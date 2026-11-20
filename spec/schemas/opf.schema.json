@@ -516,7 +516,7 @@
         "direction": {
           "type": "string",
           "enum": ["ltr", "rtl"],
-          "description": "Base text direction for the language. When omitted, engines derive it from the script: Arabic (Arab), Hebrew (Hebr), Syriac (Syrc), Thaana (Thaa), N'Ko (Nkoo), Adlam (Adlm), Samaritan (Samr), Mandaic (Mand) and Hanifi Rohingya (Rohg) are right-to-left; every other script is left-to-right. The engine language vocabulary (spec/reference/engine-vocabularies.json) states it for the tags it knows. A right-to-left deck mirrors its layout, and one rule says what follows it. Layout words and layout coordinates are logical: 'start' and 'end' in alignments, header and footer zones, promoted regions, image placement, overlay bands and shape anchors, the order of side-by-side blocks and columns, and an overlay shape's 'x' all run from the edge the deck starts on. Coordinates and sides that name pixels of a picture or parts of a plot are physical in every language: ImageFocus, ImageCallout 'x', a chart's 'legend' and data label 'position', and the 'left' and 'right' of table cell borders and paddings and of a shape's padding."
+          "description": "Base text direction for the language. When omitted, engines derive it from the script: Arabic (Arab), Hebrew (Hebr), Syriac (Syrc), Thaana (Thaa), N'Ko (Nkoo), Adlam (Adlm), Samaritan (Samr), Mandaic (Mand) and Hanifi Rohingya (Rohg) are right-to-left; every other script is left-to-right. The engine language vocabulary (spec/reference/engine-vocabularies.json) states it for the tags it knows. A right-to-left deck mirrors its layout, and one rule says what follows it. Layout words and layout coordinates are logical: 'start' and 'end' in alignments, header and footer zones, the cells blocks name with 'region', image placement, overlay bands and shape anchors, the order of side-by-side blocks and columns, and an overlay shape's 'x' all run from the edge the deck starts on. Coordinates and sides that name pixels of a picture or parts of a plot are physical in every language: ImageFocus, ImageCallout 'x', a chart's 'legend' and data label 'position', and the 'left' and 'right' of table cell borders and paddings and of a shape's padding."
         },
         "script": {
           "type": "string",
@@ -858,7 +858,7 @@
         "titlePosition": {
           "type": "string",
           "enum": ["top", "start"],
-          "description": "Where the heading group (tag, title and subtitle) sits on a slide with body content. 'top' (the default) stacks it above the body. 'start' sets it beside the body, in a column of two fifths of the content width (the body takes the other three fifths, a gap apart) on the reading side: the left in a left-to-right deck, the right in a right-to-left deck; design.mirror swaps the side. The group is centered down the column at its role size, aligned by titleAlignment. On a layout, the rows that hold only headings give way and the title column runs down beside the layout's body regions, which keep their own arrangement; a 'subtitle' region joins the title's group, and a layout without a title region gets the column for the slide's title. Content no region takes sits below them, across the slide. A layout whose title already shares a row with a body region keeps its own placement. On a slide without a layout the automatic composition fills the free area beside the column. A slide without body content (a cover), a slide with promoted regions (start, center, end, top, middle, bottom: they name its columns themselves) and a portrait canvas (taller than wide) keep the title on top. Header and footer zones, placed pictures and footnotes keep their places: the column lies between them. A slide that gives up its layout for the automatic grid to set its text larger (the layout's recomposition) puts its title on top, taking the column's width for its body. Effective value: the slide's design, then the deck's design, then the theme's design.titlePosition, then the layout record's design.titlePosition, then 'top'. PPTX export: a layout record that sets 'start' (and every layout of a deck or theme that sets it) gets a slide layout with its title placeholder beside the body; a slide that sets it on another layout keeps its title's own position on that slide."
+          "description": "Where the heading group (tag, title and subtitle) sits on a slide with body content. 'top' (the default) stacks it above the body. 'start' sets it beside the body, in a column of two fifths of the content width (the body takes the other three fifths, a gap apart) on the reading side: the left in a left-to-right deck, the right in a right-to-left deck; design.mirror swaps the side. The group is centered down the column at its role size, aligned by titleAlignment. On a layout, the rows that hold only headings give way and the title column runs down beside the layout's body regions, which keep their own arrangement; a 'subtitle' region joins the title's group, and a layout without a title region gets the column for the slide's title. Content no region takes sits below them, across the slide. A layout whose title already shares a row with a body region keeps its own placement. On a slide without a layout the automatic composition fills the free area beside the column. A slide without body content (a cover), a slide whose blocks name cells of its grid ('region': start, center, end, top, middle, bottom: they name its columns themselves) and a portrait canvas (taller than wide) keep the title on top. Header and footer zones, placed pictures and footnotes keep their places: the column lies between them. A slide that gives up its layout for the automatic grid to set its text larger (the layout's recomposition) puts its title on top, taking the column's width for its body. Effective value: the slide's design, then the deck's design, then the theme's design.titlePosition, then the layout record's design.titlePosition, then 'top'. PPTX export: a layout record that sets 'start' (and every layout of a deck or theme that sets it) gets a slide layout with its title placeholder beside the body; a slide that sets it on another layout keeps its title's own position on that slide."
         },
         "contentAlignment": {
           "type": "string",
@@ -2896,7 +2896,7 @@
     },
     "Slide": {
       "type": "object",
-      "description": "A single slide. Content can be authored as a full-slide root payload, or inside promoted named region keys such as 'start', 'center+end', and 'top:start'. The columns of that grid are logical: 'start' is the left column in a left-to-right deck and the right column in a right-to-left one.",
+      "description": "A single slide. Content is a full-slide root payload or a list of blocks. On a slide without a layout, blocks may name cells of a 3 x 3 grid with their 'region' ('start', 'center+end', 'top:start'): see ContentPayload.region. The columns of that grid are logical: 'start' is the left column in a left-to-right deck and the right column in a right-to-left one. OPF 0.35 removed the slide keys that named those cells (the promoted regions 'start', 'top:start', 'middle+bottom:center+end' and the other 45): validate reports such a key (opf/schema) with the safe fix that moves its content into a block with 'region'.",
       "additionalProperties": false,
       "dependentSchemas": {
         "caption": {
@@ -3063,150 +3063,6 @@
         "design": {
           "$ref": "#/$defs/SlideDesign",
           "description": "Slide-level design applied on top of the deck-wide design."
-        },
-        "start": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "start+center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "center+end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "start+center+end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "bottom": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle+bottom": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle+bottom": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top:start": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top:center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top:end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top:start+center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top:center+end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top:start+center+end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle:start": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle:center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle:end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle:start+center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle:center+end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle:start+center+end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "bottom:start": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "bottom:center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "bottom:end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "bottom:start+center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "bottom:center+end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "bottom:start+center+end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle:start": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle:center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle:end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle:start+center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle:center+end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle:start+center+end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle+bottom:start": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle+bottom:center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle+bottom:end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle+bottom:start+center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle+bottom:center+end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "middle+bottom:start+center+end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle+bottom:start": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle+bottom:center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle+bottom:end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle+bottom:start+center": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle+bottom:center+end": {
-          "$ref": "#/$defs/ContentPayload"
-        },
-        "top+middle+bottom:start+center+end": {
-          "$ref": "#/$defs/ContentPayload"
         },
         "notes": {
           "type": "string",
@@ -3381,9 +3237,9 @@
         },
         "region": {
           "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Pin a root block (slides.N.blocks.I) to a region of the slide's template layout by name. The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin is ignored with a warning (opf/region-unknown, opf/region-kind or opf/region-full) and the block is placed by its kind. Blocks without a pin are bound by reading order, role and kind. A pin on a nested block, or on a slide without a template layout, has no effect.",
-          "examples": ["notes", "metrics"]
+          "pattern": "^([a-z][a-z0-9-]*|(top|middle|bottom|top\\+middle|middle\\+bottom|top\\+middle\\+bottom)(:(start|center|end|start\\+center|center\\+end|start\\+center\\+end))?|start|center|end|start\\+center|center\\+end|start\\+center\\+end)$",
+          "description": "Where a root block (slides.N.blocks.I) goes. On a slide with a layout: a region of that layout, by name. The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin is ignored with a warning (opf/region-unknown, opf/region-kind or opf/region-full) and the block is placed by its kind. Blocks without a pin are bound by reading order, role and kind. On a slide without a layout: a cell of the slide's 3 x 3 grid below the headings, a column band ('start', 'center', 'end', 'start+center', 'center+end', 'start+center+end'), a row band ('top', 'middle', 'bottom', 'top+middle', 'middle+bottom', 'top+middle+bottom') or rows, a colon, then columns ('top:start', 'middle+bottom:center+end'); each half lists adjacent names in reading order. The columns are logical ('start' is the right column in a right-to-left deck). A slide places every block in a cell or none: when one block names a cell, every block of the slide's blocks names one (opf/schema otherwise). Blocks that name the same cell stack in it in source order, as a group's blocks would; two different cells may not overlap. A cell word on a slide with a layout names no region of it (opf/region-unknown), and a layout region's name is never a cell word. A pin on a nested block has no effect.",
+          "examples": ["aside", "media", "start", "top:center+end"]
         },
         "type": {
           "type": "string",
@@ -5342,7 +5198,7 @@
     "Composition": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize, maxFontSize and overflow. Explicit promoted regions retain their positions. A layout defines its grid as one ordered list of regions; its composition supports gap, padding, minFontSize, maxFontSize and overflow rather than mode, columns or weights.",
+      "description": "Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize, maxFontSize and overflow. Blocks placed in cells (ContentPayload.region on a slide without a layout) retain their positions. A layout defines its grid as one ordered list of regions; its composition supports gap, padding, minFontSize, maxFontSize and overflow rather than mode, columns or weights.",
       "properties": {
         "mode": {
           "type": "string",

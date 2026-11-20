@@ -69,10 +69,10 @@ const deck = () => ({
         { image: { src: "./decor.png", alt: "" } },
         { image: "./noalt.png" },
         { blocks: [{ bullets: ["One two", { text: "Three" }] }, { code: { source: "const a = 1;", language: "ts" } }] },
+        { chart: { type: "column", data: { columns: ["A", "B"], rows: [["x", 1]], source: { src: "./c.csv" } } } },
+        { chart: { type: "pie", data: { dataset: "sales" } } },
+        { table: { dataset: "sales" } },
       ],
-      start: { chart: { type: "column", data: { columns: ["A", "B"], rows: [["x", 1]], source: { src: "./c.csv" } } } },
-      end: { chart: { type: "pie", data: { dataset: "sales" } } },
-      "bottom": { table: { dataset: "sales" } },
     },
     {
       id: "s4", section: "Main", notes: "Closing {{who}}",
@@ -137,11 +137,15 @@ describe("stats: structure", () => {
     assert.equal(result.slides.withOwnDesign, 1);
   });
 
-  test("counts payload kinds across roots, blocks, regions and groups", () => {
+  test("counts payload kinds across roots, blocks, cells and groups", () => {
     assert.deepEqual(result.payloads, {
       text: 2, items: 0, bullets: 1, quote: 1, metric: 1, code: 1, timeline: 1, diagram: 0, chart: 2, table: 2, image: 4, video: 1,
-      blocks: 6, regions: 3, groups: 1, maxDepth: 2,
+      blocks: 9, cells: 0, groups: 1, maxDepth: 2,
     });
+    // OPF 0.35: the root blocks of a slide placed in the cells of its grid.
+    const cells = stats({ slides: [{ blocks: [{ region: "start", text: "a" }, { region: "end", blocks: [{ text: "b" }, { text: "c" }] }] }, { layout: "text", blocks: [{ region: "start", text: "d" }] }] });
+    assert.equal(cells.payloads.cells, 2);
+    assert.equal(cells.payloads.blocks, 5);
   });
 
   test("a deck without slides reports zeros", () => {

@@ -1,6 +1,6 @@
 // CE-20: the Studio's Design panel, bound to the selection (STUDIO-SPEC section 8). The existing `design-controls` sections are reused as
 // they are, by name, in panels made once per arrangement and shown for the selection that needs them; the Studio adds a Layout row (with the
-// layout's diagram, Change layout and Edit layout), the composition of a group, a promoted region or a slide (mode, columns, gap, padding and
+// layout's diagram, Change layout and Edit layout), the composition of a group or a slide (mode, columns, gap, padding and
 // one weight per track, linked to the dividers), a region's read-only rules, the multiple-selection actions, speaker notes, and Advanced (the
 // selection's path as a copyable chip, and the schema inspector, opened on demand). Every field commits one undoable change through the session.
 // The panel shows options, not explanations: every option is a visible control with a short label, a hint is a tooltip, and an action that
@@ -35,7 +35,8 @@ export function designMode(nodes) {
   const node = nodes[0];
   if (node.kind === "slide") return "slide";
   if (node.kind === "group") return "group";
-  if (node.kind === "region") return node.virtual ? "region" : "promoted";
+  // A cell of the slide grid (OPF 0.35) has no settings of its own: its blocks name it.
+  if (node.kind === "region") return node.promoted ? "promoted" : "region";
   if (node.kind === "heading") return "heading";
   if (node.kind === "part") return "part";
   return ["image", "chart", "table", "list"].includes(node.type) ? node.type : "block";
@@ -279,7 +280,8 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
       if (next === "slide") {
         own.append(layoutSection(node));
         if (!studio.slideUsesLayout() && node.container && !node.container.promoted) own.append(compositionSection(node));
-      } else if (next === "group" || next === "promoted") own.append(compositionSection(node));
+      } else if (next === "group") own.append(compositionSection(node));
+      else if (next === "promoted") own.append(toolbar("Cell", [commandButton("studio.select.parent", "Select slide", "MousePointer2", { text: true })]));
       else if (next === "region") own.append(regionSection(node));
       else if (next === "multi") own.append(multiSection(nodes));
       else if (next === "chart" || next === "table") own.append(dataSection(node));
@@ -293,7 +295,7 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
       if (sharedFirst) container.insertBefore(shared, own);
       else container.insertBefore(own, shared);
     }
-    const arrangement = next === "deck" ? "deck" : next === "slide" ? "slide" : next === "image" ? "image" : next === "table" ? "table" : ["block", "list", "chart", "group", "promoted"].includes(next) ? "block" : null;
+    const arrangement = next === "deck" ? "deck" : next === "slide" ? "slide" : next === "image" ? "image" : next === "table" ? "table" : ["block", "list", "chart", "group"].includes(next) ? "block" : null;
     for (const [name, entry] of panels) entry.host.hidden = name !== arrangement;
     if (arrangement) { const entry = panel(arrangement); entry.host.hidden = false; entry.controls.refresh(); }
     // The chart's options and a list's numbering follow the selection in their own panels.

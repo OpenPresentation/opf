@@ -186,7 +186,7 @@ test('content and region slides keep the pre-centering geometry', () => {
   assert.ok(byField(content, 'text').box.y >= byField(content, 'title').box.y + byField(content, 'title').box.height, 'body follows the title');
   const blocks = composeSlide({title: 'Blocks', blocks: [{text: 'A'}, {text: 'B'}]});
   assert.ok(Math.abs(byField(blocks, 'title').box.y - padding) < 1e-6);
-  const regions = composeSlide({title: 'Promoted', start: {text: 'A'}, end: {text: 'B'}});
+  const regions = composeSlide({title: 'Promoted', blocks: [{region: 'start',text: 'A'}, {region: 'end',text: 'B'}]});
   assert.ok(Math.abs(byField(regions, 'title').box.y - padding) < 1e-6);
   const weighted = composeSlide({title: 'Keep weights', composition: {mode: 'row', weights: [2, 1]}, blocks: [{text: 'Wide'}, {text: 'Narrow'}]});
   assert.ok(Math.abs(weighted.items[1].box.width / weighted.items[2].box.width - 2) < 1e-5);
@@ -216,9 +216,10 @@ test('empty body payloads are not body: such title slides center too', () => {
       assert.deepEqual(result.diagnostics, [], `${name} adds no diagnostics`);
     }
   }
-  // Promoted regions retain their separate geometry and never consume a template.
-  const promoted = {title: 'Regions', start: {text: 'x'}, end: {text: 'y'}};
-  assert.deepEqual(composeSlide(promoted, {layout: titleSubtitle}).items.map(item=>item.box),composeSlide(promoted).items.map(item=>item.box));
+  // OPF 0.35: cells place blocks only on a slide without a layout; with one, a cell word names no region of it (region-unknown).
+  const cells = {title: 'Regions', blocks: [{region: 'start',text: 'x'}, {region: 'end',text: 'y'}]};
+  assert.deepEqual(composeSlide(cells, {layout: titleSubtitle}).diagnostics.filter(entry => entry.code === 'region-unknown').map(entry => entry.path), ['slides.0.blocks.0.region', 'slides.0.blocks.1.region']);
+  assert.notDeepEqual(composeSlide(cells, {layout: titleSubtitle}).items.map(item=>item.box),composeSlide(cells).items.map(item=>item.box));
   // Real automatic body payloads keep the heading origin.
   for (const payload of [{blocks: [{text: 'x'}]}, {text: 'x'}, {items: ['x']}, {image: photo}]) {
     const result = composeSlide({title: 'Real payload', ...payload});

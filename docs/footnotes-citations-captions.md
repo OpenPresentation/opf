@@ -10,7 +10,7 @@ and the editor. A deck without the new fields validates, composes, previews and 
 - `TextRun.cite`: a reference id, or an array of ids, from the top-level `references` list.
 - `TextRun.footnote`: an inline note (string or `TextRun[]`) with no references entry.
 - `references` (presentation root): `[{ id, text, url? }]`; `text` is a string or `TextRun[]`.
-- `caption` on an `image`, `chart`, `table` or `video` payload (a block, a promoted region payload, or the
+- `caption` on an `image`, `chart`, `table` or `video` payload (a block, or the
   slide root when it holds exactly one of those payloads): a string, `TextRun[]`, or
   `{ text, position?: "below" | "above", align?: "start" | "center" | "end" }` (defaults `below`, `start`).
 
@@ -45,7 +45,7 @@ the "unsupported location" boundary, chosen so the engines never silently drop a
 
 `collectCitations(presentation)` numbers every marker per deck in reading order: slides in order, then
 inside a slide the heading group first (`tag`, `title`, `subtitle`, the order the slide stacks them), then the
-promoted regions (sorted keys), the blocks (recursively) and the root payload, then the runs. Headings read
+the blocks (recursively; blocks placed in the cells of the slide's grid cell by cell in reading order, rows from the top, each from its start column) and the root payload, then the runs. Headings read
 before the body, so a marker on a headline claim takes the lowest numbers of its slide (FA-10, vetoable). The same reference id keeps its number wherever it is cited; every inline footnote takes a new
 number. A run that cites several ids shows `1,2`. `slideCitations(slide, slideIndex, presentation)`
 gives one slide's markers and notes with the deck numbering (the slide object may be a paginated page or

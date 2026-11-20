@@ -189,7 +189,9 @@ const JSON_LISTS = [
   [`{${SALES},"slides":[{"chart":{"data":{"dataset":"pipeline"},"mapping":{"series":["|"]}}}]}`, ['Stage'], ['Quarter']],
   ['{"references":[{"id":"r1","text":"R"}],"slides":[{"title":[{"text":"x","cite":"|"}]}]}', ['r1'], []],
   ['{"narrative":"classic-story","slides":[{"beat":"|"}]}', ['opening', 'closing'], []],
-  ['{"slides":[{"layout":"two-column","blocks":[{"region":"|"}]}]}', ['first', 'second', 'start'], ['title']],
+  ['{"slides":[{"layout":"two-column","blocks":[{"region":"|"}]}]}', ['first', 'second'], ['title', 'start']],
+  // OPF 0.35: a slide without a layout places its blocks in the cells of its grid.
+  ['{"slides":[{"blocks":[{"region":"|"}]}]}', ['start', 'top:end'], ['first']],
   ['{"variables":{"brand":{"type":"color","value":"#123456"},"hero":{"type":"image","value":"a.png"}},"slides":[{"title":[{"text":"x","color":"|"}]}]}', ['var:brand'], ['var:hero']],
   ['{"variables":{"brand":{"type":"color","value":"#123456"},"hero":{"type":"image","value":"a.png"}},"slides":[{"image":"|"}]}', ['var:hero'], ['var:brand']],
 ];

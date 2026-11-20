@@ -428,7 +428,7 @@ const readingOrderRules: ValidationRule[] = [
 					path: pointerOfDotted(composed[index]!),
 					slide,
 					message: `Reading order differs from visual order: ${JSON.stringify(name(composed[index]!))} is read at ${ordinal(index)} but appears at ${ordinal(visual.indexOf(composed[index]!))}. Composed order: ${composed.map(name).join(', ')}; visual order: ${visual.map(name).join(', ')}.`,
-					help: 'Reorder the blocks (or rename promoted regions) so the composed order follows the visual order, or use blocks with an explicit composition instead of region keys.',
+					help: "Reorder the blocks (or place them in other cells of the slide's grid) so the composed order follows the visual order, or use blocks with an explicit composition instead of cells.",
 					measured: { firstMismatch: index, composed: composed.length },
 				});
 			}
@@ -475,7 +475,7 @@ function visualOrder(items: readonly Placed[], rtl: boolean, base = items[0]?.pa
 	});
 }
 function flatOrder(items: readonly Placed[], rtl: boolean): string[] {
-	// The same ordering composeSlide uses for promoted regions. A right-to-left deck's boxes may be mirrored (or, before the
+	// The same ordering composeSlide uses for the cells of a slide's grid. A right-to-left deck's boxes may be mirrored (or, before the
 	// mirroring lands, not), so only the row order is checked there: each row keeps its composed order.
 	if (rtl) return readingRows(items).flatMap((row) => row.map((item) => item.path));
 	return visualReadingOrder(items).map((item) => item.path);

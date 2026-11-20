@@ -64,8 +64,8 @@ assert.equal(tokenAt('{"a":  ', 7, false), null, 'two spaces are not a trigger')
 const slideKeys = labels('{"slides": [{|}]}');
 assert.deepEqual(slideKeys.slice(0, 20), ['title', 'subtitle', 'layout', 'items', 'text', 'notes', 'image', 'chart', 'table', 'quote', 'code', 'metric', 'timeline', 'diagram', 'blocks', 'design', 'id', 'section', 'tag', 'hidden'], 'a slide: the common keys in the curated order');
 assert.ok(slideKeys.length < 45, `a slide offers ${slideKeys.length} keys, not the 75 of the schema`);
-assert.equal(slideKeys.some((label) => label.includes(':')), false, 'the region keys are hidden');
-assert.ok(labels('{"slides": [{"top+mi|"}]}').some((label) => label.startsWith('top+middle')), 'a typed prefix shows the region keys');
+assert.equal(slideKeys.some((label) => label.includes(':')), false, 'a slide offers no cell keys (OPF 0.35: a block names its cell with region)');
+assert.equal(labels('{"slides": [{"top+mi|"}]}').some((label) => label.startsWith('top+middle')), false, 'a typed cell is no slide key');
 assert.deepEqual(labels('{"slides": [], "design": {|}}').slice(0, 7), ['theme', 'colorScheme', 'fontScheme', 'dimensions', 'background', 'header', 'footer'], 'design: the common keys first');
 assert.deepEqual(labels('{"slides": [], "organization": {|}}').slice(0, 2), ['id', 'name'], 'organization: required members first');
 assert.deepEqual(labels('{|}').slice(0, 6), ['slides', 'name', 'design', 'language', 'audience', 'purpose'], 'the deck: required first, then the common keys');

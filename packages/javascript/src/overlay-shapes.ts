@@ -13,6 +13,7 @@
  * The text fitter comes from composition (`composeOverlayShapes`' `item` callback), so this module imports composition's types only.
  */
 import type { ComposedItem, LayoutBox, SlideComposition } from './composition.js';
+import { isGridCell } from './grid-cells.js';
 import {selectChartPoint,type ChartPointGeometry,type ChartPointMissing} from './chart-point-anchors.js';
 import { composeShape, composeStroke, isPresetShape, pathEnds, presetAspect, sketchStroke, type ComposedShape, type ComposedShapePath, type ComposedStroke, type ShapeEnd } from './shape-block.js';
 import type { ShapePathCommand } from './shape-geometry.js';
@@ -350,10 +351,11 @@ export interface ComposedConnector {
 /** An entry of `SlideComposition.overlayShapes`, in draw order. */
 export type ComposedOverlayEntry = ComposedOverlayShape | ComposedConnector;
 
-/** The promoted region keys of a slide (`start`, `center+end`, `top:start` ...), whose payloads are blocks too. */
-const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:middle|bottom))*(?::(?:start|center|end)(?:\+(?:center|end))*)?|(?:start|center|end)(?:\+(?:center|end))*)$/;
-
-/** Every block id of a slide with its dotted path (`slides.0.blocks.1.blocks.0`), in document order; the first of a repeated id wins. */
+/**
+ * Every block id of a slide with its dotted path (`slides.0.blocks.1.blocks.0`), in document order; the first of a repeated id wins.
+ * composeSlide's own view of a slide whose blocks name cells keeps each cell under its cell word (`slides.0.top:start`): those payloads
+ * are blocks too.
+ */
 export function slideBlockIds(slide: unknown, slidePath: string): Map<string, string> {
   const ids = new Map<string, string>();
   const walk = (payload: Rec, path: string, depth: number) => {
@@ -363,7 +365,7 @@ export function slideBlockIds(slide: unknown, slidePath: string): Map<string, st
   };
   const value = record(slide);
   if (Array.isArray(value.blocks)) value.blocks.forEach((block: unknown, index: number) => { if (block !== null && typeof block === 'object') walk(record(block), `${slidePath}.blocks.${index}`, 0); });
-  for (const key of Object.keys(value)) if (REGION_KEY.test(key) && value[key] !== null && typeof value[key] === 'object' && !Array.isArray(value[key])) walk(record(value[key]), `${slidePath}.${key}`, 0);
+  for (const key of Object.keys(value)) if (isGridCell(key) && value[key] !== null && typeof value[key] === 'object' && !Array.isArray(value[key])) walk(record(value[key]), `${slidePath}.${key}`, 0);
   return ids;
 }
 

@@ -52,7 +52,7 @@ const { document, patch, assigned } = assignIds(presentation);
 // assigned: [{ pointer: "/slides/0", kind: "slide", id: "slide-1" }, ...]
 ```
 
-Missing ids are filled in document order (slides, then each slide's blocks, nested groups and promoted regions), as `slide-1`, `slide-2`, ... and `block-1`, `block-2`, ..., skipping ids already in use, so the same document always gets the same ids and the result is valid against the schema. An existing id is never changed. Pass `generate({ kind, pointer, node, parentId })` to choose the ids yourself (a UUID, a slug of the title); it must return a non-empty string no slide or payload uses, or `assignIds` throws `OPFIdError` (`invalid-id`, `duplicate-id`). The id is added as the node's last member; `format` puts it in canonical order. List items, table rows and runs have no id.
+Missing ids are filled in document order (slides, then each slide's blocks and nested groups), as `slide-1`, `slide-2`, ... and `block-1`, `block-2`, ..., skipping ids already in use, so the same document always gets the same ids and the result is valid against the schema. An existing id is never changed. Pass `generate({ kind, pointer, node, parentId })` to choose the ids yourself (a UUID, a slug of the title); it must return a non-empty string no slide or payload uses, or `assignIds` throws `OPFIdError` (`invalid-id`, `duplicate-id`). The id is added as the node's last member; `format` puts it in canonical order. List items, table rows and runs have no id.
 
 ### Id-addressed paths
 

@@ -16,7 +16,7 @@ test('every skill carries the same glossary, near its top', () => {
   assert.ok(skillFiles.length >= 6, 'six skills');
   const first = glossaryOf(readFileSync(skillFiles[0], 'utf8'));
   assert.ok(first, `${skillFiles[0]} has a glossary`);
-  for (const term of ['Furniture', 'Composition', 'Implicit blocks', 'Promoted region', 'Catalog record', 'Reflow', 'Provenance']) assert.match(first, new RegExp(`\\*\\*${term}\\*\\*`));
+  for (const term of ['Furniture', 'Composition', 'Implicit blocks', 'Cell', 'Catalog record', 'Reflow', 'Provenance']) assert.match(first, new RegExp(`\\*\\*${term}\\*\\*`));
   for (const file of skillFiles) {
     const text = readFileSync(file, 'utf8');
     assert.equal(glossaryOf(text), first, `${path.relative(skills, file)} has the shared glossary`);

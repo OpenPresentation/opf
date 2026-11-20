@@ -229,62 +229,68 @@
       "id": "s7-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "$820K",
-          "label": "Primary signal",
-          "description": "Reduce container dwell time through scheduling and yard visibility",
-          "trend": "up"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "Bluewater Logistics should focus the next cycle on ",
-          {
-            "text": "reduce container dwell time through scheduling and yard visibility",
-            "bold": true,
-            "color": "#334155"
-          },
-          " while making the operating tradeoffs clear to ports and logistics stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "Ports and logistics working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "Ports and logistics",
-              "Program lead",
-              "On track",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "Watch",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "At risk",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "$820K",
+            "label": "Primary signal",
+            "description": "Reduce container dwell time through scheduling and yard visibility",
+            "trend": "up"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "Bluewater Logistics should focus the next cycle on ",
+            {
+              "text": "reduce container dwell time through scheduling and yard visibility",
+              "bold": true,
+              "color": "#334155"
+            },
+            " while making the operating tradeoffs clear to ports and logistics stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "Ports and logistics working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Ports and logistics",
+                "Program lead",
+                "On track",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "Watch",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "At risk",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {

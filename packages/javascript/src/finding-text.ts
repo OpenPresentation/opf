@@ -40,6 +40,7 @@ import {
   WORDS,
 } from "./finding-text-util.js";
 import { type JsonSchema, catalogKindAt, createSchemaValue, schemaAtPath, schemaVariants } from "./schema-navigation.js";
+import { nearestGridCell } from "./grid-cells.js";
 
 export type { FindingText, FindingTextContext } from "./finding-text-util.js";
 
@@ -63,6 +64,7 @@ export const PATTERN_PHRASES: Readonly<Record<string, PatternPhrase>> = Object.f
   "\\S": {what: "a label with at least one non-whitespace character", next: "write a nonblank label, or omit it."},
   "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$": { what: "a hex color like `#1F4E79` (3, 6 or 8 hex digits)", next: "write the color as #RRGGBB." },
   "^[a-z][a-z0-9-]*$": { what: ID, next: ID_NEXT },
+  "^([a-z][a-z0-9-]*|(top|middle|bottom|top\\+middle|middle\\+bottom|top\\+middle\\+bottom)(:(start|center|end|start\\+center|center\\+end|start\\+center\\+end))?|start|center|end|start\\+center|center\\+end|start\\+center\\+end)$": { what: "a region of the slide's layout (lowercase letters, digits and hyphens, like `aside`) or, on a slide without a layout, a cell of its grid like `start`, `top:end` or `middle+bottom:center+end`", next: "name a region of the layout, or a cell: rows (top, middle, bottom) before the colon and columns (start, center, end) after it, each span in reading order." },
   "^[a-z0-9][a-z0-9-]*$": { what: "an id of lowercase letters, digits and hyphens, like `my-chart`", next: ID_NEXT },
   "^(?:[a-z][a-z0-9-]*:)?[a-z][a-z0-9-]*$": { what: "a catalog id like `pillars` or `acme:hero` (lowercase letters, digits and hyphens)", next: "use the id of a record, with the catalog group in front when it has one." },
   "^[a-zA-Z0-9][a-zA-Z0-9._-]*$": { what: "an id of letters, digits, dots, hyphens and underscores that starts with a letter or digit, like `logo-2`", next: "use letters, digits, dots, hyphens and underscores, without spaces." },
@@ -216,6 +218,12 @@ function describeSchema(finding: Finding, context: FindingTextContext, helpers: 
     case "additionalProperties": {
       const name = String(params.additionalProperty ?? segments.at(-1) ?? "");
       const parent = segments.slice(0, -1);
+      // OPF 0.35: a slide key that named a cell of the slide's grid (`start`, `top:start`, ...) moved into a block's `region`.
+      const cell = parent.length === 2 && parent[0] === "slides" ? nearestGridCell(name) : undefined;
+      if (cell) return {
+        message: `${code(name)} is a slide key OPF 0.35 removed: a block of the slide's ${code("blocks")} names its cell with ${code("region")}.`,
+        next: `apply the fix that moves it into a block, or write ${code(`{ "region": "${cell.cell ?? "top:start"}", ... }`)} in the slide's ${code("blocks")}.`,
+      };
       const allowed = schemaKeys(parent, context);
       // Core ranked the near misses when it made the finding (an exact reading such as `lang` for `language` first): its first suggestion is the hint.
       const suggested = finding.suggestions?.[0]?.value;

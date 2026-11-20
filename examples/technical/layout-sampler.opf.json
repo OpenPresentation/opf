@@ -1139,57 +1139,67 @@
     {
       "id": "dynamic-promoted-columns",
       "title": "What the pilot asks of us",
-      "start": {
-        "text": "The pilot shows a clear gain in completion with modest effort."
-      },
-      "center+end": {
-        "items": [
-          "Two teams must release a lead at 20%",
-          "Weekly reviews need a fixed slot",
-          "Analytics needs read access to both workflows"
-        ]
-      }
+      "blocks": [
+        {
+          "region": "start",
+          "text": "The pilot shows a clear gain in completion with modest effort."
+        },
+        {
+          "region": "center+end",
+          "items": [
+            "Two teams must release a lead at 20%",
+            "Weekly reviews need a fixed slot",
+            "Analytics needs read access to both workflows"
+          ]
+        }
+      ]
     },
     {
       "id": "dynamic-promoted-grid",
       "title": "From baseline to decision in six weeks",
-      "top:start": {
-        "metric": {
-          "value": 52,
-          "label": "Participants"
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": 52,
+            "label": "Participants"
+          }
+        },
+        {
+          "region": "top:center",
+          "metric": {
+            "value": "84%",
+            "label": "Completion"
+          }
+        },
+        {
+          "region": "top:end",
+          "metric": {
+            "value": "6.2",
+            "unit": "min",
+            "label": "Median time"
+          }
+        },
+        {
+          "region": "middle+bottom:start+center+end",
+          "timeline": {
+            "events": [
+              {
+                "when": "Week 1",
+                "what": "Baseline"
+              },
+              {
+                "when": "Weeks 2–5",
+                "what": "Pilot"
+              },
+              {
+                "when": "Week 6",
+                "what": "Review and decide"
+              }
+            ]
+          }
         }
-      },
-      "top:center": {
-        "metric": {
-          "value": "84%",
-          "label": "Completion"
-        }
-      },
-      "top:end": {
-        "metric": {
-          "value": "6.2",
-          "unit": "min",
-          "label": "Median time"
-        }
-      },
-      "middle+bottom:start+center+end": {
-        "timeline": {
-          "events": [
-            {
-              "when": "Week 1",
-              "what": "Baseline"
-            },
-            {
-              "when": "Weeks 2–5",
-              "what": "Pilot"
-            },
-            {
-              "when": "Week 6",
-              "what": "Review and decide"
-            }
-          ]
-        }
-      }
+      ]
     },
     {
       "id": "dynamic-image-text-quote",
@@ -1305,49 +1315,53 @@
     {
       "id": "dynamic-chart-quote",
       "title": "The numbers and the voice agree",
-      "start+center": {
-        "chart": {
-          "type": "column",
-          "axisTitles": {
-            "category": "Week",
-            "value": "Task completion"
-          },
-          "data": {
-            "columns": [
-              "Week",
-              {
-                "name": "Task completion",
-                "format": "0%"
-              }
-            ],
-            "rows": [
-              [
-                "1",
-                0.68
+      "blocks": [
+        {
+          "region": "start+center",
+          "chart": {
+            "type": "column",
+            "axisTitles": {
+              "category": "Week",
+              "value": "Task completion"
+            },
+            "data": {
+              "columns": [
+                "Week",
+                {
+                  "name": "Task completion",
+                  "format": "0%"
+                }
               ],
-              [
-                "2",
-                0.72
-              ],
-              [
-                "3",
-                0.76
-              ],
-              [
-                "4",
-                0.84
+              "rows": [
+                [
+                  "1",
+                  0.68
+                ],
+                [
+                  "2",
+                  0.72
+                ],
+                [
+                  "3",
+                  0.76
+                ],
+                [
+                  "4",
+                  0.84
+                ]
               ]
-            ]
+            }
+          }
+        },
+        {
+          "region": "end",
+          "quote": {
+            "text": "The weekly review keeps the next step clear.",
+            "attribution": "Product lead",
+            "source": "Illustrative quotation"
           }
         }
-      },
-      "end": {
-        "quote": {
-          "text": "The weekly review keeps the next step clear.",
-          "attribution": "Product lead",
-          "source": "Illustrative quotation"
-        }
-      }
+      ]
     },
     {
       "layout": "inverted-pyramid",

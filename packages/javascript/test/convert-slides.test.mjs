@@ -48,12 +48,13 @@ describe("split by blocks", () => {
     assert.deepEqual(result.slides.map((slide) => slide.id), ["b", "b--3", "b--4"]);
   });
 
-  test("a slide with inline content or named regions splits by field or by region", () => {
+  test("a slide with inline content or blocks in cells splits by field or by cell", () => {
     const inline = splitSlide({ slides: [{ title: "T", text: "A", items: ["B"] }] }, 0, { each: true });
     assert.deepEqual(inline.slides.map((slide) => slide.blocks), [[{ text: "A" }], [{ items: ["B"] }]]);
-    const regions = splitSlide({ slides: [{ start: { text: "L" }, end: { text: "R" } }] }, 0, { each: true });
+    const regions = splitSlide({ slides: [{ blocks: [{ region: 'start', text: "L" }, { region: 'end', text: "R" }] }] }, 0, { each: true });
     assert.deepEqual(regions.slides.map((slide) => slide.blocks[0].text), ["L", "R"]);
-    assert.deepEqual(regions.loss, ["region placement"]);
+    assert.deepEqual(regions.slides.map((slide) => slide.blocks[0].region), [undefined, undefined]);
+    assert.deepEqual(regions.loss, ["cell placement"]);
   });
 
   test("split refuses one block, no split point and out of range points", () => {
@@ -85,11 +86,11 @@ describe("merge", () => {
     assert.deepEqual(merged.loss, ['slide id "s--2"', 'slide id "s--3"']);
   });
 
-  test("merge refuses a single slide, missing slides and regions", () => {
-    const deck = { slides: [{ text: "A" }, { start: { text: "L" } }, { text: "B" }] };
+  test("merge refuses a single slide, missing slides and blocks in cells", () => {
+    const deck = { slides: [{ text: "A" }, { blocks: [{ region: 'start', text: "L" }] }, { text: "B" }] };
     refused(() => mergeSlides(deck, 0, 1), /at least two/);
     refused(() => mergeSlides(deck, 2, 2), /exist/);
-    refused(() => mergeSlides(deck, 0, 2), /named regions/);
+    refused(() => mergeSlides(deck, 0, 2), /in cells/);
   });
 });
 

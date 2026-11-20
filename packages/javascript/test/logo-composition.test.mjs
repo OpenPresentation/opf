@@ -75,7 +75,7 @@ test('content slides never get an automatic logo', () => {
     [{title: 'Body', text: 'Content'}, undefined],
     [{title: 'Content', text: 'Body'}, text1x],
     [{title: 'Blocks', blocks: [{text: 'a'}, {text: 'b'}]}, undefined],
-    [{title: 'Regions', start: {text: 'a'}, end: {text: 'b'}}, undefined],
+    [{title: 'Regions', blocks: [{region: 'start',text: 'a'}, {region: 'end',text: 'b'}]}, undefined],
     [{title: 'Image', image: asset('photo')}, {id: 'image-1x', regions: [{name: 'title'}, {name: 'body-1', accepts: ['image'], max: 1}]}],
   ];
   for (const [slide, layout] of cases) {

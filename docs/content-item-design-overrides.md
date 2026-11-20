@@ -2,7 +2,7 @@
 
 This is a parking-lot note for design controls intentionally removed from slide content payloads while the v1 content model stabilizes.
 
-Current principle: root slide payload fields and promoted region payloads should describe what the slide contains. Layout and rendering decide how it looks. If per-payload styling returns later, it should live in an explicit override surface rather than mixing presentation controls into the base content payload.
+Current principle: root slide payload fields and blocks should describe what the slide contains. Layout and rendering decide how it looks. If per-payload styling returns later, it should live in an explicit override surface rather than mixing presentation controls into the base content payload.
 
 **Standing requirement for any styling surface that does return:** every color field must accept the shared `ColorRef` forms — literal hex, a color-scheme slot or role name, and a `var:<id>` variable reference — from its first release, never hex alone. Rich-text runs and styled table cells already follow this (see [`content-payloads.md`](./content-payloads.md) → "Color references"); the 0.10 styled-cell surface initially shipped hex-only and had to be widened, which is the failure mode this requirement exists to prevent. A styling surface that ships hex-only freezes every styled deck's palette outside the design system and breaks re-theming.
 
@@ -11,18 +11,19 @@ Current principle: root slide payload fields and promoted region payloads should
 ```jsonc
 {
   "title": "Revenue",
-  "start": {
+  "blocks": [{
+    "region": "start",
     "text": "Revenue grew 28%",
     "design": {
       "text": {
         "alignment": "center"
       }
     }
-  }
+  }]
 }
 ```
 
-Open question: whether overrides belong inline on each content payload, in `slides[].design`, or in a reusable style catalog keyed by region key or payload `type`.
+Open question: whether overrides belong inline on each content payload, in `slides[].design`, or in a reusable style catalog keyed by a block's `region` or payload `type`.
 
 ## Deferred Fields
 

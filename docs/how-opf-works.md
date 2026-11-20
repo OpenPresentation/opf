@@ -18,8 +18,8 @@ Presentation
 │                     ├── title / subtitle / tag / notes / section / beat / layout
 │                     └── one content shape:
 │                           root payload   (a single content kind)
-│                           blocks[]       (ordered payloads, placement inferred)
-│                           region keys    (3x3 placement grid)
+│                           blocks[]       (ordered payloads, placement inferred,
+│                                           or each in a cell of a 3x3 grid: "region")
 ├── design ........ theme, colorScheme, fontScheme, background, logo, header, footer
 ├── variables ..... named colors, referenced from content as "var:<id>"
 ├── assets ........ named media sources, referenced as "asset:<id>"
@@ -53,7 +53,7 @@ A slide carries its content in one of three shapes. Pick the loosest shape that 
 }
 ```
 
-Multiple kinds at the slide root (with no explicit `type`, `blocks`, or regions) are shorthand for the equivalent `blocks`:
+Multiple kinds at the slide root (with no explicit `type` or `blocks`) are shorthand for the equivalent `blocks`:
 
 ```json
 {
@@ -75,7 +75,7 @@ Multiple kinds at the slide root (with no explicit `type`, `blocks`, or regions)
 }
 ```
 
-**3. Promoted region keys** — a 3×3 placement grid when position matters:
+**3. Blocks in cells** — on a slide without a layout, each block names a cell of a 3×3 grid with `region` when position matters:
 
 ```
                   start                center                  end
@@ -87,9 +87,9 @@ Multiple kinds at the slide root (with no explicit `type`, `blocks`, or regions)
   bottom |  bottom:start      |  bottom:center     |  bottom:end        |
          +--------------------+--------------------+--------------------+
 
-  A bare column key ("start") spans all three rows.
-  A bare row key ("top") spans all three columns.
-  Keys span neighbors with "+" and intersect rows with columns via ":".
+  A bare column ("start") spans all three rows.
+  A bare row ("top") spans all three columns.
+  Cells span neighbors with "+" and intersect rows with columns via ":".
 ```
 
 The spans compose into the slide shapes you actually want:
@@ -122,11 +122,14 @@ That last shape in JSON:
 ```json
 {
   "title": "Adoption Doubled",
-  "top": { "text": "Adoption doubled while support load stayed flat." },
-  "middle+bottom:start": { "metric": { "value": "2.1x", "label": "Adoption" } },
-  "middle+bottom:center+end": {
-    "chart": { "type": "line", "data": { "columns": ["Month", "Teams"], "rows": [["Jan", 12], ["Feb", 18]] } }
-  }
+  "blocks": [
+    { "region": "top", "text": "Adoption doubled while support load stayed flat." },
+    { "region": "middle+bottom:start", "metric": { "value": "2.1x", "label": "Adoption" } },
+    {
+      "region": "middle+bottom:center+end",
+      "chart": { "type": "line", "data": { "columns": ["Month", "Teams"], "rows": [["Jan", 12], ["Feb", 18]] } }
+    }
+  ]
 }
 ```
 
@@ -135,19 +138,21 @@ And the two-column shape from the grid above:
 ```json
 {
   "title": "Operating Snapshot",
-  "start": { "table": { "columns": ["Metric", "Value"], "rows": [["Revenue", "$4.2M"]] } },
-  "center+end": { "chart": { "type": "line", "data": { "columns": ["Month", "Revenue"], "rows": [["Jan", 3.4]] } } }
+  "blocks": [
+    { "region": "start", "table": { "columns": ["Metric", "Value"], "rows": [["Revenue", "$4.2M"]] } },
+    { "region": "center+end", "chart": { "type": "line", "data": { "columns": ["Month", "Revenue"], "rows": [["Jan", 3.4]] } } }
+  ]
 }
 ```
 
-Region keys on one slide must not overlap, and regions cannot be mixed with a root payload. Slide-level strings `title`, `subtitle`, and `tag` sit alongside whichever content shape you use, and render into the title area of the resolved template.
+A slide places every block in a cell or none. Blocks that name the same cell stack in it in source order, as a group's blocks would; two different cells on one slide must not overlap. On a slide with a layout, `region` names one of the layout's regions instead (a cell word names none: `opf/region-unknown`). Through OPF 0.34 the cells were slide keys (`"top:start": { ... }`, the promoted regions); `opf validate` reports such a key with the safe fix that moves it into a block. Slide-level strings `title`, `subtitle`, and `tag` sit alongside whichever content shape you use, and render into the title area of the resolved template.
 
 ## Layouts are hints, not contracts
 
 `Slide.layout` optionally references a layout record. The layout's regions describe what the template *exposes* (a title region, chart regions, image treatment) — they do not constrain what the slide may contain. This loose coupling is intentional:
 
-- A slide may use any region keys or payloads regardless of its declared layout. Validators do not error on a slide/layout mismatch.
-- When `layout` is omitted, engines compose the slide automatically from its payload or region keys; that is not a finding.
+- A slide may use any payloads regardless of its declared layout. Validators do not error on a slide/layout mismatch.
+- When `layout` is omitted, engines compose the slide automatically from its payload or blocks (in their cells, when they name cells); that is not a finding.
 - A layout reference that resolves nowhere is the warning `opf/unresolved-reference`, and the slide composes automatically. Engines never substitute a different layout.
 
 The principle, used throughout OPF: **slides are the source of truth**. Layouts, narratives, and design records guide rendering; they never invalidate content.
@@ -320,10 +325,13 @@ Everything above, together — intent metadata, a catalog-backed narrative with 
     {
       "beat": "performance-headline",
       "title": "Adoption Doubled",
-      "start": { "metric": { "value": "2.1x", "label": "Quarter-over-quarter adoption", "trend": "up" } },
-      "center+end": {
-        "chart": { "type": "line", "data": { "columns": ["Month", "Active Teams"], "rows": [["Jul", 8], ["Aug", 12], ["Sep", 17]], "source": { "src": "asset:adoption-csv" } } }
-      },
+      "blocks": [
+        { "region": "start", "metric": { "value": "2.1x", "label": "Quarter-over-quarter adoption", "trend": "up" } },
+        {
+          "region": "center+end",
+          "chart": { "type": "line", "data": { "columns": ["Month", "Active Teams"], "rows": [["Jul", 8], ["Aug", 12], ["Sep", 17]], "source": { "src": "asset:adoption-csv" } } }
+        }
+      ],
       "notes": "Pause here; this is the slide the decision hangs on."
     },
     {
@@ -353,7 +361,7 @@ The beat ids (`objectives`, `performance-headline`, `risks`, `asks`) come from t
 
 Two layers, with a deliberate split:
 
-- **Schema errors** for structural problems: wrong types, overlapping region keys, payloads mixing incompatible content kinds, a region payload missing concrete content, duplicate slide or payload ids.
+- **Schema errors** for structural problems: wrong types, overlapping cells, a block in a cell beside one in none, payloads mixing incompatible content kinds, a payload missing concrete content, duplicate slide or payload ids.
 - **Warnings** for advisory drift: references that resolve nowhere (`opf/unresolved-reference`), unknown `var:` variable references and unrecognized run colors, narrative/slide mismatches. These never make a document invalid.
 
 `validate` from `@openpresentation/opf` applies both layers locally and, beyond them, checks references, accessibility, layout and content ([validate](validate.md)).

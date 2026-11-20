@@ -13,7 +13,7 @@ import {latinPhrases} from '../src/script-fonts.js';
 const arabic = 'العنصر الأول مع رقم 2026';
 const deck = (language, extra = {}) => ({name: 'RTL layout', ...(language === undefined ? {} : {language}), ...extra, slides: [
   {title: 'عنوان العرض', items: [arabic, 'English item', {text: 'العنصر الثاني: v2.0 و PowerPoint 365', level: 1}, 'آخر']},
-  {title: 'مناطق', start: {text: 'النص الأيسر'}, end: {text: 'النص الأيمن'}},
+  {title: 'مناطق', blocks: [{region: 'start',text: 'النص الأيسر'}, {region: 'end',text: 'النص الأيمن'}]},
   {title: 'جدول', table: {columns: ['المؤشر', 'القيمة', 'الحالة'], rows: [['الإيرادات', 'Customers', 'جيد']]}},
   {title: 'مخطط', chart: {type: 'column', data: {columns: ['شهر', 'قيمة'], rows: [['يناير', 12], ['فبراير', 15], ['مارس', 18]]}}},
   {title: 'نص طويل', text: `${arabic} ${arabic} ${arabic} ${'abc '.repeat(40)}`.trim(), notes: 'ملاحظات المتحدث'},
@@ -60,8 +60,9 @@ const rtl = await read(deck('ar')), ltr = await read(deck('en'));
 
 // Regions mirror.
 {
-  const rtlRegions = shapes(rtl.xml, 2).filter(shape => /start|end/.test(shape.name)), ltrRegions = shapes(ltr.xml, 2).filter(shape => /start|end/.test(shape.name));
-  const byName = (list, side) => list.find(shape => shape.name.includes(`.${side}.`));
+  // The block in the start cell is blocks.0, the one in the end cell blocks.1 (shape names carry each block's path).
+  const rtlRegions = shapes(rtl.xml, 2).filter(shape => /\.blocks\.[01]\./.test(shape.name)), ltrRegions = shapes(ltr.xml, 2).filter(shape => /\.blocks\.[01]\./.test(shape.name));
+  const byName = (list, side) => list.find(shape => shape.name.includes(`.blocks.${side === 'start' ? 0 : 1}.`));
   assert.ok(byName(rtlRegions, 'start').x > byName(rtlRegions, 'end').x, 'the authored left region is at the right');
   assert.ok(byName(ltrRegions, 'start').x < byName(ltrRegions, 'end').x);
 }

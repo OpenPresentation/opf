@@ -211,7 +211,7 @@ Approximations: anti-aliasing, text shadows, font weight and the exact glyph cov
 
 Overflow, minimum type size, reading order and image resolution use `composeSlide` at the deck's slide size with the resolved font scheme, the same composition the preview and the PPTX export consume. Without `fonts.textMeasurement` the text widths are core's portable estimate and can differ from the real fonts by a few percent; hosts that load fonts (the editor, the renderer) pass their measurement for font-exact results. A composition with `overflow: "error"` fails at composition time; `validate` still computes the geometry, relaxes the setting, and reports the overflow as a **warning**, so that `valid` never depends on font metrics. Rendering and export still refuse such a slide when it does not fit, and a host that wants the finding to fail promotes it with `severity: { 'opf/text-overflow': 'error' }`.
 
-Promoted region keys (`start`, `center`, `end`, `top:start` and the rest) are composed in visual reading order (rows from top to bottom, then along the row), whatever order the keys are written in. The PPTX export writes shapes in that order, which is the reading order of assistive technology; `opf/reading-order` checks that the composed order still matches the geometry (the same `visualReadingOrder` that composes the regions). Authoring with `blocks` (an ordered list) keeps the reading order equal to the visual order.
+The cells of a slide's grid (blocks that name `start`, `center`, `end`, `top:start` and the rest with `region`) are composed in visual reading order (rows from top to bottom, then along the row), whatever order the blocks are written in. The PPTX export writes shapes in that order, which is the reading order of assistive technology; `opf/reading-order` checks that the composed order still matches the geometry (the same `visualReadingOrder` that composes the regions). Authoring with `blocks` (an ordered list) keeps the reading order equal to the visual order.
 
 ## Templates and variables
 
@@ -469,7 +469,7 @@ Default severity: **error**. Cost: structure. A connector end names no block or 
 
 Default severity: **error**. Cost: structure. An image placement cannot be honoured.
 
-**Why.** A placed image bleeds to a slide edge and the rest of the slide composes beside it. Only a top-level block (slides.N.blocks.I) can do that, and a slide edge holds one placed image; a block in a group or a promoted region, or a second block on the same edge, has nowhere to go.
+**Why.** A placed image bleeds to a slide edge and the rest of the slide composes beside it. Only a top-level block (slides.N.blocks.I) can do that, and a slide edge holds one placed image; a block in a group or in a cell of the slide grid, or a second block on the same edge, has nowhere to go.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -662,7 +662,7 @@ Default severity: **error**. Cost: structure. A layout template's region list is
 
 Default severity: **error**. Cost: structure. A layout template's regions are not valid.
 
-**Why.** Region names are unique across the whole record and may not be tag, auto or a promoted-region word (start, center, end, top, middle, bottom), so a Markdown block's region= stays unambiguous; title and subtitle name the heading regions, which take only a size, an anchor and (the title) a rule; a subtitle region needs a title region; a region accepts at least one content kind; overflowRegion must name a body region. composeSlide refuses such a record.
+**Why.** Region names are unique across the whole record and may not be tag, auto or a cell word of the slide grid (start, center, end, top, middle, bottom), so a block's region (and a Markdown block's region=) stays unambiguous; title and subtitle name the heading regions, which take only a size, an anchor and (the title) a rule; a subtitle region needs a title region; a region accepts at least one content kind; overflowRegion must name a body region. composeSlide refuses such a record.
 
 **Basis.** spec/schemas/layout.schema.json and the region rules (docs/layout-templates.md)
 
@@ -1144,7 +1144,7 @@ Default severity: **warning**. Cost: structure. A built-in variable has no value
 
 Default severity: **info**. Cost: structure. A group is drawn only when one of its optional variables has a value.
 
-**Why.** A group (a block or promoted region with `blocks`) whose content variables are all optional (`required: false`) and all unfilled is left out whole when the deck is filled: its pictures, cards and other text go with the fields the variables would fill, so a slide never draws a card around a picture with no text. Validation fills every variable with its example or a sample, so it reports the group here instead.
+**Why.** A group (a block with `blocks`) whose content variables are all optional (`required: false`) and all unfilled is left out whole when the deck is filled: its pictures, cards and other text go with the fields the variables would fill, so a slide never draws a card around a picture with no text. Validation fills every variable with its example or a sample, so it reports the group here instead.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

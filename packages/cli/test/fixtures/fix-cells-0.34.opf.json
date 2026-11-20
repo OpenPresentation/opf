@@ -1,0 +1,122 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Quarterly review",
+  "language": "en-US",
+  "slides": [
+    {
+      "title": "Operating snapshot",
+      "start": {
+        "text": "Revenue grew in every quarter, led by the enterprise tier."
+      },
+      "center+end": {
+        "chart": {
+          "type": "column",
+          "data": {
+            "columns": [
+              "Quarter",
+              "Revenue"
+            ],
+            "rows": [
+              [
+                "Q1",
+                12
+              ],
+              [
+                "Q2",
+                15
+              ],
+              [
+                "Q3",
+                19
+              ],
+              [
+                "Q4",
+                24
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "Revenue by quarter",
+      "layout": "chart",
+      "start": {
+        "text": "Every quarter beat the one before."
+      },
+      "center+end": {
+        "chart": {
+          "type": "column",
+          "data": {
+            "columns": [
+              "Quarter",
+              "Revenue"
+            ],
+            "rows": [
+              [
+                "Q1",
+                12
+              ],
+              [
+                "Q2",
+                15
+              ],
+              [
+                "Q3",
+                19
+              ],
+              [
+                "Q4",
+                24
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "What changed",
+      "layout": "section",
+      "top": {
+        "text": "Three things changed this year."
+      },
+      "bottom": {
+        "items": [
+          "Pricing moved to seats",
+          "Two new regions",
+          "Support hours doubled"
+        ]
+      }
+    },
+    {
+      "title": "Start with a focused pilot",
+      "layout": "metrics",
+      "blocks": [
+        {
+          "text": "Learn what works before scaling.",
+          "region": "note"
+        },
+        {
+          "metric": {
+            "value": 24,
+            "label": "teams in the pilot"
+          },
+          "region": "metrics"
+        }
+      ]
+    },
+    {
+      "title": "How it flows",
+      "layout": "flow",
+      "start": {
+        "text": "Plan"
+      },
+      "center+end": {
+        "items": [
+          "Build",
+          "Ship"
+        ]
+      }
+    }
+  ]
+}

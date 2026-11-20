@@ -34,7 +34,7 @@ const rich = cases.flatMap(([name, style], index) => [...(index ? [' '] : []), {
 const shapes = [
   ['body-root', {subtitle:'Body', text:rich}],
   ['body-block', {subtitle:'Body', blocks:[{text:rich}]}],
-  ['body-region', {center:{text:rich}}],
+  ['body-region', {blocks:[{region:'center', text:rich}]}],
   ['list-body', {items:[{text:rich}]}],
   ['list-description', {items:[{text:'List body', description:rich}]}],
   ['table-header', {table:{columns:[rich], rows:[['Table body']]}}],

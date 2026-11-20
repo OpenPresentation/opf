@@ -224,62 +224,68 @@
       "id": "s50-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "$4.8M",
-          "label": "Primary signal",
-          "description": "Prepare the quarter narrative for public-market investors",
-          "trend": "flat"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "Asteria Robotics should focus the next cycle on ",
-          {
-            "text": "prepare the quarter narrative for public-market investors",
-            "bold": true,
-            "color": "#7AB7A6"
-          },
-          " while making the operating tradeoffs clear to investor relations stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "Investor relations working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "Investor relations",
-              "Program lead",
-              "Watch",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "At risk",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "On track",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "$4.8M",
+            "label": "Primary signal",
+            "description": "Prepare the quarter narrative for public-market investors",
+            "trend": "flat"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "Asteria Robotics should focus the next cycle on ",
+            {
+              "text": "prepare the quarter narrative for public-market investors",
+              "bold": true,
+              "color": "#7AB7A6"
+            },
+            " while making the operating tradeoffs clear to investor relations stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "Investor relations working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Investor relations",
+                "Program lead",
+                "Watch",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "At risk",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "On track",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {

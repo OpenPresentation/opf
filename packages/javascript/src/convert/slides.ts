@@ -5,7 +5,8 @@
 import { visitContentPayloads } from "../content-walk.js";
 import { OPFPaginationError, type PaginatedPage, type PresentationPaginationOptions, paginate } from "../pagination.js";
 import { CONTENT_KEYS, type ConversionReport, type Json, Loss, type Obj, assertValidOutput, clone, concatText, contentKeysOf, isRecord, refuse, report, same } from "./shared.js";
-import { isRegionKey, regionKeysOf, sortRegionKeys } from "./structure.js";
+import { blocksInCellOrder, withoutCell } from "./structure.js";
+import { cellBlocks } from "../grid-cells.js";
 
 export interface SlideEdit extends ConversionReport {
   /** The presentation after the change. */
@@ -41,12 +42,12 @@ function replaceSlides(presentation: Obj, start: number, deleteCount: number, sl
   return next;
 }
 
-/** The blocks of a slide for splitting: its `blocks`, its inline content fields, or its regions in reading order. */
+/** The blocks of a slide for splitting: its `blocks` (out of their cells, in reading order of the cells), or its inline content fields. */
 function splittableBlocks(slide: Obj, loss: Loss): Obj[] {
-  const regions = sortRegionKeys(regionKeysOf(slide));
-  if (regions.length) {
-    loss.note("region placement");
-    return regions.map((key) => slide[key]);
+  const placed = blocksInCellOrder(slide);
+  if (placed.length) {
+    loss.note("cell placement");
+    return placed.map(withoutCell);
   }
   if (Array.isArray(slide.blocks)) return slide.blocks;
   const keys = contentKeysOf(slide);
@@ -66,7 +67,7 @@ export interface SplitSlideOptions {
  * Split one slide into several by its blocks. The slide's design, layout, composition, section and other slide
  * fields are copied to each part, its first part keeps its `id` and notes, later parts get ids ending `--2`,
  * `--3`, ... that no other slide uses, and every block (with its own id) moves to exactly one part. A slide that
- * uses named regions is split region by region and loses the regions' placement (reported).
+ * places its blocks in the cells of its grid is split in reading order of the cells and loses the cells' placement (reported).
  */
 export function splitSlide(presentation: unknown, slideIndex: number, options: SplitSlideOptions = {}): SlideEdit {
   const source = slideAt(presentation, slideIndex);
@@ -82,7 +83,7 @@ export function splitSlide(presentation: unknown, slideIndex: number, options: S
   }
   const bounds = [0, ...starts, blocks.length];
   const base: Obj = {};
-  for (const [key, value] of Object.entries(source)) if (!BODY_KEYS.has(key) && !isRegionKey(key)) base[key] = clone(value);
+  for (const [key, value] of Object.entries(source)) if (!BODY_KEYS.has(key)) base[key] = clone(value);
   const taken = documentIds(presentation as Obj);
   const slides = bounds.slice(0, -1).map((from, part) => {
     const slide: Obj = {};
@@ -176,7 +177,7 @@ export function mergeSlides(presentation: unknown, start: number, count = 2): Sl
     slides.push(clone(slideAt(presentation, start + offset)));
   }
   const loss = new Loss();
-  if (slides.some((slide) => regionKeysOf(slide).length)) throw refuse("Slides that place content in named regions cannot be merged. Convert the regions to blocks first.");
+  if (slides.some((slide) => cellBlocks(slide))) throw refuse("Slides that place their blocks in cells cannot be merged. Take the blocks out of their cells first.");
   const [first, ...others] = slides as [Obj, ...Obj[]];
   const merged: Obj = {};
   for (const [key, value] of Object.entries(first)) if (!BODY_KEYS.has(key) && key !== "notes") merged[key] = value;
@@ -272,7 +273,7 @@ function rebuild(presentation: Obj, group: readonly (PaginatedPage & { sourceSli
   const firstPage = group[0]!;
   const skeleton = clone(valueAt(presentation, ["slides", String(firstPage.slideIndex)])) as Obj;
   const root: Obj = {};
-  for (const [key, value] of Object.entries(skeleton)) if (!BODY_KEYS.has(key) && !isRegionKey(key)) root[key] = value;
+  for (const [key, value] of Object.entries(skeleton)) if (!BODY_KEYS.has(key)) root[key] = value;
   interface Slice {
     page: number;
     value: Json;
@@ -307,7 +308,7 @@ function rebuild(presentation: Obj, group: readonly (PaginatedPage & { sourceSli
       if (!isRecord(slot[key as never])) {
         const model = containerOf(depth);
         const copy: Obj = {};
-        for (const [name, entry] of Object.entries(model ?? {})) if (!BODY_KEYS.has(name) && !isRegionKey(name)) copy[name] = clone(entry);
+        for (const [name, entry] of Object.entries(model ?? {})) if (!BODY_KEYS.has(name)) copy[name] = clone(entry);
         (slot as Json)[key] = copy;
       }
       cursor = (slot as Json)[key];
@@ -332,7 +333,6 @@ function rebuild(presentation: Obj, group: readonly (PaginatedPage & { sourceSli
       node.blocks = node.blocks.filter((block: Json) => block !== undefined);
       for (const block of node.blocks) compact(block);
     }
-    for (const key of Object.keys(node)) if (isRegionKey(key) && isRecord(node[key])) compact(node[key]);
   };
   compact(root);
   if (skeleton.type !== undefined && CONTENT_KEYS.some((key) => root[key] !== undefined)) root.type = skeleton.type;

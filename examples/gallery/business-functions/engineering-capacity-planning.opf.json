@@ -228,62 +228,68 @@
       "id": "s29-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "91%",
-          "label": "Primary signal",
-          "description": "Balance platform reliability work with customer-facing commitments",
-          "trend": "flat"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "Relay Cloud should focus the next cycle on ",
-          {
-            "text": "balance platform reliability work with customer-facing commitments",
-            "bold": true,
-            "color": "#6B27D5"
-          },
-          " while making the operating tradeoffs clear to engineering stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "Engineering working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "Engineering",
-              "Program lead",
-              "Watch",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "At risk",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "On track",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "91%",
+            "label": "Primary signal",
+            "description": "Balance platform reliability work with customer-facing commitments",
+            "trend": "flat"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "Relay Cloud should focus the next cycle on ",
+            {
+              "text": "balance platform reliability work with customer-facing commitments",
+              "bold": true,
+              "color": "#6B27D5"
+            },
+            " while making the operating tradeoffs clear to engineering stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "Engineering working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Engineering",
+                "Program lead",
+                "Watch",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "At risk",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "On track",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {

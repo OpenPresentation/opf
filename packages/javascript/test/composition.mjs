@@ -20,7 +20,7 @@ for (const dimensions of [[1280,720],[720,1280],[1024,768],[320,180]]) {
     }
   }
 }
-const thirds = composeSlide({ top: { text: 'Top' }, middle: { text: 'Middle' }, bottom: { text: 'Bottom' } });
+const thirds = composeSlide({ blocks: [{ region: 'top', text: 'Top' }, { region: 'middle', text: 'Middle' }, { region: 'bottom', text: 'Bottom' }] });
 assert.equal(thirds.items.length, 3);
 const byValue = Object.fromEntries(thirds.items.map(item => [item.value,item.box]));
 assert.ok(byValue.Top.y < byValue.Middle.y && byValue.Middle.y < byValue.Bottom.y);
@@ -75,7 +75,7 @@ for (const dimensions of [[1280,720],[720,1280],[320,180]]) {
   }
  }
 }
-const groupInRegion=composeSlide({start:{blocks:[{text:'A'},{text:'B'}],composition:{mode:'column'}},end:{text:'C'}});
+const groupInRegion=composeSlide({blocks:[{region:'start',blocks:[{text:'A'},{text:'B'}],composition:{mode:'column'}},{region:'end',text:'C'}]});
 assert.equal(groupInRegion.groups.length,1);assert.equal(groupInRegion.items.length,3);
 assert.ok(groupInRegion.items[1].box.y>groupInRegion.items[0].box.y);
 for(const invalid of [{blocks:[]},{type:'group'},{text:'Leaf',composition:{mode:'row'}},{blocks:[{text:'A'}],image:'image.png'},{type:'text',blocks:[{text:'A'}]}]) {

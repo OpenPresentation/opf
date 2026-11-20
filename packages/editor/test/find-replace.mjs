@@ -36,7 +36,7 @@ const deck = () => ({
         { code: { source: "const acme = 1;", language: "javascript" } },
       ],
     },
-    { id: "three", title: "Left and right", start: { text: "Acme left" }, end: { items: ["Acme right"] }, design: { header: { start: { text: "Acme header" } } } },
+    { id: "three", title: "Left and right", blocks: [{ region: 'start', text: "Acme left" }, { region: 'end', items: ["Acme right"] }], design: { header: { start: { text: "Acme header" } } } },
   ],
 });
 const session = () => createEditorSession(deck(), { rejectInvalid: true });
@@ -47,7 +47,7 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   const labels = fields.map((field) => field.label);
   for (const expected of ["Presentation name", "Presentation description", "Footer center", "Title", "Subtitle", "Tag", "Speaker notes", "Text",
     "List item 1", "List item 2", "List item 3", "Quote", "Quote attribution", "Quote source", "Metric label", "Timeline event 1", "Timeline event 1 date",
-    "Table header 1", "Table row 1, column 1", "Table row 2, column 1", "Chart label 2", "Image alt text", "Code", "start · Text", "end · List item 1", "Header start"]) {
+    "Table header 1", "Table row 1, column 1", "Table row 2, column 1", "Chart label 2", "Image alt text", "Code", "Block 1 · Text", "Block 2 · List item 1", "Header start"]) {
     assert.ok(labels.some((label) => label.endsWith(expected)), `searches ${expected}: ${labels.join("; ")}`);
   }
   assert.ok(!fields.some((field) => /asset:|data:|minimal|roboto/.test(field.text)), "never searches asset references or design ids");
@@ -58,7 +58,7 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   assert.ok(slideOnly.length && slideOnly.every((field) => field.slideIndex === 0), "slideIndex limits the search to one slide and leaves deck fields out");
   for (const field of fields) assert.equal(typeof field.pointer, "string");
   // Paths are the dotted paths the canvas traces.
-  assert.ok(fields.some((field) => field.path === "slides.2.start.text"));
+  assert.ok(fields.some((field) => field.path === "slides.2.blocks.0.text"));
   assert.ok(fields.some((field) => field.path === "slides.1.blocks.0.items.1.text"));
   assert.ok(fields.some((field) => field.path === "slides.1.blocks.4.table.rows.1.0.value"));
 }
@@ -153,7 +153,7 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   assert.equal(after.slides[1].blocks[6].image.alt, "Globex logo");
   assert.equal(after.slides[1].blocks[6].image.src, "asset:logo", "references are untouched");
   assert.equal(after.slides[1].blocks[2].metric.value, 98);
-  assert.equal(after.slides[2].start.text, "Globex left");
+  assert.equal(after.slides[2].blocks[0].text, "Globex left");
   assert.equal(after.slides[2].design.header.start.text, "Globex header");
   assert.equal(findMatches(after, "Acme").matches.length, 0);
   editor.undo();
@@ -240,7 +240,7 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   const editor = session();
   const result = replaceAll(editor, "Acme", "Globex", { slideIndex: 2 });
   assert.equal(result.count, 3);
-  assert.equal(editor.presentation.slides[2].start.text, "Globex left");
+  assert.equal(editor.presentation.slides[2].blocks[0].text, "Globex left");
   assert.equal(editor.presentation.slides[0].title, "Acme grows");
   assert.equal(editor.presentation.name, "Acme review");
 }

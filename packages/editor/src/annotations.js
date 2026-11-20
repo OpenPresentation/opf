@@ -71,9 +71,7 @@ export function captionTargets(presentation) {
   };
   (presentation?.slides ?? []).forEach((slide, index) => {
     if (!isObject(slide)) return;
-    const regions = Object.keys(slide).filter((key) => /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key) && isObject(slide[key])).sort();
-    if (regions.length) for (const key of regions) visit(slide[key], `slides.${index}.${key}`);
-    else visit(slide, `slides.${index}`);
+    visit(slide, `slides.${index}`);
   });
   return targets;
 }

@@ -88,58 +88,6 @@ const ROOT_PAYLOAD_FIELDS = [
   "timeline"
 ];
 
-const PROMOTED_REGION_KEYS = [
-  "start",
-  "center",
-  "end",
-  "start+center",
-  "center+end",
-  "start+center+end",
-  "top",
-  "middle",
-  "bottom",
-  "top+middle",
-  "middle+bottom",
-  "top+middle+bottom",
-  "top:start",
-  "top:center",
-  "top:end",
-  "top:start+center",
-  "top:center+end",
-  "top:start+center+end",
-  "middle:start",
-  "middle:center",
-  "middle:end",
-  "middle:start+center",
-  "middle:center+end",
-  "middle:start+center+end",
-  "bottom:start",
-  "bottom:center",
-  "bottom:end",
-  "bottom:start+center",
-  "bottom:center+end",
-  "bottom:start+center+end",
-  "top+middle:start",
-  "top+middle:center",
-  "top+middle:end",
-  "top+middle:start+center",
-  "top+middle:center+end",
-  "top+middle:start+center+end",
-  "middle+bottom:start",
-  "middle+bottom:center",
-  "middle+bottom:end",
-  "middle+bottom:start+center",
-  "middle+bottom:center+end",
-  "middle+bottom:start+center+end",
-  "top+middle+bottom:start",
-  "top+middle+bottom:center",
-  "top+middle+bottom:end",
-  "top+middle+bottom:start+center",
-  "top+middle+bottom:center+end",
-  "top+middle+bottom:start+center+end"
-];
-
-
 const FIELD_TYPE = Object.freeze({
   text: "text",
   items: "list",
@@ -535,17 +483,6 @@ function slideRootContent(slide, slidePath) {
   return items;
 }
 
-function promotedRegionContent(slide, slidePath) {
-  const items = [];
-  for (const key of PROMOTED_REGION_KEYS) {
-    if (slide[key] !== undefined) {
-      const payload = contentPayloadFromHost(slide[key], `${slidePath}.${key}`);
-      items.push({ ...payload, regionKey: key });
-    }
-  }
-  return items;
-}
-
 function blockContent(slide, slidePath) {
   if (!Array.isArray(slide.blocks)) return [];
   return slide.blocks.map((block, index) => contentPayloadFromHost(block, `${slidePath}.blocks.${index}`));
@@ -584,10 +521,7 @@ function bindSlide(presentation, index, context) {
   // {{deck.slideCount}} hold this slide's number, its section and the deck's slide count, the same values the furniture draws. Core resolved them.
   const slide = slideContext.slide;
   const layout = slideContext.options.layout;
-  const contentItems = [
-    ...slideRootContent(slide, slidePath),
-    ...promotedRegionContent(slide, slidePath)
-  ];
+  const contentItems = slideRootContent(slide, slidePath);
   const blocks = blockContent(slide, slidePath);
 
   const design = resolveDesign(presentation, slide, slideContext);

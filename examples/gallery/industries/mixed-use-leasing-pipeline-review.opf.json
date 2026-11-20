@@ -228,62 +228,68 @@
       "id": "s10-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "$4.8M",
-          "label": "Primary signal",
-          "description": "Move anchor tenants from interest to signed letters of intent",
-          "trend": "up"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "Cedarwell Properties should focus the next cycle on ",
-          {
-            "text": "move anchor tenants from interest to signed letters of intent",
-            "bold": true,
-            "color": "#F59E0B"
-          },
-          " while making the operating tradeoffs clear to commercial real estate stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "Commercial real estate working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "Commercial real estate",
-              "Program lead",
-              "On track",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "Watch",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "At risk",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "$4.8M",
+            "label": "Primary signal",
+            "description": "Move anchor tenants from interest to signed letters of intent",
+            "trend": "up"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "Cedarwell Properties should focus the next cycle on ",
+            {
+              "text": "move anchor tenants from interest to signed letters of intent",
+              "bold": true,
+              "color": "#F59E0B"
+            },
+            " while making the operating tradeoffs clear to commercial real estate stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "Commercial real estate working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Commercial real estate",
+                "Program lead",
+                "On track",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "Watch",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "At risk",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {

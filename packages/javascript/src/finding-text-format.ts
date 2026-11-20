@@ -192,7 +192,7 @@ const imagePlacementInvalid: RuleText = (finding) => {
     };
   }
   return {
-    message: `${code("placement")} can't be used here: a block inside a group or a region can't bleed to a slide edge.`,
+    message: `${code("placement")} can't be used here: a block inside a group or in a cell of the slide's grid can't bleed to a slide edge.`,
     next: `use ${code("placement")} on a top-level block of the slide, one per slide edge, or remove it.`,
   };
 };

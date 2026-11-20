@@ -371,7 +371,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `name` | yes | `string` | The region's name, lowercase kebab-case, unique across the whole record. A block targets it with 'region': '<name>'. It may not be 'title' (those are heading regions), 'tag', 'auto' or one of the promoted-region words... |
+| `name` | yes | `string` | The region's name, lowercase kebab-case, unique across the whole record. A block targets it with 'region': '<name>'. It may not be 'title' (those are heading regions), 'tag', 'auto' or one of the cell words of a slide... |
 | `size` | no | `ref:RegionSize` |  |
 | `accepts` | no | `array<enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline \| diagram \| shape \| group>` | Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A region that takes 'image' also takes a shape block. A group is also accepted where every one of its leaf kinds... |
 | `role` | no | `enum:primary \| media \| supporting` | Which content the region wants first. Binding gives a picture (image, video) to a media region first, then primary, supporting; every other kind to a primary region first, then supporting, media; of two equal regions... |

@@ -138,14 +138,16 @@ assert.equal(dropTarget(nested, { x: 2, y: 2 }, []), null);
 const self = dropTarget(nested, center(evidence), [evidence.key]);
 assert.equal(self.target, row.key, "a dragged node is never its own target");
 
-// --- implicit content, promoted regions, layout regions, parts ---------------------------------------------------------------------
+// --- implicit content, cells of the slide grid, layout regions, parts ------------------------------------------------------------
+// OPF 0.35: the blocks of a slide without a layout name cells with `region`; each cell is a virtual container of the blocks that name it.
 const promoted = sceneOf(dynamic, 2);
 const regionNodes = promoted.contentChildren(promoted.slideKey);
-assert.deepEqual(regionNodes.map((node) => [node.kind, node.region, node.promoted]), [["region", "top", true], ["region", "middle", true], ["region", "bottom", true]]);
+assert.deepEqual(regionNodes.map((node) => [node.kind, node.region, node.promoted, node.virtual]), [["region", "top", true, true], ["region", "middle", true, true], ["region", "bottom", true, true]]);
+assert.deepEqual(regionNodes.map((node) => node.key), ["top", "middle", "bottom"].map((cell) => `${promoted.slideKey}#${cell}`));
 assert.equal(promoted.containerOf(promoted.slideKey).promoted, true);
 const topText = promoted.contentChildren(regionNodes[0].key)[0];
-assert.deepEqual([topText.kind, topText.key, topText.field, topText.owner], ["implicit", "/slides/2/top/text", "text", "/slides/2/top"]);
-assert.match(topText.label, /^Text \(slide\): First: state the situation\./);
+assert.deepEqual([topText.kind, topText.key, topText.pin], ["block", "/slides/2/blocks/0", "top"]);
+assert.match(topText.label, /^Text: First: state the situation\./);
 
 const tour = read("technical/full-feature-tour.opf.json");
 const listSlide = sceneOf(tour, 5);

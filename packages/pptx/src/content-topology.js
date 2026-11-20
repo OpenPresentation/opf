@@ -1,11 +1,12 @@
 import {sourceRunStyles, validateSourceRunStyles, restoreSourceRunStyles} from './source-run-styles.js';
+import {gridCells, isGridCell} from '@openpresentation/opf/composition';
 // Content topology (spec-gap closure P1): the structure of a slide's content
 // survives a PPTX round trip through the OPF_SLIDE_V1 record.
 //
 // PowerPoint has no native counterpart for OPF's content structure: nested
-// groups, promoted regions (`left`, `top:left` ...), a root payload (`text`,
-// `items` ...) versus `blocks`, block ids, block extensions and group
-// composition. Import rebuilds flat blocks from the native shapes in reading
+// groups, a root payload (`text`, `items` ...) versus `blocks`, a block's
+// `region` (a layout region, or a cell of the slide grid such as `top:start`),
+// block ids, block extensions and group composition. Import rebuilds flat blocks from the native shapes in reading
 // order. The topology record stores the structure and the reference-pixel box
 // of every leaf, taken from the same `composeSlide` geometry the exporter draws
 // from. Import matches each imported block to the smallest stored leaf whose
@@ -18,10 +19,11 @@ import {sourceRunStyles, validateSourceRunStyles, restoreSourceRunStyles} from '
 //   Topology = {form: 'root', field, box?}                 // one root payload on the slide
 //            | {form: 'root', fields: [{field, box?}]}     // root shorthand with several payloads
 //            | {form: 'blocks', blocks: Node[]}
-//            | {form: 'regions', regions: {[key]: Node}}   // key = promoted region key
+//            | {form: 'regions', regions: {[key]: Node}}   // 0.34 and earlier: key = a slide key that named a cell (`top:start`);
+//                                                             // import rebuilds it as blocks whose `region` names the cell (OPF 0.35)
 //   Node     = {t: 'group', id?, ext?, comp?, typed?, pin?, in?, emph?, blocks: Node[]}
 //            | {t: 'leaf', k, id?, ext?, typed?, pin?, in?, emph?, bullets?, box?, lines?, wrap?}   // box = [x, y, w, h] reference px, 1 decimal
-//   pin = the block's authored `region` pin (OPF 0.19 layout templates, RR-81), restored onto the block
+//   pin = the block's authored `region` (a layout region pin, OPF 0.19 and RR-81, or a cell of the slide grid, OPF 0.35), restored onto the block
 //   emph = the block's or group's authored `emphasis` (true or false, LH-06), restored onto it
 //   in  = the template region a root block was drawn in (RR-81): where its shapes are, for editors and diagnostics; never restored
 //   typed = true when the authored block spelled out its `type`
@@ -52,11 +54,8 @@ const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringi
 
 export const CONTENT_KINDS = Object.freeze(['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape']);
 export const ROOT_PAYLOAD_FIELDS = Object.freeze(['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram']);
-const HORIZONTAL = ['start', 'center', 'end', 'start+center', 'center+end', 'start+center+end'];
-const VERTICAL = ['top', 'middle', 'bottom', 'top+middle', 'middle+bottom', 'top+middle+bottom'];
-export const REGION_KEYS = Object.freeze([...HORIZONTAL, ...VERTICAL, ...VERTICAL.flatMap(row => HORIZONTAL.map(column => `${row}:${column}`))]);
-const REGION_KEY_PATTERN = /^[a-z]+(\+[a-z]+)*(:[a-z]+(\+[a-z]+)*)?$/;
-const REGION_KEY_SET = new Set(REGION_KEYS);
+// The cells of a slide's grid (core `gridCells`): 0.34 stored a slide's cells as the `regions` form, keyed by them.
+const CELL_PATTERN = /^[a-z]+(\+[a-z]+)*(:[a-z]+(\+[a-z]+)*)?$/;
 // Groups nest at most this deep (a leaf inside three groups). Deeper structures
 // are valid OPF but are not stored; the slide then imports as flat blocks.
 export const MAX_GROUP_DEPTH = 3;
@@ -68,6 +67,8 @@ export const MAX_ID_LENGTH = 256;
 export const BOX_TOLERANCE = 3;
 // A template region name (OPF 0.19), as a `region` pin or the region a block was drawn in.
 const REGION_NAME = /^[a-z][a-z0-9-]{0,63}$/;
+// A block's `region`: a template region name, or (OPF 0.35) a cell of the slide grid.
+const pinOf = value => typeof value === 'string' && (REGION_NAME.test(value) || isGridCell(value));
 
 const kindOfField = field => field === 'items' || field === 'bullets' ? 'list' : field;
 const isGroup = block => object(block) && (block.type === 'group' || (block.type === undefined && Array.isArray(block.blocks)));
@@ -294,7 +295,7 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     }
     if (object(block.extensions)) node.ext = clone(block.extensions);
     if (typeof block.type === 'string') node.typed = true;
-    if (typeof block.region === 'string' && REGION_NAME.test(block.region)) node.pin = block.region;
+    if (pinOf(block.region)) node.pin = block.region;
     if (typeof block.emphasis === 'boolean') node.emph = block.emphasis;
     if (regionOf.has(path)) node.in = regionOf.get(path);
     return node;
@@ -320,9 +321,7 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     return leaf;
   };
   try {
-    // Core precedence: promoted regions win over blocks, blocks over a root payload.
-    const regionKeys = Object.keys(slide).filter(key => REGION_KEY_SET.has(key) && object(slide[key]));
-    if (regionKeys.length) return {form: 'regions', regions: Object.fromEntries(regionKeys.map(key => [key, node(slide[key], `${base}.${key}`, 0)]))};
+    // Core precedence: blocks over a root payload. A block in a cell of the slide grid is one of the blocks (its cell is its pin).
     if (Array.isArray(slide.blocks)) {
       if (!slide.blocks.length) return undefined;
       return {form: 'blocks', blocks: slide.blocks.map((block, index) => node(block, `${base}.blocks.${index}`, 0))};
@@ -533,7 +532,7 @@ export function validateTopology(value) {
     if (!validId(item.id)) throw Error('Invalid content node id.');
     if (item.ext !== undefined && !object(item.ext)) throw Error('Invalid content node extensions.');
     if (item.typed !== undefined && item.typed !== true) throw Error('Invalid content node type flag.');
-    if ((item.pin !== undefined && !REGION_NAME.test(item.pin ?? '')) || (item.in !== undefined && !REGION_NAME.test(item.in ?? ''))) throw Error('Invalid content node region.');
+    if ((item.pin !== undefined && !pinOf(item.pin)) || (item.in !== undefined && !REGION_NAME.test(item.in ?? ''))) throw Error('Invalid content node region.');
     if (item.emph !== undefined && typeof item.emph !== 'boolean') throw Error('Invalid content node emphasis.');
     if (item.t === 'group') {
       if (depth >= MAX_GROUP_DEPTH) throw Error(`Content groups nest deeper than ${MAX_GROUP_DEPTH} levels.`);
@@ -568,11 +567,12 @@ export function validateTopology(value) {
       for (const child of value.blocks) node(child, 0);
       return value;
     case 'regions': {
+      // A 0.34 file: the slide's cells as slide keys (import rebuilds them as blocks with `region`).
       if (!object(value.regions)) throw Error('Invalid content regions.');
       const keys = Object.keys(value.regions);
-      if (!keys.length || keys.length > REGION_KEYS.length) throw Error('Invalid content regions.');
+      if (!keys.length || keys.length > gridCells.length) throw Error('Invalid content regions.');
       for (const key of keys) {
-        if (!REGION_KEY_PATTERN.test(key) || !REGION_KEY_SET.has(key)) throw Error(`Unknown region key ${key}.`);
+        if (!CELL_PATTERN.test(key) || !isGridCell(key)) throw Error(`Unknown region key ${key}.`);
         node(value.regions[key], 0);
       }
       return value;
@@ -604,12 +604,19 @@ const textRuns = value => typeof value === 'string' || (Array.isArray(value) && 
 /**
  * Rebuild the authored content form from the imported flat `blocks` and their
  * native `bounds` (reference px, one entry per block, null when unknown).
- * Returns {fields} (slide properties to set: root field, `blocks` or region
- * keys; a `null` value removes the property) and the restored block ids, or
- * {reason} when a block matches no leaf or several blocks land on one leaf.
- * Leaves with no block are dropped: empty payloads export nothing.
+ * Returns {fields} (slide properties to set: a root field or `blocks`; a `null`
+ * value removes the property) and the restored block ids, or {reason} when a
+ * block matches no leaf or several blocks land on one leaf. Leaves with no block
+ * are dropped: empty payloads export nothing.
+ *
+ * A 0.34 file's `regions` form (the slide's cells as slide keys) comes back as
+ * blocks whose `region` names the cell (OPF 0.35), in `cells.order` (the order
+ * 0.34 export walked them: the sorted keys, or a legacy record's own order), so
+ * every later record read in that order finds its payload. On a slide with a
+ * layout (`cells.layout`) the blocks name no cell: 0.34 ignored that layout,
+ * and a cell word names no region of it, so they bind to its regions.
  */
-export function rebuildContent(topology, blocks, bounds, placed, intactStyles = {}, protectedBlocks = new Set()) {
+export function rebuildContent(topology, blocks, bounds, placed, intactStyles = {}, protectedBlocks = new Set(), cells = {}) {
   if (!Array.isArray(blocks) || !Array.isArray(bounds) || blocks.length !== bounds.length) return {reason: 'the imported blocks carry no native bounds'};
   const leaves = [];
   const collect = item => {
@@ -704,7 +711,8 @@ export function rebuildContent(topology, blocks, bounds, placed, intactStyles = 
   };
   if (topology.form === 'root') { for (const leaf of leaves) for (const index of leaf.rejoined ?? leaf.matches) paths.set(index, leaf.field); }
   else if (topology.form === 'blocks') { let position = 0; for (const item of topology.blocks) if (built(item)) place(item, `blocks.${position++}`); }
-  else for (const [key, item] of Object.entries(topology.regions)) if (built(item)) place(item, key);
+  const cellOrder = topology.form === 'regions' ? cellKeys(topology.regions, cells.order) : [];
+  if (topology.form === 'regions') { let position = 0; for (const key of cellOrder) if (built(topology.regions[key])) place(topology.regions[key], `blocks.${position++}`); }
   const fields = {blocks: null};
   if (topology.form === 'root') {
     for (const leaf of leaves) {
@@ -725,10 +733,20 @@ export function rebuildContent(topology, blocks, bounds, placed, intactStyles = 
     placed?.(paths);
     return {fields, ids};
   }
-  for (const [key, item] of Object.entries(topology.regions)) {
-    const host = build(item);
-    if (host !== undefined) fields[key] = host;
+  const rebuilt = [];
+  for (const key of cellOrder) {
+    const host = build(topology.regions[key]);
+    if (host === undefined) continue;
+    const {id, region: _pin, ...rest} = host;
+    rebuilt.push({...(id !== undefined ? {id} : {}), ...(cells.layout ? {} : {region: key}), ...rest});
   }
+  if (rebuilt.length) fields.blocks = rebuilt;
   placed?.(paths);
   return {fields, ids};
+}
+
+/** The cell keys of a 0.34 `regions` record in the order its export walked them: `order` when it names exactly those keys, else sorted. */
+function cellKeys(regions, order) {
+  const keys = Object.keys(regions).sort();
+  return Array.isArray(order) && order.length === keys.length && new Set(order).size === keys.length && order.every(key => Object.hasOwn(regions, key)) ? [...order] : keys;
 }

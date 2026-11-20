@@ -29,6 +29,7 @@ import {itemAlignment,resolveDesignHints,type DesignAlignment,type ResolvedDesig
 import {visualReadingOrder} from './reading-order.js';
 import {isLayoutTemplate,layoutTemplate,regionDiagram,regionListColumns,regionSequence,singleBlockRegion,titleBesideTemplate,withRegionRules,TITLE_BESIDE_SHARE,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
 import {bindRegions,rootNodes,type BoundBlock} from './bind-regions.js';
+import {cellBlocks,cellsInReadingOrder,isGridCell,type CellBlock} from './grid-cells.js';
 import {featuredCells,type FeaturedCells} from './featured-cards.js';
 import {EYEBROW_LABEL_CHARS,EYEBROW_TEXT_KIND,eyebrowLabel,isLabelText,rowLabel,groupBinding,JOINED_FIXED_MAX,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength,type GroupedBinding} from './block-grouping.js';
 import {allocateRows,areaRects,collapseAreas,columnWidths,flowCells,flowShape,gridFlowShape,LIST_WHOLE_ENTRIES,listColumnBreaks,listGridShape,shareHeights,type CellRect,type FlowShape,type RowDemand} from './template-geometry.js';
@@ -5400,7 +5401,75 @@ function growMixedCode(input: unknown, options: ComposeSlideOptions, result: Sli
   }
   return result;
 }
+/** Result keys that hold a dotted document path (`path`, `hostPath`, `textPath`, `paths`, an overlay's `ref`, `at`). */
+const PATH_KEY = /(?:^|[a-z])(?:path|Path|paths|Paths)$|^ref$|^at$/;
+/** Result keys that hold the author's own payloads: never rewritten. */
+const AUTHORED_KEYS: ReadonlySet<string> = new Set(['value', 'payload', 'host']);
+/**
+ * OPF 0.35: a slide without a layout whose blocks name cells of its 3 x 3 grid (`region`; cellBlocks) is composed as the grid of cells
+ * it describes: each cell holds its one block, or a group of the blocks that name it, in source order. The engine's own view keeps each
+ * cell under its cell word (`slides.N.top:start`), so every rule of the grid composes it exactly as 0.34 composed the same content under
+ * the slide keys it replaced; composeSlide then writes the result's paths as the author's (`slides.N.blocks.I`). The group of a cell that
+ * several blocks name keeps the cell's path (`slides.N.top:start`), its blocks their own. Undefined for any other slide.
+ */
+/** OPF 0.35 (layout-cells.ts): compose a slide's cells beside its layout record, as 0.34 composed a slide with a layout and cell keys (the
+ *  record's design and composition apply, its regions do not), to tell whether the fix that removes the layout keeps the drawing. */
+const CELLS_BESIDE_LAYOUT = Symbol.for('opf.cellsBesideLayout');
+function cellComposition(input: unknown, options: ComposeSlideOptions): { slide: Record<string, unknown>; path: (value: string) => string } | undefined {
+  if (options.layout !== null && typeof options.layout === 'object' && (options as Record<symbol, unknown>)[CELLS_BESIDE_LAYOUT] !== true) return undefined;
+  const source = record(input), placed = cellBlocks(source);
+  if (!placed) return undefined;
+  const { blocks: _blocks, ...slide } = source as Record<string, unknown>;
+  const base = `slides.${options.slideIndex ?? 0}`, single = new Map<string, number>(), many = new Map<string, number[]>();
+  const authored = ({ block }: CellBlock): Record<string, unknown> => { const { region: _region, ...rest } = block; return rest; };
+  for (const cell of cellsInReadingOrder(placed)) {
+    const entries = placed.filter(entry => entry.cell === cell);
+    if (entries.length === 1) { slide[cell] = authored(entries[0]!); single.set(cell, entries[0]!.index); }
+    else { slide[cell] = { blocks: entries.map(authored) }; many.set(cell, entries.map(entry => entry.index)); }
+  }
+  const escape = (text: string) => text.replace(/[.+]/g, match => `\\${match}`);
+  const pattern = new RegExp(`^${escape(base)}\\.(${[...single.keys(), ...many.keys()].map(escape).join('|')})(?=\\.|$)(\\.blocks\\.(\\d+)(?=\\.|$))?`);
+  const path = (value: string): string => value.replace(pattern, (whole, cell: string, nested: string | undefined, index: string | undefined) => {
+    const own = single.get(cell);
+    if (own !== undefined) return `${base}.blocks.${own}${nested ?? ''}`;
+    const block = index !== undefined ? many.get(cell)?.[Number(index)] : undefined;
+    return block !== undefined ? `${base}.blocks.${block}` : whole;
+  });
+  return { slide, path };
+}
+/** Rewrite every path string of a composition in place (cellComposition), leaving the author's payloads and objects alone. */
+function rewritePaths(value: unknown, path: (value: string) => string, authored: WeakSet<object>, seen = new WeakSet<object>()): void {
+  if (value === null || typeof value !== 'object' || seen.has(value) || authored.has(value)) return;
+  seen.add(value);
+  if (Array.isArray(value)) { for (const entry of value) rewritePaths(entry, path, authored, seen); return; }
+  const target = value as Record<string, unknown>;
+  for (const key of Object.keys(target)) {
+    if (AUTHORED_KEYS.has(key)) continue;
+    const entry = target[key];
+    if (typeof entry === 'string') { if (PATH_KEY.test(key)) { const next = path(entry); if (next !== entry) target[key] = next; } }
+    else if (Array.isArray(entry) && PATH_KEY.test(key) && entry.some(item => typeof item === 'string')) target[key] = entry.map(item => typeof item === 'string' ? path(item) : item);
+    else rewritePaths(entry, path, authored, seen);
+  }
+}
+/** Every object of an authored value, so rewritePaths never touches the author's own objects. */
+function authoredObjects(value: unknown, into = new WeakSet<object>(), depth = 0): WeakSet<object> {
+  if (value === null || typeof value !== 'object' || into.has(value) || depth > 64) return into;
+  into.add(value);
+  for (const entry of Array.isArray(value) ? value : Object.values(value)) authoredObjects(entry, into, depth + 1);
+  return into;
+}
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
+  // OPF 0.35 removed the slide keys that named cells (`start`, `top:start`, ...; validate reports each with the fix that moves it into a
+  // block): a slide that still has one draws without it.
+  const own = record(input);
+  if (Object.keys(own).some(isGridCell)) input = Object.fromEntries(Object.entries(own).filter(([key]) => !isGridCell(key)));
+  const cells = cellComposition(input, options);
+  if (!cells) return composeGrid(input, options);
+  const result = composeGrid(cells.slide, options);
+  rewritePaths(result, cells.path, authoredObjects(input));
+  return result;
+}
+function composeGrid(input: unknown, options: ComposeSlideOptions): SlideComposition {
   if (options.textMeasurement) options = { ...options, textMeasurement: memoizedMeasurement(options.textMeasurement) };
   const probe = (options as Record<symbol, unknown>)[TIGHT_DISPLAY] !== undefined || options.fill === false ? undefined : { differs: false };
   if (probe) tightProbes.push(probe);
@@ -5773,6 +5842,9 @@ export function messageWords(value: unknown): number {
 function bodyPayloads(slide: Record<string, any>): { field: string; host: Record<string, any> }[] | undefined {
   const empty = (value: unknown) => value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0);
   const payloads: { field: string; host: Record<string, any> }[] = [];
+  // OPF 0.35: blocks placed in the cells of the slide's grid are no lone payload (their cells place them), as composeSlide's own view of
+  // such a slide holds them under cell words, beside no root content.
+  if (cellBlocks(slide)) return payloads;
   for (const host of [slide, ...(Array.isArray(slide.blocks) ? slide.blocks.map(record) : [])]) {
     if (host !== slide && !empty(host.blocks)) return undefined;
     for (const field of fields) if (!empty(host[field])) payloads.push({ field, host });
@@ -12073,7 +12145,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // Every icon of the slide that resolves and is not drawn: the guard turned the chips off (no room without setting text smaller), or it
   // marks something icons do not draw on (a nested or numbered entry). The text stays; the finding says why the chip is missing.
   // What bounds the space of the block an icon marks, so the finding names what the author can change: a share the author set
-  // (`composition.weights` of the slide or of a group around the block), the layout region or promoted region it is placed in, or the slide.
+  // (`composition.weights` of the slide or of a group around the block), the layout region or the cell of the slide's grid it is placed in, or the slide.
   const roomFor = (at: string): string => {
     const owner = items.filter(item => at.startsWith(`${item.path}.`)).sort((a, b) => b.path.length - a.path.length)[0];
     const steps = (owner?.path ?? at).slice(path.length + 1).split('.');
@@ -12084,8 +12156,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       node = record(Array.isArray(node.blocks) ? node.blocks[Number(steps[++index])] : undefined);
     }
     if (weighted) return 'its block, at the share `composition.weights` gives it,';
-    const region = owner?.region ?? (regionParts(steps[0] ?? '') ? steps[0] : undefined);
-    return region !== undefined ? `its block, in the region \`${region}\`,` : 'the slide';
+    if (owner?.region !== undefined) return `its block, in the region \`${owner.region}\`,`;
+    return regionParts(steps[0] ?? '') ? `its block, in the cell \`${steps[0]}\` of the slide's grid,` : 'the slide';
   };
   const iconDiagnostics: LayoutDiagnostic[] = [], drawnIcons = new Set(icons.map(icon => icon.path));
   for (const found of documentIcons(slide)) {
@@ -12360,6 +12432,7 @@ export { layoutContent, layoutStructure, LAYOUT_BODY_KINDS, type LayoutContent, 
 export { HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, TITLE_BESIDE_SHARE, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, regionDiagram, regionListColumns, regionSequence, titleBesideTemplate, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
 export { EYEBROW_LABEL_CHARS, EYEBROW_LABEL_WORDS, EYEBROW_TEXT_KIND, eyebrowLabel, isLabelText, rowLabel, ROW_LABEL_CHARS, ROW_LABEL_WORDS, groupBinding, groupingNode, JOINED_FIXED_MAX, majorityKind, MOVED_ROW_MAX, PAIR_FIGURE_KINDS, PAIR_LENGTH_RATIO, repeatedPairs, textLength, type GroupedBinding, type GroupingNode, type JoinedArrangement } from './block-grouping.js';
 export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
+export { cellBlocks, cellsInReadingOrder, gridCells, isGridCell, type CellBlock, type GridCell } from './grid-cells.js';
 export { allocateRows, gridFlowShape, LIST_WHOLE_ENTRIES, listColumnBreaks, listGridShape, shareHeights, type FlowShape, type RowDemand } from './template-geometry.js';
 export { THEME_DESIGN_KEYS } from './design-hints.js';
 export { FEATURED_LABEL_MAX_CHARACTERS, FEATURED_LABEL_MAX_WORDS, FEATURED_MARK_MAX_CHARACTERS, FEATURED_MAX_CELLS, featuredCells, type FeaturedCells, type FeaturedKind } from './featured-cards.js';

@@ -140,7 +140,7 @@ test('citation numbering, variables, host policies and nested dataset consumers 
 	const policy = parity(checker, document, { contracts: [{ path: '/slides/*/layout', allowedValues: ['statement'], message: 'Use the required layout.' }] });
 	assert.ok(policy.findings.some(finding => finding.ruleId === 'opf/contract'));
 	document.datasets = { values: { columns: ['X', 'Y'], rows: [['A', 9]] } };
-	document.slides[1] = { id: 'nested', title: 'Nested', start: { blocks: [{ blocks: [{ chart: { type: 'column', data: { dataset: 'values' } } }] }] }, end: { table: { dataset: 'values' } } };
+	document.slides[1] = { id: 'nested', title: 'Nested', blocks: [{ region: 'start', blocks: [{ blocks: [{ chart: { type: 'column', data: { dataset: 'values' } } }] }] }, { region: 'end', table: { dataset: 'values' } }] };
 	assert.equal(parity(checker, document).schemaValid, true);
 	document.datasets.values.rows[0][1] = 99;
 	assert.equal(parity(checker, document).schemaValid, true);

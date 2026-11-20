@@ -1824,7 +1824,7 @@
     },
     {
       "id": "COV-regions",
-      "title": "Format coverage: All 48 promoted region keys and region tiles",
+      "title": "Format coverage: All 48 cells of the slide grid (a block's region) and region tiles",
       "changes": [
         "fa-37-start-end",
         "lh-69-placed-tiles"

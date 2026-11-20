@@ -28,15 +28,19 @@
     },
     {
       "title": "Table beside text",
-      "start": {
-        "text": "Numbers on the right, the reading of them here: the second half carried the year."
-      },
-      "center+end": {
-        "table": {
-          "columns": [{ "name": "Half" }, { "name": "Revenue", "format": "$#,##0.0\"M\"" }, { "name": "Growth", "format": "0%" }],
-          "rows": [["H1", 21.2, 0.08], ["H2", 30.5, 0.44]]
+      "blocks": [
+        {
+          "region": "start",
+          "text": "Numbers on the right, the reading of them here: the second half carried the year."
+        },
+        {
+          "region": "center+end",
+          "table": {
+            "columns": [{ "name": "Half" }, { "name": "Revenue", "format": "$#,##0.0\"M\"" }, { "name": "Growth", "format": "0%" }],
+            "rows": [["H1", 21.2, 0.08], ["H2", 30.5, 0.44]]
+          }
         }
-      }
+      ]
     }
   ]
 }

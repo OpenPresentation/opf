@@ -3,38 +3,49 @@
   "slides": [
     {
       "title": "Operating Model",
-      "top:start": {
-        "text": "Inputs"
-      },
-      "top:center+end": {
-        "text": "Processing"
-      },
-      "middle+bottom:start+center+end": {
-        "items": [
-          "Queue",
-          "Route",
-          "Resolve"
-        ]
-      }
+      "blocks": [
+        {
+          "region": "top:start",
+          "text": "Inputs"
+        },
+        {
+          "region": "top:center+end",
+          "text": "Processing"
+        },
+        {
+          "region": "middle+bottom:start+center+end",
+          "items": [
+            "Queue",
+            "Route",
+            "Resolve"
+          ]
+        }
+      ]
     },
     {
       "title": "Team Responsibilities",
-      "top+middle:start": {
-        "text": "Product"
-      },
-      "top+middle:center": {
-        "text": "Engineering"
-      },
-      "top+middle:end": {
-        "text": "Operations"
-      },
-      "bottom:start+center+end": {
-        "bullets": [
-          "Weekly planning review",
-          "Shared risk register",
-          "Single launch checklist"
-        ]
-      }
+      "blocks": [
+        {
+          "region": "top+middle:start",
+          "text": "Product"
+        },
+        {
+          "region": "top+middle:center",
+          "text": "Engineering"
+        },
+        {
+          "region": "top+middle:end",
+          "text": "Operations"
+        },
+        {
+          "region": "bottom:start+center+end",
+          "bullets": [
+            "Weekly planning review",
+            "Shared risk register",
+            "Single launch checklist"
+          ]
+        }
+      ]
     }
   ]
 }

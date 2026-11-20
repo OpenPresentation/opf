@@ -17,7 +17,6 @@ import { OPFEditorError, getValueAtPath, opfPathToJsonPointer } from "./index.js
 /** At most this many matches are collected; `truncated` says so. */
 export const MAX_MATCHES = 10000;
 
-const REGION_KEY = /^(?:top|middle|bottom|start|center|end)(?:[+:]|$)/;
 const WORD_BEFORE = "(?<![\\p{L}\\p{N}_])";
 const WORD_AFTER = "(?![\\p{L}\\p{N}_])";
 
@@ -175,7 +174,6 @@ export function collectSearchFields(presentation, options = {}) {
     field(fields, state, [...base, "tag"], slide.tag, "Tag");
     field(fields, state, [...base, "section"], slide.section, "Section");
     payloadFields(fields, state, base, slide);
-    for (const key of Object.keys(slide)) if (REGION_KEY.test(key) && isObject(slide[key])) payloadFields(fields, state, [...base, key], slide[key], `${key} · `);
     furnitureFields(fields, state, base, slide.design);
     if (options.notes !== false) field(fields, state, [...base, "notes"], slide.notes, "Speaker notes", "notes");
   });

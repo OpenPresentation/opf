@@ -18,12 +18,15 @@ export const REFERENCE_RULES = Object.freeze([
   { kind: "datasetColumn", definitions: ["DatasetFields"], keys: ["category", "x", "series", "line", "secondaryAxis"], phrases: ["column"], item: true },
   { kind: "cite", definitions: [], keys: ["cite"], phrases: ["references"], item: true },
   { kind: "beat", definitions: [], keys: ["beat"], phrases: ["narrative"], item: true },
-  { kind: "region", definitions: [], keys: ["region"], phrases: ["template layout"] },
+  { kind: "region", definitions: [], keys: ["region"], phrases: ["a region of that layout"] },
   { kind: "color", definitions: ["ColorRef"], keys: ["color"], phrases: ["var:<id>"] },
 ]);
 
-/** The promoted regions of a slide a block can be pinned to (the lower-case names the `region` pattern accepts). */
-export const PROMOTED_REGIONS = Object.freeze(["top", "middle", "bottom", "start", "center", "end"]);
+/**
+ * The cells a block of a slide without a layout names with `region` (OPF 0.35), as completions offer them: the rows and columns, then
+ * each row of each column. Spans (`center+end`, `top+middle:start`) are typed out.
+ */
+export const GRID_CELL_WORDS = Object.freeze(["top", "middle", "bottom", "start", "center", "end", "top:start", "top:center", "top:end", "middle:start", "middle:center", "middle:end", "bottom:start", "bottom:center", "bottom:end"]);
 
 const isObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 const isIndex = (segment) => typeof segment === "number" || /^(?:0|[1-9]\d*)$/.test(String(segment));

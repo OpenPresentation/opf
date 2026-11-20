@@ -4,23 +4,20 @@
 import {overlayIssues, slideBlockIds, isShapeBlock, shapeStyleLook, shapeTextColor} from '@openpresentation/opf/composition';
 import {logicalProvenancePath} from './legacy-tags.js';
 import {EFFECT_DEFAULTS} from './effects.js';
-import {REGION_KEYS, ROOT_PAYLOAD_FIELDS} from './content-topology.js';
+import {ROOT_PAYLOAD_FIELDS} from './content-topology.js';
 
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
-const REGION_KEY_SET = new Set(REGION_KEYS);
 const isGroup = block => object(block) && (block.type === 'group' || (block.type === undefined && Array.isArray(block.blocks)));
 const hex6 = value => typeof value === 'string' && /^#[0-9a-f]{6}/i.test(value) ? value.slice(0, 7).toUpperCase() : undefined;
 const isColor = value => typeof value === 'string' || (object(value) && value.color !== undefined && value.gradient === undefined && value.pattern === undefined);
 
-/** The shape blocks of a slide, in content order (regions by name, then blocks and groups depth first). */
+/** The shape blocks of a slide, in content order (blocks and groups depth first). */
 function* shapeBlocks(slide) {
   const walk = function* (block) {
     if (!object(block)) return;
     if (isGroup(block)) { for (const child of Array.isArray(block.blocks) ? block.blocks : []) yield* walk(child); return; }
     if (block.image === undefined && isShapeBlock(block)) yield block;
   };
-  const regions = Object.keys(slide).filter(key => REGION_KEY_SET.has(key) && object(slide[key])).sort();
-  if (regions.length) { for (const key of regions) yield* walk(slide[key]); return; }
   if (Array.isArray(slide.blocks)) for (const block of slide.blocks) yield* walk(block);
 }
 
@@ -152,7 +149,7 @@ function usedIds(slide) {
     if (typeof block.id === 'string') ids.add(block.id);
     if (Array.isArray(block.blocks)) block.blocks.forEach(walk);
   };
-  for (const key of Object.keys(slide)) if (key === 'blocks' || REGION_KEY_SET.has(key)) (Array.isArray(slide[key]) ? slide[key] : [slide[key]]).forEach(walk);
+  if (Array.isArray(slide.blocks)) slide.blocks.forEach(walk);
   for (const entry of slide.shapes ?? []) if (typeof entry?.id === 'string') ids.add(entry.id);
   return ids;
 }

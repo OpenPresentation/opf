@@ -221,62 +221,68 @@
       "id": "s49-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "18%",
-          "label": "Primary signal",
-          "description": "Close audit evidence gaps before external assessment",
-          "trend": "up"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "Tandem BioSystems should focus the next cycle on ",
-          {
-            "text": "close audit evidence gaps before external assessment",
-            "bold": true,
-            "color": "#1B49CB"
-          },
-          " while making the operating tradeoffs clear to compliance stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "Compliance working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "Compliance",
-              "Program lead",
-              "On track",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "Watch",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "At risk",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "18%",
+            "label": "Primary signal",
+            "description": "Close audit evidence gaps before external assessment",
+            "trend": "up"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "Tandem BioSystems should focus the next cycle on ",
+            {
+              "text": "close audit evidence gaps before external assessment",
+              "bold": true,
+              "color": "#1B49CB"
+            },
+            " while making the operating tradeoffs clear to compliance stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "Compliance working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Compliance",
+                "Program lead",
+                "On track",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "Watch",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "At risk",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {

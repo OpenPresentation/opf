@@ -184,7 +184,8 @@ const YXREF = [
   ['cite', 'references:\n  - id: smith2020\n    text: Smith\nslides:\n  - title:\n      - text: x\n        cite: |', ['smith2020']],
   ['cite in a flow list', 'references:\n  - id: smith2020\n    text: Smith\nslides:\n  - title:\n      - text: x\n        cite: [|]', ['smith2020']],
   ['beat', 'narrative: classic-story\nslides:\n  - beat: |', ['opening', 'closing']],
-  ['region', 'slides:\n  - layout: two-column\n    blocks:\n      - region: |', ['first', 'second', 'top', 'middle', 'bottom', 'start', 'center', 'end']],
+  ['region', 'slides:\n  - layout: two-column\n    blocks:\n      - region: |', ['first', 'second']],
+  ['region: a cell of a slide without a layout', 'slides:\n  - blocks:\n      - region: |', ['top', 'middle', 'bottom', 'start', 'center', 'end', 'top:start']],
   ['var:', 'variables:\n  brand:\n    type: color\n    value: "#123456"\nslides:\n  - title:\n      - text: x\n        color: |', ['var:brand']],
 ];
 export const yamlXrefs = [

@@ -179,16 +179,20 @@
     },
     {
       "id": "three",
-      "start": {
-        "id": "left-col",
-        "text": "Left text"
-      },
-      "end": {
-        "bullets": [
-          "right one",
-          "right two"
-        ]
-      },
+      "blocks": [
+        {
+          "id": "left-col",
+          "region": "start",
+          "text": "Left text"
+        },
+        {
+          "region": "end",
+          "bullets": [
+            "right one",
+            "right two"
+          ]
+        }
+      ],
       "extensions": {
         "owner": "ops"
       }

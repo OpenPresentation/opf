@@ -67,8 +67,8 @@ const deck = {design: {theme: 'classic', fontScheme: 'roboto'}, slides: [
   {title: 'Per level', items: ['Freeze', {text: 'Migrate', level: 1}, {text: 'Verify', level: 1}, {text: 'Sample', level: 2}, 'Switch', {text: 'Watch', level: 1}, 'Retire'],
     numbering: ['arabic', {style: 'alpha-lower', suffix: 'paren'}, {style: 'roman-lower', suffix: 'paren-both'}]},
   {title: 'Wide markers', items: ['Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen'], numbering: {style: 'roman-lower', start: 8, suffix: 'paren-both'}},
-  {title: 'Bullets and restart', start: {bullets: ['First', 'Second', {text: 'Resumed', start: 6}, 'Seventh'], numbering: 'arabic'}, end: {items: ['Plain', 'Plain again']}},
-  {title: 'Beside a block', start: {items: [{text: 'Collect', description: 'Interviews and the backlog.'}, {text: 'Draft', description: 'One page.'}, 'Decide'], numbering: 'arabic'}, end: {metric: {value: '3', label: 'steps'}}},
+  {title: 'Bullets and restart', blocks: [{region: 'start',bullets: ['First', 'Second', {text: 'Resumed', start: 6}, 'Seventh'], numbering: 'arabic'}, {region: 'end',items: ['Plain', 'Plain again']}]},
+  {title: 'Beside a block', blocks: [{region: 'start',items: [{text: 'Collect', description: 'Interviews and the backlog.'}, {text: 'Draft', description: 'One page.'}, 'Decide'], numbering: 'arabic'}, {region: 'end',metric: {value: '3', label: 'steps'}}]},
   {title: 'Bold lead', items: [[{text: 'Bold', bold: true}, ' lead'], 'Plain lead'], numbering: 'arabic'},
 ]};
 

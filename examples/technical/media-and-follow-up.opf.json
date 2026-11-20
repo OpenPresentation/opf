@@ -6,22 +6,29 @@
   "slides": [
     {
       "title": "Product Snapshot",
-      "start": {
-        "image": "asset:product-shot"
-      },
-      "center+end": {
-        "text": "The dashboard pulls review status, owners, and exceptions into one operating view."
-      }
+      "blocks": [
+        {
+          "region": "start",
+          "image": "asset:product-shot"
+        },
+        {
+          "region": "center+end",
+          "text": "The dashboard pulls review status, owners, and exceptions into one operating view."
+        }
+      ]
     },
     {
       "title": "Follow-Up",
-      "start+center+end": {
-        "items": [
-          "Confirm owners for open exceptions.",
-          "Review aging thresholds with operations leads.",
-          "Schedule the next dashboard readout."
-        ]
-      }
+      "blocks": [
+        {
+          "region": "start+center+end",
+          "items": [
+            "Confirm owners for open exceptions.",
+            "Review aging thresholds with operations leads.",
+            "Schedule the next dashboard readout."
+          ]
+        }
+      ]
     }
   ],
   "assets": {

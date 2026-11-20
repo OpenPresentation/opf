@@ -110,51 +110,59 @@
     {
       "id": "bullets-and-restart",
       "title": "Bullets and an entry start",
-      "start": {
-        "bullets": [
-          "First point",
-          "Second point",
-          {
-            "text": "Resumed at six",
-            "start": 6
-          },
-          "Seventh point"
-        ],
-        "numbering": "arabic"
-      },
-      "end": {
-        "items": [
-          "Plain bullet",
-          "Plain bullet again"
-        ]
-      }
+      "blocks": [
+        {
+          "region": "start",
+          "bullets": [
+            "First point",
+            "Second point",
+            {
+              "text": "Resumed at six",
+              "start": 6
+            },
+            "Seventh point"
+          ],
+          "numbering": "arabic"
+        },
+        {
+          "region": "end",
+          "items": [
+            "Plain bullet",
+            "Plain bullet again"
+          ]
+        }
+      ]
     },
     {
       "id": "beside-blocks",
       "title": "Beside other blocks",
-      "start": {
-        "items": [
-          {
-            "text": "Collect the requirements",
-            "description": "Interviews and the support backlog."
-          },
-          {
-            "text": "Draft the proposal",
-            "description": "One page, with the trade-offs."
-          },
-          {
-            "text": "Decide",
-            "description": "Owner signs off."
+      "blocks": [
+        {
+          "region": "start",
+          "items": [
+            {
+              "text": "Collect the requirements",
+              "description": "Interviews and the support backlog."
+            },
+            {
+              "text": "Draft the proposal",
+              "description": "One page, with the trade-offs."
+            },
+            {
+              "text": "Decide",
+              "description": "Owner signs off."
+            }
+          ],
+          "numbering": "arabic"
+        },
+        {
+          "region": "end",
+          "metric": {
+            "value": "3",
+            "label": "steps to a decision"
           }
-        ],
-        "numbering": "arabic"
-      },
-      "end": {
-        "metric": {
-          "value": "3",
-          "label": "steps to a decision"
         }
-      }
+      ]
     }
   ],
   "catalogs": {

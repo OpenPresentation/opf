@@ -113,10 +113,11 @@ describe('numbering', () => {
     assert.deepEqual(result.slides.get(2).marked.map(marker => [marker.path, marker.text]), [['slides.2.blocks.0.bullets.0.0', '2'], ['slides.2.blocks.1.items.0.text.1', '1'], ['slides.2.blocks.1.items.0.description.0', '4']]);
     assert.deepEqual(result.slides.get(2).notes.map(note => note.number), [1, 2, 4]);
   });
-  test('reading order is regions (sorted keys), then blocks, then the root payload', () => {
+  test('reading order: blocks placed in cells read cell by cell in reading order, then blocks, then the root payload', () => {
     const paths = [];
-    walkCitationRuns({ 'top:end': { text: [{ text: 'r', cite: 'a' }] }, start: { blocks: [{ bullets: [{ text: [{ text: 'b', cite: 'a' }] }] }] } }, 'slides.0', entry => paths.push(entry.path));
-    assert.deepEqual(paths, ['slides.0.start.blocks.0.bullets.0.text.0', 'slides.0.top:end.text.0']);
+    // The cells read rows from the top, each from its start column: `start` (all rows, the start column) before `top:end`, whatever the source order.
+    walkCitationRuns({ blocks: [{ region: 'top:end', text: [{ text: 'r', cite: 'a' }] }, { region: 'start', blocks: [{ bullets: [{ text: [{ text: 'b', cite: 'a' }] }] }] }] }, 'slides.0', entry => paths.push(entry.path));
+    assert.deepEqual(paths, ['slides.0.blocks.1.blocks.0.bullets.0.text.0', 'slides.0.blocks.0.text.0']);
   });
   test('slideCitations continues the deck numbering for a slide object that is not the document slide', () => {
     const document = deck();

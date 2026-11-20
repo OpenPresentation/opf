@@ -552,51 +552,55 @@
       "beat": "performance-headline",
       "section": "Performance",
       "title": "Adoption Doubled",
-      "start": {
-        "metric": {
-          "value": "2.1x",
-          "label": "Quarter-over-quarter adoption",
-          "delta": "+8 regions",
-          "trend": "up"
-        }
-      },
-      "center+end": {
-        "chart": {
-          "type": "line",
-          "data": {
-            "columns": [
-              "Month",
-              "Active Teams"
-            ],
-            "rows": [
-              [
-                "Apr",
-                96
+      "blocks": [
+        {
+          "region": "start",
+          "metric": {
+            "value": "2.1x",
+            "label": "Quarter-over-quarter adoption",
+            "delta": "+8 regions",
+            "trend": "up"
+          }
+        },
+        {
+          "region": "center+end",
+          "chart": {
+            "type": "line",
+            "data": {
+              "columns": [
+                "Month",
+                "Active Teams"
               ],
-              [
-                "May",
-                112
-              ],
-              [
-                "Jun",
-                131
-              ],
-              [
-                "Jul",
-                188
-              ],
-              [
-                "Aug",
-                236
-              ],
-              [
-                "Sep",
-                288
+              "rows": [
+                [
+                  "Apr",
+                  96
+                ],
+                [
+                  "May",
+                  112
+                ],
+                [
+                  "Jun",
+                  131
+                ],
+                [
+                  "Jul",
+                  188
+                ],
+                [
+                  "Aug",
+                  236
+                ],
+                [
+                  "Sep",
+                  288
+                ]
               ]
-            ]
+            }
           }
         }
-      },
+      ],
       "notes": "Promoted regions: a metric on the left, an inline-data line chart across center and right. Q3 active teams (712) are 2.1x Q2 (339)."
     },
     {

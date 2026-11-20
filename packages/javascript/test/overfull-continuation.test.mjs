@@ -83,7 +83,7 @@ test('block units: one payload per root block, nothing else to move', () => {
   assert.equal(blockUnits({ blocks: [{ text: 'Lead' }, timeline(0), timeline(1)] }), undefined, 'one unit led by the text');
   assert.equal(blockUnits({ blocks: [timeline(0), { blocks: [timeline(1)] }] }), undefined, 'a nested group');
   assert.equal(blockUnits({ text: 'Root text', blocks: [timeline(0), timeline(1)] }), undefined, 'a root payload');
-  assert.equal(blockUnits({ start: { text: 'Side' }, blocks: [timeline(0), timeline(1)] }), undefined, 'a promoted region');
+  assert.equal(blockUnits({ blocks: [{ region: 'start', ...timeline(0) }, { region: 'end', ...timeline(1) }] }), undefined, 'blocks in the cells of the slide grid');
   assert.deepEqual(blockUnits({ blocks: [{ code: { source: 'a()' } }, { text: 'Why' }, { code: { source: 'b()' } }] }), { kind: 'code', units: [[0, 1], [2]] });
 });
 

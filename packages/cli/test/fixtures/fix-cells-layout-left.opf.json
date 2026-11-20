@@ -1,0 +1,79 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Customer voices",
+  "language": "en-US",
+  "slides": [
+    {
+      "title": "Revenue by quarter",
+      "layout": "chart",
+      "start": {
+        "text": "Every quarter beat the one before."
+      },
+      "center+end": {
+        "chart": {
+          "type": "column",
+          "data": {
+            "columns": [
+              "Quarter",
+              "Revenue"
+            ],
+            "rows": [
+              [
+                "Q1",
+                12
+              ],
+              [
+                "Q2",
+                15
+              ],
+              [
+                "Q3",
+                19
+              ],
+              [
+                "Q4",
+                24
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "In their words",
+      "layout": "quote",
+      "start": {
+        "text": "Support answered within the hour."
+      },
+      "center+end": {
+        "chart": {
+          "type": "column",
+          "data": {
+            "columns": [
+              "Quarter",
+              "Revenue"
+            ],
+            "rows": [
+              [
+                "Q1",
+                12
+              ],
+              [
+                "Q2",
+                15
+              ],
+              [
+                "Q3",
+                19
+              ],
+              [
+                "Q4",
+                24
+              ]
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

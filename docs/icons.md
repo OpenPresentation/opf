@@ -115,8 +115,8 @@ body as the same list without icons would (its chips do not count against the bo
 long as it still fits with them. When neither fits, the slide is
 drawn without its icons and each one gets `opf/icon-dropped`; the text is always drawn. The
 finding names what bounds the block (its share of `composition.weights`, its region, or the slide), so the author knows what to give
-more room. An icon on something icons do not mark (a nested or numbered entry) gets the same finding. Icons in promoted regions
-(`start`, `center+end`, ...) are drawn and reported as any block's.
+more room. An icon on something icons do not mark (a nested or numbered entry) gets the same finding. Icons in blocks placed in cells
+(`"region": "start"`, `"center+end"`, ...) are drawn and reported as any block's.
 
 ## Engines
 

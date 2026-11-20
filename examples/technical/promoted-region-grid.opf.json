@@ -5,83 +5,97 @@
   "slides": [
     {
       "title": "Column Spans",
-      "start": {
-        "text": "Left column"
-      },
-      "center+end": {
-        "items": [
-          "Center and right span",
-          "No overlap with left"
-        ]
-      }
+      "blocks": [
+        {
+          "region": "start",
+          "text": "Left column"
+        },
+        {
+          "region": "center+end",
+          "items": [
+            "Center and right span",
+            "No overlap with left"
+          ]
+        }
+      ]
     },
     {
       "title": "Row Spans",
-      "top+middle": {
-        "chart": {
-          "type": "area",
-          "data": {
-            "columns": [
-              "Month",
-              "Volume"
-            ],
-            "rows": [
-              [
-                "Jan",
-                10
+      "blocks": [
+        {
+          "region": "top+middle",
+          "chart": {
+            "type": "area",
+            "data": {
+              "columns": [
+                "Month",
+                "Volume"
               ],
-              [
-                "Feb",
-                18
-              ],
-              [
-                "Mar",
-                24
+              "rows": [
+                [
+                  "Jan",
+                  10
+                ],
+                [
+                  "Feb",
+                  18
+                ],
+                [
+                  "Mar",
+                  24
+                ]
               ]
-            ]
+            }
           }
+        },
+        {
+          "region": "bottom",
+          "quote": "The bottom row remains available for interpretation."
         }
-      },
-      "bottom": {
-        "quote": "The bottom row remains available for interpretation."
-      }
+      ]
     },
     {
       "title": "Grid Cells",
-      "top:start": {
-        "metric": {
-          "value": 42,
-          "label": "Inputs"
-        }
-      },
-      "top:center": {
-        "metric": {
-          "value": 18,
-          "label": "Routes"
-        }
-      },
-      "top:end": {
-        "metric": {
-          "value": 9,
-          "label": "Escalations"
-        }
-      },
-      "middle+bottom:start+center+end": {
-        "timeline": [
-          {
-            "when": "Now",
-            "what": "Observe"
-          },
-          {
-            "when": "Next",
-            "what": "Route"
-          },
-          {
-            "when": "Then",
-            "what": "Resolve"
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": 42,
+            "label": "Inputs"
           }
-        ]
-      }
+        },
+        {
+          "region": "top:center",
+          "metric": {
+            "value": 18,
+            "label": "Routes"
+          }
+        },
+        {
+          "region": "top:end",
+          "metric": {
+            "value": 9,
+            "label": "Escalations"
+          }
+        },
+        {
+          "region": "middle+bottom:start+center+end",
+          "timeline": [
+            {
+              "when": "Now",
+              "what": "Observe"
+            },
+            {
+              "when": "Next",
+              "what": "Route"
+            },
+            {
+              "when": "Then",
+              "what": "Resolve"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

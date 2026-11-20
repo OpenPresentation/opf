@@ -25,9 +25,9 @@ A slide carries `title` / `subtitle` / `tag` / `notes` / `section` / `beat` / `l
 
 1. **Root payload** — content-kind fields directly on the slide. The kind is inferred from the field: `text`, `items` (list), `bullets`, `image`, `video`, `chart`, `table`, `code`, `metric`, `quote`, `timeline`, `diagram` (Mermaid, Graphviz DOT or PlantUML source). Several kinds at the root are shorthand for `blocks`.
 2. **`blocks`** — an ordered array of payloads when placement should stay engine-inferred. A block is a leaf payload or a **group**: `{ "type": "group", "blocks": [...], "composition": { ... } }`. Groups nest (hard cap 32; stay ≤ 3 in practice) and cannot mix `blocks` with leaf fields.
-3. **Promoted regions** — a 3×3 grid when position matters. Rows `top|middle|bottom`, columns `start|center|end`, spans with `+`, intersections with `:` — `"start"`, `"center+end"`, `"top:start"`, `"middle+bottom:center+end"`. Keys must not overlap; regions cannot mix with a root payload.
+3. **Blocks in cells** — on a slide without a layout, each block names a cell of a 3×3 grid with `region` when position matters. Rows `top|middle|bottom`, columns `start|center|end`, spans with `+`, intersections with `:` — `"start"`, `"center+end"`, `"top:start"`, `"middle+bottom:center+end"`. Every block of the slide names a cell or none; blocks that name the same cell stack in it; different cells must not overlap. (OPF 0.35 removed the 0.34 slide keys `"top:start": { ... }`; `opf validate` moves them into blocks.)
 
-Direction: layout words are logical. `start` and `end` (region columns, `titleAlignment` and `contentAlignment`, a caption's or table cell's `align`, header and footer zones, image `placement.edge`, `overlay.edge`, shape anchors, an overlay shape's `x`) follow the deck's direction: `start` is the left edge in a left-to-right deck and the right edge in a right-to-left deck. Coordinates and sides that name pixels of a picture or parts of a plot are physical in every language: image `focus` and `callouts`, chart `legend` and `dataLabels.position`, and the `left` and `right` sides of cell `borders` and `padding` and of a shape's `padding`.
+Direction: layout words are logical. `start` and `end` (cell columns, `titleAlignment` and `contentAlignment`, a caption's or table cell's `align`, header and footer zones, image `placement.edge`, `overlay.edge`, shape anchors, an overlay shape's `x`) follow the deck's direction: `start` is the left edge in a left-to-right deck and the right edge in a right-to-left deck. Coordinates and sides that name pixels of a picture or parts of a plot are physical in every language: image `focus` and `callouts`, chart `legend` and `dataLabels.position`, and the `left` and `right` sides of cell `borders` and `padding` and of a shape's `padding`.
 
 `composition` (on a slide or group) arranges children: `{ "mode": "auto|grid|row|column", "columns": 1-12, "weights": [..], "gap": 0-0.1, "padding": 0-0.2, "minFontSize": 8-32, "maxFontSize": 8-200, "overflow": "warn|error" }`. Weights are relative track sizes; gap/padding are fractions of the canvas short edge; the font sizes are reference pixels at a 720-pixel short edge. Engines own the placement of content: a block has no x/y.
 
@@ -62,9 +62,9 @@ Reusable records live in catalogs; a reference is a bare id or `name:id`: `narra
 
 ## Prefer / never
 
-Prefer: string shorthands; bare ids for default-catalog records; inference over explicit `type`; regions only when position matters; groups only when `blocks` ordering is not enough; names/`var:` over hex in color fields; `items` for lists and `bullets` only for plain talking points (never both in one block or region; see [content payloads](content-payloads.md#items-versus-bullets)).
+Prefer: string shorthands; bare ids for default-catalog records; inference over explicit `type`; cells only when position matters; groups only when `blocks` ordering is not enough; names/`var:` over hex in color fields; `items` for lists and `bullets` only for plain talking points (never both in one block; see [content payloads](content-payloads.md#items-versus-bullets)).
 
-Never: loose chart or table fields directly on a slide; region keys mixed with a root payload; overlapping region keys; `blocks` mixed with leaf fields on one payload; duplicate ids; x/y or pixel geometry on a block (only overlay `shapes` and image `callouts` are positioned, by fractions); a percent or a pixel where a fraction belongs (`"x": 20`).
+Never: loose chart or table fields directly on a slide; a block in a cell beside one in none; overlapping cells; a slide key such as `"start"` or `"top:start"` (a block's `region` names the cell); `blocks` mixed with leaf fields on one payload; duplicate ids; x/y or pixel geometry on a block (only overlay `shapes` and image `callouts` are positioned, by fractions); a percent or a pixel where a fraction belongs (`"x": 20`).
 
 ## Two canonical slides
 
@@ -72,8 +72,10 @@ Never: loose chart or table fields directly on a slide; region keys mixed with a
 {
   "id": "headline",
   "title": "Adoption Doubled",
-  "start": { "id": "kpi", "metric": { "value": "2.1x", "label": "Adoption", "trend": "up" } },
-  "center+end": { "chart": { "type": "line", "data": { "columns": ["Month", "Teams"], "rows": [["Jan", 12], ["Feb", 18]] } } }
+  "blocks": [
+    { "id": "kpi", "region": "start", "metric": { "value": "2.1x", "label": "Adoption", "trend": "up" } },
+    { "region": "center+end", "chart": { "type": "line", "data": { "columns": ["Month", "Teams"], "rows": [["Jan", 12], ["Feb", 18]] } } }
+  ]
 }
 ```
 

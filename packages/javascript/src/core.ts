@@ -170,7 +170,7 @@ export { edit } from './edit.js';
 export type { EditOptions, EditResult } from './edit.js';
 // OPF 0.35: `opf fix` as a function: the safe fixes of a deck's findings, applied round after round until none is left.
 export { DEFAULT_FIX_ROUNDS, fix } from './fix.js';
-export type { AppliedFix, FixOptions, FixResult } from './fix.js';
+export type { AppliedFix, FixOptions, FixResult, LayoutWithCells } from './fix.js';
 export { fill, fillRecords } from './fill.js';
 export type { FillOptions, FillRecord, FillResult, FilledDeck } from './fill.js';
 export { format, OPFFormatError } from './format.js';

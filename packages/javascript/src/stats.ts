@@ -4,6 +4,7 @@ import { imageBackground, resolveCanvasDimensions, resolveFontFamilies } from '.
 import { resolveDesignRecords } from './design-records.js';
 import { LOGO_SHAPES } from './logos.js';
 import { isRecord, visitContentPayloads } from './content-walk.js';
+import { cellBlocks } from './grid-cells.js';
 import { listVariables, type VariableKind } from './variables.js';
 
 /**
@@ -71,7 +72,7 @@ export interface SlideStats {
   layout: string | null;
   section: string | null;
   hidden: boolean;
-  /** Content payload kinds present on the slide (root, blocks and regions), in a fixed order. */
+  /** Content payload kinds present on the slide (root and blocks), in a fixed order. */
   payloads: string[];
   words: { content: number; notes: number };
   hasNotes: boolean;
@@ -119,7 +120,7 @@ export interface PresentationStats {
     /** Slides whose own `design` object overrides the deck design. */
     withOwnDesign: number;
   };
-  /** Content payloads by kind, counted across slide roots, blocks and promoted regions. */
+  /** Content payloads by kind, counted across slide roots and blocks. */
   payloads: {
     text: number;
     items: number;
@@ -135,9 +136,9 @@ export interface PresentationStats {
     video: number;
     /** Block entries at any depth. */
     blocks: number;
-    /** Promoted region payloads (`left`, `top:center`, ...). */
-    regions: number;
-    /** Blocks and regions that hold nested `blocks`. */
+    /** Root blocks placed in a cell of their slide's grid (`"region": "top:center"` on a slide without a layout). */
+    cells: number;
+    /** Blocks that hold nested `blocks`. */
     groups: number;
     /** Deepest block nesting; 0 when no slide has blocks. */
     maxDepth: number;
@@ -474,7 +475,7 @@ function compute(presentation: unknown, options: StatsOptions, onFile?: (src: st
   const datasetUse = new Map<string, number>();
 
   // ---- slides --------------------------------------------------------------------------------
-  const payloadCounts = { text: 0, items: 0, bullets: 0, quote: 0, metric: 0, code: 0, timeline: 0, diagram: 0, chart: 0, table: 0, image: 0, video: 0, blocks: 0, regions: 0, groups: 0, maxDepth: 0 };
+  const payloadCounts = { text: 0, items: 0, bullets: 0, quote: 0, metric: 0, code: 0, timeline: 0, diagram: 0, chart: 0, table: 0, image: 0, video: 0, blocks: 0, cells: 0, groups: 0, maxDepth: 0 };
   const layouts = new Map<string, number>(), chartTypes = new Map<string, number>(), extensions = new Set<string>();
   const chartData = { inline: 0, dataset: 0, withSource: 0 };
   const tableItems: TableFact[] = [];
@@ -509,9 +510,8 @@ function compute(presentation: unknown, options: StatsOptions, onFile?: (src: st
     });
     const caption = (node: Rec) => { if (node.caption !== undefined) { captions++; run(node.caption); } };
 
-    const visitNode = (node: Rec, path: string, depth: number, kind: 'root' | 'block' | 'region') => {
+    const visitNode = (node: Rec, path: string, depth: number, kind: 'root' | 'block') => {
       if (kind === 'block') payloadCounts.blocks++;
-      if (kind === 'region') payloadCounts.regions++;
       if (kind !== 'root' && Array.isArray(node.blocks)) payloadCounts.groups++;
       if (depth > payloadCounts.maxDepth) payloadCounts.maxDepth = depth;
       for (const key of KIND_ORDER) if (node[key] !== undefined) { payloadCounts[key]++; kinds.add(key); }
@@ -558,15 +558,15 @@ function compute(presentation: unknown, options: StatsOptions, onFile?: (src: st
       }
     };
 
-    // The slide is its own root payload; blocks and regions below it are walked by the shared content walk.
+    // The slide is its own root payload; the blocks below it are walked by the shared content walk.
     run(slide.title); run(slide.subtitle); run(slide.tag);
     const slidePath = `/slides/${index}`;
     visitNode(slide, slidePath, 0, 'root');
     visitContentPayloads(slide, slidePath, (node, path) => {
-      // `blocks/0`, `blocks/0/blocks/1`, `left/blocks/2` are blocks (depth = nesting of `blocks`); `left`, `top:center` are regions.
-      const relative = path.slice(slidePath.length + 1);
-      visitNode(node, path, (relative.match(/(^|\/)blocks\//g) ?? []).length, /(^|\/)blocks\/\d+$/.test(relative) ? 'block' : 'region');
+      // `blocks/0`, `blocks/0/blocks/1`: depth = nesting of `blocks`.
+      visitNode(node, path, (path.slice(slidePath.length + 1).match(/(^|\/)blocks\//g) ?? []).length, 'block');
     });
+    payloadCounts.cells += cellBlocks(slide)?.length ?? 0;
 
     const notes = typeof slide.notes === 'string' ? slide.notes : '';
     const noteWords = wordCount(notes);

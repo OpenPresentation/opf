@@ -206,8 +206,7 @@ describe("presentation shapes that must validate", () => {
       name: "Columns",
       slides: [{
         title: "Market Shift",
-        start: { text: "Signal" },
-        "center+end": { items: ["Demand moved upmarket", "Procurement cycles shortened"] },
+        blocks: [{ region: 'start', text: "Signal" }, { region: "center+end", items: ["Demand moved upmarket", "Procurement cycles shortened"] }],
       }],
     });
   });
@@ -217,7 +216,8 @@ describe("presentation shapes that must validate", () => {
       name: "Rows",
       slides: [{
         title: "Performance",
-        "top+middle": {
+        blocks: [{
+          region: "top+middle",
           type: "chart",
           chart: {
             type: "line",
@@ -229,8 +229,7 @@ describe("presentation shapes that must validate", () => {
               ],
             },
           },
-        },
-        bottom: { text: "Latency improved quarter over quarter." },
+        }, { region: 'bottom', text: "Latency improved quarter over quarter." }],
       }],
     });
   });
@@ -291,9 +290,7 @@ describe("presentation shapes that must validate", () => {
       name: "Grid",
       slides: [{
         title: "Operating Model",
-        "top:start": { text: "Inputs" },
-        "top:center+end": { text: "Processing" },
-        "middle+bottom:start+center+end": { items: ["Queue", "Route", "Resolve"] },
+        blocks: [{ region: "top:start", text: "Inputs" }, { region: "top:center+end", text: "Processing" }, { region: "middle+bottom:start+center+end", items: ["Queue", "Route", "Resolve"] }],
       }],
     });
   });
@@ -496,7 +493,7 @@ describe("presentation shapes that must be rejected", () => {
   test("Overlap", () => {
     assertPresentationInvalid({
       name: "Overlap",
-      slides: [{ start: { text: "A" }, "start+center": { text: "B" } }],
+      slides: [{ blocks: [{ region: 'start', text: "A" }, { region: "start+center", text: "B" }] }],
     }, "overlap");
   });
 
@@ -521,11 +518,18 @@ describe("presentation shapes that must be rejected", () => {
     }, "must NOT have additional properties");
   });
 
-  test("Mixed Root And Regions", () => {
+  test("Blocks In Cells Beside A Block In None", () => {
     assertPresentationInvalid({
-      name: "Mixed Root And Regions",
+      name: "Blocks In Cells Beside A Block In None",
+      slides: [{ blocks: [{ region: "start", text: "Cell" }, { text: "Loose" }] }],
+    }, "places every block in a cell of its grid or none");
+  });
+
+  test("Removed Cell Key", () => {
+    assertPresentationInvalid({
+      name: "Removed Cell Key",
       slides: [{ items: ["Root"], start: { text: "Region" } }],
-    }, "cannot be mixed");
+    }, "must NOT have additional properties");
   });
 
   test("Missing List Items", () => {
@@ -830,7 +834,7 @@ describe("presentation shapes that must be rejected", () => {
   test("Region Mixed Payload Kinds", () => {
     assertPresentationInvalid({
       name: "Region Mixed Payload Kinds",
-      slides: [{ start: { text: "A", items: ["B"] } }],
+      slides: [{ blocks: [{ region: 'start', text: "A", items: ["B"] }] }],
     }, "incompatible");
   });
 
@@ -950,11 +954,11 @@ describe("content-reference warning behavior (OPF 0.15)", () => {
       name: "Unknown Chart Type",
       slides: [{
         title: "Slide Title",
-        start: { chart: { type: "no-such-chart", data: { columns: ["A", "B"], rows: [["x", 1]] } } },
+        blocks: [{ region: 'start', chart: { type: "no-such-chart", data: { columns: ["A", "B"], rows: [["x", 1]] } } }],
       }],
     });
     assert.equal(result.valid, false);
-    assert.ok(result.errors.some((error) => error.path === "/slides/0/start/chart/type"), JSON.stringify(result.errors, null, 2));
+    assert.ok(result.errors.some((error) => error.path === "/slides/0/blocks/0/chart/type"), JSON.stringify(result.errors, null, 2));
   });
 
   test("the retired chart types and plural audience ids are gone: errors and unresolved references", () => {

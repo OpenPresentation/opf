@@ -233,62 +233,68 @@
       "id": "s67-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "11 days",
-          "label": "Primary signal",
-          "description": "Prepare council to vote on mixed-income zoning changes",
-          "trend": "up"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "City of Redwood Falls should focus the next cycle on ",
-          {
-            "text": "prepare council to vote on mixed-income zoning changes",
-            "bold": true,
-            "color": "#334155"
-          },
-          " while making the operating tradeoffs clear to city government stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "City government working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "City government",
-              "Program lead",
-              "On track",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "Watch",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "At risk",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "11 days",
+            "label": "Primary signal",
+            "description": "Prepare council to vote on mixed-income zoning changes",
+            "trend": "up"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "City of Redwood Falls should focus the next cycle on ",
+            {
+              "text": "prepare council to vote on mixed-income zoning changes",
+              "bold": true,
+              "color": "#334155"
+            },
+            " while making the operating tradeoffs clear to city government stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "City government working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "City government",
+                "Program lead",
+                "On track",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "Watch",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "At risk",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {
