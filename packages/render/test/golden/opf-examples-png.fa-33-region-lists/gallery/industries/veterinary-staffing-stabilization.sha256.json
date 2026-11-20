@@ -2,28 +2,28 @@
   "deck": "gallery/industries/veterinary-staffing-stabilization.opf.json",
   "entries": {
     "gallery/industries/veterinary-staffing-stabilization.opf.json#0": {
-      "sha256": "13d9c297f66b1d8beb4513cb31b04e06d6768f70147e38ec1bb1f29ca16e355f",
-      "bytes": 14793
+      "sha256": "6cd3fecb37b351bb25872abfc5e4bd25141dd7b73930709dd4c787a5b015a219",
+      "bytes": 13742
     },
     "gallery/industries/veterinary-staffing-stabilization.opf.json#1": {
-      "sha256": "3cec77a61ff87556f9f6143673bb55bee265f478d094f4e2899a68aa33ad718f",
-      "bytes": 21454
+      "sha256": "8545a47359ab7ac690391ad83a4990f461f0d931f82079d8e1c2ac4cfe5d24a2",
+      "bytes": 20389
     },
     "gallery/industries/veterinary-staffing-stabilization.opf.json#2": {
-      "sha256": "dbd5b7ca703994f74735576e2fe64df75e889b24506ccf4329df6949397da5a1",
-      "bytes": 12148
+      "sha256": "68378e9908425d79ecb08bafc6e254abb1e9b6f6727bf86653bbaf7e46177792",
+      "bytes": 11095
     },
     "gallery/industries/veterinary-staffing-stabilization.opf.json#3": {
-      "sha256": "376ccae3cb2fbb321e1973f4add0593c30426fcdbef5e3f5627f1778fd88271b",
-      "bytes": 13354
+      "sha256": "a03a99ec53c5f595c36ca885f308c7333ba4bc6514adaaeffe5dcad88cada1a3",
+      "bytes": 12601
     },
     "gallery/industries/veterinary-staffing-stabilization.opf.json#4": {
-      "sha256": "c87111f035aab4ec3db905938dd902f80b9e588e7886f8646beceda2f35c2e5e",
-      "bytes": 21495
+      "sha256": "71b9c881162b0d1361c6bdea72d9e683775b61cf8a7482abac9aa1b0afc6a2f7",
+      "bytes": 20455
     },
     "gallery/industries/veterinary-staffing-stabilization.opf.json#5": {
-      "sha256": "2b1441c035a9b0c524749e56402a55ca0aa8754c5b89f07f1ba6d3e22e099954",
-      "bytes": 18136
+      "sha256": "e9a4ccf2d79d2b4392a172542c7a92edd34af6f65d78651ca63accfb680351d6",
+      "bytes": 17022
     }
   }
 }
