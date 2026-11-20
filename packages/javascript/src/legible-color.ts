@@ -1,4 +1,4 @@
-/** Colour helpers behind the preview-polish palettes (code syntax, metric trend): WCAG contrast and bounded lightening. */
+/** Color helpers behind the preview-polish palettes (code syntax, metric trend): WCAG contrast and bounded lightening. */
 
 export const channels = (hex: string) => [1, 3, 5].map(offset => Number.parseInt(hex.slice(offset, offset + 2), 16));
 export const toHex = (values: number[]) => `#${values.map(value => Math.max(0, Math.min(255, Math.round(value))).toString(16).padStart(2, '0')).join('').toUpperCase()}`;
@@ -29,7 +29,7 @@ export function fromHsl(h: number, s: number, l: number): string {
 /**
  * Lighten (or darken) `foreground` until it reaches `minimum` against `background`: hue and
  * saturation are kept and lightness moves in 1% steps toward white (or black), so a dark brand
- * colour becomes a vivid light one instead of a grey. When that direction cannot reach the target
+ * color becomes a vivid light one instead of a gray. When that direction cannot reach the target
  * (a mid-tone background) the other direction is tried, and the last resort is black or white,
  * whichever contrasts more (always >= 4.58:1).
  */

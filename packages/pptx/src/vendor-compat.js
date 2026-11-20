@@ -27,7 +27,7 @@ export function legacyVendorOutput(entries) {
     }
   }
   if (entries['ppt/notesMasters/notesMaster1.xml']) entries['ppt/notesMasters/notesMaster1.xml'] = encoder.encode(LEGACY_NOTES_MASTER);
-  // pptxgenjs-plus 7c92136 ("spec-valid notes theme2") gives the notes master its own default Office theme (Office colours,
+  // pptxgenjs-plus 7c92136 ("spec-valid notes theme2") gives the notes master its own default Office theme (Office colors,
   // Office font scheme). 4.0.1 pointed the notes master at theme1, and opf-pptx then gives it a copy of the finished deck
   // theme (FF-05, giveNotesMastersOwnThemes), so PowerPoint lists only the deck's fonts. Point it back at theme1 and drop
   // the vendor theme; the FF-05 copy replaces it after every theme rewrite.

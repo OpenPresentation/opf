@@ -13,7 +13,7 @@ export function rasterMetadata(bytes) {
   const size = (width, height, mediaType) => Number.isInteger(width) && Number.isInteger(height) && width > 0 && height > 0 ? { width, height, mediaType } : null;
   if (bytes.length >= 33 && text(0, 8) === '\x89PNG\r\n\x1a\n' && view.getUint32(8) === 13 && text(12, 4) === 'IHDR') {
     const dimensions = size(view.getUint32(16), view.getUint32(20), "image/png");
-    // pHYs precedes IDAT. Only the metre unit defines a physical resolution.
+    // pHYs precedes IDAT. Only the meter unit defines a physical resolution.
     for (let at = 33; dimensions && at + 12 <= bytes.length;) {
       const length = view.getUint32(at), kind = text(at + 4, 4);
       if (kind === 'IDAT' || kind === 'IEND' || at + 12 + length > bytes.length) break;
@@ -48,7 +48,7 @@ export function rasterMetadata(bytes) {
   }
   if (bytes.length >= 4 && bytes[0] === 0xff && bytes[1] === 0xd8) {
     let dimensions = null, orientation = null, jfif = null, exif = null;
-    // JFIF density (in inches or centimetres) takes precedence over EXIF
+    // JFIF density (in inches or centimeters) takes precedence over EXIF
     // X/YResolution; a JFIF aspect-ratio-only density (unit 0) defines no DPI.
     const result = () => dimensions ? { ...dimensions, ...(jfif ?? exif), ...orientation } : null;
     // JPEG segment lengths include their two length bytes. Every iteration
@@ -87,7 +87,7 @@ function resolution(x, y) {
 }
 
 // IFD0 XResolution/YResolution (RATIONAL) with ResolutionUnit 2 (inch, the
-// default) or 3 (centimetre). Every value read stays within the APP1 segment.
+// default) or 3 (centimeter). Every value read stays within the APP1 segment.
 function exifResolution(bytes, start, end) {
   if (start + 8 > end) return null;
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);

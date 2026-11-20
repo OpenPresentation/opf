@@ -257,7 +257,7 @@ export function updateJsonSource(source, presentation, memory = sharedMemory) {
   const unit = indent.includes("\t") ? "\t" : indent;
   const pretty = (value, lineIndent) => JSON.stringify(value, null, unit).split("\n").join(eol + lineIndent);
   let result = source;
-  // Insertion copies the neighbours' separator; an empty container is written in the document's style.
+  // Insertion copies the neighbors' separator; an empty container is written in the document's style.
   function insert(path, value) {
     const parentPath = path.slice(0, -1), last = path[path.length - 1];
     const parent = findNodeAtLocation(parseTree(result), parentPath);

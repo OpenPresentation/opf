@@ -6,7 +6,7 @@
 //   2. deep equality (an order-preserving LCS first, then order-free),
 //   3. content similarity for objects and arrays (greedy, best score first,
 //      ties broken by index),
-//   4. positional pairing of leftover primitives between matched neighbours.
+//   4. positional pairing of leftover primitives between matched neighbors.
 //
 // Matched pairs that are out of order are reported as moves, found with a
 // longest increasing subsequence so a single relocation is a single move.
@@ -203,7 +203,7 @@ export function matchArrays(a: readonly unknown[], b: readonly unknown[], option
     for (const { i, j, score } of scored) if (matchA[i]! < 0 && matchB[j]! < 0) link(i, j, "similar", Math.round(score * 1000) / 1000);
   }
 
-  // 4. Leftover primitives pair up by position between order-preserving neighbours.
+  // 4. Leftover primitives pair up by position between order-preserving neighbors.
   pairs.sort((x, y) => x.a - y.a);
   const chain = longestIncreasing(pairs.map(pair => pair.b)).map(index => pairs[index]!);
   const anchors: Array<[number, number]> = [[-1, -1], ...chain.map(pair => [pair.a, pair.b] as [number, number]), [a.length, b.length]];

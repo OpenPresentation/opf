@@ -167,7 +167,7 @@ function resolveOptions(options: ValidateOptions): Resolved {
 		if (measurement !== undefined && typeof measurement !== 'function' && !isObject(measurement)) throw new TypeError('Validate fonts.textMeasurement must be a text measurement, or a function of the slide index.');
 	}
 	if (options.chartPalette !== undefined && (!Array.isArray(options.chartPalette) || !options.chartPalette.every((color) => typeof color === 'string' && /^#[0-9a-fA-F]{6}$/.test(color))))
-		throw new TypeError('Validate chartPalette must be an array of #RRGGBB colours.');
+		throw new TypeError('Validate chartPalette must be an array of #RRGGBB colors.');
 	if (options.template !== undefined && typeof options.template !== 'boolean') throw new TypeError('Validate template must be true or false.');
 	if (options.values !== undefined && !isObject(options.values)) throw new TypeError('Validate values must be an object keyed by variable id.');
 	const level = (info: ValidationRuleInfo) => severity.get(info.id) ?? severity.get(info.category);

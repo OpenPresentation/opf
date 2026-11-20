@@ -38,7 +38,7 @@ const isRecord = (value: unknown): value is Record<string, unknown> => !!value &
 /**
  * The slide id for imported data: `data-` and eight hex digits of a SHA-256 over the source text and the options that
  * shape the import, so the same import always gets the same id and different data or options get different ones.
- * A BOM and CRLF line endings are normalised first so a checkout's line endings do not change the id.
+ * A BOM and CRLF line endings are normalized first so a checkout's line endings do not change the id.
  */
 export function importSlideId(raw: string, settings: Record<string, unknown>): string {
   const text = raw.replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n");

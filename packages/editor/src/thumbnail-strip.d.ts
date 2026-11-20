@@ -93,7 +93,7 @@ export interface ThumbnailStripOptions {
    * context menu on every thumbnail (right-click, Shift+F10 or the ContextMenu key): Duplicate, Delete (disabled for the last slide), Hide or
    * Show in slide show, Move left and Move right (Move up and Move down in a vertical strip; mirrored in a right-to-left one). On a focused
    * thumbnail Alt+Arrow moves it and Delete deletes it. Each action is one undoable session change, the thumbnail follows the slide it
-   * leaves current (the copy, the moved or new slide, the neighbour of a deleted one) and `onSelect` reports it.
+   * leaves current (the copy, the moved or new slide, the neighbor of a deleted one) and `onSelect` reports it.
    */
   actions?: boolean;
   /** Offer Title, Bullets and Blank in the add menu instead of catalog layouts. */

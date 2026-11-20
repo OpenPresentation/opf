@@ -328,10 +328,10 @@ function inheritedAlignment(chain) {
   return undefined;
 }
 
-/** A box wider than this share of the slide spans more than one zone, so its centre says nothing about the zone. */
+/** A box wider than this share of the slide spans more than one zone, so its center says nothing about the zone. */
 const WIDE_ZONE_SHARE = .36;
-// A narrow box keeps the zone its centre is in; a box wider than a zone (core gives a lone zone the content width) takes the
-// zone its paragraphs align to, and keeps the centre when nothing says how they align.
+// A narrow box keeps the zone its center is in; a box wider than a zone (core gives a lone zone the content width) takes the
+// zone its paragraphs align to, and keeps the center when nothing says how they align.
 function zoneOf(chain, slideWidth, fallback) {
   const bounds = inheritedBounds(chain);
   if (!bounds || !(slideWidth > 0)) return fallback;

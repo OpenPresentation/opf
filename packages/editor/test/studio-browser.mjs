@@ -170,7 +170,7 @@ try {
     await press('Escape');
     await page.mouse.up();
     assert.equal(await depth(), before, 'Esc cancels mid-drag: nothing changes');
-    assert.match(await status(), /Move cancelled/);
+    assert.match(await status(), /Move canceled/);
   }
   // A refused drop shows its reason and changes nothing.
   await ev(() => window.ed.setSlide(2));

@@ -315,7 +315,7 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
           let pen = 0, bounds = null;
           for (const glyph of glyphs) {
             if (includeOutline) {
-              // Colour/bitmap glyphs may have no fontkit outline (the em-box fallback below still applies).
+              // Color/bitmap glyphs may have no fontkit outline (the em-box fallback below still applies).
               let box;
               try { box = face.font.getGlyph(glyph.gid).bbox; } catch { box = null; }
               if (box && [box.minX, box.minY, box.maxX, box.maxY].every(Number.isFinite) && box.width > 0 && box.height > 0) {
@@ -335,8 +335,8 @@ export function createFontRegistry(entries, options = {}, {allowEmpty = false, c
       if(includeOutline) {
         const unit=face.font.unitsPerEm;
         let bounds=null;
-        // FF-45: fontkit reads COLR v0 layers only; a COLRv1 colour face (Noto Color Emoji) has no outlines it can bound (its
-        // glyf outlines are empty), so its ink box is the face's em box over the run: the colour image fills the em square.
+        // FF-45: fontkit reads COLR v0 layers only; a COLRv1 color face (Noto Color Emoji) has no outlines it can bound (its
+        // glyf outlines are empty), so its ink box is the face's em box over the run: the color image fills the em square.
         try { bounds=run.bbox; } catch { bounds=null; }
         if(bounds&&[bounds.minX,bounds.minY,bounds.maxX,bounds.maxY].every(Number.isFinite)) value.outline={x:bounds.minX/unit,y:-bounds.maxY/unit,width:bounds.width/unit,height:bounds.height/unit};
         else if(face.font.directory?.tables?.COLR&&value.width>0) { const ascent=face.font.ascent/unit,descent=face.font.descent/unit; value.outline={x:0,y:-ascent,width:value.width,height:ascent-descent}; }

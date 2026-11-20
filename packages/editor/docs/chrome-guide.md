@@ -1,6 +1,6 @@
 # The editor chrome: a task guide (CE-30)
 
-This guide is for a developer who wants an editor in a page, with its title bar behaving the way the page needs. It is organised by task. Every code sample tagged with a file name (`js embed.js#mount`) is a region of a runnable example in [`examples/chrome/`](../examples/chrome/), and `test/chrome-guide.mjs` fails when the two drift apart. The examples run in a real browser in `test/chrome-examples-browser.mjs`.
+This guide is for a developer who wants an editor in a page, with its title bar behaving the way the page needs. It is organized by task. Every code sample tagged with a file name (`js embed.js#mount`) is a region of a runnable example in [`examples/chrome/`](../examples/chrome/), and `test/chrome-guide.mjs` fails when the two drift apart. The examples run in a real browser in `test/chrome-examples-browser.mjs`.
 
 The reference pages stay the reference: [embedding.md](embedding.md) (every option, the handle, the events), [theming.md](theming.md) (the tokens), [styling.md](styling.md) (classes, state attributes, icon names) and [web-component.md](web-component.md).
 

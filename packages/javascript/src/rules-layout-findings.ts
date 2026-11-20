@@ -41,10 +41,10 @@ const canvasScale = (composition: SlideComposition) => Math.min(composition.widt
 const HEADINGS = new Set(['title', 'subtitle', 'tag']);
 /** The bare id of a layout reference (`default:list` and `list` are the same record of the default catalog). */
 const layoutId = (slide: Rec): string | undefined => (typeof slide.layout === 'string' && slide.layout ? slide.layout.slice(slide.layout.indexOf(':') + 1) : undefined);
-/** Layout records whose slides open, divide or close a deck: never body slides, and they draw their headings centred on purpose. */
+/** Layout records whose slides open, divide or close a deck: never body slides, and they draw their headings centered on purpose. */
 const FRAMING_LAYOUTS = new Set(['cover', 'section', 'closing']);
 
-/** True when a value (a string, runs, list entries, table cells) sets an explicit run `fontSize`, which the fit honours as the author's choice. */
+/** True when a value (a string, runs, list entries, table cells) sets an explicit run `fontSize`, which the fit honors as the author's choice. */
 function setsRunSize(value: unknown, depth = 0): boolean {
 	if (depth > 6 || value === null || typeof value !== 'object') return false;
 	if (Array.isArray(value)) return value.some((entry) => setsRunSize(entry, depth + 1));
@@ -137,7 +137,7 @@ const centeredBody: ValidationRule = {
 			const body = composition.items.filter((item) => !HEADINGS.has(item.field));
 			const framing = FRAMING_LAYOUTS.has(layoutId(slide.slide) ?? '');
 			// A lone text block (alone on the slide, or alone in its layout region, such as the note of the metrics record) is a statement
-			// or a note: the statement, metrics, cover, section and closing records centre it on purpose, so it may run one line longer.
+			// or a note: the statement, metrics, cover, section and closing records center it on purpose, so it may run one line longer.
 			const lone = (item: ComposedItem) => body.length === 1 || (item.region !== undefined && body.filter((other) => other.region === item.region).length === 1);
 			let worst: { item: ComposedItem; lines: number; characters: number } | undefined;
 			let count = 0;

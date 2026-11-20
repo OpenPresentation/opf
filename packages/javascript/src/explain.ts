@@ -3,7 +3,6 @@
  * `@openpresentation/opf/source`.
  */
 import { RULE_EXPLAIN, exampleText } from "./finding-text-explain.js";
-import { us } from "./finding-text-helpers.js";
 import { SOURCE_EXPLAIN } from "./finding-text-source.js";
 import type { RuleExplanation } from "./finding-text-util.js";
 import { findValidationRule, ruleDocumentation } from "./validation-rule-info.js";
@@ -29,9 +28,9 @@ export function explain(ruleId: string): RuleExplanation | undefined {
     name: info.name,
     category: info.category,
     severity: info.severity,
-    summary: us(info.summary),
-    rationale: us(info.standard && !info.standard.startsWith("spec/") ? `${info.rationale} Basis: ${info.standard}.` : info.rationale),
-    fix: detail?.fix ?? us(info.summary),
+    summary: info.summary,
+    rationale: info.standard && !info.standard.startsWith("spec/") ? `${info.rationale} Basis: ${info.standard}.` : info.rationale,
+    fix: detail?.fix ?? info.summary,
     ...(detail ? { example: { problem: exampleText(detail.problem), fixed: exampleText(detail.fixed), language: "json" as const } } : {}),
     docs: ruleDocumentation(info.id),
   };

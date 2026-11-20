@@ -2,7 +2,7 @@ import { checkCatalogsOption, provenanceOf, resolveReference, unresolvedReferenc
 import { ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_THEME } from './engine-vocabularies.js';
 
 /**
- * The theme, colour scheme and font scheme one slide (or the deck) is drawn with, resolved the one way every engine
+ * The theme, color scheme and font scheme one slide (or the deck) is drawn with, resolved the one way every engine
  * resolves them: the slide's design, then the deck's design, then the theme, then the engine default, per field.
  * Catalog-free: records come from the document's catalogs groups and the catalogs the host registered.
  */
@@ -17,7 +17,7 @@ export interface ResolvedDesignRecords {
   fontScheme: Rec;
   /** Where the theme reference is written, dotted (`design.theme`, `slides.2.design.theme`). */
   themePath: string;
-  /** Where the colour-scheme reference that applies is written, dotted. */
+  /** Where the color-scheme reference that applies is written, dotted. */
   colorSchemePath: string;
   /** Where the font-scheme reference that applies is written, dotted. */
   fontSchemePath: string;
@@ -28,7 +28,7 @@ export interface ResolvedDesignRecords {
    * resolving again. A kind is absent when its engine default applies (no reference, or one that resolves nowhere).
    */
   provenance: { theme?: RecordProvenance; colorScheme?: RecordProvenance; fontScheme?: RecordProvenance };
-  /** Unresolved references, in the order theme, colour scheme, font scheme. */
+  /** Unresolved references, in the order theme, color scheme, font scheme. */
   diagnostics: UnresolvedReferenceDiagnostic[];
 }
 

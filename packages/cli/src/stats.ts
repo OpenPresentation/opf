@@ -50,7 +50,7 @@ export function formatStats(result: PresentationStats): string {
   const size = deck.slideSize;
   let out = `${deck.name ?? "(unnamed presentation)"}\n`;
   out += line("Deck", `${size.preset ?? "custom"} ${size.widthInches} x ${size.heightInches} in (${size.aspectRatio}), language ${ref(deck.language)}, ${deck.template ? "template" : "not a template"}`);
-  out += line("Design", `theme ${ref(deck.design.theme)}, colour scheme ${ref(deck.design.colorScheme)}, font scheme ${ref(deck.design.fontScheme)}`);
+  out += line("Design", `theme ${ref(deck.design.theme)}, color scheme ${ref(deck.design.colorScheme)}, font scheme ${ref(deck.design.fontScheme)}`);
   out += line("Intent", `audience ${deck.audience.map(ref).join(", ") || "none"}; purpose ${ref(deck.purpose)}; tone ${ref(deck.tone)}; narrative ${deck.narrative ? `${ref(deck.narrative)}, ${noun(deck.narrative.beats, "beat")}` : "none"}`);
   out += line("People", `${noun(result.people.organizations.length, "organization")}${result.people.organizations.length ? ` (${result.people.organizations.map((entry) => entry.name || entry.id).join(", ")})` : ""}; ${noun(result.people.speakers.length, "speaker")}${result.people.speakers.length ? ` (${result.people.speakers.map((entry) => entry.name || entry.id).join(", ")})` : ""}`);
   out += line("Slides", `${slides.total}, ${slides.hidden.length} hidden${slides.hidden.length ? ` (${slideList(slides.hidden)})` : ""}; ${slides.withTitle} with a title`);
@@ -71,7 +71,7 @@ export function formatStats(result: PresentationStats): string {
   const overrides = result.headerFooter.slides;
   out += line("Header/footer", `${furniture("header", result.headerFooter.header)}; ${furniture("footer", result.headerFooter.footer)}; slide overrides: header ${overrides.headerOverrides} (${overrides.headerSuppressed} off), footer ${overrides.footerOverrides} (${overrides.footerSuppressed} off)`);
   out += line("Fonts", `${result.fonts.families.join(", ") || "none"}${result.fonts.unresolvedSchemeIds.length ? `; unresolved schemes: ${result.fonts.unresolvedSchemeIds.join(", ")}` : ""}`);
-  out += line("Colour vars", result.colors.variables.map((variable) => `${variable.id} ${variable.value ?? "(no value)"}`).join(", ") || "none");
+  out += line("Color vars", result.colors.variables.map((variable) => `${variable.id} ${variable.value ?? "(no value)"}`).join(", ") || "none");
   if (result.perSlide) {
     out += "\nPer slide\n";
     for (const slide of result.perSlide) out += `  ${String(slide.index + 1).padStart(3)}  ${slideLine(slide)}\n`;

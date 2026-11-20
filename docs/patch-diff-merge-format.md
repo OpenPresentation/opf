@@ -109,7 +109,7 @@ import { diff, formatDiffReport } from "@openpresentation/opf/diff";
 const result = diff(a, b);
 result.equal;     // true when nothing differs
 result.patch;     // RFC 6902 patch: applyPatch(a, result.patch) deep-equals b
-result.changes;   // typed, categorised changes
+result.changes;   // typed, categorized changes
 result.slides;    // how each slide was matched, and its status
 result.summary;   // counts by type, category and slide status
 formatDiffReport(result); // plain-text report
@@ -120,7 +120,7 @@ formatDiffReport(result); // plain-text report
 1. a shared string `id`;
 2. identical content (an order-preserving match first, then anywhere, so a moved slide with no `id` is still found);
 3. content similarity for objects and arrays: the share of scalar leaves with the same path and value, with partial credit for text that shares words. The default threshold is 0.5 (`threshold` option); two elements that both carry an `id` and differ in it must reach 0.8, so an unrelated added slide is not mistaken for a renamed one;
-4. leftover primitives between matched neighbours pair by position (an edited bullet is one `replace`).
+4. leftover primitives between matched neighbors pair by position (an edited bullet is one `replace`).
 
 Ties break by index, so the result never depends on iteration order or object key order. Arrays too large for the similarity pass (over 250,000 element pairs) fall back to id and equality matching.
 
@@ -179,7 +179,7 @@ import { format, sortPresentationKeys, isFormatted } from "@openpresentation/opf
 const text = format(sourceTextOrDocument);
 ```
 
-- **Key order** follows the property declaration order of the OPF schema at every depth (through `$ref`, `oneOf`, `anyOf`, `allOf` and `then`/`else`): `$schema`, `name`, `description`, ..., `design`, `variables`, `narrative`, `slides`, `assets`, `catalogs`, `extensions` at the root, `id`, `layout`, `title`, ... in a slide. Keys the schema does not declare (extensions, catalog records, custom colours, unknown fields) follow the declared ones in their original relative order, so formatting never reorders user data that has no canonical order. Array order and every value are unchanged.
+- **Key order** follows the property declaration order of the OPF schema at every depth (through `$ref`, `oneOf`, `anyOf`, `allOf` and `then`/`else`): `$schema`, `name`, `description`, ..., `design`, `variables`, `narrative`, `slides`, `assets`, `catalogs`, `extensions` at the root, `id`, `layout`, `title`, ... in a slide. Keys the schema does not declare (extensions, catalog records, custom colors, unknown fields) follow the declared ones in their original relative order, so formatting never reorders user data that has no canonical order. Array order and every value are unchanged.
 - **Layout** is two-space indentation (`indent` 0 to 8), LF line endings (`eol: "crlf"` for Windows checkouts that use `core.autocrlf`), no BOM, one trailing newline. Formatting is idempotent.
 - It does not validate: any JSON document can be formatted, and formatting never changes validity.
 

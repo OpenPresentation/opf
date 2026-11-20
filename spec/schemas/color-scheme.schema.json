@@ -22,12 +22,12 @@
     "$schema": {
       "type": "string",
       "const": "https://openpresentation.org/schema/opf-color-scheme/v1",
-      "description": "Identifies a published record file as a colour scheme record. Required in a published file; an embedded copy omits it."
+      "description": "Identifies a published record file as a color scheme record. Required in a published file; an embedded copy omits it."
     },
     "id": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$",
-      "description": "The colour scheme's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this field.",
+      "description": "The color scheme's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without this field.",
       "examples": [
         "cool-horizon",
         "boost",

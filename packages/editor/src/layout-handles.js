@@ -38,7 +38,7 @@ export function createLayoutHandles(root, options) {
     if(frame){win.cancelAnimationFrame(frame);frame=0;preview(active.fraction);}
     if(!active)return false;
     const edit=active;
-    if(signature(edit.flow.path)!==edit.base){cancel(false);options.onError(new Error('The layout changed elsewhere. The resize was cancelled.'));return false;}
+    if(signature(edit.flow.path)!==edit.base){cancel(false);options.onError(new Error('The layout changed elsewhere. The resize was canceled.'));return false;}
     if(!edit.valid){cancel(false);return false;}
     active=null;release(edit);committing=true;
     try{
@@ -155,7 +155,7 @@ export function createLayoutHandles(root, options) {
   doc.addEventListener('keydown',escape,true);
   const unsubscribe=editor.subscribe(()=>{
     if(committing||!active)return;
-    if(signature(active.flow.path)!==active.base){cancel(false);options.onError(new Error('The layout changed elsewhere. The resize was cancelled.'));}
+    if(signature(active.flow.path)!==active.base){cancel(false);options.onError(new Error('The layout changed elsewhere. The resize was canceled.'));}
     else preview(active.fraction);
   });
   return {update,commit,cancel,hide(){layer.replaceChildren();},get editingPath(){return active?.flow.path??null;},get enabled(){return enabled;},setEnabled(value){if(!commit())return false;enabled=!!value;renderCanonical();return true;},destroy(){if(frame)win.cancelAnimationFrame(frame);active=null;unsubscribe();doc.removeEventListener('keydown',escape,true);layer.remove();}};

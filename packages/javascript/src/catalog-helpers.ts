@@ -85,7 +85,7 @@ export interface EmbedResult {
 
 /**
  * Embed every record the document references, once, in the group it resolves in, together with the records those
- * records reference (a theme's colour and font schemes). A bare id that resolves in the host's default catalog is
+ * records reference (a theme's color and font schemes). A bare id that resolves in the host's default catalog is
  * embedded under `catalogs.default` (whose `source` is set to that catalog's). Records already embedded are kept as
  * they are, but for an embedded copy of a built-in layout record from before OPF 0.35 that fails the layout schema: it is made valid
  * first, without changing what it draws (`refreshed`): an unedited copy of the 0.34 release takes the current record (and the pins of

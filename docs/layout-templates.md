@@ -172,8 +172,8 @@ role size balanced (LH-148). Nothing is set smaller than without the growth.
 A single-message slide (a statement, a closing, a quotation) reads best when the title and what belongs to it sit together
 in the middle of the slide. A column has no numeric row to hold the leftover height when **every entry of the record's
 `regions` list is sized `auto`** (`title`, `subtitle` and the body regions alike), so the record's `anchor` then places
-the whole stack, headings included, in the content box's leftover height: `middle` centres it, `bottom` sits it at the foot,
-`top` (the default) starts it at the top. Empty optional regions collapse and take no space, so a title-only slide centres
+the whole stack, headings included, in the content box's leftover height: `middle` centers it, `bottom` sits it at the foot,
+`top` (the default) starts it at the top. Empty optional regions collapse and take no space, so a title-only slide centers
 the title alone.
 
 ```json
@@ -182,7 +182,7 @@ the title alone.
 ```
 
 The rule applies only to the record's own `anchor` on a column record with all-`auto` entries (an `auto` split counts as an
-`auto` entry). A record with any numeric entry, a row record, and a split's own `anchor` keep the behaviour above, so no
+`auto` entry). A record with any numeric entry, a row record, and a split's own `anchor` keep the behavior above, so no
 existing record changes until it opts in. `LayoutTemplate.stack` reports the resolved anchor.
 
 The measured-content implementation supports text/list leaves and uncaptioned quote/metric leaves. A quote keeps
@@ -321,7 +321,7 @@ slide that pins any block with `region` keeps the binding above as written.
      the grid with `opf/layout-unplaced`, where they read whole (three tables in `table-beside`'s narrow region broke their
      words).
 
-An empty region collapses into a neighbour that shares the full length of one of its edges (start side, end side, below,
+An empty region collapses into a neighbor that shares the full length of one of its edges (start side, end side, below,
 above; a body region before a heading region). A column of the grid that holds nothing but empty regions (and heading or
 below-the-grid areas that span other columns too) gives way first (LH-65) when at least two columns with content remain, or
 when its empty region has no neighbor to collapse into (a `hero`'s media column beside its stack of rows): it takes no width

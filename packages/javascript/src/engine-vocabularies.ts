@@ -10,7 +10,7 @@ type Rec = Readonly<Record<string, unknown>>;
 
 /** The drawing fields of the theme engines use when a document names none, or its theme resolves nowhere. */
 export const ENGINE_DEFAULT_THEME: Rec = engineDefaultsSource.theme;
-/** The twelve slots engines use when neither the design nor the theme names a resolvable colour scheme. */
+/** The twelve slots engines use when neither the design nor the theme names a resolvable color scheme. */
 export const ENGINE_DEFAULT_COLOR_SCHEME: Rec = engineDefaultsSource.colorScheme;
 /** The font pair engines use when neither the design nor the theme names a resolvable font scheme. */
 export const ENGINE_DEFAULT_FONT_SCHEME: Rec = engineDefaultsSource.fontScheme;

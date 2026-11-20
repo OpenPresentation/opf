@@ -218,7 +218,7 @@ export function resolveReference(document: unknown, kind: CatalogKind, reference
 const KIND_NOUNS: Record<CatalogKind, string> = {
   layouts: 'Layout',
   themes: 'Theme',
-  colorSchemes: 'Colour scheme',
+  colorSchemes: 'Color scheme',
   fontSchemes: 'Font scheme',
   narratives: 'Narrative',
   audiences: 'Audience',

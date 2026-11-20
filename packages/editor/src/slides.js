@@ -253,7 +253,7 @@ export function moveSlides(editor, indices, to, options = {}, meta) {
 
 /**
  * Compute moving slides by `delta` positions (negative up). A contiguous selection moves as a block and a
- * scattered one moves each slide past its neighbour, like Alt+Arrow in a list. Moving past the first or last
+ * scattered one moves each slide past its neighbor, like Alt+Arrow in a list. Moving past the first or last
  * slide changes nothing (`changed` is false).
  */
 export function prepareMoveSlidesBy(presentation, indices, delta, options = {}) {
@@ -267,9 +267,9 @@ export function prepareMoveSlidesBy(presentation, indices, delta, options = {}) 
     const sequence = step < 0 ? [...order.keys()] : [...order.keys()].reverse();
     let moved = false;
     for (const at of sequence) {
-      const neighbour = at + step;
-      if (neighbour < 0 || neighbour >= count || !selected.has(order[at]) || selected.has(order[neighbour])) continue;
-      [order[at], order[neighbour]] = [order[neighbour], order[at]];
+      const neighbor = at + step;
+      if (neighbor < 0 || neighbor >= count || !selected.has(order[at]) || selected.has(order[neighbor])) continue;
+      [order[at], order[neighbor]] = [order[neighbor], order[at]];
       moved = true;
     }
     if (!moved) break;
@@ -327,7 +327,7 @@ const cleanName = (name) => (typeof name === "string" ? name.trim() : name);
 
 /**
  * Compute giving slides a section label (`name`), or clearing it (`null`). The slides keep their order, so
- * labelling a middle slide splits its section in two runs; use `prepareAddSection` to start a section.
+ * labeling a middle slide splits its section in two runs; use `prepareAddSection` to start a section.
  */
 export function prepareSetSection(presentation, indices, name) {
   const list = selectionOf(presentation, indices, "Choose at least one slide.");

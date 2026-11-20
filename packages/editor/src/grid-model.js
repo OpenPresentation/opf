@@ -876,11 +876,11 @@ function transposeChart(model) {
   const [headers, ...rows] = model.lines;
   // A column's number format belongs to its numbers: the old series names become category labels, as text.
   const names = headers.map((cell) => String(valueOf(cell) ?? ""));
-  let relabelled = 0;
+  let relabeled = 0;
   const categories = rows.map((row) => {
     const category = row[0];
     if (category === null || category === undefined) return "";
-    if (typeof category !== "string") relabelled += 1;
+    if (typeof category !== "string") relabeled += 1;
     return String(category);
   });
   const lines = [[names[0], ...categories], ...names.slice(1).map((name, index) => [name, ...rows.map((row) => row[index + 1] ?? null)])];
@@ -888,7 +888,7 @@ function transposeChart(model) {
   model.width = widthOf(model);
   // Every column is new: a mapping that named the old columns no longer applies.
   model.colOrigin = Array(model.width).fill(null);
-  return { rowsBefore: rows.length, columnsBefore: names.length, relabelled };
+  return { rowsBefore: rows.length, columnsBefore: names.length, relabeled };
 }
 
 // --- cell edits --------------------------------------------------------------------------------

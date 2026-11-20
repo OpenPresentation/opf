@@ -1,7 +1,7 @@
 // Review panel (RR-29, RR-55): the DOM panel over core's `validate` report and, optionally, a hosted reviewer. It lists the findings
 // of the open presentation by category (format, references, policy, accessibility, layout, content, and any category a hosted
 // reviewer adds), lets the author go to the content a finding is about, offers quick fixes (type the alt text in place, switch a
-// failing text colour to the readable one) and updates as the document changes. The full check runs after the document has been
+// failing text color to the readable one) and updates as the document changes. The full check runs after the document has been
 // quiet for a moment, not on every keystroke (the session itself checks only the `format` category per edit). The panel owns no
 // document state: every fix is an undoable edit through the editor session. Importing this module does not need a DOM;
 // mounting does.
@@ -314,7 +314,7 @@ export function createReviewPanel(container, options) {
     try {
       applyReviewFix(editor, finding, fix);
       say(`${fix.title}. Undo restores the previous state.`);
-      // Check the changed document at once, then put focus on the neighbouring finding.
+      // Check the changed document at once, then put focus on the neighboring finding.
       refresh();
       const after = visible();
       const next = after[Math.min(Math.max(index, 0), after.length - 1)];

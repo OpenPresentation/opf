@@ -22,7 +22,7 @@ export interface BoundBlock {
   block?: number;
   /** Root payload fields the node holds (a root payload only). */
   fields?: string[];
-  /** The block named this region with `region` and the pin was honoured. */
+  /** The block named this region with `region` and the pin was honored. */
   pinned?: boolean;
 }
 

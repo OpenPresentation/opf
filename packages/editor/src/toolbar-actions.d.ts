@@ -55,5 +55,5 @@ export interface ToolbarActions {
   /** Removes the element. Safe twice. */
   destroy(): void;
 }
-/** The host's own buttons in the toolbar: labelled, optionally iconed, with enabled and pressed state read on `refresh()`. */
+/** The host's own buttons in the toolbar: labeled, optionally iconed, with enabled and pressed state read on `refresh()`. */
 export declare function createToolbarActions(container: HTMLElement, options?: ToolbarActionsOptions): ToolbarActions;

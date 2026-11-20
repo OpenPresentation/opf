@@ -21,7 +21,7 @@ export function nativeTypeface(font, context) {
 
 // A run painted with a bare theme slot (a:schemeClr, no color transform) remembers the slot as the OPF color name: the
 // transient `_opfScheme` marker is read, and always removed, by restoreRunColors (run-colors.js) once the document's own
-// colour scheme can confirm the slot holds that colour.
+// color scheme can confirm the slot holds that color.
 const OPF_SLOTS = {dk1: 'dark1', lt1: 'light1', dk2: 'dark2', lt2: 'light2', hlink: 'hyperlink', folHlink: 'followedHyperlink', accent1: 'accent1', accent2: 'accent2', accent3: 'accent3', accent4: 'accent4', accent5: 'accent5', accent6: 'accent6'};
 function nativeSchemeSlot(fill, context) {
   const node = fill?.['a:schemeClr'];

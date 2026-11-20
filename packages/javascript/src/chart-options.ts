@@ -1,6 +1,6 @@
 // RR-35: chart options (axis titles, legend position, data labels).
 //
-// One normalisation and one support table for every engine. The preview
+// One normalization and one support table for every engine. The preview
 // (opf-render), the PPTX exporter and importer (opf-pptx) and the validator all
 // read the same resolved options, so a chart that asks for something a type cannot
 // show is adapted the same way everywhere and reported with the same
@@ -41,9 +41,9 @@ export interface ResolvedChartDataLabels {
 
 /** FA-14: the series and category names `chart.highlight` keeps for a chart type (what the type cannot highlight is dropped, with a diagnostic). */
 export interface ResolvedChartHighlight {
-  /** Series (column) names whose marks take the accent colour. */
+  /** Series (column) names whose marks take the accent color. */
   series: string[];
-  /** Category (row label) names whose marks take the accent colour. */
+  /** Category (row label) names whose marks take the accent color. */
   categories: string[];
 }
 
@@ -59,7 +59,7 @@ export interface ResolvedChartOptions {
   dataLabelsOff?: boolean;
   /**
    * FA-14: the names `chart.highlight` keeps; undefined when the chart has no highlight or its type can highlight nothing it names.
-   * It does not make `active` true: a highlight changes the colours of marks, never the geometry or the reserved space.
+   * It does not make `active` true: a highlight changes the colors of marks, never the geometry or the reserved space.
    */
   highlight?: ResolvedChartHighlight;
   diagnostics: ChartOptionDiagnostic[];
@@ -182,7 +182,7 @@ const POSITIONS: ReadonlySet<string> = new Set(['auto', 'center', 'inside-end', 
 export const DEFAULT_CHART_LABEL_SEPARATOR = ', ';
 
 /**
- * Normalise a chart's `axisTitles`, `legend` and `dataLabels` against what its type can show. `target` is undefined for a chart type
+ * Normalize a chart's `axisTitles`, `legend` and `dataLabels` against what its type can show. `target` is undefined for a chart type
  * outside the catalog: nothing is adapted then (the engines fall back to their legacy output for such charts anyway).
  */
 export function resolveChartOptions(chart: unknown, target?: ChartOptionTarget): ResolvedChartOptions {
@@ -314,8 +314,8 @@ export interface ChartHighlightMarks {
 /**
  * FA-14: which series and categories of a chart are highlighted. `highlight` is `resolveChartOptions(...).highlight` and `data` the
  * chart's `resolveChartData` result (its `columns`, `hasX` and `rows`). A mark is highlighted when its series OR its category is
- * named: a column or bar of series s in row i takes the accent colour when `series[s] || categories[i]`; every other mark takes the muted
- * colour (`chartHighlightColors`). Category names match the row labels as text (a number label `2024` matches `"2024"`, an empty label
+ * named: a column or bar of series s in row i takes the accent color when `series[s] || categories[i]`; every other mark takes the muted
+ * color (`chartHighlightColors`). Category names match the row labels as text (a number label `2024` matches `"2024"`, an empty label
  * matches `""`), every row that carries the label. Returns undefined when there is no highlight or it names nothing the chart plots (a
  * name that matches no column or label is the `chart-highlight-unknown-name` validation error), so the engines then draw the chart as if
  * it had none.
