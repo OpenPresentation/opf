@@ -167,7 +167,8 @@ test('a finding that is not the shape core emits keeps its message and still get
 		const text = describeFinding(odd, { document: {} });
 		assert.ok(text.message && text.next, id);
 		assert.match(text.next, /[.?]$/, id);
-		assert.doesNotMatch(text.message, /colour/, id);
+		// The words of a message core did not write are passed on as written, never respelled.
+		if (/odd happened/.test(text.message)) assert.match(text.message, /odd happened in colour 3/, id);
 	}
 	const other = describeFinding({ ruleId: 'acme/rule', severity: 'info', category: 'x', path: '', message: 'Their sentence.', help: 'Their hint. More.' });
 	assert.deepEqual(other, { message: 'Their sentence.', next: 'their hint.' });
