@@ -95,7 +95,7 @@ export function safeFixHint(command: string, findings: readonly Finding[]): stri
 
 /**
  * OPF 0.35: the sentence that names the fix when a deck embeds copies of built-in layouts from before 0.35 that fail the schema (record
- * findings that carry `use-current-record` or `rename-layout`): `opf embed <deck> -i` makes them valid. Empty otherwise, and for embed itself.
+ * findings that carry `use-current-record` or `rename-layout`): `opf embed <deck> -i` replaces them with the current records. Empty otherwise, and for embed itself.
  */
 export function staleCopyHint(command: string, findings: readonly Finding[]): string {
 	if (command === "embed") return "";
@@ -105,7 +105,7 @@ export function staleCopyHint(command: string, findings: readonly Finding[]): st
 		if (match && finding.severity === "error" && finding.fixes?.some((fix) => fix.id === "use-current-record" || fix.id === "rename-layout")) ids.add(match[1]!.replaceAll("~1", "/").replaceAll("~0", "~"));
 	}
 	if (!ids.size) return "";
-	return ` The deck embeds copies of built-in layouts from before OPF 0.35 (${[...ids].join(", ")}): \`opf embed <deck> -i\` refreshes each one it can without changing what it draws; validate again after it.`;
+	return ` The deck embeds copies of built-in layouts from before OPF 0.35 (${[...ids].join(", ")}): \`opf embed <deck> -i\` replaces each one with the current record; validate again after it.`;
 }
 
 /** The format and references check a command runs on a deck it is about to write. */

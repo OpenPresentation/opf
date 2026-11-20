@@ -39,7 +39,7 @@ test("a stale embedded copy gets both commands, the embed hint last", () => {
   const refused = run(["convert", STALE, path.join(temp, "cover.svg")], 1);
   assert.equal(refused.code, "invalid-document");
   assert.match(refused.error, FIX);
-  assert.match(refused.error, /`opf embed <deck> -i` refreshes each one it can without changing what it draws; validate again after it\.$/);
+  assert.match(refused.error, /`opf embed <deck> -i` replaces each one with the current record; validate again after it\.$/);
   assert.ok(refused.error.indexOf("opf fix") < refused.error.indexOf("opf embed"));
 });
 

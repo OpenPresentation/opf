@@ -21,11 +21,9 @@ const patch = (id: string, title: string, operations: JsonPatchOperation[], safe
 
 /**
  * OPF 0.35: how the fixes of the removed design keys (REMOVED_DESIGN_KEYS) are marked. Both fixes delete the key and write nothing in its
- * place, so a slide the key shaped draws differently (`contentDirection` stacked or rowed the blocks of an automatic slide and the regions
- * of a layout; `chartPrimary` split an automatic slide around its chart, and never applied to a slide with a layout, so deleting it from a
- * layout record keeps the drawing). The owner is still deciding between two answers: write the form that keeps the 0.34.2 drawing
- * (`composition.mode`, a region's `flow`, `chart-beside`; replace `removedDesignKeyOperations`), or mark them not safe (`safe: false`
- * here). Either is a change to this table or that function alone.
+ * place: the engine composes the slide, so a slide the key shaped can draw differently (`changesDrawing`). `chartPrimary` never applied
+ * to a slide with a layout, so deleting it from a layout record changes nothing. An author who wants a specific arrangement sets the
+ * slide's `composition` (mode, weights).
  */
 export const REMOVED_DESIGN_KEY_FIXES: Readonly<Record<string, { safe: boolean; changesDrawing: (segments: readonly string[]) => boolean }>> = Object.freeze({
   contentDirection: { safe: true, changesDrawing: () => true },
@@ -213,15 +211,15 @@ export function removedCellKeys(slide: unknown): { key: string; cell: GridCell }
 
 /**
  * OPF 0.35: the blocks a slide's removed cell keys become (`removedCellKeys`), in reading order of their cells: each key's payload,
- * unchanged, with `region` naming its cell (after its `id`, when it has one). With `placed` false (default: the slide has a layout) the
- * blocks name no cell, so they bind to the layout's regions (layoutCellsFix removes the layout and names the cells, keeping the drawing,
- * when the slide keeps its 0.34 drawing that way). Undefined when the slide cannot move them as they
- * are: it has no such key, a key holds no payload object, or the slide also holds root content or blocks (0.34 rejected that mix).
- * Only the slide's own keys move; the payloads, their text and their nested blocks are copied as written.
+ * unchanged, with `region` naming its cell (after its `id`, when it has one). On a slide with a layout the blocks name no cell, so they
+ * bind to the layout's regions by kind. Undefined when the slide cannot move them as they are: it has no such key, a key holds no payload
+ * object, or the slide also holds root content or blocks (0.34 rejected that mix). Only the slide's own keys move; the payloads, their
+ * text and their nested blocks are copied as written.
  */
-export function cellKeysAsBlocks(slide: unknown, placed = !isRecord(slide) || slide.layout === undefined): { keys: string[]; blocks: Record<string, unknown>[] } | undefined {
+export function cellKeysAsBlocks(slide: unknown): { keys: string[]; blocks: Record<string, unknown>[] } | undefined {
   const keys = removedCellKeys(slide);
   if (!keys.length || !isRecord(slide) || ROOT_CONTENT.some((field) => slide[field] !== undefined) || keys.some(({ key }) => !isRecord(slide[key]))) return undefined;
+  const placed = slide.layout === undefined;
   const blocks = keys.map(({ key, cell }) => {
     const { id, region: _ignored, ...rest } = slide[key] as Record<string, unknown>;
     return { ...(id !== undefined ? { id } : {}), ...(placed ? { region: cell } : {}), ...rest };
@@ -234,10 +232,10 @@ function cellKeyRepair(document: unknown, slideSegments: string[], key: string):
   const layout = isRecord(slide) && slide.layout !== undefined;
   const example = near.cell ? `{ "region": "${near.cell}", ... }` : '{ "region": "top:start", ... }';
   const help = `OPF 0.35 removed the slide keys that placed content in the cells of a slide's 3 x 3 grid (the promoted regions): a block of the slide's blocks names its cell with "region", as ${example}. Blocks that name the same cell stack in it, and a slide places every block in a cell or none.`
-    + (layout ? " This slide also has a layout: through 0.34 the cells composed the slide and the layout gave it only its design (alignment, boxes, bullets, image fit and color variant); a cell word now names no region of a layout. The fix removes layout, names the cells and writes on the slide's design what the layout gave it, so the slide draws as before; the other fix keeps the layout and moves the content into blocks that bind to its regions." : "")
+    + (layout ? " This slide also has a layout, and a cell word names no region of a layout: the fix keeps the layout and moves each cell's content into a block without region, which binds to the layout's regions by kind, so the slide draws on its layout. To keep a grid of cells instead, remove layout and name the cells on the blocks." : "")
     + (near.help ? ` ${near.help}` : "");
   const moved = near.cell ? cellKeysAsBlocks(slide) : undefined;
   if (!moved) return { help, fixes: [], dropSuggestions: true };
   const operations: JsonPatchOperation[] = [...moved.keys.map((name) => ({ op: "remove" as const, path: pointerOf([...slideSegments, name]) })), { op: "add", path: pointerOf([...slideSegments, "blocks"]), value: moved.blocks }];
-  return { help, fixes: [patch("cells-to-blocks", layout ? "Move the regions into blocks of the layout" : "Move the regions into blocks with region", operations, !layout)], dropSuggestions: true };
+  return { help, fixes: [layout ? patch("cells-to-layout-blocks", "Move the regions into blocks of the layout", operations, true, true) : patch("cells-to-blocks", "Move the regions into blocks with region", operations, true)], dropSuggestions: true };
 }

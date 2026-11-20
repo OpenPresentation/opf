@@ -965,8 +965,8 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 			const design = slide && typeof slide.design === 'object' && slide.design !== null && !Array.isArray(slide.design) ? (slide.design as Record<string, unknown>) : undefined;
 			const setPosition = position !== undefined && design?.titlePosition === undefined;
 			const positionOp = !setPosition ? [] : design ? [{ op: 'add' as const, path: pointer([...slideAt, 'design', 'titlePosition']), value: position }] : [{ op: 'add' as const, path: pointer([...slideAt, 'design']), value: { titlePosition: position } }];
-			// The last slide on an unedited copy of the removed layout drops the copy too (and embeds the replacement where the group embeds records).
-			const dropCopy = stale?.renamed && stale.version !== 'edited' && staleCopyUsers(document, stale, options).length <= 1 ? droppedCopyOperations(document, stale) : [];
+			// The last slide on a copy of the removed layout drops the copy too (and embeds the replacement where the group embeds records).
+			const dropCopy = stale?.renamed && staleCopyUsers(document, stale, options).length <= 1 ? droppedCopyOperations(document, stale) : [];
 			const what = renamed.endsWith('vertical-process') ? '' : renamed.endsWith('agenda') ? ' with its title beside the list (design.titlePosition "start")' : ' (a short list as boxes joined by arrows, longer steps as numbered steps)';
 			findings.push(
 				finding('opf/unresolved-reference', {
@@ -975,7 +975,7 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 					help: `OPF 0.35 removed layout "${site.reference}"; use "${renamed}", which draws the same content${what}.${position ? ` The fix sets the layout and${setPosition ? '' : ' leaves'} the slide's design.titlePosition${setPosition ? ` to "${position}"` : ' as the slide sets it'}.` : ''}`,
 					definition: `${schemas.presentation.$id}#/$defs/Slide`,
 					lookup: ['opf', 'catalog', site.kind],
-					fixes: [{ id: 'rename-layout', title: setPosition ? `Use layout ${renamed} with the title beside it` : `Use layout ${renamed}`, kind: 'patch' as const, safe: true, ...(renamedLayoutChangesDrawing(site.kind, site.reference) ? { changesDrawing: true } : {}), patch: [{ op: 'replace' as const, path, value: renamed }, ...positionOp, ...dropCopy] }],
+					fixes: [{ id: 'rename-layout', title: setPosition ? `Use layout ${renamed} with the title beside it` : `Use layout ${renamed}`, kind: 'patch' as const, safe: true, ...(stale || renamedLayoutChangesDrawing(site.kind, site.reference) ? { changesDrawing: true } : {}), patch: [{ op: 'replace' as const, path, value: renamed }, ...positionOp, ...dropCopy] }],
 				}),
 			);
 			continue;

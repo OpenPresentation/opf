@@ -3,27 +3,21 @@
  * `catalogs.default`, so a self-contained deck carries the built-in layouts as an earlier release published them. 0.35 changed their keys
  * (`flow: "none"` is `max: 1`, `listColumns` is gone, `sequence` is an `arrangement`, ...) and renamed their body regions, so such a copy
  * fails the 0.35 layout schema. This module recognizes such a copy (staleLayoutCopy), says what it is (staleCopyCause), builds the patch
- * that takes the current record (staleCopyFix: `use-current-record`, or `rename-layout` for a layout 0.35 removed) and makes the copies of
- * a deck valid (refreshStaleLayouts, which `embed` runs).
+ * that takes the current record (staleCopyFix: `use-current-record`, or `rename-layout` for a layout 0.35 removed) and replaces the
+ * copies of a deck (refreshStaleLayouts, which `embed` runs).
  *
- * What is safe, by the content hash of the copy (PRIOR_LAYOUT_HASHES):
- * - an unedited copy of the 0.34 release of the record: 0.35 converted exactly that record, so the current one draws as the copy did and
- *   taking it is safe; the fix also renames each pin of a slide on it to the region's 0.35 name (RENAMED_REGIONS), so every block stays
- *   in its region;
- * - an unedited copy of an earlier release, or an edited copy: the current record draws differently (or drops the edits), so the fix is
- *   offered and not marked safe; the per-key fixes (`use-max-1`, `remove:listColumns`, `use-arrangement`, ...) keep the copy and its
- *   drawing, and refreshStaleLayouts applies them when they make the copy valid;
- * - a copy of a layout 0.35 removed (`flow`, `vertical-flow`, `agenda-split`): `rename-layout` moves its slides to the layout that
- *   replaced it, as the slide fix of the same id does, drops the copy and embeds the replacement; safe when the copy is unedited.
- * The deck's own records (`catalogs.custom`) are never replaced: they get the per-key fixes only.
+ * `catalogs.default` mirrors the built-in records; a customized layout belongs in `catalogs.custom`. So a stale copy is always replaced by
+ * the current record, whatever release wrote it and whether it was edited: the fix renames each pin of a slide on it to the region's 0.35
+ * name (RENAMED_REGIONS), so every block stays in its region, and the 0.35 engine draws the slides (the fix is marked `changesDrawing` when
+ * the record changed). A copy of a layout 0.35 removed (`flow`, `vertical-flow`, `agenda-split`) moves its slides to the layout that
+ * replaced it, as the slide fix `rename-layout` does, and is dropped. The deck's own records (`catalogs.custom`) are never replaced: they
+ * get the fix of each key.
  */
 import { catalogSchemaNames } from './catalog-schemas.js';
-import { catalogGroupSource, embeddedCopy, parseReference, registeredCatalog, renamedLayout, renamedLayoutChangesDrawing, renamedLayoutTitlePosition, resolveReference, type CatalogOptions } from './catalog-refs.js';
+import { catalogGroupSource, embeddedCopy, parseReference, registeredCatalog, renamedLayout, renamedLayoutTitlePosition, resolveReference, type CatalogOptions } from './catalog-refs.js';
 import { documentHash } from './document-hash.js';
-import type { Finding, FindingFix, JsonPatchOperation } from './generated/types/finding.js';
-import { PRIOR_LAYOUT_HASHES, RELEASE_034_LAYOUT_HASHES } from './prior-layout-hashes.js';
+import type { FindingFix, JsonPatchOperation } from './generated/types/finding.js';
 import { validateAgainstSchema } from './schema-check.js';
-import { removedKeyRepair } from './schema-fixes.js';
 import { schemas } from './schemas.js';
 
 type Rec = Record<string, unknown>;
@@ -99,15 +93,6 @@ export function layoutRegionNames(record: unknown): Set<string> {
   return names;
 }
 
-/** Which release of the built-in layout `id` an embedded `record` is, unedited: `0.34`, `earlier`, or undefined for any other record. */
-export function priorBuiltinLayout(id: string, record: unknown): '0.34' | 'earlier' | undefined {
-  const hashes = Object.hasOwn(PRIOR_LAYOUT_HASHES, id) ? PRIOR_LAYOUT_HASHES[id]! : undefined;
-  if (!hashes || !isRec(record)) return undefined;
-  const hash = documentHash(embeddedCopy(record)).slice('sha256:'.length, 'sha256:'.length + 16);
-  if (!hashes.includes(hash)) return undefined;
-  return RELEASE_034_LAYOUT_HASHES[id]?.includes(hash) ? '0.34' : 'earlier';
-}
-
 /** The schema issues of an embedded layout record, checked with the identity it is keyed by (as validate checks it). */
 function layoutRecordIssues(id: string, record: unknown) {
   return validateAgainstSchema(isRec(record) ? { $schema: schemas[catalogSchemaNames.layouts].$id, id, ...record } : record, 'layouts').errors;
@@ -120,8 +105,6 @@ export interface StaleLayoutCopy {
   id: string;
   /** JSON Pointer of the copy. */
   path: string;
-  /** The release the copy is, unedited (priorBuiltinLayout); `edited` when its content is no released version of the record. */
-  version: '0.34' | 'earlier' | 'edited';
   /** The current record of `id`, as embed copies it, when the catalog registered for the group's source has one. */
   current?: Rec;
   /** For a layout OPF 0.35 removed (`flow`, `vertical-flow`, `agenda-split`): the layout that replaced it and the title position its slides need. */
@@ -129,39 +112,29 @@ export interface StaleLayoutCopy {
 }
 
 /**
- * The embedded layout record `catalogs[group].layouts[id]`, when it is a copy of a built-in record: an unedited released version of one,
- * or any record whose id the catalog registered for the group's source publishes (or that 0.35 removed). Undefined for `catalogs.custom`
- * (the deck's own records) and for any other record. The caller checks that the copy fails the schema.
+ * The embedded layout record `catalogs[group].layouts[id]`, when it is a copy of a built-in record: its id is one the catalog registered
+ * for the group's source publishes, or one 0.35 removed. Undefined for `catalogs.custom` (the deck's own records) and for any other
+ * record. The caller checks that the copy fails the schema.
  */
 export function staleLayoutCopy(document: unknown, group: string, id: string, options: CatalogOptions = {}): StaleLayoutCopy | undefined {
   if (group === 'custom') return undefined;
   const record = embeddedLayouts(document, group)[id];
   if (!isRec(record)) return undefined;
   const registered = rec(registeredCatalog(catalogGroupSource(document, group, options), options)?.layouts);
-  const released = priorBuiltinLayout(id, record);
-  const base = { group, id, path: pointer(['catalogs', group, 'layouts', id]), version: released ?? ('edited' as const) };
+  const base = { group, id, path: pointer(['catalogs', group, 'layouts', id]) };
   if (isRec(registered[id])) return { ...base, current: embeddedCopy(registered[id]) };
   const next = renamedLayout('layouts', id);
-  if (next !== undefined) {
-    const position = renamedLayoutTitlePosition('layouts', id);
-    return { ...base, renamed: { id: next, ...(isRec(registered[next]) ? { current: embeddedCopy(registered[next]) } : {}), ...(position ? { titlePosition: position } : {}) } };
-  }
-  return released ? base : undefined;
+  if (next === undefined) return undefined;
+  const position = renamedLayoutTitlePosition('layouts', id);
+  return { ...base, renamed: { id: next, ...(isRec(registered[next]) ? { current: embeddedCopy(registered[next]) } : {}), ...(position ? { titlePosition: position } : {}) } };
 }
-
-/** Whether taking the current record (or the replacing layout) is safe: an unedited copy of the 0.34 release, or of a layout 0.35 removed. */
-const safeToTake = (copy: StaleLayoutCopy) => (copy.renamed ? copy.version !== 'edited' : copy.version === '0.34');
 
 /** What a stale copy is and how to fix it, as the start of a finding's help. */
 export function staleCopyCause(copy: StaleLayoutCopy): string {
-  const what = copy.version === 'edited' ? 'an edited copy' : copy.version === '0.34' ? "an unedited copy of OPF 0.34's release" : 'an unedited copy of an earlier release';
-  const head = `catalogs.${copy.group}.layouts.${copy.id} is ${what} of the built-in layout '${copy.id}'${copy.renamed ? `, which 0.35 removed (use '${copy.renamed.id}')` : ''}; 0.35 changed the keys of the built-in records, so the copy fails the 0.35 layout schema.`;
-  if (copy.renamed) {
-    return `${head} ${safeToTake(copy) ? 'The fix rename-layout (`opf embed -i` applies it)' : 'The fix rename-layout, which drops your edits,'} moves its slides to '${copy.renamed.id}'${copy.renamed.titlePosition ? ` with design.titlePosition "${copy.renamed.titlePosition}"` : ''} and drops the copy.`;
-  }
-  if (!copy.current) return `${head} Apply the fix of each key (\`opf embed -i\` applies the safe ones), or register the catalog that publishes it to take the current record.`;
-  if (safeToTake(copy)) return `${head} Take the current record, which draws as this copy did (fix use-current-record; \`opf embed -i\` applies it), or apply the fix of each key.`;
-  return `${head} The fix of each key keeps ${copy.version === 'edited' ? 'your edits' : 'its drawing'} (\`opf embed -i\` applies the safe ones); use-current-record takes the current record, which draws ${copy.version === 'edited' ? 'without your edits' : 'as the current built-in does'}.`;
+  const head = `catalogs.${copy.group}.layouts.${copy.id} is a copy of the built-in layout '${copy.id}' from before OPF 0.35${copy.renamed ? `, which 0.35 removed (use '${copy.renamed.id}')` : ''}; 0.35 changed the keys of the built-in records, so the copy fails the 0.35 layout schema.`;
+  const mirror = `catalogs.${copy.group} mirrors the built-in records (keep a customized layout in catalogs.custom), and the 0.35 engine draws the slides, which may look different.`;
+  if (copy.renamed) return `${head} The fix rename-layout (\`opf fix -i\` and \`opf embed -i\` apply it) moves its slides to '${copy.renamed.id}'${copy.renamed.titlePosition ? ` with design.titlePosition "${copy.renamed.titlePosition}"` : ''} and drops the copy; ${mirror}`;
+  return `${head} The fix use-current-record (\`opf fix -i\` and \`opf embed -i\` apply it) replaces it with the current record and renames the region pins of its slides; ${mirror}`;
 }
 
 /** The slides whose `layout` resolves to the copy, with the reference each writes. */
@@ -237,13 +210,21 @@ export function staleCopyPatch(document: unknown, copy: StaleLayoutCopy, options
   return [...ops, ...droppedCopyOperations(document, copy)];
 }
 
-/** The fix of a stale copy (staleCopyPatch): `use-current-record`, or `rename-layout` for a removed layout; safe as safeToTake says. */
+/** Whether replacing the copy with `target` changes the record its slides draw on (always, for a copy that fails the schema). */
+const recordChanged = (document: unknown, copy: StaleLayoutCopy, target: unknown): boolean => !isRec(target) || documentHash(embeddedLayouts(document, copy.group)[copy.id]) !== documentHash(target);
+
+/** The record a stale copy's slides draw on after its fix: the current record, or the layout that replaced a removed one. */
+const replacementOf = (document: unknown, copy: StaleLayoutCopy): unknown => copy.current ?? copy.renamed?.current ?? (copy.renamed ? embeddedLayouts(document, copy.group)[copy.renamed.id] : undefined);
+
+/**
+ * The fix of a stale copy (staleCopyPatch): `use-current-record`, or `rename-layout` for a removed layout. Always safe (it loses no
+ * content and writes valid OPF; `catalogs.default` mirrors the built-in records), and marked `changesDrawing` when the record changed.
+ */
 export function staleCopyFix(document: unknown, copy: StaleLayoutCopy, options: CatalogOptions = {}): FindingFix | undefined {
   const patch = staleCopyPatch(document, copy, options);
   if (!patch) return undefined;
-  return copy.renamed
-    ? { id: 'rename-layout', title: `Use layout ${copy.renamed.id} and drop the old copy of ${copy.id}`, kind: 'patch', safe: safeToTake(copy), ...(renamedLayoutChangesDrawing('layouts', copy.id) ? { changesDrawing: true } : {}), patch }
-    : { id: 'use-current-record', title: `Take the current ${copy.id} record`, kind: 'patch', safe: safeToTake(copy), patch };
+  const marks = { kind: 'patch' as const, safe: true, ...(recordChanged(document, copy, replacementOf(document, copy)) ? { changesDrawing: true } : {}), patch };
+  return copy.renamed ? { id: 'rename-layout', title: `Use layout ${copy.renamed.id} and drop the old copy of ${copy.id}`, ...marks } : { id: 'use-current-record', title: `Take the current ${copy.id} record`, ...marks };
 }
 
 const applyOperation = (root: Rec, operation: JsonPatchOperation): void => {
@@ -259,58 +240,27 @@ const applyOperation = (root: Rec, operation: JsonPatchOperation): void => {
   else if (operation.op === 'add' || operation.op === 'replace') parentOf(segments)[segments.at(-1)!] = structuredClone(operation.value);
 };
 
-/**
- * The copy converted by the safe fixes of its schema findings (removedKeyRepair: `use-max-1`, `remove:listColumns`, `use-arrangement`,
- * ...), when they make it valid; undefined when one of its errors has no safe fix. The copy keeps its drawing and its region names.
- */
-function convertedCopy(document: unknown, copy: StaleLayoutCopy): { record: Rec; changesDrawing: boolean } | undefined {
-  const holder: Rec = { catalogs: { [copy.group]: { layouts: { [copy.id]: structuredClone(embeddedLayouts(document, copy.group)[copy.id]) } } } };
-  let changesDrawing = false;
-  for (let round = 0; round < 8; round++) {
-    const record = embeddedLayouts(holder, copy.group)[copy.id];
-    const issues = layoutRecordIssues(copy.id, record);
-    if (!issues.length) return { record: rec(record), changesDrawing };
-    const fixes = issues.map((issue) => removedKeyRepair({ ruleId: 'opf/catalog-record', path: `${copy.path}${issue.path}`, validation: issue } as unknown as Finding, holder)?.fixes.find((fix) => fix.safe));
-    if (fixes.some((fix) => fix?.kind !== 'patch')) return undefined;
-    for (const fix of fixes as FindingFix[]) {
-      changesDrawing ||= fix.changesDrawing === true;
-      for (const operation of fix.patch ?? []) applyOperation(holder, operation);
-    }
-    // Two removed design keys deleted in one round leave the record's design empty: drop it, as each fix alone would.
-    const design = rec(embeddedLayouts(holder, copy.group)[copy.id]).design;
-    if (isRec(design) && !Object.keys(design).length) delete rec(embeddedLayouts(holder, copy.group)[copy.id]).design;
-  }
-  return undefined;
-}
-
-/** One stale copy `embed` made valid (refreshStaleLayouts). */
+/** One stale copy `embed` replaced (refreshStaleLayouts). */
 export interface RefreshedRecord {
   group: string;
   kind: 'layouts';
   id: string;
   source?: string;
-  /**
-   * `current`: replaced by the current record (an unedited copy of the 0.34 release); `converted`: kept, with the safe fix of each removed
-   * key applied; `renamed`: a layout 0.35 removed, its slides moved to `renamedTo` and the copy dropped.
-   */
-  how: 'current' | 'converted' | 'renamed';
+  /** `current`: replaced by the current record; `renamed`: a layout 0.35 removed, its slides moved to `renamedTo` and the copy dropped. */
+  how: 'current' | 'renamed';
   renamedTo?: string;
-  /**
-   * True when the refresh can change how the copy's slides draw (FindingFix `changesDrawing`): `renamed` from `agenda-split` (its title
-   * column narrows from half the width to two fifths) or `flow`, or `converted` with a fix that does not keep the drawing (a deleted
-   * `design.contentDirection`, a `listColumns` other than a list region's `"auto"`). Absent when the slides draw as before.
-   */
+  /** True when the record the slides draw on changed (FindingFix `changesDrawing`): the 0.35 engine draws them, which may look different. */
   changesDrawing?: true;
   /** JSON Pointers of the slide layouts and block pins rewritten so that every slide keeps its layout and every block its region. */
   references: string[];
 }
 
 /**
- * Make every embedded copy of a built-in layout record from before OPF 0.35 that fails the layout schema valid, in place, keeping its
- * content (RefreshedRecord.changesDrawing says when a slide may draw differently): an unedited copy of the 0.34 release takes the current record (its slides' pins renamed to the 0.35 regions), a
- * copy of a layout 0.35 removed moves its slides to the replacement (when unedited and the replacement is registered), and any other copy
- * gets the safe fix of each removed key when that makes it valid. A copy that stays invalid, and the deck's own records
- * (`catalogs.custom`), are kept as they are. Returns what changed. `embed` calls it before embedding.
+ * Replace every embedded copy of a built-in layout record from before OPF 0.35 that fails the layout schema, in place: with the current
+ * record (its slides' pins renamed to the 0.35 regions), or, for a layout 0.35 removed, by moving its slides to the replacement and
+ * dropping the copy. `catalogs.default` mirrors the built-in records, so the copy is replaced whatever release wrote it and whether it
+ * was edited (RefreshedRecord.changesDrawing says when the record changed). A copy whose current record is not registered, and the deck's
+ * own records (`catalogs.custom`), are kept as they are. Returns what changed. `embed` calls it before embedding.
  */
 export function refreshStaleLayouts(document: Rec, options: CatalogOptions = {}): RefreshedRecord[] {
   const refreshed: RefreshedRecord[] = [];
@@ -319,19 +269,13 @@ export function refreshStaleLayouts(document: Rec, options: CatalogOptions = {})
     for (const [id, record] of Object.entries(value.layouts)) {
       if (!layoutRecordIssues(id, record).length) continue;
       const copy = staleLayoutCopy(document, group, id, options);
-      if (!copy) continue;
+      if (!copy || !(copy.current || copy.renamed?.current)) continue;
+      const patch = staleCopyPatch(document, copy, options);
+      if (!patch) continue;
+      const changed = recordChanged(document, copy, replacementOf(document, copy));
+      for (const operation of patch) applyOperation(document, operation);
       const source = catalogGroupSource(document, group, options);
-      const entry = { group, kind: 'layouts' as const, id, ...(source !== undefined ? { source } : {}) };
-      const patch = safeToTake(copy) && (copy.current || copy.renamed?.current) ? staleCopyPatch(document, copy, options) : undefined;
-      if (patch) {
-        for (const operation of patch) applyOperation(document, operation);
-        refreshed.push({ ...entry, how: copy.renamed ? 'renamed' : 'current', ...(copy.renamed ? { renamedTo: copy.renamed.id } : {}), ...(copy.renamed && renamedLayoutChangesDrawing('layouts', id) ? { changesDrawing: true as const } : {}), references: patch.filter((operation) => operation.path.startsWith('/slides/')).map((operation) => operation.path) });
-        continue;
-      }
-      const converted = convertedCopy(document, copy);
-      if (!converted) continue;
-      (value.layouts as Rec)[id] = converted.record;
-      refreshed.push({ ...entry, how: 'converted', ...(converted.changesDrawing ? { changesDrawing: true as const } : {}), references: [] });
+      refreshed.push({ group, kind: 'layouts', id, ...(source !== undefined ? { source } : {}), how: copy.renamed ? 'renamed' : 'current', ...(copy.renamed ? { renamedTo: copy.renamed.id } : {}), ...(changed ? { changesDrawing: true as const } : {}), references: patch.filter((operation) => operation.path.startsWith('/slides/')).map((operation) => operation.path) });
     }
   }
   return refreshed;

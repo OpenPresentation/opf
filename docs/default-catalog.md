@@ -136,8 +136,8 @@ the same records from `@openpresentation/gallery`, where `defaultCatalog` is `ga
 - **`embed(document, { catalogs })`** embeds each referenced record once, in the group it resolves in, together with
   the records it references (a theme's color and font schemes). A bare id from the host default goes under
   `catalogs.default` with the catalog's source. Records already embedded are kept as they are, except a copy of a built-in
-  layout from before OPF 0.35 that fails the layout schema: it is made valid first without changing what it draws
-  (`refreshed`; see [the 0.35 migration note](migrations/0.35.md#self-contained-decks-embedded-copies-of-built-in-layouts)); `x-*`, `$schema`
+  layout from before OPF 0.35 that fails the layout schema: `catalogs.default` mirrors the built-in records, so it takes the
+  current record first (`refreshed`; see [the 0.35 migration note](migrations/0.35.md#self-contained-decks-embedded-copies-of-built-in-layouts)); `x-*`, `$schema`
   and `id` are stripped. It returns `{ document, added, refreshed, unresolved }` and is idempotent. Authoring tools call it on save and
   export; `opf embed` does it on the command line.
 - **`copySlides(from, to, indexes, { catalogs, at })`** copies slides with their records. Groups match by `source`, not
