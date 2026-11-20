@@ -12,6 +12,7 @@ import { visitContentPayloads } from './content-walk.js';
 import { assertValid } from './validator.js';
 import { sliceNumberedItems } from './numbering.js';
 import { regionAccepts } from './bind-regions.js';
+import { cellBlocks } from './grid-cells.js';
 import { resolveSlideVariables, slideTokenSpans, usesSlideBuiltin } from './slide-variables.js';
 
 export interface PaginationOptions extends Omit<ComposeSlideOptions, 'textMeasurement'> {
@@ -368,9 +369,6 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
             children.push(projected);
           });
           if (children.length) { result.blocks = children; hasContent = true; }
-        } else if (root && isRecord(value) && /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key)) {
-          const child = visit(value,childPath,outputPath);
-          if (child) { result[key] = child; hasContent = true; }
         } else if (key === 'text' && isShapeBlock(node)) {
           // SH-02: a shape's text goes with its shape (the leaf is the shape item, `<block>.shape` or `<block>.path`).
           if (portions.has(`${path}.shape`) || portions.has(`${path}.path`)) result[key] = clone(value);
@@ -583,16 +581,15 @@ export interface ContinuationResult {
   layout: 'measured' | 'estimated';
 }
 
-const promotedKey = /^(top|middle|bottom|start|center|end)([+:]|$)/;
 /**
  * LH-90: the root blocks of a slide as the units a whole-block split keeps together, or undefined. Every root block must be one
- * payload (no nested group) and the slide must hold nothing else to move (no root payload, no promoted region). A unit starts at
+ * payload (no nested group) and the slide must hold nothing else to move (no root payload, no blocks placed in the cells of the slide's grid). A unit starts at
  * each block of the first block's kind (`kind`, the lead kind) and takes the blocks after it up to the next one, so eight
  * timelines are eight units and a timeline keeps the note that follows it. A slide needs two or more units.
  */
 export function blockUnits(slide: unknown): { kind: string; units: number[][] } | undefined {
   if (!isRecord(slide) || !Array.isArray(slide.blocks) || slide.blocks.length < 2) return undefined;
-  if (Object.keys(slide).some(key => contentFields.has(key) || promotedKey.test(key))) return undefined;
+  if (Object.keys(slide).some(key => contentFields.has(key)) || cellBlocks(slide)) return undefined;
   const kinds: string[] = [];
   for (const block of slide.blocks) {
     const fields = isRecord(block) && !Array.isArray(block.blocks) ? Object.keys(block).filter(key => contentFields.has(key)) : [];

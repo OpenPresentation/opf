@@ -1,4 +1,5 @@
 import type { LayoutBox, LayoutDiagnostic, RichTextFit, RichTextRun, TextFit, TextStyle } from './composition.js';
+import { cellBlocks, cellsInReadingOrder, isGridCell } from './grid-cells.js';
 
 /**
  * Footnotes, citations and captions (RR-34).
@@ -53,7 +54,6 @@ export const CAPTIONABLE_FIELDS: readonly string[] = Object.freeze(['image', 'ch
 const record = (value: unknown): Record<string, unknown> => value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
 const isRecord = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
 const round = (value: number) => Math.round(value * 1e6) / 1e6 || value;
-const regionKey = /^(top|middle|bottom|start|center|end)([+:]|$)/;
 const TEXT_FIELDS = ['text', 'items', 'bullets'] as const;
 /** Heading fields in reading order (the order composeSlide stacks them); each may be a string or TextRun[]. */
 const HEADING_FIELDS = ['tag', 'title', 'subtitle'] as const;
@@ -80,7 +80,9 @@ export interface AnnotatedRun { path: string; run: RichTextRun; cite: string[]; 
 /**
  * Visit every rich-text run of a slide that can carry a citation (the slide tag, title and subtitle, then
  * text, bullets, list item and quote runs), in reading order: the heading group first (tag, title, subtitle),
- * then promoted regions (sorted keys), then blocks (recursively), then the root payload.
+ * then blocks (recursively), then the root payload. The blocks of a slide placed in the cells of its grid read cell by cell in
+ * reading order (rows from the top, each from its start column), the blocks of one cell in source order; composeSlide's own view of
+ * such a slide, which keeps each cell under its cell word, reads the same.
  * `basePath` is the slide's dotted path (`slides.3`).
  */
 export function walkCitationRuns(slide: unknown, basePath: string, visit: (entry: AnnotatedRun) => void): void {
@@ -117,8 +119,10 @@ export function walkCitationRuns(slide: unknown, basePath: string, visit: (entry
   const value = record(slide);
   // The heading group reads first: tag, title, then subtitle (the order composeSlide lays them out), before any body run.
   for (const field of HEADING_FIELDS) runs(value[field], `${basePath}.${field}`);
-  const regions = Object.keys(value).filter(key => regionKey.test(key)).sort();
-  if (regions.length) { for (const key of regions) host(value[key], `${basePath}.${key}`, 0); return; }
+  const cells = cellsInReadingOrder(Object.keys(value).filter(isGridCell).map(cell => ({ cell })));
+  if (cells.length) { for (const key of cells) host(value[key], `${basePath}.${key}`, 0); return; }
+  const placed = cellBlocks(value);
+  if (placed) { for (const cell of cellsInReadingOrder(placed)) for (const entry of placed) if (entry.cell === cell) host(entry.block, `${basePath}.blocks.${entry.index}`, 0); return; }
   if (Array.isArray(value.blocks)) { value.blocks.forEach((block: unknown, index: number) => { host(block, `${basePath}.blocks.${index}`, 0); }); return; }
   host(value, basePath, 0);
 }

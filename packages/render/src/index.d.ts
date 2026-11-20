@@ -299,7 +299,6 @@ export interface RenderBinding {
   field?: string;
   value: unknown;
   path: string;
-  regionKey?: string;
 }
 
 export declare class OPFRenderError extends Error {

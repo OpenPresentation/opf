@@ -12,7 +12,8 @@ import { annotationIssues } from "./annotation-validation.js";
 import { isShapeBlock, shapeIssues, SHAPE_BLOCK_KEYS } from "./shape-block.js";
 import { PositionRangeError, connectorAdjustPreset, isOverlayConnector, overlayIssues, representablePositionBox } from "./overlay-shapes.js";
 import { codeHighlightLines } from "./code-highlight.js";
-import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
+import { isRecord, pathFor, visitContentPayloads } from "./content-walk.js";
+import { gridCellSpan, isGridCell } from "./grid-cells.js";
 import {tableGrid} from "./table.js";
 import { numberingFindings } from "./numbering.js";
 import { schemaEngine } from "#schema-engine";
@@ -60,9 +61,7 @@ export type SchemaOrKind = SchemaName | CatalogRecordKind;
 
 const schemaNameByCatalogKind: Readonly<Record<CatalogRecordKind, SchemaName>> = catalogSchemaNames;
 
-export { promotedRegionKeys } from "./content-walk.js";
-
-const promotedRegionKeySet = new Set<string>(promotedRegionKeys);
+export { gridCells } from "./grid-cells.js";
 
 const rootPayloadFields = [
   "type",
@@ -164,24 +163,6 @@ const imageOptionFields = ["fit", "focus", "aspectRatio", "shape", "adjust", "st
 // SH-02: the image options a shape block also takes, and the keys only a shape block takes.
 const shapeImageFields = new Set<string>(["aspectRatio", "shape", "adjust", "stroke", "opacity"]);
 const shapeOptionFields = SHAPE_BLOCK_KEYS.filter((field) => field !== "path");
-
-const columnSpans: Record<string, readonly number[]> = {
-  start: [0],
-  center: [1],
-  end: [2],
-  "start+center": [0, 1],
-  "center+end": [1, 2],
-  "start+center+end": [0, 1, 2],
-};
-
-const rowSpans: Record<string, readonly number[]> = {
-  top: [0],
-  middle: [1],
-  bottom: [2],
-  "top+middle": [0, 1],
-  "middle+bottom": [1, 2],
-  "top+middle+bottom": [0, 1, 2],
-};
 
 function isSchemaName(value: unknown): value is SchemaName {
   return typeof value === "string" && hasOwn(schemas, value);
@@ -333,7 +314,7 @@ function validateContentPayload(
     for (const field of shapeOptionFields) if (hasOwn(value, field) && !(field === "hidden" && options.slideRoot)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on a shape block; ${reason}`, { code: "shape-option-unsupported-payload", field, ...params }));
   };
   if (hasOwn(value, "placement") && !options.topLevel && !hasBlocks && explicitType !== "group" && inferredKinds(value).includes("image")) {
-    issues.push(semanticIssue(pathFor(path, "placement"), "placement is only valid on a top-level block (slides.N.blocks.I); a block inside a group or a promoted region cannot bleed to a slide edge", { code: "image-placement-invalid" }));
+    issues.push(semanticIssue(pathFor(path, "placement"), "placement is only valid on a top-level block (slides.N.blocks.I); a block inside a group cannot bleed to a slide edge", { code: "image-placement-invalid" }));
   }
   if (hasBlocks || explicitType === "group") {
     if (hasOwn(value, "caption")) issues.push(captionIssue("a group cannot carry one"));
@@ -452,84 +433,44 @@ function validateContentPayload(
   return issues;
 }
 
-interface SlideRegion {
-  rows: readonly number[];
-  columns: readonly number[];
-}
-
-function slideRegion(key: string): SlideRegion | undefined {
-  if (key.includes(":")) {
-    const [rowPart, columnPart] = key.split(":");
-    if (!rowPart || !columnPart) return undefined;
-    const rows = rowSpans[rowPart];
-    const columns = columnSpans[columnPart];
-    return rows && columns ? { rows, columns } : undefined;
-  }
-
-  if (key in columnSpans) {
-    const columns = columnSpans[key];
-    return columns ? { rows: [0, 1, 2], columns } : undefined;
-  }
-
-  if (key in rowSpans) {
-    const rows = rowSpans[key];
-    return rows ? { rows, columns: [0, 1, 2] } : undefined;
-  }
-
-  return undefined;
+function validateSlideRoot(slide: Record<string, unknown>, slidePath: string, canvas?: { width: number; height: number }): ValidationIssue[] {
+  return presentFields(slide, rootPayloadFields).length > 0 ? validateContentPayload(slide, slidePath, { slideRoot: true, ...(canvas ? { canvas } : {}) }) : [];
 }
 
 function intersects(left: readonly number[], right: readonly number[]): boolean {
   return left.some((value) => right.includes(value));
 }
 
-function regionsOverlap(left: SlideRegion, right: SlideRegion): boolean {
-  return intersects(left.rows, right.rows) && intersects(left.columns, right.columns);
-}
-
-function validateSlideRegions(slide: Record<string, unknown>, slidePath: string, canvas?: { width: number; height: number }): ValidationIssue[] {
+/**
+ * OPF 0.35: the cells of a slide without a layout. A slide places every block in a cell or none, so a block that names none beside one
+ * that does is an error; two blocks may name the same cell (they stack in it), but two different cells may not overlap, and a block in a
+ * cell has no slide edge to bleed to (`placement`).
+ */
+function validateSlideCells(slide: Record<string, unknown>, slidePath: string): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
-  const regionKeys = Object.keys(slide).filter((key) => promotedRegionKeySet.has(key));
-  const rootFields = presentFields(slide, rootPayloadFields);
-
-  if (regionKeys.length > 0 && rootFields.length > 0) {
-    issues.push(semanticIssue(slidePath, "root content payload fields cannot be mixed with promoted region keys", {
-      rootFields,
-      regionKeys,
-    }));
+  if (slide.layout !== undefined || !Array.isArray(slide.blocks)) return issues;
+  const blocks = slide.blocks.flatMap((block, index) => isRecord(block) ? [{ block, index }] : []);
+  const placed = blocks.filter(({ block }) => isGridCell(block.region));
+  if (!placed.length) return issues;
+  const cells = [...new Set(placed.map(({ block }) => String(block.region)))];
+  for (const { block, index } of blocks) {
+    if (isGridCell(block.region)) continue;
+    const path = pathFor(pathFor(slidePath, "blocks"), String(index));
+    issues.push(semanticIssue(typeof block.region === "string" ? pathFor(path, "region") : path, typeof block.region === "string"
+      ? `a slide places every block in a cell of its grid or none: '${block.region}' is no cell (write one of the cells the other blocks use, such as '${cells[0]}', or give the slide a layout)`
+      : `a slide places every block in a cell of its grid or none: give this block a 'region' cell too (the other blocks use ${cells.map((cell) => `'${cell}'`).join(", ")})`, { cells }));
   }
-
-  if (regionKeys.length === 0 && rootFields.length > 0) {
-    issues.push(...validateContentPayload(slide, slidePath, { slideRoot: true, ...(canvas ? { canvas } : {}) }));
+  for (const { block, index } of placed) {
+    if (hasOwn(block, "placement")) issues.push(semanticIssue(pathFor(pathFor(pathFor(slidePath, "blocks"), String(index)), "placement"), "placement is only valid on a top-level block of a slide whose blocks are not in cells; a block in a cell of the slide's grid cannot bleed to a slide edge", { code: "image-placement-invalid" }));
   }
-
-  for (const key of regionKeys) {
-    const value = slide[key];
-    if (isRecord(value)) {
-      issues.push(...validateContentPayload(value, pathFor(slidePath, key), canvas ? { canvas } : {}));
+  for (let left = 0; left < cells.length; left += 1) {
+    for (let right = left + 1; right < cells.length; right += 1) {
+      const a = gridCellSpan(cells[left]!), b = gridCellSpan(cells[right]!);
+      if (!a || !b || !intersects(a.rows, b.rows) || !intersects(a.columns, b.columns)) continue;
+      const at = placed.find(({ block }) => block.region === cells[right])!;
+      issues.push(semanticIssue(pathFor(pathFor(pathFor(slidePath, "blocks"), String(at.index)), "region"), `cells '${cells[left]}' and '${cells[right]}' overlap`, { cells: [cells[left], cells[right]] }));
     }
   }
-
-  for (let leftIndex = 0; leftIndex < regionKeys.length; leftIndex += 1) {
-    const leftKey = regionKeys[leftIndex];
-    if (!leftKey) continue;
-    const leftRegion = slideRegion(leftKey);
-    if (!leftRegion) continue;
-
-    for (let rightIndex = leftIndex + 1; rightIndex < regionKeys.length; rightIndex += 1) {
-      const rightKey = regionKeys[rightIndex];
-      if (!rightKey) continue;
-      const rightRegion = slideRegion(rightKey);
-      if (!rightRegion) continue;
-
-      if (regionsOverlap(leftRegion, rightRegion)) {
-        issues.push(semanticIssue(slidePath, `promoted region keys '${leftKey}' and '${rightKey}' overlap`, {
-          regionKeys: [leftKey, rightKey],
-        }));
-      }
-    }
-  }
-
   return issues;
 }
 
@@ -594,7 +535,7 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
     const canvas = deckCanvas();
     return canvas ? {...canvas, rtl: resolveSlideDirection(value, index) === 'rtl'} : undefined;
   };
-  const hasCallouts = (node: unknown, depth = 0): boolean => isRecord(node) && depth <= 34 && Object.entries(node).some(([key, entry]) => key === 'callouts' ? Array.isArray(entry) && entry.length > 0 : key === 'image' || key === 'blocks' || promotedRegionKeySet.has(key) ? (Array.isArray(entry) ? entry.some(item => hasCallouts(item, depth + 1)) : hasCallouts(entry, depth + 1)) : false);
+  const hasCallouts = (node: unknown, depth = 0): boolean => isRecord(node) && depth <= 34 && Object.entries(node).some(([key, entry]) => key === 'callouts' ? Array.isArray(entry) && entry.length > 0 : key === 'image' || key === 'blocks' ? (Array.isArray(entry) ? entry.some(item => hasCallouts(item, depth + 1)) : hasCallouts(entry, depth + 1)) : false);
   value.slides.forEach((slide, index) => {
     if (isRecord(slide)) {
       const slidePath = `/slides/${index}`;
@@ -624,7 +565,7 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
       });
       for (const issue of overlayIssues(slide, slidePath, value, canvasForOverlays(slide, index))) issues.push(semanticIssue(issue.path, issue.message, { ...(issue.code ? { code: issue.code } : {}), ...issue.params }));
       issues.push(...enUkIssues(slide.language, `${slidePath}/language`));
-      issues.push(...validateSlideRegions(slide, slidePath, hasCallouts(slide) ? deckCanvas() : undefined));
+      issues.push(...validateSlideRoot(slide, slidePath, hasCallouts(slide) ? deckCanvas() : undefined), ...validateSlideCells(slide, slidePath));
       const payloadTableIssues = (payload: Record<string, unknown>, path: string): void => {
         if (isRecord(payload.table)) for(const issue of tableGrid(payload.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
       };
@@ -978,11 +919,6 @@ function presentationReferenceWarnings(value: unknown, catalogs: readonly Catalo
     };
     highlightWarnings(slide, slidePath);
     visitContentPayloads(slide, slidePath, highlightWarnings);
-    for (const key of Object.keys(slide)) {
-      if (promotedRegionKeySet.has(key)) {
-        issues.push(...chartTypeWarnings(slide[key], pathFor(slidePath, key)));
-      }
-    }
   });
 
   return issues;
@@ -999,7 +935,6 @@ function contentDepthIssues(value: unknown): ValidationIssue[] {
   value.slides.forEach((slide, index) => {
     if (!isRecord(slide)) return;
     if (Array.isArray(slide.blocks)) slide.blocks.forEach((block, i) => { stack.push({ value: block, path: `/slides/${index}/blocks/${i}`, depth: 0, ancestors: [] }); });
-    for (const key of promotedRegionKeys) if (hasOwn(slide, key)) stack.push({ value: slide[key], path: `/slides/${index}/${key}`, depth: 0, ancestors: [] });
   });
   while (stack.length) {
     const entry = stack.pop()!;

@@ -24,7 +24,7 @@ export interface Payload {
 const BODY_FIELDS = ['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'path'] as const;
 export const bodyFields = BODY_FIELDS;
 
-/** Root payload, then every block (recursively) and promoted-region payload of a slide. */
+/** Root payload, then every block of a slide (recursively). */
 export function slidePayloads(slide: Rec, slidePath: string): Payload[] {
 	const out: Payload[] = [{ path: slidePath, node: slide, root: true }];
 	visitContentPayloads(slide, slidePath, (node, path) => out.push({ path, node, root: false }));

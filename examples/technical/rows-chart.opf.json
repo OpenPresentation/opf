@@ -3,52 +3,60 @@
   "slides": [
     {
       "title": "Performance",
-      "top+middle": {
-        "type": "chart",
-        "chart": {
-          "type": "line",
-          "data": {
-            "columns": [
-              "Quarter",
-              "Median latency"
-            ],
-            "rows": [
-              [
-                "Q1",
-                420
+      "blocks": [
+        {
+          "region": "top+middle",
+          "type": "chart",
+          "chart": {
+            "type": "line",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Median latency"
               ],
-              [
-                "Q2",
-                310
-              ],
-              [
-                "Q3",
-                260
-              ],
-              [
-                "Q4",
-                190
+              "rows": [
+                [
+                  "Q1",
+                  420
+                ],
+                [
+                  "Q2",
+                  310
+                ],
+                [
+                  "Q3",
+                  260
+                ],
+                [
+                  "Q4",
+                  190
+                ]
               ]
-            ]
+            }
           }
+        },
+        {
+          "region": "bottom",
+          "text": "Latency improved 55% over the last four quarters."
         }
-      },
-      "bottom": {
-        "text": "Latency improved 55% over the last four quarters."
-      }
+      ]
     },
     {
       "title": "Next Focus",
-      "top": {
-        "text": "Reduce long-tail retries"
-      },
-      "middle+bottom": {
-        "items": [
-          "Profile slow tool calls",
-          "Cache stable lookups",
-          "Batch low-risk writes"
-        ]
-      }
+      "blocks": [
+        {
+          "region": "top",
+          "text": "Reduce long-tail retries"
+        },
+        {
+          "region": "middle+bottom",
+          "items": [
+            "Profile slow tool calls",
+            "Cache stable lookups",
+            "Batch low-risk writes"
+          ]
+        }
+      ]
     }
   ]
 }

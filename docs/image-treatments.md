@@ -115,7 +115,7 @@ The picture keeps its `fit` and `focus`; without them it covers its frame around
 
 `placement: { edge: "start" | "end" | "top" | "bottom", size: 0.1–0.9 (default 0.5), inset: false }` gives the image a band along that edge of the slide, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. `size` is the band's share of the slide width (start, end) or height (top, bottom). `inset: true` puts the frame inside the slide padding of the band, like a card. Header and footer bands keep their full-width placement.
 
-- Only a top-level block (`slides.N.blocks.I`) can be placed, and each slide edge takes at most one placed image. A placed block inside a group or a promoted region, or a second block on the same edge, is an `opf/image-placement-invalid` error.
+- Only a top-level block (`slides.N.blocks.I`) can be placed, and each slide edge takes at most one placed image. A placed block inside a group or in a cell of the slide's grid (`region` on a slide without a layout), or a second block on the same edge, is an `opf/image-placement-invalid` error.
 - Bands are taken in block order. Each spans the free area left by the earlier ones.
 - Placement belongs to a top-level image block. Current v2 layout records do not have image-placeholder placement; write a block in `blocks` to place a picture rather than using the root `Slide.image` shorthand.
 - A slide whose only body is placed images is composed like a cover: its headings center in the free area beside the image.

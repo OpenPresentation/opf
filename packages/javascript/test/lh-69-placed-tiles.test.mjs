@@ -18,7 +18,7 @@ const inside = (box, outer) => box.x >= outer.x - 0.5 && box.y >= outer.y - 0.5 
 
 for (const [language, text] of Object.entries(WORDS)) {
   const direction = language === 'ar' ? 'rtl' : 'ltr';
-  const teams = (labels) => ({ title: text.title, 'top+middle:start': { text: labels[0] }, 'top+middle:center': { text: labels[1] }, 'top+middle:end': { text: labels[2] }, 'bottom:start+center+end': { bullets: text.bullets } });
+  const teams = (labels) => ({ title: text.title, blocks: [{ region: 'top+middle:start', text: labels[0] }, { region: 'top+middle:center', text: labels[1] }, { region: 'top+middle:end', text: labels[2] }, { region: 'bottom:start+center+end', bullets: text.bullets }] });
 
   test(`LH-69 (${direction}): placed short texts draw as tiles at one size, the bullets beside them at their own size`, () => {
     const result = composeSlide(teams(text.teams), { direction });
@@ -44,20 +44,20 @@ for (const [language, text] of Object.entries(WORDS)) {
   });
 
   test(`LH-69 (${direction}): one placed short text over a list is one tile across its region`, () => {
-    const result = composeSlide({ title: text.title, top: { text: text.focus }, 'middle+bottom': { items: text.steps } }, { direction });
+    const result = composeSlide({ title: text.title, blocks: [{ region: 'top', text: text.focus }, { region: 'middle+bottom', items: text.steps }] }, { direction });
     const grid = tiles(result);
     assert.ok(grid, 'the lone short text draws as a tile');
     assert.equal(grid.chips.length, 1);
     const head = texts(result)[0], list = field(result, 'items');
     assert.ok(inside(head.box, grid.chips[0].box));
     assert.ok(grid.chips[0].box.y + grid.chips[0].box.height <= list.box.y + 0.5, 'the tile stays in its region, above the list');
-    const plain = composeSlide({ title: text.title, top: { text: `${text.focus}.` }, 'middle+bottom': { items: text.steps } }, { direction });
+    const plain = composeSlide({ title: text.title, blocks: [{ region: 'top', text: `${text.focus}.` }, { region: 'middle+bottom', items: text.steps }] }, { direction });
     assert.ok(list.text.fontSize >= field(plain, 'items').text.fontSize - 1e-6, 'the list is never smaller');
     assert.ok(list.text.fontSize > head.text.fontSize, 'the sibling list grows past the fixed tile-label size');
   });
 
   test(`LH-69 (${direction}): a sentence or a longer text keeps its heading`, () => {
-    const sentence = composeSlide({ title: text.title, start: { text: text.sentence }, 'center+end': { text: text.detail } }, { direction });
+    const sentence = composeSlide({ title: text.title, blocks: [{ region: 'start', text: text.sentence }, { region: 'center+end', text: text.detail }] }, { direction });
     assert.equal(tiles(sentence), undefined, 'a short sentence is a statement, not a label');
     const long = composeSlide(teams([text.long, ...text.teams.slice(1)]), { direction });
     const grid = tiles(long);

@@ -232,62 +232,68 @@
       "id": "s48-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "31%",
-          "label": "Primary signal",
-          "description": "Select the packaging move that improves conversion and expansion",
-          "trend": "down"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "Northbeam Software should focus the next cycle on ",
-          {
-            "text": "select the packaging move that improves conversion and expansion",
-            "bold": true,
-            "color": "#0F172A"
-          },
-          " while making the operating tradeoffs clear to pricing stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "Pricing working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "Pricing",
-              "Program lead",
-              "At risk",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "On track",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "Watch",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "31%",
+            "label": "Primary signal",
+            "description": "Select the packaging move that improves conversion and expansion",
+            "trend": "down"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "Northbeam Software should focus the next cycle on ",
+            {
+              "text": "select the packaging move that improves conversion and expansion",
+              "bold": true,
+              "color": "#0F172A"
+            },
+            " while making the operating tradeoffs clear to pricing stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "Pricing working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Pricing",
+                "Program lead",
+                "At risk",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "On track",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "Watch",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {

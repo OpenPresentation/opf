@@ -675,7 +675,7 @@ function reduceLogo(id: string, logo: LogoReference | { error: string }, path: s
 const skippedKeys = new Set(["extensions"]);
 const skippedRootKeys = new Set(["variables", "catalogs", "$schema", "template"]);
 
-/** A group inside a slide: a block or promoted region that holds `blocks`, at any depth under a slide (never the slide itself). */
+/** A group inside a slide: a block that holds `blocks`, at any depth under a slide (never the slide itself). */
 const groupPathPattern = /^\/slides\/\d+\/.+/;
 
 /** The declared content variables (not colors, not built-ins) a subtree uses, each with the paths that use it. */
@@ -701,7 +701,7 @@ function subtreeVariables(value: unknown, path: string, context: Context, found 
 }
 
 /**
- * LH-30: a group (a block or promoted region with `blocks`) whose content variables are all optional and all unfilled is optional
+ * LH-30: a group (a block with `blocks`) whose content variables are all optional and all unfilled is optional
  * content as a whole: its pictures, cards and static text go with the fields the variables would fill, so the slide does not draw a
  * card around a picture with no text, or a heading over nothing. A group that uses no content variable, or any filled or required
  * one, stays. The resolution omits it (`variable-group-omitted`, info); the validation view, whose samples fill every variable,

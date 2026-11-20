@@ -2,55 +2,51 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {composeSlide, visualReadingOrder} from '../dist/composition.js';
 
-// RR-29: promoted regions are composed in visual reading order (rows top to bottom, then along the row)
-// instead of alphabetical key order, so the composed item order matches what a reader sees. Geometry is
-// unchanged: only the order of the items (and so the SVG draw order and the PPTX shape order) differs.
+// RR-29: the cells of a slide's grid (blocks that name a cell with `region`, OPF 0.35) are composed in visual reading order (rows top
+// to bottom, then along the row) whatever order the blocks are written in, so the composed item order matches what a reader sees.
+// Geometry does not depend on the source order: only the order of the items (and so the SVG draw order and the PPTX shape order) is
+// the reading order. Each item keeps the path of its own block.
 const compose = slide => composeSlide(slide, {width: 1280, height: 720});
-const order = slide => compose(slide).items.filter(item => item.field !== 'title').map(item => item.path.replace(/^slides\.0\./, ''));
-const sortedBoxes = result => [...result.items].sort((a, b) => a.path.localeCompare(b.path)).map(item => [item.path, item.box]);
+const body = slide => compose(slide).items.filter(item => item.field !== 'title');
+const order = slide => body(slide).map(item => item.value);
+const paths = slide => body(slide).map(item => item.path.replace(/^slides\.0\./, ''));
+const cells = (...entries) => ({title: 'T', blocks: entries.map(([region, text]) => ({region, text}))});
 
-test('columns are composed left, center, right (not center, left, right)', () => {
-  assert.deepEqual(order({title: 'T', end: {text: 'R'}, center: {text: 'C'}, start: {text: 'L'}}), ['start.text', 'center.text', 'end.text']);
+test('columns are composed start, center, end (not in source order)', () => {
+  assert.deepEqual(order(cells(['center', 'C'], ['start', 'L'], ['end', 'R'])), ['L', 'C', 'R']);
+  assert.deepEqual(paths(cells(['center', 'C'], ['start', 'L'], ['end', 'R'])), ['blocks.1.text', 'blocks.0.text', 'blocks.2.text']);
 });
 
 test('rows are composed top, middle, bottom', () => {
-  assert.deepEqual(order({title: 'T', bottom: {text: 'B'}, top: {text: 'T'}, middle: {text: 'M'}}), ['top.text', 'middle.text', 'bottom.text']);
+  assert.deepEqual(order(cells(['bottom', 'B'], ['top', 'T'], ['middle', 'M'])), ['T', 'M', 'B']);
 });
 
 test('a grid with spans reads row by row', () => {
-  assert.deepEqual(order({
-    title: 'T',
-    'middle+bottom:center+end': {text: 'D'}, 'middle+bottom:start': {text: 'C'}, 'top:center+end': {text: 'B'}, 'top:start': {text: 'A'},
-  }), ['top:start.text', 'top:center+end.text', 'middle+bottom:start.text', 'middle+bottom:center+end.text']);
+  assert.deepEqual(order(cells(['middle+bottom:center+end', 'D'], ['middle+bottom:start', 'C'], ['top:center+end', 'B'], ['top:start', 'A'])), ['A', 'B', 'C', 'D']);
 });
 
-test('a full-height region shares the row with the stacked regions beside it and reads along x', () => {
-  assert.deepEqual(order({title: 'T', 'bottom:center+end': {text: 'C'}, 'top:center+end': {text: 'B'}, start: {text: 'A'}}), ['start.text', 'top:center+end.text', 'bottom:center+end.text']);
-  assert.deepEqual(order({title: 'T', end: {text: 'C'}, 'middle+bottom:start': {text: 'B'}, 'top:start': {text: 'A'}}), ['top:start.text', 'middle+bottom:start.text', 'end.text']);
+test('a full-height cell shares the row with the stacked cells beside it and reads along x', () => {
+  assert.deepEqual(order(cells(['bottom:center+end', 'C'], ['top:center+end', 'B'], ['start', 'A'])), ['A', 'B', 'C']);
+  assert.deepEqual(order(cells(['end', 'C'], ['middle+bottom:start', 'B'], ['top:start', 'A'])), ['A', 'B', 'C']);
 });
 
-test('a region group keeps its block order inside the region', () => {
-  const result = compose({title: 'T', end: {text: 'R'}, start: {blocks: [{text: 'L1'}, {text: 'L2'}]}});
-  assert.deepEqual(result.items.filter(item => item.field !== 'title').map(item => item.path.replace(/^slides\.0\./, '')), ['start.blocks.0.text', 'start.blocks.1.text', 'end.text']);
+test('a group in a cell keeps its block order inside the cell; blocks that name one cell stack in source order', () => {
+  const group = compose({title: 'T', blocks: [{region: 'end', text: 'R'}, {region: 'start', blocks: [{text: 'L1'}, {text: 'L2'}]}]});
+  assert.deepEqual(group.items.filter(item => item.field !== 'title').map(item => item.path.replace(/^slides\.0\./, '')), ['blocks.1.blocks.0.text', 'blocks.1.blocks.1.text', 'blocks.0.text']);
+  const shared = cells(['start', 'L1'], ['end', 'R'], ['start', 'L2']);
+  assert.deepEqual(order(shared), ['L1', 'L2', 'R']);
+  assert.deepEqual(paths(shared), ['blocks.0.text', 'blocks.2.text', 'blocks.1.text']);
+  // They stack as a group of their own would.
+  const asGroup = compose({title: 'T', blocks: [{region: 'start', blocks: [{text: 'L1'}, {text: 'L2'}]}, {region: 'end', text: 'R'}]});
+  assert.deepEqual(body(shared).map(item => item.box), asGroup.items.filter(item => item.field !== 'title').map(item => item.box));
 });
 
-test('the order does not depend on the order the region keys are written in', () => {
-  const expected = order({title: 'T', start: {text: 'L'}, center: {text: 'C'}, end: {text: 'R'}});
-  for (const keys of [['end', 'center', 'start'], ['center', 'start', 'end'], ['start', 'end', 'center']]) {
-    assert.deepEqual(order({title: 'T', ...Object.fromEntries(keys.map(key => [key, {text: key}]))}), expected);
-  }
-});
-
-test('geometry is unchanged: each region keeps its box, only the item order differs', () => {
-  const box = result => Object.fromEntries(sortedBoxes(result));
-  const thirds = box(compose({title: 'T', start: {text: 'L'}, center: {text: 'C'}, end: {text: 'R'}}));
-  assert.ok(thirds['slides.0.start.text'].x < thirds['slides.0.center.text'].x && thirds['slides.0.center.text'].x < thirds['slides.0.end.text'].x);
-  assert.equal(thirds['slides.0.start.text'].y, thirds['slides.0.end.text'].y);
-  // the same document composed with its keys written in the reverse order lands every item on the same box
-  assert.deepEqual(
-    sortedBoxes(compose({title: 'T', start: {text: 'L'}, center: {text: 'C'}, end: {text: 'R'}})),
-    sortedBoxes(compose({title: 'T', end: {text: 'R'}, center: {text: 'C'}, start: {text: 'L'}})),
-  );
+test('geometry does not depend on the source order: each cell keeps its box', () => {
+  const boxes = slide => Object.fromEntries(body(slide).map(item => [item.value, item.box]));
+  const thirds = boxes(cells(['start', 'L'], ['center', 'C'], ['end', 'R']));
+  assert.ok(thirds.L.x < thirds.C.x && thirds.C.x < thirds.R.x);
+  assert.equal(thirds.L.y, thirds.R.y);
+  for (const written of [[['end', 'R'], ['center', 'C'], ['start', 'L']], [['center', 'C'], ['start', 'L'], ['end', 'R']]]) assert.deepEqual(boxes(cells(...written)), thirds);
 });
 
 test('visualReadingOrder: rows top to bottom, along the row, ties keep input order, rtl reverses each row', () => {

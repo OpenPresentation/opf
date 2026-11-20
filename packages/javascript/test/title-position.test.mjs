@@ -115,7 +115,7 @@ test('start on an automatic slide: the headings in the start column, the body be
 test('a cover, promoted regions and a portrait canvas keep the title on top', () => {
   const cover = { title: 'Quarterly review', subtitle: 'Design options' };
   assert.deepEqual(composeSlide({ ...cover, design: { titlePosition: 'start' } }).items, composeSlide(cover).items);
-  const promoted = { title: 'What the pilot asks of us', start: { text: 'The pilot shows a clear gain.' }, end: { items: ['Two teams', 'Six weeks'] } };
+  const promoted = { title: 'What the pilot asks of us', blocks: [{ region: 'start', text: 'The pilot shows a clear gain.' }, { region: 'end', items: ['Two teams', 'Six weeks'] }] };
   assert.deepEqual(composeSlide({ ...promoted, design: { titlePosition: 'start' } }).items.map((item) => item.box), composeSlide(promoted).items.map((item) => item.box));
   const portrait = { width: 720, height: 1280 };
   assert.deepEqual(composeSlide(slide({ design: { titlePosition: 'start' } }), { ...portrait, layout: gallery.layouts.list }).items.map((item) => item.box), composeSlide(slide(), { ...portrait, layout: gallery.layouts.list }).items.map((item) => item.box));

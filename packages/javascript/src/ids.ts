@@ -5,7 +5,7 @@
 // - `touches` reports what a patch reads and writes: the pointers, in index and id form, the ids of the slides and payloads
 //   involved, and the part of the document each location belongs to. Hosts build conflict detection and permission checks on it.
 // - `documentHash` is the content hash a patch application can require (`expectHash`).
-import { isRecord, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
+import { isRecord, visitContentPayloads } from "./content-walk.js";
 import type { JsonPatchOperation } from "./generated/types/finding.js";
 import {
   applyPatch,
@@ -43,7 +43,7 @@ export class OPFIdError extends Error {
 }
 
 export interface AssignIdsContext {
-  /** `slide` for an entry of `slides`; `block` for a content payload (a block, a nested group or a promoted region). */
+  /** `slide` for an entry of `slides`; `block` for a content payload (a block or a nested group). */
   kind: "slide" | "block";
   /** The JSON Pointer of the node, in index form (`/slides/2/blocks/0`). */
   pointer: string;
@@ -145,7 +145,7 @@ export function assignIds(document: unknown, options: AssignIdsOptions = {}): As
  * - `document`: the whole document (the root);
  * - `slide-order`: the `slides` array, or a slide as a whole (added, removed, moved, copied);
  * - `slide`: a field of one slide, or a slide replaced or read as a whole;
- * - `block`: a content payload (a block, a nested group or a promoted region) or the `blocks` array that holds it, below a slide;
+ * - `block`: a content payload (a block or a nested group) or the `blocks` array that holds it, below a slide;
  * - `design`: the deck's `design` or a slide's `design`;
  * - `assets`, `catalogs`: the deck's `assets` and `catalogs`;
  * - `metadata`: every other deck field (`name`, `language`, `references`, `datasets`, `variables`, `narrative`, `extensions`, ...).
@@ -219,20 +219,15 @@ function locate(tokens: readonly string[], document: unknown, readOnlyOrReplace:
   if (tokens.length === 2) return out(readOnlyOrReplace ? "slide" : "slide-order", "slide");
   if (tokens[2] === "design") return out("design", "other");
   let kind: PatchScopeKind = "slide", shape: Shape = "other";
-  let node = slide.node, slideLevel = true;
+  let node = slide.node;
   for (let i = 2; i < tokens.length;) {
     const token = tokens[i]!;
-    if (slideLevel && (promotedRegionKeys as readonly string[]).includes(token)) {
-      const child = node?.[token];
-      if (isRecord(child) && typeof child.id === "string") ids.push(child.id);
-      kind = "block"; node = isRecord(child) ? child : undefined; slideLevel = false; i += 1;
-      shape = i === tokens.length ? "payload" : "other";
-    } else if (token === "blocks") {
+    if (token === "blocks") {
       kind = "block"; i += 1;
       if (i === tokens.length) { shape = "payloads"; break; }
       const child = elementAt(node?.blocks, tokens[i]!);
       if (child.id !== undefined) ids.push(child.id);
-      node = child.node; slideLevel = false; i += 1;
+      node = child.node; i += 1;
       shape = i === tokens.length ? "payload" : "other";
     } else break;
   }

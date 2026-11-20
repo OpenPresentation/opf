@@ -59,8 +59,8 @@ test('spans reject hidden content, missing covered positions, overlap and header
     assert.throws(() => layoutTable(table, box), RangeError);
   }
   const table = {rows: [[{value: 'A', colSpan: 2}, 'hidden']]};
-  const result = check({slides: [{'start': {blocks: [{table}]}}]});
-  assert.ok(errorsOf(result).some(error => error.path === '/slides/0/start/blocks/0/table/rows/0/1'), JSON.stringify(errorsOf(result)));
+  const result = check({slides: [{blocks: [{region: 'start',blocks: [{table}]}]}]});
+  assert.ok(errorsOf(result).some(error => error.path === '/slides/0/blocks/0/blocks/0/table/rows/0/1'), JSON.stringify(errorsOf(result)));
 });
 
 test('span rectangles preserve dense column indexes and editable value paths', () => {

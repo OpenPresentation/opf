@@ -5,80 +5,85 @@
   "slides": [
     {
       "title": "Distribution And Outliers",
-      "start": {
-        "chart": {
-          "type": "box-and-whisker",
-          "data": {
-            "columns": [
-              "Team",
-              "Cycle Time"
-            ],
-            "rows": [
-              [
-                "Alpha",
-                5
+      "blocks": [
+        {
+          "region": "start",
+          "chart": {
+            "type": "box-and-whisker",
+            "data": {
+              "columns": [
+                "Team",
+                "Cycle Time"
               ],
-              [
-                "Beta",
-                8
-              ],
-              [
-                "Gamma",
-                12
+              "rows": [
+                [
+                  "Alpha",
+                  5
+                ],
+                [
+                  "Beta",
+                  8
+                ],
+                [
+                  "Gamma",
+                  12
+                ]
               ]
-            ]
+            }
+          }
+        },
+        {
+          "region": "center",
+          "chart": {
+            "type": "histogram",
+            "data": {
+              "columns": [
+                "Bucket",
+                "Count"
+              ],
+              "rows": [
+                [
+                  "0-5",
+                  8
+                ],
+                [
+                  "6-10",
+                  12
+                ],
+                [
+                  "11-15",
+                  4
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "region": "end",
+          "chart": {
+            "type": "scatter",
+            "data": {
+              "columns": [
+                "Metric",
+                "Before",
+                "After"
+              ],
+              "rows": [
+                [
+                  "Latency",
+                  420,
+                  210
+                ],
+                [
+                  "Queue",
+                  15,
+                  7
+                ]
+              ]
+            }
           }
         }
-      },
-      "center": {
-        "chart": {
-          "type": "histogram",
-          "data": {
-            "columns": [
-              "Bucket",
-              "Count"
-            ],
-            "rows": [
-              [
-                "0-5",
-                8
-              ],
-              [
-                "6-10",
-                12
-              ],
-              [
-                "11-15",
-                4
-              ]
-            ]
-          }
-        }
-      },
-      "end": {
-        "chart": {
-          "type": "scatter",
-          "data": {
-            "columns": [
-              "Metric",
-              "Before",
-              "After"
-            ],
-            "rows": [
-              [
-                "Latency",
-                420,
-                210
-              ],
-              [
-                "Queue",
-                15,
-                7
-              ]
-            ]
-          }
-        }
-      }
+      ]
     },
     {
       "title": "Composition And Flow",

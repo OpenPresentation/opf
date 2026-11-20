@@ -1,4 +1,5 @@
 import { isShapeBlock } from './shape-block.js';
+import { cellBlocks, isGridCell } from './grid-cells.js';
 import { layoutTemplate, type LayoutRegion, type LayoutTemplate, type RegionKind } from './layout-template.js';
 
 /** A diagnostic of content binding, in the `LayoutDiagnostic` shape composition reports. */
@@ -50,8 +51,6 @@ export interface BindRegionsOptions {
 const FIELDS = ['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'path'] as const;
 const FIELD_KINDS: Readonly<Record<string, RegionKind>> = { text: 'text', bullets: 'text', items: 'list', image: 'image', video: 'video', chart: 'chart', table: 'table', code: 'code', metric: 'metric', quote: 'quote', shape: 'shape', path: 'shape', timeline: 'timeline', diagram: 'diagram' };
 const IMAGE_EDGES = ['start', 'end', 'top', 'bottom'];
-/** The promoted-region keys of a slide (`start`, `top:start`, `middle+bottom:center+end`, ...). */
-export const PROMOTED_REGION_KEY = /^(top|middle|bottom)(\+(top|middle|bottom))*(:(start|center|end)(\+(start|center|end))*)?$|^(start|center|end)(\+(start|center|end))*$/;
 const record = (value: unknown): Record<string, any> => value !== null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, any> : {};
 const empty = (value: unknown) => value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0);
 
@@ -95,7 +94,8 @@ export function regionAccepts(region: { readonly accepts: readonly string[] }, b
 export function placedImageBlocks(slide: unknown): Set<number> {
   const value = record(slide);
   const placed = new Set<number>();
-  if (!Array.isArray(value.blocks) || Object.keys(value).some(key => PROMOTED_REGION_KEY.test(key))) return placed;
+  // A slide whose blocks name cells of its grid places none of them at an edge (validate reports the placement).
+  if (!Array.isArray(value.blocks) || cellBlocks(value)) return placed;
   const used = new Set<string>();
   value.blocks.forEach((block: unknown, index: number) => {
     const host = record(block);
@@ -152,14 +152,14 @@ export function regionRoleRank(role: LayoutRegion['role'], kind: RegionKind): nu
  *    drawn there anyway (`layout-unplaced`, which `paginate` resolves with a continuation slide). A layout with no overflow
  *    region draws it in an implicit row below the grid (`layout-unplaced` too).
  *
- * A slide with promoted regions (`left`, `top:left`, ...) composes them as in 0.18 and binds nothing.
+ * A cell word (`top:start`; the cells of a slide without a layout) names no region of a layout: `region-unknown`, and the block is bound
+ * as if it had no pin.
  */
 export function bindRegions(slide: unknown, layout: unknown, options: BindRegionsOptions = {}): RegionBindingResult {
   const template: LayoutTemplate = layoutTemplate(layout);
   const value = record(slide), index = options.slideIndex ?? 0;
   const regions: RegionBinding[] = template.regions.map(region => ({ name: region.name, blocks: [], overflow: [] }));
   const result: RegionBindingResult = { regions, below: [], diagnostics: [] };
-  if (Object.keys(value).some(key => PROMOTED_REGION_KEY.test(key))) return result;
   const byName = new Map(template.regions.map((region, order) => [region.name, { region, binding: regions[order]!, order }]));
   const room = (name: string) => { const entry = byName.get(name)!; return entry.binding.blocks.length < entry.region.max; };
   const nodes = rootNodes(value, index);
@@ -168,7 +168,7 @@ export function bindRegions(slide: unknown, layout: unknown, options: BindRegion
     const pin = node.block !== undefined ? node.value.region : undefined;
     if (typeof pin !== 'string') { rest.push(node); continue; }
     const target = byName.get(pin), pinPath = `${node.path}.region`;
-    if (!target) result.diagnostics.push({ code: 'region-unknown', path: pinPath, region: pin, message: `The layout has no region '${pin}'; the block is placed by its kind instead.` });
+    if (!target) result.diagnostics.push({ code: 'region-unknown', path: pinPath, region: pin, message: `The layout has no region '${pin}'; the block is placed by its kind instead.${isGridCell(pin) ? ` '${pin}' is a cell of a slide without a layout.` : ''}` });
     else if (!regionAccepts(target.region, node.value)) result.diagnostics.push({ code: 'region-kind', path: pinPath, region: pin, message: `Region '${pin}' does not accept ${node.kind} content (it accepts ${target.region.accepts.join(', ')}); the block is placed by its kind instead.` });
     else if (!room(pin)) result.diagnostics.push({ code: 'region-full', path: pinPath, region: pin, message: `Region '${pin}' already holds its ${target.region.max} block${target.region.max === 1 ? '' : 's'}; the block is placed by its kind instead.` });
     else { target.binding.blocks.push({ path: node.path, kind: node.kind, block: node.block!, pinned: true }); continue; }

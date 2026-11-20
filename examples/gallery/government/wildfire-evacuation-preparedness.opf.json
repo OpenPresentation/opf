@@ -228,62 +228,68 @@
       "id": "s69-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "91%",
-          "label": "Primary signal",
-          "description": "Coordinate evacuation roles before fire season",
-          "trend": "down"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "Pine County Emergency Management should focus the next cycle on ",
-          {
-            "text": "coordinate evacuation roles before fire season",
-            "bold": true,
-            "color": "#545659"
-          },
-          " while making the operating tradeoffs clear to emergency management stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "Emergency management working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "Emergency management",
-              "Program lead",
-              "At risk",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "On track",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "Watch",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "91%",
+            "label": "Primary signal",
+            "description": "Coordinate evacuation roles before fire season",
+            "trend": "down"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "Pine County Emergency Management should focus the next cycle on ",
+            {
+              "text": "coordinate evacuation roles before fire season",
+              "bold": true,
+              "color": "#545659"
+            },
+            " while making the operating tradeoffs clear to emergency management stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "Emergency management working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Emergency management",
+                "Program lead",
+                "At risk",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "On track",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "Watch",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {

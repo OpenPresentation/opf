@@ -49,6 +49,6 @@ test('slides without a template keep the visual check, a block read as one unit'
   const team = { catalogs: { custom: { layouts: { team: layouts.team } } }, slides: [{ layout: 'team', title: 'x', blocks: [person(0), person(1)] }] };
   assert.ok(!validate(team, { only: ['accessibility'] }).findings.some((finding) => finding.ruleId === 'opf/reading-order'));
   // A promoted-region slide on a template composes as in 0.18, in visual order.
-  const promoted = { catalogs: { custom: { layouts: { text: layouts.text } } }, slides: [{ layout: 'text', title: 'x', 'top:end': { text: 'Right' }, 'top:start': { text: 'Left' } }] };
+  const promoted = { catalogs: { custom: { layouts: { text: layouts.text } } }, slides: [{ layout: 'text', title: 'x', blocks: [{ region: 'top:start', text: 'Left' }, { region: 'top:end', text: 'Right' }] }] };
   assert.ok(!validate(promoted, { only: ['accessibility'] }).findings.some((finding) => finding.ruleId === 'opf/reading-order'));
 });

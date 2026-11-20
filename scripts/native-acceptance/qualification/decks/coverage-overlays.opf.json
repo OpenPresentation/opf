@@ -64,10 +64,13 @@
     {
       "id": "anchored-edges",
       "title": "Notes anchored to each edge of a block",
-      "center": {
-        "id": "plan",
-        "text": "Five parts, one owner each."
-      },
+      "blocks": [
+        {
+          "id": "plan",
+          "region": "center",
+          "text": "Five parts, one owner each."
+        }
+      ],
       "shapes": [
         {
           "shape": "wedgeRectCallout",
@@ -300,9 +303,12 @@
     {
       "id": "overlay-styles",
       "title": "Overlay shapes with effects and text options",
-      "top": {
-        "text": "Every overlay below carries one effect or text option."
-      },
+      "blocks": [
+        {
+          "region": "top",
+          "text": "Every overlay below carries one effect or text option."
+        }
+      ],
       "shapes": [
         {
           "shape": "roundRect",
@@ -406,9 +412,12 @@
     {
       "id": "overlay-misc",
       "title": "Paths, adjust values, links and hidden overlays",
-      "top": {
-        "text": "A custom outline, a rounded corner, a linked button and a hidden shape."
-      },
+      "blocks": [
+        {
+          "region": "top",
+          "text": "A custom outline, a rounded corner, a linked button and a hidden shape."
+        }
+      ],
       "shapes": [
         {
           "path": {

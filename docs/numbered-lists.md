@@ -20,7 +20,7 @@ draws `1.`, `a)`, `b)`, `2.`, `3.`. The fixture [numbered-lists.opf.json](fixtur
 
 ## The field
 
-`numbering` is optional on a slide root payload and on a content payload (a block or a promoted region). It is valid only beside `items` or `bullets`; on any other payload, or on a group of `blocks`, validation reports an error. A payload that has both `items` and `bullets` numbers both lists.
+`numbering` is optional on a slide root payload and on a content payload (a block). It is valid only beside `items` or `bullets`; on any other payload, or on a group of `blocks`, validation reports an error. A payload that has both `items` and `bullets` numbers both lists.
 
 ```text
 numbering: NumberingStyle | Numbering | (NumberingStyle | Numbering)[]

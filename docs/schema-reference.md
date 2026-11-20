@@ -955,7 +955,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: A single slide. Content can be authored as a full-slide root payload, or inside promoted named region keys such as 'start', 'center+end', and 'top:start'. The columns of that grid are logical: 'start' is the left column in a left-to-right deck and the right column in a right-to-left one.
+- Purpose: A single slide. Content is a full-slide root payload or a list of blocks. On a slide without a layout, blocks may name cells of a 3 x 3 grid with their 'region' ('start', 'center+end', 'top:start'): see ContentPayload.region. The columns of that grid are logical: 'start' is the left column in a left-to-right deck and the right column in a right-to-left one. OPF 0.35 removed the slide keys that named those cells (the promoted regions 'start', 'top:start', 'middle+bottom:center+end' and the oth...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -984,54 +984,6 @@ _No named properties._
 | `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as short... |
 | `shapes` | no | `array<ref:OverlayShape>` | Shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or overla... |
 | `design` | no | `ref:SlideDesign` | Slide-level design applied on top of the deck-wide design. |
-| `start` | no | `ref:ContentPayload` |  |
-| `center` | no | `ref:ContentPayload` |  |
-| `end` | no | `ref:ContentPayload` |  |
-| `start+center` | no | `ref:ContentPayload` |  |
-| `center+end` | no | `ref:ContentPayload` |  |
-| `start+center+end` | no | `ref:ContentPayload` |  |
-| `top` | no | `ref:ContentPayload` |  |
-| `middle` | no | `ref:ContentPayload` |  |
-| `bottom` | no | `ref:ContentPayload` |  |
-| `top+middle` | no | `ref:ContentPayload` |  |
-| `middle+bottom` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom` | no | `ref:ContentPayload` |  |
-| `top:start` | no | `ref:ContentPayload` |  |
-| `top:center` | no | `ref:ContentPayload` |  |
-| `top:end` | no | `ref:ContentPayload` |  |
-| `top:start+center` | no | `ref:ContentPayload` |  |
-| `top:center+end` | no | `ref:ContentPayload` |  |
-| `top:start+center+end` | no | `ref:ContentPayload` |  |
-| `middle:start` | no | `ref:ContentPayload` |  |
-| `middle:center` | no | `ref:ContentPayload` |  |
-| `middle:end` | no | `ref:ContentPayload` |  |
-| `middle:start+center` | no | `ref:ContentPayload` |  |
-| `middle:center+end` | no | `ref:ContentPayload` |  |
-| `middle:start+center+end` | no | `ref:ContentPayload` |  |
-| `bottom:start` | no | `ref:ContentPayload` |  |
-| `bottom:center` | no | `ref:ContentPayload` |  |
-| `bottom:end` | no | `ref:ContentPayload` |  |
-| `bottom:start+center` | no | `ref:ContentPayload` |  |
-| `bottom:center+end` | no | `ref:ContentPayload` |  |
-| `bottom:start+center+end` | no | `ref:ContentPayload` |  |
-| `top+middle:start` | no | `ref:ContentPayload` |  |
-| `top+middle:center` | no | `ref:ContentPayload` |  |
-| `top+middle:end` | no | `ref:ContentPayload` |  |
-| `top+middle:start+center` | no | `ref:ContentPayload` |  |
-| `top+middle:center+end` | no | `ref:ContentPayload` |  |
-| `top+middle:start+center+end` | no | `ref:ContentPayload` |  |
-| `middle+bottom:start` | no | `ref:ContentPayload` |  |
-| `middle+bottom:center` | no | `ref:ContentPayload` |  |
-| `middle+bottom:end` | no | `ref:ContentPayload` |  |
-| `middle+bottom:start+center` | no | `ref:ContentPayload` |  |
-| `middle+bottom:center+end` | no | `ref:ContentPayload` |  |
-| `middle+bottom:start+center+end` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:start` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:center` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:end` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:start+center` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:center+end` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:start+center+end` | no | `ref:ContentPayload` |  |
 | `notes` | no | `string` | Speaker notes shown in presenter view. |
 | `section` | no | `string` | PowerPoint-style slide section label. Consecutive slides with the same value belong to the same section in presenter view, outlines, and PowerPoint section-aware exports. Also the slide-scoped built-in variable '{{sli... |
 | `hidden` | no | `boolean` | Whether the slide is hidden from the presented sequence. The player skips it, the PPTX export writes it as a hidden slide, and per-slide image and PDF output skips it unless the caller asks to include hidden slides (o... |
@@ -1078,7 +1030,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `id` | no | `string` | Optional stable identifier for this payload, unique among slide and payload ids in the document. Use when another system needs to address the payload across edits patch-style agent edits, comments, review state, or ge... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows at payload scope; ignored by the engine but preserved across read/write round-trips. |
-| `region` | no | `string` | Pin a root block (slides.N.blocks.I) to a region of the slide's template layout by name. The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin is ignored with a... |
+| `region` | no | `string` | Where a root block (slides.N.blocks.I) goes. On a slide with a layout: a region of that layout, by name. The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin i... |
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| diagram \| shape \| group` | Optional content kind. When omitted, engines infer the kind from the fields present: a block with 'shape' and no 'image', or with 'path', is a shape block. |
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Structured list payload (type 'list'). Each item is either a plain string, a TextRun[] rich text sequence, or a ListItem object with optional `description`. List nesting uses item.level rather than nested content payl... |
@@ -1685,7 +1637,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize, maxFontSize and overflow. Explicit promoted regions retain their positions. A layout defines its grid as one ordered list of regions; its composition supports gap, padding, minFontSize, maxFontSize and overflow rather than mode, columns or weights.
+- Purpose: Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize, maxFontSize and overflow. Blocks placed in cells (ContentPayload.region on a slide without a layout) retain their positions. A layout defines its grid as one ordered list of regions; its composition supports gap, padding, minFontSize, maxFontSize and overflow rather than mode, columns or weights.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |

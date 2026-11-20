@@ -68,7 +68,6 @@ export interface PresentationDiff {
 export type DiffOptions = MatchOptions;
 
 const isObject = (value: unknown): value is Record<string, unknown> => !!value && typeof value === "object" && !Array.isArray(value);
-const REGION_KEY = /^(top|middle|bottom|start|center|end)([:+].*)?$/u;
 const ROOT_CATEGORIES: Record<string, DiffCategory> = { design: "design", assets: "assets", datasets: "datasets", catalogs: "catalogs", variables: "variables", narrative: "narrative", extensions: "extensions" };
 
 /** The category a change at `tokens` belongs to. */
@@ -80,7 +79,6 @@ export function categoryOf(tokens: readonly string[]): DiffCategory {
     if (tokens[2] === "design") return "design";
     const last = tokens[tokens.length - 1] ?? "", parent = tokens[tokens.length - 2];
     if (parent === "blocks" && /^\d+$/u.test(last)) return "block";
-    if (REGION_KEY.test(last)) return "block";
     return "field";
   }
   return ROOT_CATEGORIES[root] ?? "metadata";

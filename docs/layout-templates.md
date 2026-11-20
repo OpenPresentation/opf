@@ -99,7 +99,7 @@ to ask for), and elsewhere it is the validate finding `opf/layout-template`.
 region takes the subtitle out of it (a `subtitle` needs a `title`). Their `size` defaults to `auto` inside a `column` and to
 1 inside a `row`, so a cover that puts the title beside a picture is `{ "direction": "row", "regions": [{ "name": "title" },
 { "name": "media", ... }] }`. A layout with no `title` region gets an implicit `auto` row on top for a slide that has
-headings. Region names are unique across the whole record and may not be `tag`, `auto` or a promoted-region word (`start`,
+headings. Region names are unique across the whole record and may not be `tag`, `auto` or a cell word of the slide grid (`start`,
 `center`, `end`, `top`, `middle`, `bottom`).
 
 **Standard region names (OPF 0.35).** The built-in layouts name their body regions with seven words, so a pin reads the same on
@@ -329,10 +329,11 @@ and no gap, and the columns left share the width by their own sizes, so two bloc
 column beside a neighbor that took the third column's width too. The empty region reports `collapsed` and a zero-wide cell where
 its column was. The column, and a nested group's new default gap (LH-89), are kept only when no block reads smaller than with
 the columns and gaps of before (unless that removes overflow). Headings are centered vertically in their region unless every
-row it spans is `auto`, so a `cover` or a title-only slide centers its title. A slide with promoted regions (`start`, `top:start`, ...)
-composes them as in 0.18.
+row it spans is `auto`, so a `cover` or a title-only slide centers its title. A block's cell word (`start`, `top:start`, ...; the
+cells of a slide without a layout) names no region of a layout: `opf/region-unknown`, and the block binds by kind. Through 0.34
+such a slide ignored its layout and composed the cells.
 
-In the Markdown dialect, `<!-- block: region=aside -->` pins a block; a promoted-region key keeps its 0.18 meaning.
+In the Markdown dialect, `<!-- block: region=aside -->` pins a block; `region=top:start` names a cell on a slide without a layout.
 
 ## Flow
 
@@ -452,7 +453,7 @@ record without a title region gets the column for the slide's title, and blocks 
 the slide. The column is a column of the template, so a right-to-left deck draws it at the right and `design.mirror` swaps
 it. A record whose title already shares a row with a body region keeps its own placement. An automatic slide puts its
 headings in the same column and composes its body beside it (`mirror` swaps that column too). A cover (no body), a slide
-with promoted regions and a portrait canvas keep the title on top, and so does a slide that LH-83 recomposes as the
+whose blocks are in cells and a portrait canvas keep the title on top, and so does a slide that LH-83 recomposes as the
 automatic grid (the recomposition exists to set its text larger, so its body takes the column's width). The gallery's `cycle`, `matrix` and `vertical-process` are column records (title over
 body) whose `design` sets `titlePosition: "start"`, so they draw as the 0.34 row records did; `agenda-split` was removed
 in 0.35 (it is `agenda` with `titlePosition: "start"`, which `opf/unresolved-reference`'s fix writes). A slide without `layout` is composed automatically; `layout: "auto"` was removed in 0.35 and is now an
@@ -593,7 +594,7 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   grows on past a list's display size, as LH-05's compact grid does: step by step up to 56 px, each step larger, nothing
   overflowing, at most 60% of the body covered, the body keeping its rows and columns (a body that may draw step badges or
   cards keeps the three steps, so those drawings are held to the same body). The stack then sits in the middle of the body under the headings, rather than
-  at its top over an empty foot. Promoted regions that
+  at its top over an empty foot. Cells that
   each run the body's full height (`start`, `center+end`) and hold only paragraphs and lists set them as one band in the
   middle of the body, each block starting at the band's top. Both are composed with LH-48's centering and kept only when
   no block reads smaller and nothing overflows.
@@ -643,7 +644,7 @@ the type scale to the readability floor, never below it, flagging what still doe
   plot of the layout and of the result, `{ layoutPlot, plot }`. A wide chart region the layout draws on purpose (`chart`,
   `dashboard`) keeps its proportions: only the plot's height triggers it. chart-beside with its `aside` holding further charts
   (a few pixels of plot each) becomes the automatic grid of charts above their notes.
-- **Never recomposed.** A slide the layout fits above the floor, a cover, a slide with promoted regions, a slide with a block
+- **Never recomposed.** A slide the layout fits above the floor, a cover, a slide with a block
   pinned to a region (`region`: the author chose the region), and `composeSlide(slide, { recompose: false })`, for hosts
   that need the regions and for tests of a layout's own geometry. A strict composition (`overflow: "error"`) that the layout
   cannot fit still fails, and an automatic grid that fails strictly is not kept.

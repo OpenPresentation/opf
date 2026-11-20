@@ -230,62 +230,68 @@
       "id": "s89-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "18%",
-          "label": "Primary signal",
-          "description": "Teach managers a repeatable coaching conversation model",
-          "trend": "flat"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "PeopleCraft should focus the next cycle on ",
-          {
-            "text": "teach managers a repeatable coaching conversation model",
-            "bold": true,
-            "color": "#6B27D5"
-          },
-          " while making the operating tradeoffs clear to training stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "Training working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "Training",
-              "Program lead",
-              "Watch",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "At risk",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "On track",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "18%",
+            "label": "Primary signal",
+            "description": "Teach managers a repeatable coaching conversation model",
+            "trend": "flat"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "PeopleCraft should focus the next cycle on ",
+            {
+              "text": "teach managers a repeatable coaching conversation model",
+              "bold": true,
+              "color": "#6B27D5"
+            },
+            " while making the operating tradeoffs clear to training stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "Training working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Training",
+                "Program lead",
+                "Watch",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "At risk",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "On track",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {

@@ -558,27 +558,34 @@ function promotedRegionSlide(spec, index, catalogs) {
     id: `s${index + 1}-regions`,
     section: "Operating model",
     title: "Operating Model",
-    "top:start": {
-      metric: {
-        value: metricValue(index),
-        label: "Primary signal",
-        description: spec.outcome,
-        trend: trend(index),
+    // OPF 0.35: each block names its cell of the slide's 3 x 3 grid with `region` (a slide without a layout).
+    blocks: [
+      {
+        region: "top:start",
+        metric: {
+          value: metricValue(index),
+          label: "Primary signal",
+          description: spec.outcome,
+          trend: trend(index),
+        },
       },
-    },
-    "top:center+end": {
-      text: richText(spec, index),
-    },
-    "middle+bottom:start": {
-      quote: {
-        text: `The path is workable if we keep the metric simple and the decision owner visible.`,
-        attribution: `${spec.area} working group`,
-        source: "Stakeholder interview",
+      {
+        region: "top:center+end",
+        text: richText(spec, index),
       },
-    },
-    "middle+bottom:center+end": {
-      table: tablePayload(spec, index),
-    },
+      {
+        region: "middle+bottom:start",
+        quote: {
+          text: `The path is workable if we keep the metric simple and the decision owner visible.`,
+          attribution: `${spec.area} working group`,
+          source: "Stakeholder interview",
+        },
+      },
+      {
+        region: "middle+bottom:center+end",
+        table: tablePayload(spec, index),
+      },
+    ],
     notes: "Use this slide to slow the conversation down around ownership and operating rhythm.",
   };
 }

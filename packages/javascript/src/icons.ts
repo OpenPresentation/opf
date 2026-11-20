@@ -11,7 +11,7 @@
 // 24 x 24 viewBox, which the preview draws as SVG paths and the PPTX export as a native custom geometry. An SVG that is not one
 // color (a monochrome icon: one paint, or `currentColor`) is a picture with its own colors.
 import { applyLuminance, colorContrast, normalizeHexColor, readableSchemeColor, type ResolvedColorRoles } from './color.js';
-import { promotedRegionKeys } from './content-walk.js';
+import { gridCells } from './grid-cells.js';
 
 /** The viewBox every resolved icon is drawn in (its larger side is scaled to fit, centered). */
 export const ICON_VIEWBOX = 24;
@@ -451,11 +451,12 @@ export function documentIcons(input: unknown): { path: string; value: unknown }[
     if (Array.isArray(value.items)) value.items.forEach((entry, index) => { if (isRec(entry) && entry.icon !== undefined) found.push({ path: `${path}.items.${index}.icon`, value: entry.icon }); });
     if (Array.isArray(value.blocks)) value.blocks.forEach((block, index) => { payload(block, `${path}.blocks.${index}`, depth + 1); });
   };
-  // A slide holds root payload fields (items, metric) or blocks, as a group does, or promoted regions (`start`, `center+end`, ...), each a
-  // payload of its own: their icons are loaded, drawn and reported as any block's.
+  // A slide holds root payload fields (items, metric) or blocks, as a group does; a block placed in a cell of its grid is one of them.
+  // composeSlide's own view of such a slide keeps each cell under its cell word (`start`, `center+end`, ...), each a payload of its
+  // own: their icons are loaded, drawn and reported as any block's.
   const slide = (value: unknown, path: string) => {
     payload(value, path, 0);
-    if (isRec(value)) for (const key of promotedRegionKeys) payload(value[key], `${path}.${key}`, 1);
+    if (isRec(value)) for (const key of gridCells) payload(value[key], `${path}.${key}`, 1);
   };
   if (isRec(input) && Array.isArray(input.slides)) input.slides.forEach((value, index) => { slide(value, `slides.${index}`); });
   else slide(input, 'slide');

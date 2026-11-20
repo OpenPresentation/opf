@@ -229,62 +229,68 @@
       "id": "s47-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "$820K",
-          "label": "Primary signal",
-          "description": "Improve forecast quality by focusing on stage hygiene",
-          "trend": "flat"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "FoundryGrid should focus the next cycle on ",
-          {
-            "text": "improve forecast quality by focusing on stage hygiene",
-            "bold": true,
-            "color": "#0B6258"
-          },
-          " while making the operating tradeoffs clear to revenue operations stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "Revenue operations working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "Revenue operations",
-              "Program lead",
-              "Watch",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "At risk",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "On track",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "$820K",
+            "label": "Primary signal",
+            "description": "Improve forecast quality by focusing on stage hygiene",
+            "trend": "flat"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "FoundryGrid should focus the next cycle on ",
+            {
+              "text": "improve forecast quality by focusing on stage hygiene",
+              "bold": true,
+              "color": "#0B6258"
+            },
+            " while making the operating tradeoffs clear to revenue operations stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "Revenue operations working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Revenue operations",
+                "Program lead",
+                "Watch",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "At risk",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "On track",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {

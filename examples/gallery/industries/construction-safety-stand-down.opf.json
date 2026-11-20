@@ -224,62 +224,68 @@
       "id": "s18-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "$4.8M",
-          "label": "Primary signal",
-          "description": "Reset field safety practices before tower crane installation",
-          "trend": "down"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "Keystone Build Partners should focus the next cycle on ",
-          {
-            "text": "reset field safety practices before tower crane installation",
-            "bold": true,
-            "color": "#7EB3CF"
-          },
-          " while making the operating tradeoffs clear to construction stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "Construction working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "Construction",
-              "Program lead",
-              "At risk",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "On track",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "Watch",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "$4.8M",
+            "label": "Primary signal",
+            "description": "Reset field safety practices before tower crane installation",
+            "trend": "down"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "Keystone Build Partners should focus the next cycle on ",
+            {
+              "text": "reset field safety practices before tower crane installation",
+              "bold": true,
+              "color": "#7EB3CF"
+            },
+            " while making the operating tradeoffs clear to construction stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "Construction working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Construction",
+                "Program lead",
+                "At risk",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "On track",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "Watch",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {

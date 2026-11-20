@@ -49,7 +49,7 @@ export type {
 	ValidationRuleInfo,
 	ValidationThresholds,
 } from './validation-types.js';
-export { promotedRegionKeys } from './schema-check.js';
+export { gridCells } from './schema-check.js';
 
 /**
  * `validate(input, options?)`: one checker for an OPF presentation. It reads a parsed presentation or strict JSON text and
@@ -319,7 +319,7 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 		}
 		// OPF 0.35: a removed design key or region flow says what replaced it and carries the safe fix.
 		const removed = next.scope !== 'context' ? removedKeyRepair(next, document) : undefined;
-		if (removed) next = { ...next, help: removed.help, ...(removed.fixes.length ? { fixes: removed.fixes } : {}) };
+		if (removed) next = withRepair(next, removed);
 		if (next.ruleId === 'opf/schema' && next.fixes === undefined && next.scope !== 'context') {
 			const fixes = schemaFixes(next, document);
 			if (fixes.length) next.fixes = fixes;
@@ -420,6 +420,12 @@ export function assertValid(value: unknown, options: ValidateOptions = {}): asse
 	if (!report.valid) throw new OPFValidationError(report);
 }
 
+/** A finding with what replaced its removed key (removedKeyRepair): the help, the fixes and, for a slide's cell key, no near-miss names. */
+function withRepair(finding: Finding, removed: NonNullable<ReturnType<typeof removedKeyRepair>>): Finding {
+	const { suggestions, ...rest } = finding;
+	return { ...(removed.dropSuggestions ? rest : { ...rest, ...(suggestions ? { suggestions } : {}) }), help: removed.help, ...(removed.fixes.length ? { fixes: removed.fixes } : {}) };
+}
+
 /**
  * Check one published catalog record file (an audience, theme, layout, font scheme, chart type and so on) against its
  * companion schema, `$schema` and `id` included. The report has the same shape as `validate`'s; every finding is `format`.
@@ -431,7 +437,7 @@ export function validateCatalogRecord(kind: CatalogRecordKind, value: unknown): 
 	const engine: SchemaCheckResult = validateAgainstSchema(value, kind);
 	const findings: Finding[] = engine.errors.map((issue) => {
 		const found = issueFinding(issue, issueRuleId(issue), engine.schemaName), removed = removedKeyRepair(found, value);
-		return removed ? { ...found, help: removed.help, ...(removed.fixes.length ? { fixes: removed.fixes } : {}) } : found;
+		return removed ? withRepair(found, removed) : found;
 	});
 	const tally = counts(findings);
 	const checks: ValidationChecks = {

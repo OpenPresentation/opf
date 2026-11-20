@@ -11,6 +11,7 @@ import { isRecord, nearest, pointerOf, readAt, segmentsOf } from "./finding-text
 import { starterValue } from "./finding-text.js";
 import { schemaAtPath, schemaVariants } from "./schema-navigation.js";
 import { REMOVED_DESIGN_KEYS } from "./design-hints.js";
+import { cellsInReadingOrder, type GridCell, nearestGridCell } from "./grid-cells.js";
 
 /** The most "Change to ..." fixes one enum finding carries. */
 const MAX_CHANGES = 5;
@@ -94,15 +95,21 @@ export function schemaFixes(finding: Finding, document: unknown): FindingFix[] {
  */
 /** OPF 0.35: what replaced a layout region's `listColumns` (removedKeyRepair). */
 export const REMOVED_LIST_COLUMNS = "OPF 0.35 removed the region key listColumns. Delete it: a list of more than 6 entries flows into up to three columns in any region without an arrangement (or with the numbered one) when that sets it at least as large as one column; a list payload's own columns (1, 2, 3 or \"auto\") still chooses.";
-export function removedKeyRepair(finding: Finding, document: unknown): { help: string; fixes: FindingFix[] } | undefined {
+export function removedKeyRepair(finding: Finding, document: unknown): { help: string; fixes: FindingFix[]; dropSuggestions?: true } | undefined {
   const validation = finding.validation;
   if (!validation || (finding.ruleId !== "opf/schema" && finding.ruleId !== "opf/catalog-record")) return undefined;
   const segments = segmentsOf(finding.path);
+  if (validation.keyword === "additionalProperties" && segments.length === 3 && segments[0] === "slides" && readAt(document, segments) !== undefined && nearestGridCell(segments[2]!) !== undefined) return cellKeyRepair(document, segments.slice(0, 2), segments[2]!);
   if (validation.keyword === "additionalProperties") {
     const name = segments.at(-1) ?? "";
     if (name === "listColumns" && segments.at(-3) === "regions" && readAt(document, segments) !== undefined) return { help: REMOVED_LIST_COLUMNS, fixes: [patch("remove:listColumns", "Delete listColumns", [{ op: "remove", path: finding.path }], true)] };
     if (segments.at(-2) !== "design" || !Object.hasOwn(REMOVED_DESIGN_KEYS, name) || readAt(document, segments) === undefined) return undefined;
     return { help: REMOVED_DESIGN_KEYS[name]!, fixes: [patch(`remove:${name}`, `Delete design.${name}`, [{ op: "remove", path: finding.path }], true)] };
+  }
+  if (validation.keyword === "pattern" && segments.at(-1) === "region" && segments.at(-3) === "blocks" && segments[0] === "slides" && segments.length === 5) {
+    const typed = readAt(document, segments), near = typeof typed === "string" ? nearestGridCell(typed) : undefined;
+    if (!near?.help) return undefined;
+    return { help: `${JSON.stringify(typed)} is no cell of the slide's grid. ${near.help}`, fixes: near.cell ? [patch(`change-to:${near.cell}`, `Change to ${near.cell}`, [{ op: "replace", path: finding.path, value: near.cell }])] : [] };
   }
   if (validation.keyword === "enum" && segments.at(-1) === "flow" && segments.at(-3) === "regions" && readAt(document, segments) === "none") {
     const parent = segments.slice(0, -1), region = readAt(document, parent);
@@ -111,4 +118,50 @@ export function removedKeyRepair(finding: Finding, document: unknown): { help: s
     return { help, fixes: [patch("use-max-1", "Write max 1 (a region of one block)", [{ op: "remove", path: finding.path }, { op: "add", path: pointerOf([...parent, "max"]), value: 1 }], true)] };
   }
   return undefined;
+}
+
+/** The fields that make a slide hold root content: with any of them, a slide had no promoted regions to move. */
+const ROOT_CONTENT = ["type", "text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "diagram", "shape", "path", "blocks"];
+
+/**
+ * OPF 0.35: the slide keys of `slide` that named a cell of its 3 x 3 grid through 0.34 (the promoted regions `start`, `top:start`, ...,
+ * and a key written like one: `left`, `start:top`), each with the cell it names, in reading order of the cells (keys of one cell in
+ * the slide's key order).
+ */
+export function removedCellKeys(slide: unknown): { key: string; cell: GridCell }[] {
+  if (!isRecord(slide)) return [];
+  const found = Object.keys(slide).flatMap((key) => { const cell = nearestGridCell(key)?.cell; return cell ? [{ key, cell }] : []; });
+  const order = cellsInReadingOrder(found);
+  return order.flatMap((cell) => found.filter((entry) => entry.cell === cell));
+}
+
+/**
+ * OPF 0.35: the blocks a slide's removed cell keys become (`removedCellKeys`), in reading order of their cells: each key's payload,
+ * unchanged, with `region` naming its cell (after its `id`, when it has one). On a slide with a layout the blocks name no cell (a cell
+ * word there names no region of the layout), so they bind to the layout's regions. Undefined when the slide cannot move them as they
+ * are: it has no such key, a key holds no payload object, or the slide also holds root content or blocks (0.34 rejected that mix).
+ * Only the slide's own keys move; the payloads, their text and their nested blocks are copied as written.
+ */
+export function cellKeysAsBlocks(slide: unknown): { keys: string[]; blocks: Record<string, unknown>[] } | undefined {
+  const keys = removedCellKeys(slide);
+  if (!keys.length || !isRecord(slide) || ROOT_CONTENT.some((field) => slide[field] !== undefined) || keys.some(({ key }) => !isRecord(slide[key]))) return undefined;
+  const placed = slide.layout === undefined;
+  const blocks = keys.map(({ key, cell }) => {
+    const { id, region: _ignored, ...rest } = slide[key] as Record<string, unknown>;
+    return { ...(id !== undefined ? { id } : {}), ...(placed ? { region: cell } : {}), ...rest };
+  });
+  return { keys: keys.map(({ key }) => key), blocks };
+}
+
+function cellKeyRepair(document: unknown, slideSegments: string[], key: string): { help: string; fixes: FindingFix[]; dropSuggestions: true } {
+  const slide = readAt(document, slideSegments), near = nearestGridCell(key)!;
+  const layout = isRecord(slide) && slide.layout !== undefined;
+  const example = near.cell ? `{ "region": "${near.cell}", ... }` : '{ "region": "top:start", ... }';
+  const help = `OPF 0.35 removed the slide keys that placed content in the cells of a slide's 3 x 3 grid (the promoted regions): a block of the slide's blocks names its cell with "region", as ${example}. Blocks that name the same cell stack in it, and a slide places every block in a cell or none.`
+    + (layout ? " This slide has a layout: through 0.34 these keys made it ignore its layout, and a cell word now names no region of a layout, so the fix moves the content into blocks without one; they bind to the layout's regions and the slide draws with its layout (delete layout and name the cells to keep the grid)." : "")
+    + (near.help ? ` ${near.help}` : "");
+  const moved = near.cell ? cellKeysAsBlocks(slide) : undefined;
+  if (!moved) return { help, fixes: [], dropSuggestions: true };
+  const operations: JsonPatchOperation[] = [...moved.keys.map((name) => ({ op: "remove" as const, path: pointerOf([...slideSegments, name]) })), { op: "add", path: pointerOf([...slideSegments, "blocks"]), value: moved.blocks }];
+  return { help, fixes: [patch("cells-to-blocks", layout ? "Move the regions into blocks of the layout" : "Move the regions into blocks with region", operations, !layout)], dropSuggestions: true };
 }

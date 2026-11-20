@@ -106,7 +106,7 @@ Blocks are separated by blank lines; a fence, heading, quote, table, image line 
 | `id=...`, `type=...` | The block's `id` and explicit `type`. Such a block is always an entry in `blocks` |
 | `as=bullets` | Store a list as `bullets` instead of `items` |
 | `as=video` | Store an image line as `video` |
-| `region=top:start` | Put the block in that promoted region of the slide (`start`, `center+end`, `top+middle`, `middle+bottom:start+center+end`, ...) instead of the content |
+| `region=top:start` | The block's `region`: on a slide without a layout, the cell of the slide's grid it goes in (`start`, `center+end`, `top+middle`, `middle+bottom:start+center+end`, ...); on a slide with a layout, the layout region it is pinned to |
 
 | Markdown | OPF field | Notes |
 | --- | --- | --- |

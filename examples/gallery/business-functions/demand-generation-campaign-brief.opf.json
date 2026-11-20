@@ -224,62 +224,68 @@
       "id": "s27-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "11 days",
-          "label": "Primary signal",
-          "description": "Launch an integrated campaign around the new benchmark report",
-          "trend": "down"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "Brightpath Analytics should focus the next cycle on ",
-          {
-            "text": "launch an integrated campaign around the new benchmark report",
-            "bold": true,
-            "color": "#8C4107"
-          },
-          " while making the operating tradeoffs clear to marketing stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "Marketing working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "Marketing",
-              "Program lead",
-              "At risk",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "On track",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "Watch",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "11 days",
+            "label": "Primary signal",
+            "description": "Launch an integrated campaign around the new benchmark report",
+            "trend": "down"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "Brightpath Analytics should focus the next cycle on ",
+            {
+              "text": "launch an integrated campaign around the new benchmark report",
+              "bold": true,
+              "color": "#8C4107"
+            },
+            " while making the operating tradeoffs clear to marketing stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "Marketing working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Marketing",
+                "Program lead",
+                "At risk",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "On track",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "Watch",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {

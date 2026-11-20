@@ -64,7 +64,7 @@ test('finding 9: a note or an overlay naming "icon" does not change how a short 
 });
 
 test('finding 11: a short Arabic question ends as a sentence, as one ending in a full stop does', () => {
-  const shape = (end) => composeSlide({ title: 'سؤال', language: 'ar', start: { text: 'هل نبدأ الآن' + end }, end: { text: 'نعم نبدأ اليوم' + end } }).items.map((item) => [item.field, item.box.width, item.text?.fontSize]);
+  const shape = (end) => composeSlide({ title: 'سؤال', language: 'ar', blocks: [{ region: 'start', text: 'هل نبدأ الآن' + end }, { region: 'end', text: 'نعم نبدأ اليوم' + end }] }).items.map((item) => [item.field, item.box.width, item.text?.fontSize]);
   assert.deepEqual(shape('؟'), shape('.'));
   assert.notDeepEqual(shape(''), shape('.'), 'a short text without an end mark is a tile label');
 });

@@ -18,12 +18,16 @@
     {
       "section": "Market",
       "title": "Buyer Signal",
-      "start": {
-        "text": "Teams want fewer exports."
-      },
-      "center+end": {
-        "text": "They want review status, owners, and exceptions in one operating view."
-      }
+      "blocks": [
+        {
+          "region": "start",
+          "text": "Teams want fewer exports."
+        },
+        {
+          "region": "center+end",
+          "text": "They want review status, owners, and exceptions in one operating view."
+        }
+      ]
     },
     {
       "section": "Plan",

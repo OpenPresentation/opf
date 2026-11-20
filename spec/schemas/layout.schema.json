@@ -313,7 +313,7 @@
               "subtitle"
             ]
           },
-          "description": "The region's name, lowercase kebab-case, unique across the whole record. A block targets it with 'region': '<name>'. It may not be 'title' (those are heading regions), 'tag', 'auto' or one of the promoted-region words ('start', 'center', 'end', 'top', 'middle', 'bottom'), so a Markdown block's region= option stays unambiguous: the validate finding opf/layout-region.",
+          "description": "The region's name, lowercase kebab-case, unique across the whole record. A block targets it with 'region': '<name>'. It may not be 'title' (those are heading regions), 'tag', 'auto' or one of the cell words of a slide without a layout ('start', 'center', 'end', 'top', 'middle', 'bottom'), so a block's 'region' (and a Markdown block's region= option) stays unambiguous: the validate finding opf/layout-region.",
           "examples": [
             "main",
             "aside",

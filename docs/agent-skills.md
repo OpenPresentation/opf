@@ -5,7 +5,7 @@ The repository ships six reusable skills in `skills/`. Each folder has a `SKILL.
 | Skill | Use it for |
 | --- | --- |
 | [opf-author](../skills/opf-author/SKILL.md) | Turn briefs and source material into valid OPF content; includes a complete starter deck |
-| [opf-layout](../skills/opf-layout/SKILL.md) | Dynamic composition, nested groups, promoted regions, overflow repair, and pagination |
+| [opf-layout](../skills/opf-layout/SKILL.md) | Dynamic composition, nested groups, blocks in the cells of the slide grid, overflow repair, and pagination |
 | [opf-presets](../skills/opf-presets/SKILL.md) | Catalog discovery, design inheritance, gallery reuse, colors, themes, and fonts |
 | [opf-edit](../skills/opf-edit/SKILL.md) | Precise JSON Patch edits, undo, canvas/schema integration, and copy/import |
 | [opf-export](../skills/opf-export/SKILL.md) | Browser previews, SVG/PNG/PDF/PPTX, assets, fonts, and export verification |

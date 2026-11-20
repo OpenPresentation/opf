@@ -221,62 +221,68 @@
       "id": "s57-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "18%",
-          "label": "Primary signal",
-          "description": "Connect employer demand to short-cycle training capacity",
-          "trend": "down"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "Metro Technical College should focus the next cycle on ",
-          {
-            "text": "connect employer demand to short-cycle training capacity",
-            "bold": true,
-            "color": "#545659"
-          },
-          " while making the operating tradeoffs clear to community college stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "Community college working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "Community college",
-              "Program lead",
-              "At risk",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "On track",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "Watch",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "18%",
+            "label": "Primary signal",
+            "description": "Connect employer demand to short-cycle training capacity",
+            "trend": "down"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "Metro Technical College should focus the next cycle on ",
+            {
+              "text": "connect employer demand to short-cycle training capacity",
+              "bold": true,
+              "color": "#545659"
+            },
+            " while making the operating tradeoffs clear to community college stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "Community college working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Community college",
+                "Program lead",
+                "At risk",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "On track",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "Watch",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {

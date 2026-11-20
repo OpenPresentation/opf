@@ -224,62 +224,68 @@
       "id": "s59-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:start": {
-        "metric": {
-          "value": "11 days",
-          "label": "Primary signal",
-          "description": "Balance competitive goals with travel and facility constraints",
-          "trend": "flat"
-        }
-      },
-      "top:center+end": {
-        "text": [
-          "Summit State Athletics should focus the next cycle on ",
-          {
-            "text": "balance competitive goals with travel and facility constraints",
-            "bold": true,
-            "color": "#0B6258"
-          },
-          " while making the operating tradeoffs clear to college athletics stakeholders."
-        ]
-      },
-      "middle+bottom:start": {
-        "quote": {
-          "text": "The path is workable if we keep the metric simple and the decision owner visible.",
-          "attribution": "College athletics working group",
-          "source": "Stakeholder interview"
-        }
-      },
-      "middle+bottom:center+end": {
-        "table": {
-          "columns": [
-            "Workstream",
-            "Owner",
-            "Status",
-            "Decision"
-          ],
-          "rows": [
-            [
-              "College athletics",
-              "Program lead",
-              "Watch",
-              "Continue"
-            ],
-            [
-              "Data and reporting",
-              "Analytics",
-              "At risk",
-              "Tighten metric definitions"
-            ],
-            [
-              "Field adoption",
-              "Operations",
-              "On track",
-              "Add weekly office hours"
-            ]
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": "11 days",
+            "label": "Primary signal",
+            "description": "Balance competitive goals with travel and facility constraints",
+            "trend": "flat"
+          }
+        },
+        {
+          "region": "top:center+end",
+          "text": [
+            "Summit State Athletics should focus the next cycle on ",
+            {
+              "text": "balance competitive goals with travel and facility constraints",
+              "bold": true,
+              "color": "#0B6258"
+            },
+            " while making the operating tradeoffs clear to college athletics stakeholders."
           ]
+        },
+        {
+          "region": "middle+bottom:start",
+          "quote": {
+            "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+            "attribution": "College athletics working group",
+            "source": "Stakeholder interview"
+          }
+        },
+        {
+          "region": "middle+bottom:center+end",
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "College athletics",
+                "Program lead",
+                "Watch",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "At risk",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "On track",
+                "Add weekly office hours"
+              ]
+            ]
+          }
         }
-      },
+      ],
       "notes": "Use this slide to slow the conversation down around ownership and operating rhythm."
     },
     {

@@ -20,63 +20,14 @@ export function pathFor(parentPath: string, key: string): string {
 
 export const bareIdPattern = /^[a-z0-9][a-z0-9-]*$/;
 
-export const promotedRegionKeys = [
-  "start",
-  "center",
-  "end",
-  "start+center",
-  "center+end",
-  "start+center+end",
-  "top",
-  "middle",
-  "bottom",
-  "top+middle",
-  "middle+bottom",
-  "top+middle+bottom",
-  "top:start",
-  "top:center",
-  "top:end",
-  "top:start+center",
-  "top:center+end",
-  "top:start+center+end",
-  "middle:start",
-  "middle:center",
-  "middle:end",
-  "middle:start+center",
-  "middle:center+end",
-  "middle:start+center+end",
-  "bottom:start",
-  "bottom:center",
-  "bottom:end",
-  "bottom:start+center",
-  "bottom:center+end",
-  "bottom:start+center+end",
-  "top+middle:start",
-  "top+middle:center",
-  "top+middle:end",
-  "top+middle:start+center",
-  "top+middle:center+end",
-  "top+middle:start+center+end",
-  "middle+bottom:start",
-  "middle+bottom:center",
-  "middle+bottom:end",
-  "middle+bottom:start+center",
-  "middle+bottom:center+end",
-  "middle+bottom:start+center+end",
-  "top+middle+bottom:start",
-  "top+middle+bottom:center",
-  "top+middle+bottom:end",
-  "top+middle+bottom:start+center",
-  "top+middle+bottom:center+end",
-  "top+middle+bottom:start+center+end",
-] as const;
+export { cellBlocks, cellsInReadingOrder, gridCellSpan, gridCells, isGridCell, nearestGridCell, type CellBlock, type GridCell } from "./grid-cells.js";
 
 export type ContentPayloadVisitor = (payload: Record<string, unknown>, path: string) => void;
 
 /**
  * Visit every content payload below `slide`: each block, recursively through
- * nested group blocks, and each promoted-region payload. Promoted region keys
- * exist only on a slide, so regions are read at slide level alone.
+ * nested group blocks (a block placed in a cell of the slide's grid is one of
+ * its blocks).
  *
  * The slide itself is not visited: it doubles as its own root content payload,
  * so a caller that also cares about the root applies its check to the slide
@@ -111,9 +62,5 @@ export function visitContentPayloads(
     slide.blocks.forEach((block, index) => {
       if (isRecord(block)) walk(block, `${blocksPath}/${index}`, 0, []);
     });
-  }
-  for (const key of promotedRegionKeys) {
-    const region = slide[key];
-    if (isRecord(region)) walk(region, pathFor(slidePath, key), 0, []);
   }
 }

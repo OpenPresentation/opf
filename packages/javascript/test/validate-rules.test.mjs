@@ -261,12 +261,12 @@ test('opf/missing-slide-title and opf/duplicate-slide-title', () => {
 
 test('opf/reading-order: promoted regions are composed in visual order, blocks in order', () => {
 	// composeSlide used to compose region keys alphabetically (center, left, right); it now follows the layout (RR-29)
-	assert.ok(!has(deck([{ title: 'T', start: { text: 'L' }, center: { text: 'C' }, end: { text: 'R' } }]), 'reading-order'));
-	assert.ok(!has(deck([{ title: 'T', top: { text: 'T' }, middle: { text: 'M' }, bottom: { text: 'B' } }]), 'reading-order'));
-	assert.ok(!has(deck([{ title: 'T', 'top:start': { text: 'A' }, 'top:center+end': { text: 'B' }, 'middle+bottom:start': { text: 'C' }, 'middle+bottom:center+end': { text: 'D' } }]), 'reading-order'));
+	assert.ok(!has(deck([{ title: 'T', blocks: [{ region: 'start', text: 'L' }, { region: 'center', text: 'C' }, { region: 'end', text: 'R' }] }]), 'reading-order'));
+	assert.ok(!has(deck([{ title: 'T', blocks: [{ region: 'top', text: 'T' }, { region: 'middle', text: 'M' }, { region: 'bottom', text: 'B' }] }]), 'reading-order'));
+	assert.ok(!has(deck([{ title: 'T', blocks: [{ region: 'top:start', text: 'A' }, { region: 'top:center+end', text: 'B' }, { region: 'middle+bottom:start', text: 'C' }, { region: 'middle+bottom:center+end', text: 'D' }] }]), 'reading-order'));
 	assert.ok(!has(deck([{ title: 'T', composition: { mode: 'row' }, blocks: [{ text: 'L' }, { text: 'C' }, { text: 'R' }] }]), 'reading-order'));
 	assert.ok(!has(deck([{ title: 'T', blocks: [{ text: 'A' }, { text: 'B' }, { text: 'C' }, { text: 'D' }] }]), 'reading-order'));
-	assert.ok(!has(deck([{ title: 'T', start: { text: 'L' }, end: { text: 'R' } }]), 'reading-order'));
+	assert.ok(!has(deck([{ title: 'T', blocks: [{ region: 'start', text: 'L' }, { region: 'end', text: 'R' }] }]), 'reading-order'));
 });
 
 // ------------------------------------------------------------ resolved color roles

@@ -202,7 +202,7 @@ describe("inlineDatasets", () => {
     slides: [
       { title: "Chart", chart: { type: "column", data: { dataset: "revenue", fields: ["Quarter", "Revenue"] }, mapping: { series: ["Revenue"] } } },
       { title: "Table", blocks: [{ table: { dataset: "revenue" } }, { table: { dataset: "missing" } }] },
-      { title: "Regions", start: { chart: { type: "line", data: { dataset: "revenue" } } }, end: { text: "x" } },
+      { title: "Regions", blocks: [{ region: 'start', chart: { type: "line", data: { dataset: "revenue" } } }, { region: 'end', text: "x" }] },
     ],
   });
 
@@ -220,7 +220,7 @@ describe("inlineDatasets", () => {
     assert.deepEqual(out.slides[0].chart.mapping, { series: ["Revenue"] });
     assert.deepEqual(out.slides[1].blocks[0].table, { columns: ["Quarter", { name: "Revenue", format: "$#,##0.0" }, "Costs"], rows: revenue().rows });
     assert.deepEqual(out.slides[1].blocks[1].table, { dataset: "missing" }, "unknown ids are left as they are");
-    assert.equal(out.slides[2].start.chart.data.columns.length, 3);
+    assert.equal(out.slides[2].blocks[0].chart.data.columns.length, 3);
     assert.deepEqual(out.datasets, input.datasets, "datasets stay in place");
     out.slides[1].blocks[0].table.rows[0][1] = 99;
     assert.equal(input.datasets.revenue.rows[0][1], 12, "rows are copies");

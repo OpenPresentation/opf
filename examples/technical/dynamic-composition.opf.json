@@ -48,15 +48,20 @@
     },
     {
       "title": "Promoted rows have distinct positions",
-      "top": {
-        "text": "First: state the situation."
-      },
-      "middle": {
-        "text": "Then: explain the change."
-      },
-      "bottom": {
-        "text": "Finally: make the recommendation."
-      }
+      "blocks": [
+        {
+          "region": "top",
+          "text": "First: state the situation."
+        },
+        {
+          "region": "middle",
+          "text": "Then: explain the change."
+        },
+        {
+          "region": "bottom",
+          "text": "Finally: make the recommendation."
+        }
+      ]
     },
     {
       "title": "Arrange each idea and its supporting details",
