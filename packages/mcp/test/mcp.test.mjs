@@ -512,8 +512,8 @@ describe("the bundled sources", () => {
 		// Reviewed for the chartPrimary replacement on 2026-11-20: 1,397,930 exact bytes (after #1385: 1,397,584). It adds 346: the slide
 		// composition that keeps a removed design.chartPrimary's split, in design-resolution.md (+215) and dynamic-composition.md (+131),
 		// where both pages named the chart-beside layout, which has no region for a table. The limit is unchanged.
-		// Reviewed for the example decks' pictures in the viewer on 2026-11-20: 1,399,722 exact bytes (after the chartPrimary replacement:
-		// 1,397,930). It adds 1,792 in mcp.md: the app-only read_example_files (its table row, the viewer's images paragraph, the server
+		// Reviewed for the example decks' pictures in the viewer on 2026-11-20: 1,399,982 exact bytes (after the chartPrimary replacement:
+		// 1,397,930). It adds 2,052 in mcp.md: the app-only read_example_files (its table row, the viewer's images paragraph, the server
 		// tools row and the examples' files in the sources), and how a hosted viewer gets the pictures. The limit is unchanged.
 		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
 	});

@@ -247,7 +247,7 @@ node -e "const fs = require('fs'); fs.mkdirSync('public/opf-icons', { recursive:
 
 Then `search_icons` and `validate_deck` read the same sets, and `test/mcp-workerd.test.mjs` runs such a Worker in workerd.
 
-**Example pictures for a hosted viewer.** They travel with the examples: each entry of `defaultSources().examples` that names shipped images carries them in `files`, so a host that serves those entries (from its storage, as JSON) offers the viewer `read_example_files` with no other change; a host that leaves `files` out offers no such tool, and the examples' pictures stay placeholders.
+**Example pictures for a hosted viewer.** They travel with the examples: each entry of `defaultSources().examples` that names shipped images carries them in `files`, so a host that serves those entries (from its storage, as JSON) offers the viewer `read_example_files` with no other change; a host that leaves `files` out offers no such tool, and the examples' pictures stay placeholders. The viewer matches by path alone, since it reads none of your files: any deck that names one of these paths (`./assets/logo.svg`, `./assets/cover.png` and the like) draws the example's picture, a deck of your own included. Give your own pictures as data URIs.
 
 ## Limits
 

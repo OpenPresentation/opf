@@ -1133,7 +1133,8 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		showDeck();
 		scheduleChecks(event.document);
 		scheduleContext();
-		void loadExamplePictures(event.document);
+		// A failed read or redraw leaves the placeholders; the editor reports its own errors.
+		void loadExamplePictures(event.document).catch(() => {});
 	});
 	editor.on("slide", () => { updateQuestion(); scheduleContext(); });
 	// Where the source pane stands: edit_deck waits for typing the pane has not taken in, rather than commit it for the person.
