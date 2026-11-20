@@ -1174,31 +1174,7 @@
       ]
     }
   ],
-  "fontkitFallbackLimits": [
-    {
-      "family": "Noto Sans Myanmar",
-      "samples": {
-        "mymr-words": 70,
-        "mymr-medials": 14
-      },
-      "reason": "fontkit 2.0.4 has no Myanmar shaper: it does not reorder the medial ra and the e vowel, does not build the kinzi glyph from nga + asat + virama and does not apply the ligature of the u and ii vowels, so the measured advance differs from HarfBuzz's by the width of the nga that the kinzi absorbs (about 3.5 percent of the words sample). No catalog language uses Myanmar; it is only the Myanmar Text script slot."
-    },
-    {
-      "family": "Noto Sans Syriac",
-      "samples": {
-        "syrc-marks": 16
-      },
-      "reason": "fontkit's Arabic-style shaper gives the first letter of a word (shin followed by a mark-bearing letter) its isolated form where HarfBuzz joins it, so the measured advance is about 1.6 percent narrower. Only the Estrangelo Edessa script slot uses Syriac."
-    },
-    {
-      "family": "Noto Nastaliq Urdu",
-      "samples": {
-        "arab-harakat": 10,
-        "arab-pa-shahmukhi": 12
-      },
-      "reason": "fontkit throws on the font's mark-to-base anchors (null anchor); the renderer measures again without mark positioning (abvm, blwm, mark, mkmk), which changes the advance of vowel-marked words by 1 percent. Noto Nastaliq Urdu is selected only by the Google Slides noto-nastaliq-urdu scheme and by explicit request."
-    }
-  ],
+  "fontkitFallbackLimits": [],
   "rasterLimits": {
     "description": "resvg-js 2.6.2 (and 2.7.0-alpha.2) draws a HarfBuzz cluster with the advance of its widest glyph instead of the sum of its glyphs (usvg outline_cluster), so a spacing vowel sign, a split vowel or a decomposed sara am that shares a cluster with its consonant loses its advance, and rustybuzz breaks a ligature conjunct under a pre-base vowel sign and ignores the SVG lang. The raster path works around all of it (src/raster-text.js): every <text> with Indic, Thai, Lao, Khmer or Myanmar characters, or Hangul in a KOR-language text, is drawn cluster by cluster at fontkit's positions, as fontkit glyph outlines for the scripts whose fontkit runs equal HarfBuzz's (Devanagari, Gujarati, Oriya, Tamil, Kannada, Sinhala) and as resvg-shaped single clusters for the others. The scripts below are the ones that still deviate from the HarfBuzz reference.",
     "scripts": [],

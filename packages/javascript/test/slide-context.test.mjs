@@ -16,7 +16,7 @@ const recorder = () => {
 
 describe("resolveSlideContext", () => {
   test("resolves canvas, theme, colour scheme, font families and layout in one call", () => {
-    const deck = { design: { theme: "minimal", fontScheme: "roboto", dimensions: "4:3", contentAlignment: "center", titleAlignment: "right", contentBox: true }, slides: [{ layout: "cover", title: "Hi" }, { title: "Second" }] };
+    const deck = { design: { theme: "minimal", fontScheme: "roboto", dimensions: "4:3", contentAlignment: "center", titleAlignment: "end", contentBox: true }, slides: [{ layout: "cover", title: "Hi" }, { title: "Second" }] };
     const { options, diagnostics, resolved } = context(deck, 0);
     assert.deepEqual(diagnostics, []);
     assert.equal(options.width, 960);
@@ -32,7 +32,7 @@ describe("resolveSlideContext", () => {
     // in `presentation` and the layout record (FA-17), so every engine reads the same values from SlideComposition.design.
     for (const key of ["contentAlignment", "titleAlignment", "contentBox"]) assert.equal(key in options, false, key);
     const design = composeSlide(deck.slides[0], options).design;
-    assert.deepEqual([design.contentAlignment, design.titleAlignment, design.contentBox], ["center", "right", true]);
+    assert.deepEqual([design.contentAlignment, design.titleAlignment, design.contentBox], ["center", "end", true]);
     assert.deepEqual([design.sources.contentAlignment, design.sources.titleAlignment, design.sources.contentBox], ["deck", "deck", "deck"]);
     assert.equal("socialPlatforms" in options, false, "social platforms are an engine vocabulary");
     assert.equal("textMeasurement" in options, false);

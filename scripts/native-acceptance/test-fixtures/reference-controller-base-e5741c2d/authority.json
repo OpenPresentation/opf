@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "scope": "historical derivation source only; never execute",
+  "revision": "e5741c2dae7e1b341ca0cf6b22cbc9c2f03f6d85",
+  "files": [
+    {
+      "path": "seven-chart-worker.ps1",
+      "gitBlob": "9c0e986a4777a22424e41bb53d43ec69d312a7a3",
+      "bytes": 21756,
+      "sha256": "7735dcd6c9c1f3ff6d0a454319697eda040f66ec515dde96e705a1ed65571af4"
+    },
+    {
+      "path": "run-seven-chart-profile.ps1",
+      "gitBlob": "aa88bd32163b9b8fd625a6fadd3bf34a0b6a732f",
+      "bytes": 10729,
+      "sha256": "060cafa0e782f7aaaaafb9d395bbfa51598f89c2269986a56c17e3e0ce5e3878"
+    },
+    {
+      "path": "seven-chart-worker-self-test.ps1",
+      "gitBlob": "da984e9ceed03e4918842df8325b1122f7a4f230",
+      "bytes": 15017,
+      "sha256": "35b1b4e69d21181144ad0cfed5f4050488929717840fff514894f97751d8aa0b"
+    }
+  ]
+}

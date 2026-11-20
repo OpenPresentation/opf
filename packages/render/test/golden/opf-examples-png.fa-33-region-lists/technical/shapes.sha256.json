@@ -1,0 +1,37 @@
+{
+  "deck": "technical/shapes.opf.json",
+  "entries": {
+    "technical/shapes.opf.json#0": {
+      "sha256": "456833c818b0ebd5a5aeadf705e71d00c18609ee4174da8dd339977b4b14a377",
+      "bytes": 11963
+    },
+    "technical/shapes.opf.json#1": {
+      "sha256": "cf159a15ffb6fa4f4a9cd4547a2db3672e724da7ab2b003d6db06b1984235d3e",
+      "bytes": 7623
+    },
+    "technical/shapes.opf.json#2": {
+      "sha256": "198ab5972c9c9054825b46b84d553190a979108b435312f43b7a7e0060ac17b5",
+      "bytes": 14711
+    },
+    "technical/shapes.opf.json#3": {
+      "sha256": "147c1405b92f3d6dc2f861168922a137a49e5a0095c146610525fa301c73048c",
+      "bytes": 9230
+    },
+    "technical/shapes.opf.json#4": {
+      "sha256": "498e9b48b12448b36a9d19e00307db74dec867b01af348f05060aec3692fba98",
+      "bytes": 6349
+    },
+    "technical/shapes.opf.json#5": {
+      "sha256": "0c204499ff088d9ae92139a32e7b120a5083499b785874cbe68d86f1c887e2d2",
+      "bytes": 6391
+    },
+    "technical/shapes.opf.json#6": {
+      "sha256": "47010a569f57efb82c4a797d2ae0dd781b4fbf34163f897f638fe466f014b806",
+      "bytes": 10902
+    },
+    "technical/shapes.opf.json#7": {
+      "sha256": "da701f15a35d11fc4a3489ab5c884bf97a763cf29038f5c22233a219824fe1e7",
+      "bytes": 7731
+    }
+  }
+}

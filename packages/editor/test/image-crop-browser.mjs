@@ -35,7 +35,7 @@ try {
       { id: 'block', title: 'Block picture', blocks: [{ image: { src: 'asset:photo', alt: 'A red and blue picture' }, fit: 'contain' }, { text: 'Beside the picture', emphasis: false }] },
       { id: 'root', title: 'Root picture', image: 'asset:photo', text: 'Text beside it' },
       // OPF 0.15: an image block placed along the right edge (FA-22 placement), in place of the 0.14 slide image.
-      { id: 'placed', title: 'Placed picture', blocks: [{ image: 'asset:photo', placement: { edge: 'right', size: 0.45 } }, { text: 'Text' }] },
+      { id: 'placed', title: 'Placed picture', blocks: [{ image: 'asset:photo', placement: { edge: 'end', size: 0.45 } }, { text: 'Text' }] },
     ],
   };
   await app.load(source);
@@ -240,7 +240,7 @@ try {
   assert.ok(Math.abs(frameShape.width / frameShape.height - 0.45 * 1280 / 720) < 0.05, `the frame shape of the placed image: ${JSON.stringify(frameShape)}`);
   await page.getByRole('button', { name: 'Apply crop' }).click();
   const placedCrop = await app.waitDoc((deck) => deck.slides[2].blocks[0].image === 'asset:photo-crop', 'a placed image is cropped');
-  assert.deepEqual(placedCrop.slides[2].blocks[0].placement, { edge: 'right', size: 0.45 });
+  assert.deepEqual(placedCrop.slides[2].blocks[0].placement, { edge: 'end', size: 0.45 });
   await app.settle();
   mark('a string picture and a placed image block crop the same way and keep their placement');
 

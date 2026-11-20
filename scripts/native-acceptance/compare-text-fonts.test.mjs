@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
+import fs from 'node:fs';
+import crypto from 'node:crypto';
+import {gunzipSync} from 'node:zlib';
 import {createRequire} from 'node:module';
 import {nativeFontCaptureFlag} from './compare-text.mjs';
 import {explicitUniformTextFonts,compareUniformTextFonts} from './compare-text-fonts.mjs';
@@ -63,4 +66,56 @@ test('theme object defaults are verified empty or rejected as unsupported',()=>{
  assert.equal(explicitUniformTextFonts(fixture({'ppt/theme/theme1.xml':'<a:theme name="Theme"><a:themeElements/></a:theme>'}),dependencies,1)[0].shapes[0].font.bold,false);
  for(const source of ['<a:theme><a:objectDefaults><a:spDef><a:lstStyle><a:lvl1pPr><a:defRPr b="1"/></a:lvl1pPr></a:lstStyle></a:spDef></a:objectDefaults></a:theme>','<a:theme><a:objectDefaults><a:spDef><a:lstStyle><a:lvl1pPr><a:defRPr i="1"/></a:lvl1pPr></a:lstStyle></a:spDef></a:objectDefaults></a:theme>'])assert.throws(()=>explicitUniformTextFonts(fixture({'ppt/theme/theme1.xml':source}),dependencies,1),/Unsupported theme object defaults/);
  const missingTheme={'ppt/slideMasters/_rels/slideMaster1.xml.rels':'<Relationships/>'};assert.throws(()=>explicitUniformTextFonts(fixture(missingTheme),dependencies,1),/theme inheritance relationship/);
+});
+
+
+const metricsFixture=new URL('./fixtures/metrics-font-empty-frame/',import.meta.url);
+const metricsReceipt=JSON.parse(fs.readFileSync(new URL('receipt.json',metricsFixture)));
+const metricsInput=fs.readFileSync(new URL(metricsReceipt.input.file,metricsFixture));
+const metricsReportBytes=gunzipSync(fs.readFileSync(new URL(metricsReceipt.nativeReport.file,metricsFixture)));
+const metricsReport=JSON.parse(metricsReportBytes.toString().replace(/^\uFEFF/,''));
+function actualMetrics(){return{expected:explicitUniformTextFonts(metricsInput,dependencies,1),report:structuredClone(metricsReport),actions:[],captureTextFonts:true,caseId:'feature-metrics'};}
+
+test('retained actual15-frame metrics report compares all14 source text fonts in every phase',()=>{
+ const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+ assert.equal(metricsInput.length,metricsReceipt.input.bytes);assert.equal(sha(metricsInput),metricsReceipt.input.sha256);
+ assert.equal(metricsReportBytes.length,metricsReceipt.nativeReport.decodedBytes);assert.equal(sha(metricsReportBytes),metricsReceipt.nativeReport.sha256);
+ const f=actualMetrics();assert.equal(f.expected[0].shapes.length,14);assert.deepEqual(f.expected[0].emptyTextFrameNames,['OPF card slides.0.blocks.3']);
+ for(const phase of ['original','edited','reopened']){const slide=f.report.phases[phase].slides[0];assert.equal(slide.shapeCount,15);assert.equal(slide.shapes.filter(s=>s.hasTextFrame!==0&&s.text!==null).length,15);const empty=slide.shapes.find(s=>s.name===f.expected[0].emptyTextFrameNames[0]);assert.equal(empty.text,'');assert.equal(empty.textFont.status,'no-text');}
+ const result=compareUniformTextFonts(f);assert.equal(result.passed,true);assert.equal(result.observations.length,42);assert.equal(result.nativeAcceptance,false);
+});
+
+test('only exact source-bound empty frames are exempt; unbound, renamed, duplicate and text-bearing frames refuse',()=>{
+ for(const phase of ['original','edited','reopened'])for(const mode of ['unbound','renamed','duplicate-native','gained-text','missing-text']){
+  const f=actualMetrics(),slide=f.report.phases[phase].slides[0],empty=slide.shapes.find(s=>s.name===f.expected[0].emptyTextFrameNames[0]);
+  if(mode==='unbound')slide.shapes.push({...structuredClone(empty),name:'Unbound empty decorative frame'});
+  if(mode==='renamed')empty.name+=' renamed';
+  if(mode==='duplicate-native')slide.shapes.push(structuredClone(empty));
+  if(mode==='gained-text')empty.text='Unexpected native text';
+  if(mode==='missing-text')slide.shapes=slide.shapes.filter(s=>s.name!==f.expected[0].shapes[0].name);
+  slide.shapeCount=slide.shapes.length;assert.throws(()=>compareUniformTextFonts(f),/Unexpected native text shape count|Duplicate native shape/,phase+' '+mode);
+ }
+});
+
+test('source empty identities stay unique, disjoint and literal, including a renamed PPTX source',()=>{
+ for(const mode of ['duplicate-source','case-duplicate','overlap','invalid']){
+  const f=actualMetrics(),empty=f.expected[0].emptyTextFrameNames;
+  if(mode==='duplicate-source')empty.push(empty[0]);
+  if(mode==='case-duplicate')empty.push(empty[0].toUpperCase());
+  if(mode==='overlap')empty.push(f.expected[0].shapes[0].name);
+  if(mode==='invalid')empty.push(null);
+  assert.throws(()=>compareUniformTextFonts(f),/Duplicate expected nontext shape|overlaps text shape|Invalid expected nontext/,mode);
+ }
+ const parts=dependencies.unzipSync(metricsInput),file='ppt/slides/slide1.xml',old='name="OPF card slides.0.blocks.3"',xml=dependencies.strFromU8(parts[file]);assert.equal(xml.split(old).length,2);
+ parts[file]=dependencies.strToU8(xml.replace(old,'name="Renamed source decorative card"'));
+ const f=actualMetrics();f.expected=explicitUniformTextFonts(dependencies.zipSync(parts),dependencies,1);
+ assert.throws(()=>compareUniformTextFonts(f),/Unexpected native text shape count/);
+});
+
+test('source-bound empty exemption never masks a requested face, size, style or descriptor finding',()=>{
+ for(const [field,value]of [['name','Wrong Face'],['sizePoints',99],['bold',-1],['italic',-1]]){
+  const f=actualMetrics(),source=f.expected[0].shapes.find(s=>s.font.bold===false&&s.font.italic===false),shape=f.report.phases.reopened.slides[0].shapes.find(s=>s.name===source.name);shape.textFont[field]=value;
+  const result=compareUniformTextFonts(f);assert.equal(result.passed,false);assert.ok(result.findings.some(f=>f.field===field));assert.equal(result.observations.length,42);
+ }
+ for(const mode of ['missing','mixed']){const f=actualMetrics(),shape=f.report.phases.original.slides[0].shapes.find(s=>s.name===f.expected[0].shapes[0].name);if(mode==='missing')delete shape.textFont;else shape.textFont.status='mixed-or-unavailable';assert.throws(()=>compareUniformTextFonts(f),/missing.mixed native font descriptor/);}
 });

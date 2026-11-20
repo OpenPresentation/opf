@@ -1,0 +1,47 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Unequal notes from LH-27 b06 s50",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "layout": "metrics",
+      "title": "Evidence Pack",
+      "blocks": [
+        {
+          "metric": {
+            "value": 42,
+            "unit": "pts",
+            "delta": "+6 pts",
+            "trend": "up",
+            "label": "Illustrative result"
+          }
+        },
+        {
+          "text": "LatticeLane should focus the next cycle on decide which roadmap bets move into the second half build window while making the operating tradeoffs clear to product stakeholders."
+        },
+        {
+          "metric": {
+            "value": "2.4x",
+            "label": "Primary signal",
+            "description": "Decide which roadmap bets move into the second half build window",
+            "trend": "up"
+          }
+        },
+        {
+          "text": "Explain the tradeoffs."
+        },
+        {
+          "metric": {
+            "value": "31%",
+            "label": "Primary signal",
+            "description": "Explain broadband route choices and resident impact",
+            "trend": "flat"
+          }
+        }
+      ],
+      "id": "s50"
+    }
+  ]
+}

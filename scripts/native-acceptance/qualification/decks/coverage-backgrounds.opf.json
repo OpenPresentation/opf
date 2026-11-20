@@ -1,0 +1,322 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: slide backgrounds",
+  "description": "RR-105 format coverage: every background form (theme slot, solid, gradient, image, pattern and the shortcuts), opacity, tone, image fit, focus, recolor, overlays and where a cover places its heading on a picture.",
+  "language": "en-US",
+  "design": {
+    "background": {
+      "type": "theme",
+      "slot": "light2",
+      "opacity": 1
+    }
+  },
+  "slides": [
+    {
+      "id": "theme-slot",
+      "title": "The deck background is a theme slot",
+      "text": "Every slide without its own background uses light 2 from the color scheme."
+    },
+    {
+      "id": "shortcut-slot",
+      "title": "A slot name as a shortcut",
+      "text": "Dark 1 behind white text.",
+      "design": {
+        "background": "dark1"
+      }
+    },
+    {
+      "id": "shortcut-hex",
+      "title": "A hex color as a shortcut",
+      "text": "A pale sand color for an appendix slide.",
+      "design": {
+        "background": "#F5EBDD"
+      }
+    },
+    {
+      "id": "shortcut-image",
+      "title": "A picture path as a shortcut",
+      "text": "The harbor photo fills the slide.",
+      "design": {
+        "background": "./assets/cover-image.png"
+      }
+    },
+    {
+      "id": "solid",
+      "title": "A solid scheme color at 85 percent",
+      "text": "Solid accent 1, slightly transparent over the slide.",
+      "design": {
+        "background": {
+          "type": "solid",
+          "color": {
+            "color": "accent1",
+            "darken": 0.4
+          },
+          "opacity": 0.85
+        }
+      }
+    },
+    {
+      "id": "gradient-dark",
+      "title": "A dark diagonal gradient",
+      "text": "Three stops from navy to teal, read as a dark background.",
+      "design": {
+        "background": {
+          "type": "gradient",
+          "tone": "dark",
+          "gradient": {
+            "angle": 45,
+            "stops": [
+              {
+                "color": "dark2",
+                "position": 0
+              },
+              {
+                "color": "#0F4C81",
+                "position": 0.6
+              },
+              {
+                "color": "accent1",
+                "position": 1
+              }
+            ]
+          },
+          "opacity": 1
+        }
+      }
+    },
+    {
+      "id": "gradient-light",
+      "title": "A light vertical gradient",
+      "text": "From white to light 2, read as a light background.",
+      "design": {
+        "background": {
+          "type": "gradient",
+          "tone": "light",
+          "gradient": {
+            "angle": 90,
+            "stops": [
+              {
+                "color": "light1",
+                "position": 0
+              },
+              {
+                "color": "light2",
+                "position": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "pattern",
+      "title": "A patterned background",
+      "text": "A light diagonal pattern in two scheme colors.",
+      "design": {
+        "background": {
+          "type": "pattern",
+          "pattern": {
+            "preset": "ltUpDiag",
+            "foregroundColor": "light2",
+            "backgroundColor": "light1"
+          },
+          "opacity": 0.9
+        }
+      }
+    },
+    {
+      "id": "image-contain",
+      "title": "A picture contained on a dark slide",
+      "text": "The whole picture shows, with bars on the sides.",
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "./assets/cover-image.png",
+          "alt": "Harbor at dusk",
+          "fit": "contain",
+          "tone": "dark",
+          "overlay": false
+        }
+      }
+    },
+    {
+      "id": "image-stretch",
+      "title": "A stretched, faded picture",
+      "text": "Stretched to the slide and drawn at 30 percent.",
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "./assets/cover-image.png",
+          "alt": "Harbor at dusk",
+          "fit": "stretch",
+          "opacity": 0.3,
+          "tone": "light"
+        }
+      }
+    },
+    {
+      "id": "image-tile",
+      "title": "A tiled, recolored picture",
+      "text": "Small tiles of the product shot in gray.",
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "./assets/product-shot.png",
+          "alt": "Product shot",
+          "fit": "tile",
+          "recolor": "grayscale",
+          "opacity": 0.4
+        }
+      }
+    },
+    {
+      "id": "image-duotone",
+      "title": "A cropped picture in brand colors",
+      "text": "Cover fit around a focus point, recolored, with a band at the bottom.",
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "./assets/cover-image.png",
+          "alt": "Harbor at dusk",
+          "fit": "cover",
+          "focus": {
+            "x": 0.7,
+            "y": 0.4
+          },
+          "recolor": {
+            "dark": "dark2",
+            "light": "accent1"
+          },
+          "overlay": {
+            "color": "dark1",
+            "opacity": 0.6,
+            "edge": "bottom",
+            "size": 0.5
+          }
+        }
+      }
+    },
+    {
+      "id": "cover-top-start",
+      "layout": "cover",
+      "title": "Heading at the top start",
+      "subtitle": "Harbor operations review, autumn 2026",
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "./assets/cover-image.png",
+          "alt": "Harbor at dusk",
+          "textPlacement": "top-start",
+          "overlay": {
+            "color": "dark1",
+            "opacity": 0.4
+          }
+        }
+      }
+    },
+    {
+      "id": "cover-top-center",
+      "layout": "cover",
+      "title": "Heading at the top center",
+      "subtitle": "Harbor operations review, autumn 2026",
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "./assets/cover-image.png",
+          "alt": "Harbor at dusk",
+          "textPlacement": "top-center",
+          "overlay": {
+            "color": "dark1",
+            "opacity": 0.4
+          }
+        }
+      }
+    },
+    {
+      "id": "cover-middle-start",
+      "layout": "cover",
+      "title": "Heading in the middle, at the start",
+      "subtitle": "Harbor operations review, autumn 2026",
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "./assets/cover-image.png",
+          "alt": "Harbor at dusk",
+          "textPlacement": "middle-start",
+          "overlay": {
+            "color": "dark1",
+            "opacity": 0.4
+          }
+        }
+      }
+    },
+    {
+      "id": "cover-middle-center",
+      "layout": "cover",
+      "title": "Heading in the middle, centered",
+      "subtitle": "Harbor operations review, autumn 2026",
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "./assets/cover-image.png",
+          "alt": "Harbor at dusk",
+          "textPlacement": "middle-center",
+          "overlay": {
+            "color": "dark1",
+            "opacity": 0.4
+          }
+        }
+      }
+    },
+    {
+      "id": "section-bottom-start",
+      "layout": "section",
+      "title": "Heading at the bottom start",
+      "subtitle": "Harbor operations review, autumn 2026",
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "./assets/cover-image.png",
+          "alt": "Harbor at dusk",
+          "textPlacement": "bottom-start",
+          "overlay": {
+            "color": "dark1",
+            "opacity": 0.4
+          }
+        }
+      }
+    },
+    {
+      "id": "section-bottom-center",
+      "layout": "section",
+      "title": "Heading at the bottom center",
+      "subtitle": "Harbor operations review, autumn 2026",
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "./assets/cover-image.png",
+          "alt": "Harbor at dusk",
+          "textPlacement": "bottom-center",
+          "overlay": {
+            "color": "dark1",
+            "opacity": 0.4
+          }
+        }
+      }
+    },
+    {
+      "id": "cover-panel",
+      "layout": "cover",
+      "title": "Heading on a side panel",
+      "subtitle": "Harbor operations review, autumn 2026",
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "./assets/cover-image.png",
+          "alt": "Harbor at dusk",
+          "textPlacement": "panel"
+        }
+      }
+    }
+  ]
+}

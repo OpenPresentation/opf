@@ -17,7 +17,7 @@
       "heightInches": 8.333
     },
     "background": "light1",
-    "titleAlignment": "left",
+    "titleAlignment": "start",
     "contentBox": true,
     "contentDirection": "horizontal",
     "chartPrimary": "none",
@@ -406,8 +406,8 @@
             "Openers and closers"
           ],
           "design": {
-            "titleAlignment": "left",
-            "contentAlignment": "left"
+            "titleAlignment": "start",
+            "contentAlignment": "start"
           },
           "direction": "row",
           "regions": [

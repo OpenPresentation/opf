@@ -7,16 +7,17 @@
     "Openers and closers"
   ],
   "design": {
-    "titleAlignment": "center",
-    "contentAlignment": "center",
+    "titleAlignment": "start",
+    "contentAlignment": "start",
     "imageFit": "contain",
     "variant": "brand"
   },
   "direction": "column",
-  "anchor": "middle",
+  "anchor": "bottom",
   "regions": [
     {
-      "name": "title"
+      "name": "title",
+      "rule": true
     },
     {
       "name": "details",

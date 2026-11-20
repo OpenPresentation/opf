@@ -1,0 +1,388 @@
+{
+  "schemaVersion": 1,
+  "profile": "reference-line-one-name-three-native-archives-v1",
+  "input": {
+    "bytes": 129055,
+    "sha256": "3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918"
+  },
+  "requestSha256": "4f10ea2e2b7846bd463875c49057711cc7bf0ecb5a51679000c692163f832d28",
+  "envelopeSha256": "e65509e145336d385b936f11abaa4d33c202a3068b195f1361d59b7c37ccf14a",
+  "admission": {
+    "bytes": 2025357,
+    "sha256": "ef86e27e685b0ebd696e641cba23e88149ff70d61044e7e1ee89e97b7b244b1f"
+  },
+  "routeComparison": {
+    "bytes": 288785,
+    "sha256": "b91aa7b705dfde6e2cbab8c5eedb43d92835e5e11a8c20393791eee35cac65a3"
+  },
+  "worker": {
+    "sha256": "3ce6b57ca190a4c0c89b3202eeb11e2685fb2731bfc9a3a206bc3f8b022d8573",
+    "bytes": 93931
+  },
+  "controllerRevision": "60b982282f9c0b340928adbc595a7969565c1e2f",
+  "started": "2026-11-13T17:49:24.4067332Z",
+  "finished": "2026-11-13T17:49:27.4830409Z",
+  "stages": 886,
+  "native": {
+    "copies": 3,
+    "opens": 2,
+    "closes": 2,
+    "actions": 1,
+    "quits": 1
+  },
+  "names": {
+    "original": "Actual",
+    "edited": "Actual edited",
+    "reopened": "Actual edited"
+  },
+  "otherNames": [
+    {
+      "index": 2,
+      "name": "Target 80"
+    },
+    {
+      "index": 3,
+      "name": "Floor -10"
+    }
+  ],
+  "typeEvidence": {
+    "chart": {
+      "observedType": "System.Int32",
+      "observedRawValue": "-4111",
+      "numericValue": -4111
+    },
+    "count": {
+      "observedType": "System.Int32",
+      "observedRawValue": "3",
+      "numericValue": 3
+    },
+    "series": [
+      {
+        "index": 1,
+        "typeObservation": {
+          "observedType": "System.Int32",
+          "observedRawValue": "4",
+          "numericValue": 4
+        }
+      },
+      {
+        "index": 2,
+        "typeObservation": {
+          "observedType": "System.Int32",
+          "observedRawValue": "4",
+          "numericValue": 4
+        }
+      },
+      {
+        "index": 3,
+        "typeObservation": {
+          "observedType": "System.Int32",
+          "observedRawValue": "4",
+          "numericValue": 4
+        }
+      }
+    ]
+  },
+  "archives": {
+    "before": {
+      "bytes": 134323,
+      "sha256": "a3a61235eaccfeaa9148e8bb8da6b6d8077858c2f95f74a502c73d250e31ebbc"
+    },
+    "edited": {
+      "bytes": 134333,
+      "sha256": "6fb4c1aa17fc25b63e032204cbfa8f31d758376f9a6b59947047657f5c9d4f85"
+    },
+    "reopened": {
+      "bytes": 134334,
+      "sha256": "de8bd0bdaaa30d202c72955eb938b2c8dcaacf68287602187cae145fd5e0d2ca"
+    }
+  },
+  "rasters": [
+    {
+      "phase": "original",
+      "slideIndex": 1,
+      "sha256": "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
+    },
+    {
+      "phase": "original",
+      "slideIndex": 2,
+      "sha256": "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
+    },
+    {
+      "phase": "original",
+      "slideIndex": 3,
+      "sha256": "f5c69fa9192cb1d5931d3ee2230a60e69c5492c2a173b9788e332fe5004c5777"
+    },
+    {
+      "phase": "edited",
+      "slideIndex": 1,
+      "sha256": "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
+    },
+    {
+      "phase": "edited",
+      "slideIndex": 2,
+      "sha256": "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
+    },
+    {
+      "phase": "edited",
+      "slideIndex": 3,
+      "sha256": "f5c69fa9192cb1d5931d3ee2230a60e69c5492c2a173b9788e332fe5004c5777"
+    },
+    {
+      "phase": "reopened",
+      "slideIndex": 1,
+      "sha256": "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
+    },
+    {
+      "phase": "reopened",
+      "slideIndex": 2,
+      "sha256": "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
+    },
+    {
+      "phase": "reopened",
+      "slideIndex": 3,
+      "sha256": "f5c69fa9192cb1d5931d3ee2230a60e69c5492c2a173b9788e332fe5004c5777"
+    }
+  ],
+  "firstSaveOpenParts": [
+    "[Content_Types].xml",
+    "_rels/.rels",
+    "docProps/app.xml",
+    "docProps/core.xml",
+    "ppt/_rels/presentation.xml.rels",
+    "ppt/charts/_rels/chart1.xml.rels",
+    "ppt/charts/_rels/chart2.xml.rels",
+    "ppt/charts/_rels/chart3.xml.rels",
+    "ppt/charts/chart1.xml",
+    "ppt/charts/chart2.xml",
+    "ppt/charts/chart3.xml",
+    "ppt/embeddings/Microsoft_Excel_Worksheet.xlsx",
+    "ppt/embeddings/Microsoft_Excel_Worksheet1.xlsx",
+    "ppt/embeddings/Microsoft_Excel_Worksheet2.xlsx",
+    "ppt/embeddings/Microsoft_Excel_Worksheet3.xlsx",
+    "ppt/notesMasters/_rels/notesMaster1.xml.rels",
+    "ppt/notesMasters/notesMaster1.xml",
+    "ppt/notesSlides/_rels/notesSlide1.xml.rels",
+    "ppt/notesSlides/_rels/notesSlide2.xml.rels",
+    "ppt/notesSlides/_rels/notesSlide3.xml.rels",
+    "ppt/presProps.xml",
+    "ppt/presentation.xml",
+    "ppt/slideLayouts/_rels/slideLayout10.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout11.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout12.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout13.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout14.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout15.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout16.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout17.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout18.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout19.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout2.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout20.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout21.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout22.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout23.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout24.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout25.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout26.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout27.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout28.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout29.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout3.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout30.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout31.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout32.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout33.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout34.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout35.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout36.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout37.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout38.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout39.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout4.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout40.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout41.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout42.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout5.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout6.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout7.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout8.xml.rels",
+    "ppt/slideLayouts/_rels/slideLayout9.xml.rels",
+    "ppt/slideLayouts/slideLayout1.xml",
+    "ppt/slideLayouts/slideLayout10.xml",
+    "ppt/slideLayouts/slideLayout11.xml",
+    "ppt/slideLayouts/slideLayout12.xml",
+    "ppt/slideLayouts/slideLayout13.xml",
+    "ppt/slideLayouts/slideLayout14.xml",
+    "ppt/slideLayouts/slideLayout15.xml",
+    "ppt/slideLayouts/slideLayout16.xml",
+    "ppt/slideLayouts/slideLayout17.xml",
+    "ppt/slideLayouts/slideLayout18.xml",
+    "ppt/slideLayouts/slideLayout19.xml",
+    "ppt/slideLayouts/slideLayout2.xml",
+    "ppt/slideLayouts/slideLayout20.xml",
+    "ppt/slideLayouts/slideLayout21.xml",
+    "ppt/slideLayouts/slideLayout22.xml",
+    "ppt/slideLayouts/slideLayout23.xml",
+    "ppt/slideLayouts/slideLayout24.xml",
+    "ppt/slideLayouts/slideLayout25.xml",
+    "ppt/slideLayouts/slideLayout26.xml",
+    "ppt/slideLayouts/slideLayout27.xml",
+    "ppt/slideLayouts/slideLayout28.xml",
+    "ppt/slideLayouts/slideLayout29.xml",
+    "ppt/slideLayouts/slideLayout3.xml",
+    "ppt/slideLayouts/slideLayout30.xml",
+    "ppt/slideLayouts/slideLayout31.xml",
+    "ppt/slideLayouts/slideLayout32.xml",
+    "ppt/slideLayouts/slideLayout33.xml",
+    "ppt/slideLayouts/slideLayout34.xml",
+    "ppt/slideLayouts/slideLayout35.xml",
+    "ppt/slideLayouts/slideLayout36.xml",
+    "ppt/slideLayouts/slideLayout37.xml",
+    "ppt/slideLayouts/slideLayout38.xml",
+    "ppt/slideLayouts/slideLayout39.xml",
+    "ppt/slideLayouts/slideLayout4.xml",
+    "ppt/slideLayouts/slideLayout40.xml",
+    "ppt/slideLayouts/slideLayout41.xml",
+    "ppt/slideLayouts/slideLayout42.xml",
+    "ppt/slideLayouts/slideLayout5.xml",
+    "ppt/slideLayouts/slideLayout6.xml",
+    "ppt/slideLayouts/slideLayout7.xml",
+    "ppt/slideLayouts/slideLayout8.xml",
+    "ppt/slideLayouts/slideLayout9.xml",
+    "ppt/slideMasters/_rels/slideMaster1.xml.rels",
+    "ppt/slideMasters/slideMaster1.xml",
+    "ppt/slides/_rels/slide1.xml.rels",
+    "ppt/slides/_rels/slide2.xml.rels",
+    "ppt/slides/_rels/slide3.xml.rels",
+    "ppt/slides/slide1.xml",
+    "ppt/slides/slide2.xml",
+    "ppt/slides/slide3.xml",
+    "ppt/tags/opfDocument.xml",
+    "ppt/tags/opfHeading1.xml",
+    "ppt/tags/opfHeading2.xml",
+    "ppt/tags/opfLayout1.xml",
+    "ppt/tags/opfLayout10.xml",
+    "ppt/tags/opfLayout11.xml",
+    "ppt/tags/opfLayout12.xml",
+    "ppt/tags/opfLayout13.xml",
+    "ppt/tags/opfLayout14.xml",
+    "ppt/tags/opfLayout15.xml",
+    "ppt/tags/opfLayout16.xml",
+    "ppt/tags/opfLayout17.xml",
+    "ppt/tags/opfLayout18.xml",
+    "ppt/tags/opfLayout19.xml",
+    "ppt/tags/opfLayout2.xml",
+    "ppt/tags/opfLayout20.xml",
+    "ppt/tags/opfLayout21.xml",
+    "ppt/tags/opfLayout22.xml",
+    "ppt/tags/opfLayout23.xml",
+    "ppt/tags/opfLayout24.xml",
+    "ppt/tags/opfLayout25.xml",
+    "ppt/tags/opfLayout26.xml",
+    "ppt/tags/opfLayout27.xml",
+    "ppt/tags/opfLayout28.xml",
+    "ppt/tags/opfLayout29.xml",
+    "ppt/tags/opfLayout3.xml",
+    "ppt/tags/opfLayout30.xml",
+    "ppt/tags/opfLayout31.xml",
+    "ppt/tags/opfLayout32.xml",
+    "ppt/tags/opfLayout33.xml",
+    "ppt/tags/opfLayout34.xml",
+    "ppt/tags/opfLayout35.xml",
+    "ppt/tags/opfLayout36.xml",
+    "ppt/tags/opfLayout37.xml",
+    "ppt/tags/opfLayout38.xml",
+    "ppt/tags/opfLayout39.xml",
+    "ppt/tags/opfLayout4.xml",
+    "ppt/tags/opfLayout40.xml",
+    "ppt/tags/opfLayout41.xml",
+    "ppt/tags/opfLayout5.xml",
+    "ppt/tags/opfLayout6.xml",
+    "ppt/tags/opfLayout7.xml",
+    "ppt/tags/opfLayout8.xml",
+    "ppt/tags/opfLayout9.xml",
+    "ppt/tags/opfSlide1.xml",
+    "ppt/tags/opfSlide2.xml",
+    "ppt/tags/opfSlide3.xml",
+    "ppt/tags/tag1.xml",
+    "ppt/tags/tag10.xml",
+    "ppt/tags/tag11.xml",
+    "ppt/tags/tag12.xml",
+    "ppt/tags/tag13.xml",
+    "ppt/tags/tag14.xml",
+    "ppt/tags/tag15.xml",
+    "ppt/tags/tag16.xml",
+    "ppt/tags/tag17.xml",
+    "ppt/tags/tag18.xml",
+    "ppt/tags/tag19.xml",
+    "ppt/tags/tag2.xml",
+    "ppt/tags/tag20.xml",
+    "ppt/tags/tag21.xml",
+    "ppt/tags/tag22.xml",
+    "ppt/tags/tag23.xml",
+    "ppt/tags/tag24.xml",
+    "ppt/tags/tag25.xml",
+    "ppt/tags/tag26.xml",
+    "ppt/tags/tag27.xml",
+    "ppt/tags/tag28.xml",
+    "ppt/tags/tag29.xml",
+    "ppt/tags/tag3.xml",
+    "ppt/tags/tag30.xml",
+    "ppt/tags/tag31.xml",
+    "ppt/tags/tag32.xml",
+    "ppt/tags/tag33.xml",
+    "ppt/tags/tag34.xml",
+    "ppt/tags/tag35.xml",
+    "ppt/tags/tag36.xml",
+    "ppt/tags/tag37.xml",
+    "ppt/tags/tag38.xml",
+    "ppt/tags/tag39.xml",
+    "ppt/tags/tag4.xml",
+    "ppt/tags/tag40.xml",
+    "ppt/tags/tag41.xml",
+    "ppt/tags/tag42.xml",
+    "ppt/tags/tag43.xml",
+    "ppt/tags/tag44.xml",
+    "ppt/tags/tag45.xml",
+    "ppt/tags/tag46.xml",
+    "ppt/tags/tag47.xml",
+    "ppt/tags/tag5.xml",
+    "ppt/tags/tag6.xml",
+    "ppt/tags/tag7.xml",
+    "ppt/tags/tag8.xml",
+    "ppt/tags/tag9.xml",
+    "ppt/theme/theme1.xml",
+    "ppt/theme/theme2.xml"
+  ],
+  "coreRevisions": [
+    "1",
+    "2",
+    "2"
+  ],
+  "postflight": {
+    "observedZero": true
+  },
+  "retained": {
+    "report.json": {
+      "bytes": 81027,
+      "sha256": "f57ae3c4ed9f0c671bbdf5418d2e4311290a4bb884b1a191611b7484685f8b25"
+    },
+    "stages.jsonl": {
+      "bytes": 256493,
+      "sha256": "0e9d964c86be172952201733bf3bc5497711c27d8a52098a9214606cb5d9005a"
+    },
+    "reference-name-before.pptx": {
+      "bytes": 134323,
+      "sha256": "a3a61235eaccfeaa9148e8bb8da6b6d8077858c2f95f74a502c73d250e31ebbc"
+    },
+    "native-furniture-control.pptx": {
+      "bytes": 134333,
+      "sha256": "6fb4c1aa17fc25b63e032204cbfa8f31d758376f9a6b59947047657f5c9d4f85"
+    },
+    "reference-name-reopened.pptx": {
+      "bytes": 134334,
+      "sha256": "de8bd0bdaaa30d202c72955eb938b2c8dcaacf68287602187cae145fd5e0d2ca"
+    }
+  }
+}

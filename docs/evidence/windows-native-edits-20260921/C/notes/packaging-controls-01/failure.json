@@ -1,5 +1,0 @@
-{
-  "error": "bytes.equals is not a function",
-  "cause": "fflate returns Uint8Array, not Buffer",
-  "scope": "Offline generator type error before native tests"
-}

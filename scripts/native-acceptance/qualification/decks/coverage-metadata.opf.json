@@ -1,0 +1,179 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: document metadata",
+  "description": "RR-105 format coverage: every identity and intent field of a document, inline audience, purpose, tone and language records with every field, several speakers, and a custom slide size in inches.",
+  "language": {
+    "name": "English (United States)",
+    "bcp47": "en-US",
+    "ooxmlLang": "en-US",
+    "code": "en",
+    "direction": "ltr",
+    "script": "Latn",
+    "fontScheme": "aptos",
+    "googleFontScheme": "aptos",
+    "summary": "American English.",
+    "description": "Spelling and dates in US style.",
+    "tags": [
+      "default"
+    ]
+  },
+  "filename": "harbor-board-update",
+  "author": [
+    "Ana Ribeiro",
+    "Ben Okafor"
+  ],
+  "organization": {
+    "id": "harbor",
+    "name": "Harbor Labs",
+    "role": "primary"
+  },
+  "speaker": [
+    {
+      "id": "ana",
+      "name": "Ana Ribeiro",
+      "title": "Head of Operations",
+      "photo": {
+        "src": "./assets/alice.png",
+        "alt": "Ana Ribeiro"
+      },
+      "email": "ana@harborlabs.example",
+      "phone": "+49 30 1234568",
+      "bio": "Runs operations for three terminals.",
+      "organizationId": "harbor",
+      "socials": {
+        "linkedin": "https://www.linkedin.com/in/ana-ribeiro"
+      }
+    },
+    {
+      "id": "ben",
+      "name": "Ben Okafor",
+      "title": "Finance Lead"
+    }
+  ],
+  "audience": [
+    "executive",
+    {
+      "id": "board",
+      "name": "Supervisory board",
+      "summary": "Five members who approve the budget.",
+      "description": "Meets quarterly; reads the deck in advance.",
+      "seniority": "c-suite",
+      "technicalFluency": "low",
+      "decisionPower": "decision-maker",
+      "attentionBudgetMinutes": 20,
+      "recommendedNarratives": [
+        "scqa"
+      ],
+      "recommendedTones": [
+        "confident"
+      ],
+      "tags": [
+        "governance"
+      ]
+    },
+    {
+      "name": "Terminal managers",
+      "seniority": "manager",
+      "technicalFluency": "medium",
+      "decisionPower": "advisory"
+    },
+    {
+      "name": "Analysts",
+      "seniority": "ic",
+      "technicalFluency": "high",
+      "decisionPower": "informational"
+    },
+    {
+      "name": "Regional directors",
+      "seniority": "director",
+      "technicalFluency": "mixed"
+    },
+    {
+      "name": "Vice presidents",
+      "seniority": "vp"
+    },
+    {
+      "name": "All staff",
+      "seniority": "mixed"
+    }
+  ],
+  "purpose": {
+    "id": "decide",
+    "name": "Approve the budget",
+    "summary": "Get a yes on next year's budget.",
+    "description": "The board approves or sends the plan back.",
+    "outcome": "Budget approved",
+    "successCriteria": [
+      "Vote passes",
+      "No open questions"
+    ],
+    "recommendedNarratives": [
+      "scqa"
+    ],
+    "recommendedTones": [
+      "confident"
+    ],
+    "tags": [
+      "budget"
+    ]
+  },
+  "tone": {
+    "name": "Calm and direct",
+    "summary": "Plain words, numbers first.",
+    "description": "Short sentences that lead with the figure.",
+    "voiceCues": [
+      "Lead with the number"
+    ],
+    "avoid": [
+      "Jargon"
+    ],
+    "samplePhrases": [
+      "Volume rose 12 percent."
+    ],
+    "recommendedNarratives": [
+      "scqa"
+    ],
+    "tags": [
+      "board"
+    ]
+  },
+  "takeaway": [
+    "Volume is up 12 percent",
+    "The budget holds flat"
+  ],
+  "duration": 20,
+  "tags": [
+    "board",
+    "quarterly"
+  ],
+  "narrative": "scqa",
+  "design": {
+    "dimensions": {
+      "widthInches": 13.333,
+      "heightInches": 7.5
+    },
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "title": "Board update, autumn 2026",
+      "subtitle": "{{speaker.name}}, {{speaker.title}} · {{organization.name}}"
+    },
+    {
+      "id": "speakers",
+      "title": "Presented by two speakers",
+      "text": "Speakers: {{speakers|, }}. Contact {{speaker.email}}."
+    },
+    {
+      "id": "takeaway",
+      "title": "Volume is up and the budget holds",
+      "items": [
+        "Volume rose 12 percent",
+        "Costs stayed flat",
+        "We ask for the same budget"
+      ]
+    }
+  ]
+}

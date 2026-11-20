@@ -7,11 +7,6 @@
       "element": "lineChart",
       "grouping": "stacked",
       "composition": "single"
-    },
-    "renderers": {
-      "aspose-slides": {
-        "chartType": "StackedLine"
-      }
     }
   },
   "group": "Line",

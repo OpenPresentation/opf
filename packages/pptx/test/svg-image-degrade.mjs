@@ -75,7 +75,7 @@ for (const [name, source, reason] of broken) {
 
 // Placed image block: the placeholder fills the image frame.
 {
-  const deck = {slides: [{title: 'A', blocks: [{type: 'image', image: broken[0][1], placement: {edge: 'right'}}]}]};
+  const deck = {slides: [{title: 'A', blocks: [{type: 'image', image: broken[0][1], placement: {edge: 'end'}}]}]};
   const {diagnostics, slide} = await run(deck);
   assert.ok(unresolved(diagnostics).length >= 1 && unresolved(diagnostics).every(diagnostic => diagnostic.reason === 'svg-malformed'));
   assert.match(slide, /name="OPF image placeholder 1"/);

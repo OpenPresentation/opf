@@ -4,7 +4,7 @@ import { describe, test } from "node:test";
 import { paginateSlide, paginate } from "../dist/index.js";
 import { check, errorsOf } from './support/validation.mjs';
 
-const regionKey = /^(top|middle|bottom|left|center|right)([+:]|$)/;
+const regionKey = /^(top|middle|bottom|start|center|end)([+:]|$)/;
 const items = Array.from({ length: 60 }, (_, index) => `Point ${index}: ${"detail ".repeat(11)}`);
 
 const isPayload = (value) => !!value && typeof value === "object" && !Array.isArray(value);
@@ -47,7 +47,7 @@ describe("pagination keeps content payload ids unique", () => {
   });
 
   test("an overflowing region payload keeps its id on the first page only", () => {
-    const [first, ...rest] = paginated({ name: "Long", slides: [{ left: { id: "sidebar", items } }] });
+    const [first, ...rest] = paginated({ name: "Long", slides: [{ start: { id: "sidebar", items } }] });
     assert.deepEqual(payloadIds(first), ["sidebar"]);
     for (const page of rest) {
       for (const id of payloadIds(page)) assert.match(id, /^sidebar--\d+$/);

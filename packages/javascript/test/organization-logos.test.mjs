@@ -17,7 +17,7 @@ const codes = report => report.findings.filter(finding => finding.ruleId.startsW
 const inset = (width = 1280, height = 720) => 0.08 * Math.min(width, height);
 const columnWidth = (width = 1280, height = 720) => (width - 2 * inset(width, height) - 2 * 0.02 * width) / 3;
 // A zone's content with the other two zones occupied by short text, so it keeps its own column.
-const crowded = (side, content) => Object.fromEntries(['left', 'center', 'right'].map(zone => [zone, zone === side ? content : {text: '.'}]));
+const crowded = (side, content) => Object.fromEntries(['start', 'center', 'end'].map(zone => [zone, zone === side ? content : {text: '.'}]));
 
 test('the shapes are full, stacked, icon and wordmark', () => {
   assert.deepEqual([...LOGO_SHAPES], ['full', 'stacked', 'icon', 'wordmark']);
@@ -149,11 +149,11 @@ test('resolveSlideContext resolves logo references for the slide background', ()
 });
 
 test('outside slides and furniture a logo reference resolves deck-wide, as on a light background', () => {
-  const presentation = deck({id: 'acme', name: 'Acme', logo: {full: {onLight: asset('acme'), onDark: asset('acme-white')}}}, {design: {watermark: 'var:organization.logo', footer: {left: {image: 'var:organization.logo.icon'}}}});
+  const presentation = deck({id: 'acme', name: 'Acme', logo: {full: {onLight: asset('acme'), onDark: asset('acme-white')}}}, {design: {watermark: 'var:organization.logo', footer: {start: {image: 'var:organization.logo.icon'}}}});
   const {presentation: resolved, diagnostics} = resolveVariables(presentation);
   assert.deepEqual(diagnostics, []);
   assert.equal(resolved.design.watermark, asset('acme'));
-  assert.equal(resolved.design.footer.left.image, 'var:organization.logo.icon', 'zone images resolve per slide in layoutFurniture');
+  assert.equal(resolved.design.footer.start.image, 'var:organization.logo.icon', 'zone images resolve per slide in layoutFurniture');
 });
 
 test('validation: unknown shapes and organizations are errors, a missing logo warns, inline logo tokens are errors', () => {
@@ -166,7 +166,7 @@ test('validation: unknown shapes and organizations are errors, a missing logo wa
   assert.deepEqual(findings({title: 'x', image: 'var:organization.gamma.logo'}), [['opf/variable-builtin-missing', 'warning', '/slides/0/image']]);
   assert.deepEqual(findings({title: '{{organization.logo}}'}), [['opf/variable-unknown-builtin', 'error', '/slides/0/title']]);
   // A missing logo for the primary organization (no organization at all) is the same warning.
-  assert.deepEqual(codes(validate(deck(undefined, {slides: [{title: 'x', design: {footer: {left: {image: 'var:organization.logo.icon'}}}}]}), {only: ['format', 'content']})), [['opf/variable-builtin-missing', 'warning', '/slides/0/design/footer/left/image']]);
+  assert.deepEqual(codes(validate(deck(undefined, {slides: [{title: 'x', design: {footer: {start: {image: 'var:organization.logo.icon'}}}}]}), {only: ['format', 'content']})), [['opf/variable-builtin-missing', 'warning', '/slides/0/design/footer/start/image']]);
 });
 
 test('the schema: shapes and backgrounds on the organization, design.logo a reference or false, no LogoSet, no zone logo flag', () => {
@@ -178,8 +178,8 @@ test('the schema: shapes and backgrounds on the organization, design.logo a refe
   assert.ok(!valid(deck({id: 'acme', name: 'Acme', logo: {full: {light: asset('a')}}})));
   for (const logo of ['var:organization.logo', 'var:organization.logo.icon', 'var:organization.acme.logo', 'var:organization.acme.logo.wordmark', false]) assert.ok(valid(deck({id: 'acme', name: 'Acme', logo: asset('a')}, {design: {logo}})), String(logo));
   for (const logo of [asset('a'), {default: asset('a')}, 'var:organization.name', 'var:organization.logo.banner', true]) assert.ok(!valid(deck({id: 'acme', name: 'Acme', logo: asset('a')}, {design: {logo}})), JSON.stringify(logo));
-  assert.ok(!valid(deck({id: 'acme', name: 'Acme', logo: asset('a')}, {design: {footer: {left: {logo: true}}}})));
-  assert.ok(valid(deck({id: 'acme', name: 'Acme', logo: asset('a')}, {design: {footer: {left: {image: 'var:organization.logo.icon', text: '{{organization.name}}'}}}})));
+  assert.ok(!valid(deck({id: 'acme', name: 'Acme', logo: asset('a')}, {design: {footer: {start: {logo: true}}}})));
+  assert.ok(valid(deck({id: 'acme', name: 'Acme', logo: asset('a')}, {design: {footer: {start: {image: 'var:organization.logo.icon', text: '{{organization.name}}'}}}})));
 });
 
 test('listBuiltinVariables lists every logo shape as a slide-scoped image', () => {
@@ -195,7 +195,7 @@ test('listBuiltinVariables lists every logo shape as a slide-scoped image', () =
 
 test('a zone image logo reference resolves for the slide background and keeps the reference', () => {
   const presentation = deck([{id: 'acme', name: 'Acme', logo: {icon: {onLight: asset('icon'), onDark: asset('icon-white')}}}, {id: 'beta', name: 'Beta', logo: asset('beta')}, {id: 'gamma', name: 'Gamma'}], {
-    design: {footer: {left: {image: 'var:organization.logo.icon'}, right: {image: 'var:organization.beta.logo'}}},
+    design: {footer: {start: {image: 'var:organization.logo.icon'}, end: {image: 'var:organization.beta.logo'}}},
   });
   const light = layoutFurniture({}, {presentation}), dark = layoutFurniture({}, {presentation, darkBackground: true});
   assert.deepEqual(light.diagnostics, []);
@@ -206,8 +206,8 @@ test('a zone image logo reference resolves for the slide background and keeps th
   assert.equal(dark.parts[0].image, asset('icon-white'));
   // An organization without a logo, or an unknown shape, is unresolved content at the zone image.
   for (const image of ['var:organization.gamma.logo', 'var:organization.logo.banner', 'var:organization.nobody.logo']) {
-    const layout = layoutFurniture({}, {presentation: {...presentation, design: {footer: {left: {image, text: 'Acme'}}}}});
-    assert.deepEqual(layout.diagnostics.map(entry => [entry.code, entry.path]), [['unresolved-content', 'design.footer.left.image']], image);
+    const layout = layoutFurniture({}, {presentation: {...presentation, design: {footer: {start: {image, text: 'Acme'}}}}});
+    assert.deepEqual(layout.diagnostics.map(entry => [entry.code, entry.path]), [['unresolved-content', 'design.footer.start.image']], image);
     assert.deepEqual(layout.parts.map(part => part.field), ['text']);
   }
 });
@@ -216,8 +216,9 @@ test('a zone lays out image, text, socials and date in one row aligned to its ed
   const organization = {id: 'acme', name: 'Acme', logo: asset('acme'), socials: {x: '@acme'}};
   const zone = {image: 'var:organization.logo', text: 'Acme Corp', socials: true, date: '2026'};
   const measure = (text, size) => [...text].length * size / 2;
-  for (const side of ['left', 'center', 'right']) {
-    const layout = layoutFurniture({}, {presentation: deck(organization, {design: {footer: {[side]: zone}}}), textMeasurement: {measure}});
+  // The zone key (`start`, `end`) and the engine alignment of its parts (`left`, `right`) in this left-to-right deck.
+  for (const [key, side] of [['start', 'left'], ['center', 'center'], ['end', 'right']]) {
+    const layout = layoutFurniture({}, {presentation: deck(organization, {design: {footer: {[key]: zone}}}), textMeasurement: {measure}});
     assert.deepEqual(layout.diagnostics, []);
     const parts = layout.parts;
     assert.deepEqual(parts.map(part => part.field), ['image', 'text', 'socials', 'date']);
@@ -237,15 +238,15 @@ test('a zone lays out image, text, socials and date in one row aligned to its ed
     near(parts[1].box.width, measure('Acme Corp', parts[1].fit.fontSize), 'text box hugs its line');
   }
   // A zone with one text part keeps the whole zone width, as before.
-  const lone = layoutFurniture({}, {presentation: deck(organization, {design: {footer: {right: {text: 'Only'}}}})}).parts[0];
+  const lone = layoutFurniture({}, {presentation: deck(organization, {design: {footer: {end: {text: 'Only'}}}})}).parts[0];
   near(lone.box.width, 1280 - 2 * inset(), 'one text part spans the content width');
   // \n still breaks lines inside a part.
-  const lines = layoutFurniture({}, {presentation: deck(organization, {design: {footer: {left: {image: 'var:organization.logo', text: 'One\nTwo'}}}})}).parts[1];
+  const lines = layoutFurniture({}, {presentation: deck(organization, {design: {footer: {start: {image: 'var:organization.logo', text: 'One\nTwo'}}}})}).parts[1];
   assert.equal(lines.fit.lines.length, 2);
 });
 
 test('a right-to-left deck runs the row from the right', () => {
-  const presentation = deck({id: 'acme', name: 'Acme', logo: asset('acme')}, {language: 'ar', design: {footer: {left: {image: 'var:organization.logo', text: 'نص'}}}});
+  const presentation = deck({id: 'acme', name: 'Acme', logo: asset('acme')}, {language: 'ar', design: {footer: {start: {image: 'var:organization.logo', text: 'نص'}}}});
   const [image, text] = layoutFurniture({}, {presentation}).parts;
   assert.equal(image.alignment, 'right');
   near(image.box.x + image.box.width, 1280 - inset(), 'the image is at the start (right) edge');
@@ -255,7 +256,7 @@ test('a right-to-left deck runs the row from the right', () => {
 test('a row wider than its zone wraps its text, and reports overflow when it cannot fit', () => {
   const organization = {id: 'acme', name: 'Acme', logo: asset('acme')};
   const long = 'Confidential and proprietary information prepared for the board';
-  const layout = layoutFurniture({}, {presentation: deck(organization, {design: {footer: crowded('left', {image: 'var:organization.logo', text: long, date: '2026'})}})});
+  const layout = layoutFurniture({}, {presentation: deck(organization, {design: {footer: crowded('start', {image: 'var:organization.logo', text: long, date: '2026'})}})});
   assert.deepEqual(layout.diagnostics, []);
   const [image, text, date] = layout.parts;
   assert.ok(text.fit.lines.length > 1, 'the long text wraps');
@@ -263,17 +264,17 @@ test('a row wider than its zone wraps its text, and reports overflow when it can
   near(date.box.x + date.box.width - image.box.x, columnWidth(), 'the row fills the zone exactly');
   // A very wide logo is capped beside text, so the text keeps room; a word that still cannot fit its share is overflow.
   const wide = `data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100"/>').toString('base64')}`;
-  const capped = layoutFurniture({}, {presentation: deck({...organization, logo: wide}, {design: {footer: crowded('left', {image: 'var:organization.logo', text: 'Acme'})}})});
+  const capped = layoutFurniture({}, {presentation: deck({...organization, logo: wide}, {design: {footer: crowded('start', {image: 'var:organization.logo', text: 'Acme'})}})});
   assert.deepEqual(capped.diagnostics, []);
   near(capped.parts[0].box.width, columnWidth() * 0.4, 'the logo takes at most 40% of the zone');
-  const overflow = layoutFurniture({composition: {minFontSize: 32}}, {presentation: deck({...organization, logo: wide}, {design: {footer: crowded('left', {image: 'var:organization.logo', text: 'Supercalifragilistic', date: '2026'})}})});
+  const overflow = layoutFurniture({composition: {minFontSize: 32}}, {presentation: deck({...organization, logo: wide}, {design: {footer: crowded('start', {image: 'var:organization.logo', text: 'Supercalifragilistic', date: '2026'})}})});
   assert.equal(overflow.overflow, true);
-  assert.deepEqual(overflow.diagnostics.map(entry => [entry.code, entry.path]), [['text-overflow', 'design.footer.left.text']]);
+  assert.deepEqual(overflow.diagnostics.map(entry => [entry.code, entry.path]), [['text-overflow', 'design.footer.start.text']]);
 });
 
 test('a deck with organization logos round-trips through YAML and Markdown', () => {
   const presentation = deck([{id: 'acme', name: 'Acme', role: 'primary', logo: {full: {onLight: asset('acme'), onDark: asset('acme-white')}, icon: asset('icon')}}, {id: 'beta', name: 'Beta', logo: asset('beta')}], {
-    design: {logo: 'var:organization.beta.logo', footer: {left: {image: 'var:organization.logo.icon', text: '{{organization.name}}'}}},
+    design: {logo: 'var:organization.beta.logo', footer: {start: {image: 'var:organization.logo.icon', text: '{{organization.name}}'}}},
     slides: [{title: 'Cover', image: 'var:organization.beta.logo.wordmark'}],
   });
   assert.ok(validate(presentation, {only: ['format']}).valid);
@@ -292,7 +293,7 @@ const png = (width, height) => {
 test('beside other parts an image is capped at FURNITURE_IMAGE_SHARE of the zone; alone it keeps its width', () => {
   assert.equal(FURNITURE_IMAGE_SHARE, 0.4);
   const zoneWidth = columnWidth();
-  const zone = content => layoutFurniture({}, {presentation: deck({id: 'acme', name: 'Acme', logo: png(1000, 100)}, {design: {header: crowded('left', content)}})}).parts.slice(0, content.text ? 2 : 1);
+  const zone = content => layoutFurniture({}, {presentation: deck({id: 'acme', name: 'Acme', logo: png(1000, 100)}, {design: {header: crowded('start', content)}})}).parts.slice(0, content.text ? 2 : 1);
   const [alone] = zone({image: 'var:organization.logo'});
   near(alone.box.width, alone.box.height * 10, 'a lone 10:1 logo keeps its proportions');
   const [image, text] = zone({image: 'var:organization.logo', text: 'Acme'});
@@ -300,13 +301,13 @@ test('beside other parts an image is capped at FURNITURE_IMAGE_SHARE of the zone
   near(image.box.height, alone.box.height, 'at the same height (consumers fit the image inside the box)');
   near(text.box.x, image.box.x + image.box.width + FURNITURE_GAP, 'the text follows');
   // An image narrower than the share keeps its own width.
-  const [square] = layoutFurniture({}, {presentation: deck({id: 'acme', name: 'Acme', logo: png(100, 100)}, {design: {header: crowded('left', {image: 'var:organization.logo', text: 'Acme'})}})}).parts;
+  const [square] = layoutFurniture({}, {presentation: deck({id: 'acme', name: 'Acme', logo: png(100, 100)}, {design: {header: crowded('start', {image: 'var:organization.logo', text: 'Acme'})}})}).parts;
   near(square.box.width, square.box.height, 'a square logo is not stretched');
 });
 
 test('portrait: a logo beside text never breaks a word silently at the readability floor', () => {
   // The renderer's case: a 720 px wide portrait canvas, a header-left logo beside text, a 32 px floor.
-  const layout = (logo, text) => layoutFurniture({composition: {minFontSize: 32}}, {width: 720, height: 1280, presentation: deck({id: 'acme', name: 'Acme', logo}, {design: {header: crowded('left', {image: 'var:organization.logo', text})}})});
+  const layout = (logo, text) => layoutFurniture({composition: {minFontSize: 32}}, {width: 720, height: 1280, presentation: deck({id: 'acme', name: 'Acme', logo}, {design: {header: crowded('start', {image: 'var:organization.logo', text})}})});
   for (const logo of [png(400, 100), png(100, 100), './assets/acme.svg']) {
     const result = layout(logo, 'Keep both');
     assert.deepEqual(result.diagnostics, [], 'the words fit their share whole');
@@ -316,12 +317,12 @@ test('portrait: a logo beside text never breaks a word silently at the readabili
   }
   // A word wider than its share would break inside the word: that is text-overflow at the part, never silent.
   const long = layout(png(400, 100), 'Confidentiality');
-  assert.deepEqual(long.diagnostics.map(entry => [entry.code, entry.path]), [['text-overflow', 'design.header.left.text']]);
+  assert.deepEqual(long.diagnostics.map(entry => [entry.code, entry.path]), [['text-overflow', 'design.header.start.text']]);
   assert.match(long.diagnostics[0].message, /break inside the word/);
   assert.equal(long.overflow, true);
   // Scripts written without spaces break between characters as usual.
   assert.deepEqual(layout(png(100, 100), '東京都の会議資料です').diagnostics, []);
   // A lone text part keeps its 0.17 behavior: no new diagnostic for a long word in a single-part zone.
-  const single = layoutFurniture({composition: {minFontSize: 32}}, {width: 720, height: 1280, presentation: deck(undefined, {design: {header: {left: {text: 'Confidentiality-assessment'}}}})});
+  const single = layoutFurniture({composition: {minFontSize: 32}}, {width: 720, height: 1280, presentation: deck(undefined, {design: {header: {start: {text: 'Confidentiality-assessment'}}}})});
   assert.ok(single.diagnostics.every(entry => !/break inside the word/.test(entry.message)));
 });

@@ -16,7 +16,7 @@ import { checkFormat } from "./checks.js";
 export { LOGO_SHAPES };
 /** The backgrounds a logo shape can be split by: one image for both, or one for light and one for dark backgrounds. */
 export const LOGO_BACKGROUNDS = Object.freeze(["both", "onLight", "onDark"]);
-export const HEADER_FOOTER_ZONES = Object.freeze(["left", "center", "right"]);
+export const HEADER_FOOTER_ZONES = Object.freeze(["start", "center", "end"]);
 // Flag fields of a header/footer zone: false is stored as "absent" (so is a `date` of false).
 const ZONE_FLAGS = ["socials"];
 export const ZONE_FIELDS = Object.freeze(["text", "image", "date", "dateFormat", "socials"]);
@@ -58,10 +58,10 @@ function checkZoneField(key, value) {
 }
 
 const ENUMS = Object.freeze({
-  titleAlignment: ["left", "center", "right"],
-  contentAlignment: ["left", "center", "right"],
+  titleAlignment: ["start", "center", "end"],
+  contentAlignment: ["start", "center", "end"],
   contentDirection: ["horizontal", "vertical"],
-  chartPrimary: ["none", "top", "bottom", "left", "right"],
+  chartPrimary: ["none", "top", "bottom", "start", "end"],
   listBullet: ["character", "image", "none"],
   imageFit: ["cover", "contain", "stretch", "auto"],
 });

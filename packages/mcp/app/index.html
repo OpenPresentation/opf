@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenPresentation</title>
+<style>/*OPF_CSS*/</style>
+</head>
+<body>
+<div id="opf-deck" class="opf-ui" data-show="preview" data-ready="false">
+  <header class="deck-bar">
+    <div id="deck-title-row" class="deck-title-row"><div id="deck-title" class="deck-title"></div>
+      <div class="deck-open-wrap" id="deck-open-wrap" hidden>
+        <button type="button" id="deck-open" class="deck-button" aria-expanded="false" aria-controls="deck-open-menu">Open <span aria-hidden="true">▾</span></button>
+        <div id="deck-open-menu" class="deck-open-menu" role="group" aria-label="Open a deck" hidden>
+          <button type="button" id="deck-device" class="deck-button">Open from device…</button>
+          <button type="button" id="deck-paste" class="deck-button">Paste a deck…</button>
+          <select id="deck-example" class="deck-select" aria-label="Browse examples" hidden><option value="">Browse examples…</option></select>
+        </div>
+        <input type="file" id="deck-file" hidden>
+      </div>
+      <button type="button" id="deck-send" class="deck-button deck-send" aria-label="Ask Claude to edit…" hidden disabled><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg><span id="deck-send-label" class="deck-send-label">Ask Claude to edit…</span><span class="deck-send-short" aria-hidden="true">Ask</span></button>
+      <button type="button" id="deck-more" class="deck-button deck-icon deck-more" aria-label="More" title="More" aria-expanded="false" aria-controls="deck-menu"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></button>
+      <div id="deck-menu" class="deck-menu" role="group" aria-label="More" hidden>
+        <button type="button" class="deck-menu-item deck-menu-history" data-run="undo">Undo</button>
+        <button type="button" class="deck-menu-item deck-menu-history" data-run="redo">Redo</button>
+        <button type="button" class="deck-menu-item" data-run="find">Find and replace</button>
+        <button type="button" class="deck-menu-item" data-run="expand">Expand</button>
+        <button type="button" class="deck-menu-item" data-run="export">Export…</button>
+        <p id="deck-about" class="deck-menu-about"></p>
+      </div>
+    </div>
+    <span class="deck-break"></span>
+    <div class="deck-group" role="group" aria-label="History">
+      <button type="button" id="deck-undo" class="deck-button deck-icon" aria-label="Undo" title="Undo · Ctrl/Cmd Z" disabled><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg></button>
+      <button type="button" id="deck-redo" class="deck-button deck-icon" aria-label="Redo" title="Redo · Ctrl/Cmd Shift Z" disabled><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13"/></svg></button>
+    </div>
+    <div class="deck-tabs" role="tablist" aria-label="View">
+      <button type="button" role="tab" id="tab-preview" aria-controls="deck-panes" aria-selected="true">Preview</button>
+      <button type="button" role="tab" id="tab-source" aria-controls="deck-panes" aria-selected="false" tabindex="-1">Source</button>
+      <button type="button" role="tab" id="tab-both" aria-controls="deck-panes" aria-selected="false" tabindex="-1">Both</button>
+    </div>
+    <span class="deck-spacer"></span>
+    <div id="deck-design" class="deck-item"></div>
+    <button type="button" id="deck-find-open" class="deck-button deck-icon" aria-label="Find and replace" title="Find and replace · Ctrl/Cmd F"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
+    <div id="deck-export" class="deck-item deck-export" hidden></div>
+    <button type="button" id="deck-expand" class="deck-button deck-icon" aria-label="Expand" title="Expand" hidden><svg class="deck-expand-open" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></svg><svg class="deck-expand-close" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" x2="21" y1="10" y2="3"/><line x1="3" x2="10" y1="21" y2="14"/></svg></button>
+  </header>
+  <div role="form" id="deck-request" class="deck-request" aria-label="Request an edit" hidden>
+    <label id="deck-question" for="deck-instruction"></label>
+    <input id="deck-instruction" type="text" maxlength="7000" required autocomplete="off">
+    <button class="deck-button" type="button" id="deck-request-send">Send</button>
+    <button class="deck-button" type="button" id="deck-request-close">Cancel</button>
+    <span id="deck-sync" role="status"></span>
+  </div>
+  <p id="deck-note" class="deck-note" role="status" hidden></p>
+  <div id="deck-root" class="deck-root">
+    <div id="deck-find" class="deck-find"></div>
+    <div id="deck-panes" class="deck-panes" role="tabpanel">
+      <section id="deck-source" class="deck-source" aria-label="Deck source"></section>
+      <section class="deck-stage-col" aria-label="Slides">
+        <div id="deck-stage" class="deck-stage"><div id="deck-canvas" class="deck-canvas"></div><div id="deck-wait" class="deck-wait" role="status"><div class="deck-wait-slide" aria-hidden="true"><span></span><span></span><span></span></div><p id="deck-wait-text" class="deck-wait-text">Waiting for the deck…</p></div></div>
+        <div class="deck-row"><div id="deck-thumbs" class="deck-thumbs"></div></div>
+      </section>
+    </div>
+    <aside id="deck-review" class="deck-review" aria-label="Review" hidden>
+      <div class="deck-review-head"><span class="deck-review-title">Review</span><button type="button" id="deck-review-close" class="deck-button" aria-label="Close the review">Close</button></div>
+      <div id="deck-review-panel" class="deck-review-panel"></div>
+      <small id="deck-version"></small>
+    </aside>
+  </div>
+  <footer class="deck-foot">
+    <div id="deck-verdict" class="deck-verdict"></div>
+    <div id="deck-nav" class="deck-nav"></div>
+    <div class="deck-feedback"><span id="deck-status" class="deck-status" role="status"></span><button type="button" id="deck-edit-undo" class="deck-button" hidden>Undo</button></div>
+  </footer>
+</div>
+<script type="module">/*OPF_JS*/</script>
+</body>
+</html>

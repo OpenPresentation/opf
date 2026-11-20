@@ -121,6 +121,18 @@
         {
           "id": "playground:present-button-browser",
           "command": "node test/present-button-browser.mjs"
+        },
+        {
+          "id": "playground:icon-picker-browser",
+          "command": "node test/icon-picker-browser.mjs"
+        },
+        {
+          "id": "playground:shape-editing-browser",
+          "command": "node test/shape-editing-browser.mjs"
+        },
+        {
+          "id": "playground:shape-overlays-browser",
+          "command": "node test/shape-overlays-browser.mjs"
         }
       ]
     },
@@ -238,10 +250,6 @@
           "command": "node test/hang-indent-perf-browser.mjs"
         },
         {
-          "id": "browser:startup-perf",
-          "command": "node test/startup-perf-browser.mjs"
-        },
-        {
           "id": "browser:mobile-touch",
           "command": "node test/mobile-touch-browser.mjs"
         },
@@ -260,6 +268,10 @@
         {
           "id": "browser:workspace",
           "command": "node test/workspace-browser.mjs"
+        },
+        {
+          "id": "browser:workspace-review-navigation",
+          "command": "node test/workspace-review-navigation-browser.mjs"
         },
         {
           "id": "browser:workspace-react",
@@ -288,6 +300,10 @@
         {
           "id": "browser:source-hooks",
           "command": "node test/source-hooks-browser.mjs"
+        },
+        {
+          "id": "browser:source-refused-replace",
+          "command": "node test/source-refused-replace-browser.mjs"
         },
         {
           "id": "browser:design-menu",
@@ -342,10 +358,6 @@
           "command": "node test/studio-touch-browser.mjs"
         },
         {
-          "id": "browser:studio-perf",
-          "command": "node test/studio-perf-browser.mjs"
-        },
-        {
           "id": "browser:editor-expand",
           "command": "node test/editor-expand-browser.mjs"
         },
@@ -364,6 +376,29 @@
         {
           "id": "browser:variant-trend-fit",
           "command": "node test/variant-trend-fit-browser.mjs"
+        },
+        {
+          "id": "browser:icon-picker-studio",
+          "command": "node test/icon-picker-studio-browser.mjs"
+        }
+      ]
+    },
+    "perf": {
+      "description": "opf#1319: the tests that hold an absolute wall-clock budget (startup to first preview, Studio selection and commit at 300 slides). A budget measured on a shared runner varies by a third between runners with the same code, so they are not part of the pull-request check `verify`: nightly.yml runs this suite on Linux and Windows every night, in the release gate and under the label full-ci, and a failure opens or updates the nightly-red issue. The setup is the browser suite's (startup-perf loads artifacts/playground).",
+      "setup": [
+        "pnpm run build:deps",
+        "pnpm run build",
+        "pnpm run build:playground",
+        "pnpm run build:chrome-examples"
+      ],
+      "tests": [
+        {
+          "id": "perf:startup-perf",
+          "command": "node test/startup-perf-browser.mjs"
+        },
+        {
+          "id": "perf:studio-perf",
+          "command": "node test/studio-perf-browser.mjs"
         }
       ]
     }

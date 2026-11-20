@@ -38,7 +38,7 @@ describe("schemaAtPath", () => {
   test("finds the schema of nested members, array items and promoted regions", () => {
     assert.equal(schemaAtPath(deck, "/slides/0/text/0/bold").type, "boolean");
     assert.equal(schemaAtPath(deck, "/slides/0/blocks/0/blocks/0/text").oneOf.length, 2);
-    assert.equal(schemaAtPath(deck, "/slides/0/top:left").$ref, undefined);
+    assert.equal(schemaAtPath(deck, "/slides/0/top:start").$ref, undefined);
   });
   test("takes segments, pointers and dotted paths alike", () => {
     const pointer = schemaAtPath(deck, "/slides/0/title");

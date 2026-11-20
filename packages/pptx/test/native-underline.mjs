@@ -32,8 +32,8 @@ const cases = [
 ];
 const rich = cases.flatMap(([name, style], index) => [...(index ? [' '] : []), {text:name, ...style}]);
 const shapes = [
-  ['body-root', {text:rich}],
-  ['body-block', {blocks:[{text:rich}]}],
+  ['body-root', {subtitle:'Body', text:rich}],
+  ['body-block', {subtitle:'Body', blocks:[{text:rich}]}],
   ['body-region', {center:{text:rich}}],
   ['list-body', {items:[{text:rich}]}],
   ['list-description', {items:[{text:'List body', description:rich}]}],
@@ -75,7 +75,7 @@ for (const [name, slide] of shapes) {
   });
 }
 test('linked furniture retains explicit native underline none', {skip:registryLane ? 'Published core 0.11 does not emit linked social furniture; current candidate/source lane is mandatory.' : false}, async () => {
-  const source = {organization:{id:'acme', name:'Acme', socials:{x:'@acme'}}, design:{footer:{left:{text:'{{organization.name}}'}, right:{socials:true}}}, slides:[{text:'Body'}]};
+  const source = {organization:{id:'acme', name:'Acme', socials:{x:'@acme'}}, design:{footer:{start:{text:'{{organization.name}}'}, end:{socials:true}}}, slides:[{text:'Body'}]};
   const {entries} = await exportAndRetain('furniture-links', source);
   // RR-72: a one-slide deck draws its furniture once, on the slide master: read what the slide shows.
   const shown = parser.parse(`<shown>${shownFurniture(entries, 1).map(shape => shape.xml).join('')}</shown>`);

@@ -19,7 +19,9 @@ await build({
     contents: `
 import { createEditorSession } from ${src('index.js')};
 import { createReviewPanel } from ${src('review-panel.js')};
-window.harness = { createEditorSession, createReviewPanel };`,
+import { createOpfEditor } from ${src('workspace.js')};
+import { validate } from '@openpresentation/opf';
+window.harness = { createEditorSession, createReviewPanel, createOpfEditor, validate };`,
   },
   outfile: path.join(output, 'harness.js'), bundle: true, platform: 'browser', format: 'esm', logLevel: 'error',
 });
@@ -28,7 +30,7 @@ const server = createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
     if (url.pathname === '/' || url.pathname === '/index.html') { res.writeHead(200, { 'Content-Type': 'text/html' }).end(page); return; }
-    if (url.pathname === '/harness.js') { res.writeHead(200, { 'Content-Type': 'text/javascript' }).end(await readFile(path.join(output, 'harness.js'))); return; }
+    if (url.pathname === '/harness.js') { const body = await readFile(path.join(output, 'harness.js')); res.writeHead(200, { 'Content-Type': 'text/javascript' }).end(body); return; }
     if (url.pathname === '/favicon.ico') { res.writeHead(204).end(); return; }
     res.writeHead(404).end();
   } catch { res.writeHead(500).end(); }
@@ -97,6 +99,21 @@ try {
   assert.equal(await tab.evaluate(() => state.checks), 2, 'one check for the whole burst, not six');
   checks.push('a burst of edits runs the full check once');
 
+  // Core/list idle is distinct from workspace redraw and from a potentially slow hosted review.
+  const idle = await tab.evaluate(async () => {
+    const before = state.checks;
+    editor.set('slides.1.title', 'Awaited review');
+    let settled = false;
+    const pending = panel.whenIdle().then(() => { settled = true; });
+    await Promise.resolve();
+    const waited = !settled && state.checks === before;
+    // Rescheduling the burst must keep the existing waiter pending until the final deck/list is current.
+    editor.set('slides.1.title', 'Final awaited review');
+    await pending;
+    return { waited, checks: state.checks - before, latest: editor.get('slides.1.title'), unavailable: !panel.validation };
+  });
+  assert.deepEqual(idle, { waited: true, checks: 1, latest: 'Final awaited review', unavailable: false });
+  checks.push('whenIdle includes the rescheduled debounce, full core audit and list update');
   // --- the hook: hosted findings join core's, keyed by source --------------------------------------------------------------------------------
   await panel.locator('[data-action="run-review"]').click();
   await tab.waitForFunction(() => document.querySelectorAll('.opf-review-item[data-source="pptx.dev/review"]').length === 2);
@@ -143,6 +160,112 @@ try {
   await tab.waitForTimeout(250);
   assert.doesNotMatch(await panel.locator('.opf-review-meta[role="status"]').textContent(), /Running/, 'the run was dropped, not left spinning');
   checks.push('an edit during a hosted review drops that run');
+
+  const released = await tab.evaluate(async () => {
+    panel.schedule();
+    const pending = panel.whenIdle();
+    panel.destroy();
+    await pending;
+    await panel.whenIdle();
+    return !document.querySelector('.opf-review');
+  });
+  assert.equal(released, true, 'destroy releases pending core-idle waiters without running a stale audit');
+  checks.push('destroy releases a pending idle waiter and removes the panel');
+  // The real workspace resource gate invalidates geometry for every pending resource class, even though
+  // the host measurement/catalog identity and earlier slides stay unchanged. This managed handle models
+  // prepared resource completion; it does not claim real font/icon/diagram fidelity.
+  const resourceEpochs = await tab.evaluate(async () => {
+    const host = document.createElement('div'), slot = document.createElement('div');
+    document.body.append(host, slot);
+    let pending = [], factor = 0.2, nextFactor = factor;
+    const loaded = [], events = [];
+    const fonts = {
+      textMeasurement: { measure: (text, size) => text.length * size * factor },
+      pending: () => [...pending],
+      ensure: async () => { await Promise.resolve(); loaded.push(...pending); pending = []; factor = nextFactor; },
+    };
+    const documentValue = { name: 'Resource epochs', language: 'en-US', slides: [
+      { id: 'unchanged-first', title: 'Long earlier content', subtitle: 'Same input', composition: { minFontSize: 24, maxFontSize: 24 }, blocks: [{ text: 'Complete authored word '.repeat(130) }, { text: 'Second complete block' }] },
+      { id: 'changed-last', title: 'Later slide', subtitle: 'Gate trigger', text: 'Content' },
+    ] };
+    const workspace = window.harness.createOpfEditor(host, { document: documentValue, fonts, catalogs: [], slots: { review: slot }, panels: { canvas: false }, review: { delay: 1 }, on: { fonts: event => events.push(event.state) } });
+    await workspace.ready;
+    await workspace.whenIdle();
+    await workspace.review.whenIdle();
+    const rows = [{ resource: 'initial', actual: workspace.review.validation, cold: window.harness.validate(workspace.session.snapshot().presentation, { catalogs: [], fonts }) }];
+    for (const [resource, width] of [['icons:test', 3], ['shape:presets', 0.2], ['diagram:flowchart', 4]]) {
+      pending = [resource]; nextFactor = width;
+      workspace.session.set('slides.1.title', resource);
+      await workspace.whenIdle();
+      await workspace.review.whenIdle();
+      rows.push({ resource, actual: workspace.review.validation, cold: window.harness.validate(workspace.session.snapshot().presentation, { catalogs: [], fonts }) });
+    }
+    workspace.destroy(); host.remove(); slot.remove();
+    return { rows, loaded, events };
+  });
+  assert.deepEqual(resourceEpochs.loaded, ['icons:test', 'shape:presets', 'diagram:flowchart']);
+  assert.deepEqual(resourceEpochs.events, ['loading', 'ready', 'loading', 'ready', 'loading', 'ready']);
+  for (const row of resourceEpochs.rows) assert.deepEqual(row.actual, row.cold, `${row.resource}: full settled report equals fresh review`);
+  const firstSlideFacts = row => row.actual.findings.filter(finding => finding.slide === 0);
+  assert.notDeepEqual(firstSlideFacts(resourceEpochs.rows[0]), firstSlideFacts(resourceEpochs.rows[1]), 'the resource epoch materially changes earlier geometry-dependent findings');
+  assert.notDeepEqual(firstSlideFacts(resourceEpochs.rows[1]), firstSlideFacts(resourceEpochs.rows[2]), 'returning to narrow measurement restores the corresponding fresh findings');
+  checks.push('workspace invalidates unchanged earlier geometry after icons, shapes and diagram resource preparation');
+  // A resource call may commit an earlier package/metadata epoch before rejecting a later one.
+  // A different complete document then has nothing pending, so successful-loading invalidation alone is insufficient.
+  const partialResourceFailure = await tab.evaluate(async () => {
+    const host = document.createElement('div'), slot = document.createElement('div');
+    document.body.append(host, slot);
+    let pending = [], factor = 0.2, ensureCalls = 0;
+    const events = [], errors = [], committed = [];
+    const fonts = {
+      textMeasurement: { measure: (text, size) => text.length * size * factor },
+      pending: () => [...pending],
+      ensure: async () => {
+        ensureCalls++;
+        await Promise.resolve();
+        committed.push(pending[0]);
+        pending = [];
+        factor = 3;
+        throw Object.assign(new Error('Owned later resource failure after a committed epoch'), { code: 'owned-resource-failure', details: { loaded: ['shape:partial'], failed: [{ package: 'diagram:later', code: 'owned-resource-failure' }] } });
+      },
+    };
+    const documentValue = { name: 'Partial resource failure', language: 'en-US', slides: [
+      { id: 'unchanged-first', title: 'Long earlier content', subtitle: 'Same input', composition: { minFontSize: 24, maxFontSize: 24 }, blocks: [{ text: 'Complete authored word '.repeat(130) }, { text: 'Second complete block' }] },
+      { id: 'changed-last', title: 'Later slide', subtitle: 'Gate trigger', text: 'Content' },
+    ] };
+    const workspace = window.harness.createOpfEditor(host, { document: documentValue, fonts, catalogs: [], slots: { review: slot }, panels: { canvas: false }, review: { delay: 1 }, on: { fonts: event => events.push(event.state) }, onError: error => errors.push({ code: error.code, cause: error.cause?.code }) });
+    await workspace.ready;
+    await workspace.whenIdle();
+    await workspace.review.whenIdle();
+    const before = workspace.review.validation;
+    pending = ['shape:partial', 'diagram:later'];
+    workspace.session.set('slides.1.title', 'Temporary failing content');
+    await workspace.whenIdle();
+    await workspace.review.whenIdle();
+    const failed = { errors: [...errors], events: [...events] };
+    // Remove the failed new content rather than retrying it: the surviving document is already resource-complete.
+    workspace.session.set('slides.1.title', 'Recovered complete document');
+    await workspace.whenIdle();
+    await workspace.review.whenIdle();
+    const actual = workspace.review.validation;
+    const cold = window.harness.validate(workspace.session.snapshot().presentation, { catalogs: [], fonts });
+    workspace.review.invalidate();
+    workspace.review.schedule();
+    await workspace.review.whenIdle();
+    const explicitCold = workspace.review.validation;
+    const completePending = fonts.pending();
+    workspace.destroy(); host.remove(); slot.remove();
+    return { before, actual, cold, explicitCold, failed, events, errors, ensureCalls, committed, completePending };
+  });
+  assert.equal(partialResourceFailure.ensureCalls, 1, 'the complete recovery document does not retry the failed resource');
+  assert.deepEqual(partialResourceFailure.committed, ['shape:partial']);
+  assert.deepEqual(partialResourceFailure.completePending, []);
+  assert.deepEqual(partialResourceFailure.failed, { errors: [{ code: 'fonts-unavailable', cause: 'owned-resource-failure' }], events: ['loading', 'error'] });
+  assert.deepEqual(partialResourceFailure.events, ['loading', 'error'], 'pending=[] recovery adds no loading-to-ready event');
+  assert.deepEqual(partialResourceFailure.explicitCold, partialResourceFailure.cold, 'explicitly invalidated review agrees with the actual public cold validator');
+  assert.notDeepEqual(partialResourceFailure.before.findings.filter(finding => finding.slide === 0), partialResourceFailure.cold.findings.filter(finding => finding.slide === 0), 'the partial epoch materially changed an unchanged earlier slide');
+  assert.deepEqual(partialResourceFailure.actual, partialResourceFailure.cold, 'settled complete recovery must not retain pre-failure composition');
+  checks.push('failed partial resource preparation invalidates earlier geometry before a different complete document settles');
 
   assert.deepEqual(problems, [], 'no page errors');
   console.log(`Review hook (browser): ${checks.length} checks. ${checks.join('; ')}.`);

@@ -116,6 +116,15 @@ try {
   // The active item: aria-current and the accent ring, following the navigator and a click.
   const current = () => page.locator('#thumb-strip .opf-thumbs-item[aria-current="true"] .opf-thumbs-index').allTextContents();
   assert.deepEqual(await current(), ['02'], 'the slide on the canvas is the active item');
+  // aria-current and SVG readiness are synchronous; the accent ring has a CSS color transition.
+  // Observe its settled paint state rather than sampling its initial transparent frame.
+  await page.waitForFunction(() => {
+    const items = [...document.querySelectorAll('#thumb-strip .opf-thumbs-item')];
+    const frames = items.map(item => item.querySelector('.opf-thumbs-frame'));
+    return items[1]?.getAttribute('aria-current') === 'true'
+      && getComputedStyle(frames[0]).outlineColor !== getComputedStyle(frames[1]).outlineColor
+      && frames.every(frame => frame.getAnimations().every(animation => animation.transitionProperty !== 'outline-color' || animation.playState === 'finished'));
+  }, undefined, { timeout: 15000 });
   const ring = await items.nth(1).locator('.opf-thumbs-frame').evaluate((node) => getComputedStyle(node).outlineStyle + ' ' + getComputedStyle(node).outlineWidth);
   assert.equal(ring, 'solid 2px', 'the active thumbnail has a 2px ring');
   const quiet = await items.nth(0).locator('.opf-thumbs-frame').evaluate((node) => getComputedStyle(node).outlineColor);

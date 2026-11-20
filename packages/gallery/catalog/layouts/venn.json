@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "venn",
+  "name": "Venn",
+  "summary": "One to seven overlapping sets, with one short label per set.",
+  "tags": [
+    "Groups of items"
+  ],
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "sets",
+      "accepts": [
+        "list"
+      ],
+      "role": "primary",
+      "flow": "none",
+      "arrangement": "venn"
+    }
+  ],
+  "description": "Show overlap among 1 to 7 sets using one flat list of short labels. The list order identifies the sets; no overlap values are implied. One to four sets have labels inside the circles, and five to seven beside them. Long labels, nested entries or unsupported counts retain the complete list with a finding instead of shrinking the text.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/venn.svg"
+  }
+}

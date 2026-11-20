@@ -7,6 +7,8 @@
 //   node scripts/quarantine.mjs check-all             `check` for the repository root and every packages/<x> that has a test/quarantine.json
 //                                                     (run from the repository root: the root script `check:quarantine`)
 //   node scripts/quarantine.mjs run-suite <suite>     run a suite's setup and tests in order; quarantined tests are deferred
+//                                                     (--shard i/n runs one CI shard, balanced by the suite's seconds in
+//                                                     scripts/ci-test-weights.json when it has them, opf#1319)
 //   node scripts/quarantine.mjs run-deferred          run the deferred tests (always-run, continue-on-error step) and report them
 //   node scripts/quarantine.mjs playwright-grep       print the regular expression of the active quarantined Playwright tests
 //                                                     (empty when none): `playwright test --grep-invert "$re"` is the gate,
@@ -21,6 +23,7 @@ import { spawn } from 'node:child_process';
 import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { driftReport } from './ci-test-weights.mjs';
 import { spawnSpec } from './package-manager.mjs';
 
 export const MAX_DAYS = 14;
@@ -195,10 +198,45 @@ export function parseShard(text) {
   return { index, count };
 }
 
-/** The tests of shard `shard` of `tests`: every `count`-th test starting at the shard's index, so the shards together run each test once, in order. */
-export const shardTests = (tests, shard) => (shard ? tests.filter((_, position) => position % shard.count === shard.index - 1) : tests);
+/** Seconds a browser test without a weight is planned at (about the median of the editor's suites). */
+export const DEFAULT_SUITE_WEIGHT = 20;
 
-export async function runSuite(name, state, shard = null) {
+/**
+ * opf#1319: the seconds per test of a package's suite (`browser-suites` / package / suite in scripts/ci-test-weights.json, written
+ * from a full run's job logs by scripts/ci-test-weights.mjs), or null when there are none. The package is the name of the package
+ * directory (`editor` for packages/editor).
+ */
+export function suiteWeights(pkg, suite, file = path.join(path.dirname(fileURLToPath(import.meta.url)), 'ci-test-weights.json')) {
+  if (!existsSync(file)) return null;
+  const table = JSON.parse(readFileSync(file, 'utf8'))['browser-suites']?.[pkg]?.[suite];
+  return table && Object.keys(table).length ? table : null;
+}
+
+/**
+ * The tests of shard `shard` of `tests`, so the shards together run each test once, each shard in the suite's order. With `weights`
+ * (seconds per test id) the shards are balanced longest first onto the lightest shard (a test without a weight counts
+ * DEFAULT_SUITE_WEIGHT); without, every `count`-th test starting at the shard's index.
+ */
+export function shardTests(tests, shard, weights = null) {
+  if (!shard) return tests;
+  if (!weights) return tests.filter((_, position) => position % shard.count === shard.index - 1);
+  const loads = Array.from({ length: shard.count }, () => 0);
+  const mine = new Set();
+  const order = tests.map((test, position) => ({ test, position, weight: weights[test.id] ?? DEFAULT_SUITE_WEIGHT }));
+  order.sort((a, b) => b.weight - a.weight || a.position - b.position);
+  for (const item of order) {
+    let target = 0;
+    for (let index = 1; index < shard.count; index++) if (loads[index] < loads[target]) target = index;
+    loads[target] += item.weight;
+    if (target === shard.index - 1) mine.add(item.test);
+  }
+  return tests.filter((test) => mine.has(test));
+}
+
+/** The seconds `weights` plan for `tests` (DEFAULT_SUITE_WEIGHT for a test without one). */
+export const plannedSuiteSeconds = (tests, weights) => tests.reduce((sum, test) => sum + (weights?.[test.id] ?? DEFAULT_SUITE_WEIGHT), 0);
+
+export async function runSuite(name, state, shard = null, weights = null) {
   const definition = state.suites.suites[name];
   if (!definition) throw new Error(`No suite "${name}" in the suites file (have: ${Object.keys(state.suites.suites).join(', ')}).`);
   for (const command of definition.setup ?? []) {
@@ -209,7 +247,10 @@ export async function runSuite(name, state, shard = null) {
   const honoured = new Set(state.active);
   const deferred = [];
   let failure = 0;
-  for (const test of shardTests(definition.tests, shard)) {
+  const mine = shardTests(definition.tests, shard, weights);
+  const ran = [];
+  let measured = 0;
+  for (const test of mine) {
     if (honoured.has(test.id)) {
       console.log(`\n> ${test.id}: quarantined, deferred to the non-blocking step`);
       annotate('notice', 'Quarantined test deferred', `${test.id} runs in the non-blocking quarantine step.`);
@@ -217,12 +258,19 @@ export async function runSuite(name, state, shard = null) {
       continue;
     }
     console.log(`\n> ${test.id}: ${test.command}`);
+    const started = performance.now();
     const { code } = await runArgv(splitCommand(test.command));
+    measured += (performance.now() - started) / 1000;
+    ran.push(test);
     if (code !== 0) {
       // By default a failure stops the suite, like `a && b`. A suite with "continueOnFailure" runs the rest and fails at the end.
       if (!definition.continueOnFailure) return code || 1;
       failure ||= code || 1;
     }
+  }
+  // opf#1319: a weighted shard reports the seconds its weights planned against the seconds it took (a warning when stale).
+  if (shard && weights && !failure) {
+    for (const line of driftReport(`${name} shard ${shard.index}/${shard.count}`, plannedSuiteSeconds(ran, weights), measured)) console.log(line);
   }
   if (deferred.length) {
     mkdirSync(quarantineDirectory(), { recursive: true });
@@ -322,7 +370,8 @@ export async function main(argv) {
     // An expired or malformed entry is not honoured: its test runs as a gate (the check step reports the entry).
     const state = loadState(files);
     for (const error of state.errors) annotate('error', 'Test quarantine', error);
-    return runSuite(rest[0], state, options.shard ? parseShard(options.shard) : null);
+    const shard = options.shard ? parseShard(options.shard) : null;
+    return runSuite(rest[0], state, shard, shard ? suiteWeights(path.basename(process.cwd()), rest[0]) : null);
   }
   if (command === 'run-deferred') return runDeferred(loadState(files));
   if (command === 'playwright-grep') {

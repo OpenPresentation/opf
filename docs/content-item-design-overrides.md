@@ -11,7 +11,7 @@ Current principle: root slide payload fields and promoted region payloads should
 ```jsonc
 {
   "title": "Revenue",
-  "left": {
+  "start": {
     "text": "Revenue grew 28%",
     "design": {
       "text": {

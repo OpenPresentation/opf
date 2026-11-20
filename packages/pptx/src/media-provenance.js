@@ -50,10 +50,22 @@ function resolvedSource(value, assets) {
   return source;
 }
 
-/** The caption the placeholder shows: title, else source, else "Media". */
-export function mediaCaption(value) {
-  const asset = typeof value === 'string' ? {src: value} : object(value) ? value : {src: ''};
-  return asset.title || asset.src || 'Media';
+/**
+ * The caption the placeholder shows: title, else source, else "Media". RR-105: an `asset:` reference is followed through `assets` (the
+ * fields the value writes win over the registry entry's, as the preview layers them), so the caption is the asset's title, never its id;
+ * a reference that does not resolve shows "Media".
+ */
+export function mediaCaption(value, assets = {}) {
+  let asset = typeof value === 'string' ? {src: value} : object(value) ? value : {src: ''};
+  const seen = new Set();
+  while (typeof asset.src === 'string' && asset.src.startsWith('asset:')) {
+    const id = asset.src.slice(6);
+    if (seen.has(id) || !object(assets) || !Object.hasOwn(assets, id)) break;
+    seen.add(id);
+    const {src: _source, ...overrides} = asset, entry = assets[id];
+    asset = {...(typeof entry === 'string' ? {src: entry} : object(entry) ? entry : {src: ''}), ...overrides};
+  }
+  return asset.title || (typeof asset.src === 'string' && !asset.src.startsWith('asset:') ? asset.src : '') || 'Media';
 }
 
 /**
@@ -201,7 +213,7 @@ export function importMediaGroups(shapes, paragraphs, relationships, entries, sl
       else if (!captions.every(member => typeof member.record.fingerprint === 'string' && mediaTextFingerprint(text(member)) === member.record.fingerprint)) reason = 'its caption text was edited or exact caption evidence is missing';
       // Line evidence is not authentication: bind the stored authored title
       // to exact current characters and validated boundaries as well.
-      else if (caption !== mediaCaption(frame.record.video)) reason = 'its stored caption disagrees with current native text';
+      else if (caption !== mediaCaption(frame.record.video, frame.record.assets ?? {})) reason = 'its stored caption disagrees with current native text';
       else if (!href && caption !== source) reason = 'its source has no current native hyperlink or source caption';
       else {
         const conflict = Object.entries(frame.record.assets ?? {}).some(([id, asset]) => Object.hasOwn(registry, id) && canonical(registry[id]) !== canonical(asset));

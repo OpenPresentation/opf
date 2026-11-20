@@ -223,7 +223,8 @@ test('S5 scenarios against the real `pnpm --filter "...[base]"`', { skip: pnpmAv
     }
     // The plan's S5 table, spelled out, so a graph change that keeps both sides equal still has to be deliberate.
     const expected = {
-      'editor-only': ['editor'],
+      // The MCP server bundles the editor into its deck view, so an editor change also tests it.
+      'editor-only': ['editor', 'mcp'],
       'CLI-only': ['cli', 'mcp'],
       renderer: ['render', 'pptx', 'editor', 'cli', 'mcp', 'integration'],
       PPTX: ['pptx', 'editor', 'cli', 'mcp', 'integration'],
@@ -263,7 +264,7 @@ test('root-owned paths: pnpm selects only the root project, so the path map deci
 
 test('tiers: changed packages run full, dependents contract, the rest skip', () => {
   const editor = targetScope(['packages/editor/src/a.js']);
-  assert.deepEqual(tiersOf(editor), { editor: 'full' }, 'an editor-only change does not select integration');
+  assert.deepEqual(tiersOf(editor), { editor: 'full', mcp: 'contract' }, 'an editor-only change selects the MCP server (its deck view bundles the editor), not integration');
   assert.equal(editor.tier, 'leaf');
   assert.equal(editor.jobs.goldens, 'skip');
   assert.equal(editor.jobs['gallery-gates'], 'skip');
@@ -414,8 +415,9 @@ test('legs: every package has a plan for both tiers, a skipped job has no legs, 
     assert.deepEqual(legsFor(id, 'full').map((leg) => leg.name), [id], `${id} has one leg named like the job`);
   }
   assert.deepEqual(legsFor('render', 'full').map((leg) => leg.name), ['render (tests 1/4)', 'render (tests 2/4)', 'render (tests 3/4)', 'render (tests 4/4)', 'render (browser)']);
-  assert.deepEqual(legsFor('editor', 'full').map((leg) => leg.name), ['editor (tests 1/2)', 'editor (tests 2/2)', 'editor (playground 1/4)', 'editor (playground 2/4)', 'editor (playground 3/4)', 'editor (playground 4/4)', 'editor (browser 1/3)', 'editor (browser 2/3)', 'editor (browser 3/3)']);
-  assert.deepEqual(legsFor('pptx', 'contract').map((leg) => `${leg.index}/${leg.count}`), ['1/4', '2/4', '3/4', '4/4']);
+  assert.deepEqual(legsFor('editor', 'full').map((leg) => leg.name), ['editor (tests 1/2)', 'editor (tests 2/2)', 'editor (playground 1/4)', 'editor (playground 2/4)', 'editor (playground 3/4)', 'editor (playground 4/4)', 'editor (browser 1/4)', 'editor (browser 2/4)', 'editor (browser 3/4)', 'editor (browser 4/4)']);
+  assert.deepEqual(legsFor('pptx', 'full').map((leg) => leg.name), ['pptx (tests 1/6)', 'pptx (tests 2/6)', 'pptx (tests 3/6)', 'pptx (tests 4/6)', 'pptx (tests 5/6)', 'pptx (tests 6/6)', 'pptx (browser)']);
+  assert.deepEqual(legsFor('pptx', 'contract').map((leg) => `${leg.index}/${leg.count}`), ['1/5', '2/5', '3/5', '4/5', '5/5']);
   assert.deepEqual(legsFor('lint', 'full').map((leg) => leg.name), ['lint (static)', 'lint (checks 1/2)', 'lint (checks 2/2)']);
   assert.deepEqual(legsFor('core', 'full').map((leg) => leg.name), ['core'], 'the old check names are kept');
 });
@@ -431,7 +433,7 @@ test('a leg carries everything the matrix job needs, and its id is unique', () =
   }
   assert.equal(new Set(all.map((leg) => leg.id)).size, all.length, 'ids are unique');
   assert.equal(new Set(all.map((leg) => leg.name)).size, all.length, 'and so are the check names');
-  assert.deepEqual([...new Set(all.filter((leg) => leg.browser).map((leg) => leg.job))], ['render', 'pptx', 'editor', 'goldens'], 'the Playwright image jobs');
+  assert.deepEqual([...new Set(all.filter((leg) => leg.browser).map((leg) => leg.job))], ['mcp', 'render', 'pptx', 'editor', 'goldens'], 'the Playwright image jobs');
   assert.deepEqual(all.filter((leg) => leg.job === 'core').map((leg) => [leg.buildDeps, leg.buildAlso, leg.reuse]), [['@openpresentation/opf', '@openpresentation/opf-render @openpresentation/opf-pptx', true]]);
 });
 
@@ -439,14 +441,21 @@ test('legs follow the decision: only jobs that run have legs, forced runs have e
   const jobsOf = (decision) => [...new Set(decision.legs.map((leg) => leg.job))];
   const engine = targetScope(['packages/render/src/a.js']);
   assert.deepEqual(jobsOf(engine), ['lint', 'cli', 'mcp', 'render', 'pptx', 'editor', 'integration', 'goldens', 'gallery-gates', 'pack-shape']);
-  assert.deepEqual(jobsOf(targetScope(['packages/editor/src/a.js'])), ['lint', 'editor', 'pack-shape'], 'an editor-only change runs no cli, integration, goldens or gallery leg');
+  assert.deepEqual(jobsOf(targetScope(['packages/editor/src/a.js'])), ['lint', 'mcp', 'editor', 'pack-shape'], 'an editor-only change runs no cli, integration, goldens or gallery leg (the MCP server bundles the editor)');
   assert.equal(engine.legs.filter((leg) => leg.job === 'render').length, 5);
   assert.equal(engine.legs.filter((leg) => leg.job === 'lint').length, 3, 'lint always has its legs');
-  assert.equal(engine.legs.filter((leg) => leg.job === 'pptx').length, 4, 'a dependent runs its contract suite in four shards');
+  assert.equal(engine.legs.filter((leg) => leg.job === 'pptx').length, 5, 'a dependent runs its contract suite in five shards');
   assert.equal(engine.legs.some((leg) => leg.job === 'gallery' || leg.job === 'core' || leg.job === 'audit'), false);
   const forced = targetScope(['scripts/anything.mjs']);
   assert.equal(forced.legs.filter((leg) => leg.job === 'render').length, 5);
-  assert.equal(forced.legs.filter((leg) => leg.job === 'editor').length, 9);
+  // opf#1319: the editor's playground legs run when the editor itself changed, not in a forced run (nightly.yml runs them).
+  assert.deepEqual(forced.legs.filter((leg) => leg.job === 'editor').map((leg) => leg.kind), ['tests', 'tests', 'browser', 'browser', 'browser', 'browser']);
+  assert.deepEqual(targetScope(['docs/programs/a.md'], { labels: ['full-ci'] }).legs.filter((leg) => leg.kind === 'playground'), [], 'the label full-ci runs them in full-ci.yml');
+  assert.deepEqual(targetScope(['docs/programs/a.md'], { event: 'push' }).legs.filter((leg) => leg.kind === 'playground'), []);
+  for (const files of [['packages/editor/src/a.js'], ['packages/editor/test/browser-suites.json', 'scripts/a.mjs']]) {
+    assert.deepEqual(targetScope(files).legs.filter((leg) => leg.job === 'editor').map((leg) => leg.kind), ['tests', 'tests', 'playground', 'playground', 'playground', 'playground', 'browser', 'browser', 'browser', 'browser'], files.join());
+  }
+  assert.equal(targetScope(['packages/javascript/src/a.ts']).legs.some((leg) => leg.kind === 'playground'), false, 'a dependent never ran them');
   assert.equal(forced.legs.filter((leg) => leg.job === 'gallery').length, 1);
   assert.deepEqual(jobsOf(forced), JOB_ORDER.filter((job) => job !== 'audit'), 'every job but the audit');
   const docs = targetScope(['docs/programs/monorepo/README.md']);

@@ -16,9 +16,9 @@ const runsText = value => typeof value === 'string' ? value : Array.isArray(valu
   ? value.map(run => typeof run === 'string' ? run : isObject(run) && typeof run.text === 'string' ? run.text : '').join('') : '';
 const cellText = cell => Array.isArray(cell) ? runsText(cell) : isObject(cell) ? (Object.hasOwn(cell, 'value') ? (Array.isArray(cell.value) || typeof cell.value === 'string' ? runsText(cell.value) : String(cell.value ?? '')) : typeof cell.name === 'string' ? cell.name : '') : cell == null ? '' : String(cell);
 
-// The payloads of a slide in reading order: its promoted regions (top row first, then left to right), its blocks (groups
+// The payloads of a slide in reading order: its promoted regions (top row first, then start to end), its blocks (groups
 // depth first) or the slide itself.
-const REGIONS = ['top:left', 'top', 'top:right', 'left', 'center', 'right', 'bottom:left', 'bottom', 'bottom:right'];
+const REGIONS = ['top:start', 'top', 'top:end', 'start', 'center', 'end', 'bottom:start', 'bottom', 'bottom:end'];
 function payloads(slide) {
   const out = [];
   const walk = block => {

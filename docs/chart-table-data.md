@@ -7,6 +7,7 @@ Status: RR-54 (release readiness). Additive schema plus one behaviour fix (stric
 Recorded 2026-10-05 for the owner, who asked for all five recommendations of the chart/table data review at once:
 
 1. **One strict chart number rule in core.** The preview read `"12%"` as a gap and `"1e6"` as 1000000; the exporter stripped every non-numeric character (`"1e6"` became 16, `"(5)"` became 5, `"Q1"` became 1). Both engines now call core `chartNumber`, which follows the existing data-import rule. A string that is not a strict decimal number is a gap in both engines and a `chart-value-not-numeric` warning, never a guessed value. Decks whose chart cells held `"12%"` or `"$5"` export a gap where they used to export 12 or 5.
+   How a gap draws (RR-105): a line breaks; an unstacked area ends at the points beside the gap and stands on the axis there, so a point with gaps on both sides draws no area; a stacked or 100% stacked area keeps the gap's layer at zero thickness, so the layers above still rest on the running total. A gap has no data label. The PPTX export writes the gap as an omitted `c:pt` with `c:dispBlanksAs val="gap"` on line and area charts (before 0.34 it wrote `span`, so PowerPoint joined a line across the gap while the preview broke it).
 2. **`ChartDataSource` is removed from the schema.** No engine resolved it ([opf#240](https://github.com/OpenPresentation/opf/issues/240), descoped), so the format-audit program (FA-07, 2026-10-06) deleted it, with its `chart-data-source-unresolved` warning. A future data-resolver design re-adds it when it is built. Inline data records where it came from with `data.source`, which engines never read.
 3. **Number formats use the variables syntax.** One pattern language for `NumberVariable.format`, column formats and cell formats. Core converts it to an Excel format code for the PPTX export and back on import.
 4. **Datasets are top-level and shared.** A chart or a table references one with `{ "dataset": "<id>" }`. Core inlines references before composition, so the engines keep plotting and laying out inline data.
@@ -18,7 +19,7 @@ A document that uses none of the new fields validates, previews and exports byte
 
 ### Number formats
 
-`NumberFormat` is a string with the `NumberVariable.format` syntax: an optional literal prefix, a numeric part made of `#`, `0`, `,` (grouping) and `.` (decimals), and an optional literal suffix. A `%` in the prefix or suffix multiplies the value by 100. Examples: `#,##0`, `0.0%`, `$#,##0.00`, `#,##0 units`. An invalid pattern is a `number-format-invalid` error. A format applies only to number values; strings, booleans, `null` and rich runs display unchanged.
+`NumberFormat` is a string with the `NumberVariable.format` syntax: an optional literal prefix, a numeric part made of `#`, `0`, `,` (grouping) and `.` (decimals), and an optional literal suffix. A `%` in the prefix or suffix multiplies the value by 100. Sections: a format is one to three `;`-separated sections, `positive;negative;zero`, each a pattern as above, with Excel's meaning. With one section every number uses it (a negative number prints a leading `-`). With two, the first formats positive numbers and zero and the second negative numbers; with three, the third formats zero. A negative section formats the absolute value and prints no minus of its own, so its literal text carries the sign: `"+0%;-0%"` shows `+12%` and `-5%`, and `"0;(0)"` shows `(5)`. As in Excel the section is chosen by the value's sign, not by its rounded text, so `-0.4` under `"0;(0)"` shows `(0)`; only an exact zero takes the third section. Four or more sections, an empty section or a section without a numeric part is a `number-format-invalid` error. There is no text section, no color (`[Red]`) and no condition (`[>100]`). The PPTX export writes the sections as the same Excel sections. A waterfall whose column format has sections shows every bar, steps and totals, through that format and adds no sign of its own (`"+0.0;(0.0)"` gives `+4.5` and `(2.5)`; the native labels carry the sections as written); without sections a step still gets `+` or `−`. A title's percent ("20%") names a value through the section that formats it. Examples: `#,##0`, `0.0%`, `$#,##0.00`, `#,##0 units`. An invalid pattern is a `number-format-invalid` error. A format applies only to number values; strings, booleans, `null` and rich runs display unchanged.
 
 Two spellings display differently in Excel, so prefer the alternatives in charts that are exported: optional decimals only (`0.##`) show a whole number as `5` in core and the preview but as `5.` (with a trailing point) in Excel, and an all-`#` integer part (`#`, `#,###`) shows zero as `0` in core but as nothing in Excel. Use `0.0#`-style decimals with at least one `0`, or a whole-number format, and an integer part that ends in `0`.
 
@@ -44,7 +45,7 @@ A body cell's own format wins over the column's.
 
 ```json
 "table": {
-  "columns": ["Region", { "name": "Revenue", "format": "$#,##0.0" }, { "value": "Growth", "style": { "align": "right" }, "format": "0%" }],
+  "columns": ["Region", { "name": "Revenue", "format": "$#,##0.0" }, { "value": "Growth", "style": { "align": "end" }, "format": "0%" }],
   "rows": [["EMEA", 8.2, 0.4], ["APAC", 6.1, { "value": 0.52, "format": "0.0%" }]]
 }
 ```
@@ -98,11 +99,12 @@ Some data does not fit the chart type it is written for. Core's `chartDrawPlan(c
 | Data | Drawn as | PPTX |
 | --- | --- | --- |
 | `world` over category labels of which fewer than half are places (`isPlaceLabel`: CLDR region names in English and the deck language, upper-case region codes, US states, Canadian provinces, Australian states, common aliases) | clustered columns of every series (`map-as-columns`) | a `c:barChart`, in every `chartex` mode |
+| `pareto` of two or more numeric series (a Pareto chart sorts one series and draws its cumulative share; LH-175) | clustered columns of every series in data order (`pareto-as-columns`) | a `c:barChart`, in every `chartex` mode |
 | `box-and-whisker` with one value per category (no label repeats, two rows or more) | one box per series: the rows form one group named after the category column (`box-per-series`) | the chartex box-and-whisker with that one category |
 | `pie` or `doughnut` of several series | a doughnut of nested rings, the first series innermost, each ring colored by category and named on its largest slice (`nested-rings`; LH-92, see chart-options.md) | one `c:doughnutChart` with a `c:ser` per series, each naming its series in one `c:dLbl` |
 | `scatter` whose X column holds no number | every series against the category position 1, 2, 3, ...; the X column is not drawn (`scatter-by-position`) | X values 1 to n |
 
-The PPTX export reports a fallback as `chart-data-adapted` with `adaptation: 'chart-fallback'` and records the authored data, so `fromPptx` restores it (a pie of several series imports as a doughnut). A construct that plots one series (treemap, histogram and Pareto with categories, waterfall, funnel, a map of places, a one-series pie) still draws the first; `validate` names the others, and a scatter X column without numbers, in the warning `opf/chart-series-dropped` (`chartDrawDiagnostics`).
+The PPTX export reports a fallback as `chart-data-adapted` with `adaptation: 'chart-fallback'` and records the authored data, so `fromPptx` restores it (a pie of several series imports as a doughnut). A construct that plots one series (treemap, histogram with categories, a Pareto chart of one numeric series, waterfall, funnel, a map of places, a one-series pie) still draws the first; `validate` names the others, and a scatter X column without numbers, in the warning `opf/chart-series-dropped` (`chartDrawDiagnostics`).
 
 ## Core runtime API
 
@@ -209,6 +211,8 @@ All three engines read core's functions when they exist and fall back to their p
 ### PPTX import (opf-pptx)
 
 - **With provenance:** `datasets` is restored before document provenance validates. A frame's dataset reference, `mapping`, formats and `source` are restored only while the cache hash still matches. If PowerPoint (or a person) changed the values, the native values import and a diagnostic says why, such as `chart-data-provenance-changed` or `table-dataset-unavailable`. The hash compares format codes in core's canonical form (`fromExcelNumberFormat`), so PowerPoint's re-spellings on save (`\$#,##0.0` for `$#,##0.0`, `#,##0\ "units"` for `#,##0 "units"`, native check [opf#385](https://github.com/OpenPresentation/opf/pull/385)) still match; a General code counts as no code.
+
+Decorative ChartEx titles are excluded from chart-data evidence. A plain PowerPoint save can rewrite a title from `cx:rich` to `cx:txData/cx:v` without changing the data. That rewrite, or a display-caption rename, keeps an unchanged chart's authored data form; it must not introduce a synthetic `Row` column. The cached categories, numeric values, series names and number formats still control whether provenance can restore the authored form.
 - **Without provenance:** a cache `formatCode` that `fromExcelNumberFormat` maps back becomes that column's `{ name, format }`, for both classic and chartex charts. Core returns the canonical spelling, such as `#,##0 units` for `#,##0 "units"`. Other codes are reported as `chart-number-format-adapted` and never invented.
 - **Cached values:** these follow the strict rule as well. XML decimal forms (`+5`, `.5`, `007`) are numbers; anything else is a gap with a diagnostic, never a stripped number or 0.
 

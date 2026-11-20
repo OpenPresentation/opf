@@ -1,8 +1,8 @@
 // RR-64 phase 2: outlined text is shaped by HarfBuzz, the browser's shaper. Checked here over the 30 script corpora: every drawn
 // glyph of an outlined sample has HarfBuzz's glyph id and pen position (an independent harfbuzzjs shaping of the same text, face
 // and language); fontkit, which the layout measures with, differs on several of them (so shaping with it would not draw what the
-// browser draws); a run with no pinned width whose HarfBuzz and fontkit advances differ stays text; and text in a face whose fsType
-// restricts embedding stays text. Both fallbacks are reported as `text-as-paths-fallback` with their reason.
+// browser draws); a run is outlined with or without a pinned width; and text in a face whose fsType restricts embedding stays text,
+// reported as `text-as-paths-fallback` with its reason.
 import assert from 'node:assert/strict';
 import * as hb from 'harfbuzzjs';
 import { loadCorpora, loadFaces } from '../scripts/script-corpora.mjs';
@@ -18,7 +18,7 @@ const SIZE = 25;
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const outline = (family, text, lang, rtl, extra = '') => {
   const diagnostics = [];
-  const { content } = fonts.outlines.outlineSlideText([`<text x="10" y="50" font-family="${family}" font-size="${SIZE}"${lang ? ` lang="${lang}"` : ''}${rtl ? ' direction="rtl"' : ''} xml:space="preserve"${extra}>${escape(text)}</text>`], { fail: (code, message) => new Error(message), report: (diagnostic) => diagnostics.push(diagnostic) });
+  const { content } = fonts.outlines.outlineSlideText([`<text x="10" y="50" font-family="${family}" font-size="${SIZE}"${lang ? ` lang="${lang}"` : ''}${rtl ? ' direction="rtl" text-anchor="end"' : ''} xml:space="preserve"${extra}>${escape(text)}</text>`], { fail: (code, message) => new Error(message), report: (diagnostic) => diagnostics.push(diagnostic) });
   return { markup: content[0], diagnostics };
 };
 // The drawn glyphs of an outlined element, left to right: gid and position in pixels (each run's transform plus its <use> offsets).
@@ -71,15 +71,18 @@ for (const group of corpora.groups ?? corpora) {
   }
 }
 assert.ok(compared >= 120, `${compared} corpus samples compared (${skipped} skipped)`);
-assert.ok(divergent >= 5, `fontkit picks other glyphs than HarfBuzz on ${divergent} samples: ${divergentSamples}`);
+// fontkit 2 picked other glyphs on at least ten samples; fontkit 3 fixed most of them, so one is enough to show the gate tells the shapers apart.
+assert.ok(divergent >= 1, `fontkit picks other glyphs than HarfBuzz on ${divergent} samples: ${divergentSamples}`);
 
-// A run with no pinned width whose HarfBuzz and fontkit advances differ stays text; with a textLength it is outlined, scaled to it.
+// A run is outlined with no pinned width and inside a textLength (scaled to it). fontkit 2 had no Myanmar shaper, so its unpinned
+// Myanmar run, whose fontkit and HarfBuzz advances differed, stayed text ("shaping"); fontkit 3 measures every bundled face and corpus
+// sample like HarfBuzz, so that fallback is gone.
 {
   const face = faces.find((candidate) => candidate.scripts.includes('Mymr') && candidate.weight === 400);
   const text = corpora.groups.find((group) => group.script === 'Mymr').samples.find((sample) => sample.id === 'mymr-words').text;
   const free = outline(face.family, text, 'my', false);
-  assert.match(free.markup, /<text [^>]*textLength="[\d.]+" lengthAdjust="spacingAndGlyphs"[^>]*>/, 'the unpinned Myanmar run stays text, pinned to the measured width');
-  assert.deepEqual(free.diagnostics.map((diagnostic) => [diagnostic.code, diagnostic.reason]), [['text-as-paths-fallback', 'shaping']]);
+  assert.ok(/<use href="#opf-g-/.test(free.markup), 'the unpinned Myanmar run is outlined: fontkit 3 and HarfBuzz measure it alike');
+  assert.deepEqual(free.diagnostics, []);
   const pinned = outline(face.family, text, 'my', false, ' textLength="420" lengthAdjust="spacingAndGlyphs"');
   assert.ok(/<use href="#opf-g-/.test(pinned.markup) && [...pinned.markup.matchAll(/<text\b[^>]*>/g)].every(([tag]) => / fill="none"/.test(tag)), 'inside a textLength the run is outlined (only the invisible readable line is text)');
   assert.deepEqual(pinned.diagnostics, []);
@@ -96,4 +99,4 @@ assert.ok(divergent >= 5, `fontkit picks other glyphs than HarfBuzz on ${diverge
   assert.match(content[0], /<text [^>]*font-family="Locked"[^>]*>Private<\/text>/, 'text in a restricted face stays text');
   assert.deepEqual(diagnostics.map((diagnostic) => [diagnostic.code, diagnostic.reason]), [['text-as-paths-fallback', 'restricted']]);
 }
-console.log(`Text as paths, scripts: ${compared} corpus samples outlined with HarfBuzz's glyphs and positions (${skipped} mixed or multi-face samples skipped); fontkit differs on ${divergent} (${divergentSamples.join(', ')}); unpinned divergent runs and restricted faces stay text.`);
+console.log(`Text as paths, scripts: ${compared} corpus samples outlined with HarfBuzz's glyphs and positions (${skipped} mixed or multi-face samples skipped); fontkit differs on ${divergent} (${divergentSamples.join(', ')}); restricted faces stay text.`);

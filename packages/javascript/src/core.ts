@@ -36,6 +36,7 @@ export {
   findValidationRule,
   validate,
   validateCatalogRecord,
+  createValidator,
   validationCategories,
   validationRules,
 } from "./validator.js";
@@ -49,6 +50,8 @@ export type {
   ValidationRuleCost,
   ValidationRuleInfo,
   ValidationThresholds,
+  Validator,
+  ValidationCacheInfo,
 } from "./validator.js";
 
 export {
@@ -98,6 +101,12 @@ export type {
 } from "./spec-files.js";
 
 export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Fonts, LayoutDiagnostic, ComposeSlideOptions } from "./composition.js";
+// Browsers and edge runtimes load each diagram type on demand: a host that validates or draws diagrams there awaits ensureDiagrams first.
+export { diagramsPending, ensureDiagrams } from "./diagram.js";
+// SH-02: and the preset geometry the first time a deck has a shape block or a picture mask beyond rect, roundRect, ellipse and hexagon.
+export { ensureShapes, shapesPending } from "./shape-block.js";
+// LH-14: a host registers icon sets as loaders (the gallery's sets load on first use): it awaits ensureIcons before validating or drawing.
+export { embedIcons, ensureIcons, iconsPending, parseIconReference, resolveIcon, nearIconNames, type IconOptions, type IconReference, type IconResolution, type IconSetRecord, type ResolvedIcon } from "./icons.js";
 
 // OPF 0.15 catalogs: references, the one resolution rule, and the authoring helpers (FA-20).
 export {
@@ -124,7 +133,7 @@ export type {
   ResolvedReference,
   UnresolvedReferenceDiagnostic,
 } from "./catalog-refs.js";
-export { CATALOG_SCHEMA, catalogDisplayKinds, catalogSchemaNames } from "./catalog-schemas.js";
+export { CATALOG_SCHEMA, catalogDisplayKinds, catalogIconKinds, catalogSchemaNames } from "./catalog-schemas.js";
 export type { CatalogDisplayKind, CatalogRecordKind } from "./catalog-schemas.js";
 export { copySlides, embed, moveToCustom, OPFMoveToCustomError, sameRecord, updateFromCatalog } from "./catalog-helpers.js";
 export type { CatalogPatchOperation, CatalogRecordChange, CatalogRef, CatalogUpdate, CopiedRecordRename, CopySlidesResult, EmbedResult, EmbeddedRecord, MovedRecord, MoveToCustomErrorCode, MoveToCustomPatchOperation, MoveToCustomResult } from "./catalog-helpers.js";
@@ -172,6 +181,9 @@ export type { DeckFormat, ParseOptions, StringifyOptions } from './deck.js';
 
 export { parseTabularData, ingest, OPFDataImportError } from './data.js';
 export type { DataCell, TabularData, ImportedChartData, ImportedChartType, ImportedTable, ImportedChart, DataImportOptions, IngestOptions } from './data.js';
+// LH-106: the numbering system and number text of the language in effect (one path for every number the engines generate).
+export { formatNumber, formatPercentNumber, localizeDigits, numberLocale, numberingSystemOf, numberingSystemExtension, isSupportedNumberingSystem, supportedNumberingSystems, plainLanguageTag, languageInEffect, numeralScripts, asciiDigits } from './numerals.js';
+export type { NumberLocale } from './numerals.js';
 // RR-54: chart and table data: strict numbers, number formats and Excel codes, datasets, series mapping.
 export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
 // LH-60: how a chart is drawn when its data does not fit its type (map, box, pie and scatter fallbacks; series a type cannot plot).

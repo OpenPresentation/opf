@@ -24,6 +24,8 @@ import { createRichTextInput } from "./rich-text-input.js";
 import { textInputOffsetAtPoint } from "./text-pointer.js";
 import { createRichTextToolbar } from "./rich-text-toolbar.js";
 import { createImageCropper } from "./image-cropper.js";
+import { createShapeHandles } from "./shape-handles.js";
+import { createOverlayTools } from "./overlay-tools.js";
 import { FONTS_PENDING, fontGate, fontsPendingError, whenFontsReady } from "./font-gate.js";
 import { checkFormat, firstErrorMessage } from "./checks.js";
 import { createCanvasPages } from "./canvas-pages.js";
@@ -128,9 +130,11 @@ export function createCanvasEditor(container, options = {}) {
   notice.style.cssText =
     "position:absolute;left:8px;bottom:8px;max-width:calc(100% - 16px);font:12px/1.4 system-ui;background:#fff8ed;color:#875217;border:1px solid #ead5b3;border-radius:5px;padding:6px 10px;z-index:4";
   notice.hidden = true;
+  // The hover outline is for a pointer that hovers: a touch screen keeps :hover on the last element touched (a scroll that started on the
+  // title), which would look like a selection nobody made.
   const style = doc.createElement("style");
   style.textContent =
-    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas [data-opf-trend-arrow]{cursor:pointer}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus,.opf-canvas .opf-selection:focus{outline:none}.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection,.opf-canvas .opf-selection:focus-visible{stroke:#7765d0}.opf-canvas [data-canvas-target][data-canvas-editing]>.opf-selection{stroke:none}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
+    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas [data-opf-trend-arrow]{cursor:pointer}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus,.opf-canvas .opf-selection:focus{outline:none}@media (hover:hover){.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection,.opf-canvas .opf-selection:focus-visible{stroke:#7765d0}.opf-canvas [data-canvas-target][data-canvas-editing]>.opf-selection{stroke:none}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
   root.append(style, preview, overlay, notice);
   container.replaceChildren(root);
   // LH-99: a slide the export continues on further pages (LH-90) is edited as written; the indicator names its pages and previews each
@@ -188,6 +192,25 @@ export function createCanvasEditor(container, options = {}) {
     onCommit: value => options.onCommit?.(value),
     onCancel: value => { clearNotice(); options.onCancel?.(value); },
   });
+  // SH-06: the adjust handles of a selected preset shape (the yellow diamonds); each drag is one undoable change.
+  const shapeHandles = options.shapeTools === false ? null : createShapeHandles(root, {
+    editor, render: renderFor, beforeEdit: commit,
+    isTextEditing: () => active?.kind === "text" || active?.kind === "rich-text",
+    clearError: clearNotice, onError: report,
+    onDraft: value => options.onDraft?.(value),
+    onCommit: value => options.onCommit?.(value),
+    onCancel: value => { clearNotice(); options.onCancel?.(value); },
+  });
+  // SH-06 part B: move and resize an overlay shape, and draw a connector between two blocks or overlays.
+  const overlayTools = options.shapeTools === false ? null : createOverlayTools(root, {
+    editor, render: renderFor, beforeEdit: commit,
+    isTextEditing: () => active?.kind === "text" || active?.kind === "rich-text",
+    select: path => choose(path),
+    clearError: clearNotice, onError: report,
+    onDraft: value => options.onDraft?.(value),
+    onCommit: value => options.onCommit?.(value),
+    onCancel: value => { clearNotice(); options.onCancel?.(value); },
+  });
   const blockControls = createBlockControls(root, {
     editor, render: renderFor, beforeEdit: () => {if(!commit())return false;richToolbar.hide();return true;}, enabled: () => layoutHandles.enabled,
     isEditing: () => !!active || !!layoutHandles.editingPath, slideIndex: () => slideIndex,
@@ -215,6 +238,8 @@ export function createCanvasEditor(container, options = {}) {
   function choose(path) {
     selectedPath = path;
     imageCropper?.sync(path);
+    shapeHandles?.sync(path);
+    overlayTools?.sync(path);
     for (const node of targets())
       node.toggleAttribute(
         "data-canvas-selected",
@@ -249,6 +274,8 @@ export function createCanvasEditor(container, options = {}) {
     fontsShown = true;
     const size = preview.firstElementChild?.getBoundingClientRect?.().height || 0;
     layoutHandles.hide();
+    shapeHandles?.hide();
+    overlayTools?.hide();
     blockControls.hide();
     richToolbar.hide();
     const box = doc.createElement("div");
@@ -484,6 +511,8 @@ export function createCanvasEditor(container, options = {}) {
     if (targetMode === "passive")
       for (const node of svg.querySelectorAll("[tabindex]")) node.setAttribute("tabindex", "-1");
     layoutHandles.update(presentation, geometry);
+    shapeHandles?.update(presentation, geometry);
+    overlayTools?.update(presentation, geometry);
     blockControls.update(presentation, geometry);
     imageCropper?.update();
     if (active?.kind === "text") positionInput();
@@ -574,7 +603,13 @@ export function createCanvasEditor(container, options = {}) {
       rootRect = root.getBoundingClientRect();
     const viewBox = svg.viewBox.baseVal,
       scale = svgRect.width / viewBox.width;
-    const font = win.getComputedStyle(text),
+    const allText = target.querySelectorAll("text");
+    // LH-181: a string drawn as runs (LH-63's run-in heading: its first line or "Label:" bold) draws one `text` per run of each line and
+    // none for a blank line. The textarea spans every traced line (data-opf-rich-lines) and takes the body's face (the last run; the
+    // heading is always the first), so the browser's own word and line hit-testing (a double click, a click on any line) matches the
+    // drawn text instead of falling through to the slide below a short textarea.
+    const richLines = target.hasAttribute("data-opf-rich-text") ? JSON.parse(target.getAttribute("data-opf-rich-lines") ?? "[]") : [];
+    const font = win.getComputedStyle(richLines.length && allText.length ? allText[allText.length - 1] : text),
       fontSize = parseFloat(font.fontSize),
       geometry = resolvePresentation(
         active.draft ?? editor.presentation,
@@ -589,11 +624,15 @@ export function createCanvasEditor(container, options = {}) {
     const timelinePart=geometry.items.find(item=>item.timelineLayout?.parts.some(part=>part.path===active.path))?.timelineLayout?.parts.find(part=>part.path===active.path);
     const furniturePart=geometry.furniture?.parts.find(part=>part.type==='text'&&part.path===active.path);
     const internalPart=metricPart??timelinePart??furniturePart;
-    const allText = target.querySelectorAll("text");
     const lineHeight = internalPart?.fit?.lineHeight ?? (
-      allText.length > 1
+      richLines.length > 1 ? richLines[1].y - richLines[0].y
+      : richLines.length ? richLines[0].height
+      : allText.length > 1
         ? Number(allText[1].getAttribute("y")) - Number(text.getAttribute("y"))
         : fontSize * 1.22);
+    const lineCount = richLines.length || allText.length;
+    // The traced lines' whole extent, paragraph spacing included, so the textarea reaches the last drawn line.
+    const richExtent = richLines.length ? richLines.at(-1).y + richLines.at(-1).height - richLines[0].y : 0;
     const canvas = doc.createElement("canvas"),
       ctx = canvas.getContext("2d");
     ctx.font = `${font.fontStyle} ${font.fontWeight} ${fontSize}px ${font.fontFamily}`;
@@ -601,10 +640,12 @@ export function createCanvasEditor(container, options = {}) {
       ascent = metrics.fontBoundingBoxAscent ?? fontSize * 0.9,
       descent = metrics.fontBoundingBoxDescent ?? fontSize * 0.2;
     const baseline = ascent + (lineHeight - ascent - descent) / 2;
-    const x = Number(text.getAttribute("x")),
+    // opf#1322: a tracked display line measured with real faces is start-anchored at its own x; the renderer then names its alignment
+    // and anchor point in data-opf-anchor and data-opf-anchor-x.
+    const x = Number(text.getAttribute("data-opf-anchor-x") ?? text.getAttribute("x")),
       y = Number(text.getAttribute("y")) - baseline;
     const bounds = target.getBBox(),
-      anchor = text.getAttribute("text-anchor");
+      anchor = text.getAttribute("data-opf-anchor") ?? text.getAttribute("text-anchor");
     const tracedWidth = Number(target.getAttribute("data-opf-box-width"));
     const width = split?.width ?? internalPart?.box.width ?? item?.box.width ?? (tracedWidth > 0 ? tracedWidth : Math.max(80, bounds.width + 20));
     const left = internalPart?.box.x ?? (anchor === "middle" ? x - width / 2 : anchor === "end" ? x - width : x);
@@ -619,7 +660,7 @@ export function createCanvasEditor(container, options = {}) {
       caretColor: font.fill,
       textAlign: furniturePart?.alignment ?? timelinePart?.alignment ?? metricLayout?.alignment ?? (anchor === "middle" ? "center" : anchor === "end" ? "right" : "left"),
       width: `${width * scale}px`,
-      height: `${Math.max(lineHeight, allText.length * lineHeight) * scale + 2}px`,
+      height: `${Math.max(lineHeight, lineCount * lineHeight, richExtent) * scale + 2}px`,
       minHeight: "0",
       letterSpacing: font.letterSpacing,
     });
@@ -730,6 +771,10 @@ export function createCanvasEditor(container, options = {}) {
     }
     const target = getTarget(path),
       text = target?.querySelector("text");
+    // SH-06: a shape's outline is selected, not edited as text: its adjust handles show on it and the shape section of the design controls edits it.
+    if (/\.shape$/.test(path) && typeof value === "string") return;
+    // An overlay shape or connector of the slide's `shapes` is selected the same way: its tools are the frame and the Selected shape section.
+    if (/\.shapes\.\d+$/.test(path) && value && typeof value === "object") return;
     if (
       (typeof value === "string" || typeof value === "number") &&
       text &&
@@ -834,6 +879,21 @@ export function createCanvasEditor(container, options = {}) {
       active.input = active.rich.input;
       if (entry?.point) active.rich.pointerStart(entry.point);
     } else openProperties(path, value);
+
+    if (options.titleEnterCommits && /^slides\.\d+\.title$/.test(path) && active?.input) {
+      const hint = doc.createElement("span");
+      hint.className = "opf-title-key-hint";
+      hint.textContent = "Enter to finish · Shift+Enter for a new line";
+      overlay.append(hint);
+      active.input.setAttribute("aria-description", hint.textContent);
+      active.input.addEventListener("keydown", event => {
+        if (event.key !== "Enter" || event.shiftKey || event.ctrlKey || event.metaKey || event.altKey ||
+            event.isComposing || active?.composing || active?.rich?.composing || event.keyCode === 229) return;
+        event.preventDefault();
+        event.stopPropagation();
+        commit();
+      });
+    }
   }
   function propertyPatches(edit) {
     return edit.inputs.map(({ field, input }) => ({
@@ -887,7 +947,7 @@ export function createCanvasEditor(container, options = {}) {
         input.type = "checkbox";
         input.checked = field.value;
       } else {
-        // Mermaid source is several lines of code: more rows, a monospace face and no spell check.
+        // Diagram source (Mermaid, DOT or PlantUML) is several lines of code: more rows, a monospace face and no spell check.
         const source = isDiagramSource(field);
         input.rows = field.type === "number" ? 1 : source ? 8 : 2;
         input.value = field.value === null ? "null" : String(field.value);
@@ -1101,6 +1161,8 @@ export function createCanvasEditor(container, options = {}) {
     slideIndex = index;
     selectedPath = null;
     imageCropper?.sync(null);
+    shapeHandles?.sync(null);
+    overlayTools?.sync(null);
     pages?.close();
     renderFor();
     return true;
@@ -1175,6 +1237,8 @@ export function createCanvasEditor(container, options = {}) {
     win.visualViewport?.removeEventListener("resize", keepEditVisible);
     richToolbar.destroy();
     layoutHandles.destroy();
+    shapeHandles?.destroy();
+    overlayTools?.destroy();
     blockControls.destroy();
     if (frame) win.cancelAnimationFrame(frame);
     root.remove();
@@ -1195,6 +1259,18 @@ export function createCanvasEditor(container, options = {}) {
     get layoutEditing() { return layoutHandles.enabled; },
     /** True while the crop layer is open. */
     get cropping() { return !!imageCropper?.isOpen; },
+    /** True while the canvas is picking the two ends of a connector. */
+    get connecting() { return !!overlayTools?.connecting; },
+    /**
+     * SH-06: draw a connector between two blocks or overlay shapes: click the start, then the end (Esc cancels). `route` is straight (default), elbow or curved;
+     * `stroke` the line (`{ end: { type: "triangle" } }`); `onStatus(message)` hears the prompts. Returns `{ cancel(), done }`, `done` resolving with the change (or null).
+     */
+    connect(connectOptions) {
+      if (!overlayTools) return { cancel() {}, done: Promise.resolve(null) };
+      if (!commit()) return { cancel() {}, done: Promise.resolve(null) };
+      richToolbar.hide();
+      return overlayTools.connect(connectOptions);
+    },
     /** Open the crop layer for the picture at `path` (an image block or a slide's `image`). `tool: "focus"` starts with the focal point. */
     cropImage(path, cropOptions) {
       if (!imageCropper) return Promise.resolve(false);
@@ -1257,6 +1333,8 @@ export function createCanvasEditor(container, options = {}) {
       imageCropper?.destroy();
       richToolbar.destroy();
       layoutHandles.destroy();
+      shapeHandles?.destroy();
+      overlayTools?.destroy();
       blockControls.destroy();
       pages?.destroy();
       pictures?.dispose();

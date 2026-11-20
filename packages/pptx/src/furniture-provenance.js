@@ -1,7 +1,8 @@
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag, encodeTextTag, groupUnchanged} from './code-provenance.js';
+import {currentTag, currentTags, upgradeTag} from './legacy-tags.js';
 import {sourceLineParagraphs} from './text-provenance.js';
-import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, isBuiltinTemplate, mentionsSlideToken, parseDate, slideNumberTemplate} from './furniture-fields.js';
+import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, dateFormatOfField, isBuiltinTemplate, mentionsSlideToken, parseDate, slideNumberTemplate} from './furniture-fields.js';
 import {schemas} from '@openpresentation/opf';
 import {resolveLogo} from '@openpresentation/opf/composition';
 import {mediaKey} from './media-dedupe.js';
@@ -16,10 +17,9 @@ const NS = 'http://schemas.openxmlformats.org/presentationml/2006/main';
 const enc = new TextEncoder(), dec = new TextDecoder('utf-8', {fatal: true});
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
-const kinds = ['header', 'footer'], zones = ['left', 'center', 'right'];
+const kinds = ['header', 'footer'], zones = ['start', 'center', 'end'];
 const fields = ['text', 'image', 'socials', 'date'];
 const settings = ['dateFormat'];
-const dateFormatForField = Object.fromEntries(Object.entries(NATIVE_DATE_FIELDS).map(([format, type]) => [type, format]));
 // Platform keys follow the Socials schema's propertyNames pattern exactly, so
 // every key a valid document can carry re-imports (and nothing else does).
 const platformId = new RegExp(schemas.presentation.$defs.Socials.propertyNames.pattern, 'u'), schemes = ['', 'https://'];
@@ -127,7 +127,7 @@ export function furnitureManifest(presentation, slide, layout, slideIndex, stati
 }
 
 export function attachFurnitureTags(entries, records, manifests) {
-  attachTextTags(entries, records, TAG, 'opfFurniture', 'furniture', {pictures: true, signed: true});
+  attachTextTags(entries, currentTags(records), TAG, 'opfFurniture', 'furniture', {pictures: true, signed: true});
   const types = [];
   for (const [path, manifest] of manifests) {
     const part = `ppt/tags/opfFurnitureSlide${manifest.group}.xml`;
@@ -141,7 +141,7 @@ export function attachFurnitureTags(entries, records, manifests) {
     check(!entries[part] && xml.includes('</p:spTree>'), 'Missing slide tree or colliding furniture tag part.');
     xml = xml.replace('</p:spTree>', `</p:spTree><p:custDataLst><p:tags r:id="${id}"/></p:custDataLst>`);
     rels = rels.replace('</Relationships>', `<Relationship Id="${id}" Type="${REL}" Target="../tags/opfFurnitureSlide${manifest.group}.xml"/></Relationships>`);
-    entries[part] = enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${TAG}" val="${encodeTextTag(manifest)}"/></p:tagLst>`);
+    entries[part] = enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${TAG}" val="${encodeTextTag(currentTag(manifest))}"/></p:tagLst>`);
     entries[path] = enc.encode(xml);
     entries[relPath] = enc.encode(rels);
     types.push(`<Override PartName="/${part}" ContentType="application/vnd.openxmlformats-officedocument.presentationml.tags+xml"/>`);
@@ -188,7 +188,7 @@ export function stampFurnitureImageKeys(entries, manifests, names, relationships
     }
     const part = `ppt/tags/opfFurnitureSlide${manifest.group}.xml`;
     if (!entries[part]) throw Error('Missing furniture tag part.');
-    entries[part] = enc.encode(dec.decode(entries[part]).replace(/\bval="[^"]*"/, () => `val="${encodeTextTag(manifest)}"`));
+    entries[part] = enc.encode(dec.decode(entries[part]).replace(/\bval="[^"]*"/, () => `val="${encodeTextTag(currentTag(manifest))}"`));
   }
 }
 
@@ -341,7 +341,7 @@ function inheritedRecords(context, entries) {
         if (array(container?.['p:tags']).length && result.tags.length !== 1 && result.ambiguous) damaged[on] = true;
         for (const tag of result.tags) {
           let data;
-          try { data = decodeTextTag(tag.val); } catch { damaged[on] = true; continue; }
+          try { data = upgradeTag(decodeTextTag(tag.val), 'furniture'); } catch { damaged[on] = true; continue; }
           if (result.ambiguous || data?.v !== 1 || typeof data.slot !== 'string' || data.role !== type) { damaged[on] = true; continue; }
           const slot = `${on}|${data.slot}`;
           records.set(slot, [...(records.get(slot) ?? []), {type, index, data}]);
@@ -365,7 +365,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
       if (type === 'text' && result.tags.length) taggedText.add(index);
       for (const tag of result.tags) try {
         check(!result.ambiguous, 'Multiple identities on a furniture shape.');
-        records.push({type, index, data: decodeTextTag(tag.val)});
+        records.push({type, index, data: upgradeTag(decodeTextTag(tag.val), 'furniture')});
       } catch { invalidRecord = true; }
     }
   }
@@ -374,7 +374,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
   let manifest;
   try {
     check(!tags.ambiguous && tags.tags.length === 1 && !invalidRecord, 'Missing or ambiguous furniture manifest/shape tags.');
-    manifest = withSharedParts(decodeTextTag(tags.tags[0].val));
+    manifest = withSharedParts(upgradeTag(decodeTextTag(tags.tags[0].val), 'furniture'));
     validateManifest(manifest);
     for (const record of records) {
       const data = record.data, part = manifest.parts[data?.part];
@@ -484,7 +484,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
 // Otherwise the current words import as a literal date.
 function importedDate(flag, format, text, nativeFields, zone, marker, ordered, paragraphs, report) {
   if (flag === true) {
-    const pattern = nativeFields.length === 1 && nativeFields[0].text === text ? dateFormatForField[nativeFields[0].type] : undefined;
+    const pattern = nativeFields.length === 1 && nativeFields[0].text === text ? dateFormatOfField(nativeFields[0].type, nativeFields[0].lang) : undefined;
     if (pattern) {
       if (format.dateFormat !== undefined || pattern !== DEFAULT_DATE_FORMAT) zone.dateFormat = pattern;
       return true;
@@ -568,6 +568,23 @@ export function importFurniture(contexts, entries, onDiagnostic, {sections = [],
       // Every slide's inherited definition lost the same native placeholder (the dialog's Apply to All): the deck's footer changed.
       result.design[kind] = candidates[0][kind].value;
       candidates.forEach((slide, index) => delete result.slides[index].design[kind]);
+    }
+  }
+  // RR-102: Insert > Header & Footer changed the footers of a deck that had one (Apply to All of a date, a slide's footer turned on,
+  // one slide's text retyped) so that no deck value is left that every inheriting slide agrees on: the footer most slides now share
+  // (two or more) is the deck's footer again, and every other slide keeps its own.
+  const footers = candidates.map(slide => slide.footer);
+  if (result.design.footer === undefined && footers.some(candidate => candidate?.scope === 'global' || candidate?.derived) &&
+    footers.some(candidate => candidate && candidate.pristine !== true)) {
+    const counts = new Map();
+    for (const candidate of footers) if (candidate && candidate.value !== false) {
+      const found = counts.get(canonical(candidate.value)) ?? {value: candidate.value, count: 0};
+      counts.set(canonical(candidate.value), {...found, count: found.count + 1});
+    }
+    const best = [...counts.entries()].sort((a, b) => b[1].count - a[1].count)[0];
+    if (best && best[1].count >= 2) {
+      result.design.footer = best[1].value;
+      footers.forEach((candidate, index) => { if (candidate && candidate.value !== false && canonical(candidate.value) === best[0]) delete result.slides[index].design.footer; });
     }
   }
   // A deck with no OPF footer provenance (PowerPoint's Header & Footer dialog, another tool): the footer most slides share is the

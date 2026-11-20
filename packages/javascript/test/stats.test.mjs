@@ -31,7 +31,7 @@ const deck = () => ({
     dimensions: { widthInches: 10, heightInches: 5 },
     watermark: "asset:wm",
     background: { type: "image", src: "./bg.jpg" },
-    header: { left: { image: "var:organization.logo.icon" }, right: { text: "Confidential" } },
+    header: { start: { image: "var:organization.logo.icon" }, end: { text: "Confidential" } },
     footer: { center: { text: "{{slide.number}}", date: true } },
   },
   variables: {
@@ -63,15 +63,15 @@ const deck = () => ({
       caption: "Figure 1",
     },
     {
-      id: "s3", section: "Main", design: { fontScheme: "aptos", header: false, footer: { left: { text: "x" } }, background: "./s.jpg" },
+      id: "s3", section: "Main", design: { fontScheme: "aptos", header: false, footer: { start: { text: "x" } }, background: "./s.jpg" },
       blocks: [
         { image: "asset:pic" },
         { image: { src: "./decor.png", alt: "" } },
         { image: "./noalt.png" },
         { blocks: [{ bullets: ["One two", { text: "Three" }] }, { code: { source: "const a = 1;", language: "ts" } }] },
       ],
-      left: { chart: { type: "column", data: { columns: ["A", "B"], rows: [["x", 1]], source: { src: "./c.csv" } } } },
-      right: { chart: { type: "pie", data: { dataset: "sales" } } },
+      start: { chart: { type: "column", data: { columns: ["A", "B"], rows: [["x", 1]], source: { src: "./c.csv" } } } },
+      end: { chart: { type: "pie", data: { dataset: "sales" } } },
       "bottom": { table: { dataset: "sales" } },
     },
     {
@@ -245,7 +245,7 @@ describe("stats: citations, variables, header/footer, fonts, colours", () => {
   });
 
   test("describes header and footer at deck level and per slide", () => {
-    assert.deepEqual(result.headerFooter.header, { configured: true, suppressed: false, zones: ["left", "right"], fields: ["image", "text"] });
+    assert.deepEqual(result.headerFooter.header, { configured: true, suppressed: false, zones: ["start", "end"], fields: ["image", "text"] });
     assert.deepEqual(result.headerFooter.footer, { configured: true, suppressed: false, zones: ["center"], fields: ["text", "date"] });
     assert.deepEqual(result.headerFooter.slides, { headerOverrides: 0, headerSuppressed: 1, footerOverrides: 1, footerSuppressed: 0 });
   });

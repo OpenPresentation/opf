@@ -12,6 +12,10 @@ export interface DeckTitleLabels {
   label?: string;
   /** The placeholder shown while the deck has no name. Default: "Untitled presentation". */
   placeholder?: string;
+  /** The text of the button that commits the name being edited. Default: "Save". */
+  save?: string;
+  /** The text of the button that drops it. Default: "Cancel". */
+  cancel?: string;
 }
 export interface DeckTitleRename {
   /** The new trimmed name; `""` when the name was removed. */
@@ -32,6 +36,11 @@ export interface DeckTitleOptions {
   density?: "comfortable" | "touch";
   labels?: DeckTitleLabels;
   /**
+   * The element the field stretches over while the name is edited (the row the title sits in), or a function returning it. Its other children
+   * are hidden meanwhile and it keeps its height. Default: the nearest ancestor of the container with `data-opf-title-row`, else the container's parent.
+   */
+  row?: HTMLElement | null | (() => HTMLElement | null | undefined);
+  /**
    * Called before a rename is applied. Return `false` to stop it (the workspace uses this to commit an open canvas edit first and stops
    * when that fails). The typed text stays in the field.
    */
@@ -46,6 +55,11 @@ export interface DeckTitle {
   readonly element: HTMLElement;
   /** The text field. */
   readonly input: HTMLInputElement;
+  /** The Save and Cancel buttons, shown only while the name is edited. */
+  readonly saveButton: HTMLButtonElement;
+  readonly cancelButton: HTMLButtonElement;
+  /** An edit is open: focusing or typing in the field opens it; Enter or Save commits, Escape or Cancel reverts. Leaving the field and its buttons never commits: it closes an edit whose name is unchanged and keeps typed text open. */
+  readonly editing: boolean;
   setDensity(density: "comfortable" | "touch"): void;
   /** Disabled shows the name as text, like read-only; any typed text is dropped. */
   setDisabled(disabled: boolean): void;

@@ -42,7 +42,7 @@ export async function listFontDirectories(directories: string[], label = "--font
  * routes to, with lazy faces loaded on demand), visual substitution, and Noto script packages for the scripts the
  * deck's text draws when they are installed. `faces` are the --fonts files, loaded first.
  */
-export async function prepareFonts(renderer: Renderer, presentation: unknown, userFonts: string[], reporter: Reporter, embedScriptFonts = false): Promise<PreparedFonts> {
+export async function prepareFonts(renderer: Renderer, presentation: unknown, userFonts: string[], reporter: Reporter, embedScriptFonts = false, renderOptions?: Record<string, unknown>): Promise<PreparedFonts> {
 	try {
 		const handle = await renderer.fonts.loadFonts({
 			pack: "office",
@@ -50,8 +50,9 @@ export async function prepareFonts(renderer: Renderer, presentation: unknown, us
 			scripts: "auto",
 			embedScriptFonts,
 			presentation,
+			...(renderOptions ? { renderOptions } : {}),
 			faces: userFonts.map((file) => ({ path: file })),
-			onDiagnostic: (diagnostic: Diagnostic) => reporter.add("fonts", scriptDiagnostic(diagnostic)),
+			onDiagnostic: (diagnostic: Diagnostic) => reporter.add("fonts", diagnostic),
 		});
 		return { handle, userFonts };
 	} catch (error) {
@@ -88,15 +89,15 @@ const shared = new Map<string, SharedEntry>();
  * a handle prepared for it and the shared one hold the same faces, so the bytes are the same. Any other deck, or a
  * renderer without `autoScriptSelection`, gets undefined and the caller prepares a handle of its own (`prepareFonts`).
  */
-export async function leaseSharedFonts(renderer: Renderer, presentation: unknown, userFonts: string[], reporter: Reporter, embedScriptFonts = false): Promise<FontsLease | undefined> {
-	const select = (renderer.fonts as { autoScriptSelection?: (presentation: unknown) => { detected?: unknown[]; scripts?: unknown[]; unavailable?: unknown[] } }).autoScriptSelection;
+export async function leaseSharedFonts(renderer: Renderer, presentation: unknown, userFonts: string[], reporter: Reporter, embedScriptFonts = false, renderOptions?: Record<string, unknown>): Promise<FontsLease | undefined> {
+	const select = (renderer.fonts as { autoScriptSelection?: (presentation: unknown, options?: Record<string, unknown>) => { detected?: unknown[]; scripts?: unknown[]; unavailable?: unknown[] } }).autoScriptSelection;
 	if (typeof select !== "function") return undefined;
-	const selection = select(presentation);
+	const selection = select(presentation, renderOptions);
 	if (selection.detected?.length || selection.scripts?.length || selection.unavailable?.length) return undefined;
 	const key = JSON.stringify([userFonts, embedScriptFonts]);
 	let entry = shared.get(key);
 	if (!entry) {
-		// The diagnostics of the one preparation (already worded by prepareFonts), repeated into each export's report.
+		// The diagnostics of the one preparation (already worded by the renderer), repeated into each export's report.
 		const diagnostics: Diagnostic[] = [];
 		const sink = { add: (_source: string, diagnostic: Diagnostic) => void diagnostics.push(diagnostic) } as unknown as Reporter;
 		const ready = prepareFonts(renderer, NEUTRAL_DECK, userFonts, sink, embedScriptFonts).then((prepared) => ({ handle: prepared.handle, diagnostics }));
@@ -115,20 +116,16 @@ export async function leaseSharedFonts(renderer: Renderer, presentation: unknown
 		release = resolve;
 	});
 	await previous;
-	const pending = (handle as { pending?: (presentation: unknown) => string[] }).pending;
-	if (typeof pending === "function" && pending.call(handle, presentation).length) {
-		release();
-		return undefined;
-	}
-	(handle.registry as { clearSubstitutions?: () => void } | undefined)?.clearSubstitutions?.();
-	for (const diagnostic of diagnostics) reporter.add("fonts", diagnostic);
-	return { handle, release };
-}
-
-function scriptDiagnostic(diagnostic: Diagnostic): Diagnostic {
-	if (diagnostic.code !== "script-font-not-installed") return diagnostic;
-	const name = typeof diagnostic.package === "string" ? diagnostic.package : "the Noto script package";
-	return { ...diagnostic, message: `${diagnostic.message} Install ${name} next to the CLI (npm install -g ${name}) to draw this script with a bundled open font.` };
+	try {
+		const prepared = handle as FontsHandle & { pending?: (presentation: unknown, renderOptions?: Record<string, unknown>) => string[]; ensure?: (presentation: unknown, options?: Record<string, unknown>) => Promise<unknown> };
+		if (typeof prepared.pending === "function" && prepared.pending(presentation, renderOptions).length) {
+			if (typeof prepared.ensure !== "function") { release(); return undefined; }
+			await prepared.ensure(presentation, { renderOptions, onDiagnostic: (diagnostic: Diagnostic) => reporter.add("fonts", diagnostic) });
+		}
+		(handle.registry as { clearSubstitutions?: () => void } | undefined)?.clearSubstitutions?.();
+		for (const diagnostic of diagnostics) reporter.add("fonts", diagnostic);
+		return { handle, release };
+	} catch (error) { release(); throw error; }
 }
 
 /**
@@ -148,4 +145,49 @@ export function substitutionRows(handle: FontsHandle) {
 		rows.set(`${item.requestedFamily}\u0000${item.resolvedFamily}`, { requested: item.requestedFamily, resolved: item.resolvedFamily, compatibility: item.compatibility });
 	}
 	return [...rows.values()].sort((a, b) => (a.requested + a.resolved < b.requested + b.resolved ? -1 : 1));
+}
+
+const SUBSTITUTE_KIND: Record<string, string> = {
+	metric: "a metric-compatible substitute, so lines break as they would with the requested font",
+	visual: "a visual substitute, so lines can break differently than with the requested font",
+	generic: "the fallback face",
+};
+
+/**
+ * One `fonts/font-substituted` info finding per requested family that was drawn with another face (Aptos with Intos): which face
+ * stood in, how close it is, and why when the font policy says (a proprietary font OPF does not bundle). Not one per slide or weight.
+ */
+export function reportSubstitutions(reporter: Reporter, handle: FontsHandle) {
+	const byFamily = new Map<string, { resolved: Set<string>; compatibility: Set<string>; licenseClass?: string }>();
+	for (const item of handle.substitutions ?? []) {
+		if (!item.substitute || item.requestedFamily === item.resolvedFamily) continue;
+		const entry = byFamily.get(item.requestedFamily) ?? { resolved: new Set<string>(), compatibility: new Set<string>() };
+		entry.resolved.add(item.resolvedFamily);
+		entry.compatibility.add(item.compatibility);
+		if (item.licenseClass) entry.licenseClass = item.licenseClass;
+		byFamily.set(item.requestedFamily, entry);
+	}
+	for (const [requested, entry] of [...byFamily].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) {
+		const resolved = [...entry.resolved].sort();
+		// The weakest tier any weight was drawn with describes the family.
+		const compatibility = ["generic", "visual", "metric"].find((tier) => entry.compatibility.has(tier)) ?? [...entry.compatibility][0] ?? "visual";
+		const reason =
+			entry.licenseClass === "proprietary-standard"
+				? `${requested} is a proprietary font that OPF does not bundle`
+				: entry.licenseClass === "open"
+					? `${requested} is openly licensed, but no font package OPF bundles serves it`
+					: compatibility === "generic"
+						? `no bundled face or declared replacement serves ${requested}`
+						: undefined;
+		const kind = SUBSTITUTE_KIND[compatibility] ?? `a ${compatibility} substitute`;
+		reporter.add("fonts", {
+			code: "font-substituted",
+			path: "",
+			message: `${requested} is drawn with ${resolved.join(" and ")}, ${kind}${reason ? `: ${reason}` : ""}.`,
+			requested,
+			resolved,
+			compatibility,
+			...(entry.licenseClass ? { licenseClass: entry.licenseClass } : {}),
+		});
+	}
 }

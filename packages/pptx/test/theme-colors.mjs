@@ -111,12 +111,12 @@ const deck = {
   design: {theme: 'classic', colorScheme: 'forest-green'},
   variables: {risk: '#B42318'},
   slides: [
-    {title: 'Runs', text: [
+    {title: 'Runs', subtitle: 'Runs', text: [
       {text: 'slot', color: 'accent2'}, ' ', {text: 'role', color: 'primary'}, ' ',
       {text: 'literal', color: '#4A7C59'}, ' ', {text: 'variable', color: 'var:risk'}, ' ',
       {text: 'link', color: 'hyperlink'}, ' ', {text: 'secondary', color: 'textSecondary'},
     ]},
-    {title: 'Override', design: {colorScheme: 'boost'}, text: [{text: 'other', color: 'accent2'}, ' ', {text: 'shared', color: 'dark1'}]},
+    {title: 'Override', subtitle: 'Override', design: {colorScheme: 'boost'}, text: [{text: 'other', color: 'accent2'}, ' ', {text: 'shared', color: 'dark1'}]},
     {title: 'Solid', design: {background: {type: 'solid', color: '#FFFFFF'}}, text: 'Literal background'},
   ],
 };
@@ -152,7 +152,7 @@ assert.match(third, /<p:bg><p:bgPr><a:solidFill><a:srgbClr val="FFFFFF"(?:\/>|><
 assert.equal(runFill(third, 'Solid'), '<a:schemeClr val="tx1"/>', 'default text on a literal background is the text role');
 assert.equal(resolve(runFill(third, 'Solid'), colors), hex(forest.dark1));
 // Even an override slide whose scheme equals the deck scheme stays literal.
-const sameOverride = slideXml(parts(await toPptx({design: {colorScheme: 'forest-green'}, slides: [{title: 'Same', design: {colorScheme: 'forest-green'}, text: [{text: 'pinned', color: 'accent2'}]}]})));
+const sameOverride = slideXml(parts(await toPptx({design: {colorScheme: 'forest-green'}, slides: [{title: 'Same', subtitle: 'Same', design: {colorScheme: 'forest-green'}, text: [{text: 'pinned', color: 'accent2'}]}]})));
 assert.doesNotMatch(sameOverride, /<a:schemeClr/);
 
 // FF-24b: default text pairs only with an opaque light/dark theme background, and
@@ -185,8 +185,11 @@ assert.equal(runFill(classic.xml, 'Muted'), '<a:schemeClr val="tx2"/>');
 // A text role that differs from dark1 is not the paired slot: literal.
 const role = await pairing({theme: 'classic', colorScheme: {id: 'cool-horizon', text: '#333333'}});
 assert.equal(runFill(role.xml, 'Pair'), '<a:srgbClr val="333333"/>');
-// Translucent theme background: the backdrop is not the theme slot alone.
-const translucent = await pairing({theme: 'classic', background: {type: 'theme', slot: 'light1', opacity: .5}});
+// Solid ColorRef and theme-slot backgrounds both retain their authored opacity.
+const translucent = await pairing({theme: 'classic', background: {type: 'solid', color: 'light1', opacity: .5}});
+const translucentTheme = await pairing({theme: 'classic', background: {type: 'theme', slot: 'light1', opacity: .5}});
+assert.match(translucent.xml, /<p:bg>[\s\S]*?<a:alpha val="50000"\/>/, 'the valid solid background actually writes half opacity');
+assert.match(translucentTheme.xml, /<p:bg>[\s\S]*?<a:schemeClr val="bg1"><a:alpha val="50000"\/>/, 'the theme background keeps its scheme reference and native half opacity');
 // RR-96: default text is the tx1 role whatever the backdrop; it is the deck's dark1 here.
 assert.equal(runFill(translucent.xml, 'Pair'), '<a:schemeClr val="tx1"/>');
 assert.equal(resolve(runFill(translucent.xml, 'Pair'), translucent.colors, clrMapOf(translucent.entries)), hex(cool.dark1));

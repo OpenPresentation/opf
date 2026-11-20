@@ -2,44 +2,44 @@
   "deck": "gallery/industries/airline-disruption-recovery-review.opf.json",
   "entries": {
     "gallery/industries/airline-disruption-recovery-review.opf.json#0": {
-      "sha256": "4c5243f0867588fa325fbbfd6b4f5668fc452b386ef47f29dd4167a8400a4627",
+      "sha256": "aebbfb59ad5dc81dce16e324190e63e263f97a6c99d94a94dc1b12e95200c84d",
       "bytes": 8821
     },
     "gallery/industries/airline-disruption-recovery-review.opf.json#1": {
-      "sha256": "85e21b39b2803875eba661f5093ab2f728d510a627d790a9c9db371c57bcd04f",
-      "bytes": 14266
+      "sha256": "b2ce3f0ce3e927f45317da0a038506c9c0ae07d051bc96354c38bdb4a1a8a49d",
+      "bytes": 14146
     },
     "gallery/industries/airline-disruption-recovery-review.opf.json#2": {
-      "sha256": "14ed6e69584c25a95cfb8fc0a5361b5328513747d5812ecf95be3f5da3c9a2e4",
-      "bytes": 4897
+      "sha256": "547dc0150541ca18ed4228618a077ad73ef6c1fb5a333dd134eef7686880a822",
+      "bytes": 4880
     },
     "gallery/industries/airline-disruption-recovery-review.opf.json#3": {
-      "sha256": "f3368d16ada52e4f0181796c1cbd297d0480882cbdecce167bf573484fcdc040",
-      "bytes": 9471
+      "sha256": "e951ad9c1a3ca609827d2e8e4e9fc8d94e75d6e83ed0d1dd2d7b65bb09c7dc4b",
+      "bytes": 9815
     },
     "gallery/industries/airline-disruption-recovery-review.opf.json#4": {
-      "sha256": "6503efa3b1c45929217bf1b5f255904d8c4057259b3700e883c2a2a826511a72",
-      "bytes": 13328
+      "sha256": "23c49cf32f6a73c0581f7048896b9df8e8a1649ef3259150898a0176754a463d",
+      "bytes": 13337
     },
     "gallery/industries/airline-disruption-recovery-review.opf.json#5": {
-      "sha256": "30e526a671e0e0ea9a76390abc86e27380155d121d2d2c5f3f51cc30bbe9f674",
-      "bytes": 19563
+      "sha256": "1df6737fe6d7c627330c478138f91f78f0071a1b09006b106318db16f140dc16",
+      "bytes": 19234
     },
     "gallery/industries/airline-disruption-recovery-review.opf.json#6": {
-      "sha256": "55995e5f26f9f4921770a185b5f0c2b57740cc5cba25cdb24d3b8f1b63a53f98",
-      "bytes": 11533
+      "sha256": "439828a6ecb5048bc6f636d31e0fc09a4e86de93a1b52fd7efaac2948800b36e",
+      "bytes": 11382
     },
     "gallery/industries/airline-disruption-recovery-review.opf.json#7": {
-      "sha256": "17bb9faeb247d47b19e4c18fa4793475355eb059e56607ffa6cf6dc820744088",
-      "bytes": 20508
+      "sha256": "6f66b58935b21d5ec5da1ea5f4cf7c16705e5a757ff41525d9ab46e0f6e842f5",
+      "bytes": 20496
     },
     "gallery/industries/airline-disruption-recovery-review.opf.json#8": {
-      "sha256": "3272d0d2f61d2b487dd92df6cb1b5051da34e318a8c13387768e1b10982fc07e",
-      "bytes": 7387
+      "sha256": "056e1f2aace5f2d2bebd5eb7e1f25343092a77c952f861e64474ae994dd84075",
+      "bytes": 7459
     },
     "gallery/industries/airline-disruption-recovery-review.opf.json#9": {
-      "sha256": "dc72f61e80104f4463c4fab1facd4f14cee06977d94c36e63850f4753e91eb7a",
-      "bytes": 14505
+      "sha256": "48cc8d74d35309fbecd118ab1754199ae6f19b89f56db8bee412246631b9c22e",
+      "bytes": 14504
     }
   }
 }

@@ -16,6 +16,7 @@
 //
 //   node scripts/bump-site.mjs bump --site <dir> --version X.Y.Z [--write] [--opf-checkout <opf checkout>] [--refresh-lockfile] [--json] [--github-output <file>] [--body-file <file>]
 //   node scripts/bump-site.mjs published <X.Y.Z> [--wait <minutes>]
+//   node scripts/bump-site.mjs branch --base bot/opf-vX.Y.Z --heads <git ls-remote --heads output> --field current|exists|next
 //
 // `bump` without `--write` only prints the plan and never runs anything. With `--write` it runs the site's `opf:bump` (the site's
 // dependencies are installed without lifecycle scripts by that script; only trusted, default-branch code of the site runs), or, for a
@@ -193,7 +194,7 @@ export function pullRequestBody(plan, { repository = 'OpenPresentation/opf', gen
     plan.kind === 'none'
       ? `The pins were already at this version; only generated files changed (label \`${label}\`): review it, then merge it by hand.`
       : plan.kind === 'patch'
-      ? `This is a **patch** bump (label \`${label}\`): this site's \`opf-bump-merge.yml\` merges it once its \`build-and-smoke\` check has passed.`
+      ? `This is a **patch** bump (label \`${label}\`): this site's \`opf-bump-merge.yml\` merges it once the site's checks and its Native Preview have passed on this exact head.`
       : `This is a **${plan.kind}** bump (label \`${label}\`): a minor or major bump of the shared 0.x line can break a site, so it is not merged automatically. Review it, then merge it by hand.`,
     '',
     'The lockfile was refreshed with the site\'s own package manager from the registry. Nothing was deployed.',
@@ -214,6 +215,24 @@ export function missingFromRegistry(version, exec) {
     if (found !== version) missing.push(name);
   }
   return missing;
+}
+
+/**
+ * The bump branch of a version and the fresh one after it (RR-107). The first bump of X.Y.Z uses `base` (bot/opf-vX.Y.Z). When a
+ * rerun cannot merge the existing branch into its regenerated files (a conflict, for example in the lockfile after the site moved),
+ * it neither fails nor rewrites that branch: it pushes to the next name, bot/opf-vX.Y.Z-2, then -3, and later reruns continue on the
+ * highest one. `heads`: the remote branch names (`git ls-remote --heads` lines or bare names); others are ignored.
+ */
+export function bumpBranches(base, heads) {
+  if (!/^bot\/opf-v\d+\.\d+\.\d+$/u.test(base ?? '')) throw new Error(`not a bump branch: ${base}`);
+  const pattern = new RegExp(`^${base.replaceAll('.', '\\.')}(?:-([2-9]|[1-9]\\d+))?$`, 'u');
+  let latest = 0;
+  for (const line of heads) {
+    const match = pattern.exec(line.trim().split(/\s+/u).at(-1)?.replace(/^refs\/heads\//u, '') ?? '');
+    if (match) latest = Math.max(latest, match[1] ? Number(match[1]) : 1);
+  }
+  const name = (number) => (number <= 1 ? base : `${base}-${number}`);
+  return { current: name(latest), exists: latest > 0, next: name(Math.max(latest, 1) + 1) };
 }
 
 function parseArgs(argv, valueFlags, booleanFlags) {
@@ -250,6 +269,13 @@ export async function main(argv = process.argv.slice(2), { log = (line) => proce
       await sleep(15_000);
     }
   }
+  if (command === 'branch') {
+    const options = parseArgs(rest, ['base', 'heads', 'field'], []);
+    if (!options.base || !options.heads || !['current', 'exists', 'next'].includes(options.field)) throw new Error('usage: bump-site.mjs branch --base bot/opf-vX.Y.Z --heads <file> --field current|exists|next');
+    const result = bumpBranches(options.base, readFileSync(options.heads, 'utf8').split('\n').filter((line) => line.trim()));
+    log(String(result[options.field]));
+    return result;
+  }
   if (command === 'bump') {
     const options = parseArgs(rest, ['site', 'version', 'github-output', 'body-file', 'opf-checkout'], ['write', 'refresh-lockfile', 'json']);
     if (!options.site || !options.version) throw new Error('usage: bump-site.mjs bump --site <dir> --version X.Y.Z [--write] [--opf-checkout dir] [--refresh-lockfile] [--json] [--github-output file] [--body-file file]');
@@ -284,7 +310,7 @@ export async function main(argv = process.argv.slice(2), { log = (line) => proce
     if (options['body-file']) writeFileSync(options['body-file'], pullRequestBody(plan, { generated: ownScript, files: changedFiles }));
     return { ...plan, label, changed, ownScript, changedFiles };
   }
-  throw new Error('usage: bump-site.mjs bump|published (see the header of scripts/bump-site.mjs)');
+  throw new Error('usage: bump-site.mjs bump|published|branch (see the header of scripts/bump-site.mjs)');
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

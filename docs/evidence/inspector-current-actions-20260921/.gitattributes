@@ -1,3 +1,0 @@
-** -text
-# Captured CI logs retain their original trailing spaces and CRLF bytes.
-app54/corrected6df/ci/*.log whitespace=-blank-at-eol,cr-at-eol

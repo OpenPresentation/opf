@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, test } from "node:test";
 
-import { chartNumber, ingest, toExcelNumberFormat, formatDataNumber, formatVariableNumber, inlineDatasets, fromExcelNumberFormat, paginate, presentation, validate, resolveChartData, resolveTableData, resolveVariables, tableCellDisplayValue, suggestChartNumberFix } from "../dist/index.js";
+import { chartNumber, numberFormatError, ingest, toExcelNumberFormat, formatDataNumber, formatVariableNumber, inlineDatasets, fromExcelNumberFormat, paginate, presentation, validate, resolveChartData, resolveTableData, resolveVariables, tableCellDisplayValue, suggestChartNumberFix } from "../dist/index.js";
 import * as dataEntry from "../dist/data.js";
 import { composeSlide, layoutTable } from "../dist/composition.js";
 import { convertContent } from "../dist/convert.js";
@@ -18,6 +18,63 @@ import { createRequire } from "node:module";
 import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
 const require = createRequire(import.meta.url);
+
+describe("number format sections (positive;negative;zero)", () => {
+  const show = (value, format, language) => formatDataNumber(value, format, language);
+  test("one section is unchanged, a negative prints its minus", () => {
+    assert.equal(show(-5, "0"), "-5");
+    assert.equal(show(-0.001, "0"), "0");
+    assert.equal(show(12, "+0"), "+12");
+  });
+  test("two sections: positive and zero, then negative on the absolute value", () => {
+    assert.equal(show(0.12, "+0%;-0%"), "+12%");
+    assert.equal(show(-0.05, "+0%;-0%"), "-5%");
+    assert.equal(show(0, "+0%;-0%"), "+0%");
+    assert.equal(show(-5, "0;(0)"), "(5)");
+    assert.equal(show(-1234.5, "#,##0.0;(#,##0.0)"), "(1,234.5)");
+    assert.equal(show(-5, "0;0"), "5");
+  });
+  test("three sections: the third is exact zero", () => {
+    assert.equal(show(3, "+0;-0;0 flat"), "+3");
+    assert.equal(show(-3, "+0;-0;0 flat"), "-3");
+    assert.equal(show(0, "+0;-0;0 flat"), "0 flat");
+  });
+  test("the section follows the sign, not the rounded text (as Excel)", () => {
+    assert.equal(show(-0.4, "0;(0)"), "(0)");
+    assert.equal(show(0.4, "+0;-0;0 flat"), "+0");
+    assert.equal(show(-0.4, "+0;-0;0 flat"), "-0");
+  });
+  test("each section scales and localizes on its own", () => {
+    assert.equal(show(-0.05, "0;-0.0%", "de"), "-5,0%");
+  });
+  test("four sections, an empty section and a section without digits are errors", () => {
+    for (const format of ["0;0;0;0", "0;", ";0", "0;;0", "0;x", "0;0;text"]) {
+      assert.ok(numberFormatError(format), format);
+      assert.ok(!("text" in formatVariableNumber(1, format)), format);
+    }
+    assert.equal(numberFormatError("+0%;-0%"), undefined);
+    assert.equal(numberFormatError("0;(0);0"), undefined);
+  });
+  test("validate reports the error with a hint that says what is allowed", () => {
+    const found = validate({ slides: [{ title: "Growth", chart: { type: "column", data: { columns: ["Month", { name: "Growth", format: "0;0;0;0" }], rows: [["Jan", 0.12]] } } }] });
+    const finding = found.findings.find((entry) => entry.ruleId === "opf/number-format-invalid");
+    assert.ok(finding && finding.severity === "error", JSON.stringify(found.findings));
+    assert.match(finding.help, /negative and a zero section/);
+  });
+  test("Excel codes: sections are written and read as sections", () => {
+    assert.equal(toExcelNumberFormat("+0%;-0%"), "+0%;-0%");
+    assert.equal(toExcelNumberFormat("0;(0)"), "0;(0)");
+    assert.equal(toExcelNumberFormat("+0;-0;0 flat"), '+0;-0;0 "flat"');
+    assert.equal(toExcelNumberFormat("#,##0 m/s;-#,##0 m/s"), '#,##0 "m/s";-#,##0 "m/s"');
+    assert.equal(toExcelNumberFormat("0;0;0;0"), "General");
+    assert.equal(fromExcelNumberFormat("+0%;-0%"), "+0%;-0%");
+    assert.equal(fromExcelNumberFormat('+0;-0;0 "flat"'), "+0;-0;0 flat");
+    assert.equal(fromExcelNumberFormat("0;[Red]-0"), undefined);
+    assert.equal(fromExcelNumberFormat('0;"a;b"0'), undefined);
+    assert.equal(fromExcelNumberFormat("0;0;0;0"), undefined);
+    for (const format of ["+0%;-0%", "0;(0)", "+0.0;-0.0;0.0"]) assert.equal(fromExcelNumberFormat(toExcelNumberFormat(format)), format);
+  });
+});
 const Ajv2020 = require("ajv/dist/2020.js").default;
 const addFormats = require("ajv-formats").default;
 // The schema definitions are checked with Ajv directly: core exposes no generic schema validator.
@@ -132,7 +189,8 @@ describe("number formats", () => {
     assert.equal(fromExcelNumberFormat('"$"#,##0.00'), "$#,##0.00");
     assert.equal(fromExcelNumberFormat("[$€-407]#,##0"), "€#,##0");
     assert.equal(fromExcelNumberFormat('#,##0" units"'), "#,##0 units");
-    for (const code of ["#,##0;(#,##0)", "0.00E+00", "mm/dd/yyyy", "@", "#,##0_);(#,##0)", "[Red]0", "#,##0,", "0%%", '0"%"', "# ?/?", '"No."0', "General;0"]) {
+    assert.equal(fromExcelNumberFormat("#,##0;(#,##0)"), "#,##0;(#,##0)");
+    for (const code of ["0.00E+00", "mm/dd/yyyy", "@", "#,##0_);(#,##0)", "[Red]0", "#,##0,", "0%%", '0"%"', "# ?/?", '"No."0', "General;0"]) {
       assert.equal(fromExcelNumberFormat(code), undefined, code);
     }
   });
@@ -144,7 +202,7 @@ describe("inlineDatasets", () => {
     slides: [
       { title: "Chart", chart: { type: "column", data: { dataset: "revenue", fields: ["Quarter", "Revenue"] }, mapping: { series: ["Revenue"] } } },
       { title: "Table", blocks: [{ table: { dataset: "revenue" } }, { table: { dataset: "missing" } }] },
-      { title: "Regions", left: { chart: { type: "line", data: { dataset: "revenue" } } }, right: { text: "x" } },
+      { title: "Regions", start: { chart: { type: "line", data: { dataset: "revenue" } } }, end: { text: "x" } },
     ],
   });
 
@@ -162,7 +220,7 @@ describe("inlineDatasets", () => {
     assert.deepEqual(out.slides[0].chart.mapping, { series: ["Revenue"] });
     assert.deepEqual(out.slides[1].blocks[0].table, { columns: ["Quarter", { name: "Revenue", format: "$#,##0.0" }, "Costs"], rows: revenue().rows });
     assert.deepEqual(out.slides[1].blocks[1].table, { dataset: "missing" }, "unknown ids are left as they are");
-    assert.equal(out.slides[2].left.chart.data.columns.length, 3);
+    assert.equal(out.slides[2].start.chart.data.columns.length, 3);
     assert.deepEqual(out.datasets, input.datasets, "datasets stay in place");
     out.slides[1].blocks[0].table.rows[0][1] = 99;
     assert.equal(input.datasets.revenue.rows[0][1], 12, "rows are copies");
@@ -285,7 +343,7 @@ describe("resolveChartData", () => {
 describe("resolveTableData and display values", () => {
   test("inline tables: header formats (DataColumn and StyledTableCell)", () => {
     const table = {
-      columns: ["Region", { name: "Revenue", format: "$#,##0.0" }, { value: "Growth", style: { align: "right" }, format: "0%" }],
+      columns: ["Region", { name: "Revenue", format: "$#,##0.0" }, { value: "Growth", style: { align: "end" }, format: "0%" }],
       rows: [["EMEA", 8.2, 0.4], ["APAC", 6.1, { value: 0.52, format: "0.0%" }]],
     };
     const result = resolveTableData(table);
@@ -331,7 +389,7 @@ describe("validation findings", () => {
         { title: "Chart", chart: { type: "column", data: { dataset: "revenue", fields: ["Quarter", "Revenue", "Costs"] }, mapping: { category: "Quarter", series: ["Costs", "Revenue"] } } },
         { title: "Inline", chart: { type: "line", data: { columns: ["Quarter", { name: "Margin", format: "0%" }], rows: [["Q1", 0.31], ["Q2", "0.34"]], source: { src: "./margin.csv", sheet: "Sheet1", range: "A1:B3", fields: ["Quarter", "Margin"], retrieved: "2026-10-05T09:30:00Z", description: "Finance export" } } } },
         { title: "Table", table: { dataset: "revenue", fields: ["Quarter", "Revenue"] } },
-        { title: "Formats", table: { columns: ["Region", { name: "Revenue", format: "$#,##0.0" }, { value: "Growth", style: { align: "right" }, format: "0%" }], rows: [["EMEA", 8.2, 0.4], ["APAC", 6.1, { value: 0.52, format: "0.0%" }]] } },
+        { title: "Formats", table: { columns: ["Region", { name: "Revenue", format: "$#,##0.0" }, { value: "Growth", style: { align: "end" }, format: "0%" }], rows: [["EMEA", 8.2, 0.4], ["APAC", 6.1, { value: 0.52, format: "0.0%" }]] } },
       ],
     });
     assert.deepEqual(issues(document), { valid: true, errors: [], warnings: [] });
@@ -467,9 +525,27 @@ describe("validation findings", () => {
     walk(path.join(repoRoot, "docs/fixtures"));
     assert.ok(files.length > 50);
     const dataCodes = new Set(["dataset-unknown", "dataset-field-unknown", "data-column-duplicate", "chart-mapping-unknown-column", "number-format-invalid", "chart-value-not-numeric", "chart-mapping-adapted"]);
+    const paretoAdaptations = new Map([
+      ["examples/gallery/business-functions/partner-ecosystem-launch-kit.opf.json", ["/slides/2/chart/type"]],
+      ["examples/gallery/design-and-media/visual-brand-system-sampler.opf.json", ["/slides/2/chart/type"]],
+      ["examples/gallery/education/curriculum-approval-brief.opf.json", ["/slides/6/blocks/0/chart/type"]],
+      ["examples/gallery/government/wildfire-evacuation-preparedness.opf.json", ["/slides/2/chart/type"]],
+      ["examples/gallery/industries/consulting-margin-recovery-plan.opf.json", ["/slides/2/chart/type"]],
+      ["examples/gallery/presentation-types/product-launch-narrative.opf.json", ["/slides/6/blocks/0/chart/type"]],
+    ]);
     for (const file of files) {
-      const result = dataReport(JSON.parse(readFileSync(file, "utf8")));
-      assert.deepEqual(result.findings.filter((entry) => dataCodes.has(entry.ruleId.slice(4))).filter((entry) => entry.severity !== "info"), [], path.relative(repoRoot, file));
+      const document = JSON.parse(readFileSync(file, "utf8"));
+      const result = dataReport(document);
+      const relative = path.relative(repoRoot, file).split(path.sep).join("/");
+      const paths = paretoAdaptations.get(relative) ?? [];
+      for (const pointer of paths) {
+        const chart = pointer.split("/").slice(1, -1).reduce((node, key) => node[key], document);
+        assert.equal(chart.type, "pareto", relative);
+        assert.ok(chart.data.columns.slice(1).filter((_, offset) => chart.data.rows.some(row => typeof row[offset + 1] === "number")).length >= 2, relative);
+      }
+      const actual = result.findings.filter((entry) => dataCodes.has(entry.ruleId.slice(4))).filter((entry) => entry.severity !== "info").map(({ ruleId, severity, path }) => ({ ruleId, severity, path }));
+      const expected = paths.map(path => ({ ruleId: "opf/chart-mapping-adapted", severity: "warning", path }));
+      assert.deepEqual(actual, expected, relative);
     }
   });
 });
@@ -490,7 +566,7 @@ describe("core integration", () => {
     assert.equal(layout.rows[1].cells[1].value, "$12.0");
     assert.equal(layout.rows[1].cells[1].input, 12);
     assert.equal(layout.rows[1].cells[2].value, 8, "a column without a format keeps its value");
-    const styled = layoutTable({ columns: ["a", { value: "b", format: "0%" }], rows: [[1, 0.5], [2, { value: 0.25, format: "0.0%", style: { align: "right" } }]] }, { x: 0, y: 0, width: 600, height: 300 });
+    const styled = layoutTable({ columns: ["a", { value: "b", format: "0%" }], rows: [[1, 0.5], [2, { value: 0.25, format: "0.0%", style: { align: "end" } }]] }, { x: 0, y: 0, width: 600, height: 300 });
     assert.equal(styled.rows[1].cells[1].value, "50%");
     assert.equal(styled.rows[2].cells[1].value, "25.0%");
     assert.equal(styled.rows[2].cells[1].style.align, "right");
@@ -622,7 +698,7 @@ describe("RR-54 review", () => {
     ]);
     assert.equal(check(deck({ slides: [{ chart: { type: "column", data: { src: "asset:x", columns: ["a"] } } }] })).valid, false);
     // A table header object: 'value' selects StyledTableCell, 'name' DataColumn.
-    assert.deepEqual(errors(deck({ slides: [{ table: { columns: [{ name: "R", style: { align: "right" } }], rows: [[1]] } }] })), [
+    assert.deepEqual(errors(deck({ slides: [{ table: { columns: [{ name: "R", style: { align: "end" } }], rows: [[1]] } }] })), [
       ["/slides/0/table/columns/0", "must NOT have additional properties"],
     ]);
     // Dataset-backed and inline tables: the exclusive fields are named.
@@ -630,8 +706,8 @@ describe("RR-54 review", () => {
     assert.deepEqual(table({ dataset: "r", rows: [] }), [["/slides/0/table/rows", "'rows' is not allowed on a dataset-backed table: it takes its headers, rows and column formats from the dataset"]]);
     assert.deepEqual(table({ dataset: "r", columns: ["a"] }), [["/slides/0/table/columns", "'columns' is not allowed on a dataset-backed table: it takes its headers, rows and column formats from the dataset"]]);
     assert.deepEqual(table({ rows: [["a"]], fields: ["a"] }), [["/slides/0/table/fields", "'fields' applies only to a dataset-backed table; add 'dataset' or remove 'fields'"]]);
-    // A malformed value with no form key keeps every alternative.
-    assert.ok(errors(deck({ slides: [{ chart: { type: "column", data: { values: [] } } }] })).some(([, message]) => message === "must have required property 'columns'"));
+    // A malformed value with no field of any form is one error at the value; the forms ride along as alternatives.
+    assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { values: [] } } }] })), [["/slides/0/chart/data", 'none of the forms accepted here has "values"']]);
   });
 
   test("fields name each dataset column at most once", () => {

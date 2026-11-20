@@ -7,7 +7,7 @@ import { resolveScriptFonts, type ResolvedScriptFonts, type ScriptFontSlots, typ
  * The script-aware measurement of one slide (opf#485). A host measurement measures a string in the one face its style
  * names, so Arabic text in a Latin title face is a missing glyph. The engines never measure that way: the renderer
  * plans each script run of a string in its script slot's face (the slide's `resolveScriptFonts` profile, and a run
- * language's own profile for a run with `TextRun.lang`), and the exporter does the same. A host measurement that can
+ * language's own profile for a run with `TextRun.language`), and the exporter does the same. A host measurement that can
  * plan (`forScripts`, the renderer's `loadFonts()` measurement) is asked for exactly that plan here, so core's layout
  * checks measure what preview and export draw. A measurement without `forScripts` is returned unchanged. Internal
  * module.

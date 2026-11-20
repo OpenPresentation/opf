@@ -1,0 +1,56 @@
+{
+  "name": "LibreOffice corpus: long and nested lists",
+  "slides": [
+    {
+      "title": "Long bullets that wrap",
+      "bullets": [
+        "Price from every provider that hosts the model, per token and now per minute for audio models, with the date each price was read",
+        "Context window, maximum output and the modalities each endpoint accepts, as the provider documents them today",
+        "License and open-weights status, with a link to the license text and the date it was last checked",
+        "Benchmark scores with their sources"
+      ]
+    },
+    {
+      "title": "A nested list three levels deep",
+      "items": [
+        { "text": "Prepare the migration" },
+        { "text": "Freeze writes to the old tables during the copy window", "level": 1 },
+        { "text": "Announce the window to every team that writes to them", "level": 2 },
+        { "text": "Copy the data and verify the row counts", "level": 1 },
+        { "text": "Switch the readers" },
+        { "text": "Move the read traffic one service at a time, watching the error rate after each one", "level": 1 },
+        { "text": "Retire the old tables after thirty days" }
+      ]
+    },
+    {
+      "title": "A numbered list",
+      "items": [
+        "Write the change and its test in one pull request",
+        "Run the checks for what the branch changed",
+        "Ask for a review from someone who owns the code",
+        "Merge when the required check is green",
+        "Watch the next nightly run and revert a red main first"
+      ],
+      "numbering": "arabic"
+    },
+    {
+      "title": "Numbered with nested letters",
+      "items": [
+        { "text": "Collect the inputs" },
+        { "text": "Customer interviews", "level": 1 },
+        { "text": "Support tickets from the last two quarters", "level": 1 },
+        { "text": "Decide what to build" },
+        { "text": "Ship the first version to a pilot group" }
+      ],
+      "numbering": ["arabic", "alpha-lower"]
+    },
+    {
+      "title": "List entries with descriptions",
+      "items": [
+        { "text": "Faster onboarding", "description": "A new customer reaches first value in under a day, down from a week." },
+        { "text": "Fewer escalations", "description": "Tickets that reach engineering fell by a third after the help center rewrite." },
+        { "text": "Predictable releases", "description": "One release every two weeks, each with notes the support team reads first." }
+      ]
+    }
+  ]
+}

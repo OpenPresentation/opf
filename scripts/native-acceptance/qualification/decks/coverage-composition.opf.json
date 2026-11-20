@@ -1,0 +1,376 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: composition, groups and slide fields",
+  "description": "RR-105 format coverage: composition modes, columns, weights, gaps, padding, font size limits and overflow policy; nested groups; every explicit block type; named layout regions, emphasis and ids; timelines in both forms; and the slide fields beat, section, notes, hidden and extensions.",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "extensions": {
+    "review": {
+      "status": "draft"
+    }
+  },
+  "slides": [
+    {
+      "id": "mode-row",
+      "title": "Three blocks in a weighted row",
+      "section": "Composition",
+      "beat": "setup",
+      "notes": "The middle column is twice as wide as the others.",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          1,
+          2,
+          1
+        ],
+        "gap": 0.04,
+        "padding": 0.05
+      },
+      "blocks": [
+        {
+          "type": "metric",
+          "metric": {
+            "value": "12",
+            "label": "Pilots"
+          }
+        },
+        {
+          "type": "text",
+          "text": "Twelve pilots ran this year; nine of them moved into production with the same team."
+        },
+        {
+          "type": "metric",
+          "metric": {
+            "value": "9",
+            "label": "In production"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mode-column",
+      "title": "Blocks stacked in a column",
+      "section": "Composition",
+      "beat": [
+        "evidence",
+        "detail"
+      ],
+      "composition": {
+        "mode": "column",
+        "gap": 0.02,
+        "maxFontSize": 40
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text": "The column mode stacks each block under the last."
+        },
+        {
+          "type": "list",
+          "items": [
+            "First, the headline number",
+            "Then, the reason behind it"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mode-grid",
+      "title": "A grid of six cells",
+      "composition": {
+        "mode": "grid",
+        "columns": 3,
+        "minFontSize": 14,
+        "overflow": "warn"
+      },
+      "blocks": [
+        {
+          "type": "metric",
+          "metric": "41"
+        },
+        {
+          "type": "metric",
+          "metric": "7.5"
+        },
+        {
+          "type": "metric",
+          "metric": "0.9"
+        },
+        {
+          "type": "text",
+          "text": "Teams"
+        },
+        {
+          "type": "text",
+          "text": "Hours saved"
+        },
+        {
+          "type": "text",
+          "text": "Error rate"
+        }
+      ]
+    },
+    {
+      "id": "mode-auto",
+      "title": "Automatic placement with an error policy",
+      "composition": {
+        "mode": "auto",
+        "overflow": "error"
+      },
+      "blocks": [
+        {
+          "type": "quote",
+          "quote": "Automatic placement found the right split."
+        },
+        {
+          "type": "code",
+          "code": "opf convert deck.opf.json deck.pptx"
+        }
+      ]
+    },
+    {
+      "id": "nested-groups",
+      "title": "Groups inside groups",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          3,
+          2
+        ]
+      },
+      "blocks": [
+        {
+          "type": "group",
+          "id": "left-group",
+          "composition": {
+            "mode": "column"
+          },
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Pipeline grew in every region."
+            },
+            {
+              "type": "group",
+              "composition": {
+                "mode": "row"
+              },
+              "blocks": [
+                {
+                  "metric": {
+                    "value": "+14%",
+                    "label": "North"
+                  }
+                },
+                {
+                  "metric": {
+                    "value": "+9%",
+                    "label": "South"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "icon": "lucide:chart-bar",
+          "emphasis": true,
+          "blocks": [
+            {
+              "type": "chart",
+              "chart": {
+                "type": "pie",
+                "data": {
+                  "columns": [
+                    "Region",
+                    "Share"
+                  ],
+                  "rows": [
+                    [
+                      "North",
+                      58
+                    ],
+                    [
+                      "South",
+                      42
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "block-types",
+      "title": "Image, table, timeline and diagram blocks",
+      "composition": {
+        "mode": "grid",
+        "columns": 2
+      },
+      "blocks": [
+        {
+          "type": "image",
+          "image": {
+            "src": "./assets/product-shot.png",
+            "alt": "Product shot"
+          },
+          "id": "shot",
+          "extensions": {
+            "source": "brand kit"
+          }
+        },
+        {
+          "type": "table",
+          "table": {
+            "columns": [
+              "Plan",
+              "Seats"
+            ],
+            "rows": [
+              [
+                "Team",
+                10
+              ],
+              [
+                "Business",
+                50
+              ]
+            ]
+          }
+        },
+        {
+          "type": "timeline",
+          "timeline": [
+            {
+              "when": "May",
+              "what": "Beta",
+              "status": "done"
+            },
+            {
+              "when": "Sep",
+              "what": "Launch",
+              "status": "current"
+            }
+          ]
+        },
+        {
+          "type": "diagram",
+          "diagram": {
+            "source": "flowchart LR\n  Beta --> Launch"
+          }
+        }
+      ]
+    },
+    {
+      "id": "shape-and-video",
+      "title": "A shape block and a video block",
+      "blocks": [
+        {
+          "type": "shape",
+          "shape": "chevron",
+          "fill": "accent1",
+          "text": "Next"
+        },
+        {
+          "type": "video",
+          "video": {
+            "src": "https://example.com/media/demo.mp4",
+            "alt": "Demo video",
+            "title": "Two-minute demo"
+          }
+        }
+      ]
+    },
+    {
+      "id": "timeline-object",
+      "type": "timeline",
+      "title": "A named timeline with durations",
+      "timeline": {
+        "name": "Regional rollout",
+        "description": "From the first pilot to every region.",
+        "events": [
+          {
+            "when": "2026-01",
+            "what": "Pilot",
+            "description": "One operations team",
+            "status": "done",
+            "duration": 2
+          },
+          {
+            "when": "2026-03",
+            "what": "Rollout",
+            "description": "Three regions",
+            "status": "current",
+            "duration": 4
+          },
+          {
+            "when": "2026-07",
+            "what": "Scale",
+            "description": "Self-service onboarding",
+            "status": "planned",
+            "duration": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "named-regions",
+      "layout": "comparison",
+      "title": "Before and after the change",
+      "blocks": [
+        {
+          "region": "first",
+          "id": "before",
+          "items": [
+            "Five handoffs",
+            "Two-week wait"
+          ]
+        },
+        {
+          "region": "second",
+          "id": "after",
+          "emphasis": true,
+          "items": [
+            "One owner",
+            "Same-day answer"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "closing-lead",
+      "layout": "closing",
+      "title": "What we ask of the board",
+      "blocks": [
+        {
+          "text": "Approve the budget today"
+        },
+        {
+          "text": "Name a sponsor"
+        },
+        {
+          "text": "Review in March"
+        },
+        {
+          "text": "Share with the terminals"
+        }
+      ]
+    },
+    {
+      "id": "hidden-slide",
+      "title": "A backup slide hidden in the show",
+      "hidden": true,
+      "text": "Kept for questions about the budget.",
+      "extensions": {
+        "review": {
+          "owner": "ben"
+        }
+      }
+    }
+  ]
+}

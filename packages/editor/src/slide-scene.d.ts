@@ -17,7 +17,7 @@ export interface SceneContainer {
   resizable: boolean;
   /** The composed flow's path, when the container has one. */
   flowPath?: string;
-  /** The slide's content is in promoted regions (`left`, `center+right`, ...): drops go into a region. */
+  /** The slide's content is in promoted regions (`start`, `center+end`, ...): drops go into a region. */
   promoted?: boolean;
   /** The slide uses a layout template: its regions are its children. */
   layout?: boolean;

@@ -39,7 +39,7 @@ export interface ZoneValue {
 export declare const ZONE_VALUES: readonly ZoneValue[];
 /** Date format tokens (English names). */
 export declare const DATE_FORMAT_TOKENS: readonly string[];
-export declare const HEADER_FOOTER_ZONES: readonly ["left", "center", "right"];
+export declare const HEADER_FOOTER_ZONES: readonly ["start", "center", "end"];
 export type HeaderFooterZone = (typeof HEADER_FOOTER_ZONES)[number];
 
 export interface DesignOptionOptions {

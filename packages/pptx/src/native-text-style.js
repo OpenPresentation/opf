@@ -3,6 +3,14 @@ import {splitWeightFace} from './font-weights.js';
 
 const boolean = value => ['1','true','on'].includes(value) ? true : ['0','false','off'].includes(value) ? false : undefined;
 
+const RUN_LANG = /^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$/;
+/** A current native proofing override, shared by body and table readers. */
+export function nativeRunLanguage(properties, {deckLang} = {}) {
+  const lang = properties.lang;
+  return typeof lang === 'string' && RUN_LANG.test(lang) && !/^(?:und|zxx)(?:-|$)/i.test(lang)
+    && (properties.altLang === 'en-US' || deckLang && lang.toLowerCase() !== deckLang.toLowerCase()) ? {language: lang} : {};
+}
+
 const themeFamilies = context => ['a:majorFont', 'a:minorFont'].map(key => context.fonts?.[key]?.['a:latin']?.typeface?.trim().toLowerCase()).filter(Boolean);
 
 export function nativeTypeface(font, context) {

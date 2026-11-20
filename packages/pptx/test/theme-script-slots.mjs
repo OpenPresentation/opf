@@ -134,7 +134,8 @@ for (const [scheme, language] of [['meiryo', 'ja'], ['calibri', 'en-US'], ['apto
 {
   const {bytes} = await exported(deck('calibri'));
   const slideXml = new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']);
-  assert.ok([...slideXml.matchAll(/<a:latin typeface="([^"+][^"]*)"/g)].length > 0, 'runs name their latin face');
+  // RR-105 (opf#1293): a run in its theme's family names it through the theme reference (+mj-lt, +mn-lt).
+  assert.ok([...slideXml.matchAll(/<a:latin typeface="([^"]+)"/g)].length > 0, 'runs name their latin face');
   assert.doesNotMatch(slideXml, /<a:(?:ea|cs)\s+typeface="[^+"]/, 'runs name no explicit ea/cs typeface');
 }
 

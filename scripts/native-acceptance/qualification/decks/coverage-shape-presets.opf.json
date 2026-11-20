@@ -1,0 +1,1816 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: all 187 preset shapes",
+  "description": "RR-105 format coverage: every DrawingML preset shape as a shape block, twelve to a slide, each with a non-default first adjust value; open each in PowerPoint and compare the outline with the preview.",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "id": "presets-1",
+      "title": "Preset shapes 1 to 12",
+      "notes": "From line to heptagon: line, lineInv, triangle, rtTriangle, rect, diamond, parallelogram, trapezoid, nonIsoscelesTrapezoid, pentagon, hexagon, heptagon.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "line",
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The line preset"
+        },
+        {
+          "shape": "lineInv",
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The lineInv preset"
+        },
+        {
+          "shape": "triangle",
+          "adjust": {
+            "adj": 0.425
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The triangle preset"
+        },
+        {
+          "shape": "rtTriangle",
+          "fill": "accent1",
+          "alt": "The rtTriangle preset"
+        },
+        {
+          "shape": "rect",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The rect preset"
+        },
+        {
+          "shape": "diamond",
+          "fill": "accent1",
+          "alt": "The diamond preset"
+        },
+        {
+          "shape": "parallelogram",
+          "adjust": {
+            "adj": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The parallelogram preset"
+        },
+        {
+          "shape": "trapezoid",
+          "adjust": {
+            "adj": 0.213
+          },
+          "fill": "accent1",
+          "alt": "The trapezoid preset"
+        },
+        {
+          "shape": "nonIsoscelesTrapezoid",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The nonIsoscelesTrapezoid preset"
+        },
+        {
+          "shape": "pentagon",
+          "adjust": {
+            "hf": 0.894
+          },
+          "fill": "accent1",
+          "alt": "The pentagon preset"
+        },
+        {
+          "shape": "hexagon",
+          "adjust": {
+            "adj": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The hexagon preset"
+        },
+        {
+          "shape": "heptagon",
+          "adjust": {
+            "hf": 0.872
+          },
+          "fill": "accent1",
+          "alt": "The heptagon preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-2",
+      "title": "Preset shapes 13 to 24",
+      "notes": "From octagon to star24: octagon, decagon, dodecagon, star4, star5, star6, star7, star8, star10, star12, star16, star24.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "octagon",
+          "adjust": {
+            "adj": 0.249
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The octagon preset"
+        },
+        {
+          "shape": "decagon",
+          "adjust": {
+            "vf": 0.894
+          },
+          "fill": "accent1",
+          "alt": "The decagon preset"
+        },
+        {
+          "shape": "dodecagon",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The dodecagon preset"
+        },
+        {
+          "shape": "star4",
+          "adjust": {
+            "adj": 0.106
+          },
+          "fill": "accent1",
+          "alt": "The star4 preset"
+        },
+        {
+          "shape": "star5",
+          "adjust": {
+            "adj": 0.162
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The star5 preset"
+        },
+        {
+          "shape": "star6",
+          "adjust": {
+            "adj": 0.245
+          },
+          "fill": "accent1",
+          "alt": "The star6 preset"
+        },
+        {
+          "shape": "star7",
+          "adjust": {
+            "adj": 0.294
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The star7 preset"
+        },
+        {
+          "shape": "star8",
+          "adjust": {
+            "adj": 0.319
+          },
+          "fill": "accent1",
+          "alt": "The star8 preset"
+        },
+        {
+          "shape": "star10",
+          "adjust": {
+            "adj": 0.362
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The star10 preset"
+        },
+        {
+          "shape": "star12",
+          "adjust": {
+            "adj": 0.319
+          },
+          "fill": "accent1",
+          "alt": "The star12 preset"
+        },
+        {
+          "shape": "star16",
+          "adjust": {
+            "adj": 0.319
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The star16 preset"
+        },
+        {
+          "shape": "star24",
+          "adjust": {
+            "adj": 0.319
+          },
+          "fill": "accent1",
+          "alt": "The star24 preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-3",
+      "title": "Preset shapes 25 to 36",
+      "notes": "From star32 to teardrop: star32, roundRect, round1Rect, round2SameRect, round2DiagRect, snipRoundRect, snip1Rect, snip2SameRect, snip2DiagRect, plaque, ellipse, teardrop.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "star32",
+          "adjust": {
+            "adj": 0.319
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The star32 preset"
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.142
+          },
+          "fill": "accent1",
+          "alt": "The roundRect preset"
+        },
+        {
+          "shape": "round1Rect",
+          "adjust": {
+            "adj": 0.142
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The round1Rect preset"
+        },
+        {
+          "shape": "round2SameRect",
+          "adjust": {
+            "adj1": 0.142
+          },
+          "fill": "accent1",
+          "alt": "The round2SameRect preset"
+        },
+        {
+          "shape": "round2DiagRect",
+          "adjust": {
+            "adj1": 0.142
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The round2DiagRect preset"
+        },
+        {
+          "shape": "snipRoundRect",
+          "adjust": {
+            "adj1": 0.142
+          },
+          "fill": "accent1",
+          "alt": "The snipRoundRect preset"
+        },
+        {
+          "shape": "snip1Rect",
+          "adjust": {
+            "adj": 0.142
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The snip1Rect preset"
+        },
+        {
+          "shape": "snip2SameRect",
+          "adjust": {
+            "adj1": 0.142
+          },
+          "fill": "accent1",
+          "alt": "The snip2SameRect preset"
+        },
+        {
+          "shape": "snip2DiagRect",
+          "adjust": {
+            "adj1": 0
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The snip2DiagRect preset"
+        },
+        {
+          "shape": "plaque",
+          "adjust": {
+            "adj": 0.142
+          },
+          "fill": "accent1",
+          "alt": "The plaque preset"
+        },
+        {
+          "shape": "ellipse",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The ellipse preset"
+        },
+        {
+          "shape": "teardrop",
+          "adjust": {
+            "adj": 0.85
+          },
+          "fill": "accent1",
+          "alt": "The teardrop preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-4",
+      "title": "Preset shapes 37 to 48",
+      "notes": "From homePlate to stripedRightArrow: homePlate, chevron, pieWedge, pie, blockArc, donut, noSmoking, rightArrow, leftArrow, upArrow, downArrow, stripedRightArrow.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "homePlate",
+          "adjust": {
+            "adj": 0.425
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The homePlate preset"
+        },
+        {
+          "shape": "chevron",
+          "adjust": {
+            "adj": 0.425
+          },
+          "fill": "accent1",
+          "alt": "The chevron preset"
+        },
+        {
+          "shape": "pieWedge",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The pieWedge preset"
+        },
+        {
+          "shape": "pie",
+          "adjust": {
+            "adj1": 0
+          },
+          "fill": "accent1",
+          "alt": "The pie preset"
+        },
+        {
+          "shape": "blockArc",
+          "adjust": {
+            "adj1": 195
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The blockArc preset"
+        },
+        {
+          "shape": "donut",
+          "adjust": {
+            "adj": 0.213
+          },
+          "fill": "accent1",
+          "alt": "The donut preset"
+        },
+        {
+          "shape": "noSmoking",
+          "adjust": {
+            "adj": 0.159
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The noSmoking preset"
+        },
+        {
+          "shape": "rightArrow",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "fill": "accent1",
+          "alt": "The rightArrow preset"
+        },
+        {
+          "shape": "leftArrow",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The leftArrow preset"
+        },
+        {
+          "shape": "upArrow",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "fill": "accent1",
+          "alt": "The upArrow preset"
+        },
+        {
+          "shape": "downArrow",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The downArrow preset"
+        },
+        {
+          "shape": "stripedRightArrow",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "fill": "accent1",
+          "alt": "The stripedRightArrow preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-5",
+      "title": "Preset shapes 49 to 60",
+      "notes": "From notchedRightArrow to leftRightArrowCallout: notchedRightArrow, bentUpArrow, leftRightArrow, upDownArrow, leftUpArrow, leftRightUpArrow, quadArrow, leftArrowCallout, rightArrowCallout, upArrowCallout, downArrowCallout, leftRightArrowCallout.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "notchedRightArrow",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The notchedRightArrow preset"
+        },
+        {
+          "shape": "bentUpArrow",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": "accent1",
+          "alt": "The bentUpArrow preset"
+        },
+        {
+          "shape": "leftRightArrow",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The leftRightArrow preset"
+        },
+        {
+          "shape": "upDownArrow",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "fill": "accent1",
+          "alt": "The upDownArrow preset"
+        },
+        {
+          "shape": "leftUpArrow",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The leftUpArrow preset"
+        },
+        {
+          "shape": "leftRightUpArrow",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": "accent1",
+          "alt": "The leftRightUpArrow preset"
+        },
+        {
+          "shape": "quadArrow",
+          "adjust": {
+            "adj1": 0.191
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The quadArrow preset"
+        },
+        {
+          "shape": "leftArrowCallout",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": "accent1",
+          "alt": "The leftArrowCallout preset"
+        },
+        {
+          "shape": "rightArrowCallout",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The rightArrowCallout preset"
+        },
+        {
+          "shape": "upArrowCallout",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": "accent1",
+          "alt": "The upArrowCallout preset"
+        },
+        {
+          "shape": "downArrowCallout",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The downArrowCallout preset"
+        },
+        {
+          "shape": "leftRightArrowCallout",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": "accent1",
+          "alt": "The leftRightArrowCallout preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-6",
+      "title": "Preset shapes 61 to 72",
+      "notes": "From upDownArrowCallout to swooshArrow: upDownArrowCallout, quadArrowCallout, bentArrow, uturnArrow, circularArrow, leftCircularArrow, leftRightCircularArrow, curvedRightArrow, curvedLeftArrow, curvedUpArrow, curvedDownArrow, swooshArrow.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "upDownArrowCallout",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The upDownArrowCallout preset"
+        },
+        {
+          "shape": "quadArrowCallout",
+          "adjust": {
+            "adj1": 0.157
+          },
+          "fill": "accent1",
+          "alt": "The quadArrowCallout preset"
+        },
+        {
+          "shape": "bentArrow",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The bentArrow preset"
+        },
+        {
+          "shape": "uturnArrow",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": "accent1",
+          "alt": "The uturnArrow preset"
+        },
+        {
+          "shape": "circularArrow",
+          "adjust": {
+            "adj1": 0.106
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The circularArrow preset"
+        },
+        {
+          "shape": "leftCircularArrow",
+          "adjust": {
+            "adj1": 0.106
+          },
+          "fill": "accent1",
+          "alt": "The leftCircularArrow preset"
+        },
+        {
+          "shape": "leftRightCircularArrow",
+          "adjust": {
+            "adj1": 0.106
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The leftRightCircularArrow preset"
+        },
+        {
+          "shape": "curvedRightArrow",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": "accent1",
+          "alt": "The curvedRightArrow preset"
+        },
+        {
+          "shape": "curvedLeftArrow",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The curvedLeftArrow preset"
+        },
+        {
+          "shape": "curvedUpArrow",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": "accent1",
+          "alt": "The curvedUpArrow preset"
+        },
+        {
+          "shape": "curvedDownArrow",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The curvedDownArrow preset"
+        },
+        {
+          "shape": "swooshArrow",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": "accent1",
+          "alt": "The swooshArrow preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-7",
+      "title": "Preset shapes 73 to 84",
+      "notes": "From cube to frame: cube, can, lightningBolt, heart, sun, moon, smileyFace, irregularSeal1, irregularSeal2, foldedCorner, bevel, frame.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "cube",
+          "adjust": {
+            "adj": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The cube preset"
+        },
+        {
+          "shape": "can",
+          "adjust": {
+            "adj": 0.213
+          },
+          "fill": "accent1",
+          "alt": "The can preset"
+        },
+        {
+          "shape": "lightningBolt",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The lightningBolt preset"
+        },
+        {
+          "shape": "heart",
+          "fill": "accent1",
+          "alt": "The heart preset"
+        },
+        {
+          "shape": "sun",
+          "adjust": {
+            "adj": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The sun preset"
+        },
+        {
+          "shape": "moon",
+          "adjust": {
+            "adj": 0.425
+          },
+          "fill": "accent1",
+          "alt": "The moon preset"
+        },
+        {
+          "shape": "smileyFace",
+          "adjust": {
+            "adj": 0.04
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The smileyFace preset"
+        },
+        {
+          "shape": "irregularSeal1",
+          "fill": "accent1",
+          "alt": "The irregularSeal1 preset"
+        },
+        {
+          "shape": "irregularSeal2",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The irregularSeal2 preset"
+        },
+        {
+          "shape": "foldedCorner",
+          "adjust": {
+            "adj": 0.142
+          },
+          "fill": "accent1",
+          "alt": "The foldedCorner preset"
+        },
+        {
+          "shape": "bevel",
+          "adjust": {
+            "adj": 0.106
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The bevel preset"
+        },
+        {
+          "shape": "frame",
+          "adjust": {
+            "adj1": 0.106
+          },
+          "fill": "accent1",
+          "alt": "The frame preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-8",
+      "title": "Preset shapes 85 to 96",
+      "notes": "From halfFrame to straightConnector1: halfFrame, corner, diagStripe, chord, arc, leftBracket, rightBracket, leftBrace, rightBrace, bracketPair, bracePair, straightConnector1.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "halfFrame",
+          "adjust": {
+            "adj1": 0.283
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The halfFrame preset"
+        },
+        {
+          "shape": "corner",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "fill": "accent1",
+          "alt": "The corner preset"
+        },
+        {
+          "shape": "diagStripe",
+          "adjust": {
+            "adj": 0.425
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The diagStripe preset"
+        },
+        {
+          "shape": "chord",
+          "adjust": {
+            "adj1": 60
+          },
+          "fill": "accent1",
+          "alt": "The chord preset"
+        },
+        {
+          "shape": "arc",
+          "adjust": {
+            "adj1": 285
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The arc preset"
+        },
+        {
+          "shape": "leftBracket",
+          "adjust": {
+            "adj": 0.071
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The leftBracket preset"
+        },
+        {
+          "shape": "rightBracket",
+          "adjust": {
+            "adj": 0.071
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The rightBracket preset"
+        },
+        {
+          "shape": "leftBrace",
+          "adjust": {
+            "adj1": 0.071
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The leftBrace preset"
+        },
+        {
+          "shape": "rightBrace",
+          "adjust": {
+            "adj1": 0.071
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The rightBrace preset"
+        },
+        {
+          "shape": "bracketPair",
+          "adjust": {
+            "adj": 0.142
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The bracketPair preset"
+        },
+        {
+          "shape": "bracePair",
+          "adjust": {
+            "adj": 0.071
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The bracePair preset"
+        },
+        {
+          "shape": "straightConnector1",
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The straightConnector1 preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-9",
+      "title": "Preset shapes 97 to 108",
+      "notes": "From bentConnector2 to accentCallout1: bentConnector2, bentConnector3, bentConnector4, bentConnector5, curvedConnector2, curvedConnector3, curvedConnector4, curvedConnector5, callout1, callout2, callout3, accentCallout1.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "bentConnector2",
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The bentConnector2 preset"
+        },
+        {
+          "shape": "bentConnector3",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The bentConnector3 preset"
+        },
+        {
+          "shape": "bentConnector4",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The bentConnector4 preset"
+        },
+        {
+          "shape": "bentConnector5",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The bentConnector5 preset"
+        },
+        {
+          "shape": "curvedConnector2",
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The curvedConnector2 preset"
+        },
+        {
+          "shape": "curvedConnector3",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The curvedConnector3 preset"
+        },
+        {
+          "shape": "curvedConnector4",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The curvedConnector4 preset"
+        },
+        {
+          "shape": "curvedConnector5",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3
+          },
+          "alt": "The curvedConnector5 preset"
+        },
+        {
+          "shape": "callout1",
+          "adjust": {
+            "adj1": 0.159
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The callout1 preset"
+        },
+        {
+          "shape": "callout2",
+          "adjust": {
+            "adj1": 0.159
+          },
+          "fill": "accent1",
+          "alt": "The callout2 preset"
+        },
+        {
+          "shape": "callout3",
+          "adjust": {
+            "adj1": 0.159
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The callout3 preset"
+        },
+        {
+          "shape": "accentCallout1",
+          "adjust": {
+            "adj1": 0.159
+          },
+          "fill": "accent1",
+          "alt": "The accentCallout1 preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-10",
+      "title": "Preset shapes 109 to 120",
+      "notes": "From accentCallout2 to cloudCallout: accentCallout2, accentCallout3, borderCallout1, borderCallout2, borderCallout3, accentBorderCallout1, accentBorderCallout2, accentBorderCallout3, wedgeRectCallout, wedgeRoundRectCallout, wedgeEllipseCallout, cloudCallout.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "accentCallout2",
+          "adjust": {
+            "adj1": 0.159
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The accentCallout2 preset"
+        },
+        {
+          "shape": "accentCallout3",
+          "adjust": {
+            "adj1": 0.159
+          },
+          "fill": "accent1",
+          "alt": "The accentCallout3 preset"
+        },
+        {
+          "shape": "borderCallout1",
+          "adjust": {
+            "adj1": 0.159
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The borderCallout1 preset"
+        },
+        {
+          "shape": "borderCallout2",
+          "adjust": {
+            "adj1": 0.159
+          },
+          "fill": "accent1",
+          "alt": "The borderCallout2 preset"
+        },
+        {
+          "shape": "borderCallout3",
+          "adjust": {
+            "adj1": 0.159
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The borderCallout3 preset"
+        },
+        {
+          "shape": "accentBorderCallout1",
+          "adjust": {
+            "adj1": 0.159
+          },
+          "fill": "accent1",
+          "alt": "The accentBorderCallout1 preset"
+        },
+        {
+          "shape": "accentBorderCallout2",
+          "adjust": {
+            "adj1": 0.159
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The accentBorderCallout2 preset"
+        },
+        {
+          "shape": "accentBorderCallout3",
+          "adjust": {
+            "adj1": 0.159
+          },
+          "fill": "accent1",
+          "alt": "The accentBorderCallout3 preset"
+        },
+        {
+          "shape": "wedgeRectCallout",
+          "adjust": {
+            "adj1": -0.177
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The wedgeRectCallout preset"
+        },
+        {
+          "shape": "wedgeRoundRectCallout",
+          "adjust": {
+            "adj1": -0.177
+          },
+          "fill": "accent1",
+          "alt": "The wedgeRoundRectCallout preset"
+        },
+        {
+          "shape": "wedgeEllipseCallout",
+          "adjust": {
+            "adj1": -0.177
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The wedgeEllipseCallout preset"
+        },
+        {
+          "shape": "cloudCallout",
+          "adjust": {
+            "adj1": -0.177
+          },
+          "fill": "accent1",
+          "alt": "The cloudCallout preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-11",
+      "title": "Preset shapes 121 to 132",
+      "notes": "From cloud to flowChartProcess: cloud, ribbon, ribbon2, ellipseRibbon, ellipseRibbon2, leftRightRibbon, verticalScroll, horizontalScroll, wave, doubleWave, plus, flowChartProcess.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "cloud",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The cloud preset"
+        },
+        {
+          "shape": "ribbon",
+          "adjust": {
+            "adj1": 0.142
+          },
+          "fill": "accent1",
+          "alt": "The ribbon preset"
+        },
+        {
+          "shape": "ribbon2",
+          "adjust": {
+            "adj1": 0.142
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The ribbon2 preset"
+        },
+        {
+          "shape": "ellipseRibbon",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": "accent1",
+          "alt": "The ellipseRibbon preset"
+        },
+        {
+          "shape": "ellipseRibbon2",
+          "adjust": {
+            "adj1": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The ellipseRibbon2 preset"
+        },
+        {
+          "shape": "leftRightRibbon",
+          "adjust": {
+            "adj1": 0.425
+          },
+          "fill": "accent1",
+          "alt": "The leftRightRibbon preset"
+        },
+        {
+          "shape": "verticalScroll",
+          "adjust": {
+            "adj": 0.106
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The verticalScroll preset"
+        },
+        {
+          "shape": "horizontalScroll",
+          "adjust": {
+            "adj": 0.106
+          },
+          "fill": "accent1",
+          "alt": "The horizontalScroll preset"
+        },
+        {
+          "shape": "wave",
+          "adjust": {
+            "adj1": 0.106
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The wave preset"
+        },
+        {
+          "shape": "doubleWave",
+          "adjust": {
+            "adj1": 0.053
+          },
+          "fill": "accent1",
+          "alt": "The doubleWave preset"
+        },
+        {
+          "shape": "plus",
+          "adjust": {
+            "adj": 0.213
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The plus preset"
+        },
+        {
+          "shape": "flowChartProcess",
+          "fill": "accent1",
+          "alt": "The flowChartProcess preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-12",
+      "title": "Preset shapes 133 to 144",
+      "notes": "From flowChartDecision to flowChartPunchedCard: flowChartDecision, flowChartInputOutput, flowChartPredefinedProcess, flowChartInternalStorage, flowChartDocument, flowChartMultidocument, flowChartTerminator, flowChartPreparation, flowChartManualInput, flowChartManualOperation, flowChartConnector, flowChartPunchedCard.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "flowChartDecision",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartDecision preset"
+        },
+        {
+          "shape": "flowChartInputOutput",
+          "fill": "accent1",
+          "alt": "The flowChartInputOutput preset"
+        },
+        {
+          "shape": "flowChartPredefinedProcess",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartPredefinedProcess preset"
+        },
+        {
+          "shape": "flowChartInternalStorage",
+          "fill": "accent1",
+          "alt": "The flowChartInternalStorage preset"
+        },
+        {
+          "shape": "flowChartDocument",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartDocument preset"
+        },
+        {
+          "shape": "flowChartMultidocument",
+          "fill": "accent1",
+          "alt": "The flowChartMultidocument preset"
+        },
+        {
+          "shape": "flowChartTerminator",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartTerminator preset"
+        },
+        {
+          "shape": "flowChartPreparation",
+          "fill": "accent1",
+          "alt": "The flowChartPreparation preset"
+        },
+        {
+          "shape": "flowChartManualInput",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartManualInput preset"
+        },
+        {
+          "shape": "flowChartManualOperation",
+          "fill": "accent1",
+          "alt": "The flowChartManualOperation preset"
+        },
+        {
+          "shape": "flowChartConnector",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartConnector preset"
+        },
+        {
+          "shape": "flowChartPunchedCard",
+          "fill": "accent1",
+          "alt": "The flowChartPunchedCard preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-13",
+      "title": "Preset shapes 145 to 156",
+      "notes": "From flowChartPunchedTape to flowChartMagneticDrum: flowChartPunchedTape, flowChartSummingJunction, flowChartOr, flowChartCollate, flowChartSort, flowChartExtract, flowChartMerge, flowChartOfflineStorage, flowChartOnlineStorage, flowChartMagneticTape, flowChartMagneticDisk, flowChartMagneticDrum.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "flowChartPunchedTape",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartPunchedTape preset"
+        },
+        {
+          "shape": "flowChartSummingJunction",
+          "fill": "accent1",
+          "alt": "The flowChartSummingJunction preset"
+        },
+        {
+          "shape": "flowChartOr",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartOr preset"
+        },
+        {
+          "shape": "flowChartCollate",
+          "fill": "accent1",
+          "alt": "The flowChartCollate preset"
+        },
+        {
+          "shape": "flowChartSort",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartSort preset"
+        },
+        {
+          "shape": "flowChartExtract",
+          "fill": "accent1",
+          "alt": "The flowChartExtract preset"
+        },
+        {
+          "shape": "flowChartMerge",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartMerge preset"
+        },
+        {
+          "shape": "flowChartOfflineStorage",
+          "fill": "accent1",
+          "alt": "The flowChartOfflineStorage preset"
+        },
+        {
+          "shape": "flowChartOnlineStorage",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartOnlineStorage preset"
+        },
+        {
+          "shape": "flowChartMagneticTape",
+          "fill": "accent1",
+          "alt": "The flowChartMagneticTape preset"
+        },
+        {
+          "shape": "flowChartMagneticDisk",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartMagneticDisk preset"
+        },
+        {
+          "shape": "flowChartMagneticDrum",
+          "fill": "accent1",
+          "alt": "The flowChartMagneticDrum preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-14",
+      "title": "Preset shapes 157 to 168",
+      "notes": "From flowChartDisplay to actionButtonBeginning: flowChartDisplay, flowChartDelay, flowChartAlternateProcess, flowChartOffpageConnector, actionButtonBlank, actionButtonHome, actionButtonHelp, actionButtonInformation, actionButtonForwardNext, actionButtonBackPrevious, actionButtonEnd, actionButtonBeginning.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "flowChartDisplay",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartDisplay preset"
+        },
+        {
+          "shape": "flowChartDelay",
+          "fill": "accent1",
+          "alt": "The flowChartDelay preset"
+        },
+        {
+          "shape": "flowChartAlternateProcess",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The flowChartAlternateProcess preset"
+        },
+        {
+          "shape": "flowChartOffpageConnector",
+          "fill": "accent1",
+          "alt": "The flowChartOffpageConnector preset"
+        },
+        {
+          "shape": "actionButtonBlank",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The actionButtonBlank preset"
+        },
+        {
+          "shape": "actionButtonHome",
+          "fill": "accent1",
+          "alt": "The actionButtonHome preset"
+        },
+        {
+          "shape": "actionButtonHelp",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The actionButtonHelp preset"
+        },
+        {
+          "shape": "actionButtonInformation",
+          "fill": "accent1",
+          "alt": "The actionButtonInformation preset"
+        },
+        {
+          "shape": "actionButtonForwardNext",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The actionButtonForwardNext preset"
+        },
+        {
+          "shape": "actionButtonBackPrevious",
+          "fill": "accent1",
+          "alt": "The actionButtonBackPrevious preset"
+        },
+        {
+          "shape": "actionButtonEnd",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The actionButtonEnd preset"
+        },
+        {
+          "shape": "actionButtonBeginning",
+          "fill": "accent1",
+          "alt": "The actionButtonBeginning preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-15",
+      "title": "Preset shapes 169 to 180",
+      "notes": "From actionButtonReturn to mathEqual: actionButtonReturn, actionButtonDocument, actionButtonSound, actionButtonMovie, gear6, gear9, funnel, mathPlus, mathMinus, mathMultiply, mathDivide, mathEqual.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "actionButtonReturn",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The actionButtonReturn preset"
+        },
+        {
+          "shape": "actionButtonDocument",
+          "fill": "accent1",
+          "alt": "The actionButtonDocument preset"
+        },
+        {
+          "shape": "actionButtonSound",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The actionButtonSound preset"
+        },
+        {
+          "shape": "actionButtonMovie",
+          "fill": "accent1",
+          "alt": "The actionButtonMovie preset"
+        },
+        {
+          "shape": "gear6",
+          "adjust": {
+            "adj1": 0.128
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The gear6 preset"
+        },
+        {
+          "shape": "gear9",
+          "adjust": {
+            "adj1": 0.085
+          },
+          "fill": "accent1",
+          "alt": "The gear9 preset"
+        },
+        {
+          "shape": "funnel",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The funnel preset"
+        },
+        {
+          "shape": "mathPlus",
+          "adjust": {
+            "adj1": 0.2
+          },
+          "fill": "accent1",
+          "alt": "The mathPlus preset"
+        },
+        {
+          "shape": "mathMinus",
+          "adjust": {
+            "adj1": 0.2
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The mathMinus preset"
+        },
+        {
+          "shape": "mathMultiply",
+          "adjust": {
+            "adj1": 0.2
+          },
+          "fill": "accent1",
+          "alt": "The mathMultiply preset"
+        },
+        {
+          "shape": "mathDivide",
+          "adjust": {
+            "adj1": 0.2
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The mathDivide preset"
+        },
+        {
+          "shape": "mathEqual",
+          "adjust": {
+            "adj1": 0.2
+          },
+          "fill": "accent1",
+          "alt": "The mathEqual preset"
+        }
+      ]
+    },
+    {
+      "id": "presets-16",
+      "title": "Preset shapes 181 to 187",
+      "notes": "From mathNotEqual to chartPlus: mathNotEqual, cornerTabs, squareTabs, plaqueTabs, chartX, chartStar, chartPlus.",
+      "composition": {
+        "mode": "grid",
+        "columns": 4,
+        "gap": 0.03
+      },
+      "blocks": [
+        {
+          "shape": "mathNotEqual",
+          "adjust": {
+            "adj1": 0.2
+          },
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The mathNotEqual preset"
+        },
+        {
+          "shape": "cornerTabs",
+          "fill": "accent1",
+          "alt": "The cornerTabs preset"
+        },
+        {
+          "shape": "squareTabs",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The squareTabs preset"
+        },
+        {
+          "shape": "plaqueTabs",
+          "fill": "accent1",
+          "alt": "The plaqueTabs preset"
+        },
+        {
+          "shape": "chartX",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The chartX preset"
+        },
+        {
+          "shape": "chartStar",
+          "fill": "accent1",
+          "alt": "The chartStar preset"
+        },
+        {
+          "shape": "chartPlus",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.2
+          },
+          "alt": "The chartPlus preset"
+        }
+      ]
+    }
+  ]
+}

@@ -5,7 +5,7 @@
 // format is involved; any other use is a usage error (exit 2). Drawing and PowerPoint run core's export engine
 // (`@openpresentation/opf/internal/engine`, the engine of `convert` of `@openpresentation/opf`) through the optional peers.
 import path from "node:path";
-import { type ConvertOptions, type ConvertedFile, type Finding, type FindingSeverity, type Presentation } from "@openpresentation/opf";
+import type { ConvertOptions, ConvertedFile, Finding, FindingSeverity, Presentation } from "@openpresentation/opf";
 import { fromYaml } from "@openpresentation/opf/yaml";
 import { type ConversionPlan, OPFApiError, exportFormatOf, importPresentation, loadPptx, planConversion, writePlanned } from "@openpresentation/opf/internal/engine";
 import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
@@ -24,7 +24,7 @@ type Target = { kind: "deck"; format: DeckFormat } | { kind: "export"; format: E
 const MD_INPUT = ["split", "title"] as const;
 const YAML_INPUT = ["aliases"] as const;
 const PPTX_INPUT = ["signals"] as const;
-const EXPORT_ONLY = ["slides", "include-hidden", "paginate", "keep-slides", "scale", "raster", "text", "charts", "provenance", "images", "body-text", "slide-numbers", "typefaces", "as", "date", "asset-dir", "fonts"] as const;
+const EXPORT_ONLY = ["slides", "include-hidden", "paginate", "keep-slides", "scale", "raster", "text", "charts", "diagrams", "provenance", "images", "body-text", "smart-art", "slide-numbers", "typefaces", "as", "date", "asset-dir", "fonts"] as const;
 const MEDIA: Record<string, string> = { svg: "image/svg+xml", png: "image/png", pdf: "application/pdf", pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation", zip: "application/zip" };
 
 export const spec: CommandSpec = {
@@ -33,7 +33,7 @@ export const spec: CommandSpec = {
 	summary: "Convert a deck or a .pptx to another form: a deck form, PDF, PPTX, PNG or SVG per slide, a .zip of slides, or stdout.",
 	operands: ["<input> (a deck, a .pptx, or - for stdin)", "<output> (a file whose extension names the format, or - for stdout with --to)"],
 	positional: [2, 2],
-	values: ["from", "to", "fail-on", "split", "title", "signals", "slides", "scale", "text", "charts", "provenance", "images", "body-text", "slide-numbers", "typefaces", "as", "date", "asset-dir"],
+	values: ["from", "to", "fail-on", "split", "title", "signals", "slides", "scale", "text", "charts", "diagrams", "provenance", "images", "body-text", "smart-art", "slide-numbers", "typefaces", "as", "date", "asset-dir"],
 	repeated: ["fonts"],
 	flags: ["force", "aliases", "schema-comment", "drop-unsupported", "include-hidden", "paginate", "keep-slides", "raster"],
 	help: `Formats. Input: .json, .opf.yaml/.yaml/.yml, .opf.md and a plain .md (OPF Markdown, an outline included), .pptx, or -
@@ -60,14 +60,21 @@ Flags, each only where its format is involved (otherwise exit 2):
                                                   further slides between whole blocks (slide-continued, report continued)
                    --keep-slides                  draw every slide as written, also one that overflows
   pptx             --charts <auto|native|picture>  --images <compatible|preserve>  --provenance <full|references-only|none>
+                   --diagrams <shapes|picture>    shapes (the default): native shapes, text and connectors for the diagram
+                                                  families that passed their comparison with the preview in PowerPoint; the
+                                                  others stay pictures (diagram-shapes-unavailable). picture: each diagram one
+                                                  SVG picture
                    --body-text <measured|native>  measured (the default): every wrapped line is its own text box, laid out as the
                                                   preview draws it. native: opt in to whole paragraphs, a wrapped title as the
                                                   Title placeholder and a text or list as one body, so PowerPoint and Keynote
                                                   re-wrap edited text; what it cannot carry stays measured (native-body-fallback)
-                   --slide-numbers <static|live>  a footer like "{{slide.number}} / {{deck.slideCount}}": static (the default)
-                                                  writes the number as fixed text, so Keynote shows the words too; live keeps the
-                                                  slide-number field, which Keynote shows as the digit alone. A bare
-                                                  {{slide.number}} stays a live field either way
+                   --smart-art <live|shapes>      a pyramid, matrix or cycle layout: live (the default) writes live SmartArt where
+                                                  PowerPoint draws it as the preview does, else native shapes (smartart-
+                                                  unavailable says why); shapes writes native shapes always
+                   --slide-numbers <static|live>  a footer like "{{slide.number}} / {{deck.slideCount}}": live (the default)
+                                                  keeps the slide-number field, so PowerPoint renumbers it, but Keynote shows it
+                                                  as the digit alone; static writes the number as fixed text, so Keynote shows
+                                                  the words too. A bare {{slide.number}} stays a live field either way
                    --typefaces <selected|safe>    selected (the default): the families the deck chose; a viewer without one
                                                   substitutes another font (typeface-not-office-safe names them). safe: write
                                                   each Latin text family as Arial, Georgia, Courier New or Times New Roman,
@@ -152,9 +159,11 @@ export async function run(args: string[], host: Host): Promise<void> {
 	const failOn = failOnOf(options);
 	const target = targetOf(output, to);
 	oneOf("--charts", options.charts, ["auto", "native", "picture"] as const);
+	oneOf("--diagrams", options.diagrams, ["picture", "shapes"] as const);
 	oneOf("--provenance", options.provenance, ["full", "references-only", "none"] as const);
 	oneOf("--images", options.images, ["compatible", "preserve"] as const);
 	oneOf("--body-text", options["body-text"], ["measured", "native"] as const);
+	oneOf("--smart-art", options["smart-art"], ["live", "shapes"] as const);
 	oneOf("--slide-numbers", options["slide-numbers"], ["static", "live"] as const);
 	oneOf("--typefaces", options.typefaces, ["selected", "safe"] as const);
 	oneOf("--as", options.as, ["native", "images"] as const);
@@ -266,6 +275,8 @@ export async function run(args: string[], host: Host): Promise<void> {
 /** A missing or old peer, with the one command that installs what this conversion needs. */
 function explainPeer(error: unknown, target: Target, raster: boolean, raw: string | undefined, sourceFormat: DeckFormat | "pptx"): unknown {
 	if (!(error instanceof OPFApiError) || (error.code !== "peer-not-installed" && error.code !== "peer-too-old")) return error;
+	// Font packages the deck's faces need: the renderer named exactly those and their install line, so the format's whole list is not added.
+	if (Array.isArray(error.details?.packages)) return fromApiError(error);
 	let pictures = false;
 	try {
 		pictures = raw !== undefined && (sourceFormat === "json" ? hasPictures(JSON.parse(raw.replace(/^\uFEFF/, ""))) : /\.(png|jpe?g|gif|webp)\b/i.test(raw));
@@ -308,9 +319,11 @@ async function exportDeck(
 			text: text("text"),
 			raster: options.raster === true ? true : undefined,
 			charts: text("charts"),
+			diagrams: text("diagrams"),
 			provenance: text("provenance"),
 			images: text("images"),
 			bodyText: text("body-text"),
+			smartArt: text("smart-art"),
 			slideNumbers: text("slide-numbers"),
 			typefaces: text("typefaces"),
 			as: text("as"),
@@ -332,7 +345,7 @@ async function exportDeck(
 	const wanted = MEDIA[target.zip ? "zip" : target.format];
 	for (const file of plan.files) if (file.type !== wanted) throw new CliError(`Internal error: ${file.path ?? file.name} would be written as ${file.type}, not ${wanted}. Nothing was written.`, "format-mismatch", 2);
 	// The located findings of the check replace the engine's unlocated copy of them; the engines' own findings follow.
-	const findings = located ? [...located, ...plan.findings.filter((found) => !/^(opf|yaml|markdown)\//.test(found.ruleId))] : plan.findings;
+	const findings = located ? [...located, ...plan.findings.filter((found) => !located.some((original) => original.ruleId === found.ruleId && original.path === found.path && original.message === found.message))] : plan.findings;
 	const factsOf = (file: ConvertedFile) => ({
 		...(file.slide === undefined ? {} : { slide: file.slide, id: file.id }),
 		...(file.width === undefined || file.height === undefined ? {} : { width: file.width, height: file.height }),

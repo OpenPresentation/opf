@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf",
-  "version": "0.31.0",
+  "version": "0.34.1",
   "description": "Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; in Node, the file API and the CLI defaults register the pptx.gallery catalog of @openpresentation/gallery.",
   "license": "MIT",
   "author": "Open Presentation",
@@ -96,6 +96,14 @@
       "types": "./dist/symbol-font-encodings.d.ts",
       "import": "./dist/symbol-font-encodings.js"
     },
+    "./shape-geometry": {
+      "types": "./dist/shape-geometry.d.ts",
+      "import": "./dist/shape-geometry.js"
+    },
+    "./shape-catalog": {
+      "types": "./dist/shape-catalog.d.ts",
+      "import": "./dist/shape-catalog.js"
+    },
     "./deck": {
       "types": "./dist/deck.d.ts",
       "import": "./dist/deck.js"
@@ -151,11 +159,19 @@
     },
     "#diagram-engine": {
       "types": "./src/diagram-engine-eager.ts",
-      "workerd": "./dist/diagram-engine-eager.js",
-      "worker": "./dist/diagram-engine-eager.js",
-      "edge-light": "./dist/diagram-engine-eager.js",
+      "workerd": "./dist/diagram-engine-lazy.js",
+      "worker": "./dist/diagram-engine-lazy.js",
+      "edge-light": "./dist/diagram-engine-lazy.js",
       "browser": "./dist/diagram-engine-lazy.js",
       "default": "./dist/diagram-engine-eager.js"
+    },
+    "#shape-engine": {
+      "types": "./src/shape-engine-eager.ts",
+      "workerd": "./dist/shape-engine-lazy.js",
+      "worker": "./dist/shape-engine-lazy.js",
+      "edge-light": "./dist/shape-engine-lazy.js",
+      "browser": "./dist/shape-engine-lazy.js",
+      "default": "./dist/shape-engine-eager.js"
     }
   },
   "files": [
@@ -171,7 +187,7 @@
     "clean": "rm -rf dist src/generated",
     "generate": "node scripts/generate.mjs && node scripts/generate-content.mjs",
     "build:deps": "pnpm --filter \"@openpresentation/opf^...\" --fail-if-no-match run build",
-    "build": "node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/minify-precompiled.mjs && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)",
+    "build": "node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/minify-precompiled.mjs && node scripts/copy-spec.mjs && node scripts/copy-example-files.mjs && node ../../scripts/reuse-build.mjs stamp)",
     "typecheck": "pnpm run build:deps && pnpm run generate && node ../../scripts/typecheck.mjs --noEmit",
     "test": "pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs",
     "test:workerd": "pnpm run build:deps && pnpm run build && node --test test/workerd.test.mjs",
@@ -202,11 +218,11 @@
     "sharp": "0.35.5",
     "tsup": "^9.0.0",
     "typescript": "~5.9.3",
-    "workerd": "1.20261030.1"
+    "workerd": "1.20261113.1"
   },
   "peerDependencies": {
-    "@openpresentation/opf-pptx": "^0.31.0",
-    "@openpresentation/opf-render": "^0.31.0"
+    "@openpresentation/opf-pptx": "^0.34.1",
+    "@openpresentation/opf-render": "^0.34.1"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-pptx": {

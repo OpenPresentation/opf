@@ -26,15 +26,15 @@ const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const repack = entries => zipSync(Object.fromEntries(Object.keys(entries).sort().map(name => [name, [entries[name], {mtime: new Date(1980, 0, 1)}]])), {level: 6});
 const cases = [];
 for (const measured of [false, true]) for (const [width, height] of [[1280, 720], [720, 1280]]) for (const floor of [16, 32]) for (const local of [false, true]) {
-  const source = {organization: {id: 'primary', name: 'Organization'}, design: {fontScheme: 'roboto', dimensions: {widthInches: width / 96, heightInches: height / 96}, header: {left: {text: ' Authored\twords \r\n\r\nlast  \r'}, center: {text: '{{organization.name}}'}, right: {text: '{{slide.section}}'}}, footer: {left: {date: ' 2026-09-10 '}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'Furniture', section: 'Section', text: 'Keep body words.', composition: {minFontSize: floor, overflow: 'error'}, ...(local ? {design: {header: {left: {image, text: ''}, right: {text: 'Local'}}}} : {})}]};
+  const source = {organization: {id: 'primary', name: 'Organization'}, design: {fontScheme: 'roboto', dimensions: {widthInches: width / 96, heightInches: height / 96}, header: {start: {text: ' Authored\twords \r\n\r\nlast  \r'}, center: {text: '{{organization.name}}'}, end: {text: '{{slide.section}}'}}, footer: {start: {date: ' 2026-09-10 '}, end: {text: '{{slide.number}}'}}}, slides: [{title: 'Furniture', section: 'Section', text: 'Keep body words.', composition: {minFontSize: floor, overflow: 'error'}, ...(local ? {design: {header: {start: {image, text: ''}, end: {text: 'Local'}}}} : {})}]};
   cases.push({id: `furniture-${measured ? 'measured' : 'estimated'}-${width}-${floor}-${local ? 'local' : 'inherited'}`, source, options: measured ? {fonts} : {}});
 }
 cases.push(
   {id: 'notes-control', source: {slides: [{title: 'Speaker notes', text: 'First slide', notes: 'Keep these speaker notes.\nSecond line.'}, {title: 'Second slide', image, notes: 'Second slide speaker notes.'}]}},
   {id: 'plain-control', source: {slides: [{title: 'Plain control', text: 'Current content'}]}},
   {id: 'image-control', source: {slides: [{title: 'Image control', image}]}},
-  {id: 'empty-furniture', source: {design: {header: {left: {text: ''}}}, slides: [{text: 'Body'}]}},
-  {id: 'disabled-furniture', source: {design: {header: {left: {text: 'Disabled'}}}, slides: [{text: 'Body', design: {header: false, footer: false}}]}},
+  {id: 'empty-furniture', source: {design: {header: {start: {text: ''}}}, slides: [{text: 'Body'}]}},
+  {id: 'disabled-furniture', source: {design: {header: {start: {text: 'Disabled'}}}, slides: [{text: 'Body', design: {header: false, footer: false}}]}},
 );
 const manifest = [];
 for (const {id, source, options = {}} of cases) {

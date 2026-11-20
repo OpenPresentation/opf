@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
+import { createNodeDemand } from "./font-demand.js";
 import { createFontRegistry, OPFFontError } from "./font-registry.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { lazyFontList } from "./lazy-font-list.js";
@@ -8,6 +9,7 @@ import { textOutlines } from "./text-paths.js";
 import { createSubsetter, fontSubsets } from "./font-subset.js";
 import { createShaper } from "./hb-shape.js";
 import { packageRoot, resolveInstalled } from "./node-resolve.js";
+import { scriptFontNotInstalledMessage } from "./script-font-message.js";
 export { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { analyzePresentationScripts, autoScriptSelection, createScriptAnalysis, nextFallbackPackage, scriptFontPackages, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontPackages } from "./script-font-pack.js";
@@ -35,7 +37,12 @@ function requireInstalled(packages, what) {
   });
   if (!missing.length) return;
   const install = `npm install ${missing.map(pkg => `${pkg.name}@${pkg.version}`).join(" ")}`;
-  throw new OPFFontError("font-resource-unavailable", `${what} needs font packages that are not installed (optional peer dependencies of @openpresentation/opf-render): run \`${install}\`.`, {packages: missing.map(pkg => pkg.name), install});
+  // The families each package serves here (for a presentation: only the faces it selects), so the message says what needs it.
+  const familiesOf = pkg => [...new Set((pkg.faces ?? []).map(face => face.family).filter(Boolean))];
+  const faces = [...new Set(missing.flatMap(familiesOf))];
+  const named = missing.map(pkg => { const families = familiesOf(pkg); return families.length ? `${pkg.name} (${families.join(", ")})` : pkg.name; }).join(", ");
+  const one = missing.length === 1;
+  throw new OPFFontError("font-resource-unavailable", `${what} needs ${one ? "a font package that is" : "font packages that are"} not installed (${one ? "an optional peer dependency" : "optional peer dependencies"} of @openpresentation/opf-render): ${named}. Run \`${install}\`.`, {packages: missing.map(pkg => pkg.name), faces, install});
 }
 
 // `skipped`: an optional npm package that is not installed is recorded there instead of failing (scripts: 'auto').
@@ -77,7 +84,7 @@ async function loadPackages(packages, skipped, {fallbackOnly = false, what = "Th
       const file = path.join(directory, face.file);
       const data = await verifiedFile(file, face.sha256, {package:pkg.name, file:face.file});
       fontFiles.push(file);
-      entries.push({data:new Uint8Array(data), family:face.family, weight:face.weight, italic:face.italic, license, ...(pkg.scripts ? {scripts:[...pkg.scripts]} : {}), ...(fallbackOnly ? {fallbackOnly:true, embed:"used"} : {})});
+      entries.push({data:new Uint8Array(data), family:face.family, weight:face.weight, italic:face.italic, license, ...(pkg.scripts ? {scripts:[...pkg.scripts]} : {}), ...(fallbackOnly || face.fallbackOnly ? {fallbackOnly:true, embed:"used"} : {})});
     }
   }
   return {entries, fontFiles, packages:packages.map(pkg => pkg.name)};
@@ -108,7 +115,7 @@ async function withScripts(loaded, scripts, {presentation, onDiagnostic, renderO
   const selection = scriptSelectionOf(analyzePresentationScripts(presentation, undefined, renderOptions)), skipped = [];
   const extra = await loadPackages(notLoaded(scriptFontPackages(selection.scripts)), skipped);
   for (const script of selection.unavailable) onDiagnostic?.({code: "script-font-unavailable", script, message: `No pinned open font serves script '${script}'; that text uses the design font.`});
-  for (const item of skipped) onDiagnostic?.({code: "script-font-not-installed", package: item.package, scripts: item.scripts, message: `Install ${item.package}@${item.version} to preview ${item.scripts.join(", ")} text with its designated open font.`});
+  for (const item of skipped) onDiagnostic?.({code: "script-font-not-installed", package: item.package, version: item.version, scripts: item.scripts, message: scriptFontNotInstalledMessage(`Install ${item.package}@${item.version} to preview ${item.scripts.join(", ")} text with its designated open font.`, item.package, item.version)});
   return {entries:[...loaded.entries, ...embedUsed(extra.entries)], fontFiles:[...loaded.fontFiles, ...extra.fontFiles], packages:[...(loaded.packages ?? []), ...extra.packages],
     selection:{...selection, packages: scriptFontPackages(selection.scripts).map(item => item.name).filter(name => !skipped.some(item => item.package === name)), notInstalled: skipped.map(item => item.package)}};
 }
@@ -134,7 +141,7 @@ async function completeFallback(registry, presentation, loaded, onDiagnostic, re
     const skipped = [], extra = await loadPackages([next], skipped);
     if (skipped.length) {
       selection.notInstalled.push(next.name);
-      onDiagnostic?.({code: "script-font-not-installed", package: next.name, scripts: [...next.scripts], message: `Install ${next.name}@${next.version} for glyphs the loaded CJK faces lack.`});
+      onDiagnostic?.({code: "script-font-not-installed", package: next.name, version: next.version, scripts: [...next.scripts], message: scriptFontNotInstalledMessage(`Install ${next.name}@${next.version} for glyphs the loaded CJK faces lack.`, next.name, next.version)});
       continue;
     }
     registry.addFaces(embedUsed(extra.entries));
@@ -237,7 +244,7 @@ async function ensureFonts(registry, loaded, presentation, {onDiagnostic, render
   selection.packages.push(...extra.packages);
   for (const item of skipped) {
     selection.notInstalled.push(item.package);
-    onDiagnostic?.({code: "script-font-not-installed", package: item.package, scripts: item.scripts, message: `Install ${item.package}@${item.version} to preview ${item.scripts.join(", ")} text with its designated open font.`});
+    onDiagnostic?.({code: "script-font-not-installed", package: item.package, version: item.version, scripts: item.scripts, message: scriptFontNotInstalledMessage(`Install ${item.package}@${item.version} to preview ${item.scripts.join(", ")} text with its designated open font.`, item.package, item.version)});
   }
   for (const script of wanted.unavailable) if (!selection.unavailable.includes(script)) {
     selection.unavailable.push(script);
@@ -277,10 +284,12 @@ function nodeHarfbuzz(kind) {
  */
 export async function loadFonts({pack = "base", embedScriptFonts = false, ...options} = {}) {
   if (pack !== "base" && pack !== "office" && pack !== "none") throw new OPFFontError("invalid-font-pack", "Choose the base, office or none font pack.", {pack});
-  const {registry, loaded} = await buildRegistry(pack, options);
+  const demand = options.presentation !== undefined ? await createNodeDemand(pack, options, {loadPackages, callerFaces, renamedAliases}) : undefined;
+  const {registry, loaded} = demand ?? await buildRegistry(pack, options);
+  if(demand)registry.lazyFonts=lazyOf(registry);
   // Script faces are large (CJK faces are 5-10 MB each). Raster output reads them from fontFiles; embed them in standalone SVG only
   // on request. The default Noto Sans fallback is always offered (embed "used"), so an SVG carries it exactly when its text draws it.
-  const selectEmbedded = () => registry.selectEmbeddedFonts(face => embedScriptFonts || !face.scripts || face.fallbackOnly);
+  const selectEmbedded = () => { const selected=registry.selectEmbeddedFonts(face => embedScriptFonts || !face.scripts || face.fallbackOnly); return demand?demand.orderFaces(selected):selected; };
   // The embedded list is base64 of every face: computed on first use, and again after `ensure` added faces.
   let embeddedFonts, fontFiles = [...registry.fontFiles];
   // Calls mutate one registry: serialize their reads/additions, while returning each
@@ -288,12 +297,16 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
   let ensureQueue = Promise.resolve();
   // `pending` is asked before every render: each string is scanned once and each slide's families resolved once (see createScriptAnalysis).
   const scriptMemory = createScriptAnalysis();
+  const renderOptionsFor = callOptions => {const {renderOptions,onDiagnostic,mapFamily,preserveChosenFamilies,measurementRequests,signal,...inline}=callOptions??{};return {...options.renderOptions,...inline,...renderOptions};};
   const refresh = () => { embeddedFonts = undefined; fontFiles = [...registry.fontFiles]; };
   const [subsetter, shaper] = await Promise.all([nodeHarfbuzz("subsets"), nodeHarfbuzz("shaper")]);
   for (const [kind, engine] of [["subsets", subsetter], ["shaper", shaper]]) if (!engine) {
     const {file, without} = HARFBUZZ[kind];
     options.onDiagnostic?.({code: "harfbuzz-unavailable", package: "harfbuzzjs", file, message: `${file} could not be loaded, so ${without}. Ship the harfbuzzjs package with the server.`});
   }
+  const outlines = textOutlines({ registry, shaper });
+  // Private local handoff only: later public setShaper calls remain conservative full-measure coverage.
+  demand?.acceptOwnedShaper();
   return {
     textMeasurement: registry.textMeasurement,
     get embeddedFonts() { return (embeddedFonts ??= selectEmbedded()); },
@@ -302,7 +315,7 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     loadSystemFonts: false,
     registry,
     // RR-64: the outline engine `toSvg(deck, { fonts, text: "paths" })` draws text with, over this registry's faces.
-    outlines: textOutlines({ registry, shaper }),
+    outlines,
     // RR-65: the subset engine that cuts each face an SVG embeds to the characters the slide draws.
     ...(subsetter ? { subsets: fontSubsets(registry, subsetter) } : {}),
     manifest: BUNDLED_FONT_MANIFEST,
@@ -310,15 +323,28 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     /** Load the script faces the presentation's text needs (see `ensureFonts`); `embeddedFonts` and `fontFiles` then include them. */
     ensure(presentation, callOptions = {}) {
       const result = ensureQueue.then(async () => {
-        const prepared = await ensureFonts(registry, loaded, presentation, {onDiagnostic: callOptions.onDiagnostic ?? options.onDiagnostic, renderOptions: {...options.renderOptions, ...callOptions.renderOptions}});
-        refresh();
-        return prepared;
+        const prepare = demand ? (_registry,_loaded,presentation,opts)=>demand.ensure(presentation,opts) : ensureFonts;
+        let rejected = false;
+        try {
+          return await prepare(registry, loaded, presentation, {onDiagnostic: callOptions.onDiagnostic ?? options.onDiagnostic, renderOptions: renderOptionsFor(callOptions), ...(callOptions.mapFamily ? {mapFamily:callOptions.mapFamily} : {}), ...(callOptions.preserveChosenFamilies ? {preserveChosenFamilies:true} : {}), ...(callOptions.measurementRequests ? {measurementRequests:callOptions.measurementRequests} : {})});
+        } catch (error) {
+          rejected = true;
+          throw error;
+        } finally {
+          // A later resource can fail after verified faces or fallback-only metadata already changed.
+          // Derived views must reflect those committed registry changes while the original rejection propagates.
+          try {
+            refresh();
+            if(demand)registry.lazyFonts=lazyOf(registry);
+          } catch(error) { if(!rejected)throw error; } // Never replace the original preparation rejection.
+        }
       });
       ensureQueue = result.catch(() => {});
       return result;
     },
     /** Synchronous: the script packages the presentation needs that are not loaded yet. Empty means `ensure` loads nothing. */
     pending(presentation, renderOptions) {
+      if(demand)return demand.pending(presentation,renderOptionsFor(renderOptions));
       const held = new Set([...loaded.packages, ...(loaded.selection?.notInstalled ?? [])]);
       const analysis = analyzePresentationScripts(presentation, undefined, {...options.renderOptions, ...renderOptions}, scriptMemory);
       const primary = scriptFontPackages(scriptSelectionOf(analysis).scripts).map(pkg => pkg.name).filter(name => !held.has(name));

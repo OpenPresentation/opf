@@ -60,7 +60,7 @@ for (const { name, design, link: linkSource } of cases) {
     { text: "coloredlink", link: "https://example.com/colored", color: "#C0FFEE" },
     { text: "plaintext" },
   ];
-  const deck = { design, slides: runs.map((run) => ({ title: "Roles", text: [run] })) };
+  const deck = { design, slides: runs.map((run) => ({ title: "Roles", subtitle: "Roles", text: [run] })) }; // a subtitle: the slide is no lone message (LH-164), so it keeps the deck surface
   const files = unzipSync(await toPptx(deck));
   const theme = themeColors(files);
   const masterMap = clrMapOf(decode(files["ppt/slideMasters/slideMaster1.xml"]));
@@ -95,15 +95,15 @@ assert.equal(expected.surface, "#EEEEDD");
 assert.equal(expected.textSecondary, "#556677");
 assert.equal(expected.background, "#FFF8E7");
 assert.equal(resolveColorRoles({ ...cool, ...cases[0].design.colorScheme }, { background: "#000000" }).text, cool.light1.toUpperCase(), "a text override does not apply on a dark background");
-const lightSvg = toSvg({ design: cases[0].design, slides: [{ text: [{ text: "reftext", color: "text" }] }] }, 1);
+const lightSvg = toSvg({ design: cases[0].design, slides: [{ title: "Roles", subtitle: "Roles", text: [{ text: "reftext", color: "text" }] }] }, 1);
 assert.equal(svgFill(lightSvg, "reftext"), "334455");
 
 // A text override does not make text unreadable on a dark background: the dark slide keeps light1 text, in both engines.
-const darkSvg = toSvg({ design: cases[1].design, slides: [{ text: [{ text: "reftext", color: "text" }] }] }, 1);
+const darkSvg = toSvg({ design: cases[1].design, slides: [{ title: "Roles", subtitle: "Roles", text: [{ text: "reftext", color: "text" }] }] }, 1);
 assert.notEqual(svgFill(darkSvg, "reftext"), "334455", "text override ignored on a dark background");
 
 // Import: a link written in the theme hyperlink color comes back as a link with no color; a link with its own color keeps it.
-const linkDeck = { design: { theme: "classic", colorScheme: "forest-green" }, slides: [{ title: "Links", text: [{ text: "plain", link: "https://example.com/p" }, { text: "colored", link: "https://example.com/c", color: "#C0FFEE" }] }] };
+const linkDeck = { design: { theme: "classic", colorScheme: "forest-green" }, slides: [{ title: "Links", subtitle: "Links", text: [{ text: "plain", link: "https://example.com/p" }, { text: "colored", link: "https://example.com/c", color: "#C0FFEE" }] }] };
 const imported = await fromPptx(await toPptx(linkDeck));
 const importedRuns = imported.slides[0].text;
 const plainRun = importedRuns.find((run) => run.text === "plain"), coloredRun = importedRuns.find((run) => run.text === "colored");

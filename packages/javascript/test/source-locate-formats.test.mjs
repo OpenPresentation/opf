@@ -277,7 +277,7 @@ describe("scanMarkdown", () => {
     assert.equal(scanMarkdown(text, { split: "rules" }).slides.length, 1);
   });
   test("the dialect vocabulary is exported", () => {
-    assert.deepEqual([...SLIDE_OPTION_KEYS], ["id", "type", "layout", "section", "tag", "hidden", "beat"]);
+    assert.deepEqual([...SLIDE_OPTION_KEYS], ["id", "type", "layout", "section", "tag", "hidden", "beat", "language"]);
     assert.deepEqual([...BLOCK_OPTION_KEYS], ["id", "type", "as", "region"]);
     assert.ok(FENCE_KINDS.includes("opf-slide") && METRIC_KEYS.includes("sentiment"));
     assert.deepEqual([...SPAN_VALUES], ["color", "size", "font", "lang"]);
@@ -300,8 +300,11 @@ function leaves(value, at = []) {
   return [at];
 }
 
+// Sampled by file name, not position, so adding an example never changes which existing decks are checked.
+const sampled = (name, every) => ([...name].reduce((hash, character) => Math.imul(hash ^ character.charCodeAt(0), 16777619), 2166136261) >>> 0) % every === 0;
+
 describe("every example deck", () => {
-  const sample = examples.filter((_, index) => index % 3 === 0);
+  const sample = examples.filter((example) => sampled(example.file, 3));
   test("in YAML, every leaf is located and pathAt reads the same path back", () => {
     let checked = 0;
     for (const { slug, deck } of sample) {

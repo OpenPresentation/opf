@@ -1,10 +1,8 @@
 #!/usr/bin/env node
-// MR-16: a cheap checkout for one agent task. The repository is large (the evidence archives under docs/evidence are
-// about 70 percent of the tracked tree and no agent task reads them), and every agent works in its own checkout on its own
-// branch from a fresh origin/main. This script makes that checkout small and fast:
+// MR-16: a cheap checkout for one agent task. Every agent works in its own checkout on its own branch from a fresh
+// origin/main, and the history is large (it still holds the evidence archives that left the tree in RR-20). This script
+// makes that checkout small and fast:
 //   - a blobless clone (`--filter=blob:none`): history without file contents, contents fetched when checked out;
-//   - a sparse profile that leaves docs/evidence/** and packages/*/docs/evidence/** out of the working tree (they stay in
-//     the index and in `git log`; `git sparse-checkout disable` brings them back);
 //   - one pnpm store per directory of worktrees (default: <parent of the checkout>/.pnpm-store, so it is on the same volume
 //     and installs hard-link instead of copy; OPF_PNPM_STORE or --store-dir override it).
 //
@@ -16,7 +14,6 @@
 //     --clone             make a new blobless clone instead of a worktree of the repository you are in (the default when
 //                         you are not inside a clone of this repository)
 //     --url <url>         what to clone (default OPF_REPO_URL, else https://github.com/OpenPresentation/opf.git)
-//     --full              no sparse profile: the whole tree, evidence included
 //     --store-dir <dir>   the shared pnpm store (default as above)
 //     --no-install        do not run `pnpm install --frozen-lockfile`
 //     --offline           do not fetch (a worktree of the clone you are in; the base must already exist)
@@ -37,11 +34,9 @@ import { spawnSpec } from './package-manager.mjs';
 export const DEFAULT_URL = 'https://github.com/OpenPresentation/opf.git';
 export const DEFAULT_BASE = 'origin/main';
 export const WINDOWS_PATH_LIMIT = 60;
-// Gitignore-style patterns for `git sparse-checkout set --no-cone`: everything except the evidence archives.
-export const SPARSE_PATTERNS = ['/*', '!/docs/evidence/', '!/packages/*/docs/evidence/'];
 const TASK = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 const VALUE_FLAGS = new Set(['--branch', '--path', '--base', '--store-dir', '--url']);
-const BOOLEAN_FLAGS = new Set(['--clone', '--full', '--no-install', '--offline', '--dry-run', '--allow-long-path', '--delete-branch', '--force']);
+const BOOLEAN_FLAGS = new Set(['--clone', '--no-install', '--offline', '--dry-run', '--allow-long-path', '--delete-branch', '--force']);
 
 export function parseArgs(argv) {
   const [command, ...rest] = argv;
@@ -88,20 +83,17 @@ export function storeDirFor(directory, options = {}, env = process.env) {
  * The git commands that make the checkout, in order: [{ args, cwd? }] (cwd is the checkout unless it is the repository
  * for a worktree). Pure, so the plan can be read with --dry-run and tested without running git.
  */
-export function planAdd({ mode, repo, url = DEFAULT_URL, directory, branch, base = DEFAULT_BASE, sparse = true, fetch = true }) {
+export function planAdd({ mode, repo, url = DEFAULT_URL, directory, branch, base = DEFAULT_BASE, fetch = true }) {
   const steps = [];
-  const sparseSet = { args: ['sparse-checkout', 'set', '--no-cone', ...SPARSE_PATTERNS], cwd: directory };
   if (mode === 'clone') {
     steps.push({ args: ['clone', '--filter=blob:none', '--no-checkout', url, directory], cwd: null });
-    if (sparse) steps.push(sparseSet);
     steps.push({ args: ['checkout', '--no-track', '-b', branch, base], cwd: directory });
     return steps;
   }
   const remote = /^([^/]+)\/(.+)$/.exec(base);
   if (fetch && remote) steps.push({ args: ['fetch', remote[1], remote[2]], cwd: repo });
   steps.push({ args: ['worktree', 'add', '--no-checkout', '--no-track', '-b', branch, directory, base], cwd: repo });
-  if (sparse) steps.push(sparseSet);
-  // `worktree add --no-checkout` leaves an empty index; the hard reset fills the working tree with the sparse set only.
+  // `worktree add --no-checkout` leaves an empty index; the hard reset fills the index and the working tree.
   steps.push({ args: ['reset', '--hard', '--quiet', 'HEAD'], cwd: directory });
   return steps;
 }
@@ -138,8 +130,8 @@ export function add(options, { env = process.env, platform = process.platform, c
   const root = insideRepository(cwd);
   const mode = options.clone || !isOpfClone(root) ? 'clone' : 'worktree';
   const base = options.base ?? DEFAULT_BASE;
-  const steps = planAdd({ mode, repo: root, url: options.url ?? env.OPF_REPO_URL ?? DEFAULT_URL, directory, branch, base, sparse: !options.full, fetch: !options.offline });
-  log(`${mode === 'clone' ? 'blobless clone' : `worktree of ${root}`} -> ${directory} (branch ${branch} from ${base}${options.full ? ', full tree' : ', sparse: no docs/evidence'})`);
+  const steps = planAdd({ mode, repo: root, url: options.url ?? env.OPF_REPO_URL ?? DEFAULT_URL, directory, branch, base, fetch: !options.offline });
+  log(`${mode === 'clone' ? 'blobless clone' : `worktree of ${root}`} -> ${directory} (branch ${branch} from ${base})`);
   for (const step of steps) run(step, options.dryRun, log);
   const store = storeDirFor(directory, options, env);
   if (!options.noInstall) {
@@ -155,7 +147,6 @@ export function add(options, { env = process.env, platform = process.platform, c
   log(`ready in ${seconds} s: ${directory}`);
   log(`branch ${branch}; keep using the shared store in this checkout:`);
   log(platform === 'win32' ? `  PowerShell: $env:npm_config_store_dir = '${store}'` : `  export npm_config_store_dir='${store}'`);
-  if (!options.full) log('docs/evidence is not checked out here; `git sparse-checkout disable` brings it back.');
   return { directory, branch, mode, store, steps };
 }
 

@@ -1,0 +1,849 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: design options",
+  "description": "RR-105 format coverage: an inline color scheme and font scheme with every field, color variants on every slot and with reordered accents, title and content alignment, content direction and box, chart placement, image fit, mirroring, logos and watermarks, and every named color in content.",
+  "language": "en-US",
+  "organization": {
+    "id": "harbor",
+    "name": "Harbor Labs",
+    "logo": {
+      "src": "./assets/logo.svg",
+      "alt": "Harbor Labs logo"
+    },
+    "role": "primary"
+  },
+  "design": {
+    "theme": "classic",
+    "colorScheme": {
+      "name": "Harbor",
+      "accent1": "#0F4C81",
+      "accent2": "#C2410C",
+      "accent3": "#15803D",
+      "accent4": "#7C3AED",
+      "accent5": "#0E7490",
+      "accent6": "#B45309",
+      "dark1": "#111827",
+      "dark2": "#1F2937",
+      "light1": "#FFFFFF",
+      "light2": "#EEF2F7",
+      "hyperlink": "#1D4ED8",
+      "followedHyperlink": "#6D28D9",
+      "primary": "#0F4C81",
+      "secondary": "#C2410C",
+      "accent": "#15803D",
+      "background": "#FFFFFF",
+      "surface": "#F8FAFC",
+      "text": "#111827",
+      "textSecondary": "#4B5563"
+    },
+    "fontScheme": {
+      "major": "Aptos Display",
+      "minor": "Aptos",
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "accent": "Aptos Serif",
+      "code": "Aptos Mono",
+      "eastAsian": {
+        "major": "Yu Gothic",
+        "minor": "Yu Gothic"
+      },
+      "complexScript": {
+        "major": "Noto Sans Arabic",
+        "minor": "Noto Sans Arabic"
+      },
+      "type": "sans-serif",
+      "app": "powerpoint",
+      "languageFamily": "latin"
+    },
+    "background": "light1",
+    "titleAlignment": "start",
+    "contentAlignment": "start",
+    "contentBox": false,
+    "watermark": {
+      "text": "DRAFT",
+      "opacity": 0.08
+    }
+  },
+  "slides": [
+    {
+      "id": "named-colors",
+      "title": "Every named color in one table",
+      "design": {
+        "watermark": false
+      },
+      "table": {
+        "columns": [
+          "Name",
+          "Sample",
+          "Name",
+          "Sample"
+        ],
+        "rows": [
+          [
+            "Slot accent1",
+            {
+              "value": "",
+              "style": {
+                "fill": "accent1"
+              }
+            },
+            "Slot accent2",
+            {
+              "value": "",
+              "style": {
+                "fill": "accent2"
+              }
+            }
+          ],
+          [
+            "Slot accent3",
+            {
+              "value": "",
+              "style": {
+                "fill": "accent3"
+              }
+            },
+            "Slot accent4",
+            {
+              "value": "",
+              "style": {
+                "fill": "accent4"
+              }
+            }
+          ],
+          [
+            "Slot accent5",
+            {
+              "value": "",
+              "style": {
+                "fill": "accent5"
+              }
+            },
+            "Slot accent6",
+            {
+              "value": "",
+              "style": {
+                "fill": "accent6"
+              }
+            }
+          ],
+          [
+            "Slot dark1",
+            {
+              "value": "",
+              "style": {
+                "fill": "dark1"
+              }
+            },
+            "Slot dark2",
+            {
+              "value": "",
+              "style": {
+                "fill": "dark2"
+              }
+            }
+          ],
+          [
+            "Slot light1",
+            {
+              "value": "",
+              "style": {
+                "fill": "light1"
+              }
+            },
+            "Slot light2",
+            {
+              "value": "",
+              "style": {
+                "fill": "light2"
+              }
+            }
+          ],
+          [
+            "Slot hyperlink",
+            {
+              "value": "",
+              "style": {
+                "fill": "hyperlink"
+              }
+            },
+            "Slot followedHyperlink",
+            {
+              "value": "",
+              "style": {
+                "fill": "followedHyperlink"
+              }
+            }
+          ],
+          [
+            "Slot primary",
+            {
+              "value": "",
+              "style": {
+                "fill": "primary"
+              }
+            },
+            "Slot secondary",
+            {
+              "value": "",
+              "style": {
+                "fill": "secondary"
+              }
+            }
+          ],
+          [
+            "Slot accent",
+            {
+              "value": "",
+              "style": {
+                "fill": "accent"
+              }
+            },
+            "Slot background",
+            {
+              "value": "",
+              "style": {
+                "fill": "background"
+              }
+            }
+          ],
+          [
+            "Slot surface",
+            {
+              "value": "",
+              "style": {
+                "fill": "surface"
+              }
+            },
+            "Slot surfaceAlt",
+            {
+              "value": "",
+              "style": {
+                "fill": "surfaceAlt"
+              }
+            }
+          ],
+          [
+            "Slot text",
+            {
+              "value": "",
+              "style": {
+                "fill": "text"
+              }
+            },
+            "Slot textSecondary",
+            {
+              "value": "",
+              "style": {
+                "fill": "textSecondary"
+              }
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "id": "variant-light1",
+      "title": "The light1 variant",
+      "text": "This slide draws on light1 with text and accents chosen to stay readable.",
+      "design": {
+        "variant": "light1"
+      }
+    },
+    {
+      "id": "variant-light2",
+      "title": "The light2 variant",
+      "text": "This slide draws on light2 with text and accents chosen to stay readable.",
+      "design": {
+        "variant": "light2"
+      }
+    },
+    {
+      "id": "variant-dark1",
+      "title": "The dark1 variant",
+      "text": "This slide draws on dark1 with text and accents chosen to stay readable.",
+      "design": {
+        "variant": "dark1"
+      }
+    },
+    {
+      "id": "variant-dark2",
+      "title": "The dark2 variant",
+      "text": "This slide draws on dark2 with text and accents chosen to stay readable.",
+      "design": {
+        "variant": "dark2"
+      }
+    },
+    {
+      "id": "variant-accent1",
+      "title": "The accent1 variant",
+      "text": "This slide draws on accent1 with text and accents chosen to stay readable.",
+      "design": {
+        "variant": "accent1"
+      }
+    },
+    {
+      "id": "variant-accent2",
+      "title": "The accent2 variant",
+      "text": "This slide draws on accent2 with text and accents chosen to stay readable.",
+      "design": {
+        "variant": "accent2"
+      }
+    },
+    {
+      "id": "variant-accent3",
+      "title": "The accent3 variant",
+      "text": "This slide draws on accent3 with text and accents chosen to stay readable.",
+      "design": {
+        "variant": "accent3"
+      }
+    },
+    {
+      "id": "variant-accent4",
+      "title": "The accent4 variant",
+      "text": "This slide draws on accent4 with text and accents chosen to stay readable.",
+      "design": {
+        "variant": "accent4"
+      }
+    },
+    {
+      "id": "variant-accent5",
+      "title": "The accent5 variant",
+      "text": "This slide draws on accent5 with text and accents chosen to stay readable.",
+      "design": {
+        "variant": "accent5"
+      }
+    },
+    {
+      "id": "variant-accent6",
+      "title": "The accent6 variant",
+      "text": "This slide draws on accent6 with text and accents chosen to stay readable.",
+      "design": {
+        "variant": "accent6"
+      }
+    },
+    {
+      "id": "variant-accents",
+      "title": "A dark variant with the accents reordered",
+      "design": {
+        "variant": {
+          "background": "dark2",
+          "accents": [
+            "accent4",
+            "accent3",
+            "accent2",
+            "accent1",
+            "accent6",
+            "accent5"
+          ]
+        }
+      },
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Revenue"
+          ],
+          "rows": [
+            [
+              "Q1",
+              12
+            ],
+            [
+              "Q2",
+              18
+            ],
+            [
+              "Q3",
+              22
+            ],
+            [
+              "Q4",
+              26
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "align-center",
+      "title": "A centered title and body",
+      "text": "Centered text suits a short statement.",
+      "design": {
+        "titleAlignment": "center",
+        "contentAlignment": "center"
+      }
+    },
+    {
+      "id": "align-end",
+      "title": "Title and body at the end edge",
+      "text": "End-aligned text sits against the right edge in this left-to-right deck.",
+      "design": {
+        "titleAlignment": "end",
+        "contentAlignment": "end",
+        "contentBox": true
+      }
+    },
+    {
+      "id": "direction-vertical",
+      "title": "Content stacked vertically",
+      "design": {
+        "contentDirection": "vertical"
+      },
+      "blocks": [
+        {
+          "text": "Revenue grew every quarter."
+        },
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  12
+                ],
+                [
+                  "Q2",
+                  18
+                ],
+                [
+                  "Q3",
+                  22
+                ],
+                [
+                  "Q4",
+                  26
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "direction-horizontal",
+      "title": "Content side by side",
+      "design": {
+        "contentDirection": "horizontal",
+        "mirror": true
+      },
+      "blocks": [
+        {
+          "text": "Revenue grew every quarter, mirrored to the other side."
+        },
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  12
+                ],
+                [
+                  "Q2",
+                  18
+                ],
+                [
+                  "Q3",
+                  22
+                ],
+                [
+                  "Q4",
+                  26
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "chart-none",
+      "title": "The chart placed by the engine",
+      "design": {
+        "chartPrimary": "none"
+      },
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  12
+                ],
+                [
+                  "Q2",
+                  18
+                ],
+                [
+                  "Q3",
+                  22
+                ],
+                [
+                  "Q4",
+                  26
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "text": "Revenue doubled from the first quarter to the last."
+        }
+      ]
+    },
+    {
+      "id": "chart-top",
+      "title": "The chart placed at the top",
+      "design": {
+        "chartPrimary": "top"
+      },
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  12
+                ],
+                [
+                  "Q2",
+                  18
+                ],
+                [
+                  "Q3",
+                  22
+                ],
+                [
+                  "Q4",
+                  26
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "text": "Revenue doubled from the first quarter to the last."
+        }
+      ]
+    },
+    {
+      "id": "chart-bottom",
+      "title": "The chart placed at the bottom",
+      "design": {
+        "chartPrimary": "bottom"
+      },
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  12
+                ],
+                [
+                  "Q2",
+                  18
+                ],
+                [
+                  "Q3",
+                  22
+                ],
+                [
+                  "Q4",
+                  26
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "text": "Revenue doubled from the first quarter to the last."
+        }
+      ]
+    },
+    {
+      "id": "chart-start",
+      "title": "The chart placed at the start",
+      "design": {
+        "chartPrimary": "start"
+      },
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  12
+                ],
+                [
+                  "Q2",
+                  18
+                ],
+                [
+                  "Q3",
+                  22
+                ],
+                [
+                  "Q4",
+                  26
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "text": "Revenue doubled from the first quarter to the last."
+        }
+      ]
+    },
+    {
+      "id": "chart-end",
+      "title": "The chart placed at the end",
+      "design": {
+        "chartPrimary": "end"
+      },
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  12
+                ],
+                [
+                  "Q2",
+                  18
+                ],
+                [
+                  "Q3",
+                  22
+                ],
+                [
+                  "Q4",
+                  26
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "text": "Revenue doubled from the first quarter to the last."
+        }
+      ]
+    },
+    {
+      "id": "image-fit-cover",
+      "title": "Pictures fit by cover",
+      "design": {
+        "imageFit": "cover"
+      },
+      "blocks": [
+        {
+          "image": {
+            "src": "./assets/cover-image.png",
+            "alt": "Harbor at dusk"
+          }
+        },
+        {
+          "text": "The deck sets how every picture fits its frame."
+        }
+      ]
+    },
+    {
+      "id": "image-fit-contain",
+      "title": "Pictures fit by contain",
+      "design": {
+        "imageFit": "contain"
+      },
+      "blocks": [
+        {
+          "image": {
+            "src": "./assets/cover-image.png",
+            "alt": "Harbor at dusk"
+          }
+        },
+        {
+          "text": "The deck sets how every picture fits its frame."
+        }
+      ]
+    },
+    {
+      "id": "image-fit-stretch",
+      "title": "Pictures fit by stretch",
+      "design": {
+        "imageFit": "stretch"
+      },
+      "blocks": [
+        {
+          "image": {
+            "src": "./assets/cover-image.png",
+            "alt": "Harbor at dusk"
+          }
+        },
+        {
+          "text": "The deck sets how every picture fits its frame."
+        }
+      ]
+    },
+    {
+      "id": "image-fit-auto",
+      "title": "Pictures fit by auto",
+      "design": {
+        "imageFit": "auto"
+      },
+      "blocks": [
+        {
+          "image": {
+            "src": "./assets/cover-image.png",
+            "alt": "Harbor at dusk"
+          }
+        },
+        {
+          "text": "The deck sets how every picture fits its frame."
+        }
+      ]
+    },
+    {
+      "id": "watermark-image",
+      "title": "A picture watermark",
+      "text": "Confidential until the board meets.",
+      "design": {
+        "watermark": {
+          "src": "./assets/watermark.png",
+          "opacity": 0.15
+        }
+      }
+    },
+    {
+      "id": "watermark-asset",
+      "title": "A watermark from a path",
+      "text": "The same mark from a plain path.",
+      "design": {
+        "watermark": "./assets/watermark.png"
+      }
+    },
+    {
+      "id": "logo-override",
+      "layout": "cover",
+      "title": "A cover that draws the icon logo",
+      "subtitle": "Harbor Labs",
+      "design": {
+        "logo": "var:organization.logo"
+      }
+    },
+    {
+      "id": "logo-off",
+      "layout": "section",
+      "title": "A section without a logo",
+      "design": {
+        "logo": false
+      }
+    },
+    {
+      "id": "slide-schemes",
+      "title": "A slide with its own schemes",
+      "text": "This slide swaps in a serif font scheme and a green palette.",
+      "design": {
+        "colorScheme": "forest-green",
+        "fontScheme": {
+          "id": "georgia",
+          "major": "Georgia",
+          "minor": "Georgia",
+          "type": "serif",
+          "app": "google-slides",
+          "languageFamily": "eastAsian"
+        }
+      }
+    },
+    {
+      "id": "slide-mono",
+      "title": "A slide in a monospace scheme",
+      "text": "Status: all systems normal.",
+      "design": {
+        "fontScheme": {
+          "major": "Roboto Mono",
+          "minor": "Roboto Mono",
+          "type": "monospace",
+          "languageFamily": "ea"
+        }
+      }
+    },
+    {
+      "id": "slide-complex",
+      "title": "Font scheme families for complex scripts",
+      "text": "The scheme names its complex-script faces.",
+      "design": {
+        "fontScheme": {
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "languageFamily": "complexScript"
+        }
+      }
+    },
+    {
+      "id": "slide-light",
+      "title": "A slide in Segoe UI Light",
+      "text": "Light and semilight faces draw lighter in the preview, as in PowerPoint.",
+      "design": {
+        "fontScheme": {
+          "major": "Segoe UI Light",
+          "minor": "Segoe UI Semilight"
+        }
+      }
+    },
+    {
+      "id": "slide-cs",
+      "title": "The short family names",
+      "text": "cs and ea are the DrawingML short forms.",
+      "design": {
+        "fontScheme": {
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "languageFamily": "cs"
+        }
+      }
+    }
+  ]
+}

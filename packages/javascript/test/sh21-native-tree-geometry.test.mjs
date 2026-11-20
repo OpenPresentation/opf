@@ -1,0 +1,37 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {test} from 'node:test';
+import {nativeTreeGeometry} from '../dist/composition.js';
+const fixture=JSON.parse(readFileSync(new URL('./fixtures/sh21-native-tree-rectangles.json',import.meta.url),'utf8'));
+const PT=.75;
+test('SH21: bounded binary fit reproduces all420 observed native tree node and connector rectangle measurements',()=>{
+ assert.equal(fixture.cases.length,420);let maximum=0;
+ for(const item of fixture.cases){
+  const [width,height]=item.frame.split('x').map(n=>Number(n)/PT),entries=structuredClone(item.entries),before=structuredClone(entries),frame={x:0,y:0,width,height};
+  const actual=nativeTreeGeometry(item.kind,frame,entries);assert.equal(actual.ok,true,item.kind+'/'+item.set);assert.deepEqual(entries,before,'tree geometry never edits authored content');assert.equal(actual.nodes.length,entries.length);
+  for(const[index,node]of actual.nodes.entries()){
+   assert.equal(node.index,index);assert.equal(node.level,entries[index].level);
+   for(const field of ['box','background']){const wanted=item.expected[index][field],box=node[field];if(!wanted){assert.equal(box,undefined);continue;}assert.ok(box);for(const[key,value]of ['x','y','width','height'].entries()){const error=Math.abs(box[value]*PT-wanted[key]);maximum=Math.max(maximum,error);assert.ok(error<=.1,`${item.kind}/${item.set}/${item.frame}/${index}/${field}/${value}: ${error}pt`);}}
+  }
+  assert.equal(actual.connectors.length,entries.length-1);assert.equal(actual.connectors.length,item.connectors.length);
+  const unused=[...item.connectors];for(const edge of actual.connectors){assert.equal(actual.nodes[edge.child].parent,edge.parent);const box=[edge.box.x,edge.box.y,edge.box.width,edge.box.height].map(n=>n*PT);const index=unused.findIndex(expected=>expected.every((n,k)=>Math.abs(n-box[k])<=.1));assert.ok(index>=0,item.kind+'/'+item.set+'/'+item.frame+': every semantic connector matches one native rectangle');const expected=unused.splice(index,1)[0];maximum=Math.max(maximum,...box.map((n,k)=>Math.abs(n-expected[k])));}
+  const moved=nativeTreeGeometry(item.kind,{...frame,x:23,y:17},entries);assert.equal(moved.ok,true);for(const[index,node]of moved.nodes.entries()){const old=actual.nodes[index];assert.ok(Math.abs(node.box.x-old.box.x-23)<1e-8);assert.ok(Math.abs(node.box.y-old.box.y-17)<1e-8);assert.equal(node.parent,old.parent);}
+ }
+ assert.ok(maximum<.00015,`model inference residual ${maximum}pt`);
+});
+test('SH21: tree geometry refuses malformed topology/frames without silently reparenting or clamping',()=>{
+ const frame={x:0,y:0,width:600,height:400};for(const kind of ['org-chart','hierarchy']){
+  for(const entries of [[],[{text:'Child',level:1}],[{text:'Root',level:0},{text:'Jump',level:2}],[{text:'Root',level:0},{text:'Forest',level:0}]]){const result=nativeTreeGeometry(kind,frame,entries);assert.equal(result.ok,false);assert.ok(result.reason);}
+  for(const invalid of [{...frame,width:0},{...frame,height:-1},{...frame,x:Infinity}])assert.equal(nativeTreeGeometry(kind,invalid,[{text:'Root'}]).ok,false);
+ }
+});
+test('SH21: Hierarchy connector crossbars match genuine native paths around the paired foreground/background nodes',()=>{
+ const input=JSON.parse(readFileSync(new URL('./fixtures/sh21-native-tree-paths.json',import.meta.url),'utf8')),frame=Object.fromEntries(Object.entries(input.frame).map(([key,n])=>[key,n/PT]));
+ const result=nativeTreeGeometry(input.kind,frame,input.entries);assert.equal(result.ok,true);const unused=[...input.connectors];
+ const normalize=points=>{const out=[];for(const point of points){if(out.length&&Math.hypot(point[0]-out.at(-1)[0],point[1]-out.at(-1)[1])<.00015)continue;while(out.length>=2){const a=out.at(-2),b=out.at(-1);if(Math.abs((b[0]-a[0])*(point[1]-b[1])-(b[1]-a[1])*(point[0]-b[0]))>.00015)break;out.pop();}out.push(point);}return out;};
+ for(const edge of result.connectors){const box=[edge.box.x,edge.box.y,edge.box.width,edge.box.height].map(n=>n*PT),index=unused.findIndex(e=>e.box.every((n,k)=>Math.abs(n-box[k])<.1));assert.ok(index>=0);const expected=normalize(unused.splice(index,1)[0].points),actual=normalize(edge.points.map(point=>point.map(n=>n*PT)));assert.equal(actual.length,expected.length);for(const[k,point]of actual.entries())for(let axis=0;axis<2;axis++)assert.ok(Math.abs(point[axis]-expected[k][axis])<.00015,'every independent native path point matches');}
+ assert.equal(unused.length,0);
+});
+test('SH21: connector stacking order matches all420 independent native group sequences',()=>{
+ for(const item of fixture.cases){const [width,height]=item.frame.split('x').map(n=>Number(n)/PT),actual=nativeTreeGeometry(item.kind,{x:0,y:0,width,height},item.entries);assert.equal(actual.ok,true);assert.equal(actual.connectors.length,item.connectors.length);for(const [index,edge]of actual.connectors.entries()){const box=[edge.box.x,edge.box.y,edge.box.width,edge.box.height].map(n=>n*PT);assert.ok(item.connectors[index].every((n,k)=>Math.abs(n-box[k])<=.1),item.kind+'/'+item.set+'/'+item.frame+'/'+index+': connector order is native drawing order');}}
+});

@@ -127,7 +127,7 @@ const deck = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Bund
   design: {theme: 'classic', colorScheme: 'cool-horizon', fontScheme: 'roboto'},
   slides: [
     {title: 'Cover', subtitle: 'Probe'},
-    {layout: 'two-column', title: 'Two columns', left: {text: 'Left'}, right: {items: ['One', 'Two']}},
+    {layout: 'two-column', title: 'Two columns', start: {text: 'Left'}, end: {items: ['One', 'Two']}},
     {title: 'Chart', chart: {type: 'bar', data: {columns: ['Q', 'A'], rows: [['Q1', 1], ['Q2', 3]]}}},
     {title: 'Picture', design: {background: {type: 'image', src: './a.png', recolor: 'grayscale'}}},
     {title: 'Missing', layout: 'not-a-layout', text: 'Body'},

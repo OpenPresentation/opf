@@ -132,10 +132,10 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
 // Image treatments belong to one image block (OPF 0.15): null removes a field. There is no deck-level slide image any more.
 {
   const editor = session();
-  switchDimension(editor, "image-treatments", { fit: "contain", placement: { edge: "left", size: 0.4 } }, { path: "slides.2.blocks.2" });
+  switchDimension(editor, "image-treatments", { fit: "contain", placement: { edge: "start", size: 0.4 } }, { path: "slides.2.blocks.2" });
   const removed = switchDimension(editor, "image-treatments", { fit: null }, { path: "slides.2.blocks.2" });
   assert.deepEqual(removed.patches, [{ op: "remove", path: "/slides/2/blocks/2/fit" }]);
-  assert.deepEqual(editor.get("slides.2.blocks.2.placement"), { edge: "left", size: 0.4 });
+  assert.deepEqual(editor.get("slides.2.blocks.2.placement"), { edge: "start", size: 0.4 });
 }
 
 // Themes: the default lets the theme's own schemes apply so fonts follow; bundle:false changes only the reference.
@@ -245,10 +245,10 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
 // Headers and footers: absent fields stay, null removes.
 {
   const editor = session();
-  switchDimension(editor, "headers-footers", { header: { left: { text: "Brand" } }, footer: { center: { text: "Confidential" } } });
+  switchDimension(editor, "headers-footers", { header: { start: { text: "Brand" } }, footer: { center: { text: "Confidential" } } });
   const onlyFooter = switchDimension(editor, "headers-footers", { footer: { center: { text: "Internal" } } });
   assert.deepEqual(onlyFooter.patches, [{ op: "replace", path: "/design/footer", value: { center: { text: "Internal" } } }]);
-  assert.deepEqual(editor.get("design.header"), { left: { text: "Brand" } });
+  assert.deepEqual(editor.get("design.header"), { start: { text: "Brand" } });
   const removed = switchDimension(editor, "headers-footers", { header: null });
   assert.deepEqual(removed.patches, [{ op: "remove", path: "/design/header" }]);
   assert.equal(editor.get("design.header"), undefined);

@@ -4,7 +4,7 @@
 // formats; dataset references and chart.mapping export exactly like their inline equivalent; dataset tables and formatted
 // cells export their display text; export -> import restores every new field from OPF_DATA_V1/OPF_DATASETS_V1 while the
 // native evidence is unchanged; a deck without provenance maps the format codes core can map back, and reports the rest;
-// and a deck that uses none of the new fields keeps its bytes (test/fixtures/rr-54-unchanged.json, from main).
+// and default exports keep the exact reviewed snapshot bytes (test/fixtures/rr-54-unchanged.json; approved default changes are recorded there).
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
@@ -98,12 +98,15 @@ const formatted = {slides: [{title: 'Formats', chart: {type: 'column', dataLabel
   for (const [cell, style] of [['B2', 1], ['B3', 1], ['C2', 2], ['C3', 2], ['D2', 3], ['D3', 3]]) assert.match(sheet, new RegExp(`<c r="${cell}" s="${style}"`), `${cell} has style ${style}`);
   assert.match(sheet, /<c r="B3" s="1"\/>/, 'a gap stays a blank cell, with the column style');
   assert.doesNotMatch(sheet, /<c r="(?:A\d|E\d|[A-E]1)" s=/, 'categories, headings and unformatted columns keep the default style');
-  // A percent-stacked chart keeps its 0% axis; percentage labels keep PowerPoint's own percent form.
+  // A percent-stacked chart keeps its 0% axis; percentage labels keep PowerPoint's own percent form, written as `0%` (RR-105:
+  // Keynote applies the label code and drew `General` without the percent sign), never the series' `$#,##0`.
   const stacked = await exported({slides: [{title: 'Stacked', chart: {type: '100pct-stacked-column', data: formatted.slides[0].chart.data}}]});
   assert.deepEqual(numFmt(block(stacked.chart, 'valAx')[0]), ['0%', '0'], 'percent-stacked axis stays 0%');
   const pie = await exported({slides: [{title: 'Pie', chart: {type: 'pie', dataLabels: {content: ['category', 'percent']}, data: {columns: ['Region', {name: 'Sales', format: '$#,##0'}], rows: [['A', 1], ['B', 3]]}}}]});
   assert.deepEqual(formatCodes(pie.chart).filter(code => code !== 'General'), ['$#,##0'], 'the pie series cache carries the format');
-  assert.ok([...pie.chart.matchAll(/<c:numFmt formatCode="([^"]*)"/g)].every(match => match[1] === 'General'), 'percentage labels keep General');
+  const labelCodes = [...pie.chart.matchAll(/<c:dLbls>[\s\S]*?<\/c:dLbls>/g)].flatMap(labels => [...labels[0].matchAll(/<c:numFmt formatCode="([^"]*)"/g)].map(match => match[1]));
+  assert.ok(labelCodes.length > 0 && labelCodes.every(code => code === '0%'), `percentage labels are drawn with 0%: ${labelCodes.join(' ')}`);
+  assert.ok([...pie.chart.replace(/<c:dLbls>[\s\S]*?<\/c:dLbls>/g, '').matchAll(/<c:numFmt formatCode="([^"]*)"/g)].every(match => match[1] === 'General'), 'every other chart number format stays General');
   checks += 3;
 }
 
@@ -137,7 +140,7 @@ const formatted = {slides: [{title: 'Formats', chart: {type: 'column', dataLabel
 {
   const deck = {datasets: {sales: {columns: ['Region', {name: 'Revenue', format: '$#,##0.0'}, {name: 'Growth', format: '0%'}], rows: [['EMEA', 8.2, 0.4], ['APAC', 6.1, 0.52]]}},
     slides: [{title: 'Dataset table', table: {dataset: 'sales'}}, {title: 'Inline table', table: {
-      columns: ['Region', {name: 'Revenue', format: '$#,##0.0'}, {value: 'Growth', style: {align: 'right'}, format: '0%'}],
+      columns: ['Region', {name: 'Revenue', format: '$#,##0.0'}, {value: 'Growth', style: {align: 'end'}, format: '0%'}],
       rows: [['EMEA', 8.2, 0.4], ['APAC', 6.1, {value: 0.52, format: '0.0%'}], ['LATAM', 'n/a', null]]}}]};
   const {text} = await exported(deck);
   const cells = xml => [...xml.matchAll(/<a:tc\b[^>]*>([\s\S]*?)<\/a:tc>/g)].map(([, body]) => [...body.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''));
@@ -158,7 +161,7 @@ const roundTripDeck = {
     {title: 'Mapped chart', chart: {type: 'line', mapping: {category: 'Quarter', series: ['Costs', 'Revenue']}, data: {columns: ['Revenue', 'Quarter', {name: 'Costs', format: '#,##0'}], rows: [[1, 'a', 2], [3, 'b', 4]], source: {src: 'https://example.com/q.csv', description: 'Finance export'}}}},
     {title: 'Scatter', chart: {type: 'scatter', mapping: {x: 'W'}, data: {columns: ['N', 'H', {name: 'W', format: '0.0'}], rows: [['a', 170, 60.5], ['b', 180, 75]]}}},
     {title: 'Dataset table', table: {dataset: 'revenue', fields: ['Quarter', 'Revenue']}},
-    {title: 'Inline table', table: {columns: ['Region', {name: 'Revenue', format: '$#,##0.0'}, {value: 'Growth', style: {align: 'right'}, format: '0%'}], rows: [['EMEA', 8.2, 0.4], ['APAC', 6.1, {value: 0.52, format: '0.0%'}]]}},
+    {title: 'Inline table', table: {columns: ['Region', {name: 'Revenue', format: '$#,##0.0'}, {value: 'Growth', style: {align: 'end'}, format: '0%'}], rows: [['EMEA', 8.2, 0.4], ['APAC', 6.1, {value: 0.52, format: '0.0%'}]]}},
     {title: 'Treemap', chart: {type: 'treemap', data: {columns: ['Area', {name: 'Size', format: '#,##0.0'}], rows: [['A', 5], ['B', 3]]}}},
   ],
 };
@@ -257,7 +260,7 @@ const roundTripDeck = {
   const fixture = JSON.parse(readFileSync(new URL('./fixtures/rr-54-unchanged.json', import.meta.url), 'utf8'));
   for (const [name, {deck, sha256, nativeSlideSha256, rr20PartCount, rr20Bytes}] of Object.entries(fixture.entries)) {
     const bytes = await toPptx(structuredClone(deck));
-    assert.equal(createHash('sha256').update(bytes).digest('hex'), sha256, `${name}: locked ZIP bytes (reviewed table and single-column provenance updates)`);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), sha256, `${name}: locked ZIP bytes (reviewed default-output and provenance updates)`);
     assert.equal(bytes.length, rr20Bytes, `${name}: reviewed RR-20 archive size`);
     assert.equal(Object.keys(unzipSync(bytes)).length, rr20PartCount, `${name}: reviewed RR-20 ZIP part count`);
     if (nativeSlideSha256) {
@@ -268,4 +271,4 @@ const roundTripDeck = {
   checks += Object.keys(fixture.entries).length;
 }
 
-console.log(`RR-54 chart and table data passed: ${checks} checks (strict numbers, chart and workbook number formats, dataset/mapping/scatter X equivalence, dataset and formatted tables, full round trip, edits and missing datasets, third-party format codes and chartex, provenance modes, unchanged bytes).`);
+console.log(`RR-54 chart and table data passed: ${checks} checks (strict numbers, chart and workbook number formats, dataset/mapping/scatter X equivalence, dataset and formatted tables, full round trip, edits and missing datasets, third-party format codes and chartex, provenance modes, reviewed archive bytes).`);

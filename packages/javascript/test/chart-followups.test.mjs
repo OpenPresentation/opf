@@ -63,11 +63,11 @@ describe("LH-93: one plot height across siblings", () => {
     assert.ok(Math.abs(a.top - b.top) < 1e-6 && Math.abs(a.height - b.height) < 1e-6);
   });
 
-  test("charts that do not share an axis, horizontal bars and a lone chart keep the plot the engines lay out", () => {
+  test("charts that do not share an axis and a lone chart keep the plot the engines lay out; horizontal bars of one unit share one (LH-93)", () => {
     const apart = composeSlide({ title: "Two", blocks: [{ chart: chartOf() }, { chart: chartOf({}, ["Now", "Before"]) }] });
     assert.ok(charts(apart).every((item) => item.chart.layer?.plot === undefined), "another unit");
     const bars = composeSlide({ title: "Two", blocks: [{ chart: chartOf({ type: "bar" }) }, { chart: chartOf({ type: "bar" }, ["Current", "Baseline"], 10) }] });
-    assert.ok(charts(bars).every((item) => item.chart.layer?.plot === undefined), "horizontal bars");
+    assert.ok(charts(bars).every((item) => item.chart.layer?.plot !== undefined), "horizontal bars of one unit share one plot (LH-93, opf#1111)");
     const lone = composeSlide({ title: "One", chart: chartOf() });
     assert.equal(charts(lone)[0].chart.layer?.plot, undefined);
   });

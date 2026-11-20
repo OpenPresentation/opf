@@ -10,6 +10,7 @@ export {chartDrawPlan};
 
 const FALLBACK_MESSAGES = Object.freeze({
   'map-as-columns': 'its categories are not places a map can plot, so it is exported as a clustered column chart of every series',
+  'pareto-as-columns': 'a Pareto chart sorts one series, so its several series are exported as a clustered column chart of every series in data order',
   'box-per-series': 'it has one value per category, so its rows form one group and each series is one box of its values',
   'nested-rings': 'it has several series, so it is exported as a doughnut chart with one ring per series (the first innermost)',
   'scatter-by-position': 'its X column holds no numbers, so its series are plotted against the category position and that column is not exported',

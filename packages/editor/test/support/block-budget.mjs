@@ -20,10 +20,14 @@ export const MEASURABLE_MS = 30;
 export const RATIO = 0.85;
 /**
  * While the worker's request is in flight (`data-opf-checking` is set) the main thread has nothing of the check to do, whatever the runner's speed or core
- * count: the typical edit's worst heartbeat gap in that span must be at most this share of the main-thread run's typical edit. Measured: 0 to 11 ms against
- * 63 to 139 ms on CI, 1 to 19 ms against 43 to 60 ms on a fast machine; a check that also runs on the main thread blocks there for its whole cost.
+ * count: the typical edit's worst heartbeat gap in that span, less CodeMirror's background parse (support/worker-flight.mjs takes its idle-callback spans
+ * out: it is the code editor's syntax tree, not a check, runs the same without the worker, and on a slow runner fills the span with slices of up to 100 ms),
+ * must be at most this share of the main-thread run's typical edit. Measured without the parse: 0 to 11 ms against 63 to 139 ms on CI (at most 17%), 1 to
+ * 5 ms against 50 to 80 ms on a fast machine. A check that also runs on the main thread blocks there for its whole cost, which is the main-thread edit less
+ * the apply: 70 to 80% of it on a fast machine, about 40 to 55% on a bad runner whose apply takes 50 to 70 ms. 0.4 sat on that last margin; 0.25 is
+ * between the two. With the parse counted, the bad runs of 2026-11-14 measured 38 to 88 ms against 113 and 172 ms (the reason for taking it out).
  */
-export const FLIGHT_RATIO = 0.4;
+export const FLIGHT_RATIO = 0.25;
 /** One block of this many limits is no noise: the pane did it once. */
 export const CEILING = 3;
 
@@ -33,7 +37,7 @@ export const CEILING = 3;
  * was (the check ran elsewhere); omitted when not measured. `limit`: the budget for a typical edit on a reference machine (ms). `baseline`: the samples of the
  * same edits checked on the main thread (the same page, runner and deck), or undefined.
  * 1. With a measurable baseline, the typical worker edit blocks for at most RATIO of what the main-thread one does, and the typical block while the worker's
- *    request is in flight for at most FLIGHT_RATIO of it. The baseline is the runner's own speed: a fixed number is too slack on a fast machine (a check back on
+ *    request is in flight (less CodeMirror's background parse, which `flight` must already leave out) for at most FLIGHT_RATIO of it. The baseline is the runner's own speed: a fixed number is too slack on a fast machine (a check back on
  *    the main thread, 55 ms, would pass a 100 ms limit) and too tight on a slow one.
  * 2. Without one (no comparison run, or a main-thread check too cheap to measure), the typical edit blocks for at most `limit`.
  * 3. No single edit blocks for CEILING limits: a one-time cost, for example the first check, is not a typical edit, and a stall that long is not noise either.

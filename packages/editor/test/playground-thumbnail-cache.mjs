@@ -11,7 +11,7 @@ const calls = [];
 const cache = createThumbnailCache({toSvg: (deck, selected, settings) => { calls.push(selected); return toSvg(deck, selected, settings); }, getOptions: () => options});
 const deck = {
   name: 'Thumbnail context', organization: {id: 'team', role: 'primary', name: 'Original team'},
-  design: {theme: 'minimal', fontScheme: 'roboto', footer: {right: {text: '{{slide.number}} / {{deck.slideCount}} · {{slide.section}} · {{organization.name}}'}}},
+  design: {theme: 'minimal', fontScheme: 'roboto', footer: {end: {text: '{{slide.number}} / {{deck.slideCount}} · {{slide.section}} · {{organization.name}}'}}},
   slides: [
     {id: 'one', layout: 'text', section: 'Intro', title: 'First', text: 'An inherited design.'},
     {id: 'two', hidden: true, layout: 'text', title: 'Hidden', text: 'Hidden slides still have thumbnails.'},

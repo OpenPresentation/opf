@@ -98,7 +98,8 @@ describe("opf catalog", () => {
     const result = runCli(["catalog", "layouts"]);
     assert.equal(result.status, 0, `stderr: ${result.stderr}`);
     const ids = JSON.parse(result.stdout).map((record) => record.id);
-    assert.equal(ids.length, Object.keys(gallery.layouts).length);
+    assert.deepEqual(ids, Object.keys(gallery.layouts), "all installed layout ids in catalog order");
+    assert.equal(new Set(ids).size, ids.length, "no duplicate layout ids");
     assert.ok(ids.includes("cover"));
     const record = JSON.parse(runCli(["catalog", "chartTypes", "stacked-column"]).stdout);
     assert.equal(record.id, "stacked-column");

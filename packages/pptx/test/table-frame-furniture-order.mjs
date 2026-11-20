@@ -66,7 +66,7 @@ assert.ok(packed > 0, 'The suite covers tables whose rows fill the composed box.
 const names = xml => [...xml.matchAll(/<p:cNvPr id="\d+" name="([^"]*)"/g)].map(match => match[1]).filter(Boolean);
 const furniture = name => name.startsWith('OPF furniture');
 const decks = [
-  {design: {header: {left: {text: 'Confidential'}, right: {date: true, dateFormat: 'yyyy-MM-dd'}}, footer: {left: {text: 'Acme'}, right: {text: '{{slide.number}} / {{deck.slideCount}}'}}},
+  {design: {header: {start: {text: 'Confidential'}, end: {date: true, dateFormat: 'yyyy-MM-dd'}}, footer: {start: {text: 'Acme'}, end: {text: '{{slide.number}} / {{deck.slideCount}}'}}},
     slides: [{title: 'First', text: 'Body', table: short}, {title: 'Second', bullets: ['One', 'Two']}]},
   {design: {footer: {center: {text: 'Only a footer'}}}, slides: [{title: 'Solo', text: 'Body', table: short}]},
 ];
@@ -90,7 +90,7 @@ for (const deck of decks) {
   }
   // Native fields and re-import do not depend on furniture position.
   const first = dec.decode(entries['ppt/slides/slide1.xml']);
-  if (deck.design.footer.right) assert.match(first, /<a:fld [^>]*type="slidenum"/);
+  if (deck.design.footer.end) assert.match(first, /<a:fld [^>]*type="slidenum"/);
   const imported = await fromPptx(await toPptx(deck, {date: '2026-01-02', slideNumberFields: 'live'}));
   assert.deepEqual(imported.design.footer, deck.design.footer);
   assert.deepEqual(imported.slides.map(slide => slide.title), deck.slides.map(slide => slide.title));

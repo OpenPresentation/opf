@@ -270,8 +270,8 @@ describe('anchor', () => {
 describe('design keys: theme level and precedence', () => {
   test('the seven keys a theme may carry rank below the deck and above the layout', () => {
     assert.deepEqual([...THEME_DESIGN_KEYS], ['titleAlignment', 'contentAlignment', 'contentBox', 'contentDirection', 'imageFit', 'listBullet', 'listStyle']);
-    const layout = { design: { contentBox: false, titleAlignment: 'right' } };
-    const theme = { design: { contentBox: true, titleAlignment: 'center', chartPrimary: 'left' } };
+    const layout = { design: { contentBox: false, titleAlignment: 'end' } };
+    const theme = { design: { contentBox: true, titleAlignment: 'center', chartPrimary: 'start' } };
     const fromTheme = resolveDesignHints({ layout, theme });
     assert.equal(fromTheme.contentBox, true);
     assert.equal(fromTheme.sources.contentBox, 'theme');
@@ -279,8 +279,8 @@ describe('design keys: theme level and precedence', () => {
     assert.equal(fromTheme.chartPrimary, undefined, 'chartPrimary is not a theme key');
     const fromDeck = resolveDesignHints({ layout, theme, presentation: { design: { contentBox: false } } });
     assert.equal(fromDeck.sources.contentBox, 'deck');
-    const fromSlide = resolveDesignHints({ layout, theme, slide: { design: { titleAlignment: 'left', theme: 'x' } }, slideIndex: 2 });
-    assert.equal(fromSlide.titleAlignment, 'left');
+    const fromSlide = resolveDesignHints({ layout, theme, slide: { design: { titleAlignment: 'start', theme: 'x' } }, slideIndex: 2 });
+    assert.equal(fromSlide.titleAlignment, 'start');
     assert.equal(resolveDesignHints({ layout, theme, slide: { design: { theme: 'x' } }, slideIndex: 2 }).paths.titleAlignment, 'slides.2.design.theme');
   });
 
@@ -335,11 +335,14 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
 
   test('the boxes a slide composes to: header, footer, placed-image bands and bleed (RR-81 review)', async () => {
     const { composeLayoutAreas } = await import('../dist/composition.js');
-    const furniture = { header: { left: { text: 'Acme' }, right: { text: 'Confidential' } }, footer: { right: { text: '{{slide.number}}' } } };
-    const placements = [{ edge: 'left', size: 0.25 }];
+    const furniture = { header: { start: { text: 'Acme' }, end: { text: 'Confidential' } }, footer: { end: { text: '{{slide.number}}' } } };
+    const placements = [{ edge: 'start', size: 0.25 }];
     // Without cards and with cards on the deck (the card insets live in the auto rows too).
     for (const presentation of [{ design: furniture }, { design: { ...furniture, contentBox: true } }]) for (const [id, record] of Object.entries(layouts)) {
-      const kept = { ...record, regions: keepAll(record.regions) };
+      // Wave 7 (LH-09 with LH-155): a record with a primary or secondary region (the statement) is laid out as its filled slides draw it, which
+      // carry no title rule, so this slide without a body is compared without the rule too.
+      const filledRule = record.regions.some((region) => region.role === 'primary' || region.role === 'secondary');
+      const kept = { ...record, regions: keepAll(record.regions).map((region) => (filledRule && region.rule ? (({ rule, ...rest }) => rest)(region) : region)) };
       const slide = { title: 'Title', subtitle: 'Subtitle', blocks: [{ image: 'https://example.com/band.png', placement: placements[0] }] };
       // `fill: false`: the placeholders hold the role sizes; LH-129 grows the headings of a slide whose headings are its message.
       const composed = composeSlide(slide, { layout: kept, presentation, fill: false });
@@ -350,7 +353,8 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     }
     // A filled two-line verdict on a carded slide is exactly as tall as the layout's verdict placeholder.
     const verdict = 'The new plan wins on cost and on time to market, and the old plan wins only on what we already know how to run well.';
-    const filled = composeSlide({ title: 'Title', subtitle: 'Subtitle', blocks: [{ text: 'A' }, { text: 'B' }, { text: verdict }], design: {contentBox: true} }, { layout: layouts.comparison, fill: false });
+    // LH-170: `emphasis: false` keeps the verdict in its region (it would be the foot band), whose placeholder this compares.
+    const filled = composeSlide({ title: 'Title', subtitle: 'Subtitle', blocks: [{ text: 'A' }, { text: 'B' }, { text: verdict, emphasis: false }], design: {contentBox: true} }, { layout: layouts.comparison, fill: false });
     const verdictItem = filled.items.find((item) => item.region === 'verdict');
     assert.equal(verdictItem.text.lines.length, 2);
     assert.ok(verdictItem.frameBox, 'carded');

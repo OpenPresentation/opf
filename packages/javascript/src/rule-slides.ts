@@ -47,13 +47,15 @@ function relax<T>(value: T): T {
 	return copy as T;
 }
 
-interface Composed {
+export interface Composed {
 	composition?: SlideComposition;
 	layoutDiagnostics: { diagnostic: LayoutDiagnostic; strict: boolean }[];
 	layoutError?: string;
 }
 
-export function buildSlides(document: Rec, options: ValidateOptions): RuleSlide[] {
+export type CompositionMemo = (index: number, compute: () => Composed) => Composed;
+
+export function buildSlides(document: Rec, options: ValidateOptions, memo?: CompositionMemo): RuleSlide[] {
 	const slides = (Array.isArray(document.slides) ? document.slides : []) as Rec[];
 	return slides.map((slide, index) => {
 		const path = pointer('slides', index);
@@ -73,7 +75,7 @@ export function buildSlides(document: Rec, options: ValidateOptions): RuleSlide[
 		});
 		const design = lazy(() => resolveDesign(document, index, resolved()));
 		const layout = lazy(() => resolved().options.layout as Rec | undefined);
-		const composed = lazy((): Composed => {
+		const compute = (): Composed => {
 			const result: Composed = { layoutDiagnostics: [] };
 			// WI-1 (P24): compose with the role families the renderer draws (resolveDrawnFontFamilies), so a weight the open
 			// replacement lacks draws its nearest weight here too instead of failing the slide's layout.
@@ -98,7 +100,8 @@ export function buildSlides(document: Rec, options: ValidateOptions): RuleSlide[
 				} else result.layoutError = error instanceof Error ? error.message : String(error);
 			}
 			return result;
-		});
+		};
+		const composed = lazy(() => memo ? memo(index, compute) : compute());
 		const payloads = lazy(() => slidePayloads(slide, path));
 		const texts = lazy(() => textValues(slide, path));
 		const rtl = lazy(() => {

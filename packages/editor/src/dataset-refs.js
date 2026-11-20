@@ -4,7 +4,7 @@
 // share a dataset and keep their `fields` and `mapping` names in step when a column is renamed.
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
-const REGION_KEY = /^(?:top|middle|bottom|left|center|right)(?:[+:]|$)/;
+const REGION_KEY = /^(?:top|middle|bottom|start|center|end)(?:[+:]|$)/;
 
 /** The dataset reference test (the same as core's `isDatasetRef`): an object with a string `dataset`. */
 export const isDatasetRef = (value) => isObject(value) && typeof value.dataset === "string";

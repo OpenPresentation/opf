@@ -30,7 +30,7 @@ const PARTS = {
   'The element': { root: 'opf-editor', js: ['element.js'], css: ['expand.css'], types: 'element.d.ts' },
 };
 // Stylesheets that are not part of this contract (yet): the source pane, the studio, the panels and the other parts of the playground.
-const NOT_DOCUMENTED = ['tokens.css', 'touch.css', 'panels.css', 'source-pane.css', 'source-navigation.css', 'studio.css', 'layout-editor.css', 'export-menu.css', 'handoff.css', 'presenter.css'];
+const NOT_DOCUMENTED = ['tokens.css', 'touch.css', 'panels.css', 'source-pane.css', 'source-navigation.css', 'studio.css', 'layout-editor.css', 'export-menu.css', 'handoff.css', 'presenter.css', 'icon-picker.css', 'shape-picker.css'];
 
 // ---- parse the doc -------------------------------------------------------------------------------------------------------------------------
 const sections = new Map();

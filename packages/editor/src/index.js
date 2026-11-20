@@ -1,3 +1,4 @@
+import { slideTitle } from "./rich-text.js";
 import { commitCatalogControl } from "./catalog-control.js";
 import { paginateSlide } from "@openpresentation/opf/pagination";
 import { OPFPatchError, applyPatch as applyCorePatch, applyPatchWithInverse, formatPointer, invertPatch, jsonEqual, parsePointer, readPointer } from "@openpresentation/opf/patch";
@@ -36,9 +37,11 @@ export {
 // any other option overrides the resolved one (`layout`, ...). FA-31: `slide` is the slide to compose and draw, with `{{slide.number}}`,
 // `{{slide.section}}` and `{{deck.slideCount}}` substituted for `slideNumber` and `slideCount` (default: its place in the open deck and the
 // deck's length), the same numbers the options carry. Pagination takes the source slide instead and substitutes while it measures.
+// `date` (the host's current date for `date: true` header and footer fields) goes into the resolution too, as the renderer passes it:
+// LH-164 decides a message slide's accent surface by composing the slide, which a date field without a date fails.
 function slideContext(presentation, slideIndex, catalogs, { fonts, catalogs: _extra, onDiagnostic, ...overrides } = {}) {
   if (!Number.isInteger(slideIndex) || !presentation.slides?.[slideIndex]) throw new OPFEditorError("slide-index-out-of-range", "Slide index is out of range.");
-  const { slide, options, diagnostics } = resolveSlideContext(presentation, slideIndex, { fonts, catalogs, slideNumber: overrides.slideNumber, slideCount: overrides.slideCount });
+  const { slide, options, diagnostics } = resolveSlideContext(presentation, slideIndex, { fonts, catalogs, slideNumber: overrides.slideNumber, slideCount: overrides.slideCount, ...(overrides.date !== undefined ? { date: overrides.date } : {}) });
   for (const diagnostic of diagnostics) onDiagnostic?.(diagnostic);
   return { slide, options: { ...options, ...overrides } };
 }
@@ -185,6 +188,8 @@ export function createEditorSession(input, options = {}) {
   const validationFor = (validated, document) =>
     validated && validated.validation && validated.catalogs === catalogs && jsonEqual(validated.document, document) ? validated.validation : check(document);
 
+  let followOpeningTitle = options.nameFromOpeningTitle === true;
+
   function commitPatch(operations, meta = {}, applyOptions = {}) {
     assertPatchOperations(operations);
     let patches = operations.map(normalizeOperation);
@@ -213,6 +218,25 @@ export function createEditorSession(input, options = {}) {
         meta = { ...meta, forked: forks, notice: forks.map(forkNotice).join(" ") };
       }
     }
+    // The untitled starter follows its opening title until a separate rename or document replacement.
+    // Append the name to the same transaction so Undo restores both fields together.
+    const replaced = patches.some(patch => patch.op !== "test" && patch.path === "");
+    const ownsName = followOpeningTitle && (patches.some(patch => patch.op !== "test" && (patch.path === "/name" || (patch.op === "move" && patch.from === "/name"))) ||
+      (replaced && (meta.source !== "source-pane" || next?.name !== before?.name || next?.slides?.[0]?.id !== before?.slides?.[0]?.id)));
+    if (followOpeningTitle && !ownsName && !replaced) {
+      const opening = before.slides?.[0];
+      const updated = next.slides?.[0];
+      if (opening?.id === updated?.id && !jsonEqual(opening?.title, updated?.title)) {
+        const name = slideTitle(updated).replace(/\s+/gu, " ").trim();
+        if (name && name !== next.name) {
+          const rename = { op: "add", path: "/name", value: name };
+          const renamed = applyPatchWithInverse(next, [rename]);
+          next = renamed.presentation;
+          patches.push(rename);
+          inversePatches.unshift(...renamed.inverse);
+        }
+      }
+    }
     const nextValidation = validationFor(applyOptions?.validated, next);
 
     if ((meta.rejectInvalid ?? rejectInvalid) && !nextValidation.valid) {
@@ -225,6 +249,7 @@ export function createEditorSession(input, options = {}) {
     if (patches.every(patch => patch.op === "test")) return {
       presentation: clone(presentation), patches: clonePatchOperations(patches), inversePatches: [], validation: nextValidation
     };
+    if (ownsName) followOpeningTitle = false;
     presentation = next;
     validation = nextValidation;
     undoStack.push({ patches: clonePatchOperations(patches), inversePatches, meta });

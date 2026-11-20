@@ -19,3 +19,6 @@ artifacts/
 # Built gallery package (tracked source: packages/gallery/{catalog,previews,src,scripts,test}).
 packages/gallery/dist
 packages/*/*.tgz
+
+# The MCP App view, built by packages/mcp/scripts/build-app.mjs and inlined into dist by tsup.
+packages/mcp/app-dist

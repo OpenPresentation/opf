@@ -104,7 +104,7 @@ jobs:
     needs: scope
     runs-on: ubuntu-24.04
     # An empty string is no container: the host legs run on the runner, the browser legs in the pinned image.
-    container: ${{ matrix.browser && 'mcr.microsoft.com/playwright:v1.64.1-noble@sha256:47b510dd9230bf0b9bfc9b20102241e577ea7a99334ab4c3ca19f19770e9b8ea' || '' }}
+    container: ${{ matrix.browser && 'mcr.microsoft.com/playwright:v1.65.0-noble@sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d' || '' }}
     timeout-minutes: ${{ matrix.timeout }}
     strategy:
       fail-fast: false
@@ -224,10 +224,26 @@ jobs:
       # The MCP server's tests spawn it, compare it with the built `opf`, and bundle it for a Worker and run it in workerd (the
       # `workerd` npm package, no Cloudflare account). OPF_REQUIRE_WORKERD makes a missing workerd binary a failure here.
       - name: Test the MCP server (with the workerd lane)
-        if: ${{ matrix.job == 'mcp' }}
+        if: ${{ matrix.job == 'mcp' && matrix.kind == 'tests' }}
         env:
           OPF_REQUIRE_WORKERD: '1'
         run: pnpm --filter @openpresentation/mcp --fail-if-no-match run test
+
+      # The deck view (show_deck's MCP App) in Chromium, framed the way an MCP Apps host frames it: another origin, the sandbox flags
+      # and the restrictive default CSP of SEP-1865. The commands are test/browser-suites.json.
+      - name: MCP browser suite
+        if: ${{ matrix.job == 'mcp' && matrix.kind == 'browser' }}
+        working-directory: packages/mcp
+        run: |
+          pnpm run build
+          node ../../scripts/quarantine.mjs check
+          node ../../scripts/quarantine.mjs run-suite browser
+
+      - name: MCP quarantined tests (non-blocking)
+        if: ${{ always() && matrix.job == 'mcp' && matrix.kind == 'browser' }}
+        continue-on-error: true
+        working-directory: packages/mcp
+        run: node ../../scripts/quarantine.mjs run-deferred
 
       # --- render, pptx and editor: `tests` shards (the package's `test`, or `test:contract` for a dependent) and, for a changed
       # package only, its browser suites ---------------------------------------------------------------------------------------
@@ -329,15 +345,18 @@ jobs:
           SCRIPT: ${{ matrix.tier == 'full' && 'test' || 'test:contract' }}
         run: node scripts/ci-test-shards.mjs --package editor --script "$SCRIPT" --shard "${{ matrix.index }}/${{ matrix.count }}"
 
-      # The playground suite is 28 tests and about 14 minutes in one job (old per-repository CI, 2026-10-20): four shards of
-      # the quarantine runner (every fourth test), each building the playground from the suite's own setup.
+      # The playground suite is 31 tests and about 13 minutes of tests (run 43550563504): four shards of the quarantine runner,
+      # balanced by the measured seconds in scripts/ci-test-weights.json, each building the playground from the suite's own setup.
+      # opf#1319: only a pull request that changes packages/editor has these legs (DIRECT_ONLY_KINDS in scripts/ci-scope.mjs); a
+      # forced run leaves them to nightly.yml (editor-linux), which the release gate and the label full-ci also run.
       - name: Playground browser suite (shard ${{ matrix.index }} of ${{ matrix.count }})
         if: ${{ matrix.job == 'editor' && matrix.kind == 'playground' }}
         working-directory: packages/editor
         run: node ../../scripts/quarantine.mjs run-suite playground --shard "${{ matrix.index }}/${{ matrix.count }}"
 
-      # The standalone suite is 55 tests and 23 to 32 minutes in one job depending on the runner (2026-11-02): each `browser i/n`
-      # leg runs every n-th test. Without --shard every leg ran the whole suite, so adding legs shortened none of them.
+      # The standalone suite is 58 tests and about 21 minutes of tests (run 43550563504): each `browser i/n` leg runs its share,
+      # balanced by the measured seconds in scripts/ci-test-weights.json (opf#1319). Without --shard every leg ran the whole suite,
+      # so adding legs shortened none of them. The perf suite (absolute wall-clock budgets) is not here: nightly.yml runs it.
       - name: Standalone browser suites (shard ${{ matrix.index }} of ${{ matrix.count }})
         if: ${{ matrix.job == 'editor' && matrix.kind == 'browser' }}
         working-directory: packages/editor

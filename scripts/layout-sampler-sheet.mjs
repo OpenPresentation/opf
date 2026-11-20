@@ -3,9 +3,24 @@ import {readFileSync, readdirSync, writeFileSync} from 'node:fs';
 import path from 'node:path';
 import {toPng} from '@openpresentation/opf-render';
 
+const fail = (message, code = 1) => {
+  console.error(`layout-sampler-sheet: ${message}`);
+  process.exit(code);
+};
 const [dir, out, cols = '4', ...only] = process.argv.slice(2);
-const files = only.length ? only.map(id => `${id}.png`) : readdirSync(dir).filter(f => f.endsWith('.png')).sort();
+if (!dir || !out) fail('usage: node scripts/layout-sampler-sheet.mjs <dir> <out.png> [columns] [ids...]', 2);
 const columns = Number(cols), w = 480, h = 270, label = 28;
+if (!Number.isInteger(columns) || columns < 1) fail(`columns must be a whole number of 1 or more, not ${JSON.stringify(cols)}.`, 2);
+let found;
+try {
+  found = readdirSync(dir).filter(f => f.toLowerCase().endsWith('.png')).sort();
+} catch (error) {
+  fail(`cannot read the folder ${dir}: ${error.code ?? error.message}.`);
+}
+const files = only.length ? only.map(id => `${id}.png`) : found;
+if (!files.length) fail(`no .png files in ${dir}. Convert the deck into it first (opf convert deck.opf.json ${dir}/slide-{n}.png); if that printed an error, fix the deck before tiling.`);
+const absent = files.filter(file => !found.includes(file));
+if (absent.length) fail(`${absent.join(', ')} not found in ${dir}.`);
 const rows = Math.ceil(files.length / columns);
 const tiles = files.map((file, i) => {
   const x = (i % columns) * (w + 12), y = Math.floor(i / columns) * (h + label + 12);

@@ -1,5 +1,0 @@
----
-type: changed
-packages: [pptx]
----
-LH-12 (output-changing for every deck with text): every exported OPF text shape that is not a layout placeholder is a native text box (`txBox="1"`), so screen readers announce text rather than a graphic; a shape bound to a placeholder (titles, footers) drops the flag. Untagged rich body lines are named `OPF text <path> line N` and the unsupported-content panel `OPF placeholder panel` / `OPF placeholder text`, instead of PptxGenJS's generic "Text 3" and "Shape 4". A new conformance test (`test/native-conformance.mjs`) exports every example deck and checks the native-quality rules: theme fonts and all twelve color slots, scheme colors (16% of color elements stay literal: colors the author wrote and engine-derived colors with no theme slot), chart text in the deck's typefaces, text boxes, names, picture alt text, explicit zero insets and table cell margins, no `outEnd` labels on stacked bars, matched axis id lists on secondary-axis combos and paragraph bullets.

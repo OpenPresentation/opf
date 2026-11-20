@@ -1,0 +1,9 @@
+The default MCP stdio client could not read the complete viewer: JSON escaping made its resource exceed the SDK's10MiB buffer. The first resource call failed after414ms;65.5s was cumulative suite time, not aTTL. Later failures were disconnected-client cascades.
+
+Keep the original parallel lazyimports but load PPTX through a private static export-only bridge. This retains the actual publictoPptx implementation and all editor/render/shape/diagram/Export behavior, while allowing unused native-import code to disappear. NoCSS/charset/compression/dependency/network/CSP/timeout/buffer-limit changes.
+
+Add a build guard on the complete serializedUTF8 JSONRPC resource, including escaping and metadata, at fixed10MiB. Three meaningful controls cover actualresource/SDK, exactlimit versusone extra byte and escaped rawtext, and a real defaultstdio read followed by another tool. Currentframe is10,342,417B (143,343Bheadroom); script loses336,043B.
+
+Validation: focused3PASS; all61MCP testsPASS/1optional deployed-siteSKIP; unchanged localbrowser16groupsPASS(actualexit0),19durable captures, including actualPPTX/PDF/PNG exports and source/error/denial/CSP contracts. The original mapper wrapper mistakenly retained the diagnostic60scap and ETIMEDOUT. Its already-owned child completed153.1s with9PASS/1sparse-galleryRED and typecheckPASS; attachedexit wasnull, so no successful originalwrapper/nativeexit is invented. No unchangedMCPrepeat. Metadata-only delta actually exited1 with6PASS/1same sparseRED/typeSKIP. Root's coherent whole-sourcegate remains required.
+
+Fragment: changes/rr-105-mcp-resource-frame.md. Program: RR-105 row/progress. Durable85record packet +9metadata records,19PNGs and exact455/currentHTML evidence with standaloneverifier: docs/handoff/2026-11-10/rr105-mcp-resource-frame/README.md. Original519log and rejectedhypotheses/setuprefusals retained. No Office, actualClaude save, hosted/registry/release acceptance claimed.

@@ -48,6 +48,7 @@ try {
 function Test-Integer($Value) { return $Value -is [int] }
 function Require-Property($Action,[string]$Name,[string]$Context) { if($null -eq $Action.PSObject.Properties[$Name]) { throw "$Context missing property" }; return $Action.$Name }
 function Assert-String($Value,[string]$Name,[string]$Context,[int]$Maximum=65535,[bool]$AllowEmpty=$true) { if($Value -isnot [string] -or (-not $AllowEmpty -and $Value.Length -eq 0) -or $Value.Length -gt $Maximum) { throw "$Context invalid $Name" } }
+function Assert-LiteralSeriesName($Value,[string]$Name,[string]$Context) { Assert-String $Value $Name $Context 255 $false }
 function Read-AndValidateActionPlan([string]$Path) {
     Assert-String $Path 'Path' 'Plan' 65535 $false
     $resolved=(Resolve-Path -LiteralPath $Path).Path

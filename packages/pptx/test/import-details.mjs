@@ -95,11 +95,11 @@ const colorDeck = {
   variables: {brand: {type: 'color', value: '#AA0000'}},
   design: {colorScheme: {accent1: '#112233', accent2: '#445566', hyperlink: '#0000EE'}},
   slides: [
-    {title: 'Runs', text: [{text: 'var ', color: 'var:brand'}, {text: 'slot ', color: 'accent2'}, {text: 'role ', color: 'primary'}, {text: 'text ', color: 'text'}, {text: 'hex ', color: '#FF0000'}, {text: 'plain'}]},
+    {title: 'Runs', subtitle: 'Runs', text: [{text: 'var ', color: 'var:brand'}, {text: 'slot ', color: 'accent2'}, {text: 'role ', color: 'primary'}, {text: 'text ', color: 'text'}, {text: 'hex ', color: '#FF0000'}, {text: 'plain'}]},
     {title: 'Lists', blocks: [
       {type: 'group', blocks: [{type: 'text', text: [{text: 'in a group ', color: 'accent2'}, 'then plain']}, {items: [[{text: 'x', color: 'accent2'}, 'y'], {text: [{text: 'z', color: 'var:brand'}], description: [{text: 'details', color: 'accent1'}]}]}]},
       {bullets: ['p', [{text: 'q', color: 'primary'}]]}]},
-    {title: 'Regions', left: {text: [{text: 'L', color: 'accent2'}]}, right: {text: [{text: 'R', color: 'var:brand'}]}}
+    {title: 'Regions', start: {text: [{text: 'L', color: 'accent2'}]}, end: {text: [{text: 'R', color: 'var:brand'}]}}
   ]
 };
 const colors = (deck, slide) => {
@@ -181,7 +181,7 @@ const colors = (deck, slide) => {
   assert.deepEqual(plain.issues.filter(issue => /color/.test(issue.code)), []);
   assert.equal(JSON.stringify(plain.deck).includes('_opfScheme'), false, 'The transient marker never reaches the document');
   // A literal that happens to equal a slot colour stays a literal (srgbClr names no slot); a transform is not the slot colour.
-  const literal = await read(stripTags(await exportDeck({design: colorDeck.design, slides: [{title: 'T', text: [{text: 'same', color: '#445566'}]}]})));
+  const literal = await read(stripTags(await exportDeck({design: colorDeck.design, slides: [{title: 'T', subtitle: 'T', text: [{text: 'same', color: '#445566'}]}]})));
   assert.deepEqual(colors(literal.deck, 0), [['same', '#445566']]);
   const dimmed = await read(modify(stripTags(bytes), entries => text(entries, 'ppt/slides/slide1.xml', xml => xml.replace(/<a:schemeClr val="accent2"\/>/, '<a:schemeClr val="accent2"><a:lumMod val="50000"/></a:schemeClr>'))));
   assert.match(colors(dimmed.deck, 0)[1][1], /^#[0-9A-F]{6}$/);
@@ -221,10 +221,10 @@ const colors = (deck, slide) => {
   const forms = {
     root: {items},
     group: {blocks: [{type: 'group', blocks: [{items}, {type: 'text', text: 'beside'}]}]},
-    region: {left: {items}, right: {text: 'R'}},
+    region: {start: {items}, end: {text: 'R'}},
     blocks: {blocks: [{items}, {items: ['p', 'q']}]}
   };
-  const dig = slide => slide.items ?? slide.left?.items ?? slide.blocks[0].items ?? slide.blocks[0].blocks[0].items;
+  const dig = slide => slide.items ?? slide.start?.items ?? slide.blocks[0].items ?? slide.blocks[0].blocks[0].items;
   for (const strip of [false, true]) for (const save of [false, true]) for (const [name, slide] of Object.entries(forms)) {
     let bytes = await exportDeck({slides: [{title: 'T', ...slide}]});
     if (save) bytes = resave(bytes);
@@ -251,8 +251,8 @@ const colors = (deck, slide) => {
     'root bullets': {bullets},
     'block bullets': {blocks: [{bullets}, {items: ['i', 'j']}]},
     'group bullets': {blocks: [{type: 'group', id: 'g', blocks: [{bullets}, {type: 'text', text: 'beside'}]}, {bullets: ['p', 'q']}]},
-    'region bullets': {left: {bullets}, right: {items: ['z']}},
-    'region group bullets': {left: {type: 'group', blocks: [{bullets}, {bullets: ['y']}]}, right: {text: 'R'}},
+    'region bullets': {start: {bullets}, end: {items: ['z']}},
+    'region group bullets': {start: {type: 'group', blocks: [{bullets}, {bullets: ['y']}]}, end: {text: 'R'}},
     'typed text bullets': {blocks: [{type: 'text', bullets}, {type: 'list', items: ['a']}]},
     'items stay items': {blocks: [{items: ['a', 'b']}, {type: 'list', items: ['c']}]}
   };

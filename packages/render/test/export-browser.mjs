@@ -151,6 +151,10 @@ try {
   const outputs = await run(`
     const one = await toPng(input.svgs[0]);
     const double = await toPng(input.svgs[0], {scale: 2});
+    // A page whose CSP allows data: images but not blob: ones (an MCP App's sandbox) asks for a data: URL; the picture is the same.
+    const asData = await toPng(input.svgs[0], {svgSource: 'data'});
+    let badSource = null;
+    try { await toPng(input.svgs[0], {svgSource: 'file'}); } catch (error) { badSource = error.code; }
     const clear = await toPng(input.bare, {background: 'transparent'});
     const raster = await toPdf(input.svgs, {raster: true, scale: 1, pdfLib: window.opfPdfLib});
     let noPdfLib = null;
@@ -160,12 +164,14 @@ try {
     try { await toPdf(input.svgs, {signal: controller.signal, onProgress: () => controller.abort()}); } catch (error) { cancelled = error.name; }
     let tooLarge = null;
     try { await toPng(input.svgs[0], {scale: 100}); } catch (error) { tooLarge = error.code; }
-    return {one: toBase64(one), double: toBase64(double), clear: toBase64(clear), raster: toBase64(raster), noPdfLib, cancelled, tooLarge};
+    return {one: toBase64(one), double: toBase64(double), sameAsData: toBase64(asData) === toBase64(one), badSource, clear: toBase64(clear), raster: toBase64(raster), noPdfLib, cancelled, tooLarge};
   `, {svgs, bare: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="10" y="10" width="10" height="10" fill="#d03030"/></svg>'});
   const one = await sharp(toBytes(outputs.one)).metadata(), double = await sharp(toBytes(outputs.double)).metadata();
   assert.deepEqual([one.width, one.height], [1280, 720]);
   assert.deepEqual([double.width, double.height], [2560, 1440]);
   assert.equal(one.format, 'png');
+  assert.equal(outputs.sameAsData, true, 'svgSource: "data" draws the same PNG as the blob: URL');
+  assert.equal(outputs.badSource, 'invalid-conversion-option');
   const first = await sharp(toBytes(outputs.one)).removeAlpha().raw().toBuffer({resolveWithObject: true});
   const colours = new Set();
   for (let index = 0; index < first.data.length; index += 3 * 997) colours.add(`${first.data[index]},${first.data[index + 1]},${first.data[index + 2]}`);

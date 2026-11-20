@@ -86,7 +86,8 @@ export type GalleryKind =
   | "tones"
   | "chartTypes"
   | "languages"
-  | "socialPlatforms";
+  | "socialPlatforms"
+  | "iconSets";
 
 /** Each kind's `index.json`. */
 export declare const catalogIndexes: Readonly<Record<GalleryKind, CatalogIndex>>;

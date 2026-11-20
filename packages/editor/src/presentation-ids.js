@@ -1,14 +1,14 @@
 /** Shared slide and content-payload id collection (matches @openpresentation/opf pagination). */
 
 const promotedRegionKeys = [
-  "left", "center", "right", "left+center", "center+right", "left+center+right",
+  "start", "center", "end", "start+center", "center+end", "start+center+end",
   "top", "middle", "bottom", "top+middle", "middle+bottom", "top+middle+bottom",
-  "top:left", "top:center", "top:right", "top:left+center", "top:center+right", "top:left+center+right",
-  "middle:left", "middle:center", "middle:right", "middle:left+center", "middle:center+right", "middle:left+center+right",
-  "bottom:left", "bottom:center", "bottom:right", "bottom:left+center", "bottom:center+right", "bottom:left+center+right",
-  "top+middle:left", "top+middle:center", "top+middle:right", "top+middle:left+center", "top+middle:center+right", "top+middle:left+center+right",
-  "middle+bottom:left", "middle+bottom:center", "middle+bottom:right", "middle+bottom:left+center", "middle+bottom:center+right", "middle+bottom:left+center+right",
-  "top+middle+bottom:left", "top+middle+bottom:center", "top+middle+bottom:right", "top+middle+bottom:left+center", "top+middle+bottom:center+right", "top+middle+bottom:left+center+right",
+  "top:start", "top:center", "top:end", "top:start+center", "top:center+end", "top:start+center+end",
+  "middle:start", "middle:center", "middle:end", "middle:start+center", "middle:center+end", "middle:start+center+end",
+  "bottom:start", "bottom:center", "bottom:end", "bottom:start+center", "bottom:center+end", "bottom:start+center+end",
+  "top+middle:start", "top+middle:center", "top+middle:end", "top+middle:start+center", "top+middle:center+end", "top+middle:start+center+end",
+  "middle+bottom:start", "middle+bottom:center", "middle+bottom:end", "middle+bottom:start+center", "middle+bottom:center+end", "middle+bottom:start+center+end",
+  "top+middle+bottom:start", "top+middle+bottom:center", "top+middle+bottom:end", "top+middle+bottom:start+center", "top+middle+bottom:center+end", "top+middle+bottom:start+center+end",
 ];
 
 const MAX_COMPOSITION_DEPTH = 8;

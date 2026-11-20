@@ -14,7 +14,7 @@ const deck = sourceDeck('data:image/png;base64,AA==');
 assert.equal(deck.slides.length, 16);
 assert.deepEqual(deck.slides.map(slide => slide.title.match(/^K\d{2}/)[0]), Array.from({length: 16}, (_, index) => `K${String(index + 1).padStart(2, '0')}`));
 assert.ok(deck.slides.every(slide => slide.notes.includes('preserve this sentence')));
-assert.equal(deck.design.footer.right.text, '{{slide.number}}');
+assert.equal(deck.design.footer.end.text, '{{slide.number}}');
 assert.deepEqual(deck.design.fontScheme, {major: 'Arial', minor: 'Arial'}, 'Both authored title and body select Arial, avoiding Arial Black catalog headings');
 assert.equal(fixtureFontPolicy.previewAlias, 'Arimo');
 assert.equal(fixtureFontPolicy.variants.length, 4);

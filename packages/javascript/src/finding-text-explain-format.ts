@@ -39,7 +39,7 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { references: [{ id: "gartner", text: "Gartner, 2026" }], slides: [{ title: "Market", text: [{ text: "EMEA grew 12%", cite: "gartner" }], table: { columns: ["Region", "Growth"], rows: [["EMEA", "12%"]] } }] },
   ),
   "opf/caption-unsupported-payload": ex(
-    "Put the `caption` on the image, chart, table or video it describes, or remove it.",
+    "Put the `caption` on the image, chart, table, video or diagram it describes, or remove it.",
     { title: "Revenue", blocks: [{ text: "Revenue grew", caption: "Source: finance" }] },
     { title: "Revenue", blocks: [{ chart: CHART, caption: "Source: finance" }] },
   ),
@@ -48,10 +48,45 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: CHART, fit: "cover" },
     { title: "Revenue", image: IMG("team"), fit: "cover" },
   ),
+  "opf/shape-option-unsupported-payload": ex(
+    "Remove the shape option, or make the block a shape block with `shape` (a preset such as roundRect) or `path`. Options such as `fill`, `style` and `rotate` describe how a shape is drawn.",
+    { title: "Plan", blocks: [{ text: "Launch", fill: "accent2" }] },
+    { title: "Plan", blocks: [{ shape: "roundRect", text: "Launch", fill: "accent2" }] },
+  ),
+  "opf/shape-adjust-unknown": ex(
+    "Use an adjust name the preset has (docs/shapes.md lists them; roundRect has `adj`, rightArrow `adj1` and `adj2`), or remove it.",
+    { title: "Plan", blocks: [{ shape: "roundRect", adjust: { adj1: 0.3 } }] },
+    { title: "Plan", blocks: [{ shape: "roundRect", adjust: { adj: 0.3 } }] },
+  ),
+  "opf/shape-adjust-range": ex(
+    "Set the adjust value inside its handle's range: roundRect's corner `adj` runs from 0 to 0.5 of the shorter side.",
+    { title: "Plan", blocks: [{ shape: "roundRect", adjust: { adj: 0.8 } }] },
+    { title: "Plan", blocks: [{ shape: "roundRect", adjust: { adj: 0.5 } }] },
+  ),
+  "opf/shape-link-hidden": ex(
+    "Show the shape, or drop its link: a hidden shape cannot be clicked.",
+    { title: "Plan", blocks: [{ shape: "rect", text: "Pricing", link: "https://example.com/pricing", hidden: true }] },
+    { title: "Plan", blocks: [{ shape: "rect", text: "Pricing", link: "https://example.com/pricing" }] },
+  ),
+  "opf/shape-anchor-size-unit": ex(
+    "Write pixels as `widthPx`; `width` is a fraction.",
+    { title: "T", blocks: [{ id: "a", text: "x" }], shapes: [{ shape: "ellipse", at: { block: "a", edge: "top", width: 6 } }] },
+    { title: "T", blocks: [{ id: "a", text: "x" }], shapes: [{ shape: "ellipse", at: { block: "a", edge: "top", widthPx: 6 } }] },
+  ),
+  "opf/shape-anchor-missing": ex(
+    "Name a block of the slide in `at.block` (give the block an `id`), or place the shape by `x`, `y`, `width` and `height`.",
+    { title: "Team", blocks: [{ id: "photo", image: IMG("team") }], shapes: [{ shape: "ellipse", text: "New", at: { block: "phot", edge: "top" } }] },
+    { title: "Team", blocks: [{ id: "photo", image: IMG("team") }], shapes: [{ shape: "ellipse", text: "New", at: { block: "photo", edge: "top" } }] },
+  ),
+  "opf/connector-end-missing": ex(
+    "Name a block or an overlay shape of the slide in `from` and `to` (give it an `id`).",
+    { title: "Plan", blocks: [{ id: "plan", shape: "roundRect", text: "Plan" }, { id: "ship", shape: "roundRect", text: "Ship" }], shapes: [{ connector: { from: "plan", to: "shipping", route: "elbow" } }] },
+    { title: "Plan", blocks: [{ id: "plan", shape: "roundRect", text: "Plan" }, { id: "ship", shape: "roundRect", text: "Ship" }], shapes: [{ connector: { from: "plan", to: "ship", route: "elbow" } }] },
+  ),
   "opf/image-placement-invalid": ex(
     "Use `placement` on a top-level block of the slide, with one placed image per slide edge.",
-    { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "left" } }, { image: IMG("b"), placement: { edge: "left" } }] },
-    { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "left" } }, { image: IMG("b"), placement: { edge: "right" } }] },
+    { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "start" } }, { image: IMG("b"), placement: { edge: "start" } }] },
+    { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "start" } }, { image: IMG("b"), placement: { edge: "end" } }] },
   ),
   "opf/layout-placeholder-group": ex(
     "Flatten the group so it nests at most three levels, and keep the headings (title, subtitle, tag) at the record's top level. Layout records written for current versions use `regions`, where the same limits apply to splits.",
@@ -77,6 +112,16 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     "Name a column the chart data has in `mapping`. The message lists them.",
     { title: "Revenue", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] }, mapping: { series: ["Profit"] } } },
     { title: "Revenue", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] }, mapping: { series: ["Revenue"] } } },
+  ),
+  "opf/chart-reference-axis-unavailable": ex(
+    "Use axis value, or add an actual secondary line series to a combo chart before using a secondary reference.",
+    { title: "Revenue", chart: {...CHART, referenceLines: [{value: 20, axis: "secondary"}]} },
+    { title: "Revenue", chart: {...CHART, referenceLines: [{value: 20, axis: "value"}]} },
+  ),
+  "opf/chart-reference-unsupported-type": ex(
+    "Remove `referenceLines`, or change the chart to a type with one value axis for every series: column, bar, line, line-with-markers, area or combo.",
+    { title: "Share", chart: { type: "pie", data: { columns: ["Region", "Share"], rows: [["North", 60], ["South", 40]] }, referenceLines: [{ value: 50 }] } },
+    { title: "Share", chart: { type: "column", data: { columns: ["Region", "Share"], rows: [["North", 60], ["South", 40]] }, referenceLines: [{ value: 50 }] } },
   ),
   "opf/number-format-invalid": ex(
     "Write the format as an Excel-style pattern with a numeric part, such as `0.0`, `#,##0`, `0%` or `$#,##0.00`.",

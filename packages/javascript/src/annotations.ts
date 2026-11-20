@@ -20,7 +20,8 @@ import type { LayoutBox, LayoutDiagnostic, RichTextFit, RichTextRun, TextFit, Te
  */
 
 export type CaptionPosition = 'below' | 'above';
-export type CaptionAlignment = 'left' | 'center' | 'right';
+/** A caption's alignment as a document writes it: logical, `start` is the edge its text starts on. */
+export type CaptionAlignment = 'start' | 'center' | 'end';
 export type RichText = string | readonly (string | RichTextRun)[];
 export interface CaptionObject { text: RichText; position?: CaptionPosition; align?: CaptionAlignment }
 export type Caption = RichText | CaptionObject;
@@ -52,7 +53,7 @@ export const CAPTIONABLE_FIELDS: readonly string[] = Object.freeze(['image', 'ch
 const record = (value: unknown): Record<string, unknown> => value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
 const isRecord = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
 const round = (value: number) => Math.round(value * 1e6) / 1e6 || value;
-const regionKey = /^(top|middle|bottom|left|center|right)([+:]|$)/;
+const regionKey = /^(top|middle|bottom|start|center|end)([+:]|$)/;
 const TEXT_FIELDS = ['text', 'items', 'bullets'] as const;
 /** Heading fields in reading order (the order composeSlide stacks them); each may be a string or TextRun[]. */
 const HEADING_FIELDS = ['tag', 'title', 'subtitle'] as const;
@@ -68,9 +69,9 @@ export function annotationText(value: unknown): string {
 /** Normalize a Caption value to its text, position and alignment. */
 export function captionSettings(value: unknown): CaptionSettings | undefined {
   if (value === undefined || value === null) return undefined;
-  if (typeof value === 'string' || Array.isArray(value)) return { text: value as RichText, position: 'below', align: 'left' };
+  if (typeof value === 'string' || Array.isArray(value)) return { text: value as RichText, position: 'below', align: 'start' };
   if (!isRecord(value) || value.text === undefined) return undefined;
-  return { text: value.text as RichText, position: value.position === 'above' ? 'above' : 'below', align: value.align === 'center' || value.align === 'right' ? value.align : 'left' };
+  return { text: value.text as RichText, position: value.position === 'above' ? 'above' : 'below', align: value.align === 'center' || value.align === 'end' ? value.align : 'start' };
 }
 
 /** A run that cites or carries a footnote, with its dotted OPF path (`slides.0.blocks.1.text.2`). */
@@ -218,8 +219,10 @@ export function slideCitations(slide: unknown, slideIndex: number, presentation?
 }
 
 /** Fits a string or TextRun[] into a box at a requested size (composeSlide supplies its placed fitter). */
-export type AnnotationFitter = (value: RichText, box: LayoutBox, requestedSize: number, minFontSize: number, path: string, alignment: CaptionAlignment) => TextFit | RichTextFit;
+export type AnnotationFitter = (value: RichText, box: LayoutBox, requestedSize: number, minFontSize: number, path: string, alignment: 'left' | 'center' | 'right') => TextFit | RichTextFit;
 export interface AnnotationLayoutOptions {
+  /** LH-138: a caption that reads "Name: detail" draws its name in bold (a picture's caption; see `splitCaptionName`). */
+  nameDetail?: boolean;
   scale: number;
   minFontSize: number;
   fit: AnnotationFitter;
@@ -233,7 +236,8 @@ export interface ComposedCaption {
   value: Caption;
   text: RichText;
   position: CaptionPosition;
-  alignment: CaptionAlignment;
+  /** The engine's alignment for the caption's `align`: `left` is the start edge and `right` the end edge (`physicalAlignment` resolves the direction). */
+  alignment: 'left' | 'center' | 'right';
   /** The caption band. */
   box: LayoutBox;
   /** The media box after the band is reserved; `ComposedItem.box` equals it. */
@@ -247,23 +251,65 @@ export interface ComposedCaption {
 
 const fitHeight = (fit: TextFit | RichTextFit): number => Math.max(fit.placement?.height ?? 0, 'richLines' in fit ? (fit as RichTextFit).height : fit.lines.length * fit.lineHeight);
 
+/** LH-138: the most words a caption's bold name takes ("Before:", "Reno fulfillment center:"); a longer lead-in is a sentence, not a name. */
+export const CAPTION_NAME_WORDS = 6;
+/**
+ * LH-138: a caption that is one plain string with a colon followed by a space, one to `CAPTION_NAME_WORDS` words before it and a detail after it, splits at
+ * the first colon into a bold name and its detail ("Before: loose boxes" becomes **Before:** loose boxes), as Claude Design draws a picture's caption.
+ * A colon inside a word ("10:30", "https://") never splits, and runs, which an author formats, stay as written.
+ */
+export function splitCaptionName(text: RichText): RichText {
+  if (typeof text !== 'string') return text;
+  const match = /^([^:\n]+:)[ \t]+(\S[\s\S]*)$/.exec(text.trim());
+  if (!match) return text;
+  const name = match[1]!;
+  if (!name.slice(0, -1).trim() || name.slice(0, -1).trim().split(/\s+/).length > CAPTION_NAME_WORDS) return text;
+  return [{ text: name, bold: true }, ` ${match[2]!}`];
+}
+
+/** LH-63: the longest first line, in characters, of a text that draws as a run-in heading over its body ("Option A: focused pilot"). */
+export const RUN_IN_HEADING_CHARS = 40;
+const RUN_IN_SENTENCE_END = /[.!?…;,。！？]$/u, RUN_IN_LIST_MARK = /^(?:[-•*–—·▪◦]|\d+[.)])\s/u;
+/**
+ * LH-63: a plain text whose first line is `RUN_IN_HEADING_CHARS` characters or fewer and ends where the author broke the line, with a body after it that is
+ * longer than the line, draws that line as a bold run-in heading over its body ("Option A: focused pilot" over its two sentences); a line that ends a sentence
+ * or opens a list entry is body text, not a heading. A text with no such line whose first line opens with a short label ("Recommendation: establish the
+ * evidence ...") draws the label in bold, as a picture's caption does (`splitCaptionName`). The runs keep every character of the text, so the words,
+ * line breaks and spaces are the author's; any other text is undefined (drawn as written), and runs the author formatted are never passed here.
+ */
+export function runInHeading(text: string): RichText | undefined {
+  if (!text || RUN_IN_LIST_MARK.test(text.trimStart())) return undefined;
+  const lineEnd = /\r\n|[\r\n\u2028\u2029]/.exec(text);
+  if (lineEnd) {
+    const first = text.slice(0, lineEnd.index), heading = first.trim(), body = text.slice(lineEnd.index + lineEnd[0].length).trim();
+    if (heading && body && [...heading].length <= RUN_IN_HEADING_CHARS && !RUN_IN_SENTENCE_END.test(heading) && [...body].length > [...heading].length) return [{ text: first, bold: true }, text.slice(first.length)];
+  }
+  const label = /^(\s*[^:\r\n\u2028\u2029]+:)([ \t]+\S[\s\S]*)$/u.exec(text);
+  if (!label) return undefined;
+  const name = label[1]!.trim().slice(0, -1).trim();
+  if (!name || [...name].length >= RUN_IN_HEADING_CHARS || name.split(/\s+/u).length > CAPTION_NAME_WORDS) return undefined;
+  return [{ text: label[1]!, bold: true }, label[2]!];
+}
+
 /** Reserve a caption band in `box` (the payload box) and return the band and the media box. */
 export function layoutCaption(value: unknown, box: LayoutBox, path: string, options: AnnotationLayoutOptions): ComposedCaption | undefined {
-  const settings = captionSettings(value);
-  if (!settings) return undefined;
+  const plain = captionSettings(value);
+  if (!plain) return undefined;
+  const settings = options.nameDetail ? { ...plain, text: splitCaptionName(plain.text) } : plain;
+  const alignment = plain.align === 'center' ? 'center' : plain.align === 'end' ? 'right' : 'left';
   const fontSize = Math.max(options.minFontSize, CAPTION_FONT_RATIO * 25 * options.scale), gap = fontSize * 0.4;
   const maxHeight = Math.max(fontSize * 1.22, box.height * CAPTION_MAX_RATIO);
   const diagnostics: LayoutDiagnostic[] = [];
-  const probe = options.fit(settings.text, { x: box.x, y: box.y, width: box.width, height: maxHeight }, fontSize, fontSize, path, settings.align);
+  const probe = options.fit(settings.text, { x: box.x, y: box.y, width: box.width, height: maxHeight }, fontSize, fontSize, path, alignment);
   const height = Math.min(maxHeight, Math.max(fontSize * 1.22, fitHeight(probe)));
   const captionBox = { x: box.x, y: settings.position === 'above' ? box.y : box.y + box.height - height, width: box.width, height };
-  const fit = options.fit(settings.text, captionBox, fontSize, fontSize, path, settings.align);
+  const fit = options.fit(settings.text, captionBox, fontSize, fontSize, path, alignment);
   const overflow = fit.overflow || fitHeight(fit) > height + .01;
   if (overflow) diagnostics.push({ code: 'text-overflow', path, message: 'The caption does not fit its band at the minimum font size; shorten it or give the block more space.' });
   const mediaHeight = Math.max(options.scale, box.height - height - gap);
   const mediaBox = { x: box.x, y: settings.position === 'above' ? box.y + height + gap : box.y, width: box.width, height: mediaHeight };
   for (const target of [captionBox, mediaBox]) for (const key of ['x', 'y', 'width', 'height'] as const) target[key] = round(target[key]);
-  return { path, value: value as Caption, text: settings.text, position: settings.position, alignment: settings.align, box: captionBox, mediaBox, fit, textStyle: options.textStyle(path), fontSize, overflow, diagnostics };
+  return { path, value: value as Caption, text: settings.text, position: settings.position, alignment, box: captionBox, mediaBox, fit, textStyle: options.textStyle(path), fontSize, overflow, diagnostics };
 }
 
 /** One listed note in a slide's footnote area. */

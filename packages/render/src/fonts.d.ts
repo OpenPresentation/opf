@@ -1,6 +1,7 @@
 import type { TextMeasurement, TextStyle, ScriptRole } from "@openpresentation/opf/composition";
 import type { FontPolicyEntry } from "@openpresentation/opf/font-policy";
 import type { LazyFont } from "./fonts-node.js";
+import type {ToSvgOptions} from "./svg.js";
 // Core owns these: the font policy table and lookup, the symbol-font code rules and the script slot of a script. They are core's own
 // exports (the same objects), not copies.
 export { FONT_POLICY, fontPolicyFor } from "@openpresentation/opf/font-policy";
@@ -69,6 +70,15 @@ export interface TextOutlines {
 /** What `fonts.ensure(presentation)` loaded: the script packages and vendored faces that were missing, and drawn CJK characters no face covers. */
 /** What `ensure` loaded. `diagrams`: the diagram types it loaded (in a browser, core loads each type on demand; Node has them all). */
 export interface EnsureResult { scripts: string[]; lazy: LazyFont[]; uncovered: string[]; diagrams?: string[] }
+/** An exporter's actual additional measurement, separate from the text SVG draws. Family names have already been mapped by the exporter. */
+export interface FontMeasurementRequest { text: string; size: number; style: TextStyle }
+export type FontPreparationOptions = Partial<ToSvgOptions> & {
+  renderOptions?: Partial<ToSvgOptions>;
+  /** Additional exporter mapping; never rewrites the document or ordinary SVG demand. Pass the same function on every call: the handle keeps its font analysis per mapping function (by identity), so a fresh closure each call starts from a cold cache. */
+  mapFamily?: (family: string) => string;
+  preserveChosenFamilies?: boolean;
+  measurementRequests?: readonly FontMeasurementRequest[];
+};
 /** The fonts handle `loadFonts()` returns from `/fonts-node` and `/fonts-browser`: pass it as `{ fonts }` to every deck-level function. */
 export interface FontsHandle extends RenderFonts {
   readonly textMeasurement: FontRegistry["textMeasurement"];
@@ -82,13 +92,13 @@ export interface FontsHandle extends RenderFonts {
   /** The substitutions made so far (a requested family drawn with another face), as `registry.substitutions`. */
   readonly substitutions: FontResolution[];
   /** Load the script (and, in a browser, vendored) faces the presentation's text needs. Cheap when nothing is missing. */
-  ensure(presentation: unknown, options?: object): Promise<EnsureResult>;
+  ensure(presentation: unknown, options?: FontPreparationOptions): Promise<EnsureResult>;
   /** Synchronous: the files and script packages `ensure` would load, and in a browser the diagram types (`diagram:<type>`). Empty means a render can start now. */
   pending(presentation: unknown, renderOptions?: object): string[];
   /** Remove the faces this handle added to the document (a browser handle). */
   dispose?(): void;
 }
-export interface FaceDescription { family:string; weight:number; italic:boolean; scripts?:string[] }
+export interface FaceDescription { family:string; weight:number; italic:boolean; scripts?:string[]; /** Present when selection metadata is requested. */ familyGroup?:string }
 export interface FontRegistry {
   textMeasurement: TextMeasurement & {outlineBounds: NonNullable<TextMeasurement['outlineBounds']>; resolveFont(style: TextStyle): FontResolution};
   clearSubstitutions(): void;
@@ -97,7 +107,7 @@ export interface FontRegistry {
   /** Embedded faces matching `predicate`; large script faces can stay with raster fontFiles. */
   selectEmbeddedFonts(predicate: (face: FaceDescription) => boolean): EmbeddedFont[];
   /** Parsed face metadata in entry order, without encoding font bytes. */
-  describeFaces(): FaceDescription[];
+  describeFaces(options?: {selection?: boolean}): FaceDescription[];
   /** Every face as `{ family, data }`, the bytes the registry measures with. */
   exportFaces(): { family: string; data: Uint8Array }[];
   readonly substitutions: FontResolution[];

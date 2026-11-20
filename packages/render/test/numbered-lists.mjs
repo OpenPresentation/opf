@@ -12,7 +12,7 @@ const deck = {design: {fontScheme: 'roboto'}, slides: [
   {title: 'Per level', items: ['Freeze', {text: 'Migrate', level: 1}, {text: 'Verify', level: 1}, {text: 'Sample', level: 2}, 'Switch', {text: 'Watch', level: 1}, 'Retire'],
     numbering: ['arabic', {style: 'alpha-lower', suffix: 'paren'}, {style: 'roman-lower', suffix: 'paren-both'}]},
   {title: 'Wide markers', items: ['Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen'], numbering: {style: 'roman-lower', start: 8, suffix: 'paren-both'}},
-  {title: 'Bullets and restart', left: {bullets: ['First', 'Second', {text: 'Resumed', start: 6}, 'Seventh'], numbering: 'arabic'}, right: {items: ['Plain', 'Plain again']}},
+  {title: 'Bullets and restart', start: {bullets: ['First', 'Second', {text: 'Resumed', start: 6}, 'Seventh'], numbering: 'arabic'}, end: {items: ['Plain', 'Plain again']}},
   {title: 'Bold lead', items: [[{text: 'Bold', bold: true}, ' lead'], [{text: 'Italic', italic: true}, ' lead'], 'Plain lead'], numbering: 'arabic'},
 ]};
 

@@ -67,7 +67,7 @@ export const baseDeck = () => ({
   ],
 });
 
-const header = { left: { text: "Brand" }, right: { text: "{{slide.number}}" } };
+const header = { start: { text: "Brand" }, end: { text: "{{slide.number}}" } };
 const footer = { center: { text: "Confidential" } };
 
 // `patches` is the exact patch for the fixture; `slide` is the slide whose preview must react.
@@ -203,13 +203,13 @@ export const cases = [
   {
     dimension: "image-treatments",
     // OPF 0.15: the treatments of one image block (FA-22).
-    value: { fit: "contain", shape: "rounded" },
+    value: { fit: "contain", shape: "roundRect" },
     options: { path: "slides.2.blocks.2" },
     slide: 2,
     preview: "svg",
     patches: [
       { op: "add", path: "/slides/2/blocks/2/fit", value: "contain" },
-      { op: "add", path: "/slides/2/blocks/2/shape", value: "rounded" },
+      { op: "add", path: "/slides/2/blocks/2/shape", value: "roundRect" },
     ],
   },
   {

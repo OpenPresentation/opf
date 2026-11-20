@@ -21,7 +21,10 @@ import {chartNumber, formatDataNumber, type ResolvedChartData} from './chart-dat
 import {chartCategoriesInTime} from './chart-time-order.js';
 import type {ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
-import type {ChartLayerReferences, ChartLayerStack, ChartLayerValueList, ChartLayerWaterfall} from './chart-marks.js';
+import type {ChartLayerDoughnut, ChartLayerReferences, ChartLayerStack, ChartLayerValueList, ChartLayerWaterfall} from './chart-marks.js';
+import type {ChartLayerHistogram} from './chart-histogram.js';
+import type {ChartNumericAxes} from './chart-numeric-axes.js';
+import {chartRadarLayout, type ChartLayerRadar} from './chart-radar.js';
 
 /** A small chart has at most this many series (LH-03). */
 export const SMALL_CHART_MAX_SERIES = 2;
@@ -86,6 +89,8 @@ export interface ChartPlotInset { left: number; top: number; right: number; bott
 
 /** What composition decides for a chart beyond its value axis (LH-03, LH-81, LH-92, LH-93). */
 export interface ChartLayer {
+  /** RR-105: scatter X/Y and box-and-whisker axes, also written into native PPTX. */
+  numericAxes?: ChartNumericAxes;
   small?: ChartLayerSmall;
   header?: ChartLayerHeader;
   /** LH-92: a doughnut of two or more rings names each ring on one of its slices. */
@@ -113,10 +118,16 @@ export interface ChartLayer {
   waterfall?: ChartLayerWaterfall;
   /** LH-108: a pie or one-series doughnut lists its categories and values beside it (chart-marks.ts). */
   valueList?: ChartLayerValueList;
+  /** LH-182: a doughnut's square and its hole, which both engines fill with the surface (chart-marks.ts). */
+  doughnut?: ChartLayerDoughnut;
   /** LH-109: a stacked column or area chart's values inside its segments and series names beside its last column (chart-marks.ts). */
   stack?: ChartLayerStack;
-  /** LH-110: the reference line and the period band the slide title names (chart-marks.ts). */
+  /** Explicit numeric references and their independent authored strokes (chart-references.ts). */
   references?: ChartLayerReferences;
+  /** LH-160: a histogram's bin count and edge decimals, and whether its data labels fit (chart-histogram.ts). */
+  histogram?: ChartLayerHistogram;
+  /** RR-105: a radar's legend placement and value axis (chart-radar.ts). */
+  radar?: ChartLayerRadar;
 }
 
 /** LH-105: one series name at the end of its line. Lengths are slide pixels. */
@@ -219,8 +230,9 @@ export function chartHeaderCaption(chart: unknown, columns: readonly string[], l
  * The label text of a value as the engines draw a default value label: the column's number format, else the General form. LH-141: with
  * `group` (the column has no format and groups its thousands, `columnGroup`) a whole number of four digits or more is grouped by the language.
  */
-export function valueLabel(value: number, format: string | undefined, group?: {language?: string}): string {
-  return chartLabelText({value: format !== undefined ? formatDataNumber(value, format) : formatChartLabelNumber(value, group)}, ['value']);
+export function valueLabel(value: number, format: string | undefined, group?: {language?: string}, language = group?.language): string {
+  // LH-106: in the language's numbering system, grouped or not.
+  return chartLabelText({value: format !== undefined ? formatDataNumber(value, format, language) : formatChartLabelNumber(value, group, language)}, ['value']);
 }
 
 const groupColumns = new WeakMap<object, Map<number, boolean>>();
@@ -239,7 +251,7 @@ export function columnGroups(data: ResolvedChartData, column: number): boolean {
 /** LH-141: a value of the data's column `column` as its default label prints it: the column's format, else the General form (grouped by `language` where `columnGroups`). */
 export function columnValueLabel(data: ResolvedChartData, column: number, value: number, language?: string): string {
   const format = data.ok && typeof data.formats[column] === 'string' && data.formats[column] !== '' ? data.formats[column] : undefined;
-  return valueLabel(value, format, columnGroups(data, column) ? {language} : undefined);
+  return valueLabel(value, format, columnGroups(data, column) ? {language} : undefined, language);
 }
 
 /**
@@ -266,14 +278,14 @@ export function smallChart(chart: unknown, data: ResolvedChartData, geometry?: C
     const pad = 10 * scale;
     const widest = Math.max(0, ...values.flatMap(row => row.flatMap((value, j) => value === null ? [] : [geometry.measure(columnValueLabel(data, j + 1, value, geometry.language), fontPx, 400)])));
     if (spec.horizontal) {
-      // A bar's label sits past its end, one line tall: two series' labels sit a bar apart (the clustered slot, PptxGenJS gap width
-      // 150%), one series' a category apart.
+      // A bar's label sits past its end, one line tall: two series' labels sit a bar apart (the clustered slot, chartBarGeometry, LH-176),
+      // one series' a category apart.
       const band = Math.max(1, box.height - 2 * pad - fontPx * 1.5) / count;
-      if (fontPx * 1.22 > (seriesCount > 1 ? band / 2.5 / seriesCount : band)) return undefined;
+      if (fontPx * 1.22 > (seriesCount > 1 ? chartBarGeometry(band, seriesCount, 'clustered').width : band)) return undefined;
     } else {
       // A column label is centred on its column: two series' labels sit a column apart, one series' a category apart.
       const band = Math.max(1, box.width - 2 * pad) / count;
-      const room = seriesCount > 1 && spec.kind === 'bar' ? band / 2.5 / seriesCount : band;
+      const room = seriesCount > 1 && spec.kind === 'bar' ? chartBarGeometry(band, seriesCount, 'clustered').width : band;
       if (widest + fontPx * 0.1 > room) return undefined;
     }
   }
@@ -364,13 +376,55 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
   }
   if (!rows) return undefined;
   const caption = text ? {text, box: {x: left, y: box.y + pad, width: captionWidth, height: lineHeight}} : undefined;
-  // Right to left, every part mirrors inside the chart box.
+  // RTL mirrors the caption and overall legend box. Native chart legends keep authored series order inside that box,
+  // including wrapped rows; mirroring each entry separately reverses the preview while PowerPoint retains source order.
   const mirror = (part: Box): Box => rtl ? {...part, x: box.x + box.width - (part.x - box.x) - part.width} : part;
+  const legendBox = legend ? mirror(legend.box) : undefined;
   return {
     ...(caption ? {caption: {text: caption.text, box: mirror(caption.box)}} : {}),
-    ...(legend ? {legend: {box: mirror(legend.box), entries: legend.entries.map(entry => ({...entry, box: mirror(entry.box)}))}} : {}),
+    ...(legend && legendBox ? {legend: {box: legendBox, entries: legend.entries.map(entry => ({...entry, box: rtl ? {...entry.box, x: legendBox.x + entry.box.x - legend.box.x} : entry.box}))}} : {}),
     height: pad + rows * lineHeight,
   };
+}
+
+/**
+ * LH-176: the gap between two categories' bars, as a percent of one bar's width (DrawingML `c:gapWidth`): 150 for clustered bars and
+ * columns, 50 for stacked and 100% stacked ones. Their series overlap 0 (clustered: side by side) or 100 (stacked: on one another)
+ * (`c:overlap`). The PPTX export writes these values and the preview draws its bars from {@link chartBarGeometry}, so both agree.
+ */
+export const CHART_BAR_GAP_WIDTH = Object.freeze({clustered: 150, stacked: 50});
+
+/** The bars of one category band: each bar's width, the bars together, the offset of the first bar, and whether series sit side by side. */
+export interface ChartBarGeometry {
+  /** The width of one bar (a column's width, a horizontal bar's height). */
+  width: number;
+  /** The width of the category's bars together: the series' bars side by side, or one stacked bar. */
+  group: number;
+  /** From the band's start to its first bar: half the gap. */
+  offset: number;
+  clustered: boolean;
+}
+
+/**
+ * LH-176: where the bars of one category sit in its `band` (the plot length over the category count), as PowerPoint lays out
+ * {@link CHART_BAR_GAP_WIDTH}: a clustered band holds `seriesCount` bars side by side and a gap of 1.5 bar widths
+ * (`width = band / (seriesCount + 1.5)`), a stacked band one bar and a gap of half its width (`width = band / 1.5`). The gap is split
+ * evenly before and after the bars.
+ */
+export function chartBarGeometry(band: number, seriesCount: number, grouping: string | undefined): ChartBarGeometry {
+  const clustered = grouping !== 'stacked' && grouping !== 'percentStacked';
+  const bars = clustered ? Math.max(1, seriesCount) : 1;
+  const width = band / (bars + (clustered ? CHART_BAR_GAP_WIDTH.clustered : CHART_BAR_GAP_WIDTH.stacked) / 100);
+  const group = width * bars;
+  return {width, group, offset: (band - group) / 2, clustered};
+}
+
+/**
+ * LH-176/SH-25: source series within one native bar cluster. A reversed vertical category axis also reverses the physical
+ * left-to-right series slots; horizontal categories keep their top-to-bottom series order. Stacks occupy one slot in either direction.
+ */
+export function chartBarSeriesOffset(bar: ChartBarGeometry, series: number, count: number, reversedColumn = false): number {
+  return bar.clustered ? (reversedColumn ? count - 1 - series : series) * bar.width : 0;
 }
 
 /**
@@ -386,7 +440,8 @@ export function chartLayer(chart: unknown, data: ResolvedChartData, geometry: Ch
   const header = chartHeader(chart, data, geometry);
   const small = smallChart(chart, data, header ? {...geometry, box: {...geometry.box, y: geometry.box.y + header.height, height: Math.max(1, geometry.box.height - header.height)}} : geometry);
   const rings = chartRingLabels(chart, data);
-  return small || header || rings ? {...(small ? {small} : {}), ...(header ? {header} : {}), ...(rings ? {rings} : {})} : undefined;
+  const radar = chartRadarLayout(chart, data, geometry);
+  return small || header || rings || radar ? {...(small ? {small} : {}), ...(header ? {header} : {}), ...(rings ? {rings} : {}), ...(radar ? {radar} : {})} : undefined;
 }
 
 /**
@@ -419,6 +474,13 @@ export function chartRingLabels(chart: unknown, data: ResolvedChartData): ChartL
  * at the type's default position (outside the end of a column or bar, above a line point).
  */
 export function chartLayerDataLabels<T extends {dataLabels?: unknown}>(resolved: T, layer: ChartLayer | undefined, kind: 'bar' | 'line' | string): T {
+  // A doughnut's authored labels that do not fit their ring (chartDoughnut): both engines draw the reduced content, or none.
+  const fit = layer?.doughnut?.labels;
+  if (fit && resolved.dataLabels !== undefined) {
+    return fit.content === null
+      ? {...resolved, dataLabels: undefined, dataLabelsOff: true}
+      : {...resolved, dataLabels: {...(resolved.dataLabels as object), content: fit.content}};
+  }
   if (resolved.dataLabels !== undefined || !layer?.small?.labels) return resolved;
   return {...resolved, active: true, dataLabels: {content: ['value'], position: kind === 'line' ? 'above' : 'outside-end', separator: ', '}};
 }

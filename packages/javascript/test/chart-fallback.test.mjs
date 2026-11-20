@@ -76,8 +76,23 @@ describe('chartDrawPlan', () => {
 		assert.equal(numeric.fallback, undefined);
 	});
 
+	test('a Pareto chart of several series draws as clustered columns with every series (LH-175)', () => {
+		const drawn = plan({ type: 'pareto', data: quarters });
+		assert.equal(drawn.type, 'column');
+		assert.equal(drawn.kind, 'bar');
+		assert.equal(drawn.fallback, 'pareto-as-columns');
+		assert.deepEqual(drawn.columns, quarters.columns);
+		assert.deepEqual(drawn.rows, quarters.rows, 'data order, not sorted');
+		assert.deepEqual(drawn.dropped, []);
+		const one = plan({ type: 'pareto', data: { columns: ['Quarter', 'Current'], rows: quarters.rows.map(row => row.slice(0, 2)) } });
+		assert.equal(one.type, 'pareto');
+		assert.equal(one.fallback, undefined);
+	});
+
 	test('one-series constructs name the series they leave out', () => {
-		for (const type of ['treemap', 'funnel', 'waterfall', 'pareto', 'histogram']) assert.deepEqual(plan({ type, data: quarters }).dropped, ['Baseline'], type);
+		for (const type of ['treemap', 'funnel', 'waterfall', 'histogram']) assert.deepEqual(plan({ type, data: quarters }).dropped, ['Baseline'], type);
+		const notes = { columns: ['Quarter', 'Current', 'Note'], rows: [['Q1', 21, 'a'], ['Q2', 25, 'b']] };
+		assert.deepEqual(plan({ type: 'pareto', data: notes }).dropped, ['Note'], 'a Pareto chart of one numeric series names the other column');
 		for (const type of ['column', 'line', 'radar', 'combo']) assert.deepEqual(plan({ type, data: quarters }).dropped, [], type);
 		const resolved = resolveChartData({ type: 'treemap', data: quarters });
 		const [diagnostic] = chartDrawDiagnostics({ type: 'treemap', data: quarters }, resolved, '/slides/0/chart');
@@ -94,7 +109,7 @@ describe('opf/chart-series-dropped', () => {
 		assert.equal(dropped.length, 1);
 		assert.equal(dropped[0].severity, 'warning');
 		assert.equal(dropped[0].path, '/slides/0/chart/type');
-		for (const type of ['world', 'box-and-whisker', 'pie', 'doughnut', 'column']) assert.equal((await found(deck({ type, data: quarters }), 'chart-series-dropped')).length, 0, type);
+		for (const type of ['world', 'box-and-whisker', 'pie', 'doughnut', 'pareto', 'column']) assert.equal((await found(deck({ type, data: quarters }), 'chart-series-dropped')).length, 0, type);
 	});
 });
 

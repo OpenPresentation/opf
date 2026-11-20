@@ -1,6 +1,8 @@
 # Continue the OPF ecosystem work
 
-Current entrypoint: the [release-readiness program](programs/release-readiness/README.md), its [burndown](programs/release-readiness/burndown.md), and the [compatibility matrix](compatibility-matrix.md). The [September 29 review checkpoint](handoff-2026-09-29.md), [September 21 handoff](handoff-2026-09-21.md) and dated checkpoints below are historical. Keep published-package evidence separate from subsequent source merges and unfinished acceptance.
+**Latest handoff (2026-11-07):** [handoff/2026-11-07/README.md](handoff/2026-11-07/README.md), plus the one-prompt [KICKOFF.md](handoff/2026-11-07/KICKOFF.md). Everything below is history.
+
+Earlier entrypoint: the [release-readiness program](programs/release-readiness/README.md), its [burndown](programs/release-readiness/burndown.md), and the [compatibility matrix](compatibility-matrix.md). The [September 29 review checkpoint](handoff-2026-09-29.md), [September 21 handoff](handoff-2026-09-21.md) and dated checkpoints below are historical. Keep published-package evidence separate from subsequent source merges and unfinished acceptance.
 
 Runtime update (September 10): use **Node 24 only** for new development and verification; see [migration instructions](migrations/node24.md). Historical Node 20/24 results and commands below describe prior checkpoints. Keep distinct browser/OS/native gates and the existing Office recovery prerequisite.
 

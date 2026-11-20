@@ -1,0 +1,3 @@
+param([Parameter(Mandatory=$true)][string]$Root,[Parameter(Mandatory=$true)][string]$ActionFile,[Parameter(Mandatory=$true)][string]$ActionModelSha256,[Parameter(Mandatory=$true)][string]$ActionFileSha256,[Parameter(Mandatory=$true)][int]$ActionFileBytes,[Parameter(Mandatory=$true)][string]$Output,[Parameter(Mandatory=$true)][string]$FixtureFile)
+$ErrorActionPreference='Stop'
+& (Join-Path $PSScriptRoot 'seven-value-snapshot-check.ps1') -Root $Root -ActionFile $ActionFile -ActionModelSha256 $ActionModelSha256 -ActionFileSha256 $ActionFileSha256 -ActionFileBytes $ActionFileBytes -Output $Output -FixtureFile $FixtureFile -HistogramClassic

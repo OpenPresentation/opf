@@ -1,4 +1,5 @@
 import {prepareBlockMove,listBlockContainers,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove,createContentBlock} from './blocks.js';
+import {SHAPE_CATEGORIES,shapesInCategory} from '@openpresentation/opf/shape-catalog';
 import {getValueAtPath,splitOpfPath,opfPathToJsonPointer,applyJsonPatch} from './index.js';
 
 /** Arrange-mode block handles. Native drag reorders siblings; the menu also reparents blocks. */
@@ -66,19 +67,21 @@ export function createBlockControls(root, options) {
     panel.style.cssText='position:absolute;right:8px;top:40px;width:300px;max-width:calc(100% - 16px);max-height:calc(100% - 48px);overflow:auto;box-sizing:border-box;padding:14px;background:var(--opf-ui-surface,white);color:var(--opf-ui-fg,#332e40);border:1px solid var(--opf-ui-border,#d5cde5);border-radius:var(--opf-ui-radius-md,8px);box-shadow:var(--opf-ui-shadow-pop,0 5px 24px #28203922);pointer-events:auto;font:12px/1.5 var(--opf-ui-font,system-ui);z-index:3';
     const heading=doc.createElement('strong');heading.textContent='Add content';panel.append(heading);
     function field(label,node){const wrapper=doc.createElement('label');wrapper.textContent=label;wrapper.style.cssText='display:block;margin-top:10px';node.setAttribute('aria-label',label);node.style.cssText='display:block;box-sizing:border-box;width:100%;padding:6px;margin-top:4px';wrapper.append(node);panel.append(wrapper);return wrapper;}
-    const kind=doc.createElement('select');for(const [value,label] of [['text','Text'],['list','List'],['chart','Chart'],['table','Table'],['metric','Metric'],['quote','Quote'],['code','Code'],['diagram','Diagram'],['timeline','Timeline'],['group','Group'],['image','Image'],['video','Video']]){const option=doc.createElement('option');option.value=value;option.textContent=label;kind.append(option);}field('Content type',kind);
+    const kind=doc.createElement('select');for(const [value,label] of [['text','Text'],['list','List'],['chart','Chart'],['table','Table'],['metric','Metric'],['quote','Quote'],['code','Code'],['diagram','Diagram'],['timeline','Timeline'],['group','Group'],['shape','Shape'],['image','Image'],['video','Video']]){const option=doc.createElement('option');option.value=value;option.textContent=label;kind.append(option);}field('Content type',kind);
     const destinations=doc.createElement('select');for(const item of containers){const option=doc.createElement('option');option.value=item.path;option.textContent=item.label;destinations.append(option);}destinations.value=requested;field('Add destination',destinations);
     const positions=doc.createElement('select');field('Add position',positions);
     function positionsFor(){positions.replaceChildren();const count=containers.find(c=>c.path===destinations.value).count;for(let i=0;i<=count;i++){const option=doc.createElement('option');option.value=String(i);option.textContent=i===count?'At the end':`Before block ${i+1}`;positions.append(option);}positions.value=String(destinations.value===requested&&index!==undefined?Math.min(index,count):count);}
     destinations.onchange=positionsFor;positionsFor();
     const source=doc.createElement('input');source.type='text';const media=field('Media URL or asset reference',source);media.style.display='none';
     const file=doc.createElement('input');file.type='file';file.accept='image/png,image/jpeg,image/webp';const upload=field('Or choose an image',file);upload.style.display='none';
+    // SH-06: the preset of a new shape, grouped as PowerPoint's gallery.
+    const shapePick=doc.createElement('select');for(const category of SHAPE_CATEGORIES){const group=doc.createElement('optgroup');group.label=category.title;for(const entry of shapesInCategory(category.id)){const option=doc.createElement('option');option.value=entry.name;option.textContent=entry.name.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/^./,letter=>letter.toUpperCase());group.append(option);}shapePick.append(group);}shapePick.value='rect';const shapeRow=field('Shape',shapePick);shapeRow.style.display='none';
     let loading=false,fileRevision=0;const thisPanel=panel;
     const add=doc.createElement('button');add.type='button';add.textContent='Add';add.style.cssText='margin:12px 6px 0 0;padding:6px 12px;border:1px solid var(--opf-ui-border-strong,#bfb1de);border-radius:var(--opf-ui-radius-sm,4px);background:var(--opf-ui-muted,#ede7f9);color:inherit;cursor:pointer';
     const close=doc.createElement('button');close.type='button';close.textContent='Cancel';close.onclick=cancel;close.style.cssText=add.style.cssText;
     const cancelRead=()=>{fileRevision++;loading=false;add.disabled=false;};
     source.oninput=()=>{cancelRead();file.value='';};
-    kind.onchange=()=>{cancelRead();media.style.display=['image','video'].includes(kind.value)?'block':'none';upload.style.display=kind.value==='image'?'block':'none';};
+    kind.onchange=()=>{cancelRead();media.style.display=['image','video'].includes(kind.value)?'block':'none';upload.style.display=kind.value==='image'?'block':'none';shapeRow.style.display=kind.value==='shape'?'block':'none';};
     file.onchange=()=>{
       cancelRead();const revision=fileRevision,chosen=file.files?.[0];if(!chosen)return;
       if(!['image/png','image/jpeg','image/webp'].includes(chosen.type)){options.onError(new Error('Choose a PNG, JPEG or WebP image.'));return;}
@@ -87,7 +90,7 @@ export function createBlockControls(root, options) {
       reader.onerror=()=>{if(panel!==thisPanel||revision!==fileRevision)return;loading=false;add.disabled=false;options.onError(new Error('The image file could not be read.'));};
       reader.readAsDataURL(chosen);
     };
-    add.onclick=()=>{if(!loading)change(()=>prepareBlockInsert(base,destinations.value,createContentBlock(kind.value,{source:source.value}),Number(positions.value)));};
+    add.onclick=()=>{if(!loading)change(()=>prepareBlockInsert(base,destinations.value,createContentBlock(kind.value,{source:source.value,shape:shapePick.value}),Number(positions.value)));};
     panel.append(add,close);panel.onkeydown=event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();cancel();}};
     layer.append(panel);kind.focus();
   }

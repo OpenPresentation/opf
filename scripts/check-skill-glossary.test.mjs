@@ -27,7 +27,13 @@ test('every skill carries the same glossary, near its top', () => {
 
 test('the opf-export skill states the PPTX per-line limit before the first conversion command', () => {
   const text = readFileSync(path.join(skills, 'opf-export', 'SKILL.md'), 'utf8');
-  const caveat = text.indexOf('one text box for each wrapped line');
-  assert.ok(caveat > 0, 'the caveat is present');
-  assert.ok(caveat < text.indexOf('## Files: `convert`'), 'the caveat comes before the convert section');
+  const convert = text.indexOf('## Files: `convert`');
+  assert.ok(convert > 0, 'the conversion section is present');
+  const caveat = text.slice(0, convert);
+  assert.match(caveat, /normally writes one box per wrapped line/, 'the normal per-line limit comes before conversion');
+  assert.match(caveat, /separate source-bound word, number or script boxes/, 'proofing-sensitive fragment limits are explicit');
+  assert.match(caveat, /does not reflow into adjacent boxes/, 'measured edits cannot flow between boxes');
+  assert.match(caveat, /longer text can overlap/, 'the consequence of a longer edit is explicit');
+  assert.match(caveat, /--body-text native/, 'native paragraph editing is identified before conversion');
+  assert.match(caveat, /native-body-fallback/, 'native-mode fallback remains explicit');
 });

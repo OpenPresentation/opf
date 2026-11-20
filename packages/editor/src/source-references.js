@@ -13,7 +13,7 @@ import { listBuiltinVariables } from "@openpresentation/opf";
  * names whose description contains one of the phrases. `item`: the field is a list (or a string or a list) and every entry is a reference.
  */
 export const REFERENCE_RULES = Object.freeze([
-  { kind: "asset", definitions: ["Asset", "LogoSource", "ImageSource"], keys: ["src", "logo", "watermark"], phrases: ["asset:<id>", "or Asset"] },
+  { kind: "asset", definitions: ["Asset", "LogoSource", "ImageSource", "ImagePayload"], keys: ["src", "logo", "watermark"], phrases: ["asset:<id>", "or Asset"] },
   { kind: "dataset", definitions: ["DatasetId"], keys: [], phrases: [] },
   { kind: "datasetColumn", definitions: ["DatasetFields"], keys: ["category", "x", "series", "line", "secondaryAxis"], phrases: ["column"], item: true },
   { kind: "cite", definitions: [], keys: ["cite"], phrases: ["references"], item: true },
@@ -23,7 +23,7 @@ export const REFERENCE_RULES = Object.freeze([
 ]);
 
 /** The promoted regions of a slide a block can be pinned to (the lower-case names the `region` pattern accepts). */
-export const PROMOTED_REGIONS = Object.freeze(["top", "middle", "bottom", "left", "center", "right"]);
+export const PROMOTED_REGIONS = Object.freeze(["top", "middle", "bottom", "start", "center", "end"]);
 
 const isObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 const isIndex = (segment) => typeof segment === "number" || /^(?:0|[1-9]\d*)$/.test(String(segment));

@@ -32,6 +32,7 @@ export async function startFixture({ contextOptions = { viewport: { width: 1000,
     '/styles.css': ['text/css', (await buildStyles(new URL('src/styles/', root))).css],
   };
   const server = createServer((req, res) => {
+    if (req.url === '/favicon.ico') { res.writeHead(204).end(); return; }
     const found = files[new URL(req.url, 'http://localhost').pathname];
     if (!found) { res.writeHead(404).end(); return; }
     res.writeHead(200, { 'Content-Type': found[0] }).end(found[1]);

@@ -9,7 +9,7 @@ import {defaultExampleBaselinePath} from '../scripts/default-baseline.mjs';
 // snapshot as a host does, which changes nothing for a self-contained deck.
 import { gallery as defaultCatalog } from '@openpresentation/gallery';
 import {toPng, toSvg} from '../dist/index.js';
-import { diffManifests, readBaseline } from './golden-store.mjs';
+import { compareCorpus, readBaseline } from './golden-store.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // RR-52: a baseline is a directory with one file per deck (test/golden/<name>/...). A legacy
@@ -72,15 +72,16 @@ if (update) {
   console.log(`Golden candidate: ${Object.keys(next.entries).length} slides, ${corpus.length} decks. Review ${output}/index.html, then promote it into ${baselinePath} with npm run golden:promote (it rewrites only the decks that differ).`);
 } else {
   const expected = readBaseline(baselinePath);
-  const { changedSlides: changes, changedDecks } = diffManifests(expected, next);
-  writeFileSync(path.join(output, 'diff.json'), JSON.stringify({ sourceMatches: JSON.stringify(expected.source) === JSON.stringify(next.source), changedSlides: changes, changedDecks }, null, 2) + '\n');
-  assert.deepEqual(next.source, expected.source, 'Golden corpus changed; inspect candidate and review the new corpus.');
+  const { changedSlides: changes, changedDecks, newDecks, removedDecks } = compareCorpus(expected, next);
+  writeFileSync(path.join(output, 'diff.json'), JSON.stringify({ sourceMatches: JSON.stringify(expected.source) === JSON.stringify(next.source), changedSlides: changes, changedDecks, newDecks, removedDecks }, null, 2) + '\n');
   assert.equal(next.version, expected.version, 'Golden manifest version changed');
   assert.equal(next.scale, expected.scale, 'Golden scale changed');
   assert.equal(next.format, expected.format, 'Golden format changed');
   assert.equal(next.systemFonts, expected.systemFonts, 'Golden font policy changed');
   assert.equal(changes.length, 0, `${changes.length} raster baselines changed; see ${output}/diff.json`);
-  console.log(`Golden passed: ${Object.keys(next.entries).length} slides, ${corpus.length} decks; no skipped corpus (${((performance.now() - started) / 1000).toFixed(1)} s).`);
+  for (const deck of newDecks) console.log(`Golden: new deck ${deck} is not in the baseline yet; its slides are rendered but not compared until the golden workflow records them.`);
+  for (const deck of removedDecks) console.log(`Golden: deck ${deck} left the corpus; the golden workflow drops it from the baseline.`);
+  console.log(`Golden passed: ${Object.keys(next.entries).length} slides, ${corpus.length} decks (${newDecks.length} new, ${removedDecks.length} removed) (${((performance.now() - started) / 1000).toFixed(1)} s).`);
 }
 function readCorpus(directory, prefix = '') {
   return readdirSync(directory, { withFileTypes: true }).flatMap(entry => {

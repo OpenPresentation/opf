@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 1,
+  "syntheticMutantsOnly": true,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "originalManifestSha256": "fd13b7725ea3b76717ec6976c9e12a7f6df9db5135818120cc026fa54c9c5d65",
+  "preparationRevision": "2400d38bf549cdb661c31725776df25e497d364c",
+  "workerRevision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+  "cases": [
+    {
+      "id": "chart-all-seven",
+      "input": "inputs/chart-all-seven.pptx",
+      "source": "sources/chart-all-seven.opf.json",
+      "actionPlan": "actions/chart-all-seven.json",
+      "archiveSha256": "d14f8a9489d4a4f3a99f0a6ff23cd0e5cc0d847d2389a0e96fb3886b5a05649b",
+      "slideCount": 7,
+      "automaticControlEligible": false,
+      "roundTripEqual": false,
+      "roundTripAcceptance": "review-required",
+      "fontProfile": "direct-pptx-export; preview independently rendered",
+      "chartex": "auto",
+      "previews": {
+        "svg": [
+          "previews/chart-all-seven-01.svg",
+          "previews/chart-all-seven-02.svg",
+          "previews/chart-all-seven-03.svg",
+          "previews/chart-all-seven-04.svg",
+          "previews/chart-all-seven-05.svg",
+          "previews/chart-all-seven-06.svg",
+          "previews/chart-all-seven-07.svg"
+        ],
+        "png": [
+          "previews/chart-all-seven-01.png",
+          "previews/chart-all-seven-02.png",
+          "previews/chart-all-seven-03.png",
+          "previews/chart-all-seven-04.png",
+          "previews/chart-all-seven-05.png",
+          "previews/chart-all-seven-06.png",
+          "previews/chart-all-seven-07.png"
+        ]
+      },
+      "worker": "furniture"
+    },
+    {
+      "id": "chart-mode-all-seven-fallback",
+      "mode": "fallback",
+      "chart": "all-seven",
+      "input": "chart-modes/all-seven-fallback.pptx",
+      "archiveSha256": "b8d9448f8b8a09aca2d5cc3d19432b1c29d875bd227cd617879467fca9d0afde",
+      "approvedFallbackSha256": "b8d9448f8b8a09aca2d5cc3d19432b1c29d875bd227cd617879467fca9d0afde",
+      "chartExParts": 0,
+      "slideCount": 7,
+      "automaticControlEligible": false,
+      "xmlShapeCounts": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "roundTripEqual": false,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'treemap' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.1.chart",
+          "message": "The 'histogram' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.2.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.3.chart",
+          "message": "The 'box-and-whisker' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.3.chart",
+          "message": "The 'box-and-whisker' chart is drawn as core's box-per-series fallback: it has one value per category, so its rows form one group and each series is one box of its values, as the preview draws it.",
+          "adaptation": "chart-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.4.chart",
+          "message": "The 'waterfall' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.5.chart",
+          "message": "The 'funnel' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.6.chart",
+          "message": "The 'world' chart is drawn as core's map-as-columns fallback: its categories are not places a map can plot, so it is exported as a clustered column chart of every series, as the preview draws it.",
+          "adaptation": "chart-fallback"
+        }
+      ],
+      "importedChartTypes": [
+        "column",
+        "column",
+        "column",
+        "column",
+        "column",
+        "column",
+        "column"
+      ],
+      "nativeAcceptance": "pending",
+      "actionPlan": "actions/chart-mode-all-seven-fallback.json",
+      "worker": "furniture"
+    },
+    {
+      "id": "chart-mode-all-seven-auto",
+      "mode": "auto",
+      "chart": "all-seven",
+      "input": "chart-modes/all-seven-auto.pptx",
+      "archiveSha256": "e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1",
+      "approvedFallbackSha256": null,
+      "chartExParts": 6,
+      "slideCount": 7,
+      "automaticControlEligible": false,
+      "xmlShapeCounts": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "roundTripEqual": false,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.3.chart",
+          "message": "The 'box-and-whisker' chart is drawn as core's box-per-series fallback: it has one value per category, so its rows form one group and each series is one box of its values, as the preview draws it.",
+          "adaptation": "chart-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.6.chart",
+          "message": "The 'world' chart is drawn as core's map-as-columns fallback: its categories are not places a map can plot, so it is exported as a clustered column chart of every series, as the preview draws it.",
+          "adaptation": "chart-fallback"
+        }
+      ],
+      "importedChartTypes": [
+        "treemap",
+        "histogram",
+        "pareto",
+        "box-and-whisker",
+        "waterfall",
+        "funnel",
+        "column"
+      ],
+      "nativeAcceptance": "pending",
+      "actionPlan": "actions/chart-mode-all-seven-auto.json",
+      "worker": "furniture"
+    },
+    {
+      "id": "chart-mode-all-seven-native",
+      "mode": "native",
+      "chart": "all-seven",
+      "input": "chart-modes/all-seven-native.pptx",
+      "archiveSha256": "e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1",
+      "approvedFallbackSha256": null,
+      "chartExParts": 6,
+      "slideCount": 7,
+      "automaticControlEligible": false,
+      "xmlShapeCounts": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "roundTripEqual": false,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.3.chart",
+          "message": "The 'box-and-whisker' chart is drawn as core's box-per-series fallback: it has one value per category, so its rows form one group and each series is one box of its values, as the preview draws it.",
+          "adaptation": "chart-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.6.chart",
+          "message": "The 'world' chart is drawn as core's map-as-columns fallback: its categories are not places a map can plot, so it is exported as a clustered column chart of every series, as the preview draws it.",
+          "adaptation": "chart-fallback"
+        }
+      ],
+      "importedChartTypes": [
+        "treemap",
+        "histogram",
+        "pareto",
+        "box-and-whisker",
+        "waterfall",
+        "funnel",
+        "column"
+      ],
+      "nativeAcceptance": "pending",
+      "actionPlan": "actions/chart-mode-all-seven-native.json",
+      "worker": "furniture"
+    }
+  ],
+  "files": [
+    {
+      "path": "chart-all-seven.pptx",
+      "originalPath": "inputs/chart-all-seven.pptx",
+      "bytes": 189742,
+      "sha256": "d14f8a9489d4a4f3a99f0a6ff23cd0e5cc0d847d2389a0e96fb3886b5a05649b"
+    },
+    {
+      "path": "chart-mode-all-seven-fallback.pptx",
+      "originalPath": "chart-modes/all-seven-fallback.pptx",
+      "bytes": 171762,
+      "sha256": "b8d9448f8b8a09aca2d5cc3d19432b1c29d875bd227cd617879467fca9d0afde"
+    },
+    {
+      "path": "chart-mode-all-seven-auto.pptx",
+      "originalPath": "chart-modes/all-seven-auto.pptx",
+      "bytes": 189797,
+      "sha256": "e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1"
+    },
+    {
+      "path": "chart-mode-all-seven-native.pptx",
+      "originalPath": "chart-modes/all-seven-native.pptx",
+      "bytes": 189797,
+      "sha256": "e21983be80f8fd2d53eb199454bd1ff6ec0fd6940f544fd80769d49e42f693f1"
+    },
+    {
+      "path": "whole-seven.opf.json",
+      "originalPath": "sources/chart-all-seven.opf.json",
+      "bytes": 3682,
+      "sha256": "d5132b17c5ddece1445c800459de876ff3dd4ff57b1db6d786bff6adb8efc630"
+    }
+  ],
+  "scope": "Exact four whole original PPTX archives and exact sealed whole-seven OPF; tests mutate owned in-memory copies only. No native results."
+}

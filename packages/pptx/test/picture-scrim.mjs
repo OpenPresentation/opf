@@ -8,14 +8,14 @@ import {composeSlide} from '@openpresentation/opf/composition';
 import {fromPptx, toPptx} from '../dist/index.js';
 
 const src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
-const deck = (background, design = {}) => ({name: 'Scrims', language: 'en-US', design: {fontScheme: 'roboto'}, slides: [{title: 'Field context', subtitle: 'Over a photograph', design: {background: {type: 'image', src, ...background}, titleAlignment: 'right', ...design}}]});
+const deck = (background, design = {}) => ({name: 'Scrims', language: 'en-US', design: {fontScheme: 'roboto'}, slides: [{title: 'Field context', subtitle: 'Over a photograph', design: {background: {type: 'image', src, ...background}, titleAlignment: 'end', ...design}}]});
 const emu = px => Math.round(px / 96 * 914400);
 const shapes = xml => [...xml.matchAll(/<p:sp>(?:(?!<\/p:sp>)[\s\S])*<\/p:sp>/g)].map(([shape]) => shape);
 const scrimShapes = xml => shapes(xml).filter(shape => /name="OPF background (scrim|tone (dark|light))/.test(shape));
 
 // Header and footer text get scrims of their own: three native rectangles at core's boxes, each a bg1 gradient with core's stops.
 {
-  const document = deck({}, {header: {left: {text: 'Context'}}, footer: {left: {text: 'Market review'}}});
+  const document = deck({}, {header: {start: {text: 'Context'}}, footer: {start: {text: 'Market review'}}});
   const context = resolveSlideContext(document, 0);
   const scrims = composeSlide(context.slide, context.options).backgroundImage.scrims;
   assert.equal(scrims.length, 3);

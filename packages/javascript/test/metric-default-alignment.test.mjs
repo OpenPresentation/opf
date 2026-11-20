@@ -67,13 +67,14 @@ test('shorthand, blocks, nested groups and template regions use the same centere
 });
 
 test('explicit left, center and right survive at every supported alignment source',()=>{
-  for(const align of ['left','center','right']) {
+  // The document word (`start`, `end`) is the engine's `left`, `right` alignment in this left-to-right deck.
+  for(const [word,align] of [['start','left'],['center','center'],['end','right']]) {
     const variants=[
-      [{metric,design:{contentAlignment:align}},{}],
-      [{metric},{presentation:{design:{contentAlignment:align}}}],
-      [{metric},{contentAlignment:align}],
-      [{metric},{themeDesign:{contentAlignment:align}}],
-      [{metric},{layout:{...gallery.layouts.metrics,design:{contentAlignment:align}}}],
+      [{metric,design:{contentAlignment:word}},{}],
+      [{metric},{presentation:{design:{contentAlignment:word}}}],
+      [{metric},{contentAlignment:word}],
+      [{metric},{themeDesign:{contentAlignment:word}}],
+      [{metric},{layout:{...gallery.layouts.metrics,design:{contentAlignment:word}}}],
     ];
     for(const [slide,options] of variants) {
       const item=metrics(composeSlide(slide,{...options,textMeasurement}))[0];
@@ -84,8 +85,8 @@ test('explicit left, center and right survive at every supported alignment sourc
 });
 
 test('slide, host, deck, theme and layout precedence remains explicit for metrics',()=>{
-  const slide={metric,design:{contentAlignment:'left'}};
-  const options={contentAlignment:'right',presentation:{design:{contentAlignment:'center'}},themeDesign:{contentAlignment:'right'},layout:{...gallery.layouts.metrics,design:{contentAlignment:'left'}}};
+  const slide={metric,design:{contentAlignment:'start'}};
+  const options={contentAlignment:'end',presentation:{design:{contentAlignment:'center'}},themeDesign:{contentAlignment:'end'},layout:{...gallery.layouts.metrics,design:{contentAlignment:'start'}}};
   const alignment=()=>metrics(composeSlide(slide,options))[0].metricLayout.alignment;
   assert.equal(alignment(),'left');
   delete slide.design;
@@ -101,8 +102,8 @@ test('slide, host, deck, theme and layout precedence remains explicit for metric
 });
 
 test('deck context retains alignment from referenced theme and layout records',()=>{
-  for(const align of ['left','center','right'])for(const source of ['theme','layout']) {
-    const deck={design:{theme:'house'},catalogs:{custom:{themes:{house:{name:'House',design:source==='theme'?{contentAlignment:align}:{}}},layouts:{house:{...gallery.layouts.metrics,design:source==='layout'?{contentAlignment:align}:{}}}}},slides:[{layout:'house',metric}]};
+  for(const [word,align] of [['start','left'],['center','center'],['end','right']])for(const source of ['theme','layout']) {
+    const deck={design:{theme:'house'},catalogs:{custom:{themes:{house:{name:'House',design:source==='theme'?{contentAlignment:word}:{}}},layouts:{house:{...gallery.layouts.metrics,design:source==='layout'?{contentAlignment:word}:{}}}}},slides:[{layout:'house',metric}]};
     const {slide,options,diagnostics}=resolveSlideContext(deck,0,{catalogs:[gallery],fonts:{textMeasurement}});
     assert.deepEqual(diagnostics,[]);
     const geometry=composeSlide(slide,options);
@@ -115,10 +116,10 @@ test('ordinary prose, lists and tables retain their previous alignment and geome
   const blocks=[{text:'Ordinary prose'},{items:['First','Second']},{table:{columns:['Text','Value'],rows:[['Apples',42]]}}];
   const slide={composition:{mode:'column'},blocks};
   const geometry=composeSlide(slide,{textMeasurement});
-  const explicit=composeSlide({...slide,design:{contentAlignment:'left'}},{textMeasurement});
+  const explicit=composeSlide({...slide,design:{contentAlignment:'start'}},{textMeasurement});
   assert.ok(geometry.items.every(item=>item.alignment==='left'));
   assert.deepEqual(geometry.items,explicit.items);
-  for(const align of ['center','right']) {
-    assert.ok(composeSlide(slide,{contentAlignment:align,textMeasurement}).items.every(item=>item.alignment===align));
+  for(const [word,align] of [['center','center'],['end','right']]) {
+    assert.ok(composeSlide(slide,{contentAlignment:word,textMeasurement}).items.every(item=>item.alignment===align));
   }
 });

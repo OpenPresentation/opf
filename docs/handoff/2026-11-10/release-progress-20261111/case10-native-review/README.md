@@ -1,0 +1,9 @@
+# Case10 native digit/colon repair — scoped acceptance
+
+Coordinator and independent review accept the actual digit-before-colon and readable spacing in all four body contexts. All text is present, with no clipping or overlap. Original/edited/reopened native PNGs are byte-identical; native.png represents all three, alongside the actual Node preview. All22native shapes/117UTF16 and the three exact digit/colon/space probes survive. Native heading metrics and wrapped-line spacing differ from Node; no pixel, baseline or physical-font parity is claimed.
+
+Original public import equals the source with zero diagnostics. Saved and reopened models equal each other, preserving every original codepoint/space while retaining current rich styles in exactly four fields. Four literal native-scalar-fragment-reflow findings remain; the source JSON/default styles were not restored. Primary font descriptor is Aptos, CS descriptor Arabic Typesetting, LCID1025; the source had no direct CS override. Descriptors do not prove physical font identity.
+
+The single attempt completes31.549s launcher/12.135s worker, two read-only opens, one SaveCopy, two owned closes and one empty Quit, zero actions. One postflight sample sees zero processes about4160ms after Quit; its21.9081ms observation and45.7048ms finish are not time since Quit or a full5s absence proof. Actual order is typed/raw/lifecycle admission → bounded observer → offline public imports. An extra requested import-before-observer ordering was withdrawn after checking the frozen read-only B07 contract; no result/history was rewritten and no retry was run.
+
+Private complete181-entry evidence remains in Data-Advantage/openpresentation-site branch codex/evidence-b18-case10-native01-20261111 at15f9c6486347933972569f3c9687fbc97a30afbf. Only synthetic images and nonidentifying scope records are copied here. No full59, edited-chart, broad font or release acceptance follows.

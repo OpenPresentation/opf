@@ -14,7 +14,7 @@ test('composed metrics default to center and other items default to left alignme
 });
 
 test('the heading group follows titleAlignment and every other item follows contentAlignment', () => {
-  const composed = composeSlide(slide, {titleAlignment: 'center', contentAlignment: 'right'});
+  const composed = composeSlide(slide, {titleAlignment: 'center', contentAlignment: 'end'});
   assert.deepEqual(alignments(composed), [['title', 'center'], ['subtitle', 'center'], ['text', 'right'], ['metric', 'right'], ['items', 'right']]);
   assert.equal(composed.items[3].metricLayout.alignment, 'right');
   // The title never inherits content alignment.
@@ -22,13 +22,13 @@ test('the heading group follows titleAlignment and every other item follows cont
 });
 
 test('slide design overrides host alignment options', () => {
-  const composed = composeSlide({...slide, design: {titleAlignment: 'right', contentAlignment: 'center'}}, {titleAlignment: 'center', contentAlignment: 'right'});
+  const composed = composeSlide({...slide, design: {titleAlignment: 'end', contentAlignment: 'center'}}, {titleAlignment: 'center', contentAlignment: 'end'});
   assert.deepEqual(alignments(composed), [['title', 'right'], ['subtitle', 'center'], ['text', 'center'], ['metric', 'center'], ['items', 'center']]);
 });
 
 test('accepted outline placement uses the item alignment', () => {
   const textMeasurement = {measure: (text, size) => text.length * size * .5, outlineBounds: (text, size) => text.trim() ? {x: 0, y: -size * .8, width: text.length * size * .5, height: size} : null};
-  const composed = composeSlide(slide, {titleAlignment: 'center', contentAlignment: 'right', textMeasurement});
+  const composed = composeSlide(slide, {titleAlignment: 'center', contentAlignment: 'end', textMeasurement});
   for (const item of composed.items) if (item.text?.placement) assert.equal(item.text.placement.alignment, item.alignment, item.path);
   assert.ok(composed.items.filter(item => item.text?.placement).length >= 3);
 });
@@ -40,29 +40,29 @@ const titleSubtitle = {id: 'title-subtitle', regions: [{name: 'title', size: 1}]
 
 test('cover tag, title and subtitle share titleAlignment', () => {
   for (const layout of [titleSubtitle, undefined]) {
-    assert.deepEqual(alignments(composeSlide(cover, {layout, titleAlignment: 'left', contentAlignment: 'center'})), [['tag', 'left'], ['title', 'left'], ['subtitle', 'left']]);
-    assert.deepEqual(alignments(composeSlide(cover, {layout, titleAlignment: 'right', contentAlignment: 'left'})), [['tag', 'right'], ['title', 'right'], ['subtitle', 'right']]);
+    assert.deepEqual(alignments(composeSlide(cover, {layout, titleAlignment: 'start', contentAlignment: 'center'})), [['tag', 'left'], ['title', 'left'], ['subtitle', 'left']]);
+    assert.deepEqual(alignments(composeSlide(cover, {layout, titleAlignment: 'end', contentAlignment: 'start'})), [['tag', 'right'], ['title', 'right'], ['subtitle', 'right']]);
   }
   // Unset titleAlignment is left, as for the title itself; a host contentAlignment alone does not move the group.
   assert.deepEqual(alignments(composeSlide(cover, {contentAlignment: 'center'})), [['tag', 'left'], ['title', 'left'], ['subtitle', 'left']]);
-  const composed = composeSlide({title: 'Cover'}, {titleAlignment: 'center', contentAlignment: 'right'});
+  const composed = composeSlide({title: 'Cover'}, {titleAlignment: 'center', contentAlignment: 'end'});
   assert.deepEqual(alignments(composed), [['title', 'center']]);
 });
 
 test('cover slide design contentAlignment still sets tag and subtitle explicitly', () => {
-  const composed = composeSlide({...cover, design: {titleAlignment: 'left', contentAlignment: 'center'}}, {titleAlignment: 'right', contentAlignment: 'right'});
+  const composed = composeSlide({...cover, design: {titleAlignment: 'start', contentAlignment: 'center'}}, {titleAlignment: 'end', contentAlignment: 'end'});
   assert.deepEqual(alignments(composed), [['tag', 'center'], ['title', 'left'], ['subtitle', 'center']]);
   // Slide titleAlignment alone moves the whole group.
-  assert.deepEqual(alignments(composeSlide({...cover, design: {titleAlignment: 'center'}}, {contentAlignment: 'right'})), [['tag', 'center'], ['title', 'center'], ['subtitle', 'center']]);
+  assert.deepEqual(alignments(composeSlide({...cover, design: {titleAlignment: 'center'}}, {contentAlignment: 'end'})), [['tag', 'center'], ['title', 'center'], ['subtitle', 'center']]);
 });
 
 test('slides with body content keep the heading group on titleAlignment: tag and subtitle follow the title (RR-93a, WI-2)', () => {
-  const composed = composeSlide({...cover, text: 'Body copy'}, {titleAlignment: 'left', contentAlignment: 'center'});
+  const composed = composeSlide({...cover, text: 'Body copy'}, {titleAlignment: 'start', contentAlignment: 'center'});
   assert.deepEqual(alignments(composed), [['tag', 'left'], ['title', 'left'], ['subtitle', 'left'], ['text', 'center']]);
 });
 
 test('cover accepted outline placement follows the shared alignment', () => {
   const textMeasurement = {measure: (text, size) => text.length * size * .5, outlineBounds: (text, size) => text.trim() ? {x: 0, y: -size * .8, width: text.length * size * .5, height: size} : null};
-  const composed = composeSlide(cover, {titleAlignment: 'right', contentAlignment: 'left', textMeasurement});
+  const composed = composeSlide(cover, {titleAlignment: 'end', contentAlignment: 'start', textMeasurement});
   for (const item of composed.items) assert.equal(item.text.placement.alignment, 'right', item.path);
 });

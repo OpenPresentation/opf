@@ -1,0 +1,801 @@
+// SH-09: core's pyramids and matrices (SlideComposition.arrangements, core arrangements.ts) in the PPTX export and import; SH-18 adds
+// cycles (Basic Cycle, cycle2: circles with a rightArrow after each, the arrows the sibTrans2D1 label).
+//
+// Export takes the first that fits (owner, 2026-11-06):
+//
+//   1. live SmartArt (`smartArt: "live"`, the default): a p:graphicFrame of PowerPoint's Basic Pyramid (pyramid1) or Basic Matrix
+//      (matrix3) layout, where core's geometry is PowerPoint's own and the instance lies in the domain the PowerPoint comparison passed
+//      (core smartArtUnavailable). PowerPoint lays a SmartArt out again from its data model on open, so the file carries what decides
+//      that layout and nothing else of Microsoft's:
+//        - the data model (ppt/diagrams/dataN.xml): the `doc` point naming the layout (loTypeId) and OPF's own quick style and colors
+//          (qsTypeId, csTypeId), one point per entry with `custT="1"` (PowerPoint keeps the run size and sets the text margins from
+//          it, instead of fitting the text again), runs with an explicit size (core's), typeface and language, the paragraph centered
+//          at core's line pitch with no space before or after, and one `cxn` per entry from the doc point in entry order;
+//        - OPF's colors and quick style parts (colorsN.xml, quickStyleN.xml), whose style labels cover every label the two layouts
+//          use (node0, node1, bgShp, revTx and the transition labels), in the deck's theme colors: the nodes in accent1 outlined in bg1
+//          (the theme's third line style, 1.5 pt), their text in core's readable color, the matrix's diamond accent1 lightened 80%;
+//        - a drawing part (drawingN.xml) built from core's geometry, for readers that draw the cached shapes;
+//        - no layout part: `r:lo` is empty, so PowerPoint resolves its built-in layout from loTypeId (docs/smartart.md records why
+//          this is the most valid of the three forms the SH-09 spike found PowerPoint accepts). OPF never writes Microsoft's layout
+//          definitions.
+//      SH-19: OPF's own designs (the ring and loops of a cycle, the stepped pyramid, the quadrants and card grids, the wrapped and
+//      snaking chevrons and flows) are live SmartArt too, on OPF's own layout definition of the design (src/smart-art-layouts.js), written
+//      to the layout part (`r:lo` names it) where core's SMART_ART_OPF_DOMAIN holds and OPF's interpreter draws the design from it.
+//      SH-16: the frame is the mc:Choice of an mc:AlternateContent (Requires SMART_ART_REQUIRES) whose mc:Fallback is a picture of the
+//      same frame, id and name: OPF's preview of the frame (smartArtRegionSvg) as an SVG over its PNG raster, the outline as alt text.
+//      PowerPoint takes the Choice; an app that does not lay SmartArt out takes the picture. Without a fallback picture (no opf-render,
+//      no rasterizer) the arrangement is native shapes.
+//   2. native shapes (`smartArt: "shapes"`, or an instance outside the domain, reported as the info finding pptx/smartart-unavailable
+//      with the reason): the diamond and nodes as presets (diamond, trapezoid with core's adjustment, roundRect) at core's boxes, under
+//      the list's measured lines, centered on their nodes. Each shape is tagged OPF_ARRANGEMENT_V1 and import consumes it (the layout's
+//      drawing, not content); the lines import as the list.
+//
+// In `full` provenance the SmartArt frame carries OPF_SMARTART_V1: the slide, the list path, the arrangement, the authored list and the
+// text of every node as written. On import an unchanged tagged SmartArt is that list again; an edited one (a node's text changed, a
+// node added or removed) imports its data model's nodes, as any PowerPoint pyramid1 or matrix3 does: the points in `cxn` order, their
+// text and run properties, as a list in the `pyramid` or `matrix` layout (SH-19: OPF's own layouts by their uniqueId). Import never stores a
+// layout part. SH-08: any other SmartArt PowerPoint wrote imports through src/smart-art-import.js (an arrangement's or the list or process
+// layout's list, a Mermaid hierarchy, or its drawing as overlay shapes).
+import {SMART_ART_LAYOUTS, SMART_ART_NAMES, arrangementTree, plainLanguageTag, arrangementPaint, applyColorTransform, bindNoBreak, colorContrast, opfSmartArtUnavailable, smartArtScript, smartArtUnavailable} from '@openpresentation/opf/composition';
+import {layoutDefinitionXml, opfLayoutDefinition} from './smart-art-layouts.js';
+import {SMART_ART_LIMITS, drawingSlide, hierarchyDiagram, layoutStem, outlineItems, outlineText, plainText, readSmartArtModel, smartArtForm} from './smart-art-import.js';
+import {XMLParser} from 'fast-xml-parser';
+import {attachTextTags, decodeTextTag} from './code-provenance.js';
+import {mediaKey} from './media-dedupe.js';
+import {safeMeasurement} from './safe-typefaces.js';
+import {svgBlipRelationship} from './svg-image.js';
+import {previewRegionSvg, svgAttribute} from './preview-region.js';
+
+export const SMART_ART_TAG = 'OPF_SMARTART_V1', ARRANGEMENT_TAG = 'OPF_ARRANGEMENT_V1';
+export const SMART_ART_URI = 'http://schemas.openxmlformats.org/drawingml/2006/diagram';
+export const smartArtName = path => `OPF smartart ${path}`;
+// SH-16: the fallback picture's name while the package is written; attachSmartArtFallbacks gives it the frame's name and id.
+export const smartArtFallbackName = path => `OPF smartart fallback ${path}`;
+/**
+ * SH-16: the namespace the mc:Choice of a SmartArt frame requires (docs/smartart.md records the PowerPoint evidence). Only Office's
+ * SmartArt uses it, so an app that does not lay SmartArt out does not claim it and takes the mc:Fallback picture.
+ */
+export const SMART_ART_REQUIRES = Object.freeze({prefix: 'dgm1612', namespace: 'http://schemas.microsoft.com/office/drawing/2016/12/diagram'});
+const MC = 'http://schemas.openxmlformats.org/markup-compatibility/2006';
+
+/** SH-16: the alt text of the fallback picture: the kind and size, then each entry on its own line, in entry order. */
+export function smartArtOutline(kind, values) {
+  const texts = values.map(plain), count = texts.length;
+  const head = kind==='org-chart'||kind==='hierarchy'?`${kind==='org-chart'?'Organization chart':'Hierarchy'} of ${count} nodes, root first`:kind==='venn'?`Venn of ${count} sets`:kind === 'pyramid' ? `Pyramid of ${count} level${count === 1 ? '' : 's'}, top to bottom` : kind === 'cycle' ? cycleOutlineHead(count) : kind === 'matrix' ? `Matrix of ${count} ${count === 1 ? 'entry' : 'entries'}, in reading order`
+    // SH-17: the linear arrangements, in order.
+    : `${kind === 'chevrons' ? 'Chevrons' : kind === 'flow' ? 'Flow' : 'Vertical flow'} of ${count} ${kind === 'chevrons' ? 'stage' : 'step'}${count === 1 ? '' : 's'}, ${kind === 'vertical-flow' ? 'top to bottom' : 'in order'}`;
+  return [`${head}:`, ...texts.map((text,index)=>['org-chart','hierarchy'].includes(kind)?'  '.repeat(Number(values[index]?.level??0))+text:text)].join('\n');
+}
+
+// The miter limit opf-render strokes the arrangement's nodes with (stroke-miterlimit) and the antialiasing margin of the fallback picture.
+const MITER_LIMIT = 8, ANTIALIAS = 1;
+
+/**
+ * SH-16: how far the preview's ink reaches outside the SmartArt frame (canvas px): the nodes' outlines, centered on their edges, with
+ * the miter joins of a polygon's corners (a pyramid level's base corners reach furthest), plus a pixel of antialiasing. The fallback
+ * picture grows by it on every side, so it draws everything the preview draws. Rounded up to whole EMU.
+ */
+export function smartArtBleed(arrangement) {
+  const {frame} = arrangement, half = arrangement.lineWidth / 2, points = [];
+  if (arrangement.background) {
+    const {x, y, width, height} = arrangement.background;
+    points.push([x, y], [x + width, y + height]);
+  }
+  for (const node of arrangement.nodes) {
+    if (!node.points) {
+      const {x, y, width, height} = node.box;
+      points.push([x - half, y - half], [x + width + half, y + height + half]);
+      if(node.background){const b=node.background;points.push([b.x-half,b.y-half],[b.x+b.width+half,b.y+b.height+half]);}
+      continue;
+    }
+    node.points.forEach((point, index, all) => {
+      const unit = ([dx, dy]) => { const length = Math.hypot(dx, dy) || 1; return [dx / length, dy / length]; };
+      const previous = all[(index + all.length - 1) % all.length], next = all[(index + 1) % all.length];
+      const u = unit([previous[0] - point[0], previous[1] - point[1]]), v = unit([next[0] - point[0], next[1] - point[1]]);
+      // Each edge's stroke reaches half the width either side of it; a miter join reaches half the width over sin(angle / 2).
+      for (const [dx, dy] of [u, v]) points.push([point[0] - dy * half, point[1] + dx * half], [point[0] + dy * half, point[1] - dx * half]);
+      const sine = Math.sqrt(Math.max(0, (1 - (u[0] * v[0] + u[1] * v[1])) / 2));
+      if (sine > 0 && 1 / sine <= MITER_LIMIT) {
+        const bisector = unit([u[0] + v[0], u[1] + v[1]]);
+        points.push([point[0] - bisector[0] * half / sine, point[1] - bisector[1] * half / sine]);
+      }
+    });
+  }
+  // SH-18: a cycle's arrows have no outline; their corners are their reach.
+  for (const arrow of arrangement.arrows ?? []) points.push(...arrow.points);
+  const reach = Math.max(0, ...points.flatMap(([x, y]) => [frame.x - x, frame.y - y, x - frame.x - frame.width, y - frame.y - frame.height]));
+  return Math.ceil((reach + ANTIALIAS) * EMU) / EMU;
+}
+
+/**
+ * SH-16: OPF's preview of one SmartArt frame, from the slide's SVG as opf-render draws it with `trace`: the arrangement's drawing and
+ * its entries' text (each element with its ancestors, so their transforms and clips apply), with the definitions they use, cropped to
+ * the frame grown by `bleed` on every side (smartArtBleed). Nothing else of the slide is drawn, so the picture is transparent around
+ * the drawing.
+ */
+export function smartArtRegionSvg(svg, arrangement, bleed = 0) {
+  const {path, frame} = arrangement;
+  return previewRegionSvg(svg, {
+    classify: (name, attributes) => name === 'g' && svgAttribute(attributes, 'data-opf-arrangement') !== undefined ? 'arrangement'
+      : name === 'g' && svgAttribute(attributes, 'data-opf-path') === path ? 'text' : undefined,
+    pick: found => {
+      const drawing = found.find(entry => entry.kind === 'arrangement' && entry.text.includes(`data-opf-arrangement-path="${path}.`));
+      const entries = found.find(entry => entry.kind === 'text');
+      return drawing && entries ? [drawing, entries] : undefined;
+    },
+    box: {x: frame.x - bleed, y: frame.y - bleed, width: frame.width + 2 * bleed, height: frame.height + 2 * bleed},
+    missing: `the preview draws no ${arrangement.kind} at ${path}`,
+  });
+}
+
+/**
+ * SH-16: the slide's SVG as the preview draws it (opf-render, an optional peer), traced, its text as glyph outlines when the fonts
+ * handle has them, so the fallback picture needs no font. `presentation` is the exported deck (variables resolved).
+ */
+export async function smartArtSlideSvg(presentation, slideNumber, options) {
+  // In try, so a bundler leaves the optional peer out when the host does not install it (as the other opf-render imports).
+  let toSvg;
+  try {
+    ({toSvg} = await import('@openpresentation/opf-render/svg'));
+  } catch (error) {
+    throw Object.assign(new Error('it needs the optional peer @openpresentation/opf-render', {cause: error}), {code: 'smartart-renderer-unavailable'});
+  }
+  const base = {trace: true, validate: false, strictAssets: false, onDiagnostic: () => {}, ...(options.catalogs ? {catalogs: options.catalogs} : {}),
+    ...(options.date ? {date: options.date} : {}), ...(typeof options.pictureLuminance === 'function' ? {pictureLuminance: options.pictureLuminance} : {})};
+  if (!options.fonts) return toSvg(presentation, slideNumber, base);
+  // `typefaces: "safe"`: the slide is laid out and drawn with the Office-safe families the export writes, as the export lays it out.
+  const fonts = options.safeTypeface && options.fonts.textMeasurement
+    ? Object.create(options.fonts, {textMeasurement: {value: safeMeasurement(options.fonts.textMeasurement, options.safeTypeface), enumerable: true}}) : options.fonts;
+  try { return toSvg(presentation, slideNumber, {...base, fonts, text: 'paths'}); }
+  catch (error) {
+    if (error?.code !== 'text-as-paths-needs-fonts') throw error;
+    return toSvg(presentation, slideNumber, {...base, fonts});
+  }
+}
+const NS = Object.freeze({
+  a: 'http://schemas.openxmlformats.org/drawingml/2006/main',
+  dgm: SMART_ART_URI,
+  dsp: 'http://schemas.microsoft.com/office/drawing/2008/diagram',
+  r: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships',
+});
+export const SMART_ART_RELATIONSHIPS = Object.freeze({
+  data: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramData',
+  layout: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramLayout',
+  quickStyle: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramQuickStyle',
+  colors: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramColors',
+  drawing: 'http://schemas.microsoft.com/office/2007/relationships/diagramDrawing',
+});
+const CONTENT_TYPES = Object.freeze({
+  data: 'application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml',
+  layout: 'application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml',
+  quickStyle: 'application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml',
+  colors: 'application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml',
+  drawing: 'application/vnd.ms-office.drawingml.diagramDrawing+xml',
+});
+/** OPF's own quick style and colors definitions (uniqueId): not Microsoft's, whose content differs. */
+export const OPF_QUICK_STYLE = 'urn:openpresentation.org/opf/smartart/quickstyle/flat';
+export const OPF_COLORS = 'urn:openpresentation.org/opf/smartart/colors/primary';
+const LAYOUT_CATEGORY = Object.freeze({pyramid: 'pyramid', matrix: 'matrix', cycle: 'cycle', chevrons: 'process', flow: 'process', 'vertical-flow': 'process','org-chart':'hierarchy',hierarchy:'hierarchy',venn:'relationship'});
+const measuredKind=kind=>['org-chart','hierarchy','venn'].includes(kind);
+const styleId=(base,kind)=>measuredKind(kind)?base+'/'+kind:base;
+const EMU = 9525; // per canvas pixel (1/96 inch)
+const emu = value => Math.round(value * EMU);
+const escapeXml = value => String(value).replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;'}[char]));
+const decoder = new TextDecoder(), encoder = new TextEncoder();
+const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
+const RTL = /[\p{Script=Arabic}\p{Script=Hebrew}\p{Script=Syriac}\p{Script=Thaana}\p{Script=Nko}]/u;
+// The run properties a SmartArt node carries as written (others, such as links, citations, code or a run size, keep the shapes).
+const RUN_KEYS = new Set(['text', 'bold', 'italic', 'underline', 'strikethrough', 'lang']);
+
+const runsOf = value => {
+  const text = value && typeof value === 'object' && !Array.isArray(value) ? value.text : value;
+  return typeof text === 'string' ? [{text}] : Array.isArray(text) ? text.map(run => typeof run === 'string' ? {text: run} : run) : [];
+};
+const hex6 = value => String(value).replace(/^#/, '').slice(0, 6).toUpperCase();
+const plain = value => runsOf(value).map(run => run?.text ?? '').join('');
+
+/**
+ * Whether an arrangement can be live SmartArt: undefined when it can, else the reason (pptx/smartart-unavailable). `values` are the
+ * list's entries as authored.
+ */
+export function smartArtReason(arrangement, values, rtl) {
+  if (arrangement.kind === 'pyramid' && arrangement.pyramidDirection === 'down') return 'the inverted pyramid has no qualified live SmartArt domain';
+  if (values.some(value => runsOf(value).some(run => !run || typeof run.text !== 'string' || Object.keys(run).some(key => !RUN_KEYS.has(key)))))
+    return 'an entry has text formatting a SmartArt node does not carry (a link, a citation, code or its own size)';
+  if (values.some(value => /[\r\n\t]/.test(plain(value)))) return 'an entry holds a line break or a tab';
+  const {rtl: rightToLeft, script} = smartArtScript(values.map(plain));
+  return smartArtUnavailable({kind: arrangement.kind, count: values.length, frame: arrangement.frame, rtl: rtl || rightToLeft,
+    nodes: arrangement.smartArt.lines.map((lines, index) => ({lines, stable: arrangement.smartArt.stable[index]})), ...(script ? {script} : {}),
+    ...(arrangement.smartArt.fill !== undefined ? {fill: arrangement.smartArt.fill} : {}), ...(arrangement.smartArt.ink !== undefined ? {ink: arrangement.smartArt.ink} : {}),
+    ...(arrangement.smartArt.widest !== undefined ? {widest: arrangement.smartArt.widest} : {})});
+}
+
+/** SH-19: whether OPF's own design can be live SmartArt on OPF's layout definition: undefined when it can, else the reason. */
+export function opfLayoutReason(arrangement, values, rtl) {
+  if (arrangement.kind === 'pyramid' && arrangement.pyramidDirection === 'down') return 'the inverted pyramid has no qualified live SmartArt domain';
+  if (!arrangement.layout) return 'its design has no OPF layout definition';
+  if (values.some(value => runsOf(value).some(run => !run || typeof run.text !== 'string' || Object.keys(run).some(key => !RUN_KEYS.has(key)))))
+    return 'an entry has text formatting a SmartArt node does not carry (a link, a citation, code or its own size)';
+  if (values.some(value => /[\r\n\t]/.test(plain(value)))) return 'an entry holds a line break or a tab';
+  const {rtl: rightToLeft, script} = smartArtScript(values.map(plain));
+  return opfSmartArtUnavailable({design: arrangement.layout.design, ...(arrangement.layout.compact ? {compact: true} : {}), count: values.length, lines: arrangement.smartArt.lines,
+    stable: arrangement.smartArt.stable, ...(arrangement.smartArt.ink !== undefined ? {ink: arrangement.smartArt.ink} : {}), ...(arrangement.smartArt.widest !== undefined ? {widest: arrangement.smartArt.widest} : {}), rtl: rtl || rightToLeft, ...(script ? {script} : {})});
+}
+
+/** SH-19: a card grid's paint, as the native shapes draw it: the card neutral and its border. */
+function cardPaint(context) {
+  return {fill: hex6(context.roles?.neutrals?.card?.hex ?? context.colors.surface), line: hex6(context.roles?.neutrals?.cardBorder?.hex ?? context.colors.border)};
+}
+
+/** What a finding calls an arrangement: its kind, or (SH-17) a row of chevrons and a vertical flow. */
+const arrangementNoun = kind => kind === 'chevrons' ? 'row of chevrons' : kind === 'vertical-flow' ? 'vertical flow' : kind;
+
+/** The paint of the slide's arrangements (core arrangementPaint) from the slide's export context. */
+export function exportPaint(context) {
+  const hex = value => `#${String(value).replace(/^#/, '').slice(0, 6).toUpperCase()}`;
+  const roles = context.roles;
+  return arrangementPaint(hex(context.colors.accent), hex(roles?.background ?? context.colors.background), hex(roles?.text ?? context.colors.text), colorContrast, applyColorTransform);
+}
+
+/**
+ * Draw a slide's arrangements (core `geometry.arrangements`) before its content. Returns the paths of the lists written as live
+ * SmartArt (their lines are not drawn) and the text color and alignment of the others' lines. `records` collects each SmartArt frame
+ * (attachSmartArt), `tags` each native shape's OPF_ARRANGEMENT_V1 record and `smartArtTags` each frame's OPF_SMARTART_V1 record.
+ */
+export async function addArrangements(slide, arrangements, {context, mode = 'live', items, slideIndex, records, tags, smartArtTags, provenance, report, fontOf, fallback}) {
+  const drawn = new Set();
+  if (!arrangements?.length) return drawn;
+  const paint = exportPaint(context), inches = value => value / 96, box = area => ({x: inches(area.x), y: inches(area.y), w: inches(area.width), h: inches(area.height)});
+  for (const arrangement of arrangements) {
+    const item = items.find(entry => entry.path === arrangement.path), values = Array.isArray(item?.value) ? item.value : [];
+    // PowerPoint's own design is live SmartArt on its built-in layout; OPF's design and a card grid on OPF's own layout (SH-19, below).
+    const design = arrangement.design ?? 'smartart';
+    let reason = mode !== 'live' || design === 'cards' ? undefined : design === 'opf' ? `${arrangement.instead ?? `its entries do not fit PowerPoint's ${SMART_ART_NAMES[arrangement.kind].layout}`}, so OPF's own ${arrangementNoun(arrangement.kind)} is drawn` : smartArtReason(arrangement, values, context.direction === 'rtl');
+    // SH-19: OPF's own design (and a card grid) is live SmartArt on OPF's own layout definition, where PowerPoint draws that definition as
+    // the preview does (core opfSmartArtUnavailable) and OPF's interpreter draws the design from it (src/smart-art-layouts.js).
+    let own;
+    if (mode === 'live' && design !== 'smartart') {
+      const why = opfLayoutReason(arrangement, values, context.direction === 'rtl'), built = why === undefined ? opfLayoutDefinition(arrangement, item) : {reason: why};
+      if (built.definition) { own = built.definition; reason = undefined; }
+      else reason = reason === undefined ? `OPF's ${arrangementNoun(arrangement.kind)} has no live SmartArt: ${built.reason}` : `${reason}; OPF's own layout does not hold it either: ${built.reason}`;
+    }
+    // SH-16: the picture every app without SmartArt shows (OPF's preview of the frame). Without one the arrangement is native shapes.
+    const candidate = mode === 'live' && ((design === 'smartart' && reason === undefined) || own !== undefined);
+    const fallbackName = smartArtFallbackName(arrangement.path), alt = candidate ? smartArtOutline(arrangement.kind, values) : undefined;
+    const picture = candidate ? (fallback ? await fallback(arrangement, {name: fallbackName, alt}) : 'no fallback picture can be drawn for apps without SmartArt') : undefined;
+    if (typeof picture === 'string') reason = picture;
+    if (candidate && reason === undefined) {
+      const objectName = smartArtName(arrangement.path);
+      // A placeholder at the frame, then its fallback picture: attachSmartArt makes the two the frame's mc:AlternateContent.
+      slide.addShape('rect', {...box(arrangement.frame), fill: {color: paint.fill.hex.slice(1)}, line: {type: 'none'}, objectName});
+      const bleed = picture();
+      const tag = provenance === 'full' ? {v: 1, slide: slideIndex, path: arrangement.path, region: arrangement.region, kind: arrangement.kind, items: structuredClone(values), texts: values.map(plain)} : undefined;
+      records.set(objectName, {arrangement, values, item, paint, lang: context.deckLang ?? 'en-US', fontOf, rtl: context.direction === 'rtl', fallback: {name: fallbackName, alt, tag, bleed},
+        ...(own ? {layout: own, ...(arrangement.paint === 'card' ? {card: cardPaint(context)} : {})} : {})});
+      if (tag) smartArtTags.set(objectName, tag);
+      drawn.add(arrangement.path);
+      continue;
+    }
+    if (reason !== undefined) report?.({code: 'smartart-unavailable', path: arrangement.path, reason,
+      message: `The ${arrangementNoun(arrangement.kind)} is exported as native shapes, not live SmartArt: ${reason}.`});
+    const name = role => `OPF arrangement ${arrangement.path} ${role}`, tag = (objectName, role, extra = {}) => tags.set(objectName, {v: 1, path: arrangement.path, kind: arrangement.kind, role, ...extra});
+    // A card grid in the card neutral with its border, as every OPF card; the other designs in the primary with the background's outline.
+    const card = arrangement.paint === 'card', fill = card ? hex6(context.roles?.neutrals?.card?.hex ?? context.colors.surface) : paint.fill.hex.slice(1);
+    const line = {color: card ? hex6(context.roles?.neutrals?.cardBorder?.hex ?? context.colors.border) : paint.line.hex.slice(1), width: arrangement.lineWidth * .75};
+    if (arrangement.background) {
+      const objectName = name('background');
+      slide.addShape('diamond', {...box(arrangement.background), fill: {color: paint.background.hex.slice(1)}, line: {type: 'none'}, objectName});
+      tag(objectName, 'background');
+    }
+    for(const edge of arrangement.connectors??[]){
+      for(let segment=1;segment<edge.points.length;segment++){const from=edge.points[segment-1],to=edge.points[segment];if(Math.hypot(to[0]-from[0],to[1]-from[1])<1e-8)continue;const objectName=name('connector '+edge.child+' segment '+segment);slide.addShape('line',{x:inches(Math.min(from[0],to[0])),y:inches(Math.min(from[1],to[1])),w:inches(Math.abs(to[0]-from[0])),h:inches(Math.abs(to[1]-from[1])),flipV:to[1]<from[1],line:{color:paint.fill.hex.slice(1),width:arrangement.lineWidth*.75,beginArrowType:'none',endArrowType:'none'},objectName});tag(objectName,'connector',{parent:edge.parent,child:edge.child});}
+    }
+    for (const node of arrangement.nodes) {
+      const objectName = name(`node ${node.index}`);
+      if(node.background){const objectName=name('rear '+node.index);slide.addShape('roundRect',{...box(node.background),fill:{color:fill},line,rectRadius:inches(node.radius??0),objectName});tag(objectName,'rear',{index:node.index,adjust:node.adjust,preset:'roundRect'});}
+      // A hierarchy's foreground card and a Venn's overlap label are in the background color with the primary outline.
+      const nodeFill=arrangement.kind==='hierarchy'||node.overlap?paint.line.hex.slice(1):fill,nodeLine=arrangement.kind==='hierarchy'||node.overlap?{...line,color:fill}:line;
+      const alpha=arrangement.kind==='venn'&&node.preset==='ellipse'?.5:arrangement.kind==='hierarchy'?.9:1;
+      slide.addShape(node.preset, {...box(node.box), fill: {color:nodeFill,...(alpha===1?{}:{transparency:(1-alpha)*100})}, line:nodeLine, objectName,
+        ...(node.preset === 'roundRect' ? {rectRadius: inches(node.radius ?? 0)} : {}), ...(node.flip ? {flipH: true} : {}), ...(node.flipV ? {flipV: true} : {})});
+      // An org chart's assistant and a Venn's overlap label are kept on their node's tag, which import puts back on the entry.
+      const role = values[node.index] !== null && typeof values[node.index] === 'object' && !Array.isArray(values[node.index]) ? values[node.index] : {};
+      tag(objectName, 'node', {index: node.index, adjust: node.adjust, preset: node.preset, ...(node.path ? {entry: node.path} : {}), ...(role.assistant === true ? {assistant: true} : {}), ...(node.overlap ? {overlap: true} : {})});
+      // SH-18: a cycle's arrow after its node, as PowerPoint stacks them.
+      for (const arrow of arrangement.arrows?.filter(entry => entry.index === node.index) ?? []) addCycleArrow(slide, arrow, {box, name, tag, color: paint.arrow.hex.slice(1)});
+    }
+  }
+  return drawn;
+}
+
+/**
+ * A trapezoid's or (SH-17) a chevron's adjustment and an arrow's two (pptxgenjs writes the preset's default): core's, by object name, in
+ * the finished slide parts.
+ */
+export function writeArrangementAdjustments(entries, tags) {
+  if (!tags.size) return;
+  const geometry = preset => new RegExp(`<a:prstGeom prst="${preset}">\\s*(?:<a:avLst\\s*/>|<a:avLst>[\\s\\S]*?</a:avLst>)\\s*</a:prstGeom>`);
+  writeCycleArrowAdjustments(entries, tags);
+  for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
+    const xml = decoder.decode(entries[part]);
+    const next = xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
+      const record = tags.get(shape.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1]);
+      if (!['node','rear'].includes(record?.role) || !['trapezoid','chevron','roundRect'].includes(record.preset)) return shape;
+      if(record.preset==='roundRect'&&record.kind!=='hierarchy')return shape;
+      return shape.replace(geometry(record.preset), `<a:prstGeom prst="${record.preset}"><a:avLst><a:gd name="adj" fmla="val ${record.adjust}"/></a:avLst></a:prstGeom>`);
+    });
+    if (next !== xml) entries[part] = encoder.encode(next);
+  }
+}
+
+/** Tag the native arrangement shapes (OPF_ARRANGEMENT_V1) and the SmartArt placeholders (OPF_SMARTART_V1, full provenance). */
+export function attachArrangementTags(entries, tags, smartArtTags) {
+  attachTextTags(entries, tags, ARRANGEMENT_TAG, 'opfArrangement', 'arrangement');
+  attachTextTags(entries, smartArtTags, SMART_ART_TAG, 'opfSmartArt', 'SmartArt');
+}
+
+// Deterministic model ids (GUIDs): the SmartArt's number, the point's role and its index.
+const modelId = (number, role, index = 0) => `{${String(number).padStart(8, '0')}-${String(role).padStart(4, '0')}-4${String(index).padStart(3, '0')}-8000-000000000000}`;
+const ROLE = Object.freeze({doc: 1, node: 2, parent: 3, sibling: 4, connection: 5, shape: 6});
+const srgb = '<a:scrgbClr r="0" g="0" b="0"/>';
+const schemeXml = color => color.lumMod !== undefined ? `<a:schemeClr val="${color.slot}"><a:lumMod val="${color.lumMod}"/><a:lumOff val="${color.lumOff}"/></a:schemeClr>` : `<a:schemeClr val="${color.slot}"/>`;
+
+/** The `a:pPr` and `a:r` elements of one node: core's size, the entry's runs with their typeface, weight, slant and language. */
+function nodeParagraph(record, index) {
+  const {arrangement, values, lang, fontOf, rtl} = record, column = record.item?.listColumns?.[index] ?? (index === 0 ? {text: record.item?.text} : undefined);
+  const entry = column?.text?.listEntries?.[0], size = Math.round(arrangement.fontSize * 75), pitch = Math.round((entry?.text?.lineHeight ?? arrangement.fontSize * 1.2) * 75);
+  const fragments = entry?.text?.richLines?.flatMap(line => line.fragments) ?? [];
+  const runs = runsOf(values[index]).map((run, runIndex) => {
+    const style = fragments.find(fragment => fragment.runIndex === runIndex)?.style ?? entry?.marker?.style;
+    const font = style ? fontOf(style) : {};
+    const bold = run.bold ?? font.bold, italic = run.italic ?? font.italic;
+    // The Latin face only: East Asian and complex-script text takes the theme's script fonts, as the exporter's text boxes do (FF-07).
+    const face = font.fontFace ? `<a:latin typeface="${escapeXml(font.fontFace)}"/>` : '';
+    // LH-11: the spaces core's line breaker never breaks at are no-break spaces, as the native body writes them.
+    const text = bindNoBreak(run.text);
+    return `<a:r><a:rPr lang="${escapeXml(run.language ? plainLanguageTag(run.language) : lang)}" sz="${size}"${bold ? ' b="1"' : ''}${italic ? ' i="1"' : ''}${run.underline ? ' u="sng"' : ''}${run.strikethrough ? ' strike="sngStrike"' : ''} dirty="0">${face}</a:rPr><a:t>${escapeXml(text)}</a:t></a:r>`;
+  }).join('');
+  const paragraphRtl = rtl || RTL.test(plain(values[index]));
+  // SH-19: a card's entry and an entry beside its level start at the line's start, as OPF's native text does.
+  const align = arrangement.align === 'start' ? (paragraphRtl ? 'r' : 'l') : 'ctr';
+  return `<a:pPr algn="${align}"${paragraphRtl ? ' rtl="1"' : ''}><a:lnSpc><a:spcPts val="${pitch}"/></a:lnSpc><a:spcBef><a:spcPts val="0"/></a:spcBef><a:spcAft><a:spcPts val="0"/></a:spcAft><a:buNone/></a:pPr>${runs}`;
+}
+
+/** The data model of one SmartArt: the doc point, one point per entry and the connections in entry order. */
+export function smartArtDataXml(record, number, drawingRelId) {
+  const {arrangement, values} = record, doc = modelId(number, ROLE.doc);
+  const hierarchy=['org-chart','hierarchy'].includes(arrangement.kind)?arrangementTree(values):undefined;
+  if(hierarchy&&!hierarchy.ok)throw new Error('Cannot write malformed SmartArt tree: '+hierarchy.reason);
+  const loTypeId = record.layout?.uniqueId ?? SMART_ART_LAYOUTS[arrangement.kind], loCatId = record.layout?.category ?? LAYOUT_CATEGORY[arrangement.kind];
+  // SH-19: a card's outline is the native card's (the theme's line styles have no such width).
+  const spPr = record.card ? `<dgm:spPr><a:ln w="${emu(arrangement.lineWidth)}"><a:solidFill><a:srgbClr val="${record.card.line}"/></a:solidFill></a:ln></dgm:spPr>` : '<dgm:spPr/>';
+  const points = [`<dgm:pt modelId="${doc}" type="doc"><dgm:prSet loTypeId="${escapeXml(loTypeId)}" loCatId="${escapeXml(loCatId)}" qsTypeId="${styleId(OPF_QUICK_STYLE,arrangement.kind)}" qsCatId="simple" csTypeId="${styleId(OPF_COLORS,arrangement.kind)}" csCatId="accent1"/><dgm:spPr/><dgm:t><a:bodyPr/><a:lstStyle/><a:p><a:endParaRPr lang="${escapeXml(record.lang)}"/></a:p></dgm:t></dgm:pt>`];
+  const connections = [];
+  values.forEach((_, index) => {
+    const id = modelId(number, ROLE.node, index), parent = modelId(number, ROLE.parent, index), sibling = modelId(number, ROLE.sibling, index), cxn = modelId(number, ROLE.connection, index);
+    points.push(`<dgm:pt modelId="${id}"><dgm:prSet custT="1"/>${spPr}<dgm:t><a:bodyPr/><a:lstStyle/><a:p>${nodeParagraph(record, index)}</a:p></dgm:t></dgm:pt>`,
+      `<dgm:pt modelId="${parent}" type="parTrans" cxnId="${cxn}"><dgm:prSet/><dgm:spPr/><dgm:t><a:bodyPr/><a:lstStyle/><a:p><a:endParaRPr lang="${escapeXml(record.lang)}"/></a:p></dgm:t></dgm:pt>`,
+      `<dgm:pt modelId="${sibling}" type="sibTrans" cxnId="${cxn}"><dgm:prSet/><dgm:spPr/><dgm:t><a:bodyPr/><a:lstStyle/><a:p><a:endParaRPr lang="${escapeXml(record.lang)}"/></a:p></dgm:t></dgm:pt>`);
+    const ancestor=hierarchy?.nodes[index]?.parent,source=ancestor===undefined?doc:modelId(number,ROLE.node,ancestor),order=hierarchy?(ancestor===undefined?0:hierarchy.nodes[ancestor].children.indexOf(index)):index;
+    connections.push(`<dgm:cxn modelId="${cxn}" srcId="${source}" destId="${id}" srcOrd="${order}" destOrd="0" parTransId="${parent}" sibTransId="${sibling}"/>`);
+  });
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dgm:dataModel xmlns:dgm="${NS.dgm}" xmlns:a="${NS.a}"><dgm:ptLst>${points.join('')}</dgm:ptLst><dgm:cxnLst>${connections.join('')}</dgm:cxnLst><dgm:bg/><dgm:whole/><dgm:extLst><a:ext uri="http://schemas.microsoft.com/office/drawing/2008/diagram"><dsp:dataModelExt xmlns:dsp="${NS.dsp}" relId="${drawingRelId}" minVer="http://schemas.openxmlformats.org/drawingml/2006/diagram"/></a:ext></dgm:extLst></dgm:dataModel>`;
+}
+
+// The style labels pyramid1 and matrix3 use (node1, revTx, bgShp), the first node's (node0) and the transition labels, so no shape
+// takes PowerPoint's black default for a label the part leaves out.
+// SH-19: OPF's layouts add text over a shape (fgAcc1, no fill) and a card (alignNode1, the card neutral and its border).
+const LABELS = ['node0', 'node1', 'bgShp', 'revTx', 'sibTrans2D1', 'parChTrans1D1', 'trBgShp', 'fgAcc1', 'alignNode1'];
+
+/** OPF's colors definition in the deck's theme: arrangementPaint's slots. Native layouts may use revTx over a filled node; OPF's own layouts reserve it for text beside the node. */
+export function smartArtColorsXml(paint, card, onShapeText = false,kind) {
+  if(measuredKind(kind))return measuredColorsXml(paint,kind);
+  const none = '<a:schemeClr val="bg1"><a:alpha val="0"/></a:schemeClr>';
+  const list = (name, fill, line, text) => `<dgm:styleLbl name="${name}"><dgm:fillClrLst meth="repeat">${fill}</dgm:fillClrLst><dgm:linClrLst meth="repeat">${line}</dgm:linClrLst><dgm:effectClrLst/><dgm:txLinClrLst/><dgm:txFillClrLst meth="repeat">${text}</dgm:txFillClrLst><dgm:txEffectClrLst/></dgm:styleLbl>`;
+  const labels = LABELS.map(name => name === 'bgShp' || name === 'trBgShp' ? list(name, schemeXml(paint.background), schemeXml(paint.line), schemeXml(paint.text))
+    : name === 'revTx' ? list(name, none, none, onShapeText ? schemeXml(paint.text) : '<a:schemeClr val="tx1"/>')
+      : name === 'fgAcc1' ? list(name, none, none, schemeXml(paint.text))
+      : name === 'alignNode1' ? list(name, card ? `<a:srgbClr val="${card.fill}"/>` : schemeXml(paint.fill), card ? `<a:srgbClr val="${card.line}"/>` : schemeXml(paint.line), '<a:schemeClr val="tx1"/>')
+      // SH-18 and SH-17: the arrows of a cycle or a flow (sibTrans2D1) in the primary lightened 40%, without an outline.
+      : name === 'sibTrans2D1' ? list(name, schemeXml(paint.arrow), none, schemeXml(paint.text))
+      : list(name, schemeXml(paint.fill), schemeXml(paint.line), schemeXml(paint.text)));
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dgm:colorsDef xmlns:dgm="${NS.dgm}" xmlns:a="${NS.a}" uniqueId="${OPF_COLORS}"><dgm:title val="OPF primary"/><dgm:desc val="OPF: the nodes in the primary color, outlined in the background"/><dgm:catLst><dgm:cat type="accent1" pri="11000"/></dgm:catLst>${labels.join('')}</dgm:colorsDef>`;
+}
+
+/** OPF's quick style: flat (no effects, no 3-D), a node's line the theme's third line style (1.5 pt), the diamond without a line. */
+export function smartArtQuickStyleXml(kind) {
+  if(measuredKind(kind))return measuredQuickStyleXml(kind);
+  const scene = '<dgm:scene3d><a:camera prst="orthographicFront"/><a:lightRig rig="threePt" dir="t"/></dgm:scene3d><dgm:sp3d/><dgm:txPr/>';
+  const style = (line, fill) => `<dgm:style><a:lnRef idx="${line}">${srgb}</a:lnRef><a:fillRef idx="${fill}">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor"/></dgm:style>`;
+  const labels = LABELS.map(name => `<dgm:styleLbl name="${name}">${scene}${name === 'bgShp' || name === 'trBgShp' || name === 'sibTrans2D1' ? style(0, 1) : name === 'revTx' || name === 'fgAcc1' ? style(0, 0) : name === 'alignNode1' ? style(1, 1) : style(3, 1)}</dgm:styleLbl>`);
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dgm:styleDef xmlns:dgm="${NS.dgm}" xmlns:a="${NS.a}" uniqueId="${OPF_QUICK_STYLE}"><dgm:title val="OPF flat"/><dgm:desc val="OPF: flat nodes with a 1.5 pt outline"/><dgm:catLst><dgm:cat type="simple" pri="10100"/></dgm:catLst><dgm:scene3d><a:camera prst="orthographicFront"/><a:lightRig rig="threePt" dir="t"/></dgm:scene3d>${labels.join('')}</dgm:styleDef>`;
+}
+
+// SH21 labels are native layout role names measured from saved defaults; existing six layouts retain their exact style parts.
+const measuredLabels=kind=>kind==='venn'?['vennNode1','revTx']:[...Array.from({length:9},(_,i)=>'node'+i),...Array.from({length:9},(_,i)=>'fgAcc'+i),...Array.from({length:9},(_,i)=>'parChTrans1D'+(i+1)),'revTx'];
+function measuredColorsXml(paint,kind){
+ const none='<a:schemeClr val="bg1"><a:alpha val="0"/></a:schemeClr>',body='<a:schemeClr val="tx1"/>';
+ const labels=measuredLabels(kind).map(name=>{const foreground=kind==='hierarchy'&&/^fgAcc/.test(name),edge=/^parChTrans/.test(name),textOnly=name==='revTx';
+  const fill=textOnly||edge?none:name==='vennNode1'?'<a:schemeClr val="accent1"><a:alpha val="50000"/></a:schemeClr>':foreground?'<a:schemeClr val="bg1"><a:alpha val="90000"/></a:schemeClr>':schemeXml(paint.fill),line=textOnly?none:foreground||edge?schemeXml(paint.fill):schemeXml(paint.line),text=kind==='org-chart'?schemeXml(paint.text):body;
+  return '<dgm:styleLbl name="'+name+'"><dgm:fillClrLst meth="repeat">'+fill+'</dgm:fillClrLst><dgm:linClrLst meth="repeat">'+line+'</dgm:linClrLst><dgm:effectClrLst/><dgm:txLinClrLst/><dgm:txFillClrLst meth="repeat">'+text+'</dgm:txFillClrLst><dgm:txEffectClrLst/></dgm:styleLbl>';
+ });
+ return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dgm:colorsDef xmlns:dgm="'+NS.dgm+'" xmlns:a="'+NS.a+'" uniqueId="'+styleId(OPF_COLORS,kind)+'"><dgm:title val="OPF '+kind+'"/><dgm:desc val="OPF measured arrangement paint"/><dgm:catLst><dgm:cat type="accent1" pri="11000"/></dgm:catLst>'+labels.join('')+'</dgm:colorsDef>';
+}
+function measuredQuickStyleXml(kind){
+ const scene='<dgm:scene3d><a:camera prst="orthographicFront"/><a:lightRig rig="threePt" dir="t"/></dgm:scene3d><dgm:sp3d/><dgm:txPr/>';
+ const labels=measuredLabels(kind).map(name=>{const line=name==='revTx'?0:3,fill=name==='revTx'||/^parChTrans/.test(name)?0:1;return '<dgm:styleLbl name="'+name+'">'+scene+'<dgm:style><a:lnRef idx="'+line+'">'+srgb+'</a:lnRef><a:fillRef idx="'+fill+'">'+srgb+'</a:fillRef><a:effectRef idx="0">'+srgb+'</a:effectRef><a:fontRef idx="minor"/></dgm:style></dgm:styleLbl>';});
+ return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dgm:styleDef xmlns:dgm="'+NS.dgm+'" xmlns:a="'+NS.a+'" uniqueId="'+styleId(OPF_QUICK_STYLE,kind)+'"><dgm:title val="OPF '+kind+'"/><dgm:desc val="OPF flat measured arrangement"/><dgm:catLst><dgm:cat type="simple" pri="10100"/></dgm:catLst>'+scene.slice(0,scene.indexOf('</dgm:scene3d>')+'</dgm:scene3d>'.length)+labels.join('')+'</dgm:styleDef>';
+}
+
+function measuredDrawingXml(record,number,xfrm){
+ const {arrangement,paint}=record,shapes=[],none='<a:noFill/>',solid=color=>'<a:solidFill>'+color+'</a:solidFill>',background='<a:schemeClr val="bg1"/>',body='<a:schemeClr val="tx1"/>';
+ const withAlpha=(color,alpha)=>color.endsWith('/>')?color.slice(0,-2)+'><a:alpha val="'+alpha+'"/></a:schemeClr>':color.replace('</a:schemeClr>','<a:alpha val="'+alpha+'"/></a:schemeClr>');
+ const shape=(index,box,preset,adjust,fill,line,textBox,text,textColor)=>{
+  const geometry='<a:prstGeom prst="'+preset+'"><a:avLst>'+(adjust===undefined?'':'<a:gd name="adj" fmla="val '+adjust+'"/>')+'</a:avLst></a:prstGeom>';
+  const outline=line?'<a:ln w="'+emu(arrangement.lineWidth)+'">'+solid(line)+'</a:ln>':'<a:ln>'+none+'</a:ln>';
+  const margins=emu(arrangement.textMargin),tx=textBox?'<dsp:txBody><a:bodyPr wrap="square" lIns="'+margins+'" tIns="'+margins+'" rIns="'+margins+'" bIns="'+margins+'" anchor="ctr"><a:noAutofit/></a:bodyPr><a:lstStyle/><a:p>'+text+'</a:p></dsp:txBody>'+xfrm(textBox,'dsp:txXfrm'):'';
+  return '<dsp:sp modelId="'+modelId(number,ROLE.shape,index)+'"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>'+xfrm(box)+geometry+(fill?solid(fill):none)+outline+'</dsp:spPr><dsp:style><a:lnRef idx="'+(line?3:0)+'">'+srgb+'</a:lnRef><a:fillRef idx="'+(fill?1:0)+'">'+srgb+'</a:fillRef><a:effectRef idx="0">'+srgb+'</a:effectRef><a:fontRef idx="minor">'+(textColor??body)+'</a:fontRef></dsp:style>'+tx+'</dsp:sp>';
+ };
+ for(const edge of arrangement.connectors??[]){const {box,points}=edge,path=points.map(([x,y],i)=>'<a:'+(i?'lnTo':'moveTo')+'><a:pt x="'+emu(x-box.x)+'" y="'+emu(y-box.y)+'"/></a:'+(i?'lnTo':'moveTo')+'>').join('');shapes.push('<dsp:sp modelId="'+modelId(number,ROLE.shape,300+edge.child)+'"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>'+xfrm(box)+'<a:custGeom><a:avLst/><a:gdLst/><a:ahLst/><a:cxnLst/><a:rect l="0" t="0" r="0" b="0"/><a:pathLst><a:path>'+path+'</a:path></a:pathLst></a:custGeom>'+none+'<a:ln w="'+emu(arrangement.lineWidth)+'">'+solid(schemeXml(paint.fill))+'</a:ln></dsp:spPr></dsp:sp>');}
+ for(const node of arrangement.nodes){
+  const text=nodeParagraph(record,node.index),fill=schemeXml(paint.fill),line=schemeXml(paint.line);
+  if(node.background)shapes.push(shape(200+node.index,node.background,'roundRect',10000,fill,line));
+  if(arrangement.kind==='venn'&&node.beside){shapes.push(shape(node.index,node.box,'ellipse',undefined,withAlpha(fill,50000),line),shape(50+node.index,node.textBox,'rect',undefined,undefined,undefined,node.textBox,text,body));continue;}
+  const foreground=arrangement.kind==='hierarchy';shapes.push(shape(node.index,node.box,node.preset,node.preset==='roundRect'?10000:undefined,foreground?withAlpha(background,90000):arrangement.kind==='venn'?withAlpha(fill,50000):fill,foreground?fill:line,node.textBox,text,foreground||arrangement.kind==='venn'?body:schemeXml(paint.text)));
+ }
+ return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dsp:drawing xmlns:dgm="'+NS.dgm+'" xmlns:dsp="'+NS.dsp+'" xmlns:a="'+NS.a+'"><dsp:spTree><dsp:nvGrpSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvGrpSpPr/></dsp:nvGrpSpPr><dsp:grpSpPr/>'+shapes.join('')+'</dsp:spTree></dsp:drawing>';
+}
+
+/** The cached drawing from core's geometry, relative to the frame (EMU). */
+export function smartArtDrawingXml(record, number) {
+  const {arrangement, paint} = record, origin = arrangement.frame, margin = emu(arrangement.textMargin);
+  // SH-17: a chevron's text margins differ by side.
+  const [left, top, right, bottom] = (arrangement.margins ?? [arrangement.textMargin, arrangement.textMargin, arrangement.textMargin, arrangement.textMargin]).map(emu);
+  const xfrm = (box, tag = 'a:xfrm', {rotation = 0, flip = false} = {}) => `<${tag}${rotation ? ` rot="${Math.round(rotation * 60000)}"` : ''}${flip ? ' flipH="1"' : ''}><a:off x="${emu(box.x - origin.x)}" y="${emu(box.y - origin.y)}"/><a:ext cx="${emu(box.width)}" cy="${emu(box.height)}"/></${tag}>`;
+  if(measuredKind(arrangement.kind))return measuredDrawingXml(record,number,xfrm);
+  const shapes = [];
+  if (arrangement.background) shapes.push(`<dsp:sp modelId="${modelId(number, ROLE.shape, 99)}"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>${xfrm(arrangement.background)}<a:prstGeom prst="diamond"><a:avLst/></a:prstGeom><a:solidFill>${schemeXml(paint.background)}</a:solidFill><a:ln><a:noFill/></a:ln></dsp:spPr><dsp:style><a:lnRef idx="0">${srgb}</a:lnRef><a:fillRef idx="1">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor"/></dsp:style></dsp:sp>`);
+  for (const node of arrangement.nodes) {
+    const index = node.index, text = node.path !== undefined ? nodeParagraph(record, index) : '';
+    // A cycle's ellipse, and a quadrant's roundRect at the default corner, have no adjustment; a box's (SH-17) and a chevron's carry core's.
+    const geometry = node.preset === 'ellipse' ? '<a:prstGeom prst="ellipse"><a:avLst/></a:prstGeom>' : node.preset === 'roundRect' && (node.adjust ?? 16667) === 16667 ? '<a:prstGeom prst="roundRect"><a:avLst/></a:prstGeom>' : `<a:prstGeom prst="${node.preset}"><a:avLst><a:gd name="adj" fmla="val ${node.adjust}"/></a:avLst></a:prstGeom>`;
+    const insets = arrangement.margins ? `lIns="${left}" tIns="${top}" rIns="${right}" bIns="${bottom}"` : `lIns="${margin}" tIns="${margin}" rIns="${margin}" bIns="${margin}"`;
+    shapes.push(`<dsp:sp modelId="${modelId(number, ROLE.shape, index)}"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>${xfrm(node.box, 'a:xfrm', {flip: node.flip === true})}${geometry}<a:solidFill>${schemeXml(paint.fill)}</a:solidFill><a:ln w="${emu(arrangement.lineWidth)}"><a:solidFill>${schemeXml(paint.line)}</a:solidFill></a:ln></dsp:spPr><dsp:style><a:lnRef idx="3">${srgb}</a:lnRef><a:fillRef idx="1">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor">${schemeXml(paint.text)}</a:fontRef></dsp:style><dsp:txBody><a:bodyPr wrap="square" ${insets} anchor="ctr"><a:noAutofit/></a:bodyPr><a:lstStyle/><a:p>${text || `<a:endParaRPr lang="${escapeXml(record.lang)}"/>`}</a:p></dsp:txBody>${xfrm(node.textBox, 'dsp:txXfrm')}</dsp:sp>`);
+    // SH-18: an arrow after its node (a cycle's, SH-17 a flow's).
+    for (const arrow of arrangement.arrows?.filter(entry => entry.index === index) ?? []) shapes.push(cycleArrowDrawingXml(arrow, record, number, origin));
+  }
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dsp:drawing xmlns:dgm="${NS.dgm}" xmlns:dsp="${NS.dsp}" xmlns:a="${NS.a}"><dsp:spTree><dsp:nvGrpSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvGrpSpPr/></dsp:nvGrpSpPr><dsp:grpSpPr/>${shapes.join('')}</dsp:spTree></dsp:drawing>`;
+}
+
+/**
+ * Replace every SmartArt placeholder (addArrangements `records`, by object name) with its p:graphicFrame and add its parts, in slide
+ * order. Runs on the unzipped package after the placeholders are tagged (their p:nvPr, with the tag, moves to the frame).
+ */
+export function attachSmartArt(entries, records) {
+  if (!records.size) return;
+  const slides = Object.keys(entries).filter(part => /^ppt\/slides\/slide\d+\.xml$/.test(part)).sort((a, b) => Number(a.match(/(\d+)\.xml$/)[1]) - Number(b.match(/(\d+)\.xml$/)[1]));
+  const overrides = [], fallbacks = new Set([...records.values()].map(record => record.fallback?.name).filter(Boolean));
+  let number = 0, seen = 0;
+  for (const part of slides) {
+    const relsPart = part.replace(/([^/]+)$/, '_rels/$1.rels');
+    let rels = decoder.decode(entries[relsPart]), changed = false;
+    let nextId = Math.max(0, ...[...rels.matchAll(/\bId="rId(\d+)"/g)].map(match => Number(match[1]))) + 1;
+    // SH-16: each fallback picture leaves its place (right after its placeholder) for its frame's mc:Fallback.
+    const pictures = new Map();
+    const source = decoder.decode(entries[part]).replace(/<p:pic>[\s\S]*?<\/p:pic>/g, picture => {
+      const name = picture.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
+      if (!fallbacks.has(name)) return picture;
+      pictures.set(name, picture);
+      return '';
+    });
+    const xml = source.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
+      const name = shape.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1], record = records.get(name);
+      if (!record) return shape;
+      seen += 1; number += 1; changed = true;
+      const ids = {data: `rId${nextId++}`, quickStyle: `rId${nextId++}`, colors: `rId${nextId++}`, drawing: `rId${nextId++}`, ...(record.layout ? {layout: `rId${nextId++}`} : {})};
+      // SH-19: OPF's own layout definition, when the arrangement is OPF's design.
+      if (record.layout) entries[`ppt/diagrams/layout${number}.xml`] = encoder.encode(layoutDefinitionXml(record.layout));
+      entries[`ppt/diagrams/data${number}.xml`] = encoder.encode(smartArtDataXml(record, number, ids.drawing));
+      entries[`ppt/diagrams/quickStyle${number}.xml`] = encoder.encode(smartArtQuickStyleXml(record.arrangement.kind));
+      entries[`ppt/diagrams/colors${number}.xml`] = encoder.encode(smartArtColorsXml(record.paint, record.card, record.layout === undefined,record.arrangement.kind));
+      entries[`ppt/diagrams/drawing${number}.xml`] = encoder.encode(smartArtDrawingXml(record, number));
+      for (const kind of ['data', ...(record.layout ? ['layout'] : []), 'quickStyle', 'colors', 'drawing']) {
+        overrides.push(`<Override PartName="/ppt/diagrams/${kind}${number}.xml" ContentType="${CONTENT_TYPES[kind]}"/>`);
+        rels = rels.replace('</Relationships>', `<Relationship Id="${ids[kind]}" Type="${SMART_ART_RELATIONSHIPS[kind]}" Target="../diagrams/${kind}${number}.xml"/></Relationships>`);
+      }
+      const cNvPr = shape.match(/<p:cNvPr\b[^>]*?(?:\/>|>[\s\S]*?<\/p:cNvPr>)/)?.[0] ?? `<p:cNvPr id="${1000 + number}" name="${escapeXml(name)}"/>`;
+      const nvPr = shape.match(/<p:nvPr\s*\/>|<p:nvPr>[\s\S]*?<\/p:nvPr>/)?.[0] ?? '<p:nvPr/>';
+      const {frame} = record.arrangement, alt = record.values.map(plain).join(', ');
+      const named = cNvPr.includes(' descr=') ? cNvPr : cNvPr.replace(/<p:cNvPr\b/, `<p:cNvPr descr="${escapeXml(alt)}"`);
+      // `r:lo` is empty for a built-in layout: no layout part, so PowerPoint resolves it from the data model's loTypeId (docs/smartart.md);
+      // SH-19: it names OPF's own layout part for OPF's design.
+      const graphicFrame = `<p:graphicFrame><p:nvGraphicFramePr>${named}<p:cNvGraphicFramePr/>${nvPr}</p:nvGraphicFramePr><p:xfrm><a:off x="${emu(frame.x)}" y="${emu(frame.y)}"/><a:ext cx="${emu(frame.width)}" cy="${emu(frame.height)}"/></p:xfrm><a:graphic><a:graphicData uri="${SMART_ART_URI}"><dgm:relIds xmlns:dgm="${NS.dgm}" r:dm="${ids.data}" r:lo="${ids.layout ?? ''}" r:qs="${ids.quickStyle}" r:cs="${ids.colors}"/></a:graphicData></a:graphic></p:graphicFrame>`;
+      // SH-16: PowerPoint takes the mc:Choice (the live SmartArt); an app that does not claim SMART_ART_REQUIRES takes the mc:Fallback,
+      // OPF's preview of the frame as a picture (attachSmartArtFallbacks names, tags and describes it once its SVG part is attached).
+      const picture = pictures.get(record.fallback?.name);
+      if (!picture) throw new Error('A SmartArt frame has no fallback picture.');
+      pictures.delete(record.fallback.name);
+      return `<mc:AlternateContent xmlns:mc="${MC}"><mc:Choice xmlns:${SMART_ART_REQUIRES.prefix}="${SMART_ART_REQUIRES.namespace}" Requires="${SMART_ART_REQUIRES.prefix}">${graphicFrame}</mc:Choice><mc:Fallback>${picture}</mc:Fallback></mc:AlternateContent>`;
+    });
+    if (pictures.size) throw new Error('A SmartArt fallback picture has no frame.');
+    if (!changed) continue;
+    entries[part] = encoder.encode(xml);
+    entries[relsPart] = encoder.encode(rels);
+  }
+  if (seen !== records.size) throw new Error('Missing generated SmartArt placeholders.');
+  entries['[Content_Types].xml'] = encoder.encode(decoder.decode(entries['[Content_Types].xml']).replace('</Types>', `${overrides.join('')}</Types>`));
+}
+
+/**
+ * SH-16: finish each fallback picture once its SVG part is attached (src/svg-image.js attachSvgPictures). In `full` provenance it carries
+ * OPF_SMARTART_V1 too: the frame's record with `fallback: true` and the media keys of its SVG and PNG, so a file in which only the
+ * picture survived imports as the same list on the same layout. Then it takes the frame's name and id (the two are one object, in the
+ * mc:Choice or the mc:Fallback) and the outline as its description, one entry a line. `relationshipsOf(entries, part)` reads a slide's
+ * relationships (Map<id, {path}>).
+ */
+export function attachSmartArtFallbacks(entries, records, relationshipsOf) {
+  const fallbacks = new Map([...records.values()].filter(record => record.fallback).map(record => [record.fallback.name, record]));
+  if (!fallbacks.size) return;
+  const manifests = new Map();
+  for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
+    let relationships;
+    for (const [picture] of decoder.decode(entries[part]).matchAll(/<p:pic>[\s\S]*?<\/p:pic>/g)) {
+      const record = fallbacks.get(picture.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1]);
+      if (!record?.fallback.tag) continue;
+      relationships ??= relationshipsOf(entries, part);
+      const png = entries[relationships.get(picture.match(/<a:blip\b[^>]*\br:embed="([^"]+)"/)?.[1])?.path];
+      const svg = entries[relationships.get(picture.match(/<asvg:svgBlip\b[^>]*\br:embed="([^"]+)"/)?.[1])?.path];
+      if (!png || !svg) throw new Error('A SmartArt fallback picture has no SVG or PNG part.');
+      manifests.set(record.fallback.name, {...record.fallback.tag, fallback: true, svg: mediaKey(svg), png: mediaKey(png), bleed: Math.round((record.fallback.bleed ?? 0) * EMU)});
+    }
+  }
+  attachTextTags(entries, manifests, SMART_ART_TAG, 'opfSmartArtFallback', 'SmartArt fallback', {pictures: true});
+  let seen = 0;
+  for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
+    const xml = decoder.decode(entries[part]), next = xml.replace(/<mc:AlternateContent\b[\s\S]*?<\/mc:AlternateContent>/g, alternate => {
+      const picture = alternate.match(/<mc:Fallback><p:pic>[\s\S]*?<\/p:pic><\/mc:Fallback>/)?.[0], name = picture?.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
+      const record = fallbacks.get(name);
+      if (!record) return alternate;
+      seen += 1;
+      const id = alternate.match(/<mc:Choice\b[\s\S]*?<p:cNvPr\b[^>]*\bid="(\d+)"/)?.[1];
+      if (!id) throw new Error('A SmartArt frame has no id.');
+      const descr = escapeXml(record.fallback.alt).replace(/\n/g, '&#10;');
+      // The frame grown by the bleed on every side, from the frame's own EMU, so the picture and the frame share one center.
+      const [, x, y] = alternate.match(/<p:xfrm><a:off x="(-?\d+)" y="(-?\d+)"\/>/) ?? [], [, cx, cy] = alternate.match(/<p:xfrm>[\s\S]*?<a:ext cx="(\d+)" cy="(\d+)"\/>/) ?? [];
+      if (x === undefined || cx === undefined) throw new Error('A SmartArt frame has no transform.');
+      const bleed = Math.round((record.fallback.bleed ?? 0) * EMU);
+      const grown = `<a:xfrm><a:off x="${Number(x) - bleed}" y="${Number(y) - bleed}"/><a:ext cx="${Number(cx) + 2 * bleed}" cy="${Number(cy) + 2 * bleed}"/></a:xfrm>`;
+      const named = picture.replace(/<p:cNvPr\b[^>]*?(\/?)>/, (_, close) => `<p:cNvPr id="${id}" name="${escapeXml(smartArtName(record.arrangement.path))}" descr="${descr}"${close}>`);
+      return alternate.replace(picture, named.replace(/<a:xfrm>[\s\S]*?<\/a:xfrm>/, grown));
+    });
+    if (next !== xml) entries[part] = encoder.encode(next);
+  }
+  if (seen !== fallbacks.size) throw new Error('Missing generated SmartArt fallback pictures.');
+}
+
+// ---------------------------------------------------------------------------
+// SH-18: a cycle's arrows (core ComposedArrangement.arrows): DrawingML rightArrow shapes turned along the cycle, after their node.
+
+/** SH-18: the first line of a cycle's alt text. */
+function cycleOutlineHead(count) {
+  return `Cycle of ${count} step${count === 1 ? '' : 's'}, clockwise from the top, the last leading back to the first`;
+}
+
+/** SH-18, native shapes: one arrow of a cycle (a rightArrow at core's box and rotation, the primary lightened, no outline), tagged OPF_ARRANGEMENT_V1. */
+function addCycleArrow(slide, arrow, {box, name, tag, color}) {
+  const objectName = name(`arrow ${arrow.index}`);
+  slide.addShape('rightArrow', {...box(arrow.box), rotate: arrow.rotation, fill: {color}, line: {type: 'none'}, objectName});
+  tag(objectName, 'arrow', {index: arrow.index, rotation: arrow.rotation, adjust: [...arrow.adjust]});
+}
+
+/** SH-18: a cycle arrow's adjustments (pptxgenjs writes the preset's default): core's adj1 and adj2, by object name, in the finished slide parts. */
+function writeCycleArrowAdjustments(entries, tags) {
+  for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
+    const xml = decoder.decode(entries[part]);
+    const next = xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
+      const record = tags.get(shape.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1]);
+      if (record?.role !== 'arrow' || !Array.isArray(record.adjust)) return shape;
+      return shape.replace(/<a:prstGeom prst="rightArrow">\s*(?:<a:avLst\s*\/>|<a:avLst>[\s\S]*?<\/a:avLst>)\s*<\/a:prstGeom>/,
+        `<a:prstGeom prst="rightArrow"><a:avLst><a:gd name="adj1" fmla="val ${record.adjust[0]}"/><a:gd name="adj2" fmla="val ${record.adjust[1]}"/></a:avLst></a:prstGeom>`);
+    });
+    if (next !== xml) entries[part] = encoder.encode(next);
+  }
+}
+
+/** SH-18: a cycle arrow in the SmartArt's cached drawing (relative to the frame `origin`, EMU). */
+function cycleArrowDrawingXml(arrow, record, number, origin) {
+  const {paint} = record, rot = Math.round(arrow.rotation * 60000) % 21600000;
+  const xfrm = `<a:xfrm${rot ? ` rot="${rot}"` : ''}><a:off x="${emu(arrow.box.x - origin.x)}" y="${emu(arrow.box.y - origin.y)}"/><a:ext cx="${emu(arrow.box.width)}" cy="${emu(arrow.box.height)}"/></a:xfrm>`;
+  const geometry = `<a:prstGeom prst="rightArrow"><a:avLst><a:gd name="adj1" fmla="val ${arrow.adjust[0]}"/><a:gd name="adj2" fmla="val ${arrow.adjust[1]}"/></a:avLst></a:prstGeom>`;
+  return `<dsp:sp modelId="${modelId(number, ROLE.shape, 100 + arrow.index)}"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>${xfrm}${geometry}<a:solidFill>${schemeXml(paint.arrow)}</a:solidFill><a:ln><a:noFill/></a:ln></dsp:spPr><dsp:style><a:lnRef idx="0">${srgb}</a:lnRef><a:fillRef idx="1">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor">${schemeXml(paint.text)}</a:fontRef></dsp:style><dsp:txBody><a:bodyPr lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr"><a:noAutofit/></a:bodyPr><a:lstStyle/><a:p><a:endParaRPr lang="${escapeXml(record.lang)}"/></a:p></dsp:txBody></dsp:sp>`;
+}
+
+// ---------------------------------------------------------------------------
+// Import
+
+const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false, isArray: name => ['dgm:pt', 'dgm:cxn', 'a:p', 'a:r', 'p:tag'].includes(name)});
+const TAG_REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
+const scalar = value => typeof value === 'string' ? value : typeof value === 'number' ? String(value) : value && typeof value === 'object' ? String(value['#text'] ?? '') : '';
+
+/**
+ * Import: a slide's SmartArt frames, as OPF (`frames` are the slide's p:graphicFrame nodes). Returns Map<frame index, result>, the result's
+ * `type` saying what the frame became (src/smart-art-import.js, SH-08):
+ *   - `list`: `{kind, layout, tagged, payload}`, a list on an arrangement's layout (a pyramid1, matrix3, cycle2, chevron1, process1 or
+ *     process2 OPF or PowerPoint wrote, OPF's own layouts by their uniqueId, and SH-08 every layout of those families) or on the `list` or
+ *     `process` layout (the list and process families). An unchanged frame OPF wrote (OPF_SMARTART_V1, whose node texts equal the data
+ *     model's) gives back the authored list; any other reads the data model's outline, nested entries with their level;
+ *   - `diagram`: `{payload}`, a hierarchy or organization chart as a Mermaid flowchart;
+ *   - `shapes`: `{slide, name, frame, outline}`, another layout's drawing (importSmartArtShapes reads it as overlay shapes);
+ *   - `empty`: a SmartArt with no text to import.
+ */
+export function importSmartArt({frames, relationships, entries, slideIndex, report}) {
+  const out = new Map();
+  for (const [index, frame] of frames.entries()) {
+    const data = frame?.['a:graphic']?.['a:graphicData'];
+    if (data?.uri !== SMART_ART_URI) continue;
+    // A SmartArt's parts are untrusted input: one that cannot be read leaves its frame to the rest of the import and never fails it.
+    try {
+    const ids = data['dgm:relIds'] ?? {}, dataPart = relationships.get(ids['r:dm'])?.path;
+    if (!dataPart || !entries[dataPart]) continue;
+    const model = readSmartArtModel(decoder.decode(entries[dataPart]));
+    if (!model) continue;
+    let form = smartArtForm(model.layoutId, model.category);
+    const path = `slides.${slideIndex}`, stem = layoutStem(model.layoutId) || 'unnamed';
+    const walk=roots=>roots.flatMap(entry=>[entry,...walk(entry.children)]);
+    if(['org-chart','hierarchy'].includes(form.arrangement)&&(model.roots.length!==1||walk(model.roots).some(entry=>entry.assistant||entry.edge)))form={hierarchy:'TD'};
+    // New semantic mappings must retain cached labels that belong to no data entry, as the previous drawing import did.
+    const knownDrawingPart=measuredKind(form.arrangement)&&model.drawingRelId?relationships.get(model.drawingRelId)?.path:undefined;
+    const knownDrawing=knownDrawingPart&&entries[knownDrawingPart]?drawingSlide(decoder.decode(entries[knownDrawingPart]),{x:0,y:0,cx:1,cy:1},'Label count'):undefined;
+    const extraLabels=knownDrawing&&knownDrawing.bodies.filter(body=>body.paragraphs.flat().some(run=>String(run.text??'').trim())).length>walk(model.roots).length;
+    if(extraLabels)form={drawing:true};
+    const frameName = scalar(frame?.['p:nvGraphicFramePr']?.['p:cNvPr']?.name) || 'SmartArt';
+    const named = `The SmartArt ${JSON.stringify(frameName)} (layout ${stem})`;
+    // Past the outline's limits the model's entries are a flat list: the drawing, or that list, is imported.
+    if (model.limited) {
+      form = {drawing: true};
+      report?.({code: 'smartart-limited', path, layout: stem, limit: model.limited, message: `${named} has ${model.limited === 'depth' ? `entries nested more than ${SMART_ART_LIMITS.depth} levels deep` : `more than ${SMART_ART_LIMITS.entries} entries`}; its drawing is imported, or without one its entries as a flat list${model.omitted ? ` (the first ${SMART_ART_LIMITS.entries}; ${model.omitted} more are not imported)` : ''}.`});
+    }
+    if (model.sharedConnections) report?.({code: 'smartart-connection-dropped', path, layout: stem, message: `${named} has ${model.sharedConnections} ${model.sharedConnections === 1 ? 'connection' : 'connections'} to an entry that already has a parent (or to its own ancestor); each entry is imported once, under its first parent.`});
+    // Never lose text silently: what the OPF form does not keep is named.
+    for (const item of model.dropped) {
+      if (item.role === 'transition' && item.used && form.hierarchy) continue;
+      const what = item.role === 'transition' ? 'text on a connection between entries' : item.role === 'presentation' ? 'text that belongs to no entry' : 'an entry no connection reaches';
+      report?.({code: 'smartart-text-dropped', path, layout: stem, text: item.text, message: `${named} has ${what}, ${JSON.stringify(item.text)}, which the import does not keep.`});
+    }
+    if (model.pictures && !form.drawing) report?.({code: 'smartart-picture-dropped', path, layout: stem, message: `${named} has ${model.pictures} ${model.pictures === 1 ? 'entry' : 'entries'} with a picture, which the import does not keep; the text is kept.`});
+    const items = outlineItems(model.roots);
+    if (form.arrangement) {
+      const kind = form.arrangement;
+      const tree=['org-chart','hierarchy'].includes(kind),outline=tree?walk(model.roots):model.roots;
+      const texts = outline.map(entry => plainText(entry.runs)), flat = model.roots.every(entry => !entry.children.length && !entry.detail);
+      // The tag (full provenance): the list as written, when the frame's node texts are still the ones OPF wrote.
+      let stored;
+      for (const link of array(frame?.['p:nvGraphicFramePr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'])) {
+        const rel = relationships.get(link['r:id']);
+        if (rel?.type !== TAG_REL || rel.targetMode === 'External' || !entries[rel.path]) continue;
+        try {
+          for (const tag of array(parser.parse(decoder.decode(entries[rel.path]))['p:tagLst']?.['p:tag'])) {
+            if (String(tag.name ?? '').toUpperCase() !== SMART_ART_TAG) continue;
+            const record = decodeTextTag(tag.val);
+            if (record?.v === 1 && record.kind === kind && Array.isArray(record.items) && Array.isArray(record.texts)) stored = record;
+          }
+        } catch { /* an unreadable tag leaves the frame to its data model */ }
+      }
+      const sameLevels=stored&&stored.items.length===items.length&&stored.items.every((value,index)=>Number(value?.level??0)===Number(items[index]?.level??0));
+      const unchanged = stored && (flat||tree&&sameLevels) && stored.texts.length === texts.length && stored.texts.every((text, at) => text.replace(/ /g, ' ') === texts[at]);
+      if (stored && !unchanged) report?.({code: 'smartart-edited', path: stored.path ?? path, message: `The ${kind} was edited in PowerPoint; its list is read from the SmartArt's nodes.`});
+      if (!form.exact) report?.({code: 'smartart-adapted', path, layout: stem, form: kind, message: `${named} is imported as OPF's ${form.pyramidDirection === 'down' ? 'inverted pyramid' : kind} layout with its entries.`});
+      out.set(index, items.length || unchanged ? {type: 'list', kind, layout: `default:${form.pyramidDirection === 'down' ? 'inverted-pyramid' : kind}`, tagged: unchanged === true, payload: {type: 'list', items: unchanged ? structuredClone(stored.items) : items}} : {type: 'empty'});
+      continue;
+    }
+    if (form.layout) {
+      report?.({code: 'smartart-adapted', path, layout: stem, form: form.layout, message: form.inverted
+        ? `${named} is an inverted pyramid, which OPF's pyramid does not draw (its first entry is the narrow top); its entries are imported as a list in order, the widest first.`
+        : `${named} is imported as a list on OPF's ${form.layout} layout.`});
+      // SH-08: the list and process families hold their bullets as one node's paragraphs, each an item of its own.
+      out.set(index, items.length ? {type: 'list', kind: form.layout, layout: `default:${form.layout}`, tagged: false, payload: {type: 'list', items: outlineItems(model.roots, {split: true})}} : {type: 'empty'});
+      continue;
+    }
+    if (form.hierarchy) {
+      if (!items.length) { out.set(index, {type: 'empty'}); continue; }
+      const noun = /org/i.test(stem) ? 'Organization chart' : 'Hierarchy', diagram = hierarchyDiagram(model.roots, form.hierarchy, noun);
+      report?.({code: 'smartart-adapted', path, layout: stem, form: 'diagram', message: `${named} is imported as a Mermaid flowchart with its entries.`});
+      if (diagram.formatted) report?.({code: 'smartart-formatting-dropped', path, layout: stem, message: `${named} has bold, italic, underlined or struck-through text, which a diagram's labels do not carry; the text is kept.`});
+      out.set(index, {type: 'diagram', payload: {type: 'diagram', diagram: {source: diagram.source, alt: diagram.alt}}});
+      continue;
+    }
+    // Any other layout: its drawing as overlay shapes, the outline kept as the alt text of the first; without a drawing, the outline as a list.
+    const drawingPart = model.drawingRelId ? relationships.get(model.drawingRelId)?.path : undefined;
+    const xfrm = frame?.['p:xfrm'], number = value => value !== undefined && value !== '' && Number.isFinite(Number(value)) ? Number(value) : undefined;
+    const place = {x: number(xfrm?.['a:off']?.x), y: number(xfrm?.['a:off']?.y), cx: number(xfrm?.['a:ext']?.cx), cy: number(xfrm?.['a:ext']?.cy), rot: number(xfrm?.rot) ?? 0,
+      flipH: xfrm?.flipH === '1' || xfrm?.flipH === 'true', flipV: xfrm?.flipV === '1' || xfrm?.flipV === 'true'};
+    const slide = drawingPart && entries[drawingPart] && [place.x, place.y, place.cx, place.cy].every(value => value !== undefined) ? drawingSlide(decoder.decode(entries[drawingPart]), place, frameName) : undefined;
+    if (slide) {
+      report?.({code: 'smartart-adapted', path, layout: stem, form: 'shapes', message: extraLabels?`${named} has additional drawing labels outside its data entries; its drawing is imported as overlay shapes, its outline as the first shape's alt text.`:`${named} has no OPF arrangement; its drawing is imported as overlay shapes, its outline as the first shape's alt text.`});
+      out.set(index, {type: 'shapes', slide, name: frameName, frame: place, ...(model.roots.length ? {outline: `SmartArt (${stem}):\n${outlineText(model.roots)}`} : {})});
+      continue;
+    }
+    report?.({code: 'smartart-adapted', path, layout: stem, form: 'list', message: `${named} has no OPF arrangement and no drawing; its entries are imported as a list.`});
+    out.set(index, items.length ? {type: 'list', kind: 'list', layout: 'default:list', tagged: false, payload: {type: 'list', items: outlineItems(model.roots, {split: true})}} : {type: 'empty'});
+    } catch (error) {
+      out.delete(index);
+      report?.({code: 'smartart-unreadable', path: `slides.${slideIndex}`, message: `A SmartArt's parts could not be read (${error instanceof Error ? error.name : 'error'}); the frame imports as any other graphic frame.`});
+    }
+  }
+  return out;
+}
+
+/**
+ * Import: the shapes of a slide that carry a valid OPF_ARRANGEMENT_V1 tag (the layout's drawing of a pyramid or matrix, consumed), and
+ * `entries`: the entry paths whose node was an org chart's assistant or a Venn's overlap label, with that field (restoreArrangementEntries).
+ */
+export function importArrangementShapes(shapes, relationships, entries) {
+  const consumed = new Set(), marked = new Map();
+  for (const shape of shapes) {
+    for (const link of array(shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'])) {
+      const rel = relationships.get(link['r:id']);
+      if (rel?.type !== TAG_REL || rel.targetMode === 'External' || !entries[rel.path]) continue;
+      try {
+        for (const tag of array(parser.parse(decoder.decode(entries[rel.path]))['p:tagLst']?.['p:tag'])) {
+          if (String(tag.name ?? '').toUpperCase() !== ARRANGEMENT_TAG) continue;
+          const record = decodeTextTag(tag.val);
+          if (record?.v === 1 && typeof record.path === 'string' && typeof record.role === 'string') consumed.add(shape);
+          if (record?.role === 'node' && typeof record.entry === 'string' && record.entry.startsWith(record.path + '.')) for (const field of ['assistant', 'overlap']) if (record[field] === true) marked.set(record.entry.replace(/\.text$/, ''), field);
+        }
+      } catch { /* an unreadable tag leaves the shape as ordinary content */ }
+    }
+  }
+  return {shapes: consumed, entries: marked};
+}
+
+/** Import: an org chart's assistant and a Venn's overlap label (importArrangementShapes' `entries`) go back on their list entries. */
+export function restoreArrangementEntries(document, marked) {
+  for (const [path, field] of marked ?? []) {
+    const keys = path.split('.').map(part => /^\d+$/.test(part) ? Number(part) : part), index = keys.at(-1);
+    if (keys.at(-2) !== 'items' || typeof index !== 'number') continue;
+    const list = keys.slice(0, -1).reduce((node, key) => node?.[key], document);
+    if (!Array.isArray(list) || list[index] === undefined) continue;
+    const entry = list[index];
+    if (typeof entry === 'string' || Array.isArray(entry)) list[index] = {text: entry, [field]: true};
+    else if (entry && typeof entry === 'object') entry[field] = true;
+  }
+  return document;
+}
+
+/**
+ * SH-16, import: the slide's pictures that are the fallback of a SmartArt OPF wrote (a file another app saved with only the
+ * mc:Fallback): a picture named for its list, carrying OPF_SMARTART_V1 with `fallback: true` whose SVG or PNG is still the one written.
+ * Returns Map<picture index, {kind, layout, frame (the SmartArt frame's a:xfrm), payload}>; a tagged picture that was replaced or renamed imports as an ordinary picture.
+ */
+export function importSmartArtFallbacks({pictures, relationships, entries, slideIndex, report}) {
+  const out = new Map();
+  for (const [index, picture] of pictures.entries()) {
+    let stored;
+    for (const link of array(picture?.['p:nvPicPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'])) {
+      const rel = relationships.get(link['r:id']);
+      if (rel?.type !== TAG_REL || rel.targetMode === 'External' || !entries[rel.path]) continue;
+      try {
+        for (const tag of array(parser.parse(decoder.decode(entries[rel.path]))['p:tagLst']?.['p:tag'])) {
+          if (String(tag.name ?? '').toUpperCase() !== SMART_ART_TAG) continue;
+          const record = decodeTextTag(tag.val);
+          if (record?.fallback === true) stored = record;
+        }
+      } catch { /* an unreadable tag leaves the picture to import as a picture */ }
+    }
+    if (!stored) continue;
+    const blip = picture?.['p:blipFill']?.['a:blip'], png = entries[relationships.get(blip?.['r:embed'])?.path], svg = entries[relationships.get(svgBlipRelationship(blip))?.path];
+    const valid = stored.v === 1 && SMART_ART_LAYOUTS[stored.kind] !== undefined && typeof stored.path === 'string' && Array.isArray(stored.items) && stored.items.length > 0
+      && scalar(picture?.['p:nvPicPr']?.['p:cNvPr']?.name) === smartArtName(stored.path)
+      && ((svg && mediaKey(svg) === stored.svg) || (png && mediaKey(png) === stored.png));
+    if (!valid) {
+      report?.({code: 'invalid-smartart-provenance', path: `slides.${slideIndex}`, message: 'A tagged OPF SmartArt fallback picture was replaced, renamed or damaged; it imports as an ordinary picture.'});
+      continue;
+    }
+    // The frame the picture was grown from (its bleed on every side), where the list lies.
+    const xfrm = picture?.['p:spPr']?.['a:xfrm'], bleed = Number.isInteger(stored.bleed) && stored.bleed >= 0 ? stored.bleed : 0;
+    const frame = xfrm?.['a:off'] && xfrm?.['a:ext'] ? {...xfrm, 'a:off': {...xfrm['a:off'], x: String(Number(xfrm['a:off'].x) + bleed), y: String(Number(xfrm['a:off'].y) + bleed)},
+      'a:ext': {...xfrm['a:ext'], cx: String(Number(xfrm['a:ext'].cx) - 2 * bleed), cy: String(Number(xfrm['a:ext'].cy) - 2 * bleed)}} : xfrm;
+    out.set(index, {kind: stored.kind, layout: `default:${stored.kind}`, frame, payload: {type: 'list', items: structuredClone(stored.items)}});
+  }
+  return out;
+}

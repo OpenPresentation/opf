@@ -6,11 +6,11 @@ The installed test retains `artifacts/packed-json-browser-node24.json` and `arti
 
 At the earlier September 15 checkpoint, the tested registry predecessors were editor 0.6.0, core 0.9.0 and renderer/PPTX 0.7.0. The current editor's other merged features require newer coordinated core/renderer APIs. Its full suite with the registry predecessors fails the `frameBox` assertion in `test/layout.mjs`; that failure is retained in PR19 evidence. Coordinate dependency versions and full installed-package acceptance before tagging a new release. This change does not alter versions or runtime source and does not publish a package. The next release requires Node 24; existing npm versions remain immutable.
 
-[Earlier verification evidence](evidence/json-release-checks-20260915/README.md) retains the passing source/installed JSON checks and the complete renewed package failure. The installed report byte-matches all 39 shipped files with actual registry predecessors; it does not replace the overall command result.
+Earlier verification evidence retains the passing source/installed JSON checks and the complete renewed package failure. The installed report byte-matches all 39 shipped files with actual registry predecessors; it does not replace the overall command result.
 
 ## Editor 0.7.0 release candidate
 
-Core 0.10.0 and renderer/PPTX 0.8.0 are now published. Clean installation and the complete editor 0.7.0 packed/source checks pass against those registry dependencies, including all seven offline JSON workflows and the later full-package gates. [The new release checkpoint](evidence/release-0.7.0/README.md) records this acceptance. CI and publication of editor 0.7.0 remain required before hosts adopt its new exports.
+Core 0.10.0 and renderer/PPTX 0.8.0 are now published. Clean installation and the complete editor 0.7.0 packed/source checks pass against those registry dependencies, including all seven offline JSON workflows and the later full-package gates. The new release checkpoint records this acceptance. CI and publication of editor 0.7.0 remain required before hosts adopt its new exports.
 
 ## Layout discovery
 

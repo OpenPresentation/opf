@@ -8,11 +8,14 @@
 // the same label form a section (see `listSections`). Slides without a label form an unnamed run. `hidden`
 // is a boolean on the slide. Slide order is the `slides` array, so a move is a remove plus an add of the same
 // slide (removing and re-adding keeps every other slide's patch path stable).
+import { slideTitle } from "./rich-text.js";
 import { checkedDocument, fail, same } from "./edit-helpers.js";
 import { collectReservedPresentationIds, remapSlideTreeIds } from "./presentation-ids.js";
 import { prepareDimensionSwitch } from "./switches.js";
 import { mergeCatalogs } from "./catalogs.js";
 import { checkFormat } from "./checks.js";
+
+export { slideTitle };
 
 const isIndex = (value) => Number.isInteger(value) && value >= 0;
 const clone = (value) => structuredClone(value);
@@ -79,12 +82,6 @@ export function hasSections(presentation) {
 export function sectionForSlide(presentation, slideIndex) {
   return listSections(presentation).find((section) => slideIndex >= section.start && slideIndex < section.start + section.count);
 }
-/** The title shown for a slide in navigators and outlines. */
-export function slideTitle(slide) {
-  // A title is a string or TextRun[] (FA-10): either shows as its plain text.
-  const title = typeof slide?.title === "string" ? slide.title : Array.isArray(slide?.title) ? slide.title.map((run) => (typeof run === "string" ? run : (run?.text ?? ""))).join("") : "";
-  return title.trim() ? title : "";
-}
 /** One row per slide for pickers and navigators: `{ index, id, title, hidden, section, layout }`. */
 export function slideSummaries(presentation) {
   return requireSlides(presentation).map((slide, index) => ({ index, id: slide.id, title: slideTitle(slide), hidden: slide.hidden === true, section: sectionOf(slide), layout: slide.layout }));
@@ -147,7 +144,7 @@ export function prepareAddSlide(presentation, options = {}) {
     else if (!options.layout) slide.title = "New slide";
     if (options.text !== undefined) slide.text = String(options.text);
     else if (!options.layout && options.title === undefined) slide.text = "Write your next idea here.";
-  } else if (options.id) slide.id = id;
+  } else slide.id = id;
   const inherited = options.section === undefined ? sectionOf(slides[at - 1] ?? slides[at]) : options.section;
   slide = withSection(slide, inherited);
   if (options.layout) {

@@ -1,6 +1,0 @@
-{
-	"name" : "Import history",
-	
-	"design": {"fontScheme":"roboto"},
-	"slides" : [ {  "title" : "Reordered import", "text" : "Imported body"  } ]
-}

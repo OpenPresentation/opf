@@ -46,6 +46,17 @@ test('a bad 2-vCPU CI runner, where the pane applies the answer slowly, passes: 
   // The same edits with the check running beside the worker's blocks while the request is in flight.
   assert.match(blockFailures({ samples: edits, flight: series(45), limit: 100, baseline: series(80) }).join(), /while the worker checks/);
 });
+test('the in-flight block is judged as given: the CI runs of 2026-11-14 as they reported it, with CodeMirror\'s background parse counted, fail', () => {
+  // The verdict cannot tell a parse slice from a check: support/worker-flight.mjs takes the parse out before (test/worker-flight-intervals.mjs rebuilds
+  // these runs edit by edit and passes them that way). As reported, both failed: 56 against 113 ms, 87 against 172 ms.
+  assert.match(blockFailures({ samples: [70, 68, 50, 56, 74, 79, 67, 47, 73, 76, 58, 45], flight: [54, 54, 38, 56, 55, 61, 67, 47, 59, 61, 58, 45], limit: 100, baseline: [116, 120, 122, 118, 113, 106, 110, 106, 109, 107, 106, 169] }).join(), /blocks for 56 ms while the worker checks, over 25% of the 113 ms/);
+  assert.match(blockFailures({ samples: [87, 106, 82, 91], flight: [87, 88, 82, 74], limit: 100, baseline: [227, 172, 169, 152] }).join(), /blocks for 87 ms while the worker checks, over 25% of the 172 ms/);
+  // The passing run of the same day, and the same failing edits once the parse is out (2 ms left of each span).
+  assert.deepEqual(blockFailures({ samples: [11, 14, 18, 15, 12, 15, 17, 14, 17, 18, 36, 24], flight: [2, 2, 4, 1, 1, 4, 4, 5, 1, 2, 4, 4], limit: 100, baseline: [66, 83, 63, 77, 63, 64, 62, 64, 64, 63, 64, 103] }), []);
+  assert.deepEqual(blockFailures({ samples: [70, 68, 50, 56, 74, 79, 67, 47, 73, 76, 58, 45], flight: series(2), limit: 100, baseline: [116, 120, 122, 118, 113, 106, 110, 106, 109, 107, 106, 169] }), []);
+  // A check beside the worker's on that bad runner is about 40 to 55% of the main-thread edit: over the 25% budget (the old 40% let the lower end pass).
+  assert.match(blockFailures({ samples: series(68), flight: series(46), limit: 100, baseline: series(113) }).join(), /while the worker checks/);
+});
 test('the edits must have been checked in the worker', () => {
   assert.match(blockFailures({ samples: series(50), flight: series(null), limit: 100, baseline: series(105) }).join(), /only 0 of 12 edits/);
   assert.match(blockFailures({ samples: series(20), flight: [1, 1, 1, null, null, null, null], limit: 100 }).join(), /only 3 of 7/);

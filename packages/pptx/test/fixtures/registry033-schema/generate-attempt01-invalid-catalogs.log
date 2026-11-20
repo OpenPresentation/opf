@@ -1,0 +1,15 @@
+file:///private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+opf@0.33.0_@openpresentation+opf-pptx@0.33.0_@openpresentation+opf-render@0.33.0/node_modules/@openpresentation/opf/dist/chunk-OPVJLL7H.js:6706
+  if (!Array.isArray(catalogs)) throw new OPFCatalogsOptionError(entry, `got ${catalogs === null ? "null" : typeof catalogs}`);
+                                      ^
+
+OPFCatalogsOptionError: validate: the catalogs option must be an array of registered catalogs ({ source, <kind>: { <id>: record } } with known catalog kinds); got object.
+    at checkCatalogsOption (file:///private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+opf@0.33.0_@openpresentation+opf-pptx@0.33.0_@openpresentation+opf-render@0.33.0/node_modules/@openpresentation/opf/dist/chunk-OPVJLL7H.js:6706:39)
+    at checkDocumentOptions (file:///private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+opf@0.33.0_@openpresentation+opf-pptx@0.33.0_@openpresentation+opf-render@0.33.0/node_modules/@openpresentation/opf/dist/chunk-UK3J6FSU.js:3440:3)
+    at resolveOptions (file:///private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+opf@0.33.0_@openpresentation+opf-pptx@0.33.0_@openpresentation+opf-render@0.33.0/node_modules/@openpresentation/opf/dist/chunk-UK3J6FSU.js:8445:3)
+    at validate (file:///private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+opf@0.33.0_@openpresentation+opf-pptx@0.33.0_@openpresentation+opf-render@0.33.0/node_modules/@openpresentation/opf/dist/chunk-UK3J6FSU.js:8649:15)
+    at validate2 (file:///private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+opf@0.33.0_@openpresentation+opf-pptx@0.33.0_@openpresentation+opf-render@0.33.0/node_modules/@openpresentation/opf/dist/index.js:34:37)
+    at file:///private/tmp/opf-registry033-witness/generate.mjs:24:14 {
+  code: 'invalid-catalogs'
+}
+
+Node.js v24.21.0

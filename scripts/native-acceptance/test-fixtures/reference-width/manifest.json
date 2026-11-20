@@ -1,0 +1,16 @@
+{
+  "kind": "ACTUAL_OFFICE_FREE_REFERENCE_EXPORT_REGRESSION_INPUT",
+  "producerRevision": "0699820e2f562d94c48b8c44a2d9b72387c0cecb",
+  "runtimeIdentitySha256": "724c718a2d449b912394f0bf76e828b3e2da72c8f9211881eadc864f2d40e15e",
+  "file": "reference-native-lines.pptx",
+  "bytes": 128812,
+  "sha256": "229f3b9db61aabae4b1b52b8554d125f27649ef8e0a5f74f8b94698087848e08",
+  "sourceId": "reference-native-lines",
+  "sourceWidth": 1.5,
+  "actualEmu": 14288,
+  "actualImportedWidth": 1.5000524934383201,
+  "scope": "Exact existing failed attempt01 archive, public/synthetic source. Not Office/native acceptance. No generation in regression test.",
+  "durableBefore": "https://github.com/OpenPresentation/opf/blob/c08da0c3723982f0ff448132691fbf3479dea2da/docs/handoff/2026-11-10/rr105-current-candidate/append01/README.md",
+  "registryAcceptance": false,
+  "nativeAcceptance": false
+}

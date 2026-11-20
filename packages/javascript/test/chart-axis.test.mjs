@@ -142,7 +142,7 @@ describe('chartValueAxis', () => {
 	});
 
 	test('other types, unresolved data and bad geometry give no axis', () => {
-		for (const type of ['pie', 'scatter', 'radar', 'combo', 'waterfall', 'funnel', 'treemap', 'nonsense'])
+		for (const type of ['pie', 'scatter', 'radar', 'waterfall', 'funnel', 'treemap', 'nonsense'])
 			assert.equal(axisOf(chartOf([[1, 2, 3]], type)), undefined, type);
 		assert.equal(axisOf({ type: 'column', data: { dataset: 'missing' } }), undefined);
 		assert.equal(axisOf(chartOf([[1, 2]]), { width: 0, height: 450, scale: 1 }), undefined);
@@ -182,9 +182,9 @@ describe('composition exposes the axis on the chart item', () => {
 		assert.deepEqual(item.chart.valueAxis, { min: 0, max: 900, majorUnit: 200 });
 	});
 
-	test('other chart types and non-chart items carry no chart', () => {
+	test('scatter carries numeric axes; non-chart items carry no chart', () => {
 		const composed = compose({ slides: [slide(chartOf([[1, 2, 3]], 'scatter'), { bullets: ['One'] })] });
-		assert.equal(chartItem(composed).chart, undefined);
+		assert.deepEqual(chartItem(composed).chart, {layer: {numericAxes: {value: {min: 0, max: 3.5, majorUnit: 1}, category: {min: 0, max: 3.5, majorUnit: 1}}}});
 		// LH-105: a pie carries no axis, only its slice labels.
 		assert.equal(chartItem(compose({ slides: [slide(chartOf([[1, 2, 3]], 'pie'), { bullets: ['One'] })] })).chart.valueAxis, undefined);
 		assert.ok(composed.items.filter((item) => item.field !== 'chart').every((item) => item.chart === undefined));

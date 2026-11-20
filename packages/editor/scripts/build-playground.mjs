@@ -99,6 +99,13 @@ let scriptFaces = 0;
 // HarfBuzz). They are the copies the installed renderer depends on (harfbuzzjs, MIT), so the page runs the version the renderer was tested with.
 const renderRequire = createRequire(require.resolve('@openpresentation/opf-render/package.json'));
 for (const name of ['harfbuzz-subset.wasm', 'harfbuzz.wasm']) await copyFile(renderRequire.resolve(`harfbuzzjs/dist/${name}`), new URL(name, output));
+// RR-63: the gallery's icon files the page registers (examples/playground-catalogs.js), served next to it in opf-icons/. Only the set-level
+// files: each set's index, whole set and search keywords (a handful of files, not one per icon); fetchIcons reads the whole set when a
+// per-icon file is not served.
+const iconFiles = path.join(path.dirname(require.resolve('@openpresentation/gallery/package.json')), 'dist', 'icons');
+const { GALLERY_ICON_SETS } = await import('@openpresentation/gallery/icon-sets');
+await mkdir(new URL('opf-icons/', output), { recursive: true });
+for (const id of GALLERY_ICON_SETS) for (const name of [`${id}.json`, `${id}.icons.json`, `${id}.tags.json`]) await copyFile(path.join(iconFiles, name), new URL(`opf-icons/${name}`, output));
 for (const [source, destination] of [['playground.html', 'index.html'], ['playground.css', 'playground.css'], ['galleries.json', 'galleries.json']]) {
   await copyFile(new URL('examples/' + source, root), new URL(destination, output));
 }

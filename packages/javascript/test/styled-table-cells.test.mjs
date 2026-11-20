@@ -8,7 +8,7 @@ import { check, errorsOf } from './support/validation.mjs';
 const measurement = {measure: (text, size) => [...text].length * size * .5};
 const box = {x: 10, y: 20, width: 600, height: 600};
 const style = {
-  fill: '#11223380', color: '#fff', align: 'right', verticalAlign: 'bottom',
+  fill: '#11223380', color: '#fff', align: 'end', verticalAlign: 'bottom',
   padding: {top: 12, right: 20, bottom: 6, left: 30},
   borders: {top: {color: '#abc', width: 2, dash: 'dash'}, bottom: {color: '#00000000', width: 0}},
 };
@@ -59,8 +59,8 @@ test('spans reject hidden content, missing covered positions, overlap and header
     assert.throws(() => layoutTable(table, box), RangeError);
   }
   const table = {rows: [[{value: 'A', colSpan: 2}, 'hidden']]};
-  const result = check({slides: [{'left': {blocks: [{table}]}}]});
-  assert.ok(errorsOf(result).some(error => error.path === '/slides/0/left/blocks/0/table/rows/0/1'), JSON.stringify(errorsOf(result)));
+  const result = check({slides: [{'start': {blocks: [{table}]}}]});
+  assert.ok(errorsOf(result).some(error => error.path === '/slides/0/start/blocks/0/table/rows/0/1'), JSON.stringify(errorsOf(result)));
 });
 
 test('span rectangles preserve dense column indexes and editable value paths', () => {

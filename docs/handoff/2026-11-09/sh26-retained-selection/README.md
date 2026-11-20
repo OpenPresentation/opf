@@ -1,0 +1,29 @@
+# SH-26 retained fallback selection
+
+The six raw5/6-block inverted-pyramid/org-chart/hierarchy long-content samples at f32f7ea982a3bf41edd7e31064ea9a5d779ea5db shrank their first list from64/3px to16px after a new70-character reading-measure refusal made the joined and unjoined fit-failure counts equal. The new refusal is valid. The selector now retains all source fonts when the alternate has identical body-size key coverage, no smaller source size, and at least one larger size. Strictly fewer fit failures retain priority; equal candidates without this dominance keep the joined arrangement. No diagnostics are removed or normalized.
+
+This is a vetoable SH26-EQUAL-FIT-TYPE decision. Runtime scope is only `composeArranged` in `packages/javascript/src/composition.ts`. No chart/schema/PPTX/importer, native domain, CI, locks, catalog or golden baseline is changed. Root owns publication, combined CI and the managed golden refresh. No native/Office acceptance or release is claimed.
+
+## Verification
+
+Pinned Node24.20.0/pnpm10.33.2, frozen offline install, freshly bound baseline core/renderer build at clean f32/tree8b48eb8cc6d851ec612f2592af39ab6852f68432. The one maintained `paginatedDecks()` invocation proves `venn 5 long` retains all35 label values in exact order across4 pages with14/7/7/7 labels and no fit overflow. No raster or golden write was used for that audit.
+
+New focused selection regression exercises six exact sampler sources, preserved input/content/path/type, strict overflow refusal and retained70-character diagnostics. Default pagination returns complete ordered labels at24px or greater with whole-word lines at most70 characters. Whole-block continuation is tested with an explicit24px floor: inverted-pyramid returns whole original lists at that floor; org-chart/hierarchy cannot fit an indivisible structured list and preserve the entire unchanged document and its diagnostic, while direct whole-block pagination throws. Equal-font tie and strictly-fewer-fit-failure controls and mixed non-text coverage guard the other branches.
+
+The inherited default whole-block floor remains16px. Without an explicit floor, inverted-pyramid5long has3+2 blocks at17/22.6667px; org-chart/hierarchy5/6long refuse whole-block continuation. These pre-existing outcomes are retained in raw evidence and are not a universal no-shrink pagination qualification. No pagination runtime change is part of this item.
+
+Original experimental test setup failures are retained: passing `wholeBlocks` to the presentation-level `paginate` API had no effect; the maintained whole-block API is `continueOverfull` (or slide-level `paginateSlide`). An18px cap also leaves the first settled list at21.3px, so the exact equal-font control correctly uses22px. The original raw-six font failures remain evidence of the selector defect.
+
+The final source identity, actual check outcomes and review captures are recorded below. Local raw evidence is under `artifacts/sh26-tie-baseline`; the baseline install/build receipts are under `C:/opf-work/release-033-artifacts/sh26-tie-*`. The original required aggregate remains RED; pinned golden outputs must be regenerated only by the managed workflow.
+
+## Sealed local result
+
+Tested runtime/test source is `b487178e7d5425c3bb272a4b294dfea3ba15e7cc` (tree `beb30f089f30d93452583d91b394bd4e30d30e83`). The required scoped `pnpm check:changed --base f32f7ea982a3bf41edd7e31064ea9a5d779ea5db` is **RED**, preserved unchanged:10/12 steps passed; the full core run passed4223/4225, including all21 final-source new controls, and failed only its missing sparse script-corpus module plus the expected pinned composition-golden mismatch. `check:text` independently failed on its missing tracked Linux gzip. The build, Biome selection, typecheck, browser-safe, catalog-free, changes, diagram-doc-images, font-hotlinks, skill-commands and stability checks passed. Biome retains its existing oversized-composition-file/schema-version notices; no lint configuration was changed.
+
+The maintained restoration helper then copied4356 missing exact HEAD evidence inputs (113,711,152bytes) without overwriting, staging or substituting data. At the same clean source, only the affected checks were repeated: maintained `check:text` **PASS**, script-width-estimates **35/35 PASS**. This is composed local coverage, not a green original aggregate. The managed golden refresh and exact combined CI remain owed. No full mapped repeat or altered baseline was used.
+
+All9 source-bound candidate SVG/PNG pairs were inspected: the six raw refused cases retain the first21.3px text and honestly remain overflowing/cropped; six-block extras can overlap below the named region. They are diagnostic stress output, not accepted usable slides. Three representative default first pages visibly fit with larger readable type; exact complete output labels/order are separately tested. Native/PPTX and the stronger universal no-shrink whole-block policy remain unqualified.
+
+`evidence.json` binds60 archived files (raw failures, setup/source receipts, successful recoveries, scripts and9 PNG captures) to the exact runtime/test blobs. Run the offline bounded verifier with `node docs/handoff/2026-11-09/sh26-retained-selection/verify.mjs`. It performs no test, render, provider or Office action. The first packing attempt hit Node's default1MiB subprocess buffer on the unchanged composition source; the evidence-only packer then used a bounded4MiB read. No source/test policy changed.
+
+Final evidence-only `check:changed` passed in30.4seconds (build/Biome/changes/skill-commands/text); typecheck was correctly unselected because these last changes contain no TypeScript. Its exact raw log/exit receipt is archived separately. This does not supersede the original runtime mapped RED. Runtime/test blobs are unchanged.

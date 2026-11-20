@@ -18,10 +18,10 @@
     {
       "section": "Market",
       "title": "Buyer Signal",
-      "left": {
+      "start": {
         "text": "Teams want fewer exports."
       },
-      "center+right": {
+      "center+end": {
         "text": "They want review status, owners, and exceptions in one operating view."
       }
     },

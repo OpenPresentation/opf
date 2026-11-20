@@ -79,7 +79,7 @@ node scripts/test-native-powerpoint.mjs artifacts/native-powerpoint generate
 node scripts/test-native-powerpoint.mjs artifacts/native-powerpoint compare
 ```
 
-[Native comparison reports and raster evidence](evidence/native-powerpoint-2026-09-08/README.md) preserve the candidate checkpoint and separate final [registry results](evidence/native-powerpoint-2026-09-08/registry-comparison.json).
+Native comparison reports and raster evidence preserve the candidate checkpoint and separate final registry results.
 
 ## Dependency and application inventory
 

@@ -350,8 +350,8 @@ export interface OpfEditorOptions {
   actions?: ToolbarAction[];
   /** CE-28 wave 2: the Design quick menu (the `design` item). `onOpenPanel` adds its "More design options…" row for your own Design panel; the editor's own Design panel wins when it has one. */
   designMenu?: { onOpenPanel?: () => void };
-  /** CE-28 wave 2: "+" and the context menu on the thumbnail strip (default true in `full` and `embed`, false elsewhere). */
-  slideActions?: boolean;
+  /** Enable thumbnail actions (default in full and embed). "starters" offers Title, Bullets and Blank and focuses a new title. */
+  slideActions?: boolean | "starters";
   /** CE-28 wave 2: the browser asks before the page closes while the editor is `dirty` (`true`), or while the function says so (default false). */
   guardUnload?: boolean | ((editor: OpfEditor) => boolean);
 
@@ -380,13 +380,15 @@ export interface OpfEditorOptions {
   /**
    * Text for the default layouts (`review`, `design`, `find`, `undo`, `redo`, `slideView`, `inspector`) and the accessible names of the slide row's
    * two landmarks (`navigator`, default "Slide navigation"; `thumbnails`, default "Slides"). CE-28, the toolbar: `title` (the name of the deck
-   * title field, default "Presentation name"), `untitled` (its placeholder, default "Untitled presentation"), `expand` and `collapse` (the expand
+   * title field, default "Presentation name"), `untitled` (its placeholder, default "Untitled presentation"), `titleSave` and `titleCancel` (the buttons shown while the name is edited, default "Save" and "Cancel"), `expand` and `collapse` (the expand
    * button, default "Expand editor" and "Exit expanded editor"), `more` (the ⋯ button, default "More"), `moreMenu` (its menu, default "More
    * actions") and `counter` (the toolbar counter's landmark, default "Slide navigation").
    */
   labels?: Partial<Record<"review" | "design" | "find" | "undo" | "redo" | "slideView" | "inspector" | "navigator" | "thumbnails" | OpfEditorChromeLabel, string>> & {
     /** CE-28 wave 2: the labels of the Design quick menu, the review pill, the help sheet and the actions group. */
     designMenu?: DesignMenuLabels;
+    /** Status after the workspace and its fonts are ready. An empty string leaves the status line clear. */
+    ready?: string;
     reviewPill?: ReviewPillLabels;
     help?: HelpButtonLabels;
     actions?: ToolbarActionsLabels;
@@ -410,13 +412,15 @@ export interface OpfEditorOptions {
 }
 
 /** CE-28: the labels of the toolbar's parts. */
-export type OpfEditorChromeLabel = "title" | "untitled" | "expand" | "collapse" | "more" | "moreMenu" | "counter" | "exportItem";
+export type OpfEditorChromeLabel = "title" | "untitled" | "titleSave" | "titleCancel" | "expand" | "collapse" | "more" | "moreMenu" | "counter" | "exportItem";
 
 export interface OpfEditorSourceState {
   /** `valid`, `invalid` (the document has errors) or `syntax` (the text does not read as a document in `format`). */
   status: { kind: "valid"; warnings: number } | { kind: "invalid"; errors: number; warnings: number } | { kind: "syntax"; format: SourceFormat; message: string };
   format: SourceFormat;
   text: string;
+  /** The findings of the checks on the text (`source.checks`, by default format and references); empty when it does not read as a document. */
+  findings: Finding[];
 }
 
 export interface OpfEditorEvents {
@@ -460,14 +464,18 @@ export interface OpfEditorEvents {
   draft: { presentation: unknown; path: string; value: unknown };
   commit: { path: string; editor: EditorSession };
   cancel: { path?: string };
-  status: { message: string };
+  status: { message: string; undoable?: boolean };
   error: { error: Error; message: string; [key: string]: unknown };
   /** The source was copied or downloaded (or exported as JSON, YAML or Markdown): it is kept somewhere of the person's own. */
   kept: { kind: "copy" | "download" };
   rename: { name: string };
   export: { blob: Blob; fileName: string; format: string; notes: string[] };
   persistence: AutosaveStatus;
-  review: { error: number; warning: number; info: number; total: number; all: number; sources: string[]; unavailable: boolean };
+  /**
+   * The Review counts, after every redraw of the panel. While the source pane's text is not a valid deck (`draft: true`) they are that text's own
+   * findings, so the pill never says "Valid" over an error; the panel's list then describes the last valid version.
+   */
+  review: { error: number; warning: number; info: number; total: number; all: number; sources: string[]; unavailable: boolean; draft: boolean };
   /** A Review finding about the deck rather than a slide asked to be shown. */
   "review-goto": { finding: ReviewFinding; target: unknown };
   "review-focus": { fix: unknown; target: unknown };

@@ -2434,15 +2434,15 @@ export const BUNDLED_FONT_MANIFEST=freeze({
     },
     {
       "name": "@expo-google-fonts/noto-sans-mongolian",
-      "version": "0.4.1",
+      "version": "0.4.2",
       "pack": "scripts",
       "scripts": [
         "Mong"
       ],
-      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-mongolian/v/0.4.1",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-mongolian/v/0.4.2",
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
-      "licenseSha256": "b0158b3c0b16c20e22ea662850503a7980111c5c704501e942cc1a7ed12dc011",
+      "licenseSha256": "dbaad9386f1579930e60139d1cf36913da6c45f032433798bb8bf2e5912c8467",
       "reservedFontNames": [],
       "upstream": "https://github.com/notofonts/mongolian",
       "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/mongolian)",
@@ -2452,7 +2452,7 @@ export const BUNDLED_FONT_MANIFEST=freeze({
           "family": "Noto Sans Mongolian",
           "weight": 400,
           "italic": false,
-          "sha256": "7c0edce49dfc23a2f7b5697df7d73b0dad24c8bb751a1ea1a4b9b59fc849f481"
+          "sha256": "009317e64d43aae7daa08657d1dd0259c5f603faba1ee8f4b4d729b8c462864d"
         }
       ]
     },
@@ -2551,7 +2551,7 @@ export const BUNDLED_FONT_MANIFEST=freeze({
     },
     {
       "name": "@expo-google-fonts/noto-color-emoji",
-      "version": "0.4.7",
+      "version": "0.4.8",
       "pack": "scripts",
       "scripts": [
         "Zsye"
@@ -2560,7 +2560,7 @@ export const BUNDLED_FONT_MANIFEST=freeze({
         "format": "COLRv1, SVG",
         "rasterFamily": "Noto Emoji"
       },
-      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji/v/0.4.7",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji/v/0.4.8",
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "ac564676d10054a8445923dfc2dfb13c042d97888bd27c1b6ec6dfe89a9d8d62",
@@ -2573,7 +2573,7 @@ export const BUNDLED_FONT_MANIFEST=freeze({
           "family": "Noto Color Emoji",
           "weight": 400,
           "italic": false,
-          "sha256": "ad4a3478943b88660a194d1434793bc02c8007819f2d1e7da9ede289e78f9ca7"
+          "sha256": "d8c8a5e2eaecf93bf46be895640139d344ace174e2cdb6b0d988f7e83fd97844"
         }
       ]
     },

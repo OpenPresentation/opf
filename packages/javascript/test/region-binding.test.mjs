@@ -162,7 +162,7 @@ describe('step 3: content no region takes', () => {
 
 describe('inputs', () => {
   test('a placed image takes its band and never occupies a region', () => {
-    const result = bindRegions({ blocks: [{ ...image, placement: { edge: 'left' } }, text('a')] }, layouts['image-beside']);
+    const result = bindRegions({ blocks: [{ ...image, placement: { edge: 'start' } }, text('a')] }, layouts['image-beside']);
     assert.deepEqual(bound(result), { media: [], body: ['blocks.1'] });
   });
 

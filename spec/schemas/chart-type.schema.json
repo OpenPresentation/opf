@@ -3,7 +3,7 @@
   "$id": "https://openpresentation.org/schema/opf-chart-type/v1",
   "$comment": "The v1 in the $id is the pre-1.0 line, not a frozen contract: this schema may change in any 0.x minor release. The release that produced this copy is the version of the @openpresentation/opf package it came from (opf --version; opf schemas lists it next to each id). See docs/schema-versioning.md.",
   "title": "Chart Type",
-  "description": "Schema for chart-type records: display metadata for chart pickers (name, group, expected series, complexity) and the Open XML mapping a picker can describe. One record per chart type that Aspose.Slides officially supports (see mappings.renderers[\"aspose-slides\"].chartType), plus the column-and-line combination 'combo'. A document's chart.type is an engine vocabulary validated directly; engines never look a chart-type record up. pptx.gallery publishes these records and @openpresentation/gallery ships them as catalogDisplay.chartTypes.",
+  "description": "Schema for chart-type records: display metadata for chart pickers (name, group, expected series, complexity) and the Open XML mapping a picker can describe. One record per chart type that OPF supports natively in its preview and PPTX export, plus the column-and-line combination 'combo'. A document's chart.type is an engine vocabulary validated directly; engines never look a chart-type record up. pptx.gallery publishes these records and @openpresentation/gallery ships them as catalogDisplay.chartTypes.",
   "type": "object",
   "additionalProperties": false,
   "patternProperties": {
@@ -175,15 +175,15 @@
         },
         "renderers": {
           "type": "object",
-          "description": "Optional renderer-specific mappings. Keys are renderer ids; values are intentionally opaque to OPF. The bundled catalog records the matching Aspose.Slides ChartType enumeration member under the \"aspose-slides\" key, e.g. {\"aspose-slides\": {\"chartType\": \"StackedColumn\"}}; a mixed composition names the ChartType it starts from and the series type it switches series to, e.g. {\"chartType\": \"ClusteredColumn\", \"lineSeriesType\": \"LineWithMarkers\"}.",
+          "description": "Optional renderer-specific mappings. Keys are renderer ids; values are intentionally opaque to OPF. The bundled catalog records carry none.",
           "additionalProperties": {
             "type": "object",
             "additionalProperties": true
           },
           "examples": [
             {
-              "aspose-slides": {
-                "chartType": "ClusteredColumn"
+              "example-renderer": {
+                "chartType": "StackedColumn"
               }
             }
           ]

@@ -148,16 +148,27 @@ test('LH-71 and LH-52 with LH-44: a table that wraps beside its text goes full w
   }
 });
 
-test('LH-86 with LH-43 and LH-46: long rows joined into one region share its height at one size', () => {
+test('LH-86 with LH-43 and LH-46: a full long-row stack reflows at its retained size within70characters', () => {
   const paragraph = (name) => ({ text: `${name} should focus the next cycle on preparing supplier data collection for annual reporting while making the operating tradeoffs clear to its stakeholders.` });
   for (const direction of ['ltr', 'rtl']) {
-    const result = composeSlide({ title: 'Scope 3 reporting readiness', blocks: ['Lumina Foods', 'Cedarwell Properties', 'Brightpath Analytics', 'North Pier Advisory', 'RheinWorks Mobility'].map(paragraph) }, { layout: layouts['two-column'], direction });
+    const source = { title: 'Scope 3 reporting readiness', blocks: ['Lumina Foods', 'Cedarwell Properties', 'Brightpath Analytics', 'North Pier Advisory', 'RheinWorks Mobility'].map(paragraph) };
+    const result = composeSlide(source, { layout: layouts['two-column'], direction });
     assert.deepEqual(overflow(result), []);
     const texts = result.items.filter((item) => item.field === 'text');
     assert.equal(texts.length, 5);
     assert.equal(new Set(texts.map((item) => item.text.fontSize)).size, 1);
-    const region = result.regions.find((entry) => entry.arrangement === 'column').box;
-    assert.ok(Math.abs(texts[0].frameBox.y - region.y) < 1 && Math.abs(texts[4].frameBox.y + texts[4].frameBox.height - region.y - region.height) < 1);
+    assert.ok(texts.every(item => item.text.fontSize >= 24), 'the five original24px paragraphs never shrink');
+    for (const [index, item] of texts.entries()) {
+      assert.equal(item.text.lines.join('').replace(/\s+/g, ' ').trim(), source.blocks[index].text, 'complete words in source order');
+      assert.ok(item.text.lines.every(line => line.trim().length <= 70), 'the former89–90character rows are no longer accepted');
+    }
+    const region = result.regions.find(entry => entry.content.length === 5).box, frames = texts.map(item => item.frameBox);
+    assert.ok(frames.every(box => box && box.y >= region.y - .01 && box.y + box.height <= region.y + region.height + .01), 'every body stays inside its region');
+    assert.ok(Math.abs(frames[0].y - frames[1].y) < .01 && Math.abs(frames[2].y - frames[3].y) < .01, 'two ordered rows share their track');
+    assert.ok(frames[2].y > frames[0].y + frames[0].height && frames[4].y > frames[2].y + frames[2].height, 'source rows do not overlap');
+    assert.ok(direction === 'rtl' ? frames[0].x > frames[1].x && frames[2].x > frames[3].x : frames[0].x < frames[1].x && frames[2].x < frames[3].x, 'each row follows the language reading direction');
+    const top = Math.min(...frames.map(box => box.y)), bottom = Math.max(...frames.map(box => box.y + box.height));
+    assert.ok(bottom - top >= region.height * .85, 'the retained-type body fills its region');
   }
 });
 

@@ -20,23 +20,32 @@ name: Merge OPF bump
 # each of them: it runs when any of the three workflows completes and the last one to finish decides. Everything the bump regenerates (the
 # vendored editor under public/opf-editor and data/opf-spec.json, the preview fonts, the catalog and the previews) is written by the site's
 # own `pnpm opf:bump` (scripts/opf-bump.mjs, run by bump-sites.yml) and committed into the bump pull request, which is why ALLOWED_FILES lists them.
+#
+# It also waits for the pull request's **Native Preview** check (cf-native-preview.yml) on the exact head, completed with success,
+# and merges only a head that contains the tip of the default branch. Production's deploy gate accepts a merge only when the squash
+# commit's tree equals the tree a Native Preview accepted (scripts/cf-deployment-proof.mjs, validateMergedPreview); a squash of a
+# head that is behind the default branch has a different tree, and a merge before the Preview is recorded has none, so either one
+# holds production until the next pull request. The Preview finishes after this site's CI, so its own completion is the usual last
+# trigger. That run belongs to the default branch and names no pull request, so on it the one open bot/opf-v* pull request of this
+# repository is the candidate, and the same conditions decide.
 on:
   workflow_run:
-    workflows: ["Build and smoke", "Validate gallery registry", "Cloudflare Worker build"]
+    workflows: ["Build and smoke", "Validate gallery registry", "Cloudflare Worker build", "Native Worker preview"]
     types: [completed]
 
 permissions:
   contents: read
 
 concurrency:
-  group: opf-bump-merge-${{ github.event.workflow_run.head_branch }}
+  group: opf-bump-merge-${{ github.repository }}
   cancel-in-progress: false
 
 jobs:
   merge:
     name: merge
-    # A successful pull request run of a bump branch of this repository, never a fork.
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request' && startsWith(github.event.workflow_run.head_branch, 'bot/opf-v') && github.event.workflow_run.head_repository.full_name == github.repository }}
+    # A successful pull request run of a bump branch of this repository, never a fork, or a successful run of this repository's
+    # Native Preview workflow (which runs on the default branch).
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_repository.full_name == github.repository && ((github.event.workflow_run.event == 'pull_request' && startsWith(github.event.workflow_run.head_branch, 'bot/opf-v')) || github.event.workflow_run.path == '.github/workflows/cf-native-preview.yml') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -56,6 +65,7 @@ jobs:
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
           HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
           HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          TRIGGER_PATH: ${{ github.event.workflow_run.path }}
           # One check name per line: the checks that make a bump safe to merge (this site's build and smoke, its full pull request CI and the Worker build).
           REQUIRED_CHECKS: |
             build-and-smoke
@@ -63,11 +73,20 @@ jobs:
             worker-build
           # The only files a bump may touch (extended regular expression, matched against each changed path).
           # what the site's own `pnpm opf:bump` writes (scripts/opf-bump.mjs of the site): the pins, the generated catalog, preview and font files
-          # and the vendored editor.
-          ALLOWED_FILES: '^(package\.json|pnpm-lock\.yaml|public/(opf-editor|chart-previews|layout-previews|preview-fonts)/.*|public/(audiences|chart-types|color-schemes|font-schemes|languages|layouts|narratives|purposes|social-platforms|themes|tones)/.*|styles/preview-fonts/.*|data/(opf-spec|font-replacements|preview-fonts|preview-font-replacements|audiences|charts|color-schemes|font-schemes|languages|layouts|narratives|purposes|socials|themes|tones)\.json)$'
+          # and the vendored editor, and the portable layout examples (scripts/sync-layout-examples.mjs: data/layout-examples.json and a
+          # public/layout-examples/<id>.svg for a layout whose package preview differs). fonts/upstream is only read by a bump (it is
+          # written by `sync-preview-fonts.mjs --verify-upstream` from the gallery's own pins), so it is not listed.
+          # scripts/opf-bump.test.mjs checks this list.
+          ALLOWED_FILES: '^(package\.json|pnpm-lock\.yaml|public/(opf-editor|chart-previews|diagram-previews|layout-previews|preview-fonts)/.*|public/(audiences|chart-types|color-schemes|font-schemes|languages|layouts|narratives|purposes|social-platforms|themes|tones)/.*|public/layout-examples/[a-z0-9-]+\.svg|styles/preview-fonts/.*|data/(opf-spec|font-replacements|preview-fonts|preview-font-replacements|audiences|charts|color-schemes|font-schemes|languages|layouts|layout-examples|narratives|purposes|socials|themes|tones)\.json)$'
         run: |
           set -euo pipefail
           stop() { echo "::notice title=OPF bump::$1"; exit 0; }
+          if [ "$TRIGGER_PATH" = .github/workflows/cf-native-preview.yml ]; then
+            bumps="$(gh pr list --repo "$REPO" --state open --limit 100 --json headRefName,headRefOid,isCrossRepository --jq '[.[] | select((.headRefName | startswith("bot/opf-v")) and (.isCrossRepository | not))]')"
+            [ "$(jq length <<<"$bumps")" = 1 ] || stop "no single open bump pull request for this Native Preview completion"
+            HEAD_BRANCH="$(jq -r '.[0].headRefName' <<<"$bumps")"
+            HEAD_SHA="$(jq -r '.[0].headRefOid' <<<"$bumps")"
+          fi
           pr="$(gh pr list --repo "$REPO" --head "$HEAD_BRANCH" --state open --json number,title,baseRefName,headRefOid,labels --jq '.[0] // empty')"
           [ -n "$pr" ] || stop "no open pull request for $HEAD_BRANCH"
           number="$(jq -r .number <<<"$pr")"
@@ -87,5 +106,12 @@ jobs:
             conclusion="$(jq -r --arg name "$name" '[.[] | select(.name == $name)] | sort_by(.id) | last | .conclusion // "pending"' <<<"$runs")"
             [ "$conclusion" = success ] || stop "#$number: check '$name' is $conclusion; not merged"
           done <<<"$REQUIRED_CHECKS"
+          # The Native Preview check of this pull request on this exact head (the trusted workflow's marker), deployed and qualified.
+          marker="opf-sites-native-preview-v1:$number:$HEAD_SHA"
+          preview="$(jq -r --arg marker "$marker" '[.[] | select(.name == "Native Preview" and .app.slug == "github-actions" and .external_id == $marker)] | sort_by(.id) | last | if . == null then "missing" elif .status != "completed" then .status else .conclusion end' <<<"$runs")"
+          [ "$preview" = success ] || stop "#$number: Native Preview is $preview; not merged (its completion will decide again)"
+          # A squash of a head that does not contain the default branch's tip has a tree no Preview accepted.
+          behind="$(gh api "repos/$REPO/compare/$DEFAULT_BRANCH...$HEAD_SHA" --jq .behind_by)"
+          [ "$behind" = 0 ] || stop "#$number is $behind commit(s) behind $DEFAULT_BRANCH; update the branch (its new head gets its own checks and Preview)"
           gh pr merge "$number" --repo "$REPO" --squash --delete-branch --match-head-commit "$HEAD_SHA"
           echo "Merged #$number ($HEAD_BRANCH) with the GitHub App's token." | tee -a "$GITHUB_STEP_SUMMARY"

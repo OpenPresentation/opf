@@ -126,7 +126,7 @@ describe('Watermark', () => {
 describe("a slide's design cannot set dimensions", () => {
   test('the deck sets dimensions, a slide does not', () => {
     valid(deck({ design: { dimensions: '4:3' } }));
-    valid(deck({}, { design: { background: 'dark1', titleAlignment: 'left' } }));
+    valid(deck({}, { design: { background: 'dark1', titleAlignment: 'start' } }));
     const result = invalid(deck({}, { design: { dimensions: 'a4' } }), '/slides/0/design');
     assert.ok(errorsOf(result).some((error) => /cannot set 'dimensions'/.test(error.message)), JSON.stringify(errorsOf(result)));
     invalid(deck({}, { design: { dimensions: { preset: '16:9' } } }), '/slides/0/design');

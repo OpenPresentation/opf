@@ -5,10 +5,10 @@
   "slides": [
     {
       "title": "Column Spans",
-      "left": {
+      "start": {
         "text": "Left column"
       },
-      "center+right": {
+      "center+end": {
         "items": [
           "Center and right span",
           "No overlap with left"
@@ -48,7 +48,7 @@
     },
     {
       "title": "Grid Cells",
-      "top:left": {
+      "top:start": {
         "metric": {
           "value": 42,
           "label": "Inputs"
@@ -60,13 +60,13 @@
           "label": "Routes"
         }
       },
-      "top:right": {
+      "top:end": {
         "metric": {
           "value": 9,
           "label": "Escalations"
         }
       },
-      "middle+bottom:left+center+right": {
+      "middle+bottom:start+center+end": {
         "timeline": [
           {
             "when": "Now",

@@ -1,0 +1,193 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: variables, citations and footnotes",
+  "description": "RR-105 format coverage: every variable kind with every field, inline tokens with formats, whole-field references, deck-local icons, text runs that cite references and carry footnotes, and references in both text forms.",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "variables": {
+    "risk": "#B42318",
+    "brand": {
+      "type": "color",
+      "value": "#0F4C81",
+      "required": true,
+      "label": "Brand color",
+      "description": "Accent for highlights",
+      "example": "#0F4C81"
+    },
+    "client": {
+      "type": "text",
+      "value": "Port of Lisbon",
+      "required": true,
+      "label": "Client",
+      "description": "The client this deck is for",
+      "example": "Port of Rotterdam"
+    },
+    "greeting": {
+      "type": "text",
+      "value": [
+        "Welcome, ",
+        {
+          "text": "Port of Lisbon",
+          "bold": true
+        }
+      ],
+      "label": "Greeting",
+      "example": [
+        "Welcome, ",
+        {
+          "text": "client",
+          "bold": true
+        }
+      ]
+    },
+    "volume": {
+      "type": "number",
+      "value": 1284500,
+      "format": "#,##0",
+      "required": true,
+      "label": "Containers",
+      "description": "Containers moved this year",
+      "example": 1000000
+    },
+    "kickoff": {
+      "type": "date",
+      "value": "2026-11-12",
+      "format": "d MMMM yyyy",
+      "required": true,
+      "label": "Kickoff",
+      "description": "First workshop",
+      "example": "2026-01-15"
+    },
+    "logo": {
+      "type": "image",
+      "value": {
+        "src": "./assets/icon.svg",
+        "alt": "Client mark"
+      },
+      "required": false,
+      "label": "Client logo",
+      "description": "Shown on the cover",
+      "example": "./assets/icon.svg"
+    },
+    "portal": {
+      "type": "url",
+      "value": "https://example.com/portal",
+      "required": true,
+      "label": "Portal",
+      "description": "Where the data lives",
+      "example": "https://example.com"
+    },
+    "wins": {
+      "type": "list",
+      "value": [
+        "Faster unloading",
+        "Fewer delays",
+        "Lower costs"
+      ],
+      "required": true,
+      "label": "Wins",
+      "description": "Three results to highlight",
+      "example": [
+        "One",
+        "Two"
+      ]
+    }
+  },
+  "references": [
+    {
+      "id": "itf-2025",
+      "text": "International Transport Forum, Port Outlook 2025.",
+      "url": "https://example.com/itf-2025"
+    },
+    {
+      "id": "harbor-survey",
+      "text": [
+        "Harbor Labs, ",
+        {
+          "text": "Terminal Survey",
+          "italic": true
+        },
+        ", October 2026."
+      ]
+    }
+  ],
+  "slides": [
+    {
+      "id": "tokens",
+      "title": "Prepared for {{client}}",
+      "subtitle": "var:greeting",
+      "text": "We moved {{volume}} containers (about {{volume|#,##0.0}}) before the kickoff on {{kickoff}}, or {{kickoff|yyyy-MM-dd}}. Details: {{portal}}."
+    },
+    {
+      "id": "list-variable",
+      "title": "Three wins: {{wins|; }}",
+      "items": [
+        "var:wins",
+        "And one more to come"
+      ]
+    },
+    {
+      "id": "image-variable",
+      "title": "The client mark from a variable",
+      "image": "var:logo"
+    },
+    {
+      "id": "color-variables",
+      "title": "Colors from variables",
+      "design": {
+        "background": "light1"
+      },
+      "text": [
+        {
+          "text": "Risk is rising",
+          "color": "var:risk",
+          "bold": true
+        },
+        " while ",
+        {
+          "text": "brand work",
+          "color": "var:brand"
+        },
+        " continues."
+      ]
+    },
+    {
+      "id": "citations",
+      "title": "Citations and footnotes in running text",
+      "text": [
+        {
+          "text": "Ports in Europe grew 3 percent last year",
+          "cite": "itf-2025"
+        },
+        ", and ",
+        {
+          "text": "terminal managers rank crane time first",
+          "cite": [
+            "harbor-survey",
+            "itf-2025"
+          ]
+        },
+        ". ",
+        {
+          "text": "Our figures are unaudited",
+          "footnote": "Finance will audit them in January."
+        },
+        " and ",
+        {
+          "text": "exclude transshipment",
+          "footnote": [
+            "Transshipment is reported ",
+            {
+              "text": "separately",
+              "italic": true
+            },
+            "."
+          ]
+        },
+        "."
+      ]
+    }
+  ]
+}

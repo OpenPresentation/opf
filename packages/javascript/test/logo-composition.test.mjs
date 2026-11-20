@@ -52,11 +52,11 @@ test('cover and section slides draw the full logo above the centered heading gro
 });
 
 test('the cover logo respects header furniture and placed image bands, and wrapped headings recenter below it', () => {
-  const presentation = withLogo(asset('deck'), {design: {header: {left: {text: 'Header'}}}});
+  const presentation = withLogo(asset('deck'), {design: {header: {start: {text: 'Header'}}}});
   const result = composeSlide({title: 'Cover'}, {layout: titleOnly, presentation});
   assert.ok(result.logo.box.y >= result.furniture.headerBottom, 'below the header band');
   assert.ok(byField(result, 'title').box.y >= result.logo.box.y + result.logo.box.height);
-  const banded = composeSlide({title: 'Cover', blocks: [{image: asset('photo'), placement: {edge: 'left'}}]}, {layout: titleOnly, presentation: withLogo(asset('deck'))});
+  const banded = composeSlide({title: 'Cover', blocks: [{image: asset('photo'), placement: {edge: 'start'}}]}, {layout: titleOnly, presentation: withLogo(asset('deck'))});
   assert.ok(Math.abs(banded.logo.box.x - (banded.items.find(item => item.field === 'image').image.region.width + 0.08 * 720)) < 1e-6, 'inside the free area beside the band');
   assert.ok(banded.logo.box.width <= banded.contentBox.width + 1e-6);
   const tall = composeSlide({title: 'A very long cover title that wraps onto several lines of text to fill the whole safe area of the slide', subtitle: 'And a subtitle that is also long enough to wrap across the available width more than once on this canvas'}, {width: 400, height: 300, layout: titleSubtitle, presentation: withLogo(asset('deck'))});
@@ -75,7 +75,7 @@ test('content slides never get an automatic logo', () => {
     [{title: 'Body', text: 'Content'}, undefined],
     [{title: 'Content', text: 'Body'}, text1x],
     [{title: 'Blocks', blocks: [{text: 'a'}, {text: 'b'}]}, undefined],
-    [{title: 'Regions', left: {text: 'a'}, right: {text: 'b'}}, undefined],
+    [{title: 'Regions', start: {text: 'a'}, end: {text: 'b'}}, undefined],
     [{title: 'Image', image: asset('photo')}, {id: 'image-1x', regions: [{name: 'title'}, {name: 'body-1', accepts: ['image'], flow: 'none'}]}],
   ];
   for (const [slide, layout] of cases) {
@@ -157,5 +157,5 @@ test('pagination ignores the picture-bullet notice: it neither splits nor reject
     assert.equal(byField(result, 'items').bulletImage.path, 'organization.logo');
   }
   // Unresolved furniture (a zone logo reference without a logo) still rejects pagination like any other unresolved repeated content.
-  assert.throws(() => paginateSlide(short, {presentation: {design: {footer: {left: {image: 'var:organization.logo.icon'}}}, slides: [short]}, slideIndex: 0}), OPFPaginationError);
+  assert.throws(() => paginateSlide(short, {presentation: {design: {footer: {start: {image: 'var:organization.logo.icon'}}}, slides: [short]}, slideIndex: 0}), OPFPaginationError);
 });

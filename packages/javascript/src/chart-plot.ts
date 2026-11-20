@@ -7,12 +7,14 @@
 // by side keep one baseline and one top, and siblings in different rows take the shortest plot's height on their own baseline. The plot
 // is stored as an inset from the chart box (ChartLayer.plot); the preview draws its plot there and the PPTX export writes it as the
 // plot area's manual layout (c:plotArea c:manualLayout, layoutTarget inner), so PowerPoint draws the same plot.
-import {chartTextSize, type ChartValueAxis} from './chart-axis.js';
+import {chartAxisScale, chartTextSize, type ChartValueAxis} from './chart-axis.js';
 import {formatDataNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
 import {chartDrawPlan} from './chart-fallback.js';
 import type {ChartLayer, ChartPlotInset} from './chart-layer.js';
+import {horizontalBarPlot} from './chart-marks.js';
 import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
 import {groupNumber, groupsAxisTicks} from './number-grouping.js';
+import {formatNumber, formatPercentNumber} from './numerals.js';
 
 interface Box { x: number; y: number; width: number; height: number }
 
@@ -33,6 +35,7 @@ const VERTICAL: Readonly<Record<string, {key?: 'line'; percent?: boolean}>> = {
   column: {}, 'stacked-column': {}, '100pct-stacked-column': {percent: true},
   line: {key: 'line'}, 'line-with-markers': {key: 'line'}, 'stacked-line': {key: 'line'}, 'stacked-line-with-markers': {key: 'line'},
   area: {}, 'stacked-area': {}, '100pct-stacked-area': {percent: true},
+  combo: {key:'line'},
 };
 
 // Whitespace that may split a category label; no-break spaces stay inside their word (the preview's rule).
@@ -45,10 +48,11 @@ const record = (value: unknown): value is Record<string, unknown> => typeof valu
  * A value axis tick as the preview labels it: a percentage on a 100% chart, else the first series' number format, else General. LH-141:
  * with `group` (an axis without a format whose ticks are whole numbers of four digits, `groupsAxisTicks`) the tick groups its thousands by the language.
  */
-export function tickLabel(value: number, percent: boolean, format: string | undefined, group?: {language?: string}): string {
-  if (percent) return `${clean(value * 100)}%`;
-  if (format === undefined) return group ? groupNumber(clean(value), group.language) : String(clean(value));
-  return formatDataNumber(clean(value), format);
+export function tickLabel(value: number, percent: boolean, format: string | undefined, group?: {language?: string}, language = group?.language): string {
+  // LH-106: every tick is in the language's numbering system (formatNumber), grouped or not.
+  if (percent) return formatPercentNumber(clean(value * 100), language);
+  if (format === undefined) return group ? groupNumber(clean(value), group.language) : formatNumber(clean(value), language);
+  return formatDataNumber(clean(value), format, language);
 }
 
 /**
@@ -114,20 +118,22 @@ function categoryLabelReserve(labels: readonly string[], plot: {x: number; width
 }
 
 /**
- * LH-93: the inner plot box of a column, line or area chart (not a horizontal bar or combo chart) as an inset from its chart box, laid
+ * LH-93: the inner plot box of a column, line, area or combo chart, and the active-option horizontal bar fallback for explicit references, laid
  * out the way the preview lays it out (opf-render charts.js): below the header row (LH-81) or a top legend, above a bottom legend, the
  * category axis title and the category labels (one line, two, or turned: core reproduces the preview's choice), right of the value
  * axis title and the value tick labels (the composed axis's ticks in the first series' format; half a text size when a small chart drops
  * its value axis), left of a side legend. `composed` is the chart's composed value axis and layer; without a usable axis (none, or one of
  * more than 1000 intervals) there is no inset.
  */
-export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, composed: {valueAxis?: ChartValueAxis; layer?: ChartLayer}, geometry: ChartPlotGeometry): ChartPlotInset | undefined {
-  if (!record(chart) || !resolved.ok || resolved.combo) return undefined;
+export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, composed: {valueAxis?: ChartValueAxis; secondaryValueAxis?:ChartValueAxis; layer?: ChartLayer}, geometry: ChartPlotGeometry): ChartPlotInset | undefined {
+  if (!record(chart) || !resolved.ok) return undefined;
   const axis = composed.valueAxis, layer = composed.layer;
-  if (!axis || !(axis.majorUnit > 0) || !Number.isFinite(axis.max - axis.min) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
+  const axisScale = chartAxisScale(axis);
+  if (!axis || !axisScale) return undefined;
   const authored = typeof chart.type === 'string' ? chart.type.trim().toLowerCase() : '';
   const plan = chartDrawPlan(chart, resolved, {language: geometry.language});
-  const spec = Object.hasOwn(VERTICAL, plan.type) ? VERTICAL[plan.type]! : undefined;
+  const horizontal = plan.type === 'bar';
+  const spec: {key?: 'line'; percent?: boolean} | undefined = horizontal ? {} : Object.hasOwn(VERTICAL, plan.type) ? VERTICAL[plan.type]! : undefined;
   if (!spec || plan.columns.length < 2 || !plan.rows.length) return undefined;
   const {box, scale} = geometry;
   if (![box.width, box.height, scale].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0) return undefined;
@@ -165,8 +171,9 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
     }
   }
   if (options.active) {
-    if (options.axisTitles.value) cut('left', lineHeight);
-    if (options.axisTitles.category) cut('bottom', lineHeight);
+    if (options.axisTitles.value) cut(horizontal ? 'bottom' : resolved.combo&&rtl?'right':'left', lineHeight);
+    if (resolved.combo&&composed.secondaryValueAxis&&options.axisTitles.secondary) cut(rtl?'left':'right',lineHeight);
+    if (options.axisTitles.category) cut(horizontal ? 'left' : 'bottom', lineHeight);
   }
   const hidden = layer?.small?.valueAxis === false;
   const side = names.length > 1 && !legendManaged ? legendWidth(inner.width) + pad : 0;
@@ -175,9 +182,27 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   const top = inner.y + pad + (hidden ? lineHeight : lineHeight / 2);
   const format = typeof plan.formats[1] === 'string' && plan.formats[1] !== '' && !numberFormatError(plan.formats[1]) ? plan.formats[1] : undefined;
   const percent = spec.percent === true;
-  const ticks: number[] = [];
-  for (let index = 0, count = Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9); index <= count; index++) ticks.push(clean(axis.min + index * axis.majorUnit));
-  const tickWidth = hidden ? fontPx / 2 : Math.max(...ticks.map(tick => width(tickLabel(tick, percent, format, !percent && format === undefined && groupsAxisTicks(axis) ? {language: geometry.language} : undefined)))) + fontPx * 0.5;
+  const ticks = axisScale.ticks;
+  // Explicit horizontal-bar references need the SAME active-option plot the preview draws. The legacy
+  // horizontalBarPlot helper deliberately refuses options; keep that guard and share the actual legend/title
+  // reservations above instead. Only reference placement calls this fallback for horizontal bars.
+  if (horizontal) {
+    const categories = plan.rows.map(row => String(row[0] ?? '').replace(/[\r\n]+/g, ' '));
+    const longestWord = Math.max(0, ...categories.flatMap(name => name.split(BREAKABLE).map(width))) + fontPx * 0.5;
+    const gutter = Math.min(Math.max(inner.width * 0.3, Math.min(inner.width * 0.4, longestWord)), Math.max(0, ...categories.map(width)) + fontPx * 0.5);
+    let x = inner.x + pad + gutter + pad / 2, plotWidth = Math.max(1, right - x - fontPx);
+    // The composed scale is fixed, so one pass leaves both formatted end tick labels inside the chart.
+    if (!hidden && format !== undefined) {
+      const first = width(tickLabel(ticks[0]!, false, format, undefined, geometry.language)) / 2;
+      const last = width(tickLabel(ticks.at(-1)!, false, format, undefined, geometry.language)) / 2;
+      const nextX = Math.max(x, inner.x + pad + first);
+      plotWidth = Math.max(1, Math.min(x + plotWidth, inner.x + inner.width - pad - last) - nextX); x = nextX;
+    }
+    const plotTop = inner.y + pad + lineHeight / 2, bottom = inner.y + inner.height - pad - (hidden ? 0 : lineHeight);
+    if (!(bottom - plotTop > 1)) return undefined;
+    return {left: x - box.x, top: plotTop - box.y, right: box.x + box.width - (x + plotWidth), bottom: box.y + box.height - bottom};
+  }
+  const tickWidth = hidden ? fontPx / 2 : Math.max(...ticks.map(tick => width(tickLabel(tick, percent, format, !percent && format === undefined && groupsAxisTicks(axis) ? {language: geometry.language} : undefined, geometry.language)))) + fontPx * 0.5;
   // The end of the plot (the last category: the right, or the left right to left) keeps half a text size, or the end-label gutter.
   const end = Math.max(fontPx / 2, layer?.endLabels?.gutter ?? 0, layer?.stack?.names?.gutter ?? 0);
   const labels = plan.rows.map(row => row[0] === null || row[0] === undefined ? '' : String(row[0]).replace(/[\r\n]+/g, ' '));
@@ -187,7 +212,17 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   const edge = layer?.stack?.edge === true && labels.length >= 2;
   const half = (text: string | undefined) => edge ? Math.min(width(text ?? '') / 2, box.width * 0.15) : 0;
   // The value axis side keeps its tick labels, the other side the end gutter; the plot's edge is that room past the padding.
-  const leftRoom = Math.max(rtl ? end : tickWidth, half(labels[0]) - pad), rightRoom = Math.max(rtl ? tickWidth : end, half(labels.at(-1)) - pad);
+  let secondaryWidth=0;
+  const secondary=composed.secondaryValueAxis;
+  if(resolved.combo&&secondary){
+    const index=resolved.combo.findIndex(entry=>entry.axis==='secondary')+1,format=plan.formats[index];
+    const secondaryScale=chartAxisScale(secondary);
+    if(!secondaryScale)return undefined;
+    const labels=secondaryScale.ticks.map(value=>tickLabel(value,false,format,!format&&groupsAxisTicks(secondary)?{language:geometry.language}:undefined,geometry.language));
+    secondaryWidth=Math.max(...labels.map(width))+fontPx*0.5;
+  }
+  const far=Math.max(end,secondaryWidth);
+  const leftRoom = Math.max(rtl ? far : tickWidth, half(labels[0]) - pad), rightRoom = Math.max(rtl ? tickWidth : far, half(labels.at(-1)) - pad);
   const x = inner.x + pad + leftRoom;
   const plotWidth = Math.max(1, right - rightRoom - x);
   const cap = Math.max(lineHeight + fontPx * 1.22, inner.height * 0.4);
@@ -209,37 +244,70 @@ export interface SiblingPlotChart {
 
 /**
  * LH-93: the charts of each shared set (`shareSiblingChartAxes`) get one plot height. Every member's plot is laid out on its own
- * (chartPlotInset); members whose boxes overlap vertically stand side by side and share their plots' lowest top and highest bottom, and
- * the set takes the shortest such plot height, each member's plot ending at its row's baseline. The result is written to the member's
- * layer as `plot`. A set with a member that has no inset (a horizontal bar chart, a chart without a usable axis) is left as it was.
- * `geometryFor` gives a member's scale, text floor, measure, direction and language; `document` resolves dataset references.
+ * (chartPlotInset, or horizontalBarPlot for a horizontal bar chart); members whose boxes overlap vertically stand side by side and share
+ * their plots' lowest top and highest bottom, and the set takes the shortest such plot height, each member's plot ending at its row's
+ * baseline (a horizontal bar chart's at its row's top: its categories read from the top). A set of horizontal bar charts, whose value axis
+ * runs across, also shares one plot width: members whose boxes overlap horizontally stand one above another and start their plots at the
+ * same x (the widest category gutter among them), and every member's plot takes the set's narrowest width, so one value is one bar length
+ * on every chart. The result is written to the member's layer as `plot`. A set with a member that has no inset (a chart without a
+ * usable axis, a chart with options of its own) is left as it was. `geometryFor` gives a member's scale, text floor, measure, direction
+ * and language; `document` resolves dataset references.
  */
 export function shareSiblingPlots(sets: readonly (readonly SiblingPlotChart[])[], geometryFor: (item: SiblingPlotChart) => Omit<ChartPlotGeometry, 'box'>, document?: unknown): void {
   for (const members of sets) {
     if (members.length < 2) continue;
     const plots = members.map(item => {
       const resolved = resolveChartData(item.value, document);
-      const inset = item.chart ? chartPlotInset(item.value, resolved, item.chart, {...geometryFor(item), box: item.box}) : undefined;
-      return inset ? {item, inset, top: item.box.y + inset.top, bottom: item.box.y + item.box.height - inset.bottom} : undefined;
+      const geometry = {...geometryFor(item), box: item.box};
+      const horizontal = HORIZONTAL.has(typeId(item.value));
+      const axis = item.chart?.valueAxis;
+      const inset = !item.chart ? undefined : horizontal ? (axis ? horizontalBarPlot(item.value, resolved, item.chart.layer, axis, item.box, geometry) : undefined) : chartPlotInset(item.value, resolved, item.chart, geometry);
+      return inset ? {item, inset, horizontal, top: item.box.y + inset.top, bottom: item.box.y + item.box.height - inset.bottom, left: item.box.x + inset.left, right: item.box.x + item.box.width - inset.right} : undefined;
     });
     if (plots.some(plot => plot === undefined)) continue;
     const placed = plots as NonNullable<(typeof plots)[number]>[];
+    const horizontal = placed.every(plot => plot.horizontal);
+    if (!horizontal && placed.some(plot => plot.horizontal)) continue;
     // Rows: members whose boxes overlap by at least half the shorter box's height stand side by side.
-    const rows: (typeof placed)[] = [];
-    for (const plot of [...placed].sort((a, b) => a.item.box.y - b.item.box.y)) {
-      const overlaps = (other: typeof plot) => Math.min(plot.item.box.y + plot.item.box.height, other.item.box.y + other.item.box.height) - Math.max(plot.item.box.y, other.item.box.y) >= Math.min(plot.item.box.height, other.item.box.height) / 2;
-      const row = rows.find(entry => entry.some(overlaps));
-      if (row) row.push(plot); else rows.push([plot]);
-    }
+    const rows = groups(placed, plot => [plot.item.box.y, plot.item.box.height]);
     const spans = rows.map(row => ({row, top: Math.max(...row.map(plot => plot.top)), bottom: Math.min(...row.map(plot => plot.bottom))}));
     const height = Math.min(...spans.map(span => span.bottom - span.top));
     if (!(height > 1)) continue;
-    for (const {row, bottom} of spans) {
-      for (const {item, inset} of row) {
-        const plot: ChartPlotInset = {left: inset.left, right: inset.right, top: bottom - height - item.box.y, bottom: item.box.y + item.box.height - bottom};
-        item.chart!.layer = {...item.chart!.layer, plot};
+    // Columns of horizontal bar charts: members whose boxes overlap by at least half the narrower box's width stand one above another.
+    const starts = new Map<(typeof placed)[number], number>();
+    let width = Infinity;
+    if (horizontal) {
+      for (const column of groups(placed, plot => [plot.item.box.x, plot.item.box.width])) {
+        const x = Math.max(...column.map(plot => plot.left));
+        for (const plot of column) { starts.set(plot, x); width = Math.min(width, plot.right - x); }
+      }
+      if (!(width > 1)) continue;
+    }
+    for (const {row, top, bottom} of spans) {
+      for (const plot of row) {
+        const {item, inset} = plot;
+        const y = horizontal ? top : bottom - height;
+        const x = horizontal ? starts.get(plot)! : item.box.x + inset.left;
+        const right = horizontal ? item.box.x + item.box.width - (x + width) : inset.right;
+        const shared: ChartPlotInset = {left: x - item.box.x, right, top: y - item.box.y, bottom: item.box.y + item.box.height - (y + height)};
+        item.chart!.layer = {...item.chart!.layer, plot: shared};
       }
     }
   }
+}
+
+const HORIZONTAL = new Set(['bar', 'stacked-bar', '100pct-stacked-bar']);
+const typeId = (chart: unknown): string => record(chart) && typeof chart.type === 'string' ? chart.type.trim().toLowerCase() : '';
+
+/** The members of a set in bands along one axis: two overlap when they share at least half the smaller extent. */
+function groups<T>(members: readonly T[], extent: (member: T) => [number, number]): T[][] {
+  const bands: T[][] = [];
+  for (const member of [...members].sort((a, b) => extent(a)[0] - extent(b)[0])) {
+    const [from, size] = extent(member);
+    const overlaps = (other: T) => { const [otherFrom, otherSize] = extent(other); return Math.min(from + size, otherFrom + otherSize) - Math.max(from, otherFrom) >= Math.min(size, otherSize) / 2; };
+    const band = bands.find(entry => entry.some(overlaps));
+    if (band) band.push(member); else bands.push([member]);
+  }
+  return bands;
 }
 

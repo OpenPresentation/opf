@@ -36,6 +36,7 @@ test('the own installed current renderer export produces a real estimated previe
   const outcome = previewOutcome(renderer, document);
   assert.equal(outcome.fatal, undefined, JSON.stringify(outcome));
   assert.equal(outcome.resolved.slides.length, 1); assert.equal(outcome.svgs.length, 1);
-  assert.match(outcome.svgs[0], /Same authored content/); assert.deepEqual(outcome.pdiag, []);
+  // LH-188 (2026-11-13): a short message grows and may wrap, so the text is read across its lines.
+  assert.match(outcome.svgs[0].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' '), /Same authored content/); assert.deepEqual(outcome.pdiag, []);
   assert.deepEqual(hostRenderOutcome({gate: {ok: true}, fonts: undefined}, renderer, document), {ok: true});
 });

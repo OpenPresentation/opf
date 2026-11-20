@@ -515,11 +515,11 @@ const withMerges = () => {
   tables.sortTableRows(editor, T, 1, { direction: "desc" });
   assert.equal(tables.readTableStyle(editor.presentation, T).preset, "banded", "and after a sort");
   const custom = session();
-  custom.set(`${T}.rows.0.1`, { value: 10, style: { align: "right", fill: "#ffeecc" } });
+  custom.set(`${T}.rows.0.1`, { value: 10, style: { align: "end", fill: "#ffeecc" } });
   tables.insertTableRows(custom, T, 1);
-  assert.deepEqual(custom.get(`${T}.rows.1.1`), { value: "", style: { align: "right", fill: "#ffeecc" } }, "a new cell takes the style of the row above it");
+  assert.deepEqual(custom.get(`${T}.rows.1.1`), { value: "", style: { align: "end", fill: "#ffeecc" } }, "a new cell takes the style of the row above it");
   tables.insertTableColumns(custom, T, 2);
-  assert.deepEqual(custom.get(`${T}.rows.0.2`), { value: "", style: { align: "right", fill: "#ffeecc" } }, "and of the column to its left");
+  assert.deepEqual(custom.get(`${T}.rows.0.2`), { value: "", style: { align: "end", fill: "#ffeecc" } }, "and of the column to its left");
 }
 
 // --- the header row -------------------------------------------------------------------------------------

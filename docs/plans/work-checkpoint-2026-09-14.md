@@ -147,7 +147,7 @@ composition. Ten workflows pass in all three rendering modes from checkout
 and fresh candidate installations; 79 installed runtime files match their
 staged packages. Existing coordinated package tests and all eight installed
 browser suites also pass. Detailed evidence is linked from
-[the new checkpoint](../evidence/rich-input-and-platform-ci-20260915/README.md).
+the new checkpoint.
 
 The follow-up browser commit passed CI run `34950054828`, including all
 three new browser commands. PR18 merged into main at `7b5d75f`; furniture
@@ -183,7 +183,7 @@ installed JSON browser suite alongside furniture workflows. They retain the
 reviewed renderer and corrected converter runtime, without changing source
 examples, geometry, visual baselines, release versions or font policy.
 
-[Integration evidence](../evidence/furniture-json-integration-20260915/README.md)
+Integration evidence
 retains 523 passing core tests, 81 CLI commands, the full coordinated package
 suite, all 805 reviewed raster entries, eight installed browser suites, seven
 installed JSON workflows and sixteen installed furniture workflows with forty
@@ -209,7 +209,7 @@ source fingerprint: all 805 raster entries remain identical. Core `363711d`,
 editor `651a532` and PPTX `891fc5f` record coordinated immutable CI references.
 The editor and converter runtime files remain unchanged.
 
-[Integration evidence](../evidence/furniture-catalog-integration-20260915/README.md)
+Integration evidence
 retains 523 core tests, eleven CLI tests, four text-checker tests, type checks,
 the complete coordinated package command and 81 CLI commands. Fresh packages
 expose all 44 corrected catalog choices offline and pass the exact editor

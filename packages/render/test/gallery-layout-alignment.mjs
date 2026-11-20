@@ -11,6 +11,11 @@ assert.equal(fixture.layouts.length, 57, 'the 50 partial and 7 gallery-only layo
 for (const {document} of fixture.layouts) {
   delete document.catalogs;
   delete document.slides[0].layout;
+  // Project only the historical authored alignment fields; keep the original JSON bytes and physical assertions.
+  for (const design of [document.design, document.slides[0].design]) for (const key of ['titleAlignment', 'contentAlignment']) {
+    if (design?.[key] === 'left') design[key] = 'start';
+    else if (design?.[key] === 'right') design[key] = 'end';
+  }
 }
 
 const anchors = {left: 'start', center: 'middle', right: 'end'};
@@ -27,11 +32,13 @@ const withoutLayout = (document, layoutMode) => {
   const base = structuredClone(document), design = document.slides[0].design ?? {};
   delete base.slides[0].layout; delete base.slides[0].design; delete base.slides[0].composition; delete base.catalogs;
   const hints = Object.fromEntries(LAYOUT_HINTS.filter(key => design[key] !== undefined && !(key === 'contentDirection' && layoutMode)).map(key => [key, design[key]]));
-  base.slides[0].design = {...hints, titleAlignment: 'left', contentAlignment: 'left'};
+  base.slides[0].design = {...hints, titleAlignment: 'start', contentAlignment: 'start'};
   return base;
 };
 // The alignment the gallery design asks for, restated independently of core.
-const expectedAlignment = (slide, field) => (field === 'title' ? slide.design?.titleAlignment : slide.design?.contentAlignment) ?? 'left';
+const authoredAlignment = {left: 'start', center: 'center', right: 'end'};
+const physicalAlignment = {start: 'left', center: 'center', end: 'right'};
+const expectedAlignment = (slide, field) => physicalAlignment[(field === 'title' ? slide.design?.titleAlignment : slide.design?.contentAlignment) ?? 'start'];
 const boxes = svg => [...svg.matchAll(/<(rect|image|circle|path|line)\b[^>]*>/g)].map(([token]) => token);
 
 let traced = 0, layoutEffects = 0, explicitMetrics = 0;
@@ -79,7 +86,7 @@ for (const {id, document} of fixture.layouts) {
   //    whether the installed core's omitted metric alignment is left or center.
   if (bound.geometry.items.some(item => item.metricLayout)) for (const alignment of Object.keys(anchors)) {
     const explicit = structuredClone(document);
-    explicit.slides[0].design = {...explicit.slides[0].design, contentAlignment: alignment};
+    explicit.slides[0].design = {...explicit.slides[0].design, contentAlignment: authoredAlignment[alignment]};
     const geometry = resolvePresentation(explicit).slides[0].geometry;
     const preview = toSvg(explicit, 1, {trace: true});
     for (const [index, item] of geometry.items.entries()) {

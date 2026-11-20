@@ -183,7 +183,7 @@ interface Pending {
 
 export function parseOptions(text: string, keys: readonly string[], kind: "slide" | "block", ctx: Ctx, range: Range): Obj | undefined {
   const { pairs, error } = parseAttributes(text);
-  const help = `A ${kind} options comment reads <!-- ${kind}: ${kind === "slide" ? 'id=cover layout=title section="Part 1" hidden' : "id=chart-1 as=bullets region=top:left"} -->. Keys: ${keys.join(", ")}.`;
+  const help = `A ${kind} options comment reads <!-- ${kind}: ${kind === "slide" ? 'id=cover layout=title section="Part 1" hidden' : "id=chart-1 as=bullets region=top:start"} -->. Keys: ${keys.join(", ")}.`;
   if (error) {
     ctx.error("options-syntax", error, help, range);
     return undefined;
@@ -557,7 +557,7 @@ class SlideParser {
     if (word === "chart") this.chart(rest, bodyText, range);
     else if (word === "metric") this.metric(body, range);
     else if (word === "timeline") this.timeline(rest, body, range);
-    else if (word === "mermaid") this.diagram(rest, bodyText, range);
+    else if (word === "mermaid" || word === "dot" || word === "plantuml") this.diagram(word, rest, bodyText, range);
     else if (word === "opf-slide") this.embeddedSlide(bodyText, bodyStart, range);
     else if (word === "opf-block") this.embeddedBlock(bodyText, bodyStart, range);
     else {
@@ -574,21 +574,23 @@ class SlideParser {
     }
   }
 
-  // A ```mermaid fence is a diagram payload; `alt="..."` after the word is its text alternative.
-  private diagram(rest: string, text: string, range: Range): void {
+  // A ```mermaid, ```dot or ```plantuml fence is a diagram payload in that syntax; `alt="..."` after the word is its text alternative.
+  private diagram(syntax: "mermaid" | "dot" | "plantuml", rest: string, text: string, range: Range): void {
     const { ctx } = this;
     const { pairs, error } = parseAttributes(rest);
     let alt: string | undefined;
-    if (error) ctx.error("diagram-attributes", error, 'Write ```mermaid alt="What the diagram shows" (alt is optional).', range, this.path);
+    if (error) ctx.error("diagram-attributes", error, `Write \`\`\`${syntax} alt="What the diagram shows" (alt is optional).`, range, this.path);
     for (const [key, value] of pairs) {
       if (key === "alt" && typeof value === "string") alt = value;
-      else ctx.error("diagram-attributes", `Unknown diagram attribute ${JSON.stringify(key)}.`, "A mermaid fence takes alt, a text alternative in double quotes.", range, this.path);
+      else ctx.error("diagram-attributes", `Unknown diagram attribute ${JSON.stringify(key)}.`, `A ${syntax} fence takes alt, a text alternative in double quotes.`, range, this.path);
     }
     if (!text.trim()) {
-      ctx.error("diagram-source", "A mermaid block has no source.", "Write the Mermaid diagram between the fences, starting with its type (flowchart LR, sequenceDiagram, mindmap, ...).", range, this.path);
+      const advice = syntax === "dot" ? "Write the DOT graph between the fences (digraph { a -> b })." : syntax === "plantuml" ? "Write the PlantUML diagram between the fences, from @startuml to @enduml." : "Write the Mermaid diagram between the fences, starting with its type (flowchart LR, sequenceDiagram, mindmap, ...).";
+      ctx.error("diagram-source", `A ${syntax} block has no source.`, advice, range, this.path);
       return;
     }
-    this.native("diagram", alt === undefined ? text : { source: text, alt }, range);
+    if (syntax !== "mermaid") this.native("diagram", alt === undefined ? { source: text, syntax } : { source: text, syntax, alt }, range);
+    else this.native("diagram", alt === undefined ? text : { source: text, alt }, range);
   }
 
   private chart(rest: string, text: string, range: Range): void {
@@ -757,9 +759,10 @@ class SlideParser {
     set("layout", options.layout);
     set("section", options.section);
     set("tag", options.tag);
+    set("language", options.language);
     set("title", this.title);
     set("subtitle", this.subtitle);
-    // A block with region=<promoted key> (top, left, top:left, ...) is a promoted region of the slide. Any other region
+    // A block with region=<promoted key> (top, start, top:start, ...) is a promoted region of the slide. Any other region
     // name pins the block to that region of the slide's layout template (OPF 0.19); region names are never promoted keys.
     const promoted = (block: { options?: Obj }) => typeof block.options?.region === "string" && PROMOTED_REGION_KEY.test(block.options.region);
     const content = this.blocks.filter((block) => !promoted(block));

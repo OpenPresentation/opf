@@ -1,0 +1,15 @@
+{
+  "sourceFeatureHead": "0a4a909688850637b955664df6d20b5ac2744bd1",
+  "workerHead": "ff501beb2613bc7419edcc2f8967ccaf738c6770",
+  "sourceSha256": "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622",
+  "nativeSavedSha256": "e1f8de266a4bec04c54d8b09c32dc46dada8ed1ad0cf5292bbda54b4a38032a8",
+  "source": "Maintained CLI wide image-callout witness, same measured font route as preview",
+  "native": "Actual coordinator-owned PowerPoint read-only Open, multiline/clear text actions, SaveCopyAs and read-only reopen",
+  "expectedCurrentWords": [
+    "Native edit\nSecond line",
+    "",
+    "Inspection point"
+  ],
+  "blankPanelTextBodyAdded": true,
+  "allThreePanelEmuFramesExactlyUnchanged": true
+}

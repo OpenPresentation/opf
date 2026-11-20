@@ -5,7 +5,7 @@
   "slides": [
     {
       "title": "Distribution And Outliers",
-      "left": {
+      "start": {
         "chart": {
           "type": "box-and-whisker",
           "data": {
@@ -55,7 +55,7 @@
           }
         }
       },
-      "right": {
+      "end": {
         "chart": {
           "type": "scatter",
           "data": {

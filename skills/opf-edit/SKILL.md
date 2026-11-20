@@ -14,9 +14,9 @@ Preserve document fields unrelated to the requested change, including assets, ca
 - **Furniture**: the parts that repeat on slides outside the content: header, footer, logo, slide number. You set them once on the deck or a layout, not in `blocks`.
 - **Composition**: the automatic layout step that turns a slide's content into boxes with a position, size and font size. A `composition` key steers it.
 - **Implicit blocks**: content fields written straight on the slide (`text`, `items`, `table`, ...) with no `blocks` list. Composition treats them as blocks, and editing can turn them into an explicit `blocks` list.
-- **Promoted region**: content placed by a 3×3 grid key on the slide (`left`, `top:right`, `center+right`), used when relative position matters. It cannot be mixed with root content.
+- **Promoted region**: content placed by a 3×3 grid key on the slide (`start`, `top:end`, `center+end`), used when relative position matters. It cannot be mixed with root content.
 - **Catalog record**: one named, reusable design entry (a theme, layout, color scheme, font scheme, ...) from the `@openpresentation/gallery` package or a deck's `catalogs`. A deck refers to it by id.
-- **Reflow**: text wrapping again when its box or size changes. OPF computes line breaks itself; PPTX export writes each wrapped line as its own text box, so text edited in PowerPoint or Keynote does not reflow.
+- **Reflow**: text wrapping again when its box or size changes. OPF computes preview line breaks. Default PPTX export uses measured boxes without reflow between boxes; selected proofing-sensitive lines use smaller source-bound fragments. Opt-in native paragraph export lets supported text re-wrap in the application, while fallback content stays measured.
 - **Provenance**: tags that OPF writes into an exported PPTX to record where each shape came from, so a later import can map edits back to the OPF source.
 <!-- glossary:end -->
 
@@ -41,6 +41,10 @@ Group related changes in one validated transaction and preserve undo/redo. Valid
 ## User-facing editing
 
 The main canvas uses shared SVG rendering and supports inline text/table edits and structured property forms. The schema inspector exposes optional fields and structured variants beyond the existing payload. These are different levels of interaction; structured field coverage does not establish complete WYSIWYG fidelity for rich text, every chart, video playback, or branding conventions.
+
+To give a list entry, metric or group an `icon` (or change or remove it), use the editor's `setIcon`, `removeIcon` and `setSvgIcon` (`@openpresentation/opf-editor/icon-options`) rather than hand-writing patches: each is one undoable step, a pasted SVG goes into the deck's `icons` map under a name, a refused SVG carries the `opf/icon-invalid` message, and `searchIcons` finds names in the icon sets the host registered (see [editor APIs](references/editor.md)). In a file edit, find a name with the MCP's `search_icons` and never invent one.
+
+To insert a shape block, change its preset or edit any of its properties (fill, stroke, style, effects, rotation, text, alt text, link) or its adjust values, use the editor's `insertShape`, `setShapePreset`, `setShapeAdjust` and `setShapeProperties` (`@openpresentation/opf-editor/shape-options`, editor 0.33 and later; check the installed exports) rather than hand-writing patches: each is one undoable step that pins adjust values to the handle's range (`await loadShapeEngine()` first) and refuses a value that would make the deck invalid (see [editor APIs](references/editor.md)). For a slide's overlay shapes and connectors (`slide.shapes`) there are `insertOverlayShape`, `setOverlayFrame`, `moveOverlayLayer`, `removeOverlay`, `connectShapes` and `setConnector` in `@openpresentation/opf-editor/shape-overlays`. In a file edit, find the preset with the MCP's `search_shapes`.
 
 Commit or cancel an active canvas draft before navigation or imports. Keep a single authoritative editor session. Dispose of mounted canvases, inspectors, subscriptions, and owned font faces on unmount. Host applications own persistence and collaboration; these primitives do not save work to a server automatically.
 

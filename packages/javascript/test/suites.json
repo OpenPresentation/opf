@@ -4,6 +4,7 @@
   "include": [],
   "exclude": [
     "diagram-browser-engine.mjs",
+    "shape-browser-engine.mjs",
     "diff-support.mjs",
     "packed-install-smoke.mjs"
   ]

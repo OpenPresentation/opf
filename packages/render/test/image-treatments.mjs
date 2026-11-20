@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import sharp from 'sharp';
 import { resolveSlideContext } from '@openpresentation/opf';
-import { composeSlide } from '@openpresentation/opf/composition';
+import { LONE_DISPLAY_SIZES, MESSAGE_DISPLAY_SIZE, composeSlide } from '@openpresentation/opf/composition';
 import { toSvg, toPng } from '../dist/index.js';
 import { TREATMENTS, samplePicture, treatmentDocument } from './fixtures/image-treatments.mjs';
 
@@ -14,6 +14,24 @@ const reference = JSON.parse(readFileSync(new URL('reference.json', directory), 
 const picture = await samplePicture();
 const failures = [];
 let checked = 0;
+
+// SH-02: outlines are SH-01's evaluated presets (L in place of 0.14's H and V), so a polygon is compared as the points it visits; an
+// outline with arcs (SH-01 draws an ellipse as four quarter arcs, 0.14 as two halves) is checked by the pixels below.
+function outlinePoints(d) {
+  if (d === undefined) return undefined;
+  if (/A/.test(d)) return 'arcs';
+  const tokens = d.match(/[MLHVCSQTAZ]|-?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?/gi) ?? [], points = [];
+  let command = '', x = 0, y = 0;
+  for (let at = 0; at < tokens.length;) {
+    if (/^[MLHVCSQTAZ]$/i.test(tokens[at])) { command = tokens[at++]; if (command === 'Z') continue; }
+    const read = () => Number(tokens[at++]);
+    if (command === 'H') x = read(); else if (command === 'V') y = read();
+    else if (command === 'A') { const arc = [read(), read(), read(), read(), read()]; x = read(); y = read(); points.push(...arc.slice(0, 2).map(value => (Math.round(value * 1000) / 1000 || 0))); }
+    else { x = read(); y = read(); }
+    points.push(Math.round(x * 1000) / 1000 || 0, Math.round(y * 1000) / 1000 || 0);
+  }
+  return points;
+}
 
 async function pixels(png) {
   const { data, info } = await sharp(png).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
@@ -25,6 +43,16 @@ for (const treatment of TREATMENTS) {
   const document = treatmentDocument(treatment, picture);
   // LH-02: the 0.14 renders predate core's automatic scrim behind text on a background picture without an overlay, so it is set aside here.
   for (const slide of document.slides) { const background = slide.design?.background; if (background && typeof background === 'object' && background.overlay === undefined) background.overlay = false; }
+  // RR-105: the 0.14 renders also predate the tone a dark overlay implies (light text over text-overlay's darkened picture); they drew the
+  // text of a light picture, stated here as the background's tone.
+  for (const slide of document.slides) { const background = slide.design?.background; if (background && typeof background === 'object' && background.tone === undefined && background.overlay) background.tone = 'light'; }
+  // RR-105: and the step a short message beside a picture now grows to where its lines keep the minimum measure; the 0.14 renders set it at
+  // the lone text's display size, stated here as the slide's largest body size.
+  if (['side-by-side', 'rounded-card'].includes(slug)) for (const slide of document.slides) slide.composition = { ...slide.composition, maxFontSize: LONE_DISPLAY_SIZES.text };
+  // LH-188: and they predate the length-keyed ceilings of a one-message slide: the message stops at its former display size (MESSAGE_DISPLAY_SIZE).
+  else for (const slide of document.slides) slide.composition = { ...slide.composition, maxFontSize: MESSAGE_DISPLAY_SIZE };
+  // LH-164: a slide that is one short message takes the accent surface; these documents compare pixels with the 0.14 renders, which have the deck's own surface, stated here as the slide's variant.
+  if (treatment.watermark) for (const slide of document.slides) slide.design = { variant: resolveSlideContext({ ...document, slides: [{ ...slide, subtitle: 'Plain surface' }] }, 0, {}).resolved.roles.variant, ...slide.design };
   const diagnostics = [];
   const svg = toSvg(document, 1, { onDiagnostic: entry => diagnostics.push(entry) });
   assert.deepEqual(diagnostics.filter(entry => entry.code.startsWith('unresolved-')).map(entry => entry.code), [], `${slug}: a self-contained treatment resolves everything`);
@@ -39,14 +67,15 @@ for (const treatment of TREATMENTS) {
     assert.ok(image, `${slug}: image block geometry`);
     assert.deepEqual(image.region, expected.frame.region, `${slug}: band`);
     assert.deepEqual(image.box, expected.frame.box, `${slug}: frame`);
-    assert.equal(image.shape.path, expected.frame.shape, `${slug}: outline`);
-    assert.equal(image.overlay?.shape.path, expected.frame.overlay, `${slug}: overlay outline`);
-    assert.equal(image.placement?.edge, treatment.placement.edge, `${slug}: placement edge`);
+    assert.deepEqual(outlinePoints(image.shape.path), outlinePoints(expected.frame.shape), `${slug}: outline`);
+    assert.deepEqual(outlinePoints(image.overlay?.shape.path), outlinePoints(expected.frame.overlay), `${slug}: overlay outline`);
+    const physicalEdge = {start: 'left', end: 'right'}[treatment.placement.edge] ?? treatment.placement.edge;
+    assert.equal(image.placement?.edge, physicalEdge, `${slug}: placement edge`);
   } else if (treatment.background) {
     const background = geometry.backgroundImage;
     assert.ok(background, `${slug}: background image geometry`);
     assert.deepEqual(background.box, expected.frame.box, `${slug}: canvas frame`);
-    assert.equal(background.overlay?.shape.path, expected.frame.overlay, `${slug}: overlay outline`);
+    assert.deepEqual(outlinePoints(background.overlay?.shape.path), outlinePoints(expected.frame.overlay), `${slug}: overlay outline`);
   }
 
   // Pixels: exactly the 0.14 render at the same scale, with the bundled fonts.

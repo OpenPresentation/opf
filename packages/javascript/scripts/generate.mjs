@@ -25,6 +25,7 @@ const schemaDefinitions = [
   { name: "language", typeName: "Language", file: "language.schema.json" },
   { name: "colorScheme", typeName: "ColorScheme", file: "color-scheme.schema.json", typeFile: "color-scheme" },
   { name: "fontScheme", typeName: "FontScheme", file: "font-scheme.schema.json", typeFile: "font-scheme" },
+  { name: "iconSet", typeName: "IconSet", file: "icon-set.schema.json", typeFile: "icon-set" },
   // The report format every OPF tool shares (validate, the converters, the editor Review panel, hosted reviewers).
   // It is not a catalog kind. Its root schema is open so a richer report (validate's) still validates against it;
   // the generated type is closed so an unknown field is a type error.
@@ -209,13 +210,51 @@ async function generateTypes() {
 
 async function generateSymbolFontEncodings() {
   // FF-45: the reversible code-to-Unicode tables for the symbol-encoded families are reference data, not a catalog.
+  // The 1,120 code rows are written in a column form that src/symbol-font-encodings.ts expands at load into the same
+  // objects, keys in the same order: a row is its key list's index in `symbolFontCodeShapes` and its values in that
+  // order, without `code` and `hex` (code 32 + the row's index, hex its two uppercase digits); an `installed` object is
+  // the same, an index and values. Repeating the keys of every row was most of the table's bytes in the MCP viewer.
   const table = await readJson(path.join(specRoot, "reference", "symbol-font-encodings.json"));
+  const shapes = [];
+  const shapeOf = (keys) => {
+    const key = keys.join(",");
+    const at = shapes.findIndex((shape) => shape.join(",") === key);
+    return at >= 0 ? at : shapes.push(keys) - 1;
+  };
+  const families = table.families.map((family) => ({
+    ...family,
+    codes: family.codes.map((row, index) => {
+      const { code, hex, ...rest } = row;
+      const keys = Object.keys(row);
+      if (code !== table.codeRange.first + index || hex !== code.toString(16).toUpperCase().padStart(2, "0") || keys[0] !== "code" || keys[1] !== "hex") {
+        throw new Error(`symbol-font-encodings: ${family.family} row ${index} is not code ${table.codeRange.first + index} with its hex first; the column form needs that.`);
+      }
+      const fields = Object.keys(rest);
+      return [shapeOf(fields), ...fields.map((field) => (field === "installed" && rest.installed ? [shapeOf(Object.keys(rest.installed)), ...Object.values(rest.installed)] : rest[field]))];
+    }),
+  }));
   const lines = [
     generatedHeader("spec/reference/symbol-font-encodings.json"),
-    `export const symbolFontEncodingsSource: unknown = ${asTs(table)};`,
+    `export const symbolFontCodeShapes: readonly (readonly string[])[] = ${JSON.stringify(shapes)};`,
+    "",
+    `export const symbolFontEncodingsSource: unknown = ${asTs({ ...table, families })};`,
     "",
   ];
   await fs.writeFile(path.join(generatedRoot, "symbol-font-encodings.ts"), lines.join("\n"));
+}
+
+async function generatePresetGeometry() {
+  // SH-01: the 187 DrawingML preset shapes are reference data for the shape geometry engine (src/shape-geometry.ts).
+  const table = await readJson(path.join(specRoot, "reference", "preset-geometry.json"));
+  const lines = [
+    generatedHeader("spec/reference/preset-geometry.json"),
+    `export const presetGeometrySource: unknown = ${JSON.stringify({ shapes: table.shapes })};`,
+    "",
+  ];
+  await fs.writeFile(path.join(generatedRoot, "preset-geometry.ts"), lines.join("\n"));
+  // SH-02: the preset names alone, which composition and validation read without loading the geometry (#shape-engine).
+  const names = [generatedHeader("spec/reference/preset-geometry.json"), `export const PRESET_NAMES: readonly string[] = Object.freeze(${JSON.stringify(Object.keys(table.shapes))});`, ""];
+  await fs.writeFile(path.join(generatedRoot, "preset-names.ts"), names.join("\n"));
 }
 
 async function generateFontPolicy() {
@@ -252,6 +291,7 @@ await fs.mkdir(generatedRoot, { recursive: true });
 await generateEngineData();
 await generateFontPolicy();
 await generateSymbolFontEncodings();
+await generatePresetGeometry();
 await generateSchemas();
 await generateSpecFiles();
 await generateTypes();

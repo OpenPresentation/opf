@@ -29,10 +29,43 @@ const original=JSON.stringify(source),bytes=await toPptx(source,options);
 assert.equal(JSON.stringify(source),original);
 assert.deepEqual(await toPptx(source,options),bytes,'Physical face selection must replay deterministically');
 const zip=unzipSync(bytes),seen=new Set(),runs=[];
+const text=name=>{const data=zip[name];assert.ok(data,`${name} is in the package`);return new TextDecoder().decode(data);};
+// 2026-11-13 (opf#1293): the export writes theme font references (+mj-lt for the heading role, +mn-lt for the body role, and the
+// -ea and -cs slots), so a run's face is the one its slide's theme names: slide, its layout, the layout's master, the master's theme.
+const related=(part,type)=>{
+  const rels=parser.parse(text(part.replace(/([^/]+)$/,'_rels/$1.rels'))).Relationships.Relationship;
+  const target=[rels].flat().find(rel=>rel.Type.endsWith(`/${type}`))?.Target;
+  assert.ok(target,`${part} relates to a ${type}`);
+  return path.posix.normalize(path.posix.join(path.posix.dirname(part),target));
+};
+const themeFonts=new Map();
+function slideTheme(slide){
+  const part=`ppt/slides/slide${slide+1}.xml`;
+  if(!themeFonts.has(part)){
+    const scheme=parser.parse(text(related(related(related(part,'slideLayout'),'slideMaster'),'theme')))['a:theme']['a:themeElements']['a:fontScheme'];
+    const fonts=new Map();
+    for(const [prefix,role] of [['mj','a:majorFont'],['mn','a:minorFont']])for(const [slot,element] of [['lt','a:latin'],['ea','a:ea'],['cs','a:cs']]){
+      const typeface=scheme[role]?.[element]?.typeface;
+      if(typeof typeface==='string')fonts.set(`+${prefix}-${slot}`,typeface);
+    }
+    themeFonts.set(part,fonts);
+  }
+  return themeFonts.get(part);
+}
+/** The family a run's typeface draws: a theme reference resolved through the slide's theme, which must name a real family for it. */
+function drawnFamily(typeface,slide){
+  if(typeof typeface!=='string'||!/^\+m[jn]-(lt|ea|cs)$/.test(typeface))return typeface;
+  const fonts=slideTheme(slide),family=fonts.get(typeface);
+  assert.ok(fonts.has(typeface),`Slide ${slide}: theme reference ${typeface} must resolve through the slide's theme`);
+  assert.ok(family||!typeface.endsWith('-lt'),`Slide ${slide}: the theme's ${typeface} must name a family`);
+  return family;
+}
 function visit(value,slide){
   if(!value||typeof value!=='object')return;
   if(value['a:rPr']&&Object.hasOwn(value,'a:t')){
-    const props=value['a:rPr'],family=props['a:latin']?.typeface;
+    const props=value['a:rPr'],family=drawnFamily(props['a:latin']?.typeface,slide);
+    // The East Asian and complex-script slots a run names resolve through the theme too (a theme slot may be empty: no face of its own).
+    for(const element of ['a:ea','a:cs'])drawnFamily(props[element]?.typeface,slide);
     if(family){
       const selection=key(family,props.b==='1',props.i==='1');
       assert.ok(allowed.has(selection),`Slide ${slide}: native style must select a real registered face: ${selection}`);

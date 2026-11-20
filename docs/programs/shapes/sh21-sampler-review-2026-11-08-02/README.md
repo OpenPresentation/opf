@@ -1,0 +1,9 @@
+# Final40-record sampler source/record review
+
+Source branch at review: 5f08a394f15c75350d8a7b31f213c39463b5ffa2. Before document: git f95895be3:examples/technical/layout-sampler.opf.json. Both documents render through the same current built renderer/font set (Node24.20.0, office pack with visual substitution); the runtime source is unchanged since076725b5bb47249a2dbe113ef065890cf2c21f82. This isolates the maintained sampler/catalog refresh and does not claim full wave-2 preview equivalence or native/live-domain qualification.
+
+The generator preserves all49 prior authored slide objects and their order, appends inverted-pyramid/org-chart/hierarchy/venn, and embeds the final40 catalog records:53 slides including13 dynamic compositions. SVG/hash comparison finds eight prior slides changed by refreshed embedded records: cover, section, agenda, agenda-split, statement, closing, process and scorecard. All other41 prior SVGs are byte-identical.
+
+Visual review of changed-before.png, changed-after.png and new-layouts.png passes: agenda/process markers and scorecard values grow; cover/section/statement/closing use the accepted heading tiles; all authored text remains visible with short measures and no clipping. The four new bodies fill the available slide height with large labels. Hierarchy retains explicit nested parent structure; Venn keeps its measured label rectangles. No text was reduced to fit. Existing slide ordinals remain unchanged.
+
+The first attempt's blank image-layer tooling failure is preserved next door. The corrected review-only compositor uses the existing sharp dependency. review.json records exact input document, SVG and per-slide PNG hashes. No golden baseline was generated or modified. Pinned workflow goldens, native product/edit qualification and the final assembled check remain owed.

@@ -22,7 +22,7 @@ describe('direction resolution', () => {
   });
 
   it('composes a left-to-right deck exactly as before', () => {
-    const presentation = {language: 'en', slides: [{title: 'Title', left: {text: 'Left'}, right: {items: ['One', 'Two']}}]};
+    const presentation = {language: 'en', slides: [{title: 'Title', start: {text: 'Left'}, end: {items: ['One', 'Two']}}]};
     const composed = compose(presentation);
     assert.equal(composed.direction, undefined);
     for (const item of composed.items) assert.equal(item.text?.directions, undefined);
@@ -40,16 +40,16 @@ describe('direction resolution', () => {
 
 describe('mirrored arrangement', () => {
   it('draws the left region at the right and the right region at the left', () => {
-    const presentation = doc({}, {left: {text: 'يسار'}, right: {text: 'يمين'}});
+    const presentation = doc({}, {start: {text: 'يسار'}, end: {text: 'يمين'}});
     const composed = compose(presentation);
-    const [first, second] = ['left', 'right'].map(side => composed.items.find(item => item.path === `slides.0.${side}.text`));
+    const [first, second] = ['start', 'end'].map(side => composed.items.find(item => item.path === `slides.0.${side}.text`));
     assert.equal(composed.direction, 'rtl');
     assert.ok(first.box.x > second.box.x, 'the authored left region is the rightmost');
     const mirrored = compose({...presentation, language: 'en'});
-    assert.ok(mirrored.items.find(item => item.path === 'slides.0.left.text').box.x < mirrored.items.find(item => item.path === 'slides.0.right.text').box.x);
+    assert.ok(mirrored.items.find(item => item.path === 'slides.0.start.text').box.x < mirrored.items.find(item => item.path === 'slides.0.end.text').box.x);
     // Same sizes, only the places swap.
-    assert.equal(first.box.width, mirrored.items.find(item => item.path === 'slides.0.left.text').box.width);
-    assert.equal(first.box.x, mirrored.items.find(item => item.path === 'slides.0.right.text').box.x);
+    assert.equal(first.box.width, mirrored.items.find(item => item.path === 'slides.0.start.text').box.width);
+    assert.equal(first.box.x, mirrored.items.find(item => item.path === 'slides.0.end.text').box.x);
   });
 
   it('puts the first column at the right and keeps the weights with their tracks', () => {
@@ -64,7 +64,7 @@ describe('mirrored arrangement', () => {
   });
 
   it('mirrors a placed image, the cover logo and header/footer zones', () => {
-    const presentation = {language: 'ar', organization: {id: 'acme', name: 'Acme', logo: 'logo.png'}, design: {footer: {left: {text: 'يسار'}, right: {text: 'يمين'}}}, slides: [{title: 'x', blocks: [{image: './a.png', placement: {edge: 'left'}}, {text: 'نص'}]}]};
+    const presentation = {language: 'ar', organization: {id: 'acme', name: 'Acme', logo: 'logo.png'}, design: {footer: {start: {text: 'يسار'}, end: {text: 'يمين'}}}, slides: [{title: 'x', blocks: [{image: './a.png', placement: {edge: 'start'}}, {text: 'نص'}]}]};
     const composed = compose(presentation);
     const placed = composed.items.find(item => item.field === 'image');
     assert.equal(placed.image.placement.edge, 'right');
@@ -72,7 +72,7 @@ describe('mirrored arrangement', () => {
     const english = compose({...presentation, language: 'en'});
     assert.equal(english.items.find(item => item.field === 'image').image.placement.edge, 'left');
     const parts = composed.furniture.parts.filter(part => part.type === 'text');
-    const leftPart = parts.find(part => part.zone === 'left'), rightPart = parts.find(part => part.zone === 'right');
+    const leftPart = parts.find(part => part.zone === 'start'), rightPart = parts.find(part => part.zone === 'end');
     assert.ok(leftPart.box.x > rightPart.box.x, 'the authored left zone is drawn at the right');
     assert.equal(leftPart.alignment, 'right');
     assert.equal(rightPart.alignment, 'left');
@@ -251,9 +251,9 @@ describe('metric and timeline', () => {
 
 describe('furniture', () => {
   it('derives its direction like composition', () => {
-    const presentation = {language: 'ar', design: {footer: {left: {text: 'يسار'}}}, slides: [{title: 'x'}]};
+    const presentation = {language: 'ar', design: {footer: {start: {text: 'يسار'}}}, slides: [{title: 'x'}]};
     const layout = layoutFurniture(presentation.slides[0], {presentation, slideIndex: 0});
-    assert.equal(layout.parts[0].zone, 'left');
+    assert.equal(layout.parts[0].zone, 'start');
     assert.equal(layout.parts[0].alignment, 'right');
     // RR-91: a lone zone spans the content width, so the right-aligned text ends at the right content inset.
     assert.ok(Math.abs(layout.parts[0].box.x + layout.parts[0].box.width - (1280 - 0.08 * 720)) < 1e-6);

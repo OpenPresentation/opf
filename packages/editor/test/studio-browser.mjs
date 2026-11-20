@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { startStudioPage, studioDeck } from './support/studio-page.mjs';
+import {checkTrackPointers} from './support/track-pointer-check.mjs';
 
 // CE-20, the Studio's acceptance tests (STUDIO-SPEC.md section 12) in a real browser: `createOpfEditor(el, { layout: "studio" })` on the
 // workspace test page. 1 mount and destroy, 2 selection, 3 drag, 4 group, 5 dividers, 6 insert and slides, 7 clipboard, 8 text, 9 zoom,
@@ -665,4 +666,5 @@ try {
   if (errors.length) { console.error('page errors:', errors); process.exitCode = 1; }
   await app.close();
 }
+if (!process.exitCode) { await checkTrackPointers({startStudioPage}); checks.push('physical LTR/RTL gap pointer mapping, exact no-motion and one-step undo'); }
 if (!process.exitCode) console.log(`studio browser: ${checks.length} checks passed\n- ${checks.join('\n- ')}`);

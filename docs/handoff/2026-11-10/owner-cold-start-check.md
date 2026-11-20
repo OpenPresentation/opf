@@ -1,0 +1,55 @@
+# Why the 36-slide first render was slower
+
+The demand font loader saves memory by loading only the faces this deck uses. Choosing those faces currently requires two complete analysis/layout passes before the actual SVG render. That added CPU work outweighed the faster first render in the original 36-slide test. Font-file reads were not the main cost.
+
+## What the original controlled trial measured
+
+Both paths used the same runtime, deck, font files and SVG output. These are Node24 measurements on one Windows computer, with two fresh processes per mode and deck size. Module import is separate; these figures are font preparation plus the first full SVG batch, rather than complete application startup.
+
+| 36-slide phase | Whole-pack baseline | Demand loading |
+| --- | --- | --- |
+| Held font faces | 131 | 3 |
+| Font preparation | 291 ms | 2,047 ms |
+| First SVG batch | 3,196 ms | 1,913 ms |
+| Preparation + first batch | 3,487 ms | 3,960 ms |
+| Warm SVG batch | 2,124 ms | 1,689 ms |
+| Peak process memory during rendering | 487-488 MiB | 323-324 MiB |
+| Post-GC JavaScript heap | 99.8 MiB | 59.3 MiB |
+
+Both demand-loading repetitions were slower than both whole-pack controls: 3,839.90/4,079.53 ms versus 3,480.75/3,492.87 ms. This is two fresh processes per mode, not a single unlucky run; one machine and two repetitions still do not establish a universal performance rate.
+
+Preparation added about 1,756 ms; the first render saved about 1,283 ms. The net first-use penalty was about 473 ms, or 13.6%. This trial's 131-face whole-pack baseline is distinct from the earlier 53-face configuration. The three selected faces were Intos 400/700 and Intos Display 700. Whole-process memory includes the engine and its caches; it is not raw font-file size.
+
+[Original measurements](https://github.com/OpenPresentation/opf/blob/4d1ffa78440c47d955d9883575d347996325bf40/docs/handoff/2026-11-09/svg-performance/DEMAND-FONT-RESULTS.md).
+
+## What the diagnostic established
+
+A separate instrumented run observed two disjoint planner contexts, each composing all 36 slides: 72 analysis compositions before actual output. Together they occupied 2.154 seconds, 99.3% of that run's preparation. Verified local reads took 2.14 ms and hashing 0.93 ms. Those spans establish the extra work path; their instrumented durations do not replace the original benchmark.
+
+The first pass discovers the styles the actual layout draws. The next checks selection and glyph coverage after verified font bytes have loaded. The engine also performed 5,079 fontkit shaping calls before attaching HarfBuzz, then discarded 880 metric-cache entries. The genuine first SVG batch made the same 48,955 HarfBuzz shaping calls under both font modes. Removing font coverage checks or reusing metrics across shapers would risk incorrect text or missing glyphs.
+
+[Diagnostic and limits](https://github.com/OpenPresentation/opf/blob/697100785cc10bb21d03dce13907a926baf64935/docs/handoff/2026-11-09/rr114-cold-start-diagnostic/RESULTS.md).
+
+## Held layout-replay candidate
+
+A separate candidate attempts to reuse verified analysis work while retaining coverage/fallback checks and exact SVG bytes. In a mirrored 12-process trial, startup was 1.83% faster at 16 slides and 8.00% faster at 36, but 5.58% slower at 48. Both 48-slide candidate repetitions were slower than both controls. The reason for that regression, including whether a replay cap was involved, was not instrumented and remains unknown. All 1,200 SVG checks matched. Post-GC heap was essentially unchanged.
+
+Root independently replayed all 79 evidence records and exact output/input/source guards again. No new timing experiment or source change was made for this check. This is not a fresh comparison against the original whole-pack baseline, so the percentages cannot be subtracted to claim the original penalty is eliminated. The candidate remains UNFOLDED.
+
+[Latest complete results](https://github.com/OpenPresentation/opf/blob/e8a813dd7325b302fb60638a8ad846928562d16f/docs/handoff/2026-11-10/rr114-replay-value-performance/RESULTS.md).
+
+Vetoable decision: keep the established demand-loader memory and warm-render gains, retain the explicit whole-pack option, and hold this startup candidate while the larger-deck regression remains unexplained. Reuse a prepared handle for repeated work, calling ensure after edits that need additional faces. Browser/mobile/cloud performance requires its own measurements; these Node results do not qualify those environments.
+
+## Follow-up source work — November 10
+
+Root and an independent peer reviewed a separate quadratic HarfBuzz cluster-boundary repair and replayed all68 evidence records/13 exact glyph pairs. An unchanged8100-character CLI paginate command that previously timed out at120s now finishes once in91.18s under the same cap. This fixture does not establish how much of the original36-slide473ms penalty it removes. A NEW private Node preparation path is testing cmap coverage without discarded shaping/metrics; it is not yet qualified or merged. The held layout-replay candidate and its unexplained48-slide regression remain held. No new whole-versus-demand timing trial was run for this update.
+
+## Current coverage-only candidate: controlled check completed
+
+The new source-bound six-child36-slide trial completed once with two fresh processes per arm. Preparation plus first SVG means: whole3.461s, old demand3.735s, new demand3.417s. This supports rough first-use parity with whole, not a statistical speed win: one whole sample3.405s beats both new3.407/3.428s. New demand render-recorded process HWM305.64–306.07MiB versus whole487.47–488.86; startup CPU4437.5ms remains above whole4078ms. All648rendered slide outputs are hash-guarded;216final digests retained, no pending faces. Module import is separate, OS cache notreset, n2/oneWindowsmachine and no mobile/cloud/leak claim.
+
+[Exact current results and limits](https://github.com/OpenPresentation/opf/blob/ddbd1aebbfdf8420e2210bc2ab96d42a994de4ea/docs/handoff/2026-11-10/rr114-cmap-cold/RESULTS.md). The privateNodeprobe is reviewed and folded into qualification source57; full0897gate49/51, the closed original57 delta and the final coherent gate remain separate from release acceptance. Earlier layout-replay candidates stay UNFOLDED.
+
+## Independent follow-up verification — November 10
+
+Root replayed the published builtins-only verifier again:46 lossless records,6 children,648 runtime output guards and216 retained final digests PASS. An independent peer checked every raw sample and arithmetic. This was a receipt audit, not a new performance run. The historical13.6% penalty is real; the latest comparable three-arm trial supports approximate first-use wall-time parity with whole-font loading, while startup CPU remains8.82% higher. Latest demand peak process memory is about306MiB versus488MiB. The private Node preparation fix is folded into the unpublished0.34 candidate; final coherent/platform/release gates remain separate.

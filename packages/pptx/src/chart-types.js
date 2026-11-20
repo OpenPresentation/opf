@@ -1,54 +1,54 @@
 // OPF chart type ids -> native PowerPoint chart constructs (FF-22).
 //
-// The core catalog keeps one chart type per Aspose.Slides ChartType
-// (spec/catalogs/chart-types, OpenPresentation/opf#121). The mapping is carried
+// The core catalog keeps one chart type per native construct
+// OPF supports (packages/gallery/catalog/chart-types, OpenPresentation/opf#121). The mapping is carried
 // here so the exporter stays self-contained. Every id maps to the exact Office construct (OPF 0.15: chart.type is a
 // schema enum, so there is no other id).
 
 const category = (pptx, extra = {}) => ({ family: 'category', pptx, ...extra });
 
 export const CHART_TYPES = Object.freeze({
-  column: category('bar', { aspose: 'ClusteredColumn', barDir: 'col', grouping: 'clustered' }),
-  'stacked-column': category('bar', { aspose: 'StackedColumn', barDir: 'col', grouping: 'stacked' }),
-  '100pct-stacked-column': category('bar', { aspose: 'PercentsStackedColumn', barDir: 'col', grouping: 'percentStacked' }),
-  bar: category('bar', { aspose: 'ClusteredBar', barDir: 'bar', grouping: 'clustered' }),
-  'stacked-bar': category('bar', { aspose: 'StackedBar', barDir: 'bar', grouping: 'stacked' }),
-  '100pct-stacked-bar': category('bar', { aspose: 'PercentsStackedBar', barDir: 'bar', grouping: 'percentStacked' }),
-  line: category('line', { aspose: 'Line', grouping: 'standard', markers: false }),
-  'line-with-markers': category('line', { aspose: 'LineWithMarkers', grouping: 'standard', markers: true }),
-  'stacked-line': category('line', { aspose: 'StackedLine', grouping: 'stacked', markers: false }),
-  'stacked-line-with-markers': category('line', { aspose: 'StackedLineWithMarkers', grouping: 'stacked', markers: true }),
-  area: category('area', { aspose: 'Area', grouping: 'standard' }),
-  'stacked-area': category('area', { aspose: 'StackedArea', grouping: 'stacked' }),
-  '100pct-stacked-area': category('area', { aspose: 'PercentsStackedArea', grouping: 'percentStacked' }),
-  pie: { family: 'circular', pptx: 'pie', aspose: 'Pie' },
-  doughnut: { family: 'circular', pptx: 'doughnut', aspose: 'Doughnut' },
-  scatter: { family: 'xy', pptx: 'scatter', aspose: 'ScatterWithMarkers' },
-  radar: category('radar', { aspose: 'Radar', radarStyle: 'standard', markers: false }),
-  'radar-with-markers': category('radar', { aspose: 'RadarWithMarkers', radarStyle: 'marker', markers: true }),
-  'filled-radar': category('radar', { aspose: 'FilledRadar', radarStyle: 'filled', markers: false }),
+  column: category('bar', { barDir: 'col', grouping: 'clustered' }),
+  'stacked-column': category('bar', { barDir: 'col', grouping: 'stacked' }),
+  '100pct-stacked-column': category('bar', { barDir: 'col', grouping: 'percentStacked' }),
+  bar: category('bar', { barDir: 'bar', grouping: 'clustered' }),
+  'stacked-bar': category('bar', { barDir: 'bar', grouping: 'stacked' }),
+  '100pct-stacked-bar': category('bar', { barDir: 'bar', grouping: 'percentStacked' }),
+  line: category('line', { grouping: 'standard', markers: false }),
+  'line-with-markers': category('line', { grouping: 'standard', markers: true }),
+  'stacked-line': category('line', { grouping: 'stacked', markers: false }),
+  'stacked-line-with-markers': category('line', { grouping: 'stacked', markers: true }),
+  area: category('area', { grouping: 'standard' }),
+  'stacked-area': category('area', { grouping: 'stacked' }),
+  '100pct-stacked-area': category('area', { grouping: 'percentStacked' }),
+  pie: { family: 'circular', pptx: 'pie' },
+  doughnut: { family: 'circular', pptx: 'doughnut' },
+  scatter: { family: 'xy', pptx: 'scatter' },
+  radar: category('radar', { radarStyle: 'standard', markers: false }),
+  'radar-with-markers': category('radar', { radarStyle: 'marker', markers: true }),
+  'filled-radar': category('radar', { radarStyle: 'filled', markers: false }),
   // FA-15: clustered columns (a c:barChart on the primary axes) with line series with markers (a c:lineChart per value axis;
   // the secondary one crosses at the right on a deleted second c:catAx). Core's resolveChartData says which series is which.
-  combo: { family: 'combo', pptx: 'bar', aspose: 'ClusteredColumn', barDir: 'col', grouping: 'clustered', markers: true },
+  combo: { family: 'combo', pptx: 'bar', barDir: 'col', grouping: 'clustered', markers: true },
   // Office 2016 chartex constructs (cx:chartSpace, one cx:series per plot,
   // named by layoutId). `requires` is the markup-compatibility namespace the
   // slide's mc:Choice names, so older readers take the classic fallback.
   // `series` is the number of value columns the construct plots.
-  treemap: chartex('treemap', 'Treemap', { requires: 'cx1', dimension: 'size', series: 1 }),
-  histogram: chartex('clusteredColumn', 'Histogram', { requires: 'cx1', binning: true, series: 1, axes: true }),
-  pareto: chartex('paretoLine', 'ParetoLine', { requires: 'cx1', binning: true, owner: 'clusteredColumn', series: 1, axes: true }),
-  'box-and-whisker': chartex('boxWhisker', 'BoxAndWhisker', { requires: 'cx1', series: Infinity, axes: true }),
-  waterfall: chartex('waterfall', 'Waterfall', { requires: 'cx1', series: 1, axes: true }),
-  funnel: chartex('funnel', 'Funnel', { requires: 'cx2', series: 1, axes: true }),
+  treemap: chartex('treemap', { requires: 'cx1', dimension: 'size', series: 1 }),
+  histogram: chartex('clusteredColumn', { requires: 'cx1', binning: true, series: 1, axes: true }),
+  pareto: chartex('paretoLine', { requires: 'cx1', binning: true, owner: 'clusteredColumn', series: 1, axes: true }),
+  'box-and-whisker': chartex('boxWhisker', { requires: 'cx1', series: Infinity, axes: true }),
+  waterfall: chartex('waterfall', { requires: 'cx1', series: 1, axes: true }),
+  funnel: chartex('funnel', { requires: 'cx2', series: 1, axes: true }),
   // Native check 2026-09-30: PowerPoint accepts the regionMap part only when the choice requires cx4 (2016/5/10, the
   // region-map extension namespace; cx5 and cx8 fall back), reports ChartType 140, and then draws nothing without a
   // populated cx:geoCache ("There was a problem getting the information for your map chart"), so the map stays on the
   // clustered column fallback in 'auto' mode and is written only with `chartex: 'native'`.
-  world: chartex('regionMap', 'Map', { requires: 'cx4', dimension: 'colorVal', series: 1, unconfirmed: true }),
+  world: chartex('regionMap', { requires: 'cx4', dimension: 'colorVal', series: 1, unconfirmed: true }),
 });
 
-function chartex(layoutId, aspose, extra) {
-  return { family: 'chartex', layoutId, aspose, dimension: 'val', ...extra };
+function chartex(layoutId, extra) {
+  return { family: 'chartex', layoutId, dimension: 'val', ...extra };
 }
 
 // The classic construct written as the mc:Fallback of every chartex chart, so a

@@ -62,15 +62,22 @@ describe('the colour-blind rule follows the deck colour scheme', () => {
 	});
 	const findings = (document, options = {}) => validate(document, { only: ['chart-color-only'], ...options }).findings;
 
-	test('a scheme whose first two accents are near-identical is flagged, the default scheme is not', () => {
+	// LH-94: the engines draw a series the scheme supplies at least 11 L* from the series before it, so a scheme whose accents are twins is drawn
+	// apart and the rule has nothing to report; the pair an author chose in `chart.colors` is the author's and still is.
+	const authored = (colors) => { const document = chart({ id: 'apart', ...scheme }); document.slides[0].chart.colors = colors; return document; };
+
+	test('a scheme whose first two accents are near-identical is drawn apart, so neither it nor the default scheme is flagged', () => {
 		assert.equal(findings(chart(undefined)).length, 0);
-		assert.equal(findings(chart({ id: 'twins', ...scheme, accent2: '#7C251D' })).length, 1);
+		assert.equal(findings(chart({ id: 'twins', ...scheme, accent2: '#7C251D' })).length, 0);
 		assert.equal(findings(chart({ id: 'apart', ...scheme })).length, 0);
+		assert.equal(findings(authored(['#7B241C', '#7C251D'])).length, 1);
 	});
 
 	test('the inline scheme is judged on its own accents, so the fixed blues no longer decide', () => {
 		const twins = { id: 'twins', ...scheme, accent1: '#2874A6', accent2: '#2975A7' };
+		// Moved 11 L* apart the blue twins still differ little in color under the vision models (the rule's color difference), so they stay flagged.
 		assert.equal(findings(chart(twins)).length, 1);
+		assert.equal(findings(authored(['#2874A6', '#2975A7'])).length, 1);
 		assert.equal(findings(chart({ id: 'blues', ...scheme, accent1: '#2874A6', accent2: '#F5B041' })).length, 0);
 	});
 

@@ -1,0 +1,23 @@
+# RR-114: HarfBuzz cluster carrier boundary lookup
+
+Source candidate only; not released or published. Root already reproduced the unchanged exact8,100-character CLI paginate command exceeding its120s cap. Its streaming V8 profile has843/1,894ticks in ArrayIndexOf, with842/843 caller samples through font-registry metrics/demand coverage. That diagnostic is not a latency benchmark. Original setup/profiler failures remain preserved separately.
+
+Vetoable RR114-HB-CLUSTERS: preserve existing glyph creation, sorted cluster starts and carrier selection; initialize each glyph codePoints array, then assign the selected carrier using the next indexed start. No new map/cache or font-family preload, no shaping/WASM/features/glyph/position/coverage relaxation. The held preparation replay candidate is separate and unchanged.
+
+Before/after actual pinned-WASM controls13PASS each; every returned glyph ID/codePoints/advance/xOffset/yOffset and selected font/file/WASM identity is exactly equal. Independent public harfbuzzjs glyph/position and point-first Unicode ownership checks cover longASCII8100,ligatures/featuresoff,marks/clusterlevel2,ArabicRTL/LTR,Devanagari multiglyph clusters,nonBMP/ZWJ and empty text. The five verified faces total27,144,952font bytes, maximumtext8100UTF16 units; unit process maxRSS observed156,956/156,612KiB before/after. These bounded controls are not a startup/memory benchmark.
+
+The root timeout source dc2 and this b5 baseline have no relevant core/CLI/render source or spec differences. Three actual route modules (CLI, node-engine, fonts-node) are byte-identical to the original timeout run. Required same-input/same120s-cap CLI acceptance is next; no unmodified120s baseline rerun, golden update, budget change, full mapper, Office, release or speed claim. Normal source checks and coordinator review remain owed.
+
+Actual same-command acceptance (one run, no retries): source36febf, unchanged8157-byte input/SHA6b60ac9a44aa87d05b96e0b815ccc61390c045b6f7cff27c95133d66c8c5fd57, same120,000ms cap. Owned session75379 actually terminated0; product child0 after91,182.9539ms, fiveSVG pages totaling10,333,649bytes, stderr0. All210 built files and input remained exact. The old unmodified command already timed out at120,041ms; it was not rerun. This clears that specific timeout boundary, not a general startup/performance claim;91seconds remains slow. Required broader normal mapper will run once on the coordinator-reviewed assembled source, separately from this focused result.
+
+Direct targeted Biome invocation was refused because the repository intentionally ignores engine source/test paths; zero files processed/no fixes. Its actual exit1/log is retained as a tooling-scope refusal. Both changed files pass Node syntax checks; the normal mapped package checks remain owed, without configuration/flag/budget changes.
+
+## Durable evidence
+
+The lossless packet retains68 file records /28,268,983 decoded record bytes. Exact duplicate contents are stored once (51 unique blobs /22,034,508bytes); gzip is7,518,046bytes. It includes the original120s timeout, both unsuccessful callback-profiler attempts, the complete partial30s streaming V8 log and processed report, all13before/after actual glyph vectors, every actual candidate SVG page, full command/source/build identity receipts and the ignored-Biome-path refusal. No profiler attempt is presented as a successful latency measurement.
+
+```sh
+node docs/handoff/2026-11-10/rr114-hb-cluster-carriers/verify.mjs
+```
+
+The independent offline verifier executes no product, conversion, profiler or external process. It hashes every unique content blob and file mapping, checks all original failure scopes, exact glyph/font/WASM equality, the unchanged CLI arguments/cap/input/routes, all five actual SVGs and the current source hash. Full coherent mapped qualification and root source/peer review remain separate and owed. This bug repair does not land or qualify the held preparation replay candidate.

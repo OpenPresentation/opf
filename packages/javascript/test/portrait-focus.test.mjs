@@ -48,7 +48,7 @@ test('other crops stay centered', () => {
 });
 
 test('a circular headshot crop keeps the head: the portrait picture in a round frame', () => {
-  const image = imageOf({ image: portrait, shape: 'circle', aspectRatio: 1 });
+  const image = imageOf({ image: portrait, shape: 'ellipse', aspectRatio: 1 });
   assert.equal(image.shape.preset, 'ellipse');
   assert.deepEqual(image.focus, { x: 0.5, y: 0.3 });
 });

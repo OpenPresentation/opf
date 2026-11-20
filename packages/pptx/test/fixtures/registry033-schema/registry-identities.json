@@ -1,0 +1,57 @@
+{
+  "observedAt": "2026-11-10T18:58:44.324073+00:00",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "integrity": "sha512-A67Yv70WY6BbpbnAjY3se8ZKOCghiTUJt20VZdgogvaWfMbBS9XtcAzHPmvBWz+oNLXRsmL13Ovyq32tnRJ0fg==",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.33.0.tgz",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf@0.33.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "integrity": "sha512-ZsJSQXG784h5bvzwl3+pBvd1q/3flW1sSW3AnmieQM31EcFEOnHuZX79IDETKWGqMc84lU7Wk2Y4D/0PPlWIkg==",
+      "tarball": "https://registry.npmjs.org/@openpresentation/gallery/-/gallery-0.33.0.tgz",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fgallery@0.33.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "integrity": "sha512-IOY+9byTkLLSCkY82vnv5513lfjwtSjZ6JrqWC3bp5aLoH3rIyyGnx9eJRDLYWVnHny1PEr3ggUIKeetENbwDw==",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.33.0.tgz",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-render@0.33.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      }
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "integrity": "sha512-uBCE1GesAD9JyMDB9uU9OzU8ixWZuY26NtYqK+8WrIKMXnH4yO9HOaBpidAqd7MHd7XQKdEeFq1bMwsaZ8RfPQ==",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.33.0.tgz",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.33.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "deck": "technical/shape-effects.opf.json",
+  "entries": {
+    "technical/shape-effects.opf.json#0": {
+      "sha256": "9feb198a94bb481cc7b2b9c871db10abdada8cf6665b5fb1b6c9f31af68860d5",
+      "bytes": 9203
+    },
+    "technical/shape-effects.opf.json#1": {
+      "sha256": "dc8be202f6d03b67e6c99a046bb5ddf66aa98b278dc6045c7ab0eb4ecb951fff",
+      "bytes": 14639
+    },
+    "technical/shape-effects.opf.json#2": {
+      "sha256": "f0315f87deea73b0acf1dcd4d4d9bcd1f567230ec4c6b98be76273ede67faa42",
+      "bytes": 14500
+    },
+    "technical/shape-effects.opf.json#3": {
+      "sha256": "df35954614f29c365467557d3c2b82fa6384f78809e1d1cafc27e7985933eacc",
+      "bytes": 14112
+    }
+  }
+}

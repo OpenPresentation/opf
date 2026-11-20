@@ -59,6 +59,8 @@ const forms = [
   { name: "image with focus, alt and overlay", spec: { type: "image", src: "asset:photo", alt: "A photo", fit: "stretch", focus: { x: 0.5, y: 0.7 }, overlay: { color: "dark1", opacity: 0.4 } }, stored: { type: "image", src: "asset:photo", alt: "A photo", fit: "stretch", focus: { x: 0.5, y: 0.7 }, overlay: { color: "dark1", opacity: 0.4 } }, draws: true },
   // LH-02: `overlay: false` turns off core's automatic scrim under text on the picture.
   { name: "image without the automatic scrim", spec: { type: "image", src: "asset:photo", overlay: false }, stored: { type: "image", src: "asset:photo", overlay: false }, draws: true },
+  // LH-158: the author picks where a cover's heading group goes on the picture.
+  { name: "image with a text placement", spec: { type: "image", src: "asset:photo", textPlacement: "top-start" }, stored: { type: "image", src: "asset:photo", textPlacement: "top-start" }, draws: true },
   { name: "image shorthand", spec: "asset:photo", stored: "asset:photo", draws: true },
   {
     name: "pattern with colors",
@@ -90,6 +92,7 @@ for (const form of forms) {
   const spec = { type: "gradient", gradient: { angle: "90", stops: [{ color: "#000000", position: "1" }, { color: "accent1", position: "0" }, { color: "#888888", position: 0.5 }] } };
   assert.deepEqual(normalizeBackground(spec), { type: "gradient", gradient: { angle: 90, stops: [{ color: "accent1", position: 0 }, { color: "#888888", position: 0.5 }, { color: "#000000", position: 1 }] } });
   const fails = (value, pattern) => assert.throws(() => normalizeBackground(value), (error) => error.code === "invalid-background" && pattern.test(error.message), JSON.stringify(value).slice(0, 80));
+  fails({ type: "image", src: "asset:photo", textPlacement: "left" }, /Text placement is one of/);
   fails({ type: "gradient", gradient: { stops: [{ color: "#000", position: 0 }] } }, /at least two color stops/);
   fails({ type: "gradient", gradient: { stops: [{ color: "#000", position: 0 }, { color: "teal", position: 1 }] } }, /Stop 2: the color must be a hex color/);
   fails({ type: "gradient", gradient: { stops: [{ color: "#000", position: 0 }, { color: "#fff", position: 2 }] } }, /Stop 2: the position is a number from 0/);

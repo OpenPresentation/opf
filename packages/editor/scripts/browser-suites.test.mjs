@@ -27,6 +27,14 @@ test('the CI browser suite lists every standalone browser script CI runs', () =>
     checkStandalone(entry, scripts);
   }
 });
+test('the perf suite holds the wall-clock budgets the nightly runs instead of verify (opf#1319)', () => {
+  const { browser, perf } = read('test/browser-suites.json').suites;
+  assert.deepEqual(perf.setup, browser.setup, 'the same builds as the browser suite');
+  assert.deepEqual(perf.tests.map((entry) => entry.command), ['node test/startup-perf-browser.mjs', 'node test/studio-perf-browser.mjs']);
+  for (const entry of perf.tests) checkStandalone(entry, read('package.json').scripts);
+  const browserCommands = new Set(browser.tests.map((entry) => entry.command));
+  for (const entry of perf.tests) assert.equal(browserCommands.has(entry.command), false, `${entry.id} runs once, in the perf suite`);
+});
 test('direct browser registration refuses missing paths and arbitrary commands', () => {
   assert.throws(() => checkStandalone({ id: 'missing', command: 'node test/missing-browser.mjs' }, {}), /ENOENT/);
   assert.throws(() => checkStandalone({ id: 'outside', command: 'node ../outside-browser.mjs' }, {}), /expected a normal/);

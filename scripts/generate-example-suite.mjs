@@ -147,8 +147,8 @@ function slug(value) {
     .replace(/^-+|-+$/g, "");
 }
 
-// Deprecated catalog records (e.g. chart types outside the Aspose.Slides-
-// supported set) stay resolvable but are never picked for new examples.
+// Deprecated catalog records (e.g. chart types outside the supported
+// set) stay resolvable but are never picked for new examples.
 async function loadCatalogIds(kind) {
   const entries = await readdir(path.join(catalogRoot, kind), { withFileTypes: true });
   const names = entries
@@ -408,11 +408,11 @@ function designFor(spec, index, catalogs, density) {
       ? { preset: "16:10", widthInches: 13.333, heightInches: 8.333 }
       : pick(["widescreen", "16:9", "4:3", "16:10", "letter", "a4"], index),
     background,
-    titleAlignment: pick(["left", "center", "right"], index),
+    titleAlignment: pick(["start", "center", "end"], index),
     // LH-88: no deck-level contentAlignment. A deck value overrides every layout record, so a cycled "center" (a third of the decks) centred list and paragraph bodies (opf/centered-body); unset, the layout records decide: start-aligned bodies, centred cover, section, closing, statement and metrics.
     contentBox: index % 3 === 0,
     contentDirection: pick(["horizontal", "vertical"], index),
-    chartPrimary: pick(["none", "left", "right", "top", "bottom"], index),
+    chartPrimary: pick(["none", "start", "end", "top", "bottom"], index),
     imageFit: pick(["cover", "contain"], index),
     listBullet: pick(["character", "image"], index),
   };
@@ -427,13 +427,13 @@ function designFor(spec, index, catalogs, density) {
     header: index % 5 === 0
       ? false
       : {
-          left: { text: "{{slide.section}}" },
-          right: { image: "asset:brand-icon" },
+          start: { text: "{{slide.section}}" },
+          end: { image: "asset:brand-icon" },
         },
     footer: {
-      left: { text: "{{organization.name}}" },
+      start: { text: "{{organization.name}}" },
       center: { text: index % 2 === 0 ? "Internal planning draft" : "Decision review" },
-      right: { text: "{{slide.number}}" },
+      end: { text: "{{slide.number}}" },
     },
   };
 }
@@ -560,7 +560,7 @@ function promotedRegionSlide(spec, index, catalogs) {
     id: `s${index + 1}-regions`,
     section: "Operating model",
     title: "Operating Model",
-    "top:left": {
+    "top:start": {
       metric: {
         value: metricValue(index),
         label: "Primary signal",
@@ -568,17 +568,17 @@ function promotedRegionSlide(spec, index, catalogs) {
         trend: trend(index),
       },
     },
-    "top:center+right": {
+    "top:center+end": {
       text: richText(spec, index),
     },
-    "middle+bottom:left": {
+    "middle+bottom:start": {
       quote: {
         text: `The path is workable if we keep the metric simple and the decision owner visible.`,
         attribution: `${spec.area} working group`,
         source: "Stakeholder interview",
       },
     },
-    "middle+bottom:center+right": {
+    "middle+bottom:center+end": {
       table: tablePayload(spec, index),
     },
     notes: "Use this slide to slow the conversation down around ownership and operating rhythm.",
@@ -1038,6 +1038,8 @@ This folder contains broader OPF examples organized by scenario instead of by is
 The root-level examples one directory up remain compact regression fixtures. The gallery examples are intentionally more varied: some are sparse OPF documents, while others use catalog overrides, assets, metadata, promoted regions, blocks, and richer design configuration.
 
 Brand marks, header icons, watermarks, cover artwork and supporting photos are original MIT-licensed abstract illustrations embedded as PNG data URIs. They work offline without fonts or an image resolver and can be regenerated with \`scripts/gallery-artwork.mjs\`. They are fictional demonstration artwork, not photographs or third-party logos: a supporting photo is an abstract landscape that stands in for a real photograph, which is what a deck of your own would carry there.
+
+One deck here is hand-authored rather than generated: \`design-and-media/data-story-academy-corporate-programs.opf.json\`, a 16-slide corporate programs deck for Data Story Academy (datastoryacademy.com). Its cover panels, squiggles, cards and lockup are the deck's own vector artwork, embedded as SVG assets, and it shows sections, speaker notes, highlighted charts and promoted regions on image backgrounds. The generator leaves it alone, and \`pnpm check:examples-convert\` covers it like the generated decks.
 
 Every gallery deck converts to PNG and PPTX with \`opf convert\` as it is, and \`pnpm check:examples-convert\` keeps it so. Two kinds of reference remain authoring examples, because their files are not embedded and no conversion reads them: each deck's \`demo-video\` asset (\`./media/<organization>-demo.mp4\`) and its \`metric-data\` asset (\`./data/<title>.csv\`). The video slide draws its placeholder and the data asset feeds nothing on the page, so neither makes a conversion fail; playback and data resolution belong to the application that opens the deck.
 `;

@@ -11,7 +11,7 @@ const BS = String.fromCharCode(92);
 const deck = (extra = {}) => ({
   name: 'Review',
   organization: { id: 'acme', name: 'Acme' },
-  design: { header: { left: { text: '{{slide.section}}' } }, footer: { left: { text: '{{organization.name}}' }, right: { text: '{{slide.number}} / {{deck.slideCount}}' } } },
+  design: { header: { start: { text: '{{slide.section}}' } }, footer: { start: { text: '{{organization.name}}' }, end: { text: '{{slide.number}} / {{deck.slideCount}}' } } },
   slides: [
     { id: 'one', section: 'Intro', title: 'Slide {{slide.number}} of {{deck.slideCount}}', text: 'Section: {{slide.section}}', notes: 'Say {{slide.number}}' },
     { id: 'two', section: 'Plan', title: 'Plan', bullets: ['Point {{slide.number}}'] },
@@ -34,7 +34,7 @@ test('the slide-scoped built-ins are listed with a slide scope', () => {
   ]);
   assert.ok(list.filter((entry) => entry.scope === 'deck').every((entry) => !entry.name.startsWith('slide.') && entry.name !== 'deck.slideCount'));
   const number = slide[0];
-  assert.deepEqual(number.uses.map((use) => use.path), ['/design/footer/right/text', '/slides/0/title', '/slides/0/notes', '/slides/1/bullets/0']);
+  assert.deepEqual(number.uses.map((use) => use.path), ['/design/footer/end/text', '/slides/0/title', '/slides/0/notes', '/slides/1/bullets/0']);
   const sectionless = listBuiltinVariables({ slides: [{ title: '{{slide.section}}' }] }).find((entry) => entry.name === 'slide.section');
   assert.equal(sectionless.available, false);
 });
@@ -51,8 +51,8 @@ test('resolveVariables leaves slide-scoped tokens as written, also on a complete
   assert.equal(second.bullets[0], 'Point {{slide.number}}');
   // A user escape is consumed; the escape in front of a slide-scoped token stays for the per-slide pass.
   assert.equal(first.subtitle, `For Globex {{client}} ${BS}{{slide.number}} ${BS}{{ deck.slideCount }}`);
-  assert.equal(result.presentation.design.footer.left.text, 'Acme');
-  assert.equal(result.presentation.design.footer.right.text, '{{slide.number}} / {{deck.slideCount}}');
+  assert.equal(result.presentation.design.footer.start.text, 'Acme');
+  assert.equal(result.presentation.design.footer.end.text, '{{slide.number}} / {{deck.slideCount}}');
   // Idempotent: resolving the result again changes nothing.
   assert.deepEqual(resolveVariables(result.presentation).presentation, result.presentation);
   // A template and a partial pass never report them either.
@@ -64,7 +64,7 @@ test('resolveSlideVariables substitutes every string of the slide except extensi
   const slide = {
     id: 's', section: 'Results', title: '{{slide.number}}/{{deck.slideCount}}', text: [{ text: 'Run {{slide.section}}', bold: true }],
     table: { columns: ['N'], rows: [['{{ slide.number }}']] }, notes: 'n{{slide.number}}',
-    design: { footer: { right: { text: '{{slide.number}}' } }, background: '#ffffff' },
+    design: { footer: { end: { text: '{{slide.number}}' } }, background: '#ffffff' },
     extensions: { vendor: { keep: '{{slide.number}}' } },
   };
   const before = structuredClone(slide);
@@ -74,7 +74,7 @@ test('resolveSlideVariables substitutes every string of the slide except extensi
   assert.deepEqual(out.text, [{ text: 'Run Results', bold: true }]);
   assert.equal(out.table.rows[0][0], '4');
   assert.equal(out.notes, 'n4');
-  assert.equal(out.design.footer.right.text, '{{slide.number}}', 'layoutFurniture resolves header and footer text');
+  assert.equal(out.design.footer.end.text, '{{slide.number}}', 'layoutFurniture resolves header and footer text');
   assert.equal(out.extensions.vendor.keep, '{{slide.number}}');
   // Unchanged input is returned as is; a slide without a section resolves {{slide.section}} to nothing.
   const plain = { title: 'Plain', text: '{{client}}' };
@@ -89,7 +89,7 @@ test('resolveSlideVariables substitutes every string of the slide except extensi
 test('an escaped {{slide.number}} draws as the literal token in body text and furniture', () => {
   const source = {
     variables: { client: { type: 'text', value: 'Globex' } },
-    design: { footer: { right: { text: `${BS}{{slide.number}} is {{slide.number}}` } } },
+    design: { footer: { end: { text: `${BS}{{slide.number}} is {{slide.number}}` } } },
     slides: [{ title: 'For {{client}}', text: `Write ${BS}{{slide.number}} to get {{slide.number}}.` }],
   };
   const { presentation } = resolveVariables(source);
@@ -97,7 +97,7 @@ test('an escaped {{slide.number}} draws as the literal token in body text and fu
   assert.equal(context.slide.text, 'Write {{slide.number}} to get 3.');
   const geometry = composeSlide(context.slide, context.options);
   assert.equal(item(geometry, 'text').value, 'Write {{slide.number}} to get 3.');
-  const footer = furnitureText(geometry, 'design.footer.right.text');
+  const footer = furnitureText(geometry, 'design.footer.end.text');
   assert.equal(footer.text, '{{slide.number}} is 3');
   assert.deepEqual(footer.fields, [{ type: 'slideNumber', start: 20, end: 21 }]);
 });
@@ -111,9 +111,9 @@ test('resolveSlideContext returns the substituted slide for its slide number and
   assert.equal(defaults.slide.title, 'Slide 1 of 2');
   assert.equal(defaults.slide.text, 'Section: Intro');
   const geometry = composeSlide(defaults.slide, defaults.options);
-  assert.equal(furnitureText(geometry, 'design.header.left.text').text, 'Intro');
-  assert.equal(furnitureText(geometry, 'design.footer.left.text').text, 'Acme');
-  const numbered = furnitureText(geometry, 'design.footer.right.text');
+  assert.equal(furnitureText(geometry, 'design.header.start.text').text, 'Intro');
+  assert.equal(furnitureText(geometry, 'design.footer.start.text').text, 'Acme');
+  const numbered = furnitureText(geometry, 'design.footer.end.text');
   assert.equal(numbered.text, '1 / 2');
   assert.deepEqual(numbered.fields, [{ type: 'slideNumber', start: 0, end: 1 }]);
   assert.equal(numbered.field, 'text');
@@ -169,7 +169,7 @@ test('validation: unknown slide paths and whole-field slide references are error
   assert.deepEqual(warningsOf(ok).filter((entry) => entry.ruleId?.startsWith('opf/variable-')), []);
   // Inherited header text: a slide without a section is warned at that slide; a slide that overrides the header is not.
   const missing = deck();
-  missing.slides = [{ title: 'No section' }, { title: 'Own header', design: { header: { left: { text: 'Fixed' } } } }, { section: 'S', title: 'Has one' }, { title: 'Direct {{slide.section}}', design: { header: false } }];
+  missing.slides = [{ title: 'No section' }, { title: 'Own header', design: { header: { start: { text: 'Fixed' } } } }, { section: 'S', title: 'Has one' }, { title: 'Direct {{slide.section}}', design: { header: false } }];
   const report = check(missing, { only: ['format', 'content'] });
   assert.equal(report.valid, true);
   const warned = warningsOf(report).filter((entry) => entry.ruleId === 'opf/variable-builtin-missing');
@@ -177,7 +177,7 @@ test('validation: unknown slide paths and whole-field slide references are error
   // Removed 0.16 keys are invalid.
   for (const key of ['organization', 'speaker', 'section', 'slideNumber', 'slideNumberFormat']) {
     const old = deck();
-    old.design.footer.right = { [key]: key === 'slideNumberFormat' ? '{current} / {total}' : true };
+    old.design.footer.end = { [key]: key === 'slideNumberFormat' ? '{current} / {total}' : true };
     assert.equal(check(old).valid, false, key);
   }
 });

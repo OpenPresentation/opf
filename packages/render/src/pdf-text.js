@@ -12,6 +12,7 @@ import { attributesOf, inheritStyle, parseFontFamilies, parseFontWeight, parseLe
 
 const bidi = bidiFactory();
 const IGNORED = /[⁦-⁩‎‏‪-‮؜]/u;
+const chunkDirection = chunk => chunk.chars[0].style.direction === "rtl" ? "rtl" : "ltr";
 
 /** Parse `font-feature-settings` / `font-variant-ligatures` of a style into an object of OpenType feature booleans. */
 export function featuresOf(style) {
@@ -122,7 +123,13 @@ export function layoutText(textNode, env, parentStyle, link) {
     const runs = runsByChunk[chunkIndex];
     const total = runs.reduce((sum, run) => sum + run.width, 0);
     const anchor = chunk.chars[0].style["text-anchor"];
-    let x = chunk.x + (anchor === "middle" ? -total / 2 : anchor === "end" ? -total : 0);
+    const rtl = chunkDirection(chunk) === "rtl";
+    // LH-189: the letter spacing after the chunk's last character does not count toward its anchor, as resvg anchors it, so outlined
+    // text and the PDF place a tracked middle or end anchored line where the raster preview does.
+    const last = runs.at(-1), trailing = last && last.width === last.natural ? last.glyphs.at(-1)?.letter ?? 0 : 0, extent = total - trailing;
+    // SVG start/end follow the chunk's base direction; middle stays physical.
+    // Use the same explicit-direction decision as bidi shaping below.
+    let x = chunk.x - (anchor === "middle" ? extent / 2 : anchor === "end" ? rtl ? 0 : extent : anchor === "start" && rtl ? extent : 0);
     for (const run of reorder(runs)) {
       run.x = x + (run.dx ?? 0);
       run.y = chunk.y + (run.dy ?? 0);
@@ -158,7 +165,7 @@ function collapseWhitespace(chars) {
 
 function buildRuns(chunk, env, styleIds, faceCache, linkIds, ownerIds) {
   const text = chunk.chars.map((char) => char.ch).join("");
-  const baseDirection = chunk.chars[0].style.direction === "rtl" ? "rtl" : "ltr";
+  const baseDirection = chunkDirection(chunk);
   // Levels per UTF-16 unit; characters take the level of their first unit.
   const embedding = bidi.getEmbeddingLevels(text, baseDirection);
   const levels = [];
@@ -255,6 +262,7 @@ function shapeRun(run, env) {
   run.glyphs = glyphs;
   run.natural = glyphs.reduce((sum, glyph, index) => {
     glyph.spacing = letterSpacing + (glyph.codePoints.length === 1 && glyph.codePoints[0] === 0x20 ? wordSpacing : 0);
+    glyph.letter = letterSpacing;
     glyph.nominalIndex = index;
     return sum + glyph.advance * scale + glyph.spacing;
   }, 0);
@@ -297,19 +305,71 @@ export function actualTextFor(run, glyph) {
 const NON_ASCII_SPACE = new RegExp("[" + [" ", " ", " - ", " ", " ", "　"].join("") + "]");
 
 /**
- * Split a left-to-right run into clusters: the shortest glyph groups whose characters are exactly the next characters of
- * the logical text (a reordered Indic syllable is one cluster). Each cluster gets `actual`, its logical text, when its
- * glyphs do not give that text in order or it holds a space the glyph map copies as a plain space. Null when the glyphs
- * and the text do not line up.
+ * Split a left-to-right run into clusters (the shortest glyph groups whose characters are exactly the next characters of the
+ * logical text: a reordered Indic syllable is one cluster) and set `run.clusters` to its words and spaces, or null when the
+ * glyphs and the text do not line up. A cluster whose glyphs do not carry its characters in logical order (a pre-base vowel
+ * sign or medial drawn before its consonant, a Thai or Lao am split into its nikhahit and aa, a two-part vowel split into its
+ * parts) gets its whole logical text on one glyph, the first that advances the pen (else the first), and its other glyphs are
+ * `silent`: drawn as text that maps to no character. The glyph-to-Unicode map, read in drawing order, then gives the author's
+ * text to readers that ignore /ActualText (pdf.js), and the word's `actual` (its text; for a space the map copies as a plain
+ * space, that space) is written as /ActualText for those that honor it. Right-to-left runs keep the shaper's attribution:
+ * their glyphs are read back to front, with /ActualText per glyph where that is not enough.
  */
-export function textClusters(run) {
-  // Fonts decompose some characters (a Bengali two-part vowel becomes its parts) and compose others, so try the text as
-  // written first and its canonical decomposition second.
-  return alignClusters(run, run.logical) ?? alignClusters(run, run.logical.normalize("NFD"));
+export function attributeClusters(run) {
+  run.clusters = null;
+  if (run.level % 2 === 1) return;
+  const clusters = alignedClusters(run);
+  if (!clusters) return;
+  for (const cluster of clusters) {
+    if (cluster.inOrder) continue;
+    const carrier = cluster.glyphs.find((glyph) => glyph.advance !== 0) ?? cluster.glyphs[0];
+    for (const glyph of cluster.glyphs) {
+      if (glyph === carrier) glyph.codePoints = [...cluster.text].map((character) => character.codePointAt(0));
+      else { glyph.codePoints = []; glyph.silent = true; }
+    }
+  }
+  // One /ActualText span per word that holds such a cluster: a span ends the text item in pdf.js, which then reads the gap
+  // to the next item as a space, so spans end only where the text has one. A plain space next to such a word goes inside
+  // its span, the word before it first (PDFium drops a space glyph that a span's glyphs overlap, and a span of a space
+  // alone); any other space is a unit of its own, with /ActualText when it is not U+0020.
+  const units = [];
+  let word = null;
+  for (const cluster of clusters) {
+    if (/^\s+$/u.test(cluster.text)) {
+      word = null;
+      units.push({ glyphs: cluster.glyphs, text: cluster.text, space: true, actual: NON_ASCII_SPACE.test(cluster.text) ? cluster.text : null });
+      continue;
+    }
+    if (!word) { word = { glyphs: [], text: "", actual: null, reordered: false }; units.push(word); }
+    word.glyphs.push(...cluster.glyphs);
+    word.text += cluster.text;
+    word.reordered ||= !cluster.inOrder;
+  }
+  const merged = [];
+  units.forEach((unit, index) => {
+    const before = merged.at(-1), after = units[index + 1];
+    if (unit.space && unit.actual === null && (before?.reordered || after?.reordered)) {
+      if (before?.reordered) { before.glyphs.push(...unit.glyphs); before.text += unit.text; }
+      else { after.glyphs.unshift(...unit.glyphs); after.text = unit.text + after.text; }
+      return;
+    }
+    merged.push(unit);
+  });
+  for (const unit of merged) if (unit.reordered) unit.actual = unit.text;
+  run.clusters = merged;
 }
 
-function alignClusters(run, text) {
-  const logical = [...text].map((character) => character.codePointAt(0));
+// Fonts decompose some characters (a Bengali two-part vowel becomes its parts, a Thai am its nikhahit and aa) and compose
+// others, so the glyphs are matched against the text as written, then against each character's canonical and then its
+// compatibility decomposition; a cluster always ends on a character boundary of the text as written.
+function alignedClusters(run) {
+  return alignClusters(run, null) ?? alignClusters(run, "NFD") ?? alignClusters(run, "NFKD");
+}
+
+function alignClusters(run, form) {
+  const characters = [...run.logical];
+  const points = (text) => [...text].map((character) => character.codePointAt(0));
+  const expansions = characters.map((character) => points(form ? character.normalize(form) : character));
   const balance = new Map();
   let open = 0;
   const add = (point, delta) => {
@@ -319,25 +379,29 @@ function alignClusters(run, text) {
     else if (before !== 0 && after === 0) open--;
   };
   const clusters = [];
-  let group = [], taken = [], consumed = 0, start = 0;
+  let group = [], taken = [], takenCount = 0, consumedCount = 0, next = 0, start = 0;
   for (const glyph of run.glyphs) {
     group.push(glyph);
     for (const point of glyph.codePoints) {
-      if (consumed >= logical.length) return null;
       add(point, 1);
-      add(logical[consumed++], -1);
       taken.push(point);
+      takenCount++;
+      while (consumedCount < takenCount) {
+        if (next >= characters.length) return null;
+        for (const expected of expansions[next]) { add(expected, -1); consumedCount++; }
+        next++;
+      }
     }
     if (open === 0 && taken.length) {
-      const slice = logical.slice(start, consumed);
-      const exact = slice.every((point, index) => point === taken[index]) && !slice.some((point) => NON_ASCII_SPACE.test(String.fromCodePoint(point)));
-      clusters.push({ glyphs: group, actual: exact ? null : String.fromCodePoint(...slice).normalize("NFC") });
-      group = []; taken = []; start = consumed;
+      const text = characters.slice(start, next).join("");
+      const written = points(text);
+      clusters.push({ glyphs: group, text, inOrder: written.length === taken.length && written.every((point, index) => point === taken[index]) });
+      group = []; taken = []; start = next;
     }
   }
-  if (group.length || consumed !== logical.length) {
+  if (group.length || next !== characters.length) {
     // Trailing glyphs without characters join the last cluster; anything else means no alignment.
-    if (!group.length || taken.length || !clusters.length) return null;
+    if (!group.length || taken.length || !clusters.length || next !== characters.length) return null;
     clusters.at(-1).glyphs.push(...group);
   }
   return clusters;

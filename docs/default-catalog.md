@@ -74,8 +74,8 @@ matched by `source`.
 > their bare ids resolve in `custom`, then in that catalog. A document whose `default` names a `source` uses the
 > registered catalog with that source, and nothing when the host did not register it, even if it registered others.
 > `"default": false` uses no catalog for bare ids. Without the `catalogs` option the browser build and every engine
-> register nothing, so only what the document embeds resolves; in Node, core's file API and `validate`, `stats`,
-> `paginate`, `embed` and `edit` register `gallery`, as the CLI does. Hosts (the CLI, the editor app, the sites)
+> register nothing, so only what the document embeds resolves; in Node, core's file API and `validate`,
+> `createValidator().validate`, `stats`, `paginate`, `embed` and `edit` register `gallery`, as the CLI does. Hosts (the CLI, the editor app, the sites)
 > register `@openpresentation/gallery`; libraries and engines pass the option through.
 
 ```js
@@ -234,7 +234,7 @@ LH-37. A reviewer applies this list to every new or changed theme, color scheme,
 1. **No accent line under titles.** No short rule, bar or underline under a title or tag, whether a layout region, a theme decoration or a preview. Hierarchy comes from size, weight and space.
 2. **No decorative side stripes on cards.** A card or `contentBox` surface is a fill or an outline, not a fill with a colored bar down one edge.
 3. **No default gradient backgrounds.** A theme background is a color-scheme slot (`light1`, `dark1`, ...) or a picture the user chose. A gradient is a deliberate, named variant of one theme and never the default; check the record and its previews.
-4. **No centered body text.** Center only a closing, a statement or a number (`titleAlignment` / `contentAlignment: "center"` on those layouts); a cover and a section set their display title at the start edge, low on the slide (LH-130). A layout whose body is a list, a table, a paragraph or code stays start-aligned, in a right-to-left deck too.
+4. **No centered body text.** Center only a statement or a number (`titleAlignment` / `contentAlignment: "center"` on those layouts); a cover, a section and a closing set their display title at the start edge, low on the slide (LH-130, LH-155). A layout whose body is a list, a table, a paragraph or code stays start-aligned, in a right-to-left deck too.
 5. **No emoji.** None in a record's names, descriptions, tags, sample content or previews, and none standing in for an icon or a bullet.
 6. **Not "cream, serif and terracotta" by default.** A scheme with a warm off-white `light1`/`light2` (hue 30-55, saturation 20% or more, lightness 88-97%) together with a terracotta accent (hue 8-28, saturation 35-75%, lightness 35-60%) and a theme that pairs it with a serif font scheme is the assistant-generated look. Offer it only with a reason, and never as a theme default.
 7. **No low-contrast tints.** Compute the WCAG contrast ratio of each pair:
@@ -321,7 +321,7 @@ Before 0.19, Core stored the snapshot at `spec/catalogs/manifest.json` (schema `
 }
 ```
 
-That historical snapshot used `mirror` for every kind and held every record the gallery published (278 layouts at that checkpoint). The `packages/gallery` package owns the snapshot and the 30 v2 layout templates; core consumes the package, and the records are tracked in this repository. No browser entry of Core imports catalog records (`pnpm check:catalog-free`).
+That historical snapshot used `mirror` for every kind and held every record the gallery published (278 layouts at that checkpoint). The `packages/gallery` package owns the snapshot and the 36 v2 layout templates; core consumes the package, and the records are tracked in this repository. No browser entry of Core imports catalog records (`pnpm check:catalog-free`).
 
 The 1.x design synchronized the snapshot from pptx.gallery and refused a publisher that stopped serving a held id
 (waived per id with `--allow-removed`). That sync was retired with gallery 2.0.0; a record is now removed by a pull

@@ -401,7 +401,7 @@
       "id": "chart-primary-left",
       "title": "chartPrimary left",
       "design": {
-        "chartPrimary": "left"
+        "chartPrimary": "start"
       },
       "blocks": [
         {
@@ -448,7 +448,7 @@
       "id": "chart-primary-right",
       "title": "chartPrimary right",
       "design": {
-        "chartPrimary": "right"
+        "chartPrimary": "end"
       },
       "blocks": [
         {

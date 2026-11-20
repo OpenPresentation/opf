@@ -39,7 +39,8 @@ test('covers, sections and statements never step their title down; a cover or se
   const text = 'Revenue grew in every region this quarter, led by EMEA';
   for (const layout of [layouts.cover, layouts.section, layouts.text]) assert.ok(title({ title: text }, layout).text.fontSize >= 54, 'a slide with no body is a cover');
   assert.ok(title({ title: text }, layouts.section).text.fontSize > 54, 'its headings are the message (LH-129)');
-  assert.equal(title({ title: text, text: 'One message.' }, layouts.statement).text.fontSize, 54);
+  // LH-09: a statement's sentence title over its paragraph is its message and grows to display size.
+  assert.ok(title({ title: text, text: 'One message.' }, layouts.statement).text.fontSize > 54);
 });
 
 test('a "Topic: qualifier" title that still wraps splits at the colon', () => {

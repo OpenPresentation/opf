@@ -46,7 +46,30 @@ describe("unknown property suggestions", () => {
   });
   test("an enum finding keeps its allowed values, all of them in the params", () => {
     const found = validate({ slides: [{ title: "a" }], design: { titleAlignment: "middle" } }, { only: ["format"] }).findings.find((entry) => entry.validation?.keyword === "enum");
-    assert.deepEqual(found.validation.params.allowedValues, ["left", "center", "right"]);
-    assert.deepEqual(names(found), ["left", "center", "right"]);
+    assert.deepEqual(found.validation.params.allowedValues, ["start", "center", "end"]);
+    assert.deepEqual(names(found), ["start", "center", "end"]);
+  });
+});
+
+describe("the help of an unknown property names the nearest declared one", () => {
+  const help = (document) => additional(document)[0].help;
+  test("a one-letter slip in a design key", () => {
+    const [found] = additional({ slides: [{ title: "a" }], design: { contentAligment: "start" } });
+    assert.deepEqual(names(found), ["contentAlignment"]);
+    assert.match(found.help, /Did you mean "contentAlignment"\?/);
+    assert.equal(found.fixes?.[0]?.id, "rename-to:contentAlignment");
+  });
+  test("every near name in the object a person might slip in says it", () => {
+    assert.match(help({ slides: [{ title: "a", tilte: "b" }] }), /Did you mean "title"\?/);
+    assert.match(help({ slids: [] }), /Did you mean "slides"\?/);
+  });
+  test("an abbreviation keeps its own sentence and ranks before the other near names", () => {
+    const [found] = additional({ slides: [{ blocks: [{ type: "text", text: [{ text: "hi", lang: "en" }] }] }] });
+    assert.deepEqual(names(found).slice(0, 1), ["language"]);
+    assert.match(found.help, /^Write "language" instead/);
+    assert.equal(found.fixes?.[0]?.id, "rename-to:language");
+  });
+  test("a name with no near declared one keeps the generic help", () => {
+    assert.match(help({ slides: [{ title: "a" }], zzzzzzzz: 1 }), /^Review "zzzzzzzz"/);
   });
 });

@@ -5,7 +5,9 @@
 //
 // Browser-safe and synchronous: no file access, no network, no fonts or DOM.
 import { chartOptionTarget } from './chart-options.js';
+import { CHART_REFERENCE_TYPES } from './chart-reference-types.js';
 import { formatVariableNumber } from './variables.js';
+import { localizeNumberText } from './numerals.js';
 
 /** A scalar data cell (chart data, dataset rows). */
 export type DataCellValue = string | number | boolean | null;
@@ -43,6 +45,8 @@ export type DataDiagnosticCode =
   | 'chart-highlight-unknown-name'
   | 'chart-highlight-adapted'
   | 'chart-series-dropped'
+  | 'chart-reference-axis-unavailable'
+  | 'chart-reference-unsupported-type'
   | 'table-highlight-unknown-name'
   | 'number-format-invalid';
 
@@ -137,11 +141,15 @@ export function numberFormatError(format: unknown): string | undefined {
   return 'error' in result ? result.error : undefined;
 }
 
-/** Format a number with a NumberFormat; an absent or invalid format prints the General form (String(value)). */
-export function formatDataNumber(value: number, format?: string): string {
-  if (format === undefined || format === '' || !Number.isFinite(value)) return String(value);
-  const result = formatVariableNumber(value, format);
-  return 'text' in result ? result.text : String(value);
+/**
+ * Format a number with a NumberFormat; an absent or invalid format prints the General form (String(value)). LH-106: with `language`
+ * the text is in that language's numbering system (see `formatVariableNumber`); without it, Latin.
+ */
+export function formatDataNumber(value: number, format?: string, language?: string): string {
+  const general = () => language === undefined || !Number.isFinite(value) ? String(value) : localizeNumberText(String(value), language);
+  if (format === undefined || format === '' || !Number.isFinite(value)) return general();
+  const result = formatVariableNumber(value, format, language);
+  return 'text' in result ? result.text : general();
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -201,8 +209,16 @@ function excelInteger(integer: string): string {
 /** NumberFormat -> Excel format code ("General" when absent or invalid). Literal prefix/suffix text is quoted or escaped; placeholders are written '#' before '0' ("0#" -> "#0"). */
 export function toExcelNumberFormat(format?: string): string {
   if (format === undefined || format === '') return 'General';
+  const sections = format.split(';');
+  if (sections.length > 3) return 'General';
+  const codes = sections.map(excelSection);
+  // Each section is a pattern of its own; Excel reads `positive;negative;zero` as OPF does, so the sections are joined as they are.
+  return codes.includes(undefined) ? 'General' : codes.join(';');
+}
+
+function excelSection(format: string): string | undefined {
   const parts = formatParts(format);
-  if (!parts) return 'General';
+  if (!parts) return undefined;
   const percent = { used: false };
   const minDecimals = [...parts.decimals].filter(char => char === '0').length;
   const decimals = parts.decimals ? `.${'0'.repeat(minDecimals)}${'#'.repeat(parts.decimals.length - minDecimals)}` : '';
@@ -248,6 +264,28 @@ export function fromExcelNumberFormat(code: string): string | undefined {
   if (typeof code !== 'string') return undefined;
   const trimmed = code.trim();
   if (trimmed === '' || /^general$/i.test(trimmed)) return undefined;
+  const sections = excelSections(code);
+  if (!sections || sections.length > 3) return undefined;
+  const formats = sections.map(fromExcelSection);
+  return formats.includes(undefined) ? undefined : formats.join(';');
+}
+
+/** The sections of an Excel code: split at each `;` outside quotes, brackets and a backslash escape. */
+function excelSections(code: string): string[] | undefined {
+  const sections: string[] = [];
+  let start = 0;
+  for (let i = 0; i < code.length; i++) {
+    const char = code[i]!;
+    if (char === '"') { const end = code.indexOf('"', i + 1); if (end < 0) return undefined; i = end; }
+    else if (char === '\\') i++;
+    else if (char === '[') { const end = code.indexOf(']', i + 1); if (end < 0) return undefined; i = end; }
+    else if (char === ';') { sections.push(code.slice(start, i)); start = i + 1; }
+  }
+  sections.push(code.slice(start));
+  return sections;
+}
+
+function fromExcelSection(code: string): string | undefined {
   const tokens = excelTokens(code);
   if (!tokens) return undefined;
   const first = tokens.findIndex(token => token.kind === 'placeholder');
@@ -276,7 +314,7 @@ export function fromExcelNumberFormat(code: string): string | undefined {
   const format = `${prefix}${numeric}${suffix}`;
   // The NumberFormat must read back as the same three parts (a prefix may not hold '#', '0', ',' or '.').
   const parts = formatParts(format);
-  if (!parts || parts.prefix !== prefix || parts.suffix !== suffix) return undefined;
+  if (!parts || parts.prefix !== prefix || parts.suffix !== suffix || format.includes(';')) return undefined;
   return format;
 }
 
@@ -416,7 +454,7 @@ function visitDataPayloads(document: Record<string, any>, visit: (payload: Recor
   for (const slide of document.slides) {
     if (!record(slide)) continue;
     walk(slide, 0, []);
-    for (const [key, value] of Object.entries(slide)) if (record(value) && /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key)) walk(value, 1, [slide]);
+    for (const [key, value] of Object.entries(slide)) if (record(value) && /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key)) walk(value, 1, [slide]);
   }
 }
 
@@ -592,6 +630,12 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
       ...secondaryLines.map(() => ({ role: 'line' as const, axis: 'secondary' as const })),
     ];
   }
+  // An explicit reference is never dropped silently: a type without one value axis for every series is an error that names the property.
+  if (record(chart) && Array.isArray(chart.referenceLines) && chart.referenceLines.length > 0 && typeof chart.type === 'string' && !CHART_REFERENCE_TYPES.has(chart.type))
+    diagnostics.push({code:'chart-reference-unsupported-type',severity:'error',path:at(base,'referenceLines'),message:`referenceLines needs a chart with one value axis for every series (${[...CHART_REFERENCE_TYPES].join(', ')}); a '${chart.type}' chart has none. Remove referenceLines or change the chart type.`});
+  if (record(chart) && Array.isArray(chart.referenceLines)) chart.referenceLines.forEach((entry, index) => {
+    if (record(entry) && entry.axis === 'secondary' && !combo?.some(series => series.axis === 'secondary')) diagnostics.push({code:'chart-reference-axis-unavailable',severity:'error',path:at(base,'referenceLines',index,'axis'),message:'A secondary reference requires a combo chart with a plotted line series on its secondary value axis.'});
+  });
   const order = [category, ...(x === undefined ? [] : [x]), ...series];
   if (!rows.length) return fail('no-rows', 'The chart data has no rows.');
   // A lone column (no category column) is the chart's values, plotted against row numbers or binned: it is read as numbers too.
@@ -839,13 +883,17 @@ function highlightDiagnostics(table: unknown, rows: readonly (readonly unknown[]
 }
 
 /** Display value of a table cell: a number with a format (cell, else column) becomes formatted text; anything else is returned unchanged. */
-export function tableCellDisplayValue(cell: DataTableCell, columnFormat?: string): DataTableCell {
+export function tableCellDisplayValue(cell: DataTableCell, columnFormat?: string, language?: string): DataTableCell {
+  // LH-106: with `language`, a number cell (with or without a format) is shown in that language's numbering system.
+  const shown = (value: number, format: string | undefined) => formatDataNumber(value, general(format) ? undefined : format, language);
   if (record(cell) && own(cell, 'value')) {
     const styled = cell as DataStyledCell;
     const format = typeof styled.format === 'string' ? styled.format : columnFormat;
-    if (typeof styled.value !== 'number' || format === undefined || numberFormatError(format)) return cell;
-    return { ...styled, value: formatDataNumber(styled.value, format) };
+    if (typeof styled.value !== 'number' || (general(format) && shown(styled.value, format) === String(styled.value))) return cell;
+    return { ...styled, value: shown(styled.value, format) };
   }
-  if (typeof cell !== 'number' || columnFormat === undefined || numberFormatError(columnFormat)) return cell;
-  return formatDataNumber(cell, columnFormat);
+  if (typeof cell !== 'number' || (general(columnFormat) && shown(cell, columnFormat) === String(cell))) return cell;
+  return shown(cell, columnFormat);
 }
+// A cell without a (valid) format whose General text is JavaScript's own stays the number it is.
+const general = (format: string | undefined): boolean => format === undefined || numberFormatError(format) !== undefined;

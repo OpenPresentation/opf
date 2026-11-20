@@ -65,7 +65,7 @@
       "color": "#FFFFFF",
       "opacity": 1
     },
-    "titleAlignment": "right",
+    "titleAlignment": "end",
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "bottom",
@@ -76,21 +76,21 @@
       "opacity": 0.06
     },
     "header": {
-      "left": {
+      "start": {
         "text": "{{slide.section}}"
       },
-      "right": {
+      "end": {
         "image": "asset:brand-icon"
       }
     },
     "footer": {
-      "left": {
+      "start": {
         "text": "{{organization.name}}"
       },
       "center": {
         "text": "Internal planning draft"
       },
-      "right": {
+      "end": {
         "text": "{{slide.number}}"
       }
     }
@@ -706,8 +706,8 @@
             "Openers and closers"
           ],
           "design": {
-            "titleAlignment": "left",
-            "contentAlignment": "left"
+            "titleAlignment": "start",
+            "contentAlignment": "start"
           },
           "direction": "row",
           "regions": [

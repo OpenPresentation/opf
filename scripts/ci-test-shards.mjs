@@ -17,10 +17,15 @@
 //   node scripts/ci-test-shards.mjs --package pptx --script test --shard 2/3 [--dry-run]
 // `--package` is render, pptx or editor (packages/<id>; the weights stay keyed by the old repository names). It prints and runs
 // the shard's commands in the package directory; `--dry-run` only prints them. `npm run` and `pnpm run` steps both work.
+//
+// opf#1319: the weights are regenerated from a full run's job logs by scripts/ci-test-weights.mjs. At its end a shard prints the
+// seconds its tests were planned to take and the seconds they took, and warns (an annotation, never a failure) when the two drift
+// far apart, so stale weights show in the run instead of as a slow leg nobody explains.
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { driftReport } from './ci-test-weights.mjs';
 import { spawnSpec } from './package-manager.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -163,20 +168,35 @@ export function planPackageShard({ id, scriptName, shard, repositoryRoot = root 
   const entry = SHARDED_PACKAGES[id];
   if (!entry) throw new Error(`--package must be one of ${Object.keys(SHARDED_PACKAGES).join(', ')}, not ${id}`);
   const packageRoot = path.join(repositoryRoot, entry.dir);
-  return { packageRoot, commands: planSiblingShard({ siblingRoot: packageRoot, sibling: entry.weights, scriptName, shard, overhead: PACKAGE_SHARD_ONE_OVERHEAD }) };
+  const weights = loadWeights(entry.weights);
+  return { packageRoot, weights, commands: planSiblingShard({ siblingRoot: packageRoot, sibling: entry.weights, scriptName, shard, weights, overhead: PACKAGE_SHARD_ONE_OVERHEAD }) };
 }
+
+/** True for a command of a shard that is one listed test (`node [--test] test/<file>`), whose time the weights plan. */
+export const isTestCommand = (entry) => entry.tool === 'node' && /(^|\/)test\/[^/\s]+\.m?js$/.test(entry.argv.at(-1) ?? '');
+/** The seconds the weights plan for the listed tests among `commands`. */
+export const plannedSeconds = (commands, weights) => commands.filter(isTestCommand).reduce((sum, entry) => sum + (weights[fileOf(entry.text)] ?? DEFAULT_WEIGHT), 0);
 
 function main(argv) {
   const value = (name) => argv[argv.indexOf(name) + 1];
   const scriptName = value('--script') ?? 'test';
   const shard = parseShard(value('--shard'));
   if (argv.includes('--package')) {
-    const { packageRoot, commands } = planPackageShard({ id: value('--package'), scriptName, shard });
+    const { packageRoot, weights, commands } = planPackageShard({ id: value('--package'), scriptName, shard });
     console.log(`::notice title=Test shard ${shard.index}/${shard.count}::${value('--package')} ${scriptName}: ${commands.length} command(s)`);
+    const dryRun = argv.includes('--dry-run');
+    let measured = 0;
     for (const entry of commands) {
       console.log(`+ ${entry.text}`);
-      if (!argv.includes('--dry-run')) execute(entry, packageRoot);
+      if (dryRun) continue;
+      const started = performance.now();
+      execute(entry, packageRoot);
+      if (isTestCommand(entry)) measured += (performance.now() - started) / 1000;
     }
+    const label = `${value('--package')} ${scriptName} shard ${shard.index}/${shard.count}`;
+    const planned = plannedSeconds(commands, weights);
+    if (dryRun) console.log(`${label}: planned ${Math.round(planned)} s of tests from scripts/ci-test-weights.json`);
+    else for (const line of driftReport(label, planned, measured)) console.log(line);
     return 0;
   }
   throw new Error('--package <render|pptx|editor> is required');

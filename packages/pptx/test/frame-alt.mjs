@@ -17,7 +17,8 @@ async function roundTrip(chart, slide = {}) {
   const slideXml = decoder.decode(entries['ppt/slides/slide1.xml']);
   const imported = (await fromPptx(bytes)).slides[0];
   const back = imported.chart ?? imported.blocks?.find(block => block.chart)?.chart;
-  return {slideXml, back, frames: [...slideXml.matchAll(/<p:graphicFrame>[\s\S]*?<\/p:graphicFrame>/g)].map(match => match[0])};
+  // RR-105: a chartex chart's mc:Fallback is a picture of the preview, the same object as its frame: it carries the frame's p:cNvPr.
+  return {slideXml, back, frames: [...slideXml.matchAll(/<p:graphicFrame>[\s\S]*?<\/p:graphicFrame>|<mc:Fallback><p:pic>[\s\S]*?<\/p:pic>/g)].map(match => match[0])};
 }
 
 const alt = 'Revenue grew from 10 in Q1 to 20 in Q2 & fell to 15 in Q3 ("North" leads).';
@@ -32,19 +33,20 @@ for (const type of ['column', 'bar', 'line', 'pie', 'scatter']) {
   assert.equal(back.alt, alt, `${type}: import restores alt`);
 }
 
-// 2. Chartex (Office 2016) charts: both the choice and the fallback frame carry the description.
+// 2. Chartex (Office 2016) charts: both the choice frame and the fallback picture (RR-105; a classic chart frame before) carry the description.
 for (const type of ['waterfall', 'funnel', 'treemap']) {
   const {slideXml, back, frames} = await roundTrip({type, alt, data: {columns: ['Step', 'Value'], rows: [['A', 10], ['B', 20], ['C', 15]]}});
   assert.match(slideXml, /<mc:AlternateContent/, `${type}: a chartex frame`);
-  assert.equal(frames.length, 2, `${type}: choice and fallback frames`);
+  assert.equal(frames.length, 2, `${type}: choice frame and fallback picture`);
+  assert.match(frames[1], /^<mc:Fallback><p:pic>/, `${type}: the fallback is a picture`);
   for (const frame of frames) assert.match(frame, new RegExp(`descr="${escaped.replace(/[()]/g, '\\$&')}"`), `${type}: descr on the frame`);
   assert.equal(back.alt, alt, `${type}: import restores alt from the chartex choice`);
 }
 
-// 3. No alt: no descr and no decorative marker, and import invents none.
+// 3. No alt: the generated description (RR-105, #1290, 2026-11-12; before it, no descr), no decorative marker, and import invents no alt.
 {
   const {slideXml, back} = await roundTrip({type: 'column', data});
-  assert.doesNotMatch(slideXml, /<p:cNvPr[^>]*name="OPF chart 1"[^>]*descr=/, 'no alt, no descr');
+  assert.match(slideXml, /<p:cNvPr[^>]*name="OPF chart 1" descr="Column chart: North and South by Quarter, 3 categories"\/>/, 'no alt, the generated descr');
   assert.doesNotMatch(slideXml, /adec:decorative/);
   assert.equal('alt' in back, false);
 }
@@ -53,6 +55,7 @@ for (const type of ['waterfall', 'funnel', 'treemap']) {
 for (const type of ['column', 'waterfall']) {
   const {slideXml, back, frames} = await roundTrip({type, alt: '', data: type === 'waterfall' ? {columns: ['Step', 'Value'], rows: [['A', 10], ['B', 20]]} : data});
   assert.doesNotMatch(slideXml, /descr=/, `${type}: no descr for a decorative chart`);
+  assert.equal(frames.length, type === 'column' ? 1 : 2, `${type}: the chart frame (and a chartex chart's fallback picture)`);
   for (const frame of frames) assert.match(frame, /<p:cNvPr id="\d+" name="OPF chart 1"><a:extLst><a:ext uri="\{C183D7F6-B498-43B3-948B-1728B52AA6E4\}"><adec:decorative xmlns:adec="http:\/\/schemas\.microsoft\.com\/office\/drawing\/2017\/decorative" val="1"\/><\/a:ext><\/a:extLst><\/p:cNvPr>/);
   assert.doesNotThrow(() => parser.parse(slideXml), `${type}: well-formed slide`);
   assert.equal(back.alt, '', `${type}: import restores the empty alt`);

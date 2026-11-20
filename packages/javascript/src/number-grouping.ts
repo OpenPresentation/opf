@@ -2,26 +2,19 @@
 // wherever the author wrote no number format: chart value labels, the doughnut hole and the pie value list, the end labels of a line,
 // and a metric's numeric value. A number format the author wrote is the author's and is never regrouped.
 
+import {formatNumber} from './numerals.js';
+
 /** A whole number groups its thousands from this magnitude (four integer digits). */
 export const NUMBER_GROUPING_MIN = 1000;
 
-const formatters = new Map<string, Intl.NumberFormat>();
-
 /**
- * `value` in the General form (at most twelve significant digits) with its thousands grouped by the language's locale (`Intl`, English
- * when the tag is missing or unknown; a locale that groups only from five digits, Spanish, leaves four digits as they are). A number that
- * is not finite is its plain text.
+ * `value` in the General form (at most twelve significant digits) with its thousands grouped by the language's locale (English
+ * when the tag is missing or unknown; a locale that groups only from five digits, Spanish, leaves four digits as they are), in the
+ * language's own digits (LH-106: `formatNumber`, from OPF's locale table, never the runtime's `Intl`). A number that is not finite
+ * is its plain text.
  */
 export function groupNumber(value: number, language?: string): string {
-  if (!Number.isFinite(value)) return String(value);
-  const key = language ?? '';
-  let formatter = formatters.get(key);
-  if (!formatter) {
-    try { formatter = new Intl.NumberFormat(language || 'en', {useGrouping: true, maximumFractionDigits: 12}); }
-    catch { formatter = new Intl.NumberFormat('en', {useGrouping: true, maximumFractionDigits: 12}); }
-    formatters.set(key, formatter);
-  }
-  return formatter.format(Number(value.toPrecision(12)));
+  return formatNumber(value, language, {group: true});
 }
 
 /**
@@ -52,3 +45,22 @@ export function groupsAxisTicks(axis: {min: number; max: number; majorUnit: numb
 
 /** The number format code PowerPoint prints a grouping series' labels with, as `groupNumber` does (its separators follow the viewer's region). */
 export const GROUPED_LABEL_CODE = '#,##0';
+
+/**
+ * LH-153: whether a value axis the engines do not compose (a combo chart's axes, a scatter chart's, the chartex constructs': waterfall,
+ * histogram, pareto, box and whisker) groups its tick labels, decided from its data alone so the preview and PowerPoint (which picks its own
+ * ticks) agree: every value is a whole number, one reaches four digits (`groupsThousands`) and the values span at least `minRange` (default
+ * 100: a nice scale of at most ten intervals then steps by 10 or more, so every tick is a whole number). A `zeroBased` axis (columns, bars,
+ * a waterfall) includes zero in the span. A scatter chart's X axis passes 1000: a column of years (1990 to 2020, or 1900 to 2020) is a
+ * four-digit whole number that must not read "1,990".
+ */
+export function groupsDataRange(values: readonly (number | null | undefined)[], options: {zeroBased?: boolean; minRange?: number} = {}): boolean {
+  if (!groupsThousands(values)) return false;
+  let min = options.zeroBased ? 0 : Infinity, max = options.zeroBased ? 0 : -Infinity;
+  for (const value of values) {
+    if (value === null || value === undefined) continue;
+    if (value < min) min = value;
+    if (value > max) max = value;
+  }
+  return max - min >= (options.minRange ?? 100);
+}

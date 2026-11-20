@@ -1,0 +1,47 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Qualification: SmartArt right to left",
+  "description": "v0.33 qualification: arrangements in Arabic (right to left).",
+  "language": {
+    "bcp47": "ar",
+    "name": "Arabic",
+    "direction": "rtl",
+    "script": "Arab",
+    "fontScheme": "noto-sans-arabic"
+  },
+  "slides": [
+    {
+      "id": "pyramid-ar",
+      "layout": "pyramid",
+      "title": "استراتيجيتنا",
+      "items": [
+        "الرؤية",
+        "الأهداف",
+        "البرامج",
+        "الفرق والمنصة"
+      ]
+    },
+    {
+      "id": "flow-ar",
+      "layout": "flow",
+      "title": "كيف نعمل",
+      "items": [
+        "الرؤية",
+        "الأهداف",
+        "البرامج",
+        "الفرق والمنصة"
+      ]
+    },
+    {
+      "id": "cycle-ar",
+      "layout": "cycle",
+      "title": "دورة المراجعة",
+      "items": [
+        "الرؤية",
+        "الأهداف",
+        "البرامج",
+        "الفرق والمنصة"
+      ]
+    }
+  ]
+}

@@ -106,17 +106,17 @@ reports and comparison outputs are.
 
 | Evidence | Covers |
 | --- | --- |
-| [rr-33-35-native-20261001](../../evidence/rr-33-35-native-20261001/README.md) ([v2 run](../../evidence/rr-33-35-native-20261001/v2-run-20261001.md), [parity investigation](../../evidence/rr-33-35-native-20261001/parity-investigation.md)) | Numbered lists (RR-33), footnotes, citations and captions (RR-34), chart options (RR-35) and the single-series chart colour (RR-36). The v1 run found citation markers about 0.75 times smaller (F1) and chartex axis titles lost on save (F2); both were fixed and the v2 run (25 decks) passed |
-| [rr-05b-native-20261002](../../evidence/rr-05b-native-20261002/README.md) | Right-to-left layout (RR-05): alignment, bullets, table `rtl`, chart mirroring and `v2.0` bidi order, 4 decks, 0 failing checks |
-| [spec-gaps-native-20261001](../../evidence/spec-gaps-native-20261001/README.md) | Chart text at 12 pt (FF-62), slide sections and nested-group round trip, design fields (logos, accent font, picture bullets) |
-| [windows-native-charts-20260930](../../evidence/windows-native-charts-20260930/README.md) | The native chartex chart types (FF-56) |
+| rr-33-35-native-20261001 (v2 run, parity investigation) | Numbered lists (RR-33), footnotes, citations and captions (RR-34), chart options (RR-35) and the single-series chart colour (RR-36). The v1 run found citation markers about 0.75 times smaller (F1) and chartex axis titles lost on save (F2); both were fixed and the v2 run (25 decks) passed |
+| rr-05b-native-20261002 | Right-to-left layout (RR-05): alignment, bullets, table `rtl`, chart mirroring and `v2.0` bidi order, 4 decks, 0 failing checks |
+| spec-gaps-native-20261001 | Chart text at 12 pt (FF-62), slide sections and nested-group round trip, design fields (logos, accent font, picture bullets) |
+| windows-native-charts-20260930 | The native chartex chart types (FF-56) |
 
 Recorded in the burndown rows without a committed evidence folder: the native checks of SVG pictures (RR-10) and of
 native header/footer (RR-11, `p:hf`; relevant to [opf#87](https://github.com/OpenPresentation/opf/issues/87)), and
 the PowerPoint measurements behind the 54 pattern tiles (RR-07, in the [core changelog](../../../CHANGELOG.md)) and
 the Arabic Typesetting baseline probe (RR-38, [opf#279](https://github.com/OpenPresentation/opf/pull/279)). The
 cross-platform evidence for the published set is not native PowerPoint but is linked for completeness:
-[rr-04-cross-platform-20261001](../../evidence/rr-04-cross-platform-20261001/README.md) (measured on the 0.11.4
+rr-04-cross-platform-20261001 (measured on the 0.11.4
 train; the Published packages matrix runs again on the 0.12.0 set in opf#283).
 
 ### Not yet verified natively
@@ -218,7 +218,7 @@ provenance, `npm audit signatures`):
 - `@openpresentation/opf-pptx` **0.12.2** (2026-10-02, `e4569ac`, [opf-pptx#155](https://github.com/OpenPresentation/opf-pptx/pull/155)):
   writes the deck language's own Office script entry (Viet, Uigh) with the deck's font, so `Presentation.Fonts` lists no
   extra name (the last case of the FF-05 class; [opf-pptx#154](https://github.com/OpenPresentation/opf-pptx/pull/154),
-  native re-run [rr-17-viet-supplement-native-20261002](../../evidence/rr-17-viet-supplement-native-20261002/README.md)).
+  native re-run rr-17-viet-supplement-native-20261002).
 - `@openpresentation/opf-editor` **0.11.2** (2026-10-03, `c7ac1d7`, opf-editor#85): the slide-size and purpose switches
   ([opf-editor#80](https://github.com/OpenPresentation/opf-editor/pull/80)).
 - `@openpresentation/opf` **0.12.1** (2026-10-03, `1f698c4`, [opf#338](https://github.com/OpenPresentation/opf/pull/338)):
@@ -246,7 +246,7 @@ unchanged and opf-pptx keeps the core floor `^0.12.0`.
   re-run for this patch. The apostrophe is in PptxGenJS itself; the same fix is submitted upstream as
   [gitbrent/PptxGenJS#1537](https://github.com/gitbrent/PptxGenJS/pull/1537).
 - **How it was found**: the Keynote native check of the 20-deck import set ([opf#341](https://github.com/OpenPresentation/opf/pull/341),
-  [evidence](../../evidence/mac-checks-20261002/keynote/README.md)). On opf-pptx 0.12.2 six decks failed, all by losing
+  evidence). On opf-pptx 0.12.2 six decks failed, all by losing
   native category charts; the bisect pointed at the table range. The re-check of the fixed decks (built from the fix
   branch before the release) has PASS 0, WARN 20, FAIL 0. This is a Keynote check on a Mac, not a PowerPoint check.
 - **Pptx-dev's own generator had the same bug.** Its `/api/v1/generate` and `/api/v1/author/export` output goes through

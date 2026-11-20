@@ -251,7 +251,7 @@ try {
   docked.destroy();
   check(!propertyHost.children.length, "destroy cleans up docked properties");
   propertyHost.remove();
-  editor.set('design.titleAlignment','right');
+  editor.set('design.titleAlignment','end');
   const aligned=createCanvasEditor(host,{editor,slideIndex:0,fonts});
   await aligned.ready;aligned.beginEdit('slides.0.title');
   check(host.querySelector('textarea').style.textAlign==='right','right aligned text uses a matching caret overlay');

@@ -16,7 +16,7 @@ test('multiple real panels remain distinct and similarly named ordinary shapes d
 
 test('actual grouped and published 0.18.0 exports retain one semantic image placeholder', () => {
  for(const file of ['slide1.xml','published-0180-slide1.xml']){
-  const xml=readFileSync(new URL('../../../docs/evidence/rr59-image-placeholder-oracle/'+file,import.meta.url),'utf8');
+  const xml=readFileSync(new URL('./fixtures/rr59-image-placeholder-oracle/'+file,import.meta.url),'utf8');
   assert.equal(imagePlaceholderCount(xml),1);
   assert.equal((xml.match(/<p:pic>/g)??[]).length,0);
   assert.match(xml,/Image unavailable/);

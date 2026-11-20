@@ -1,0 +1,224 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: headers, footers, logos and socials",
+  "description": "RR-105 format coverage: header and footer zones with text, images, socials and dates (on, fixed and formatted), slide numbers and counts, suppressed furniture, organization logos in every shape and for light and dark backgrounds, and every social platform.",
+  "language": "en-US",
+  "organization": [
+    {
+      "id": "harbor",
+      "name": "Harbor Labs",
+      "legalName": "Harbor Labs GmbH",
+      "role": "primary",
+      "domain": "harborlabs.example",
+      "email": "hello@harborlabs.example",
+      "phone": "+49 30 1234567",
+      "tagline": "Logistics software for ports",
+      "logo": {
+        "full": {
+          "onLight": {
+            "src": "./assets/logo-light.svg",
+            "alt": "Harbor Labs logo"
+          },
+          "onDark": {
+            "src": "./assets/logo-dark.svg",
+            "alt": "Harbor Labs logo"
+          }
+        },
+        "stacked": {
+          "src": "./assets/logo.svg",
+          "alt": "Harbor Labs stacked logo"
+        },
+        "icon": {
+          "src": "./assets/icon.svg",
+          "alt": "Harbor Labs icon"
+        },
+        "wordmark": {
+          "onLight": {
+            "src": "./assets/wordmark.svg",
+            "alt": "Harbor Labs wordmark"
+          }
+        }
+      },
+      "socials": {
+        "linkedin": "https://www.linkedin.com/company/harbor-labs",
+        "x": "@harborlabs"
+      }
+    },
+    {
+      "id": "port",
+      "name": "Port of Lisbon",
+      "role": "client"
+    },
+    {
+      "id": "eu",
+      "name": "Regional Fund",
+      "role": "sponsor"
+    },
+    {
+      "id": "expo",
+      "name": "Logistics Expo",
+      "role": "host"
+    },
+    {
+      "id": "rail",
+      "name": "Rail Partners",
+      "role": "partner",
+      "logo": {
+        "src": "./assets/logo.svg",
+        "alt": "Rail Partners logo"
+      }
+    }
+  ],
+  "speaker": {
+    "id": "ana",
+    "name": "Ana Ribeiro",
+    "title": "Head of Operations",
+    "organizationId": "harbor",
+    "socials": {
+      "github": "harbor-labs",
+      "youtube": "@harborlabs",
+      "instagram": "@harborlabs",
+      "facebook": "harborlabs",
+      "tiktok": "@harborlabs",
+      "threads": "@harborlabs",
+      "mastodon": "@harbor@mastodon.social",
+      "bluesky": "@harborlabs.bsky.social"
+    }
+  },
+  "design": {
+    "background": "light1",
+    "header": {
+      "end": {
+        "image": "var:organization.logo.icon"
+      }
+    },
+    "footer": {
+      "start": {
+        "text": "{{organization.name}} · {{organization.tagline}}"
+      },
+      "center": {
+        "text": "Page {{slide.number}} of {{deck.slideCount}}"
+      },
+      "end": {
+        "date": true,
+        "dateFormat": "d MMMM yyyy"
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "title": "Harbor operations review",
+      "subtitle": "For the Port of Lisbon"
+    },
+    {
+      "id": "footer-default",
+      "section": "Results",
+      "title": "The footer shows the date, the page and the tagline",
+      "text": "The date in the footer is today, written as day, month and year."
+    },
+    {
+      "id": "footer-fixed-date",
+      "section": "Results",
+      "title": "A fixed date and the section name",
+      "text": "This slide fixes the footer date and names its section.",
+      "design": {
+        "footer": {
+          "start": {
+            "text": "{{slide.section}}"
+          },
+          "end": {
+            "date": "2026-11-12",
+            "dateFormat": "yyyy-MM-dd"
+          }
+        }
+      }
+    },
+    {
+      "id": "socials",
+      "title": "Social accounts in the footer",
+      "text": "The footer lists the primary organization's accounts; the speaker's are metadata.",
+      "design": {
+        "footer": {
+          "start": {
+            "socials": true
+          },
+          "center": {},
+          "end": {
+            "text": "{{slide.number}}"
+          }
+        }
+      }
+    },
+    {
+      "id": "header-text",
+      "title": "A header with a wordmark and a note",
+      "text": "The header carries the wordmark at the start and a note in the center.",
+      "design": {
+        "header": {
+          "start": {
+            "image": "var:organization.logo.wordmark"
+          },
+          "center": {
+            "text": "Internal draft",
+            "date": false
+          }
+        }
+      }
+    },
+    {
+      "id": "dark-logo",
+      "title": "The logo for dark backgrounds",
+      "text": "On a dark slide the footer draws the dark version of the full logo.",
+      "design": {
+        "variant": "dark1",
+        "footer": {
+          "start": {
+            "image": "var:organization.logo.full"
+          },
+          "end": {
+            "text": "{{slide.number}} / {{deck.slideCount}}"
+          }
+        }
+      }
+    },
+    {
+      "id": "stacked-logo",
+      "title": "The stacked logo in the header",
+      "text": "The stacked logo suits a narrow header zone.",
+      "design": {
+        "header": {
+          "end": {
+            "image": "var:organization.logo.stacked"
+          }
+        }
+      }
+    },
+    {
+      "id": "no-furniture",
+      "title": "A slide without header or footer",
+      "text": "Full-bleed content sometimes needs the whole slide.",
+      "design": {
+        "header": false,
+        "footer": false
+      }
+    },
+    {
+      "id": "image-in-footer",
+      "title": "A plain picture in the footer",
+      "text": "A footer zone can hold any picture, not only a logo.",
+      "design": {
+        "footer": {
+          "end": {
+            "image": {
+              "src": "./assets/icon.svg",
+              "alt": "Small mark"
+            },
+            "text": "Partner build"
+          }
+        }
+      }
+    }
+  ]
+}

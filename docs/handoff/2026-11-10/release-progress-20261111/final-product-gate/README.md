@@ -1,0 +1,9 @@
+# Final product/security coherent delta — PASS
+
+Clean source5894af8ab0bdb53092cae1893304c263dbd58bd3/treef651b05e346137c4ff07a34cae5c48f9c9a03e51 is normally pushed on the takeover branch. The maintained changed gate from canonical6a836 passes all15selected steps, exit0/1189.495s, with source/tree/status unchanged. Typecheck is unselected because this delta changes no TypeScript; the earlier strict type qualifications remain separately bound.
+
+This includes the actual digit/colon product repair, current-case10-only22shape admission, SH21 public ESM/parser repairs, reviewed strict snapshot checkpoint and secure MCP client/core2.4.0. Full MCP tests pass104.3s and all317PPTX contract scripts pass1008.1s. Public stability passes48.8s on this actual run; no DNS-tail composition or skipped gate is used. Build, Biome and every selected native/doc/source check pass. Raw gate/selected15logs and hashes are retained.
+
+The build changes the two intended PPTX modules and consequently the MCP browser bundle, which includes that exporter. The current JSON-RPC resource is10,478,665B against10,485,760B,7095B headroom. The previous secure-leaf7970B figure remains historical. Full current MCP frame/CSP/browser controls pass; the old19artifact exact-carry observation applied only before this later product build. The runtime delta records added/removed chunk names as well as changed paths; all609 compiled files are retained in external before/after ledgers. A build is expected to change these outputs; runtimeUnchanged=false is not concealed.
+
+This closes the coherent changed product/dependency scope. It is not native22shape visual acceptance, actualWindows new snapshot controls, final full-ci/platform/packed/registry, main merge or a published release. Subsequent tooling-only changes need their own delta and do not justify repeating the unchanged317suite. All earlier first failures remain in their original packets.

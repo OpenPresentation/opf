@@ -1,3 +1,4 @@
+import { selectionFamilyGroup } from "./font-selection.js";
 import { sha256Bytes } from "./sha256.js";
 import bidiFactory from "bidi-js";
 import { create } from "fontkit";
@@ -26,7 +27,8 @@ function validFamily(family) {
 }
 // The open families load with the office pack (loadFonts({pack:"office"})).
 
-const packFor = family => { const pack = BUNDLED_FONT_MANIFEST.packages.find(pkg=>pkg.renamedFrom?.toLowerCase()===family.toLowerCase() || pkg.faces.some(face=>face.family.toLowerCase()===family.toLowerCase()))?.pack; return pack==="open" ? "office" : pack; };
+const packageFor = family => BUNDLED_FONT_MANIFEST.packages.find(pkg=>pkg.renamedFrom?.toLowerCase()===family.toLowerCase() || pkg.faces.some(face=>face.family.toLowerCase()===family.toLowerCase()));
+const packFor = family => { const pack = packageFor(family)?.pack; return pack==="open" ? "office" : pack; };
 const percent = value => `${(value*100).toFixed(1)}%`;
 /** FF-31: say why a family has no face and what the caller can do, from the OPF font policy. */
 function unavailableFontError(family, style, policy) {
@@ -35,8 +37,9 @@ function unavailableFontError(family, style, policy) {
   if (!row) return new OPFFontError("font-unavailable", `No local font face for '${family}'. '${family}' is not in the OPF font policy table, so there is no declared replacement: ${hook}, add an alias, or set fallbackFamily.`, {...details, licenseClass:"unknown"});
   Object.assign(details, {licenseClass:row.licenseClass});
   if (!row.replacement) {
-    const pack = packFor(family);
-    return new OPFFontError("font-unavailable", `No local font face for '${family}'. '${family}' is ${row.licenseClass === "open" ? `openly licensed (${row.license})` : row.license}${pack ? `; load the '${pack}' font pack` : `; no pinned renderer pack ships it yet, so supply its font files (for example from @expo-google-fonts/${family.toLowerCase().replace(/ +/g,"-")})`}.`, {...details, ...(pack?{pack}:{})});
+    const pack = packFor(family), npm = pack === "scripts" ? packageFor(family) : undefined;
+    const how = npm ? `; install ${npm.name}@${npm.version} (an optional npm package of the 'scripts' font pack)` : pack ? `; load the '${pack}' font pack` : undefined;
+    return new OPFFontError("font-unavailable", `No local font face for '${family}'. '${family}' is ${row.licenseClass === "open" ? `openly licensed (${row.license})` : row.license}${how ??  `; no pinned renderer pack ships it yet, so supply its font files (for example from @expo-google-fonts/${family.toLowerCase().replace(/ +/g,"-")})`}.`, {...details, ...(pack?{pack}:{}), ...(npm?{package:npm.name, version:npm.version}:{})});
   }
   const {family:replacement, compatibility, measured} = row.replacement;
   const candidates = [replacement, ...(row.alternates ?? [])], packs = [...new Set(candidates.map(packFor).filter(Boolean))];
@@ -50,27 +53,6 @@ function unavailableFontError(family, style, policy) {
   return new OPFFontError("font-unavailable", `No local font face for '${family}'. ${owner} None of its replacements (${candidates.join(", ")}) is loaded${packs.length ? `; load the ${packs.map(pack=>"'"+pack+"'").join(" or ")} font pack` : ""}, or ${hook}. The PPTX names '${family}' either way.`, details);
 }
 /** Local font files only. The caller explicitly chooses aliases and fallback. */
-// fontkit 2.0.4 cannot decode every OpenType lookup: its GSUB type 8 (reverse chaining contextual single substitution) struct lacks the
-// backtrackGlyphCount field, so the lookup fails with "Not a fixed size" when a feature that references it is applied, and it has no processor
-// for the type anyway. Noto Sans Mongolian 3.x has such a lookup under calt and rclt in every script, so every shaping of the face threw (FF-44).
-// A lookup that cannot be decoded is treated as one that applies nothing (no subtables), so the rest of the feature still runs: advances equal
-// a browser's for the face's Latin and Mongolian samples (test/mongolian-shaping.mjs). Applied only after shaping failed, once per font.
-const lookupsGuarded = new WeakSet();
-export function skipUndecodableLookups(font) {
-  if (lookupsGuarded.has(font)) return false;
-  lookupsGuarded.add(font);
-  let guarded = false;
-  for (const tag of ["GSUB", "GPOS"]) {
-    let list;
-    try { list = font[tag]?.lookupList; } catch { continue; }
-    if (typeof list?.get !== "function") continue;
-    const get = list.get.bind(list);
-    list.get = index => { try { return get(index); } catch { return { lookupType: 1, flags: {}, subTables: [] }; } };
-    guarded = true;
-  }
-  return guarded;
-}
-
 // opf-render#125: fontkit 2.0.4 caches one Glyph per glyph id (font._glyphs) with the code points of the call that created it, and
 // its layout reads the input's code points back from that cache (glyphsForString -> getGlyph(id, [codePoint]) -> GlyphInfo). A glyph
 // first reached another way keeps other code points: a composite outline (run.bbox for outlineBounds, glyph.path) reaches its
@@ -130,9 +112,9 @@ export function pickFace(faces, family, style, {policy = "none", aliases = new M
     const metricFallback = policy!=="visual" && candidate?.metricModeFallback===true && [400,700].includes(weight);
     const allowVisual = policy==="visual" || metricFallback;
     if (candidate && (allowVisual || tier==="metric")) {
-      // A family that names its weight (Segoe UI Semibold, Arial Black) selects that weight in
-      // the replacement; its bold style link still selects bold (FF-31).
-      const wanted = candidate.weight ? (weight>=600 ? Math.max(candidate.weight,700) : candidate.weight) : weight;
+      // A weight-named family keeps its lighter base weight. Native bold on Light/Semilight
+      // is a modest emphasis, not the Bold face of the parent family (LH-177).
+      const wanted = candidate.weight ? (weight>=600 ? candidate.weight<400 ? 400 : Math.max(candidate.weight,700) : candidate.weight) : weight;
       for (const [index, substitute] of candidate.substitutes.entries()) {
         // Only the declared replacement can carry the row's metric claim; an alternate is visual.
         const substituteTier = index===0 ? tier : "visual";
@@ -164,11 +146,11 @@ export function pickFace(faces, family, style, {policy = "none", aliases = new M
   return {face, compatibility, rule, styleFallback, via, ...(encoding ? {encoding} : {})};
 }
 
-export function createFontRegistry(entries, options = {}) {
-  if (!Array.isArray(entries) || !entries.length) throw new OPFFontError("empty-font-registry", "Supply at least one font file.");
+export function createFontRegistry(entries, options = {}, {allowEmpty = false, controls} = {}) {
+  if (!Array.isArray(entries) || !entries.length && !allowEmpty) throw new OPFFontError("empty-font-registry", "Supply at least one font file.");
   const makeFace = entry => {
     if (!(entry.data instanceof Uint8Array)) throw new OPFFontError("invalid-font-data", "Font data must be a Uint8Array.");
-    const data = entry.data.slice();
+    const data = new Uint8Array(entry.data);
     let font;
     try { font = create(data, entry.postscriptName); } catch (error) { throw new OPFFontError("invalid-font-data", error.message); }
     if (!font?.layout || !font.unitsPerEm) throw new OPFFontError("font-collection", "Select one font from a collection with postscriptName.");
@@ -177,8 +159,7 @@ export function createFontRegistry(entries, options = {}) {
     // OpenType groups Medium/SemiBold/ExtraBold under a preferred family, while
     // retaining separate legacy families for four-style native font selectors.
     // An explicit caller rename owns its namespace and must not add this alias.
-    const familyGroup = entry.family && entry.family.toLowerCase() !== font.familyName?.toLowerCase()
-      ? family : validFamily(font.getName?.('preferredFamily', 'en') ?? family);
+    const familyGroup = validFamily(selectionFamilyGroup(font, entry.family ?? family));
     const linking = font['OS/2']?.fsSelection ?? font.head?.macStyle;
     const fontFace = linking && typeof linking.bold === 'boolean' && typeof linking.italic === 'boolean'
       ? {family:validFamily(font.getName?.('fontFamily', 'en') ?? font.familyName ?? family),bold:linking.bold,italic:linking.italic} : undefined;
@@ -201,8 +182,11 @@ export function createFontRegistry(entries, options = {}) {
         return hash;
       },license:entry.license,embed:entry.embed,scripts,fallbackOnly:entry.fallbackOnly===true,cache:new Map()};
   };
-  let shaper;
+  let shaper, ownedShaper, ownedBackend = true;
   const faces = [], duplicates = new Set(), familySlots = new Map();
+  // Bumped whenever the held faces or what selection reads of them (their scripts, fallbackOnly) change: addFaces, activateScriptFamilies.
+  // A cache of selection results (lazyFontNames) compares this number instead of describing every face on every call.
+  let generation = 0;
   // Adds faces atomically: every check runs before any face is registered.
   const register = added => {
     const ids = new Set(duplicates), slots = new Map(familySlots);
@@ -217,6 +201,7 @@ export function createFontRegistry(entries, options = {}) {
       slots.set(id,face);
     }
     faces.push(...added);
+    generation++;
     for (const id of ids) duplicates.add(id);
     for (const [id,face] of slots) familySlots.set(id,face);
   };
@@ -230,6 +215,14 @@ export function createFontRegistry(entries, options = {}) {
     aliases = new Map(Object.entries({...scriptAliases,...options.aliases}).map(([from,to])=>[validFamily(from).toLowerCase(),validFamily(to)]));
   };
   buildAliases();
+  // Private loader control: a fallback first loaded for coverage may later be explicitly selected by a script font scheme.
+  if (controls) controls.activateScriptFamilies = families => {
+    const named = new Set(families.map(family=>family.toLowerCase()));
+    let changed = false;
+    for (const face of faces) if (face.fallbackOnly && named.has(face.family.toLowerCase())) { face.fallbackOnly = false; changed = true; }
+    if (changed) { buildAliases(); substitutions.clear(); generation++; }
+    return changed;
+  };
   const policy = options.substitutionPolicy ?? "none";
   if (!["none","metric","visual"].includes(policy)) throw new OPFFontError("invalid-font-policy", "substitutionPolicy must be none, metric, or visual.");
   if (options.fallbackFamily) validFamily(options.fallbackFamily);
@@ -258,6 +251,11 @@ export function createFontRegistry(entries, options = {}) {
   const resolveFace = style => resolve(style).face;
   const resolveStyle = style => {
     const {face,resolution}=resolve(style),resolved={...style,fontFamily:face.family,fontWeight:face.weight,italic:face.italic};
+    // A rich run's explicit bold flag must link from the named lightweight family, not its parent replacement.
+    const sourceWeight = fontPolicyFor(resolution.sourceFamily)?.replacement?.weight;
+    if (resolution.substitute && sourceWeight && sourceWeight<400) resolved.sourceFontFamily=resolution.sourceFamily;
+    else if (style.sourceFontFamily && fontPolicyFor(style.sourceFontFamily)?.replacement?.family===face.family) resolved.sourceFontFamily=style.sourceFontFamily;
+    else delete resolved.sourceFontFamily;
     // Never carry a stale selection from a previously resolved style.
     delete resolved.fontFace;
     delete resolved.symbolEncoding;
@@ -270,16 +268,10 @@ export function createFontRegistry(entries, options = {}) {
     else if(style.symbolEncoding && symbolPreviewFaces(style.symbolEncoding).some(name=>name.toLowerCase()===face.family.toLowerCase())) resolved.symbolEncoding=symbolEncodingFamily(style.symbolEncoding);
     return resolved;
   };
-  const metrics = (text,size,style,includeOutline=false) => {
+  const validateMeasurementInput = (text,size) => {
     if (typeof text!=='string'||!Number.isFinite(size)||size<=0) throw new OPFFontError('invalid-text-measurement','Text measurement requires a string and a positive finite font size.');
-    const {face,resolution}=resolve(style);
-    // A BCP-47 `lang` selects the font's OpenType language system, as a browser
-    // does for an element's lang (FF-19). Without it, shaping is unchanged.
-    const language=openTypeLanguage(style.lang);
-    const direction = style.direction ?? (bidi.getEmbeddingLevels(text).paragraphs[0]?.level % 2 ? "rtl" : "ltr");
-    const key = `${direction}\u0000${style.lang ?? ""}\u0000${text}`;
-    let value=face.cache.get(key);
-    if (value===undefined) {
+  };
+  const checkGlyphCoverage = (face,text,style) => {
       if (options.strictGlyphs!==false) for(const character of text) {
         if (/\p{Default_Ignorable_Code_Point}/u.test(character)) continue;
         const code=character.codePointAt(0);
@@ -289,8 +281,29 @@ export function createFontRegistry(entries, options = {}) {
           throw new OPFFontError("missing-glyph", `Font '${face.family}' cannot display U+${code.toString(16).toUpperCase()}.${loadedElsewhere?"":" No loaded font has it, so glyph fallback has no face to fall back to; if it is a script character, load that script's font (loadFonts with scripts: 'auto' and the presentation, or fonts.ensure(presentation))."}`, {path:style.path,fontFamily:face.family,character,...(loadedElsewhere?{}:{loadedFaceHasGlyph:false})});
         }
       }
+  };
+  if (controls) {
+    // Node-only preparation control. It never supplies geometry or populates metric caches.
+    controls.probeGlyphs = (text,size,style) => { validateMeasurementInput(text,size); const {face}=resolve(style); checkGlyphCoverage(face,text,style); };
+    controls.canProbeGlyphs = () => ownedBackend && shaper === ownedShaper;
+    // Called only by the local fonts-node handoff after it attaches its own default outline adapter.
+    controls.acceptOwnedShaper = () => { ownedShaper=shaper; ownedBackend=true; };
+  }
+  const metrics = (text,size,style,includeOutline=false) => {
+    validateMeasurementInput(text,size);
+    const {face,resolution}=resolve(style);
+    // Automatic and explicit direction requests have separate keys. A cache hit
+    // needs neither Unicode direction analysis nor OpenType language lookup.
+    const directionKey = style.direction == null ? "auto" : `explicit:${style.direction}`;
+    const key = `${directionKey}\u0000${style.lang ?? ""}\u0000${text}`;
+    let value=face.cache.get(key);
+    if (value===undefined) {
+      checkGlyphCoverage(face,text,style);
     }
     if(value===undefined||includeOutline&&!Object.hasOwn(value,'outline')) {
+      // A width-only entry is shaped again when its outline is first requested.
+      const language = openTypeLanguage(style.lang);
+      const direction = style.direction ?? (bidi.getEmbeddingLevels(text).paragraphs[0]?.level % 2 ? "rtl" : "ltr");
       // FF-31: features a policy row turns off in its replacement (Gelasio for Georgia: liga, clig), the
       // same ones the SVG output turns off, so measured and drawn advances agree.
       const off=disabledFeaturesFor(face.family),policyFeatures=off&&Object.fromEntries(off.map(tag=>[tag,false]));
@@ -317,17 +330,7 @@ export function createFontRegistry(entries, options = {}) {
           throw new OPFFontError("font-shaping-failed", `Font '${face.family}' cannot shape this text with HarfBuzz.`, {path:style.path,fontFamily:face.family,cause:error?.message});
         }
       } else try { run=shape(); }
-      catch (error) {
-        // A lookup fontkit cannot decode (GSUB type 8 in Noto Sans Mongolian) applies nothing; shape again with the rest (FF-44).
-        if (skipUndecodableLookups(face.font)) { try { run=shape(); } catch { /* the mark retry below */ } }
-        // fontkit rejects some mark-attachment lookups (null anchors, for example
-        // Gurmukhi tippi in Noto Sans Gurmukhi). Mark positioning moves marks
-        // without changing advances, so measure again without it (FF-19).
-        if (!run) {
-          try { run=shape({abvm:false,blwm:false,mark:false,mkmk:false}); }
-          catch { throw new OPFFontError("font-shaping-failed", `Font '${face.family}' cannot shape this text.`, {path:style.path,fontFamily:face.family,cause:error?.message}); }
-        }
-      }
+      catch (error) { throw new OPFFontError("font-shaping-failed", `Font '${face.family}' cannot shape this text.`, {path:style.path,fontFamily:face.family,cause:error?.message}); }
       value={width:run.positions.reduce((total,position)=>total+position.xAdvance,0)/face.font.unitsPerEm,...value};
       if(includeOutline) {
         const unit=face.font.unitsPerEm;
@@ -356,11 +359,13 @@ export function createFontRegistry(entries, options = {}) {
   // validate asks for each slide's measurement, so its layout checks measure script runs in the faces this renderer draws.
   const textMeasurement={measure,resolveStyle,outlineBounds,resolveFont:style=>resolve(style).resolution};
   textMeasurement.forScripts=profile=>createScriptFonts(profile,textMeasurement).textMeasurement;
-  return {
+  const registry = {
     textMeasurement,
     // Attach the handle's outline shaper after its WASM loads. Earlier measurements must not survive the engine switch.
     setShaper(engine) {
       shaper = engine;
+      // A public setter call is never a trusted Node-owned attachment.
+      ownedBackend = false;
       for (const face of faces) face.cache.clear();
     },
     resolveFont(style) { return resolve(style).resolution; },
@@ -370,7 +375,7 @@ export function createFontRegistry(entries, options = {}) {
     // `loadFonts` handle's embeddedFonts). Whichever list it is given, the SVG writer embeds a face only where its text draws it (RR-61).
     get embeddedFonts() { return embedded(face=>face.embed!=="used"); },
     /** Parsed face metadata in entry order, without encoding font bytes. */
-    describeFaces: ()=>faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.scripts?{scripts:[...face.scripts]}:{}),...(face.fallbackOnly?{fallbackOnly:true}:{})})),
+    describeFaces: ({selection = false} = {})=>faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(selection?{familyGroup:face.familyGroup}:{}),...(face.scripts?{scripts:[...face.scripts]}:{}),...(face.fallbackOnly?{fallbackOnly:true}:{})})),
     /** Embedded faces for which `predicate({family,weight,italic,scripts})` holds; large script faces can be left to raster fontFiles. */
     selectEmbeddedFonts: predicate=>embedded(predicate),
     /** Every face as `{family, data}` (the bytes the registry measures with), for the browser PDF export to embed. */
@@ -391,5 +396,8 @@ export function createFontRegistry(entries, options = {}) {
       return made.map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.scripts?{scripts:[...face.scripts]}:{})}));
     },
   };
+  // Not part of the public registry (like fontNames): the number lazyFontNames compares to know the face pool changed.
+  Object.defineProperty(registry, "facesGeneration", { get: () => generation });
+  return registry;
   function embedded(predicate) { return faces.filter(face=>predicate({family:face.family,weight:face.weight,italic:face.italic,scripts:face.scripts,embed:face.embed,fallbackOnly:face.fallbackOnly})).map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.license ? {license:face.license} : {}),...(face.embed ? {embed:face.embed} : {}),dataUrl:`data:font/${face.format};base64,${base64(face.data)}`})); }
 }

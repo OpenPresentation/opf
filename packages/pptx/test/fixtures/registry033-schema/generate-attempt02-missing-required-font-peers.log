@@ -1,0 +1,26 @@
+file:///private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+opf-render@0.33.0_@openpresentation+opf-pptx@0.33.0_sharp@0.35.5/node_modules/@openpresentation/opf-render/dist/fonts-node.js:38
+  throw new OPFFontError("font-resource-unavailable", `${what} needs font packages that are not installed (optional peer dependencies of @openpresentation/opf-render): run \`${install}\`.`, {packages: missing.map(pkg => pkg.name), install});
+        ^
+
+OPFFontError: The 'office' font pack needs font packages that are not installed (optional peer dependencies of @openpresentation/opf-render): run `npm install @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2`.
+    at requireInstalled (file:///private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+opf-render@0.33.0_@openpresentation+opf-pptx@0.33.0_sharp@0.35.5/node_modules/@openpresentation/opf-render/dist/fonts-node.js:38:9)
+    at buildRegistry (file:///private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+opf-render@0.33.0_@openpresentation+opf-pptx@0.33.0_sharp@0.35.5/node_modules/@openpresentation/opf-render/dist/fonts-node.js:181:5)
+    at loadFonts (file:///private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+opf-render@0.33.0_@openpresentation+opf-pptx@0.33.0_sharp@0.35.5/node_modules/@openpresentation/opf-render/dist/fonts-node.js:280:36)
+    at file:///private/tmp/opf-registry033-witness/generate.mjs:26:19 {
+  code: 'font-resource-unavailable',
+  details: {
+    packages: [
+      '@expo-google-fonts/roboto',
+      '@expo-google-fonts/roboto-mono',
+      '@expo-google-fonts/caladea',
+      '@expo-google-fonts/arimo',
+      '@expo-google-fonts/tinos',
+      '@expo-google-fonts/cousine',
+      '@expo-google-fonts/gelasio',
+      '@expo-google-fonts/noto-sans'
+    ],
+    install: 'npm install @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2'
+  }
+}
+
+Node.js v24.21.0

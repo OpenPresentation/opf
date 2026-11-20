@@ -12,8 +12,14 @@ export const CATALOG_SCHEMA = 4;
 /** Kinds of catalog display metadata: published by catalogs for pickers, never referenced by documents. */
 export const catalogDisplayKinds = ['chartTypes', 'languages', 'socialPlatforms'] as const;
 export type CatalogDisplayKind = (typeof catalogDisplayKinds)[number];
-/** Every kind of record a catalog publishes: the content kinds documents reference, and the display kinds. */
-export type CatalogRecordKind = CatalogKind | CatalogDisplayKind;
+/**
+ * LH-14: icon sets, the records an `icon` names as `<set>:<name>`. They resolve by their own rule (icons.ts), not as a content
+ * reference, and a registered catalog may give a set as a function that loads it.
+ */
+export const catalogIconKinds = ['iconSets'] as const;
+export type CatalogIconKind = (typeof catalogIconKinds)[number];
+/** Every kind of record a catalog publishes: the content kinds documents reference, the display kinds and the icon sets. */
+export type CatalogRecordKind = CatalogKind | CatalogDisplayKind | CatalogIconKind;
 
 /** The companion schema each catalog record kind validates against. */
 export const catalogSchemaNames: Readonly<Record<CatalogRecordKind, SchemaName>> = {
@@ -28,4 +34,5 @@ export const catalogSchemaNames: Readonly<Record<CatalogRecordKind, SchemaName>>
   chartTypes: 'chartType',
   languages: 'language',
   socialPlatforms: 'socialPlatform',
+  iconSets: 'iconSet',
 };

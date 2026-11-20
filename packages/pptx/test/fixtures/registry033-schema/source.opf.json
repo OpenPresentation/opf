@@ -1,0 +1,122 @@
+{
+  "name": "Genuine registry 0.33 legacy schema witness",
+  "language": "en-US",
+  "design": {
+    "titleAlignment": "left",
+    "footer": {
+      "right": {
+        "text": "slides.0.left"
+      }
+    }
+  },
+  "extensions": {
+    "slides.0.left": "slides.0.left",
+    "titleAlignment": "left"
+  },
+  "datasets": {
+    "legacy-source": {
+      "columns": [
+        "Key",
+        "Value"
+      ],
+      "rows": [
+        [
+          "slides.0.left",
+          12
+        ],
+        [
+          "Other",
+          18
+        ]
+      ]
+    }
+  },
+  "slides": [
+    {
+      "title": "Legacy anchor units",
+      "blocks": [
+        {
+          "id": "anchor-note",
+          "text": "Literal slides.0.left"
+        },
+        {
+          "code": {
+            "language": "text",
+            "source": "slides.0.left"
+          }
+        }
+      ],
+      "shapes": [
+        {
+          "id": "anchor-wide",
+          "shape": "rect",
+          "at": {
+            "block": "anchor-note",
+            "edge": "end",
+            "width": 160,
+            "height": 64
+          },
+          "fill": "accent1",
+          "decorative": true
+        },
+        {
+          "id": "anchor-cliff",
+          "shape": "ellipse",
+          "at": {
+            "block": "anchor-note",
+            "edge": "top",
+            "width": 1.01,
+            "height": 0.5
+          },
+          "fill": "accent2",
+          "decorative": true
+        }
+      ]
+    },
+    {
+      "title": "Legacy rich table",
+      "table": {
+        "columns": [
+          "Field",
+          "Value"
+        ],
+        "rows": [
+          [
+            "slides.0.left",
+            {
+              "value": [
+                {
+                  "text": "Bonjour ",
+                  "lang": "fr-FR",
+                  "bold": true
+                },
+                {
+                  "text": "slides.0.left",
+                  "lang": "fr-FR"
+                }
+              ],
+              "style": {
+                "align": "left",
+                "borders": {
+                  "left": {
+                    "color": "accent1",
+                    "width": 1
+                  }
+                }
+              }
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "title": "Legacy shared dataset",
+      "chart": {
+        "type": "column",
+        "data": {
+          "dataset": "legacy-source"
+        }
+      }
+    }
+  ]
+}

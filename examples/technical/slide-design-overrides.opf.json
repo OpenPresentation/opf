@@ -8,8 +8,8 @@
     "fontScheme": "aptos",
     "dimensions": "widescreen",
     "background": "light1",
-    "titleAlignment": "left",
-    "contentAlignment": "left",
+    "titleAlignment": "start",
+    "contentAlignment": "start",
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "none",
@@ -40,7 +40,7 @@
     {
       "title": "Chart Primary Override",
       "design": {
-        "chartPrimary": "left",
+        "chartPrimary": "start",
         "contentDirection": "vertical"
       },
       "chart": {
@@ -75,7 +75,7 @@
         {
           "image": "asset:context-photo",
           "placement": {
-            "edge": "right"
+            "edge": "end"
           }
         }
       ]

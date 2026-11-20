@@ -242,7 +242,7 @@ assert.ok((await readFile(path.join(root, 'dist/preview-fonts-cli.js'), 'utf8'))
   const broken = createDeckStore({document: {slides: [{id: 'a', title: 'x'}, {id: 'a', title: 'y'}]}});
   assert.throws(() => broken.svg(0), (error) => error instanceof DeckError && error.code === 'invalid-document' && /slide ids must be unique/.test(error.message) && error.message.includes('/slides/1/id'), 'an invalid deck says where');
   assert.throws(() => createDeckStore({document: '{'}), (error) => error.code === 'invalid-document');
-  const dated = createDeckStore({document: {slides: [{id: 'a', title: 'x'}], design: {footer: {right: {date: true}}}}, date: '2026-10-01'});
+  const dated = createDeckStore({document: {slides: [{id: 'a', title: 'x'}], design: {footer: {end: {date: true}}}}, date: '2026-10-01'});
   assert.doesNotThrow(() => dated.svg(0));
 }
 

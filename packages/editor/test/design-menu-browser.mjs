@@ -63,7 +63,10 @@ try {
   assert.deepEqual(await page.getByRole('group').evaluateAll((nodes) => nodes.map((node) => node.dataset.section)), ['theme', 'colors', 'fonts', 'layout']);
   assert.equal(await group('Theme').getByRole('menuitemradio').count(), 3, 'the three gallery themes');
   assert.equal(await group('Colors').getByRole('menuitemradio').count(), 14);
-  assert.equal(await group('This slide: Layout').getByRole('menuitemradio').count(), 30);
+  const layoutIds = await ev(() => Object.keys(window.opfWs.gallery.layouts));
+  const layoutChoices = await group('This slide: Layout').getByRole('menuitemradio').evaluateAll(nodes => nodes.map(node => node.dataset.value));
+  assert.deepEqual(layoutChoices, layoutIds, 'every matching-source gallery layout appears in catalog order');
+  assert.equal(new Set(layoutChoices).size, layoutChoices.length, 'no duplicate layout choices');
   assert.equal(await page.getByRole('menuitem', { name: 'More design options…' }).count(), 1);
   mark('structure and ARIA');
 
@@ -321,18 +324,55 @@ try {
   await page.addScriptTag({ content: axeSource });
   const axe = await ev(async () => { const result = await window.axe.run('.opf-design-menu', { rules: { 'color-contrast': { enabled: false } } }); return result.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`); });
   assert.deepEqual(axe, [], 'no axe violations in the open menu');
+  assert.equal(await ev(() => document.querySelectorAll('[role=tab]').length), 0, 'the popover has no section switch: no tabs for a screen reader');
   await page.keyboard.press('Escape');
   mark('axe');
 
   // ---- the bottom sheet at 390px ----------------------------------------------------------------------------------------------------------------------
   await page.setViewportSize({ width: 390, height: 844 });
   await mount();
+  assert.equal(await ev(() => document.querySelectorAll('[role=tab]').length), 0, 'a closed menu has no tabs in the document');
   await trigger().click();
   assert.equal(await ev(() => document.querySelector('.opf-design-menu').dataset.mode), 'sheet');
   assert.equal(await page.getByRole('dialog', { name: 'Design' }).getAttribute('aria-modal'), 'true');
   const sheet = await box('.opf-design-menu-popover');
   assert.ok(Math.abs(sheet.bottom - 844) < 1 && sheet.left === 0 && sheet.width === 390, `a full-width sheet at the bottom (${JSON.stringify(sheet)})`);
-  assert.ok(sheet.height <= 844 * 0.85 + 1, 'at most 85% of the screen');
+  assert.ok(sheet.height <= 844 * 0.55 + 1, 'about half the screen, so the slide above stays in view');
+  // One section at a time behind a segmented switch, in one scroll container (no list scrolls on its own).
+  const sections = await ev(() => {
+    const popover = document.querySelector('.opf-design-menu-popover');
+    const shown = [...popover.querySelectorAll('.opf-design-menu-group')].filter((group) => group.getClientRects().length).map((group) => group.dataset.section);
+    const row = popover.querySelector('.opf-design-menu-group[data-active] .opf-design-menu-item');
+    let scrollers = 0;
+    for (let node = row; node && node !== popover; node = node.parentElement) if (/(auto|scroll)/.test(getComputedStyle(node).overflowY)) scrollers += 1;
+    return { shown, scrollers, tabs: [...popover.querySelectorAll('[role=tab]')].filter((tab) => !tab.hidden).map((tab) => [tab.dataset.section, tab.getAttribute('aria-selected')]) };
+  });
+  assert.deepEqual(sections.shown, ['theme']);
+  assert.equal(sections.scrollers, 1);
+  assert.deepEqual(sections.tabs.map(([key]) => key), ['theme', 'colors', 'fonts', 'layout']);
+  await page.getByRole('tab', { name: /^Colors/ }).click();
+  assert.deepEqual(await ev(() => [...document.querySelectorAll('.opf-design-menu-group')].filter((group) => group.getClientRects().length).map((group) => group.dataset.section)), ['colors']);
+  // A scroll or a resize lays the open sheet out again, and that must leave the focus on the tab: the menu used to insert the
+  // switch again each time, which blurred it (seen as this test failing on a slower Windows runner, where the section's own
+  // scroll event arrived before the key).
+  await ev(() => new Promise((resolve) => {
+    window.dispatchEvent(new Event('resize'));
+    document.querySelector('.opf-design-menu-menu').dispatchEvent(new Event('scroll'));
+    requestAnimationFrame(() => requestAnimationFrame(resolve));
+  }));
+  assert.deepEqual(await ev(() => [document.activeElement.getAttribute('role'), document.activeElement.dataset.section]), ['tab', 'colors'], 'a relayout of the open sheet keeps the focus on the tab');
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await ev(() => document.activeElement.dataset.section), 'fonts', 'the arrow keys move along the switch');
+  // The switch is a tablist: labelled, one selected tab in the Tab order, each controlling its section.
+  const tablist = await ev(() => {
+    const list = document.querySelector('[role=tablist]');
+    const tabs = [...list.querySelectorAll('[role=tab]')];
+    return { label: list.getAttribute('aria-label'), selected: tabs.filter((tab) => tab.getAttribute('aria-selected') === 'true').map((tab) => tab.tabIndex), others: tabs.filter((tab) => tab.getAttribute('aria-selected') !== 'true').map((tab) => tab.tabIndex), controls: tabs.every((tab) => document.getElementById(tab.getAttribute('aria-controls'))?.dataset.section === tab.dataset.section) };
+  });
+  assert.deepEqual(tablist, { label: 'Design', selected: [0], others: [-1, -1, -1], controls: true });
+  const sheetAxe = await ev(async () => { const result = await window.axe.run('.opf-design-menu-popover', { rules: { 'color-contrast': { enabled: false } } }); return result.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`); });
+  assert.deepEqual(sheetAxe, [], 'no axe violations in the sheet with its switch');
+  await page.getByRole('tab', { name: /^Theme/ }).click();
   assert.equal(await page.locator('.opf-design-menu-scrim').isVisible(), true);
   assert.equal(await page.locator('.opf-design-menu-head').isVisible(), true);
   assert.equal(await page.locator('.opf-design-menu-title').innerText(), 'Design');
@@ -342,6 +382,7 @@ try {
   assert.equal(await page.getByRole('dialog', { name: 'Design' }).isVisible(), true);
   await page.getByRole('button', { name: 'Close', exact: true }).click();
   assert.equal(await dialog().count(), 0, 'the close button closes');
+  assert.equal(await ev(() => document.querySelectorAll('[role=tab]').length), 0, 'closing the sheet takes its tabs out of the document');
   assert.equal(await ev(() => document.activeElement.className), 'opf-design-menu-trigger');
   await trigger().click();
   await page.mouse.click(195, 40);
@@ -354,6 +395,22 @@ try {
   await page.keyboard.press('Escape');
   await page.setViewportSize({ width: 1280, height: 860 });
   mark('bottom sheet at 390px');
+
+  // Added intents are ordinary owned choices: only the current layout changes.
+  for (const id of ['inverted-pyramid', 'org-chart', 'hierarchy', 'venn']) {
+    const value = source();
+    Object.assign(value.slides[0], { subtitle: 'Keep subtitle', notes: 'Keep notes' });
+    await mount({ deck: value });
+    const before = await doc();
+    await trigger().click();
+    await group('This slide: Layout').locator('[data-value="' + id + '"]').click();
+    assert.deepEqual(await doc(), { ...before, slides: before.slides.map((slide, index) => index === 0 ? { ...slide, layout: id } : slide) }, id + ': only the current layout changes');
+    assert.deepEqual(await ev(() => window.t.sources), ['design-menu'], id + ': one owned edit');
+    assert.deepEqual(await checkedIn('layout'), [id], id + ': current menu choice');
+    await ev(() => window.t.session.undo());
+    assert.deepEqual(await doc(), before, id + ': one undo restores every authored field');
+  }
+  mark('new catalog layouts preserve content and owned undo');
 
   // ---- destroy ----------------------------------------------------------------------------------------------------------------------------------------------
   await mount();

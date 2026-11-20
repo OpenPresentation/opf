@@ -1,4 +1,6 @@
-// The actual browser loader attaches HarfBuzz when shapeWasm is supplied and retains fontkit when omitted.
+// The actual browser loader attaches HarfBuzz when shapeWasm is supplied and retains fontkit when omitted. The samples are the three
+// that fontkit 2 measured differently from HarfBuzz (the reviewed render#213 report keeps those fontkit 2 widths as its evidence);
+// fontkit 3 shapes Myanmar and Syriac like HarfBuzz, so both handles must now give the reviewed HarfBuzz width.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
@@ -10,9 +12,10 @@ import { chromium } from 'playwright';
 import { loadCorpora } from '../scripts/script-corpora.mjs';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const require = createRequire(import.meta.url);
-const evidence = JSON.parse(await readFile(new URL('../docs/evidence/harfbuzz-layout-measurement/report.json', import.meta.url), 'utf8'));
+const evidence = JSON.parse(await readFile(new URL('./fixtures/harfbuzz-layout-measurement/report.json', import.meta.url), 'utf8'));
 const corpora = await loadCorpora();
-const targets = evidence.samples.filter(sample => Math.abs(sample.delta) > 0.001);
+const targets = evidence.samples.filter(sample => ['mymr-words', 'mymr-medials', 'syrc-marks'].includes(sample.id));
+assert.equal(targets.length, 3);
 const faceData = [];
 for (const [family, pkg] of [['Noto Sans Myanmar', 'noto-sans-myanmar'], ['Noto Sans Syriac', 'noto-sans-syriac']]) {
   const row = targets.find(sample => sample.family === family);
@@ -45,8 +48,8 @@ try {
   for (const row of rows) {
     const expected = targets.find(sample => sample.id === row.id);
     assert.ok(Math.abs(row.shaped - expected.harfbuzz) < 1e-8, row.id);
-    assert.ok(Math.abs(row.fallback - expected.fontkit) < 1e-8, `${row.id}: fallback`);
+    assert.ok(Math.abs(row.fallback - expected.harfbuzz) < 1e-8, `${row.id}: the fontkit fallback measures HarfBuzz's width (${row.fallback} != ${expected.harfbuzz})`);
   }
   assert.deepEqual(unexpected, []);
-  console.log(`Browser HarfBuzz measurement: ${JSON.stringify(rows)}; no network, supplied-WASM and no-WASM handles agree with reviewed Node references.`);
+  console.log(`Browser HarfBuzz measurement: ${JSON.stringify(rows)}; no network, supplied-WASM and no-WASM (fontkit) handles both give the reviewed HarfBuzz widths.`);
 } finally { await browser.close(); }

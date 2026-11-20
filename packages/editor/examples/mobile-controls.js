@@ -78,8 +78,9 @@ button,select,input[type=text],input[type=number],textarea{touch-action:manipula
 .canvas-toolbar{padding:6px 10px}
 .canvas-toolbar .view-switch{display:flex;flex:1 1 100%}
 .canvas-toolbar .view-switch button{flex:1 1 0;min-width:0;padding:0 4px}
-.canvas-toolbar .history-actions{display:flex;flex:1 1 100%;gap:6px}
+.canvas-toolbar .history-actions{display:flex;flex:1 1 100%;gap:6px;min-width:0}
 .canvas-toolbar .history-actions>button{flex:1 1 0;min-width:0;padding:0 8px}
+.canvas-toolbar #connect-shapes{display:none}
 }
 @media (max-width:900px) and (pointer:coarse){
 .canvas-toolbar button,.document-bar button,.sidebar .add-slide,.inspector button,.inspector select,.inspector input{min-height:44px}

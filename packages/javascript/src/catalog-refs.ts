@@ -9,6 +9,8 @@
  * own group first.
  */
 
+import type { IconSetLoader } from './icons.js';
+
 /** The content kinds a catalog group holds, keyed by id. */
 export const catalogKinds = ['layouts', 'themes', 'colorSchemes', 'fontSchemes', 'narratives', 'audiences', 'purposes', 'tones'] as const;
 export type CatalogKind = (typeof catalogKinds)[number];
@@ -26,6 +28,12 @@ export type CatalogRecords = { readonly [K in CatalogKind]?: CatalogRecordMap };
 export interface Catalog extends CatalogRecords {
   /** The catalog's identity: an HTTPS URL or a `pkg:` reference. Never fetched. */
   readonly source: string;
+  /**
+   * LH-14: the icon sets an `icon` names as `<set>:<name>`, by set id: each the set's record (opf-icon-set/v1 without `$schema`
+   * and `id`), or a function that loads it (`galleryIconSets()` of @openpresentation/gallery/icon-sets: `ensureIcons` calls it with
+   * `{ icons: [names] }`, the icons a deck draws, and the gallery reads only those; a search asks `{ tags: true }`). See icons.ts.
+   */
+  readonly iconSets?: Readonly<Record<string, Readonly<Record<string, unknown>> | IconSetLoader>>;
 }
 /** The one option every entry point that resolves references accepts. */
 export interface CatalogOptions {
@@ -102,6 +110,11 @@ export function checkCatalogsOption(catalogs: unknown, entry: string): readonly 
     if (!isRec(catalog) || typeof catalog.source !== 'string') throw new OPFCatalogsOptionError(entry, `catalogs[${index}] is not an object with a string source`);
     for (const [kind, records] of Object.entries(catalog)) {
       if (kind === 'source') continue;
+      // LH-14: a registered icon set is its record or a function that loads it.
+      if (kind === 'iconSets') {
+        if (!isRec(records) || Object.values(records).some((set) => typeof set !== 'function' && !isRec(set))) throw new OPFCatalogsOptionError(entry, `catalogs[${index}].iconSets is not an object of icon-set records or loaders keyed by id`);
+        continue;
+      }
       if (!(catalogKinds as readonly string[]).includes(kind)) throw new OPFCatalogsOptionError(entry, `catalogs[${index}].${kind} is not a catalog kind`);
       if (!isRec(records)) throw new OPFCatalogsOptionError(entry, `catalogs[${index}].${kind} is not an object of records keyed by id`);
     }
@@ -267,6 +280,12 @@ function designSites(sites: CatalogReferenceSite[], design: unknown, path: (stri
   pushObjectReference(sites, 'fontSchemes', design.fontScheme, [...path, 'fontScheme']);
 }
 
+function languageSites(sites: CatalogReferenceSite[], language: unknown, path: (string | number)[]) {
+  if (!isRec(language)) return;
+  pushReference(sites, 'fontSchemes', language.fontScheme, [...path, 'fontScheme']);
+  pushReference(sites, 'fontSchemes', language.googleFontScheme, [...path, 'googleFontScheme']);
+}
+
 /** The references written inside one embedded or registered record, resolved in `group` first. */
 export function recordReferenceSites(kind: CatalogKind, record: unknown, path: (string | number)[], group?: string): CatalogReferenceSite[] {
   const sites: CatalogReferenceSite[] = [];
@@ -279,7 +298,7 @@ export function recordReferenceSites(kind: CatalogKind, record: unknown, path: (
 
 /**
  * Every content reference a document writes, in document order: the root narrative, audience, purpose and tone, the
- * language's font schemes, the deck and slide designs, each slide's layout, and (with `records`) the references
+ * deck and slide languages' font schemes, their designs, each slide's layout, and (with `records`) the references
  * inside embedded records. Free-form audience and purpose text is not a reference and is not listed.
  */
 export function catalogReferenceSites(document: unknown, options: { records?: boolean; slides?: boolean } = {}): CatalogReferenceSite[] {
@@ -292,16 +311,14 @@ export function catalogReferenceSites(document: unknown, options: { records?: bo
   else pushObjectReference(sites, 'audiences', deck.audience, ['audience']);
   pushObjectReference(sites, 'purposes', deck.purpose, ['purpose']);
   pushObjectReference(sites, 'tones', deck.tone, ['tone']);
-  if (isRec(deck.language)) {
-    pushReference(sites, 'fontSchemes', deck.language.fontScheme, ['language', 'fontScheme']);
-    pushReference(sites, 'fontSchemes', deck.language.googleFontScheme, ['language', 'googleFontScheme']);
-  }
+  languageSites(sites, deck.language, ['language']);
   designSites(sites, deck.design, ['design']);
   if (options.slides !== false && Array.isArray(deck.slides))
     deck.slides.forEach((slide, index) => {
       if (!isRec(slide)) return;
       // `layout: "auto"` is automatic composition, not a reference (OPF 0.19).
       if (slide.layout !== 'auto') pushReference(sites, 'layouts', slide.layout, ['slides', index, 'layout']);
+      languageSites(sites, slide.language, ['slides', index, 'language']);
       designSites(sites, slide.design, ['slides', index, 'design']);
     });
   if (options.records !== false)
@@ -352,4 +369,29 @@ export function catalogRecords(document: unknown, kind: CatalogKind, options: Ca
 /** A record as a document embeds it: no `$schema`, `id` or `x-*` display metadata. */
 export function embeddedCopy(record: unknown): Record<string, unknown> {
   return Object.fromEntries(Object.entries(rec(record)).filter(([key]) => key !== '$schema' && key !== 'id' && !key.startsWith('x-')).map(([key, value]) => [key, structuredClone(value)]));
+}
+
+/**
+ * Whether `candidate` is a plausible respelling of the unknown catalog id `reference`, for "did you mean": the two share a word of
+ * three letters or more (`two-colum`, `two-column`), start with the same three letters (`tabel`, `table`), are the same letters in
+ * another order (`cvoer`, `cover`), or share at least half their letter pairs (`taable`, `table`). An edit distance alone pointed a
+ * title slide at `table` (`title`: two edits, one shared letter pair); those two share none of these, so `title` gets no suggestion.
+ */
+export function relatedName(reference: string, candidate: string): boolean {
+  // A catalog group prefix (`acme:`) is not part of the name.
+  const bare = (value: string) => value.slice(value.lastIndexOf(':') + 1).toLowerCase();
+  const a = bare(reference), b = bare(candidate);
+  if (a === b) return true;
+  const words = (value: string) => value.split(/[^\p{L}\p{N}]+/u).filter((word) => word.length >= 3);
+  const other = new Set(words(b));
+  if (words(a).some((word) => other.has(word))) return true;
+  let prefix = 0;
+  while (prefix < a.length && prefix < b.length && a[prefix] === b[prefix]) prefix++;
+  if (prefix >= Math.min(3, a.length, b.length)) return true;
+  if (a.length === b.length && [...a].sort().join('') === [...b].sort().join('')) return true;
+  const pairs = (value: string) => Array.from({ length: Math.max(0, value.length - 1) }, (_, index) => value.slice(index, index + 2));
+  const left = pairs(a), right = pairs(b), pool = [...right];
+  let shared = 0;
+  for (const pair of left) { const at = pool.indexOf(pair); if (at >= 0) { shared++; pool.splice(at, 1); } }
+  return left.length + right.length > 0 && (2 * shared) / (left.length + right.length) >= 0.5;
 }

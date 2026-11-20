@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "corpus": {
-    "path": "docs/evidence/script-corpora-20261001/script-corpora.json",
+    "path": "docs/programs/font-fidelity-everywhere/tracker-inputs/script-corpora-20261001/script-corpora.json",
     "sha256": "cd31a9c8cc848548bc0114561b34e4454858d5d7e786af3e08609a2ddbf2f31a"
   },
   "styles": [

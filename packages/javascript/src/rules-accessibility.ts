@@ -1,4 +1,4 @@
-import { CHART_SERIES_MIN_LIGHTNESS_STEP, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, colorContrast, emphasisSurface, normalizeHexColor, resolveChartColors } from './color.js';
+import { CHART_SERIES_MIN_LIGHTNESS_STEP, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, chartSlicePlan, colorContrast, emphasisSurface, normalizeHexColor, resolveChartColors } from './color.js';
 import { type LayoutBox, textInkBox } from './composition.js';
 import { metricValueColor } from './metric-trend.js';
 import type { ResolvedDesign } from './rule-design.js';
@@ -25,6 +25,7 @@ import {
 	type Rec,
 	backdropColors,
 	colorDifference,
+	contrastRatio,
 	lightnessDifference,
 	readableColor,
 	rec,
@@ -59,6 +60,7 @@ const isLarge = (sizePx: number, bold: boolean) => {
 };
 
 const within = (box: LayoutBox, area: LayoutBox) => box.x >= area.x - 0.5 && box.y >= area.y - 0.5 && box.x + box.width <= area.x + area.width + 0.5 && box.y + box.height <= area.y + area.height + 0.5;
+const overlaps = (box: LayoutBox, area: LayoutBox) => box.x < area.x + area.width && area.x < box.x + box.width && box.y < area.y + area.height && area.y < box.y + box.height;
 
 function slideBackdrop(context: RuleSlide, box?: { x: number; y: number; width: number; height: number }): BackdropSample {
 	const { design, composition } = context;
@@ -70,7 +72,11 @@ function slideBackdrop(context: RuleSlide, box?: { x: number; y: number; width: 
 		const overlay = image.overlay && !image.overlay.edge
 			? { color: resolveTextColor(image.overlay.color, design, '#000000') ?? '#000000', opacity: image.overlay.opacity }
 			: scrim ? { color: scrim.color, opacity: scrim.opacity } : undefined;
-		return backdropColors({ kind: 'image', opacity: image.opacity ?? 1, base: '#FFFFFF' }, box, design.dimensions, { overlay, ...(scrim?.grays ? { grays: scrim.grays } : {}) });
+		// RR-105: a duotone bounds the pixels to its own ramp, and an edge band the text reaches counts over the part it covers.
+		const duotone = image.recolor?.type === 'duotone' ? ([resolveTextColor(image.recolor.dark, design, '#000000') ?? '#000000', resolveTextColor(image.recolor.light, design, '#FFFFFF') ?? '#FFFFFF'] as const) : undefined;
+		const edge = image.overlay?.edge ? image.overlay : undefined, reach = box ?? { x: 0, y: 0, ...design.dimensions };
+		const band = edge && overlaps(reach, edge.box) ? { color: resolveTextColor(edge.color, design, '#000000') ?? '#000000', opacity: edge.opacity, whole: within(reach, edge.box) } : undefined;
+		return backdropColors({ kind: 'image', opacity: image.opacity ?? 1, base: '#FFFFFF' }, box, design.dimensions, { overlay, ...(scrim?.grays ? { grays: scrim.grays } : {}), ...(duotone ? { duotone } : {}), ...(band ? { band } : {}) });
 	}
 	return backdropColors(design.backdrop, box, design.dimensions);
 }
@@ -113,7 +119,7 @@ function collectSamples(context: RuleSlide): TextSample[] {
 					if (Array.isArray(cell.value))
 						cell.value.forEach((run: unknown, index: number) => {
 							const colorRef = rec(run).color;
-							if (typeof colorRef !== 'string') return;
+							if (colorRef == null || colorRef === '') return;
 							const color = resolveTextColor(colorRef, itemDesign, itemDesign.colors.text);
 							if (color) samples.push({ path: `${cellPath}/${index}/color`, color, sizePx: rec(run).fontSize ? Number(rec(run).fontSize) / PX_TO_PT : 15, bold: Boolean(rec(run).bold) || cell.header, backdrop: cellBackdrop, source: 'override', colorPath: `${cellPath}/${index}/color`, label: 'Table cell text' });
 						});
@@ -147,7 +153,7 @@ function collectSamples(context: RuleSlide): TextSample[] {
 			const relative = splitPointer(owner.path).slice(1);
 			const base = pointer(...splitPointer(itemPath), ...relative);
 			for (const run of runsOf({ ...owner, path: base })) {
-				if (typeof run.style.color !== 'string') continue;
+				if (run.style.color == null || run.style.color === '') continue;
 				const color = resolveTextColor(run.style.color, itemDesign, itemDesign.colors.text);
 				if (!color) continue;
 				const size = typeof run.style.fontSize === 'number' ? run.style.fontSize / PX_TO_PT : baseSize;
@@ -177,6 +183,20 @@ const contrastRules: ValidationRule[] = [
 					const worst = worstContrast(sample.color, sample.backdrop);
 					if (worst.ratio >= needed) continue;
 					if (sample.backdrop.unknown) {
+						// RR-105: text that stays below the threshold over every color the picture can show here is low contrast for certain:
+						// a warning of its own for each such text, whatever the picture.
+						const best = Math.max(...sample.backdrop.colors.map((color) => contrastRatio(sample.color, color)));
+						if (best < needed) {
+							context.report(onImageRule, {
+								path: sample.path,
+								slide,
+								severity: 'warning',
+								message: `${sample.label} colour ${sample.color} is too faint on this background picture: over every colour the picture can show here its contrast is at most ${best.toFixed(1)}:1, and ${needed}:1 is needed at this size.`,
+								help: 'Set the background\'s tone (dark or light) so the text color follows the picture, give the text a readable color, or make the overlay strong enough for the text to read.',
+								measured: { ratio: round(worst.ratio), best: round(best), needed, textColor: sample.color },
+							});
+							continue;
+						}
 						if (!imageReported.done) {
 							imageReported.done = true;
 							context.report(onImageRule, {
@@ -265,7 +285,7 @@ const altRules: ValidationRule[] = [
 				for (const ref of assetRefs(context.document, slide.slide, slide.path, index === 0)) {
 					if (seen.has(ref.path)) continue;
 					seen.add(ref.path);
-					let alt = altOf(ref.value, context.document.assets);
+					let alt = altOf(ref.value, context.document.assets, context.document.variables, context.document.template === true);
 					if (ref.kind === 'video' && !alt) alt = typeof rec(ref.value).title === 'string' ? rec(ref.value).title : undefined;
 					if (alt !== undefined && alt.trim() !== '') continue;
 					if (alt === '') continue; // explicit decorative opt-out
@@ -290,7 +310,7 @@ const altRules: ValidationRule[] = [
 				for (const ref of assetRefs(context.document, slide.slide, slide.path, index === 0)) {
 					if (seen.has(ref.path)) continue;
 					seen.add(ref.path);
-					const alt = altOf(ref.value, context.document.assets)?.trim();
+					const alt = altOf(ref.value, context.document.assets, context.document.variables, context.document.template === true)?.trim();
 					if (!alt) continue;
 					const source = sourceOfAsset(ref.value);
 					const problem =
@@ -430,7 +450,31 @@ function bindingOrder(items: readonly { path: string; region?: string }[], regio
 		.sort((a, b) => a.region - b.region || a.block - b.block || a.index - b.index)
 		.map((entry) => entry.item.path);
 }
-function visualOrder(items: readonly { path: string; box: { x: number; y: number; width: number; height: number } }[], rtl: boolean): string[] {
+type Placed = { path: string; box: { x: number; y: number; width: number; height: number } };
+function visualOrder(items: readonly Placed[], rtl: boolean, base = items[0]?.path.match(/^slides\.\d+/)?.[0] ?? ''): string[] {
+	// RR-105: a block is one unit of the reading order: the blocks of a slide (or of a group) are ordered by the boxes that hold them, and
+	// a group's own items are read before the next block, in their own visual order. Three team cards side by side read card by card
+	// (picture, then name), not all pictures first.
+	const units = new Map<string, Placed[]>();
+	for (const item of items) {
+		const rest = item.path.startsWith(`${base}.`) ? item.path.slice(base.length + 1) : '';
+		const key = /^blocks\.\d+/.exec(rest)?.[0] ?? rest.split('.')[0] ?? '';
+		(units.get(key) ?? units.set(key, []).get(key)!).push(item);
+	}
+	if (units.has('')) return flatOrder(items, rtl);
+	if (units.size === 1) return visualOrder(items, rtl, `${base}.${[...units.keys()][0]}`);
+	const placed = [...units].map(([key, members]) => {
+		const left = Math.min(...members.map((item) => item.box.x)), top = Math.min(...members.map((item) => item.box.y));
+		const right = Math.max(...members.map((item) => item.box.x + item.box.width)), bottom = Math.max(...members.map((item) => item.box.y + item.box.height));
+		return { path: key, members, box: { x: left, y: top, width: right - left, height: bottom - top } };
+	});
+	const order = flatOrder(placed, rtl);
+	return order.flatMap((key) => {
+		const unit = placed.find((entry) => entry.path === key)!;
+		return unit.members.length > 1 ? visualOrder(unit.members, rtl, `${base}.${key}`) : unit.members.map((item) => item.path);
+	});
+}
+function flatOrder(items: readonly Placed[], rtl: boolean): string[] {
 	// The same ordering composeSlide uses for promoted regions. A right-to-left deck's boxes may be mirrored (or, before the
 	// mirroring lands, not), so only the row order is checked there: each row keeps its composed order.
 	if (rtl) return readingRows(items).flatMap((row) => row.map((item) => item.path));
@@ -484,6 +528,8 @@ const chartColorContext = (design: ResolvedDesign) => ({
 
 const chartSkip = /(histogram|box|pareto|waterfall|world|map)/;
 const perCategory = /(pie|doughnut|treemap|funnel)/;
+// LH-161: only a circle has a last slice beside the first.
+const circular = /(pie|doughnut)/;
 
 const chartRules: ValidationRule[] = [
 	{
@@ -506,7 +552,11 @@ const chartRules: ValidationRule[] = [
 					const paletteContext = chartColorContext(slide.design);
 					const palette = chartPaletteForFill(surface, context.chartPalette ?? chartSeriesPalette(slide.design.colorScheme, chart.colors, paletteContext), { legible: context.chartPalette === undefined ? chartSchemeSeries(chart.colors, slide.design.colorScheme, paletteContext) : undefined, soften: context.chartPalette === undefined });
 					if (!palette.length) continue;
-					const used = Array.from({ length: Math.min(count, 24) }, (_, i) => palette[i % palette.length]!);
+					// LH-161: a pie's or doughnut's last slice is moved off the first (at most 20 L*) when they would read as one tone, else every slice gets a
+					// surface-colored border, which separates the pair by shape (core chartSlicePlan), as the engines draw it.
+					const slicePlan = circular.test(type) && context.chartPalette === undefined ? chartSlicePlan(surface, palette, count, { legible: chartSchemeSeries(chart.colors, slide.design.colorScheme, paletteContext) }) : undefined;
+					const drawn = slicePlan?.colors ?? palette;
+					const used = Array.from({ length: Math.min(count, 24) }, (_, i) => drawn[i % drawn.length]!);
 					const pairs: { a: number; b: number; model: string; difference: number }[] = [];
 					for (let a = 0; a < used.length; a++)
 						for (let b = a + 1; b < used.length; b++) {
@@ -516,9 +566,9 @@ const chartRules: ValidationRule[] = [
 								if (difference < worst.difference) worst = { model, difference };
 							}
 							if (worst.difference < context.thresholds.minSeriesColorDifference) pairs.push({ a, b, ...worst });
-							// LH-35: neighbouring series (and neighbouring slices, the last beside the first) also differ in lightness, the cue that
+							// LH-35: neighbouring series (and a pie's neighbouring slices, the last beside the first) also differ in lightness, the cue that
 							// survives without hue: under the engines' own step (CHART_SERIES_MIN_LIGHTNESS_STEP, 11 L*) they read as one tone.
-							else if (b === a + 1 || (slices && a === 0 && b === used.length - 1 && used.length > 2)) {
+							else if (b === a + 1 || (circular.test(type) && !slicePlan?.bordered && a === 0 && b === used.length - 1 && used.length > 2)) {
 								const lightness = lightnessDifference(used[a]!, used[b]!);
 								if (lightness < CHART_SERIES_MIN_LIGHTNESS_STEP) pairs.push({ a, b, model: 'lightness', difference: lightness });
 							}

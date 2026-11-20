@@ -695,6 +695,17 @@
   color: var(--opf-ui-danger);
 }
 
+/* The source text is not a valid deck: its errors lead the panel. */
+:root .opf-review-source {
+  border: 1px solid color-mix(in srgb, var(--opf-ui-danger) 45%, var(--opf-ui-border));
+  border-radius: var(--opf-ui-radius);
+  background: color-mix(in srgb, var(--opf-ui-danger) 5%, transparent);
+}
+
+:root .opf-review-source-note {
+  color: var(--opf-ui-fg);
+}
+
 /* ---------------------------------------------------------------- slide manager (opf-slides, opf-sm-*, opf-menu) */
 
 .opf-slides .slide-card {
@@ -790,10 +801,11 @@
   pointer-events: none;
 }
 
+/* Keep the complete SVG inside the fixed grid frame; its native meet transform letterboxes other slide ratios. */
 .opf-slides .thumbnail svg {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
 }
 
 .opf-slides .slide-card[aria-current="true"] .thumbnail {

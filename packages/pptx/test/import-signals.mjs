@@ -232,7 +232,7 @@ await check('importing with signals reports the same diagnostics as without', as
 await check('tagged exports link to groups, regions and root payloads', async () => {
   const opf = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'T', slides: [
     {title: 'Grouped', blocks: [{type: 'group', id: 'g1', blocks: [{type: 'text', text: 'Alpha'}, {type: 'list', items: ['a', 'b']}]}, {type: 'text', text: 'Omega'}]},
-    {title: 'Regions', left: {type: 'text', text: 'L'}, right: {type: 'list', items: ['x', 'y']}},
+    {title: 'Regions', start: {type: 'text', text: 'L'}, end: {type: 'list', items: ['x', 'y']}},
     {title: 'Root', text: 'Just text'},
     {title: 'Mixed', blocks: [{type: 'metric', metric: {value: '98%', label: 'Uptime'}}, {type: 'quote', quote: {text: 'Q', attribution: 'A'}}, {type: 'code', code: {source: 'a = 1', language: 'python'}}]}
   ]};
@@ -242,7 +242,7 @@ await check('tagged exports link to groups, regions and root payloads', async ()
   assert.equal(result.signals.deck.provenance.opfTaggedSlides, 4);
   const paths = slide => slide.shapes.filter(shape => shape.opf?.path).map(shape => `${shape.opf.path}:${shape.opf.blockType ?? shape.opf.role}`);
   assert.deepEqual([...new Set(paths(result.signals.slides[0]))], ['slides.0.title:title', 'slides.0.blocks.0.blocks.0:text', 'slides.0.blocks.0.blocks.1:list', 'slides.0.blocks.1:text']);
-  assert.deepEqual([...new Set(paths(result.signals.slides[1]))], ['slides.1.title:title', 'slides.1.left:text', 'slides.1.right:list']);
+  assert.deepEqual([...new Set(paths(result.signals.slides[1]))], ['slides.1.title:title', 'slides.1.start:text', 'slides.1.end:list']);
   assert.deepEqual([...new Set(paths(result.signals.slides[2]))], ['slides.2.title:title', 'slides.2.text:text']);
   assert.deepEqual([...new Set(paths(result.signals.slides[3]))], ['slides.3.title:title', 'slides.3.blocks.0:metric', 'slides.3.blocks.1:quote', 'slides.3.blocks.2:code']);
   for (const slide of result.signals.slides) for (const shape of slide.shapes) if (shape.opf?.path) assert.notEqual(at(result.presentation, shape.opf.path), undefined, shape.opf.path);

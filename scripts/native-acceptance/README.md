@@ -35,6 +35,24 @@ pair. Historical fixtures retain their original export options and explicitly
 record that preview/export equivalence is unproven. Native font installation
 and visual comparison remain explicit acceptance steps.
 
+## Current chart archive authority
+
+Preparation loads the authoritative package fixture at
+`packages/pptx/test/fixtures/chartex-fallback-main.json`. Its strict whole-archive
+hashes, sizes, ordered diagnostics and layout/tag counts are current-output checks.
+The older `fixtures/chartex-fallback-main.json` remains an authentic historical
+native witness, not an alternate accepted output. Both file hashes and source
+metadata are bound in `suite.json`, and the package fixture is part of the suite
+repository input inventory. Native and registry acceptance remain false.
+
+There are 28 primary inputs, 30 positive chart-mode inputs and one six-slide
+table-colour input: 59 positive prepared cases. Multi-series Pareto uses the
+current clustered-column fallback in every mode with all three series. A world
+chart over nonplace categories uses columns, while an actual country map keeps
+its separate native/auto contract. All-seven inputs still contain seven slides:
+neither they nor the table input fit the generic three-slide worker. Select a
+separately reviewed bounded plan; preparation never widens the worker limits.
+
 ## Opt-in font-route subset
 
 Prepare only the versioned Traditional Arabic and Nirmala Telugu/Kannada/Gujarati/Malayalam fixtures with `--font-routes all`, or pass comma-separated exact case IDs from `fixtures/font-routes.json`:
@@ -52,6 +70,13 @@ Each selected fixture has explicit 400/700 upright corpus rows, numeric/Latin/ne
 The existing one-case Windows runner can retain its ordinary observations for a selected eligible fixture after explicit authorization. Preparation and that worker's completion do not establish font fidelity: the route metadata keeps reference measurements, native physical face, BoundWidth/ink/baseline acceptance unresolved. Actual contextual per-class reference widths and affected Office overflow/ink measurements require separately reviewed assertions and supervisor evidence. This change adds no worker assertion or native pass criterion.
 
 ## Run on Windows
+
+For the separately qualified mixed-code cases, use the bounded
+[Roboto Mono profile procedure](../../docs/handoff/2026-11-08/rr105-roboto-mono-profile.md).
+It prepares only the renderer-pinned 400/700 upright faces and leaves the
+existing seven-face Roboto helper and its cleanup identity unchanged. Input
+generation and mocked lifecycle tests do not install fonts or establish
+native acceptance; only the supervisor performs registration and Office runs.
 
 Follow [the Windows runner instructions](WINDOWS.md). Only the supervisor runs
 Office. The runner checks the selected source revision and all generated hashes,
@@ -111,3 +136,54 @@ This fixture stresses semantic edit preservation: 36 pt exceeds its original
 text-box height. A pass does not establish visual fit, physical glyph-font
 selection, baseline parity, or overall native release acceptance. Preserve any
 failure and investigate its actual cause before changing expectations.
+
+## Explicit dense-events survey profile
+
+The generic furniture runner still refuses cases whose automaticControlEligible
+flag is false. The dense-events profile is a separate controller for the exact
+feature-dense-events case: one original slide, exactly50 source shapes, no actions.
+It delegates to the recorded worker's unchanged ReadOnlySurvey mode (one slide,
+at most100 shapes,16MiB/4096 ZIP entries and a60-second maximum). It does not
+change the generic3-slide/30-shape/20-action contract or edit the suite.
+
+Freeze and review the NEW controller checkout before creating an execution
+envelope. Generation retains its original suite digest, preparation/worker Git
+identities and installed consumer receipts; controller HEAD/code hashes and
+Node24 executable identity are recorded separately. Supply the reviewed manifest
+digest explicitly; no workstation path or frozen release SHA is built into the
+controller. All roots must remain clean and all original file/runtime identities
+are rechecked before and after execution. Moving the controller HEAD invalidates
+its envelope even when a later commit changes only documentation. Keep later
+results on a separate evidence branch.
+
+Create the envelope without opening Office:
+
+```sh
+node scripts/native-acceptance/dense-survey-contract.mjs create --suite /absolute/prepared-suite --expected-manifest-sha256 REVIEWED_MANIFEST_SHA256 --preparation-repository /absolute/frozen-preparation --worker-repository /absolute/frozen-pptx-package --consumer /absolute/installed-consumer --output /absolute/new-execution-envelope.json
+```
+
+The command prints the exact envelope SHA256. The supervisor reviews that file
+and pins its digest when invoking the Windows PowerShell launcher:
+
+```powershell
+& /absolute/WindowsPowerShell/powershell.exe -NoProfile -NonInteractive -File scripts/native-acceptance/run-dense-survey-windows.ps1 -ExecutionEnvelope /absolute/new-execution-envelope.json -ExpectedEnvelopeSha256 REVIEWED_ENVELOPE_SHA256 -NodeExecutable /absolute/node.exe -OutputDirectory /absolute/new-attempt
+```
+
+Without RunOffice, only the bound Office-free process/worker harness checks and
+snapshot validation run. Only the supervisor adds -RunOffice after source and
+envelope review and the ordinary idle/ownership safety checks. The launcher
+creates one fresh attempt, never retries, never evaluates a generic or worker
+entrypoint during helper imports, and delegates all COM to the unchanged worker.
+
+The output binder requires all50 ordered named shapes and their visible words
+in original, no-op edited and reopened observations; the original/snapshot,
+worker, saved archive and all three1280x720 PNG identities remain bound to that
+attempt. Saved OOXML must retain the same source words/shape identities. These
+are structural observations, not font, glyph, spacing, raster equivalence, actual
+editing or native acceptance. Both nativeAcceptance and registryAcceptance stay
+false pending supervisor review. The generic text binder remains unchanged.
+
+The retained test PNG is a prepared renderer preview used only in explicitly
+modeled Office-free output tests; it is not a native screenshot. No Office
+execution follows from a passing pure contract. Intact seven-slide chart controls
+and the retired six-slide table-helper replacement remain separate work.

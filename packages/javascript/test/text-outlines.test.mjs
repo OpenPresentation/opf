@@ -52,11 +52,11 @@ test('composition preserves width-only behavior and exposes the actual outline p
   const legacy=composeSlide(slide,{textMeasurement:{measure:measurement.measure},explain:true});
   assert.equal(legacy.items[0].text.placement,undefined);
   assert.equal(legacy.explanation.textOutlines,'unavailable');
-  const result=composeSlide(slide,{textMeasurement:measurement,titleAlignment:'right',contentAlignment:'center',explain:true});
+  const result=composeSlide(slide,{textMeasurement:measurement,titleAlignment:'end',contentAlignment:'center',explain:true});
   assert.deepEqual(slide,source);assert.equal(result.explanation.algorithm,'grid-score-v9');
   assert.equal(result.explanation.textOutlines,'provided');assert.equal(result.explanation.textRasterPadding,1);
   assert.equal(result.items[0].text.placement.alignment,'right');assert.equal(result.items[1].text.placement.alignment,'center');
-  assert.equal(composeSlide({...slide,design:{titleAlignment:'left'}},{textMeasurement:measurement,titleAlignment:'right'}).items[0].text.placement.alignment,'left');
+  assert.equal(composeSlide({...slide,design:{titleAlignment:'start'}},{textMeasurement:measurement,titleAlignment:'end'}).items[0].text.placement.alignment,'left');
   const scaled=composeSlide(slide,{width:640,height:360,textMeasurement:measurement,textRasterPadding:2,explain:true});
   assert.equal(scaled.explanation.textRasterPadding,1);
 });
@@ -74,7 +74,7 @@ test('outline failures participate in bounded fitting, candidate scores and stri
 test('presentation pagination forwards outline padding and effective title alignment',()=>{
   // A synthetic provider leaves no space for positive clearance around a title.
   // The zero-padding presentation must pass the same constraint as direct composition.
-  const design={titleAlignment:'right',contentAlignment:'center'},slide={title:'T',text:'Body'};
+  const design={titleAlignment:'end',contentAlignment:'center'},slide={title:'T',text:'Body'};
   const width=composeSlide(slide).items[0].box.width;
   const edge={measure:(text,size,s)=>s.path.endsWith('.title')?width:measurement.measure(text,size),outlineBounds:(text,size,s)=>s.path.endsWith('.title')?{x:0,y:-size*.8,width,height:size}:measurement.outlineBounds(text,size,s)};
   const deck={design,slides:[slide]};

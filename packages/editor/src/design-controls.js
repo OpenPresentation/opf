@@ -11,6 +11,7 @@ import {
   COLOR_NAMES,
   IMAGE_BACKGROUND_FITS,
   PATTERN_GROUPS,
+  TEXT_PLACEMENTS,
   THEME_BACKGROUND_SLOTS,
   prepareBackground,
   readBackground,
@@ -44,6 +45,10 @@ import {
 import { ACCENT_SLOTS } from "./color-slots.js";
 import { readDesignVariant, setDesignVariant, variantSwatches } from "./design-variants.js";
 import { createContentControls, iconNode, shortReason } from "./content-controls.js";
+import { createIconPicker } from "./icon-picker.js";
+import { createShapeControls } from "./shape-controls.js";
+import { readShape, shapeBlockPathForSelection } from "./shape-options.js";
+import { readOverlay } from "./shape-overlays.js";
 import { IMAGE_EDGES, IMAGE_FITS, IMAGE_SHAPES, readEffectiveImageFit, readImageTreatments, setImageTreatment } from "./image-options.js";
 import { METRIC_TRENDS, readMetricTrend, setMetricTrend } from "./content-actions.js";
 import { applyCatalogUpdate, catalogRecordAt, checkCatalogUpdates, mergeCatalogs, moveToCustom, referenceFindings } from "./catalogs.js";
@@ -51,7 +56,7 @@ import { describeTableCell, mergeTableCells, parseTableCellPath, readTableAlt, r
 import { OPFEditorError } from "./index.js";
 
 /** The sections a panel can show. `selection` and `table` follow the current selection; the rest follow the deck or the current slide. */
-export const DESIGN_CONTROL_SECTIONS = Object.freeze(["look", "variant", "background", "header-footer", "brand", "layout-options", "info", "selection", "image", "table", "slide-content", "catalog"]);
+export const DESIGN_CONTROL_SECTIONS = Object.freeze(["look", "variant", "background", "header-footer", "brand", "layout-options", "info", "selection", "shape", "image", "table", "slide-content", "catalog"]);
 
 const SECTION_TITLES = {
   look: "Look and language",
@@ -64,10 +69,11 @@ const SECTION_TITLES = {
   "layout-options": "Alignment and arrangement",
   info: "Audience and story",
   selection: "Selected content",
+  shape: "Selected shape",
   table: "Table",
   "slide-content": "Slide structure",
 };
-const OPEN_BY_DEFAULT = new Set(["look", "selection", "image", "table"]);
+const OPEN_BY_DEFAULT = new Set(["look", "selection", "shape", "image", "table"]);
 // RR-71: the four shapes of an organization's logo, and the two backgrounds a shape can be split by.
 const LOGO_SHAPE_LABELS = {
   all: "All shapes (one image)",
@@ -658,6 +664,9 @@ export function createDesignControls(container, options = {}) {
     const overlay = overlayFields("bg-overlay", "Overlay");
     // LH-02: without an overlay, core draws an automatic scrim behind text on the picture; `overlay: false` turns it off.
     const scrimOff = checkField("bg-scrim-off", "No automatic scrim", { help: "Without an overlay, a scrim keeps text on the picture readable. Check to show the picture as it is." });
+    // LH-158: where a cover's or section's heading group goes on the picture; Automatic lets core pick the calmest place it measured.
+    const textPlacement = selectField("bg-text-placement", "Text placement", { empty: "Automatic", help: "Where a cover's or section's title sits on the picture" });
+    textPlacement.setOptions(TEXT_PLACEMENTS.map((value) => ({ value, label: value === "panel" ? "Panel beside the picture" : value.replace("-", ", ").replace(/^./, (first) => first.toUpperCase()) })));
     const bgRecolor = selectField("bg-recolor", "Recolor", { empty: "None", help: "Changes the picture, not the overlay" });
     bgRecolor.setOptions([
       { value: "grayscale", label: "Grayscale" },
@@ -681,6 +690,7 @@ export function createDesignControls(container, options = {}) {
         ...(opacityValue() === undefined ? {} : { opacity: opacityValue() }),
         ...(recolorValue() ? { recolor: recolorValue() } : {}),
         ...(overlay.value() ? { overlay: overlay.value() } : scrimOff.input.checked ? { overlay: false } : {}),
+        ...(textPlacement.select.value ? { textPlacement: textPlacement.select.value } : {}),
       };
     };
     const bgImage = imageCluster("bg-image", "Background image", {
@@ -691,7 +701,7 @@ export function createDesignControls(container, options = {}) {
       },
       help: "Asset, URL or data URL. Enter applies.",
     });
-    imagePanel.append(bgImage.wrap, fit.wrap, bgAlt.wrap, focusX.wrap, focusY.wrap, bgRecolor.wrap, bgDuoDark.wrap, bgDuoLight.wrap, overlay.wrap, scrimOff.wrap);
+    imagePanel.append(bgImage.wrap, fit.wrap, bgAlt.wrap, focusX.wrap, focusY.wrap, bgRecolor.wrap, bgDuoDark.wrap, bgDuoLight.wrap, overlay.wrap, scrimOff.wrap, textPlacement.wrap);
 
     const patternPanel = panel("pattern", "Pattern");
     const preset = selectField("bg-preset", "Pattern", { help: "PowerPoint presets, exported as native fills" });
@@ -752,6 +762,7 @@ export function createDesignControls(container, options = {}) {
       focusY.set(current.type === "image" && current.focus ? String(current.focus.y) : "");
       overlay.set(current.type === "image" && current.overlay ? current.overlay : undefined);
       scrimOff.set(current.type === "image" && current.overlay === false);
+      textPlacement.set(current.type === "image" ? (current.textPlacement ?? "") : "");
       const recolor = current.type === "image" ? current.recolor : undefined;
       bgRecolor.set(recolor === "grayscale" ? "grayscale" : recolor && typeof recolor === "object" ? "duotone" : "");
       bgDuoDark.set(recolor && typeof recolor === "object" ? recolor.dark : "");
@@ -1122,10 +1133,10 @@ export function createDesignControls(container, options = {}) {
         field.set(option.value ?? "", sourceNote(option.scope, option.value !== undefined));
       });
     };
-    enumField("titleAlignment", "Title alignment", ["left", "center", "right"], {});
-    enumField("contentAlignment", "Content alignment", ["left", "center", "right"], {});
+    enumField("titleAlignment", "Title alignment", ["start", "center", "end"], {});
+    enumField("contentAlignment", "Content alignment", ["start", "center", "end"], {});
     enumField("contentDirection", "Content direction", ["horizontal", "vertical"], { horizontal: "Horizontal (row)", vertical: "Vertical (column)" }, "When a slide sets no arrangement");
-    enumField("chartPrimary", "Primary chart position", ["none", "top", "bottom", "left", "right"], { none: "None (equal)" }, "Where the main chart sits");
+    enumField("chartPrimary", "Primary chart position", ["none", "top", "bottom", "start", "end"], { none: "None (equal)" }, "Where the main chart sits");
     enumField("imageFit", "Image fit", IMAGE_FITS, { cover: "Cover (crop to fill)", contain: "Contain (whole image)", stretch: "Stretch to the frame", auto: "Auto (cover a near fit, else whole)" }, "When an image block sets no fit");
     const box = selectField("opt-contentBox", "Content box", {
       empty: "Default",
@@ -1232,9 +1243,30 @@ export function createDesignControls(container, options = {}) {
       onChange: (value) => run(() => setMetricTrend(editor, dynamic.blockPath, value === "" ? null : value), value === "" ? "Trend removed." : `Trend set to ${value}.`),
     });
     trend.setOptions(METRIC_TRENDS.map((value) => ({ value, label: titleCase(value) })));
+    // LH-166: the icon of the selected list entry, metric or group: pick from the registered sets, or paste an SVG into the deck's icons.
+    const iconHost = h("div", { class: "opf-dc-icon", "data-role": "selection-icon" });
+    const iconPicker = createIconPicker(iconHost, {
+      editor,
+      getSelectedPath: getSelected,
+      catalogs: options.catalogs,
+      onChange: (change) => options.onChange?.(change),
+      onStatus: (message, info) => (info.error ? complain(message) : say(message)),
+    });
     const chartType = selectField("chart-type", "Chart type", {
       help: "Types this data supports",
-      onChange: (value) => run(() => switchDimension(editor, "charts", value, { slideIndex: getSlide(), path: dynamic.blockPath, ...catalogOptions() }), `Chart type set to ${chartType.select.selectedOptions[0]?.textContent ?? value}.`),
+      onChange: (value) => run(() => {
+        const switchOptions = { slideIndex: getSlide(), path: dynamic.blockPath, ...catalogOptions() };
+        try {
+          return switchDimension(editor, "charts", value, switchOptions);
+        } catch (error) {
+          // A type that cannot draw the chart's reference lines: offer to remove them rather than refuse or drop them silently.
+          const win = doc.defaultView;
+          if (error?.code !== "chart-reference-lines-unsupported" || typeof win?.confirm !== "function") throw error;
+          const count = error.details?.count ?? 1;
+          if (!win.confirm(`This chart type cannot draw ${count === 1 ? "the chart's reference line" : `${count} of the chart's reference lines`}. Remove ${count === 1 ? "it" : "them"} and switch?`)) throw error;
+          return switchDimension(editor, "charts", value, { ...switchOptions, removeReferenceLines: true });
+        }
+      }, (change) => `Chart type set to ${chartType.select.selectedOptions[0]?.textContent ?? value}.${change?.loss?.length ? ` Removed: ${change.loss.join(" ")}` : ""}`),
     });
     // The block's path is internal: it is a copyable chip under Advanced (a host with its own Advanced, such as the Studio, turns it off).
     const pathChip = h("button", { type: "button", class: "opf-dc-path", "data-role": "selection-path", title: "Copy path" });
@@ -1245,11 +1277,18 @@ export function createDesignControls(container, options = {}) {
       clipboard.writeText(path).then(() => say(`Copied ${path}.`), () => complain("Could not copy the path."));
     });
     const advanced = h("details", { class: "opf-dc-advanced", "data-role": "selection-advanced", hidden: options.showPath === false || undefined }, h("summary", {}, "Advanced"), pathChip);
-    body.append(contentControls.nodes.arrange, contentControls.nodes.list, convert.wrap, contentControls.nodes.metrics, trend.wrap, chartType.wrap, replace.wrap, contentControls.nodes.image, advanced);
-    dynamic.selection = { details, convert, replace, chartType, trend, pathChip, advanced };
+    body.append(contentControls.nodes.arrange, contentControls.nodes.list, convert.wrap, contentControls.nodes.metrics, trend.wrap, iconHost, chartType.wrap, replace.wrap, contentControls.nodes.image, advanced);
+    dynamic.selection = { details, convert, replace, chartType, trend, iconPicker, pathChip, advanced };
   }
 
   if (built["slide-content"]) built["slide-content"].body.append(contentControls.slideNode);
+
+  // --- selected shape (SH-06): the preset, its adjust values, fill, line, style, effects, transform, text and accessibility keys ---------
+
+  if (built.shape) {
+    const { body, details } = built.shape;
+    dynamic.shape = { details, controls: createShapeControls({ editor, doc, h, nextId, reselect, selectField, textField, numberField, checkField, button, run, say, complain, geometryFor, body }) };
+  }
 
   // --- selected image (FA-22): fit, focus, treatments and placement of one image block -----------------------------
 
@@ -1273,17 +1312,19 @@ export function createDesignControls(container, options = {}) {
     const focusX = numberField("img-focus-x", "Focus X", { min: 0, max: 1, step: 0.05, help: "0 left to 1 right; the point a cover fit keeps in view", onCommit: focusCommit });
     const focusY = numberField("img-focus-y", "Focus Y", { min: 0, max: 1, step: 0.05, help: "0 top to 1 bottom", onCommit: focusCommit });
     const shape = selectField("img-shape", "Shape", { empty: "Rectangle", onChange: (value) => treat({ shape: value === "" ? null : value }, "Image shape changed.") });
-    shape.setOptions(IMAGE_SHAPES.filter((value) => value !== "rectangle").map((value) => ({ value, label: titleCase(value) })));
-    const radius = numberField("img-radius", "Corner radius", { min: 0, max: 0.5, step: 0.02, help: "Share of the shorter side", onCommit: (value) => treat({ cornerRadius: value }, "Corner radius changed.") });
+    shape.setOptions(IMAGE_SHAPES.filter((value) => value !== "rect").map((value) => ({ value, label: value })));
+    // SH-02: a roundRect frame's corner is its adjust value adj (a share of the shorter side).
+    const radius = numberField("img-radius", "Corner radius", { min: 0, max: 0.5, step: 0.02, help: "Share of the shorter side", onCommit: (value) => treat({ adjust: value === null ? null : { adj: value } }, "Corner radius changed.") });
     const aspect = numberField("img-aspect", "Aspect ratio", { min: 0.1, max: 10, step: 0.01, placeholder: "width / height", help: "1.78 for 16:9, 1 for a square. Clear to fill the region.", onCommit: (value) => treat({ aspectRatio: value }, "Frame aspect ratio changed.") });
     const opacity = numberField("img-opacity", "Opacity", { min: 0, max: 1, step: 0.05, onCommit: (value) => treat({ opacity: value }, "Image opacity changed.") });
+    // SH-02: the picture's line is its stroke (renamed from border).
     const borderCommit = () => {
       const ref = borderColor.input.value.trim();
-      treat({ border: ref ? { color: ref, width: borderWidth.input.value === "" ? 2 : Number(borderWidth.input.value) } : null }, ref ? "Border changed." : "Border removed.");
+      treat({ stroke: ref ? { color: ref, width: borderWidth.input.value === "" ? 2 : Number(borderWidth.input.value) } : null }, ref ? "Stroke changed." : "Stroke removed.");
     };
-    const borderColor = textField("img-border-color", "Border color", { list: true, placeholder: "dark1 or #1F2937", help: "Clear to remove", onCommit: borderCommit });
+    const borderColor = textField("img-border-color", "Stroke color", { list: true, placeholder: "dark1 or #1F2937", help: "Clear to remove", onCommit: borderCommit });
     borderColor.setList(COLOR_NAMES);
-    const borderWidth = numberField("img-border-width", "Border width", { min: 0, max: 64, step: 1, onCommit: borderCommit });
+    const borderWidth = numberField("img-border-width", "Stroke width", { min: 0, max: 64, step: 1, onCommit: borderCommit });
     const recolorCommit = () => {
       const kind = recolor.select.value;
       if (kind === "duotone" && (!duoDark.input.value.trim() || !duoLight.input.value.trim())) return say("Enter the dark and light duotone colors to apply it.");
@@ -1323,13 +1364,13 @@ export function createDesignControls(container, options = {}) {
         fit.set(current.fit ?? "");
         focusX.set(current.focus ? String(current.focus.x) : "");
         focusY.set(current.focus ? String(current.focus.y) : "");
-        shape.set(current.shape && current.shape !== "rectangle" ? current.shape : "");
-        radius.set(current.cornerRadius === undefined ? "" : String(current.cornerRadius));
-        radius.wrap.hidden = current.shape !== "rounded";
+        shape.set(current.shape && current.shape !== "rect" ? current.shape : "");
+        radius.set(current.adjust?.adj === undefined ? "" : String(current.adjust.adj));
+        radius.wrap.hidden = current.shape !== "roundRect";
         aspect.set(current.aspectRatio === undefined ? "" : String(current.aspectRatio));
         opacity.set(current.opacity === undefined ? "" : String(current.opacity));
-        borderColor.set(current.border?.color ?? "");
-        borderWidth.set(current.border?.width === undefined ? "" : String(current.border.width));
+        borderColor.set(typeof current.stroke?.color === "string" ? current.stroke.color : "");
+        borderWidth.set(current.stroke?.width === undefined ? "" : String(current.stroke.width));
         const duotone = current.recolor && typeof current.recolor === "object";
         recolor.set(current.recolor === "grayscale" ? "grayscale" : duotone ? "duotone" : "");
         duoDark.set(duotone ? current.recolor.dark : "");
@@ -1449,7 +1490,7 @@ export function createDesignControls(container, options = {}) {
     const fill = selectField("cell-fill", "Cell fill", { onChange: (value) => run(() => setTableCellStyle(editor, dynamic.tablePath, dynamic.cell, { fill: value === "" ? null : value }), "Cell fill changed.") });
     fill.setOptions(CELL_FILLS.map(([value, label]) => ({ value, label })));
     const align = selectField("cell-align", "Cell text alignment", { empty: "Default", onChange: (value) => run(() => setTableCellStyle(editor, dynamic.tablePath, dynamic.cell, { align: value === "" ? null : value }), "Cell alignment changed.") });
-    align.setOptions(["left", "center", "right"].map((value) => ({ value, label: titleCase(value) })));
+    align.setOptions(["start", "center", "end"].map((value) => ({ value, label: titleCase(value) })));
     // RR-93: `bold` is a cell style field, so a number cell stays bold without rich runs and keeps its number format and alignment. Unchecking removes the field.
     const bold = checkField("cell-bold", "Bold cell text", { onChange: (checked) => run(() => setTableCellStyle(editor, dynamic.tablePath, dynamic.cell, { bold: checked ? true : null }), checked ? "Cell text is bold." : "Cell text is no longer bold.") });
     const cellBox = h("div", { class: "opf-dc-cell" }, cellLabel, columns.wrap, rows.wrap, join.wrap, h("div", { class: "opf-dc-actions" }, merge, split), fill.wrap, align.wrap, bold.wrap);
@@ -1473,8 +1514,13 @@ export function createDesignControls(container, options = {}) {
   function syncSelection() {
     const selected = getSelected();
     const document_ = editor.presentation;
-    const blockPath = selected ? blockPathForSelection(document_, selected) : undefined;
-    const content = blockPath ? readBlockContent(document_, blockPath) : undefined;
+    // SH-06: a shape block is its own kind (it has no content to convert, though it carries text), and its section follows it.
+    // An overlay shape or connector of the slide's `shapes` is no block: it has no arrange toolbar, and its own section places, stacks and deletes it.
+    const overlay = selected ? readOverlay(document_, selected) : undefined;
+    const shapePath = selected && !overlay ? shapeBlockPathForSelection(document_, selected) : undefined;
+    const shaped = shapePath ? readShape(document_, shapePath) : undefined;
+    const blockPath = overlay ? undefined : (shapePath ?? (selected ? blockPathForSelection(document_, selected) : undefined));
+    const content = overlay ? undefined : shaped ? { path: shaped.path.split("."), explicit: shaped.explicit, owner: shaped.block, key: "shape", kind: "shape", content: shaped.block } : blockPath ? readBlockContent(document_, blockPath) : undefined;
     dynamic.blockPath = blockPath;
     // A selected group has no content of its own, but it can be arranged (grouped with the next block, ungrouped).
     const groupPath = !blockPath && selected && isGroupBlock(document_, selected) ? selected : undefined;
@@ -1485,12 +1531,13 @@ export function createDesignControls(container, options = {}) {
       ui.pathChip.dataset.path = path ?? "";
       ui.pathChip.replaceChildren(h("code", {}, path ?? ""), iconNode(doc, "Copy", 14));
       ui.pathChip.setAttribute("aria-label", `Copy path ${path ?? ""}`);
-      for (const field of [ui.convert, ui.replace]) field.wrap.hidden = !content;
+      for (const field of [ui.convert, ui.replace]) field.wrap.hidden = !content || shaped !== undefined;
       ui.chartType.wrap.hidden = true;
       const metricTrend = content?.kind === "metric" ? readMetricTrend(document_, blockPath) : undefined;
       ui.trend.wrap.hidden = !metricTrend;
       if (metricTrend) ui.trend.set(metricTrend.trend ?? "");
-      if (content) {
+      ui.iconPicker.refresh();
+      if (content && !shaped) {
         const targets = blockConversionTargets(document_, blockPath);
         // Every type is listed; one this content cannot become is disabled, with the reason as its tooltip and accessible description.
         ui.convert.setOptions([
@@ -1512,6 +1559,11 @@ export function createDesignControls(container, options = {}) {
           ui.chartType.set(content.content?.type);
         }
       }
+    }
+    const shapeUi = dynamic.shape;
+    if (shapeUi) {
+      shapeUi.details.hidden = !shaped && !overlay;
+      if (shaped || overlay) shapeUi.controls.load(overlay ? overlay.path : shaped.path);
     }
     const imageUi = dynamic.image;
     if (imageUi) {
@@ -1613,6 +1665,8 @@ export function createDesignControls(container, options = {}) {
       invalidateUpload();
       root.removeEventListener("input", invalidateUpload, true);
       root.removeEventListener("change", invalidateUpload, true);
+      dynamic.selection?.iconPicker.destroy();
+      dynamic.shape?.controls.destroy();
       unsubscribe();
       root.remove();
     },

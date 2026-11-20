@@ -33,10 +33,10 @@ const escaped = 'North America leads EMEA, $18.1M against $11.5M in Q4 &amp; &qu
   assert.deepEqual({...tables[0], alt: undefined}, {...plain, alt: undefined});
 }
 
-// 2. No alt: no descr, no decorative marker, and import invents none.
+// 2. No alt: the generated description (RR-105, #1290, 2026-11-12; before it, no descr), no decorative marker, and import invents no alt.
 {
   const {slideXml, tables} = await one({columns, rows});
-  assert.doesNotMatch(slideXml, /<p:cNvPr[^>]*name="OPF table 1"[^>]*descr=/);
+  assert.match(slideXml, /<p:cNvPr[^>]*name="OPF table 1" descr="Table: Region and Q4; 2 rows"\/>/);
   assert.doesNotMatch(slideXml, /adec:decorative/);
   assert.equal('alt' in tables[0], false);
 }
@@ -62,7 +62,7 @@ const escaped = 'North America leads EMEA, $18.1M against $11.5M in Q4 &amp; &qu
 
   const blocks = await roundTrip({slides: [{title: 'Two', blocks: [{table: {columns, rows, alt: 'First.'}}, {table: {columns, rows}}, {chart: {type: 'column', alt: 'The chart.', data: {columns, rows}}}]}]});
   const descrs = blocks.slideXml.match(/descr="[^"]*"/g);
-  assert.deepEqual(descrs, ['descr="First."', 'descr="The chart."']);
+  assert.deepEqual(descrs, ['descr="First."', 'descr="Table: Region and Q4; 2 rows"', 'descr="The chart."'], 'the second table has the generated description (RR-105, 2026-11-12)');
   const [first, second] = blocks.tables;
   assert.equal(first.alt, 'First.');
   assert.equal('alt' in second, false);
@@ -75,7 +75,8 @@ const escaped = 'North America leads EMEA, $18.1M against $11.5M in Q4 &amp; &qu
   const entries = unzipSync(bytes);
   const xml = decoder.decode(entries['ppt/slides/slide1.xml']);
   for (const [descr, expected] of [[' descr="Typed in PowerPoint"', 'Typed in PowerPoint'], [' descr=""', undefined]]) {
-    const edited = {...entries, 'ppt/slides/slide1.xml': new TextEncoder().encode(xml.replace(/(<p:cNvPr id="\d+" name="OPF table 1")(\s*\/?>)/, `$1${descr}$2`))};
+    // RR-105 (2026-11-12): the export writes the generated description, which the PowerPoint edit replaces.
+    const edited = {...entries, 'ppt/slides/slide1.xml': new TextEncoder().encode(xml.replace(/(<p:cNvPr id="\d+" name="OPF table 1")(?: descr="[^"]*")?(\s*\/?>)/, `$1${descr}$2`))};
     const table = (await fromPptx(zipSync(edited))).slides[0].table;
     assert.equal(table.alt, expected);
   }

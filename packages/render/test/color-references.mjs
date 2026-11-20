@@ -11,6 +11,8 @@ const toSvg = (deck, index, options = {}) => toSvgUnregistered(deck, index, {cat
 const fixture = JSON.parse(
   readFileSync(new URL('fixtures/color-references.opf.json', import.meta.url), 'utf8'),
 );
+// LH-164: slide 1 is one short message, which takes the accent surface; a longer paragraph keeps the deck's own surface, which is what these color checks are about.
+fixture.slides[0].text = [...fixture.slides[0].text, ' This closing sentence makes it a paragraph of more than twenty five words, so it is no short message.'];
 const forest = defaultCatalog.colorSchemes['forest-green'];
 assert.ok(forest, 'forest-green color scheme');
 
@@ -32,6 +34,7 @@ assert.match(variableRuns, /fill="#0F172A"/);
 const authoredHex = toSvg({
   design: { theme: 'classic', colorScheme: 'cool-horizon' },
   slides: [{
+    subtitle: 'Toolbar',
     text: [{ text: 'Toolbar', color: '#2563eb' }],
   }],
 }, 1);

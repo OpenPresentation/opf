@@ -3,7 +3,7 @@
   "asOf": "2026-10-02",
   "paritySource": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-published-0.12.json",
   "manifestSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.render-manifest.json",
-  "measurementReport": "docs/evidence/font-replacements-20260923/report.json",
+  "measurementReport": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
   "ownerPlan": {
     "date": "2026-09-29",
     "request": "work this in as a tracker and to help prioritize work.",
@@ -1422,7 +1422,7 @@
       ]
     },
     "Segoe UI Light": {
-      "nextAction": "Red Hat Display 300 italic is bundled (FF-43). Measured against Segoe UI Light 5.71: 1.7% mean and 5.4% max upright, 2.0% and 6.6% italic. Qualify light metrics.",
+      "nextAction": "LH-177: regular previews with Red Hat Display 300 and bold emphasis with 400, reviewed against the STEM native witness. Re-measure the changed style link before making any metric claim; historical 2026-09 widths do not qualify this mapping.",
       "evidence": [
         "openPack",
         "measurement",
@@ -1431,7 +1431,7 @@
       ]
     },
     "Segoe UI Semilight": {
-      "nextAction": "Define an explicit matching Red Hat Display weight for weight 350 (measured against 400) and qualify Semilight independently (max 9.1%).",
+      "nextAction": "LH-177: target 350 uses the nearest bundled Red Hat Display 300 face; bold emphasis uses 400. The preview is closer to native but remains visual. Re-measure and qualify the changed mapping independently.",
       "evidence": [
         "openPack",
         "measurement",
@@ -1716,7 +1716,7 @@
       ]
     },
     "Yu Gothic": {
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans JP (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 14 of 14 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta -1.4% mean, 4.1% max over 7 samples; line height 1.6 (original) against 1.45 em (preview face).",
+      "nextAction": "Native PowerPoint comparison: LH-183 records the retained visual gap. Noto Sans JP Regular draws heavier strokes than Yu Gothic Regular, including Japanese diagram labels. Keep the current mapping visual until a lighter stand-in is qualified; a licensed original supplied by the host resolves exactly. Historical script-corpus coverage and width measurements do not clear this stroke-weight finding.",
       "evidence": [
         "scriptAuto",
         "scriptModel",
@@ -2766,7 +2766,7 @@
     },
     "metricCandidates": {
       "label": "Intos and Selawik acceptance measurement (2026-09-29)",
-      "url": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json"
+      "url": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/metric-candidates-20260929.json"
     },
     "renderAptosNode": {
       "label": "opf-render aptos-preview test (Node, office pack, four Intos families)",
@@ -2821,7 +2821,7 @@
     "latinHostFixtures": [
       {
         "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
-        "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+        "url": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/latin-host-fixtures-20261001.json"
       },
       {
         "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
@@ -2839,7 +2839,7 @@
     "latinQualification": [
       {
         "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
-        "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+        "url": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/latin-qualification-20261001.json"
       },
       {
         "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
@@ -2867,7 +2867,7 @@
     "scriptHostFixtures": [
       {
         "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
-        "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+        "url": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/script-host-fixtures-20261002.json"
       },
       {
         "label": "opf-render#114 (Node and browser script family fixtures)",
@@ -2885,7 +2885,7 @@
     "scriptNameHostFixtures": [
       {
         "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-        "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
+        "url": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/script-name-host-fixtures-20261014.json"
       },
       {
         "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -2922,99 +2922,99 @@
   "galleryFontsSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.gallery-preview-fonts.json",
   "measurementSources": {
     "Georgia": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "The Georgia entry was replaced on 2026-09-29 by the Gelasio re-run with liga and clig off (opf#163); the other rows are the 2026-09-23 host run."
     },
     "Aptos": {
-      "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/metric-candidates-20260929.json",
       "note": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01."
     },
     "Aptos Display": {
-      "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/metric-candidates-20260929.json",
       "note": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01."
     },
     "Aptos Narrow": {
-      "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/metric-candidates-20260929.json",
       "note": "Measured on 2026-09-29 (opf#166) against the Microsoft 365 cloud fonts, Aptos 2.01."
     },
     "Aptos Serif": {
-      "source": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/metric-candidates-20260929.json",
       "note": "Measured on 2026-09-29 (opf#166) from the files in Microsoft's Aptos Fonts download, because Aptos Serif is not installed on the measuring host."
     },
     "Franklin Gothic Book": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Franklin Gothic Medium": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Impact": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Century Gothic": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Lucida Sans": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Lucida Sans Unicode": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Trebuchet MS": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Garamond": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Arial Narrow": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Baskerville Old Face": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Bookman Old Style": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Segoe UI": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Segoe UI Light": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Segoe UI Semilight": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Segoe UI Semibold": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Tahoma": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Corbel": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Gill Sans MT": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     },
     "Rockwell": {
-      "source": "docs/evidence/font-replacements-20260923/report.json",
+      "source": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
       "note": "Re-measured on 2026-09-29 (FF-43) against the installed Windows original with the faces opf-render ships (the vendored manifest). Widths are unchanged from the earlier run except the Source Sans 3 rows (Corbel, Gill Sans MT), which now follow the vendored 3.052 release. Vertical metrics, painted glyph heights and outline identity (0 identical outlines in every family) are in bundled-replacements-ff43-20260929.json."
     }
   },
@@ -3038,10 +3038,10 @@
       "note": "hhea, OS/2 typo and win, x-height and cap-height equal in all 16 styles; painted x-height and cap-height boxes agree (opf#166). Line breaks are not recorded."
     }
   },
-  "qualificationReport": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
-  "hostFixtureEvidence": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json",
-  "scriptHostFixtureEvidence": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json",
-  "scriptNameHostFixtureEvidence": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json",
+  "qualificationReport": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/latin-qualification-20261001.json",
+  "hostFixtureEvidence": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/latin-host-fixtures-20261001.json",
+  "scriptHostFixtureEvidence": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/script-host-fixtures-20261002.json",
+  "scriptNameHostFixtureEvidence": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/script-name-host-fixtures-20261014.json",
   "latinAcceptance": {
     "date": "2026-10-01",
     "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
@@ -3084,7 +3084,7 @@
   "visualAcceptance": {
     "id": "ff-46-documented-visual-native-20261005-fonts",
     "label": "FF-46 native visual run with the Windows supplemental fonts installed: script, visual and code-table families (2026-10-05)",
-    "file": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/compare.json",
+    "file": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-documented-visual-native-20261005-fonts/compare.json",
     "readme": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/README.md",
     "date": "2026-10-05",
     "statuses": [
@@ -3299,7 +3299,7 @@
     },
     "Segoe UI Light": {
       "original": "Segoe UI Light: the light weight.",
-      "replacement": "Red Hat Display 300."
+      "replacement": "Red Hat Display 300; bold uses 400 to retain the named family's light emphasis."
     },
     "Segoe UI Semibold": {
       "original": "Segoe UI Semibold: the semibold weight.",
@@ -3307,7 +3307,8 @@
     },
     "Segoe UI Semilight": {
       "original": "Segoe UI Semilight: weight 350.",
-      "replacement": "Red Hat Display 400: there is no 350 face."
+      "replacement": "Red Hat Display 300, the nearest bundled face to 350; bold uses 400.",
+      "caveat": "Visual approximation: the bundled font has no 350 face. The previous 400/700 preview was visibly heavier than PowerPoint."
     },
     "Skeena": {
       "original": "Skeena: Microsoft 365 cloud sans.",
@@ -3345,12 +3346,17 @@
     "Source Sans Pro": {
       "original": "Source Sans Pro 2.045: Adobe's humanist sans (the predecessor name).",
       "replacement": "Source Sans 3: the renamed family; regular and bold match within 0.15%, italics within 0.41%."
+    },
+    "Yu Gothic": {
+      "original": "Yu Gothic Regular: a light Japanese gothic face.",
+      "replacement": "Noto Sans JP Regular.",
+      "caveat": "LH-183: PowerPoint draws Yu Gothic Regular visibly lighter than this preview stand-in. The shape of the strokes and width remain a visual approximation; supplying the licensed Yu Gothic face gives an exact preview. This gap affects all Japanese text, including diagrams, and remains open in font fidelity."
     }
   },
   "scriptCorpus": {
-    "qualification": "docs/evidence/script-corpora-20261001/qualification.json",
-    "references": "docs/evidence/script-corpora-20261001/references.json",
-    "corpus": "docs/evidence/script-corpora-20261001/script-corpora.json"
+    "qualification": "docs/programs/font-fidelity-everywhere/tracker-inputs/script-corpora-20261001/qualification.json",
+    "references": "docs/programs/font-fidelity-everywhere/tracker-inputs/script-corpora-20261001/references.json",
+    "corpus": "docs/programs/font-fidelity-everywhere/tracker-inputs/script-corpora-20261001/script-corpora.json"
   },
   "symbolFontsSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.symbol-fonts.json",
   "symbolEncodings": "spec/reference/symbol-font-encodings.json",
@@ -3358,7 +3364,7 @@
     {
       "id": "rr-05b-native-20261002",
       "label": "RR-05b native run: Arabic and Hebrew decks (2026-10-02)",
-      "file": "docs/evidence/rr-05b-native-20261002/compare.json",
+      "file": "docs/programs/font-fidelity-everywhere/tracker-inputs/rr-05b-native-20261002/compare.json",
       "readme": "docs/evidence/rr-05b-native-20261002/README.md",
       "date": "2026-10-02",
       "host": "PowerPoint 365, Windows"
@@ -3366,7 +3372,7 @@
     {
       "id": "rr-05-cjk-native-20261002",
       "label": "RR-05 native run: CJK, Thai and Hindi decks (2026-10-02)",
-      "file": "docs/evidence/rr-05-cjk-native-20261002/compare.json",
+      "file": "docs/programs/font-fidelity-everywhere/tracker-inputs/rr-05-cjk-native-20261002/compare.json",
       "readme": "docs/evidence/rr-05-cjk-native-20261002/README.md",
       "date": "2026-10-02",
       "host": "PowerPoint 365, Windows"
@@ -3374,7 +3380,7 @@
     {
       "id": "ff-46-native-0.12-20261002",
       "label": "FF-46 native run: every family on the 0.12.0 train (2026-10-02)",
-      "file": "docs/evidence/ff-46-native-0.12-20261002/compare.json",
+      "file": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-native-0.12-20261002/compare.json",
       "readme": "docs/evidence/ff-46-native-0.12-20261002/README.md",
       "date": "2026-10-02",
       "host": "PowerPoint 365, Windows"
@@ -3382,7 +3388,7 @@
     {
       "id": "ff-46-documented-visual-native-20261005",
       "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
-      "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
+      "file": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-documented-visual-native-20261005/compare.json",
       "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
       "date": "2026-10-05",
       "host": "PowerPoint 365, Windows"
@@ -3390,7 +3396,7 @@
     {
       "id": "ff-46-documented-visual-native-20261005-fonts",
       "label": "FF-46 native visual run with the Windows supplemental fonts installed: script, visual and code-table families (2026-10-05)",
-      "file": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/compare.json",
+      "file": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-documented-visual-native-20261005-fonts/compare.json",
       "readme": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/README.md",
       "date": "2026-10-05",
       "host": "PowerPoint 365, Windows (supplemental fonts installed)"

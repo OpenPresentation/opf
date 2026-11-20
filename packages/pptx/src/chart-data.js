@@ -51,6 +51,7 @@ export function excelCode(format) {
  * Write the number formats of a generated classic chart part (after its data labels are written). `formats`:
  *   series  the Excel code of each c:ser, in document order (undefined keeps General);
  *   x       the X column's code (scatter c:xVal and the horizontal value axis);
+ *   xAxis   LH-153: a scatter X axis's code where the X column has none and its values group their thousands (the axis only, not the cache);
  *   axis    the value axis code (the first plotted series' format, as Excel does), or undefined to keep the axis;
  *   secondaryAxis  a combo chart's secondary value axis code (its first series' format, FA-15), or undefined to keep it;
  *   groups  per series: true when its default value labels group their thousands (LH-141: no format of its own, whole numbers, one of
@@ -60,7 +61,7 @@ export function excelCode(format) {
  * Every c:numCache of a series takes its code, every c:numFmt of a series' data labels too; the chart group's labels
  * take the first series' code.
  */
-export function applyChartNumberFormats(xml, {series = [], x, axis, secondaryAxis, groups = [], labels = true, scatter = false}) {
+export function applyChartNumberFormats(xml, {series = [], x, xAxis, axis, secondaryAxis, groups = [], labels = true, scatter = false}) {
   // The code of a series' labels: its own format, else the grouped General form of a series that groups.
   const labelCodes = series.map((code, index) => code ?? (groups[index] ? GROUPED_LABEL_CODE : undefined));
   // CT_NumData: formatCode is the cache's first child (PptxGenJS writes none on pie and doughnut series).
@@ -90,7 +91,7 @@ export function applyChartNumberFormats(xml, {series = [], x, axis, secondaryAxi
   // The first c:valAx is the value axis; a combo chart's second one is its secondary axis (a scatter chart's two are X and Y).
   let valueAxis = 0;
   return grouped.replace(/<c:valAx>[\s\S]*?<\/c:valAx>/g, valAx => {
-    const code = scatter ? (/<c:axPos val="[bt]"\/>/.test(valAx) ? x : axis) : valueAxis++ === 0 ? axis : secondaryAxis;
+    const code = scatter ? (/<c:axPos val="[bt]"\/>/.test(valAx) ? x ?? xAxis : axis) : valueAxis++ === 0 ? axis : secondaryAxis;
     return code === undefined ? valAx : valAx.replace(/<c:numFmt\b[^>]*\/>/, `<c:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`);
   });
 }

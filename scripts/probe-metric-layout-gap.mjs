@@ -7,7 +7,7 @@ import {pathToFileURL,fileURLToPath} from 'node:url';
 // Historical counterexamples, not a passing-fit contract for future versions.
 // node scripts/probe-metric-layout-gap.mjs <registry-consumer> [output-prefix]
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
-const baselinePath=fileURLToPath(new URL('../docs/evidence/shared-code-complete/registry-code-node24.json',import.meta.url));
+const baselinePath=fileURLToPath(new URL('../scripts/fixtures/registry-code-node24.json',import.meta.url));
 const baselineBytes=await readFile(baselinePath,'utf8');
 const baseline=JSON.parse(baselineBytes);
 assert.ok(process.argv[2],'Pass a verified registry consumer directory.');

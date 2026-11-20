@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "chevrons",
+  "name": "Chevrons",
+  "summary": "Stages in order, as a row of chevrons.",
+  "tags": [
+    "Groups of items"
+  ],
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "stages",
+      "accepts": [
+        "list"
+      ],
+      "role": "primary",
+      "flow": "none",
+      "arrangement": "chevrons"
+    }
+  ],
+  "description": "Show 1 to 8 stages that follow one another, each leading into the next. Write one short list entry per stage, in order; a word or two reads best inside a chevron.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/chevrons.svg"
+  }
+}

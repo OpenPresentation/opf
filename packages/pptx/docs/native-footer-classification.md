@@ -38,7 +38,7 @@ For current positive safe integer slide dimensions `W,H`, require for **both** f
 
 Use exact integer/rational comparisons (or BigInt products) rather than floating margins. These are a deliberately bounded classification region, **not** a render tolerance or a promise that text fits. The actual A/B frames satisfy every bound. A frame outside it remains current content, even if its name/text resembles a known footer.
 
-Reuse the existing physical `zoneOf` rule: center `< 1/3` is left, center `> 2/3` is right, otherwise center. Its exact boundary equivalent is left when `3*(2*x+cx) < 2*W`, right when that value is `> 4*W`, otherwise center. Do not infer a logical reading-direction swap, zone from a part index or the source's remembered alignment.
+Reuse the existing physical `zoneOf` rule: a frame whose center is in the left third (`< 1/3`) is the `start` zone, one in the right third (`> 2/3`) the `end` zone, otherwise `center`. Its exact boundary equivalent is `start` when `3*(2*x+cx) < 2*W`, `end` when that value is `> 4*W`, otherwise `center`. Do not infer a logical reading-direction swap, zone from a part index or the source's remembered alignment.
 
 ## Output, refusal and deletion authority
 

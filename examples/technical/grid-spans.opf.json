@@ -3,13 +3,13 @@
   "slides": [
     {
       "title": "Operating Model",
-      "top:left": {
+      "top:start": {
         "text": "Inputs"
       },
-      "top:center+right": {
+      "top:center+end": {
         "text": "Processing"
       },
-      "middle+bottom:left+center+right": {
+      "middle+bottom:start+center+end": {
         "items": [
           "Queue",
           "Route",
@@ -19,16 +19,16 @@
     },
     {
       "title": "Team Responsibilities",
-      "top+middle:left": {
+      "top+middle:start": {
         "text": "Product"
       },
       "top+middle:center": {
         "text": "Engineering"
       },
-      "top+middle:right": {
+      "top+middle:end": {
         "text": "Operations"
       },
-      "bottom:left+center+right": {
+      "bottom:start+center+end": {
         "bullets": [
           "Weekly planning review",
           "Shared risk register",

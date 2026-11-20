@@ -141,13 +141,17 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   assert.match(provenance[1].message, /'boost'/);
 }
 
-// Theme fonts changed: the font scheme stays observed.
+// Theme fonts changed: the slides name the theme fonts (RR-105, opf#1293), so the new heading face is the document's font scheme
+// (the stored scheme with the theme's major and minor faces) and the theme, whose colors still match, is restored.
 {
   const {deck, provenance} = await read(modify(exported, entries => text(entries, 'ppt/theme/theme1.xml', xml => xml.replace(/(<a:majorFont><a:latin typeface=")[^"]*"/, '$1Georgia"'))));
-  assert.notEqual(deck.design.fontScheme, 'arial');
+  const minor = /<a:minorFont><a:latin typeface="([^"]*)"/.exec(dec.decode(unzipSync(exported)['ppt/theme/theme1.xml']))[1];
+  assert.deepEqual(deck.design.fontScheme, {id: 'arial', major: 'Georgia', minor});
+  assert.equal(deck.design.theme, 'bold');
   assert.equal(deck.design.colorScheme, 'boost');
-  assert.deepEqual(provenance.map(issue => [issue.code, issue.path]), [['design-reference-changed', 'design.theme'], ['design-reference-changed', 'design.fontScheme']]);
-  assert.match(provenance[1].message, /major font/);
+  assert.deepEqual(provenance.map(issue => [issue.code, issue.path]), [['design-reference-changed', 'design.fontScheme']]);
+  assert.match(provenance[0].message, /major font/);
+  assert.match(provenance[0].message, /heading font 'Georgia'/);
 }
 
 // Slide size changed: observed dimensions stay.
@@ -255,7 +259,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
 
 // Furniture already owns a slide tag list; both records share it.
 {
-  const deck = {name: 'Footer deck', organization: {id: 'acme', name: 'Acme'}, design: {fontScheme: 'arial', footer: {left: {text: '{{organization.name}}'}, right: {text: '{{slide.number}}'}}},
+  const deck = {name: 'Footer deck', organization: {id: 'acme', name: 'Acme'}, design: {fontScheme: 'arial', footer: {start: {text: '{{organization.name}}'}, end: {text: '{{slide.number}}'}}},
     slides: [{layout: 'cover', title: 'One', subtitle: 'Two'}]};
   const bytes = await toPptx(deck);
   const entries = unzipSync(bytes);
@@ -272,7 +276,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
   // The footer is only words: a retyped name changes the footer text and leaves the stored organization.
   const renamed = await read(modify(bytes, entries => text(entries, 'ppt/slides/slide1.xml', xml => xml.replace('>Acme<', '>Acme Corp<'))));
   assert.deepEqual(renamed.deck.organization, deck.organization);
-  assert.equal(renamed.deck.design.footer.left.text, 'Acme Corp');
+  assert.equal(renamed.deck.design.footer.start.text, 'Acme Corp');
 }
 
 // In 'references-only' mode documents that state nothing keep their package unchanged ('full' records the defaults they
@@ -345,7 +349,7 @@ const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 
 // omitted; import then keeps observed values instead of treating them as unstated.
 {
   const issues = [];
-  const bytes = await toPptx({name: 'Sizes', design: {fontScheme: 'arial', colorScheme: {id: 'boost', name: 'x'.repeat(300 * 1024)}},
+  const bytes = await toPptx({name: 'Sizes', design: {fontScheme: 'arial', colorScheme: {id: 'x'.repeat(300 * 1024)}},
     slides: [{layout: 'cover', beat: ['y'.repeat(300 * 1024)], title: 'One', subtitle: 'Two'}]}, {onDiagnostic: issue => issues.push(issue)});
   assert.deepEqual(issues.filter(issue => issue.code === 'document-provenance-omitted').map(issue => issue.path), ['design.colorScheme', 'slides.0.beat']);
   const entries = unzipSync(bytes);

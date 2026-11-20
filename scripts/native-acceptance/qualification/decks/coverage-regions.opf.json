@@ -1,0 +1,581 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: every promoted region key",
+  "description": "RR-105 format coverage: all 48 promoted region keys of the 3 by 3 grid (rows, columns and their intersections), each band split in thirds, two thirds and one, one and two thirds, or one wide cell.",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "id": "rows-1",
+      "title": "Three bands: thirds, two thirds and one, one and two thirds",
+      "top:start": {
+        "metric": {
+          "value": "94%",
+          "label": "On-time delivery"
+        }
+      },
+      "top:center": {
+        "metric": {
+          "value": "3.2 days",
+          "label": "Average cycle"
+        }
+      },
+      "top:end": {
+        "metric": {
+          "value": "1,240",
+          "label": "Orders this week"
+        }
+      },
+      "middle:start+center": {
+        "metric": {
+          "value": "18",
+          "label": "Open incidents"
+        }
+      },
+      "middle:end": {
+        "metric": {
+          "value": "4.6",
+          "label": "Customer rating"
+        }
+      },
+      "bottom:start": {
+        "metric": {
+          "value": "$2.1M",
+          "label": "Bookings"
+        }
+      },
+      "bottom:center+end": {
+        "metric": {
+          "value": "62",
+          "label": "Active accounts"
+        }
+      },
+      "notes": "Region keys: top:start, top:center, top:end, middle:start+center, middle:end, bottom:start, bottom:center+end."
+    },
+    {
+      "id": "rows-2",
+      "title": "Three bands: two thirds and one, one and two thirds, one wide cell",
+      "top:start+center": {
+        "metric": {
+          "value": "7",
+          "label": "New hires"
+        }
+      },
+      "top:end": {
+        "metric": {
+          "value": "99.95%",
+          "label": "Uptime"
+        }
+      },
+      "middle:start": {
+        "metric": {
+          "value": "11 min",
+          "label": "First response"
+        }
+      },
+      "middle:center+end": {
+        "metric": {
+          "value": "38%",
+          "label": "Self-serve share"
+        }
+      },
+      "bottom:start+center+end": {
+        "metric": {
+          "value": "5",
+          "label": "Regions live"
+        }
+      },
+      "notes": "Region keys: top:start+center, top:end, middle:start, middle:center+end, bottom:start+center+end."
+    },
+    {
+      "id": "rows-3",
+      "title": "Three bands: one and two thirds, one wide cell, thirds",
+      "top:start": {
+        "metric": {
+          "value": "94%",
+          "label": "On-time delivery"
+        }
+      },
+      "top:center+end": {
+        "metric": {
+          "value": "3.2 days",
+          "label": "Average cycle"
+        }
+      },
+      "middle:start+center+end": {
+        "metric": {
+          "value": "1,240",
+          "label": "Orders this week"
+        }
+      },
+      "bottom:start": {
+        "metric": {
+          "value": "18",
+          "label": "Open incidents"
+        }
+      },
+      "bottom:center": {
+        "metric": {
+          "value": "4.6",
+          "label": "Customer rating"
+        }
+      },
+      "bottom:end": {
+        "metric": {
+          "value": "$2.1M",
+          "label": "Bookings"
+        }
+      },
+      "notes": "Region keys: top:start, top:center+end, middle:start+center+end, bottom:start, bottom:center, bottom:end."
+    },
+    {
+      "id": "rows-4",
+      "title": "Three bands: one wide cell, thirds, two thirds and one",
+      "top:start+center+end": {
+        "metric": {
+          "value": "62",
+          "label": "Active accounts"
+        }
+      },
+      "middle:start": {
+        "metric": {
+          "value": "7",
+          "label": "New hires"
+        }
+      },
+      "middle:center": {
+        "metric": {
+          "value": "99.95%",
+          "label": "Uptime"
+        }
+      },
+      "middle:end": {
+        "metric": {
+          "value": "11 min",
+          "label": "First response"
+        }
+      },
+      "bottom:start+center": {
+        "metric": {
+          "value": "38%",
+          "label": "Self-serve share"
+        }
+      },
+      "bottom:end": {
+        "metric": {
+          "value": "5",
+          "label": "Regions live"
+        }
+      },
+      "notes": "Region keys: top:start+center+end, middle:start, middle:center, middle:end, bottom:start+center, bottom:end."
+    },
+    {
+      "id": "rows-plain",
+      "title": "Three plain bands, top to bottom",
+      "top": {
+        "metric": {
+          "value": "94%",
+          "label": "On-time delivery"
+        }
+      },
+      "middle": {
+        "metric": {
+          "value": "3.2 days",
+          "label": "Average cycle"
+        }
+      },
+      "bottom": {
+        "metric": {
+          "value": "1,240",
+          "label": "Orders this week"
+        }
+      },
+      "notes": "Region keys: top, middle, bottom."
+    },
+    {
+      "id": "upper-1",
+      "title": "A tall upper band in thirds",
+      "top+middle:start": {
+        "metric": {
+          "value": "18",
+          "label": "Open incidents"
+        }
+      },
+      "top+middle:center": {
+        "metric": {
+          "value": "4.6",
+          "label": "Customer rating"
+        }
+      },
+      "top+middle:end": {
+        "metric": {
+          "value": "$2.1M",
+          "label": "Bookings"
+        }
+      },
+      "bottom": {
+        "metric": {
+          "value": "62",
+          "label": "Active accounts"
+        }
+      },
+      "notes": "Region keys: top+middle:start, top+middle:center, top+middle:end, bottom."
+    },
+    {
+      "id": "upper-2",
+      "title": "A tall upper band in two thirds and one",
+      "top+middle:start+center": {
+        "metric": {
+          "value": "7",
+          "label": "New hires"
+        }
+      },
+      "top+middle:end": {
+        "metric": {
+          "value": "99.95%",
+          "label": "Uptime"
+        }
+      },
+      "bottom": {
+        "metric": {
+          "value": "11 min",
+          "label": "First response"
+        }
+      },
+      "notes": "Region keys: top+middle:start+center, top+middle:end, bottom."
+    },
+    {
+      "id": "upper-3",
+      "title": "A tall upper band in one and two thirds",
+      "top+middle:start": {
+        "metric": {
+          "value": "38%",
+          "label": "Self-serve share"
+        }
+      },
+      "top+middle:center+end": {
+        "metric": {
+          "value": "5",
+          "label": "Regions live"
+        }
+      },
+      "bottom": {
+        "metric": {
+          "value": "94%",
+          "label": "On-time delivery"
+        }
+      },
+      "notes": "Region keys: top+middle:start, top+middle:center+end, bottom."
+    },
+    {
+      "id": "upper-4",
+      "title": "A tall upper band in one wide cell",
+      "top+middle:start+center+end": {
+        "metric": {
+          "value": "3.2 days",
+          "label": "Average cycle"
+        }
+      },
+      "bottom": {
+        "metric": {
+          "value": "1,240",
+          "label": "Orders this week"
+        }
+      },
+      "notes": "Region keys: top+middle:start+center+end, bottom."
+    },
+    {
+      "id": "upper-plain",
+      "title": "A tall upper band over a footer band",
+      "top+middle": {
+        "metric": {
+          "value": "18",
+          "label": "Open incidents"
+        }
+      },
+      "bottom": {
+        "metric": {
+          "value": "4.6",
+          "label": "Customer rating"
+        }
+      },
+      "notes": "Region keys: top+middle, bottom."
+    },
+    {
+      "id": "lower-1",
+      "title": "A header band over thirds",
+      "top": {
+        "metric": {
+          "value": "$2.1M",
+          "label": "Bookings"
+        }
+      },
+      "middle+bottom:start": {
+        "metric": {
+          "value": "62",
+          "label": "Active accounts"
+        }
+      },
+      "middle+bottom:center": {
+        "metric": {
+          "value": "7",
+          "label": "New hires"
+        }
+      },
+      "middle+bottom:end": {
+        "metric": {
+          "value": "99.95%",
+          "label": "Uptime"
+        }
+      },
+      "notes": "Region keys: top, middle+bottom:start, middle+bottom:center, middle+bottom:end."
+    },
+    {
+      "id": "lower-2",
+      "title": "A header band over two thirds and one",
+      "top": {
+        "metric": {
+          "value": "11 min",
+          "label": "First response"
+        }
+      },
+      "middle+bottom:start+center": {
+        "metric": {
+          "value": "38%",
+          "label": "Self-serve share"
+        }
+      },
+      "middle+bottom:end": {
+        "metric": {
+          "value": "5",
+          "label": "Regions live"
+        }
+      },
+      "notes": "Region keys: top, middle+bottom:start+center, middle+bottom:end."
+    },
+    {
+      "id": "lower-3",
+      "title": "A header band over one and two thirds",
+      "top": {
+        "metric": {
+          "value": "94%",
+          "label": "On-time delivery"
+        }
+      },
+      "middle+bottom:start": {
+        "metric": {
+          "value": "3.2 days",
+          "label": "Average cycle"
+        }
+      },
+      "middle+bottom:center+end": {
+        "metric": {
+          "value": "1,240",
+          "label": "Orders this week"
+        }
+      },
+      "notes": "Region keys: top, middle+bottom:start, middle+bottom:center+end."
+    },
+    {
+      "id": "lower-4",
+      "title": "A header band over one wide cell",
+      "top": {
+        "metric": {
+          "value": "18",
+          "label": "Open incidents"
+        }
+      },
+      "middle+bottom:start+center+end": {
+        "metric": {
+          "value": "4.6",
+          "label": "Customer rating"
+        }
+      },
+      "notes": "Region keys: top, middle+bottom:start+center+end."
+    },
+    {
+      "id": "lower-plain",
+      "title": "A header band over a tall lower band",
+      "top": {
+        "metric": {
+          "value": "$2.1M",
+          "label": "Bookings"
+        }
+      },
+      "middle+bottom": {
+        "metric": {
+          "value": "62",
+          "label": "Active accounts"
+        }
+      },
+      "notes": "Region keys: top, middle+bottom."
+    },
+    {
+      "id": "full-1",
+      "title": "Full-height columns in thirds",
+      "top+middle+bottom:start": {
+        "metric": {
+          "value": "7",
+          "label": "New hires"
+        }
+      },
+      "top+middle+bottom:center": {
+        "metric": {
+          "value": "99.95%",
+          "label": "Uptime"
+        }
+      },
+      "top+middle+bottom:end": {
+        "metric": {
+          "value": "11 min",
+          "label": "First response"
+        }
+      },
+      "notes": "Region keys: top+middle+bottom:start, top+middle+bottom:center, top+middle+bottom:end."
+    },
+    {
+      "id": "full-2",
+      "title": "Full-height columns in two thirds and one",
+      "top+middle+bottom:start+center": {
+        "metric": {
+          "value": "38%",
+          "label": "Self-serve share"
+        }
+      },
+      "top+middle+bottom:end": {
+        "metric": {
+          "value": "5",
+          "label": "Regions live"
+        }
+      },
+      "notes": "Region keys: top+middle+bottom:start+center, top+middle+bottom:end."
+    },
+    {
+      "id": "full-3",
+      "title": "Full-height columns in one and two thirds",
+      "top+middle+bottom:start": {
+        "metric": {
+          "value": "94%",
+          "label": "On-time delivery"
+        }
+      },
+      "top+middle+bottom:center+end": {
+        "metric": {
+          "value": "3.2 days",
+          "label": "Average cycle"
+        }
+      },
+      "notes": "Region keys: top+middle+bottom:start, top+middle+bottom:center+end."
+    },
+    {
+      "id": "full-4",
+      "title": "Full-height columns in one wide cell",
+      "top+middle+bottom:start+center+end": {
+        "metric": {
+          "value": "1,240",
+          "label": "Orders this week"
+        }
+      },
+      "notes": "Region keys: top+middle+bottom:start+center+end."
+    },
+    {
+      "id": "full-plain",
+      "title": "One region over the whole body",
+      "top+middle+bottom": {
+        "metric": {
+          "value": "18",
+          "label": "Open incidents"
+        }
+      },
+      "notes": "Region keys: top+middle+bottom."
+    },
+    {
+      "id": "columns-1",
+      "title": "Columns only, in thirds",
+      "start": {
+        "metric": {
+          "value": "4.6",
+          "label": "Customer rating"
+        }
+      },
+      "center": {
+        "metric": {
+          "value": "$2.1M",
+          "label": "Bookings"
+        }
+      },
+      "end": {
+        "metric": {
+          "value": "62",
+          "label": "Active accounts"
+        }
+      },
+      "notes": "Region keys: start, center, end."
+    },
+    {
+      "id": "columns-2",
+      "title": "Columns only, in two thirds and one",
+      "start+center": {
+        "metric": {
+          "value": "7",
+          "label": "New hires"
+        }
+      },
+      "end": {
+        "metric": {
+          "value": "99.95%",
+          "label": "Uptime"
+        }
+      },
+      "notes": "Region keys: start+center, end."
+    },
+    {
+      "id": "columns-3",
+      "title": "Columns only, in one and two thirds",
+      "start": {
+        "metric": {
+          "value": "11 min",
+          "label": "First response"
+        }
+      },
+      "center+end": {
+        "metric": {
+          "value": "38%",
+          "label": "Self-serve share"
+        }
+      },
+      "notes": "Region keys: start, center+end."
+    },
+    {
+      "id": "tiles",
+      "title": "Short labels become tiles",
+      "top:start": {
+        "text": "Faster unloading"
+      },
+      "top:center": {
+        "text": "Fewer delays"
+      },
+      "top:end": {
+        "text": "Lower costs"
+      },
+      "middle+bottom:start+center+end": {
+        "items": [
+          "Two new cranes at the north berth",
+          "Weekend night shifts",
+          "One booking system for every carrier"
+        ]
+      },
+      "notes": "Region keys: top:start, top:center, top:end, middle+bottom:start+center+end."
+    },
+    {
+      "id": "columns-wide",
+      "title": "One column across the body",
+      "start+center+end": {
+        "text": "A single region that spans every column states one message across the slide."
+      },
+      "notes": "Region key: start+center+end."
+    }
+  ]
+}

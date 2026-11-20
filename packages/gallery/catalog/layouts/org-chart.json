@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "org-chart",
+  "name": "Organization chart",
+  "summary": "A single-root team structure, with reporting lines and child depths.",
+  "tags": [
+    "Groups of items"
+  ],
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "people",
+      "accepts": [
+        "list"
+      ],
+      "role": "primary",
+      "flow": "none",
+      "arrangement": "org-chart"
+    }
+  ],
+  "description": "Show one organization or reporting tree with 1 to 8 short entries. Use one list: the first entry is the level-zero root and each child sets its zero-based level. Keep parents before their children, without skipping a depth. Assistants and separate roots need a diagram instead; unsupported trees retain the complete list with a finding.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/org-chart.svg"
+  }
+}

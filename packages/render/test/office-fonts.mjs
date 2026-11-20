@@ -84,14 +84,16 @@ assert.doesNotMatch(calibri,/font-variant-ligatures|font-feature-settings/);
 assert.deepEqual(georgia,svgOf('Georgia'));
 // Flow lines (estimated measurement): the outer text element carries no style; each tspan names its own family,
 // so a Cousine run inside a Gelasio-first line does not inherit ligatures:none.
-const flow=toSvg({design:{fontScheme:{major:'Gelasio',minor:'Gelasio',code: 'Cousine'}},slides:[{title:'Flow',text:[{text:'office fluffy '},{text:'code ff',fontFamily:'Cousine'}]}]}, 1,{});
+// LH-188: a title of more than four words keeps the slide a content slide (no one-message growth onto more lines).
+const flow=toSvg({design:{fontScheme:{major:'Gelasio',minor:'Gelasio',code: 'Cousine'}},slides:[{title:'Flow of ligatures in a paragraph',text:[{text:'office fluffy '},{text:'code ff',fontFamily:'Cousine'}]}]}, 1,{});
 const flowText=flow.split('\n').find(line=>line.includes('office fluffy'));
 assert.match(flowText,/<text(?![^>]*font-variant-ligatures)[^>]*>/);
 assert.match(flowText,/<tspan[^>]*font-family="Gelasio[^"]*"[^>]*font-variant-ligatures:none[^>]*>office fluffy /);
 assert.match(flowText,/<tspan(?![^>]*font-variant-ligatures)[^>]*font-family="Cousine[^"]*"[^>]*>code ff/);
 // Nested script runs inside a Gelasio run go back to default shaping.
 {const scripts=await loadFonts({pack:'office',scripts:['Arab'],substitutionPolicy:'metric'});
-const mixed=toSvg({design:{fontScheme:{major:'Gelasio',minor:'Gelasio',code: 'Cousine'}},slides:[{title:'Mixed',text:'office fluffy \u0633\u0644\u0627\u0645 fi'}]}, 1, {fonts: scripts});
+// LH-188: a title of more than four words keeps the slide a content slide (no one-message growth onto more lines).
+const mixed=toSvg({design:{fontScheme:{major:'Gelasio',minor:'Gelasio',code: 'Cousine'}},slides:[{title:'Mixed scripts in one paragraph',text:'office fluffy \u0633\u0644\u0627\u0645 fi'}]}, 1, {fonts: scripts});
 assert.match(mixed,/<text[^>]*font-variant-ligatures:none[^>]*>/);
 assert.match(mixed,/<tspan[^>]*font-family="[^"]*"[^>]*style="font-variant-ligatures:normal;font-feature-settings:normal"[^>]*>\u0633\u0644\u0627\u0645/);}}
 // Raster: resvg ignores the SVG properties, so the rasterizer separates the letters a ligature would join

@@ -12,7 +12,7 @@ assert.match(group(svg,'slides.0.table.rows.0.1'),/text-anchor="end"/,'numeric r
 assert.match(group(svg,'slides.0.table.rows.0.0'),/text-anchor="start"/,'text left aligned');
 const explicit=structuredClone(doc);explicit.slides[0].table.rows[0][1]={value:5.8,style:{align:'center',borders:{bottom:{color:'accent5',width:2}}}};
 const styled=toSvg(explicit,1,{trace:true});assert.match(styled,/stroke="#3AC67A"/);assert.match(group(styled,'slides.0.table.rows.0.1.value'),/text-anchor="middle"/);
-const deck=structuredClone(doc);deck.design.contentAlignment='left';assert.match(group(toSvg(deck,1,{trace:true}),'slides.0.table.rows.0.1'),/text-anchor="start"/);
+const deck=structuredClone(doc);deck.design.contentAlignment='start';assert.match(group(toSvg(deck,1,{trace:true}),'slides.0.table.rows.0.1'),/text-anchor="start"/);
 for(const type of ['column','bar'])for(const values of [[5.8,6.7],[-5.8,-6.7],[-2,3]]){
  const input={design:doc.design,slides:[{chart:{type,data:{columns:['Category','Value'],rows:values.map((v,i)=>[String(i),v])}}}]};
  const output=toSvg(input,1,{trace:true});const bars=[...output.matchAll(/<rect\b([^>]*data-opf-path="slides\.0\.chart\.data\.rows\.\d+\.1"[^>]*)\/>/g)].map(m=>attrs(m[1]));assert.equal(bars.length,2);

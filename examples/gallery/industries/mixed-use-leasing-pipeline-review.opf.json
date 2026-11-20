@@ -65,7 +65,7 @@
       "heightInches": 8.333
     },
     "background": "dark1",
-    "titleAlignment": "left",
+    "titleAlignment": "start",
     "contentBox": true,
     "contentDirection": "vertical",
     "chartPrimary": "bottom",
@@ -76,21 +76,21 @@
       "opacity": 0.06
     },
     "header": {
-      "left": {
+      "start": {
         "text": "{{slide.section}}"
       },
-      "right": {
+      "end": {
         "image": "asset:brand-icon"
       }
     },
     "footer": {
-      "left": {
+      "start": {
         "text": "{{organization.name}}"
       },
       "center": {
         "text": "Decision review"
       },
-      "right": {
+      "end": {
         "text": "{{slide.number}}"
       }
     }
@@ -230,7 +230,7 @@
       "id": "s10-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:left": {
+      "top:start": {
         "metric": {
           "value": "$4.8M",
           "label": "Primary signal",
@@ -238,7 +238,7 @@
           "trend": "up"
         }
       },
-      "top:center+right": {
+      "top:center+end": {
         "text": [
           "Cedarwell Properties should focus the next cycle on ",
           {
@@ -249,14 +249,14 @@
           " while making the operating tradeoffs clear to commercial real estate stakeholders."
         ]
       },
-      "middle+bottom:left": {
+      "middle+bottom:start": {
         "quote": {
           "text": "The path is workable if we keep the metric simple and the decision owner visible.",
           "attribution": "Commercial real estate working group",
           "source": "Stakeholder interview"
         }
       },
-      "middle+bottom:center+right": {
+      "middle+bottom:center+end": {
         "table": {
           "columns": [
             "Workstream",
@@ -804,8 +804,8 @@
             "Openers and closers"
           ],
           "design": {
-            "titleAlignment": "left",
-            "contentAlignment": "left"
+            "titleAlignment": "start",
+            "contentAlignment": "start"
           },
           "direction": "row",
           "regions": [

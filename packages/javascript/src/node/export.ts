@@ -7,15 +7,16 @@
 // caller names, so the same presentation gives the same bytes on every machine.
 import { statSync } from "node:fs";
 import path from "node:path";
-import { type Catalog, type Fonts, continueOverfull, paginate } from "../core.js";
-import { createImageResolver } from "./assets.js";
+import { ensureIcons } from "../icons.js";
+import { type Catalog, type Fonts, continueOverfull, paginate, validate } from "../core.js";
+import { createImageResolver, iconSourceReader } from "./assets.js";
 import { defaultCatalogs } from "./catalogs.js";
 import { OPFApiError } from "../api-errors.js";
-import { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
+import { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts, reportSubstitutions, substitutionRows } from "./fonts.js";
 import { type SlideSelection, parseSlideSelection } from "../slide-selection.js";
 import { deckStem, padNumber } from "./files.js";
 import { type Diagnostic, type FontsHandle, PPTX_PACKAGE, type Peer, type PptxModule, RENDER_PACKAGE, type Renderer, loadPptx, loadRenderer, missingPeerFrom, requirePptxOptions } from "./peers.js";
-import { Reporter, reportThrown } from "./reporter.js";
+import { type Reporter, reportThrown } from "./reporter.js";
 import { createZip } from "./zip.js";
 
 export type ExportFormat = "svg" | "png" | "pdf" | "pptx";
@@ -59,6 +60,11 @@ export interface ExportOptions {
 	text?: ExportText;
 	/** `pptx`: native charts (`native`), pictures (`picture`) or opf-pptx's choice (`auto`, the default). */
 	charts?: "auto" | "native" | "picture";
+	/**
+	 * `pptx`: diagrams as native shapes, text and connectors (`shapes`, the default) for the diagram families that passed their comparison
+	 * with the preview in PowerPoint (core DIAGRAM_SHAPE_FAMILIES), the others staying pictures; or every diagram as one SVG picture (`picture`).
+	 */
+	diagrams?: "picture" | "shapes";
 	/** `pptx`: what the file records about where media came from. */
 	provenance?: "full" | "references-only" | "none";
 	/** `pptx`: keep images as they are (`preserve`) or convert them for older PowerPoint (`compatible`). */
@@ -70,9 +76,15 @@ export interface ExportOptions {
 	 */
 	bodyText?: "measured" | "native";
 	/**
-	 * `pptx`: a footer or header text with words around the slide number (`{{slide.number}} / {{deck.slideCount}}`). `static` (opf-pptx's
-	 * default) writes the number as fixed text, so Keynote shows the words too; `live` keeps the slide-number field, which Keynote
-	 * draws as the digit alone. A text that is only `{{slide.number}}` stays a live field in both.
+	 * `pptx` (SH-09, SH-18): a pyramid, matrix or cycle (a layout region's `arrangement`) as live SmartArt (`live`, the default) where PowerPoint lays it
+	 * out exactly as the preview draws it, else as native shapes with a `smartart-unavailable` finding; `shapes` writes native shapes always.
+	 */
+	smartArt?: "live" | "shapes";
+	/**
+	 * `pptx`: a footer or header text with words around the slide number (`{{slide.number}} / {{deck.slideCount}}`). `live` (opf-pptx's
+	 * default since RR-102) keeps the slide-number field, so PowerPoint's Insert > Header & Footer shows Slide number checked and renumbers
+	 * it, but Keynote draws it as the digit alone; `static` writes the number as fixed text, so Keynote shows the words too. A text that
+	 * is only `{{slide.number}}` stays a live field in both.
 	 */
 	slideNumbers?: "static" | "live";
 	/**
@@ -232,17 +244,19 @@ export function resolveExportOptions(options: ExportOptions): ResolvedExportOpti
 	if (options.raster !== undefined && typeof options.raster !== "boolean") throw invalid("raster must be true or false.");
 	if (options.paginate !== undefined && typeof options.paginate !== "boolean" && options.paginate !== "blocks") throw invalid('paginate must be true, false or "blocks".');
 	const charts = oneOf("charts", options.charts, ["auto", "native", "picture"] as const);
+	const diagrams = oneOf("diagrams", options.diagrams, ["picture", "shapes"] as const);
 	const provenance = oneOf("provenance", options.provenance, ["full", "references-only", "none"] as const);
 	const images = oneOf("images", options.images, ["compatible", "preserve"] as const);
 	const bodyText = oneOf("bodyText", options.bodyText, ["measured", "native"] as const);
+	const smartArt = oneOf("smartArt", options.smartArt, ["live", "shapes"] as const);
 	const slideNumbers = oneOf("slideNumbers", options.slideNumbers, ["static", "live"] as const);
 	const text = oneOf("text", options.text, EXPORT_TEXT);
 	const typefaces = oneOf("typefaces", options.typefaces, ["selected", "safe"] as const);
 	const as = oneOf("as", options.as, ["native", "images"] as const);
 	if (options.raster && format !== "pdf") throw invalid("raster applies to format pdf.");
-	if ((charts !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || slideNumbers !== undefined || typefaces !== undefined || as !== undefined) && format !== "pptx") throw invalid("charts, provenance, images, bodyText, slideNumbers, typefaces and as apply to format pptx.");
+	if ((charts !== undefined || diagrams !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || smartArt !== undefined || slideNumbers !== undefined || typefaces !== undefined || as !== undefined) && format !== "pptx") throw invalid("charts, diagrams, provenance, images, bodyText, smartArt, slideNumbers, typefaces and as apply to format pptx.");
 	// A pictures-only PPTX has no text, fonts, charts or source records: the options that shape them do not apply.
-	if (as === "images" && (charts !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || slideNumbers !== undefined || typefaces !== undefined)) throw invalid("charts, provenance, images, bodyText, slideNumbers and typefaces do not apply to as: \"images\", where each slide is one picture.");
+	if (as === "images" && (charts !== undefined || diagrams !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || smartArt !== undefined || slideNumbers !== undefined || typefaces !== undefined)) throw invalid("charts, diagrams, provenance, images, bodyText, smartArt, slideNumbers and typefaces do not apply to as: \"images\", where each slide is one picture.");
 	if (options.scale !== undefined && format !== "png" && format !== "pdf" && !(format === "pptx" && as === "images")) throw invalid("scale applies to format png (and raster pdf, and pptx with as: \"images\").");
 	if (options.includeHidden && format === "pptx") throw invalid("includeHidden applies to per-slide image and PDF output; the PPTX keeps a hidden slide as a hidden slide.");
 	if (options.slides !== undefined && format === "pptx") throw invalid("slides is not available for pptx: the whole presentation is exported.");
@@ -294,17 +308,69 @@ export async function runExport(presentation: unknown, options: ResolvedExportOp
 	const userFonts = options.fonts ? [] : (ctx.userFonts ?? (await listFontDirectories(options.fontFolders, ctx.flags ? "--fonts" : "fonts")));
 
 	const resolver = createImageResolver(assetRoot(options.assetDir, ctx.flags), reporter, ctx.flags ? "pass --asset-dir" : "pass assetDir");
+	// LH-14: the icon sets the deck names (the gallery loads each set on first use) and its icons' SVG files, read as its images are (the
+	// asset directory only; nothing is fetched), before anything composes the deck.
+	await ensureIcons(presentation, { catalogs, readSource: iconSourceReader(undefined, resolver) });
 	// RR-59: a standalone SVG (text "fonts") carries the installed script faces its text draws; raster, PDF and PPTX read
 	// them from the font files, so they skip the script data URLs. Without `fonts`, a deck the process's shared handle serves
 	// unchanged borrows it (the pack is prepared once per process); any other deck gets a handle of its own.
 	const embedScripts = format === "svg" && options.text === "fonts";
-	const lease = options.fonts ? undefined : await leaseSharedFonts(renderer, presentation, userFonts, reporter, embedScripts);
+	const lease = options.fonts ? undefined : await leaseSharedFonts(renderer, presentation, userFonts, reporter, embedScripts, { catalogs, ...(date ? { date } : {}) });
 	try {
-		const handle: FontsHandle = options.fonts ?? lease?.handle ?? (await prepareFonts(renderer, presentation, userFonts, reporter, embedScripts)).handle;
-		return await drawWith(presentation, handle, options, ctx, { reporter, catalogs, date, renderer, ...(pptx ? { pptx } : {}), userFonts, resolver });
+		const handle: FontsHandle = options.fonts ?? lease?.handle ?? (await prepareFonts(renderer, presentation, userFonts, reporter, embedScripts, { catalogs, ...(date ? { date } : {}) })).handle;
+		if(options.fonts && handle.registry?.fontNames)await handle.ensure?.(presentation,{renderOptions:{catalogs,...(date?{date}:{})}});
+		const environment: DrawEnvironment = { reporter, catalogs, date, renderer, ...(pptx ? { pptx } : {}), userFonts, resolver };
+		// RR-105, second line of defense: `ensure` prepares every face the deck's real-metrics composition measures (the font
+		// analysis's fixpoint), but the exporters also compose with what the analysis does not see (the PPTX exporter's own
+		// options, real image sizes, the picture sampler). When drawing fails only because one face was not prepared, that face
+		// is prepared now and the drawing runs again, at most LATE_FACE_ROUNDS times, and each late face is reported
+		// (fonts/prepared-late, info) so tests and hosts see it. Any other failure, and a face that stays unprepared, fails as before.
+		const late = new Set<string>();
+		for (let round = 0; ; round++) {
+			const mark = reporter.mark();
+			const result = await drawWith(presentation, handle, options, ctx, environment);
+			const face = result.failure ? unpreparedFace(thrownBy.get(result)) : undefined;
+			if (!face || round >= LATE_FACE_ROUNDS || late.has(face.key) || typeof handle.ensure !== "function" || !handle.registry?.fontNames) return result;
+			late.add(face.key);
+			try {
+				await handle.ensure(presentation, { renderOptions: { catalogs, ...(date ? { date } : {}) }, measurementRequests: [{ text: " ", size: 16, style: face.style }] });
+			} catch {
+				return result;
+			}
+			reporter.withdrawErrors(mark);
+			reporter.add(
+				"fonts",
+				{ code: "prepared-late", path: face.path, message: `${face.style.fontFamily} ${face.style.fontWeight}${face.style.italic ? " italic" : ""} was prepared only when the export measured it; the export ran again with it.`, fontFamily: face.style.fontFamily, fontWeight: face.style.fontWeight, italic: face.style.italic },
+				"info",
+			);
+		}
 	} finally {
 		lease?.release();
 	}
+}
+
+/** How many faces a conversion may prepare after its fonts were ensured, one drawing each (RR-105). */
+const LATE_FACE_ROUNDS = 4;
+// The error a failed drawing threw, by the run that reports it (internal to runExport's late preparation).
+const thrownBy = new WeakMap<ExportRun, unknown>();
+const failedWith = (run: ExportRun, error: unknown): ExportRun => {
+	thrownBy.set(run, error);
+	return run;
+};
+/**
+ * The face a drawing failed on because the fonts handle had not prepared it: exactly the demand loader's prepared-face error
+ * (`font-unavailable`, "selected face is not prepared", naming the family, the selected weight and style), here or as a cause.
+ */
+function unpreparedFace(error: unknown): { key: string; path: string; style: { fontFamily: string; fontWeight: number; italic: boolean } } | undefined {
+	let current = error as { code?: unknown; message?: unknown; details?: Record<string, unknown>; cause?: unknown } | undefined;
+	for (let depth = 0; current && depth < 3; depth++, current = current.cause as typeof current) {
+		const details = current.details;
+		if (current.code !== "font-unavailable" || typeof current.message !== "string" || !current.message.startsWith("The selected face is not prepared") || !details) continue;
+		const { fontFamily, fontWeight, italic, path } = details;
+		if (typeof fontFamily !== "string" || !fontFamily.trim() || typeof fontWeight !== "number" || !Number.isFinite(fontWeight) || typeof italic !== "boolean") return undefined;
+		return { key: JSON.stringify([fontFamily.toLowerCase(), fontWeight, italic]), path: typeof path === "string" ? path : "", style: { fontFamily, fontWeight, italic } };
+	}
+	return undefined;
 }
 
 interface DrawEnvironment {
@@ -321,7 +387,8 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 	const { format, scale } = options;
 	const { reporter, catalogs, date, renderer, pptx, userFonts, resolver } = environment;
 	let deck: unknown = presentation;
-	const fontSummary = (): ExportFontSummary => ({
+	// The report's font summary, and one info finding per substituted family (kept once however often the summary is built).
+	const fontSummary = (): ExportFontSummary => (reportSubstitutions(reporter, handle), {
 		pack: "office",
 		substitutionPolicy: "visual",
 		userFonts,
@@ -338,7 +405,7 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 			pagination = { pages: result.pages };
 		} catch (error) {
 			reportThrown(reporter, "render", error);
-			return { files: [], fonts: fontSummary(), skippedHidden: [], failure: failureOf(error) };
+			return failedWith({ files: [], fonts: fontSummary(), skippedHidden: [], failure: failureOf(error) }, error);
 		}
 	} else if (options.paginate !== false) {
 		// LH-90: an overfull slide of block units (sibling blocks of one kind, each with the blocks after it) continues on further slides, so the preview and the PPTX draw
@@ -366,9 +433,11 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 			}
 		} catch (error) {
 			reportThrown(reporter, source, error);
-			return { files: [], fonts: fontSummary(), skippedHidden: [], failure: failureOf(error) };
+			return failedWith({ files: [], fonts: fontSummary(), skippedHidden: [], failure: failureOf(error) }, error);
 		}
 	}
+	// Continuations can add generated labels; prepare their actual faces before drawing the final pages.
+	if(deck!==presentation && handle.registry?.fontNames)await handle.ensure?.(deck,{renderOptions:{catalogs,...(date?{date}:{})}});
 	// LH-145: the picture backgrounds are measured once, after pagination (which copies a slide's design), and both engines get the same sampler.
 	const pictureLuminance = options.measurePictures === false ? undefined : await measurePictureBackgrounds(renderer, deck, resolver, catalogs, reporter);
 	const slideCount = (deck as { slides?: unknown[] }).slides?.length ?? 0;
@@ -380,6 +449,18 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 	const named = options.slides === undefined ? undefined : parseSlideSelection(options.slides, slideCount, slidesLabel);
 	const selected = format === "pptx" ? [] : named ?? (options.includeHidden ? everySlide : everySlide.filter((number) => !isHidden(number)));
 	const skippedHidden = format === "pptx" || named || options.includeHidden ? [] : everySlide.filter(isHidden);
+	// Format/reference gating stays unchanged. Report selected chart data advisories once for drawings whose renderer does not
+	// report them itself. Native PPTX already explains these adaptations through its exporter diagnostics.
+	if (format !== "pptx" || options.as === "images") {
+		const rules = ["opf/chart-mapping-adapted", "opf/chart-series-dropped"];
+		const chartCheck = validate(deck, { only: rules, catalogs });
+		for (const finding of chartCheck.findings) {
+			if (finding.severity !== "warning" || !rules.includes(finding.ruleId)) continue;
+			const sourceIndex = /^\/slides\/(\d+)(?:\/|$)/.exec(finding.path)?.[1];
+			if (format !== "pptx" && (sourceIndex === undefined || !selected.includes(Number(sourceIndex) + 1))) continue;
+			if (!reporter.findings.some(existing => existing.ruleId === finding.ruleId && existing.path === finding.path && existing.message === finding.message)) reporter.addFinding(finding);
+		}
+	}
 	if (format !== "pptx" && !selected.length)
 		throw new OPFApiError(skippedHidden.length ? (ctx.flags ? "Every slide is hidden. Use --include-hidden to write them, or --slides to name slides." : "Every slide is hidden. Use includeHidden to write them, or slides to name slides.") : "The presentation has no slides.", skippedHidden.length ? "all-slides-hidden" : "no-slides");
 
@@ -406,9 +487,11 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 				...(pictureLuminance ? { pictureLuminance } : {}),
 				// opf-pptx still names its option `chartex` and its picture choice `fallback`.
 				...(options.charts ? { chartex: options.charts === "picture" ? "fallback" : options.charts } : {}),
+				...(options.diagrams ? { diagrams: options.diagrams } : {}),
 				...(options.provenance ? { provenance: options.provenance === "none" ? false : options.provenance } : {}),
 				...(options.images ? { imageFormat: options.images } : {}),
 				...(options.bodyText ? { bodyText: options.bodyText } : {}),
+				...(options.smartArt ? { smartArt: options.smartArt } : {}),
 				...(options.slideNumbers ? { slideNumberFields: options.slideNumbers } : {}),
 				...(options.typefaces ? { typefaces: options.typefaces } : {}),
 				...(pictures ? { as: "images", scale: options.pictureScale, slideRasterizer } : {}),
@@ -485,7 +568,7 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 		const missing = missingPeerFrom(error);
 		if (missing) throw missing;
 		reportThrown(reporter, format === "pptx" ? "pptx" : "render", error);
-		return { files: [], fonts: fontSummary(), ...(pagination ? { pagination } : {}), skippedHidden: [], failure: failureOf(error) };
+		return failedWith({ files: [], fonts: fontSummary(), ...(pagination ? { pagination } : {}), skippedHidden: [], failure: failureOf(error) }, error);
 	}
 }
 

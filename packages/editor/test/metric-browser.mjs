@@ -134,7 +134,7 @@ try {
     results.push({dimensions,alignment,selection,parts:geometry.parts.length,exactMetricRoundTrip:true,exportSha256:hash(new Uint8Array(bytes)),exportBytes:bytes.length,substitutions:await page.evaluate(()=>fonts.substitutions)});
   }
   for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(const metric of [0,'','\r\n\r\n\n','0.00']){
-    const deck={design:{fontScheme:'roboto',contentAlignment:'right',dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{metric}]};
+    const deck={design:{fontScheme:'roboto',contentAlignment:'end',dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{metric}]};
     await page.evaluate(args=>mountMetric(args),{deck,faces});
     const body=target('slides.0.metric');assert.equal(await body.count(),1);assert.equal(await body.getAttribute('data-opf-metric-role'),'value');
     const part=await page.evaluate(()=>editor.composeSlide(0,{fonts}).items[0].metricLayout.parts[0]);

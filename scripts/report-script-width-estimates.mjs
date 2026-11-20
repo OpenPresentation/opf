@@ -1,9 +1,9 @@
 /** Reproduce RR-79/#566 calibration against the committed FF-44 natural Chromium advances.
  * Run after pnpm build: node scripts/report-script-width-estimates.mjs [output.json]. */
-import {readFile,writeFile} from 'node:fs/promises';
+import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {measureText} from '../packages/javascript/dist/composition.js';
-const source=new URL('../docs/evidence/script-corpora-20261001/',import.meta.url);
+const source=new URL('../docs/programs/font-fidelity-everywhere/tracker-inputs/script-corpora-20261001/',import.meta.url);
 const corpusBytes=await readFile(new URL('script-corpora.json',source));
 const browserBytes=await readFile(new URL('browser.json',source));
 const corpus=JSON.parse(corpusBytes),browser=JSON.parse(browserBytes);
@@ -33,6 +33,7 @@ const summary=corpus.groups.map(group=>{
   return {script:group.script,cases:cases.length,protected:protectedScripts.has(group.script),robustAlternative:{factor:robustFactor,minEstimateToBrowser:Math.min(...robustRatios),maxEstimateToBrowser:Math.max(...robustRatios),meanAbsoluteRelativeError:robustRatios.reduce((sum,ratio)=>sum+Math.abs(ratio-1),0)/cases.length},maximumAlternativeFactor:protectedScripts.has(group.script)?1:Math.max(1,Math.ceil(limiting.neededFactor*100)/100),absoluteRelativeError:{before:distribution(cases,'before'),spacingOnly:distribution(cases,'spacing'),after:distribution(cases,'after')},beforeMedian:median(cases.map(row=>row.browser/row.before)),spacingMedian:median(cases.map(row=>row.browser/row.spacing)),afterMedian:median(cases.map(row=>row.browser/row.after)),afterMax:Math.max(...cases.map(row=>row.browser/row.after)),estimateToBrowser:{min:Math.min(...cases.map(row=>row.after/row.browser)),median:median(cases.map(row=>row.after/row.browser)),max:Math.max(...cases.map(row=>row.after/row.browser)),over25Percent:cases.filter(row=>row.after/row.browser>1.25).length},byWeight:[400,700].map(weight=>{const faces=cases.filter(row=>row.weight===weight);return {weight,cases:faces.length,medianEstimateToBrowser:faces.length?median(faces.map(row=>row.after/row.browser)):null,maxEstimateToBrowser:faces.length?Math.max(...faces.map(row=>row.after/row.browser)):null};}),underestimated:cases.filter(row=>row.browser>row.after+.1).length,limiting:{id:limiting.id,family:limiting.family,weight:limiting.weight,neededFactor:limiting.neededFactor}};
 });
 const report={method:'Natural Chromium advances at 100px from FF-44; robust script factor minimizes mean absolute relative error after Mc correction: weighted median of (browserEm-commonUnits)/scriptUnits with weight scriptUnits/browserEm, rounded to nearest .01; only six named scripts receive factors. No runtime fonts or native accuracy claim.',sources:{corpus:createHash('sha256').update(corpusBytes).digest('hex'),browser:createHash('sha256').update(browserBytes).digest('hex')},summary,rows};
-const output=process.argv[2]??new URL('../docs/evidence/script-width-estimates/report.json',import.meta.url);
+const output=process.argv[2]??new URL('../artifacts/script-width-estimates/report.json',import.meta.url);
+if(!process.argv[2])await mkdir(new URL('../artifacts/script-width-estimates/',import.meta.url),{recursive:true});
 await writeFile(output,JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify({cases:rows.length,nonprotectedUnderestimates:summary.filter(row=>!row.protected).reduce((total,row)=>total+row.underestimated,0),protectedUnderestimates:summary.filter(row=>row.protected).reduce((total,row)=>total+row.underestimated,0)},null,2));

@@ -89,7 +89,7 @@ test('reference diagnostics use registered catalogs and name where each suggesti
 		catalogs: { custom: { layouts: { partner: layout('Document label') } } },
 	});
 	const options = freeze({
-			catalogs: [{ source: 'https://example.invalid', layouts: { partner: layout('Loaded label'), loaded: layout('Loaded') } }],
+			catalogs: [{ source: 'https://example.invalid', layouts: { partner: layout('Loaded label'), pratnxx: layout('Pratnxx'), loaded: layout('Loaded') } }],
 		}),
 		before = JSON.stringify({ document, options });
 	const result = checkAll(document, options),
@@ -102,7 +102,9 @@ test('reference diagnostics use registered catalogs and name where each suggesti
 	assert.equal(issue.suggestions[0].label, 'Document label');
 	assert.equal(issue.suggestions[0].origin, 'document');
 	assert.equal(issue.suggestions[0].definition, 'document#/catalogs/custom/layouts/partner');
-	assert.ok(issue.suggestions.some((suggestion) => suggestion.value === 'loaded' && suggestion.origin === 'registered' && suggestion.definition === 'https://example.invalid#/layouts/loaded'));
+	assert.ok(issue.suggestions.some((suggestion) => suggestion.value === 'pratnxx' && suggestion.origin === 'registered' && suggestion.definition === 'https://example.invalid#/layouts/pratnxx'));
+	// Only near misses are suggested: `loaded` is no respelling of `pratner`.
+	assert.ok(!issue.suggestions.some((suggestion) => suggestion.value === 'loaded'));
 	assert.ok(issue.message.includes('https://example.invalid'), issue.message);
 	assert.equal(JSON.stringify({ document, options }), before);
 	assert.deepEqual(checkAll(document, options), result);
@@ -259,7 +261,7 @@ test('asset references diagnose missing registry entries and cycles without fetc
 			watermark: { src: 'asset:missing-watermark', opacity: 0.1 },
 			background: { type: 'image', src: 'asset:missing-background' },
 			footer: {
-				right: { image: { src: 'asset:missing-footer', alt: 'Keep' } },
+				end: { image: { src: 'asset:missing-footer', alt: 'Keep' } },
 			},
 		},
 		slides: [{ title: 'asset:literal-text', video: 'asset:missing-video' }],
@@ -272,7 +274,7 @@ test('asset references diagnose missing registry entries and cycles without fetc
 		[
 			'/assets/alias/src',
 			'/design/background/src',
-			'/design/footer/right/image/src',
+			'/design/footer/end/image/src',
 			'/design/watermark/src',
 			'/organization/logo/full/onLight',
 			'/slides/0/video',

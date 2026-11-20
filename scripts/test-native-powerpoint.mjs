@@ -43,7 +43,7 @@ if (mode === 'generate') {
   const document = {design:{fontScheme:{id:'calibri',code:'Calibri'},dimensions:{widthInches:1280/96,heightInches:720/96}},slides:[
     {title:'Native text verification',text:'PowerPoint keeps this content editable. Calibri uses the same installed font bytes for measurement and the SVG raster comparison.'},
     {title:'Styled and merged table',table:{columns:['Team','Stage','Status'],rows:[
-      [{value:['Mixed ',{text:'bold',bold:true},' text'],rowSpan:2,style:{fill:'#DDEEFF',verticalAlign:'bottom',align:'right',padding:{left:12,right:18,top:4,bottom:8},borders:{right:{color:'#225588',width:3,dash:'dash'}}}},'Editable cell',{value:'Ready',style:{fill:'#E5F5EA',align:'center'}}],
+      [{value:['Mixed ',{text:'bold',bold:true},' text'],rowSpan:2,style:{fill:'#DDEEFF',verticalAlign:'bottom',align:'end',padding:{left:12,right:18,top:4,bottom:8},borders:{right:{color:'#225588',width:3,dash:'dash'}}}},'Editable cell',{value:'Ready',style:{fill:'#E5F5EA',align:'center'}}],
       [null,'Editing',{value:'Review',style:{borders:{bottom:{color:'#AA3300',width:2,dash:'dot'}}}}]
     ]}},
     {title:'Border ownership and covered rows',table:{rows:[

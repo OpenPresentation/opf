@@ -2,8 +2,8 @@
   "deck": "technical/content-payload-matrix.opf.json",
   "entries": {
     "technical/content-payload-matrix.opf.json#0": {
-      "sha256": "c312cb91ac024eaa3296e2d8698f220c4a5abf34c4d598b6bf8b69d1bd2cc595",
-      "bytes": 5877
+      "sha256": "d3c1120f2a696f4cd18b21d46326502c7e632f147e0c3e8a8225b250cce41e46",
+      "bytes": 6949
     },
     "technical/content-payload-matrix.opf.json#1": {
       "sha256": "cd6dfc4ebc40bfbaf499e9dfd347f39278bf4164aeb24e9a9977ca8b3a5b5c59",
@@ -34,8 +34,8 @@
       "bytes": 4364
     },
     "technical/content-payload-matrix.opf.json#8": {
-      "sha256": "b3ffa9b5f1785a1d1db2c5036103283835e30a228c8e3461919cdcfbefb2243b",
-      "bytes": 7084
+      "sha256": "773f60fd5ec087cd0cc8bb0f77b534679089ffed086b8109d76a6bd49ae2837a",
+      "bytes": 7331
     },
     "technical/content-payload-matrix.opf.json#9": {
       "sha256": "cde68165bd7139e8f8bd2b81e362cc1f7fd84feb5a48c67d2e8c015e62469dde",

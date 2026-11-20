@@ -127,7 +127,7 @@ npm install @openpresentation/opf @openpresentation/opf-render @openpresentation
 for you, and an application that only reads, validates or converts between deck forms needs neither. Core loads them the
 first time a call needs them, from core's own install location and then from the working directory; a missing one throws
 `peer-not-installed` with the install command. What each output needs is listed in [the CLI reference](cli.md#install): PNG
-needs `@resvg/resvg-js` and `sharp`, raster PDF `pdf-lib`, pictures in a PDF `sharp`, every format the office font pack, and
+needs `@resvg/resvg-js` and `sharp`, raster PDF `pdf-lib`, pictures in a PDF `sharp`, every drawn format the font packages its deck's faces use, and
 `.pptx` input or output `@openpresentation/opf-pptx`.
 
 ## `convert(input, output, options?)`
@@ -170,7 +170,7 @@ the PNG or SVG slides; with an output path a `.zip` name makes the archive inste
 **Options** are the flags of `opf convert` in camel case: `slides` (`3`, `"1,3-5"` or `[1, 3]`, read by `parseSlideSelection`), `includeHidden`, `paginate`, `scale`
 (0.1 to 8, PNG and raster PDF), `raster` (`true` draws a PDF as a picture per page; vector text is the default), `text` (an SVG
 carries `"fonts"`, the default, which embeds the faces the slide uses; `"system"`, none, for a page that has the fonts; or
-`"paths"`, glyph outlines, so the file needs no font), `charts` (`"auto"`, `"native"` or `"picture"`), `provenance` and `images`
+`"paths"`, glyph outlines, so the file needs no font), `charts` (`"auto"`, `"native"` or `"picture"`), `diagrams` (`"shapes"`, the default, or `"picture"`), `provenance` and `images`
 (`"compatible"` or `"preserve"`) for PPTX, `date` (`YYYY-MM-DD` for date fields; nothing reads a clock), `catalogs` (the default
 catalog when omitted), `fonts` (a prepared `loadFonts()` handle of `@openpresentation/opf-render/fonts-node`, or a folder or a list
 of folders of `.ttf`/`.otf` files), `assetDir`, plus `signals` (a `.pptx` input: also return the importer's per-shape
@@ -217,11 +217,13 @@ Every error has a `code`; branch on it, never on the message.
 | Class | Codes |
 | --- | --- |
 | `OPFApiError` (the base class) | `node-only` (the browser-safe build), `invalid-option`, `input-not-found`, `input-unreadable`, `invalid-presentation` (a deck written as a deck), `output-exists`, `output-not-file`, `output-unwritable` |
-| `OPFExportError` | the export step: `peer-not-installed` (the message carries the install command; `details` the package and range), `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `no-slides`, `all-slides-hidden`, `export-failed`, a font code |
+| `OPFExportError` | the export step: `peer-not-installed` (the message carries the install command; `details` the package and range), `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `no-slides`, `all-slides-hidden`, `layout-overflow` (strict composition), `export-failed`, a font code |
 | `OPFImportError` | the import step and `open` of a PowerPoint file: `peer-not-installed`, `peer-too-old`, `peer-load-failed`, `import-failed`, `invalid-presentation` |
 | `OPFValidationError` | `open` and `save` of an invalid deck; also thrown by core's `parse` and `assertValid` |
 
-`findings` on an error holds the located findings of the failed step.
+An engine failure with its own string `code` keeps that code; `export-failed` and `import-failed` are fallbacks for errors without one. For example, strict composition rejects with `OPFExportError` and code `layout-overflow`, retaining the original `OPFCompositionError` and its located `diagnostics` on `error.cause`.
+
+`findings` on an error holds any located findings supplied by the failed step.
 
 ## Fonts, determinism and the network
 

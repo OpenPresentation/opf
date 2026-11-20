@@ -83,6 +83,15 @@ function isRasterImage(bytes) {
   return jpeg || gif || webp;
 }
 
+// ZIP local-file, empty-archive and spanning signatures, independent of the file extension.
+function isZipArchive(bytes) {
+  return bytes[0] === 0x50 && bytes[1] === 0x4b && (
+    bytes[2] === 0x03 && bytes[3] === 0x04 ||
+    bytes[2] === 0x05 && bytes[3] === 0x06 ||
+    bytes[2] === 0x07 && bytes[3] === 0x08
+  );
+}
+
 export function inspectTextBytes(file, bytes, { maxOutputLength = 64 * 1024 * 1024 } = {}) {
   const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
   if (bytes.subarray(0, 8).equals(pngSignature)) return { kind: "binaryImages" };
@@ -94,6 +103,8 @@ export function inspectTextBytes(file, bytes, { maxOutputLength = 64 * 1024 * 10
   // hundreds of mojibake false positives).
   if (isRasterImage(bytes)) return { kind: "binaryImages" };
   const compressedName = /\.(?:json|log|txt|md|svg|xml)\.gz$/i.test(file);
+  // RR-110: archive evidence is binary; named gzip text reports still take the strict decoder below.
+  if (!compressedName && isZipArchive(bytes)) return { kind: "binaryArchives" };
   if (!compressedName && bytes[0] === 0x1f && bytes[1] === 0x8b && bytes[2] === 0x08) return { kind: "binaryArchives" };
   // These are compressed text reports, not text encoded in gzip bytes. Keep
   // their actual contents covered, and fail on malformed/oversized archives.

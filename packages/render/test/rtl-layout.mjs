@@ -11,7 +11,7 @@ const texts = svg => [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].map
 const arabic = 'العنصر الأول مع رقم 2026';
 const slides = [
   {title: 'عنوان العرض', items: [arabic, 'English item', 'العنصر الثاني: PowerPoint 365']},
-  {title: 'مناطق', left: {text: 'النص الأيسر'}, right: {items: ['عنصر ١', 'عنصر ٢']}},
+  {title: 'مناطق', start: {text: 'النص الأيسر'}, end: {items: ['عنصر ١', 'عنصر ٢']}},
   {title: 'جدول', table: {columns: ['المؤشر', 'القيمة', 'الحالة'], rows: [['الإيرادات', '12', 'جيد']]}},
   // LH-03: `dataLabels: false` keeps the value axis of a small chart, whose side this checks.
   {title: 'مخطط', chart: {type: 'column', dataLabels: false, data: {columns: ['شهر', 'قيمة'], rows: [['يناير', 12], ['فبراير', 15], ['مارس', 18]]}}},

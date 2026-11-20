@@ -87,11 +87,11 @@ export function createRichTextToolbar(root, {editor, report, beforeChange, onPro
   const family=field('Font family');family.onchange=()=>{try{apply({fontFamily:family.value||null});}catch(error){report(error);}};
   const link=field('Link URL');link.onchange=()=>{try{if(link.value&&!/^(https?:\/\/|mailto:|tel:)\S+$/.test(link.value))throw new Error('Use an HTTP, HTTPS, mailto or tel link without spaces.');apply({link:link.value||null});}catch(error){report(error);}};
   const language=field('Language tag');language.style.width='80px';
-  language.onchange=()=>{try{if(language.value&&!/^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/.test(language.value))throw new Error('Use a BCP-47 language tag such as fr-FR or ja-JP.');apply({lang:language.value||null});}catch(error){report(error);}};
+  language.onchange=()=>{try{if(language.value&&!/^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/.test(language.value))throw new Error('Use a BCP-47 language tag such as fr-FR or ja-JP.');apply({language:language.value||null});}catch(error){report(error);}};
   const replacement=field('Selected text');replacement.style.width='160px';
   replacement.onkeydown=event=>{if(event.key==='Enter'){event.preventDefault();try{apply(null,replacement.value);}catch(error){report(error);}}};
   button('Replace text',()=>apply(null,replacement.value));
-  button('Reset style',()=>apply(Object.fromEntries(['bold','italic','underline','strikethrough','superscript','subscript','code','color','fontSize','fontFamily','link','lang'].map(key=>[key,null]))));
+  button('Reset style',()=>apply(Object.fromEntries(['bold','italic','underline','strikethrough','superscript','subscript','code','color','fontSize','fontFamily','link','language'].map(key=>[key,null]))));
   button('Edit text',()=>{const path=selected?.path;hide();if(path)onTyping?.(path);});
   button('Edit runs',()=>{const path=selected?.path;hide();if(path)onProperties?.(path);});
   button('Done',()=>{hide();win.getSelection()?.removeAllRanges();});

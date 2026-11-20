@@ -22,9 +22,9 @@ const texts = (svg, path) => [...svg.matchAll(/<text\b[^>]*>/g)].map(match => ma
 // Alignment: layout only, deck over layout, slide over deck, per key. WI-2: the subtitle sits in the title area and follows
 // titleAlignment unless the slide's own design sets contentAlignment (the third case).
 const cases = [
-  ['layout only', deckOf(layout({ titleAlignment: 'right', contentAlignment: 'center' })), { title: 'right', subtitle: 'right', text: 'center' }],
-  ['deck over layout', deckOf(layout({ titleAlignment: 'right', contentAlignment: 'center' }), {}, { titleAlignment: 'left' }), { title: 'left', subtitle: 'left', text: 'center' }],
-  ['slide over deck over layout', deckOf(layout({ titleAlignment: 'right', contentAlignment: 'center' }), { design: { contentAlignment: 'right' } }, { titleAlignment: 'left', contentAlignment: 'left' }), { title: 'left', subtitle: 'right', text: 'right' }],
+  ['layout only', deckOf(layout({ titleAlignment: 'end', contentAlignment: 'center' })), { title: 'right', subtitle: 'right', text: 'center' }],
+  ['deck over layout', deckOf(layout({ titleAlignment: 'end', contentAlignment: 'center' }), {}, { titleAlignment: 'start' }), { title: 'left', subtitle: 'left', text: 'center' }],
+  ['slide over deck over layout', deckOf(layout({ titleAlignment: 'end', contentAlignment: 'center' }), { design: { contentAlignment: 'end' } }, { titleAlignment: 'start', contentAlignment: 'start' }), { title: 'left', subtitle: 'right', text: 'right' }],
   ['no value anywhere', deckOf(layout({})), { title: 'left', subtitle: 'left', text: 'left' }],
 ];
 let checked = 0;

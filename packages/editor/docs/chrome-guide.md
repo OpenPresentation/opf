@@ -94,7 +94,7 @@ An item may be listed once (a name given twice throws); `spacer` and `|` may rep
 | `views` | The view switch (Slide, Sorter, Outline, Layouts); only with more than one view. |
 | `find` | The Find button. |
 | `design` | The Design quick menu: theme, colors, fonts and this slide's layout, each one an undoable edit. |
-| `review` | The review pill ("Valid", "3 issues"). In a layout without a Review panel it runs headless and pressing it emits `review-open`. |
+| `review` | The review pill ("Valid", "3 issues"). While the source text is not a valid deck it counts that text's errors, never "Valid". In a layout without a Review panel it runs headless and pressing it emits `review-open`. |
 | `autosave` | The autosave line (with `persistence`). |
 | `export`, `present` | The Export menu, the Present button. |
 | `expand` | Fill the window. |
@@ -279,7 +279,7 @@ editor.on("dirty", ({ dirty }) => {
 
 `guardUnload: true` makes the browser ask before the page closes while `dirty`; a function `(editor) => boolean` decides for a host with state of its own. In React, `useOpfDirty(editor)`; in Svelte, `opfDirty(editor)`.
 
-Notes: Ctrl/Cmd+S is heard while the focus is inside the editor's element, or on the page's body (nothing focused) in the `full`, `canvas` and Studio layouts; `embed` and `viewer` hear it only inside. Enter in the title renames and keeps the focus in the field. A copy or a download of the source counts as saved. [`full.html`](../examples/chrome/full.html) is the page.
+Notes: Ctrl/Cmd+S is heard while the focus is inside the editor's element, or on the page's body (nothing focused) in the `full`, `canvas` and Studio layouts; `embed` and `viewer` hear it only inside. Focusing the title opens an edit over the whole bar with Save and Cancel buttons: Enter or Save renames and keeps the focus in the field, Escape or Cancel puts the name back, and leaving the field never saves: with the name unchanged it closes the edit, with typed text the draft stays open. A copy or a download of the source counts as saved. [`full.html`](../examples/chrome/full.html) is the page.
 
 ## Host buttons
 

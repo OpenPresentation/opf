@@ -71,7 +71,7 @@ assert.deepEqual(labels('{"slides": [], "organization": {|}}').slice(0, 2), ['id
 assert.deepEqual(labels('{|}').slice(0, 6), ['slides', 'name', 'design', 'language', 'audience', 'purpose'], 'the deck: required first, then the common keys');
 assert.equal(labels('{"slides": [{"title": "a", |}]}').includes('title'), false, 'keys already there are not offered');
 // Equal boost: CodeMirror then lists them by label, as VS Code does.
-assert.deepEqual([...labels('{"design": {"titleAlignment": |}}')].sort((a, b) => a.localeCompare(b)), ['center', 'left', 'right']);
+assert.deepEqual([...labels('{"design": {"titleAlignment": |}}')].sort((a, b) => a.localeCompare(b)), ['center', 'end', 'start']);
 assert.deepEqual([...labels('{"template": |}')].sort(), ['false', 'true']);
 assert.equal(labels('{"slides": [{"title": |}]}'), null, 'free text offers nothing');
 assert.equal(labels('{"duration": |}'), null, 'a number offers nothing');
@@ -144,7 +144,7 @@ const context = (text) => {
   return { unit: '  ', valueAt: (segments) => segments.reduce((value, key) => (value && typeof value === 'object' ? value[key] : undefined), draft), keysOf: () => ['slides', 'name', 'design', 'extensions'], catalogKind: (segments) => (segments.at(-1) === 'layout' ? 'layouts' : undefined), catalogCount: () => 28, starter: (_segments, property) => (property === 'slides' ? [{ title: 'Slide title' }] : '') };
 };
 const said = (text, index = 0) => describeFinding(finding(text, index), context(text));
-assert.deepEqual(said('{"slides":[{"title":"a"}],"design":{"titleAlignment":"middle"}}'), { message: '`titleAlignment` must be left, center or right, but is `middle`.', next: 'did you mean `center`?' });
+assert.deepEqual(said('{"slides":[{"title":"a"}],"design":{"titleAlignment":"middle"}}'), { message: '`titleAlignment` must be start, center or end, but is `middle`.', next: 'did you mean `center`?' });
 assert.equal(said('{"slides":[{"items":"One"}]}').message, '`items` should be a list, but it is text (`One`).');
 assert.equal(said('{"slides":[{"items":"One"}]}').next, 'write ["One"].');
 assert.equal(said('{"name":"x"}').message, 'The deck is missing `slides`.');
@@ -176,7 +176,7 @@ const fixed = (text, title, index = 0) => {
   return applySourceEdits(text, fix.edits);
 };
 assert.deepEqual(JSON.parse(fixed('{"slides":[{"title":"a"}],"design":{"titleAlignment":"middle"}}', 'Change to center')).design, { titleAlignment: 'center' });
-assert.equal(validate(fixed('{"slides":[{"title":"a"}],"design":{"titleAlignment":"middle"}}', 'Change to left'), { only: ['format'] }).valid, true);
+assert.equal(validate(fixed('{"slides":[{"title":"a"}],"design":{"titleAlignment":"middle"}}', 'Change to start'), { only: ['format'] }).valid, true);
 assert.deepEqual(JSON.parse(fixed('{"slids":[{"title":"a"}]}', 'Rename to slides', 1)), { slides: [{ title: 'a' }] });
 assert.deepEqual(JSON.parse(fixed('{"slides":[{"title":"a"}],"foo":1}', 'Remove property')), { slides: [{ title: 'a' }] });
 assert.deepEqual(JSON.parse(fixed('{"name":"x"}', 'Add `slides`')), { name: 'x', slides: [{ title: 'Slide title' }] });

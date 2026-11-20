@@ -107,10 +107,12 @@ test('furniture-layouts exports inherited carriers on distinct tagged layout var
     const identity=JSON.parse(Buffer.from(tags.find(tag=>tag.name==='OPF_LAYOUT_V1').val,'hex').toString());
     assert.equal(identity.reference,id);
     const shapes=list(layout['p:cSld']['p:spTree']['p:sp']);
-    const sharedHeader=shapes.filter(shape=>shape['p:nvSpPr']['p:cNvPr'].name.startsWith('OPF furniture header left text line '));
+    const sharedHeader=shapes.filter(shape=>shape['p:nvSpPr']['p:cNvPr'].name.startsWith('OPF furniture header start text line '));
     assert.equal(sharedHeader.length,index===1?0:3,'Inherited header belongs to each used layout variant, not the local slide');
     if(index!==1){
-      assert.match(layout['p:cSld'].name,/furniture/);
+      // RR-105 (#1290, 2026-11-12): the variant's internal name moved to its tag (OPF_LAYOUT_V1, asserted above); its user-facing name is the
+      // record's name numbered (previously matched /furniture/, as in 'Text (furniture 1)').
+      assert.equal(layout['p:cSld'].name,index===0?'Text 2':'Two columns 2');
       const texts=sharedHeader.map(shape=>list(shape['p:txBody']['a:p']).flatMap(p=>list(p['a:r']).map(run=>run['a:t']??'')).join(''));
       assert.deepEqual(texts,['  Inherited header\twords','second line  ','']);
     }

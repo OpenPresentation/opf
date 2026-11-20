@@ -5,7 +5,7 @@
 // quiet for a moment, not on every keystroke (the session itself checks only the `format` category per edit). The panel owns no
 // document state: every fix is an undoable edit through the editor session. Importing this module does not need a DOM;
 // mounting does.
-import { validate } from "@openpresentation/opf";
+import { createValidator } from "@openpresentation/opf";
 import { mergeCatalogs } from "./catalogs.js";
 import {
   applyReviewFix,
@@ -74,6 +74,10 @@ const STYLE = `
 .opf-review-ignored{margin-top:8px}
 .opf-review-ignored li{display:flex;gap:8px;align-items:center;margin:4px 0}
 .opf-review-error{color:#b3261e}
+.opf-review-source{margin:0 0 10px;padding:8px 10px;border:1px solid #b3261e;border-radius:6px}
+.opf-review-source-note{margin:0 0 4px}
+.opf-review-source .opf-review-item{padding:6px 0}
+.opf-review-source .opf-review-item:first-child{border-top:0}
 `;
 
 function ensureStyles(doc) {
@@ -86,6 +90,15 @@ function ensureStyles(doc) {
 
 const plural = (count, noun) => `${count} ${noun}${count === 1 ? "" : "s"}`;
 const messageOf = (error) => error?.issues?.[0]?.message ?? error?.message ?? String(error);
+
+/** The counts line while the source text is not a valid deck: "1 error in the source text." */
+function sourceSummary(counts) {
+  const parts = [];
+  if (counts.error) parts.push(plural(counts.error, "error"));
+  if (counts.warning) parts.push(plural(counts.warning, "warning"));
+  if (counts.info) parts.push(plural(counts.info, "note"));
+  return `${parts.join(", ")} in the source text.`;
+}
 
 function summaryText(counts, scopeLabel) {
   if (!counts.total) return `No findings${scopeLabel}.`;
@@ -117,8 +130,9 @@ function summaryText(counts, scopeLabel) {
 export function createReviewPanel(container, options) {
   const { editor, getSlideIndex, getValidateOptions, onGoTo, onFocusField, onStatus, onIgnoredChange, onChange, review } = options;
   // Core resolves the deck's references with the session's registered catalogs (and any the host adds): the same list as the preview.
-  const validateOptions = () => {
-    const host = getValidateOptions?.(editor.presentation) ?? {};
+  const checker = createValidator();
+  const validateOptions = (deck = editor.snapshot().presentation) => {
+    const host = getValidateOptions?.(deck) ?? {};
     return { ...host, catalogs: mergeCatalogs(editor.catalogs, host.catalogs) };
   };
   if (review !== undefined && typeof review !== "function") throw new TypeError("The Review panel's review hook must be a function (presentation, options) returning a FindingReport.");
@@ -136,6 +150,8 @@ export function createReviewPanel(container, options) {
   let findings = [];
   let destroyed = false;
   let timer;
+  let auditing = false;
+  const idleWaiters = new Set();
   let currentId;
   let editingAlt;
   let altDraft = "";
@@ -160,7 +176,11 @@ export function createReviewPanel(container, options) {
   const empty = h(doc, "p", { class: "opf-review-empty" });
   const ignoredBox = h(doc, "details", { class: "opf-review-ignored", hidden: true });
   const gotoHint = h(doc, "span", { id: `${id}-goto-hint`, hidden: true, text: "Go to it." });
-  root.append(head, ...(hookStatus ? [hookStatus] : []), filters, list, empty, ignoredBox, gotoHint);
+  // The source pane's verdict while its text is not a valid deck (`setSource`): its findings lead the panel, and the list below is said to
+  // describe the last valid version, which is all the slides and the full check can see.
+  const sourceBox = h(doc, "section", { class: "opf-review-source", "data-opf-review-source": "", hidden: true, "aria-label": "Source text" });
+  root.append(head, ...(hookStatus ? [hookStatus] : []), sourceBox, filters, list, empty, ignoredBox, gotoHint);
+  let sourceFindings = null;
   container.append(root);
 
   const say = (message, error = false) => {
@@ -178,7 +198,8 @@ export function createReviewPanel(container, options) {
   function validateNow() {
     lastAuditError = undefined;
     try {
-      coreReport = validate(editor.presentation, validateOptions());
+      const deck = editor.snapshot().presentation;
+      coreReport = checker.validate(deck, validateOptions(deck));
     } catch (error) {
       coreReport = undefined;
       lastAuditError = error;
@@ -390,8 +411,11 @@ export function createReviewPanel(container, options) {
       empty.hidden = shown.length > 0;
       empty.textContent = findings.length && !shown.length ? "Nothing to show with these filters." : "Nothing to fix. The checks cover the format, references, contrast, text fit, alt text, reading order and more; they do not replace looking at the slides.";
     }
+    renderSource(shown.length);
     renderIgnored();
-    onChange?.({ ...countFindings(shown), all: findings.length, sources: report?.sources ?? [], unavailable: Boolean(lastAuditError) });
+    onChange?.(sourceFindings
+      ? { ...countFindings(sourceFindings), all: sourceFindings.length, sources: report?.sources ?? [], unavailable: false, draft: true }
+      : { ...countFindings(shown), all: findings.length, sources: report?.sources ?? [], unavailable: Boolean(lastAuditError), draft: false });
     // Live updates must not take the keyboard away: put focus back on the same control, or the same finding.
     if (hadFocus?.id && !lastAuditError) {
       const li = itemFor(hadFocus.id);
@@ -400,20 +424,57 @@ export function createReviewPanel(container, options) {
     }
   }
 
-  function refresh() {
+  // While the source text is not a valid deck, its findings come first: the counts line and the review counts are the source's, and the
+  // list of the full check is introduced as the last valid version's (it cannot check text that is not a deck).
+  function renderSource(shownCount) {
+    sourceBox.hidden = !sourceFindings;
+    if (!sourceFindings) { sourceBox.replaceChildren(); return; }
+    const last = lastAuditError ? "" : shownCount ? " The findings below are from the last valid version." : " The last valid version has no other findings.";
+    sourceBox.replaceChildren(
+      h(doc, "p", { class: "opf-review-source-note", text: `The source text is not a valid deck. Fix it in the source; the slides show the last valid version.${last}` }),
+      h(doc, "ul", { class: "opf-review-items" }, ...sourceFindings.map((finding) => h(doc, "li", { class: "opf-review-item", "data-severity": finding.severity, ...(finding.ruleId ? { "data-rule": finding.ruleId } : {}) },
+        h(doc, "span", { class: "opf-review-sev", text: SEVERITY_LABELS[finding.severity] ?? SEVERITY_LABELS.error }), " ",
+        h(doc, "span", { class: "opf-review-msg", text: finding.message }), " ",
+        h(doc, "span", { class: "opf-review-meta", text: [finding.path ? `Source ${finding.path}` : "Source", finding.ruleId].filter(Boolean).join(" · ") })))),
+    );
+    counts.textContent = sourceSummary(countFindings(sourceFindings));
+    if (!shownCount && !lastAuditError) empty.hidden = true;
+  }
+
+  // The source pane's text is not a valid deck (`findings`, at least one), or is again (null).
+  function setSource(next) {
+    if (destroyed) return;
+    const listed = Array.isArray(next) && next.length ? next.map(({ severity, ruleId, path, message }) => ({ severity: SEVERITY_LABELS[severity] ? severity : "error", ...(ruleId ? { ruleId } : {}), ...(path ? { path } : {}), message: String(message ?? "") })) : null;
+    if (JSON.stringify(listed) === JSON.stringify(sourceFindings)) return;
+    sourceFindings = listed;
+    renderList();
+  }
+
+  function settle() {
+    if (timer !== undefined || auditing) return;
+    for (const resolve of idleWaiters) resolve();
+    idleWaiters.clear();
+  }
+
+  function checkNow() {
     if (destroyed) return;
     clearTimeout(timer);
     timer = undefined;
-    validateNow();
-    renderList();
+    auditing = true;
+    try { validateNow(); renderList(); } finally { auditing = false; settle(); }
     if (options.autoReview && review) void runHook();
+  }
+
+  function refresh() {
+    checker.clear();
+    checkNow();
   }
 
   // One full check per burst of changes (typing, an undo group, a paste): when nothing has changed for `delay` milliseconds.
   function schedule() {
     if (destroyed) return;
     clearTimeout(timer);
-    timer = setTimeout(refresh, delay);
+    timer = setTimeout(checkNow, delay);
   }
 
   // A change while the hosted review runs drops its result (it was about the old text); one that comes after marks it out of date.
@@ -449,6 +510,10 @@ export function createReviewPanel(container, options) {
     /** Core's `validate` report alone. */
     get validation() { return coreReport; },
     refresh,
+    /** Clear retained geometry when host resources change; does not start a check. */
+    invalidate() { checker.clear(); },
+    /** Settles after the pending debounced core check AND list update; excludes the optional hosted hook. */
+    whenIdle() { return timer !== undefined || auditing ? new Promise((resolve) => idleWaiters.add(resolve)) : Promise.resolve(); },
     /** Check after `delay` milliseconds without another call: a host that drives its own checks (`autoRefresh: false`) calls this after each redraw. */
     schedule,
     /** Run the hosted reviewer now (the `review` hook); resolves when its findings are listed. */
@@ -456,9 +521,15 @@ export function createReviewPanel(container, options) {
     /** Re-render after the host's slide changed (the "This slide only" filter). */
     update: renderList,
     setIgnored,
+    setSource,
+    /** The source pane's findings while its text is not a valid deck, or null. */
+    get sourceFindings() { return sourceFindings; },
     destroy() {
       destroyed = true;
       clearTimeout(timer);
+      timer = undefined;
+      checker.clear();
+      settle();
       hookRunning?.controller.abort();
       stop();
       root.remove();

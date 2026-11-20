@@ -36,7 +36,7 @@ const deck = () => ({
         { code: { source: "const acme = 1;", language: "javascript" } },
       ],
     },
-    { id: "three", title: "Left and right", left: { text: "Acme left" }, right: { items: ["Acme right"] }, design: { header: { left: { text: "Acme header" } } } },
+    { id: "three", title: "Left and right", start: { text: "Acme left" }, end: { items: ["Acme right"] }, design: { header: { start: { text: "Acme header" } } } },
   ],
 });
 const session = () => createEditorSession(deck(), { rejectInvalid: true });
@@ -47,7 +47,7 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   const labels = fields.map((field) => field.label);
   for (const expected of ["Presentation name", "Presentation description", "Footer center", "Title", "Subtitle", "Tag", "Speaker notes", "Text",
     "List item 1", "List item 2", "List item 3", "Quote", "Quote attribution", "Quote source", "Metric label", "Timeline event 1", "Timeline event 1 date",
-    "Table header 1", "Table row 1, column 1", "Table row 2, column 1", "Chart label 2", "Image alt text", "Code", "left · Text", "right · List item 1", "Header left"]) {
+    "Table header 1", "Table row 1, column 1", "Table row 2, column 1", "Chart label 2", "Image alt text", "Code", "start · Text", "end · List item 1", "Header start"]) {
     assert.ok(labels.some((label) => label.endsWith(expected)), `searches ${expected}: ${labels.join("; ")}`);
   }
   assert.ok(!fields.some((field) => /asset:|data:|minimal|roboto/.test(field.text)), "never searches asset references or design ids");
@@ -58,7 +58,7 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   assert.ok(slideOnly.length && slideOnly.every((field) => field.slideIndex === 0), "slideIndex limits the search to one slide and leaves deck fields out");
   for (const field of fields) assert.equal(typeof field.pointer, "string");
   // Paths are the dotted paths the canvas traces.
-  assert.ok(fields.some((field) => field.path === "slides.2.left.text"));
+  assert.ok(fields.some((field) => field.path === "slides.2.start.text"));
   assert.ok(fields.some((field) => field.path === "slides.1.blocks.0.items.1.text"));
   assert.ok(fields.some((field) => field.path === "slides.1.blocks.4.table.rows.1.0.value"));
 }
@@ -153,8 +153,8 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   assert.equal(after.slides[1].blocks[6].image.alt, "Globex logo");
   assert.equal(after.slides[1].blocks[6].image.src, "asset:logo", "references are untouched");
   assert.equal(after.slides[1].blocks[2].metric.value, 98);
-  assert.equal(after.slides[2].left.text, "Globex left");
-  assert.equal(after.slides[2].design.header.left.text, "Globex header");
+  assert.equal(after.slides[2].start.text, "Globex left");
+  assert.equal(after.slides[2].design.header.start.text, "Globex header");
   assert.equal(findMatches(after, "Acme").matches.length, 0);
   editor.undo();
   assert.deepEqual(editor.presentation, before, "one undo restores every field");
@@ -240,7 +240,7 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   const editor = session();
   const result = replaceAll(editor, "Acme", "Globex", { slideIndex: 2 });
   assert.equal(result.count, 3);
-  assert.equal(editor.presentation.slides[2].left.text, "Globex left");
+  assert.equal(editor.presentation.slides[2].start.text, "Globex left");
   assert.equal(editor.presentation.slides[0].title, "Acme grows");
   assert.equal(editor.presentation.name, "Acme review");
 }
@@ -250,14 +250,14 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
 {
   const tokens = () => ({
     name: "Acme",
-    design: { footer: { right: { text: "Page {{slide.number}} of {{ deck.slideCount }} · Acme" }, left: { text: "{{organization.name}} number" } } },
+    design: { footer: { end: { text: "Page {{slide.number}} of {{ deck.slideCount }} · Acme" }, start: { text: "{{organization.name}} number" } } },
     organization: { id: "acme", name: "Acme" },
     slides: [{ id: "one", title: "Slide {{slide.number}}: Acme", section: "Acme part", text: [{ text: "see {{slide.section}} and ", bold: true }, "slide.number written \\{{customer}}"] }],
   });
   const editor = createEditorSession(tokens(), { rejectInvalid: true });
   const slidePaths = (query) => findMatches(editor.presentation, query).matches.map((match) => `${match.path}@${match.start}`);
   // "number" appears in the token and in plain text: only the plain text is found.
-  assert.deepEqual(slidePaths("number"), ["design.footer.left.text@22", "slides.0.text@32"], "matches inside tokens are not offered");
+  assert.deepEqual(slidePaths("number"), ["design.footer.start.text@22", "slides.0.text@32"], "matches inside tokens are not offered");
   // Words of the token's name, a match that starts before a token and runs into it, and the token's braces are not matches either.
   assert.deepEqual(slidePaths("deck.slideCount"), []);
   assert.deepEqual(slidePaths("of {{ deck"), []);
@@ -269,8 +269,8 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   const depth = editor.snapshot().undoDepth;
   const result = replaceAll(editor, "number", "no.");
   assert.equal(result.count, 2);
-  assert.equal(editor.presentation.design.footer.left.text, "{{organization.name}} no.");
-  assert.equal(editor.presentation.design.footer.right.text, "Page {{slide.number}} of {{ deck.slideCount }} · Acme");
+  assert.equal(editor.presentation.design.footer.start.text, "{{organization.name}} no.");
+  assert.equal(editor.presentation.design.footer.end.text, "Page {{slide.number}} of {{ deck.slideCount }} · Acme");
   assert.equal(editor.presentation.slides[0].title, "Slide {{slide.number}}: Acme");
   assert.deepEqual(editor.presentation.slides[0].text, [{ text: "see {{slide.section}} and ", bold: true }, "slide.no. written \\{{customer}}"]);
   assert.equal(editor.validation.valid, true);
@@ -280,10 +280,10 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   // "slide" and "Acme" are found around the tokens, never in them; replacing them leaves every token as written.
   replaceAll(editor, "slide", "page");
   assert.equal(editor.presentation.slides[0].title, "page {{slide.number}}: Acme", "only the word outside the token changes");
-  assert.equal(editor.presentation.design.footer.right.text, "Page {{slide.number}} of {{ deck.slideCount }} · Acme");
+  assert.equal(editor.presentation.design.footer.end.text, "Page {{slide.number}} of {{ deck.slideCount }} · Acme");
   assert.equal(replaceAll(editor, "Acme", "Globex").count, 4);
-  assert.equal(editor.presentation.design.footer.left.text, "{{organization.name}} number");
-  assert.equal(editor.presentation.design.footer.right.text, "Page {{slide.number}} of {{ deck.slideCount }} · Globex");
+  assert.equal(editor.presentation.design.footer.start.text, "{{organization.name}} number");
+  assert.equal(editor.presentation.design.footer.end.text, "Page {{slide.number}} of {{ deck.slideCount }} · Globex");
   assert.equal(editor.presentation.slides[0].section, "Globex part");
   // A regular expression is held to the same rule: a pattern that would cut through a token skips it.
   assert.deepEqual(findMatches(editor.presentation, "slide\\.\\w+", { regex: true }).matches, [], "every slide.* left in the document is inside a token");

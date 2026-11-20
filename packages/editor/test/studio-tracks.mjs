@@ -5,8 +5,8 @@ import { drawnTracks, prepareSceneTrackResize } from '../dist/slide-edits.js';
 
 // CE-20: the first resize of a content-sized track starts from what is drawn. A column without weights is stacked at the heights its
 // blocks need, so its rows do not fill it; weights fill the container. Before the fix the first nudge of such a divider jumped from where it
-// was drawn (about 26% of the pair) to the middle (about 48%). `drawnTracks` reads the drawn heights as weights, the last row taking the empty
-// space below, and maps the drawn fraction onto them, so every divider stays where it is drawn and the first nudge moves it one step.
+// was drawn (about 26% of the pair) to the middle (about 48%). `drawnTracks` reads the drawn heights as weights, the first and last rows taking the leading/trailing empty
+// space, and maps the drawn fraction onto them, so every divider stays where it is drawn and the first nudge moves it one step.
 const scene = (deck, index = 0) => slideScene(deck, index, { geometry: composeSlideGeometry(deck, index) });
 const dividers = (container) => container.tracks.slice(0, -1).map((track) => track.start + track.length);
 const stack = { name: 'Stack', slides: [{ id: 's', title: 'A stack', composition: { mode: 'column' }, blocks: [{ id: 'a', text: 'Short line' }, { id: 'b', text: 'Another short line' }, { id: 'c', text: 'Third' }] }] };
@@ -17,21 +17,23 @@ assert.equal(container.mode, 'column');
 const drawn = drawnTracks(before.flowOf(before.slideKey));
 assert.equal(drawn.drawn, true, 'a stacked column is read from its drawn heights');
 assert.ok(drawn.weights.every((weight) => weight > 0 && weight <= 100), `weights core accepts: ${drawn.weights}`);
-assert.ok(drawn.weights.at(-1) > drawn.weights[0], 'the last row takes the empty space');
+assert.ok(drawn.weights[0] > drawn.weights[1] && drawn.weights.at(-1) > drawn.weights[1], 'first and last rows allocate the centered leading/trailing space');
 
-// The divider where it is drawn: nothing moves (the last row grows to fill).
+// The divider where it is drawn: nothing moves (the original source and every accepted text box stay exact).
 const [first, second] = container.tracks;
 const atRest = prepareSceneTrackResize(stack, before, before.slideKey, 0, first.length / (first.length + second.length));
 const rest = scene(atRest.presentation).node(before.slideKey).container;
 dividers(container).forEach((at, index) => assert.ok(Math.abs(dividers(rest)[index] - at) < 0.004, `divider ${index} stays at ${at.toFixed(3)} (now ${dividers(rest)[index].toFixed(3)})`));
 
-// A small nudge moves the first divider a little, not to the middle of the pair.
-const nudged = prepareSceneTrackResize(stack, before, before.slideKey, 0, (first.length / (first.length + second.length)) + 0.1);
-const after = scene(nudged.presentation).node(before.slideKey).container;
-const pair = second.start + second.length - first.start;
-const moved = (dividers(after)[0] - dividers(container)[0]) / pair;
-assert.ok(moved > 0 && moved <= 0.25, `the first nudge moves the divider one step: ${(moved * 100).toFixed(1)}% of the pair`);
-assert.ok(Math.abs(dividers(after)[1] - dividers(container)[1]) < 0.004, 'the other divider stays where it is drawn');
+// The original positive request would steal height from a tight middle row. Keep it as an explicit no-shrink refusal.
+assert.throws(()=>prepareSceneTrackResize(stack,before,before.slideKey,0,(first.length/(first.length+second.length))+.1),error=>error.code==='studio-refused');
+// The opposite nudge consumes leading slack and moves one divider, keeping the other fixed.
+const nudged=prepareSceneTrackResize(stack,before,before.slideKey,0,(first.length/(first.length+second.length))-.1);
+const after=scene(nudged.presentation).node(before.slideKey).container;
+const pair=second.start+second.length-first.start;
+const moved=(dividers(container)[0]-dividers(after)[0])/pair;
+assert.ok(moved>0&&moved<=.25,`the first feasible nudge moves one step: ${(moved*100).toFixed(1)}% of the pair`);
+assert.ok(Math.abs(dividers(after)[1]-dividers(container)[1])<.004,'the other divider stays where it is drawn');
 
 // A container that already has weights, or tracks that fill it, is unchanged by the rule.
 const weighted = { name: 'Row', slides: [{ id: 'r', title: 'A row', composition: { mode: 'row', weights: [2, 1] }, blocks: [{ id: 'x', text: 'Left' }, { id: 'y', text: 'Right' }] }] };

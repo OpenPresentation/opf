@@ -1,0 +1,23 @@
+# Arabic arrangement trailing-space context
+
+SOURCE ONLY product successor, base `14de74b23d71a6274c28919de774dc7b7e1668fd`. New source/tests are UNRUN. The separately reviewed Node22 test interception and CI artifact-capture leaf is independent.
+
+The original final CI LibreOffice job failed before LibreOffice, while the maintained qualification builder exported the unchanged Arabic deck. A single local before-control on root source `311e7d027bbc2b140b7e08d40eb398cb55355ba4`, Node24.21.0, reproduced both preview/default PPTX failures in 0.873s: unprepared Intos/Aptos at `/slides/1/items/0/0`. Source input is unchanged, 1077B SHA-256 `f9ece76f6c2d0c223decf52e6f823371a5865c9444eb3a92def00051031e976d`. All609 compiled files stayed byte-identical before/after. Original CI/local failures are retained.
+
+A pure custom-measurement counterexample reached the actual centered-arrangement trimming call twice. `itemizeScripts` assigns an isolated ASCII space to the Latin slot, while that space in its original Arabic fragment stays in the complex-script slot. Full-fragment minus trimmed-fragment advance works with only the prepared complex-script face; isolated-space measurement refuses. The recording pass uses narrow estimated advances and need not wrap, so it need not request the isolated-space face that real layout subsequently requested. This is a composition request defect, not an invalid language fixture or a LibreOffice rendering result.
+
+The product change replaces only the trailing-space advance with the original-fragment/trimmed-fragment difference using the same style, font size and measurement provider. Displayed text is reused; existing line and fragment min/max clamps stay exact. No loader/eager-role change, font fallback relaxation, fixture rewrite, schema, golden or tolerance change. The core regression uses a complex-script-only context-dependent measurer; integration tests the exact current three-slide input through public SVG/PNG/PPTX conversion against an eager-font oracle, with an unrelated unprepared Latin-face refusal. Both new regressions remain UNRUN until the coherent root build.
+
+Local retained before evidence: `/tmp/opf-arabic-arrangement-before01/receipt.json` SHA-256 `1710eb0302602d9fd3c8215d893c0c01e007cdc1709c0b33d8f9cee1ca66a46b`; pure driver SHA-256 `4d7596bf9022df03b0751c821394a1e24d7e9a71c36eb1fe1a110d52d6397fa8`. No Office/LibreOffice/process queries were made. Current full renderer/golden and browser performance graph implications must be qualified by the root after integration; this note claims no after-result.
+
+## First after-focus and test-only successor
+
+Root source `c1d50ef5cec2e32f94dfe0b0966cf9c3ec3aa51e` built successfully. The actual public three-slide SVG/PNG/PPTX demand/eager regression passed in 1.842s. The core regression refused its test constraint before reaching the measurement assertions: `composition.minFontSize: 40` exceeds the authoritative 32 maximum (`Composition` schema; core `assertComposition`). Original `/tmp/opf-arabic-arrangement-after01/focus.log` is retained.
+
+The test-only successor changes that one minimum to32, retaining its valid40 maximum, nonlinear provider, actual final wrapping requirement,40px fragment and independent120px fragment/line widths, strict missing-Latin assertion and every production byte. No production/integration/fixture/schema/tolerance changes. The corrected core test is UNRUN; root owns the causal replay on its unchanged built runtime.
+
+## Second core-focus failure and arrangement-only fixture
+
+After the valid32 minimum correction, root sole core focus on `0302db76aef6ad953cca90e05f7847ce34f7674c` reached a legitimate plain-title tab-width probe. `fitSourceText.breakLines` measures a space even for text with no tabs; the artificial complex-script-only provider correctly refused, but that assertion was broader than the intended arrangement regression. Original `/tmp/opf-arabic-context-core-focus02/focus.log` is retained. The independent actual integration pass and maintained three-preview/default-PPTX producer pass remain separate valid results.
+
+This test-only successor removes only the title from the **cloned focused fixture**, preserving every actual source byte and the complete integration input. Its arrangement entries use the rich-text path, where the neutral tab probe is guarded by an actual tab; all four unchanged Arabic entries have none. The provider remains strict, with no path/stack exceptions or permissive neutral fallback. Full arrangement, explicit isolated-space refusal,40 cap, actual final wrapping and independent120px fragment/line assertions remain exact. Corrected focus is UNRUN; no production, integration, schema, font, geometry or tolerance changes.

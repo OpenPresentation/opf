@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Qualification: glued diagram connectors",
+  "description": "v0.33 qualification (SH-07, shapes phase 2): Mermaid edges that are straight and have no arrowheads export as native connectors glued to their nodes.",
+  "language": "en-US",
+  "slides": [
+    { "id": "links", "title": "Three teams share one plan", "diagram": "flowchart LR\n  A[Sales] --- B[Planning]\n  B --- C[Finance]" },
+    { "id": "tree", "title": "One owner per region", "diagram": "flowchart TD\n  H[Program lead] --- N[North]\n  H --- S[South]\n  H --- W[West]" }
+  ]
+}

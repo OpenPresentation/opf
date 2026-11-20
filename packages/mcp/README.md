@@ -3,8 +3,12 @@
 The MCP server for OPF (Open Presentation Format). An agent or editor that speaks the [Model Context Protocol](https://modelcontextprotocol.io)
 learns the format and checks decks through it, without shelling out and parsing text: documentation, schemas, the default catalog,
 example decks and the six agent skills as resources, a `start_here` tool that gives a path for a goal, and `validate_deck`,
-`get_schema`, `search_catalog`, `get_catalog_record`, `convert`, `search_docs` and `list_examples` as tools. It keeps no state, reads
-no file, fetches nothing, and needs no API key. Node 22 or later.
+`get_schema`, `search_catalog`, `get_catalog_record`, `search_icons`, `search_shapes`, `convert`, `search_docs` and `list_examples` as tools.
+`show_deck` opens a deck in the OPF viewer, an MCP App with Preview, Source and Both, inside a client that supports MCP Apps (such as
+Claude on the web, on desktop and in the iOS app); the viewer renders, checks and edits the deck on the user's machine and sends the user's edits back to the model. `open_editor` opens the same viewer with a starter deck from no arguments (a direct entry point where the client offers one), and where the client calls tools in a view the model reads and edits the open deck in place (`read_deck`, `select_slide`, `edit_deck`).
+It keeps no state, reads no file but the renderer's fonts, fetches nothing, and needs no API key. Node 22 or later.
+
+Claude Desktop: when the matching [GitHub release](https://github.com/OpenPresentation/opf/releases) lists `opf-<version>.mcpb` and its SHA-256 file, install that bundle. Release-bundle publication is planned from 0.34.0; 0.33.0 has no published bundle asset. `pnpm run build:mcpb` builds it from a checkout; see the docs. Or use the command below.
 
 ```sh
 claude mcp add opf -- npx -y @openpresentation/mcp          # Claude Code
@@ -23,7 +27,7 @@ validators), for a hosted server:
 import { createOpfServer } from "@openpresentation/mcp";           // with the bundled docs, examples, skills and release notes
 import { createOpfMcpServer } from "@openpresentation/mcp/server"; // the same without that data: you pass `sources`
 
-const server = createOpfServer({ version: "0.27.0" });
+const server = createOpfServer({ version: "1.0.0" }); // your hosted server’s version
 await server.connect(transport); // stdio, or Streamable HTTP in a Worker
 ```
 

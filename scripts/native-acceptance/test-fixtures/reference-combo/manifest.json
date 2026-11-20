@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "kind": "ACTUAL_FAILED_REFERENCE_SUITE02_OUTPUT_NOT_NATIVE_ACCEPTANCE",
+  "producer": "054456c9da817fc83b2ddd7b01920865343f38ce",
+  "consumerIdentitySha256": "724c718a2d449b912394f0bf76e828b3e2da72c8f9211881eadc864f2d40e15e",
+  "files": [
+    {
+      "name": "reference-native-axes.pptx",
+      "bytes": 129466,
+      "sha256": "d0878373b71b01930fb92d626faa484d157d9f5064a4d5d144f59f957e8aec82"
+    },
+    {
+      "name": "source.opf.json",
+      "bytes": 3111,
+      "sha256": "ec455bebf5e5460fcaac18d8247a4d22b67d02568914c8936a7a3b1d5eb44db4"
+    }
+  ],
+  "note": "Copied byte-exact from preserved partial02; no exporter/generation or fixture re-authoring. Ordinary imported last-series line default is intentionally elided.",
+  "officeRun": false,
+  "nativeAcceptance": false
+}

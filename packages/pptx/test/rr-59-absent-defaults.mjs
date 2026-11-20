@@ -80,7 +80,7 @@ for (const [label, deck] of Object.entries(decks)) {
 
 // 4. Native edits win: a value changed in PowerPoint imports as observed, with no diagnostic (nothing stated was lost).
 {
-  const deck = decks.content, bytes = await toPptx(deck);
+  const deck = {...decks.content, slides: decks.content.slides.map(slide => ({...slide, subtitle: 'Sub'}))}, bytes = await toPptx(deck);
   const accent = await read(edit(bytes, (name, xml) => name === 'ppt/theme/theme1.xml' ? xml.replace(/(<a:accent1><a:srgbClr val=")[^"]+/, '$100FF00') : xml));
   assert.equal(accent.deck.design.colorScheme.accent1, '#00FF00', 'a changed theme colour imports the observed colour scheme');
   assert.equal(accent.deck.design.dimensions, undefined, 'the unchanged slide size stays absent');

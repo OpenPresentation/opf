@@ -37,7 +37,7 @@ const stripTags = bytes => modify(bytes, entries => {
 });
 
 // 1. "Page {{slide.number}} of {{deck.slideCount}}": a native slide-number field (the Slide Number placeholder) with fixed words around it.
-const paged = {name: 'Paged', design: {fontScheme: 'roboto', footer: {left: {text: 'Confidential'}, center: {text: 'Page {{slide.number}} of {{deck.slideCount}}'}}}, slides: [
+const paged = {name: 'Paged', design: {fontScheme: 'roboto', footer: {start: {text: 'Confidential'}, center: {text: 'Page {{slide.number}} of {{deck.slideCount}}'}}}, slides: [
   {title: 'One', text: 'Body'}, {title: 'Two', text: 'Body'}, {title: 'Three', text: 'Body'}]};
 {
   const {bytes, issues, entries} = await exportDeck(paged);
@@ -60,7 +60,7 @@ const paged = {name: 'Paged', design: {fontScheme: 'roboto', footer: {left: {tex
 
 // 2. A header is ordinary tagged shapes (PowerPoint has no header object), and its slide number is still a live field.
 {
-  const source = {name: 'Header', design: {fontScheme: 'roboto', header: {left: {text: '{{slide.section}}'}, right: {text: 'No. {{slide.number}}'}}}, slides: [
+  const source = {name: 'Header', design: {fontScheme: 'roboto', header: {start: {text: '{{slide.section}}'}, end: {text: 'No. {{slide.number}}'}}}, slides: [
     {title: 'One', section: 'Intro'}, {title: 'Two', section: 'Intro'}, {title: 'Three', section: 'Close'}]};
   const {bytes, entries} = await exportDeck(source);
   const xml = slideXml(entries, 3);
@@ -74,10 +74,11 @@ const paged = {name: 'Paged', design: {fontScheme: 'roboto', footer: {left: {tex
 
 // 3. Body text: every slide token is fixed text with the slide's value; nothing but the footer number is a field.
 {
-  const source = {name: 'Body', design: {fontScheme: 'roboto', footer: {right: {text: '{{slide.number}}'}}}, slides: [
+  const source = {name: 'Body', design: {fontScheme: 'roboto', footer: {end: {text: '{{slide.number}}'}}}, slides: [
     {title: 'Intro slide', section: 'Intro', text: 'Slide {{slide.number}} of {{deck.slideCount}} in {{slide.section}}'},
     {title: 'Slide {{slide.number}}', text: 'The count is {{ deck.slideCount }}.'},
-    {title: 'Escaped', text: 'Write \\{{slide.number}} for the number.'}]};
+    // LH-188: a title of more than four words keeps the slide a content slide, so its sentence stays on one line.
+    {title: 'Escaped tokens in the body text', text: 'Write \\{{slide.number}} for the number.'}]};
   const {entries, issues} = await exportDeck(source);
   assert.deepEqual(issues, []);
   const [first, second, third] = [1, 2, 3].map(index => slideXml(entries, index));
@@ -87,7 +88,7 @@ const paged = {name: 'Paged', design: {fontScheme: 'roboto', footer: {left: {tex
   for (const xml of [first, second, third]) assert.equal(fieldCount(xml), 1, 'Body text is never a field; only the footer number is.');
   assert.deepEqual(furniture(first).map(runs), ['[slidenum:1]']);
   // The footer's own escape draws literally and stays literal through a round trip.
-  const literal = {name: 'Literal', design: {fontScheme: 'roboto', footer: {right: {text: 'Use \\{{slide.number}}'}}}, slides: [{title: 'One'}, {title: 'Two'}]};
+  const literal = {name: 'Literal', design: {fontScheme: 'roboto', footer: {end: {text: 'Use \\{{slide.number}}'}}}, slides: [{title: 'One'}, {title: 'Two'}]};
   const exported = await exportDeck(literal);
   assert.deepEqual(furniture(slideXml(exported.entries, 2)).map(runs), ['Use {{slide.number}}']);
   assert.equal(fieldCount(slideXml(exported.entries, 2)), 0);
@@ -97,7 +98,7 @@ const paged = {name: 'Paged', design: {fontScheme: 'roboto', footer: {left: {tex
 // 4. Pagination: a slide split in two shows consecutive numbers and the final count, in the footer and in the body.
 {
   const long = {title: 'Long list', items: Array.from({length: 80}, (_, index) => `Item ${index + 1} with enough words to take a line of its own on the page`)};
-  const source = {name: 'Long', design: {fontScheme: 'roboto', footer: {left: {text: 'Slide {{slide.number}} of {{deck.slideCount}}'}, right: {text: '{{slide.number}} / {{deck.slideCount}}'}}},
+  const source = {name: 'Long', design: {fontScheme: 'roboto', footer: {start: {text: 'Slide {{slide.number}} of {{deck.slideCount}}'}, end: {text: '{{slide.number}} / {{deck.slideCount}}'}}},
     slides: [{title: 'Cover'}, long, {title: 'End', text: 'Count {{deck.slideCount}}, number {{slide.number}}'}]};
   const split = paginate(source).presentation;
   const count = split.slides.length;
@@ -119,11 +120,11 @@ const paged = {name: 'Paged', design: {fontScheme: 'roboto', footer: {left: {tex
   const {bytes} = await exportDeck(paged);
   const { deck, invalid } = await read(stripTags(bytes));
   assert.deepEqual(invalid, []);
-  assert.deepEqual(deck.design.footer, {left: {text: 'Confidential'}, center: {text: 'Page {{slide.number}} of 3'}}, 'The count is words without provenance; the field is the token.');
+  assert.deepEqual(deck.design.footer, {start: {text: 'Confidential'}, center: {text: 'Page {{slide.number}} of 3'}}, 'The count is words without provenance; the field is the token.');
   // RR-91: a lone zone spans the content width, and an untagged footer's zone is read from its box centre, so the number sits
   // beside a left zone (as in a real footer) to keep its box in the right third.
-  const bare = await exportDeck({name: 'Number and note', design: {fontScheme: 'roboto', footer: {left: {text: 'Note'}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'A'}, {title: 'B'}]});
-  assert.deepEqual((await read(stripTags(bare.bytes))).deck.design.footer, {left: {text: 'Note'}, right: {text: '{{slide.number}}'}});
+  const bare = await exportDeck({name: 'Number and note', design: {fontScheme: 'roboto', footer: {start: {text: 'Note'}, end: {text: '{{slide.number}}'}}}, slides: [{title: 'A'}, {title: 'B'}]});
+  assert.deepEqual((await read(stripTags(bare.bytes))).deck.design.footer, {start: {text: 'Note'}, end: {text: '{{slide.number}}'}});
 }
 
 // 6. Typed words that spell a token are literal, never a live value on the next export.

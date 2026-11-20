@@ -17,6 +17,7 @@
 // Tags are untrusted input: every field is checked before use and the result still validates.
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
+import {currentTags, upgradeTag} from './legacy-tags.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {CAPTION_TAG, FOOTNOTES_TAG, footnotesRuleName} from './annotation-export.js';
 
@@ -33,8 +34,8 @@ const engineKey = key => ENGINE_STYLE.has(key) || key.startsWith('_opf');
 const name = shape => shape?.['p:nvSpPr']?.['p:cNvPr']?.name ?? shape?.['p:nvPicPr']?.['p:cNvPr']?.name ?? shape?.['p:nvGraphicFramePr']?.['p:cNvPr']?.name;
 
 export function attachAnnotationTags(entries, context) {
-  attachTextTags(entries, context.captionTags, CAPTION_TAG, 'opfCaption', 'caption');
-  attachTextTags(entries, context.footnoteTags, FOOTNOTES_TAG, 'opfFootnotes', 'footnotes');
+  attachTextTags(entries, currentTags(context.captionTags), CAPTION_TAG, 'opfCaption', 'caption');
+  attachTextTags(entries, currentTags(context.footnoteTags), FOOTNOTES_TAG, 'opfFootnotes', 'footnotes');
 }
 
 function readTags(shape, relationships, entries) {
@@ -55,7 +56,7 @@ function readRecord(shape, relationships, entries, tagName) {
   if (unreadable || own.length !== 1 || tags.some(tag => /^OPF_/i.test(tag.name ?? '') && String(tag.name).toUpperCase() !== tagName)) return null;
   try {
     if (typeof own[0].val !== 'string' || own[0].val.length > MAX_VALUE_CHARS * 2) return null;
-    const record = decodeTextTag(own[0].val);
+    const record = upgradeTag(decodeTextTag(own[0].val), 'annotation');
     if (!object(record) || record.v !== 1) return null;
     if (record.line !== undefined && (!Number.isSafeInteger(record.line) || record.line < 0 || !Number.isSafeInteger(record.count) || record.count < 1 || record.count > 1000 || record.line >= record.count)) return null;
     if (record.boundary !== undefined && !['hard', 'soft', 'end'].includes(record.boundary)) return null;
@@ -127,11 +128,12 @@ function withoutNumber(value, number) {
  */
 export function importAnnotations({shapes, paragraphs, relationships, entries, slideIndex, readBody, report}) {
   const consumed = new Set(), captionGroups = new Map(), entryGroups = new Map();
+  let detached = [];
   for (const [index, shape] of shapes.entries()) {
     const caption = readRecord(shape, relationships, entries, CAPTION_TAG);
     if (caption !== undefined) {
       consumed.add(shape);
-      if (!caption || caption.role !== 'caption' || typeof caption.path !== 'string' || typeof caption.field !== 'string' || !['below', 'above'].includes(caption.position) || !['left', 'center', 'right'].includes(caption.align) || caption.line === undefined) { report({code: 'invalid-caption-provenance', path: `slides.${slideIndex}`, message: 'A caption tag is unreadable or invalid; its text stays an ordinary text block.'}); consumed.delete(shape); continue; }
+      if (!caption || caption.role !== 'caption' || typeof caption.path !== 'string' || typeof caption.field !== 'string' || !['below', 'above'].includes(caption.position) || !['start', 'center', 'end'].includes(caption.align) || caption.line === undefined) { report({code: 'invalid-caption-provenance', path: `slides.${slideIndex}`, message: 'A caption tag is unreadable or invalid; its text stays an ordinary text block.'}); consumed.delete(shape); continue; }
       const key = caption.path;
       if (!captionGroups.has(key)) captionGroups.set(key, []);
       captionGroups.get(key).push({index, shape, record: caption});
@@ -149,6 +151,8 @@ export function importAnnotations({shapes, paragraphs, relationships, entries, s
         consumed.delete(shape);
         report({code: 'invalid-footnote-provenance', path: `slides.${slideIndex}`, message: 'An edited or incompatible tagged footnote separator stays ordinary native content; its current text is retained.'});
       }
+      // RR-105: the markers of empty runs (annotation-export.js detachedMarkers); an invalid list is ignored (the marker marks the run before it).
+      else if (Array.isArray(footnote.detached) && footnote.detached.length <= 10000 && footnote.detached.every(entry => object(entry) && typeof entry.path === 'string' && entry.path.length <= 512 && Number.isSafeInteger(entry.at) && entry.at >= 0)) detached = footnote.detached;
       continue;
     }
     if (!Number.isSafeInteger(footnote.entry) || !Number.isSafeInteger(footnote.number) || footnote.number < 1 || !['reference', 'footnote'].includes(footnote.kind) || (footnote.kind === 'reference' && typeof footnote.id !== 'string') || footnote.line === undefined) { report({code: 'invalid-footnote-provenance', path: `slides.${slideIndex}`, message: 'A footnote entry tag is invalid; its text stays an ordinary text block.'}); consumed.delete(shape); continue; }
@@ -170,12 +174,12 @@ export function importAnnotations({shapes, paragraphs, relationships, entries, s
     notes.push({number: record.number, kind: record.kind, ...(record.kind === 'reference' ? {id: record.id} : {}), ...(typeof record.url === 'string' ? {url: record.url} : {}), text: withoutNumber(groupText(members, paragraphs, readBody), record.number)});
   }
   notes.sort((a, b) => a.number - b.number);
-  return {consumed, captions, notes};
+  return {consumed, captions, notes, detached};
 }
 
 /** The caption value to write into a block: a string or TextRun[] with the default position and alignment, else the object form. */
 export function captionValue(caption) {
-  return caption.position === 'below' && caption.align === 'left' ? caption.value : {text: caption.value, position: caption.position, align: caption.align};
+  return caption.position === 'below' && caption.align === 'start' ? caption.value : {text: caption.value, position: caption.position, align: caption.align};
 }
 
 // Every run array of a slide payload that may carry markers, with a setter.
@@ -197,7 +201,7 @@ function runArrays(slide) {
   };
   // FA-10: the heading group (tag, title, subtitle) may carry markers when it is TextRun[].
   for (const field of ['tag', 'title', 'subtitle']) if (Array.isArray(slide[field])) found.push({path: field, get: () => slide[field], set: value => { slide[field] = value; }});
-  const keys = Object.keys(slide).filter(key => /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key) && object(slide[key]));
+  const keys = Object.keys(slide).filter(key => /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key) && object(slide[key]));
   if (keys.length) for (const key of keys.sort()) visit(slide[key], key); else visit(slide, '');
   return found;
 }
@@ -209,23 +213,28 @@ const isMarkerRun = run => object(run) && run.superscript === true && typeof run
  * notes. A marker whose numbers do not all resolve, or that starts a run array, is left as it is.
  * Returns the reference notes the slide used.
  */
-export function restoreSlideCitations(slide, notes) {
+export function restoreSlideCitations(slide, notes, detached = []) {
   const byNumber = new Map(notes.map(note => [note.number, note]));
   for (const target of runArrays(slide)) {
     const runs = target.get();
     if (!runs.some(isMarkerRun)) continue;
+    // RR-105: the markers of this array that belong to an empty run (by their place among its markers) become that empty run again.
+    const path = target.path.replace(/^\./, ''), empty = new Set(detached.filter(entry => entry.path === path).map(entry => entry.at));
     const result = [];
+    let ordinal = -1;
     for (const run of runs) {
       const previous = result[result.length - 1];
-      if (!isMarkerRun(run) || previous === undefined || typeof previous === 'object' && previous.superscript) { result.push(run); continue; }
+      if (isMarkerRun(run)) ordinal += 1;
+      const own = isMarkerRun(run) && empty.has(ordinal);
+      if (!isMarkerRun(run) || (!own && (previous === undefined || typeof previous === 'object' && previous.superscript))) { result.push(run); continue; }
       const resolved = run.text.split(',').map(Number).map(number => byNumber.get(number));
       if (resolved.some(note => !note)) { result.push(run); continue; }
-      const marked = typeof previous === 'string' ? {text: previous} : {...previous};
+      const marked = own ? {text: ''} : typeof previous === 'string' ? {text: previous} : {...previous};
       const ids = [...new Set(resolved.filter(note => note.kind === 'reference').map(note => note.id))];
       const footnotes = resolved.filter(note => note.kind === 'footnote');
       if (ids.length) marked.cite = ids.length === 1 ? ids[0] : ids;
       if (footnotes.length) marked.footnote = footnotes[0].text;
-      result[result.length - 1] = marked;
+      if (own) result.push(marked); else result[result.length - 1] = marked;
     }
     target.set(result);
   }
@@ -236,12 +245,12 @@ export function restoreSlideCitations(slide, notes) {
  * `references`: the stored list (document provenance) with the current native text of each note
  * that was edited, plus any cited reference the stored list does not hold, in number order.
  */
-export function restoreCitations(imported, slideNotes, report) {
+export function restoreCitations(imported, slideNotes, report, slideDetached = []) {
   const used = new Map();
   imported.slides.forEach((slide, index) => {
     const notes = slideNotes[index] ?? [];
     if (!notes.length) return;
-    restoreSlideCitations(slide, notes);
+    restoreSlideCitations(slide, notes, slideDetached[index] ?? []);
     for (const note of notes) if (note.kind === 'reference' && !used.has(note.id)) used.set(note.id, note);
   });
   const stored = Array.isArray(imported.references) ? imported.references.filter(object) : [];

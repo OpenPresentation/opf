@@ -12,7 +12,8 @@ const json=value=>Buffer.from(`${JSON.stringify(value,null,2)}\n`);
 export function tableColorDocument(){
   const cases=[
     ['#F8FAFC','#000000','#000000'],['#0F172A','#FFFFFF','#FFFFFF'],
-    ['#777777','#000000','#000000'],['#767676','#FFFFFF','#000000'],
+    // RR-96 chooses the highest-contrast scheme role, not the preferred-white WCAG threshold.
+    ['#777777','#000000','#000000'],['#767676','#000000','#000000'],
     ['#FFFFFF80','#FFFFFF','#000000'],['#F8FAFC','#FFFFFF','#FFFFFF','#FFFFFF'],
   ];
   const slides=[],expected=[];

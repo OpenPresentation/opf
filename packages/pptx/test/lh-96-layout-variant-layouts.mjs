@@ -18,7 +18,7 @@ const deck = (design = {}, extra = {}) => ({
     {layout: 'quote', title: 'In their words', quote: {text: 'We can see where help is needed.', source: 'Pilot lead'}},
     {layout: 'closing', title: 'Agree the start date', text: 'Name the pilot lead.'},
     {layout: 'section', title: 'Own variant', design: {variant: 'light1'}},
-    {layout: 'text', title: 'Content', text: 'A plain slide.'},
+    {layout: 'text', title: 'Content', text: 'A plain slide.', items: ['One', 'Two']},
   ],
 });
 const open = async (document) => {

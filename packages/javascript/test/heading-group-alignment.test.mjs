@@ -11,31 +11,31 @@ const separate = {id: 'separate-subtitle', design: {contentAlignment: 'center'},
 const alignOf = (result, field) => result.items.find(item => item.field === field).alignment;
 
 test('a left title keeps its tag and subtitle left over centred content', () => {
-  const result = composeSlide(slide, {layout: metrics, titleAlignment: 'left'});
+  const result = composeSlide(slide, {layout: metrics, titleAlignment: 'start'});
   assert.deepEqual(['tag', 'title', 'subtitle'].map(field => alignOf(result, field)), ['left', 'left', 'left']);
   assert.equal(alignOf(result, 'metric'), 'center');
 });
 
 test('a centred title brings its subtitle with it, on a template and without a layout', () => {
   for (const layout of [metrics, undefined]) {
-    const result = composeSlide(slide, {layout, titleAlignment: 'center', contentAlignment: 'left'});
+    const result = composeSlide(slide, {layout, titleAlignment: 'center', contentAlignment: 'start'});
     assert.deepEqual(['tag', 'title', 'subtitle'].map(field => alignOf(result, field)), ['center', 'center', 'center']);
   }
 });
 
 test('a layout design.titleAlignment moves the whole heading group', () => {
-  const layout = {...metrics, design: {titleAlignment: 'right', contentAlignment: 'left'}};
+  const layout = {...metrics, design: {titleAlignment: 'end', contentAlignment: 'start'}};
   const result = composeSlide(slide, {layout});
   assert.deepEqual(['tag', 'title', 'subtitle'].map(field => alignOf(result, field)), ['right', 'right', 'right']);
 });
 
 test('a layout with its own subtitle region keeps the subtitle on contentAlignment', () => {
-  const result = composeSlide(slide, {layout: separate, titleAlignment: 'left'});
+  const result = composeSlide(slide, {layout: separate, titleAlignment: 'start'});
   assert.equal(alignOf(result, 'title'), 'left');
   assert.equal(alignOf(result, 'subtitle'), 'center');
 });
 
 test("the slide's own design.contentAlignment keeps the subtitle (and tag) on the content", () => {
-  const result = composeSlide({...slide, design: {contentAlignment: 'right'}}, {layout: metrics, titleAlignment: 'left'});
+  const result = composeSlide({...slide, design: {contentAlignment: 'end'}}, {layout: metrics, titleAlignment: 'start'});
   assert.deepEqual(['tag', 'title', 'subtitle'].map(field => alignOf(result, field)), ['right', 'left', 'right']);
 });

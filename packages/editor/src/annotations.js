@@ -1,5 +1,5 @@
 // Footnotes, citations and captions (RR-34). Headless helpers that edit the core fields as one
-// validated, undoable session change each: `caption` on image, chart, table and video blocks, the
+// validated, undoable session change each: `caption` on image, chart, table, video and diagram blocks, the
 // deck's `references` list, and `cite` / `footnote` on a text, bullet or list item run. Every
 // `prepare*` returns the guarded patches (a test on the edited container plus one replace) and the
 // validated candidate without applying them; the matching verb commits through the session so the
@@ -12,8 +12,8 @@ import { captionSettings, collectCitations, referencesSlide, walkCitationRuns } 
 import { checkFormat } from "./checks.js";
 
 export const CAPTION_POSITIONS = Object.freeze(["below", "above"]);
-export const CAPTION_ALIGNMENTS = Object.freeze(["left", "center", "right"]);
-export const CAPTIONABLE_FIELDS = Object.freeze(["image", "chart", "table", "video"]);
+export const CAPTION_ALIGNMENTS = Object.freeze(["start", "center", "end"]);
+export const CAPTIONABLE_FIELDS = Object.freeze(["image", "chart", "table", "video", "diagram"]);
 // Fields whose runs can carry a marker: the slide heading group (FA-10) plus text, quote text, bullets and items.
 const TEXT_FIELDS = ["title", "subtitle", "tag", "text", "bullets", "items"];
 
@@ -51,7 +51,7 @@ function captionHost(presentation, blockPath) {
   if (!isObject(host)) throw fail("invalid-path", `No block at ${parts.join(".")}.`);
   if (Array.isArray(host.blocks)) throw fail("caption-unsupported", "A group cannot carry a caption; choose one of its blocks.", { path: parts.join(".") });
   const fields = CAPTIONABLE_FIELDS.filter((field) => host[field] !== undefined);
-  if (fields.length !== 1) throw fail("caption-unsupported", fields.length ? "This slide root holds several captionable payloads; put the caption on a block." : "Only an image, chart, table or video payload takes a caption.", { path: parts.join("."), fields });
+  if (fields.length !== 1) throw fail("caption-unsupported", fields.length ? "This slide root holds several captionable payloads; put the caption on a block." : "Only an image, chart, table, video or diagram payload takes a caption.", { path: parts.join("."), fields });
   return { parts, host, field: fields[0] };
 }
 
@@ -71,7 +71,7 @@ export function captionTargets(presentation) {
   };
   (presentation?.slides ?? []).forEach((slide, index) => {
     if (!isObject(slide)) return;
-    const regions = Object.keys(slide).filter((key) => /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key) && isObject(slide[key])).sort();
+    const regions = Object.keys(slide).filter((key) => /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key) && isObject(slide[key])).sort();
     if (regions.length) for (const key of regions) visit(slide[key], `slides.${index}.${key}`);
     else visit(slide, `slides.${index}`);
   });
@@ -96,8 +96,8 @@ export function prepareCaption(presentation, blockPath, caption) {
     const settings = normalizeCaption(caption);
     const objectForm = isObject(caption);
     if (!settings || !isRichText(settings.text) || (objectForm && caption.position !== undefined && !CAPTION_POSITIONS.includes(caption.position)) || (objectForm && caption.align !== undefined && !CAPTION_ALIGNMENTS.includes(caption.align)))
-      throw fail("invalid-caption", "A caption is a string, TextRun[] or { text, position: below|above, align: left|center|right }.");
-    next.caption = settings.position === "below" && settings.align === "left" ? clone(settings.text) : { text: clone(settings.text), position: settings.position, align: settings.align };
+      throw fail("invalid-caption", "A caption is a string, TextRun[] or { text, position: below|above, align: start|center|end }.");
+    next.caption = settings.position === "below" && settings.align === "start" ? clone(settings.text) : { text: clone(settings.text), position: settings.position, align: settings.align };
   }
   return transaction(presentation, parts, next, { action: "caption", field });
 }

@@ -37,6 +37,16 @@ try{
  fragment("changed","Removed `@openpresentation/opf/node` and `@openpresentation/opf/node/engine`.");
  const named=run(process.execPath,["scripts/check-breaking-changes.mjs"]);
  assert.equal(named.status,0,named.stdout+named.stderr);assert.match(named.stdout,/"acknowledgedBy": "changelog-fragment"/);
+ // SH-02: a schema removal is acknowledged the same way, by a pending `changed` fragment naming it as <schema file>:<JSON path>.
+ write("spec/schemas/example.schema.json",{properties:{},$defs:{Kept:{}}});git("add",".");git("commit","-qm","Schema parts");git("tag","opf-v0.2.1");writeFileSync(path.join(root,"README.md"),"after the schema tag\n");git("add",".");git("commit","-qm","After the schema tag");
+ write("spec/schemas/example.schema.json",{properties:{mode:{type:"string"}},$defs:{}});
+ const schemaGone=run(process.execPath,["scripts/check-breaking-changes.mjs"]);
+ assert.equal(schemaGone.status,1,schemaGone.stdout+schemaGone.stderr);assert.match(schemaGone.stderr,/example\.schema\.json:\$defs\.Kept/);
+ fragment("changed","Removed `@openpresentation/opf/node` and `@openpresentation/opf/node/engine`; schema: `example.schema.json:$defs.Kept`.");
+ const schemaNamed=run(process.execPath,["scripts/check-breaking-changes.mjs"]);
+ assert.equal(schemaNamed.status,0,schemaNamed.stdout+schemaNamed.stderr);assert.match(schemaNamed.stdout,/"removedSchema": \[\s*"example\.schema\.json:\$defs\.Kept"/);
+ fragment("changed","Removed `@openpresentation/opf/node` and `@openpresentation/opf/node/engine`; schema: `example.schema.json:$defs.KeptAndMore`.");
+ assert.equal(run(process.execPath,["scripts/check-breaking-changes.mjs"]).status,1,"a longer name does not acknowledge a removal");
  rmSync(path.join(root,"changes"),{recursive:true});manifest("0.3.0",{".":{}});
  const bumped=run(process.execPath,["scripts/check-breaking-changes.mjs"]);assert.equal(bumped.status,0,bumped.stdout+bumped.stderr);
  // RR-78: a record that moved from spec/catalogs to packages/gallery/catalog is not removed; one that is gone is.

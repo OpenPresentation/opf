@@ -12,7 +12,7 @@ import { OPFApiError } from "../api-errors.js";
 export const RENDER_PACKAGE = "@openpresentation/opf-render";
 export const PPTX_PACKAGE = "@openpresentation/opf-pptx";
 /** Peer ranges. The CLI checks the features it calls rather than the version, so a newer release in range keeps working. */
-export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.31.0", [PPTX_PACKAGE]: "^0.31.0" } as const;
+export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.34.1", [PPTX_PACKAGE]: "^0.34.1" } as const;
 
 /** The first opf-pptx that reads `bodyText` and `slideNumberFields`. An older one would ignore them silently. */
 export const PPTX_TEXT_OPTIONS_FROM = "0.22.0";
@@ -57,6 +57,8 @@ export interface RenderFonts {
 	loadSystemFonts?: boolean;
 }
 export interface FontRegistry {
+	/** Private demand-loader metadata capability; role names require no font bytes. */
+	fontNames?: object;
 	scriptSelection?: { detected: string[]; scripts: string[]; unavailable: string[]; packages?: string[]; notInstalled?: string[]; uncovered?: string[] };
 }
 /** The handle `loadFonts()` of opf-render `/fonts-node` returns: pass it as `{ fonts }` to every deck-level call. */
@@ -67,10 +69,15 @@ export interface FontsHandle extends RenderFonts {
 	useBundledFonts: false;
 	loadSystemFonts: false;
 	registry: FontRegistry;
-	substitutions: { requestedFamily: string; resolvedFamily: string; compatibility: string; substitute: boolean }[];
+	/** Present on current handles; prepare newly used faces after document edits or pagination. */
+	ensure?(presentation: unknown, options?: Record<string, unknown>): Promise<unknown>;
+	/** `licenseClass` is the requested family's row in the font policy (`proprietary-standard`, `open`), when it has one. */
+	substitutions: { requestedFamily: string; resolvedFamily: string; compatibility: string; substitute: boolean; licenseClass?: string }[];
 }
 /** The engines of opf-render 0.18 (RR-73). Slides count from 1; a number gives one SVG, a selection a list. */
 export interface RenderModule {
+	/** Optional on older renderers; recognize only their actual structured validation exception. */
+	OPFRenderError?: new (code: string, message: string, details?: Record<string, unknown>) => Error & { code: string; details: Record<string, unknown> };
 	/** One slide of the deck as SVG; slides count from 1. */
 	toSvg(presentation: unknown, slide: number, options?: Record<string, unknown>): string;
 	/** One SVG slide as PNG. */
@@ -101,7 +108,7 @@ export interface Peer<T> {
  * installs only the ones its outputs use. The versions are the ones the renderer is tested with (its `peerDependencies`).
  */
 export const RENDER_EXTRAS = {
-	/** The faces of the office pack, which the CLI and `convert` always load (every format). */
+	/** The font packages of the base and office packs. A deck needs only the ones its faces use (opf-render loads faces on demand); `opf doctor <deck>` names them. */
 	fonts: ["@expo-google-fonts/roboto@0.4.3", "@expo-google-fonts/roboto-mono@0.4.2", "@expo-google-fonts/caladea@0.4.2", "@expo-google-fonts/arimo@0.4.3", "@expo-google-fonts/tinos@0.4.2", "@expo-google-fonts/cousine@0.4.3", "@expo-google-fonts/gelasio@0.4.1", "@expo-google-fonts/noto-sans@0.4.2"],
 	/** PNG output (and raster fallbacks): the SVG rasterizer, and sharp for WebP and rotated JPEG pictures. */
 	png: ["@resvg/resvg-js@^2.6.2", "sharp@^0.35.5"],
@@ -125,8 +132,9 @@ const hint = (name: string) =>
 	(name === RENDER_PACKAGE ? `\n${renderHint()}` : "");
 
 function bases(): string[] {
-	// Resolution starts at core's own file, then at the working directory.
-	return [import.meta.url, pathToFileURL(path.join(process.cwd(), "noop.js")).href];
+	// Resolution starts at core's own file, then at the working directory. A CommonJS bundle of core has no import.meta.url (RR-63).
+	const here: unknown = import.meta.url;
+	return [...(typeof here === "string" ? [here] : []), pathToFileURL(path.join(process.cwd(), "noop.js")).href];
 }
 
 function locate(specifier: string): string | undefined {
@@ -225,7 +233,7 @@ export function missingPeerFrom(error: unknown): OPFApiError | undefined {
 		const details = current.details ?? {};
 		const fontPackages = current.code === "font-resource-unavailable" && (Array.isArray(details.packages) || typeof details.package === "string");
 		if (current.code !== "converter-missing" && !fontPackages) continue;
-		const kept = Object.fromEntries(["package", "packages", "range", "install", "purpose"].filter((key) => details[key] !== undefined).map((key) => [key, details[key]]));
+		const kept = Object.fromEntries(["package", "packages", "faces", "range", "install", "purpose"].filter((key) => details[key] !== undefined).map((key) => [key, details[key]]));
 		return new OPFApiError(current.message ?? String(current.code), details.installed === true ? "peer-load-failed" : "peer-not-installed", { details: kept, cause: error });
 	}
 	return undefined;

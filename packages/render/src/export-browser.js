@@ -36,7 +36,7 @@ async function svgPng(svg, options = {}) {
   const width = Math.max(1, Math.round(size.width * scale)), height = Math.max(1, Math.round(size.height * scale));
   if (width * height > MAX_PIXELS) throw new OPFRenderError("png-render-failed", `The PNG would be ${width} by ${height} pixels; the limit is ${MAX_PIXELS / 1e6} megapixels.`, { width, height });
   options.signal?.throwIfAborted?.();
-  const image = await loadSvgImage(text, options.signal);
+  const image = await loadSvgImage(text, options.signal, options.svgSource);
   const { canvas, context } = createCanvas(width, height);
   const background = options.background ?? "#FFFFFF";
   if (background && background !== "transparent" && background !== "none") { context.fillStyle = background; context.fillRect(0, 0, width, height); }
@@ -83,7 +83,7 @@ export async function toPdf(source, slides, options) {
     producer: packageName,
     ErrorClass: OPFRenderError,
     // The element's own text has no fonts in a standalone SVG image: give it the faces the slides embed.
-    rasterize: async (svg, factor) => ({ png: await svgPng(fontCss && /<text[\s>]/.test(svg) ? svg.replace(/(<svg\b[^>]*>)/, `$1<style>${fontCss}</style>`) : svg, { scale: factor, background: "transparent", signal: options.signal }) }),
+    rasterize: async (svg, factor) => ({ png: await svgPng(fontCss && /<text[\s>]/.test(svg) ? svg.replace(/(<svg\b[^>]*>)/, `$1<style>${fontCss}</style>`) : svg, { scale: factor, background: "transparent", signal: options.signal, svgSource: options.svgSource }) }),
   });
 }
 
@@ -96,7 +96,7 @@ async function rasterPdf(inputs, options) {
   for (const [index, svg] of inputs.entries()) {
     options.signal?.throwIfAborted?.();
     const size = pageSize(svg);
-    const png = await svgPng(svg, { scale, background: options.background ?? "#FFFFFF", signal: options.signal });
+    const png = await svgPng(svg, { scale, background: options.background ?? "#FFFFFF", signal: options.signal, svgSource: options.svgSource });
     const image = await pdf.embedPng(png);
     pdf.addPage([size.width, size.height]).drawImage(image, { x: 0, y: 0, width: size.width, height: size.height });
     options.onProgress?.({ page: index + 1, pages: inputs.length });
@@ -132,9 +132,12 @@ async function canvasPng(canvas) {
   return new Uint8Array(await blob.arrayBuffer());
 }
 
-async function loadSvgImage(text, signal) {
-  const url = URL.createObjectURL(new Blob([text], { type: "image/svg+xml;charset=utf-8" }));
-  try {
+// The SVG reaches the browser's image decoder by URL: a blob: URL by default, or a data: URL (`svgSource: "data"`) for a page whose
+// Content-Security-Policy allows data: images but not blob: ones (the sandbox of an MCP App). A blob: URL that does not load is tried
+// again as data:, so a page that did not say still gets its picture.
+async function loadSvgImage(text, signal, source = "blob") {
+  if (source !== "blob" && source !== "data") throw new OPFRenderError("invalid-conversion-option", 'svgSource must be "blob" or "data".', { option: "svgSource", value: source });
+  const load = async (url) => {
     const image = new Image();
     image.decoding = "sync";
     const loaded = new Promise((resolve, reject) => {
@@ -147,6 +150,15 @@ async function loadSvgImage(text, signal) {
     // Fonts the SVG embeds as data: faces load with the image; decode() settles the picture before the first draw.
     try { await image.decode(); } catch { /* drawn below as the browser has it */ }
     return image;
+  };
+  const asData = () => load(`data:image/svg+xml;charset=utf-8,${encodeURIComponent(text)}`);
+  if (source === "data") return asData();
+  const url = URL.createObjectURL(new Blob([text], { type: "image/svg+xml;charset=utf-8" }));
+  try {
+    return await load(url);
+  } catch (error) {
+    if (signal?.aborted) throw error;
+    return asData();
   } finally {
     // The decoded image keeps its own copy; the URL is no longer needed once loaded.
     setTimeout(() => URL.revokeObjectURL(url), 0);

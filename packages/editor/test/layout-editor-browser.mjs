@@ -11,11 +11,13 @@ import axe from 'axe-core';
 const root = fileURLToPath(new URL('../artifacts/playground/', import.meta.url));
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.wasm': 'application/wasm' };
 const server = createServer(async (req, res) => {
+  if (req.url === '/favicon.ico') { res.writeHead(204).end(); return; }
   try {
     const target = path.resolve(root, '.' + decodeURIComponent(new URL(req.url, 'http://localhost').pathname));
     const relative = path.relative(root, target);
     if (relative.startsWith('..') || path.isAbsolute(relative)) { res.writeHead(403).end(); return; }
-    res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(await readFile(target));
+    const body = await readFile(target);
+    res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(body);
   } catch { res.writeHead(404).end(); }
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));

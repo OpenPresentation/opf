@@ -116,10 +116,10 @@ function shaperOver(instance, state) {
           const carrier = carriers.get(glyph.cluster);
           if (!carrier || (carrier.advance === 0 && glyph.advance !== 0)) carriers.set(glyph.cluster, glyph);
         }
-        for (const glyph of glyphs) {
-          if (carriers.get(glyph.cluster) !== glyph) { glyph.codePoints = []; continue; }
-          const end = starts[starts.indexOf(glyph.cluster) + 1] ?? units;
-          glyph.codePoints = [...text.slice(glyph.cluster, end)].map((character) => character.codePointAt(0));
+        for (const glyph of glyphs) glyph.codePoints = [];
+        for (let index = 0; index < starts.length; index++) {
+          const start = starts[index], end = starts[index + 1] ?? units;
+          carriers.get(start).codePoints = [...text.slice(start, end)].map((character) => character.codePointAt(0));
         }
         return glyphs.map(({ gid, codePoints, advance, xOffset, yOffset }) => ({ gid, codePoints, advance, xOffset, yOffset }));
       } finally {

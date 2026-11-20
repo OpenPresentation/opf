@@ -20,9 +20,16 @@ export function applySourceEdits(text, edits) {
   return next;
 }
 
-/** The node at `segments`: `{ node, parent }` or null. */
+/** The parse tree of `text`, or null when it is empty or does not parse: a fix is written only for text that has the finding's place. */
+function treeOf(text) {
+  if (typeof text !== "string" || text.trim() === "") return null;
+  const errors = [];
+  const root = parseTree(text, errors, { allowTrailingComma: true });
+  return root && errors.length === 0 ? root : null;
+}
+/** The node at `segments`: `{ root, node }` or null (the text is empty, does not parse, or has no such place). */
 function nodeAt(text, segments) {
-  const root = parseTree(text, [], { allowTrailingComma: true });
+  const root = treeOf(text);
   if (!root) return null;
   const node = findNodeAtLocation(root, toPath(segments));
   return node ? { root, node } : null;
@@ -47,22 +54,28 @@ export function renameKey(text, segments, name) {
   if (!found) return null;
   return [{ from: found.key.offset, to: found.key.offset + found.key.length, insert: JSON.stringify(name) }];
 }
+/** jsonc-parser's `modify`, or null where it throws (a parent that is not an object or a list). */
+function modifyAt(text, path, value, options) {
+  try { return modify(text, path, value, options); } catch { return null; }
+}
 /** Remove the property (or list item) at `segments`, with the comma that belonged to it. */
 export function removeAt(text, segments, unit = "  ") {
-  const edits = modify(text, toPath(segments), undefined, { formattingOptions: formatting(unit, text) });
-  return edits.length ? asEdits(edits) : null;
+  if (segments.length === 0 || !nodeAt(text, segments)) return null;
+  const edits = modifyAt(text, toPath(segments), undefined, { formattingOptions: formatting(unit, text) });
+  return edits?.length ? asEdits(edits) : null;
 }
 /** Add `key: value` to the object at `segments`, after its last property. */
 export function addProperty(text, segments, key, value, unit = "  ") {
-  const edits = modify(text, [...toPath(segments), key], value, { formattingOptions: formatting(unit, text) });
-  return edits.length ? asEdits(edits) : null;
+  if (nodeAt(text, segments)?.node.type !== "object") return null;
+  const edits = modifyAt(text, [...toPath(segments), key], value, { formattingOptions: formatting(unit, text) });
+  return edits?.length ? asEdits(edits) : null;
 }
 /** Add `value` at the end of the list at `segments`. */
 export function addItem(text, segments, value, unit = "  ") {
   const found = nodeAt(text, segments);
-  const length = found?.node.type === "array" ? (found.node.children?.length ?? 0) : 0;
-  const edits = modify(text, [...toPath(segments), length], value, { formattingOptions: formatting(unit, text), isArrayInsertion: true });
-  return edits.length ? asEdits(edits) : null;
+  if (found?.node.type !== "array") return null;
+  const edits = modifyAt(text, [...toPath(segments), found.node.children?.length ?? 0], value, { formattingOptions: formatting(unit, text), isArrayInsertion: true });
+  return edits?.length ? asEdits(edits) : null;
 }
 /** Wrap the value at `segments` in a one-item list. */
 export function wrapInList(text, segments) {
@@ -88,13 +101,18 @@ export function moveIntoExtensions(text, segments, unit = "  ") {
   let value;
   try { value = JSON.parse(text.slice(found.node.offset, found.node.offset + found.node.length)); } catch { return null; }
   const options = { formattingOptions: formatting(unit, text) };
-  const removed = applySourceEdits(text, asEdits(modify(text, toPath(segments), undefined, options)));
-  const added = applySourceEdits(removed, asEdits(modify(removed, [...toPath(parent), "extensions", name], value, options)));
+  const removing = modifyAt(text, toPath(segments), undefined, options);
+  if (!removing) return null;
+  const removed = applySourceEdits(text, asEdits(removing));
+  const adding = modifyAt(removed, [...toPath(parent), "extensions", name], value, options);
+  if (!adding) return null;
+  const added = applySourceEdits(removed, asEdits(adding));
   return added === text ? null : diffEdit(text, added);
 }
 
 /**
- * The quick fixes of a schema or reference finding in a JSON text that parses. `context` is the one source-messages.js takes plus
+ * The quick fixes of a schema or reference finding in a JSON text that parses. Never throws: a finding whose place the text does not
+ * have (the text of another document, an empty or broken one) gets no fix. `context` is the one source-messages.js takes plus
  * `{ unit, starter(segments, property) }` (the value `Add` inserts).
  */
 export function fixesForFinding(finding, text, context = {}) {

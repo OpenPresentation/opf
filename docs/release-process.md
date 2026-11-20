@@ -1,5 +1,7 @@
 # OPF Release Process
 
+For the four-repository event/gate/target matrix and current agent deployment authority, see [CI/CD contract](ci-cd.md). Package publication still uses only the Release and tag-triggered trusted-publisher workflows described here.
+
 Use Node 24 (`24.x`) for all future source, candidate and registry verification.
 The packages declare the open-ended `engines.node` `>=22` (RR-20, tested on Node 22, 24 and 26 by the `node-range`
 CI legs, which run in the nightly workflow, before every release and on pull requests labelled `full-ci`); a closed range such as `24.x` makes npm on any other Node silently install an older release, and
@@ -15,8 +17,7 @@ trusted-publisher entry of `docs/programs/monorepo/owner-steps.md`, O1b). They a
 
 ## Release: one click
 
-> Status: the workflows and `scripts/release.mjs` are in place and rehearsed with dry runs. The first real release through them
-> is the canary `0.26.0-rc.0` (MR-41), then 0.26.0 (MR-44). Releases up to 0.25.x were made from the four old repositories with
+> Historical cutover: this workflow lane was introduced for the canary `0.26.0-rc.0` (MR-41), then 0.26.0 (MR-44). Releases up to 0.25.x were made from the four old repositories with
 > a per-package train; that process is retired and not described here.
 
 **One version, one tag, one workflow.** All seven packages carry the same version (`pnpm check:versions`); a release is the tag
@@ -30,12 +31,11 @@ Actions, **Release**, **Run workflow** on `main`:
 
 | Input | Meaning |
 | --- | --- |
-| `version` | `X.Y.Z`, `X.Y.Z-rc.N`, or `patch` / `minor` of the shared line (the highest `latest` of core, CLI, render, PPTX and editor) |
+| `version` | `X.Y.Z`, `X.Y.Z-rc.N`, or `patch` / `minor` of the shared line (the highest `latest` of core, CLI, render, PPTX, editor and MCP) |
 | `dry-run` | Default **true**: rehearse everything up to `npm publish --dry-run`; nothing is committed, tagged or published. Set false for the real release |
 | `skip-gate` | A dry run only: skip the slow gate |
 
-Run it with `dry-run` true first when the change touches the release machinery; a real release of ordinary changes needs no
-rehearsal. The jobs:
+Run it with `dry-run` true first. After the rehearsal succeeds, run the same version on `main` with `dry-run` false for the real release. The jobs:
 
 1. **plan**: a real release runs on `main`, and the check `verify` is green for its head (one API call, no waiting).
 2. **gate** (parallel with prepare): `nightly.yml` called on that commit: Windows, macOS, Node 22 and 26, the packed-install,
@@ -51,12 +51,18 @@ rehearsal. The jobs:
    `npm-publish.yml` (a tag pushed with `GITHUB_TOKEN` would not).
 5. **npm-publish.yml** on the tag: `plan` (the tag is on `main`), `build` (one install and build, `pnpm pack` of the seven,
    `scripts/stamp-githead.mjs` adds `gitHead` to each tarball because `pnpm pack` omits it, a smoke test installs the seven
-   tarballs together, renders the quickstart deck and runs the CLI), `publish` (the only job with `id-token: write`; the
+   tarballs together, renders the quickstart deck and runs the CLI), `mcpb` (beside `build`, in its own runner: builds and checks
+   the full Claude Desktop MCP bundle with all script fonts and retains it with its SHA-256; nothing on the publication path
+   needs it), `publish` (the only job with `id-token: write`; the
    pre-publish gate, then `npm publish <tarball> --access public --provenance --tag <tag>` seven times, printing npm's own output; a version already on npm is
    skipped. Once npm accepted an upload the package is published: if the registry does not serve it yet it is logged as
-   **pending**, which is not a failure, and the job goes on), `verify` (below: it first waits for the registry), `release` (the GitHub release, notes grouped by package) and `report` (a failure opens the issue
-   "Release vX.Y.Z failed", labeled `release-failed`).
-6. **follow the publish run** (the Release run waits for it, so it is green only when the whole release is).
+   **pending**, which is not a failure, and the job goes on), `verify` (below: it first waits for the registry), `release` (the GitHub release, notes grouped by package), `assets` (after
+   `mcpb` and `release`: attaches the checked versioned `.mcpb` and its `.sha256` file to that release) and `report` (a failed
+   publication opens the issue "Release vX.Y.Z failed", labeled `release-failed`; missing bundle assets open a separate issue,
+   labeled `release-assets-missing`, because the packages are live).
+6. **follow the publish run** (the Release run waits for it and judges its publication jobs with
+   `scripts/release-publish-run.mjs`: it is green when the seven packages are published and verified and the GitHub release
+   exists; missing bundle assets are a warning there and do not hold back the site bumps).
 
 Time target: about 20 minutes from the click to seven verified packages (measured in MR-44).
 
@@ -125,6 +131,27 @@ npm view @openpresentation/opf@X.Y.Z gitHead dist.attestations.url
 npm view @openpresentation/gallery dist-tags --json           # latest is X.Y.Z; 5.0.0 stays published
 ```
 
+### Claude Desktop release assets
+
+The `mcpb` job of `npm-publish.yml` runs `pnpm --filter @openpresentation/mcp run build:mcpb --check` in its own runner (its
+own checkout, install and build) and retains only `opf-X.Y.Z.mcpb` and `opf-X.Y.Z.mcpb.sha256` as the `mcpb` workflow
+artifact. This is the full bundle, including all pinned script fonts. Its `npm install` resolves the bundle's third-party
+dependencies and font packages from the registry without a lockfile, with `--ignore-scripts`, and never in the runner that
+packs the published tarballs; a registry problem or a slow download fails this job only, because `publish` and `verify` do not
+need it. The zip entries carry a fixed time, so the same files give the same bytes. A rehearsal builds and checks the bundle
+too, without creating a release or uploading public assets.
+
+The order on a real release: `release` creates the GitHub release with its notes first, exactly as it does without a bundle;
+then the `assets` job downloads the checked artifact and attaches the two files. If `mcpb` or `assets` fails, the packages and
+the release notes are already live: the publish run shows the red job, `report` opens or updates the `release-assets-missing`
+issue (not `release-failed`), and the Release run reports "assets missing" as a warning and still bumps the sites. To recover,
+re-run the failed job of the publish run (Re-run failed jobs, or `gh run rerun <run-id> --failed`); it only attaches the missing
+files. Reruns preserve release notes and existing assets. They verify an existing bundle/checksum pair, add a missing checksum
+from the already uploaded bundle's bytes, or add a missing bundle only if its bytes match the existing checksum. A mismatch fails
+instead of replacing a public asset. Retry through the existing trusted workflow; never repair a release with `--clobber`. The
+`mcpb` artifact is kept for 14 days: re-run a failed `assets` job within that time (if `mcpb` itself failed, its re-run builds
+a new artifact).
+
 ### `scripts/release.mjs`
 
 | Command | Does |
@@ -133,8 +160,8 @@ npm view @openpresentation/gallery dist-tags --json           # latest is X.Y.Z;
 | `pack <version> --commit <sha> --out <dir>` | `pnpm pack` of the seven, `gitHead` stamped, `release-manifest.json` with digests |
 | `smoke <version> (--dir <dir> \| --registry)` | install the seven together, render, resolve, run the CLI |
 | `check-publish <version> [--tag t]` | the pre-publish gate |
-| `publish <version> --dir <dir> [--tag t] [--dry-run] [--wait minutes] [--poll seconds] [--expect-staged]` | the gate, then `npm publish` in dependency order: npm's output is printed; after all six uploads each package gets one registry look (`--wait`, default 0, polls longer) and one not served yet is logged **pending**, never a failure; a staged result fails unless `--expect-staged` |
-| `await-registry <version> [--wait minutes] [--poll seconds] [--max-poll seconds]` | waits (default 60 min, backoff 15 s to 120 s, cache-busting) until the registry serves all six; fails only when the budget is spent |
+| `publish <version> --dir <dir> [--tag t] [--dry-run] [--wait minutes] [--poll seconds] [--expect-staged]` | the gate, then `npm publish` in dependency order: npm's output is printed; after all seven uploads each package gets one registry look (`--wait`, default 0, polls longer) and one not served yet is logged **pending**, never a failure; a staged result fails unless `--expect-staged` |
+| `await-registry <version> [--wait minutes] [--poll seconds] [--max-poll seconds]` | waits (default 60 min, backoff 15 s to 120 s, cache-busting) until the registry serves all seven; fails only when the budget is spent |
 | `verify <version> [--tag t] [--commit sha] [--wait minutes]` | the registry and provenance check (a prerelease has no changelog section to check) |
 | `notes <version> [--out file]` | the GitHub release body |
 | `order` | the publish order |

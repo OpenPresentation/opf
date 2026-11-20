@@ -48,13 +48,13 @@ export function listBlockContainers(presentation,{slideIndex,includeImplicit=fal
     if(includeImplicit&&!Array.isArray(slide.blocks)&&!Object.keys(slide).some(isRegion))result.push({path:opfPathToJsonPointer(path),label,count:contentFields.filter(key=>Object.hasOwn(slide,key)).length,implicit:true});
     visit(slide,path,label);
     if(includeImplicit)for(const [key,value] of Object.entries(slide))if(isRegion(key)&&value&&typeof value==='object'&&!Array.isArray(value.blocks))result.push({path:opfPathToJsonPointer([...path,key]),label:`${label} › ${key}`,count:1,implicit:true});
-    for(const [key,value] of Object.entries(slide))if(key.split(/[+:]/).every(part=>['top','middle','bottom','left','center','right'].includes(part))&&value&&typeof value==='object'&&!Array.isArray(value)&&Array.isArray(value.blocks))visit(value,[...path,key],`${label} › ${key}`);
+    for(const [key,value] of Object.entries(slide))if(key.split(/[+:]/).every(part=>['top','middle','bottom','start','center','end'].includes(part))&&value&&typeof value==='object'&&!Array.isArray(value)&&Array.isArray(value.blocks))visit(value,[...path,key],`${label} › ${key}`);
   });
   return result;
 }
 
 const contentFields=['text','items','bullets','image','video','chart','table','code','diagram','metric','quote','timeline'];
-const isRegion=key=>/^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:left|center|right)(?:\+(?:left|center|right))*)?|(?:left|center|right)(?:\+(?:left|center|right))*)$/.test(key);
+const isRegion=key=>/^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/.test(key);
 function preparedChange(presentation,container,next,path) {
   const pointer=opfPathToJsonPointer(container);
   const patches=[{op:'test',path:pointer,value:structuredClone(getValueAtPath(presentation,container))},
@@ -141,7 +141,7 @@ export function prepareBlockRemove(presentation,path) {
 }
 
 /** Small, schema-valid starting points. Media requires an explicit source. */
-export function createContentBlock(kind,{source}={}) {
+export function createContentBlock(kind,{source,shape}={}) {
   const presets={
     text:{text:'Add your text'},
     list:{items:['First point','Second point']},
@@ -154,6 +154,8 @@ export function createContentBlock(kind,{source}={}) {
     timeline:{timeline:[{when:'Now',what:'First milestone'},{when:'Next',what:'Second milestone'}]},
     group:{composition:{mode:'column'},blocks:[{text:'First point'},{text:'Second point'}]}
   };
+  // SH-06: a shape block with the preset chosen (a rectangle without one); text and styling are set afterwards.
+  if(kind==='shape')return {shape:typeof shape==='string'&&shape?shape:'rect'};
   if(kind==='image'||kind==='video'){
     if(typeof source!=='string'||!source.trim())throw new TypeError('Choose a media file or enter its source.');
     return {[kind]:source};

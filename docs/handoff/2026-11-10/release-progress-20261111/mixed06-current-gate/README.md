@@ -1,0 +1,5 @@
+# Mixed-source current gate completed
+
+Exact clean source0ad95dc11 incorporates reviewed c075 mixed-source native fragments, the maintained generated schema-reference refresh, and two causal Markdown expectations. The four-step root aggregate completes exit0: build5.661s; meaningful public/pure fragment focus18/18PASS1.730s, zero skips; full Markdown192cases PASS75.330s (including original performance budgets); maintained check:changed againstac837 PASS976.703s. That final gate runs all313PPTX contract scripts and147editor scripts plus the node:test file. It does not claim the separate long-text hypothesis or cache/memory diagnostics are tested, nor any native cure for c075.
+
+Exact original receipts/stdout/stderr and selected-step logs are retained losslessly. Prior generated-doc and two Markdown failures remain in their original packets. The exact source18focused checks cover original-source pins, one/two authored identities, SVG origins, full native properties, arbitrary-length current edits and damaged/foreign/duplicate/deleted/native-boundary ownership refusals. New genuine consumer and actual06 native qualification remain owed.

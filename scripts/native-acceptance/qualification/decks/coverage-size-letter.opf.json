@@ -1,0 +1,60 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: slide size letter",
+  "description": "RR-105 format coverage: one dimension preset per deck (a deck has one size), with a text slide, a chart and a list to check the layout at that shape.",
+  "language": "en-US",
+  "design": {
+    "dimensions": {
+      "preset": "letter"
+    },
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "title": "A US Letter page",
+      "subtitle": "Harbor operations, autumn 2026"
+    },
+    {
+      "id": "chart",
+      "title": "Volume rose every quarter",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Containers"
+          ],
+          "rows": [
+            [
+              "Q1",
+              210
+            ],
+            [
+              "Q2",
+              236
+            ],
+            [
+              "Q3",
+              251
+            ],
+            [
+              "Q4",
+              274
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "list",
+      "title": "Three changes made the difference",
+      "items": [
+        "Two new cranes at the north berth",
+        "Night shifts on weekends",
+        "One booking system for every carrier"
+      ]
+    }
+  ]
+}

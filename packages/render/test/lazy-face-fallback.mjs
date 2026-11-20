@@ -22,12 +22,22 @@ const deck = ({title, text = title, scheme, language, slides}) => ({
   $schema: 'https://openpresentation.org/schema/opf/v1', name: 'lazy face fallback', ...(language ? {language} : {}),
   ...(scheme ? {design: {fontScheme: scheme}} : {}), slides: slides ?? [{id: 'a', title, text}],
 });
-/** [family, text] for every drawn run; a run without its own font-family inherits its text element's. */
+/** Every drawn run retains its own or inherited SVG family, weight and slope. */
+const attribute = (attributes, name) => new RegExp(`\\s${name}="([^"]*)"`).exec(attributes)?.[1];
+const runStyle = (attributes, inherited = {fontWeight: 400, italic: false}) => {
+  const weight = attribute(attributes, 'font-weight'), slope = attribute(attributes, 'font-style');
+  const fontWeight = weight === undefined ? inherited.fontWeight : weight === 'normal' ? 400 : weight === 'bold' ? 700 : Number(weight);
+  assert.ok(Number.isFinite(fontWeight) && fontWeight >= 1 && fontWeight <= 1000, 'SVG run has a concrete supported weight');
+  assert.ok(slope === undefined || slope === 'normal' || slope === 'italic', 'SVG run has a concrete normal/italic style');
+  return {fontWeight, italic: slope === undefined ? inherited.italic : slope === 'italic'};
+};
 const drawnRuns = svg => [...svg.matchAll(/<text\b([^>]*)>(.*?)<\/text>/gs)].flatMap(([, attributes, content]) => {
-  const inherited = /font-family="([^",]*)/.exec(attributes)[1];
-  if (!content.includes('<tspan')) return [[inherited, content]];
-  return [...content.matchAll(/<tspan\b([^>]*)>([^<]*)<\/tspan>/g)].map(([, own, text]) => [/font-family="([^",]*)/.exec(own)?.[1] ?? inherited, text]);
+  const inherited = /font-family="([^",]*)/.exec(attributes)[1], style = runStyle(attributes);
+  if (!content.includes('<tspan')) return [[inherited, content, style]];
+  return [...content.matchAll(/<tspan\b([^>]*)>([^<]*)<\/tspan>/g)].map(([, own, text]) => [/font-family="([^",]*)/.exec(own)?.[1] ?? inherited, text, runStyle(own, style)]);
 });
+assert.deepEqual(drawnRuns('<svg><text font-family="Intos" font-weight="700" font-style="italic"><tspan>Inherited</tspan><tspan font-weight="400" font-style="normal">Own</tspan></text></svg>').map(([, , style]) => style), [{fontWeight: 700, italic: true}, {fontWeight: 400, italic: false}], 'SVG tspan own attributes override inherited style exactly');
+assert.deepEqual(drawnRuns('<svg><text font-family="Intos">Default</text></svg>')[0][2], {fontWeight: 400, italic: false}, 'only an absent SVG style uses SVG defaults');
 const families = runs => [...new Set(runs.map(([family]) => family))];
 const unescape = text => text.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, '&');
 
@@ -39,8 +49,8 @@ async function render(label, document, {scripts = 'auto', policy = 'metric', sli
   const svg = toSvg(document, slideIndex + 1, {fonts});
   const runs = drawnRuns(svg);
   assert.ok(runs.length > 0, `${label}: draws text`);
-  for (const [family, text] of runs) {
-    try { strict.measure(unescape(text), 20, {fontFamily: family, fontWeight: 400}); }
+  for (const [family, text, style] of runs) {
+    try { strict.measure(unescape(text), 20, {fontFamily: family, ...style}); }
     catch (error) { assert.fail(`${label}: ${family} cannot draw ${JSON.stringify(text)}: ${error.message}`); }
   }
   checked++;
@@ -59,6 +69,8 @@ for (const policy of ['metric', 'visual']) {
   assert.deepEqual(families(mixed.runs).sort(), ['Intos', 'Intos Display', 'Noto Sans JP'], 'the heading is Intos Display plus Noto Sans JP, the body Intos plus Noto Sans JP');
   assert.ok(mixed.runs.some(([family, text]) => family === 'Intos Display' && text.includes('Q3')), 'Latin heading text keeps Intos Display');
   assert.ok(mixed.runs.some(([family, text]) => family === 'Noto Sans JP' && text.includes('レビュー')), 'the katakana draws with Noto Sans JP');
+  assert.ok(mixed.runs.some(([family, text, style]) => family === 'Intos Display' && text.includes('Q3') && style.fontWeight === 700 && style.italic === false), 'the actual Latin heading requests the prepared700 face');
+  assert.ok(mixed.runs.some(([family, text, style]) => family === 'Intos' && text.includes('Revenue') && style.fontWeight === 400 && style.italic === false), 'the actual Latin body requests the prepared400 face');
   // The deck language decides Han-only text.
   const languages = await render(`aptos + han with a Japanese language (${policy})`, deck({title: '日本語', language: 'ja'}), {policy});
   assert.deepEqual(languages.packages, ['noto-sans-jp']);
@@ -86,6 +98,8 @@ for (const policy of ['metric', 'visual']) {
 
 // 2. An explicit script list and 'all' behave like auto for the same deck.
 for (const scripts of [['Jpan'], 'all']) await render(`aptos + japanese with scripts ${JSON.stringify(scripts)}`, deck({title: '日本語', text: 'Body 日本語'}), {scripts});
+const italic = await render('actual italic body face', deck({title: 'Heading', text: [{text: 'Italic body', italic: true}]}));
+assert.ok(italic.runs.some(([family, text, style]) => family === 'Intos' && text.includes('Italic body') && style.fontWeight === 400 && style.italic === true), 'strict coverage includes the actual400italic body');
 
 // 3. Without the script face nothing can draw the text, for every family alike: the vendored Intos, Carlito and Open
 // Sans all raise missing-glyph, and the error names what to load.

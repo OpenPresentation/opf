@@ -170,7 +170,7 @@ overall native acceptance.
 
 Use the exact reviewed core/PPTX revisions and installed consumer to generate a
 fresh Windows suite. Keep the suite seal, executing code/runtime identities and
-every case disposition. The [reviewed 55-case dispatch table](../../docs/evidence/rr20-site-currency-queue/native55-dispatch-coverage.md)
+every case disposition. The reviewed 55-case dispatch table
 records the historical 55-case inventory and its original evidence scope; current
 execution uses the freshly verified `suite.json`, not a historical seal.
 
@@ -230,3 +230,62 @@ imports. Historical classification does not establish fresh native visual
 acceptance. Every case needs linked evidence and a disposition; pure controls,
 serialization, generated previews or comparator existence never close native
 acceptance. Preserve the existing tolerances and supervisor evidence review.
+
+## Bounded read-only survey
+
+An explicitly reviewed one-slide witness with more than 30 top-level shapes may
+use `-ReadOnlySurvey`. It requires an empty validated action list and exactly one
+integer declared slide, one physical slide part and one actual native slide. The
+source must be at most 16 MiB and contain at most 4096 ZIP directory entries. The
+survey observes at most 100 top-level shapes; it does not expand editing or
+nested-group coverage. Pass the switch to this runner, including during
+`-ValidateOnly`, so preflight and the worker bind the same mode.
+
+The default edit mode keeps its 3-slide/30-shape/20-action limits. Both modes keep
+the same maximum 60 seconds, owned read-only Open, derivative SaveCopyAs,
+read-only reopen, failure latch and no-UI/no-kill/no-retry rules. A timeout or
+failed native call requires preserved evidence and supervisor inspection.
+
+Run the Office-free actual boundary regression with
+`node packages/pptx/test/native-readonly-survey.mjs`. Passing it does not run Office
+or establish native acceptance.
+
+## Prospective ordinary FULL59 typed route
+
+The current sealed 9a20 FULL59 suite has 28 primary, 30 positive chart-mode and
+one dedicated table case. The historical 58-case arithmetic above is not its
+execution roster. Dispatch only actual sealed eligible entries. Dense-events,
+whole-seven and table-six keep their separate routes; no caps are raised.
+
+`furniture-profile.mjs` introduces an explicitly bound ordinary-case lifecycle
+profile. It binds the unchanged 9a20 producer, exact FULL59 seal and genuine
+six-package proof separately from the current clean controller/forward worker.
+It never relaxes the legacy runner's default producer-provenance check.
+Create an envelope from a reviewed options JSON (`suiteDirectory`,
+`producerRepository`, `consumer`, `packedProof`, `caseId`, `captureTextFonts`),
+then prepare a fresh attempt:
+
+```powershell
+# Preparation and all actual execution require their separately assigned scope.
+node scripts/native-acceptance/furniture-profile.mjs create --options C:\opf-work/options.json --output C:\opf-work/envelope.json
+node scripts/native-acceptance/furniture-profile.mjs prepare --envelope C:\opf-work/envelope.json --sha256 <envelope-sha256> --output C:\opf-work/fresh-attempt --require-office true
+powershell.exe -NoProfile -NonInteractive -File scripts/native-acceptance/run-windows.ps1 -SuiteDirectory <sealed-suite> -PptxRepository <current-controller>/packages/pptx -Case <exact-case> -OutputDirectory C:\opf-work/fresh-attempt -ExecutionEnvelope C:\opf-work/envelope.json -ExpectedEnvelopeSha256 <envelope-sha256> -ExpectedRequestSha256 <prepared-request-sha256> -NodeExecutable <pinned-node> -RunOffice
+```
+
+Bind `-CaptureTextFonts` to the envelope's same boolean when selected. Default
+preparation/typed launch is pure; explicit `-RunOffice` requires a matching
+prepared true request. `-ValidateOnly` and `-RunOffice` are mutually exclusive.
+The worker stays 45 seconds by default/hard maximum 60. Its strict process-name
+query accepts only exact `NoProcessFoundForGivenName` as absence, and records the
+actual zero proof immediately before activation. Query faults/nonzero stop.
+
+Only complete owned read-only open/SaveCopy/reopen/two-close/empty-Quit records,
+18 ordered critical lifecycle facts (including strict preflight before actual
+application creation), continuous raw stages with null or exact bound path strings,
+and the exact completed sealed plan
+can reach a separate unchanged 5-second/100ms/51-query observer. Failed lifecycle
+records cause zero observer IO. No Seven/table fields are fabricated. A lifecycle
+observation still needs the applicable semantic comparator, all native slide
+images and supervisor review; it is not font/glyph, chart-data, native editing,
+full59 or release acceptance. The original worker/source leaves stay immutable;
+this prospective successor requires its own managed Windows qualification.

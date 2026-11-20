@@ -1,3 +1,0 @@
-# Preserve the exact bytes indexed in summary.json, including PowerShell logs.
-*.json -text whitespace=cr-at-eol
-*.log -text whitespace=cr-at-eol

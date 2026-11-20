@@ -77,15 +77,15 @@ const count = big.slides.length;
   const analysis = createFontAnalysis(), { stats } = analysis;
   const first = analysis.faces(big, options, view);
   assert.deepEqual(first, referenceFaces(big, options, view));
-  assert.deepEqual({ ...stats }, { decks: 1, slides: count, designs: 0 }, 'the first analysis composes every slide once');
+  assert.deepEqual({ ...stats }, { decks: 1, slides: count, metricSlides: 0, designs: 0 }, 'the first analysis composes every slide once');
   for (let again = 0; again < 5; again++) assert.deepEqual(analysis.faces(structuredClone(big), { catalogs: [...catalogs] }, { ...view, faces: [...view.faces] }), first);
-  assert.deepEqual({ ...stats }, { decks: 1, slides: count, designs: 0 }, 'the same deck again (a copy, with an equal option list) composes nothing and is not checked again');
+  assert.deepEqual({ ...stats }, { decks: 1, slides: count, metricSlides: 0, designs: 0 }, 'the same deck again (a copy, with an equal option list) composes nothing and is not checked again');
 
   const edited = structuredClone(big);
   edited.slides[7].title = 'A title in italics';
   edited.slides[7].text = [{ text: 'Bold ', bold: true }, { text: 'and italic', italic: true }];
   assert.deepEqual(analysis.faces(edited, options, view), referenceFaces(edited, options, view), 'the edited deck is analyzed right');
-  assert.deepEqual({ ...stats }, { decks: 2, slides: count + 1, designs: 0 }, 'an edit of one slide composes that slide');
+  assert.deepEqual({ ...stats }, { decks: 2, slides: count + 1, metricSlides: 0, designs: 0 }, 'an edit of one slide composes that slide');
 
   // A host that changes the deck in place is analyzed right too: keys come from the content, not the object.
   edited.slides[9].title = 'Changed in place';
@@ -96,7 +96,7 @@ const count = big.slides.length;
   const mixed = structuredClone(big);
   mixed.slides[9] = structuredClone(edited.slides[9]);
   analysis.faces(mixed, options, view);
-  assert.deepEqual({ ...stats }, { decks: 4, slides: count + 2, designs: 0 }, 'a new combination of known slides is checked, not composed');
+  assert.deepEqual({ ...stats }, { decks: 4, slides: count + 2, metricSlides: 0, designs: 0 }, 'a new combination of known slides is checked, not composed');
 
   // What every slide reads besides itself: the deck's design, the options, the registry view.
   analysis.faces({ ...edited, design: { ...edited.design, fontScheme: 'roboto' } }, options, view);
@@ -182,11 +182,14 @@ const count = big.slides.length;
   for (let call = 0; call < 6; call++) handle.pending(structuredClone(roboto), options);
   const stats = handle.analysisStats;
   assert.equal(stats.slides, count, 'six pending calls compose each slide once');
+  // RR-105: the deck's faces are held, so its slides are composed once more with real metrics, and only once.
+  assert.equal(stats.metricSlides, count, 'and compose each slide once with real metrics');
   assert.ok(stats.designs <= count, 'and resolve each slide design at most once');
   assert.equal(stats.strings, new Set(drawnStrings(roboto)).size, 'and scan each drawn string once');
   roboto.slides[0].title = 'Edited';
   handle.pending(roboto, options);
   assert.equal(handle.analysisStats.slides, count + 1, 'an edit composes the edited slide');
+  assert.equal(handle.analysisStats.metricSlides, count + 1, 'and composes it again with real metrics');
   assert.equal(handle.analysisStats.strings, stats.strings + 1, 'and scans the edited string');
   handle.dispose();
 }

@@ -9,6 +9,7 @@
 // engine-derived chrome colors stay literal sRGB.
 
 import {readBackgroundColor} from './background.js';
+import {colorTransform} from '@openpresentation/opf/composition';
 
 /** OPF slot -> clrScheme child element, in CT_ColorScheme order. */
 export const THEME_SLOTS = Object.freeze([
@@ -240,8 +241,35 @@ export function writeSchemeColors(xml, table, keep = new Set()) {
     const key = hex.toUpperCase(), entry = table.get(key);
     if (!entry || keep.has(key) || /<a:(?:lumMod|lumOff|tint|shade|satMod)\b/.test(inner)) return match;
     const transforms = `${entry.lumMod !== undefined ? `<a:lumMod val="${entry.lumMod}"/>` : ''}${entry.lumOff !== undefined ? `<a:lumOff val="${entry.lumOff}"/>` : ''}`;
+    // SH-02: a lighter or darker color whose base is no scheme color keeps its base literal, with the transform.
+    if (entry.literal) return `<a:srgbClr val="${entry.literal}">${transforms}${inner}</a:srgbClr>`;
     return `<a:schemeClr val="${entry.value}">${transforms}${inner}</a:schemeClr>`;
   });
+}
+
+/**
+ * SH-02: add the lighter and darker colors (ColorRef `{ color, lighten }` and `{ color, darken }`) found in `values` to a slide's `table`,
+ * so the finished part writes each as its base with a:lumMod and a:lumOff: the base's scheme value where `table` holds the base's color as
+ * a plain scheme color, else the base's literal RRGGBB. `resolve` turns a ColorRef into the RRGGBB the exporter wrote for it. A color the
+ * table already holds keeps its entry; `extensions` passthrough data is not read.
+ */
+export function addTransformedColors(table, resolve, ...values) {
+  const visit = (value, depth = 0) => {
+    if (depth > 64 || value === null || typeof value !== 'object') return;
+    if (Array.isArray(value)) { value.forEach(item => visit(item, depth + 1)); return; }
+    const transform = colorTransform(value);
+    if (transform) {
+      const six = color => typeof color === 'string' ? hex6Of(color.trim().replace(/^#/, '').slice(0, 6)) : undefined;
+      const hex = six(resolve(value)), base = six(resolve(transform.color));
+      if (hex && base && hex !== base && !table.has(hex)) {
+        const scheme = table.get(base), lum = {lumMod: transform.lumMod, ...(transform.lumOff ? {lumOff: transform.lumOff} : {})};
+        table.set(hex, scheme && scheme.lumMod === undefined && scheme.lumOff === undefined && !scheme.literal ? {value: scheme.value, ...lum} : {literal: base, ...lum});
+      }
+    }
+    for (const [key, item] of Object.entries(value)) if (key !== 'extensions') visit(item, depth + 1);
+  };
+  values.forEach(value => visit(value));
+  return table;
 }
 
 /** The RRGGBB colors written literally in a slide's authored content (and the document's variables), which a scheme color must not take over. */

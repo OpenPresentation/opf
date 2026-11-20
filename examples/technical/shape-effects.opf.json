@@ -1,0 +1,204 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Shape effects",
+  "description": "Technical fixture for shape effects (SH-03 wired into SH-02 shape blocks): the outer shadow presets and object form, inner shadow, glow, soft edges, reflection and blur, alone and together, on several presets, rotated, with lighter and darker theme colors, and the intense style's own shadow. The preview draws them as SVG filters and the PPTX export writes a native a:effectLst.",
+  "language": "en-US",
+  "design": {
+    "variant": "light1"
+  },
+  "slides": [
+    {
+      "title": "Outer shadows",
+      "blocks": [
+        {
+          "text": "soft",
+          "shape": "roundRect",
+          "fill": "accent1",
+          "shadow": "soft"
+        },
+        {
+          "text": "hard",
+          "shape": "roundRect",
+          "fill": "accent2",
+          "shadow": "hard"
+        },
+        {
+          "text": "perspective",
+          "shape": "roundRect",
+          "fill": "accent3",
+          "shadow": "perspective"
+        },
+        {
+          "text": "object",
+          "shape": "roundRect",
+          "fill": "accent4",
+          "shadow": {
+            "color": {
+              "color": "accent4",
+              "darken": 0.5
+            },
+            "opacity": 0.6,
+            "blur": 12,
+            "distance": 10,
+            "angle": 135,
+            "size": 1.05
+          }
+        }
+      ]
+    },
+    {
+      "title": "Inner shadow, glow, soft edges and blur",
+      "blocks": [
+        {
+          "text": "inner shadow",
+          "shape": "roundRect",
+          "fill": "accent1",
+          "innerShadow": {
+            "color": "#000000",
+            "opacity": 0.6,
+            "blur": 10,
+            "distance": 6,
+            "angle": 45
+          }
+        },
+        {
+          "text": "glow",
+          "shape": "ellipse",
+          "fill": "accent2",
+          "glow": {
+            "color": {
+              "color": "accent2",
+              "lighten": 0.4
+            },
+            "opacity": 0.6,
+            "radius": 14
+          }
+        },
+        {
+          "text": "soft edge",
+          "shape": "rect",
+          "fill": "accent3",
+          "softEdge": 10
+        },
+        {
+          "text": "blur",
+          "shape": "ellipse",
+          "fill": "accent4",
+          "blur": 6
+        }
+      ]
+    },
+    {
+      "title": "Reflection and effects together",
+      "blocks": [
+        {
+          "text": "reflection",
+          "shape": "roundRect",
+          "fill": "accent1",
+          "reflection": {
+            "opacity": 0.5,
+            "size": 0.4,
+            "distance": 4,
+            "blur": 2
+          }
+        },
+        {
+          "text": "glow and shadow",
+          "shape": "star5",
+          "fill": "accent2",
+          "glow": {
+            "color": "accent2",
+            "opacity": 0.4,
+            "radius": 10
+          },
+          "shadow": "soft"
+        },
+        {
+          "text": "rotated",
+          "shape": "rightArrow",
+          "fill": "accent3",
+          "rotate": 20,
+          "shadow": {
+            "opacity": 0.5,
+            "blur": 8,
+            "distance": 8,
+            "angle": 90
+          }
+        },
+        {
+          "text": "intense style",
+          "shape": "roundRect",
+          "style": "intense"
+        }
+      ]
+    },
+    {
+      "title": "Effects on presets",
+      "blocks": [
+        {
+          "text": "chevron",
+          "shape": "chevron",
+          "fill": "accent1",
+          "glow": {
+            "color": "accent1",
+            "opacity": 0.35,
+            "radius": 10
+          }
+        },
+        {
+          "text": "callout",
+          "shape": "wedgeRectCallout",
+          "fill": {
+            "color": "accent2",
+            "lighten": 0.6
+          },
+          "innerShadow": {
+            "opacity": 0.4,
+            "blur": 8,
+            "distance": 5,
+            "angle": 270
+          }
+        },
+        {
+          "text": "decision",
+          "shape": "flowChartDecision",
+          "fill": "accent3",
+          "shadow": "hard",
+          "stroke": {
+            "color": {
+              "color": "accent3",
+              "darken": 0.4
+            },
+            "width": 2
+          }
+        },
+        {
+          "text": "no fill",
+          "shape": "ellipse",
+          "fill": "none",
+          "stroke": {
+            "color": "accent4",
+            "width": 3
+          },
+          "shadow": "soft"
+        },
+        {
+          "text": "donut",
+          "shape": "donut",
+          "fill": "accent5",
+          "reflection": {
+            "opacity": 0.4,
+            "size": 0.5
+          }
+        },
+        {
+          "text": "can",
+          "shape": "can",
+          "fill": "accent6",
+          "softEdge": 6,
+          "shadow": "soft"
+        }
+      ]
+    }
+  ]
+}

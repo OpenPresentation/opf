@@ -45,7 +45,8 @@ assert.deepEqual(quick.record, { name: "Review grid", direction: "row", anchor: 
 assert.equal(layoutFromRegions({ ...input, regions: [{ name: "title" }, body] }).record.direction, "column");
 assert.deepEqual(layoutFromRegions({ ...input, regions: [{ name: "title", size: 1 }, body, { name: "foot", size: "auto" }] }).record.regions.map((entry) => entry.size), [1, undefined, "auto"]);
 assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "main" }, { name: "main" }] }), /unique/);
-assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "left" }] }), /reserved/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "start" }] }), /reserved/);
+assert.equal(layoutFromRegions({ ...input, regions: [{ name: "left" }] }).record.regions[0].name, "left", "physical-looking custom ids are no longer promoted logical region names");
 assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "Bad Name" }] }), /Invalid region name/);
 assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "subtitle" }, body] }), /needs a title/);
 assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "title" }] }), /at least one content region/);

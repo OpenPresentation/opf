@@ -49,7 +49,7 @@ test('an explicit fit on the block or in the slide design is kept', () => {
 test('a layout keeps the engine default, and a placed picture still bleeds as a cover', () => {
   const inLayout = composeSlide({ title: 'T', blocks: [{ image: svg(1600, 900) }, { image: svg(1600, 900) }, { image: svg(1600, 900) }] }, { layout: gallery.layouts.gallery });
   for (const image of inLayout.items.filter((item) => item.field === 'image')) assert.equal(image.image.fit, 'cover');
-  const placed = composeSlide({ title: 'T', blocks: [{ image: svg(1600, 900), placement: { edge: 'left', size: 0.4 } }, { text: note }] });
+  const placed = composeSlide({ title: 'T', blocks: [{ image: svg(1600, 900), placement: { edge: 'start', size: 0.4 } }, { text: note }] });
   assert.equal(placed.items.find((item) => item.field === 'image').image.fit, 'cover');
 });
 

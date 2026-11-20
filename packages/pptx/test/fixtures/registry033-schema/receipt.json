@@ -1,0 +1,127 @@
+{
+  "purpose": "Actual registry0.33 export, not a PowerPoint native observation",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "integrity": "sha512-A67Yv70WY6BbpbnAjY3se8ZKOCghiTUJt20VZdgogvaWfMbBS9XtcAzHPmvBWz+oNLXRsmL13Ovyq32tnRJ0fg==",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.33.0.tgz",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf@0.33.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "installedPackagePath": "/private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+opf@0.33.0_@openpresentation+opf-pptx@0.33.0_@openpresentation+opf-render@0.33.0/node_modules/@openpresentation/opf/package.json"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "integrity": "sha512-ZsJSQXG784h5bvzwl3+pBvd1q/3flW1sSW3AnmieQM31EcFEOnHuZX79IDETKWGqMc84lU7Wk2Y4D/0PPlWIkg==",
+      "tarball": "https://registry.npmjs.org/@openpresentation/gallery/-/gallery-0.33.0.tgz",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fgallery@0.33.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "installedPackagePath": "/private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+gallery@0.33.0/node_modules/@openpresentation/gallery/package.json"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "integrity": "sha512-IOY+9byTkLLSCkY82vnv5513lfjwtSjZ6JrqWC3bp5aLoH3rIyyGnx9eJRDLYWVnHny1PEr3ggUIKeetENbwDw==",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.33.0.tgz",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-render@0.33.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "installedPackagePath": "/private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+opf-render@0.33.0_@expo-google-fonts+arimo@0.4.3_@expo-google-fonts+c_34874d2ed9bf484942f0e31051cfc5db/node_modules/@openpresentation/opf-render/package.json"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "integrity": "sha512-uBCE1GesAD9JyMDB9uU9OzU8ixWZuY26NtYqK+8WrIKMXnH4yO9HOaBpidAqd7MHd7XQKdEeFq1bMwsaZ8RfPQ==",
+      "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.33.0.tgz",
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.33.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "installedPackagePath": "/private/tmp/opf-registry033-witness/node_modules/.pnpm/@openpresentation+opf-pptx@0.33.0_@openpresentation+opf-render@0.33.0/node_modules/@openpresentation/opf-pptx/package.json"
+    }
+  ],
+  "node": "v24.21.0",
+  "options": {
+    "date": "2026-11-10",
+    "bodyText": "measured"
+  },
+  "pptx": {
+    "bytes": 113310,
+    "sha256": "80c53d0482cfd385f6745d4c7af6143d212d0b053bbb8e9a21236297f18be4da"
+  },
+  "validation": {
+    "valid": true,
+    "schemaValid": true,
+    "findings": [
+      {
+        "ruleId": "opf/chart-text-alternative",
+        "severity": "info",
+        "category": "accessibility",
+        "scope": "document",
+        "path": "/slides/2/chart",
+        "message": "The chart on slide 3 has no alt text and no text beside it that states what it shows.",
+        "help": "Set chart.alt to a sentence with the chart's point and key numbers, or add a subtitle, text block or table with them, so the message does not depend on seeing the chart.",
+        "definition": "https://github.com/OpenPresentation/opf/blob/main/docs/validate.md#opfchart-text-alternative",
+        "slide": 2,
+        "fixes": [
+          {
+            "id": "focus-alt",
+            "title": "Write alt text",
+            "kind": "focus",
+            "safe": true,
+            "focus": {
+              "path": "/slides/2/chart",
+              "field": "alt"
+            }
+          },
+          {
+            "id": "focus-subtitle",
+            "title": "Write a subtitle",
+            "kind": "focus",
+            "safe": true,
+            "focus": {
+              "path": "/slides/2/subtitle",
+              "field": "text"
+            }
+          }
+        ]
+      }
+    ],
+    "counts": {
+      "error": 0,
+      "warning": 0,
+      "info": 1
+    },
+    "checks": {
+      "syntax": "not-applicable",
+      "schema": "checked",
+      "references": "checked",
+      "policy": "not-run",
+      "accessibility": "checked",
+      "content": "checked",
+      "layout": "estimated",
+      "backgroundPixels": "not-read",
+      "imageBytes": "embedded-only",
+      "nativeExport": "not-checked"
+    }
+  },
+  "diagnostics": []
+}

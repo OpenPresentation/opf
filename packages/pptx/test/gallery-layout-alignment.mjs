@@ -1,4 +1,4 @@
-// The historical gallery 1 alignment-only fixture remains in docs/evidence/rr-81-layout-review/.
+// The historical gallery 1 alignment-only fixture is in history: 7fb6140804f969550e3a9c9d52916b7610844917:docs/evidence/rr-81-layout-review/.
 // Gallery 2 templates change region geometry as well as design. Compare each accepted
 // line directly with native geometry and preview anchors instead of assuming only alignment changes.
 import assert from 'node:assert/strict';
@@ -26,7 +26,7 @@ const textOf = shape => array(shape['p:txBody']?.['a:p']).map(p => array(p['a:r'
 const near = (a, b, message) => assert.ok(Math.abs(a - b) < .002, `${message}: ${a} vs ${b}`);
 const dec = new TextDecoder();
 let lines = 0;
-for (const [id, record] of Object.entries(gallery.layouts)) for (const alignment of ['left', 'center', 'right']) {
+for (const [id, record] of Object.entries(gallery.layouts)) for (const alignment of ['start', 'center', 'end']) {
   const blocks = layoutTemplate(record).regions.map(region => ({...sample[region.accepts.find(kind => sample[kind])](), region: region.name}));
   const document = {design: {fontScheme: {id: 'carlito', heading: 'Carlito', body: 'Carlito'}, titleAlignment: alignment, contentAlignment: alignment}, slides: [{layout: id, title: 'Clear title', subtitle: 'Supporting words', ...(blocks.length ? {blocks} : {})}]};
   const options = {fonts, catalogs: [gallery], seed: 1, timestamp: '2026-01-01T00:00:00Z'};
@@ -37,7 +37,7 @@ for (const [id, record] of Object.entries(gallery.layouts)) for (const alignment
   const shapes = array(parser.parse(xml)['p:sld']['p:cSld']['p:spTree']['p:sp']).filter(shape => textOf(shape) && /^OPF (?:heading|text) /.test(shape['p:nvSpPr']['p:cNvPr'].name));
   assert.equal(shapes.length, expected.length, `${id}: one editable shape per accepted line`);
   const svg = toSvg(document, options)[0];
-  const previewTexts = [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].map(([, attributes, body]) => ({text: body.replace(/<[^>]+>/g, ''), anchor: attributes.match(/text-anchor="([^"]+)"/)?.[1] ?? 'start'}));
+  const previewTexts = [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].map(([, attributes, body]) => ({text: body.replace(/<[^>]+>/g, ''), anchor: (attributes.match(/data-opf-anchor="([^"]+)"/) ?? attributes.match(/text-anchor="([^"]+)"/))?.[1] ?? 'start'}));
   for (const [index, shape] of shapes.entries()) {
     const {item, placed, index: lineIndex} = expected[index];
     const transform = shape['p:spPr']['a:xfrm'];

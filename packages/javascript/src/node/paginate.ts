@@ -5,7 +5,8 @@ import { type Catalog, type Fonts, type PresentationPaginationResult, paginate }
 import { OPFApiError } from "../api-errors.js";
 import { defaultCatalogs } from "./catalogs.js";
 import { leaseSharedFonts, listFontDirectories, prepareFonts } from "./fonts.js";
-import { loadRenderer } from "./peers.js";
+import { type Renderer, loadRenderer, missingPeerFrom } from "./peers.js";
+import { isRendererValidationFailure } from "./validation-fonts.js";
 import type { Reporter } from "./reporter.js";
 
 export interface PaginateDeckOptions {
@@ -39,19 +40,28 @@ export async function paginateDeck(deck: unknown, options: PaginateDeckOptions):
 }
 
 export interface MeasuringFontsOptions {
+	/** Catalogs used by the same composition the fonts prepare. */
+	catalogs?: readonly Catalog[];
 	/** Folders of `.ttf` and `.otf` files, loaded before the bundled pack (as `--fonts`). They need opf-render. */
 	fontFolders?: readonly string[];
 	/** Receives the font diagnostics. */
 	reporter: Reporter;
 	/** Name options as the command's flags in messages. */
 	flags?: boolean;
+	/** CLI/MCP validation only: defer a genuine renderer format refusal to the caller's source-aware validator. */
+	reportInvalidDocument?: boolean;
 }
 
 export interface MeasuringFonts {
-	/** The fonts `opf convert` draws `deck` with; absent when the layout can only be estimated. */
+	/** The fonts `opf convert` draws `deck` with; absent for an estimate or a rejected format. */
 	fonts?: Fonts;
-	/** Why there are no fonts: the missing or too old peer (`peer-not-installed`, `peer-too-old`) that measuring needs. */
+	/**
+	 * Why there are no fonts: the missing or too old peer (`peer-not-installed`, `peer-too-old`) that measuring needs. A font package
+	 * the deck's faces need is one too: its `details` then have `packages`, `faces` and `install` (see `missingFontPackages`).
+	 */
 	estimated?: OPFApiError;
+	/** A real renderer format refusal; the caller must still validate the original source and return its report. */
+	invalidDocument?: true;
 	/** Returns a shared handle; call it when the measurement is done. */
 	release(): void;
 }
@@ -63,14 +73,38 @@ export interface MeasuringFonts {
  */
 export async function measuringFonts(deck: unknown, options: MeasuringFontsOptions): Promise<MeasuringFonts> {
 	const folders = options.fontFolders ?? [];
+	let renderer: Renderer | undefined;
 	try {
-		const renderer = await loadRenderer();
+		renderer = await loadRenderer();
 		const userFonts = await listFontDirectories([...folders], options.flags ? "--fonts" : "fonts");
-		const lease = await leaseSharedFonts(renderer, deck, userFonts, options.reporter);
-		const handle = lease?.handle ?? (await prepareFonts(renderer, deck, userFonts, options.reporter)).handle;
+		const lease = await leaseSharedFonts(renderer, deck, userFonts, options.reporter, false, { catalogs: options.catalogs ?? defaultCatalogs() });
+		const handle = lease?.handle ?? (await prepareFonts(renderer, deck, userFonts, options.reporter, false, { catalogs: options.catalogs ?? defaultCatalogs() })).handle;
 		return { fonts: handle as Fonts, release: () => lease?.release() };
 	} catch (error) {
+		if (options.reportInvalidDocument && isRendererValidationFailure(error, renderer?.render.module.OPFRenderError)) return { invalidDocument: true, release: () => {} };
 		if (error instanceof OPFApiError && (error.code === "peer-not-installed" || error.code === "peer-too-old") && !folders.length) return { estimated: error, release: () => {} };
+		// A font package a face of the deck needs (Cousine for Consolas) that is not installed, raised while the shared handle loads
+		// the deck's faces: the text cannot be measured with the face convert would draw, so it is estimated, as without opf-render,
+		// rather than measured with another face.
+		const fontPackage = !folders.length && !(error instanceof OPFApiError) ? missingFontPackagesError(error) : undefined;
+		if (fontPackage) return { estimated: fontPackage, release: () => {} };
 		throw error;
 	}
+}
+
+/** The `peer-not-installed` error of a renderer font error that names the font packages it needs (`details.packages`), else undefined. */
+function missingFontPackagesError(error: unknown): OPFApiError | undefined {
+	const mapped = missingPeerFrom(error);
+	return mapped?.code === "peer-not-installed" && Array.isArray(mapped.details?.packages) ? mapped : undefined;
+}
+
+/** The font packages a measurement found missing: from `estimated` when it is a font package error, else undefined. */
+export function missingFontPackages(estimated: OPFApiError | undefined): { packages: string[]; faces: string[]; install?: string } | undefined {
+	const details = estimated?.details as { packages?: unknown; faces?: unknown; install?: unknown } | undefined;
+	if (!details || !Array.isArray(details.packages)) return undefined;
+	return {
+		packages: details.packages.filter((name): name is string => typeof name === "string"),
+		faces: Array.isArray(details.faces) ? details.faces.filter((name): name is string => typeof name === "string") : [],
+		...(typeof details.install === "string" ? { install: details.install } : {}),
+	};
 }

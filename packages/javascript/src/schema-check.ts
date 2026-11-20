@@ -6,16 +6,18 @@ import { resolveDesignRecords } from "./design-records.js";
 import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { datasetDiagnostics, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
 import { chartDrawDiagnostics } from "./chart-fallback.js";
-import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions } from "./composition.js";
+import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions, resolveSlideDirection } from "./composition.js";
 import { layoutTemplateIssues } from "./layout-template.js";
 import { annotationIssues } from "./annotation-validation.js";
+import { isShapeBlock, shapeIssues, SHAPE_BLOCK_KEYS } from "./shape-block.js";
+import { PositionRangeError, connectorAdjustPreset, isOverlayConnector, overlayIssues, representablePositionBox } from "./overlay-shapes.js";
 import { codeHighlightLines } from "./code-highlight.js";
 import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
 import { numberingFindings } from "./numbering.js";
 import { schemaEngine } from "#schema-engine";
 import { schemas, type SchemaName } from "./schemas.js";
-import { bestMatchErrors, type UnionError } from "./union-errors.js";
+import { bestMatchErrors, collapseRepeats, type UnionError } from "./union-errors.js";
 import { rememberValidationDefinition } from './validation-definitions.js';
 import type { ValidationIssue } from "./generated/types/finding.js";
 import { VARIABLE_KINDS, hasContentVariables, instantiateForValidation, isTemplate, type VariableValues } from "./variables.js";
@@ -75,6 +77,8 @@ const rootPayloadFields = [
   "metric",
   "quote",
   "timeline",
+  "shape",
+  "path",
   "blocks",
 ] as const;
 
@@ -89,7 +93,8 @@ type ContentKind =
   | "metric"
   | "quote"
   | "timeline"
-  | "diagram";
+  | "diagram"
+  | "shape";
 
 interface ContentKindSpec {
   fields: readonly string[];
@@ -108,7 +113,8 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
     required: ["items"],
   },
   image: {
-    fields: ["image"],
+    // SH-02: an image block's `shape` is its frame's mask.
+    fields: ["image", "shape"],
     required: ["image"],
   },
   chart: {
@@ -143,20 +149,29 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
     fields: ["diagram"],
     required: ["diagram"],
   },
+  // SH-02: a preset (`shape` without `image`) or a custom `path`, with its `text` inside.
+  shape: {
+    fields: ["shape", "path", "text"],
+    required: [],
+    requireAny: ["shape", "path"],
+  },
 };
 
 // RR-34: payload kinds whose blocks may carry a caption.
 const captionableKinds = new Set<ContentKind>(["image", "chart", "table", "video", "diagram"]);
-// FA-22: fit, focus, the image treatments and placement belong to image payloads only.
-const imageOptionFields = ["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement"] as const;
+// FA-22: fit, focus, the image treatments and placement belong to image payloads only (LH-132: and a person's `portrait`).
+const imageOptionFields = ["fit", "focus", "aspectRatio", "shape", "adjust", "stroke", "opacity", "recolor", "overlay", "placement", "portrait"] as const;
+// SH-02: the image options a shape block also takes, and the keys only a shape block takes.
+const shapeImageFields = new Set<string>(["aspectRatio", "shape", "adjust", "stroke", "opacity"]);
+const shapeOptionFields = SHAPE_BLOCK_KEYS.filter((field) => field !== "path");
 
 const columnSpans: Record<string, readonly number[]> = {
-  left: [0],
+  start: [0],
   center: [1],
-  right: [2],
-  "left+center": [0, 1],
-  "center+right": [1, 2],
-  "left+center+right": [0, 1, 2],
+  end: [2],
+  "start+center": [0, 1],
+  "center+end": [1, 2],
+  "start+center+end": [0, 1, 2],
 };
 
 const rowSpans: Record<string, readonly number[]> = {
@@ -230,6 +245,32 @@ function isEnUkTag(value: unknown): boolean {
   return typeof value === "string" && value.toLowerCase() === "en-uk";
 }
 
+const EN_UK_MESSAGE = "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag";
+
+// The deck and a slide author a language tag; 'en-UK' is the same schema error on both (a run's is reported by opf/language-tag, as an error).
+function enUkIssues(language: unknown, path: string): ValidationIssue[] {
+  const at = isEnUkTag(language) ? path : isRecord(language) && isEnUkTag(language.bcp47) ? `${path}/bcp47` : undefined;
+  return at ? [semanticIssue(at, EN_UK_MESSAGE, { replacement: "en-GB" })] : [];
+}
+
+// 0.33 wrote an anchored overlay size in pixels under `width` and `height`; 0.34 reads fractions. A value above 4 (the format documents 1 and
+// 1.08) and up to 8 (the schema's maximum) still validates and is taken for a pixel size; above 8 it is a schema error whose finding carries the
+// same rename (check-document.ts, collapseAuthoringShapes).
+function overlayAnchorSizeWarnings(value: unknown): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  if (isRecord(value) && Array.isArray(value.slides)) value.slides.forEach((slide, index) => {
+    if (isRecord(slide) && Array.isArray(slide.shapes)) slide.shapes.forEach((entry, shapeIndex) => {
+      const at = isRecord(entry) ? entry.at : undefined;
+      if (isRecord(at)) for (const key of ["width", "height"]) {
+        const size = at[key];
+        if (typeof size === "number" && size > 4 && size <= 8 && !hasOwn(at, `${key}Px`))
+          issues.push(semanticIssue(`/slides/${index}/shapes/${shapeIndex}/at/${key}`, `at.${key} is ${size}, a fraction; pixels are ${key}Px`, { code: "shape-anchor-size-unit", key, size }));
+      }
+    });
+  });
+  return issues;
+}
+
 function presentFields(value: Record<string, unknown>, fields: readonly string[]): string[] {
   return fields.filter((field) => hasOwn(value, field));
 }
@@ -240,8 +281,11 @@ function isContentKind(value: unknown): value is ContentKind {
 
 function inferredKinds(value: Record<string, unknown>): ContentKind[] {
   const kinds: ContentKind[] = [];
+  // SH-02: a shape block holds its own text; bullets beside it are a text payload of their own.
+  const shape = isShapeBlock(value);
 
-  if (presentFields(value, contentKindSpecs.text.fields).length > 0) kinds.push("text");
+  if (shape) kinds.push("shape");
+  if (presentFields(value, shape ? ["bullets"] : contentKindSpecs.text.fields).length > 0) kinds.push("text");
   if (hasOwn(value, "items")) kinds.push("list");
   if (hasOwn(value, "image")) kinds.push("image");
   if (hasOwn(value, "video")) kinds.push("video");
@@ -271,17 +315,22 @@ function isImplicitBlocksComposition(
 function validateContentPayload(
   value: Record<string, unknown>,
   path: string,
-  options: { slideRoot?: boolean; topLevel?: boolean } = {},
+  options: { slideRoot?: boolean; topLevel?: boolean; canvas?: { width: number; height: number } } = {},
 ): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   const explicitType = value.type;
   const payloadFields = presentFields(value, rootPayloadFields);
   const hasBlocks = hasOwn(value, "blocks");
-  // RR-34: a caption belongs to exactly one image, chart, table or video payload of this host.
-  const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table or video payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
+  // RR-34: a caption belongs to exactly one image, chart, table, video or diagram payload of this host.
+  const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table, video or diagram payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
   // FA-22: image options on anything but an image payload, and a placement anywhere but a top-level block.
-  const imageOptionIssues = (reason: string, params: Record<string, unknown> = {}) => {
-    for (const field of imageOptionFields) if (hasOwn(value, field)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on an image payload; ${reason}`, { code: "image-option-unsupported-payload", field, ...params }));
+  const imageOptionIssues = (reason: string, params: Record<string, unknown> = {}, except: ReadonlySet<string> = new Set()) => {
+    for (const field of imageOptionFields) if (hasOwn(value, field) && !except.has(field)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on an image payload; ${reason}`, { code: "image-option-unsupported-payload", field, ...params }));
+  };
+  // SH-02: shape options on anything but a shape block.
+  const shapeOptionIssues = (reason: string, params: Record<string, unknown> = {}) => {
+    // A slide's own `hidden` hides the slide.
+    for (const field of shapeOptionFields) if (hasOwn(value, field) && !(field === "hidden" && options.slideRoot)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on a shape block; ${reason}`, { code: "shape-option-unsupported-payload", field, ...params }));
   };
   if (hasOwn(value, "placement") && !options.topLevel && !hasBlocks && explicitType !== "group" && inferredKinds(value).includes("image")) {
     issues.push(semanticIssue(pathFor(path, "placement"), "placement is only valid on a top-level block (slides.N.blocks.I); a block inside a group or a promoted region cannot bleed to a slide edge", { code: "image-placement-invalid" }));
@@ -289,12 +338,14 @@ function validateContentPayload(
   if (hasBlocks || explicitType === "group") {
     if (hasOwn(value, "caption")) issues.push(captionIssue("a group cannot carry one"));
     imageOptionIssues("a group cannot carry them");
+    shapeOptionIssues("a group cannot carry them");
     if (explicitType !== undefined && explicitType !== "group") issues.push(semanticIssue(path, "a group must use type 'group' or omit type"));
-    const incompatible = payloadFields.filter(field => field !== "blocks" && field !== "type");
+    // SH-02: a group's `shape` is reported as an image option (image-option-unsupported-payload).
+    const incompatible = payloadFields.filter(field => field !== "blocks" && field !== "type" && field !== "shape");
     if (incompatible.length) issues.push(semanticIssue(path, "blocks cannot be mixed with leaf payload fields", { fields: incompatible }));
     if (!Array.isArray(value.blocks) || (value.blocks.length === 0 && !options.slideRoot)) issues.push(semanticIssue(pathFor(path, "blocks"), "a group requires at least one block"));
     if (Array.isArray(value.blocks)) value.blocks.forEach((block, index) => {
-      if (isRecord(block)) issues.push(...validateContentPayload(block, `${pathFor(path, "blocks")}/${index}`, { topLevel: options.slideRoot === true }));
+      if (isRecord(block)) issues.push(...validateContentPayload(block, `${pathFor(path, "blocks")}/${index}`, { topLevel: options.slideRoot === true, ...(options.canvas ? { canvas: options.canvas } : {}) }));
     });
     // FA-22: at most one placed block per slide edge.
     if (options.slideRoot && Array.isArray(value.blocks)) {
@@ -344,14 +395,38 @@ function validateContentPayload(
   }
   const spec = contentKindSpecs[resolvedKind];
   if (hasOwn(value, "caption") && !captionableKinds.has(resolvedKind)) issues.push(captionIssue(`this payload is '${resolvedKind}'`, { type: resolvedKind }));
-  if (resolvedKind !== "image") imageOptionIssues(`this payload is '${resolvedKind}'`, { type: resolvedKind });
+  if (resolvedKind !== "image") imageOptionIssues(`this payload is '${resolvedKind}'`, { type: resolvedKind }, resolvedKind === "shape" ? shapeImageFields : undefined);
+  if (resolvedKind !== "shape") shapeOptionIssues(`this payload is '${resolvedKind}'`, { type: resolvedKind });
+  // SH-02: adjust names and ranges of the preset (an image's mask too), and a link on a hidden shape.
+  if (resolvedKind === "shape" || resolvedKind === "image")
+    for (const issue of shapeIssues(value, (...keys) => keys.reduce((at, key) => pathFor(at, key), path))) issues.push(semanticIssue(issue.path, issue.message, { code: issue.code, ...issue.params }));
+  if (resolvedKind === "image" && isRecord(value.image) && Array.isArray(value.image.callouts)) {
+    value.image.callouts.forEach((callout, index) => {
+      if (!isRecord(callout)) return;
+      for (const key of ['x', 'y']) if (typeof callout[key] === 'number' && !Number.isFinite(callout[key])) issues.push(semanticIssue(`${pathFor(path, 'image')}/callouts/${index}/${key}`, 'an image callout origin must be a finite signed fraction', {key}));
+      // A finite origin too far away to be written as exact geometry is refused here, at its coordinate, as an overlay shape's is: a
+      // picture's frame is never larger than the slide, so the slide's own size bounds every callout.
+      const canvas = options.canvas;
+      if (canvas && ['x', 'y', 'width', 'height'].every(key => typeof callout[key] === 'number' && Number.isFinite(callout[key]))) {
+        const at = `${pathFor(path, 'image')}/callouts/${index}`, frame = callout as { x: number; y: number; width: number; height: number };
+        try { representablePositionBox({ x: frame.x * canvas.width, y: frame.y * canvas.height, width: frame.width * canvas.width, height: frame.height * canvas.height }, at.replace(/^\//, '').replaceAll('/', '.')); }
+        catch (error) {
+          if (!(error instanceof PositionRangeError)) throw error;
+          issues.push(semanticIssue(`${at}/${error.coordinate}`, error.message, { key: error.coordinate }));
+        }
+      }
+    });
+  }
   const allowedFields = new Set<string>([
     "type",
     ...spec.fields,
   ]);
 
+  // `bullets` are talking points of a text payload: `type: "list"` beside them is one mistake with one fix, not a missing `items`
+  // and an incompatible field.
+  const listOfBullets = resolvedKind === "list" && hasOwn(value, "bullets") && !hasOwn(value, "items");
   for (const required of spec.required) {
-    if (!hasOwn(value, required)) {
+    if (!hasOwn(value, required) && !listOfBullets) {
       issues.push(semanticIssue(path, `content payload type '${resolvedKind}' requires '${required}'`, {
         type: resolvedKind,
         required,
@@ -368,7 +443,7 @@ function validateContentPayload(
 
   const incompatible = payloadFields.filter((field) => !allowedFields.has(field));
   if (incompatible.length > 0) {
-    issues.push(semanticIssue(path, `content payload type '${resolvedKind}' cannot include incompatible fields: ${incompatible.join(", ")}`, {
+    issues.push(semanticIssue(path, listOfBullets && incompatible.length === 1 ? "'bullets' belongs to a text payload, so it cannot be a 'list': write the entries under 'items', or remove 'type'" : `content payload type '${resolvedKind}' cannot include incompatible fields: ${incompatible.join(", ")}`, {
       type: resolvedKind,
       incompatible,
     }));
@@ -412,7 +487,7 @@ function regionsOverlap(left: SlideRegion, right: SlideRegion): boolean {
   return intersects(left.rows, right.rows) && intersects(left.columns, right.columns);
 }
 
-function validateSlideRegions(slide: Record<string, unknown>, slidePath: string): ValidationIssue[] {
+function validateSlideRegions(slide: Record<string, unknown>, slidePath: string, canvas?: { width: number; height: number }): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   const regionKeys = Object.keys(slide).filter((key) => promotedRegionKeySet.has(key));
   const rootFields = presentFields(slide, rootPayloadFields);
@@ -425,13 +500,13 @@ function validateSlideRegions(slide: Record<string, unknown>, slidePath: string)
   }
 
   if (regionKeys.length === 0 && rootFields.length > 0) {
-    issues.push(...validateContentPayload(slide, slidePath, { slideRoot: true }));
+    issues.push(...validateContentPayload(slide, slidePath, { slideRoot: true, ...(canvas ? { canvas } : {}) }));
   }
 
   for (const key of regionKeys) {
     const value = slide[key];
     if (isRecord(value)) {
-      issues.push(...validateContentPayload(value, pathFor(slidePath, key)));
+      issues.push(...validateContentPayload(value, pathFor(slidePath, key), canvas ? { canvas } : {}));
     }
   }
 
@@ -485,22 +560,14 @@ function deckMetadataIssues(value: Record<string, unknown>): ValidationIssue[] {
   return issues;
 }
 
-function presentationSemanticIssues(value: unknown): ValidationIssue[] {
+function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[]): ValidationIssue[] {
   if (!isRecord(value) || !Array.isArray(value.slides)) {
     return [];
   }
 
   const issues: ValidationIssue[] = [];
 
-  if (isEnUkTag(value.language)) {
-    issues.push(semanticIssue("/language", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
-      replacement: "en-GB",
-    }));
-  } else if (isRecord(value.language) && isEnUkTag(value.language.bcp47)) {
-    issues.push(semanticIssue("/language/bcp47", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
-      replacement: "en-GB",
-    }));
-  }
+  issues.push(...enUkIssues(value.language, "/language"));
 
   issues.push(...deckMetadataIssues(value));
   // 'speakers' is the one built-in variable name without a dot, so a declared variable may not take it.
@@ -511,6 +578,23 @@ function presentationSemanticIssues(value: unknown): ValidationIssue[] {
   // Slide and payload ids share one namespace, so the origin of the id already
   // seen decides which message describes the collision truthfully.
   const documentIds = new Map<string, "slide" | "payload">();
+  let overlayCanvas: {width: number; height: number} | undefined, overlayCanvasResolved = false;
+  // The deck's canvas, resolved once and only for a deck that positions something by fractions (an overlay shape or an image callout).
+  const deckCanvas = () => {
+    if (!overlayCanvasResolved) {
+      overlayCanvasResolved = true;
+      const design = isRecord(value.design) ? value.design : {};
+      const dimensions = design.dimensions ?? resolveDesignRecords(value, undefined, {catalogs: catalogs ?? []}).theme.dimensions;
+      try { overlayCanvas = resolveCanvasDimensions(dimensions); } catch { /* The authored dimensions have their own schema error. */ }
+    }
+    return overlayCanvas;
+  };
+  const canvasForOverlays = (slide: Record<string, unknown>, index: number) => {
+    if (!Array.isArray(slide.shapes) || !slide.shapes.some(shape => isRecord(shape) && shape.connector === undefined && ['x', 'y', 'width', 'height'].every(key => typeof shape[key] === 'number' && Number.isFinite(shape[key])))) return undefined;
+    const canvas = deckCanvas();
+    return canvas ? {...canvas, rtl: resolveSlideDirection(value, index) === 'rtl'} : undefined;
+  };
+  const hasCallouts = (node: unknown, depth = 0): boolean => isRecord(node) && depth <= 34 && Object.entries(node).some(([key, entry]) => key === 'callouts' ? Array.isArray(entry) && entry.length > 0 : key === 'image' || key === 'blocks' || promotedRegionKeySet.has(key) ? (Array.isArray(entry) ? entry.some(item => hasCallouts(item, depth + 1)) : hasCallouts(entry, depth + 1)) : false);
   value.slides.forEach((slide, index) => {
     if (isRecord(slide)) {
       const slidePath = `/slides/${index}`;
@@ -526,7 +610,21 @@ function presentationSemanticIssues(value: unknown): ValidationIssue[] {
           else documentIds.set(payload.id, "payload");
         }
       });
-      issues.push(...validateSlideRegions(slide, slidePath));
+      // SH-04: overlay shapes and connectors share the namespace; a connector or an `at` names blocks and overlay shapes by id.
+      if (Array.isArray(slide.shapes)) slide.shapes.forEach((entry, shapeIndex) => {
+        if (!isRecord(entry)) return;
+        const entryPath = `${slidePath}/shapes/${shapeIndex}`;
+        if (typeof entry.id === "string") {
+          if (documentIds.has(entry.id)) issues.push(semanticIssue(`${entryPath}/id`, "overlay ids must be unique among slide, payload and overlay ids within a presentation", { id: entry.id }));
+          else documentIds.set(entry.id, "payload");
+        }
+        // SH-02's checks of a shape: adjust names and ranges, and a link on a hidden shape.
+        const checked = isOverlayConnector(entry) ? (isRecord(entry.adjust) ? { shape: connectorAdjustPreset(entry), adjust: entry.adjust } : undefined) : entry;
+        if (checked) for (const issue of shapeIssues(checked, (...keys) => keys.reduce((at, key) => pathFor(at, key), entryPath))) issues.push(semanticIssue(issue.path, issue.message, { code: issue.code, ...issue.params }));
+      });
+      for (const issue of overlayIssues(slide, slidePath, value, canvasForOverlays(slide, index))) issues.push(semanticIssue(issue.path, issue.message, { ...(issue.code ? { code: issue.code } : {}), ...issue.params }));
+      issues.push(...enUkIssues(slide.language, `${slidePath}/language`));
+      issues.push(...validateSlideRegions(slide, slidePath, hasCallouts(slide) ? deckCanvas() : undefined));
       const payloadTableIssues = (payload: Record<string, unknown>, path: string): void => {
         if (isRecord(payload.table)) for(const issue of tableGrid(payload.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
       };
@@ -728,6 +826,8 @@ function variableReferenceWarnings(value: Record<string, unknown>): ValidationIs
   const issues: ValidationIssue[] = [];
 
   const colorRef = (entry: unknown, path: string): void => {
+    // SH-02: the lighter or darker form names its base in its color key.
+    if (isRecord(entry) && entry.color !== undefined) { colorRef(entry.color, pathFor(path, "color")); return; }
     if (typeof entry !== "string" || !entry.startsWith("var:")) return;
     const id = entry.slice("var:".length);
     // A reference the schema rejects already reports an error; advising the
@@ -738,6 +838,7 @@ function variableReferenceWarnings(value: Record<string, unknown>): ValidationIs
   // Run colors are open strings: warn on anything that is none of the
   // documented forms, since renderers will fall back to the theme color.
   const runColor = (entry: unknown, path: string): void => {
+    if (isRecord(entry)) { colorRef(entry, path); return; }
     if (typeof entry !== "string") return;
     if (hexColorPattern.test(entry) || schemeColorNames.has(entry)) return;
     if (entry.startsWith("var:") && variableIdPattern.test(entry.slice("var:".length))) {
@@ -829,6 +930,9 @@ function variableReferenceWarnings(value: Record<string, unknown>): ValidationIs
     textEntries(node.items, pathFor(path, "items"));
     textEntries(node.bullets, pathFor(path, "bullets"));
     table(node.table, pathFor(path, "table"));
+    if (isRecord(node.chart) && Array.isArray(node.chart.referenceLines)) node.chart.referenceLines.forEach((line, index) => {
+      if (isRecord(line) && isRecord(line.stroke)) colorRef(line.stroke.color, `${path}/chart/referenceLines/${index}/stroke/color`);
+    });
   };
 
   value.slides.forEach((slide, index) => {
@@ -885,17 +989,7 @@ function presentationReferenceWarnings(value: unknown, catalogs: readonly Catalo
 }
 
 function validateLanguageSemantics(value: unknown): ValidationIssue[] {
-  if (!isRecord(value)) {
-    return [];
-  }
-
-  if (isEnUkTag(value.bcp47)) {
-    return [semanticIssue("/bcp47", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
-      replacement: "en-GB",
-    })];
-  }
-
-  return [];
+  return isRecord(value) ? enUkIssues(value.bcp47, "/bcp47") : [];
 }
 
 // Guard recursive payloads before AJV or recursive semantic/reference traversal.
@@ -1043,19 +1137,20 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
   const valid = resolved.validate(subject) === true;
   const ajvErrors = valid ? [] : typedVariableErrors(resolved.validate.errors ?? [], subject);
   const specific = resolved.schemaName === "presentation" ? dataUnionErrors(ajvErrors, subject) : ajvErrors;
-  const mapped = bestMatchErrors(schemaEngine(), schemas[resolved.schemaName].$id as string, specific).map(toIssue);
+  const mapped = collapseRepeats(bestMatchErrors(schemaEngine(), schemas[resolved.schemaName].$id as string, specific)).map(toIssue);
   const errors = mapped;
   // OPF 0.19: the template rules a schema cannot express (opf/layout-template, opf/layout-region), on a record the schema accepts.
   if (resolved.schemaName === "layout" && valid) for (const issue of layoutTemplateIssues(subject)) errors.push(semanticIssue(issue.path, issue.message, { code: issue.code }));
   const warnings: ValidationIssue[] = [];
 
   if (resolved.schemaName === "presentation") {
-    errors.push(...presentationSemanticIssues(subject));
+    errors.push(...presentationSemanticIssues(subject, options.catalogs));
     errors.push(...variableIssues.errors);
     const data = dataIssues(subject);
     errors.push(...data.errors);
     warnings.push(...presentationReferenceWarnings(subject, options.catalogs));
     warnings.push(...data.warnings);
+    warnings.push(...overlayAnchorSizeWarnings(subject));
     warnings.push(...variableIssues.warnings);
   } else if (resolved.schemaName === "language") {
     errors.push(...validateLanguageSemantics(value));

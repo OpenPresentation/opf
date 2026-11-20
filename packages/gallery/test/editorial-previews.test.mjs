@@ -11,7 +11,7 @@ for (const [id, record] of Object.entries(gallery.layouts)) {
     const deck = editorialDeck(id, record);
     const result = validate(deck, {catalogs: [gallery]});
     assert.equal(result.valid, true, JSON.stringify(result));
-    assert.match(deck.design.footer.left.text, /Illustrative example • fictional data/, 'the footer discloses the fictional data');
+    assert.match(deck.design.footer.start.text, /Illustrative example • fictional data/, 'the footer discloses the fictional data');
     assert.equal(templateDeck(id, record).slides.length, 2, 'stability fixtures remain exhaustive');
   });
 }

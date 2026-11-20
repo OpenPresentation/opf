@@ -13,8 +13,9 @@ import {toPptx, fromPptx} from '../dist/index.js';
 // check the supervisor runs (FF-46): native verification pending. This test pins the current contract so a change is
 // deliberate.
 const slides = [
-  {id: 'pua', title: 'Private use', text: [{text: 'Check '}, {text: '', fontFamily: 'Wingdings'}, {text: ' alpha '}, {text: '', fontFamily: 'Symbol'}, {text: ' web '}, {text: '', fontFamily: 'Webdings'}]},
-  {id: 'plain', title: 'Plain', text: [{text: 'Check '}, {text: 'ülà', fontFamily: 'Wingdings'}, {text: ' alpha '}, {text: 'abg', fontFamily: 'Symbol'}, {text: ' web '}, {text: 'A', fontFamily: 'Webdings'}, {text: ' two '}, {text: '§', fontFamily: 'Wingdings 2'}, {text: ' three '}, {text: 'x', fontFamily: 'Wingdings 3'}]},
+  // LH-188: a title of more than four words keeps the slide a content slide (no one-message growth onto more lines).
+  {id: 'pua', title: 'Private use symbol code points', text: [{text: 'Check '}, {text: '', fontFamily: 'Wingdings'}, {text: ' alpha '}, {text: '', fontFamily: 'Symbol'}, {text: ' web '}, {text: '', fontFamily: 'Webdings'}]},
+  {id: 'plain', title: 'Plain symbol characters in a paragraph', text: [{text: 'Check '}, {text: 'ülà', fontFamily: 'Wingdings'}, {text: ' alpha '}, {text: 'abg', fontFamily: 'Symbol'}, {text: ' web '}, {text: 'A', fontFamily: 'Webdings'}, {text: ' two '}, {text: '§', fontFamily: 'Wingdings 2'}, {text: ' three '}, {text: 'x', fontFamily: 'Wingdings 3'}]},
 ];
 const presentation = {name: 'FF-45 symbol fonts', slides};
 const families = ['Wingdings', 'Symbol', 'Webdings', 'Wingdings 2', 'Wingdings 3'];

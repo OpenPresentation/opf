@@ -74,7 +74,7 @@ export function fieldChoices(field) {
       ? TIMELINE_STATUS_CHOICES
       : undefined;
 }
-/** Whether a form field holds Mermaid source (a diagram given as a string, or a diagram object's `source`). */
+/** Whether a form field holds diagram source, Mermaid, DOT or PlantUML (a diagram given as a string, or a diagram object's `source`). */
 export function isDiagramSource(field) {
   const segments = splitOpfPath(field.path);
   return field.type === "string" && (segments.at(-1) === "diagram" || (segments.at(-1) === "source" && segments.at(-2) === "diagram"));

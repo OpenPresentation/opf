@@ -55,6 +55,15 @@ export async function run(args: string[], _host: Host): Promise<void> {
 	const input_ = inputFact(input, source.raw);
 	if (destination.check) {
 		const ok = split.length === 0;
+		// The reason a check fails is a finding, like every other failure: one per slide that would split.
+		for (const entry of extra.overflow)
+			reporter.add("cli", {
+				code: "slide-would-split",
+				path: `slides.${entry.slide - 1}`,
+				pages: entry.pages,
+				message: `Slide ${entry.slide} does not fit and would split into ${entry.pages} slides.`,
+				help: "Run opf paginate <deck> -i to write the split into the deck, or shorten the slide or choose a layout with more room.",
+			}, "error");
 		printReport(envelope("paginate", { ok, input: input_, findings: reporter.findings, ...extra }));
 		if (!ok) process.exitCode = 1;
 		return;

@@ -10,11 +10,11 @@ const layout = id => design => ({id, design, regions: [{name: 'title'}, {name: '
 const asset = name => `data:image/png;base64,${name}`;
 // One value per key that the engine default does not already produce, plus an opposing value to override with.
 const KEYS = {
-  titleAlignment: ['center', 'right'],
-  contentAlignment: ['center', 'right'],
+  titleAlignment: ['center', 'end'],
+  contentAlignment: ['center', 'end'],
   contentBox: [true, false],
   contentDirection: ['vertical', 'horizontal'],
-  chartPrimary: ['left', 'top'],
+  chartPrimary: ['start', 'top'],
   imageFit: ['contain', 'stretch'],
   listBullet: ['image', 'character'],
   mirror: [true, false],
@@ -69,33 +69,33 @@ test('a value the schema does not allow is skipped so the next level answers', (
 
 test('host-resolved deck values rank with the deck design, below the slide and above the layout', () => {
   const record = layout('l')({titleAlignment: 'center', contentAlignment: 'center', contentBox: true});
-  const hints = resolveDesignHints({slide: {design: {contentAlignment: 'left'}}, layout: record, deck: {titleAlignment: 'right', contentAlignment: 'right'}});
-  assert.deepEqual([hints.titleAlignment, hints.contentAlignment, hints.contentBox], ['right', 'left', true]);
+  const hints = resolveDesignHints({slide: {design: {contentAlignment: 'start'}}, layout: record, deck: {titleAlignment: 'end', contentAlignment: 'end'}});
+  assert.deepEqual([hints.titleAlignment, hints.contentAlignment, hints.contentBox], ['end', 'start', true]);
   assert.deepEqual(hints.sources, {titleAlignment: 'deck', contentAlignment: 'slide', contentBox: 'layout'});
 });
 
 const alignments = result => Object.fromEntries(result.items.map(item => [item.field, item.alignment]));
 
 test('layout titleAlignment and contentAlignment align title and content; the deck and the slide override them per key', () => {
-  const record = layout('centered')({titleAlignment: 'center', contentAlignment: 'right'});
+  const record = layout('centered')({titleAlignment: 'center', contentAlignment: 'end'});
   const slide = {title: 'Title', text: 'Body', layout: 'centered'};
   assert.deepEqual(alignments(composeSlide(slide, {layout: record})), {title: 'center', text: 'right'});
   // Without a layout record the engine default (left) applies.
   assert.deepEqual(alignments(composeSlide(slide, {})), {title: 'left', text: 'left'});
   // The deck's design overrides the layout key by key; the other key still comes from the layout.
-  assert.deepEqual(alignments(composeSlide(slide, {layout: record, presentation: {design: {titleAlignment: 'left'}}})), {title: 'left', text: 'right'});
+  assert.deepEqual(alignments(composeSlide(slide, {layout: record, presentation: {design: {titleAlignment: 'start'}}})), {title: 'left', text: 'right'});
   // A host that resolves the deck value itself gets the same answer.
-  assert.deepEqual(alignments(composeSlide(slide, {layout: record, titleAlignment: 'left'})), {title: 'left', text: 'right'});
+  assert.deepEqual(alignments(composeSlide(slide, {layout: record, titleAlignment: 'start'})), {title: 'left', text: 'right'});
   // The slide's design wins over the deck and the layout.
-  assert.deepEqual(alignments(composeSlide({...slide, design: {contentAlignment: 'left'}}, {layout: record, presentation: {design: {contentAlignment: 'center'}}})), {title: 'center', text: 'left'});
+  assert.deepEqual(alignments(composeSlide({...slide, design: {contentAlignment: 'start'}}, {layout: record, presentation: {design: {contentAlignment: 'center'}}})), {title: 'center', text: 'left'});
 });
 
 test('a cover keeps tag, title and subtitle together under the layout titleAlignment', () => {
-  const record = {id: 'title-subtitle', design: {titleAlignment: 'center', contentAlignment: 'right'}, regions: [{name: 'title', size: 1}]};
+  const record = {id: 'title-subtitle', design: {titleAlignment: 'center', contentAlignment: 'end'}, regions: [{name: 'title', size: 1}]};
   const cover = {tag: 'Tag', title: 'Cover', subtitle: 'Sub', layout: 'title-subtitle'};
   assert.deepEqual(alignments(composeSlide(cover, {layout: record})), {tag: 'center', title: 'center', subtitle: 'center'});
   // Only the slide's own contentAlignment splits the group.
-  assert.deepEqual(alignments(composeSlide({...cover, design: {contentAlignment: 'left'}}, {layout: record})), {tag: 'left', title: 'center', subtitle: 'left'});
+  assert.deepEqual(alignments(composeSlide({...cover, design: {contentAlignment: 'start'}}, {layout: record})), {tag: 'left', title: 'center', subtitle: 'left'});
 });
 
 test('layout contentBox draws body cards unless the deck or the slide says otherwise', () => {
@@ -123,7 +123,7 @@ test('layout listBullet image attaches the organization icon logo, and reports a
 });
 
 test('template geometry is authoritative while design hints retain their precedence', () => {
-  const record = layout('dir')({contentDirection: 'vertical', chartPrimary: 'left'});
+  const record = layout('dir')({contentDirection: 'vertical', chartPrimary: 'start'});
   const slide = {title: 'T', blocks: [{text: 'First'}, {text: 'Second'}]};
   const control = composeSlide(slide, {layout: record});
   const overridden = composeSlide({...slide, design: {contentDirection: 'horizontal', chartPrimary: 'top'}}, {layout: record});

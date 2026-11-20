@@ -1,7 +1,7 @@
 // Diagrams (OPF `diagram`): each exports as one native SVG picture (`asvg:svgBlip` over a PNG fallback) painted by core's paintDiagram
 // in the palette opf-render previews it with, at core's drawn box, with the alt text as the picture's description. A source that
 // cannot be drawn, or a diagram without a rasterizer for its fallback, is the unavailable-diagram placeholder with a diagnostic. In
-// full provenance OPF_DIAGRAM_V1 gives the diagram back on import; an edited picture, or an export without the tag, is an image.
+// full provenance OPF_DIAGRAM_V1 gives the diagram back on import; an edited picture, or an export without the tag, is an image. SH-07: shapes are the default (sh-07-native-diagrams.mjs); this file tests the picture path, diagrams: 'picture'.
 import assert from 'node:assert/strict';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {fromPptx, toPptx, toSvg} from './helpers/default-catalog.mjs';
@@ -16,7 +16,7 @@ let checked = 0;
 
 async function open(deck, options = {}) {
   const diagnostics = [];
-  const bytes = await toPptx(deck, {...FIXED, onDiagnostic: item => diagnostics.push(item), ...options});
+  const bytes = await toPptx(deck, {...FIXED, diagrams: 'picture', onDiagnostic: item => diagnostics.push(item), ...options});
   return {bytes, entries: unzipSync(bytes), diagnostics};
 }
 const slideXml = (entries, index) => strFromU8(entries[`ppt/slides/slide${index + 1}.xml`]);
@@ -146,7 +146,7 @@ const previews = await toSvg(deck);
   assert.deepEqual(reported.map(item => ({reason: item.reason, path: item.path})), [{reason: 'svg-rasterizer-unavailable', path: 'slides.0.diagram'}]);
   assert.match(reported[0].message, /^A diagram needs a rasterizer/);
   assert.match(reported[0].message, /unavailable-diagram placeholder\.$/);
-  await assert.rejects(toPptx(single, {...FIXED, svgRasterizer: unavailable, strictAssets: true}), error => error.code === 'svg-rasterizer-unavailable');
+  await assert.rejects(toPptx(single, {...FIXED, diagrams: 'picture', svgRasterizer: unavailable, strictAssets: true}), error => error.code === 'svg-rasterizer-unavailable');
   // A host rasterizer draws the fallback; the SVG is passed as text with the fallback size.
   const calls = [];
   const fallback = exported.entries[relTarget(exported.entries, 0, diagramPictures(exported.entries, 0)[0].embed)];

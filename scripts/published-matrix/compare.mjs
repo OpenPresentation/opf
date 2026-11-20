@@ -14,6 +14,7 @@ import {existsSync, readdirSync, readFileSync, writeFileSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {compareHosts} from './digests.mjs';
+import {assertComparablePublishedHosts} from './prepare-harness.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const argv = process.argv.slice(2);
@@ -30,12 +31,13 @@ for (const entry of readdirSync(root, {withFileTypes: true})) {
   const find = (name) => [path.join(dir, name), path.join(dir, 'out', name), path.join(dir, 'determinism', name)].find((candidate) => existsSync(candidate));
   const digests = find('digests.json');
   if (!digests) continue;
-  hosts[entry.name.replace(/^published-matrix-/, '')] = {digests: read(digests), consumer: find('consumer.json') ? read(find('consumer.json')) : null, installed: find('installed.json') ? read(find('installed.json')) : null, determinism: find('determinism.json') ? read(find('determinism.json')) : null};
+  hosts[entry.name.replace(/^published-matrix-/, '')] = {driver: find('driver.json') ? read(find('driver.json')) : null, digests: read(digests), consumer: find('consumer.json') ? read(find('consumer.json')) : null, installed: find('installed.json') ? read(find('installed.json')) : null, determinism: find('determinism.json') ? read(find('determinism.json')) : null};
 }
 const names = Object.keys(hosts).sort();
 assert.ok(names.length >= 2, `need at least two operating systems under ${root}, found ${names.join(', ') || 'none'}`);
 const allowlist = existsSync(allowlistPath) ? read(allowlistPath) : {entries: []};
 for (const name of names) assert.equal(hosts[name].determinism?.passed, true, `${name}: the determinism grid passed on its own host`);
+assertComparablePublishedHosts(hosts);
 const {states, differences, allowed, stale} = compareHosts(hosts, allowlist);
 const summary = {
   hosts: names.map((name) => ({os: name, node: hosts[name].determinism?.node, platform: hosts[name].determinism?.platform, arch: hosts[name].determinism?.arch, icu: hosts[name].determinism?.icu, states: hosts[name].digests.states})),

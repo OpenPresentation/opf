@@ -16,7 +16,7 @@
 // slide content overlaps its box: PowerPoint draws master and layout shapes beneath every slide shape, while core paints
 // furniture above content, so such a part stays above the content on its slide (`furniture-on-slide` diagnostic).
 //
-// Provenance. A lifted shape keeps its OPF_FURNITURE_V1 tag, with the slot (`footer.left.image`) in place of the slide
+// Provenance. A lifted shape keeps its OPF_FURNITURE_V1 tag, with the slot (`footer.start.image`) in place of the slide
 // group and part. Each slide's manifest moves the part (its topology entry, the definition's flag, and its stored text
 // template or logo reference) into `shared`, keyed by slot, with `on: 'master' | 'layout'`; importers before 0.18,
 // which read only slide shapes, ignore `shared` and read the rest of the slide's furniture as before.

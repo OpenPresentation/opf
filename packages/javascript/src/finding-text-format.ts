@@ -104,8 +104,8 @@ const captionUnsupportedPayload: RuleText = (finding) => {
   const kind = type ?? (/a group cannot carry one/.test(finding.message) ? "group" : undefined);
   const is = kind ? kindPhrase(kind) : "not one of those";
   return {
-    message: `A ${code("caption")} belongs to one image, chart, table or video; this block is ${is}.`,
-    next: `put the ${code("caption")} on the image, chart, table or video it describes, or remove it.`,
+    message: `A ${code("caption")} belongs to one image, chart, table, video or diagram; this block is ${is}.`,
+    next: `put the ${code("caption")} on the image, chart, table, video or diagram it describes, or remove it.`,
   };
 };
 
@@ -117,6 +117,69 @@ const imageOptionUnsupportedPayload: RuleText = (finding) => {
   return {
     message: `${code(field)} only applies to pictures; this block is ${kind ? kindPhrase(kind) : "not a picture"}.`,
     next: `remove ${code(field)}, or move it onto an image.`,
+  };
+};
+
+const shapeOptionUnsupportedPayload: RuleText = (finding) => {
+  const field = text(params(finding).field) ?? match(finding.message, /^(\w+) is only valid on a shape block/)?.[1];
+  const type = text(params(finding).type) ?? match(finding.message, /; this payload is '(.+?)'/)?.[1];
+  const kind = type ?? (/a group cannot carry them/.test(finding.message) ? "group" : undefined);
+  if (!field) return undefined;
+  return {
+    message: `${code(field)} only applies to shapes; this block is ${kind ? kindPhrase(kind) : "not a shape"}.`,
+    next: `remove ${code(field)}, or make the block a shape with \`shape\` (a preset such as roundRect) or \`path\`.`,
+  };
+};
+
+const shapeAdjustUnknown: RuleText = (finding) => {
+  const { name, shape, known } = params(finding);
+  if (typeof name !== "string") return undefined;
+  const names = Array.isArray(known) ? known.filter((entry): entry is string => typeof entry === "string") : [];
+  if (shape === "path") return { message: `${code(`adjust.${name}`)} has no effect on a custom \`path\`: adjust values belong to presets.`, next: `remove ${code(`adjust.${name}`)}.` };
+  return {
+    message: `${text(shape) ?? "This preset"} has no adjust value ${code(name)}${names.length ? `; it has ${names.map(code).join(", ")}` : "; it has none"}.`,
+    next: names.length ? `use ${names.map(code).join(" or ")}, or remove ${code(name)}.` : `remove ${code(`adjust.${name}`)}.`,
+  };
+};
+
+const shapeAdjustRange: RuleText = (finding) => {
+  const { name, shape, value, min, max, unit } = params(finding);
+  if (typeof name !== "string" || typeof value !== "number") return undefined;
+  const range = `${typeof min === "number" ? min : "no minimum"} to ${typeof max === "number" ? max : "no maximum"}`;
+  return {
+    message: `${code(`adjust.${name}`)} of ${text(shape) ?? "this preset"} is ${value}, outside ${range}${unit === "degrees" ? " degrees" : ""}, so the preset's default is drawn.`,
+    next: `set it between ${range}.`,
+  };
+};
+
+const shapeLinkHidden: RuleText = () => ({
+  message: "This shape is hidden, so its `link` can never be clicked.",
+  next: "remove `hidden`, or remove the `link`.",
+});
+
+const shapeAnchorSizeUnit: RuleText = (finding) => {
+  const { key, size } = params(finding);
+  return typeof key === "string" ? { message: `${code(`at.${key}: ${String(size)}`)} is a fraction, not pixels.`, next: `rename ${code(key)} to ${code(`${key}Px`)} if it is pixels.` } : undefined;
+};
+
+const shapeAnchorMissing: RuleText = (finding) => {
+  const { id, known } = params(finding);
+  if (typeof id !== "string") return undefined;
+  const ids = Array.isArray(known) ? known.filter((entry): entry is string => typeof entry === "string") : [];
+  return {
+    message: `${code(`at.block: "${id}"`)} names no block on this slide, so the shape is not drawn.${ids.length ? ` Block ids on this slide: ${plainList(ids)}.` : " No block on this slide has an id."}`,
+    next: chooseNext(id, ids, `give the block the shape belongs to ${code(`id: "${id}"`)}`),
+  };
+};
+
+const connectorEndMissing: RuleText = (finding) => {
+  const { id, side, known } = params(finding);
+  if (typeof id !== "string" || (side !== "from" && side !== "to")) return undefined;
+  const ids = Array.isArray(known) ? known.filter((entry): entry is string => typeof entry === "string") : [];
+  if (/names a connector/.test(finding.message)) return { message: `The connector's ${code(side)} names the connector ${code(id)}; a connector joins blocks and overlay shapes.`, next: `name a block or an overlay shape in ${code(side)}.` };
+  return {
+    message: `The connector's ${code(`${side}: "${id}"`)} names no block or overlay shape on this slide, so the connector is not drawn.${ids.length ? ` Ids on this slide: ${plainList(ids)}.` : " Nothing on this slide has an id."}`,
+    next: chooseNext(id, ids, `give the block or shape it should join ${code(`id: "${id}"`)}`),
   };
 };
 
@@ -197,6 +260,19 @@ const chartMappingUnknownColumn: RuleText = (finding) => {
   return {
     message: `The chart mapping names column ${code(name)}, which the data does not have. Columns: ${plainList(columns)}.`,
     next: chooseNext(name, columns),
+  };
+};
+
+const chartReferenceAxisUnavailable: RuleText = () => ({
+  message: "This reference uses a secondary value axis that the chart does not have.",
+  next: "use the value axis, or put a line series on a combo chart's secondary axis.",
+});
+
+const chartReferenceUnsupportedType: RuleText = (finding) => {
+  const type = match(finding.message, /a '(.+?)' chart has none/)?.[1];
+  return {
+    message: type ? `A ${code(type)} chart cannot draw reference lines: it has no single value axis.` : "This chart type cannot draw reference lines: it has no single value axis.",
+    next: "remove `referenceLines`, or use a column, bar, line, line-with-markers, area or combo chart.",
   };
 };
 
@@ -524,13 +600,19 @@ const unresolvedReference: RuleText = (finding, _context, helpers) => {
       : `${noun} ${code(reference)} is not embedded or in a registered catalog, so ${FALLBACK(kind)}.`;
   const { close } = nearest(reference, suggestions);
   const remove = kind === "layouts" ? "remove the reference to let OPF pick" : "remove the reference";
+  // Core suggests only near misses (check-document's nearMisses). With none, say where the ids are listed instead of guessing one.
+  const listed = kind ? `${code("search_catalog")} and ${code(`opf catalog ${kind}`)} list the ${KIND_SINGULAR(kind)} ids` : "";
   return {
     message,
     next: close.length
       ? `did you mean ${code(close[0])}?`
       : suggestions.length
         ? `choose one of ${codeList(suggestions, 5, "or")}, embed the record under ${code("catalogs.custom")}, or ${remove}.`
-        : `embed the record under ${code("catalogs.custom")}, register the catalog that defines it, or ${remove}.`,
+        : kind === "layouts"
+          ? `remove ${code("layout")} and the slide composes automatically from its content, or use a layout that exists (${listed}); a record of your own goes under ${code("catalogs.custom")}.`
+          : listed
+            ? `use a ${KIND_SINGULAR(kind)} that exists (${listed}), embed the record under ${code("catalogs.custom")}, or ${remove}.`
+            : `embed the record under ${code("catalogs.custom")}, register the catalog that defines it, or ${remove}.`,
   };
 };
 
@@ -552,6 +634,28 @@ const unusedReference: RuleText = (finding, _context, helpers) => {
   return {
     message: `Reference ${code(id)} is never cited.`,
     next: `cite it from a text, bullet or list item (${code(`cite: "${id}"`)}), or remove it.`,
+  };
+};
+
+// LH-14: an icon that resolves nowhere: the reference as written and the nearest names core suggests.
+const iconUnknown: RuleText = (finding, _context, helpers) => {
+  const value = helpers.valueAt(helpers.segments);
+  if (typeof value !== "string") return undefined;
+  const near = (finding.suggestions ?? []).slice(0, 3).map((entry) => String(entry.value));
+  const set = /^No icon set ([a-z][a-z0-9-]*) /.exec(finding.message)?.[1];
+  return {
+    message: set ? `Icon set ${code(set)} is not embedded or registered, so ${code(value)} is not drawn.` : `${code(value)} is not an icon of its set or of the deck's ${code("icons")}, so it is not drawn.`,
+    next: near.length ? `did you mean ${near.map((name) => code(name)).join(" or ")}?` : `pick a name the set has (search_icons finds them by keyword), add it to the deck's ${code("icons")}, or remove the icon.`,
+  };
+};
+
+const iconInvalid: RuleText = (finding, _context, helpers) => {
+  const value = helpers.valueAt(helpers.segments);
+  if (typeof value !== "string") return undefined;
+  const why = /has (.+?); an icon draws only/.exec(finding.message)?.[1];
+  return {
+    message: why ? `The SVG of ${code(value)} has ${why}, so it is not drawn.` : `${code(value)} cannot be drawn as an icon.`,
+    next: "keep only shapes in its SVG (paths, circles, rectangles, lines, polygons), with no script, link or raster, or remove the icon.",
   };
 };
 
@@ -619,11 +723,20 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/caption-unsupported-payload": captionUnsupportedPayload,
   "opf/image-option-unsupported-payload": imageOptionUnsupportedPayload,
   "opf/image-placement-invalid": imagePlacementInvalid,
+  "opf/shape-option-unsupported-payload": shapeOptionUnsupportedPayload,
+  "opf/shape-adjust-unknown": shapeAdjustUnknown,
+  "opf/shape-adjust-range": shapeAdjustRange,
+  "opf/shape-link-hidden": shapeLinkHidden,
+  "opf/shape-anchor-size-unit": shapeAnchorSizeUnit,
+  "opf/shape-anchor-missing": shapeAnchorMissing,
+  "opf/connector-end-missing": connectorEndMissing,
   "opf/layout-placeholder-group": layoutPlaceholderGroup,
   "opf/dataset-unknown": datasetUnknown,
   "opf/dataset-field-unknown": datasetFieldUnknown,
   "opf/data-column-duplicate": dataColumnDuplicate,
   "opf/chart-mapping-unknown-column": chartMappingUnknownColumn,
+  "opf/chart-reference-axis-unavailable": chartReferenceAxisUnavailable,
+  "opf/chart-reference-unsupported-type": chartReferenceUnsupportedType,
   "opf/number-format-invalid": numberFormatInvalid,
   "opf/variable-invalid-value": variableInvalidValue,
   "opf/variable-unknown-builtin": variableUnknownBuiltin,
@@ -644,6 +757,8 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/catalog-record-not-in-source": catalogRecordNotInSource,
   "opf/unused-reference": unusedReference,
   "opf/unused-dataset": unusedDataset,
+  "opf/icon-unknown": iconUnknown,
+  "opf/icon-invalid": iconInvalid,
   "opf/unknown-beat": unknownBeat,
   "opf/slide-theme-dimensions": slideThemeDimensions,
   "opf/variable-unknown": variableUnknown,

@@ -32,7 +32,7 @@ const labels = (format, doc, explicit = true) => {
 assert.deepEqual(readMarkers('  - - a: 1'), { indent: 2, markers: [2, 4], rest: 'a: 1', restStart: 6 });
 assert.deepEqual(readMarkers('-a'), { indent: 0, markers: [], rest: '-a', restStart: 0 }, 'a dash is a marker only before a space');
 assert.equal(readEntry('title: x').key, 'title');
-assert.equal(readEntry('top+middle:left: x').key, 'top+middle:left', 'a colon not followed by a space is part of a plain key');
+assert.equal(readEntry('top+middle:start: x').key, 'top+middle:start', 'a colon not followed by a space is part of a plain key');
 assert.equal(readEntry('"a: b": 1').key, 'a: b');
 assert.equal(readEntry("'it''s': 1").key, "it's");
 assert.equal(readEntry('a # b: c'), null, 'a comment hides the colon');
@@ -55,7 +55,7 @@ const yamlContexts = [
   ['value, partly typed', 'design:\n  titleAlignment: ce¦', { mode: 'value', path: ['design', 'titleAlignment'], key: 'titleAlignment', text: 'ce' }],
   ['value of a key in a slide', 'slides:\n  - layout: pi¦', { mode: 'value', path: ['slides', 0, 'layout'], key: 'layout', text: 'pi' }],
   ['value inside quotes', 'slides:\n  - layout: "pi¦"', { mode: 'value', path: ['slides', 0, 'layout'], key: 'layout', text: 'pi', quoted: true }],
-  ['a promoted region key is one key', 'top+middle:left: ¦', { mode: 'value', path: ['top+middle:left'], key: 'top+middle:left', text: '' }],
+  ['a promoted region key is one key', 'top+middle:start: ¦', { mode: 'value', path: ['top+middle:start'], key: 'top+middle:start', text: '' }],
   ['flow list item', 'audience: [bo¦]', { mode: 'item', path: ['audience', 0], text: 'bo', flow: true }],
   ['second flow list item', 'audience: [board, cu¦]', { mode: 'item', path: ['audience', 1], text: 'cu', flow: true }],
   ['flow mapping key', 'design: {theme: x, co¦}', { mode: 'key', path: ['design'], existing: ['theme'], text: 'co', flow: true }],
@@ -112,7 +112,7 @@ for (const doc of ['name: x # ¦', '# ¦', 'slides:\n  - notes: |\n      ¦', 's
 
 // ---- the lists -----------------------------------------------------------------------------------------------------------------------------------
 assert.ok(labels('yaml', 'name: x\n¦').includes('slides') && !labels('yaml', 'name: x\n¦').includes('name'));
-assert.deepEqual(labels('yaml', 'design:\n  titleAlignment: ¦').slice(0, 3).sort(), ['center', 'left', 'right']);
+assert.deepEqual(labels('yaml', 'design:\n  titleAlignment: ¦').slice(0, 3).sort(), ['center', 'end', 'start']);
 assert.ok(labels('yaml', 'slides:\n  - layout: ¦').includes('pillars'));
 assert.deepEqual(labels('yaml', 'slides:\n  - hidden: ¦').sort(), ['false', 'true']);
 assert.equal(labels('yaml', 'slides:\n  - title: ¦'), null, 'free text');
@@ -167,7 +167,7 @@ for (const snippet of SNIPPETS.filter((entry) => entry.where === 'slide')) {
   const slide = read.presentation.slides[0];
   const expected = JSON.parse(JSON.stringify(value));
   if (expected.metric) expected.metric.value = Number(expected.metric.value);
-  if (expected.left || expected.right) { for (const side of ['left', 'right']) if (expected[side]) expected[side] = slide[side]; }
+  if (expected.start || expected.end) { for (const side of ['start', 'end']) if (expected[side]) expected[side] = slide[side]; }
   assert.deepEqual(slide, expected, `${snippet.prefix}: the Markdown reads back as the fragment`);
 }
 assert.equal(renderYaml(SNIPPETS.find((entry) => entry.prefix === 'deck').fragment).text, 'name: ${1:Deck name}\nslides:\n  - title: ${2:Title}${0}');
@@ -235,7 +235,7 @@ assert.deepEqual(tokenFor('md', 'sli', 3), { quoted: false, closed: false, start
 
 // ---- hover ---------------------------------------------------------------------------------------------------------------------------------------
 {
-  const text = 'design:\n  titleAlignment: left\nslides:\n  - layout: pillars\n    title: Hello\n';
+  const text = 'design:\n  titleAlignment: start\nslides:\n  - layout: pillars\n    title: Hello\n';
   const hover = (needle, shift = 0) => hoverModelAt(EditorState.create({ doc: text }), text.indexOf(needle) + shift, { catalogs, format: 'yaml' });
   assert.equal(hover('titleAlignment', 2).model.title, 'titleAlignment');
   assert.ok(hover('titleAlignment', 2).model.description, 'the key has the schema description');
@@ -243,10 +243,10 @@ assert.deepEqual(tokenFor('md', 'sli', 3), { quoted: false, closed: false, start
   assert.equal(hover('pillars', 2).model.type, 'layout');
   assert.equal(hover('Hello', 1), null, 'free text');
   assert.equal(hover('design:', 2).model.title, 'design');
-  assert.equal(hover('left', 1).model.title, 'titleAlignment', 'an enum value shows its field');
+  assert.equal(hover('start', 1).model.title, 'titleAlignment', 'an enum value shows its field');
 }
 {
-  const text = '---\nname: Deck\ndesign:\n  titleAlignment: left\n---\n# A\n<!-- slide: layout=pillars -->\n';
+  const text = '---\nname: Deck\ndesign:\n  titleAlignment: start\n---\n# A\n<!-- slide: layout=pillars -->\n';
   const hover = (needle, shift = 0) => hoverModelAt(EditorState.create({ doc: text }), text.indexOf(needle) + shift, { catalogs, format: 'md' });
   assert.equal(hover('titleAlignment', 3).model.title, 'titleAlignment');
   assert.equal(hover('pillars', 2).model.type, 'layout');
@@ -268,8 +268,11 @@ function walk(value, at, visit) {
   if (Array.isArray(value)) value.forEach((item, index) => walk(item, [...at, index], visit));
   else if (value !== null && typeof value === 'object') for (const [key, item] of Object.entries(value)) { visit([...at, key], item); walk(item, [...at, key], visit); }
 }
+// Sampled by file name, not position, so adding an example never changes which existing decks are checked.
+const sampled = (name, every) => ([...name].reduce((hash, character) => Math.imul(hash ^ character.charCodeAt(0), 16777619), 2166136261) >>> 0) % every === 0;
+
 let compared = 0;
-for (const { slug, deck } of examples.filter((_, index) => index % 4 === 0)) {
+for (const { slug, deck } of examples.filter((example) => sampled(example.file, 4))) {
   const yaml = toYaml(deck).yaml;
   walk(deck, [], (path, value) => {
     const keyRange = locate(yaml, 'yaml', path, { part: 'key' });
@@ -322,9 +325,9 @@ assert.equal(textFixed('yaml', 'slides:\n  - title: a\n  - title: b\n    layot: 
 assert.equal(textFixed('md', '---\ndesign:\n  titleAlignment: middle\n---\n# A\n', 'Change to center'), '---\ndesign:\n  titleAlignment: center\n---\n# A\n', 'the front matter is YAML');
 assert.equal(textFixed('md', '---\ndesgin:\n  theme: minimal\n---\n# A\n', 'Rename to design'), '---\ndesign:\n  theme: minimal\n---\n# A\n');
 {
-  const text = '# A\n<!-- slide: layout=cde -->\n';
+  const text = '# A\n<!-- slide: layout=covr -->\n';
   const found = textFinding('md', text);
-  const fix = textFixesForFinding('md', found, text, { valueAt: () => 'cde' }).find((entry) => entry.title === 'Change to cover');
+  const fix = textFixesForFinding('md', found, text, { valueAt: () => 'covr' }).find((entry) => entry.title === 'Change to cover');
   assert.equal(applySourceEdits(text, fix.edits), '# A\n<!-- slide: layout=cover -->\n', 'an option value is written bare');
 }
 // The rows of the problems panel carry the positions: line and column of the key or the value, in YAML and in Markdown.

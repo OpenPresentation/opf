@@ -11,20 +11,28 @@ shipped versus deferred.
 
 ## Versions
 
-**Published set (2026-10-24):** core, CLI, renderer, PPTX, editor and Gallery, all at
-the shared version **0.26.1**. `node scripts/registry-plan.mjs` prints these releases with their registry `gitHead`;
-registry identity is separate from the consumer and native checks below. All declare
-`engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
+Use one completed shared stable release for core, CLI, renderer, PPTX, editor
+and Gallery. In a checkout, `node scripts/registry-plan.mjs` prints these six
+packages' current registry versions and `gitHead` values. The optional seventh
+package, `@openpresentation/mcp`, follows the same release and is verified by the
+[release workflow](release-process.md); see its [server and viewer guide](mcp.md).
+
+The install below saves exact versions in `package.json`; retain
+`package-lock.json` and confirm the six OPF packages share one release before
+using the workflow. For an earlier reproducible run, use the exact versions in
+its receipt. The 2026-11-08 published-consumer receipt
+records the genuine 0.33.0 run, separately from Office and site qualification.
+All packages declare `engines.node: >=22`; Node 24 is the verified toolchain.
 
 ```sh
 node -v   # 24.x (verified); 22 and later are declared
-npm install @openpresentation/opf@0.26.1 \
-  @openpresentation/opf-render@0.26.1 \
-  @openpresentation/opf-editor@0.26.1 \
-  @openpresentation/opf-pptx@0.26.1 \
-  @openpresentation/cli@0.26.1 \
-  @openpresentation/gallery@0.26.1
-# opf-render 0.26 keeps its converters and font packages as optional peers: install the ones you use
+npm install --save-exact @openpresentation/opf \
+  @openpresentation/opf-render \
+  @openpresentation/opf-editor \
+  @openpresentation/opf-pptx \
+  @openpresentation/cli \
+  @openpresentation/gallery
+# Converters and font packages are optional peers: install the ones you use
 # (here the base font pack, PNG and PDF; add @expo-google-fonts/* office or script packs as needed)
 npm install @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 \
   @resvg/resvg-js@^2.6.2 pdf-lib@^1.17.1 sharp@^0.35.5
@@ -35,14 +43,15 @@ names the `npm install` command, so a host that only previews SVG in a browser i
 
 Copy [`docs/quickstart/developer-quickstart.opf.json`](quickstart/developer-quickstart.opf.json)
 into that project as `deck.opf.json`. That file is a docs fixture, not one of
-the 127 decks in `@openpresentation/opf/examples`. Verify the install came from the registry
+the JSON decks in the installed `@openpresentation/opf/examples` catalog
+(the two Markdown decks are outside that catalog). The [source inventory](compatibility-matrix.md#current-source-inventory) is separate from the installed release. Verify the install came from the registry
 (`package-lock.json` `resolved` URLs start with `https://registry.npmjs.org/`)
 and that you did not add `file:` dependencies on this repository.
 
 The [format card](format-card.md) describes ColorRef, named variables and the
 current source contract. `opf embed` embeds the catalog records a deck uses for
 portable offline authoring; it does not download remote assets. Keep the
-ColorRef docs fixture outside the 127-deck example/golden corpus in this update.
+ColorRef docs fixture outside the bundled examples and renderer golden corpus.
 
 ## The short path
 
@@ -191,7 +200,7 @@ CLI 0.22.0, `opf convert deck.opf.json deck.pptx --body-text native` (`bodyText:
 'native'` in `toPptx`) is an opt-in mode that writes whole paragraphs and binds a
 wrapped title to the Title placeholder; see [when to choose it](cli.md#pptx-text-rr-88-rr-91). Shared
 headers and footers are written on the slide master or layout. The retained
-[Windows sample](evidence/rr-20-windows-current-2026-10-14/README.md) covers
+Windows sample covers
 17 selected native cases and four actual UI operations; 41 of 58 cases were
 not executed natively. This quickstart verifies published Node APIs and
 exports. It does not certify every Office operation or global native fidelity.
@@ -225,4 +234,6 @@ It fails if any package is a `file:` or workspace link.
   links, and Header & footer playground example are already live on
   production; the issue stays open)
 - Archived font-shaping prototypes (not in the published runtime)
-- PDF/UA or PDF/A conformance, general SVG diagrams, and Mermaid
+- PDF/UA or PDF/A conformance. Arbitrary SVG input and Mermaid diagrams are
+  outside this example's checks; see the [diagram guide](diagrams.md) for the
+  supported Mermaid preview and native PowerPoint export.

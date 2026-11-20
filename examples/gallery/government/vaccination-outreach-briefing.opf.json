@@ -61,7 +61,7 @@
     },
     "dimensions": "a4",
     "background": "dark1",
-    "titleAlignment": "right",
+    "titleAlignment": "end",
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "none",
@@ -73,13 +73,13 @@
     },
     "header": false,
     "footer": {
-      "left": {
+      "start": {
         "text": "{{organization.name}}"
       },
       "center": {
         "text": "Decision review"
       },
-      "right": {
+      "end": {
         "text": "{{slide.number}}"
       }
     }
@@ -678,8 +678,8 @@
             "Openers and closers"
           ],
           "design": {
-            "titleAlignment": "left",
-            "contentAlignment": "left"
+            "titleAlignment": "start",
+            "contentAlignment": "start"
           },
           "direction": "row",
           "regions": [

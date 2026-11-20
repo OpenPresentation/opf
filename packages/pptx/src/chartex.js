@@ -8,18 +8,23 @@
 // ranges and their cached values) and one `cx:series` per plotted column,
 // together with its chart style and colour style parts, and the slide's chart
 // frame is wrapped in `mc:AlternateContent`: the `mc:Choice` (which requires
-// the chartex namespace of the construct) references the chartex part and the
-// `mc:Fallback` keeps the classic chart, so a reader without chartex support
-// still shows the data. Both parts share the workbook.
+// the chartex namespace of the construct) references the chartex part, which
+// reads the classic chart's workbook. RR-105: the `mc:Fallback`, what a reader
+// without chartex support draws (Keynote, older PowerPoint), is a
+// picture of OPF's preview of the chart, and the classic chart part is then
+// removed; only when that picture cannot be drawn does the `mc:Fallback` keep
+// the classic chart (a clustered column chart of the raw data, which draws
+// neither bins, steps nor quartiles).
 //
 // Import reads the chartex part back: the `cx:series` layoutIds name the OPF
 // chart type (an owned `paretoLine` marks the Office Pareto chart), and the
 // cached dimensions restore the category-major data.
+import {stripNumeralShape} from './numeral-shapes.js';
 import {CHARTEX_NAMESPACES, chartTypeFromChartex} from './chart-types.js';
 import {chartOptionsFromChartex} from './chart-options.js';
 import {formattedColumns} from './chart-data.js';
 import {insideLabelColor} from './chart-fallback.js';
-import {waterfallSignedFormat, waterfallSteps} from '@openpresentation/opf/composition';
+import {groupsDataRange, GROUPED_LABEL_CODE, histogramEdgeFormat, scottBinCount, waterfallSignedFormat, waterfallSteps} from '@openpresentation/opf/composition';
 
 const NS = Object.freeze({
   a: 'http://schemas.openxmlformats.org/drawingml/2006/main',
@@ -55,25 +60,8 @@ export function columnLetters(index) {
   return name;
 }
 
-/**
- * Office's automatic histogram bins: Scott's normal reference rule gives the bin
- * width 3.49 * sd * n^(-1/3) (sample standard deviation), and the bins cover
- * [min, max] from the minimum. Returns the bin count PowerPoint is told to use
- * (`cx:binCount`), so the preview and the native chart agree on the bins.
- */
-export function scottBinCount(values) {
-  const n = values.length;
-  if (n === 0) return 1;
-  let min = Infinity, max = -Infinity, mean = 0;
-  for (const value of values) { if (value < min) min = value; if (value > max) max = value; mean += value / n; }
-  if (!(max > min) || n < 2) return 1;
-  let variance = 0;
-  for (const value of values) variance += (value - mean) * (value - mean) / (n - 1);
-  const width = 3.49 * Math.sqrt(variance) * Math.cbrt(n) ** -1;
-  if (!(width > 0) || !Number.isFinite(width)) return 1;
-  const count = Math.ceil((max - min) / width - 1e-9);
-  return Number.isFinite(count) && count >= 1 ? count : 1;
-}
+// LH-160: the bin count (Scott's, capped so the labels fit) is core's (chart-histogram.ts); the preview draws the same bins.
+export {scottBinCount};
 
 // A deterministic GUID for cx:series uniqueId, from the chart number and
 // series index (FNV-1a over the key, repeated for each hex group).
@@ -98,7 +86,7 @@ function numberText(value) {
 // The layout properties of the plotted series (CT_SeriesLayoutProperties order:
 // parentLabelLayout, regionLabelLayout, visibility, aggregation, binning,
 // geography, statistics, subtotals).
-function layoutProperties(spec, series, hasCategories) {
+function layoutProperties(spec, series, hasCategories, histogram) {
   switch (spec.layoutId) {
     case 'treemap':
       return '<cx:layoutPr><cx:parentLabelLayout val="none"/></cx:layoutPr>';
@@ -106,7 +94,7 @@ function layoutProperties(spec, series, hasCategories) {
     case 'paretoLine':
       // A category column bins by category (Office "By category"); a lone value column is binned automatically (Scott's rule, made explicit).
       if (hasCategories) return '<cx:layoutPr><cx:aggregation/></cx:layoutPr>';
-      return `<cx:layoutPr><cx:binning intervalClosed="r" underflow="auto" overflow="auto"><cx:binCount val="${scottBinCount(series.values.filter(value => value !== null && Number.isFinite(value)))}"/></cx:binning></cx:layoutPr>`;
+      return `<cx:layoutPr><cx:binning intervalClosed="r" underflow="auto" overflow="auto"><cx:binCount val="${histogram?.bins ?? scottBinCount(series.values.filter(value => value !== null && Number.isFinite(value)))}"/></cx:binning></cx:layoutPr>`;
     case 'boxWhisker':
       return '<cx:layoutPr><cx:visibility meanLine="0" meanMarker="1" nonoutliers="0" outliers="1"/><cx:statistics quartileMethod="exclusive"/></cx:layoutPr>';
     case 'waterfall': {
@@ -137,8 +125,9 @@ const CX_POSITION = Object.freeze({center: 'ctr', 'inside-end': 'inEnd', 'inside
 
 // RR-35: an explicit dataLabels option writes the selected content, position and separator for every construct that takes it;
 // `dataLabels: false` removes the labels a treemap or funnel carries by default. Without the option the defaults are unchanged.
-// RR-54: a value label of a series with a number format (not a binned construct, whose labels are counts) shows it.
-const labelFormat = (spec, code) => code === undefined || spec.binning ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
+// RR-54: a value label of a series with a number format shows it. A binned construct's labels are counts, which carry no format of the column.
+// LH-153: `code` is the label's code (chartexPartXml's `labelCodes`): the column's format, else `#,##0` for a series that groups its thousands.
+const labelFormat = (spec, code) => code === undefined ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
 
 function dataLabels(spec, text, options, code, points = '') {
   if (options?.dataLabelsOff) return '';
@@ -152,6 +141,15 @@ function dataLabels(spec, text, options, code, points = '') {
   if (spec.layoutId === 'treemap') return `<cx:dataLabels pos="ctr">${text}<cx:visibility seriesName="0" categoryName="1" value="0"/>${points}</cx:dataLabels>`;
   if (spec.layoutId === 'funnel') return `<cx:dataLabels pos="ctr">${labelFormat(spec, code)}${text}<cx:visibility seriesName="0" categoryName="0" value="1"/>${points}</cx:dataLabels>`;
   return '';
+}
+
+// LH-153: the values a waterfall's axis spans: each step's start and end on the running total (none when the total leaves the finite range).
+function waterfallExtents(values) {
+  try {
+    return waterfallSteps(values.map(value => value === null || value === undefined || !Number.isFinite(value) ? null : value)).flatMap(step => [step.from, step.to]);
+  } catch {
+    return [];
+  }
 }
 
 // LH-59: the rows of a waterfall's plotted column that are totals (none when the running total leaves the finite range).
@@ -188,18 +186,28 @@ const axisTitle = (value, text, run) => {
     `<a:p><a:pPr algn="ctr"><a:defRPr ${props}>${fill}</a:defRPr></a:pPr><a:r><a:rPr lang="en-US" ${props}>${fill}</a:rPr><a:t>${escapeXml(value)}</a:t></a:r></a:p></cx:rich></cx:tx></cx:title>`;
 };
 
-function axes(spec, gridColor, text, titles = {}, run = {}, code, hiddenValue = false) {
+// RR-105: the value axis core composed for a histogram or Pareto chart (layer.histogram.valueAxis), the scale the preview draws. PowerPoint's
+// automatic chartex axis follows its own rule (v0.33 PowerPoint qualification: 0 to 4,500 by 500 where the preview drew 0 to 5,000 by 1,000),
+// so the bounds and the major unit are written (CT_ValScaling max, min, majorUnit); without one PowerPoint keeps its automatic axis.
+function valueScaling(axis) {
+  if (!axis || ![axis.min, axis.max, axis.majorUnit].every(Number.isFinite) || !(axis.majorUnit > 0) || !(axis.max > axis.min)) return '<cx:valScaling/>';
+  return `<cx:valScaling max="${numberText(axis.max)}" min="${numberText(axis.min)}" majorUnit="${numberText(axis.majorUnit)}"/>`;
+}
+
+function axes(spec, gridColor, text, titles = {}, run = {}, code, hiddenValue = false, edgeCode, valueAxis, percentUnit) {
   if (!spec.axes) return '';
   const gridlines = `<cx:majorGridlines><cx:spPr><a:ln w="9525"><a:solidFill><a:srgbClr val="${gridColor}"/></a:solidFill></a:ln></cx:spPr></cx:majorGridlines>`;
   const gapWidth = {clusteredColumn: '0.06', paretoLine: '0.06', boxWhisker: '1', waterfall: '0.5', funnel: '0.06'}[spec.layoutId] ?? '1';
   // CT_Axis order: scaling, units, majorGridlines, tickLabels, spPr, txPr.
-  const category = `<cx:axis id="0"><cx:catScaling gapWidth="${gapWidth}"/>${axisTitle(titles.category, text, run)}<cx:tickLabels/>${text}</cx:axis>`;
+  // LH-160: a binned axis takes the bin edges' number format (PowerPoint applies it to the bin labels), so they stay on one line.
+  const category = `<cx:axis id="0"><cx:catScaling gapWidth="${gapWidth}"/>${axisTitle(titles.category, text, run)}<cx:tickLabels/>${edgeCode ? `<cx:numFmt formatCode="${edgeCode}" sourceLinked="0"/>` : ''}${text}</cx:axis>`;
   if (spec.layoutId === 'funnel') return `${category}<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/>${text}</cx:axis>`;
   // RR-54: the value axis shows the first series' number format (none when that series has none) (CT_Axis: numFmt follows tickLabels); a binned axis counts.
-  const numberFormat = code === undefined || spec.binning ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
+  // LH-153: `code` is chartexPartXml's `axisCode`: the first series' format, else `#,##0` where the axis groups its thousands (a binned axis counts).
+  const numberFormat = code === undefined ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
   // LH-107: a waterfall whose bars carry their values has no value axis and no gridlines (cx:axis hidden, as the funnel's).
-  const value = hiddenValue ? `<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/>${numberFormat}${text}</cx:axis>` : `<cx:axis id="1"><cx:valScaling/>${axisTitle(titles.value, text, run)}${gridlines}<cx:tickLabels/>${numberFormat}${text}</cx:axis>`;
-  const percentage = spec.layoutId === 'paretoLine' ? `<cx:axis id="2"><cx:valScaling max="1" min="0"/><cx:units unit="percentage"/><cx:tickLabels/>${text}</cx:axis>` : '';
+  const value = hiddenValue ? `<cx:axis id="1" hidden="1">${valueScaling(valueAxis)}<cx:tickLabels/>${numberFormat}${text}</cx:axis>` : `<cx:axis id="1">${valueScaling(valueAxis)}${axisTitle(titles.value, text, run)}${gridlines}<cx:tickLabels/>${numberFormat}${text}</cx:axis>`;
+  const percentage = spec.layoutId === 'paretoLine' ? `<cx:axis id="2"><cx:valScaling max="1" min="0"${percentUnit > 0 && percentUnit <= 1 ? ` majorUnit="${numberText(percentUnit)}"` : ''}/><cx:units unit="percentage"/><cx:tickLabels/>${text}</cx:axis>` : '';
   return `${category}${value}${percentage}`;
 }
 
@@ -265,9 +273,18 @@ function chartexCaption(caption, {labelColor, font, textSize, rtl}) {
     `<a:p><a:pPr algn="${rtl ? 'r' : 'l'}"><a:defRPr ${props}>${fill}</a:defRPr></a:pPr><a:r><a:rPr lang="en-US" ${props}>${fill}</a:rPr><a:t>${escapeXml(caption)}</a:t></a:r></a:p></cx:rich></cx:tx></cx:title>`;
 }
 
-export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, markLabelColor, markLabelBackground, gridColor, font, palette, textSize, options, formats = [], waterfall, rtl = false}) {
+export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, markLabelColor, markLabelBackground, gridColor, font, palette, textSize, options, formats = [], groups = [], waterfall, rtl = false, histogram, numericAxes}) {
   // LH-107: core's waterfall layer applies to the native waterfall only.
   if (spec.layoutId !== 'waterfall') waterfall = undefined;
+  // LH-153: the number format of each series' value labels and of the value axis, where the author wrote none: `#,##0` for a series that groups
+  // its thousands (`groups`, core's rule: whole numbers, one of four digits) and for an axis whose plotted values do (core `groupsDataRange`,
+  // decided from the data because PowerPoint picks its own ticks; the preview decides the same way). A histogram or Pareto chart of a lone value
+  // column plots bin counts, which are always whole numbers and carry no format of the column. A binned construct keeps ignoring a column format.
+  const counts = spec.binning === true && !hasCategories;
+  const labelCodes = series.map((_, index) => spec.binning ? (counts || (formats[index] === undefined && groups[index]) ? GROUPED_LABEL_CODE : undefined) : formats[index] ?? (groups[index] ? GROUPED_LABEL_CODE : undefined));
+  const extents = spec.layoutId === 'waterfall' ? waterfallExtents(series[0].values) : series.flatMap(entry => entry.values);
+  const axisCode = spec.binning ? (counts || (formats[0] === undefined && groupsDataRange(extents, {zeroBased: true})) ? GROUPED_LABEL_CODE : undefined)
+    : formats[0] ?? (groupsDataRange(extents, {zeroBased: spec.layoutId !== 'boxWhisker'}) ? GROUPED_LABEL_CODE : undefined);
   const rows = series[0].labels.length;
   const range = (letter) => `Sheet1!$${letter}$2:$${letter}$${rows + 1}`;
   const categories = hasCategories
@@ -292,7 +309,7 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
     const inside = insideLabels(spec, entry, color, {palette, markLabelColor, markLabelBackground, font, textSize, options});
     return `<cx:series layoutId="${spec.owner ?? spec.layoutId}" uniqueId="${seriesUniqueId(number, index)}">` +
       `<cx:tx><cx:txData><cx:f>Sheet1!$${letter}$1</cx:f><cx:v>${escapeXml(entry.name)}</cx:v></cx:txData></cx:tx>` +
-      `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${waterfall?.labels && !options?.dataLabels && !options?.dataLabelsOff ? waterfallLabels(waterfall, entry, {labelColor: markLabelColor ?? labelColor, font, textSize, code: formats[index]}) : dataLabels(spec, inside?.text ?? text, options, formats[index], inside?.points)}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
+      `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${waterfall?.labels && !options?.dataLabels && !options?.dataLabelsOff ? waterfallLabels(waterfall, entry, {labelColor: markLabelColor ?? labelColor, font, textSize, code: labelCodes[index]}) : dataLabels(spec, inside?.text ?? text, options, labelCodes[index], inside?.points)}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories, histogram)}` +
       (spec.axes ? '<cx:axisId val="0"/><cx:axisId val="1"/>' : '') + '</cx:series>';
   });
   if (spec.owner) {
@@ -308,7 +325,7 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
     `<cx:chartSpace xmlns:a="${NS.a}" xmlns:r="${NS.r}" xmlns:cx="${NS.cx}">` +
     `<cx:chartData><cx:externalData r:id="${workbookRelId}" cx:autoUpdate="0"/>${data}</cx:chartData>` +
-    `<cx:chart>${chartexCaption(waterfall?.caption, {labelColor: markLabelColor ?? labelColor, font, textSize, rtl})}<cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, formats[0], waterfall?.valueAxis === false)}</cx:plotArea>${legend}</cx:chart>` +
+    `<cx:chart>${chartexCaption(waterfall?.caption, {labelColor: markLabelColor ?? labelColor, font, textSize, rtl})}<cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, axisCode, waterfall?.valueAxis === false, counts && histogram?.decimals !== undefined ? histogramEdgeFormat(histogram.decimals) : undefined, numericAxes?.value ?? (spec.binning ? histogram?.valueAxis : undefined), spec.binning ? histogram?.percentUnit : undefined)}</cx:plotArea>${legend}</cx:chart>` +
     // LH-105: no chart draws a panel; the chart area is unfilled and the chart stands on the card or the slide background.
     `<cx:spPr>${fill.color ? solidFill(fill.color, alpha) : '<a:noFill/>'}<a:ln><a:noFill/></a:ln></cx:spPr>${text}` +
     '</cx:chartSpace>';
@@ -369,42 +386,60 @@ export function chartColorStyleXml() {
     [1, 2, 3, 4, 5, 6].map(n => `<a:schemeClr val="accent${n}"/>`).join('') + variations.map(v => `<cs:variation>${v}</cs:variation>`).join('') + '</cs:colorStyle>';
 }
 
+/** RR-105: the name a chart's fallback picture carries until attachChartexFallbacks gives it the frame's. */
+export const chartexFallbackName = name => `${name} fallback picture`;
+
 /**
  * Wrap the PptxGenJS chart frame: the mc:Choice references the chartex part,
- * the mc:Fallback keeps the classic chart frame. The choice frame copies the
- * name, id, description and transform of the original.
+ * the mc:Fallback holds `fallback` (RR-105: the chart's picture), else the
+ * classic chart frame. The choice frame copies the name, id, description and
+ * transform of the original.
  */
-export function wrapChartexFrame(frame, relId, requires) {
+export function wrapChartexFrame(frame, relId, requires, fallback = frame) {
   const namespace = CHARTEX_NAMESPACES[requires];
   if (!namespace) throw new Error(`Unknown chartex namespace ${requires}.`);
   const head = frame.match(/^<p:graphicFrame>[\s\S]*?<\/p:xfrm>/)?.[0];
   if (!head) throw new Error('Generated chart frame has no transform.');
   const choice = `${head}<a:graphic xmlns:a="${NS.a}"><a:graphicData uri="${NS.cx}"><cx:chart xmlns:cx="${NS.cx}" xmlns:r="${NS.r}" r:id="${relId}"/></a:graphicData></a:graphic></p:graphicFrame>`;
-  return `<mc:AlternateContent xmlns:mc="${NS.mc}"><mc:Choice xmlns:${requires}="${namespace}" Requires="${requires}">${choice}</mc:Choice><mc:Fallback>${frame}</mc:Fallback></mc:AlternateContent>`;
+  return `<mc:AlternateContent xmlns:mc="${NS.mc}"><mc:Choice xmlns:${requires}="${namespace}" Requires="${requires}">${choice}</mc:Choice><mc:Fallback>${fallback}</mc:Fallback></mc:AlternateContent>`;
 }
 
 /**
  * Add the chartex parts for every chart the exporter registered in
  * `context.chartex` (by frame name), in slide order. Runs on the unzipped
  * package after the classic chart parts have their fonts and headings.
+ * RR-105: a chart with a fallback picture (`chart.fallback`, the picture's
+ * name) gets that picture as its mc:Fallback, moved from its place in the
+ * slide, and its classic chart is removed: the chart part, its relationships,
+ * its content type and the slide's relationship to it. The embedded workbook
+ * stays, related from the chartex part alone. Returns the removed chart parts.
  */
 export function attachChartexParts(entries, chartex, parseRelationships) {
-  if (!chartex.size) return;
+  if (!chartex.size) return [];
   const slides = Object.keys(entries).filter(part => /^ppt\/slides\/slide\d+\.xml$/.test(part)).sort((a, b) => Number(a.match(/(\d+)\.xml$/)[1]) - Number(b.match(/(\d+)\.xml$/)[1]));
-  const overrides = [];
+  const overrides = [], removed = [];
+  const fallbacks = new Set([...chartex.values()].map(chart => chart.fallback).filter(Boolean));
   let number = 0;
   for (const part of slides) {
     const relationships = parseRelationships(entries, part);
     const relsPart = part.replace(/([^/]+)$/, '_rels/$1.rels');
     let rels = text(entries[relsPart]);
     let nextId = Math.max(0, ...[...rels.matchAll(/\bId="rId(\d+)"/g)].map(match => Number(match[1]))) + 1;
-    let xml = text(entries[part]);
-    let changed = false;
+    // RR-105: each fallback picture leaves its place for its frame's mc:Fallback.
+    const pictures = new Map();
+    let xml = text(entries[part]).replace(/<p:pic>[\s\S]*?<\/p:pic>/g, picture => {
+      const name = picture.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
+      if (!fallbacks.has(name)) return picture;
+      pictures.set(name, picture);
+      return '';
+    });
+    let changed = pictures.size > 0;
     xml = xml.replace(/<p:graphicFrame>[\s\S]*?<\/p:graphicFrame>/g, frame => {
       const name = frame.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
       const chart = chartex.get(name);
       if (!chart) return frame;
-      const chartPart = relationships.get(frame.match(/<c:chart\b[^>]*\br:id="([^"]+)"/)?.[1])?.path;
+      const classicId = frame.match(/<c:chart\b[^>]*\br:id="([^"]+)"/)?.[1];
+      const chartPart = relationships.get(classicId)?.path;
       if (!chartPart) throw new Error('Generated chart relationship is missing.');
       const workbook = [...parseRelationships(entries, chartPart).values()].find(relationship => relationship.type === CHARTEX_RELATIONSHIP_TYPES.package);
       if (!workbook) throw new Error('Generated chart has no embedded workbook.');
@@ -420,13 +455,62 @@ export function attachChartexParts(entries, chartex, parseRelationships) {
       const relId = `rId${nextId++}`;
       rels = rels.replace('</Relationships>', `<Relationship Id="${relId}" Type="${CHARTEX_RELATIONSHIP_TYPES.chart}" Target="../charts/chartEx${number}.xml"/></Relationships>`);
       changed = true;
-      return wrapChartexFrame(frame, relId, chart.spec.requires);
+      const picture = chart.fallback && pictures.get(chart.fallback);
+      if (chart.fallback && !picture) throw new Error('A chartex chart has no fallback picture.');
+      if (!picture) return wrapChartexFrame(frame, relId, chart.spec.requires);
+      pictures.delete(chart.fallback);
+      // The classic chart is no longer shown by any reader: it and the slide's relationship to it go (the workbook stays).
+      const relationship = new RegExp(`<Relationship\\b[^>]*\\bId="${classicId}"[^>]*/>`);
+      if (!relationship.test(rels)) throw new Error('Generated chart relationship is missing.');
+      rels = rels.replace(relationship, '');
+      removed.push(chartPart);
+      return wrapChartexFrame(frame, relId, chart.spec.requires, picture);
     });
+    if (pictures.size) throw new Error('A chartex fallback picture has no chart frame.');
     if (!changed) continue;
     entries[part] = encoder.encode(xml);
     entries[relsPart] = encoder.encode(rels);
   }
-  if (overrides.length) entries['[Content_Types].xml'] = encoder.encode(text(entries['[Content_Types].xml']).replace('</Types>', `${overrides.join('')}</Types>`));
+  let types = text(entries['[Content_Types].xml']);
+  for (const chartPart of removed) {
+    delete entries[chartPart];
+    delete entries[chartPart.replace(/([^/]+)$/, '_rels/$1.rels')];
+    const override = new RegExp(`<Override\\b[^>]*\\bPartName="/${chartPart.replace(/[.]/g, '\\.')}"[^>]*/>`);
+    if (!override.test(types)) throw new Error(`${chartPart} has no content type.`);
+    types = types.replace(override, '');
+  }
+  if (overrides.length || removed.length) entries['[Content_Types].xml'] = encoder.encode(types.replace('</Types>', `${overrides.join('')}</Types>`));
+  return removed;
+}
+
+/**
+ * RR-105: finish each chart's fallback picture once its SVG part is attached (src/svg-image.js attachSvgPictures): it takes its
+ * frame's p:cNvPr (the name and alt text of the mc:Choice) and its transform, and keeps its own id, as the classic fallback frame
+ * had one of its own: an app's shape id says which branch it drew. Data provenance later tags it with the frame's OPF_DATA_V1
+ * (src/data-provenance.js).
+ */
+export function attachChartexFallbacks(entries, chartex) {
+  const fallbacks = new Set([...chartex.values()].map(chart => chart.fallback).filter(Boolean));
+  if (!fallbacks.size) return;
+  let seen = 0;
+  for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
+    const xml = text(entries[part]), next = xml.replace(/<mc:AlternateContent\b[\s\S]*?<\/mc:AlternateContent>/g, alternate => {
+      const picture = alternate.match(/<mc:Fallback><p:pic>[\s\S]*?<\/p:pic><\/mc:Fallback>/)?.[0];
+      if (!fallbacks.has(picture?.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1])) return alternate;
+      seen += 1;
+      const choice = alternate.match(/<mc:Choice\b[\s\S]*?<\/mc:Choice>/)?.[0] ?? '';
+      const cNvPr = choice.match(/<p:cNvPr\b[^>]*?(?:\/>|>[\s\S]*?<\/p:cNvPr>)/)?.[0];
+      const xfrm = choice.match(/<p:xfrm>([\s\S]*?)<\/p:xfrm>/)?.[1];
+      if (!cNvPr || !xfrm) throw new Error('A chartex frame has no name or transform.');
+      const id = picture.match(/<p:cNvPr\b[^>]*\bid="(\d+)"/)?.[1];
+      if (!id) throw new Error('A chartex fallback picture has no id.');
+      const named = cNvPr.replace(/(<p:cNvPr\b[^>]*\bid=")\d+"/, `$1${id}"`);
+      const finished = picture.replace(/<p:cNvPr\b[^>]*?(?:\/>|>[\s\S]*?<\/p:cNvPr>)/, () => named).replace(/<a:xfrm\b[^>]*>[\s\S]*?<\/a:xfrm>/, () => `<a:xfrm>${xfrm}</a:xfrm>`);
+      return alternate.replace(picture, () => finished);
+    });
+    if (next !== xml) entries[part] = encoder.encode(next);
+  }
+  if (seen !== fallbacks.size) throw new Error('Missing generated chartex fallback pictures.');
 }
 
 // ---------------------------------------------------------------------------
@@ -497,7 +581,7 @@ export function chartFromChartex(doc, {heading, limits, invalid, path, report}) 
     values.push(numeric ? level(numeric, `${location}/cx:numDim`, true) : []);
     // RR-54: the series' number format code (cx:lvl formatCode); core maps the codes it can back to column formats.
     const code = asArray(numeric?.['cx:lvl'])[0]?.formatCode;
-    codes.push(typeof code === 'string' ? code : undefined);
+    codes.push(typeof code === 'string' ? stripNumeralShape(code) : undefined);
     const name = series['cx:tx']?.['cx:txData']?.['cx:v'];
     names.push(name === undefined ? `Series ${index + 1}` : scalar(name));
   });

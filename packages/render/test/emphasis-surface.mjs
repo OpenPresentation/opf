@@ -25,6 +25,9 @@ for (const design of [{theme: 'classic'}, {theme: 'classic', variant: 'dark1'}, 
     assert.ok(rect, `${label}: the surface is drawn`);
     assert.equal(rect.fill.toUpperCase(), surface.fill, `${label}: in core's fill`);
     const texts = [...svg.matchAll(/<text\b([^>]*)>/g)].map(([, a]) => attrs(a)).filter((entry) => (entry['data-opf-path'] ?? '').startsWith(`${path}.`) && entry.fill);
+    // Wave 8: a band text with a run-in label (LH-63) is rich text, whose runs carry their fills on tspans inside the text's group.
+    const group = svg.split(`data-opf-path="${path}.text"`)[1]?.split('</g>')[0] ?? '';
+    texts.push(...[...group.matchAll(/<tspan\b([^>]*)>/g)].map(([, a]) => ({...attrs(a), 'data-opf-path': `${path}.text`})).filter((entry) => entry.fill));
     assert.ok(texts.length, `${label}: text on the surface`);
     for (const text of texts) assert.ok(colorContrast(text.fill.slice(0, 7), surface.fill) >= 4.5, `${label}: ${text['data-opf-path']} ${text.fill} on ${surface.fill}`);
     checked++;

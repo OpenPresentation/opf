@@ -51,8 +51,95 @@
 .opf-title-input[aria-disabled="true"] {
   color: var(--opf-ui-muted-fg);
 }
+
+/* Editing: the field takes the whole row the part sits in (the row is the host's, found by `row` or `data-opf-title-row`), with Save and Cancel
+   at its end. The part is an overlay of the row, so the row keeps its height; the row's other controls are hidden (and leave the Tab order). */
+.opf-title-actions {
+  display: none;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  margin-inline-start: 8px;
+}
+.opf-title-actions[hidden] {
+  display: none;
+}
+[data-opf-title-relative] {
+  position: relative;
+}
+[data-opf-title-editing] > * {
+  visibility: hidden;
+}
+.opf-title.opf-title[data-editing] {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  width: auto;
+  max-width: none;
+  padding-inline: var(--opf-title-pad-start, 0) var(--opf-title-pad-end, 0);
+  background: var(--opf-ui-surface);
+  visibility: visible;
+}
+.opf-title.opf-title[data-editing] .opf-title-input {
+  flex: 1 1 auto;
+  field-sizing: fixed;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  border-color: var(--opf-ui-ring);
+  background: var(--opf-ui-surface);
+  text-overflow: clip;
+}
+.opf-title.opf-title[data-editing] .opf-title-actions {
+  display: inline-flex;
+}
+.opf-title-button {
+  box-sizing: border-box;
+  min-width: 64px;
+  height: var(--opf-ui-control-h);
+  margin: 0;
+  padding: 0 14px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius);
+  background: var(--opf-ui-surface);
+  color: var(--opf-ui-fg);
+  font: 500 13px/1.2 var(--opf-ui-font);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--opf-ui-ease), border-color var(--opf-ui-ease);
+}
+.opf-title-button:hover {
+  background: var(--opf-ui-muted);
+}
+.opf-title-button[data-action="save"] {
+  border-color: var(--opf-ui-accent);
+  background: var(--opf-ui-accent);
+  color: var(--opf-ui-accent-fg);
+}
+.opf-title-button[data-action="save"]:hover {
+  opacity: 0.92;
+  background: var(--opf-ui-accent);
+}
+.opf-title-button:focus-visible {
+  outline: 2px solid var(--opf-ui-ring);
+  outline-offset: 2px;
+}
+.opf-title[data-density="touch"] .opf-title-button {
+  height: 44px;
+}
+@media (pointer: coarse) {
+  .opf-title-button {
+    min-width: 44px;
+    height: 44px;
+  }
+  .opf-title.opf-title[data-editing] .opf-title-input {
+    min-height: 44px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
-  .opf-title-input {
+  .opf-title-input,
+  .opf-title-button {
     transition: none;
   }
 }

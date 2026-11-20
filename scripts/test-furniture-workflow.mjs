@@ -53,9 +53,9 @@ try{
  },registry.embeddedFonts);
  for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1280]])for(const floor of [16,32])for(const local of [false,true]){
   const original=local?'':'  A  B\tC\u00a0D\r\n\r\ntrail  \r';
-  const header={left:{text:original},center:{text:'{{organization.name}}'},right:{text:'{{slide.section}}'}},footer={left:{date:' 2026-09-10 '},right:{text:'{{slide.number}}'}};
+  const header={start:{text:original},center:{text:'{{organization.name}}'},end:{text:'{{slide.section}}'}},footer={start:{date:' 2026-09-10 '},end:{text:'{{slide.number}}'}};
   const deck = withRecords({organization:{id:'openpresentation',name:'OpenPresentation'},design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},header,footer},slides:[{title:'Shared furniture',section:'Review',text:'Body content keeps its own space.',composition:{minFontSize:floor,overflow:'error'},...(local?{design:{header}}:{})}]});
-  const fieldPath=local?'slides.0.design.header.left.text':'design.header.left.text';activeCase={measured,width,height,floor,local,deck};
+  const fieldPath=local?'slides.0.design.header.start.text':'design.header.start.text';activeCase={measured,width,height,floor,local,deck};
   await page.evaluate(args=>mount(args),{deck,faces:registry.embeddedFonts,measured});
   const geometry=await page.evaluate(async()=>{
    await document.fonts.ready;const geometry=editor.composeSlide(0,renderOptions),context=document.createElement('canvas').getContext('2d');
@@ -109,15 +109,15 @@ try{
   await target.dblclick();input=page.getByRole('textbox',{name:'Edit text inline',exact:true});
   const edit=original?original.replace('A','Edited'):'  New\tlabel  ';await input.fill(edit);await input.press('Control+Enter');const accepted=await page.evaluate(()=>editor.presentation);assert.equal(await page.evaluate(path=>editor.get(path),fieldPath),edit);
   await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await page.evaluate(()=>editor.presentation),deck);await page.getByRole('button',{name:'Redo',exact:true}).click();assert.deepEqual(await page.evaluate(()=>editor.presentation),accepted);
-  const date=page.locator('[data-canvas-target][data-opf-path="design.footer.left.date"]');await date.dblclick();input=page.getByRole('textbox',{name:'Edit date inline',exact:true});await input.fill('Literal date');await input.press('Control+Enter');assert.equal(await page.evaluate(()=>editor.presentation.design.footer.left.date),'Literal date');await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await page.evaluate(()=>editor.presentation),accepted);
+  const date=page.locator('[data-canvas-target][data-opf-path="design.footer.start.date"]');await date.dblclick();input=page.getByRole('textbox',{name:'Edit date inline',exact:true});await input.fill('Literal date');await input.press('Control+Enter');assert.equal(await page.evaluate(()=>editor.presentation.design.footer.start.date),'Literal date');await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await page.evaluate(()=>editor.presentation),accepted);
   await page.getByRole('button',{name:'Export',exact:true}).click();await page.waitForFunction(()=>lastImport!==null||failures.length>0);
   assert.deepEqual(await page.evaluate(()=>failures),[]);
   const exported=await page.evaluate(()=>({bytes:Array.from(lastExport),imported:lastImport,source:editor.presentation}));
   assert.deepEqual(exported.source,accepted);
   const imported=exported.imported,importedHeader=imported.slides[0].design?.header??imported.design?.header,importedFooter=imported.slides[0].design?.footer??imported.design?.footer;
-  assert.equal(importedHeader.left.text,edit);assert.equal(importedHeader.center.text,'{{organization.name}}');assert.equal(importedHeader.right.text,'{{slide.section}}');
+  assert.equal(importedHeader.start.text,edit);assert.equal(importedHeader.center.text,'{{organization.name}}');assert.equal(importedHeader.end.text,'{{slide.section}}');
   assert.deepEqual(imported.organization,deck.organization);assert.equal(imported.slides[0].section,'Review');
-  assert.equal(importedFooter.left.date,deck.design.footer.left.date);assert.equal(importedFooter.right.text,'{{slide.number}}');
+  assert.equal(importedFooter.start.date,deck.design.footer.start.date);assert.equal(importedFooter.end.text,'{{slide.number}}');
   assert.deepEqual(await page.evaluate(()=>failures),[]);if(measured&&floor===32)await page.screenshot({path:path.join(output,`furniture-${width}-${local?'local':'inherited'}.png`),fullPage:true});
   results.push({measured,width,height,floor,local,path:fieldPath,original,accepted:edit,geometry,paint,imported,pptxSha256:hash(new Uint8Array(exported.bytes))});
  }

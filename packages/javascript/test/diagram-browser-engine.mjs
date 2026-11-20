@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { checkDiagram, composeSlide, diagramsPending, ensureDiagrams } from '../dist/composition.js';
 
 const deck = { slides: [{ title: 'Flow', diagram: 'flowchart LR\n  A --> B' }, { title: 'Order', blocks: [{ text: 'Context' }, { diagram: { source: 'sequenceDiagram\n  A->>B: hi' } }] }] };
+// SH-12: a DOT graph is drawn by pele's flowchart type, so it waits for that type.
+assert.deepEqual(diagramsPending({ diagram: { source: 'digraph { a -> b }', syntax: 'dot' } }), ['flowchart']);
 assert.deepEqual(diagramsPending(deck), ['flowchart', 'sequence']);
 assert.equal(checkDiagram(deck.slides[0].diagram).issue.code, 'diagram-unloaded');
 const before = composeSlide(deck.slides[0], { width: 1920, height: 1080, scale: 1.5 });
@@ -16,4 +18,11 @@ assert.ok(after.items.find(item => item.field === 'diagram').diagram.svg.startsW
 // A type the page never loaded is still reported as loading, not as an error of the document; an unknown one is an error.
 assert.deepEqual(diagramsPending({ diagram: 'pie\n  "A" : 1' }), ['pie']);
 assert.equal(checkDiagram('not a diagram').issue.code, 'diagram-unsupported');
+// SH-13: the PlantUML reader loads on demand too, then the pele type its diagram is drawn as.
+const plantuml = { diagram: { source: '@startmindmap\n* Root\n** Child\n@endmindmap', syntax: 'plantuml' } };
+assert.deepEqual(diagramsPending(plantuml), ['plantuml']);
+assert.equal(checkDiagram(plantuml.diagram).issue.code, 'diagram-unloaded');
+assert.deepEqual(await ensureDiagrams(plantuml), ['plantuml', 'mindmap']);
+assert.deepEqual(diagramsPending(plantuml), []);
+assert.deepEqual(checkDiagram(plantuml.diagram), { ok: true, type: 'mindmap' });
 console.log('lazy diagram engine: ok');

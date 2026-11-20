@@ -1,7 +1,7 @@
 import { isLayoutTemplate, layoutEntries } from './layout-template.js';
 
 /** Body content kinds accepted by template regions. */
-export const LAYOUT_BODY_KINDS = ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram'] as const;
+export const LAYOUT_BODY_KINDS = ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape'] as const;
 export type LayoutBodyKind = typeof LAYOUT_BODY_KINDS[number];
 
 /** What a layout template holds, derived from its regions. */

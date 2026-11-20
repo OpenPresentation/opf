@@ -85,6 +85,8 @@ Slot names: `toolbar` and the toolbar items `title`, `history`, `counter`, `view
 | `theme` | see [theming](theming.md) and, for class hooks, layers and icons, [styling](styling.md) |
 | `onChange`, `onSelection`, `onCursor`, `onError`, `onReady`, `on` | callbacks and listeners |
 
+With `slideActions: "starters"`, the thumbnail strip offers Title, Bullets and Blank and focuses the title on slides that have one. Use `canvas: { titleEnterCommits: true }` for Enter to finish an inline slide title and Shift+Enter to insert a line break. A host that supplies its own status area can set `labels.ready` to an empty string.
+
 ## The handle
 
 `getDocument()` (frozen, replaced on every change, so a store snapshot) · `setDocument(document, { text, format, name, rebase })` (opens a document as one undoable change that forks no catalog record; the source pane shows `text` as written; a document the session refuses becomes a draft in the pane and the call returns `false`) · `setSourceText(text, { format, name, rebase })` (raw text in the source pane, below) · `session` · `canvas` · `sourcePane` and the other parts · `slideIndex`, `setSlide(index)`, `goTo(index, path)`, `select(path)` · `view`, `views`, `setView(view)` · `undo()`, `redo()`, `commit()` · `focus("source" | "canvas")` · `present()` · `openFind()` · `readSource()` · `sourceCursor` · `getDeckName()`, `setDeckName(name)` · `expand(on)`, `expanded` · `dirty`, `markSaved()`, `save()` · `setActions(list)` · `shortcuts()` · `toolbar`, `deckTitle`, `designMenu`, `reviewPill`, `helpButton`, `toolbarActions` · `setReadOnly`, `setTheme`, `setDensity`, `setExportMode` · `status(message)` · `on(event, listener)` (returns the unsubscribe) and `off` · `ready` · `destroy()`.
@@ -123,7 +125,7 @@ createOpfEditor(el, { document, fonts, catalogs, toolbar: false, slots: { title:
 | `present` | the Present button | 75 | Present |
 | `expand` | expand the editor to fill the window (Escape returns it) | 70 | Expand editor |
 | `design` | the Design quick menu: theme, colors, fonts and this slide's layout, each one undoable edit; "More design options…" opens the Design panel when there is one, or yours (`designMenu.onOpenPanel`). A preset leaves it out where the Design side panel is on (not in `embed`) | 35 | Design… |
-| `review` | the review pill ("Valid", "3 issues"), fed by the Review counts; it opens the Review panel. Listed in a layout without one (the embed), the review runs headless for it and pressing it emits `review-open` (`{ counts, findings }`) for you to show the findings | 30 | Review (3) |
+| `review` | the review pill ("Valid", "3 issues"), fed by the Review counts (while the source text is not a valid deck, that text's errors); it opens the Review panel. Listed in a layout without one (the embed), the review runs headless for it and pressing it emits `review-open` (`{ counts, findings }`) for you to show the findings | 30 | Review (3) |
 | `help` | the keyboard shortcuts sheet, listing `editor.shortcuts()` (the bindings this editor has); "?" opens it, except in `embed` and `viewer` | 10 | Keyboard shortcuts |
 | `actions` | your own buttons (`actions`, `setActions`); hidden while there are none | 25; 90 while one action is `primary` (unless `toolbar` gives it a priority) | one entry per action |
 | `more` | the ⋯ menu, shown only while something is in it | fixed | – |

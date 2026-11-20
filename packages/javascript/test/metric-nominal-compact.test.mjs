@@ -11,7 +11,8 @@ const message = statement.regions.find((region) => region.name === 'message');
 message.size = 'auto';
 
 test('a metric in an auto region keeps 76 px', () => {
-  const result = composeSlide({ title: 'Adoption doubled', metric: { value: '2x', label: 'Weekly active teams' } }, { layout: statement });
+  // Without fill: LH-09 makes a statement's lone metric its message, which grows to display size (lh-09-statements.test.mjs).
+  const result = composeSlide({ title: 'Adoption doubled', metric: { value: '2x', label: 'Weekly active teams' } }, { layout: statement, fill: false });
   const metric = result.items.find((item) => item.field === 'metric');
   assert.equal(metric.metricLayout.parts.find((part) => part.role === 'value').fit.fontSize, 76);
   assert.deepEqual(result.diagnostics, []);

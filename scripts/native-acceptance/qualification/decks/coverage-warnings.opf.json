@@ -1,0 +1,72 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: deliberate warning cases",
+  "description": "RR-105 format coverage: slides that validate with a deliberate warning, so the warnings added in 0.34 are drawn and exported: an overlay with no part on the slide, an anchored size that reads like 0.33 pixels, and a timeline period shorter than its marker.",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "id": "shape-off-slide",
+      "title": "A badge placed entirely off the slide",
+      "text": "The badge was written with x as a percent, so it lands off the slide and draws nothing (opf/shape-off-slide).",
+      "shapes": [
+        {
+          "shape": "ellipse",
+          "x": 70,
+          "y": 0.1,
+          "width": 0.12,
+          "height": 0.2,
+          "fill": "accent2",
+          "text": "New"
+        }
+      ]
+    },
+    {
+      "id": "anchor-size-unit",
+      "title": "An anchored note sized like 0.33 pixels",
+      "center": {
+        "id": "plan",
+        "text": "The plan has five parts."
+      },
+      "shapes": [
+        {
+          "shape": "wedgeRectCallout",
+          "text": "Owner: Ana",
+          "at": {
+            "block": "plan",
+            "edge": "top",
+            "width": 6,
+            "height": 0.6
+          },
+          "fill": "light2"
+        }
+      ]
+    },
+    {
+      "id": "timeline-period-short",
+      "title": "A milestone shorter than its marker",
+      "timeline": [
+        {
+          "when": "Jan",
+          "what": "Plan",
+          "duration": 100,
+          "status": "done"
+        },
+        {
+          "when": "Jul",
+          "what": "Audit",
+          "duration": 0.01,
+          "status": "current"
+        },
+        {
+          "when": "Aug",
+          "what": "Rollout",
+          "duration": 100,
+          "status": "planned"
+        }
+      ]
+    }
+  ]
+}

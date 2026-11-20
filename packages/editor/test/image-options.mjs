@@ -25,14 +25,16 @@ const deck = () => ({
   const fields = {
     fit: "contain",
     focus: { x: 0.25, y: 0.75 },
-    shape: "rounded",
-    cornerRadius: 0.1,
-    border: { color: "dark1", width: 4 },
+    shape: "roundRect",
+    adjust: { adj: 0.1 },
+    stroke: { color: "dark1", width: 4 },
     opacity: 0.8,
     recolor: { dark: "dark1", light: "accent1" },
     overlay: { color: "dark1", opacity: 0.4, edge: "bottom", size: 0.25 },
     aspectRatio: 1.5,
-    placement: { edge: "right", size: 0.45 },
+    placement: { edge: "end", size: 0.45 },
+    // LH-132: how a person's picture is drawn in a team (it changes nothing on a lone picture).
+    portrait: "side",
   };
   assert.deepEqual(Object.keys(fields).sort(), [...IMAGE_TREATMENT_FIELDS].sort());
   const change = setImageTreatment(editor, "slides.0.blocks.0", fields);
@@ -42,7 +44,7 @@ const deck = () => ({
   for (const [key, value] of Object.entries(fields)) assert.deepEqual(block[key], value, key);
   const state = readImageTreatments(editor.presentation, "slides.0.blocks.0");
   assert.equal(state.placeable, true);
-  assert.deepEqual(state.placement, { edge: "right", size: 0.45 });
+  assert.deepEqual(state.placement, { edge: "end", size: 0.45 });
   // The composition draws what was set: the block bleeds to the right edge and carries its fit and focus.
   const geometry = composeSlide(editor.presentation.slides[0], resolveSlideContext(editor.presentation, 0).options);
   const image = geometry.items.find((item) => item.path === "slides.0.blocks.0.image" || item.path === "slides.0.blocks.0");
@@ -60,27 +62,27 @@ const deck = () => ({
   // The slide's own image (Slide.image) is not an image block: it takes no framing fields.
   assert.throws(() => setImageTreatment(editor, "slides.1", { fit: "contain" }), (error) => error.code === "not-an-image-block");
   // The image-treatments switch takes the same fields for one block.
-  const switched = switchDimension(editor, "image-treatments", { shape: "circle" }, { path: "slides.0.blocks.0" });
+  const switched = switchDimension(editor, "image-treatments", { shape: "ellipse" }, { path: "slides.0.blocks.0" });
   assert.equal(switched.scope, "block");
-  assert.equal(editor.get("slides.0.blocks.0.shape"), "circle");
+  assert.equal(editor.get("slides.0.blocks.0.shape"), "ellipse");
 }
 
 // --- placement rules: top-level blocks only, one per edge -----------------------------------------------------------
 {
   const presentation = deck();
-  presentation.slides[0].blocks[1] = { image: "asset:photo", placement: { edge: "left" } };
-  assert.throws(() => prepareImageTreatment(presentation, "slides.0.blocks.0", { placement: { edge: "left" } }), (error) => error.code === "placement-edge-taken");
+  presentation.slides[0].blocks[1] = { image: "asset:photo", placement: { edge: "start" } };
+  assert.throws(() => prepareImageTreatment(presentation, "slides.0.blocks.0", { placement: { edge: "start" } }), (error) => error.code === "placement-edge-taken");
   assert.equal(prepareImageTreatment(presentation, "slides.0.blocks.0", { placement: { edge: "top", size: 0.3 } }).changed, true);
-  assert.throws(() => prepareImageTreatment(presentation, "slides.0.blocks.2.blocks.0", { placement: { edge: "right" } }), (error) => error.code === "placement-not-top-level");
-  assert.deepEqual(readImageTreatments(presentation, "slides.0.blocks.0").usedEdges, ["left"]);
+  assert.throws(() => prepareImageTreatment(presentation, "slides.0.blocks.2.blocks.0", { placement: { edge: "end" } }), (error) => error.code === "placement-not-top-level");
+  assert.deepEqual(readImageTreatments(presentation, "slides.0.blocks.0").usedEdges, ["start"]);
   assert.equal(readImageTreatments(presentation, "slides.0.blocks.2.blocks.0").placeable, false);
   for (const [fields, message] of [
     [{ fit: "crop" }, /cover, contain, stretch/],
     [{ focus: { x: 2, y: 0 } }, /focus/i],
     [{ placement: { edge: "middle" } }, /edge/],
-    [{ placement: { edge: "left", size: 0.95 } }, /0\.1 to 0\.9/],
+    [{ placement: { edge: "start", size: 0.95 } }, /0\.1 to 0\.9/],
     [{ overlay: { color: "dark1" } }, /opacity/],
-    [{ border: { color: "nope", width: 2 } }, /border color/i],
+    [{ stroke: { color: "nope", width: 2 } }, /stroke color/i],
     [{ slideImage: "x" }, /Unknown image treatment/],
   ])
     assert.throws(() => prepareImageTreatment(deck(), "slides.0.blocks.0", fields), message);
@@ -107,7 +109,7 @@ const deck = () => ({
   setBackground(editor, spec);
   assert.deepEqual(editor.get("design.background"), spec);
   setBackground(editor, { type: "image", src: "asset:photo", fit: "tile" }, { slideIndex: 1 });
-  assert.deepEqual(readBackground(editor.presentation, { slideIndex: 1 }), { type: "image", opacity: undefined, src: "asset:photo", alt: undefined, fit: "tile", focus: undefined, recolor: undefined, overlay: undefined, scope: "slide", value: { type: "image", src: "asset:photo", fit: "tile" } });
+  assert.deepEqual(readBackground(editor.presentation, { slideIndex: 1 }), { type: "image", opacity: undefined, src: "asset:photo", alt: undefined, fit: "tile", focus: undefined, recolor: undefined, overlay: undefined, textPlacement: undefined, scope: "slide", value: { type: "image", src: "asset:photo", fit: "tile" } });
   const deckState = readBackground(editor.presentation);
   assert.equal(deckState.alt, "Ships at dawn");
   assert.deepEqual(deckState.focus, { x: 0.5, y: 0.7 });

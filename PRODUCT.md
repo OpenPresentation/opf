@@ -15,7 +15,7 @@ Downstream applications:
   and self-hosted systems built by integrators
 ```
 
-OpenPresentation publishes open-source code and documentation only. It does **not** provide hosted APIs, hosted rendering functions, queues, storage, authentication, jobs, previews, SLAs, telemetry, or managed infrastructure. Downstream applications can wrap the OSS primitives in their own products and services.
+OpenPresentation publishes open-source code and documentation. The engine runs in the caller’s environment; downstream applications choose their own rendering, storage and application infrastructure. The [MCP server](docs/mcp.md) has local stdio and hosted transport options, with viewer availability determined separately by the client and deployment.
 
 - **Role in OpenPresentation OSS:** OPF is the interchange format. It defines the JSON contract between authoring intent and rendered presentations so agents, editors, validators, renderers, and converters can interoperate.
 - **Siblings in OpenPresentation OSS:** [pptx.gallery](https://www.pptx.gallery) provides the human-browsable shared vocabulary. This repository owns the schemas under `spec/` and the core API in `@openpresentation/opf`; the gallery package in this repository (`packages/gallery`) owns the catalog records published as `@openpresentation/gallery`, released with the other packages. pptx.gallery presents the published package and does not author records.

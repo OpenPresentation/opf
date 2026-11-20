@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {test} from 'node:test';
+import {compositeLayoutDefinition} from '../dist/composition.js';
+const frame={x:0,y:0,width:600,height:400};
+const table=count=>({nodes:Array.from({length:count},(_,index)=>{const box={x:index*600/count,y:0,width:600/count,height:400};return{index,box,textBox:{...box},preset:'roundRect',adjust:0};}),...(count===8?{textTops:Array(count).fill(.2)}:{})});
+const style={node:'node1',text:'node',margins:[0,0,0,0],fontSize:33};
+const build=align=>compositeLayoutDefinition({uniqueId:'urn:opf:review:paragraph-defaults',title:'Defaults',description:'Native added-node paragraph defaults',category:'list'},frame,12,table,{...style,...(align?{align}:{})});
+const texts=definition=>{const out=[];const visit=value=>{if(!value||typeof value!=='object')return;if(value.alg?.type==='tx')out.push(value);for(const child of Object.values(value)){if(Array.isArray(child))child.forEach(visit);else if(child&&typeof child==='object')visit(child);}};visit(definition);return out;};
+test('SH23: start alignment is a native layout default in every table, including9–12',()=>{const definition=build('start');assert.equal(definition.reason,undefined);const nodes=texts(definition);assert.equal(nodes.length,90);for(const node of nodes){assert.equal(node.alg.params?.parTxLTRAlign,'l',node.name);assert.equal(node.alg.params?.parTxRTLAlign,'r',node.name);}assert.equal(nodes.find(n=>n.name==='n8_1').alg.params.txAnchorVert,'t','the composed table keeps its vertical anchor');});
+test('SH23: center and omitted alignment explicitly keep the centered native default',()=>{for(const alignment of ['center',undefined]){const nodes=texts(build(alignment));assert.equal(nodes.length,90);for(const node of nodes){assert.equal(node.alg.params?.parTxLTRAlign,'ctr');assert.equal(node.alg.params?.parTxRTLAlign,'ctr');}}});

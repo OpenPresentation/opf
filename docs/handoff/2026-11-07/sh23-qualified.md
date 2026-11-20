@@ -1,0 +1,3 @@
+# SH-23 isolated continuation
+
+The source branch codex/sh-23-qualified contains only the reviewed aee3d430f tables plus the shared added-node paragraph alignment correction, source regressions, qualification tools and all six raw native attempts. Unfinished SH20–22 helpers remain on codex/sh-20-live-domains and are not included. [Five accepted native save/reopen results, original failed witness and exact hashes](../../programs/shapes/sh23-2026-11-07/README.md). The isolated generator reproduces every qualified input archive byte-exactly. Builds and focused tests pass; full changed-branch and assembled integration gate remain owed under coordinator batching. Do not push any branch after the coordinator folds it into integration.

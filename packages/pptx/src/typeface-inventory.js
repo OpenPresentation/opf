@@ -115,11 +115,22 @@ export function checkTypefaces(input, options = {}) {
       fail(entry, 'theme-script-slot', {expected: wanted});
       continue;
     }
+    const pitch = family => {
+      if (entry.pitchFamily === undefined) return;
+      const fixed = (entry.pitchFamily & 0x03) === FIXED_PITCH;
+      if (monospace.has(family) && !fixed) fail(entry, 'monospace-not-fixed-pitch', {pitchFamily: entry.pitchFamily});
+      if (!monospace.has(family) && fixed) fail(entry, 'fixed-pitch-not-monospace', {pitchFamily: entry.pitchFamily});
+      const seen = pitches.get(family);
+      if (seen === undefined) pitches.set(family, entry.pitchFamily);
+      else if (seen !== entry.pitchFamily) fail(entry, 'inconsistent-pitch-family', {pitchFamily: entry.pitchFamily, first: seen});
+    };
     const reference = THEME_REFERENCE.exec(entry.typeface);
     if (reference) {
       if (entry.resolved === null) fail(entry, 'theme-reference-unresolved');
       else if (entry.resolved === '') { if (!allowEmpty || reference[2] === 'lt') fail(entry, 'empty-theme-reference'); }
       else if (!chosen.has(entry.resolved)) fail(entry, 'foreign-theme-reference', {resolved: entry.resolved});
+      // RR-105 (opf#1293): a run's theme reference keeps the pitch family of the family it names.
+      else pitch(entry.resolved);
       continue;
     }
     if (entry.typeface === '') {
@@ -132,14 +143,7 @@ export function checkTypefaces(input, options = {}) {
       continue;
     }
     if (!chosen.has(entry.typeface)) fail(entry, 'foreign-typeface');
-    if (entry.pitchFamily !== undefined) {
-      const fixed = (entry.pitchFamily & 0x03) === FIXED_PITCH;
-      if (monospace.has(entry.typeface) && !fixed) fail(entry, 'monospace-not-fixed-pitch', {pitchFamily: entry.pitchFamily});
-      if (!monospace.has(entry.typeface) && fixed) fail(entry, 'fixed-pitch-not-monospace', {pitchFamily: entry.pitchFamily});
-      const seen = pitches.get(entry.typeface);
-      if (seen === undefined) pitches.set(entry.typeface, entry.pitchFamily);
-      else if (seen !== entry.pitchFamily) fail(entry, 'inconsistent-pitch-family', {pitchFamily: entry.pitchFamily, first: seen});
-    }
+    pitch(entry.typeface);
   }
   const expected = packageFontsUsed(inventory);
   if (inventory.fontsUsed === null) {

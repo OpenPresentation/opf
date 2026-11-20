@@ -2,6 +2,7 @@
 // files. They throw `OPFApiError`; the public functions turn it into `OPFExportError` or `OPFImportError`.
 import { type Catalog, type Finding, type Presentation, type ValidateOptions, type ValidationReport, validate } from "../core.js";
 import { defaultCatalogs } from "./catalogs.js";
+import { ensureIcons } from "../icons.js";
 import { runImport } from "./pptx-import.js";
 import { OPFApiError } from "../api-errors.js";
 import { type ExportContinuedSlide, type ExportFile, type ExportFontSummary, type ExportOptions, type ResolvedExportOptions, VERSIONS, resolveExportOptions, runExport } from "./export.js";
@@ -80,6 +81,8 @@ export async function prepareExport(options: ExportOptions, flags = false): Prom
  */
 export async function runPreparedExport(prepared: PreparedExport, presentation: Presentation, checked?: readonly Finding[]): Promise<ExportResult> {
 	let initial = checked;
+	// LH-14: the icon sets the deck names load before its check, so validate reports an unknown icon name.
+	await ensureIcons(presentation, { catalogs: prepared.options.catalogs ?? defaultCatalogs() });
 	if (!initial) {
 		const check = validate(presentation, checkOptions(prepared.options.catalogs));
 		if (!check.valid) throw new OPFApiError(`The presentation is not valid OPF: ${firstError(check.findings)}`, "invalid-presentation", { findings: check.findings });

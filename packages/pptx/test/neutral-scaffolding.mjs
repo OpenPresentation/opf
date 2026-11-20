@@ -15,7 +15,7 @@ assert.match(cells[3],/<a:lnL[^>]*><a:noFill\/>/);
 assert.equal(colorHex({'a:schemeClr':{val:'tx1','a:lumMod':{val:'20000'},'a:lumOff':{val:'80000'}}},{dk1:'000000',lt1:'FFFFFF'}),'CCCCCC','the rule neutral resolves to CCCCCC on this black-on-white deck');
 assert.doesNotMatch(cells[3],/<a:schemeClr val="accent5"/);
 const explicit=structuredClone(doc);explicit.slides[0].table.rows[0][1]={value:5.8,style:{align:'center',borders:{bottom:{color:'accent5',width:2}}}};const styled=(await exportXml(explicit))['ppt/slides/slide1.xml'];assert.match(styled,/<a:pPr[^>]*algn="ctr"/);assert.match(styled,/<a:schemeClr val="accent5"/);
-const left=structuredClone(doc);left.design.contentAlignment='left';const leftCells=[...(await exportXml(left))['ppt/slides/slide1.xml'].matchAll(/<a:tc\b[\s\S]*?<\/a:tc>/g)].map(m=>m[0]);assert.match(leftCells[3],/<a:pPr[^>]*algn="l"/,'explicit design beats numeric default');
+const left=structuredClone(doc);left.design.contentAlignment='start';const leftCells=[...(await exportXml(left))['ppt/slides/slide1.xml'].matchAll(/<a:tc\b[\s\S]*?<\/a:tc>/g)].map(m=>m[0]);assert.match(leftCells[3],/<a:pPr[^>]*algn="l"/,'explicit design beats numeric default');
 for(const type of ['column','bar','area'])for(const values of [[5.8,6.7],[-5.8,-6.7],[-2,3]]){
  // LH-03: `dataLabels: false` keeps the value axis, gridlines and one series colour of a small chart, which this checks.
  const input={design,slides:[{chart:{type,dataLabels:false,data:{columns:['Category','Value'],rows:values.map((v,i)=>[String(i),v])}}}]};const all=await exportXml(input);const chart=Object.entries(all).find(([n])=>/^ppt\/charts\/chart\d+\.xml$/.test(n))[1];

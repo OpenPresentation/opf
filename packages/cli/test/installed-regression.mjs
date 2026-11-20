@@ -245,7 +245,16 @@ try {
   ]});
   const native = await run(['convert', 'embedded.opf.json', 'embedded.pptx', '--fail-on', 'warning']);
   assert.equal(native.ok, true); assert.equal(native.written, true);
-  assert.deepEqual(native.counts, {error: 0, warning: 0, info: 0}, JSON.stringify(native.findings));
+  // LH-28 (#966): a PPTX export that names a family that is not Office-safe carries one info note, pptx/typeface-not-office-safe;
+  // this deck keeps the default theme's Aptos and Aptos Display. That note is about fonts, by design, so the pictures add no
+  // finding: no error, no warning, and no info but that one note (a CLI from before LH-28, such as 0.31.0 from the registry, has none).
+  // Since 0.35 (opf#1373) a convert also says which font it measured in place of one it has no file for, one info note per family,
+  // fonts/font-substituted: here Aptos and Aptos Display, measured as Intos and Intos Display. Those are about fonts too, so the
+  // only info notes allowed are the one typeface note and at most one substitution note for each of the two families.
+  assert.deepEqual({error: native.counts.error, warning: native.counts.warning}, {error: 0, warning: 0}, JSON.stringify(native.findings));
+  assert.ok(native.findings.every(item => item.severity === 'info' && ['pptx/typeface-not-office-safe', 'fonts/font-substituted'].includes(item.ruleId)), JSON.stringify(native.findings));
+  assert.ok(native.findings.filter(item => item.ruleId === 'pptx/typeface-not-office-safe').length <= 1, JSON.stringify(native.findings));
+  assert.ok(native.findings.filter(item => item.ruleId === 'fonts/font-substituted').length <= 2, JSON.stringify(native.findings));
   assert.deepEqual(unresolved(native), []);
   for (const slide of [1, 2, 3]) {
     const xml = await slideXml('embedded.pptx', slide);

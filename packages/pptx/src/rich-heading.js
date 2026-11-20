@@ -7,6 +7,7 @@
 // are joined with the boundaries their tags record; soft wraps insert nothing and hard boundaries keep their separator.
 
 import {splitWeightFace} from './font-weights.js';
+import {rejoinDetachedSpace} from './content-topology.js';
 import {isWrappedInQuoteMarks, unwrapQuoteMarks} from '@openpresentation/opf/composition';
 
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -27,7 +28,10 @@ export function joinRichLines(ordered, readBody, separatorOf) {
     if (!Array.isArray(body) || !body.length) return undefined;
     body.forEach((paragraph, index) => {
       if (index) parts.push('\n');
-      parts.push(...asParts(paragraph.richText ?? paragraph.text));
+      const runs = asParts(paragraph.richText ?? paragraph.text);
+      // RR-105: a decorated run's space that ended the earlier line joins the run again.
+      if (position && !index) rejoinDetachedSpace(parts, runs[0]);
+      parts.push(...runs);
     });
     const separator = separatorOf(item, position === ordered.length - 1);
     if (separator) parts.push(separator);

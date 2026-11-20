@@ -105,10 +105,8 @@ const complexBytes = await makeComplexPptx();
 const complexImport = await fromPptx(complexBytes);
 assert.equal(validate(complexImport, {only: ['format']}).valid, true);
 assert.equal(complexImport.slides[0].title, "Complex PPTX");
-assert.ok(
-  complexImport.slides[0].blocks.some((block) => /PowerPoint shape:/.test(block.text)),
-  "Non-text PowerPoint shapes should fall back to editable OPF blocks"
-);
+// SH-05: a PowerPoint shape that draws something is an overlay shape (it was a "PowerPoint shape:" text block before).
+assert.deepEqual(complexImport.slides[0].shapes.map(({ shape, fill, stroke }) => ({ shape, fill, stroke })), [{ shape: 'rect', fill: '#FFAA00', stroke: { color: '#C2410C' } }], 'a PowerPoint shape imports as an overlay shape');
 
 assert.equal(runtimePolicy.requiredNetworkCalls, false);
 assert.equal(runtimePolicy.requiredLibreOfficeDependency, false);

@@ -522,11 +522,6 @@
           "element": "areaChart",
           "grouping": "percentStacked",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "PercentsStackedArea"
-          }
         }
       },
       "group": "Area",
@@ -544,11 +539,6 @@
           "barDir": "bar",
           "grouping": "percentStacked",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "PercentsStackedBar"
-          }
         }
       },
       "group": "Bar",
@@ -566,11 +556,6 @@
           "barDir": "col",
           "grouping": "percentStacked",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "PercentsStackedColumn"
-          }
         }
       },
       "group": "Column",
@@ -586,11 +571,6 @@
         "openxml": {
           "element": "areaChart",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "Area"
-          }
         }
       },
       "group": "Area",
@@ -608,11 +588,6 @@
           "barDir": "bar",
           "grouping": "clustered",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "ClusteredBar"
-          }
         }
       },
       "group": "Bar",
@@ -629,11 +604,6 @@
           "element": "boxWhiskerChart",
           "composition": "extension",
           "notes": "Office extension chart; exact extension markup is renderer-specific."
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "BoxAndWhisker"
-          }
         }
       },
       "group": "Other",
@@ -651,11 +621,6 @@
           "barDir": "col",
           "grouping": "clustered",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "ClusteredColumn"
-          }
         }
       },
       "group": "Column",
@@ -687,12 +652,6 @@
             }
           ],
           "notes": "One c:plotArea holds a c:barChart (clustered columns, primary axes) and a c:lineChart with markers. When chart.secondaryAxis is set, the secondary line series form a second c:lineChart on a second c:valAx (crosses max, at the right) and a deleted second c:catAx."
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "ClusteredColumn",
-            "lineSeriesType": "LineWithMarkers"
-          }
         }
       },
       "group": "Combo",
@@ -708,11 +667,6 @@
         "openxml": {
           "element": "doughnutChart",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "Doughnut"
-          }
         }
       },
       "group": "Pie",
@@ -729,11 +683,6 @@
           "element": "radarChart",
           "radarStyle": "filled",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "FilledRadar"
-          }
         }
       },
       "group": "Radar",
@@ -750,11 +699,6 @@
           "element": "funnelChart",
           "composition": "extension",
           "notes": "Office extension chart; exact extension markup is renderer-specific."
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "Funnel"
-          }
         }
       },
       "group": "Other",
@@ -771,11 +715,6 @@
           "element": "histogramChart",
           "composition": "extension",
           "notes": "Office extension chart; exact extension markup is renderer-specific."
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "Histogram"
-          }
         }
       },
       "group": "Histogram",
@@ -787,8 +726,8 @@
       "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
       "kind": "chart-types",
       "version": "1",
-      "description": "Catalog of chart types available in the pptx.gallery catalog, reduced to the chart types Aspose.Slides officially supports (one record per Aspose.Slides ChartType), plus the column-and-line combo. Each entry is a lightweight summary; full chart-type records live in the per-id JSON files alongside this index.",
-      "contentSha256": "9ceb0d52aa1d09c03197e292f2d849bbc348c7a1280e020076f37166c570640c",
+      "description": "Catalog of chart types available in the pptx.gallery catalog, reduced to the chart types OPF supports natively in its preview and PPTX export, plus the column-and-line combo. Each entry is a lightweight summary; full chart-type records live in the per-id JSON files alongside this index.",
+      "contentSha256": "49b76df8acb8d028166fef6d5f15c65d1a956bd2f36dfa165da8a289afbfbc09",
       "records": [
         {
           "id": "100pct-stacked-area",
@@ -963,11 +902,6 @@
           "element": "lineChart",
           "marker": true,
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "LineWithMarkers"
-          }
         }
       },
       "group": "Line",
@@ -983,11 +917,6 @@
         "openxml": {
           "element": "lineChart",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "Line"
-          }
         }
       },
       "group": "Line",
@@ -1005,11 +934,6 @@
           "composition": "extension",
           "extension": "cx:paretoLine",
           "notes": "Office Pareto chart (Histogram Pareto): a chartex histogram whose cx:series layoutId=\"clusteredColumn\" plots the sorted category values and whose owned cx:series layoutId=\"paretoLine\" plots the cumulative percentage on a secondary axis. Renderers without chartex support may approximate it with sorted columns plus a cumulative-percentage line."
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "ParetoLine"
-          }
         }
       },
       "group": "Histogram",
@@ -1025,11 +949,6 @@
         "openxml": {
           "element": "pieChart",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "Pie"
-          }
         }
       },
       "group": "Pie",
@@ -1046,11 +965,6 @@
           "element": "radarChart",
           "radarStyle": "marker",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "RadarWithMarkers"
-          }
         }
       },
       "group": "Radar",
@@ -1067,11 +981,6 @@
           "element": "radarChart",
           "radarStyle": "standard",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "Radar"
-          }
         }
       },
       "group": "Radar",
@@ -1088,11 +997,6 @@
           "element": "scatterChart",
           "scatterStyle": "marker",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "ScatterWithMarkers"
-          }
         }
       },
       "group": "XY (Scatter)",
@@ -1109,11 +1013,6 @@
           "element": "areaChart",
           "grouping": "stacked",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "StackedArea"
-          }
         }
       },
       "group": "Area",
@@ -1131,11 +1030,6 @@
           "barDir": "bar",
           "grouping": "stacked",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "StackedBar"
-          }
         }
       },
       "group": "Bar",
@@ -1153,11 +1047,6 @@
           "barDir": "col",
           "grouping": "stacked",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "StackedColumn"
-          }
         }
       },
       "group": "Column",
@@ -1175,11 +1064,6 @@
           "grouping": "stacked",
           "marker": true,
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "StackedLineWithMarkers"
-          }
         }
       },
       "group": "Line",
@@ -1196,11 +1080,6 @@
           "element": "lineChart",
           "grouping": "stacked",
           "composition": "single"
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "StackedLine"
-          }
         }
       },
       "group": "Line",
@@ -1217,11 +1096,6 @@
           "element": "treemapChart",
           "composition": "extension",
           "notes": "Office extension chart; exact extension markup is renderer-specific."
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "Treemap"
-          }
         }
       },
       "group": "Treemap",
@@ -1238,11 +1112,6 @@
           "element": "waterfallChart",
           "composition": "extension",
           "notes": "Office extension chart; exact extension markup is renderer-specific."
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "Waterfall"
-          }
         }
       },
       "group": "Other",
@@ -1259,11 +1128,6 @@
           "element": "mapChart",
           "composition": "extension",
           "notes": "Office extension chart; exact extension markup is renderer-specific."
-        },
-        "renderers": {
-          "aspose-slides": {
-            "chartType": "Map"
-          }
         }
       },
       "group": "Map",
@@ -6553,10 +6417,10 @@
         "chart-types": {
           "mode": "mirror",
           "records": 27,
-          "contentSha256": "9ceb0d52aa1d09c03197e292f2d849bbc348c7a1280e020076f37166c570640c",
+          "contentSha256": "49b76df8acb8d028166fef6d5f15c65d1a956bd2f36dfa165da8a289afbfbc09",
           "gallery": {
             "records": 27,
-            "contentSha256": "9ceb0d52aa1d09c03197e292f2d849bbc348c7a1280e020076f37166c570640c"
+            "contentSha256": "49b76df8acb8d028166fef6d5f15c65d1a956bd2f36dfa165da8a289afbfbc09"
           }
         },
         "color-schemes": {

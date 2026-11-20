@@ -23,6 +23,7 @@
 // neighbouring slices stay apart; at 3:1 against the backdrop, or at 1.6:1 when every context mark carries its text (`labeled`).
 import {chartNumber, tableKeyText, type ResolvedChartData} from './chart-data.js';
 import {monthOf} from './chart-time-order.js';
+import {numberFormatSectionFor} from './variables.js';
 
 /** LH-105: what the slide title names: series (indices among the plotted series) or categories (row indices). */
 export interface ChartLayerFocus {
@@ -140,7 +141,8 @@ export function chartTitleFocus(chart: unknown, data: ResolvedChartData, options
   const numbers = titleNumbers(options.text);
   const values = data.rows.map(row => chartNumber(row[1]));
   const byValue = values.map(value => value !== null && numbers.some(number => {
-    if (number.percent && !format.includes('%')) return false;
+    // The title's percent matches a value the way the label shows it: through the section of the format that formats this value.
+    if (number.percent && !numberFormatSectionFor(format, value).includes('%')) return false;
     const target = number.percent ? number.value / 100 : number.value, decimals = number.percent ? number.decimals + 2 : number.decimals;
     return Math.abs(Number(value.toFixed(decimals)) - target) < 10 ** -(decimals + 6);
   }) ? 0 : -1);

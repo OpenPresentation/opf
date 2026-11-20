@@ -88,7 +88,7 @@ assert.equal(listSwitchOptions({}, "languages", { vocabularies: catalogDisplay }
 {
   const presentation = baseDeck();
   presentation.speaker = { id: "alice", name: "Alice", socials: { linkedin: "alice" } };
-  presentation.slides[1].design = { fontScheme: { id: "georgia", major: "X" }, background: "light1", header: { left: { text: "H" } } };
+  presentation.slides[1].design = { fontScheme: { id: "georgia", major: "X" }, background: "light1", header: { start: { text: "H" } } };
   const at = (dimension, options) => currentSwitchValue(presentation, dimension, { catalogs, ...options });
   assert.deepEqual(at("layouts", { slideIndex: 1 }), { value: "chart", scope: "slide" });
   assert.deepEqual(at("color-schemes"), { value: "cool-horizon", scope: "deck" });
@@ -104,7 +104,7 @@ assert.equal(listSwitchOptions({}, "languages", { vocabularies: catalogDisplay }
   assert.deepEqual(at("backgrounds", { slideIndex: 1 }), { value: "light1", scope: "slide" });
   assert.deepEqual(at("charts", { slideIndex: 1 }), { value: "column", scope: "slide" });
   assert.deepEqual(at("socials"), { value: { linkedin: "alice" }, scope: "deck" });
-  assert.deepEqual(at("headers-footers", { slideIndex: 1 }), { value: { header: { left: { text: "H" } }, footer: undefined }, scope: "slide" });
+  assert.deepEqual(at("headers-footers", { slideIndex: 1 }), { value: { header: { start: { text: "H" } }, footer: undefined }, scope: "slide" });
   assert.equal(at("headers-footers", { slideIndex: 0 }).scope, "deck", "a slide with no value of its own reads the deck's");
   assert.deepEqual(at("image-treatments"), { value: undefined, scope: "block" }, "image treatments belong to one image block");
   assert.deepEqual(at("image-treatments", { path: "slides.2.blocks.2" }).value.fit, undefined);

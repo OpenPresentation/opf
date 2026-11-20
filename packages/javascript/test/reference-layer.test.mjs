@@ -113,8 +113,8 @@ describe("content color references", () => {
   test("var references inside groups and regions are checked", () => {
     const result = checked(deck({
       slides: [{
-        left: { table: { rows: [[{ value: "x", style: { fill: "var:ghost" } }]] } },
-        "center+right": {
+        start: { table: { rows: [[{ value: "x", style: { fill: "var:ghost" } }]] } },
+        "center+end": {
           type: "group",
           blocks: [{ text: [{ text: "deep", color: "var:ghost" }] }],
         },
@@ -225,7 +225,7 @@ describe("color reference positions", () => {
       slides: [{
         title: "Passthrough",
         extensions: { review: { color: "var:ghost", palette: [{ fill: "var:x" }] } },
-        left: { text: "Body", extensions: { gen: { fill: "var:x", nested: { color: "var:ghost" } } } },
+        start: { text: "Body", extensions: { gen: { fill: "var:x", nested: { color: "var:ghost" } } } },
       }],
     }));
     assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
@@ -303,7 +303,7 @@ describe("ids and extensions below slide level", () => {
 
   test("region payloads carry ids", () => {
     const result = checked(deck({
-      slides: [{ left: { id: "sidebar", text: "x" }, "center+right": { id: "main", text: "y" } }],
+      slides: [{ start: { id: "sidebar", text: "x" }, "center+end": { id: "main", text: "y" } }],
     }));
     assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
   });
@@ -318,14 +318,14 @@ describe("ids and extensions below slide level", () => {
 
   test("payload ids share the namespace with slide ids", () => {
     const result = checked(deck({
-      slides: [{ id: "ask", title: "The Ask" }, { title: "Detail", left: { id: "ask", text: "x" } }],
+      slides: [{ id: "ask", title: "The Ask" }, { title: "Detail", start: { id: "ask", text: "x" } }],
     }));
     assert.equal(result.valid, false);
   });
 
   test("distinct ids across slides and payloads stay valid", () => {
     const result = checked(deck({
-      slides: [{ id: "one", title: "A" }, { id: "two", left: { id: "three", text: "x" } }],
+      slides: [{ id: "one", title: "A" }, { id: "two", start: { id: "three", text: "x" } }],
     }));
     assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
   });
@@ -340,8 +340,8 @@ describe("ids and extensions below slide level", () => {
       },
       {
         label: "payload vs payload",
-        slides: [{ left: { id: "ask", text: "a" } }, { left: { id: "ask", text: "b" } }],
-        path: "/slides/1/left/id",
+        slides: [{ start: { id: "ask", text: "a" } }, { start: { id: "ask", text: "b" } }],
+        path: "/slides/1/start/id",
         message: "content payload ids must be unique among slide and payload ids within a presentation",
       },
       {
@@ -352,7 +352,7 @@ describe("ids and extensions below slide level", () => {
       },
       {
         label: "slide vs earlier payload",
-        slides: [{ title: "a", left: { id: "ask", text: "x" } }, { id: "ask", title: "b" }],
+        slides: [{ title: "a", start: { id: "ask", text: "x" } }, { id: "ask", title: "b" }],
         path: "/slides/1/id",
         message: "slide id duplicates a content payload id; ids must be unique among slide and payload ids within a presentation",
       },

@@ -1,0 +1,3 @@
+Burndown log line for docs/programs/layout-harvest/burndown.md (progress log, after the LH-186 done line), to add on the v0.33.0 integration branch:
+
+- 2026-11-07: Vetoable decision (LH-186, approved by the supervisor for the owner): a long agenda on `agenda-split` whose list would be set two or more steps under its role size moves to the automatic grid at the larger size (template sample: 24 → 30 px), and its step badges and side title give way with the layout. Readable text wins over the layout's decoration. Condition: in the build that combines LH-184 and LH-186, the paginated FAQ pages stay in columns (LH-184's prose-measure rule) and never become one column of 85-to-95-character lines; checked on the integration branch's template goldens.

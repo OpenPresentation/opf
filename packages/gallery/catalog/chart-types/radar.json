@@ -7,11 +7,6 @@
       "element": "radarChart",
       "radarStyle": "standard",
       "composition": "single"
-    },
-    "renderers": {
-      "aspose-slides": {
-        "chartType": "Radar"
-      }
     }
   },
   "group": "Radar",

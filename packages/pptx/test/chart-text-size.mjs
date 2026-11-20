@@ -73,7 +73,10 @@ for (const config of configs) {
     const preview = await previewSizes(deck, type);
     const parts = unzipSync(await toPptx(structuredClone(deck)));
     const chartParts = Object.keys(parts).filter((name) => /^ppt\/charts\/(?:chart|chartEx|style)\d+\.xml$/.test(name));
-    assert.ok(chartParts.some((name) => /chart\d+\.xml$/.test(name)), `${label}: a chart part`);
+    // RR-105: a chart is one classic part, or one chartEx part whose fallback is a picture of the preview (no classic part is left).
+    const classic = chartParts.filter((name) => /\/chart\d+\.xml$/.test(name)), native = chartParts.filter((name) => /\/chartEx\d+\.xml$/.test(name));
+    assert.equal(classic.length + native.length, 1, `${label}: one chart part`);
+    if (native.length) assert.match(strFromU8(parts['ppt/slides/slide1.xml']), /<mc:Fallback><p:pic>/, `${label}: the chartex fallback is a picture`);
 
     for (const name of chartParts) {
       const xml = strFromU8(parts[name]);

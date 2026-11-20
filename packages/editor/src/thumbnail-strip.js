@@ -72,7 +72,7 @@ export function createThumbnailStrip(container, options = {}) {
   if (!editor || typeof editor.subscribe !== "function") throw new TypeError("createThumbnailStrip needs an editor session.");
   const doc = container.ownerDocument;
   const win = doc.defaultView;
-  const labels = { ...DEFAULT_LABELS, ...(options.labels ?? {}) };
+  const labels = { ...DEFAULT_LABELS, ...(options.starters ? { statusAdded: "Added slide {position}", statusDeleted: "Deleted slide {position}" } : {}), ...(options.labels ?? {}) };
   const icons = normalizeIcons(options.icons, ["add"], "createThumbnailStrip icons");
   const density = options.density === "touch" ? "touch" : "comfortable";
   const orientation = options.orientation === "vertical" ? "vertical" : "horizontal";
@@ -98,6 +98,7 @@ export function createThumbnailStrip(container, options = {}) {
   let menu;
   let addSlot;
   let addButton;
+  let actionsButton;
   let status;
   const visible = new Set();
   const items = [];
@@ -176,6 +177,26 @@ export function createThumbnailStrip(container, options = {}) {
     paintActive();
   }
   function paintActive() {
+    if (actions && options.starters && !readOnly && items[active]) {
+      if (!actionsButton) {
+        actionsButton = doc.createElement("button");
+        actionsButton.type = "button";
+        actionsButton.className = "opf-thumbs-actions";
+        actionsButton.textContent = "•••";
+        actionsButton.title = labels.slideActions;
+        actionsButton.setAttribute("aria-label", labels.slideActions);
+        actionsButton.setAttribute("aria-haspopup", "menu");
+        actionsButton.setAttribute("aria-expanded", "false");
+        actionsButton.addEventListener("click", () => {
+          if (menu?.opener === actionsButton) closeMenu();
+          else openSlideMenu(active, actionsButton);
+        });
+      }
+      if (actionsButton.parentElement !== items[active].li) {
+        if (menu?.opener === actionsButton) closeMenu(false);
+        items[active].li.append(actionsButton);
+      }
+    } else actionsButton?.remove();
     items.forEach((item, index) => {
       if (index === active) item.button.setAttribute("aria-current", "true");
       else item.button.removeAttribute("aria-current");
@@ -312,10 +333,10 @@ export function createThumbnailStrip(container, options = {}) {
     const rtl = isRtl();
     return key === "ArrowLeft" ? (rtl ? 1 : -1) : key === "ArrowRight" ? (rtl ? -1 : 1) : 0;
   }
-  function announce(message) {
+  function announce(message, undoable = false) {
     if (!message) return;
     if (options.onStatus) {
-      options.onStatus(message);
+      options.onStatus(message, { undoable });
       return;
     }
     if (!status) {
@@ -340,7 +361,7 @@ export function createThumbnailStrip(container, options = {}) {
     scrollToActive();
     items[active]?.button.focus();
     if (notify) options.onSelect?.(active);
-    announce(message);
+    announce(message, true);
   }
   /** One undoable change for the slide at `index`. Every kind is a function of slides.js, the ones the slide manager calls. */
   function perform(kind, index, extra = {}) {
@@ -349,9 +370,10 @@ export function createThumbnailStrip(container, options = {}) {
     try {
       if (kind === "add") {
         const at = total ? clamp(index, total) + 1 : 0;
-        const change = addSlide(editor, { at, ...(extra.layout ? { layout: extra.layout } : {}) }, META);
+        const change = addSlide(editor, { at, ...extra }, META);
         const target = change.index ?? at;
         follow(target, fill(labels.statusAdded, { position: target + 1 }));
+        options.onAdd?.(target);
         return;
       }
       if (!Number.isInteger(index) || index < 0 || index >= total) return;
@@ -364,7 +386,7 @@ export function createThumbnailStrip(container, options = {}) {
           return;
         }
         const change = removeSlides(editor, [index], META);
-        follow(change.selection[0], fill(labels.statusDeleted, { count: total - 1 }));
+        follow(change.selection[0], fill(labels.statusDeleted, { count: total - 1, position: index + 1 }));
       } else if (kind === "hide") {
         const change = setHidden(editor, [index], undefined, META);
         follow(index, change.hidden ? labels.statusHidden : labels.statusShown, false);
@@ -419,11 +441,12 @@ export function createThumbnailStrip(container, options = {}) {
       addButton.className = "opf-thumbs-add";
       addButton.setAttribute("aria-label", labels.add);
       addButton.title = labels.add;
-      if (typeof options.layoutOptions === "function") {
+      if (options.starters || typeof options.layoutOptions === "function") {
         addButton.setAttribute("aria-haspopup", "menu");
         addButton.setAttribute("aria-expanded", "false");
       }
       addButton.append(resolveIcon(doc, icons.add, "M12 5v14M5 12h14", { name: "add", className: "opf-thumbs-add-icon" }));
+      if (options.starters) addButton.append("Slide");
       addSlot.append(addButton);
       addButton.addEventListener("click", onAddClick);
     }
@@ -433,6 +456,15 @@ export function createThumbnailStrip(container, options = {}) {
     if (readOnly || disposed) return;
     if (menu?.opener === addButton) {
       closeMenu();
+      return;
+    }
+    if (options.starters) {
+      const entries = [
+        { label: "Title", run: () => perform("add", active, { title: "New slide" }) },
+        { label: "Bullets", run: () => perform("add", active, { slide: { title: "New slide", items: ["First point"] } }) },
+        { label: "Blank", run: () => perform("add", active, { slide: {} }) },
+      ];
+      openMenu({ label: labels.add, opener: addButton, entries, anchor: addButton.getBoundingClientRect(), toggle: true });
       return;
     }
     let choices = [];
@@ -593,9 +625,10 @@ export function createThumbnailStrip(container, options = {}) {
     // "Left" steps back in a left-to-right strip and forward in a right-to-left one.
     const left = moveStep(vertical ? "ArrowUp" : "ArrowLeft");
     const canStep = (step) => index + step >= 0 && index + step < total;
+    const remove = { label: labels.delete, shortcut: "Delete", disabled: off || total <= 1, run: () => perform("delete", index) };
     const entries = [
       { label: labels.duplicate, disabled: off, run: () => perform("duplicate", index) },
-      { label: labels.delete, shortcut: "Delete", disabled: off || total <= 1, run: () => perform("delete", index) },
+      ...(!options.starters ? [remove] : []),
       { label: slide.hidden === true ? labels.showSlide : labels.hideSlide, disabled: off, run: () => perform("hide", index) },
       { separator: true },
       {
@@ -610,8 +643,9 @@ export function createThumbnailStrip(container, options = {}) {
         disabled: off || !canStep(-left),
         run: () => perform("move", index, { step: -left }),
       },
+      ...(options.starters ? [{ separator: true }, remove] : []),
     ];
-    openMenu({ label: labels.slideActions, opener, entries, x, y, anchor: x === undefined ? opener.getBoundingClientRect() : undefined });
+    openMenu({ label: labels.slideActions, opener, entries, x, y, toggle: opener === actionsButton, anchor: x === undefined ? opener.getBoundingClientRect() : undefined });
   }
   function openLayoutMenu(choices) {
     const groups = groupLayoutChoices(choices).filter((group) => group.choices.length);
@@ -710,6 +744,7 @@ export function createThumbnailStrip(container, options = {}) {
       }
       closeMenu(false);
       mountAdd();
+      paintActive();
     },
     /** Redraw from the session now. `{ clear: true }` also drops the cache, for example after the host loaded fonts. */
     refresh,

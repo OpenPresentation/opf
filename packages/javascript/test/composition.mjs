@@ -75,7 +75,7 @@ for (const dimensions of [[1280,720],[720,1280],[320,180]]) {
   }
  }
 }
-const groupInRegion=composeSlide({left:{blocks:[{text:'A'},{text:'B'}],composition:{mode:'column'}},right:{text:'C'}});
+const groupInRegion=composeSlide({start:{blocks:[{text:'A'},{text:'B'}],composition:{mode:'column'}},end:{text:'C'}});
 assert.equal(groupInRegion.groups.length,1);assert.equal(groupInRegion.items.length,3);
 assert.ok(groupInRegion.items[1].box.y>groupInRegion.items[0].box.y);
 for(const invalid of [{blocks:[]},{type:'group'},{text:'Leaf',composition:{mode:'row'}},{blocks:[{text:'A'}],image:'image.png'},{type:'text',blocks:[{text:'A'}]}]) {

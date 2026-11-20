@@ -1,0 +1,119 @@
+<svg aria-label="family-flowchart" aria-roledescription="slide" height="720" lang="en-US" role="group" viewBox="0 0 1280 720" width="1280" xml:lang="en-US" xmlns="http://www.w3.org/2000/svg">
+<style>@font-face{font-family:"Intos";font-weight:400;font-style:normal;src:url("data:font/ttf;base64,AAEAAAATAQAABAAwR0RFRgARABMAAAFEAAAAFkdQT1MFme6VAAAFqAAAAmZHU1VCuPy46gAAAcQAAAAoT1MvMnigY6EAAAMcAAAAYGNtYXAC4QLJAAADfAAAAIxjdnQgW4MpRwAABAgAAADIZnBnbWIvA38AABdUAAAODGdhc3AAAAAQAAABPAAAAAhnbHlmLXdF2AAACpgAAAy8aGVhZDret/4AAAJEAAAANmhoZWEV0Q9AAAABfAAAACRobXR4UcEJMwAAAsgAAABUbG9jYSGpJQoAAAHsAAAALG1heHAB/g8yAAABXAAAACBuYW1lM5ZPNwAACBAAAAKIcG9zdAJeAtYAAAJ8AAAATHByZXCa2AWHAAAE0AAAANZ2aGVhFOALgwAAAaAAAAAkdm10eByJI2YAAAIYAAAALAABAAH//wAPAAEAAAAMAAAAAAAAAAIAAQABABIAAQAAAAEAAAAVAJQACgAAAAAAAgBQAJAAjQAAAQEODAAAAAAAAQAAB4P9vwAAE2H7oPYLEqsIAAAAAAAAAAAAAAAAAAAAABUAARAABAD8AAgACcT+mvW+CkIAAAABAAAAAAAAAAAAAAAAAAEAAQAAAAoAJgAmAAJERkxUABJsYXRuAA4AAAAAAAQAAAAA//8AAAAAAAAAAAAXAFUApgD0AYUCMAKQAz0DdgOiA9AEGARoBNYFGAV0BbMF8gZeBl4AAAD2AkECQQJBAkEDpwJZA6cDLAJBAjwCQQOnA6cDpwOlA6cCvAO1Ai8HgwABAAAAAQAAZdWlWl8PPPUABwgAAAAAAOayi4AAAAAA5sXhWfug/UESqwjpAAAABgACAAAAAAAAAAIAAAAAAAD/nAAyAAAAAAAAAAAAAAAAAAAAAAAAAAAAFQAAACwAMwA6ADsARABHAEgASgBLAEwATgBRAFIAUwBVAFYAVwBcACIAAwS+ASgCFQCwBJ4AsAcjAAIEbAAOBEAAdAR8AGoENwBqA+AARQRpAKEB6QCMA+UAoQRpAKEEagBkBH0AoQKtAKED4wBmApYAJgOeAAgEAwBlAaAAAAAEBKIBkAAFAAAFMwTNAAAAmgUzBM0AAALNAGYC2wAAAgAAAwAAAAAABAAAAAEAAAAAAAAAAAAAAABJTlRTAMAAIAB5B4P9vwAACBQCMwAAAZ8AAAAAA84FQgAAACAAAwAAAAIAAAADAAAAFAADAAEAAAAUAAQAeAAAABoAEAADAAoAIAA/AEkAUABYAGEAZQBpAGsAcAB0AHn//wAAACAAPwBJAFAAVwBhAGQAZwBrAG4AcgB5////9P/U/7j/sv+s/6T/ov+h/6D/nv+d/5kAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArQCtAJIAkgVCAAADzgAA/poFVP/uA9v/6/6QAK0ArQCSAJIFQv/yBUIDzv/y/poFVP/uBVoD3P/y/poArQCtAJIAkgVCAAAFQgPOAAD+mgVH/+4FRwPc/+z+kwCiAKIAdwB3Ac3+7wHNAR/+7/4gAdb+5gH/ASX+5f4gAKIAogB3AHcGCgMrBgoFWwMrAlwGEwMiBjsFYQMhAlgAS7gAyFJYsQEBjlmwAbkIAAgAY3CxAAdCtmFRQTEhBQAqsQAHQkAMVghGCDYIJggYBwUKKrEAB0JADF4GTgY+Bi4GHwUFCiqxAAxCvhXAEcANwAnABkAABQALKrEAEUK+AEAAQABAAEAAQAAFAAsquQADAABEsSQBiFFYsECIWLkAAwBkRLEoAYhRWLgIAIhYuQADAABEWRuxJwGIUVi6CIAAAQRAiGNUWLkAAwAARFlZWVlZQAxYBkgGOAYoBhoFBQ4quAH/hbAEjbECAESzBWQGAEREAAAAAQAAAAoAMABAAARERkxUABpjeXJsABpncmVrABpsYXRuABoABAAAAAD//wABAAAAAWtlcm4ACAAAAAIAAQAAAAIARAAGAAIACAABAAgAAgAcAAQAAAAuACQAAgADAAAAAAAAAAAAAAAAAAEAAgATABQAAQATAAIAAgABAAEAEwABAAEAAgAIAAEACAACAXgABAAAAbABiAAPAAwAAAAA//YAAAAA/+z/9AAAAAAAAAAA/74AAAAA//QAAAAA//4AAAAAAAD/7gAA/9cAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//7/9v/4AAAAAAAA/74AAAAA//YAAAAAAAAAAAAAAAD/+wAAAAAAAP/s//kAAAAAACn/9P/xAAAACgAAADMAAAAAAAAAAAAA//YAAAAAAAAAAAAA/9cAAP/0/+wAAAAA/+f/3//ZAAD/9AAA/9cAAP/x//EAAAAAABT/3wAMAAAADAAAAAoAAP/N/6sAAP/0//7/3f/AAAAAAP/4AAAAAP/P/+kAAAAA//3/5P/mAAD/8wAA//sAAP/k/8MAAAAAAB//7P/cAAAAAAAAACQAAP/2//gAAAAAAAD/+AAFAAAAAAAAAAAAAP+z/7v/5P/sAAL/xf+U//7//f+dABkAAP/p//YAAP/2//7/4QAA//j/6QAC/9cAAgACAAEABQAAAAcAEgAFAAEAAwARAAgACgACAAEAAQAHAAMAAwADAAQAAQAEAAQABgAJAAUACwABAAEAEgACAA0ACQAOAAEAAAADAAgABgAEAAoABgAAAAAACwAHAAwABQAAAAAABwBaAAMAAQQJAAABXADSAAMAAQQJAAEACgDIAAMAAQQJAAIADgC6AAMAAQQJAAMAMACKAAMAAQQJAAQAGgBwAAMAAQQJAAUAVgAaAAMAAQQJAAYAGgAAAEkAbgB0AG8AcwAtAFIAZQBnAHUAbABhAHIAVgBlAHIAcwBpAG8AbgAgADEALgAwADAAMAA7ACAAdAB0AGYAYQB1AHQAbwBoAGkAbgB0ACAAKAB2ADEALgA4AC4ANAAuADEANgAtAGUAYgA2ADQAKQBJAG4AdABvAHMAIABSAGUAZwB1AGwAYQByADEALgAwADAAMAA7AEkATgBUAFMAOwBJAG4AdABvAHMALQBSAGUAZwB1AGwAYQByAFIAZQBnAHUAbABhAHIASQBuAHQAbwBzAEMAbwBwAHkAcgBpAGcAaAB0ACAAMgAwADEANgAtADIAMAAyADQAIABUAGgAZQAgAEkAbgB0AGUAcgAgAFAAcgBvAGoAZQBjAHQAIABBAHUAdABoAG8AcgBzACAAKABoAHQAdABwAHMAOgAvAC8AZwBpAHQAaAB1AGIALgBjAG8AbQAvAHIAcwBtAHMALwBpAG4AdABlAHIAKQAuACAASQBuAHQAbwBzACAAbQBvAGQAaQBmAGkAYwBhAHQAaQBvAG4AcwAgAEMAbwBwAHkAcgBpAGcAaAB0ACAAMgAwADIANgAgAFQAaABlACAASQBuAHQAbwBzACAAUAByAG8AagBlAGMAdAAgAEEAdQB0AGgAbwByAHMAIAAoAGgAdAB0AHAAcwA6AC8ALwBnAGkAdABoAHUAYgAuAGMAbwBtAC8AbQB1AGcAbAB1AGcALwBpAG4AdABvAHMAKQAuAAEAsAAAAWQFQgADABNAEAAAADhNAAEBOQFOERACCRgrASMRMwFktLQFQvq+AAACALAAAARPBUIADgAZAClAJgUBBAABAAQBZwADAwJfAAICOE0AAAA5AE4PDw8ZDxgiKCEQBgkaKzMzESEyPgI1NC4CIyETESEyFhYVFAYGI7C0AR91rXI4OHKtdv4utAESaYI6OoFoAeNCd51bWp11Qv0+AiVHfE5PfUgAAQACAAAHIQVCACQAIUAeHhMGAwACAUwEAwICAjhNAQEAADkAThoaERoQBQkbKyEzEzY3NjcWFxYXEzMBIwMGBwYHJicmJwMjAwYHBgcmJyYnAyMBgtzuGxQLCgwLFhju3AGCxNobGBEQEBEYHN7V4BwYERAQERcb28IDSGFjMTk+NmVV/LgFQvzTZWtKTU1Ka2UDLfzTZWtNUFBNa2UDLQAAAQAOAAAEXwVCACMAIEAdIxoRCAQAAgFMAwECAjhNAQEAADkATh4SHhAECRorMzMTPgI3NjcWFx4CFxMzAQEjAw4CBwYHJicuAicDIwEOwt0cKSMQCQkJCRAiKBvcxf48AavBuB4tJBEKCwsLECMsH7TFAasBUSpCPB8REhQRIDtBKf6vArcCi/7nL0hAIRQXFxQiP0gvARn9bwAAAgB0/+oDqQPcACYANwCDQAkzEhEDBAQDAUxLsAtQWEAYAAMDAmEAAgJBTQYBBAQAYQEFAgAAPwBOG0uwFlBYQBgAAwMCYQACAkFNBgEEBABhAQUCAABCAE4bQBwAAwMCYQACAkFNAAEBOU0GAQQEAGEFAQAAQgBOWVlAFSgnAQAnNyg3FxUODAYFACYBJgcJFisFMjY3MxUzETQuAyMiBgYHFz4CMzIWFRUUBgYHDgMVFBYWNyImNTQ2Njc+AzcVFAYGAct/lyQEoDNVZWcqUaCEJaMQP2VHZmk2c1lHi3JEXJuAWXM8YzsXTlRCCkB7Fntz2AKDWnpNKQ8sZ1gxIUEqYVkFJB0NCwgePWlTYIZFjkxKNkEhBwMKDRILhDtqQwACAGr/1APcBSoAGQApANy2CwUCBAUBTEuwCVBYQB0AAgI4TQAFBQNhAAMDO00HAQQEAGEBBgIAAEIAThtLsAtQWEAdAAICOE0ABQUDYQADAztNBwEEBABhAQYCAAA/AE4bS7AaUFhAHQACAjhNAAUFA2EAAwM7TQcBBAQAYQEGAgAAQgBOG0uwK1BYQCEAAgI4TQAFBQNhAAMDO00AAQE5TQcBBAQAYQYBAABCAE4bQBwAAgABAAIBZwcBBAYBAAQAZQAFBQNhAAMDOwVOWVlZWUAXGxoBACMhGikbKRIQCgkIBwAZARkICRYrBTI+AjczFTMRIxEjLgMjIg4CFRQWFjciJiY1NDY2MzIWFhUUBgYCCUZhQigND6arCg0nQGJHXJhvPWq7llp6PTx6W1l5Pj95LCU3OhWXBUL97xQ6OCVGg7p1m+N6kWCkZWSgXligamuiXAACAGr/7APMA9wAHAAoAEBAPQUEAgECAUwHAQUAAgEFAmcABAQDYQADA0FNAAEBAGEGAQAAQgBOHR0BAB0oHSgkIhUTDg0JBwAcARwICRYrBTI2NjcnBgYjIiYnJichNTQuAiMiDgIVFBYWAzY3PgIzMhYXFhcCNGShbRaeGnpVWIMlIQMCu0l7l09konQ+b82VAw8SR2VBVnUdFgUUPnBKKklKTEpCXkKGu3M1Soi7cJbhfAJMLSs2VDBTSTVBAAAEAEX+hwPGBFcAEwAfAEoAUQBpQGZOTAICASEBCgMCTE8BAUoMAQoDAAMKAIAABwkECQcEgAADAAAJAwBpAAkGAQQFCQRpCwECAgFhAAEBQU0ABQUIYQAICEMITiAgFRQgSiBKRkQ/PTk4NzYxLysoGxkUHxUfKCQNCRgrExQXFhYzMjY3NjU0JyYmIyIGBwYlMhYVFAYjIiY1NDYDJwYGFRQWFxYWFxYWFRQGIyImJjU0NhcnIgYVFBYzMjY2NTQmJyYmJyY2ARc2FzUmBn5iM5BNTJAzYmI0j0xNjzRiAXJha2thYmtrJmdAXlZFMoRPl3yHZGKbWW86eGZb9ct9zHjQ2I+JCAdGAUdkNnt7ewKIllwxLS0xXJaWWjAwMDBaNHFhYnNzYmFx/hNCE1NEQ10OCgYCAlM4RlEaSkdAQQIec1SBkkOAWYaXBAUaKyotAiQobR+XEXIAAQChAAAD0gVCABYAJ0AkEgEBAAFMAAMDOE0AAAACYQACAkFNBAEBATkBThEUJBMjBQkbKwE0NjYzMhYVETMRNCYmIyIHBgcRIxEzAUxBcUhoeKxWmmdzVT8pqqsCRlJzPH1v/aUCa3qkUzsqUwIe+r4AAgCMAAABXQVHAAMADQAmQCMEAQICA2EAAwM+TQABATtNAAAAOQBOBQQKCAQNBQ0REAUJGCszMxEjNzI2NCYjIgYUFp6rq1YrPj4rKj4+A863OVA5OVA5AAEAoQAAA+0FQgAMACRAIQkGAwIEAAIBTAADAzhNAAICO00BAQAAOQBOExITEAQJGiszMxE3ATMBASMBIxEjoatlAWXX/kUBndD+XxOpAWNg/j0CKwGj/lcDHQAAAQChAAAD0QPcABYARLUSAQEAAUxLsCRQWEASAAAAAmEDAQICQU0EAQEBOQFOG0AWAAMDO00AAAACYQACAkFNBAEBATkBTlm3ERQkEyMFCRsrATQ2NjMyFhURMxE0JiYjIgcGBycjETMBTEFxSGh4q1WaZ3NVQyoBpKsCRlJzPH1v/aUCa3qkUzstXLb8MgAAAgBk/+wEAwPcABMAJwAtQCoAAwMBYQABAUFNBQECAgBhBAEAAEIAThUUAQAfHRQnFScLCQATARMGCRYrBTI+AjU0LgIjIg4CFRQeAjciLgI1ND4CMzIeAhUUDgICM2ire0JCe6toaKp7QkJ7qmhKbUcjI0dtSkttSCMjSG0UR4W4cXK7hkhIhrtycbiFR5E5Y4FHSIJkOjpkgkhHgWM5AAIAof6aBBMD3AAZACkAYbYWAgIEBQFMS7AkUFhAHAAFBQJhAwECAkFNBgEEBAFhAAEBQk0AAAA9AE4bQCAAAwM7TQAFBQJhAAICQU0GAQQEAWEAAQFCTQAAAD0ATllADxsaIyEaKRspFicmEAcJGisTMxEzHgMzMjY2NTQuAiMiDgIHIzUjASImJjU0NjYzMhYWFRQGBqOnDAwpQWJGertqPXCYW0djQCcMD6YBtld6Pj15WVx5PT56/poB/RU6NyV645t1uoNGJTg6FJ38r1yia2qgWF6gZGWkYAABAKEAAAKIA94AFABBtREBAAEBTEuwJFBYQBEAAQECYQMBAgJBTQAAADkAThtAFQADAztNAAEBAmEAAgJBTQAAADkATlm2FUMkEAQJGiszMxE0NjYzMhYXNSYmIyIGBgcjNSOnnjxoQx42CA4uETdhSBEEpQJdQmU6BwKlAQMqSzKXAAABAGb/7AOCA9wALAAxQC4qKRQTBAMBAUwAAQECYQACAkFNAAMDAGEEAQAAQgBOAQAnJRkXEA4ALAEsBQkWKwUyNjY1NCYnJyYmNTQ2NjMyFhYXNy4CIyIGBhUUFhcXFhUUBgYjIiYnBxYWAe94tWaEi5tXTzZdO0BUMg6bF12TaW2rYoaKqZM4ZkVadhWjG9AUTIZWZYMgIhRANSc/JCc+IyVFbD1JglRnhR8mIWIoQSdKUCR/hAAAAQAm/+MCYQTHABcAM0AwDwEFAw4BBAUCTAABAAGFBgEDAwBfAgEAADtNAAUFBGIABARCBE4TJSMREREQBwkdKwEjNSMVIxUzERQWMzI2NycGBiMiJjURMwJE1qudnZWIIUQcIxQyEEA61gPO+fmL/Z55hQkIigQHO0ACVQAAAQAI/pMDpgPOABoAHUAaGhQNAwABAUwCAQEBO00AAABDAE4aEyIDCRkrExYWMzI2NwEjAwYHBgcmJyYnAyMBBw4CJydUDUArbJItAa+10CEXCgkKCRchzbYBdxsWPlAwEv6mBg1ucgRb/cRaWiUjIyVZWwI8/C1NQ0ELDQQAAgBl//QDwwVUACMAMwBAQD0AAgMAAwIAgAYBAAUDAAV+AAMDAWEAAQE+TQAFBQRhBwEEBD8ETiUkAQAtKyQzJTMYFhMSDw0AIwEjCAkWKwEzNTQ+Ajc2NjU0JiYjIgYGBzM+AjMyFhYVFAYHDgMVEzI2NjU0JiYjIgYGFRQWFgGPuhMqQy9ga2rAgnXCdwTDBUdqOUJrP1lCM1A4Hl8mPiQkPiYmPiUlPgGWCztROjAbNpttaKFbVKBzSV0sMlo9Tm4kHDhNeFz+UyE4IiM5ISE5IyI4IQCwACwgsABVWEVZICBLuAAOUUuwBlNaWLA0G7AoWWBmIIpVWLACJWG5CAAIAGNjI2IbISGwAFmwAEMjRLIAAQBDYEItsAEssCBgZi2wAiwjISMhLbADLCBkswMUFQBCQ7ATQyBgYEKxAhRDQrElA0OwAkNUeCCwDCOwAkNDYWSwBFB4sgICAkNgQrAhZRwhsAJDQ7IOFQFCHCCwAkMjQrITARNDYEIjsABQWGVZshYBAkNgQi2wBCywAyuwFUNYIyEjIbAWQ0MjsABQWGVZGyBkILDAULAEJlqyKAENQ0VjRbAGRVghsAMlWVJbWCEjIRuKWCCwUFBYIbBAWRsgsDhQWCGwOFlZILEBDUNFY0VhZLAoUFghsQENQ0VjRSCwMFBYIbAwWRsgsMBQWCBmIIqKYSCwClBYYBsgsCBQWCGwCmAbILA2UFghsDZgG2BZWVkbsAIlsAxDY7AAUliwAEuwClBYIbAMQxtLsB5QWCGwHkthuBAAY7AMQ2O4BQBiWVlkYVmwAStZWSOwAFBYZVlZIGSwFkMjQlktsAUsIEUgsAQlYWQgsAdDUFiwByNCsAgjQhshIVmwAWAtsAYsIyEjIbADKyBksQdiQiCwCCNCsAZFWBuxAQ1DRWOxAQ1DsAVgRWOwBSohILAIQyCKIIqwASuxMAUlsAQmUVhgUBthUllYI1khWSCwQFNYsAErGyGwQFkjsABQWGVZLbAHLLAJQyuyAAIAQ2BCLbAILLAJI0IjILAAI0JhsAJiZrABY7ABYLAHKi2wCSwgIEUgsA5DY7gEAGIgsABQWLBAYFlmsAFjYESwAWAtsAossgkOAENFQiohsgABAENgQi2wCyywAEMjRLIAAQBDYEItsAwsICBFILABKyOwAEOwBCVgIEWKI2EgZCCwIFBYIbAAG7AwUFiwIBuwQFlZI7AAUFhlWbADJSNhRESwAWAtsA0sICBFILABKyOwAEOwBCVgIEWKI2EgZLAkUFiwABuwQFkjsABQWGVZsAMlI2FERLABYC2wDiwgsAAjQrMNDAADRVBYIRsjIVkqIS2wDyyxAgJFsGRhRC2wECywAWAgILAPQ0qwAFBYILAPI0JZsBBDSrAAUlggsBAjQlktsBEsILAQYmawAWMguAQAY4ojYbARQ2AgimAgsBEjQiMtsBIsS1RYsQRkRFkksA1lI3gtsBMsS1FYS1NYsQRkRFkbIVkksBNlI3gtsBQssQASQ1VYsRISQ7ABYUKwEStZsABDsAIlQrEPAiVCsRACJUKwARYjILADJVBYsQEAQ2CwBCVCioogiiNhsBAqISOwAWEgiiNhsBAqIRuxAQBDYLACJUKwAiVhsBAqIVmwD0NHsBBDR2CwAmIgsABQWLBAYFlmsAFjILAOQ2O4BABiILAAUFiwQGBZZrABY2CxAAATI0SwAUOwAD6yAQEBQ2BCLbAVLACxAAJFVFiwEiNCIEWwDiNCsA0jsAVgQiBgtxgYAQARABMAQkJCimAgsBQjQrABYbEUCCuwiysbIlktsBYssQAVKy2wFyyxARUrLbAYLLECFSstsBkssQMVKy2wGiyxBBUrLbAbLLEFFSstsBwssQYVKy2wHSyxBxUrLbAeLLEIFSstsB8ssQkVKy2wKywjILAQYmawAWOwBmBLVFgjIC6wAV0bISFZLbAsLCMgsBBiZrABY7AWYEtUWCMgLrABcRshIVktsC0sIyCwEGJmsAFjsCZgS1RYIyAusAFyGyEhWS2wICwAsA8rsQACRVRYsBIjQiBFsA4jQrANI7AFYEIgYLABYbUYGAEAEQBCQopgsRQIK7CLKxsiWS2wISyxACArLbAiLLEBICstsCMssQIgKy2wJCyxAyArLbAlLLEEICstsCYssQUgKy2wJyyxBiArLbAoLLEHICstsCkssQggKy2wKiyxCSArLbAuLCA8sAFgLbAvLCBgsBhgIEMjsAFgQ7ACJWGwAWCwLiohLbAwLLAvK7AvKi2wMSwgIEcgILAOQ2O4BABiILAAUFiwQGBZZrABY2AjYTgjIIpVWCBHICCwDkNjuAQAYiCwAFBYsEBgWWawAWNgI2E4GyFZLbAyLACxAAJFVFixDgZFQrABFrAxKrEFARVFWDBZGyJZLbAzLACwDyuxAAJFVFixDgZFQrABFrAxKrEFARVFWDBZGyJZLbA0LCA1sAFgLbA1LACxDgZFQrABRWO4BABiILAAUFiwQGBZZrABY7ABK7AOQ2O4BABiILAAUFiwQGBZZrABY7ABK7AAFrQAAAAAAEQ+IzixNAEVKiEtsDYsIDwgRyCwDkNjuAQAYiCwAFBYsEBgWWawAWNgsABDYTgtsDcsLhc8LbA4LCA8IEcgsA5DY7gEAGIgsABQWLBAYFlmsAFjYLAAQ2GwAUNjOC2wOSyxAgAWJSAuIEewACNCsAIlSYqKRyNHI2EgWGIbIVmwASNCsjgBARUUKi2wOiywABawFyNCsAQlsAQlRyNHI2GxDABCsAtDK2WKLiMgIDyKOC2wOyywABawFyNCsAQlsAQlIC5HI0cjYSCwBiNCsQwAQrALQysgsGBQWCCwQFFYswQgBSAbswQmBRpZQkIjILAKQyCKI0cjRyNhI0ZgsAZDsAJiILAAUFiwQGBZZrABY2AgsAErIIqKYSCwBENgZCOwBUNhZFBYsARDYRuwBUNgWbADJbACYiCwAFBYsEBgWWawAWNhIyAgsAQmI0ZhOBsjsApDRrACJbAKQ0cjRyNhYCCwBkOwAmIgsABQWLBAYFlmsAFjYCMgsAErI7AGQ2CwASuwBSVhsAUlsAJiILAAUFiwQGBZZrABY7AEJmEgsAQlYGQjsAMlYGRQWCEbIyFZIyAgsAQmI0ZhOFktsDwssAAWsBcjQiAgILAFJiAuRyNHI2EjPDgtsD0ssAAWsBcjQiCwCiNCICAgRiNHsAErI2E4LbA+LLAAFrAXI0KwAyWwAiVHI0cjYbAAVFguIDwjIRuwAiWwAiVHI0cjYSCwBSWwBCVHI0cjYbAGJbAFJUmwAiVhuQgACABjYyMgWGIbIVljuAQAYiCwAFBYsEBgWWawAWNgIy4jICA8ijgjIVktsD8ssAAWsBcjQiCwCkMgLkcjRyNhIGCwIGBmsAJiILAAUFiwQGBZZrABYyMgIDyKOC2wQCwjIC5GsAIlRrAXQ1hQG1JZWCA8WS6xMAEUKy2wQSwjIC5GsAIlRrAXQ1hSG1BZWCA8WS6xMAEUKy2wQiwjIC5GsAIlRrAXQ1hQG1JZWCA8WSMgLkawAiVGsBdDWFIbUFlYIDxZLrEwARQrLbBDLLA6KyMgLkawAiVGsBdDWFAbUllYIDxZLrEwARQrLbBELLA7K4ogIDywBiNCijgjIC5GsAIlRrAXQ1hQG1JZWCA8WS6xMAEUK7AGQy6wMCstsEUssAAWsAQlsAQmICAgRiNHYbAMI0IuRyNHI2GwC0MrIyA8IC4jOLEwARQrLbBGLLEKBCVCsAAWsAQlsAQlIC5HI0cjYSCwBiNCsQwAQrALQysgsGBQWCCwQFFYswQgBSAbswQmBRpZQkIjIEewBkOwAmIgsABQWLBAYFlmsAFjYCCwASsgiophILAEQ2BkI7AFQ2FkUFiwBENhG7AFQ2BZsAMlsAJiILAAUFiwQGBZZrABY2GwAiVGYTgjIDwjOBshICBGI0ewASsjYTghWbEwARQrLbBHLLEAOisusTABFCstsEgssQA7KyEjICA8sAYjQiM4sTABFCuwBkMusDArLbBJLLAAFSBHsAAjQrIAAQEVFBMusDYqLbBKLLAAFSBHsAAjQrIAAQEVFBMusDYqLbBLLLEAARQTsDcqLbBMLLA5Ki2wTSywABZFIyAuIEaKI2E4sTABFCstsE4ssAojQrBNKy2wTyyyAABGKy2wUCyyAAFGKy2wUSyyAQBGKy2wUiyyAQFGKy2wUyyyAABHKy2wVCyyAAFHKy2wVSyyAQBHKy2wViyyAQFHKy2wVyyzAAAAQystsFgsswABAEMrLbBZLLMBAABDKy2wWiyzAQEAQystsFssswAAAUMrLbBcLLMAAQFDKy2wXSyzAQABQystsF4sswEBAUMrLbBfLLIAAEUrLbBgLLIAAUUrLbBhLLIBAEUrLbBiLLIBAUUrLbBjLLIAAEgrLbBkLLIAAUgrLbBlLLIBAEgrLbBmLLIBAUgrLbBnLLMAAABEKy2waCyzAAEARCstsGksswEAAEQrLbBqLLMBAQBEKy2wayyzAAABRCstsGwsswABAUQrLbBtLLMBAAFEKy2wbiyzAQEBRCstsG8ssQA8Ky6xMAEUKy2wcCyxADwrsEArLbBxLLEAPCuwQSstsHIssAAWsQA8K7BCKy2wcyyxATwrsEArLbB0LLEBPCuwQSstsHUssAAWsQE8K7BCKy2wdiyxAD0rLrEwARQrLbB3LLEAPSuwQCstsHgssQA9K7BBKy2weSyxAD0rsEIrLbB6LLEBPSuwQCstsHsssQE9K7BBKy2wfCyxAT0rsEIrLbB9LLEAPisusTABFCstsH4ssQA+K7BAKy2wfyyxAD4rsEErLbCALLEAPiuwQistsIEssQE+K7BAKy2wgiyxAT4rsEErLbCDLLEBPiuwQistsIQssQA/Ky6xMAEUKy2whSyxAD8rsEArLbCGLLEAPyuwQSstsIcssQA/K7BCKy2wiCyxAT8rsEArLbCJLLEBPyuwQSstsIossQE/K7BCKy2wiyyyCwADRVBYsAYbsgQCA0VYIyEbIVlZQiuwCGWwAyRQeLEFARVFWDBZLQ==")}</style><metadata>Copyright 2013 The Intos Project Authors (https://github.com/muglug/intos)
+
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+This license is copied below, and is also available with a FAQ at:
+https://scripts.sil.org/OFL
+
+
+-----------------------------------------------------------
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+-----------------------------------------------------------
+
+PREAMBLE
+The goals of the Open Font License (OFL) are to stimulate worldwide
+development of collaborative font projects, to support the font creation
+efforts of academic and linguistic communities, and to provide a free and
+open framework in which fonts may be shared and improved in partnership
+with others.
+
+The OFL allows the licensed fonts to be used, studied, modified and
+redistributed freely as long as they are not sold by themselves. The
+fonts, including any derivative works, can be bundled, embedded, 
+redistributed and/or sold with any software provided that any reserved
+names are not used by derivative works. The fonts and derivatives,
+however, cannot be released under any other type of license. The
+requirement for fonts to remain under this license does not apply
+to any document created using the fonts or their derivatives.
+
+DEFINITIONS
+"Font Software" refers to the set of files released by the Copyright
+Holder(s) under this license and clearly marked as such. This may
+include source files, build scripts and documentation.
+
+"Reserved Font Name" refers to any names specified as such after the
+copyright statement(s).
+
+"Original Version" refers to the collection of Font Software components as
+distributed by the Copyright Holder(s).
+
+"Modified Version" refers to any derivative made by adding to, deleting,
+or substituting -- in part or in whole -- any of the components of the
+Original Version, by changing formats or by porting the Font Software to a
+new environment.
+
+"Author" refers to any designer, engineer, programmer, technical
+writer or other person who contributed to the Font Software.
+
+PERMISSION &amp; CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of the Font Software, to use, study, copy, merge, embed, modify,
+redistribute, and sell modified and unmodified copies of the Font
+Software, subject to the following conditions:
+
+1) Neither the Font Software nor any of its individual components,
+in Original or Modified Versions, may be sold by itself.
+
+2) Original or Modified Versions of the Font Software may be bundled,
+redistributed and/or sold with any software, provided that each copy
+contains the above copyright notice and this license. These can be
+included either as stand-alone text files, human-readable headers or
+in the appropriate machine-readable metadata fields within text or
+binary files as long as those fields can be easily viewed by the user.
+
+3) No Modified Version of the Font Software may use the Reserved Font
+Name(s) unless explicit written permission is granted by the corresponding
+Copyright Holder. This restriction only applies to the primary font name as
+presented to the users.
+
+4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
+Software shall not be used to promote, endorse or advertise any
+Modified Version, except to acknowledge the contribution(s) of the
+Copyright Holder(s) and the Author(s) or with their explicit written
+permission.
+
+5) The Font Software, modified or unmodified, in part or in whole,
+must be distributed entirely under this license, and must not be
+distributed under any other license. The requirement for fonts to
+remain under this license does not apply to any document created
+using the Font Software.
+
+TERMINATION
+This license becomes null and void if any of the above conditions are
+not met.
+
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
+OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
+DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
+OTHER DEALINGS IN THE FONT SOFTWARE.
+
+
+Intos font files bundled by @openpresentation/opf-render
+
+These sixteen TrueType files are the unmodified `fonts/` output of the Intos project, vendored byte for byte.
+
+- Project: https://github.com/muglug/intos
+- Pinned commit: fef9315c14da9e4b23b4c3cac8e718998d4e4736 (2026-09-08, "Slim down README")
+- Version string in the font name tables: 1.000
+- License: SIL Open Font License, Version 1.1 (`LICENSE.txt`, verbatim from the pinned commit). Neither the license file nor the font name tables declare a Reserved Font Name.
+- The files were retrieved from the Git LFS store of that commit; each file's SHA-256 equals its LFS object id and is pinned in `src/font-manifest.js`.
+
+Upstream copyright statements, as carried in each font's name table (the license file above still carries a template copyright line, so they are repeated here):
+
+- Intos, Intos Display and Intos Narrow: "Copyright 2016-2024 The Inter Project Authors (https://github.com/rsms/inter). Intos modifications Copyright 2026 The Intos Project Authors (https://github.com/muglug/intos)."
+- Intos Serif: "Copyright 2022 The Gelasio Project Authors (https://github.com/SorkinType/Gelasio). Intos Serif modifications Copyright 2026 The Intos Project Authors (https://github.com/muglug/intos)."
+
+Provenance, from the upstream README and build scripts: the sans families are derived from Inter and the serif family from Gelasio. Their outlines are drawn from those sources. The project sets advance widths, kerning and vertical metrics to those of Microsoft Aptos so that text keeps its line breaks, and its Semibold build scripts also read local Aptos files to place marks such as the i and j dots and to size some glyphs; the Display and Narrow families replay the Aptos to Aptos Display and Aptos Narrow proportion changes on the Intos masters. No Aptos file is part of the repository or of these files. OPF compared the outlines of the bundled regular faces with the Aptos 2.01 faces and found none identical (0 of 975 shared nonempty glyphs in each sans regular face; the only identical glyphs in Intos Serif Regular are eight plain rectangles such as the hyphen and dashes). The family names are not trademarks of the font they stand in for.
+
+OPF uses these faces only as preview replacements for Aptos, Aptos Display, Aptos Narrow and Aptos Serif. The exported PPTX keeps naming the family the author chose, and no Aptos file is bundled or embedded.
+</metadata>
+<rect aria-hidden="true" fill="#011842" height="720" opacity="1" width="1280" x="0" y="0"/>
+<g aria-label="Flowchart: Idea, Worth testing?, Prototype, Park it, yes, no" data-opf-diagram="flowchart" role="img"><g transform="translate(159 208) scale(2)" font-family="Intos, sans-serif" font-size="16" fill="#FFFFFF"><g fill="none" stroke="#99A3B3" stroke-linecap="round"><g data-id="L_A_B_0"><path d="M74.06,76L115.06,76"/><path d="M122.06,76L114.06,79.36L114.06,72.64Z" fill="#99A3B3" stroke="none"/></g><g data-id="L_B_C_0"><path d="M276.55,68C293.2,68 293.2,32 309.85,32L362.65,32"/><path d="M369.65,32L361.65,35.36L361.65,28.64Z" fill="#99A3B3" stroke="none"/></g><g data-id="L_B_D_0"><path d="M276.55,84C293.2,84 293.2,120 309.85,120L362.65,120"/><path d="M369.65,120L361.65,123.36L361.65,116.64Z" fill="#99A3B3" stroke="none"/></g></g><g font-size="14"><g data-id="L_B_C_0"><rect x="311.85" y="21.5" width="28.3" height="21" rx="3" fill="#011842"/><text x="326" y="36.9" text-anchor="middle">yes</text></g><g data-id="L_B_D_0"><rect x="314.28" y="109.5" width="23.44" height="21" rx="3" fill="#011842"/><text x="326" y="124.9" text-anchor="middle">no</text></g></g><g><g data-id="A" transform="translate(41.03,76)"><rect x="-33.03" y="-24" width="66.06" height="48" fill="#06244F" stroke="#164C7E" rx="6"/><text x="0" y="5.6" text-anchor="middle">Idea</text></g><g data-id="B" transform="translate(205.71,76)"><polygon points="0,-52.28 83.64,0 0,52.28 -83.64,0" fill="#06244F" stroke="#164C7E"/><text x="0" y="5.6" text-anchor="middle">Worth testing?</text></g><g data-id="C" transform="translate(421.04,32)"><rect x="-51.39" y="-24" width="102.77" height="48" fill="#06244F" stroke="#164C7E" rx="6"/><text x="0" y="5.6" text-anchor="middle">Prototype</text></g><g data-id="D" transform="translate(408.92,120)"><rect x="-39.27" y="-24" width="78.54" height="48" fill="#06244F" stroke="#164C7E" rx="6"/><text x="0" y="5.6" text-anchor="middle">Park it</text></g></g></g></g>
+</svg>

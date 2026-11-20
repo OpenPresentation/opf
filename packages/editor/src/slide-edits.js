@@ -446,30 +446,42 @@ function flowWeights(flow) {
 /**
  * The weights a container's tracks are drawn with, and how the drawn pair maps onto them. With explicit weights (or tracks that fill the
  * container) they are the composition's weights. A column stacked at its content's heights (no weights: its rows do not fill it) reads
- * as weights in proportion to the drawn heights, with the last row taking the empty space below, so the first resize starts from what is
+ * as weights in proportion to its drawn heights, allocating leading/trailing slack to the first/last rows, so the first resize starts from what is
  * drawn: every other divider stays where it is (CE-20; without this the first nudge of a content-sized column jumped from about 26% to
- * 48%, because explicit weights fill the container while the drawn stack does not). `scale(boundary)` turns a fraction of the drawn
- * pair into the fraction of the pair the weights will draw.
+ * 48%, because explicit weights fill the container while the drawn stack does not). `scale(boundary)` is the linear coefficient of the pair mapping; resize also includes its leading offset.
  */
-export function drawnTracks(flow) {
+function drawnTrackPlan(flow) {
   const vertical = flow.composition?.mode === "column";
   const tracks = (vertical ? flow.rows : flow.columns) ?? [];
   const explicit = Array.isArray(flow.composition?.weights) && flow.composition.weights.length ? flow.composition.weights : null;
   const plain = { weights: Array.from({ length: tracks.length }, (_, index) => explicit?.[index] ?? 1), drawn: false, scale: () => 1 };
-  if (explicit || tracks.length < 2 || !flow.box) return plain;
+  const ordinary = {view: plain, fraction: (_boundary, value) => value};
+  if (explicit || tracks.length < 2 || !flow.box) return ordinary;
   const extent = vertical ? flow.box.height : flow.box.width;
   const room = extent - (flow.gap ?? 0) * (tracks.length - 1);
-  const sizes = tracks.map((track) => track.size);
+  const sizes = tracks.map(track => track.size);
   const slack = room - sizes.reduce((sum, size) => sum + size, 0);
-  if (!(room > 0) || slack <= room * 0.005 || sizes.some((size) => !(size > 0))) return plain;
+  if (!(room > 0) || slack <= room * 0.005 || sizes.some(size => !(size > 0))) return ordinary;
+  const reverse = !vertical && tracks[1].offset < tracks[0].offset;
+  const leading = Math.max(0, reverse ? extent - tracks[0].offset - sizes[0] : tracks[0].offset);
   const raw = [...sizes];
-  raw[raw.length - 1] += slack;
-  // Whole-number-ish weights (the smallest at least 2, so the halves the snapping uses are fine enough), never over core's 100.
+  raw[0] += Math.min(slack, leading);
+  raw[raw.length - 1] += slack - Math.min(slack, leading);
+  // Preserve the current outer slack as allocation on the first/last tracks.
+  // Core still owns all content layout; only an actual drag authors weights.
   let unit = Math.max(tracks.length / room, 2 / Math.min(...raw));
   if (Math.max(...raw) * unit > 100) unit = 100 / Math.max(...raw);
-  const weights = raw.map((size) => Math.max(0.001, round3(size * unit)));
-  return { weights, drawn: true, scale: (boundary) => (sizes[boundary] + sizes[boundary + 1]) / (raw[boundary] + raw[boundary + 1]) };
+  const weights = raw.map(size => Math.max(0.001, round3(size * unit)));
+  const sum = weights.reduce((a, b) => a + b, 0);
+  const scale = boundary => (sizes[boundary] + sizes[boundary + 1]) / (raw[boundary] + raw[boundary + 1]);
+  return {
+    view: {weights, drawn: true, scale},
+    fraction: (boundary, value) => (raw[boundary] - sizes[boundary]) / (raw[boundary] + raw[boundary + 1]) + value * scale(boundary),
+    // Current accepted content heights are conservative minima for implicit conversion.
+    room, minimums: sizes.map(size => Math.ceil(size / room * sum * 1000) / 1000),
+  };
 }
+export function drawnTracks(flow) { return drawnTrackPlan(flow).view; }
 // Write `weights` as the container's composition: `prepareTrackResize` checks the flow (2 to 12 tracks, no reserved slots) and turns an
 // automatic arrangement into the explicit grid it drew; the weights are then the exact snapped values.
 function prepareWeights(presentation, scene, key, weights, label, options) {
@@ -499,11 +511,46 @@ function prepareWeights(presentation, scene, key, weights, label, options) {
 export function prepareSceneTrackResize(presentation, scene, key, boundary, fraction, options = {}) {
   const flow = scene.flowOf(key);
   if (!flow) throw refuse("This has no tracks to resize. Select a row, column or grid.");
-  const drawn = drawnTracks(flow);
-  const weights = drawn.weights;
+  const plan = drawnTrackPlan(flow);
+  const drawn = plan.view;
+  const weights = [...drawn.weights];
   if (!Number.isInteger(boundary) || boundary < 0 || boundary >= weights.length - 1) throw refuse("Choose a divider between two tracks.");
   // `fraction` is where the divider sits in the pair as drawn; the weights draw the pair over its share of the whole container.
-  const { a, b } = snapTrackPair(weights, boundary, Math.max(0, Math.min(1, fraction * drawn.scale(boundary))), options);
+  const tracks = flow.composition?.mode === "column" ? flow.rows : flow.columns;
+  const currentShare = tracks[boundary].size / (tracks[boundary].size + tracks[boundary + 1].size);
+  if (!flow.composition?.weights?.length && Math.abs(fraction - currentShare) <= 1e-9)
+    return unchanged(presentation, {paths: [scene.node(key).path], weights});
+  let { a, b } = snapTrackPair(weights, boundary, Math.max(0, Math.min(1, plan.fraction(boundary, fraction))), options);
+  if (plan.minimums) {
+    const total = weights[boundary] + weights[boundary + 1];
+    const snapped = {a, b};
+    const snappedTotal = a + b;
+    a = total * a / snappedTotal; b = total - a;
+    const requested = Math.max(0, Math.min(1, plan.fraction(boundary, fraction))) * total;
+    const minimums = [...plan.minimums], children = scene.contentChildren(key);
+    if (children.length === weights.length) {
+      const vertical = flow.composition?.mode === "column", extent = vertical ? scene.height : scene.width;
+      const sum = weights.reduce((x, y) => x + y, 0);
+      for (let index = 0; index < children.length; index++) {
+        const box = children[index].box, size = box && (vertical ? box.h : box.w) * extent;
+        if (size > 0) minimums[index] = Math.max(minimums[index], Math.ceil(size / plan.room * sum * 1000) / 1000);
+      }
+    }
+    if (minimums.some((minimum, index) => index !== boundary && index !== boundary + 1 && weights[index] + 0.0011 < minimum))
+      throw refuse("The current content needs more space than these tracks provide.");
+    const lower = minimums[boundary], upper = total - minimums[boundary + 1];
+    if (lower > upper) throw refuse("This resize would make the content smaller. Give it more space first.");
+    const normalized = a;
+    a = Math.max(lower, Math.min(upper, a));
+    b = total - a;
+    if (Math.abs(a - weights[boundary]) <= 0.0011) {
+      if (requested < lower - 0.0011 || requested > upper + 0.0011)
+        throw refuse("This resize would make the content smaller. Give it more space first.");
+      return unchanged(presentation, {paths: [scene.node(key).path], weights});
+    }
+    // A two-track whole ratio can retain its original small integers after the bounds check.
+    if (weights.length === 2 && a === normalized) { a = snapped.a; b = snapped.b; }
+  }
   weights[boundary] = a;
   weights[boundary + 1] = b;
   return prepareWeights(presentation, scene, key, weights, `Resized to ${ratioLabel(a, b)}`, options);

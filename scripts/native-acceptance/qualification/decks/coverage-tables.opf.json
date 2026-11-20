@@ -1,0 +1,363 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: tables",
+  "description": "RR-105 format coverage: styled table cells (fill, color, bold, alignment, vertical alignment, padding, borders), spans, number formats, every header form, tables from datasets and highlighted rows.",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "datasets": {
+    "regional-sales": {
+      "title": "Sales by region",
+      "description": "Quarterly bookings in $M, fictional.",
+      "columns": [
+        "Region",
+        {
+          "name": "Q3",
+          "format": "$#,##0.0"
+        },
+        {
+          "name": "Q4",
+          "format": "$#,##0.0"
+        },
+        "Owner"
+      ],
+      "rows": [
+        [
+          "North",
+          4.2,
+          4.9,
+          "Ana"
+        ],
+        [
+          "South",
+          3.1,
+          3.4,
+          "Ben"
+        ],
+        [
+          "East",
+          2.7,
+          3.6,
+          "Chen"
+        ],
+        [
+          "West",
+          3.9,
+          3.8,
+          "Dara"
+        ]
+      ],
+      "source": {
+        "src": "./data/bookings.xlsx",
+        "sheet": "Q4",
+        "range": "A1:D5",
+        "fields": [
+          "Region",
+          "Q3",
+          "Q4",
+          "Owner"
+        ],
+        "retrieved": "2026-10-05",
+        "description": "Finance export, unaudited"
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "styled-cells",
+      "type": "table",
+      "title": "Cells with fills, colors and alignment",
+      "table": {
+        "alt": "Four projects with their status, budget and owner.",
+        "columns": [
+          "Project",
+          {
+            "value": "Status",
+            "style": {
+              "align": "center",
+              "bold": true
+            }
+          },
+          {
+            "name": "Budget",
+            "format": "$#,##0"
+          },
+          [
+            "Owner ",
+            {
+              "text": "(lead)",
+              "italic": true
+            }
+          ]
+        ],
+        "rows": [
+          [
+            "Atlas",
+            {
+              "value": "On track",
+              "style": {
+                "fill": {
+                  "color": "accent3",
+                  "darken": 0.35
+                },
+                "color": "light1",
+                "align": "center",
+                "bold": true
+              }
+            },
+            120000,
+            "Ana"
+          ],
+          [
+            "Beacon",
+            {
+              "value": "At risk",
+              "style": {
+                "fill": {
+                  "color": "accent2",
+                  "lighten": 0.6
+                },
+                "color": "dark1",
+                "align": "center"
+              }
+            },
+            86000,
+            "Ben"
+          ],
+          [
+            "Cobalt",
+            {
+              "value": "Late",
+              "style": {
+                "fill": "#B42318",
+                "color": "#FFFFFF",
+                "align": "center"
+              }
+            },
+            54000,
+            [
+              "Chen ",
+              {
+                "text": "and Dara",
+                "italic": true
+              }
+            ]
+          ],
+          [
+            "Delta",
+            {
+              "value": "Done",
+              "style": {
+                "align": "end",
+                "color": "textSecondary"
+              }
+            },
+            {
+              "value": 0.92,
+              "format": "0%"
+            },
+            null
+          ]
+        ]
+      }
+    },
+    {
+      "id": "borders-padding",
+      "title": "Borders, padding and vertical alignment",
+      "table": {
+        "columns": [
+          "Check",
+          "Result",
+          "Note"
+        ],
+        "rows": [
+          [
+            {
+              "value": "Load test",
+              "style": {
+                "verticalAlign": "top",
+                "padding": {
+                  "top": 12,
+                  "right": 8,
+                  "bottom": 4,
+                  "left": 16
+                },
+                "borders": {
+                  "top": {
+                    "color": "accent1",
+                    "width": 2,
+                    "dash": "solid"
+                  },
+                  "bottom": {
+                    "color": "accent1",
+                    "width": 2,
+                    "dash": "solid"
+                  }
+                }
+              }
+            },
+            {
+              "value": "Passed",
+              "style": {
+                "verticalAlign": "middle",
+                "borders": {
+                  "left": {
+                    "color": "dark2",
+                    "width": 1,
+                    "dash": "dash"
+                  },
+                  "right": {
+                    "color": "dark2",
+                    "width": 1,
+                    "dash": "dot"
+                  }
+                }
+              }
+            },
+            {
+              "value": "Peak traffic held for two hours without errors",
+              "style": {
+                "verticalAlign": "bottom",
+                "align": "start"
+              }
+            }
+          ],
+          [
+            {
+              "value": "Failover",
+              "style": {
+                "borders": {
+                  "top": "none",
+                  "bottom": {
+                    "color": "#94A3B8",
+                    "width": 1,
+                    "dash": "dot"
+                  }
+                }
+              }
+            },
+            true,
+            {
+              "value": "Second region took over in 40 seconds",
+              "style": {
+                "padding": {
+                  "left": 24
+                }
+              }
+            }
+          ],
+          [
+            "Restore",
+            false,
+            "Backup restore took longer than the target"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "spans",
+      "title": "Merged cells across columns and rows",
+      "table": {
+        "columns": [
+          "Team",
+          "Monday",
+          "Tuesday",
+          "Wednesday"
+        ],
+        "rows": [
+          [
+            {
+              "value": "Platform",
+              "rowSpan": 2,
+              "style": {
+                "verticalAlign": "middle",
+                "bold": true
+              }
+            },
+            {
+              "value": "Planning offsite",
+              "colSpan": 2,
+              "style": {
+                "align": "center",
+                "fill": "light2"
+              }
+            },
+            null,
+            "Release"
+          ],
+          [
+            null,
+            "Reviews",
+            "Reviews",
+            "Support"
+          ],
+          [
+            "Design",
+            "Research",
+            {
+              "value": "Customer workshop",
+              "colSpan": 2,
+              "style": {
+                "align": "center",
+                "fill": "light2"
+              }
+            },
+            null
+          ]
+        ]
+      }
+    },
+    {
+      "id": "empty-header",
+      "title": "A row header column without a heading",
+      "table": {
+        "columns": [
+          null,
+          "2025",
+          "2026"
+        ],
+        "rows": [
+          [
+            "Revenue",
+            18.4,
+            22.1
+          ],
+          [
+            "Headcount",
+            120,
+            134
+          ],
+          [
+            "Offices",
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "dataset-table",
+      "title": "A table drawn from a shared dataset",
+      "table": {
+        "dataset": "regional-sales",
+        "highlight": {
+          "rows": [
+            "East"
+          ]
+        }
+      }
+    },
+    {
+      "id": "dataset-fields",
+      "title": "Only some fields of the dataset",
+      "table": {
+        "dataset": "regional-sales",
+        "fields": [
+          "Region",
+          "Q4"
+        ]
+      }
+    }
+  ]
+}

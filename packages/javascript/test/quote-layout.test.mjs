@@ -37,10 +37,10 @@ test('complete quote layout preserves source ranges, requested/resolved styles a
 
 test('shorthand and empty metadata preserve schema paths without an invented footer', () => {
   for (const value of ['  Original\ntext  ',{text:'',attribution:'',source:''}]) {
-    const result=layoutQuote(value,cell,{path:'slides.2.left.quote'});
+    const result=layoutQuote(value,cell,{path:'slides.2.start.quote'});
     assert.equal(result.parts.length,1);
     assert.equal(result.parts[0].box.height,result.parts[0].fit.lines.length*result.parts[0].fit.lineHeight);
-    assert.equal(result.parts[0].sources[0].path,typeof value==='string'?'slides.2.left.quote':'slides.2.left.quote.text');
+    assert.equal(result.parts[0].sources[0].path,typeof value==='string'?'slides.2.start.quote':'slides.2.start.quote.text');
     assert.equal(result.parts[0].text,`“${typeof value==='string'?value:value.text}”`);
     assert.equal(result.textMeasurement,'estimated');
   }

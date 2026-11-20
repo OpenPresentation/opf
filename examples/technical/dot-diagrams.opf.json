@@ -1,0 +1,203 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "DOT diagrams",
+  "description": "Technical fixture for Graphviz DOT diagrams (diagram syntax \"dot\"): a release pipeline with a cluster and a decision, an undirected service graph beside text, an architecture with a database cylinder and labeled edges, a state graph on a dark variant, and a graph with an alt. OPF reads the DOT itself and pele lays it out in layers.",
+  "filename": "dot-diagrams",
+  "language": "en-US",
+  "design": {
+    "theme": "classic",
+    "colorScheme": "forest-green",
+    "fontScheme": "aptos"
+  },
+  "slides": [
+    {
+      "id": "pipeline",
+      "title": "Every change passes the same pipeline",
+      "diagram": {
+        "syntax": "dot",
+        "source": "digraph release {\n  rankdir=LR\n  node [shape=box, style=rounded]\n  subgraph cluster_ci {\n    label=\"Continuous integration\"\n    Commit -> Build -> Test\n  }\n  Review [shape=diamond, label=\"Approved?\"]\n  Test -> Review [label=\"passes\"]\n  Test -> Build [label=\"fails\", style=dashed]\n  Review -> Release [label=\"yes\"]\n  Release [shape=ellipse]\n}"
+      }
+    },
+    {
+      "id": "services",
+      "title": "Three teams share one API",
+      "blocks": [
+        {
+          "bullets": [
+            "Web, mobile and partners call the same API",
+            "Search reads from the catalog the API writes",
+            "Billing hears about every order"
+          ]
+        },
+        {
+          "diagram": {
+            "syntax": "dot",
+            "source": "graph services {\n  API [shape=box]\n  Web -- API\n  Mobile -- API\n  Partners -- API\n  API -- Catalog -- Search\n  API -- Billing\n}"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "title": "Decks are validated before they are stored",
+      "diagram": {
+        "syntax": "dot",
+        "source": "digraph architecture {\n  rankdir=LR\n  node [shape=box]\n  Client [shape=ellipse]\n  Gateway -> Auth [label=\"token\"]\n  Client -> Gateway [label=\"POST /decks\"]\n  Gateway -> Validator\n  Validator -> Store [label=\"valid\"]\n  Validator -> Client [label=\"findings\", style=dashed]\n  Store [shape=cylinder, label=\"Deck store\"]\n}"
+      }
+    },
+    {
+      "id": "states",
+      "title": "A deck moves from draft to published",
+      "design": {
+        "variant": "dark1"
+      },
+      "diagram": {
+        "syntax": "dot",
+        "source": "digraph states {\n  rankdir=LR\n  node [shape=circle]\n  Draft -> Review [label=\"submit\"]\n  Review -> Draft [label=\"changes\"]\n  Review -> Published [label=\"approve\"]\n  Published [shape=doublecircle]\n}"
+      }
+    },
+    {
+      "id": "alt",
+      "title": "Rejected briefs return to their author",
+      "diagram": {
+        "syntax": "dot",
+        "source": "digraph review {\n  rankdir=LR\n  Brief [shape=box]\n  Approved [shape=diamond, label=\"Approved?\"]\n  Brief -> Approved\n  Approved -> Build [label=\"yes\"]\n  Approved -> Brief [label=\"no\"]\n}",
+        "alt": "A brief goes to review. Approved work is built; rejected work returns to the brief."
+      }
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen",
+          "variants": [
+            {
+              "id": "light",
+              "name": "Light",
+              "variant": "light1"
+            },
+            {
+              "id": "light-alt",
+              "name": "Light alt",
+              "variant": {
+                "background": "light1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            },
+            {
+              "id": "dark",
+              "name": "Dark",
+              "variant": "dark1"
+            },
+            {
+              "id": "dark-alt",
+              "name": "Dark alt",
+              "variant": {
+                "background": "dark1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "colorSchemes": {
+        "forest-green": {
+          "name": "Forest Green",
+          "accent1": "#4A7C59",
+          "accent2": "#68B0AB",
+          "accent3": "#8FC0A9",
+          "accent4": "#C8D5B9",
+          "accent5": "#DACDA6",
+          "accent6": "#BFBFBF",
+          "dark1": "#000000",
+          "dark2": "#263F2E",
+          "followedHyperlink": "#68B0AB",
+          "hyperlink": "#4A7C59",
+          "light1": "#FFFFFF",
+          "light2": "#EEF5F0",
+          "summary": "Organic green palette for growth, health, and sustainability stories.",
+          "description": "A green and soft-neutral scheme for decks about growth, renewal, wellness, and environmental impact.",
+          "tags": [
+            "organic",
+            "healthy",
+            "sustainable",
+            "fresh",
+            "balanced"
+          ]
+        },
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "aptos": {
+          "name": "Aptos",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
+          "type": "sans-serif",
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      }
+    }
+  }
+}

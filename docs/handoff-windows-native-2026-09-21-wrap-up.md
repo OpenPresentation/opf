@@ -14,7 +14,7 @@ Source linking completed renderer/PPTX and stopped at the editor's missing
 installed dependencies, so no editor validation is claimed. No remote CI pass
 is claimed by this receipt and no workflow or tolerance was changed.
 
-The [E8 evidence](evidence/windows-native-font-query-order-20260929/README.md)
+The E8 evidence
 records one native run using the exact E7 input, SHA-256
 `4e2bab2a4f5a0f09350d2edc2463bcb29302fa7db34a8c621e39fcd5c9a16cd7`.
 The opt-in comparison retains the initial `Presentation.Fonts` collection and
@@ -43,7 +43,7 @@ deploy, retry embedding, implement native `p:hf` or merge deferred geometry.
 
 ## September 29 explicit theme-slot control (09:38 UTC)
 
-The [FF-05 E7 evidence](evidence/windows-native-explicit-slots-20260929/README.md)
+The FF-05 E7 evidence
 records one bounded read-only inventory after changing only four empty theme
 major/minor ea/cs attributes in the accepted E6 Calibri control to Calibri.
 The other 40 ZIP entry contents and all relationships remained unchanged.
@@ -69,7 +69,7 @@ unchanged. No native retry, tolerance change, package publication or deployment.
 
 ## September 29 Calibri control (09:01 UTC)
 
-The [FF-05 E6 evidence](evidence/windows-native-calibri-control-20260929/README.md)
+The FF-05 E6 evidence
 records one successful read-only inventory after changing exactly 17 explicit
 Carlito typeface attributes to Calibri. Other package contents and relationships
 were preserved, including the four empty theme ea/cs slots. The current audit
@@ -120,7 +120,7 @@ with-temp and exporter-control runs. The current audits pass; original audit
 failures remain preserved. The owned source was unchanged, the owned
 presentation closed once, and postflight showed PowerPoint Home without an
 open presentation or dialog. See the
-[portable inventory evidence](evidence/windows-native-font-inventory-20260929/README.md).
+portable inventory evidence.
 This does not prove the font allowlist, physical font identity or embedding.
 FF-05 still needs a discriminating experiment; the
 [Aptos brief](programs/font-fidelity-everywhere/aptos-origin-brief.md) records
@@ -165,7 +165,7 @@ full audit completed at `2026-09-29T08:23:46.429Z` on core
 `f17e9ae5869669d5fbac3720f285652d0c37551c`. It improves the September 23
 scoreboard from 4 to 5 without a classification regression; text passes for
 798 and fills for 790. Local raw receipts: `baseline81-results.json` and
-`baseline81-report.md`; the committed [results](programs/font-fidelity-everywhere/gallery-support/parity/parity-results.json)
+`baseline81-report.md`; the committed results
 and [scoreboard](programs/font-fidelity-everywhere/gallery-support/parity/PARITY.md)
 apply the [documented one-slug normalization](programs/font-fidelity-everywhere/gallery-support/README.md#normalized-ids).
 Editor `d0c95a1` was refreshed by a dependency-only merge and was not used by
@@ -195,7 +195,7 @@ remain preserved; public evidence is linked below.
 
 The bounded mixed-size table edit/save/reopen proof now has an accepted native
 result. Evidence is in
-[windows-native-mixed-edit-20260922](evidence/windows-native-mixed-edit-20260922/README.md).
+windows-native-mixed-edit-20260922.
 Both attempts used fresh output directories, Windows PowerShell 5.1,
 PowerPoint 16.0.20326.20158, source SHA-256
 `f92c5d5565afa1d03fc6df0cdc8d482771d5ebd5a5403f7a888f75e2ad020a51`, the four
@@ -245,7 +245,7 @@ tree identical to reviewed head `6e67741`), and fixture `fixture-carlito-02`
 (source SHA-256
 `f505236ecef4fad838a198449adede1f4afa39d7bac74613626eee2f2a419aeb`). Evidence
 is in
-[windows-native-font-embed-20260922](evidence/windows-native-font-embed-20260922/README.md).
+windows-native-font-embed-20260922.
 
 After the Gate E edits (`.Text` plus `Font2.Name/Size/Bold/Italic` on the title,
 the body and four body spans), `Presentation.Fonts` reported `Carlito` and
@@ -345,7 +345,7 @@ with core110's passing coordinated checkpoints, respectively
 rendering code. The release owner received the exact coordination changes, and
 post-merge run 35661504472 passed. The initial failed run remains preserved.
 
-The [native font inventory bundle](evidence/windows-native-font-inventory-20260921/README.md)
+The native font inventory bundle
 and this handoff are published through [core111](https://github.com/OpenPresentation/opf/pull/111),
 merged as `3c5048522714365a41d9b5b9ba81620affae718b`; both post-merge
 runs passed.
@@ -369,17 +369,17 @@ without visible clipping; this is not native parity.
 
 ## Frozen results and finite limits
 
-- [Plain native tabs](evidence/windows-native-tabs-fonts-20260921/README.md)
+- Plain native tabs
   retain content and save/reopen positions, but the unchanged **0.02pt** gate
   fails: target error `0.022655487060546875pt` and tab/literal difference
   `0.022678375244140625pt`. Do not add offsets or relax the tolerance.
-- [Picture/furniture controls](evidence/windows-native-edits-20260921/README.md)
+- Picture/furniture controls
   pass finite edits, current-content provenance and cleanup. Crop import reports
   its limitation; Change Picture changes geometry; longer edited furniture
   clips. These results do not establish general reflow or native `p:hf` support.
 - Production notes ordering opens/saves/reopens. Reordered diagnostics are
   refused at open (`0x80070570`); preserve production ordering.
-- The [mixed-table observation](evidence/windows-native-mixed-table-20260921/README.md)
+- The mixed-table observation
   retains all 245 characters, the literal tab and five rich runs. Native
   soft-line boundaries are 92/194 versus the old estimated preview's 78/172,
   and native default tab spacing is 72pt. This is not edit/save/reopen or

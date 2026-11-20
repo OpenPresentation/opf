@@ -36,7 +36,7 @@ describe("opf-mcp", () => {
 		assert.equal(info.name, "opf");
 		assert.match(client.getInstructions(), /format-card/);
 		const { tools } = await client.listTools();
-		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "start_here", "validate_deck"]);
+		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "read_font_file", "read_icons", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
 		for (const tool of tools) {
 			assert.equal(tool.inputSchema.type, "object", tool.name);
 			assert.equal(tool.outputSchema?.type, "object", tool.name);
@@ -169,6 +169,54 @@ describe("opf-mcp", () => {
 			assert.deepEqual(example.record, JSON.parse(cli(["catalog", "examples", "full-feature-tour"]).stdout));
 		});
 
+		test("search_icons finds icons by name and keyword, and validate_deck reports an unknown icon with the nearest names (LH-14)", async () => {
+			const found = (await client.callTool({ name: "search_icons", arguments: { query: "truck" } })).structuredContent;
+			assert.equal(found.icons[0].icon, "lucide:truck");
+			assert.ok(found.icons.some((icon) => icon.set === "tabler"));
+			assert.deepEqual(found.sets.map((set) => [set.id, set.license]), [["lucide", "ISC"], ["tabler", "MIT"]]);
+			const keyword = (await client.callTool({ name: "search_icons", arguments: { query: "delivery", set: "lucide", limit: 5 } })).structuredContent;
+			assert.ok(keyword.returned > 0 && keyword.icons.every((icon) => icon.set === "lucide"));
+			const set = failure(await client.callTool({ name: "search_icons", arguments: { query: "x", set: "lucid" } }));
+			assert.equal(set.code, "unknown-id");
+			const deck = { name: "Icons", language: "en", slides: [{ title: "Why", items: [{ text: "Fast", icon: "lucide:truk" }] }] };
+			const report = (await client.callTool({ name: "validate_deck", arguments: { document: deck } })).structuredContent;
+			const unknown = report.findings.find((finding) => finding.ruleId === "opf/icon-unknown");
+			assert.ok(unknown, JSON.stringify(report.findings));
+			assert.ok(unknown.suggestions.some((entry) => entry.value === "lucide:truck"));
+		});
+
+		test("search_shapes finds presets by DrawingML name and common words, with adjust handles and a drawing (SH-06)", async () => {
+			const shapes = async (arguments_) => (await client.callTool({ name: "search_shapes", arguments: arguments_ })).structuredContent;
+			const arrow = await shapes({ query: "rightArrow" });
+			assert.equal(arrow.shapes[0].shape, "rightArrow");
+			assert.deepEqual(Object.keys(arrow.shapes[0]).sort(), ["adjust", "aspect", "category", "categoryTitle", "shape", "svg"]);
+			assert.equal(arrow.shapes[0].category, "blockArrows");
+			assert.equal(arrow.shapes[0].categoryTitle, "Block Arrows");
+			assert.equal(arrow.shapes[0].aspect, 2);
+			assert.deepEqual(arrow.shapes[0].adjust, [
+				{ name: "adj1", default: 0.5, min: 0, max: 1, unit: "fraction", handle: true },
+				{ name: "adj2", default: 0.5, min: 0, max: 1, unit: "fraction", handle: true },
+			]);
+			assert.match(arrow.shapes[0].svg, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" viewBox="0 0 96 48"[^>]*><path d="M0 12 L72 12 L72 0 L96 24/);
+			assert.ok(!/<script|href=/.test(arrow.shapes[0].svg));
+			assert.deepEqual(arrow.categories.map((category) => category.id), ["lines", "rectangles", "basic", "blockArrows", "equations", "flowchart", "starsBanners", "callouts", "actionButtons"]);
+			assert.equal(arrow.categories.reduce((sum, category) => sum + category.shapes, 0), 187);
+			assert.equal((await shapes({ query: "wedgeRectCallout" })).shapes[0].shape, "wedgeRectCallout");
+			assert.equal((await shapes({ query: "speech bubble" })).shapes[0].shape, "wedgeRectCallout");
+			assert.equal((await shapes({ query: "cylinder" })).shapes[0].shape, "can");
+			const star = await shapes({ query: "star", category: "starsBanners", limit: 3 });
+			assert.equal(star.returned, 3);
+			assert.ok(star.total >= 12 && star.shapes.every((shape) => shape.category === "starsBanners"));
+			const browse = await shapes({ category: "equations" });
+			assert.deepEqual(browse.shapes.map((shape) => shape.shape), ["mathPlus", "mathMinus", "mathMultiply", "mathDivide", "mathEqual", "mathNotEqual"]);
+			// The angle handles are degrees, and a value no handle moves is listed without one.
+			const pie = (await shapes({ query: "pie", limit: 1 })).shapes[0];
+			assert.deepEqual(pie.adjust.map((entry) => [entry.name, entry.unit, entry.handle]), [["adj1", "degrees", true], ["adj2", "degrees", true]]);
+			const hexagon = (await shapes({ query: "hexagon", limit: 1 })).shapes[0];
+			assert.deepEqual(hexagon.adjust.map((entry) => [entry.name, entry.handle]), [["adj", true], ["vf", false]]);
+			assert.equal((await shapes({ query: "zzzzzz" })).total, 0);
+		});
+
 		test("names a kind or id that does not exist, with a suggestion", async () => {
 			const kind = failure(await client.callTool({ name: "search_catalog", arguments: { kind: "layout" } }));
 			assert.equal(kind.code, "unknown-catalog");
@@ -289,7 +337,7 @@ describe("opf-mcp", () => {
 
 		test("has resource templates for every kind, and reads a URI that no list names", async () => {
 			const { resourceTemplates } = await client.listResourceTemplates();
-			assert.deepEqual(resourceTemplates.map((template) => template.uriTemplate).sort(), ["opf://catalog/{kind}/{id}", "opf://docs/{slug}", "opf://examples/{slug}", "opf://schema/{+name}", "opf://skills/{+path}"]);
+			assert.deepEqual(resourceTemplates.map((template) => template.uriTemplate).sort(), ["opf://catalog/{kind}/{id}", "opf://docs/{slug}", "opf://examples/{slug}", "opf://schema/{+name}", "opf://skills/{+path}", "ui://opf/deck", "ui://opf/deck/{hash}"]);
 			const slides = await client.readResource({ uri: "opf://schema/presentation#/properties/slides" });
 			assert.deepEqual(JSON.parse(slides.contents[0].text), JSON.parse(cli(["schema", "presentation", "/properties/slides"]).stdout));
 			const chart = await client.readResource({ uri: "opf://schema/presentation#Chart" });
@@ -381,10 +429,16 @@ describe("opf-mcp", () => {
 			const changelog = readFileSync(path.join(root, "CHANGELOG.md"), "utf8");
 			const versions = [...changelog.matchAll(/^## (\d+\.\d+\.\d+)/gm)].map((match) => match[1]);
 			const shown = [...text.matchAll(/^## (\d+\.\d+\.\d+)/gm)].map((match) => match[1]);
-			assert.deepEqual(shown, versions.slice(0, 5));
+			// The newest release always, then older ones while there are at most five and the page stays within its budget
+			// (tsup.config.ts): the 0.34.0 changelog made five releases 214,836 characters and this test red on main.
+			const sizes = changelog.replaceAll("\r\n", "\n").split(/^(?=## )/m).filter((section) => /^## \d+\.\d+\.\d+/.test(section)).map((section) => section.length);
+			let fit = 1;
+			for (let size = sizes[0]; fit < Math.min(5, sizes.length) && size + sizes[fit] <= 120_000; fit++) size += sizes[fit];
+			assert.deepEqual(shown, versions.slice(0, fit));
 			assert.match(text, /^# What's new in OPF/);
+			assert.match(text, fit === 1 ? /^The last release from the CHANGELOG/m : new RegExp(`^The last ${fit} releases from the CHANGELOG`, "m"));
 			assert.ok(text.includes(changelog.split(/^## /m).find((section) => section.startsWith(versions[0])).split("\n")[2].slice(0, 60)), "the newest section's first entry");
-			assert.ok(text.length > 2000 && text.length < 200_000, `${text.length} characters`);
+			assert.ok(text.length > 2000 && (fit === 1 || text.length < 121_000), `${text.length} characters`);
 		});
 
 		test("opf://docs/index lists it, and carries the one neutral pointer to pptx.dev", async () => {
@@ -437,7 +491,12 @@ describe("the bundled sources", () => {
 		}
 		assert.ok(sources.examples.length >= 100);
 		const bytes = sources.docs.reduce((total, doc) => total + Buffer.byteLength(doc.markdown), 0);
-		assert.ok(bytes < 1_000_000, `${bytes} bytes of documentation`);
+		// Serve the exact checked-in public pages; byte growth must not be hidden by trimming documentation.
+		for (const doc of sources.docs) assert.equal(doc.markdown, readFileSync(path.join(root, "docs", doc.slug + ".md"), "utf8").replaceAll("\r\n", "\n"), doc.slug);
+		// Reviewed for v0.34.0 on 2026-11-12: 1,351,126 exact bytes over the same public pages (1,310,537 at 4e03508b6). The growth is
+		// reviewed guidance, not maintainer notes: icon loading per host (icons.md), the viewer tools and set icons (mcp.md), the new rules
+		// (validate.md), digits by language (design-resolution.md). The limit keeps the same 3% headroom over the reviewed size.
+		assert.ok(bytes < 1_392_000, `${bytes} bytes of documentation`);
 	});
 });
 

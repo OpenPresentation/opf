@@ -1,0 +1,37 @@
+{
+  "deck": "technical/plantuml-diagrams.opf.json",
+  "entries": {
+    "technical/plantuml-diagrams.opf.json#0": {
+      "sha256": "290c12c823c7077c854ec2b8c70031da157acd1fe60a7540eed00436db1b7fda",
+      "bytes": 8697
+    },
+    "technical/plantuml-diagrams.opf.json#1": {
+      "sha256": "e2edf4b375459fd76d5c98b3745dd22d48c975e95da50100c9d189c407d998a3",
+      "bytes": 6736
+    },
+    "technical/plantuml-diagrams.opf.json#2": {
+      "sha256": "79ae6273acdbf575a71f983938526736dc8f6304da9e94001de9013b9cf8c1f3",
+      "bytes": 6495
+    },
+    "technical/plantuml-diagrams.opf.json#3": {
+      "sha256": "62a47ca9ed15b370220105e26cfc54e1751e9bfe411722810ed39ed03bc3f044",
+      "bytes": 7432
+    },
+    "technical/plantuml-diagrams.opf.json#4": {
+      "sha256": "7df90df1623621b8090b94e3f1cd7108f8e628ed4d58820d6db96f82fec7cd72",
+      "bytes": 10876
+    },
+    "technical/plantuml-diagrams.opf.json#5": {
+      "sha256": "d244c566789d8229bc74b47ef39d97807cd45baae9b2ac47dee39cf1285286e3",
+      "bytes": 8692
+    },
+    "technical/plantuml-diagrams.opf.json#6": {
+      "sha256": "38fb8dee3280e66b032d399916278495ea547e5c0674f96aafcc18ef6ad52fa8",
+      "bytes": 9200
+    },
+    "technical/plantuml-diagrams.opf.json#7": {
+      "sha256": "78640a283e1e0589eaece8b2399a9d80332667ede3b1b85cd2d03c2dfe9d7d28",
+      "bytes": 7300
+    }
+  }
+}

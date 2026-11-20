@@ -26,6 +26,7 @@ export const SNAPSHOT_KINDS = [
   { kind: "chart-types", catalogKey: "chartTypes", schemaFile: "chart-type.schema.json" },
   { kind: "color-schemes", catalogKey: "colorSchemes", schemaFile: "color-scheme.schema.json" },
   { kind: "font-schemes", catalogKey: "fontSchemes", schemaFile: "font-scheme.schema.json" },
+  { kind: "icon-sets", catalogKey: "iconSets", schemaFile: "icon-set.schema.json" },
   { kind: "languages", catalogKey: "languages", schemaFile: "language.schema.json" },
   { kind: "layouts", catalogKey: "layouts", schemaFile: "layout.schema.json", schemaVersion: 2 },
   { kind: "narratives", catalogKey: "narratives", schemaFile: "narrative.schema.json" },

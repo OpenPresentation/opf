@@ -187,7 +187,9 @@ assert.equal(registry.resolveFont({fontFamily:'Symbol',fontWeight:700,italic:tru
 }
 
 // ---- scripts: 'auto' loads the symbol faces for a deck that names a symbol family (run, design font or scheme) ----
-const deck=(text,extra={})=>({$schema:'https://openpresentation.org/schema/opf/v1',name:'FF-45',slides:[{id:'a',title:'Symbols',text,...extra}]});
+// The slide has a subtitle: a lone short text is LH-164's one-message slide (wave 8), whose surface core decides by composing it, and the
+// bare measurement cannot measure the private-use form there; this test is about how both forms draw their symbols.
+const deck=(text,extra={})=>({$schema:'https://openpresentation.org/schema/opf/v1',name:'FF-45',slides:[{id:'a',title:'Symbols',subtitle:'Codes',text,...extra}]});
 const runDeck=deck([{text:'Check: '},{text:' l',fontFamily:'Wingdings'},{text:' alpha '},{text:'abg',fontFamily:'Symbol'},{text:' web '},{text:'',fontFamily:'Webdings'}]);
 assert.deepEqual(autoScriptSelection(runDeck).scripts,[SYMBOL_SCRIPT]);
 assert.deepEqual(detectPresentationScripts(runDeck),[],'text alone (private-use characters) is not a script');

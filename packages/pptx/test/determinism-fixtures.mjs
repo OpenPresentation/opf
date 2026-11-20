@@ -47,7 +47,7 @@ function scriptDeck(key) {
   const s = scripts[key];
   return {
     $schema: 'https://openpresentation.org/schema/opf/v1', name: `Determinism ${key}`, language: s.language, author: 'Determinism', organization: {id: 'org', name: 'İstanbul Örg 日本'},
-    design: {header: {left: {text: s.header}, center: {text: '{{organization.name}}'}}, footer: {left: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {text: s.footer}, right: {text: '{{slide.number}}'}}},
+    design: {header: {start: {text: s.header}, center: {text: '{{organization.name}}'}}, footer: {start: {date: '2026-04-23', dateFormat: 'MMM d, yyyy'}, center: {text: s.footer}, end: {text: '{{slide.number}}'}}},
     assets: {photo: {src: dataUri('wide.png', 'image/png'), alt: s.title}},
     slides: [
       {title: s.title, subtitle: s.text, items: s.items, notes: s.notes},
@@ -153,14 +153,17 @@ async function importTieBreaks(cases) {
 }
 
 export const suites = {
-  async plain() {
+  async plain(config = {}) {
+    // RR-105: an extended (chartex) chart's fallback is a picture rasterized by opf-render's native PNG converter. `noRasterizer`
+    // exports as a host without it does (its classic chart stays the fallback), the reference for a sandbox that loads no addons.
+    const noRasterizer = config.noRasterizer ? {svgRasterizer: async () => { throw Object.assign(new Error('No rasterizer in this run.'), {code: 'svg-rasterizer-unavailable'}); }} : {};
     const cases = {};
     for (const key of Object.keys(scripts)) {
       const imports = key === 'latin' || key === 'arabic';
-      await exportCase(cases, `script-${key}`, scriptDeck(key), {}, imports);
-      if (imports || key === 'japanese') await exportCase(cases, `script-${key}:explicit`, scriptDeck(key), {...EXPLICIT, date: '2026-04-23'});
+      await exportCase(cases, `script-${key}`, scriptDeck(key), {...noRasterizer}, imports);
+      if (imports || key === 'japanese') await exportCase(cases, `script-${key}:explicit`, scriptDeck(key), {...EXPLICIT, date: '2026-04-23', ...noRasterizer});
     }
-    for (const [name, deck] of coreExamples()) await exportCase(cases, `example-${name}`, deck, {imageResolver}, name === 'full-feature-tour' || name === 'language-and-writing');
+    for (const [name, deck] of coreExamples()) await exportCase(cases, `example-${name}`, deck, {imageResolver, ...noRasterizer}, name === 'full-feature-tour' || name === 'language-and-writing');
     await importTieBreaks(cases);
     // Concurrent exports share one deterministic Math.random seed slot; they must
     // still equal sequential output.

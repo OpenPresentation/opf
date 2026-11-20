@@ -14,8 +14,11 @@ export interface ReviewPanelOptions {
   onFocusField?: (event: { finding: ReviewFinding; fix: ReviewFix; target: ReviewTarget }) => void;
   /** Called with every status or error message the panel shows. */
   onStatus?: (message: string, info: { error: boolean }) => void;
-  /** Called after every redraw with the counts of the findings shown (after the filters and hidden checks), of all findings, and the sources present (`opf`, `pptx.dev/review`, ...). */
-  onChange?: (counts: { error: number; warning: number; info: number; total: number; all: number; sources: string[]; unavailable: boolean }) => void;
+  /**
+   * Called after every redraw with the counts of the findings shown (after the filters and hidden checks), of all findings, and the sources present (`opf`, `pptx.dev/review`, ...).
+   * While `setSource` holds findings (`draft: true`), the counts are the source text's: the list below them describes the last valid version.
+   */
+  onChange?: (counts: { error: number; warning: number; info: number; total: number; all: number; sources: string[]; unavailable: boolean; draft: boolean }) => void;
   /** Rule ids hidden at the start, and a callback when the author hides or restores a check. */
   ignored?: string[];
   onIgnoredChange?: (ids: string[]) => void;
@@ -44,6 +47,10 @@ export interface ReviewPanel {
   readonly validation: import("@openpresentation/opf").ValidationReport | undefined;
   /** Run core's full check again now and redraw. */
   refresh(): void;
+  /** Drop retained geometry after host font/icon/diagram resources change; the next schedule/refresh still runs every check. */
+  invalidate(): void;
+  /** Settles after the pending debounced core audit and DOM list update (not the optional hosted review hook). */
+  whenIdle(): Promise<void>;
   /** Check after `delay` milliseconds without another call (a burst of calls checks once). With `autoRefresh: false` the host calls this after each redraw. */
   schedule(): void;
   /** Run the `review` hook now; resolves once its findings are listed (or its error is shown). */
@@ -52,6 +59,14 @@ export interface ReviewPanel {
   update(): void;
   /** Hide (true) or show again (false) the findings of one rule in this panel. */
   setIgnored(ruleId: string, hidden: boolean): void;
+  /**
+   * The findings of source text that is not a valid deck (the workspace passes its source pane's), or null once it is one again. While set, they
+   * lead the panel and its counts (`onChange` reports them with `draft: true`), and the findings of the full check are said to describe the last
+   * valid version, the document the session holds. Text that does not read as a document is one error with its message.
+   */
+  setSource(findings: Array<{ severity: "error" | "warning" | "info"; ruleId?: string; path?: string; message: string }> | null): void;
+  /** The findings `setSource` holds, or null. */
+  readonly sourceFindings: Array<{ severity: "error" | "warning" | "info"; ruleId?: string; path?: string; message: string }> | null;
   destroy(): void;
 }
 

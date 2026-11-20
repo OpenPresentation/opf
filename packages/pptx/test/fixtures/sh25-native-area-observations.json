@@ -1,0 +1,2135 @@
+{
+  "scope": "All30original actual area bbox-midpoint failures; no OPF geometry or serialized source values used for native point coordinates",
+  "rows": [
+    {
+      "family": "area",
+      "language": "en-us",
+      "reportSha256": "f659e258c0987c0504b80d14b87e9cfe7015afce3c162f5e3364aab543614da5",
+      "nativeSavedPptxSha256": "69d32714984f6dba73c870a7532306b0b24dbe3e14f18de3d313d816292b0742",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.0",
+        "chartType": 1,
+        "seriesChartType": 1,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 1,
+        "kind": "marker",
+        "edge": "start",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          135.46102362204724,
+          180.49062992125982,
+          0,
+          175.63102362204728
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          178.6610243849867,
+          378.98267829234203
+        ],
+        "overlayCenterSlidePoints": [
+          178.40283203125,
+          291.15802001953125
+        ],
+        "distancePixels": 117.10005039587126,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 166.402832,
+        "top": 279.15802,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "area",
+      "language": "en-us",
+      "reportSha256": "f659e258c0987c0504b80d14b87e9cfe7015afce3c162f5e3364aab543614da5",
+      "nativeSavedPptxSha256": "69d32714984f6dba73c870a7532306b0b24dbe3e14f18de3d313d816292b0742",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.1",
+        "chartType": 1,
+        "seriesChartType": 1,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 2,
+        "kind": "marker",
+        "edge": "end",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          342.1548031496063,
+          224.39842519685038,
+          0,
+          131.72322834645672
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          385.3548039125458,
+          400.93657593013734
+        ],
+        "overlayCenterSlidePoints": [
+          385.08770751953125,
+          335.0685119628906
+        ],
+        "distancePixels": 87.82480734104399,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 373.0877,
+        "top": 323.0685,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "area",
+      "language": "en-us",
+      "reportSha256": "f659e258c0987c0504b80d14b87e9cfe7015afce3c162f5e3364aab543614da5",
+      "nativeSavedPptxSha256": "69d32714984f6dba73c870a7532306b0b24dbe3e14f18de3d313d816292b0742",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.2",
+        "chartType": 1,
+        "seriesChartType": 1,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 3,
+        "kind": "marker",
+        "edge": "top",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          548.8485826771654,
+          92.67511811023621,
+          0,
+          263.4465354330709
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          592.0485834401048,
+          335.0749223868303
+        ],
+        "overlayCenterSlidePoints": [
+          591.7725830078125,
+          203.3370819091797
+        ],
+        "distancePixels": 175.65083946386892,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 579.7726,
+        "top": 191.337082,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "area",
+      "language": "en-us",
+      "reportSha256": "f659e258c0987c0504b80d14b87e9cfe7015afce3c162f5e3364aab543614da5",
+      "nativeSavedPptxSha256": "69d32714984f6dba73c870a7532306b0b24dbe3e14f18de3d313d816292b0742",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.3",
+        "chartType": 1,
+        "seriesChartType": 1,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 4,
+        "kind": "marker",
+        "edge": "bottom",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          755.5423622047244,
+          285.8692913385827,
+          0,
+          70.25236220472442
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          798.7423629676639,
+          431.6720090010035
+        ],
+        "overlayCenterSlidePoints": [
+          798.4575805664062,
+          396.5432434082031
+        ],
+        "distancePixels": 46.839893217261,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 786.4576,
+        "top": 384.543243,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "area",
+      "language": "en-us",
+      "reportSha256": "f659e258c0987c0504b80d14b87e9cfe7015afce3c162f5e3364aab543614da5",
+      "nativeSavedPptxSha256": "69d32714984f6dba73c870a7532306b0b24dbe3e14f18de3d313d816292b0742",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.4",
+        "chartType": 1,
+        "seriesChartType": 1,
+        "seriesName": "Second",
+        "seriesIndex": 2,
+        "pointIndex": 1,
+        "kind": "marker",
+        "edge": "center",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          135.46102362204724,
+          268.3061417322835,
+          0,
+          87.81551181102361
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          178.6610243849867,
+          422.8904341978539
+        ],
+        "overlayCenterSlidePoints": [
+          178.40283203125,
+          378.97906494140625
+        ],
+        "distancePixels": 58.54950442173982,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 166.402832,
+        "top": 366.979065,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 10
+        },
+        {
+          "index": 1,
+          "value": 25
+        },
+        {
+          "index": 2,
+          "value": 12
+        },
+        {
+          "index": 3,
+          "value": 15
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "area",
+      "language": "ar",
+      "reportSha256": "d4414f2e53387d995c90f60176ba57e6ece981c193d15283b460a2a150827c2d",
+      "nativeSavedPptxSha256": "67f3819a4249f9a9bf83ca09d995e3d1bce4718da0f4474a2b163c5612b786bd",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.0",
+        "chartType": 1,
+        "seriesChartType": 1,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 1,
+        "kind": "marker",
+        "edge": "start",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          738.1389763779528,
+          180.49062992125982,
+          0,
+          175.63102362204728
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          781.3389771408922,
+          378.98267829234203
+        ],
+        "overlayCenterSlidePoints": [
+          781.59716796875,
+          291.15802001953125
+        ],
+        "distancePixels": 117.10005038989014,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 769.597168,
+        "top": 279.15802,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "area",
+      "language": "ar",
+      "reportSha256": "d4414f2e53387d995c90f60176ba57e6ece981c193d15283b460a2a150827c2d",
+      "nativeSavedPptxSha256": "67f3819a4249f9a9bf83ca09d995e3d1bce4718da0f4474a2b163c5612b786bd",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.1",
+        "chartType": 1,
+        "seriesChartType": 1,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 2,
+        "kind": "marker",
+        "edge": "end",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          531.4451968503937,
+          224.39842519685038,
+          0,
+          131.72322834645672
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          574.6451976133332,
+          400.93657593013734
+        ],
+        "overlayCenterSlidePoints": [
+          574.9122924804688,
+          335.0685119628906
+        ],
+        "distancePixels": 87.82480733279414,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 562.9123,
+        "top": 323.0685,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "area",
+      "language": "ar",
+      "reportSha256": "d4414f2e53387d995c90f60176ba57e6ece981c193d15283b460a2a150827c2d",
+      "nativeSavedPptxSha256": "67f3819a4249f9a9bf83ca09d995e3d1bce4718da0f4474a2b163c5612b786bd",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.2",
+        "chartType": 1,
+        "seriesChartType": 1,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 3,
+        "kind": "marker",
+        "edge": "top",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          324.75141732283464,
+          92.67511811023621,
+          0,
+          263.4465354330709
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          367.9514180857741,
+          335.0749223868303
+        ],
+        "overlayCenterSlidePoints": [
+          368.2273864746094,
+          203.3370819091797
+        ],
+        "distancePixels": 175.65083937436313,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 356.2274,
+        "top": 191.337082,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "area",
+      "language": "ar",
+      "reportSha256": "d4414f2e53387d995c90f60176ba57e6ece981c193d15283b460a2a150827c2d",
+      "nativeSavedPptxSha256": "67f3819a4249f9a9bf83ca09d995e3d1bce4718da0f4474a2b163c5612b786bd",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.3",
+        "chartType": 1,
+        "seriesChartType": 1,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 4,
+        "kind": "marker",
+        "edge": "bottom",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          118.05763779527558,
+          285.8692913385827,
+          0,
+          70.25236220472442
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          161.25763855821504,
+          431.6720090010035
+        ],
+        "overlayCenterSlidePoints": [
+          161.5424346923828,
+          396.5432434082031
+        ],
+        "distancePixels": 46.83989336569993,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 149.542435,
+        "top": 384.543243,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "area",
+      "language": "ar",
+      "reportSha256": "d4414f2e53387d995c90f60176ba57e6ece981c193d15283b460a2a150827c2d",
+      "nativeSavedPptxSha256": "67f3819a4249f9a9bf83ca09d995e3d1bce4718da0f4474a2b163c5612b786bd",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.4",
+        "chartType": 1,
+        "seriesChartType": 1,
+        "seriesName": "Second",
+        "seriesIndex": 2,
+        "pointIndex": 1,
+        "kind": "marker",
+        "edge": "center",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          738.1389763779528,
+          268.3061417322835,
+          0,
+          87.81551181102361
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          781.3389771408922,
+          422.8904341978539
+        ],
+        "overlayCenterSlidePoints": [
+          781.59716796875,
+          378.97906494140625
+        ],
+        "distancePixels": 58.54950440977746,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 769.597168,
+        "top": 366.979065,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 10
+        },
+        {
+          "index": 1,
+          "value": 25
+        },
+        {
+          "index": 2,
+          "value": 12
+        },
+        {
+          "index": 3,
+          "value": 15
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "stacked-area",
+      "language": "en-us",
+      "reportSha256": "d2d77bc5886c15747a40160958ddcff8de366a8d8c5c6941a7da5cfcdf64869a",
+      "nativeSavedPptxSha256": "13158b52a553ad15f10bf11ad14cf5c394a5d13d70675053ed07f5151a47f34e",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.0",
+        "chartType": 76,
+        "seriesChartType": 76,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 1,
+        "kind": "marker",
+        "edge": "start",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          32.11417322834646,
+          219.39535433070864,
+          0,
+          133.75314960629925
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          75.31417399128591,
+          396.9484656939169
+        ],
+        "overlayCenterSlidePoints": [
+          75.0603141784668,
+          330.0506286621094
+        ],
+        "distancePixels": 89.19775826120635,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 63.0603142,
+        "top": 318.050629,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "stacked-area",
+      "language": "en-us",
+      "reportSha256": "d2d77bc5886c15747a40160958ddcff8de366a8d8c5c6941a7da5cfcdf64869a",
+      "nativeSavedPptxSha256": "13158b52a553ad15f10bf11ad14cf5c394a5d13d70675053ed07f5151a47f34e",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.1",
+        "chartType": 76,
+        "seriesChartType": 76,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 2,
+        "kind": "marker",
+        "edge": "end",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          284.2642519685039,
+          252.8336220472441,
+          0,
+          100.3148818897638
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          327.46425273144337,
+          413.6675995521846
+        ],
+        "overlayCenterSlidePoints": [
+          327.2203063964844,
+          363.4879455566406
+        ],
+        "distancePixels": 66.90699594613872,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 315.2203,
+        "top": 351.487946,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "stacked-area",
+      "language": "en-us",
+      "reportSha256": "d2d77bc5886c15747a40160958ddcff8de366a8d8c5c6941a7da5cfcdf64869a",
+      "nativeSavedPptxSha256": "13158b52a553ad15f10bf11ad14cf5c394a5d13d70675053ed07f5151a47f34e",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.2",
+        "chartType": 76,
+        "seriesChartType": 76,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 3,
+        "kind": "marker",
+        "edge": "top",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          536.4143307086614,
+          152.5187401574803,
+          0,
+          200.6297637795276
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          579.6143314716008,
+          363.5101586073027
+        ],
+        "overlayCenterSlidePoints": [
+          579.3802490234375,
+          263.1759033203125
+        ],
+        "distancePixels": 133.77937112915066,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 567.380249,
+        "top": 251.1759,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "stacked-area",
+      "language": "en-us",
+      "reportSha256": "d2d77bc5886c15747a40160958ddcff8de366a8d8c5c6941a7da5cfcdf64869a",
+      "nativeSavedPptxSha256": "13158b52a553ad15f10bf11ad14cf5c394a5d13d70675053ed07f5151a47f34e",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.3",
+        "chartType": 76,
+        "seriesChartType": 76,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 4,
+        "kind": "marker",
+        "edge": "bottom",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          788.5644094488189,
+          299.6472440944882,
+          0,
+          53.50125984251969
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          831.7644102117583,
+          437.0744105758066
+        ],
+        "overlayCenterSlidePoints": [
+          831.5402221679688,
+          410.30023193359375
+        ],
+        "distancePixels": 35.700156295807396,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 819.5402,
+        "top": 398.300232,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "stacked-area",
+      "language": "en-us",
+      "reportSha256": "d2d77bc5886c15747a40160958ddcff8de366a8d8c5c6941a7da5cfcdf64869a",
+      "nativeSavedPptxSha256": "13158b52a553ad15f10bf11ad14cf5c394a5d13d70675053ed07f5151a47f34e",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.4",
+        "chartType": 76,
+        "seriesChartType": 76,
+        "seriesName": "Second",
+        "seriesIndex": 2,
+        "pointIndex": 1,
+        "kind": "marker",
+        "edge": "center",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          32.11417322834646,
+          152.5187401574803,
+          0,
+          66.87661417322835
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          75.31417399128591,
+          296.6335838041531
+        ],
+        "overlayCenterSlidePoints": [
+          75.0603141784668,
+          263.1759033203125
+        ],
+        "distancePixels": 44.611524732484035,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 63.0603142,
+        "top": 251.1759,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 10
+        },
+        {
+          "index": 1,
+          "value": 25
+        },
+        {
+          "index": 2,
+          "value": 12
+        },
+        {
+          "index": 3,
+          "value": 15
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "stacked-area",
+      "language": "ar",
+      "reportSha256": "ce22ebb8fcdbd3bfa6a34e8fe8cb4fb05b639b3ba3598625d66f4c6b0678a610",
+      "nativeSavedPptxSha256": "891a6f207eb742d0f27806508bd4153f09920f22499f80e5f44aa6a139aad224",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.0",
+        "chartType": 76,
+        "seriesChartType": 76,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 1,
+        "kind": "marker",
+        "edge": "start",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          841.4858267716535,
+          219.39535433070864,
+          0,
+          133.75314960629925
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          884.6858275345929,
+          396.9484656939169
+        ],
+        "overlayCenterSlidePoints": [
+          884.939697265625,
+          330.0506286621094
+        ],
+        "distancePixels": 89.19775831138968,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 872.9397,
+        "top": 318.050629,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "stacked-area",
+      "language": "ar",
+      "reportSha256": "ce22ebb8fcdbd3bfa6a34e8fe8cb4fb05b639b3ba3598625d66f4c6b0678a610",
+      "nativeSavedPptxSha256": "891a6f207eb742d0f27806508bd4153f09920f22499f80e5f44aa6a139aad224",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.1",
+        "chartType": 76,
+        "seriesChartType": 76,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 2,
+        "kind": "marker",
+        "edge": "end",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          589.3357480314961,
+          252.8336220472441,
+          0,
+          100.3148818897638
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          632.5357487944356,
+          413.6675995521846
+        ],
+        "overlayCenterSlidePoints": [
+          632.7796630859375,
+          363.4879455566406
+        ],
+        "distancePixels": 66.90699573845087,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 620.779663,
+        "top": 351.487946,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "stacked-area",
+      "language": "ar",
+      "reportSha256": "ce22ebb8fcdbd3bfa6a34e8fe8cb4fb05b639b3ba3598625d66f4c6b0678a610",
+      "nativeSavedPptxSha256": "891a6f207eb742d0f27806508bd4153f09920f22499f80e5f44aa6a139aad224",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.2",
+        "chartType": 76,
+        "seriesChartType": 76,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 3,
+        "kind": "marker",
+        "edge": "top",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          337.1856692913386,
+          152.5187401574803,
+          0,
+          200.6297637795276
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          380.3856700542781,
+          363.5101586073027
+        ],
+        "overlayCenterSlidePoints": [
+          380.6197509765625,
+          263.1759033203125
+        ],
+        "distancePixels": 133.77937112440415,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 368.619751,
+        "top": 251.1759,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "stacked-area",
+      "language": "ar",
+      "reportSha256": "ce22ebb8fcdbd3bfa6a34e8fe8cb4fb05b639b3ba3598625d66f4c6b0678a610",
+      "nativeSavedPptxSha256": "891a6f207eb742d0f27806508bd4153f09920f22499f80e5f44aa6a139aad224",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.3",
+        "chartType": 76,
+        "seriesChartType": 76,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 4,
+        "kind": "marker",
+        "edge": "bottom",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          85.0355905511811,
+          299.6472440944882,
+          0,
+          53.50125984251969
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          128.23559131412054,
+          437.0744105758066
+        ],
+        "overlayCenterSlidePoints": [
+          128.4597625732422,
+          410.30023193359375
+        ],
+        "distancePixels": 35.700156108430384,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 116.459763,
+        "top": 398.300232,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "stacked-area",
+      "language": "ar",
+      "reportSha256": "ce22ebb8fcdbd3bfa6a34e8fe8cb4fb05b639b3ba3598625d66f4c6b0678a610",
+      "nativeSavedPptxSha256": "891a6f207eb742d0f27806508bd4153f09920f22499f80e5f44aa6a139aad224",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.4",
+        "chartType": 76,
+        "seriesChartType": 76,
+        "seriesName": "Second",
+        "seriesIndex": 2,
+        "pointIndex": 1,
+        "kind": "marker",
+        "edge": "center",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          841.4858267716535,
+          152.5187401574803,
+          0,
+          66.87661417322835
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          884.6858275345929,
+          296.6335838041531
+        ],
+        "overlayCenterSlidePoints": [
+          884.939697265625,
+          263.1759033203125
+        ],
+        "distancePixels": 44.61152483282223,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 872.9397,
+        "top": 251.1759,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 10
+        },
+        {
+          "index": 1,
+          "value": 25
+        },
+        {
+          "index": 2,
+          "value": 12
+        },
+        {
+          "index": 3,
+          "value": 15
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "100pct-stacked-area",
+      "language": "en-us",
+      "reportSha256": "251733a96ba06d63b316e7fce5d4f15984a99dab770a376c56f67453177bd552",
+      "nativeSavedPptxSha256": "1ea1b43c1af86031cb1f898f21f184a2002eedef178598d9343f2671f9c092b4",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.0",
+        "chartType": 77,
+        "seriesChartType": 77,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 1,
+        "kind": "marker",
+        "edge": "start",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          51.5292125984252,
+          130.22653543307086,
+          0,
+          222.92196850393702
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          94.72921336136466,
+          352.36405624509797
+        ],
+        "overlayCenterSlidePoints": [
+          94.47685241699219,
+          240.88441467285156
+        ],
+        "distancePixels": 148.63990294891445,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 82.47685,
+        "top": 228.884415,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "100pct-stacked-area",
+      "language": "en-us",
+      "reportSha256": "251733a96ba06d63b316e7fce5d4f15984a99dab770a376c56f67453177bd552",
+      "nativeSavedPptxSha256": "1ea1b43c1af86031cb1f898f21f184a2002eedef178598d9343f2671f9c092b4",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.1",
+        "chartType": 77,
+        "seriesChartType": 77,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 2,
+        "kind": "marker",
+        "edge": "end",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          297.2146456692913,
+          227.7548818897638,
+          0,
+          125.3936220472441
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          340.41464643223077,
+          401.12822947344443
+        ],
+        "overlayCenterSlidePoints": [
+          340.1646423339844,
+          338.4100036621094
+        ],
+        "distancePixels": 83.62496544794642,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 328.164642,
+        "top": 326.41,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "100pct-stacked-area",
+      "language": "en-us",
+      "reportSha256": "251733a96ba06d63b316e7fce5d4f15984a99dab770a376c56f67453177bd552",
+      "nativeSavedPptxSha256": "1ea1b43c1af86031cb1f898f21f184a2002eedef178598d9343f2671f9c092b4",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.2",
+        "chartType": 77,
+        "seriesChartType": 77,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 3,
+        "kind": "marker",
+        "edge": "top",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          542.9000787401575,
+          114.30354330708661,
+          0,
+          238.84496062992127
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          586.1000795030969,
+          344.40256018210584
+        ],
+        "overlayCenterSlidePoints": [
+          585.8524169921875,
+          224.96180725097656
+        ],
+        "distancePixels": 159.25467959619832,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 573.8524,
+        "top": 212.9618,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "100pct-stacked-area",
+      "language": "en-us",
+      "reportSha256": "251733a96ba06d63b316e7fce5d4f15984a99dab770a376c56f67453177bd552",
+      "nativeSavedPptxSha256": "1ea1b43c1af86031cb1f898f21f184a2002eedef178598d9343f2671f9c092b4",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.3",
+        "chartType": 77,
+        "seriesChartType": 77,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 4,
+        "kind": "marker",
+        "edge": "bottom",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          788.5855118110236,
+          236.84141732283464,
+          0,
+          116.30708661417324
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          831.785512573963,
+          405.67149718997985
+        ],
+        "overlayCenterSlidePoints": [
+          831.5402221679688,
+          347.4962158203125
+        ],
+        "distancePixels": 77.56773131855783,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 819.5402,
+        "top": 335.496216,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "100pct-stacked-area",
+      "language": "en-us",
+      "reportSha256": "251733a96ba06d63b316e7fce5d4f15984a99dab770a376c56f67453177bd552",
+      "nativeSavedPptxSha256": "1ea1b43c1af86031cb1f898f21f184a2002eedef178598d9343f2671f9c092b4",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.4",
+        "chartType": 77,
+        "seriesChartType": 77,
+        "seriesName": "Second",
+        "seriesIndex": 2,
+        "pointIndex": 1,
+        "kind": "marker",
+        "edge": "center",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          51.5292125984252,
+          18.765590551181106,
+          0,
+          111.46094488188976
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          94.72921336136466,
+          185.17259955218458
+        ],
+        "overlayCenterSlidePoints": [
+          94.47685241699219,
+          129.4265365600586
+        ],
+        "distancePixels": 74.32884560645437,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 82.47685,
+        "top": 117.426537,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 10
+        },
+        {
+          "index": 1,
+          "value": 25
+        },
+        {
+          "index": 2,
+          "value": 12
+        },
+        {
+          "index": 3,
+          "value": 15
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "100pct-stacked-area",
+      "language": "ar",
+      "reportSha256": "3cf1ed7b9e9b7435968fbc53f5dcaea0c743ffe48c4ad5aaf7407b2b9097f3e4",
+      "nativeSavedPptxSha256": "e66c2e373414ff9ad2a4f49b7ca0046339b1d0f2cf9cef8be20b39dd5ffe0d19",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.0",
+        "chartType": 77,
+        "seriesChartType": 77,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 1,
+        "kind": "marker",
+        "edge": "start",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          822.0707874015748,
+          130.22653543307086,
+          0,
+          222.92196850393702
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          865.2707881645142,
+          352.36405624509797
+        ],
+        "overlayCenterSlidePoints": [
+          865.5231323242188,
+          240.88441467285156
+        ],
+        "distancePixels": 148.63990289825477,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 853.523132,
+        "top": 228.884415,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "100pct-stacked-area",
+      "language": "ar",
+      "reportSha256": "3cf1ed7b9e9b7435968fbc53f5dcaea0c743ffe48c4ad5aaf7407b2b9097f3e4",
+      "nativeSavedPptxSha256": "e66c2e373414ff9ad2a4f49b7ca0046339b1d0f2cf9cef8be20b39dd5ffe0d19",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.1",
+        "chartType": 77,
+        "seriesChartType": 77,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 2,
+        "kind": "marker",
+        "edge": "end",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          576.3853543307088,
+          227.7548818897638,
+          0,
+          125.3936220472441
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          619.5853550936482,
+          401.12822947344443
+        ],
+        "overlayCenterSlidePoints": [
+          619.8353271484375,
+          338.4100036621094
+        ],
+        "distancePixels": 83.6249652776521,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 607.8353,
+        "top": 326.41,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "100pct-stacked-area",
+      "language": "ar",
+      "reportSha256": "3cf1ed7b9e9b7435968fbc53f5dcaea0c743ffe48c4ad5aaf7407b2b9097f3e4",
+      "nativeSavedPptxSha256": "e66c2e373414ff9ad2a4f49b7ca0046339b1d0f2cf9cef8be20b39dd5ffe0d19",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.2",
+        "chartType": 77,
+        "seriesChartType": 77,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 3,
+        "kind": "marker",
+        "edge": "top",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          330.69992125984254,
+          114.30354330708661,
+          0,
+          238.84496062992127
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          373.899922022782,
+          344.40256018210584
+        ],
+        "overlayCenterSlidePoints": [
+          374.1475524902344,
+          224.96180725097656
+        ],
+        "distancePixels": 159.254679507614,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 362.147552,
+        "top": 212.9618,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "100pct-stacked-area",
+      "language": "ar",
+      "reportSha256": "3cf1ed7b9e9b7435968fbc53f5dcaea0c743ffe48c4ad5aaf7407b2b9097f3e4",
+      "nativeSavedPptxSha256": "e66c2e373414ff9ad2a4f49b7ca0046339b1d0f2cf9cef8be20b39dd5ffe0d19",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.3",
+        "chartType": 77,
+        "seriesChartType": 77,
+        "seriesName": "First",
+        "seriesIndex": 1,
+        "pointIndex": 4,
+        "kind": "marker",
+        "edge": "bottom",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          85.01448818897637,
+          236.84141732283464,
+          0,
+          116.30708661417324
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          128.21448895191583,
+          405.67149718997985
+        ],
+        "overlayCenterSlidePoints": [
+          128.4597625732422,
+          347.4962158203125
+        ],
+        "distancePixels": 77.56773122420067,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 116.459763,
+        "top": 335.496216,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 20
+        },
+        {
+          "index": 1,
+          "value": 15
+        },
+        {
+          "index": 2,
+          "value": 30
+        },
+        {
+          "index": 3,
+          "value": 8
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    },
+    {
+      "family": "100pct-stacked-area",
+      "language": "ar",
+      "reportSha256": "3cf1ed7b9e9b7435968fbc53f5dcaea0c743ffe48c4ad5aaf7407b2b9097f3e4",
+      "nativeSavedPptxSha256": "e66c2e373414ff9ad2a4f49b7ca0046339b1d0f2cf9cef8be20b39dd5ffe0d19",
+      "raw": {
+        "chartName": "OPF chart 1",
+        "shapeName": "OPF shape slides.0.shapes.4",
+        "chartType": 77,
+        "seriesChartType": 77,
+        "seriesName": "Second",
+        "seriesIndex": 2,
+        "pointIndex": 1,
+        "kind": "marker",
+        "edge": "center",
+        "valueSign": 1,
+        "nativeLocalBoundsPoints": [
+          822.0707874015748,
+          18.765590551181106,
+          0,
+          111.46094488188976
+        ],
+        "nativeSliceObservations": [],
+        "nativePieCenterLocalPoints": null,
+        "nativeCurvedBoundsLocalPoints": null,
+        "nativePlotCenterLocalPoints": null,
+        "nativeCircleCenterLocalPoints": null,
+        "nativeCircleCenterMethod": null,
+        "coordinateStrategy": "native-point-bounds",
+        "nativePointSlidePoints": [
+          865.2707881645142,
+          185.17259955218458
+        ],
+        "overlayCenterSlidePoints": [
+          865.5231323242188,
+          129.4265365600586
+        ],
+        "distancePixels": 74.32884550514711,
+        "withinFourPixels": false,
+        "scope": "Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement"
+      },
+      "chart": {
+        "left": 43.2,
+        "top": 110.676537
+      },
+      "overlay": {
+        "left": 853.523132,
+        "top": 117.426537,
+        "width": 24,
+        "height": 24
+      },
+      "nativeSavedSeriesCache": [
+        {
+          "index": 0,
+          "value": 10
+        },
+        {
+          "index": 1,
+          "value": 25
+        },
+        {
+          "index": 2,
+          "value": 12
+        },
+        {
+          "index": 3,
+          "value": 15
+        }
+      ],
+      "nativeSeriesValuesGetterAvailability": "Not established by original worker; fixture uses native-saved chart cache only to model actual getter value, not geometry"
+    }
+  ]
+}

@@ -71,7 +71,7 @@ const open = async (document) => {
 
 // 4. Literals the document wrote stay literal, and a slide with its own color scheme is pinned.
 {
-  const {text} = await open(deck('dark1', [{title: 'Literal', text: [{text: 'Pinned', color: '#123456'}]}, {title: 'Own scheme', design: {colorScheme: {id: 'own', accent1: '#C0392B'}}, text: 'x'}]));
+  const {text} = await open(deck('dark1', [{title: 'Literal', subtitle: 'Literal', text: [{text: 'Pinned', color: '#123456'}]}, {title: 'Own scheme', design: {colorScheme: {id: 'own', accent1: '#C0392B'}}, text: 'x'}]));
   assert.match(text('ppt/slides/slide1.xml'), /<a:srgbClr val="123456"\/>/, 'a literal hex color stays sRGB');
   assert.doesNotMatch(text('ppt/slides/slide2.xml'), /<a:schemeClr val="(?:tx1|bg1|accent1)"/, 'a slide with its own color scheme has no scheme colors');
 }

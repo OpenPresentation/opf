@@ -5,6 +5,8 @@ import type { DimensionSwitchChange, DimensionSwitchOptions, PreparedDimensionSw
 export declare const BACKGROUND_TYPES: readonly ["theme", "solid", "gradient", "image", "pattern"];
 export declare const THEME_BACKGROUND_SLOTS: readonly ["light1", "light2", "dark1", "dark2"];
 export declare const IMAGE_BACKGROUND_FITS: readonly ["cover", "contain", "stretch", "tile"];
+/** LH-158: where a cover's or section's heading group goes on a picture background. */
+export declare const TEXT_PLACEMENTS: readonly ["top-start", "top-center", "middle-start", "middle-center", "bottom-start", "bottom-center", "panel"];
 /** Image sources the background string shorthand accepts: `asset:`, `https://`, `data:`, `./`, `../`. */
 export declare const IMAGE_SOURCE: RegExp;
 /** Scheme slots and roles a ColorRef may name. */
@@ -22,7 +24,7 @@ export type BackgroundSpec =
   | { type: "theme"; slot: (typeof THEME_BACKGROUND_SLOTS)[number] }
   | { type: "solid"; color: string; opacity?: number }
   | { type: "gradient"; gradient: { angle?: number; stops: GradientStop[] }; opacity?: number }
-  | { type: "image"; src: string; alt?: string; fit?: (typeof IMAGE_BACKGROUND_FITS)[number]; focus?: ImageFocus; opacity?: number; recolor?: "grayscale" | { dark: string; light: string }; overlay?: ImageOverlay | false }
+  | { type: "image"; src: string; alt?: string; fit?: (typeof IMAGE_BACKGROUND_FITS)[number]; focus?: ImageFocus; opacity?: number; recolor?: "grayscale" | { dark: string; light: string }; overlay?: ImageOverlay | false; textPlacement?: (typeof TEXT_PLACEMENTS)[number] }
   | { type: "pattern"; pattern: { preset: string; foregroundColor?: string; backgroundColor?: string }; opacity?: number };
 
 /** Whether `value` is a ColorRef: a hex color, a scheme slot or role name, or `var:<id>`. */
@@ -46,6 +48,8 @@ export interface BackgroundState {
   recolor?: "grayscale" | { dark: string; light: string };
   /** LH-02: `false` when the automatic scrim is turned off. */
   overlay?: ImageOverlay | false;
+  /** LH-158: the picture's text placement, when the author picked one. */
+  textPlacement?: (typeof TEXT_PLACEMENTS)[number];
   preset?: string;
   foregroundColor?: string;
   backgroundColor?: string;

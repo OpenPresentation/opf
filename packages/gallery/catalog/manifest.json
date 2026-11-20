@@ -20,10 +20,10 @@
     "chart-types": {
       "mode": "mirror",
       "records": 27,
-      "contentSha256": "9ceb0d52aa1d09c03197e292f2d849bbc348c7a1280e020076f37166c570640c",
+      "contentSha256": "49b76df8acb8d028166fef6d5f15c65d1a956bd2f36dfa165da8a289afbfbc09",
       "gallery": {
         "records": 27,
-        "contentSha256": "9ceb0d52aa1d09c03197e292f2d849bbc348c7a1280e020076f37166c570640c"
+        "contentSha256": "49b76df8acb8d028166fef6d5f15c65d1a956bd2f36dfa165da8a289afbfbc09"
       }
     },
     "color-schemes": {
@@ -44,6 +44,15 @@
         "contentSha256": "7d19dc9155e05e6037a5888e7cced933c3f275b6cb86f51157eaae7ba1dd8e5e"
       }
     },
+    "icon-sets": {
+      "mode": "mirror",
+      "records": 2,
+      "contentSha256": "7e5e6eadfdfbb18242db5e1ef80bf128a081fa95f1857beda0ddda8398965753",
+      "gallery": {
+        "records": 2,
+        "contentSha256": "7e5e6eadfdfbb18242db5e1ef80bf128a081fa95f1857beda0ddda8398965753"
+      }
+    },
     "languages": {
       "mode": "mirror",
       "records": 93,
@@ -55,11 +64,11 @@
     },
     "layouts": {
       "mode": "mirror",
-      "records": 30,
-      "contentSha256": "47adcc12d6c2a30588f38540f19d6321f867f66532d7065b2c68b22ff4055f22",
+      "records": 40,
+      "contentSha256": "66d47ff798875602f19d283a31b6fdf15cf62ec832367987378af4381fc37d57",
       "gallery": {
-        "records": 30,
-        "contentSha256": "47adcc12d6c2a30588f38540f19d6321f867f66532d7065b2c68b22ff4055f22"
+        "records": 40,
+        "contentSha256": "66d47ff798875602f19d283a31b6fdf15cf62ec832367987378af4381fc37d57"
       }
     },
     "narratives": {

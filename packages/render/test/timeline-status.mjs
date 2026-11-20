@@ -1,7 +1,7 @@
 // FA-11: TimelineEvent.status in the SVG preview. Absent status is byte-identical to the plain marker; done, current
 // and planned are drawn from the deck's colors and agree with core's timelineMarkerShapes / timelineTextColor.
 import assert from 'node:assert/strict';
-import { colorContrast, timelineMarkerShapes, timelineTextColor } from '@openpresentation/opf/composition';
+import { colorContrast, LANGUAGES, timelineMarkerShapes, timelineStatusWordsFor, timelineTextColor } from '@openpresentation/opf/composition';
 import { resolvePresentation, toSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import { loadFonts } from '../dist/fonts-node.js';
 
@@ -16,24 +16,41 @@ const textFill = (svg, path) => {
   return { fill: /fill="([^"]+)"/.exec(match)?.[1], weight: /font-weight="([^"]+)"/.exec(match)?.[1] };
 };
 
-// No status: unchanged markers, no status attributes, same bytes as an explicit "done" except the marker status trace.
+// No status: unchanged markers and no status attributes.
 const plain = toSvg(deckOf([]), 1, options);
 assert.ok(!plain.includes('status'));
 assert.equal(circles(plain).length, 3);
 for (const circle of circles(plain)) assert.deepEqual(Object.keys(circle).sort(), ['aria-hidden', 'cx', 'cy', 'data-opf-path', 'fill', 'r']); // FA-30: the marker is decorative
-// LH-121: a done event adds the progress line (and, in an English deck, a status word under its label); in a deck with no status
-// words the markers are those of the plain timeline and the drawing differs only by the progress line.
-const german = (deck) => ({ ...deck, language: 'de' }), lines = (svg) => svg.replace(/<line\b[^>]*\/>\n?/g, '');
-const done = toSvg(german(deckOf(['done', 'done', 'done'])), 1, options);
-assert.deepEqual(circles(done).map(({ 'data-opf-timeline-status': s, 'data-opf-timeline-shape': h, ...rest }) => rest), circles(toSvg(german(deckOf([])), 1, options)));
-assert.equal(lines(toSvg(german(deckOf(['done', 'done', 'done'])), 1, { fonts: { textMeasurement: fonts.textMeasurement } })), lines(toSvg(german(deckOf([])), 1, { fonts: { textMeasurement: fonts.textMeasurement } })));
+// LH-121: localized words can change marker placement. Preserve the exact
+// marker/drawing control only in a valid explicit language with no vocabulary.
+const unsupportedLanguage = 'af';
+assert.ok(LANGUAGES.some(language => language.tag === unsupportedLanguage), 'control is a supported language');
+assert.equal(timelineStatusWordsFor(unsupportedLanguage), undefined, 'control must have no generated status words');
+const withoutVocabulary = deck => ({ ...deck, language: unsupportedLanguage }), lines = svg => svg.replace(/<line\b[^>]*\/>\n?/g, '');
+const done = toSvg(withoutVocabulary(deckOf(['done', 'done', 'done'])), 1, options);
+assert.ok(!done.includes('data-opf-timeline-role="status"'));
+assert.deepEqual(circles(done).map(({ 'data-opf-timeline-status': s, 'data-opf-timeline-shape': h, ...rest }) => rest), circles(toSvg(withoutVocabulary(deckOf([])), 1, options)));
+assert.equal(lines(toSvg(withoutVocabulary(deckOf(['done', 'done', 'done'])), 1, { fonts: { textMeasurement: fonts.textMeasurement } })), lines(toSvg(withoutVocabulary(deckOf([])), 1, { fonts: { textMeasurement: fonts.textMeasurement } })));
+const visibleText = svg => [...svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(match => match[1].replace(/<[^>]*>/g, ''));
+const germanWords = ['Abgeschlossen', 'Aktuell', 'Geplant'];
+assert.deepEqual(timelineStatusWordsFor('de-DE'), Object.fromEntries(['done', 'current', 'planned'].map((status, index) => [status, germanWords[index]])));
 
 // All three states.
-for (const design of [{}, { theme: 'classic', variant: 'dark1' }]) {
-  const deck = deckOf(['done', 'current', 'planned'], design), svg = toSvg(deck, 1, options);
+for (const language of ['en-US', 'de-DE']) for (const design of [{}, { theme: 'classic', variant: 'dark1' }]) {
+  const deck = { ...deckOf(['done', 'current', 'planned'], design), language }, svg = toSvg(deck, 1, options);
   const bound = resolvePresentation(deck, options).slides[0];
   const layout = bound.geometry.items.find(item => item.field === 'timeline').timelineLayout;
   const colors = { background: bound.design.backgroundColor ?? bound.design.colors.background, primary: bound.design.colors.primary, text: bound.design.colors.text, mutedText: bound.design.colors.mutedText };
+  if (language === 'de-DE') {
+    assert.deepEqual(layout.statusLabels.map(label => label.text), germanWords);
+    const visible = visibleText(svg).join(' ');
+    for (const word of germanWords) assert.ok(visible.includes(word), 'visible German status ' + word);
+    for (const word of ['Done', 'Current', 'Planned']) assert.ok(!visible.includes(word), 'no visible English status ' + word);
+    for (const label of layout.statusLabels) {
+      const drawn = textFill(svg, label.path.replace(/\.status$/, ''));
+      assert.equal(drawn.fill, timelineTextColor(label, colors), label.path + ' localized status color');
+    }
+  }
   const drawn = circles(svg);
   const expected = layout.markers.flatMap(marker => timelineMarkerShapes(marker, colors));
   assert.equal(drawn.length, expected.length);
@@ -59,4 +76,4 @@ for (const design of [{}, { theme: 'classic', variant: 'dark1' }]) {
   assert.deepEqual([d.weight, c.weight, p.weight].map(Number), [600, 700, 600]);
   assert.equal(textFill(svg, 'slides.0.timeline.2.when').fill, p.fill);
 }
-console.log('Timeline status passed: plain markers are byte-identical, and done, current and planned match core in light and dark themes.');
+console.log('Timeline status passed: the no-vocabulary control remains byte-identical; English/German words, colors and all marker geometry match their own light/dark layouts.');

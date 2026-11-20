@@ -1,4 +1,4 @@
-import { type ColorMap, type ColorVariant, type SchemeNeutrals, deckBackgroundIsFixed, defaultSlideBackground, layoutColorVariant, normalizeColorVariant, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
+import { type ColorMap, type ColorVariant, type SchemeNeutrals, applyColorTransform, colorTransform, deckBackgroundIsChosen, deckBackgroundIsFixed, defaultSlideBackground, layoutColorVariant, normalizeColorVariant, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
 import { imageBackground, type FontFamilies } from './composition.js';
 import type { SlideContext } from './slide-context.js';
 
@@ -209,6 +209,9 @@ function backdropOf(definition: unknown, scheme: Rec, text: string, variables: R
  * background itself (so the background, surface and text roles resolve through the scheme alone, as in the preview).
  */
 function backgroundColorRef(value: unknown, scheme: Rec, variables: Rec, fallback: string): string {
+	// SH-02: the lighter or darker form resolves its base the same way.
+	const transform = colorTransform(value);
+	if (transform) return applyColorTransform(backgroundColorRef(transform.color, scheme, variables, fallback), transform);
 	if (typeof value !== 'string') return fallback;
 	const literal = normalizeHexColor(value);
 	if (literal) return literal;
@@ -247,6 +250,49 @@ export function decisionColor(definition: unknown, scheme: Rec, variables: Rec =
 }
 
 const THEME_SLOTS: ReadonlySet<unknown> = new Set(['light1', 'light2', 'dark1', 'dark2']);
+
+/** The nine grays a picture's pixels are bounded by when nothing is known of them (the ramp `opf/text-on-image` reads). */
+const PICTURE_STEPS = [0, 32, 64, 96, 128, 160, 192, 224, 255];
+/** How much better one text color's worst contrast must be than the other's for a picture to take its tone. */
+const TONE_MARGIN = 1.2;
+
+/**
+ * RR-105: the colors a picture background can show, from what the document says of it: a duotone recolor bounds its pixels to the
+ * ramp from its dark to its light color (else any gray, or the measured `grays`), the picture's opacity lays them over the scheme's
+ * default slide background, and an overlay of the author's lays its color over them (a full-frame overlay over every pixel; an edge
+ * band over some, so both sets count).
+ */
+export function pictureColors(definition: unknown, scheme: Rec, variables: Rec = {}, grays?: readonly [number, number]): string[] {
+	const picture = imageBackground(definition);
+	if (!picture) return [];
+	const resolve = (value: unknown, fallback: string) => backgroundColorRef(value, scheme, variables, fallback);
+	const recolor = rec(picture.recolor);
+	const steps = grays ? [...new Set([grays[0], ...PICTURE_STEPS.filter((v) => v > grays[0] && v < grays[1]), grays[1]])] : PICTURE_STEPS;
+	const duotone = recolor.dark !== undefined && recolor.light !== undefined;
+	const dark = duotone ? resolve(recolor.dark, '#000000') : '#000000', light = duotone ? resolve(recolor.light, '#FFFFFF') : '#FFFFFF';
+	const base = defaultSlideBackground(scheme), opacity = picture.opacity ?? 1;
+	const pixels = steps.map((step) => blend(blend(light, dark, step / 255), base, opacity));
+	const overlay = rec(picture.overlay), alpha = typeof overlay.opacity === 'number' ? Math.max(0, Math.min(1, overlay.opacity)) : undefined;
+	if (overlay.color === undefined || alpha === undefined) return pixels;
+	const color = resolve(overlay.color, '#000000'), covered = pixels.map((pixel) => blend(color, pixel, alpha));
+	return overlay.edge === undefined ? covered : [...pixels, ...covered];
+}
+
+/**
+ * RR-105: the tone a picture background that names none implies (ImageBackground.tone): `dark` when the light text of the dark1 variant
+ * reads better than the dark text of light1 over the worst of {@link pictureColors} (by {@link TONE_MARGIN}), `light` the other way, else
+ * undefined (an unknown photograph with nothing over it, where the automatic scrim keeps either readable). A duotone in dark colors or a
+ * dark overlay strong enough makes a picture dark; a picture with neither stays as it was. `grays`, when a host measured the picture
+ * under the text, bounds the pixels instead of the full ramp.
+ */
+export function pictureTone(definition: unknown, scheme: Rec, variables: Rec = {}, grays?: readonly [number, number]): 'dark' | 'light' | undefined {
+	const picture = imageBackground(definition);
+	if (!picture || (picture.recolor === undefined && picture.overlay === undefined && picture.opacity === undefined && !grays)) return undefined;
+	const colors = pictureColors(definition, scheme, variables, grays);
+	const worst = (text: string) => Math.min(...colors.map((color) => contrastRatio(text, color)));
+	const onDark = worst(resolveColorRoles(scheme, { variant: { background: 'dark1' } }).text), onLight = worst(resolveColorRoles(scheme, { variant: { background: 'light1' } }).text);
+	return onDark >= onLight * TONE_MARGIN ? 'dark' : onLight >= onDark * TONE_MARGIN ? 'light' : undefined;
+}
 
 /** What the design says about the slide's colors: a variant (a map over the scheme), a single background color, or neither (light1 by default). */
 export interface ColorChoice {
@@ -287,7 +333,8 @@ export function colorChoice(levels: readonly Rec[], scheme: Rec, variables: Rec 
 		if (variantOnly || definition === undefined || definition === null || definition === false) continue;
 		if (themeSlot) return { variant: { background: themeSlot } };
 		if (isPicture) {
-			const tone = rec(definition).tone;
+			// RR-105: a picture that names no tone takes the one its recolor, opacity and overlay imply (pictureTone), when they imply one.
+			const tone = rec(definition).tone ?? pictureTone(definition, scheme, variables);
 			if (tone === 'dark' || tone === 'light') return { variant: { background: tone === 'dark' ? 'dark1' : 'light1' } };
 			variantOnly = true;
 			picture = { definition };
@@ -308,12 +355,15 @@ export function colorChoice(levels: readonly Rec[], scheme: Rec, variables: Rec 
  * LH-103: only over a scheme-based background. A fixed background the deck or the theme draws (a hex or `var:` color, a gradient, a
  * pattern, a picture; deckBackgroundIsFixed) beats the layout's variant: the levels are the slide's, the deck's and the theme's, so the
  * slide keeps that background and its tone or luminance decides the text, as on a slide with no layout variant.
+ *
+ * LH-164: `surface` is the accent variant a message-only slide takes (messageSurface); it stands where a layout's variant would, under the
+ * same conditions, and replaces the layout's tone-relative `surface` (the statement's).
  */
-export function colorLevels(slideDesign: Rec, layout: unknown, deckDesign: Rec, theme: Rec, scheme: Rec, variables: Rec = {}): Rec[] {
-	if (!layoutColorVariant(layout) || deckBackgroundIsFixed(deckDesign, theme.background)) return [slideDesign, deckDesign, theme];
+export function colorLevels(slideDesign: Rec, layout: unknown, deckDesign: Rec, theme: Rec, scheme: Rec, variables: Rec = {}, surface?: ColorVariant): Rec[] {
+	if (!(surface ?? layoutColorVariant(layout)) || deckBackgroundIsFixed(deckDesign, theme.background) || (surface && !layoutColorVariant(layout) && deckBackgroundIsChosen(deckDesign, theme.background))) return [slideDesign, deckDesign, theme];
 	const below = colorChoice([deckDesign, theme], scheme, variables);
 	const deck = resolveColorRoles(scheme, { background: below.background, variant: below.variant });
-	const variant = layoutColorVariant(layout, { background: deck.map.bg1, dark: deck.dark })!;
+	const variant = surface ?? layoutColorVariant(layout, { background: deck.map.bg1, dark: deck.dark })!;
 	const accents = variant.accents ?? below.variant?.accents;
 	return [slideDesign, { variant: accents ? { ...variant, accents } : variant }, deckDesign, theme];
 }
@@ -335,7 +385,7 @@ export function resolveDesign(document: Rec, index: number, context: SlideContex
 	const dimensions = { width: options.width as number, height: options.height as number };
 	const variables = rec(document.variables);
 	// The preview derives the dark/light decision from one colour, before any opacity: see decisionColor.
-	const choice = colorChoice(colorLevels(own, resolved.layout, deck, theme, colorScheme, variables), colorScheme, variables);
+	const choice = colorChoice(colorLevels(own, resolved.layout, deck, theme, colorScheme, variables, resolved.messageSurface?.variant), colorScheme, variables);
 	const roles = resolveColorRoles(colorScheme, { background: choice.background, variant: choice.variant });
 	const dark = roles.dark;
 	const text = roles.text;
@@ -377,6 +427,8 @@ export function resolveDesign(document: Rec, index: number, context: SlideContex
 
 /** A text/background colour in a content run: the author's ColorRef resolved the way the preview resolves it. */
 export function resolveTextColor(reference: unknown, design: ResolvedDesign, fallback: string): string | undefined {
+	const transform = colorTransform(reference);
+	if (transform) { const base = resolveTextColor(transform.color, design, fallback); return base === undefined ? undefined : applyColorTransform(base, transform); }
 	if (typeof reference !== 'string' || !reference.trim()) return undefined;
 	const literal = normalizeHexColor(reference);
 	if (literal) return literal;
@@ -411,6 +463,10 @@ export interface BackgroundImageLayer {
 	opacity?: number;
 	/** LH-02: the darkest and lightest gray (0 to 255) the host measured under the text, which then bounds the picture instead of the full ramp. */
 	grays?: readonly [number, number];
+	/** RR-105: a duotone recolor's dark and light colors, which every pixel of the picture lies between. */
+	duotone?: readonly [string, string];
+	/** RR-105: an overlay of the author's limited to an edge band that the text box reaches: its colors count beside the uncovered ones. */
+	band?: { color: string; opacity: number; whole: boolean };
 }
 
 const GREY_RAMP = [0, 32, 64, 96, 128, 160, 192, 224, 255].map((v) => toHex([v, v, v]));
@@ -461,10 +517,15 @@ export function backdropColors(
 			const opacity = layer?.opacity ?? backdrop.opacity;
 			const ramp = layer?.grays ? [...new Set([layer.grays[0], ...[0, 32, 64, 96, 128, 160, 192, 224, 255].filter((v) => v > layer.grays![0] && v < layer.grays![1]), layer.grays[1]])].map((v) => toHex([v, v, v])) : GREY_RAMP;
 			const colors = ramp.map((grey) => {
-				let color = blend(grey, backdrop.base, opacity);
+				// RR-105: a duotone maps each gray to the ramp between its two colors.
+				const pixel = layer?.duotone ? blend(layer.duotone[1], layer.duotone[0], toRgb(grey)[0] / 255) : grey;
+				let color = blend(pixel, backdrop.base, opacity);
 				if (layer?.overlay) color = blend(layer.overlay.color, color, layer.overlay.opacity);
 				return color;
 			});
+			// RR-105: a box inside an edge band sits on the band alone; one that reaches past it on both.
+			const band = layer?.band;
+			if (band) return { colors: [...(band.whole ? [] : colors), ...colors.map((color) => blend(band.color, color, band.opacity))], unknown: true };
 			return { colors, unknown: true };
 		}
 	}

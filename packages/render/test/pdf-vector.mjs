@@ -128,8 +128,10 @@ for (const { name, deck, expect } of roundTrips) {
 // Each case is one line of one script. pdf.js, PDFium (Chrome, Edge) and, when it is installed, poppler must return
 // the authored text in logical order, compared as ordered text (no re-sorting of runs). Right-to-left runs are drawn in visual
 // order inside /ReversedChars with per-glyph /ActualText where the glyph map cannot give the text, as Chromium writes them;
-// reordered Indic and Khmer clusters carry /ActualText per cluster. The readers named in `skip` do not read that script
-// correctly from Chromium's own PDF either (PDFium on Thai and Burmese marks) or by design do not honour /ActualText (pdf.js).
+// a reordered Indic, Khmer, Myanmar or Thai cluster carries its whole text on its first drawn glyph, so pdf.js (which does not
+// honour /ActualText) reads it in logical order, and its word carries /ActualText. The readers named in `skip` do not read that
+// script correctly from Chromium's own PDF either (PDFium and poppler on Thai and Burmese marks, poppler on Gujarati).
+// test/pdf-text-scripts.mjs checks every reordering script of the corpora.
 {
   const registry = (await loadFonts({pack: 'base', scripts: "all"})).registry;
   const options = { fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}};
@@ -145,11 +147,11 @@ for (const { name, deck, expect } of roundTrips) {
     ["arabic", "Noto Naskh Arabic", rtl("نمت الإيرادات بنسبة مقارنة بالعام الماضي"), "نمت الإيرادات بنسبة مقارنة بالعام الماضي", []],
     ["arabic lam-alef ligature", "Noto Naskh Arabic", rtl("لا يوجد الله"), "لا يوجد الله", []],
     ["syriac", "Noto Sans Syriac", rtl("ܠܫܢܐ ܣܘܪܝܝܐ"), "ܠܫܢܐ ܣܘܪܝܝܐ", []],
-    ["devanagari", "Noto Sans Devanagari", "किताब हिन्दी क्षत्रिय तिमाही", "किताब हिन्दी क्षत्रिय तिमाही", ["pdfjs"]],
-    ["bengali", "Noto Sans Bengali", "বাংলা ভাষা কিতাব কৌতুক", "বাংলা ভাষা কিতাব কৌতুক", ["pdfjs"]],
-    ["tamil", "Noto Sans Tamil", "தமிழ் மொழி கொடு சௌ", "தமிழ் மொழி கொடு சௌ", ["pdfjs"]],
-    ["gujarati", "Noto Sans Gujarati", "ગુજરાતી ભાષા કિતાબ", "ગુજરાતી ભાષા કિતાબ", ["pdfjs", "poppler"]],
-    ["khmer", "Noto Sans Khmer", "ភាសាខ្មែរ ខ្មែរ", "ភាសាខ្មែរ ខ្មែរ", ["pdfjs"]],
+    ["devanagari", "Noto Sans Devanagari", "किताब हिन्दी क्षत्रिय तिमाही", "किताब हिन्दी क्षत्रिय तिमाही", []],
+    ["bengali", "Noto Sans Bengali", "বাংলা ভাষা কিতাব কৌতুক", "বাংলা ভাষা কিতাব কৌতুক", []],
+    ["tamil", "Noto Sans Tamil", "தமிழ் மொழி கொடு சௌ", "தமிழ் மொழி கொடு சௌ", []],
+    ["gujarati", "Noto Sans Gujarati", "ગુજરાતી ભાષા કિતાબ", "ગુજરાતી ભાષા કિતાબ", ["poppler"]],
+    ["khmer", "Noto Sans Khmer", "ភាសាខ្មែរ ខ្មែរ", "ភាសាខ្មែរ ខ្មែរ", []],
     ["thai", "Noto Sans Thai", "ภาษาไทย ที่ปรึกษา น้ำ", "ภาษาไทย ที่ปรึกษา น้ำ", ["pdfium", "poppler"]],
     ["burmese", "Noto Sans Myanmar", "မြန်မာဘာသာ ကျွန်ုပ်", "မြန်မာဘာသာ ကျွန်ုပ်", ["pdfium", "poppler"]],
   ];

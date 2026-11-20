@@ -15,7 +15,7 @@ const deck = (variant, { design = {}, slide = {}, direction } = {}) => ({
 	language: direction === 'rtl' ? 'ar' : 'en-US',
 	design: { colorScheme: 'house:house', background: 'light1', ...design },
 	catalogs: { house: { source: 'https://example.com/house', layouts: { divider: layout(variant) }, colorSchemes: { house: { name: 'House', ...scheme } } } },
-	slides: [{ layout: 'house:divider', title: 'Part two', subtitle: 'The evidence', ...slide }, { title: 'Content', text: 'Body.' }],
+	slides: [{ layout: 'house:divider', title: 'Part two', subtitle: 'The evidence', ...slide }, { title: 'Content', text: 'Body.', items: ['One', 'Two'] }], // two payloads: not one message (LH-164)
 });
 const roles = (document, index = 0) => resolveSlideContext(document, index).resolved.roles;
 

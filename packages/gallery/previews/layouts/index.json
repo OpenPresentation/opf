@@ -11,7 +11,7 @@
     {
       "id": "section",
       "file": "section.svg",
-      "bytes": 1011
+      "bytes": 1035
     },
     {
       "id": "agenda",
@@ -26,12 +26,12 @@
     {
       "id": "statement",
       "file": "statement.svg",
-      "bytes": 989
+      "bytes": 1260
     },
     {
       "id": "closing",
       "file": "closing.svg",
-      "bytes": 1182
+      "bytes": 1499
     },
     {
       "id": "text",
@@ -61,17 +61,17 @@
     {
       "id": "pillars",
       "file": "pillars.svg",
-      "bytes": 5890
+      "bytes": 5887
     },
     {
       "id": "comparison",
       "file": "comparison.svg",
-      "bytes": 2805
+      "bytes": 4006
     },
     {
       "id": "process",
       "file": "process.svg",
-      "bytes": 6163
+      "bytes": 6166
     },
     {
       "id": "timeline",
@@ -84,9 +84,59 @@
       "bytes": 3694
     },
     {
+      "id": "pyramid",
+      "file": "pyramid.svg",
+      "bytes": 2681
+    },
+    {
+      "id": "inverted-pyramid",
+      "file": "inverted-pyramid.svg",
+      "bytes": 2674
+    },
+    {
+      "id": "matrix",
+      "file": "matrix.svg",
+      "bytes": 3979
+    },
+    {
+      "id": "cycle",
+      "file": "cycle.svg",
+      "bytes": 3729
+    },
+    {
+      "id": "chevrons",
+      "file": "chevrons.svg",
+      "bytes": 2856
+    },
+    {
+      "id": "flow",
+      "file": "flow.svg",
+      "bytes": 3089
+    },
+    {
+      "id": "vertical-flow",
+      "file": "vertical-flow.svg",
+      "bytes": 2689
+    },
+    {
+      "id": "org-chart",
+      "file": "org-chart.svg",
+      "bytes": 2575
+    },
+    {
+      "id": "hierarchy",
+      "file": "hierarchy.svg",
+      "bytes": 5034
+    },
+    {
+      "id": "venn",
+      "file": "venn.svg",
+      "bytes": 2788
+    },
+    {
       "id": "metrics",
       "file": "metrics.svg",
-      "bytes": 3786
+      "bytes": 3885
     },
     {
       "id": "scorecard",
@@ -121,7 +171,7 @@
     {
       "id": "table",
       "file": "table.svg",
-      "bytes": 6396
+      "bytes": 6389
     },
     {
       "id": "table-beside",

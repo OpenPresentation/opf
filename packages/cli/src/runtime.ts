@@ -148,6 +148,8 @@ export interface WriteDeckOptions {
 	extra?: Record<string, unknown>;
 	/** Findings of the command itself (pagination, an import), added to the check's. */
 	findings?: Finding[];
+	/** Runs after the deck is written and before the report; the files it wrote are listed in the report's outputs. */
+	afterWrite?: () => Promise<OutputFact[]>;
 }
 
 /**
@@ -166,5 +168,6 @@ export async function writeDeck(command: string, document: unknown, destination:
 	const sameFile = options.inputFile !== undefined && options.inputFile !== "-" && !toStdout && samePath(options.inputFile, destination.file);
 	if (toStdout) process.stdout.write(text);
 	else await saveText(destination.file, text, destination.overwrite, sameFile && options.source ? { file: options.inputFile as string, raw: options.source.raw } : undefined);
-	printReport(envelope(command, { input: options.input ?? null, outputs: [outputFact(destination.file, text, DECK_MEDIA[format])], findings, ...options.extra }), toStdout);
+	const more = (await options.afterWrite?.()) ?? [];
+	printReport(envelope(command, { input: options.input ?? null, outputs: [outputFact(destination.file, text, DECK_MEDIA[format]), ...more], findings, ...options.extra }), toStdout);
 }

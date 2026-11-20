@@ -22,7 +22,7 @@ function frame(shape, width, height) {
   const [X,Y,CX,CY,W,H] = [x,y,cx,cy,width,height].map(BigInt);
   if (X < 0n || Y < 0n || X + CX > W || Y + CY > H || 10n * Y < 9n * H || 20n * CY > H || 3n * CX > W) return undefined;
   const center = 3n * (2n * X + CX);
-  return {x,y,cx,cy,zone: center < 2n * W ? 'left' : center > 4n * W ? 'right' : 'center'};
+  return {x,y,cx,cy,zone: center < 2n * W ? 'start' : center > 4n * W ? 'end' : 'center'};
 }
 
 function plainFrame(shape) {

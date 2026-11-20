@@ -30,6 +30,11 @@
 // release-prep pull request bumps the version, which acknowledges it again,
 // and assembles the fragment into the changelog.
 //
+// SH-02: a schema removal (kinds 2 to 4) is acknowledged the same two ways: the bump, or before it a pending `changed`
+// fragment (as for kind 5) that names it as `<schema file>:<JSON path>`, such as `opf.schema.json:$defs.ImageBorder` or
+// `opf.schema.json:$defs.ContentPayload.properties.shape` (a removed schema file: its file name alone). The release that
+// consumes the fragment must bump the version, since the check runs again on it without the fragment.
+//
 // MR-35: a removed record id (kind 1) is acknowledged the same two ways: the bump,
 // or before it a pending gallery fragment (`packages: [gallery]`) that declares it in
 // its `drawing` list as `<kind>:<id>` (camelCase kind: `colorSchemes:cool-horizon`),
@@ -171,12 +176,10 @@ const breaking = [];
 const notes = [];
 // Removed package exports: { specifier, message }. Acknowledged by the version bump or a changelog fragment (kind 5).
 const removedExports = [];
+// Removed schema parts: { key: "<schema file>:<JSON path>" (a removed file: its name), message }. Acknowledged by the bump or a changed fragment (SH-02).
+const removedSchema = [];
 // Removed catalog records: { key: "<camelCaseKind>:<id>", message }. Acknowledged by the bump or a gallery fragment's `drawing` (MR-35).
 const removedRecords = [];
-
-function flagBreaking(message) {
-  breaking.push(message);
-}
 
 async function checkRemovedCatalogRecords(tag) {
   const oldCatalogFiles = [...listFilesAtTag(tag, formerCatalogsSubpath), ...listFilesAtTag(tag, catalogsSubpath)].filter(
@@ -254,7 +257,7 @@ async function checkSchemas(tag) {
   for (const relPath of oldSchemaFiles) {
     const absolutePath = path.join(repoRoot, relPath);
     if (!existsSync(absolutePath)) {
-      flagBreaking(`[schema removed] ${relPath} existed at ${tag}, no longer exists`);
+      removedSchema.push({ key: path.basename(relPath), message: `[schema removed] ${relPath} existed at ${tag}, no longer exists` });
       continue;
     }
 
@@ -267,7 +270,7 @@ async function checkSchemas(tag) {
       const newKeys = new Set(topLevelKeys(newSchema, key));
       for (const removed of oldKeys) {
         if (!newKeys.has(removed)) {
-          flagBreaking(`[${key} removed] ${relPath}: top-level '${key}.${removed}' existed at ${tag}, no longer exists`);
+          removedSchema.push({ key: `${path.basename(relPath)}:${key}.${removed}`, message: `[${key} removed] ${relPath}: top-level '${key}.${removed}' existed at ${tag}, no longer exists` });
         }
       }
     }
@@ -293,17 +296,15 @@ async function checkSchemas(tag) {
       const newEnumValues = Array.isArray(newNode.enum) ? newNode.enum : null;
       if (newEnumValues === null) {
         if (enumValues.length > 0) {
-          flagBreaking(
-            `[enum lost] ${relPath} at '${jsonPath}': enum constraint removed (was: ${JSON.stringify(enumValues)})`,
-          );
+          removedSchema.push({ key: `${path.basename(relPath)}:${jsonPath}`, message:
+            `[enum lost] ${relPath} at '${jsonPath}': enum constraint removed (was: ${JSON.stringify(enumValues)})` });
         }
         continue;
       }
       const missing = enumValues.filter((value) => !newEnumValues.includes(value));
       if (missing.length > 0) {
-        flagBreaking(
-          `[enum lost] ${relPath} at '${jsonPath}': lost value(s) ${JSON.stringify(missing)} (was: ${JSON.stringify(enumValues)}, now: ${JSON.stringify(newEnumValues)})`,
-        );
+        removedSchema.push({ key: `${path.basename(relPath)}:${jsonPath}`, message:
+          `[enum lost] ${relPath} at '${jsonPath}': lost value(s) ${JSON.stringify(missing)} (was: ${JSON.stringify(enumValues)}, now: ${JSON.stringify(newEnumValues)})` });
       }
     }
   }
@@ -323,7 +324,7 @@ async function main() {
   await checkSchemas(tag);
   await checkPackageExports(tag);
 
-  if (breaking.length === 0 && removedExports.length === 0 && removedRecords.length === 0) {
+  if (breaking.length === 0 && removedSchema.length === 0 && removedExports.length === 0 && removedRecords.length === 0) {
     process.stdout.write(`${JSON.stringify({ valid: true, tag, breakingChanges: 0 }, null, 2)}\n`);
     return;
   }
@@ -335,6 +336,11 @@ async function main() {
   // Kind 5: before the bump, a pending `changed` fragment that names the removed specifier acknowledges it.
   const fragments = acknowledgingFragments();
   const fragmentAcknowledged = [];
+  for (const removal of removedSchema) {
+    const by = fragments.find((fragment) => fragmentNames(fragment.text, removal.key));
+    if (by && !versionAcknowledged) fragmentAcknowledged.push(`${removal.message.split("]")[0]}] ${removal.key} (changes/${by.name})`);
+    else breaking.push(removal.message);
+  }
   for (const removal of removedExports) {
     const by = fragments.find((fragment) => fragmentNames(fragment.text, removal.specifier));
     if (by && !versionAcknowledged) fragmentAcknowledged.push(`[export removed] ${removal.specifier} (changes/${by.name})`);
@@ -348,9 +354,9 @@ async function main() {
     else breaking.push(removal.message);
   }
   if (breaking.length === 0) {
-    process.stderr.write(`breaking-change check found ${removedExports.length} removed package export(s) and ${removedRecords.length} removed record id(s) since ${tag}, each named by a pending changelog fragment:\n\n${fragmentAcknowledged.map((item) => `  - ${item}\n`).join("")}\n`);
+    process.stderr.write(`breaking-change check found ${removedSchema.length} schema removal(s), ${removedExports.length} removed package export(s) and ${removedRecords.length} removed record id(s) since ${tag}, each named by a pending changelog fragment:\n\n${fragmentAcknowledged.map((item) => `  - ${item}\n`).join("")}\n`);
     process.stdout.write(`The release that ships them must be a breaking release: for a 0.x line, a minor or major bump of packages/javascript/package.json (now ${currentVersion}, ${oldVersion} at ${tag}). Passing.\n`);
-    process.stdout.write(`${JSON.stringify({ valid: true, tag, breakingChanges: removedExports.length + removedRecords.length, acknowledgedBy: "changelog-fragment", removedExports: removedExports.map((item) => item.specifier), removedRecords: removedRecords.map((item) => item.key), oldVersion, currentVersion }, null, 2)}\n`);
+    process.stdout.write(`${JSON.stringify({ valid: true, tag, breakingChanges: removedSchema.length + removedExports.length + removedRecords.length, acknowledgedBy: "changelog-fragment", removedSchema: removedSchema.map((item) => item.key), removedExports: removedExports.map((item) => item.specifier), removedRecords: removedRecords.map((item) => item.key), oldVersion, currentVersion }, null, 2)}\n`);
     return;
   }
   if (fragmentAcknowledged.length) notes.push(`Named by a pending changelog fragment: ${fragmentAcknowledged.join(", ")}.`);
@@ -373,6 +379,8 @@ async function main() {
   process.stderr.write(
     `packages/javascript/package.json is still at ${currentVersion} (compared against ${oldVersion} at ${tag}).\n` +
       `Required: bump the version (for a 0.x line, any minor or major bump; for 1.x+, a major bump) to acknowledge these breaking changes, or revert them.\n` +
+      (removedSchema.length ? `A schema removal can instead be named, as <schema file>:<JSON path> (${removedSchema.map((item) => item.key).join(", ")}), by a pending changes/*.md fragment of type changed.
+` : "") +
       (removedExports.length ? `A removed package export can instead be named, as its import specifier, by a pending changes/*.md fragment of type changed.\n` : "") +
       (removedRecords.length ? `A removed record id can instead be declared, as <kind>:<id>, in the \`drawing\` list of a pending gallery fragment (changes/*.md with packages: [gallery]).\n` : ""),
   );

@@ -1,5 +1,6 @@
 // Effective current-native Body styles. No native applications or source typography replay.
 import assert from 'node:assert/strict';
+import {historicalKeynoteVocabulary} from './helpers/keynote-vocabulary.mjs';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {unzipSync, zipSync, strFromU8, strToU8} from 'fflate';
@@ -25,7 +26,9 @@ async function read(parts = original) {
   return {deck, diagnostics};
 }
 const {deck, diagnostics} = await read();
-assert.equal(createHash('sha256').update(JSON.stringify(deck)).digest('hex'), '7bcfc43c75b926dc193f451c984c773fed3e0eb54ec55845356c8c509b8e9f3f', 'Exact reviewed whole import; no style normalization (RR-96: table fills equal to a package theme color import as the slot, the only change)');
+const historical = historicalKeynoteVocabulary(deck);
+assert.equal(createHash('sha256').update(await readFile(new URL(manifest.file, directory))).digest('hex'), manifest.sha256, 'Sealed native bytes stay unchanged');
+assert.equal(createHash('sha256').update(JSON.stringify(historical)).digest('hex'), '7bcfc43c75b926dc193f451c984c773fed3e0eb54ec55845356c8c509b8e9f3f', 'Exact reviewed whole import through fourteen closed vocabulary slots; no style normalization (RR-96: table fills equal to a package theme color import as the slot, the only change)');
 for (const slide of [1,2,4,6,8,13,14,15,16]) {
   const block = deck.slides[slide].blocks[0], values = slide === 16 ? block.items : [block.text];
   for (const value of values) for (const run of Array.isArray(value) ? value : [value]) if (typeof run !== 'string') {

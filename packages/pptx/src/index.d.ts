@@ -36,11 +36,20 @@ export interface ImageResolverContext {
 }
 
 export interface MediaProvenanceDiagnostic { code: "media-provenance-omitted"; path: string; message: string }
-/** An opt-in native body could not represent this payload; current measured shapes were retained. */
+/**
+ * An opt-in native body could not represent this payload, or (any mode, RR-105) a wrapped title could be neither a native wrapped title
+ * nor one title of fixed lines; current measured shapes were retained.
+ */
 export interface NativeBodyFallbackDiagnostic {
   code: "native-body-fallback";
   path: string;
-  reason: "complex-composition" | "multi-column" | "unsupported-list" | "annotated-text" | "unsupported-text" | "overflow";
+  reason: "complex-composition" | "multi-column" | "unsupported-list" | "annotated-text" | "unsupported-text" | "overflow" | "tight-wrap" | "font-metrics" | "hard-break" | "mixed-direction" | "line-pitch" | "line-placement";
+  message: string;
+}
+/** Measured native text could not be split with complete ownership evidence; the original measured line or scalar was retained. */
+export interface NativeFragmentUnavailableDiagnostic {
+  code: "native-fragment-unavailable" | "native-scalar-fragment-unavailable";
+  path: string;
   message: string;
 }
 /** The chart data cannot be plotted, so a placeholder frame stands in for the chart. */
@@ -50,6 +59,12 @@ export interface ChartDataUnplottableDiagnostic { code: "chart-data-unplottable"
  * `reason: "diagram-unavailable"`: a diagram whose source cannot be drawn (core reports why with `unresolved-content`) exports the preview's
  * unavailable-diagram placeholder, the dashed shape `OPF diagram placeholder N` that reads "Diagram unavailable".
  */
+/**
+ * SH-07, `diagrams: "shapes"`: a diagram that stays one SVG picture (info). `family` is its diagram type (pele's name, such as
+ * `flowchart`): a family not in core's DIAGRAM_SHAPE_FAMILIES (its native shapes have not passed the comparison with the preview in
+ * PowerPoint), or a drawing with a part that has no native form (the message names it).
+ */
+export interface DiagramShapesUnavailableDiagnostic { code: "diagram-shapes-unavailable"; path: string; family: string; message: string }
 export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; path: string; message: string; reason: "table-has-no-rows" | "unsupported-payload" | "diagram-unavailable" }
 /**
  * An image that cannot be exported as a picture: the preview's placeholder was exported instead (or no watermark, or the background colour).
@@ -76,10 +91,11 @@ export interface SvgSanitizedDiagnostic { code: "svg-sanitized"; path: string; m
  *   and a border to an SVG picture, and those stay native);
  * - `border-dot`: a dotted table cell border is PowerPoint's square dot (one width on, one off); the preview leaves two widths between dots;
  * - `pattern-preset`: an engine-defined pattern preset (`diagStripe`) is its closest DrawingML preset (`wdUpDiag`);
- * - `image-animation`: an animated WebP becomes a still PNG of its first frame under `imageFormat: "compatible"`.
+ * - `image-animation`: an animated WebP becomes a still PNG of its first frame under `imageFormat: "compatible"`;
+ * - `funnel-label-color`: PowerPoint can ignore the written native funnel label color and choose its own contrast color.
  * The skill `opf-export` lists every mapping, including the ones that report another code or none.
  */
-export interface ExportLossyDiagnostic { code: "export-lossy"; feature: "svg-rasterized" | "border-dot" | "pattern-preset" | "image-animation"; path: string; message: string }
+export interface ExportLossyDiagnostic { code: "export-lossy"; feature: "svg-rasterized" | "border-dot" | "pattern-preset" | "image-animation" | "funnel-label-color"; path: string; message: string }
 /** LH-28, `typefaces: "safe"`: an authored family written as its Office-safe family (`replacement`), once per family; `path` is `""`. */
 export interface TypefaceReplacedDiagnostic { code: "typeface-replaced"; path: string; family: string; replacement: string; message: string }
 /**
@@ -88,7 +104,7 @@ export interface TypefaceReplacedDiagnostic { code: "typeface-replaced"; path: s
  * a chartex chart type was written as a clustered column chart (`chartex-fallback`) and a one-column histogram was binned into counts
  * (`histogram-binned`).
  */
-export interface ChartDataAdaptedDiagnostic { code: "chart-data-adapted"; path: string; message: string; adaptation: "histogram-binned" | "row-numbers" | "series-dropped" | "chartex-fallback" }
+export interface ChartDataAdaptedDiagnostic { code: "chart-data-adapted"; path: string; message: string; adaptation: "histogram-binned" | "row-numbers" | "series-dropped" | "chartex-fallback" | "signed-pareto-combo" }
 /** With `chartex: "native"`, a map chart (`world`) is exported as a chartex regionMap (`Requires="cx4"`) without cached geography: PowerPoint must fetch the region shapes from its online map service and shows "There was a problem getting the information for your map chart" with an empty chart until it does. */
 export interface ChartMapGeodataDiagnostic { code: "chart-map-geodata"; path: string; message: string }
 /** RR-54: chart values that core `chartNumber` rejects (not a number or a plain decimal string) were exported as gaps; one per chart, with their count. */
@@ -110,11 +126,12 @@ export interface VariableExampleUsedDiagnostic {
 export interface ToPptxOptions {
   /**
    * How a footer or header text with words around `{{slide.number}}` (`{{slide.number}} / {{deck.slideCount}}`, `Page {{slide.number}}`)
-   * writes its number. "static" (default) writes the number as fixed text in an ordinary shape, so PowerPoint and Keynote both show
-   * `2 / 6`; the total is fixed either way (PowerPoint has no slide-count field). "live" keeps PowerPoint's slide-number field (in the
-   * Slide Number placeholder for the first footer one) with the words as fixed runs: Keynote replaces the whole paragraph that holds a
-   * slide-number field with the number alone, so it shows only `2`. A text that is only `{{slide.number}}` keeps its live field and
-   * placeholder in both modes. A fixed number does not follow slides moved or deleted in PowerPoint; the authored text returns on import (RR-91).
+   * writes its number. "live" (default since RR-102) keeps PowerPoint's slide-number field with the words as fixed runs, in the Slide
+   * Number placeholder for the first footer one, so Insert > Header & Footer shows Slide number checked and PowerPoint renumbers it.
+   * "static" writes the number as fixed text in an ordinary shape, for Keynote targets: Keynote replaces the whole paragraph that holds a
+   * slide-number field with the number alone, so a live `{{slide.number}} / 6` shows only `2` there (RR-91). The total is fixed either
+   * way (PowerPoint has no slide-count field). A text that is only `{{slide.number}}` keeps its live field and placeholder in both modes.
+   * A fixed number does not follow slides moved or deleted in PowerPoint; the authored text returns on import.
    */
   slideNumberFields?: "static" | "live";
   /**
@@ -129,16 +146,35 @@ export interface ToPptxOptions {
    * Omitted or "measured" preserves the current measured-line export. No native application qualification is implied (Keynote 15.1.1 was checked for Title/Body controls and reflow, PowerPoint was not).
    */
   bodyText?: "measured" | "native";
+  /**
+   * SH-07: how diagrams are written. "shapes" (default) writes a diagram of a family in core's DIAGRAM_SHAPE_FAMILIES as one group of
+   * native shapes, connectors and text built from the preview's own drawing (pele's laid-out geometry), with `OPF_DIAGRAM_V1` on the group
+   * so import reads the Mermaid, DOT or PlantUML source back; any other diagram (a family not compared yet, right-to-left text, a part with no native
+   * form) stays a picture and reports `diagram-shapes-unavailable` (info). "picture" writes every diagram as one native SVG picture over
+   * its PNG fallback, the default of earlier releases.
+   */
+  diagrams?: "picture" | "shapes";
+  /**
+   * SH-09: how a pyramid, matrix or cycle (SH-18; a layout region's `arrangement`) is written. "live" (the default) writes live SmartArt (Basic
+   * Pyramid, Basic Matrix, Basic Cycle) where PowerPoint lays it out exactly as the preview draws it, and native shapes with an info
+   * `smartart-unavailable` diagnostic (its `reason`) where it would not; "shapes" writes native shapes always. SH-16: each live SmartArt is an
+   * `mc:AlternateContent` whose fallback is OPF's preview of the frame (an SVG picture over a PNG), which apps without SmartArt show; it is
+   * drawn with opf-render (an optional peer) and `svgRasterizer` (in a browser), and without them the arrangement is native shapes.
+   */
+  smartArt?: "live" | "shapes";
   /** Default compatible converts WebP to a static PNG. Preserve embeds original WebP bytes. */
   imageFormat?: "compatible" | "preserve";
   /**
    * How the chartex chart types (treemap, histogram, pareto, box-and-whisker, waterfall, funnel, world) are exported.
-   * "auto" (default) writes Office 2016 chartex parts (`cx:chartSpace`, style parts, an `mc:AlternateContent` frame with the
-   * clustered column chart as fallback) for the constructs desktop PowerPoint confirmed natively on 2026-09-30 (treemap,
+   * "auto" (default) writes Office 2016 chartex parts (`cx:chartSpace`, style parts, an `mc:AlternateContent` frame whose fallback,
+   * for apps without chartex support, is a picture of OPF's preview of the chart, or the clustered column chart with
+   * `chartex-fallback-picture-unavailable` when the picture cannot be drawn) for the constructs desktop PowerPoint confirmed natively on 2026-09-30 (treemap,
    * histogram, pareto, box-and-whisker, waterfall, funnel) and keeps `world` on the clustered column chart with
    * `chart-data-adapted` (`chartex-fallback`) because the regionMap part, though accepted with `Requires="cx4"`, draws
    * nothing until PowerPoint fetches map data online. Multi-series Pareto also uses editable clustered columns with all series and this diagnostic;
-   * explicit native mode rejects it with unsupported-chart-data before returning bytes. Single-series Pareto stays native.
+   * explicit native mode rejects it with unsupported-chart-data before returning bytes. Single-series Pareto stays native except signed
+   * categorical data, which uses an editable classic combo (descending signed columns and an explicit positive-only cumulative-share
+   * line on a secondary 0–1 axis). Its cumulative values are static after native edits; import returns the sorted/derived combo data.
    * "native" writes supported chartex parts, the map included (reports
    * `chart-map-geodata`). "fallback" writes clustered columns only
    * (`chartex-fallback`, `histogram-binned`), as releases before FF-22b did. Import of chartex parts is always on.
@@ -213,10 +249,15 @@ export interface ToPptxOptions {
    */
   pictureLuminance?: (src: string) => PictureLuminance | undefined;
   /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, and, from core's slide context, `unresolved-reference` (once per reference path) when a layout, theme, colour-scheme or font-scheme reference resolves nowhere (not embedded in the document's `catalogs` and not in a registered catalog): core's engine defaults are drawn instead, and a slide whose layout resolves nowhere, like one with no layout, composes automatically. None of them refuses the export unless `strictReferences` is set. */
-  onDiagnostic?: (diagnostic: LayoutDiagnostic | UnresolvedReferenceDiagnostic | MediaProvenanceDiagnostic | NativeBodyFallbackDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | ExportLossyDiagnostic | TypefaceReplacedDiagnostic | VariableExampleUsedDiagnostic) => void;
+  onDiagnostic?: (diagnostic: LayoutDiagnostic | UnresolvedReferenceDiagnostic | MediaProvenanceDiagnostic | NativeBodyFallbackDiagnostic | NativeFragmentUnavailableDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | ExportLossyDiagnostic | TypefaceReplacedDiagnostic | VariableExampleUsedDiagnostic | DiagramShapesUnavailableDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;
+  /**
+   * LH-14: reads an icon's SVG file (an `asset:` reference, a relative path or an HTTPS URL the deck's icons name) for `ensureIcons`;
+   * without it only inline SVG, data URIs and the registered icon sets draw. The exporter never reads or fetches a file by itself.
+   */
+  readIconSource?: (source: string) => Promise<string | Uint8Array | undefined>;
   /**
    * Draws the PNG fallback of an SVG picture (the raster older viewers show; PowerPoint 2016 and Microsoft 365 draw the SVG itself). It receives the
    * sanitized SVG text and the pixel size to draw (the SVG's own aspect, about 192 dpi of the displayed size) and returns PNG bytes with a transparent
@@ -261,7 +302,7 @@ export interface ToPptxOptions {
 }
 
 export interface FromPptxOptions {
-  /** Reports native details that import cannot preserve, including code provenance fallback/reflow and grouped text transforms. Table paths identify native frame and row/cell indexes (including headers). Stored catalog references that no longer match the package report `design-reference-changed` / `layout-reference-changed` at the reference path; a stored slide layout reference that resolves neither in the stored document catalogs, nor in the slide's own stored record, nor in `catalogs` reports `unresolved-reference`; a slide whose imported blocks no longer fit the stored content structure reports `content-structure-changed` at `slides.N`, a block id repeated by a duplicated slide `duplicate-block-id` (docs/document-roundtrip.md). */
+  /** Reports native details that import cannot preserve, including code provenance fallback/reflow and grouped text transforms, and the shape properties OPF has no form for (`shape-property-dropped`, with `property` and `shape`: 3-D, preset shadows, fill overlay, wrap, columns and autofit, alternative text titles, hover links, locks, black-and-white mode, custom data; `shape-not-imported` for a filled shape across the whole slide). Table paths identify native frame and row/cell indexes (including headers). Stored catalog references that no longer match the package report `design-reference-changed` / `layout-reference-changed` at the reference path; a stored slide layout reference that resolves neither in the stored document catalogs, nor in the slide's own stored record, nor in `catalogs` reports `unresolved-reference`; a slide whose imported blocks no longer fit the stored content structure reports `content-structure-changed` at `slides.N`, a block id repeated by a duplicated slide `duplicate-block-id` (docs/document-roundtrip.md). */
   onDiagnostic?: (diagnostic: {code: string; path: string; message: string}) => void;
   fallbackName?: string;
   schema?: string;
@@ -468,6 +509,10 @@ export interface PptxTextSignal {
   bulletedParagraphs?: number;
   anchor?: "top" | "middle" | "bottom";
   autofit?: "shrink" | "resize" | "none";
+  /** Saved body scale in percent when below 100; run sizes already include it. */
+  fontScalePct?: number;
+  /** Saved percentage-point reduction; lineSpacingPct includes it, or is omitted if the result would be negative. */
+  lineSpacingReductionPct?: number;
   wrap?: "none";
   vertical?: string;
   columns?: number;

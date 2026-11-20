@@ -107,7 +107,7 @@ const deck = () => ({
     { id: "block", title: "Block", blocks: [{ image: { src: "asset:photo", alt: "Block alt" } }, { text: "Beside the image" }] },
     { id: "string", title: "String", image: "asset:plain", text: "Text" },
     { id: "inline", title: "Inline", image: { src: PNG, alt: "inline" }, text: "Text" },
-    { id: "placed", title: "Placed image", blocks: [{ image: "asset:photo", placement: { edge: "right", size: 0.4 } }, { text: "Text" }] },
+    { id: "placed", title: "Placed image", blocks: [{ image: "asset:photo", placement: { edge: "end", size: 0.4 } }, { text: "Text" }] },
     { id: "fitted", title: "Fitted image", blocks: [{ image: "asset:plain", fit: "contain", focus: { x: 0.2, y: 0.8 } }, { text: "Text" }] },
     { id: "svg", title: "Vector", image: "asset:vector", text: "Text" },
     { id: "url", title: "Hosted", image: "https://example.com/p.png", text: "Text" },
@@ -196,7 +196,7 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   assert.equal(editor.presentation.assets["image-crop"].description, undefined, "no provenance for an inline original");
   assert.equal(prepareRestore(editor.presentation, "slides.2.image"), null);
   editor.applyPatch(prepareCrop(editor.presentation, "slides.3.blocks.0.image", cropped()).patches, { rejectInvalid: true });
-  assert.deepEqual(editor.presentation.slides[3].blocks[0], { image: "asset:photo-crop", placement: { edge: "right", size: 0.4 } }, "the block's placement is kept");
+  assert.deepEqual(editor.presentation.slides[3].blocks[0], { image: "asset:photo-crop", placement: { edge: "end", size: 0.4 } }, "the block's placement is kept");
   editor.applyPatch(prepareCrop(editor.presentation, "slides.4.blocks.0.image", cropped()).patches, { rejectInvalid: true });
   assert.deepEqual(editor.presentation.slides[4].blocks[0], { image: "asset:plain-crop-2", fit: "contain", focus: { x: 0.2, y: 0.8 } }, "the block's fit and focus are kept");
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true, JSON.stringify(validate(editor.presentation, { only: ["format"] }).findings));

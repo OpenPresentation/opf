@@ -391,9 +391,12 @@ export function createOpfEditor(element, options = {}) {
   let drafting = false;
   let openedText;
   let sourceState = null;
+  let lastSourceReport = null;
   let sourceCursor = null;
   let fontsFailure;
   let refreshToken = 0;
+  let reviewResources = 0;
+  let reviewSnapshot;
   let lastRefresh = Promise.resolve();
   let geometrySize = null;
   let statusText = "";
@@ -432,10 +435,10 @@ export function createOpfEditor(element, options = {}) {
   if (variablesObject && variablesObject.focusSource !== undefined && typeof variablesObject.focusSource !== "function") throw new TypeError("variables.focusSource must be a function.");
   const fitMode = studioLayout ? false : options.fit === undefined ? (layout === "slots" ? false : "contain") : options.fit;
 
-  const say = (message) => {
+  const say = (message, { undoable = false } = {}) => {
     statusText = message;
     if (slots.status) slots.status.textContent = message;
-    emit("status", { message });
+    emit("status", { message, ...(undoable ? { undoable } : {}) });
   };
   const exportModeFor = (setting) => (setting === "sheet" || setting === "menu" ? setting : win?.matchMedia?.("(max-width: 900px)").matches ? "sheet" : "menu");
 
@@ -456,8 +459,10 @@ export function createOpfEditor(element, options = {}) {
   }
   // ---- navigation and the refresh loop ----------------------------------------------------------------------------------------
   function renderViews(deck) {
+    // Only the slide manager and active sorter consume this cache. A slots host
+    // can have a canvas and lazy strip without either; the strip owns its cache.
     // The Studio's filmstrip draws the thumbnails it shows itself, as they scroll in.
-    if (!studioLayout) thumbnailCache?.prepare(deck);
+    if (!studioLayout && (slideManager || (activeView === "sorter" && sorter))) thumbnailCache?.prepare(deck);
     slideManager?.render();
     if (activeView === "sorter") sorter?.render();
     if (activeView === "outline") outline?.render();
@@ -483,22 +488,34 @@ export function createOpfEditor(element, options = {}) {
       },
     };
   }
-  function sync() {
+  function sync(navigation) {
     fonts?.registry?.clearSubstitutions?.();
     // The frozen snapshot (one object per version): the session's `presentation` copies the whole deck on every read.
-    const deck = session.snapshot().presentation;
+    const snapshot = session.snapshot();
+    const deck = snapshot.presentation;
     slideIndex = Math.max(0, Math.min(slideIndex, deck.slides.length - 1));
     renderViews(deck);
     showIndex(slideIndex);
     fonts?.registry?.clearSubstitutions?.();
     if (canvas && canvas.slideIndex !== slideIndex) canvas.setSlide(slideIndex);
     emit("sync", syncDetail(deck));
-    review?.schedule();
+    // Navigation changes the current-slide filter, not the document's findings. An already scheduled edit check
+    // must remain pending; a refresh superseded during font loading must still schedule the new snapshot.
+    if (navigation?.snapshot === snapshot && navigation.catalogs === session.catalogs && navigation.resources === reviewResources && reviewSnapshot === snapshot) review?.update();
+    else {
+      reviewSnapshot = snapshot;
+      review?.schedule();
+    }
     design?.refresh();
   }
   // The one "ensure fonts, then update" path: every document change and every slide change goes through whenFontsReady, so nothing outside
   // the canvas (which gates its own draws with the same handle) measures a document whose faces are still loading.
-  function refresh() {
+  function invalidateReview() {
+    reviewResources++;
+    reviewSnapshot = undefined;
+    review?.invalidate();
+  }
+  function refresh(navigation) {
     if (!mounted || destroyed) return Promise.resolve();
     const token = ++refreshToken;
     let loaded = false;
@@ -516,16 +533,20 @@ export function createOpfEditor(element, options = {}) {
         fontsPending = false;
         if (loaded) {
           thumbnailCache?.clear();
+          // The fonts handle also prepares lazy icons, shapes and diagram engines; all change derived review geometry.
+          invalidateReview();
           emit("fonts", { state: "ready" });
-          if (/Loading fonts/.test(statusText)) say(MESSAGES.ready);
+          if (/Loading fonts/.test(statusText)) say(options.labels?.ready ?? MESSAGES.ready);
         }
         try {
-          sync();
+          sync(navigation);
         } catch (error) {
           report(error);
         }
       },
       failed: (error) => {
+        // Earlier verified resources may have committed before a later one failed; a different complete deck can have no pending load.
+        invalidateReview();
         fontsFailure = error;
         emit("fonts", { state: "error", error });
         say(error.message);
@@ -545,7 +566,7 @@ export function createOpfEditor(element, options = {}) {
         slideIndex = index;
         showIndex(index);
         if (changed) emit("slide", { index, count: slides.length });
-        refresh();
+        refresh({ snapshot: session.snapshot(), catalogs: session.catalogs, resources: reviewResources });
         return true;
       }
     } catch (error) {
@@ -575,6 +596,7 @@ export function createOpfEditor(element, options = {}) {
     if (controls.redo) controls.redo.disabled = !inSync || readOnly || !session.canRedo;
     // The deck name is not renamed over text in the source pane that is not a valid deck (that would replace the person's draft).
     deckTitle?.setDisabled(!inSync);
+    strip?.setReadOnly(readOnly || !inSync);
     designMenu?.setDisabled(!inSync);
     actionsPart?.setDisabled(!inSync);
     actionsPart?.refresh();
@@ -753,7 +775,19 @@ export function createOpfEditor(element, options = {}) {
         onError: (error) => report(error instanceof Error ? error : new Error("Thumbnails unavailable")),
         // CE-28 wave 2: "+" and the thumbnail menu (duplicate, delete, hide, move), each one undoable change; "+" offers the deck's layouts.
         ...(slideActions
-          ? { actions: true, readOnly, onStatus: say, ...(listSwitchOptions ? { layoutOptions: (presentation) => listSwitchOptions(presentation, "layouts", { catalogs: catalogs() }) } : {}) }
+          ? {
+              actions: true,
+              readOnly: readOnly || !inSync,
+              onStatus: say,
+              ...(slideActions === "starters" ? {
+                starters: true,
+                onAdd(index) {
+                  if (session.presentation.slides[index]?.title) canvas?.beginEdit(`slides.${index}.title`);
+                },
+              } : listSwitchOptions ? {
+                layoutOptions: (presentation) => listSwitchOptions(presentation, "layouts", { catalogs: catalogs() }),
+              } : {}),
+            }
           : {}),
       });
     }
@@ -822,10 +856,12 @@ export function createOpfEditor(element, options = {}) {
       getFindings: ({ format, text: shown }) => {
         reportedText = shown;
         const made = reportSource(format, shown, { catalogs: catalogs(), checks: configured.checks ?? SOURCE_CHECKS });
+        lastSourceReport = made;
         draftInvalid = !made.valid;
         inSync = made.status.kind === "valid";
-        sourceState = { status: made.status, format, text: shown };
+        sourceState = { status: made.status, format, text: shown, findings: made.findings };
         syncChrome();
+        review?.setSource(sourceProblems(made));
         emit("source", sourceState);
         updateDirty();
         return made.findings;
@@ -842,6 +878,14 @@ export function createOpfEditor(element, options = {}) {
       },
       onError: (error) => report(error),
     };
+  }
+
+  // The findings of source text that is not a valid deck, for the Review panel and the pill (null while it is one): the pane's own findings,
+  // or its syntax message as one error. The review of the document cannot see that text, so it must not be the only verdict on show.
+  function sourceProblems(made) {
+    if (!made || made.valid) return null;
+    if (made.status.kind === "syntax") return [{ severity: "error", message: made.status.message }];
+    return made.findings;
   }
 
   // While the canvas holds an inline edit, the source shows the draft as it is typed, without touching the session.
@@ -945,7 +989,7 @@ export function createOpfEditor(element, options = {}) {
           slideIndex = event.slideIndex;
           showIndex(slideIndex);
           emit("slide", { index: slideIndex, count: slides.length });
-          refresh();
+          refresh({ snapshot: session.snapshot(), catalogs: session.catalogs, resources: reviewResources });
         }
         emit("render", event);
         configured.onRender?.(event);
@@ -1037,12 +1081,18 @@ export function createOpfEditor(element, options = {}) {
   function mountReview() {
     const configured = typeof options.review === "object" ? options.review : {};
     const { hook, ...panelOptions } = configured;
+    let reviewDeck;
+    const reviewMeasurement = (index) => layoutFor(reviewDeck, index).fonts.textMeasurement;
+    const checkedSnapshot = session.snapshot();
     review = createReviewPanel(slots.review, {
       ...panelOptions,
       editor: ui,
       getSlideIndex: () => slideIndex,
       // The layout checks measure text with the fonts the canvas draws with, script-aware per slide.
-      getValidateOptions: (deck) => (fonts?.textMeasurement ? { fonts: { textMeasurement: (index) => layoutFor(deck, index).fonts.textMeasurement } } : {}),
+      getValidateOptions: (deck) => {
+        reviewDeck = deck;
+        return fonts?.textMeasurement ? { fonts: { textMeasurement: reviewMeasurement } } : {};
+      },
       // The workspace re-checks after it has redrawn, so the faces are loaded and the checks measure what the canvas shows.
       autoRefresh: false,
       ...(hook ? { review: hook } : {}),
@@ -1066,6 +1116,8 @@ export function createOpfEditor(element, options = {}) {
         emit("review", counts);
       },
     });
+    reviewSnapshot = checkedSnapshot;
+    if (sourceState && sourceState.status.kind !== "valid") review.setSource(sourceProblems(lastSourceReport));
   }
 
   function present(from) {
@@ -1269,6 +1321,7 @@ export function createOpfEditor(element, options = {}) {
         editor: ui,
         ...(chromeLabels().untitled ? { placeholder: chromeLabels().untitled } : {}),
         ...(chromeLabels().title ? { label: chromeLabels().title } : {}),
+        labels: { ...(chromeLabels().titleSave ? { save: chromeLabels().titleSave } : {}), ...(chromeLabels().titleCancel ? { cancel: chromeLabels().titleCancel } : {}) },
         readOnly,
         density,
         beforeCommit: () => inSync && commitPending(),
@@ -1505,7 +1558,6 @@ export function createOpfEditor(element, options = {}) {
     studio?.setReadOnly(readOnly);
     deckTitle?.setReadOnly(readOnly);
     designMenu?.setReadOnly(readOnly);
-    strip?.setReadOnly?.(readOnly);
     root.toggleAttribute("data-readonly", readOnly);
     syncChrome();
     studioCtl?.refresh();
@@ -1686,8 +1738,8 @@ export function createOpfEditor(element, options = {}) {
     const add = (id, label, keys, group) => list.push({ id, label, keys, group });
     if (listeners.get("save")?.size && layout !== "viewer" && options.shortcuts !== false) add("save", "Save", ["Mod-s"], "Edit");
     if (deckTitle && !readOnly) {
-      add("title-commit", "Rename: keep the name typed in the title", ["Enter"], "Presentation name");
-      add("title-cancel", "Rename: put the name back", ["Escape"], "Presentation name");
+      add("title-commit", "Rename: save the name typed in the title", ["Enter"], "Presentation name");
+      add("title-cancel", "Rename: cancel and put the name back", ["Escape"], "Presentation name");
     }
     if (expandCtl) add("expand-exit", "Leave the expanded editor", ["Escape"], "Window");
     return list;
@@ -1918,7 +1970,7 @@ export function createOpfEditor(element, options = {}) {
     undo,
     redo,
     /** Run the update again now (the parts redraw, `sync` is emitted once the fonts are ready). Resolves when it is done. */
-    refresh,
+    refresh: () => refresh(),
     /** Resolves when the latest update has finished (fonts loaded, parts redrawn). */
     whenIdle() {
       return lastRefresh;
@@ -2035,7 +2087,7 @@ export function createOpfEditor(element, options = {}) {
     mountParts();
     mounted = true;
     if (readOnly) applyReadOnly();
-    say(MESSAGES.ready);
+    say(options.labels?.ready ?? MESSAGES.ready);
     const wantedView = "view" in requested ? requested.view : options.view;
     activeView = "slide";
     if (wantedView && wantedView !== "slide") setView(wantedView);

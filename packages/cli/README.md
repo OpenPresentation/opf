@@ -70,14 +70,16 @@ exits with 2.
   fix (a missing argument, the nearest command or flag: "Did you mean --check?", a removed flag's replacement).
 - **Exit codes.** `0` success, possibly with warnings. `1` an invalid document, a failed patch test, a finding at or above
   `--fail-on <error|warning|info>` (default `error`), an existing output, a merge conflict, or a `--check` that found a change.
-  `2` usage, text that is not valid JSON, YAML or Markdown, I/O, or a missing optional peer.
+  `2` usage, I/O, or a missing optional peer, and, in every command except `validate`, text that is not valid JSON, YAML or
+  Markdown. `opf validate` reports a syntax error as an `opf/json-syntax` (or `yaml/<rule>`, `markdown/<rule>`) finding and exits 1.
+  Closing a pipe early (`opf catalog | head`) ends the command quietly with 141, as `cat` and `git` do.
 - No telemetry, automatic uploads, or execution of instructions inside document text. Use `--` before file names that start with `-`.
 
 ## Create and validate
 
 ```sh
 opf create decision.opf.json --title "Launch decision"
-opf create brief.opf.md --example compliance-readiness-review      # opf catalog examples lists them
+opf create brief.opf.md --example contract-cycle-time-brief        # opf catalog examples lists them
 opf create - --title "Launch decision" | opf validate -
 opf validate decision.opf.json
 ```
@@ -123,7 +125,7 @@ Inputs: `.json`, `.opf.yaml`/`.yml`, `.opf.md` and a plain `.md`, `.pptx`, or `-
 `.svg` (one file per slide beside the output, `slides/deck.png` giving `slides/deck-1.png`, ... padded to the width of the largest slide number written, `-01` from ten slides; one selected slide is written to the output itself; `{n}` in the output is the slide number, so `slides/slide-{n}.png` always numbers its files, and any other `{key}`, or `{n}` in a single-file output, is a usage error), `.zip` (the slides as PNG, or
 SVG with `--to svg`), or `-` with `--to`. A flag applies only where its format is involved, else it is a usage error: `--split` and
 `--title` for a Markdown input, `--aliases` for YAML, `--signals` for a `.pptx` input, `--schema-comment` for a YAML output,
-`--drop-unsupported` for a Markdown output, and `--slides`, `--include-hidden`, `--scale`, `--raster`, `--text`, `--charts`,
+`--drop-unsupported` for a Markdown output, and `--slides`, `--include-hidden`, `--scale`, `--raster`, `--text`, `--charts`, `--diagrams`,
 `--images`, `--provenance`, `--paginate`, `--date`, `--fonts` and `--asset-dir` for drawn and PowerPoint outputs. `opf convert --help`
 lists which format each belongs to. Removed in 0.18: `render`, `export`, `import`, `from-md`, `to-md`, `from-yaml`, `to-yaml` and
 `create --from`, all `opf convert` now. See [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md).
@@ -230,14 +232,29 @@ project, or npx):
 
 ```sh
 opf doctor --format text
-opf doctor deck.opf.md          # with a deck: a PDF needs sharp only when it has pictures
+opf doctor deck.opf.md          # with a deck: the font packages its faces use, its script fonts, sharp when it has pictures
 ```
+
+Font packages are per deck (opf-render loads only the faces a deck's fonts use), so with a deck doctor answers whether that deck
+can be drawn and lists the font packages it does not use apart. Doctor exits 0 whenever its arguments are right: it reports, and
+`ok` is the verdict. `opf validate` reports a font package the deck needs that is not installed as a
+`fonts/font-package-not-installed` warning with the install line, and a face drawn with another face (Aptos with Intos) is one
+`fonts/font-substituted` info finding per family in `opf convert`.
 
 A conversion that misses a peer exits 2 with `code: "peer-not-installed"` and that one command in `install`. Output is
 deterministic: no network, no system fonts, no clock (`--date` supplies the date for `date: true` fields). Fonts are the renderer's
 bundled open pack plus the `.ttf`/`.otf` files in each `--fonts` folder; relative images are read only from the input's folder
 (`--asset-dir`); URLs are never fetched. Scripts beyond Latin, Greek and Cyrillic need the renderer's optional Noto script packages
 (the report names them). The full reference is in [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md).
+
+## Shapes, icons, SmartArt and diagrams
+
+`opf validate`, `opf convert` and the MCP server draw these with no extra flags:
+
+- **Shapes**: `shape` blocks (187 PowerPoint presets or a custom `path`), slide `shapes` overlays and connectors, six effects ([shapes](https://github.com/OpenPresentation/opf/blob/main/docs/shapes.md)).
+- **Icons**: `"icon": "lucide:truck"` on list entries, metrics and groups. The CLI registers the gallery's Lucide and Tabler sets and loads the ones a deck names ([icons](https://github.com/OpenPresentation/opf/blob/main/docs/icons.md)).
+- **Live SmartArt**: the `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` and `vertical-flow` layouts export as live SmartArt where PowerPoint draws them as the preview does, else as native shapes; `--smart-art shapes` always writes shapes ([SmartArt layouts](https://github.com/OpenPresentation/opf/blob/main/docs/smartart.md)).
+- **Diagrams** accept Mermaid, Graphviz DOT (`syntax: "dot"`) or PlantUML (`syntax: "plantuml"`) and export as native PowerPoint shapes by default; `--diagrams picture` writes a picture ([diagrams](https://github.com/OpenPresentation/opf/blob/main/docs/diagrams.md)).
 
 ## Markdown and YAML
 

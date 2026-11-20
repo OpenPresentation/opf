@@ -1,3 +1,6 @@
+import {continuationFonts,continuationFontKey,continuationFontCohort} from './continuation-fonts.js';
+import {isShapeBlock} from "./shape-block.js";
+import {isOverlayConnector, slideBlockIds} from "./overlay-shapes.js";
 import { codeHighlightSlice } from './code-highlight.js';
 import {tableRowBoundaries} from './table.js';
 import { composeSlide, OPFCompositionError, type ComposeSlideOptions, type Fonts, type LayoutDiagnostic, type SlideComposition } from './composition.js';
@@ -27,7 +30,8 @@ export interface PaginationOptions extends Omit<ComposeSlideOptions, 'textMeasur
   minFontSize?: number;
   /**
    * LH-90: break only between the slide's block units (`blockUnits`: a lead block and the blocks that follow it; each root block
-   * alone when the slide has none), never inside one, over the fewest pages that hold them, with the units spread evenly over
+   * alone when the slide has none), never inside one. Retain settled source sizes for comparable automatic body roles, then
+   * use the fewest pages that hold them, with the units spread evenly over
    * those pages when every page still fits (eight timelines that fit five to a page are four and four, not five and three).
    * The slide is composed first as the engines draw it: a strict (`overflow: "error"`) composition throws its
    * `OPFCompositionError`, and a slide with no `text-overflow` or `small-cell` is returned unchanged. A unit that overflows on a
@@ -45,9 +49,16 @@ export interface PaginationMapping {
   /** Half-open offsets into the original leaf; text offsets use UTF-16. */
   range?: { unit: 'utf16' | 'items'; start: number; end: number };
 }
+/**
+ * SH-04: what a split did to the slide's overlay that a host should report: `connector-split`, a connector whose two ends landed on
+ * different pages, so no page draws it (`path` is the connector's source path, `slides.N.shapes.I`).
+ */
+export interface PaginationDiagnostic { code: 'connector-split'; path: string; message: string }
 export interface PaginatedPage {
   slideIndex: number;
   mappings: PaginationMapping[];
+  /** SH-04: what this page left out of the slide's overlay (a connector whose ends are on different pages). */
+  diagnostics?: PaginationDiagnostic[];
   /** Repeated headings/furniture and their metadata sources; separate from body slices. */
   repeatedMappings?: PaginationMapping[];
 }
@@ -66,6 +77,8 @@ const clone = <T>(value: T): T => structuredClone(value);
 const slideIds = (slide: Record<string, unknown>): string[] => {
   const ids = typeof slide.id === 'string' ? [slide.id] : [];
   visitContentPayloads(slide, '', payload => { if (typeof payload.id === 'string') ids.push(payload.id); });
+  // SH-04: overlay ids share the namespace.
+  if (Array.isArray(slide.shapes)) for (const entry of slide.shapes) if (isRecord(entry) && typeof entry.id === 'string') ids.push(entry.id);
   return ids;
 };
 const textOf = (value: any): string => typeof value === 'string' ? value : Array.isArray(value) ? value.map(textOf).join('') : value?.text ?? '';
@@ -151,18 +164,14 @@ function leafFor(path: string, field: string, value: any): Leaf {
  * LH-144: the largest size a composed slide draws for each kind of body block, in reference pixels: a paragraph's or list's text
  * (`text`, `list`), a quote's, metric's or timeline's largest part. Tables, code and charts are not capped (composition.maxFontSize).
  */
-function bodySizes(composed: SlideComposition): Map<string, number> {
-  const scale = Math.min(composed.width, composed.height) / 720, sizes = new Map<string, number>();
-  const add = (kind: string, size: number | undefined) => { if (size !== undefined && Number.isFinite(size) && size > 0) sizes.set(kind, Math.max(sizes.get(kind) ?? 0, Math.round(size / scale * 100) / 100)); };
-  for (const item of composed.items) {
-    if (headingFields.has(item.field) || item.eyebrow) continue;
-    const layout = item.quoteLayout ?? item.metricLayout ?? item.timelineLayout;
-    if (layout) add(item.field, Math.max(0, ...(layout.parts as readonly { fit?: { fontSize: number }; visible?: boolean }[]).flatMap(part => part.visible === false || !part.fit ? [] : [part.fit.fontSize])));
-    else if (item.text && !item.codeLayout && (item.field === 'text' || item.field === 'items' || item.field === 'bullets')) add(item.field === 'text' ? 'text' : 'list', item.text.fontSize);
+function bodySizes(composed: SlideComposition, options: ComposeSlideOptions = {}): Map<string, number> {
+  const sizes = new Map<string,number>();
+  for (const font of continuationFonts(composed,options)) {
+    if (!font.automatic || !['text','list','quote','metric','timeline'].includes(font.kind)) continue;
+    sizes.set(font.kind,Math.max(sizes.get(font.kind)??0,font.size));
   }
   return sizes;
 }
-
 /** Explicit, lossless authoring transform. It never changes slide count during rendering. */
 export function paginateSlide(input: unknown, options: PaginationOptions = {}): PaginationResult {
   // RR-34: a slide that cites references validates only with the deck's references list (RR-54: and its datasets).
@@ -183,7 +192,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
       if (Array.isArray(node.blocks)) node.blocks.forEach(child=>{ visit(child,minimum); });
     };
     visit(result,rootMinimum);
-    for (const [key,value] of Object.entries(result)) if (isRecord(value) && /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key)) visit(value,rootMinimum);
+    for (const [key,value] of Object.entries(result)) if (isRecord(value) && /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key)) visit(value,rootMinimum);
     return result;
   };
   // Persist the evaluated readability policy in the ordinary returned slides. Otherwise a
@@ -272,9 +281,62 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     reservedIds.add(id); emittedIds.add(id); return id;
   };
   const assignPageIds = (slide: Record<string,unknown>, pageIndex: number) => {
-    const assign = (node: Record<string,unknown>) => { if (typeof node.id === 'string') node.id = pageId(node.id,pageIndex); };
+    const renamed = new Map<string,string>();
+    const assign = (node: Record<string,unknown>) => { if (typeof node.id === 'string') { const id = pageId(node.id,pageIndex); if (id !== node.id) renamed.set(node.id,id); node.id = id; } };
     assign(slide);
     visitContentPayloads(slide,'',assign);
+    // SH-04: overlay ids take their page's id too, and an `at` block and a connector's ends follow the ids they name.
+    if (!Array.isArray(slide.shapes)) return;
+    for (const entry of slide.shapes) if (isRecord(entry)) assign(entry);
+    const follow = (id: unknown) => typeof id === 'string' ? renamed.get(id) ?? id : id;
+    for (const entry of slide.shapes) {
+      if (!isRecord(entry)) continue;
+      if (isRecord(entry.at)) entry.at = {...entry.at, block: follow(entry.at.block)};
+      if (isRecord(entry.connector)) entry.connector = {...entry.connector, from: follow(entry.connector.from), to: follow(entry.connector.to)};
+    }
+  };
+  // SH-04: a page's overlay. A shape placed by fractions of the slide is on every page, as the headings are; a shape placed `at` a block is
+  // on the page that block lands on; a connector is on the page that holds both of its ends, and one whose ends land on different pages
+  // is on none (`connector-split`, reported on the first page that holds its `from` end, by splitDiagnostics).
+  const blockIds = slideBlockIds(source, sourceBase);
+  const pageOverlay = (mappings: PaginationMapping[]): { shapes?: unknown[]; connectors: number[]; starts: number[] } => {
+    if (!Array.isArray(source.shapes)) return {connectors: [], starts: []};
+    const onPage = (id: unknown): boolean => {
+      const path = typeof id === 'string' ? blockIds.get(id) : undefined;
+      return path !== undefined && mappings.some(mapping => mapping.sourcePath.startsWith(`${path}.`));
+    };
+    const kept = new Set<number>(), overlayIds = new Set<string>();
+    source.shapes.forEach((entry: unknown, index: number) => {
+      if (!isRecord(entry) || isOverlayConnector(entry)) return;
+      if (entry.at !== undefined && !onPage(isRecord(entry.at) ? entry.at.block : undefined)) return;
+      kept.add(index);
+      if (typeof entry.id === 'string') overlayIds.add(entry.id);
+    });
+    const present = (id: unknown) => onPage(id) || (typeof id === 'string' && overlayIds.has(id));
+    const connectors: number[] = [], starts: number[] = [];
+    source.shapes.forEach((entry: unknown, index: number) => {
+      if (!isRecord(entry) || !isOverlayConnector(entry)) return;
+      const connector = isRecord(entry.connector) ? entry.connector : {};
+      const from = present(connector.from);
+      if (from) starts.push(index);
+      if (from && present(connector.to)) { kept.add(index); connectors.push(index); }
+    });
+    const shapes = source.shapes.filter((_: unknown, index: number) => kept.has(index)).map((entry: unknown) => clone(entry));
+    return {...(shapes.length ? {shapes} : {}), connectors, starts};
+  };
+  // The connectors no page holds, each reported on the first page that holds its `from` end.
+  const pageConnectors: { connectors: number[]; starts: number[] }[] = [];
+  const splitDiagnostics = () => {
+    if (!Array.isArray(source.shapes)) return;
+    const drawn = new Set(pageConnectors.flatMap(page => page.connectors));
+    source.shapes.forEach((entry: unknown, index: number) => {
+      if (!isRecord(entry) || !isOverlayConnector(entry) || drawn.has(index)) return;
+      const page = pageConnectors.findIndex(entry => entry.starts.includes(index));
+      if (page < 0) return;
+      const connector = isRecord(entry.connector) ? entry.connector : {};
+      const target = pages[page]!;
+      target.diagnostics = [...(target.diagnostics ?? []), {code:'connector-split',path:`${sourceBase}.shapes.${index}`,message:`The connector from '${String(connector.from)}' to '${String(connector.to)}' is not drawn: its ends landed on different pages. Keep both of them on one page, or join shapes of one page.`}];
+    });
   };
 
   // Prune absent leaves, compact block arrays, and preserve every enclosing group.
@@ -306,37 +368,58 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
             children.push(projected);
           });
           if (children.length) { result.blocks = children; hasContent = true; }
-        } else if (root && isRecord(value) && /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key)) {
+        } else if (root && isRecord(value) && /^(top|middle|bottom|start|center|end)([+:]|$)/.test(key)) {
           const child = visit(value,childPath,outputPath);
           if (child) { result[key] = child; hasContent = true; }
+        } else if (key === 'text' && isShapeBlock(node)) {
+          // SH-02: a shape's text goes with its shape (the leaf is the shape item, `<block>.shape` or `<block>.path`).
+          if (portions.has(`${path}.shape`) || portions.has(`${path}.path`)) result[key] = clone(value);
         } else if (!contentFields.has(key)) result[key] = clone(value);
       }
       return root || hasContent ? result : undefined;
     };
     const slide = visit(source,sourceBase,`slides.${sourceIndex+pageIndex}`,true)!;
     if (pageIndex > 0) delete slide.notes;
-    return {slide,mappings};
+    const overlay = pageOverlay(mappings);
+    delete slide.shapes;
+    if (overlay.shapes) slide.shapes = overlay.shapes;
+    return {slide,mappings,overlay};
   };
   const diagnosticsFor = (portions: Map<string,Portion>) => fit(geometry(project(portions,slides.length).slide,slides.length).diagnostics);
-  // LH-144: the largest body size the first page draws for each kind of block (reference pixels). A later page is capped at the largest of
-  // these for the kinds it holds (composition.maxFontSize), so a last page with one timeline, list or paragraph does not read larger than
-  // the pages before it. A cap only lowers sizes, so a page that fits without it fits with it; breaks are chosen without it.
-  let firstSizes: Map<string, number> | undefined;
+  // LH-144: the pages after the first share their type sizes, so a last page with one timeline, list or paragraph does not read larger
+  // than the pages before it. Each page is first drawn as an unpaginated slide would be (its body grows to fill it); then every later page
+  // is capped (composition.maxFontSize), for each kind of block it holds, at the larger of the first page's size and the smallest size any
+  // later page draws for that kind on its own. The cap never sets a page under the first page's size or under what every later page
+  // reaches, so continuation pages that all grow (an arrangement beside a side title) keep their growth (RR-105, the v0.33.0 sizes), and
+  // only a page that would read larger than its siblings is held to them. A cap only lowers sizes, so a page that fits without it fits
+  // with it; breaks are chosen without it.
   const kindOf = (field: string) => field === 'items' || field === 'bullets' ? 'list' : field;
+  const drawnSizes: {kinds: Set<string>; sizes: Map<string, number>}[] = [];
   const finish = () => {
     if (!selected.size) return;
     if (slides.length >= maxSlides) throw new OPFPaginationError(`Pagination needs more than ${maxSlides} slides. No partial result was returned.`);
-    const {slide,mappings} = project(selected,slides.length);
-    const cap = firstSizes && Math.max(0, ...[...selected.values()].map(portion => firstSizes!.get(kindOf(portion.leaf.field)) ?? 0));
-    if (cap) slide.composition = {...slide.composition, maxFontSize: Math.min(Math.max(8, cap), 200, slide.composition?.maxFontSize ?? Infinity)};
+    const {slide,mappings,overlay} = project(selected,slides.length);
     const drawn = geometry(slide,slides.length), issues = fit(drawn.diagnostics);
-    if (!firstSizes) firstSizes = bodySizes(drawn);
     if (issues.length) throw new OPFPaginationError('A continuation page does not fit at its final page number. No partial result was returned.',issues);
+    drawnSizes.push({kinds: new Set([...selected.values()].map(portion => kindOf(portion.leaf.field))), sizes: bodySizes(drawn,composeOptions)});
     assignPageIds(slide,slides.length);
     // RR-34: a page that cites references validates only with the deck's references list (RR-54: and its datasets).
     assertValid({...deckContext(options.presentation),slides:[slide]}, { only: ['format'] });
     slides.push(slide); pages.push({slideIndex:sourceIndex+slides.length-1,mappings,...(initial.furniture?{repeatedMappings:repeatedMappings(slides.length-1)}:{})});
+    pageConnectors.push(overlay);
     selected = new Map();
+  };
+  const shareSizes = () => {
+    const first = drawnSizes[0]?.sizes, shared = new Map<string, number>();
+    if (!first) return;
+    for (const page of drawnSizes.slice(1)) for (const [kind, size] of page.sizes) shared.set(kind, Math.min(shared.get(kind) ?? Infinity, size));
+    for (let index = 1; index < slides.length; index++) {
+      const slide = slides[index]!, cap = Math.max(0, ...[...drawnSizes[index]!.kinds].map(kind => Math.max(first.get(kind) ?? 0, shared.get(kind) ?? 0)));
+      if (!cap) continue;
+      slide.composition = {...slide.composition, maxFontSize: Math.min(Math.max(8, cap), 200, slide.composition?.maxFontSize ?? Infinity)};
+      const issues = fit(geometry(slide,index).diagnostics);
+      if (issues.length) throw new OPFPaginationError('A continuation page does not fit at its final page number. No partial result was returned.',issues);
+    }
   };
   if (options.wholeBlocks) {
     // LH-90: a page holds a run of whole units, each with all of its leaves: the slide's block units (a lead block and the
@@ -353,21 +436,50 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
       previous = unit;
     }
     const portions = (from: number, to: number) => new Map(units.slice(from,to).flat().map(leaf=>[leaf.path,{leaf,start:0,end:(leaf.boundaries ?? [0,1]).at(-1)!,value:leaf.value} as Portion]));
-    const issuesOf = (from: number, to: number, pageIndex: number) => fit(geometry(project(portions(from,to),pageIndex).slide,pageIndex).diagnostics);
-    // The fewest pages: each page takes as many of the next blocks as fit.
+    const originalFonts=continuationFonts(initial,composeOptions);
+    const cohorts=new Map<string,number>();
+    for(const font of originalFonts)if(font.automatic)cohorts.set(continuationFontCohort(font),Math.max(cohorts.get(continuationFontCohort(font))??0,font.size));
+    const retained=originalFonts.map(font=>({...font,size:font.automatic?cohorts.get(continuationFontCohort(font))!:font.size}));
+    const inspect = (from: number,to: number,pageIndex: number,caps?: Map<string,number>) => {
+      const selected=portions(from,to),projection=project(selected,pageIndex);
+      const cap=caps&&Math.max(0,...[...selected.values()].map(portion=>caps.get(kindOf(portion.leaf.field))??0));
+      if(cap)projection.slide.composition={...projection.slide.composition,maxFontSize:Math.min(Math.max(8,cap),200,projection.slide.composition?.maxFontSize??Infinity)};
+      const drawn=geometry(projection.slide,pageIndex),issues=fit(drawn.diagnostics);
+      const mappings=projection.mappings;
+      // composeSlide keeps the source slide index; projection mappings carry output page indexes.
+      const composedPath=(output:string)=>sourceBase+output.slice(output.indexOf('.',7));
+      const sourcePath=(path:string)=>{
+        const mapping=mappings.find(entry=>{const output=composedPath(entry.outputPath);return path===output||path.startsWith(output+'.');});
+        return mapping?mapping.sourcePath+path.slice(composedPath(mapping.outputPath).length):path;
+      };
+      const fonts=new Map(continuationFonts(drawn,composeOptions,sourcePath).map(font=>[continuationFontKey(font),font.size]));
+      for(const font of retained)if(mappings.some(mapping=>font.path===mapping.sourcePath)&&((fonts.get(continuationFontKey(font))??0)<font.size-1e-6)){
+        issues.push({code:'text-overflow',path:font.path,message:`Continuation would reduce retained ${font.role} text below ${font.size} reference pixels. Use more whole-block pages or change the authored constraint.`});
+      }
+      return {drawn,issues};
+    };
+    let planningCaps: Map<string,number>|undefined;
+    const issuesOf = (from: number,to: number,pageIndex: number) => inspect(from,to,pageIndex,planningCaps).issues;
+    // Readability precedes page count: take as many whole units as fit without reducing
+    // retained automatic-role or explicitly styled source text, including final page caps.
     const greedy: [number,number][] = [];
     for (let start = 0; start < units.length;) {
       const alone = issuesOf(start,start+1,greedy.length);
       if (alone.length) throw new OPFPaginationError(`The block at ${units[start]![0]!.path} cannot fit on an otherwise empty slide.`,alone);
       let end = start+1;
       while (end < units.length && !issuesOf(start,end+1,greedy.length).length) end++;
+      if(!planningCaps)planningCaps=bodySizes(inspect(start,end,greedy.length).drawn,composeOptions);
       greedy.push([start,end]); start = end;
     }
     // The same number of pages with the blocks spread evenly (the earlier pages take the remainder), when every page fits.
     const count = greedy.length, base = Math.floor(units.length/count), extra = units.length%count;
     const balanced = Array.from({length:count},(_,page)=>{ const start = page*base+Math.min(page,extra); return [start,start+base+(page<extra?1:0)] as [number,number]; });
-    const ranges = balanced.every(([from,to],page)=>!issuesOf(from,to,page).length) ? balanced : greedy;
+    planningCaps=undefined;
+    const balancedFits=balanced.every(([from,to],page)=>{const candidate=inspect(from,to,page,planningCaps);if(!planningCaps)planningCaps=bodySizes(candidate.drawn,composeOptions);return !candidate.issues.length;});
+    const ranges = balancedFits ? balanced : greedy;
     for (const [from,to] of ranges) { selected = portions(from,to); finish(); }
+    shareSizes();
+    splitDiagnostics();
     return {slides,pages};
   }
   for (const leaf of leaves) {
@@ -414,6 +526,8 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   }
   finish();
   if (!slides.length) throw new OPFPaginationError('No body content can be paginated.', initial.diagnostics);
+  shareSizes();
+  splitDiagnostics();
   return {slides,pages};
 }
 
@@ -469,7 +583,7 @@ export interface ContinuationResult {
   layout: 'measured' | 'estimated';
 }
 
-const promotedKey = /^(top|middle|bottom|left|center|right)([+:]|$)/;
+const promotedKey = /^(top|middle|bottom|start|center|end)([+:]|$)/;
 /**
  * LH-90: the root blocks of a slide as the units a whole-block split keeps together, or undefined. Every root block must be one
  * payload (no nested group) and the slide must hold nothing else to move (no root payload, no promoted region). A unit starts at
@@ -584,7 +698,7 @@ function paginateSlides(input: unknown, options: PresentationPaginationOptions, 
       if (result.slides.length > 1) splits.push({sourceSlideIndex:index,outputStart,count:result.slides.length});
       result.pages.forEach((page,pageIndex)=>{
         const remap=(mapping:PaginationMapping)=>({...mapping,outputPath:mapping.outputPath.replace(/^slides\.\d+/,`slides.${outputStart+pageIndex}`)});
-        pages.push({sourceSlideIndex:index,slideIndex:outputStart+pageIndex,mappings:page.mappings.map(remap),...(page.repeatedMappings?{repeatedMappings:page.repeatedMappings.map(remap)}:{})});
+        pages.push({sourceSlideIndex:index,slideIndex:outputStart+pageIndex,mappings:page.mappings.map(remap),...(page.repeatedMappings?{repeatedMappings:page.repeatedMappings.map(remap)}:{}),...(page.diagnostics?{diagnostics:page.diagnostics}:{})});
       });
       output.push(...result.slides);
       reservedIds.push(...result.slides.flatMap(slide=>slideIds(slide)));

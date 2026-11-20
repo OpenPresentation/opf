@@ -8,6 +8,7 @@ import {
 	checkCatalogsOption,
 	parseReference,
 	pointerPath,
+	relatedName,
 	resolveReference,
 	unresolvedReference,
 	type CatalogKind,
@@ -16,15 +17,17 @@ import {
 import { schemaEntries, schemas, type SchemaName } from './schemas.js';
 import { catalogSchemaNames } from './catalog-schemas.js';
 import { validateAgainstSchema, type SchemaCheckResult, type ValidationIssue } from './schema-check.js';
+import { respellings, type ForeignObjectParams } from './union-errors.js';
 import type { JsonPrimitive, JsonSchema } from './json.js';
 import { validationDefinition } from './validation-definitions.js';
 import { unusedReferenceWarnings } from './annotation-validation.js';
 import { describeDurationRange, durationOutsideNarrative, durationRangeInverted, resolveNarrative, unknownBeatReferences } from './narrative-plan.js';
 import { chartNumberFixesByCell, unusedDatasets, type ChartNumberFix } from './chart-data.js';
-import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
+import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from './content-walk.js';
 import { ruleInfo } from './validation-rules.js';
 import { chartShapeHelp, chartShapePatch, FOREIGN_CHART_KEYS } from './chart-shape.js';
 import { splitPointer } from './rule-content.js';
+import { documentIcons, iconIssue } from './icons.js';
 import type { Finding, FindingSeverity, FindingSuggestion } from './generated/types/finding.js';
 import type { Contract, ValidateOptions } from './validation-types.js';
 
@@ -157,20 +160,41 @@ export function issueFinding(
 	];
 	let help =
 		'Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.';
-	if (issue.keyword === 'required')
+	if (issue.keyword === 'required' && issue.params.missingProperty === 'id' && /^\/(organization|speaker)(\/\d+)?$/.test(issue.path))
+		help = `Add an "id" next to "name": organizations and speakers are found by id (speaker.organizationId, {{organization.<id>.name}}, the editor and the PPTX round trip), for example "id": "acme" (letters, digits, "-" and "_", unique in the deck).`;
+	else if (issue.keyword === 'required')
 		help = `Add the required ${JSON.stringify(issue.params.missingProperty)} field in this object, using the intended schema form.`;
 	else if (issue.keyword === 'additionalProperties')
 		help = `Review ${JSON.stringify(issue.params.additionalProperty)} against this object's schema. Preserve custom metadata in document.extensions where appropriate; do not delete authored content to clear this error.`;
-	else if (issue.keyword === 'enum')
-		help =
-			'Choose one of this schema branch’s allowed values; inspect the other alternatives if the field uses another form.';
-	else if (issue.keyword === 'opf')
-		help =
-			'Resolve the reported structural conflict while preserving every content field. Preview the result after editing.';
+	else if (issue.keyword === 'enum') {
+		// A short list is the fix: name the values. A long one (chart types, shape presets) stays in `suggestions`.
+		const values = Array.isArray(issue.params.allowedValues) ? issue.params.allowedValues.filter(primitive) : [];
+		help = values.length > 0 && values.length <= 12
+			? `Use one of: ${values.map((value) => JSON.stringify(value)).join(', ')}.`
+			: 'Choose one of this schema branch’s allowed values; inspect the other alternatives if the field uses another form.';
+	} else if (issue.keyword === 'dependentRequired')
+		help = `${JSON.stringify(issue.params.property)} only applies together with ${JSON.stringify(issue.params.missingProperty)}: add ${JSON.stringify(issue.params.missingProperty)}, or remove ${JSON.stringify(issue.params.property)}.`;
+	else if (issue.keyword === 'opf') help = semanticHelp(issue);
+	else if ((issue.keyword === 'oneOf' || issue.keyword === 'anyOf') && Array.isArray(issue.params.properties)) help = foreignObjectHelp(issue);
 	const allowed = Array.isArray(issue.params.allowedValues)
 		? issue.params.allowedValues.filter(primitive)
 		: [];
 	const nearest = issue.keyword === 'additionalProperties' ? nearestProperties(issue, entry.schema, precise?.pointer, precise?.schemaName) : [];
+	// A layout word written as a physical side (a `left` region, a `right` footer zone): the fix is the logical word.
+	const typedName = issue.keyword === 'additionalProperties' && typeof issue.params.additionalProperty === 'string' ? issue.params.additionalProperty : undefined;
+	if (typedName !== undefined && nearest[0]?.value === logicalName(typedName) && nearest[0].value !== typedName)
+		help = `Write ${JSON.stringify(nearest[0].value)}: layout words follow the deck's direction, so the sides are "start" and "end", not "left" and "right".`;
+	else if (typedName !== undefined && typeof nearest[0]?.value === 'string' && nearest[0].value.startsWith(typedName))
+		help = `Write ${JSON.stringify(nearest[0].value)} instead; ${JSON.stringify(typedName)} is not a field of this object.`;
+	else if (typedName !== undefined && typeof nearest[0]?.value === 'string')
+		help = `Did you mean ${JSON.stringify(nearest[0].value)}? ${JSON.stringify(typedName)} is not a field of this object. To keep custom metadata, put it in extensions; do not delete authored content to clear this error.`;
+	// A slide key that is almost a region key: say what the grammar is (a span in the wrong order or skipping a row), not only "additional property".
+	const regionKey = typedName !== undefined && nearest[0]?.value !== logicalName(typedName) && /^\/slides\/\d+$/.test(issue.path) ? regionKeyHelp(typedName) : undefined;
+	if (regionKey) {
+		help = regionKey.help;
+		if (regionKey.suggestion && !nearest.some((entry) => entry.value === regionKey.suggestion))
+			nearest.unshift({ value: regionKey.suggestion, label: regionKey.suggestion, origin: 'schema' as const, definition: `${String(entry.schema.$id)}#/$defs/Slide/properties/${regionKey.suggestion}` });
+	}
 	return finding(ruleId, {
 		...(severity ? { severity } : {}),
 		path,
@@ -195,13 +219,66 @@ export function issueFinding(
 	});
 }
 
+/**
+ * The help of an object written in a shape this place does not take (union-errors.ts, `ForeignObjectParams`): the forms it may take,
+ * and, when its fields are those of another content kind, that kind's own field.
+ */
+function foreignObjectHelp(issue: ValidationIssue): string {
+	const params = issue.params as unknown as ForeignObjectParams;
+	// The forms themselves ride along as validation.alternatives (the CLI prints them as "other forms").
+	const many = params.alsoAt?.length ? 'each entry' : 'it';
+	if (params.belongsTo?.length) {
+		const kinds = params.belongsTo.map((kind) => `"${kind}"`).join(' or ');
+		return `To show these as ${kinds}, give each its own block whose ${kinds} holds these fields; to keep ${many} here, rewrite ${many} in one of the forms this place takes. Keep the authored content.`;
+	}
+	return `Rewrite ${many} in one of the forms this place takes, moving the authored content into the fields that form has; do not delete it to clear this error.`;
+}
+
 /** The most near-miss names a "did you mean" offers. */
 const NEAREST_PROPERTIES = 3;
+const REGION_ROWS = ['top', 'middle', 'bottom'], REGION_COLUMNS = ['start', 'center', 'end'];
+/**
+ * A slide key written like a region key but not one: what the grammar is and the key it most likely meant. A region key is rows,
+ * then a colon, then columns (`top:start`, `middle+bottom:center+end`), or one half alone (`center+end`, `top+middle`). Each half
+ * lists adjacent names in reading order, so `bottom+middle` (out of order), `top+bottom` (skips `middle`) and `start:top` (columns
+ * first) are not keys. Undefined when the key is not made of region words.
+ */
+function regionKeyHelp(typed: string): { help: string; suggestion?: string } | undefined {
+	const halves = logicalName(typed).split(':');
+	if (halves.length > 2 || halves.some((half) => half === '')) return undefined;
+	const words = halves.map((half) => half.split('+'));
+	if (!words.every((list) => list.every((word) => REGION_ROWS.includes(word) || REGION_COLUMNS.includes(word)))) return undefined;
+	const isRows = (list: string[]): boolean => list.every((word) => REGION_ROWS.includes(word)),
+		isColumns = (list: string[]): boolean => list.every((word) => REGION_COLUMNS.includes(word));
+	if (words.some((list) => !isRows(list) && !isColumns(list))) return { help: `A region key does not mix rows (top, middle, bottom) and columns (start, center, end) in one half: write rows, a colon, then columns, such as "top:start" or "middle+bottom:center+end".` };
+	if (words.length === 2 && isColumns(words[0]!) && isRows(words[1]!)) {
+		const swapped = `${halves[1]}:${halves[0]}`;
+		return { help: `Rows come before the colon and columns after it: write "${swapped}".`, ...(promotedRegionKeys.includes(swapped as never) ? { suggestion: swapped } : {}) };
+	}
+	if (words.length === 2 && (!isRows(words[0]!) || !isColumns(words[1]!))) return { help: 'A region key with a colon names rows before it and columns after it, such as "top:start" or "middle+bottom:center+end".' };
+	const order = (list: string[], vocabulary: string[]): number[] => [...new Set(list)].map((word) => vocabulary.indexOf(word)).sort((a, b) => a - b);
+	const rows = words.length === 2 || isRows(words[0]!) ? order(words[0]!, REGION_ROWS) : [], columns = order(words[words.length - 1]!, REGION_COLUMNS);
+	const hasRows = words.length === 2 || isRows(words[0]!), hasColumns = words.length === 2 || isColumns(words[0]!);
+	const adjacent = (indexes: number[]): boolean => indexes.every((index, at) => at === 0 || index === indexes[at - 1]! + 1);
+	if ((hasRows && !adjacent(rows)) || (hasColumns && !adjacent(columns)))
+		return { help: `A span covers adjacent rows or columns: "top+bottom" and "start+end" skip the middle one. Write "top+middle+bottom" or "start+center+end", or use one region for each part.` };
+	const canonical = (indexes: number[], vocabulary: string[]): string => indexes.map((index) => vocabulary[index]).join('+');
+	const key = words.length === 2 ? `${canonical(rows, REGION_ROWS)}:${canonical(columns, REGION_COLUMNS)}` : hasRows ? canonical(rows, REGION_ROWS) : canonical(columns, REGION_COLUMNS);
+	if (key === typed) return undefined;
+	return promotedRegionKeys.includes(key as never)
+		? { help: `Write "${key}": the names of a span go in reading order (top, middle, bottom; start, center, end), rows before the colon and columns after it.`, suggestion: key }
+		: undefined;
+}
+
+/** A key with `left` and `right` read as the logical sides: `left` is `start`, `top:center+right` is `top:center+end`. */
+const logicalName = (name: string): string => name.split(':').map((part) => part.split('+').map((word) => (word === 'left' ? 'start' : word === 'right' ? 'end' : word)).join('+')).join(':');
 
 /**
- * Did-you-mean for an unknown property (`additionalProperties`): the properties the same object's schema declares whose
- * names are within edit distance 2 (1 for a name of three characters or fewer, or every short name would match), compared
- * case-insensitively, nearest first, at most three. A suggestion is a name the schema has, never a rewrite of authored content.
+ * Did-you-mean for an unknown property (`additionalProperties`): the properties the same object's schema declares that the typed
+ * name plausibly respells (`respellings`: within edit distance 2, 1 for a name of three characters or fewer, and related by the
+ * `relatedName` rule unknown catalog ids use, so `label` does not suggest `level`), nearest first, at most three. Two exact readings come before those: the same key with `left` and `right` as the
+ * logical `start` and `end` (a region or a header or footer zone), and the one declared name the typed name abbreviates (`lang` for
+ * `language`; three characters or more). A suggestion is a name the schema has, never a rewrite of authored content.
  */
 function nearestProperties(issue: ValidationIssue, fallbackRoot: JsonSchema, pointerToKeyword: string | undefined, schemaName: SchemaName | undefined): FindingSuggestion[] {
 	const typed = issue.params.additionalProperty;
@@ -210,19 +287,22 @@ function nearestProperties(issue: ValidationIssue, fallbackRoot: JsonSchema, poi
 	let node: unknown = rootEntry?.schema ?? fallbackRoot;
 	const base = pointerToKeyword.split('/').slice(0, -1);
 	for (const token of base.slice(1)) {
-		if (!isRecord(node)) return [];
-		node = node[token.replaceAll('~1', '/').replaceAll('~0', '~')];
+		// A branch of a union is an array entry (`oneOf/1`): the object form of a text run, of a caption.
+		if (Array.isArray(node)) node = /^\d+$/.test(token) ? node[Number(token)] : undefined;
+		else if (isRecord(node)) node = node[token.replaceAll('~1', '/').replaceAll('~0', '~')];
+		else return [];
 	}
 	if (!isRecord(node) || !isRecord(node.properties)) return [];
 	const root = (rootEntry?.schema ?? fallbackRoot) as JsonSchema,
-		limit = typed.length <= 3 ? 1 : 2,
 		lower = typed.toLowerCase();
-	return Object.keys(node.properties)
-		.map((name) => ({ name, away: distance(lower, name.toLowerCase()) }))
-		.filter(({ name, away }) => name !== typed && away <= limit)
-		.sort((a, b) => a.away - b.away || (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
+	const declared = Object.keys(node.properties),
+		logical = logicalName(typed),
+		longer = typed.length >= 3 ? declared.filter((name) => name !== typed && name.toLowerCase().startsWith(lower)) : [],
+		exact = logical !== typed && declared.includes(logical) ? [logical] : longer.length === 1 ? longer : [];
+	const near = respellings(typed, declared).filter((name) => !exact.includes(name));
+	return [...exact, ...near]
 		.slice(0, NEAREST_PROPERTIES)
-		.map(({ name }) => ({
+		.map((name) => ({
 			value: name,
 			label: name,
 			origin: 'schema' as const,
@@ -434,6 +514,12 @@ function embeddedRecordFindings(document: unknown, options: CatalogOptions, find
 	if (!object(document) || !object(document.catalogs)) return invalid;
 	for (const [group, value] of Object.entries(document.catalogs)) {
 		if (!object(value)) continue;
+		// LH-14: an embedded icon set is checked against its companion schema, as a content record is.
+		for (const [id, record] of Object.entries(object(value.iconSets) ? value.iconSets : {})) {
+			if (object(record) && (Object.hasOwn(record, '$schema') || Object.hasOwn(record, 'id'))) continue;
+			const validation = validateAgainstSchema(object(record) ? { $schema: schemas.iconSet.$id, id, ...record } : record, 'iconSets');
+			for (const issue of validation.errors) findings.push(issueFinding(issue, 'opf/catalog-record', 'iconSet', pointer(['catalogs', group, 'iconSets', id]), 'document'));
+		}
 		for (const kind of catalogKinds)
 			for (const [id, record] of Object.entries(object(value[kind]) ? value[kind] : {})) {
 				const path = pointer(['catalogs', group, kind, id]);
@@ -498,7 +584,7 @@ function chartNumberFixPaths(document: unknown): Map<string, ChartNumberFix> {
 const HELP: Record<string, string> = {
 	'chart-value-not-numeric':
 		'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.',
-	'chart-mapping-adapted': 'The mapping entry is ignored. Remove it, or name a different column.',
+	'chart-mapping-adapted': 'Choose a compatible chart type or mapping for the selected data. The message explains how the mapping or drawing was adapted.',
 	'chart-series-dropped': 'The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.',
 	'chart-highlight-adapted': 'The highlight is adapted by every engine. Name a series or category the chart type can emphasise, or remove the entry.',
 	'slide-theme-dimensions': 'A PPTX has one slide size. Set design.dimensions on the deck, or give every slide the same theme dimensions.',
@@ -508,6 +594,7 @@ const HELP: Record<string, string> = {
 	'variable-unknown': "Declare the variable in the top-level variables map, or write '\\{{' for literal braces.",
 	'variable-unknown-value': 'Remove the supplied value, or declare the variable it belongs to.',
 	'variable-unused': 'Reference the variable as {{id}} or var:id where it belongs, or remove its declaration.',
+	'variable-group-omitted': 'Give one of the variables a value to draw the group, make one of them required, or move the content that should always show out of the group.',
 	'variable-reference-unknown': 'Declare the variable in the top-level variables map, or use another colour.',
 	'run-color-unrecognized': 'Use a #RRGGBB hex colour, a colour-scheme name or a var: reference to a declared colour variable.',
 	'numbering-start-ignored': "Add a 'numbering' field to the payload, or remove 'start'.",
@@ -519,6 +606,164 @@ const HELP: Record<string, string> = {
  * author should write, with their own values converted, and the additional-property findings that only repeat the same mistake are dropped.
  * Other unknown keys of the same chart stay reported.
  */
+/** The fix for a semantic format error, from what it reports; the generic sentence where the message already says it all. */
+function semanticHelp(issue: ValidationIssue): string {
+	const params = issue.params ?? {}, field = typeof params.field === 'string' ? params.field : undefined, quoted = JSON.stringify(field);
+	if (params.code === 'image-option-unsupported-payload' && field) return `Remove ${quoted}, or put it on an image block ({ "image": ... }); it has no meaning on another kind of content.`;
+	if (params.code === 'shape-option-unsupported-payload' && field === 'alt' && params.type === 'image') return 'A picture\'s alt text goes inside its image object: { "image": { "src": "...", "alt": "..." } }.';
+	if (params.code === 'shape-option-unsupported-payload' && field) return `Remove ${quoted}, or draw this as a shape: a shape block ({ "shape": ... } with no "image") or an overlay shape in the slide's "shapes".`;
+	if (params.code === 'number-format-invalid') return "Write a pattern with a numeric part, such as \"0%\", \"0.0\", \"#,##0\" or \"$#,##0.00\", optionally followed by a negative and a zero section after \";\" (\"+0%;-0%\", \"0;(0);0\"; at most three, each with a numeric part). A negative section prints no minus of its own. There is no text section, color or condition.";
+	if (params.code === 'caption-unsupported-payload') return 'Put the caption on the image, chart, table, video or diagram it describes, or write it as a text block of its own.';
+	if (Array.isArray(params.incompatible) && params.incompatible.includes('bullets') && params.type === 'list') return 'For a list, write the entries under "items". To keep "bullets" (talking points, which belong to a text payload), remove "type" or write "type": "text".';
+	return 'Resolve the reported structural conflict while preserving every content field. Preview the result after editing.';
+}
+
+const BACKGROUND_TYPES = ['theme', 'solid', 'gradient', 'image', 'pattern'];
+const BACKGROUND_HELP = `A background is a string (a theme slot such as "light1", a hex color, or an image source such as "asset:hero" or "./photo.jpg") or an object with "type": ${BACKGROUND_TYPES.map((type) => JSON.stringify(type)).join(', ')}, for example { "type": "solid", "color": "accent1" }.`;
+
+/**
+ * Mistakes whose schema errors say nothing about the fix, reworded at the value the author wrote:
+ *  - a shape `fill` written like a background (`{ "type": "solid", "color": ... }`, or `{ "color": ... }` with nothing else): one finding
+ *    that says a solid fill is the color itself, with the fix, instead of an error for every branch of the fill union;
+ *  - a `background` no form accepts: the forms and the `type` values, instead of the names of schema definitions;
+ *  - `type: "list"` beside `bullets`: the raw "missing items" goes, the semantic finding says what to write;
+ *  - the `if` half of a failed `if`/`then` ("must match \"then\" schema"), which repeats the `then` error beside it.
+ */
+function collapseAuthoringShapes(document: unknown, findings: Finding[]): void {
+	const valueAt = (path: string): unknown => {
+		let node: unknown = document;
+		for (const segment of splitPointer(path)) node = Array.isArray(node) ? node[Number(segment)] : isRecord(node) ? node[segment] : undefined;
+		return node;
+	};
+	const schema = (entry: Finding | undefined): entry is Finding => entry?.ruleId === 'opf/schema';
+	// 1. The fill of a shape.
+	const fills = new Map<string, Finding>();
+	for (const entry of findings) {
+		if (!schema(entry)) continue;
+		const at = /^(.*\/fill)(?:\/[^/]+)?$/.exec(entry.path)?.[1];
+		// A table cell's `style.fill` is a color reference, not a shape fill; its finding stays the schema's own.
+		if (!at || fills.has(at) || at.endsWith('/style/fill')) continue;
+		const fill = valueAt(at);
+		if (!isRecord(fill) || Object.hasOwn(fill, 'lighten') || Object.hasOwn(fill, 'darken')) continue;
+		const solid = (fill.type === 'solid' || fill.type === undefined) && fill.color !== undefined && !Object.hasOwn(fill, 'gradient') && !Object.hasOwn(fill, 'pattern');
+		const typed = (fill.type === 'gradient' && isRecord(fill.gradient)) || (fill.type === 'pattern' && isRecord(fill.pattern));
+		if (!solid && !typed) continue;
+		const color = typeof fill.color === 'string' ? JSON.stringify(fill.color) : '"accent1"';
+		fills.set(at, {
+			...entry,
+			path: at,
+			message: solid ? `A shape's solid fill is the color itself, not an object: write "fill": ${color}.` : `A shape's fill has no "type": write "fill": { ${JSON.stringify(fill.type)}: { ... } }.`,
+			help: solid
+				? `Write "fill": ${color}. A fill is "none", a color ("accent1", "#1E40AF", or { "color": "accent1", "lighten": 0.4 }), { "gradient": { ... } } or { "pattern": { ... } }; only a slide background takes { "type": "solid", ... }.`
+				: `Remove "type": a fill is told apart by its key, { "gradient": { ... } } or { "pattern": { ... } }; only a slide background takes "type".`,
+			fixes: [solid && typeof fill.color === 'string'
+				? { id: 'fill-color', title: `Write the fill as ${color}`, kind: 'patch' as const, safe: false, patch: [{ op: 'replace' as const, path: at, value: fill.color }] }
+				: { id: 'fill-remove-type', title: 'Remove "type"', kind: 'patch' as const, safe: false, patch: [{ op: 'remove' as const, path: `${at}/type` }] }],
+		});
+	}
+	if (fills.size) {
+		const seen = new Set<string>();
+		for (let index = 0; index < findings.length; index++) {
+			const entry = findings[index];
+			if (!schema(entry)) continue;
+			const at = [...fills.keys()].find((path) => entry.path === path || entry.path.startsWith(`${path}/`));
+			if (!at) continue;
+			if (seen.has(at)) { findings.splice(index--, 1); continue; }
+			seen.add(at);
+			findings[index] = fills.get(at)!;
+		}
+	}
+	// 2. A background no form accepts: no `type`, an unknown one, or a value that is neither a string nor an object. Every branch of
+	// the union would report its own missing keys; one finding names the forms.
+	const backgrounds = new Set<string>();
+	for (const entry of findings) {
+		if (!schema(entry)) continue;
+		const at = /^((?:.*\/)?design\/background)(?:\/.*)?$/.exec(entry.path)?.[1];
+		if (!at || backgrounds.has(at)) continue;
+		const background = valueAt(at), type = isRecord(background) ? background.type : undefined;
+		if (typeof background === 'string' || (isRecord(background) && typeof type === 'string' && BACKGROUND_TYPES.includes(type))) continue;
+		backgrounds.add(at);
+	}
+	for (const at of backgrounds) {
+		const background = valueAt(at), type = isRecord(background) ? background.type : undefined;
+		const first = findings.findIndex((entry) => schema(entry) && (entry.path === at || entry.path.startsWith(`${at}/`)));
+		const { fixes: _fixes, suggestions: _suggestions, ...kept } = findings[first]!;
+		const one: Finding = {
+			...kept,
+			path: at,
+			message: isRecord(background) ? (type === undefined ? 'A background object needs a "type".' : `${JSON.stringify(type)} is not a background type.`) : 'This is not a background OPF can read.',
+			help: BACKGROUND_HELP,
+		};
+		for (let index = findings.length - 1; index >= 0; index--) { const entry = findings[index]; if (schema(entry) && (entry.path === at || entry.path.startsWith(`${at}/`))) findings.splice(index, 1); }
+		findings.splice(first, 0, one);
+	}
+	// 3. The `if` half of a failed if/then.
+	for (let index = findings.length - 1; index >= 0; index--) {
+		const entry = findings[index];
+		if (!schema(entry) || entry.validation?.keyword !== 'if') continue;
+		const stem = entry.validation.schemaPath.replace(/if$/, '');
+		if (findings.some((other) => other !== entry && schema(other) && other.path.startsWith(entry.path) && typeof other.validation?.schemaPath === 'string' && (other.validation.schemaPath.startsWith(`${stem}then`) || other.validation.schemaPath.startsWith(`${stem}else`)))) findings.splice(index, 1);
+	}
+	// 4. A 0.33 anchored overlay size in pixels above the schema's maximum of 8 (and up to 1280, the `widthPx` maximum, so the rename stays
+	// valid): the error says what the value most likely is and carries the rename opf/shape-anchor-size-unit offers below 8.
+	for (const [index, entry] of findings.entries()) {
+		if (!schema(entry) || entry.validation?.keyword !== 'maximum') continue;
+		const match = /^(\/slides\/\d+\/shapes\/\d+\/at)\/(width|height)$/.exec(entry.path);
+		const at = match?.[1] ? valueAt(match[1]) : undefined, key = match?.[2], size = key && isRecord(at) ? at[key] : undefined;
+		if (!key || !isRecord(at) || typeof size !== 'number' || !(size > 8 && size <= 1280) || Object.hasOwn(at, `${key}Px`)) continue;
+		const px = `${key}Px`;
+		findings[index] = {
+			...entry,
+			message: `at.${key} is ${size}, but it is a fraction of the block, at most 8: did you mean "${px}"?`,
+			help: `Did you mean "${px}"? "${key}" is a fraction of the block (1 is its own size, up to 8); a size in pixels is "${px}". A 0.33 deck wrote pixels under "${key}".`,
+			fixes: [{ id: 'rename', title: `Rename ${key} to ${px}`, kind: 'patch' as const, safe: false, patch: [{ op: 'move' as const, from: entry.path, path: `${entry.path}Px` }] }],
+		};
+	}
+	// The missing `items` of a `type: "list"` that carries `bullets`: the semantic finding beside it says what to write.
+	for (let index = findings.length - 1; index >= 0; index--) {
+		const entry = findings[index];
+		if (!schema(entry) || entry.validation?.keyword !== 'required' || entry.validation.params.missingProperty !== 'items') continue;
+		const payload = valueAt(entry.path);
+		if (isRecord(payload) && payload.type === 'list' && Object.hasOwn(payload, 'bullets')) findings.splice(index, 1);
+	}
+	// An option on the wrong kind of block. The schema states the rule (ContentPayload dependentSchemas) so that any JSON Schema tool
+	// knows it; here the format check has already reported it at the option itself, with what to do, so the raw copy goes.
+	const OPTION_RULES = ['opf/image-option-unsupported-payload', 'opf/shape-option-unsupported-payload', 'opf/caption-unsupported-payload'];
+	// The raw copy is a missing kind key at the block ('image', 'shape' or 'path', or a captionable payload), or the `not` of "a shape with
+	// no image". After the union errors are reduced nothing in a finding names the definition it came from, so the wording is the test.
+	const optionDefinition = (entry: Finding): boolean => (entry.validation?.keyword === 'required' && /^must have required property '(?:image|shape|path|chart|table|video|diagram)'/.test(entry.message)) || (entry.validation?.keyword === 'not' && entry.message === 'must NOT be valid') || ((entry.validation?.keyword === 'anyOf' || entry.validation?.keyword === 'oneOf') && /must match a schema in anyOf|must match exactly one schema/.test(entry.message));
+	for (let index = findings.length - 1; index >= 0; index--) {
+		const entry = findings[index];
+		if (!schema(entry) || !optionDefinition(entry)) continue;
+		const prefix = `${entry.path}/`;
+		if (findings.some((other) => other !== entry && other.path.startsWith(prefix) && !other.path.slice(prefix.length).includes('/') && OPTION_RULES.includes(other.ruleId))) findings.splice(index, 1);
+	}
+	// A region (or a block of a slide's blocks) written as a bare string, number or list: the schema reports "must be object" and the
+	// raw "must NOT be valid" of the payload's own rules. One finding says a region holds a content payload, with the text form.
+	const payloadSlots = new Map<string, unknown>();
+	for (const entry of findings) {
+		if (!schema(entry) || payloadSlots.has(entry.path)) continue;
+		const key = /^\/slides\/\d+\/([^/]+)$/.exec(entry.path)?.[1], inBlocks = /^\/slides\/\d+\/blocks\/\d+$/.test(entry.path);
+		if (!inBlocks && !(key !== undefined && (promotedRegionKeys as readonly string[]).includes(key))) continue;
+		const value = valueAt(entry.path);
+		if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || Array.isArray(value)) payloadSlots.set(entry.path, value);
+	}
+	for (const [at, value] of payloadSlots) {
+		const first = findings.findIndex((entry) => schema(entry) && entry.path === at);
+		const text = typeof value === 'string';
+		const write = text ? `{ "text": ${JSON.stringify(value)} }` : Array.isArray(value) ? '{ "items": [ ... ] } for a list, or { "blocks": [ ... ] } for several blocks' : '{ "text": "..." }';
+		const { fixes: _fixes, suggestions: _suggestions, ...kept } = findings[first]!;
+		const one: Finding = {
+			...kept,
+			message: `A region holds a content payload (an object), not ${text ? 'a bare string' : Array.isArray(value) ? 'a list' : 'a ' + typeof value}.`,
+			help: `Write ${write}. A payload names its kind by its key: "text", "items" (a list), "image", "chart", "table", or "blocks" to stack several; see docs/dynamic-composition.md.`,
+			...(text ? { fixes: [{ id: 'wrap-text', title: 'Write the string as { "text": ... }', kind: 'patch' as const, safe: false, patch: [{ op: 'replace' as const, path: at, value: { text: value } }] }] } : {}),
+		};
+		for (let index = findings.length - 1; index >= 0; index--) { const entry = findings[index]; if (schema(entry) && entry.path === at) findings.splice(index, 1); }
+		findings.splice(first, 0, one);
+	}
+}
+
 function collapseChartShape(document: unknown, findings: Finding[]): void {
 	const chartAt = (path: string): unknown => {
 		let node: unknown = document;
@@ -559,9 +804,11 @@ export function engineFindings(document: unknown, engine: SchemaCheckResult, ena
 	const findings: Finding[] = [];
 	for (const issue of engine.errors) {
 		const ruleId = issueRuleId(issue);
-		if (enabled(ruleId)) findings.push(issueFinding(issue, ruleId));
+		if (!enabled(ruleId)) continue;
+		findings.push(issueFinding(issue, ruleId));
 	}
 	collapseChartShape(document, findings);
+	collapseAuthoringShapes(document, findings);
 	// RR-54: the migration fix of each chart value column whose text cells share one display style, by cell path.
 	let numberFixes: Map<string, ChartNumberFix> | undefined;
 	for (const issue of engine.warnings) {
@@ -581,9 +828,14 @@ export function engineFindings(document: unknown, engine: SchemaCheckResult, ena
 				continue;
 			}
 		}
-		const found = issueFinding(issue, ruleId, 'presentation', '', 'document', 'warning');
+		const found = issueFinding(issue, ruleId, 'presentation', '', 'document', code === 'variable-group-omitted' ? 'info' : 'warning');
 		const help = HELP[code];
 		if (help) found.help = help;
+		if (code === 'shape-anchor-size-unit') {
+			const key = String(issue.params.key), px = `${key}Px`;
+			found.help = `Did you mean "${px}"? "${key}" is a fraction of the block.`;
+			found.fixes = [{ id: 'rename', title: `Rename ${key} to ${px}`, kind: 'patch', safe: false, patch: [{ op: 'move', from: found.path, path: `${found.path}Px` }] }];
+		}
 		findings.push(found);
 	}
 	return findings;
@@ -682,15 +934,29 @@ export function undeclaredCatalogFindings(document: unknown): Finding[] {
 
 const KIND_PLURAL: Record<CatalogKind, string> = { layouts: 'layouts', themes: 'themes', colorSchemes: 'color schemes', fontSchemes: 'font schemes', narratives: 'narratives', audiences: 'audiences', purposes: 'purposes', tones: 'tones' };
 
+const KIND_SINGULAR: Record<CatalogKind, string> = { layouts: 'layout', themes: 'theme', colorSchemes: 'color scheme', fontSchemes: 'font scheme', narratives: 'narrative', audiences: 'audience', purposes: 'purpose', tones: 'tone' };
+
 /**
- * The start of an unresolved reference's help: "Did you mean 'two-column'?" when a record is a near miss (the same edit distance the
- * schema's did-you-mean uses), else the nearest records that do exist. Empty when no catalog is registered, so there is nothing to name.
+ * The records an unresolved reference may have meant: within the edit distance the schema's did-you-mean uses and a plausible respelling
+ * (relatedName), so `two-colum` names `two-column` but `title` does not name `table`.
  */
-function nearestRecords(kind: CatalogKind, reference: string, candidates: string[]): string {
-	if (!candidates.length) return '';
-	const close = candidates.filter((value) => distance(reference, value) <= Math.max(2, Math.floor(reference.length / 4))).slice(0, 3);
+function nearMisses(reference: string, candidates: string[]): string[] {
+	return candidates.filter((value) => distance(reference, value) <= Math.max(2, Math.floor(reference.length / 4)) && relatedName(reference, value));
+}
+
+/**
+ * The start of an unresolved reference's help: "Did you mean 'two-column'?" when a record is a near miss (nearMisses), else that no
+ * record is named like it and where the ids are listed. Empty when no catalog is registered, so there is nothing to name.
+ */
+function nearestRecords(kind: CatalogKind, reference: string, candidates: string[], registered: boolean): string {
+	if (!registered) return '';
+	const close = nearMisses(reference, candidates).slice(0, 3);
 	const quote = (values: string[]) => values.map((value) => `'${value}'`).join(', ');
-	return close.length ? `Did you mean ${quote(close)}? ` : `The nearest ${KIND_PLURAL[kind]} that exist: ${quote(candidates.slice(0, 3))}. `;
+	if (close.length) return `Did you mean ${quote(close)}? `;
+	const listed = `search_catalog (the OPF MCP server), opf catalog ${kind} and pptx.gallery list the ${KIND_PLURAL[kind]} that exist.`;
+	return kind === 'layouts'
+		? `No layout is named like '${reference}'. Without the layout key the slide composes automatically from its content; ${listed} `
+		: `No ${KIND_SINGULAR[kind]} is named like '${reference}'; ${listed} `;
 }
 
 /** The unresolved content references, one finding each, with the nearest records as suggestions. */
@@ -711,18 +977,25 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 		}
 		if (found && !(found.origin === 'document' && invalid.has(recordKey(found.group, site.kind, found.id)))) continue;
 		const diagnostic = unresolvedReference(document, site.kind, site.reference, path, options);
-		const suggestions = catalogRecords(document, site.kind, options)
+		const records = catalogRecords(document, site.kind, options);
+		// Only near misses are suggested (nearMisses): a nearest spelling that names another kind of slide is no help.
+		const near = new Set(nearMisses(site.reference, records.map((entry) => entry.reference)));
+		const suggestions = records
+			.filter((entry) => near.has(entry.reference))
 			.map((entry) => ({ value: entry.reference, label: typeof entry.record.name === 'string' ? entry.record.name : entry.reference, origin: entry.origin === 'host' ? 'registered' : 'document', definition: entry.origin === 'document' ? `document#${pointer(['catalogs', entry.group, site.kind, entry.id])}` : `${entry.source ?? 'context'}#/${site.kind}/${entry.id}` }))
 			.sort((a, b) => distance(site.reference, a.value) - distance(site.reference, b.value) || (a.value < b.value ? -1 : a.value > b.value ? 1 : 0))
 			.slice(0, 5);
+		const suggested = suggestions.length > 0;
 		findings.push(
 			finding('opf/unresolved-reference', {
 				path,
 				message: diagnostic.message,
-				help: `${nearestRecords(site.kind, site.reference, suggestions.map((entry) => entry.value))}${
-					site.kind === 'layouts'
-						? 'Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.'
-						: 'Embed the record (embed(), or opf embed), register the catalog that defines it, or choose one of the suggested records.'
+				help: `${nearestRecords(site.kind, site.reference, suggestions.map((entry) => entry.value), records.length > 0)}${
+					!suggested && records.length
+						? `To keep this id, embed the ${site.kind === 'layouts' ? 'layout ' : ''}record (embed(), or opf embed) or register the catalog that defines it.`
+						: site.kind === 'layouts'
+							? 'Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.'
+							: 'Embed the record (embed(), or opf embed), register the catalog that defines it, or choose one of the suggested records.'
 				}`,
 				definition: `${schemas.presentation.$id}#/$defs/Catalogs`,
 				lookup: ['opf', 'catalog', site.kind],
@@ -826,6 +1099,26 @@ export function referenceFindings(document: unknown, engine: SchemaCheckResult, 
 				lookup: ['opf', 'schema', 'presentation', '/$defs/Dataset'],
 			}),
 		);
+	// LH-14: an icon that resolves nowhere (a set or name not found, with the nearest names) and an SVG that cannot be an icon. A registered
+	// set the host has not loaded yet (ensureIcons) is not checked: the CLI, the MCP and the Node file API load the sets first.
+	for (const { path, value } of documentIcons(document)) {
+		const issue = iconIssue(document, value, catalogs);
+		if (!issue) continue;
+		const unknown = issue.code === 'icon-unknown';
+		findings.push(
+			finding(unknown ? 'opf/icon-unknown' : 'opf/icon-invalid', {
+				path: pointerPath(path.split('.')),
+				message: issue.message,
+				help: unknown
+					? `${issue.suggestions?.length ? `Did you mean ${issue.suggestions.slice(0, 3).map((name) => `'${name}'`).join(', ')}? ` : ''}Use an icon the set has (the MCP's search_icons finds names by keyword), add the name to the deck's icons, or remove the icon. Nothing else changes: the text is drawn without the chip.`
+					: 'Give the icon SVG text with only shapes (path, circle, rect, line, polyline, polygon and groups), no script, event handler, external reference or raster, or remove the icon.',
+				definition: `${schemas.presentation.$id}#/$defs/IconReference`,
+				lookup: ['opf', 'schema', 'presentation', '/$defs/IconReference'],
+				...(issue.suggestions?.length ? { suggestions: issue.suggestions.map((value) => ({ value, label: value, origin: 'registered' as const, definition: `${schemas.presentation.$id}#/$defs/IconReference` })) } : {}),
+				...(issue.renamed ? { fixes: [{ id: 'icon-renamed', title: 'Use the new name', kind: 'patch' as const, safe: true, patch: [{ op: 'replace' as const, path: pointerPath(path.split('.')), value: issue.renamed }] }] } : {}),
+			}),
+		);
+	}
 	return findings;
 }
 

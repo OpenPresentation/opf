@@ -15,6 +15,8 @@ export interface DesignMenuLabels {
   fonts?: string;
   /** The section for the current slide's layout. Default: "This slide: Layout". */
   layout?: string;
+  /** The layout section's segment in the bottom sheet's section switch. Default: "Layout". */
+  layoutTab?: string;
   /** The row that opens the full Design panel (only shown when `onOpenPanel` is given). Default: "More design options…". */
   more?: string;
   /** What the toolbar's overflow menu lists (`menuItems()`). Default: "Design…". */

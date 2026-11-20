@@ -20,8 +20,8 @@ function range(value, start, end, allowEmpty) {
   return runs(value);
 }
 const booleans = ['bold','italic','underline','strikethrough','superscript','subscript','code'];
-const strings = ['color','fontFamily','link','lang'];
-// TextRun.lang is a BCP-47 tag (core schema pattern).
+const strings = ['color','fontFamily','link','language'];
+// TextRun.language is a BCP-47 tag (core schema pattern).
 const languageTag = /^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/;
 function checkedFormat(format) {
   if (!format || typeof format !== 'object' || Array.isArray(format)) throw new TypeError('Expected a run formatting object.');
@@ -31,7 +31,7 @@ function checkedFormat(format) {
     if (booleans.includes(key) && typeof value !== 'boolean' || strings.includes(key) && typeof value !== 'string' || key === 'fontSize' && (!Number.isFinite(value) || value <= 0))
       throw new TypeError(`Invalid run style: ${key}`);
   }
-  if (typeof format.lang === 'string' && !languageTag.test(format.lang)) throw new TypeError('Use a BCP-47 language tag such as fr-FR or ja-JP.');
+  if (typeof format.language === 'string' && !languageTag.test(format.language)) throw new TypeError('Use a BCP-47 language tag such as fr-FR or ja-JP.');
   if (format.superscript && format.subscript) throw new TypeError('Choose superscript or subscript, not both.');
   return {...format, ...(format.superscript ? {subscript:false} : {}), ...(format.subscript ? {superscript:false} : {})};
 }
@@ -116,4 +116,11 @@ export function updateRichTextInput(value, nextText, change) {
     } else compact.push(run);
   }
   return compact;
+}
+
+/** The title shown for a slide in navigators and outlines. */
+export function slideTitle(slide) {
+  // A title is a string or TextRun[] (FA-10): either shows as its plain text.
+  const title = typeof slide?.title === "string" ? slide.title : Array.isArray(slide?.title) ? slide.title.map((run) => (typeof run === "string" ? run : (run?.text ?? ""))).join("") : "";
+  return title.trim() ? title : "";
 }

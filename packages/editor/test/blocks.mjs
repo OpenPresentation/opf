@@ -22,7 +22,7 @@ for(const i of [0,1]){const noop=prepareBlockMove(deck,'slides.0.blocks.0','slid
 const editor=createEditorSession(deck,{rejectInvalid:true});editor.applyPatch(later.patches);editor.undo();assert.deepEqual(editor.presentation,deck);assert.equal(editor.canUndo,false);
 editor.set('name','Newer independent name');editor.applyPatch(later.patches);assert.equal(editor.get('name'),'Newer independent name');editor.undo();assert.deepEqual(editor.get('slides'),deck.slides);
 editor.set('slides.0.notes','Newer notes');assert.throws(()=>editor.applyPatch(later.patches));assert.equal(editor.get('slides.0.notes'),'Newer notes');
-const promoted={slides:[{left:{blocks:[{text:'L1'},{text:'L2'}]},right:{blocks:[{text:'R'}]}}]};const moved=prepareBlockMove(promoted,'slides.0.left.blocks.0','slides.0.right',1);assert.equal(moved.presentation.slides[0].right.blocks[1].text,'L1');
+const promoted={slides:[{start:{blocks:[{text:'L1'},{text:'L2'}]},end:{blocks:[{text:'R'}]}}]};const moved=prepareBlockMove(promoted,'slides.0.start.blocks.0','slides.0.end',1);assert.equal(moved.presentation.slides[0].end.blocks[1].text,'L1');
 console.log('Block moves passed: sibling order, shifted group destinations, nested/ancestor/cross-slide moves, formatting/data preservation, no-op, cycle/empty rejection, guards and undo.');
 
 const implicit={name:'Keep metadata',assets:{},slides:[{id:'one',title:'Keep title',subtitle:'Keep subtitle',notes:'Keep notes',design:{fontScheme:'roboto'},composition:{mode:'row',weights:[3,1]},text:[{text:'Preserve rich text',bold:true}],items:['Preserve items']}]};
@@ -31,14 +31,14 @@ assert.equal(inserted.path,'/slides/0/blocks/1');
 assert.deepEqual(inserted.presentation.slides[0].blocks,[{text:implicit.slides[0].text},createContentBlock('metric'),{items:implicit.slides[0].items}]);
 const {blocks:ignored,...metadata}=inserted.presentation.slides[0];const {text:ignored2,items:ignored3,...expectedMetadata}=implicit.slides[0];assert.deepEqual(metadata,expectedMetadata);
 assert.deepEqual(prepareBlockInsert({slides:[{type:'text',bullets:['Keep bullet']}]},'slides.0',{text:'New'}).presentation.slides[0].blocks[0],{type:'text',bullets:['Keep bullet']});
-const insertedRegion=prepareBlockInsert({slides:[{left:{text:'Left'},right:{text:'Right'}}]},'slides.0.left',{items:['New']});assert.deepEqual(insertedRegion.presentation.slides[0].left.blocks,[{text:'Left'},{items:['New']}]);
-assert.throws(()=>prepareBlockInsert({slides:[{left:{text:'Left'}}]},'slides.0',{text:'Mixed'}),/container/);
+const insertedRegion=prepareBlockInsert({slides:[{start:{text:'Left'},end:{text:'Right'}}]},'slides.0.start',{items:['New']});assert.deepEqual(insertedRegion.presentation.slides[0].start.blocks,[{text:'Left'},{items:['New']}]);
+assert.throws(()=>prepareBlockInsert({slides:[{start:{text:'Left'}}]},'slides.0',{text:'Mixed'}),/container/);
 assert.deepEqual(listBlockContainers(implicit,{includeImplicit:true}).map(c=>c.path),['/slides/0']);
 assert.deepEqual(listBlockContainers(implicit),[]);
 const duplicate=prepareBlockDuplicate(deck,'slides.0.blocks.1');assert.deepEqual(duplicate.presentation.slides[0].blocks[2],deck.slides[0].blocks[1]);assert.notEqual(duplicate.presentation.slides[0].blocks[2],duplicate.presentation.slides[0].blocks[1]);
 const removed=prepareBlockRemove(single,'slides.0.blocks.0.blocks.0');assert.deepEqual(removed.presentation.slides[0].blocks,[{text:'Other'}]);
 const empty=prepareBlockRemove({slides:[{title:'Retained slide',blocks:[{blocks:[{blocks:[{text:'Only'}]}]}]}]},'slides.0.blocks.0.blocks.0.blocks.0');assert.deepEqual(empty.presentation.slides,[{title:'Retained slide',blocks:[]}]);
-const regionRemoved=prepareBlockRemove({slides:[{notes:'Retain notes',left:{blocks:[{blocks:[{text:'Only'}]}]},right:{text:'Context'}}]},'slides.0.left.blocks.0.blocks.0');assert.deepEqual(regionRemoved.presentation.slides[0],{notes:'Retain notes',right:{text:'Context'}});
+const regionRemoved=prepareBlockRemove({slides:[{notes:'Retain notes',start:{blocks:[{blocks:[{text:'Only'}]}]},end:{text:'Context'}}]},'slides.0.start.blocks.0.blocks.0');assert.deepEqual(regionRemoved.presentation.slides[0],{notes:'Retain notes',end:{text:'Context'}});
 for(const kind of ['text','list','chart','table','metric','quote','code','timeline','group','image','video'])prepareBlockInsert({slides:[{title:'Blank'}]},'slides.0',createContentBlock(kind,{source:'https://example.org/media'}));
 assert.throws(()=>createContentBlock('image'),/source/);assert.throws(()=>createContentBlock('unknown'),/Unknown/);
 for(const index of [-1,1.5,99])assert.throws(()=>prepareBlockInsert(implicit,'slides.0',{text:'x'},index));

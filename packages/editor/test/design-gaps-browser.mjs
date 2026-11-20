@@ -315,24 +315,24 @@ try {
       await waitDoc(current => current.design.footer === undefined, `text ${JSON.stringify(value)} undone`);
       await settle();
     };
-    let zoneNow = 'left';
+    let zoneNow = 'start';
     const zone = async name => { zoneNow = name; await field(design, 'Zone').selectOption(name); };
     const warnings = () => page.locator('#design-controls .opf-dc-warnings').evaluateAll(nodes => nodes.map(node => node.textContent).join(' '));
     await field(design, 'Edit').selectOption('footer');
-    await zone('left');
-    await write('text', current => current.design.footer?.left?.text === 'Acme Corp', 'Text', 'Acme Corp');
+    await zone('start');
+    await write('text', current => current.design.footer?.start?.text === 'Acme Corp', 'Text', 'Acme Corp');
     // RR-71: the logo is the zone's image, a reference to the organization's logo; Insert logo writes it.
     assert.equal(await design.getByLabel('Show the logo').count(), 0, 'the logo toggle is gone');
     await step('footer: Insert logo', async () => {
       await design.getByRole('button', { name: 'Insert logo', exact: true }).click();
       assert.equal(await field(design, 'Image source').inputValue(), 'var:organization.logo.icon', 'the image field shows the logo reference');
-    }, current => current.design.footer?.left?.image === 'var:organization.logo.icon');
+    }, current => current.design.footer?.start?.image === 'var:organization.logo.icon');
     await step('footer: Insert logo, stacked shape', async () => {
       await field(design, 'Logo shape').selectOption('stacked');
       await design.getByRole('button', { name: 'Insert logo', exact: true }).click();
-    }, current => current.design.footer?.left?.image === 'var:organization.logo.stacked');
+    }, current => current.design.footer?.start?.image === 'var:organization.logo.stacked');
     await field(design, 'Logo shape').selectOption('icon');
-    await write('image by address', current => current.design.footer?.left?.image === 'https://example.com/badge.png', 'Image source', 'https://example.com/badge.png');
+    await write('image by address', current => current.design.footer?.start?.image === 'https://example.com/badge.png', 'Image source', 'https://example.com/badge.png');
     // FA-31: the generated values are variables in the text, put there by the Insert value menu.
     assert.deepEqual(await field(design, 'Insert value').locator('option').evaluateAll(nodes => nodes.map(node => [node.value, node.textContent])), [
       ['', 'Choose a value…'], ['slide.number', 'Slide number'], ['deck.slideCount', 'Slide count'], ['slide.section', 'Section'],
@@ -340,30 +340,30 @@ try {
     ], 'the menu offers the six values');
     for (const old of ['Show the organization name', 'Show the speaker name and title', 'Show the section label', 'Show the slide number', 'Slide number format'])
       assert.equal(await design.getByLabel(old).count(), 0, `${old} is gone: it is a variable in the text now`);
-    await step('footer: a value into an empty zone', () => insert('speaker.name'), current => current.design.footer?.left?.text === '{{speaker.name}}');
-    await withText('Acme Corp', () => step('footer: a value after the text', () => insert('organization.name'), current => current.design.footer?.left?.text === 'Acme Corp{{organization.name}}'));
-    await zone('right');
+    await step('footer: a value into an empty zone', () => insert('speaker.name'), current => current.design.footer?.start?.text === '{{speaker.name}}');
+    await withText('Acme Corp', () => step('footer: a value after the text', () => insert('organization.name'), current => current.design.footer?.start?.text === 'Acme Corp{{organization.name}}'));
+    await zone('end');
     // The caret decides where the token lands, and it ends up after the token with the text box focused again.
     await withText('Page  of ', () => step('footer: a value at the caret', async () => {
       await caret(5);
       await insert('slide.number');
       assert.deepEqual(await text.evaluate(node => [document.activeElement === node, node.selectionStart, node.selectionEnd, node.value]), [true, 21, 21, 'Page {{slide.number}} of '], 'the caret follows the token');
-    }, current => current.design.footer?.right?.text === 'Page {{slide.number}} of '));
+    }, current => current.design.footer?.end?.text === 'Page {{slide.number}} of '));
     await withText('Page {{slide.number}} of N', () => step('footer: a value over a selection', async () => {
       await caret('Page {{slide.number}} of '.length, 'Page {{slide.number}} of N'.length);
       await insert('deck.slideCount');
-    }, current => current.design.footer?.right?.text === 'Page {{slide.number}} of {{deck.slideCount}}'));
+    }, current => current.design.footer?.end?.text === 'Page {{slide.number}} of {{deck.slideCount}}'));
     // Typing that has not been committed yet is part of the same edit.
     await step('footer: uncommitted typing commits with the value', async () => {
       await text.fill('Deck: ');
       await insert('deck.name');
-    }, current => current.design.footer?.right?.text === 'Deck: {{deck.name}}');
+    }, current => current.design.footer?.end?.text === 'Deck: {{deck.name}}');
     await withText('{{slide.section}}', async () => {
       assert.match(await warnings(), /shows \{\{slide\.section\}\}, but this slide has no section/, 'a section value on a slide without one is explained');
     });
-    await toggle('current date', current => current.design.footer?.right?.date === true, "Today's date");
-    await write('fixed date', current => current.design.footer?.right?.date === '2026-10-01', 'Fixed date', '2026-10-01');
-    await write('date format', current => current.design.footer?.right?.dateFormat === 'MMMM d, yyyy', 'Date format', 'MMMM d, yyyy');
+    await toggle('current date', current => current.design.footer?.end?.date === true, "Today's date");
+    await write('fixed date', current => current.design.footer?.end?.date === '2026-10-01', 'Fixed date', '2026-10-01');
+    await write('date format', current => current.design.footer?.end?.dateFormat === 'MMMM d, yyyy', 'Date format', 'MMMM d, yyyy');
     mark('every header and footer part (text with the six inserted values, logo, image, date and format) in its zone');
     // A new line is Shift+Enter; Enter commits.
     await zone('center');
@@ -384,9 +384,9 @@ try {
     });
     mark('an unknown slide variable is refused and changes nothing');
     // Parts that need something say so.
-    await zone('left');
+    await zone('start');
     await design.getByLabel('Social profiles').check();
-    await waitDoc(current => current.design.footer?.left?.socials === true, 'socials without any');
+    await waitDoc(current => current.design.footer?.start?.socials === true, 'socials without any');
     assert.match(await warnings(), /social profiles, but the organization has none/);
     await button('Undo').click();
     await waitDoc(current => current.design.footer === undefined, 'socials reset');
@@ -398,20 +398,20 @@ try {
     await waitDoc(current => current.design.footer?.center?.text === 'Draft', 'center text');
     const summary = await design.getByRole('list', { name: 'Zones in use' }).textContent();
     assert.match(summary, /Center: text “Draft”/);
-    assert.match(summary, /Left: empty/);
+    assert.match(summary, /Start: empty/);
     await button('Undo').click();
     await waitDoc(current => current.design.footer === undefined, 'summary reset');
     await settle();
     // Same scope rules: a slide edit keeps the deck's zones, and hiding is per slide.
-    await field(design, 'Zone').selectOption('left');
+    await field(design, 'Zone').selectOption('start');
     await typeInto(design, 'Text', 'Acme');
-    await waitDoc(current => current.design.footer?.left?.text === 'Acme', 'deck footer');
+    await waitDoc(current => current.design.footer?.start?.text === 'Acme', 'deck footer');
     await settle();
     await slide(1);
     await field(design, 'Applies to').selectOption('slide');
     await settle();
-    await field(design, 'Zone').selectOption('right');
-    await step('slide scope: a date part keeps the deck zones', () => design.getByLabel("Today's date").check(), current => current.slides[1].design?.footer?.left?.text === 'Acme' && current.slides[1].design.footer.right?.date === true && current.design.footer.right === undefined);
+    await field(design, 'Zone').selectOption('end');
+    await step('slide scope: a date part keeps the deck zones', () => design.getByLabel("Today's date").check(), current => current.slides[1].design?.footer?.start?.text === 'Acme' && current.slides[1].design.footer.end?.date === true && current.design.footer.end === undefined);
     await field(design, 'Edit').selectOption('header');
     await step('slide scope: hide the header on this slide', () => design.getByLabel('Hide it').check(), current => current.slides[1].design?.header === false);
     await field(design, 'Applies to').selectOption('deck');

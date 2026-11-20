@@ -38,13 +38,14 @@ const previewAnchor = (svg, text) => {
   // LH-32: the tag is an eyebrow: the preview draws its capitals, PowerPoint the authored text with cap="all".
   const match = [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].find(([, , body]) => [escaped, escaped.toUpperCase()].includes(body.replace(/<[^>]+>/g, '')));
   assert.ok(match, `Preview text is missing: ${text}`);
-  return match[1].match(/text-anchor="(\w+)"/)?.[1] ?? 'start';
+  // opf#1322: a measured tracked display line is start-anchored; its alignment and anchor point are in data-opf-anchor(-x).
+  return (match[1].match(/data-opf-anchor="(\w+)"/) ?? match[1].match(/text-anchor="(\w+)"/))?.[1] ?? 'start';
 };
 const nativeAlign = {start: 'l', middle: 'ctr', end: 'r'};
 
 const deck = {design: {fontScheme: 'roboto'}, slides: [
   {title: 'Centered cover', subtitle: 'Centered subtitle', design: {titleAlignment: 'center', contentAlignment: 'center'}},
-  {title: 'Left title', text: 'Right aligned body', design: {titleAlignment: 'left', contentAlignment: 'right'}},
+  {title: 'Left title', text: 'Right aligned body', design: {titleAlignment: 'start', contentAlignment: 'end'}},
   // Content alignment never applies to the title.
   {title: 'Default title', blocks: [{text: 'Centered supporting copy'}, {text: 'Second centered block'}], design: {contentAlignment: 'center'}},
 ]};
@@ -78,7 +79,7 @@ for (const [index, slide] of deck.slides.entries()) {
 // resolved alignment (gallery number-* layouts center their metrics).
 let metricLines = 0;
 for (const align of ['left', 'center', 'right']) {
-  const metricDeck = {design: {fontScheme: 'roboto', contentAlignment: align}, slides: [{title: 'KPI', blocks: [{metric: {value: '$48B', label: 'TAM'}}, {metric: {value: '$6B', label: 'SAM', description: 'Serviceable market'}}]}]};
+  const metricDeck = {design: {fontScheme: 'roboto', contentAlignment: ({left:'start',right:'end'}[align]??align)}, slides: [{title: 'KPI', blocks: [{metric: {value: '$48B', label: 'TAM'}}, {metric: {value: '$6B', label: 'SAM', description: 'Serviceable market'}}]}]};
   for (const options of [{}, {fonts}]) {
     const [xml] = await slideXml(metricDeck, options), [svg] = toSvg(metricDeck, options);
     for (const text of ['$48B', 'TAM', '$6B', 'SAM', 'Serviceable market']) {
@@ -95,9 +96,9 @@ assert.equal(metricLines, 30);
 // Review" cover wrote a left title over a centered tag and subtitle). Only the slide's own
 // contentAlignment keeps them apart, and so does the subtitle of a slide with body content (WI-2); body text keeps the content alignment.
 const coverText = {tag: 'Compliance', title: 'Compliance Readiness Review', subtitle: 'Tandem BioSystems Compliance'};
-const coverDeck = {design: {fontScheme: 'roboto', titleAlignment: 'left', contentAlignment: 'center'}, slides: [
+const coverDeck = {design: {fontScheme: 'roboto', titleAlignment: 'start', contentAlignment: 'center'}, slides: [
   {layout: 'cover', ...coverText},
-  {layout: 'cover', ...coverText, design: {contentAlignment: 'right'}},
+  {layout: 'cover', ...coverText, design: {contentAlignment: 'end'}},
   {...coverText, text: 'Body copy'},
 ]};
 // RR-93a, WI-2: on a content slide the tag and the subtitle (both in the title area) follow the title (titleAlignment); only the

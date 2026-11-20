@@ -35,7 +35,7 @@ export function layoutGroupOrder(choices) {
 export const LAYOUT_REGION_KINDS = Object.freeze(["text", "list", "image", "video", "chart", "table", "code", "diagram", "metric", "quote", "timeline", "group"]);
 export const LAYOUT_REGION_ROLES = Object.freeze(["primary", "secondary", "media", "supporting"]);
 export const LAYOUT_REGION_FLOWS = Object.freeze(["none", "grid", "column", "auto"]);
-const RESERVED = new Set(["title", "subtitle", "tag", "auto", "left", "center", "right", "top", "middle", "bottom"]);
+const RESERVED = new Set(["title", "subtitle", "tag", "auto", "start", "center", "end", "top", "middle", "bottom"]);
 const NAME = /^[a-z][a-z0-9-]*$/;
 
 /** Group layouts by their catalog group (see `layoutGroupName`), in catalog order, then the custom ones. Choices keep their order within a group. */

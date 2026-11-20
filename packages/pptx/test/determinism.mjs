@@ -187,7 +187,7 @@ function run(config, {tz, locale, env = {}, flags = []}) {
   const child = spawnSync(process.execPath, [...flags, here, '--worker', JSON.stringify(config)], {
     env: childEnv, encoding: 'utf8', timeout: 240000, maxBuffer: 64 * 1024 * 1024, cwd: root
   });
-  const label = `${config.suite} TZ=${tz ?? '-'} LANG=${locale ?? '-'}${config.stress ? ' stress=' + config.stress : ''}${config.sandbox ? ' sandbox' : ''}`;
+  const label = `${config.suite} TZ=${tz ?? '-'} LANG=${locale ?? '-'}${config.stress ? ' stress=' + config.stress : ''}${config.sandbox ? ' sandbox' : ''}${flags.includes('--allow-addons') ? ' addons' : ''}${config.noRasterizer ? ' no-rasterizer' : ''}`;
   assert.equal(child.error, undefined, label);
   assert.equal(child.status, 0, `${label}\n${child.stderr}`);
   return {label, ...JSON.parse(child.stdout)};
@@ -286,12 +286,18 @@ async function parent() {
       compare(record({suite, stress, clock: nextClock(), audit: true}, {tz: TIMEZONES[(i + 2) % TIMEZONES.length], locale: LOCALES[(i + 3) % LOCALES.length]}), suite);
     });
     // No host fonts: permission sandbox (fonts unreadable, no subprocesses) and an empty fontconfig.
+    // RR-105: the plain suite's chartex charts have picture fallbacks that opf-render's native PNG converter (an addon) rasterizes. The
+    // sandbox without addons cannot load it and exports as a host without a rasterizer does (the classic chart stays the fallback), so it
+    // is compared with a baseline exported without a rasterizer; a second plain sandbox that may load addons is compared with the
+    // ordinary baseline, as the WebP suite is.
+    baselines['plain-no-rasterizer'] = record({suite: 'plain', noRasterizer: true}, {tz: 'UTC', locale: 'C'});
+    assert.notDeepEqual(baselines['plain-no-rasterizer'].cases['example-chart-type-sampler'], baselines.plain.cases['example-chart-type-sampler'], 'the chartex fallback differs without a rasterizer');
     const sandboxed = [];
-    for (const suite of ['plain', 'registry', 'webp']) {
-      const flags = suite === 'webp' ? [...sandboxFlags, '--allow-addons'] : sandboxFlags;
+    for (const [suite, addons, baseline] of [['plain', false, 'plain-no-rasterizer'], ['plain', true, 'plain'], ['registry', false, 'registry'], ['webp', true, 'webp']]) {
+      const flags = addons ? [...sandboxFlags, '--allow-addons'] : sandboxFlags;
       const result = record({suite, sandbox: true, audit: true, clock: nextClock()}, {tz: 'Pacific/Chatham', locale: 'tr_TR.UTF-8', env: noFontsEnv, flags});
       sandboxed.push(result);
-      compare(result, suite);
+      compare(result, baseline);
     }
     for (const result of sandboxed) {
       assert.deepEqual(result.probe.sandbox, {fontDirectoriesDenied: true, childProcessDenied: true, permission: true}, `${result.label}: sandbox must deny fonts and processes`);

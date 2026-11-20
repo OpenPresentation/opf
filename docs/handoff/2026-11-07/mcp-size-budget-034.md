@@ -1,0 +1,7 @@
+# Reviewed v0.34 MCP size budgets
+
+Effective runtime source076725b5bb47249a2dbe113ef065890cf2c21f82 (probe-only25369e3b3 changes no bundle content). Exact measured report uses the existing production Worker bundler and records every public page. Lean unminified8,273,467bytes; production minified5,397,634; gzip1,232,153; exact public documentation1,267,527bytes over the same42 pages. Lean and production retain zero docs/examples/viewer data modules. The graph remains platform-neutral and all explicit retained-data exclusions stay strict. No public page is trimmed.
+
+Vetoable: use the existing core catalog-free3% measured headroom policy for these release-specific assertions, rounded up to1000bytes:8,522,000 unminified;5,560,000 minified;1,270,000 gzip;1,306,000 public docs. These ceilings describe reviewed format/composition and guidance growth, not platform limits or visual tolerances. The final release assembly must recheck the actual production bundle.
+
+Core catalog-free budgets regenerate through the maintained `node scripts/check-catalog-free.mjs --update`, retaining its3% rule. Before and review preserve exact values. Composition grows from249,192 to259,878gzip bytes as the measured tree/Venn geometry, inversion and composition wiring enter the engine. All32 entries still import no catalog data and the maintained check passes.

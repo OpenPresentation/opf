@@ -1,12 +1,11 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { VARIANTS_EXAMPLE_BASELINE } from '../packages/render/scripts/example-baseline.mjs';
 import { examplesDigest, readPublishedCoreGolden } from './registry-golden.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -83,22 +82,4 @@ test('registry golden refuses escaped paths and missing release fixtures', () =>
   }
   writeFileSync(path.join(directory, 'ecosystem.lock.json'), JSON.stringify({ golden: { repository: 'opf', path: 'scripts/fixtures/missing.json' } }));
   assert.throws(() => readPublishedCoreGolden({ ...options, ref: commit() }), /git show/);
-});
-
-function readCorpus(directory, prefix = '') {
-  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-    const file = path.posix.join(prefix, entry.name);
-    if (entry.isDirectory()) return readCorpus(path.join(directory, entry.name), file);
-    return entry.isFile() && entry.name.endsWith('.opf.json') ? [{ file, deck: JSON.parse(readFileSync(path.join(directory, entry.name), 'utf8')) }] : [];
-  });
-}
-
-test('the default renderer baseline records the digest of this checkout\'s examples', () => {
-  // MR-31: the examples corpus is the input of packages/render/test/golden/. When examples/ or core's conversion moves, the
-  // baseline's source digest moves with it (`pnpm golden:update` in the pinned image, or the golden workflow).
-  const selected = path.join(root, 'packages/render', VARIANTS_EXAMPLE_BASELINE.replace(/\.sha256\.json$/, ''), '_baseline.json');
-  const baseline = JSON.parse(readFileSync(selected, 'utf8'));
-  const corpus = readCorpus(path.join(root, 'examples'));
-  assert.equal(baseline.source.decks, corpus.length);
-  assert.equal(baseline.source.sha256, examplesDigest(corpus));
 });

@@ -17,7 +17,10 @@ const TITLES = {
   'image-beside': 'Explain what the audience should notice', image: 'Give the visual room to speak',
   gallery: 'Compare three visual directions', hero: 'One team. One outcome.',
   code: 'Keep the implementation easy to inspect', scorecard: 'Track performance against a target',
-  logos: 'Recognize the partners',
+  logos: 'Recognize the partners', pyramid: 'What the pilot builds on', 'inverted-pyramid': 'From possibilities to a decision', matrix: 'Four ways to run the pilot',
+  cycle: 'How each pilot round feeds the next',
+  'org-chart': 'Give the pilot a clear reporting structure', hierarchy: 'Break the pilot into focused workstreams', venn: 'Three conditions for a useful pilot',
+  chevrons: 'Four stages of the pilot', flow: 'From evidence to decision', 'vertical-flow': 'How a team joins the pilot',
 };
 const SUBTITLES = {
   cover: 'A six-week pilot with two teams', section: 'Part 2: the evidence',
@@ -71,7 +74,7 @@ export function editorialDeck(id, record) {
   else delete slide.subtitle;
   if (id === 'metrics') slide.design = { titleAlignment: 'center' };
   // The examples' figures are fictional: every preview says so in its footer.
-  deck.design = { background: 'light1', footer: { left: { text: 'Illustrative example • fictional data' } } };
+  deck.design = { background: 'light1', footer: { start: { text: 'Illustrative example • fictional data' } } };
   const counts = {};
   slide.blocks = (slide.blocks ?? []).map((block) => {
     const kind = Object.keys(block).find(key => key !== 'region');
@@ -81,6 +84,16 @@ export function editorialDeck(id, record) {
     if (id === 'faq') payload = labelled(QUESTIONS[index % 3]);
     else if (id === 'process') payload = { ...labelled(STEPS[index % 3], { start: index % 3 + 1 }), numbering: 'arabic' };
     else if (id === 'team') payload = labelled(PEOPLE[index % 3]);
+    else if (id === 'inverted-pyramid') payload = {items: ['Possibilities', 'Qualified options', 'Shortlist', 'Decision']};
+    else if (id === 'pyramid') payload = { items: ['Goal', 'Evidence', 'Pilot teams', 'Shared baseline'] };
+    else if (id === 'org-chart') payload = { items: [{text:'Pilot lead',level:0},{text:'Delivery',level:1},{text:'Evidence',level:1}] };
+    else if (id === 'hierarchy') payload = { items: [{text:'Pilot',level:0},{text:'Delivery',level:1},{text:'Design',level:2},{text:'Build',level:2},{text:'Evidence',level:1}] };
+    else if (id === 'venn') payload = { items: ['Clear scope', 'Evidence', 'Shared goal'] };
+    else if (id === 'matrix') payload = { items: ['Small, fast', 'Small, slow', 'Broad, fast', 'Broad, slow'] };
+    else if (id === 'cycle') payload = { items: ['Plan', 'Pilot', 'Measure', 'Adjust'] };
+    else if (id === 'chevrons') payload = { items: ['Baseline', 'Pilot', 'Review', 'Decide'] };
+    else if (id === 'flow') payload = { items: ['Gather evidence', 'Run the pilot', 'Decide'] };
+    else if (id === 'vertical-flow') payload = { items: ['Nominate', 'Train', 'Start'] };
     else if (id === 'agenda' || id === 'agenda-split') payload = { items: ['Define the problem', 'Review the pilot evidence', 'Agree the next decision'] };
     else if (id === 'pillars') payload = labelled(PILLARS[index % 3]);
     else if (id === 'comparison') payload = { text: ['Option A: focused pilot\nTwo teams, six weeks. Low setup cost and a clear baseline.', 'Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs.', 'Recommendation: establish the evidence with Option A before committing to Option B.'][index % 3] };

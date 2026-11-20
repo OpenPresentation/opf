@@ -61,9 +61,9 @@ test('the committed burndown parses and covers RR-01 to its highest item without
   const items = parseBurndown(markdown);
   const last = Math.max(...items.map((i) => Number(i.id.slice(3))));
   assert.ok(last >= 53, `expected at least RR-53, found RR-${last}`);
-  assert.deepEqual(items.map((i) => i.id).sort(), Array.from({ length: last }, (_, n) => `RR-${String(n + 1).padStart(2, '0')}`));
+  assert.deepEqual(items.map((i) => i.id).sort((a, b) => Number(a.slice(3)) - Number(b.slice(3))), Array.from({ length: last }, (_, n) => `RR-${String(n + 1).padStart(2, '0')}`));
   for (const i of items) assert.ok(STATUSES.includes(i.status));
-  for (const i of items) for (const dep of i.depends.match(/RR-\d{2}/g) ?? []) assert.ok(items.some((o) => o.id === dep), `${i.id} depends on unknown ${dep}`);
+  for (const i of items) for (const dep of i.depends.match(/RR-\d{2,3}/g) ?? []) assert.ok(items.some((o) => o.id === dep), `${i.id} depends on unknown ${dep}`);
   // the work queue only names real items, and no closed item lingers in it
   const s = summarize(items, parseNow(markdown));
   assert.deepEqual(s.stale, []);

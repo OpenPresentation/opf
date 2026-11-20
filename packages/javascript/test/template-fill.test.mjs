@@ -70,10 +70,11 @@ test('a quote grows its quote and attribution; the title over it keeps its size'
   assert.ok(part(result, 'footer') > part(kept, 'footer') && part(result, 'footer') <= LONE_DISPLAY_SIZES.quoteFooter);
 });
 
-test('a statement grows its message and keeps its title; a full statement keeps its sizes', () => {
+test('a statement grows its message, its sentence title to display size (LH-09); a full statement keeps its sizes', () => {
   const slide = { title: 'Reliability is the feature customers pay for', blocks: [{ text: 'Every roadmap decision in 2027 starts with one question: does it make the service more dependable?' }] };
   const result = composeSlide(slide, { layout: layouts.statement }), kept = composeSlide(slide, { layout: layouts.statement, fill: false });
-  assert.equal(field(result, 'title').text.fontSize, field(kept, 'title').text.fontSize);
+  // LH-09: a sentence title over its paragraph is the statement's message: it grows too, after the paragraph.
+  assert.ok(field(result, 'title').text.fontSize > field(kept, 'title').text.fontSize);
   assert.ok(STEPS.includes(field(result, 'text').text.fontSize) && field(result, 'text').text.fontSize > field(kept, 'text').text.fontSize);
   const paragraph = 'State Workforce Board should focus the next cycle on preparing displaced workers for regional growth sectors while making the operating tradeoffs clear to every stakeholder.';
   const full = { title: 'Decision and follow-through', blocks: [{ text: paragraph }, { text: paragraph }, { text: paragraph }, { text: paragraph }] };

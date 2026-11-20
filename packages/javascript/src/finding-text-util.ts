@@ -50,7 +50,7 @@ export interface TextHelpers {
 export const WORDS: Record<string, string> = { object: "an object", array: "a list", string: "text", number: "a number", integer: "a whole number", boolean: "true or false", null: "null" };
 export const KIND_WORDS: Record<string, string> = { layouts: "layout", themes: "theme", colorSchemes: "color scheme", fontSchemes: "font scheme", narratives: "narrative", audiences: "audience", purposes: "purpose", tones: "tone", languages: "language" };
 export const KIND_EXAMPLES: Record<string, string> = { layouts: "`pillars` or `acme:hero`", themes: "`minimal` or `acme:bold`", colorSchemes: "`boost` or `acme:night`", fontSchemes: "`aptos` or `acme:brand`", narratives: "`classic-story`", audiences: "`board`", purposes: "`inform`", tones: "`formal`" };
-const ALIASES: Record<string, string> = { middle: "center", centre: "center", centered: "center", centred: "center", justify: "left", col: "column", cols: "column", pic: "image", picture: "image", photo: "image", paragraph: "text", bullets: "list", bullet: "list" };
+const ALIASES: Record<string, string> = { middle: "center", centre: "center", centered: "center", centred: "center", justify: "start", left: "start", right: "end", col: "column", cols: "column", pic: "image", picture: "image", photo: "image", paragraph: "text", bullets: "list", bullet: "list" };
 
 /** The segments of a JSON Pointer (`/slides/0/title`); `""` is the document. */
 export function segmentsOf(path: unknown): string[] {

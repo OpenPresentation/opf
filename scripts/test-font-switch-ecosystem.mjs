@@ -46,6 +46,7 @@
 // slides (or, for the font scheme, states) carrying them, and a pair counts as
 // covered when any slot holds the value. Deck-wide factors take one value.
 import assert from 'node:assert/strict';
+import {fontSwitchListBlock} from './font-switch-list-fixture.mjs';
 import {createHash} from 'node:crypto';
 import {mkdir, readFile, readdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
@@ -243,7 +244,7 @@ const LAYOUT_FAMILIES = [...new Set(catalogs.layouts.map(layoutFamily))].sort();
 const layoutMembers = (family) => catalogs.layouts.filter((record) => layoutFamily(record) === family).map((record) => record.id);
 const templateBlock = {
   text: (text) => ({text: text.body}),
-  list: (text) => ({bullets: text.items}),
+  list: (text, layout) => fontSwitchListBlock(text.items, layout, {supplementalLabel:text.subtitle}),
   metric: (text) => ({metric: {value: 42, label: text.items[0], unit: 'ms'}}),
   chart: () => ({chart: {type: 'column', data: CHART_DATA}}),
   table: (text) => ({table: {columns: [text.cells[0], text.cells[1]], rows: [[text.cells[2], text.cells[3]]]}}),
@@ -258,14 +259,14 @@ function layoutSlide(id, layoutId, text) {
   const content = layoutKinds(record);
   const heading = hasTitle(record);
   const types = heading ? ['title', 'subtitle'] : [];
-  return {id, layout: layoutId, ...(types.includes('title') ? {title: text.title} : {}), ...(types.includes('subtitle') ? {subtitle: text.subtitle} : {}), ...(content.length ? {blocks: content.map((type) => templateBlock[type](text))} : {})};
+  return {id, layout: layoutId, ...(types.includes('title') ? {title: text.title} : {}), ...(types.includes('subtitle') ? {subtitle: text.subtitle} : {}), ...(content.length ? {blocks: content.map((type) => templateBlock[type](text, record))} : {})};
 }
 assert.deepEqual(LAYOUT_FAMILIES, ['chart', 'code', 'image', 'list', 'metric', 'quote', 'table', 'text', 'timeline', 'title'], 'the catalog has the expected layout families');
 
 const FOOTERS = {
   off: () => ({header: false, footer: false}),
-  number: () => ({footer: {right:{text:'{{slide.number}}'}}}),
-  date: () => ({footer: {left: {date: '2026-09-29', dateFormat: 'yyyy-MM-dd'}}}),
+  number: () => ({footer: {end:{text:'{{slide.number}}'}}}),
+  date: () => ({footer: {start: {date: '2026-09-29', dateFormat: 'yyyy-MM-dd'}}}),
   text: () => ({footer: {center: {text: 'Confidential'}}})
 };
 const BACKGROUNDS = {
@@ -491,7 +492,7 @@ function buildDeck(name, row, index) {
       colorScheme: row.colorScheme,
       background: BACKGROUNDS[row.background[0]],
       ...FOOTERS[row.headerFooter](),
-      ...(row.socials === 'profiles' ? {header: {right: {socials: true}}} : {})
+      ...(row.socials === 'profiles' ? {header: {end: {socials: true}}} : {})
     },
     assets: {hero: {src: PIXEL, alt: 'Illustration'}, clip: {src: CLIP, alt: 'Clip'}},
     slides

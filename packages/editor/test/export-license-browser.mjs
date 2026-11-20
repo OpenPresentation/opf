@@ -48,7 +48,7 @@ window.run = async ({ faces, licenses = {} }) => {
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost');
   if (url.pathname === '/') { res.writeHead(200, { 'Content-Type': 'text/html' }).end('<!doctype html><meta charset="utf-8"><title>PDF licenses</title><script type="module" src="./harness.js"></script>'); return; }
-  if (url.pathname === '/harness.js') { res.writeHead(200, { 'Content-Type': 'text/javascript' }).end(await readFile(path.join(output, 'harness.js'))); return; }
+  if (url.pathname === '/harness.js') { const body = await readFile(path.join(output, 'harness.js')); res.writeHead(200, { 'Content-Type': 'text/javascript' }).end(body); return; }
   res.writeHead(url.pathname === '/favicon.ico' ? 204 : 404).end();
 });
 await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));

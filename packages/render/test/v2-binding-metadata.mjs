@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {resolvePresentation,toSvg} from '../dist/svg.js';
 import {gallery} from '@openpresentation/gallery';
-const deck={slides:[{layout:'text',title:'Region title',blocks:[{text:'Region alignment probe'}]}]};
+// LH-188: a title of more than four words keeps the slide a content slide (no one-message growth onto more lines).
+const deck={slides:[{layout:'text',title:'Region title of the binding probe',blocks:[{text:'Region alignment probe'}]}]};
 const bound=resolvePresentation(deck,{catalogs:[gallery]}).slides[0];
 assert.ok(!Object.hasOwn(bound,'titleBindings'),'v1 title bindings are not exposed');
 assert.ok(bound.geometry.regions.some(region=>region.name==='body'),'v2 body region geometry remains available');
@@ -13,10 +14,10 @@ for(const item of [...bound.contentItems,...bound.blocks]){
 assert.match(toSvg(deck,{catalogs:[gallery]})[0],/Region alignment probe/);
 const rootDeck={slides:[{title:'Root',text:'Root text'}]};
 assert.deepEqual(resolvePresentation(rootDeck).slides[0].contentItems,[{type:'text',field:'text',value:'Root text',path:'slides.0.text'}]);
-const promotedDeck={slides:[{title:'Promoted',left:{text:'Left text'},right:{text:'Right text'}}]};
+const promotedDeck={slides:[{title:'Promoted',start:{text:'Left text'},end:{text:'Right text'}}]};
 assert.deepEqual(resolvePresentation(promotedDeck).slides[0].contentItems,[
- {type:'text',field:'text',value:'Left text',path:'slides.0.left.text',regionKey:'left'},
- {type:'text',field:'text',value:'Right text',path:'slides.0.right.text',regionKey:'right'}
+ {type:'text',field:'text',value:'Left text',path:'slides.0.start.text',regionKey:'start'},
+ {type:'text',field:'text',value:'Right text',path:'slides.0.end.text',regionKey:'end'}
 ]);
 const group={blocks:[{text:'First nested'},{text:'Second nested'}],composition:{mode:'column'}};
 const richSlide={title:[{text:'Plain',bold:false},{text:' strong',bold:true,italic:true}],subtitle:[{text:'Sub',italic:true}],blocks:[group]};

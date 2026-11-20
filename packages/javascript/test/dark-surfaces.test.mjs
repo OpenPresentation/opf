@@ -70,7 +70,10 @@ describe('LH-55 chart series on a dark plot', () => {
 			assert.ok(adjusted.every((color) => colorContrast(color, fill) >= CHART_DARK_SERIES_MIN_CONTRAST), `${fill}: ${adjusted}`);
 			assert.ok(Math.abs(lightness(adjusted[0]) - lightness(adjusted[1])) >= CHART_LEAD_LIGHTNESS_STEP, `${fill}: ${adjusted.slice(0, 2)}`);
 		}
-		assert.deepEqual(chartPaletteForFill('#FFFFFF', palette, { legible }), chartPaletteForFill('#FFFFFF', palette), 'a light plot is unchanged');
+		// LH-94 moves only a series that stands under 11 L* from the one before it (series 6 and 11 of this scheme); the others are unchanged.
+		const light = chartPaletteForFill('#FFFFFF', palette, { legible }), plain = chartPaletteForFill('#FFFFFF', palette);
+		assert.deepEqual(light.slice(0, 5), plain.slice(0, 5), 'a light plot keeps the colors that already stand clear of their neighbors');
+		assert.ok(light.every((color) => colorContrast(color, '#FFFFFF') >= 3), 'a light plot keeps 3:1');
 		const authored = chartSeriesPalette(SCHEME, [undefined, '#3F6B88']);
 		const adjusted = chartPaletteForFill(NAVY, authored, { legible: chartSchemeSeries([undefined, '#3F6B88'], SCHEME) });
 		assert.equal(adjusted[1], '#3F6B88', 'an authored series that has 3:1 keeps its colour');

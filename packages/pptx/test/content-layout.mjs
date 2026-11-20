@@ -4,6 +4,7 @@ import {XMLParser} from 'fast-xml-parser';
 import {toSvg, toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {colorHex} from './helpers/scheme-colors.mjs';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
 const all = (node, name) => {
@@ -42,10 +43,13 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
   assert.deepEqual(imported.slides[1].quote,deck.slides[1].quote,'Quote text, attribution and source must survive export/import');
   for (let index = 0; index < deck.slides.length; index++) {
     const svg = parser.parse(svgSlides[index]);
-    const native = parser.parse(new TextDecoder().decode(entries[`ppt/slides/slide${index + 1}.xml`]));
+    // RR-105 (opf#1293): theme font references read as their theme's families.
+    const native = parser.parse(withThemeFamilies(entries, `ppt/slides/slide${index + 1}.xml`));
     const nativeShapes = all(native, 'p:sp');
     for (const text of all(svg, 'text')) {
-      const value = text.tspan ? all(text,'tspan').map(content).join('') : content(text);
+      // LH-32: a line tracked as an eyebrow keeps its last character in a tspan of no letter spacing after its own text (render untrackLast), so
+      // the line is its own text followed by its tspans.
+      const value = text.tspan ? (typeof text['#text'] === 'string' ? text['#text'] : '') + all(text,'tspan').map(content).join('') : content(text);
       if (!value || value === deck.slides[index].title) continue;
       const shape = nativeShapes.find(item => all(item, 'a:t').map(content).join('') === value);
       assert.ok(shape, `Native payload text must match preview: ${value}`);
@@ -62,10 +66,13 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
       const firstFill = (Array.isArray(text.tspan) ? text.tspan[0] : text.tspan)?.fill ?? text.fill;
       assert.equal(color?.toUpperCase(), firstFill.replace('#', '').toUpperCase(), `Color: ${value}`);
       const transform = all(shape, 'a:xfrm')[0], offset = transform['a:off'], extent = transform['a:ext'];
-      const anchor = text['text-anchor'];
+      // opf#1322: a measured tracked display line is start-anchored; its alignment and anchor point are in data-opf-anchor(-x).
+      const anchor = text['data-opf-anchor'] ?? text['text-anchor'], anchorX = Number(text['data-opf-anchor-x'] ?? text.x);
       const x = Number(offset.x) / 9525 + (anchor === 'middle' ? Number(extent.cx) / 9525 / 2 : anchor === 'end' ? Number(extent.cx) / 9525 : 0);
-      assert.ok(Math.abs(x - Number(text.x)) < .02, `Horizontal layout: ${value}`);
+      assert.ok(Math.abs(x - anchorX) < .02, `Horizontal layout: ${value}`);
       assert.ok(Math.abs(Number(offset.y) / 9525 - (Number(text.y) - Number(text['font-size']))) < .02, `Measured line box: ${value}`);
+      // LH-32, LH-189: the run's spacing (spc, hundredths of a point) is the preview's letter spacing.
+      assert.equal(Number(properties.spc ?? 0), Math.round(Number(text['letter-spacing'] ?? 0) * .75 * 100), `Letter spacing: ${value}`);
       checkedText++;
     }
     if (index === 2) {

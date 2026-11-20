@@ -72,7 +72,7 @@ try {
   writeDeck('beta.opf.json', 'Beta, changed');
   const failure = run('test/golden.mjs');
   assert.notEqual(failure.status, 0);
-  assert.match(failure.stderr, /Golden corpus changed/);
+  assert.match(failure.stderr, /1 raster baselines changed/);
   ok(run('test/golden.mjs', ['--update']));
   const before = readFileSync(path.join(selected, '_baseline.json'), 'utf8');
   const promoted = ok(run('scripts/golden-promote.mjs'));

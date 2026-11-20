@@ -4,6 +4,7 @@
 // both inlined by tsup from skills/ and CHANGELOG.md (see tsup.config.ts).
 import { docs } from "@openpresentation/opf/docs";
 import { examples } from "@openpresentation/opf/examples";
+import { installedIconSets } from "@openpresentation/gallery/icon-sets";
 import type { DocPage, ExamplePage, OpfMcpSources } from "./server.js";
 
 declare const OPF_MCP_SKILLS: Record<string, Record<string, string>>;
@@ -36,6 +37,10 @@ export const DOC_SLUGS: readonly string[] = [
 	"numbered-lists",
 	"table-text-colors",
 	"image-treatments",
+	"shapes",
+	"shape-effects",
+	"smartart",
+	"icons",
 	"chart-options",
 	"chart-table-data",
 	"footnotes-citations-captions",
@@ -55,6 +60,11 @@ export const DOC_SLUGS: readonly string[] = [
 	"open-ecosystem",
 ];
 
+// RR-63: the gallery icon sets over the installed package's files where this runtime reads them (Node: the stdio server, a Node host),
+// else none (a Worker or a browser: there are no files to read, so there a set icon is unregistered, as in the lean server, instead of
+// failing on every load). A Worker host that serves the files passes sources.iconSets: galleryIconSets(fetchIcons(url, env.ASSETS)).
+const ICON_SETS = installedIconSets();
+
 /** The bundled sources. Pass `{ ...defaultSources(), examples: [] }` to a host that must stay small. */
 export function defaultSources(): OpfMcpSources {
 	const bySlug = new Map(docs.map((doc) => [doc.slug, doc]));
@@ -66,5 +76,7 @@ export function defaultSources(): OpfMcpSources {
 		examples: examples.map((example): ExamplePage => ({ slug: example.slug, category: example.category, gallery: example.gallery, file: example.file, deck: example.deck })),
 		skills: OPF_MCP_SKILLS,
 		whatsNew: OPF_MCP_WHATS_NEW,
+		// LH-14, RR-63: the gallery icon sets, read one icon at a time from the installed package (ICON_SETS, above).
+		...(ICON_SETS ? { iconSets: ICON_SETS } : {}),
 	};
 }

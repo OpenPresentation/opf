@@ -20,8 +20,8 @@ const paths = src => [
   ['design.background', {design: {background: {type: 'image', src}}, slides: [{title: 'Background'}]}, 'no picture'],
   ['design.watermark', {design: {watermark: {src, opacity: 0.2}}, slides: [{title: 'Watermark'}]}, 'no picture'],
   ['organization.logo', {organization: {id: 'acme', name: 'Acme', role: 'primary', logo: src}, design: {background: light}, slides: [{title: 'Cover', layout: 'cover'}]}, 'placeholder'],
-  ['design.footer.left.image', {design: {footer: {left: {image: src}}}, slides: [{title: 'Footer', text: 'Body'}]}, 'placeholder'],
-  ['organization.logo.icon', {organization: {id: 'acme', name: 'Acme', logo: {full: 'logo.png', icon: src}}, design: {footer: {left: {image: 'var:organization.logo.icon'}}}, slides: [{title: 'Footer', text: 'Body'}]}, 'placeholder'],
+  ['design.footer.start.image', {design: {footer: {start: {image: src}}}, slides: [{title: 'Footer', text: 'Body'}]}, 'placeholder'],
+  ['organization.logo.icon', {organization: {id: 'acme', name: 'Acme', logo: {full: 'logo.png', icon: src}}, design: {footer: {start: {image: 'var:organization.logo.icon'}}}, slides: [{title: 'Footer', text: 'Body'}]}, 'placeholder'],
   ['organization.logo', {organization: {id: 'acme', name: 'Acme', logo: src}, design: {listBullet: 'image', background: light}, slides: [{title: 'List', items: ['Alpha', 'Beta']}]}, 'character bullets'],
 ];
 

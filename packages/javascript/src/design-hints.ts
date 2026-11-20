@@ -6,13 +6,22 @@ export const THEME_DESIGN_KEYS = ['titleAlignment', 'contentAlignment', 'content
 /** Where an effective design hint came from: the slide's own `design`, the deck's `design`, the resolved theme record, or the slide's layout record. */
 export type DesignHintSource = 'slide' | 'deck' | 'theme' | 'layout';
 
-/** The effective value of every shared design key. A key nobody sets is absent, so the engine default applies. */
+/** A design alignment as a document writes it: logical, so `start` is the left edge of a left-to-right deck and the right edge of a right-to-left one. */
+export type DesignAlignment = 'start' | 'center' | 'end';
+/**
+ * The engine's word for a design alignment. Composed items keep `left` for the start edge and `right` for the end edge
+ * (`physicalAlignment` resolves them against each paragraph's direction), so a consumer of `SlideComposition.design`
+ * that needs an item alignment converts with this. Any other value is `undefined`.
+ */
+export const itemAlignment = (value: unknown): 'left' | 'center' | 'right' | undefined => value === 'start' ? 'left' : value === 'end' ? 'right' : value === 'center' ? 'center' : undefined;
+
+/** The effective value of every shared design key, in the document's words. A key nobody sets is absent, so the engine default applies. */
 export interface DesignHints {
-  titleAlignment?: 'left' | 'center' | 'right';
-  contentAlignment?: 'left' | 'center' | 'right';
+  titleAlignment?: DesignAlignment;
+  contentAlignment?: DesignAlignment;
   contentBox?: boolean;
   contentDirection?: 'horizontal' | 'vertical';
-  chartPrimary?: 'none' | 'top' | 'bottom' | 'left' | 'right';
+  chartPrimary?: 'none' | 'top' | 'bottom' | 'start' | 'end';
   imageFit?: 'cover' | 'contain' | 'stretch' | 'auto';
   listBullet?: 'character' | 'image' | 'none';
   /** LH-08: how list entries are arranged: stacked (`stack`) or as ruled rows (`rows`). Absent: automatic (rows for a list of short labels with descriptions). */
@@ -44,10 +53,10 @@ export interface ResolveDesignHintsOptions {
   deck?: DesignHints;
 }
 
-const ALIGNMENTS = ['left', 'center', 'right'];
+const ALIGNMENTS = ['start', 'center', 'end'];
 const VALUES: { [K in DesignHintKey]: readonly unknown[] | 'boolean' } = {
   titleAlignment: ALIGNMENTS, contentAlignment: ALIGNMENTS, contentBox: 'boolean', contentDirection: ['horizontal', 'vertical'],
-  chartPrimary: ['none', 'top', 'bottom', 'left', 'right'], imageFit: ['cover', 'contain', 'stretch', 'auto'], listBullet: ['character', 'image', 'none'], listStyle: ['stack', 'rows'], mirror: 'boolean',
+  chartPrimary: ['none', 'top', 'bottom', 'start', 'end'], imageFit: ['cover', 'contain', 'stretch', 'auto'], listBullet: ['character', 'image', 'none'], listStyle: ['stack', 'rows'], mirror: 'boolean',
 };
 const themeKeys: ReadonlySet<string> = new Set(THEME_DESIGN_KEYS);
 /** A value the schema allows for the key; anything else is skipped, so the next level answers. */

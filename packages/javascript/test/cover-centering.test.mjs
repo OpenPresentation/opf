@@ -111,14 +111,14 @@ test('missing subtitle and tag leave no reserved gap', () => {
 
 test('explicit heading alignment survives centering', () => {
   const slide = {title: 'Aligned cover', subtitle: 'Aligned subtitle'};
-  const result = composeSlide(slide, {layout: titleSubtitle, titleAlignment: 'center', contentAlignment: 'right', textMeasurement: measurement});
+  const result = composeSlide(slide, {layout: titleSubtitle, titleAlignment: 'center', contentAlignment: 'end', textMeasurement: measurement});
   assert.equal(byField(result, 'title').alignment, 'center');
   // The cover has no content region, so the subtitle joins the title's alignment rather than the host contentAlignment.
   assert.equal(byField(result, 'subtitle').alignment, 'center');
   assert.equal(byField(result, 'title').text.placement.alignment, 'center');
   assert.equal(byField(result, 'subtitle').text.placement.alignment, 'center');
   // A slide that sets its own contentAlignment keeps the explicit split.
-  const split = composeSlide({...slide, design: {titleAlignment: 'center', contentAlignment: 'right'}}, {layout: titleSubtitle, textMeasurement: measurement});
+  const split = composeSlide({...slide, design: {titleAlignment: 'center', contentAlignment: 'end'}}, {layout: titleSubtitle, textMeasurement: measurement});
   assert.equal(byField(split, 'title').alignment, 'center');
   assert.equal(byField(split, 'subtitle').alignment, 'right');
   assert.equal(byField(split, 'subtitle').text.placement.alignment, 'right');
@@ -130,7 +130,7 @@ test('explicit heading alignment survives centering', () => {
 });
 
 test('headers and footers bound the centered group', () => {
-  const presentation = {design: {header: {left: {text: 'Header'}}, footer: {right: {text: '{{slide.number}}'}}}};
+  const presentation = {design: {header: {start: {text: 'Header'}}, footer: {end: {text: '{{slide.number}}'}}}};
   const result = composeSlide({title: 'Cover with furniture', subtitle: 'Centered in remaining space'}, {
     layout: titleSubtitle, presentation, slideNumber: 3,
   });
@@ -144,7 +144,7 @@ test('headers and footers bound the centered group', () => {
 
 test('placed image bands: the cover centers inside the free area', () => {
   const regions = {
-    left: {x: 0, y: 0, width: 640, height: 720}, right: {x: 640, y: 0, width: 640, height: 720},
+    start: {x: 0, y: 0, width: 640, height: 720}, end: {x: 640, y: 0, width: 640, height: 720},
     top: {x: 0, y: 0, width: 1280, height: 360}, bottom: {x: 0, y: 360, width: 1280, height: 360},
   };
   const padding = 0.08 * 720;
@@ -152,7 +152,7 @@ test('placed image bands: the cover centers inside the free area', () => {
     const result = composeSlide({title: 'Cover beside a photo', subtitle: 'Centered in what is left', blocks: [{image: photo, placement: {edge}}]}, {layout: titleSubtitle});
     assert.deepEqual(byField(result, 'image').box, region, edge);
     const area = {
-      left: edge === 'left' ? region.width : 0, right: edge === 'right' ? region.x : 1280,
+      left: edge === 'start' ? region.width : 0, right: edge === 'end' ? region.x : 1280,
       top: edge === 'top' ? region.height : 0, bottom: edge === 'bottom' ? region.y : 720,
     };
     const {headings, top, bottom} = headingGroup(result);
@@ -174,7 +174,7 @@ test('a flowed image is body and keeps the content origin; a placed image is not
   const padding = 0.08 * 720;
   const flowed = composeSlide({title: 'Image slide', subtitle: 'Not a cover', image: {src: photo, alt: 'Harbor'}}, {layout});
   assert.ok(Math.abs(byField(flowed, 'title').box.y - padding) < 1e-6);
-  const placed = composeSlide({title: 'Image slide', subtitle: 'A cover beside it', blocks: [{image: {src: photo, alt: 'Harbor'}, placement: {edge: 'left', size: 0.5}}]});
+  const placed = composeSlide({title: 'Image slide', subtitle: 'A cover beside it', blocks: [{image: {src: photo, alt: 'Harbor'}, placement: {edge: 'start', size: 0.5}}]});
   assert.ok(byField(placed, 'title').box.y > padding + 1);
   assert.deepEqual(byField(placed, 'image').box, {x: 0, y: 0, width: 640, height: 720});
   assert.equal(placed.items.filter(item => item.field === 'image').length, 1);
@@ -186,7 +186,7 @@ test('content and region slides keep the pre-centering geometry', () => {
   assert.ok(byField(content, 'text').box.y >= byField(content, 'title').box.y + byField(content, 'title').box.height, 'body follows the title');
   const blocks = composeSlide({title: 'Blocks', blocks: [{text: 'A'}, {text: 'B'}]});
   assert.ok(Math.abs(byField(blocks, 'title').box.y - padding) < 1e-6);
-  const regions = composeSlide({title: 'Promoted', left: {text: 'A'}, right: {text: 'B'}});
+  const regions = composeSlide({title: 'Promoted', start: {text: 'A'}, end: {text: 'B'}});
   assert.ok(Math.abs(byField(regions, 'title').box.y - padding) < 1e-6);
   const weighted = composeSlide({title: 'Keep weights', composition: {mode: 'row', weights: [2, 1]}, blocks: [{text: 'Wide'}, {text: 'Narrow'}]});
   assert.ok(Math.abs(weighted.items[1].box.width / weighted.items[2].box.width - 2) < 1e-5);
@@ -217,7 +217,7 @@ test('empty body payloads are not body: such title slides center too', () => {
     }
   }
   // Promoted regions retain their separate geometry and never consume a template.
-  const promoted = {title: 'Regions', left: {text: 'x'}, right: {text: 'y'}};
+  const promoted = {title: 'Regions', start: {text: 'x'}, end: {text: 'y'}};
   assert.deepEqual(composeSlide(promoted, {layout: titleSubtitle}).items.map(item=>item.box),composeSlide(promoted).items.map(item=>item.box));
   // Real automatic body payloads keep the heading origin.
   for (const payload of [{blocks: [{text: 'x'}]}, {text: 'x'}, {items: ['x']}, {image: photo}]) {

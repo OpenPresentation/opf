@@ -53,6 +53,8 @@ export function sampleBlock(kind, index = 0) {
       return { timeline: { events: [{ when: "Q1", what: "Baseline" }, { when: "Q2", what: "Pilot" }, { when: "Q3", what: "Launch" }, { when: "Q4", what: "Scale" }] } };
     case "diagram":
       return { diagram: pick(["flowchart LR\n  Plan --> Pilot --> Launch", "flowchart LR\n  Brief --> Review --> Build", "flowchart LR\n  Collect --> Analyze --> Report"], index) };
+    case "shape":
+      return { shape: pick(["roundRect", "chevron", "ellipse"], index), text: pick(["Plan", "Build", "Launch"], index) };
     case "group":
       return { blocks: [sampleBlock("image", index), { text: pick(["Ana Ruiz, Chief Executive", "Sam Lee, Head of Product", "Kai Moreau, Engineering Lead"], index) }] };
     default:
@@ -105,7 +107,9 @@ export function templateDeck(id, record) {
       // Counted per kind across the slide, so two regions of one kind show different samples.
       const index = used[kind] ?? 0;
       used[kind] = index + 1;
-      blocks.push({ region: name, ...sampleBlock(kind, index) });
+      const sample = kind === "list" && ["org-chart", "hierarchy"].includes(region.arrangement)
+        ? { items: [{text:"Plan",level:0},{text:"Build",level:1},{text:"Review",level:1}] } : sampleBlock(kind, index);
+      blocks.push({ region: name, ...sample });
     }
   }
   const filled = { layout: id, title: TITLE, subtitle: SUBTITLE };

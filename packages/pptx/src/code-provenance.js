@@ -44,6 +44,7 @@ const cyrb53 = text => {
   h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
   return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16).padStart(14, '0');
 };
+export const nativeTextHash = cyrb53;
 const fingerprint = (geometry, paragraphs) => cyrb53(JSON.stringify([geometry, paragraphs]));
 const wrapShape = shape => `<p:sld><p:cSld><p:spTree>${shape}</p:spTree></p:cSld></p:sld>`;
 function exportedSignature(shape) {
@@ -61,7 +62,8 @@ export function groupUnchanged(items, paragraphs) {
   });
 }
 
-export function attachTextTags(entries, records, tagName, prefix, kind, {pictures = false, descriptions, signed = false} = {}) {
+// `groups` (SH-07): a record may also name a p:grpSp (a diagram written as shapes); its tag goes on the group's own p:nvPr.
+export function attachTextTags(entries, records, tagName, prefix, kind, {pictures = false, groups = false, descriptions, signed = false} = {}) {
   if (!records.size) return;
   let count = 0;
   const seen = new Set(), types = [];
@@ -69,12 +71,25 @@ export function attachTextTags(entries, records, tagName, prefix, kind, {picture
     const relPath = path.replace('/slides/','/slides/_rels/') + '.rels';
     let rels = dec.decode(entries[relPath]);
     const ids = new Set([...rels.matchAll(/\bId="([^"]+)"/g)].map(match=>match[1]));
-    const pattern = pictures ? /<p:(sp|pic)>[\s\S]*?<\/p:\1>/g : /<p:sp>[\s\S]*?<\/p:sp>/g;
+    const pattern = groups ? /<p:(grpSp|sp|pic)>[\s\S]*?<\/p:\1>/g : pictures ? /<p:(sp|pic)>[\s\S]*?<\/p:\1>/g : /<p:sp>[\s\S]*?<\/p:sp>/g;
     const xml = dec.decode(entries[path]).replace(pattern, shape=>{
       const name = shape.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
       if (!records.has(name)) return shape;
       if (seen.has(name)) throw new Error(`Duplicate generated ${kind} shape.`);
       seen.add(name);
+      const tag = `<p:tag name="${tagName}" val="${hex(signed && shape.startsWith('<p:sp>') ? {...records.get(name), sig: exportedSignature(shape)} : records.get(name))}"/>`;
+      const existing = /<p:custDataLst>\s*<p:tags r:id="([^"]+)"\s*\/>\s*<\/p:custDataLst>/.exec(shape);
+      if (existing) {
+        // CT_CustomerDataList permits one p:tags reference: join its tag list.
+        const relation = array(parser.parse(rels).Relationships?.Relationship).find(item => item.Id === existing[1]);
+        const target = typeof relation?.Target === 'string' && /^\.\.\/tags\/[A-Za-z0-9_-]+\.xml$/.test(relation.Target) ? 'ppt/' + relation.Target.slice(3) : undefined;
+        if (relation?.Type !== REL || relation.TargetMode === 'External' || !target || !entries[target]) throw Error('Generated shape tag relationship is missing or invalid.');
+        const current = dec.decode(entries[target]), list = parser.parse(current)['p:tagLst'];
+        if (!list || !current.includes('</p:tagLst>') || array(list['p:tag']).some(item => String(item.name).toUpperCase() === tagName.toUpperCase())) throw Error('Generated shape tag list is invalid or colliding.');
+        entries[target] = enc.encode(current.replace('</p:tagLst>', tag + '</p:tagLst>'));
+        return shape;
+      }
+      if (/<p:custDataLst\b/.test(shape)) throw Error('Generated shape has unsupported customer data.');
       const part = `ppt/tags/${prefix}${++count}.xml`;
       let id = `rId${prefix[0].toUpperCase()+prefix.slice(1)}${count}`;
       while (ids.has(id)) id += '_';
@@ -97,6 +112,11 @@ export function attachTextTags(entries, records, tagName, prefix, kind, {picture
 }
 
 const children = (nodes, name) => array(nodes).flatMap(node=>node[name] === undefined ? [] : [node[name]]);
+// RR-102: the language of a field run (a date field shows its type in that language).
+const fieldLanguage = nodes => {
+  const lang = array(nodes).find(node => node['a:rPr'] !== undefined)?.[':@']?.lang;
+  return typeof lang === 'string' && lang ? {lang} : {};
+};
 const plainText = nodes => array(nodes).map(node=>node['#text'] ?? '').join('');
 export const nativeTextShapes = tree => [...array(tree?.['p:sp']),...array(tree?.['p:grpSp']).flatMap(nativeTextShapes)];
 const orderedShapes = tree => [...children(tree,'p:sp'),...children(tree,'p:grpSp').flatMap(orderedShapes)];
@@ -122,7 +142,7 @@ export function nativeShapeParagraphs(xml, rootElement = 'p:sld') {
     };
     for (const child of paragraph) {
       if (child['a:br'] !== undefined) text += '\n';
-      if (child['a:fld'] !== undefined) fields.push({type: String(child[':@']?.type ?? ''), text: children(child['a:fld'],'a:t').map(plainText).join(''), start: text.length});
+      if (child['a:fld'] !== undefined) fields.push({type: String(child[':@']?.type ?? ''), text: children(child['a:fld'],'a:t').map(plainText).join(''), start: text.length, ...fieldLanguage(child['a:fld'])});
       text += readRuns(child);
       if (child['mc:AlternateContent'] !== undefined) {
         // FF-45: an a14:m math zone (an OMML equation, m:oMathPara) has no OPF model. Its mc:Fallback runs (the text PowerPoint

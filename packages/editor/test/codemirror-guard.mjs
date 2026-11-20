@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { cpSync, mkdirSync, mkdtempSync, realpathSync, rmSync, symlinkSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, realpathSync, rmSync, statSync, symlinkSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import os from 'node:os';
 import path from 'node:path';
@@ -37,7 +37,10 @@ try {
   mkdirSync(path.join(modules, '@codemirror'), { recursive: true });
   cpSync(viewDir, path.join(modules, '@codemirror', 'view'), { recursive: true, dereference: true });
   for (const name of ['@codemirror/state', 'style-mod', 'crelt', 'w3c-keyname']) {
-    symlinkSync(path.join(siblings, name), path.join(modules, name), 'dir');
+    const target = path.join(siblings, name), link = path.join(modules, name);
+    assert.ok(statSync(target).isDirectory(), 'this fixture links dependency directories only');
+    symlinkSync(target, link, process.platform === 'win32' ? 'junction' : 'dir');
+    assert.equal(realpathSync(link), realpathSync(target), 'the copied view shares the exact dependency directory');
   }
   const other = await import(pathToFileURL(path.join(modules, '@codemirror', 'view', 'dist', 'index.js')).href);
   assert.notEqual(other.ViewPlugin, ViewPlugin, 'the test loads a second copy');

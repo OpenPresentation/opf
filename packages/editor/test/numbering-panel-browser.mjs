@@ -28,7 +28,7 @@ const source = {
   design: { theme: 'classic', fontScheme: 'roboto' },
   slides: [
     { id: 'steps', title: 'Rollout', items: ['Freeze the schema', { text: 'Migrate the data', level: 1 }, { text: 'Verify the counts', level: 1 }, 'Switch traffic', 'Retire the old service'] },
-    { id: 'two', title: 'Two lists', left: { bullets: ['Alpha', 'Beta'] }, right: { items: ['Gamma', 'Delta'] } },
+    { id: 'two', title: 'Two lists', start: { bullets: ['Alpha', 'Beta'] }, end: { items: ['Gamma', 'Delta'] } },
   ],
 };
 
@@ -153,9 +153,9 @@ try {
   assert.equal(await choices.locator('option').count(), 2);
   await choices.selectOption({ index: 1 });
   await dialog.getByLabel('Number this list').check();
-  const two = await waitDoc(current => current.slides[1].right?.numbering !== undefined, 'second list numbered');
-  assert.equal(two.slides[1].right.numbering, 'arabic');
-  assert.equal(two.slides[1].left.numbering, undefined);
+  const two = await waitDoc(current => current.slides[1].end?.numbering !== undefined, 'second list numbered');
+  assert.equal(two.slides[1].end.numbering, 'arabic');
+  assert.equal(two.slides[1].start.numbering, undefined);
   mark('several lists on a slide');
 
   // Turn off numbering on the first slide: one edit removes numbering and entry starts; one Undo brings it all back.

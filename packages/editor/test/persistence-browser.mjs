@@ -132,6 +132,28 @@ try {
   mark('the real playground forwards canvas commit refusal, warns on clean-baseline unload, and recovers after cancel or valid commit');
   await refusalContext.close();
 
+  // opf#932: an earlier change schedules the background autosave; an inline edit started before it fires stays open. The autosave
+  // stores the committed document (the Source change), leaves the draft alone, and the draft is committed and stored by its own commit.
+  const keepContext = await browser.newContext();
+  const { page: keepPage, errors: keepErrors } = await open(keepContext);
+  await applySource(keepPage, edited('Canonical change'));
+  await keepPage.locator('#preview [data-canvas-target][data-opf-path="slides.0.title"]').press('Enter');
+  const keepInput = keepPage.getByRole('textbox', { name: 'Edit title inline', exact: true });
+  await keepInput.waitFor();
+  await keepInput.fill('Draft in progress');
+  await saved(keepPage); // the write the Source change scheduled has fired
+  assert.equal(await keepInput.isVisible(), true, 'the background autosave leaves the new inline edit open');
+  assert.equal(await keepInput.inputValue(), 'Draft in progress', 'and its draft untouched');
+  assert.equal((await stored(keepPage))[0].record.presentation.slides[0].title, 'Canonical change', 'the stored copy is the committed document, not the draft: the earlier change is durable');
+  await keepInput.press('Control+Enter');
+  await keepInput.waitFor({ state: 'detached' });
+  await saved(keepPage);
+  await storedCurrent(keepPage);
+  assert.equal((await stored(keepPage))[0].record.presentation.slides[0].title, 'Draft in progress', 'committing the draft stores it');
+  assert.deepEqual(keepErrors, [], 'no browser errors');
+  mark('a background autosave started by an earlier change keeps a newly opened inline edit open');
+  await keepContext.close();
+
   // --- autosave and restore across a reload ------------------------------------------------------------------------
   const context = await browser.newContext();
   let { page, errors } = await open(context);
@@ -332,6 +354,34 @@ try {
   await page.close();
   mark('a full store reports it and the editor keeps working');
   await fullContext.close();
+
+  // RR-115: an actual host adapter refuses deletion; the offer stays visible and can be retried.
+  const failedDiscardContext = await browser.newContext();
+  await failedDiscardContext.addInitScript((presentation) => {
+    const key = 'opf-editor/v2/discard-failure';
+    const copies = new Map([[key, { version: 2, key: 'discard-failure', savedAt: 1000, name: 'Recovery', slideCount: presentation.slides.length, dirty: true, presentation }]]);
+    window.__denyDiscard = true;
+    window.__discardCopyCount = () => copies.size;
+    window.OPF_EDITOR_HOST = { persistence: { key: 'discard-failure', storage: {
+      get: async (key) => copies.get(key), set: async (key, value) => { copies.set(key, value); },
+      delete: async (key) => { if (window.__denyDiscard) throw Error('delete denied'); copies.delete(key); },
+    } } };
+  }, edited('Discard recovery'));
+  ({ page, errors } = await open(failedDiscardContext));
+  await banner(page).waitFor();
+  await page.getByRole('button', { name: 'Discard copy', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('#autosave-status')?.dataset.state === 'error', undefined, { timeout: 10000 });
+  assert.equal(await banner(page).isVisible(), true, 'failed discard leaves the recovery offer visible');
+  assert.equal(await page.getByRole('button', { name: 'Discard copy', exact: true }).isEnabled(), true, 'failed discard can be retried');
+  assert.equal(await page.evaluate(() => window.__discardCopyCount()), 1);
+  assert.doesNotMatch(await page.locator('[role="status"]').allTextContents().then(parts => parts.join(' ')), /Discarded the stored copy/);
+  await page.evaluate(() => { window.__denyDiscard = false; });
+  await page.getByRole('button', { name: 'Discard copy', exact: true }).click();
+  await banner(page).waitFor({ state: 'hidden' });
+  assert.equal(await page.evaluate(() => window.__discardCopyCount()), 0);
+  assert.deepEqual(errors, []);
+  mark('failed discard retains a visible retryable offer and reports success only after deletion');
+  await failedDiscardContext.close();
 
   // --- accessibility of the prompt ------------------------------------------------------------------------------------------
   const a11y = await browser.newContext();

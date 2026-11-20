@@ -29,7 +29,8 @@ const server = createServer(async (req, res) => {
     const target = path.resolve(root, '.' + decodeURIComponent(url.pathname));
     const relative = path.relative(root, target);
     if (relative.startsWith('..') || path.isAbsolute(relative)) { res.writeHead(403).end(); return; }
-    res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(await readFile(target));
+    const body = await readFile(target);
+    res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(body);
   } catch { res.writeHead(404).end(); }
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -214,7 +215,7 @@ try {
   await page.getByRole('radio', { name: 'PDF' }).click();
   await page.getByRole('button', { name: 'Copy prompt' }).click();
   await page.waitForFunction(() => document.querySelector('.opf-handoff-copy span').textContent === 'Copied');
-  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), buildAgentHandoff(current, { target: 'pdf' }).markdown);
+  assert.equal((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, "\n"), buildAgentHandoff(current, { target: 'pdf' }).markdown);
   await page.keyboard.press('Escape');
   await dialog.waitFor({ state: 'hidden' });
   assert.equal(await page.evaluate(() => document.activeElement.textContent.trim()), 'Export', 'focus returns to the Export button');

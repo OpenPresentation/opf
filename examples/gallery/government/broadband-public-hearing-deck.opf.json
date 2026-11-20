@@ -80,21 +80,21 @@
       "opacity": 0.06
     },
     "header": {
-      "left": {
+      "start": {
         "text": "{{slide.section}}"
       },
-      "right": {
+      "end": {
         "image": "asset:brand-icon"
       }
     },
     "footer": {
-      "left": {
+      "start": {
         "text": "{{organization.name}}"
       },
       "center": {
         "text": "Decision review"
       },
-      "right": {
+      "end": {
         "text": "{{slide.number}}"
       }
     }
@@ -234,7 +234,7 @@
       "id": "s80-regions",
       "section": "Operating model",
       "title": "Operating Model",
-      "top:left": {
+      "top:start": {
         "metric": {
           "value": "31%",
           "label": "Primary signal",
@@ -242,7 +242,7 @@
           "trend": "flat"
         }
       },
-      "top:center+right": {
+      "top:center+end": {
         "text": [
           "Rural Connectivity Office should focus the next cycle on ",
           {
@@ -253,14 +253,14 @@
           " while making the operating tradeoffs clear to public engagement stakeholders."
         ]
       },
-      "middle+bottom:left": {
+      "middle+bottom:start": {
         "quote": {
           "text": "The path is workable if we keep the metric simple and the decision owner visible.",
           "attribution": "Public engagement working group",
           "source": "Stakeholder interview"
         }
       },
-      "middle+bottom:center+right": {
+      "middle+bottom:center+end": {
         "table": {
           "columns": [
             "Workstream",
@@ -820,8 +820,8 @@
             "Openers and closers"
           ],
           "design": {
-            "titleAlignment": "left",
-            "contentAlignment": "left"
+            "titleAlignment": "start",
+            "contentAlignment": "start"
           },
           "direction": "row",
           "regions": [

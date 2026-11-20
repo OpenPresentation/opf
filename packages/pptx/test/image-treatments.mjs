@@ -9,14 +9,14 @@ import { toPptx, fromPptx } from '../dist/index.js';
 import { colorHex, schemeRole, themeColorsOf, clrMapOf } from './helpers/scheme-colors.mjs';
 
 // This suite runs against the linked coordinated core; a core without image block treatment geometry is a pinning error.
-assert.ok(composeSlide({ title: 'probe', blocks: [{ type: 'image', image: 'x', shape: 'circle' }] }).items.find(item => item.field === 'image')?.image?.shape,
+assert.ok(composeSlide({ title: 'probe', blocks: [{ type: 'image', image: 'x', shape: 'ellipse' }] }).items.find(item => item.field === 'image')?.image?.shape,
   'Linked core composition has no image block treatment geometry; pin a core with the FA-22 image blocks.');
 const parser = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', parseTagValue:false});
 const array = value => value == null ? [] : Array.isArray(value) ? value : [value];
 const decode = bytes => new TextDecoder().decode(bytes);
 const uri = `data:image/png;base64,${(await readFile(new URL('fixtures/images/square.png', import.meta.url))).toString('base64')}`;
-const scheme = { name: 'Custom', dark1: '#101820', light1: '#F4F1EA', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
-const deckFor = (treatment, design = {}) => ({ design: { colorScheme: scheme, ...design },
+const scheme = { dark1: '#101820', light1: '#F4F1EA', dark2: '#2A3440', light2: '#E8E4DC', accent1: '#1F5AA6', accent2: '#4A7A3A', accent3: '#B05A2A', accent4: '#7A4A9A', accent5: '#C0C8D0', accent6: '#5A8A9A', hyperlink: '#1F5AA6', followedHyperlink: '#7A4A9A' };
+const deckFor = (treatment, design = {}) => ({ extensions: {fixture: {colorSchemeName: 'Custom'}}, design: { colorScheme: scheme, ...design },
   slides: [{ title: 'Treatment', blocks: [{ type: 'image', image: uri, ...treatment }, { type: 'text', text: 'Body' }] }] });
 const geometryOf = (deck, width = 1280, height = 720) => composeSlide(deck.slides[0], { width, height, presentation: deck }).items.find(item => item.field === 'image').image;
 async function exported(deck) {
@@ -33,8 +33,8 @@ const guides = geometry => Object.fromEntries(array(geometry['a:avLst']?.['a:gd'
 let checked = 0;
 
 // Masks: the picture's preset geometry and guides equal core's normalized shape, at core's frame.
-for (const [shape, extra] of [['rounded', { cornerRadius: 0.12 }], ['circle', {}], ['hexagon', {}], ['rectangle', {}]]) {
-  const deck = deckFor({ placement: { edge: 'right', inset: true }, shape, ...extra });
+for (const [shape, extra] of [['roundRect', { adjust: { adj: 0.12 } }], ['ellipse', {}], ['hexagon', {}], ['rect', {}], ['star5', {}]]) {
+  const deck = deckFor({ placement: { edge: 'end', inset: true }, shape, ...extra });
   const geometry = geometryOf(deck);
   const { picture } = await exported(deck);
   const preset = picture['p:spPr']['a:prstGeom'];
@@ -48,15 +48,15 @@ for (const [shape, extra] of [['rounded', { cornerRadius: 0.12 }], ['circle', {}
 
 // Border: centered solid line on the picture; width in EMU from scaled reference pixels, alpha from #RRGGBBAA.
 {
-  const deck = deckFor({ placement: { edge: 'left' }, shape: 'rounded', border: { color: '#10182080', width: 12 } }, { dimensions: { widthInches: 20, heightInches: 11.25 } });
+  const deck = deckFor({ placement: { edge: 'start' }, shape: 'roundRect', stroke: { color: '#10182080', width: 12 } }, { dimensions: { widthInches: 20, heightInches: 11.25 } });
   const geometry = geometryOf(deck, 1920, 1080);
   const line = (await exported(deck)).picture['p:spPr']['a:ln'];
-  assert.equal(Number(line.w), Math.round(geometry.border.width / 96 * 914400));
+  assert.equal(Number(line.w), Math.round(geometry.stroke.width / 96 * 914400));
   assert.equal(line.algn, 'ctr');
   assert.equal(line['a:solidFill']['a:srgbClr'].val, '101820');
   assert.equal(Number(line['a:solidFill']['a:srgbClr']['a:alpha'].val), Math.round(0x80 / 255 * 100000));
   assert.equal(line['a:miter'].lim, '800000');
-  const themedExport = await exported(deckFor({ border: { color: 'accent1', width: 2 } })), themed = themedExport.picture['p:spPr']['a:ln'];
+  const themedExport = await exported(deckFor({ stroke: { color: 'accent1', width: 2 } })), themed = themedExport.picture['p:spPr']['a:ln'];
   assert.equal(schemeRole(themed['a:solidFill']), 'accent1');
   assert.equal(themedExport.hexOf(themed['a:solidFill']), '1F5AA6');
   checked++;
@@ -81,7 +81,7 @@ for (const [shape, extra] of [['rounded', { cornerRadius: 0.12 }], ['circle', {}
 
 // Overlay: one native shape directly above the picture, in the frame's shape or an edge band.
 {
-  const deck = deckFor({ placement: { edge: 'right', inset: true }, shape: 'circle', overlay: { color: '#00000080', opacity: 0.5 } });
+  const deck = deckFor({ placement: { edge: 'end', inset: true }, shape: 'ellipse', overlay: { color: '#00000080', opacity: 0.5 } });
   const geometry = geometryOf(deck);
   const { overlay, entries } = await exported(deck);
   assert.equal(overlay['p:spPr']['a:prstGeom'].prst, 'ellipse');
@@ -105,8 +105,8 @@ for (const [shape, extra] of [['rounded', { cornerRadius: 0.12 }], ['circle', {}
 }
 
 // Round trip: every treatment field returns while the native objects are unchanged.
-const full = { placement: { edge: 'right', size: 0.46, inset: true }, aspectRatio: 0.5, shape: 'rounded', cornerRadius: 0.12, fit: 'cover', focus: { x: 0.3, y: 0.6 },
-  border: { color: 'dark1', width: 12 }, opacity: 0.8, recolor: { dark: 'accent1', light: 'light1' }, overlay: { color: '#000000', opacity: 0.2 } };
+const full = { placement: { edge: 'end', size: 0.46, inset: true }, aspectRatio: 0.5, shape: 'roundRect', adjust: { adj: 0.12 }, fit: 'cover', focus: { x: 0.3, y: 0.6 },
+  stroke: { color: 'dark1', width: 12 }, opacity: 0.8, recolor: { dark: 'accent1', light: 'light1' }, overlay: { color: '#000000', opacity: 0.2 } };
 {
   const deck = deckFor(full);
   deck.slides[0].blocks[0].image = { src: uri, alt: 'Phone' };
@@ -138,7 +138,7 @@ const full = { placement: { edge: 'right', size: 0.46, inset: true }, aspectRati
   const imported = await fromPptx(zipSync(edited), { onDiagnostic: d => diagnostics.push(d) });
   const block = imported.slides[0].blocks.find(entry => entry.type === 'image');
   assert.equal(block.overlay, undefined);
-  assert.equal(block.shape, 'rounded');
+  assert.equal(block.shape, 'roundRect');
   assert.ok(diagnostics.some(d => d.code === 'invalid-image-provenance'));
   const recolored = { ...entries, [path]: new TextEncoder().encode(xml.replace('<a:alphaModFix amt="80000"/>', '<a:alphaModFix amt="60000"/>')) };
   const plain = await fromPptx(zipSync(recolored), { onDiagnostic: () => {} });
@@ -149,7 +149,7 @@ const full = { placement: { edge: 'right', size: 0.46, inset: true }, aspectRati
 
 // An edge overlay on a non-rectangle mask is core's unsupported-image-treatment and is not drawn.
 {
-  const deck = deckFor({ shape: 'circle', overlay: { color: 'dark1', opacity: 0.5, edge: 'bottom' } });
+  const deck = deckFor({ shape: 'ellipse', overlay: { color: 'dark1', opacity: 0.5, edge: 'bottom' } });
   const diagnostics = [];
   const bytes = await toPptx(deck, { imageFormat: 'preserve', onDiagnostic: d => diagnostics.push(d) });
   assert.ok(diagnostics.some(d => d.code === 'unsupported-image-treatment' && d.path === 'slides.0.blocks.0.overlay.edge'));

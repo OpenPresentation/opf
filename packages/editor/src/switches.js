@@ -9,7 +9,7 @@
 // tables; their labels come from the host's display metadata (`options.vocabularies`, the shape of `catalogDisplay` from
 // `@openpresentation/gallery`), never from data the editor ships.
 import { CHART_TYPES, LANGUAGES, SOCIAL_PLATFORMS, isXYChartType, parseReference, resolveChartData, resolveReference } from "@openpresentation/opf";
-import { chartOptionTarget } from "@openpresentation/opf/composition";
+import { CHART_REFERENCE_TYPES, chartOptionTarget } from "@openpresentation/opf/composition";
 import { createValuePatch, applyJsonPatch, getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { createContentBlock, prepareBlockReplace } from "./blocks.js";
 import { checkedDocument, designPatches, fail, same } from "./edit-helpers.js";
@@ -81,7 +81,7 @@ const DESIGN_KEYS = Object.freeze({
   backgrounds: ["background"],
   "headers-footers": ["header", "footer"],
 });
-const REGION = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:left|center|right)(?:\+(?:left|center|right))*)?|(?:left|center|right)(?:\+(?:left|center|right))*)$/;
+const REGION = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/;
 const BLOCK_KINDS = ["text", "list", "chart", "table", "metric", "quote", "code", "diagram", "timeline", "group", "image", "video"];
 const RESERVED_GROUPS = new Set(["default", "custom"]);
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -282,7 +282,9 @@ export function prepareDimensionSwitch(presentation, dimension, value, options =
       throw fail("path-slide-mismatch", "options.path is not on the slide named by options.slideIndex.", { slideIndex, path: options.path });
     const chart = owner && getValueAtPath(presentation, [...owner, "chart"]);
     if (!chart || typeof chart !== "object") throw fail("chart-not-found", "This slide has no chart to switch. Insert a chart block first.", { slideIndex, path: options.path });
-    patches = chart.type === value ? [] : [...createValuePatch(presentation, [...owner, "chart", "type"], value), ...staleMappingPatches(presentation, owner, chart, value), ...staleComboPatches(presentation, owner, chart, value)];
+    const references = chart.type === value ? { patches: [], loss: [] } : staleReferencePatches(presentation, owner, chart, value, options);
+    patches = chart.type === value ? [] : [...createValuePatch(presentation, [...owner, "chart", "type"], value), ...staleMappingPatches(presentation, owner, chart, value), ...staleComboPatches(presentation, owner, chart, value), ...references.patches];
+    if (references.loss.length) conversionLoss = references.loss;
   } else if (dimension === "blocks") {
     if (options.path === undefined) throw fail("missing-path", "Choose the block to replace with options.path.");
     // convert: true moves the block's own text into the new kind (block-convert.js) instead of replacing it.
@@ -488,6 +490,28 @@ function staleMappingPatches(presentation, owner, chart, type) {
 
 // FA-15: `line`, `secondaryAxis` and the secondary axis title belong to combo charts; any other type ignores them (core warns
 // chart-option-adapted). Switching away from combo removes them, and an `axisTitles` left empty.
+// Explicit reference lines are never dropped silently. A type that cannot draw a chart's references (no single value axis, or no
+// secondary axis for a `secondary` reference) refuses the switch with `chart-reference-lines-unsupported`, so a host can offer the
+// choice; with `removeReferenceLines: true` the switch removes exactly those references and reports them as `loss`.
+function staleReferencePatches(presentation, owner, chart, type, options) {
+  const lines = chart.referenceLines;
+  if (!Array.isArray(lines) || lines.length === 0) return { patches: [], loss: [] };
+  const supported = CHART_REFERENCE_TYPES.has(type), combo = chartOptionTarget(type)?.kind === "combo";
+  const kept = supported ? lines.filter((line) => combo || line?.axis !== "secondary") : [];
+  const removed = lines.length - kept.length;
+  if (removed === 0) return { patches: [], loss: [] };
+  const parts = [...owner, "chart", "referenceLines"], path = parts.join(".");
+  const what = supported
+    ? `${removed === 1 ? "A reference line is" : `${removed} reference lines are`} on the secondary value axis, which a ${type} chart does not have`
+    : `A ${type} chart has no single value axis, so it cannot draw this chart's ${lines.length === 1 ? "reference line" : `${lines.length} reference lines`}`;
+  if (options.removeReferenceLines !== true)
+    throw fail("chart-reference-lines-unsupported", `${what}. Switch with removeReferenceLines: true to remove ${removed === 1 ? "it" : "them"}, or keep a chart type that draws reference lines (${[...CHART_REFERENCE_TYPES].join(", ")}).`, { type, path, count: removed });
+  return {
+    patches: kept.length ? createValuePatch(presentation, parts, kept) : [{ op: "remove", path: opfPathToJsonPointer(parts) }],
+    loss: [`${removed === 1 ? "1 reference line" : `${removed} reference lines`} (${path}): ${what.charAt(0).toLowerCase()}${what.slice(1)}.`],
+  };
+}
+
 function staleComboPatches(presentation, owner, chart, type) {
   if (chartOptionTarget(type)?.kind === "combo") return [];
   const parts = [...owner, "chart"];

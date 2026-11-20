@@ -1,0 +1,311 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: lists, bullets and numbering",
+  "description": "RR-105 format coverage: list items and bullets in every form, nested levels, icons, descriptions, numbering styles and suffixes, columns, and the list design options.",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "icons": {
+    "brand-mark": "./assets/icon.svg"
+  },
+  "organization": {
+    "id": "northwind",
+    "name": "Northwind Logistics",
+    "logo": {
+      "src": "./assets/icon.svg",
+      "alt": "Northwind mark"
+    }
+  },
+  "slides": [
+    {
+      "id": "items-forms",
+      "type": "list",
+      "title": "Three ways to write a list item",
+      "items": [
+        "A plain string for a short point",
+        [
+          "Runs for ",
+          {
+            "text": "one emphasized phrase",
+            "bold": true
+          }
+        ],
+        {
+          "text": "An object with a description",
+          "description": "The description sits under the entry in smaller type."
+        },
+        {
+          "text": [
+            "An object with ",
+            {
+              "text": "runs",
+              "italic": true
+            }
+          ],
+          "description": [
+            "A description in ",
+            {
+              "text": "runs",
+              "bold": true
+            },
+            " too."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "items-levels-icons",
+      "title": "Icons from a set, the deck and a file",
+      "items": [
+        {
+          "text": "Customers renew in every region",
+          "icon": "lucide:users"
+        },
+        {
+          "text": "Two accounts need a call this week",
+          "icon": "lucide:clock"
+        },
+        {
+          "text": "The platform kept its uptime promise",
+          "icon": "brand-mark"
+        },
+        {
+          "text": "Support answers within the hour",
+          "icon": "./assets/icon.svg"
+        }
+      ]
+    },
+    {
+      "id": "items-nested",
+      "title": "Three levels of nesting",
+      "items": [
+        {
+          "text": "Customers",
+          "level": 0
+        },
+        {
+          "text": "Renewals are up in every region",
+          "level": 1
+        },
+        {
+          "text": "Strongest in the Nordics",
+          "level": 2
+        },
+        {
+          "text": "Platform",
+          "level": 0
+        },
+        {
+          "text": "Uptime held at 99.95 percent",
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": "bullets-forms",
+      "title": "Talking points as bullets",
+      "bullets": [
+        "Hiring closes the support gap by March",
+        [
+          "The ",
+          {
+            "text": "new office",
+            "bold": true
+          },
+          " opens in Lisbon"
+        ],
+        {
+          "text": "Budget stays flat",
+          "level": 0
+        },
+        {
+          "text": [
+            "Travel moves to ",
+            {
+              "text": "quarterly",
+              "italic": true
+            },
+            " trips"
+          ],
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": "numbering-roman",
+      "title": "Roman numerals with a period",
+      "numbering": {
+        "style": "roman-upper",
+        "suffix": "period"
+      },
+      "items": [
+        "Agree the scope",
+        "Staff the team",
+        "Ship the pilot"
+      ]
+    },
+    {
+      "id": "numbering-alpha",
+      "title": "Letters in parentheses, starting at C",
+      "numbering": {
+        "style": "alpha-lower",
+        "start": 3,
+        "suffix": "paren-both"
+      },
+      "items": [
+        "Collect the proposals",
+        "Draft the shortlist",
+        "Ask finance for a range"
+      ]
+    },
+    {
+      "id": "numbering-levels",
+      "title": "A numbering style per level",
+      "numbering": [
+        "arabic",
+        {
+          "style": "alpha-upper",
+          "suffix": "paren"
+        },
+        "roman-lower"
+      ],
+      "items": [
+        {
+          "text": "Discovery",
+          "level": 0
+        },
+        {
+          "text": "Interview ten customers",
+          "level": 1
+        },
+        {
+          "text": "Two in each region",
+          "level": 2
+        },
+        {
+          "text": "Summarize the findings",
+          "level": 1
+        },
+        {
+          "text": "Delivery",
+          "level": 0,
+          "start": 4
+        }
+      ]
+    },
+    {
+      "id": "bullets-numbered",
+      "title": "Numbered bullets that restart",
+      "blocks": [
+        {
+          "numbering": "roman-lower",
+          "bullets": [
+            {
+              "text": "Plan the move",
+              "start": 5
+            },
+            "Book the vans",
+            "Label the boxes"
+          ]
+        },
+        {
+          "type": "list",
+          "numbering": "alpha-upper",
+          "items": [
+            "Pack the lab",
+            "Move the servers",
+            "Test the network"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "columns-auto",
+      "title": "A long list flows into columns",
+      "blocks": [
+        {
+          "columns": "auto",
+          "items": [
+            "Austin",
+            "Berlin",
+            "Cairo",
+            "Denver",
+            "Edinburgh",
+            "Fukuoka",
+            "Geneva",
+            "Hanoi",
+            "Istanbul",
+            "Jakarta",
+            "Kyoto",
+            "Lagos"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "columns-two",
+      "title": "Bullets in two columns",
+      "blocks": [
+        {
+          "columns": 2,
+          "bullets": [
+            "Design review",
+            "Security review",
+            "Load test",
+            "Accessibility audit",
+            "Docs freeze",
+            "Release notes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list-image-bullets",
+      "title": "Picture bullets in rows",
+      "design": {
+        "listBullet": "image",
+        "listStyle": "rows"
+      },
+      "items": [
+        {
+          "text": "Faster onboarding",
+          "icon": "lucide:rocket"
+        },
+        {
+          "text": "Fewer escalations",
+          "icon": "lucide:shield-check"
+        },
+        {
+          "text": "Clearer ownership",
+          "icon": "lucide:users"
+        }
+      ]
+    },
+    {
+      "id": "list-no-bullets",
+      "title": "A stacked list without bullet marks",
+      "design": {
+        "listBullet": "none",
+        "listStyle": "stack"
+      },
+      "items": [
+        "Every request gets an owner",
+        "Every owner gets a deadline",
+        "Every deadline gets a review"
+      ]
+    },
+    {
+      "id": "list-character-bullets",
+      "title": "Character bullets, the default",
+      "design": {
+        "listBullet": "character"
+      },
+      "bullets": [
+        "One shared backlog",
+        "One weekly review",
+        "One place for decisions"
+      ]
+    }
+  ]
+}

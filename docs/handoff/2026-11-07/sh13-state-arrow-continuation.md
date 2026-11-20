@@ -1,0 +1,7 @@
+# SH-13 state-arrow continuation
+
+Branch `codex/sh-13-state-arrow-review` derives from frozen reviewed source `04a7fc6636569bdb09c0435188f289ddffe4c4d7` and changes only the state parser, its regression, fragment and review notes. The frozen preparation branch was not modified.
+
+The shared link reader accepted `<->` and `<-->`, but the state translator silently retained only a forward edge. PlantUML's primary state grammar uses separate [forward](https://github.com/plantuml/plantuml/blob/master/src/main/java/net/sourceforge/plantuml/statediagram/command/CommandLinkState.java) and [reverse](https://github.com/plantuml/plantuml/blob/master/src/main/java/net/sourceforge/plantuml/statediagram/command/CommandLinkStateReverse.java) commands, with only one arrowhead. The continuation reports `diagram-syntax` at the authored line and asks for two transitions when both directions are intended.
+
+The new regression exercises both two-headed forms and confirms line 4/column 1, plus supported forward/reverse controls. A single-file esbuild transpilation of the regression against the frozen source reproduces the failure (`ok: true` for invalid input); the same regression against the corrected source passes both cases. This did not rebuild packages or occupy a heavy-check slot. `pnpm check:changed` and the ordinary public-entry package regression remain owed after the coordinator's v0.33 check pause. No PR or CI dispatch was started.

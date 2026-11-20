@@ -570,21 +570,19 @@ export function createSourcePane(container, options = {}) {
     flush();
     const before = deck();
     const beforeText = dirty ? undefined : control.api.getValue();
-    transientNotes = [];
     let change;
     applying = true;
+    // A refused document throws and changes nothing, the findings included: its findings name places in its own text, not in the text the
+    // pane still shows (the caller has them on the error and may load the text as a draft with `setSourceText`).
     try {
       // Remember the spelling of the document being replaced, then open the new one.
       syncJson(before);
       change = editor.replaceDocument(input, { format, ...replaceOptions.meta });
-    } catch (error) {
-      rejectionFindings = error?.issues?.length ? findingsOfError(error) : [normalizeFinding({ message: errorText(error), kind: "rejected" })];
-      renderFindings();
-      throw error;
     } finally { applying = false; }
     clearTimeout(timer);
     timer = null;
     for (const key of Object.keys(drafts)) delete drafts[key];
+    transientNotes = [];
     syntaxFindings = [];
     rejectionFindings = [];
     dirty = false;

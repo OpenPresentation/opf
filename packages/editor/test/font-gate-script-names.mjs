@@ -78,8 +78,10 @@ const nameDeck = (name, sample) => ({
   $schema: "https://openpresentation.org/schema/opf/v1",
   name: `Script name fixture ${name} ${sample.id}`,
   ...(sample.language ? { language: sample.language } : {}),
-  design: { fontScheme: { id: "x-script-name-fixture", name, major: name, minor: name, eastAsian: { major: name, minor: name }, complexScript: { major: name, minor: name } } },
-  slides: [{ id: "a", title: sample.text, text: [{ text: sample.text }, { text: sample.text, bold: true }] }],
+  design: { fontScheme: { id: "x-script-name-fixture", major: name, minor: name, eastAsian: { major: name, minor: name }, complexScript: { major: name, minor: name } } },
+  // LH-188: the subtitle keeps the slide a content slide, so the text is set at its role size in both faces (a one-message slide grows
+  // its text as far as each face's widths allow, which the size comparison below does not measure).
+  slides: [{ id: "a", title: sample.text, subtitle: sample.text, text: [{ text: sample.text }, { text: sample.text, bold: true }] }],
 });
 const codeDeck = (name, sample) => {
   const text = sample.codes.split(" ").map((code) => String.fromCharCode(0xf000 + parseInt(code, 16))).join("");

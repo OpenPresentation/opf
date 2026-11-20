@@ -20,7 +20,7 @@ The original PRs retain the review discussion. No history was force-pushed.
 | opf-editor | [`ae4cc6426b04`](https://github.com/OpenPresentation/opf-editor/tree/ae4cc6426b04c7ca428c1b4acacea2e11d99fa84) |
 | opf-pptx | [`fbe9a73d012d`](https://github.com/OpenPresentation/opf-pptx/tree/fbe9a73d012dbd51d65a39251e405e488651a70b) |
 
-[Archive manifest](../evidence/final-handoff-20260915/archive-checkpoints.json)
+Archive manifest
 records each validated main base as well. Read archived code with `git show`
 or a separate checkout. Resume from current main and port bounded changes;
 do not blindly merge the archive or revive old package/runtime configuration.

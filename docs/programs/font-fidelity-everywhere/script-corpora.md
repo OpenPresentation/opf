@@ -1,7 +1,7 @@
 # Script shaping corpora and per-family qualification (FF-44, RR-17)
 
 Program: font-fidelity-everywhere item FF-44, carried by [RR-17](../release-readiness/burndown.md). Source of the numbers:
-[docs/evidence/script-corpora-20261001](../../evidence/script-corpora-20261001/README.md) (committed JSON; nothing here is a native
+docs/evidence/script-corpora-20261001 (committed JSON; nothing here is a native
 PowerPoint claim). Code: [opf-render](https://github.com/OpenPresentation/opf-render) `test/fixtures/script-corpora.json`,
 `scripts/script-corpora.mjs`, `scripts/measure-script-references.mjs`, `test/script-corpora*.mjs`
 ([opf-render#93](https://github.com/OpenPresentation/opf-render/pull/93)).

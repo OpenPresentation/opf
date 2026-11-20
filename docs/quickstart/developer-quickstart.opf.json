@@ -9,21 +9,21 @@
     "theme": "minimal",
     "fontScheme": "roboto",
     "header": {
-      "left": {
+      "start": {
         "text": "Developer  quickstart"
       },
       "center": {
         "text": "{{organization.name}}"
       },
-      "right": {
+      "end": {
         "text": "{{slide.section}}"
       }
     },
     "footer": {
-      "left": {
+      "start": {
         "text": "Local, no account"
       },
-      "right": {
+      "end": {
         "text": "{{slide.number}}"
       }
     }

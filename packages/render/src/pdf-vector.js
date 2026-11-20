@@ -1,5 +1,6 @@
+import { loadFontFiles } from './font-files.js';
 import { FontEmbedder, FontLibrary, nominalAdvance } from "./pdf-fonts.js";
-import { actualTextFor, layoutText, textClusters } from "./pdf-text.js";
+import { actualTextFor, attributeClusters, layoutText } from "./pdf-text.js";
 import { IDENTITY, viewBoxTransform, applyPoint, applyStyleSheets, attributesOf, inheritStyle, invert, multiply, parseColor, parseFontWeight, parseLength, parseNumberList, parsePath, parseTransform, pathBounds, ROOT_STYLE, shapeToPath, transformPath } from "./pdf-style.js";
 import { PdfFile, asciiString, name, num, ref, sha256, hex, textString, utf16Hex, utf8Encoder } from "./pdf-writer.js";
 import { isElement, parseXml, serialize, escapeAttribute } from "./pdf-xml.js";
@@ -129,25 +130,7 @@ class Converter {
   // Fonts
 
   async loadFontFiles(files, directories) {
-    // Font files are Node-only. A browser host passes no paths: its faces come from the SVG's @font-face data or `fontData`.
-    if (!files.length && !directories.length) return;
-    const { readdir, readFile, stat: fsStat, path } = await nodeFileSystem();
-    const seen = new Set();
-    const read = async (file) => {
-      const resolved = path.resolve(file);
-      if (seen.has(resolved)) return;
-      seen.add(resolved);
-      try {
-        const stat = await fsStat(resolved);
-        await this.fonts.addFile(resolved, stat, () => readFile(resolved));
-      } catch (error) {
-        this.diagnostic({ code: "pdf-font-unreadable", message: `Font file ${resolved} could not be read: ${error.code ?? error.message}.`, origin: resolved });
-      }
-    };
-    for (const directory of directories) {
-      for (const file of await listFonts(directory, { readdir, path })) await read(file);
-    }
-    for (const file of files) await read(file);
+    await loadFontFiles(this.fonts, files, directories, d => this.diagnostic(d));
   }
 
   addEmbeddedFontFaces(root) {
@@ -769,9 +752,11 @@ class Converter {
     if (!runs.some((run) => run.fill || run.stroke)) return;
     // Runs are drawn in visual (left to right) order. Right-to-left runs are marked /ReversedChars so extractors read
     // their characters back to front, and a cluster whose glyph-to-Unicode map cannot give its text (a ligature, a
-    // letter split into base and dots, a mirrored bracket) carries /ActualText; a left-to-right run the map cannot
-    // recover (reordered Indic or Khmer clusters, a no-break space) carries one /ActualText for its text object.
+    // letter split into base and dots, a mirrored bracket) carries /ActualText. In a left-to-right run a reordered or
+    // decomposed cluster (an Indic, Khmer or Myanmar pre-base sign, a Thai am) puts its whole text on one glyph, so the map
+    // gives it in drawing order; a run the glyphs cannot be aligned with, or a no-break space, carries /ActualText.
     for (const run of runs) {
+      attributeClusters(run);
       run.entry = this.embedder.use(run.face);
       for (const glyph of run.glyphs) glyph.cid = this.embedder.record(run.entry, glyph);
     }
@@ -791,7 +776,6 @@ class Converter {
     const solidFill = fill;
     if (!solidFill && !stroke) return;
     const rtl = run.level % 2 === 1;
-    const runActual = !rtl && (!sameText(run) || NON_ASCII_SPACE.test(run.logical)) ? run.logical : null;
     const operations = [];
     let current = null, pending = 0, hex = "";
     const flushHex = () => { if (hex) { current.items.push(`<${hex}>`); hex = ""; } };
@@ -836,15 +820,14 @@ class Converter {
       hex += code;
       pending += nominal - shaped + shift;
     };
-    // Each unit is a glyph, or for a left-to-right run the glyph map cannot give back (reordered Indic or Khmer clusters, a
-    // no-break space) a cluster of glyphs. A unit whose text the map cannot give carries it as /ActualText, one span per
-    // unit as Chromium writes them; a run that cannot be split into clusters gets one span for the whole run.
+    // Each unit is a glyph, or in a left-to-right run with a reordered or decomposed cluster or a no-break space (see
+    // attributeClusters) a cluster of glyphs. A unit whose text the glyph map alone does not give carries it as /ActualText,
+    // one span per unit as Chromium writes them; a left-to-right run whose glyphs cannot be aligned with its text gets one
+    // span for the whole run.
     let units, wholeRun = false;
-    if (runActual === null) units = run.glyphs.map((glyph) => ({ glyphs: [glyph], actual: actualTextFor(run, glyph) }));
-    else {
-      units = textClusters(run);
-      if (units === null) { wholeRun = true; units = [{ glyphs: run.glyphs, actual: null }]; }
-    }
+    if (!rtl && run.clusters?.some((cluster) => cluster.actual !== null)) units = run.clusters;
+    else if (!rtl && (!sameText(run) || NON_ASCII_SPACE.test(run.logical))) { wholeRun = true; units = [{ glyphs: run.glyphs, actual: null }]; }
+    else units = run.glyphs.map((glyph) => ({ glyphs: [glyph], actual: actualTextFor(run, glyph) }));
     const openSpan = (text) => {
       if (current) { addNumber(); flushHex(); }
       current = null;
@@ -855,14 +838,15 @@ class Converter {
       current = null;
       operations.push({ end: true });
     };
-    if (wholeRun) openSpan(runActual);
+    if (wholeRun) openSpan(run.logical);
     for (const unit of units) {
       if (unit.actual !== null) openSpan(unit.actual);
       for (const glyph of unit.glyphs) {
         const advance = glyph.advance * scale + glyph.spacing + extra;
-        if (glyph.codePoints.length === 0) {
+        if (glyph.codePoints.length === 0 && !glyph.silent) {
           // A glyph that stands for no character (a dot or mark the font split off a letter) is drawn as a filled outline,
-          // so extractors see only the letters.
+          // so extractors see only the letters. A silent glyph of a reordered cluster stays text (its cluster's text is on
+          // another glyph): an outline there would leave a gap that extractors read as a space inside the word.
           decorations.push({ glyph, pen });
           pending -= advance * 1000 / size;
         } else showGlyph(glyph, pen);
@@ -1242,18 +1226,6 @@ export function dataUriBytes(header, payload) {
   return bytes;
 }
 
-async function listFonts(directory, { readdir, path }) {
-  const found = [];
-  let entries;
-  try { entries = await readdir(directory, { withFileTypes: true }); } catch { return found; }
-  entries.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
-  for (const entry of entries) {
-    const full = path.join(directory, entry.name);
-    if (entry.isDirectory()) found.push(...await listFonts(full, { readdir, path }));
-    else if (/\.(ttf|otf)$/i.test(entry.name)) found.push(full);
-  }
-  return found;
-}
 
 /**
  * Convert SVG slides to a vector PDF. `options` carries the resolved conversion settings (see toPdf in raster.js).

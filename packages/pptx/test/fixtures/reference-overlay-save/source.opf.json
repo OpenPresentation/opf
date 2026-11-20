@@ -1,0 +1,122 @@
+{
+  "name": "Reference witnesses: markers and bounded overlays",
+  "description": "Public synthetic source. Native line markers and fixed bar/single-category overlays; no native editability claim.",
+  "design": {
+    "theme": "minimal",
+    "fontScheme": "roboto",
+    "variant": "light1"
+  },
+  "slides": [
+    {
+      "id": "line-markers",
+      "chart": {
+        "type": "line-with-markers",
+        "data": {
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "rows": [
+            [
+              "A",
+              4
+            ],
+            [
+              "B",
+              6
+            ],
+            [
+              "C",
+              5
+            ]
+          ]
+        },
+        "legend": "none",
+        "dataLabels": false,
+        "referenceLines": [
+          {
+            "value": 8,
+            "label": "Target 8",
+            "labelPosition": "start",
+            "stroke": {
+              "color": "#C44900",
+              "width": 2,
+              "dash": "dot"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "bar-overlay",
+      "chart": {
+        "type": "bar",
+        "data": {
+          "columns": [
+            "Region",
+            "Actual"
+          ],
+          "rows": [
+            [
+              "North",
+              12
+            ],
+            [
+              "South",
+              18
+            ],
+            [
+              "East",
+              16
+            ]
+          ]
+        },
+        "legend": "none",
+        "dataLabels": false,
+        "referenceLines": [
+          {
+            "value": 20,
+            "label": "Target 20",
+            "stroke": {
+              "color": "#C44900",
+              "width": 2,
+              "dash": "dash"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "singleton-overlay",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Period",
+            "Actual"
+          ],
+          "rows": [
+            [
+              "Only",
+              7
+            ]
+          ]
+        },
+        "legend": "none",
+        "dataLabels": false,
+        "referenceLines": [
+          {
+            "value": 10,
+            "label": "Target 10",
+            "labelPosition": "start",
+            "stroke": {
+              "color": "#087E8B",
+              "width": 2,
+              "dash": "dot"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

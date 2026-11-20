@@ -1,6 +1,6 @@
 # Diagrams
 
-A `diagram` is a diagram written as text. You write [Mermaid](https://mermaid.js.org) source, and the engines draw it in the deck's own fonts and colors, so a flowchart, a sequence of messages or a mind map looks like the rest of the slide and not like a pasted screenshot. This guide covers when to use one, how to write it in JSON, YAML and Markdown, what it looks like, how it is sized, and how it exports. The field reference is [Content payloads](content-payloads.md#diagram); the schema definition is `$defs.Diagram` (`opf schema presentation '/$defs/Diagram'`).
+A `diagram` is a diagram written as text. You write [Mermaid](https://mermaid.js.org), [Graphviz DOT](#graphviz-dot) or [PlantUML](#plantuml) source, and the engines draw it in the deck's own fonts and colors, so a flowchart, a sequence of messages or a mind map looks like the rest of the slide and not like a pasted screenshot. This guide covers when to use one, how to write it in JSON, YAML and Markdown, what it looks like, how it is sized, and how it exports. The field reference is [Content payloads](content-payloads.md#diagram); the schema definition is `$defs.Diagram` (`opf schema presentation '/$defs/Diagram'`).
 
 ## When to use a diagram
 
@@ -12,12 +12,13 @@ Choose the content kind by what the content is, not by how it should look.
 | Numbers plotted on axes or as shares of a whole, where the values should stay editable data | `chart` |
 | Dated or ordered milestones with progress (`done`, `current`, `planned`) | `timeline` (the payload, with its status design) |
 | Parallel entries with details, or a short sequence of one-line steps | a list (`items`) or layout `process` |
+| A single-root reporting tree of up to eight people (an assistant is an entry with `assistant: true`), or up to seven overlapping sets (their common overlap named by a last entry with `overlap: true`) | a list on layout `org-chart` or `venn` ([Trees and set overlap](smartart.md#trees-and-set-overlap-sh-21)) |
 
 A Mermaid `pie` or `timeline` diagram is a quick picture. A `chart` or `timeline` payload keeps the data editable and gets the engines' chart and timeline design, with highlights and status words. Prefer the payload when it fits and the diagram when only a diagram can show the structure.
 
 ## Writing one
 
-A string is shorthand for `{ "source": value }`. The object form adds `alt`, the text alternative, and `syntax` (`"mermaid"`, the default and the only value today). A diagram is a root payload, a block, or the content of a layout region that accepts it. It takes a `caption` like an image or a chart.
+A string is shorthand for `{ "source": value }`. The object form adds `alt`, the text alternative, and `syntax`: `"mermaid"` (the default), `"dot"` for a [Graphviz DOT](#graphviz-dot) graph or `"plantuml"` for a [PlantUML](#plantuml) diagram. A diagram is a root payload, a block, or the content of a layout region that accepts it. It takes a `caption` like an image or a chart.
 
 ```json
 {
@@ -25,6 +26,10 @@ A string is shorthand for `{ "source": value }`. The object form adds `alt`, the
   "diagram": "flowchart LR\n  A[Request] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| D[Revise]\n  D --> A"
 }
 ```
+
+The slide this draws, in the engine's default design:
+
+![The slide drawn from the example: the title above a flowchart in which a request goes to an Approved? decision, yes leads to Build and no leads to Revise, which loops back to the request.](images/diagrams/review-loop.svg)
 
 With an `alt` and a caption:
 
@@ -38,6 +43,8 @@ With an `alt` and a caption:
   "caption": "Figure 1. The review loop"
 }
 ```
+
+![The slide drawn from the example: a brief goes to an Approved? decision, yes leads to Build and no returns to the brief, with the caption Figure 1. The review loop under the diagram.](images/diagrams/review-loop-caption.svg)
 
 As YAML a block scalar keeps the source readable:
 
@@ -65,9 +72,11 @@ Beside text, give the slide `blocks`; the diagram takes its own cell:
 }
 ```
 
+![The slide drawn from the example: two bullets on the left and, on the right, a sequence diagram in which the client sends POST /decks to the API and the API answers 201 Created.](images/diagrams/beside-text.svg)
+
 ### In Markdown
 
-A fenced block whose info word is `mermaid` is a diagram. An optional `alt="..."` after the word is its text alternative. `toMarkdown` writes a diagram back the same way, so the round trip is lossless.
+A fenced block whose info word is `mermaid` is a diagram, one whose info word is `dot` is a [DOT diagram](#graphviz-dot) (`{ source, syntax: "dot" }`) and one whose info word is `plantuml` a [PlantUML diagram](#plantuml) (`{ source, syntax: "plantuml" }`). An optional `alt="..."` after the word is its text alternative. `toMarkdown` writes a diagram back the same way, so the round trip is lossless.
 
 ````markdown
 # Every request is reviewed before it ships
@@ -85,7 +94,7 @@ A source with a blank first or last line, or an `alt` that holds a backtick or a
 
 ## Supported Mermaid families
 
-OPF draws diagrams with [pele](https://pele.run), which parses Mermaid 12.1 syntax. The first line of the source names the family. All the built-in families are supported; ZenUML is not.
+OPF draws diagrams with [pele](https://pele.run), the shared layout/drawing library pinned as `pele@1.13.0` in this source. It parses Mermaid 12.1 syntax. OPF reads the supported DOT and PlantUML subsets itself and adapts them to the same engine; these are not separate Graphviz or PlantUML renderer installations. The first line of the source names the family. All the built-in families are supported; ZenUML is not.
 
 | Family | First line | Shows |
 | --- | --- | --- |
@@ -122,7 +131,7 @@ OPF draws diagrams with [pele](https://pele.run), which parses Mermaid 12.1 synt
 | Swimlane | `swimlane-beta` | A flowchart in lanes |
 | Agent flow | `agentflow-beta` | The steps and tools of an agent workflow |
 
-The six most useful, each as a complete source:
+The six most useful, each as a complete source and the slide it draws in the default design:
 
 ````text
 flowchart LR
@@ -131,11 +140,15 @@ flowchart LR
   B -->|no| D[Park it]
 ````
 
+![A flowchart: an idea goes to a Worth testing? decision; yes leads to Prototype and no to Park it.](images/diagrams/family-flowchart.svg)
+
 ````text
 sequenceDiagram
   Client->>API: POST /decks
   API-->>Client: 201 Created
 ````
+
+![A sequence diagram: the client sends POST /decks to the API, and the API answers 201 Created.](images/diagrams/family-sequence.svg)
 
 ````text
 mindmap
@@ -144,6 +157,8 @@ mindmap
     Efficiency
     People
 ````
+
+![A mind map: Strategy in a circle at the center with the branches Growth, Efficiency and People.](images/diagrams/family-mindmap.svg)
 
 ````text
 timeline
@@ -154,6 +169,8 @@ timeline
     2026 Q3 : All regions
 ````
 
+![A timeline titled Regional rollout: the Pilot section in 2026 Q1 with one operations team, and the Rollout section in 2026 Q3 with all regions.](images/diagrams/family-timeline.svg)
+
 ````text
 stateDiagram-v2
   [*] --> Queued
@@ -162,6 +179,8 @@ stateDiagram-v2
   Building --> Failed: error
   Failed --> Queued: retry
 ````
+
+![A state diagram: Queued goes to Building, which goes to Live on success or Failed on error, and Failed returns to Queued on retry.](images/diagrams/family-state.svg)
 
 ````text
 journey
@@ -173,7 +192,149 @@ journey
     Build a first deck: 4: New user
 ````
 
+![A user journey titled Onboarding: creating an account scores 5, verifying the email 3 and building a first deck 4.](images/diagrams/family-journey.svg)
+
 For the full syntax of each family, read the [Mermaid documentation](https://mermaid.js.org/intro/); pele follows it, but draws with its own layout (see [The engine](#the-engine)).
+
+## Graphviz DOT
+
+A [DOT](https://graphviz.org/doc/info/lang.html) graph (`graph` or `digraph`) is a diagram with `syntax: "dot"`. OPF reads the DOT language itself and gives the graph to pele's layered layout, the one that draws a Mermaid flowchart, so a DOT diagram is laid out in ranks as Graphviz's `dot` engine lays it out, sized, styled and exported exactly as a flowchart is. No Graphviz code ships or runs (Graphviz is EPL-2.0), and the drawing is pele's, so it does not match the pixels of a Graphviz rendering.
+
+```json
+{
+  "title": "Every change passes the same pipeline",
+  "diagram": {
+    "syntax": "dot",
+    "source": "digraph release {\n  rankdir=LR\n  node [shape=box, style=rounded]\n  subgraph cluster_ci {\n    label=\"Continuous integration\"\n    Commit -> Build -> Test\n  }\n  Review [shape=diamond, label=\"Approved?\"]\n  Test -> Review [label=\"passes\"]\n  Test -> Build [label=\"fails\", style=dashed]\n  Review -> Release [label=\"yes\"]\n  Release [shape=ellipse]\n}"
+  }
+}
+```
+
+![The slide drawn from the example: Commit, Build and Test in a group named Continuous integration, Test going to an Approved? diamond when it passes and back to Build, dashed, when it fails, and yes leading to a rounded Release.](images/diagrams/dot-pipeline.svg)
+
+In Markdown, the `dot` fence:
+
+````markdown
+# A deck moves from draft to published
+
+```dot alt="A draft is submitted for review; review approves it or sends it back."
+digraph states {
+  rankdir=LR
+  node [shape=circle]
+  Draft -> Review [label="submit"]
+  Review -> Draft [label="changes"]
+  Review -> Published [label="approve"]
+  Published [shape=doublecircle]
+}
+```
+````
+
+![The slide drawn from the example on a dark variant: Draft, Review and a double-circled Published, with submit, changes and approve on the edges.](images/diagrams/dot-states.svg)
+
+A runnable deck is [`examples/technical/dot-diagrams.opf.json`](../examples/technical/dot-diagrams.opf.json).
+
+What OPF draws from a DOT source:
+
+| DOT | Drawn as |
+| --- | --- |
+| `digraph` and `->`, `graph` and `--`, `strict` | Edges with an arrowhead in a digraph and without one in a graph; `strict` draws a repeated edge once |
+| `rankdir` (`TB`, `LR`, `BT`, `RL`) | The direction the ranks run (top to bottom by default) |
+| `label` on the graph | The diagram's title, drawn above it |
+| `subgraph cluster_*` (or `cluster=true`) and its `label` | A labeled group around its nodes, nested as written; a node is in the innermost cluster that mentions it. Other subgraphs only group statements (`rank=same` is not kept) |
+| `node [...]`, `edge [...]`, `graph [...]` | Defaults for the statements after them, scoped to their subgraph |
+| Node `label` | The node's text: `\n`, `\l` and `\r` break lines, `\N`, `\G`, `\E`, `\T` and `\H` are the node, graph, edge, tail and head names; a record's fields (`{a\|b\|<p> c}`) are its lines; an HTML-like label is read as text (`<br/>` breaks a line) |
+| Node `shape` | The shapes in the table below |
+| Node `style` | `rounded` rounds a box, `dashed` and `dotted` dash the outline, `bold` thickens it, `invis` leaves the node and its edges out |
+| Edge `label` (or `xlabel`) | The edge's label |
+| Edge `style` and `penwidth` | `dashed` and `dotted` are a dashed line, `bold` or a `penwidth` of 2 or more a thick one, `invis` an edge that only places its nodes |
+| `arrowhead`, `arrowtail`, `dir` | `none` is no marker, the `dot` and `odot` arrows a circle, `tee` and `box` a cross, every other arrow type an arrowhead; `dir=both` draws both ends (with the head's marker), `dir=none` neither, and `dir=back` draws the edge from its head to its tail, which the layout then ranks that way |
+| `minlen` | The number of ranks the edge spans (up to 8) |
+| Ports (`a:p:n`) | Read and not kept: the layout decides where an edge meets its node |
+
+| DOT shape | Drawn as | PowerPoint shape |
+| --- | --- | --- |
+| `box`, `rect`, `rectangle`, `square`, `Msquare`, `record` | A rounded box | Rounded rectangle |
+| `Mrecord`, `box` with `style=rounded` | A box with rounder corners | Rounded rectangle |
+| `ellipse` (the default), `oval`, `egg` | A stadium, which holds its label as an ellipse does | Rounded rectangle (fully rounded) |
+| `circle`, `Mcircle`, `doublecircle`, `point` | A circle, a double circle, a small filled circle | Ellipse |
+| `diamond`, `Mdiamond` | A diamond | Diamond |
+| `hexagon`, `octagon`, `doubleoctagon`, `tripleoctagon`, `septagon` | A hexagon | Hexagon |
+| `parallelogram`, `trapezium`, `invtrapezium` | A parallelogram, a trapezoid, an inverted trapezoid | Parallelogram, trapezoid, freeform |
+| `triangle`, `invtriangle` | A triangle, an inverted triangle | Triangle, freeform |
+| `cylinder`, `note`, `tab`, `folder` | A cylinder, a card with a cut corner, a folder | Freeform |
+| `box3d`, `component` | Stacked boxes, a framed box | Rounded rectangles and lines |
+| `plaintext`, `plain`, `none`, `underline` | Text without an outline | Text box |
+| Any other shape (`house`, `star`, `cds`, ...) | A rounded box | Rounded rectangle |
+
+The deck decides colors, fonts and sizes, as it does for Mermaid: `color`, `fillcolor`, `fontcolor`, `fontname`, `fontsize`, `bgcolor`, `width`, `height`, `pos` and the other attributes of Graphviz's drawing are read and ignored, and so are `style=filled`, `constraint`, `weight`, `splines` and `rank`.
+
+**Layouts OPF does not draw are refused, not approximated.** A graph whose `layout` attribute names another Graphviz engine (`neato`, `fdp`, `sfdp`, `circo`, `twopi`, `osage`, `patchwork`) is not drawn: the slide reports a finding at the attribute's line and column ("OPF draws DOT graphs with a layered layout, as Graphviz's dot engine does; the neato layout is not drawn ...") and the engines draw the "Diagram unavailable" placeholder. Remove the attribute, or write `layout=dot`, to draw the graph in layers. An HTML-like label that holds a `<table>` is refused the same way; write the label as text, or as a record.
+
+In a double-quoted string `\"` is a quote and a backslash before a line break continues the line; every other backslash pair (`\\`, `\n`, `\l`, `\N`) is a label escape, so `"c:\\"` is the text `c:\`. Text arrives as written, backticks included.
+
+A DOT source holds one graph, at most 20,000 characters, 500 edges and 16 levels of nested subgraphs. A syntax error is a finding with its line and column in the DOT source; if pele rejects what OPF made of a source, the finding says so without a position (pele's would be in generated text).
+
+## PlantUML
+
+A [PlantUML](https://plantuml.com) diagram is a diagram with `syntax: "plantuml"`, written from its `@start` line to its `@end` line. OPF reads PlantUML itself and draws each kind as the Mermaid family of the same kind, so a PlantUML diagram is laid out by pele, sized, styled and exported exactly as that family is. No PlantUML code ships or runs (PlantUML is GPL), and the drawing is pele's, so it does not match the pixels of a PlantUML rendering.
+
+```json
+{
+  "title": "The API answers every request with findings",
+  "diagram": {
+    "syntax": "plantuml",
+    "source": "@startuml\nactor Author\nparticipant \"Deck API\" as API\ndatabase Store\nAuthor -> API : POST /decks\nAPI -> Store : save\nStore --> API : id\nalt valid\n  API --> Author : 201 Created\nelse invalid\n  API --> Author : 422 findings\nend\n@enduml"
+  }
+}
+```
+
+![The slide drawn from the example: Author, Deck API and a Store database with POST /decks, save and id, then an alt frame where a valid deck answers 201 Created and an invalid one 422 findings.](images/diagrams/plantuml-sequence.svg)
+
+In Markdown, the `plantuml` fence:
+
+````markdown
+# Every brief is reviewed before it is built
+
+```plantuml
+@startuml
+start
+:Write the brief;
+if (Approved?) then (yes)
+  :Build the deck;
+else (no)
+  :Revise it;
+endif
+stop
+@enduml
+```
+````
+
+![The slide drawn from the example: a start dot, Write the brief, an Approved? diamond, yes to Build the deck and no to Revise it, both ending at a stop.](images/diagrams/plantuml-activity.svg)
+
+A runnable deck with every kind is [`examples/technical/plantuml-diagrams.opf.json`](../examples/technical/plantuml-diagrams.opf.json).
+
+The kinds OPF draws, and what it reads of each:
+
+| PlantUML diagram | Drawn as | What is read |
+| --- | --- | --- |
+| Sequence (`participant`, `A -> B : message`) | Sequence | `participant`, `actor`, `boundary`, `control`, `entity`, `database`, `collections` and `queue` with `as` names; messages `->`, `-->` (dashed), `->>`, `-\` and `-/` (the last three are drawn with the open head), `->x`, `<-`, `<->`; `++` and `--` activations, `activate`, `deactivate`, `create`, `destroy`, `return`; `alt`/`else`, `opt`, `loop`, `par`, `break`, `critical` and `group`; notes (`left of`, `right of`, `over`, one line or a block); `ref over`; `== dividers ==` and `...delays...` as notes over every participant; `box`; `autonumber` (plain; numbers from 1); `title` |
+| Class (`class`, `interface`, `enum`) | Class | Classes, abstract classes, interfaces, enums, annotations and the other class keywords, with `as` names, generics and stereotypes; members in braces or as `Name : member`, `{static}` and `{abstract}`; `extends` and `implements`; relations `<|--`, `<|..`, `*--`, `o--`, `-->`, `..>`, `--`, `..` (both ways) with cardinalities and labels; notes on a class and a floating `note "text" as N` that no link refers to; packages and namespaces |
+| State (`[*]`, `state`) | State | States with `as` names and descriptions, transitions with events, composite states, `--` and `||` regions, `<<choice>>`, `<<fork>>` and `<<join>>`, notes left of or right of a state, `left to right direction` |
+| Activity, the current syntax (`start`, `:action;`, `stop`) | Flowchart | `start`, `stop`, `end`, `kill`, `detach`; actions over one or several lines (an SDL ending `|`, `<`, `>`, `/`, `]` or `}` picks the shape); `if`/`elseif`/`else`/`endif`, `switch`/`case`, `while`/`endwhile`, `repeat`/`repeat while`, `fork`/`fork again`/`end fork` (bars), `split`; arrow labels (`-> label;`); `partition` and `group` blocks and `|swimlanes|` as groups; notes beside the last action; `(A)` connectors |
+| Use case (`actor`, `(use case)`) | Use case | Actors (`actor`, `:Name:`), use cases (`usecase`, `(Name)`) with `as` names (including `(Use the application) as (Use)`), `rectangle` and `package` boundaries around use cases (one level; a nested one is drawn beside its parent; an actor written inside a boundary is drawn outside it, and a boundary with no use case is not drawn), associations with labels, `<<include>>` and `<<extend>>` on dotted links, generalization, notes left of, right of, top of or bottom of an element, `left to right direction` |
+| Component and deployment (`[Component]`, `node`, `database`) | Flowchart | `[Component]`, `component`, `() Interface`, `interface`, `database`, `node`, `cloud`, `artifact`, `folder`, `queue`, `actor` and the other element keywords as shapes; `package`, `node`, `folder`, `frame`, `cloud`, `database` and `rectangle` blocks as groups (named, with `as`, or unnamed: `cloud {`), which a link can name; links with their line (`--`, `..`, `==`, `-[hidden]-`), direction, ends and labels; notes left of, right of, top of or bottom of an element |
+| Mind map (`@startmindmap`) | Mind map | `*` depth (and `+` and `-` for the two sides), Markdown indentation, boxless `*_` nodes as square ones, multi-line `:text;` nodes |
+| Gantt (`@startgantt`) | Gantt | `Project starts`, tasks that `last` or `require` days or weeks, `starts` and `ends` on a date or at another task's start or end (with days before or after), `then`, milestones that `happen`, `is N% complete` (100% done, more than 0 active), `-- sections --`, closed weekdays and dates. OPF schedules the tasks in working days and writes their dates; without `Project starts`, the days are numbered from 1 |
+
+In `participant Participant as Foo`, `Foo` is the name later lines use and `Participant` is what is drawn (PlantUML's own example); a quoted side is always what is drawn (`participant "Web App" as W`, `participant W as "Web App"`). The same holds for classes, states, use cases, actors, components and gantt tasks (`[Prototype design] as [D1]`).
+
+PlantUML's styling is ignored, as Mermaid's themes are: `skinparam`, `!theme`, `<style>`, colors, `hide` and `show`, `scale`, headers, footers, captions, legends, `mainframe` and `autoactivate` (no activation bars). A keyword is a statement only in its own shape: an element named `Header`, `Show`, `Title`, `Node` or `Group` keeps its messages and relations. Spacing lines (`...`, `|||`, `||45||`) are ignored, since the layout spaces the messages; `...text...` and `== text ==` are notes.
+
+**What OPF does not draw is refused, not approximated.** The other PlantUML diagrams (timing, object, network, ArchiMate, entity relationship, Salt, JSON, YAML, work breakdown structures and the other `@start` kinds), the legacy activity syntax (`(*) --> "First"`), messages from outside a sequence diagram (`[->`), circle ends (`->o`), a cross or half head on a double-headed message, `autonumber` with arguments, `newpage`, history states (`[H]`), `label` and `goto`, `hide @unlinked` and `hide <<stereotype>>`, notes on a link or floating notes that a link names (a lone floating class note is drawn), a note above or below a state, a gantt `pauses` or `is deleted`, a ** after a message, a second diagram in one source, and the preprocessor (`!include`, `!define`, `!function`, `$variables`) report a finding at their line ("OPF does not draw PlantUML timing diagrams; it draws sequence, class, state, ...") and the engines draw the "Diagram unavailable" placeholder. So does a line OPF cannot read in a diagram it draws.
+
+`return` answers the call of the latest activation (`++`, `activate`) and deactivates it; without one it replies to the last unanswered call. A `destroy` followed by messages of others is drawn with the last message to or from the destroyed participant, as pele requires. If pele rejects what OPF made of a source, the finding says so without a position (pele's would be in generated text).
+
+A PlantUML source holds one diagram, at most 20,000 characters (2,000 on a line), 500 messages, relations or arrows, and 16 levels of nested blocks.
 
 ## How the deck styles a diagram
 
@@ -186,6 +347,23 @@ The deck decides colors and fonts, so a diagram follows the slide it sits on:
 - **Fonts.** Labels use the font scheme's body font, and code-like labels (class members, for example) its code font.
 - **Dark backgrounds, dark variants and color maps** adapt with no change to the source: `design.variant: "dark1"` on a slide redraws its diagram from the dark surface.
 
+The same slide, with the same source, in four designs from the default catalog:
+
+```json
+{
+  "title": "Every request is reviewed before it ships",
+  "diagram": "flowchart LR\n  A[Request] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| D[Revise]\n  D --> A\n  C --> E[Test]\n  E --> F{Passes?}\n  F -->|yes| G[Release]\n  F -->|no| C"
+}
+```
+
+| `classic`, `forest-green`, `aptos` | `bold`, `deep-purple`, `montserrat` |
+| --- | --- |
+| ![The flowchart on a white slide with pale green nodes.](images/diagrams/style-classic.svg) | ![The flowchart on a white slide with pale purple nodes and the Montserrat font.](images/diagrams/style-bold.svg) |
+| **`minimal`, `burnt-orange`, `georgia`** | **`classic`, `steel-blue`, `open-sans`, slide `design.variant: "dark1"`** |
+| ![The flowchart on a dark brown slide with orange-brown nodes and a serif font.](images/diagrams/style-minimal.svg) | ![The flowchart on a black slide with dark nodes, light labels and the Open Sans font.](images/diagrams/style-dark.svg) |
+
+Every image in this guide is the renderer's own SVG output for the source above it, drawn by `scripts/build-diagram-doc-images.mjs` (`pnpm check:diagram-doc-images` keeps them current).
+
 Mermaid's own theming (`%%{init: ...}%%`, themes, `themeVariables`) and click callbacks are ignored. Authored `style`, `classDef` and C4 `UpdateElementStyle` colors are the exception: pele applies them and OPF's painter keeps them, so a shape with an authored color no longer follows the deck's colors, variant or contrast rules. Leave them out and let the deck decide; if one shape must stand out, prefer a different node shape or a label to a color.
 
 ## Sizing
@@ -197,13 +375,38 @@ Core lays a diagram out for its block with the deck's measured fonts, the same w
 3. A diagram is centered in its block. A region anchored to the bottom places it there.
 4. Pele lays the diagram out for the width it has, so a smaller size is a new layout, not a shrunken picture: a wide flowchart may turn to run downward.
 
-When the diagram does not fit even at the floor, it is drawn smaller to stay inside its block, and the slide reports a `text-overflow` finding at the diagram's path, with advice. Fix it in the content, not in `minFontSize`:
+When the diagram does not fit even at the floor, a flowchart or a state diagram is first tried in the other main direction (`LR` and `TB` swap, `RL` and `BT` swap; a state diagram without a `direction` is top to bottom, so it tries `direction LR`). If the labels reach the floor there, the diagram is drawn that way and the slide reports an `arrangement-adapted` info finding ("The flowchart is drawn top to bottom because left to right does not fit at the readability floor"). This applies to a direction the author wrote too: the source keeps its text, only the drawing turns, and the preview and the PPTX export draw the same turned layout. A diagram that fits as written is never turned.
+
+When no direction holds the labels at the floor (or the diagram type has no direction), the diagram as written is drawn smaller to stay inside its block, and the slide reports a `text-overflow` finding at the diagram's path, naming the directions tried. Fix it in the content, not in `minFontSize`:
 
 - give the diagram a slide or a region of its own, or put it beside short text rather than under long text;
-- draw it the other way (`flowchart TB` for `LR`, or the reverse);
 - split it into two diagrams, or shorten the labels.
 
-The overflow check needs composition or rendering with the resolved fonts; `opf validate` alone cannot see it.
+`opf validate` reports both findings, `text-overflow` and `arrangement-adapted`, whether or not `@openpresentation/opf-render` is installed, because it composes every slide and lays each diagram out. With the renderer it measures with the fonts `opf convert` draws with (the report says `layout (measured)`); without it, with core's portable estimate (`layout (estimated)`, and a hint says how to install the renderer). The two can disagree for a diagram near the limit: a flowchart of ten one-word branches gets `arrangement-adapted` measured and `text-overflow` estimated (checked 2026-11-14, CLI 0.34.0). Treat an estimated result as provisional and run `opf validate` or `opf convert` with the renderer installed for the final answer.
+
+### Write for readable labels
+
+A diagram is the slide's main content, so write it to be read from the back of a room: few nodes, few hops, short labels. Measured with this repository's renderer (core 0.34.0, `opf convert` to SVG, a titled slide at 1280 x 720 with the diagram alone in the body; sizes are reference pixels, 32 is the most a label gets and 16 the floor, a body list is 28 to 32):
+
+| Flowchart (nodes, longest path in hops) | Labels of one or two words | Labels of three or four words |
+| --- | --- | --- |
+| 3 nodes in a row | 32 | 32 |
+| 4 in a row | 32 | 21 |
+| 5 in a row | 32 | 17 |
+| 6 in a row | 27 | 15 (under the floor, `text-overflow`) |
+| 8 in a row | 20 | 11 (`text-overflow`) |
+| 10 in a row | 16 | 9 (`text-overflow`) |
+| 7 nodes, one parent with three children, each with one child (written `TB` or `LR`) | 32 | not measured |
+| 10 nodes in a tree three levels deep | 18 to 25 (`LR` 25, `TB` 18) | not measured |
+
+What the numbers say, and so what to write:
+
+- **Keep to 3 to 6 nodes on a slide, and to one or two words a label.** That keeps labels at 27 pixels or more, close to the body text. At 8 nodes labels are 20 pixels and the diagram reads as small print beside the slide's title; at 10 nodes they are at the floor.
+- **A label of three or four words costs about as much as two more nodes.** Put the detail in the slide's text or notes, or in a second slide, and keep the node to the noun.
+- **Split a long flow over several slides** (one stage or one decision per slide, each with its own title that says what happens there) instead of writing one chain of 8 or more. Each part is then drawn at 32.
+- **Direction follows the shape, and the engine tries both.** A chain is drawn best left to right on a wide slide: five nodes in a row are 32 pixels left to right and 18 top to bottom, because the slide is shorter than it is wide. A parent with many children is the other way: one parent with five children is 20 pixels left to right and 32 top to bottom. Write `TB` for a fan-out or a hierarchy and `LR` for a sequence; do not turn a long chain top to bottom to make it fit, and do not rely on the engine's turn (`arrangement-adapted`) to save a diagram that has too many nodes.
+- **Do not shrink to fit.** Never lower `minFontSize` or draw a diagram in a small region so that a large one fits; fewer nodes and shorter labels is the fix, and a `text-overflow` finding on a diagram means the slide has too much in it.
+- **Give the diagram the slide.** A title and the diagram, or the diagram beside a few short lines, not a diagram under a paragraph.
 
 ### Layouts that accept a diagram
 
@@ -223,7 +426,7 @@ A block binds to a region by kind, role and reading order ([Binding content to r
 
 ## Accessibility
 
-`alt` is the text alternative: say what the diagram shows, not that it is a diagram ("A brief goes to review; approved work is built, rejected work returns to the brief."). Without `alt`, engines derive one from the diagram type and its labels (for example "Flowchart: Request, Approved?, Build, Revise"), up to 400 characters. The preview draws the diagram as one `role="img"` named by that text, and the PPTX export writes it as the picture's description.
+`alt` is the text alternative: say what the diagram shows, not that it is a diagram ("A brief goes to review; approved work is built, rejected work returns to the brief."). Without `alt`, engines derive one from the diagram type and its labels (for example "Flowchart: Request, Approved?, Build, Revise"), up to 400 characters. The preview draws the diagram as one `role="img"` named by that text, and the PPTX export writes it as the description of the picture (or of the group of shapes).
 
 ## Exports
 
@@ -232,9 +435,61 @@ A block binds to a region by kind, role and reading order ([Binding content to r
 | SVG preview | The diagram as vector shapes and text in the slide's colors and fonts |
 | PNG | The preview rasterized |
 | PDF | Vector; the diagram's labels stay selectable text |
-| PPTX | A native SVG picture with a PNG fallback: crisp at any size, recolorable as a picture in PowerPoint, `alt` as the picture's description. `fromPptx` brings it back as a `diagram`. |
+| PPTX (the default, `diagrams: "shapes"`) | Native PowerPoint shapes, connectors and text in one group, drawn from the preview's own geometry, `alt` as the group's description. `fromPptx` brings an unchanged group back as a `diagram`, a DOT or PlantUML diagram with its own source. A diagram that cannot be written as shapes is the picture below. |
+| PPTX, `diagrams: "picture"` | A native SVG picture with a PNG fallback: crisp at any size, recolorable as a picture in PowerPoint, `alt` as the picture's description. `fromPptx` brings it back as a `diagram`. |
 
-The PPTX diagram is a picture, not native PowerPoint shapes and connectors: the nodes are not editable one by one. PowerPoint's own "Convert to Shape" works on the picture and gives editable shapes, but that is PowerPoint's conversion, not an OPF export, and it does not map back to the diagram. To change a diagram, edit its source in OPF and export again. Native editable PPTX shapes are planned; see the [diagram plan](plans/diagrams-svg.md) and the [compatibility matrix](compatibility-matrix.md).
+### Native shapes in PowerPoint
+
+The PPTX export writes each diagram as editable PowerPoint shapes that look like the preview (`diagrams: "shapes"`, the default). To get one SVG picture per diagram instead, as earlier releases did, opt out:
+
+```js
+const bytes = await toPptx(deck, { diagrams: "picture" });
+await convert(deck, "deck.pptx", { diagrams: "picture" });
+```
+
+```sh
+opf convert deck.opf.json deck.pptx --diagrams picture
+```
+
+The shapes are built from pele's laid-out drawing, the same geometry the preview draws, never a second layout or PowerPoint's connector routing:
+
+- **Nodes** are shapes. An outline that is exactly a PowerPoint preset is that preset (`rect`, `roundRect`, `ellipse`, `diamond`, `hexagon`, `parallelogram`, `trapezoid`, `triangle`, checked against the [shape geometry](shapes.md)); any other outline (a cylinder, a flag, a stick figure, a pie slice) is a freeform of its exact path.
+- **Labels** are real text in the deck's fonts at the preview's size, weight, color and baseline, with no wrapping and no autofit. A node's label is the node's own text, so it moves with the node; other labels are text boxes.
+- **Edges** keep their exact path and arrowheads. A straight edge without arrowheads is a PowerPoint connector glued to the connection sites of the nodes it touches, so it follows a node you move. Every other edge is a freeform of its line and its arrowheads: PowerPoint opens a connector only with one of its preset routes (a connector of freeform geometry makes the file unreadable), and its largest line end is about a fifth shorter than pele's arrowhead, so a glued connector would not look like the preview.
+- **Fills and lines** keep their colors, opacity, gradients, widths, dashes, caps and joins.
+- Everything is one group named `OPF diagram N`, with the diagram's `alt` as its description.
+
+A diagram family is written as shapes only after PowerPoint's drawing of it has been compared with the preview, source by source. Every family below passed: in PowerPoint 365 for Windows, with an example source per family (the ones in this guide where it has one) and a harder one (more nodes, long labels, right to left where the family has a direction), each slide rendered through PowerPoint and compared with the preview pixel by pixel and by eye, in five designs: the engine default (a dark slide in Aptos), a light theme, a serif font scheme (Georgia), a deck in Segoe UI, and a Japanese deck in Yu Gothic for the families that take labels (flowchart, sequence, mind map, timeline, kanban). In every design the shapes, lines and fills match the preview to antialiasing and every label sits where the preview puts it; what differs is the glyphs where the preview draws a font with a stand-in (see below).
+
+| Family | Written as shapes | Family | Written as shapes |
+| --- | --- | --- | --- |
+| Flowchart | yes | Architecture | yes |
+| Sequence | yes | Kanban | yes |
+| Class | yes | Packet | yes |
+| State | yes | Radar | yes |
+| Entity relationship | yes | Treemap | yes |
+| Gantt | yes | Venn | yes |
+| Pie | yes | Ishikawa | yes |
+| Quadrant | yes | Requirement | yes |
+| Mind map | yes | Wardley map | yes |
+| Timeline | yes | Tree view | yes |
+| User journey | yes | Event modeling | yes |
+| XY chart | yes | Railroad | yes |
+| Sankey | yes | Cynefin | yes |
+| Git graph | yes | Use case | yes |
+| C4 | yes | Swimlane | yes |
+| Block | yes | Agent flow | yes |
+
+A DOT diagram is drawn as a flowchart, and a PlantUML diagram as its Mermaid family, so each is written as shapes as that family is. The list is core's `DIAGRAM_SHAPE_FAMILIES` (from `@openpresentation/opf/composition`). A diagram stays the picture, with the info finding `pptx/diagram-shapes-unavailable` naming its family and the reason, when:
+
+- its family is not in that list (a new pele diagram type, until it has been compared);
+- its drawing uses something PowerPoint has no native form for: a clip path, a mask, a filter, a pattern, an embedded image, text on a path, or right-to-left text (whose placement PowerPoint decides by its own bidirectional layout).
+
+What can differ from the preview is what differs for all of the deck's text: where the preview draws a font with a stand-in (Aptos, Segoe UI and Yu Gothic, for example, which OPF does not bundle), PowerPoint draws the real font, so the glyph shapes and weight differ a little, while every line starts, ends and sits where the preview puts it. For a diagram that must be the preview to the pixel, export with `diagrams: "picture"`.
+
+**Editing and import.** The shapes are ordinary PowerPoint shapes: restyle, move or retype them as you like. `fromPptx` reads an unchanged group back as the diagram, with its Mermaid, DOT or PlantUML source and the group's current description as `alt`. Once a member is moved, resized, retyped, added or removed, the group imports as its shapes and reports `invalid-diagram-provenance`: the edit is kept and the source is not reconstructed. To keep the source as the truth, edit it in OPF and export again. With `provenance: false` (`--provenance none`) the group carries no source and imports as its shapes.
+
+PowerPoint's own "Convert to Shape" on a picture diagram also gives shapes, but that is PowerPoint's conversion, not an OPF export, and it does not map back to the diagram. See the [compatibility matrix](compatibility-matrix.md).
 
 ## Errors and limits
 
@@ -244,8 +499,12 @@ The PPTX diagram is a picture, not native PowerPoint shapes and connectors: the 
 
 ## The engine
 
-[pele](https://pele.run) 1.13.0 (MIT, no runtime dependencies) is the engine. It is synchronous and does not use the DOM, so the preview, the PDF and the PPTX export need no browser, and the drawing is deterministic for a given source and fonts. Core measures the text with the deck's fonts, so line breaks match the rest of the slide.
+[pele](https://pele.run) 1.13.0 (MIT, no runtime dependencies) is the engine; OPF's own DOT and PlantUML readers (`dotToMermaid` and `plantumlToMermaid`, from `@openpresentation/opf/composition`, which show the Mermaid a source becomes) hand it DOT graphs and PlantUML diagrams. It is synchronous and does not use the DOM, so the preview, the PDF and the PPTX export need no browser, and the drawing is deterministic for a given source and fonts. Core measures the text with the deck's fonts, so line breaks match the rest of the slide.
 
-Node, Bun, Deno and edge runtimes (Cloudflare Workers, Vercel Edge) load every diagram type with core and draw any diagram at once. A browser bundle loads only pele's core with OPF (about 12 KB gzipped) and each diagram type the first time a deck draws one (13 to 54 KB gzipped each), through the package's `#diagram-engine` import map. The renderer's browser fonts handle loads them in `ensure` (its `pending` lists them as `diagram:<type>`), so `<opf-deck>`, the player, browser export and the editor wait for them as they wait for fonts; `toPptx` loads them itself. A host that draws with `toSvg` directly calls `await ensureDiagrams(presentation)` from `@openpresentation/opf/composition` first (`diagramsPending(presentation)` lists what it would load); until then a diagram draws as a "Loading diagram" placeholder, which is not a finding.
+Node, Bun and Deno load every diagram type with core and draw any diagram at once. A browser bundle or an edge Worker (Cloudflare Workers, Vercel Edge) loads only pele's core with OPF (about 12 KB gzipped) and each diagram type the first time a deck draws one (13 to 54 KB gzipped each), and OPF's PlantUML reader (about 10 KB gzipped) the first time a deck draws a PlantUML diagram, through the package's `#diagram-engine` import map; a Worker that never loads a diagram type does not carry their code. The renderer's browser fonts handle loads them in `ensure` (its `pending` lists them as `diagram:<type>`), so `<opf-deck>`, the player, browser export and the editor wait for them as they wait for fonts; `toPptx` loads them itself. A host that validates or draws with `validate`, `composeSlide` or `toSvg` directly calls `await ensureDiagrams(presentation)` (from `@openpresentation/opf` or `@openpresentation/opf/composition`) first; `diagramsPending(presentation)` lists what it would load. Shapes and icon sets load the same way, and one preload covers all three: see [Engines and icon sets that load on demand](how-opf-works.md#engines-and-icon-sets-that-load-on-demand). Until then a diagram draws as a "Loading diagram" placeholder and its source is not checked, which is not a finding.
 
 Pele reads Mermaid 12.1 syntax but has its own layout and drawing, so a diagram does not match the pixels of mermaid.js, and an unusual construct may parse in one and not in the other. Write for the OPF drawing: check a diagram in the preview (`opf convert deck.opf.json slide-{n}.png`), not in Mermaid's live editor.
+
+PlantUML Gantt schedules refuse durations, offsets or task spans over 36,600 days and more than 366,000 calendar-day checks per diagram. These limits produce a located diagnostic where a source location is available; shorten the schedule or split it into separate diagrams. A calendar with every weekday closed, an invalid date, or a task ending before it starts is refused instead of normalized.
+
+PlantUML state transitions use one arrowhead. Write two separate transitions for both directions; a two-headed state arrow is a source-positioned syntax finding.

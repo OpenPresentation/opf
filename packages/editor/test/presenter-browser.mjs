@@ -37,8 +37,12 @@ try {
   }, [count, hidden, extra]);
   // The page behind a full screen element takes no focus, so the opener can be focused once full screen has ended.
   const fullscreenOver = () => page.waitForFunction(() => !document.fullscreenElement);
+  // The browser answers an exit (its `fullscreenchange`) after `fullscreenElement` is already null: a presentation started before that event
+  // reads it as the visitor leaving. The exit promises are tracked below; the event comes before the one for the exit settles.
+  const exitsAnswered = () => page.waitForFunction(() => window.realExitsPending === 0);
   const open = async (index) => {
     await fullscreenOver();
+    await exitsAnswered();
     await page.locator('#opener').focus();
     return page.evaluate((i) => window.presenter.start(i), index);
   };
@@ -404,15 +408,18 @@ try {
 
   // An exit answered with its event after its promise (as Chrome does) or the other way round is the presenter's own either way, and the next
   // time the user leaves full screen is theirs, however soon: the earlier exit is not waited for any longer.
-  for (const eventFirst of [true, false]) {
+  // A third order: the exit settles and its event never comes (the browser merged it with the next request's change), so the next presentation's
+  // own full screen is the first change a presenter sees (the closed one is destroyed, as a host that mounts a new presenter does), and the exit
+  // is no longer waited for.
+  for (const order of ['event first', 'promise first', 'no event']) {
     const outcome = await scripted(`pair(); first.start(0); fs.grant(0); await settle(); first.stop();
-      ${eventFirst ? 'fs.finishExit(0);' : 'fs.finishExit(0, { event: false }); await settle(); document.dispatchEvent(new Event("fullscreenchange"));'}
+      ${order === 'event first' ? 'fs.finishExit(0);' : order === 'promise first' ? 'fs.finishExit(0, { event: false }); await settle(); document.dispatchEvent(new Event("fullscreenchange"));' : 'fs.finishExit(0, { event: false }); first.destroy();'}
       await settle();
       second.start(0); fs.grant(1); await settle();
       const before = second.isRunning();
       fs.userExit(); await settle();
       return { before, after: second.isRunning(), log: lateLog.slice() };`);
-    assert.deepEqual(outcome, { before: true, after: false, log: ['first', 'second'] }, `the user leaving full screen right after an earlier presenter's exit ends the presentation (${eventFirst ? 'event, then promise' : 'promise, then event'})`);
+    assert.deepEqual(outcome, { before: true, after: false, log: ['first', 'second'] }, `the user leaving full screen right after an earlier presenter's exit ends the presentation (${order})`);
     await cleanUp();
   }
 

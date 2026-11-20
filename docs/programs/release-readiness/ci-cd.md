@@ -365,7 +365,8 @@ files. Splitting the editor off the pptx job alone would have saved about two mi
   plan; `scripts/ecosystem-scope.test.mjs` pins the matrix, the denominators and the aggregator.
 - **Balance.** `scripts/ci-test-weights.json` holds the seconds per test file from that run. The slices come from the sibling's
   list and these weights (longest first, onto the lightest slice), so every job computes the same partition. A stale or missing
-  weight only unbalances the slices. To refresh it, read the `[i/n] node test/<file>` lines and their timestamps in a full-tier job log.
+  weight only unbalances the slices. To refresh it, run `node scripts/ci-test-weights.mjs` on the job logs of one full run (opf#1319; it reads the
+  `+ node test/<file>` lines and their timestamps).
 - **Required name.** `packages` aggregates the jobs; a matrix job's result is success only when all its slices succeeded.
   `candidate-gallery-results.mjs` lists the normal lane as `ecosystem-render`, `ecosystem-pptx`, `ecosystem-editor` and
   `ecosystem-core`. The ruleset is untouched: it requires `packages`.

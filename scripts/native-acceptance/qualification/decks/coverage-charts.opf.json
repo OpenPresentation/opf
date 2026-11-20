@@ -1,0 +1,1334 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: chart types and chart options",
+  "description": "RR-105 format coverage: the chart types the corpus did not draw (stacked and 100 percent stacked, doughnut, radar, map), and every chart option: data labels, legends, axis titles, colors, highlight, mapping, datasets, reference lines.",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "datasets": {
+    "pipeline": {
+      "title": "Pipeline by stage",
+      "columns": [
+        "Month",
+        "Won",
+        "Lost",
+        "Open"
+      ],
+      "rows": [
+        [
+          "Jul",
+          12,
+          4,
+          30
+        ],
+        [
+          "Aug",
+          15,
+          6,
+          28
+        ],
+        [
+          "Sep",
+          19,
+          5,
+          33
+        ],
+        [
+          "Oct",
+          22,
+          7,
+          35
+        ]
+      ],
+      "source": {
+        "src": "https://example.com/data/pipeline.csv",
+        "retrieved": "2026-10-05T09:30:00Z"
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "stacked-column",
+      "title": "Every segment grew in the stacked view",
+      "blocks": [
+        {
+          "chart": {
+            "type": "stacked-column",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Enterprise",
+                "Mid-market",
+                "Self-serve"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  42,
+                  30,
+                  18
+                ],
+                [
+                  "Q2",
+                  46,
+                  33,
+                  22
+                ],
+                [
+                  "Q3",
+                  51,
+                  31,
+                  27
+                ],
+                [
+                  "Q4",
+                  55,
+                  36,
+                  31
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "100pct-stacked-column",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Enterprise",
+                "Mid-market",
+                "Self-serve"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  42,
+                  30,
+                  18
+                ],
+                [
+                  "Q2",
+                  46,
+                  33,
+                  22
+                ],
+                [
+                  "Q3",
+                  51,
+                  31,
+                  27
+                ],
+                [
+                  "Q4",
+                  55,
+                  36,
+                  31
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "stacked-bar",
+      "title": "Shares hold steady across the year",
+      "blocks": [
+        {
+          "chart": {
+            "type": "stacked-bar",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Enterprise",
+                "Mid-market",
+                "Self-serve"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  42,
+                  30,
+                  18
+                ],
+                [
+                  "Q2",
+                  46,
+                  33,
+                  22
+                ],
+                [
+                  "Q3",
+                  51,
+                  31,
+                  27
+                ],
+                [
+                  "Q4",
+                  55,
+                  36,
+                  31
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "100pct-stacked-bar",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Enterprise",
+                "Mid-market",
+                "Self-serve"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  42,
+                  30,
+                  18
+                ],
+                [
+                  "Q2",
+                  46,
+                  33,
+                  22
+                ],
+                [
+                  "Q3",
+                  51,
+                  31,
+                  27
+                ],
+                [
+                  "Q4",
+                  55,
+                  36,
+                  31
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "stacked-area",
+      "title": "Self-serve takes a larger share",
+      "blocks": [
+        {
+          "chart": {
+            "type": "stacked-area",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Enterprise",
+                "Mid-market",
+                "Self-serve"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  42,
+                  30,
+                  18
+                ],
+                [
+                  "Q2",
+                  46,
+                  33,
+                  22
+                ],
+                [
+                  "Q3",
+                  51,
+                  31,
+                  27
+                ],
+                [
+                  "Q4",
+                  55,
+                  36,
+                  31
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "100pct-stacked-area",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Enterprise",
+                "Mid-market",
+                "Self-serve"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  42,
+                  30,
+                  18
+                ],
+                [
+                  "Q2",
+                  46,
+                  33,
+                  22
+                ],
+                [
+                  "Q3",
+                  51,
+                  31,
+                  27
+                ],
+                [
+                  "Q4",
+                  55,
+                  36,
+                  31
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "stacked-line",
+      "title": "Cumulative bookings by segment",
+      "blocks": [
+        {
+          "chart": {
+            "type": "stacked-line",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Enterprise",
+                "Mid-market",
+                "Self-serve"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  42,
+                  30,
+                  18
+                ],
+                [
+                  "Q2",
+                  46,
+                  33,
+                  22
+                ],
+                [
+                  "Q3",
+                  51,
+                  31,
+                  27
+                ],
+                [
+                  "Q4",
+                  55,
+                  36,
+                  31
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "stacked-line-with-markers",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Enterprise",
+                "Mid-market",
+                "Self-serve"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  42,
+                  30,
+                  18
+                ],
+                [
+                  "Q2",
+                  46,
+                  33,
+                  22
+                ],
+                [
+                  "Q3",
+                  51,
+                  31,
+                  27
+                ],
+                [
+                  "Q4",
+                  55,
+                  36,
+                  31
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "radar",
+      "title": "Two teams, five skills",
+      "blocks": [
+        {
+          "chart": {
+            "type": "radar",
+            "data": {
+              "columns": [
+                "Skill",
+                "Team A",
+                "Team B"
+              ],
+              "rows": [
+                [
+                  "Design",
+                  4,
+                  3
+                ],
+                [
+                  "Research",
+                  3,
+                  5
+                ],
+                [
+                  "Build",
+                  5,
+                  4
+                ],
+                [
+                  "Test",
+                  2,
+                  4
+                ],
+                [
+                  "Ship",
+                  4,
+                  3
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "radar-with-markers",
+            "data": {
+              "columns": [
+                "Skill",
+                "Team A",
+                "Team B"
+              ],
+              "rows": [
+                [
+                  "Design",
+                  4,
+                  3
+                ],
+                [
+                  "Research",
+                  3,
+                  5
+                ],
+                [
+                  "Build",
+                  5,
+                  4
+                ],
+                [
+                  "Test",
+                  2,
+                  4
+                ],
+                [
+                  "Ship",
+                  4,
+                  3
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "filled-radar",
+            "data": {
+              "columns": [
+                "Skill",
+                "Team A",
+                "Team B"
+              ],
+              "rows": [
+                [
+                  "Design",
+                  4,
+                  3
+                ],
+                [
+                  "Research",
+                  3,
+                  5
+                ],
+                [
+                  "Build",
+                  5,
+                  4
+                ],
+                [
+                  "Test",
+                  2,
+                  4
+                ],
+                [
+                  "Ship",
+                  4,
+                  3
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "doughnut-labels",
+      "type": "chart",
+      "title": "Email still brings most requests",
+      "chart": {
+        "type": "doughnut",
+        "data": {
+          "columns": [
+            "Channel",
+            "Requests"
+          ],
+          "rows": [
+            [
+              "Email",
+              46
+            ],
+            [
+              "Chat",
+              31
+            ],
+            [
+              "Phone",
+              14
+            ],
+            [
+              "Forum",
+              9
+            ]
+          ]
+        },
+        "dataLabels": {
+          "content": [
+            "category",
+            "percent"
+          ],
+          "separator": ": "
+        },
+        "legend": "none"
+      }
+    },
+    {
+      "id": "world",
+      "title": "Sales are strongest in Germany",
+      "chart": {
+        "type": "world",
+        "data": {
+          "columns": [
+            "Country",
+            "Sales"
+          ],
+          "rows": [
+            [
+              "Germany",
+              9
+            ],
+            [
+              "France",
+              6
+            ],
+            [
+              "United States",
+              8
+            ],
+            [
+              "Brazil",
+              3
+            ],
+            [
+              "Japan",
+              5
+            ]
+          ]
+        },
+        "alt": "Sales by country, highest in Germany."
+      }
+    },
+    {
+      "id": "labels-positions",
+      "title": "Data labels at four positions",
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Channel",
+                "Requests"
+              ],
+              "rows": [
+                [
+                  "Email",
+                  46
+                ],
+                [
+                  "Chat",
+                  31
+                ],
+                [
+                  "Phone",
+                  14
+                ],
+                [
+                  "Forum",
+                  9
+                ]
+              ]
+            },
+            "dataLabels": {
+              "content": [
+                "value"
+              ],
+              "position": "outside-end"
+            },
+            "legend": "top"
+          }
+        },
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Channel",
+                "Requests"
+              ],
+              "rows": [
+                [
+                  "Email",
+                  46
+                ],
+                [
+                  "Chat",
+                  31
+                ],
+                [
+                  "Phone",
+                  14
+                ],
+                [
+                  "Forum",
+                  9
+                ]
+              ]
+            },
+            "dataLabels": {
+              "position": "inside-base"
+            },
+            "legend": "bottom"
+          }
+        },
+        {
+          "chart": {
+            "type": "bar",
+            "data": {
+              "columns": [
+                "Channel",
+                "Requests"
+              ],
+              "rows": [
+                [
+                  "Email",
+                  46
+                ],
+                [
+                  "Chat",
+                  31
+                ],
+                [
+                  "Phone",
+                  14
+                ],
+                [
+                  "Forum",
+                  9
+                ]
+              ]
+            },
+            "dataLabels": {
+              "position": "center"
+            },
+            "legend": "left"
+          }
+        },
+        {
+          "chart": {
+            "type": "bar",
+            "data": {
+              "columns": [
+                "Channel",
+                "Requests"
+              ],
+              "rows": [
+                [
+                  "Email",
+                  46
+                ],
+                [
+                  "Chat",
+                  31
+                ],
+                [
+                  "Phone",
+                  14
+                ],
+                [
+                  "Forum",
+                  9
+                ]
+              ]
+            },
+            "dataLabels": {
+              "position": "inside-end"
+            },
+            "legend": "right"
+          }
+        }
+      ]
+    },
+    {
+      "id": "labels-line",
+      "title": "Line labels above, below, left and right",
+      "blocks": [
+        {
+          "chart": {
+            "type": "line-with-markers",
+            "data": {
+              "columns": [
+                "Week",
+                "Tickets"
+              ],
+              "rows": [
+                [
+                  "W1",
+                  40
+                ],
+                [
+                  "W2",
+                  34
+                ],
+                [
+                  "W3",
+                  29
+                ],
+                [
+                  "W4",
+                  25
+                ]
+              ]
+            },
+            "dataLabels": {
+              "position": "above"
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "line-with-markers",
+            "data": {
+              "columns": [
+                "Week",
+                "Wait"
+              ],
+              "rows": [
+                [
+                  "W1",
+                  12
+                ],
+                [
+                  "W2",
+                  10
+                ],
+                [
+                  "W3",
+                  9
+                ],
+                [
+                  "W4",
+                  7
+                ]
+              ]
+            },
+            "dataLabels": {
+              "position": "below"
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "scatter",
+            "data": {
+              "columns": [
+                "Idea",
+                "Effort",
+                "Impact"
+              ],
+              "rows": [
+                [
+                  "Search",
+                  2,
+                  8
+                ],
+                [
+                  "Export",
+                  5,
+                  6
+                ],
+                [
+                  "Themes",
+                  8,
+                  3
+                ]
+              ]
+            },
+            "dataLabels": {
+              "position": "left"
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "scatter",
+            "data": {
+              "columns": [
+                "Idea",
+                "Effort",
+                "Impact"
+              ],
+              "rows": [
+                [
+                  "Alerts",
+                  1,
+                  4
+                ],
+                [
+                  "Sharing",
+                  4,
+                  9
+                ],
+                [
+                  "Offline",
+                  7,
+                  5
+                ]
+              ]
+            },
+            "dataLabels": {
+              "position": "right"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "mapping",
+      "title": "Choosing columns with a mapping",
+      "chart": {
+        "type": "line",
+        "data": {
+          "columns": [
+            "Region",
+            "Month",
+            "Visits",
+            "Signups",
+            "Notes"
+          ],
+          "rows": [
+            [
+              "North",
+              "Jul",
+              120,
+              14,
+              "launch"
+            ],
+            [
+              "North",
+              "Aug",
+              140,
+              19,
+              ""
+            ],
+            [
+              "North",
+              "Sep",
+              155,
+              22,
+              ""
+            ],
+            [
+              "North",
+              "Oct",
+              170,
+              25,
+              "promo"
+            ]
+          ]
+        },
+        "mapping": {
+          "category": "Month",
+          "series": [
+            "Visits",
+            "Signups"
+          ]
+        },
+        "axisTitles": {
+          "category": "Month",
+          "value": "People"
+        }
+      }
+    },
+    {
+      "id": "mapping-x",
+      "title": "A scatter plot with a mapped x axis",
+      "chart": {
+        "type": "scatter",
+        "data": {
+          "columns": [
+            "Team",
+            "Size",
+            "Velocity"
+          ],
+          "rows": [
+            [
+              "Atlas",
+              6,
+              31
+            ],
+            [
+              "Beacon",
+              9,
+              38
+            ],
+            [
+              "Cobalt",
+              4,
+              22
+            ],
+            [
+              "Delta",
+              12,
+              41
+            ]
+          ]
+        },
+        "mapping": {
+          "x": "Size",
+          "series": [
+            "Velocity"
+          ]
+        },
+        "axisTitles": {
+          "category": "Team size",
+          "value": "Points per sprint"
+        }
+      }
+    },
+    {
+      "id": "dataset-chart",
+      "title": "Won deals from the shared pipeline dataset",
+      "chart": {
+        "type": "column",
+        "data": {
+          "dataset": "pipeline",
+          "fields": [
+            "Month",
+            "Won",
+            "Lost"
+          ]
+        },
+        "colors": [
+          "accent3",
+          {
+            "color": "accent2",
+            "darken": 0.2
+          }
+        ],
+        "highlight": {
+          "series": [
+            "Won"
+          ]
+        },
+        "dataLabels": {
+          "position": "auto"
+        }
+      }
+    },
+    {
+      "id": "inline-source",
+      "title": "Inline data that records where it came from",
+      "chart": {
+        "type": "area",
+        "data": {
+          "columns": [
+            "Month",
+            "Visits"
+          ],
+          "rows": [
+            [
+              "Jul",
+              1200
+            ],
+            [
+              "Aug",
+              1350
+            ],
+            [
+              "Sep",
+              null
+            ],
+            [
+              "Oct",
+              1610
+            ]
+          ],
+          "source": {
+            "src": "./data/web.csv",
+            "retrieved": "2026-10-05"
+          }
+        },
+        "dataLabels": true
+      }
+    },
+    {
+      "id": "reference-lines",
+      "title": "Margin against target on a second axis",
+      "chart": {
+        "type": "combo",
+        "data": {
+          "columns": [
+            "Quarter",
+            {
+              "name": "Revenue",
+              "format": "$#,##0"
+            },
+            {
+              "name": "Margin",
+              "format": "0%"
+            }
+          ],
+          "rows": [
+            [
+              "Q1",
+              12,
+              0.31
+            ],
+            [
+              "Q2",
+              18,
+              0.34
+            ],
+            [
+              "Q3",
+              22,
+              0.29
+            ],
+            [
+              "Q4",
+              26,
+              0.37
+            ]
+          ]
+        },
+        "line": [
+          "Margin"
+        ],
+        "secondaryAxis": [
+          "Margin"
+        ],
+        "axisTitles": {
+          "category": "Quarter",
+          "value": "Revenue ($M)",
+          "secondary": "Margin"
+        },
+        "referenceLines": [
+          {
+            "value": 20,
+            "label": "Plan $20M",
+            "labelPosition": "start",
+            "stroke": {
+              "color": "accent2",
+              "width": 2,
+              "dash": "dash"
+            }
+          },
+          {
+            "value": 0.33,
+            "axis": "secondary",
+            "label": "Target 33%",
+            "labelPosition": "end"
+          },
+          {
+            "value": 15,
+            "axis": "value",
+            "stroke": "none",
+            "label": "Floor"
+          }
+        ]
+      }
+    },
+    {
+      "id": "bar-negatives",
+      "title": "Margins by product, two below zero",
+      "chart": {
+        "type": "bar",
+        "data": {
+          "columns": [
+            "Product",
+            "Margin"
+          ],
+          "rows": [
+            [
+              "Cranes",
+              14
+            ],
+            [
+              "Software",
+              22
+            ],
+            [
+              "Leasing",
+              -6
+            ],
+            [
+              "Repairs",
+              -3
+            ]
+          ]
+        },
+        "dataLabels": true
+      }
+    },
+    {
+      "id": "bar-references",
+      "title": "Bar references with legend, labels and axis titles",
+      "chart": {
+        "type": "bar",
+        "data": {
+          "columns": [
+            "Terminal",
+            "Wait",
+            "Target"
+          ],
+          "rows": [
+            [
+              "North",
+              42,
+              30
+            ],
+            [
+              "South",
+              28,
+              30
+            ],
+            [
+              "East",
+              35,
+              30
+            ]
+          ]
+        },
+        "mapping": {
+          "category": "Terminal",
+          "series": [
+            "Wait"
+          ]
+        },
+        "legend": "bottom",
+        "dataLabels": {
+          "position": "inside-end"
+        },
+        "axisTitles": {
+          "category": "Terminal",
+          "value": "Minutes"
+        },
+        "highlight": {
+          "categories": [
+            "North"
+          ]
+        },
+        "referenceLines": [
+          {
+            "value": 30,
+            "label": "Target 30 min",
+            "stroke": {
+              "color": "accent2",
+              "dash": "dot"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "pareto-histogram-negative",
+      "title": "Pareto and histogram with negative values",
+      "blocks": [
+        {
+          "chart": {
+            "type": "pareto",
+            "data": {
+              "columns": [
+                "Cause",
+                "Hours"
+              ],
+              "rows": [
+                [
+                  "Weather",
+                  40
+                ],
+                [
+                  "Repairs",
+                  25
+                ],
+                [
+                  "Paperwork",
+                  12
+                ],
+                [
+                  "Credits",
+                  -5
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "histogram",
+            "data": {
+              "columns": [
+                "Change",
+                "Ships"
+              ],
+              "rows": [
+                [
+                  "-2",
+                  3
+                ],
+                [
+                  "-1",
+                  7
+                ],
+                [
+                  "0",
+                  12
+                ],
+                [
+                  "1",
+                  6
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "pareto-multi",
+      "title": "A Pareto chart with two series",
+      "chart": {
+        "type": "pareto",
+        "data": {
+          "columns": [
+            "Cause",
+            "North",
+            "South"
+          ],
+          "rows": [
+            [
+              "Weather",
+              40,
+              22
+            ],
+            [
+              "Repairs",
+              25,
+              30
+            ],
+            [
+              "Paperwork",
+              12,
+              9
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "labels-boolean",
+      "title": "Seats per office, without labels",
+      "chart": {
+        "type": "bar",
+        "data": {
+          "columns": [
+            "Office",
+            "Seats",
+            "Open"
+          ],
+          "rows": [
+            [
+              "Lisbon",
+              40,
+              true
+            ],
+            [
+              "Austin",
+              65,
+              false
+            ],
+            [
+              "Osaka",
+              30,
+              true
+            ]
+          ]
+        },
+        "mapping": {
+          "category": "Office",
+          "series": [
+            "Seats"
+          ]
+        },
+        "dataLabels": false,
+        "legend": "none"
+      }
+    }
+  ]
+}

@@ -4,7 +4,7 @@ import {composeSlide, layoutTable} from '@openpresentation/opf/composition';
 
 const table = {rows: [
   [{value: ['Styled ', {text: 'red', color: '#ff0000'}], colSpan: 2, rowSpan: 2, style: {
-    fill:'#12345680', color:'#00ff00', align:'right', verticalAlign:'bottom',
+    fill:'#12345680', color:'#00ff00', align:'end', verticalAlign:'bottom',
     padding:{left:30, right:20, top:12, bottom:6},
     borders:{top:{color:'#fedcba80', width:4, dash:'dash'}, right:{color:'#aa00aa', width:2, dash:'dot'}, bottom:{color:'#000000', width:0}}
   }}, null, 'C'], [null, null, 'D'], ['E', 'F', {value:'Scalar', style:{align:'center', color:'#123456'}}]

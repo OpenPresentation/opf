@@ -5,6 +5,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 import { SET, mapCommit, registryPlan, resolveRef, treePath } from './registry-plan.mjs';
 
 const sha = (digit) => digit.repeat(40);
@@ -66,7 +67,7 @@ test('treePath: core and the CLI are root-relative, the archived repositories\' 
 });
 
 test('every package of the set is a directory of this repository', () => {
-  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
   for (const entry of SET) {
     assert.ok(execFileSync('git', ['ls-files', `${entry.directory}/package.json`], { cwd: root, encoding: 'utf8' }).trim(), entry.directory);
   }

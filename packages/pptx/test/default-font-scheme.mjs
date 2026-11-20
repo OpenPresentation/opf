@@ -4,6 +4,7 @@ import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {ENGINE_DEFAULT_FONT_SCHEME, resolveFontFamilies} from '@openpresentation/opf/composition';
 import {paginate} from '@openpresentation/opf';
 import {toPptx} from '../src/index.js';
+import {withThemeFamilies} from './helpers/theme-fonts.mjs';
 
 // FF-35 (font-fidelity-everywhere), OPF 0.15. Every engine shares one last-resort font
 // scheme, core's ENGINE_DEFAULT_FONT_SCHEME (Aptos Display / Aptos, engine-defaults.json),
@@ -25,7 +26,8 @@ const themePair = entries => {
 };
 const slideFaces = entries => new Set(Object.entries(entries)
   .filter(([name]) => /^ppt\/slides\/slide\d+\.xml$/.test(name))
-  .flatMap(([, value]) => [...strFromU8(value).matchAll(/<a:latin typeface="([^"]*)"/g)].map(match => match[1])));
+  // RR-105 (opf#1293): theme font references read as their theme's families.
+  .flatMap(([name]) => [...withThemeFamilies(entries, name).matchAll(/<a:latin typeface="([^"]*)"/g)].map(match => match[1])));
 
 const textSlide = {id: 'text', title: 'Title', text: 'Body copy'};
 const codeSlide = {id: 'code', layout: 'code', title: 'Rule', code: {source: 'const score = urgency * confidence;', language: 'ts'}};

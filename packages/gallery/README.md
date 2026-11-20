@@ -1,10 +1,10 @@
 # gallery
 
-The default catalog for Open Presentation: layouts, themes, colour schemes and font schemes for OPF decks, published as
+The default catalog for Open Presentation: layouts, themes, color schemes and font schemes for OPF decks, published as
 [`@openpresentation/gallery`](https://www.npmjs.com/package/@openpresentation/gallery) and previewed at
 [pptx.gallery](https://www.pptx.gallery).
 
-It holds every layout, theme, colour scheme, font scheme, narrative, audience, purpose and tone that
+It holds every layout, theme, color scheme, font scheme, narrative, audience, purpose and tone that
 [OPF](https://openpresentation.org) decks name by id (`layout: "pillars"`, `design: { theme: "minimal" }`). Engines
 never fetch records: a host registers the catalogs it trusts, and this package is the catalog every OPF host registers by
 default.
@@ -15,7 +15,7 @@ default.
 
 Gallery 5.x advances the overall catalog compatibility contract to `4`: a layout record is `direction` and one ordered
 list of `regions`, nested for two dimensions, and `areas`, `columns`, `rows` and the `regions` map are gone (FA-33, no
-migration path). The engine packages follow their separate release process. The per-kind layout schema version remains
+migration path). Those versions predate the shared OPF release line. The per-kind layout schema version remains
 `2` and its URI remains `opf-layout/v2`; those identifiers are distinct from the overall catalog contract.
 
 ## Use
@@ -53,6 +53,24 @@ content in every region by the pinned `@openpresentation/opf-render`, a self-con
 package has no dependency, not even for its types: `GalleryCatalog` has the shape of core's `Catalog`, so `gallery` is
 assignable to it.
 
+## Icon sets
+
+`@openpresentation/gallery/icon-sets` exports `galleryIconSets(load?)`, a catalog of two icon sets that decks name as `<set>:<name>` in an `icon` field: `lucide:truck` ([Lucide](https://lucide.dev), ISC, 2,029 icons, the default set) and `tabler:rocket` ([Tabler outline](https://tabler.io/icons), MIT, 5,203 icons). The icon data is plain static files under `dist/icons/`, exported as `@openpresentation/gallery/icons/*` (each set's index with its license and every name, one small file per icon, the whole set in one file, and the search keywords), read one icon at a time, so a host pays for the icons its decks draw and a bundle carries none of the data. Register it beside `gallery`:
+
+```js
+import { gallery } from "@openpresentation/gallery";
+import { fetchIcons, galleryIconSets } from "@openpresentation/gallery/icon-sets";
+
+const catalogs = [gallery, galleryIconSets()]; // Node, Bun and Deno: the installed files
+const served = [gallery, galleryIconSets(fetchIcons("/opf-icons/"))]; // a browser page: dist/icons/ served at /opf-icons/
+// A Worker: galleryIconSets(fetchIcons(new URL("/opf-icons/", request.url), env.ASSETS)).
+// A server that bundles a set: galleryIconSets({ lucide }), with lucide imported from "@openpresentation/gallery/icons/lucide.icons.json".
+```
+
+A bundled Node server deployed with its `node_modules` needs nothing: the files are found as the installed package. A host may serve all of `dist/icons/` or only its six set-level `*.json` files (a set is then read whole, once). An icon that cannot be read is an `opf/icon-unknown` finding that says why, and the slide draws without it.
+
+The licenses are in `THIRD-PARTY-NOTICES.md`. See [icons](https://github.com/OpenPresentation/opf/blob/main/docs/icons.md).
+
 ## Layouts
 
 A slide names a layout by intent; its content flows into the layout's regions, so no layout fixes a block count.
@@ -81,6 +99,13 @@ automatically. A deck's own layouts are records of the same schema under `catalo
 | `process` | Steps in order, in one row. |
 | `timeline` | Dated events or a roadmap along one axis, with optional notes. |
 | `faq` | Questions with their answers. |
+| `pyramid` | Levels that build on each other, as a pyramid, the first at the top. |
+| `inverted-pyramid` | Levels that narrow to a point, with the widest first. Editable native shapes in PowerPoint. |
+| `matrix` | Four parts of a whole, as the quadrants of a square beside the title. |
+| `cycle` | Steps that repeat, as a loop of nodes with arrows beside the title. |
+| `chevrons` | Stages in order, as a row of chevrons. |
+| `flow` | Steps in order, as boxes joined by arrows in one row. |
+| `vertical-flow` | Steps in order, as boxes joined by arrows in a column beside the title. |
 | **Numbers** | |
 | `metrics` | One to six headline numbers, with an optional note. |
 | `scorecard` | Metrics with commentary or status, as cards. |
@@ -139,7 +164,7 @@ Core compiles the list to the grid its engine uses, so the same layout draws the
 ## Versions
 
 The gallery is released with the other OPF packages under one shared version (core, the CLI, the renderer, the PPTX exporter,
-the editor and this package; from 0.26.0). The gallery's earlier line (1.0.0 to 5.0.0) is not continued: those versions stay
+the editor and this package from 0.26.0, with MCP joining in 0.27.0). The gallery's earlier line (1.0.0 to 5.0.0) is not continued: those versions stay
 on npm, and `latest` points at the shared line, so `^5` consumers keep 5.0.0 and get no further catalog fixes. While the
 shared version is 0.x, a breaking change is a minor bump.
 

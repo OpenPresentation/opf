@@ -71,7 +71,7 @@ async function group(id,name,run){
 }
 const deck=footer=>({design:{footer},slides:[{title:'Title',design:{footer:false}},{title:'Two'},{title:'Three'}]});
 // OPF 0.15: the deck embeds the font scheme it names (no catalog is registered in this renderer-absent consumer).
-const wrapped=embed({name:'Wrapped generated date boundary',design:{fontScheme:'roboto',dimensions:{widthInches:7.5,heightInches:13.3333333333},footer:{center:{date:true,dateFormat:'MMMM d, yyyy'},right:{text:'{{slide.number}} / {{deck.slideCount}}'}}},slides:[{title:'Title',design:{footer:false}},{title:'Content',text:'Keep body content.',composition:{minFontSize:32,overflow:'error'}},{title:'Third',text:'Still current.',composition:{minFontSize:32,overflow:'error'}}]},{catalogs:[gallery]}).document;
+const wrapped=embed({name:'Wrapped generated date boundary',design:{fontScheme:'roboto',dimensions:{widthInches:7.5,heightInches:13.3333333333},footer:{center:{date:true,dateFormat:'MMMM d, yyyy'},end:{text:'{{slide.number}} / {{deck.slideCount}}'}}},slides:[{title:'Title',design:{footer:false}},{title:'Content',text:'Keep body content.',composition:{minFontSize:32,overflow:'error'}},{title:'Third',text:'Still current.',composition:{minFontSize:32,overflow:'error'}}]},{catalogs:[gallery]}).document;
 await group('01','Existing basic renderer-absent contract',async()=>{
  const source={name:'Installed package',slides:[{title:'Editable output',table:{columns:['Item','Value'],rows:[['Quality',42]]}},{title:'Metric',metric:{value:'42%',label:'Measured outcome'}},{title:'Quote',quote:{text:'Keep the source.',attribution:'Reviewer',source:'Interview'}},{title:'Code',code:{language:'python',source:'approve(change)'}},{title:'Timeline',timeline:{events:[{when:'Q1',what:'Pilot'},{when:'Q2',what:'Rollout'}]}}]};
  const exported=await emit('basic',source),{document}=await read('basic',exported.bytes);assert.ok(exported.bytes.length>1000);assert.equal(document.slides.length,5);
@@ -81,7 +81,7 @@ await group('01','Existing basic renderer-absent contract',async()=>{
  return {slides:5,retainedText:['Quality','42%','Reviewer - Interview','approve(change)','Pilot','Rollout']};
 });
 await group('02','Inherited and local furniture, authored whitespace and metadata',async()=>{
- const source={name:'Furniture source preservation',author:'Probe author',organization:{id:'primary',name:'Probe organization'},design:{fontScheme:'roboto',header:{left:{text:' Authored\twords \r\n\r\nlast  \r'},center:{text:'{{organization.name}}'},right:{text:'{{slide.section}}'}},footer:{left:{date:' 2026-09-14 '},right:{text:'{{slide.number}}'}}},slides:[{title:'Hidden',text:'First body',notes:'First notes',design:{header:false,footer:false}},{title:'Inherited',section:'Section',text:'Keep body words.',notes:'Second notes\nSecond line.'},{title:'Local',text:'Local body',notes:'Third notes',design:{header:{left:{text:'Local header'}},footer:{left:{text:'Local footer'}}}}]};
+ const source={name:'Furniture source preservation',author:'Probe author',organization:{id:'primary',name:'Probe organization'},design:{fontScheme:'roboto',header:{start:{text:' Authored\twords \r\n\r\nlast  \r'},center:{text:'{{organization.name}}'},end:{text:'{{slide.section}}'}},footer:{start:{date:' 2026-09-14 '},end:{text:'{{slide.number}}'}}},slides:[{title:'Hidden',text:'First body',notes:'First notes',design:{header:false,footer:false}},{title:'Inherited',section:'Section',text:'Keep body words.',notes:'Second notes\nSecond line.'},{title:'Local',text:'Local body',notes:'Third notes',design:{header:{start:{text:'Local header'}},footer:{start:{text:'Local footer'}}}}]};
  const exported=await emit('source',source),{document}=await read('source',exported.bytes);
  assert.deepEqual(document.design.header,source.design.header);assert.deepEqual(document.design.footer,source.design.footer);
  assert.deepEqual(document.slides[0].design.header,false);assert.deepEqual(document.slides[0].design.footer,false);
@@ -90,27 +90,27 @@ await group('02','Inherited and local furniture, authored whitespace and metadat
  assert.deepEqual(document.slides.map(s=>s.notes),source.slides.map(s=>s.notes));
  assert.equal(furniture(xml(exported.entries,1)).length,0);
  for(const text of ['First body','Keep body words.','Local body'])assert.ok(JSON.stringify(document).includes(text));
- return {whitespace:document.design.header.left.text,notes:document.slides.map(s=>s.notes),localOverrides:true};
+ return {whitespace:document.design.header.start.text,notes:document.slides.map(s=>s.notes),localOverrides:true};
 });
 await group('03','Formatted date and slide-number fields, determinism and current host date',async()=>{
- const source=deck({left:{date:'2026-04-23',dateFormat:'MMM d, yyyy'},center:{date:true,dateFormat:'MMMM d, yyyy'},right:{text:'{{slide.number}} / {{deck.slideCount}}'}});
+ const source=deck({start:{date:'2026-04-23',dateFormat:'MMM d, yyyy'},center:{date:true,dateFormat:'MMMM d, yyyy'},end:{text:'{{slide.number}} / {{deck.slideCount}}'}});
  const exported=await emit('first',source,{date:'2026-09-22'}),{document}=await read('first',exported.bytes);
  assert.deepEqual(exported.issues,[]);assert.deepEqual(document.design.footer,source.design.footer);assert.deepEqual(document.slides[0].design.footer,false);
  const slide=xml(exported.entries);assert.match(slide,/type="datetime4"/);assert.ok(slide.includes('Apr 23, 2026')&&slide.includes('September 22, 2026'));
  // A number with words around it is a live field with fixed runs in older opf-pptx and fixed text in newer ones (Keynote drops the words
  // next to a live field); either way the slide shows the number and ' / 3'. A text that is only the number stays a live slidenum field.
  assert.ok(slide.includes(' / 3')&&/<a:t>(?:2| \/ 3|2 \/ 3)<\/a:t>/.test(slide),'N / total text');
- const bare=await emit('bare-number',deck({right:{text:'{{slide.number}}'}}),{date:'2026-09-22'});assert.match(xml(bare.entries),/type="slidenum"/);
+ const bare=await emit('bare-number',deck({end:{text:'{{slide.number}}'}}),{date:'2026-09-22'});assert.match(xml(bare.entries),/type="slidenum"/);
  const repeated=await emit('repeat',source,{date:'2026-09-22'});assert.deepEqual(repeated.bytes,exported.bytes);
  const next=await emit('next-host',document,{date:'2027-04-23'});assert.ok(xml(next.entries).includes('April 23, 2027'));assert.ok(!xml(next.entries).includes('September 22, 2026'));
  assert.deepEqual((await read('next-host',next.bytes)).document.design.footer,source.design.footer);
  return {sha256:hash(exported.bytes),byteDeterministic:true,nativeOoxmlFields:['datetime4','slidenum'],nativeOfficeUntested:true};
 });
 await group('04','Missing host date and unsupported native pattern diagnostics',async()=>{
- const source=deck({left:{date:true,dateFormat:'MMMM d, yyyy'}}),missing=await emit('missing-host',source);
- assert.ok(missing.issues.some(i=>i.code==='unresolved-content'&&i.path==='design.footer.left.date'));
- const iso=await emit('unsupported-native-pattern',deck({left:{date:true,dateFormat:'yyyy-MM-dd'}}),{date:'2026-09-22'});
- assert.deepEqual(iso.issues.map(i=>[i.code,i.path]),[['furniture-date-fixed','design.footer.left.date'],['furniture-date-fixed','design.footer.left.date']]);
+ const source=deck({start:{date:true,dateFormat:'MMMM d, yyyy'}}),missing=await emit('missing-host',source);
+ assert.ok(missing.issues.some(i=>i.code==='unresolved-content'&&i.path==='design.footer.start.date'));
+ const iso=await emit('unsupported-native-pattern',deck({start:{date:true,dateFormat:'yyyy-MM-dd'}}),{date:'2026-09-22'});
+ assert.deepEqual(iso.issues.map(i=>[i.code,i.path]),[['furniture-date-fixed','design.footer.start.date'],['furniture-date-fixed','design.footer.start.date']]);
  assert.doesNotMatch(xml(iso.entries),/type="datetime/);assert.ok(xml(iso.entries).includes('2026-09-22'));await read('unsupported-native-pattern',iso.bytes);
  return {missingDiagnostics:missing.issues,unsupportedPatternDiagnostics:iso.issues};
 });

@@ -5,7 +5,17 @@ param(
     [Parameter(Mandatory=$true)][string]$OutputDirectory,
     [ValidateRange(5,60)][int]$TimeoutSeconds=45,
     [switch]$ValidateOnly,
-    [switch]$CaptureTextFonts
+    [switch]$CaptureTextFonts,
+    [switch]$ReadOnlySurvey,
+    [switch]$CaptureTextProbes,
+    [string]$ExecutionEnvelope='',
+    [string]$ExpectedEnvelopeSha256='',
+    [string]$ExpectedRequestSha256='',
+    [string]$NodeExecutable='',
+    [switch]$RunOffice,
+    [switch]$DenseEvents,
+    [switch]$ReferenceNameEdit,
+    [switch]$ReferenceNameSnapshots
 )
 $ErrorActionPreference='Stop'
 
@@ -93,11 +103,18 @@ function Assert-FreshNativeOutput([string]$Directory,[string[]]$ProtectedRoots) 
     }
     return $full
 }
-function Import-NativePlanValidation([string]$Worker) {
+function Import-NativePlanValidation([string]$Worker,[bool]$Survey=$false,[bool]$Probes=$false) {
     $tokens=$null;$parseErrors=$null
     $ast=[System.Management.Automation.Language.Parser]::ParseFile($Worker,[ref]$tokens,[ref]$parseErrors)
     if($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }
-    foreach($name in @('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan')) {
+    $definitions=@('Test-Integer','Require-Property','Assert-String','Assert-LiteralSeriesName','Read-AndValidateActionPlan')
+    if($Survey) {
+        $surveyParameter=@($ast.ParamBlock.Parameters | Where-Object { $_.Name.VariablePath.UserPath -ceq 'ReadOnlySurvey' })
+        if($surveyParameter.Count -ne 1 -or $surveyParameter[0].StaticType -ne [System.Management.Automation.SwitchParameter]) { throw 'Selected worker does not support reviewed read-only survey mode' }
+        $definitions+=@('Get-FurnitureSurveySlideCount','Assert-FurnitureSurvey')
+    }
+    if($Probes) { $definitions+=@('Assert-FurnitureProbeKeys','Test-FurnitureProbeFinite','Read-AndValidateTextProbePlan') }
+    foreach($name in $definitions) {
         $function=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
         if($null -eq $function) { throw "Missing pure plan validator: $name" }
         # Only these pure definitions are loaded; no worker entrypoint or Office operation is evaluated.
@@ -118,10 +135,49 @@ function Assert-NativeFontCaptureSupport([string]$Worker,[bool]$Requested) {
 function Get-NativeFontCaptureArguments([bool]$Requested) {
     if($Requested) { return '-CaptureTextFonts' }
 }
+function Read-NativeTextProbeBinding($Binding,[string]$Worker,[bool]$Requested,[bool]$Fonts,$Actions) {
+    if(-not $Requested) { return $null }
+    if(-not $Fonts -or $Actions -isnot [array] -or $Actions.Count -ne 0) { throw 'Text probes require CaptureTextFonts and an empty action plan' }
+    $tokens=$null;$errors=$null;$ast=[System.Management.Automation.Language.Parser]::ParseFile($Worker,[ref]$tokens,[ref]$errors)
+    if($errors.Count -ne 0) { throw 'Text probe worker has parser errors' }
+    $parameter=@($ast.ParamBlock.Parameters | Where-Object { $_.Name.VariablePath.UserPath -ceq 'TextProbePlan' })
+    if($parameter.Count -ne 1 -or $parameter[0].StaticType -ne [string]) { throw 'Selected worker lacks the reviewed TextProbePlan parameter' }
+    $relative=$Binding.selected.textProbePlan
+    if($relative -isnot [string]) { throw 'Selected case must declare a sealed textProbePlan asset' }
+    $records=@($Binding.suite.files | Where-Object { $_.path -ceq $relative })
+    if($records.Count -ne 1) { throw 'Text probe plan must name exactly one sealed suite file' }
+    $probePath=Resolve-NativeAsset $Binding.root $relative
+    $null=Read-AndValidateTextProbePlan $probePath (Get-FileHash -LiteralPath $Binding.inputPath -Algorithm SHA256).Hash.ToLowerInvariant() $Fonts $Actions
+    return [ordered]@{path=$probePath;record=$records[0]}
+}
 function Invoke-NativeChild([string]$Shell,[string]$Script,[string[]]$Arguments,[string]$Log) {
     & $Shell -NoProfile -NonInteractive -File $Script @Arguments *> $Log
     if($LASTEXITCODE -ne 0) { throw "Child failed; preserve $Log. No retry was started." }
 }
+
+# Explicit prospective mode. The unchanged legacy path below still requires
+# exact producer provenance; this mode never selects that legacy entrypoint.
+if($DenseEvents -and $ReferenceNameEdit){throw 'Choose one closed furniture route'}
+if($ReferenceNameSnapshots -and -not $ReferenceNameEdit){throw 'Name snapshots require the exact closed reference-name mode'}
+if($ExecutionEnvelope -cne '') {
+    if($ReadOnlySurvey -or $CaptureTextProbes -or ($ValidateOnly -and $RunOffice)){throw 'Typed ordinary furniture refuses survey/probe or conflicting execution modes'}
+    if($ExpectedEnvelopeSha256 -cnotmatch '^[a-f0-9]{64}$' -or $ExpectedRequestSha256 -cnotmatch '^[a-f0-9]{64}$' -or (Get-Item -LiteralPath $ExecutionEnvelope).Length -gt 4194304 -or (Get-FileHash -LiteralPath $ExecutionEnvelope -Algorithm SHA256).Hash.ToLowerInvariant() -cne $ExpectedEnvelopeSha256){throw 'Exact external furniture envelope/request pins required'}
+    $profile=Get-Content -LiteralPath $ExecutionEnvelope -Raw -Encoding UTF8 | ConvertFrom-Json
+    $controller=(Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../..')).Path
+    $expectedProfile=if($ReferenceNameSnapshots){'reference-line-one-name-three-native-archives-v1'}elseif($ReferenceNameEdit){'reference-line-one-series-name-edit-v1'}elseif($DenseEvents){'full59-dense-events-furniture-lifecycle-v1'}else{'full59-ordinary-furniture-lifecycle-v1'}
+    if($profile.profile -cne $expectedProfile -or $profile.controller.directory -cne $controller -or $profile.controller.dirty -isnot [bool] -or $profile.controller.dirty){throw 'Wrong clean furniture controller'}
+    $requiredFurniture=@('scripts/native-acceptance/run-windows.ps1','scripts/native-acceptance/furniture-profile.mjs','scripts/native-acceptance/furniture-postflight.ps1','scripts/native-acceptance/owned-postflight.ps1','scripts/native-acceptance/run-reference-chart-profile.ps1')
+    if($ReferenceNameSnapshots){$requiredFurniture+=@('reference-name-snapshot-contract.mjs','reference-name-snapshot-profile.mjs','run-reference-name-snapshots.ps1','reference-name-snapshot.test.mjs','reference-name-snapshot-check.ps1')|ForEach-Object {'scripts/native-acceptance/'+$_}}
+    $null=Assert-NativeRepositoryIdentity $controller $profile.controller $requiredFurniture
+    $node=Assert-PlainNativePath $NodeExecutable
+    if($node -cne $NodeExecutable -or $node -cne $profile.node.path -or (Get-Item -LiteralPath $node).Length -ne $profile.node.identity.bytes -or (Get-FileHash -LiteralPath $node -Algorithm SHA256).Hash.ToLowerInvariant() -cne $profile.node.identity.sha256 -or (Test-Path Env:NODE_OPTIONS) -or (Test-Path Env:NODE_PATH)){throw 'Exact non-preloaded furniture Node required'}
+    if([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT){throw 'Typed furniture launcher requires separate Windows assignment'}
+    . (Join-Path $PSScriptRoot 'owned-postflight.ps1')
+    . (Join-Path $PSScriptRoot 'furniture-postflight.ps1')
+    Invoke-FurnitureTypedRunner -Envelope $ExecutionEnvelope -Sha256 $ExpectedEnvelopeSha256 -RequestSha256 $ExpectedRequestSha256 -Node $node -Suite $SuiteDirectory -WorkerRoot $PptxRepository -CaseId $Case -Output $OutputDirectory -Seconds $TimeoutSeconds -Office ([bool]$RunOffice) -Fonts ([bool]$CaptureTextFonts) -DenseEvents:$DenseEvents -ReferenceNameEdit:$ReferenceNameEdit -ReferenceNameSnapshots:$ReferenceNameSnapshots
+    return
+}
+if($DenseEvents -or $ReferenceNameEdit -or $ReferenceNameSnapshots -or $RunOffice -or $ExpectedEnvelopeSha256 -cne '' -or $ExpectedRequestSha256 -cne '' -or $NodeExecutable -cne ''){throw 'Typed furniture arguments require an explicit envelope'}
 
 # All identity, eligibility, path and plan refusals precede output creation and Office.
 $binding=Read-NativeSuite $SuiteDirectory $Case
@@ -130,9 +186,14 @@ $suiteRoot=Assert-PlainNativePath (Join-Path $PSScriptRoot '../..')
 $workerIdentity=Assert-NativeRepositoryIdentity $workerRoot $binding.suite.provenance.workerRepository @('test/native-furniture-control.ps1','test/native-process.ps1','test/native-process-check.ps1','test/native-furniture-harness-check.ps1')
 $suiteIdentity=Assert-NativeRepositoryIdentity $suiteRoot $binding.suite.provenance.suiteRepository @('scripts/native-acceptance/run-windows.ps1')
 $worker=Resolve-NativeAsset $workerRoot 'test/native-furniture-control.ps1'
-Import-NativePlanValidation $worker
+Import-NativePlanValidation $worker ([bool]$ReadOnlySurvey) ([bool]$CaptureTextProbes)
 Assert-NativeFontCaptureSupport $worker ([bool]$CaptureTextFonts)
-$null=Read-AndValidateActionPlan $binding.planPath
+$validatedActions=Read-AndValidateActionPlan $binding.planPath
+$probeBinding=Read-NativeTextProbeBinding $binding $worker ([bool]$CaptureTextProbes) ([bool]$CaptureTextFonts) $validatedActions
+if($ReadOnlySurvey) {
+    if(-not (Test-Integer $binding.selected.slideCount) -or $binding.selected.slideCount -ne 1) { throw 'Read-only survey requires exactly one declared slide' }
+    Assert-FurnitureSurvey $true $validatedActions $binding.inputPath
+}
 $output=Assert-FreshNativeOutput $OutputDirectory @($binding.root,$workerRoot,$suiteRoot)
 if([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) { throw 'Run this entrypoint on Windows; pure self-tests do not require Office' }
 $shell=Join-Path $env:WINDIR 'System32/WindowsPowerShell/v1.0/powershell.exe'
@@ -141,17 +202,25 @@ if(-not (Test-Path -LiteralPath $shell -PathType Leaf)) { throw 'Windows PowerSh
 $harness=Join-Path $output 'harness';[void](New-Item -ItemType Directory -Path $harness)
 $receipt=[ordered]@{schemaVersion=1;case=$Case;timestamp=(Get-Date).ToUniversalTime().ToString('o');manifestSha256=$binding.manifestSha256;selectedCase=$binding.selected;provenance=$binding.suite.provenance;executingCode=[ordered]@{suite=$suiteIdentity;workers=$workerIdentity};timeoutSeconds=$TimeoutSeconds;status='pure-checks-pending';nativeAcceptance=$false;registryAcceptance=$false}
 if($CaptureTextFonts) { $receipt.captureTextFonts=$true }
+if($ReadOnlySurvey) { $receipt.readOnlySurvey=$true }
 $snapshots=Join-Path $output 'inputs';[void](New-Item -ItemType Directory -Path $snapshots)
 $inputSnapshot=Join-Path $snapshots 'case.pptx';$planSnapshot=Join-Path $snapshots 'action-plan.json'
 $expectedInput=@($binding.suite.files | Where-Object { $_.path -ceq $binding.selected.input })[0]
 $expectedPlan=@($binding.suite.files | Where-Object { $_.path -ceq $binding.selected.actionPlan })[0]
 $snapshotRecords=@([pscustomobject]@{path='case.pptx';sha256=$expectedInput.sha256;bytes=$expectedInput.bytes},[pscustomobject]@{path='action-plan.json';sha256=$expectedPlan.sha256;bytes=$expectedPlan.bytes})
+$probeSnapshot=$null
+if($null -ne $probeBinding) {
+    $probeSnapshot=Join-Path $snapshots 'text-probe-plan.json'
+    $snapshotRecords+=@([pscustomobject]@{path='text-probe-plan.json';sha256=$probeBinding.record.sha256;bytes=$probeBinding.record.bytes})
+    $receipt.textProbePlan=[ordered]@{source=$probeBinding.record;snapshotPath=$probeSnapshot;nativeAcceptance=$false}
+}
 $receiptPath=Join-Path $output 'runner.json'
 function Write-RunnerReceipt { $receipt | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $receiptPath -Encoding UTF8 }
 Write-RunnerReceipt
 try {
     Copy-Item -LiteralPath $binding.inputPath -Destination $inputSnapshot
     Copy-Item -LiteralPath $binding.planPath -Destination $planSnapshot
+    if($null -ne $probeBinding) { Copy-Item -LiteralPath $probeBinding.path -Destination $probeSnapshot }
     Assert-NativeFileRecords $snapshots $snapshotRecords
     Invoke-NativeChild $shell (Join-Path $workerRoot 'test/native-process-check.ps1') @('-OutputDirectory',(Join-Path $harness 'process')) (Join-Path $output 'process-check.log')
     Invoke-NativeChild $shell (Join-Path $workerRoot 'test/native-furniture-harness-check.ps1') @('-ScriptPath',$worker,'-ReportPath',(Join-Path $harness 'furniture.json')) (Join-Path $output 'furniture-harness.log')
@@ -160,10 +229,14 @@ try {
     $null=Assert-NativeRepositoryIdentity $workerRoot $binding.suite.provenance.workerRepository @('test/native-furniture-control.ps1')
     $null=Assert-NativeRepositoryIdentity $suiteRoot $binding.suite.provenance.suiteRepository @('scripts/native-acceptance/run-windows.ps1')
     if($ValidateOnly) { $receipt.status='pure-checks-completed; native-not-run';Write-RunnerReceipt;return }
-    $null=Read-AndValidateActionPlan $planSnapshot
+    $validatedActions=Read-AndValidateActionPlan $planSnapshot
+    if($ReadOnlySurvey) { Assert-FurnitureSurvey $true $validatedActions $inputSnapshot }
     Assert-NativeFileRecords $snapshots $snapshotRecords
+    if($null -ne $probeBinding) { $null=Read-AndValidateTextProbePlan $probeSnapshot (Get-FileHash -LiteralPath $inputSnapshot -Algorithm SHA256).Hash.ToLowerInvariant() ([bool]$CaptureTextFonts) $validatedActions }
     $receipt.status='native-worker-pending';Write-RunnerReceipt
     $workerArguments=@('-InputPresentation',$inputSnapshot,'-ActionPlan',$planSnapshot,'-OutputDirectory',(Join-Path $output 'native'),'-TimeoutSeconds',([string]$TimeoutSeconds)) + @(Get-NativeFontCaptureArguments ([bool]$CaptureTextFonts))
+    if($ReadOnlySurvey) { $workerArguments+='-ReadOnlySurvey' }
+    if($null -ne $probeBinding) { $workerArguments+=@('-TextProbePlan',$probeSnapshot) }
     Invoke-NativeChild $shell $worker $workerArguments (Join-Path $output 'native-worker.log')
     $terminal=Get-Content -LiteralPath (Join-Path $output 'native/supervisor.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     if($terminal.timedOut -ne $false -or $terminal.exitCode -ne 0 -or $terminal.cleanupConfirmed -ne $true) { throw 'Worker did not confirm successful completion and cleanup; preserve the attempt and inspect Office' }

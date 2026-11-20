@@ -16,7 +16,7 @@ const fixture = JSON.parse(readFileSync(fixturePath, "utf8"));
 
 const payloadSlide = {
   id: "host",
-  left: { id: "kpi-adoption", metric: { value: "1x", label: "Adoption" } },
+  start: { id: "kpi-adoption", metric: { value: "1x", label: "Adoption" } },
 };
 
 assert.deepEqual(slideIds(payloadSlide).sort(), ["host", "kpi-adoption"].sort());
@@ -26,7 +26,7 @@ const ids = new Set(["kpi-adoption"]);
 const incoming = structuredClone(payloadSlide);
 incoming.id = "guest";
 remapSlideTreeIds(incoming, ids);
-assert.equal(incoming.left.id, "kpi-adoption-2");
+assert.equal(incoming.start.id, "kpi-adoption-2");
 assert.ok(ids.has("kpi-adoption-2"));
 
 if (validate(fixture, { only: ["format"] }).valid) {

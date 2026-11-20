@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {readBaseline} from './golden-store.mjs';
+import {deckOfKey, readBaseline} from './golden-store.mjs';
 import {layoutMetric} from '@openpresentation/opf/composition';
 import {exampleBaseline} from '../scripts/example-baseline.mjs';
 import {chartTextSizeDefault, schemeNeutralsDerived, colorVariantsDerived, tableTextSize} from '../scripts/template-baseline.mjs';
@@ -33,7 +33,21 @@ try {
   fails(run(), /raster baselines changed/);
   writeFileSync(baseline, approved);
   writeDeck('Changed source');
-  fails(run(), /Golden corpus changed/);
+  fails(run(), /raster baselines changed/);
+  writeFileSync(baseline, approved);
+  writeDeck('First baseline');
+  succeeds(run());
+  // Adding an example needs no baseline change: the new deck is reported and the recorded slides are still compared.
+  const added = path.join(corpus, 'added.opf.json');
+  writeFileSync(added, JSON.stringify({ slides: [{ title: 'New example' }] }));
+  const withNew = run();
+  succeeds(withNew);
+  assert.match(withNew.stdout, /new deck added\.opf\.json is not in the baseline/);
+  writeFileSync(baseline, JSON.stringify(corrupt));
+  fails(run(), /raster baselines changed/);
+  writeFileSync(baseline, approved);
+  rmSync(added);
+  writeDeck('Changed source');
   succeeds(run('--update'));
   assert.equal(readFileSync(baseline, 'utf8'), approved, 'Updates must leave the approved baseline intact');
   rmSync(file);
@@ -48,12 +62,12 @@ try {
     const metricDefault = layoutMetric(1, {x: 0, y: 0, width: 400, height: 300}).alignment;
     const selected = readBaseline(fileURLToPath(new URL('../' + exampleBaseline(metricDefault, tableTextSize(), chartTextSizeDefault(), schemeNeutralsDerived(), colorVariantsDerived()), import.meta.url)));
     const actual = JSON.parse(readFileSync(path.join(temp,'ordinary/candidate.json'),'utf8'));
-    assert.equal(Object.keys(selected.entries).length,Object.keys(actual.entries).length,'the selected baseline covers every slide of the installed examples');
-    assert.deepEqual(actual.source,selected.source);
-    assert.deepEqual(actual.entries,selected.entries);
+    const decks=new Set(Object.keys(selected.entries).map(deckOfKey));
+    const recorded=Object.fromEntries(Object.entries(actual.entries).filter(([key])=>decks.has(deckOfKey(key))));
+    assert.deepEqual(recorded,selected.entries,'every slide the selected baseline records matches the installed examples');
     console.log(`Ordinary ${metricDefault}-metric baseline selection passed: ${Object.keys(selected.entries).length} exact slides.`);
   } else {
     console.log('Explicit corpus/baseline preserved; default probe is not applicable.');
   }
-  console.log('Golden gate passed: missing baseline, pixel drift, source drift, non-mutating candidate generation and empty-corpus rejection.');
+  console.log('Golden gate passed: missing baseline, pixel drift, new decks reported without failing, non-mutating candidate generation and empty-corpus rejection.');
 } finally { rmSync(temp, { recursive: true, force: true }); }

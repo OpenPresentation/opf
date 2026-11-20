@@ -147,6 +147,11 @@
           "major": "Noto Naskh Arabic",
           "minor": "Noto Naskh Arabic"
         }
+      },
+      "timelineStatusWords": {
+        "done": "مكتمل",
+        "current": "حالي",
+        "planned": "مخطط"
       }
     },
     {
@@ -307,6 +312,11 @@
           "major": "Noto Sans SC",
           "minor": "Noto Sans SC"
         }
+      },
+      "timelineStatusWords": {
+        "done": "已完成",
+        "current": "当前",
+        "planned": "计划"
       }
     },
     {
@@ -323,6 +333,11 @@
           "major": "Noto Sans TC",
           "minor": "Noto Sans TC"
         }
+      },
+      "timelineStatusWords": {
+        "done": "已完成",
+        "current": "目前",
+        "planned": "計畫"
       }
     },
     {
@@ -371,6 +386,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Dokončeno",
+        "current": "Aktuální",
+        "planned": "Plánováno"
       }
     },
     {
@@ -387,6 +407,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Udført",
+        "current": "Aktuelt",
+        "planned": "Planlagt"
       }
     },
     {
@@ -403,6 +428,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Afgerond",
+        "current": "Huidig",
+        "planned": "Gepland"
       }
     },
     {
@@ -419,6 +449,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Done",
+        "current": "Current",
+        "planned": "Planned"
       }
     },
     {
@@ -547,6 +582,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Valmis",
+        "current": "Nykyinen",
+        "planned": "Suunniteltu"
       }
     },
     {
@@ -563,6 +603,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Terminé",
+        "current": "En cours",
+        "planned": "Prévu"
       }
     },
     {
@@ -627,6 +672,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Abgeschlossen",
+        "current": "Aktuell",
+        "planned": "Geplant"
       }
     },
     {
@@ -643,6 +693,11 @@
           "major": "Noto Sans",
           "minor": "Noto Sans"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Ολοκληρώθηκε",
+        "current": "Τρέχον",
+        "planned": "Προγραμματισμένο"
       }
     },
     {
@@ -691,6 +746,11 @@
           "major": "Noto Sans Hebrew",
           "minor": "Noto Sans Hebrew"
         }
+      },
+      "timelineStatusWords": {
+        "done": "הושלם",
+        "current": "נוכחי",
+        "planned": "מתוכנן"
       }
     },
     {
@@ -707,6 +767,11 @@
           "major": "Noto Sans Devanagari",
           "minor": "Noto Sans Devanagari"
         }
+      },
+      "timelineStatusWords": {
+        "done": "पूर्ण",
+        "current": "वर्तमान",
+        "planned": "नियोजित"
       }
     },
     {
@@ -755,6 +820,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Selesai",
+        "current": "Saat ini",
+        "planned": "Direncanakan"
       }
     },
     {
@@ -771,6 +841,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Completato",
+        "current": "Attuale",
+        "planned": "Pianificato"
       }
     },
     {
@@ -787,6 +862,11 @@
           "major": "Noto Sans JP",
           "minor": "Noto Sans JP"
         }
+      },
+      "timelineStatusWords": {
+        "done": "完了",
+        "current": "現在",
+        "planned": "予定"
       }
     },
     {
@@ -867,6 +947,11 @@
           "major": "Noto Sans KR",
           "minor": "Noto Sans KR"
         }
+      },
+      "timelineStatusWords": {
+        "done": "완료",
+        "current": "현재",
+        "planned": "예정"
       }
     },
     {
@@ -1059,6 +1144,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Fullført",
+        "current": "Nåværende",
+        "planned": "Planlagt"
       }
     },
     {
@@ -1139,6 +1229,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Ukończono",
+        "current": "Obecnie",
+        "planned": "Zaplanowano"
       }
     },
     {
@@ -1155,6 +1250,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Concluído",
+        "current": "Atual",
+        "planned": "Planejado"
       }
     },
     {
@@ -1219,6 +1319,11 @@
           "major": "Noto Sans",
           "minor": "Noto Sans"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Завершено",
+        "current": "Сейчас",
+        "planned": "Запланировано"
       }
     },
     {
@@ -1331,6 +1436,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Completado",
+        "current": "Actual",
+        "planned": "Previsto"
       }
     },
     {
@@ -1363,6 +1473,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Klart",
+        "current": "Aktuellt",
+        "planned": "Planerat"
       }
     },
     {
@@ -1443,6 +1558,11 @@
           "major": "Noto Sans Thai",
           "minor": "Noto Sans Thai"
         }
+      },
+      "timelineStatusWords": {
+        "done": "เสร็จแล้ว",
+        "current": "ปัจจุบัน",
+        "planned": "วางแผนไว้"
       }
     },
     {
@@ -1459,6 +1579,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Tamamlandı",
+        "current": "Güncel",
+        "planned": "Planlandı"
       }
     },
     {
@@ -1475,6 +1600,11 @@
           "major": "Noto Sans",
           "minor": "Noto Sans"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Завершено",
+        "current": "Зараз",
+        "planned": "Заплановано"
       }
     },
     {
@@ -1523,6 +1653,11 @@
           "major": "Roboto",
           "minor": "Roboto"
         }
+      },
+      "timelineStatusWords": {
+        "done": "Hoàn tất",
+        "current": "Hiện tại",
+        "planned": "Dự kiến"
       }
     },
     {
