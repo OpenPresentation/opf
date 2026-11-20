@@ -38,6 +38,7 @@
     },
     {
       "title": "Decision Rule",
+      "layout": "code-and-rule",
       "blocks": [
         {
           "code": {
@@ -55,5 +56,45 @@
         }
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "custom": {
+      "layouts": {
+        "code-and-rule": {
+          "name": "Code beside its rule",
+          "summary": "Code in a column that fits it, with the rule it implements beside it.",
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "direction": "row",
+              "anchor": "middle",
+              "regions": [
+                {
+                  "name": "body",
+                  "size": 2,
+                  "accepts": [
+                    "code"
+                  ],
+                  "flow": "column"
+                },
+                {
+                  "name": "aside",
+                  "size": 3,
+                  "accepts": [
+                    "text",
+                    "list"
+                  ],
+                  "role": "supporting",
+                  "flow": "column"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
 }
