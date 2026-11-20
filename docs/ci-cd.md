@@ -29,7 +29,7 @@ Site `cf-native-preview.yml` owns hosted native Preview build/upload/qualificati
 - `cf:preview:deploy` means the maintained hosted `wrangler preview` path using the project's exact locked Wrangler, version 4.135 or newer.
 - Use the maintained workflow for hosted status/cleanup and production retries. Do not create another standalone preview Worker or an ambiguous command alias.
 
-Production uploads are serialized per Worker. Superseded PR validation can be cancelled; do not cancel an active production upload. Use normal workflow/job dependencies and precise completion gates, rather than hand-written CI polling loops. Observe a batch with [pr-gate.mjs](../scripts/pr-gate.mjs).
+Production uploads are serialized per Worker. Superseded PR validation can be canceled; do not cancel an active production upload. Use normal workflow/job dependencies and precise completion gates, rather than hand-written CI polling loops. Observe a batch with [pr-gate.mjs](../scripts/pr-gate.mjs).
 
 ## Source, artifacts and deployment identity
 

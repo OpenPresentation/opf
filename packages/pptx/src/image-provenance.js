@@ -176,7 +176,7 @@ export function placeImages(entries, images, overlays, {metadataFor, fail, fitIm
         const blip = blipEffects(effects);
         if (blip) picture = picture.replace(/<a:blip\b([^>]*?)(?:\/>|>([\s\S]*?)<\/a:blip>)/, (_, attributes, inner = '') => `<a:blip${attributes}>${blip}${inner}</a:blip>`);
       }
-      // RR-96: the colours the treatment wrote become scheme colours before the manifest fingerprints the shape.
+      // RR-96: the colors the treatment wrote become scheme colors before the manifest fingerprints the shape.
       picture = finish(part, picture);
       placed.add(name);
       if (image.treatment !== undefined) {

@@ -59,7 +59,7 @@ const formatRules: ValidationRuleInfo[] = [
 	rule('shape-anchor-missing', 'format', 'error', 'An overlay shape has no resolvable block or qualified plotted chart point.', 'An overlay shape placed with `at` sits against a composed block of its slide, named by the block\'s `id`. A chart point also requires a unique plotted category and series in a qualified shared plot. When an identity or geometry is missing, the shape is not drawn.', { standard: SCHEMA }),
 	rule('shape-anchor-size-unit', 'format', 'warning', 'A pixel size is under a fraction key.', 'In `at`, `width` and `height` are fractions of the block (up to 8); pixels are `widthPx` and `heightPx`. A value above 4 and up to 8 is reported here; above 8 it is a schema error that offers the same rename.', { standard: SCHEMA }),
 	rule('connector-end-missing', 'format', 'error', 'A connector end names no block or overlay shape on the slide.', 'A connector joins two shapes of its slide, each named by the `id` of a block or an overlay shape. With an end that names nothing (or names a connector) there is nothing to glue it to, so it is not drawn.', { standard: SCHEMA }),
-	rule('image-placement-invalid', 'format', 'error', 'An image placement cannot be honoured.', 'A placed image bleeds to a slide edge and the rest of the slide composes beside it. Only a top-level block (slides.N.blocks.I) can do that, and a slide edge holds one placed image; a block in a group or in a cell of the slide grid, or a second block on the same edge, has nowhere to go.', { standard: SCHEMA }),
+	rule('image-placement-invalid', 'format', 'error', 'An image placement cannot be honored.', 'A placed image bleeds to a slide edge and the rest of the slide composes beside it. Only a top-level block (slides.N.blocks.I) can do that, and a slide edge holds one placed image; a block in a group or in a cell of the slide grid, or a second block on the same edge, has nowhere to go.', { standard: SCHEMA }),
 	rule('layout-placeholder-group', 'format', 'error', 'A layout record\'s placeholder group breaks a nesting rule.', 'A placeholder group arranges body regions inside one cell of its layout record. Groups nest at most three levels inside a record, and a group holds body regions and groups only: the headings (title, subtitle, tag) stay at the record\'s top level, where the engine places them. Composition cannot use a record that breaks either rule.', { standard: SCHEMA }),
 	rule('dataset-unknown', 'format', 'error', 'A chart or table names a dataset that does not exist.', 'The data cannot be drawn without the dataset it refers to.', { standard: SCHEMA }),
 	rule('dataset-field-unknown', 'format', 'error', 'A table asks a dataset for a column it does not have.', 'The column cannot be shown when the dataset has no column of that name.', { standard: SCHEMA }),
@@ -71,20 +71,20 @@ const formatRules: ValidationRuleInfo[] = [
 	rule('variable-invalid-value', 'format', 'error', 'A variable value does not match its declared type.', 'A number variable given text, or a date given a non-date, cannot be filled into the deck.', { standard: SCHEMA }),
 	rule('variable-unknown-builtin', 'format', 'error', 'A token names a built-in variable that does not exist.', 'The `deck.`, `speaker.`, `organization.` and `slide.` names (and `speakers`) are reserved for built-in variables; a name under them that is not a built-in can never be filled, so the token would show literally. The slide-scoped `slide.number`, `slide.section` and `deck.slideCount` are inline tokens only, so `var:slide.*` and `var:deck.slideCount` are reported too; organization logos are whole-field references only (`var:organization.logo.icon`), so a `{{organization.logo}}` token, an unknown logo shape or an unknown organization id is reported.', { standard: SCHEMA }),
 	rule('table-highlight-unknown-name', 'format', 'error', 'A table highlight names a row the table does not have.', '`table.highlight` emphasizes body rows by their first-column text; a name that matches no row highlights nothing, so the table is not drawn as authored.', { standard: SCHEMA }),
-	rule('chart-highlight-unknown-name', 'format', 'error', 'A chart highlight names a series or category the chart does not have.', '`chart.highlight` emphasises marks by name; a name that matches no series or category in the chart data highlights nothing, so the chart is not drawn as authored.', { standard: SCHEMA }),
+	rule('chart-highlight-unknown-name', 'format', 'error', 'A chart highlight names a series or category the chart does not have.', '`chart.highlight` emphasizes marks by name; a name that matches no series or category in the chart data highlights nothing, so the chart is not drawn as authored.', { standard: SCHEMA }),
 	rule('variable-format', 'format', 'error', 'A variable cannot be formatted.', 'A number or date format that does not apply to the value leaves the token unreadable.', { standard: SCHEMA }),
 	rule(
 		'variable-unfilled',
 		'format',
 		'error',
 		'A required template variable has no value.',
-		'A variable a deck declares as required, with no value, is template scaffolding: `{{name}}` tokens show up literally and colour variables fall back to a default. A normal deck must be filled, so this is an error and the deck is not valid; a template (`template: true`) is incomplete on purpose, so it is a warning.',
+		'A variable a deck declares as required, with no value, is template scaffolding: `{{name}}` tokens show up literally and color variables fall back to a default. A normal deck must be filled, so this is an error and the deck is not valid; a template (`template: true`) is incomplete on purpose, so it is a warning.',
 		{
 			approximations:
-				'Required variables are those the variable machinery reports as unfilled for the document (declared, no value, not `required: false`, not given by the `values` option). For a document that declares no content variables, `{{id}}` / `{{id|format}}` tokens (`{{` escapes) left in any string outside `variables`, `extensions`, `catalogs` and `assets` are reported as warnings. `var:` colour references with no declaration are reported as `opf/variable-reference-unknown`. Fill a template with `opf fill` or `resolveVariables` to clear the findings.',
+				'Required variables are those the variable machinery reports as unfilled for the document (declared, no value, not `required: false`, not given by the `values` option). For a document that declares no content variables, `{{id}}` / `{{id|format}}` tokens (`{{` escapes) left in any string outside `variables`, `extensions`, `catalogs` and `assets` are reported as warnings. `var:` color references with no declaration are reported as `opf/variable-reference-unknown`. Fill a template with `opf fill` or `resolveVariables` to clear the findings.',
 		},
 	),
-	rule('run-color-unrecognized', 'format', 'warning', 'A text run colour is none of the documented forms.', 'Run colours are open strings so imported decks stay valid, but a value that is not a hex colour, a colour-scheme name or a `var:` reference falls back to the theme colour.', { standard: SCHEMA }),
+	rule('run-color-unrecognized', 'format', 'warning', 'A text run color is none of the documented forms.', 'Run colors are open strings so imported decks stay valid, but a value that is not a hex color, a color-scheme name or a `var:` reference falls back to the theme color.', { standard: SCHEMA }),
 	rule('numbering-start-ignored', 'format', 'warning', 'A list entry sets `start` where nothing is numbered.', 'A start value only restarts an auto-number; without `numbering` on the payload it has no effect.', { standard: SCHEMA }),
 	rule(
 		'slide-size-out-of-range',
@@ -94,7 +94,7 @@ const formatRules: ValidationRuleInfo[] = [
 		"The schema accepts any positive custom `widthInches` and `heightInches`, but a PPTX stores the size as `p:sldSz` with each side between 914400 and 51206400 EMU, which is 1 to 56 inches. A custom size outside that range exports a file that does not conform to the standard, which PowerPoint may reject or clamp. It is a warning because the document is still correct OPF and the preview draws it.",
 		{
 			standard: 'ECMA-376 / ISO/IEC 29500-1 section 19.2.1.39 (p:sldSz) and section 19.7.17 (ST_SlideSizeCoordinate): 914400 to 51206400 EMU',
-			approximations: "Checks the deck's resolved size: `design.dimensions`, else the resolved theme's `dimensions`. Inches are converted to EMU as the PPTX exporter does (`Math.round(inches * 914400)`), so a side of exactly 1 in or 56 in passes. A slide-level theme with another size is `opf/slide-theme-dimensions`. Presets are always in range. PowerPoint's own behaviour at the limits was not measured.",
+			approximations: "Checks the deck's resolved size: `design.dimensions`, else the resolved theme's `dimensions`. Inches are converted to EMU as the PPTX exporter does (`Math.round(inches * 914400)`), so a side of exactly 1 in or 56 in passes. A slide-level theme with another size is `opf/slide-theme-dimensions`. Presets are always in range. PowerPoint's own behavior at the limits was not measured.",
 		},
 	),
 ];
@@ -138,7 +138,7 @@ const referenceRules: ValidationRuleInfo[] = [
 		'references',
 		'warning',
 		'A content reference resolves nowhere.',
-		'A layout, theme, colour scheme, font scheme, narrative, audience, purpose or tone reference that neither the document embeds nor a registered catalog defines falls back: a slide composes automatically, a design uses the engine default. A strict export fails instead. A slide with no layout is automatic composition and is never reported. A layout id that OPF has removed is reported with the safe fix that writes its replacement or deletes the key.',
+		'A layout, theme, color scheme, font scheme, narrative, audience, purpose or tone reference that neither the document embeds nor a registered catalog defines falls back: a slide composes automatically, a design uses the engine default. A strict export fails instead. A slide with no layout is automatic composition and is never reported. A layout id that OPF has removed is reported with the safe fix that writes its replacement or deletes the key.',
 		{ standard: SCHEMA, approximations: 'Resolved like every engine resolves it: catalogs.custom, then the records embedded under catalogs.default, then the catalog registered for its source (the first registered catalog when `default` is omitted); `name:id` in catalogs.<name>, then the catalog registered for its source. Nothing is fetched. Free-form audience and purpose text is not a reference. It is a warning, not an error, because catalogs are open and a host may register the id; `--fail-on warning` is the check that a deck is done. With a catalog registered, the hint names the nearest records that exist ("Did you mean `two-column`?").' },
 	),
 	rule(
@@ -159,7 +159,7 @@ const referenceRules: ValidationRuleInfo[] = [
 	rule('variable-unknown', 'references', 'warning', 'A `{{token}}` names a variable that is not declared.', 'An undeclared token is shown literally.', { standard: SCHEMA }),
 	rule('variable-unknown-value', 'references', 'warning', 'A value was supplied for a variable that is not declared.', 'The value is never used.', { standard: SCHEMA }),
 	rule('variable-unused', 'references', 'warning', 'A variable is declared but never used.', 'A declaration nothing refers to has no effect.', { standard: SCHEMA }),
-	rule('variable-reference-unknown', 'references', 'warning', 'A `var:` colour names a variable that is not declared.', 'An undeclared colour variable falls back to a default colour.', { standard: SCHEMA }),
+	rule('variable-reference-unknown', 'references', 'warning', 'A `var:` color names a variable that is not declared.', 'An undeclared color variable falls back to a default color.', { standard: SCHEMA }),
 ];
 
 const policyRules: ValidationRuleInfo[] = [
@@ -199,14 +199,14 @@ export const contrastRule = rule(
 	'text-contrast',
 	'accessibility',
 	'warning',
-	'Text colour has too little contrast against the background it sits on.',
-	'Low-contrast text is hard or impossible to read for people with low vision, colour-vision differences, glare on a projector or a poor display. WCAG sets 4.5:1 for normal text and 3:1 for large text.',
+	'Text color has too little contrast against the background it sits on.',
+	'Low-contrast text is hard or impossible to read for people with low vision, color-vision differences, glare on a projector or a poor display. WCAG sets 4.5:1 for normal text and 3:1 for large text.',
 	{
 		standard: 'WCAG 2.2 SC 1.4.3 Contrast (Minimum), level AA',
 		thresholds: ['contrastNormal', 'contrastLarge'],
 		cost: 'composition',
 		approximations:
-			'Computed on sRGB colours with the WCAG relative-luminance formula, against the background the preview draws: a solid or theme colour, the card surface, a table cell fill, every colour a gradient takes under the text box (sampled on a 5x5 grid, angle respected), or both colours of a pattern. Anti-aliasing, text shadows and font weight are not modelled. Text colour is the preview\'s (the scheme\'s text role or dark1 on a light background and light1 on a dark one, chosen from the background luminance, where a gradient or picture background uses the scheme\'s default background colour), so a default can fail on a dark gradient. A link with no colour of its own is measured in the scheme\'s hyperlink colour.',
+			'Computed on sRGB colors with the WCAG relative-luminance formula, against the background the preview draws: a solid or theme color, the card surface, a table cell fill, every color a gradient takes under the text box (sampled on a 5x5 grid, angle respected), or both colors of a pattern. Anti-aliasing, text shadows and font weight are not modeled. Text color is the preview\'s (the scheme\'s text role or dark1 on a light background and light1 on a dark one, chosen from the background luminance, where a gradient or picture background uses the scheme\'s default background color), so a default can fail on a dark gradient. A link with no color of its own is measured in the scheme\'s hyperlink color.',
 	},
 );
 export const onImageRule = rule(
@@ -269,7 +269,7 @@ export const readingOrderRule = rule(
 		standard: 'WCAG 2.2 SC 1.3.2 Meaningful Sequence, level A (PowerPoint: "Check reading order")',
 		cost: 'composition',
 		approximations:
-			'Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. A block is one unit (RR-105): blocks are ordered by the boxes that hold them, and a group\'s own items are read, in their own visual order, before the next block, so cards side by side (a picture over a name) read card by card. Headings are expected first. Content drawn entirely above the title, over the columns of the title, is reported; content in a column beside the title is read after it. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.',
+			'Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centers fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. A block is one unit (RR-105): blocks are ordered by the boxes that hold them, and a group\'s own items are read, in their own visual order, before the next block, so cards side by side (a picture over a name) read card by card. Headings are expected first. Content drawn entirely above the title, over the columns of the title, is reported; content in a column beside the title is read after it. Free-form overlap is not analyzed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.',
 	},
 );
 export const linkRule = rule(
@@ -284,13 +284,13 @@ export const chartColorRule = rule(
 	'chart-color-only',
 	'accessibility',
 	'info',
-	'Chart series may be indistinguishable without colour vision.',
-	'OPF charts have no data labels or patterns, so series are told apart by colour alone (and legend order). Colours that look alike to someone with colour-vision deficiency, or when printed in greyscale, make series impossible to tell apart.',
+	'Chart series may be indistinguishable without color vision.',
+	'OPF charts have no data labels or patterns, so series are told apart by color alone (and legend order). Colors that look alike to someone with color-vision deficiency, or when printed in grayscale, make series impossible to tell apart.',
 	{
 		standard: 'WCAG 2.2 SC 1.4.1 Use of Color, level A',
 		thresholds: ['minSeriesColorDifference'],
 		approximations:
-			'Uses the engine\'s series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide color scheme (accent1 to accent6, then their tints), adjusted for the slide background and softened like the engines draw them, LH-105) in series order: series i takes color i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighbouring series (and neighbouring slices, on a pie or doughnut the last beside the first, which the engines move off the first by at most 20 L* or, where that is not enough, separate with a surface-colored slice border that this rule accepts, LH-161) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.',
+			'Uses the engine\'s series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide color scheme (accent1 to accent6, then their tints), adjusted for the slide background and softened like the engines draw them, LH-105) in series order: series i takes color i, pie/doughnut/treemap/funnel slices take colors per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and grayscale. Neighboring series (and neighboring slices, on a pie or doughnut the last beside the first, which the engines move off the first by at most 20 L* or, where that is not enough, separate with a surface-colored slice border that this rule accepts, LH-161) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.',
 	},
 );
 export const chartAltRule = rule(
@@ -305,11 +305,11 @@ export const chartColorsRule = rule(
 	'chart-colors-adjusted',
 	'accessibility',
 	'warning',
-	'A chart colour cannot be used as authored.',
-	'`chart.colors` sets the colour of series 1, 2, 3 and so on. A colour that cannot be resolved (a `var:` colour variable the deck does not define, or a name that is not a colour) is ignored and the deck palette colour of that position is used. A colour with under 3:1 contrast against the slide background the chart stands on is kept for its hue but drawn lighter or darker, so the chart does not show the colour that was written.',
+	'A chart color cannot be used as authored.',
+	'`chart.colors` sets the color of series 1, 2, 3 and so on. A color that cannot be resolved (a `var:` color variable the deck does not define, or a name that is not a color) is ignored and the deck palette color of that position is used. A color with under 3:1 contrast against the slide background the chart stands on is kept for its hue but drawn lighter or darker, so the chart does not show the color that was written.',
 	{
 		standard: 'WCAG 2.2 SC 1.4.11 Non-text Contrast, level AA',
-		approximations: 'Resolves each entry like any colour reference (hex, colour-scheme slot or role, `var:` variable) against the slide\'s scheme and compares it with the slide background (no chart has a panel, LH-105; a chart in a card stands on the card, which is not measured) by WCAG contrast; 3:1 is the threshold the engines enforce. Translucent colours and unresolved backgrounds are not measured. Colours that look alike to colour-vision deficiency are reported by opf/chart-color-only, which judges the authored colours.',
+		approximations: 'Resolves each entry like any color reference (hex, color-scheme slot or role, `var:` variable) against the slide\'s scheme and compares it with the slide background (no chart has a panel, LH-105; a chart in a card stands on the card, which is not measured) by WCAG contrast; 3:1 is the threshold the engines enforce. Translucent colors and unresolved backgrounds are not measured. Colors that look alike to color-vision deficiency are reported by opf/chart-color-only, which judges the authored colors.',
 	},
 );
 export const languageRule = rule(
@@ -614,7 +614,7 @@ export const chartPieManySlicesRule = rule(
 	'content',
 	'info',
 	`A pie or doughnut chart has more than ${PIE_MAX_SLICES} slices.`,
-	'People compare angles and areas poorly, and past a few slices the small ones cannot be told apart or labelled. Bars along one axis show the same parts of a whole and let them be compared and ranked (Few, Show Me the Numbers).',
+	'People compare angles and areas poorly, and past a few slices the small ones cannot be told apart or labeled. Bars along one axis show the same parts of a whole and let them be compared and ranked (Few, Show Me the Numbers).',
 	{
 		standard: `Stephen Few, Show Me the Numbers (2012), on pie charts; more than ${PIE_MAX_SLICES} categories.`,
 		approximations: 'Counts the rows (categories) of a `pie` or `doughnut` chart as its data resolves; a doughnut of several series (nested rings) counts the categories of a ring. Treemaps and funnels are not checked.',

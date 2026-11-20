@@ -35,7 +35,7 @@ const { slide, options, diagnostics } = resolveSlideContext(document, slideIndex
 // slide: document.slides[slideIndex] with {{slide.number}}, {{slide.section}} and {{deck.slideCount}} substituted.
 const geometry = composeSlide(slide, options);
 // geometry.items: leaf paths and boxes; geometry.groups: nested group bounds.
-// diagnostics holds one unresolved-reference per layout, theme, colour or font scheme reference that resolves nowhere;
+// diagnostics holds one unresolved-reference per layout, theme, color or font scheme reference that resolves nowhere;
 // each falls back (automatic composition, or the engine default) and none throws unless strictReferences is set.
 console.log(geometry.diagnostics);
 ```

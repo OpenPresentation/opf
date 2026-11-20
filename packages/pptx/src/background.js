@@ -33,8 +33,8 @@ export const nativePatternPreset = preset => presetPatterns.has(preset) ? preset
 // The SVG preview paints the pattern background color and foreground marks,
 // defaulting to white and the slide text color. Other engine-defined presets
 // have no DrawingML equivalent; like the preview, only their background color remains.
-// `resolve(reference)` turns a ColorRef (a `var:` variable, a colour-scheme slot or
-// role name) into a hex colour, as for table fills and run colours; literals pass
+// `resolve(reference)` turns a ColorRef (a `var:` variable, a color-scheme slot or
+// role name) into a hex color, as for table fills and run colors; literals pass
 // through. `scheme(reference, hex)` names the theme color for an authored slot/role
 // reference whose drawn color the deck theme holds exactly (FF-24); solid, gradient
 // and pattern colors then become a:schemeClr, keeping any background opacity as alpha.

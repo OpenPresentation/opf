@@ -1,19 +1,19 @@
-// Run colours named by a reference (RR-08).
+// Run colors named by a reference (RR-08).
 //
-// A TextRun colour may be a ColorRef: a `var:` variable, a colour-scheme slot ('accent2') or a role ('primary'). The
-// export resolves it (or writes the theme slot that holds the same colour) and PowerPoint has no field for the name, so
+// A TextRun color may be a ColorRef: a `var:` variable, a color-scheme slot ('accent2') or a role ('primary'). The
+// export resolves it (or writes the theme slot that holds the same color) and PowerPoint has no field for the name, so
 // import used to return only the resolved hex. Two sources can name the reference again, and both are gated by the
-// imported document's own colour resolution: a name is restored only while it still resolves to the run's current colour,
-// so a colour edited in PowerPoint keeps its edited value and nothing is invented.
+// imported document's own color resolution: a name is restored only while it still resolves to the run's current color,
+// so a color edited in PowerPoint keeps its edited value and nothing is invented.
 //
 // 1. Provenance (full mode): OPF_SLIDE_V1 `colors` = {n, at: [[slot, reference], ...]}. The slots are the text runs of the
 //    slide's content in a fixed order (slideRunSlots: text runs, list item and description runs; regions by name, then
 //    blocks and groups in order, or the root payload). `n` is how many slots the authored slide had; the record is used only
 //    when the imported slide has exactly that many, so a run can never be matched to another. It holds reference names
 //    only, never words.
-// 2. A slide with no OPF record (plain PPTX): a run painted with a bare a:schemeClr (no colour transform) names that
-//    theme slot ('accent2', 'dark1', 'hyperlink'), restored when the document's colour scheme holds that exact colour for
-//    the slot. The exporter writes schemeClr only where the theme holds the colour, so this is the same convention.
+// 2. A slide with no OPF record (plain PPTX): a run painted with a bare a:schemeClr (no color transform) names that
+//    theme slot ('accent2', 'dark1', 'hyperlink'), restored when the document's color scheme holds that exact color for
+//    the slot. The exporter writes schemeClr only where the theme holds the color, so this is the same convention.
 
 import {ROOT_PAYLOAD_FIELDS} from './content-topology.js';
 
@@ -76,12 +76,12 @@ export function runColorRecord(slide) {
   return at.length ? {n: slots.length, at} : undefined;
 }
 
-/** Throws when `value` is not a well-formed colours record. */
+/** Throws when `value` is not a well-formed colors record. */
 export function validateRunColors(value) {
-  if (!object(value) || !Number.isSafeInteger(value.n) || value.n < 1 || value.n > MAX_COLOR_SLOTS || !Array.isArray(value.at) || !value.at.length || value.at.length > value.n) throw Error('Invalid run colours record.');
+  if (!object(value) || !Number.isSafeInteger(value.n) || value.n < 1 || value.n > MAX_COLOR_SLOTS || !Array.isArray(value.at) || !value.at.length || value.at.length > value.n) throw Error('Invalid run colors record.');
   let previous = -1;
   for (const entry of value.at) {
-    if (!Array.isArray(entry) || entry.length !== 2 || !Number.isSafeInteger(entry[0]) || entry[0] <= previous || entry[0] >= value.n || !isColorReference(entry[1])) throw Error('Invalid run colour entry.');
+    if (!Array.isArray(entry) || entry.length !== 2 || !Number.isSafeInteger(entry[0]) || entry[0] <= previous || entry[0] >= value.n || !isColorReference(entry[1])) throw Error('Invalid run color entry.');
     previous = entry[0];
   }
   return value;
@@ -95,12 +95,12 @@ function* markedRuns(value) {
 }
 
 /**
- * Restore run colour references on `slides` (the imported document's slides). `info[i]` is
+ * Restore run color references on `slides` (the imported document's slides). `info[i]` is
  * {record, structure, content}: the stored OPF_SLIDE_V1 value, whether the slide's arrangement matches it and whether its
  * content structure was restored from it, or undefined for an untagged slide. `resolve(slide, name)` returns the '#RRGGBB'
  * the name resolves to in the document (or undefined). Every transient `_opfScheme` marker is removed.
- * opf-pptx#212: a list run whose colour import removed as the list's own (OPF_SLIDE_V1 listRuns) carries `_opfInherited`, that
- * colour: a stored reference that resolves to it is restored (an authored `text` role equals the inherited colour), and the
+ * opf-pptx#212: a list run whose color import removed as the list's own (OPF_SLIDE_V1 listRuns) carries `_opfInherited`, that
+ * color: a stored reference that resolves to it is restored (an authored `text` role equals the inherited color), and the
  * marker is removed; a run left with only its text becomes a plain string again.
  */
 // Visit only real content leaves; metadata paths never address arbitrary objects.
@@ -152,7 +152,7 @@ export function restoreRunColors(slides, info, resolve, report) {
           report?.({code:'list-scalar-reference-changed',path:'slides.'+index,message:'Scalar source intent conflicts with an authored run color slot; current native run boundaries are retained.'});
           scalars = []; slots = slideRunSlots(slide, null, null);
         }
-        if (slots.length !== n) report({code: 'color-reference-changed', path: `slides.${index}`, message: `The slide's text runs no longer match the stored colour references (${slots.length} runs now, ${n} at export), so the named run colours of slides.${index} (variables, scheme slots and roles) were not restored; the runs keep their resolved colours.`});
+        if (slots.length !== n) report({code: 'color-reference-changed', path: `slides.${index}`, message: `The slide's text runs no longer match the stored color references (${slots.length} runs now, ${n} at export), so the named run colors of slides.${index} (variables, scheme slots and roles) were not restored; the runs keep their resolved colors.`});
         else for (const [slot, name] of at) if (slots[slot]) restoreName(slots[slot], name);
       }
     }

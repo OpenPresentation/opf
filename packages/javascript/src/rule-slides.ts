@@ -10,7 +10,7 @@ import type { ValidateOptions } from './validation-types.js';
 
 /**
  * The slides the accessibility, layout and content rules read. Every derived part is computed on first use and
- * memoised, so composition (the expensive part, about 80 percent of a full run) happens only when a rule that
+ * memoized, so composition (the expensive part, about 80 percent of a full run) happens only when a rule that
  * needs geometry runs. The composition options come from `resolveSlideContext`, the one resolution every engine
  * uses. Internal module.
  */

@@ -197,7 +197,7 @@ async function rename(view, context) {
     // The occurrence the caret was on (the nearest one of the symbol, when the text moved).
     const same = now.occurrences.filter((occurrence) => symbolKey(occurrence) === key);
     const current = same.reduce((best, occurrence) => (!best || Math.abs(occurrence.from - symbol.from) < Math.abs(best.from - symbol.from) ? occurrence : best), null);
-    if (!current) { close(); context.say(`Rename cancelled: ${label} is no longer in the text`); return; }
+    if (!current) { close(); context.say(`Rename canceled: ${label} is no longer in the text`); return; }
     const problem = validateName(now, current, name);
     if (problem) { context.say(problem); return; }
     const result = renameEdits(now, current, name);

@@ -308,7 +308,7 @@ ed.on('render', () => { renderError = undefined; });
 ed.on('selection', ({ path }) => { select(path); if (!keepInspectorPanel) showPanel('content'); });
 ed.on('draft', ({ presentation }) => { element('json').value = viewSource(presentation); status('Editing on the slide · Esc to cancel'); });
 ed.on('commit', () => status('Changes saved in this session'));
-ed.on('cancel', () => { element('json').value = viewSource(editor.presentation); status('Edit cancelled'); });
+ed.on('cancel', () => { element('json').value = viewSource(editor.presentation); status('Edit canceled'); });
 ed.on('export', ({ fileName }) => status(`${fileName} downloaded · Save OPF to keep your original editable source`));
 element('apply').onclick = () => act(() => editor.set(selectedPath, typeof selectedValue === 'string' ? element('value').value : JSON.parse(element('value').value)));
 element('undo').onclick = () => act(() => ed.undo());

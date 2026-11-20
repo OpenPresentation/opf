@@ -135,7 +135,7 @@ const SLIDE_DESIGN_FIELDS = [...STYLE_REFERENCES, 'background', ...COMPOSITION_H
 const DOCUMENT_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['filename', 'extensions'])});
 const SLIDE_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['language'])});
 // RR-59: document-level values the import reads back although export only baked them in from engine defaults: the
-// canonical `$schema`, the package title (`name`), the language the runs carry, and the theme, colour scheme, font scheme
+// canonical `$schema`, the package title (`name`), the language the runs carry, and the theme, color scheme, font scheme
 // and slide size of the generated theme. In `full` mode OPF_DOCUMENT_V1.absent lists the ones the source did not state
 // (a top-level key, which every published importer ignores), and import leaves each of them absent while the native
 // value it would be read from is still the default the export wrote; a value edited in PowerPoint is imported as observed.
@@ -348,7 +348,7 @@ function nativeSlide(entries, path, includeRunStyles = true) {
   const cSld = root?.['p:cSld'], tree = cSld?.['p:spTree'];
   const rels = relationships(entries, path);
   // FA-23: an image background with alt text is a back picture and its overlay is a shape (src/image-provenance.js); both
-  // are evidence of design.background with the native slide background, so moving or recolouring them is a background edit.
+  // are evidence of design.background with the native slide background, so moving or recoloring them is a background edit.
   const named = (nodes, key) => array(nodes).filter(node => /^OPF background /.test(String(node?.[key]?.['p:cNvPr']?.name ?? '')));
   const backgroundObjects = [...named(tree?.['p:pic'], 'p:nvPicPr').map(node => ({spPr: node['p:spPr'], blipFill: node['p:blipFill']})),
     ...named(tree?.['p:sp'], 'p:nvSpPr').map(node => ({spPr: node['p:spPr']}))];
@@ -420,7 +420,7 @@ function documentReferences(doc) {
 }
 
 // The embedded catalogs a set of references needs: each referenced record once, in the group it resolves in, plus the
-// records it references (a theme's colour and font schemes, resolved in the theme's group first), and every group
+// records it references (a theme's color and font schemes, resolved in the theme's group first), and every group
 // declaration (its `source`, or `default: false`). Only embedded records are kept; nothing resolves in a host catalog here.
 export function referencedCatalogs(catalogs, references) {
   if (!object(catalogs)) return undefined;
@@ -570,7 +570,7 @@ export function recordContentTopology(provenance, slide, index, items) {
   const topology = contentTopology(slide, items, index, reason => { provenance.slides[index].omittedContent = reason; });
   if (!topology) return;
   provenance.slides[index].content = topology;
-  // Variable, scheme-slot and role names of text runs (the native colour holds only what they resolve to).
+  // Variable, scheme-slot and role names of text runs (the native color holds only what they resolve to).
   const colors = runColorRecord(slide);
   if (colors) provenance.slides[index].colors = colors;
   // Whitespace of the hard line breaks inside list items (their native lines carry no tag).
@@ -1295,7 +1295,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
   if (observedFontScheme) group('design.fontScheme', [set(['design', 'fontScheme'], observedFontScheme)]);
   const styleIntact = STYLE_REFERENCES.every(key => restoredStyle[key] !== false);
   // RR-59: a default the source left absent stays absent while the native value it is read from is the one export wrote
-  // (FF-24's theme recovery, for example, gives a theme-only deck its colour scheme). A native edit is imported as observed.
+  // (FF-24's theme recovery, for example, gives a theme-only deck its color scheme). A native edit is imported as observed.
   const absent = new Set(array(document.absent));
   const defaultGates = {theme: match.colors && match.fonts, colorScheme: match.colors, fontScheme: match.fonts, dimensions: match.size};
   for (const [key, unchanged] of Object.entries(defaultGates)) {

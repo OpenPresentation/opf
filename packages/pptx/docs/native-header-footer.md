@@ -145,7 +145,7 @@ vertically centered. A lone text part keeps the whole zone width, as before; a t
 wide as its words. The exporter draws every part at `part.box` and the native placeholder keeps that box, so a `ftr` beside a logo is a
 narrow placeholder at the right of the logo. The master and layout placeholders do not follow it: each spans the zone's band (the box
 core gives a lone part in that zone, `start` `.07`, `center` `.37`, `end` `.67` of the width in a left-to-right deck, `.26` wide), at the edge the part is aligned to,
-so a footer added through the dialog fits any text. On import, a placeholder's zone is still the third its centre falls in, which is the
+so a footer added through the dialog fits any text. On import, a placeholder's zone is still the third its center falls in, which is the
 zone the row sits in. A row too wide for its zone is a `text-overflow` diagnostic from core.
 
 ## Master furniture (RR-72)
@@ -197,7 +197,7 @@ do not change.
     to the first zone without a text;
   * all three share one baseline: the deck's own date, footer text or number, in that order (the box the slide shape of that part
     has, core's placed line), so items turned on together line up, and a date added beside the footer text lines up with it.
-  Their text style (size, theme colour, font) is the first furniture run's, so a footer added through the dialog looks like the
+  Their text style (size, theme color, font) is the first furniture run's, so a footer added through the dialog looks like the
   exported ones. When core cannot compose the footer the placeholders fall back to the first slide's native boxes, then core's
   default footer band.
 * **Master and layout date field.** A deck whose footer has a current date gives the master and layout Date its field (type,
@@ -251,7 +251,7 @@ is read where the slide manifest says it is:
   (`test/provenance-interop.mjs` runs published 0.11.6 against an export).
 * **Without provenance** (a PowerPoint deck, a tag-stripped export, a footer added through the dialog) every `dt`,
   `ftr` or `sldNum` placeholder with content is footer furniture and never slide content:
-  * the zone is the horizontal third of the placeholder's centre, resolved through the slide, its layout (same idx) and
+  * the zone is the horizontal third of the placeholder's center, resolved through the slide, its layout (same idx) and
     the master when the slide gives no `a:xfrm`; no geometry means date left, footer center, number right;
   * `sldNum` needs a `slidenum` field and imports as the zone's `text`, with each native slide-number field as
     `{{slide.number}}` and the words around it kept (`Page {{slide.number}}`); a count or a section is never inferred
@@ -343,7 +343,7 @@ provenance, `provenance: false` and stripped tags, a date format), `test/fixture
     validate `parts` and `definitions` strictly, keep reading the rest of the slide's furniture instead of rejecting the band.
 20. (RR-72) Shapes on a third-party master or layout stay unread (a picture there is ignored, not imported as an image): they are
     template decoration, and reading them would put a corporate template's logo into every imported deck's design.
-21. (RR-72) The row baseline is not changed. In RR-71's row zones each part is centred on the row's tallest part (the logo, 36 px at a
+21. (RR-72) The row baseline is not changed. In RR-71's row zones each part is centered on the row's tallest part (the logo, 36 px at a
     720 px short edge), so row text sits about 6 px below single-part text in the same band. Putting row text on the single-part
     baseline leaves the logo 6 px above it: in the header the logo moves into the slide's top margin and `headerBottom` changes, in the
     footer the band's top (`footerTop`, the body's lower bound) moves up or the logo crosses into the body gap. Either moves more than the

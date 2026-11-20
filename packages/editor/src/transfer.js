@@ -102,7 +102,7 @@ function qualified(value, group) {
 }
 
 /**
- * Freeze the source deck's look on its slides before they move: each slide carries its colour scheme, font scheme, background
+ * Freeze the source deck's look on its slides before they move: each slide carries its color scheme, font scheme, background
  * and header/footer, so the target deck's design does not restyle it. A value the source takes from its theme is written with
  * the theme's catalog group; one it takes from the engine default is written only when the target would not use the engine
  * default too (core's `ENGINE_DEFAULT_*`, never a catalog id).

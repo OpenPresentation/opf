@@ -54,7 +54,7 @@ export interface ValidationThresholds {
 	minFontSizePt: number;
 	/** Minimum effective pixels per inch of an embedded raster image at its displayed size. */
 	minImagePpi: number;
-	/** Smallest CIE76 colour difference between two chart series (after colour-vision simulation) before they count as confusable. */
+	/** Smallest CIE76 color difference between two chart series (after color-vision simulation) before they count as confusable. */
 	minSeriesColorDifference: number;
 }
 
@@ -101,7 +101,7 @@ export interface ValidateOptions {
 	thresholds?: Partial<ValidationThresholds>;
 	/** The host's fonts. The layout rules use `fonts.textMeasurement`; see `ValidateFonts`. */
 	fonts?: ValidateFonts;
-	/** Chart series palette (opaque `#RRGGBB`), in the engine's order. Default: `chartSeriesPalette` of each slide's colour scheme (accent1 to accent6, then their tints), as opf-render and opf-pptx draw them. */
+	/** Chart series palette (opaque `#RRGGBB`), in the engine's order. Default: `chartSeriesPalette` of each slide's color scheme (accent1 to accent6, then their tints), as opf-render and opf-pptx draw them. */
 	chartPalette?: readonly string[];
 	/** Check as a template (true) or a normal deck (false), overriding the root `template` marker. */
 	template?: boolean;

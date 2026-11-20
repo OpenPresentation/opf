@@ -99,7 +99,7 @@ export interface FontPolicyDecision {
   replacement: string;
   compatibility: FontReplacementCompatibility;
   /** Metric-mode registries still preview with this visual replacement (reported as visual), so an
-   * earlier metric behaviour does not regress. It never makes the replacement metric. */
+   * earlier metric behavior does not regress. It never makes the replacement metric. */
   metricModeFallback?: boolean;
   note?: string;
 }

@@ -117,7 +117,7 @@ function resolveNode(schema: JsonSchema | undefined, root: SchemaRoot, seen: Set
 
 /**
  * The concrete forms of a schema: `oneOf` / `anyOf` branches and `type` arrays expanded, each branch merged over the shared
- * base (properties and required lists are combined; a branch that only names required fields is labelled by them).
+ * base (properties and required lists are combined; a branch that only names required fields is labeled by them).
  */
 export function schemaVariants(schema: JsonSchema | undefined, root: SchemaRoot = presentationSchema): JsonSchema[] {
   const resolved = resolveSchema(schema, root);
@@ -128,7 +128,7 @@ export function schemaVariants(schema: JsonSchema | undefined, root: SchemaRoot 
   return (variants as JsonSchema[]).flatMap((child) =>
     schemaVariants(child, root).map((variant) => {
       // A branch that only names required fields (Watermark: exactly one of src and text) adds to the base's required list and is
-      // labelled by them, so the generic form offers "src" and "text" as two forms of one object.
+      // labeled by them, so the generic form offers "src" and "text" as two forms of one object.
       const requiredOnly = !variant.type && !variant.properties && !variant.$ref && Array.isArray(variant.required);
       return {
         ...base,

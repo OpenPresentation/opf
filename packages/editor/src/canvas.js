@@ -1083,7 +1083,7 @@ export function createCanvasEditor(container, options = {}) {
     if (JSON.stringify(editor.get(active.path)) !== active.base) {
       report(
         new Error(
-          "This content changed elsewhere. Your draft was cancelled to preserve the newer edit.",
+          "This content changed elsewhere. Your draft was canceled to preserve the newer edit.",
         ),
       );
       cancel(false);
@@ -1194,7 +1194,7 @@ export function createCanvasEditor(container, options = {}) {
       if (JSON.stringify(editor.get(active.path)) !== active.base) {
         report(
           new Error(
-            "The selected content changed elsewhere; the draft was cancelled.",
+            "The selected content changed elsewhere; the draft was canceled.",
           ),
         );
         cancel(false);

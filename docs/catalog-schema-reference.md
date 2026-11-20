@@ -154,8 +154,8 @@ OPF documents usually reference these records with string ids such as `design.th
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-color-scheme/v1"` | Identifies a published record file as a colour scheme record. Required in a published file; an embedded copy omits it. |
-| `id` | yes | `string` | The colour scheme's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without t... |
+| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-color-scheme/v1"` | Identifies a published record file as a color scheme record. Required in a published file; an embedded copy omits it. |
+| `id` | yes | `string` | The color scheme's id in its catalog, lowercase kebab-case. Required in a published record file; a document references the record by it (a bare id, or 'name:id' for a named group) and embeds it keyed by it, without th... |
 | `name` | yes | `string` | Human-readable scheme name shown in pickers. |
 | `summary` | no | `string` | One-sentence positioning of the palette what mood it evokes and where to use it. |
 | `description` | no | `string` | Longer prose describing the palette and its intended use. |
@@ -381,7 +381,7 @@ _No named properties._
 | `metrics` | no | `enum:stack \| tile` | How a metric block in the region is laid out. 'stack' (default): value, unit, label and the rest as one block at the region's anchor and content alignment. 'tile': the metric fills its cell (its card when the layout d... |
 | `arrangement` | no | `enum:steps \| numbered \| pyramid \| inverted-pyramid \| matrix \| cycle \| chevrons \| process \| vertical-process \| org-chart \| hierarchy \| venn` | What the region draws its content as. 'steps' and 'numbered' draw a sequence; the other values draw a lone list of one level as a diagram (docs/smartart.md). Absent: the region's content draws as any other. 'steps': t... |
 | `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the region's content when it is shorter than the region. Replaces the 'anchor' of the record and of the splits around it. Default: the nearest of those that sets one, else 'top'. A picture shown w... |
-| `empty` | no | `enum:collapse \| keep` | What the region does on a slide that gives it no content: 'collapse' (default) joins its cells to a neighbouring area that shares the full length of one of its edges and is not itself empty; 'keep' leaves the space. |
+| `empty` | no | `enum:collapse \| keep` | What the region does on a slide that gives it no content: 'collapse' (default) joins its cells to a neighboring area that shares the full length of one of its edges and is not itself empty; 'keep' leaves the space. |
 
 #### DesignHints
 
@@ -522,12 +522,12 @@ _No named properties._
 | `name` | yes | `string` | Human-readable theme name shown in pickers. |
 | `summary` | no | `string` | One-sentence positioning of the theme when to reach for it. |
 | `description` | no | `string` | Longer prose describing what the theme looks and feels like and the kinds of decks it suits. |
-| `colorScheme` | no | `string` | The theme's default colour scheme: a reference (a bare id or 'name:id') resolved like design.colorScheme, but in the theme's own catalogs group first. |
+| `colorScheme` | no | `string` | The theme's default color scheme: a reference (a bare id or 'name:id') resolved like design.colorScheme, but in the theme's own catalogs group first. |
 | `fontScheme` | no | `string` | The theme's default font scheme: a reference (a bare id or 'name:id') resolved like design.fontScheme, but in the theme's own catalogs group first. |
 | `background` | no | `ref:ThemeBackground` |  |
 | `variants` | no | `array<ref:ThemeVariant>` | The color variants the theme offers (OPF 0.23), for example light, light-alt, dark and dark-alt: named values of design.variant over the theme's one color scheme, so a dark deck is a variant of a theme and not a theme... |
 | `dimensions` | no | `enum:16:9 \| 4:3 \| 16:10 \| 1:1 \| 4:5 \| 9:16 \| letter \| a4 \| widescreen \| standard` | Default slide size for this theme. Accepts the same preset values as design.dimensions.preset. |
-| `design` | no | `object` | The theme's design defaults (OPF 0.19), so a house style such as boxed content or centred titles is set once: the keys and values of the deck's design for titleAlignment, titlePosition, contentAlignment, contentBox, i... |
+| `design` | no | `object` | The theme's design defaults (OPF 0.19), so a house style such as boxed content or centered titles is set once: the keys and values of the deck's design for titleAlignment, titlePosition, contentAlignment, contentBox,... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 

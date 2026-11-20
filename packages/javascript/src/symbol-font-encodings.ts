@@ -69,7 +69,7 @@ export interface SymbolFontEncodingTable {
   families: SymbolFontEncoding[];
 }
 
-/** One character of symbol-font text, normalised to its code and Unicode equivalent. */
+/** One character of symbol-font text, normalized to its code and Unicode equivalent. */
 export interface SymbolTextCharacter {
   /** The character as it appears in the text (one code point). */
   source: string;
@@ -182,7 +182,7 @@ export function symbolCodeForUnicode(family: string, text: string): number | nul
 }
 
 /**
- * Normalise text in a symbol-encoded family character by character: each character's code (or null when
+ * Normalize text in a symbol-encoded family character by character: each character's code (or null when
  * it is not symbol-encoded text) and the Unicode equivalent to draw (or null, with the table's reason).
  * Unknown families map every character to `{code: null, unicode: null}`.
  */

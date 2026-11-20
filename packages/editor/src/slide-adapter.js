@@ -55,7 +55,7 @@ export function composeSlideGeometry(presentation, slideIndex, { catalogs, fonts
  * - `geometry(presentation, slideIndex)`: the `SlideComposition` of a slide as it is drawn (the canvas's `onRender` geometry, or the
  *   renderer's `resolvePresentation(...).slides[i].geometry` with the canvas fonts); default core composition with the session's catalogs;
  * - `selection()`: the keys selected now, recorded with each change (`meta.selection`) so undo and redo can restore them;
- * - `onPreview({ presentation, message })`: draw a gesture's draft (`presentation` is null when the gesture ends or is cancelled);
+ * - `onPreview({ presentation, message })`: draw a gesture's draft (`presentation` is null when the gesture ends or is canceled);
  * - `onSelection(keys, { source })`: the keys to select after an edit, an undo or a redo;
  * - `onRefuse({ reason, command })`: a command was refused (the Studio's status line and live region).
  */

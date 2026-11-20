@@ -77,7 +77,7 @@ import type { Presentation, Audience, Tone } from "@openpresentation/opf/types";
 
 The root entry holds the application-level API: schemas, catalog references and their resolution (`resolveReference`, `embed`, `copySlides`, `updateFromCatalog`), validation, variables, pagination, data helpers, font policy, `stats`, `resolveSlideContext` and `resolveSlideVariables`. Engines compose and draw `context.slide` from `resolveSlideContext(deck, index, { slideNumber, slideCount })`: the slide with the slide-scoped built-ins `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}` substituted for the same numbers its `options` carry (`resolveSlideVariables(slide, { slideNumber, slideCount })` does that substitution alone). Header and footer text is substituted by `layoutFurniture`, which records each slide number in `FurnitureTextPart.fields`. See [templates and variables](../../docs/templates-and-variables.md#slide-scoped-built-ins). It carries no catalog records: the pptx.gallery catalog is the package `@openpresentation/gallery` (`gallery`, `catalogDisplay`, and the layout previews of `@openpresentation/gallery/previews`), a dependency of core released on its own version line, which the Node build registers when a call names no catalogs (OPF 0.19 removed `@openpresentation/opf/catalog` and `defaultCatalog`, with no alias). Every entry point that resolves references takes `{ catalogs }`, the catalogs the host registered; the first one is the default for documents that omit `catalogs.default`. See [catalogs and the default catalog](../../docs/default-catalog.md).
 
-The layout engine's names are not on the root. `composeSlide`, `fitText`, `layoutQuote` and the other `layoutX`/`fitX` functions, numbering, footnotes and citations, colour contrast, code syntax, pattern fills, metric trends, chart options, script fonts and text direction come from `@openpresentation/opf/composition`; the symbol-font tables come from `@openpresentation/opf/symbol-font-encodings`.
+The layout engine's names are not on the root. `composeSlide`, `fitText`, `layoutQuote` and the other `layoutX`/`fitX` functions, numbering, footnotes and citations, color contrast, code syntax, pattern fills, metric trends, chart options, script fonts and text direction come from `@openpresentation/opf/composition`; the symbol-font tables come from `@openpresentation/opf/symbol-font-encodings`.
 
 ### Facts, slide context and the fonts handle
 
@@ -129,7 +129,7 @@ A slide can draw more than text, pictures and charts, with no extra package:
 ### Layout previews
 
 `@openpresentation/gallery/previews` ships pre-rendered SVG thumbnails for the
-slide layouts catalogued at pptx.gallery. Each preview is a self-contained SVG
+slide layouts cataloged at pptx.gallery. Each preview is a self-contained SVG
 sized to fill a 16:9 container, with its colors and layout already rendered.
 
 ```tsx

@@ -3,7 +3,7 @@
   "$id": "https://openpresentation.org/schema/opf/v1",
   "$comment": "The v1 in the $id is the pre-1.0 line, not a frozen contract: this schema may change in any 0.x minor release. The release that produced this copy is the version of the @openpresentation/opf package it came from (opf --version; opf schemas lists it next to each id). See docs/schema-versioning.md.",
   "title": "Presentation",
-  "description": "Open-source JSON format for describing PowerPoint presentations. Agents describe narratives, content, audience, reusable assets, and design — the engine handles OOXML complexity.\n\nContent references (Slide.layout, design.theme, design.colorScheme / design.colorScheme.id, design.fontScheme / design.fontScheme.id, narrative, audience, purpose and tone, and the colorScheme / fontScheme a theme record names) point at catalog records. Each is a bare 'id' or a 'name:id' whose prefix names a group in 'catalogs'. A bare id resolves in catalogs.custom, then in the records embedded under catalogs.default, then in the catalog the host registered for catalogs.default.source (or the host's default catalog when 'default' is omitted); 'name:id' resolves in catalogs.<name>, then in the catalog the host registered for its source. A reference that resolves nowhere is the warning opf/unresolved-reference, and the slide uses automatic composition or the engine default. Engines never fetch a catalog: a saved document embeds every record it uses, and hosts register any other catalog by its source string. See docs/default-catalog.md.\n\nchart.type, the language tag and the keys of Organization.socials / Speaker.socials are engine vocabularies, validated directly with no catalog lookup. When a document names no theme, colour scheme or font scheme, every engine uses the same small engine defaults (spec/reference/engine-defaults.json). Asset references use 'asset:<id>' strings that point into the top-level assets registry, and content color fields (rich-text runs, styled table cells) accept hex values, color-scheme slot/role names, or 'var:<id>' references into the top-level variables map.",
+  "description": "Open-source JSON format for describing PowerPoint presentations. Agents describe narratives, content, audience, reusable assets, and design — the engine handles OOXML complexity.\n\nContent references (Slide.layout, design.theme, design.colorScheme / design.colorScheme.id, design.fontScheme / design.fontScheme.id, narrative, audience, purpose and tone, and the colorScheme / fontScheme a theme record names) point at catalog records. Each is a bare 'id' or a 'name:id' whose prefix names a group in 'catalogs'. A bare id resolves in catalogs.custom, then in the records embedded under catalogs.default, then in the catalog the host registered for catalogs.default.source (or the host's default catalog when 'default' is omitted); 'name:id' resolves in catalogs.<name>, then in the catalog the host registered for its source. A reference that resolves nowhere is the warning opf/unresolved-reference, and the slide uses automatic composition or the engine default. Engines never fetch a catalog: a saved document embeds every record it uses, and hosts register any other catalog by its source string. See docs/default-catalog.md.\n\nchart.type, the language tag and the keys of Organization.socials / Speaker.socials are engine vocabularies, validated directly with no catalog lookup. When a document names no theme, color scheme or font scheme, every engine uses the same small engine defaults (spec/reference/engine-defaults.json). Asset references use 'asset:<id>' strings that point into the top-level assets registry, and content color fields (rich-text runs, styled table cells) accept hex values, color-scheme slot/role names, or 'var:<id>' references into the top-level variables map.",
   "type": "object",
   "required": ["slides"],
   "additionalProperties": false,
@@ -730,7 +730,7 @@
     },
     "Socials": {
       "type": "object",
-      "description": "Social media handles or URLs, keyed by platform. The keys are an engine vocabulary validated directly (no catalog lookup): engines link a handle with the platform's URL pattern and handle prefix (spec/reference/engine-vocabularies.json). Each value is a string, either a full URL or a platform handle (e.g., '@acme'). Brand colours and icons are catalog display metadata for authoring UIs; engines render the profile URL, not icons or brand colours. Used both for organization and speaker records.",
+      "description": "Social media handles or URLs, keyed by platform. The keys are an engine vocabulary validated directly (no catalog lookup): engines link a handle with the platform's URL pattern and handle prefix (spec/reference/engine-vocabularies.json). Each value is a string, either a full URL or a platform handle (e.g., '@acme'). Brand colors and icons are catalog display metadata for authoring UIs; engines render the profile URL, not icons or brand colors. Used both for organization and speaker records.",
       "additionalProperties": {
         "type": "string",
         "description": "Handle or URL for the platform identified by the property key."
@@ -759,7 +759,7 @@
       "properties": {
         "theme": {
           "$ref": "#/$defs/CatalogReference",
-          "description": "Theme for the deck: a themes reference, a bare id ('minimal') or 'name:id' ('acme:brand'). The theme supplies the default colour scheme, font scheme, background and dimensions; design.colorScheme, design.fontScheme, design.background and design.dimensions override it field by field. A reference that resolves nowhere is the warning opf/unresolved-reference and engines use the engine default theme.",
+          "description": "Theme for the deck: a themes reference, a bare id ('minimal') or 'name:id' ('acme:brand'). The theme supplies the default color scheme, font scheme, background and dimensions; design.colorScheme, design.fontScheme, design.background and design.dimensions override it field by field. A reference that resolves nowhere is the warning opf/unresolved-reference and engines use the engine default theme.",
           "examples": ["minimal", "classic", "bold", "acme:brand"]
         },
         "colorScheme": {
@@ -767,7 +767,7 @@
             { "type": "string" },
             { "$ref": "#/$defs/ColorScheme" }
           ],
-          "description": "Color scheme for the presentation. Accepts two forms:\n- A colorSchemes reference: a bare id ('cool-horizon') or 'name:id' ('acme:ocean').\n- Object form: a ColorScheme with an optional 'id' reference as the base plus slot/role overrides. Without 'id', the overrides apply on top of the engine default colour scheme.\n\nWithout either, the theme's colorScheme applies, then the engine default colour scheme.",
+          "description": "Color scheme for the presentation. Accepts two forms:\n- A colorSchemes reference: a bare id ('cool-horizon') or 'name:id' ('acme:ocean').\n- Object form: a ColorScheme with an optional 'id' reference as the base plus slot/role overrides. Without 'id', the overrides apply on top of the engine default color scheme.\n\nWithout either, the theme's colorScheme applies, then the engine default color scheme.",
           "examples": [
             "cool-horizon",
             "boost",
@@ -903,7 +903,7 @@
         },
         "id": {
           "$ref": "#/$defs/CatalogReference",
-          "description": "Colour-scheme reference (a bare id or 'name:id') resolved as the base; slot and role overrides on the surrounding ColorScheme object take precedence over the resolved scheme.",
+          "description": "Color-scheme reference (a bare id or 'name:id') resolved as the base; slot and role overrides on the surrounding ColorScheme object take precedence over the resolved scheme.",
           "examples": ["cool-horizon", "boost", "burnt-orange", "ocean-depth", "corporate-blue"]
         },
         "accent1": {
@@ -1763,7 +1763,7 @@
     "ImageBackground": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Picture background: the image fills the whole canvas behind everything and never moves content (to push content aside, use an image block with placement). The string shorthand 'asset:x' (or any image source) is { type: 'image', src: 'asset:x' }, a cover image. Paint order: the colour scheme's default slide background, the picture, then the overlay, then furniture and content.",
+      "description": "Picture background: the image fills the whole canvas behind everything and never moves content (to push content aside, use an image block with placement). The string shorthand 'asset:x' (or any image source) is { type: 'image', src: 'asset:x' }, a cover image. Paint order: the color scheme's default slide background, the picture, then the overlay, then furniture and content.",
       "required": ["type", "src"],
       "properties": {
         "tone": {
@@ -1793,7 +1793,7 @@
         "fit": {
           "type": "string",
           "enum": ["cover", "contain", "stretch", "tile"],
-          "description": "How the picture fills the canvas: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered over the colour scheme's default background; 'stretch' scales it to the canvas exactly; 'tile' repeats it at its own size from the top-left corner. Default 'cover'."
+          "description": "How the picture fills the canvas: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered over the color scheme's default background; 'stretch' scales it to the canvas exactly; 'tile' repeats it at its own size from the top-left corner. Default 'cover'."
         },
         "focus": {
           "$ref": "#/$defs/ImageFocus",
@@ -3952,7 +3952,7 @@
         "sentiment": {
           "type": "string",
           "enum": ["positive", "negative", "neutral"],
-          "description": "Whether the change is good news. Positive draws the trend arrow and the trend and delta text in green, negative in red and neutral in the neutral text colour, each kept at 4.5:1 contrast or more against the slide background. When absent the colour follows the trend: up is positive, down is negative and flat is neutral. Set it when the direction is not the verdict, for example positive on a falling churn, cost or latency trend. The arrow always keeps the direction of `trend`. Only the trend arrow and the trend and delta text take the colour, so sentiment has no visible effect on a metric without a trend."
+          "description": "Whether the change is good news. Positive draws the trend arrow and the trend and delta text in green, negative in red and neutral in the neutral text color, each kept at 4.5:1 contrast or more against the slide background. When absent the color follows the trend: up is positive, down is negative and flat is neutral. Set it when the direction is not the verdict, for example positive on a falling churn, cost or latency trend. The arrow always keeps the direction of `trend`. Only the trend arrow and the trend and delta text take the color, so sentiment has no visible effect on a metric without a trend."
         },
         "icon": {
           "$ref": "#/$defs/IconReference",
@@ -4495,7 +4495,7 @@
         },
         "highlight": {
           "$ref": "#/$defs/ChartHighlight",
-          "description": "Optional emphasis: the series and/or categories that carry the message. The engines draw the highlighted marks in the deck's primary (accent) color and every other mark in a muted neutral derived from the theme (a light grey on a light chart panel, a dim grey on a dark one); there is no color field. A mark is highlighted when its series OR its category is named. Absent keeps today's colors exactly. Supported on column, bar and line charts (series and categories; on a line a category highlight marks that category's points), pie and doughnut charts (categories, one per slice), and area, scatter and radar charts (series); the histogram, pareto, waterfall, funnel, treemap, box-and-whisker, world and combo constructs drop the option with a 'chart-option-adapted' diagnostic, as does a part the type cannot highlight. A name that matches no column or row label is a 'chart-highlight-unknown-name' error."
+          "description": "Optional emphasis: the series and/or categories that carry the message. The engines draw the highlighted marks in the deck's primary (accent) color and every other mark in a muted neutral derived from the theme (a light gray on a light chart panel, a dim gray on a dark one); there is no color field. A mark is highlighted when its series OR its category is named. Absent keeps today's colors exactly. Supported on column, bar and line charts (series and categories; on a line a category highlight marks that category's points), pie and doughnut charts (categories, one per slice), and area, scatter and radar charts (series); the histogram, pareto, waterfall, funnel, treemap, box-and-whisker, world and combo constructs drop the option with a 'chart-option-adapted' diagnostic, as does a part the type cannot highlight. A name that matches no column or row label is a 'chart-highlight-unknown-name' error."
         }
       }
     },
@@ -5126,7 +5126,7 @@
         },
         "colorSchemes": {
           "$ref": "#/$defs/CatalogRecords",
-          "description": "Colour-scheme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-color-scheme/v1. Referenced from design.colorScheme and a theme's colorScheme."
+          "description": "Color-scheme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-color-scheme/v1. Referenced from design.colorScheme and a theme's colorScheme."
         },
         "fontSchemes": {
           "$ref": "#/$defs/CatalogRecords",

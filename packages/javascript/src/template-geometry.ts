@@ -56,7 +56,7 @@ export function flowShape(arrangement: 'grid' | 'row' | 'column', count: number,
 
 /**
  * The cells of a flow shape inside `box`, in block order (row by row). Rows have equal heights and full rows equal
- * widths; a short row keeps the column width of the full rows and is centred, or, with `stretch` (LH-47), its cells share
+ * widths; a short row keeps the column width of the full rows and is centered, or, with `stretch` (LH-47), its cells share
  * the full width. `gap` is clamped so no cell is thinner than the gaps around it.
  */
 export function flowCells(shape: FlowShape, box: LayoutBox, requestedGap: number, stretch = false): { cells: LayoutBox[]; gap: number } {
@@ -96,8 +96,8 @@ export function columnWidths(sizes: readonly number[], total: number, gap: numbe
 export interface CellRect { row: number; column: number; rowSpan: number; columnSpan: number }
 
 /**
- * Collapse empty areas into neighbours (design section 3). `grid[row][column]` is an area name or `.`; `empty` names the
- * areas with nothing to show; `heading` tells heading areas apart. Each empty area joins a neighbour that shares the full
+ * Collapse empty areas into neighbors (design section 3). `grid[row][column]` is an area name or `.`; `empty` names the
+ * areas with nothing to show; `heading` tells heading areas apart. Each empty area joins a neighbor that shares the full
  * length of one of its edges and is not itself empty, trying the start side, the end side, below and above, a body area
  * before a heading area. `absorbs` can rule an area out as a target. Returns the new owner grid and, for each collapsed area, the area it joined. Never changes `grid`.
  */
@@ -119,7 +119,7 @@ export function collapseAreas(grid: readonly (readonly string[])[], empty: Reado
       if (joined.has(name)) continue;
       const own = rect(name);
       if (!own) continue;
-      const neighbour = (side: 'start' | 'end' | 'below' | 'above'): string | undefined => {
+      const neighbor = (side: 'start' | 'end' | 'below' | 'above'): string | undefined => {
         const cells: string[] = [];
         if (side === 'start' || side === 'end') {
           const column = side === 'start' ? own.column - 1 : own.column + own.columnSpan;
@@ -141,7 +141,7 @@ export function collapseAreas(grid: readonly (readonly string[])[], empty: Reado
       let target: string | undefined;
       for (const body of [true, false]) {
         for (const side of sides) {
-          const candidate = neighbour(side);
+          const candidate = neighbor(side);
           if (candidate !== undefined && heading(candidate) !== body) { target = candidate; break; }
         }
         if (target !== undefined) break;
@@ -216,7 +216,7 @@ export interface RowDemand {
  * 3. The other `auto` rows take what they need from what is left (WI-1: no fixed cap, so dense content in an `auto` row
  *    keeps its starting size while the space is there); when that is not enough they shrink together, each giving up the
  *    same fraction of what it can give up above its floor (shareHeights), so a one-line note keeps nearly its need beside
- *    a dense neighbour and no row overflows while the floors fit.
+ *    a dense neighbor and no row overflows while the floors fit.
  * 4. The numeric rows share the rest in proportion to their sizes. An `auto` row with nothing in it has no height and no gap.
  */
 export function allocateRows(rows: readonly RowDemand[], total: number, gap: number): number[] {

@@ -515,8 +515,10 @@ describe("the bundled sources", () => {
 		// Reviewed for the example decks' pictures in the viewer on 2026-11-20: 1,399,982 exact bytes (after the chartPrimary replacement:
 		// 1,397,930). It adds 2,052 in mcp.md: the app-only read_example_files (its table row, the viewer's images paragraph, the server
 		// tools row and the examples' files in the sources), and how a hosted viewer gets the pictures. The limit is unchanged.
-		// Reviewed for the 0.35 alignment (fixes write the new form, no 0.34 drawing emulation) on 2026-11-20: 1,400,024 exact bytes
-		// (main at 82e1944f6: 1,399,982). It adds 42: the removed keys' fixes say the engine composes the slide and a composition sets a
+		// Reviewed for American spelling on 2026-11-20: 1,399,865 exact bytes (main at ddf6580e0: 1,399,982). Spelling only: "colour" to
+		// "color", "centre" to "center", "behaviour" to "behavior" and the like remove 117 bytes over 18 pages (validate.md -66). The limit is unchanged.
+		// Reviewed for the 0.35 alignment (fixes write the new form, no 0.34 drawing emulation) on 2026-11-20: 1,399,907 exact bytes
+		// (main at c58cf0ba6: 1,399,865). It adds 42: the removed keys' fixes say the engine composes the slide and a composition sets a
 		// specific arrangement (design-resolution.md +75, dynamic-composition.md -33), fix() returns the 0.35 form (node.md +39), embed
 		// replaces a stale copy with the current record (default-catalog.md +32), and opf fix drops layoutWithCells (cli.md -71). The
 		// limit is unchanged.

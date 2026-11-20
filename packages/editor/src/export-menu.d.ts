@@ -43,7 +43,7 @@ export interface ExportMenuItems {
 }
 
 export interface ExportStatus {
-  state: "busy" | "success" | "error" | "cancelled";
+  state: "busy" | "success" | "error" | "canceled";
   message: string;
   notes: string[];
 }
@@ -72,7 +72,7 @@ export interface ExportMenuOptions {
   onDownload?(download: ExportDownload): void | Promise<void>;
   /** Called after a file was handed on, with its notes. */
   onExport?(done: ExportDownload & { notes: string[] }): void;
-  /** Every change of the status line (busy, success, error, cancelled). Also announced in the menu's `aria-live` region. */
+  /** Every change of the status line (busy, success, error, canceled). Also announced in the menu's `aria-live` region. */
   onStatus?(status: ExportStatus): void;
   /** "Agent handoff": handle it yourself. Default: open the agent handoff dialog. */
   onAgentHandoff?(handoff: { document: unknown; target: AgentHandoffTarget }): void;

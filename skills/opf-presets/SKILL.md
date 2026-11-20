@@ -27,7 +27,7 @@ Documents reference `themes`, `layouts`, `colorSchemes`, `fontSchemes`, `narrati
 
 Read [design and gallery rules](references/design.md) when applying overrides or importing examples.
 
-- Deck design sets shared defaults. Slide design overrides them. A theme supplies defaults below explicitly supplied design fields. Colour- and font-scheme objects with `id` combine a catalog base with sibling overrides; `design.theme` is a reference string.
+- Deck design sets shared defaults. Slide design overrides them. A theme supplies defaults below explicitly supplied design fields. Color- and font-scheme objects with `id` combine a catalog base with sibling overrides; `design.theme` is a reference string.
 - Omission inherits; `false` explicitly suppresses inherited header, footer, or watermark.
 - Light and dark are `design.variant`, not themes. A theme record's optional `variants` (`light`, `light-alt`, `dark`, `dark-alt` on the gallery's `minimal`, `classic` and `bold`) lists values a picker can write into `design.variant`; the gallery has no `dark` theme since `@openpresentation/gallery` 4.
 - A gallery theme, color scheme, or font scheme is not a rendered deck. Preview it with representative content, including long text and data.
