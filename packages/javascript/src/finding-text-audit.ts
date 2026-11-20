@@ -299,7 +299,7 @@ const regionUnknown: RuleText = (finding, _context, helpers) => {
   const known = layout?.names ?? [];
   // OPF 0.35: a 0.34 region name of a built-in layout; the fix renames the pin.
   const renamed = (finding.fixes ?? []).find((fix) => fix.id === "rename-region" && fix.kind === "patch");
-  const next = renamed?.kind === "patch" ? (renamed.patch[0] as { value?: unknown } | undefined)?.value : undefined;
+  const next = renamed?.kind === "patch" ? (renamed.patch?.[0] as { value?: unknown } | undefined)?.value : undefined;
   if (typeof next === "string") {
     const reference = slide ? helpers.valueAt(["slides", String(slide - 1), "layout"]) : undefined;
     const id = layout?.id ?? (typeof reference === "string" ? reference : undefined);
