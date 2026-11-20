@@ -496,8 +496,8 @@ describe("the bundled sources", () => {
 		// Reviewed for v0.34.0 on 2026-11-12: 1,351,126 exact bytes over the same public pages (1,310,537 at 4e03508b6). The growth is
 		// reviewed guidance, not maintainer notes: icon loading per host (icons.md), the viewer tools and set icons (mcp.md), the new rules
 		// (validate.md), digits by language (design-resolution.md). The limit keeps the same 3% headroom over the reviewed size.
-		// Reviewed for the 0.35 layout simplification on 2026-11-19: 1,393,502 exact bytes over the same public pages. Main's part, 1,351,126 to
-		// 1,391,228, is the guidance merged since v0.34.0: the viewer in other hosts and adding the hosted server (mcp.md), the CLI findings
+		// Reviewed for the 0.35 layout simplification on 2026-11-20, after merging v0.34.2: 1,392,535 exact bytes over the same public pages.
+		// Main's part, 1,351,126 to 1,390,261 (v0.34.2 shortened mcp.md by 967), is the guidance merged since v0.34.0: the viewer in other hosts and adding the hosted server (mcp.md), the CLI findings
 		// (cli.md), org-chart assistants and Venn overlaps (diagrams.md, smartart.md), the lone icon list by direction (icons.md), chart data
 		// and shapes (chart-table-data.md, shapes.md). The 0.35 branch adds 2,274 net: the layout vocabulary (layout-templates.md +4,201,
 		// smartart.md +666) less the removed keys (design-resolution.md, catalog-schema-reference.md, schema-reference.md). Same 3% headroom.

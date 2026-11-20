@@ -57,6 +57,8 @@ export interface CanvasEditorOptions {
    * pointer. Keyboard entry (Enter, Space, F2) and `beginEdit(path)` always select all text. Non-text targets always open
    * their properties on double-click.
    */
+  /** Commit an inline slide title with Enter. Shift+Enter keeps a line break. */
+  titleEnterCommits?: boolean;
   textEntry?: "click" | "dblclick";
   /**
    * CE-20: "interactive" (default) makes each piece of content a focusable button on the slide. "passive" is for a host that draws its own

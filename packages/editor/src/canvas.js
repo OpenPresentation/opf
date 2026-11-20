@@ -879,6 +879,21 @@ export function createCanvasEditor(container, options = {}) {
       active.input = active.rich.input;
       if (entry?.point) active.rich.pointerStart(entry.point);
     } else openProperties(path, value);
+
+    if (options.titleEnterCommits && /^slides\.\d+\.title$/.test(path) && active?.input) {
+      const hint = doc.createElement("span");
+      hint.className = "opf-title-key-hint";
+      hint.textContent = "Enter to finish · Shift+Enter for a new line";
+      overlay.append(hint);
+      active.input.setAttribute("aria-description", hint.textContent);
+      active.input.addEventListener("keydown", event => {
+        if (event.key !== "Enter" || event.shiftKey || event.ctrlKey || event.metaKey || event.altKey ||
+            event.isComposing || active?.composing || active?.rich?.composing || event.keyCode === 229) return;
+        event.preventDefault();
+        event.stopPropagation();
+        commit();
+      });
+    }
   }
   function propertyPatches(edit) {
     return edit.inputs.map(({ field, input }) => ({

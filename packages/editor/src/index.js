@@ -1,3 +1,4 @@
+import { slideTitle } from "./rich-text.js";
 import { commitCatalogControl } from "./catalog-control.js";
 import { paginateSlide } from "@openpresentation/opf/pagination";
 import { OPFPatchError, applyPatch as applyCorePatch, applyPatchWithInverse, formatPointer, invertPatch, jsonEqual, parsePointer, readPointer } from "@openpresentation/opf/patch";
@@ -187,6 +188,8 @@ export function createEditorSession(input, options = {}) {
   const validationFor = (validated, document) =>
     validated && validated.validation && validated.catalogs === catalogs && jsonEqual(validated.document, document) ? validated.validation : check(document);
 
+  let followOpeningTitle = options.nameFromOpeningTitle === true;
+
   function commitPatch(operations, meta = {}, applyOptions = {}) {
     assertPatchOperations(operations);
     let patches = operations.map(normalizeOperation);
@@ -215,6 +218,25 @@ export function createEditorSession(input, options = {}) {
         meta = { ...meta, forked: forks, notice: forks.map(forkNotice).join(" ") };
       }
     }
+    // The untitled starter follows its opening title until a separate rename or document replacement.
+    // Append the name to the same transaction so Undo restores both fields together.
+    const replaced = patches.some(patch => patch.op !== "test" && patch.path === "");
+    const ownsName = followOpeningTitle && (patches.some(patch => patch.op !== "test" && (patch.path === "/name" || (patch.op === "move" && patch.from === "/name"))) ||
+      (replaced && (meta.source !== "source-pane" || next?.name !== before?.name || next?.slides?.[0]?.id !== before?.slides?.[0]?.id)));
+    if (followOpeningTitle && !ownsName && !replaced) {
+      const opening = before.slides?.[0];
+      const updated = next.slides?.[0];
+      if (opening?.id === updated?.id && !jsonEqual(opening?.title, updated?.title)) {
+        const name = slideTitle(updated).replace(/\s+/gu, " ").trim();
+        if (name && name !== next.name) {
+          const rename = { op: "add", path: "/name", value: name };
+          const renamed = applyPatchWithInverse(next, [rename]);
+          next = renamed.presentation;
+          patches.push(rename);
+          inversePatches.unshift(...renamed.inverse);
+        }
+      }
+    }
     const nextValidation = validationFor(applyOptions?.validated, next);
 
     if ((meta.rejectInvalid ?? rejectInvalid) && !nextValidation.valid) {
@@ -227,6 +249,7 @@ export function createEditorSession(input, options = {}) {
     if (patches.every(patch => patch.op === "test")) return {
       presentation: clone(presentation), patches: clonePatchOperations(patches), inversePatches: [], validation: nextValidation
     };
+    if (ownsName) followOpeningTitle = false;
     presentation = next;
     validation = nextValidation;
     undoStack.push({ patches: clonePatchOperations(patches), inversePatches, meta });

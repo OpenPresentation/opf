@@ -117,3 +117,10 @@ export function updateRichTextInput(value, nextText, change) {
   }
   return compact;
 }
+
+/** The title shown for a slide in navigators and outlines. */
+export function slideTitle(slide) {
+  // A title is a string or TextRun[] (FA-10): either shows as its plain text.
+  const title = typeof slide?.title === "string" ? slide.title : Array.isArray(slide?.title) ? slide.title.map((run) => (typeof run === "string" ? run : (run?.text ?? ""))).join("") : "";
+  return title.trim() ? title : "";
+}
