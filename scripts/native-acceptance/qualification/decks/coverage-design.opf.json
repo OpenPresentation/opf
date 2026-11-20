@@ -388,8 +388,8 @@
     {
       "id": "direction-vertical",
       "title": "Content stacked vertically",
-      "design": {
-        "contentDirection": "vertical"
+      "composition": {
+        "mode": "column"
       },
       "blocks": [
         {
@@ -429,8 +429,10 @@
     {
       "id": "direction-horizontal",
       "title": "Content side by side",
+      "composition": {
+        "mode": "row"
+      },
       "design": {
-        "contentDirection": "horizontal",
         "mirror": true
       },
       "blocks": [
@@ -471,9 +473,6 @@
     {
       "id": "chart-none",
       "title": "The chart placed by the engine",
-      "design": {
-        "chartPrimary": "none"
-      },
       "blocks": [
         {
           "chart": {
@@ -512,8 +511,12 @@
     {
       "id": "chart-top",
       "title": "The chart placed at the top",
-      "design": {
-        "chartPrimary": "top"
+      "composition": {
+        "mode": "column",
+        "weights": [
+          3,
+          2
+        ]
       },
       "blocks": [
         {
@@ -553,10 +556,17 @@
     {
       "id": "chart-bottom",
       "title": "The chart placed at the bottom",
-      "design": {
-        "chartPrimary": "bottom"
+      "composition": {
+        "mode": "column",
+        "weights": [
+          2,
+          3
+        ]
       },
       "blocks": [
+        {
+          "text": "Revenue doubled from the first quarter to the last."
+        },
         {
           "chart": {
             "type": "column",
@@ -585,18 +595,13 @@
               ]
             }
           }
-        },
-        {
-          "text": "Revenue doubled from the first quarter to the last."
         }
       ]
     },
     {
       "id": "chart-start",
+      "layout": "chart-beside",
       "title": "The chart placed at the start",
-      "design": {
-        "chartPrimary": "start"
-      },
       "blocks": [
         {
           "chart": {
@@ -634,9 +639,10 @@
     },
     {
       "id": "chart-end",
+      "layout": "chart-beside",
       "title": "The chart placed at the end",
       "design": {
-        "chartPrimary": "end"
+        "mirror": true
       },
       "blocks": [
         {
@@ -844,6 +850,32 @@
           "languageFamily": "cs"
         }
       }
+    },
+    {
+      "id": "title-start",
+      "title": "The title beside the body",
+      "design": {
+        "titlePosition": "start"
+      },
+      "text": "With titlePosition start the heading sits in a column at the start side and the body beside it."
+    },
+    {
+      "id": "title-top-on-cycle",
+      "layout": "cycle",
+      "title": "A cycle with its title on top",
+      "design": {
+        "titlePosition": "top"
+      },
+      "blocks": [
+        {
+          "items": [
+            "Plan",
+            "Build",
+            "Measure",
+            "Learn"
+          ]
+        }
+      ]
     }
   ]
 }

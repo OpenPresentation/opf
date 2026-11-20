@@ -22,7 +22,7 @@ const states = (shape) => Object.fromEntries(shape.rows.map((row) => [row.key, r
   assert.equal(shape.next, 'items');
   assert.equal(shape.sentence, 'Slide with layout pillars: title set, items next, notes optional');
   assert.equal(shape.rows[0].description, 'Slide title');
-  assert.match(shape.rows[1].description, /^The pillars \(text, list, metric, image, group\)$|^The pillars \(text, list, metric, image or group\)$/);
+  assert.match(shape.rows[1].description, /^The body \(text, list, metric, image, group\)$|^The body \(text, list, metric, image or group\)$/);
   assert.deepEqual(shape.path, ['slides', 0]);
   assert.equal(shape.atMember, true);
 }
@@ -112,7 +112,7 @@ assert.equal(at('json', '{"slides":[{"layout":"pillars","title":"a"|}]}').atMemb
   assert.deepEqual(states(at('md', '---\norganization:\n  id: a\n  |\n---\n# A')).name, 'next');
   const fence = at('md', '<!-- slide: layout=agenda -->\n# A\n\n```opf-slide\nnotes: n\n|\n```\n');
   assert.equal(fence.title, 'slide · layout "agenda"');
-  assert.deepEqual(states(fence), { title: 'set', items: 'next', notes: 'set' });
+  assert.deepEqual(states(fence), { title: 'set', 'items / text': 'next', notes: 'set' });
   assert.equal(fence.atMember, true);
   assert.equal(shapeAt('md', '---\nname: x\n---\n# A', 3, { catalogs }), null, 'the line of the front matter fence has no shape');
 }

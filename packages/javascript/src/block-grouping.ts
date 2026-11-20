@@ -11,7 +11,7 @@
  *    beyond its `max`, else to the row below the grid. With no layout, interleaved blocks of two kinds with unequal counts
  *    are a grid of the majority kind above a row of the others.
  * 3. **Extra blocks join a fixed region (LH-46).** A block no region had room for, on a layout with no overflow region, joins
- *    the region that accepts it instead of the row below the grid: a `flow: none` region up to `JOINED_FIXED_MAX` blocks
+ *    the region that accepts it instead of the row below the grid: a single-block region (`max: 1`) up to `JOINED_FIXED_MAX` blocks
  *    (accepted, no finding), a flowing region up to `MAX_REGION_BLOCKS` (beyond its `max`, still `layout-unplaced`). Fixed
  *    regions of one role side by side (the columns of `comparison`) become one region of N cells, with any block bound
  *    between theirs in source order; a lone fixed region arranges pictures as a mosaic and text as a lead plus cards.
@@ -19,14 +19,14 @@
  * A slide that pins any block to a region keeps the binding as written.
  */
 import { regionAccepts, regionRoleRank, type BoundBlock, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
-import { MAX_REGION_BLOCKS, type LayoutTemplate } from './layout-template.js';
+import { MAX_REGION_BLOCKS, singleBlockRegion, type LayoutTemplate } from './layout-template.js';
 import { areaRects } from './template-geometry.js';
 
 /** LH-58: the kinds that pair with a paragraph as one cell. */
 export const PAIR_FIGURE_KINDS: readonly string[] = ['metric', 'chart', 'table', 'image', 'video', 'code'];
 /** LH-58: a pair of paragraphs is long + short when one is at least this many times the other's length. */
 export const PAIR_LENGTH_RATIO = 2;
-/** LH-46: a `flow: none` region takes at most this many blocks when extra blocks join it. */
+/** LH-46: a single-block region (`max: 1`, OPF 0.35; `flow: none` before) takes at most this many blocks when extra blocks join it. */
 export const JOINED_FIXED_MAX = 6;
 
 /** A root block as grouping reads it: its kind, whether it is a content group and, for a paragraph, its length in characters. */
@@ -191,7 +191,7 @@ export function groupBinding(binding: RegionBindingResult, template: LayoutTempl
   // as the overflow region (within its room) move to another region that accepts them, else below the grid.
   const moved = new Set<string | undefined>();
   for (const region of template.regions) {
-    if (region.flow === 'none') continue;
+    if (singleBlockRegion(region)) continue;
     const list = units.get(region.name)!;
     const foreign = list.filter(unit => !unplaced.has(unit[0]!.path) && !regionAccepts(region, payloadOf.get(unit[0]!.path)));
     const own = list.length - foreign.length;
@@ -214,22 +214,22 @@ export function groupBinding(binding: RegionBindingResult, template: LayoutTempl
   below = below.filter(unit => {
     const block = unit[0]!;
     if (!unplaced.has(block.path)) return true;
-    const target = homeOf(block).find(region => units.get(region.name)!.length < (region.flow === 'none' ? JOINED_FIXED_MAX : MAX_REGION_BLOCKS));
+    const target = homeOf(block).find(region => units.get(region.name)!.length < (singleBlockRegion(region) ? JOINED_FIXED_MAX : MAX_REGION_BLOCKS));
     if (!target) return true;
     units.get(target.name)!.push(unit);
     // A fixed region takes it as a sibling; a flowing region draws it beyond its `max`, as the overflow region does.
-    if (target.flow === 'none' || units.get(target.name)!.length <= target.max) unplaced.delete(block.path);
+    if (singleBlockRegion(target) || units.get(target.name)!.length <= target.max) unplaced.delete(block.path);
     joined.add(target.name);
     return false;
   });
   const rects = areaRects(template.grid);
   for (const name of joined) {
     const region = regionByName.get(name)!.region;
-    if (region.flow !== 'none') continue;
+    if (!singleBlockRegion(region)) continue;
     // Fixed regions of one role side by side (same rows) are one region of N cells: the first takes their blocks, and the blocks
     // bound elsewhere between them in source order, so the cells keep reading order; the others collapse into it.
     const rect = rects.get(name)!;
-    const siblings = template.regions.filter(other => other.flow === 'none' && other.role === region.role && rects.get(other.name)?.row === rect.row && rects.get(other.name)?.rowSpan === rect.rowSpan);
+    const siblings = template.regions.filter(other => singleBlockRegion(other) && other.role === region.role && rects.get(other.name)?.row === rect.row && rects.get(other.name)?.rowSpan === rect.rowSpan);
     const lead = siblings[0]!;
     if (siblings.length > 1) {
       const members = siblings.flatMap(other => units.get(other.name)!);

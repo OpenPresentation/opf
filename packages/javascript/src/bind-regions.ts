@@ -137,7 +137,7 @@ export function rootNodes(slide: unknown, slideIndex = 0): (BoundBlock & { value
 /** Role rank of a region for a block kind (content binding, step 2): pictures prefer media regions, everything else primary ones. */
 export function regionRoleRank(role: LayoutRegion['role'], kind: RegionKind): number {
   const media = kind === 'image' || kind === 'video';
-  return media ? { media: 0, primary: 1, secondary: 2, supporting: 3 }[role] : { primary: 0, secondary: 1, supporting: 2, media: 3 }[role];
+  return media ? { media: 0, primary: 1, supporting: 2 }[role] : { primary: 0, supporting: 1, media: 2 }[role];
 }
 
 /**

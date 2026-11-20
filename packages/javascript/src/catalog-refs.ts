@@ -226,6 +226,37 @@ const KIND_NOUNS: Record<CatalogKind, string> = {
   tones: 'Tone',
 };
 
+/** True for `layout: "auto"`, which OPF 0.35 removed: omitting `layout` is automatic composition. */
+export const removedLayoutAuto = (kind: CatalogKind, reference: string): boolean => kind === 'layouts' && reference === 'auto';
+
+/**
+ * The gallery layouts OPF 0.35 removed, by the layout that replaced each: `process` draws a short list as `flow` did, and `agenda-split` is
+ * `agenda` with `design.titlePosition: "start"` (titlePositionOfRenamedLayout).
+ */
+const RENAMED_LAYOUTS: Readonly<Record<string, string>> = Object.freeze({ flow: 'process', 'vertical-flow': 'vertical-process', 'agenda-split': 'agenda' });
+/** The removed gallery layouts whose replacement draws them only with a title position the slide sets: `agenda-split` was `agenda` with its title beside. */
+const RENAMED_TITLE_POSITIONS: Readonly<Record<string, 'start'>> = Object.freeze({ 'agenda-split': 'start' });
+
+/**
+ * The `design.titlePosition` a slide needs on the layout that replaced a removed gallery layout to draw as before: `start` for `agenda-split`
+ * (bare or `default:`); undefined for any other reference.
+ */
+export function renamedLayoutTitlePosition(kind: CatalogKind, reference: string): 'start' | undefined {
+  const parsed = kind === 'layouts' ? parseReference(reference) : undefined;
+  if (!parsed || (parsed.group !== undefined && parsed.group !== 'default') || !Object.hasOwn(RENAMED_TITLE_POSITIONS, parsed.id)) return undefined;
+  return RENAMED_TITLE_POSITIONS[parsed.id];
+}
+
+/**
+ * The reference that replaced a bare or `default:` reference to a gallery layout OPF 0.35 removed (`flow` is `process`, `vertical-flow`
+ * is `vertical-process`, `agenda-split` is `agenda`), with the same group prefix; undefined for any other reference.
+ */
+export function renamedLayout(kind: CatalogKind, reference: string): string | undefined {
+  const parsed = kind === 'layouts' ? parseReference(reference) : undefined;
+  if (!parsed || (parsed.group !== undefined && parsed.group !== 'default') || !Object.hasOwn(RENAMED_LAYOUTS, parsed.id)) return undefined;
+  return `${parsed.group !== undefined ? 'default:' : ''}${RENAMED_LAYOUTS[parsed.id]}`;
+}
+
 /** The diagnostic for a reference that resolves nowhere, naming the reference and the source it was looked for in. */
 export function unresolvedReference(document: unknown, kind: CatalogKind, reference: string, path: string, options: CatalogOptions = {}): UnresolvedReferenceDiagnostic {
   const parsed = parseReference(reference);
@@ -242,6 +273,13 @@ export function unresolvedReference(document: unknown, kind: CatalogKind, refere
           ? `it is not embedded in catalogs.${group === 'default' ? 'custom or catalogs.default' : group} and no catalog is registered for it`
           : `it is not embedded in catalogs.${group === 'default' ? 'custom or catalogs.default' : group} and the catalog registered for ${source} ${registeredCatalog(source, options) ? 'has no such record' : 'is not registered'}`;
   const fallback = kind === 'layouts' ? 'automatic' : 'engine-default';
+  // OPF 0.35 removed `layout: "auto"`: it is an ordinary reference now, and the message says what replaced it.
+  const renamed = renamedLayout(kind, reference), position = renamedLayoutTitlePosition(kind, reference);
+  const removed = removedLayoutAuto(kind, reference)
+    ? `OPF 0.35 removed layout 'auto' (omit layout for automatic composition)`
+    : renamed !== undefined
+      ? `OPF 0.35 removed layout '${reference}' (use '${renamed}'${position ? ` with design.titlePosition '${position}'` : ''})`
+      : where;
   return {
     code: 'unresolved-reference',
     kind,
@@ -250,7 +288,7 @@ export function unresolvedReference(document: unknown, kind: CatalogKind, refere
     group,
     ...(source !== undefined ? { source } : {}),
     fallback,
-    message: `${noun} '${reference}' resolves nowhere: ${where}; ${fallback === 'automatic' ? 'the slide composes automatically' : 'the engine default is used'}.`,
+    message: `${noun} '${reference}' resolves nowhere: ${removed}; ${fallback === 'automatic' ? 'the slide composes automatically' : 'the engine default is used'}.`,
   };
 }
 
@@ -316,8 +354,7 @@ export function catalogReferenceSites(document: unknown, options: { records?: bo
   if (options.slides !== false && Array.isArray(deck.slides))
     deck.slides.forEach((slide, index) => {
       if (!isRec(slide)) return;
-      // `layout: "auto"` is automatic composition, not a reference (OPF 0.19).
-      if (slide.layout !== 'auto') pushReference(sites, 'layouts', slide.layout, ['slides', index, 'layout']);
+      pushReference(sites, 'layouts', slide.layout, ['slides', index, 'layout']);
       languageSites(sites, slide.language, ['slides', index, 'language']);
       designSites(sites, slide.design, ['slides', index, 'design']);
     });

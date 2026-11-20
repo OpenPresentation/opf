@@ -98,8 +98,8 @@ test('a content slide keeps its title size: only headings that are the message g
 
 test('a lone timeline grows by steps of the type scale while its labels keep their lines and arrangement', () => {
   const slide = { title: 'Six weeks to an informed decision', blocks: [
-    { region: 'timeline', timeline: { events: [{ when: 'Week 1', what: 'Baseline' }, { when: 'Weeks 2-5', what: 'Pilot' }, { when: 'Week 6', what: 'Review and decide' }] } },
-    { region: 'notes', text: 'Test with two teams for six weeks. Measure task completion and time before deciding what to scale.' },
+    { region: 'body', timeline: { events: [{ when: 'Week 1', what: 'Baseline' }, { when: 'Weeks 2-5', what: 'Pilot' }, { when: 'Week 6', what: 'Review and decide' }] } },
+    { region: 'aside', text: 'Test with two teams for six weeks. Measure task completion and time before deciding what to scale.' },
   ] };
   for (const direction of ['ltr', 'rtl']) {
     const result = composeSlide(slide, { layout: layouts.timeline, direction }), timeline = field(result, 'timeline').timelineLayout;

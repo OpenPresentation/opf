@@ -1,6 +1,6 @@
 // LH-169: a list whose entries each lead with a short figure and carry a description draws as a row of figures (metrics): the figure
 // bold in the accent at display size over an accent rule, its label under it at the size the list drew it. LH-170: a lone short note
-// that closes the body (a `verdict` region's text, or the paragraph after a row of figures) draws as the full-width band on the emphasis
+// that closes the body (the `aside` of a layout of parallel columns, or the paragraph after a row of figures) draws as the full-width band on the emphasis
 // surface under the body. Left to right and right to left; lists and notes that must not change, as they are on main.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
@@ -90,7 +90,7 @@ for (const language of ['en', 'ar']) {
 
   test(`LH-170: a comparison's verdict is the band; a long one stays text (n18, ${language})`, () => {
     const column = (region, label, bullets) => ({ region, composition: { mode: 'column' }, blocks: [{ text: [{ text: label, bold: true }] }, { bullets }] });
-    const slide = (verdict) => ({ layout: 'comparison', title: text.title, blocks: [column('first', text.labels[0], text.pros), column('second', text.labels[1], text.cons), { region: 'verdict', text: verdict }] });
+    const slide = (verdict) => ({ layout: 'comparison', title: text.title, blocks: [column('first', text.labels[0], text.pros), column('second', text.labels[1], text.cons), { region: 'aside', text: verdict }] });
     const result = compose(slide(text.verdict), language), verdict = item(result, 'blocks.2.text');
     assert.equal(result.emphasis?.source, 'foot-band');
     assert.equal(verdict.emphasis, true);
@@ -117,7 +117,7 @@ test('LH-170: the note after a row of metrics is the band; a long one stays text
   const pair = compose({ layout: 'comparison', title: 'Contract turnaround, before and after e-signature', blocks: [
     { region: 'first', composition: { mode: 'column' }, blocks: [{ text: [{ text: 'Before', bold: true }] }, { metric: { value: '11 days', label: 'From quote to signed contract', description: 'Printed, signed and scanned by hand' } }] },
     { region: 'second', composition: { mode: 'column' }, blocks: [{ text: [{ text: 'After', bold: true }] }, { metric: { value: '3 days', label: 'From quote to signed contract', description: 'Standard templates and electronic signature', delta: '-8 days', trend: 'down', sentiment: 'positive' } }] },
-    { region: 'verdict', text: 'Standard legal templates and e-signature removed eight days from every deal.' }] });
+    { region: 'aside', text: 'Standard legal templates and e-signature removed eight days from every deal.' }] });
   assert.equal(pair.emphasis?.source, 'featured');
 });
 
@@ -138,7 +138,7 @@ test('LH-170 review: a note that is a peer of the texts above it stays text, eve
   // 01 s10: three parallel "<Name> should ..." lines; the layout binds the third to its verdict region.
   const parallel = compose({ layout: 'comparison', title: 'Recovery review', blocks: [{ text: should('AeroVista Airlines', 'shorten recovery time after weather-driven disruption') }, { text: should('Harbor & Loom Hotels', 'recover weekday occupancy through segmented offers') }, { text: should('Oakbridge Faculty Senate', 'approve a revised data ethics requirement') }] });
   assert.equal(parallel.emphasis, undefined);
-  assert.equal(item(parallel, 'blocks.2.text').region, 'verdict');
+  assert.equal(item(parallel, 'blocks.2.text').region, 'aside');
   // The opening alone makes a peer: a third line much longer than the two above it, opening as they do.
   const opening = compose({ layout: 'comparison', title: 'Recovery review', blocks: [{ text: 'AeroVista should cut delays this quarter.' }, { text: 'Harbor Hotels should fill weekday rooms.' }, { text: 'Oakbridge Senate should approve the revised data ethics requirement before the spring term and publish it to every faculty.' }] });
   assert.equal(opening.emphasis, undefined);
@@ -149,6 +149,6 @@ test('LH-170 review: a note that is a peer of the texts above it stays text, eve
   const similar = compose({ layout: 'comparison', title: 'Execution timeline', blocks: [{ text: should('The revenue department', 'reduce filing friction and call center demand') }, { text: 'Image backgrounds use a fixed image fill.' }, { text: 'A shared layout contract gives the editor, preview, and PowerPoint export the same content geometry. The narrative stays in JSON and remains easy to revise.' }] });
   assert.equal(similar.emphasis, undefined);
   // 02 s32: labeled options ("Option A: ...", a line break, the details) are not of the note's form; the recommendation is the band.
-  const options = compose({ layout: 'comparison', title: 'Choose the smallest useful test', blocks: [{ region: 'first', text: 'Option A: focused pilot\nTwo teams, six weeks. Low setup cost and a clear baseline.' }, { region: 'second', text: 'Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs.' }, { region: 'verdict', text: 'Recommendation: establish the evidence with Option A before committing to Option B.' }] });
+  const options = compose({ layout: 'comparison', title: 'Choose the smallest useful test', blocks: [{ region: 'first', text: 'Option A: focused pilot\nTwo teams, six weeks. Low setup cost and a clear baseline.' }, { region: 'second', text: 'Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs.' }, { region: 'aside', text: 'Recommendation: establish the evidence with Option A before committing to Option B.' }] });
   assert.equal(options.emphasis?.source, 'foot-band');
 });

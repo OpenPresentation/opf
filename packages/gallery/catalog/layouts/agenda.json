@@ -12,15 +12,13 @@
       "name": "title"
     },
     {
-      "name": "items",
+      "name": "body",
       "accepts": [
         "list",
         "text"
       ],
-      "role": "primary",
       "flow": "column",
-      "listColumns": "auto",
-      "sequence": "numbered"
+      "arrangement": "numbered"
     }
   ],
   "description": "Set expectations by listing the parts of a talk. Longer agendas flow across columns while preserving their order.",

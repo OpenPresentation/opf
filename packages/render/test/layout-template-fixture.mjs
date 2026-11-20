@@ -8,6 +8,7 @@ import { gallery } from '@openpresentation/gallery';
 import { layoutTemplate } from '@openpresentation/opf/composition';
 import { paginate } from '@openpresentation/opf/pagination';
 import { resolvePresentation } from '../dist/index.js';
+import { LEAD_ASIDE, longListCases } from '../../javascript/test/support/long-list-cases.mjs';
 
 export const fixture = { source: 'gallery3 146e477196405fe7d2283008f6fad34c12742599', layouts: gallery.layouts };
 export const { layouts } = fixture;
@@ -92,11 +93,15 @@ export function featureDecks() {
       ['hero mirrored', { layout: 'hero', title: 'Hero', blocks: [{ text: 'The lead message.' }, { image: { src: picture(4), alt: 'Picture' } }, { metric: { value: '42%', label: 'Support' } }] }],
     ] },
   ];
+  // OPF 0.35: the long lists of core's long-list goldens (7, 9, 12 and 16 short entries, 8 long ones) in a layout's body, between a lead and
+  // an aside, in two columns and in a weighted row of an automatic slide.
+  decks.push({ design: {}, cases: longListCases().map(({ key, slide, layout }) => [`long-list ${key}`, layout ? { ...slide, layout: layout === LEAD_ASIDE ? 'lead-aside' : Object.keys(layouts).find((id) => layouts[id] === layout) } : slide]) });
+  const records = { ...layouts, 'lead-aside': LEAD_ASIDE };
   return decks.map(({ design, cases }) => {
-    const used = [...new Set(cases.map(([, slide]) => slide.layout))];
+    const used = [...new Set(cases.map(([, slide]) => slide.layout).filter(Boolean))];
     return {
       keys: cases.map(([key]) => `feature ${key}`),
-      deck: { design, catalogs: { custom: { layouts: Object.fromEntries(used.map((id) => [id, layouts[id]])) } }, slides: cases.map(([, slide]) => slide) },
+      deck: { design, catalogs: { custom: { layouts: Object.fromEntries(used.map((id) => [id, records[id]])) } }, slides: cases.map(([, slide]) => slide) },
     };
   });
 }

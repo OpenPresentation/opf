@@ -1,14 +1,14 @@
-// LH-07: a layout's `sequence` region draws its steps under numbered badges joined by a connector (blocks side by side, a list's entries
-// down a badge column) and a lone list of one- or two-word entries as chips joined by arrows; steps keep the size they have without it.
+// LH-07: a layout's `steps` or `numbered` region (its `arrangement`) draws its steps under numbered badges joined by a connector (blocks side by side, a list's entries
+// down a badge column); a lone list of 2 to 8 one- or two-word entries draws Basic Process (OPF 0.35); steps keep the size they have without it.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { composeSlide, fitList, STEP_BADGE, STEP_BADGE_GAP, listNumberLabel } from '../dist/composition.js';
 import { layouts } from './support/template-samples.mjs';
 
 const { process: processLayout, agenda } = layouts;
-// The same record without its sequence key: what the slide draws without LH-07.
-const plain = (record) => ({ ...record, regions: record.regions.map(({ sequence: _sequence, ...region }) => region) });
-const step = (text, description, start) => ({ region: 'steps', items: [{ text, description, start }], numbering: 'arabic' });
+// The same record without its steps or numbered arrangement: what the slide draws without LH-07.
+const plain = (record) => ({ ...record, regions: record.regions.map(({ arrangement, ...region }) => arrangement === 'steps' || arrangement === 'numbered' ? region : { ...region, ...(arrangement ? { arrangement } : {}) }) });
+const step = (text, description, start) => ({ region: 'body', items: [{ text, description, start }], numbering: 'arabic' });
 const sampler = { title: 'Three steps from evidence to decision', blocks: [
   step('Establish a baseline', 'Measure the current completion rate and task time.', 1),
   step('Run the pilot', 'Test with two teams and review feedback each week.', 2),
@@ -19,8 +19,8 @@ const findings = (result) => result.diagnostics.filter((entry) => ['text-overflo
 const top = (entry) => entry.text.listEntries?.[0]?.textBox.y ?? entry.text.placement?.lines[0]?.y ?? entry.box.y;
 
 test('the gallery process layout lists steps and the agendas numbered steps', () => {
-  assert.equal(processLayout.regions.find((region) => region.name === 'steps').sequence, 'steps');
-  for (const id of ['agenda', 'agenda-split']) assert.equal(layouts[id].regions.find((region) => region.name === 'items').sequence, 'numbered');
+  assert.equal(processLayout.regions.find((region) => region.name === 'body').arrangement, 'steps');
+  for (const id of ['agenda']) assert.equal(layouts[id].regions.find((region) => region.name === 'body').arrangement, 'numbered');
 });
 
 for (const direction of ['ltr', 'rtl']) {
@@ -53,7 +53,7 @@ for (const direction of ['ltr', 'rtl']) {
     assert.deepEqual(items.map((entry) => entry.text.fontSize), body(without).map((entry) => entry.text.fontSize));
     assert.deepEqual(findings(result), []);
     // The region's cell holds its badges.
-    const region = result.regions.find((entry) => entry.name === 'steps');
+    const region = result.regions.find((entry) => entry.name === 'body');
     for (const badge of row.badges) assert.ok(badge.cy - badge.radius >= region.box.y - 1e-6 && badge.cy - badge.radius >= result.contentBox.y);
   });
 }
@@ -123,35 +123,52 @@ test('LH-07: the unnumbered lists of one agenda count on from one list to the ne
 });
 
 for (const direction of ['ltr', 'rtl']) {
-  test(`LH-07 (${direction}): a lone list of one- or two-word steps is a flow of chips joined by arrows`, () => {
-    const slide = { title: 'How support works', blocks: [{ items: ['Queue', 'Route', 'Resolve', 'Follow up'] }] };
-    const result = composeSlide(slide, { layout: processLayout, direction }), without = composeSlide(slide, { layout: plain(processLayout), direction });
-    assert.equal(result.steps?.length, 1);
-    const [flow] = result.steps, list = body(result)[0];
-    assert.equal(flow.form, 'flow');
-    assert.equal(flow.chips.length, 4);
-    assert.equal(flow.arrows.length, 3);
-    assert.ok(flow.arrows.every((arrow) => arrow.direction === (direction === 'rtl' ? 'left' : 'right')));
-    // Reading order and one entry per chip, each a list column of one line at the list's size.
-    const xs = flow.chips.map((chip) => chip.box.x);
-    assert.deepEqual(xs, [...xs].sort((a, b) => direction === 'rtl' ? b - a : a - b));
-    assert.equal(list.listColumns.length, 4);
-    assert.equal(list.text.fontSize, body(without)[0].text.fontSize);
-    for (const [index, column] of list.listColumns.entries()) {
-      const chip = flow.chips[index].box;
-      assert.deepEqual([column.start, column.end, column.text.listEntries[0].text.richLines.length], [index, index + 1, 1]);
-      assert.equal(column.text.listEntries[0].textPath, `slides.0.blocks.0.items.${index}`);
-      assert.ok(column.box.x >= chip.x && column.box.x + column.box.width <= chip.x + chip.width && column.box.y >= chip.y && column.box.y + column.box.height <= chip.y + chip.height, 'the entry sits in its chip');
-      assert.equal(column.text.fontSize, list.text.fontSize);
+  test(`0.35 (${direction}): a lone list of 2 to 8 one- or two-word steps draws Basic Process, at the size its steps have or larger`, () => {
+    const lists = [['Queue', 'Route'], ['Queue', 'Route', 'Resolve', 'Follow up'], ['Plan', 'Scope work', 'Build it', 'Test it', 'Fix bugs', 'Review', 'Release', 'Measure']];
+    for (const items of lists) {
+      const result = composeSlide({ title: 'How support works', blocks: [{ items }] }, { layout: processLayout, direction });
+      // The same entries numbered are no candidate: they draw as they did before 0.35 (steps, or a plain list where badges would cost a size).
+      const stepped = composeSlide({ title: 'How support works', blocks: [{ items, numbering: 'arabic' }] }, { layout: processLayout, direction });
+      assert.equal(result.steps, undefined, 'a process draws no badges');
+      assert.equal(result.arrangements?.length, 1);
+      const [process] = result.arrangements, list = body(result)[0];
+      assert.deepEqual([process.kind, process.region, process.path], ['process', 'body', list.path]);
+      assert.equal(process.nodes.length, items.length);
+      assert.equal(list.listColumns.length, items.length);
+      assert.ok(process.fontSize >= body(stepped)[0].text.fontSize - 1e-6, `${items.length} entries: ${process.fontSize} is under the steps' ${body(stepped)[0].text.fontSize}`);
+      assert.deepEqual(result.diagnostics.filter((entry) => entry.code === 'arrangement-adapted'), []);
+      assert.deepEqual(findings(result), []);
     }
-    for (const [index, arrow] of flow.arrows.entries()) {
-      const [from, to] = [flow.chips[index].box, flow.chips[index + 1].box];
-      const between = direction === 'rtl' ? arrow.box.x >= to.x + to.width && arrow.box.x + arrow.box.width <= from.x : arrow.box.x >= from.x + from.width && arrow.box.x + arrow.box.width <= to.x;
-      assert.ok(between, 'each arrow sits between two chips');
-    }
-    assert.deepEqual(findings(result), []);
   });
 }
+
+test('0.35: other lone lists of a steps region draw as before: 9 entries, a three-word entry, a description, numbering', () => {
+  const nine = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+  // Nine entries: no process; the badges would set the list smaller, so it is a plain list, as in 0.34.
+  const long = composeSlide({ title: 'Steps', blocks: [{ items: nine }] }, { layout: processLayout });
+  assert.deepEqual([long.arrangements, long.steps], [undefined, undefined]);
+  for (const block of [{ items: ['Plan', 'Build the prototype', 'Ship'] }, { items: ['Plan', { text: 'Build', description: 'Two weeks' }, 'Ship'] }, { items: ['Plan', 'Build', 'Ship'], numbering: 'arabic' }]) {
+    const result = composeSlide({ title: 'Steps', blocks: [block] }, { layout: processLayout });
+    assert.equal(result.arrangements, undefined);
+    assert.deepEqual(result.steps?.map((entry) => entry.form), ['column']);
+  }
+  // A short list beside a paragraph in the region: the blocks are steps side by side. (A short closing line is the foot band instead, LH-06,
+  // and leaves the list alone in the region.)
+  const mixed = composeSlide({ title: 'Steps', blocks: [{ items: ['Plan', 'Build', 'Ship'] }, { text: 'Each step ends with a short review before the next one starts.' }] }, { layout: processLayout });
+  assert.equal(mixed.arrangements, undefined);
+  assert.deepEqual(mixed.steps?.map((entry) => entry.form), ['row']);
+});
+
+test('0.35: a short list that Basic Process does not hold at its size draws as steps (the slide is composed again)', () => {
+  const items = ['Internationalizations', 'Telecommunications', 'Interoperabilities', 'Institutionalization', 'Counterrevolutionary', 'Electroencephalogram', 'Characterizations', 'Incomprehensibility'];
+  // A portrait slide: no row or column of boxes holds eight long words at the list's size.
+  const result = composeSlide({ title: 'Steps', blocks: [{ items }] }, { layout: processLayout, width: 720, height: 1280 });
+  assert.equal(result.arrangements, undefined);
+  assert.deepEqual(result.steps?.map((entry) => entry.form), ['column']);
+  assert.deepEqual(result.diagnostics.filter((entry) => entry.code === 'arrangement-adapted'), [], 'no finding: the steps are the drawing');
+  // On a landscape slide the same list draws Basic Process.
+  assert.equal(composeSlide({ title: 'Steps', blocks: [{ items }] }, { layout: processLayout }).arrangements?.[0]?.kind, 'process');
+});
 
 test('LH-07: a list of longer entries in a steps region draws beside badges, numbered in arabic', () => {
   const slide = { title: 'Five stages of the rollout', blocks: [{ items: ['Agree scope and owners', 'Run two teams for six weeks', 'Measure completion and task time', 'Scale to every regional team'] }] };

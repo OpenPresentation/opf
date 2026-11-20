@@ -33,14 +33,14 @@ assert.ok(templateParts.some(xml => /name="Title"[\s\S]*?<a:lstStyle><a:lvl1pPr[
 assert.ok(templateParts.some(xml => /<a:latin typeface="\+mj-lt"/.test(xml)), 'Layout title prompts inherit the selected heading family from their own master');
 assert.deepEqual((await fromPptx(zipSync(parts), options)).slides.slice(0, 2), source.slides.slice(0, 2), 'Native title identity preserves authored titles through import');
 
-const automaticSource = {slides: [{title: 'Automatic', text: 'Body'}, {layout: 'auto', title: 'Explicit automatic', text: 'Body'}]};
+const automaticSource = {slides: [{title: 'Automatic', text: 'Body'}, {title: 'Second automatic', text: 'Body'}]};
 const automaticBytes = await toPptx(automaticSource, options);
 const automaticParts = unzipSync(automaticBytes);
 const automaticLayouts = Object.entries(automaticParts).filter(([path]) => /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)).map(([, bytes]) => dec.decode(bytes));
 // RR-105 (#1290, 2026-11-12): OPF's automatic layout is named "Title Only" (src/layout-names.js); previously "OPF auto".
 assert.equal(automaticLayouts.filter(xml => /name="Title Only"/.test(xml) && /type="titleOnly"/.test(xml)).length, 1, 'Automatic slides use one OPF auto titleOnly layout per master');
 const automaticReports = [];
-assert.deepEqual((await fromPptx(automaticBytes, {...options, onDiagnostic: item => automaticReports.push(item)})).slides, automaticSource.slides, 'Automatic layout preserves implicit versus explicit authored layout');
+assert.deepEqual((await fromPptx(automaticBytes, {...options, onDiagnostic: item => automaticReports.push(item)})).slides, automaticSource.slides, 'Automatic slides come back without a layout');
 const mixed = {slides: [{layout: 'text', title: 'Template', text: 'Body'}, {title: 'Automatic', text: 'Body'}]};
 const mixedParts = unzipSync(await toPptx(mixed, options));
 const rel = dec.decode(mixedParts['ppt/slides/_rels/slide2.xml.rels']).match(/<Relationship[^>]*Type="[^"]*\/slideLayout"[^>]*Target="([^"]+)"/)[1];
@@ -49,34 +49,40 @@ firstRelationships = firstRelationships.replace(/(<Relationship[^>]*Type="[^"]*\
 mixedParts['ppt/slides/_rels/slide1.xml.rels'] = enc.encode(firstRelationships);
 const changedReports = [];
 const changed = await fromPptx(zipSync(mixedParts), {...options, onDiagnostic: item => changedReports.push(item)});
-assert.equal(changed.slides[0].layout, 'auto', 'Change Layout from a template to OPF auto wins over stored layout');
-assert.ok(changedReports.some(item => item.code === 'layout-changed'));
-assert.ok(!automaticReports.some(item => item.code === 'unresolved-reference' && /auto/.test(item.message)), 'auto is a built-in sentinel, not a catalog reference');
+assert.equal(changed.slides[0].layout, undefined, 'Change Layout from a template to OPF auto wins over stored layout: the slide has no layout');
+assert.ok(!Object.hasOwn(changed.slides[0], 'layout'));
+assert.ok(changedReports.some(item => item.code === 'layout-changed' && item.path === 'slides.0.layout'));
+assert.ok(!automaticReports.some(item => item.code === 'unresolved-reference' || item.code === 'layout-changed'), 'the automatic layout tag is no catalog reference and no change');
+// A custom layout whose id is auto is an ordinary template: its slide keeps layout 'auto' and is not read as OPF's automatic layout.
+const ownAuto = {catalogs: {custom: {layouts: {auto: {name: 'Own auto', regions: [{name: 'title'}, {name: 'body', accepts: ['text']}]}}}}, slides: [{layout: 'auto', title: 'Own auto', text: 'Body'}, {title: 'Automatic', text: 'Body'}]};
+const ownAutoBack = await fromPptx(await toPptx(ownAuto, options), options);
+assert.equal(ownAutoBack.slides[0].layout, 'auto', 'a catalog layout with the id auto round-trips');
+assert.equal(ownAutoBack.slides[1].layout, undefined);
 const bareAuto = unzipSync(await toPptx({slides: [{title: 'Bare automatic', text: 'Body'}]}, {...options, catalogs: []}));
 assert.ok(Object.entries(bareAuto).some(([path, bytes]) => /^ppt\/slideLayouts\//.test(path) && /name="Title Only"/.test(dec.decode(bytes))), 'Bare automatic decks use OPF auto without registered catalogs');
 const foreign = unzipSync(await toPptx({slides: [{title: 'Foreign', text: 'Body'}]}, {...options, catalogs: [], provenance: false}));
 const foreignRelationship = dec.decode(foreign['ppt/slides/_rels/slide1.xml.rels']).match(/<Relationship[^>]*Type="[^"]*\/slideLayout"[^>]*Target="([^"]+)"/)[1];
 const layoutPath = `ppt/${foreignRelationship.replace(/^\.\.\//, '')}`;
 foreign[layoutPath] = enc.encode(dec.decode(foreign[layoutPath]).replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g, ''));
-for (const [type, name, expected] of [['title', 'Foreign', 'cover'], ['secHead', 'Foreign', 'section'], ['obj', 'Foreign', 'text'], ['tx', 'Foreign', 'text'], ['twoObj', 'Foreign', 'two-column'], ['twoTxTwoObj', 'Foreign', 'two-column'], ['picTx', 'Foreign', 'image-beside'], ['blank', 'Foreign', 'auto'], ['titleOnly', 'Foreign', 'auto'], ['cust', 'cHaRt BeSiDe', 'chart-beside'], ['cust', 'Unknown', 'auto']]) {
+for (const [type, name, expected] of [['title', 'Foreign', 'cover'], ['secHead', 'Foreign', 'section'], ['obj', 'Foreign', 'text'], ['tx', 'Foreign', 'text'], ['twoObj', 'Foreign', 'two-column'], ['twoTxTwoObj', 'Foreign', 'two-column'], ['picTx', 'Foreign', 'image-beside'], ['blank', 'Foreign', undefined], ['titleOnly', 'Foreign', undefined], ['cust', 'cHaRt BeSiDe', 'chart-beside'], ['cust', 'Unknown', undefined]]) {
   const copy = {...foreign};
   let xml = dec.decode(copy[layoutPath]).replace(/<p:sldLayout\b[^>]*>/, open => open.replace(/\s+type="[^"]*"/, '') .replace(/>$/, ` type="${type}">`));
   xml = xml.replace(/<p:cSld\b[^>]*>/, open => open.replace(/\s+name="[^"]*"/, '').replace(/>$/, ` name="${name}">`));
   copy[layoutPath] = enc.encode(xml);
   const imported = await fromPptx(zipSync(copy), options);
-  assert.equal(imported.slides[0].layout, expected === 'auto' ? expected : `default:${expected}`, `${type}/${name}: foreign layout maps by type or built-in name`);
+  assert.equal(imported.slides[0].layout, expected === undefined ? expected : `default:${expected}`, `${type}/${name}: foreign layout maps by type or built-in name`);
 }
 console.log('Template layout review: 144 region identities, native plain titles, prompt typography and foreign layout mapping passed. Native Office acceptance remains pending.');
 
-assert.equal(foreignLayoutReference({type: 'titleOnly'}), 'auto');
-assert.equal(foreignLayoutReference({type: 'blank'}, []), 'auto');
+assert.equal(foreignLayoutReference({type: 'titleOnly'}), undefined);
+assert.equal(foreignLayoutReference({type: 'blank'}, []), undefined);
 assert.equal(foreignLayoutReference({type: 'title'}, []), undefined);
 
 const competing = [{source: 'first', layouts: {cover: {...layouts.cover, name: 'First cover'}}}, {source: 'second', layouts: {cover: {...layouts.cover, name: 'Second cover'}}}];
-assert.equal(foreignLayoutReference({type: 'cust', 'p:cSld': {name: 'Second cover'}}, competing), 'auto', 'a shadowed host record cannot supply a misleading match');
+assert.equal(foreignLayoutReference({type: 'cust', 'p:cSld': {name: 'Second cover'}}, competing), undefined, 'a shadowed host record cannot supply a misleading match');
 assert.equal(foreignLayoutReference({type: 'cust', 'p:cSld': {name: 'First cover'}}, competing), 'default:cover');
-assert.equal((await fromPptx(zipSync(foreign))).slides[0].layout, 'auto', 'normal import maps a foreign titleOnly without options');
-assert.equal((await fromPptx(zipSync(foreign), {catalogs: []})).slides[0].layout, 'auto', 'explicitly empty catalogs retain automatic mapping');
+assert.equal((await fromPptx(zipSync(foreign))).slides[0].layout, undefined, 'normal import maps a foreign titleOnly to no layout without options');
+assert.equal((await fromPptx(zipSync(foreign), {catalogs: []})).slides[0].layout, undefined, 'explicitly empty catalogs retain automatic mapping');
 
 const nativeCover = {...foreign};
 nativeCover[layoutPath] = enc.encode(dec.decode(nativeCover[layoutPath]).replace(/type="titleOnly"/, 'type="title"'));

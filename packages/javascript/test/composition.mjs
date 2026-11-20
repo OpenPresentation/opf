@@ -25,7 +25,7 @@ assert.equal(thirds.items.length, 3);
 const byValue = Object.fromEntries(thirds.items.map(item => [item.value,item.box]));
 assert.ok(byValue.Top.y < byValue.Middle.y && byValue.Middle.y < byValue.Bottom.y);
 assert.equal(overlaps(byValue.Top,byValue.Bottom),false);
-const crowded = composeSlide({ blocks: blocks(6) }, { layout: { regions: [{name:"body-1",accepts:["text"],flow:"none"},{name:"body-2",accepts:["text"],flow:"none"}] } });
+const crowded = composeSlide({ blocks: blocks(6) }, { layout: { regions: [{name:"body-1",accepts:["text"],max: 1},{name:"body-2",accepts:["text"],max: 1}] } });
 assert.equal(crowded.items.length,6);
 for (let i=0;i<6;i++) for (let j=i+1;j<6;j++) assert.equal(overlaps(crowded.items[i].box,crowded.items[j].box),false);
 const weighted = composeSlide({ blocks:blocks(2),composition:{ mode:'row',weights:[2,1] } });

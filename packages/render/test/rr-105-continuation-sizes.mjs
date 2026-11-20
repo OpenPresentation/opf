@@ -7,7 +7,7 @@ import { templateDeck } from './layout-template-fixture.mjs';
 import { toSvg } from './catalog-harness.mjs';
 
 // The body size of pages 2 to 4 of each `paginated <id> 5 long` deck as v0.33.0 drew it (supervisor sheets, measurements.csv).
-const V033 = { pyramid: 28, matrix: 30.667, cycle: 30.667, 'vertical-flow': 30.667, chevrons: 25.333 };
+const V033 = { pyramid: 28, matrix: 30.667, cycle: 30.667, 'vertical-process': 30.667, chevrons: 25.333 };
 const MEASURE = 70;
 for (const [id, before] of Object.entries(V033)) {
   const { keys, deck } = templateDeck(id), index = keys.indexOf(`${id} 5 long`);

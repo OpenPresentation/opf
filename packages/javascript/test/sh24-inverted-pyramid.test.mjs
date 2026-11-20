@@ -27,23 +27,23 @@ import {composeSlide,layoutTemplate,smartArtUnavailable} from '../dist/compositi
 import {validateCatalogRecord} from '../dist/index.js';
 const record=gallery.layouts['inverted-pyramid'];
 const published={$schema:'https://openpresentation.org/schema/opf-layout/v2',id:'inverted-pyramid',...record};
-test('schema and compiled regions carry the direction only on pyramid arrangements',()=>{
+test('the inverted pyramid is one arrangement value; 0.34 pyramidDirection fails the schema',()=>{
   assert.ok(record);
   assert.equal(validateCatalogRecord('layouts',published).valid,true);
-  assert.equal(layoutTemplate(record).regions.find(r=>r.name==='levels').pyramidDirection,'down');
-  for(const direction of ['sideways',null,12])assert.equal(validateCatalogRecord('layouts',{...published,regions:[{name:'levels',arrangement:'pyramid',pyramidDirection:direction}]}).valid,false);
-  for(const arrangement of [undefined,'matrix','flow'])assert.equal(validateCatalogRecord('layouts',{...published,regions:[{name:'levels',arrangement,pyramidDirection:'down'}]}).valid,false);
+  assert.equal(layoutTemplate(record).regions.find(r=>r.name==='body').arrangement,'inverted-pyramid');
+  for(const direction of ['down','up','sideways'])assert.equal(validateCatalogRecord('layouts',{...published,regions:[{name:'levels',arrangement:'pyramid',pyramidDirection:direction}]}).valid,false);
+  assert.equal(validateCatalogRecord('layouts',{...published,regions:[{name:'levels',arrangement:'inverted-pyramid'}]}).valid,true);
 });
 test('composition preserves top-to-bottom source paths without shrinking or enabling unmeasured SmartArt',()=>{
   const items=['Possibilities','Qualified options','Shortlist','Decision'];
   for(const blocks of [false,true]){
     const slide={title:'From options to a decision',...(blocks?{blocks:items.map(text=>({items:[text]}))}:{items})};
     const result=composeSlide(slide,{layout:record});
-    const a=result.arrangements?.[0];assert.ok(a);assert.equal(a.pyramidDirection,'down');
+    const a=result.arrangements?.[0];assert.ok(a);assert.equal(a.kind,'inverted-pyramid');assert.equal('pyramidDirection' in a,false);
     assert.deepEqual(a.nodes.map(n=>n.index),[0,1,2,3]);
     assert.ok(a.nodes[0].box.width>a.nodes.at(-1).box.width);
-    const up=composeSlide(slide,{layout:{...record,regions:record.regions.map(region=>{const {pyramidDirection,...rest}=region;return rest;})}});
+    const up=composeSlide(slide,{layout:{...record,regions:record.regions.map(region=>region.arrangement==='inverted-pyramid'?{...region,arrangement:'pyramid'}:region)}});
     assert.equal(a.fontSize,up.arrangements[0].fontSize,'direction changes no text size');
-    assert.match(smartArtUnavailable({kind:'pyramid',pyramidDirection:'down',count:4,frame:a.frame,nodes:[]}),/no qualified live/);
+    assert.match(smartArtUnavailable({kind:'inverted-pyramid',count:4,frame:a.frame,nodes:[]}),/no qualified live/);
   }
 });

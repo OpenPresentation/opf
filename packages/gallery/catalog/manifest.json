@@ -64,11 +64,11 @@
     },
     "layouts": {
       "mode": "mirror",
-      "records": 40,
-      "contentSha256": "66d47ff798875602f19d283a31b6fdf15cf62ec832367987378af4381fc37d57",
+      "records": 38,
+      "contentSha256": "a0fe282afd4bccb755481840d30f0c03dabb763ee43b9cb010467b4804693b15",
       "gallery": {
-        "records": 40,
-        "contentSha256": "66d47ff798875602f19d283a31b6fdf15cf62ec832367987378af4381fc37d57"
+        "records": 38,
+        "contentSha256": "a0fe282afd4bccb755481840d30f0c03dabb763ee43b9cb010467b4804693b15"
       }
     },
     "narratives": {

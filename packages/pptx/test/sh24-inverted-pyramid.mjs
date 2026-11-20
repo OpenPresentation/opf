@@ -17,7 +17,7 @@ assert.equal(imported.slides[0].layout,deck.slides[0].layout,'OPF provenance res
 assert.deepEqual(imported.slides[0].items,items);
 const [svg]=toSvg(deck);for(const label of items)assert.ok(svg.includes(label),label);
 // Exercise continuous trapezoids independently of the fitter's preferred stepped design: only the shape is flipped, not its text.
-const frame={x:0,y:0,width:800,height:420},arrangement={kind:'pyramid',pyramidDirection:'down',design:'smartart',path:'slides.0.items',frame,nodes:pyramidNodes(frame,4,'down'),lineWidth:2,smartArt:{lines:[1,1,1,1],stable:[true,true,true,true]}};
+const frame={x:0,y:0,width:800,height:420},arrangement={kind:'inverted-pyramid',design:'smartart',path:'slides.0.items',frame,nodes:pyramidNodes(frame,4,'down'),lineWidth:2,smartArt:{lines:[1,1,1,1],stable:[true,true,true,true]}};
 assert.match(smartArtReason(arrangement,items,false),/no qualified live/);assert.match(opfLayoutReason({...arrangement,design:'opf'},items,false),/no qualified live/);
 const shapes=[];await addArrangements({addShape:(preset,options)=>shapes.push({preset,options})},[arrangement],{context:{colors:{accent:'336699',background:'FFFFFF',text:'000000'}},mode:'shapes',items:[{path:arrangement.path,value:items}],slideIndex:0,records:[],tags:new Map(),smartArtTags:new Map(),report:()=>{}});
 assert.equal(shapes.length,4);assert.ok(shapes.every(s=>s.preset==='trapezoid'&&s.options.flipV===true));

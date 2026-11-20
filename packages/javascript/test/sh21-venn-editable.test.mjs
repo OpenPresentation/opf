@@ -37,7 +37,7 @@ test('SH21: very long labels retain the whole full-size list and refuse an unfit
  const deck={language:'en-US',catalogs:{custom:{layouts:{plain}}},slides:[{layout:'custom:plain',title:'Overlapping sets',items}]},context=resolveSlideContext(deck,0,{catalogs:[gallery]}),baseline=composeSlide(context.slide,context.options).items.find(i=>i.field==='items');assert.ok(item.text.fontSize>=baseline.text.fontSize,'the complete-list fallback does not shrink the pre-arrangement fit');
 });
 test('SH21: a narrow body uses whole labels in a complete card fallback and RTL keeps source identity',()=>{
- const layout={name:'Narrow sets',direction:'row',regions:[{name:'sets',accepts:['list'],role:'primary',flow:'none',arrangement:'venn',size:1},{name:'reserve',accepts:['text'],size:5,empty:'keep'}]};
+ const layout={name:'Narrow sets',direction:'row',regions:[{name:'sets',accepts:['list'],role:'primary',max: 1,arrangement:'venn',size:1},{name:'reserve',accepts:['text'],size:5,empty:'keep'}]};
  const items=short(7),g=composeSlide({items},{width:1280,height:720,layout});assert.deepEqual(g.items.find(i=>i.field==='items').value,items);assert.ok(g.diagnostics.some(d=>d.code==='arrangement-adapted'));assert.ok(g.arrangements?.[0]?.design==='cards'||!g.arrangements?.length);
  const rtl=composition(['ألف','باء','جيم','دال','هاء','واو','زاي'],{language:'ar'});assert.deepEqual(rtl.items.find(i=>i.field==='items').value,['ألف','باء','جيم','دال','هاء','واو','زاي']);assert.ok(rtl.arrangements?.[0]);assert.ok(rtl.diagnostics.some(d=>d.code==='arrangement-adapted'));
 });

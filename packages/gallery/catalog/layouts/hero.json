@@ -23,11 +23,10 @@
             "quote",
             "metric"
           ],
-          "role": "primary",
-          "flow": "none"
+          "max": 1
         },
         {
-          "name": "support",
+          "name": "body",
           "accepts": [
             "text",
             "list",
@@ -48,7 +47,7 @@
         "diagram"
       ],
       "role": "media",
-      "flow": "none",
+      "max": 1,
       "bleed": true
     }
   ],

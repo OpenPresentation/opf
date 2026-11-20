@@ -169,7 +169,7 @@ export function createLayoutCanvas(container, options = {}) {
       if (wire && (!wanted || wire.dataset.key !== wireKey)) { wire.remove(); wire = null; }
       if (wanted && !wire) {
         if (isHeading(box.entry)) { wire = el("div", "opf-lx-wire opf-lx-wire-heading", { "aria-hidden": "true" }); wire.append(el("span", "opf-lx-bar"), el("span", "opf-lx-bar opf-lx-bar-short")); }
-        else wire = buildWireframe(dom, box.entry.accepts, { count: box.entry.flow === "none" ? 1 : Math.min(3, box.entry.max ?? 3), flow: box.entry.flow ?? "auto" });
+        else wire = buildWireframe(dom, box.entry.accepts, { count: Math.min(3, box.entry.max ?? 3), flow: box.entry.flow ?? "auto" });
         wire.dataset.key = wireKey;
         node.append(wire);
       }

@@ -82,7 +82,7 @@
     },
     "layout-harvest": {
       "source": "scripts/native-acceptance/qualification/decks/layout-harvest.opf.json",
-      "importSha256": "1efbfcca2620c98fc374c92f0259ec639dd50e7532f07fdb1dbcfbfb13181eb0",
+      "importSha256": "00f7205cc4b3f3970b6d209bfcf47eaa02f0e092dfd0b929c04ac281ba9ed649",
       "identity": [
         {
           "slide": "ppt/slides/slide17.xml",

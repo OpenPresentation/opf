@@ -89,9 +89,8 @@ test('LH-49: a chart whose plot is too short takes the filling track beside the 
   assert.ok(others[1].box.y > others[0].box.y, 'stacked in their column');
   assert.ok(result.items.filter((item) => item.field !== 'chart' && item.field !== 'title').every((item) => item.box.width >= 0.35 * 1280), 'text keeps 40% of the width');
   assert.deepEqual(findings(result), findings(plain));
-  // Right to left the chart is at the right; design.chartPrimary (even 'none') is the author's.
+  // Right to left the chart is at the right.
   assert.equal(composeSlide({ title: 'T', composition: { mode: 'column' }, blocks }, { direction: 'rtl' }).track.edge, 'right');
-  assert.equal(composeSlide({ title: 'T', design: { chartPrimary: 'none' }, composition: { mode: 'column' }, blocks }).track, undefined);
   // A chart whose plot is large enough keeps the grid.
   assert.equal(composeSlide({ title: 'T', blocks: [{ chart: chartData }, { text: 'Median review time fell 57%.' }] }).track, undefined);
 });

@@ -9,13 +9,14 @@ import {composeSlide} from '@openpresentation/opf/composition';
 import {defaultCatalog, fromPptx, toPptx} from './helpers/default-catalog.mjs';
 
 const options = {seed: 991, timestamp: '2026-11-02T00:00:00Z', zipDate: '2026-11-02T00:00:00Z'};
-const agenda = (count, extra = {}) => ({layout: 'agenda-split', title: 'Six workstreams to align before the next budget cycle', ...extra,
+// OPF 0.35: 0.34's agenda-split is the agenda with its title beside it (design.titlePosition start).
+const agenda = (count, extra = {}) => ({layout: 'agenda', design: {titlePosition: 'start'}, title: 'Six workstreams to align before the next budget cycle', ...extra,
   blocks: Array.from({length: count}, (_, index) => ({items: Array.from({length: 6}, (_, item) => `Workstream ${index + 1}, step ${item + 1}: agree the owner, the reporting cadence and the first readout`)}))});
 // LH-186: slide 2's five entries are short enough to fit its numbered region near the list's role size, so the slide keeps its layout
 // and its step badges (long entries set two steps under the role size move to the automatic grid before they shrink).
 const deck = {slides: [agenda(3, {id: 'recomposed'}), {...agenda(1, {id: 'layout'}), blocks: [{items: Array.from({length: 5}, (_, item) => `Workstream ${item + 1}: agree the owner and the reporting cadence`)}]}]};
-assert.ok(composeSlide(deck.slides[0], {layout: defaultCatalog.layouts['agenda-split']}).recomposed, 'slide 1 is recomposed at the floor');
-assert.equal(composeSlide(deck.slides[1], {layout: defaultCatalog.layouts['agenda-split']}).recomposed, undefined, 'slide 2 keeps its layout');
+assert.ok(composeSlide(deck.slides[0], {layout: defaultCatalog.layouts.agenda}).recomposed, 'slide 1 is recomposed at the floor');
+assert.equal(composeSlide(deck.slides[1], {layout: defaultCatalog.layouts.agenda}).recomposed, undefined, 'slide 2 keeps its layout');
 
 const exported = async extra => {
   const diagnostics = [], bytes = new Uint8Array(await toPptx(deck, {...options, ...extra, onDiagnostic: diagnostic => diagnostics.push(diagnostic)}));
@@ -55,14 +56,15 @@ const layoutOf = (entries, slide) => {
   const idx = /<p:ph type="body" idx="(\d+)"\/>/.exec(bound[0])[1];
   const layout = layoutOf(entries, 1);
   // RR-105 (#1290, 2026-11-12): user-facing layout names (src/layout-names.js); previously 'Agenda beside (automatic grid)'.
-  assert.equal(layout.name, 'Agenda beside 2');
+  assert.equal(layout.name, 'Agenda 2');
   assert.ok(layout.placeholders.includes(`<p:ph type="body" idx="${idx}"/>`), 'the layout has that Body placeholder');
   assert.ok(layout.placeholders.includes('<p:ph type="title"/>'), 'and the title');
   // The slide on its layout keeps the template's own slide layout.
-  assert.equal(layoutOf(entries, 2).name, 'Agenda beside', 'the template layout itself (RR-105: previously checked as a name without "automatic grid")');
+  assert.equal(layoutOf(entries, 2).name, 'Agenda', 'the template layout itself (RR-105: previously checked as a name without "automatic grid")');
   // Import reads the layout from the variant's tag and pins no block to a region; the lists come back whole.
   const back = await fromPptx(bytes, {});
-  assert.deepEqual(back.slides.map(slide => slide.layout), ['agenda-split', 'agenda-split']);
+  assert.deepEqual(back.slides.map(slide => slide.layout), ['agenda', 'agenda']);
+  assert.deepEqual(back.slides.map(slide => slide.design?.titlePosition), ['start', 'start'], 'the title position comes back');
   assert.ok(back.slides[0].blocks.every(block => block.region === undefined));
   // Native paragraphs come back as styled runs (as every native body does); their text is the source's.
   const plain = value => typeof value === 'string' ? value : value.map(run => typeof run === 'string' ? run : run.text).join('');
@@ -72,7 +74,7 @@ const layoutOf = (entries, slide) => {
 // 2. Measured (the default): nothing changes for the recomposed slide; it stays on the template's layout.
 {
   const {entries} = await exported({});
-  assert.equal(layoutOf(entries, 1).name, 'Agenda beside');
+  assert.equal(layoutOf(entries, 1).name, 'Agenda');
 }
 
 console.log('LH-91: a slide recomposed at the floor keeps native bodies on its layout variant, and round-trips its layout.');

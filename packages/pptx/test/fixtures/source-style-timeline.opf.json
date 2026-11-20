@@ -30,7 +30,7 @@
               }
             ]
           },
-          "region": "timeline"
+          "region": "body"
         },
         {
           "text": [
@@ -39,7 +39,7 @@
               "fontSize": 24
             }
           ],
-          "region": "notes"
+          "region": "aside"
         }
       ]
     }
@@ -123,15 +123,15 @@
               "name": "title"
             },
             {
-              "name": "timeline",
+              "name": "body",
               "accepts": [
                 "timeline"
               ],
               "role": "primary",
-              "flow": "none"
+              "max": 1
             },
             {
-              "name": "notes",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text",

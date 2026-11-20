@@ -65,7 +65,7 @@ test('equal fit failures without font dominance keep the joined arrangement',()=
   const selected=composeSlide(slide,{layout:layouts['org-chart'],recompose:false});
   assert.equal(fitFindings(selected).length,5);
   assert.equal(geometryUnplaced(selected),0);
-  assert.ok(bodies(selected).every(item=>item.region==='people'&&item.text.fontSize===22));
+  assert.ok(bodies(selected).every(item=>item.region==='body'&&item.text.fontSize===22));
   assert.deepEqual(bodies(selected).flatMap(item=>entries(item).map(entry=>entry.value)),labels(slide).map(value=>value.text));
 });
 const geometryUnplaced=geometry=>geometry.diagnostics.filter(entry=>entry.code==='layout-unplaced').length;

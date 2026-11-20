@@ -145,7 +145,7 @@ export function slideScene(presentation, slideIndex, { geometry, findings = [], 
 
   const slideNode = add(base({
     key: formatPointer(slideTokens), path: formatPointer(slidePath), kind: "slide", type: "slide", parent: null, index: slideIndex, depth: 0,
-    label: `Slide ${slideIndex + 1}${typeof slide.layout === "string" && slide.layout !== "auto" ? ` · ${slide.layout}` : ""}`,
+    label: `Slide ${slideIndex + 1}${typeof slide.layout === "string" ? ` · ${slide.layout}` : ""}`,
     box: { x: 0, y: 0, w: 1, h: 1 }, hidden: slide.hidden === true,
   }));
 

@@ -20,8 +20,8 @@ describe('several timelines in one region are a stack of bands', () => {
 		const composed = composeSlide({ title: 'Execution', blocks: [timeline(0), note, timeline(1)] }, { layout: layouts.timeline });
 		assert.deepEqual(composed.diagnostics, []);
 		const [first, second] = timelines(composed);
-		assert.equal(first.region, 'timeline');
-		assert.equal(second.region, 'timeline', 'the second timeline is not drawn below the grid');
+		assert.equal(first.region, 'body');
+		assert.equal(second.region, 'body', 'the second timeline is not drawn below the grid');
 		for (const item of [first, second]) {
 			assert.equal(item.timelineLayout.arrangement, 'band');
 			assert.ok(ink(item).y >= item.box.y - 0.01 && bottom(ink(item)) <= bottom(item.box) + 0.01, 'the measured height holds the label bands');

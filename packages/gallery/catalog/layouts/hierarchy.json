@@ -12,12 +12,11 @@
       "name": "title"
     },
     {
-      "name": "nodes",
+      "name": "body",
       "accepts": [
         "list"
       ],
-      "role": "primary",
-      "flow": "none",
+      "max": 1,
       "arrangement": "hierarchy"
     }
   ],

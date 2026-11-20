@@ -30,8 +30,7 @@
             "group",
             "diagram"
           ],
-          "role": "primary",
-          "flow": "none"
+          "max": 1
         },
         {
           "name": "second",
@@ -45,19 +44,18 @@
             "group",
             "diagram"
           ],
-          "role": "primary",
-          "flow": "none"
+          "max": 1
         }
       ]
     },
     {
-      "name": "verdict",
+      "name": "aside",
       "size": "auto",
       "accepts": [
         "text"
       ],
       "role": "supporting",
-      "flow": "none"
+      "max": 1
     }
   ],
   "description": "Compare alternatives using parallel information. Keep the same criteria and level of detail for every option.",

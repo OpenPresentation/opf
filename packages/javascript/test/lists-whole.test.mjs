@@ -77,7 +77,7 @@ describe('LH-42: several lists in a region are one list per cell', () => {
 
   test('a region that mixes lists with other blocks keeps its flow', () => {
     const result = compose({ title: 'Mixed', blocks: [{ items: three('finance') }, { text: 'Owners report every week.' }, { items: three('operations') }] }, layouts.agenda);
-    assert.notEqual(result.regions.find((entry) => entry.name === 'items').arrangement, 'grid');
+    assert.notEqual(result.regions.find((entry) => entry.name === 'body').arrangement, 'grid');
   });
 });
 

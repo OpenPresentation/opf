@@ -9,7 +9,7 @@ const lines = (count, name) => Array.from({length: count}, (_, index) => `${name
 const slide = {layout: 'code', title: 'Signal Trend', blocks: [
   {code: {source: lines(6, 'routeToSponsor'), language: 'ts', filename: 'video-demo-sales-narrative-rule.ts'}},
   {text: 'Prairie Ridge High School should focus the next cycle on secure funding for hands-on robotics and chemistry labs while making the operating tradeoffs clear to k-12 education stakeholders.'},
-  {code: {source: 'export const valid = result.errors.length === 0;', language: 'ts', filename: 'validator.ts'}, region: 'code'},
+  {code: {source: 'export const valid = result.errors.length === 0;', language: 'ts', filename: 'validator.ts'}, region: 'body'},
   {text: 'Keep the recommendation and its evidence together.'},
   {code: {source: lines(6, 'keepInWeeklyReview'), language: 'ts', filename: 'revenue-forecast-inspection-rule.ts'}},
 ]};

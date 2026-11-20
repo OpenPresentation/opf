@@ -1,0 +1,7 @@
+---
+type: changed
+packages: [opf, editor, pptx, gallery]
+---
+Breaking (0.35 layout simplification, step 1; no drawing changes): `layout: "auto"` is removed. A slide without `layout` is automatic composition, and `"auto"` is now an ordinary layout reference: unresolved, it is `opf/unresolved-reference`, which says that OPF 0.35 removed it and offers the safe fix that deletes the key (`remove-layout-auto`); a catalog may now define a layout with the id `auto`. `opf format` no longer drops it, and core's `AUTO_LAYOUT` export (`@openpresentation/opf/composition`) is gone. PPTX import writes no `layout` for OPF's automatic slide layout and for foreign blank, title-only and unmatched custom layouts (`foreignLayoutReference` returns `undefined` for them); Change Layout in PowerPoint from a template to the automatic layout still wins over the stored layout, now by removing it (`layout-changed`). The region role `secondary` is removed: `role` is `primary`, `media` or `supporting`, and the old value fails the layout schema (`opf/catalog-record`). The gallery `dashboard` layout's `kpis` region is `supporting` (it composes as before: its two regions accept disjoint kinds), and the built-in layout records no longer write the default `"role": "primary"`. The editor's layout inspector offers the three roles and accepts `auto` as a custom layout id, and its source hints read a region without `role` as primary (required), as they read the explicit role before.
+
+Schema removal: `layout.schema.json:$defs.Region.properties.role` loses the value `secondary`.

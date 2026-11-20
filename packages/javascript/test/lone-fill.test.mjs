@@ -57,7 +57,7 @@ test('a lone table grows its type and rows, and engines get its growth', () => {
   assert.deepEqual(findings(result), []);
   assert.ok(item.tableGrowth > 1, `${item.tableGrowth}`);
   assert.equal(composeSlide({ title: 'Decision options', table }, { layout: layouts.table, fill: false }).items.at(-1).tableGrowth, undefined);
-  const region = result.regions.find((entry) => entry.name === 'table').box;
+  const region = result.regions.find((entry) => entry.name === 'body').box;
   assert.ok(Math.abs(middle(item.frameBox ?? item.box) - middle(region)) < 2, 'the table and its card sit in the middle of the body');
 });
 

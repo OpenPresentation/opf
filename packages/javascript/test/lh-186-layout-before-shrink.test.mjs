@@ -7,12 +7,14 @@ import { gallery } from '@openpresentation/gallery';
 import { composeSlide } from '../dist/composition.js';
 
 const words = (count) => Array.from({ length: count }, (_, index) => ['growth', 'revenue', 'customers', 'market', 'platform', 'strategy', 'quarter', 'team'][index % 8]).join(' ');
+// OPF 0.35: 0.34's agenda-split is the agenda with its title beside it.
+const agendaBeside = { ...gallery.layouts.agenda, design: { ...gallery.layouts.agenda.design, titlePosition: 'start' } };
 const HEADINGS = new Set(['title', 'subtitle', 'tag']);
 const body = (result) => result.items.filter((item) => !HEADINGS.has(item.field));
 const smallest = (result) => Math.min(...body(result).map((item) => item.text.fontSize));
 const findings = (result) => result.diagnostics.map((entry) => entry.code).sort();
 const longList = { title: 'Ten points', items: Array.from({ length: 10 }, (_, index) => `Point ${index + 1}: ${words(12)}`) };
-const agenda = (count) => ({ title: 'Workstreams to align before the budget cycle', blocks: Array.from({ length: count }, (_, index) => ({ items: Array.from({ length: 6 }, (_, item) => `Workstream ${index + 1}, step ${item + 1}: agree the owner and the first readout`) })) });
+const agenda = (count, entries = 6) => ({ title: 'Workstreams to align before the budget cycle', blocks: Array.from({ length: count }, (_, index) => ({ items: Array.from({ length: entries }, (_, item) => `Workstream ${index + 1}, step ${item + 1}: agree the owner and the first readout`) })) });
 
 test('LH-186: a long list set more than one step under its role size takes the columns that set it larger', () => {
   const plain = composeSlide(longList, { fill: false }), result = composeSlide(longList);
@@ -28,8 +30,8 @@ test('LH-186: a long list set more than one step under its role size takes the c
 });
 
 test('LH-186: a layout template more than one step under its role size is recomposed as the automatic grid', () => {
-  const record = gallery.layouts['agenda-split'];
-  const kept = composeSlide(agenda(2), { layout: record, recompose: false }), result = composeSlide(agenda(2), { layout: record });
+  const record = agendaBeside;
+  const kept = composeSlide(agenda(2, 8), { layout: record, recompose: false }), result = composeSlide(agenda(2, 8), { layout: record });
   assert.equal(smallest(kept), 18, 'the layout sets the two lists at 18 px, above the floor');
   assert.ok(result.recomposed, 'recomposed');
   assert.equal(result.regions, undefined);
@@ -39,7 +41,7 @@ test('LH-186: a layout template more than one step under its role size is recomp
   assert.deepEqual(findings(result), findings(kept), 'no new finding');
   // Sibling lists keep one size (LH-43).
   assert.equal(new Set(body(result).map((item) => item.text.fontSize)).size, 1);
-  assert.equal(composeSlide(agenda(2), { layout: record, fill: false }).recomposed, undefined, 'fill: false keeps the layout');
+  assert.equal(composeSlide(agenda(2, 8), { layout: record, fill: false }).recomposed, undefined, 'fill: false keeps the layout');
 });
 
 test('LH-186: where no arrangement sets the text larger, the slide keeps the composition it had', () => {
@@ -68,6 +70,6 @@ test('LH-186: explicit author choices are kept', () => {
   assert.ok(body(composeSlide(pair)).every((item) => item.listColumns === undefined), 'sibling lists');
   // A block pinned to a region keeps the layout.
   const pinned = agenda(2);
-  pinned.blocks[0].region = 'items';
-  assert.equal(composeSlide(pinned, { layout: gallery.layouts['agenda-split'] }).recomposed, undefined, 'a pinned block');
+  pinned.blocks[0].region = 'body';
+  assert.equal(composeSlide(pinned, { layout: agendaBeside }).recomposed, undefined, 'a pinned block');
 });

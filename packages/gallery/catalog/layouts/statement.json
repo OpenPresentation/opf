@@ -19,15 +19,14 @@
       "rule": true
     },
     {
-      "name": "message",
+      "name": "body",
       "size": "auto",
       "accepts": [
         "text",
         "quote",
         "metric"
       ],
-      "role": "primary",
-      "flow": "none"
+      "max": 1
     }
   ],
   "description": "Give one important assertion room to stand alone. Keep supporting detail on a following slide.",

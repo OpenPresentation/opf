@@ -19,8 +19,8 @@ const layout = layoutFromRegions({
   regions: [
     { name: "title" },
     { direction: "row", regions: [
-      { name: "main", size: 2, accepts: ["text"], role: "primary", flow: "none" },
-      { name: "notes", accepts: ["text", "list"], role: "secondary", flow: "column" },
+      { name: "main", size: 2, accepts: ["text"], role: "primary", max: 1 },
+      { name: "notes", accepts: ["text", "list"], role: "supporting", flow: "column" },
     ] },
   ],
 });
@@ -29,8 +29,8 @@ assert.deepEqual(layout.record, {
   regions: [
     { name: "title" },
     { direction: "row", regions: [
-      { name: "main", size: 2, accepts: ["text"], role: "primary", flow: "none" },
-      { name: "notes", accepts: ["text", "list"], role: "secondary", flow: "column" },
+      { name: "main", size: 2, accepts: ["text"], role: "primary", max: 1 },
+      { name: "notes", accepts: ["text", "list"], role: "supporting", flow: "column" },
     ] },
   ],
 });
@@ -61,7 +61,7 @@ assert.throws(() => layoutFromRegions({ ...input, direction: "diagonal", regions
 assert.throws(() => layoutFromRegions({ ...input, regions: [{ regions: [body] }] }), /row or column/);
 assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "main", accepts: [] }] }), /accepted content kinds/);
 assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "main", accepts: ["text"], role: "invalid" }] }), /valid role/);
-assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "main", accepts: ["text"], flow: "row" }] }), /valid flow/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "main", accepts: ["text"], flow: "none" }] }), /valid flow/);
 assert.throws(() => layoutFromRegions({ ...input, regions: [body], overflowRegion: "title" }), /not a content region/);
 // Splits nest two deep inside the record's own list (three levels of lists); a third split is too deep.
 const nest = (levels) => levels === 0 ? [{ name: "leaf", accepts: ["text"] }] : [{ direction: levels % 2 ? "row" : "column", regions: nest(levels - 1) }];

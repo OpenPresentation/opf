@@ -36,8 +36,7 @@
             "group",
             "diagram"
           ],
-          "role": "primary",
-          "flow": "none"
+          "max": 1
         },
         {
           "name": "second",
@@ -56,8 +55,7 @@
             "group",
             "diagram"
           ],
-          "role": "primary",
-          "flow": "none"
+          "max": 1
         }
       ]
     }

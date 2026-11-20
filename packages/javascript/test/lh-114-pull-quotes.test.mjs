@@ -125,10 +125,10 @@ test('LH-122: in the timeline layout a text before the timeline is the lead, a t
   const timeline = { timeline: [{ when: 'Jan', what: 'Design freeze' }, { when: 'Mar', what: 'Cutover' }] };
   const text = { text: 'We migrate one region at a time.' };
   const regions = (blocks) => Object.fromEntries(bindRegions({ blocks }, record).regions.filter((region) => region.blocks.length).map((region) => [region.name, region.blocks.map((block) => block.block)]));
-  assert.deepEqual(regions([text, timeline]), { lead: [0], timeline: [1] });
-  assert.deepEqual(regions([timeline, text]), { timeline: [0], notes: [1] });
-  assert.deepEqual(regions([text, timeline, { text: 'Each cutover runs clean for 30 days.' }]), { lead: [0], timeline: [1], notes: [2] });
-  assert.deepEqual(regions([{ items: ['One', 'Two', 'Three'] }, timeline]), { timeline: [1], notes: [0] }, 'the lead takes text only');
+  assert.deepEqual(regions([text, timeline]), { lead: [0], body: [1] });
+  assert.deepEqual(regions([timeline, text]), { body: [0], aside: [1] });
+  assert.deepEqual(regions([text, timeline, { text: 'Each cutover runs clean for 30 days.' }]), { lead: [0], body: [1], aside: [2] });
+  assert.deepEqual(regions([{ items: ['One', 'Two', 'Three'] }, timeline]), { body: [1], aside: [0] }, 'the lead takes text only');
   const result = composeSlide({ layout: 'timeline', title: 'Platform migration roadmap', blocks: [text, timeline] }, { layout: record });
   const [lead, drawn] = [result.items.find((item) => item.field === 'text'), result.items.find((item) => item.field === 'timeline')];
   assert.ok(lead.box.y + lead.box.height <= drawn.box.y + 0.5, 'the lead is drawn above the timeline');

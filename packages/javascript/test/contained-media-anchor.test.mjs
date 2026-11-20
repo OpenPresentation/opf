@@ -11,7 +11,7 @@ const { layouts } = gallery;
 const plain = (id) => ({ ...layouts[id], anchor: 'top', design: { ...layouts[id].design, contentBox: false } });
 const body = 'Keep a named owner from intake through the final decision. The owner collects the evidence, explains exceptions, and records what happens next.';
 const near = (a, b, message) => assert.ok(Math.abs(a - b) <= 0.51, `${message ?? ''} ${a} vs ${b}`);
-const columns = (anchor) => ({ name: 'Columns', direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: ['first', 'second'].map((name) => ({ name, accepts: ['text', 'image', 'video'], role: 'primary', flow: 'none', ...(anchor ? { anchor } : {}) })) }], design: { imageFit: 'contain' } });
+const columns = (anchor) => ({ name: 'Columns', direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: ['first', 'second'].map((name) => ({ name, accepts: ['text', 'image', 'video'], role: 'primary', max: 1, ...(anchor ? { anchor } : {}) })) }], design: { imageFit: 'contain' } });
 
 test('mixed image and text: the picture top equals the neighbouring text top', () => {
   const result = composeSlide({ title: 'Review visual context beside its explanation', blocks: [{ image: svg(1600, 1000) }, { text: body }] }, { layout: plain('two-column') });

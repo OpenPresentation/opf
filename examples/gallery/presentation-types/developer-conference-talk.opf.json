@@ -66,8 +66,6 @@
     },
     "titleAlignment": "end",
     "contentBox": false,
-    "contentDirection": "vertical",
-    "chartPrimary": "top",
     "imageFit": "contain",
     "listBullet": "image",
     "watermark": {
@@ -662,7 +660,7 @@
                 "video"
               ],
               "role": "media",
-              "flow": "none",
+              "max": 1,
               "bleed": true
             }
           ],
@@ -691,7 +689,6 @@
                 "code",
                 "group"
               ],
-              "role": "primary",
               "flow": "auto"
             }
           ],
@@ -712,23 +709,22 @@
               "name": "title"
             },
             {
-              "name": "charts",
+              "name": "body",
               "accepts": [
                 "chart",
                 "group",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "grid"
             },
             {
-              "name": "note",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
@@ -751,16 +747,15 @@
               "direction": "row",
               "regions": [
                 {
-                  "name": "table",
+                  "name": "body",
                   "size": 3,
                   "accepts": [
                     "table"
                   ],
-                  "role": "primary",
-                  "flow": "none"
+                  "max": 1
                 },
                 {
-                  "name": "notes",
+                  "name": "aside",
                   "size": 2,
                   "accepts": [
                     "text",
@@ -797,19 +792,18 @@
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             },
             {
-              "name": "timeline",
+              "name": "body",
               "accepts": [
                 "timeline",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "column"
             },
             {
-              "name": "notes",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text",
@@ -843,9 +837,7 @@
                 "text",
                 "group"
               ],
-              "role": "primary",
-              "flow": "auto",
-              "listColumns": "auto"
+              "flow": "auto"
             }
           ],
           "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",

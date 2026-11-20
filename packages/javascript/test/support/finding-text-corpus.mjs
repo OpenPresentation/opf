@@ -10,7 +10,7 @@ const deck = (slides, extra = {}) => ({ name: 'Fixture', language: 'en-US', ...e
 const iconSet = { name: 'Brand', license: 'MIT', copyright: 'Copyright (c) 2026 Example', viewBox: [0, 0, 24, 24], style: 'stroke', icons: { star: 'M12 3l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 10l6-1z' } };
 const white = { background: { type: 'solid', color: '#FFFFFF' } };
 const chartData = { columns: ['Q', 'V'], rows: [['Q1', 1]] };
-const roadmap = { name: 'Roadmap split', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'timeline', accepts: ['timeline'], max: 1 }, { name: 'notes', accepts: ['text', 'list'], flow: 'column' }] }] };
+const roadmap = { name: 'Roadmap split', overflowRegion: 'timeline', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'timeline', accepts: ['timeline'], max: 1 }, { name: 'notes', accepts: ['text', 'list'], flow: 'column' }] }] };
 const timeline = { timeline: { events: [{ when: 'Q1', what: 'Pilot' }, { when: 'Q2', what: 'Launch' }] } };
 const record = (extra = {}) => ({ name: 'Arc', duration: { min: 10, max: 20 }, beats: [{ id: 'hook', name: 'Hook', type: 'text' }, { id: 'proof', name: 'Proof', type: 'chart' }, { id: 'ask', name: 'Ask', type: 'list' }], ...extra });
 const narrativeDeck = (extra = {}) => ({ name: 'D', narrative: 'arc', duration: 15, catalogs: { custom: { narratives: { arc: record() } } }, slides: [{ title: 'One', beat: 'hook' }, { title: 'Two', beat: ['proof'] }], ...extra });
@@ -122,7 +122,7 @@ export const CASES = [
 	{ name: 'shape-off-slide', rule: 'opf/shape-off-slide', input: deck([{ title: 'T', text: 'Body', shapes: [{ shape: 'rect', text: 'Draft', x: 70, y: 10, width: 0.2, height: 0.1 }] }]) },
 	{ name: 'chart-label-collision', rule: 'opf/chart-label-collision', input: deck([{ title: 'Results', chart: { type: 'line', data: { columns: ['Quarter', 'Actual'], rows: [['Q1', 10], ['Q2', 20], ['Q3', 30]] }, referenceLines: Array.from({ length: 5 }, () => ({ value: 20, label: 'Plan' })) } }]) },
 	{ name: 'timeline-period-short', rule: 'opf/timeline-period-short', input: deck([{ title: 'Plan', timeline: { events: [{ when: 'Day 1', what: 'Kickoff', duration: 1 }, { when: 'Year 3', what: 'Delivery', duration: 1000 }] } }]) },
-	{ name: 'arrangement-adapted', rule: 'opf/arrangement-adapted', input: deck([{ layout: 'quad', title: 'T', items: ['North', 'South', 'East'] }], { catalogs: { custom: { layouts: { quad: { name: 'Quad', regions: [{ name: 'title' }, { name: 'quadrants', accepts: ['list'], flow: 'none', arrangement: 'matrix' }] } } } } }) },
+	{ name: 'arrangement-adapted', rule: 'opf/arrangement-adapted', input: deck([{ layout: 'quad', title: 'T', items: ['North', 'South', 'East'] }], { catalogs: { custom: { layouts: { quad: { name: 'Quad', regions: [{ name: 'title' }, { name: 'quadrants', accepts: ['list'], max: 1, arrangement: 'matrix' }] } } } } }) },
 	{ name: 'region-full', rule: 'opf/region-full', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', ...timeline }, { region: 'timeline', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	{ name: 'layout-unplaced', rule: 'opf/layout-unplaced', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', ...timeline }, { region: 'timeline', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	// RR-105: cards side by side read card by card (no finding); a layout that draws the body above the title is read out of order.

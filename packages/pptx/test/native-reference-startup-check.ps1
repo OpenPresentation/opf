@@ -4,22 +4,37 @@ if($PSVersionTable.PSEdition -cne 'Desktop' -or $PSVersionTable.PSVersion.Major 
 if(Test-Path -LiteralPath $ReportPath){throw 'Preserve prior startup controls'}
 $root=$ReportPath+'.startup';if(Test-Path -LiteralPath $root){throw 'Preserve prior startup fixture'};[void](New-Item -ItemType Directory -Path $root)
 $before=(Get-FileHash -LiteralPath $ScriptPath -Algorithm SHA256).Hash.ToLowerInvariant()
-if((Get-Item -LiteralPath $ScriptPath).Length -ne 93931 -or $before -cne '3ce6b57ca190a4c0c89b3202eeb11e2685fb2731bfc9a3a206bc3f8b022d8573'){throw 'Exact reviewed startup worker required'}
+if((Get-Item -LiteralPath $ScriptPath).Length -ne 93931 -or $before -cne 'e0db6af0c1d94948554b0e324ad32dcf6a1f95ff11c8b314b46f0463be6c8018'){throw 'Exact reviewed startup worker required'}
 $source=[IO.File]::ReadAllText($ScriptPath)
-# Stage8 (owner-approved 2026-11-13) accepts only the current worker, which admits the v0.34.0 reference export and its helper series
+# Stage9 (owner-approved 2026-11-18, "Yes, for the plan": lock refresh for layout-record changes) admits the 0.35 reference export,
+# which differs from the stage-8 input only in layout-record tags, region-derived placeholder names and removed/renamed built-in
+# layouts; its helper series names are unchanged.
+# It accepts only the current worker, then proves the exact stage-8 worker before the earlier derivations.
+$layoutRecordInputEdits=@(
+ ,@("if(`$SourceBytes -ne 129055 -or `$SourceHash -cne '3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918'","if(`$SourceBytes -ne 124993 -or `$SourceHash -cne 'a274f346d8acda750fb8ada0507038ea6c2e47847ae3a64b176c6c39a3344908'")
+)
+$stage8Source=$source
+foreach($pair in $layoutRecordInputEdits){$at=$stage8Source.IndexOf($pair[1],[StringComparison]::Ordinal);if($at -lt 0 -or $stage8Source.LastIndexOf($pair[1],[StringComparison]::Ordinal) -ne $at){throw 'Unique ninth-stage layout-record input inverse required'};$stage8Source=$stage8Source.Replace($pair[1],$pair[0])}
+$stage8Bytes=[Text.Encoding]::UTF8.GetBytes($stage8Source)
+$sha=[Security.Cryptography.SHA256]::Create();try{$stage8Hash=([BitConverter]::ToString($sha.ComputeHash($stage8Bytes))).Replace('-','').ToLowerInvariant()}finally{$sha.Dispose()}
+if($stage8Bytes.Length -ne 93931 -or $stage8Hash -cne '3ce6b57ca190a4c0c89b3202eeb11e2685fb2731bfc9a3a206bc3f8b022d8573'){throw 'Exact eighth-stage worker inverse required'}
+$layoutRecordInputForward=$stage8Source
+foreach($pair in $layoutRecordInputEdits){$at=$layoutRecordInputForward.IndexOf($pair[0],[StringComparison]::Ordinal);if($at -lt 0 -or $layoutRecordInputForward.LastIndexOf($pair[0],[StringComparison]::Ordinal) -ne $at){throw 'Unique ninth-stage layout-record input forward required'};$layoutRecordInputForward=$layoutRecordInputForward.Replace($pair[0],$pair[1])}
+if($layoutRecordInputForward -cne $source){throw 'Ninth-stage layout-record input forward differs'}
+# Stage8 (owner-approved 2026-11-13) accepts only the stage-8 worker, which admits the v0.34.0 reference export and its helper series
 # names, then proves the exact stage-7 worker before the earlier derivations.
 $measuredInputEdits=@(
  @("if(`$SourceBytes -ne 129025 -or `$SourceHash -cne '06c82deb1dbe067d4f097aebe760b8f1dbdcc0e2a74e95b8d1f99eeea2302a83'","if(`$SourceBytes -ne 129055 -or `$SourceHash -cne '3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918'"),
  @("`$name -cne ('OPF reference '+(`$index-1))","`$name -cne (@('Target 80','Floor -10')[`$index-2])")
 )
-$stage7Source=$source
+$stage7Source=$stage8Source
 foreach($pair in $measuredInputEdits){$at=$stage7Source.IndexOf($pair[1],[StringComparison]::Ordinal);if($at -lt 0 -or $stage7Source.LastIndexOf($pair[1],[StringComparison]::Ordinal) -ne $at){throw 'Unique eighth-stage measured-input inverse required'};$stage7Source=$stage7Source.Replace($pair[1],$pair[0])}
 $stage7Bytes=[Text.Encoding]::UTF8.GetBytes($stage7Source)
 $sha=[Security.Cryptography.SHA256]::Create();try{$stage7Hash=([BitConverter]::ToString($sha.ComputeHash($stage7Bytes))).Replace('-','').ToLowerInvariant()}finally{$sha.Dispose()}
 if($stage7Bytes.Length -ne 93922 -or $stage7Hash -cne '21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255'){throw 'Exact seventh-stage worker inverse required'}
 $measuredInputForward=$stage7Source
 foreach($pair in $measuredInputEdits){$at=$measuredInputForward.IndexOf($pair[0],[StringComparison]::Ordinal);if($at -lt 0 -or $measuredInputForward.LastIndexOf($pair[0],[StringComparison]::Ordinal) -ne $at){throw 'Unique eighth-stage measured-input forward required'};$measuredInputForward=$measuredInputForward.Replace($pair[0],$pair[1])}
-if($measuredInputForward -cne $source){throw 'Eighth-stage measured-input forward differs'}
+if($measuredInputForward -cne $stage8Source){throw 'Eighth-stage measured-input forward differs'}
 # Stage7 proves the exact prior stage before any startup extraction.
 $workerRootEdits=@(
  @("`$fixed=Join-Path `$outputRoot ('reference-name-'+`$Phase+'.pptx')","`$fixed=Join-Path `$root ('reference-name-'+`$Phase+'.pptx')"),
@@ -58,8 +73,8 @@ $newPath=Join-Path $root 'actual-new-startup.ps1';$oldPath=Join-Path $root 'actu
 New-StartupScript $source 'referenceNameModeEnabled' $newPath;New-StartupScript $oldSource 'referenceNameEdit' $oldPath
 # This is a synthetic length fixture, NOT the genuine sealed PPTX. Earlier full
 # hash/bootstrap checks are deliberately not executed or claimed in this test.
-$inputPath=Join-Path $root 'synthetic-length-fixture.pptx';[IO.File]::WriteAllBytes($inputPath,[Array]::CreateInstance([byte],129055));$inputHash=(Get-FileHash -LiteralPath $inputPath -Algorithm SHA256).Hash.ToLowerInvariant()
-$sourceHash='3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918';if($inputHash -ceq $sourceHash){throw 'Synthetic input must not impersonate the sealed archive'}
+$inputPath=Join-Path $root 'synthetic-length-fixture.pptx';[IO.File]::WriteAllBytes($inputPath,[Array]::CreateInstance([byte],124993));$inputHash=(Get-FileHash -LiteralPath $inputPath -Algorithm SHA256).Hash.ToLowerInvariant()
+$sourceHash='a274f346d8acda750fb8ada0507038ea6c2e47847ae3a64b176c6c39a3344908';if($inputHash -ceq $sourceHash){throw 'Synthetic input must not impersonate the sealed archive'}
 $plan=@([pscustomobject]@{op='set-chart-series-name';slideIndex=1;chartName='OPF chart 1';seriesIndex=1;expectedName='Actual';newName='Actual edited'});ConvertTo-Json -InputObject $plan -Depth 8|Set-Content -LiteralPath (Join-Path $root 'plan.json') -Encoding UTF8
 $rows=@()
 foreach($mode in @('valid','old-collision','disabled','missing-switch','missing-request','false-request','nonboolean-request','wrong-source')){
@@ -77,4 +92,4 @@ foreach($mode in @('valid','old-collision','disabled','missing-switch','missing-
  $rows+=@([ordered]@{scenario=$mode;passed=$true;publicSwitch=if($null -eq $value){$null}else{$value.publicSwitch};internalEnabled=if($null -eq $value){$null}else{$value.internalEnabled};refusal=$caught})
 }
 if((Get-FileHash -LiteralPath $ScriptPath -Algorithm SHA256).Hash.ToLowerInvariant() -cne $before -or (Get-FileHash -LiteralPath $inputPath -Algorithm SHA256).Hash.ToLowerInvariant() -cne $inputHash){throw 'Startup controls mutated source/input bytes'}
-[ordered]@{schemaVersion=1;powerShellEdition=$PSVersionTable.PSEdition;powerShellVersion=$PSVersionTable.PSVersion.ToString();scope='Actual ParamBlock and two exact pre-COM startup statements only';earlierFullSourceBootstrapExercised=$false;syntheticLengthFixture=$true;genuineArchive=$false;officeConstructed=$false;processQueries=0;observerIO=0;workerSha256=$before;oldInverseSha256=$oldHash;measuredInputDerivation=[ordered]@{edits=$measuredInputEdits.Count;workerBytes=(Get-Item -LiteralPath $ScriptPath).Length;inverseBytes=$stage7Bytes.Length;inverseSha256=$stage7Hash;forwardExact=($measuredInputForward -ceq $source)};workerRootDerivation=[ordered]@{edits=$workerRootEdits.Count;workerBytes=$stage7Bytes.Length;inverseBytes=$snapshotBytes.Length;inverseSha256=$snapshotHash;forwardExact=($workerRootForward -ceq $stage7Source)};cases=$rows}|ConvertTo-Json -Depth 12|Set-Content -LiteralPath $ReportPath -Encoding UTF8
+[ordered]@{schemaVersion=1;powerShellEdition=$PSVersionTable.PSEdition;powerShellVersion=$PSVersionTable.PSVersion.ToString();scope='Actual ParamBlock and two exact pre-COM startup statements only';earlierFullSourceBootstrapExercised=$false;syntheticLengthFixture=$true;genuineArchive=$false;officeConstructed=$false;processQueries=0;observerIO=0;workerSha256=$before;oldInverseSha256=$oldHash;layoutRecordInputDerivation=[ordered]@{edits=$layoutRecordInputEdits.Count;workerBytes=(Get-Item -LiteralPath $ScriptPath).Length;inverseBytes=$stage8Bytes.Length;inverseSha256=$stage8Hash;forwardExact=($layoutRecordInputForward -ceq $source)};measuredInputDerivation=[ordered]@{edits=$measuredInputEdits.Count;workerBytes=$stage8Bytes.Length;inverseBytes=$stage7Bytes.Length;inverseSha256=$stage7Hash;forwardExact=($measuredInputForward -ceq $stage8Source)};workerRootDerivation=[ordered]@{edits=$workerRootEdits.Count;workerBytes=$stage7Bytes.Length;inverseBytes=$snapshotBytes.Length;inverseSha256=$snapshotHash;forwardExact=($workerRootForward -ceq $stage7Source)};cases=$rows}|ConvertTo-Json -Depth 12|Set-Content -LiteralPath $ReportPath -Encoding UTF8

@@ -1,0 +1,5 @@
+{"$schema":"https://openpresentation.org/schema/opf/v1","name":"wordsplit","language":"en-US","design":{"theme":"classic","colorScheme":"corporate-blue","fontScheme":"aptos"},
+"slides":[
+{"id":"narrow","title":"Narrow weighted row","composition":{"mode":"row","weights":[5,1]},"blocks":[{"text":"The gateway only validates and enqueues; workers are stateless and scale on queue depth."},{"items":[{"text":"Fast acknowledgment"},{"text":"Scale on queue depth"},{"text":"Append-only ledger"},{"text":"Replay safely"}]}]},
+{"id":"tiny","title":"A word wider than its column","composition":{"mode":"row","weights":[9,1]},"blocks":[{"text":"The column beside this paragraph is too narrow for its longest word even at the minimum size."},{"items":[{"text":"Internationalization"},{"text":"Localization"}]}]}
+]}

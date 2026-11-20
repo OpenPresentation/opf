@@ -14,7 +14,7 @@ const slides = [
   {title: 'Contract turnaround', layout: 'comparison', blocks: [
     {region: 'first', ...group('Before', {metric: {value: '11 days', label: 'From quote to signed contract', description: 'Printed, signed and scanned by hand'}})},
     {region: 'second', ...group('After', {metric: {value: '3 days', label: 'From quote to signed contract', description: 'Standard templates and electronic signature', delta: '-8 days', trend: 'down', sentiment: 'positive'}})},
-    {region: 'verdict', text: 'Standard legal templates and e-signature removed eight days from every deal.'},
+    {region: 'aside', text: 'Standard legal templates and e-signature removed eight days from every deal.'},
   ]},
   {title: 'What we decided today', design: {variant: 'dark1'}, blocks: [{bullets: ['Approve the expansion budget', 'Launch the pilot in March', 'Hire a program lead by January', 'Review progress in June']}]},
 ];

@@ -88,7 +88,7 @@ export function regionKind(region) {
   return region?.accepts?.[0] ?? "text";
 }
 
-/** How many sample blocks a region gets: one in a `none` region, else three (never more than its `max`). */
+/** How many sample blocks a region gets: one in a region of `max: 1` (or a published 0.34 record's `flow: none`), else three (never more than its `max`). */
 export function regionCount(region) {
   if ((region?.flow ?? "auto") === "none") return 1;
   return Math.min(3, region?.max ?? 6);

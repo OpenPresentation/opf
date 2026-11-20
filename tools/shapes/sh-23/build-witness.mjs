@@ -15,7 +15,7 @@ const out=process.argv[2];if(!out||fs.existsSync(out))throw Error('Supply a fres
 fs.mkdirSync(out,{recursive:true});
 const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual'}),words=['Vision','Plan','Build','Ship','Learn','Grow','Scale','Serve'];
 const manifest={scope:'SH23 production witnesses; parent owns PowerPoint edits and save/reopen qualification.',sources:['packages/pptx/src/smart-art-layouts.js','packages/pptx/dist/smart-art-layouts.js','packages/javascript/src/smart-art-layout.ts','tools/shapes/sh-23/layout-xml.mjs','tools/shapes/sh-23/build-witness.mjs'].map(file=>({file,sha256:createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex')})),cases:[]};
-for(const [kind,count]of [['pyramid',8],['matrix',3],['flow',7],['chevrons',7],['vertical-flow',5]]){
+for(const [kind,count]of [['pyramid',8],['matrix',3],['process',7],['chevrons',7],['vertical-process',5]]){
  const deck={$schema:'https://openpresentation.org/schema/opf/v1',name:'SH23 '+kind,language:'en-US',catalogs:{custom:{fontSchemes:{'source-sans-3':{name:'Source Sans 3',major:'Source Sans 3',minor:'Source Sans 3',type:'sans-serif'}}}},design:{dimensions:'16:9',fontScheme:'source-sans-3'},slides:[{layout:kind,title:'Editable stages',items:words.slice(0,count)}]};
  const file=kind+'.pptx',bytes=new Uint8Array(await toPptx(deck,{catalogs:[gallery],fonts,seed:2323,timestamp:'2026-11-07T00:00:00Z',zipDate:'2026-11-07T00:00:00Z'})),entries=unzipSync(bytes),slide=strFromU8(entries['ppt/slides/slide1.xml']);
  if(!slide.includes('drawingml/2006/diagram'))throw Error(kind+': current source did not export live SmartArt');

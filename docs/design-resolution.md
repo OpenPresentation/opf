@@ -339,13 +339,13 @@ The data is a table in `@openpresentation/opf` (`number-locale-data.ts`), read f
 
 ## Brand assets and layout hints
 
-The 2026-09-30 spec coverage audit found that the deck logo, `organization.logo`, `speaker.photo`, `design.contentDirection`, `design.chartPrimary`, `design.listBullet` and `fontScheme.accent` validated, edited and round-tripped but changed nothing in any engine. This section states what they do now. Every rule below is implemented once, in `composeSlide()` and `resolveLogo()` of `@openpresentation/opf`, and consumed by the renderer and the exporter; the decisions marked **(vetoable)** are agent decisions the owner can overturn.
+The 2026-09-30 spec coverage audit found that the deck logo, `organization.logo`, `speaker.photo`, `design.contentDirection`, `design.chartPrimary`, `design.listBullet` and `fontScheme.accent` validated, edited and round-tripped but changed nothing in any engine. This section states what they do now (OPF 0.35 removed `contentDirection` and `chartPrimary`; see below). Every rule below is implemented once, in `composeSlide()` and `resolveLogo()` of `@openpresentation/opf`, and consumed by the renderer and the exporter; the decisions marked **(vetoable)** are agent decisions the owner can overturn.
 
 ### Layout templates and design
 
-An OPF layout record (`opf-layout/v2`) is one ordered list of `regions`, declared once, in reading order, with a `direction` (`row` or `column`) and splits for two dimensions. A region has a `name`, a relative `size` and rules: accepted content kinds, role, flow, capacity and optional bleed. `layoutContent(record)` and `layoutStructure(record)` summarize those regions for hosts; `composeSlide()` reports their binding and boxes in `geometry.regions`. A slide may use `layout: "auto"` to bypass a record explicitly. [Layout templates](layout-templates.md) documents the binding and flow rules.
+An OPF layout record (`opf-layout/v2`) is one ordered list of `regions`, declared once, in reading order, with a `direction` (`row` or `column`) and splits for two dimensions. A region has a `name`, a relative `size` and rules: accepted content kinds, role, flow, capacity and optional bleed. `layoutContent(record)` and `layoutStructure(record)` summarize those regions for hosts; `composeSlide()` reports their binding and boxes in `geometry.regions`. A slide without `layout` uses no record (automatic composition). [Layout templates](layout-templates.md) documents the binding and flow rules.
 
-The effective `design` value of each key comes from the slide, then the deck, then the resolved theme, then the layout record, then the engine default. This includes `titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFit`, `listBullet` and `mirror`. `resolveDesignHints()` reports the supplying level, and `SlideComposition.design` holds the merged result. A layout's regions determine placement; `design.mirror` reverses its tracks, while the slide's own `composition` arranges the first primary flowing region. A top-level image block may still carry its own `placement` band. A layout sits on any slide background; it does not opt into a picture.
+The effective `design` value of each key comes from the slide, then the deck, then the resolved theme, then the layout record, then the engine default. This includes `titleAlignment`, `titlePosition`, `contentAlignment`, `contentBox`, `imageFit`, `listBullet`, `listStyle` and `mirror`. `titlePosition: "start"` (OPF 0.35) sets the heading group beside the body, in a column of two fifths of the content width on the reading side ([layout templates](layout-templates.md#design-keys)). `resolveDesignHints()` reports the supplying level, and `SlideComposition.design` holds the merged result. A layout's regions determine placement; `design.mirror` reverses its tracks, while the slide's own `composition` arranges the first primary flowing region. A top-level image block may still carry its own `placement` band. A layout sits on any slide background; it does not opt into a picture.
 
 The `tag` (eyebrow) follows `titleAlignment` on every slide, and is start-aligned when none resolves, like the title, so a layout that centres its content does not centre the tag over a start-aligned title. The `subtitle` joins them whenever it sits in the title area (a cover, or a layout with no `subtitle` region of its own), so the heading group shares one alignment axis; a layout with a separate `subtitle` region keeps it on `contentAlignment`. Only the slide's own `design.contentAlignment` keeps the tag and that subtitle on content alignment, preserving the 2026-10-06 authoring decision.
 
@@ -395,13 +395,11 @@ The same logos are placed anywhere through slide-scoped built-in references (`va
 
 No reference engine draws a speaker photo by itself: the schema has no speaker slot on any slide and no slide-to-speaker link, and a speaker block on covers would be a separate design. The author places it explicitly with the built-in image variable (`"image": "var:speaker.photo"`, see [templates and variables](templates-and-variables.md#built-in-variables)); the field also round-trips through PPTX provenance.
 
-### `contentDirection`
+### `contentDirection` (removed in OPF 0.35)
 
-The effective value follows the normal design precedence: slide, deck, theme, layout, engine default. On automatic slides `vertical` sets the root arrangement to `column` and `horizontal` to `row`, unless the slide explicitly sets `composition.mode`. Promoted regions keep their geometry and nested content groups keep their own composition.
+OPF 0.35 removed `design.contentDirection` from the deck, slide, theme and layout `design`: a region's `flow` takes the words of `composition.mode` (`auto`, `grid`, `row`, `column`), so a layout says a row of steps with `flow: "row"` (the `process` layout does), and an automatic slide says its arrangement with `composition.mode`. A document that still sets it fails the schema, and validate offers the safe fix that deletes it. See [the 0.35 migration](migrations/0.35.md).
 
-On a v2 template, `contentDirection` changes every flowing region into a row or column without changing the template's regions. An atomic `flow: "none"` region remains atomic. Without the direction hint each region uses its declared flow. Layout records do not have `composition.mode`, `columns` or `weights`; their region list defines the grid.
-
-The resolved direction also chooses how a lone list with icons is drawn (a list that can be LH-165's [icon cards](icons.md#icon-cards-lh-165)): where the root arrangement resolves to `column` (`vertical`, or the slide's own `composition.mode: "column"`, which wins), or the list's layout region is arranged as a column (the slide's own `composition.mode` in the first primary flowing region it arranges, else `contentDirection`), the list stays ruled rows with each entry's chip at the start of its row (the end in a right-to-left deck), at the size the rows have without icons; `row`, `grid`, `auto` and no direction draw the icon cards. A layout region's own `flow` is no direction for this choice, so a layout's lone list keeps its cards unless the slide sets `composition.mode: "column"` or `contentDirection` is `vertical`.
+The slide's `composition.mode` also chooses how a lone list with icons is drawn (a list that can be LH-165's [icon cards](icons.md#icon-cards-lh-165)): where the root arrangement resolves to `column`, or the list's layout region is arranged as a column (the slide's own `composition.mode` in the first primary flowing region it arranges), the list stays ruled rows with each entry's chip at the start of its row (the end in a right-to-left deck), at the size the rows have without icons; `row`, `grid`, `auto` and no mode draw the icon cards. A layout region's own `flow` is no direction for this choice, so a layout's lone list keeps its cards unless the slide sets `composition.mode: "column"`.
 
 ### `titleAlignment` and `contentAlignment` in right-to-left decks
 
@@ -409,17 +407,9 @@ The resolved direction also chooses how a lone list with icons is drawn (a list 
 
 **Numbers in right-to-left text (LH-118).** A number with a sign, a currency or a percent sign (`+16%`, `-2.5%`, `$42`; core `numberRanges`) reads left to right inside right-to-left text: "+16%" in an Arabic metric drew as "16%+". The preview wraps each such number in a left-to-right isolate (U+2066 ... U+2069, core `isolateNumbers`), in metric values, deltas and units, table cells, body text and chart text. PowerPoint draws the isolate characters as boxes, so the PPTX export writes each such number as its own `en-US` run (as RR-05 does for a Latin phrase), and writes a paragraph of only such a number left to right (`rtl="0"`) at the physical alignment it had, because PowerPoint still drew "16%+" for an `en-US` run in a right-to-left paragraph of no letters (checked with PowerPoint's own slide export). Import reads the split runs and the left-to-right number-only paragraph back as they were authored. Bare digits (`2026`, `1,200`, `10:30`) are unchanged: they read the same in either direction.
 
-### `chartPrimary`
+### `chartPrimary` (removed in OPF 0.35)
 
-The resolved `design.chartPrimary` applies on automatic slides only. It changes the root arrangement when the slide has no promoted regions, no `composition.mode` of its own, and its root nodes contain at least one chart leaf and at least one node that is not a chart. The **first chart node is primary** and the other root nodes form one synthetic sub-grid:
-
-- `start` / `end`: the root is a two-track row with weights `[3, 2]` (chart first for `start`, last for `end`; `start` is the left in a left-to-right deck and the right in a right-to-left deck); the rest arrange in `auto` mode inside their track.
-- `top` / `bottom`: a two-track column with weights `[3, 2]` (chart first for `top`).
-- `none`, or any other value: no change, the existing automatic grid with equal weight.
-
-Automatic composition builds the primary chart track and a direct content group for the other root nodes, preserving the 3:2 chart weight and source content order. A v2 template remains authoritative and does not apply this automatic hint. OPF 0.19 removes the v1 record-construction helper `chartPrimaryLayout`; authors use `chart-beside` or a custom v2 template for an authored grid.
-
-The synthetic container has no OPF path, so it records no `groups`, `flows` or explanation entry; the root decision has `reason: 'chart-primary'` and `selectedColumns` 2 (row) or 1 (column). Explicit root `columns` and `weights` are ignored while the automatic hint applies. A chart inside a nested group, a chart-only root, or a single root `chart` payload leaves the arrangement unchanged. A slide using a v2 template follows that template instead.
+OPF 0.35 removed `design.chartPrimary`. It applied to automatic slides only and was ignored on every slide with a layout. A chart beside its supporting blocks is the `chart-beside` layout (3:2, the chart first; `design.mirror: true` puts it at the end), or a custom template; on an automatic slide a short chart among other blocks already takes its own track (LH-49, [dynamic composition](dynamic-composition.md)), whose root decision keeps `reason: 'chart-primary'`. A document that still sets it fails the schema, and validate offers the safe fix that deletes it.
 
 ### `listBullet` (vetoable)
 
@@ -472,7 +462,7 @@ paragraph's is. A group's eyebrow takes a band at the top of the group, sized fo
 over the span its blocks finally cover (their cards included), at the content alignment, before them in reading order. Two groups with
 eyebrows stay side by side or stacked as peers. An explicit arrangement (a `composition` mode, weights or columns of the slide or
 of the group) keeps its blocks as authored, a group of labels alone heads nothing, a root label before a root list stays a block on a
-layout with a `sequence` region (LH-07 draws step badges on its lists), and two labels in a row are no eyebrows.
+layout with a `steps` or `numbered` region (LH-07 draws step badges on its lists), and two labels in a row are no eyebrows.
 
 ### `fontScheme.accent`
 

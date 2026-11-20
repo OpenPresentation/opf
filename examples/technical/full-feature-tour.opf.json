@@ -418,7 +418,7 @@
                 "video"
               ],
               "role": "media",
-              "flow": "none",
+              "max": 1,
               "bleed": true
             }
           ]
@@ -463,16 +463,16 @@
               "direction": "row",
               "regions": [
                 {
-                  "name": "chart",
+                  "name": "body",
                   "size": 3,
                   "accepts": [
                     "chart"
                   ],
                   "role": "primary",
-                  "flow": "none"
+                  "max": 1
                 },
                 {
-                  "name": "notes",
+                  "name": "aside",
                   "size": 2,
                   "accepts": [
                     "text",
@@ -507,8 +507,7 @@
                 "group"
               ],
               "role": "primary",
-              "flow": "auto",
-              "listColumns": "auto"
+              "flow": "auto"
             }
           ]
         }

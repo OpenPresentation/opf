@@ -15,16 +15,15 @@
       "direction": "row",
       "regions": [
         {
-          "name": "table",
+          "name": "body",
           "size": 3,
           "accepts": [
             "table"
           ],
-          "role": "primary",
-          "flow": "none"
+          "max": 1
         },
         {
-          "name": "notes",
+          "name": "aside",
           "size": 2,
           "accepts": [
             "text",

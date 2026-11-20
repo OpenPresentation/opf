@@ -130,7 +130,7 @@ const referenceRules: ValidationRuleInfo[] = [
 		'references',
 		'error',
 		"A layout template's regions are not valid.",
-		"Region names are unique across the whole record and may not be tag, auto or a promoted-region word (start, center, end, top, middle, bottom), so a Markdown block's region= stays unambiguous; title and subtitle name the heading regions, which take only a size, an anchor and (the title) a rule; a subtitle region needs a title region; a region accepts at least one content kind; a region with flow 'none' holds one block; overflowRegion must name a body region. composeSlide refuses such a record.",
+		"Region names are unique across the whole record and may not be tag, auto or a promoted-region word (start, center, end, top, middle, bottom), so a Markdown block's region= stays unambiguous; title and subtitle name the heading regions, which take only a size, an anchor and (the title) a rule; a subtitle region needs a title region; a region accepts at least one content kind; overflowRegion must name a body region. composeSlide refuses such a record.",
 		{ standard: 'spec/schemas/layout.schema.json and the region rules (docs/layout-templates.md)' },
 	),
 	rule(
@@ -138,7 +138,7 @@ const referenceRules: ValidationRuleInfo[] = [
 		'references',
 		'warning',
 		'A content reference resolves nowhere.',
-		'A layout, theme, colour scheme, font scheme, narrative, audience, purpose or tone reference that neither the document embeds nor a registered catalog defines falls back: a slide composes automatically, a design uses the engine default. A strict export fails instead. A slide with no layout is automatic composition and is never reported.',
+		'A layout, theme, colour scheme, font scheme, narrative, audience, purpose or tone reference that neither the document embeds nor a registered catalog defines falls back: a slide composes automatically, a design uses the engine default. A strict export fails instead. A slide with no layout is automatic composition and is never reported. `layout: "auto"`, removed in 0.35, is reported with a fix that deletes the key.',
 		{ standard: SCHEMA, approximations: 'Resolved like every engine resolves it: catalogs.custom, then the records embedded under catalogs.default, then the catalog registered for its source (the first registered catalog when `default` is omitted); `name:id` in catalogs.<name>, then the catalog registered for its source. Nothing is fetched. Free-form audience and purpose text is not a reference. It is a warning, not an error, because catalogs are open and a host may register the id; `--fail-on warning` is the check that a deck is done. With a catalog registered, the hint names the nearest records that exist ("Did you mean `two-column`?").' },
 	),
 	rule(
@@ -403,8 +403,8 @@ export const arrangementAdaptedRule = rule(
 	'arrangement-adapted',
 	'layout',
 	'info',
-	'A pyramid, matrix, cycle, row of chevrons or flow is drawn another way.',
-	"A `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` region draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.",
+	'A diagram arrangement (a pyramid, matrix, cycle, row of chevrons, process, tree or Venn) is drawn another way.',
+	"A region whose `arrangement` is `pyramid`, `inverted-pyramid`, `matrix`, `cycle`, `chevrons`, `process`, `vertical-process`, `org-chart`, `hierarchy` or `venn` draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.",
 	{ cost: 'composition' },
 );
 export const shapeOffSlideRule = rule(

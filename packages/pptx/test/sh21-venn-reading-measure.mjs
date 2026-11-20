@@ -104,7 +104,9 @@ for(const[name,text,oldSize]of[['medium',medium,104/3],['long',long,80/3]])test(
  if(name==='long')assert.ok(boundedWrap,'the full-word bounded-width success path is exercised, not just the refusal');
  const bytes=new Uint8Array(await toPptx(paged,{catalogs:[gallery],fonts})),parts=unzipSync(bytes);assert.ok(!Object.keys(parts).some(file=>file.startsWith('ppt/diagrams/')));for(const[file,part]of Object.entries(parts))if(/^ppt\/slides\/slide\d+\.xml$/.test(file))assert.ok(!/<a:(?:normAutofit|spAutoFit)\b/.test(strFromU8(part)));
  const imported=await fromPptx(bytes);assert.deepEqual(imported.slides.flatMap(slide=>slide.items??slide.blocks?.find(block=>block.items)?.items??[]),doc.slides[0].items);
- const plain=structuredClone(gallery.layouts.venn);for(const region of plain.regions)delete region.arrangement;const generic=structuredClone(doc);generic.catalogs.custom.layouts={plain};generic.slides[0].layout='custom:plain';const genericFit=compose(generic);assert.ok(details(genericFit).lines.some(line=>line.length>70));assert.ok(!genericFit.diagnostics.some(d=>fallbackOverflow(d)&&/complete diagram fallback/i.test(d.message)),'generic lists retain their existing policy');assert.deepEqual(doc,source);
+ const plain=structuredClone(gallery.layouts.venn);for(const region of plain.regions)delete region.arrangement;const generic=structuredClone(doc);generic.catalogs.custom.layouts={plain};generic.slides[0].layout='custom:plain';const genericFit=compose(generic);
+ // OPF 0.35: a region without an arrangement lays a long list out in columns by default, so the generic list is in columns or past the measure.
+ assert.ok(details(genericFit).item.listColumns?.length>1||details(genericFit).lines.some(line=>line.length>70));assert.ok(!genericFit.diagnostics.some(d=>fallbackOverflow(d)&&/complete diagram fallback/i.test(d.message)),'generic lists retain their existing policy');assert.deepEqual(doc,source);
 });
 
 test('SH21: an unbreakable Venn label is explicitly refused instead of silently splitting a word',()=>{

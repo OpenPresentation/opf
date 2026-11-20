@@ -22,7 +22,7 @@
       "title": "We will halve the time from order to delivery by next autumn",
       "blocks": [
         {
-          "region": "message",
+          "region": "body",
           "text": "Three changes get us there: regional stock, one planning calendar and carriers we measure every week."
         }
       ]
@@ -175,7 +175,7 @@
       "title": "The team",
       "blocks": [
         {
-          "region": "people",
+          "region": "body",
           "composition": {
             "mode": "column"
           },
@@ -198,7 +198,7 @@
           ]
         },
         {
-          "region": "people",
+          "region": "body",
           "composition": {
             "mode": "column"
           },
@@ -221,7 +221,7 @@
           ]
         },
         {
-          "region": "people",
+          "region": "body",
           "composition": {
             "mode": "column"
           },
@@ -244,7 +244,7 @@
           ]
         },
         {
-          "region": "people",
+          "region": "body",
           "composition": {
             "mode": "column"
           },
@@ -302,7 +302,7 @@
       "title": "Four steps to the new network",
       "blocks": [
         {
-          "region": "steps",
+          "region": "body",
           "items": [
             {
               "text": "Pick the hubs",
@@ -315,7 +315,7 @@
           }
         },
         {
-          "region": "steps",
+          "region": "body",
           "items": [
             {
               "text": "Move the stock",
@@ -328,7 +328,7 @@
           }
         },
         {
-          "region": "steps",
+          "region": "body",
           "items": [
             {
               "text": "Switch the carriers",
@@ -341,7 +341,7 @@
           }
         },
         {
-          "region": "steps",
+          "region": "body",
           "items": [
             {
               "text": "Review every week",
@@ -395,7 +395,7 @@
           "text": "Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs."
         },
         {
-          "region": "verdict",
+          "region": "aside",
           "text": "Recommendation: establish the evidence with Option A before committing to Option B."
         }
       ]
@@ -445,7 +445,7 @@
       "title": "Three conditions for a useful pilot",
       "blocks": [
         {
-          "region": "pillars",
+          "region": "body",
           "items": [
             {
               "text": "Clear scope",
@@ -454,7 +454,7 @@
           ]
         },
         {
-          "region": "pillars",
+          "region": "body",
           "items": [
             {
               "text": "Consistent measures agreed with finance before the start",
@@ -463,7 +463,7 @@
           ]
         },
         {
-          "region": "pillars",
+          "region": "body",
           "items": [
             {
               "text": "An explicit decision",
@@ -635,7 +635,7 @@
       "title": "Approve the four hubs today",
       "blocks": [
         {
-          "region": "details",
+          "region": "body",
           "text": "Ana Ruiz, program lead\nana.ruiz@example.com"
         }
       ]

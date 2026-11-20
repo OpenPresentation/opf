@@ -31,7 +31,7 @@ const context2 = getJsonFieldContext(source,source.indexOf('cover')+1,[defaultCa
 assert.equal(context2.options[0].layoutGroup,'Current layout');
 assert.equal(context2.options.find(option=>option.value==='text').layoutGroup,'Text');
 assert.equal(context2.options.find(option=>option.value==='chart').layoutGroup,'Visuals');
-assert.match(context2.options.find(option=>option.value==='chart').regions,/charts/);
+assert.match(context2.options.find(option=>option.value==='chart').regions,/body \(grid: chart/);
 assert.ok(context2.options.every(option=>!Object.hasOwn(option,'placeholderTypes')&&!Object.hasOwn(option,'placeholders')));
 for(const value of ['pillars','metrics','chart','image']) {
  const changed=replaceFieldOption(context2,value),edit=fieldOptionEdit(context2,value);

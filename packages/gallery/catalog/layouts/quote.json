@@ -16,13 +16,12 @@
       "name": "title"
     },
     {
-      "name": "quotes",
+      "name": "body",
       "size": "auto",
       "accepts": [
         "quote",
         "group"
       ],
-      "role": "primary",
       "flow": "grid"
     }
   ],

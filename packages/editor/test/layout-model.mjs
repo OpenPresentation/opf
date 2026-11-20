@@ -139,14 +139,14 @@ assert.throws(() => saveLayoutToDeck(session, shared, { replace: true }), (error
 assert.throws(() => saveLayoutToDeck({}, shared), (error) => error.code === "invalid-editor");
 
 // Preview's sample deck is a valid deck that uses the layout, with blocks pinned to its body regions.
-const sample = sampleDeck({ id: "hero", name: "Hero", direction: "column", regions: [{ name: "title" }, { direction: "row", regions: [{ name: "lead", accepts: ["text", "quote"], flow: "none" }, { name: "media", accepts: ["image"], flow: "none" }] }, { name: "support", accepts: ["table", "chart"], max: 2 }] });
+const sample = sampleDeck({ id: "hero", name: "Hero", direction: "column", regions: [{ name: "title" }, { direction: "row", regions: [{ name: "lead", accepts: ["text", "quote"], max: 1 }, { name: "media", accepts: ["image"], max: 1 }] }, { name: "support", accepts: ["table", "chart"], max: 2 }] });
 assert.equal(sample.slides[0].layout, "hero");
 assert.deepEqual(sample.slides[0].blocks.map((block) => [block.region, Object.keys(block).find((key) => key !== "region")]), [["lead", "text"], ["media", "image"], ["support", "table"], ["support", "chart"]]);
 const report = validate(sample, { only: ["format"] });
 assert.equal(report.valid, true, JSON.stringify(report.findings));
 // Every content kind has a sample that core accepts.
 for (const kind of ["text", "list", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "group"]) {
-  const one = sampleDeck({ id: "k", name: "K", regions: [{ name: "only", accepts: [kind], flow: "none" }] });
+  const one = sampleDeck({ id: "k", name: "K", regions: [{ name: "only", accepts: [kind], max: 1 }] });
   const result = validate(one, { only: ["format"] });
   assert.equal(result.valid, true, `${kind}: ${JSON.stringify(result.findings.map((finding) => finding.message))}`);
 }

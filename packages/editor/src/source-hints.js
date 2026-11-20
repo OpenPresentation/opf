@@ -145,7 +145,7 @@ function layoutRows(record, slide) {
     }
     keys.forEach((key) => used.add(key));
     const set = keys.some((key) => present(slide[key])) || blocks.some((block) => block.region === region.name);
-    const required = region.name === "title" || region.role === "primary" || (Number.isFinite(region.min) && region.min >= 1);
+    const required = region.name === "title" || (region.name !== "subtitle" && (region.role ?? "primary") === "primary") || (Number.isFinite(region.min) && region.min >= 1);
     rows.push(row(keys.length ? keys.join(" / ") : region.name, description, set, required, { keys, region: region.name }));
   }
   rows.push(row("notes", KEY_WORDS.notes, present(slide.notes), false, { keys: ["notes"] }));

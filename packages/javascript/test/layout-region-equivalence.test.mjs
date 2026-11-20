@@ -7,7 +7,9 @@ import { layoutTemplate } from '../dist/composition.js';
 // composed with, so rendering is unchanged. The fixtures are the 28 records of @openpresentation/gallery 4.0.0 in the old
 // grid form (gallery-4-layouts.json: areas, columns, rows and the regions map) and the grid, region rules and areas the
 // engine built from each of them before FA-33 (gallery-4-grids.json, produced by the old reader). Each old record is
-// converted to the new form below, compiled, and compared with that grid.
+// converted to the new form below, compiled, and compared with that grid. OPF 0.35: a `flow: "none"` region converts to `max: 1`, and the
+// grids record its flow as `auto` (the single-block region keeps max 1); the grids have no `listColumns` (removed in OPF 0.35: a long list
+// may take columns in any region without an arrangement), while the old records keep theirs, which the reader ignores.
 const fixture = (name) => JSON.parse(readFileSync(new URL(`./fixtures/layout-regions/${name}.json`, import.meta.url), 'utf8'));
 const records = fixture('gallery-4-layouts');
 const grids = fixture('gallery-4-grids');
@@ -32,7 +34,8 @@ function convert(old) {
       return entry;
     }
     if (size !== 1) entry.size = size;
-    return { ...entry, ...old.regions[name] };
+    const { flow, ...rules } = old.regions[name];
+    return { ...entry, ...rules, ...(flow === 'none' ? { max: 1 } : flow !== undefined ? { flow } : {}) };
   };
   // The list of the rectangle [r0..r1] x [c0..c1]; `along` is the direction of the list it becomes.
   const list = (r0, r1, c0, c1) => {

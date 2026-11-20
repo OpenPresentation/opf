@@ -12,21 +12,20 @@
       "name": "title"
     },
     {
-      "name": "table",
+      "name": "body",
       "accepts": [
         "table"
       ],
-      "role": "primary",
       "flow": "column"
     },
     {
-      "name": "note",
+      "name": "aside",
       "size": "auto",
       "accepts": [
         "text"
       ],
       "role": "supporting",
-      "flow": "none"
+      "max": 1
     }
   ],
   "description": "Present structured data that benefits from precise comparison. Use clear row and column headings and concise cell content.",

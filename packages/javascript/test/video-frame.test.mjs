@@ -37,7 +37,7 @@ test('a wide cell: the frame takes the cell height and sits centered across', ()
 });
 
 test('the region anchor places the frame down a tall cell', () => {
-  const record = (anchor) => ({ name: 'Columns', direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: ['first', 'second'].map((name) => ({ name, accepts: ['video'], role: 'primary', flow: 'none', anchor })) }] });
+  const record = (anchor) => ({ name: 'Columns', direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: ['first', 'second'].map((name) => ({ name, accepts: ['video'], role: 'primary', max: 1, anchor })) }] });
   const frame = (anchor) => composeSlide({ title: 'T', blocks: videos(2) }, { layout: record(anchor) }).items.find((item) => item.field === 'video').box;
   const top = frame('top'), middle = frame('middle'), bottom = frame('bottom');
   const spare = composeSlide({ title: 'T', blocks: videos(2) }, { layout: record('top') }).regions.find((entry) => entry.name === 'first').box.height - top.height;

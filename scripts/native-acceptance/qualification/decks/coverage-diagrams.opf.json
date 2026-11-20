@@ -1,7 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Coverage: diagrams and arrangements",
-  "description": "RR-105 format coverage: Mermaid, Graphviz DOT and PlantUML diagrams in every payload form, and every arrangement layout (flow, vertical flow, chevrons, cycle, pyramid, inverted pyramid, matrix, org chart, hierarchy, Venn).",
+  "description": "RR-105 format coverage: Mermaid, Graphviz DOT and PlantUML diagrams in every payload form, and every arrangement layout (process, vertical process, chevrons, cycle, pyramid, inverted pyramid, matrix, org chart, hierarchy, Venn).",
   "language": "en-US",
   "design": {
     "background": "light1"
@@ -84,8 +84,8 @@
       }
     },
     {
-      "id": "flow",
-      "layout": "flow",
+      "id": "process",
+      "layout": "process",
       "title": "Four stages from request to release",
       "items": [
         "Request",
@@ -95,8 +95,8 @@
       ]
     },
     {
-      "id": "vertical-flow",
-      "layout": "vertical-flow",
+      "id": "vertical-process",
+      "layout": "vertical-process",
       "title": "Onboarding runs top to bottom",
       "items": [
         "Sign the contract",
@@ -167,7 +167,7 @@
       "title": "Who reports to whom in the pilot",
       "blocks": [
         {
-          "region": "people",
+          "region": "body",
           "items": [
             {
               "text": "Pilot lead",
@@ -195,7 +195,7 @@
       "title": "Workstreams under the program",
       "blocks": [
         {
-          "region": "nodes",
+          "region": "body",
           "items": [
             {
               "text": "Program",
@@ -227,7 +227,7 @@
       "title": "Where a good pilot sits",
       "blocks": [
         {
-          "region": "sets",
+          "region": "body",
           "items": [
             "Clear scope",
             "Real users",

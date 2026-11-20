@@ -60,7 +60,7 @@
               "diagram"
             ],
             "role": "primary",
-            "flow": "none"
+            "max": 1
           },
           {
             "name": "second",
@@ -80,7 +80,7 @@
               "diagram"
             ],
             "role": "primary",
-            "flow": "none"
+            "max": 1
           }
         ]
       }

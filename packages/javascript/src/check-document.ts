@@ -10,6 +10,9 @@ import {
 	pointerPath,
 	relatedName,
 	resolveReference,
+	removedLayoutAuto,
+	renamedLayout,
+	renamedLayoutTitlePosition,
 	unresolvedReference,
 	type CatalogKind,
 	type CatalogOptions,
@@ -977,6 +980,41 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 		}
 		if (found && !(found.origin === 'document' && invalid.has(recordKey(found.group, site.kind, found.id)))) continue;
 		const diagnostic = unresolvedReference(document, site.kind, site.reference, path, options);
+		if (removedLayoutAuto(site.kind, site.reference)) {
+			findings.push(
+				finding('opf/unresolved-reference', {
+					path,
+					message: diagnostic.message,
+					help: 'OPF 0.35 removed layout "auto". Delete the layout key: a slide without one is composed automatically, which is what "auto" did.',
+					definition: `${schemas.presentation.$id}#/$defs/Slide`,
+					lookup: ['opf', 'catalog', site.kind],
+					fixes: [{ id: 'remove-layout-auto', title: 'Delete layout (automatic composition)', kind: 'patch' as const, safe: true, patch: [{ op: 'remove' as const, path }] }],
+				}),
+			);
+			continue;
+		}
+		const renamed = renamedLayout(site.kind, site.reference);
+		if (renamed !== undefined) {
+			// agenda-split is agenda with the title beside it: the fix also sets the slide's design.titlePosition, unless the slide sets one.
+			const position = renamedLayoutTitlePosition(site.kind, site.reference);
+			const slideAt = site.path.slice(0, -1);
+			const slide = slideAt.reduce<unknown>((value, key) => (isRecord(value) || Array.isArray(value) ? (value as Record<string | number, unknown>)[key] : undefined), document) as Record<string, unknown> | undefined;
+			const design = slide && typeof slide.design === 'object' && slide.design !== null && !Array.isArray(slide.design) ? (slide.design as Record<string, unknown>) : undefined;
+			const setPosition = position !== undefined && design?.titlePosition === undefined;
+			const positionOp = !setPosition ? [] : design ? [{ op: 'add' as const, path: pointer([...slideAt, 'design', 'titlePosition']), value: position }] : [{ op: 'add' as const, path: pointer([...slideAt, 'design']), value: { titlePosition: position } }];
+			const what = renamed.endsWith('vertical-process') ? '' : renamed.endsWith('agenda') ? ' with its title beside the list (design.titlePosition "start")' : ' (a short list as boxes joined by arrows, longer steps as numbered steps)';
+			findings.push(
+				finding('opf/unresolved-reference', {
+					path,
+					message: diagnostic.message,
+					help: `OPF 0.35 removed layout "${site.reference}"; use "${renamed}", which draws the same content${what}.${position ? ` The fix sets the layout and${setPosition ? '' : ' leaves'} the slide's design.titlePosition${setPosition ? ` to "${position}"` : ' as the slide sets it'}.` : ''}`,
+					definition: `${schemas.presentation.$id}#/$defs/Slide`,
+					lookup: ['opf', 'catalog', site.kind],
+					fixes: [{ id: 'rename-layout', title: setPosition ? `Use layout ${renamed} with the title beside it` : `Use layout ${renamed}`, kind: 'patch' as const, safe: true, patch: [{ op: 'replace' as const, path, value: renamed }, ...positionOp] }],
+				}),
+			);
+			continue;
+		}
 		const records = catalogRecords(document, site.kind, options);
 		// Only near misses are suggested (nearMisses): a nearest spelling that names another kind of slide is no help.
 		const near = new Set(nearMisses(site.reference, records.map((entry) => entry.reference)));

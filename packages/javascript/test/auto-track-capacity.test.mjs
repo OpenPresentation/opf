@@ -40,8 +40,8 @@ test('dense comparison options in an auto row keep at least 18 px, and the verdi
   // The comparison record with its option row sized auto, as WI-2 proposes.
   const record = structuredClone(layouts.comparison);
   record.regions[1].size = 'auto';
-  const result = composeSlide({ ...heading, blocks: [{ region: 'first', text: option('Option A: focused pilot') }, { region: 'second', text: option('Option B: broad rollout') }, { region: 'verdict', text: 'Recommendation: establish the evidence with Option A before committing to Option B.' }] }, { layout: record });
-  const [first, second, verdict] = ['first', 'second', 'verdict'].map((name) => result.items.find((item) => item.region === name));
+  const result = composeSlide({ ...heading, blocks: [{ region: 'first', text: option('Option A: focused pilot') }, { region: 'second', text: option('Option B: broad rollout') }, { region: 'aside', text: 'Recommendation: establish the evidence with Option A before committing to Option B.' }] }, { layout: record });
+  const [first, second, verdict] = ['first', 'second', 'aside'].map((name) => result.items.find((item) => item.region === name));
   assert.ok(first.text.fontSize >= 18 && second.text.fontSize >= 18, `${first.text.fontSize} ${second.text.fontSize}`);
   assert.equal(result.diagnostics.length, 0);
   const options = result.regions.find((region) => region.name === 'first').box;

@@ -173,7 +173,7 @@ let cases = 0;
   assert.deepEqual(documented.deck.catalogs, deckA.catalogs);
   const malformed = await read(modify(exportedA, entries => { stripDocument(entries); retag(entries, value => { value.layoutRecord = 'gallery-hero'; }); }));
   assert.deepEqual(malformed.provenance, [['invalid-document-provenance', 'slides.0']]);
-  assert.equal(malformed.deck.slides[0].layout, 'auto', 'An invalid stored record falls back to the foreign blank layout mapping');
+  assert.equal(malformed.deck.slides[0].layout, undefined, 'An invalid stored record falls back to the foreign blank layout mapping: no layout');
   assert.equal(malformed.deck.slides[1].layout, 'cover');
   const moved = await read(modify(exportedA, entries => { stripDocument(entries); text(entries, 'ppt/slides/slide1.xml', xml => xml.replace(/(<p:sp>[\s\S]*?<a:off x=")(\d+)"/, (_, before, x) => `${before}${Number(x) + 12700}"`)); }));
   assert.deepEqual(moved.provenance, [['layout-reference-changed', 'slides.0.layout'], ['slide-reference-changed', 'slides.0.composition'],

@@ -16,22 +16,22 @@ for (const {document} of fixture.layouts) {
     if (design?.[key] === 'left') design[key] = 'start';
     else if (design?.[key] === 'right') design[key] = 'end';
   }
+  // OPF 0.35 removed design.contentDirection and design.chartPrimary: the historical documents drop them.
+  for (const design of [document.design, document.slides[0].design]) if (design) { delete design.contentDirection; delete design.chartPrimary; }
 }
 
 const anchors = {left: 'start', center: 'middle', right: 'end'};
 const attribute = (attrs, name) => new RegExp(`(?:^|\\s)${name}="([^"]*)"`).exec(attrs)?.[1];
 const tokens = text => text.split(/(?=<)/);
-// The gallery also derives the layout hints core composes (contentDirection, chartPrimary, listBullet, imageFit);
+// The gallery also derives the layout hints core composes (listBullet, imageFit; contentDirection and chartPrimary until 0.35);
 // they move boxes or change how an image or bullet draws by design, so the default keeps them and drops only what
 // is alignment (and the layout itself). The comparison explicitly selects left alignment:
 // an omitted metric alignment can already be center on newer cores. FA-22: imageFit ('contain' on the *-fit-* layouts) is one such hint.
-// A layout record's own composition.mode ranks above design.contentDirection (the gallery derives the hint from the
-// layout's direction), so a layout with a mode ignores the hint and the layout-less default must not apply it either.
-const LAYOUT_HINTS = ['contentDirection', 'chartPrimary', 'listBullet', 'imageFit'];
-const withoutLayout = (document, layoutMode) => {
+const LAYOUT_HINTS = ['listBullet', 'imageFit'];
+const withoutLayout = (document) => {
   const base = structuredClone(document), design = document.slides[0].design ?? {};
   delete base.slides[0].layout; delete base.slides[0].design; delete base.slides[0].composition; delete base.catalogs;
-  const hints = Object.fromEntries(LAYOUT_HINTS.filter(key => design[key] !== undefined && !(key === 'contentDirection' && layoutMode)).map(key => [key, design[key]]));
+  const hints = Object.fromEntries(LAYOUT_HINTS.filter(key => design[key] !== undefined).map(key => [key, design[key]]));
   base.slides[0].design = {...hints, titleAlignment: 'start', contentAlignment: 'start'};
   return base;
 };
@@ -46,7 +46,7 @@ for (const {id, document} of fixture.layouts) {
   const slide = document.slides[0];
   assert.equal(slide.layout, undefined);
   const bound = resolvePresentation(document).slides[0];
-  const base = withoutLayout(document, bound.layout?.composition?.mode);
+  const base = withoutLayout(document);
   const baseBound = resolvePresentation(base).slides[0];
   assert.equal(bound.layout, undefined, `${id}: automatic composition has no obsolete layout record`);
   assert.equal(bound.geometry.items.length, baseBound.geometry.items.length, `${id}: alignment adds or drops no composed item`);

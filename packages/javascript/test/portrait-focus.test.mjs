@@ -7,7 +7,7 @@ import { composeSlide, defaultImageFocus, fitImage, PORTRAIT_FOCUS_Y } from '../
 
 const svg = (width, height) => `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="${width}" height="${height}" fill="#ccc"/></svg>`)}`;
 const portrait = svg(200, 400), landscape = svg(400, 200);
-const wideLayout = { name: 'Wide picture', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['image'], role: 'primary', flow: 'none' }] };
+const wideLayout = { name: 'Wide picture', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['image'], role: 'primary', max: 1 }] };
 const imageOf = (block, options = {}) => composeSlide({ title: 'Heading', blocks: [{ type: 'image', fit: 'cover', ...block }] }, { layout: wideLayout, ...options }).items.find(item => item.field === 'image').image;
 const near = (actual, expected, label) => assert.ok(Math.abs(actual - expected) < 1e-4, `${label}: ${actual} vs ${expected}`);
 

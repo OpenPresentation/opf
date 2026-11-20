@@ -44,7 +44,7 @@ for (const [language, text] of Object.entries(TEXT)) {
   const direction = language === 'ar' ? 'rtl' : 'ltr';
 
   test(`LH-155 with LH-158 (${direction}): the closing stack over a picture is placed by the picture-text scores`, () => {
-    const slide = (placement) => ({ title: text.thanks, blocks: [{ region: 'details', text: text.contact }], design: { background: { type: 'image', src: PHOTO, tone: 'dark', ...(placement ? { textPlacement: placement } : {}) } } });
+    const slide = (placement) => ({ title: text.thanks, blocks: [{ region: 'body', text: text.contact }], design: { background: { type: 'image', src: PHOTO, tone: 'dark', ...(placement ? { textPlacement: placement } : {}) } } });
     const at = (extra, placement) => composeSlide(slide(placement), { layout: layouts.closing, direction, darkBackground: true, ...extra });
     const calm = at({ pictureLuminance: () => grid('calm') }), busy = at({ pictureLuminance: () => grid('busy') }), estimated = at({}), authored = at({}, 'top-start');
     const top = (result) => field(result, 'title').box.y;
@@ -63,7 +63,7 @@ for (const [language, text] of Object.entries(TEXT)) {
   });
 
   test(`LH-09 with LH-155 (${direction}): a closing is never a statement message; a statement keeps its rule only where it costs nothing`, () => {
-    const closing = composeSlide({ title: text.thanks, blocks: [{ region: 'details', text: text.contact }] }, { layout: layouts.closing, direction });
+    const closing = composeSlide({ title: text.thanks, blocks: [{ region: 'body', text: text.contact }] }, { layout: layouts.closing, direction });
     const contact = closing.items.find((item) => item.field === 'text');
     assert.ok(contact.text.fontSize < 56, `the contact line is no display message (${contact.text.fontSize})`);
     assert.ok(field(closing, 'title').text.fontSize >= 70 && closing.titleRule, 'the closing keeps its display title and rule');
@@ -86,7 +86,7 @@ for (const [language, text] of Object.entries(TEXT)) {
   });
 
   test(`LH-132 with LH-74 and LH-14 (${direction}): a team's pictures are portraits, and its group icons never cost the text`, () => {
-    const person = (name, index, extra = {}) => ({ region: 'people', composition: { mode: 'column' }, ...extra, blocks: [{ image: { src: face, alt: name }, shape: 'ellipse' }, { items: [{ text: name, description: text.role }] }] });
+    const person = (name, index, extra = {}) => ({ region: 'body', composition: { mode: 'column' }, ...extra, blocks: [{ image: { src: face, alt: name }, shape: 'ellipse' }, { items: [{ text: name, description: text.role }] }] });
     const team = (extra, first) => compose(deckOf({ layout: 'team', title: text.label, blocks: text.names.map((name, index) => index === 0 && first ? first(name) : person(name, index, extra)) }, language));
     const portraits = team({});
     assert.ok(portraits.items.filter((item) => item.image).every((item) => item.image.shape.kind === 'roundRect'), 'portraits on the person cards');
@@ -101,7 +101,7 @@ for (const [language, text] of Object.entries(TEXT)) {
     assert.equal(iconned.icons, undefined);
     assert.equal(iconned.diagnostics.filter((entry) => entry.code === 'icon-dropped').length, text.names.length);
     // LH-74 still fills a card with a lone picture that is no person.
-    const pictures = compose(deckOf({ layout: 'team', title: text.label, blocks: text.names.slice(0, 3).map((name) => ({ region: 'people', image: { src: face, alt: name }, fit: 'cover' })) }, language));
+    const pictures = compose(deckOf({ layout: 'team', title: text.label, blocks: text.names.slice(0, 3).map((name) => ({ region: 'body', image: { src: face, alt: name }, fit: 'cover' })) }, language));
     assert.ok(pictures.items.filter((item) => item.image).every((item) => item.image.shape.kind === 'roundRect' && !item.frameBox));
   });
 

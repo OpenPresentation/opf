@@ -18,19 +18,18 @@
         "text"
       ],
       "role": "supporting",
-      "flow": "none"
+      "max": 1
     },
     {
-      "name": "timeline",
+      "name": "body",
       "accepts": [
         "timeline",
         "diagram"
       ],
-      "role": "primary",
       "flow": "column"
     },
     {
-      "name": "notes",
+      "name": "aside",
       "size": "auto",
       "accepts": [
         "text",

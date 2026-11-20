@@ -99,7 +99,7 @@
     "design": {
       "type": "object",
       "additionalProperties": false,
-      "description": "The theme's design defaults (OPF 0.19), so a house style such as boxed content or centred titles is set once: the keys and values of the deck's design for titleAlignment, contentAlignment, contentBox, contentDirection, imageFit and listBullet. Per key the slide's design wins, then the deck's design, then this, then the layout record's design, then the engine default.",
+      "description": "The theme's design defaults (OPF 0.19), so a house style such as boxed content or centred titles is set once: the keys and values of the deck's design for titleAlignment, titlePosition, contentAlignment, contentBox, imageFit, listBullet and listStyle. Per key the slide's design wins, then the deck's design, then this, then the layout record's design, then the engine default.",
       "properties": {
         "titleAlignment": {
           "type": "string",
@@ -109,6 +109,14 @@
             "end"
           ],
           "description": "As design.titleAlignment of a deck."
+        },
+        "titlePosition": {
+          "type": "string",
+          "enum": [
+            "top",
+            "start"
+          ],
+          "description": "As design.titlePosition of a deck."
         },
         "contentAlignment": {
           "type": "string",
@@ -122,14 +130,6 @@
         "contentBox": {
           "type": "boolean",
           "description": "As design.contentBox of a deck."
-        },
-        "contentDirection": {
-          "type": "string",
-          "enum": [
-            "horizontal",
-            "vertical"
-          ],
-          "description": "As design.contentDirection of a deck."
         },
         "imageFit": {
           "type": "string",

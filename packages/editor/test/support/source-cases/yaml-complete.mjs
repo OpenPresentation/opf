@@ -147,7 +147,7 @@ yamlCases.push(...yamlFixes);
 // Docs, accessible names and announcements in YAML: the same machinery as JSON.
 export const yamlAccess = [
   ['Y-DOC-001', 'R-CMP-17', 'the selected key shows its schema description', 'yaml', 'name: x\n|', [T('desc')], { docs: { shown: true, has: ['description'] } }],
-  ['Y-DOC-002', 'R-CMP-17', 'layout ids show name, description and regions', 'yaml', 'slides:\n  - layout: |', [T('pill')], { docs: { has: ['Pillars', 'Regions: title, pillars'] } }],
+  ['Y-DOC-002', 'R-CMP-17', 'layout ids show name, description and regions', 'yaml', 'slides:\n  - layout: |', [T('pill')], { docs: { has: ['Pillars', 'Regions: title, body'] } }],
   ['Y-DOC-003', 'R-A11Y-01', 'each option has an accessible name with its position', 'yaml', 'slides: []\n|', [T('des'), ['waitLabels']], { popup: { ariaNames: [/^design, property, Design\. 1 of 3$/, /^description, property, string\. 2 of 3$/] } }],
   ['Y-DOC-004', 'R-CMP-17', 'Ctrl+Space with the list open hides and shows the documentation', 'yaml', 'name: x\n|', [T('des'), K('Control+Space'), ['expectDocs', false], K('Control+Space'), ['expectDocs', true]], {}],
   ['Y-A11Y-001', 'R-A11Y-02', 'opening the list says how many suggestions', 'yaml', 'slides: []\ndes|', [K('Control+Space')], { live: '3 suggestions' }],
@@ -243,7 +243,7 @@ yamlCases.push(...yamlMultiline);
 // Layout regions rank the slide keys, and the footer under a list of records whose catalog is not loaded.
 const YCAT = 'catalogs:\n  acme:\n    source: https://acme.test\n    layouts:\n      bespoke:\n        name: Bespoke\n        regions:\n          - name: title\n';
 export const yamlRank = [
-  ['Y-RNK-001', 'R-CMP-18', 'agenda: title and items come before the subtitle', 'yaml', 'slides:\n  - layout: agenda\n    |', [K('Control+Space')], { popup: { first: 'title', order: ['title', 'items', 'subtitle', 'text'] } }],
+  ['Y-RNK-001', 'R-CMP-18', 'agenda: title and the keys of its body (items, text) come before the subtitle', 'yaml', 'slides:\n  - layout: agenda\n    |', [K('Control+Space')], { popup: { first: 'title', order: ['title', 'items', 'text', 'subtitle'] } }],
   ['Y-RNK-002', 'R-CMP-18', 'cover: the media region calls for image and video', 'yaml', 'slides:\n  - layout: cover\n    |', [K('Control+Space')], { popup: { order: ['title', 'image', 'video', 'subtitle'] } }],
   ['Y-RNK-003', 'R-CMP-18', 'keys already set are not offered again', 'yaml', 'slides:\n  - layout: agenda\n    title: a\n    |', [K('Control+Space')], { popup: { first: 'items', not: ['title', 'layout'] } }],
   ['Y-RNK-004', 'R-CMP-18', 'no layout: the common order holds', 'yaml', 'slides:\n  - |', [K('Control+Space')], { popup: { order: ['title', 'subtitle', 'layout', 'items'] } }],

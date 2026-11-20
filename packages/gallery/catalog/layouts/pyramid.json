@@ -12,12 +12,11 @@
       "name": "title"
     },
     {
-      "name": "levels",
+      "name": "body",
       "accepts": [
         "list"
       ],
-      "role": "primary",
-      "flow": "none",
+      "max": 1,
       "arrangement": "pyramid"
     }
   ],

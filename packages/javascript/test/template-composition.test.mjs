@@ -2,6 +2,7 @@ import { gallery } from '@openpresentation/gallery';
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 import { format, resolveSlideContext, validate } from '../dist/index.js';
+import { describeFinding } from '../dist/source.js';
 import { THEME_DESIGN_KEYS, composeSlide, gridFlowShape, listColumnBreaks, resolveDesignHints } from '../dist/composition.js';
 
 // OPF 0.19 (RR-79), design sections 3 to 5: flows, tracks, collapse, bleed, list columns, mirror and the theme level.
@@ -10,8 +11,8 @@ const { layouts } = fixture;
 // The 0.26.10 forms of `comparison` and `statement`, kept as engine samples: a numeric option row beside an auto verdict, and an
 // anchored message in a numeric region. WI-2 redrew the gallery records as auto stacks (single-message-layouts.test.mjs).
 const bodyKinds = ['text', 'list', 'metric', 'image', 'chart', 'table', 'group'];
-const comparisonBefore = { id: 'comparison', design: { contentBox: false }, direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'first', accepts: bodyKinds, role: 'primary', flow: 'none' }, { name: 'second', accepts: bodyKinds, role: 'primary', flow: 'none' }] }, { name: 'verdict', size: 'auto', accepts: ['text'], role: 'supporting', flow: 'none' }] };
-const statementBefore = { id: 'statement', design: { titleAlignment: 'center', contentAlignment: 'center' }, direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { name: 'message', accepts: ['text', 'quote', 'metric'], role: 'primary', flow: 'none' }] };
+const comparisonBefore = { id: 'comparison', design: { contentBox: false }, direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'first', accepts: bodyKinds, role: 'primary', max: 1 }, { name: 'second', accepts: bodyKinds, role: 'primary', max: 1 }] }, { name: 'verdict', size: 'auto', accepts: ['text'], role: 'supporting', max: 1 }] };
+const statementBefore = { id: 'statement', design: { titleAlignment: 'center', contentAlignment: 'center' }, direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { name: 'message', accepts: ['text', 'quote', 'metric'], role: 'primary', max: 1 }] };
 // Every body region (only the named ones when `only` is given) of a region list keeps its space when empty.
 const keepAll = (list, only) => list.map((entry) => entry.regions ? { ...entry, regions: keepAll(entry.regions, only) } : ['title', 'subtitle'].includes(entry.name) || (only && !only.includes(entry.name)) ? entry : { ...entry, empty: 'keep' });
 const near = (a, b, tolerance = 1e-3) => Math.abs(a - b) <= tolerance;
@@ -37,12 +38,12 @@ describe('the grid flow by count', () => {
 
   test('pillars draws 5 blocks as 3 + 2, the short row stretched to the full width (LH-47)', () => {
     const result = compose({ title: 'Five', blocks: short(5) }, layouts.pillars);
-    const items = cells(result, 'pillars');
+    const items = cells(result, 'body');
     assert.equal(rows(items), 2);
     assert.ok(items.every(item => item.frameBox !== undefined), 'pillars draws its entries on cards (layout harvest)');
     const [a, b, c, d, e] = items.map((item) => item.frameBox);
     assert.ok(near(d.width, e.width) && d.width > a.width * 1.4);
-    const box = region(result, 'pillars').box;
+    const box = region(result, 'body').box;
     assert.ok(near(d.x, box.x) && near(e.x + e.width, box.x + box.width), 'full width');
     assert.ok(near(b.y, a.y) && near(c.y, a.y) && d.y > a.y);
   });
@@ -50,15 +51,15 @@ describe('the grid flow by count', () => {
   test('adding a block reflows the region and nothing else moves', () => {
     // At the role sizes (`fill: false`): LH-48 centers an under-filled body, whose height depends on its blocks.
     const three = compose({ title: 'x', blocks: short(3) }, layouts.pillars, { fill: false }), four = compose({ title: 'x', blocks: short(4) }, layouts.pillars, { fill: false });
-    assert.deepEqual(region(three, 'pillars').box, region(four, 'pillars').box);
-    assert.equal(rows(cells(three, 'pillars')), 1);
-    assert.equal(rows(cells(four, 'pillars')), 2);
+    assert.deepEqual(region(three, 'body').box, region(four, 'body').box);
+    assert.equal(rows(cells(three, 'body')), 1);
+    assert.equal(rows(cells(four, 'body')), 2);
   });
 
   test('column stacks with equal heights', () => {
     const result = compose({ title: 'x', blocks: [{ chart: { type: 'pie', data: { columns: ['k', 'v'], rows: [['a', 1]] } } }, text('a'), text('b')] }, layouts['chart-beside']);
-    const notes = cells(result, 'notes');
-    assert.equal(region(result, 'notes').arrangement, 'column');
+    const notes = cells(result, 'aside');
+    assert.equal(region(result, 'aside').arrangement, 'column');
     assert.ok(near(notes[0].box.height, notes[1].box.height));
     assert.ok(near(notes[0].box.x, notes[1].box.x));
   });
@@ -77,7 +78,7 @@ describe('the grid flow by count', () => {
 describe('tracks', () => {
   test('relative column sizes share the width; auto rows take what their content needs', () => {
     const result = compose({ title: 'Chart', blocks: [{ chart: { type: 'pie', data: { columns: ['k', 'v'], rows: [['a', 1]] } } }, text('Takeaway')] }, layouts['chart-beside']);
-    const chart = region(result, 'chart').box, notes = region(result, 'notes').box, gap = 720 / 30;
+    const chart = region(result, 'body').box, notes = region(result, 'aside').box, gap = 720 / 30;
     assert.ok(near(chart.width / notes.width, 3 / 2, 1e-6));
     assert.ok(near(chart.width + notes.width + gap, result.contentBox.width, 1e-6));
     const title = result.headingAreas[0].box;
@@ -95,7 +96,7 @@ describe('tracks', () => {
 
   test('an auto row takes what it needs, and a numeric row with content keeps its need up to half the space (WI-1)', () => {
     const result = compose({ title: 'x', blocks: [{ metric: { value: 1, label: 'a' } }, text(long.repeat(6))] }, layouts.metrics);
-    const note = region(result, 'note'), metrics = region(result, 'metrics');
+    const note = region(result, 'aside'), metrics = region(result, 'body');
     assert.ok(note.box.height > result.contentBox.height / 2, 'no fixed half-box cap on a body auto row');
     assert.ok(metrics.box.height >= 120, 'the metric row is not squeezed to nothing');
   });
@@ -113,7 +114,7 @@ describe('empty regions and headings', () => {
 
   test('statement: title only, the message collapses and the title is centred', () => {
     const result = compose({ title: 'The one thing' }, layouts.statement);
-    assert.equal(region(result, 'message').collapsed, true);
+    assert.equal(region(result, 'body').collapsed, true);
     assert.ok(result.items[0].box.y > result.contentBox.y + 150);
   });
 
@@ -170,8 +171,8 @@ describe('bleed, mirror and right to left', () => {
     assert.deepEqual(mirrored.regions.map((entry) => entry.name), plain.regions.map((entry) => entry.name));
     const chart = { chart: { type: 'pie', data: { columns: ['k', 'v'], rows: [['a', 1]] } } };
     const beside = compose({ title: 'x', blocks: [chart, text('t')], design: { mirror: true } }, layouts['chart-beside']);
-    assert.ok(region(beside, 'chart').box.x > region(beside, 'notes').box.x);
-    assert.ok(near(region(beside, 'chart').box.width / region(beside, 'notes').box.width, 1.5, 1e-6), 'the sizes travel with their cells');
+    assert.ok(region(beside, 'body').box.x > region(beside, 'aside').box.x);
+    assert.ok(near(region(beside, 'body').box.width / region(beside, 'aside').box.width, 1.5, 1e-6), 'the sizes travel with their cells');
   });
 
   test('a right-to-left deck mirrors the drawing, and mirror on top of it reverses again', () => {
@@ -184,29 +185,65 @@ describe('bleed, mirror and right to left', () => {
 });
 
 describe('overrides', () => {
-  test('design.contentDirection makes every flowing region one row or one column', () => {
-    const vertical = compose({ title: 'x', blocks: short(4), design: { contentDirection: 'vertical' } }, layouts.pillars);
-    assert.equal(region(vertical, 'pillars').arrangement, 'column');
-    assert.equal(rows(cells(vertical, 'pillars')), 4);
-    // process carries contentDirection: horizontal in its own design.
+  // OPF 0.35: a region's flow takes the words of composition.mode; design.contentDirection is gone.
+  const withBodyFlow = (record, flow) => ({ ...record, regions: record.regions.map((entry) => (entry.name === 'body' ? { ...entry, flow } : entry)) });
+  test('a region of flow column or row lays its blocks in one column or one row', () => {
+    const vertical = compose({ title: 'x', blocks: short(4) }, withBodyFlow(layouts.pillars, 'column'));
+    assert.equal(region(vertical, 'body').arrangement, 'column');
+    assert.equal(rows(cells(vertical, 'body')), 4);
+    const across = compose({ title: 'x', blocks: short(4) }, withBodyFlow(layouts.pillars, 'row'));
+    assert.equal(region(across, 'body').arrangement, 'row');
+    assert.equal(rows(cells(across, 'body')), 1);
+    // process draws its steps in a row region.
     const process = compose({ title: 'x', blocks: short(5) }, layouts.process);
-    assert.equal(region(process, 'steps').arrangement, 'row');
+    assert.equal(region(process, 'body').arrangement, 'row');
   });
 
-  test('a slide\'s own composition.mode and columns arrange its first primary flowing region, above contentDirection', () => {
-    const result = compose({ title: 'x', blocks: short(4), composition: { mode: 'grid', columns: 4 }, design: { contentDirection: 'vertical' } }, layouts.pillars);
-    assert.equal(region(result, 'pillars').arrangement, 'composition');
-    assert.equal(rows(cells(result, 'pillars')), 1);
+  test("a slide's own composition.mode and columns arrange its first primary flowing region, above its flow", () => {
+    const result = compose({ title: 'x', blocks: short(4), composition: { mode: 'grid', columns: 4 } }, withBodyFlow(layouts.pillars, 'column'));
+    assert.equal(region(result, 'body').arrangement, 'composition');
+    assert.equal(rows(cells(result, 'body')), 1);
   });
 
-  test('layout "auto" composes exactly like no layout', () => {
+  test('0.35 removed layout "auto": it is an ordinary reference, reported as removed with a fix that deletes the key', () => {
     const slide = { title: 'x', blocks: short(3) };
-    assert.deepEqual(composeSlide({ ...slide, layout: 'auto' }), composeSlide(slide));
     const deck = { slides: [{ ...slide, layout: 'auto' }] };
+    // Unresolved, so the slide composes automatically, as a slide without layout does.
     assert.equal(resolveSlideContext(deck, 0).options.layout, undefined);
-    assert.deepEqual(resolveSlideContext(deck, 0).diagnostics, []);
-    assert.deepEqual(validate(deck).findings.filter((entry) => entry.ruleId === 'opf/unresolved-reference'), []);
-    assert.equal(JSON.parse(format(deck)).slides[0].layout, undefined, 'opf format drops it');
+    const [diagnostic] = resolveSlideContext(deck, 0).diagnostics;
+    assert.equal(diagnostic.code, 'unresolved-reference');
+    assert.match(diagnostic.message, /OPF 0.35 removed layout 'auto'/);
+    const findings = validate(deck).findings.filter((entry) => entry.ruleId === 'opf/unresolved-reference');
+    assert.equal(findings.length, 1);
+    assert.equal(findings[0].path, '/slides/0/layout');
+    assert.match(findings[0].help, /Delete the layout key/);
+    assert.deepEqual(findings[0].fixes, [{ id: 'remove-layout-auto', title: 'Delete layout (automatic composition)', kind: 'patch', safe: true, patch: [{ op: 'remove', path: '/slides/0/layout' }] }]);
+    assert.equal(findings[0].suggestions, undefined, 'no near layout is offered in its place');
+    assert.deepEqual(describeFinding(findings[0], { document: deck, format: 'json' }), { message: 'Layout `auto` was removed in OPF 0.35: a slide without `layout` composes automatically, which is what `auto` did.', next: 'delete the `layout` key (the fix does).' });
+    assert.equal(JSON.parse(format(deck)).slides[0].layout, 'auto', 'opf format keeps every value');
+    // A catalog that defines a layout of that id is used like any other.
+    const own = { catalogs: { custom: { layouts: { auto: { name: 'Auto', regions: [{ name: 'title' }, { name: 'body', accepts: ['text', 'list'] }] } } } }, slides: [{ ...slide, layout: 'auto' }] };
+    assert.equal(resolveSlideContext(own, 0).resolved.layout.name, 'Auto');
+    assert.deepEqual(validate(own).findings.filter((entry) => entry.ruleId === 'opf/unresolved-reference'), []);
+  });
+
+  test('0.35 removed the flow and vertical-flow layouts: reported as removed with a fix that names process and vertical-process', () => {
+    const cases = [['flow', 'process'], ['default:flow', 'default:process'], ['vertical-flow', 'vertical-process'], ['default:vertical-flow', 'default:vertical-process']];
+    for (const [old, renamed] of cases) {
+      // A default: reference needs its group declared (opf/undeclared-catalog otherwise).
+      const deck = { ...(old.startsWith('default:') ? { catalogs: { default: { source: gallery.source } } } : {}), slides: [{ title: 'Steps', items: ['Plan', 'Build', 'Ship'], layout: old }] };
+      assert.equal(resolveSlideContext(deck, 0, { catalogs: [gallery] }).options.layout, undefined, `${old} resolves nowhere`);
+      const findings = validate(deck, { catalogs: [gallery] }).findings.filter((entry) => entry.ruleId === 'opf/unresolved-reference');
+      assert.equal(findings.length, 1);
+      assert.ok(findings[0].message.includes(`OPF 0.35 removed layout '${old}' (use '${renamed}')`), findings[0].message);
+      assert.deepEqual(findings[0].fixes, [{ id: 'rename-layout', title: `Use layout ${renamed}`, kind: 'patch', safe: true, patch: [{ op: 'replace', path: '/slides/0/layout', value: renamed }] }]);
+      assert.deepEqual(describeFinding(findings[0], { document: deck, format: 'json' }), { message: `Layout \`${old}\` was removed in OPF 0.35: \`${renamed}\` replaced it.`, next: `change the layout to \`${renamed}\` (the fix does).` });
+      const fixed = { ...deck, slides: [{ ...deck.slides[0], layout: renamed }] };
+      assert.deepEqual(validate(fixed, { catalogs: [gallery] }).findings.filter((entry) => entry.ruleId === 'opf/unresolved-reference'), []);
+    }
+    // A catalog's own flow layout is that catalog's, never renamed.
+    const own = { catalogs: { custom: { layouts: { flow: { name: 'Flow', regions: [{ name: 'title' }, { name: 'body', accepts: ['list'] }] } } } }, slides: [{ title: 'x', items: ['a', 'b'], layout: 'flow' }] };
+    assert.equal(resolveSlideContext(own, 0).resolved.layout.name, 'Flow');
   });
 });
 
@@ -269,14 +306,14 @@ describe('anchor', () => {
 
 describe('design keys: theme level and precedence', () => {
   test('the seven keys a theme may carry rank below the deck and above the layout', () => {
-    assert.deepEqual([...THEME_DESIGN_KEYS], ['titleAlignment', 'contentAlignment', 'contentBox', 'contentDirection', 'imageFit', 'listBullet', 'listStyle']);
+    assert.deepEqual([...THEME_DESIGN_KEYS], ['titleAlignment', 'titlePosition', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet', 'listStyle']);
     const layout = { design: { contentBox: false, titleAlignment: 'end' } };
-    const theme = { design: { contentBox: true, titleAlignment: 'center', chartPrimary: 'start' } };
+    const theme = { design: { contentBox: true, titleAlignment: 'center', mirror: true } };
     const fromTheme = resolveDesignHints({ layout, theme });
     assert.equal(fromTheme.contentBox, true);
     assert.equal(fromTheme.sources.contentBox, 'theme');
     assert.equal(fromTheme.paths.contentBox, 'design.theme');
-    assert.equal(fromTheme.chartPrimary, undefined, 'chartPrimary is not a theme key');
+    assert.equal(fromTheme.mirror, undefined, 'mirror is not a theme key');
     const fromDeck = resolveDesignHints({ layout, theme, presentation: { design: { contentBox: false } } });
     assert.equal(fromDeck.sources.contentBox, 'deck');
     const fromSlide = resolveDesignHints({ layout, theme, slide: { design: { titleAlignment: 'start', theme: 'x' } }, slideIndex: 2 });
@@ -307,8 +344,8 @@ describe('geometry.regions', () => {
   test('every region is listed with its box, flow, accepted kinds and content, filled or collapsed', () => {
     const result = compose({ title: 'x', blocks: [{ metric: { value: 1, label: 'a' } }] }, layouts.metrics);
     assert.deepEqual(result.regions.map((entry) => [entry.name, entry.flow, entry.accepts, entry.content, entry.collapsed ?? false]), [
-      ['metrics', 'grid', ['metric', 'group'], ['slides.0.blocks.0'], false],
-      ['note', 'none', ['text', 'list'], [], true],
+      ['body', 'grid', ['metric', 'group'], ['slides.0.blocks.0'], false],
+      ['aside', 'auto', ['text', 'list'], [], true],
     ]);
     assert.equal(result.slots, undefined);
     assert.equal(composeSlide({ title: 'x' }).regions, undefined, 'automatic slides have no regions');
@@ -316,7 +353,7 @@ describe('geometry.regions', () => {
 
   test('items carry their region; the strict overflow rule still applies', () => {
     const result = compose({ title: 'x', blocks: short(2) }, layouts.pillars);
-    assert.deepEqual(result.items.map((item) => item.region ?? null), [null, 'pillars', 'pillars']);
+    assert.deepEqual(result.items.map((item) => item.region ?? null), [null, 'body', 'body']);
     assert.throws(() => compose({ title: 'x', blocks: [text(long.repeat(20))], composition: { overflow: 'error' } }, layouts.statement), /does not fit/);
   });
 });
@@ -339,9 +376,9 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     const placements = [{ edge: 'start', size: 0.25 }];
     // Without cards and with cards on the deck (the card insets live in the auto rows too).
     for (const presentation of [{ design: furniture }, { design: { ...furniture, contentBox: true } }]) for (const [id, record] of Object.entries(layouts)) {
-      // Wave 7 (LH-09 with LH-155): a record with a primary or secondary region (the statement) is laid out as its filled slides draw it, which
-      // carry no title rule, so this slide without a body is compared without the rule too.
-      const filledRule = record.regions.some((region) => region.role === 'primary' || region.role === 'secondary');
+      // Wave 7 (LH-09 with LH-155): a record with a primary region (the statement; a region without role is primary) is laid out as its
+      // filled slides draw it, which carry no title rule, so this slide without a body is compared without the rule too.
+      const filledRule = record.regions.some((region) => typeof region.name === 'string' && region.name !== 'title' && region.name !== 'subtitle' && (region.role ?? 'primary') === 'primary');
       const kept = { ...record, regions: keepAll(record.regions).map((region) => (filledRule && region.rule ? (({ rule, ...rest }) => rest)(region) : region)) };
       const slide = { title: 'Title', subtitle: 'Subtitle', blocks: [{ image: 'https://example.com/band.png', placement: placements[0] }] };
       // `fill: false`: the placeholders hold the role sizes; LH-129 grows the headings of a slide whose headings are its message.
@@ -355,11 +392,11 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     const verdict = 'The new plan wins on cost and on time to market, and the old plan wins only on what we already know how to run well.';
     // LH-170: `emphasis: false` keeps the verdict in its region (it would be the foot band), whose placeholder this compares.
     const filled = composeSlide({ title: 'Title', subtitle: 'Subtitle', blocks: [{ text: 'A' }, { text: 'B' }, { text: verdict, emphasis: false }], design: {contentBox: true} }, { layout: layouts.comparison, fill: false });
-    const verdictItem = filled.items.find((item) => item.region === 'verdict');
+    const verdictItem = filled.items.find((item) => item.region === 'aside');
     assert.equal(verdictItem.text.lines.length, 2);
     assert.ok(verdictItem.frameBox, 'carded');
-    const placeholder = composeLayoutAreas(layouts.comparison, {presentation: {design: {contentBox: true}}}).areas.find((area) => area.name === 'verdict').box;
-    assert.ok(near(placeholder.height, filled.regions.find((region) => region.name === 'verdict').box.height, 0.5), `${placeholder.height} vs the filled verdict`);
+    const placeholder = composeLayoutAreas(layouts.comparison, {presentation: {design: {contentBox: true}}}).areas.find((area) => area.name === 'aside').box;
+    assert.ok(near(placeholder.height, filled.regions.find((region) => region.name === 'aside').box.height, 0.5), `${placeholder.height} vs the filled verdict`);
     const image = composeLayoutAreas(layouts.image).areas.find((area) => area.name === 'media').box;
     assert.equal(image.x, 0, 'bled to the slide edge by default');
     const inside = composeLayoutAreas(layouts.image, { bleed: false }).areas.find((area) => area.name === 'media').box;

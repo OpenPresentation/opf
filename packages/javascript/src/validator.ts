@@ -15,7 +15,7 @@ import type { Rec } from './rule-design.js';
 import { splitPointer } from './rule-content.js';
 import type { FindingInput, ValidationContext } from './rule-context.js';
 import { validateAgainstSchema, type SchemaCheckResult } from './schema-check.js';
-import { schemaFixes } from './schema-fixes.js';
+import { removedKeyRepair, schemaFixes } from './schema-fixes.js';
 import { buildSlides } from './rule-slides.js';
 import { ValidationCompositionCache, type ValidationCacheInfo } from './validation-cache.js';
 import type { Presentation } from './types.js';
@@ -305,7 +305,7 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 	for (const entry of findings) {
 		const info = findValidationRule(entry.ruleId);
 		const override = info ? run.severity(info) : undefined;
-		const next: Finding = override && override !== entry.severity ? { ...entry, severity: override } : entry;
+		let next: Finding = override && override !== entry.severity ? { ...entry, severity: override } : entry;
 		if (info && run.ignored(info, splitPointer(next.path))) continue;
 		const index = slideOf(next.path);
 		if (next.slide === undefined && index !== undefined && next.scope !== 'context') {
@@ -317,6 +317,9 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 			const location = parsed.locate(next.path);
 			if (location) next.location = location;
 		}
+		// OPF 0.35: a removed design key or region flow says what replaced it and carries the safe fix.
+		const removed = next.scope !== 'context' ? removedKeyRepair(next, document) : undefined;
+		if (removed) next = { ...next, help: removed.help, ...(removed.fixes.length ? { fixes: removed.fixes } : {}) };
 		if (next.ruleId === 'opf/schema' && next.fixes === undefined && next.scope !== 'context') {
 			const fixes = schemaFixes(next, document);
 			if (fixes.length) next.fixes = fixes;
@@ -426,7 +429,10 @@ export function validateCatalogRecord(kind: CatalogRecordKind, value: unknown): 
 	const kinds = Object.keys(catalogSchemaNames);
 	if (!kinds.includes(kind)) throw new TypeError(`Unknown catalog kind ${JSON.stringify(kind)}. Kinds: ${kinds.join(', ')}.`);
 	const engine: SchemaCheckResult = validateAgainstSchema(value, kind);
-	const findings: Finding[] = engine.errors.map((issue) => issueFinding(issue, issueRuleId(issue), engine.schemaName));
+	const findings: Finding[] = engine.errors.map((issue) => {
+		const found = issueFinding(issue, issueRuleId(issue), engine.schemaName), removed = removedKeyRepair(found, value);
+		return removed ? { ...found, help: removed.help, ...(removed.fixes.length ? { fixes: removed.fixes } : {}) } : found;
+	});
 	const tally = counts(findings);
 	const checks: ValidationChecks = {
 		syntax: 'not-applicable',

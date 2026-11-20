@@ -8,21 +8,24 @@ import {compositeLayoutDefinition, evaluateLayoutDefinition, layoutArrangement, 
 import {toSvg} from '../src/svg.js';
 import {composeSlide} from '@openpresentation/opf/composition';
 
-const catalogs = [gallery];
+// OPF 0.35: the gallery's process layout draws long steps as numbered steps; a region whose arrangement is process (the 0.34 flow
+// layout's record) draws them as OPF's own process.
+const basicProcess = {id: 'basic-process', name: 'Basic process', direction: 'column', regions: [{name: 'title'}, {name: 'body', accepts: ['list'], max: 1, arrangement: 'process'}]};
+const catalogs = [{...gallery, layouts: {...gallery.layouts, 'basic-process': basicProcess}}];
 const long = ['Why we exist and who we serve', 'The few goals that matter this year', 'How teams plan, decide and ship', 'The reviews that keep plans honest', 'Data everyone can see and trust'];
 const slides = [
   {layout: 'cycle', title: 'The loop', items: long.slice(0, 5)},
   {layout: 'pyramid', title: 'Levels', items: long.slice(0, 4)},
   {layout: 'matrix', title: 'Four', items: long.slice(0, 4)},
   {layout: 'matrix', title: 'Three', items: long.slice(0, 3)},
-  {layout: 'flow', title: 'Steps', items: long.slice(0, 4)},
+  {layout: 'basic-process', title: 'Steps', items: long.slice(0, 4)},
   {layout: 'chevrons', title: 'Stages', items: long.slice(0, 5)},
-  {layout: 'vertical-flow', title: 'Steps', items: long.slice(0, 4)},
+  {layout: 'vertical-process', title: 'Steps', items: long.slice(0, 4)},
 ];
 const number = value => Number(value);
 let checked = 0;
 for (const [index, slide] of slides.entries()) {
-  const arrangement = composeSlide(slide, {layout: gallery.layouts[slide.layout]}).arrangements?.[0];
+  const arrangement = composeSlide(slide, {layout: catalogs[0].layouts[slide.layout]}).arrangements?.[0];
   assert.ok(arrangement?.layout, `${slide.layout}: OPF's design with its recipe (${arrangement?.design})`);
   const count = arrangement.nodes.length, frame = arrangement.frame;
   const definition = compositeLayoutDefinition({uniqueId: 'urn:openpresentation.org/smartart/layout/test', title: 'T', description: 'D', category: 'other'}, frame, 8,
@@ -30,7 +33,7 @@ for (const [index, slide] of slides.entries()) {
   assert.equal(definition.reason, undefined, `${slide.layout}: ${definition.reason}`);
   const drawn = layoutArrangement(evaluateLayoutDefinition(definition, frame, count));
   const svg = toSvg({slides: [slide]}, 1, {catalogs, trace: true});
-  const group = new RegExp(`<g [^>]*data-opf-arrangement="${slide.layout}"[^>]*>([\\s\\S]*?)</g>`).exec(svg)?.[1];
+  const group = new RegExp(`<g [^>]*data-opf-arrangement="${arrangement.kind}"[^>]*>([\\s\\S]*?)</g>`).exec(svg)?.[1];
   assert.ok(group, `${slide.layout}: the preview draws the arrangement`);
   // Each node's shape: a rect (x, y, width, height) or a path whose bounds are the node's box.
   const shapes = [...group.matchAll(/<(rect|path) [^>]*data-opf-arrangement-path="[^"]*\.items\.(\d)"[^>]*>/g)].map(([tag, kind, entry]) => {

@@ -56,8 +56,8 @@ export function bodyRegions(record) {
   return out;
 }
 
-/** How many sample blocks a region gets: one for `flow: "none"`, else up to three (never more than its `max`). */
-export const regionSampleCount = (region) => (region?.flow === "none" ? 1 : Math.min(3, region?.max ?? 6));
+/** How many sample blocks a region gets: up to three, never more than its `max` (one for a region of `max: 1`). */
+export const regionSampleCount = (region) => Math.min(3, region?.max ?? 6);
 /** The kinds a region's samples cycle through: its `accepts`, or text, list and image when it accepts everything. */
 export const regionSampleKinds = (region) => (Array.isArray(region?.accepts) && region.accepts.length ? region.accepts.filter((kind) => LAYOUT_REGION_KINDS.includes(kind)) : ["text", "list", "image"]);
 
@@ -68,7 +68,7 @@ export const regionSampleKinds = (region) => (Array.isArray(region?.accepts) && 
 export function sampleDeck(record) {
   const { $schema, id, ...layout } = clone(record);
   void $schema;
-  const key = typeof id === "string" && /^[a-z][a-z0-9-]*$/.test(id) && id !== "auto" ? id : "layout-preview";
+  const key = typeof id === "string" && /^[a-z][a-z0-9-]*$/.test(id) ? id : "layout-preview";
   const blocks = [];
   const used = {};
   for (const { name, region } of bodyRegions(record)) {

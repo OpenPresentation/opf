@@ -581,6 +581,26 @@ const unresolvedReference: RuleText = (finding, _context, helpers) => {
     return typeof value === "string" ? value : undefined;
   })();
   if (!reference) return undefined;
+  if (kind === "layouts" && reference === "auto" && /removed layout 'auto'/.test(finding.message)) {
+    return {
+      message: `Layout ${code("auto")} was removed in OPF 0.35: a slide without ${code("layout")} composes automatically, which is what ${code("auto")} did.`,
+      next: `delete the ${code("layout")} key (the fix does).`,
+    };
+  }
+  const replaced = kind === "layouts" ? /removed layout '.+?' \(use '(.+?)'(?: with design\.titlePosition '(.+?)')?\)/.exec(finding.message) : undefined;
+  const renamed = replaced?.[1], position = replaced?.[2];
+  if (renamed && position) {
+    return {
+      message: `Layout ${code(reference)} was removed in OPF 0.35: ${code(renamed)} with the title beside the body (${code(`design.titlePosition: "${position}"`)}) replaced it.`,
+      next: `change the layout to ${code(renamed)} and set the slide's ${code("design.titlePosition")} to ${code(position)} (the fix does both).`,
+    };
+  }
+  if (renamed) {
+    return {
+      message: `Layout ${code(reference)} was removed in OPF 0.35: ${code(renamed)} replaced it.`,
+      next: `change the layout to ${code(renamed)} (the fix does).`,
+    };
+  }
   const noun = cap(KIND_SINGULAR(kind || (found?.[1] ?? "catalog record").toLowerCase()));
   const colon = reference.indexOf(":");
   const group = colon > 0 ? reference.slice(0, colon) : undefined;

@@ -15,24 +15,23 @@
       "name": "title"
     },
     {
-      "name": "metrics",
+      "name": "body",
       "accepts": [
         "metric",
         "group"
       ],
-      "role": "primary",
       "flow": "grid",
       "anchor": "middle"
     },
     {
-      "name": "note",
+      "name": "aside",
       "size": "auto",
       "accepts": [
         "text",
         "list"
       ],
       "role": "supporting",
-      "flow": "none"
+      "max": 1
     }
   ],
   "description": "Highlight a small set of important numbers. Give each number a label and the context needed to interpret it.",

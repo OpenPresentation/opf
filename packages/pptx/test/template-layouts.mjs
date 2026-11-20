@@ -32,7 +32,7 @@ const substituted = {...templates}; delete substituted.venn; substituted['unlist
 assert.throws(() => assertCatalogCoverage(substituted), /Every authoritative layout/);
 const aliased = {...templates, venn: {...templates.venn, name: templates.hierarchy.name}};
 assert.throws(() => assertCatalogCoverage(aliased), /Every named layout remains distinct/);
-for (const id of ['flow', 'vertical-flow', 'org-chart', 'hierarchy', 'venn', 'pyramid', 'inverted-pyramid']) {
+for (const id of ['process', 'vertical-process', 'org-chart', 'hierarchy', 'venn', 'pyramid', 'inverted-pyramid']) {
   assert.ok(templates[id], id + ' remains a required named diagram layout');
 }
 for (const entry of layoutIndex.records) {
@@ -261,7 +261,7 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
   }
   // The content topology names the region each root block was drawn in.
   const slideTag = number => JSON.parse(Buffer.from(text(entries, `ppt/tags/opfSlide${number}.xml`).match(/val="([^"]+)"/)[1], 'hex').toString('utf8'));
-  assert.deepEqual(slideTag(Object.keys(templates).indexOf('comparison') + 1).content.blocks.map(node => node.in), ['first', 'second', 'verdict']);
+  assert.deepEqual(slideTag(Object.keys(templates).indexOf('comparison') + 1).content.blocks.map(node => node.in), ['first', 'second', 'aside']);
   checked++;
 }
 {
@@ -350,8 +350,8 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
 
 // ---- 3. A region pin round-trips (OPF_SLIDE_V1 records it); a custom template is one more layout.
 const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-split': {name: 'Roadmap split', summary: 'A roadmap with notes over metrics beside it.',
-  direction: 'column', regions: [{name: 'title'}, {direction: 'row', size: 2, regions: [{name: 'timeline', size: 2, accepts: ['timeline'], role: 'primary', flow: 'none'},
-    {direction: 'column', regions: [{name: 'notes', accepts: ['text', 'list'], role: 'secondary', flow: 'column'}, {name: 'metrics', accepts: ['metric', 'text'], role: 'supporting', flow: 'grid'}]}]}]}}}},
+  direction: 'column', regions: [{name: 'title'}, {direction: 'row', size: 2, regions: [{name: 'timeline', size: 2, accepts: ['timeline'], role: 'primary', max: 1},
+    {direction: 'column', regions: [{name: 'notes', accepts: ['text', 'list'], role: 'supporting', flow: 'column'}, {name: 'metrics', accepts: ['metric', 'text'], role: 'supporting', flow: 'grid'}]}]}]}}}},
   slides: [{layout: 'roadmap-split', title: '2027 roadmap', blocks: [{timeline: {events: [{when: 'Q1', what: 'Pilot'}, {when: 'Q2', what: 'Launch'}]}},
     {metric: {value: 12, label: 'Pilot customers'}}, {metric: {value: '94%', label: 'Retention'}}, {items: ['Hiring two engineers', 'Security review in Q1']},
     {region: 'metrics', text: 'Targets agreed with finance.'}]}]};
@@ -405,7 +405,7 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   checked++;
 }
 
-// ---- 6. A slide added in PowerPoint with an OPF layout: its title placeholder and the text typed into the `verdict` placeholder.
+// ---- 6. A slide added in PowerPoint with an OPF layout: its title placeholder and the text typed into the `aside` placeholder.
 // Plain binding would put a lone text into `first`, so the block keeps its region with a pin. Placeholders carry no xfrm, and the
 // untouched ones (`first`, `second`, a date, a text body with no paragraph) are prompts, not empty blocks.
 {
@@ -413,15 +413,15 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
     slides: [{layout: 'comparison', title: 'Before and after', blocks: [{text: 'Before.'}, {text: 'After.'}, {text: 'Ship it.'}]}]};
   const {entries: parts} = await exportDeck(deck);
   const layout = layoutOf(parts, 1);
-  const idxOf = name => placeholders(text(parts, layout)).find(item => item.name === name).idx, verdictIdx = idxOf('verdict');
+  const idxOf = name => placeholders(text(parts, layout)).find(item => item.name === name).idx, asideIdx = idxOf('aside');
   // The untouched placeholders PowerPoint copies onto a new slide: only <p:ph>, no xfrm, an empty text body (the prompt shows).
   const prompt = (id, name, ph) => `<p:sp><p:nvSpPr><p:cNvPr id="${id}" name="${name}"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr>${ph}</p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p><a:endParaRPr lang="en-US"/></a:p></p:txBody></p:sp>`;
   const slide = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:sld xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="${REL}" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"><p:cSld><p:spTree><p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr><p:grpSpPr/>` +
     prompt(4, 'Content Placeholder 3', `<p:ph idx="${idxOf('first')}"/>`) + prompt(5, 'Content Placeholder 4', `<p:ph idx="${idxOf('second')}"/>`) +
     prompt(6, 'Date Placeholder 5', '<p:ph type="dt" sz="half" idx="10"/>') +
-    `<p:sp><p:nvSpPr><p:cNvPr id="7" name="Empty Text Placeholder 6"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="body" idx="${verdictIdx}"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/></p:txBody></p:sp>` +
+    `<p:sp><p:nvSpPr><p:cNvPr id="7" name="Empty Text Placeholder 6"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="body" idx="${asideIdx}"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/></p:txBody></p:sp>` +
     `<p:sp><p:nvSpPr><p:cNvPr id="2" name="Title 1"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="title"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p><a:r><a:rPr lang="en-US"/><a:t>Added in PowerPoint</a:t></a:r></a:p></p:txBody></p:sp>` +
-    `<p:sp><p:nvSpPr><p:cNvPr id="3" name="Text Placeholder 2"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="body" idx="${verdictIdx}"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p><a:r><a:rPr lang="en-US"/><a:t>Typed into the verdict.</a:t></a:r></a:p></p:txBody></p:sp>` +
+    `<p:sp><p:nvSpPr><p:cNvPr id="3" name="Text Placeholder 2"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="body" idx="${asideIdx}"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p><a:r><a:rPr lang="en-US"/><a:t>Typed into the verdict.</a:t></a:r></a:p></p:txBody></p:sp>` +
     `</p:spTree></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sld>`;
   const added = mutate(parts, {
     'ppt/slides/slide2.xml': slide,
@@ -433,7 +433,7 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   const {imported} = await read(added);
   assert.ok(isDeepStrictEqual(imported.slides[0], deck.slides[0]), 'The exported slide is unchanged');
   const {title, blocks, layout: added_layout} = imported.slides[1];
-  assert.deepEqual({title, blocks, layout: added_layout}, {title: 'Added in PowerPoint', blocks: [{type: 'text', text: 'Typed into the verdict.', region: 'verdict'}], layout: 'comparison'});
+  assert.deepEqual({title, blocks, layout: added_layout}, {title: 'Added in PowerPoint', blocks: [{type: 'text', text: 'Typed into the verdict.', region: 'aside'}], layout: 'comparison'});
   checked++;
 }
 
@@ -482,7 +482,7 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
 
 // ---- 10. Automatic slides use the dedicated OPF auto layout independently of host catalogs.
 {
-  const deck = {name: 'Classic', slides: [{title: 'Title', subtitle: 'Subtitle'}, {layout: 'auto', title: 'Text', text: 'Body.'}, {title: 'Auto', blocks: [{image: {src: square}}]}]};
+  const deck = {name: 'Classic', slides: [{title: 'Title', subtitle: 'Subtitle'}, {title: 'Text', text: 'Body.'}, {title: 'Auto', blocks: [{image: {src: square}}]}]};
   const {entries: parts} = await exportDeck(deck);
   assert.equal(layoutParts(parts).length, 2);
   assert.equal(layoutTag(parts, layoutOf(parts, 3)).id, 'auto');
@@ -494,4 +494,122 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   checked++;
 }
 
-console.log(`Template layouts passed (${checked}): ${templateIds.length} authoritative templates as native slide layouts (placeholder per area, types, geometry, OPF_LAYOUT_V1, schema order), every reachable template in catalog order on every master, bound placeholder objects, embedded and registered round trips, region pins, list columns, Change Layout, a slide added in PowerPoint, no provenance, furniture variants, a damaged tag and automatic titleOnly layouts.`);
+// ---- 11. OPF 0.35 standard region names: a 0.34 file. A block pinned to an old name (chart-beside's `notes`, now `aside`) comes
+// back as written; the pin is opf/region-unknown and the block binds by kind, to the same region. An OPF_LAYOUT_V1 tag whose region
+// map names the old regions (`chart`, `notes`) imports without a finding or a pin: no region of the record has those names.
+{
+  const record = templates['chart-beside'];
+  const chart = {chart: {type: 'bar', data: {columns: ['Quarter', 'Value'], rows: [['Q1', 1], ['Q2', 2]]}}};
+  const deck = {name: 'Old pin', catalogs: {custom: {layouts: {'chart-beside': record}}},
+    slides: [{layout: 'chart-beside', title: 'Revenue', blocks: [chart, {region: 'notes', text: 'Up a third.', emphasis: false}]}]};
+  const {bytes: output} = await exportDeck(deck);
+  const {imported} = await read(output);
+  assert.equal(imported.slides[0].blocks[1].region, 'notes', 'the old pin is kept as written');
+  const findings = validate(imported).findings.filter(finding => finding.ruleId === 'opf/region-unknown');
+  assert.deepEqual(findings.map(finding => finding.path), ['/slides/0/blocks/1/region'], JSON.stringify(findings));
+  const composed = composeSlide(imported.slides[0], {layout: record});
+  assert.deepEqual(composed.items.filter(item => item.path.includes('.blocks.')).map(item => [item.field, item.region]), [['chart', 'body'], ['text', 'aside']]);
+  // The same slide without provenance, its layout tag rewritten as 0.34 wrote it.
+  const {entries: parts} = await exportDeck({...deck, slides: [{...deck.slides[0], blocks: [chart, {text: 'Up a third.', emphasis: false}]}]}, {provenance: false});
+  const layout = layoutOf(parts, 1), tag = layoutTag(parts, layout);
+  const rid = text(parts, layout).match(/<\/p:spTree><p:custDataLst><p:tags r:id="([^"]+)"\/><\/p:custDataLst>/)[1];
+  const tagPath = resolvePart(layout, relationships(parts, layout).find(item => item.id === rid).target);
+  assert.deepEqual(Object.values(tag.regions).sort(), ['aside', 'body']);
+  const old = {...tag, regions: Object.fromEntries(Object.entries(tag.regions).map(([idx, name]) => [idx, {body: 'chart', aside: 'notes'}[name]]))};
+  const hex = Buffer.from(JSON.stringify(old)).toString('hex');
+  const rewritten = mutate(parts, {[tagPath]: xml => xml.replace(/(name="OPF_LAYOUT_V1" val=")([^"]+)"/, (_, head, value) => `${head}${/[A-F]/.test(value) ? hex.toUpperCase() : hex}"`)});
+  assert.deepEqual(layoutTag(unzipSync(rewritten), layout).regions, old.regions);
+  const {imported: plain, reports} = await read(rewritten);
+  assert.equal(plain.slides[0].layout, 'chart-beside');
+  assert.deepEqual(plain.slides[0].blocks.map(block => block.type), ['chart', 'text'], 'both blocks come back, bound by kind');
+  assert.ok((plain.slides[0].blocks ?? []).every(block => block.region === undefined), JSON.stringify(plain.slides[0]));
+  assert.deepEqual(reports.filter(report => /layout tag/i.test(report.message ?? '')), [], 'the old region map is not a damaged tag');
+  checked++;
+}
+
+// ---- 12. OPF 0.35 removed the gallery's flow and vertical-flow layouts: a 0.34 file whose slide is on one of them (its stored layout,
+// or only its slide layout's OPF_LAYOUT_V1 tag without provenance) imports on process or vertical-process; a stored layout reports
+// layout-renamed. Built here by writing the 0.34 ids into a current export's tags.
+{
+  const catalogs = [defaultCatalog];
+  const hexOf = (value, like) => { const hex = Buffer.from(JSON.stringify(value)).toString('hex'); return /[A-F]/.test(like) ? hex.toUpperCase() : hex; };
+  for (const [old, current] of [['flow', 'process'], ['vertical-flow', 'vertical-process']]) {
+    const deck = {name: 'A 0.34 layout', slides: [{layout: current, title: 'Steps', items: ['Plan', 'Build', 'Ship']}]};
+    for (const provenance of ['full', false]) {
+      const {entries: parts} = await exportDeck(deck, {catalogs, provenance});
+      const layout = layoutOf(parts, 1), tag = layoutTag(parts, layout);
+      assert.deepEqual([tag.id, tag.group, tag.reference], [current, 'default', current]);
+      const rid = text(parts, layout).match(/<\/p:spTree><p:custDataLst><p:tags r:id="([^"]+)"\/><\/p:custDataLst>/)[1];
+      const edits = {[resolvePart(layout, relationships(parts, layout).find(item => item.id === rid).target)]: xml => xml.replace(/(name="OPF_LAYOUT_V1" val=")([^"]+)"/, (_, head, value) => `${head}${hexOf({...tag, id: old, reference: old}, value)}"`)};
+      for (const path of Object.keys(parts).filter(name => /^ppt\/tags\//.test(name) && /name="OPF_SLIDE_V1"/.test(text(parts, name))))
+        edits[path] = xml => xml.replace(/(name="OPF_SLIDE_V1" val=")([^"]+)"/, (_, head, value) => {
+          const record = JSON.parse(Buffer.from(value, 'hex').toString('utf8'));
+          assert.equal(record.layout, current);
+          return `${head}${hexOf({...record, layout: old}, value)}"`;
+        });
+      assert.equal(Object.keys(edits).length, provenance === 'full' ? 2 : 1, `${old} ${provenance}: the tags written`);
+      const {imported, reports} = await read(mutate(parts, edits), {catalogs});
+      assert.equal(imported.slides[0].layout, current, `${old} ${provenance}`);
+      assert.deepEqual(imported.slides[0].items ?? imported.slides[0].blocks?.[0]?.items, ['Plan', 'Build', 'Ship']);
+      assert.deepEqual(reports.filter(report => report.code === 'layout-renamed').map(report => report.path), provenance === 'full' ? ['slides.0.layout'] : [], `${old} ${provenance}: ${JSON.stringify(reports)}`);
+      assert.deepEqual(reports.filter(report => report.code === 'unresolved-reference' || /layout tag/i.test(report.message ?? '')), []);
+    }
+  }
+  checked++;
+}
+
+// ---- 13. OPF 0.35 design.titlePosition. A record that sets `start` (cycle) gets a slide layout with its title placeholder beside the body:
+// the start column of two fifths, the body beside it, the slide's title bound to it at its own geometry. A slide that sets `start` on a
+// record that does not (list) keeps the layout's title on top and its own title shape beside the body. A right-to-left slide that is the
+// first on its layout (matrix) puts the layout's title column at the right; design.mirror on the slide moves only the slide's own title.
+// The deck's and the slide's titlePosition round-trip. A 0.34 file's agenda-split slide (stored layout or slide-layout tag) imports
+// on agenda with design.titlePosition start.
+{
+  const catalogs = [defaultCatalog];
+  const deck = {name: 'Title position', design: {titlePosition: 'top'}, slides: [
+    {layout: 'cycle', title: 'A review loop', blocks: [{items: ['Plan', 'Build', 'Measure', 'Learn']}]},
+    {layout: 'list', design: {titlePosition: 'start'}, title: 'Three parts', blocks: [{items: ['Define the problem', 'Review the evidence', 'Agree the decision']}]},
+    {layout: 'matrix', language: 'ar', title: 'أربعة أجزاء', blocks: [{items: ['الأول', 'الثاني', 'الثالث', 'الرابع']}]},
+    {layout: 'vertical-process', design: {mirror: true}, title: 'Steps in order', blocks: [{items: ['Draft', 'Review', 'Approve']}]},
+  ]};
+  // The deck's own `top` is a deck value: it would win over the records, so this deck says it only to round-trip it on a copy.
+  const {entries: parts} = await exportDeck({...deck, design: {}}, {catalogs});
+  const EMU = 9525, padding = 0.08 * 720, gap = 720 / 30, content = 1280 - 2 * padding, column = (content - gap) * 2 / 5;
+  const near = (actual, expected, label) => assert.ok(Math.abs(actual / EMU - expected) <= 1, `${label}: ${actual / EMU} vs ${expected}`);
+  const titleOf = number => placeholders(text(parts, `ppt/slides/slide${number}.xml`)).find(shape => shape.type === 'title');
+  const layoutBoxes = number => { const shapes = placeholders(text(parts, layoutOf(parts, number))); return {title: shapes.find(shape => shape.type === 'title').box, body: shapes.find(shape => shape.idx !== undefined && !['dt', 'ftr', 'sldNum'].includes(shape.type)).box}; };
+  const cycle = layoutBoxes(1), list = layoutBoxes(2), matrix = layoutBoxes(3), vertical = layoutBoxes(4);
+  near(cycle.title[0], padding, 'cycle title x'); near(cycle.title[2], column, 'cycle title width'); near(cycle.body[0], padding + column + gap, 'cycle body x');
+  near(list.title[2], content, 'list layout title across the slide');
+  near(matrix.title[0], padding + content - column, 'matrix (rtl) title at the right'); near(matrix.body[0], padding, 'matrix (rtl) body at the left');
+  near(vertical.title[0], padding, 'vertical-process layout title at the left');
+  near(titleOf(1).box[0], padding, 'cycle slide title'); near(titleOf(1).box[2], column, 'cycle slide title width');
+  near(titleOf(2).box[0], padding, 'the slide override: title in the start column'); near(titleOf(2).box[2], column, 'the slide override: title width');
+  near(titleOf(3).box[0], padding + content - column, 'rtl slide title at the right');
+  near(titleOf(4).box[0], padding + content - column, 'mirrored slide title at the right');
+  // The deck's and the slide's titlePosition come back.
+  const {bytes} = await exportDeck(deck, {catalogs});
+  const {imported} = await read(bytes, {catalogs});
+  assert.equal(imported.design.titlePosition, 'top');
+  assert.equal(imported.slides[1].design.titlePosition, 'start');
+  // A 0.34 agenda-split slide: the agenda export with the 0.34 id written into its tags.
+  const hexOf = (value, like) => { const hex = Buffer.from(JSON.stringify(value)).toString('hex'); return /[A-F]/.test(like) ? hex.toUpperCase() : hex; };
+  const old34 = {name: 'A 0.34 layout', slides: [{layout: 'agenda', title: 'Three parts', items: ['Plan', 'Build', 'Ship']}]};
+  for (const provenance of ['full', false]) {
+    const {entries: agendaParts} = await exportDeck(old34, {catalogs, provenance});
+    const layout = layoutOf(agendaParts, 1), tag = layoutTag(agendaParts, layout);
+    const rid = text(agendaParts, layout).match(/<\/p:spTree><p:custDataLst><p:tags r:id="([^"]+)"\/><\/p:custDataLst>/)[1];
+    const edits = {[resolvePart(layout, relationships(agendaParts, layout).find(item => item.id === rid).target)]: xml => xml.replace(/(name="OPF_LAYOUT_V1" val=")([^"]+)"/, (_, head, value) => `${head}${hexOf({...tag, id: 'agenda-split', reference: 'agenda-split'}, value)}"`)};
+    for (const path of Object.keys(agendaParts).filter(name => /^ppt\/tags\//.test(name) && /name="OPF_SLIDE_V1"/.test(text(agendaParts, name))))
+      edits[path] = xml => xml.replace(/(name="OPF_SLIDE_V1" val=")([^"]+)"/, (_, head, value) => `${head}${hexOf({...JSON.parse(Buffer.from(value, 'hex').toString('utf8')), layout: 'agenda-split'}, value)}"`);
+    const {imported: back, reports} = await read(mutate(agendaParts, edits), {catalogs});
+    assert.equal(back.slides[0].layout, 'agenda', `agenda-split ${provenance}`);
+    assert.deepEqual(back.slides[0].design, {titlePosition: 'start'}, `agenda-split ${provenance}: the title beside the list`);
+    const renamed = reports.filter(report => report.code === 'layout-renamed');
+    assert.deepEqual(renamed.map(report => report.path), provenance === 'full' ? ['slides.0.layout'] : [], JSON.stringify(reports));
+    if (provenance === 'full') assert.match(renamed[0].message, /design\.titlePosition start/);
+  }
+  checked++;
+}
+
+console.log(`Template layouts passed (${checked}): ${templateIds.length} authoritative templates as native slide layouts (placeholder per area, types, geometry, OPF_LAYOUT_V1, schema order), every reachable template in catalog order on every master, bound placeholder objects, embedded and registered round trips, region pins, list columns, Change Layout, a slide added in PowerPoint, no provenance, furniture variants, a damaged tag, automatic titleOnly layouts, the 0.34 layout ids and titlePosition.`);

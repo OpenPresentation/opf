@@ -33,8 +33,8 @@ export function layoutGroupOrder(choices) {
 }
 
 export const LAYOUT_REGION_KINDS = Object.freeze(["text", "list", "image", "video", "chart", "table", "code", "diagram", "metric", "quote", "timeline", "group"]);
-export const LAYOUT_REGION_ROLES = Object.freeze(["primary", "secondary", "media", "supporting"]);
-export const LAYOUT_REGION_FLOWS = Object.freeze(["none", "grid", "column", "auto"]);
+export const LAYOUT_REGION_ROLES = Object.freeze(["primary", "media", "supporting"]);
+export const LAYOUT_REGION_FLOWS = Object.freeze(["auto", "grid", "row", "column"]);
 const RESERVED = new Set(["title", "subtitle", "tag", "auto", "start", "center", "end", "top", "middle", "bottom"]);
 const NAME = /^[a-z][a-z0-9-]*$/;
 
@@ -71,7 +71,6 @@ function regionRules(entry, name) {
     out.max = entry.max;
   }
   if (entry.bleed !== undefined) { if (typeof entry.bleed !== "boolean") throw fail("layout-region", `Bleed for ${name} is true or false.`); out.bleed = entry.bleed; }
-  if (entry.listColumns !== undefined) { if (entry.listColumns !== "auto" && entry.listColumns !== 1) throw fail("layout-region", `List columns for ${name} is auto or 1.`); out.listColumns = entry.listColumns; }
   if (entry.anchor !== undefined) { if (!LAYOUT_ANCHORS.includes(entry.anchor)) throw fail("layout-region", `Choose a valid anchor for ${name}.`); out.anchor = entry.anchor; }
   if (entry.empty !== undefined) { if (entry.empty !== "collapse" && entry.empty !== "keep") throw fail("layout-region", `Empty for ${name} is collapse or keep.`); out.empty = entry.empty; }
   return out;
@@ -85,7 +84,7 @@ function regionRules(entry, name) {
  * of a column only). The list is the reading order.
  */
 export function layoutFromRegions({ id, name, summary, direction = "column", anchor, regions, overflowRegion }) {
-  if (!NAME.test(id) || id === "auto") throw fail("layout-id", "Choose a kebab-case layout id other than auto.");
+  if (!NAME.test(id)) throw fail("layout-id", "Choose a kebab-case layout id.");
   if (typeof name !== "string" || !name.trim()) throw fail("layout-name", "Name the custom layout.");
   if (!LAYOUT_DIRECTIONS.includes(direction)) throw fail("layout-direction", "Choose row or column for the direction.");
   if (anchor !== undefined && !LAYOUT_ANCHORS.includes(anchor)) throw fail("layout-anchor", "Choose top, middle or bottom for the anchor.");
@@ -135,7 +134,7 @@ export function layoutFromRegions({ id, name, summary, direction = "column", anc
 /** Prepare one validated catalog edit. Existing custom ids are never silently overwritten, unless the caller says `replace: true` (editing a layout the deck already has). */
 export function prepareCustomLayout(presentation, layout, options = {}) {
   const { id, record } = layout;
-  if (!NAME.test(id) || id === "auto") throw fail("layout-id", "Choose a kebab-case layout id other than auto.");
+  if (!NAME.test(id)) throw fail("layout-id", "Choose a kebab-case layout id.");
   if (presentation.catalogs?.custom?.layouts?.[id] && !options.replace) throw fail("layout-exists", `A custom layout named ${id} already exists.`);
   const custom = presentation.catalogs?.custom ?? {};
   const next = { ...presentation, catalogs: { ...presentation.catalogs, custom: { ...custom, layouts: { ...custom.layouts, [id]: record } } } };

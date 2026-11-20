@@ -20,7 +20,7 @@ describe('pagination with template layouts', () => {
     assert.deepEqual(presentation.slides[1].blocks.map((block) => block.text), ['Pillar 7', 'Pillar 8']);
     // Headings repeat; moved blocks carry a pin to the region they came from.
     assert.equal(presentation.slides[1].title, 'Eight pillars');
-    assert.deepEqual(presentation.slides[1].blocks.map((block) => block.region), ['pillars', 'pillars']);
+    assert.deepEqual(presentation.slides[1].blocks.map((block) => block.region), ['body', 'body']);
     assert.equal(presentation.slides[0].blocks[0].region, undefined, 'blocks that stay are not pinned');
     assert.equal(pages.length, 2);
   });

@@ -107,7 +107,7 @@ for (const fixture of fixtures.slice(1)) assert.equal(fixture.blocks[1].text,
     for (const [index, slide] of deck.slides.entries()) {
       let geometry;
       try { geometry = compose(deck, index); } catch { continue; }
-      const automatic = slide.layout === undefined || slide.layout === 'auto' || geometry.recomposed !== undefined;
+      const automatic = slide.layout === undefined || geometry.recomposed !== undefined;
       const reasons = [];
       const plan = planNativeBody(slide, geometry, {automatic, textMeasurement: measurement, report: diagnostic => reasons.push(diagnostic.reason)});
       tight += reasons.filter(reason => reason === 'tight-wrap').length;

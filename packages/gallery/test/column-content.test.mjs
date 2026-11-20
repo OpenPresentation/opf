@@ -64,7 +64,7 @@ test('a timeline in either column of two-column is placed in its column (it was 
 });
 
 test('media regions that were centered keep their look: image-beside and logos anchor in the middle', () => {
-  for (const [id, name] of [['image-beside', 'media'], ['logos', 'logos']]) {
+  for (const [id, name] of [['image-beside', 'media'], ['logos', 'body']]) {
     const region = id === 'logos' ? gallery.layouts[id].regions[1] : gallery.layouts[id].regions[1].regions.find((entry) => entry.name === name);
     assert.equal(region.name, name);
     assert.equal(region.anchor, 'middle', id);

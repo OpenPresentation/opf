@@ -1,7 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Qualification: SmartArt arrangements",
-  "description": "v0.33 qualification: every arrangement (pyramid, matrix, cycle, chevrons, flow, vertical-flow) where PowerPoint's own SmartArt layout holds the entries (live built-in), where OPF's own design draws them as live SmartArt on an OPF layout definition (SH-19), and where OPF's design stays native shapes.",
+  "description": "v0.33 qualification: every arrangement (pyramid, matrix, cycle, chevrons, process, vertical-process) where PowerPoint's own SmartArt layout holds the entries (live built-in), where OPF's own design draws them as live SmartArt on an OPF layout definition (SH-19), and where OPF's design stays native shapes.",
   "language": "en-US",
   "slides": [
     {
@@ -101,8 +101,8 @@
       ]
     },
     {
-      "id": "flow-4-short",
-      "layout": "flow",
+      "id": "process-4-short",
+      "layout": "process",
       "title": "How a request moves",
       "items": [
         "Vision",
@@ -112,8 +112,8 @@
       ]
     },
     {
-      "id": "flow-7-medium",
-      "layout": "flow",
+      "id": "process-7-medium",
+      "layout": "process",
       "title": "Seven steps to a habit",
       "items": [
         "Clear purpose",
@@ -126,8 +126,8 @@
       ]
     },
     {
-      "id": "vertical-flow-3-short",
-      "layout": "vertical-flow",
+      "id": "vertical-process-3-short",
+      "layout": "vertical-process",
       "title": "Three steps",
       "items": [
         "Vision",
@@ -136,8 +136,8 @@
       ]
     },
     {
-      "id": "vertical-flow-6-medium",
-      "layout": "vertical-flow",
+      "id": "vertical-process-6-medium",
+      "layout": "vertical-process",
       "title": "Six steps to steady delivery",
       "items": [
         "Clear purpose",
@@ -188,8 +188,8 @@
       ]
     },
     {
-      "id": "flow-8-short",
-      "layout": "flow",
+      "id": "process-8-short",
+      "layout": "process",
       "title": "Eight steps",
       "items": [
         "Vision",
@@ -203,8 +203,8 @@
       ]
     },
     {
-      "id": "vertical-flow-6-short",
-      "layout": "vertical-flow",
+      "id": "vertical-process-6-short",
+      "layout": "vertical-process",
       "title": "Six steps",
       "items": [
         "Vision",

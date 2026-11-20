@@ -5,8 +5,8 @@ import { composeSlide, EYEBROW_TAG_SIZE, HEADING_DISPLAY_SIZES } from '../dist/c
 import { layouts } from './support/template-samples.mjs';
 
 const { agenda, section } = layouts;
-// The same record without its sequence key: what the slide draws without LH-07.
-const plain = (record) => ({ ...record, regions: record.regions.map(({ sequence: _sequence, ...region }) => region) });
+// The same record without its steps or numbered arrangement: what the slide draws without LH-07.
+const plain = (record) => ({ ...record, regions: record.regions.map(({ arrangement, ...region }) => arrangement === 'steps' || arrangement === 'numbered' ? region : { ...region, ...(arrangement ? { arrangement } : {}) }) });
 // Short labels, each with a description: LH-08 rules such a list automatically.
 const labeled = [
   { text: 'Where we stand', description: 'Results from the first nine months' },
@@ -18,7 +18,7 @@ const list = (result) => result.items.find((item) => item.field === 'items');
 const field = (result, name) => result.items.find((item) => item.field === name);
 
 for (const direction of ['ltr', 'rtl']) {
-  test(`wave 5 (${direction}): a list in a sequence region keeps LH-07's badges and takes no LH-08 rows`, () => {
+  test(`wave 5 (${direction}): a list in a numbered region keeps LH-07's badges and takes no LH-08 rows`, () => {
     // LH-134 (wave 6): an agenda whose every entry has a description draws numbered ruled rows instead; one without keeps the badges.
     const bare = labeled.map((entry) => entry.text);
     const fit = list(composeSlide({ title: 'Today’s agenda', blocks: [{ items: bare }] }, { layout: agenda, direction })).text;
@@ -28,7 +28,7 @@ for (const direction of ['ltr', 'rtl']) {
     const rows = list(composeSlide(slide, { layout: agenda, direction })).text;
     assert.ok(rows.listEntries.every((entry) => entry.badge?.numeral), 'LH-134: numbered rows');
     assert.equal(rows.rules?.length, labeled.length - 1);
-    // Without the sequence the same list is ruled, as LH-08 rules a list of short labels with descriptions.
+    // Without the numbered arrangement the same list is ruled, as LH-08 rules a list of short labels with descriptions.
     const ruled = list(composeSlide(slide, { layout: plain(agenda), direction })).text;
     assert.equal(ruled.rules?.length, labeled.length - 1);
     assert.ok(ruled.listEntries.every((entry) => !entry.badge));

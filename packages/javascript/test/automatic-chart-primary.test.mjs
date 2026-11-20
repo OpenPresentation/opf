@@ -6,18 +6,14 @@ const chart = { chart: { type: 'column', data: { columns: ['Quarter', 'Revenue']
 const support = [{ text: 'Enterprise seats up 31%' }, { items: ['Churn down', 'Pipeline up'] }];
 const body = result => result.items.filter(item => !['title', 'subtitle', 'tag'].includes(item.field));
 
-test('automatic chartPrimary preserves its weighted chart and automatic support group on every side', () => {
-  for (const side of ['start', 'end', 'top', 'bottom']) {
-    const first = side === 'start' || side === 'top';
-    const hinted = composeSlide({ title: 'C', blocks: [support[0], chart, support[1]] }, { presentation: { design: { chartPrimary: side } }, explain: true });
-    const group = { blocks: support, composition: {} };
-    const explicit = composeSlide({ title: 'C', blocks: first ? [chart, group] : [group, chart], composition: { mode: ['start', 'end'].includes(side) ? 'row' : 'column', weights: first ? [3, 2] : [2, 3] } });
-    const boxes = result => Object.fromEntries(body(result).map(item => [item.field, item.box]));
-    assert.deepEqual(boxes(hinted), boxes(explicit), side);
-    assert.deepEqual(body(hinted).map(item => item.value).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))), [chart.chart, support[0].text, support[1].items].sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))));
-    assert.equal(hinted.explanation.decisions.length, 1);
-    assert.equal(hinted.explanation.decisions[0].reason, 'chart-primary');
-    assert.deepEqual(hinted.groups, [], 'synthetic support does not invent a source group');
+test('OPF 0.35: design.chartPrimary and design.contentDirection no longer reach composition', () => {
+  const slide = { title: 'C', blocks: [support[0], chart, support[1]] };
+  const plain = composeSlide(slide, { explain: true });
+  for (const design of [{ chartPrimary: 'start' }, { chartPrimary: 'top' }, { contentDirection: 'vertical' }, { contentDirection: 'horizontal' }]) {
+    const hinted = composeSlide({ ...slide, design }, { presentation: { design }, explain: true });
+    assert.deepEqual(body(hinted).map(item => item.box), body(plain).map(item => item.box), JSON.stringify(design));
+    assert.equal('chartPrimary' in hinted.design || 'contentDirection' in hinted.design, false);
+    assert.equal(hinted.diagnostics.some(entry => /chartPrimary/.test(entry.message)), false);
   }
 });
 

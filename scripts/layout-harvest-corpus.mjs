@@ -15,11 +15,14 @@ import {gallery} from '@openpresentation/gallery';
 import {embed} from '@openpresentation/opf';
 import {examples} from '@openpresentation/opf/examples';
 import {layoutTemplate} from '@openpresentation/opf/composition';
+import {promotedRegionKeys} from '@openpresentation/opf/validator';
 import {toPng} from '@openpresentation/opf-render';
 
 const out = path.resolve(process.argv[2] ?? 'artifacts/layout-harvest-corpus');
 const sizeAt = process.argv.indexOf('--batch-size');
 const batchSize = sizeAt > 0 ? Number(process.argv[sizeAt + 1]) : 50;
+// A slide's promoted regions (`top`, `start`, `top:start+center`, ...).
+const PROMOTED = new Set(promotedRegionKeys);
 const KINDS = ['text', 'items', 'bullets', 'metric', 'chart', 'table', 'quote', 'timeline', 'code'];
 
 // --- content pools from the examples ---
@@ -56,7 +59,7 @@ for (const {file, deck} of examples) {
   for (const slide of deck.slides) {
     if (typeof slide.title === 'string' && slide.title.length > 3) { titles.push(slide.title); topic?.titles.push(slide.title); }
     harvest(slide);
-    for (const [key, value] of Object.entries(slide)) if (/^(top|middle|bottom|left|center|right)/.test(key)) harvest(value);
+    for (const [key, value] of Object.entries(slide)) if (PROMOTED.has(key)) harvest(value);
   }
 }
 const uniqueTitles = [...new Set(titles)];
@@ -121,6 +124,7 @@ const add = (slide, tags) => { slides.push({slide, tags}); used = new Set(); };
 const MANY = new Set(['list', 'agenda', 'faq', 'process', 'pillars', 'team', 'metrics', 'scorecard', 'gallery', 'logos']);
 const regionKinds = record => {
   const template = layoutTemplate(record);
+  // layoutTemplate reads a region without a role as primary (OPF 0.35: the records leave `role: "primary"` out).
   const regions = [...template.regions].sort((a, b) => (a.role === 'primary' ? 0 : 1) - (b.role === 'primary' ? 0 : 1));
   return regions.map(region => region.accepts.find(kind => kind !== 'group' && kind !== 'video') ?? 'text');
 };
@@ -169,8 +173,8 @@ for (const {file, deck} of examples) {
     const kinds = [];
     const collect = value => { if (!value || typeof value !== 'object') return; if (value.blocks) value.blocks.forEach(collect); for (const kind of [...KINDS, 'image', 'video']) if (value[kind] !== undefined) kinds.push(kind); };
     collect(slide);
-    for (const [key, value] of Object.entries(slide)) if (/^(top|middle|bottom|left|center|right)/.test(key)) collect(value);
-    const signature = `${slide.layout ?? 'auto'}|${kinds.sort().join(',')}|${Object.keys(slide).filter(key => /^(top|middle|bottom|left|center|right)/.test(key)).sort().join(',')}`;
+    for (const [key, value] of Object.entries(slide)) if (PROMOTED.has(key)) collect(value);
+    const signature = `${slide.layout ?? 'auto'}|${kinds.sort().join(',')}|${Object.keys(slide).filter(key => PROMOTED.has(key)).sort().join(',')}`;
     if (signatures.has(signature) || !picturesInline(slide)) continue;
     signatures.add(signature);
     const copy = structuredClone(slide);
@@ -236,7 +240,7 @@ for (const [number, {theme, entries}] of batches.entries()) {
   for (const [index, entry] of entries.entries()) {
     const slide = entry.slide, parts = [];
     for (const child of slide.blocks ?? []) parts.push(describe(child, images));
-    for (const [key, value] of Object.entries(slide)) if (/^(top|middle|bottom|left|center|right)/.test(key)) parts.push(describe(value, images));
+    for (const [key, value] of Object.entries(slide)) if (PROMOTED.has(key)) parts.push(describe(value, images));
     for (const kind of [...KINDS, 'image']) if (slide[kind] !== undefined && !slide.blocks) parts.push(describe({[kind]: slide[kind]}, images));
     brief += `## s${String(index + 1).padStart(2, '0')}\n\n- Title: "${plainText(slide.title) ?? ''}"\n${slide.subtitle ? `- Subtitle: "${plainText(slide.subtitle)}"\n` : ''}${parts.map(part => `- ${part}`).join('\n')}\n\n`;
   }

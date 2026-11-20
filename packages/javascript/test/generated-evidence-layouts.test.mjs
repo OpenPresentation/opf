@@ -16,9 +16,8 @@ test('generated Evidence Packs keep vertical charts readable beside intact notes
     assert.deepEqual(slide.blocks.map(block => Object.keys(block)[0]), ['chart', 'quote', 'metric']);
     const context = resolveSlideContext(deck, slideIndex, { catalogs: [gallery] });
     const geometry = composeSlide(slide, context.options);
-    if (deck.design.contentDirection === 'horizontal') {
+    if (slide.layout === 'dashboard') {
       horizontal++;
-      assert.equal(slide.layout, 'dashboard', 'horizontal overview remains unchanged');
       continue;
     }
     vertical++;
@@ -27,9 +26,9 @@ test('generated Evidence Packs keep vertical charts readable beside intact notes
     const quote = geometry.items.find(item => item.type === 'quote');
     const metric = geometry.items.find(item => item.type === 'metric');
     assert.ok(chart && quote && metric, 'all authored content is composed');
-    assert.equal(chart.region, 'chart');
-    assert.equal(quote.region, 'notes');
-    assert.equal(metric.region, 'notes');
+    assert.equal(chart.region, 'body');
+    assert.equal(quote.region, 'aside');
+    assert.equal(metric.region, 'aside');
     assert.ok(chart.box.height >= geometry.height * 0.5, 'chart occupies at least half the slide height');
     assert.ok(chart.box.width / chart.box.height < 2, 'chart is not a shallow strip');
     assert.ok(quote.box.x >= chart.box.x + chart.box.width, 'quote sits beside the chart');
@@ -38,6 +37,6 @@ test('generated Evidence Packs keep vertical charts readable beside intact notes
       assert.ok(item.box.x >= 0 && item.box.y >= 0 && item.box.x + item.box.width <= geometry.width + .01 && item.box.y + item.box.height <= geometry.height + .01, 'content stays in slide bounds');
     }
   }
-  assert.equal(vertical, 20, 'all vertical Evidence Packs are covered');
-  assert.equal(horizontal, 20, 'all horizontal Evidence Packs retain dashboard');
+  assert.equal(vertical, 20, 'every chart-beside Evidence Pack is covered');
+  assert.equal(horizontal, 20, 'the other Evidence Packs keep the dashboard overview');
 });

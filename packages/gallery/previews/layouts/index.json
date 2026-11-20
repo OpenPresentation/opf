@@ -19,11 +19,6 @@
       "bytes": 2532
     },
     {
-      "id": "agenda-split",
-      "file": "agenda-split.svg",
-      "bytes": 2704
-    },
-    {
       "id": "statement",
       "file": "statement.svg",
       "bytes": 1260
@@ -109,13 +104,8 @@
       "bytes": 2856
     },
     {
-      "id": "flow",
-      "file": "flow.svg",
-      "bytes": 3089
-    },
-    {
-      "id": "vertical-flow",
-      "file": "vertical-flow.svg",
+      "id": "vertical-process",
+      "file": "vertical-process.svg",
       "bytes": 2689
     },
     {

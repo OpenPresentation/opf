@@ -9,7 +9,7 @@ import {composeSlide} from '../dist/composition.js';
 const photo = 'data:image/png;base64,iVBORw0KGgo=';
 const titleSubtitle = {id: 'title-subtitle', regions: [{name: 'title', size: 1}]};
 const titleOnly = {id: 'title', regions: [{name: 'title', size: 1}]};
-const text1x = {id: 'text-1x', regions: [{name: 'title'}, {name: 'body-1', accepts: ['text'], flow: 'none'}]};
+const text1x = {id: 'text-1x', regions: [{name: 'title'}, {name: 'body-1', accepts: ['text'], max: 1}]};
 const byField = (result, field) => result.items.find(item => item.field === field);
 const headingGroup = result => {
   const headings = result.items.filter(item => ['tag', 'title', 'subtitle'].includes(item.field));
@@ -86,7 +86,7 @@ test('wrapped cover headings recenter as a group and keep line and outline origi
   // Placement lines are the same lines a top-anchored composition produces, translated by the shift (at the role size: LH-129 grows a
   // cover's headings, a content title keeps its size).
   const kept = composeSlide({title: 'Short', subtitle: 'Also short'}, {layout: titleSubtitle, textMeasurement: measurement, fill: false});
-  const unshifted = composeSlide({title: 'Short', subtitle: 'Also short', text: 'Body'}, {layout: {id: 'text-1x', regions: [{name: 'title'}, {name: 'body-1', accepts: ['text'], flow: 'none'}]}, textMeasurement: measurement});
+  const unshifted = composeSlide({title: 'Short', subtitle: 'Also short', text: 'Body'}, {layout: {id: 'text-1x', regions: [{name: 'title'}, {name: 'body-1', accepts: ['text'], max: 1}]}, textMeasurement: measurement});
   const dy = byField(kept, 'title').box.y - byField(unshifted, 'title').box.y;
   assert.ok(dy > 0);
   const moved = byField(kept, 'title').text.placement.lines, base = byField(unshifted, 'title').text.placement.lines;
@@ -170,7 +170,7 @@ test('placed image bands: the cover centers inside the free area', () => {
 });
 
 test('a flowed image is body and keeps the content origin; a placed image is not body', () => {
-  const layout = {...titleSubtitle, regions: [{name: 'title'}, {name: 'body-1', accepts: ['image'], flow: 'none'}]};
+  const layout = {...titleSubtitle, regions: [{name: 'title'}, {name: 'body-1', accepts: ['image'], max: 1}]};
   const padding = 0.08 * 720;
   const flowed = composeSlide({title: 'Image slide', subtitle: 'Not a cover', image: {src: photo, alt: 'Harbor'}}, {layout});
   assert.ok(Math.abs(byField(flowed, 'title').box.y - padding) < 1e-6);

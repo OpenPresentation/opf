@@ -2789,7 +2789,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // regions, so its native body is planned as an automatic slide's is. It keeps its template's slide layout (the layout tag is
   // what import reads the slide's layout from), in a variant whose Body placeholder sits at the recomposed body's box.
   const recomposed = template !== undefined && geometry.recomposed !== undefined;
-  const automatic = opfSlide.layout === undefined || opfSlide.layout === 'auto' || recomposed;
+  const automatic = opfSlide.layout === undefined || recomposed;
   // Native wrap measures an undrawn base alphabet after the ordinary SVG demand analysis.
   // Collect at the planner's actual request boundary; prepare asynchronously before its unchanged synchronous plan.
   if (options.bodyText === 'native' && options.fonts?.registry?.fontNames && options.fonts?.ensure) {
@@ -2859,10 +2859,10 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // LH-130: core's accent rule above the title, in the tag's color (src/title-rule.js).
   addTitleRule(slide, geometry.titleRule, tagColor(slideContext), context.titleRuleTags);
   for (const [itemIndex, item] of geometry.items.entries()) {
-    // RR-81: the lone picture, chart or table of a `none` region binds to that region's placeholder on the slide layout. A captioned
+    // RR-81: the lone picture, chart or table of a single-block region (`max: 1`, OPF 0.35; `flow: none` before) binds to that region's placeholder on the slide layout. A captioned
     // object or one drawn on a card stays a free shape: Change Layout would move it away from its caption or card.
     const boundRegion = template && item.region !== undefined && ['image', 'chart', 'table'].includes(item.field) && !item.caption && !item.frameBox
-      ? geometry.regions?.find(region => region.name === item.region && region.flow === 'none' && region.content?.length === 1 && !region.overflow?.length) : undefined;
+      ? geometry.regions?.find(region => region.name === item.region && region.max === 1 && region.content?.length === 1 && !region.overflow?.length) : undefined;
     // RR-88, RR-105 (opf#1291): on a slide with a native layout every title is the layout's Title placeholder, in every body-text mode:
     // PowerPoint's Accessibility Checker and Outline view, and Keynote's `title showing`, read only a bound title. Three tiers, each
     // keeping core's lines: a one-line title is its measured line, bound; a wrapped title whose lines PowerPoint's own wrap is shown to

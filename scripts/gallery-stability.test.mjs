@@ -80,9 +80,9 @@ test("a changed region is caught on the filled slide and a collapse change on th
     };
     return find(layout.regions);
   };
-  const flow = compareReleases(baseline, release("0.26.1", (gallery) => { region(gallery.layouts.metrics, "metrics").flow = "column"; }), engines);
+  const flow = compareReleases(baseline, release("0.26.1", (gallery) => { region(gallery.layouts.metrics, "body").flow = "column"; }), engines);
   assert.deepEqual(flow.kinds.layouts.changed.map((change) => [change.id, change.slides]), [["metrics", [1]]]);
-  const keep = compareReleases(baseline, release("0.26.1", (gallery) => { region(gallery.layouts.metrics, "note").empty = "keep"; }), engines);
+  const keep = compareReleases(baseline, release("0.26.1", (gallery) => { region(gallery.layouts.metrics, "aside").empty = "keep"; }), engines);
   assert.ok(keep.kinds.layouts.changed.some((change) => change.id === "metrics" && change.slides.includes(2)));
 });
 

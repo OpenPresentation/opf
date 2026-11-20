@@ -205,7 +205,7 @@ function collect(analysis) {
   // Uses found by the name of the key ------------------------------------------------------------------------------------------------
   const layoutOf = (slide) => {
     const layout = stringValue(childOf(slide, "layout"));
-    if (!layout || layout === "auto") return null;
+    if (!layout) return null;
     return { reference: layout, identity: identityOf(resolveCached(analysis, "layouts", layout)) };
   };
   const columns = [];

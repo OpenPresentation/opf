@@ -816,7 +816,7 @@
           "accepts": [
             "metric"
           ],
-          "role": "secondary",
+          "role": "supporting",
           "flow": "grid"
         },
         {

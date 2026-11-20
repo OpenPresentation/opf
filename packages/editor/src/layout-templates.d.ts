@@ -26,7 +26,6 @@ export interface LayoutRegionRules {
   flow?: string;
   max?: number;
   bleed?: boolean;
-  listColumns?: "auto" | 1;
   anchor?: "top" | "middle" | "bottom";
   empty?: "collapse" | "keep";
 }

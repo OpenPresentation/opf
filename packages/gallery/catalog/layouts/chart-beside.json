@@ -15,17 +15,16 @@
       "direction": "row",
       "regions": [
         {
-          "name": "chart",
+          "name": "body",
           "size": 3,
           "accepts": [
             "chart",
             "diagram"
           ],
-          "role": "primary",
-          "flow": "none"
+          "max": 1
         },
         {
-          "name": "notes",
+          "name": "aside",
           "size": 2,
           "accepts": [
             "text",

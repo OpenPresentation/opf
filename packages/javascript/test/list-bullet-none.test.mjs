@@ -10,7 +10,7 @@ const LABELED = [
   {text: 'Clear scope', description: 'Two teams and one workflow keep the pilot focused.'},
   {text: 'Consistent measures', description: 'Track completion and task time against a baseline.'},
 ];
-const layout = design => ({id: 'labels', design, regions: [{name: 'title'}, {name: 'body', accepts: ['list'], flow: 'none'}]});
+const layout = design => ({id: 'labels', design, regions: [{name: 'title'}, {name: 'body', accepts: ['list'], max: 1}]});
 const listOf = composed => composed.items.find(item => item.field === 'items');
 
 test('none draws no marker geometry and no indent; labels and descriptions keep their roles', () => {

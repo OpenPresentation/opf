@@ -6,12 +6,13 @@ import {gallery} from '@openpresentation/gallery';
 import {convert} from '@openpresentation/opf';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
+// OPF 0.35 step 4: the deck's second slide is on the process layout (it was flow), 1077 -> 1083 bytes.
 const source=readFileSync(new URL('../../../scripts/native-acceptance/qualification/decks/smartart-arabic.opf.json',import.meta.url));
 const document=JSON.parse(source),catalogs=[gallery],renderOptions={catalogs};
 
 test('unchanged three-slide Arabic qualification input exports exact eager-font preview and PPTX bytes with demand fonts',async()=>{
- assert.equal(source.length,1077);
- assert.equal(createHash('sha256').update(source).digest('hex'),'f9ece76f6c2d0c223decf52e6f823371a5865c9444eb3a92def00051031e976d');
+ assert.equal(source.length,1083);
+ assert.equal(createHash('sha256').update(source).digest('hex'),'fb0bd5610854575864027c8bf23bfff6359879ad286a91e223eb4148f0c805a3');
  const saved=structuredClone(document),options={pack:'office',substitutionPolicy:'visual'};
  const demand=await loadFonts({...options,scripts:'auto',presentation:document,renderOptions});
  const whole=await loadFonts({...options,scripts:['Arab']});
