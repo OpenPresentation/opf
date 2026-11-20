@@ -236,7 +236,9 @@ describe('overrides', () => {
       const findings = validate(deck, { catalogs: [gallery] }).findings.filter((entry) => entry.ruleId === 'opf/unresolved-reference');
       assert.equal(findings.length, 1);
       assert.ok(findings[0].message.includes(`OPF 0.35 removed layout '${old}' (use '${renamed}')`), findings[0].message);
-      assert.deepEqual(findings[0].fixes, [{ id: 'rename-layout', title: `Use layout ${renamed}`, kind: 'patch', safe: true, patch: [{ op: 'replace', path: '/slides/0/layout', value: renamed }] }]);
+      // flow -> process can draw a list differently (long entries as numbered steps): the fix is marked changesDrawing; vertical-flow is a rename.
+      const drawing = old === 'flow' || old === 'default:flow' ? { changesDrawing: true } : {};
+      assert.deepEqual(findings[0].fixes, [{ id: 'rename-layout', title: `Use layout ${renamed}`, kind: 'patch', safe: true, ...drawing, patch: [{ op: 'replace', path: '/slides/0/layout', value: renamed }] }]);
       assert.deepEqual(describeFinding(findings[0], { document: deck, format: 'json' }), { message: `Layout \`${old}\` was removed in OPF 0.35: \`${renamed}\` replaced it.`, next: `change the layout to \`${renamed}\` (the fix does).` });
       const fixed = { ...deck, slides: [{ ...deck.slides[0], layout: renamed }] };
       assert.deepEqual(validate(fixed, { catalogs: [gallery] }).findings.filter((entry) => entry.ruleId === 'opf/unresolved-reference'), []);
