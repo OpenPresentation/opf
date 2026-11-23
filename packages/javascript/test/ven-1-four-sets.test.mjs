@@ -22,3 +22,9 @@ test('VEN-1: outside labels sit beside their circles', () => {
   const [arrangement] = result.arrangements;
   if (arrangement.design === 'opf') assert.ok(arrangement.nodes.every((node) => node.beside));
 });
+
+test('VEN-1: four long labels keep the list (which paginates), not outside labels', () => {
+  const long = 'Planning and operational support for participants across several teams';
+  const result = compose({ layout: 'venn', title: 'Overlap', blocks: [{ region: 'body', items: [long, long, long, long] }] });
+  assert.ok(!(result.arrangements ?? []).some((arrangement) => arrangement.design === 'opf'));
+});

@@ -3317,6 +3317,8 @@ const TIMELINE_DISPLAY_SIZE = 56, TIMELINE_WHAT_LINES = 2, TIMELINE_STEP_MIN = 1
 const LINEAR_STRIP_COVER = .5;
 /** MX1: a matrix of other than four entries prefers, at one text size, the grid whose cards are nearest this width over height. */
 const MATRIX_CARD_ASPECT = 1.25;
+/** VEN-1: four sets take the outside-label design only when every label has at most this many characters. */
+const VENN_FOUR_LABEL = 24;
 /** IP1: OPF's stepped pyramid widens its bars until it and its widest label span this share of the region. */
 const PYRAMID_GROUP_SHARE = .9;
 /** C03: at one text size, OPF's linear design with more lines is kept over fewer only when it covers this much more of the region. */
@@ -11953,9 +11955,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       };
       const measuredDesign:ArrangementDesign={design:'smartart',frame:area,nodes:nativeNodes,margin:ARRANGEMENT_TEXT_MARGIN.venn,align:'center',paint:'primary',text:'slide',lineWidth:primaryLine,...(overlapAt<0?{}:{fitNodes:(size:number)=>withOverlap(nativeNodes,size)})};
       if(sets<=4)designs.push(measuredDesign);
-      // VEN-1: four sets whose labels the Basic Venn circles do not hold (one label of eight letters) take the enlarged circles with
-      // outside labels and then the cards, as five to seven sets do, before the list (the last resort).
-      if(sets>=4){
+      // VEN-1: four sets of short labels (VENN_FOUR_LABEL characters at most) whose labels the Basic Venn circles do not hold (one label
+      // of eight letters) take the enlarged circles with outside labels and then the cards, as five to seven sets do, before the list
+      // (the last resort). Four long labels keep the list, which paginates them.
+      if(sets>=5||sets===4&&values.slice(0,sets).every(value=>[...flatten(typeof value==='object'&&value!==null&&!Array.isArray(value)?record(value).text:value).trim()].length<=VENN_FOUR_LABEL)){
         // Keep the previous measured design's actual type size as an additional floor. Reclaim unused native label slots, not type.
         const previous=sized(measuredDesign),previousList={...item};
         if(!previous)fillRegionWithList(previousList,area,top);
