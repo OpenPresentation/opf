@@ -293,6 +293,15 @@ The colors of a solid background (`SolidBackground.color`), of each gradient sto
 
 ## Script fonts and language
 
+### A deck that declares no language (OPF 0.35)
+
+With no `language` on the deck or the slide, OPF reads one thing from the text: a slide whose letters are mostly Arabic-script or Hebrew is laid out as Arabic (`ar`) or Hebrew (`he`). It then gets everything a deck that declares the language gets: the script's default fonts, a right-to-left layout (alignment, list markers, columns), and in the exported PPTX right-to-left paragraphs, the language tag on the runs and the theme's script fonts. The picture and the PPTX are those of the declared deck; only the declaration itself is missing (the SVG's `lang`, the PPTX's `dc:language`), and an import gives back a deck with no language. Before 0.35 such a deck was laid out left to right, as English, with a fallback face.
+
+- Each slide is read on its own: the title, subtitle, text, list items and table cells it draws, not its notes. More than half of the letters decide; digits, punctuation and spaces do not count. An English slide with an Arabic phrase stays English.
+- A declared language always wins: the deck's, the slide's, or the `language` option. Declare `"language": "en-US"` to keep a slide of Arabic text left to right.
+- Only right-to-left scripts are read. For any other script the direction does not depend on the language, and one script can be many languages, so OPF does not guess.
+- `resolveScriptFonts()` reports where the language came from in `languageSource`: `document`, `option`, `text` or `default`. `opf/missing-language` names the slides that were read as Arabic or Hebrew.
+
 OOXML gives each theme font (major and minor) three script slots: `latin`, East Asian (`ea`) and complex script (`cs`). The presentation `language` and the effective font scheme resolve to all three:
 
 ```
@@ -309,7 +318,7 @@ OOXML gives each theme font (major and minor) three script slots: `latin`, East 
 - A language record's `script` (ISO 15924) picks its slot. East Asian scripts (`Jpan`, `Hans`, `Hant`, `Kore`, ...) use `eastAsian`. Complex scripts (`Arab`, `Hebr`, `Deva`, `Thai`, ...) use `complexScript`. Latin, Cyrillic, Greek and other scripts use `latin`. `direction` defaults from the script (Arabic and Hebrew are right-to-left).
 - The language's `fontScheme` applies to PowerPoint output and `googleFontScheme` to Google Slides output. For Latin-script languages, the design font scheme always supplies the latin slot.
 - A language sets `lang`, the text direction and the script slots, and never the Latin scheme: only `design.fontScheme` (slide, then deck, then theme, then the shared default `aptos`) sets the latin fonts, and a language record's `fontScheme` is a default for its own script slot, not a deck font. The PPTX theme's `a:ea` and `a:cs` are written only for a slot a script font is selected for (the scheme's explicit slot or the language's script font) and stay empty otherwise, as in Office's own themes. See [Language contract](./programs/font-fidelity-everywhere/script-font-model.md#language-contract-ff-50-model-c) and [Theme slots](./programs/font-fidelity-everywhere/script-font-model.md#theme-slots-ff-49).
-- A Latin deck therefore repeats its heading/body family in `ea`/`cs`. A Japanese deck with `design.fontScheme: { "major": "Carlito", "minor": "Carlito" }` keeps the Latin family in `latin` and uses Meiryo (PowerPoint) or Noto Sans JP (Google Slides) in `ea`. `design.fontScheme.eastAsian` / `.complexScript` (`{ "major": ..., "minor": ... }`) name a script font explicitly, for example for CJK text inside a Latin deck.
+- A Latin deck therefore repeats its heading/body family in `ea`/`cs`. A Japanese deck with `design.fontScheme: { "major": "Carlito", "minor": "Carlito" }` keeps the Latin family in `latin` and uses Yu Gothic (PowerPoint) or Noto Sans JP (Google Slides) in `ea`. `design.fontScheme.eastAsian` / `.complexScript` (`{ "major": ..., "minor": ... }`) name a script font explicitly, for example for CJK text inside a Latin deck.
 
 `@openpresentation/opf/composition` exports `resolveScriptFonts(document, { app, slideIndex })` (`app` is `"powerpoint"`, the default, or `"google-slides"`), and the package root exports `normalizeLanguageFamily(value)` (which reads a font scheme's `languageFamily`, `eastAsian` as `ea` and `complexScript` as `cs`). `resolveScriptFonts` returns the heading and body slots, the OOXML `lang` (a curated `ooxmlLang` culture tag such as `ja-JP` or `ms-MY`, or an authored region tag), the canonical `bcp47` tag, `script`, `direction`/`rtl`, and the per-script supplemental theme font. Renderers and exporters should use it rather than re-deriving slots. The model, the OOXML mapping and the open questions are in [`programs/font-fidelity-everywhere/script-font-model.md`](./programs/font-fidelity-everywhere/script-font-model.md). opf-render and opf-pptx implement it (FF-07, FF-19, FF-49).
 

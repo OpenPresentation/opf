@@ -90,8 +90,8 @@ describe('script classes', () => {
   }
 
   const cjk = [
-    ['japanese', 'ja-JP', 'ja', 'japanese', 'Jpan', 'Meiryo', 'Noto Sans JP', 'Jpan'],
-    ['ja-JP', 'ja-JP', 'ja-JP', 'japanese', 'Jpan', 'Meiryo', 'Noto Sans JP', 'Jpan'],
+    ['japanese', 'ja-JP', 'ja', 'japanese', 'Jpan', 'Yu Gothic', 'Noto Sans JP', 'Jpan'],
+    ['ja-JP', 'ja-JP', 'ja-JP', 'japanese', 'Jpan', 'Yu Gothic', 'Noto Sans JP', 'Jpan'],
     ['zh-Hans', 'zh-CN', 'zh-Hans', 'chinese-simplified', 'Hans', 'Microsoft YaHei', 'Noto Sans SC', 'Hans'],
     ['zh-CN', 'zh-CN', 'zh-CN', 'chinese-simplified', 'Hans', 'Microsoft YaHei', 'Noto Sans SC', 'Hans'],
     ['zh-TW', 'zh-TW', 'zh-TW', 'chinese-traditional', 'Hant', 'Microsoft JhengHei', 'Noto Sans TC', 'Hant'],
@@ -115,19 +115,24 @@ describe('script classes', () => {
     });
   }
 
+  // v0.35: Arabic, Persian and Urdu take PowerPoint's Office theme fonts for the Arabic script, Times New Roman for headings and Arial for body.
+  // The other complex-script defaults are fonts every Windows has: Segoe UI (Hebrew), Nirmala UI (the Indic scripts), Leelawadee UI (Thai, Khmer).
+  const office = ['Times New Roman', 'Arial'];
   const complex = [
-    ['arabic', 'ar-SA', 'Arab', true, 'Arabic Typesetting', 'Noto Naskh Arabic'],
-    ['fa-IR', 'fa-IR', 'Arab', true, 'Arabic Typesetting', 'Noto Naskh Arabic'],
-    ['urdu', 'ur-PK', 'Arab', true, 'Arabic Typesetting', 'Noto Nastaliq Urdu'],
-    ['he-IL', 'he-IL', 'Hebr', true, 'David', 'Noto Sans Hebrew'],
-    ['hindi', 'hi-IN', 'Deva', false, 'Mangal', 'Noto Sans Devanagari'],
-    ['bn', 'bn-BD', 'Beng', false, 'Shonar Bangla', 'Noto Sans Bengali'],
-    ['ta', 'ta-IN', 'Taml', false, 'Latha', 'Noto Sans Tamil'],
-    ['thai', 'th-TH', 'Thai', false, 'Angsana New', 'Noto Sans Thai'],
+    ['arabic', 'ar-SA', 'Arab', true, office, 'Noto Naskh Arabic'],
+    ['fa-IR', 'fa-IR', 'Arab', true, office, 'Noto Naskh Arabic'],
+    ['urdu', 'ur-PK', 'Arab', true, office, 'Noto Nastaliq Urdu'],
+    ['he-IL', 'he-IL', 'Hebr', true, 'Segoe UI', 'Noto Sans Hebrew'],
+    ['hindi', 'hi-IN', 'Deva', false, 'Nirmala UI', 'Noto Sans Devanagari'],
+    ['bn', 'bn-BD', 'Beng', false, 'Nirmala UI', 'Noto Sans Bengali'],
+    ['ta', 'ta-IN', 'Taml', false, 'Nirmala UI', 'Noto Sans Tamil'],
+    ['thai', 'th-TH', 'Thai', false, 'Leelawadee UI', 'Noto Sans Thai'],
   ];
-  for (const [language, lang, script, rtl, powerPoint, google] of complex) {
+  for (const [language, lang, script, rtl, families, google] of complex) {
+    const [headingFamily, powerPoint] = Array.isArray(families) ? families : [families, families];
     test(`${language} fills complexScript${rtl ? ' and is right-to-left' : ''}`, () => {
       const resolved = resolveScriptFonts(deck(language));
+      assert.equal(resolved.heading.complexScript, headingFamily);
       assert.equal(resolved.lang, lang);
       assert.equal(resolved.script, script);
       assert.equal(resolved.scriptRole, 'complexScript');
@@ -135,7 +140,7 @@ describe('script classes', () => {
       assert.equal(resolved.direction, rtl ? 'rtl' : 'ltr');
       assert.deepEqual(resolved.body, {latin: 'Carlito', eastAsian: 'Carlito', complexScript: powerPoint});
       assert.deepEqual(resolved.sources, {eastAsian: 'latin', complexScript: 'language'});
-      assert.deepEqual(resolved.supplement, {script, heading: powerPoint, body: powerPoint});
+      assert.deepEqual(resolved.supplement, {script, heading: headingFamily, body: powerPoint});
       assert.equal(resolveScriptFonts(deck(language), {app: 'google-slides'}).complexScript, google);
     });
   }
@@ -150,67 +155,69 @@ describe('script classes', () => {
   });
 
   test('the theme supplement of a latin-slot script names the chosen cs scheme, not the language default (FF-46, opf#375)', () => {
-    const ebrima = (extra = {}) => ({major: 'Ebrima', minor: 'Ebrima', languageFamily: 'cs', ...extra});
-    // A deck language with no script font in the scheme keeps the catalog default (Nyala), as before.
-    assert.deepEqual(resolveScriptFonts(deck('amharic')).supplement, {script: 'Ethi', heading: 'Nyala', body: 'Nyala'});
+    // The native FF-46 deck chose Ebrima over the default of its day, Nyala. Since 0.35 Ebrima is the Amharic default, so these decks
+    // choose Nyala over Ebrima: the same assertions with the two names swapped.
+    const nyala = (extra = {}) => ({major: 'Nyala', minor: 'Nyala', languageFamily: 'cs', ...extra});
+    // A deck language with no script font in the scheme keeps the catalog default (Ebrima), as before.
+    assert.deepEqual(resolveScriptFonts(deck('amharic')).supplement, {script: 'Ethi', heading: 'Ebrima', body: 'Ebrima'});
     // The design selects a cs scheme that serves the language: the Ethi entry names that family, in both slots.
-    for (const scheme of [ebrima(), ebrima({languages: ['am']})]) {
+    for (const scheme of [nyala(), nyala({languages: ['am']})]) {
       const resolved = resolveScriptFonts(deck('amharic', scheme));
       assert.equal(resolved.script, 'Ethi');
       assert.equal(resolved.scriptRole, 'latin');
       assert.equal(resolved.sources.complexScript, 'schemeFamily');
-      assert.deepEqual(resolved.supplement, {script: 'Ethi', heading: 'Ebrima', body: 'Ebrima'});
+      assert.deepEqual(resolved.supplement, {script: 'Ethi', heading: 'Nyala', body: 'Nyala'});
     }
-    // The same scheme as an inline catalog record referenced by id (how a deck selects "the ebrima scheme").
-    const record = {id: 'ebrima', name: 'Ebrima', app: 'powerpoint', ...ebrima({languages: ['am']})};
-    const {id: ebrimaId, ...ebrimaRecord} = record;
-    const byId = resolveScriptFonts(deck('amharic', ebrimaId, {catalogs: {custom: {fontSchemes: {[ebrimaId]: ebrimaRecord}}}}));
-    assert.deepEqual(byId.supplement, {script: 'Ethi', heading: 'Ebrima', body: 'Ebrima'});
+    // The same scheme as an inline catalog record referenced by id (how a deck selects "the nyala scheme").
+    const record = {id: 'nyala', name: 'Nyala', app: 'powerpoint', ...nyala({languages: ['am']})};
+    const {id: nyalaId, ...nyalaRecord} = record;
+    const byId = resolveScriptFonts(deck('amharic', nyalaId, {catalogs: {custom: {fontSchemes: {[nyalaId]: nyalaRecord}}}}));
+    assert.deepEqual(byId.supplement, {script: 'Ethi', heading: 'Nyala', body: 'Nyala'});
     // A heading and body that differ are kept apart.
-    const pair = resolveScriptFonts(deck('amharic', ebrima({major: 'Ebrima', minor: 'Nyala'})));
-    assert.deepEqual(pair.supplement, {script: 'Ethi', heading: 'Ebrima', body: 'Nyala'});
+    const pair = resolveScriptFonts(deck('amharic', nyala({major: 'Nyala', minor: 'Ebrima'})));
+    assert.deepEqual(pair.supplement, {script: 'Ethi', heading: 'Nyala', body: 'Ebrima'});
     // Catalog schemes: the author-chosen scheme wins over the language's own, for either app.
     assert.deepEqual(resolveScriptFonts(deck('amharic', 'noto-sans-ethiopic')).supplement, {script: 'Ethi', heading: 'Noto Sans Ethiopic', body: 'Noto Sans Ethiopic'});
-    assert.deepEqual(resolveScriptFonts(deck('amharic', 'nyala'), {app: 'google-slides'}).supplement, {script: 'Ethi', heading: 'Nyala', body: 'Nyala'});
+    assert.deepEqual(resolveScriptFonts(deck('amharic', 'ebrima'), {app: 'google-slides'}).supplement, {script: 'Ethi', heading: 'Ebrima', body: 'Ebrima'});
     // Armenian and Georgian are the same class: Sylfaen is the catalog default, a chosen cs scheme replaces it.
     for (const [language, script] of [['armenian', 'Armn'], ['georgian', 'Geor']]) {
-      assert.deepEqual(resolveScriptFonts(deck(language, ebrima())).supplement, {script, heading: 'Ebrima', body: 'Ebrima'}, language);
+      assert.deepEqual(resolveScriptFonts(deck(language, nyala())).supplement, {script, heading: 'Nyala', body: 'Nyala'}, language);
       assert.deepEqual(resolveScriptFonts(deck(language, 'sylfaen')).supplement, {script, heading: 'Sylfaen', body: 'Sylfaen'}, language);
     }
     assert.deepEqual(resolveScriptFonts(deck('armenian', 'noto-sans-armenian')).supplement, {script: 'Armn', heading: 'Noto Sans Armenian', body: 'Noto Sans Armenian'});
     assert.deepEqual(resolveScriptFonts(deck('georgian', 'noto-sans-georgian')).supplement, {script: 'Geor', heading: 'Noto Sans Georgian', body: 'Noto Sans Georgian'});
     // Nothing else changes: the slots, the language and the script of the Amharic deck.
-    const plain = resolveScriptFonts(deck('amharic', ebrima()));
-    assert.deepEqual(plain.body, same('Ebrima'));
+    const plain = resolveScriptFonts(deck('amharic', nyala()));
+    assert.deepEqual(plain.body, same('Nyala'));
     assert.equal(plain.lang, 'am-ET');
   });
 
-  test('an explicit complexScript slot is the deck\'s choice for a latin-slot script: the inline Ebrima deck of the native FF-46 run (opf#375)', () => {
-    // scripts-40-amharic-ebrima: inline = (family) => ({major: family, minor: family, complexScript: {major: family, minor: family}}), language am.
+  test('an explicit complexScript slot is the deck\'s choice for a latin-slot script: an inline deck in the form of the native FF-46 run (opf#375)', () => {
+    // The form of scripts-40-amharic-ebrima (that deck chose Ebrima, which is the Amharic default since 0.35, so this one chooses Nyala): inline = (family) => ({major: family, minor: family, complexScript: {major: family, minor: family}}), language am.
     const inline = (family, slot = 'complexScript') => ({major: family, minor: family, [slot]: {major: family, minor: family}});
     for (const language of ['am', 'amharic', 'am-ET']) {
-      const resolved = resolveScriptFonts(deck(language, inline('Ebrima')));
+      const resolved = resolveScriptFonts(deck(language, inline('Nyala')));
       assert.equal(resolved.script, 'Ethi');
       assert.equal(resolved.lang, 'am-ET');
       assert.deepEqual(resolved.sources, {eastAsian: 'latin', complexScript: 'fontScheme'});
-      assert.deepEqual(resolved.heading, same('Ebrima'));
-      assert.deepEqual(resolved.supplement, {script: 'Ethi', heading: 'Ebrima', body: 'Ebrima'}, language);
+      assert.deepEqual(resolved.heading, same('Nyala'));
+      assert.deepEqual(resolved.supplement, {script: 'Ethi', heading: 'Nyala', body: 'Nyala'}, language);
     }
     // Heading and body are kept apart; a slot with one side falls back to the other (core's pair rule).
-    const split = resolveScriptFonts(deck('amharic', {major: 'Ebrima', minor: 'Ebrima', complexScript: {major: 'Ebrima', minor: 'Nyala'}}));
-    assert.deepEqual(split.supplement, {script: 'Ethi', heading: 'Ebrima', body: 'Nyala'});
+    const split = resolveScriptFonts(deck('amharic', {major: 'Nyala', minor: 'Nyala', complexScript: {major: 'Nyala', minor: 'Ebrima'}}));
+    assert.deepEqual(split.supplement, {script: 'Ethi', heading: 'Nyala', body: 'Ebrima'});
     // Armenian and Georgian are the same class.
-    assert.deepEqual(resolveScriptFonts(deck('armenian', inline('Ebrima'))).supplement, {script: 'Armn', heading: 'Ebrima', body: 'Ebrima'});
-    assert.deepEqual(resolveScriptFonts(deck('georgian', inline('Ebrima'))).supplement, {script: 'Geor', heading: 'Ebrima', body: 'Ebrima'});
+    assert.deepEqual(resolveScriptFonts(deck('armenian', inline('Nyala'))).supplement, {script: 'Armn', heading: 'Nyala', body: 'Nyala'});
+    assert.deepEqual(resolveScriptFonts(deck('georgian', inline('Nyala'))).supplement, {script: 'Geor', heading: 'Nyala', body: 'Nyala'});
     // A catalog record that carries a complexScript slot is the same choice.
-    const record = {major: 'Carlito', minor: 'Carlito', complexScript: {major: 'Ebrima', minor: 'Ebrima'}};
-    assert.deepEqual(resolveScriptFonts(deck('amharic', 'brand-ethiopic', {catalogs: {custom: {fontSchemes: {'brand-ethiopic': record}}}})).supplement, {script: 'Ethi', heading: 'Ebrima', body: 'Ebrima'});
+    const record = {major: 'Carlito', minor: 'Carlito', complexScript: {major: 'Nyala', minor: 'Nyala'}};
+    assert.deepEqual(resolveScriptFonts(deck('amharic', 'brand-ethiopic', {catalogs: {custom: {fontSchemes: {'brand-ethiopic': record}}}})).supplement, {script: 'Ethi', heading: 'Nyala', body: 'Nyala'});
     // An explicit East Asian slot (the MS Gothic form) is not a choice for Ethiopic, Armenian or Georgian text.
-    for (const [language, script, family] of [['amharic', 'Ethi', 'Nyala'], ['armenian', 'Armn', 'Sylfaen'], ['georgian', 'Geor', 'Sylfaen']]) {
+    for (const [language, script, family] of [['amharic', 'Ethi', 'Ebrima'], ['armenian', 'Armn', 'Sylfaen'], ['georgian', 'Geor', 'Sylfaen']]) {
       assert.deepEqual(resolveScriptFonts(deck(language, inline('MS Gothic', 'eastAsian'))).supplement, {script, heading: family, body: family}, language);
     }
     // The language's own scripts in the same deck are unchanged by an explicit slot for the other side.
-    assert.deepEqual(resolveScriptFonts(deck('amharic')).supplement, {script: 'Ethi', heading: 'Nyala', body: 'Nyala'});
+    assert.deepEqual(resolveScriptFonts(deck('amharic')).supplement, {script: 'Ethi', heading: 'Ebrima', body: 'Ebrima'});
   });
 
   test('East Asian and complex-script supplements follow the resolved slot, including an explicit slot (inline MS Gothic form, opf#375)', () => {
@@ -224,11 +231,11 @@ describe('script classes', () => {
       assert.equal(resolved.supplement.heading, resolved.heading.eastAsian);
     }
     // An explicit complexScript slot for the same languages names nothing for them: the language default stays.
-    assert.deepEqual(resolveScriptFonts(deck('japanese', inline('Ebrima', 'complexScript'))).supplement, {script: 'Jpan', heading: 'Meiryo', body: 'Meiryo'});
+    assert.deepEqual(resolveScriptFonts(deck('japanese', inline('Ebrima', 'complexScript'))).supplement, {script: 'Jpan', heading: 'Yu Gothic', body: 'Yu Gothic'});
     // Complex-script languages follow an explicit complexScript slot; an explicit eastAsian slot leaves them on the language default.
-    for (const [language, script, family] of [['arabic', 'Arab', 'Arabic Typesetting'], ['hebrew', 'Hebr', 'David'], ['hindi', 'Deva', 'Mangal'], ['thai', 'Thai', 'Angsana New']]) {
+    for (const [language, script, heading, body = heading] of [['arabic', 'Arab', 'Times New Roman', 'Arial'], ['hebrew', 'Hebr', 'Segoe UI'], ['hindi', 'Deva', 'Nirmala UI'], ['thai', 'Thai', 'Leelawadee UI']]) {
       assert.deepEqual(resolveScriptFonts(deck(language, inline('Ebrima', 'complexScript'))).supplement, {script, heading: 'Ebrima', body: 'Ebrima'}, language);
-      assert.deepEqual(resolveScriptFonts(deck(language, inline('MS Gothic', 'eastAsian'))).supplement, {script, heading: family, body: family}, language);
+      assert.deepEqual(resolveScriptFonts(deck(language, inline('MS Gothic', 'eastAsian'))).supplement, {script, heading, body}, language);
     }
     // For every catalog language with a script slot, the supplement equals the resolved slot family under explicit slots, in both parts.
     for (const language of languages) {
@@ -260,16 +267,16 @@ describe('script classes', () => {
   });
 
   test('a scheme that does not choose a family for the script leaves the language supplement alone (FF-46, opf#375)', () => {
-    const nyala = {script: 'Ethi', heading: 'Nyala', body: 'Nyala'};
-    const base = {major: 'Ebrima', minor: 'Ebrima'};
+    const ebrima = {script: 'Ethi', heading: 'Ebrima', body: 'Ebrima'};
+    const base = {major: 'Nyala', minor: 'Nyala'};
     // A latin scheme, an ea scheme, a cs scheme for another language and an explicit East Asian slot name no family for Ethiopic text.
-    assert.deepEqual(resolveScriptFonts(deck('amharic', base)).supplement, nyala);
-    assert.deepEqual(resolveScriptFonts(deck('amharic', {...base, languageFamily: 'ea'})).supplement, nyala);
-    assert.deepEqual(resolveScriptFonts(deck('amharic', {...base, languageFamily: 'cs', languages: ['ar']})).supplement, nyala);
-    assert.deepEqual(resolveScriptFonts(deck('amharic', {...base, eastAsian: {major: 'Ebrima', minor: 'Ebrima'}})).supplement, nyala);
-    assert.deepEqual(resolveScriptFonts(deck('amharic', 'calibri')).supplement, nyala);
+    assert.deepEqual(resolveScriptFonts(deck('amharic', base)).supplement, ebrima);
+    assert.deepEqual(resolveScriptFonts(deck('amharic', {...base, languageFamily: 'ea'})).supplement, ebrima);
+    assert.deepEqual(resolveScriptFonts(deck('amharic', {...base, languageFamily: 'cs', languages: ['ar']})).supplement, ebrima);
+    assert.deepEqual(resolveScriptFonts(deck('amharic', {...base, eastAsian: {major: 'Nyala', minor: 'Nyala'}})).supplement, ebrima);
+    assert.deepEqual(resolveScriptFonts(deck('amharic', 'calibri')).supplement, ebrima);
     // A complex-script language still reads its supplement from its own slot, which already follows the scheme.
-    assert.deepEqual(resolveScriptFonts(deck('arabic', {...base, languageFamily: 'cs'})).supplement, {script: 'Arab', heading: 'Ebrima', body: 'Ebrima'});
+    assert.deepEqual(resolveScriptFonts(deck('arabic', {...base, languageFamily: 'cs'})).supplement, {script: 'Arab', heading: 'Nyala', body: 'Nyala'});
     // Latin, Cyrillic and Greek decks get no supplement from a cs scheme.
     for (const language of ['english-us', 'russian', 'greek']) assert.equal(resolveScriptFonts(deck(language, {...base, languageFamily: 'cs'})).supplement, undefined, language);
   });
@@ -411,7 +418,7 @@ describe('precedence', () => {
     assert.equal(unlisted.eastAsian, 'Noto Sans JP', 'an empty languages list admits every language');
     assert.equal(unlisted.sources.eastAsian, 'schemeFamily');
     const arabicInMeiryo = resolveScriptFonts(deck('arabic', 'meiryo'));
-    assert.deepEqual(arabicInMeiryo.body, {latin: 'Meiryo', eastAsian: 'Meiryo', complexScript: 'Arabic Typesetting'});
+    assert.deepEqual(arabicInMeiryo.body, {latin: 'Meiryo', eastAsian: 'Meiryo', complexScript: 'Arial'});
   });
 
   test('catalog font-scheme records may carry script slots', () => {
@@ -428,7 +435,7 @@ describe('precedence', () => {
     assert.equal(resolved.eastAsian, 'Noto Sans JP');
     const object = resolveScriptFonts(deck({bcp47: 'ar-SA', name: 'Arabic (Saudi Arabia)', direction: 'rtl', script: 'Arab'}));
     assert.equal(object.lang, 'ar-SA');
-    assert.equal(object.complexScript, 'Arabic Typesetting');
+    assert.equal(object.complexScript, 'Arial');
     assert.equal(object.rtl, true);
     const override = resolveScriptFonts(deck({id: 'hebrew', fontScheme: 'noto-sans-hebrew'}));
     assert.equal(override.lang, 'he-IL');
@@ -460,7 +467,7 @@ describe('precedence', () => {
     const resolved = resolveScriptFonts(deck('english'), {language: 'th-TH'});
     assert.equal(resolved.lang, 'th-TH');
     assert.equal(resolved.languageSource, 'option');
-    assert.equal(resolved.complexScript, 'Angsana New');
+    assert.equal(resolved.complexScript, 'Leelawadee UI');
   });
 
   test('unresolvable language references fall back to the default tag', () => {

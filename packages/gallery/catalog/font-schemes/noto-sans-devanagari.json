@@ -1,6 +1,6 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
-  "id": "noto-sans-devangari",
+  "id": "noto-sans-devanagari",
   "name": "Noto Sans Devanagari",
   "app": "google-slides",
   "languageFamily": "cs",

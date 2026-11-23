@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "leelawadee-ui",
+  "name": "Leelawadee UI",
+  "app": "powerpoint",
+  "languageFamily": "cs",
+  "languages": [
+    "th",
+    "km"
+  ],
+  "major": "Leelawadee UI",
+  "minor": "Leelawadee UI",
+  "textSample": "ภาษาไทยสวยมาก",
+  "type": "sans-serif",
+  "description": "Leelawadee UI is the default OPF font scheme for Thai and Khmer presentations, using Leelawadee UI for both headings and body text. It ships with Windows and draws Thai and Khmer at about the size of the Latin text beside it."
+}

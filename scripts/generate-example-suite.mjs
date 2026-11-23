@@ -163,6 +163,9 @@ async function loadCatalogIds(kind) {
   return ids.sort((a, b) => a.localeCompare(b));
 }
 
+/** Font schemes the gallery gained after the suite was designed (v0.35 script defaults): see loadCatalogs. */
+const FONT_SCHEMES_ADDED_SINCE = new Set(["times-new-roman-arial", "leelawadee-ui", "ebrima", "segoe-ui-regular"]);
+
 function pick(values, index, offset = 0) {
   return values[(index + offset) % values.length];
 }
@@ -1074,6 +1077,10 @@ async function loadCatalogs() {
   const catalogs = Object.fromEntries(
     await Promise.all(Object.entries(catalogKinds).map(async ([name, kind]) => [name, await loadCatalogIds(kind)])),
   );
+  // A deck takes its font scheme by position in this list (pick(catalogs.fontSchemes, index)), so a scheme added to the catalog
+  // would move the choice of every deck after it, and their golden pictures with it. Schemes added since the suite was designed
+  // stay out of the choice; they are script defaults, which draw no English deck anyway.
+  catalogs.fontSchemes = catalogs.fontSchemes.filter((id) => !FONT_SCHEMES_ADDED_SINCE.has(id));
   // RR-97: the decks are English, so the font scheme they draw with must be one the bundled Latin faces cover. A complex
   // script or East Asian scheme names proprietary faces (Aparajita, Meiryo) whose open replacements are optional
   // @expo-google-fonts packages, so `opf convert` of such a deck fails with render/font-unavailable on a plain install.

@@ -20,7 +20,7 @@ const arabicBody = 'بدأ العمل على المنصة الجديدة في م
  */
 function registry({ naskh = true, planner = true } = {}) {
 	const faces = { 'Latin Display': (character) => !arabic.test(character), 'Latin Sans': (character) => !arabic.test(character), ...(naskh ? { Naskh: () => true } : {}) };
-	const routes = { 'aptos display': 'Latin Display', aptos: 'Latin Sans', ...(naskh ? { 'arabic typesetting': 'Naskh' } : {}) };
+	const routes = { 'aptos display': 'Latin Display', aptos: 'Latin Sans', ...(naskh ? { 'times new roman': 'Naskh', arial: 'Naskh' } : {}) };
 	const faceOf = (family) => (faces[family] ? family : (routes[String(family).toLowerCase()] ?? 'Latin Sans'));
 	const profiles = [];
 	const measurement = {
@@ -69,11 +69,11 @@ describe('validate measures script text with the fonts handle\'s script faces (o
 		const report = validate(arabicDeck, { catalogs, fonts });
 		assert.deepEqual(layoutFailures(report), []);
 		assert.equal(report.checks.layout, 'measured');
-		// The slide's profile names the language's complex-script family for both roles, as the engines' profile does.
+		// The slide's profile names the language's complex-script families (Times New Roman and Arial), as the engines' profile does.
 		assert.equal(profiles[0].bcp47, 'ar-SA');
 		assert.equal(profiles[0].rtl, true);
-		assert.deepEqual(profiles[0].heading, { latin: 'Aptos Display', eastAsian: 'Aptos Display', complexScript: 'Arabic Typesetting' });
-		assert.deepEqual(profiles[0].body, { latin: 'Aptos', eastAsian: 'Aptos', complexScript: 'Arabic Typesetting' });
+		assert.deepEqual(profiles[0].heading, { latin: 'Aptos Display', eastAsian: 'Aptos Display', complexScript: 'Times New Roman' });
+		assert.deepEqual(profiles[0].body, { latin: 'Aptos', eastAsian: 'Aptos', complexScript: 'Arial' });
 	});
 
 	test('an ar-SA run in an en-US deck is planned with its own language\'s profile: no opf/layout-failed', () => {
@@ -86,7 +86,7 @@ describe('validate measures script text with the fonts handle\'s script faces (o
 		const own = profiles.find((profile) => profile.bcp47 === 'ar-SA');
 		assert.ok(own, 'the ar-SA run asks for its own profile');
 		assert.equal(own.languageSource, 'option');
-		assert.equal(own.body.complexScript, 'Arabic Typesetting');
+		assert.equal(own.body.complexScript, 'Arial');
 	});
 
 	test('without the Arabic face a real missing glyph is still reported', () => {
@@ -117,7 +117,7 @@ describe("paginate measures script text with the fonts handle's script faces (op
 		const { fonts, profiles } = registry();
 		const result = paginate(longArabic, { catalogs, fonts });
 		assert.ok(result.presentation.slides.length > 1);
-		assert.equal(profiles[0].body.complexScript, 'Arabic Typesetting');
+		assert.equal(profiles[0].body.complexScript, 'Arial');
 		// paginateSlide given the presentation plans scripts the same way.
 		assert.ok(paginateSlide(longArabic.slides[0], { presentation: longArabic, slideIndex: 0, fonts: registry().fonts }).slides.length > 1);
 	});

@@ -2,7 +2,7 @@
   "schema": "opf-font-tracker/v1",
   "asOf": "2026-10-02",
   "generatedBy": "scripts/build-font-tracker.mjs",
-  "description": "One record per font family: every font-policy family (168: the 153 the owner reviewed on 2026-09-29 plus the rows added since for Intos, the emoji and math faces and the script-font dependencies). Derived fields come from the policy, the measurement report, the pinned opf-render manifest and symbol-font snapshots, the pinned pptx.gallery card-font snapshot, the committed native PowerPoint comparison output and the committed parity results; next actions and evidence come from font-tracker.overrides.json. The summary's licensing block answers how many fonts there are, how many are open, how many need a replacement and how many have one.",
+  "description": "One record per font family: every font-policy family (169: the 153 the owner reviewed on 2026-09-29 plus the rows added since for Intos, the emoji and math faces and the script-font dependencies). Derived fields come from the policy, the measurement report, the pinned opf-render manifest and symbol-font snapshots, the pinned pptx.gallery card-font snapshot, the committed native PowerPoint comparison output and the committed parity results; next actions and evidence come from font-tracker.overrides.json. The summary's licensing block answers how many fonts there are, how many are open, how many need a replacement and how many have one.",
   "inputs": {
     "galleryPreviewFonts": {
       "file": "docs/programs/font-fidelity-everywhere/font-tracker.gallery-preview-fonts.json",
@@ -16,7 +16,7 @@
     "policy": {
       "file": "spec/reference/font-policy.json",
       "version": 1,
-      "families": 168
+      "families": 169
     },
     "measurementReport": {
       "file": "docs/programs/font-fidelity-everywhere/tracker-inputs/font-replacements-20260923/report.json",
@@ -485,10 +485,10 @@
   },
   "priorityFormula": "score = severity x (valuesOpen x hostFactor + 1). severity is the status severity, plus 0.5 for a visual Latin route whose measured maximum width delta exceeds 5%. valuesOpen counts parity values whose preview uses the family and whose fontResolution is not already pass (real face or metric replacement with the selected name kept). hostFactor is the share of applicable hosts without per-family verification, never below 0.25.",
   "summary": {
-    "records": 168,
-    "inPolicy": 168,
+    "records": 169,
+    "inPolicy": 169,
     "licensing": {
-      "totalFamilies": 168,
+      "totalFamilies": 169,
       "openDirectlyUsable": {
         "total": 71,
         "drawnAsItself": 67,
@@ -505,18 +505,18 @@
         }
       },
       "needsReplacement": {
-        "total": 97,
+        "total": 98,
         "byClass": {
           "proprietary-latin": 53,
-          "proprietary-script": 41,
+          "proprietary-script": 42,
           "special": 3
         }
       },
       "replacementFound": {
-        "total": 97,
+        "total": 98,
         "metricCompatible": 9,
         "visualLookAlike": 44,
-        "scriptFace": 41,
+        "scriptFace": 42,
         "specialPath": 3,
         "specialPathKinds": {
           "code-table": 3
@@ -528,7 +528,7 @@
       },
       "bundledFaceLicenses": {
         "replacementRecordsByLicense": {
-          "OFL-1.1": 97
+          "OFL-1.1": 98
         },
         "replacementFacesByLicense": {
           "OFL-1.1": 50
@@ -546,7 +546,7 @@
     },
     "byClass": {
       "proprietary-latin": 53,
-      "proprietary-script": 41,
+      "proprietary-script": 42,
       "open": 71,
       "special": 3
     },
@@ -557,7 +557,7 @@
       "needs-special-path": 0,
       "code-table": 0,
       "visual-gap": 0,
-      "script-gap": 24,
+      "script-gap": 25,
       "baseline-needed": 1,
       "metric-measured": 0,
       "documented-visual": 65,
@@ -567,33 +567,33 @@
       "1": 1,
       "2": 0,
       "3": 0,
-      "4": 24,
+      "4": 25,
       "5": 143
     },
     "hostVerification": {
       "node": {
         "verified": 145,
-        "unverified": 23,
+        "unverified": 24,
         "NA": 0
       },
       "browser": {
         "verified": 144,
-        "unverified": 24,
+        "unverified": 25,
         "NA": 0
       },
       "editor": {
         "verified": 145,
-        "unverified": 23,
+        "unverified": 24,
         "NA": 0
       },
       "galleryEditor": {
         "verified": 145,
-        "unverified": 23,
+        "unverified": 24,
         "NA": 0
       },
       "galleryCards": {
         "verified": 100,
-        "unverified": 43,
+        "unverified": 44,
         "NA": 25
       }
     },
@@ -601,7 +601,7 @@
       "verified": 168,
       "partial": 0,
       "failed": 0,
-      "unverified": 0,
+      "unverified": 1,
       "NA": 0
     },
     "nativeVerifiedFamilies": [
@@ -777,7 +777,7 @@
     "nativePartialFamilies": [],
     "nativeFailedFamilies": [],
     "bundled": {
-      "yes": 168,
+      "yes": 169,
       "no": 0
     },
     "parityRerunNeeded": 7
@@ -1322,7 +1322,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 91
+        "rank": 92
       }
     },
     {
@@ -1643,7 +1643,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 67
+        "rank": 68
       }
     },
     {
@@ -2208,7 +2208,7 @@
         "valuesAffected": 704,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 92
+        "rank": 93
       }
     },
     {
@@ -2760,7 +2760,7 @@
         "valuesAffected": 704,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 93
+        "rank": 94
       }
     },
     {
@@ -2998,7 +2998,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 78
+        "rank": 79
       }
     },
     {
@@ -3336,7 +3336,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 94
+        "rank": 95
       }
     },
     {
@@ -3674,7 +3674,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 95
+        "rank": 96
       }
     },
     {
@@ -4073,7 +4073,7 @@
         "valuesAffected": 4,
         "valuesOpen": 4,
         "hostFactor": 0.25,
-        "rank": 45
+        "rank": 46
       }
     },
     {
@@ -4287,7 +4287,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 96
+        "rank": 97
       }
     },
     {
@@ -4568,7 +4568,7 @@
         "valuesAffected": 3,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 97
+        "rank": 98
       }
     },
     {
@@ -4830,7 +4830,7 @@
         "valuesAffected": 3,
         "valuesOpen": 3,
         "hostFactor": 0.25,
-        "rank": 58
+        "rank": 59
       }
     },
     {
@@ -5104,7 +5104,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 79
+        "rank": 80
       }
     },
     {
@@ -5311,7 +5311,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 98
+        "rank": 99
       }
     },
     {
@@ -5533,7 +5533,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 99
+        "rank": 100
       }
     },
     {
@@ -5772,7 +5772,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 46
+        "rank": 47
       }
     },
     {
@@ -6513,7 +6513,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 100
+        "rank": 101
       }
     },
     {
@@ -6733,7 +6733,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 101
+        "rank": 102
       }
     },
     {
@@ -7010,7 +7010,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 47
+        "rank": 48
       }
     },
     {
@@ -7288,7 +7288,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 48
+        "rank": 49
       }
     },
     {
@@ -7570,7 +7570,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 34
+        "rank": 35
       }
     },
     {
@@ -7772,7 +7772,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 102
+        "rank": 103
       }
     },
     {
@@ -8194,7 +8194,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 103
+        "rank": 104
       }
     },
     {
@@ -8445,7 +8445,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 80
+        "rank": 81
       }
     },
     {
@@ -8715,7 +8715,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 49
+        "rank": 50
       }
     },
     {
@@ -8993,7 +8993,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 81
+        "rank": 82
       }
     },
     {
@@ -9269,7 +9269,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 50
+        "rank": 51
       }
     },
     {
@@ -9483,7 +9483,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 104
+        "rank": 105
       }
     },
     {
@@ -9757,7 +9757,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 51
+        "rank": 52
       }
     },
     {
@@ -10033,7 +10033,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 35
+        "rank": 36
       }
     },
     {
@@ -10314,7 +10314,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 36
+        "rank": 37
       }
     },
     {
@@ -10602,7 +10602,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 37
+        "rank": 38
       }
     },
     {
@@ -10882,7 +10882,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 52
+        "rank": 53
       }
     },
     {
@@ -11163,7 +11163,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 105
+        "rank": 106
       }
     },
     {
@@ -11378,7 +11378,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 106
+        "rank": 107
       }
     },
     {
@@ -12024,7 +12024,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 60
+        "rank": 61
       }
     },
     {
@@ -12247,7 +12247,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 82
+        "rank": 83
       }
     },
     {
@@ -12788,7 +12788,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 107
+        "rank": 108
       }
     },
     {
@@ -13391,7 +13391,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 68
+        "rank": 69
       }
     },
     {
@@ -13613,7 +13613,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 108
+        "rank": 109
       }
     },
     {
@@ -13867,7 +13867,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 53
+        "rank": 54
       }
     },
     {
@@ -14121,7 +14121,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 54
+        "rank": 55
       }
     },
     {
@@ -14396,7 +14396,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 38
+        "rank": 39
       }
     },
     {
@@ -14724,7 +14724,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 61
+        "rank": 62
       }
     },
     {
@@ -14934,7 +14934,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 109
+        "rank": 110
       }
     },
     {
@@ -15223,7 +15223,7 @@
         "valuesAffected": 6,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 110
+        "rank": 111
       }
     },
     {
@@ -15504,7 +15504,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 55
+        "rank": 56
       }
     },
     {
@@ -15825,7 +15825,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 69
+        "rank": 70
       }
     },
     {
@@ -16331,7 +16331,7 @@
         "valuesAffected": 3,
         "valuesOpen": 3,
         "hostFactor": 0.25,
-        "rank": 28
+        "rank": 29
       }
     },
     {
@@ -17132,7 +17132,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 29
+        "rank": 30
       }
     },
     {
@@ -17362,7 +17362,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 111
+        "rank": 112
       }
     },
     {
@@ -17592,7 +17592,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 112
+        "rank": 113
       }
     },
     {
@@ -17818,7 +17818,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 113
+        "rank": 114
       }
     },
     {
@@ -18044,7 +18044,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 114
+        "rank": 115
       }
     },
     {
@@ -18372,7 +18372,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 62
+        "rank": 63
       }
     },
     {
@@ -19223,6 +19223,174 @@
       }
     },
     {
+      "family": "Leelawadee UI",
+      "class": "proprietary-script",
+      "inPolicy": true,
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "selectedNamePreservedInPptx": true,
+      "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
+      "previewRoute": {
+        "family": "Noto Sans Thai",
+        "tier": "visual",
+        "kind": "replacement",
+        "alternates": [],
+        "alternatesBundled": {},
+        "disabledFeatures": [],
+        "decision": null,
+        "source": null,
+        "pendingBundle": null
+      },
+      "bundled": {
+        "yes": true,
+        "applies": "route-target",
+        "family": "Noto Sans Thai",
+        "pack": "scripts",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/noto-sans-thai",
+            "version": "0.4.2",
+            "pack": "scripts",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-thai/v/0.4.2",
+            "vendored": null,
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "400Regular/NotoSansThai_400Regular.ttf",
+            "sha256": "9acb585d8662ca4ed1b1cf5889dfa1393f8555103b3986e1ea1e3af4faef70bd"
+          },
+          {
+            "style": "700",
+            "file": "700Bold/NotoSansThai_700Bold.ttf",
+            "sha256": "0be544f347b3ab6382bdc2b555a783727a4858a3dc140670406924670967d916"
+          }
+        ],
+        "stylesAvailable": [
+          "400",
+          "700"
+        ]
+      },
+      "stylesRequired": [
+        "400",
+        "700"
+      ],
+      "replacementStylesRequired": [
+        "400",
+        "700"
+      ],
+      "stylesMissing": [],
+      "stylesExplicitGaps": [],
+      "approximateStyles": [],
+      "stylesBasis": "assumed: real font not measured; four styles for Latin, regular and bold for script families",
+      "scripts": [
+        "Thai",
+        "Khmer",
+        "Latin"
+      ],
+      "measurements": null,
+      "candidates": [],
+      "hostVerification": {
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
+        "galleryCards": "unverified"
+      },
+      "hostLoading": {
+        "node": "only when the scripts option is passed ('auto' or a script list; opf-render#55)",
+        "browser": "when the host requests scripts (opf-render#55)",
+        "editor": "auto (opf-editor#40)",
+        "galleryEditor": "script-font manifest (opf#171)",
+        "galleryCards": "self-hosted preview webfont: @fontsource/noto-sans-thai 5.3.0 (static, weights 400 700, upright only); no font scheme uses this family, so no card test covers it"
+      },
+      "nativeVerification": {
+        "status": "unverified",
+        "note": "No native PowerPoint check recorded for this family in docs/evidence."
+      },
+      "acceptance": {
+        "fixture": "pending",
+        "accepted": false,
+        "date": null,
+        "evidence": [],
+        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+      },
+      "scriptCorpus": {
+        "corpus": "opf-script-corpora-v1",
+        "face": "Noto Sans Thai",
+        "weights": [
+          400,
+          700
+        ],
+        "scripts": [
+          "Thai"
+        ],
+        "faceSamples": 14,
+        "equalToHarfBuzz": 14,
+        "recordedFontkitLimits": 0,
+        "ownScriptBmpCoverage": 1,
+        "lineHeightEm": 1.51,
+        "original": null
+      },
+      "paritySignals": {
+        "source": "parity-results-2026-10-02-published-0.12.json",
+        "totalValues": 850,
+        "valuesAffected": 0,
+        "fontResolution": {
+          "pass": 0,
+          "near": 0,
+          "fail": 0
+        },
+        "statusAtRun": {},
+        "resolvedAtRun": [],
+        "pptxNamedValues": 0,
+        "byDimension": {},
+        "expectedStatusOnMain": "visual-substitute",
+        "rerunNeeded": false
+      },
+      "phase": 4,
+      "status": "script-gap",
+      "statusReason": "visual script route: the script corpus (FF-44) qualifies coverage and shaping; native PowerPoint comparison and the recorded appearance gap remain",
+      "nextAction": "Native PowerPoint comparison (FF-46) is the remaining acceptance gate and has not been run for this family: the owner decided on 2026-11-23 to record it as not yet natively verified (opf#1399). Added with the 0.35 script defaults (2026-11-23) as the default for Thai and Khmer: it ships with Windows by default. Thai text previews with Noto Sans Thai at 0.96 and Khmer with Noto Sans Khmer at 1.19 (the policy's size factors: the sum of the installed original's shaped advances over the open face's, HarfBuzz with the language tag, eight sentences per language; Thai 0.958, per-sentence 0.935 to 0.985; Khmer 1.19, per-sentence 1.163 to 1.235). Read-only PowerPoint check 2026-11-23 (16.0 build 20625), one slide per language exported with the default: PowerPoint broke every line at the same word as OPF. Not run: the native acceptance fixtures of FF-46 for this family, and a script-corpus measurement under its own name.",
+      "evidence": [
+        {
+          "label": "opf-render#55 (auto script fonts)",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/55"
+        },
+        {
+          "label": "opf-editor#40 (editor script fonts)",
+          "url": "https://github.com/OpenPresentation/opf-editor/pull/40"
+        },
+        {
+          "label": "Script font model",
+          "url": "docs/programs/font-fidelity-everywhere/script-font-model.md"
+        },
+        {
+          "label": "Font replacement measurements (2026-09-23)",
+          "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "Script corpora and per-family qualification (FF-44)",
+          "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+        },
+        {
+          "label": "Script corpora evidence (2026-10-01)",
+          "url": "docs/evidence/script-corpora-20261001/README.md"
+        }
+      ],
+      "priority": {
+        "score": 2,
+        "severity": 2,
+        "valuesAffected": 0,
+        "valuesOpen": 0,
+        "hostFactor": 1,
+        "rank": 27
+      }
+    },
+    {
       "family": "Liberation Mono",
       "class": "open",
       "inPolicy": true,
@@ -19456,7 +19624,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 115
+        "rank": 116
       }
     },
     {
@@ -19693,7 +19861,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 116
+        "rank": 117
       }
     },
     {
@@ -19930,7 +20098,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 117
+        "rank": 118
       }
     },
     {
@@ -20141,7 +20309,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 118
+        "rank": 119
       }
     },
     {
@@ -20342,7 +20510,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 119
+        "rank": 120
       }
     },
     {
@@ -20582,7 +20750,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 83
+        "rank": 84
       }
     },
     {
@@ -20846,7 +21014,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 70
+        "rank": 71
       }
     },
     {
@@ -21090,7 +21258,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 84
+        "rank": 85
       }
     },
     {
@@ -22293,7 +22461,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 120
+        "rank": 121
       }
     },
     {
@@ -22712,7 +22880,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 63
+        "rank": 64
       }
     },
     {
@@ -22948,7 +23116,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 85
+        "rank": 86
       }
     },
     {
@@ -23367,7 +23535,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 64
+        "rank": 65
       }
     },
     {
@@ -23695,7 +23863,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 71
+        "rank": 72
       }
     },
     {
@@ -24016,7 +24184,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 72
+        "rank": 73
       }
     },
     {
@@ -24240,7 +24408,7 @@
         "valuesAffected": 5,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 121
+        "rank": 122
       }
     },
     {
@@ -24557,7 +24725,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 27
+        "rank": 28
       }
     },
     {
@@ -25356,7 +25524,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 122
+        "rank": 123
       }
     },
     {
@@ -25509,7 +25677,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 56
+        "rank": 57
       }
     },
     {
@@ -25737,7 +25905,7 @@
         "valuesAffected": 2,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 123
+        "rank": 124
       }
     },
     {
@@ -25955,7 +26123,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 124
+        "rank": 125
       }
     },
     {
@@ -26199,7 +26367,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 125
+        "rank": 126
       }
     },
     {
@@ -26407,7 +26575,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 126
+        "rank": 127
       }
     },
     {
@@ -26625,7 +26793,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 127
+        "rank": 128
       }
     },
     {
@@ -26852,7 +27020,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 128
+        "rank": 129
       }
     },
     {
@@ -27081,7 +27249,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 129
+        "rank": 130
       }
     },
     {
@@ -27310,7 +27478,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 130
+        "rank": 131
       }
     },
     {
@@ -27528,7 +27696,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 131
+        "rank": 132
       }
     },
     {
@@ -27753,7 +27921,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 132
+        "rank": 133
       }
     },
     {
@@ -27978,7 +28146,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 133
+        "rank": 134
       }
     },
     {
@@ -28205,7 +28373,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 134
+        "rank": 135
       }
     },
     {
@@ -28442,7 +28610,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 135
+        "rank": 136
       }
     },
     {
@@ -28667,7 +28835,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 136
+        "rank": 137
       }
     },
     {
@@ -28894,7 +29062,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 137
+        "rank": 138
       }
     },
     {
@@ -29134,7 +29302,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 138
+        "rank": 139
       }
     },
     {
@@ -29342,7 +29510,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 139
+        "rank": 140
       }
     },
     {
@@ -29567,7 +29735,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 140
+        "rank": 141
       }
     },
     {
@@ -29740,7 +29908,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 141
+        "rank": 142
       }
     },
     {
@@ -29950,7 +30118,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 142
+        "rank": 143
       }
     },
     {
@@ -30162,7 +30330,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 143
+        "rank": 144
       }
     },
     {
@@ -30387,7 +30555,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 144
+        "rank": 145
       }
     },
     {
@@ -30624,7 +30792,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 145
+        "rank": 146
       }
     },
     {
@@ -30832,7 +31000,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 146
+        "rank": 147
       }
     },
     {
@@ -31040,7 +31208,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 147
+        "rank": 148
       }
     },
     {
@@ -31265,7 +31433,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 148
+        "rank": 149
       }
     },
     {
@@ -31501,7 +31669,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 149
+        "rank": 150
       }
     },
     {
@@ -31726,7 +31894,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 150
+        "rank": 151
       }
     },
     {
@@ -31934,7 +32102,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 151
+        "rank": 152
       }
     },
     {
@@ -31997,11 +32165,13 @@
       "stylesRequiredByRole": {
         "400": [
           "Angsana New",
-          "DilleniaUPC"
+          "DilleniaUPC",
+          "Leelawadee UI"
         ],
         "700": [
           "Angsana New",
-          "DilleniaUPC"
+          "DilleniaUPC",
+          "Leelawadee UI"
         ]
       },
       "stylesMissing": [],
@@ -32161,7 +32331,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 152
+        "rank": 153
       }
     },
     {
@@ -32376,7 +32546,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 153
+        "rank": 154
       }
     },
     {
@@ -32584,7 +32754,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 154
+        "rank": 155
       }
     },
     {
@@ -32912,7 +33082,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 65
+        "rank": 66
       }
     },
     {
@@ -33143,7 +33313,7 @@
         "valuesAffected": 7,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 155
+        "rank": 156
       }
     },
     {
@@ -33421,7 +33591,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 57
+        "rank": 58
       }
     },
     {
@@ -33643,7 +33813,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 156
+        "rank": 157
       }
     },
     {
@@ -33971,7 +34141,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 73
+        "rank": 74
       }
     },
     {
@@ -34171,7 +34341,7 @@
         "valuesAffected": 3,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 157
+        "rank": 158
       }
     },
     {
@@ -34403,7 +34573,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 158
+        "rank": 159
       }
     },
     {
@@ -34896,7 +35066,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 159
+        "rank": 160
       }
     },
     {
@@ -35148,7 +35318,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 160
+        "rank": 161
       }
     },
     {
@@ -35356,7 +35526,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 161
+        "rank": 162
       }
     },
     {
@@ -35579,7 +35749,7 @@
         "valuesAffected": 3,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 162
+        "rank": 163
       }
     },
     {
@@ -35785,7 +35955,7 @@
         "valuesAffected": 848,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 163
+        "rank": 164
       }
     },
     {
@@ -36071,7 +36241,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 39
+        "rank": 40
       }
     },
     {
@@ -36745,7 +36915,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 30
+        "rank": 31
       }
     },
     {
@@ -36999,7 +37169,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 31
+        "rank": 32
       }
     },
     {
@@ -37671,7 +37841,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 86
+        "rank": 87
       }
     },
     {
@@ -37954,7 +38124,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 74
+        "rank": 75
       }
     },
     {
@@ -38552,7 +38722,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 75
+        "rank": 76
       }
     },
     {
@@ -39434,7 +39604,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 87
+        "rank": 88
       }
     },
     {
@@ -39804,7 +39974,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 76
+        "rank": 77
       }
     },
     {
@@ -40056,7 +40226,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 40
+        "rank": 41
       }
     },
     {
@@ -40308,7 +40478,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 41
+        "rank": 42
       }
     },
     {
@@ -40532,7 +40702,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 164
+        "rank": 165
       }
     },
     {
@@ -40773,7 +40943,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 77
+        "rank": 78
       }
     },
     {
@@ -40952,7 +41122,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 165
+        "rank": 166
       }
     },
     {
@@ -41397,7 +41567,7 @@
         "valuesAffected": 3,
         "valuesOpen": 3,
         "hostFactor": 0.25,
-        "rank": 59
+        "rank": 60
       }
     },
     {
@@ -41775,7 +41945,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 88
+        "rank": 89
       }
     },
     {
@@ -42050,7 +42220,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 42
+        "rank": 43
       }
     },
     {
@@ -42303,7 +42473,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 32
+        "rank": 33
       }
     },
     {
@@ -42556,7 +42726,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 33
+        "rank": 34
       }
     },
     {
@@ -42836,7 +43006,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 166
+        "rank": 167
       }
     },
     {
@@ -43042,7 +43212,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 167
+        "rank": 168
       }
     },
     {
@@ -43668,7 +43838,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 43
+        "rank": 44
       }
     },
     {
@@ -43996,7 +44166,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 66
+        "rank": 67
       }
     },
     {
@@ -44286,7 +44456,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 44
+        "rank": 45
       }
     },
     {
@@ -44948,7 +45118,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 89
+        "rank": 90
       }
     },
     {
@@ -45326,7 +45496,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 90
+        "rank": 91
       }
     },
     {
@@ -45543,7 +45713,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 168
+        "rank": 169
       }
     },
     {

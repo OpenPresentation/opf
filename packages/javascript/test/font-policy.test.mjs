@@ -154,16 +154,18 @@ describe("font policy table", () => {
   // RR-38: a visual replacement whose glyphs and advances are far from the real font's carries a preview size multiplier.
   test("sizeAdjust is a preview-only multiplier on visual rows, with its basis, on the measured rows only", () => {
     const adjusted = rows.filter((row) => row.replacement?.sizeAdjust !== undefined);
-    // RR-38 (Arabic Typesetting) and opf#361 (the rule factors of five more script families, measured natively).
+    // RR-38 (Arabic Typesetting), opf#361 (the rule factors of five more script families, measured natively) and the 0.35 script
+    // defaults (Leelawadee UI for Thai, by advance sums).
     assert.deepEqual(adjusted.map((row) => `${row.family}->${row.replacement.family}`).sort(), [
-      "Angsana New->Noto Sans Thai", "Arabic Typesetting->Noto Naskh Arabic", "DilleniaUPC->Noto Sans Thai",
+      "Angsana New->Noto Sans Thai", "Arabic Typesetting->Noto Naskh Arabic", "DilleniaUPC->Noto Sans Thai", "Leelawadee UI->Noto Sans Thai",
       "Malgun Gothic->Noto Sans KR", "Nirmala UI->Noto Sans Devanagari", "Sakkal Majalla->Noto Naskh Arabic",
     ]);
     // opf#361 rule: the smallest factor with no line over 3 percent natively (precomposed Hangul for Malgun Gothic).
     assert.deepEqual(Object.fromEntries(adjusted.map((row) => [row.family, row.replacement.sizeAdjust])), {
-      "Angsana New": 0.75, "Arabic Typesetting": 0.64, DilleniaUPC: 0.68, "Malgun Gothic": 1.07, "Nirmala UI": 1.07, "Sakkal Majalla": 0.89,
+      "Angsana New": 0.75, "Arabic Typesetting": 0.64, DilleniaUPC: 0.68, "Leelawadee UI": 0.96, "Malgun Gothic": 1.07, "Nirmala UI": 1.07, "Sakkal Majalla": 0.89,
     });
-    for (const row of adjusted.filter((r) => r.family !== "Arabic Typesetting")) assert.match(row.replacement.sizeAdjustBasis, /opf#361 rule/, row.family);
+    for (const row of adjusted.filter((r) => !["Arabic Typesetting", "Leelawadee UI"].includes(r.family))) assert.match(row.replacement.sizeAdjustBasis, /opf#361 rule/, row.family);
+    assert.match(fontPolicyFor("Leelawadee UI").replacement.sizeAdjustBasis, /v0\.35 script defaults/);
     // Traditional Arabic, Ebrima and MS Gothic stay without a multiplier (opf#361 decision).
     for (const family of ["Traditional Arabic", "Ebrima", "MS Gothic"]) assert.equal(fontPolicyFor(family).replacement.sizeAdjust, undefined, family);
     for (const row of adjusted) {

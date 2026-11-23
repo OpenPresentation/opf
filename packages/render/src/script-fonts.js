@@ -130,21 +130,32 @@ export const SCRIPT_FONT_REPLACEMENTS = freeze([
  * replacement's font size by it in measurement and drawing alike, so a replacement much wider than the real font (Noto Naskh Arabic
  * for Arabic Typesetting: 1/0.64) draws lines of the length PowerPoint draws. The exported size and core's geometry never change.
  */
-export function sizeAdjustFor(row, drawnFamily) {
-  const policy = typeof row === "string" ? fontPolicyFor(row) : row;
-  const replacement = policy?.replacement, adjust = replacement?.sizeAdjust;
+export function sizeAdjustFor(row, drawnFamily, script) {
+  const replacement = replacementFor(row, script), adjust = replacement?.sizeAdjust;
   return typeof adjust === "number" && adjust !== 1 && typeof replacement.family === "string" && replacement.family.toLowerCase() === String(drawnFamily).toLowerCase() ? adjust : undefined;
+}
+
+/**
+ * The replacement a policy row names for runs of `script` (an ISO 15924 key such as `Arab`): the row's script replacement
+ * (`replacement.scripts[script]`) when it has one, otherwise its replacement. A Latin family whose own replacement is metric can draw
+ * another script with another face: Arial and Times New Roman draw Latin text with Arimo and Tinos, and Arabic-script runs with Noto
+ * Naskh Arabic at the multiplier measured on those runs. `row` is a policy row, or the requested family name.
+ */
+export function replacementFor(row, script) {
+  const policy = typeof row === "string" ? fontPolicyFor(row) : row;
+  const replacement = policy?.replacement;
+  return (typeof script === "string" && replacement?.scripts?.[script]) || replacement || undefined;
 }
 
 /**
  * RR-38: where PowerPoint puts the baseline of a line below its top, in em, for the policy row's replacement drawn as `drawnFamily`
  * (`{lineAscent, lineAscentMixed}`: a line in the real font alone, and a line that also holds other fonts), or undefined. Measured in
- * a native PowerPoint probe (Arabic Typesetting 0.70 and 0.78); core places baselines one em below the line top.
+ * a native PowerPoint probe (Arabic Typesetting 0.70 and 0.78); core places baselines one em below the line top. `script` picks a
+ * script replacement as `sizeAdjustFor` does.
  */
-export function lineAscentFor(row, drawnFamily) {
-  const policy = typeof row === "string" ? fontPolicyFor(row) : row;
-  const replacement = policy?.replacement;
-  if (!sizeAdjustFor(policy, drawnFamily) || typeof replacement.lineAscent !== "number") return undefined;
+export function lineAscentFor(row, drawnFamily, script) {
+  const replacement = replacementFor(row, script);
+  if (!sizeAdjustFor(row, drawnFamily, script) || typeof replacement.lineAscent !== "number") return undefined;
   return {lineAscent: replacement.lineAscent, lineAscentMixed: typeof replacement.lineAscentMixed === "number" ? replacement.lineAscentMixed : replacement.lineAscent};
 }
 
@@ -439,6 +450,18 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
       if (isNew) options.onFallback?.(note);
     }
   };
+  const scriptReplacementOf = (family, script) => (family ? fontPolicyFor(String(family))?.replacement?.scripts?.[script] : undefined);
+  /**
+   * The slot family whose policy row decides a run's multiplier (the family the slot names, before a script replacement takes its place).
+   * A script the Latin slot covers (Ethiopic) has no slot of its own: the theme's script entry names its family (Ebrima), so that
+   * family's row decides when it has a replacement for the script. Without one (Sylfaen for Armenian and Georgian) the Latin family does.
+   */
+  const slotFamilyFor = (run, slots) => {
+    if (run.role === "eastAsian") return slots.eastAsian;
+    if (run.role === "complexScript") return slots.complexScript;
+    const entry = run.script !== "Latn" && slots.supplement?.script === run.script ? slots.supplement.family : undefined;
+    return entry && scriptReplacementOf(entry, run.script) ? entry : slots.latin;
+  };
   const candidatesFor = (run, slots) => {
     const list = [run.role === "eastAsian" ? slots.eastAsian : run.role === "complexScript" ? slots.complexScript : slots.latin];
     if (run.script !== "Latn") {
@@ -448,8 +471,13 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
       // proprietary script families keep the designated order below until they carry a measured multiplier of their own.
       const scriptRule = list[0] ? SCRIPT_FONT_REPLACEMENTS.find(rule => rule.script === run.script && rule.requestedFamily.toLowerCase() === String(list[0]).toLowerCase()) : undefined;
       if (scriptRule && sizeAdjustFor(list[0], scriptRule.substitutes[0])) list.push(scriptRule.substitutes[0]);
+      // A slot family whose policy row names a replacement for this script (Arial and Times New Roman: Noto Naskh Arabic for Arabic-script
+      // runs) is drawn as that replacement for these runs, as Arabic Typesetting resolves to its own: the replacement takes the family's
+      // place, so the family's Latin replacement (Arimo, Tinos, which have no Arabic) is never probed, loaded or reported as lacking glyphs.
+      // The theme's script supplement (the Arab entry names Times New Roman or Arial too) takes it the same way.
       if (slots.supplement && slots.supplement.script === run.script) list.push(slots.supplement.family);
       list.push(...designatedFamilies(run.script, serif));
+      return [...new Set(list.filter(Boolean).map(family => scriptReplacementOf(family, run.script)?.family ?? family))];
     }
     return [...new Set(list.filter(Boolean))];
   };
@@ -535,7 +563,7 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
     const cached = plans.get(cacheKey);
     if (cached) return cached;
     const slots = slotsFor(style);
-    const runs = itemizeScripts(text, profile).map(run => ({...run, candidates: candidatesFor(run, slots)}));
+    const runs = itemizeScripts(text, profile).map(run => ({...run, candidates: candidatesFor(run, slots), slotFamily: slotFamilyFor(run, slots)}));
     const pending = new Map();
     const global = [...new Set([...runs.flatMap(run => run.candidates), ...designatedFamilies(fontKey(profile.script ?? "Zzzz", text, profile), serif), ...designatedFamilies("Latn", serif)])];
     const unique = names => names.map(name => resolveName(name, style)).filter((name, index, all) => name && all.indexOf(name) === index);
@@ -557,11 +585,13 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
       // RR-38: the slot family's replacement draws at the policy's size multiplier. Unmeasured, the replacement is the first face
       // the stack names after the requested family; the requested name leaves the stack so a host that has the real font installed
       // (a browser on Windows) cannot draw it at the reduced size.
-      const adjustOf = family => sizeAdjustFor(run.candidates[0], family);
-      const ascentOf = family => lineAscentFor(run.candidates[0], family);
+      const adjustOf = family => sizeAdjustFor(run.slotFamily ?? run.candidates[0], family, run.script);
+      const ascentOf = family => lineAscentFor(run.slotFamily ?? run.candidates[0], family, run.script);
       if (!measured) {
-        const adjust = adjustOf(run.candidates[1]);
-        push(run.text, adjust ? run.candidates[1] : run.candidates[0], adjust ? run.candidates.slice(1) : run.candidates, adjust, ascentOf(run.candidates[1]));
+        // The adjusted face is the first candidate when a script replacement took the slot family's place, else the one after the family.
+        const lead = run.candidates[0] !== run.slotFamily && adjustOf(run.candidates[0]) ? 0 : 1;
+        const adjust = adjustOf(run.candidates[lead]);
+        push(run.text, adjust ? run.candidates[lead] : run.candidates[0], adjust ? run.candidates.slice(lead) : run.candidates, adjust, ascentOf(run.candidates[lead]));
         continue;
       }
       const chosen = resolveName(run.candidates[0], style);

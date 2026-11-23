@@ -7,6 +7,6 @@
   "ooxmlLang": "hi-IN",
   "script": "Deva",
   "direction": "ltr",
-  "fontScheme": "mangal",
-  "googleFontScheme": "noto-sans-devangari"
+  "fontScheme": "nirmala-ui",
+  "googleFontScheme": "noto-sans-devanagari"
 }

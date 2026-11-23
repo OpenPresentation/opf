@@ -529,6 +529,9 @@ describe("the bundled sources", () => {
 		// Reviewed for the always-listed read_example_files on 2026-11-22: 1,400,272 exact bytes (main at 9523eddc3: 1,400,038).
 		// It adds 234 in mcp.md: the tool is listed whenever the viewer is offered, and a host that leaves the examples' files out
 		// answers every path as missing. The limit is unchanged.
+		// Reviewed for the 0.35 font defaults (a deck that declares no language) on 2026-11-23: 1,402,000 exact bytes (main at cf79e66a7:
+		// 1,400,272). It adds 1,728: the section on a deck with no language whose text is Arabic or Hebrew (design-resolution.md +1,558)
+		// and the missing-language rule naming the slides it read (validate.md +170). The limit is unchanged.
 		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
 	});
 });

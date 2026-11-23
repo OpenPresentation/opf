@@ -681,7 +681,7 @@
           "minor": "Yu Gothic",
           "textSample": "これは游ゴシックフォントで書かれています",
           "type": "sans-serif",
-          "description": "Yu Gothic is a sans serif OPF font scheme for East Asian presentations, using Yu Gothic for both headings and body text."
+          "description": "Yu Gothic is the default OPF font scheme for Japanese presentations, using Yu Gothic for both headings and body text. It ships with Windows."
         },
         "arial": {
           "name": "Arial",

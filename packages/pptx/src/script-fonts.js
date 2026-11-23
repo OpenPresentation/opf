@@ -495,7 +495,7 @@ export function observeLanguage({slides, theme, themePath, slideThemes, catalogs
  * stays and `metadata-reference-changed` names the reference. Returns the
  * provenance groups to apply.
  */
-export function reconcileLanguage(groups, observed, report) {
+export function reconcileLanguage(groups, observed, report, document) {
   const slideGroups = groups.filter(item => /^slides\.\d+\.language$/.test(item.field));
   let index = groups.findIndex(item => item.field === "language");
   if (slideGroups.length && observed.slides?.length && index >= 0) {
@@ -519,11 +519,13 @@ export function reconcileLanguage(groups, observed, report) {
     });
   }
   if (index < 0 || observed.lang === undefined) return groups;
-  // RR-59: a language the source left absent stays absent while the runs carry the engine default the export wrote them in;
-  // a language set in PowerPoint is imported as observed.
+  // RR-59: a language the source left absent stays absent while the runs carry the language the export wrote them in: the
+  // engine default, or (v0.35) the language read from the text of a deck in a right-to-left script. A language set in
+  // PowerPoint is imported as observed.
   if (groups[index].ops.some(op => op.remove && op.path?.length === 1 && op.path[0] === "language")) {
     let fallback;
-    try { fallback = resolver({}, {}, observed.catalogs).lang; } catch { fallback = undefined; }
+    const undeclared = document && Array.isArray(document.slides) ? {...document, language: undefined, slides: document.slides.map(slide => slide && typeof slide === "object" ? {...slide, language: undefined} : slide)} : {};
+    try { fallback = resolver(undeclared, {}, observed.catalogs).lang; } catch { fallback = undefined; }
     return typeof fallback === "string" && fallback.toLowerCase() === observed.lang.toLowerCase() ? groups : groups.filter((_, position) => position !== index);
   }
   const stored = groups[index].ops.find(op => op.path?.length === 1 && op.path[0] === "language")?.value;
@@ -536,6 +538,25 @@ export function reconcileLanguage(groups, observed, report) {
 }
 
 /** Whether the language observed in the runs is written right to left. */
+/**
+ * v0.35: a deck that declared no language is exported with each slide's language read from its text (a slide in a right-to-left
+ * script is Arabic or Hebrew, any other the engine default). On import the slides that are not in the language of most runs
+ * carry an observed language of their own, which the source never had. Where the deck's language was restored as absent, a
+ * slide's observed language is dropped when the slide's text gives the same language without it.
+ */
+export function dropLanguagesReadFromText(imported, catalogs) {
+  if (!imported || imported.language !== undefined || !Array.isArray(imported.slides)) return;
+  const bare = imported.slides.map(slide => slide && typeof slide === "object" ? {...slide, language: undefined} : slide);
+  imported.slides.forEach((slide, slideIndex) => {
+    if (!slide || typeof slide.language !== "string") return;
+    try {
+      const read = resolver({...imported, slides: bare}, {slideIndex}, catalogs);
+      const named = resolver({...imported, slides: bare.map((entry, index) => index === slideIndex ? slide : entry)}, {slideIndex}, catalogs);
+      if (read.lang.toLowerCase() === named.lang.toLowerCase()) delete slide.language;
+    } catch { /* a language that does not resolve stays as observed */ }
+  });
+}
+
 export function observedRtl(observed) {
   if (observed.lang === undefined) return false;
   try { return resolver({language: observed.language}, {}, observed.catalogs).rtl === true; } catch { return false; }

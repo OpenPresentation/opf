@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "ebrima",
+  "name": "Ebrima",
+  "app": "powerpoint",
+  "languageFamily": "cs",
+  "languages": [
+    "am"
+  ],
+  "major": "Ebrima",
+  "minor": "Ebrima",
+  "textSample": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+  "type": "sans-serif",
+  "description": "Ebrima is the default OPF font scheme for Amharic presentations, using Ebrima for both headings and body text. It ships with Windows and draws Ethiopic at about the size of the Latin text beside it."
+}

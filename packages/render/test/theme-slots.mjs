@@ -81,12 +81,16 @@ for (const designId of ['aptos', 'calibri', 'georgia', 'meiryo', 'arabic-typeset
 // slot's family is the selected name (never the replacement) and the fallback chain follows it.
 const families = svg => [...new Set([...svg.matchAll(/font-family="([^"]*)"/g)].map(match => match[1]))];
 const chain = (designId, tag, text) => families(toSvg(doc(designId, tag, text), 1));
-assert.ok(chain('aptos', 'ja', '日本語のテキスト').includes('Meiryo, Noto Sans JP, Noto Serif JP, sans-serif'), 'Japanese text: Meiryo, then the open replacement');
+assert.ok(chain('aptos', 'ja', '日本語のテキスト').includes('Yu Gothic, Noto Sans JP, Noto Serif JP, sans-serif'), 'Japanese text: Yu Gothic (the default since 0.35), then the open replacement');
 // RR-38: Arabic Typesetting carries a preview size multiplier measured on its replacement, so the run names that replacement first (the face a
 // registry resolves it to) and not the selected name: a host with the real font installed would otherwise draw it at the reduced size.
 assert.ok(chain('aptos', 'ar', 'مرحبا بالعالم').includes('Noto Naskh Arabic, Noto Sans Arabic, sans-serif'), 'Arabic text: the multiplier-measured replacement, then the designated faces');
-assert.ok(chain('calibri', 'he', 'שלום עולם').includes('David, Noto Sans Hebrew, Noto Serif Hebrew, sans-serif'), 'Hebrew text: David, then the open replacement');
-assert.ok(chain('aptos', 'hi', 'नमस्ते दुनिया').includes('Mangal, Noto Sans Devanagari, Noto Serif Devanagari, sans-serif'), 'Hindi text: Mangal, then the open replacement');
+// v0.35: the Hebrew and Hindi defaults (Segoe UI, Nirmala UI) carry a preview multiplier for their script, so their runs name the
+// replacement first too. A deck that chooses David or Mangal names the selected family, then the open replacement.
+assert.ok(chain('calibri', 'he', 'שלום עולם').includes('Noto Sans Hebrew, Noto Serif Hebrew, sans-serif'), 'Hebrew text: the multiplier-measured replacement of Segoe UI');
+assert.ok(chain('calibri', {bcp47: 'he', fontScheme: 'david'}, 'שלום עולם').includes('David, Noto Sans Hebrew, Noto Serif Hebrew, sans-serif'), 'Hebrew text in David: David, then the open replacement');
+assert.ok(chain('aptos', 'hi', 'नमस्ते दुनिया').includes('Noto Sans Devanagari, Noto Serif Devanagari, sans-serif'), 'Hindi text: the multiplier-measured replacement of Nirmala UI');
+assert.ok(chain('aptos', {bcp47: 'hi', fontScheme: 'mangal'}, 'नमस्ते दुनिया').includes('Mangal, Noto Sans Devanagari, Noto Serif Devanagari, sans-serif'), 'Hindi text in Mangal: Mangal, then the open replacement');
 // Japanese text in a Latin-language deck: the ea slot repeats the latin family, then the script fallback.
 assert.ok(chain('aptos', 'en-US', '日本語のテキスト').includes('Aptos Display, Noto Sans JP, Noto Serif JP, sans-serif'), 'Latin deck: the ea slot repeats latin, then the script fallback');
 // A Latin sentence keeps the latin family in every language.

@@ -529,7 +529,12 @@ function bindSlide(presentation, index, context) {
   if (context.mapInputFamily) design.fonts = Object.fromEntries(Object.entries(design.fonts).map(([role, family]) => [role, context.mapInputFamily(family)]));
   // Script fonts (FF-19): each text run is measured and drawn with its script
   // slot's face; the latin slot stays the design font scheme's family.
-  const scriptFonts = createScriptFonts(scriptProfile(presentation, index, design, context), context.options.textMeasurement, {
+  // The slots name the authored families. `design.fonts` is replaced below by the families the registry draws (Arabic Typesetting
+  // becomes Noto Naskh Arabic), and a run language's profile is built later, on first use: built from the drawn families, a slot that
+  // repeats the scheme's family (an `ar` run in an English deck on the arabic-typesetting scheme) named the replacement, whose policy
+  // row has no size multiplier, so that run was drawn at full size while the deck's own Arabic was drawn at the multiplier.
+  const slotDesign = { ...design };
+  const scriptFonts = createScriptFonts(scriptProfile(presentation, index, slotDesign, context), context.options.textMeasurement, {
     glyphFallback: context.options.glyphFallback,
     onFallback: note => reportGlyphFallback(context, note)
   });
@@ -541,7 +546,7 @@ function bindSlide(presentation, index, context) {
     if (!languageScripts.has(lang)) {
       let own;
       try {
-        const profile = scriptProfile(presentation, index, design, context, lang);
+        const profile = scriptProfile(presentation, index, slotDesign, context, lang);
         own = profile.languageSource === "option" && profile.bcp47?.toLowerCase() !== scriptFonts.profile?.bcp47?.toLowerCase()
           ? createScriptFonts(profile, context.options.textMeasurement, { glyphFallback: context.options.glyphFallback, onFallback: note => reportGlyphFallback(context, note) })
           : undefined;

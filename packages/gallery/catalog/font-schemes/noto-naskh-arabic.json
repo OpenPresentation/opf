@@ -1,6 +1,6 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
-  "id": "noto-naksh-arabic",
+  "id": "noto-naskh-arabic",
   "name": "Noto Naskh Arabic",
   "app": "google-slides",
   "languageFamily": "cs",

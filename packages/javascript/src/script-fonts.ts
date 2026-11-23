@@ -4,6 +4,7 @@ import { resolveFontFamilies } from "./composition.js";
 import { isRecord } from "./content-walk.js";
 import { resolveDesignRecords } from "./design-records.js";
 import { LANGUAGES, type LanguageVocabulary } from "./engine-vocabularies.js";
+import { languageOfText } from "./language-inference.js";
 
 /**
  * Language/script font model (font-fidelity-everywhere FF-18).
@@ -86,8 +87,12 @@ export interface ResolvedScriptFonts extends ScriptFontSlots {
   lang: string;
   /** Canonically cased BCP-47 tag for HTML/SVG `lang`: the authored tag. */
   bcp47: string;
-  /** `default` when the tag came from `defaultLanguage` because no language resolved. */
-  languageSource: "document" | "option" | "default";
+  /**
+   * Where the language came from: the `document` (the deck's or the slide's `language`), the `option`, the `text` (v0.35: no
+   * language is declared and the slide is written in a right-to-left script), or `default` when the tag came from
+   * `defaultLanguage` because no language resolved.
+   */
+  languageSource: "document" | "option" | "text" | "default";
   /** ISO 15924 script (`Zzzz` when it cannot be determined). */
   script: string;
   /** Script slot the language's own text uses. */
@@ -357,10 +362,13 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
   const slide = options.slideIndex === undefined ? undefined : slides[options.slideIndex];
   const authoredLanguage = isRecord(slide) && slide.language !== undefined ? slide.language : document.language;
   const fromDocument = fromOption ? undefined : resolveLanguage(authoredLanguage);
+  // v0.35: with no language declared for the slide or the deck, a slide written in a right-to-left script is read as that
+  // script's language (language-inference.ts), so it is laid out and exported as a deck that declares the language is.
+  const fromText = fromOption || authoredLanguage !== undefined ? undefined : resolveLanguage(languageOfText(document, options.slideIndex));
   const requestedDefault = text(options.defaultLanguage);
   const fallbackTag = requestedDefault && splitTag(requestedDefault) ? requestedDefault : "en-US";
-  const language = fromOption ?? fromDocument ?? resolveLanguage(fallbackTag) ?? { tag: fallbackTag, overrides: {} };
-  const languageSource = fromOption ? "option" : fromDocument ? "document" : "default";
+  const language = fromOption ?? fromDocument ?? fromText ?? resolveLanguage(fallbackTag) ?? { tag: fallbackTag, overrides: {} };
+  const languageSource = fromOption ? "option" : fromDocument ? "document" : fromText ? "text" : "default";
   const overrides = language.overrides;
   const known = language.known;
 
@@ -448,8 +456,8 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
 
 /**
  * The deck base direction composition lays a slide out in: the direction of the presentation language's script
- * (`rtl` for Arabic, Hebrew and the other right-to-left scripts), `ltr` when the document names no language or
- * the language does not resolve. Layout, preview and export all read this one value (RR-05).
+ * (`rtl` for Arabic, Hebrew and the other right-to-left scripts), `ltr` when the language does not resolve. A document
+ * that names no language is `ltr` unless the slide's text is mostly in a right-to-left script (v0.35, language-inference.ts). Layout, preview and export all read this one value (RR-05).
  */
 export function resolveSlideDirection(presentation: unknown, slideIndex?: number): "ltr" | "rtl" {
   if (!isRecord(presentation)) return "ltr";
