@@ -4328,8 +4328,9 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
   });
   const numbers=options.numbering===undefined?undefined:listNumbers(input,options.numbering);
   const listPlain=(value:ListText)=>typeof value==='string'?value:value.map(run=>typeof run==='string'?run:run.text).join('');
+  // P3: a display word (LH-136) is a heading with or without a description under it.
   // LH-133: a one-entry list that shares its label column with sibling blocks (`rowLabels`) is a ruled row, not a heading list.
-  const heading=options.heading===true&&!numbers&&source.length===1&&source[0]!.descriptionRuns!==undefined&&!(options.rows===true&&options.rowLabels);
+  const heading=options.heading===true&&!numbers&&source.length===1&&(source[0]!.descriptionRuns!==undefined||options.display===true)&&!(options.rows===true&&options.rowLabels);
   // LH-07: entries drawn beside step badges (numbered, one level).
   const badged=options.badges===true&&numbers!==undefined&&source.every(item=>item.level===0);
   // LH-14: entries drawn beside icon chips (unnumbered, at least one first-level icon). RR-105: only a first-level entry draws its icon; a
@@ -7694,11 +7695,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   }
   // LH-136: pillars whose titles are one word. A slide whose body is 2 to 5 lists of one entry each, a single word with its description,
   // draws each as the word at display size over an accent rule, with no card (the word says what the card would: the pillar's name).
+  // P3: so does a set of one-word headings without descriptions, which drew as thin pills in an empty body; the family looks alike.
   // Any other set of pillars, a title of several words included, keeps its cards.
   const wordPillar = (node: Pending): boolean => {
     const entries = node.value, entry = Array.isArray(entries) && entries.length === 1 ? record(entries[0]) : undefined;
     return !node.children && node.caption === undefined && (node.field === 'items' || node.field === 'bullets') && node.payload.numbering === undefined && entry !== undefined
-      && typeof entry.text === 'string' && entry.text.trim() !== '' && !/\s/u.test(entry.text.trim()) && [...entry.text.trim()].length <= PILLAR_WORD_MAX && entry.description !== undefined && (entry.level ?? 0) === 0;
+      && typeof entry.text === 'string' && entry.text.trim() !== '' && !/\s/u.test(entry.text.trim()) && [...entry.text.trim()].length <= PILLAR_WORD_MAX && (entry.level ?? 0) === 0;
   };
   if (ruleOn('pillar-words') && pending.length >= 2 && pending.length <= PILLAR_MAX && pending.every(wordPillar)) {
     for (const node of pending) pillarWords.add(node.path);
