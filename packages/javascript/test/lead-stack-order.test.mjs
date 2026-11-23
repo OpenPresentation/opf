@@ -33,4 +33,13 @@ test('LH-67 with LH-83: a comparison with a long second option keeps its options
   assert.equal(result.recomposed, undefined);
   assert.ok(a.box.x + a.box.width <= b.box.x + 1, 'Option A is drawn before Option B');
   assert.equal(a.text.fontSize, b.text.fontSize, 'the two options share one size');
+  // The long option takes the wider share of the row on its own side, at the body size, and the recommendation keeps its banner.
+  assert.ok(b.box.width >= 2 * a.box.width, `${b.box.width} vs ${a.box.width}`);
+  // Core's estimated measurement: 26 px here; the renderer's fonts give the 28 px body size.
+  assert.ok(b.text.fontSize >= 26 - 1e-9, `${b.text.fontSize}`);
+  assert.equal(Math.round(a.box.y), Math.round(b.box.y), 'their first lines on one line');
+  assert.equal(result.emphasis?.shape, 'band', 'the recommendation is the banner');
+  // Balanced options keep equal columns.
+  const even = body(composeSlide({ ...slide, blocks: [{ text: 'Option A: focused pilot\nTwo teams, six weeks.' }, { text: 'Option B: broad rollout\nAll teams, three months.' }, slide.blocks[2]] }, { layout: layouts.comparison }));
+  assert.ok(Math.abs(even[0].box.width - even[1].box.width) < 1);
 });

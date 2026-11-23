@@ -10028,7 +10028,23 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (vacated.some(Boolean)) fire('empty-columns');
     // The regions whose every cell lies in a column that gave way report `collapsed`.
     const gaveWay = new Set(plan.regions.filter(region => cells.some(row => row.includes(region.name)) && cells.every(row => row.every((name, column) => name !== region.name || vacated[column]))).map(region => region.name));
-    const keptWidths = columnWidths(plan.columns.filter((_, column) => !vacated[column]), frame.width, gap);
+    // C01 (WI-3 in a layout): two option regions side by side (two equal columns of single-block primary regions, each holding one
+    // paragraph or list, on a slide without cards) whose texts differ 2.5x or more in length split the width in favor of the longer one,
+    // up to 3:1, on its own side, so a long option keeps its size beside a short one instead of shrinking in a half.
+    const optionWeights = ((): number[] | undefined => {
+      const kept = plan.columns.filter((_, column) => !vacated[column]);
+      if (hasCards || kept.length !== 2 || kept[0] !== kept[1] || !ruleOn('lead-stack')) return undefined;
+      const columns = plan.columns.flatMap((_, column) => vacated[column] ? [] : [column]);
+      const row = cells.find(names => columns.every(column => plan.regions.some(region => region.name === names[column] && region.role === 'primary' && singleBlockRegion(region))) && names[columns[0]!] !== names[columns[1]!]);
+      if (!row) return undefined;
+      const lengths = columns.map(column => { const units = unitsOf(row[column]!), unit = units[0]; return units.length === 1 && unit && !unit.children && unit.caption === undefined && ['text', 'items', 'bullets'].includes(unit.field) ? [...(contentText(unit.field, unit.value) ?? '')].length : 0; });
+      if (lengths.some(length => !length)) return undefined;
+      const ratio = Math.max(...lengths) / Math.min(...lengths);
+      if (ratio < LEAD_MEDIAN_RATIO) return undefined;
+      const wide = Math.min(3, Math.sqrt(ratio));
+      return lengths.map(length => length === Math.max(...lengths) ? wide : 1);
+    })();
+    const keptWidths = columnWidths(optionWeights ?? plan.columns.filter((_, column) => !vacated[column]), frame.width, gap);
     const widths = plan.columns.map((_, column) => vacated[column] ? 0 : keptWidths[vacated.slice(0, column).filter(gone => !gone).length]!);
     const columnX: number[] = [];
     widths.reduce((x, size, column) => { const kept = !vacated[column], start = kept && widths.slice(0, column).some((_, before) => !vacated[before]) ? x + gap : x; columnX.push(start); return kept ? start + size : x; }, 0);
