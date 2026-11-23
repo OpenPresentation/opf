@@ -4794,10 +4794,18 @@ const ALL_CELL_TRACKS: CellTracks = { rows: [false, false, false], columns: [fal
  * row no block names at the edge of the grid keeps its third: it is what puts a lone `bottom:end` block at the bottom, or
  * `middle+bottom` rows below an empty top; so does a row with nothing wholly on one side of it (`start` beside `top:center+end` alone).
  */
-function cellTracks(cells: readonly [number[], number[]][]): CellTracks {
+function cellTracks(cells: readonly [number[], number[]][], fullRowsGive = true): CellTracks {
   const between = (spans: number[][]) => [0, 1, 2].map(index => spans.every(span => !span.includes(index) || (span.includes(index - 1) && span.includes(index + 1)))
     && spans.some(span => span.every(at => at < index)) && spans.some(span => span.every(at => at > index)));
-  return { rows: between(cells.map(cell => cell[0])), columns: between(cells.map(cell => cell[1])) };
+  // opf#1412 (A1): when the slide names two or more cells and every row they name is full (its cells cover every column that takes space),
+  // the rows no cell names give their space away too, so a row of blocks alone takes the whole body. A lone block keeps its edge (a
+  // `bottom:end` note, a `top:start` label, a `top` band), and so does a row that is not full (a corner beside an empty column). A slide
+  // drawn over a background picture keeps its rows (`fullRowsGive` false): its cells may sit on panels the picture draws.
+  const columns = between(cells.map(cell => cell[1])), rowsBetween = between(cells.map(cell => cell[0]));
+  const named = (row: number) => cells.some(cell => cell[0].includes(row));
+  const full = (row: number) => [0, 1, 2].every(column => columns[column] || cells.some(cell => cell[0].includes(row) && cell[1].includes(column)));
+  const fullRows = fullRowsGive && cells.length >= 2 && [0, 1, 2].filter(named).every(full);
+  return { rows: rowsBetween.map((dropped, row) => dropped || (fullRows && !named(row))), columns };
 }
 function regionBox(parts: [number[], number[]], area: LayoutBox, requestedGap: number, tracks: CellTracks = ALL_CELL_TRACKS): LayoutBox {
   const gap = Math.min(requestedGap, area.width / 6, area.height / 6);
@@ -7164,7 +7172,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const backgroundImage = resolveBackgroundImage(slide, options.presentation, options.themeBackground, options.layout, width, height, path, mirrorSide, imageDiagnostics);
   measuredPicture = backgroundImage !== undefined && typeof options.pictureLuminance === 'function';
   const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
-  const regionTracks = cellTracks(regions.map(key => regionParts(key)!));
+  const regionTracks = cellTracks(regions.map(key => regionParts(key)!), backgroundImage === undefined);
   const assets = record(options.presentation).assets;
   // WI-3 (P33): a slide composed with no layout shows its pictures whole unless a design or the block sets a fit: the default
   // fit of automatic composition is `contain`, a placed (edge) picture and every layout keep the engine default `cover`.
