@@ -537,6 +537,11 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   middle of the space under the headings: rows that hug
   their content move down, regions take the height their blocks need in the middle of their cells, and cards hug their
   text (LH-64's hug, whatever it fills of a card).
+- **A table and the note under it** (a `table` layout's body and aside, TAB-1). The pair grows as a body of paragraphs does, the
+  table by the scale's ratio up to its display size and its rows with it, while it covers under three quarters of the body and to
+  at most three quarters (`TABLE_NOTE_GROWN_TARGET`, the target of LH-75's pair beside each other), so a third row or a longer note
+  keeps the size the two-row table grew to instead of dropping to the role sizes. A pair that already covers half the body or more
+  keeps its place unless it grows.
 - **Never grown by these two rules.** A stacked record (`statement`, `quote`, `closing`, which place their message as one stack, a closing at the foot (LH-155), and grow by
   LH-129's rule below), blocks below
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a

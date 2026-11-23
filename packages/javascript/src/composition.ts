@@ -5236,8 +5236,9 @@ function shrinks(next: SlideComposition, base: SlideComposition, options: Compos
 }
 // LH-48: how much of the body's height its content takes, for a body of two or more paragraphs and lists (a lone block grows in
 // composeLayout, fillLone): the height the blocks' text covers (their extents joined where they overlap, as side by side), over the body
-// (the content box below the headings). `spare`: the height left under the content. Undefined for any other body.
-function bodyFill(result: SlideComposition, options: ComposeSlideOptions = {}): { fill: number; spare: number } | undefined {
+// (the content box below the headings). `spare`: the height left under the content. `target`: the share of the body under which the body
+// grows and up to which it grows (LONE_FILL and LONE_TARGET when absent). Undefined for any other body.
+function bodyFill(result: SlideComposition, options: ComposeSlideOptions = {}): { fill: number; spare: number; target?: number } | undefined {
   // LH-06's band or pill and LH-114's pull line keep their own size and place; the blocks above (or below) them are the body that grows.
   // LH-165, LH-162: cards take the body's height and grow their own text (composeLayout's iconCards and textTiles).
   if (LEAD_STACKS.has(result) || CARD_GRIDS.has(result)) return undefined;
@@ -5288,7 +5289,10 @@ function bodyFill(result: SlideComposition, options: ComposeSlideOptions = {}): 
   for (const [from, to] of extents) { if (to > reach) { covered += to - Math.max(from, reach); reach = to; } }
   // C07: a snippet and its aside stand side by side, each at its own anchor: the row covers the taller of the two.
   if (codeAside) covered = Math.max(...extents.map(([from, to]) => to - from));
-  return { fill: covered / (bodyBottom - bodyTop), spare: Math.max(0, bodyBottom - bottom) };
+  // TAB-1 (0.35.2): a table and the note under it grow, as the pair beside each other does (LH-75 follow-up), while they cover under three
+  // quarters of the body (TABLE_NOTE_GROWN_TARGET) and up to it: a table of two rows grew to its display size, and one of three, or the
+  // same table with a longer note, filled half the body at its role sizes and kept them, smaller, with a third of the body empty.
+  return { fill: covered / (bodyBottom - bodyTop), spare: Math.max(0, bodyBottom - bottom), ...(tableNote ? { target: TABLE_NOTE_GROWN_TARGET } : {}) };
 }
 // LH-48: a body of two or more paragraphs and lists that fills under LONE_FILL of its height, with nothing overflowing, is composed again
 // with all of them one, two or three steps of the type scale larger (GROW; each up to its display size), and the largest step that adds
@@ -5309,7 +5313,7 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   if (!start) return undefined;
   // LH-168: a row of steps that already fills LONE_FILL keeps its size and is only centered under the heading (as the same steps in columns
   // are when they grow), so the badges do not sit against the title with the space left below the text.
-  if (start.fill >= LONE_FILL) {
+  if (start.fill >= (start.target ?? LONE_FILL)) {
     if (!result.steps?.some(entry => entry.form === 'row') || bodyReadability(result, options).sizes.some(entry => entry.atFloor)) return undefined;
     const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
     const centered = composeVariant(input, { ...options, [GROW]: 0, [CENTER]: true } as ComposeSlideOptions, before, floor);
@@ -5325,6 +5329,8 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...avatar, ...extra } as ComposeSlideOptions, before, floor);
   // LH-114: a body with a pull line is one stack with it at the top of the body, so it grows but is not centered.
   const pulled = result.items.some(item => item.quoteLayout?.rule);
+  // TAB-1: a table and its note past LONE_FILL are only composed again when they grow; at their role sizes they keep their place.
+  const past = start.fill >= LONE_FILL;
   // One climb of LH-48's steps from `from` with `extra` options, then the centered body: the largest step that adds no finding, sets every
   // block larger and fills at most LONE_TARGET, and passes `accept`. LH-132: each step is composed with the avatar (AVATAR_QUOTES), and the
   // step it ends on (stepsOf) draws a quote's portrait again where that sets nothing smaller (withPortraits).
@@ -5334,10 +5340,10 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
     for (let next = 1; next <= limit; next++) {
       const grown = attempt({ [GROW]: next, ...extra }), fill = grown && bodyFill(grown, options);
       // LH-173: a step that breaks more words than the body had (a label or description of a list included) is no growth.
-      if (!grown || !fill || overflowCount(grown) > 0 || fill.fill > LONE_TARGET || smallest(grown) <= smallest(best) + FONT_GRID_EPSILON || shrinks(grown, best, options) || !accept(grown) || bodyReadability(grown, options).splitWords + listSplitWords(grown) > bodyReadability(best, options).splitWords + listSplitWords(best)) break;
+      if (!grown || !fill || overflowCount(grown) > 0 || fill.fill > (fill.target ?? LONE_TARGET) || smallest(grown) <= smallest(best) + FONT_GRID_EPSILON || shrinks(grown, best, options) || !accept(grown) || bodyReadability(grown, options).splitWords + listSplitWords(grown) > bodyReadability(best, options).splitWords + listSplitWords(best)) break;
       best = grown; steps = next;
     }
-    const centered = pulled ? undefined : attempt({ [GROW]: steps, [CENTER]: true, ...extra }), fill = centered && bodyFill(centered, options);
+    const centered = pulled || (past && !steps) ? undefined : attempt({ [GROW]: steps, [CENTER]: true, ...extra }), fill = centered && bodyFill(centered, options);
     if (centered && fill && overflowCount(centered) === 0 && !shrinks(centered, best, options)) { stepsOf.set(centered, { [GROW]: steps, [CENTER]: true, ...extra }); return centered; }
     if (best !== from) stepsOf.set(best, { [GROW]: steps, ...extra });
     return best;
