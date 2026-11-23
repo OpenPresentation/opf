@@ -11995,6 +11995,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // Each is sized in its tallest geometry, then its nodes take the height of the text (refit).
       // The compact designs (closer rooms, smaller arrows) only when none of PowerPoint's proportions holds the entries (`last`).
       for (const compact of [false, true]) for (let lines = 1; lines <= Math.min(OPF_LINES_MAX, count); lines++) {
+        // C03: chevrons never wrap to a last row of one chevron (five stages are 3 + 2, not 2 + 2 + 1; four are 2 + 2 or one row).
+        if (kind === 'chevrons' && lines > 1 && Math.floor(count / lines) === 1) continue;
         const opf = linearDesign(kind, area, count, gap, rtl, lines, undefined, compact);
         if (opf) designs.push({ design: 'opf', frame: area, nodes: opf.nodes, ...(opf.arrows.length ? { arrows: opf.arrows } : {}), margin: ARRANGEMENT_TEXT_MARGIN[kind], margins: linearMargins(kind, rtl, true), align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine, largest: true,
           refit: need => linearDesign(kind, area, count, gap, rtl, lines, need, compact), ...(compact ? { last: true as const } : {}),
@@ -12038,8 +12040,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (unavailable !== undefined) { outside ??= result; skipped = unavailable; continue; }
       // C03, VPR-1: PowerPoint's chevrons or vertical process covering under half of its region (LINEAR_STRIP_COVER) is kept only when no
       // row or column design of OPF's holds the entries as large: OPF's fills the region where it does (and is then written as its own
-      // shapes). Basic Process keeps PowerPoint's design.
-      if (design.design === 'smartart' && (kind === 'chevrons' || kind === 'vertical-process' || tree) && !candidate && covers(design.nodes) < LINEAR_STRIP_COVER) { strip = result; continue; }
+      // shapes). Basic Process keeps PowerPoint's design. VPR-1: one vertical step is OPF's box, not PowerPoint's box filling the frame.
+      if (design.design === 'smartart' && (kind === 'chevrons' || kind === 'vertical-process' || tree) && !candidate && (covers(design.nodes) < LINEAR_STRIP_COVER || (kind === 'vertical-process' && count === 1))) { strip = result; continue; }
       // Of the card grids, of a cycle's designs and of OPF's rows or columns of a linear arrangement (SH-17, `largest`), the one that holds the largest text.
       const largest = design.design === 'cards' || kind === 'cycle' || design.largest === true;
       // C03: of OPF's linear designs at one size, the one that covers clearly more of the region (two rows of four one-word chevrons, not a
@@ -12421,7 +12423,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     item.box = { x: area.x, y, width: area.width, height: band + height };
     item.alignment = rtl ? 'right' : 'left';
     const ordered = [...badges].sort((a, b) => rtl ? b.cx - a.cx : a.cx - b.cx);
-    return { form: 'row', region: region.name, path: badges[0]!.path, badges: ordered, connector: { x1: ordered[0]!.cx, y1: ordered[0]!.cy, x2: ordered.at(-1)!.cx, y2: ordered.at(-1)!.cy }, lineWidth: 2 * scale };
+    return { form: 'row', region: region.name, path: badges[0]!.path, badges: ordered, connector: { x1: ordered[0]!.cx, y1: ordered[0]!.cy, x2: ordered.at(-1)!.cx, y2: ordered.at(-1)!.cy }, lineWidth: 2 * scale * Math.max(1, size / (LIST_NOMINAL_SIZE * scale)) };
   };
   const row = stepRow();
   if (row) { for (let index = steps.length - 1; index >= 0; index--) if (steps[index]!.region === row.region) steps.splice(index, 1); steps.push(row); }

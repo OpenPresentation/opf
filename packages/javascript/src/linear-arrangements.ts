@@ -47,6 +47,8 @@ export const SMART_ART_SCALES: Readonly<Record<LinearArrangement, readonly numbe
   process: Object.freeze([1024, 426.5, 269, 196.75, 155, 128, 108.875, 94.75, 83.875, 75.25].map(value => value / 1024)),
   'vertical-process': Object.freeze([1024, 409.5, 256, 186, 146.25, 120.375, 102.375, 89, 78.75, 70.5].map(value => value / 1024)),
 });
+/** VPR-1: OPF's vertical flow of one step draws its box at most this share of the area wide. */
+export const VERTICAL_SINGLE_SHARE = .6;
 /** One node squeezed by the frame's other side is this share of the frame (PowerPoint's search stops a step short of 1). */
 const SQUEEZED = 1023 / 1024;
 /** PowerPoint's proportions: a chevron's height over its width and its step, a box's height over its width and its step, a vertical box's. */
@@ -193,7 +195,8 @@ export function linearDesign(kind: LinearArrangement, area: Box, count: number, 
   const place = (box: Box) => rtl ? mirrorBox(box, area) : box, turn = (rotation: number) => rtl ? (rotation === 0 ? 180 : rotation === 180 ? 0 : rotation) : rotation;
   if (kind === 'vertical-process') {
     // Columns two gaps apart, which hold the right arrow from one column to the next; each box half its height from the next.
-    const between = 2 * gap, width = (area.width - (wrap - 1) * between) / wrap;
+    // VPR-1: one step is a box of PowerPoint's proportion at most VERTICAL_SINGLE_SHARE of the area wide, not a block filling it.
+    const between = 2 * gap, width = n === 1 ? Math.min(area.width, VERTICAL_SINGLE_SHARE * area.width, VERTICAL_FLOW_WIDTH * area.height) : (area.width - (wrap - 1) * between) / wrap;
     if (width <= 0) return undefined;
     const fixed = compact ? COMPACT_COLUMN_ROOM * gap : 0;
     const tallest = Math.min(compact ? (area.height - (most - 1) * fixed) / most : area.height / (most + OPF_COLUMN_ROOM * (most - 1)), OPF_MOST['vertical-process'] * width);
@@ -204,7 +207,7 @@ export function linearDesign(kind: LinearArrangement, area: Box, count: number, 
     const length = compact ? COMPACT_ARROW_LENGTH * room : OPF_COLUMN_ARROW_LENGTH * h, thick = compact ? COMPACT_ARROW_THICKNESS * room : OPF_COLUMN_ARROW_THICKNESS * h;
     let entry = 0;
     counts.forEach((k, column) => {
-      const own = (span - (k - 1) * room) / k, x = area.x + column * (width + between), up = column % 2 === 1;
+      const own = (span - (k - 1) * room) / k, x = (n === 1 ? area.x + (area.width - width) / 2 : area.x) + column * (width + between), up = column % 2 === 1;
       for (let j = 0; j < k; j++) {
         const slot = up ? k - 1 - j : j, y = y0 + slot * (own + room);
         nodes.push(boxNode(entry + j, place({ x, y, width, height: own }), FLOW_ROUND_ADJUST));

@@ -47,3 +47,16 @@ test('VPR-1: three one-word steps of a vertical process span their half of the s
   assert.equal(arrangement.design, 'opf');
   assert.ok(extent(arrangement.nodes).width > 0.9 * arrangement.frame.width, `width ${extent(arrangement.nodes).width} of ${arrangement.frame.width}`);
 });
+
+test('C03: chevrons never wrap to a last row of one chevron (five are 3 + 2)', () => {
+  const result = compose({ layout: 'chevrons', title: 'Five stages', blocks: [{ items: ['Scope', 'Baseline', 'Pilot', 'Review', 'Decide'] }] });
+  const ys = result.arrangements[0].nodes.map((node) => Math.round(node.box.y)), counts = [...new Set(ys)].map((y) => ys.filter((entry) => entry === y).length);
+  assert.ok(counts.every((count) => count > 1) || counts.length === 1, `rows ${counts}`);
+});
+
+test('VPR-1: one step is a box of its own proportion, not a block filling its half', () => {
+  const [arrangement] = compose({ layout: 'vertical-process', title: 'How a team joins the pilot', blocks: [{ region: 'body', items: ['Nominate'] }] }).arrangements;
+  assert.equal(arrangement.design, 'opf');
+  assert.ok(arrangement.nodes[0].box.width <= 0.6 * arrangement.frame.width + 1e-6);
+  assert.ok(arrangement.nodes[0].box.height < 0.6 * arrangement.frame.height);
+});

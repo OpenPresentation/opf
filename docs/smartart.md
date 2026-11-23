@@ -161,7 +161,7 @@ then every node takes the height that text needs with its margins (0.15 em above
 least: a chevron 0.4 of its width, a box 0.6, a vertical box 1/1.8), and the whole is centered in the region. Only where none of these
 holds the entries at the list's size does OPF draw a compact form of the same design (rooms of two gaps, the arrow 0.6 of the
 room, a chevron's point 0.12 of its width deep, no least height), so a list is left a list only when no design holds it. Every row of a flow spans the region: a row of fewer entries widens them (a
-column of fewer lengthens them). Every chevron is as wide as the fullest row's (C03), so a shorter last row stops before the right edge.
+column of fewer lengthens them). Every chevron is as wide as the fullest row's (C03), so a shorter last row stops before the right edge, and chevrons never wrap to a row of one chevron (five stages are 3 + 2, six 3 + 3, seven 3 + 2 + 2 or 4 + 3, eight 4 + 4 or 3 + 3 + 2, whichever holds the text largest). One step of a vertical flow is OPF's box of PowerPoint's proportion, at most 0.6 of the region wide, not PowerPoint's box filling the frame (VPR-1).
 
 - **chevrons**: each row a run of chevrons, left to right; a wrapped row breaks after a chevron's point and the next row starts again
   at the left, so the points carry the order;
