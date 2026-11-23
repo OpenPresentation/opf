@@ -8761,6 +8761,19 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     shapeTexts.set(node.path, { value: host.text, textPath });
     items.push({ path: node.path, field: 'shape', type: 'shape', value: node.value, payload: node.payload, box: { ...shape.box }, shape, ...(text ? { text } : {}), textStyle: { ...styleFor('text', textPath), ...(shape.textBold ? { fontWeight: 700 } : {}) }, composition: settings, alignment: 'center' });
   };
+  // C15: pictures (and videos) in one row of a region, some captioned and some not: an uncaptioned one keeps the room of the tallest
+  // caption band beside it empty, so the pictures of the row share one height and their top and bottom edges line up.
+  const captionReserve = new WeakMap<Pending, number>();
+  const reserveCaptions = (units: Pending[], boxes: LayoutBox[], cards: boolean): void => {
+    const media = (unit: Pending) => !unit.children && (unit.field === 'image' || unit.field === 'video');
+    const rows = new Map<string, number[]>();
+    units.forEach((unit, index) => { const box = boxes[index]; if (media(unit) && box) { const key = `${Math.round(box.y)}:${Math.round(box.height)}`; rows.set(key, [...rows.get(key) ?? [], index]); } });
+    for (const row of rows.values()) {
+      const bands = row.map(index => { const inner = payloadBox(boxes[index]!, cards), captioned = captionOf(units[index]!, inner); return captioned ? inner.height - captioned.mediaBox.height : 0; });
+      const band = Math.max(...bands);
+      if (band > 0) row.forEach((index, at) => { if (!bands[at]) captionReserve.set(units[index]!, band); });
+    }
+  };
   const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: RegionListColumns, metricReferenceHeight?: number, anchor: RegionAnchor = 'top', frame?: LayoutBox): void => {
     // LH-06: the block or group with the slide's emphasis is drawn on its surface, a card in its cell; nothing drawn on the surface takes
     // a card of its own. A group's children are arranged inside the card's inset.
@@ -8840,6 +8853,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     box = payloadBox(box, cards);
     let caption = captionOf(node, box);
     if (caption) box = caption.mediaBox;
+    else if (captionReserve.has(node)) box = { ...box, height: Math.max(scale, box.height - captionReserve.get(node)!) };
     // LH-50: a paragraph's eyebrow takes a band at the top of its box; it is placed over the text's final box at the end (placeEyebrows).
     const brow = node.eyebrow ? eyebrowBand(node.eyebrow, box.width, proseMeasure(node, box.width).size) : 0;
     if (brow) box = { ...box, y: box.y + brow, height: Math.max(scale, box.height - brow) };
@@ -10542,6 +10556,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         // A long list (listColumnsOf) is laid out in columns when they read at least as large as one column; with several blocks, a list
         // that does not fit its own cell at the starting size tries columns before it shrinks (RR-81 review: the region's tools before overflow).
         const stack: number[] = [];
+        reserveCaptions(units, boxes, cards);
         units.forEach((unit, index) => {
           const first = items.length;
           placeNode(unit, boxes[index]!, settings, cards, listGrid ? 1 : listColumnsOf(region), region.anchor === 'top' || stacked || planned[index] ? undefined : referenceHeights[index], region.anchor, !cards || bands ? undefined : planned[index] ? frames[index] : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
