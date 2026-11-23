@@ -4349,6 +4349,8 @@ export const STEP_BADGE_GAP=.4;
 export const STEP_PROCESS_MIN=2, STEP_PROCESS_MAX=8, STEP_PROCESS_CHARACTERS=24;
 /** PR1: a `steps` region's lone badge list of at most this many entries draws as a row of steps, each column at least this many ems wide. */
 export const STEP_ROW_MAX=5, STEP_ROW_MIN_EMS=6;
+/** PR1: a row of a list's steps grows its entries up to this size (reference pixels), each grown entry on at most STEP_ROW_LINES lines. */
+export const STEP_ROW_DISPLAY=56, STEP_ROW_LINES=3;
 /**
  * LH-85: the bullet of each nesting level, by `level % LIST_MARKERS.length`, drawn at the entry's size. Every bundled text face has
  * • (U+2022) and the en dash (U+2013); ◦ (U+25E6) and ▪ (U+25AA), the former level 1 and 2 bullets, are missing from most of them
@@ -12388,14 +12390,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const own0 = `${item.path}.0`, ownPath = `${item.path}.${index}`, marker = listOptions.citationMarker;
         const entryOptions: ListFitOptions = marker ? { ...listOptions, citationMarker: (run: string) => marker(run === own0 || run.startsWith(`${own0}.`) ? ownPath + run.slice(own0.length) : run) } : listOptions;
         const probe = fitList([values[index]!], { x: 0, y: 0, width: columnWidth, height: 1e5 }, size, size, entryOptions);
-        if (probe.overflow || probe.fontSize < size - FONT_GRID_EPSILON || probe.listEntries.some(entry => blockCutsWord(entry))) return undefined;
+        if (probe.overflow || probe.fontSize < size - FONT_GRID_EPSILON || probe.listEntries.some(entry => blockCutsWord(entry) || (size > base + FONT_GRID_EPSILON && entry.text.richLines.length > STEP_ROW_LINES))) return undefined;
         height = Math.max(height, probe.height);
         fits.push({ box: { x: 0, y: 0, width: columnWidth, height: probe.height }, start: index, end: index + 1, text: probe });
       }
       return band + height <= area.height + 1e-6 ? { size, diameter, band, height, fits, entryOptions: (index: number) => { const own0 = `${item.path}.0`, ownPath = `${item.path}.${index}`, marker = listOptions.citationMarker; return marker ? { ...listOptions, citationMarker: (run: string) => marker(run === own0 || run.startsWith(`${own0}.`) ? ownPath + run.slice(own0.length) : run) } : listOptions; } } : undefined;
     };
     let chosen: NonNullable<ReturnType<typeof tryAt>> | undefined;
-    const top = Math.max(base, Math.min(capOf(item.composition), snapFontSizeDown(LONE_DISPLAY_SIZES.list * scale)));
+    const top = Math.max(base, Math.min(capOf(item.composition), snapFontSizeDown(STEP_ROW_DISPLAY * scale)));
     for (let size = top; size >= base - FONT_GRID_EPSILON && !chosen; size = snapFontSizeDown(size - 4 / 3 * scale)) chosen = tryAt(Math.max(size, base));
     if (!chosen) return undefined;
     const { size, diameter, band, height } = chosen, y = area.y + (area.height - band - height) / 2, badges: ComposedStepBadge[] = [], fits: ComposedListColumn[] = [];
