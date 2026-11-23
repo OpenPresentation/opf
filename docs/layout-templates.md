@@ -613,10 +613,12 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   line and to the height the box leaves over the description) in bold over an accent rule of 0.14 em across the block (a native
   line in PowerPoint, `ListFit.rules` with `accent`), with no card. Sibling words read at one size. Any other set, a title of
   several words included, keeps its cards. fitList's `display` option (with `heading`) draws one list this way.
-- **A lone timeline (LH-129)** in a template's `body` region, or an automatic slide's only block, first tries three and then two
-  steps of the type scale on its labels (its 18 and 22 px roles to 28 and 32, or 24 and 28 px), and keeps the first at which it fits
-  its box in the same arrangement and no label (the name, a date, an event) takes another line; otherwise it grows by LH-41's few
-  pixels as before.
+- **A lone timeline (LH-129)** in a template's `body` region, or an automatic slide's only block, first tries four, three and then
+  two steps of the type scale on its labels (its 18 and 22 px roles to 33 and 37, 28 and 32, or 24 and 28 px), and keeps the first
+  at which it fits its box in the same arrangement and no label (the name, a date, an event) takes another line; otherwise it grows
+  by LH-41's few pixels as before. A grown band draws its markers and the gaps around them in proportion to its labels (TLN-1).
+  With a lead above it or a note below it, its row hugs the grown timeline when LH-102 centers the body, so the lead, the timeline
+  and the note sit together in the middle of the body rather than at its top and foot (TLN-1).
 - **A lone code panel (LH-101)** grows its code in type-scale steps up to the code display size (32 px) while it covers at most
   60% of the body, and its panel hugs it in the middle of the body. Only code that covers at least 60% of the body takes the whole
   body, its lines in the middle of the panel (`layoutCode`'s `fill`).

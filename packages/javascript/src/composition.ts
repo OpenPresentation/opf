@@ -3307,7 +3307,7 @@ const TIMELINE_GROWTH = 4;
  * LH-129: the growths (reference pixels on every role) a lone timeline tries first, largest first: three and two steps of the type scale
  * above its 18 and 22 px label roles (to 28 and 32, or 24 and 28 px).
  */
-const TIMELINE_STEP_GROWTH = [10, 6] as const;
+const TIMELINE_STEP_GROWTH = [15, 10, 6] as const;
 /** LH-41: a size offset that takes every timeline part to the readability floor (to measure how far a timeline can shrink). */
 const TIMELINE_FLOOR_OFFSET = 1000;
 /** LH-41: several timelines in one region stack in one column of bands while each band is at least this tall (reference pixels). */
@@ -3516,8 +3516,11 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         // lone band centers the block (header and band) in its box; a band of a stack sits at the top of its box, so the bands of one
         // row share their lines.
         // A compact band draws smaller markers and tighter gaps (Claude Design's compact bands).
-        setRadius(Math.min((options.compact?7:9)*scale,bandStep/5));
-        const lift=(options.compact?5:6)*scale,fieldGap=(options.compact?2:4)*scale,pairGap=6*scale,extent=hasRing?ringRadius+strokeWidth/2:radius+(outlined?strokeWidth/2:0);
+        // TLN-1: a lone timeline grown past its role sizes (a positive size offset) draws its markers and gaps in proportion to its
+        // labels, so the band reads as one drawing at the larger size rather than large labels around small dots.
+        const what=source.find(part=>part.role==='what'),grown=effectiveOffset>0&&what?Math.max(1,sizeAt(what,reduction)/what.requestedFontSize):1;
+        setRadius(Math.min((options.compact?7:9)*scale*grown,bandStep/5));
+        const lift=(options.compact?5:6)*scale*grown,fieldGap=(options.compact?2:4)*scale,pairGap=6*scale,extent=hasRing?ringRadius+strokeWidth/2:radius+(outlined?strokeWidth/2:0);
         const whenOf=(fields:TimelineTextPart[])=>fields.find(part=>part.role==='when'),whatOf=(fields:TimelineTextPart[])=>fields.find(part=>part.role==='what')!;
         const pair=(fields:TimelineTextPart[])=>{const when=whenOf(fields);return when?{when:lineWidth(when,reduction)+scale,what:lineWidth(whatOf(fields),reduction)+scale}:undefined;};
         const inline=!!options.compact&&events.every((fields,index)=>{const widths=pair(fields);return !widths||widths.when+pairGap+widths.what<=bandWidthAt(index)+.01;});
@@ -6174,7 +6177,9 @@ function centerTemplate(input: unknown, options: ComposeSlideOptions, result: Sl
   // First what the body's content covers as the layout placed it (each block's lines, parts or rows, not its cell): a body that already
   // covers LONE_TARGET is not composed again.
   const scale = Math.min(result.width, result.height) / 720, extentOf = (item: ComposedItem): readonly [number, number] => {
-    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
+    // TLN-1: a timeline covers what it draws (its bounds: parts, markers and rings), not the top of the cell it sits in the middle of.
+    if (item.timelineLayout) return [item.timelineLayout.bounds.y, item.timelineLayout.bounds.y + item.timelineLayout.bounds.height];
+    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout;
     if (internal) { const parts = (internal.parts as readonly { box: LayoutBox }[]); return [Math.min(item.box.y, ...parts.map(part => part.box.y)), Math.max(...parts.map(part => part.box.y + part.box.height), item.box.y)]; }
     if (item.field === 'table') {
       let table: TableLayout | undefined;
@@ -9462,7 +9467,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-135: a tier's price at the floor of its stack is at its role size, not scaled down: display headroom is the only thing it gives up.
     else if (node.field === 'metric') content = measureMetric(node, {x:0,y:0,width:inner,height:metricReferenceHeight === undefined ? 1e6 : Math.max(scale,metricReferenceHeight-pad)}, naturalSettings, false, atFloor && tierMetricPaths.has(node.path) ? {value: METRIC_ROLE_VALUE_SIZE * scale} : undefined).bounds.height;
     // LH-41: laid out as the region will (a band, compact, at its role sizes or the floor): its name, label bands and markers.
-    else if (node.field === 'timeline') content = measureTimeline(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings, atFloor ? 'floor' : 'role', undefined, true).bounds.height + scale;
+    // TLN-1: a lone timeline that may grow asks, in a centered body (CENTER), for the height it takes grown (placeTimeline).
+    else if (node.field === 'timeline') content = (!atFloor && (options as Record<symbol, unknown>)[CENTER] === true && timelineHints.get(node)?.grow ? placeTimeline(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings) : measureTimeline(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings, atFloor ? 'floor' : 'role', undefined, true)).bounds.height + scale;
     else if (node.field === 'table') content = (atFloor ? measureTable(node, inner, naturalSettings, true)?.height : measureTable(node, inner, naturalSettings)?.naturalHeight) ?? ((Array.isArray(record(node.value).rows) ? record(node.value).rows.length : 4) + 1) * 36 * scale * (atFloor ? Math.min(1, floorSize / startSize) : 1);
     else content = inner / 1.6;
     if (atFloor && !tierMetricPaths.has(node.path) && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets' || node.field === 'table' || node.field === 'timeline')) content *= Math.min(1, floorSize / startSize);
@@ -10232,6 +10238,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       cells.forEach((row, index) => {
         const names = row.filter(name => name !== '.');
         if (rowSizes[index] !== 'auto' && names.length && names.every(name => { const units = unitsOf(name); return units.length > 0 && units.every(huggedField) && (units.every(unit => unit.field === 'metric') || units.every(unit => unit.field === 'table')); })) rowSizes[index] = 'auto';
+      });
+    }
+    // TLN-1 (LH-102, centerTemplate): a row whose regions each hold one lone timeline that may grow hugs it (an auto row, its need the
+    // grown timeline's height), so a lead above it and a note below it sit with it in the middle of the body, not at its top and foot.
+    if ((options as Record<symbol, unknown>)[CENTER] === true && plan.stack === undefined) {
+      cells.forEach((row, index) => {
+        const names = row.filter(name => name !== '.');
+        if (rowSizes[index] !== 'auto' && names.length && names.every(name => { const units = unitsOf(name); return units.length === 1 && !!timelineHints.get(units[0]!)?.grow; })) rowSizes[index] = 'auto';
       });
     }
     // A valid 12 x 12 grid may request more gaps than fit. Keep the same physical gap on both axes and

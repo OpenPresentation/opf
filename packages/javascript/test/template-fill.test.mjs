@@ -105,8 +105,9 @@ test('a lone timeline grows by steps of the type scale while its labels keep the
     const result = composeSlide(slide, { layout: layouts.timeline, direction }), timeline = field(result, 'timeline').timelineLayout;
     assert.deepEqual(findings(result), []);
     const size = (role) => timeline.parts.find((part) => part.role === role).fit.fontSize;
-    assert.equal(size('when'), 28, direction);
-    assert.equal(size('what'), 32, direction);
+    // TLN-1: four steps now (the 18 and 22 px roles to 33 and 37 px) where the labels keep their lines.
+    assert.equal(size('when'), 33, direction);
+    assert.equal(size('what'), 37, direction);
     assert.ok(timeline.parts.filter((part) => part.role === 'what' || part.role === 'when').every((part) => part.fit.lines.length === 1));
   }
 });
