@@ -128,7 +128,7 @@ function Assert-FurnitureReferenceNameAction($a) {
     foreach($pair in @(@('op','set-chart-series-name'),@('chartName','OPF chart 1'),@('expectedName','Actual'),@('newName','Actual edited'))){if($a.($pair[0]) -isnot [string] -or $a.($pair[0]) -cne $pair[1]){throw 'Reference-name action differs from the sealed literal edit'}}
 }
 function Assert-FurnitureReferenceNameMode($Actions,[string]$SourceHash,[long]$SourceBytes,[bool]$Fonts,[bool]$Survey) {
-    if($SourceBytes -ne 124993 -or $SourceHash -cne 'a274f346d8acda750fb8ada0507038ea6c2e47847ae3a64b176c6c39a3344908' -or $Fonts -or $Survey -or $Actions -isnot [array] -or $Actions.Count -ne 1){throw 'Exact sealed reference-name source and one plan required'}
+    if($SourceBytes -ne 124991 -or $SourceHash -cne '58e87d163fc0fe74765e62d7f8e2d382155a75e81ad425099f352038888c9a80' -or $Fonts -or $Survey -or $Actions -isnot [array] -or $Actions.Count -ne 1){throw 'Exact sealed reference-name source and one plan required'}
     Assert-FurnitureReferenceNameAction $Actions[0]
 }
 function Get-FurnitureSurveySlideCount([string]$Path) {
