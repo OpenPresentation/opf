@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "vertical-process",
+  "name": "Vertical process",
+  "summary": "Steps in order, as boxes joined by arrows in a column beside the title.",
+  "tags": [
+    "Groups of items"
+  ],
+  "design": {
+    "titlePosition": "start"
+  },
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "body",
+      "accepts": [
+        "list"
+      ],
+      "max": 1,
+      "arrangement": "vertical-process"
+    }
+  ],
+  "description": "Show 1 to 8 steps that follow one another from top to bottom, each a box with an arrow to the next, beside the title. Write one short list entry per step, in order.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/vertical-process.svg"
+  }
+}

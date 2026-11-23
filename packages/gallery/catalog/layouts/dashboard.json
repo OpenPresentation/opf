@@ -15,22 +15,21 @@
       "name": "title"
     },
     {
-      "name": "kpis",
+      "name": "lead",
       "size": 2,
       "accepts": [
         "metric"
       ],
-      "role": "secondary",
+      "role": "supporting",
       "flow": "grid"
     },
     {
-      "name": "charts",
+      "name": "body",
       "size": 3,
       "accepts": [
         "chart",
         "table"
       ],
-      "role": "primary",
       "flow": "grid"
     }
   ],

@@ -59,7 +59,7 @@ test('LH-188: a short statement grows to its ceiling, a medium one to its own, a
   const long = item(composeSlide({ text: sentence }), 'text');
   assert.ok(long.text.fontSize <= MESSAGE_DISPLAY_SIZE + 1e-6, `today's cap (${long.text.fontSize})`);
   // On the statement layout as in automatic composition.
-  const record = item(composeSlide({ layout: 'statement', blocks: [{ region: 'message', text: 'Ship in March.' }] }, { layout: layouts.statement }), 'text');
+  const record = item(composeSlide({ layout: 'statement', blocks: [{ region: 'body', text: 'Ship in March.' }] }, { layout: layouts.statement }), 'text');
   assert.equal(record.text.fontSize, short.text.fontSize);
 });
 
@@ -67,7 +67,7 @@ test('LH-188: a title over a paragraph is no statement: the paragraph keeps toda
   const title = 'Why we moved the ledger.', text = 'It was slow and costly.';
   const content = item(composeSlide({ title, text }), 'text');
   assert.ok(content.text.fontSize <= HEADING_DISPLAY_SIZES.title + 1e-6, `${content.text.fontSize}`);
-  const statement = composeSlide({ title, blocks: [{ region: 'message', text }] }, { layout: layouts.statement });
+  const statement = composeSlide({ title, blocks: [{ region: 'body', text }] }, { layout: layouts.statement });
   assert.ok(item(statement, 'text').text.fontSize <= HEADING_DISPLAY_SIZES.title + 1e-6);
 });
 
@@ -90,7 +90,7 @@ test('LH-188: a one-message quote grows to its ceiling, alone and on the quote l
   const body = (result) => item(result, 'quote').quoteLayout.parts.find((part) => part.role === 'body');
   const lone = body(composeSlide({ quote }));
   assert.ok(lone.fit.fontSize > LONE_DISPLAY_SIZES.quote && lone.fit.fontSize <= MESSAGE_CEILINGS.quote[0][1], `${lone.fit.fontSize}`);
-  const record = body(composeSlide({ layout: 'quote', blocks: [{ region: 'quotes', quote }] }, { layout: layouts.quote }));
+  const record = body(composeSlide({ layout: 'quote', blocks: [{ region: 'body', quote }] }, { layout: layouts.quote }));
   assert.ok(record.fit.fontSize > LONE_DISPLAY_SIZES.quote && record.fit.fontSize <= MESSAGE_CEILINGS.quote[0][1], `${record.fit.fontSize}`);
   // Beside a sentence title the quote keeps today's cap.
   const titled = body(composeSlide({ title: 'What our customers told us in the survey', quote }));

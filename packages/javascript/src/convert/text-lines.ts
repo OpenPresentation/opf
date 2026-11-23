@@ -55,7 +55,7 @@ export interface ParsedQuote {
 }
 
 /**
- * Split plain lines into a quote body and an attribution. Recognised, and only at the end of the text:
+ * Split plain lines into a quote body and an attribution. Recognized, and only at the end of the text:
  * one or two trailing lines that start with a dash (`— Name, Title`, `– Name`, `-- Name`, `~ Name`, and
  * `- Name` unless the body is itself a dashed list), the second one being the source, or a last line that
  * ends with a closing quote mark followed by ` — Name` when the quote opens with a quote mark. A dash line

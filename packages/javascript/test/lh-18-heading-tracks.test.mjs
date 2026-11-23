@@ -6,7 +6,7 @@ import { test } from 'node:test';
 import { composeSlide } from '../dist/composition.js';
 import { layouts } from './support/template-samples.mjs';
 
-const pillar = (text, description) => ({ region: 'pillars', items: [{ text, description }] });
+const pillar = (text, description) => ({ region: 'body', items: [{ text, description }] });
 const unequal = [
   pillar('Reliable by design and proven in production', 'Every release runs for a week on our own traffic before a customer sees it.'),
   pillar('Fair', 'No overage fees. You pay one flat rate per user, whatever you use.'),

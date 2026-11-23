@@ -99,7 +99,7 @@ describe("group and ungroup", () => {
     assert.deepEqual(inline.slide, { title: "T", blocks: [{ blocks: [{ text: "A" }, { items: ["B"] }] }] });
     refused(() => wrapBlocks(slide, [], {}), /exist/);
     refused(() => wrapBlocks(slide, [9]), /exist/);
-    refused(() => wrapBlocks({ start: { text: "A" } }, [0], { container: ["start"] }), /single payload/);
+    refused(() => wrapBlocks({ blocks: [{ region: "start", text: "A" }] }, [0], { container: ["blocks", 0] }), /single payload/);
   });
 
   test("unwrap splices the children into the parent and reports what the group carried", () => {
@@ -112,7 +112,7 @@ describe("group and ungroup", () => {
     assert.equal(plain.lossless, true);
     assert.deepEqual(plain.slide, { blocks: [{ text: "B" }] });
     refused(() => unwrapGroup(grouped, ["blocks", 0]), /Choose a group/);
-    refused(() => unwrapGroup({ start: { blocks: [{ text: "A" }] } }, ["start"]), /Convert the regions to blocks/);
+    refused(() => unwrapGroup({ blocks: [{ blocks: [{ text: "A" }] }] }, []), /Only a group that sits inside a list of blocks/);
   });
 
   test("wrap then unwrap restores the slide", () => {
@@ -121,37 +121,43 @@ describe("group and ungroup", () => {
   });
 });
 
-describe("blocks and regions", () => {
-  test("blocks to regions places each block in its own region and back, losing only the placement", () => {
+describe("blocks and cells", () => {
+  test("blocks to cells names a cell on each block and back, losing only the placement", () => {
     const slide = { title: "T", blocks: [{ text: "A" }, { items: ["B"] }, { text: "C" }] };
     const result = blocksToRegions(slide, ["start", "top:end", "bottom:end"]);
-    assert.deepEqual(result.slide, { title: "T", start: { text: "A" }, "top:end": { items: ["B"] }, "bottom:end": { text: "C" } });
+    assert.deepEqual(result.slide, { title: "T", blocks: [{ region: "start", text: "A" }, { region: "top:end", items: ["B"] }, { region: "bottom:end", text: "C" }] });
+    assert.deepEqual(result.path, ["blocks", 0]);
     assert.equal(result.lossless, true);
     const back = regionsToBlocks(result.slide);
-    assert.deepEqual(back.slide.blocks.map((block) => block.text ?? block.items), ["A", ["B"], "C"]);
-    assert.deepEqual(back.loss, ["region placement"]);
-    assert.deepEqual(regionsToBlocks({ end: { text: "R" }, start: { text: "L" }, bottom: { text: "B" } }).slide.blocks.map((block) => block.text), ["L", "R", "B"]);
+    assert.deepEqual(back.slide.blocks, [{ text: "A" }, { items: ["B"] }, { text: "C" }]);
+    assert.deepEqual(back.loss, ["cell placement"]);
+    // Back in reading order of the cells (rows from the top, each from its start column), source order within a cell.
+    const cells = { blocks: [{ region: "end", text: "R" }, { region: "start", text: "L1" }, { region: "bottom", text: "B" }, { region: "start", text: "L2" }] };
+    assert.deepEqual(regionsToBlocks(cells).slide.blocks.map((block) => block.text), ["L1", "L2", "R", "B"]);
+    // Blocks may share a cell: they stack in it.
+    assert.deepEqual(blocksToRegions({ blocks: [{ text: "A" }, { text: "B" }] }, ["start", "start"]).slide.blocks.map((block) => block.region), ["start", "start"]);
   });
 
-  test("regions are refused when they overlap, are unknown, or the counts differ", () => {
+  test("cells are refused when two different ones overlap, are unknown, or the counts differ", () => {
     const slide = { blocks: [{ text: "A" }, { text: "B" }] };
     refused(() => blocksToRegions(slide, ["start", "start+center"]), /overlaps/);
     refused(() => blocksToRegions(slide, ["start", "top"]), /overlaps/);
-    refused(() => blocksToRegions(slide, ["start", "nowhere"]), /not a region/);
-    refused(() => blocksToRegions(slide, ["start"]), /region for each/);
-    refused(() => blocksToRegions({ start: { text: "A" } }, ["start"]), /already uses/);
-    refused(() => regionsToBlocks({ blocks: [{ text: "A" }] }), /no named regions/);
-    assert.deepEqual(blocksToRegions({ text: "A" }, ["center"]).slide, { center: { text: "A" } });
+    refused(() => blocksToRegions(slide, ["start", "nowhere"]), /not a cell/);
+    refused(() => blocksToRegions(slide, ["start"]), /cell for each/);
+    refused(() => blocksToRegions({ blocks: [{ region: "start", text: "A" }] }, ["start"]), /already places/);
+    refused(() => blocksToRegions({ layout: "text", blocks: [{ text: "A" }] }, ["start"]), /has a layout/);
+    refused(() => regionsToBlocks({ blocks: [{ text: "A" }] }), /places no blocks in cells/);
+    assert.deepEqual(blocksToRegions({ text: "A" }, ["center"]).slide, { blocks: [{ region: "center", text: "A" }] });
   });
 
-  test("moveRegion moves or swaps the content of regions", () => {
-    const slide = { title: "T", start: { text: "L" }, end: { text: "R" } };
-    assert.deepEqual(Object.keys(moveRegion(slide, "start", "center").slide), ["title", "center", "end"]);
-    refused(() => moveRegion(slide, "start", "end"), /already has content/);
+  test("moveRegion moves or swaps the blocks of cells", () => {
+    const slide = { title: "T", blocks: [{ region: "start", text: "L" }, { region: "end", text: "R" }] };
+    assert.deepEqual(moveRegion(slide, "start", "center").slide.blocks.map((block) => block.region), ["center", "end"]);
+    refused(() => moveRegion(slide, "start", "end"), /already has blocks/);
     const swapped = moveRegion(slide, "start", "end", { swap: true });
-    assert.deepEqual(swapped.slide, { title: "T", end: { text: "L" }, start: { text: "R" } });
+    assert.deepEqual(swapped.slide, { title: "T", blocks: [{ region: "end", text: "L" }, { region: "start", text: "R" }] });
     refused(() => moveRegion(slide, "start", "top:end"), /overlaps/);
-    refused(() => moveRegion(slide, "bottom", "top"), /no "bottom" region/);
+    refused(() => moveRegion(slide, "bottom", "top"), /no block in the "bottom" cell/);
     assert.equal(moveRegion(slide, "start", "start").changed, false);
   });
 });
@@ -178,8 +184,8 @@ describe("images between content and design", () => {
   test("promote handles a root image, a region, a nested group and prunes what it empties", () => {
     const root = promoteImage({ title: "T", image: "a.png", design: { theme: "minimal" } }, [], "background");
     assert.deepEqual(root.slide, { title: "T", design: { theme: "minimal", background: { type: "image", src: "a.png" } } });
-    const region = promoteImage({ start: { image: "a.png" }, end: { text: "R" } }, ["start"], "background");
-    assert.deepEqual(Object.keys(region.slide), ["end", "design"]);
+    const region = promoteImage({ blocks: [{ region: "start", image: "a.png" }, { region: "end", text: "R" }] }, ["blocks", 0], "background");
+    assert.deepEqual(region.slide.blocks, [{ region: "end", text: "R" }]);
     const nested = promoteImage({ blocks: [{ blocks: [{ image: "a.png" }] }, { text: "x" }] }, ["blocks", 0, "blocks", 0], "watermark");
     assert.deepEqual(nested.slide.blocks, [{ text: "x" }]);
     const only = promoteImage({ blocks: [{ id: "i", image: "a.png" }] }, ["blocks", 0], "background");
@@ -217,9 +223,10 @@ describe("images between content and design", () => {
     refused(() => demoteImage({ text: "x" }, "background"), /does not set/);
     refused(() => demoteImage({ text: "x", design: { background: { type: "solid", color: "#fff" } } }, "background"), /not an image/);
     refused(() => demoteImage({ text: "x", design: { background: "dark1" } }, "background"), /not an image/);
-    refused(() => demoteImage({ start: { text: "x" }, design: { background: "asset:a" } }, "background"), /free region/);
-    const region = demoteImage({ start: { text: "x" }, design: { background: "asset:a" } }, "background", { region: "end" });
-    assert.deepEqual(region.slide, { start: { text: "x" }, end: { image: "asset:a" } });
+    refused(() => demoteImage({ blocks: [{ region: "start", text: "x" }], design: { background: "asset:a" } }, "background"), /free cell/);
+    const region = demoteImage({ blocks: [{ region: "start", text: "x" }], design: { background: "asset:a" } }, "background", { region: "end" });
+    assert.deepEqual(region.slide, { blocks: [{ region: "start", text: "x" }, { region: "end", image: "asset:a" }] });
+    assert.deepEqual(region.path, ["blocks", 1]);
   });
 
   test("promote then demote restores the slide when the image has only a source", () => {

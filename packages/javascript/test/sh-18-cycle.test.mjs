@@ -108,7 +108,7 @@ test("the paint: circles in the primary, arrows in the primary lightened 40%", (
 const compose = slide => composeSlide(slide, { layout: gallery.layouts[slide.layout] });
 
 test('the gallery cycle layout draws a lone list as a cycle, every entry centered on its node at one size', () => {
-  assert.equal(layoutTemplate(gallery.layouts.cycle).regions.find(region => region.name === 'stages').arrangement, 'cycle');
+  assert.equal(layoutTemplate(gallery.layouts.cycle).regions.find(region => region.name === 'body').arrangement, 'cycle');
   const items = ['Plan', 'Build', 'Ship', 'Learn'];
   const result = compose({ layout: 'cycle', title: 'The loop', items }), [arrangement] = result.arrangements, list = result.items.find(item => item.field === 'items');
   assert.equal(arrangement.kind, 'cycle');
@@ -140,7 +140,7 @@ test("long entries draw OPF's own cycle, never a plain list while a design holds
   // A list no design holds still fills the region: larger than the role size where the whole list fits, in the middle of its height.
   const long = ['Why we exist and who we serve', 'The few goals that matter this year', 'How teams plan, decide and ship', 'The reviews that keep plans honest',
     'Data everyone can see and trust', 'Feedback loops measured in days', 'Releases that land every single week', 'Customers who stay and refer others'];
-  const fallback = compose({ layout: 'cycle', title: 'The loop', items: long }), listed = fallback.items.find(item => item.field === 'items'), region = fallback.regions.find(entry => entry.name === 'stages').box;
+  const fallback = compose({ layout: 'cycle', title: 'The loop', items: long }), listed = fallback.items.find(item => item.field === 'items'), region = fallback.regions.find(entry => entry.name === 'body').box;
   assert.equal(fallback.arrangements, undefined);
   assert.ok(fallback.diagnostics.some(item => item.code === 'arrangement-adapted'));
   assert.ok(listed.text.fontSize > LIST_NOMINAL_SIZE, `the fallback list grows (${listed.text.fontSize})`);

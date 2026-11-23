@@ -19,7 +19,10 @@ import {
   type ResolvedReference,
   type UnresolvedReferenceDiagnostic,
 } from './catalog-refs.js';
+import { refreshStaleLayouts, type RefreshedRecord } from './stale-records.js';
 import type { Presentation } from './types.js';
+
+export type { RefreshedRecord } from './stale-records.js';
 
 /**
  * The authoring helpers of OPF 0.15 catalogs (FA-20): embed what a document uses, copy slides between documents
@@ -70,19 +73,29 @@ export interface EmbedResult {
   document: Presentation;
   /** The records added, in the order they were embedded. */
   added: EmbeddedRecord[];
+  /**
+   * OPF 0.35: the embedded copies of built-in layout records from before 0.35 that failed the layout schema and were replaced
+   * (`how`: `current` or `renamed`; see refreshStaleLayouts), with `changesDrawing` when the record changed. Empty for any other
+   * deck. Take `document` whenever this or `added` is non-empty.
+   */
+  refreshed: RefreshedRecord[];
   /** The references that resolve nowhere: they stay as written. */
   unresolved: UnresolvedReferenceDiagnostic[];
 }
 
 /**
  * Embed every record the document references, once, in the group it resolves in, together with the records those
- * records reference (a theme's colour and font schemes). A bare id that resolves in the host's default catalog is
+ * records reference (a theme's color and font schemes). A bare id that resolves in the host's default catalog is
  * embedded under `catalogs.default` (whose `source` is set to that catalog's). Records already embedded are kept as
- * they are; catalog display metadata (`x-*`), `$schema` and `id` are stripped from the copies. Idempotent.
+ * they are, but for an embedded copy of a built-in layout record from before OPF 0.35 that fails the layout schema: `catalogs.default`
+ * mirrors the built-in records, so it is replaced first (`refreshed`): it takes the current record (and the pins of its slides the 0.35
+ * region names), or, for a layout 0.35 removed, its slides move to the replacement. Catalog display metadata (`x-*`), `$schema` and
+ * `id` are stripped from the copies. Idempotent.
  */
 export function embed(document: unknown, options: CatalogOptions = {}): EmbedResult {
   const catalogs = { catalogs: checkCatalogsOption(options.catalogs, 'embed') };
   const out = structuredClone(rec(document)) as Rec;
+  const refreshed = refreshStaleLayouts(out, catalogs);
   const added: EmbeddedRecord[] = [];
   const unresolved: UnresolvedReferenceDiagnostic[] = [];
   const queue: CatalogReferenceSite[] = catalogReferenceSites(out);
@@ -116,7 +129,7 @@ export function embed(document: unknown, options: CatalogOptions = {}): EmbedRes
     added.push({ group: found.group, kind: site.kind, id: found.id, ...(found.source !== undefined ? { source: found.source } : {}) });
     queue.push(...recordReferenceSites(site.kind, copy, ['catalogs', found.group, site.kind, found.id], found.group));
   }
-  return { document: out as unknown as Presentation, added, unresolved };
+  return { document: out as unknown as Presentation, added, refreshed, unresolved };
 }
 
 // ------------------------------------------------------------------------------------------------------- copySlides

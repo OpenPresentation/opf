@@ -3,7 +3,6 @@ import { type Obj, type Run, isRecord } from "../convert/shared.js";
 import { levelsFromIndents, parseCodeFence, parseQuoteLines, splitWhen } from "../convert/text-lines.js";
 import { type InlineIssue, matchBracket, parseAttributes, parseInline, parsePlainInline, readDestination, unescapeInline } from "./inline.js";
 import { Ctx, DECIMAL, type Line, type Range, lineRange, readCsv, readYamlMapping, splitLines } from "./support.js";
-import { PROMOTED_REGION_KEY } from "../bind-regions.js";
 import { nearest } from "../finding-text-util.js";
 import { BLOCK_AS_VALUES, BLOCK_OPTION_KEYS, METRIC_KEYS, SLIDE_OPTION_KEYS } from "./dialect.js";
 
@@ -71,7 +70,7 @@ function interrupts(lines: Line[], i: number): boolean {
 
 // --- segments ----------------------------------------------------------------------------------
 
-/** Cut the lines after the front matter into one list of lines per slide, honouring fences, comments and notes. */
+/** Cut the lines after the front matter into one list of lines per slide, honoring fences, comments and notes. */
 export function splitSegments(lines: Line[], split: "rules" | "headings"): Line[][] {
   const segments: Line[][] = [[]];
   let fence: string | undefined;
@@ -762,11 +761,9 @@ class SlideParser {
     set("language", options.language);
     set("title", this.title);
     set("subtitle", this.subtitle);
-    // A block with region=<promoted key> (top, start, top:start, ...) is a promoted region of the slide. Any other region
-    // name pins the block to that region of the slide's layout template (OPF 0.19); region names are never promoted keys.
-    const promoted = (block: { options?: Obj }) => typeof block.options?.region === "string" && PROMOTED_REGION_KEY.test(block.options.region);
-    const content = this.blocks.filter((block) => !promoted(block));
-    const regions = this.blocks.filter(promoted);
+    // A block's region=<name> is its `region`: a cell of the slide's grid (top, start, top:start, ...) on a slide without a
+    // layout, or a region of the slide's layout (OPF 0.19); layout region names are never cell words.
+    const content = this.blocks;
     const [only] = content;
     if (content.length === 1 && only?.key !== undefined && only.options?.id === undefined && only.options?.type === undefined && only.options?.region === undefined && isContentKey(only.key) && Object.keys(only.payload).length === 1) {
       slide[only.key] = only.payload[only.key];
@@ -782,15 +779,6 @@ class SlideParser {
         if (block.options?.region !== undefined) out.region = block.options.region;
         return Object.assign(out, block.payload);
       });
-    }
-    for (const block of regions) {
-      const region = block.options!.region as string;
-      const payload: Obj = {};
-      if (block.options?.id !== undefined) payload.id = block.options.id;
-      if (block.options?.type !== undefined) payload.type = block.options.type;
-      Object.assign(payload, block.payload);
-      ctx.ranges.set(`${path}/${region}`, block.range);
-      set(region, payload, block.range);
     }
     set("notes", this.notes || undefined, this.notesRange);
     if (this.notesRange && this.notes) ctx.ranges.set(`${path}/notes`, this.notesRange);

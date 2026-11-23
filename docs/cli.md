@@ -23,6 +23,7 @@ installed package versions give the same bytes on every operating system.
 | `opf stats <file>` | Neutral facts about a deck (`--format json\|text`). |
 | `opf paginate <input> [output]` | Overflowing slides split into continuation slides, measured with the renderer's fonts when it is installed. |
 | `opf embed <input> [output]` | The catalog records a deck references, copied into it. |
+| `opf fix <input> [output]` | The safe fixes of a deck's findings applied, validating again after each round, until none is left. |
 | `opf fill <template> <data> [output]` | A template's variables filled: one deck per record (the output is a name pattern), or `--combine`. The second argument is always the data (`-` for stdin). |
 | `opf ingest <data> [output] --as table\|chart` | CSV, TSV or JSON rows as a table or chart slide, alone or added `--into` a deck. |
 | `opf doctor [deck]` | Which formats this install can write, and the one command that installs what is missing. |
@@ -47,7 +48,7 @@ Every command that writes a deck takes the same arguments:
 | `opf embed deck.opf.json` | No output: the deck goes to stdout, the report to stderr. `-` says the same. |
 | `opf embed deck.opf.json out.opf.json` | An output after the inputs: written atomically (a temporary sibling, then a rename); an existing file needs `--force`. |
 | `opf embed deck.opf.json -i` | `-i` (`--in-place`) rewrites the input, refusing if it changed since it was read. Not for stdin, and not with an output. |
-| `opf embed deck.opf.json --check` | Writes nothing and exits 1 when the command would change something: `format --check` (not canonical), `embed --check` (not self-contained) and `paginate --check` (a slide overflows). |
+| `opf embed deck.opf.json --check` | Writes nothing and exits 1 when the command would change something: `format --check` (not canonical), `embed --check` (not self-contained), `fix --check` (a safe fix would apply) and `paginate --check` (a slide overflows). |
 
 The form written is the output's extension (`.json`, `.opf.yaml`/`.yml`, `.opf.md`), else `--to json|yaml|md`, else the form
 that was read. An existing output is refused before anything is printed or written.
@@ -121,7 +122,7 @@ carry that one command for the format asked for. What each output needs beside `
 ## From code
 
 The engine the commands run is core's `@openpresentation/opf` in Node, which an application imports instead of spawning `opf`.
-In Node, `validate`, `stats`, `paginate`, `embed` and `edit` register the gallery (`@openpresentation/gallery`) when a call names none, as the commands
+In Node, `validate`, `stats`, `paginate`, `embed`, `fix` and `edit` register the gallery (`@openpresentation/gallery`) when a call names none, as the commands
 do, so `opf validate deck` and `validate(deck)` agree:
 
 ```ts
@@ -131,6 +132,7 @@ await opf.convert("deck.opf.md", "deck.pdf");                         // opf con
 const deck = await opf.open("deck.pptx");                             // opf convert deck.pptx -
 const { files } = await opf.convert(deck, { format: "png", scale: 2 }); // bytes, nothing written
 const { presentation } = opf.edit(deck, patch);                       // opf edit deck --patch patch.json
+const { document, applied } = opf.fix(deck);                          // opf fix deck -i
 const { decks } = opf.fill(template, csvText);                        // opf fill template data.csv out-{n}.opf.json
 ```
 
@@ -211,6 +213,22 @@ For a file that will be opened in LibreOffice, `--charts picture` writes the cha
   file, line and column. See [validate](validate.md).
 - **`opf paginate`** measures the page breaks with the fonts `opf convert --paginate` draws with when `@openpresentation/opf-render`
   is installed (`layout: "measured"`); without it they are estimated (`layout: "estimated"`) and `hint` names the install command.
+- **`opf fix`** validates the deck as `opf validate` does and applies each finding's fix that is marked `safe` (it loses no
+  content and writes valid OPF: `use-max-1`, `remove:listColumns`, `rename-layout`, `rename-region`, `remove-layout-auto`,
+  `use-current-record` on a stale copy of a built-in layout, a renamed icon, ...), one fix per finding, then validates again, because an error
+  in the deck's own keys hides the accessibility, layout and content checks. By default only the checks that repair the document
+  apply their fixes (`format`, `references`, `policy`, `layout`); `--audits` applies the audits' safe fixes too (accessibility,
+  content), which `fix.audits` lists otherwise. The fixes bring the deck to the 0.35 form and the 0.35 engine draws it: a safe fix that can change
+  how a slide draws (`rename-layout` from `agenda-split` or `flow`, `use-current-record`, `cells-to-layout-blocks`,
+  `remove:contentDirection`, ...) is marked `changesDrawing` in `fix.applied` and "(changes the drawing)" in `--format text`, and
+  `fix.changesDrawing` counts them. It stops when no safe fix is
+  left, after at most 10 rounds (`fix.stopped`: `stable`, `max-rounds` or `no-progress`). A fix that is not marked safe is never
+  applied, nor is a fix you write (`focus-language`), which is never counted: its finding stays in `findings` with its fixes, and
+  `fix.unsafe` lists the findings whose only fixes need a choice. The report adds `valid`, `checks` and `fix: { applied: [{ round,
+  ruleId, path, fix, title, changesDrawing }], rounds, stopped, changesDrawing, unsafe, audits }`;
+  `--format text` prints it as lines. The deck is written with the fixes even when findings remain (an input with nothing to fix is
+  not rewritten by `-i`); the exit status is 1 when findings at or above `--fail-on` (default `error`) remain or the rounds ran out.
+  `--check` writes nothing and exits 1 when a safe fix would apply. Core's `fix(deck, options)` does the same from code.
 - **`opf fill`** reads CSV, TSV or JSON data; a blank cell keeps the variable's declared value; an unfilled required variable fails
   unless `--partial`; `--examples` fills from the declared examples. The second argument is always the data, whatever its name
   (`-` reads it from stdin), and the third is the output; a template alone fills from its own values, to stdout.
@@ -233,7 +251,9 @@ stdout carries the document. Findings have the [`opf validate`](validate.md) sha
 
 Errors are `{ command, ok: false, code, error, ... }` on stderr. The message states the fix: a missing argument names it and
 prints the usage, an unknown command, option or value suggests the nearest one ("Did you mean --check?"), and a removed command
-or flag names its replacement. Codes include `usage`, `unknown-command`, `unknown-option`, `removed-command`, `removed-option`,
+or flag names its replacement, and a command that refuses a deck (`invalid-document`, `findings-at-fail-on`) names
+`opf fix <deck> -i` when some of its findings carry a safe fix, and `opf embed <deck> -i` when it embeds copies of built-in
+layouts from before OPF 0.35. Codes include `usage`, `unknown-command`, `unknown-option`, `removed-command`, `removed-option`,
 `missing-argument`, `extra-argument`, `missing-value`, `invalid-value`, `option-not-applicable`, `unknown-input-format`,
 `input-not-found`, `invalid-json`, `invalid-yaml`, `invalid-markdown`, `invalid-document`, `findings-at-fail-on`,
 `output-exists`, `merge-conflict`, `fill-failed`, `peer-not-installed` and `peer-too-old`.

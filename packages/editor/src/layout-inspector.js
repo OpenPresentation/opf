@@ -1,6 +1,6 @@
 // The inspector of the layout editor (RR-99): the properties of the selection, as form fields. With nothing selected it edits the layout
 // (id, name, summary, direction, default anchor, overflow region, design hints); a split has a direction, size and anchor; a region has
-// its name, size, accepted kinds, role, flow, max, anchor, bleed, list columns and empty rule. Every field is a command on the shared
+// its name, size, accepted kinds, role, flow, max, anchor, bleed and empty rule. Every field is a command on the shared
 // model, so it is validated by core and undoable like a drag on the canvas. CE-18: the panel is the studio kit's inspector frame (one
 // section per selection kind) with the kit's field builders.
 import { createLayoutModel } from "./layout-model.js";
@@ -234,7 +234,7 @@ export function createLayoutInspector(container, options = {}) {
     const max = el("input", "opf-lx-input", { type: "number", min: "1", max: "12", step: "1", "data-field": "max", placeholder: "Default" });
     max.value = entry.max === undefined ? "" : String(entry.max);
     max.addEventListener("input", () => edit(() => set("max", max.value === "" ? undefined : Number(max.value))));
-    props.append(field("Max blocks", max, { path, field: "max", help: "A whole number from 1 to 12. Default: 1 for flow none, else 6." }));
+    props.append(field("Max blocks", max, { path, field: "max", help: "A whole number from 1 to 12. Default 6; 1 is a region of one block." }));
     props.append(anchorField(path, inherited, entry.anchor, (value) => set("anchor", value, { coalesce: null })));
     const bleed = el("input", "opf-lx-check", { type: "checkbox", "data-field": "bleed" });
     bleed.checked = entry.bleed === true;
@@ -243,7 +243,6 @@ export function createLayoutInspector(container, options = {}) {
     bleedField.classList.add("opf-lx-field-check");
     props.append(
       bleedField,
-      field("List columns", select([["", "Default · 1"], ["auto", "Automatic"], ["1", "1"]], entry.listColumns === undefined ? "" : String(entry.listColumns), { name: "listColumns", onChange: (value) => set("listColumns", value === "" ? undefined : value === "auto" ? "auto" : 1, { coalesce: null }) }), { path, field: "listColumns", help: "Automatic lets a long list flow into columns." }),
       field("When empty", select(withDefault("empty", ["collapse", "keep"]), entry.empty ?? "", { name: "empty", onChange: (value) => set("empty", value || undefined, { coalesce: null }) }), { path, field: "empty", help: "Collapse gives the space to a neighbor; keep leaves it." }),
     );
     body.append(props, actions([path], {}));

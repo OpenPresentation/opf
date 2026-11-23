@@ -8,12 +8,12 @@ test('layout summaries derive content and headings from template regions', () =>
   assert.deepEqual(layoutContent(gallery.layouts['chart-beside']), { kind: 'chart', count: 2, heading: { title: true, subtitle: true, tag: true } });
   assert.deepEqual(layoutContent({ regions: [{ name: 'title' }] }), { kind: 'title', count: 0, heading: { title: true, subtitle: true, tag: true } });
   assert.deepEqual(layoutContent({}), { kind: 'title', count: 0, heading: { title: false, subtitle: false, tag: false } });
-  assert.match(layoutStructure(gallery.layouts['chart-beside']), /chart \(none: chart, diagram\)/);
+  assert.match(layoutStructure(gallery.layouts['chart-beside']), /body \(auto, max 1: chart, diagram\)/);
 });
 
-test('all 40 gallery layouts validate and report their body region counts', () => {
-  assert.equal(Object.keys(gallery.layouts).length, 40);
-  assert.equal(catalogIndexes.layouts.records.length, 40);
+test('all 38 gallery layouts validate and report their body region counts', () => {
+  assert.equal(Object.keys(gallery.layouts).length, 38);
+  assert.equal(catalogIndexes.layouts.records.length, 38);
   for (const [id, record] of Object.entries(gallery.layouts)) {
     assert.equal(validateCatalogRecord('layouts', { ...record, id, $schema: 'https://openpresentation.org/schema/opf-layout/v2' }).valid, true, id);
     assert.equal(layoutContent(record).count, layoutTemplate(record).regions.length, id);

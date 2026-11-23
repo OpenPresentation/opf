@@ -9,10 +9,10 @@ const OFFICE = 'urn:microsoft.com/office/officeart/';
 assert.deepEqual(smartArtForm(`${OFFICE}2024/layout/BulletTimelineInverted`, 'process'), {layout: 'process'});
 // The same id under each category takes that category's form, never the pyramid.
 for (const category of ['process', 'list', 'cycle', 'relationship', 'hierarchy', 'matrix', 'picture'])
-  assert.notEqual(smartArtForm(`${OFFICE}2024/layout/BulletTimelineInverted`, category).arrangement, 'pyramid', category);
+  assert.ok(!/pyramid/.test(smartArtForm(`${OFFICE}2024/layout/BulletTimelineInverted`, category).arrangement ?? ''), category);
 
 // Inverted pyramids keep their widest-first order: PowerPoint's own id, and an id that names an inverted pyramid either way round.
-const down = {arrangement: 'pyramid', pyramidDirection: 'down'};
+const down = {arrangement: 'inverted-pyramid'};
 assert.deepEqual(smartArtForm(`${OFFICE}2005/8/layout/pyramid3`, 'pyramid'), down);
 assert.deepEqual(smartArtForm('urn:example/layout/InvertedPyramid', 'pyramid'), down);
 assert.deepEqual(smartArtForm('urn:example/layout/PyramidInverted', 'pyramid'), down);

@@ -206,7 +206,7 @@ export function createStudioLayers(container, { dom, adapter, studio }) {
   };
   tree.addEventListener("pointerup", () => endDrag(true));
   tree.addEventListener("pointercancel", () => endDrag(false));
-  tree.addEventListener("keydown", (event) => { if (event.key === "Escape" && drag?.moved) { event.preventDefault(); event.stopPropagation(); endDrag(false); studio.announce("Move cancelled."); } }, true);
+  tree.addEventListener("keydown", (event) => { if (event.key === "Escape" && drag?.moved) { event.preventDefault(); event.stopPropagation(); endDrag(false); studio.announce("Move canceled."); } }, true);
 
   return {
     element: scroller,

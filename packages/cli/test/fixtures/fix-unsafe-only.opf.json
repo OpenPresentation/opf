@@ -1,0 +1,56 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Quarterly review",
+  "language": "en-US",
+  "slides": [
+    {
+      "title": "Where we stand",
+      "layout": "custom:summary",
+      "blocks": [
+        {
+          "text": "Revenue grew in every region."
+        },
+        {
+          "metric": {
+            "value": 12,
+            "label": "new customers"
+          }
+        }
+      ]
+    }
+  ],
+  "catalogs": {
+    "custom": {
+      "layouts": {
+        "summary": {
+          "name": "Summary",
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "direction": "row",
+              "regions": [
+                {
+                  "name": "main",
+                  "accepts": [
+                    "text"
+                  ],
+                  "flow": "none"
+                },
+                {
+                  "name": "aside",
+                  "accepts": [
+                    "metric"
+                  ],
+                  "role": "secondary"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

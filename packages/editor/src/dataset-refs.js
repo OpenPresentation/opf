@@ -1,10 +1,9 @@
 // Where charts and tables use a shared dataset (RR-54). A top-level `datasets` entry is referenced by a chart as
 // `chart.data = { dataset, fields? }` and by a table as `table = { dataset, fields? }`. These helpers find those
-// references anywhere in a document (slides, nested blocks and promoted regions), so the data grid can say how many items
+// references anywhere in a document (slides and nested blocks), so the data grid can say how many items
 // share a dataset and keep their `fields` and `mapping` names in step when a column is renamed.
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
-const REGION_KEY = /^(?:top|middle|bottom|start|center|end)(?:[+:]|$)/;
 
 /** The dataset reference test (the same as core's `isDatasetRef`): an object with a string `dataset`. */
 export const isDatasetRef = (value) => isObject(value) && typeof value.dataset === "string";
@@ -31,7 +30,6 @@ export function walkDatasetItems(presentation, visit) {
     if (!isObject(slide)) return;
     const base = ["slides", String(index)];
     walk(slide, base, 0, []);
-    for (const [key, value] of Object.entries(slide)) if (isObject(value) && REGION_KEY.test(key)) walk(value, [...base, key], 1, [slide]);
   });
 }
 

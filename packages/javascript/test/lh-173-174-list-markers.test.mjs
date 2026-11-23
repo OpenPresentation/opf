@@ -7,12 +7,12 @@ import { test } from 'node:test';
 import { composeSlide, fitList, LIST_HEADING_SCALE } from '../dist/composition.js';
 import { layouts } from './support/template-samples.mjs';
 
-const step = (text, description, start) => ({ region: 'steps', items: [{ text, description }], numbering: { style: 'arabic', start } });
+const step = (text, description, start) => ({ region: 'body', items: [{ text, description }], numbering: { style: 'arabic', start } });
 const six = {
   title: 'Six steps from idea to launch',
   blocks: [['Idea', 'Capture the problem in one sentence.'], ['Research', 'Talk to ten customers.'], ['Design', 'Sketch and test the flow.'], ['Build', 'Ship the smallest useful version.'], ['Test', 'Fix what the pilot finds.'], ['Launch', 'Announce and measure.']].map(([text, description], index) => step(text, description, index + 1)),
 };
-const labels = (result) => result.items.filter((item) => item.region === 'steps').map((item) => item.text.listEntries[0]);
+const labels = (result) => result.items.filter((item) => item.region === 'body').map((item) => item.text.listEntries[0]);
 
 for (const direction of ['ltr', 'rtl']) {
   test(`LH-173 (${direction}): a six-step row keeps "Research" whole, its labels at one size above the descriptions`, () => {
@@ -22,7 +22,7 @@ for (const direction of ['ltr', 'rtl']) {
     for (const entry of entries) assert.equal(entry.text.lines.length, 1, `${entry.text.lines.join('/')} is on one line`);
     const sizes = new Set(entries.map((entry) => entry.text.fontSize));
     assert.equal(sizes.size, 1, `one label size, got ${[...sizes]}`);
-    const [size] = sizes, list = result.items.find((item) => item.region === 'steps').text.fontSize;
+    const [size] = sizes, list = result.items.find((item) => item.region === 'body').text.fontSize;
     assert.ok(size < list * LIST_HEADING_SCALE - 1e-6, 'the labels stepped down');
     assert.ok(size >= list - 1e-6, 'never under the list size');
     for (const entry of entries) assert.ok(entry.description.fontSize <= size + 1e-6);

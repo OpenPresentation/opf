@@ -7,7 +7,7 @@ const kinds = ["constructor", "toString", "__proto__", "not-a-kind"];
 const locations = [
   { path: "/slides/0/type", deck: (type) => ({ slides: [{ type, text: "Text" }] }) },
   { path: "/slides/0/blocks/0/type", deck: (type) => ({ slides: [{ blocks: [{ type, text: "Text" }] }] }) },
-  { path: "/slides/0/start/type", deck: (type) => ({ slides: [{ start: { type, text: "Text" } }] }) },
+  { path: "/slides/0/blocks/1/type", deck: (type) => ({ slides: [{ blocks: [{ region: 'start', text: "Text" }, { region: 'end', type, text: "Text" }] }] }) },
 ];
 
 for (const { path, deck } of locations) {

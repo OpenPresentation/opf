@@ -644,8 +644,8 @@
             "matrix",
             "cycle",
             "chevrons",
-            "flow",
-            "vertical-flow"
+            "process",
+            "vertical-process"
           ]
         }
       }
@@ -1824,7 +1824,7 @@
     },
     {
       "id": "COV-regions",
-      "title": "Format coverage: All 48 promoted region keys and region tiles",
+      "title": "Format coverage: All 48 cells of the slide grid (a block's region) and region tiles",
       "changes": [
         "fa-37-start-end",
         "lh-69-placed-tiles"
@@ -1860,11 +1860,12 @@
     },
     {
       "id": "COV-design",
-      "title": "Format coverage: Inline color and font schemes, variants, alignment, direction, chart placement, image fit, logos, watermarks",
+      "title": "Format coverage: Inline color and font schemes, variants, alignment, direction, chart placement, image fit, logos, watermarks, title position",
       "changes": [
         "fa-36-closed-objects-and-messages",
         "fa-37-start-end",
-        "lh-177-light-fonts"
+        "lh-177-light-fonts",
+        "title-position"
       ],
       "deck": "coverage-design",
       "checks": [

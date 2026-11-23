@@ -57,9 +57,11 @@ export interface CanvasEditorOptions {
    * pointer. Keyboard entry (Enter, Space, F2) and `beginEdit(path)` always select all text. Non-text targets always open
    * their properties on double-click.
    */
-  /** Commit an inline slide title with Enter. Shift+Enter keeps a line break. */
-  titleEnterCommits?: boolean;
   textEntry?: "click" | "dblclick";
+  /** Commit an inline slide title with Enter. Shift+Enter keeps a line break. A short hint saying so shows while the title is edited. */
+  titleEnterCommits?: boolean;
+  /** Text the canvas draws itself. `titleEnterHint` is the hint of `titleEnterCommits` (default "Enter to finish · Shift+Enter for a new line"). */
+  labels?: { titleEnterHint?: string };
   /**
    * CE-20: "interactive" (default) makes each piece of content a focusable button on the slide. "passive" is for a host that draws its own
    * selection over the slide (the Studio): the slide SVG is `aria-hidden` and its targets leave the tab order; editing works through `beginEdit`.
@@ -124,7 +126,7 @@ export interface CanvasEditor {
   readonly connecting: boolean;
   /**
    * SH-06: draw a connector between two blocks or overlay shapes: click the start, then the end (Esc cancels). `route` is straight (default), elbow or curved; `stroke` the line
-   * (`{ end: { type: "triangle" } }`); `onStatus(message)` hears the prompts. `done` resolves with the change (or null when cancelled).
+   * (`{ end: { type: "triangle" } }`); `onStatus(message)` hears the prompts. `done` resolves with the change (or null when canceled).
    */
   connect(options?: { route?: "straight" | "elbow" | "curved"; stroke?: Record<string, unknown>; onStatus?: (message: string, info: { error: boolean }) => void }): { cancel(): void; done: Promise<unknown> };
   /**

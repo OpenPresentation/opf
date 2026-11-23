@@ -36,7 +36,6 @@ import {
   sentence,
   unquote,
   unquoteList,
-  us,
 } from "./finding-text-helpers.js";
 
 const params = (finding: Finding): Record<string, unknown> => (isRecord(finding.validation?.params) ? finding.validation.params : {});
@@ -192,7 +191,7 @@ const imagePlacementInvalid: RuleText = (finding) => {
     };
   }
   return {
-    message: `${code("placement")} can't be used here: a block inside a group or a region can't bleed to a slide edge.`,
+    message: `${code("placement")} can't be used here: a block inside a group or in a cell of the slide's grid can't bleed to a slide edge.`,
     next: `use ${code("placement")} on a top-level block of the slide, one per slide edge, or remove it.`,
   };
 };
@@ -281,7 +280,7 @@ const numberFormatInvalid: RuleText = (finding, _context, helpers) => {
   const reason = match(finding.message, /^Number format '.*?' ((?:needs|scales|has|uses|asks|allows|is)\b.+)$/)?.[1];
   const subject = typeof value === "string" && value ? `${code(value)} is not a number format OPF can read` : "This is not a number format OPF can read";
   return {
-    message: `${subject}.${reason ? ` It ${sentence(us(reason))}` : ""}`,
+    message: `${subject}.${reason ? ` It ${sentence(reason)}` : ""}`,
     next: `write a format such as ${code("0.0")}, ${code("#,##0")}, ${code("0%")} or ${code("$#,##0.00")}.`,
   };
 };
@@ -337,7 +336,7 @@ const variableInvalidValue: RuleText = (finding) => {
   if (!id) return undefined;
   const kind = found?.[2] ?? "";
   return {
-    message: `The value given for ${code(id)} does not fit its type${kind ? ` (${kind})` : ""}${found?.[3] ? `: ${us(found[3])}` : ""}.`,
+    message: `The value given for ${code(id)} does not fit its type${kind ? ` (${kind})` : ""}${found?.[3] ? `: ${found[3]}` : ""}.`,
     next: `give it ${SAMPLE_BY_KIND[kind] ?? "a value of the declared type"}.`,
   };
 };
@@ -364,7 +363,7 @@ const variableFormat: RuleText = (finding, _context, helpers) => {
   const reason = match(finding.message, /^(?:Number|Date) format '.*?' (.+)$/)?.[1];
   const kind = id ? helpers.valueAt(["variables", id, "type"]) : undefined;
   return {
-    message: `The format${typeof declared === "string" ? ` ${code(declared)}` : ""} does not apply to ${kind ? `a ${String(kind)}` : "this"} value${id ? ` (${code(id)})` : ""}${reason ? `: it ${sentence(us(reason)).replace(/\.$/, "")}` : ""}.`,
+    message: `The format${typeof declared === "string" ? ` ${code(declared)}` : ""} does not apply to ${kind ? `a ${String(kind)}` : "this"} value${id ? ` (${code(id)})` : ""}${reason ? `: it ${sentence(reason).replace(/\.$/, "")}` : ""}.`,
     next: `change the ${code("format")} of ${id ? code(id) : "the variable"} to one that fits its values, such as ${kind === "date" ? code("MMMM d, yyyy") : code("#,##0.0")}.`,
   };
 };
@@ -534,7 +533,7 @@ const layoutTemplate: RuleText = (finding) => {
   const { id, spot } = layoutSpot(finding);
   const detail = finding.message.trim().replace(/\.$/, "");
   return {
-    message: `The layout's region list is malformed${spot ? ` at ${code(spot)}` : ""}${id ? ` (layout ${code(id)})` : ""}: ${us(detail)}.`,
+    message: `The layout's region list is malformed${spot ? ` at ${code(spot)}` : ""}${id ? ` (layout ${code(id)})` : ""}: ${detail}.`,
     next: spot ? `correct ${code(spot)} as described; the layout is not used until it is valid.` : "correct the layout as described; it is not used until it is valid.",
   };
 };
@@ -565,7 +564,7 @@ const layoutRegion: RuleText = (finding) => {
     };
   }
   return {
-    message: `A region of the layout is not valid${spot ? ` at ${code(spot)}` : ""}${id ? ` (layout ${code(id)})` : ""}: ${us(detail)}.`,
+    message: `A region of the layout is not valid${spot ? ` at ${code(spot)}` : ""}${id ? ` (layout ${code(id)})` : ""}: ${detail}.`,
     next: spot ? `correct ${code(spot)} as described.` : "correct the layout as described.",
   };
 };
@@ -581,6 +580,26 @@ const unresolvedReference: RuleText = (finding, _context, helpers) => {
     return typeof value === "string" ? value : undefined;
   })();
   if (!reference) return undefined;
+  if (kind === "layouts" && reference === "auto" && /removed layout 'auto'/.test(finding.message)) {
+    return {
+      message: `Layout ${code("auto")} was removed in OPF 0.35: a slide without ${code("layout")} composes automatically, which is what ${code("auto")} did.`,
+      next: `delete the ${code("layout")} key (the fix does).`,
+    };
+  }
+  const replaced = kind === "layouts" ? /removed layout '.+?' \(use '(.+?)'(?: with design\.titlePosition '(.+?)')?\)/.exec(finding.message) : undefined;
+  const renamed = replaced?.[1], position = replaced?.[2];
+  if (renamed && position) {
+    return {
+      message: `Layout ${code(reference)} was removed in OPF 0.35: ${code(renamed)} with the title beside the body (${code(`design.titlePosition: "${position}"`)}) replaced it.`,
+      next: `change the layout to ${code(renamed)} and set the slide's ${code("design.titlePosition")} to ${code(position)} (the fix does both).`,
+    };
+  }
+  if (renamed) {
+    return {
+      message: `Layout ${code(reference)} was removed in OPF 0.35: ${code(renamed)} replaced it.`,
+      next: `change the layout to ${code(renamed)} (the fix does).`,
+    };
+  }
   const noun = cap(KIND_SINGULAR(kind || (found?.[1] ?? "catalog record").toLowerCase()));
   const colon = reference.indexOf(":");
   const group = colon > 0 ? reference.slice(0, colon) : undefined;
@@ -589,9 +608,11 @@ const unresolvedReference: RuleText = (finding, _context, helpers) => {
   const embedded = kind && embeddedIn.some((name) => isRecord(helpers.valueAt(["catalogs", name, kind, bare])));
   const suggestions = (finding.suggestions ?? []).slice(0, 5).map((entry) => String(entry.value));
   if (embedded) {
+    // OPF 0.35: an embedded copy of a built-in layout from before 0.35 carries the fix that takes the current record.
+    const current = (finding.fixes ?? []).some((fix) => fix.id === "use-current-record" || fix.id === "rename-layout");
     return {
-      message: `${noun} ${code(reference)} is embedded but invalid, so it is not used and ${FALLBACK(kind)}.`,
-      next: `fix the record named in the other problems, or remove the reference.`,
+      message: `${noun} ${code(reference)} is embedded, but the record is invalid.`,
+      next: current ? `take the current record (the fix does, as do ${code("opf fix -i")} and ${code("opf embed -i")}).` : `fix the record named in the other problems, or remove the reference.`,
     };
   }
   const message =

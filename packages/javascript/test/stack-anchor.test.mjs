@@ -5,7 +5,7 @@ import {composeSlide, layoutTemplate} from '../dist/composition.js';
 // WI-2: on a column record whose entries are all `auto`, the record's `anchor` places the whole stack, headings included.
 // Any other record keeps today's placement: a region's anchor never moves the title.
 const record = (anchor, regions) => ({id: 'stack', direction: 'column', ...(anchor ? {anchor} : {}), regions});
-const allAuto = [{name: 'title'}, {name: 'details', size: 'auto', accepts: ['text'], flow: 'none'}];
+const allAuto = [{name: 'title'}, {name: 'details', size: 'auto', accepts: ['text'], max: 1}];
 const slide = {title: 'Thank you', blocks: [{text: 'Next step: book a call'}]};
 // The stack at the role sizes (`fill: false`: LH-48 gives a lone block on a record that is not a stack the whole body).
 const compose = (layout, value = slide, options = {}) => composeSlide(value, {width: 1280, height: 720, layout, fill: false, ...options});
@@ -54,7 +54,7 @@ test('the heading areas and regions move with the stack', () => {
 });
 
 test('a column with any numeric entry never moves its title: the record anchor reaches the body regions only', () => {
-  const mixed = [{name: 'title'}, {name: 'details', accepts: ['text'], flow: 'none'}];
+  const mixed = [{name: 'title'}, {name: 'details', accepts: ['text'], max: 1}];
   for (const anchor of ['middle', 'bottom']) {
     const anchored = compose(record(anchor, mixed)), plain = compose(record(undefined, mixed));
     assert.deepEqual(anchored.items[0].box, plain.items[0].box);
@@ -68,7 +68,7 @@ test('a title-only slide centres the title alone, and an empty optional region c
   assert.equal(only.items.length, 1);
   assert.ok(Math.abs((top(only) - box.top) - (box.bottom - bottom(only))) < 1.5);
   // The title-only slide is placed as it is with a numeric title row, where the title centres in the content box.
-  const numeric = compose(record(undefined, [{name: 'title', size: 1}, {name: 'details', size: 'auto', accepts: ['text'], flow: 'none'}]), {title: 'Thank you'});
+  const numeric = compose(record(undefined, [{name: 'title', size: 1}, {name: 'details', size: 'auto', accepts: ['text'], max: 1}]), {title: 'Thank you'});
   assert.deepEqual(only.items.map(item => item.box), numeric.items.map(item => item.box));
   // The same title with a support region present but empty draws the same box.
   const empty = compose(record('middle', allAuto), {title: 'Thank you', blocks: []});
@@ -85,7 +85,7 @@ test('a long title with long support still fits the slide without overflow', () 
 });
 
 test('a body region anchor does not move the title when the column has a numeric entry', () => {
-  const layout = {id: 'region-anchor', direction: 'column', regions: [{name: 'title'}, {name: 'details', accepts: ['text'], flow: 'none', anchor: 'middle'}]};
+  const layout = {id: 'region-anchor', direction: 'column', regions: [{name: 'title'}, {name: 'details', accepts: ['text'], max: 1, anchor: 'middle'}]};
   const result = compose(layout);
-  assert.ok(Math.abs(result.items[0].box.y - compose(record(undefined, [{name: 'title'}, {name: 'details', accepts: ['text'], flow: 'none'}])).items[0].box.y) < 1);
+  assert.ok(Math.abs(result.items[0].box.y - compose(record(undefined, [{name: 'title'}, {name: 'details', accepts: ['text'], max: 1}])).items[0].box.y) < 1);
 });

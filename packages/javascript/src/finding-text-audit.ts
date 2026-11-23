@@ -22,7 +22,6 @@ import {
   slideNumber,
   slideRef,
   unquote,
-  us,
 } from "./finding-text-helpers.js";
 
 const measuredNumber = (finding: Finding, key: string): number | undefined => {
@@ -44,8 +43,8 @@ const textContrast: RuleText = (finding) => {
   const foreground = measuredText(finding, "textColor");
   const background = measuredText(finding, "backgroundColor");
   if (ratio === undefined || needed === undefined) return undefined;
-  const label = match(finding.message, /^(.+?) colou?r /)?.[1];
-  const subject = label && !/^(Text|Colou?red text)$/.test(label) ? us(label) : "Text";
+  const label = match(finding.message, /^(.+?) color /)?.[1];
+  const subject = label && !/^(Text|Colored text)$/.test(label) ? label : "Text";
   const colors = foreground && background ? ` ${code(foreground)} on ${code(background)}` : "";
   const large = finding.measured?.large === true ? " for large text" : finding.measured?.large === false ? " for normal-size text" : "";
   const also = measuredNumber(finding, "alsoAffected");
@@ -115,7 +114,7 @@ const poorAltText: RuleText = (finding) => {
   const chart = found[1] === "Chart";
   const problem = (found[4] as string).replace(/^is a generic word, not what the data shows$/, "is a generic word");
   return {
-    message: `Alt text ${code(brief(alt, 50))} ${us(problem)}, so it doesn't describe the ${chart ? "chart" : "picture"}.`,
+    message: `Alt text ${code(brief(alt, 50))} ${problem}, so it doesn't describe the ${chart ? "chart" : "picture"}.`,
     next: chart
       ? "state what the chart shows: its point and the key numbers, in a sentence or two."
       : `describe what the picture shows, in plain words and without a leading "image of".`,
@@ -167,10 +166,10 @@ const linkText: RuleText = (finding) => {
 };
 
 const chartColorOnly: RuleText = (finding) => {
-  const parts = match(finding.message, /^(Series|Slices) may be hard to tell apart without colou?r/);
+  const parts = match(finding.message, /^(Series|Slices) may be hard to tell apart without color/);
   const noun = parts?.[1] === "Slices" ? "slices" : "series";
   const pairs = measuredNumber(finding, "confusablePairs");
-  const repeat = match(finding.message, /(\d+) (?:series|slices) exceed the (\d+)-colou?r palette/);
+  const repeat = match(finding.message, /(\d+) (?:series|slices) exceed the (\d+)-color palette/);
   const count = measuredNumber(finding, "series");
   const message =
     pairs !== undefined
@@ -180,9 +179,9 @@ const chartColorOnly: RuleText = (finding) => {
 };
 
 const chartColorsAdjusted: RuleText = (finding, _context, helpers) => {
-  const index = match(finding.message, /^Chart colou?r (\d+) /)?.[1] ?? (isText(helpers.segments.at(-1)) ? String(Number(helpers.segments.at(-1)) + 1) : undefined);
+  const index = match(finding.message, /^Chart color (\d+) /)?.[1] ?? (isText(helpers.segments.at(-1)) ? String(Number(helpers.segments.at(-1)) + 1) : undefined);
   const value = helpers.valueAt(helpers.segments);
-  const shown = typeof value === "string" ? value : unquote(match(finding.message, /^Chart colou?r \d+ \((.+?)\) /)?.[1]);
+  const shown = typeof value === "string" ? value : unquote(match(finding.message, /^Chart color \d+ \((.+?)\) /)?.[1]);
   const contrast = measuredNumber(finding, "contrast");
   const panel = measuredText(finding, "panel");
   const label = index ? `Chart color ${index}` : "A chart color";
@@ -229,7 +228,7 @@ const chartOptionAdapted: RuleText = (finding, _context, helpers) => {
   if (!option) return undefined;
   const type = at >= 0 ? helpers.valueAt([...helpers.segments.slice(0, at + 1), "type"]) : undefined;
   const typeName = typeof type === "string" ? type : match(finding.message, /^A '(.+?)' chart/)?.[1];
-  const adaptation = finding.message.includes(";") ? cap(us(finding.message.slice(finding.message.indexOf(";") + 1).trim())) : "";
+  const adaptation = finding.message.includes(";") ? cap(finding.message.slice(finding.message.indexOf(";") + 1).trim()) : "";
   return {
     message: `${code(option)} isn't supported by ${typeName ? `a ${typeName}` : "this"} chart and is adapted.${adaptation ? ` ${sentence(adaptation)}` : ""}`,
     next: `remove ${code(option)}, or choose a chart type that can show it.`,
@@ -253,7 +252,7 @@ const unresolvedContent: RuleText = (finding) => ({
 const layoutFailed: RuleText = (finding, _context, helpers) => {
   const reason = match(finding.message, /^Layout failed: (.+)$/)?.[1];
   return {
-    message: `${slideRef(finding, helpers)} couldn't be laid out${reason ? `: ${sentence(us(reason)).replace(/\.$/, "")}` : ""}, so the geometry checks were skipped.`,
+    message: `${slideRef(finding, helpers)} couldn't be laid out${reason ? `: ${sentence(reason).replace(/\.$/, "")}` : ""}, so the geometry checks were skipped.`,
     next: "fix the composition setting or content named above.",
   };
 };
@@ -265,7 +264,7 @@ const minFontSize: RuleText = (finding) => {
   const run = /^Text run is set to/.test(finding.message);
   const label = run ? "A text run" : (match(finding.message, /^(.+?) is drawn at/)?.[1] ?? "Text");
   return {
-    message: `${cap(us(label))}${onSlide(finding)} ${run ? "is set to" : "is drawn at"} ${num(size, 1)} pt, below the ${num(minimum, 1)} pt readable minimum.`,
+    message: `${cap(label)}${onSlide(finding)} ${run ? "is set to" : "is drawn at"} ${num(size, 1)} pt, below the ${num(minimum, 1)} pt readable minimum.`,
     next: run ? `raise ${code("fontSize")} to at least ${num(minimum, 1)}.` : "shorten the text, give it more room or split the slide, so it can be drawn larger.",
   };
 };
@@ -297,6 +296,17 @@ const regionUnknown: RuleText = (finding, _context, helpers) => {
   const slide = slideNumber(finding);
   const layout = slide ? regionNamesOf(helpers.valueAt(["slides", String(slide - 1), "layout"]), helpers) : undefined;
   const known = layout?.names ?? [];
+  // OPF 0.35: a 0.34 region name of a built-in layout; the fix renames the pin.
+  const renamed = (finding.fixes ?? []).find((fix) => fix.id === "rename-region" && fix.kind === "patch");
+  const next = renamed?.kind === "patch" ? (renamed.patch?.[0] as { value?: unknown } | undefined)?.value : undefined;
+  if (typeof next === "string") {
+    const reference = slide ? helpers.valueAt(["slides", String(slide - 1), "layout"]) : undefined;
+    const id = layout?.id ?? (typeof reference === "string" ? reference : undefined);
+    return {
+      message: `Block pinned to region ${code(region)}, which OPF 0.35 renamed ${code(next)}${id ? ` in layout ${code(id)}` : ""}.`,
+      next: `pin it to ${code(next)} (the fix does).`,
+    };
+  }
   return {
     message: layout
       ? `Block pinned to region ${code(region)}; layout ${code(layout.id)} has ${andList(known)}.`

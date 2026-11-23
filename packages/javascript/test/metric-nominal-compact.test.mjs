@@ -7,7 +7,7 @@ import { composeSlide, layoutMetric } from '../dist/composition.js';
 // min(76, 28% of the box height), which turned 76 px into 46.27 px in a compact (auto) region.
 const { layouts } = gallery;
 const statement = structuredClone(layouts.statement);
-const message = statement.regions.find((region) => region.name === 'message');
+const message = statement.regions.find((region) => region.name === 'body');
 message.size = 'auto';
 
 test('a metric in an auto region keeps 76 px', () => {

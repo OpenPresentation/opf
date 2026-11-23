@@ -204,7 +204,7 @@ try {
         onStart: (press) => ({ id: press.payload, ghost: kit.dragGhost(dom, document.getElementById('host'), press.payload) }),
         onStarted: (session) => dragLog.push(`start ${session.id}`),
         onMove: (session, event) => { session.ghost.moveTo(event); session.over = document.elementFromPoint(event.clientX, event.clientY)?.dataset?.id; },
-        onEnd: (session, { cancelled }) => { session.ghost.remove(); dragLog.push(cancelled ? 'cancelled' : 'ended'); },
+        onEnd: (session, { canceled }) => { session.ghost.remove(); dragLog.push(canceled ? 'canceled' : 'ended'); },
         onDrop: (session) => dragLog.push(`drop ${session.id} on ${session.over}`),
         onEscape: () => dragLog.push('escape'),
       });
@@ -212,7 +212,7 @@ try {
       list.addEventListener('pointerdown', (event) => { note(event); drag.press(event, event.target.dataset.id); list.setPointerCapture(event.pointerId); });
       list.addEventListener('pointermove', (event) => { note(event); drag.move(event); });
       list.addEventListener('pointerup', (event) => { note(event); drag.release(event); });
-      // A host forwards pointercancel too (the browser took the pointer): the drag ends as cancelled instead of staying open.
+      // A host forwards pointercancel too (the browser took the pointer): the drag ends as canceled instead of staying open.
       list.addEventListener('pointercancel', (event) => { note(event); drag.cancel(); });
       for (const type of ['dragstart', 'selectstart']) document.addEventListener(type, (event) => pointerLog.push(`${type} ${event.target?.nodeName}`), true);
     });
@@ -264,7 +264,7 @@ try {
     await page.keyboard.press('Escape');
     await until('the cancel', () => window.dragKit.active === null);
     await page.mouse.up();
-    assert.deepEqual(await page.evaluate(() => dragLog), ['start a', 'ended', 'drop a on c', 'start a', 'cancelled', 'escape']);
+    assert.deepEqual(await page.evaluate(() => dragLog), ['start a', 'ended', 'drop a on c', 'start a', 'canceled', 'escape']);
     await clean('after the cancel');
   }
 

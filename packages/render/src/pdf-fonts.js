@@ -289,8 +289,12 @@ export class FontEmbedder {
     );
     const toUnicode = file.addStream("", toUnicodeCMap(cids));
     file.set(entry.object, "/Type/Font/Subtype/Type0/BaseFont" + name(base) + "/Encoding/Identity-H/DescendantFonts[" + cidFont + " 0 R]/ToUnicode " + toUnicode + " 0 R");
+    const label = `${face.postscriptName} (${[...face.names][0]} ${face.weight}${face.italic ? " italic" : ""})`;
+    const how = embedding === "subset" ? `as a subset of the ${used.length} glyphs the PDF draws` : `whole, because its fsType forbids subsetting (the PDF draws ${used.length} of its glyphs)`;
+    const restricted = face.restriction ? "; its fsType allows the PDF to be viewed and printed only, not edited" : "";
     return {
-      code: "pdf-font-embedded", family: [...face.names][0], postscriptName: face.postscriptName, weight: face.weight, italic: face.italic,
+      code: "pdf-font-embedded", message: `The font ${label} is embedded in the PDF ${how}, ${fontBytes.length} bytes${restricted}.`,
+      family: [...face.names][0], postscriptName: face.postscriptName, weight: face.weight, italic: face.italic,
       glyphs: used.length, bytes: fontBytes.length, embedding, fsType: face.fsType, ...(face.restriction ? { embeddingRestriction: face.restriction } : {}),
       ...(face.license ? { license: face.license } : {}), origin: face.origin,
     };
@@ -312,7 +316,7 @@ export function nominalAdvance(face, gid, cache) {
 }
 
 // A glyph that stands for no character of its own (a diacritic or dot the font split off a letter) maps to a zero width
-// space: extractors drop it, and viewers that honour /ActualText never see it.
+// space: extractors drop it, and viewers that honor /ActualText never see it.
 function toUnicodeCMap(cids) {
   const pairs = cids.map((item) => [item.cid, item.codePoints]).sort((a, b) => a[0] - b[0]);
   let body = "/CIDInit /ProcSet findresource begin\n12 dict begin\nbegincmap\n/CIDSystemInfo<</Registry(Adobe)/Ordering(UCS)/Supplement 0>> def\n/CMapName/Adobe-Identity-UCS def\n/CMapType 2 def\n1 begincodespacerange\n<0000> <FFFF>\nendcodespacerange\n";

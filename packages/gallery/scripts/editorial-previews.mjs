@@ -12,7 +12,7 @@ const TITLES = {
   table: 'Compare outcomes on consistent measures', 'table-beside': 'Team B needs targeted support',
   dashboard: 'Pilot performance at a glance', faq: 'What the pilot involves',
   process: 'Three steps from evidence to decision', team: 'Give each workstream a clear owner',
-  agenda: 'From the problem to the next decision', 'agenda-split': 'Three parts, one decision', comparison: 'Choose the smallest useful test',
+  agenda: 'From the problem to the next decision', comparison: 'Choose the smallest useful test',
   pillars: 'Three conditions for a useful pilot', timeline: 'Six weeks to an informed decision',
   'image-beside': 'Explain what the audience should notice', image: 'Give the visual room to speak',
   gallery: 'Compare three visual directions', hero: 'One team. One outcome.',
@@ -20,7 +20,7 @@ const TITLES = {
   logos: 'Recognize the partners', pyramid: 'What the pilot builds on', 'inverted-pyramid': 'From possibilities to a decision', matrix: 'Four ways to run the pilot',
   cycle: 'How each pilot round feeds the next',
   'org-chart': 'Give the pilot a clear reporting structure', hierarchy: 'Break the pilot into focused workstreams', venn: 'Three conditions for a useful pilot',
-  chevrons: 'Four stages of the pilot', flow: 'From evidence to decision', 'vertical-flow': 'How a team joins the pilot',
+  chevrons: 'Four stages of the pilot', 'vertical-process': 'How a team joins the pilot',
 };
 const SUBTITLES = {
   cover: 'A six-week pilot with two teams', section: 'Part 2: the evidence',
@@ -92,9 +92,8 @@ export function editorialDeck(id, record) {
     else if (id === 'matrix') payload = { items: ['Small, fast', 'Small, slow', 'Broad, fast', 'Broad, slow'] };
     else if (id === 'cycle') payload = { items: ['Plan', 'Pilot', 'Measure', 'Adjust'] };
     else if (id === 'chevrons') payload = { items: ['Baseline', 'Pilot', 'Review', 'Decide'] };
-    else if (id === 'flow') payload = { items: ['Gather evidence', 'Run the pilot', 'Decide'] };
-    else if (id === 'vertical-flow') payload = { items: ['Nominate', 'Train', 'Start'] };
-    else if (id === 'agenda' || id === 'agenda-split') payload = { items: ['Define the problem', 'Review the pilot evidence', 'Agree the next decision'] };
+    else if (id === 'vertical-process') payload = { items: ['Nominate', 'Train', 'Start'] };
+    else if (id === 'agenda') payload = { items: ['Define the problem', 'Review the pilot evidence', 'Agree the next decision'] };
     else if (id === 'pillars') payload = labelled(PILLARS[index % 3]);
     else if (id === 'comparison') payload = { text: ['Option A: focused pilot\nTwo teams, six weeks. Low setup cost and a clear baseline.', 'Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs.', 'Recommendation: establish the evidence with Option A before committing to Option B.'][index % 3] };
     else if (kind === 'metric') payload = { metric: id === 'scorecard' ? { ...METRICS[index % 3], description: ['Target: 50 participants', 'Target: at least 80%', 'Target: under 7 min'][index % 3] } : METRICS[index % 3] };
@@ -135,7 +134,7 @@ export function editorialDeck(id, record) {
   });
   // A team example need not invent portraits. Use names and responsibilities honestly.
   // Charts and tables show one analytical object per region instead of three tiny copies.
-  if (['chart', 'chart-beside', 'table', 'table-beside', 'quote', 'agenda', 'agenda-split', 'closing', 'code', 'timeline', 'image-beside'].includes(id)) {
+  if (['chart', 'chart-beside', 'table', 'table-beside', 'quote', 'agenda', 'closing', 'code', 'timeline', 'image-beside'].includes(id)) {
     const seen = new Set();
     slide.blocks = slide.blocks.filter(block => {
       if (seen.has(block.region)) return false;

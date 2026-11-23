@@ -117,7 +117,7 @@ function resolveNode(schema: JsonSchema | undefined, root: SchemaRoot, seen: Set
 
 /**
  * The concrete forms of a schema: `oneOf` / `anyOf` branches and `type` arrays expanded, each branch merged over the shared
- * base (properties and required lists are combined; a branch that only names required fields is labelled by them).
+ * base (properties and required lists are combined; a branch that only names required fields is labeled by them).
  */
 export function schemaVariants(schema: JsonSchema | undefined, root: SchemaRoot = presentationSchema): JsonSchema[] {
   const resolved = resolveSchema(schema, root);
@@ -128,7 +128,7 @@ export function schemaVariants(schema: JsonSchema | undefined, root: SchemaRoot 
   return (variants as JsonSchema[]).flatMap((child) =>
     schemaVariants(child, root).map((variant) => {
       // A branch that only names required fields (Watermark: exactly one of src and text) adds to the base's required list and is
-      // labelled by them, so the generic form offers "src" and "text" as two forms of one object.
+      // labeled by them, so the generic form offers "src" and "text" as two forms of one object.
       const requiredOnly = !variant.type && !variant.properties && !variant.$ref && Array.isArray(variant.required);
       return {
         ...base,
@@ -357,14 +357,6 @@ export const UNRANKED_PRIORITY = 1e6;
 
 const DEFINITION_LISTS: Readonly<Record<string, readonly string[]>> = { Slide: COMMON_KEYS.slide, Design: COMMON_KEYS.design, SlideDesign: COMMON_KEYS.design };
 const ADVANCED_KEYS: ReadonlySet<string> = new Set(["extensions", "$schema"]);
-// A promoted region of a slide: one or more of top/middle/bottom, a colon, one or more of start/center/end (`top+middle:start+center`),
-// or either half alone (`left`, `top+middle`).
-const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*)?(?::)?(?:(?:start|center|end)(?:\+(?:start|center|end))*)?$/;
-
-/** Whether a slide key is a promoted region (`start`, `top+middle`, `top+middle:start+center`, ...): 48 keys of the slide schema, all `advanced`. */
-export function isPromotedRegionKey(key: string): boolean {
-  return key !== "" && key !== ":" && REGION_KEY.test(key);
-}
 
 export type { CatalogRecordKind };
 
@@ -394,7 +386,7 @@ export interface FieldChild {
   /** `string`, `number`, `enum`, `Design` (a single `$defs` object), `array of Slide`, `array of string`, `choice` (several forms), ... */
   typeLabel: string;
   required: boolean;
-  /** Hidden until the typed prefix matches: promoted regions, `extensions`, `$schema`. */
+  /** Hidden until the typed prefix matches: `extensions`, `$schema`. */
   advanced: boolean;
   /** Lower sorts first: the index in `COMMON_KEYS` for the object, `UNRANKED_PRIORITY` (1e6) otherwise. */
   priority: number;
@@ -529,7 +521,7 @@ function objectForm(variants: readonly JsonSchema[], value: unknown): ObjectForm
   return { properties, required };
 }
 
-function childrenOf(form: ObjectForm, list: readonly string[] | undefined, isSlide: boolean, root: SchemaRoot): FieldChild[] {
+function childrenOf(form: ObjectForm, list: readonly string[] | undefined, root: SchemaRoot): FieldChild[] {
   const children: FieldChild[] = [];
   for (const [key, raw] of form.properties) {
     const resolved = resolveSchema(raw, root);
@@ -541,7 +533,7 @@ function childrenOf(form: ObjectForm, list: readonly string[] | undefined, isSli
       types: uniq(variants.map(variantType)),
       typeLabel: typeLabelOf(raw, variants, root),
       required: form.required.includes(key),
-      advanced: ADVANCED_KEYS.has(key) || (isSlide && isPromotedRegionKey(key)),
+      advanced: ADVANCED_KEYS.has(key),
       priority: priorityOf(list, key),
       ...(description ? { description } : {}),
       ...(catalogKind ? { catalogKind } : {}),
@@ -628,7 +620,7 @@ function describeAt(presentation: unknown, path: OpfPath, depth: number): FieldI
     ...(catalogKind ? { catalogKind } : {}),
     variants: infos,
     primary,
-    children: childrenOf(form, list, definition === "Slide", root),
+    children: childrenOf(form, list, root),
     requiredChildren: form.required,
     freeText,
   };

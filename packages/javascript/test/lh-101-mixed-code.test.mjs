@@ -34,7 +34,7 @@ test('author minimum, maximum and fill:false keep the existing code size',()=>{
  const off=composeSlide(fixtures[0].slide,{...options('ltr'),fill:false});assert.equal(body(off).fit.fontSize,22);
 });
 test('pinned layout-code and vertical rows do not acquire the mixed-panel treatment',()=>{
- const slide=structuredClone(fixtures[0].slide);slide.layout='code';slide.blocks[0].region='code';slide.blocks[1].region='notes';const pinned=composeSlide(slide,{...options('ltr'),layout:gallery.layouts.code});assert.ok(pinned.regions);assert.equal(body(pinned).fit.fontSize,22);assert.ok(panel(pinned).box.height<300);
+ const slide=structuredClone(fixtures[0].slide);slide.layout='code';slide.blocks[0].region='body';slide.blocks[1].region='aside';const pinned=composeSlide(slide,{...options('ltr'),layout:gallery.layouts.code});assert.ok(pinned.regions);assert.equal(body(pinned).fit.fontSize,22);assert.ok(panel(pinned).box.height<300);
  const column=structuredClone(fixtures[0].slide);column.composition={mode:'column'};const r=composeSlide(column,options('ltr'));assert.ok(body(r).fit.fontSize<=22);
 });
 test('over-capacity code remains explicit and retains its complete source',()=>{

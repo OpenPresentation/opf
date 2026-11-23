@@ -14,10 +14,10 @@ export interface LayoutContent {
   heading: { title: boolean; subtitle: boolean; tag: boolean };
 }
 
-/** The template areas in reading order, with each body's flow and accepted kinds. */
+/** The template areas in reading order, with each body's flow (and `max 1` for a single-block region) and accepted kinds. */
 export function layoutStructure(layout: unknown): string {
   if (!isLayoutTemplate(layout)) return '';
-  return layoutEntries(layout).map(entry => entry.region ? `${entry.name} (${entry.region.flow}: ${entry.region.accepts.join(', ')})` : entry.name).join(', ');
+  return layoutEntries(layout).map(entry => entry.region ? `${entry.name} (${entry.region.flow}${entry.region.max === 1 ? ', max 1' : ''}: ${entry.region.accepts.join(', ')})` : entry.name).join(', ');
 }
 
 /** Derive the body kind, region count and headings from a template record. */

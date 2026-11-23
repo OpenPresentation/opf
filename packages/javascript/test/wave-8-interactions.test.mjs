@@ -56,7 +56,7 @@ for (const { language, rtl, title, figures, labels } of LANGUAGES) {
 test('LH-63 with LH-170: the verdict on the band draws its label bold (left to right and right to left)', () => {
   for (const [language, verdict, label] of [['en-US', 'Recommendation: negotiate a two-year term with exit rights before committing.', 'Recommendation:'], ['ar', 'التوصية: التفاوض على عقد لعامين مع حق الخروج قبل الالتزام.', 'التوصية:']]) {
     const side = (name, items) => ({ region: name, composition: { mode: 'column' }, blocks: [{ text: [{ text: name, bold: true }] }, { bullets: items }] });
-    const deck = deckOf({ layout: 'comparison', title: 'Moving the warehouse', blocks: [side('first', ['Frees about $3.2M of capital', 'Peak capacity without hiring', 'Operator runs our carriers']), side('second', ['Per-order cost rises about 6%', 'Less control over packing', 'Exit takes six months']), { region: 'verdict', text: verdict }] }, language);
+    const deck = deckOf({ layout: 'comparison', title: 'Moving the warehouse', blocks: [side('first', ['Frees about $3.2M of capital', 'Peak capacity without hiring', 'Operator runs our carriers']), side('second', ['Per-order cost rises about 6%', 'Less control over packing', 'Exit takes six months']), { region: 'aside', text: verdict }] }, language);
     const result = compose(deck);
     assert.equal(result.emphasis?.source, 'foot-band', `${language}: the verdict is the band`);
     const band = result.items.find((item) => item.emphasis && item.path === `${result.emphasis.path}.text`);

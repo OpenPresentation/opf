@@ -234,7 +234,7 @@ try {
   await page.keyboard.press('Escape');
   assert.equal(await dock.getByRole('textbox').count(), 0, 'Escape closes the editor');
   assert.equal((await doc()).slides[1].blocks[0].chart.data.rows[0][2], 5, 'Escape changes nothing');
-  assert.match(await status(), /Edit cancelled/);
+  assert.match(await status(), /Edit canceled/);
   await page.keyboard.press('F2');
   await selectEditorText();
   await page.keyboard.type('6');

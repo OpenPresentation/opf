@@ -10,6 +10,10 @@ import {
 	pointerPath,
 	relatedName,
 	resolveReference,
+	removedLayoutAuto,
+	renamedLayout,
+	renamedLayoutChangesDrawing,
+	renamedLayoutTitlePosition,
 	unresolvedReference,
 	type CatalogKind,
 	type CatalogOptions,
@@ -23,10 +27,11 @@ import { validationDefinition } from './validation-definitions.js';
 import { unusedReferenceWarnings } from './annotation-validation.js';
 import { describeDurationRange, durationOutsideNarrative, durationRangeInverted, resolveNarrative, unknownBeatReferences } from './narrative-plan.js';
 import { chartNumberFixesByCell, unusedDatasets, type ChartNumberFix } from './chart-data.js';
-import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from './content-walk.js';
+import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
 import { ruleInfo } from './validation-rules.js';
 import { chartShapeHelp, chartShapePatch, FOREIGN_CHART_KEYS } from './chart-shape.js';
 import { splitPointer } from './rule-content.js';
+import { droppedCopyOperations, staleCopyCause, staleCopyFix, staleCopyUsers, staleLayoutCopy } from './stale-records.js';
 import { documentIcons, iconIssue } from './icons.js';
 import type { Finding, FindingSeverity, FindingSuggestion } from './generated/types/finding.js';
 import type { Contract, ValidateOptions } from './validation-types.js';
@@ -188,13 +193,6 @@ export function issueFinding(
 		help = `Write ${JSON.stringify(nearest[0].value)} instead; ${JSON.stringify(typedName)} is not a field of this object.`;
 	else if (typedName !== undefined && typeof nearest[0]?.value === 'string')
 		help = `Did you mean ${JSON.stringify(nearest[0].value)}? ${JSON.stringify(typedName)} is not a field of this object. To keep custom metadata, put it in extensions; do not delete authored content to clear this error.`;
-	// A slide key that is almost a region key: say what the grammar is (a span in the wrong order or skipping a row), not only "additional property".
-	const regionKey = typedName !== undefined && nearest[0]?.value !== logicalName(typedName) && /^\/slides\/\d+$/.test(issue.path) ? regionKeyHelp(typedName) : undefined;
-	if (regionKey) {
-		help = regionKey.help;
-		if (regionKey.suggestion && !nearest.some((entry) => entry.value === regionKey.suggestion))
-			nearest.unshift({ value: regionKey.suggestion, label: regionKey.suggestion, origin: 'schema' as const, definition: `${String(entry.schema.$id)}#/$defs/Slide/properties/${regionKey.suggestion}` });
-	}
 	return finding(ruleId, {
 		...(severity ? { severity } : {}),
 		path,
@@ -236,40 +234,6 @@ function foreignObjectHelp(issue: ValidationIssue): string {
 
 /** The most near-miss names a "did you mean" offers. */
 const NEAREST_PROPERTIES = 3;
-const REGION_ROWS = ['top', 'middle', 'bottom'], REGION_COLUMNS = ['start', 'center', 'end'];
-/**
- * A slide key written like a region key but not one: what the grammar is and the key it most likely meant. A region key is rows,
- * then a colon, then columns (`top:start`, `middle+bottom:center+end`), or one half alone (`center+end`, `top+middle`). Each half
- * lists adjacent names in reading order, so `bottom+middle` (out of order), `top+bottom` (skips `middle`) and `start:top` (columns
- * first) are not keys. Undefined when the key is not made of region words.
- */
-function regionKeyHelp(typed: string): { help: string; suggestion?: string } | undefined {
-	const halves = logicalName(typed).split(':');
-	if (halves.length > 2 || halves.some((half) => half === '')) return undefined;
-	const words = halves.map((half) => half.split('+'));
-	if (!words.every((list) => list.every((word) => REGION_ROWS.includes(word) || REGION_COLUMNS.includes(word)))) return undefined;
-	const isRows = (list: string[]): boolean => list.every((word) => REGION_ROWS.includes(word)),
-		isColumns = (list: string[]): boolean => list.every((word) => REGION_COLUMNS.includes(word));
-	if (words.some((list) => !isRows(list) && !isColumns(list))) return { help: `A region key does not mix rows (top, middle, bottom) and columns (start, center, end) in one half: write rows, a colon, then columns, such as "top:start" or "middle+bottom:center+end".` };
-	if (words.length === 2 && isColumns(words[0]!) && isRows(words[1]!)) {
-		const swapped = `${halves[1]}:${halves[0]}`;
-		return { help: `Rows come before the colon and columns after it: write "${swapped}".`, ...(promotedRegionKeys.includes(swapped as never) ? { suggestion: swapped } : {}) };
-	}
-	if (words.length === 2 && (!isRows(words[0]!) || !isColumns(words[1]!))) return { help: 'A region key with a colon names rows before it and columns after it, such as "top:start" or "middle+bottom:center+end".' };
-	const order = (list: string[], vocabulary: string[]): number[] => [...new Set(list)].map((word) => vocabulary.indexOf(word)).sort((a, b) => a - b);
-	const rows = words.length === 2 || isRows(words[0]!) ? order(words[0]!, REGION_ROWS) : [], columns = order(words[words.length - 1]!, REGION_COLUMNS);
-	const hasRows = words.length === 2 || isRows(words[0]!), hasColumns = words.length === 2 || isColumns(words[0]!);
-	const adjacent = (indexes: number[]): boolean => indexes.every((index, at) => at === 0 || index === indexes[at - 1]! + 1);
-	if ((hasRows && !adjacent(rows)) || (hasColumns && !adjacent(columns)))
-		return { help: `A span covers adjacent rows or columns: "top+bottom" and "start+end" skip the middle one. Write "top+middle+bottom" or "start+center+end", or use one region for each part.` };
-	const canonical = (indexes: number[], vocabulary: string[]): string => indexes.map((index) => vocabulary[index]).join('+');
-	const key = words.length === 2 ? `${canonical(rows, REGION_ROWS)}:${canonical(columns, REGION_COLUMNS)}` : hasRows ? canonical(rows, REGION_ROWS) : canonical(columns, REGION_COLUMNS);
-	if (key === typed) return undefined;
-	return promotedRegionKeys.includes(key as never)
-		? { help: `Write "${key}": the names of a span go in reading order (top, middle, bottom; start, center, end), rows before the colon and columns after it.`, suggestion: key }
-		: undefined;
-}
-
 /** A key with `left` and `right` read as the logical sides: `left` is `start`, `top:center+right` is `top:center+end`. */
 const logicalName = (name: string): string => name.split(':').map((part) => part.split('+').map((word) => (word === 'left' ? 'start' : word === 'right' ? 'end' : word)).join('+')).join(':');
 
@@ -586,7 +550,7 @@ const HELP: Record<string, string> = {
 		'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.',
 	'chart-mapping-adapted': 'Choose a compatible chart type or mapping for the selected data. The message explains how the mapping or drawing was adapted.',
 	'chart-series-dropped': 'The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.',
-	'chart-highlight-adapted': 'The highlight is adapted by every engine. Name a series or category the chart type can emphasise, or remove the entry.',
+	'chart-highlight-adapted': 'The highlight is adapted by every engine. Name a series or category the chart type can emphasize, or remove the entry.',
 	'slide-theme-dimensions': 'A PPTX has one slide size. Set design.dimensions on the deck, or give every slide the same theme dimensions.',
 	'code-highlight-out-of-range': 'Marked lines count from 1 by line break in code.source. The entry marks nothing past the last line; change it to a line the code has, or remove it.',
 	'code-highlight-range-reversed': 'Write the range with the smaller line number first, or remove it. A reversed range marks nothing.',
@@ -595,8 +559,8 @@ const HELP: Record<string, string> = {
 	'variable-unknown-value': 'Remove the supplied value, or declare the variable it belongs to.',
 	'variable-unused': 'Reference the variable as {{id}} or var:id where it belongs, or remove its declaration.',
 	'variable-group-omitted': 'Give one of the variables a value to draw the group, make one of them required, or move the content that should always show out of the group.',
-	'variable-reference-unknown': 'Declare the variable in the top-level variables map, or use another colour.',
-	'run-color-unrecognized': 'Use a #RRGGBB hex colour, a colour-scheme name or a var: reference to a declared colour variable.',
+	'variable-reference-unknown': 'Declare the variable in the top-level variables map, or use another color.',
+	'run-color-unrecognized': 'Use a #RRGGBB hex color, a color-scheme name or a var: reference to a declared color variable.',
 	'numbering-start-ignored': "Add a 'numbering' field to the payload, or remove 'start'.",
 	'slide-size-out-of-range': 'Use a custom widthInches and heightInches between 1 and 56, or a preset. PowerPoint stores the slide size in 914400 to 51206400 EMU per side.',
 };
@@ -738,13 +702,12 @@ function collapseAuthoringShapes(document: unknown, findings: Finding[]): void {
 		const prefix = `${entry.path}/`;
 		if (findings.some((other) => other !== entry && other.path.startsWith(prefix) && !other.path.slice(prefix.length).includes('/') && OPTION_RULES.includes(other.ruleId))) findings.splice(index, 1);
 	}
-	// A region (or a block of a slide's blocks) written as a bare string, number or list: the schema reports "must be object" and the
-	// raw "must NOT be valid" of the payload's own rules. One finding says a region holds a content payload, with the text form.
+	// A block of a slide's blocks written as a bare string, number or list: the schema reports "must be object" and the raw "must NOT be
+	// valid" of the payload's own rules. One finding says a block holds a content payload, with the text form.
 	const payloadSlots = new Map<string, unknown>();
 	for (const entry of findings) {
 		if (!schema(entry) || payloadSlots.has(entry.path)) continue;
-		const key = /^\/slides\/\d+\/([^/]+)$/.exec(entry.path)?.[1], inBlocks = /^\/slides\/\d+\/blocks\/\d+$/.test(entry.path);
-		if (!inBlocks && !(key !== undefined && (promotedRegionKeys as readonly string[]).includes(key))) continue;
+		if (!/^\/slides\/\d+\/blocks\/\d+$/.test(entry.path)) continue;
 		const value = valueAt(entry.path);
 		if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || Array.isArray(value)) payloadSlots.set(entry.path, value);
 	}
@@ -755,7 +718,7 @@ function collapseAuthoringShapes(document: unknown, findings: Finding[]): void {
 		const { fixes: _fixes, suggestions: _suggestions, ...kept } = findings[first]!;
 		const one: Finding = {
 			...kept,
-			message: `A region holds a content payload (an object), not ${text ? 'a bare string' : Array.isArray(value) ? 'a list' : 'a ' + typeof value}.`,
+			message: `A block holds a content payload (an object), not ${text ? 'a bare string' : Array.isArray(value) ? 'a list' : 'a ' + typeof value}.`,
 			help: `Write ${write}. A payload names its kind by its key: "text", "items" (a list), "image", "chart", "table", or "blocks" to stack several; see docs/dynamic-composition.md.`,
 			...(text ? { fixes: [{ id: 'wrap-text', title: 'Write the string as { "text": ... }', kind: 'patch' as const, safe: false, patch: [{ op: 'replace' as const, path: at, value: { text: value } }] }] } : {}),
 		};
@@ -796,7 +759,7 @@ function collapseChartShape(document: unknown, findings: Finding[]): void {
 
 /**
  * The engine's issues as findings. Errors are `format` findings (the schema rule, or the semantic rule that names its
- * code); warnings that name a code (data, chart options, variables, numbering, colours) are findings of that rule.
+ * code); warnings that name a code (data, chart options, variables, numbering, colors) are findings of that rule.
  * The catalog-id warnings are left to `referenceFindings`, which resolves them against the full local context.
  * `enabled` lets a caller skip work for a rule it will not report.
  */
@@ -976,7 +939,63 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 				findings.push(issueFinding(issue, recordRuleId(issue), catalogSchemaNames[site.kind], pointer(['catalogs', found.group, site.kind, found.id]), 'context'));
 		}
 		if (found && !(found.origin === 'document' && invalid.has(recordKey(found.group, site.kind, found.id)))) continue;
+		// The record is embedded but fails its schema: say so, never that it is not embedded (OPF 0.35: a copy of a built-in record from before 0.35).
+		const embeddedInvalid = found?.origin === 'document' ? found : undefined;
+		const stale = embeddedInvalid && site.kind === 'layouts' ? staleLayoutCopy(document, embeddedInvalid.group, embeddedInvalid.id, options) : undefined;
 		const diagnostic = unresolvedReference(document, site.kind, site.reference, path, options);
+		if (removedLayoutAuto(site.kind, site.reference)) {
+			findings.push(
+				finding('opf/unresolved-reference', {
+					path,
+					message: diagnostic.message,
+					help: 'OPF 0.35 removed layout "auto". Delete the layout key: a slide without one is composed automatically, which is what "auto" did.',
+					definition: `${schemas.presentation.$id}#/$defs/Slide`,
+					lookup: ['opf', 'catalog', site.kind],
+					fixes: [{ id: 'remove-layout-auto', title: 'Delete layout (automatic composition)', kind: 'patch' as const, safe: true, patch: [{ op: 'remove' as const, path }] }],
+				}),
+			);
+			continue;
+		}
+		const renamed = renamedLayout(site.kind, site.reference);
+		if (renamed !== undefined) {
+			// agenda-split is agenda with the title beside it: the fix also sets the slide's design.titlePosition, unless the slide sets one.
+			const position = renamedLayoutTitlePosition(site.kind, site.reference);
+			const slideAt = site.path.slice(0, -1);
+			const slide = slideAt.reduce<unknown>((value, key) => (isRecord(value) || Array.isArray(value) ? (value as Record<string | number, unknown>)[key] : undefined), document) as Record<string, unknown> | undefined;
+			const design = slide && typeof slide.design === 'object' && slide.design !== null && !Array.isArray(slide.design) ? (slide.design as Record<string, unknown>) : undefined;
+			const setPosition = position !== undefined && design?.titlePosition === undefined;
+			const positionOp = !setPosition ? [] : design ? [{ op: 'add' as const, path: pointer([...slideAt, 'design', 'titlePosition']), value: position }] : [{ op: 'add' as const, path: pointer([...slideAt, 'design']), value: { titlePosition: position } }];
+			// The last slide on a copy of the removed layout drops the copy too (and embeds the replacement where the group embeds records).
+			const dropCopy = stale?.renamed && staleCopyUsers(document, stale, options).length <= 1 ? droppedCopyOperations(document, stale) : [];
+			const what = renamed.endsWith('vertical-process') ? '' : renamed.endsWith('agenda') ? ' with its title beside the list (design.titlePosition "start")' : ' (a short list as boxes joined by arrows, longer steps as numbered steps)';
+			findings.push(
+				finding('opf/unresolved-reference', {
+					path,
+					message: diagnostic.message,
+					help: `OPF 0.35 removed layout "${site.reference}"; use "${renamed}", which draws the same content${what}.${position ? ` The fix sets the layout and${setPosition ? '' : ' leaves'} the slide's design.titlePosition${setPosition ? ` to "${position}"` : ' as the slide sets it'}.` : ''}`,
+					definition: `${schemas.presentation.$id}#/$defs/Slide`,
+					lookup: ['opf', 'catalog', site.kind],
+					fixes: [{ id: 'rename-layout', title: setPosition ? `Use layout ${renamed} with the title beside it` : `Use layout ${renamed}`, kind: 'patch' as const, safe: true, ...(stale || renamedLayoutChangesDrawing(site.kind, site.reference) ? { changesDrawing: true } : {}), patch: [{ op: 'replace' as const, path, value: renamed }, ...positionOp, ...dropCopy] }],
+				}),
+			);
+			continue;
+		}
+		if (embeddedInvalid) {
+			const at = pointer(['catalogs', embeddedInvalid.group, site.kind, embeddedInvalid.id]);
+			const fix = stale ? staleCopyFix(document, stale, options) : undefined;
+			const noun = KIND_SINGULAR[site.kind];
+			findings.push(
+				finding('opf/unresolved-reference', {
+					path,
+					message: `${noun[0]!.toUpperCase()}${noun.slice(1)} '${site.reference}' is embedded in catalogs.${embeddedInvalid.group}, but the record fails the ${noun} schema: see the opf/catalog-record findings at ${at}.`,
+					help: stale ? staleCopyCause(stale) : `Fix the record with the fixes of its findings at ${at}, then validate again.`,
+					definition: `${schemas.presentation.$id}#/$defs/Catalogs`,
+					lookup: ['opf', 'catalog', site.kind],
+					...(fix ? { fixes: [fix] } : {}),
+				}),
+			);
+			continue;
+		}
 		const records = catalogRecords(document, site.kind, options);
 		// Only near misses are suggested (nearMisses): a nearest spelling that names another kind of slide is no help.
 		const near = new Set(nearMisses(site.reference, records.map((entry) => entry.reference)));

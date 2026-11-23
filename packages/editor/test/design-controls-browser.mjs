@@ -239,9 +239,9 @@ try {
 
   // Design options.
   await step('title alignment', () => field(design, 'Title alignment').selectOption('end'), current => current.design.titleAlignment === 'end', { preview: true });
+  await step('title position', () => field(design, 'Title position').selectOption('start'), current => current.design.titlePosition === 'start');
+  await step('title position back on top', () => field(design, 'Title position').selectOption('top'), current => current.design.titlePosition === 'top');
   await step('content alignment', () => field(design, 'Content alignment').selectOption('center'), current => current.design.contentAlignment === 'center');
-  await step('content direction', () => field(design, 'Content direction').selectOption('vertical'), current => current.design.contentDirection === 'vertical');
-  await step('primary chart position', () => field(design, 'Primary chart position').selectOption('start'), current => current.design.chartPrimary === 'start');
   await step('content box', () => field(design, 'Content box').selectOption('yes'), current => current.design.contentBox === true);
   await step('accent font', async () => { const input = field(design, 'Accent font'); await input.fill('Georgia'); await input.press('Enter'); }, current => current.design.fontScheme?.accent === 'Georgia');
   {
@@ -542,19 +542,19 @@ try {
   await settle();
   mark('an image moves between the content and the slide background');
 
-  // Blocks into regions and back: layouts are offered by block count, the loss comes before the change.
+  // Blocks into the cells of the slide grid and back: layouts are offered by block count, the loss comes before the change.
   await slide(5);
-  const regionLayout = selection.getByLabel(label('Place blocks in regions'));
+  const regionLayout = selection.getByLabel(label('Place blocks in cells'));
   await regionLayout.waitFor();
   assert.deepEqual(await regionLayout.locator('option').evaluateAll(options => options.map(option => option.value)), ['', 'left-right', 'top-bottom']);
-  await step('blocks to regions', () => regionLayout.selectOption('left-right'), current => current.slides[5].start?.text === 'Left text' && current.slides[5].end?.items?.[0] === 'Right' && current.slides[5].blocks === undefined, { preview: true });
+  await step('blocks to cells', () => regionLayout.selectOption('left-right'), current => current.slides[5].blocks?.[0]?.region === 'start' && current.slides[5].blocks[0].text === 'Left text' && current.slides[5].blocks[1]?.region === 'end' && current.slides[5].blocks[1].items?.[0] === 'Right', { preview: true });
   await regionLayout.selectOption('left-right');
-  await waitDoc(current => current.slides[5].start !== undefined, 'regions for the move back');
+  await waitDoc(current => current.slides[5].blocks?.[0]?.region === 'start', 'cells for the move back');
   await settle();
-  const toBlocks = selection.getByRole('button', { name: 'Turn regions into blocks', exact: true });
+  const toBlocks = selection.getByRole('button', { name: 'Take the blocks out of their cells', exact: true });
   await toBlocks.waitFor();
-  assert.match(await toBlocks.getAttribute('title'), /region placement/, 'what the action would not carry over is its tooltip');
-  await step('regions to blocks', () => toBlocks.click(), current => current.slides[5].blocks?.length === 2 && current.slides[5].start === undefined, { preview: true });
+  assert.match(await toBlocks.getAttribute('title'), /cell placement/, 'what the action would not carry over is its tooltip');
+  await step('cells to blocks', () => toBlocks.click(), current => current.slides[5].blocks?.length === 2 && current.slides[5].blocks.every(block => block.region === undefined), { preview: true });
   await button('Undo').click();
   await waitDoc(current => current.slides[5].blocks?.length === 2, 'regions undone');
   await settle();

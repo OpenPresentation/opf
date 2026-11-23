@@ -2,6 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Block Composition",
   "description": "Technical fixture showing multiple content payloads in a renderer-positioned blocks array.",
+  "language": "en-US",
   "slides": [
     {
       "title": "Mixed Evidence Blocks",

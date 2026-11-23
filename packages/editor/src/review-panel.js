@@ -1,7 +1,7 @@
 // Review panel (RR-29, RR-55): the DOM panel over core's `validate` report and, optionally, a hosted reviewer. It lists the findings
 // of the open presentation by category (format, references, policy, accessibility, layout, content, and any category a hosted
 // reviewer adds), lets the author go to the content a finding is about, offers quick fixes (type the alt text in place, switch a
-// failing text colour to the readable one) and updates as the document changes. The full check runs after the document has been
+// failing text color to the readable one) and updates as the document changes. The full check runs after the document has been
 // quiet for a moment, not on every keystroke (the session itself checks only the `format` category per edit). The panel owns no
 // document state: every fix is an undoable edit through the editor session. Importing this module does not need a DOM;
 // mounting does.
@@ -314,7 +314,7 @@ export function createReviewPanel(container, options) {
     try {
       applyReviewFix(editor, finding, fix);
       say(`${fix.title}. Undo restores the previous state.`);
-      // Check the changed document at once, then put focus on the neighbouring finding.
+      // Check the changed document at once, then put focus on the neighboring finding.
       refresh();
       const after = visible();
       const next = after[Math.min(Math.max(index, 0), after.length - 1)];
@@ -344,11 +344,13 @@ export function createReviewPanel(container, options) {
       finding.help ? h(doc, "p", { class: "opf-review-help", text: finding.help }) : undefined);
     const actions = h(doc, "div", { class: "opf-review-actions" });
     for (const fix of finding.fixes ?? []) {
+      // A safe fix that changes the drawing (OPF 0.35 `changesDrawing`, such as a removed layout's replacement) is shown with the same care.
+      const careful = !fix.safe || fix.changesDrawing === true;
       actions.append(h(doc, "button", {
         type: "button",
-        class: `opf-review-fix${fix.safe ? "" : " is-careful"}`,
+        class: `opf-review-fix${careful ? " is-careful" : ""}`,
         "data-fix": fix.id ?? fix.title,
-        title: fix.safe ? undefined : "This changes how the slide looks or what it says; it can be undone.",
+        title: careful ? "This changes how the slide looks or what it says; it can be undone." : undefined,
         text: fix.title,
         onclick: () => runFix(finding, fix),
       }));

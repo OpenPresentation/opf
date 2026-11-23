@@ -12,7 +12,7 @@
       "name": "title"
     },
     {
-      "name": "logos",
+      "name": "body",
       "accepts": [
         "image",
         "text",

@@ -4,7 +4,7 @@ For the four-repository event/gate/target matrix and current agent deployment au
 
 Use Node 24 (`24.x`) for all future source, candidate and registry verification.
 The packages declare the open-ended `engines.node` `>=22` (RR-20, tested on Node 22, 24 and 26 by the `node-range`
-CI legs, which run in the nightly workflow, before every release and on pull requests labelled `full-ci`); a closed range such as `24.x` makes npm on any other Node silently install an older release, and
+CI legs, which run in the nightly workflow, before every release and on pull requests labeled `full-ci`); a closed range such as `24.x` makes npm on any other Node silently install an older release, and
 `pnpm check:engines-range` fails on one, including in a lockfile that pins a release made after the fix.
 The next releases must document the [Node 24 migration](migrations/node24.md)
 and use new versions. Historical dual-runtime release records remain unchanged.

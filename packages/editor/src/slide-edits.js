@@ -20,7 +20,7 @@ import { prepareDuplicateSlides, prepareMoveSlides, prepareRemoveSlides } from "
 import { collectReservedPresentationIds, remapSlideTreeIds } from "./presentation-ids.js";
 import { prepareOpfImport } from "./transfer.js";
 import { prepareSave } from "./catalogs.js";
-import { CONTENT_FIELDS, contentFieldsOf, isPromotedRegion } from "./slide-scene.js";
+import { CONTENT_FIELDS, contentFieldsOf } from "./slide-scene.js";
 
 /** The error a refused studio edit throws (`code` `studio-refused`); its message is the reason to show. */
 export const refuse = (message, details) => fail("studio-refused", message, details);
@@ -56,7 +56,7 @@ function siblings(scene, keys, action) {
   for (const node of list) {
     if (node.kind === "heading") throw refuse(`A heading cannot ${HEADING_REFUSALS[action] ?? action}.`, { key: node.key });
     if (node.kind === "part") throw refuse(`Select the whole block to ${action} it.`, { key: node.key });
-    if (node.kind === "region") throw refuse(node.virtual ? "A region belongs to the slide's layout. Edit the layout to change it." : "A promoted region keeps its place on the slide grid.", { key: node.key });
+    if (node.kind === "region") throw refuse(node.promoted ? "A cell keeps its place on the slide grid. Move its blocks instead." : "A region belongs to the slide's layout. Edit the layout to change it.", { key: node.key });
     if (node.kind === "slide") throw refuse(`Use the slide list to ${action} slides.`, { key: node.key });
   }
   if (list.some((node) => node.parent !== list[0].parent)) throw refuse("Multiple selection works within one group. Select siblings.");
@@ -74,7 +74,7 @@ function explicitOwner(owner) {
   return owner.blocks;
 }
 
-// Walk a slide's block tree: every block, group and promoted region object with its parent (`array` and `owner`, or `key` for a region).
+// Walk a slide's block tree: every block and group object with its parent (`owner`).
 function parents(slide) {
   const map = new Map();
   const walk = (owner, depth) => {
@@ -82,7 +82,6 @@ function parents(slide) {
     for (const block of owner.blocks) if (isObject(block)) { map.set(block, { owner }); walk(block, depth + 1); }
   };
   walk(slide, 0);
-  for (const key of Object.keys(slide)) if (isPromotedRegion(key) && isObject(slide[key])) { map.set(slide[key], { owner: slide, key }); walk(slide[key], 0); }
   return map;
 }
 // The index pointer of `target` (an object of the working slide) by identity, or null.
@@ -98,15 +97,8 @@ function locate(slide, slidePointer, target) {
   };
   const base = parsePointer(slidePointer);
   if (target === slide) return formatPointer(base);
-  const root = walk(slide, base, 0);
-  if (root) return formatPointer(root);
-  for (const key of Object.keys(slide)) {
-    if (!isPromotedRegion(key) || !isObject(slide[key])) continue;
-    if (slide[key] === target) return formatPointer([...base, key]);
-    const found = walk(slide[key], [...base, key], 0);
-    if (found) return formatPointer(found);
-  }
-  return null;
+  const found = walk(slide, base, 0);
+  return found ? formatPointer(found) : null;
 }
 
 /**
@@ -127,7 +119,7 @@ function workingCopy(presentation, scene, convert) {
   };
   return { work, slide, objectOf, converted, parentMap: parents(slide) };
 }
-// Remove `object` from its blocks array; then remove every group (and promoted region, and the slide's own `blocks`) the removal empties,
+// Remove `object` from its blocks array; then remove every group (and the slide's own `blocks`) the removal empties,
 // except `keep`, the container the objects move into.
 function detach(slide, parentMap, object, pruned, keep) {
   const info = parentMap.get(object);
@@ -138,7 +130,6 @@ function detach(slide, parentMap, object, pruned, keep) {
   const owner = info.owner;
   if (owner === slide) { delete slide.blocks; pruned.push(slide); return; }
   const up = parentMap.get(owner);
-  if (up?.key) { delete slide[up.key]; pruned.push(slide); return; }
   pruned.push(up?.owner ?? slide);
   detach(slide, parentMap, owner, pruned, keep);
 }
@@ -163,10 +154,10 @@ function slidePatch(presentation, work, scene, owners) {
 
 /**
  * Move the sibling nodes `keys` (blocks, groups, implicit content) to `index` of the content children of the container `targetKey` (the
- * slide, a group, a promoted region or a layout region). `index` counts the children before the move, as a drop gap does. The moved
- * nodes keep their order and land together. A group the move empties is removed; implicit content becomes blocks first; a block moved
- * into a group or promoted region loses its layout region pin; a block moved into a layout region is pinned to it (and must be accepted
- * there). A move that changes nothing returns `changed: false` with `noop: true`.
+ * slide, a group, a layout region or a cell of the slide grid). `index` counts the children before the move, as a drop gap does. The
+ * moved nodes keep their order and land together. A group the move empties is removed; implicit content becomes blocks first; a block
+ * moved into a group loses its `region`; a block moved into a layout region is pinned to it (and must be accepted there), and one moved
+ * into a cell names that cell. A move that changes nothing returns `changed: false` with `noop: true`.
  */
 export function prepareSceneMove(presentation, scene, keys, targetKey, index, options = {}) {
   const sources = siblings(scene, keys, "move");
@@ -175,12 +166,12 @@ export function prepareSceneMove(presentation, scene, keys, targetKey, index, op
   for (const source of sources) for (let at = target; at; at = scene.node(at.parent)) if (at.key === source.key) throw refuse("A group cannot move into itself.");
   const content = scene.contentChildren(target.key);
   if (!Number.isInteger(index) || index < 0 || index > content.length) throw refuse("The drop place is out of range.", { index });
-  if (target.kind === "slide" && target.container?.promoted) throw refuse("Drop into one of the slide's regions.");
+  if (target.kind === "slide" && target.container?.promoted) throw refuse("Drop into one of the slide's cells.");
   if (target.kind === "region" && target.virtual) return regionMove(presentation, scene, sources, target, index, options);
   if (target.kind === "slide" && scene.layout) throw refuse("Drop into one of the layout's regions.");
 
   const sourceOwners = sources.map((node) => (node.kind === "implicit" ? node.owner : parentPointer(node.path)));
-  const targetOwner = target.path; // the slide, a group or a promoted region: the object that holds the blocks
+  const targetOwner = target.path; // the slide or a group: the object that holds the blocks
   const { work, slide, objectOf, converted, parentMap } = workingCopy(presentation, scene, [...sources.filter((node) => node.kind === "implicit").map((node) => node.owner), targetOwner]);
   const objects = sources.map(objectOf);
   if (objects.some((object) => !isObject(object))) throw refuse("This content cannot move. Convert it to blocks first.");
@@ -206,8 +197,8 @@ export function prepareSceneMove(presentation, scene, keys, targetKey, index, op
   return { presentation: next, patches, changed: true, paths, label: `Moved ${sources.length === 1 ? sources[0].label.split(":")[0] : plural(sources.length, "block")}` };
 }
 
-// A move into a layout region: the blocks become root blocks pinned to the region, placed in the slide's `blocks` beside the region's
-// other blocks so the region shows them at `index`.
+// A move into a layout region or a cell: the blocks become root blocks pinned to the region (or naming the cell), placed in the slide's
+// `blocks` beside the region's other blocks so the region shows them at `index`. A cell takes any block and has no capacity.
 function regionMove(presentation, scene, sources, region, index, options) {
   const accepts = region.accepts ?? [];
   for (const source of sources) {
@@ -250,6 +241,7 @@ function regionMove(presentation, scene, sources, region, index, options) {
   const patches = slidePatch(presentation, work, scene, [slidePointer]);
   const next = validated(presentation, patches, options.catalogs);
   const paths = objects.map((object) => locate(slide, slidePointer, object));
+  if (region.promoted) return { presentation: next, patches, changed: true, paths, label: `Moved ${sources.length === 1 ? sources[0].label.split(":")[0] : plural(sources.length, "block")} to ${region.region}` };
   // The binding decides: each moved block must land in the region as a pinned block (the region may be full).
   const context = resolveSlideContext(next, scene.slideIndex, { catalogs: options.catalogs });
   const binding = bindRegions(next.slides[scene.slideIndex], context.options.layout, { slideIndex: scene.slideIndex });
@@ -386,16 +378,14 @@ export function prepareSceneDelete(presentation, scene, keys, options = {}) {
   const patches = [];
   for (const node of [...sources].reverse()) {
     if (node.kind === "implicit") {
-      // The field goes, with the owner's `type` when it named this content, and a promoted region left with no content goes whole.
+      // The field goes, with the owner's `type` when it named this content.
       const owner = valueAt(current, node.owner);
       const rest = contentFieldsOf(owner).filter((field) => field !== node.field);
-      const ownerTokens = parsePointer(node.owner);
-      const region = ownerTokens.length === 3 && isPromotedRegion(ownerTokens[2]);
       const typed = typeof owner.type === "string" && (!rest.length || owner.type === node.type || (owner.type === "text" && node.field === "bullets"));
-      const step = region && !rest.length ? [{ op: "remove", path: node.owner }] : [{ op: "remove", path: node.path }, ...(typed ? [{ op: "remove", path: `${node.owner}/type` }] : [])];
+      const step = [{ op: "remove", path: node.path }, ...(typed ? [{ op: "remove", path: `${node.owner}/type` }] : [])];
       current = applyJsonPatch(current, step);
       patches.push(...step);
-      selection = region && !rest.length ? formatPointer(ownerTokens.slice(0, 2)) : node.owner;
+      selection = node.owner;
       continue;
     }
     const step = prepareBlockRemove(current, node.path);
@@ -504,7 +494,7 @@ function prepareWeights(presentation, scene, key, weights, label, options) {
 }
 
 /**
- * Resize the tracks of the container `key` (a slide, group or promoted region with a row, column, grid or automatic arrangement): the
+ * Resize the tracks of the container `key` (a slide or group with a row, column, grid or automatic arrangement): the
  * divider between track `boundary` and the next moves to `fraction` of the pair, snapped (`snapTrackPair`). This writes the container's
  * `composition.weights` (columns in a row or grid, rows in a column); an automatic arrangement becomes the grid it drew.
  */
@@ -647,7 +637,7 @@ export function prepareScenePaste(presentation, scene, clip, options = {}) {
   if (clip?.kind !== "opf-studio-blocks" || !Array.isArray(clip.blocks) || !clip.blocks.length) throw refuse("There is nothing to paste.");
   const target = scene.node(options.target ?? scene.slideKey);
   if (!target || !["slide", "group", "region"].includes(target.kind)) throw refuse("Paste into the slide, a group or a region.");
-  if (target.kind === "slide" && (target.container?.promoted || scene.layout)) throw refuse("Paste into one of the slide's regions.");
+  if (target.kind === "slide" && (target.container?.promoted || scene.layout)) throw refuse(target.container?.promoted ? "Paste into one of the slide's cells." : "Paste into one of the slide's regions.");
   const content = scene.contentChildren(target.key);
   const index = options.index ?? content.length;
   if (!Number.isInteger(index) || index < 0 || index > content.length) throw refuse("The paste place is out of range.", { index });

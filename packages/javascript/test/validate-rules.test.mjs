@@ -123,9 +123,9 @@ test('opf/text-contrast: explicit light text on a white background', () => {
 	// default body text is 18.75 pt, which WCAG counts as large text
 	assert.ok(found[0].measured.ratio < 2 && found[0].measured.needed === 3 && found[0].measured.large === true);
 	assert.equal(found[0].slide, 0);
-	// quick fix: switch to the text colour, which is readable on white
+	// quick fix: switch to the text colour, which is readable on white; not safe (it replaces the author's colour), so fix() leaves it
 	const fix = found[0].fixes.find((f) => f.id === 'use-readable-color');
-	assert.equal(fix.safe, true);
+	assert.equal(fix.safe, false);
 	assert.deepEqual(fix.patch, [{ op: 'replace', path: '/slides/0/text/1/color', value: 'text' }]);
 	assert.ok(!has(deck([{ title: 'T', text: ['Readable and ', { text: 'dark', color: '#222222' }] }], { design: white }), 'text-contrast'));
 });
@@ -261,12 +261,12 @@ test('opf/missing-slide-title and opf/duplicate-slide-title', () => {
 
 test('opf/reading-order: promoted regions are composed in visual order, blocks in order', () => {
 	// composeSlide used to compose region keys alphabetically (center, left, right); it now follows the layout (RR-29)
-	assert.ok(!has(deck([{ title: 'T', start: { text: 'L' }, center: { text: 'C' }, end: { text: 'R' } }]), 'reading-order'));
-	assert.ok(!has(deck([{ title: 'T', top: { text: 'T' }, middle: { text: 'M' }, bottom: { text: 'B' } }]), 'reading-order'));
-	assert.ok(!has(deck([{ title: 'T', 'top:start': { text: 'A' }, 'top:center+end': { text: 'B' }, 'middle+bottom:start': { text: 'C' }, 'middle+bottom:center+end': { text: 'D' } }]), 'reading-order'));
+	assert.ok(!has(deck([{ title: 'T', blocks: [{ region: 'start', text: 'L' }, { region: 'center', text: 'C' }, { region: 'end', text: 'R' }] }]), 'reading-order'));
+	assert.ok(!has(deck([{ title: 'T', blocks: [{ region: 'top', text: 'T' }, { region: 'middle', text: 'M' }, { region: 'bottom', text: 'B' }] }]), 'reading-order'));
+	assert.ok(!has(deck([{ title: 'T', blocks: [{ region: 'top:start', text: 'A' }, { region: 'top:center+end', text: 'B' }, { region: 'middle+bottom:start', text: 'C' }, { region: 'middle+bottom:center+end', text: 'D' }] }]), 'reading-order'));
 	assert.ok(!has(deck([{ title: 'T', composition: { mode: 'row' }, blocks: [{ text: 'L' }, { text: 'C' }, { text: 'R' }] }]), 'reading-order'));
 	assert.ok(!has(deck([{ title: 'T', blocks: [{ text: 'A' }, { text: 'B' }, { text: 'C' }, { text: 'D' }] }]), 'reading-order'));
-	assert.ok(!has(deck([{ title: 'T', start: { text: 'L' }, end: { text: 'R' } }]), 'reading-order'));
+	assert.ok(!has(deck([{ title: 'T', blocks: [{ region: 'start', text: 'L' }, { region: 'end', text: 'R' }] }]), 'reading-order'));
 });
 
 // ------------------------------------------------------------ resolved color roles

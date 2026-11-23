@@ -1,5 +1,5 @@
 // CE-19: the slide scene model. One slide of a deck as the studio kit sees it: a tree of nodes (the slide, its headings, the regions of
-// its layout or its promoted regions, groups, blocks, the parts of a block, and implicit content written on the slide itself), each with
+// its layout or the cells of its grid, groups, blocks, the parts of a block, and implicit content written on the slide itself), each with
 // a stable key, its JSON Pointer, a box in slide units (0 to 1) read from the composed layout geometry, and, for a container, the tracks
 // its children sit on. It is pure: the caller hands it the document and the `SlideComposition` of the slide (the canvas's render, or core
 // composition), and nothing here edits or renders. Slides stay auto-layout (decision D2): no node has a free position, and a drop
@@ -8,24 +8,23 @@
 //
 // Keys. A node's key is its id path: the JSON Pointer with every array index whose element has a unique `id` written as `@id`
 // (`/slides/@intro/blocks/@kpi`), so it names the same node after edits by others; an element without an id keeps its index. A layout
-// region has no place in the document (it is virtual: the blocks bound to it live in the slide's `blocks`) and is keyed `<slide key>#<name>`.
+// region has no place in the document (it is virtual: the blocks bound to it live in the slide's `blocks`) and is keyed `<slide key>#<name>`;
+// so is a cell of a slide without a layout (OPF 0.35: the root blocks that name it with `region`), keyed `<slide key>#<cell>`.
+import { cellBlocks, cellsInReadingOrder } from "@openpresentation/opf/composition";
 import { CONTENT_KIND_LABELS, readContent } from "@openpresentation/opf/convert";
 import { formatPointer, parsePointer } from "@openpresentation/opf/patch";
 import { boxesAt } from "./studio-kit/overlay.js";
 import { clickTarget } from "./studio-kit/selection.js";
 
-/** The content fields a slide, a promoted region or a block can hold, in the order implicit content becomes blocks. */
+/** The content fields a slide or a block can hold, in the order implicit content becomes blocks. */
 export const CONTENT_FIELDS = Object.freeze(["text", "items", "bullets", "image", "video", "chart", "table", "code", "diagram", "metric", "quote", "timeline"]);
 const HEADINGS = ["tag", "title", "subtitle"];
 const HEADING_LABELS = { tag: "Tag", title: "Title", subtitle: "Subtitle" };
 const MODE_LABELS = { auto: "Group", grid: "Grid", row: "Row", column: "Column" };
-const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/;
 const NONE = Object.freeze({ move: false, group: false, delete: false, duplicate: false, resizeTracks: false });
 const CONTAINERS = new Set(["slide", "region", "group"]);
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
-/** Whether `key` names a promoted region of a slide (`start`, `center+end`, `top:start`, ...). */
-export const isPromotedRegion = (key) => REGION_KEY.test(key);
 /** The content fields `owner` holds itself, in conversion order. */
 export const contentFieldsOf = (owner) => (isObject(owner) ? CONTENT_FIELDS.filter((key) => Object.hasOwn(owner, key)) : []);
 
@@ -145,7 +144,7 @@ export function slideScene(presentation, slideIndex, { geometry, findings = [], 
 
   const slideNode = add(base({
     key: formatPointer(slideTokens), path: formatPointer(slidePath), kind: "slide", type: "slide", parent: null, index: slideIndex, depth: 0,
-    label: `Slide ${slideIndex + 1}${typeof slide.layout === "string" && slide.layout !== "auto" ? ` · ${slide.layout}` : ""}`,
+    label: `Slide ${slideIndex + 1}${typeof slide.layout === "string" ? ` · ${slide.layout}` : ""}`,
     box: { x: 0, y: 0, w: 1, h: 1 }, hidden: slide.hidden === true,
   }));
 
@@ -207,7 +206,7 @@ export function slideScene(presentation, slideIndex, { geometry, findings = [], 
     } else addParts(node, `${dotted}.${contentFieldsOf(block)[0]}`);
     return node;
   }
-  // Implicit content: a content field written on the slide or a promoted region instead of a block. A structural command converts it to
+  // Implicit content: a content field written on the slide instead of a block. A structural command converts it to
   // blocks first, in the same change, so it moves, groups, duplicates and deletes like a block.
   function addImplicit(owner, ownerTokens, ownerKeyTokens, field, parentKey, depth, fieldIndex) {
     const pathTokens = [...ownerTokens, field];
@@ -223,7 +222,7 @@ export function slideScene(presentation, slideIndex, { geometry, findings = [], 
     addParts(node, pathTokens.join("."));
     return node;
   }
-  // The content of an owner (the slide, a promoted region): its blocks, else its implicit fields.
+  // The content of an owner (the slide): its blocks, else its implicit fields.
   function addContent(owner, ownerTokens, ownerKeyTokens, parentKey, depth, only) {
     if (Array.isArray(owner.blocks)) {
       owner.blocks.forEach((block, at) => {
@@ -238,6 +237,7 @@ export function slideScene(presentation, slideIndex, { geometry, findings = [], 
   }
 
   const regions = Array.isArray(geometry.regions) ? geometry.regions : null;
+  const cells = regions ? undefined : cellBlocks(slide);
   if (regions) {
     // A layout template: the regions are the slide's children, and each holds the root blocks or root content fields bound to it.
     const placed = new Set();
@@ -263,23 +263,27 @@ export function slideScene(presentation, slideIndex, { geometry, findings = [], 
     const rest = new Set([...(slide.blocks ?? []).map((_, at) => `slides.${slideIndex}.blocks.${at}`), ...contentFieldsOf(slide).map((field) => `slides.${slideIndex}.${field}`)].filter((dotted) => !placed.has(dotted)));
     if (rest.size) addContent(slide, slidePath, slideTokens, slideNode.key, 1, rest);
     slideNode.container = { mode: "layout", direction: "column", columns: 1, rows: regions.length, tracks: [], gap: 0, padding: 0, resizable: false, layout: true };
-  } else {
-    for (const key of Object.keys(slide)) {
-      if (!isPromotedRegion(key) || !isObject(slide[key])) continue;
-      const value = slide[key];
-      const tokens = [...slidePath, key], keyTokens = [...slideTokens, key];
-      const node = add(base({ key: formatPointer(keyTokens), path: formatPointer(tokens), kind: "region", type: "region", promoted: true, region: key, parent: slideNode.key, depth: 1, label: `Region ${key}` }));
-      addContent(value, tokens, keyTokens, node.key, 2);
-      const flow = flows.get(tokens.join("."));
+  } else if (cells) {
+    // OPF 0.35: a slide without a layout whose blocks name cells of its grid. Each cell is a virtual container, as a layout region is,
+    // holding the root blocks that name it (in source order); a block moved or pasted into it names the cell. Cells read in reading order.
+    for (const cell of cellsInReadingOrder(cells)) {
+      const node = add(base({ key: `${slideNode.key}#${cell}`, path: slideNode.path, kind: "region", type: "region", virtual: true, promoted: true, region: cell, parent: slideNode.key, depth: 1, label: `Cell ${cell}` }));
+      for (const entry of cells) if (entry.cell === cell) addBlock(entry.block, [...slidePath, "blocks", String(entry.index)], [...slideTokens, "blocks", tokenOf(slide.blocks, entry.index)], node.key, 2, entry.index);
+      // The blocks of a cell that several name stack as a group of the cell's own (its flow has the cell's path), whose tracks no
+      // composition of the author's holds.
+      const flow = flows.get(`${slidePath.join(".")}.${cell}`);
       node.box = flow ? unit(flow.box) : union(node.children.map((child) => byKey.get(child).box));
-      node.container = flow ? flowContainer(flow, width, height) : childContainer(value.composition?.mode ?? "auto", value.composition?.mode === "column" ? "column" : "row", node.children.map((child) => byKey.get(child)));
-      node.can = { ...NONE, resizeTracks: node.container.resizable };
+      node.container = { ...(flow ? flowContainer(flow, width, height) : childContainer("auto", "column", node.children.map((child) => byKey.get(child)))), resizable: false };
+      node.can = { ...NONE };
     }
+    const flow = flows.get(slidePath.join("."));
+    const body = slideNode.children.map((key) => byKey.get(key)).filter((child) => child.kind !== "heading");
+    slideNode.container = { ...(flow ? flowContainer(flow, width, height) : childContainer("auto", "row", body)), promoted: true, resizable: false };
+  } else {
     addContent(slide, slidePath, slideTokens, slideNode.key, 1);
     const flow = flows.get(slidePath.join("."));
     const body = slideNode.children.map((key) => byKey.get(key)).filter((child) => child.kind !== "heading");
     slideNode.container = flow ? flowContainer(flow, width, height) : childContainer(slide.composition?.mode ?? "auto", slide.composition?.mode === "column" ? "column" : "row", body);
-    if (body.some((child) => child.promoted)) slideNode.container = { ...slideNode.container, promoted: true, resizable: false };
   }
   slideNode.can = { move: true, group: false, delete: true, duplicate: true, resizeTracks: slideNode.container.resizable };
 

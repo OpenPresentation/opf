@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {composeSlide,smartArtUnavailable} from '../dist/composition.js';
-const layout=arrangement=>({name:'Measured arrangement',direction:'column',regions:[{name:'title'},{name:'nodes',accepts:['list'],role:'primary',flow:'none',...(arrangement?{arrangement}:{})}]});
+const layout=arrangement=>({name:'Measured arrangement',direction:'column',regions:[{name:'title'},{name:'nodes',accepts:['list'],role:'primary',max: 1,...(arrangement?{arrangement}:{})}]});
 const tree=[{text:'Root',level:0},{text:'Build',level:1},{text:'Web',level:2},{text:'App',level:2},{text:'Ship',level:1}];
 test('SH21: template vocabulary selects actual tree/Venn geometry and never shrinks the authored list size',()=>{
  for(const kind of ['org-chart','hierarchy','venn']){

@@ -5,11 +5,11 @@ import {toSvg, resolvePresentation} from './catalog-harness.mjs';
 // LH-133 and LH-134 in the preview: a glossary's terms and a question grid's rules in the accent, numerals without a circle in the accent,
 // at core's geometry, as the PPTX export writes them.
 const attrs = (text) => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
-const qa = (text, description) => ({region: 'questions', items: [{text, description}]});
+const qa = (text, description) => ({region: 'body', items: [{text, description}]});
 const deck = {
   design: {background: 'light1'},
   slides: [
-    {layout: 'faq', title: 'Terms used in this review', blocks: [{region: 'questions', items: [{text: 'ARR', description: 'Annual recurring revenue.'}, {text: 'Churn', description: 'The share of customers who cancel.'}, {text: 'SLA', description: 'Service level agreement.'}]}]},
+    {layout: 'faq', title: 'Terms used in this review', blocks: [{region: 'body', items: [{text: 'ARR', description: 'Annual recurring revenue.'}, {text: 'Churn', description: 'The share of customers who cancel.'}, {text: 'SLA', description: 'Service level agreement.'}]}]},
     {layout: 'faq', title: 'Questions we hear about returns', blocks: [qa('How long do I have?', '45 days from delivery.'), qa('Is shipping free?', 'Yes, in the United States.'), qa('When is my refund?', 'Two business days later.'), qa('Can I exchange?', 'Yes, in the app.'), qa('What if it is damaged?', 'Send a photo.'), qa('Do gift returns work?', 'As store credit.')]},
     {layout: 'list', title: 'Three things to remember', blocks: [{region: 'body', numbering: 'arabic', items: [{text: 'Triage cut the backlog by 41%', description: 'Premium accounts gained the most.'}, {text: 'Guided setup halved time to value', description: 'From 21 days to 9.'}, {text: 'Regional pricing adds $2.1M', description: 'Two regions trail competitors.'}]}]},
     {layout: 'agenda', title: 'Today’s agenda', blocks: [{items: [{text: 'Where we stand', description: 'Results from nine months'}, {text: 'What changed', description: 'The drivers behind the numbers'}]}]},

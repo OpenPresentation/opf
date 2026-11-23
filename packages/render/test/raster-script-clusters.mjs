@@ -110,6 +110,13 @@ const textStarts = markup => [...markup.matchAll(/<text x="([-\d.]+)" y="([-\d.]
   assert.doesNotMatch(nested, /textLength/);
   const hindiSpanEnd = pathStarts(nested).filter(([x]) => x < 115)[1][0];
   assert.ok(hindiSpanEnd > 58.6 && hindiSpanEnd < 115.075);
+  // A span that carries xml:space itself (the list items and mixed lines toSvg writes without a fonts handle): the piece writes the
+  // attribute once. Written twice, the SVG is not XML and resvg refused the slide ("attribute 'space' is already defined").
+  const spaced = await pinScriptClusters(svgOf('<text x="40" y="100" font-family="Noto Sans Devanagari, sans-serif" font-size="40"><tspan xml:space="preserve" style="white-space:pre">भाषा Q3 2026 </tspan><tspan xml:space="preserve">कामा</tspan></text>'), {fontFiles});
+  const doubled = [...spaced.matchAll(/<[a-zA-Z][^>]*>/g)].map(found => found[0]).filter(element => { const names = [...element.matchAll(/\s([a-zA-Z:-]+)="/g)].map(found => found[1]); return new Set(names).size !== names.length; });
+  assert.deepEqual(doubled, [], 'no element repeats an attribute');
+  assert.match(spaced, /<text x="[\d.]+" y="100" style="white-space:pre" text-anchor="start" xml:space="preserve"> Q3 2026 <\/text>/, 'the Latin piece keeps the span\'s other attributes');
+  assert.ok((await toPng(spaced)).length > 1000, 'the rewritten slide rasterizes');
 }
 
 // Whitespace without xml:space="preserve" collapses as resvg collapses it; baseline-shift moves the pieces; a span's fill paints its outlines.
@@ -183,5 +190,10 @@ for (const [language, title, text] of decks) {
   const svg = toSvg(presentation, 1, {fonts: prepared});
   assert.equal(await pinScriptClusters(svg, {fontFiles: prepared.fontFiles}), svg);
   assert.deepEqual(await toPng(svg, {fonts: prepared, scale: 0.25}), await toPng(svg, {fonts: prepared, scale: 0.25}));
+}
+// A deck drawn without a fonts handle: Devanagari list items, and a Devanagari paragraph with an English line, rasterize.
+for (const slide of [{title: 'नतीजे', bullets: [{text: 'बिक्री में वृद्धि', level: 0}, {text: 'नया उत्पाद', level: 0}]}, {title: 'नतीजे', text: 'आज हम।\nToday we review next year\'s plan.'}]) {
+  const png = await toPng({name: 'No fonts handle', language: 'hi', slides: [slide]}, 1);
+  assert.ok(png.length > 1000, 'a Hindi slide rasterizes without a fonts handle');
 }
 console.log('Raster script clusters: segmentation, rewrite, five languages through toSvg + toPng + toPdf, Latin untouched.');

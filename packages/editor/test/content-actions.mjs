@@ -32,7 +32,7 @@ const deck = () => ({
   slides: [
     { id: "list", title: "List", blocks: [{ id: "outline", items: ["Plan", "Build", { text: "Ship", description: "June" }, "Review"] }, { id: "note", text: "Note" }] },
     { id: "blocks", title: "Blocks", notes: "Say hi", blocks: [{ id: "a", text: "A" }, { id: "b", text: "B" }, { id: "c", items: ["C"] }, { id: "d", text: "D" }] },
-    { id: "regions", title: "Regions", start: { text: "Left" }, end: { items: ["Right"] } },
+    { id: "regions", title: "Regions", blocks: [{ region: 'start', text: "Left" }, { region: 'end', items: ["Right"] }] },
     { id: "photo", title: "Photo", blocks: [{ image: { src: "asset:photo", alt: "A pixel" } }, { text: "Body" }] },
     { id: "design", title: "Design", text: "Text", design: { background: { type: "image", src: "asset:photo", alt: "Harbour", fit: "contain", overlay: { color: "dark1", opacity: 0.4 } } } },
     { id: "long", title: "Long", blocks: [{ id: "essay", text: long }, { items: Array.from({ length: 50 }, (_, index) => ({ text: `Point ${index}`, description: "Detail." })) }] },
@@ -100,23 +100,22 @@ const refused = (action, pattern) => assert.throws(action, (error) => error.code
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
 }
 
-// --- regions -----------------------------------------------------------------------------------
+// --- cells of the slide grid (OPF 0.35: a block's region) ----------------------------------------
 {
   const editor = session();
   const original = editor.presentation;
   const placed = placeBlocksInRegions(editor, 1, ["top:start", "top:end", "bottom:start", "bottom:end"]);
-  assert.deepEqual(Object.keys(editor.get("slides.1")).filter((key) => key.includes(":")), ["top:start", "top:end", "bottom:start", "bottom:end"]);
+  assert.deepEqual(editor.get("slides.1.blocks").map((block) => block.region), ["top:start", "top:end", "bottom:start", "bottom:end"]);
   assert.equal(placed.lossless, true);
   const back = regionsAsBlocks(editor, 1);
-  assert.deepEqual(back.loss, ["region placement"]);
+  assert.deepEqual(back.loss, ["cell placement"]);
   assert.deepEqual(editor.get("slides.1.blocks").map((block) => block.id), ["a", "b", "c", "d"]);
   undoAll(editor, original);
   const swapped = moveSlideRegion(editor, 2, "start", "end", { swap: true });
   assert.equal(swapped.changed, true);
-  assert.deepEqual(editor.get("slides.2.end"), { text: "Left" });
-  assert.deepEqual(editor.get("slides.2.start"), { items: ["Right"] });
-  refused(() => moveSlideRegion(editor, 2, "start", "end"), /already has content/);
-  refused(() => placeBlocksInRegions(editor, 1, ["start"]), /region for each/);
+  assert.deepEqual(editor.get("slides.2.blocks"), [{ region: "end", text: "Left" }, { region: "start", items: ["Right"] }]);
+  refused(() => moveSlideRegion(editor, 2, "start", "end"), /already has blocks/);
+  refused(() => placeBlocksInRegions(editor, 1, ["start"]), /cell for each/);
   undoAll(editor, original);
 }
 
@@ -172,7 +171,7 @@ const refused = (action, pattern) => assert.throws(action, (error) => error.code
   refused(() => splitSlideByBlocks(editor, 6, { each: true }), /one block/);
   refused(() => mergeSlides(editor, 6, 2), /exist/);
   assert.equal(prepareMergeSlides(editor.presentation, 0, 2).range.deleteCount, 2);
-  refused(() => prepareMergeSlides(editor.presentation, 1, 2), /named regions/);
+  refused(() => prepareMergeSlides(editor.presentation, 1, 2), /in cells/);
 }
 
 // --- split on overflow and un-paginate ---------------------------------------------------------

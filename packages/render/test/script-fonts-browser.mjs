@@ -15,7 +15,10 @@ const prepared = await loadFonts({pack:'base',scripts:'all'}), {registry} = prep
 const deck=(language,fontScheme,title)=>({$schema:'https://openpresentation.org/schema/opf/v1',name:`FF-19 ${language}`,language,design:{fontScheme},slides:[{title,text:'Body'}]});
 // RR-38, opf#361: a family whose policy row carries sizeAdjust draws its title at the adjusted size of the composed 54 px
 // (Arabic Typesetting 34.5; with core's opf#361 rows also Angsana New 40.5 and Malgun Gothic 57.75), read from the installed policy.
-const titleSizes=['54',...FONT_POLICY.families.filter(row=>typeof row.replacement?.sizeAdjust==='number').map(row=>String(adjustedFontSize(54,row.replacement.sizeAdjust)))];
+// v0.35: a family's script replacement carries a multiplier of its own (Times New Roman draws Arabic-script runs at 0.95: the fa and ur
+// decks below, whose scheme serves Arabic only, take their language's default for the title), so those sizes count too.
+const multipliers=FONT_POLICY.families.flatMap(row=>[row.replacement?.sizeAdjust,...Object.values(row.replacement?.scripts??{}).map(entry=>entry.sizeAdjust)]).filter(value=>typeof value==='number');
+const titleSizes=[...new Set(['54',...multipliers.map(value=>String(adjustedFontSize(54,value)))])];
 const cases=[
   ['cyrillic','ru','roboto','Квартальный обзор 12%'],
   ['greek','el','roboto','Τριμηνιαία ανασκόπηση 12%'],

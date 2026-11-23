@@ -56,7 +56,7 @@ test('under overflow a chart keeps at least the equal share it had before', () =
 test('a group label sits directly above its list', () => {
   // Three peer columns of groups (the audit's homogeneous-group-3col): each group stacks its label over its list.
   const group = (label, items) => ({ blocks: [{ text: label }, { items }] });
-  const record = { name: 'Three columns', direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: ['first', 'second', 'third'].map((name) => ({ name, accepts: ['text', 'list', 'group'], role: 'primary', flow: 'none' })) }] };
+  const record = { name: 'Three columns', direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: ['first', 'second', 'third'].map((name) => ({ name, accepts: ['text', 'list', 'group'], role: 'primary', max: 1 })) }] };
   const items = ['Resolve access blockers.', 'Confirm release scope.', 'Prepare the next pilot build.'];
   const result = composeSlide({ title: 'Owners', blocks: [group('Product team', items), group('Operations team', items), group('Analytics team', items)] }, { layout: record });
   for (const region of ['first', 'second', 'third']) {

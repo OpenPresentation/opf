@@ -1,13 +1,13 @@
-// Slide structure conversions: wrap blocks in a group, unwrap a group, move content between `blocks` and the
-// named regions, and move an image between the content and the slide's design (background or
+// Slide structure conversions: wrap blocks in a group, unwrap a group, place blocks in the cells of the slide's
+// grid and back, and move an image between the content and the slide's design (background or
 // watermark). They work on one slide object with paths relative to it and return the new slide; the host
 // turns the difference into a patch. Pure; every result is validated as OPF. Internal module.
-import { promotedRegionKeys } from "../content-walk.js";
+import { cellBlocks, cellsInReadingOrder, gridCellSpan, isGridCell } from "../grid-cells.js";
 import { CONTENT_KEYS, type ConversionReport, type Json, Loss, type Obj, assertValidOutput, clone, contentKeysOf, isRecord, refuse, report } from "./shared.js";
 /** Image sources the background string shorthand accepts (opf.schema.json ImageSource). */
 const IMAGE_SOURCE = /^(asset:|https:\/\/|data:|\.\/|\.\.\/)/;
 
-/** A path inside one slide: `["blocks", 1]` is its second block, `["start"]` the payload of its `start` region, `[]` the slide itself. */
+/** A path inside one slide: `["blocks", 1]` is its second block, `["blocks", 1, "blocks", 0]` the first block of that group, `[]` the slide itself. */
 export type SlidePath = (string | number)[];
 
 export interface StructureChange extends ConversionReport {
@@ -18,9 +18,17 @@ export interface StructureChange extends ConversionReport {
   path?: SlidePath;
 }
 
-const REGION_KEYS = new Set<string>(promotedRegionKeys);
-export const isRegionKey = (key: string): boolean => REGION_KEYS.has(key);
-export const regionKeysOf = (slide: Obj): string[] => Object.keys(slide).filter(isRegionKey);
+/** The blocks of a slide placed in the cells of its grid, in reading order of their cells (source order within a cell); empty when it places none. */
+export function blocksInCellOrder(slide: Obj): Obj[] {
+  const placed = cellBlocks(slide);
+  if (!placed) return [];
+  return cellsInReadingOrder(placed).flatMap((cell) => placed.filter((entry) => entry.cell === cell).map((entry) => entry.block));
+}
+/** A block without its cell (`region`). */
+export function withoutCell(block: Obj): Obj {
+  const { region: _region, ...rest } = block;
+  return rest;
+}
 
 function at(slide: Obj, path: SlidePath): Json {
   let value: Json = slide;
@@ -80,7 +88,7 @@ export function unwrapGroup(slide: unknown, path: SlidePath): StructureChange {
   const group = at(next, path);
   if (!isRecord(group) || !Array.isArray(group.blocks)) throw refuse("Choose a group to unwrap.", { path });
   const index = path.at(-1);
-  if (path.length < 2 || path.at(-2) !== "blocks" || typeof index !== "number") throw refuse("Only a group that sits inside a list of blocks can be unwrapped. Convert the regions to blocks first.", { path });
+  if (path.length < 2 || path.at(-2) !== "blocks" || typeof index !== "number") throw refuse("Only a group that sits inside a list of blocks can be unwrapped.", { path });
   const parent = at(next, path.slice(0, -2));
   const loss = new Loss();
   if (group.composition) loss.note("group arrangement (composition)");
@@ -92,92 +100,64 @@ export function unwrapGroup(slide: unknown, path: SlidePath): StructureChange {
 
 // --- blocks and regions ------------------------------------------------------------------------
 
-const ROWS = ["top", "middle", "bottom"];
-const COLUMNS = ["start", "center", "end"];
-/** The grid cells a region key covers: `start+center` is the whole start and center columns, `top:start` one cell. */
-function cellsOf(key: string): Set<string> {
-  const [first = "", second] = key.split(":");
-  const parts = (text: string): string[] => text.split("+");
-  let rows = ROWS;
-  let columns = COLUMNS;
-  if (second !== undefined) {
-    rows = parts(first);
-    columns = parts(second);
-  } else if (ROWS.includes(parts(first)[0]!)) rows = parts(first);
-  else columns = parts(first);
-  return new Set(rows.flatMap((row) => columns.map((column) => `${row}:${column}`)));
-}
 const overlaps = (a: string, b: string): boolean => {
-  const other = cellsOf(b);
-  return [...cellsOf(a)].some((cell) => other.has(cell));
+  const left = gridCellSpan(a), right = gridCellSpan(b);
+  return !!left && !!right && left.rows.some((row) => right.rows.includes(row)) && left.columns.some((column) => right.columns.includes(column));
 };
-/** Regions in reading order: top row first, then left to right, by the first cell each covers. */
-export function sortRegionKeys(keys: string[]): string[] {
-  const rank = (key: string): [number, number] => {
-    const cells = [...cellsOf(key)].map((cell) => cell.split(":") as [string, string]);
-    return [Math.min(...cells.map(([row]) => ROWS.indexOf(row))), Math.min(...cells.map(([, column]) => COLUMNS.indexOf(column)))];
-  };
-  return [...keys].sort((a, b) => {
-    const [ar, ac] = rank(a);
-    const [br, bc] = rank(b);
-    return ar - br || ac - bc || keys.indexOf(a) - keys.indexOf(b);
-  });
-}
+const notACell = (cell: string) => refuse(`"${cell}" is not a cell of the slide's grid (for example start, end, top:start, center+end).`, { region: cell });
 
 /**
- * Move every block of a slide into its own named region. `regions[i]` is the region key of block i (`left`,
- * `right`, `top:left`, ...); every block needs a distinct region and the regions may not overlap, because a
- * slide cannot hold both `blocks` and regions. Nothing is lost.
+ * Place every block of a slide in a cell of its grid: `regions[i]` is the cell of block i (`start`, `end`, `top:start`, ...), written
+ * as its `region`. Blocks may share a cell (they stack in it); two different cells may not overlap. A slide with a layout has no grid
+ * of cells (its blocks go to the layout's regions). Nothing is lost.
  */
 export function blocksToRegions(slide: unknown, regions: string[]): StructureChange {
   const next = clone(slide as Obj);
-  if (regionKeysOf(next).length) throw refuse("This slide already uses named regions.");
+  if (next.layout !== undefined) throw refuse("This slide has a layout: its blocks go to the layout's regions. Remove the layout to place blocks in cells.");
+  if (cellBlocks(next)) throw refuse("This slide already places its blocks in cells.");
   const blocks = explicitBlocks(next);
   if (!blocks.length) throw refuse("This slide has no blocks to place.");
-  if (regions.length !== blocks.length) throw refuse(`Name a region for each of the ${blocks.length} blocks.`, { blocks: blocks.length, regions: regions.length });
-  regions.forEach((key, index) => {
-    if (!isRegionKey(key)) throw refuse(`"${key}" is not a region (for example start, end, top:start, center+end).`, { region: key });
-    const clash = regions.findIndex((other, otherIndex) => otherIndex < index && overlaps(other, key));
-    if (clash >= 0) throw refuse(`Region "${key}" overlaps region "${regions[clash]}". Each block needs its own part of the slide.`, { region: key });
+  if (regions.length !== blocks.length) throw refuse(`Name a cell for each of the ${blocks.length} blocks.`, { blocks: blocks.length, regions: regions.length });
+  regions.forEach((cell, index) => {
+    if (!isGridCell(cell)) throw notACell(cell);
+    const clash = regions.findIndex((other, otherIndex) => otherIndex < index && other !== cell && overlaps(other, cell));
+    if (clash >= 0) throw refuse(`Cell "${cell}" overlaps cell "${regions[clash]}". Blocks share a cell only when they name the same one.`, { region: cell });
   });
-  delete next.blocks;
-  regions.forEach((key, index) => {
-    next[key] = blocks[index];
-  });
-  return finish(next, new Loss(), [regions[0]!]);
+  next.blocks = blocks.map((block, index) => ({ ...(block.id !== undefined ? { id: block.id } : {}), region: regions[index], ...withoutCell(block) }));
+  return finish(next, new Loss(), ["blocks", 0]);
 }
 
 /**
- * Turn the named regions of a slide into ordinary blocks, in reading order (top to bottom, left to right).
- * The position each region gave its content cannot be kept and is reported.
+ * Take the blocks of a slide out of the cells of its grid: they stay its blocks, in reading order of their cells (top to bottom, start
+ * to end; source order within a cell), without `region`. The position each cell gave its blocks cannot be kept and is reported.
  */
 export function regionsToBlocks(slide: unknown): StructureChange {
   const next = clone(slide as Obj);
-  const keys = sortRegionKeys(regionKeysOf(next));
-  if (!keys.length) throw refuse("This slide has no named regions.");
-  const blocks = keys.map((key) => next[key]);
-  for (const key of keys) delete next[key];
-  next.blocks = blocks;
+  const ordered = blocksInCellOrder(next);
+  if (!ordered.length) throw refuse("This slide places no blocks in cells.");
+  next.blocks = ordered.map(withoutCell);
   const loss = new Loss();
-  loss.note("region placement");
+  loss.note("cell placement");
   return finish(next, loss, ["blocks", 0]);
 }
 
-/** Move the content of region `from` to region `to`, or swap the two when `to` is taken and `swap` is true. */
+/** Move the blocks of cell `from` to cell `to`, or swap the two cells' blocks when `to` is taken and `swap` is true. */
 export function moveRegion(slide: unknown, from: string, to: string, options: { swap?: boolean } = {}): StructureChange {
   const next = clone(slide as Obj);
-  if (!isRegionKey(from) || next[from] === undefined) throw refuse(`This slide has no "${from}" region.`, { region: from });
-  if (!isRegionKey(to)) throw refuse(`"${to}" is not a region (for example start, end, top:start, center+end).`, { region: to });
-  if (from === to) return { slide: next, changed: false, path: [from], ...report([]) };
-  const occupied = next[to] !== undefined;
-  if (occupied && !options.swap) throw refuse(`The "${to}" region already has content. Choose to swap the two regions instead.`, { region: to });
-  const others = regionKeysOf(next).filter((key) => key !== from && key !== (options.swap ? to : undefined));
-  const clash = others.find((key) => overlaps(key, to) && key !== to);
-  if (clash) throw refuse(`Region "${to}" overlaps region "${clash}".`, { region: to });
-  const entries = Object.entries(next).map(([key, value]): [string, Json] => (key === from ? [to, value] : options.swap && key === to ? [from, value] : [key, value]));
-  const rebuilt = Object.fromEntries(entries);
-  if (!occupied) rebuilt[to] = next[from];
-  return finish(rebuilt, new Loss(), [to]);
+  const placed = cellBlocks(next) ?? [];
+  const first = placed.find((entry) => entry.cell === from);
+  if (!first) throw refuse(`This slide has no block in the "${from}" cell.`, { region: from });
+  if (!isGridCell(to)) throw notACell(to);
+  if (from === to) return { slide: next, changed: false, path: ["blocks", first.index], ...report([]) };
+  const occupied = placed.some((entry) => entry.cell === to);
+  if (occupied && !options.swap) throw refuse(`The "${to}" cell already has blocks. Choose to swap the two cells instead.`, { region: to });
+  const clash = placed.find((entry) => entry.cell !== from && entry.cell !== to && overlaps(entry.cell, to));
+  if (clash) throw refuse(`Cell "${to}" overlaps cell "${clash.cell}".`, { region: to });
+  for (const entry of placed) {
+    if (entry.cell === from) next.blocks[entry.index].region = to;
+    else if (options.swap && entry.cell === to) next.blocks[entry.index].region = from;
+  }
+  return finish(next, new Loss(), ["blocks", first.index]);
 }
 
 // --- images between content and design ---------------------------------------------------------
@@ -197,7 +177,7 @@ const TREATMENT_KEYS = ["fit", "focus", "aspectRatio", "shape", "adjust", "strok
 
 function imageBlock(payload: Json): { asset: Obj; treatments: Obj } {
   if (!isRecord(payload)) throw refuse("Choose an image block.");
-  const keys = Object.keys(payload).filter((key) => key !== "id" && key !== "extensions" && key !== "type" && !(TREATMENT_KEYS as readonly string[]).includes(key));
+  const keys = Object.keys(payload).filter((key) => key !== "id" && key !== "extensions" && key !== "type" && key !== "region" && !(TREATMENT_KEYS as readonly string[]).includes(key));
   if (keys.length !== 1 || keys[0] !== "image") throw refuse("Choose a block that holds only an image.");
   const treatments = Object.fromEntries(TREATMENT_KEYS.filter((key) => payload[key] !== undefined).map((key) => [key, payload[key]]));
   return { asset: isRecord(payload.image) ? payload.image : { src: payload.image }, treatments };
@@ -216,10 +196,6 @@ function removePayload(slide: Obj, path: SlidePath): void {
     if (owner.blocks.length) return;
     if (path.length === 2) delete slide.blocks;
     else removePayload(slide, path.slice(0, -2));
-    return;
-  }
-  if (path.length === 1 && isRegionKey(String(path[0]))) {
-    delete slide[path[0]!];
     return;
   }
   throw refuse("Choose an image block of this slide.", { path });
@@ -266,7 +242,7 @@ export function promoteImage(slide: unknown, path: SlidePath, to: ImageTarget, o
 
 /**
  * Move a slide's background image or watermark back into its content as an image block, added after the
- * existing blocks (or at `index`, or in the free region named by `region` on a slide that uses regions). A
+ * existing blocks (or at `index`, or in the free cell named by `region` on a slide that places its blocks in cells). A
  * background's alt text, fit, focus, opacity and overlay move onto the block; a tile fit and a watermark's
  * opacity cannot be kept and are reported.
  */
@@ -296,12 +272,12 @@ export function demoteImage(slide: unknown, from: ImageTarget, options: { index?
   const block: Obj = { image: Object.keys(asset).length === 1 ? asset.src : asset, ...treatments };
   delete design[from];
   if (!Object.keys(design).length) delete next.design;
-  const regions = regionKeysOf(next);
+  const placed = cellBlocks(next);
   let path: SlidePath;
-  if (regions.length) {
-    if (!options.region || !isRegionKey(options.region) || regions.some((key) => overlaps(key, options.region!))) throw refuse("This slide places its content in regions. Choose a free region for the image.", { region: options.region });
-    next[options.region] = block;
-    path = [options.region];
+  if (placed) {
+    if (!options.region || !isGridCell(options.region) || placed.some((entry) => overlaps(entry.cell, options.region!))) throw refuse("This slide places its blocks in cells. Choose a free cell for the image.", { region: options.region });
+    next.blocks.push({ region: options.region, ...block });
+    path = ["blocks", next.blocks.length - 1];
   } else if (Array.isArray(next.blocks) || contentKeysOf(next).length || Object.keys(treatments).length) {
     const blocks = explicitBlocks(next);
     const index = options.index ?? blocks.length;

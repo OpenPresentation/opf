@@ -26,10 +26,13 @@
     {
       "id": "anchor-size-unit",
       "title": "An anchored note sized like 0.33 pixels",
-      "center": {
-        "id": "plan",
-        "text": "The plan has five parts."
-      },
+      "blocks": [
+        {
+          "id": "plan",
+          "region": "center",
+          "text": "The plan has five parts."
+        }
+      ],
       "shapes": [
         {
           "shape": "wedgeRectCallout",

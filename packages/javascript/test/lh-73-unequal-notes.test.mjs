@@ -12,11 +12,11 @@ const plain=value=>typeof value==='string'?value:value.map(run=>typeof run==='st
 const words=value=>value.replace(/\s+/gu,' ').trim();
 
 test('exact b06 s50 notes share a 60:40 row at 28px and leave the metric grid more body height',()=>{
- const result=compose(),[long,short]=notes(result),region=result.regions.find(region=>region.name==='note');
+ const result=compose(),[long,short]=notes(result),region=result.regions.find(region=>region.name==='aside');
  assert.equal(region.arrangement,'row');assert.equal(long.box.y,short.box.y);
  assert.ok(long.box.width>short.box.width*1.49 && long.box.width<=short.box.width*7/3+.01);
  assert.equal(long.text.fontSize,28);assert.equal(short.text.fontSize,28);
- assert.ok(result.regions.find(region=>region.name==='metrics').box.height>330.28,'former stacked-note grid gained height');
+ assert.ok(result.regions.find(region=>region.name==='body').box.height>330.28,'former stacked-note grid gained height');
  for(const[index,item]of notes(result).entries()){
   assert.equal(words(item.text.lines.join('')),words(plain(original.slides[0].blocks[index===0?1:3].text)),'all authored words retained');
   assert.ok(item.text.lines.every(line=>line.trim().length<=70),'notes retain a readable measure');
@@ -44,8 +44,9 @@ test('cards retain note role sizes and a narrow portrait is free to stack',()=>{
 });
 
 test('authored direction and peer notes retain their arrangement',()=>{
- const authored=structuredClone(original);authored.slides[0].design={contentDirection:'vertical'};
- const result=compose(authored,{recompose:false}),drawn=notes(result);assert.ok(Math.abs(drawn[0].box.width-drawn[1].box.width)<.001,'authored direction disables moved-note reweighting; fixed note region retains existing equal tracks');
+ // OPF 0.35: a region that flows as a row keeps its row as written (what design.contentDirection did for the slide).
+ const record=structuredClone(gallery.layouts.metrics),row=(list)=>list.map(entry=>entry.regions?{...entry,regions:row(entry.regions)}:entry.name==='aside'?{...entry,flow:'row'}:entry);record.regions=row(record.regions);
+ const result=compose(original,{recompose:false,layout:record}),drawn=notes(result);assert.ok(Math.abs(drawn[0].box.width-drawn[1].box.width)<.001,'a row region disables moved-note reweighting; its notes keep equal tracks');
  const peers=structuredClone(original);peers.slides[0].blocks[3].text=peers.slides[0].blocks[1].text;
  const peerResult=compose(peers),pair=notes(peerResult);assert.ok(Math.abs(pair[0].box.width-pair[1].box.width)<.001,'peer tracks stay equal');
 });

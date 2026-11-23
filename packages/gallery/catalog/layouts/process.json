@@ -7,8 +7,7 @@
     "Groups of items"
   ],
   "design": {
-    "contentBox": false,
-    "contentDirection": "horizontal"
+    "contentBox": false
   },
   "direction": "column",
   "regions": [
@@ -16,7 +15,7 @@
       "name": "title"
     },
     {
-      "name": "steps",
+      "name": "body",
       "accepts": [
         "timeline",
         "list",
@@ -25,12 +24,11 @@
         "group",
         "diagram"
       ],
-      "role": "primary",
-      "flow": "grid",
-      "sequence": "steps"
+      "flow": "row",
+      "arrangement": "steps"
     }
   ],
-  "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition.",
+  "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition. A list of 2 to 8 steps of one or two words each draws as boxes joined by arrows.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/process.svg"
   }

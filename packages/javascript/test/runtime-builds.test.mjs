@@ -62,7 +62,7 @@ describe("the two builds", () => {
     // RR-75/RR-117: Node validate and each createValidator session register the same default catalog, unlike browser core.
     // Other public classes/functions still share exact identity; the factory wrapper only forwards defaults and its one core cache.
     for (const name of Object.keys(nodeBuild)) {
-      if (["open", "save", "convert", "validate", "createValidator", "stats", "paginate", "continueOverfull", "embed", "edit"].includes(name)) assert.notEqual(browserBuild[name], nodeBuild[name], name);
+      if (["open", "save", "convert", "validate", "createValidator", "stats", "paginate", "continueOverfull", "embed", "edit", "fix"].includes(name)) assert.notEqual(browserBuild[name], nodeBuild[name], name);
       else assert.equal(browserBuild[name], nodeBuild[name], name);
     }
     for (const name of ["open", "save", "convert", "OPFApiError", "OPFExportError", "OPFImportError", "parseSlideSelection", "parse", "stringify", "validate"]) assert.equal(typeof nodeBuild[name], "function", name);
@@ -154,7 +154,7 @@ describe("session validator entrypoint defaults", () => {
   });
 
   test("explicit custom catalogs are respected per call, without an implicit gallery fallback", () => {
-    const catalog = { source: "https://example.test/validator-catalog", layouts: { custom: { name: "Custom", direction: "column", regions: [{ name: "title" }, { name: "body", accepts: ["text"], role: "primary", flow: "none" }] } } };
+    const catalog = { source: "https://example.test/validator-catalog", layouts: { custom: { name: "Custom", direction: "column", regions: [{ name: "title" }, { name: "body", accepts: ["text"], role: "primary", max: 1 }] } } };
     const value = { slides: [{ title: "Custom layout", layout: "custom", text: "Real caller-owned catalog content." }] };
     const options = { ...referenceOnly, catalogs: [catalog] }, checker = nodeBuild.createValidator(), browser = browserBuild.createValidator();
     const cold = browserBuild.validate(value, options);

@@ -22,7 +22,7 @@
             "diagram"
           ],
           "role": "media",
-          "flow": "none",
+          "max": 1,
           "anchor": "middle"
         },
         {
@@ -34,7 +34,6 @@
             "quote",
             "group"
           ],
-          "role": "primary",
           "flow": "auto",
           "anchor": "middle"
         }

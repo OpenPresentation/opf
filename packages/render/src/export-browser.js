@@ -19,7 +19,7 @@ const MAX_PIXELS = 40_000_000;
 /**
  * PNG with a canvas (RR-73): a deck drawn with `toSvg` (all slides, a slide number or a selection, as for the Node `toPng`) or SVG
  * the renderer drew; one PNG for a slide number or one SVG, a list otherwise. `scale` multiplies the SVG's own size; `background`
- * is a CSS colour (default white, `"transparent"` for none).
+ * is a CSS color (default white, `"transparent"` for none).
  */
 export async function toPng(source, slides, options) {
   ({ slides, options } = slideArguments(slides, options));

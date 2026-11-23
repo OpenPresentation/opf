@@ -1,0 +1,130 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "0.34 copies",
+  "language": "en-US",
+  "slides": [
+    {
+      "title": "Sales",
+      "layout": "chart",
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  1
+                ],
+                [
+                  "Q2",
+                  2
+                ]
+              ]
+            }
+          },
+          "region": "charts"
+        },
+        {
+          "text": "Up 20%",
+          "region": "note"
+        }
+      ]
+    },
+    {
+      "title": "Steps",
+      "layout": "flow",
+      "items": [
+        "Plan",
+        "Build",
+        "Ship"
+      ]
+    },
+    {
+      "title": "More steps",
+      "layout": "flow",
+      "blocks": [
+        {
+          "items": [
+            "Draft",
+            "Review"
+          ],
+          "region": "stages"
+        }
+      ]
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
+          "tags": [
+            "Visuals"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "charts",
+              "accepts": [
+                "chart",
+                "group",
+                "diagram"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            {
+              "name": "note",
+              "size": "auto",
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          ],
+          "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"
+          }
+        },
+        "flow": {
+          "name": "Flow",
+          "summary": "Steps in order, as boxes joined by arrows in one row.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "stages",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "flow"
+            }
+          ],
+          "description": "Show 1 to 8 steps that follow one another, each a box with an arrow to the next. Write one short list entry per step, in order.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/flow.svg"
+          }
+        }
+      }
+    }
+  }
+}

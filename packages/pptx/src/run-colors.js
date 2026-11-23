@@ -1,25 +1,23 @@
-// Run colours named by a reference (RR-08).
+// Run colors named by a reference (RR-08).
 //
-// A TextRun colour may be a ColorRef: a `var:` variable, a colour-scheme slot ('accent2') or a role ('primary'). The
-// export resolves it (or writes the theme slot that holds the same colour) and PowerPoint has no field for the name, so
+// A TextRun color may be a ColorRef: a `var:` variable, a color-scheme slot ('accent2') or a role ('primary'). The
+// export resolves it (or writes the theme slot that holds the same color) and PowerPoint has no field for the name, so
 // import used to return only the resolved hex. Two sources can name the reference again, and both are gated by the
-// imported document's own colour resolution: a name is restored only while it still resolves to the run's current colour,
-// so a colour edited in PowerPoint keeps its edited value and nothing is invented.
+// imported document's own color resolution: a name is restored only while it still resolves to the run's current color,
+// so a color edited in PowerPoint keeps its edited value and nothing is invented.
 //
 // 1. Provenance (full mode): OPF_SLIDE_V1 `colors` = {n, at: [[slot, reference], ...]}. The slots are the text runs of the
 //    slide's content in a fixed order (slideRunSlots: text runs, list item and description runs; regions by name, then
 //    blocks and groups in order, or the root payload). `n` is how many slots the authored slide had; the record is used only
 //    when the imported slide has exactly that many, so a run can never be matched to another. It holds reference names
 //    only, never words.
-// 2. A slide with no OPF record (plain PPTX): a run painted with a bare a:schemeClr (no colour transform) names that
-//    theme slot ('accent2', 'dark1', 'hyperlink'), restored when the document's colour scheme holds that exact colour for
-//    the slot. The exporter writes schemeClr only where the theme holds the colour, so this is the same convention.
+// 2. A slide with no OPF record (plain PPTX): a run painted with a bare a:schemeClr (no color transform) names that
+//    theme slot ('accent2', 'dark1', 'hyperlink'), restored when the document's color scheme holds that exact color for
+//    the slot. The exporter writes schemeClr only where the theme holds the color, so this is the same convention.
 
-import {ROOT_PAYLOAD_FIELDS, REGION_KEYS} from './content-topology.js';
-import {legacyRegionOrder} from './legacy-tags.js';
+import {ROOT_PAYLOAD_FIELDS} from './content-topology.js';
 
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
-const REGION_KEY_SET = new Set(REGION_KEYS);
 const isGroup = block => object(block) && (block.type === 'group' || (block.type === undefined && Array.isArray(block.blocks)));
 export const MAX_COLOR_SLOTS = 100000;
 
@@ -27,16 +25,16 @@ export const MAX_COLOR_SLOTS = 100000;
 const REFERENCE = /^(?:var:[a-z][a-z0-9-]*|accent[1-6]|dark[12]|light[12]|hyperlink|followedHyperlink|primary|secondary|accent|background|surface|text|textSecondary)$/;
 export const isColorReference = value => typeof value === 'string' && REFERENCE.test(value);
 
-/** The payload objects of a slide in the fixed traversal order: regions (by name), else blocks (groups depth first), else the slide's root payload. */
-function* leaves(slide, regionOrder) {
+/**
+ * The payload objects of a slide in the fixed traversal order: blocks (groups depth first), else the slide's root payload. A 0.34 file's
+ * cells (slide keys, walked by name) come back from import as blocks in that same order (content-topology `rebuildContent`).
+ */
+function* leaves(slide) {
   const walk = function* (block) {
     if (!object(block)) return;
     if (isGroup(block)) { for (const child of Array.isArray(block.blocks) ? block.blocks : []) yield* walk(child); return; }
     yield block;
   };
-  const regions = Object.keys(slide).filter(key => REGION_KEY_SET.has(key) && object(slide[key])).sort();
-  const ordered = Array.isArray(regionOrder) && regionOrder.length === regions.length && new Set(regionOrder).size === regions.length && regionOrder.every(key => regions.includes(key)) ? regionOrder : regions;
-  if (ordered.length) { for (const key of ordered) yield* walk(slide[key]); return; }
   if (Array.isArray(slide.blocks)) { for (const block of slide.blocks) yield* walk(block); return; }
   yield slide;
 }
@@ -44,7 +42,7 @@ function* leaves(slide, regionOrder) {
 /** The text runs of the slide's text and list payloads, in order: an object (a run) or null (a plain string). */
 // Proven scalar fragments occupy their original one logical slot during import;
 // actual native run objects stay intact until color references have settled.
-export function slideRunSlots(slide, scalarValues = null, scalarIndexes = null, regionOrder) {
+export function slideRunSlots(slide, scalarValues = null, scalarIndexes = null) {
   const slots = [];
   const runs = value => {
     if (scalarValues?.has(value)) { scalarIndexes?.add(slots.length); slots.push(null); return; }
@@ -53,7 +51,7 @@ export function slideRunSlots(slide, scalarValues = null, scalarIndexes = null, 
   };
   // FA-10: the heading group (tag, title, subtitle) comes first, when it is TextRun[].
   for (const field of ['tag', 'title', 'subtitle']) if (Array.isArray(slide[field])) runs(slide[field]);
-  for (const leaf of leaves(slide, regionOrder)) {
+  for (const leaf of leaves(slide)) {
     for (const field of ROOT_PAYLOAD_FIELDS) {
       const value = leaf[field];
       if (field === 'text') { if (Array.isArray(value)) runs(value); }
@@ -78,12 +76,12 @@ export function runColorRecord(slide) {
   return at.length ? {n: slots.length, at} : undefined;
 }
 
-/** Throws when `value` is not a well-formed colours record. */
+/** Throws when `value` is not a well-formed colors record. */
 export function validateRunColors(value) {
-  if (!object(value) || !Number.isSafeInteger(value.n) || value.n < 1 || value.n > MAX_COLOR_SLOTS || !Array.isArray(value.at) || !value.at.length || value.at.length > value.n) throw Error('Invalid run colours record.');
+  if (!object(value) || !Number.isSafeInteger(value.n) || value.n < 1 || value.n > MAX_COLOR_SLOTS || !Array.isArray(value.at) || !value.at.length || value.at.length > value.n) throw Error('Invalid run colors record.');
   let previous = -1;
   for (const entry of value.at) {
-    if (!Array.isArray(entry) || entry.length !== 2 || !Number.isSafeInteger(entry[0]) || entry[0] <= previous || entry[0] >= value.n || !isColorReference(entry[1])) throw Error('Invalid run colour entry.');
+    if (!Array.isArray(entry) || entry.length !== 2 || !Number.isSafeInteger(entry[0]) || entry[0] <= previous || entry[0] >= value.n || !isColorReference(entry[1])) throw Error('Invalid run color entry.');
     previous = entry[0];
   }
   return value;
@@ -97,12 +95,12 @@ function* markedRuns(value) {
 }
 
 /**
- * Restore run colour references on `slides` (the imported document's slides). `info[i]` is
+ * Restore run color references on `slides` (the imported document's slides). `info[i]` is
  * {record, structure, content}: the stored OPF_SLIDE_V1 value, whether the slide's arrangement matches it and whether its
  * content structure was restored from it, or undefined for an untagged slide. `resolve(slide, name)` returns the '#RRGGBB'
  * the name resolves to in the document (or undefined). Every transient `_opfScheme` marker is removed.
- * opf-pptx#212: a list run whose colour import removed as the list's own (OPF_SLIDE_V1 listRuns) carries `_opfInherited`, that
- * colour: a stored reference that resolves to it is restored (an authored `text` role equals the inherited colour), and the
+ * opf-pptx#212: a list run whose color import removed as the list's own (OPF_SLIDE_V1 listRuns) carries `_opfInherited`, that
+ * color: a stored reference that resolves to it is restored (an authored `text` role equals the inherited color), and the
  * marker is removed; a run left with only its text becomes a plain string again.
  */
 // Visit only real content leaves; metadata paths never address arbitrary objects.
@@ -122,9 +120,7 @@ function scalarTargets(slide, index, proof, report) {
       }
     }
   };
-  const regions = Object.keys(slide).filter(key => REGION_KEY_SET.has(key) && object(slide[key]));
-  if (regions.length) for (const key of regions) visit(slide[key], base + '.' + key);
-  else if (Array.isArray(slide.blocks)) slide.blocks.forEach((block, i) => visit(block, base + '.blocks.' + i));
+  if (Array.isArray(slide.blocks)) slide.blocks.forEach((block, i) => visit(block, base + '.blocks.' + i));
   else visit(slide, base);
   if (result.length !== [...proof.values()].reduce((n, entries) => n + entries.length, 0)) {
     report?.({code:'list-scalar-reference-changed',path:'slides.'+index,message:'Scalar source paths or item roles no longer match complete current list values; native run boundaries are retained.'});
@@ -151,12 +147,12 @@ export function restoreRunColors(slides, info, resolve, report) {
       // When the content form was not restored its own diagnostic says why, and the slots cannot be aligned.
       if (tag.structure && tag.content) {
         const scalarIndexes = new Set();
-        let slots = slideRunSlots(slide, scalarValues(), scalarIndexes, legacyRegionOrder(tag.record));
+        let slots = slideRunSlots(slide, scalarValues(), scalarIndexes);
         if (at.some(([slot]) => scalarIndexes.has(slot))) {
           report?.({code:'list-scalar-reference-changed',path:'slides.'+index,message:'Scalar source intent conflicts with an authored run color slot; current native run boundaries are retained.'});
-          scalars = []; slots = slideRunSlots(slide, null, null, legacyRegionOrder(tag.record));
+          scalars = []; slots = slideRunSlots(slide, null, null);
         }
-        if (slots.length !== n) report({code: 'color-reference-changed', path: `slides.${index}`, message: `The slide's text runs no longer match the stored colour references (${slots.length} runs now, ${n} at export), so the named run colours of slides.${index} (variables, scheme slots and roles) were not restored; the runs keep their resolved colours.`});
+        if (slots.length !== n) report({code: 'color-reference-changed', path: `slides.${index}`, message: `The slide's text runs no longer match the stored color references (${slots.length} runs now, ${n} at export), so the named run colors of slides.${index} (variables, scheme slots and roles) were not restored; the runs keep their resolved colors.`});
         else for (const [slot, name] of at) if (slots[slot]) restoreName(slots[slot], name);
       }
     }

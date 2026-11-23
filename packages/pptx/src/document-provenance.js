@@ -1,13 +1,13 @@
 import {nativeRunStyleEvidence, hasSourceRunStyles} from './source-run-styles.js';
 import {XMLParser} from 'fast-xml-parser';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
-import {currentTag, upgradeTag} from './legacy-tags.js';
+import {currentTag, legacyRegionOrder, upgradeTag} from './legacy-tags.js';
 import {contentTopology, rebuildContent, validateTopology, listLineBreaks, validateListBreaks, validateListRuns, validateListScalars, listLineRoles, validateListRoles, MAX_LIST_PATHS} from './content-topology.js';
 import {runColorRecord, validateRunColors} from './run-colors.js';
 import {overlayRecord, validateOverlayRecord} from './shape-restore.js';
 import {validateCatalogRecord} from '@openpresentation/opf';
 import {SMART_ART_URI} from './smart-art.js';
-import {parseReference, resolveReference, resolveSocialProfile} from '@openpresentation/opf/composition';
+import {parseReference, renamedLayout, renamedLayoutTitlePosition, resolveReference, resolveSocialProfile} from '@openpresentation/opf/composition';
 
 // FF-32: document and slide references survive a PPTX round trip.
 //
@@ -51,8 +51,8 @@ import {parseReference, resolveReference, resolveSocialProfile} from '@openprese
 // Spec-gap closure P1 adds, in `full` mode: the document `filename` and
 // `extensions`, the whole `assets` registry, `design.logo` (BRAND_ASSETS, also
 // per slide), the slide `section` and `extensions`, and the slide's content
-// topology (`content`, src/content-topology.js): nested groups, promoted
-// regions, the root payload form, block ids, block extensions and group
+// topology (`content`, src/content-topology.js): nested groups, the blocks' `region`
+// (a layout region or a cell of the slide grid), the root payload form, block ids, block extensions and group
 // composition, with the reference-pixel box of every leaf. A `data:` source
 // that is not an exported media part is stored inline while its field stays
 // under the per-field limit.
@@ -91,7 +91,8 @@ function authoredSocials(stored, observed) {
 // Deck-level fields. References are gated by native evidence; metadata has no
 // native PowerPoint counterpart and round-trips from the stored value.
 export const DESIGN_REFERENCES = Object.freeze(['theme', 'colorScheme', 'fontScheme', 'dimensions', 'background']);
-export const COMPOSITION_HINTS = Object.freeze(['titleAlignment', 'contentAlignment', 'contentBox', 'contentDirection', 'chartPrimary', 'imageFit', 'listBullet']);
+// OPF 0.35 removed contentDirection and chartPrimary: a 0.34 file's stored values are not restored.
+export const COMPOSITION_HINTS = Object.freeze(['titleAlignment', 'titlePosition', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet']);
 // `references` (RR-34): the deck's cited sources. Like `author`, stored as a top-level key of OPF_DOCUMENT_V1 (importers up to
 // 0.11.9 drop a tag with an unknown `supplement` field but ignore an unknown top-level key) and read back into metadata.
 export const METADATA = Object.freeze(['narrative', 'tone', 'audience', 'purpose', 'language', 'organization', 'speaker', 'takeaway', 'duration', 'tags', 'variables', 'filename', 'extensions', 'author', 'references', 'icons']);
@@ -134,7 +135,7 @@ const SLIDE_DESIGN_FIELDS = [...STYLE_REFERENCES, 'background', ...COMPOSITION_H
 const DOCUMENT_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['filename', 'extensions'])});
 const SLIDE_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['language'])});
 // RR-59: document-level values the import reads back although export only baked them in from engine defaults: the
-// canonical `$schema`, the package title (`name`), the language the runs carry, and the theme, colour scheme, font scheme
+// canonical `$schema`, the package title (`name`), the language the runs carry, and the theme, color scheme, font scheme
 // and slide size of the generated theme. In `full` mode OPF_DOCUMENT_V1.absent lists the ones the source did not state
 // (a top-level key, which every published importer ignores), and import leaves each of them absent while the native
 // value it would be read from is still the default the export wrote; a value edited in PowerPoint is imported as observed.
@@ -347,7 +348,7 @@ function nativeSlide(entries, path, includeRunStyles = true) {
   const cSld = root?.['p:cSld'], tree = cSld?.['p:spTree'];
   const rels = relationships(entries, path);
   // FA-23: an image background with alt text is a back picture and its overlay is a shape (src/image-provenance.js); both
-  // are evidence of design.background with the native slide background, so moving or recolouring them is a background edit.
+  // are evidence of design.background with the native slide background, so moving or recoloring them is a background edit.
   const named = (nodes, key) => array(nodes).filter(node => /^OPF background /.test(String(node?.[key]?.['p:cNvPr']?.name ?? '')));
   const backgroundObjects = [...named(tree?.['p:pic'], 'p:nvPicPr').map(node => ({spPr: node['p:spPr'], blipFill: node['p:blipFill']})),
     ...named(tree?.['p:sp'], 'p:nvSpPr').map(node => ({spPr: node['p:spPr']}))];
@@ -419,7 +420,7 @@ function documentReferences(doc) {
 }
 
 // The embedded catalogs a set of references needs: each referenced record once, in the group it resolves in, plus the
-// records it references (a theme's colour and font schemes, resolved in the theme's group first), and every group
+// records it references (a theme's color and font schemes, resolved in the theme's group first), and every group
 // declaration (its `source`, or `default: false`). Only embedded records are kept; nothing resolves in a host catalog here.
 export function referencedCatalogs(catalogs, references) {
   if (!object(catalogs)) return undefined;
@@ -569,7 +570,7 @@ export function recordContentTopology(provenance, slide, index, items) {
   const topology = contentTopology(slide, items, index, reason => { provenance.slides[index].omittedContent = reason; });
   if (!topology) return;
   provenance.slides[index].content = topology;
-  // Variable, scheme-slot and role names of text runs (the native colour holds only what they resolve to).
+  // Variable, scheme-slot and role names of text runs (the native color holds only what they resolve to).
   const colors = runColorRecord(slide);
   if (colors) provenance.slides[index].colors = colors;
   // Whitespace of the hard line breaks inside list items (their native lines carry no tag).
@@ -1132,7 +1133,8 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     try {
       const found = readTag(entries, root?.['p:cSld']?.['p:custDataLst'], rels, SLIDE_TAG);
       if (found.missing) return null;
-      return {record: remapMedia(validateSlide(found.value), entries), native: nativeSlide(entries, path)};
+      // A legacy record walked its cells in the order of its own (left/right) keys: import rebuilds them in that order (rebuildContent).
+      return {record: remapMedia(validateSlide(found.value), entries), native: nativeSlide(entries, path), regionOrder: legacyRegionOrder(found.value)};
     } catch (error) {
       report({code: 'invalid-document-provenance', path: `slides.${index}`, message: `${error.message} This slide keeps the values observed in the PPTX.`});
       return null;
@@ -1142,6 +1144,17 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
   const group = (field, ops, contentPaths) => groups.push({field, ops, ...(contentPaths ? {contentPaths} : {})});
   const set = (path, value) => ({path, value});
   const remove = path => ({path, remove: true});
+  // OPF 0.35 removed the gallery's flow, vertical-flow and agenda-split layouts: a slide a 0.34 file stored on one of them, with no record of
+  // its own and none in the stored catalogs, takes the layout that replaced it (process, vertical-process, agenda), and an agenda-split slide
+  // design.titlePosition "start" unless it stored a position of its own.
+  slideRecords.forEach((entry, index) => {
+    const layout = entry?.record.layout, renamed = typeof layout === 'string' && entry.record.layoutRecord === undefined
+      && !resolveReference({catalogs: object(document?.catalogs) ? document.catalogs : {}}, 'layouts', layout, {catalogs: []}) ? renamedLayout('layouts', layout) : undefined;
+    if (renamed === undefined) return;
+    const titlePosition = renamedLayoutTitlePosition('layouts', layout), design = object(entry.record.design) ? entry.record.design : {};
+    report({code: 'layout-renamed', path: `slides.${index}.layout`, message: `OPF 0.35 removed layout ${layout}; the slide uses ${renamed}, which replaced it${titlePosition && design.titlePosition === undefined ? `, with design.titlePosition ${titlePosition} (its title beside the body, as ${layout} drew it)` : ''}.`});
+    slideRecords[index] = {...entry, record: {...entry.record, layout: renamed, ...(titlePosition && design.titlePosition === undefined ? {design: {...design, titlePosition}} : {})}};
+  });
   const intent = layoutIntent(document?.catalogs, slideRecords, entries, group, report, hostCatalogs);
 
   // Slide and block ids must stay unique across the document; a duplicated
@@ -1149,9 +1162,10 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
   const seenIds = new Set();
   // Content topology: while the slide's arrangement is unchanged, the imported
   // flat blocks are matched to the stored leaves and the authored form returns
-  // (root payload, blocks with nested groups, or promoted regions). The slide
+  // (root payload, or blocks with nested groups and their `region`; a 0.34 file's
+  // cells, stored as slide keys, come back as blocks that name them). The slide
   // `type` joins that group, since it is only valid with the authored form.
-  const restoreContent = (index, {record, native: observed}) => {
+  const restoreContent = (index, {record, native: observed, regionOrder}) => {
     if (record.content === undefined) return false;
     // The stored `type` belongs to the authored form: when that form is not restored, neither is the type.
     const typeNote = record.type === undefined ? '' : ` The stored slide type ${JSON.stringify(record.type)} was not restored either.`;
@@ -1161,7 +1175,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
       return false;
     }
     let placedPaths;
-    const result = rebuildContent(record.content, imported.slides[index]?.blocks ?? [], slides[index]?.contentBounds ?? [], paths => { placedPaths = paths; }, Object.fromEntries(['fontSize', 'fontFamily', 'color'].map(key => [key, record.native.runStyles?.[key] !== undefined && record.native.runStyles[key] === observed.runStyles?.[key]])),slides[index]?.v2ProtectedBlocks??new Set());
+    const result = rebuildContent(record.content, imported.slides[index]?.blocks ?? [], slides[index]?.contentBounds ?? [], paths => { placedPaths = paths; }, Object.fromEntries(['fontSize', 'fontFamily', 'color'].map(key => [key, record.native.runStyles?.[key] !== undefined && record.native.runStyles[key] === observed.runStyles?.[key]])),slides[index]?.v2ProtectedBlocks??new Set(),{order: regionOrder, layout: record.layout !== undefined});
     if (result.reason) {
       report({code: 'content-structure-changed', path: `slides.${index}`, message: `The slide's content no longer matches its stored structure (${result.reason}), so the authored groups, regions and block ids of slides.${index} were not restored; the imported slide keeps its flat blocks.${typeNote}`});
       return false;
@@ -1178,7 +1192,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     const ops = [];
     for (const [key, value] of Object.entries(result.fields)) {
       if (value === null) { ops.push(remove(['slides', index, key])); continue; }
-      if (key === 'blocks') dedupe(value, `slides.${index}.blocks`); else if (record.content.form === 'regions') dedupe(value, `slides.${index}.${key}`);
+      if (key === 'blocks') dedupe(value, `slides.${index}.blocks`);
       ops.push(set(['slides', index, key], value));
     }
     if (record.type !== undefined) ops.push(set(['slides', index, 'type'], clone(record.type)));
@@ -1281,7 +1295,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
   if (observedFontScheme) group('design.fontScheme', [set(['design', 'fontScheme'], observedFontScheme)]);
   const styleIntact = STYLE_REFERENCES.every(key => restoredStyle[key] !== false);
   // RR-59: a default the source left absent stays absent while the native value it is read from is the one export wrote
-  // (FF-24's theme recovery, for example, gives a theme-only deck its colour scheme). A native edit is imported as observed.
+  // (FF-24's theme recovery, for example, gives a theme-only deck its color scheme). A native edit is imported as observed.
   const absent = new Set(array(document.absent));
   const defaultGates = {theme: match.colors && match.fonts, colorScheme: match.colors, fontScheme: match.fonts, dimensions: match.size};
   for (const [key, unchanged] of Object.entries(defaultGates)) {
@@ -1486,7 +1500,7 @@ export function layoutIntent(storedCatalogs, slideRecords, entries, group, repor
     if (structureMatch && problem === 'source') report({code: 'invalid-document-provenance', path: `slides.${index}.layoutRecord`, message: `slides.${index}.layoutRecord belongs to catalogs.${stated.group}${stated.source ? ` (${stated.source})` : ''}, which the document declares with another source, so the slide's stored layout record was not restored.`});
     const target = layout === undefined ? undefined : resolved.get(layout);
     let restoreLayout = structureMatch;
-    if (structureMatch && layout !== undefined && layout !== 'auto') {
+    if (structureMatch && layout !== undefined) {
       if (!target) {
         restoreLayout = false;
         report({code: 'unresolved-reference', path: `slides.${index}.layout`, message: `Layout '${layout}' resolves neither in the catalogs the PPTX stores nor in a registered catalog, so slides.${index}.layout was not restored; the imported slide keeps its observed arrangement.`});

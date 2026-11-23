@@ -1,4 +1,4 @@
-import {isArrangement,type Arrangement} from './arrangements.js';
+import {isArrangement,isRegionArrangement,isSequenceArrangement,type Arrangement,type RegionArrangement,type SequenceArrangement} from './arrangements.js';
 /**
  * OPF layout templates (`opf-layout/v2`, FA-33): a layout record is one ordered list of regions, nested for two
  * dimensions. `direction` says whether the record's `regions` are placed side by side (`row`) or stacked (`column`); an
@@ -14,10 +14,10 @@ import {isArrangement,type Arrangement} from './arrangements.js';
 export const REGION_KINDS = ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'group'] as const;
 export type RegionKind = typeof REGION_KINDS[number];
 /** Which content a region wants first (content binding, step 2). */
-export const REGION_ROLES = ['primary', 'secondary', 'media', 'supporting'] as const;
+export const REGION_ROLES = ['primary', 'media', 'supporting'] as const;
 export type RegionRole = typeof REGION_ROLES[number];
-/** How several blocks share a region. */
-export const REGION_FLOWS = ['none', 'grid', 'column', 'auto'] as const;
+/** How several blocks share a region, in the words of `composition.mode` (OPF 0.35: `none` is `max: 1`, singleBlockRegion). */
+export const REGION_FLOWS = ['auto', 'grid', 'row', 'column'] as const;
 export type RegionFlow = typeof REGION_FLOWS[number];
 export const REGION_ANCHORS = ['top', 'middle', 'bottom'] as const;
 export type RegionAnchor = typeof REGION_ANCHORS[number];
@@ -36,8 +36,6 @@ export const MAX_REGION_ENTRIES = 12;
 export const MAX_REGION_DEPTH = 3;
 /** A region holds at most this many blocks on one slide. */
 export const MAX_REGION_BLOCKS = 12;
-/** The layout id no catalog may define: `layout: "auto"` is automatic composition. */
-export const AUTO_LAYOUT = 'auto';
 
 /** One region of a template with every default applied (an inherited `anchor` included). */
 export interface LayoutRegion {
@@ -45,27 +43,22 @@ export interface LayoutRegion {
   accepts: RegionKind[];
   role: RegionRole;
   flow: RegionFlow;
-  /** Blocks the region holds on one slide (1 for `flow: "none"`, else 6 unless set). */
+  /** Blocks the region holds on one slide (6 unless set); 1 is a single-block region (singleBlockRegion). */
   max: number;
   bleed: boolean;
-  listColumns: 'auto' | 1;
   /** LH-68: `tile` when a metric in the region is laid out from its whole card; absent for the default `stack` (value, label and the rest as one block). */
   metrics?: 'tile';
   /**
-   * LH-07: the region lists the steps of a sequence. `steps`: its blocks (or a lone list's entries) are steps, drawn under numbered
-   * badges joined by a connector, and a lone list of short entries is a flow of chips joined by arrows. `numbered` (an agenda): every
-   * list draws its entries beside badges, numbered or not (an unnumbered one is counted as drawing only). Absent: the region's content draws as any other.
+   * What the region draws its content as (`regionSequence` and `regionDiagram` read the two families). LH-07, a sequence: `steps` (its
+   * blocks, or a lone list's entries, are steps under numbered badges joined by a connector, and a lone list of 2 to 8 entries of one or two words
+   * draws as Basic Process where it holds them at the steps' size, OPF 0.35) or `numbered` (an agenda: every list draws its entries beside badges, numbered or not; an unnumbered one is
+   * counted as drawing only). A diagram of the region's lone list of one level, in PowerPoint's geometry or OPF's own (composition.ts):
+   * SH-09 `pyramid` (stacked levels, the first entry at the apex), SH-24 `inverted-pyramid` (the widest level first, the entries still
+   * top to bottom), SH-09 `matrix` (four quadrants; another count draws a grid of cards), SH-18 `cycle` (nodes on a ring with an arrow
+   * to the next), SH-17 `chevrons` (a row of chevrons), `process` (a row of boxes with arrows between them) or `vertical-process` (a
+   * column of them), SH-21 `org-chart` and `hierarchy` (a tree) and `venn` (overlapping sets). Absent: the region's content draws as any other.
    */
-  sequence?: 'steps' | 'numbered';
-  /**
-   * SH-09: the region draws its lone list of one level as a diagram: `pyramid` (stacked levels, the first entry at the apex) or `matrix`
-   * (four quadrants; another count draws a grid of cards), in PowerPoint's geometry or OPF's own (composition.ts). SH-18: `cycle` (the
-   * entries as the steps of a loop, nodes on a ring with an arrow to the next). SH-17: `chevrons` (a row of chevrons), `flow` (a row of
-   * boxes with arrows between them) or `vertical-flow` (a column of them). Absent: a list.
-   */
-  arrangement?: Arrangement;
-  /** Narrow tip at the top (up, default) or bottom (down); authored entry order stays top to bottom. */
-  pyramidDirection?: 'up' | 'down';
+  arrangement?: RegionArrangement;
   anchor: RegionAnchor;
   empty: 'collapse' | 'keep';
 }
@@ -141,6 +134,19 @@ const positive = (value: unknown): value is number => typeof value === 'number' 
 const validSize = (value: unknown): value is number | 'auto' => value === 'auto' || (positive(value) && value <= 100);
 const EPSILON = 1e-9;
 
+/**
+ * OPF 0.35: a region of `max: 1` (what `flow: "none"` was) is a single-block region. Its one block fills it and stacks as a column; blocks
+ * no region had room for still join it, up to JOINED_FIXED_MAX, and then flow by its `flow`; it is never the default overflow region nor the
+ * region a slide's own composition arranges, and fixed regions of one role side by side share their joined blocks (block-grouping.ts).
+ */
+export const singleBlockRegion = (region: Pick<LayoutRegion, 'max'>): boolean => region.max === 1;
+/**
+ * OPF 0.35: whether a long list in the region may flow into columns (composition's listColumnsFor, in `auto` mode). Every region may,
+ * except one whose `arrangement` draws its list as a figure or as steps: a diagram, or the `steps` sequence. A `numbered` sequence (the
+ * agenda's) keeps its columns, its badges numbered across them. A list payload's own `columns` chooses in every region.
+ */
+export const regionListColumns = (region: Pick<LayoutRegion, 'arrangement'>): boolean => region.arrangement === undefined || region.arrangement === 'numbered';
+
 /** Whether a layout record is a template (it has a `regions` list). */
 export function isLayoutTemplate(layout: unknown): boolean {
   return Object.hasOwn(record(layout), 'regions');
@@ -152,7 +158,7 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
   // No `accepts` means every body content kind and `group`.
   const accepts = Array.isArray(entry.accepts) ? [...new Set(entry.accepts.filter((kind): kind is RegionKind => (REGION_KINDS as readonly unknown[]).includes(kind)))] : [...REGION_KINDS];
   const flow = (REGION_FLOWS as readonly unknown[]).includes(entry.flow) ? entry.flow as RegionFlow : 'auto';
-  const max = Number.isInteger(entry.max) && (entry.max as number) >= 1 && (entry.max as number) <= MAX_REGION_BLOCKS ? entry.max as number : flow === 'none' ? 1 : 6;
+  const max = Number.isInteger(entry.max) && (entry.max as number) >= 1 && (entry.max as number) <= MAX_REGION_BLOCKS ? entry.max as number : 6;
   return {
     name,
     accepts,
@@ -160,15 +166,17 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
     flow,
     max,
     bleed: entry.bleed === true,
-    listColumns: entry.listColumns === 'auto' ? 'auto' : 1,
     ...(entry.metrics === 'tile' ? { metrics: 'tile' as const } : {}),
-    ...(entry.sequence === 'steps' || entry.sequence === 'numbered' ? { sequence: entry.sequence } : {}),
-    ...(isArrangement(entry.arrangement) ? { arrangement: entry.arrangement } : {}),
-    ...(entry.arrangement === 'pyramid' && entry.pyramidDirection === 'down' ? {pyramidDirection: 'down' as const} : {}),
+    ...(isRegionArrangement(entry.arrangement) ? { arrangement: entry.arrangement } : {}),
     anchor: (REGION_ANCHORS as readonly unknown[]).includes(entry.anchor) ? entry.anchor as RegionAnchor : inherited ?? 'top',
     empty: entry.empty === 'keep' ? 'keep' : 'collapse',
   };
 }
+
+/** LH-07: the sequence a region draws (its `arrangement` when that is `steps` or `numbered`). */
+export const regionSequence = (region: Pick<LayoutRegion, 'arrangement'>): SequenceArrangement | undefined => isSequenceArrangement(region.arrangement) ? region.arrangement : undefined;
+/** The diagram a region draws its lone list as (its `arrangement` when that is not a sequence). */
+export const regionDiagram = (region: Pick<LayoutRegion, 'arrangement'>): Arrangement | undefined => isArrangement(region.arrangement) ? region.arrangement : undefined;
 
 const anchorOf = (value: unknown): RegionAnchor | undefined => (REGION_ANCHORS as readonly unknown[]).includes(value) ? value as RegionAnchor : undefined;
 const isSplitEntry = (entry: Record<string, unknown>) => entry.name === undefined && (entry.regions !== undefined || entry.direction !== undefined);
@@ -281,7 +289,6 @@ function parse(layout: unknown): Parsed {
       } else {
         if (reserved.has(name)) add('layout-region', `${at}/name`, `'${name}' is reserved and cannot name a body region (reserved: ${RESERVED_REGION_NAMES.join(', ')})`);
         else if (!NAME.test(name)) add('layout-region', `${at}/name`, `'${name}' is not a region name (lowercase letters, digits and hyphens, starting with a letter)`);
-        if (entry.flow === 'none' && entry.max !== undefined && entry.max !== 1) add('layout-region', `${at}/max`, `a region with flow "none" holds one block; max must be 1, not ${JSON.stringify(entry.max)}`);
         anchorCheck(`${at}/anchor`, entry.anchor);
         const found = layoutRegion(name, entry, inherited);
         if (!found.accepts.length) add('layout-region', `${at}/accepts`, `region '${name}' accepts no content kind`);
@@ -320,7 +327,7 @@ function parse(layout: unknown): Parsed {
   // A column of nothing but auto entries has no numeric track to hold the leftover height: the record's anchor places the stack.
   const stackAnchor = anchorOf(value.anchor);
   const stack = direction === 'column' && children.length > 0 && children.every(node => node.size === 'auto') && stackAnchor !== undefined && stackAnchor !== 'top' ? stackAnchor : undefined;
-  const overflowRegion = typeof value.overflowRegion === 'string' ? value.overflowRegion : regions.find(entry => entry.role === 'primary' && entry.flow !== 'none')?.name;
+  const overflowRegion = typeof value.overflowRegion === 'string' ? value.overflowRegion : regions.find(entry => entry.role === 'primary' && !singleBlockRegion(entry))?.name;
   return {
     issues,
     template: {
@@ -431,12 +438,63 @@ function compile(root: Node): { rows: Track[]; columns: number[]; cells: string[
  * The problems `validate` reports for a template record (`opf/layout-template`, `opf/layout-region`): a `regions` list
  * that is not 1 to 12 entries, an entry that is neither a region nor a split, a bad `direction` or `size`, `auto` outside
  * a column, splits nested too deep, regions that compile to more than 12 rows or columns; a name used twice, a reserved
- * name, a heading region with content rules, a `subtitle` without `title`, `flow: "none"` with `max` other than 1,
+ * name, a heading region with content rules, a `subtitle` without `title`,
  * a region that accepts nothing, an `overflowRegion` that is not a region. Empty for a valid template and for a record
  * that is not a template.
  */
 export function layoutTemplateIssues(layout: unknown): LayoutTemplateIssue[] {
   return isLayoutTemplate(layout) ? parse(layout).issues : [];
+}
+
+/** OPF 0.35 design.titlePosition `start`: the title column and the body beside it share the content width 2 : 3. */
+export const TITLE_BESIDE_SHARE = [2, 3] as const;
+
+/**
+ * OPF 0.35 design.titlePosition `start`: the template with its heading group beside the body instead of above it. The rows that hold
+ * only headings (the title row, and a subtitle row, of a record that stacks its headings over the body) are removed, and a title
+ * column of TITLE_BESIDE_SHARE (two fifths of the content width) spans every remaining row at the logical start; the body keeps its
+ * own grid in the other three fifths. A `subtitle` region joins the title: the subtitle is part of the one heading group in the
+ * column (`subtitle` is false). A template without a title region gets the column too, for the implicit title. The record's
+ * `stack`, heading anchors and title rule are kept, so a stacked record (a quote) centers its row beside its title. A column is
+ * logical: composition draws it at the right in a right-to-left deck, and `design.mirror` swaps it, as for every column.
+ *
+ * Undefined when the record cannot put its title beside the body: a heading shares a row with a body region (the record already
+ * places its title beside or over a part of the body), or no row holds a body region.
+ */
+export function titleBesideTemplate(plan: LayoutTemplate): LayoutTemplate | undefined {
+  const heading = (name: string) => headingNames.has(name);
+  const headingRow = plan.grid.map(row => row.every(heading));
+  if (plan.grid.some((row, index) => !headingRow[index] && row.some(heading))) return undefined;
+  const body = plan.grid.filter((_, index) => !headingRow[index]);
+  if (!body.length) return undefined;
+  const total = plan.columns.reduce((sum, size) => sum + size, 0);
+  const [title, rest] = TITLE_BESIDE_SHARE;
+  const columns = wholeWeights([total * title / rest, ...plan.columns]) as number[];
+  const grid = body.map(row => ['title', ...row]);
+  const bounds = new Map<string, { top: number; left: number; bottom: number; right: number }>();
+  for (const [r, row] of grid.entries()) for (const [c, name] of row.entries()) {
+    const found = bounds.get(name);
+    if (!found) bounds.set(name, { top: r, left: c, bottom: r, right: c });
+    else { found.top = Math.min(found.top, r); found.left = Math.min(found.left, c); found.bottom = Math.max(found.bottom, r); found.right = Math.max(found.right, c); }
+  }
+  const areaOf = (name: string): LayoutArea => {
+    const box = bounds.get(name)!;
+    return { name, row: box.top, column: box.left, rowSpan: box.bottom - box.top + 1, columnSpan: box.right - box.left + 1, heading: heading(name) };
+  };
+  // Reading order: the title where the record lists it (first, without a title region), then the body regions as before.
+  const order = plan.title ? plan.areas.map(area => area.name).filter(name => name !== 'subtitle') : ['title', ...plan.areas.map(area => area.name)];
+  const { headingAnchors, ...rest2 } = plan;
+  const anchors = headingAnchors?.title !== undefined ? { title: headingAnchors.title } : undefined;
+  return {
+    ...rest2,
+    rows: plan.rows.filter((_, index) => !headingRow[index]),
+    columns,
+    grid,
+    areas: order.map(areaOf),
+    title: true,
+    subtitle: false,
+    ...(anchors ? { headingAnchors: anchors } : {}),
+  };
 }
 
 /** Parse, check and compile a template record. Throws OPFLayoutTemplateError for a record with a `layout-template` or `layout-region` issue. */

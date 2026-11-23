@@ -181,7 +181,7 @@ See [Templates and variables](./docs/templates-and-variables.md) for fillable OP
 | [`docs/diagrams.md`](./docs/diagrams.md) | Mermaid, Graphviz DOT and PlantUML diagrams as a content kind: when to use one, the supported families, how the deck styles and sizes them, accessibility, export (native PowerPoint shapes by default) and limits. |
 | [`docs/shapes.md`](./docs/shapes.md) | Shapes: the 187 DrawingML presets as blocks, custom outlines, slide overlays and connectors, and how PowerPoint export and import carry them. |
 | [`docs/shape-effects.md`](./docs/shape-effects.md) | The six shape effects (shadow, glow, reflection, soft edge, blur, 3-D) and how each engine draws them. |
-| [`docs/smartart.md`](./docs/smartart.md) | The pyramid, matrix, cycle, chevrons, flow and vertical-flow layouts: live SmartArt in PowerPoint where it holds the text, native shapes elsewhere. |
+| [`docs/smartart.md`](./docs/smartart.md) | The pyramid, matrix, cycle, chevrons, process and vertical-process layouts: live SmartArt in PowerPoint where it holds the text, native shapes elsewhere. |
 | [`docs/icons.md`](./docs/icons.md) | Icons on list entries, metrics and groups, icon cards, and the Lucide and Tabler icon sets in `@openpresentation/gallery/icon-sets`. |
 | [`docs/mcp.md`](./docs/mcp.md) | The MCP server (`npx -y @openpresentation/mcp`): tools, resources, and `show_deck`, which opens the OPF viewer in clients such as Claude. |
 | [`docs/footnotes-citations-captions.md`](./docs/footnotes-citations-captions.md) | Citations (`cite`), inline footnotes, the deck `references` list, captions on images, charts, tables and videos, and how every engine draws them. |

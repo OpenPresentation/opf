@@ -207,7 +207,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Social media handles or URLs, keyed by platform. The keys are an engine vocabulary validated directly (no catalog lookup): engines link a handle with the platform's URL pattern and handle prefix (spec/reference/engine-vocabularies.json). Each value is a string, either a full URL or a platform handle (e.g., '@acme'). Brand colours and icons are catalog display metadata for authoring UIs; engines render the profile URL, not icons or brand colours. Used both for organization and speaker records.
+- Purpose: Social media handles or URLs, keyed by platform. The keys are an engine vocabulary validated directly (no catalog lookup): engines link a handle with the platform's URL pattern and handle prefix (spec/reference/engine-vocabularies.json). Each value is a string, either a full URL or a platform handle (e.g., '@acme'). Brand colors and icons are catalog display metadata for authoring UIs; engines render the profile URL, not icons or brand colors. Used both for organization and speaker records.
 
 _No named properties._
 
@@ -220,7 +220,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `theme` | no | `ref:CatalogReference` | Theme for the deck: a themes reference, a bare id ('minimal') or 'name:id' ('acme:brand'). The theme supplies the default colour scheme, font scheme, background and dimensions; design.colorScheme, design.fontScheme, d... |
+| `theme` | no | `ref:CatalogReference` | Theme for the deck: a themes reference, a bare id ('minimal') or 'name:id' ('acme:brand'). The theme supplies the default color scheme, font scheme, background and dimensions; design.colorScheme, design.fontScheme, de... |
 | `colorScheme` | no | `oneOf:string / ref:ColorScheme` | Color scheme for the presentation. Accepts two forms: - A colorSchemes reference: a bare id ('cool-horizon') or 'name:id' ('acme:ocean'). - Object form: a ColorScheme with an optional 'id' reference as the base plus s... |
 | `fontScheme` | no | `oneOf:string / ref:FontScheme` | Font scheme for heading, body, accent, and code text. Accepts two forms: - A fontSchemes reference: a bare id ('aptos') or 'name:id' ('acme:inter'). - Object form: a FontScheme with an optional 'id' reference as the b... |
 | `dimensions` | no | `oneOf:ref:DimensionPreset / ref:Dimensions` | Slide dimensions and aspect ratio. String shorthand such as 'widescreen' is equivalent to { preset: 'widescreen' }. |
@@ -231,10 +231,9 @@ _No named properties._
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
 | `footer` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated footer furniture rendered outside the main slide content. Use false to suppress an inherited footer. |
 | `titleAlignment` | no | `enum:start \| center \| end` | Default horizontal alignment for the title heading area (the title and the tag) in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout... |
+| `titlePosition` | no | `enum:top \| start` | Where the heading group (tag, title and subtitle) sits on a slide with body content. 'top' (the default) stacks it above the body. 'start' sets it beside the body, in a column of two fifths of the content width (the b... |
 | `contentAlignment` | no | `enum:start \| center \| end` | Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.content... |
 | `contentBox` | no | `boolean` | Whether body/content regions are rendered inside a visible card or surface. Effective value: the slide's design, then the deck's design, then the theme's design.contentBox, then the layout record's design.contentBox,... |
-| `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Effective value: the slide's design, then the deck's design, then the theme's design.contentDirection, then the layout re... |
-| `chartPrimary` | no | `enum:none \| top \| bottom \| start \| end` | Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. It applies to automatic slides only; a template layout says t... |
 | `imageFit` | no | `enum:cover \| contain \| stretch \| auto` | Default fit of image blocks (and Slide.image) that set no fit of their own: 'cover' fills the frame and crops what overflows around the block's focus, 'contain' shows the whole picture in a frame of its own proportion... |
 | `listBullet` | no | `enum:character \| image \| none` | Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the theme's design.listBullet, then the layout record's design.listBullet, then 'character'. 'character' (the... |
 | `listStyle` | no | `enum:stack \| rows` | How list entries are arranged. 'stack' draws each entry's text with its description under it, the entries close together, as before. 'rows' draws ruled rows: a hairline between two first-level entries (the scheme's bo... |
@@ -250,7 +249,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `name` | no | `string` | Name of this palette. PPTX export writes it as the name of the theme's color scheme (a:clrScheme name), which PowerPoint lists under Design, Variants, Colors; without it, an object form with 'id' writes that id, and t... |
-| `id` | no | `ref:CatalogReference` | Colour-scheme reference (a bare id or 'name:id') resolved as the base; slot and role overrides on the surrounding ColorScheme object take precedence over the resolved scheme. |
+| `id` | no | `ref:CatalogReference` | Color-scheme reference (a bare id or 'name:id') resolved as the base; slot and role overrides on the surrounding ColorScheme object take precedence over the resolved scheme. |
 | `accent1` | no | `ref:HexColor` | Accent 1 color (hex). Mirrors the OOXML accent1 slot. |
 | `accent2` | no | `ref:HexColor` | Accent 2 color (hex). Mirrors the OOXML accent2 slot. |
 | `accent3` | no | `ref:HexColor` | Accent 3 color (hex). Mirrors the OOXML accent3 slot. |
@@ -598,7 +597,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `type`, `src`
-- Purpose: Picture background: the image fills the whole canvas behind everything and never moves content (to push content aside, use an image block with placement). The string shorthand 'asset:x' (or any image source) is { type: 'image', src: 'asset:x' }, a cover image. Paint order: the colour scheme's default slide background, the picture, then the overlay, then furniture and content.
+- Purpose: Picture background: the image fills the whole canvas behind everything and never moves content (to push content aside, use an image block with placement). The string shorthand 'asset:x' (or any image source) is { type: 'image', src: 'asset:x' }, a cover image. Paint order: the color scheme's default slide background, the picture, then the overlay, then furniture and content.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -606,7 +605,7 @@ _No named properties._
 | `type` | yes | `const:"image"` | Picture background. |
 | `src` | yes | `string` | Source for the background image: an 'asset:<id>' reference, HTTPS URL, data URI, or a relative path resolved against the OPF file location. |
 | `alt` | no | `string` | Alternative text. A background with alt is meaningful: PowerPoint export draws it as a full-slide picture at the back that carries the text, so screen readers see it. Without alt it is decorative and exports as the na... |
-| `fit` | no | `enum:cover \| contain \| stretch \| tile` | How the picture fills the canvas: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered over the colour scheme's default background; 'stretch' scales it to the canvas exact... |
+| `fit` | no | `enum:cover \| contain \| stretch \| tile` | How the picture fills the canvas: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered over the color scheme's default background; 'stretch' scales it to the canvas exactl... |
 | `focus` | no | `ref:ImageFocus` | Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. Without a focus a portrait picture (taller than wide) cropped into a wider frame keeps y 0.3 so heads stay in frame; every other c... |
 | `opacity` | no | `number` | Picture opacity from 0 (fully transparent) to 1 (fully opaque); the overlay keeps its own opacity. Default 1. |
 | `recolor` | no | `ref:ImageRecolor` | Grayscale or duotone treatment of the picture's pixels, as on an image block: recolor and opacity apply to the pixels, then the overlay is drawn above. |
@@ -956,7 +955,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: A single slide. Content can be authored as a full-slide root payload, or inside promoted named region keys such as 'start', 'center+end', and 'top:start'. The columns of that grid are logical: 'start' is the left column in a left-to-right deck and the right column in a right-to-left one.
+- Purpose: A single slide. Content is a full-slide root payload or a list of blocks. On a slide without a layout, blocks may name cells of a 3 x 3 grid with their 'region' ('start', 'center+end', 'top:start'): see ContentPayload.region. The columns of that grid are logical: 'start' is the left column in a left-to-right deck and the right column in a right-to-left one. A key on the slide that names a cell is not OPF: validate reports it (opf/schema) with the safe fix that moves its content into a block w...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -964,7 +963,7 @@ _No named properties._
 | `language` | no | `oneOf:ref:LanguageTag / ref:Language` | Language of this slide, overriding the presentation language. Accepts the same BCP-47 tag or inline Language object as the presentation. Omission inherits the deck language. Direction, script fonts, quotation marks, l... |
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| diagram` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
 | `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an arr... |
-| `layout` | no | `ref:CatalogReference` | Optional layout: a layouts reference, a bare id ('pillars') or 'name:id' ('acme:hero'), or 'auto'. When omitted or 'auto', the slide is composed with no layout record: engines arrange title, subtitle, tag and content... |
+| `layout` | no | `ref:CatalogReference` | Optional layout: a layouts reference, a bare id ('pillars') or 'name:id' ('acme:hero'). When omitted, the slide is composed with no layout record: engines arrange title, subtitle, tag and content automatically, a slid... |
 | `title` | no | `oneOf:string / array<ref:TextRun>` | Slide-level title content. A v2 layout renders this in its title heading area, or an implicit heading row when that area is absent. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold,... |
 | `subtitle` | no | `oneOf:string / array<ref:TextRun>` | Slide-level subtitle or supporting line. A v2 layout renders this in its subtitle area when present, otherwise in the title heading group. Use a string for plain text or TextRun[] for inline rich text (a colored word,... |
 | `tag` | no | `oneOf:string / array<ref:TextRun>` | Small slide-level label or badge. A v2 layout renders this before the title in its title heading group; tag is not a separate layout area. Engines draw it as an eyebrow: 22 reference pixels, bold, in the primary color... |
@@ -985,54 +984,6 @@ _No named properties._
 | `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as short... |
 | `shapes` | no | `array<ref:OverlayShape>` | Shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or overla... |
 | `design` | no | `ref:SlideDesign` | Slide-level design applied on top of the deck-wide design. |
-| `start` | no | `ref:ContentPayload` |  |
-| `center` | no | `ref:ContentPayload` |  |
-| `end` | no | `ref:ContentPayload` |  |
-| `start+center` | no | `ref:ContentPayload` |  |
-| `center+end` | no | `ref:ContentPayload` |  |
-| `start+center+end` | no | `ref:ContentPayload` |  |
-| `top` | no | `ref:ContentPayload` |  |
-| `middle` | no | `ref:ContentPayload` |  |
-| `bottom` | no | `ref:ContentPayload` |  |
-| `top+middle` | no | `ref:ContentPayload` |  |
-| `middle+bottom` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom` | no | `ref:ContentPayload` |  |
-| `top:start` | no | `ref:ContentPayload` |  |
-| `top:center` | no | `ref:ContentPayload` |  |
-| `top:end` | no | `ref:ContentPayload` |  |
-| `top:start+center` | no | `ref:ContentPayload` |  |
-| `top:center+end` | no | `ref:ContentPayload` |  |
-| `top:start+center+end` | no | `ref:ContentPayload` |  |
-| `middle:start` | no | `ref:ContentPayload` |  |
-| `middle:center` | no | `ref:ContentPayload` |  |
-| `middle:end` | no | `ref:ContentPayload` |  |
-| `middle:start+center` | no | `ref:ContentPayload` |  |
-| `middle:center+end` | no | `ref:ContentPayload` |  |
-| `middle:start+center+end` | no | `ref:ContentPayload` |  |
-| `bottom:start` | no | `ref:ContentPayload` |  |
-| `bottom:center` | no | `ref:ContentPayload` |  |
-| `bottom:end` | no | `ref:ContentPayload` |  |
-| `bottom:start+center` | no | `ref:ContentPayload` |  |
-| `bottom:center+end` | no | `ref:ContentPayload` |  |
-| `bottom:start+center+end` | no | `ref:ContentPayload` |  |
-| `top+middle:start` | no | `ref:ContentPayload` |  |
-| `top+middle:center` | no | `ref:ContentPayload` |  |
-| `top+middle:end` | no | `ref:ContentPayload` |  |
-| `top+middle:start+center` | no | `ref:ContentPayload` |  |
-| `top+middle:center+end` | no | `ref:ContentPayload` |  |
-| `top+middle:start+center+end` | no | `ref:ContentPayload` |  |
-| `middle+bottom:start` | no | `ref:ContentPayload` |  |
-| `middle+bottom:center` | no | `ref:ContentPayload` |  |
-| `middle+bottom:end` | no | `ref:ContentPayload` |  |
-| `middle+bottom:start+center` | no | `ref:ContentPayload` |  |
-| `middle+bottom:center+end` | no | `ref:ContentPayload` |  |
-| `middle+bottom:start+center+end` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:start` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:center` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:end` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:start+center` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:center+end` | no | `ref:ContentPayload` |  |
-| `top+middle+bottom:start+center+end` | no | `ref:ContentPayload` |  |
 | `notes` | no | `string` | Speaker notes shown in presenter view. |
 | `section` | no | `string` | PowerPoint-style slide section label. Consecutive slides with the same value belong to the same section in presenter view, outlines, and PowerPoint section-aware exports. Also the slide-scoped built-in variable '{{sli... |
 | `hidden` | no | `boolean` | Whether the slide is hidden from the presented sequence. The player skips it, the PPTX export writes it as a hidden slide, and per-slide image and PDF output skips it unless the caller asks to include hidden slides (o... |
@@ -1079,7 +1030,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `id` | no | `string` | Optional stable identifier for this payload, unique among slide and payload ids in the document. Use when another system needs to address the payload across edits patch-style agent edits, comments, review state, or ge... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows at payload scope; ignored by the engine but preserved across read/write round-trips. |
-| `region` | no | `string` | Pin a root block (slides.N.blocks.I) to a region of the slide's template layout by name. The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin is ignored with a... |
+| `region` | no | `string` | Where a root block (slides.N.blocks.I) goes. On a slide with a layout: a region of that layout, by name. The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin i... |
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| diagram \| shape \| group` | Optional content kind. When omitted, engines infer the kind from the fields present: a block with 'shape' and no 'image', or with 'path', is a shape block. |
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Structured list payload (type 'list'). Each item is either a plain string, a TextRun[] rich text sequence, or a ListItem object with optional `description`. List nesting uses item.level rather than nested content payl... |
@@ -1175,7 +1126,7 @@ _No named properties._
 | `unit` | no | `string` | Metric unit, suffix, or currency marker. |
 | `delta` | no | `oneOf:string / number` | Metric change value. |
 | `trend` | no | `enum:up \| down \| flat` | Metric trend direction. The preview and the PowerPoint export draw it as an arrow that always points the way the trend does (up, down or flat), before the delta on its line (or before the label without a delta), and c... |
-| `sentiment` | no | `enum:positive \| negative \| neutral` | Whether the change is good news. Positive draws the trend arrow and the trend and delta text in green, negative in red and neutral in the neutral text colour, each kept at 4.5:1 contrast or more against the slide back... |
+| `sentiment` | no | `enum:positive \| negative \| neutral` | Whether the change is good news. Positive draws the trend arrow and the trend and delta text in green, negative in red and neutral in the neutral text color, each kept at 4.5:1 contrast or more against the slide backg... |
 | `icon` | no | `ref:IconReference` | An icon drawn on a chip above the metric: "<set>:<name>" ("lucide:users"), a name from the deck's icons, or an SVG source. Decoration only: when the slide has no room for it without setting text smaller, it is not dra... |
 
 
@@ -1619,7 +1570,7 @@ _No named properties._
 | `source` | no | `ref:CatalogSource` |  |
 | `layouts` | no | `ref:CatalogRecords` | Layout records keyed by id, each with the fields of https://openpresentation.org/schema/opf-layout/v2. Referenced from Slide.layout. |
 | `themes` | no | `ref:CatalogRecords` | Theme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-theme/v1. Referenced from design.theme. |
-| `colorSchemes` | no | `ref:CatalogRecords` | Colour-scheme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-color-scheme/v1. Referenced from design.colorScheme and a theme's colorScheme. |
+| `colorSchemes` | no | `ref:CatalogRecords` | Color-scheme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-color-scheme/v1. Referenced from design.colorScheme and a theme's colorScheme. |
 | `fontSchemes` | no | `ref:CatalogRecords` | Font-scheme records keyed by id, each with the fields of https://openpresentation.org/schema/opf-font-scheme/v1. Referenced from design.fontScheme, a theme's fontScheme and a language's font schemes. |
 | `narratives` | no | `ref:CatalogRecords` | Narrative records keyed by id, each with the fields of https://openpresentation.org/schema/opf-narrative/v1. Referenced from narrative. |
 | `audiences` | no | `ref:CatalogRecords` | Audience records keyed by id, each with the fields of https://openpresentation.org/schema/opf-audience/v1. Referenced from audience. |
@@ -1686,7 +1637,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize, maxFontSize and overflow. Explicit promoted regions retain their positions. A layout defines its grid as one ordered list of regions; its composition supports gap, padding, minFontSize, maxFontSize and overflow rather than mode, columns or weights.
+- Purpose: Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize, maxFontSize and overflow. Blocks placed in cells (ContentPayload.region on a slide without a layout) retain their positions. A layout defines its grid as one ordered list of regions; its composition supports gap, padding, minFontSize, maxFontSize and overflow rather than mode, columns or weights.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |

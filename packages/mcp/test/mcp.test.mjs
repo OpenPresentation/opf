@@ -36,7 +36,7 @@ describe("opf-mcp", () => {
 		assert.equal(info.name, "opf");
 		assert.match(client.getInstructions(), /format-card/);
 		const { tools } = await client.listTools();
-		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "read_font_file", "read_icons", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
+		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "open_editor", "read_example_files", "read_font_file", "read_icons", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
 		for (const tool of tools) {
 			assert.equal(tool.inputSchema.type, "object", tool.name);
 			assert.equal(tool.outputSchema?.type, "object", tool.name);
@@ -496,7 +496,43 @@ describe("the bundled sources", () => {
 		// Reviewed for v0.34.0 on 2026-11-12: 1,351,126 exact bytes over the same public pages (1,310,537 at 4e03508b6). The growth is
 		// reviewed guidance, not maintainer notes: icon loading per host (icons.md), the viewer tools and set icons (mcp.md), the new rules
 		// (validate.md), digits by language (design-resolution.md). The limit keeps the same 3% headroom over the reviewed size.
-		assert.ok(bytes < 1_392_000, `${bytes} bytes of documentation`);
+		// Reviewed for the 0.35 layout simplification on 2026-11-20, after merging v0.34.2: 1,392,535 exact bytes over the same public pages.
+		// Main's part, 1,351,126 to 1,390,261 (v0.34.2 shortened mcp.md by 967), is the guidance merged since v0.34.0: the viewer in other hosts and adding the hosted server (mcp.md), the CLI findings
+		// (cli.md), org-chart assistants and Venn overlaps (diagrams.md, smartart.md), the lone icon list by direction (icons.md), chart data
+		// and shapes (chart-table-data.md, shapes.md). The 0.35 branch adds 2,274 net: the layout vocabulary (layout-templates.md +4,201,
+		// smartart.md +666) less the removed keys (design-resolution.md, catalog-schema-reference.md, schema-reference.md). Same 3% headroom.
+		// Reviewed for 0.35 step 9 (docs in the 0.35 vocabulary) on 2026-11-20: 1,395,487 exact bytes (main at cc8dbb14e: 1,395,272, after
+		// steps 8 and the fix command). Step 9 adds 215 net: the composition model and layouts in llm-authoring.md (+420), the refusing
+		// commands' opf fix hint in cli.md (+238) and the unresolved-reference rule's removed-layout sentence (validate.md +31), less the
+		// removed 0.34 words (layout-templates.md -347, content-payloads.md -82, how-opf-works.md -42, yaml.md -6; dynamic-composition.md
+		// +3). The limit is unchanged.
+		// Reviewed for the 0.35 safe-fix promise (#1385) on 2026-11-20: 1,397,584 exact bytes (main at 0da537b11: 1,395,487). It adds
+		// 2,097: what safe means, the repair-check default and the drawing mark in validate.md (+934), cli.md (+596) and node.md (+284),
+		// and changesDrawing in the generated finding-schema-reference.md (+283). The limit is unchanged.
+		// Reviewed for the chartPrimary replacement on 2026-11-20: 1,397,930 exact bytes (after #1385: 1,397,584). It adds 346: the slide
+		// composition that keeps a removed design.chartPrimary's split, in design-resolution.md (+215) and dynamic-composition.md (+131),
+		// where both pages named the chart-beside layout, which has no region for a table. The limit is unchanged.
+		// Reviewed for the example decks' pictures in the viewer on 2026-11-20: 1,399,982 exact bytes (after the chartPrimary replacement:
+		// 1,397,930). It adds 2,052 in mcp.md: the app-only read_example_files (its table row, the viewer's images paragraph, the server
+		// tools row and the examples' files in the sources), and how a hosted viewer gets the pictures. The limit is unchanged.
+		// Reviewed for the 0.35 examples on 2026-11-20, measured before the spelling change below (1,400,113 against 1,399,982). It adds 131 in
+		// examples.md: the international gallery decks are English tagged with their region's English (they named ja, pt, de and a
+		// right-to-left ar), and the arrangement layouts are the 0.35 ones (process, vertical-process, inverted-pyramid for flow).
+		// The limit is unchanged.
+		// Reviewed for American spelling on 2026-11-20: 1,399,865 exact bytes (main at ddf6580e0: 1,399,982). Spelling only: "colour" to
+		// "color", "centre" to "center", "behaviour" to "behavior" and the like remove 117 bytes over 18 pages (validate.md -66). The limit is unchanged.
+		// Reviewed for the 0.35 alignment (fixes write the new form, no 0.34 drawing emulation) on 2026-11-20: 1,399,907 exact bytes
+		// (main at c58cf0ba6: 1,399,865). It adds 42: the removed keys' fixes say the engine composes the slide and a composition sets a
+		// specific arrangement (design-resolution.md +75, dynamic-composition.md -33), fix() returns the 0.35 form (node.md +39), embed
+		// replaces a stale copy with the current record (default-catalog.md +32), and opf fix drops layoutWithCells (cli.md -71). The
+		// limit is unchanged.
+		// Reviewed for the always-listed read_example_files on 2026-11-22: 1,400,272 exact bytes (main at 9523eddc3: 1,400,038).
+		// It adds 234 in mcp.md: the tool is listed whenever the viewer is offered, and a host that leaves the examples' files out
+		// answers every path as missing. The limit is unchanged.
+		// Reviewed for the 0.35 font defaults (a deck that declares no language) on 2026-11-23: 1,402,000 exact bytes (main at cf79e66a7:
+		// 1,400,272). It adds 1,728: the section on a deck with no language whose text is Arabic or Hebrew (design-resolution.md +1,558)
+		// and the missing-language rule naming the slides it read (validate.md +170). The limit is unchanged.
+		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
 	});
 });
 

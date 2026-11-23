@@ -22,7 +22,7 @@ describe('direction resolution', () => {
   });
 
   it('composes a left-to-right deck exactly as before', () => {
-    const presentation = {language: 'en', slides: [{title: 'Title', start: {text: 'Left'}, end: {items: ['One', 'Two']}}]};
+    const presentation = {language: 'en', slides: [{title: 'Title', blocks: [{region: 'start',text: 'Left'}, {region: 'end',items: ['One', 'Two']}]}]};
     const composed = compose(presentation);
     assert.equal(composed.direction, undefined);
     for (const item of composed.items) assert.equal(item.text?.directions, undefined);
@@ -39,17 +39,17 @@ describe('direction resolution', () => {
 });
 
 describe('mirrored arrangement', () => {
-  it('draws the left region at the right and the right region at the left', () => {
-    const presentation = doc({}, {start: {text: 'يسار'}, end: {text: 'يمين'}});
+  it('draws the start cell at the right and the end cell at the left', () => {
+    const presentation = doc({}, {blocks: [{region: 'start',text: 'يسار'}, {region: 'end',text: 'يمين'}]});
     const composed = compose(presentation);
-    const [first, second] = ['start', 'end'].map(side => composed.items.find(item => item.path === `slides.0.${side}.text`));
+    const [first, second] = [0, 1].map(index => composed.items.find(item => item.path === `slides.0.blocks.${index}.text`));
     assert.equal(composed.direction, 'rtl');
     assert.ok(first.box.x > second.box.x, 'the authored left region is the rightmost');
     const mirrored = compose({...presentation, language: 'en'});
-    assert.ok(mirrored.items.find(item => item.path === 'slides.0.start.text').box.x < mirrored.items.find(item => item.path === 'slides.0.end.text').box.x);
+    assert.ok(mirrored.items.find(item => item.path === 'slides.0.blocks.0.text').box.x < mirrored.items.find(item => item.path === 'slides.0.blocks.1.text').box.x);
     // Same sizes, only the places swap.
-    assert.equal(first.box.width, mirrored.items.find(item => item.path === 'slides.0.start.text').box.width);
-    assert.equal(first.box.x, mirrored.items.find(item => item.path === 'slides.0.end.text').box.x);
+    assert.equal(first.box.width, mirrored.items.find(item => item.path === 'slides.0.blocks.0.text').box.width);
+    assert.equal(first.box.x, mirrored.items.find(item => item.path === 'slides.0.blocks.1.text').box.x);
   });
 
   it('puts the first column at the right and keeps the weights with their tracks', () => {

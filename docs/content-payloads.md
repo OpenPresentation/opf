@@ -1,6 +1,6 @@
 # Content Payloads
 
-Slide content lives directly on a slide as a full-slide payload, in layout-agnostic `blocks`, or inside a promoted region key such as `start`, `center+end`, or `top:start`.
+Slide content lives directly on a slide as a full-slide payload or in `blocks`; on a slide without a layout, a block can name a cell of the slide's grid with `region`, such as `start`, `center+end`, or `top:start` ([Cells](#cells)).
 
 The slide-level `title`, `subtitle` and `tag` are not payloads, but like `text` and `quote.text` they accept a string or `TextRun[]` (colored words, bold, links, `cite`/`footnote` markers); see [Rich text](rich-text.md#rich-headings-and-quotes).
 
@@ -42,7 +42,7 @@ Both fields draw the same bulleted (or numbered) list: one marker, the same nest
 
 **How entries draw.** A nested entry steps in by one marker width. The bullets alternate `•` and an en dash `–` by level (`•` at level 0, `–` at 1, `•` at 2), as PowerPoint's default levels do: glyphs every bundled face has (`◦` and `▪` are missing from most of them, Roboto among them, and drew as a missing-glyph box). A description draws under its entry at 0.82 of the list size in the secondary text color. A list of exactly one entry that has a description, with no `numbering`, draws as a heading over its text: the entry bold at 1.25 times the list size with no bullet and no indent, the description at the list size. The preview and the PowerPoint export draw the same.
 
-Do not give one payload both. In a block or a promoted region, `items` next to `bullets` is the error "content payload mixes fields from incompatible content types". At slide root it validates, as the shorthand for two blocks, and composes as two lists side by side; write two blocks on purpose if you want that. `numbering` applies to every list in the payload.
+Do not give one payload both. In a block, `items` next to `bullets` is the error "content payload mixes fields from incompatible content types". At slide root it validates, as the shorthand for two blocks, and composes as two lists side by side; write two blocks on purpose if you want that. `numbering` applies to every list in the payload.
 
 A layout's placeholder kind (`list` or `text`) is what layout pickers match on (`layoutContent`), but composition does not refuse the other field and draws both the same way: the choice states what the content is, it is not a switch for the look.
 
@@ -113,7 +113,7 @@ Mark the one block or group that carries the slide's takeaway with `"emphasis": 
 }
 ```
 
-At slide root only, multiple content payload kinds are accepted as shorthand for the equivalent blocks form when there is no explicit `type`, no `blocks`, and no promoted region keys:
+At slide root only, multiple content payload kinds are accepted as shorthand for the equivalent blocks form when there is no explicit `type` and no `blocks`:
 
 ```json
 {
@@ -191,7 +191,7 @@ A column is a string or a `DataColumn` with a number format, which the data labe
 }
 ```
 
-Formats use the `NumberVariable.format` syntax (`#,##0`, `0.0%`, `$#,##0.00`, `#,##0 units`; a `%` multiplies by 100). `source` records provenance only; engines never read or refresh it. `mapping` picks the category, the X column of a scatter chart and the plotted series by column name; without it the first column is the category and every other column a series. Shared data lives in the top-level `datasets` map and a chart plots it with `"data": { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }`. The full contract, with validation codes and the engine behaviour, is [Chart and table data](chart-table-data.md).
+Formats use the `NumberVariable.format` syntax (`#,##0`, `0.0%`, `$#,##0.00`, `#,##0 units`; a `%` multiplies by 100). `source` records provenance only; engines never read or refresh it. `mapping` picks the category, the X column of a scatter chart and the plotted series by column name; without it the first column is the category and every other column a series. Shared data lives in the top-level `datasets` map and a chart plots it with `"data": { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }`. The full contract, with validation codes and the engine behavior, is [Chart and table data](chart-table-data.md).
 
 Chart data is inline columns and rows or a dataset. A data source by file or asset (`"data": { "src": "asset:revenue-csv", "columns": [...] }`) is not part of the format: no engine loaded it, and the validator rejects it. Import the data inline (with a `source`) or into a dataset instead.
 
@@ -245,7 +245,7 @@ Core 0.6.0 adds `layoutTable` from `@openpresentation/opf/composition`. It measu
 
 ## Captions
 
-An `image`, `chart`, `table`, `video` or `diagram` payload takes a `caption`: a string, `TextRun[]`, or `{ "text", "position": "below" | "above", "align": "start" | "center" | "end" }` (defaults `below`, `start`). It sits beside the payload field on a block or promoted-region payload, or on the slide root when the root holds exactly one of those payloads; anywhere else it is a `caption-unsupported-payload` error.
+An `image`, `chart`, `table`, `video` or `diagram` payload takes a `caption`: a string, `TextRun[]`, or `{ "text", "position": "below" | "above", "align": "start" | "center" | "end" }` (defaults `below`, `start`). It sits beside the payload field on a block, or on the slide root when the root holds exactly one of those payloads; anywhere else it is a `caption-unsupported-payload` error.
 
 ```json
 {
@@ -257,13 +257,13 @@ An `image`, `chart`, `table`, `video` or `diagram` payload takes a `caption`: a 
 }
 ```
 
-Core composition reserves the caption band inside the block's region and shrinks the media by its height (`item.caption` carries the band, `item.box` is the media box); the preview and the PPTX export draw that band in the muted text colour at the caption size (0.6 of the body size, never under the readable floor). Captioned blocks are the only ones whose geometry changes. See [footnotes, citations and captions](footnotes-citations-captions.md).
+Core composition reserves the caption band inside the block's region and shrinks the media by its height (`item.caption` carries the band, `item.box` is the media box); the preview and the PPTX export draw that band in the muted text color at the caption size (0.6 of the body size, never under the readable floor). Captioned blocks are the only ones whose geometry changes. See [footnotes, citations and captions](footnotes-citations-captions.md).
 
 **Name and detail (LH-138).** A picture's caption that is one plain string with a colon and a space after one to six words and a detail after it ("Before: loose boxes, tape and paper") draws the words up to the first colon in bold and the detail in the regular weight, as Claude Design draws a pair of before and after pictures or a gallery of sites. A colon inside a word ("10:30", "https://") never splits, a caption written as `TextRun[]` stays as the author formatted it, and a chart, table, video or diagram caption is not split. The document is unchanged: core composes the caption as runs (`item.caption.text`), and the preview and the PowerPoint export draw them.
 
 ## Code
 
-Code-specific fields are grouped under `code`. A string value is shorthand for `code.source`; use object form when syntax highlighting or a file label matters. In object form, `source` is required. `language` colours the code in the preview and the PowerPoint export (comments, strings, numbers, keywords, names and types, in colours from the deck theme); an unknown language stays plain and the text is never changed. See [dynamic composition](dynamic-composition.md#preview-polish-shared-by-preview-and-export-rr-07) for the supported languages.
+Code-specific fields are grouped under `code`. A string value is shorthand for `code.source`; use object form when syntax highlighting or a file label matters. In object form, `source` is required. `language` colors the code in the preview and the PowerPoint export (comments, strings, numbers, keywords, names and types, in colors from the deck theme); an unknown language stays plain and the text is never changed. See [dynamic composition](dynamic-composition.md#preview-polish-shared-by-preview-and-export-rr-07) for the supported languages.
 
 ```json
 {
@@ -389,7 +389,7 @@ A roadmap with progress states:
 
 The [diagrams guide](diagrams.md) covers when to use one, the supported Mermaid families, styling, sizing and export in full; this section is the field reference.
 
-A `diagram` is a diagram written as text: [Mermaid](https://mermaid.js.org) source (Mermaid 12.1 syntax) , a [Graphviz DOT](diagrams.md#graphviz-dot) graph or a [PlantUML](diagrams.md#plantuml) diagram, drawn by the engines in the deck's own fonts and colors. A string is shorthand for `{ "source": value }` (Mermaid); the object form takes `source`, `syntax` (`"mermaid"`, the default, `"dot"` or `"plantuml"`) and `alt`. It is a root payload, a block or a promoted region, and a region of a layout template that accepts `diagram` takes it. The first line of the source names the diagram type; the built-in families are flowchart, sequence, class, state, ER, gantt, pie, quadrant, mindmap, timeline, journey, xychart, sankey, gitGraph, C4, block, architecture, kanban, packet, radar, treemap, venn, ishikawa, requirement, railroad, wardley, cynefin, treeView, eventmodeling, usecase, swimlane, agentflow and info. ZenUML is not supported. The drawing is done by [pele](https://pele.run) (MIT, no runtime dependencies, synchronous and DOM-free), so the preview, the PDF and the PPTX export need no browser. A DOT graph is read by OPF itself and laid out in layers by pele; a `layout` other than `dot` (neato, fdp, circo, twopi, ...) is refused with a finding. A PlantUML diagram is read by OPF too and drawn as the Mermaid family of its kind (sequence, class, state, activity, use case, component, mind map, gantt); other kinds and the preprocessor are refused with a finding.
+A `diagram` is a diagram written as text: [Mermaid](https://mermaid.js.org) source (Mermaid 12.1 syntax) , a [Graphviz DOT](diagrams.md#graphviz-dot) graph or a [PlantUML](diagrams.md#plantuml) diagram, drawn by the engines in the deck's own fonts and colors. A string is shorthand for `{ "source": value }` (Mermaid); the object form takes `source`, `syntax` (`"mermaid"`, the default, `"dot"` or `"plantuml"`) and `alt`. It is a root payload or a block, and a region of a layout template that accepts `diagram` takes it. The first line of the source names the diagram type; the built-in families are flowchart, sequence, class, state, ER, gantt, pie, quadrant, mindmap, timeline, journey, xychart, sankey, gitGraph, C4, block, architecture, kanban, packet, radar, treemap, venn, ishikawa, requirement, railroad, wardley, cynefin, treeView, eventmodeling, usecase, swimlane, agentflow and info. ZenUML is not supported. The drawing is done by [pele](https://pele.run) (MIT, no runtime dependencies, synchronous and DOM-free), so the preview, the PDF and the PPTX export need no browser. A DOT graph is read by OPF itself and laid out in layers by pele; a `layout` other than `dot` (neato, fdp, circo, twopi, ...) is refused with a finding. A PlantUML diagram is read by OPF too and drawn as the Mermaid family of its kind (sequence, class, state, activity, use case, component, mind map, gantt); other kinds and the preprocessor are refused with a finding.
 
 ```json
 {
@@ -409,9 +409,9 @@ A `diagram` is a diagram written as text: [Mermaid](https://mermaid.js.org) sour
 
 Choose the payload by what the content is: `chart` for numbers plotted on axes, `timeline` for dated or ordered events with a status, `diagram` for structure and flow (steps, systems, relationships, states, hierarchies) that Mermaid can draw. A Mermaid `pie` or `timeline` diagram is a quick picture; a `chart` or `timeline` payload keeps the data editable and gets the engines' chart and timeline design.
 
-## Regions
+## Cells
 
-Region keys address a 3×3 grid of rows (`top`, `middle`, `bottom`) and columns (`start`, `center`, `end`). The columns follow the deck's direction: `start` is the left column in a left-to-right deck and the right column in a right-to-left deck (see [Right-to-left decks](dynamic-composition.md#right-to-left-decks)).
+On a slide without a layout, a block of the slide's `blocks` names a cell of a 3×3 grid with `region`: rows (`top`, `middle`, `bottom`) and columns (`start`, `center`, `end`). On a slide with a layout, `region` names one of the layout's regions instead ([layout templates](layout-templates.md)); a cell word names none of them (`opf/region-unknown`), and layout region names are never cell words. The columns follow the deck's direction: `start` is the left column in a left-to-right deck and the right column in a right-to-left deck (see [Right-to-left decks](dynamic-composition.md#right-to-left-decks)).
 
 ```
                   start                center                  end
@@ -424,10 +424,14 @@ Region keys address a 3×3 grid of rows (`top`, `middle`, `bottom`) and columns 
          +--------------------+--------------------+--------------------+
 ```
 
-- A bare column key (`start`) spans all three rows; a bare row key (`top`) spans all three columns.
+- A bare column (`start`) spans all three rows; a bare row (`top`) spans all three columns.
 - `+` spans adjacent rows or columns: `center+end`, `top+middle`.
 - `row:column` combines the two: `top:start`, `middle+bottom:center+end`.
-- Keys on one slide must not overlap, and regions cannot be mixed with root payload fields.
+- A slide places every block in a cell or none: when one block names a cell, every block of the slide's `blocks` names one.
+- Blocks that name the same cell stack in it in source order, as a group's blocks would. Two different cells on one slide must not overlap.
+- Only a root block names a cell (`slides.N.blocks.I`); a block in a cell has no slide edge to bleed to (`placement`).
+- A row or column in which no block begins or ends, with a block wholly on each side of it, takes no space (OPF 0.35.1): `top:start` and `bottom:end` split the body into two rows, `start` and `end` into two columns, `top:start`, `top:end`, `bottom:start` and `bottom:end` into quarters, with no empty band between them. A block that runs through such a row (`start` beside `top:end` and `bottom:end`) still spans the full height. An unnamed row or column at the edge keeps its third, so a lone `bottom:end` block still sits in the bottom end of the body, and so does a row with nothing wholly on one side of it (`start` beside `top:center+end` alone). When the middle row gives its space away this way, a bottom-row block with no top-row block above it (a diagonal, a corner) sits at the foot of its cell, so it stays at the bottom of the body; one under a top-row block keeps the top of its cell and follows that block.
+- A deck written for OPF 0.34 named the cells another way: `opf fix deck.opf.json -i` moves its content into blocks with `region` ([updating to 0.35](migrations/0.35.md)).
 
 Spans compose into common slide shapes:
 
@@ -454,39 +458,43 @@ Spans compose into common slide shapes:
   +---------------+-----------------------------+
 ```
 
-The same payload objects work inside regions — here, the sidebar-plus-main shape:
+Any block takes a cell, a group too (its own `blocks` and `composition` arrange it inside the cell) — here, the sidebar-plus-main shape:
 
 ```json
 {
   "title": "Operating Snapshot",
-  "start": {
-    "table": {
-      "columns": ["Metric", "Value"],
-      "rows": [
-        ["Revenue", "$4.2M"],
-        ["Gross margin", "68%"]
-      ]
-    }
-  },
-  "center+end": {
-    "chart": {
-      "type": "line",
-      "data": {
-        "columns": ["Month", "Revenue"],
+  "blocks": [
+    {
+      "region": "start",
+      "table": {
+        "columns": ["Metric", "Value"],
         "rows": [
-          ["Jan", 3.4],
-          ["Feb", 3.8],
-          ["Mar", 4.2]
+          ["Revenue", "$4.2M"],
+          ["Gross margin", "68%"]
         ]
       }
+    },
+    {
+      "region": "center+end",
+      "chart": {
+        "type": "line",
+        "data": {
+          "columns": ["Month", "Revenue"],
+          "rows": [
+            ["Jan", 3.4],
+            ["Feb", 3.8],
+            ["Mar", 4.2]
+          ]
+        }
+      }
     }
-  }
+  ]
 }
 ```
 
 ## Accessibility of the preview
 
-The SVG preview and the PowerPoint export agree on what a reader can reach. The slide root is a labelled container (`role="group"`, `aria-roledescription="slide"`, `aria-label` set to the slide title), never an image: an image makes everything inside it presentational, so a screen reader would hear only the title. Text stays reachable, in the order it is drawn: tag, title and subtitle, the content in layout order, footnotes, then header and footer. That covers body text, list entries, quotes, metric values and labels, table cells, timeline entries, captions and furniture text.
+The SVG preview and the PowerPoint export agree on what a reader can reach. The slide root is a labeled container (`role="group"`, `aria-roledescription="slide"`, `aria-label` set to the slide title), never an image: an image makes everything inside it presentational, so a screen reader would hear only the title. Text stays reachable, in the order it is drawn: tag, title and subtitle, the content in layout order, footnotes, then header and footer. That covers body text, list entries, quotes, metric values and labels, table cells, timeline entries, captions and furniture text.
 
 A picture with `alt` is an image with that name. Purely decorative drawing is hidden (`aria-hidden`): the background and its overlay, card frames, table cell fills and borders, dividers, timeline markers, watermarks, list bullets, a picture or chart whose `alt` is `""`, and a header or footer picture without `alt` (a logo repeated on every slide). A chart with `alt` is an image with that name, and its drawn marks are not announced separately. The deck element, the player and `renderDeckHtml` in `@openpresentation/opf-render` put the one slide container (region or figure) around the drawing, so a slide is announced once.
 

@@ -71,7 +71,7 @@ const fill = async deck => {
   const output = unzipSync(await toPptx(deck, {imageFormat: 'preserve', strictAssets: true}));
   return {preview: attr(preview, 'preserveAspectRatio'), cropped: /<a:srcRect\b/.test(decoder.decode(output['ppt/slides/slide1.xml']))};
 };
-const imageDeck = (design, slide = {}, deckDesign = {}) => ({design: {fontScheme: 'roboto', ...deckDesign}, catalogs: embedLayout({...layout(design), regions: [{name: 'title', size: 1}, {name: 'media', accepts: ['image'], flow: 'none'}]}), slides: [{layout: 'design-layout', title: 'Image', image, ...slide}]});
+const imageDeck = (design, slide = {}, deckDesign = {}) => ({design: {fontScheme: 'roboto', ...deckDesign}, catalogs: embedLayout({...layout(design), regions: [{name: 'title', size: 1}, {name: 'media', accepts: ['image'], max: 1}]}), slides: [{layout: 'design-layout', title: 'Image', image, ...slide}]});
 assert.deepEqual(await fill(imageDeck({imageFit: 'cover'})), {preview: 'xMidYMid slice', cropped: true}, 'layout cover');
 assert.deepEqual(await fill(imageDeck({imageFit: 'cover'}, {}, {imageFit: 'contain'})), {preview: 'xMidYMid meet', cropped: false}, 'deck contain over layout cover');
 assert.deepEqual(await fill(imageDeck({imageFit: 'contain'}, {design: {imageFit: 'cover'}})), {preview: 'xMidYMid slice', cropped: true}, 'slide cover over layout contain');

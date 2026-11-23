@@ -5,7 +5,7 @@ param(
  [Parameter(Mandatory=$true)][string]$Out,
  [Parameter(Mandatory=$true)][string]$NativeHelpersPath,
  [switch]$PlanOnly,
- [ValidateSet('pyramid','matrix','flow','chevrons','vertical-flow')][string]$Only
+ [ValidateSet('pyramid','matrix','process','chevrons','vertical-process')][string]$Only
 )
 $ErrorActionPreference='Stop'
 . $NativeHelpersPath
@@ -13,7 +13,7 @@ $Manifest=[IO.Path]::GetFullPath($Manifest);$Out=[IO.Path]::GetFullPath($Out)
 if(Test-Path -LiteralPath $Out){throw 'Preserve earlier evidence: select a fresh Out directory.'}
 $definition=Get-Content -LiteralPath $Manifest -Raw | ConvertFrom-Json
 $root=Split-Path -Parent $Manifest
-$knownKinds=@('pyramid','matrix','flow','chevrons','vertical-flow')
+$knownKinds=@('pyramid','matrix','process','chevrons','vertical-process')
 $inputs=@(foreach($witnessCase in $definition.cases){
  if($knownKinds -notcontains [string]$witnessCase.kind){throw 'Unknown witness kind; output filename refused.'}
  if([IO.Path]::GetFileName([string]$witnessCase.file) -ne $witnessCase.file){throw 'Witness filename must be a leaf.'}

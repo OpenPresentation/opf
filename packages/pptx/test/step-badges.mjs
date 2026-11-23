@@ -1,5 +1,6 @@
-// LH-07: a layout's sequence region exports its step badges (an ellipse holding its numeral), connector (a line) and flow (rounded
-// chips and block arrows) as native shapes at core's geometry, tagged so that import consumes them and gives a list its numbering back.
+// LH-07: a layout's sequence region exports its step badges (an ellipse holding its numeral) and connector (a line) as native shapes at
+// core's geometry, tagged so that import consumes them and gives a list its numbering back. (OPF 0.35: a short list of a steps region draws
+// Basic Process instead, sh-17-smartart.mjs; the flow of chips is gone.)
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
@@ -12,13 +13,13 @@ const deck = {
   slides: [
     {layout: 'process', title: 'Three steps from evidence to decision', blocks: [step('Establish a baseline', 'Measure the current rate.', 1), step('Run the pilot', 'Test with two teams.', 2), step('Decide what to scale', 'Agree the next step.', 3)]},
     {layout: 'agenda', title: 'Today’s agenda', blocks: [{numbering: 'arabic', items: ['Where we are today', 'What the pilot showed', 'The decision we need']}]},
-    {layout: 'process', title: 'How support works', blocks: [{items: ['Queue', 'Route', 'Resolve']}]},
-    {layout: 'agenda-split', title: 'What we will cover', blocks: [{items: ['Customer feedback themes', 'Support performance', 'Product reliability']}]},
+    {layout: 'process', title: 'How support works', blocks: [{items: ['Queue the request', 'Route it to a team', 'Resolve and follow up']}]},
+    {layout: 'agenda', design: {titlePosition: 'start'}, title: 'What we will cover', blocks: [{items: ['Customer feedback themes', 'Support performance', 'Product reliability']}]},
   ],
 };
 const before = structuredClone(deck);
 const geometry = resolvePresentation(deck).slides.map(slide => slide.geometry);
-assert.deepEqual(geometry.map(slide => slide.steps?.map(entry => entry.form)), [['row'], ['column'], ['flow'], ['column']]);
+assert.deepEqual(geometry.map(slide => slide.steps?.map(entry => entry.form)), [['row'], ['column'], ['column'], ['column']]);
 const bytes = await toPptx(deck), zip = unzipSync(bytes);
 const emu = value => Number(value) / 9525, near = (actual, expected, label) => assert.ok(Math.abs(actual - expected) < .01, `${label}: ${actual} vs ${expected}`);
 for (const [index, slide] of geometry.entries()) {
@@ -62,8 +63,8 @@ assert.equal(blocks[0].length, 3);
 assert.deepEqual(blocks[0].map(block => block.items[0].text), ['Establish a baseline', 'Run the pilot', 'Decide what to scale']);
 assert.ok(blocks[0].every(block => block.numbering !== undefined), 'each step keeps its numbering');
 assert.deepEqual(blocks[1], [{items: ['Where we are today', 'What the pilot showed', 'The decision we need'], numbering: 'arabic'}]);
-assert.deepEqual(blocks[2], [{items: ['Queue', 'Route', 'Resolve']}], 'a flow imports as its list, with no numbering it never had');
+assert.deepEqual(blocks[2], [{items: ['Queue the request', 'Route it to a team', 'Resolve and follow up']}], 'an unnumbered list of steps imports as its list, with no numbering it never had');
 // An agenda's badges number an unnumbered list as drawing only: it imports as written, one list without numbering.
 assert.deepEqual(blocks[3], [{items: ['Customer feedback themes', 'Support performance', 'Product reliability']}]);
 assert.deepEqual(deck, before, 'export leaves the deck unchanged');
-console.log('LH-07 step badges: native badges, connectors, chips and arrows export and import');
+console.log('LH-07 step badges: native badges and connectors export and import');

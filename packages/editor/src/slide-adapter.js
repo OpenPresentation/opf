@@ -55,7 +55,7 @@ export function composeSlideGeometry(presentation, slideIndex, { catalogs, fonts
  * - `geometry(presentation, slideIndex)`: the `SlideComposition` of a slide as it is drawn (the canvas's `onRender` geometry, or the
  *   renderer's `resolvePresentation(...).slides[i].geometry` with the canvas fonts); default core composition with the session's catalogs;
  * - `selection()`: the keys selected now, recorded with each change (`meta.selection`) so undo and redo can restore them;
- * - `onPreview({ presentation, message })`: draw a gesture's draft (`presentation` is null when the gesture ends or is cancelled);
+ * - `onPreview({ presentation, message })`: draw a gesture's draft (`presentation` is null when the gesture ends or is canceled);
  * - `onSelection(keys, { source })`: the keys to select after an edit, an undo or a redo;
  * - `onRefuse({ reason, command })`: a command was refused (the Studio's status line and live region).
  */
@@ -238,7 +238,7 @@ export function createSlideAdapter(session, options = {}) {
     /** The slides of the deck, for the filmstrip: `{ key, path, index, label, hidden }`. */
     slides() {
       const doc = document();
-      return (doc.slides ?? []).map((slide, index) => ({ key: slideKeyAt(doc, index), path: `/slides/${index}`, index, label: `Slide ${index + 1}${typeof slide.layout === "string" && slide.layout !== "auto" ? ` · ${slide.layout}` : ""}`, hidden: slide.hidden === true }));
+      return (doc.slides ?? []).map((slide, index) => ({ key: slideKeyAt(doc, index), path: `/slides/${index}`, index, label: `Slide ${index + 1}${typeof slide.layout === "string" ? ` · ${slide.layout}` : ""}`, hidden: slide.hidden === true }));
     },
     /** The current slide's nodes as the kit's layers and overlay read them. */
     nodes: () => scene().nodes.map(({ key, path, kind, parent, depth, label, findings }) => ({ key, path, kind, parent, depth, label, findings })),

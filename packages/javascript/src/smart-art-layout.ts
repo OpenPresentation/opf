@@ -413,7 +413,7 @@ export function opfLayoutGeometry(recipe: OpfLayoutRecipe, count: number): Layou
     case 'matrix-quadrants': return count === 4 ? { nodes: matrixQuadrants(area, gap) } : grid(count, Math.ceil(Math.sqrt(count)));
     case 'card-grid': return grid(count, recipe.columns ?? Math.ceil(Math.sqrt(count)));
     default: {
-      const kind: LinearArrangement = recipe.design === 'chevron-rows' ? 'chevrons' : recipe.design === 'flow-rows' ? 'flow' : 'vertical-flow';
+      const kind: LinearArrangement = recipe.design === 'chevron-rows' ? 'chevrons' : recipe.design === 'flow-rows' ? 'process' : 'vertical-process';
       return linearDesign(kind, area, count, gap, rtl, Math.min(recipe.lines ?? 1, count), recipe.need, recipe.compact === true)
         ?? linearDesign(kind, area, count, gap, rtl, 1, recipe.need, recipe.compact === true);
     }
@@ -423,7 +423,7 @@ export function opfLayoutGeometry(recipe: OpfLayoutRecipe, count: number): Layou
 /** The arrangement each of OPF's designs draws. */
 export const OPF_LAYOUT_KIND: Readonly<Record<OpfLayoutDesign, Arrangement>> = Object.freeze({
   'cycle-ring': 'cycle', 'cycle-loop': 'cycle', 'cycle-loop-3': 'cycle', 'pyramid-steps': 'pyramid', 'matrix-quadrants': 'matrix', 'card-grid': 'matrix',
-  'chevron-rows': 'chevrons', 'flow-rows': 'flow', 'vertical-flow-columns': 'vertical-flow',
+  'chevron-rows': 'chevrons', 'flow-rows': 'process', 'vertical-flow-columns': 'vertical-process',
 });
 
 // ---------------------------------------------------------------------------------------------------------------------------------

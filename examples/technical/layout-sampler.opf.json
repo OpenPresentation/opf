@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Layout sampler",
   "language": "en",
-  "description": "All 40 default layouts and 13 dynamic compositions (no layout record), on one fictional six-week pilot story. Existing slide identities and order are preserved; newly added layouts append. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
+  "description": "All 38 default layouts and 14 dynamic compositions (no layout record), on one fictional six-week pilot story. Existing slide identities and order are preserved; newly added layouts append. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
   "design": {
     "background": "light1",
     "footer": {
@@ -22,7 +22,6 @@
       "subtitle": "A six-week pilot with two teams",
       "blocks": [
         {
-          "region": "media",
           "image": {
             "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YWE3ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZmUwZjUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iIzNmOGE1NSIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiMyZjZiNDIiLz48L3N2Zz4=",
             "alt": "Illustrative landscape with two green ridges"
@@ -48,7 +47,6 @@
       "title": "From the problem to the next decision",
       "blocks": [
         {
-          "region": "items",
           "items": [
             "Define the problem",
             "Review the pilot evidence",
@@ -58,12 +56,13 @@
       ]
     },
     {
-      "id": "layout-agenda-split",
-      "layout": "agenda-split",
+      "id": "dynamic-title-start",
+      "design": {
+        "titlePosition": "start"
+      },
       "title": "Three parts, one decision",
       "blocks": [
         {
-          "region": "items",
           "items": [
             "Define the problem",
             "Review the pilot evidence",
@@ -78,7 +77,7 @@
       "title": "Start small enough to learn quickly",
       "blocks": [
         {
-          "region": "message",
+          "region": "body",
           "text": "Learn with two teams before expanding the rollout."
         }
       ]
@@ -89,7 +88,7 @@
       "title": "Agree the pilot team and start date",
       "blocks": [
         {
-          "region": "details",
+          "region": "body",
           "text": "Next step: name the pilot lead and agree the start date."
         }
       ]
@@ -100,15 +99,12 @@
       "title": "Learn before scaling",
       "blocks": [
         {
-          "region": "body",
           "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
         },
         {
-          "region": "body",
           "text": "Keep the scope narrow, collect feedback weekly and give each decision a named owner."
         },
         {
-          "region": "body",
           "text": "Compare the results with the baseline. Expand only when the evidence supports the next step."
         }
       ]
@@ -119,7 +115,6 @@
       "title": "Make the next step explicit",
       "blocks": [
         {
-          "region": "body",
           "items": [
             "Close the audit gaps",
             "Pilot with two teams",
@@ -127,7 +122,6 @@
           ]
         },
         {
-          "region": "body",
           "items": [
             "Hire two engineers",
             "Ship the mobile beta",
@@ -135,7 +129,6 @@
           ]
         },
         {
-          "region": "body",
           "items": [
             "Agree the budget",
             "Name the owners",
@@ -150,7 +143,6 @@
       "title": "A shared view makes decisions easier",
       "blocks": [
         {
-          "region": "quotes",
           "quote": {
             "text": "We can now see where participants need help.",
             "attribution": "Pilot lead",
@@ -165,11 +157,9 @@
       "title": "Opportunity and constraints",
       "blocks": [
         {
-          "region": "first",
           "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
         },
         {
-          "region": "second",
           "text": "Keep the scope narrow, collect feedback weekly and give each decision a named owner."
         }
       ]
@@ -180,15 +170,12 @@
       "title": "Scope, evidence and the next decision",
       "blocks": [
         {
-          "region": "first",
           "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
         },
         {
-          "region": "second",
           "text": "Keep the scope narrow, collect feedback weekly and give each decision a named owner."
         },
         {
-          "region": "third",
           "text": "Compare the results with the baseline. Expand only when the evidence supports the next step."
         }
       ]
@@ -199,7 +186,6 @@
       "title": "Three conditions for a useful pilot",
       "blocks": [
         {
-          "region": "pillars",
           "items": [
             {
               "text": "Clear scope",
@@ -208,7 +194,6 @@
           ]
         },
         {
-          "region": "pillars",
           "items": [
             {
               "text": "Consistent measures",
@@ -217,7 +202,6 @@
           ]
         },
         {
-          "region": "pillars",
           "items": [
             {
               "text": "An explicit decision",
@@ -233,15 +217,12 @@
       "title": "Choose the smallest useful test",
       "blocks": [
         {
-          "region": "first",
           "text": "Option A: focused pilot\nTwo teams, six weeks. Low setup cost and a clear baseline."
         },
         {
-          "region": "second",
           "text": "Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs."
         },
         {
-          "region": "verdict",
           "text": "Recommendation: establish the evidence with Option A before committing to Option B."
         }
       ]
@@ -252,7 +233,6 @@
       "title": "Three steps from evidence to decision",
       "blocks": [
         {
-          "region": "steps",
           "items": [
             {
               "text": "Establish a baseline",
@@ -263,7 +243,6 @@
           "numbering": "arabic"
         },
         {
-          "region": "steps",
           "items": [
             {
               "text": "Run the pilot",
@@ -274,7 +253,6 @@
           "numbering": "arabic"
         },
         {
-          "region": "steps",
           "items": [
             {
               "text": "Decide what to scale",
@@ -292,7 +270,6 @@
       "title": "Six weeks to an informed decision",
       "blocks": [
         {
-          "region": "timeline",
           "timeline": {
             "events": [
               {
@@ -311,7 +288,6 @@
           }
         },
         {
-          "region": "notes",
           "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
         }
       ]
@@ -322,7 +298,6 @@
       "title": "What the pilot involves",
       "blocks": [
         {
-          "region": "questions",
           "items": [
             {
               "text": "Who takes part?",
@@ -331,7 +306,6 @@
           ]
         },
         {
-          "region": "questions",
           "items": [
             {
               "text": "How long does it run?",
@@ -340,7 +314,6 @@
           ]
         },
         {
-          "region": "questions",
           "items": [
             {
               "text": "What happens next?",
@@ -356,7 +329,6 @@
       "title": "Pilot outcomes in three measures",
       "blocks": [
         {
-          "region": "metrics",
           "metric": {
             "value": 52,
             "label": "Trial participants",
@@ -364,7 +336,6 @@
           }
         },
         {
-          "region": "metrics",
           "metric": {
             "value": "84%",
             "label": "Task completion",
@@ -372,7 +343,6 @@
           }
         },
         {
-          "region": "metrics",
           "metric": {
             "value": "6.2",
             "unit": "min",
@@ -381,7 +351,6 @@
           }
         },
         {
-          "region": "note",
           "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
         }
       ],
@@ -395,7 +364,6 @@
       "title": "Track performance against a target",
       "blocks": [
         {
-          "region": "cards",
           "metric": {
             "value": 52,
             "label": "Trial participants",
@@ -403,7 +371,6 @@
           }
         },
         {
-          "region": "cards",
           "metric": {
             "value": "84%",
             "label": "Task completion",
@@ -411,7 +378,6 @@
           }
         },
         {
-          "region": "cards",
           "metric": {
             "value": "6.2",
             "unit": "min",
@@ -427,7 +393,6 @@
       "title": "Give the visual room to speak",
       "blocks": [
         {
-          "region": "media",
           "image": {
             "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YWE3ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZmUwZjUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iIzNmOGE1NSIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiMyZjZiNDIiLz48L3N2Zz4=",
             "alt": "Illustrative landscape with two green ridges"
@@ -441,14 +406,12 @@
       "title": "Explain what the audience should notice",
       "blocks": [
         {
-          "region": "media",
           "image": {
             "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YWE3ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZmUwZjUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iIzNmOGE1NSIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiMyZjZiNDIiLz48L3N2Zz4=",
             "alt": "Illustrative landscape with two green ridges"
           }
         },
         {
-          "region": "body",
           "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
         }
       ]
@@ -459,21 +422,18 @@
       "title": "Compare three visual directions",
       "blocks": [
         {
-          "region": "pictures",
           "image": {
             "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YWE3ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZmUwZjUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iIzNmOGE1NSIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiMyZjZiNDIiLz48L3N2Zz4=",
             "alt": "Blue and green landscape palette"
           }
         },
         {
-          "region": "pictures",
           "image": {
             "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNkNDliNzQiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmYWU1Y2IiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iI2I5NmI1MCIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiM4NTRiNDgiLz48L3N2Zz4=",
             "alt": "Warm earth landscape palette"
           }
         },
         {
-          "region": "pictures",
           "image": {
             "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM5YThmYmUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNlZWU4ZjUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iIzc1NmI5NiIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiM1MTQ3NjciLz48L3N2Zz4=",
             "alt": "Purple landscape palette"
@@ -488,7 +448,6 @@
       "subtitle": "Share of tasks completed, by week of the pilot",
       "blocks": [
         {
-          "region": "charts",
           "chart": {
             "type": "column",
             "axisTitles": {
@@ -525,7 +484,6 @@
           }
         },
         {
-          "region": "note",
           "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
         }
       ]
@@ -536,7 +494,6 @@
       "title": "The largest gain came in week four",
       "blocks": [
         {
-          "region": "chart",
           "chart": {
             "type": "column",
             "axisTitles": {
@@ -573,7 +530,6 @@
           }
         },
         {
-          "region": "notes",
           "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
         }
       ]
@@ -584,7 +540,7 @@
       "title": "Compare outcomes on consistent measures",
       "blocks": [
         {
-          "region": "table",
+          "region": "body",
           "table": {
             "columns": [
               "Team",
@@ -618,7 +574,6 @@
           }
         },
         {
-          "region": "note",
           "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
         }
       ]
@@ -629,7 +584,6 @@
       "title": "Team B needs targeted support",
       "blocks": [
         {
-          "region": "table",
           "table": {
             "columns": [
               "Team",
@@ -663,7 +617,6 @@
           }
         },
         {
-          "region": "notes",
           "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
         }
       ]
@@ -674,14 +627,12 @@
       "title": "Keep the implementation easy to inspect",
       "blocks": [
         {
-          "region": "code",
           "code": {
             "language": "javascript",
             "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
           }
         },
         {
-          "region": "notes",
           "text": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero."
         }
       ]
@@ -692,23 +643,18 @@
       "title": "One team. One outcome.",
       "blocks": [
         {
-          "region": "lead",
           "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
         },
         {
-          "region": "support",
           "text": "Keep the scope narrow, collect feedback weekly and give each decision a named owner."
         },
         {
-          "region": "support",
           "text": "Compare the results with the baseline. Expand only when the evidence supports the next step."
         },
         {
-          "region": "support",
           "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
         },
         {
-          "region": "media",
           "image": {
             "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YWE3ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZmUwZjUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iIzNmOGE1NSIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiMyZjZiNDIiLz48L3N2Zz4=",
             "alt": "Illustrative landscape with two green ridges"
@@ -722,7 +668,6 @@
       "title": "Pilot performance at a glance",
       "blocks": [
         {
-          "region": "kpis",
           "metric": {
             "value": 52,
             "label": "Trial participants",
@@ -730,7 +675,6 @@
           }
         },
         {
-          "region": "kpis",
           "metric": {
             "value": "84%",
             "label": "Task completion",
@@ -738,7 +682,6 @@
           }
         },
         {
-          "region": "kpis",
           "metric": {
             "value": "6.2",
             "unit": "min",
@@ -747,7 +690,6 @@
           }
         },
         {
-          "region": "charts",
           "chart": {
             "type": "column",
             "axisTitles": {
@@ -784,7 +726,6 @@
           }
         },
         {
-          "region": "charts",
           "chart": {
             "type": "bar",
             "axisTitles": {
@@ -819,7 +760,6 @@
       "title": "Give each workstream a clear owner",
       "blocks": [
         {
-          "region": "people",
           "items": [
             {
               "text": "Ana Ruiz",
@@ -828,7 +768,6 @@
           ]
         },
         {
-          "region": "people",
           "items": [
             {
               "text": "Sam Lee",
@@ -837,7 +776,6 @@
           ]
         },
         {
-          "region": "people",
           "items": [
             {
               "text": "Kai Moreau",
@@ -853,21 +791,18 @@
       "title": "Recognize the partners",
       "blocks": [
         {
-          "region": "logos",
           "image": {
             "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgNjAwIDI0MCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIyNDAiIGZpbGw9IiNmMGYwZjAiLz48cGF0aCBkPSJNMjIwIDE3MFY3MGwxNjAgMTAwVjcwIiBmaWxsPSJub25lIiBzdHJva2U9IiMyNjM0NDUiIHN0cm9rZS13aWR0aD0iMjQiLz48L3N2Zz4=",
             "alt": "NORTH, fictional geometric mark"
           }
         },
         {
-          "region": "logos",
           "image": {
             "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgNjAwIDI0MCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIyNDAiIGZpbGw9IiNmMGYwZjAiLz48cGF0aCBkPSJNMjMwIDYwaDE0MHYyNEgyNTR2MzRoOTZ2MjRoLTk2djM4aC0yNHoiIGZpbGw9IiMyNjM0NDUiLz48L3N2Zz4=",
             "alt": "FIELD, fictional geometric mark"
           }
         },
         {
-          "region": "logos",
           "image": {
             "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgNjAwIDI0MCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIyNDAiIGZpbGw9IiNmMGYwZjAiLz48Y2lyY2xlIGN4PSIzMDAiIGN5PSIxMjAiIHI9IjcyIiBmaWxsPSJub25lIiBzdHJva2U9IiMyNjM0NDUiIHN0cm9rZS13aWR0aD0iMjAiLz48cGF0aCBkPSJNMjYwIDEyMGg4ME0zMDAgODB2ODAiIHN0cm9rZT0iIzI2MzQ0NSIgc3Ryb2tlLXdpZHRoPSIxOCIvPjwvc3ZnPg==",
             "alt": "STUDIO, fictional geometric mark"
@@ -881,7 +816,6 @@
       "title": "What the pilot builds on",
       "blocks": [
         {
-          "region": "levels",
           "items": [
             "Goal",
             "Evidence",
@@ -897,7 +831,6 @@
       "title": "Four ways to run the pilot",
       "blocks": [
         {
-          "region": "quadrants",
           "items": [
             "Small, fast",
             "Small, slow",
@@ -913,7 +846,6 @@
       "title": "How each pilot round feeds the next",
       "blocks": [
         {
-          "region": "stages",
           "items": [
             "Plan",
             "Pilot",
@@ -929,7 +861,6 @@
       "title": "Four stages of the pilot",
       "blocks": [
         {
-          "region": "stages",
           "items": [
             "Baseline",
             "Pilot",
@@ -940,27 +871,11 @@
       ]
     },
     {
-      "id": "layout-flow",
-      "layout": "flow",
-      "title": "From evidence to decision",
-      "blocks": [
-        {
-          "region": "stages",
-          "items": [
-            "Gather evidence",
-            "Run the pilot",
-            "Decide"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "layout-vertical-flow",
-      "layout": "vertical-flow",
+      "id": "layout-vertical-process",
+      "layout": "vertical-process",
       "title": "How a team joins the pilot",
       "blocks": [
         {
-          "region": "stages",
           "items": [
             "Nominate",
             "Train",
@@ -1224,57 +1139,67 @@
     {
       "id": "dynamic-promoted-columns",
       "title": "What the pilot asks of us",
-      "start": {
-        "text": "The pilot shows a clear gain in completion with modest effort."
-      },
-      "center+end": {
-        "items": [
-          "Two teams must release a lead at 20%",
-          "Weekly reviews need a fixed slot",
-          "Analytics needs read access to both workflows"
-        ]
-      }
+      "blocks": [
+        {
+          "region": "start",
+          "text": "The pilot shows a clear gain in completion with modest effort."
+        },
+        {
+          "region": "center+end",
+          "items": [
+            "Two teams must release a lead at 20%",
+            "Weekly reviews need a fixed slot",
+            "Analytics needs read access to both workflows"
+          ]
+        }
+      ]
     },
     {
       "id": "dynamic-promoted-grid",
       "title": "From baseline to decision in six weeks",
-      "top:start": {
-        "metric": {
-          "value": 52,
-          "label": "Participants"
+      "blocks": [
+        {
+          "region": "top:start",
+          "metric": {
+            "value": 52,
+            "label": "Participants"
+          }
+        },
+        {
+          "region": "top:center",
+          "metric": {
+            "value": "84%",
+            "label": "Completion"
+          }
+        },
+        {
+          "region": "top:end",
+          "metric": {
+            "value": "6.2",
+            "unit": "min",
+            "label": "Median time"
+          }
+        },
+        {
+          "region": "middle+bottom:start+center+end",
+          "timeline": {
+            "events": [
+              {
+                "when": "Week 1",
+                "what": "Baseline"
+              },
+              {
+                "when": "Weeks 2–5",
+                "what": "Pilot"
+              },
+              {
+                "when": "Week 6",
+                "what": "Review and decide"
+              }
+            ]
+          }
         }
-      },
-      "top:center": {
-        "metric": {
-          "value": "84%",
-          "label": "Completion"
-        }
-      },
-      "top:end": {
-        "metric": {
-          "value": "6.2",
-          "unit": "min",
-          "label": "Median time"
-        }
-      },
-      "middle+bottom:start+center+end": {
-        "timeline": {
-          "events": [
-            {
-              "when": "Week 1",
-              "what": "Baseline"
-            },
-            {
-              "when": "Weeks 2–5",
-              "what": "Pilot"
-            },
-            {
-              "when": "Week 6",
-              "what": "Review and decide"
-            }
-          ]
-        }
-      }
+      ]
     },
     {
       "id": "dynamic-image-text-quote",
@@ -1390,56 +1315,59 @@
     {
       "id": "dynamic-chart-quote",
       "title": "The numbers and the voice agree",
-      "start+center": {
-        "chart": {
-          "type": "column",
-          "axisTitles": {
-            "category": "Week",
-            "value": "Task completion"
-          },
-          "data": {
-            "columns": [
-              "Week",
-              {
-                "name": "Task completion",
-                "format": "0%"
-              }
-            ],
-            "rows": [
-              [
-                "1",
-                0.68
+      "blocks": [
+        {
+          "region": "start+center",
+          "chart": {
+            "type": "column",
+            "axisTitles": {
+              "category": "Week",
+              "value": "Task completion"
+            },
+            "data": {
+              "columns": [
+                "Week",
+                {
+                  "name": "Task completion",
+                  "format": "0%"
+                }
               ],
-              [
-                "2",
-                0.72
-              ],
-              [
-                "3",
-                0.76
-              ],
-              [
-                "4",
-                0.84
+              "rows": [
+                [
+                  "1",
+                  0.68
+                ],
+                [
+                  "2",
+                  0.72
+                ],
+                [
+                  "3",
+                  0.76
+                ],
+                [
+                  "4",
+                  0.84
+                ]
               ]
-            ]
+            }
+          }
+        },
+        {
+          "region": "end",
+          "quote": {
+            "text": "The weekly review keeps the next step clear.",
+            "attribution": "Product lead",
+            "source": "Illustrative quotation"
           }
         }
-      },
-      "end": {
-        "quote": {
-          "text": "The weekly review keeps the next step clear.",
-          "attribution": "Product lead",
-          "source": "Illustrative quotation"
-        }
-      }
+      ]
     },
     {
       "layout": "inverted-pyramid",
       "title": "From possibilities to a decision",
       "blocks": [
         {
-          "region": "levels",
           "items": [
             "Possibilities",
             "Qualified options",
@@ -1455,7 +1383,6 @@
       "title": "Give the pilot a clear reporting structure",
       "blocks": [
         {
-          "region": "people",
           "items": [
             {
               "text": "Pilot lead",
@@ -1479,7 +1406,6 @@
       "title": "Break the pilot into focused workstreams",
       "blocks": [
         {
-          "region": "nodes",
           "items": [
             {
               "text": "Pilot",
@@ -1511,7 +1437,6 @@
       "title": "Three conditions for a useful pilot",
       "blocks": [
         {
-          "region": "sets",
           "items": [
             "Clear scope",
             "Evidence",
@@ -1550,7 +1475,7 @@
                 "video"
               ],
               "role": "media",
-              "flow": "none",
+              "max": 1,
               "bleed": true
             }
           ],
@@ -1596,49 +1521,18 @@
               "name": "title"
             },
             {
-              "name": "items",
+              "name": "body",
               "accepts": [
                 "list",
                 "text"
               ],
-              "role": "primary",
               "flow": "column",
-              "listColumns": "auto",
-              "sequence": "numbered"
+              "arrangement": "numbered"
             }
           ],
           "description": "Set expectations by listing the parts of a talk. Longer agendas flow across columns while preserving their order.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/agenda.svg"
-          }
-        },
-        "agenda-split": {
-          "name": "Agenda beside",
-          "summary": "A concise agenda beside its title and introduction.",
-          "tags": [
-            "Openers and closers"
-          ],
-          "direction": "row",
-          "regions": [
-            {
-              "name": "title"
-            },
-            {
-              "name": "items",
-              "accepts": [
-                "list",
-                "text"
-              ],
-              "role": "primary",
-              "flow": "column",
-              "listColumns": "auto",
-              "sequence": "numbered",
-              "anchor": "middle"
-            }
-          ],
-          "description": "Introduce a concise agenda with the title and introduction on one side and the parts of the talk beside them. Use Agenda for detailed entries that need the full slide width.",
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/agenda-split.svg"
           }
         },
         "statement": {
@@ -1660,15 +1554,14 @@
               "rule": true
             },
             {
-              "name": "message",
+              "name": "body",
               "size": "auto",
               "accepts": [
                 "text",
                 "quote",
                 "metric"
               ],
-              "role": "primary",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Give one important assertion room to stand alone. Keep supporting detail on a following slide.",
@@ -1696,7 +1589,7 @@
               "rule": true
             },
             {
-              "name": "details",
+              "name": "body",
               "size": "auto",
               "accepts": [
                 "text",
@@ -1732,7 +1625,6 @@
                 "code",
                 "group"
               ],
-              "role": "primary",
               "flow": "auto"
             }
           ],
@@ -1759,9 +1651,7 @@
                 "text",
                 "group"
               ],
-              "role": "primary",
-              "flow": "auto",
-              "listColumns": "auto"
+              "flow": "auto"
             }
           ],
           "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
@@ -1785,13 +1675,12 @@
               "name": "title"
             },
             {
-              "name": "quotes",
+              "name": "body",
               "size": "auto",
               "accepts": [
                 "quote",
                 "group"
               ],
-              "role": "primary",
               "flow": "grid"
             }
           ],
@@ -1811,7 +1700,7 @@
             "contentBox": true
           },
           "direction": "column",
-          "anchor": "bottom",
+          "anchor": "middle",
           "regions": [
             {
               "name": "title"
@@ -1836,8 +1725,7 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
-                  "flow": "none"
+                  "max": 1
                 },
                 {
                   "name": "second",
@@ -1856,8 +1744,7 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
-                  "flow": "none"
+                  "max": 1
                 }
               ]
             }
@@ -1878,7 +1765,7 @@
             "contentBox": true
           },
           "direction": "column",
-          "anchor": "bottom",
+          "anchor": "middle",
           "regions": [
             {
               "name": "title"
@@ -1903,8 +1790,7 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
-                  "flow": "none"
+                  "max": 1
                 },
                 {
                   "name": "second",
@@ -1923,8 +1809,7 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
-                  "flow": "none"
+                  "max": 1
                 },
                 {
                   "name": "third",
@@ -1943,8 +1828,7 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
-                  "flow": "none"
+                  "max": 1
                 }
               ]
             }
@@ -1971,7 +1855,7 @@
               "name": "title"
             },
             {
-              "name": "pillars",
+              "name": "body",
               "accepts": [
                 "text",
                 "list",
@@ -1979,7 +1863,6 @@
                 "image",
                 "group"
               ],
-              "role": "primary",
               "flow": "grid"
             }
           ],
@@ -2018,8 +1901,7 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
-                  "flow": "none"
+                  "max": 1
                 },
                 {
                   "name": "second",
@@ -2033,19 +1915,18 @@
                     "group",
                     "diagram"
                   ],
-                  "role": "primary",
-                  "flow": "none"
+                  "max": 1
                 }
               ]
             },
             {
-              "name": "verdict",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Compare alternatives using parallel information. Keep the same criteria and level of detail for every option.",
@@ -2060,8 +1941,7 @@
             "Groups of items"
           ],
           "design": {
-            "contentBox": false,
-            "contentDirection": "horizontal"
+            "contentBox": false
           },
           "direction": "column",
           "regions": [
@@ -2069,7 +1949,7 @@
               "name": "title"
             },
             {
-              "name": "steps",
+              "name": "body",
               "accepts": [
                 "timeline",
                 "list",
@@ -2078,12 +1958,11 @@
                 "group",
                 "diagram"
               ],
-              "role": "primary",
-              "flow": "grid",
-              "sequence": "steps"
+              "flow": "row",
+              "arrangement": "steps"
             }
           ],
-          "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition.",
+          "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition. A list of 2 to 8 steps of one or two words each draws as boxes joined by arrows.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/process.svg"
           }
@@ -2106,19 +1985,18 @@
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             },
             {
-              "name": "timeline",
+              "name": "body",
               "accepts": [
                 "timeline",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "column"
             },
             {
-              "name": "notes",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text",
@@ -2150,15 +2028,13 @@
               "name": "title"
             },
             {
-              "name": "questions",
+              "name": "body",
               "accepts": [
                 "list",
                 "text",
                 "group"
               ],
-              "role": "primary",
-              "flow": "column",
-              "listColumns": "auto"
+              "flow": "column"
             }
           ],
           "description": "Answer the questions an audience is likely to ask. Pair each question with a direct answer and group related questions together.",
@@ -2181,24 +2057,23 @@
               "name": "title"
             },
             {
-              "name": "metrics",
+              "name": "body",
               "accepts": [
                 "metric",
                 "group"
               ],
-              "role": "primary",
               "flow": "grid",
               "anchor": "middle"
             },
             {
-              "name": "note",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text",
                 "list"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Highlight a small set of important numbers. Give each number a label and the context needed to interpret it.",
@@ -2222,14 +2097,13 @@
               "name": "title"
             },
             {
-              "name": "cards",
+              "name": "body",
               "accepts": [
                 "metric",
                 "text",
                 "list",
                 "group"
               ],
-              "role": "primary",
               "flow": "grid",
               "metrics": "tile"
             }
@@ -2258,7 +2132,7 @@
                 "diagram"
               ],
               "role": "media",
-              "flow": "none",
+              "max": 1,
               "bleed": true
             }
           ],
@@ -2292,7 +2166,7 @@
                     "diagram"
                   ],
                   "role": "media",
-                  "flow": "none",
+                  "max": 1,
                   "anchor": "middle"
                 },
                 {
@@ -2304,7 +2178,6 @@
                     "quote",
                     "group"
                   ],
-                  "role": "primary",
                   "flow": "auto",
                   "anchor": "middle"
                 }
@@ -2331,7 +2204,7 @@
               "name": "title"
             },
             {
-              "name": "pictures",
+              "name": "body",
               "accepts": [
                 "image",
                 "video",
@@ -2358,23 +2231,22 @@
               "name": "title"
             },
             {
-              "name": "charts",
+              "name": "body",
               "accepts": [
                 "chart",
                 "group",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "grid"
             },
             {
-              "name": "note",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
@@ -2397,17 +2269,16 @@
               "direction": "row",
               "regions": [
                 {
-                  "name": "chart",
+                  "name": "body",
                   "size": 3,
                   "accepts": [
                     "chart",
                     "diagram"
                   ],
-                  "role": "primary",
-                  "flow": "none"
+                  "max": 1
                 },
                 {
-                  "name": "notes",
+                  "name": "aside",
                   "size": 2,
                   "accepts": [
                     "text",
@@ -2439,21 +2310,20 @@
               "name": "title"
             },
             {
-              "name": "table",
+              "name": "body",
               "accepts": [
                 "table"
               ],
-              "role": "primary",
               "flow": "column"
             },
             {
-              "name": "note",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Present structured data that benefits from precise comparison. Use clear row and column headings and concise cell content.",
@@ -2476,16 +2346,15 @@
               "direction": "row",
               "regions": [
                 {
-                  "name": "table",
+                  "name": "body",
                   "size": 3,
                   "accepts": [
                     "table"
                   ],
-                  "role": "primary",
-                  "flow": "none"
+                  "max": 1
                 },
                 {
-                  "name": "notes",
+                  "name": "aside",
                   "size": 2,
                   "accepts": [
                     "text",
@@ -2519,16 +2388,15 @@
               "direction": "row",
               "regions": [
                 {
-                  "name": "code",
+                  "name": "body",
                   "size": 3,
                   "accepts": [
                     "code"
                   ],
-                  "role": "primary",
                   "flow": "column"
                 },
                 {
-                  "name": "notes",
+                  "name": "aside",
                   "size": 2,
                   "accepts": [
                     "text",
@@ -2568,11 +2436,10 @@
                     "quote",
                     "metric"
                   ],
-                  "role": "primary",
-                  "flow": "none"
+                  "max": 1
                 },
                 {
-                  "name": "support",
+                  "name": "body",
                   "accepts": [
                     "text",
                     "list",
@@ -2593,7 +2460,7 @@
                 "diagram"
               ],
               "role": "media",
-              "flow": "none",
+              "max": 1,
               "bleed": true
             }
           ],
@@ -2617,22 +2484,21 @@
               "name": "title"
             },
             {
-              "name": "kpis",
+              "name": "lead",
               "size": 2,
               "accepts": [
                 "metric"
               ],
-              "role": "secondary",
+              "role": "supporting",
               "flow": "grid"
             },
             {
-              "name": "charts",
+              "name": "body",
               "size": 3,
               "accepts": [
                 "chart",
                 "table"
               ],
-              "role": "primary",
               "flow": "grid"
             }
           ],
@@ -2658,7 +2524,7 @@
               "name": "title"
             },
             {
-              "name": "people",
+              "name": "body",
               "accepts": [
                 "group",
                 "image",
@@ -2666,7 +2532,6 @@
                 "quote",
                 "list"
               ],
-              "role": "primary",
               "flow": "grid"
             }
           ],
@@ -2687,7 +2552,7 @@
               "name": "title"
             },
             {
-              "name": "logos",
+              "name": "body",
               "accepts": [
                 "image",
                 "text",
@@ -2719,12 +2584,11 @@
               "name": "title"
             },
             {
-              "name": "levels",
+              "name": "body",
               "accepts": [
                 "list"
               ],
-              "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "pyramid"
             }
           ],
@@ -2739,21 +2603,21 @@
           "tags": [
             "Groups of items"
           ],
-          "direction": "row",
+          "design": {
+            "titlePosition": "start"
+          },
+          "direction": "column",
           "regions": [
             {
-              "name": "title",
-              "size": 2
+              "name": "title"
             },
             {
-              "name": "quadrants",
+              "name": "body",
               "accepts": [
                 "list"
               ],
-              "role": "primary",
-              "flow": "none",
-              "arrangement": "matrix",
-              "size": 3
+              "max": 1,
+              "arrangement": "matrix"
             }
           ],
           "description": "Show four parts that together make a whole, or the four cases of two choices, as a 2 x 2 matrix. Write four short list entries, in the order top left, top right, bottom left, bottom right; another count is drawn as a grid of cards.",
@@ -2767,21 +2631,21 @@
           "tags": [
             "Groups of items"
           ],
-          "direction": "row",
+          "design": {
+            "titlePosition": "start"
+          },
+          "direction": "column",
           "regions": [
             {
-              "name": "title",
-              "size": 2
+              "name": "title"
             },
             {
-              "name": "stages",
+              "name": "body",
               "accepts": [
                 "list"
               ],
-              "role": "primary",
-              "flow": "none",
-              "arrangement": "cycle",
-              "size": 3
+              "max": 1,
+              "arrangement": "cycle"
             }
           ],
           "description": "Show 2 to 8 steps that repeat, where the last leads back to the first (a review loop, a product lifecycle, a feedback cycle). Write one short list entry per step, in order; the first is drawn at the top and the rest clockwise, with an arrow from each to the next.",
@@ -2801,72 +2665,17 @@
               "name": "title"
             },
             {
-              "name": "stages",
+              "name": "body",
               "accepts": [
                 "list"
               ],
-              "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "chevrons"
             }
           ],
           "description": "Show 1 to 8 stages that follow one another, each leading into the next. Write one short list entry per stage, in order; a word or two reads best inside a chevron.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/chevrons.svg"
-          }
-        },
-        "flow": {
-          "name": "Flow",
-          "summary": "Steps in order, as boxes joined by arrows in one row.",
-          "tags": [
-            "Groups of items"
-          ],
-          "direction": "column",
-          "regions": [
-            {
-              "name": "title"
-            },
-            {
-              "name": "stages",
-              "accepts": [
-                "list"
-              ],
-              "role": "primary",
-              "flow": "none",
-              "arrangement": "flow"
-            }
-          ],
-          "description": "Show 1 to 8 steps that follow one another, each a box with an arrow to the next. Write one short list entry per step, in order.",
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/flow.svg"
-          }
-        },
-        "vertical-flow": {
-          "name": "Vertical flow",
-          "summary": "Steps in order, as boxes joined by arrows in a column beside the title.",
-          "tags": [
-            "Groups of items"
-          ],
-          "direction": "row",
-          "regions": [
-            {
-              "name": "title",
-              "size": 2
-            },
-            {
-              "name": "stages",
-              "accepts": [
-                "list"
-              ],
-              "role": "primary",
-              "flow": "none",
-              "arrangement": "vertical-flow",
-              "size": 3
-            }
-          ],
-          "description": "Show 1 to 8 steps that follow one another from top to bottom, each a box with an arrow to the next, beside the title. Write one short list entry per step, in order.",
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/vertical-flow.svg"
           }
         },
         "inverted-pyramid": {
@@ -2881,17 +2690,15 @@
               "name": "title"
             },
             {
-              "name": "levels",
+              "name": "body",
               "accepts": [
                 "list"
               ],
-              "role": "primary",
-              "flow": "none",
-              "arrangement": "pyramid",
-              "pyramidDirection": "down"
+              "max": 1,
+              "arrangement": "inverted-pyramid"
             }
           ],
-          "description": "Show 1 to 8 levels narrowing from the broad top (the many, the starting pool) to the tip below (the selected few, the result). Write one short list entry per level in top-to-bottom order. Export uses editable native shapes; live Inverted Pyramid SmartArt is not yet qualified.",
+          "description": "Show 1 to 8 levels narrowing from the broad top (the many, the starting pool) to the tip below (the selected few, the result). Write one short list entry per level in top-to-bottom order. Export uses editable native shapes.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/inverted-pyramid.svg"
           }
@@ -2908,16 +2715,15 @@
               "name": "title"
             },
             {
-              "name": "people",
+              "name": "body",
               "accepts": [
                 "list"
               ],
-              "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "org-chart"
             }
           ],
-          "description": "Show one organization or reporting tree with 1 to 8 short entries. Use one list: the first entry is the level-zero root and each child sets its zero-based level. Keep parents before their children, without skipping a depth. Assistants and separate roots need a diagram instead; unsupported trees retain the complete list with a finding.",
+          "description": "Show one organization or reporting tree with 1 to 8 short entries. Use one list: the first entry is the level-zero root and each child sets its zero-based level. Keep parents before their children, without skipping a depth. Mark an assistant with \"assistant\": true among its manager's reports; separate roots need a diagram instead, and unsupported trees retain the complete list with a finding.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/org-chart.svg"
           }
@@ -2934,12 +2740,11 @@
               "name": "title"
             },
             {
-              "name": "nodes",
+              "name": "body",
               "accepts": [
                 "list"
               ],
-              "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "hierarchy"
             }
           ],
@@ -2960,18 +2765,45 @@
               "name": "title"
             },
             {
-              "name": "sets",
+              "name": "body",
               "accepts": [
                 "list"
               ],
-              "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "venn"
             }
           ],
           "description": "Show overlap among 1 to 7 sets using one flat list of short labels. The list order identifies the sets; no overlap values are implied. One to four sets have labels inside the circles, and five to seven beside them. Long labels, nested entries or unsupported counts retain the complete list with a finding instead of shrinking the text.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/venn.svg"
+          }
+        },
+        "vertical-process": {
+          "name": "Vertical process",
+          "summary": "Steps in order, as boxes joined by arrows in a column beside the title.",
+          "tags": [
+            "Groups of items"
+          ],
+          "design": {
+            "titlePosition": "start"
+          },
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "body",
+              "accepts": [
+                "list"
+              ],
+              "max": 1,
+              "arrangement": "vertical-process"
+            }
+          ],
+          "description": "Show 1 to 8 steps that follow one another from top to bottom, each a box with an arrow to the next, beside the title. Write one short list entry per step, in order.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/vertical-process.svg"
           }
         }
       }

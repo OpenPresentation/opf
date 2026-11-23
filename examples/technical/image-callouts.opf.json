@@ -1,6 +1,7 @@
 {
   "name": "Image callouts remain editable",
   "description": "Fractional text panels over the visible image frame.",
+  "language": "en-US",
   "design": {
     "theme": "classic",
     "variant": "light1",
@@ -14,7 +15,7 @@
       "blocks": [
         {
           "image": {
-            "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAABnElEQVR4nO3Yv0rDUBTH8ZNLXqHBB9CA4O4ibi4+gYuTm/g8bk6CL9HBOaOrCO46O0e0eomxLam5/vo7N7/vVJo/hA+H09Di8fDEvHV6cGfeCtt+gKkkaFCCBiVoUIIGJWhQggYlaFCCBiVoUIIGJWhQggYlaFCl+alu5l+fmln8cvfi1TxUevJd1tPNzIV46Yi4bdvf5xRF0RWn5Q78yu13S0/rHY0DzlbgV7ZhkVsHWuV29RSvKl5CaB1ole2vcVoHRy8Ym0ZlzQW9aMw4p7pDztD16KXBvECIoPNO0BODrpPuDcLtwQKdfYIGVR5d7RlDTco36F4PZ8e27TTRoAQNStATg65uL7v/4idpcbe3+b4RxAKdfYKeHnSVdHtQ7Q0u6Nh467S7PkPo6nOoU8UzznTQlmKBsC0NUmjrWG/KHS9hUyaFts4OGW4dzyRU5oW2n9Zrprt3lFP54znT/v78Ry/n10NOoyV2A71enNzXJXTseefevMW7ozNL0KAEDUrQoAQNStCgBA1K0KAEDUrQoAQNStCgBG2Y3gEQ3Irssa4fzwAAAABJRU5ErkJggg==",
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCAxMjAgNjAiPjxyZWN0IHdpZHRoPSI2MCIgaGVpZ2h0PSIzMCIgZmlsbD0iI0RBMzc0NSIvPjxyZWN0IHg9IjYwIiB3aWR0aD0iNjAiIGhlaWdodD0iMzAiIGZpbGw9IiMyNDYzRUIiLz48cmVjdCB5PSIzMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjMwIiBmaWxsPSIjMTZBMzZBIi8+PHJlY3QgeD0iNjAiIHk9IjMwIiB3aWR0aD0iNjAiIGhlaWdodD0iMzAiIGZpbGw9IiNGNUJCMjkiLz48Y2lyY2xlIGN4PSI2MCIgY3k9IjMwIiByPSIxNSIgZmlsbD0iI0ZGRkZGRiIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=",
             "alt": "Four colored quadrants surround a central white inspection point.",
             "callouts": [
               {
@@ -147,7 +148,7 @@
                 "diagram"
               ],
               "role": "media",
-              "flow": "none",
+              "max": 1,
               "bleed": true
             }
           ],

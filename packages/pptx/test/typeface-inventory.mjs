@@ -199,13 +199,13 @@ assert.equal(typeof inventoryTypefaces, 'function');
 {
   const japanese = await toPptx({name: 'ja', language: 'ja', slides: [{title: 'これは日本語です', text: 'Body'}]});
   const latinDeck = await toPptx({name: 'en', slides: [{title: 'Title', text: 'Body'}]});
-  const jaFonts = ['Aptos', 'Aptos Display', 'Meiryo'];
-  const selected = {major: {ea: 'Meiryo'}, minor: {ea: 'Meiryo'}};
+  const jaFonts = ['Aptos', 'Aptos Display', 'Yu Gothic'];
+  const selected = {major: {ea: 'Yu Gothic'}, minor: {ea: 'Yu Gothic'}};
   assert.deepEqual(checkTypefaces(japanese, {families: jaFonts, themeScripts: selected}).violations, []);
-  const emptied = repack(japanese, e => replacePart(e, 'ppt/theme/theme1.xml', /<a:ea typeface="Meiryo"[/]>/, '<a:ea typeface=""/>'));
+  const emptied = repack(japanese, e => replacePart(e, 'ppt/theme/theme1.xml', /<a:ea typeface="Yu Gothic"[/]>/, '<a:ea typeface=""/>'));
   assert.ok(reasons(checkTypefaces(emptied, {families: jaFonts, themeScripts: selected})).includes('theme-script-slot'), 'a selected ea that is empty is flagged');
   assert.deepEqual(checkTypefaces(emptied, {families: jaFonts}).violations, [], 'without themeScripts an empty slot stays allowed');
-  const wrong = repack(japanese, e => replacePart(e, 'ppt/theme/theme1.xml', /<a:ea typeface="Meiryo"[/]>/, '<a:ea typeface="Aptos"/>'));
+  const wrong = repack(japanese, e => replacePart(e, 'ppt/theme/theme1.xml', /<a:ea typeface="Yu Gothic"[/]>/, '<a:ea typeface="Aptos"/>'));
   assert.ok(reasons(checkTypefaces(wrong, {families: jaFonts, themeScripts: selected})).includes('theme-script-slot'), 'a different ea is flagged');
   assert.deepEqual(checkTypefaces(latinDeck, {families: ['Aptos', 'Aptos Display'], themeScripts: {}}).violations, [], 'nothing selected: empty ea/cs are fine');
 }

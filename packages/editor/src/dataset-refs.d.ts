@@ -11,7 +11,7 @@ export interface DatasetItem {
 }
 /** The dataset reference test (core's `isDatasetRef`). */
 export declare function isDatasetRef(value: unknown): boolean;
-/** Visit every chart and table that references a dataset (slides, nested blocks and promoted regions). */
+/** Visit every chart and table that references a dataset (slides and nested blocks). */
 export declare function walkDatasetItems(presentation: unknown, visit: (entry: DatasetItem) => void): void;
 /** The charts and tables that use dataset `id`, in document order. */
 export declare function datasetUsage(presentation: unknown, id: string): Array<{ kind: "chart" | "table"; path: string; parts: string[] }>;

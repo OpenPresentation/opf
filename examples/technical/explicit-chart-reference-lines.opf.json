@@ -1,6 +1,7 @@
 {
   "name": "Explicit chart reference lines",
   "description": "Illustrative data: independent target styling, raw percentage values, multiple axes, and fixed PowerPoint overlay fallbacks. References come only from chart.referenceLines.",
+  "language": "en-US",
   "design": {
     "theme": "minimal",
     "fontScheme": "roboto",

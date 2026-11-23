@@ -85,7 +85,7 @@ Slot names: `toolbar` and the toolbar items `title`, `history`, `counter`, `view
 | `theme` | see [theming](theming.md) and, for class hooks, layers and icons, [styling](styling.md) |
 | `onChange`, `onSelection`, `onCursor`, `onError`, `onReady`, `on` | callbacks and listeners |
 
-With `slideActions: "starters"`, the thumbnail strip offers Title, Bullets and Blank and focuses the title on slides that have one. Use `canvas: { titleEnterCommits: true }` for Enter to finish an inline slide title and Shift+Enter to insert a line break. A host that supplies its own status area can set `labels.ready` to an empty string.
+With `slideActions: "starters"`, the thumbnail strip offers Title, Bullets and Blank and focuses the title on slides that have one. Use `canvas: { titleEnterCommits: true }` for Enter to finish an inline slide title and Shift+Enter to insert a line break. A host that supplies its own status area can set `labels.ready` to an empty string. The words of the starters, the "+" button and the strip's menus and status lines are `labels.thumbnailStrip` (`addText`, `startTitle`, `startBullets`, `startBlank`, `newSlideTitle`, `firstPoint`, `statusAdded`, `statusDeleted` and the other keys of `createThumbnailStrip`'s `labels`); the hint shown while a title is edited is `canvas: { labels: { titleEnterHint } }`. Defaults are English.
 
 ## The handle
 
@@ -270,7 +270,7 @@ function Editor() {
 
 - `<OpfEditor>` renders a `<div>`. Every prop that is not `className`, `style`, `id`, `slots` or a callback is an option of `createOpfEditor`, read once when the editor mounts (give the component another `key` to mount a new one); `theme`, `readOnly`, `view`, `density` and `exportMode` follow later renders without a remount, and the callbacks are always the latest. `ref` is the handle once mounted; `onEditor(editor | null)` tells you when it is created and destroyed.
 - `useOpfEditor(options)` is the hook form for your own element: `const { ref, editor } = useOpfEditor(options)`, `<div ref={ref} />`. `slots` may hold React refs, resolved when the editor mounts.
-- StrictMode (React 18 and 19): the editor module is requested after both of StrictMode's effects, the first effect's request is cancelled by its cleanup, and only the second creates an editor, so there is no double mount and nothing leaks. `test/workspace-react-browser.mjs` runs both React versions.
+- StrictMode (React 18 and 19): the editor module is requested after both of StrictMode's effects, the first effect's request is canceled by its cleanup, and only the second creates an editor, so there is no double mount and nothing leaks. `test/workspace-react-browser.mjs` runs both React versions.
 - Server rendering: the component renders an empty container (`<div data-opf-react>`) and nothing of the editor runs on the server; the client hydrates it and mounts. React is an optional peer (`>=18`): only `@openpresentation/opf-editor/react` imports it.
 
 ## Not in this release

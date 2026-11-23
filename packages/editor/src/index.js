@@ -30,7 +30,7 @@ export {
 } from "./catalogs.js";
 
 // The options `composeSlide` and `paginateSlide` take for one slide of the open deck. Core's `resolveSlideContext` resolves the
-// slide's canvas, layout, theme, colour scheme and font families the one way every engine does (slide design, deck design,
+// slide's canvas, layout, theme, color scheme and font families the one way every engine does (slide design, deck design,
 // theme, engine default), with the session's registered catalogs, so the editor measures and composes what the renderer draws
 // and the exporter writes. `options.fonts` is the renderer's fonts handle (its `textMeasurement` measures); `options.catalogs`
 // adds catalogs for this call; `options.onDiagnostic` hears each diagnostic (`unresolved-reference`);

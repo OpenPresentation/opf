@@ -30,14 +30,14 @@ for (const [name, contents] of files) await writeFile(path.join(assets, name), c
 
 const png = new Map([
   ['watermark.png', galleryArtwork('Technical example', 0).watermark],
-  ['product-shot.png', galleryArtwork('Technical product shot', 3)['cover-bg']],
+  ['product-shot.png', galleryArtwork('Technical product shot', 3, { photo: [640, 360] })['cover-bg']],
 ]);
 for (const [name, bytes] of png) await writeFile(path.join(assets, name), bytes);
 
 const photos = new Map([
-  ['cover.png', galleryArtwork('Technical cover', 1)['supporting-photo']],
-  ['cover-image.png', galleryArtwork('Technical background', 2)['supporting-photo']],
-  ['context-photo.png', galleryArtwork('Technical context', 4)['supporting-photo']],
+  ['cover.png', galleryArtwork('Technical cover', 1, { photo: [640, 360] })['supporting-photo']],
+  ['cover-image.png', galleryArtwork('Technical background', 2, { photo: [640, 360] })['supporting-photo']],
+  ['context-photo.png', galleryArtwork('Technical context', 4, { photo: [640, 360] })['supporting-photo']],
   ['alice.png', galleryArtwork('Technical portrait', 5)['brand-icon']],
 ]);
 for (const [name, bytes] of photos) await writeFile(path.join(assets, name), bytes);

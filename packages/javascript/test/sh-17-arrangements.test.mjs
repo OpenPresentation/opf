@@ -1,4 +1,4 @@
-// SH-17: the chevrons, flow and vertical-flow arrangements of a layout region. The geometry is PowerPoint's Basic Chevron Process,
+// SH-17: the chevrons, process and vertical-process arrangements of a layout region (the gallery's chevrons and vertical-process layouts). The geometry is PowerPoint's Basic Chevron Process,
 // Basic Process and Vertical Process, as the SH-17 sweep measured them through COM (fixtures/sh-17-powerpoint-geometry.json: 1 to 8 nodes
 // in six frames each); the text is one size for all nodes, never below the list's role size; OPF draws its own row or column where
 // PowerPoint's design does not hold the entries; and the safe domain decides whether the PPTX export writes live SmartArt.
@@ -16,6 +16,7 @@ const measured = JSON.parse(readFileSync(new URL('./fixtures/sh-17-powerpoint-ge
 const rect = box => [box.x, box.y, box.width, box.height];
 
 test('every measured frame: core lays the nodes and arrows out where PowerPoint does, within 0.01 pt', () => {
+  // The measurements are keyed by the 0.34 arrangement names (flow, vertical-flow).
   const geometry = { chevrons: chevronNodes, flow: flowNodes, 'vertical-flow': verticalFlowNodes };
   for (const [kind, frames] of Object.entries(measured.layouts)) {
     assert.ok(frames.length >= 40, kind);
@@ -35,7 +36,7 @@ test('PowerPoint\'s scale is its binary search\'s last fitting step, not the clo
   assert.ok(Math.abs(800 / 1.9 - 800 * SMART_ART_SCALES.chevrons[1]) > .7);
   // Seven chevrons (6.4 widths) and six boxes (8 widths) are exact binary fractions, so the search lands on the closed form.
   assert.equal(SMART_ART_SCALES.chevrons[6], 1 / 6.4);
-  assert.equal(SMART_ART_SCALES.flow[5], 1 / 8);
+  assert.equal(SMART_ART_SCALES.process[5], 1 / 8);
   for (const scales of Object.values(SMART_ART_SCALES)) for (const value of scales) assert.equal(value * 8192, Math.round(value * 8192), 'a multiple of 1/8192');
   // One node squeezed by the frame's other side is 1023/1024 of it (COM: 799.22 of an 800 x 300 frame), its height the frame's.
   assert.deepEqual(rect(chevronNodes({ x: 0, y: 0, width: 800, height: 300 }, 1).nodes[0].box), [.391, 0, 799.219, 300]);
@@ -75,16 +76,16 @@ test('OPF\'s own designs: PowerPoint\'s proportions, lines that span the region,
   assert.equal(mirrored.nodes[0].flip, true);
   near(span(mirrored.nodes[0])[1], 1200, 'the first chevron at the right in a right-to-left deck');
   // A flow's arrows are PowerPoint's: 0.212 x 0.248 of a box's width, in a room of 0.4 of it.
-  const flow = linearDesign('flow', area, 3, 24), w = flow.nodes[0].box.width;
+  const flow = linearDesign('process', area, 3, 24), w = flow.nodes[0].box.width;
   near(flow.nodes[1].box.x - (flow.nodes[0].box.x + w), .4 * w, 'room');
   near(flow.arrows[0].box.width, .212 * w, 'arrow length'); near(flow.arrows[0].box.height, .248 * w, 'arrow thickness');
   near(span(flow.nodes[2])[1], 1200, 'the boxes fill the width');
   // Each node takes the height its text needs, PowerPoint's proportion at least, centered.
-  const short = linearDesign('flow', area, 3, 24, false, 1, 40);
+  const short = linearDesign('process', area, 3, 24, false, 1, 40);
   near(short.nodes[0].box.height, .6 * w, 'at least 0.6 of a width tall');
   near(short.nodes[0].box.y + short.nodes[0].box.height / 2, 250, 'centered');
   // Five boxes in two rows: 3 and 2, the second row widened to span the region, running back, joined by a down arrow at the right.
-  const two = linearDesign('flow', area, 5, 24, false, 2);
+  const two = linearDesign('process', area, 5, 24, false, 2);
   near(span(two.nodes[3])[1], 1200, 'the second row starts at the right'); near(span(two.nodes[4])[0], 0, 'and spans the region');
   assert.ok(two.nodes[3].box.width > two.nodes[0].box.width, 'a row of fewer boxes widens them');
   assert.deepEqual(two.arrows.map(arrow => [arrow.index, arrow.rotation]), [[0, 0], [1, 0], [2, 90], [3, 180]]);
@@ -93,36 +94,44 @@ test('OPF\'s own designs: PowerPoint\'s proportions, lines that span the region,
   const chevrons = linearDesign('chevrons', area, 5, 24, false, 2);
   near(span(chevrons.nodes[3])[0], 0, 'the second row starts at the left'); near(span(chevrons.nodes[4])[1], 1200, 'and spans the region');
   // A vertical flow's columns snake too: the second runs bottom to top, joined by a right arrow at the bottom.
-  const column = linearDesign('vertical-flow', { x: 0, y: 0, width: 600, height: 600 }, 5, 24, false, 2);
+  const column = linearDesign('vertical-process', { x: 0, y: 0, width: 600, height: 600 }, 5, 24, false, 2);
   assert.deepEqual(column.arrows.map(arrow => arrow.rotation), [90, 90, 0, 270]);
   assert.ok(column.nodes[3].box.y > column.nodes[4].box.y, 'the second column runs up');
   near(column.nodes[3].box.y + column.nodes[3].box.height, column.nodes[2].box.y + column.nodes[2].box.height, 'both columns end at the same bottom');
   // The compact form: rooms of two gaps with an arrow 0.6 of the room, no least height.
-  const compact = linearDesign('flow', area, 3, 24, false, 1, 40, true);
+  const compact = linearDesign('process', area, 3, 24, false, 1, 40, true);
   near(compact.nodes[1].box.x - (compact.nodes[0].box.x + compact.nodes[0].box.width), 48, 'two gaps');
   near(compact.arrows[0].box.width, .6 * 48, 'arrow length');
   assert.ok(compact.nodes[0].box.height < .6 * compact.nodes[0].box.width, 'as tall as its text');
 });
 
-const compose = (slide, layout = slide.layout) => composeSlide(slide, { layout: gallery.layouts[layout] });
+// 0.35 step 4: the gallery's process layout draws a short lone list as Basic Process (lh-07-step-badges.test.mjs). A region whose
+// arrangement is `process` draws every lone list and list blocks so: the record of the 0.34 flow layout, kept here.
+const basicProcess = { id: 'basic-process', name: 'Basic process', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['list'], max: 1, arrangement: 'process' }] };
+const LAYOUTS = { ...gallery.layouts, 'basic-process': basicProcess };
+const compose = (slide, layout = slide.layout) => composeSlide(slide, { layout: LAYOUTS[layout] });
+// The layout of each linear arrangement: the gallery's chevrons and vertical-process, and the Basic Process record above.
+const LAYOUT_OF = { chevrons: 'chevrons', process: 'basic-process', 'vertical-process': 'vertical-process' };
 const adapted = (result) => result.diagnostics.filter(entry => entry.code === 'arrangement-adapted').map(entry => entry.message);
 
-test('the gallery has a chevrons, a flow and a vertical-flow layout, each a lone list in an arrangement region', () => {
-  for (const kind of ['chevrons', 'flow', 'vertical-flow']) {
-    const region = layoutTemplate(gallery.layouts[kind]).regions.find(entry => entry.arrangement);
-    assert.deepEqual([region.name, region.arrangement], ['stages', kind]);
+test('the gallery has a chevrons and a vertical-process layout, each a lone list in an arrangement region, and no flow layout', () => {
+  assert.equal(gallery.layouts.flow, undefined);
+  assert.equal(gallery.layouts['vertical-flow'], undefined);
+  for (const kind of ['chevrons', 'process', 'vertical-process']) {
+    const region = layoutTemplate(LAYOUTS[LAYOUT_OF[kind]]).regions.find(entry => entry.arrangement);
+    assert.deepEqual([region.name, region.arrangement], ['body', kind]);
   }
-  assert.deepEqual(ARRANGEMENTS.filter(kind => ['chevrons', 'flow', 'vertical-flow'].includes(kind)), ['chevrons', 'flow', 'vertical-flow']);
+  assert.deepEqual(ARRANGEMENTS.filter(kind => ['chevrons', 'process', 'vertical-process'].includes(kind)), ['chevrons', 'process', 'vertical-process']);
   assert.equal(SMART_ART_LAYOUTS.chevrons, 'urn:microsoft.com/office/officeart/2005/8/layout/chevron1');
-  assert.equal(SMART_ART_LAYOUTS.flow, 'urn:microsoft.com/office/officeart/2005/8/layout/process1');
-  assert.equal(SMART_ART_LAYOUTS['vertical-flow'], 'urn:microsoft.com/office/officeart/2005/8/layout/process2');
+  assert.equal(SMART_ART_LAYOUTS.process, 'urn:microsoft.com/office/officeart/2005/8/layout/process1');
+  assert.equal(SMART_ART_LAYOUTS['vertical-process'], 'urn:microsoft.com/office/officeart/2005/8/layout/process2');
   assert.equal(ARRANGEMENT_MAX.chevrons, 8);
 });
 
 test('a lone list draws as PowerPoint\'s design, centered on its nodes at one size, never below the list\'s role size', () => {
-  for (const kind of ['chevrons', 'flow', 'vertical-flow']) {
+  for (const kind of ['chevrons', 'process', 'vertical-process']) {
     const items = ['Plan', 'Build', 'Test', 'Ship'];
-    const result = compose({ layout: kind, title: 'How we work', items });
+    const result = compose({ layout: LAYOUT_OF[kind], title: 'How we work', items });
     const [arrangement] = result.arrangements, list = result.items.find(item => item.field === 'items');
     assert.deepEqual([arrangement.kind, arrangement.design, arrangement.align, arrangement.text], [kind, 'smartart', 'center', 'node'], kind);
     assert.deepEqual(arrangement.nodes.map(node => node.path), items.map((_, index) => `slides.0.items.${index}`));
@@ -148,11 +157,11 @@ test('long entries draw OPF\'s design, a right-to-left deck mirrors it, and what
   assert.equal(chevrons.arrangements[0].design, 'opf');
   assert.match(chevrons.arrangements[0].instead, /Basic Chevron Process|wraps/);
   assert.ok(chevrons.arrangements[0].fontSize >= LIST_NOMINAL_SIZE - 1e-6);
-  const arabic = composeSlide({ layout: 'flow', title: 'العملية', items: ['الرؤية', 'الأهداف', 'البرامج'] }, { layout: gallery.layouts.flow, direction: 'rtl' });
+  const arabic = composeSlide({ layout: 'basic-process', title: 'العملية', items: ['الرؤية', 'الأهداف', 'البرامج'] }, { layout: basicProcess, direction: 'rtl' });
   const [flow] = arabic.arrangements;
   assert.ok(flow.nodes[0].box.x > flow.nodes[2].box.x, 'the first box at the right');
   assert.ok(flow.arrows.every(arrow => arrow.rotation === 180), 'arrows point left');
-  assert.match(adapted(compose({ layout: 'flow', title: 'T', items: ['A', 'B'], numbering: 'arabic' }))[0], /a numbered list/);
+  assert.match(adapted(compose({ layout: 'basic-process', title: 'T', items: ['A', 'B'], numbering: 'arabic' }))[0], /a numbered list/);
   const nine = compose({ layout: 'chevrons', title: 'T', items: ['1', '2', '3', '4', '5', '6', '7', '8', '9'] });
   assert.equal(nine.arrangements, undefined);
   assert.match(adapted(nine)[0], /A row of chevrons draws a list .* more than 8 chevrons/);
@@ -160,8 +169,8 @@ test('long entries draw OPF\'s design, a right-to-left deck mirrors it, and what
 
 test('list blocks are the entries: each on a card of the design, arrows between, one size, the bullets kept; a card grid where they do not fit', () => {
   const blocks = [{ items: ['Interview users', 'Map the journey'] }, { items: ['Prototype', 'Test with five teams'] }, { items: ['Decide', 'Plan the rollout'] }];
-  for (const kind of ['chevrons', 'flow', 'vertical-flow']) {
-    const result = compose({ layout: kind, title: 'Three workstreams', blocks });
+  for (const kind of ['chevrons', 'process', 'vertical-process']) {
+    const result = compose({ layout: LAYOUT_OF[kind], title: 'Three workstreams', blocks });
     const [arrangement] = result.arrangements, lists = result.items.filter(item => item.field === 'items');
     assert.deepEqual([arrangement.kind, arrangement.design, arrangement.paint, arrangement.align], [kind, 'opf', 'card', 'start'], kind);
     assert.equal(arrangement.nodes.length, 3);
@@ -177,7 +186,7 @@ test('list blocks are the entries: each on a card of the design, arrows between,
   }
   // Lists no design holds at their size keep the region's composition (pagination splits them), with the finding.
   const long = Array.from({ length: 3 }, () => ({ items: Array.from({ length: 7 }, (_, index) => `Item ${index + 1}: customers told us onboarding took too long, so we rebuilt it around them`) }));
-  const crowded = compose({ layout: 'flow', title: 'Long', blocks: long });
+  const crowded = compose({ layout: 'basic-process', title: 'Long', blocks: long });
   assert.equal(crowded.arrangements, undefined);
 });
 
@@ -188,10 +197,10 @@ test('the arrows\' paint: the primary lightened 40%, a color SmartArt\'s colors 
 });
 
 test('the SmartArt domain of the linear arrangements', () => {
-  const candidate = (kind, extra = {}) => ({ kind, count: 4, frame: kind === 'vertical-flow' ? { x: 0, y: 0, width: 684, height: 605 } : { x: 0, y: 0, width: 1165, height: 515 }, rtl: false, nodes: Array.from({ length: 4 }, () => ({ lines: 1, stable: true })), ...extra });
-  for (const kind of ['chevrons', 'flow']) assert.equal(smartArtUnavailable(candidate(kind)), undefined, kind);
-  assert.equal(smartArtUnavailable(candidate('vertical-flow', { frame: { x: 0, y: 0, width: 684, height: 605 } })), undefined);
-  for (const kind of ['chevrons', 'flow', 'vertical-flow']) {
+  const candidate = (kind, extra = {}) => ({ kind, count: 4, frame: kind === 'vertical-process' ? { x: 0, y: 0, width: 684, height: 605 } : { x: 0, y: 0, width: 1165, height: 515 }, rtl: false, nodes: Array.from({ length: 4 }, () => ({ lines: 1, stable: true })), ...extra });
+  for (const kind of ['chevrons', 'process']) assert.equal(smartArtUnavailable(candidate(kind)), undefined, kind);
+  assert.equal(smartArtUnavailable(candidate('vertical-process', { frame: { x: 0, y: 0, width: 684, height: 605 } })), undefined);
+  for (const kind of ['chevrons', 'process', 'vertical-process']) {
     assert.match(smartArtUnavailable(candidate(kind, { count: SMART_ART_DOMAIN.count[kind] + 1 })), /outside the compared/);
     assert.match(smartArtUnavailable(candidate(kind, { rtl: true })), /right-to-left/);
     assert.match(smartArtUnavailable(candidate(kind, { script: 'cjk' })), /Japanese/);
@@ -200,8 +209,8 @@ test('the SmartArt domain of the linear arrangements', () => {
     assert.match(smartArtUnavailable(candidate(kind, { ink: .09 })), /covers 9% of the frame/);
   }
   // The domain the sweep passed (docs/smartart.md).
-  assert.deepEqual([SMART_ART_DOMAIN.count.chevrons, SMART_ART_DOMAIN.count.flow, SMART_ART_DOMAIN.count['vertical-flow']], [6, 6, 4]);
-  assert.match(smartArtUnavailable(candidate('flow', { frame: { x: 0, y: 0, width: 1200, height: 400 } })), /proportions \(3\.00 : 1\)/);
+  assert.deepEqual([SMART_ART_DOMAIN.count.chevrons, SMART_ART_DOMAIN.count.process, SMART_ART_DOMAIN.count['vertical-process']], [6, 6, 4]);
+  assert.match(smartArtUnavailable(candidate('process', { frame: { x: 0, y: 0, width: 1200, height: 400 } })), /proportions \(3\.00 : 1\)/);
   // Pyramids and matrices keep SH-09's domain: no fill or ink limit.
   assert.equal(smartArtUnavailable({ kind: 'pyramid', count: 4, frame: { x: 0, y: 0, width: 1000, height: 500 }, rtl: false, nodes: Array.from({ length: 4 }, () => ({ lines: 1, stable: true })), fill: 1, ink: .5 }), undefined);
 });

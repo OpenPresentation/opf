@@ -109,7 +109,7 @@ export interface PatchResult {
   presentation: unknown;
   /** The patch that restores the input from `presentation`. Applying it to `presentation` yields the input. */
   inverse: JsonPatchOperation[];
-  /** The normalised operations that were applied (values cloned, unknown members dropped). */
+  /** The normalized operations that were applied (values cloned, unknown members dropped). */
   patch: JsonPatchOperation[];
   validation?: PatchValidationResult;
 }
@@ -156,7 +156,7 @@ export function formatPointer(tokens: readonly (string | number)[]): JsonPointer
 }
 
 /**
- * Stable path normalisation. Accepts a JSON Pointer (`/slides/0/title`), an
+ * Stable path normalization. Accepts a JSON Pointer (`/slides/0/title`), an
  * OPF dotted path (`slides.0.title`) or a segment array, and returns a JSON
  * Pointer. Use pointers or segment arrays for keys that contain dots.
  */
@@ -318,7 +318,7 @@ function arrayIndex(token: string, length: number, allowEnd: boolean, path: stri
   return at;
 }
 
-/** Normalise and structurally validate a patch (shape only; no document needed). Values are cloned. */
+/** Normalize and structurally validate a patch (shape only; no document needed). Values are cloned. */
 export function normalizePatch(patch: unknown): JsonPatchOperation[] {
   if (!Array.isArray(patch)) throw new OPFPatchError("invalid-patch", "A JSON Patch must be an array of operations.");
   return patch.map((operation, index) => normalizeOperation(operation, index));

@@ -94,14 +94,14 @@ test('a caption of a placed block sits inside its band', () => {
   assert.ok(image.image.box.y + image.image.box.height <= image.caption.box.y + 1e-6);
 });
 
-test('validation: two blocks on the same edge, a placed block inside a group or a region, and placement on a non-image block are errors', () => {
+test('validation: two blocks on the same edge, a placed block inside a group or a cell, and placement on a non-image block are errors', () => {
   assert.equal(check(deck([{ title: 'T', blocks: [placed({ edge: 'start' }), placed({ edge: 'end' }), { text: 'Body' }] }])).valid, true);
   const twice = errorsOf(check(deck([{ title: 'T', blocks: [placed({ edge: 'start' }), placed({ edge: 'start', size: 0.3 })] }])));
   assert.deepEqual(twice.map((f) => [f.ruleId, f.path]), [['opf/image-placement-invalid', '/slides/0/blocks/1/placement/edge']]);
   const grouped = errorsOf(check(deck([{ title: 'T', blocks: [{ blocks: [placed({ edge: 'start' }), { text: 'Body' }] }] }])));
   assert.deepEqual(grouped.map((f) => [f.ruleId, f.path]), [['opf/image-placement-invalid', '/slides/0/blocks/0/blocks/0/placement']]);
-  const region = errorsOf(check(deck([{ title: 'T', start: placed({ edge: 'start' }), end: { text: 'Body' } }])));
-  assert.deepEqual(region.map((f) => [f.ruleId, f.path]), [['opf/image-placement-invalid', '/slides/0/start/placement']]);
+  const region = errorsOf(check(deck([{ title: 'T', blocks: [{region: 'start', ...placed({ edge: 'start' })}, { region: 'end', text: 'Body' }] }])));
+  assert.deepEqual(region.map((f) => [f.ruleId, f.path]), [['opf/image-placement-invalid', '/slides/0/blocks/0/placement']]);
   const text = errorsOf(check(deck([{ title: 'T', blocks: [{ text: 'Body', placement: { edge: 'start' } }] }])));
   assert.deepEqual(text.map((f) => [f.ruleId, f.path]), [['opf/image-option-unsupported-payload', '/slides/0/blocks/0/placement']]);
 });

@@ -30,7 +30,29 @@ export const HISTOGRAM_SELECTION=Object.freeze({slideIndex:2,seriesIndex:1,point
 // like) and their ppt/tags/opfSlideN.xml native style fingerprints changed; each slide part equals the export of f75d6876b once every
 // reference is resolved to the theme's family, and every chart, chartex, workbook and other part is byte-identical (part-by-part
 // comparison). Previous: {bytes:226882,sha256:'84b02122f21a4fad9c592acd4bec3d5800be9b5608bb8be9b79b49d7d3b2d3f8'}.
-export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:226852,sha256:'d4e2aa819f10f1bda10f45c9ec7de8a404961d984125c457f28a9469200b7a1b'});
+// 0.35 layout-record change (owner decision 2026-11-18): layout tags only; only the 34 ppt/tags/opfLayout*.xml parts changed (the copied
+// layout records and their hashes), part-by-part comparison with the export of 1f47d14a7. Previous: {bytes:226852,sha256:'d4e2aa819f10f1bda10f45c9ec7de8a404961d984125c457f28a9469200b7a1b'}.
+// 0.35 region names (owner decision 2026-11-18): layout tags and placeholder names only; only the ppt/tags/opfLayout*.xml parts and 32 slide
+// layouts whose only change is the placeholder cNvPr names from region names differ, part-by-part comparison with the export of 1f47d14a7.
+// Previous: {bytes:226867,sha256:'22b22e26fc2f096be89dacc7f2d76440e0b6e2ed9ea83afc75451be5634684a6'}.
+// 0.35 one arrangement key (owner decision 2026-11-18): layout tags only; only the 6 ppt/tags/opfLayout*.xml parts of agenda, agenda-split, process, flow, vertical-flow and
+// inverted-pyramid differ (their record hash), part-by-part comparison with the export of 6578ab9db.
+// Previous: {bytes:226752,sha256:'c375cf5049a1b2a02842190070578288916e7f54091216f454063e7585ac7bb0'}.
+// 0.35 process absorbs flow (owner decision 2026-11-18): layout removed and renamed only; the `flow` slide layout and its ppt/tags/opfLayout*.xml part are removed with the later
+// parts renumbered and the master, content-type and rels entries retargeted, `vertical-flow` is renamed `vertical-process` (cSld name, tag id and reference) and the process tag's
+// record hash moved; part-by-part comparison with the export of 58735de64 after renumbering, no slide, chart, media or theme part differs.
+// Previous: {bytes:226748,sha256:'eca0713d55f468a1fc1f86a8e614e198c71cac30e2c91e8f567e7de538107cb8'}.
+// 0.35 one row-or-column vocabulary (owner decision 2026-11-18): layout tags only; only the 24 ppt/tags/opfLayout*.xml parts of the records that said flow none or design.contentDirection, whose record hash changed differ, part-by-part comparison with the export of eed73db34.
+// Previous: {bytes:224775,sha256:'c81b9110f1255587ae5207bdaf7635b88b1cec904948e99e4cf66ee5a2b53ab3'}.
+// 0.35 titlePosition (owner decision 2026-11-18): layout removed; layout tags only; the agenda-split slide layout and its ppt/tags/opfLayout*.xml part removed with the later parts renumbered and the master sldLayoutId list, master rels and [Content_Types].xml retargeted; the record hashes of the cycle, matrix and vertical-process tags; no slide layout geometry or placeholder name changed; part-by-part comparison with the export of 6d60192cb after renumbering.
+// Previous: {bytes:224768,sha256:'73797fb5df62231d66806ee49684d5ec53b9d2107d5862caee3992ee72f05db8'}.
+// 0.35 integration merged with main (owner decision 2026-11-18): layout tags, removals and renames only; only the org-chart ppt/tags/opfLayout*.xml part (its record hash; the record's description) differs from the export of the branch before the merge, 2baa023fe; against the export of main 5ffcef407 every part differs only in the ppt/tags/opfLayout*.xml parts, slide-layout placeholder names from the region names, the removed flow and agenda-split slide layouts and tags (later parts renumbered; master sldLayoutId list and rels, [Content_Types].xml and layout/slide rels retargeted) and vertical-flow renamed vertical-process; no slide, chart, media or theme part differs; part-by-part comparison with the export of 2baa023fe.
+// Previous: {bytes:222791,sha256:'ec4dca43643897703946222dfae32f2e8b689b4ad8fb209551fb28919fceed27'}.
+// 0.35 list columns by default (owner decision 2026-11-18): layout tags only; only the ppt/tags/opfLayout*.xml parts of agenda, faq and list differ (their record hashes: the records dropped listColumns); no slide layout, slide, chart, media or theme part differs; part-by-part comparison with the export of 175b55711.
+// Previous: {bytes:222792,sha256:'e362f6c0797e45a3ad04cf2fcc51e11f75c3fe11b4ec451337e35df839b79336'}.
+// 0.35.1 column anchors (owner decision 2026-11-23): layout tags only; only the ppt/tags/opfLayout*.xml parts of two-column and three-column differ (their record hashes: the records' anchor went from bottom to middle); no slide layout, slide, chart, media or theme part differs; part-by-part comparison with the export of 7697b2664.
+// Previous: {bytes:222790,sha256:'664db47e0148f2cacae21b6818a5f3cfaeebb63fb5f9e295e46030f671436341'}.
+export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:222788,sha256:'3b41ad559ae3b8e933813241ce6717fa91ae6799110b2a46e4271ebed1eb4417'});
 export const HISTOGRAM_SOURCE_ARCHIVE_BEFORE_RR105_PICTURE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
 const keys=(value,names)=>assert.deepEqual(Object.keys(value).sort(),[...names].sort());
 const modelHash=value=>digest(Buffer.from(JSON.stringify(value)));

@@ -148,7 +148,7 @@ for (const expected of cases) {
   // flips l and r (its start edge is the right), a left-to-right paragraph and every centred one keep their alignment.
   const paragraphs = value => [...value.matchAll(/<a:p>([\s\S]*?)<\/a:p>/g)].map(([, body]) => ({algn: /^<a:pPr\b[^>]*\salgn="(\w+)"/.exec(body)?.[1] ?? 'l', rtl: /^<a:pPr\b[^>]*\srtl="([01])"/.exec(body)?.[1]}));
   const flip = {l: 'r', r: 'l', ctr: 'ctr'};
-  const ownParagraphs = paragraphs(slides(xml)), baseline = paragraphs(slides((await read(deck(undefined, {}, expected.text))).xml));
+  const ownParagraphs = paragraphs(slides(xml)), baseline = paragraphs(slides((await read(deck('en-US', {}, expected.text))).xml)); // v0.35: a left-to-right deck declares it; with no language the text decides
   assert.equal(ownParagraphs.length, baseline.length, `${expected.id} paragraph count`);
   assert.deepEqual(ownParagraphs.map(paragraph => paragraph.algn), baseline.map((paragraph, index) => ownParagraphs[index].rtl === '1' ? flip[paragraph.algn] : paragraph.algn), `${expected.id} logical alignment`);
 

@@ -22,8 +22,8 @@ kind and then by id:
     "layouts": { "two-column": { "name": "Two column", "regions": [{ "name": "title" }, { "direction": "row", "regions": [{ "name": "first", "accepts": ["text"], "flow": "auto" }, { "name": "second", "accepts": ["text"], "flow": "auto" }] }] } },
     "themes": { "minimal": { "name": "Minimal", "colorScheme": "cool-horizon", "fontScheme": "aptos" } }
   },
-  "acme": { "source": "pkg:@acme/opf-catalog", "layouts": { "hero": { "name": "Hero", "regions": [{ "name": "title" }, { "name": "media", "accepts": ["image"], "flow": "none" }] } } },
-  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "regions": [{ "name": "title" }, { "name": "chart", "accepts": ["chart"], "flow": "none" }] } } }
+  "acme": { "source": "pkg:@acme/opf-catalog", "layouts": { "hero": { "name": "Hero", "regions": [{ "name": "title" }, { "name": "media", "accepts": ["image"], "max": 1 }] } } },
+  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "regions": [{ "name": "title" }, { "name": "chart", "accepts": ["chart"], "max": 1 }] } } }
 }
 ```
 
@@ -95,7 +95,7 @@ themes?, … }`. Records may keep their `x-*` display metadata there; embedding 
 record a host registers resolves the same in preview, editor and export. Without it only what the document embeds
 resolves. A `catalogs` value that is not an array of registered catalogs throws `OPFCatalogsOptionError`
 (`code: "invalid-catalogs"`) at every entry point. `resolveSlideContext(...).resolved.provenance` (and
-`resolveDesignRecords(...).provenance`) says where each resolved layout, theme, colour scheme and font scheme came from
+`resolveDesignRecords(...).provenance`) says where each resolved layout, theme, color scheme and font scheme came from
 (`{ kind, reference, id, group, source?, origin }`, origin `document` or `host`), so engines record provenance without
 resolving again.
 
@@ -134,9 +134,11 @@ the same records from `@openpresentation/gallery`, where `defaultCatalog` is `ga
 ## Authoring helpers
 
 - **`embed(document, { catalogs })`** embeds each referenced record once, in the group it resolves in, together with
-  the records it references (a theme's colour and font schemes). A bare id from the host default goes under
-  `catalogs.default` with the catalog's source. Records already embedded are kept as they are; `x-*`, `$schema` and `id`
-  are stripped. It returns `{ document, added, unresolved }` and is idempotent. Authoring tools call it on save and
+  the records it references (a theme's color and font schemes). A bare id from the host default goes under
+  `catalogs.default` with the catalog's source. Records already embedded are kept as they are, except a copy of a built-in
+  layout from before OPF 0.35 that fails the layout schema: `catalogs.default` mirrors the built-in records, so it takes the
+  current record first (`refreshed`; see [the 0.35 migration note](migrations/0.35.md#self-contained-decks-embedded-copies-of-built-in-layouts)); `x-*`, `$schema`
+  and `id` are stripped. It returns `{ document, added, refreshed, unresolved }` and is idempotent. Authoring tools call it on save and
   export; `opf embed` does it on the command line.
 - **`copySlides(from, to, indexes, { catalogs, at })`** copies slides with their records. Groups match by `source`, not
   by name: references are rewritten to the target's name for that source, and a missing group is added (renamed
@@ -175,7 +177,7 @@ They are listed in [`spec/reference/engine-vocabularies.json`](../spec/reference
 as `CHART_TYPES`, `SOCIAL_PLATFORMS` and `LANGUAGES`. Their labels, descriptions and icons stay in the catalog as
 display metadata (`catalogDisplay`).
 
-When nothing names a theme, colour scheme or font scheme, or a reference resolves nowhere, every engine draws with the
+When nothing names a theme, color scheme or font scheme, or a reference resolves nowhere, every engine draws with the
 same engine defaults: [`spec/reference/engine-defaults.json`](../spec/reference/engine-defaults.json), exported as
 `ENGINE_DEFAULT_THEME`, `ENGINE_DEFAULT_COLOR_SCHEME` and `ENGINE_DEFAULT_FONT_SCHEME`. They are the drawing fields of
 the gallery's `minimal`, `cool-horizon` and `aptos` records, compiled into code.

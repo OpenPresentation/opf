@@ -13,13 +13,13 @@ const relsOf = path => path.replace(/([^/]+)$/, '_rels/$1.rels');
  * vendor-compat.js points pptxgenjs-plus's notes master back there, replacing its default Office notes theme)
  * (`ppt/theme/theme1.xml`). Every master owns its theme part in a PowerPoint package (theme1 for the slide master,
  * theme2 for the notes master, theme3 for a handout master), and PowerPoint refuses to read a package whose notes
- * master it recognises when that master shares the slide theme ("The file or directory is corrupted and unreadable",
+ * master it recognizes when that master shares the slide theme ("The file or directory is corrupted and unreadable",
  * 0x80070570). The vendored `p:notesMasterIdLst` sits after `p:sldIdLst` (see presentationInSchemaOrder in index.js),
- * which PowerPoint ignored; it then synthesised a default notes master with the default Office theme, and that
+ * which PowerPoint ignored; it then synthesized a default notes master with the default Office theme, and that
  * made the default font (Aptos) appear in Presentation.Fonts although no part names it.
  *
  * Each notes master that shares a theme part with another master gets its own copy of that theme, with the same
- * fonts, colours and format scheme, a relationship to it and a content-type override. The copy is taken after
+ * fonts, colors and format scheme, a relationship to it and a content-type override. The copy is taken after
  * every theme rewrite, so it carries the deck's final fonts. Copies are numbered after the existing themes.
  */
 export function giveNotesMastersOwnThemes(output) {

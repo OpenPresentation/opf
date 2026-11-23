@@ -19,10 +19,6 @@ export interface LostPart {
 
 const CONTENT = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "diagram"] as const;
 const isContent = (key: string): boolean => (CONTENT as readonly string[]).includes(key);
-const ROWS = "(?:top|middle|bottom|top\\+middle|middle\\+bottom|top\\+middle\\+bottom)";
-const COLUMNS = "(?:start|center|end|start\\+center|center\\+end|start\\+center\\+end)";
-/** The promoted region keys of a slide: a row band, a column band, or both as `rows:columns`. */
-const REGION = new RegExp(`^(?:${ROWS}(?::${COLUMNS})?|${COLUMNS})$`);
 const NATIVE_SLIDE = new Set(["id", "type", "layout", "section", "tag", "hidden", "beat", "language", "title", "subtitle", "notes", "blocks", ...CONTENT]);
 
 /** Longest fence-safe marker for a body of lines. */
@@ -249,15 +245,13 @@ interface BlockSpec {
   value: unknown;
   id?: unknown;
   type?: unknown;
-  /** A promoted region key: the block is that region of the slide. */
-  region?: string;
-  /** OPF 0.19: a block's pin to a region of the slide's layout template, written as region=<name>. */
+  /** A block's `region` (a region of the slide's layout, or a cell of its grid on a slide without one), written as region=<name>. */
   pin?: string;
 }
 
 function blockOptionsLine(spec: BlockSpec, as: string | undefined): string | undefined {
   const parts: string[] = [];
-  for (const [key, value] of [["id", spec.id], ["type", spec.type], ["as", as], ["region", spec.region ?? spec.pin]] as const) {
+  for (const [key, value] of [["id", spec.id], ["type", spec.type], ["as", as], ["region", spec.pin]] as const) {
     if (value === undefined) continue;
     const text = typeof value === "string" ? optionValue(value) : undefined;
     if (text === undefined) return undefined;
@@ -278,7 +272,7 @@ function nativeBlock(spec: BlockSpec, marker: string): string[] | undefined {
     const all = options ? [options, ...lines] : lines;
     const { slide, clean } = parseSlideText(all.join("\n"));
     if (!slide || !clean) continue;
-    const target = spec.region !== undefined ? (slide[spec.region] as Obj | undefined) : spec.id !== undefined || spec.type !== undefined || spec.pin !== undefined ? (slide.blocks as Obj[] | undefined)?.[0] : slide;
+    const target = spec.id !== undefined || spec.type !== undefined || spec.pin !== undefined ? (slide.blocks as Obj[] | undefined)?.[0] : slide;
     if (target && same(target[spec.key], canon)) return all;
   }
   return undefined;
@@ -366,7 +360,6 @@ export function emitSlide(slide: Obj, index: number, mode: "embed" | "drop"): { 
 
   // Content.
   const specs: { spec: BlockSpec; where: string; payload?: Obj }[] = [];
-  const handledRegions = new Set<string>();
   if (Array.isArray(slide.blocks)) {
     slide.blocks.forEach((block: unknown, i: number) => {
       const where = `${path}/blocks/${i}`;
@@ -380,39 +373,24 @@ export function emitSlide(slide: Obj, index: number, mode: "embed" | "drop"): { 
   } else {
     for (const key of CONTENT) if (slide[key] !== undefined) specs.push({ spec: { key, value: slide[key] }, where: `${path}/${key}` });
   }
-  for (const [key, value] of Object.entries(slide)) {
-    if (!REGION.test(key) || !isRecord(value)) continue;
-    const rest = Object.keys(value).filter((entry) => entry !== "id" && entry !== "type");
-    const only = rest.length === 1 && isContent(rest[0]!) ? rest[0]! : undefined;
-    if (only === undefined) continue;
-    handledRegions.add(key);
-    specs.push({ spec: { key: only, value: value[only], id: value.id, type: value.type, region: key }, where: `${path}/${key}`, payload: value });
-  }
   let marker = "-";
   for (const { spec, where, payload } of specs) {
     const lines = spec.key ? nativeBlock(spec, marker) : undefined;
     if (lines) {
       sections.push({ lines });
       const written = { ...(spec.id !== undefined ? { id: spec.id } : {}), ...(spec.type !== undefined ? { type: spec.type } : {}), ...(spec.pin !== undefined ? { region: spec.pin } : {}), [spec.key]: canonContent(spec.key, spec.value) };
-      if (spec.region !== undefined) exp[spec.region] = written;
-      else expBlocks.push(written);
+      expBlocks.push(written);
       const list = spec.key === "items" || spec.key === "bullets";
       marker = list ? (marker === "-" ? "*" : "-") : "-";
       continue;
     }
     marker = "-";
     handle(where, spec.key ? `${spec.key} content has a part with no Markdown form` : "a block with several fields or a nested group has no Markdown form", () => {
-      // A region cannot be set inside an opf-block fence, so the whole region goes to the opf-slide block.
-      if (spec.region !== undefined) {
-        extras[spec.region] = slide[spec.region];
-        return;
-      }
       const payloadValue: Obj = payload ?? { [spec.key]: spec.value };
       const lines = embed(payloadValue);
       if (!lines) throw new OPFMarkdownError("not-representable", `The block at ${where} holds a value that YAML cannot carry exactly.`, { path: where });
       sections.push({ lines });
-      if (spec.region !== undefined) exp[spec.region] = structuredClone(payloadValue);
-      else expBlocks.push(structuredClone(payloadValue));
+      expBlocks.push(structuredClone(payloadValue));
     });
   }
 
@@ -432,8 +410,8 @@ export function emitSlide(slide: Obj, index: number, mode: "embed" | "drop"): { 
     if (!notesLines) handle(`${path}/notes`, "the speaker notes have no Note: form (blank edges, a --- line or a carriage return)", () => (extras.notes = notes));
   }
 
-  // Everything else: composition, design, extensions, region keys.
-  for (const [key, value] of Object.entries(slide)) if (!NATIVE_SLIDE.has(key) && !handledRegions.has(key)) handle(`${path}/${key}`, `${JSON.stringify(key)} has no Markdown form`, () => (extras[key] = value));
+  // Everything else: composition, design, extensions.
+  for (const [key, value] of Object.entries(slide)) if (!NATIVE_SLIDE.has(key)) handle(`${path}/${key}`, `${JSON.stringify(key)} has no Markdown form`, () => (extras[key] = value));
   if (Object.keys(extras).length) {
     const text = writeYaml(extras);
     if (text === undefined) throw new OPFMarkdownError("not-representable", `The slide at ${path} holds a value that YAML cannot carry exactly.`, { path });

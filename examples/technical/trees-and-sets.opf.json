@@ -2,6 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Trees and overlapping sets",
   "description": "Three shared-geometry diagram layouts: reporting lines (with an assistant), a hierarchy, and overlapping sets (with a named overlap). All examples are illustrative.",
+  "language": "en-US",
   "design": {
     "background": "light1",
     "footer": {
@@ -16,7 +17,6 @@
       "title": "Give the pilot a clear reporting structure",
       "blocks": [
         {
-          "region": "people",
           "items": [
             {
               "text": "Pilot lead",
@@ -40,7 +40,6 @@
       "title": "Break the pilot into focused workstreams",
       "blocks": [
         {
-          "region": "nodes",
           "items": [
             {
               "text": "Pilot",
@@ -72,7 +71,6 @@
       "title": "Three conditions for a useful pilot",
       "blocks": [
         {
-          "region": "sets",
           "items": [
             "Clear scope",
             "Evidence",
@@ -87,7 +85,6 @@
       "title": "Give the pilot lead a chief of staff",
       "blocks": [
         {
-          "region": "people",
           "items": [
             {
               "text": "Pilot lead",
@@ -116,7 +113,6 @@
       "title": "Where the pilot earns its keep",
       "blocks": [
         {
-          "region": "sets",
           "items": [
             "Clear scope",
             "Evidence",
@@ -147,16 +143,15 @@
               "name": "title"
             },
             {
-              "name": "people",
+              "name": "body",
               "accepts": [
                 "list"
               ],
-              "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "org-chart"
             }
           ],
-          "description": "Show one organization or reporting tree with 1 to 8 short entries. Use one list: the first entry is the level-zero root and each child sets its zero-based level. Keep parents before their children, without skipping a depth. Assistants and separate roots need a diagram instead; unsupported trees retain the complete list with a finding.",
+          "description": "Show one organization or reporting tree with 1 to 8 short entries. Use one list: the first entry is the level-zero root and each child sets its zero-based level. Keep parents before their children, without skipping a depth. Mark an assistant with \"assistant\": true among its manager's reports; separate roots need a diagram instead, and unsupported trees retain the complete list with a finding.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/org-chart.svg"
           }
@@ -173,12 +168,11 @@
               "name": "title"
             },
             {
-              "name": "nodes",
+              "name": "body",
               "accepts": [
                 "list"
               ],
-              "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "hierarchy"
             }
           ],
@@ -199,12 +193,11 @@
               "name": "title"
             },
             {
-              "name": "sets",
+              "name": "body",
               "accepts": [
                 "list"
               ],
-              "role": "primary",
-              "flow": "none",
+              "max": 1,
               "arrangement": "venn"
             }
           ],

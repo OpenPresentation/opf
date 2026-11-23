@@ -3,7 +3,7 @@
 // it to an editor session as one undoable transaction. The preview recomposes and the PPTX
 // export follows from the same document, so no dimension needs a special refresh path.
 //
-// OPF 0.15 (FA-23): the catalog-backed dimensions (layouts, themes, colour and font schemes, narratives, audiences, purposes,
+// OPF 0.15 (FA-23): the catalog-backed dimensions (layouts, themes, color and font schemes, narratives, audiences, purposes,
 // tones) resolve through core with the host's registered catalogs (`options.catalogs`, `Catalog[]`) and write the reference core
 // gives (`id` or `name:id`). Languages, chart types and social platforms are engine vocabularies, checked against core's
 // tables; their labels come from the host's display metadata (`options.vocabularies`, the shape of `catalogDisplay` from
@@ -81,7 +81,6 @@ const DESIGN_KEYS = Object.freeze({
   backgrounds: ["background"],
   "headers-footers": ["header", "footer"],
 });
-const REGION = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:start|center|end)(?:\+(?:start|center|end))*)?|(?:start|center|end)(?:\+(?:start|center|end))*)$/;
 const BLOCK_KINDS = ["text", "list", "chart", "table", "metric", "quote", "code", "diagram", "timeline", "group", "image", "video"];
 const RESERVED_GROUPS = new Set(["default", "custom"]);
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -180,11 +179,6 @@ function findChartOwner(presentation, slideIndex) {
         const found = visit(block, [...path, "blocks", String(index)], depth + 1);
         if (found) return found;
       }
-    for (const [key, value] of Object.entries(node)) {
-      if (!REGION.test(key)) continue;
-      const found = visit(value, [...path, key], depth + 1);
-      if (found) return found;
-    }
     return undefined;
   };
   return visit(presentation.slides[slideIndex], ["slides", String(slideIndex)], 0);
@@ -341,7 +335,7 @@ export function prepareDimensionSwitch(presentation, dimension, value, options =
       const record = choice.record ?? {};
       entries = { theme: choice.reference };
       if (options.bundle !== false) {
-        // An explicit theme choice brings the theme's own colour scheme, font scheme and background (and, for the deck, its
+        // An explicit theme choice brings the theme's own color scheme, font scheme and background (and, for the deck, its
         // slide size): an override of those at the same scope is removed so the theme's applies. Nothing is copied out of the
         // record, except on a slide whose deck sets the key: there the theme's value is written on the slide (its references
         // qualified with the theme's catalog group), because the deck's design would otherwise win over the slide's theme.
@@ -447,7 +441,7 @@ const displayLabel = (record, id) => (typeof record?.name === "string" && record
 /**
  * The values a picker can offer for a dimension. A catalog-backed dimension lists core's `catalogRecords` (the document's embedded
  * records first, then `options.catalogs`'), each `{ id, label, record, reference, group, source, origin }` with `id` the reference
- * to write. `charts` lists core's `CHART_TYPES` and `socials` core's `SOCIAL_PLATFORMS`, labelled from `options.vocabularies`;
+ * to write. `charts` lists core's `CHART_TYPES` and `socials` core's `SOCIAL_PLATFORMS`, labeled from `options.vocabularies`;
  * `languages` lists core's `LANGUAGES` tags. `blocks` lists the content
  * kinds. Use `compatibleChartTypes` to narrow `charts` to the types the chart's data can use.
  */
@@ -463,7 +457,7 @@ export function listSwitchOptions(presentation, dimension, options = {}) {
     return Object.keys(SOCIAL_PLATFORMS).map((id) => ({ id, label: displayLabel(display.get(id), id), record: { ...SOCIAL_PLATFORMS[id], ...display.get(id) } }));
   }
   if (dimension === "languages") {
-    // Core's language table (the tags engines know the script, direction and default fonts of), labelled from the host's display metadata.
+    // Core's language table (the tags engines know the script, direction and default fonts of), labeled from the host's display metadata.
     const display = displayRecords(options, VOCABULARY.languages);
     return LANGUAGES.map((language) => ({ id: language.tag, label: displayLabel(display.get(language.tag), language.tag), record: { ...language, ...display.get(language.tag) } }));
   }

@@ -82,7 +82,7 @@
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Present structured data that benefits from precise comparison. Use clear row and column headings and concise cell content.",

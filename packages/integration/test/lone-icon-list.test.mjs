@@ -5,9 +5,8 @@
 // size and did not grow, while the same list without icons grew a step to its display size; the guard then dropped the chips as costing
 // that step. The chips are drawing, as a badge list's badges are: the list now grows as it would without them, as long as it fits with them.
 //
-// The slide's direction then chooses how the list is drawn (the owner, 2026-11-18): a row (composition.mode "row", or
-// design.contentDirection "horizontal" where no mode is set) or no direction draws LH-165's icon cards side by side; a column ("column",
-// or "vertical") draws the ruled rows of the list without icons, each entry's chip at the start of its row (the end in a right-to-left
+// The slide's direction then chooses how the list is drawn (the owner, 2026-11-18): a row (composition.mode "row") or no direction
+// draws LH-165's icon cards side by side; a column ("column") draws the ruled rows of the list without icons, each entry's chip at the start of its row (the end in a right-to-left
 // deck). A grid is a grid of cards. The choice reads the arrangement composition resolved, so the precedence stays in one place.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -37,8 +36,8 @@ const dropped = (composed) => composed.diagnostics.filter((entry) => ['icon-drop
 // The drawing of the slide: what each engine reads from a composition (boxes, sizes, chips, cards), without the settings each item carries.
 const drawing = (composed) => JSON.stringify({ items: composed.items, icons: composed.icons, steps: composed.steps, recomposed: composed.recomposed }, (key, value) => key === 'composition' ? undefined : value);
 
-const ROW = [['no direction', {}], ['composition.mode row', { composition: { mode: 'row' } }], ['design.contentDirection horizontal', { design: { contentDirection: 'horizontal' } }], ['composition.mode grid', { composition: { mode: 'grid' } }], ['composition.mode auto', { composition: { mode: 'auto' } }], ['composition.mode row over contentDirection vertical', { design: { contentDirection: 'vertical' }, composition: { mode: 'row' } }]];
-const COLUMN = [['composition.mode column', { composition: { mode: 'column' } }], ['design.contentDirection vertical', { design: { contentDirection: 'vertical' } }], ['composition.mode column over contentDirection horizontal', { design: { contentDirection: 'horizontal' }, composition: { mode: 'column' } }]];
+const ROW = [['no direction', {}], ['composition.mode row', { composition: { mode: 'row' } }], ['composition.mode grid', { composition: { mode: 'grid' } }], ['composition.mode auto', { composition: { mode: 'auto' } }]];
+const COLUMN = [['composition.mode column', { composition: { mode: 'column' } }]];
 
 test('a lone list of labeled entries with icons draws its chips at the size the list has without them', async () => {
   const document = structuredClone(original);
@@ -111,7 +110,7 @@ test('right to left: a column puts each chip at the end of its row, a row draws 
 test('a layout slide: the direction that arranges the list region chooses; the region\'s own flow does not', async () => {
   assert.equal(cardsOf(await compose(directed({ layout: 'list' })))?.chips.length, 3, 'layout list: the cards');
   assert.equal(cardsOf(await compose(directed({ layout: 'list', composition: { mode: 'row' } })))?.chips.length, 3, 'layout list, mode row: the cards');
-  for (const extra of [{ design: { contentDirection: 'vertical' } }, { composition: { mode: 'column' } }]) {
+  for (const extra of [{ composition: { mode: 'column' } }]) {
     const composed = await compose(directed({ layout: 'list', ...extra }));
     assert.equal(cardsOf(composed), undefined, `layout list, ${JSON.stringify(extra)}: ruled rows`);
     assert.equal(composed.icons.length, 3);

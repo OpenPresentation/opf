@@ -12,7 +12,7 @@
 //
 // Instances: every tool call mounts its own view, and earlier ones stay live. The server mints an order key and a session key in
 // its result (`structuredContent.viewer`; the session is the caller's, or derived from the deck's name); views of the same session
-// meet on a BroadcastChannel named by that key, and the older one greys out and stops publishing (context, messages, tool edits).
+// meet on a BroadcastChannel named by that key, and the older one grays out and stops publishing (context, messages, tool edits).
 // Views of other sessions never hear each other.
 //
 // The look is the openpresentation.org design system's playground bar (a 48px bar, a 28px status footer; view.css) in one
@@ -27,6 +27,7 @@ import { createOpfEditor, layoutOptionsFor, type OpfEditor } from "@openpresenta
 import { type BrowserFontsHandle, loadFonts } from "@openpresentation/opf-render/fonts-browser";
 import { z } from "zod";
 import { FONT_BASE, bytesOf, extraFaces, fontFetch, startupFaces } from "./fonts.js";
+import { exampleImages } from "./example-files.js";
 import { hostAbilities, hostProduct, hostReport } from "./hosts.js";
 import { type IconBatch, serverIconSets } from "./icons.js";
 
@@ -89,6 +90,20 @@ const readIcons = async (set: string, names: readonly string[], index: boolean):
 };
 // The gallery's catalog and its icon sets, read from the server: a deck's "lucide:truck" draws, and the checks know every icon name.
 const catalogs = [gallery, serverIconSets(readIcons, () => offeredIconSets)];
+/**
+ * The images the bundled example decks name (./assets/logo.svg), read through the app-only read_example_files: only the files the
+ * examples ship, as data URIs, so the preview and every export draw them; any other path keeps the placeholder (./example-files.ts).
+ */
+const examplePictures = exampleImages(async (names) => {
+	if (!app.getHostCapabilities()?.serverTools) throw new Error("this host does not let the viewer ask its server for files.");
+	const result = await app.callServerTool({ name: "read_example_files", arguments: { names: [...names] } });
+	if (result.isError) throw new Error("read_example_files failed.");
+	return result.structuredContent as { files?: Record<string, unknown> } | undefined;
+});
+/** Reads the example images the deck names that the view has not asked for yet, and redraws the slides when it got one. */
+const loadExamplePictures = async (deck: unknown): Promise<void> => {
+	if ((await examplePictures.load(deck)) && editor) await editor.refresh();
+};
 
 const root = document.documentElement;
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -905,7 +920,7 @@ async function saveFile(name: string, type: string, data: Blob | string): Promis
 /**
  * An editable PowerPoint file from the deck, made here with @openpresentation/opf-pptx (the exporter the playground uses), with the
  * preview's fonts and catalogs so the file matches the slides. The exporter loads only when this runs. It makes no request: a
- * remote picture stays a labelled placeholder, and an SVG picture's PNG fallback is drawn by the renderer's browser rasterizer.
+ * remote picture stays a labeled placeholder, and an SVG picture's PNG fallback is drawn by the renderer's browser rasterizer.
  */
 async function exportPptx(deck: unknown, request: { signal: AbortSignal; onProgress(progress: { stage?: string; done?: number; total?: number; message?: string }): void }): Promise<{ bytes: Uint8Array; warnings: string[] }> {
 	const check = () => request.signal.throwIfAborted();
@@ -922,6 +937,9 @@ async function exportPptx(deck: unknown, request: { signal: AbortSignal; onProgr
 	const bytes = await toPptx(whole as never, {
 		fonts,
 		catalogs,
+		// The example images the preview draws (read_example_files). Any other file path is refused here, so the exporter does not try
+		// to read it (in a browser that is a request to the view's own origin): it exports the placeholder and notes why.
+		imageResolver: (src: string) => examplePictures.resolve(src) ?? refuseFilePath(src),
 		onDiagnostic: (item: { code: string; message: string }) => {
 			if (PPTX_NOTES.has(item.code)) notes.add(item.message);
 		},
@@ -934,6 +952,11 @@ async function exportPptx(deck: unknown, request: { signal: AbortSignal; onProgr
 	} as never);
 	check();
 	return { bytes: bytes as Uint8Array, warnings: [...notes] };
+}
+/** A deck's file path (not a data URI, an asset: reference or a URL, which the exporter handles itself) is never read by the view. */
+function refuseFilePath(src: string): undefined {
+	if (/^(?:data|asset):|^https?:\/\//i.test(src)) return undefined;
+	throw new Error(`The viewer reads no file a deck names (${src.length > 80 ? `${src.slice(0, 79)}…` : src}); only images in the deck itself and the bundled examples' own images are exported`);
 }
 /** The exporter's notes worth showing to a person; the rest are layout bookkeeping. */
 const PPTX_NOTES = new Set(["unresolved-asset", "content-placeholder", "chart-data-unplottable", "chart-data-adapted", "chart-map-geodata", "svg-sanitized", "svg-image-rasterized", "watermark-not-exported", "unresolved-reference", "media-provenance-omitted", "variable-example-used"]);
@@ -1026,6 +1049,14 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	const format: Format = args.format ?? (isText(args.document) && !/^[\s﻿]*[[{]/.test(args.document) ? "yaml" : "json");
 	status("Drawing the slides…");
 	fonts = await fontsReady;
+	// A JSON deck's example images are read before the first draw, so its pictures do not start as placeholders.
+	if (!isText(args.document) || format === "json") {
+		try {
+			await loadExamplePictures(isText(args.document) ? JSON.parse(args.document) : args.document);
+		} catch {
+			// Text that is not JSON: the editor reports it; the images are read once it is a deck.
+		}
+	}
 	const textForm = isText(args.document) && format !== "json";
 	// Export is offered where the host saves files (ui/download-file): the sandbox cannot, and a menu that makes a file nobody gets
 	// would be worse than none.
@@ -1042,6 +1073,8 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		fonts,
 		catalogs,
 		fit: "contain",
+		// The example images read through read_example_files, for the slides and the PNG, PDF and SVG exports.
+		imageResolver: (src) => examplePictures.resolve(src),
 		slideActions: "starters",
 		canvas: { titleEnterCommits: true },
 		// The deck as its audience sees it: `{{organization.name}}` in a footer draws as the name, as the renderer and the exports draw
@@ -1100,6 +1133,8 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		showDeck();
 		scheduleChecks(event.document);
 		scheduleContext();
+		// A failed read or redraw leaves the placeholders; the editor reports its own errors.
+		void loadExamplePictures(event.document).catch(() => {});
 	});
 	editor.on("slide", () => { updateQuestion(); scheduleContext(); });
 	// Where the source pane stands: edit_deck waits for typing the pane has not taken in, rather than commit it for the person.
@@ -1130,6 +1165,7 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	if (typeof args.slide === "number" && args.slide >= 1) editor.setSlide(args.slide - 1);
 	setView(VIEWS.includes(args.view as View) ? (args.view as View) : "preview");
 	showDeck();
+	await loadExamplePictures(editor.getDocument());
 	await checkWithIcons(editor.getDocument());
 	await sendContext();
 }

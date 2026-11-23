@@ -44,7 +44,7 @@ for (const [direction, text] of [['ltr', words.en], ['rtl', words.ar]]) {
   const start = direction === 'rtl' ? 'right' : 'left';
 
   test(`LH-09 (${direction}): a statement whose title is the message draws it at display size under the accent rule, its paragraph below`, () => {
-    const result = composeSlide({ title: text.statement, blocks: [{ region: 'message', text: text.support }] }, { layout: layouts.statement, direction });
+    const result = composeSlide({ title: text.statement, blocks: [{ region: 'body', text: text.support }] }, { layout: layouts.statement, direction });
     const title = item(result, 'title'), body = item(result, 'text');
     assert.ok(title.text.fontSize > 54 && title.text.fontSize <= HEADING_DISPLAY_SIZES.title, `the title grows to display size (${title.text.fontSize})`);
     assert.equal(title.alignment, 'left', 'start-aligned (the record)');
@@ -60,14 +60,14 @@ for (const [direction, text] of [['ltr', words.en], ['rtl', words.ar]]) {
   });
 
   test(`LH-09 (${direction}): a statement whose block is the message keeps the title as its running head and grows the block`, () => {
-    const metric = composeSlide({ title: text.statement, blocks: [{ region: 'message', metric: { value: '14', label: text.three } }] }, { layout: layouts.statement, direction });
+    const metric = composeSlide({ title: text.statement, blocks: [{ region: 'body', metric: { value: '14', label: text.three } }] }, { layout: layouts.statement, direction });
     const head = item(metric, 'title'), value = item(metric, 'metric').metricLayout.parts.find((part) => part.role === 'value');
     assert.ok(head.box.y < 100, 'the title is at the top of the slide');
     // A content slide's title (LH-51): its role size, or a step down where that keeps it on one line.
     assert.ok(head.text.fontSize <= 54 && head.text.fontSize >= 40, `a content slide's title (${head.text.fontSize})`);
     assert.ok(value.fit.fontSize >= 150, `the lone metric grows to display size (${value.fit.fontSize})`);
     assert.equal(metric.titleRule, undefined, 'a running head has no rule');
-    const labeled = composeSlide({ title: text.label, blocks: [{ region: 'message', text: text.message }] }, { layout: layouts.statement, direction });
+    const labeled = composeSlide({ title: text.label, blocks: [{ region: 'body', text: text.message }] }, { layout: layouts.statement, direction });
     const body = item(labeled, 'text');
     assert.ok(item(labeled, 'title').box.y < 100, 'a label title is the running head');
     assert.equal(body.textStyle.fontWeight, 400, "a message stays in the body face, so its author's bold words still stand out");
@@ -99,14 +99,14 @@ for (const [direction, text] of [['ltr', words.en], ['rtl', words.ar]]) {
   test(`LH-09 (${direction}): the words the author set bold draw in the primary color where it reads, and nothing else is emphasized`, () => {
     const colors = (result, field) => item(result, field).text.richLines.flatMap((line) => line.fragments.map((fragment) => fragment.run.color));
     // A title keeps its look: PowerPoint's heading import would read the color as authored.
-    const title = composeSlide({ title: text.emphasis, blocks: [{ region: 'message', text: text.support }] }, { layout: layouts.statement, direction, roles: light });
+    const title = composeSlide({ title: text.emphasis, blocks: [{ region: 'body', text: text.support }] }, { layout: layouts.statement, direction, roles: light });
     assert.ok(!colors(title, 'title').includes('primary'), 'no color in a title');
-    const body = composeSlide({ title: text.label, blocks: [{ region: 'message', text: text.emphasis }] }, { layout: layouts.statement, direction, roles: light });
+    const body = composeSlide({ title: text.label, blocks: [{ region: 'body', text: text.emphasis }] }, { layout: layouts.statement, direction, roles: light });
     assert.ok(colors(body, 'text').includes('primary') && colors(body, 'text').includes(undefined), 'the bold sentence of the display message');
     assert.deepEqual(item(body, 'text').value, text.emphasis, 'the document is unchanged');
-    const unread = composeSlide({ title: text.label, blocks: [{ region: 'message', text: text.emphasis }] }, { layout: layouts.statement, direction, roles: dark });
+    const unread = composeSlide({ title: text.label, blocks: [{ region: 'body', text: text.emphasis }] }, { layout: layouts.statement, direction, roles: dark });
     assert.ok(!colors(unread, 'text').includes('primary'), 'not where the primary reads under 4.5:1');
-    const plain = composeSlide({ title: text.label, blocks: [{ region: 'message', text: text.message }] }, { layout: layouts.statement, direction, roles: light });
+    const plain = composeSlide({ title: text.label, blocks: [{ region: 'body', text: text.message }] }, { layout: layouts.statement, direction, roles: light });
     assert.equal(item(plain, 'text').value, text.message, 'a plain message has no emphasis to draw');
   });
 
@@ -119,7 +119,7 @@ for (const [direction, text] of [['ltr', words.en], ['rtl', words.ar]]) {
     assert.ok(Math.abs((start === 'left' ? rule.x : rule.x + rule.width) - (start === 'left' ? list.box.x : list.box.x + list.box.width)) < 1, 'at the start edge');
     const word = list.text.listEntries[0].text.fontSize, description = list.text.fontSize;
     assert.ok(word >= 1.25 * description - 1e-6, 'the word is larger than its heading size would be');
-    const placed = composeSlide({ title: text.label, 'top:start': { text: text.three }, 'top:center+end': { text: text.label }, 'middle+bottom:start+center+end': { items: ['Queue', 'Route', 'Resolve'] } }, { direction });
+    const placed = composeSlide({ title: text.label, blocks: [{ region: 'top:start', text: text.three }, { region: 'top:center+end', text: text.label }, { region: 'middle+bottom:start+center+end', items: ['Queue', 'Route', 'Resolve'] }] }, { direction });
     const heads = placed.items.filter((entry) => entry.field === 'text');
     assert.equal(heads.length, 2);
     assert.ok(heads.every((entry) => entry.textStyle.fontWeight === 700), 'each placed short text is a heading');

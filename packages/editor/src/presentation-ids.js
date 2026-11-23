@@ -1,16 +1,5 @@
 /** Shared slide and content-payload id collection (matches @openpresentation/opf pagination). */
 
-const promotedRegionKeys = [
-  "start", "center", "end", "start+center", "center+end", "start+center+end",
-  "top", "middle", "bottom", "top+middle", "middle+bottom", "top+middle+bottom",
-  "top:start", "top:center", "top:end", "top:start+center", "top:center+end", "top:start+center+end",
-  "middle:start", "middle:center", "middle:end", "middle:start+center", "middle:center+end", "middle:start+center+end",
-  "bottom:start", "bottom:center", "bottom:end", "bottom:start+center", "bottom:center+end", "bottom:start+center+end",
-  "top+middle:start", "top+middle:center", "top+middle:end", "top+middle:start+center", "top+middle:center+end", "top+middle:start+center+end",
-  "middle+bottom:start", "middle+bottom:center", "middle+bottom:end", "middle+bottom:start+center", "middle+bottom:center+end", "middle+bottom:start+center+end",
-  "top+middle+bottom:start", "top+middle+bottom:center", "top+middle+bottom:end", "top+middle+bottom:start+center", "top+middle+bottom:center+end", "top+middle+bottom:start+center+end",
-];
-
 const MAX_COMPOSITION_DEPTH = 8;
 
 function isRecord(value) {
@@ -30,10 +19,6 @@ export function visitContentPayloads(slide, slidePath, visit) {
     slide.blocks.forEach((block, index) => {
       if (isRecord(block)) walk(block, slidePath ? `${slidePath}.blocks.${index}` : `blocks.${index}`, 0, []);
     });
-  }
-  for (const key of promotedRegionKeys) {
-    const region = slide?.[key];
-    if (isRecord(region)) walk(region, slidePath ? `${slidePath}.${key}` : key, 0, []);
   }
 }
 

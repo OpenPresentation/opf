@@ -9,7 +9,7 @@ import {toPptx} from '../dist/index.js';
 const tier = (label, value, bullets, region) => ({region, composition: {mode: 'column'}, blocks: [{metric: {value, label, description: 'per user, per month'}}, {bullets}]});
 const design = {background: {type: 'solid', color: '#FFFFFF'}};
 const plans = {design, slides: [{layout: 'three-column', title: 'Plans', blocks: [tier('Starter', '$12', ['Up to 10 users', 'Email support'], 'first'), tier('Team', '$29', ['Unlimited users', 'Single sign-on'], 'second'), tier('Enterprise', 'Custom', ['Audit logs', 'Roadmap input'], 'third')]}]};
-const word = (title, description) => ({region: 'pillars', items: [{text: title, description}]});
+const word = (title, description) => ({region: 'body', items: [{text: title, description}]});
 const promises = {design, slides: [{layout: 'pillars', title: 'Promises', blocks: [word('Fast', 'Support answers in four minutes.'), word('Fair', 'One flat rate per user.'), word('Local', 'Engineers in your time zone.')]}]};
 const xmlOf = async deck => {
   const entries = unzipSync(new Uint8Array(await toPptx(deck, {catalogs: [gallery]})));

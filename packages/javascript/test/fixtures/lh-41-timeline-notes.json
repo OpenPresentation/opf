@@ -118,7 +118,7 @@
           "text"
         ],
         "role": "supporting",
-        "flow": "none"
+        "max": 1
       },
       {
         "name": "timeline",

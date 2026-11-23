@@ -645,12 +645,12 @@ export function createStudio(ctx) {
     const at = delta < 0 ? list.findIndex((node) => node.key === nodes[0].key) - 1 : list.findIndex((node) => node.key === nodes.at(-1).key) + 1;
     return list[at]?.kind === "group" ? true : delta < 0 ? "There is no group just before this." : "There is no group just after this.";
   };
-  s.canPlaceInRegions = () => (scene().layout ? "This slide uses a layout's regions." : scene().node(scene().slideKey)?.container?.promoted ? "This slide's content is already in regions." : true);
-  s.canReleaseRegions = () => (scene().node(scene().slideKey)?.container?.promoted ? true : "This slide's content is not in regions.");
+  s.canPlaceInRegions = () => (scene().layout ? "This slide uses a layout's regions." : scene().node(scene().slideKey)?.container?.promoted ? "This slide's blocks are already in cells." : true);
+  s.canReleaseRegions = () => (scene().node(scene().slideKey)?.container?.promoted ? true : "This slide's blocks are not in cells.");
   s.canEditLayout = () => {
     if (!ctx.slots.layouts) return "Layout Studio is not part of this editor.";
     const slide = ui.get(`/slides/${ctx.slideIndex()}`);
-    return typeof slide?.layout === "string" && slide.layout !== "auto" ? true : "This slide has no layout to edit. Choose one first.";
+    return typeof slide?.layout === "string" ? true : "This slide has no layout to edit. Choose one first.";
   };
   s.textTarget = () => {
     const node = s.primaryNode();
@@ -792,7 +792,7 @@ export function createStudio(ctx) {
   };
   s.placeInRegions = () => { setSelection([scene().slideKey], { source: "api" }); showTab("design"); design.showSection("slide-content"); announce("Choose how to place the blocks in the slide's Design panel."); };
   s.releaseRegions = () => {
-    try { regionsAsBlocks(ui, ctx.slideIndex(), { source: "studio" }); announce("Regions are now blocks, in reading order."); return true; } catch (error) { announce(error.message); return false; }
+    try { regionsAsBlocks(ui, ctx.slideIndex(), { source: "studio" }); announce("The blocks are out of their cells, in reading order."); return true; } catch (error) { announce(error.message); return false; }
   };
 
   // ---- clipboard ------------------------------------------------------------------------------------------------------------------------
@@ -876,7 +876,7 @@ export function createStudio(ctx) {
     if (!target) return "Drop inside the slide.";
     if (target.kind === "region" && target.virtual && target.accepts?.length && !target.accepts.includes(kind)) return `Region ${target.region} accepts only ${target.accepts.join(", ")}.`;
     if (target.kind === "slide" && s0.layout) return "Drop into one of the layout's regions.";
-    if (target.kind === "slide" && target.container?.promoted) return "Drop into one of the slide's regions.";
+    if (target.kind === "slide" && target.container?.promoted) return "Drop into one of the slide's cells.";
     if (target.kind === "region" && target.virtual && target.max && s0.contentChildren(target.key).length >= target.max) return `Region ${target.region} is full.`;
     return true;
   };
@@ -1006,7 +1006,7 @@ export function createStudio(ctx) {
   const currentLayout = () => { const slide = ui.get(`/slides/${ctx.slideIndex()}`); return typeof slide?.layout === "string" ? slide.layout : undefined; };
   s.newSlide = (layoutId = currentLayout(), at = ctx.slideIndex() + 1) => {
     try {
-      const change = addSlide(ui, { at, ...(layoutId && layoutId !== "auto" ? { layout: layoutId } : {}) }, { source: "studio", label: "New slide", selection: selection.snapshot() });
+      const change = addSlide(ui, { at, ...(layoutId ? { layout: layoutId } : {}) }, { source: "studio", label: "New slide", selection: selection.snapshot() });
       const index = change?.index ?? at;
       ctx.go(index);
       adapter.setSlide(index);

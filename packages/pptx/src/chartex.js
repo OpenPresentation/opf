@@ -6,7 +6,7 @@
 // data, with its embedded workbook. The package is then post-processed here:
 // a `ppt/charts/chartExN.xml` part is added with `cx:chartData` (the workbook
 // ranges and their cached values) and one `cx:series` per plotted column,
-// together with its chart style and colour style parts, and the slide's chart
+// together with its chart style and color style parts, and the slide's chart
 // frame is wrapped in `mc:AlternateContent`: the `mc:Choice` (which requires
 // the chartex namespace of the construct) references the chartex part, which
 // reads the classic chart's workbook. RR-105: the `mc:Fallback`, what a reader
@@ -111,10 +111,10 @@ function layoutProperties(spec, series, hasCategories, histogram) {
 }
 
 // Text properties for every chartex text element. PowerPoint resolves chartex
-// label colours from the chart style part and each element's own cx:txPr, not
+// label colors from the chart style part and each element's own cx:txPr, not
 // from the chartSpace txPr alone (native check 2026-09-30: labels came out in
-// the style's tx1 grey on a dark theme), so every axis, data label set and
-// legend carries the deck's label colour and font explicitly, like the classic
+// the style's tx1 gray on a dark theme), so every axis, data label set and
+// legend carries the deck's label color and font explicitly, like the classic
 // chart path writes into every c:txPr.
 function textProperties(labelColor, font, size) {
   const face = escapeXml(font);
@@ -161,8 +161,8 @@ function waterfallTotals(values) {
   }
 }
 
-// Per-point fills where the construct colours points, not series: a treemap
-// tile per category, a waterfall bar by sign (LH-59: a total in the third colour). The preview paints the same.
+// Per-point fills where the construct colors points, not series: a treemap
+// tile per category, a waterfall bar by sign (LH-59: a total in the third color). The preview paints the same.
 // LH-107: a waterfall with core's roles (`waterfall.roles`) and their colors (`waterfall.colors`, RRGGBB by role) paints each bar by role.
 export function chartexPointColors(layoutId, values, palette, waterfall) {
   if (layoutId === 'treemap') return values.map((value, index) => value === null ? null : palette[index % palette.length]);
@@ -218,11 +218,11 @@ function axes(spec, gridColor, text, titles = {}, run = {}, code, hiddenValue = 
  * layout is PptxGenJS's: Sheet1, headings in row 1, categories in column A and
  * one series per following column.
  */
-// LH-56: the labels of a treemap and a funnel sit inside their marks, so they take core's text colour for each mark's fill (4.5:1, black or
-// white when the text colour falls short), as the preview draws them: a funnel's series text, and a treemap tile's own cx:dataLabel (the
-// tiles differ in colour). `markLabelColor` is the full text colour; without it the labels keep the chart text colour.
-// Native check 2026-11-02 (PR #976): PowerPoint draws funnel labels in its own contrast colour (white on the default blue) whatever the
-// series or point cx:txPr says, so only the treemap's colours reach PowerPoint; other readers take the funnel's series text.
+// LH-56: the labels of a treemap and a funnel sit inside their marks, so they take core's text color for each mark's fill (4.5:1, black or
+// white when the text color falls short), as the preview draws them: a funnel's series text, and a treemap tile's own cx:dataLabel (the
+// tiles differ in color). `markLabelColor` is the full text color; without it the labels keep the chart text color.
+// Native check 2026-11-02 (PR #976): PowerPoint draws funnel labels in its own contrast color (white on the default blue) whatever the
+// series or point cx:txPr says, so only the treemap's colors reach PowerPoint; other readers take the funnel's series text.
 function insideLabels(spec, entry, color, {palette, markLabelColor, markLabelBackground, font, textSize, options}) {
   if (!markLabelColor || (spec.layoutId !== 'treemap' && spec.layoutId !== 'funnel')) return undefined;
   if (spec.layoutId === 'funnel') return {text: textProperties(insideLabelColor(color, markLabelColor, markLabelBackground), font, textSize), points: ''};
@@ -244,7 +244,7 @@ function pointLabelField(content) {
 // (native check 2026-11-02, PR #976: every treemap label vanished with the series-style `a:endParaRPr`-only paragraph, and with an
 // empty run), while any text in the paragraph keeps the label's own content (the visibility's category, value or series name) drawn
 // with the paragraph's defRPr. So the paragraph holds one text field of the label's content (the classic chart's label field, which
-// PowerPoint keeps when it saves the file again), and the colour, size and face sit in its defRPr and the field's rPr alike.
+// PowerPoint keeps when it saves the file again), and the color, size and face sit in its defRPr and the field's rPr alike.
 function pointTextProperties(labelColor, font, size, field, bold = false) {
   const face = escapeXml(font), weight = bold ? ' b="1"' : '';
   const run = `${solidFill(labelColor)}<a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/>`;
@@ -350,7 +350,7 @@ const STYLE_ENTRIES = [
   'leaderLine', 'legend', 'plotArea', 'plotArea3D', 'seriesAxis', 'seriesLine', 'title', 'trendline', 'trendlineLabel', 'upBar', 'valueAxis', 'wall',
 ];
 export function chartStyleXml({labelColor = '000000', gridColor = '000000', font = 'Aptos', textSize} = {}) {
-  // Text and chrome colours are the deck's label and border colours (what the classic chart path writes), not the
+  // Text and chrome colors are the deck's label and border colors (what the classic chart path writes), not the
   // theme's tx1: PowerPoint applies the style part to chartex labels that carry no cx:txPr of their own.
   const textColor = `<a:srgbClr val="${labelColor}"/>`;
   const face = escapeXml(font);
@@ -377,7 +377,7 @@ export function chartStyleXml({labelColor = '000000', gridColor = '000000', font
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cs:chartStyle xmlns:cs="${NS.cs}" xmlns:a="${NS.a}" id="201">${entries}</cs:chartStyle>`;
 }
 
-// Colour style part (cs:colorStyle, colourful palette 10): the six theme
+// Color style part (cs:colorStyle, colorful palette 10): the six theme
 // accents with the standard Office variations.
 export function chartColorStyleXml() {
   const variations = ['', '<a:lumMod val="60000"/>', '<a:lumMod val="80000"/><a:lumOff val="20000"/>', '<a:lumMod val="80000"/>', '<a:lumMod val="60000"/><a:lumOff val="40000"/>',

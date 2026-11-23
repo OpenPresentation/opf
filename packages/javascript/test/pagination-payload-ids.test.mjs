@@ -47,7 +47,7 @@ describe("pagination keeps content payload ids unique", () => {
   });
 
   test("an overflowing region payload keeps its id on the first page only", () => {
-    const [first, ...rest] = paginated({ name: "Long", slides: [{ start: { id: "sidebar", items } }] });
+    const [first, ...rest] = paginated({ name: "Long", slides: [{ blocks: [{ region: 'start', id: "sidebar", items }] }] });
     assert.deepEqual(payloadIds(first), ["sidebar"]);
     for (const page of rest) {
       for (const id of payloadIds(page)) assert.match(id, /^sidebar--\d+$/);

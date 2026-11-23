@@ -4,7 +4,7 @@
 import { CHART, type ExplainDetail, ex } from "./finding-text-explain-util.js";
 
 const WHITE = { background: { type: "solid", color: "#FFFFFF" } };
-const ROADMAP = { name: "Roadmap", regions: [{ name: "title" }, { direction: "row", regions: [{ name: "timeline", accepts: ["timeline"], max: 1 }, { name: "notes", accepts: ["text", "list"], flow: "column" }] }] };
+const ROADMAP = { name: "Roadmap", overflowRegion: "timeline", regions: [{ name: "title" }, { direction: "row", regions: [{ name: "timeline", accepts: ["timeline"], max: 1 }, { name: "notes", accepts: ["text", "list"], flow: "column" }] }] };
 const TIMELINE = { timeline: { events: [{ when: "Q1", what: "Pilot" }, { when: "Q2", what: "Launch" }] } };
 const SERIES = (count: number) => ({ columns: ["Quarter", ...Array.from({ length: count }, (_, i) => `S${i + 1}`)], rows: [["Q1", ...Array.from({ length: count }, (_, i) => i + 1)]] });
 const LONG_ITEMS = [
@@ -135,8 +135,8 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   ),
   "opf/arrangement-adapted": ex(
     "Give a matrix exactly four short entries, or choose another layout for another count.",
-    { catalogs: { custom: { layouts: { quad: { name: "Quad", regions: [{ name: "title" }, { name: "quadrants", accepts: ["list"], flow: "none", arrangement: "matrix" }] } } } }, slides: [{ layout: "quad", title: "Markets", items: ["North", "South", "East"] }] },
-    { catalogs: { custom: { layouts: { quad: { name: "Quad", regions: [{ name: "title" }, { name: "quadrants", accepts: ["list"], flow: "none", arrangement: "matrix" }] } } } }, slides: [{ layout: "quad", title: "Markets", items: ["North", "South", "East", "West"] }] },
+    { catalogs: { custom: { layouts: { quad: { name: "Quad", regions: [{ name: "title" }, { name: "quadrants", accepts: ["list"], max: 1, arrangement: "matrix" }] } } } }, slides: [{ layout: "quad", title: "Markets", items: ["North", "South", "East"] }] },
+    { catalogs: { custom: { layouts: { quad: { name: "Quad", regions: [{ name: "title" }, { name: "quadrants", accepts: ["list"], max: 1, arrangement: "matrix" }] } } } }, slides: [{ layout: "quad", title: "Markets", items: ["North", "South", "East", "West"] }] },
   ),
   "opf/region-full": ex(
     "Pin the block to another region with room, or remove `region` so it is placed by its kind.",

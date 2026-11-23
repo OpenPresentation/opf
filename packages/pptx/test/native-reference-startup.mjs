@@ -9,7 +9,31 @@ import {scanPowerShellSource} from './powershell-scan.mjs';
 import {windowsPowerShellEnvironment} from '../../../scripts/native-acceptance/windows-powershell-env.mjs';
 const worker=new URL('./native-furniture-control.ps1',import.meta.url),checker=new URL('./native-reference-startup-check.ps1',import.meta.url),sha=b=>createHash('sha256').update(b).digest('hex');
 test('reference startup retains exact immutable stages with fixed hashes and no Git/history requirement',()=>{
- const source=readFileSync(worker);assert.equal(source.length,93931);assert.equal(sha(source),'3ce6b57ca190a4c0c89b3202eeb11e2685fb2731bfc9a3a206bc3f8b022d8573');
+ const source=readFileSync(worker);assert.equal(source.length,93931);assert.equal(sha(source),'755740808d1dd28dd5a44e8720cc5d11a06bd89e5a3412a3b7bdb7458e566bad');
+ // Stage10 (owner-approved 2026-11-23, "keep all three together": re-measure, re-seal and this worker edit for releasing 0.35.1) admits
+ // the 0.35.1 reference export, which differs from the stage-9 input only in the two-column and three-column layout-record tags (the
+ // 0.35.1 column layout records); its helper series names are unchanged. Its inverse is the exact stage-9 worker.
+ const columnLayoutInputEdits=[
+  [
+    "if($SourceBytes -ne 124993 -or $SourceHash -cne 'a274f346d8acda750fb8ada0507038ea6c2e47847ae3a64b176c6c39a3344908'",
+    "if($SourceBytes -ne 124991 -or $SourceHash -cne '58e87d163fc0fe74765e62d7f8e2d382155a75e81ad425099f352038888c9a80'"
+  ]
+];
+ let columnLayoutInverse=source.toString('utf8');for(const [prior,next]of [...columnLayoutInputEdits].reverse()){assert.equal(columnLayoutInverse.split(next).length-1,1);columnLayoutInverse=columnLayoutInverse.replace(next,prior);}
+ const stage9=Buffer.from(columnLayoutInverse);assert.equal(stage9.length,93931);assert.equal(sha(stage9),'e0db6af0c1d94948554b0e324ad32dcf6a1f95ff11c8b314b46f0463be6c8018');
+ let columnLayoutForward=columnLayoutInverse;for(const [prior,next]of columnLayoutInputEdits){assert.equal(columnLayoutForward.split(prior).length-1,1);columnLayoutForward=columnLayoutForward.replace(prior,next);}assert.deepEqual(Buffer.from(columnLayoutForward),source,'Only the measured 0.35.1 input extends the nine prior immutable stages');
+ // Stage9 (owner-approved 2026-11-18, "Yes, for the plan": lock refresh for layout-record changes) admits the 0.35 reference export,
+ // which differs from the stage-8 input only in layout-record tags, region-derived placeholder names and removed/renamed built-in
+ // layouts; its helper series names are unchanged. Its inverse is the exact stage-8 worker.
+ const layoutRecordInputEdits=[
+  [
+    "if($SourceBytes -ne 129055 -or $SourceHash -cne '3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918'",
+    "if($SourceBytes -ne 124993 -or $SourceHash -cne 'a274f346d8acda750fb8ada0507038ea6c2e47847ae3a64b176c6c39a3344908'"
+  ]
+];
+ let layoutRecordInverse=stage9.toString('utf8');for(const [prior,next]of [...layoutRecordInputEdits].reverse()){assert.equal(layoutRecordInverse.split(next).length-1,1);layoutRecordInverse=layoutRecordInverse.replace(next,prior);}
+ const stage8=Buffer.from(layoutRecordInverse);assert.equal(stage8.length,93931);assert.equal(sha(stage8),'3ce6b57ca190a4c0c89b3202eeb11e2685fb2731bfc9a3a206bc3f8b022d8573');
+ let layoutRecordForward=layoutRecordInverse;for(const [prior,next]of layoutRecordInputEdits){assert.equal(layoutRecordForward.split(prior).length-1,1);layoutRecordForward=layoutRecordForward.replace(prior,next);}assert.deepEqual(Buffer.from(layoutRecordForward),stage9,'Only the measured 0.35 input extends the eight prior immutable stages');
  // Stage8 (owner-approved 2026-11-13): the worker admits the v0.34.0 reference export as the one measured input and names its two helper
  // series as that export writes them. Its inverse is the exact stage-7 worker, from which the earlier stages derive as before.
  const measuredInputEdits=[
@@ -22,9 +46,9 @@ test('reference startup retains exact immutable stages with fixed hashes and no 
     "$name -cne (@('Target 80','Floor -10')[$index-2])"
   ]
 ];
- let measuredInverse=source.toString('utf8');for(const [prior,next]of [...measuredInputEdits].reverse()){assert.equal(measuredInverse.split(next).length-1,1);measuredInverse=measuredInverse.replace(next,prior);}
+ let measuredInverse=stage8.toString('utf8');for(const [prior,next]of [...measuredInputEdits].reverse()){assert.equal(measuredInverse.split(next).length-1,1);measuredInverse=measuredInverse.replace(next,prior);}
  const stage7=Buffer.from(measuredInverse);assert.equal(stage7.length,93922);assert.equal(sha(stage7),'21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255');
- let measuredForward=measuredInverse;for(const [prior,next]of measuredInputEdits){assert.equal(measuredForward.split(prior).length-1,1);measuredForward=measuredForward.replace(prior,next);}assert.deepEqual(Buffer.from(measuredForward),source,'Only the measured input and its helper names extend the seven prior immutable stages');
+ let measuredForward=measuredInverse;for(const [prior,next]of measuredInputEdits){assert.equal(measuredForward.split(prior).length-1,1);measuredForward=measuredForward.replace(prior,next);}assert.deepEqual(Buffer.from(measuredForward),stage8,'Only the measured input and its helper names extend the seven prior immutable stages');
  const workerRootEdits=[
   [
     "$fixed=Join-Path $outputRoot ('reference-name-'+$Phase+'.pptx')",
@@ -88,5 +112,5 @@ test('reference startup retains exact immutable stages with fixed hashes and no 
 test('actual Windows PS5 executes the real main parameter and startup handshake, old fails/new passes without Office',{skip:process.platform!=='win32'},()=>{
  const artifacts=fileURLToPath(new URL('../../../artifacts/',import.meta.url));mkdirSync(artifacts,{recursive:true});const output=mkdtempSync(path.join(artifacts,'native-reference-startup-')),report=path.join(output,'report.json');
  const result=spawnSync(path.join(process.env.SystemRoot,'System32/WindowsPowerShell/v1.0/powershell.exe'),['-NoProfile','-NonInteractive','-File',fileURLToPath(checker),'-ScriptPath',fileURLToPath(worker),'-ReportPath',report],{env:windowsPowerShellEnvironment(process.env),encoding:'utf8',windowsHide:true,timeout:15000});writeFileSync(path.join(output,'stdout.log'),result.stdout??'');writeFileSync(path.join(output,'stderr.log'),result.stderr??'');assert.equal(result.status,0,result.error?.message??result.stdout+result.stderr);
- const data=JSON.parse(readFileSync(report,'utf8').replace(/^\uFEFF/u,''));assert.equal(data.powerShellEdition,'Desktop');assert.match(data.powerShellVersion,/^5\.1\./u);assert.equal(data.genuineArchive,false);assert.equal(data.earlierFullSourceBootstrapExercised,false);assert.equal(data.officeConstructed,false);assert.equal(data.processQueries,0);assert.equal(data.observerIO,0);assert.equal(data.workerSha256,'3ce6b57ca190a4c0c89b3202eeb11e2685fb2731bfc9a3a206bc3f8b022d8573');assert.deepEqual(data.measuredInputDerivation,{edits:2,workerBytes:93931,inverseBytes:93922,inverseSha256:'21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255',forwardExact:true});assert.equal(data.oldInverseSha256,'4fc89960c8b1e777d7ccc5d9f8f54e9f9dddb9ca1ca864b4bb9cf9ac881ff6fa');assert.deepEqual(data.workerRootDerivation,{edits:3,workerBytes:93922,inverseBytes:93940,inverseSha256:'1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870',forwardExact:true});assert.deepEqual(data.cases.map(r=>r.scenario),['valid','old-collision','disabled','missing-switch','missing-request','false-request','nonboolean-request','wrong-source']);for(const row of data.cases)assert.equal(row.passed,true,row.scenario);assert.equal(data.cases[0].publicSwitch,true);assert.equal(data.cases[0].internalEnabled,true);assert.equal(data.cases[1].refusal,'Reference-name switch differs from its snapshotted request');
+ const data=JSON.parse(readFileSync(report,'utf8').replace(/^\uFEFF/u,''));assert.equal(data.powerShellEdition,'Desktop');assert.match(data.powerShellVersion,/^5\.1\./u);assert.equal(data.genuineArchive,false);assert.equal(data.earlierFullSourceBootstrapExercised,false);assert.equal(data.officeConstructed,false);assert.equal(data.processQueries,0);assert.equal(data.observerIO,0);assert.equal(data.workerSha256,'755740808d1dd28dd5a44e8720cc5d11a06bd89e5a3412a3b7bdb7458e566bad');assert.deepEqual(data.columnLayoutInputDerivation,{edits:1,workerBytes:93931,inverseBytes:93931,inverseSha256:'e0db6af0c1d94948554b0e324ad32dcf6a1f95ff11c8b314b46f0463be6c8018',forwardExact:true});assert.deepEqual(data.layoutRecordInputDerivation,{edits:1,workerBytes:93931,inverseBytes:93931,inverseSha256:'3ce6b57ca190a4c0c89b3202eeb11e2685fb2731bfc9a3a206bc3f8b022d8573',forwardExact:true});assert.deepEqual(data.measuredInputDerivation,{edits:2,workerBytes:93931,inverseBytes:93922,inverseSha256:'21fad1db47a4194431f8750f4f117df33f718c93782eca415b3de0f6e7fca255',forwardExact:true});assert.equal(data.oldInverseSha256,'4fc89960c8b1e777d7ccc5d9f8f54e9f9dddb9ca1ca864b4bb9cf9ac881ff6fa');assert.deepEqual(data.workerRootDerivation,{edits:3,workerBytes:93922,inverseBytes:93940,inverseSha256:'1cb61400327a06df95a03562e524c9fe4487375efd86a21dd49494b9db773870',forwardExact:true});assert.deepEqual(data.cases.map(r=>r.scenario),['valid','old-collision','disabled','missing-switch','missing-request','false-request','nonboolean-request','wrong-source']);for(const row of data.cases)assert.equal(row.passed,true,row.scenario);assert.equal(data.cases[0].publicSwitch,true);assert.equal(data.cases[0].internalEnabled,true);assert.equal(data.cases[1].refusal,'Reference-name switch differs from its snapshotted request');
 });

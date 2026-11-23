@@ -6,10 +6,10 @@ import{timelineStatusWordsFor}from'@openpresentation/opf/composition';
 import{gallery}from'@openpresentation/gallery';
 const events=()=>['done','current','planned'].map((status,index)=>({when:'Week '+(index+1),what:['Discover','Build','Launch'][index],status}));
 const document=language=>({language,design:{fontScheme:'roboto'},slides:[{title:'Roadmap',timeline:events()}]});
-test('LH121: generated status vocabulary chooses only its actual slide scripts, including nested/promoted payloads',()=>{
+test('LH121: generated status vocabulary chooses only its actual slide scripts, including nested payloads and blocks in cells',()=>{
  for(const[language,scripts]of[['ar-SA',['Arab']],['he-IL',['Hebr']],['ja-JP',['Jpan']],['zh-TW',['Hant']],['en-US',[]],['fr-FR',[]],['ga-IE',[]]])assert.deepEqual(detectPresentationScripts(document(language)),scripts,language);
  const override=document('en-US');override.slides[0].language='zh-TW';assert.deepEqual(detectPresentationScripts(override),['Hant']);override.slides[0].language={bcp47:'ar-SA'};assert.deepEqual(detectPresentationScripts(override),['Arab']);override.language='ar-SA';override.slides[0].language='en-US';assert.deepEqual(detectPresentationScripts(override),[]);
- for(const slide of[{blocks:[{blocks:[{timeline:{events:events()}}]}]},{'top:end':{timeline:events()}}])assert.deepEqual(detectPresentationScripts({language:'ar-SA',slides:[slide]}),['Arab']);
+ for(const slide of[{blocks:[{blocks:[{timeline:{events:events()}}]}]},{blocks:[{region:'top:end',timeline:events()}]}])assert.deepEqual(detectPresentationScripts({language:'ar-SA',slides:[slide]}),['Arab']);
  const noStatus=document('ar-SA');for(const event of noStatus.slides[0].timeline)delete event.status;assert.deepEqual(detectPresentationScripts(noStatus),[],'language alone still loads no script');
  assert.deepEqual(detectPresentationScripts({language:'ar-SA',variables:{unused:{timeline:events()}},slides:[{text:'Only Latin',notes:'No translated labels',extensions:{ignored:{timeline:events()}}}],metadata:{timeline:events()},catalogs:{custom:{layouts:{unused:{timeline:events()}}}}}),[],'undrawn arbitrary objects must not acquire generated labels');
 });

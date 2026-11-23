@@ -147,12 +147,12 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
 }
 
 // 8. Core places each line by its ink. Where one box would move a line more than 1 px (at 960) from its measured place, the title keeps
-// fixed lines, each paragraph with the margin that starts it there (layout-sampler 36, "How a team / joins the pilot": the J starts 2.95 px
+// fixed lines, each paragraph with the margin that starts it there (the layout sampler's vertical-process slide, "How a team / joins the pilot": the J starts 2.95 px
 // right of the H; boutique-hotel-revenue-recovery's cover, right-aligned, ends its first line 1.85 px right of the second).
 {
   const {examples} = await import('@openpresentation/opf/examples');
   const {deck: sampler} = examples.find(entry => entry.file.endsWith('layout-sampler.opf.json'));
-  const out = await exported({...sampler, slides: [sampler.slides[35]]});
+  const out = await exported({...sampler, slides: [sampler.slides.find(slide => slide.id === 'layout-vertical-process')]});
   const [title, ...rest] = out.titles(0);
   assert.equal(rest.length, 0);
   assert.match(title, /<p:ph type="title"\/>/);
@@ -160,7 +160,7 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   const margin = (shape, name) => [...shape.matchAll(/<a:pPr\b[^>]*>/g)].map(([pPr]) => Number(new RegExp(`\\b${name}="(-?\\d+)"`).exec(pPr)?.[1] ?? 0));
   const [first, second] = margin(title, 'marL');
   assert.ok(first === 0 && second > 2.5 * 9525 && second < 3.5 * 9525, `the second line starts its 2.95 px further right (${first}, ${second})`);
-  assert.equal((await imported(out.bytes)).value.slides[0].title, sampler.slides[35].title);
+  assert.equal((await imported(out.bytes)).value.slides[0].title, sampler.slides.find(slide => slide.id === 'layout-vertical-process').title);
   const {deck: hotel} = examples.find(entry => entry.file.endsWith('boutique-hotel-revenue-recovery.opf.json'));
   const right = await exported({...hotel, slides: [hotel.slides[0]]});
   assert.equal(slideTitle(right.slide(0)).tier, 'fixed-breaks', 'right-aligned lines placed apart are one title');

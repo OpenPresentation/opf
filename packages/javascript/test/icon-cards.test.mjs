@@ -94,7 +94,7 @@ for (const [language, text] of Object.entries(TEXT)) {
     const badges = tiles(numbered).badges;
     assert.deepEqual(badges.map((badge) => badge.label), ['01', '02', '03', '04']);
     assert.ok(badges.every((badge, index) => badge.numeral && badge.list?.index === index), 'numerals that give a PPTX import the list numbers back');
-    const agenda = compose({ layout: 'agenda-split', title: text.agenda, blocks: [{ region: 'items', items: text.topics.map((topic) => ({ text: topic, icon: 'brand:dot' })) }] }, language);
+    const agenda = compose({ layout: 'agenda', design: { titlePosition: 'start' }, title: text.agenda, blocks: [{ region: 'body', items: text.topics.map((topic) => ({ text: topic, icon: 'brand:dot' })) }] }, language);
     const agendaCards = tiles(agenda);
     assert.ok(agendaCards, 'an agenda with icons draws as cards');
     assert.deepEqual(agendaCards.badges.map((badge) => badge.label), ['01', '02', '03', '04'], 'numbered as its badges would number it');

@@ -8,7 +8,7 @@ import { composeSlide } from '../dist/composition.js';
 
 const record = (anchor, regions) => ({ id: 'cards', name: 'Cards', design: { contentBox: true }, direction: 'column', anchor, regions: [{ name: 'title' }, ...regions] });
 const grid = (anchor) => record(anchor, [{ name: 'body', accepts: ['text', 'list', 'metric', 'image', 'group'], role: 'primary', flow: 'grid' }]);
-const columns = (anchor) => record(anchor, [{ direction: 'row', regions: ['first', 'second', 'third'].map((name) => ({ name, accepts: ['text', 'list'], role: 'primary', flow: 'none' })) }]);
+const columns = (anchor) => record(anchor, [{ direction: 'row', regions: ['first', 'second', 'third'].map((name) => ({ name, accepts: ['text', 'list'], role: 'primary', max: 1 })) }]);
 const cards = (result) => result.items.filter((item) => item.frameBox);
 const body = (result) => result.regions.find((region) => region.content.length).box;
 const bottomOf = (box) => box.y + box.height;

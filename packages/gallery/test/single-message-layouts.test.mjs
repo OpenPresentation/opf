@@ -1,5 +1,5 @@
 // WI-2 (whole-group placement): the single-message layouts place the title and what belongs to it as one group, and
-// agenda-split joins the openers. Each changed record is checked against the geometry of its 0.26.10 form.
+// the agenda beside its title (0.34 agenda-split, OPF 0.35 agenda with design.titlePosition start) binds as an opener. Each changed record is checked against the geometry of its 0.26.10 form.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { composeSlide } from '@openpresentation/opf/composition';
@@ -8,9 +8,9 @@ import { gallery } from '../dist/index.js';
 const GAP = 24; // the default gap at a 1280 x 720 canvas
 const OLD = {
   closing: { id: 'closing', design: { titleAlignment: 'center', contentAlignment: 'center' }, direction: 'column', regions: [{ name: 'title', size: 1 }, { name: 'details', size: 'auto', accepts: ['text', 'list', 'image'], role: 'supporting', flow: 'auto' }] },
-  statement: { id: 'statement', design: { titleAlignment: 'center', contentAlignment: 'center' }, direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { name: 'message', accepts: ['text', 'quote', 'metric'], role: 'primary', flow: 'none' }] },
+  statement: { id: 'statement', design: { titleAlignment: 'center', contentAlignment: 'center' }, direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { name: 'message', accepts: ['text', 'quote', 'metric'], role: 'primary', max: 1 }] },
   quote: { id: 'quote', direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { name: 'quotes', accepts: ['quote', 'group'], role: 'primary', flow: 'grid' }] },
-  comparison: { id: 'comparison', design: { contentBox: false }, direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'first', accepts: ['text', 'list', 'metric', 'image', 'chart', 'table', 'group'], role: 'primary', flow: 'none' }, { name: 'second', accepts: ['text', 'list', 'metric', 'image', 'chart', 'table', 'group'], role: 'primary', flow: 'none' }] }, { name: 'verdict', size: 'auto', accepts: ['text'], role: 'supporting', flow: 'none' }] },
+  comparison: { id: 'comparison', design: { contentBox: false }, direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'first', accepts: ['text', 'list', 'metric', 'image', 'chart', 'table', 'group'], role: 'primary', max: 1 }, { name: 'second', accepts: ['text', 'list', 'metric', 'image', 'chart', 'table', 'group'], role: 'primary', max: 1 }] }, { name: 'verdict', size: 'auto', accepts: ['text'], role: 'supporting', max: 1 }] },
 };
 const compose = (layout, slide) => composeSlide(slide, { width: 1280, height: 720, layout: typeof layout === 'string' ? gallery.layouts[layout] : layout });
 const field = (result, name) => result.items.find((item) => item.field === name);
@@ -83,7 +83,7 @@ test('quote centres the title and the quotation as one group', () => {
 
 test('comparison puts the verdict right under the options, with the title on top', () => {
   const slide = { title: 'Choose the smallest useful test', subtitle: SUB, blocks: [{ text: 'Option A: focused pilot\nTwo teams, six weeks.' }, { text: 'Option B: broad rollout\nAll teams, three months.' }, { text: 'Recommendation: establish the evidence with Option A.', emphasis: false }] };
-  // LH-170: the verdict would be the foot band; `emphasis: false` keeps it in the record's verdict region, whose place this test reads.
+  // LH-170: the verdict would be the foot band; `emphasis: false` keeps it in the record's aside region, whose place this test reads.
   const result = compose('comparison', slide), before = compose(OLD.comparison, slide);
   const [first, second, verdict] = result.items.filter((item) => item.field === 'text');
   assert.equal(first.box.y, second.box.y);
@@ -93,17 +93,16 @@ test('comparison puts the verdict right under the options, with the title on top
   assert.equal(result.diagnostics.length, 0);
 });
 
-test('agenda-split binds three, six and nine entries without findings, the list beside the title', () => {
-  const layout = gallery.layouts['agenda-split'];
-  assert.ok(layout, 'the record exists');
+test('agenda with titlePosition start binds three, six and nine entries without findings, the list beside the title', () => {
+  assert.equal(gallery.layouts['agenda-split'], undefined, 'OPF 0.35 removed agenda-split');
   for (const count of [3, 6, 9]) {
     const items = Array.from({ length: count }, (_, index) => `Part ${index + 1}: a short agenda entry`);
-    const result = compose('agenda-split', { title: 'From the problem to the next decision', subtitle: SUB, blocks: [{ items }] });
+    const result = compose('agenda', { title: 'From the problem to the next decision', subtitle: SUB, design: { titlePosition: 'start' }, blocks: [{ items }] });
     assert.equal(result.diagnostics.length, 0, `${count} entries`);
     const title = field(result, 'title'), list = field(result, 'items');
     assert.ok(list.box.x >= title.box.x + title.box.width - 1 || list.box.x > title.box.x + 100, `${count}: the list is beside the title`);
     assert.ok(list.box.y >= result.contentBox.y - 1 && bottomOf(list) <= result.contentBox.y + result.contentBox.height + 1, `${count}: inside the content box`);
-    assert.deepEqual(result.regions.map((region) => region.name), ['items']);
+    assert.deepEqual(result.regions.map((region) => region.name), ['body']);
   }
 });
 

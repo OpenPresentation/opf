@@ -33,6 +33,12 @@ export interface ExamplePage {
 	gallery?: string | null;
 	file: string;
 	deck: unknown;
+	/**
+	 * The image files the deck names by a relative path that the package ships, keyed by that path as the deck writes it
+	 * (`./assets/logo.svg`), as base64 data URIs. Never part of the deck a tool or resource returns: the viewer reads them through
+	 * the app-only `read_example_files` and draws a deck's `./assets/<name>` with them. Left out when the deck names none.
+	 */
+	files?: Readonly<Record<string, string>>;
 }
 
 /** The data the server serves. `skills` maps a skill name to its files (`SKILL.md`, `references/...`), path to text. */
@@ -368,6 +374,14 @@ const FONT_CHUNK = 512 * 1024;
  */
 const ICON_BATCH = 100;
 const ICON_NAME = /^[a-z0-9][a-z0-9-]*$/;
+
+/**
+ * The most files one read_example_files call names. The example images are 13 files of 109 KB together (146 KB as base64), so even
+ * a call for all of them stays far under one message frame.
+ */
+const EXAMPLE_FILE_BATCH = 32;
+/** What read_example_files serves: a base64 data URI of a raster or SVG image, nothing else (a host's sources included). */
+const EXAMPLE_FILE_DATA = /^data:image\/(?:png|jpeg|gif|webp|svg\+xml);base64,[A-Za-z0-9+/]*={0,2}$/;
 
 /** Bytes as base64, without Buffer (edge-safe). */
 function base64Of(bytes: Uint8Array): string {
@@ -868,8 +882,8 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			{
 				title: "Show a deck in the OPF viewer",
 				description: processDecks
-					? "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. Their edits come back to you as context: continue from that version. Also checks the deck as validate_deck does and returns its name, slide titles and findings as text, so a client without MCP Apps still gets an answer. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI does (opf convert deck.opf.json deck.pptx)."
-					: "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. The viewer checks the deck on the user's machine and sends you its findings, and the user's edits, as context: fix the findings and continue from the user's version. This server does no deck work itself, so a client without MCP Apps gets no check. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI does (opf convert deck.opf.json deck.pptx).",
+					? "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. Their edits come back to you as context: continue from that version. Also checks the deck as validate_deck does and returns its name, slide titles and findings as text, so a client without MCP Apps still gets an answer. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one grays out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI does (opf convert deck.opf.json deck.pptx)."
+					: "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. The viewer checks the deck on the user's machine and sends you its findings, and the user's edits, as context: fix the findings and continue from the user's version. This server does no deck work itself, so a client without MCP Apps gets no check. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one grays out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI does (opf convert deck.opf.json deck.pptx).",
 				inputSchema: {
 					document: documentSchema,
 					format: formatSchema.optional().describe("The form of the document text. Default: JSON for an object or text that starts with { or [."),
@@ -934,7 +948,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			{
 				title: "OpenPresentation",
 				description:
-					"Create and edit slide decks in OpenPresentation: a starter deck (optionally with a title), or one of the bundled example decks by slug.\nAll inputs are optional; with none it opens a two-slide starter deck. In the editor the user can edit it at once, open a local OPF file, browse bundled examples, or paste a deck into Source. In a client that supports MCP Apps the viewer's own tools (read_deck, select_slide, edit_deck) then read and change that deck in place. list_examples lists the slugs. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one greys out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both.",
+					"Create and edit slide decks in OpenPresentation: a starter deck (optionally with a title), or one of the bundled example decks by slug.\nAll inputs are optional; with none it opens a two-slide starter deck. In the editor the user can edit it at once, open a local OPF file, browse bundled examples, or paste a deck into Source. In a client that supports MCP Apps the viewer's own tools (read_deck, select_slide, edit_deck) then read and change that deck in place. list_examples lists the slugs. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one grays out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both.",
 				inputSchema: {
 					example: z.string().max(100).optional().describe("A bundled example deck to open, by slug (list_examples). Leave it out for the starter deck."),
 					title: z.string().max(120).optional().describe('The deck\'s name: the starter deck\'s title, or a new name for the example. Default "Untitled deck" for the starter deck.'),
@@ -1085,6 +1099,41 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				},
 			);
 		}
+
+		// The bundled example decks name image files by a relative path (./assets/logo.svg), which the viewer cannot load: it asks for
+		// them here by that path and draws the deck's ./assets/<name> with what comes back. The answer is a lookup in the examples'
+		// own files (ExamplePage.files): a path no example's file has is reported missing, and nothing is read from disk or fetched.
+		// It is registered whenever the viewer is, also with no example files (every path is then missing): a host that answers
+		// tools/list from a server built without its examples must still list the tool, or a client that lets a view call only
+		// the listed tools refuses the viewer's call.
+		const exampleFiles = new Map<string, string>();
+		for (const example of sources.examples) {
+			for (const [name, data] of Object.entries(example.files ?? {})) if (!exampleFiles.has(name) && EXAMPLE_FILE_DATA.test(data)) exampleFiles.set(name, data);
+		}
+		server.registerTool(
+			"read_example_files",
+			{
+				title: "Read example images for the OPF viewer",
+				description: `Used by the OPF viewer only (it cannot fetch): the image files the bundled example decks name by a relative path (./assets/logo.svg), up to ${EXAMPLE_FILE_BATCH} a call, as base64 data URIs. Only the files the examples ship; any other path is reported missing. Do not call it yourself.`,
+				inputSchema: { names: z.array(z.string().max(200)).max(EXAMPLE_FILE_BATCH).describe(`Up to ${EXAMPLE_FILE_BATCH} paths as a deck names them (./assets/logo.svg).`) },
+				outputSchema: { files: z.record(z.string(), z.string()), missing: z.array(z.string()) },
+				annotations: { ...READ_ONLY, title: "Read example images for the OPF viewer" },
+				// SEP-1865: callable by the view, hidden from the model.
+				_meta: { ui: { visibility: ["app"] } },
+			},
+			async ({ names }) => {
+				const asked = [...new Set(names)];
+				const files: Record<string, string> = {};
+				const missing: string[] = [];
+				for (const name of asked) {
+					const data = exampleFiles.get(name);
+					if (data) files[name] = data;
+					else missing.push(name);
+				}
+				// The data goes to the view only: the text says what it is.
+				return { content: [{ type: "text" as const, text: `Example files: ${Object.keys(files).length} of ${asked.length}${missing.length ? `; not shipped: ${missing.join(", ")}` : ""}.` }], structuredContent: { files, missing } };
+			},
+		);
 	}
 
 	// -------------------------------------------------------------------------------------------------------------------

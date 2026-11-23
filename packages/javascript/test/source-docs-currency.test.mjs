@@ -20,7 +20,7 @@ test('current source documentation matches the actual Gallery, example folders a
   assert.ok(read('skills/opf-layout/SKILL.md').includes(`The ${layouts.length} built-ins in this source`));
   for (const name of ['opf-inspect', 'opf-presets']) assert.ok(read(`skills/${name}/SKILL.md`).includes(`v2 intent layouts (${layouts.length} in this source)`));
   assert.equal(count('examples/markdown', '.opf.md'), 2);
-  assert.equal(sampler.slides.length, layouts.length + 13);
+  assert.equal(sampler.slides.length, layouts.length + 14);
   const used = new Set(sampler.slides.map(s => s.layout).filter(Boolean));
   for (const { id } of layouts) assert.ok(used.has(id), `sampler covers ${id}`);
 });

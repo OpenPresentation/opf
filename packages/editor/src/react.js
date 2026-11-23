@@ -102,7 +102,7 @@ export function createOPFReactComponents(React) {
 // ---- CE-06: the embeddable editor for React 18 and 19 ----------------------------------------------------------------------------------
 // `<OpfEditor>` mounts `createOpfEditor` (src/workspace.js) in an effect and destroys it in the cleanup, so it is correct under StrictMode's
 // mount, unmount, mount: the editor module is loaded on demand (an import that resolves after both effects), the first effect's request is
-// cancelled by its cleanup, and only the second creates an editor. The server renders an empty container; nothing of the editor
+// canceled by its cleanup, and only the second creates an editor. The server renders an empty container; nothing of the editor
 // (and none of its code) runs there. React is an optional peer: only this entry point needs it.
 
 const NO_STOP = () => {};
@@ -140,10 +140,10 @@ function useMountedEditor(container, props, onEditor, registerPanel) {
   useEffect(() => {
     const element = container.current;
     if (!element) return undefined;
-    let cancelled = false;
+    let canceled = false;
     let created = null;
     import("./workspace.js").then(({ createOpfEditor }) => {
-      if (cancelled) return;
+      if (canceled) return;
       const { options } = splitProps(latest.current);
       const current = () => latest.current;
       // CE-20: host panels with `render` are mounted by React through portals into the Studio's panel elements.
@@ -161,10 +161,10 @@ function useMountedEditor(container, props, onEditor, registerPanel) {
       setEditor(created);
       report.current?.(created);
     }, (error) => {
-      if (!cancelled) latest.current.onError?.(error instanceof Error ? error : new Error(String(error)), {});
+      if (!canceled) latest.current.onError?.(error instanceof Error ? error : new Error(String(error)), {});
     });
     return () => {
-      cancelled = true;
+      canceled = true;
       if (!created) return;
       created.destroy();
       created = null;

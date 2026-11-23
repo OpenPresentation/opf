@@ -10,12 +10,13 @@ import {
 	variableFindings,
 } from './check-document.js';
 import { parseSource, type ParsedSource } from './check-source.js';
-import type { Finding, FindingSeverity } from './generated/types/finding.js';
+import type { Finding, FindingFix, FindingSeverity } from './generated/types/finding.js';
 import type { Rec } from './rule-design.js';
 import { splitPointer } from './rule-content.js';
 import type { FindingInput, ValidationContext } from './rule-context.js';
 import { validateAgainstSchema, type SchemaCheckResult } from './schema-check.js';
-import { schemaFixes } from './schema-fixes.js';
+import { removedKeyRepair, schemaFixes } from './schema-fixes.js';
+import { staleCopyCause, staleCopyFix, staleLayoutCopy, type StaleLayoutCopy } from './stale-records.js';
 import { buildSlides } from './rule-slides.js';
 import { ValidationCompositionCache, type ValidationCacheInfo } from './validation-cache.js';
 import type { Presentation } from './types.js';
@@ -49,7 +50,7 @@ export type {
 	ValidationRuleInfo,
 	ValidationThresholds,
 } from './validation-types.js';
-export { promotedRegionKeys } from './schema-check.js';
+export { gridCells } from './schema-check.js';
 
 /**
  * `validate(input, options?)`: one checker for an OPF presentation. It reads a parsed presentation or strict JSON text and
@@ -165,7 +166,7 @@ function resolveOptions(options: ValidateOptions): Resolved {
 		if (measurement !== undefined && typeof measurement !== 'function' && !isObject(measurement)) throw new TypeError('Validate fonts.textMeasurement must be a text measurement, or a function of the slide index.');
 	}
 	if (options.chartPalette !== undefined && (!Array.isArray(options.chartPalette) || !options.chartPalette.every((color) => typeof color === 'string' && /^#[0-9a-fA-F]{6}$/.test(color))))
-		throw new TypeError('Validate chartPalette must be an array of #RRGGBB colours.');
+		throw new TypeError('Validate chartPalette must be an array of #RRGGBB colors.');
 	if (options.template !== undefined && typeof options.template !== 'boolean') throw new TypeError('Validate template must be true or false.');
 	if (options.values !== undefined && !isObject(options.values)) throw new TypeError('Validate values must be an object keyed by variable id.');
 	const level = (info: ValidationRuleInfo) => severity.get(info.id) ?? severity.get(info.category);
@@ -185,6 +186,8 @@ function resolveOptions(options: ValidateOptions): Resolved {
 }
 
 const order = new Map(validationRules.map((info, index) => [info.id, index]));
+/** The rules that report an embedded record's own errors (check-document's recordRuleId). */
+const STALE_RECORD_RULES = new Set(['opf/catalog-record', 'opf/layout-template', 'opf/layout-region']);
 const categoryOrder = (category: string) => {
 	const index = (validationCategories as readonly string[]).indexOf(category);
 	return index < 0 ? validationCategories.length : index;
@@ -300,12 +303,30 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 		}
 	}
 
+	// OPF 0.35: a record finding on an embedded copy of a built-in layout from before 0.35 names the cause and carries the fix that
+	// takes the current record (stale-records.ts), once per copy: the one fix, since catalogs.default mirrors the built-in records.
+	const staleCopies = new Map<string, { copy?: StaleLayoutCopy; fix?: FindingFix }>();
+	const staleRepair = (entry: Finding) => {
+		if (!STALE_RECORD_RULES.has(entry.ruleId) || entry.scope === 'context') return undefined;
+		const match = /^\/catalogs\/([^/]+)\/layouts\/([^/]+)(?:\/|$)/.exec(entry.path);
+		if (!match) return undefined;
+		const [group, id] = [match[1]!, match[2]!].map((segment) => segment.replaceAll('~1', '/').replaceAll('~0', '~')) as [string, string];
+		let found = staleCopies.get(`${group}/${id}`);
+		if (!found) {
+			const copy = staleLayoutCopy(document, group, id, run.options);
+			const fix = copy ? staleCopyFix(document, copy, run.options) : undefined;
+			found = copy ? { copy, ...(fix ? { fix } : {}) } : {};
+			staleCopies.set(`${group}/${id}`, found);
+		}
+		return found.copy ? { cause: staleCopyCause(found.copy), fix: found.fix } : undefined;
+	};
+
 	// Finish: severity overrides, exceptions by path, slide numbers, source ranges, order.
 	const finished: Finding[] = [];
 	for (const entry of findings) {
 		const info = findValidationRule(entry.ruleId);
 		const override = info ? run.severity(info) : undefined;
-		const next: Finding = override && override !== entry.severity ? { ...entry, severity: override } : entry;
+		let next: Finding = override && override !== entry.severity ? { ...entry, severity: override } : entry;
 		if (info && run.ignored(info, splitPointer(next.path))) continue;
 		const index = slideOf(next.path);
 		if (next.slide === undefined && index !== undefined && next.scope !== 'context') {
@@ -317,10 +338,16 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 			const location = parsed.locate(next.path);
 			if (location) next.location = location;
 		}
+		// OPF 0.35: a removed design key or region flow says what replaced it and carries the safe fix.
+		const removed = next.scope !== 'context' ? removedKeyRepair(next, document) : undefined;
+		if (removed) next = withRepair(next, removed);
 		if (next.ruleId === 'opf/schema' && next.fixes === undefined && next.scope !== 'context') {
 			const fixes = schemaFixes(next, document);
 			if (fixes.length) next.fixes = fixes;
 		}
+		const stale = staleRepair(next);
+		// The message starts with the cause's first clause (what the copy is), so a reader of messages alone learns it.
+		if (stale) next = { ...next, message: `${stale.cause.split('; ')[0]}: ${next.message}`, help: next.help ? `${stale.cause} ${next.help}` : stale.cause, ...(stale.fix ? { fixes: [stale.fix] } : {}) };
 		finished.push(next);
 	}
 	finished.sort(
@@ -417,6 +444,12 @@ export function assertValid(value: unknown, options: ValidateOptions = {}): asse
 	if (!report.valid) throw new OPFValidationError(report);
 }
 
+/** A finding with what replaced its removed key (removedKeyRepair): the help, the fixes and, for a slide's cell key, no near-miss names. */
+function withRepair(finding: Finding, removed: NonNullable<ReturnType<typeof removedKeyRepair>>): Finding {
+	const { suggestions, ...rest } = finding;
+	return { ...(removed.dropSuggestions ? rest : { ...rest, ...(suggestions ? { suggestions } : {}) }), help: removed.help, ...(removed.fixes.length ? { fixes: removed.fixes } : {}) };
+}
+
 /**
  * Check one published catalog record file (an audience, theme, layout, font scheme, chart type and so on) against its
  * companion schema, `$schema` and `id` included. The report has the same shape as `validate`'s; every finding is `format`.
@@ -426,7 +459,10 @@ export function validateCatalogRecord(kind: CatalogRecordKind, value: unknown): 
 	const kinds = Object.keys(catalogSchemaNames);
 	if (!kinds.includes(kind)) throw new TypeError(`Unknown catalog kind ${JSON.stringify(kind)}. Kinds: ${kinds.join(', ')}.`);
 	const engine: SchemaCheckResult = validateAgainstSchema(value, kind);
-	const findings: Finding[] = engine.errors.map((issue) => issueFinding(issue, issueRuleId(issue), engine.schemaName));
+	const findings: Finding[] = engine.errors.map((issue) => {
+		const found = issueFinding(issue, issueRuleId(issue), engine.schemaName), removed = removedKeyRepair(found, value);
+		return removed ? withRepair(found, removed) : found;
+	});
 	const tally = counts(findings);
 	const checks: ValidationChecks = {
 		syntax: 'not-applicable',

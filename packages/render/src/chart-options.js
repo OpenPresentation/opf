@@ -1,6 +1,6 @@
 // RR-35: chart options in the preview (axis titles, legend position, data labels).
 //
-// Core owns the normalisation and the per-type support table (`resolveChartOptions`); this module owns the drawing.
+// Core owns the normalization and the per-type support table (`resolveChartOptions`); this module owns the drawing.
 // A chart that carries none of the three fields resolves to `active: false` and never reaches any code here, so
 // its SVG is exactly what it was before.
 import { chartLabelText, formatChartLabelNumber, formatChartLabelPercent, formatDataNumber, resolveChartOptions, textColorForFill } from "@openpresentation/opf/composition";
@@ -54,9 +54,11 @@ export function reserveAxisTitles(c, spec, titles) {
 }
 
 /**
- * Draw the axis titles after the chart: the bottom title centred under the plot, the left title rotated 270 degrees
- * (reading upwards, as PowerPoint draws a vertical axis title) and centred on the plot. `c.plotArea` is the plot the
- * renderer laid out; without one the title centres on the reserved band.
+ * Draw the axis titles after the chart: the bottom title centered under the plot, the left title rotated 270 degrees
+ * (reading upwards, as PowerPoint draws a vertical axis title) and centered on the plot. `c.plotArea` is the plot the
+ * renderer laid out; without one the title centers on the reserved band. A bar chart drawn on a table's rows (LH-115, `c.alignedRows`)
+ * has a plot shorter than its box: its bottom title sits right under the tick labels (core keeps the chart's parts together around the
+ * rows, as PowerPoint sets an axis title beside its axis), not at the foot of the box.
  */
 export function drawAxisTitles(c) {
   if (!c.axisTitleBands?.length) return;
@@ -65,17 +67,19 @@ export function drawAxisTitles(c) {
     const path = `${c.path}.axisTitles.${axis}`;
     if (side === "bottom") {
       const span = plot ? { x: plot.x, width: plot.width } : { x: inner.x, width: inner.width };
-      const rect = { x: span.x, y: outer.y + outer.height - c.lineHeight, width: span.width, height: c.lineHeight };
+      const foot = outer.y + outer.height - c.lineHeight;
+      const y = c.alignedRows && plot ? Math.min(foot, plot.y + plot.height + (c.valueAxisHidden ? 0 : c.lineHeight)) : foot;
+      const rect = { x: span.x, y, width: span.width, height: c.lineHeight };
       c.text(text, rect, path, "center");
     } else {
       const span = plot ? { y: plot.y, height: plot.height } : { y: inner.y, height: inner.height };
-      // The rotated text box is laid out horizontally, `length` wide and one line tall, then turned about its centre. A right title
+      // The rotated text box is laid out horizontally, `length` wide and one line tall, then turned about its center. A right title
       // (a combo chart's secondary axis) is rotated the same way, as PowerPoint draws every vertical axis title by default.
-      const length = Math.max(1, span.height), centreY = span.y + span.height / 2;
-      const centreX = side === "right" ? outer.x + outer.width - (c.axisTitleRightInset ?? 0) - c.lineHeight / 2 : outer.x + c.lineHeight / 2;
-      const rect = { x: centreX - length / 2, y: centreY - c.lineHeight / 2, width: length, height: c.lineHeight };
+      const length = Math.max(1, span.height), centerY = span.y + span.height / 2;
+      const centerX = side === "right" ? outer.x + outer.width - (c.axisTitleRightInset ?? 0) - c.lineHeight / 2 : outer.x + c.lineHeight / 2;
+      const rect = { x: centerX - length / 2, y: centerY - c.lineHeight / 2, width: length, height: c.lineHeight };
       const element = c.textElement(text, rect, path, "center");
-      if (element) c.children.push(c.svg.tag("g", { transform: `rotate(-90 ${c.num(centreX)} ${c.num(centreY)})` }, element));
+      if (element) c.children.push(c.svg.tag("g", { transform: `rotate(-90 ${c.num(centerX)} ${c.num(centerY)})` }, element));
     }
   }
 }
@@ -105,7 +109,7 @@ function drawLabel(c, text, rect, path, fill, weight = 400) {
   if (element) c.children.push(element);
 }
 
-/** The text colour for a label placed inside a mark of colour `fill`: the contrasting one; outside marks keep the chart text colour. */
+/** The text color for a label placed inside a mark of color `fill`: the contrasting one; outside marks keep the chart text color. */
 export function labelFill(c, position, fill) {
   return INSIDE.has(position) && fill ? textColorForFill(fill, c.labelColor) : c.labelColor;
 }
@@ -141,7 +145,7 @@ export function drawBarLabel(c, text, rect, direction, path, fill, weight = 400)
   drawLabel(c, text, { x, y, width, height }, path, labelFill(c, position, fill), weight);
 }
 
-/** A label beside a point mark (line and scatter): above, below, left, right or centred on it. `position` overrides the chart's (a combo chart's line series). */
+/** A label beside a point mark (line and scatter): above, below, left, right or centered on it. `position` overrides the chart's (a combo chart's line series). */
 export function drawPointLabel(c, text, point, path, position = c.dataLabels.position ?? "above") {
   const { width, height } = labelSize(c, text);
   const gap = 3 * c.pt + c.fontPx * 0.25;
@@ -156,7 +160,7 @@ export function drawPointLabel(c, text, point, path, position = c.dataLabels.pos
   drawLabel(c, text, { x: at[0], y: at[1], width, height }, path, c.labelColor);
 }
 
-/** A label at the middle of an area (or any mark with no position choice), centred on (x, y). */
+/** A label at the middle of an area (or any mark with no position choice), centered on (x, y). */
 export function drawCenteredLabel(c, text, x, y, path, fill) {
   const { width, height } = labelSize(c, text);
   drawLabel(c, text, { x: x - width / 2, y: y - height / 2, width, height }, path, fill ? labelFill(c, "center", fill) : c.labelColor);

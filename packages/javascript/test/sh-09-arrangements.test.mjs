@@ -56,8 +56,8 @@ test('a matrix is PowerPoint\'s Basic Matrix: four rounded squares in a centered
 });
 
 test('a region\'s arrangement is read from the layout record, and the gallery has a pyramid and a matrix layout', () => {
-  assert.equal(layoutTemplate(gallery.layouts.pyramid).regions.find(region => region.name === 'levels').arrangement, 'pyramid');
-  assert.equal(layoutTemplate(gallery.layouts.matrix).regions.find(region => region.name === 'quadrants').arrangement, 'matrix');
+  assert.equal(layoutTemplate(gallery.layouts.pyramid).regions.find(region => region.name === 'body').arrangement, 'pyramid');
+  assert.equal(layoutTemplate(gallery.layouts.matrix).regions.find(region => region.name === 'body').arrangement, 'matrix');
   assert.equal(layoutTemplate({ regions: [{ name: 'title' }, { name: 'body', arrangement: 'spiral' }] }).regions[0].arrangement, undefined);
 });
 
@@ -124,7 +124,7 @@ test('OPF\'s own design where PowerPoint\'s does not hold the entries: a stepped
   const [quadrants] = matrix.arrangements;
   assert.equal(quadrants.design, 'opf');
   assert.equal(quadrants.background, undefined);
-  const area = matrix.regions.find(region => region.name === 'quadrants').box;
+  const area = matrix.regions.find(region => region.name === 'body').box;
   near(quadrants.nodes[3].box.x + quadrants.nodes[3].box.width, area.x + area.width, 'the quadrants fill the region', .05);
 });
 

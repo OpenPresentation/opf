@@ -2,8 +2,8 @@
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "kind": "layouts",
   "version": "1",
-  "description": "The built-in slide layouts of OPF 0.19: 40 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
-  "contentSha256": "66d47ff798875602f19d283a31b6fdf15cf62ec832367987378af4381fc37d57",
+  "description": "The built-in slide layouts of OPF 0.19: 38 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
+  "contentSha256": "730b522f18c7deabc9dbf00d6287d07d457babec919b0fc15e07d0f2b1373dc7",
   "records": [
     {
       "id": "cover",
@@ -25,13 +25,6 @@
       "summary": "What the talk covers: the parts, as one list that flows into columns when long.",
       "group": "Openers and closers",
       "file": "agenda.json"
-    },
-    {
-      "id": "agenda-split",
-      "name": "Agenda beside",
-      "summary": "A concise agenda beside its title and introduction.",
-      "group": "Openers and closers",
-      "file": "agenda-split.json"
     },
     {
       "id": "statement",
@@ -153,18 +146,11 @@
       "file": "chevrons.json"
     },
     {
-      "id": "flow",
-      "name": "Flow",
-      "summary": "Steps in order, as boxes joined by arrows in one row.",
-      "group": "Groups of items",
-      "file": "flow.json"
-    },
-    {
-      "id": "vertical-flow",
-      "name": "Vertical flow",
+      "id": "vertical-process",
+      "name": "Vertical process",
       "summary": "Steps in order, as boxes joined by arrows in a column beside the title.",
       "group": "Groups of items",
-      "file": "vertical-flow.json"
+      "file": "vertical-process.json"
     },
     {
       "id": "org-chart",

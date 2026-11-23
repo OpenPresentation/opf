@@ -19,6 +19,8 @@ for (const { keys, deck } of decks) {
   const traced = toSvg(deck, { trace: true }), plain = toSvg(deck);
   for (const bound of resolved.slides) {
     const key = keys[bound.index], svg = traced[bound.index], geometry = bound.geometry;
+    // OPF 0.35: the long-list feature slides in a weighted row are automatic slides (no layout), drawn for the goldens only.
+    if (!deck.slides[bound.index].layout) continue;
     // LH-83: a slide whose layout sets a body role at the readability floor is recomposed as the automatic grid: no regions, and
     // every item is drawn outside a region group.
     assert.ok(Array.isArray(geometry.regions) !== Boolean(geometry.recomposed), `${key}: core composed the template's regions, or recomposed the slide`);

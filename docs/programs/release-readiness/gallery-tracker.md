@@ -8,7 +8,7 @@ One record per item type and value: every catalog record in `the committed track
 
 ## Summary
 
-863 records; 550 addressed, 313 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
+864 records; 550 addressed, 314 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
 
 | Type | Records | Statuses | Addressed | Unaddressed |
 | --- | ---: | --- | ---: | ---: |
@@ -27,7 +27,7 @@ One record per item type and value: every catalog record in `the committed track
 | blocks | 32 | done 24, parity-near 8 | 32 | 0 |
 | image-treatments | 15 | done 15 | 15 | 0 |
 | purposes | 9 | done 9 | 9 | 0 |
-| fonts | 168 | done 143, font-gap 25 | 168 | 0 |
+| fonts | 169 | done 143, font-gap 26 | 168 | 1 |
 | slide-sizes | 10 | descoped 7, missing-gallery 3 | 7 | 3 |
 | gallery-teasers | 1 | descoped 1 | 1 | 0 |
 
@@ -39,7 +39,7 @@ One record per item type and value: every catalog record in `the committed track
 | `works-unverified` | 0 | 1 | Every automated column passes, but no committed native PowerPoint evidence run names this value. |
 | `unknown` | 37 | 1.5 | A column has no data source for this record (no audit, parity or probe measured it), so it is not known to work. |
 | `parity-near` | 60 | 2 | The preview and the PPTX agree only within the near tolerance on at least one parity check (latest parity run). |
-| `font-gap` | 58 | 2 | A font the value draws is not accepted in the font tracker (accepted means status qualified or documented-visual). |
+| `font-gap` | 59 | 2 | A font the value draws is not accepted in the font tracker (accepted means status qualified or documented-visual). |
 | `missing-gallery` | 3 | 2 | Not shown on pptx.gallery: served only as catalog JSON, announced as coming, or without its card preview. |
 | `missing-spec` | 272 | 2 | Not in the bundled core catalog: published only by the pptx.gallery catalog, or not published in any catalog. |
 | `missing-editor` | 0 | 3 | The editor has no switch operation for this kind of value (FF-16, RR-06). |
@@ -382,6 +382,7 @@ Historical measured verdicts below retain their original input scope; an additio
 | charts | `unknown` | 9 | `100pct-stacked-area`, `100pct-stacked-bar`, `100pct-stacked-column`, `combo`, `stacked-area`, `stacked-bar`, `stacked-column`, `stacked-line`, `stacked-line-with-markers` | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
 | layouts | `unknown` | 34 | `agenda`, `chart`, `chart-beside`, `closing`, `code`, `comparison`, `cover`, `dashboard`, `faq`, `gallery`, `hero`, `image` and 22 more | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
 | slide-sizes | `unknown` | 3 | `1:1`, `4:5`, `9:16` | not measured: compose, preview, export, roundTrip, parity (no gallery config uses this preset) | Measure the missing columns (audit or probe) and commit the result. | - |
+| fonts | `works-unverified` | 1 | `Leelawadee UI` | font tracker native verification unverified (FF-46) | Native PowerPoint comparison (FF-46) is the remaining acceptance gate and has not been run for this family: the owner decided on 2026-11-23 to record it as not yet natively verified (opf#1399). Added with the 0.35 script defaults (2026-1... | - |
 
 ## Addressed gaps
 
@@ -393,7 +394,7 @@ Historical measured verdicts below retain their original input scope; an additio
 | font-schemes | `parity-near` | 55 | `angsana-new`, `aparajita`, `arabic-typesetting`, `arial`, `batang`, `bookman`, `century-schoolbook`, `classic-editorial`, `consolas`, `constantia`, `daunpenh`, `david` and 43 more | fontResolution near (fontResolution: visual-only replacement (no metric-compatible open font for Angsana New): Angsana New -> Noto Sans Thai) (and 54 other details) | A visual look-alike route, intended by the owner decision of 2026-09-29 (the PPTX keeps the selected family); the font tracker carries the family's remaining work (FF-44, FF-46 native verification). | [RR-17](burndown.md) (in-progress) |
 | font-schemes | `font-gap` | 20 | `angsana-new`, `batang`, `daunpenh`, `dilleniaupc`, `gungsuh`, `kartika`, `khmer-ui`, `latha`, `malgun-gothic`, `mangal`, `meiryo`, `ms-mincho` and 8 more | Angsana New script-gap (and 19 other details) | The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46). | [RR-17](burndown.md) (in-progress) |
 | font-schemes | `missing-spec` (descoped) | 4 | `bold-impact`, `classic-editorial`, `modern-professional`, `warm-storytelling` | legacy gallery item not published in any OPF catalog | Decided (RR-41, 2026-10-02): publish the four legacy pairings gallery-first as schema-valid font schemes with app "Google Slides" (additive; retiring them would remove public pages), then sync and release core; tracked in opf#317. | [opf#317](https://github.com/OpenPresentation/opf/issues/317) |
-| fonts | `font-gap` | 25 | `Angsana New`, `Batang`, `BatangChe`, `DaunPenh`, `DilleniaUPC`, `Ebrima`, `Gungsuh`, `GungsuhChe`, `Kartika`, `Khmer UI`, `Latha`, `Malgun Gothic` and 13 more | font tracker status script-gap (and 1 other detail) | The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46). Each record names its own next action in the JSON (14 distinct). | [RR-17](burndown.md) (in-progress) |
+| fonts | `font-gap` | 26 | `Angsana New`, `Batang`, `BatangChe`, `DaunPenh`, `DilleniaUPC`, `Ebrima`, `Gungsuh`, `GungsuhChe`, `Kartika`, `Khmer UI`, `Latha`, `Leelawadee UI` and 14 more | font tracker status script-gap (and 1 other detail) | The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46). Each record names its own next action in the JSON (15 distinct). | [RR-17](burndown.md) (in-progress) |
 | gallery-teasers | `missing-gallery` (descoped) | 1 | `transitions-and-motion` | pptx.gallery home lists "Transitions & motion" as coming: Per-slide transitions and element-level animation tokens. | Navigation and motion are deferred out of v1 by the owner (2026-10-01). | [opf#250](https://github.com/OpenPresentation/opf/issues/250) |
 | languages | `parity-near` | 27 | `amharic`, `arabic`, `armenian`, `bengali`, `chinese-simplified`, `chinese-traditional`, `chittagonian`, `georgian`, `gujarati`, `hebrew`, `hindi`, `japanese` and 15 more | fontResolution near (fontResolution: visual-only replacement (no metric-compatible open font for Nyala): Nyala -> Noto Sans Ethiopic) (and 20 other details) | A visual look-alike route, intended by the owner decision of 2026-09-29 (the PPTX keeps the selected family); the font tracker carries the family's remaining work (FF-44, FF-46 native verification). | [RR-17](burndown.md) (in-progress) |
 | languages | `font-gap` | 13 | `bengali`, `chittagonian`, `gujarati`, `hindi`, `japanese`, `khmer`, `korean`, `malayalam`, `marathi`, `nepali`, `punjabi-gurmukhi`, `tamil` and 1 more | Shonar Bangla script-gap (and 10 other details) | The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46). | [RR-17](burndown.md) (in-progress) |
@@ -411,7 +412,7 @@ Historical measured verdicts below retain their original input scope; an additio
 | Parity | `docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-published-0.12.json` (850 values, 2026-10-03T00:22:04.269Z; opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, pptx-gallery `c349a61`). The latest committed parity run (RR-20 re-audit): the published 0.12 set (core 0.12.0, opf-render 0.12.0, opf-pptx 0.12.2, opf-editor 0.11.1) on pptx-gallery c349a61, with the RR-44 classifier for computed value-axis tick labels. It replaces the RR-16 candidate run (741 perfect, 109 near, 0 mismatch) and the published-package run before it (739 / 111 / 0); no value regressed. |
 | Audit B, later run | `docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results-2026-10-02-published-0.12-catalog-only.json` (62 values; pptx-gallery `c349a61`, opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, opf-editor `f4779da`, node `26.7.0`) |
 | Parity, later run | `docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-published-0.12-catalog-only.json` (62 values, 2026-10-03T00:22:05.850Z; opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, pptx-gallery `c349a61`) |
-| Fonts | `docs/programs/font-fidelity-everywhere/font-tracker.json` (168 families, as of 2026-10-02) |
+| Fonts | `docs/programs/font-fidelity-everywhere/font-tracker.json` (169 families, as of 2026-10-02) |
 | Native evidence | `docs/programs/release-readiness/tracker-inputs/native-evidence-index.json`: json and md files under a path segment naming native or PowerPoint; a value counts as exercised when such a file names it |
 | Native run (RR-42) | `docs/programs/release-readiness/tracker-inputs/rr-42-native-20261002/values.json` (881 values; per-value verdict of the gated checks: verified or failed) |
 | Native run (RR-42) | `docs/programs/release-readiness/tracker-inputs/rr-17-viet-supplement-native-20261002/values.json` (2 values; per-value verdict of the gated checks: verified or failed) |

@@ -55,7 +55,7 @@
                 "$ref": "#/$defs/compatibility"
               },
               "metricModeFallback": {
-                "description": "Metric-mode registries still preview with this visual replacement (reported as visual) so an earlier metric behaviour does not regress.",
+                "description": "Metric-mode registries still preview with this visual replacement (reported as visual) so an earlier metric behavior does not regress.",
                 "type": "boolean"
               },
               "note": {
@@ -242,6 +242,17 @@
             }
           ]
         },
+        "scripts": {
+          "description": "Script replacements (v0.35), keyed by ISO 15924 script code (Arab). Runs of that script in this family are measured and drawn with the entry's open face instead of `family`, at its own preview-only size multiplier; text of any other script keeps `family` (Arial draws Latin text with Arimo, at the composed size, and Arabic-script runs with Noto Naskh Arabic at 0.96). The PPTX still names this row's family.",
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {
+            "pattern": "^[A-Z][a-z]{3}$"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/scriptReplacement"
+          }
+        },
         "source": {
           "type": "string",
           "format": "uri"
@@ -276,6 +287,39 @@
           "family",
           "compatibility"
         ]
+      }
+    },
+    "scriptReplacement": {
+      "description": "The open face that previews one script of a family (`replacement.scripts`).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family",
+        "compatibility"
+      ],
+      "dependentRequired": {
+        "sizeAdjust": [
+          "sizeAdjustBasis"
+        ]
+      },
+      "properties": {
+        "family": {
+          "$ref": "#/$defs/family"
+        },
+        "compatibility": {
+          "$ref": "#/$defs/compatibility"
+        },
+        "sizeAdjust": {
+          "description": "Preview-only font-size multiplier for this script's runs, as `replacement.sizeAdjust`: the sum of the real font's shaped advances over the sum of this face's, on the script corpus, regular style. Absent means 1.",
+          "type": "number",
+          "minimum": 0.25,
+          "maximum": 2
+        },
+        "sizeAdjustBasis": {
+          "description": "How `sizeAdjust` was measured: the corpus, the reference font version, the advance ratio it is rounded from, the bold ratio and the letter heights at the multiplier, and why this face. Required with `sizeAdjust`.",
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "entry": {

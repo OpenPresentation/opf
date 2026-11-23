@@ -1,54 +1,100 @@
 {
   "name": "Table And Code Example",
+  "language": "en-US",
   "slides": [
     {
       "title": "Quarter Snapshot",
-      "top+middle": {
-        "table": {
-          "columns": [
-            "Metric",
-            "Q3",
-            "Q4"
-          ],
-          "rows": [
-            [
-              "Revenue",
-              "$12.4M",
-              "$18.1M"
+      "blocks": [
+        {
+          "table": {
+            "columns": [
+              "Metric",
+              "Q3",
+              "Q4"
             ],
-            [
-              "Gross margin",
-              "68%",
-              "72%"
-            ],
-            [
-              "Pipeline",
-              "$31M",
-              "$44M"
+            "rows": [
+              [
+                "Revenue",
+                "$12.4M",
+                "$18.1M"
+              ],
+              [
+                "Gross margin",
+                "68%",
+                "72%"
+              ],
+              [
+                "Pipeline",
+                "$31M",
+                "$44M"
+              ]
             ]
-          ]
+          }
+        },
+        {
+          "text": "Growth was broad-based, with margin expansion from infrastructure savings."
         }
-      },
-      "bottom": {
-        "text": "Growth was broad-based, with margin expansion from infrastructure savings."
-      }
+      ]
     },
     {
       "title": "Decision Rule",
-      "start": {
-        "code": {
-          "source": "if risk > threshold:\n    escalate(owner)\nelse:\n    approve(change)",
-          "language": "python",
-          "filename": "decision.py"
+      "layout": "code-and-rule",
+      "blocks": [
+        {
+          "code": {
+            "source": "if risk > threshold:\n    escalate(owner)\nelse:\n    approve(change)",
+            "language": "python",
+            "filename": "decision.py"
+          }
+        },
+        {
+          "items": [
+            "Escalate only when the decision is irreversible",
+            "Keep reversible changes moving",
+            "Write the reason back to the audit log"
+          ]
         }
-      },
-      "center+end": {
-        "items": [
-          "Escalate only when the decision is irreversible",
-          "Keep reversible changes moving",
-          "Write the reason back to the audit log"
-        ]
+      ]
+    }
+  ],
+  "catalogs": {
+    "custom": {
+      "layouts": {
+        "code-and-rule": {
+          "name": "Code beside its rule",
+          "summary": "Code in a column that fits it, with the rule it implements beside it.",
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "direction": "row",
+              "anchor": "middle",
+              "regions": [
+                {
+                  "name": "body",
+                  "size": 2,
+                  "accepts": [
+                    "code"
+                  ],
+                  "flow": "column"
+                },
+                {
+                  "name": "aside",
+                  "size": 3,
+                  "accepts": [
+                    "text",
+                    "list"
+                  ],
+                  "role": "supporting",
+                  "flow": "column"
+                }
+              ]
+            }
+          ]
+        }
       }
     }
-  ]
+  }
 }

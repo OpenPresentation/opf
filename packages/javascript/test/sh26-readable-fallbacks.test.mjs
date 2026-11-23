@@ -41,7 +41,7 @@ test('six long labels use spare space to grow beyond the frozen26px fallback wit
 });
 test('fallback reflow keeps headings, title decoration, exact frame and footer unchanged',()=>{
   const doc=documentFor(fixture.cases[0].slide);doc.design={footer:{start:{text:'Complete original footer'},end:{text:'{{slide.number}}'}}};
-  const plain=structuredClone(doc);for(const region of plain.catalogs.custom.layouts['inverted-pyramid'].regions){delete region.arrangement;delete region.pyramidDirection;}
+  const plain=structuredClone(doc);for(const region of plain.catalogs.custom.layouts['inverted-pyramid'].regions){delete region.arrangement;}
   const before=compose(plain),after=compose(doc),heading=g=>g.items.filter(item=>!item.path.includes('.blocks.'));
   assert.deepEqual(heading(after),heading(before));assert.deepEqual(after.titleRule,before.titleRule);
   assert.deepEqual(after.furniture,before.furniture);assert.equal(after.furniture.parts.length,2);
@@ -55,9 +55,9 @@ test('explicit cap and fill:false retain settled26px while preserving the readin
     assert.ok(entries(item).every(entry=>entry.text.richLines.every(line=>line.fragments.map(f=>f.text).join('').trim().length<=70)));
   }
 });
-test('a matched diagram region listColumns:1 stays single-column without a payload override',()=>{
-  const doc=documentFor(fixture.cases[0].slide),record=doc.catalogs.custom.layouts['inverted-pyramid'];record.regions.find(region=>region.name==='levels').listColumns=1;
-  const result=compose(doc),item=body(result)[0];assert.equal(item.payload.columns,undefined);assert.equal(item.listColumns,undefined);assert.deepEqual(item.value,doc.slides[0].blocks[0].items);
+test('a matched diagram region list with columns: 1 stays single-column (OPF 0.35: the region key listColumns is removed)',()=>{
+  const doc=documentFor(fixture.cases[0].slide);doc.slides[0].blocks[0].columns=1;
+  const result=compose(doc),item=body(result)[0];assert.equal(item.payload.columns,1);assert.equal(item.listColumns,undefined);assert.deepEqual(item.value,doc.slides[0].blocks[0].items);
   assert.ok(result.diagnostics.some(d=>d.code==='text-overflow'&&/70 characters/.test(d.message)));
   doc.slides[0].composition.overflow='error';assert.throws(()=>compose(doc),OPFCompositionError);
 });
@@ -72,8 +72,8 @@ test('described singleton columns keep maintained column roles and whole descrip
   for(const entry of entries(item))for(const fit of[entry.text,entry.description].filter(Boolean))for(const line of fit.richLines)assert.ok(line.fragments.map(fragment=>fragment.text).join('').trim().length<=70);
 });
 test('an explicit single column and pinned region refuse an unfit retained-size reading measure',()=>{
-  const doc=documentFor(fixture.cases[0].slide);doc.slides[0].blocks[0].columns=1;doc.slides[0].blocks[0].region='levels';
-  const result=compose(doc),item=body(result)[0];assert.equal(item.region,'levels');assert.equal(item.listColumns,undefined);
+  const doc=documentFor(fixture.cases[0].slide);doc.slides[0].blocks[0].columns=1;doc.slides[0].blocks[0].region='body';
+  const result=compose(doc),item=body(result)[0];assert.equal(item.region,'body');assert.equal(item.listColumns,undefined);
   assert.deepEqual(item.value,doc.slides[0].blocks[0].items);assert.ok(item.text.fontSize>=26);
   assert.ok(result.diagnostics.some(d=>d.code==='text-overflow'&&/70 characters/.test(d.message)));
   doc.slides[0].composition.overflow='error';assert.throws(()=>compose(doc),OPFCompositionError);
@@ -97,7 +97,7 @@ test('actual Venn circles and valid tree nodes keep their native arrangement rat
   }
 });
 test('a generic list region beside an unused diagram region is outside the fallback policy',()=>{
-  const record={name:'Mixed layout',direction:'column',regions:[{name:'title'},{name:'sets',accepts:['list'],arrangement:'venn',empty:'collapse',size:1},{name:'notes',accepts:['list'],role:'primary',flow:'none',size:1}]};
+  const record={name:'Mixed layout',direction:'column',regions:[{name:'title'},{name:'sets',accepts:['list'],arrangement:'venn',empty:'collapse',size:1},{name:'notes',accepts:['list'],role:'primary',max: 1,size:1}]};
   const slide=structuredClone(fixture.cases[0].slide);slide.blocks[0].region='notes';slide.blocks[0].columns=1;
   const result=composeSlide(slide,{layout:record}),item=body(result)[0];assert.equal(item.region,'notes');assert.equal(item.listColumns,undefined);assert.ok(item.text.lines.some(line=>line.trim().length>70));assert.ok(!result.diagnostics.some(d=>/diagram fallback/.test(d.message)));
 });
@@ -127,8 +127,8 @@ test('structured numbered families stay whole across fallback columns with exact
 
 
 test('an explicit payload auto count overrides an authored nested region single-column rule',()=>{
-  const doc=documentFor(fixture.cases[0].slide),record=doc.catalogs.custom.layouts['inverted-pyramid'],region=record.regions.find(region=>region.name==='levels');
-  region.listColumns=1;record.regions=[record.regions[0],{direction:'column',regions:[region]}];doc.slides[0].blocks[0].columns='auto';
+  const doc=documentFor(fixture.cases[0].slide),record=doc.catalogs.custom.layouts['inverted-pyramid'],region=record.regions.find(region=>region.name==='body');
+  record.regions=[record.regions[0],{direction:'column',regions:[region]}];doc.slides[0].blocks[0].columns='auto';
   const result=compose(doc),item=body(result)[0];assert.ok(!result.diagnostics.some(d=>d.code==='text-overflow'));assert.ok(item.listColumns.length>1);assert.deepEqual(entries(item).map(entry=>entry.value),doc.slides[0].blocks[0].items);
 });
 

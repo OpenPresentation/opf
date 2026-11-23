@@ -16,14 +16,13 @@
       "name": "title"
     },
     {
-      "name": "cards",
+      "name": "body",
       "accepts": [
         "metric",
         "text",
         "list",
         "group"
       ],
-      "role": "primary",
       "flow": "grid",
       "metrics": "tile"
     }

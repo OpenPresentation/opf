@@ -14,8 +14,8 @@ The `examples/` directory has two shipped layers, plus a docs fixture kept outsi
 Use `examples/technical/` when you want a small file that exercises a specific schema surface:
 
 - content payloads, rich text, blocks, charts, tables, media, metrics, quotes, timelines, and diagrams
-- icons, shapes, connectors, and pyramid, matrix, cycle, chevrons, flow, organization chart, hierarchy, and Venn layouts
-- promoted region keys and span combinations
+- icons, shapes, connectors, and pyramid, matrix, cycle, chevrons, process, vertical-process, inverted-pyramid, organization chart, hierarchy, and Venn layouts
+- blocks placed in the cells of the slide grid (`region`), with span combinations
 - asset string/object forms and asset-backed chart data
 - design backgrounds, organization logo shapes, headers, footers, watermarks, and slide-level overrides
 - metadata array forms, language metadata, custom narrative records, and catalog overrides
@@ -29,7 +29,7 @@ Use `examples/technical/` when you want a small file that exercises a specific s
 | `education/` | K-12, higher education, research, advising, workforce, advancement, and student services scenarios. |
 | `government/` | Public health, transit, emergency management, utilities, regulators, courts, parks, workforce, tax, and civic engagement decks. |
 | `presentation-types/` | Reusable deck archetypes such as pitches, board updates, QBRs, conference talks, workshops, postmortems, launches, policy briefings, training, and research reports. |
-| `international/` | Region- or language-specific decks, including examples of language object metadata and right-to-left direction. |
+| `international/` | Region-specific decks in English, tagged with the English of their region (`en-JP`, `en-AE`), including language object metadata. The technical fixtures carry other languages and right-to-left direction. |
 | `design-and-media/` | Decks that emphasize design controls, image/video assets, data storytelling, and self-running orientation patterns. |
 
 ## Patterns To Look For
@@ -37,7 +37,7 @@ Use `examples/technical/` when you want a small file that exercises a specific s
 - Technical fixtures that isolate validator and renderer behavior.
 - Sparse gallery documents that use shorthand catalog references and a small slide list.
 - Medium documents with schema ids, metadata, organization and speaker records, design overrides, assets, and richer slide payloads.
-- Dense documents with their own records in `catalogs.custom`, promoted region keys, `blocks`, media assets, code payloads, header/footer configuration, organization logo shapes, watermarks, and extensions.
+- Dense documents with their own records in `catalogs.custom`, blocks placed in the cells of the slide grid, `blocks`, media assets, code payloads, header/footer configuration, organization logo shapes, watermarks, and extensions.
 - Mixed content payloads across text, bullets, lists, image, video, chart, table, code, metric, quote, timeline, and diagram slides.
 - Catalog references across narratives, layouts, themes, color schemes, font schemes, audiences, purposes and tones, every record embedded under `catalogs.default` or `catalogs.custom`, so each deck validates and renders with no catalog registered; chart types, languages and social platforms as engine vocabularies.
 

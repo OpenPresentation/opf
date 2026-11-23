@@ -10,8 +10,7 @@ const text = value => typeof value === 'string' ? value : value.map(run => typeo
 const fixture = anchor => ({
   design: {fontScheme: 'roboto', titleAlignment: 'start'},
   extensions: note,
-  slides: [{title: 'Decision', start: {id: 'message', text: [{text: 'Bonjour', language: 'fr-FR'}], extensions: note}, end: {text: literal},
-    shapes: [{id: 'badge', shape: 'rect', decorative: true, at: {block: 'message', edge: 'center', ...anchor}}]},
+  slides: [{title: 'Decision', blocks: [{region: 'start',id: 'message', text: [{text: 'Bonjour', language: 'fr-FR'}], extensions: note}, {region: 'end',text: literal}], shapes: [{id: 'badge', shape: 'rect', decorative: true, at: {block: 'message', edge: 'center', ...anchor}}]},
   {title: 'Data', table: {columns: ['Field'], rows: [[literal], [{value: [{text: 'Bonjour', language: 'fr-FR'}], style: {align: 'start', borders: {left: {width: 2}}}}]]}}],
 });
 
@@ -34,11 +33,12 @@ function rewriteTags(bytes, change) {
 test('current vocabulary and explicit anchor units survive export/import without changing literals', async () => {
   const back = await fromPptx(await toPptx(fixture({width: 1.01, heightPx: 40})));
   assert.deepEqual(back.extensions, note);
-  assert.equal(text(back.slides[0].start.text), 'Bonjour');
-  assert.equal(text(back.slides[0].end.text), literal);
-  assert.deepEqual(back.slides[0].start.extensions, note);
+  assert.deepEqual(back.slides[0].blocks.map(block => block.region), ['start', 'end']);
+  assert.equal(text(back.slides[0].blocks[0].text), 'Bonjour');
+  assert.equal(text(back.slides[0].blocks[1].text), literal);
+  assert.deepEqual(back.slides[0].blocks[0].extensions, note);
   assert.deepEqual(back.slides[0].shapes[0].at, {block: 'message', edge: 'center', width: 1.01, heightPx: 40});
-  assert.equal(back.slides[0].start.text.some(run => run?.language === 'fr-FR'), true);
+  assert.equal(back.slides[0].blocks[0].text.some(run => run?.language === 'fr-FR'), true);
   assert.equal(back.slides[1].table.rows[0][0], literal);
   assert.equal(back.slides[1].table.rows[1][0].style.align, 'start');
   assert.deepEqual(back.slides[1].table.rows[1][0].style.borders.left, {width: 2});
@@ -54,7 +54,8 @@ test('legacy typed tags migrate logical words and pixel anchors; current native 
     }
     if (kind === 'OPF_SLIDE_V1') {
       const {vocabulary: _marker, ...old} = record;
-      if (old.content?.form === 'regions') old.content.regions = Object.fromEntries(Object.entries(old.content.regions).map(([key, node]) => [key === 'start' ? 'left' : key === 'end' ? 'right' : key, node]));
+      // A legacy (0.34 and earlier) record stored the slide's cells as slide keys, with the physical words left and right.
+      if (old.content?.form === 'blocks') old.content = {form: 'regions', regions: Object.fromEntries(old.content.blocks.map(({pin, ...node}) => [pin === 'start' ? 'left' : pin === 'end' ? 'right' : pin, node]))};
       for (const [, shape] of old.overlays ?? []) if (shape.at) {
         const {widthPx, heightPx, ...rest} = shape.at;
         shape.at = {...rest, ...(widthPx !== undefined ? {width: widthPx} : {}), ...(heightPx !== undefined ? {height: heightPx} : {})};
@@ -75,10 +76,11 @@ test('legacy typed tags migrate logical words and pixel anchors; current native 
   assert.match(xml, /Bonjour/);
   entries[slidePart] = strToU8(xml.replace('Bonjour', 'Bonsoir'));
   const back = await fromPptx(zipSync(entries));
-  assert.equal(text(back.slides[0].start.text), 'Bonsoir', 'stored legacy provenance cannot restore stale source words');
-  assert.equal(text(back.slides[0].end.text), literal);
+  assert.deepEqual(back.slides[0].blocks.map(block => block.region), ['start', 'end'], 'the cells of a legacy record come back as blocks that name them');
+  assert.equal(text(back.slides[0].blocks[0].text), 'Bonsoir', 'stored legacy provenance cannot restore stale source words');
+  assert.equal(text(back.slides[0].blocks[1].text), literal);
   assert.deepEqual(back.extensions, note);
-  assert.deepEqual(back.slides[0].start.extensions, note);
+  assert.deepEqual(back.slides[0].blocks[0].extensions, note);
   assert.deepEqual(back.slides[0].shapes[0].at, {block: 'message', edge: 'center', widthPx: 1.01, heightPx: 40});
   assert.equal(back.slides[1].table.rows[0][0], literal);
   assert.equal(back.slides[1].table.rows[1][0].style.align, 'start');

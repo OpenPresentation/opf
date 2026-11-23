@@ -12,12 +12,12 @@ const deckWith = (record, slide = { layout: 'probe', title: 'Probe' }) => ({ sli
 const rulesOf = (report) => report.findings.map((entry) => entry.ruleId);
 const issues = (record) => layoutTemplateIssues(record).map((issue) => `${issue.code} ${issue.path}`);
 const base = { name: 'Probe', regions: [{ name: 'title' }, { name: 'body', accepts: ['text'] }] };
-const two = { name: 'Two', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'a', accepts: ['text'], flow: 'none' }, { name: 'b', accepts: ['text'] }] }] };
+const two = { name: 'Two', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'a', accepts: ['text'], max: 1 }, { name: 'b', accepts: ['text'] }] }] };
 const regionsOf = (...regions) => ({ ...base, regions });
 
-describe('the 40 built-in templates (design section 6)', () => {
-  test('there are 40, in six groups, and every one has a title area', () => {
-    assert.equal(Object.keys(layouts).length, 40);
+describe('the 38 built-in templates (design section 6)', () => {
+  test('there are 38, in six groups, and every one has a title area', () => {
+    assert.equal(Object.keys(layouts).length, 38);
     assert.deepEqual([...new Set(Object.values(layouts).map((record) => record.tags[0]))], ['Openers and closers', 'Text', 'Groups of items', 'Numbers', 'Visuals', 'Mixed']);
     for (const [id, record] of Object.entries(layouts)) assert.ok(JSON.stringify(record.regions).includes('"title"'), id);
   });
@@ -44,7 +44,7 @@ describe('the 40 built-in templates (design section 6)', () => {
     assert.deepEqual(layoutContent(layouts['chart-beside']), { kind: 'chart', count: 2, heading: { title: true, subtitle: true, tag: true } });
     assert.deepEqual(layoutContent(layouts.section), { kind: 'title', count: 0, heading: { title: true, subtitle: true, tag: true } });
     assert.equal(layoutContent(layouts.gallery).kind, 'image');
-    assert.equal(layoutStructure(layouts['chart-beside']), 'title, chart (none: chart, diagram), notes (column: text, list, metric, quote, chart)');
+    assert.equal(layoutStructure(layouts['chart-beside']), 'title, body (auto, max 1: chart, diagram), aside (column: text, list, metric, quote, chart)');
   });
 });
 
@@ -102,8 +102,9 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
     assert.deepEqual(issues(regionsOf({ name: 'title' }, { name: 'subtitle' }, { name: 'body', accepts: ['text'] })), []);
   });
 
-  test('the rules: flow none holds one block, a region accepts something, an overflow region exists, anchors are anchors', () => {
-    assert.deepEqual(issues(regionsOf({ name: 'body', accepts: ['text'], flow: 'none', max: 2 })), ['layout-region /regions/0/max']);
+  test('the rules: a region accepts something, an overflow region exists, anchors are anchors', () => {
+    // OPF 0.35: a single-block region is max 1 (flow none, which required it, is gone), so max takes any count from 1 to 12.
+    assert.deepEqual(issues(regionsOf({ name: 'body', accepts: ['text'], max: 2 })), []);
     assert.deepEqual(issues(regionsOf({ name: 'body', accepts: [] })), ['layout-region /regions/0/accepts']);
     assert.deepEqual(issues({ ...base, overflowRegion: 'notes' }), ['layout-region /overflowRegion']);
     assert.deepEqual(issues({ ...base, overflowRegion: 'title' }), ['layout-region /overflowRegion']);
@@ -139,9 +140,15 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
     assert.equal(isLayoutTemplate({ name: 'Old', areas: [['title']] }), false);
   });
 
-  test("'auto' is reserved: no catalog may define a layout of that id", () => {
+  test("'auto' is an ordinary layout id since 0.35 (layout: \"auto\" was removed)", () => {
     const report = validate({ slides: [{ title: 'x' }], catalogs: { custom: { layouts: { auto: base } } } }, { only: ['format', 'references'] });
-    assert.ok(report.findings.some((entry) => entry.ruleId === 'opf/catalog-record' && entry.path.startsWith('/catalogs/custom/layouts/auto')));
+    assert.ok(!report.findings.some((entry) => entry.ruleId === 'opf/catalog-record'));
+  });
+
+  test("0.35 removed the region role 'secondary': it fails the layout schema", () => {
+    const record = { name: 'Old', regions: [{ name: 'title' }, { name: 'kpis', accepts: ['metric'], role: 'secondary' }] };
+    const report = validate({ slides: [{ title: 'x' }], catalogs: { custom: { layouts: { old: record } } } }, { only: ['format', 'references'] });
+    assert.ok(report.findings.some((entry) => entry.ruleId === 'opf/catalog-record' && entry.path.startsWith('/catalogs/custom/layouts/old/regions/1/role')), JSON.stringify(report.findings.map((entry) => [entry.ruleId, entry.path])));
   });
 
   test('composeSlide refuses a template with either finding', () => {
@@ -150,14 +157,14 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
     assert.throws(() => layoutTemplate({ ...base, direction: 'row', regions: [{ name: 'a', size: 'auto' }] }), (error) => error instanceof RangeError && error.issues[0].code === 'layout-template');
   });
 
-  test('defaults: accepts every kind, role primary, flow auto, max 1 for none and 6 otherwise, collapse, top, one list column', () => {
-    const template = layoutTemplate({ name: 'x', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'a', accepts: ['text'], flow: 'none' }, { name: 'b' }] }] });
-    assert.deepEqual(template.regions.map((region) => [region.name, region.role, region.flow, region.max, region.empty, region.anchor, region.listColumns, region.bleed]), [
-      ['a', 'primary', 'none', 1, 'collapse', 'top', 1, false],
-      ['b', 'primary', 'auto', 6, 'collapse', 'top', 1, false],
+  test('defaults: accepts every kind, role primary, flow auto, max 6, collapse, top, no bleed', () => {
+    const template = layoutTemplate({ name: 'x', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'a', accepts: ['text'], max: 1 }, { name: 'b' }] }] });
+    assert.deepEqual(template.regions.map((region) => [region.name, region.role, region.flow, region.max, region.empty, region.anchor, region.bleed]), [
+      ['a', 'primary', 'auto', 1, 'collapse', 'top', false],
+      ['b', 'primary', 'auto', 6, 'collapse', 'top', false],
     ]);
     assert.deepEqual(template.regions[1].accepts, ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'group']);
-    // overflowRegion: the first primary region whose flow is not none.
+    // overflowRegion: the first primary region that is not a single-block region (max 1).
     assert.equal(template.overflowRegion, 'b');
   });
 
@@ -192,10 +199,10 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
 
   test('reading order is the order of the list, depth first', () => {
     const template = layoutTemplate(layouts.hero);
-    assert.deepEqual(template.areas.map((area) => area.name), ['title', 'lead', 'support', 'media']);
+    assert.deepEqual(template.areas.map((area) => area.name), ['title', 'lead', 'body', 'media']);
     const custom = layoutTemplate({
       name: 'x',
-      regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'timeline', size: 2, accepts: ['timeline'], flow: 'none' }, { direction: 'column', regions: [{ name: 'notes', accepts: ['text'] }, { name: 'metrics', accepts: ['metric', 'text'], flow: 'grid' }] }] }],
+      regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'timeline', size: 2, accepts: ['timeline'], max: 1 }, { direction: 'column', regions: [{ name: 'notes', accepts: ['text'] }, { name: 'metrics', accepts: ['metric', 'text'], flow: 'grid' }] }] }],
     });
     assert.deepEqual(custom.regions.map((region) => region.name), ['timeline', 'notes', 'metrics']);
     assert.deepEqual(custom.grid, [['title', 'title'], ['timeline', 'notes'], ['timeline', 'metrics']]);
@@ -205,7 +212,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
 });
 
 describe('no migration path from the 0.18 ids (owner decision, 2026-10-10)', () => {
-  // The 0.19 catalog: the 40 templates under the default catalog's source, so a removed 0.18 id resolves nowhere.
+  // The 0.19 catalog: the 38 templates under the default catalog's source, so a removed 0.18 id resolves nowhere.
   const gallery2 = { source: 'https://www.pptx.gallery', layouts };
 
   test('a former id such as list-2x is an unknown layout: opf/unresolved-reference, automatic composition', async () => {

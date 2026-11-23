@@ -3,10 +3,10 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
 import { schemas } from "../dist/index.js";
-import { COMMON_KEYS, UNRANKED_PRIORITY, describeField, isPromotedRegionKey, schemaVariants } from "../dist/schema.js";
+import { COMMON_KEYS, UNRANKED_PRIORITY, describeField, schemaVariants } from "../dist/schema.js";
+import { gridCells } from "../dist/validator.js";
 
 const slideSchema = schemas.presentation.$defs.Slide;
-const regionKeys = Object.keys(slideSchema.properties).filter(isPromotedRegionKey);
 const child = (info, key) => info.children.find((entry) => entry.key === key);
 
 describe("the root", () => {
@@ -104,17 +104,13 @@ describe("slides", () => {
     for (const key of COMMON_KEYS.design) assert.ok(key in schemas.presentation.$defs.Design.properties, `design.${key}`);
     for (const key of COMMON_KEYS.deck) assert.ok(key in schemas.presentation.properties, `deck.${key}`);
   });
-  test("promoted regions and extensions are advanced; nothing else is", () => {
+  test("extensions is advanced; nothing else is (OPF 0.35 removed the 48 cell keys: a block names its cell with region)", () => {
     const advanced = info.children.filter((entry) => entry.advanced).map((entry) => entry.key);
-    assert.equal(regionKeys.length, 48);
-    assert.equal(regionKeys.filter((key) => key.includes(":")).length, 36);
-    assert.deepEqual(advanced.sort(), [...regionKeys, "extensions"].sort());
-    assert.equal(info.children.slice(-49).every((entry) => entry.advanced), true, "advanced keys sort last");
-    assert.equal(isPromotedRegionKey("top+middle:start+center"), true);
-    assert.equal(isPromotedRegionKey("start"), true);
-    assert.equal(isPromotedRegionKey("title"), false);
-    assert.equal(isPromotedRegionKey("tag"), false);
-    assert.equal(isPromotedRegionKey(""), false);
+    assert.equal(gridCells.length, 48);
+    assert.equal(gridCells.filter((key) => key.includes(":")).length, 36);
+    assert.deepEqual(gridCells.filter((key) => key in slideSchema.properties), []);
+    assert.deepEqual(advanced, ["extensions"]);
+    assert.equal(info.children.at(-1).advanced, true, "advanced keys sort last");
   });
   test("slide title is text or rich text: the string form is primary and free text", () => {
     const title = describeField(["slides", 0, "title"]);
@@ -137,10 +133,11 @@ describe("slides", () => {
     assert.equal(child(info, "layout").typeLabel, "string");
     assert.equal(child(info, "items").typeLabel, "array of ListItem");
   });
-  test("a promoted region key is described like any property", () => {
-    const region = describeField(["slides", 0, "top+middle:start+center"]);
+  test("a cell key is no slide property (OPF 0.35); a block's region is a string", () => {
+    assert.equal(describeField(["slides", 0, "top+middle:start+center"]).known, false);
+    const region = describeField(["slides", 0, "blocks", 0, "region"]);
     assert.equal(region.known, true);
-    assert.equal(region.definition, "ContentPayload");
+    assert.deepEqual(region.types, ["string"]);
   });
 });
 

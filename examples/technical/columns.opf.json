@@ -1,30 +1,39 @@
 {
   "name": "Column Regions Example",
+  "language": "en-US",
   "slides": [
     {
       "title": "Market Shift",
-      "start": {
-        "text": "Signal"
-      },
-      "center+end": {
-        "items": [
-          "Demand moved upmarket",
-          "Procurement cycles shortened",
-          "Teams asked for operational controls"
-        ]
-      }
+      "blocks": [
+        {
+          "region": "start",
+          "text": "Signal"
+        },
+        {
+          "region": "center+end",
+          "items": [
+            "Demand moved upmarket",
+            "Procurement cycles shortened",
+            "Teams asked for operational controls"
+          ]
+        }
+      ]
     },
     {
       "title": "Operating Choice",
-      "start+center": {
-        "bullets": [
-          "Standardize the intake path",
-          "Keep escalation rules visible"
-        ]
-      },
-      "end": {
-        "text": "Decision owners need one place to see what changed."
-      }
+      "blocks": [
+        {
+          "region": "start+center",
+          "bullets": [
+            "Standardize the intake path",
+            "Keep escalation rules visible"
+          ]
+        },
+        {
+          "region": "end",
+          "text": "Decision owners need one place to see what changed."
+        }
+      ]
     }
   ]
 }

@@ -12,23 +12,22 @@
       "name": "title"
     },
     {
-      "name": "charts",
+      "name": "body",
       "accepts": [
         "chart",
         "group",
         "diagram"
       ],
-      "role": "primary",
       "flow": "grid"
     },
     {
-      "name": "note",
+      "name": "aside",
       "size": "auto",
       "accepts": [
         "text"
       ],
       "role": "supporting",
-      "flow": "none"
+      "max": 1
     }
   ],
   "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",

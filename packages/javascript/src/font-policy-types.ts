@@ -74,8 +74,23 @@ export interface FontReplacement {
   sizeAdjustBasis?: string;
   /** Null when the reference font was not available to the measuring host. */
   measured: FontReplacementMeasurement | null;
+  /** Script replacements (v0.35), keyed by ISO 15924 script code: runs of that script in this family are measured and drawn with
+   * the entry's face at its own multiplier, while text of any other script keeps `family` (Arial: Latin text in Arimo at the composed
+   * size, Arabic-script runs in Noto Naskh Arabic at 0.96). The PPTX still names the row's family. */
+  scripts?: Record<string, FontScriptReplacement>;
   /** Upstream statement of compatibility, when one exists. */
   source?: string;
+}
+
+/** The open face that previews one script of a family (`FontReplacement.scripts`). */
+export interface FontScriptReplacement {
+  /** Openly licensed family that measures and draws this script's runs. Never written to PPTX. */
+  family: string;
+  compatibility: FontReplacementCompatibility;
+  /** Preview-only font-size multiplier for this script's runs, as `FontReplacement.sizeAdjust`. Absent means 1. */
+  sizeAdjust?: number;
+  /** How `sizeAdjust` was measured. Present with `sizeAdjust`. */
+  sizeAdjustBasis?: string;
 }
 
 export interface FontPolicyEntry {
@@ -99,7 +114,7 @@ export interface FontPolicyDecision {
   replacement: string;
   compatibility: FontReplacementCompatibility;
   /** Metric-mode registries still preview with this visual replacement (reported as visual), so an
-   * earlier metric behaviour does not regress. It never makes the replacement metric. */
+   * earlier metric behavior does not regress. It never makes the replacement metric. */
   metricModeFallback?: boolean;
   note?: string;
 }

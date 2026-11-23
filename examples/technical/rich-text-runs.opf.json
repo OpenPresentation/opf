@@ -2,6 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Rich Text Runs",
   "description": "Technical fixture for formatted text runs in text, list, and bullet payloads.",
+  "language": "en-US",
   "slides": [
     {
       "title": "Text Runs",
@@ -25,7 +26,7 @@
         ", and ",
         {
           "text": "custom color",
-          "color": "#DC2626",
+          "color": "#FECACA",
           "fontSize": 18,
           "fontFamily": "Aptos"
         },

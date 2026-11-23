@@ -1,10 +1,24 @@
 /** The `design` keys that a layout record, the deck and a slide all share and that composition resolves per key. */
-export const DESIGN_HINT_KEYS = ['titleAlignment', 'contentAlignment', 'contentBox', 'contentDirection', 'chartPrimary', 'imageFit', 'listBullet', 'listStyle', 'mirror'] as const;
+export const DESIGN_HINT_KEYS = ['titleAlignment', 'titlePosition', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet', 'listStyle', 'mirror'] as const;
 export type DesignHintKey = typeof DESIGN_HINT_KEYS[number];
 /** The design keys a theme record may carry (`theme.design`), so a house style such as boxed content is set once. */
-export const THEME_DESIGN_KEYS = ['titleAlignment', 'contentAlignment', 'contentBox', 'contentDirection', 'imageFit', 'listBullet', 'listStyle'] as const;
+export const THEME_DESIGN_KEYS = ['titleAlignment', 'titlePosition', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet', 'listStyle'] as const;
+/**
+ * The design keys OPF 0.35 removed: `contentDirection` and `chartPrimary`. The engine composes the slide; a specific arrangement is the
+ * slide's `composition` (mode, weights), or in a layout record a region's `flow`. A deck, slide, theme or layout `design` that still sets
+ * one fails its schema; validate says what replaced it and offers the safe fix that deletes the key (marked `changesDrawing`).
+ */
+export const REMOVED_DESIGN_KEYS: Readonly<Record<string, string>> = Object.freeze({
+  contentDirection: 'OPF 0.35 removed design.contentDirection. Delete it: the engine now composes the slide. For a specific arrangement, set the slide\'s composition (mode "row" or "column", and weights); in a layout record, a region\'s flow "row" or "column" says it.',
+  chartPrimary: 'OPF 0.35 removed design.chartPrimary. Delete it: the engine now composes the slide. For a specific arrangement, set the slide\'s composition (mode and weights), such as a chart on one side: mode "row", weights [3, 2], the chart first in blocks.',
+});
 /** Where an effective design hint came from: the slide's own `design`, the deck's `design`, the resolved theme record, or the slide's layout record. */
 export type DesignHintSource = 'slide' | 'deck' | 'theme' | 'layout';
+
+/** Where a slide's heading group sits (design.titlePosition): above the body, or beside it on the reading side. */
+export type DesignTitlePosition = 'top' | 'start';
+/** The values of design.titlePosition. */
+export const TITLE_POSITIONS = ['top', 'start'] as const;
 
 /** A design alignment as a document writes it: logical, so `start` is the left edge of a left-to-right deck and the right edge of a right-to-left one. */
 export type DesignAlignment = 'start' | 'center' | 'end';
@@ -18,10 +32,13 @@ export const itemAlignment = (value: unknown): 'left' | 'center' | 'right' | und
 /** The effective value of every shared design key, in the document's words. A key nobody sets is absent, so the engine default applies. */
 export interface DesignHints {
   titleAlignment?: DesignAlignment;
+  /**
+   * OPF 0.35: where the heading group (tag, title, subtitle) sits: `top`, above the body (the engine default), or `start`, beside the
+   * body in a column of two fifths of the content width on the reading side (titleBesideTemplate, TITLE_BESIDE_SHARE).
+   */
+  titlePosition?: DesignTitlePosition;
   contentAlignment?: DesignAlignment;
   contentBox?: boolean;
-  contentDirection?: 'horizontal' | 'vertical';
-  chartPrimary?: 'none' | 'top' | 'bottom' | 'start' | 'end';
   imageFit?: 'cover' | 'contain' | 'stretch' | 'auto';
   listBullet?: 'character' | 'image' | 'none';
   /** LH-08: how list entries are arranged: stacked (`stack`) or as ruled rows (`rows`). Absent: automatic (rows for a list of short labels with descriptions). */
@@ -55,8 +72,7 @@ export interface ResolveDesignHintsOptions {
 
 const ALIGNMENTS = ['start', 'center', 'end'];
 const VALUES: { [K in DesignHintKey]: readonly unknown[] | 'boolean' } = {
-  titleAlignment: ALIGNMENTS, contentAlignment: ALIGNMENTS, contentBox: 'boolean', contentDirection: ['horizontal', 'vertical'],
-  chartPrimary: ['none', 'top', 'bottom', 'start', 'end'], imageFit: ['cover', 'contain', 'stretch', 'auto'], listBullet: ['character', 'image', 'none'], listStyle: ['stack', 'rows'], mirror: 'boolean',
+  titleAlignment: ALIGNMENTS, titlePosition: TITLE_POSITIONS, contentAlignment: ALIGNMENTS, contentBox: 'boolean', imageFit: ['cover', 'contain', 'stretch', 'auto'], listBullet: ['character', 'image', 'none'], listStyle: ['stack', 'rows'], mirror: 'boolean',
 };
 const themeKeys: ReadonlySet<string> = new Set(THEME_DESIGN_KEYS);
 /** A value the schema allows for the key; anything else is skipped, so the next level answers. */

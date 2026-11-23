@@ -29,7 +29,14 @@ export interface ThumbnailStripLabels {
   moveRight?: string;
   moveUp?: string;
   moveDown?: string;
-  /** Status lines (`onStatus` or the strip's live region). `{position}` and `{count}` are replaced. */
+  /** With `starters`: the text beside "+" and the menu entries, and the content they add. Defaults: "Slide", "Title", "Bullets", "Blank", "New slide", "First point". */
+  addText?: string;
+  startTitle?: string;
+  startBullets?: string;
+  startBlank?: string;
+  newSlideTitle?: string;
+  firstPoint?: string;
+  /** Status lines (`onStatus` or the strip's live region). `{position}` and `{count}` are replaced. With `starters` the defaults of `statusAdded` and `statusDeleted` are "Added slide {position}" and "Deleted slide {position}". */
   statusAdded?: string;
   statusDuplicated?: string;
   statusDeleted?: string;
@@ -86,7 +93,7 @@ export interface ThumbnailStripOptions {
    * context menu on every thumbnail (right-click, Shift+F10 or the ContextMenu key): Duplicate, Delete (disabled for the last slide), Hide or
    * Show in slide show, Move left and Move right (Move up and Move down in a vertical strip; mirrored in a right-to-left one). On a focused
    * thumbnail Alt+Arrow moves it and Delete deletes it. Each action is one undoable session change, the thumbnail follows the slide it
-   * leaves current (the copy, the moved or new slide, the neighbour of a deleted one) and `onSelect` reports it.
+   * leaves current (the copy, the moved or new slide, the neighbor of a deleted one) and `onSelect` reports it.
    */
   actions?: boolean;
   /** Offer Title, Bullets and Blank in the add menu instead of catalog layouts. */

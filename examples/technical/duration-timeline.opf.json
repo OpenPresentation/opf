@@ -2,6 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "A delivery timeline with proportional periods",
   "description": "Explicit numeric durations preserve the authored time labels and draw consecutive periods at their relative lengths.",
+  "language": "en-US",
   "design": {
     "theme": "classic",
     "variant": "light1",
@@ -140,19 +141,18 @@
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             },
             {
-              "name": "timeline",
+              "name": "body",
               "accepts": [
                 "timeline",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "column"
             },
             {
-              "name": "notes",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text",

@@ -2,18 +2,19 @@
   "source": {
     "commit": "4748ce45c",
     "date": "2026-11-12",
-    "note": "RR-105: what PowerPoint reads of every chartex chart (the mc:Choice with its drawing id and chartEx relationship id masked, the chartEx part, its relationships, style and color parts and the embedded workbook; test/helpers/chartex-identity.mjs) and a digest of the import (JSON of fromPptx), for toPptx(deck, {catalogs: [gallery], imageResolver}) of two qualification decks, recorded on codex/rr-105-keynote-fixes at 4748ce45c, before the default mc:Fallback changed from a classic chart to a picture of OPF's own preview (2026-11-12, supervisor decision for the owner, vetoable). The change keeps every value; a later change that moves one is reviewed like any other pin. RR-105 (#1290), 2026-11-12, chart workbook properties: only the workbook digests moved (docProps/core.xml creator and lastModifiedBy name the deck author, else OPF; docProps/app.xml Application OPF); the mc:Choice, chartEx, relationship, style and color digests and the import digest are unchanged. The previous workbook digests are kept per deck as rr105WorkbookPropertiesPrevious. RR-105 (#1290), 2026-11-12, default alt text: only the mc:Choice digests moved, because each chart frame without an authored alt now carries a generated descr (verified by removing the descr attributes: every slide, chartEx, relationship, style, color and workbook part is otherwise byte-identical to ed9f0f909, apart from a quote photo's generated descr on layout-harvest slide 10); the import digest is unchanged. The previous Choice digests are kept per deck as rr105DefaultAltPrevious."
+    "note": "RR-105: what PowerPoint reads of every chartex chart (the mc:Choice with its drawing id and chartEx relationship id masked, the chartEx part, its relationships, style and color parts and the embedded workbook; test/helpers/chartex-identity.mjs) and a digest of the import (JSON of fromPptx), for toPptx(deck, {catalogs: [gallery], imageResolver}) of two qualification decks, recorded on codex/rr-105-keynote-fixes at 4748ce45c, before the default mc:Fallback changed from a classic chart to a picture of OPF's own preview (2026-11-12, supervisor decision for the owner, vetoable). The change keeps every value; a later change that moves one is reviewed like any other pin. RR-105 (#1290), 2026-11-12, chart workbook properties: only the workbook digests moved (docProps/core.xml creator and lastModifiedBy name the deck author, else OPF; docProps/app.xml Application OPF); the mc:Choice, chartEx, relationship, style and color digests and the import digest are unchanged. The previous workbook digests are kept per deck as rr105WorkbookPropertiesPrevious. RR-105 (#1290), 2026-11-12, default alt text: only the mc:Choice digests moved, because each chart frame without an authored alt now carries a generated descr (verified by removing the descr attributes: every slide, chartEx, relationship, style, color and workbook part is otherwise byte-identical to ed9f0f909, apart from a quote photo's generated descr on layout-harvest slide 10); the import digest is unchanged. The previous Choice digests are kept per deck as rr105DefaultAltPrevious. OPF 0.35 step 8 (one region key for the 3 x 3 cells), 2026-11-20: only the chart-type-sampler import digest moved, because the deck and its import write a slide's cells as blocks that name them with `region` instead of slide keys (verified: putting each such slide's blocks back as the 0.34 cell keys, in place and in block order, gives the previous digest exactly); every mc:Choice, chartEx, relationship, style, color and workbook digest is unchanged. The previous import digest is kept as step8ImportPrevious. OPF 0.35 examples rewrite (#1393), 2026-11-20: the chart-type-sampler deck no longer places its first slide's three blocks in the cells start, center and end (the owner approved the redrawn example sheets), so the slide composes them itself and the two chartex frames on it sit lower. Verified on the exported slide XML with ids masked: in each of the two moved mc:Choice elements the only difference is the frame's a:off y (1404747 to 2527363 EMU); a:off x, a:ext and everything else are identical, the other three charts' mc:Choice digests are unchanged, and every chartEx, relationship, style, color and workbook digest is unchanged. The import digest moved because the deck gained a language and lost the three region names. The previous values are kept as examplesRewriteChoicePrevious and examplesRewriteImportPrevious."
   },
   "decks": {
     "chart-type-sampler": {
       "source": "examples/technical/chart-type-sampler.opf.json",
-      "importSha256": "350fcbf1d2f95a06f3ddbd095d7929356209e7560c91e96c152f83ec51f9501f",
+      "importSha256": "b859886f89604638a1bca0752d3a742d2e51db319769ede2a586717ea357c39f",
+      "step8ImportPrevious": "350fcbf1d2f95a06f3ddbd095d7929356209e7560c91e96c152f83ec51f9501f",
       "identity": [
         {
           "slide": "ppt/slides/slide1.xml",
           "name": "OPF chart 1",
           "chartEx": "ppt/charts/chartEx1.xml",
-          "choice": "d1fb98d5746a34591f31261224686dd948a6517830d8a05ccae93f252542baf8",
+          "choice": "e7e9f36513457dcbc27ccecc9198833f699df509807ac80800e2ae84a9b1cdc5",
           "part": "1f5a5cf3011976ef515accdf40790215adf0ee14256cb8f4cec56028be6f3704",
           "rels": "8822138c7e59389dce3272dcf261c29d337d343db5f9e3f28d195d7b619b4cb8",
           "style": "1a3d0b2bc8ad48e3ec6874e88e97f0ad6da2424189bcf8a40c3dbe2556dc31ce",
@@ -24,7 +25,7 @@
           "slide": "ppt/slides/slide1.xml",
           "name": "OPF chart 2",
           "chartEx": "ppt/charts/chartEx2.xml",
-          "choice": "184161227e7428210218f495e6d1abe7147f414923350844b4c9b81ca0d54948",
+          "choice": "b71993a3367f8f91af89799efd0d15262be5868bfa7f6f6c20ff0f05a9564525",
           "part": "75e74f89e3c9c97c8e6effc55dd14fea14e51e4b116de6539a87c3d1798807da",
           "rels": "355831de6ab1bfc4cb3927fcfce28632ad1f381c6c23d9b15a4d5238015c4bf6",
           "style": "1a3d0b2bc8ad48e3ec6874e88e97f0ad6da2424189bcf8a40c3dbe2556dc31ce",
@@ -78,11 +79,22 @@
         "OPF chart 4 choice": "85691b57a01eab75323c79ab099024b659ee2c98962772971a700003fd51c27f",
         "OPF chart 5 choice": "9b9b54c7491a2297543c24075e2c277b2cf02779abaf6d32ba305e744efd00c1",
         "OPF chart 6 choice": "b2f518466b9fdfaa62b587b313774abd04d0aa13938a3677c3c975593daf0810"
-      }
+      },
+      "examplesRewriteChoicePrevious": [
+        {
+          "name": "OPF chart 1",
+          "choice": "d1fb98d5746a34591f31261224686dd948a6517830d8a05ccae93f252542baf8"
+        },
+        {
+          "name": "OPF chart 2",
+          "choice": "184161227e7428210218f495e6d1abe7147f414923350844b4c9b81ca0d54948"
+        }
+      ],
+      "examplesRewriteImportPrevious": "38d00f01e9546b9877949d067fa5f8e425a11e561ba33bea9b52e9f670968001"
     },
     "layout-harvest": {
       "source": "scripts/native-acceptance/qualification/decks/layout-harvest.opf.json",
-      "importSha256": "1efbfcca2620c98fc374c92f0259ec639dd50e7532f07fdb1dbcfbfb13181eb0",
+      "importSha256": "00f7205cc4b3f3970b6d209bfcf47eaa02f0e092dfd0b929c04ac281ba9ed649",
       "identity": [
         {
           "slide": "ppt/slides/slide17.xml",

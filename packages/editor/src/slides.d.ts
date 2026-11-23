@@ -44,7 +44,7 @@ export interface SlideChange extends Omit<EditorChange, "presentation" | "patche
   patches: JsonPatchOperation[];
 }
 
-/** How moved slides take a section: the neighbour's (`"adopt"`, default), none of that (`"keep"`), a named one or none (`null`). */
+/** How moved slides take a section: the neighbor's (`"adopt"`, default), none of that (`"keep"`), a named one or none (`null`). */
 export type MoveSectionMode = "adopt" | "keep" | string | null;
 export interface AddSlideOptions {
   /** The index the slide takes (default: the end). */

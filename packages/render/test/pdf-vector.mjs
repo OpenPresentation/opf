@@ -316,6 +316,13 @@ for (const { name, deck, expect } of roundTrips) {
   assert.match(await pageText(await openPdf(pdf), 1), /Still real text/);
   await assert.rejects(toPdf(svg, { strict: true }), (error) => error.code === "pdf-raster-fallback" && error.details.path === "slides.0.shape");
   await assert.rejects(toPdf("<html/>"), (error) => error.code === "invalid-svg");
+  // A filtered <use> of drawn content outside <defs> (how a shape effect draws its shadow) rasterizes with what it references.
+  const shadowed = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200"><defs><filter id="s" filterUnits="userSpaceOnUse" x="0" y="0" width="300" height="200"><feFlood flood-color="#000" result="c"/><feComposite in="c" in2="SourceAlpha" operator="in" result="m"/><feOffset in="m" dx="40" dy="40"/></filter></defs><rect width="300" height="200" fill="#fff"/><g data-opf-path="slides.0.shape" filter="url(#s)"><use href="#core"/></g><g id="core"><rect x="20" y="20" width="100" height="60" fill="#f80"/></g></svg>`;
+  const rendered = await renderPdfPage(await openPdf(await toPdf(shadowed)), 1);
+  const { data, info } = await sharp(rendered.png).raw().toBuffer({ resolveWithObject: true });
+  const pixel = (x, y) => [...data.subarray((y * info.width + x) * info.channels, (y * info.width + x) * info.channels + 3)];
+  assert.ok(pixel(140, 100).every((channel) => channel < 40), `the shadow of the referenced shape is drawn: ${pixel(140, 100)}`);
+  assert.ok(pixel(60, 50).every((channel, index) => Math.abs(channel - [255, 136, 0][index]) < 12), `the shape itself is drawn over its shadow: ${pixel(60, 50)}`);
 }
 
 // ---- Vector drawing: shapes stay paths, gradients and patterns stay PDF shadings/tilings, translucent groups stay groups -----
@@ -513,6 +520,7 @@ for (const { name, deck, expect } of roundTrips) {
     await toPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [previewFile]}, onDiagnostic: (d) => reports.push(d) });
     const embedded = reports.find((d) => d.code === "pdf-font-embedded");
     assert.equal(embedded.embeddingRestriction, "preview-and-print");
+    assert.match(embedded.message, /; its fsType allows the PDF to be viewed and printed only, not edited\.$/, "the message names the restriction");
     assert.equal(embedded.fsType, 4);
     // A font declared by @font-face in the SVG is found by its declared family, whatever its name table says.
     const declared = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100"><style>@font-face{font-family:"Brand Sans";src:url("data:font/ttf;base64,${Buffer.from(original).toString("base64")}")}</style><text x="10" y="50" font-family="Brand Sans" font-size="20">Declared family</text></svg>`;

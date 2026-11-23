@@ -64,8 +64,8 @@ for (const [direction, text, language] of [['ltr', words.en, 'en-US'], ['rtl', w
 
   test(`LH-164 (${direction}): a statement's message takes it, a statement's metric keeps the plain surface`, () => {
     const deck = deckOf([
-      { layout: 'statement', title: text.statement, blocks: [{ region: 'message', text: text.support }] },
-      { layout: 'statement', title: text.title, blocks: [{ region: 'message', metric: { value: '14', label: text.title } }] },
+      { layout: 'statement', title: text.statement, blocks: [{ region: 'body', text: text.support }] },
+      { layout: 'statement', title: text.title, blocks: [{ region: 'body', metric: { value: '14', label: text.title } }] },
     ], undefined, language);
     assert.equal(surface(deck, 0)?.kind, 'statement-message');
     assert.equal(context(deck, 0).resolved.roles.background.toUpperCase(), accentOf(deck).toUpperCase(), 'the accent replaces the statement\'s own surface');

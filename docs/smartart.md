@@ -2,7 +2,7 @@
 
 Several layouts of the default catalog draw a list as a diagram: `pyramid` (levels that build on each other, the first entry at the top),
 `matrix` (four parts of a whole, or the four cases of two choices, as quadrants), `cycle` (steps that repeat, as a loop; see
-[Cycles](#cycles-sh-18)) and [`chevrons`, `flow` and `vertical-flow`](#chevrons-and-flows) (stages or steps in order). The PowerPoint export writes them as **live
+[Cycles](#cycles-sh-18)) and [`chevrons`, `process` and `vertical-process`](#chevrons-and-flows) (stages or steps in order; their regions' `arrangement` is `chevrons`, `steps` (a short list draws Basic Process) and `vertical-process`). The PowerPoint export writes them as **live
 SmartArt** where PowerPoint lays the SmartArt out exactly as the preview draws it (PowerPoint's designs on its built-in layouts, OPF's
 own designs on [OPF's own layout definitions](#opfs-own-layouts-sh-19)), and as the same drawing in native shapes everywhere else. A slide on either layout never turns into a stray bullet list: the arrangement has a second design of its own, drawn when
 PowerPoint's does not hold the entries.
@@ -17,7 +17,7 @@ PowerPoint's does not hold the entries.
 
 ## The arrangement of a region
 
-A layout record's region takes `arrangement: "pyramid"` or `"matrix"` ([layout templates](layout-templates.md)). When the region holds
+A layout record's region takes `arrangement: "pyramid"` or `"matrix"` ([layout templates](layout-templates.md); the other diagram values are `inverted-pyramid`, `cycle`, `chevrons`, `process`, `vertical-process`, `org-chart`, `hierarchy` and `venn`, and `steps` and `numbered` draw [step sequences](layout-templates.md#step-sequences-lh-07) instead). When the region holds
 one list of one level (no nested entries, no descriptions, no icons, no `numbering`), composition draws it as that diagram
 (`SlideComposition.arrangements`, core `arrangements.ts`), in the first of these designs that holds every entry:
 
@@ -110,9 +110,9 @@ The arrangement keeps the previous fitted list size or grows. A malformed tree, 
 
 ## Chevrons and flows
 
-Three more layouts draw a list of stages or steps in order (SH-17): `chevrons` (a row of chevrons, each leading into the next), `flow`
-(boxes joined by arrows in one row) and `vertical-flow` (the same as a column, beside the title). Each is a region's `arrangement` of the
-same name, with the same rules as a pyramid's: one list of one level, 1 to 8 short entries, one size for every node, never below the
+Three more layouts draw a list of stages or steps in order (SH-17): `chevrons` (a row of chevrons, each leading into the next), `process`
+(boxes joined by arrows in one row, for a list of 2 to 8 entries of one or two words; OPF 0.35: other steps draw as numbered steps) and `vertical-process` (the same as a column, beside the title). Their regions' `arrangement` is
+`chevrons`, `steps` (a short list draws as `process`, PowerPoint's Basic Process) and `vertical-process` (its Vertical Process), with the same rules as a pyramid's: one list of one level, 1 to 8 short entries, one size for every node, never below the
 list's role size.
 
 ```json
@@ -320,7 +320,7 @@ COM also showed, on two live instances of each (short and medium entries): `HasS
 `AllNodes`; a node's text edited in PowerPoint keeps OPF's size in every node and every node rectangle; Change Layout to Basic Block List
 keeps the nodes. With its `mc:Choice` requiring an unknown namespace, PowerPoint draws SH-16's fallback picture of each (mean difference
 1.3 from the preview over the slide, about what it is for the live SmartArt). Import reads a Basic Chevron Process, Basic Process or
-Vertical Process that PowerPoint itself wrote back to the `chevrons`, `flow` or `vertical-flow` layout and its list, from the data model.
+Vertical Process that PowerPoint itself wrote back to the `chevrons`, `process` or `vertical-process` layout and its list, from the data model.
 
 ### The layout relationship
 
@@ -531,7 +531,7 @@ decks draw OPF's layout live and every one passes (node rectangles within 0.000 
 difference, within SH-07's gate of the native export: a mean difference of at most 0.8 at a quarter size and 0.94 at full size, the
 text's ink within 1.08 px); PowerPoint's built-in layouts draw 102 live decks, every one passing; OPF's design draws 271 decks and a card
 grid 43 as native shapes, and 32 stay a list. The gate's shapes-versus-preview check leaves out each node's text rectangle grown by
-0.2 em up and down, so the preview's known text offset is not counted as a shape difference. The evidence (the gate table, sheets of preview, PowerPoint live and PowerPoint's drawing of the native export, labelled with
+0.2 em up and down, so the preview's known text offset is not counted as a shape difference. The evidence (the gate table, sheets of preview, PowerPoint live and PowerPoint's drawing of the native export, labeled with
 the design and the layout that drew it, and the COM records) is in the SH-19 folder of the shapes program.
 
 ## Import
@@ -540,7 +540,7 @@ A SmartArt OPF wrote (in `full` provenance it carries `OPF_SMARTART_V1`: the sli
 and the text of every node) imports as its list on its layout again when its node texts are unchanged. An edited one, and a Basic
 Pyramid, Basic Matrix, Basic Cycle, Basic Chevron Process, Basic Process or Vertical Process that PowerPoint wrote, import their data model's nodes: the points in `cxn` order (nested
 entries keep their `level`, SH-08), their text and run properties (bold, italic, underline, strike), as a list on the
-`pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` layout (the one of the same arrangement; SH-19: a SmartArt on one of
+`pyramid`, `matrix`, `cycle`, `chevrons`, `process` or `vertical-process` layout (the one of its arrangement; a 0.34 file's `flow` and `vertical-flow` import on `process` and `vertical-process`; SH-19: a SmartArt on one of
 OPF's own layouts by its `uniqueId`, `urn:openpresentation.org/smartart/layout/<design>/...`, also after PowerPoint saved it again), with `smartart-edited` for an edited OPF SmartArt. The diagram's place on the slide is its frame's;
 the nodes' geometry is the layout's again, as OPF draws it, so nothing of PowerPoint's layout is kept. Import never reads or stores a
 SmartArt layout part. A wrapped frame is read from its `mc:Choice`. A file in which only the fallback picture survived (an app without
@@ -620,7 +620,7 @@ SH-23 qualification: five in-domain OPF designs retain an added ninth node and a
 
 ## Inverted pyramids
 
-Use the `inverted-pyramid` layout to narrow from a broad starting pool to a final choice. A custom pyramid region sets `pyramidDirection: "down"`; `"up"` is the existing default. The first entry stays at the top, so a downward pyramid starts wide and ends at the tip. Both the continuous outline and the stepped design use core geometry; neither reverses the text order or reduces the text size. PowerPoint export uses editable native shapes with a located `smartart-unavailable` finding. Live `pyramid3` and downward OPF layout definitions remain unqualified. Import maps an Inverted Pyramid to this layout while reporting its adapted styling. See [the example](../examples/technical/inverted-pyramids.opf.json).
+Use the `inverted-pyramid` layout to narrow from a broad starting pool to a final choice. A custom region sets `arrangement: "inverted-pyramid"` (`"pyramid"` keeps the tip at the top). The first entry stays at the top, so an inverted pyramid starts wide and ends at the tip. Both the continuous outline and the stepped design use core geometry; neither reverses the text order or reduces the text size. PowerPoint export uses editable native shapes with a located `smartart-unavailable` finding. Live `pyramid3` and downward OPF layout definitions remain unqualified. Import maps an Inverted Pyramid to this layout while reporting its adapted styling. See [the example](../examples/technical/inverted-pyramids.opf.json).
 
 ### Completed domain audit for 0.34 (SH20/22)
 

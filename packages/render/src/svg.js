@@ -1,5 +1,5 @@
 // The layout engine lives in core's `/composition` entry. Every name is a static import, so a core without one fails to
-// load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
+// load instead of switching a feature (script fonts, right-to-left, patterns, code colors, trend arrows) off.
 import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, textColorForFill, chartColorForFill,
   resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform, stackedText, resolveScriptFonts, paragraphDirection, physicalAlignment, itemAlignment, patternRuns, isolateNumbers,
@@ -87,58 +87,6 @@ const ROOT_PAYLOAD_FIELDS = [
   "quote",
   "timeline"
 ];
-
-const PROMOTED_REGION_KEYS = [
-  "start",
-  "center",
-  "end",
-  "start+center",
-  "center+end",
-  "start+center+end",
-  "top",
-  "middle",
-  "bottom",
-  "top+middle",
-  "middle+bottom",
-  "top+middle+bottom",
-  "top:start",
-  "top:center",
-  "top:end",
-  "top:start+center",
-  "top:center+end",
-  "top:start+center+end",
-  "middle:start",
-  "middle:center",
-  "middle:end",
-  "middle:start+center",
-  "middle:center+end",
-  "middle:start+center+end",
-  "bottom:start",
-  "bottom:center",
-  "bottom:end",
-  "bottom:start+center",
-  "bottom:center+end",
-  "bottom:start+center+end",
-  "top+middle:start",
-  "top+middle:center",
-  "top+middle:end",
-  "top+middle:start+center",
-  "top+middle:center+end",
-  "top+middle:start+center+end",
-  "middle+bottom:start",
-  "middle+bottom:center",
-  "middle+bottom:end",
-  "middle+bottom:start+center",
-  "middle+bottom:center+end",
-  "middle+bottom:start+center+end",
-  "top+middle+bottom:start",
-  "top+middle+bottom:center",
-  "top+middle+bottom:end",
-  "top+middle+bottom:start+center",
-  "top+middle+bottom:center+end",
-  "top+middle+bottom:start+center+end"
-];
-
 
 const FIELD_TYPE = Object.freeze({
   text: "text",
@@ -295,10 +243,10 @@ function resolveColorRefIn(value, design, fallback) {
   });
 }
 
-// Background fills: a literal hex keeps normalizeColor's behaviour (uppercase, alpha kept);
+// Background fills: a literal hex keeps normalizeColor's behavior (uppercase, alpha kept);
 // anything else is a ColorRef (var:id, scheme slot or role) resolved like table fills and run
-// colours, falling back exactly as an unparseable literal did.
-// Roles resolve through the colour scheme only: background, surface and text are derived from the
+// colors, falling back exactly as an unparseable literal did.
+// Roles resolve through the color scheme only: background, surface and text are derived from the
 // background itself (the contrast text), so a reference must not see them.
 function resolveBackgroundColor(value, design, fallback) {
   const literal = normalizeColor(value, null);
@@ -307,7 +255,7 @@ function resolveBackgroundColor(value, design, fallback) {
   return resolveColorRefIn(value, { colorScheme: design.colorScheme, colors: { primary, secondary, accent }, variables: design.variables }, fallback);
 }
 
-// Image sources the background string shorthand accepts (a cover image); any other string is a theme slot or a hex colour.
+// Image sources the background string shorthand accepts (a cover image); any other string is a theme slot or a hex color.
 const IMAGE_BACKGROUND_SOURCE = /^(asset:|https:\/\/|data:|\.\/|\.\.\/)/;
 
 // The slide's single background color, or null when there is none (a gradient, or no color the engine can read).
@@ -323,7 +271,7 @@ function resolveBackground(background, colorScheme, design, canvas) {
 }
 
 
-// An unparseable colour measures as white: this is a luminance for the contrast tests below, never a colour that is drawn.
+// An unparseable color measures as white: this is a luminance for the contrast tests below, never a color that is drawn.
 function colorLuminance(color) {
   const hex = normalizeColor(color, "#FFFFFF").replace("#", "");
   const channels = [0, 2, 4].map(offset => {
@@ -334,15 +282,15 @@ function colorLuminance(color) {
 }
 
 // FF-61: WCAG 2.x contrast ratio, (L1 + 0.05) / (L2 + 0.05) with L1 the lighter relative luminance. The slide tag
-// draws in the primary colour unless that is under 4.5:1 against the slide background; opf-pptx applies the same
-// rule with the same arithmetic (test/tag-colour.mjs in both repositories pins the same colour pairs).
+// draws in the primary color unless that is under 4.5:1 against the slide background; opf-pptx applies the same
+// rule with the same arithmetic (test/tag-colour.mjs in both repositories pins the same color pairs).
 const TAG_MIN_CONTRAST = 4.5;
 function contrastRatio(first, second) {
   const a = colorLuminance(first), b = colorLuminance(second);
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 }
-// The slide background the tag sits on: the resolved solid or pattern colour, else (gradient) the scheme light1,
-// the colour the background rect also falls back to and opf-pptx uses for a background that is not one colour.
+// The slide background the tag sits on: the resolved solid or pattern color, else (gradient) the scheme light1,
+// the color the background rect also falls back to and opf-pptx uses for a background that is not one color.
 function tagFill(design) {
   const background = design.backgroundColor ?? design.colors.background;
   return contrastRatio(design.colors.primary, background) < TAG_MIN_CONTRAST ? design.colors.text : design.colors.primary;
@@ -364,7 +312,7 @@ const sameBox = (a, b) => !!a && !!b && a.x === b.x && a.y === b.y && a.width ==
 const LINK_URL = /^(https?:|mailto:|tel:)/i;
 
 // What the renderer paints with, from the records core's `resolveSlideContext` resolved (slide design, then deck design, then
-// theme, then the engine default, per field: the one order every engine uses). The theme and the colour scheme keep their
+// theme, then the engine default, per field: the one order every engine uses). The theme and the color scheme keep their
 // sorted keys, so the output does not depend on the order a catalog lists a field in. A reference that resolves nowhere never
 // throws (unless `strictReferences`): the context falls back to core's engine defaults (ENGINE_DEFAULT_THEME, _COLOR_SCHEME,
 // _FONT_SCHEME; a layout to automatic composition) and reports `unresolved-reference`, which is forwarded as a render diagnostic.
@@ -408,7 +356,7 @@ function resolveDesign(presentation, slide, slideContext) {
     background: backgroundDefinition,
     backgroundColor,
     colors: {
-      // The slide's drawn single-colour background, else the variant's bg1 (a picture, gradient or none).
+      // The slide's drawn single-color background, else the variant's bg1 (a picture, gradient or none).
       background: backgroundColor ?? roles.background,
       surface: roles.surface,
       text: roles.text,
@@ -535,17 +483,6 @@ function slideRootContent(slide, slidePath) {
   return items;
 }
 
-function promotedRegionContent(slide, slidePath) {
-  const items = [];
-  for (const key of PROMOTED_REGION_KEYS) {
-    if (slide[key] !== undefined) {
-      const payload = contentPayloadFromHost(slide[key], `${slidePath}.${key}`);
-      items.push({ ...payload, regionKey: key });
-    }
-  }
-  return items;
-}
-
 function blockContent(slide, slidePath) {
   if (!Array.isArray(slide.blocks)) return [];
   return slide.blocks.map((block, index) => contentPayloadFromHost(block, `${slidePath}.blocks.${index}`));
@@ -574,7 +511,7 @@ function resolveContext(presentation, index, context) {
 
 function bindSlide(presentation, index, context) {
   const slidePath = `slides.${index}`;
-  // Core resolves the slide's canvas, layout, theme, colour scheme, font scheme and family names the one way every engine must
+  // Core resolves the slide's canvas, layout, theme, color scheme, font scheme and family names the one way every engine must
   // (slide design, deck design, theme, engine default), from the records the document embeds and the catalogs the host
   // registered (`options.catalogs`, passed unchanged); `fonts` carries the measurement the host loaded. A slide with no
   // `layout` composes automatically; one whose reference resolves nowhere does too, with an `unresolved-reference` diagnostic,
@@ -584,10 +521,7 @@ function bindSlide(presentation, index, context) {
   // {{deck.slideCount}} hold this slide's number, its section and the deck's slide count, the same values the furniture draws. Core resolved them.
   const slide = slideContext.slide;
   const layout = slideContext.options.layout;
-  const contentItems = [
-    ...slideRootContent(slide, slidePath),
-    ...promotedRegionContent(slide, slidePath)
-  ];
+  const contentItems = slideRootContent(slide, slidePath);
   const blocks = blockContent(slide, slidePath);
 
   const design = resolveDesign(presentation, slide, slideContext);
@@ -595,7 +529,12 @@ function bindSlide(presentation, index, context) {
   if (context.mapInputFamily) design.fonts = Object.fromEntries(Object.entries(design.fonts).map(([role, family]) => [role, context.mapInputFamily(family)]));
   // Script fonts (FF-19): each text run is measured and drawn with its script
   // slot's face; the latin slot stays the design font scheme's family.
-  const scriptFonts = createScriptFonts(scriptProfile(presentation, index, design, context), context.options.textMeasurement, {
+  // The slots name the authored families. `design.fonts` is replaced below by the families the registry draws (Arabic Typesetting
+  // becomes Noto Naskh Arabic), and a run language's profile is built later, on first use: built from the drawn families, a slot that
+  // repeats the scheme's family (an `ar` run in an English deck on the arabic-typesetting scheme) named the replacement, whose policy
+  // row has no size multiplier, so that run was drawn at full size while the deck's own Arabic was drawn at the multiplier.
+  const slotDesign = { ...design };
+  const scriptFonts = createScriptFonts(scriptProfile(presentation, index, slotDesign, context), context.options.textMeasurement, {
     glyphFallback: context.options.glyphFallback,
     onFallback: note => reportGlyphFallback(context, note)
   });
@@ -607,7 +546,7 @@ function bindSlide(presentation, index, context) {
     if (!languageScripts.has(lang)) {
       let own;
       try {
-        const profile = scriptProfile(presentation, index, design, context, lang);
+        const profile = scriptProfile(presentation, index, slotDesign, context, lang);
         own = profile.languageSource === "option" && profile.bcp47?.toLowerCase() !== scriptFonts.profile?.bcp47?.toLowerCase()
           ? createScriptFonts(profile, context.options.textMeasurement, { glyphFallback: context.options.glyphFallback, onFallback: note => reportGlyphFallback(context, note) })
           : undefined;
@@ -774,7 +713,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
     "svg",
     {
       xmlns: "http://www.w3.org/2000/svg",
-      // FA-30: a labelled container, not an image: role="img" makes every text node inside presentational.
+      // FA-30: a labeled container, not an image: role="img" makes every text node inside presentational.
       role: "group",
       "aria-roledescription": "slide",
       "aria-label": title,
@@ -844,7 +783,7 @@ function renderBackground(bound, width, height, options) {
   });
 }
 
-// FA-22 image background, in the paint order of the geometry contract: the canvas colour (the colour scheme's default slide
+// FA-22 image background, in the paint order of the geometry contract: the canvas color (the color scheme's default slide
 // background), the picture (recolor and opacity on its pixels only, as for an image block), then the overlay (the whole canvas
 // or an edge band). cover, contain
 // and stretch use the shared fit math with the focus point; tile repeats the picture at its intrinsic size (1 picture px = 1
@@ -943,7 +882,7 @@ function shapeHelpers(item, bound, options) {
   };
 }
 
-// One overlay (shared by image backgrounds and image blocks): its outline filled with the colour, the colour's alpha times the
+// One overlay (shared by image backgrounds and image blocks): its outline filled with the color, the color's alpha times the
 // overlay opacity.
 function renderImageOverlay(overlay, bound, options) {
   const paint = imagePaint(overlay.color, bound, bound.design.colors.text);
@@ -1198,9 +1137,9 @@ function renderTextPayload(item, box, bound, options) {
     // fontScheme.accent draws the tag; core's textStyle (item.textStyle) already carries it, this is the fallback family.
     fontFamily: item.field === "title" ? bound.design.fonts.heading : item.field === "tag" ? bound.design.fonts.accent ?? bound.design.fonts.body : bound.design.fonts.body,
     fontWeight: item.field === "title" ? 700 : 400,
-    // The slide tag is the eyebrow label: it draws in the primary colour (scheme accent1), as the
-    // PPTX export writes it, or in the text colour when the primary is under 4.5:1 against the
-    // slide background (FF-61). Every other text payload here uses the text colour.
+    // The slide tag is the eyebrow label: it draws in the primary color (scheme accent1), as the
+    // PPTX export writes it, or in the text color when the primary is under 4.5:1 against the
+    // slide background (FF-61). Every other text payload here uses the text color.
     fill: item.field === "tag" ? tagFill(bound.design) : item.eyebrow ? eyebrowFill(bound.design, item) : bound.design.colors.text,
     fit: item.text,
     textStyle: item.textStyle,
@@ -1313,7 +1252,7 @@ const HIDDEN = Object.freeze({ "aria-hidden": "true" });
 function imageAccessibility(asset, options) {
   // An empty alt marks the picture decorative (FA-30), as it does a chart; a picture that is only furniture (a header or footer
   // logo repeated on every slide) is decorative unless the author named it.
-  if (options.imageDecorative || asset.alt === "" || (options.imageUnlabelled && asset.alt === undefined)) return HIDDEN;
+  if (options.imageDecorative || asset.alt === "" || (options.imageUnlabeled && asset.alt === undefined)) return HIDDEN;
   return { role: "img", "aria-label": asset.alt ?? options.imageLabel ?? "Image" };
 }
 
@@ -1625,7 +1564,7 @@ function renderCode(item, box, bound, options) {
       ...traceAttrs(options, item.path)
     })
   ];
-  // FA-13: code.highlight is one band per run of marked lines, behind the line text; the marked lines keep the syntax colours and
+  // FA-13: code.highlight is one band per run of marked lines, behind the line text; the marked lines keep the syntax colors and
   // the others are dimmed (core's codeHighlight* helpers, the same ones the PPTX export calls).
   if (highlight) {
     const body = layout.parts.find(part => part.role === "body");
@@ -1723,7 +1662,7 @@ function renderMetric(item, box, bound, options) {
   return tag('g',{...traceAttrs(options,item.path),...(options.trace?{'data-opf-metric-container':'true'}:{})},children.join('\n'));
 }
 
-// The trend arrow and colour for a laid-out metric (core metricTrendMark); undefined without a trend.
+// The trend arrow and color for a laid-out metric (core metricTrendMark); undefined without a trend.
 function metricTrendMark(layout,bound,background) {
   return coreMetricTrendMark(layout,{background,neutral:bound.design.roles.neutrals.trendNeutral.hex});
 }
@@ -2056,14 +1995,14 @@ function renderFurniture(bound, presentation, width, height, options, kind) {
   }
   return tag('g',{},layout.parts.filter(part=>part.kind===kind).map(part=>{
     const trace=options.trace?{'data-opf-furniture-kind':kind,'data-opf-furniture-field':part.field,'data-opf-furniture-generated':String(part.generated),'data-opf-furniture-editable':!part.generated?'true':undefined,'data-opf-furniture-source':part.sourcePath}:{};
-    if(part.type==='image')return tag('g',trace,renderImage({value:part.image,path:part.path},part.box,bound,{...options,imageFit:'contain',imageUnlabelled:true}));
+    if(part.type==='image')return tag('g',trace,renderImage({value:part.image,path:part.path},part.box,bound,{...options,imageFit:'contain',imageUnlabeled:true}));
     return tag('g',trace,renderTextBox(part.text,part.box,bound,{path:part.path,fit:part.fit,textStyle:part.style,fontFamily:part.style.fontFamily,align:part.alignment,fill:bound.design.colors.mutedText,diagnosticsHandled:true,options}));
   }).join(''));
 }
 function renderBranding(bound,presentation,width,height,options) {
   const design={...presentation.design,...bound.slide.design}, pieces=[];
   const rootFor=key=>bound.slide.design?.[key]!==undefined?`${bound.path}.design.${key}`:`design.${key}`;
-  // FA-13: a text watermark is one line of the heading font in the theme text colour, centered and rotated as core's layoutWatermark says.
+  // FA-13: a text watermark is one line of the heading font in the theme text color, centered and rotated as core's layoutWatermark says.
   if(design.watermark&&typeof design.watermark==='object'&&typeof design.watermark.text==='string'){
     const mark=layoutWatermark(design.watermark.text,{width,height},{fontFamily:bound.design.fonts.heading,fontWeight:700,textMeasurement:options.textMeasurement});
     if(mark){
@@ -2224,7 +2163,7 @@ function scriptLine(text, style, bound, type, { rtl = false, numbers = rtl, plac
 /** One positioned code/metric segment tspan; its script runs flow inside it (no textLength). */
 function segmentSpan(attrs, segment, text, style, bound, type, options, syntax) {
   const scripted = segment.kind === "tab" ? { content: escapeText(text) } : scriptLine(text, style, bound, type, options);
-  // Syntax highlighting (RR-07): a coloured text segment becomes consecutive sibling tspans, one per run, each a
+  // Syntax highlighting (RR-07): a colored text segment becomes consecutive sibling tspans, one per run, each a
   // traced segment of its own source range holding one text node (the editor's caret mapping reads that), the first
   // keeping the accepted x and the rest flowing after it. Plain code keeps one tspan per accepted segment.
   const runs = syntax && segment.kind !== "tab" ? codeLineRuns(syntax.tokens, segment.start, segment.end) : undefined;
@@ -2241,7 +2180,7 @@ function segmentSpan(attrs, segment, text, style, bound, type, options, syntax) 
   return tag("tspan", { ...attrs, "font-family": scripted.family, "font-size": scripted.sizeAdjust && options?.fontSize > 0 ? stableNumber(adjustedFontSize(options.fontSize, scripted.sizeAdjust)) : undefined }, scripted.content);
 }
 
-// FA-13: the marked lines of code.highlight, their bands (runs of displayed lines) and the lit/dimmed colours, from core (the PPTX
+// FA-13: the marked lines of code.highlight, their bands (runs of displayed lines) and the lit/dimmed colors, from core (the PPTX
 // export calls the same functions); undefined when the code marks no line.
 function codeHighlight(item, layout, bound) {
   const highlight = item.value?.highlight;

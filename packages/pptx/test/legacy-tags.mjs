@@ -44,9 +44,9 @@ const map = new Map([['a', {v: 1}]]);
 assert.deepEqual(currentTags(map).get('a'), {v: 1, vocabulary: 2});
 assert.deepEqual(map.get('a'), {v: 1});
 
-const document = {v: 1, design: {chartPrimary: 'right'}, metadata: {extensions: arbitrary}, catalogs: {custom: {themes: {sample: {design: {titleAlignment: 'left'}, extensions: arbitrary}}}}};
+const document = {v: 1, design: {titleAlignment: 'right'}, metadata: {extensions: arbitrary}, catalogs: {custom: {themes: {sample: {design: {titleAlignment: 'left'}, extensions: arbitrary}}}}};
 const upgradedDocument = upgradeTag(document, 'document');
-assert.equal(upgradedDocument.design.chartPrimary, 'end');
+assert.equal(upgradedDocument.design.titleAlignment, 'end');
 assert.equal(upgradedDocument.catalogs.custom.themes.sample.design.titleAlignment, 'start');
 assert.deepEqual(upgradedDocument.metadata.extensions, arbitrary);
 assert.deepEqual(upgradedDocument.catalogs.custom.themes.sample.extensions, arbitrary);

@@ -12,11 +12,11 @@ import { isDarkColor, surfaceAltColor } from './color.js';
 import { contrast, legible, luminance, normalize } from './legible-color.js';
 
 export type MetricTrend = 'up' | 'down' | 'flat';
-/** Whether a change is good news: the colour of the trend mark. */
+/** Whether a change is good news: the color of the trend mark. */
 export type MetricSentiment = 'positive' | 'negative' | 'neutral';
 /** The sentiment a trend has when the metric names none: up is positive, down negative, flat neutral. */
 const METRIC_DEFAULT_SENTIMENT: Readonly<Record<MetricTrend, MetricSentiment>> = Object.freeze({ up: 'positive', down: 'negative', flat: 'neutral' });
-/** The sentiment that colours a trend: the stated one, else the default for the trend. */
+/** The sentiment that colors a trend: the stated one, else the default for the trend. */
 function metricEffectiveSentiment(trend: MetricTrend, sentiment?: MetricSentiment): MetricSentiment {
   return sentiment ?? METRIC_DEFAULT_SENTIMENT[trend];
 }
@@ -25,7 +25,7 @@ export const METRIC_TREND_SHAPES: Readonly<Record<MetricTrend, 'upArrow' | 'down
 export const METRIC_TREND_MIN_CONTRAST = 4.5;
 /** LH-53: the arrow is this share of its line's font size square, and this share of it apart from the delta it precedes. */
 export const METRIC_TREND_ARROW_SIZE = .72, METRIC_TREND_ARROW_GAP = .3;
-/** WI-5 (P18, decision D3): the contrast a metric value keeps on a dark surface when it takes its colour from the scheme. */
+/** WI-5 (P18, decision D3): the contrast a metric value keeps on a dark surface when it takes its color from the scheme. */
 export const METRIC_VALUE_MIN_CONTRAST = 4.5;
 
 /**
@@ -47,21 +47,21 @@ export function metricValueColor(color: string, background: string, text?: strin
 export interface MetricTrendColorOptions {
   /** The slide background the metric text sits on. */
   background: string;
-  /** Neutral colour for a neutral sentiment (the deck's muted text). */
+  /** Neutral color for a neutral sentiment (the deck's muted text). */
   neutral?: string;
   /** Whether the change is good news; absent, the trend's default (up positive, down negative, flat neutral). */
   sentiment?: MetricSentiment;
 }
 
-// Positive is green, negative red, neutral the muted text colour. Which one a trend gets is the
+// Positive is green, negative red, neutral the muted text color. Which one a trend gets is the
 // sentiment's call (a falling latency is good news), not the arrow's: the arrow and the word carry
-// the direction, the colour carries the verdict.
+// the direction, the color carries the verdict.
 const SEMANTIC = {
   positive: { light: '#15803D', dark: '#4ADE80' },
   negative: { light: '#B91C1C', dark: '#F87171' },
 } as const;
 
-/** The colour of a trend (or, with `options.sentiment`, of its sentiment), kept at >= 4.5:1 against the slide background. */
+/** The color of a trend (or, with `options.sentiment`, of its sentiment), kept at >= 4.5:1 against the slide background. */
 export function metricTrendColor(trend: MetricTrend, options: MetricTrendColorOptions): string {
   const background = normalize(options.background) ?? '#FFFFFF';
   const sentiment = metricEffectiveSentiment(trend, options.sentiment);
@@ -72,7 +72,7 @@ export function metricTrendColor(trend: MetricTrend, options: MetricTrendColorOp
 
 export interface MetricTrendMark {
   trend: MetricTrend;
-  /** The sentiment the colour follows: the metric's own, else the default for the trend. */
+  /** The sentiment the color follows: the metric's own, else the default for the trend. */
   sentiment: MetricSentiment;
   /** DrawingML preset name for native export. */
   shape: 'upArrow' | 'downArrow' | 'rightArrow';

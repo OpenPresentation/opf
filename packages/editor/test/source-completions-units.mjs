@@ -189,7 +189,9 @@ const JSON_LISTS = [
   [`{${SALES},"slides":[{"chart":{"data":{"dataset":"pipeline"},"mapping":{"series":["|"]}}}]}`, ['Stage'], ['Quarter']],
   ['{"references":[{"id":"r1","text":"R"}],"slides":[{"title":[{"text":"x","cite":"|"}]}]}', ['r1'], []],
   ['{"narrative":"classic-story","slides":[{"beat":"|"}]}', ['opening', 'closing'], []],
-  ['{"slides":[{"layout":"two-column","blocks":[{"region":"|"}]}]}', ['first', 'second', 'start'], ['title']],
+  ['{"slides":[{"layout":"two-column","blocks":[{"region":"|"}]}]}', ['first', 'second'], ['title', 'start']],
+  // OPF 0.35: a slide without a layout places its blocks in the cells of its grid.
+  ['{"slides":[{"blocks":[{"region":"|"}]}]}', ['start', 'top:end'], ['first']],
   ['{"variables":{"brand":{"type":"color","value":"#123456"},"hero":{"type":"image","value":"a.png"}},"slides":[{"title":[{"text":"x","color":"|"}]}]}', ['var:brand'], ['var:hero']],
   ['{"variables":{"brand":{"type":"color","value":"#123456"},"hero":{"type":"image","value":"a.png"}},"slides":[{"image":"|"}]}', ['var:hero'], ['var:brand']],
 ];
@@ -269,7 +271,7 @@ assert.deepEqual(order('{"slides":[{"layout":"cover",\n|}]}').slice(0, 3), ['tit
 const plain = order('{"slides":[{\n|}]}');
 assert.deepEqual(plain.slice(0, 4), ['title', 'subtitle', 'layout', 'items'], 'no layout: the common order');
 assert.deepEqual(order('{"slides":[{"layout":"nope",\n|}]}').slice(0, 3), ['title', 'subtitle', 'items'], 'an unknown layout: the common order');
-assert.deepEqual(order('{"slides":[{"layout":"agenda","title":"a",\n|}]}').slice(0, 2), ['items', 'subtitle'], 'set keys are not offered again');
+assert.deepEqual(order('{"slides":[{"layout":"agenda","title":"a",\n|}]}').slice(0, 3), ['items', 'text', 'subtitle'], 'set keys are not offered again; the body region accepts lists and text');
 assert.deepEqual(order('{"slides":[{"layout":"agenda",\n|}]}'), order('{"slides":[{"layout":"agenda",\n|}]}'), 'same input, same order');
 assert.deepEqual(order('slides:\n  - layout: agenda\n    |', 'yaml').slice(0, 2), ['title', 'items']);
 assert.deepEqual(order('{"organization":{\n|}}').slice(0, 2), ['id', 'name'], 'required members stay first');

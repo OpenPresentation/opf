@@ -91,14 +91,14 @@ for (const alt of [undefined, 'Night sky']) {
   for (const title of ['Cover', 'Section']) assert.deepEqual(levels(find(title, 'type="subTitle" idx="1"')), {none: 9, flat: 9}, `${title}: the subtitle says no bullet at any level`);
   assert.deepEqual(levels(find('Text', 'idx="100"')), {none: 9, flat: 9}, 'Text: a text region says no bullet');
   assert.deepEqual(levels(find('List', 'idx="100"')), {none: 0, flat: 0}, 'List: the list region keeps the master bullets');
-  assert.deepEqual(levels(find('Agenda', 'type="body" idx="300"')), {none: 0, flat: 0}, 'Agenda: the items region keeps the master bullets');
+  assert.deepEqual(levels(find('Agenda', 'type="body" idx="300"')), {none: 0, flat: 0}, 'Agenda: the body region keeps the master bullets');
   assert.deepEqual(levels(find('Cover', 'type="ctrTitle"')), {none: 0, flat: 0}, 'a title is untouched');
   checks += 6;
 }
 
 // 5. LH-146: the badge numeral of a right-to-left deck is an en-US run; a left-to-right deck keeps its bytes.
 {
-  const steps = language => ({language, slides: [{title: language === 'ar' ? 'من الطلب إلى التشغيل' : 'From request to run', layout: 'process', blocks: ['1', '2', '3'].map((n, index) => ({region: 'steps', items: [{text: language === 'ar' ? ['تحديد', 'إعداد', 'تدريب'][index] : ['Scope', 'Set up', 'Train'][index]}], numbering: {style: 'arabic', start: index + 1}}))}]});
+  const steps = language => ({language, slides: [{title: language === 'ar' ? 'من الطلب إلى التشغيل' : 'From request to run', layout: 'process', blocks: ['1', '2', '3'].map((n, index) => ({region: 'body', items: [{text: language === 'ar' ? ['تحديد', 'إعداد', 'تدريب'][index] : ['Scope', 'Set up', 'Train'][index]}], numbering: {style: 'arabic', start: index + 1}}))}]});
   const badges = async language => {
     const {text} = await open(steps(language), {});
     const xml = text('ppt/slides/slide1.xml');

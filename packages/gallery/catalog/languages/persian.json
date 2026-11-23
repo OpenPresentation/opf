@@ -7,6 +7,6 @@
   "ooxmlLang": "fa-IR",
   "script": "Arab",
   "direction": "rtl",
-  "fontScheme": "arabic-typesetting",
-  "googleFontScheme": "noto-naksh-arabic"
+  "fontScheme": "times-new-roman-arial",
+  "googleFontScheme": "noto-naskh-arabic"
 }

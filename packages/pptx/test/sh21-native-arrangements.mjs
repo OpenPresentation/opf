@@ -4,7 +4,7 @@ import {strFromU8,unzipSync} from 'fflate';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {toSvg} from '@openpresentation/opf-render';
 const tree=[{text:'Root',level:0},{text:'Build',level:1},{text:'Web',level:2},{text:'App',level:2},{text:'Ship',level:1}];
-const layout=kind=>({name:kind,direction:'column',regions:[{name:'title'},{name:'nodes',accepts:['list'],role:'primary',flow:'none',arrangement:kind}]});
+const layout=kind=>({name:kind,direction:'column',regions:[{name:'title'},{name:'nodes',accepts:['list'],role:'primary',max: 1,arrangement:kind}]});
 for(const kind of ['org-chart','hierarchy','venn']){
  const items=kind==='venn'?['One','Two','Three']:tree,deck={catalogs:{custom:{layouts:{[kind]:layout(kind)}}},slides:[{layout:'custom:'+kind,title:'A clear plan',items}]};
  const svg=toSvg(deck,{trace:true})[0];assert.ok(svg.includes('data-opf-arrangement="'+kind+'"'));

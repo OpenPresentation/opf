@@ -18,7 +18,7 @@ const drag = createDragController({
   onStart: (press) => (refuse ? null : { items: press.payload.items, moves: 0 }),
   onStarted: (session) => log.push(`started ${session.items}`),
   onMove: (session) => { session.moves++; log.push("move"); },
-  onEnd: (session, { cancelled }) => log.push(`end ${cancelled ? "cancelled" : "dropped"} after ${session.moves}`),
+  onEnd: (session, { canceled }) => log.push(`end ${canceled ? "canceled" : "dropped"} after ${session.moves}`),
   onDrop: () => log.push("drop"),
   onEscape: () => log.push("escape"),
 });
@@ -54,7 +54,7 @@ const escape = keydown("Escape");
 doc.dispatchEvent(escape);
 assert.equal(escape.defaultPrevented, true);
 assert.equal(drag.active, null);
-assert.deepEqual(log, ["started a", "move", "end cancelled after 1", "escape"]);
+assert.deepEqual(log, ["started a", "move", "end canceled after 1", "escape"]);
 const later = keydown("Escape");
 doc.dispatchEvent(later);
 assert.equal(later.defaultPrevented, false, "no listener once the drag ended");
@@ -64,7 +64,7 @@ log.length = 0;
 drag.press(at(0, 0), { items: "a" });
 drag.move(at(10, 0));
 assert.equal(drag.cancel(), true);
-assert.deepEqual(log, ["started a", "move", "end cancelled after 1"]);
+assert.deepEqual(log, ["started a", "move", "end canceled after 1"]);
 drag.press(at(0, 0), { items: "a" });
 assert.equal(drag.cancel(), false);
 assert.equal(drag.pending, null);

@@ -1,6 +1,6 @@
 {
   "name": "Japan Market Entry Readout",
-  "language": "ja",
+  "language": "en-JP",
   "audience": [
     "marketing"
   ],
@@ -19,8 +19,6 @@
     "background": "light1",
     "titleAlignment": "start",
     "contentBox": true,
-    "contentDirection": "horizontal",
-    "chartPrimary": "none",
     "imageFit": "cover",
     "listBullet": "character"
   },
@@ -423,7 +421,7 @@
                 "video"
               ],
               "role": "media",
-              "flow": "none",
+              "max": 1,
               "bleed": true
             }
           ],
@@ -452,7 +450,6 @@
                 "code",
                 "group"
               ],
-              "role": "primary",
               "flow": "auto"
             }
           ],
@@ -473,23 +470,22 @@
               "name": "title"
             },
             {
-              "name": "charts",
+              "name": "body",
               "accepts": [
                 "chart",
                 "group",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "grid"
             },
             {
-              "name": "note",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
@@ -515,9 +511,7 @@
                 "text",
                 "group"
               ],
-              "role": "primary",
-              "flow": "auto",
-              "listColumns": "auto"
+              "flow": "auto"
             }
           ],
           "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",

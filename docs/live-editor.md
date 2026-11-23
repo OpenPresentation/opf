@@ -153,7 +153,7 @@ That is not a promise of identical raster pixels across browser engines, operati
 Still needed for the requested complete editor:
 
 1. Continuous mixed-style typing and calibrated caret positioning, bidi/IME/vertical-script coverage. Rich text selection, formatting, links, and selected-text replacement are available through the [SVG formatting toolbar and range API](rich-text.md).
-2. More placement constraints and specialized interactions for fixed promoted regions and individual object geometry. **Add content** and **Arrange** already support the insertion, duplication and deletion described below, track resizing, sibling block dragging, and moving complete blocks between existing groups or slides.
+2. More placement constraints and specialized interactions for blocks in fixed cells and individual object geometry. **Add content** and **Arrange** already support the insertion, duplication and deletion described below, track resizing, sibling block dragging, and moving complete blocks between existing groups or slides.
 3. Full visual implementations for specialized charts, media playback, image crops/effects, theme chrome, and every catalog preset. Generic property editing does not imply complete renderer support.
 4. Approved screenshot baselines across representative fonts/layouts/browsers, vertical metric tests, and native PPTX comparison/embedding work.
 5. Broader font-family/script coverage and independently loadable font packs; the current base and Office substitute packs do not cover every requested font. Published packages, documentation examples and installed-package browser CI already exist.

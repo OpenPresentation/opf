@@ -74,8 +74,7 @@ The licenses are in `THIRD-PARTY-NOTICES.md`. See [icons](https://github.com/Ope
 ## Layouts
 
 A slide names a layout by intent; its content flows into the layout's regions, so no layout fixes a block count.
-Variants are design settings on the slide or the deck, not layout ids: cards (`design.contentBox`), one row or one
-column (`contentDirection`), title and content alignment (`titleAlignment`, `contentAlignment`), picture fit
+Variants are design settings on the slide or the deck, not layout ids: cards (`design.contentBox`), title and content alignment (`titleAlignment`, `contentAlignment`), picture fit
 (`imageFit`) and image bullets (`listBullet`), which a theme can also set, and a mirrored side (`mirror`). A slide with no layout composes
 automatically. A deck's own layouts are records of the same schema under `catalogs.custom.layouts`.
 
@@ -85,7 +84,6 @@ automatically. A deck's own layouts are records of the same schema under `catalo
 | `cover` | The opening slide: title, subtitle and an optional picture. |
 | `section` | A divider between parts: the section title and an optional subtitle. |
 | `agenda` | What the talk covers: the parts, as one list that flows into columns when long. |
-| `agenda-split` | A concise agenda beside its title and introduction. |
 | `statement` | One message, large and alone. |
 | `closing` | The last slide: thanks, the call to action and contact details. |
 | **Text** | |
@@ -104,8 +102,7 @@ automatically. A deck's own layouts are records of the same schema under `catalo
 | `matrix` | Four parts of a whole, as the quadrants of a square beside the title. |
 | `cycle` | Steps that repeat, as a loop of nodes with arrows beside the title. |
 | `chevrons` | Stages in order, as a row of chevrons. |
-| `flow` | Steps in order, as boxes joined by arrows in one row. |
-| `vertical-flow` | Steps in order, as boxes joined by arrows in a column beside the title. |
+| `vertical-process` | Steps in order, as boxes joined by arrows in a column beside the title. |
 | **Numbers** | |
 | `metrics` | One to six headline numbers, with an optional note. |
 | `scorecard` | Metrics with commentary or status, as cards. |
@@ -132,7 +129,7 @@ slides compose automatically, unless the deck embeds the old record.
 
 A layout record lays its content out with `direction` and an ordered `regions` list. `direction` (`"row"` or `"column"`,
 default `"column"`) says whether the list runs side by side or top to bottom. Each entry is a **region** (`name`, an
-optional `size`, and the rules `accepts`, `role`, `flow`, `max`, `bleed`, `listColumns`, `anchor`, `empty`) or a **split**
+optional `size`, and the rules `accepts`, `role`, `flow`, `max`, `bleed`, `anchor`, `empty`) or a **split**
 (`direction`, `regions`, an optional `size`) that nests another list, up to three levels. `size` is a weight (default 1):
 siblings share their parent's length in proportion; `"auto"` is the height the content needs and is allowed only in a
 column. `title` and `subtitle` are the heading regions and take only `size`. An `anchor` on the record or on a split
@@ -150,8 +147,8 @@ applies to every region under it unless the region sets its own, and an omitted 
       "direction": "row",
       "size": 2,
       "regions": [
-        { "name": "lead", "accepts": ["text", "quote", "metric"], "role": "primary", "flow": "none" },
-        { "name": "media", "accepts": ["image", "video"], "role": "media", "flow": "none" }
+        { "name": "lead", "accepts": ["text", "quote", "metric"], "role": "primary", "max": 1 },
+        { "name": "media", "accepts": ["image", "video"], "role": "media", "max": 1 }
       ]
     },
     { "name": "support", "size": 1, "accepts": ["text", "list", "metric", "group"], "role": "supporting", "flow": "grid" }
@@ -178,7 +175,7 @@ The stability check enforces the rule (`pnpm check:stability`, `scripts/gallery-
 on every pull request that touches the records or the engines. The baseline is the `latest` published release. For every
 layout, theme, color scheme and font scheme both releases have, it draws a fixture deck with the workspace
 `@openpresentation/opf-render`, once per release: for a layout, a slide with sample content in every region (three blocks in a
-flowing region, one in a `none` region) and a slide with every region empty, which exercises collapse; for a design record, a
+flowing region, one in a region of `max: 1`) and a slide with every region empty, which exercises collapse; for a design record, a
 sample deck. SVG bytes are compared first; a mismatch is rasterized to count the pixels that differ. A changed drawing or a
 removed id that no fragment declares fails; a declared id that did not change warns. New ids pass.
 

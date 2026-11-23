@@ -2,26 +2,26 @@
   "schemaVersion": 1,
   "profile": "reference-line-one-name-three-native-archives-v1",
   "input": {
-    "bytes": 129055,
-    "sha256": "3ec4712d167e889815f22266bd871b8ea2633974689f37ea42a089ae2976c918"
+    "bytes": 124991,
+    "sha256": "58e87d163fc0fe74765e62d7f8e2d382155a75e81ad425099f352038888c9a80"
   },
-  "requestSha256": "4f10ea2e2b7846bd463875c49057711cc7bf0ecb5a51679000c692163f832d28",
-  "envelopeSha256": "e65509e145336d385b936f11abaa4d33c202a3068b195f1361d59b7c37ccf14a",
+  "requestSha256": "504532f2e2cf1447f12d882a85a69daf6d8d9560cca691f0ae4d1056310a0f22",
+  "envelopeSha256": "802631824d132e2bc25bce2d2e90a906f370c535907d6e625ffd5d4e875f54a6",
   "admission": {
-    "bytes": 2025357,
-    "sha256": "ef86e27e685b0ebd696e641cba23e88149ff70d61044e7e1ee89e97b7b244b1f"
+    "bytes": 2113481,
+    "sha256": "f4a8528cf6ef8fdae5685545cee995f33fe90744e0c61d120b9ae36423f22bcb"
   },
   "routeComparison": {
-    "bytes": 288785,
-    "sha256": "b91aa7b705dfde6e2cbab8c5eedb43d92835e5e11a8c20393791eee35cac65a3"
+    "bytes": 287127,
+    "sha256": "5330e03f821a30c1b38680e42b6151ed57c31f84a889ea60f7e73a06f4fe9e42"
   },
   "worker": {
-    "sha256": "3ce6b57ca190a4c0c89b3202eeb11e2685fb2731bfc9a3a206bc3f8b022d8573",
+    "sha256": "755740808d1dd28dd5a44e8720cc5d11a06bd89e5a3412a3b7bdb7458e566bad",
     "bytes": 93931
   },
-  "controllerRevision": "60b982282f9c0b340928adbc595a7969565c1e2f",
-  "started": "2026-11-13T17:49:24.4067332Z",
-  "finished": "2026-11-13T17:49:27.4830409Z",
+  "controllerRevision": "3ba38304c37c4a6ddc2139576e707a1e7b599c31",
+  "started": "2026-11-23T20:20:31.8442310Z",
+  "finished": "2026-11-23T20:20:37.1891503Z",
   "stages": 886,
   "native": {
     "copies": 3,
@@ -85,16 +85,16 @@
   },
   "archives": {
     "before": {
-      "bytes": 134323,
-      "sha256": "a3a61235eaccfeaa9148e8bb8da6b6d8077858c2f95f74a502c73d250e31ebbc"
+      "bytes": 130194,
+      "sha256": "ed46e1e0dfb0b447bf30e03604d005be42d3bd1eeb76a01f1b3197c5e17e7906"
     },
     "edited": {
-      "bytes": 134333,
-      "sha256": "6fb4c1aa17fc25b63e032204cbfa8f31d758376f9a6b59947047657f5c9d4f85"
+      "bytes": 130205,
+      "sha256": "01acb03c13fdfd8031a44cdeeae79208af80dba93d0e3bc81e0faca3ae68e83e"
     },
     "reopened": {
-      "bytes": 134334,
-      "sha256": "de8bd0bdaaa30d202c72955eb938b2c8dcaacf68287602187cae145fd5e0d2ca"
+      "bytes": 130206,
+      "sha256": "b6040faa3e70bb8cc40d7fc1516aa66fc3fd31742136c78e0809d1edb8d35ce6"
     }
   },
   "rasters": [
@@ -201,8 +201,6 @@
     "ppt/slideLayouts/_rels/slideLayout39.xml.rels",
     "ppt/slideLayouts/_rels/slideLayout4.xml.rels",
     "ppt/slideLayouts/_rels/slideLayout40.xml.rels",
-    "ppt/slideLayouts/_rels/slideLayout41.xml.rels",
-    "ppt/slideLayouts/_rels/slideLayout42.xml.rels",
     "ppt/slideLayouts/_rels/slideLayout5.xml.rels",
     "ppt/slideLayouts/_rels/slideLayout6.xml.rels",
     "ppt/slideLayouts/_rels/slideLayout7.xml.rels",
@@ -243,8 +241,6 @@
     "ppt/slideLayouts/slideLayout39.xml",
     "ppt/slideLayouts/slideLayout4.xml",
     "ppt/slideLayouts/slideLayout40.xml",
-    "ppt/slideLayouts/slideLayout41.xml",
-    "ppt/slideLayouts/slideLayout42.xml",
     "ppt/slideLayouts/slideLayout5.xml",
     "ppt/slideLayouts/slideLayout6.xml",
     "ppt/slideLayouts/slideLayout7.xml",
@@ -295,8 +291,6 @@
     "ppt/tags/opfLayout38.xml",
     "ppt/tags/opfLayout39.xml",
     "ppt/tags/opfLayout4.xml",
-    "ppt/tags/opfLayout40.xml",
-    "ppt/tags/opfLayout41.xml",
     "ppt/tags/opfLayout5.xml",
     "ppt/tags/opfLayout6.xml",
     "ppt/tags/opfLayout7.xml",
@@ -345,8 +339,6 @@
     "ppt/tags/tag43.xml",
     "ppt/tags/tag44.xml",
     "ppt/tags/tag45.xml",
-    "ppt/tags/tag46.xml",
-    "ppt/tags/tag47.xml",
     "ppt/tags/tag5.xml",
     "ppt/tags/tag6.xml",
     "ppt/tags/tag7.xml",
@@ -365,24 +357,12 @@
   },
   "retained": {
     "report.json": {
-      "bytes": 81027,
-      "sha256": "f57ae3c4ed9f0c671bbdf5418d2e4311290a4bb884b1a191611b7484685f8b25"
+      "bytes": 80888,
+      "sha256": "76e59c13ad7c61117341ec80c73a418ed0f0c47140efc67346cb56bf4c61b6d0"
     },
     "stages.jsonl": {
-      "bytes": 256493,
-      "sha256": "0e9d964c86be172952201733bf3bc5497711c27d8a52098a9214606cb5d9005a"
-    },
-    "reference-name-before.pptx": {
-      "bytes": 134323,
-      "sha256": "a3a61235eaccfeaa9148e8bb8da6b6d8077858c2f95f74a502c73d250e31ebbc"
-    },
-    "native-furniture-control.pptx": {
-      "bytes": 134333,
-      "sha256": "6fb4c1aa17fc25b63e032204cbfa8f31d758376f9a6b59947047657f5c9d4f85"
-    },
-    "reference-name-reopened.pptx": {
-      "bytes": 134334,
-      "sha256": "de8bd0bdaaa30d202c72955eb938b2c8dcaacf68287602187cae145fd5e0d2ca"
+      "bytes": 250529,
+      "sha256": "a79518c5582b257f243ba15cb43931399291bdc918024b7076a18030969d9ec7"
     }
   }
 }

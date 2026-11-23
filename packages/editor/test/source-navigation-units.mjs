@@ -290,7 +290,7 @@ for (const [format, text] of Object.entries(formats)) {
   const text = JSON.stringify({ catalogs: { acme: { source: "https://example.com/c", layouts: { hero: { regions: [{ name: "main" }] } } }, custom: { layouts: { hero: { regions: [{ name: "title" }] } } } }, slides: [{ layout: "hero" }, { layout: "acme:hero" }, { layout: "custom:hero" }, { layout: "auto" }] }, null, 2);
   const analysis = analyze(text, "json", options);
   const uses = analysis.occurrences.filter((o) => o.role === "ref" && o.kind === "layouts");
-  assert.deepEqual(uses.map((o) => [o.ref, o.scope]), [["hero", "custom"], ["acme:hero", "acme"], ["custom:hero", "custom"]], "a bare id reads from custom first; `auto` is not an id");
+  assert.deepEqual(uses.map((o) => [o.ref, o.scope]), [["hero", "custom"], ["acme:hero", "acme"], ["custom:hero", "custom"], ["auto", "default"]], "a bare id reads from custom first; `auto` is an ordinary id since 0.35, unresolved here");
   assert.equal(text.slice(uses[1].from, uses[1].to), "hero", "the id after the group name is what a rename replaces");
   const next = rename(text, "json", '"acme:hero"', "banner", { shift: 8 });
   assert.ok(next.includes('"acme:banner"') && next.includes('"layout": "hero"') && next.includes('"layout": "custom:hero"'), "only the acme record and its uses change");

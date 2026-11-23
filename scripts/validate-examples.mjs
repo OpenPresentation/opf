@@ -52,7 +52,7 @@ async function main() {
       if (!value || typeof value !== "object") return;
       if (typeof value.layout === "string") {
         const id = value.layout.replace(/^[a-z][a-z0-9-]*:/, "");
-        if (id !== "auto" && !available.has(id)) failures.push({ file, errors: [`${location}/layout names former or unknown layout '${value.layout}'`] });
+        if (!available.has(id)) failures.push({ file, errors: [`${location}/layout names former or unknown layout '${value.layout}'`] });
       }
       for (const [key, entry] of Object.entries(value)) inspect(entry, `${location}/${key}`);
     };

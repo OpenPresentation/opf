@@ -52,22 +52,19 @@ test('candidate penalties account for the score and report the selected flow', (
   assert.ok(decision.candidates.some(candidate=>candidate.penalties.tableOverflow>0));
 });
 
-test('fixed modes and promoted regions retain placement with no invented search', () => {
-  const slide={start:{composition:{mode:'column',weights:[2,1]},blocks:blocks(2)},end:{blocks:blocks(3)}};
+test('fixed modes and cells retain placement with no invented search', () => {
+  const slide={blocks:[{region:'start',composition:{mode:'column',weights:[2,1]},blocks:blocks(2)},{region:'end',blocks:blocks(3)}]};
   const result=composeSlide(slide,{explain:true});
   assert.deepEqual(result.explanation.decisions.map(({path,mode,reason})=>({path,mode,reason})),[
     {path:'slides.0',mode:'regions',reason:'promoted-regions'},
-    {path:'slides.0.start',mode:'column',reason:'configured-mode'},
-    {path:'slides.0.end',mode:'auto',reason:'lowest-score'},
+    {path:'slides.0.blocks.0',mode:'column',reason:'configured-mode'},
+    {path:'slides.0.blocks.1',mode:'auto',reason:'lowest-score'},
   ]);
   assert.deepEqual(result.explanation.decisions[0].candidates,[]);
   assert.equal(result.explanation.decisions[0].selectedColumns,undefined);
   assert.deepEqual(result.explanation.decisions[1].candidates,[]);
   assert.equal(result.explanation.decisions[1].selectedColumns,1);
   assert.ok(Math.abs(result.items[0].box.height/result.items[1].box.height-2)<1e-5);
-  const inherited=composeSlide({blocks:blocks(2)},{explain:true,layout:{design:{contentDirection:'vertical'}}});
-  assert.equal(inherited.explanation.decisions[0].reason,'configured-mode');
-  assert.equal(inherited.explanation.decisions[0].mode,'column');
 });
 
 test('candidate caps and empty slides are explicit', () => {

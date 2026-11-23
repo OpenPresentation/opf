@@ -57,13 +57,13 @@ test('four metrics with icons in two rows: no chip meets another metric', async 
   assert.deepEqual(value(composed), value(plain));
 });
 
-test('icons in a promoted region are drawn and walked', async () => {
-  const slide = { title: 'Promoted regions', start: { items: [{ text: 'Activations up', icon: 'lucide:trending-up' }, { text: 'Five cities live', icon: 'lucide:map-pin' }, { text: 'Support ready', icon: 'lucide:life-buoy' }] }, 'center+end': { chart: { type: 'column', data: { columns: ['Month', 'Cards'], rows: [['Jan', 10], ['Feb', 14], ['Mar', 22], ['Apr', 31]] } } } };
-  assert.deepEqual(documentIcons(slide).map((found) => found.path), ['slide.start.items.0.icon', 'slide.start.items.1.icon', 'slide.start.items.2.icon']);
+test('icons in a block placed in a cell are drawn and walked', async () => {
+  const slide = { title: 'Promoted regions', blocks: [{ region: 'start', items: [{ text: 'Activations up', icon: 'lucide:trending-up' }, { text: 'Five cities live', icon: 'lucide:map-pin' }, { text: 'Support ready', icon: 'lucide:life-buoy' }] }, { region: 'center+end', chart: { type: 'column', data: { columns: ['Month', 'Cards'], rows: [['Jan', 10], ['Feb', 14], ['Mar', 22], ['Apr', 31]] } } }] };
+  assert.deepEqual(documentIcons(slide).map((found) => found.path), ['slide.blocks.0.items.0.icon', 'slide.blocks.0.items.1.icon', 'slide.blocks.0.items.2.icon']);
   const composed = await compose(deck(slide));
-  assert.deepEqual(composed.icons.map((icon) => icon.path), ['slides.0.start.items.0.icon', 'slides.0.start.items.1.icon', 'slides.0.start.items.2.icon']);
+  assert.deepEqual(composed.icons.map((icon) => icon.path), ['slides.0.blocks.0.items.0.icon', 'slides.0.blocks.0.items.1.icon', 'slides.0.blocks.0.items.2.icon']);
   assert.equal(dropped(composed).length, 0);
-  assert.equal(listSize(composed, 'slides.0.start.items'), listSize(await compose(withoutIcons(deck(slide))), 'slides.0.start.items'));
+  assert.equal(listSize(composed, 'slides.0.blocks.0.items'), listSize(await compose(withoutIcons(deck(slide))), 'slides.0.blocks.0.items'));
 });
 
 const relay = { diagram: { syntax: 'dot', source: 'digraph relay {\n rankdir=LR\n node [shape=box, style=rounded]\n Gateway -> Queue\n Queue -> Workers\n Workers -> Ledger\n}' } };

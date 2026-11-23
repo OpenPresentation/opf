@@ -211,7 +211,7 @@ export async function convert(input, options = {}) {
     options.onFinding?.(finding);
   };
   const progress = (stage, done, total, message) => options.onProgress?.({ stage, done, total, message });
-  const aborted = () => exportError("export-aborted", "The export was cancelled.");
+  const aborted = () => exportError("export-aborted", "The export was canceled.");
   const check = () => { if (signal?.aborted) throw aborted(); };
   const numbers = slidesToConvert(input, options);
   if (!numbers.length) throw exportError("export-no-slides", "There are no slides to export.");

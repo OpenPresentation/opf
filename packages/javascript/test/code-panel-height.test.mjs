@@ -48,7 +48,7 @@ test('long code keeps its cell and fits down without clipping', () => {
 
 test('two and three columns of code fit down at 22 px without clipping', () => {
   for (const count of [2, 3]) {
-    const record = { name: `${count} columns`, direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: Array.from({ length: count }, (_, index) => ({ name: `c${index}`, accepts: ['code'], role: 'primary', flow: 'none' })) }] };
+    const record = { name: `${count} columns`, direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: Array.from({ length: count }, (_, index) => ({ name: `c${index}`, accepts: ['code'], role: 'primary', max: 1 })) }] };
     const blocks = Array.from({ length: count }, (_, index) => ({ region: `c${index}`, code: { language: 'js', source: Array.from({ length: 6 + 4 * index }, (_, line) => `const value${line} = compute(${line});`).join('\n') } }));
     const result = composeSlide({ title: 'Columns', blocks }, { layout: record });
     assert.deepEqual(result.diagnostics, [], `${count} columns`);

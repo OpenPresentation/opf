@@ -13,7 +13,7 @@ const withLogo = (logo, extra = {}) => ({organization: {id: 'acme', name: 'Acme'
 const titleOnly = {id: 'title', regions: [{name: 'title', size: 1}]};
 const titleSubtitle = {id: 'title-subtitle', regions: [{name: 'title', size: 1}]};
 const sectionDivider = {id: 'section-divider', regions: [{name: 'title', size: 1}]};
-const text1x = {id: 'text-1x', regions: [{name: 'title'}, {name: 'body-1', accepts: ['text'], flow: 'none'}]};
+const text1x = {id: 'text-1x', regions: [{name: 'title'}, {name: 'body-1', accepts: ['text'], max: 1}]};
 const byField = (result, field) => result.items.find(item => item.field === field);
 
 test('resolveLogo is exported from the composition entry', () => {
@@ -75,8 +75,8 @@ test('content slides never get an automatic logo', () => {
     [{title: 'Body', text: 'Content'}, undefined],
     [{title: 'Content', text: 'Body'}, text1x],
     [{title: 'Blocks', blocks: [{text: 'a'}, {text: 'b'}]}, undefined],
-    [{title: 'Regions', start: {text: 'a'}, end: {text: 'b'}}, undefined],
-    [{title: 'Image', image: asset('photo')}, {id: 'image-1x', regions: [{name: 'title'}, {name: 'body-1', accepts: ['image'], flow: 'none'}]}],
+    [{title: 'Regions', blocks: [{region: 'start',text: 'a'}, {region: 'end',text: 'b'}]}, undefined],
+    [{title: 'Image', image: asset('photo')}, {id: 'image-1x', regions: [{name: 'title'}, {name: 'body-1', accepts: ['image'], max: 1}]}],
   ];
   for (const [slide, layout] of cases) {
     const result = composeSlide(slide, {layout, presentation});

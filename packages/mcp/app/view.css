@@ -93,7 +93,7 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 .deck-tabs [role="tab"][aria-selected="true"]::after { content: ""; position: absolute; inset: auto 6px -1px; height: 2px; background: var(--opf-ui-accent-strong); }
 .deck-tabs [role="tab"]:focus-visible { outline-offset: -4px; border-radius: var(--opf-ui-radius); }
 
-/* A view that a newer one of the same deck replaced: greyed out and inert, with a line that says so. */
+/* A view that a newer one of the same deck replaced: grayed out and inert, with a line that says so. */
 .deck-note { flex: none; margin: 0; padding: 8px 12px; border-bottom: 1px solid var(--opf-ui-border); background: var(--opf-ui-muted); font-weight: 500; }
 #opf-deck[data-superseded="true"] :is(.deck-bar, .deck-root, .deck-foot) { opacity: 0.5; pointer-events: none; user-select: none; }
 
@@ -128,7 +128,7 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 #opf-deck[data-show="both"] .deck-source { border-right: 1px solid var(--opf-ui-border); }
 
 .deck-stage-col { display: flex; flex-direction: column; background: var(--deck-stage-bg); }
-/* The editor sizes the canvas to the stage (fit: "contain"); the stage centres it. The 16px around the slide is a margin, not
+/* The editor sizes the canvas to the stage (fit: "contain"); the stage centers it. The 16px around the slide is a margin, not
    padding, so the stage itself has the slide's shape and the slide fills it with equal space on every side. */
 .deck-stage { flex: 1 1 auto; min-height: 0; position: relative; overflow: hidden; margin: 16px; display: flex; align-items: center; justify-content: center; }
 .deck-canvas { flex: none; }

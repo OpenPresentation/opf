@@ -14,12 +14,13 @@ import * as edit from "./edit.js";
 import * as embed from "./embed.js";
 import { CliError, fromApiError, usage } from "./errors.js";
 import * as fill from "./fill.js";
+import * as fixCommand from "./fix.js";
 import * as format from "./format.js";
 import * as ingest from "./ingest.js";
 import { exitOnBrokenPipe, json } from "./io.js";
 import * as mcp from "./mcp-command.js";
 import * as paginate from "./paginate.js";
-import { type Host, countsOf, envelope, printReport } from "./runtime.js";
+import { type Host, countsOf, envelope, printReport, safeFixHint } from "./runtime.js";
 import { type SkillBundle, SkillsError, manageSkills } from "./skills.js";
 import * as stats from "./stats.js";
 import * as validate from "./validate.js";
@@ -66,6 +67,7 @@ const COMMANDS: [CommandSpec, Runner][] = [
 	[stats.spec, stats.run],
 	[paginate.spec, paginate.run],
 	[embed.spec, embed.run],
+	[fixCommand.spec, fixCommand.run],
 	[fill.spec, fill.run],
 	[ingest.spec, ingest.run],
 	[doctor.spec, doctor.run],
@@ -92,7 +94,7 @@ opf <command> --help (or -h) prints a command's flags and examples.
 Decks are JSON (canonical), YAML (.opf.yaml) or Markdown (.opf.md); the extension names the form. --from json|yaml|md reads
 stdin and other names (without it, text starting with { or [ is JSON); --to json|yaml|md picks the form written to stdout.
 Every command that writes a deck takes an optional output after its inputs and writes stdout without one; -i (--in-place)
-rewrites the input; format, embed and paginate take --check (write nothing, exit 1 when something would change). An existing
+rewrites the input; format, embed, fix and paginate take --check (write nothing, exit 1 when something would change). An existing
 output needs --force. --format names a report format only: json (the default), text, github (validate) or patch (diff).
 --data-format csv|tsv|json names the data of fill and ingest.
 
@@ -118,7 +120,7 @@ function failure(error: unknown, command: string | undefined): { report: Record<
 	};
 	if (error instanceof CliError) return shaped(error);
 	if (error instanceof OPFApiError) return shaped(fromApiError(error));
-	if (error instanceof OPFValidationError) return shaped(new CliError(error.message, "invalid-document", 1, { findings: error.report.findings }));
+	if (error instanceof OPFValidationError) return shaped(new CliError(`${error.message}${safeFixHint(command ?? "", error.report.findings)}`, "invalid-document", 1, { findings: error.report.findings }));
 	if (error instanceof OPFPatchError) return shaped(new CliError(error.message, `patch-${error.code}`, 1, { ...(error.path === undefined ? {} : { path: error.path }), ...(error.index === undefined ? {} : { operation: error.index }) }));
 	if (error instanceof OPFDataImportError) return shaped(new CliError(error.message, "invalid-data", 1));
 	if (error instanceof SkillsError) return shaped(new CliError(error.message, error.code === 2 ? "usage" : "skills-conflict", error.code === 2 ? 2 : 1));

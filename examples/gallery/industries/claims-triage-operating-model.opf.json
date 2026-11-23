@@ -15,10 +15,8 @@
     "background": "dark1",
     "titleAlignment": "end",
     "contentBox": false,
-    "contentDirection": "vertical",
-    "chartPrimary": "start",
     "imageFit": "contain",
-    "listBullet": "image"
+    "listBullet": "character"
   },
   "slides": [
     {
@@ -56,29 +54,24 @@
         "data": {
           "columns": [
             "Quarter",
-            "Current",
-            "Baseline"
+            "Current"
           ],
           "rows": [
             [
               "Q1",
-              23,
-              20
+              23
             ],
             [
               "Q2",
-              27,
-              22
+              27
             ],
             [
               "Q3",
-              30,
-              24
+              30
             ],
             [
               "Q4",
-              34,
-              26
+              34
             ]
           ]
         }
@@ -435,7 +428,7 @@
                 "video"
               ],
               "role": "media",
-              "flow": "none",
+              "max": 1,
               "bleed": true
             }
           ],
@@ -464,7 +457,6 @@
                 "code",
                 "group"
               ],
-              "role": "primary",
               "flow": "auto"
             }
           ],
@@ -485,23 +477,22 @@
               "name": "title"
             },
             {
-              "name": "charts",
+              "name": "body",
               "accepts": [
                 "chart",
                 "group",
                 "diagram"
               ],
-              "role": "primary",
               "flow": "grid"
             },
             {
-              "name": "note",
+              "name": "aside",
               "size": "auto",
               "accepts": [
                 "text"
               ],
               "role": "supporting",
-              "flow": "none"
+              "max": 1
             }
           ],
           "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
@@ -527,9 +518,7 @@
                 "text",
                 "group"
               ],
-              "role": "primary",
-              "flow": "auto",
-              "listColumns": "auto"
+              "flow": "auto"
             }
           ],
           "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",

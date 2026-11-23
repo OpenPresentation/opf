@@ -42,8 +42,8 @@
     {
       "key": "source",
       "path": "source.opf.json",
-      "bytes": 5522,
-      "sha256": "9661195f8e6b2153853741fbfed236f30cb5ec5ae731abde46830808459bfa90"
+      "bytes": 5504,
+      "sha256": "889deb1d556c05c34ce03c9516104594e260283be183cf28f38715e529d69ee0"
     },
     {
       "key": "rendererPreview",

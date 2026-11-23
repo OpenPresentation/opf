@@ -61,9 +61,9 @@ const MC = 'http://schemas.openxmlformats.org/markup-compatibility/2006';
 /** SH-16: the alt text of the fallback picture: the kind and size, then each entry on its own line, in entry order. */
 export function smartArtOutline(kind, values) {
   const texts = values.map(plain), count = texts.length;
-  const head = kind==='org-chart'||kind==='hierarchy'?`${kind==='org-chart'?'Organization chart':'Hierarchy'} of ${count} nodes, root first`:kind==='venn'?`Venn of ${count} sets`:kind === 'pyramid' ? `Pyramid of ${count} level${count === 1 ? '' : 's'}, top to bottom` : kind === 'cycle' ? cycleOutlineHead(count) : kind === 'matrix' ? `Matrix of ${count} ${count === 1 ? 'entry' : 'entries'}, in reading order`
+  const head = kind==='org-chart'||kind==='hierarchy'?`${kind==='org-chart'?'Organization chart':'Hierarchy'} of ${count} nodes, root first`:kind==='venn'?`Venn of ${count} sets`:kind === 'pyramid' || kind === 'inverted-pyramid' ? `Pyramid of ${count} level${count === 1 ? '' : 's'}, top to bottom` : kind === 'cycle' ? cycleOutlineHead(count) : kind === 'matrix' ? `Matrix of ${count} ${count === 1 ? 'entry' : 'entries'}, in reading order`
     // SH-17: the linear arrangements, in order.
-    : `${kind === 'chevrons' ? 'Chevrons' : kind === 'flow' ? 'Flow' : 'Vertical flow'} of ${count} ${kind === 'chevrons' ? 'stage' : 'step'}${count === 1 ? '' : 's'}, ${kind === 'vertical-flow' ? 'top to bottom' : 'in order'}`;
+    : `${kind === 'chevrons' ? 'Chevrons' : kind === 'process' ? 'Flow' : 'Vertical flow'} of ${count} ${kind === 'chevrons' ? 'stage' : 'step'}${count === 1 ? '' : 's'}, ${kind === 'vertical-process' ? 'top to bottom' : 'in order'}`;
   return [`${head}:`, ...texts.map((text,index)=>['org-chart','hierarchy'].includes(kind)?'  '.repeat(Number(values[index]?.level??0))+text:text)].join('\n');
 }
 
@@ -175,7 +175,7 @@ const CONTENT_TYPES = Object.freeze({
 /** OPF's own quick style and colors definitions (uniqueId): not Microsoft's, whose content differs. */
 export const OPF_QUICK_STYLE = 'urn:openpresentation.org/opf/smartart/quickstyle/flat';
 export const OPF_COLORS = 'urn:openpresentation.org/opf/smartart/colors/primary';
-const LAYOUT_CATEGORY = Object.freeze({pyramid: 'pyramid', matrix: 'matrix', cycle: 'cycle', chevrons: 'process', flow: 'process', 'vertical-flow': 'process','org-chart':'hierarchy',hierarchy:'hierarchy',venn:'relationship'});
+const LAYOUT_CATEGORY = Object.freeze({pyramid: 'pyramid', 'inverted-pyramid': 'pyramid', matrix: 'matrix', cycle: 'cycle', chevrons: 'process', process: 'process', 'vertical-process': 'process','org-chart':'hierarchy',hierarchy:'hierarchy',venn:'relationship'});
 const measuredKind=kind=>['org-chart','hierarchy','venn'].includes(kind);
 const styleId=(base,kind)=>measuredKind(kind)?base+'/'+kind:base;
 const EMU = 9525; // per canvas pixel (1/96 inch)
@@ -199,7 +199,7 @@ const plain = value => runsOf(value).map(run => run?.text ?? '').join('');
  * list's entries as authored.
  */
 export function smartArtReason(arrangement, values, rtl) {
-  if (arrangement.kind === 'pyramid' && arrangement.pyramidDirection === 'down') return 'the inverted pyramid has no qualified live SmartArt domain';
+  if (arrangement.kind === 'inverted-pyramid') return 'the inverted pyramid has no qualified live SmartArt domain';
   if (values.some(value => runsOf(value).some(run => !run || typeof run.text !== 'string' || Object.keys(run).some(key => !RUN_KEYS.has(key)))))
     return 'an entry has text formatting a SmartArt node does not carry (a link, a citation, code or its own size)';
   if (values.some(value => /[\r\n\t]/.test(plain(value)))) return 'an entry holds a line break or a tab';
@@ -212,7 +212,7 @@ export function smartArtReason(arrangement, values, rtl) {
 
 /** SH-19: whether OPF's own design can be live SmartArt on OPF's layout definition: undefined when it can, else the reason. */
 export function opfLayoutReason(arrangement, values, rtl) {
-  if (arrangement.kind === 'pyramid' && arrangement.pyramidDirection === 'down') return 'the inverted pyramid has no qualified live SmartArt domain';
+  if (arrangement.kind === 'inverted-pyramid') return 'the inverted pyramid has no qualified live SmartArt domain';
   if (!arrangement.layout) return 'its design has no OPF layout definition';
   if (values.some(value => runsOf(value).some(run => !run || typeof run.text !== 'string' || Object.keys(run).some(key => !RUN_KEYS.has(key)))))
     return 'an entry has text formatting a SmartArt node does not carry (a link, a citation, code or its own size)';
@@ -227,8 +227,10 @@ function cardPaint(context) {
   return {fill: hex6(context.roles?.neutrals?.card?.hex ?? context.colors.surface), line: hex6(context.roles?.neutrals?.cardBorder?.hex ?? context.colors.border)};
 }
 
-/** What a finding calls an arrangement: its kind, or (SH-17) a row of chevrons and a vertical flow. */
-const arrangementNoun = kind => kind === 'chevrons' ? 'row of chevrons' : kind === 'vertical-flow' ? 'vertical flow' : kind;
+/** What a finding calls an arrangement: its kind, or (SH-17) a row of chevrons, a vertical process and (SH-24) an inverted pyramid. */
+const arrangementNoun = kind => kind === 'chevrons' ? 'row of chevrons' : kind === 'vertical-process' ? 'vertical process' : kind === 'inverted-pyramid' ? 'inverted pyramid' : kind;
+/** A tag OPF 0.34 wrote names the process arrangements `flow` and `vertical-flow`: import reads them as the 0.35 names. */
+const taggedKind = kind => kind === 'flow' ? 'process' : kind === 'vertical-flow' ? 'vertical-process' : kind;
 
 /** The paint of the slide's arrangements (core arrangementPaint) from the slide's export context. */
 export function exportPaint(context) {
@@ -290,6 +292,9 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
     for(const edge of arrangement.connectors??[]){
       for(let segment=1;segment<edge.points.length;segment++){const from=edge.points[segment-1],to=edge.points[segment];if(Math.hypot(to[0]-from[0],to[1]-from[1])<1e-8)continue;const objectName=name('connector '+edge.child+' segment '+segment);slide.addShape('line',{x:inches(Math.min(from[0],to[0])),y:inches(Math.min(from[1],to[1])),w:inches(Math.abs(to[0]-from[0])),h:inches(Math.abs(to[1]-from[1])),flipV:to[1]<from[1],line:{color:paint.fill.hex.slice(1),width:arrangement.lineWidth*.75,beginArrowType:'none',endArrowType:'none'},objectName});tag(objectName,'connector',{parent:edge.parent,child:edge.child});}
     }
+    // OPF 0.35: the color the node text is written in (the arrangement's: no entry's run sets a color, size or face), kept on the node's tag
+    // so that import gives the entries back without it (restoreArrangementPaint).
+    const nodePaint = arrangement.text === 'node' && !values.some(value => runsOf(value).some(run => run && typeof run === 'object' && (run.color !== undefined || run.fontSize !== undefined || run.fontFamily !== undefined))) ? paint.text.hex : undefined;
     for (const node of arrangement.nodes) {
       const objectName = name(`node ${node.index}`);
       if(node.background){const objectName=name('rear '+node.index);slide.addShape('roundRect',{...box(node.background),fill:{color:fill},line,rectRadius:inches(node.radius??0),objectName});tag(objectName,'rear',{index:node.index,adjust:node.adjust,preset:'roundRect'});}
@@ -300,7 +305,7 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
         ...(node.preset === 'roundRect' ? {rectRadius: inches(node.radius ?? 0)} : {}), ...(node.flip ? {flipH: true} : {}), ...(node.flipV ? {flipV: true} : {})});
       // An org chart's assistant and a Venn's overlap label are kept on their node's tag, which import puts back on the entry.
       const role = values[node.index] !== null && typeof values[node.index] === 'object' && !Array.isArray(values[node.index]) ? values[node.index] : {};
-      tag(objectName, 'node', {index: node.index, adjust: node.adjust, preset: node.preset, ...(node.path ? {entry: node.path} : {}), ...(role.assistant === true ? {assistant: true} : {}), ...(node.overlap ? {overlap: true} : {})});
+      tag(objectName, 'node', {index: node.index, adjust: node.adjust, preset: node.preset, ...(node.path ? {entry: node.path} : {}), ...(role.assistant === true ? {assistant: true} : {}), ...(node.overlap ? {overlap: true} : {}), ...(nodePaint ? {paint: nodePaint} : {})});
       // SH-18: a cycle's arrow after its node, as PowerPoint stacks them.
       for (const arrow of arrangement.arrows?.filter(entry => entry.index === node.index) ?? []) addCycleArrow(slide, arrow, {box, name, tag, color: paint.arrow.hex.slice(1)});
     }
@@ -677,15 +682,15 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
           for (const tag of array(parser.parse(decoder.decode(entries[rel.path]))['p:tagLst']?.['p:tag'])) {
             if (String(tag.name ?? '').toUpperCase() !== SMART_ART_TAG) continue;
             const record = decodeTextTag(tag.val);
-            if (record?.v === 1 && record.kind === kind && Array.isArray(record.items) && Array.isArray(record.texts)) stored = record;
+            if (record?.v === 1 && taggedKind(record.kind) === kind && Array.isArray(record.items) && Array.isArray(record.texts)) stored = record;
           }
         } catch { /* an unreadable tag leaves the frame to its data model */ }
       }
       const sameLevels=stored&&stored.items.length===items.length&&stored.items.every((value,index)=>Number(value?.level??0)===Number(items[index]?.level??0));
       const unchanged = stored && (flat||tree&&sameLevels) && stored.texts.length === texts.length && stored.texts.every((text, at) => text.replace(/ /g, ' ') === texts[at]);
       if (stored && !unchanged) report?.({code: 'smartart-edited', path: stored.path ?? path, message: `The ${kind} was edited in PowerPoint; its list is read from the SmartArt's nodes.`});
-      if (!form.exact) report?.({code: 'smartart-adapted', path, layout: stem, form: kind, message: `${named} is imported as OPF's ${form.pyramidDirection === 'down' ? 'inverted pyramid' : kind} layout with its entries.`});
-      out.set(index, items.length || unchanged ? {type: 'list', kind, layout: `default:${form.pyramidDirection === 'down' ? 'inverted-pyramid' : kind}`, tagged: unchanged === true, payload: {type: 'list', items: unchanged ? structuredClone(stored.items) : items}} : {type: 'empty'});
+      if (!form.exact) report?.({code: 'smartart-adapted', path, layout: stem, form: kind, message: `${named} is imported as OPF's ${kind === 'inverted-pyramid' ? 'inverted pyramid' : kind} layout with its entries.`});
+      out.set(index, items.length || unchanged ? {type: 'list', kind, layout: `default:${kind}`, tagged: unchanged === true, payload: {type: 'list', items: unchanged ? structuredClone(stored.items) : items}} : {type: 'empty'});
       continue;
     }
     if (form.layout) {
@@ -730,7 +735,7 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
  * `entries`: the entry paths whose node was an org chart's assistant or a Venn's overlap label, with that field (restoreArrangementEntries).
  */
 export function importArrangementShapes(shapes, relationships, entries) {
-  const consumed = new Set(), marked = new Map();
+  const consumed = new Set(), marked = new Map(), painted = new Map();
   for (const shape of shapes) {
     for (const link of array(shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'])) {
       const rel = relationships.get(link['r:id']);
@@ -741,11 +746,33 @@ export function importArrangementShapes(shapes, relationships, entries) {
           const record = decodeTextTag(tag.val);
           if (record?.v === 1 && typeof record.path === 'string' && typeof record.role === 'string') consumed.add(shape);
           if (record?.role === 'node' && typeof record.entry === 'string' && record.entry.startsWith(record.path + '.')) for (const field of ['assistant', 'overlap']) if (record[field] === true) marked.set(record.entry.replace(/\.text$/, ''), field);
+          if (record?.role === 'node' && typeof record.path === 'string' && typeof record.paint === 'string' && /^#[0-9A-Fa-f]{6}$/.test(record.paint)) painted.set(record.path, record.paint.toUpperCase());
         }
       } catch { /* an unreadable tag leaves the shape as ordinary content */ }
     }
   }
-  return {shapes: consumed, entries: marked};
+  return {shapes: consumed, entries: marked, painted};
+}
+
+/**
+ * OPF 0.35, import: the runs of a list drawn on an arrangement's nodes in the node text color (its node tags' `paint`, written only when no
+ * entry's run sets a color, size or face) lose that color and the size and face they read back with, so the list comes back as written: an
+ * entry left with only plain runs is its string again.
+ */
+export function restoreArrangementPaint(document, painted) {
+  const plainRuns = runs => runs.every(run => typeof run === 'string' || (run && typeof run === 'object' && Object.keys(run).every(key => key === 'text'))) ? runs.map(run => typeof run === 'string' ? run : run.text).join('') : runs;
+  // The node color, and the run size and face a node's line reads back with (its entries were written without either).
+  const drawn = (run, color) => Object.fromEntries(Object.entries(run).filter(([key, value]) => !(key === 'color' && String(value).toUpperCase() === color) && key !== 'fontSize' && key !== 'fontFamily'));
+  const strip = (text, color) => Array.isArray(text) ? plainRuns(text.map(run => run && typeof run === 'object' ? drawn(run, color) : run)) : text;
+  for (const [path, color] of painted ?? []) {
+    const list = path.split('.').map(part => /^\d+$/.test(part) ? Number(part) : part).reduce((node, key) => node?.[key], document);
+    if (!Array.isArray(list)) continue;
+    list.forEach((entry, index) => {
+      if (Array.isArray(entry)) list[index] = strip(entry, color);
+      else if (entry && typeof entry === 'object') entry.text = strip(entry.text, color);
+    });
+  }
+  return document;
 }
 
 /** Import: an org chart's assistant and a Venn's overlap label (importArrangementShapes' `entries`) go back on their list entries. */
@@ -784,7 +811,8 @@ export function importSmartArtFallbacks({pictures, relationships, entries, slide
     }
     if (!stored) continue;
     const blip = picture?.['p:blipFill']?.['a:blip'], png = entries[relationships.get(blip?.['r:embed'])?.path], svg = entries[relationships.get(svgBlipRelationship(blip))?.path];
-    const valid = stored.v === 1 && SMART_ART_LAYOUTS[stored.kind] !== undefined && typeof stored.path === 'string' && Array.isArray(stored.items) && stored.items.length > 0
+    const kind = taggedKind(stored.kind);
+    const valid = stored.v === 1 && SMART_ART_LAYOUTS[kind] !== undefined && typeof stored.path === 'string' && Array.isArray(stored.items) && stored.items.length > 0
       && scalar(picture?.['p:nvPicPr']?.['p:cNvPr']?.name) === smartArtName(stored.path)
       && ((svg && mediaKey(svg) === stored.svg) || (png && mediaKey(png) === stored.png));
     if (!valid) {
@@ -795,7 +823,7 @@ export function importSmartArtFallbacks({pictures, relationships, entries, slide
     const xfrm = picture?.['p:spPr']?.['a:xfrm'], bleed = Number.isInteger(stored.bleed) && stored.bleed >= 0 ? stored.bleed : 0;
     const frame = xfrm?.['a:off'] && xfrm?.['a:ext'] ? {...xfrm, 'a:off': {...xfrm['a:off'], x: String(Number(xfrm['a:off'].x) + bleed), y: String(Number(xfrm['a:off'].y) + bleed)},
       'a:ext': {...xfrm['a:ext'], cx: String(Number(xfrm['a:ext'].cx) - 2 * bleed), cy: String(Number(xfrm['a:ext'].cy) - 2 * bleed)}} : xfrm;
-    out.set(index, {kind: stored.kind, layout: `default:${stored.kind}`, frame, payload: {type: 'list', items: structuredClone(stored.items)}});
+    out.set(index, {kind, layout: `default:${kind}`, frame, payload: {type: 'list', items: structuredClone(stored.items)}});
   }
   return out;
 }

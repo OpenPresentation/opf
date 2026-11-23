@@ -46,7 +46,7 @@ export interface SlideContext {
   /** Ready for `composeSlide(slide, options)`. */
   options: ComposeSlideOptions;
   diagnostics: SlideContextDiagnostic[];
-  /** The records `options` was resolved from, for hosts that also need the theme's or colour scheme's own fields. */
+  /** The records `options` was resolved from, for hosts that also need the theme's or color scheme's own fields. */
   resolved: {
     theme: Rec;
     colorScheme: Rec;
@@ -113,8 +113,7 @@ export function resolveSlideContext(presentation: unknown, index: number, option
 
   let layout: Rec | undefined;
   let layoutProvenance: RecordProvenance | undefined;
-  // `layout: "auto"` is automatic composition (OPF 0.19): reserved, never looked up, never reported.
-  if (typeof slide.layout === 'string' && slide.layout !== 'auto') {
+  if (typeof slide.layout === 'string') {
     const found = resolveReference(presentation, 'layouts', slide.layout, catalogs);
     if (found) {
       layout = { ...found.record };
@@ -169,7 +168,7 @@ export function resolveSlideContext(presentation: unknown, index: number, option
     try { displayed = messageDisplayed(composeSlide(variablesOf(plain), { ...plain.composeOptions, ...(measurement ? { textMeasurement: measurement } : {}) }), candidate.kind); } catch { displayed = false; }
     // Never two accent surfaces in a row: judged by whether the slide before really is on one (its own composition decides, recursively).
     if (displayed && index > 0) {
-      const before = rec(slides[index - 1]), record = (typeof before.layout === 'string' && before.layout !== 'auto' ? resolveReference(presentation, 'layouts', before.layout, catalogs)?.record : undefined) as Rec | undefined;
+      const before = rec(slides[index - 1]), record = (typeof before.layout === 'string' ? resolveReference(presentation, 'layouts', before.layout, catalogs)?.record : undefined) as Rec | undefined;
       if (drawsAccentByDesign(presentation, before, record, theme) || resolveSlideContext(presentation, index - 1, { ...options, slideNumber: undefined }).resolved.messageSurface !== undefined) displayed = false;
     }
     if (!displayed) { messageSurface = undefined; built = plain; }

@@ -1,8 +1,8 @@
 // LH-105: the chart's focus, from what the slide title says.
 //
-// Few and Claude Design: colour for what matters, the rest as context. A slide title usually states the chart's message ("North America
+// Few and Claude Design: color for what matters, the rest as context. A slide title usually states the chart's message ("North America
 // still leads on bookings", "Support tickets peaked in November", "Only 31 of 186 qualified deals close", "Cloud spend overtook
-// on-premises in 2023"), so the marks it names are the ones to emphasise. `chartTitleFocus` matches the slide title and subtitle against
+// on-premises in 2023"), so the marks it names are the ones to emphasize. `chartTitleFocus` matches the slide title and subtitle against
 // the chart's series names, its category names and (one series) its values:
 //
 //   words       the text and each name are split into words (letters and digits of any script; a hyphen or an apostrophe splits) and
@@ -18,9 +18,9 @@
 // (Platform); when it names every series, the one it names first (the subject: "Enterprise satisfaction pulled ahead of mid-market").
 // On a one-series chart and a pie, the categories it names or whose values it prints. Naming nothing (or everything) is no focus, and
 // the chart falls back to the small chart's last-point emphasis over time (chart-layer.ts). An explicit `highlight` or `colors` wins.
-// The engines draw the focused marks in their full-strength colour and the other marks in the context neutrals (core `chartContextColors`):
+// The engines draw the focused marks in their full-strength color and the other marks in the context neutrals (core `chartContextColors`):
 // one gray per context series (or slice), stepped 11 L* apart in the order they come (the first the strongest), so stacked segments and
-// neighbouring slices stay apart; at 3:1 against the backdrop, or at 1.6:1 when every context mark carries its text (`labeled`).
+// neighboring slices stay apart; at 3:1 against the backdrop, or at 1.6:1 when every context mark carries its text (`labeled`).
 import {chartNumber, tableKeyText, type ResolvedChartData} from './chart-data.js';
 import {monthOf} from './chart-time-order.js';
 import {numberFormatSectionFor} from './variables.js';

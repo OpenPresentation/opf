@@ -61,8 +61,8 @@ test('the gallery layouts at their sample content: a slide the layout fits above
     const headings = result.items.filter((item) => HEADINGS.has(item.field));
     for (const item of result.items) if (!HEADINGS.has(item.field)) for (const heading of headings) assert.ok(!meet(item.frameBox ?? item.box, heading.box), `${key}: ${item.path} crosses the ${heading.field}`);
   }
-  // The long agendas beside their title, the long tables and the crowded heroes are the cases at the floor today.
-  assert.ok(recomposed.includes('agenda-split 3 long'), recomposed.join(', '));
+  // The long lists beside their title (cycle, matrix, vertical-process), the long tables and the crowded heroes are the cases at the floor today.
+  assert.ok(recomposed.includes('cycle 3 long'), recomposed.join(', '));
   assert.ok(recomposed.length < samples.length / 10, `only slides at the floor recompose (${recomposed.length})`);
 });
 
@@ -77,13 +77,15 @@ test('the layout sampler deck: no gallery layout at its sample content is recomp
   }
 });
 
+// OPF 0.35: the agenda with its title beside it (0.34's agenda-split is agenda with design.titlePosition start).
+const agendaBeside = { ...gallery.layouts.agenda, design: { ...gallery.layouts.agenda.design, titlePosition: 'start' } };
 const agenda = (count) => ({
   title: 'Six workstreams to align before the next budget cycle',
   blocks: Array.from({ length: count }, (_, index) => ({ items: Array.from({ length: 6 }, (_, item) => `Workstream ${index + 1}, step ${item + 1}: agree the owner, the reporting cadence and the first readout`) })),
 });
 
 test('a long agenda beside its title is composed as the automatic grid, larger and without overflow', () => {
-  const record = gallery.layouts['agenda-split'];
+  const record = agendaBeside;
   const kept = composeSlide(agenda(3), { layout: record, recompose: false }), result = composeSlide(agenda(3), { layout: record });
   assert.ok(smallestText(kept) <= FLOOR + 1e-6 && overflows(kept) > 0, 'the layout sets the agenda at the floor and overflows');
   assert.ok(result.recomposed, 'recomposed');
@@ -97,7 +99,7 @@ test('a long agenda beside its title is composed as the automatic grid, larger a
 });
 
 test('the recomposition keeps the layout record\'s design and composition', () => {
-  const record = { ...gallery.layouts['agenda-split'], design: { contentBox: true, contentAlignment: 'center' }, composition: { padding: 0.06 } };
+  const record = { ...agendaBeside, design: { ...agendaBeside.design, contentBox: true, contentAlignment: 'center' }, composition: { padding: 0.06 } };
   const result = composeSlide(agenda(3), { layout: record });
   assert.ok(result.recomposed);
   const body = result.items.filter((item) => !HEADINGS.has(item.field));
@@ -109,9 +111,9 @@ test('the recomposition keeps the layout record\'s design and composition', () =
 });
 
 test('a pinned block, recompose: false and a slide at its role sizes keep the layout', () => {
-  const record = gallery.layouts['agenda-split'];
+  const record = agendaBeside;
   const pinned = agenda(3);
-  pinned.blocks[0].region = 'items';
+  pinned.blocks[0].region = 'body';
   assert.equal(composeSlide(pinned, { layout: record }).recomposed, undefined, 'a block pinned to a region');
   assert.equal(composeSlide(agenda(3), { layout: record, recompose: false }).recomposed, undefined, 'recompose: false');
   const short = composeSlide({ title: 'Three parts, one decision', blocks: [{ items: ['Define the problem', 'Review the pilot evidence', 'Agree the next decision'] }] }, { layout: record });
@@ -123,7 +125,7 @@ test('a pinned block, recompose: false and a slide at its role sizes keep the la
 });
 
 test('a right-to-left deck recomposes the same way, mirrored', () => {
-  const record = gallery.layouts['agenda-split'];
+  const record = agendaBeside;
   const result = composeSlide(agenda(3), { layout: record, direction: 'rtl' });
   assert.ok(result.recomposed);
   assert.equal(result.direction, 'rtl');

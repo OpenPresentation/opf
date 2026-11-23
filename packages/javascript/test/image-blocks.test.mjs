@@ -25,8 +25,8 @@ test('every image item carries its picture geometry; an untreated block draws in
   for (const key of ['border', 'opacity', 'recolor', 'overlay', 'placement']) assert.equal(item.image[key], undefined, key);
   // Slide.image is shorthand for one image block, and region payloads carry the same geometry.
   assert.equal(imageOf(composeSlide({ title: 'Heading', image: photo })).image.fit, 'contain');
-  assert.equal(imageOf(compose({}, { layout: { name: 'Plain', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['image'], role: 'primary', flow: 'none' }] } })).image.fit, 'cover', 'a layout keeps the engine default');
-  assert.ok(imageOf(composeSlide({ title: 'Heading', start: { image: photo, shape: 'ellipse' }, end: { text: 'Body' } })).image.shape.preset === 'ellipse');
+  assert.equal(imageOf(compose({}, { layout: { name: 'Plain', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['image'], role: 'primary', max: 1 }] } })).image.fit, 'cover', 'a layout keeps the engine default');
+  assert.ok(imageOf(composeSlide({ title: 'Heading', blocks: [{ region: 'start', image: photo, shape: 'ellipse' }, { region: 'end', text: 'Body' }] })).image.shape.preset === 'ellipse');
   // The payload reports the block's own options for editors.
   assert.deepEqual(imageOf(compose({ fit: 'contain', shape: 'roundRect' })).payload, { type: 'image', image: photo, fit: 'contain', shape: 'roundRect' });
 });

@@ -334,6 +334,14 @@
           "styles": 4,
           "reference": "Arial 7.06"
         },
+        "scripts": {
+          "Arab": {
+            "family": "Noto Naskh Arabic",
+            "compatibility": "visual",
+            "sizeAdjust": 0.96,
+            "sizeAdjustBasis": "v0.35 Arabic default: sum of Arial 7.07 advances over sum of Noto Naskh Arabic 400 advances (fontkit, read in place; each sample in its own OpenType language) over the Arabic-script runs of the 12 Arabic-script corpus samples of opf-render test/fixtures/script-corpora.json: 0.964 (per-sample 0.90 to 1.16; the samples without digits of their own 0.90 to 0.99, the two digit samples 1.08 and 1.16). Arial's Arabic is Times New Roman's (235 of the 256 glyphs of the Arabic block have the same outlines and advances); Arial's wider space makes its runs 1.5 percent longer. Bold: Arial Bold over Noto Naskh Arabic 700 0.946, so bold runs draw about 1.5 percent long. At 0.96 the body letters stand as high as the real font's (heh 1.03, meem 1.07 of the replacement's) and alef and lam somewhat lower (1.15). Noto Naskh Arabic, not Noto Sans Arabic: those samples vary less against Arial (0.90 to 0.99 against 0.82 to 0.94, which is 0.88 pooled) and its bold keeps the regular ratio (Noto Sans Arabic 700: 0.82, so bold would draw 7 percent long)."
+          }
+        },
         "source": "https://github.com/google/fonts/blob/main/ofl/arimo/METADATA.pb"
       },
       "alternates": [
@@ -1158,6 +1166,14 @@
           "maxAbsWidthDelta": 0.0934,
           "styles": 2,
           "reference": "Ebrima 5.19"
+        },
+        "scripts": {
+          "Ethi": {
+            "family": "Noto Sans Ethiopic",
+            "compatibility": "visual",
+            "sizeAdjust": 1.06,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Ebrima 5.20 advances over sum of Noto Sans Ethiopic 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.055 (per-sentence 1.032 to 1.076)."
+          }
         }
       },
       "alternates": [
@@ -1715,6 +1731,36 @@
       "note": "Script replacement; widths not measured. Windows: Tamil Supplemental Fonts FOD."
     },
     {
+      "family": "Leelawadee UI",
+      "licenseClass": "proprietary-standard",
+      "license": "proprietary (Microsoft)",
+      "availability": [
+        "windows"
+      ],
+      "embeddableByOpf": false,
+      "replacement": {
+        "family": "Noto Sans Thai",
+        "compatibility": "visual",
+        "sizeAdjust": 0.96,
+        "sizeAdjustBasis": "v0.35 script defaults: sum of Leelawadee UI 6.00 advances over sum of Noto Sans Thai 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 0.958 (per-sentence 0.935 to 0.985).",
+        "measured": null,
+        "scripts": {
+          "Khmr": {
+            "family": "Noto Sans Khmer",
+            "compatibility": "visual",
+            "sizeAdjust": 1.19,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Leelawadee UI 6.00 advances over sum of Noto Sans Khmer 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.19 (per-sentence 1.163 to 1.235)."
+          }
+        }
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
+        "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
+        "https://learn.microsoft.com/en-us/typography/font-list/leelawadee-ui"
+      ],
+      "note": "The default for Thai and Khmer since 0.35. Thai text previews in Noto Sans Thai, Khmer in Noto Sans Khmer."
+    },
+    {
       "family": "Liberation Mono",
       "licenseClass": "open",
       "license": "OFL-1.1",
@@ -2218,6 +2264,56 @@
           "maxAbsWidthDelta": 0.0939,
           "styles": 2,
           "reference": "Nirmala UI 1.46"
+        },
+        "scripts": {
+          "Beng": {
+            "family": "Noto Sans Bengali",
+            "compatibility": "visual",
+            "sizeAdjust": 1.08,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Bengali 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.079 (per-sentence 1.056 to 1.094)."
+          },
+          "Gujr": {
+            "family": "Noto Sans Gujarati",
+            "compatibility": "visual",
+            "sizeAdjust": 1.13,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Gujarati 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.128 (per-sentence 1.097 to 1.151)."
+          },
+          "Guru": {
+            "family": "Noto Sans Gurmukhi",
+            "compatibility": "visual",
+            "sizeAdjust": 1.08,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Gurmukhi 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.084 (per-sentence 1.073 to 1.094)."
+          },
+          "Knda": {
+            "family": "Noto Sans Kannada",
+            "compatibility": "visual",
+            "sizeAdjust": 1.17,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Kannada 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.166 (per-sentence 1.132 to 1.186). Noto Sans Kannada is the narrower design, so at this factor its letters stand about 15 percent taller than Nirmala UI's."
+          },
+          "Mlym": {
+            "family": "Noto Sans Malayalam",
+            "compatibility": "visual",
+            "sizeAdjust": 1.13,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Malayalam 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.13 (per-sentence 1.113 to 1.169)."
+          },
+          "Orya": {
+            "family": "Noto Sans Oriya",
+            "compatibility": "visual",
+            "sizeAdjust": 0.98,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Oriya 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 0.983 (per-sentence 0.971 to 0.998)."
+          },
+          "Taml": {
+            "family": "Noto Sans Tamil",
+            "compatibility": "visual",
+            "sizeAdjust": 1.04,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Tamil 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.039 (per-sentence 1.033 to 1.047)."
+          },
+          "Telu": {
+            "family": "Noto Sans Telugu",
+            "compatibility": "visual",
+            "sizeAdjust": 1.17,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Nirmala UI 1.46 advances over sum of Noto Sans Telugu 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.169 (per-sentence 1.128 to 1.196)."
+          }
         }
       },
       "sources": [
@@ -2240,7 +2336,7 @@
         "https://github.com/googlefonts/noto-emoji",
         "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji"
       ],
-      "note": "Colour emoji (COLRv1 and OT-SVG glyphs; the Google Fonts build, 25.1 MB). Preview face for Segoe UI Emoji (FF-45); drawn in colour by browsers, as a monochrome Noto Emoji silhouette by the resvg raster path."
+      "note": "Color emoji (COLRv1 and OT-SVG glyphs; the Google Fonts build, 25.1 MB). Preview face for Segoe UI Emoji (FF-45); drawn in color by browsers, as a monochrome Noto Emoji silhouette by the resvg raster path."
     },
     {
       "family": "Noto Emoji",
@@ -3020,6 +3116,14 @@
           "maxAbsWidthDelta": 0.0709,
           "styles": 4,
           "reference": "Segoe UI 5.71"
+        },
+        "scripts": {
+          "Hebr": {
+            "family": "Noto Sans Hebrew",
+            "compatibility": "visual",
+            "sizeAdjust": 1.03,
+            "sizeAdjustBasis": "v0.35 script defaults: sum of Segoe UI 5.72 advances over sum of Noto Sans Hebrew 400 advances (HarfBuzz shaping with the language tag, fonts read in place) over 8 sentences: 1.026 (per-sentence 1.015 to 1.036)."
+          }
         }
       },
       "alternates": [
@@ -3060,7 +3164,7 @@
         "https://learn.microsoft.com/en-us/typography/font-list/segoe-ui-emoji",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "FF-45: previews with Noto Color Emoji (OFL-1.1, COLRv1 and OT-SVG colour glyphs, 25.1 MB) loaded as the opf-render emoji pack (@expo-google-fonts/noto-color-emoji, optional peer); Noto Emoji (monochrome) is the alternate and the face the resvg raster path draws, because resvg draws neither COLRv1 nor OT-SVG glyphs. Visual: every emoji sequence advances 1.2451 em in Noto Color Emoji against 1.3730 em in Segoe UI Emoji 1.33 (-9.3%); Noto Color Emoji has no Latin glyphs, so Latin text and digits of a Segoe UI Emoji run take a text face by glyph fallback. Not measured on the policy corpus (measured: null). Color font (COLRv1 in Windows 11, version 1.33 per the list)."
+      "note": "FF-45: previews with Noto Color Emoji (OFL-1.1, COLRv1 and OT-SVG color glyphs, 25.1 MB) loaded as the opf-render emoji pack (@expo-google-fonts/noto-color-emoji, optional peer); Noto Emoji (monochrome) is the alternate and the face the resvg raster path draws, because resvg draws neither COLRv1 nor OT-SVG glyphs. Visual: every emoji sequence advances 1.2451 em in Noto Color Emoji against 1.3730 em in Segoe UI Emoji 1.33 (-9.3%); Noto Color Emoji has no Latin glyphs, so Latin text and digits of a Segoe UI Emoji run take a text face by glyph fallback. Not measured on the policy corpus (measured: null). Color font (COLRv1 in Windows 11, version 1.33 per the list)."
     },
     {
       "family": "Segoe UI Light",
@@ -3534,6 +3638,14 @@
           "maxAbsWidthDelta": 0,
           "styles": 4,
           "reference": "Times New Roman 7.12"
+        },
+        "scripts": {
+          "Arab": {
+            "family": "Noto Naskh Arabic",
+            "compatibility": "visual",
+            "sizeAdjust": 0.95,
+            "sizeAdjustBasis": "v0.35 Arabic default: sum of Times New Roman 7.13 advances over sum of Noto Naskh Arabic 400 advances (fontkit, read in place; each sample in its own OpenType language) over the Arabic-script runs of the 12 Arabic-script corpus samples of opf-render test/fixtures/script-corpora.json: 0.950 (per-sample 0.89 to 1.15; the samples without digits of their own 0.89 to 0.96, the two digit samples 1.07 and 1.15). Bold: Times New Roman Bold over Noto Naskh Arabic 700 0.932, so bold runs draw about 2 percent long. At 0.95 the body letters stand as high as the real font's (heh 1.05, meem 1.08 of the replacement's) and alef and lam somewhat lower (1.16). Noto Naskh Arabic, not Noto Sans Arabic: Times New Roman's Arabic is a naskh design, those samples vary less against it (0.89 to 0.96 against 0.81 to 0.93, which is 0.86 pooled) and its bold keeps the regular ratio (Noto Sans Arabic 700: 0.81, so bold would draw 7 percent long)."
+          }
         },
         "source": "https://github.com/google/fonts/blob/main/ofl/tinos/METADATA.pb"
       },

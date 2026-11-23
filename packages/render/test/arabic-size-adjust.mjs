@@ -27,7 +27,7 @@ assert.match(row.replacement.sizeAdjustBasis, /advances/);
 const adjustedFamilies = FONT_POLICY.families.filter(item => item.replacement?.sizeAdjust !== undefined).map(item => item.family).sort();
 const OPF361 = {'Angsana New': [0.75, 0.83, 0.86], DilleniaUPC: [0.68, 0.82, 0.85], 'Sakkal Majalla': [0.89, 0.76, 0.81], 'Malgun Gothic': [1.07, undefined, undefined], 'Nirmala UI': [1.07, 0.97, 0.94]};
 const opf361 = adjustedFamilies.length > 1;
-assert.deepEqual(adjustedFamilies, opf361 ? ['Angsana New', 'Arabic Typesetting', 'DilleniaUPC', 'Malgun Gothic', 'Nirmala UI', 'Sakkal Majalla'] : ['Arabic Typesetting'], 'the measured rows carry a multiplier, no other');
+assert.deepEqual(adjustedFamilies, opf361 ? ['Angsana New', 'Arabic Typesetting', 'DilleniaUPC', 'Leelawadee UI', 'Malgun Gothic', 'Nirmala UI', 'Sakkal Majalla'] : ['Arabic Typesetting'], 'the measured rows carry a multiplier, no other');
 assert.equal(sizeAdjustFor(row, 'Noto Naskh Arabic'), ADJUST);
 assert.equal(sizeAdjustFor('Arabic Typesetting', 'noto naskh arabic'), ADJUST, 'by family name, case-insensitive');
 assert.equal(sizeAdjustFor(row, 'Noto Sans Arabic'), undefined, 'the multiplier was measured on Noto Naskh Arabic only');
@@ -83,11 +83,14 @@ assert.equal(aliased.registry.resolveFont(typesetting).sizeAdjust, undefined);
 near(aliased.textMeasurement.measure(TEXT, 100, typesetting), aliased.textMeasurement.measure(TEXT, 100, {...naskh, fontFamily: 'Noto Sans Arabic'}), 1e-9, 'aliased face measures unadjusted');
 
 // 3. The script planner: runs carry the multiplier, with and without a measurement provider.
+// v0.35: an Arabic deck defaults to Times New Roman and Arial (arabic-default-fonts.mjs). These decks choose Arabic Typesetting for the
+// language, as a Language object may, so its complex-script slot is Arabic Typesetting and its Latin text stays in the default Aptos.
+const TYPESET_AR = {bcp47: 'ar', fontScheme: 'arabic-typesetting'};
 const deck = (fontScheme, language, text = WORDS) => ({name: 'RR-38', language, ...(fontScheme ? {design: {fontScheme}} : {}), slides: [{id: 'a', title: text, text}]});
 const profileOf = document => resolveScriptFonts(document, {catalogs});
 const style = {fontFamily: 'Aptos', fontWeight: 400, path: 'slides.0.text'};
 {
-  const profile = profileOf(deck(undefined, 'ar'));
+  const profile = profileOf(deck(undefined, TYPESET_AR));
   assert.equal(profile.body.complexScript, 'Arabic Typesetting');
   const measured = createScriptFonts(profile, registryMeasure);
   const runs = measured.plan(TEXT, style);
@@ -120,22 +123,23 @@ const style = {fontFamily: 'Aptos', fontWeight: 400, path: 'slides.0.text'};
   const [arabic] = latinDeck.plan(TEXT, style);
   assert.equal(arabic.sizeAdjust, undefined);
   assert.deepEqual(arabic.stack, ['Aptos', 'Noto Sans Arabic', 'Noto Naskh Arabic']);
-  const hebrew = createScriptFonts(profileOf(deck('calibri', 'he')));
+  // v0.35: Hebrew defaults to Segoe UI, which carries a multiplier for Hebrew (script-default-fonts.mjs), so this deck chooses David.
+  const hebrew = createScriptFonts(profileOf(deck('calibri', {bcp47: 'he', fontScheme: 'david'})));
   const [run] = hebrew.plan('שלום עולם', {...style, fontFamily: 'Calibri'});
   assert.equal(run.sizeAdjust, undefined);
   assert.deepEqual(run.stack, ['David', 'Noto Sans Hebrew', 'Noto Serif Hebrew']);
 }
 
 // 4. The SVG: drawn size = composed size x multiplier, in the replacement's own face, measured or not. The control deck names the
-// replacement itself (font scheme noto-naksh-arabic, an English deck), so its composed sizes are the ones the multiplier scales.
+// replacement itself (font scheme noto-naskh-arabic, an English deck), so its composed sizes are the ones the multiplier scales.
 const fontSizes = svg => [...svg.matchAll(/<text\b[^>]*>/g)].map(match => match[0]).filter(tag => !/font-family="(?:Aptos|Intos)/.test(tag))
   .map(tag => ({size: Number(/font-size="([\d.]+)"/.exec(tag)[1]), family: /font-family="([^"]*)"/.exec(tag)[1], length: /textLength="([\d.]+)"/.exec(tag)?.[1]}));
 // Estimated layout: the same handle without its measurement (the faces still embed and rasterize).
 const estimatedFonts = {embeddedFonts: prepared.embeddedFonts, fontFiles: prepared.fontFiles, useBundledFonts: false};
 const estimatedOptions = {fonts: estimatedFonts};
 {
-  const adjusted = fontSizes(toSvg(deck(undefined, 'ar'), estimatedOptions)[0]);
-  const control = fontSizes(toSvg(deck('noto-naksh-arabic', 'en-US'), estimatedOptions)[0]);
+  const adjusted = fontSizes(toSvg(deck(undefined, TYPESET_AR), estimatedOptions)[0]);
+  const control = fontSizes(toSvg(deck('noto-naskh-arabic', 'en-US'), estimatedOptions)[0]);
   assert.ok(adjusted.length >= 2 && adjusted.length === control.length);
   for (const [index, item] of adjusted.entries()) {
     near(item.size, adjustedFontSize(control[index].size, ADJUST), 1e-9, `estimated line ${index}: drawn size is 0.64 of the composed size, on the quarter-pixel grid`);
@@ -146,7 +150,7 @@ const estimatedOptions = {fonts: estimatedFonts};
   assert.equal(control[0].family.split(',')[0], 'Noto Naskh Arabic');
 
   // Measured: the line is pinned to the width the registry measures at the size that is drawn, so measurement and drawing agree.
-  const measuredSvg = toSvg(deck(undefined, 'ar'), {fonts: prepared})[0];
+  const measuredSvg = toSvg(deck(undefined, TYPESET_AR), {fonts: prepared})[0];
   const lines = fontSizes(measuredSvg);
   assert.ok(lines.length >= 2);
   for (const item of lines) {
@@ -158,7 +162,7 @@ const estimatedOptions = {fonts: estimatedFonts};
 }
 {
   // Mixed Arabic and Latin, measured and not: the Arabic fragments are drawn at the adjusted size, the Latin run at the line's size.
-  const document = {name: 'RR-38', language: 'ar', slides: [{id: 'a', title: 'Title', text: ['أضاف المنتج ', {text: 'PowerPoint 365', bold: true}, ' أكثر من 50 لغة']}]};
+  const document = {name: 'RR-38', language: TYPESET_AR, slides: [{id: 'a', title: 'Title', text: ['أضاف المنتج ', {text: 'PowerPoint 365', bold: true}, ' أكثر من 50 لغة']}]};
   for (const options of [{fonts: prepared}, estimatedOptions]) {
     const svg = toSvg(document, options)[0];
     const elements = [...svg.matchAll(/<(?:text|tspan)\b[^>]*font-family="([^"]*)"[^>]*font-size="([0-9.]+)"[^>]*>/g)].map(match => ({family: match[1], size: Number(match[2])}));
@@ -179,7 +183,7 @@ const estimatedOptions = {fonts: estimatedFonts};
     assert.equal(item.family.split(',')[0], 'Noto Naskh Arabic');
     near(Number(item.length), registryMeasure.measure(WORDS, item.size, {...naskh, fontWeight: item === lines[0] ? 700 : 400}), 0.01, `textLength equals the advance at the drawn size ${item.size}`);
   }
-  const control = fontSizes(toSvg(deck('noto-naksh-arabic', 'en-US'), {fonts: prepared})[0]);
+  const control = fontSizes(toSvg(deck('noto-naskh-arabic', 'en-US'), {fonts: prepared})[0]);
   near(lines[0].size, adjustedFontSize(control[0].size, ADJUST), 1e-9, 'the title is drawn at 0.64 of the composed size, on the quarter-pixel grid');
 }
 
@@ -189,18 +193,18 @@ const estimatedOptions = {fonts: estimatedFonts};
   const baselines = svg => [...svg.matchAll(/<text\b[^>]*>/g)].map(match => match[0]).filter(tag => /font-family="Noto Naskh Arabic|font-family="(?:Aptos|Intos)/.test(tag))
     .map(tag => ({size: Number(/font-size="([0-9.]+)"/.exec(tag)[1]), y: Number(/ y="([0-9.]+)"/.exec(tag)[1]), family: /font-family="([^"]*)"/.exec(tag)[1]}));
   const estimated = estimatedOptions;
-  const arabic = baselines(toSvg(deck(undefined, 'ar'), estimated)[0]).filter(item => item.family.startsWith('Noto Naskh Arabic'));
-  const control = baselines(toSvg(deck('noto-naksh-arabic', 'en-US'), estimated)[0]);
+  const arabic = baselines(toSvg(deck(undefined, TYPESET_AR), estimated)[0]).filter(item => item.family.startsWith('Noto Naskh Arabic'));
+  const control = baselines(toSvg(deck('noto-naskh-arabic', 'en-US'), estimated)[0]);
   assert.equal(arabic.length, control.length);
   const up = 1 - ASCENT[0], upMixed = 1 - ASCENT[1];
   for (const [index, item] of arabic.entries()) near(control[index].y - item.y, up * control[index].size, 0.002, `estimated line ${index} moves up ${up.toFixed(2)} em of the composed size`);
   // Measured: the same shift on the line's baseline (core's placed baseline of the same ink, minus 1 - ASCENT[0] em).
-  const measuredArabic = baselines(toSvg(deck(undefined, 'ar'), {fonts: prepared})[0]).filter(item => item.family.startsWith('Noto Naskh Arabic'));
+  const measuredArabic = baselines(toSvg(deck(undefined, TYPESET_AR), {fonts: prepared})[0]).filter(item => item.family.startsWith('Noto Naskh Arabic'));
   assert.ok(measuredArabic.every(item => Number.isFinite(item.y)));
   // A line holding a Latin run moves up 1 - ASCENT[1] em of the composed size; a Latin-only line in the same deck does not move.
   // LH-188: a title of more than four words keeps both slides content slides, so the body is set at the same size in both decks (a
   // one-message slide grows each text as far as its own widths allow).
-  const mixed = {name: 'RR-38', language: 'ar', slides: [{id: 'a', title: 'Quarterly product update for the board', text: ['أضاف المنتج ', {text: 'PowerPoint', bold: true}, ' أكثر']}]};
+  const mixed = {name: 'RR-38', language: TYPESET_AR, slides: [{id: 'a', title: 'Quarterly product update for the board', text: ['أضاف المنتج ', {text: 'PowerPoint', bold: true}, ' أكثر']}]};
   const mixedControl = {name: 'RR-38', language: 'en-US', design: {fontScheme: 'aptos'}, slides: [{id: 'a', title: 'Quarterly product update for the board', text: ['x ', {text: 'PowerPoint', bold: true}, ' y']}]};
   const mixedLine = baselines(toSvg(mixed, estimated)[0]).filter(item => Math.abs(item.size - 54) > .5), mixedBase = baselines(toSvg(mixedControl, estimated)[0]).filter(item => Math.abs(item.size - 54) > .5); // the body, not the 54 px title (LH-48 and LH-09 grow a lone body)
   const latinOnly = baselines(toSvg({name: 'RR-38', language: 'ar', slides: [{id: 'a', title: 'Quarterly', text: 'Plain Latin text'}]}, estimated)[0]);
@@ -212,7 +216,7 @@ const estimatedOptions = {fonts: estimatedFonts};
 
 // 5. Raster: the drawn ink is as wide as the adjusted advance says it should be (resvg draws the replacement at the adjusted size).
 {
-  const document = deck(undefined, 'ar', WORDS);
+  const document = deck(undefined, TYPESET_AR, WORDS);
   const svg = toSvg(document, estimatedOptions)[0];
   const body = fontSizes(svg).at(-1);
   const png = await toPng(svg, {scale: 1, fonts: estimatedFonts});

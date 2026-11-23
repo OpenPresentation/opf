@@ -4,7 +4,8 @@
 // `loTypeId` and, when PowerPoint saved it, a drawing (dsp:drawing, the shapes PowerPoint laid out). Import reads the data model's outline
 // (the `parOf` tree from the doc point, in `srcOrd` order: entries, nested entries and assistants), then takes the first that fits:
 //
-//   1. an OPF arrangement for PowerPoint's layout families that have one (pyramid, matrix, cycle, chevrons, flow, vertical flow): the
+//   1. an OPF arrangement for PowerPoint's layout families that have one (pyramid, inverted pyramid, matrix, cycle, chevrons, process,
+//      vertical process): the
 //      outline as a list on that layout (nested entries keep their level; composition draws a list where the arrangement draws one level);
 //   2. the list and process families: the outline as a list on the `list` or `process` layout;
 //   3. a hierarchy or organization chart: a Mermaid flowchart (top down, or left to right for a horizontal hierarchy), assistants on
@@ -191,7 +192,7 @@ export function smartArtForm(layoutId, category) {
   if (/^(venn|radial|target|balance|funnel|gear|equation|arrow|bracket|opposingIdeas|counterbalance|plus|converging|diverging|hexagon|circleRelationship)/i.test(stem)) return {drawing: true};
   // Preserve the widest-first order of Inverted Pyramid instead of silently turning it upright. Only a pyramid: "inverted" alone also
   // names layouts of other families (PowerPoint's Bullet Timeline Inverted is a process layout).
-  if (/^pyramid3$|invert\w*pyramid|pyramid\w*invert/i.test(stem)) return {arrangement: 'pyramid', pyramidDirection: 'down'};
+  if (/^pyramid3$|invert\w*pyramid|pyramid\w*invert/i.test(stem)) return {arrangement: 'inverted-pyramid'};
   if (/^pyramid\d*$/i.test(stem)) return {arrangement: 'pyramid'};
   if (/^matrix\d*$/i.test(stem)) return {arrangement: 'matrix'};
   if (/^cycle\d*$/i.test(stem)) return {arrangement: 'cycle'};

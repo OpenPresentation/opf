@@ -6,7 +6,7 @@ import { composeSlide, measureText } from '../dist/composition.js';
 
 // The established LH-149 six-pair fixture takes a genuine half step. Keep the composer's own-symbol and copy
 // semantics; a review snapshot may omit only its known transient marker, with complete cold reports unchanged.
-const pair = (question, answer) => ({ region: 'questions', text: `${question}\n${answer}` });
+const pair = (question, answer) => ({ region: 'body', text: `${question}\n${answer}` });
 const document = {
   name: 'Half-step review', language: 'en-US',
   slides: [{ id: 'faq', layout: 'faq', title: 'What the pilot involves', subtitle: 'Illustrative example', blocks: [

@@ -84,7 +84,7 @@ validate(presentation, {
   contracts,                                      // host policy (below)
   thresholds: { contrastNormal: 7 },              // see DEFAULT_VALIDATION_THRESHOLDS
   fonts,                                          // the host's fonts: layout rules read fonts.textMeasurement
-  chartPalette: ['#0072B2', '#E69F00'],           // the engine's chart colours
+  chartPalette: ['#0072B2', '#E69F00'],           // the engine's chart colors
   template: true, values: { client: 'Acme' },     // check as a template, or fill variables first
 });
 ```
@@ -129,11 +129,12 @@ The default runs every category, including overflow findings; `valid` means no e
 
 ## Quick fixes
 
-A fix is a suggestion that core never applies. A host such as the editor's Review panel shows it and applies it through its own undoable edit path.
+A fix is a suggestion that `validate` never applies. A host such as the editor's Review panel shows it and applies it through its own undoable edit path; core's `fix(deck)` and `opf fix` apply the safe patches (below).
 
-- A `patch` fix (`kind: "patch"`, the default) carries RFC 6902 JSON Patch operations in `patch` (`add`, `remove`, `replace`, `move`, `copy`, `test`, with JSON Pointer paths). `safe: true` means the change cannot alter what the content says: for example switching a failing text colour to the colour the theme chose for that background.
+- A `patch` fix (`kind: "patch"`, the default) carries RFC 6902 JSON Patch operations in `patch` (`add`, `remove`, `replace`, `move`, `copy`, `test`, with JSON Pointer paths). `safe: true` means the fix is the one repair the finding needs and can be applied without a person: it loses no content and what it writes is valid OPF, for example writing `"max": 1` for a layout region's removed `"flow": "none"`, or the new name of a renamed icon. A safe fix that can still change how a slide draws says so with `changesDrawing: true` (for example `rename-layout`, which moves an `agenda-split` slide to `agenda` with its title column at two fifths of the width where it was half); hosts list such fixes as changing the drawing.
 - A `focus` fix (`kind: "focus"`) names the field the author must fill in (`focus.path`, `focus.field`: `alt`, `title`, `text`, `link`, `language`, `fontSize`).
-- `safe: false` patches change meaning or appearance and need a deliberate click, for example marking a picture decorative with an empty `alt`.
+- `safe: false` patches change meaning or appearance and need a deliberate click, for example marking a picture decorative with an empty `alt`, or `use-readable-color`, which replaces a text color the author wrote with one the contrast check chose.
+- `fix(deck)` and `opf fix` apply only safe patches, never a `focus` fix, and by default only those of the checks that repair the document (`format`, `references`, `policy`, `layout`; `FIX_REPAIR_CATEGORIES`). The audits' safe fixes (`accessibility`, `content`) wait for `fix(deck, { audits: true })` or `opf fix --audits`. Each applied fix carries its `changesDrawing`.
 
 `title` says what applying the fix does.
 
@@ -143,7 +144,7 @@ Content references resolve the way every engine resolves them ([catalogs](defaul
 
 An `asset:` reference that names no entry of the document's `assets` registry is an error (`opf/asset-reference`), and so is a cycle of `asset:` sources (`opf/asset-cycle`); resource bytes are never fetched. Chart and table data findings keep their code as the rule id (`opf/dataset-unknown`, `opf/chart-value-not-numeric`, ...), and a `opf/chart-value-not-numeric` cell whose column is written in one display style (`"12%"`, `"$1,234"`) carries `fixes` ([chart and table data](chart-table-data.md#migration-help)). Citation and caption errors keep theirs too (`opf/cite-unknown-reference`, `opf/reference-id-duplicate`, `opf/cite-unsupported-location`, `opf/caption-unsupported-payload`).
 
-A narrative the document defines is a record in `catalogs.custom.narratives`, and `narrative` is always a reference string. When the narrative resolves, a `slides[].beat` id it does not define is `opf/unknown-beat`, a root `duration` outside the record's `duration` range is `opf/duration-outside-narrative`, an embedded record whose `duration.min` exceeds `duration.max` is `opf/narrative-duration-range`, and a beat no slide references is `opf/unused-beat` (only once some slide names a beat). A slide-level `design.theme` whose resolved dimensions differ from the deck's is `opf/slide-theme-dimensions`: a PPTX has one slide size, and a slide's `design` cannot set `dimensions` at all (a schema error). An undeclared `var:<id>` in a solid, gradient-stop or pattern background colour warns like any other colour reference (`opf/variable-reference-unknown`).
+A narrative the document defines is a record in `catalogs.custom.narratives`, and `narrative` is always a reference string. When the narrative resolves, a `slides[].beat` id it does not define is `opf/unknown-beat`, a root `duration` outside the record's `duration` range is `opf/duration-outside-narrative`, an embedded record whose `duration.min` exceeds `duration.max` is `opf/narrative-duration-range`, and a beat no slide references is `opf/unused-beat` (only once some slide names a beat). A slide-level `design.theme` whose resolved dimensions differ from the deck's is `opf/slide-theme-dimensions`: a PPTX has one slide size, and a slide's `design` cannot set `dimensions` at all (a schema error). An undeclared `var:<id>` in a solid, gradient-stop or pattern background color warns like any other color reference (`opf/variable-reference-unknown`).
 
 Host policy comes from explicit options, never from the document: fields under `extensions` are data and cannot install policy. `contracts` and `catalogs` may live in a local JSON file for the CLI (`--config`).
 
@@ -197,25 +198,25 @@ A file ending `.yaml` or `.yml` (or stdin with `--from yaml`) is read as YAML th
 
 ## How contrast is computed
 
-`opf/text-contrast` reasons about the colours the preview draws, because a check against a different colour than the one on screen is worse than none.
+`opf/text-contrast` reasons about the colors the preview draws, because a check against a different color than the one on screen is worse than none.
 
-1. **Background.** Design resolves per field: slide design, deck design, theme, engine default. The background is a theme slot or colour (`solid`), the card surface for content on a `contentBox` card, a table cell's fill, a gradient or a pattern. Solid, gradient-stop and pattern colours are read as literal hex colours, as the preview reads them (anything else falls back as it does there). Translucent backgrounds are composited over white.
+1. **Background.** Design resolves per field: slide design, deck design, theme, engine default. The background is a theme slot or color (`solid`), the card surface for content on a `contentBox` card, a table cell's fill, a gradient or a pattern. Solid, gradient-stop and pattern colors are read as literal hex colors, as the preview reads them (anything else falls back as it does there). Translucent backgrounds are composited over white.
 2. **Text color.** Titles, body, lists and tags use the scheme's `dark1`, or `light1` when the background is dark (luminance below 0.179). Furniture and quote attributions use the muted color, metric values (and a unit on the value's line) the color the engines draw them in, `metricValueColor` of the primary on the card or slide under them (on a dark surface a primary under 4.5:1 becomes the light text color, LH-57, LH-151), and explicit run and table colors the author's `ColorRef` resolved the same way the renderer resolves it. As the preview does, a gradient background has no single color and counts as light, so a dark gradient behind default text is reported.
-3. **Gradients.** The gradient is sampled on a 5 by 5 grid over the area the text covers (the lines' measured ink, aligned as the text is), using the preview's gradient geometry, and the worst colour decides. A pattern contributes both of its colours.
+3. **Gradients.** The gradient is sampled on a 5 by 5 grid over the area the text covers (the lines' measured ink, aligned as the text is), using the preview's gradient geometry, and the worst color decides. A pattern contributes both of its colors.
 4. **Pictures.** Pixels are never read. A background picture is bounded by a gray ramp from black to white, composited through the picture opacity and any full-frame overlay of the image background (`design.background.overlay`), or, over the text it covers, core's [automatic scrim](image-treatments.md#automatic-scrim) (bounded by the grays a host measured, when it did). A duotone recolor bounds the ramp to its own two colors, and an overlay limited to an edge band counts over the text it reaches, beside the uncovered picture. Text passes only if every step passes; otherwise `opf/text-on-image` says the result cannot be guaranteed, and warns when the text fails over every step (it is too faint whatever the picture). With the scrim, `opf/text-on-image` is a note that names it.
 5. **Ratio and size.** The WCAG 2.x relative-luminance contrast ratio is compared with 4.5:1, or 3:1 for large text: at least 18 pt, or 14 pt and bold. Sizes are the fitted sizes, expressed at the 13.33 by 7.5 in reference slide (96 px per inch). The default body size, 18.75 pt, is large text under WCAG, so default body text passes at 3:1; set `contrastLarge` to 4.5 for a stricter policy.
 
-Approximations: anti-aliasing, text shadows, font weight and the exact glyph coverage are not modelled; chart and code text are not checked (charts pick label colours against their surface; code uses its own panel colours). See each rule below for what it cannot see.
+Approximations: anti-aliasing, text shadows, font weight and the exact glyph coverage are not modeled; chart and code text are not checked (charts pick label colors against their surface; code uses its own panel colors). See each rule below for what it cannot see.
 
 ## Layout rules use composition
 
 Overflow, minimum type size, reading order and image resolution use `composeSlide` at the deck's slide size with the resolved font scheme, the same composition the preview and the PPTX export consume. Without `fonts.textMeasurement` the text widths are core's portable estimate and can differ from the real fonts by a few percent; hosts that load fonts (the editor, the renderer) pass their measurement for font-exact results. A composition with `overflow: "error"` fails at composition time; `validate` still computes the geometry, relaxes the setting, and reports the overflow as a **warning**, so that `valid` never depends on font metrics. Rendering and export still refuse such a slide when it does not fit, and a host that wants the finding to fail promotes it with `severity: { 'opf/text-overflow': 'error' }`.
 
-Promoted region keys (`start`, `center`, `end`, `top:start` and the rest) are composed in visual reading order (rows from top to bottom, then along the row), whatever order the keys are written in. The PPTX export writes shapes in that order, which is the reading order of assistive technology; `opf/reading-order` checks that the composed order still matches the geometry (the same `visualReadingOrder` that composes the regions). Authoring with `blocks` (an ordered list) keeps the reading order equal to the visual order.
+The cells of a slide's grid (blocks that name `start`, `center`, `end`, `top:start` and the rest with `region`) are composed in visual reading order (rows from top to bottom, then along the row), whatever order the blocks are written in. The PPTX export writes shapes in that order, which is the reading order of assistive technology; `opf/reading-order` checks that the composed order still matches the geometry (the same `visualReadingOrder` that composes the regions). Authoring with `blocks` (an ordered list) keeps the reading order equal to the visual order.
 
 ## Templates and variables
 
-`opf/variable-unfilled` is one rule for a required variable that has no value. In a deck that is not a template it is an error (the deck is incomplete), so `valid` is false; in a template (`"template": true` in the document, or `template: true` in the options) it is a warning, because a template is incomplete on purpose; `unfilledVariables` lists the ids either way. In a document that declares no content variables, a `{{id}}` token left in a string (outside `variables`, `extensions`, `catalogs` and `assets`) is a warning. A `var:` colour that names no declared variable is `opf/variable-reference-unknown`. It is a `format` rule, so `only: ['format']` (what pagination, patching, conversion and every write command run) rejects a deck with an unfilled required variable. Fill a template with `opf fill` or `resolveVariables`, or pass `values`, to clear the findings.
+`opf/variable-unfilled` is one rule for a required variable that has no value. In a deck that is not a template it is an error (the deck is incomplete), so `valid` is false; in a template (`"template": true` in the document, or `template: true` in the options) it is a warning, because a template is incomplete on purpose; `unfilledVariables` lists the ids either way. In a document that declares no content variables, a `{{id}}` token left in a string (outside `variables`, `extensions`, `catalogs` and `assets`) is a warning. A `var:` color that names no declared variable is `opf/variable-reference-unknown`. It is a `format` rule, so `only: ['format']` (what pagination, patching, conversion and every write command run) rejects a deck with an unfilled required variable. Fill a template with `opf fill` or `resolveVariables`, or pass `values`, to clear the findings.
 
 ## Plain-words text and `explain`
 
@@ -246,7 +247,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/shape-anchor-missing`](#opfshape-anchor-missing) | Format | error | structure | An overlay shape has no resolvable block or qualified plotted chart point. |
 | [`opf/shape-anchor-size-unit`](#opfshape-anchor-size-unit) | Format | warning | structure | A pixel size is under a fraction key. |
 | [`opf/connector-end-missing`](#opfconnector-end-missing) | Format | error | structure | A connector end names no block or overlay shape on the slide. |
-| [`opf/image-placement-invalid`](#opfimage-placement-invalid) | Format | error | structure | An image placement cannot be honoured. |
+| [`opf/image-placement-invalid`](#opfimage-placement-invalid) | Format | error | structure | An image placement cannot be honored. |
 | [`opf/layout-placeholder-group`](#opflayout-placeholder-group) | Format | error | structure | A layout record's placeholder group breaks a nesting rule. |
 | [`opf/dataset-unknown`](#opfdataset-unknown) | Format | error | structure | A chart or table names a dataset that does not exist. |
 | [`opf/dataset-field-unknown`](#opfdataset-field-unknown) | Format | error | structure | A table asks a dataset for a column it does not have. |
@@ -261,7 +262,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/chart-highlight-unknown-name`](#opfchart-highlight-unknown-name) | Format | error | structure | A chart highlight names a series or category the chart does not have. |
 | [`opf/variable-format`](#opfvariable-format) | Format | error | structure | A variable cannot be formatted. |
 | [`opf/variable-unfilled`](#opfvariable-unfilled) | Format | error | structure | A required template variable has no value. |
-| [`opf/run-color-unrecognized`](#opfrun-color-unrecognized) | Format | warning | structure | A text run colour is none of the documented forms. |
+| [`opf/run-color-unrecognized`](#opfrun-color-unrecognized) | Format | warning | structure | A text run color is none of the documented forms. |
 | [`opf/numbering-start-ignored`](#opfnumbering-start-ignored) | Format | warning | structure | A list entry sets `start` where nothing is numbered. |
 | [`opf/slide-size-out-of-range`](#opfslide-size-out-of-range) | Format | warning | structure | The slide size is outside PowerPoint's 1 to 56 inch range. |
 | [`opf/undeclared-catalog`](#opfundeclared-catalog) | Format | error | structure | A reference names a catalog group the document does not declare. |
@@ -281,9 +282,9 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/variable-unknown`](#opfvariable-unknown) | References | warning | structure | A `{{token}}` names a variable that is not declared. |
 | [`opf/variable-unknown-value`](#opfvariable-unknown-value) | References | warning | structure | A value was supplied for a variable that is not declared. |
 | [`opf/variable-unused`](#opfvariable-unused) | References | warning | structure | A variable is declared but never used. |
-| [`opf/variable-reference-unknown`](#opfvariable-reference-unknown) | References | warning | structure | A `var:` colour names a variable that is not declared. |
+| [`opf/variable-reference-unknown`](#opfvariable-reference-unknown) | References | warning | structure | A `var:` color names a variable that is not declared. |
 | [`opf/contract`](#opfcontract) | Policy | error | structure | A field is outside the values a host policy allows. |
-| [`opf/text-contrast`](#opftext-contrast) | Accessibility | warning | composition | Text colour has too little contrast against the background it sits on. |
+| [`opf/text-contrast`](#opftext-contrast) | Accessibility | warning | composition | Text color has too little contrast against the background it sits on. |
 | [`opf/text-on-image`](#opftext-on-image) | Accessibility | info | composition | Text sits on a background picture: a note when core draws its automatic scrim behind it, a warning when the text is too faint over every color the picture can show, otherwise its contrast cannot be guaranteed. |
 | [`opf/missing-alt-text`](#opfmissing-alt-text) | Accessibility | warning | structure | A picture has no alt text and is not marked decorative. |
 | [`opf/poor-alt-text`](#opfpoor-alt-text) | Accessibility | info | structure | Alt text is a file name, a URL, a generic word or very long. |
@@ -291,8 +292,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/duplicate-slide-title`](#opfduplicate-slide-title) | Accessibility | info | structure | Two slides have the same title. |
 | [`opf/reading-order`](#opfreading-order) | Accessibility | warning | composition | The order content is read differs from the order it appears on the slide. |
 | [`opf/link-text`](#opflink-text) | Accessibility | warning | structure | Link text does not say where the link goes. |
-| [`opf/chart-color-only`](#opfchart-color-only) | Accessibility | info | structure | Chart series may be indistinguishable without colour vision. |
-| [`opf/chart-colors-adjusted`](#opfchart-colors-adjusted) | Accessibility | warning | structure | A chart colour cannot be used as authored. |
+| [`opf/chart-color-only`](#opfchart-color-only) | Accessibility | info | structure | Chart series may be indistinguishable without color vision. |
+| [`opf/chart-colors-adjusted`](#opfchart-colors-adjusted) | Accessibility | warning | structure | A chart color cannot be used as authored. |
 | [`opf/chart-text-alternative`](#opfchart-text-alternative) | Accessibility | info | structure | A chart has no text alternative, or is marked decorative. |
 | [`opf/missing-language`](#opfmissing-language) | Accessibility | info | structure | The presentation does not declare its language. |
 | [`opf/chart-option-adapted`](#opfchart-option-adapted) | Layout | warning | structure | A chart option cannot be shown by the chart type. |
@@ -305,7 +306,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/region-full`](#opfregion-full) | Layout | warning | composition | A block is pinned to a region that is already full. |
 | [`opf/layout-unplaced`](#opflayout-unplaced) | Layout | warning | composition | No region of the layout has room for a block. |
 | [`opf/icon-dropped`](#opficon-dropped) | Layout | warning | composition | An icon is not drawn. |
-| [`opf/arrangement-adapted`](#opfarrangement-adapted) | Layout | info | composition | A pyramid, matrix, cycle, row of chevrons or flow is drawn another way. |
+| [`opf/arrangement-adapted`](#opfarrangement-adapted) | Layout | info | composition | A diagram arrangement (a pyramid, matrix, cycle, row of chevrons, process, tree or Venn) is drawn another way. |
 | [`opf/chart-label-collision`](#opfchart-label-collision) | Layout | warning | composition | A reference label meets another label, a data line or a mark at both ends of its line. |
 | [`opf/timeline-period-short`](#opftimeline-period-short) | Layout | warning | composition | A timeline period is too short to read. |
 | [`opf/shape-off-slide`](#opfshape-off-slide) | Layout | warning | composition | A shape or image callout lies wholly outside the slide. |
@@ -467,9 +468,9 @@ Default severity: **error**. Cost: structure. A connector end names no block or 
 
 ### `opf/image-placement-invalid`
 
-Default severity: **error**. Cost: structure. An image placement cannot be honoured.
+Default severity: **error**. Cost: structure. An image placement cannot be honored.
 
-**Why.** A placed image bleeds to a slide edge and the rest of the slide composes beside it. Only a top-level block (slides.N.blocks.I) can do that, and a slide edge holds one placed image; a block in a group or a promoted region, or a second block on the same edge, has nowhere to go.
+**Why.** A placed image bleeds to a slide edge and the rest of the slide composes beside it. Only a top-level block (slides.N.blocks.I) can do that, and a slide edge holds one placed image; a block in a group or in a cell of the slide grid, or a second block on the same edge, has nowhere to go.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -565,7 +566,7 @@ Default severity: **error**. Cost: structure. A table highlight names a row the 
 
 Default severity: **error**. Cost: structure. A chart highlight names a series or category the chart does not have.
 
-**Why.** `chart.highlight` emphasises marks by name; a name that matches no series or category in the chart data highlights nothing, so the chart is not drawn as authored.
+**Why.** `chart.highlight` emphasizes marks by name; a name that matches no series or category in the chart data highlights nothing, so the chart is not drawn as authored.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -581,15 +582,15 @@ Default severity: **error**. Cost: structure. A variable cannot be formatted.
 
 Default severity: **error**. Cost: structure. A required template variable has no value.
 
-**Why.** A variable a deck declares as required, with no value, is template scaffolding: `{{name}}` tokens show up literally and colour variables fall back to a default. A normal deck must be filled, so this is an error and the deck is not valid; a template (`template: true`) is incomplete on purpose, so it is a warning.
+**Why.** A variable a deck declares as required, with no value, is template scaffolding: `{{name}}` tokens show up literally and color variables fall back to a default. A normal deck must be filled, so this is an error and the deck is not valid; a template (`template: true`) is incomplete on purpose, so it is a warning.
 
-**Approximations.** Required variables are those the variable machinery reports as unfilled for the document (declared, no value, not `required: false`, not given by the `values` option). For a document that declares no content variables, `{{id}}` / `{{id|format}}` tokens (`{{` escapes) left in any string outside `variables`, `extensions`, `catalogs` and `assets` are reported as warnings. `var:` colour references with no declaration are reported as `opf/variable-reference-unknown`. Fill a template with `opf fill` or `resolveVariables` to clear the findings.
+**Approximations.** Required variables are those the variable machinery reports as unfilled for the document (declared, no value, not `required: false`, not given by the `values` option). For a document that declares no content variables, `{{id}}` / `{{id|format}}` tokens (`{{` escapes) left in any string outside `variables`, `extensions`, `catalogs` and `assets` are reported as warnings. `var:` color references with no declaration are reported as `opf/variable-reference-unknown`. Fill a template with `opf fill` or `resolveVariables` to clear the findings.
 
 ### `opf/run-color-unrecognized`
 
-Default severity: **warning**. Cost: structure. A text run colour is none of the documented forms.
+Default severity: **warning**. Cost: structure. A text run color is none of the documented forms.
 
-**Why.** Run colours are open strings so imported decks stay valid, but a value that is not a hex colour, a colour-scheme name or a `var:` reference falls back to the theme colour.
+**Why.** Run colors are open strings so imported decks stay valid, but a value that is not a hex color, a color-scheme name or a `var:` reference falls back to the theme color.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -609,7 +610,7 @@ Default severity: **warning**. Cost: structure. The slide size is outside PowerP
 
 **Basis.** ECMA-376 / ISO/IEC 29500-1 section 19.2.1.39 (p:sldSz) and section 19.7.17 (ST_SlideSizeCoordinate): 914400 to 51206400 EMU
 
-**Approximations.** Checks the deck's resolved size: `design.dimensions`, else the resolved theme's `dimensions`. Inches are converted to EMU as the PPTX exporter does (`Math.round(inches * 914400)`), so a side of exactly 1 in or 56 in passes. A slide-level theme with another size is `opf/slide-theme-dimensions`. Presets are always in range. PowerPoint's own behaviour at the limits was not measured.
+**Approximations.** Checks the deck's resolved size: `design.dimensions`, else the resolved theme's `dimensions`. Inches are converted to EMU as the PPTX exporter does (`Math.round(inches * 914400)`), so a side of exactly 1 in or 56 in passes. A slide-level theme with another size is `opf/slide-theme-dimensions`. Presets are always in range. PowerPoint's own behavior at the limits was not measured.
 
 ### `opf/undeclared-catalog`
 
@@ -662,7 +663,7 @@ Default severity: **error**. Cost: structure. A layout template's region list is
 
 Default severity: **error**. Cost: structure. A layout template's regions are not valid.
 
-**Why.** Region names are unique across the whole record and may not be tag, auto or a promoted-region word (start, center, end, top, middle, bottom), so a Markdown block's region= stays unambiguous; title and subtitle name the heading regions, which take only a size, an anchor and (the title) a rule; a subtitle region needs a title region; a region accepts at least one content kind; a region with flow 'none' holds one block; overflowRegion must name a body region. composeSlide refuses such a record.
+**Why.** Region names are unique across the whole record and may not be tag, auto or a cell word of the slide grid (start, center, end, top, middle, bottom), so a block's region (and a Markdown block's region=) stays unambiguous; title and subtitle name the heading regions, which take only a size, an anchor and (the title) a rule; a subtitle region needs a title region; a region accepts at least one content kind; overflowRegion must name a body region. composeSlide refuses such a record.
 
 **Basis.** spec/schemas/layout.schema.json and the region rules (docs/layout-templates.md)
 
@@ -670,7 +671,7 @@ Default severity: **error**. Cost: structure. A layout template's regions are no
 
 Default severity: **warning**. Cost: structure. A content reference resolves nowhere.
 
-**Why.** A layout, theme, colour scheme, font scheme, narrative, audience, purpose or tone reference that neither the document embeds nor a registered catalog defines falls back: a slide composes automatically, a design uses the engine default. A strict export fails instead. A slide with no layout is automatic composition and is never reported.
+**Why.** A layout, theme, color scheme, font scheme, narrative, audience, purpose or tone reference that neither the document embeds nor a registered catalog defines falls back: a slide composes automatically, a design uses the engine default. A strict export fails instead. A slide with no layout is automatic composition and is never reported. A layout id that OPF has removed is reported with the safe fix that writes its replacement or deletes the key.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -764,9 +765,9 @@ Default severity: **warning**. Cost: structure. A variable is declared but never
 
 ### `opf/variable-reference-unknown`
 
-Default severity: **warning**. Cost: structure. A `var:` colour names a variable that is not declared.
+Default severity: **warning**. Cost: structure. A `var:` color names a variable that is not declared.
 
-**Why.** An undeclared colour variable falls back to a default colour.
+**Why.** An undeclared color variable falls back to a default color.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -790,15 +791,15 @@ Default severity: **error**. Cost: structure. A field is outside the values a ho
 
 ### `opf/text-contrast`
 
-Default severity: **warning**. Cost: composition. Text colour has too little contrast against the background it sits on.
+Default severity: **warning**. Cost: composition. Text color has too little contrast against the background it sits on.
 
-**Why.** Low-contrast text is hard or impossible to read for people with low vision, colour-vision differences, glare on a projector or a poor display. WCAG sets 4.5:1 for normal text and 3:1 for large text.
+**Why.** Low-contrast text is hard or impossible to read for people with low vision, color-vision differences, glare on a projector or a poor display. WCAG sets 4.5:1 for normal text and 3:1 for large text.
 
 **Basis.** WCAG 2.2 SC 1.4.3 Contrast (Minimum), level AA
 
 **Thresholds.** `contrastNormal` (default 4.5), `contrastLarge` (default 3)
 
-**Approximations.** Computed on sRGB colours with the WCAG relative-luminance formula, against the background the preview draws: a solid or theme colour, the card surface, a table cell fill, every colour a gradient takes under the text box (sampled on a 5x5 grid, angle respected), or both colours of a pattern. Anti-aliasing, text shadows and font weight are not modelled. Text colour is the preview's (the scheme's text role or dark1 on a light background and light1 on a dark one, chosen from the background luminance, where a gradient or picture background uses the scheme's default background colour), so a default can fail on a dark gradient. A link with no colour of its own is measured in the scheme's hyperlink colour.
+**Approximations.** Computed on sRGB colors with the WCAG relative-luminance formula, against the background the preview draws: a solid or theme color, the card surface, a table cell fill, every color a gradient takes under the text box (sampled on a 5x5 grid, angle respected), or both colors of a pattern. Anti-aliasing, text shadows and font weight are not modeled. Text color is the preview's (the scheme's text role or dark1 on a light background and light1 on a dark one, chosen from the background luminance, where a gradient or picture background uses the scheme's default background color), so a default can fail on a dark gradient. A link with no color of its own is measured in the scheme's hyperlink color.
 
 ### `opf/text-on-image`
 
@@ -858,7 +859,7 @@ Default severity: **warning**. Cost: composition. The order content is read diff
 
 **Basis.** WCAG 2.2 SC 1.3.2 Meaningful Sequence, level A (PowerPoint: "Check reading order")
 
-**Approximations.** Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. A block is one unit (RR-105): blocks are ordered by the boxes that hold them, and a group's own items are read, in their own visual order, before the next block, so cards side by side (a picture over a name) read card by card. Headings are expected first. Content drawn entirely above the title, over the columns of the title, is reported; content in a column beside the title is read after it. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.
+**Approximations.** Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centers fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. A block is one unit (RR-105): blocks are ordered by the boxes that hold them, and a group's own items are read, in their own visual order, before the next block, so cards side by side (a picture over a name) read card by card. Headings are expected first. Content drawn entirely above the title, over the columns of the title, is reported; content in a column beside the title is read after it. Free-form overlap is not analyzed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.
 
 ### `opf/link-text`
 
@@ -872,25 +873,25 @@ Default severity: **warning**. Cost: structure. Link text does not say where the
 
 ### `opf/chart-color-only`
 
-Default severity: **info**. Cost: structure. Chart series may be indistinguishable without colour vision.
+Default severity: **info**. Cost: structure. Chart series may be indistinguishable without color vision.
 
-**Why.** OPF charts have no data labels or patterns, so series are told apart by colour alone (and legend order). Colours that look alike to someone with colour-vision deficiency, or when printed in greyscale, make series impossible to tell apart.
+**Why.** OPF charts have no data labels or patterns, so series are told apart by color alone (and legend order). Colors that look alike to someone with color-vision deficiency, or when printed in grayscale, make series impossible to tell apart.
 
 **Basis.** WCAG 2.2 SC 1.4.1 Use of Color, level A
 
 **Thresholds.** `minSeriesColorDifference` (default 10)
 
-**Approximations.** Uses the engine's series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide color scheme (accent1 to accent6, then their tints), adjusted for the slide background and softened like the engines draw them, LH-105) in series order: series i takes color i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighbouring series (and neighbouring slices, on a pie or doughnut the last beside the first, which the engines move off the first by at most 20 L* or, where that is not enough, separate with a surface-colored slice border that this rule accepts, LH-161) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.
+**Approximations.** Uses the engine's series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide color scheme (accent1 to accent6, then their tints), adjusted for the slide background and softened like the engines draw them, LH-105) in series order: series i takes color i, pie/doughnut/treemap/funnel slices take colors per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and grayscale. Neighboring series (and neighboring slices, on a pie or doughnut the last beside the first, which the engines move off the first by at most 20 L* or, where that is not enough, separate with a surface-colored slice border that this rule accepts, LH-161) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.
 
 ### `opf/chart-colors-adjusted`
 
-Default severity: **warning**. Cost: structure. A chart colour cannot be used as authored.
+Default severity: **warning**. Cost: structure. A chart color cannot be used as authored.
 
-**Why.** `chart.colors` sets the colour of series 1, 2, 3 and so on. A colour that cannot be resolved (a `var:` colour variable the deck does not define, or a name that is not a colour) is ignored and the deck palette colour of that position is used. A colour with under 3:1 contrast against the slide background the chart stands on is kept for its hue but drawn lighter or darker, so the chart does not show the colour that was written.
+**Why.** `chart.colors` sets the color of series 1, 2, 3 and so on. A color that cannot be resolved (a `var:` color variable the deck does not define, or a name that is not a color) is ignored and the deck palette color of that position is used. A color with under 3:1 contrast against the slide background the chart stands on is kept for its hue but drawn lighter or darker, so the chart does not show the color that was written.
 
 **Basis.** WCAG 2.2 SC 1.4.11 Non-text Contrast, level AA
 
-**Approximations.** Resolves each entry like any colour reference (hex, colour-scheme slot or role, `var:` variable) against the slide's scheme and compares it with the slide background (no chart has a panel, LH-105; a chart in a card stands on the card, which is not measured) by WCAG contrast; 3:1 is the threshold the engines enforce. Translucent colours and unresolved backgrounds are not measured. Colours that look alike to colour-vision deficiency are reported by opf/chart-color-only, which judges the authored colours.
+**Approximations.** Resolves each entry like any color reference (hex, color-scheme slot or role, `var:` variable) against the slide's scheme and compares it with the slide background (no chart has a panel, LH-105; a chart in a card stands on the card, which is not measured) by WCAG contrast; 3:1 is the threshold the engines enforce. Translucent colors and unresolved backgrounds are not measured. Colors that look alike to color-vision deficiency are reported by opf/chart-color-only, which judges the authored colors.
 
 ### `opf/chart-text-alternative`
 
@@ -910,7 +911,7 @@ Default severity: **info**. Cost: structure. The presentation does not declare i
 
 **Basis.** WCAG 2.2 SC 3.1.1 Language of Page, level A
 
-**Approximations.** Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.language`; opf/language-tag checks how those tags are written).
+**Approximations.** Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.language`; opf/language-tag checks how those tags are written). With no language set, a slide whose letters are mostly Arabic-script or Hebrew is laid out as Arabic or Hebrew, right to left (OPF 0.35); the message names those slides.
 
 
 ## Layout rules
@@ -989,9 +990,9 @@ Default severity: **warning**. Cost: composition. An icon is not drawn.
 
 ### `opf/arrangement-adapted`
 
-Default severity: **info**. Cost: composition. A pyramid, matrix, cycle, row of chevrons or flow is drawn another way.
+Default severity: **info**. Cost: composition. A diagram arrangement (a pyramid, matrix, cycle, row of chevrons, process, tree or Venn) is drawn another way.
 
-**Why.** A `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` region draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.
+**Why.** A region whose `arrangement` is `pyramid`, `inverted-pyramid`, `matrix`, `cycle`, `chevrons`, `process`, `vertical-process`, `org-chart`, `hierarchy` or `venn` draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.
 
 ### `opf/chart-label-collision`
 
@@ -1144,7 +1145,7 @@ Default severity: **warning**. Cost: structure. A built-in variable has no value
 
 Default severity: **info**. Cost: structure. A group is drawn only when one of its optional variables has a value.
 
-**Why.** A group (a block or promoted region with `blocks`) whose content variables are all optional (`required: false`) and all unfilled is left out whole when the deck is filled: its pictures, cards and other text go with the fields the variables would fill, so a slide never draws a card around a picture with no text. Validation fills every variable with its example or a sample, so it reports the group here instead.
+**Why.** A group (a block with `blocks`) whose content variables are all optional (`required: false`) and all unfilled is left out whole when the deck is filled: its pictures, cards and other text go with the fields the variables would fill, so a slide never draws a card around a picture with no text. Validation fills every variable with its example or a sample, so it reports the group here instead.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -1228,7 +1229,7 @@ Default severity: **info**. Cost: structure. A combo chart plots a series on a s
 
 Default severity: **info**. Cost: structure. A pie or doughnut chart has more than 5 slices.
 
-**Why.** People compare angles and areas poorly, and past a few slices the small ones cannot be told apart or labelled. Bars along one axis show the same parts of a whole and let them be compared and ranked (Few, Show Me the Numbers).
+**Why.** People compare angles and areas poorly, and past a few slices the small ones cannot be told apart or labeled. Bars along one axis show the same parts of a whole and let them be compared and ranked (Few, Show Me the Numbers).
 
 **Basis.** Stephen Few, Show Me the Numbers (2012), on pie charts; more than 5 categories.
 

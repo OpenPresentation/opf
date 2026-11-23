@@ -10,7 +10,7 @@ and the editor. A deck without the new fields validates, composes, previews and 
 - `TextRun.cite`: a reference id, or an array of ids, from the top-level `references` list.
 - `TextRun.footnote`: an inline note (string or `TextRun[]`) with no references entry.
 - `references` (presentation root): `[{ id, text, url? }]`; `text` is a string or `TextRun[]`.
-- `caption` on an `image`, `chart`, `table` or `video` payload (a block, a promoted region payload, or the
+- `caption` on an `image`, `chart`, `table` or `video` payload (a block, or the
   slide root when it holds exactly one of those payloads): a string, `TextRun[]`, or
   `{ text, position?: "below" | "above", align?: "start" | "center" | "end" }` (defaults `below`, `start`).
 
@@ -45,7 +45,7 @@ the "unsupported location" boundary, chosen so the engines never silently drop a
 
 `collectCitations(presentation)` numbers every marker per deck in reading order: slides in order, then
 inside a slide the heading group first (`tag`, `title`, `subtitle`, the order the slide stacks them), then the
-promoted regions (sorted keys), the blocks (recursively) and the root payload, then the runs. Headings read
+the blocks (recursively; blocks placed in the cells of the slide's grid cell by cell in reading order, rows from the top, each from its start column) and the root payload, then the runs. Headings read
 before the body, so a marker on a headline claim takes the lowest numbers of its slide (FA-10, vetoable). The same reference id keeps its number wherever it is cited; every inline footnote takes a new
 number. A run that cites several ids shows `1,2`. `slideCitations(slide, slideIndex, presentation)`
 gives one slide's markers and notes with the deck numbering (the slide object may be a paginated page or
@@ -71,7 +71,7 @@ a copy); without a presentation the slide numbers from 1 and unresolved ids are 
   whose runs carry markers gets an area directly above the footer band (or the bottom padding), with the
   content area's left edge and width: a 1 px rule, half a line of space, then `<n> <text>` for each note
   the slide uses in number order (a rich reference text keeps its runs after the number). Text is the
-  body family at the furniture size (`max(13 * scale, minFontSize)`), in the muted text colour. The
+  body family at the furniture size (`max(13 * scale, minFontSize)`), in the muted text color. The
   content area shrinks by exactly the area's height plus half the slide gap; headings, cover centering and
   everything above are unchanged. The area takes at most `FOOTNOTE_MAX_RATIO` (35%) of the span between
   the heading top and the footer band; notes beyond that report `text-overflow` at their source path
@@ -92,8 +92,8 @@ a copy); without a presentation the slide numbers from 1 and unresolved ids are 
 
 Draws what core returns: marker fragments as superscript `<text>`/`<tspan>` elements with
 `data-opf-segment="marker"` and no `data-opf-text-start/end` (so the editor never treats them as source
-text), the footnote area (rule in the border colour, entries in the muted text colour, `data-opf-footnote`
-trace attributes) after the content and before the furniture, and caption bands in the muted colour with
+text), the footnote area (rule in the border color, entries in the muted text color, `data-opf-footnote`
+trace attributes) after the content and before the furniture, and caption bands in the muted color with
 the caption path as `data-opf-path`.
 
 ## PPTX (opf-pptx)

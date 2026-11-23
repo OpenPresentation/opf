@@ -1,30 +1,38 @@
 {
   "name": "Media And Follow-Up Example",
+  "language": "en-US",
   "design": {
     "imageFit": "contain"
   },
   "slides": [
     {
       "title": "Product Snapshot",
-      "start": {
-        "image": "asset:product-shot"
-      },
-      "center+end": {
-        "text": "The dashboard pulls review status, owners, and exceptions into one operating view."
-      }
+      "blocks": [
+        {
+          "image": "asset:product-shot"
+        },
+        {
+          "text": "The dashboard pulls review status, owners, and exceptions into one operating view."
+        }
+      ]
     },
     {
       "title": "Follow-Up",
-      "start+center+end": {
-        "items": [
-          "Confirm owners for open exceptions.",
-          "Review aging thresholds with operations leads.",
-          "Schedule the next dashboard readout."
-        ]
-      }
+      "blocks": [
+        {
+          "items": [
+            "Confirm owners for open exceptions.",
+            "Review aging thresholds with operations leads.",
+            "Schedule the next dashboard readout."
+          ]
+        }
+      ]
     }
   ],
   "assets": {
-    "product-shot": "./assets/product-shot.png"
+    "product-shot": {
+      "src": "./assets/product-shot.png",
+      "alt": "Operations dashboard with review status, owners and exceptions"
+    }
   }
 }

@@ -64,34 +64,38 @@
         },
         "footer": false
       },
-      "bottom:center+end": {
-        "blocks": [
-          {
-            "text": [
-              "\n",
-              {
-                "text": "datastoryacademy.com     |     Corporate programs for 2027     |     Book a call",
-                "color": "#FFFFFF",
-                "fontSize": 14
-              }
-            ]
+      "blocks": [
+        {
+          "region": "top+middle:start+center+end",
+          "text": [
+            {
+              "text": "Data Storytelling\nfor Leaders",
+              "bold": true,
+              "color": "#FFFFFF",
+              "fontSize": 84
+            }
+          ]
+        },
+        {
+          "region": "bottom:center+end",
+          "blocks": [
+            {
+              "text": [
+                "\n",
+                {
+                  "text": "datastoryacademy.com     |     Corporate programs for 2027     |     Book a call",
+                  "color": "#FFFFFF",
+                  "fontSize": 14
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.1542,
+            "maxFontSize": 19
           }
-        ],
-        "composition": {
-          "padding": 0.1542,
-          "maxFontSize": 19
         }
-      },
-      "top+middle:start+center+end": {
-        "text": [
-          {
-            "text": "Data Storytelling\nfor Leaders",
-            "bold": true,
-            "color": "#FFFFFF",
-            "fontSize": 84
-          }
-        ]
-      },
+      ],
       "notes": "Thank you for the time. In the next fifteen minutes I want to show you why data storytelling is now an executive skill, how we build it, and what a 2027 program for your teams could look like.",
       "extensions": {
         "dsa.graphics": {
@@ -215,78 +219,83 @@
         },
         "titleAlignment": "center"
       },
-      "middle+bottom:start": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "74%",
-                "bold": true,
-                "color": "#FFFFFF",
-                "fontSize": 54
-              },
-              "\n",
-              {
-                "text": "feel overwhelmed or unhappy working with data",
-                "color": "#FFFFFF",
-                "fontSize": 18
-              }
-            ]
+      "blocks": [
+        {
+          "region": "middle+bottom:start",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "74%",
+                  "bold": true,
+                  "color": "#FFFFFF",
+                  "fontSize": 54
+                },
+                "\n",
+                {
+                  "text": "feel overwhelmed or unhappy working with data",
+                  "color": "#FFFFFF",
+                  "fontSize": 18
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.1219,
+            "maxFontSize": 72
           }
-        ],
-        "composition": {
-          "padding": 0.1219,
-          "maxFontSize": 72
-        }
-      },
-      "middle+bottom:center": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "21%",
-                "bold": true,
-                "color": "#FFFFFF",
-                "fontSize": 54
-              },
-              "\n",
-              {
-                "text": "are confident in their data literacy skills",
-                "color": "#FFFFFF",
-                "fontSize": 18
-              }
-            ]
+        },
+        {
+          "region": "middle+bottom:center",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "21%",
+                  "bold": true,
+                  "color": "#FFFFFF",
+                  "fontSize": 54
+                },
+                "\n",
+                {
+                  "text": "are confident in their data literacy skills",
+                  "color": "#FFFFFF",
+                  "fontSize": 18
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.1219,
+            "maxFontSize": 72
           }
-        ],
-        "composition": {
-          "padding": 0.1219,
-          "maxFontSize": 72
-        }
-      },
-      "middle+bottom:end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "48%",
-                "bold": true,
-                "color": "#1E1E1E",
-                "fontSize": 54
-              },
-              "\n",
-              {
-                "text": "frequently rely on gut feeling over data",
-                "color": "#1E1E1E",
-                "fontSize": 18
-              }
-            ]
+        },
+        {
+          "region": "middle+bottom:end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "48%",
+                  "bold": true,
+                  "color": "#1E1E1E",
+                  "fontSize": 54
+                },
+                "\n",
+                {
+                  "text": "frequently rely on gut feeling over data",
+                  "color": "#1E1E1E",
+                  "fontSize": 18
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.1219,
+            "maxFontSize": 72
           }
-        ],
-        "composition": {
-          "padding": 0.1219,
-          "maxFontSize": 72
         }
-      },
+      ],
       "notes": "These numbers come from Accenture and Qlik's survey of nine thousand employees. Three in four feel overwhelmed working with data, only one in five is confident, and nearly half still go with their gut. The data is there. The skill to turn it into a decision is not.",
       "extensions": {
         "dsa.graphics": {
@@ -403,162 +412,168 @@
           }
         }
       },
-      "top:end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "01",
-                "bold": true,
-                "color": "accent1",
-                "fontSize": 15
-              },
-              "\n",
-              {
-                "text": "5+ working days",
-                "bold": true,
-                "fontSize": 19
-              },
-              "\n",
-              {
-                "text": "lost per employee, every year",
-                "color": "#5E5750",
-                "fontSize": 15
-              }
-            ]
-          }
-        ],
-        "composition": {
-          "padding": 0.1933,
-          "maxFontSize": 20
-        }
-      },
-      "middle:end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "02",
-                "bold": true,
-                "color": "accent1",
-                "fontSize": 15
-              },
-              "\n",
-              {
-                "text": "61% feel overloaded",
-                "bold": true,
-                "fontSize": 19
-              },
-              "\n",
-              {
-                "text": "say data overload adds to stress",
-                "color": "#5E5750",
-                "fontSize": 15
-              }
-            ]
-          }
-        ],
-        "composition": {
-          "padding": 0.1933,
-          "maxFontSize": 20
-        }
-      },
-      "bottom:end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "03",
-                "bold": true,
-                "color": "accent1",
-                "fontSize": 15
-              },
-              "\n",
-              {
-                "text": "36% avoid data",
-                "bold": true,
-                "fontSize": 19
-              },
-              "\n",
-              {
-                "text": "would find a way to avoid it",
-                "color": "#5E5750",
-                "fontSize": 15
-              }
-            ]
-          }
-        ],
-        "composition": {
-          "padding": 0.1933,
-          "maxFontSize": 20
-        }
-      },
-      "top+middle+bottom:start+center": {
-        "blocks": [
-          {
-            "chart": {
-              "type": "bar",
-              "data": {
-                "columns": [
-                  "Country",
-                  {
-                    "name": "Annual lost productivity ($B)",
-                    "format": "$#,##0.0"
-                  }
-                ],
-                "rows": [
-                  [
-                    "United States",
-                    109.4
+      "blocks": [
+        {
+          "region": "top+middle+bottom:start+center",
+          "blocks": [
+            {
+              "chart": {
+                "type": "bar",
+                "data": {
+                  "columns": [
+                    "Country",
+                    {
+                      "name": "Annual lost productivity ($B)",
+                      "format": "$#,##0.0"
+                    }
                   ],
-                  [
-                    "Germany",
-                    23.7
-                  ],
-                  [
-                    "Japan",
-                    15.16
-                  ],
-                  [
-                    "United Kingdom",
-                    13.17
-                  ],
-                  [
-                    "France",
-                    10.9
-                  ],
-                  [
-                    "Australia",
-                    9.4
-                  ],
-                  [
-                    "India",
-                    4.6
-                  ],
-                  [
-                    "Singapore",
-                    3.7
-                  ],
-                  [
-                    "Sweden",
-                    3.2
+                  "rows": [
+                    [
+                      "United States",
+                      109.4
+                    ],
+                    [
+                      "Germany",
+                      23.7
+                    ],
+                    [
+                      "Japan",
+                      15.16
+                    ],
+                    [
+                      "United Kingdom",
+                      13.17
+                    ],
+                    [
+                      "France",
+                      10.9
+                    ],
+                    [
+                      "Australia",
+                      9.4
+                    ],
+                    [
+                      "India",
+                      4.6
+                    ],
+                    [
+                      "Singapore",
+                      3.7
+                    ],
+                    [
+                      "Sweden",
+                      3.2
+                    ]
                   ]
-                ]
+                },
+                "alt": "Estimated annual lost productivity from data skills gaps: United States $109.4B, far ahead of Germany $23.7B, Japan $15.2B and the UK $13.2B.",
+                "highlight": {
+                  "categories": [
+                    "United States"
+                  ]
+                }
               },
-              "alt": "Estimated annual lost productivity from data skills gaps: United States $109.4B, far ahead of Germany $23.7B, Japan $15.2B and the UK $13.2B.",
-              "highlight": {
-                "categories": [
-                  "United States"
-                ]
-              }
-            },
-            "id": "annual-productivity-costs"
+              "id": "annual-productivity-costs"
+            }
+          ],
+          "composition": {
+            "padding": 0.0539
           }
-        ],
-        "composition": {
-          "padding": 0.0539
+        },
+        {
+          "region": "top:end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "01",
+                  "bold": true,
+                  "color": "accent1",
+                  "fontSize": 15
+                },
+                "\n",
+                {
+                  "text": "5+ working days",
+                  "bold": true,
+                  "fontSize": 19
+                },
+                "\n",
+                {
+                  "text": "lost per employee, every year",
+                  "color": "#5E5750",
+                  "fontSize": 15
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.1933,
+            "maxFontSize": 20
+          }
+        },
+        {
+          "region": "middle:end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "02",
+                  "bold": true,
+                  "color": "accent1",
+                  "fontSize": 15
+                },
+                "\n",
+                {
+                  "text": "61% feel overloaded",
+                  "bold": true,
+                  "fontSize": 19
+                },
+                "\n",
+                {
+                  "text": "say data overload adds to stress",
+                  "color": "#5E5750",
+                  "fontSize": 15
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.1933,
+            "maxFontSize": 20
+          }
+        },
+        {
+          "region": "bottom:end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "03",
+                  "bold": true,
+                  "color": "accent1",
+                  "fontSize": 15
+                },
+                "\n",
+                {
+                  "text": "36% avoid data",
+                  "bold": true,
+                  "fontSize": 19
+                },
+                "\n",
+                {
+                  "text": "would find a way to avoid it",
+                  "color": "#5E5750",
+                  "fontSize": 15
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.1933,
+            "maxFontSize": 20
+          }
         }
-      },
+      ],
       "notes": "Accenture and Qlik estimated what this costs in lost productivity: one hundred and nine billion dollars a year in the US alone. That is more than five working days per employee, every year, lost to procrastination and stress around data.",
       "section": "The business case",
       "extensions": {
@@ -685,137 +700,143 @@
           }
         }
       },
-      "top:end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "01",
-                "bold": true,
-                "color": "accent1",
-                "fontSize": 15
-              },
-              "\n",
-              {
-                "text": "The gap is skill, not belief",
-                "bold": true,
-                "fontSize": 19
-              },
-              "\n",
-              {
-                "text": "87% see data as an asset",
-                "color": "#5E5750",
-                "fontSize": 15
-              }
-            ]
-          }
-        ],
-        "composition": {
-          "padding": 0.1982,
-          "maxFontSize": 20
-        }
-      },
-      "middle:end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "02",
-                "bold": true,
-                "color": "accent1",
-                "fontSize": 15
-              },
-              "\n",
-              {
-                "text": "Confidence drives use",
-                "bold": true,
-                "fontSize": 19
-              },
-              "\n",
-              {
-                "text": "50%+ more likely to feel empowered",
-                "color": "#5E5750",
-                "fontSize": 15
-              }
-            ]
-          }
-        ],
-        "composition": {
-          "padding": 0.1982,
-          "maxFontSize": 20
-        }
-      },
-      "bottom:end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "03",
-                "bold": true,
-                "color": "accent1",
-                "fontSize": 15
-              },
-              "\n",
-              {
-                "text": "Training is the lever",
-                "bold": true,
-                "fontSize": 19
-              },
-              "\n",
-              {
-                "text": "37% say training lifts productivity",
-                "color": "#5E5750",
-                "fontSize": 15
-              }
-            ]
-          }
-        ],
-        "composition": {
-          "padding": 0.1982,
-          "maxFontSize": 20
-        }
-      },
-      "top+middle+bottom:start+center": {
-        "blocks": [
-          {
-            "chart": {
-              "type": "column",
-              "data": {
-                "columns": [
-                  "Response",
-                  {
-                    "name": "Share of employees surveyed",
-                    "format": "0%"
-                  }
-                ],
-                "rows": [
-                  [
-                    "See data as an asset",
-                    0.87
+      "blocks": [
+        {
+          "region": "top+middle+bottom:start+center",
+          "blocks": [
+            {
+              "chart": {
+                "type": "column",
+                "data": {
+                  "columns": [
+                    "Response",
+                    {
+                      "name": "Share of employees surveyed",
+                      "format": "0%"
+                    }
                   ],
-                  [
-                    "Feel fully prepared",
-                    0.25
-                  ],
-                  [
-                    "Are confident",
-                    0.21
+                  "rows": [
+                    [
+                      "See data as an asset",
+                      0.87
+                    ],
+                    [
+                      "Feel fully prepared",
+                      0.25
+                    ],
+                    [
+                      "Are confident",
+                      0.21
+                    ]
                   ]
-                ]
-              },
-              "alt": "87% of employees see data as an asset, but only 25% feel fully prepared to use it and 21% are confident in their data literacy.",
-              "highlight": {
-                "categories": [
-                  "Are confident"
-                ]
+                },
+                "alt": "87% of employees see data as an asset, but only 25% feel fully prepared to use it and 21% are confident in their data literacy.",
+                "highlight": {
+                  "categories": [
+                    "Are confident"
+                  ]
+                }
               }
             }
+          ],
+          "composition": {
+            "padding": 0.0551
           }
-        ],
-        "composition": {
-          "padding": 0.0551
+        },
+        {
+          "region": "top:end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "01",
+                  "bold": true,
+                  "color": "accent1",
+                  "fontSize": 15
+                },
+                "\n",
+                {
+                  "text": "The gap is skill, not belief",
+                  "bold": true,
+                  "fontSize": 19
+                },
+                "\n",
+                {
+                  "text": "87% see data as an asset",
+                  "color": "#5E5750",
+                  "fontSize": 15
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.1982,
+            "maxFontSize": 20
+          }
+        },
+        {
+          "region": "middle:end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "02",
+                  "bold": true,
+                  "color": "accent1",
+                  "fontSize": 15
+                },
+                "\n",
+                {
+                  "text": "Confidence drives use",
+                  "bold": true,
+                  "fontSize": 19
+                },
+                "\n",
+                {
+                  "text": "50%+ more likely to feel empowered",
+                  "color": "#5E5750",
+                  "fontSize": 15
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.1982,
+            "maxFontSize": 20
+          }
+        },
+        {
+          "region": "bottom:end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "03",
+                  "bold": true,
+                  "color": "accent1",
+                  "fontSize": 15
+                },
+                "\n",
+                {
+                  "text": "Training is the lever",
+                  "bold": true,
+                  "fontSize": 19
+                },
+                "\n",
+                {
+                  "text": "37% say training lifts productivity",
+                  "color": "#5E5750",
+                  "fontSize": 15
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.1982,
+            "maxFontSize": 20
+          }
         }
-      },
+      ],
       "notes": "This is the gap we close. Eighty-seven percent believe in data. Only one in five is confident using it. The belief is already there, so the investment goes straight into skill.",
       "section": "The business case",
       "extensions": {
@@ -921,64 +942,69 @@
         },
         "footer": false
       },
-      "middle:start+center+end": {
-        "text": [
-          {
-            "text": "AI will draft the stories. ",
-            "bold": true,
-            "color": "#FFFFFF",
-            "fontSize": 50
-          },
-          {
-            "text": "Your people decide what they mean.",
-            "bold": true,
-            "color": "#F2A07C",
-            "fontSize": 50
+      "blocks": [
+        {
+          "region": "middle:start+center+end",
+          "text": [
+            {
+              "text": "AI will draft the stories. ",
+              "bold": true,
+              "color": "#FFFFFF",
+              "fontSize": 50
+            },
+            {
+              "text": "Your people decide what they mean.",
+              "bold": true,
+              "color": "#F2A07C",
+              "fontSize": 50
+            }
+          ]
+        },
+        {
+          "region": "bottom:start+center",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": " ",
+                  "fontSize": 14
+                },
+                "\n",
+                {
+                  "text": "Gartner predicted data storytelling would become the most widespread way to consume analytics, with 75% of data stories generated by machines (2021).",
+                  "color": "#E9E2D8",
+                  "fontSize": 17
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "maxFontSize": 23
           }
-        ]
-      },
-      "bottom:end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": " ",
-                "fontSize": 14
-              },
-              "\n",
-              {
-                "text": "We teach teams to prompt AI well and keep human judgment in charge: AI in service of human agency, not in place of it.",
-                "color": "#E9E2D8",
-                "fontSize": 15
-              }
-            ]
+        },
+        {
+          "region": "bottom:end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": " ",
+                  "fontSize": 14
+                },
+                "\n",
+                {
+                  "text": "We teach teams to prompt AI well and keep human judgment in charge: AI in service of human agency, not in place of it.",
+                  "color": "#E9E2D8",
+                  "fontSize": 15
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "maxFontSize": 20
           }
-        ],
-        "composition": {
-          "maxFontSize": 20
         }
-      },
-      "bottom:start+center": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": " ",
-                "fontSize": 14
-              },
-              "\n",
-              {
-                "text": "Gartner predicted data storytelling would become the most widespread way to consume analytics, with 75% of data stories generated by machines (2021).",
-                "color": "#E9E2D8",
-                "fontSize": 17
-              }
-            ]
-          }
-        ],
-        "composition": {
-          "maxFontSize": 23
-        }
-      },
+      ],
       "notes": "AI changes the volume, not the job. Machines will draft more charts and more slides than ever. The people who learn to use AI well, and who still decide what matters, will outperform the people who don't.",
       "section": "The business case",
       "extensions": {
@@ -1052,62 +1078,67 @@
           "overlay": false
         }
       },
-      "middle:start+center+end": {
-        "text": [
-          {
-            "text": "Our job is done when your leaders ",
-            "bold": true,
-            "fontSize": 54
-          },
-          {
-            "text": "act on the story.",
-            "bold": true,
-            "color": "accent1",
-            "fontSize": 54
+      "blocks": [
+        {
+          "region": "middle:start+center+end",
+          "text": [
+            {
+              "text": "Our job is done when your leaders ",
+              "bold": true,
+              "fontSize": 54
+            },
+            {
+              "text": "act on the story.",
+              "bold": true,
+              "color": "accent1",
+              "fontSize": 54
+            }
+          ]
+        },
+        {
+          "region": "bottom:start+center",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": " ",
+                  "fontSize": 14
+                },
+                "\n",
+                {
+                  "text": "We start with the business question, find the story that matters, design it so it's clear at a glance, and coach your people to present it with confidence.",
+                  "fontSize": 18
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "maxFontSize": 24
           }
-        ]
-      },
-      "bottom:end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": " ",
-                "fontSize": 14
-              },
-              "\n",
-              {
-                "text": "15+ years in data and communication. 2025 Brandon Hall Group Silver Award for Best Competencies and Skill Development.",
-                "color": "#5E5750",
-                "fontSize": 15
-              }
-            ]
+        },
+        {
+          "region": "bottom:end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": " ",
+                  "fontSize": 14
+                },
+                "\n",
+                {
+                  "text": "15+ years in data and communication. 2025 Brandon Hall Group Silver Award for Best Competencies and Skill Development.",
+                  "color": "#5E5750",
+                  "fontSize": 15
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "maxFontSize": 20
           }
-        ],
-        "composition": {
-          "maxFontSize": 20
         }
-      },
-      "bottom:start+center": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": " ",
-                "fontSize": 14
-              },
-              "\n",
-              {
-                "text": "We start with the business question, find the story that matters, design it so it's clear at a glance, and coach your people to present it with confidence.",
-                "fontSize": 18
-              }
-            ]
-          }
-        ],
-        "composition": {
-          "maxFontSize": 24
-        }
-      },
+      ],
       "notes": "We are not a software training company. We don't teach buttons in Tableau or Power BI. We teach people to find the story, design it, and present it so a leader can act. That's how we measure success.",
       "section": "Our approach",
       "extensions": {
@@ -1187,129 +1218,134 @@
           "overlay": false
         }
       },
-      "top+middle+bottom:start": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "Find",
-                "bold": true,
-                "color": "#1E1E1E",
-                "fontSize": 32
-              },
-              "\n",
-              {
-                "text": "the story that matters",
-                "color": "#1E1E1E",
-                "fontSize": 17
-              },
-              "\n\n",
-              {
-                "text": "—  Start with the question",
-                "color": "#1E1E1E",
-                "fontSize": 16
-              },
-              "\n\n",
-              {
-                "text": "—  Map questions to actions",
-                "color": "#1E1E1E",
-                "fontSize": 16
-              },
-              "\n\n",
-              {
-                "text": "—  Write question titles",
-                "color": "#1E1E1E",
-                "fontSize": 16
-              }
-            ]
+      "blocks": [
+        {
+          "region": "top+middle+bottom:start",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "Find",
+                  "bold": true,
+                  "color": "#1E1E1E",
+                  "fontSize": 32
+                },
+                "\n",
+                {
+                  "text": "the story that matters",
+                  "color": "#1E1E1E",
+                  "fontSize": 17
+                },
+                "\n\n",
+                {
+                  "text": "—  Start with the question",
+                  "color": "#1E1E1E",
+                  "fontSize": 16
+                },
+                "\n\n",
+                {
+                  "text": "—  Map questions to actions",
+                  "color": "#1E1E1E",
+                  "fontSize": 16
+                },
+                "\n\n",
+                {
+                  "text": "—  Write question titles",
+                  "color": "#1E1E1E",
+                  "fontSize": 16
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.0752
           }
-        ],
-        "composition": {
-          "padding": 0.0752
-        }
-      },
-      "top+middle+bottom:center": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "Design",
-                "bold": true,
-                "color": "#FFFFFF",
-                "fontSize": 32
-              },
-              "\n",
-              {
-                "text": "so it's clear at a glance",
-                "color": "#FFFFFF",
-                "fontSize": 17
-              },
-              "\n\n",
-              {
-                "text": "—  Pick the chart by intent",
-                "color": "#FFFFFF",
-                "fontSize": 16
-              },
-              "\n\n",
-              {
-                "text": "—  Design numbers for leaders",
-                "color": "#FFFFFF",
-                "fontSize": 16
-              },
-              "\n\n",
-              {
-                "text": "—  Cut clutter, show the point",
-                "color": "#FFFFFF",
-                "fontSize": 16
-              }
-            ]
+        },
+        {
+          "region": "top+middle+bottom:center",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "Design",
+                  "bold": true,
+                  "color": "#FFFFFF",
+                  "fontSize": 32
+                },
+                "\n",
+                {
+                  "text": "so it's clear at a glance",
+                  "color": "#FFFFFF",
+                  "fontSize": 17
+                },
+                "\n\n",
+                {
+                  "text": "—  Pick the chart by intent",
+                  "color": "#FFFFFF",
+                  "fontSize": 16
+                },
+                "\n\n",
+                {
+                  "text": "—  Design numbers for leaders",
+                  "color": "#FFFFFF",
+                  "fontSize": 16
+                },
+                "\n\n",
+                {
+                  "text": "—  Cut clutter, show the point",
+                  "color": "#FFFFFF",
+                  "fontSize": 16
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.0752
           }
-        ],
-        "composition": {
-          "padding": 0.0752
-        }
-      },
-      "top+middle+bottom:end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "Present",
-                "bold": true,
-                "color": "#FFFFFF",
-                "fontSize": 32
-              },
-              "\n",
-              {
-                "text": "so leaders act",
-                "color": "#FFFFFF",
-                "fontSize": 17
-              },
-              "\n\n",
-              {
-                "text": "—  Open with a strong outline",
-                "color": "#FFFFFF",
-                "fontSize": 16
-              },
-              "\n\n",
-              {
-                "text": "—  Engage and check in",
-                "color": "#FFFFFF",
-                "fontSize": 16
-              },
-              "\n\n",
-              {
-                "text": "—  Narrate with emotion",
-                "color": "#FFFFFF",
-                "fontSize": 16
-              }
-            ]
+        },
+        {
+          "region": "top+middle+bottom:end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "Present",
+                  "bold": true,
+                  "color": "#FFFFFF",
+                  "fontSize": 32
+                },
+                "\n",
+                {
+                  "text": "so leaders act",
+                  "color": "#FFFFFF",
+                  "fontSize": 17
+                },
+                "\n\n",
+                {
+                  "text": "—  Open with a strong outline",
+                  "color": "#FFFFFF",
+                  "fontSize": 16
+                },
+                "\n\n",
+                {
+                  "text": "—  Engage and check in",
+                  "color": "#FFFFFF",
+                  "fontSize": 16
+                },
+                "\n\n",
+                {
+                  "text": "—  Narrate with emotion",
+                  "color": "#FFFFFF",
+                  "fontSize": 16
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.0752
           }
-        ],
-        "composition": {
-          "padding": 0.0752
         }
-      },
+      ],
       "notes": "Every program is built on one method. Find the story that matters. Design it so it's clear at a glance. Present it so leaders act. Our frameworks and templates sit under each step.",
       "section": "Our approach",
       "extensions": {
@@ -1449,93 +1485,98 @@
           "overlay": false
         }
       },
-      "top+middle+bottom:start": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "01",
-                "bold": true,
-                "color": "accent1",
-                "fontSize": 44
-              },
-              "\n",
-              {
-                "text": "Data Storytelling Workshop",
-                "bold": true,
-                "fontSize": 24
-              },
-              "\n\n",
-              {
-                "text": "Find, design and present the most important stories in your data, so insights drive decisions.",
-                "color": "#5E5750",
-                "fontSize": 17
-              }
-            ]
+      "blocks": [
+        {
+          "region": "top+middle+bottom:start",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "01",
+                  "bold": true,
+                  "color": "accent1",
+                  "fontSize": 44
+                },
+                "\n",
+                {
+                  "text": "Data Storytelling Workshop",
+                  "bold": true,
+                  "fontSize": 24
+                },
+                "\n\n",
+                {
+                  "text": "Find, design and present the most important stories in your data, so insights drive decisions.",
+                  "color": "#5E5750",
+                  "fontSize": 17
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.0752
           }
-        ],
-        "composition": {
-          "padding": 0.0752
-        }
-      },
-      "top+middle+bottom:center": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "02",
-                "bold": true,
-                "color": "accent1",
-                "fontSize": 44
-              },
-              "\n",
-              {
-                "text": "Slides to Story Workshop",
-                "bold": true,
-                "fontSize": 24
-              },
-              "\n\n",
-              {
-                "text": "Map, plan, design and present. Everyone brings a real deck and leaves with it rebuilt and presented.",
-                "color": "#5E5750",
-                "fontSize": 17
-              }
-            ]
+        },
+        {
+          "region": "top+middle+bottom:center",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "02",
+                  "bold": true,
+                  "color": "accent1",
+                  "fontSize": 44
+                },
+                "\n",
+                {
+                  "text": "Slides to Story Workshop",
+                  "bold": true,
+                  "fontSize": 24
+                },
+                "\n\n",
+                {
+                  "text": "Map, plan, design and present. Everyone brings a real deck and leaves with it rebuilt and presented.",
+                  "color": "#5E5750",
+                  "fontSize": 17
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.0752
           }
-        ],
-        "composition": {
-          "padding": 0.0752
-        }
-      },
-      "top+middle+bottom:end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "03",
-                "bold": true,
-                "color": "accent1",
-                "fontSize": 44
-              },
-              "\n",
-              {
-                "text": "Data Stories + AI Workshop",
-                "bold": true,
-                "fontSize": 24
-              },
-              "\n\n",
-              {
-                "text": "Our prompt library and the method behind it: prompt AI to find the story, design the visual and structure the deck.",
-                "color": "#5E5750",
-                "fontSize": 17
-              }
-            ]
+        },
+        {
+          "region": "top+middle+bottom:end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "03",
+                  "bold": true,
+                  "color": "accent1",
+                  "fontSize": 44
+                },
+                "\n",
+                {
+                  "text": "Data Stories + AI Workshop",
+                  "bold": true,
+                  "fontSize": 24
+                },
+                "\n\n",
+                {
+                  "text": "Our prompt library and the method behind it: prompt AI to find the story, design the visual and structure the deck.",
+                  "color": "#5E5750",
+                  "fontSize": 17
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.0752
           }
-        ],
-        "composition": {
-          "padding": 0.0752
         }
-      },
+      ],
       "notes": "Three workshops, each built for one gap. Data Storytelling for teams with data but no story. Slides to Story for decks nobody can follow. Data Stories plus AI for teams that have AI but don't use it well.",
       "section": "Programs",
       "extensions": {
@@ -1803,28 +1844,31 @@
           "overlay": false
         }
       },
-      "top+middle+bottom:start": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "One question, one message, one next step.",
-                "bold": true,
-                "fontSize": 22
-              },
-              "\n\n",
-              {
-                "text": "Every participant brings a real deck and leaves with it rebuilt this way, ready for the next leadership meeting.",
-                "color": "#5E5750",
-                "fontSize": 16
-              }
-            ]
+      "blocks": [
+        {
+          "region": "top+middle+bottom:start",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "One question, one message, one next step.",
+                  "bold": true,
+                  "fontSize": 22
+                },
+                "\n\n",
+                {
+                  "text": "Every participant brings a real deck and leaves with it rebuilt this way, ready for the next leadership meeting.",
+                  "color": "#5E5750",
+                  "fontSize": 16
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "maxFontSize": 30
           }
-        ],
-        "composition": {
-          "maxFontSize": 30
         }
-      },
+      ],
       "notes": "This is what every participant walks out with. A slide that asks one question in the title, makes one clear point, highlights the number that matters, and ends with the source and the next step.",
       "section": "Programs",
       "extensions": {
@@ -2838,92 +2882,98 @@
         },
         "footer": false
       },
-      "middle:start": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "8",
-                "bold": true,
-                "color": "#FFFFFF",
-                "fontSize": 60
-              },
-              "\n",
-              {
-                "text": "week cohort with live weekly sessions",
-                "color": "#E9E2D8",
-                "fontSize": 16
-              }
-            ]
+      "blocks": [
+        {
+          "region": "middle:start",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "8",
+                  "bold": true,
+                  "color": "#FFFFFF",
+                  "fontSize": 60
+                },
+                "\n",
+                {
+                  "text": "week cohort with live weekly sessions",
+                  "color": "#E9E2D8",
+                  "fontSize": 16
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "maxFontSize": 80
           }
-        ],
-        "composition": {
-          "maxFontSize": 80
-        }
-      },
-      "middle:center": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "33",
-                "bold": true,
-                "color": "#FFFFFF",
-                "fontSize": 60
-              },
-              "\n",
-              {
-                "text": "participants trained on their own data",
-                "color": "#E9E2D8",
-                "fontSize": 16
-              }
-            ]
+        },
+        {
+          "region": "middle:center",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "33",
+                  "bold": true,
+                  "color": "#FFFFFF",
+                  "fontSize": 60
+                },
+                "\n",
+                {
+                  "text": "participants trained on their own data",
+                  "color": "#E9E2D8",
+                  "fontSize": 16
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "maxFontSize": 80
           }
-        ],
-        "composition": {
-          "maxFontSize": 80
-        }
-      },
-      "middle:end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "4",
-                "bold": true,
-                "color": "#FFFFFF",
-                "fontSize": 60
-              },
-              "\n",
-              {
-                "text": "senior leaders coached one-on-one",
-                "color": "#E9E2D8",
-                "fontSize": 16
-              }
-            ]
+        },
+        {
+          "region": "middle:end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "4",
+                  "bold": true,
+                  "color": "#FFFFFF",
+                  "fontSize": 60
+                },
+                "\n",
+                {
+                  "text": "senior leaders coached one-on-one",
+                  "color": "#E9E2D8",
+                  "fontSize": 16
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "maxFontSize": 80
           }
-        ],
-        "composition": {
-          "maxFontSize": 80
-        }
-      },
-      "bottom:center+end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "Result: the sponsor asked us to design a continuing program for 2027",
-                "color": "#FFFFFF",
-                "fontSize": 14
-              }
-            ]
+        },
+        {
+          "region": "bottom:center+end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "Result: the sponsor asked us to design a continuing program for 2027",
+                  "color": "#FFFFFF",
+                  "fontSize": 14
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.2,
+            "maxFontSize": 19
           }
-        ],
-        "composition": {
-          "padding": 0.2,
-          "maxFontSize": 19
         }
-      },
+      ],
       "notes": "One example. An energy company ran an eight-week cohort with thirty-three participants, plus private one-on-one coaching for senior leaders on their real decks. At the end, the sponsor asked us to design a continuing program for 2027.",
       "section": "Proof",
       "extensions": {
@@ -3395,133 +3445,136 @@
           "overlay": false
         }
       },
-      "middle+bottom:start+center+end": {
-        "blocks": [
-          {
-            "blocks": [
-              {
-                "text": [
-                  {
-                    "text": "Q1",
-                    "bold": true,
-                    "color": "accent1",
-                    "fontSize": 15
-                  },
-                  "\n",
-                  {
-                    "text": "Kickoff",
-                    "bold": true,
-                    "fontSize": 22
-                  },
-                  "\n",
-                  {
-                    "text": "Workshop and capability assessment set the baseline.",
-                    "color": "#5E5750",
-                    "fontSize": 15
-                  }
-                ]
+      "blocks": [
+        {
+          "region": "middle+bottom:start+center+end",
+          "blocks": [
+            {
+              "blocks": [
+                {
+                  "text": [
+                    {
+                      "text": "Q1",
+                      "bold": true,
+                      "color": "accent1",
+                      "fontSize": 15
+                    },
+                    "\n",
+                    {
+                      "text": "Kickoff",
+                      "bold": true,
+                      "fontSize": 22
+                    },
+                    "\n",
+                    {
+                      "text": "Workshop and capability assessment set the baseline.",
+                      "color": "#5E5750",
+                      "fontSize": 15
+                    }
+                  ]
+                }
+              ],
+              "composition": {
+                "padding": 0.0846,
+                "maxFontSize": 24
               }
-            ],
-            "composition": {
-              "padding": 0.0846,
-              "maxFontSize": 24
-            }
-          },
-          {
-            "blocks": [
-              {
-                "text": [
-                  {
-                    "text": "Q1–Q2",
-                    "bold": true,
-                    "color": "accent1",
-                    "fontSize": 15
-                  },
-                  "\n",
-                  {
-                    "text": "Cohort",
-                    "bold": true,
-                    "fontSize": 22
-                  },
-                  "\n",
-                  {
-                    "text": "An 8-week cohort builds the skill on real work.",
-                    "color": "#5E5750",
-                    "fontSize": 15
-                  }
-                ]
+            },
+            {
+              "blocks": [
+                {
+                  "text": [
+                    {
+                      "text": "Q1–Q2",
+                      "bold": true,
+                      "color": "accent1",
+                      "fontSize": 15
+                    },
+                    "\n",
+                    {
+                      "text": "Cohort",
+                      "bold": true,
+                      "fontSize": 22
+                    },
+                    "\n",
+                    {
+                      "text": "An 8-week cohort builds the skill on real work.",
+                      "color": "#5E5750",
+                      "fontSize": 15
+                    }
+                  ]
+                }
+              ],
+              "composition": {
+                "padding": 0.0846,
+                "maxFontSize": 24
               }
-            ],
-            "composition": {
-              "padding": 0.0846,
-              "maxFontSize": 24
-            }
-          },
-          {
-            "blocks": [
-              {
-                "text": [
-                  {
-                    "text": "Q2–Q4",
-                    "bold": true,
-                    "color": "accent1",
-                    "fontSize": 15
-                  },
-                  "\n",
-                  {
-                    "text": "Practice",
-                    "bold": true,
-                    "fontSize": 22
-                  },
-                  "\n",
-                  {
-                    "text": "Monthly Skill Labs and 1:1 coaching sprints.",
-                    "color": "#5E5750",
-                    "fontSize": 15
-                  }
-                ]
+            },
+            {
+              "blocks": [
+                {
+                  "text": [
+                    {
+                      "text": "Q2–Q4",
+                      "bold": true,
+                      "color": "accent1",
+                      "fontSize": 15
+                    },
+                    "\n",
+                    {
+                      "text": "Practice",
+                      "bold": true,
+                      "fontSize": 22
+                    },
+                    "\n",
+                    {
+                      "text": "Monthly Skill Labs and 1:1 coaching sprints.",
+                      "color": "#5E5750",
+                      "fontSize": 15
+                    }
+                  ]
+                }
+              ],
+              "composition": {
+                "padding": 0.0846,
+                "maxFontSize": 24
               }
-            ],
-            "composition": {
-              "padding": 0.0846,
-              "maxFontSize": 24
-            }
-          },
-          {
-            "blocks": [
-              {
-                "text": [
-                  {
-                    "text": "Q4",
-                    "bold": true,
-                    "color": "accent1",
-                    "fontSize": 15
-                  },
-                  "\n",
-                  {
-                    "text": "Results",
-                    "bold": true,
-                    "fontSize": 22
-                  },
-                  "\n",
-                  {
-                    "text": "Storytelling review and a results scorecard.",
-                    "color": "#5E5750",
-                    "fontSize": 15
-                  }
-                ]
+            },
+            {
+              "blocks": [
+                {
+                  "text": [
+                    {
+                      "text": "Q4",
+                      "bold": true,
+                      "color": "accent1",
+                      "fontSize": 15
+                    },
+                    "\n",
+                    {
+                      "text": "Results",
+                      "bold": true,
+                      "fontSize": 22
+                    },
+                    "\n",
+                    {
+                      "text": "Storytelling review and a results scorecard.",
+                      "color": "#5E5750",
+                      "fontSize": 15
+                    }
+                  ]
+                }
+              ],
+              "composition": {
+                "padding": 0.0846,
+                "maxFontSize": 24
               }
-            ],
-            "composition": {
-              "padding": 0.0846,
-              "maxFontSize": 24
             }
+          ],
+          "composition": {
+            "mode": "row"
           }
-        ],
-        "composition": {
-          "mode": "row"
         }
-      },
+      ],
       "notes": "Here's what a year can look like. A kickoff workshop to set the standard, a cohort to build the skill, monthly labs and coaching to make it stick, and a review at the end to measure it.",
       "section": "Next steps",
       "extensions": {
@@ -3691,111 +3744,117 @@
           "overlay": false
         }
       },
-      "middle:start": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "01",
-                "bold": true,
-                "color": "accent1",
-                "fontSize": 16
-              },
-              "\n",
-              {
-                "text": "Book the call",
-                "bold": true,
-                "fontSize": 24
-              },
-              "\n",
-              {
-                "text": "We learn your teams, your data and your 2027 goals.",
-                "color": "#5E5750",
-                "fontSize": 17
-              }
-            ]
+      "blocks": [
+        {
+          "region": "middle:start",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "01",
+                  "bold": true,
+                  "color": "accent1",
+                  "fontSize": 16
+                },
+                "\n",
+                {
+                  "text": "Book the call",
+                  "bold": true,
+                  "fontSize": 24
+                },
+                "\n",
+                {
+                  "text": "We learn your teams, your data and your 2027 goals.",
+                  "color": "#5E5750",
+                  "fontSize": 17
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "maxFontSize": 32
           }
-        ],
-        "composition": {
-          "maxFontSize": 32
-        }
-      },
-      "middle:center": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "02",
-                "bold": true,
-                "color": "accent1",
-                "fontSize": 16
-              },
-              "\n",
-              {
-                "text": "Pick the program",
-                "bold": true,
-                "fontSize": 24
-              },
-              "\n",
-              {
-                "text": "Choose the workshops and formats that fit.",
-                "color": "#5E5750",
-                "fontSize": 17
-              }
-            ]
+        },
+        {
+          "region": "middle:center",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "02",
+                  "bold": true,
+                  "color": "accent1",
+                  "fontSize": 16
+                },
+                "\n",
+                {
+                  "text": "Pick the program",
+                  "bold": true,
+                  "fontSize": 24
+                },
+                "\n",
+                {
+                  "text": "Choose the workshops and formats that fit.",
+                  "color": "#5E5750",
+                  "fontSize": 17
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "maxFontSize": 32
           }
-        ],
-        "composition": {
-          "maxFontSize": 32
-        }
-      },
-      "middle:end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "03",
-                "bold": true,
-                "color": "accent1",
-                "fontSize": 16
-              },
-              "\n",
-              {
-                "text": "Kick off",
-                "bold": true,
-                "fontSize": 24
-              },
-              "\n",
-              {
-                "text": "We tailor every example to your data and launch.",
-                "color": "#5E5750",
-                "fontSize": 17
-              }
-            ]
+        },
+        {
+          "region": "middle:end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "03",
+                  "bold": true,
+                  "color": "accent1",
+                  "fontSize": 16
+                },
+                "\n",
+                {
+                  "text": "Kick off",
+                  "bold": true,
+                  "fontSize": 24
+                },
+                "\n",
+                {
+                  "text": "We tailor every example to your data and launch.",
+                  "color": "#5E5750",
+                  "fontSize": 17
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "maxFontSize": 32
           }
-        ],
-        "composition": {
-          "maxFontSize": 32
-        }
-      },
-      "bottom:start+center+end": {
-        "blocks": [
-          {
-            "text": [
-              {
-                "text": "datastoryacademy.com      |      Book a 15-minute call",
-                "bold": true,
-                "color": "#FFFFFF",
-                "fontSize": 16
-              }
-            ]
+        },
+        {
+          "region": "bottom:start+center+end",
+          "blocks": [
+            {
+              "text": [
+                {
+                  "text": "datastoryacademy.com      |      Book a 15-minute call",
+                  "bold": true,
+                  "color": "#FFFFFF",
+                  "fontSize": 16
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.17,
+            "maxFontSize": 22
           }
-        ],
-        "composition": {
-          "padding": 0.17,
-          "maxFontSize": 22
         }
-      },
+      ],
       "notes": "The next step is small. A fifteen-minute call. We learn about your teams and your goals, recommend the right mix, and tailor every example to your own data.",
       "section": "Next steps",
       "extensions": {
@@ -3961,34 +4020,38 @@
         },
         "footer": false
       },
-      "bottom:center+end": {
-        "blocks": [
-          {
-            "text": [
-              "\n",
-              {
-                "text": "datastoryacademy.com     |     Corporate programs for 2027     |     Book a call",
-                "color": "#FFFFFF",
-                "fontSize": 14
-              }
-            ]
+      "blocks": [
+        {
+          "region": "top+middle:start+center+end",
+          "text": [
+            {
+              "text": "What's your\nstory?",
+              "bold": true,
+              "color": "#FFFFFF",
+              "fontSize": 84
+            }
+          ]
+        },
+        {
+          "region": "bottom:center+end",
+          "blocks": [
+            {
+              "text": [
+                "\n",
+                {
+                  "text": "datastoryacademy.com     |     Corporate programs for 2027     |     Book a call",
+                  "color": "#FFFFFF",
+                  "fontSize": 14
+                }
+              ]
+            }
+          ],
+          "composition": {
+            "padding": 0.1542,
+            "maxFontSize": 19
           }
-        ],
-        "composition": {
-          "padding": 0.1542,
-          "maxFontSize": 19
         }
-      },
-      "top+middle:start+center+end": {
-        "text": [
-          {
-            "text": "What's your\nstory?",
-            "bold": true,
-            "color": "#FFFFFF",
-            "fontSize": 84
-          }
-        ]
-      },
+      ],
       "notes": "Thank you. If one of these sounds like your 2027, let's find fifteen minutes this week.",
       "extensions": {
         "dsa.graphics": {

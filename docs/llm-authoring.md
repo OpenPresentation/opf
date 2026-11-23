@@ -21,8 +21,9 @@ Write a complete JSON document with `name` and `slides`. Put visible words in sl
 Choose one content structure per slide:
 
 - Root payloads for a simple slide: `text`, `items`, `image`, `chart`, `table`, `code`, `metric`, `quote`, `timeline`, or `diagram` (Mermaid, Graphviz DOT or PlantUML source for a flow, sequence, mind map or other structure; give it an `alt` and set `syntax` for DOT or PlantUML). Mark a roadmap's progress with `status` on the timeline events (`done`, `current`, `planned`); the engines draw it, so do not add color or schedule-health words to fake it.
-- `blocks` for a sequence that should reflow. Set `composition` only when an arrangement matters. Omit it to let the engine choose.
-- Promoted regions such as `start`, `center+end`, `top`, and `bottom` for spatially meaningful content. Regions must not overlap. Do not mix regions with root payloads or blocks.
+- `blocks` for a sequence that should reflow. Omit `composition` to let the engine choose; set `composition.mode` (`auto`, `grid`, `row`, `column`), `columns` and `weights` only when an arrangement matters, and nest a group (`blocks` with its own `composition`) to keep related blocks together.
+- A layout (`layout: "chart-beside"`) for a slide whose shape has a name: its regions (`body`, `aside`, `media`, `first`, ...) take the blocks by kind, and a block's `region` pins it to one.
+- On a slide without a layout, blocks that name cells of the slide's 3 x 3 grid with `region` (`start`, `center+end`, `top`, `bottom:end`) for spatially meaningful content. Every block names a cell or none, and different cells must not overlap.
 
 Reference records by id from the pptx.gallery catalog (`gallery` of `@openpresentation/gallery`) or a catalog the host registers (`name:id` for a named group), and put the deck's own records in `catalogs.custom`. Embed what a deck uses before saving it (`embed`, `opf embed`), so it renders the same with no catalog registered. Do not invent an unresolvable layout or assume a network lookup will happen.
 

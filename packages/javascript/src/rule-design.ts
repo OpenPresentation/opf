@@ -3,11 +3,11 @@ import { imageBackground, type FontFamilies } from './composition.js';
 import type { SlideContext } from './slide-context.js';
 
 /**
- * Design resolution and colour maths for the accessibility and layout rules of `validate`.
+ * Design resolution and color math for the accessibility and layout rules of `validate`.
  *
  * The resolution mirrors what the opf-render preview and the PPTX export draw (slide design, then deck
  * design, then theme, then engine default, per field), because a check that reasons about a different
- * colour than the one on screen is worse than none. Internal module.
+ * color than the one on screen is worse than none. Internal module.
  */
 
 // biome-ignore lint/suspicious/noExplicitAny: authored JSON is walked untyped; every read is guarded.
@@ -15,7 +15,7 @@ export type Rec = Record<string, any>;
 export const rec = (value: unknown): Rec =>
 	value && typeof value === 'object' && !Array.isArray(value) ? (value as Rec) : {};
 
-// ---------------------------------------------------------------- colour maths
+// ---------------------------------------------------------------- color math
 
 type Rgb = [number, number, number];
 const toRgb = (hex: string): Rgb => {
@@ -46,7 +46,7 @@ export const relativeLuminance = (hex: string): number => {
 	return 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
 };
 
-/** WCAG 2.x contrast ratio of two opaque colours, 1..21. */
+/** WCAG 2.x contrast ratio of two opaque colors, 1..21. */
 export function contrastRatio(a: string, b: string): number {
 	const x = relativeLuminance(a),
 		y = relativeLuminance(b);
@@ -64,14 +64,14 @@ function lab(hex: string): [number, number, number] {
 		fz = f(z);
 	return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
 }
-/** CIE76 colour difference. Crude but monotone and cheap; thresholds are calibrated for it. */
+/** CIE76 color difference. Crude but monotone and cheap; thresholds are calibrated for it. */
 export function colorDifference(a: string, b: string): number {
 	const [l1, a1, b1] = lab(a),
 		[l2, a2, b2] = lab(b);
 	return Math.hypot(l1 - l2, a1 - a2, b1 - b2);
 }
 
-/** LH-35: the CIE L* step between two colours, what tells them apart in greyscale or to a reader who sees no hue. */
+/** LH-35: the CIE L* step between two colors, what tells them apart in grayscale or to a reader who sees no hue. */
 export function lightnessDifference(a: string, b: string): number {
 	return Math.abs(lab(a)[0] - lab(b)[0]);
 }
@@ -94,13 +94,13 @@ const CVD_MATRICES = {
 		[0.004733, 0.691367, 0.3039],
 	],
 } as const;
-export type VisionModel = keyof typeof CVD_MATRICES | 'greyscale';
-export const visionModels: readonly VisionModel[] = ['protanopia', 'deuteranopia', 'tritanopia', 'greyscale'];
+export type VisionModel = keyof typeof CVD_MATRICES | 'grayscale';
+export const visionModels: readonly VisionModel[] = ['protanopia', 'deuteranopia', 'tritanopia', 'grayscale'];
 
-/** The colour as seen under a colour-vision deficiency (or printed in greyscale). */
+/** The color as seen under a color-vision deficiency (or printed in grayscale). */
 export function simulateVision(hex: string, model: VisionModel): string {
 	const rgb = toRgb(hex).map(linear);
-	if (model === 'greyscale') {
+	if (model === 'grayscale') {
 		const y = 0.2126 * (rgb[0] ?? 0) + 0.7152 * (rgb[1] ?? 0) + 0.0722 * (rgb[2] ?? 0);
 		const v = delinear(y);
 		return toHex([v, v, v]);
@@ -130,7 +130,7 @@ export interface ResolvedDesign {
 	dimensions: { width: number; height: number };
 	/** The slide background after design resolution. */
 	backdrop: Backdrop;
-	/** The preview's choice: light text (`light1`) on a dark background colour, else the `text` role (`dark1`). */
+	/** The preview's choice: light text (`light1`) on a dark background color, else the `text` role (`dark1`). */
 	dark: boolean;
 	/** RR-96: the variant, its map over the scheme's slots (for PPTX `clrMap`), the six accents in its order and the scheme-derived neutrals. */
 	variant: ColorVariant;
@@ -159,9 +159,9 @@ export const colorFrom = (scheme: Rec, slot: unknown, fallback: string): string 
 	typeof slot === 'string' ? (slot.startsWith('#') ? (normalizeHexColor(slot) ?? fallback) : (normalizeHexColor(scheme[slot]) ?? fallback)) : fallback;
 
 /**
- * The background the preview draws. Like the preview, a solid, gradient-stop or pattern colour is a ColorRef: a hex colour, a
- * colour-scheme slot or role name, or a var:<id> reference (anything unresolvable falls back: the scheme's default slide
- * background, the text colour for a pattern's foreground); opacity composites over white.
+ * The background the preview draws. Like the preview, a solid, gradient-stop or pattern color is a ColorRef: a hex color, a
+ * color-scheme slot or role name, or a var:<id> reference (anything unresolvable falls back: the scheme's default slide
+ * background, the text color for a pattern's foreground); opacity composites over white.
  */
 function backdropOf(definition: unknown, scheme: Rec, text: string, variables: Rec, canvasColor?: string): Backdrop {
 	const resolve = (value: unknown, fallback: string) => backgroundColorRef(value, scheme, variables, fallback);
@@ -205,7 +205,7 @@ function backdropOf(definition: unknown, scheme: Rec, text: string, variables: R
 }
 
 /**
- * A solid or pattern background colour: a literal, a `var:` variable, or a slot or role that does not depend on the
+ * A solid or pattern background color: a literal, a `var:` variable, or a slot or role that does not depend on the
  * background itself (so the background, surface and text roles resolve through the scheme alone, as in the preview).
  */
 function backgroundColorRef(value: unknown, scheme: Rec, variables: Rec, fallback: string): string {
@@ -225,9 +225,9 @@ function backgroundColorRef(value: unknown, scheme: Rec, variables: Rec, fallbac
 }
 
 /**
- * The single colour the preview's text-colour choice reads: the resolved slide background of a theme, shortcut, solid or
- * pattern background, else undefined (no background, a picture or a gradient, which has no single colour), where the choice
- * falls back to the scheme's default slide background. Opacity is not applied. A solid or pattern colour is a ColorRef, resolved
+ * The single color the preview's text-color choice reads: the resolved slide background of a theme, shortcut, solid or
+ * pattern background, else undefined (no background, a picture or a gradient, which has no single color), where the choice
+ * falls back to the scheme's default slide background. Opacity is not applied. A solid or pattern color is a ColorRef, resolved
  * like the preview does: a literal, a `var:` variable, a slot or a role that does not depend on the background itself.
  */
 export function decisionColor(definition: unknown, scheme: Rec, variables: Rec = {}): string | undefined {
@@ -370,7 +370,7 @@ export function colorLevels(slideDesign: Rec, layout: unknown, deckDesign: Rec, 
 
 /**
  * Effective design of one slide: the same fields and the same defaults as the opf-render preview, including
- * its choice of text colour from the luminance of the background (a gradient background counts as light, as
+ * its choice of text color from the luminance of the background (a gradient background counts as light, as
  * the preview treats it).
  */
 export function resolveDesign(document: Rec, index: number, context: SlideContext): ResolvedDesign {
@@ -384,7 +384,7 @@ export function resolveDesign(document: Rec, index: number, context: SlideContex
 	const fontDiagnostic = diagnostics.find((diagnostic) => diagnostic.kind === 'fontSchemes');
 	const dimensions = { width: options.width as number, height: options.height as number };
 	const variables = rec(document.variables);
-	// The preview derives the dark/light decision from one colour, before any opacity: see decisionColor.
+	// The preview derives the dark/light decision from one color, before any opacity: see decisionColor.
 	const choice = colorChoice(colorLevels(own, resolved.layout, deck, theme, colorScheme, variables, resolved.messageSurface?.variant), colorScheme, variables);
 	const roles = resolveColorRoles(colorScheme, { background: choice.background, variant: choice.variant });
 	const dark = roles.dark;
@@ -425,7 +425,7 @@ export function resolveDesign(document: Rec, index: number, context: SlideContex
 	};
 }
 
-/** A text/background colour in a content run: the author's ColorRef resolved the way the preview resolves it. */
+/** A text/background color in a content run: the author's ColorRef resolved the way the preview resolves it. */
 export function resolveTextColor(reference: unknown, design: ResolvedDesign, fallback: string): string | undefined {
 	const transform = colorTransform(reference);
 	if (transform) { const base = resolveTextColor(transform.color, design, fallback); return base === undefined ? undefined : applyColorTransform(base, transform); }
@@ -451,14 +451,14 @@ export function resolveTextColor(reference: unknown, design: ResolvedDesign, fal
 // --------------------------------------------------------------- backdrops
 
 export interface BackdropSample {
-	/** Opaque colours the text can sit on, worst candidates first not guaranteed. */
+	/** Opaque colors the text can sit on, worst candidates first not guaranteed. */
 	colors: string[];
 	/** True when the real backdrop depends on picture pixels core does not read, so `colors` bounds it. */
 	unknown: boolean;
 }
 
 export interface BackgroundImageLayer {
-	/** Overlay colour and opacity over the picture, when the background image has a full-frame overlay. */
+	/** Overlay color and opacity over the picture, when the background image has a full-frame overlay. */
 	overlay?: { color: string; opacity: number };
 	opacity?: number;
 	/** LH-02: the darkest and lightest gray (0 to 255) the host measured under the text, which then bounds the picture instead of the full ramp. */
@@ -469,11 +469,11 @@ export interface BackgroundImageLayer {
 	band?: { color: string; opacity: number; whole: boolean };
 }
 
-const GREY_RAMP = [0, 32, 64, 96, 128, 160, 192, 224, 255].map((v) => toHex([v, v, v]));
+const GRAY_RAMP = [0, 32, 64, 96, 128, 160, 192, 224, 255].map((v) => toHex([v, v, v]));
 
 /**
- * Backdrop colours under a text box. A gradient is sampled across the box using the preview's own gradient
- * geometry; a pattern contributes both of its colours; a picture is unknown, bounded by a grey ramp through
+ * Backdrop colors under a text box. A gradient is sampled across the box using the preview's own gradient
+ * geometry; a pattern contributes both of its colors; a picture is unknown, bounded by a gray ramp through
  * any full-frame overlay (so an overlay dark or opaque enough makes the contrast certain).
  */
 export function backdropColors(
@@ -515,10 +515,10 @@ export function backdropColors(
 		}
 		case 'image': {
 			const opacity = layer?.opacity ?? backdrop.opacity;
-			const ramp = layer?.grays ? [...new Set([layer.grays[0], ...[0, 32, 64, 96, 128, 160, 192, 224, 255].filter((v) => v > layer.grays![0] && v < layer.grays![1]), layer.grays[1]])].map((v) => toHex([v, v, v])) : GREY_RAMP;
-			const colors = ramp.map((grey) => {
+			const ramp = layer?.grays ? [...new Set([layer.grays[0], ...[0, 32, 64, 96, 128, 160, 192, 224, 255].filter((v) => v > layer.grays![0] && v < layer.grays![1]), layer.grays[1]])].map((v) => toHex([v, v, v])) : GRAY_RAMP;
+			const colors = ramp.map((gray) => {
 				// RR-105: a duotone maps each gray to the ramp between its two colors.
-				const pixel = layer?.duotone ? blend(layer.duotone[1], layer.duotone[0], toRgb(grey)[0] / 255) : grey;
+				const pixel = layer?.duotone ? blend(layer.duotone[1], layer.duotone[0], toRgb(gray)[0] / 255) : gray;
 				let color = blend(pixel, backdrop.base, opacity);
 				if (layer?.overlay) color = blend(layer.overlay.color, color, layer.overlay.opacity);
 				return color;
@@ -531,7 +531,7 @@ export function backdropColors(
 	}
 }
 
-/** Smallest contrast of `text` against every backdrop colour, with the colour that produced it. */
+/** Smallest contrast of `text` against every backdrop color, with the color that produced it. */
 export function worstContrast(text: string, sample: BackdropSample): { ratio: number; against: string } {
 	let worst = { ratio: Infinity, against: sample.colors[0] ?? PAGE };
 	for (const color of sample.colors) {
@@ -541,7 +541,7 @@ export function worstContrast(text: string, sample: BackdropSample): { ratio: nu
 	return worst;
 }
 
-/** A readable replacement for `preferred` over every backdrop colour: the theme text colour when it passes, else black or white. */
+/** A readable replacement for `preferred` over every backdrop color: the theme text color when it passes, else black or white. */
 export function readableColor(candidates: readonly string[], sample: BackdropSample, minimum: number): string | undefined {
 	for (const candidate of [...candidates, '#000000', '#FFFFFF'])
 		if (worstContrast(candidate, sample).ratio >= minimum) return candidate;
