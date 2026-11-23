@@ -6099,6 +6099,9 @@ function settle(input: unknown, options: ComposeSlideOptions, result: SlideCompo
   if (PLACED_TILES.has(result)) options = { ...options, [WITH_PLACED_TILES]: true } as ComposeSlideOptions;
   const filled = growTemplate(input, options, result);
   if (filled) return filled;
+  // TAB-1: a table and its note past LONE_FILL, which LH-75 sets side by side, keep that arrangement; the growth takes the others.
+  const early = bodyFill(result, options);
+  if (early?.target !== undefined && early.fill >= LONE_FILL) { const noted = tableNote(input, options, result); if (noted) return noted; }
   const grown = growBody(input, options, result);
   if (grown) return grown;
   if (REGION_MEASURED.has(result) && bodyFill(result, options)) {
