@@ -1,6 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Dynamic composition",
+  "language": "en-US",
   "slides": [
     {
       "title": "Give the main idea more room",

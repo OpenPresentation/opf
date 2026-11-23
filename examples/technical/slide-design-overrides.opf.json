@@ -2,6 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Slide Design Overrides",
   "description": "Technical fixture for deck-level design plus slide-level overrides.",
+  "language": "en-US",
   "design": {
     "theme": "classic",
     "colorScheme": "corporate-blue",
@@ -114,7 +115,49 @@
           "colorScheme": "cool-horizon",
           "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
           "fontScheme": "tenorite",
-          "dimensions": "widescreen"
+          "dimensions": "widescreen",
+          "variants": [
+            {
+              "id": "light",
+              "name": "Light",
+              "variant": "light1"
+            },
+            {
+              "id": "light-alt",
+              "name": "Light alt",
+              "variant": {
+                "background": "light1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            },
+            {
+              "id": "dark",
+              "name": "Dark",
+              "variant": "dark1"
+            },
+            {
+              "id": "dark-alt",
+              "name": "Dark alt",
+              "variant": {
+                "background": "dark1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            }
+          ]
         }
       },
       "colorSchemes": {
@@ -124,7 +167,7 @@
           "accent2": "#0100A6",
           "accent3": "#02ACFF",
           "accent4": "#94A1B2",
-          "accent5": "#E3ECF3",
+          "accent5": "#C0D0DD",
           "accent6": "#5A82FC",
           "dark1": "#000000",
           "dark2": "#011842",

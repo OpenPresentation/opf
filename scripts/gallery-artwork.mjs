@@ -48,6 +48,8 @@ function symbol(image,x,y,size,first,second,seed){
 // drawn from shapes only, so it needs no photograph, license or network, and it crops cleanly to a slide background, an
 // image block or a round speaker portrait because the subject sits in the middle of the frame.
 function landscape(image,{width,height},palette,white,digest){
+ // Drawn for a 640-pixel-wide frame and scaled, so a larger frame shows the same picture in more detail.
+ const s=width/640;
  const phase=digest[1]/255*Math.PI*2,phase2=digest[2]/255*Math.PI*2,sunX=width*(.28+digest[3]/255*.44),sunY=height*.3,sunR=height*.11;
  const ink=rgb('#0F172A'),edge=(distance)=>Math.min(1,Math.max(0,distance+.5));
  for(let y=0;y<height;y++)for(let x=0;x<width;x++){
@@ -57,35 +59,39 @@ function landscape(image,{width,height},palette,white,digest){
   image.paint(x,y,white,edge(sunR-Math.hypot(x-sunX,y-sunY))*.92);
  }
  const ridges=[[.5,.07,.011,.0042,.52],[.6,.08,.0085,.0031,.32],[.72,.07,.007,.0026,.12]];
- const heights=ridges.map(([base,amp,f1,f2],layer)=>Array.from({length:width},(_,x)=>height*base+height*amp*(Math.sin(x*f1*Math.PI+phase+layer*1.7)*.62+Math.sin(x*f2*Math.PI*2+phase2+layer)*.38)));
+ const heights=ridges.map(([base,amp,f1,f2],layer)=>Array.from({length:width},(_,x)=>height*base+height*amp*(Math.sin(x/s*f1*Math.PI+phase+layer*1.7)*.62+Math.sin(x/s*f2*Math.PI*2+phase2+layer)*.38)));
  ridges.forEach(([,,,,haze],layer)=>{
   const color=mix(mix(palette[0],palette[1],layer/2),ink,.2+layer*.12),tinted=mix(color,white,haze);
   for(let x=0;x<width;x++)for(let y=Math.floor(heights[layer][x]-1);y<height;y++)image.paint(x,y,tinted,edge(y+.5-heights[layer][x]));
   if(layer===1){
    // Low blocky buildings on the middle ridge, like a depot or a small town in the distance.
    for(let block=0;block<5;block++){
-    const bx=width*(.12+block*.17)+((digest[4+block]%13)-6),bw=16+digest[9+block]%22,bh=10+digest[14+block]%26,top=heights[layer][Math.min(width-1,Math.max(0,Math.round(bx+bw/2)))]-bh+3;
-    image.roundRect(bx,top,bw,bh+16,2,mix(ink,white,.35),.9);
-    for(let row=0;row<Math.floor(bh/9);row++)image.roundRect(bx+4,top+4+row*9,bw-8,3,1,white,.42);
+    const bx=width*(.12+block*.17)+((digest[4+block]%13)-6)*s,bw=(16+digest[9+block]%22)*s,bh=(10+digest[14+block]%26)*s,top=heights[layer][Math.min(width-1,Math.max(0,Math.round(bx+bw/2)))]-bh+3*s;
+    image.roundRect(bx,top,bw,bh+16*s,2*s,mix(ink,white,.35),.9);
+    for(let row=0;row<Math.floor(bh/(9*s));row++)image.roundRect(bx+4*s,top+(4+row*9)*s,bw-8*s,3*s,s,white,.42);
    }
   }
  });
  // Field rows in the foreground, converging toward the horizon.
  const horizon=heights[2][Math.round(width/2)];
- for(let row=-5;row<=5;row++)image.line(width/2+row*14,horizon+6,width/2+row*118,height+8,3+Math.abs(row)*.45,mix(palette[1],white,.55),.2);
+ for(let row=-5;row<=5;row++)image.line(width/2+row*14*s,horizon+6*s,width/2+row*118*s,height+8*s,(3+Math.abs(row)*.45)*s,mix(palette[1],white,.55),.2);
 }
-export function galleryArtwork(name,index,{dark=false}={}){
+// `photo` is the size of the two full-slide pictures (cover-bg and supporting-photo). The default, 1472 x 828, is sharp
+// (96 pixels per inch) as a full-bleed background or picture on every gallery canvas, letter and 16:10 included; the
+// technical fixtures, which show them small, keep 640 x 360.
+export function galleryArtwork(name,index,{dark=false,photo=[1472,828]}={}){
  const digest=createHash('sha256').update(name).digest(),seed=digest[0],palette=palettes[index%palettes.length].map(rgb),white=rgb('#FFFFFF');
  const result={};
- for(const [kind,width,height]of [['brand-logo',320,96],['brand-logo-light',320,96],['brand-icon',128,128],['cover-bg',640,360],['supporting-photo',640,360],['watermark',256,256]]){
+ for(const [kind,width,height]of [['brand-logo',320,96],['brand-logo-light',320,96],['brand-icon',128,128],['cover-bg',...photo],['supporting-photo',...photo],['watermark',256,256]]){
   const image=canvas(width,height);
   if(kind==='supporting-photo'){
    landscape(image,image,palette,white,digest);
   }else if(kind==='cover-bg'){
+   const s=width/640;
    for(let y=0;y<height;y++)for(let x=0;x<width;x++)image.paint(x,y,mix(mix(palette[0],palette[1],(x+y)/(width+height)),white,.88));
-   for(let band=0;band<3;band++)image.line(-50,70+band*125,690,-80+band*125,32,palette[band%2],.1);
-   image.roundRect(360,46,225,260,24,white,.6);symbol(image,414,110,120,palette[0],palette[1],seed);
-   image.roundRect(66,112,210,12,6,palette[0],.2);image.roundRect(66,144,154,12,6,palette[0],.12);
+   for(let band=0;band<3;band++)image.line(-50*s,(70+band*125)*s,690*s,(-80+band*125)*s,32*s,palette[band%2],.1);
+   image.roundRect(360*s,46*s,225*s,260*s,24*s,white,.6);symbol(image,414*s,110*s,120*s,palette[0],palette[1],seed);
+   image.roundRect(66*s,112*s,210*s,12*s,6*s,palette[0],.2);image.roundRect(66*s,144*s,154*s,12*s,6*s,palette[0],.12);
   }else if(kind==='watermark'){
    const ink=dark?white:rgb('#334155');symbol(image,26,26,204,ink,ink,seed);
   }else if(kind==='brand-icon'){

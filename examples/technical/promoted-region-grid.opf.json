@@ -2,6 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Promoted Region Grid",
   "description": "Technical fixture for non-overlapping promoted region keys and span combinations.",
+  "language": "en-US",
   "slides": [
     {
       "title": "Column Spans",

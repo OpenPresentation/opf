@@ -2,6 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Chart Colors",
   "description": "Technical fixture for chart series colors: series follow the deck color scheme in order, chart.colors sets the first positions by ColorRef (a color-scheme slot, a hex color or a variable), and chart.highlight wins over it.",
+  "language": "en-US",
   "slides": [
     {
       "title": "Series follow the deck palette, and colors sets the first two",
