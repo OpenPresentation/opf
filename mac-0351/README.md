@@ -33,16 +33,16 @@ Evidence-only branch, never merged. The 0.34 pass this follows is in `mac-034/` 
 | Negative-value bar chart: category labels clipped at the left edge ("ranes", "tware") | coverage-charts 15 | still present (pixel-identical) | `sheets/negative-bar.png` |
 | Right-to-left table: only the first column drawn, clipped | digits ar-SA, ar-SA-u-nu-latn, fa-IR 4 | still present | `sheets/rtl-table-*.png` |
 | Text beside the slide-number field dropped ("Page 1 of 4" → "1", "3 / 16" → "3", "1 / 5" → "1") | footers 1, 2, 4; data-story-academy; digits | still present; `footers~static` still shows "Page 1 of 4" | `sheets/footer-*.png` |
-| Lines-only radar drawn filled; axis labels collide ("Research"/"Ship") and clip ("Researc") | coverage-charts 5 | still present (pixel-identical) | `sheets/radar-lines.png` |
-| Secondary axis shows only 0% and 40%; the legend overlaps it | coverage-charts 14 | still present (pixel-identical) | `sheets/secondary-axis.png` |
-| Solid background alpha (85%) drawn opaque | coverage-backgrounds 5 | still present (pixel-identical) | `sheets/bg-alpha.png` |
-| Tiled picture background drawn as one large tile | coverage-backgrounds 11 | still present (pixel-identical) | `sheets/bg-tile.png` |
-| Three-stop gradient shifts at its teal end | coverage-backgrounds 6 | still present (pixel-identical) | `sheets/bg-gradient.png` |
+| Lines-only radar drawn filled; axis labels collide ("Research"/"Ship") and clip ("Researc") | coverage-charts 5 | still present (pixel-identical); `a:noFill` as the series area fill makes it lines only (experiment 1) | `sheets/radar-lines.png` |
+| Secondary axis shows only 0% and 40%; the legend overlaps it | coverage-charts 14 | still present (pixel-identical); without `c:majorUnit` all five labels show (experiment 2) | `sheets/secondary-axis.png` |
+| Background alpha (85%) | coverage-backgrounds 5 | **corrected**: not drawn opaque. Keynote keeps the alpha (its PNG has alpha 217); the first version of this table dropped the alpha instead of compositing it. Over white the export matches the preview. In Keynote's window and in Play the slide shows the background over **black**: dark (20, 59, 85) where the preview, over white, shows (59, 98, 123) | `sheets/bg-alpha.png`, `experiments-1416/view/` |
+| Tiled picture background drawn as one large tile | coverage-backgrounds 11 | still present (pixel-identical); a `p:bg` picture fill tiles (experiment 4) | `sheets/bg-tile.png` |
+| Three-stop gradient shifts at its teal end | coverage-backgrounds 6 | **gone (was a tool artifact)**: with the PNG's Display P3 profile applied, Keynote matches the preview, as #1416 found | `sheets/bg-gradient.png` |
 | Area chart gap at Sep bridged | coverage-charts 13 | still present (pixel-identical) | `sheets/area-gap.png` |
 | Elbow connector routes differently | coverage-overlays 4 | **changed, still differs**: the loop now runs above Review instead of above Ship. The cause is Keynote 15.4, not OPF: the same 0.34.0 file draws the new route in 15.4, pixel-identical to 0.35.1 | `sheets/connector-elbow.png`, `sheets/connector-elbow-control.png` |
 | Curved connectors drawn straight; some elbow routes differ | shape-overlays 3, 4, 5 | still present | `sheets/connectors-shape-overlays-*.png` |
 
-"Pixel-identical" means that Keynote 15.4 draws the 0.34.0 file and the 0.35.1 file the same, and that the 0.34.0 file draws the same in 15.1.1 and in 15.4 (`control-034/`).
+The sheets apply each PNG's embedded color profile and composite alpha over white (`tools/kload.py`); the first version of this folder did neither. "Pixel-identical" compares the raw exports of both versions with the same tool, so it holds either way, and means that Keynote 15.4 draws the 0.34.0 file and the 0.35.1 file the same, and that the 0.34.0 file draws the same in 15.1.1 and in 15.4 (`control-034/`).
 
 ### 3. The three layout fixes new in 0.35.1
 
@@ -51,6 +51,25 @@ Evidence-only branch, never merged. The 0.34 pass this follows is in `mac-034/` 
 | Column layouts anchor in the middle | fixes-0351 2 (three-column); fixes-0351-twocol 1, 2 (two-column) | **holds**: the short column ("Centered rich runs", "Weekly feedback…") moves from the foot of its box to the middle, as in the preview. Columns of equal length (layout-sampler 10, 11; fixes-0351 1) do not change, as expected | `fixes/fixes-2.png`, `fixes/twocol-1.png`, `fixes/twocol-2.png` |
 | Blocks in cells: no empty band | fixes-0351 3 (top and bottom rows), 4 (diagonal) | **holds**: the empty middle row is gone; the top row grows and the diagonal blocks take halves, as in the preview | `fixes/fixes-3.png`, `fixes/fixes-4.png` |
 | Bar chart on a short table's rows | fixes-0351-nocard 1 (2 rows), 2 (4 rows) | **holds**: the table grows and each bar stays on its row. Keynote still centers the chart title over the plot (a known Keynote difference). With content boxes (fixes-0351 5, 6) the fix does not apply, as the PR says; those slides are byte-identical in both versions | `fixes/nocard-1.png`, `fixes/nocard-2.png` |
+
+## 4. Mac experiments asked for in #1416
+
+Each variant changes only the named XML part of the 0.35.1 file (`tools/variants1416.py`; files in `experiments-1416/pptx/`). Every slide outside the target is pixel-identical to the unmodified export.
+
+| #1416 item | Variant | Keynote 15.4 | Picture |
+|---|---|---|---|
+| 1, coverage-charts 5 radar | series area fill `a:solidFill` → `a:noFill` (standard and marker radar) | **Fixed:** the standard radar is drawn as lines only, its legend keys become lines. The marker radar was already lines only in 15.4, before and after. Axis-label collisions and the "Researc" clip are unchanged | `experiments-1416/radar-nofill.png` |
+| 2, coverage-charts 14 secondary axis | no `c:majorUnit` | **Fixed:** 0%, 10%, 20%, 30%, 40% | `experiments-1416/axis.png` |
+| | General number format (majorUnit kept) | no change: only 0 and 0.4 | |
+| | both | 0 to 0.4 in steps of 0.1 (no %) | |
+| | | The legend still overlaps the top label (40%) in every variant | |
+| 3, coverage-backgrounds 5 alpha | none (observed in the window and in Play, `tools/kn-view.applescript`) | Both show the 85% background composited over **black** (20, 59, 85); the preview and PowerPoint show it over white (59, 98, 123). The inspector lists it as a Color Fill | `experiments-1416/view/window-slide-5.png`, `play-slide-5.png` |
+| 4, coverage-backgrounds 11 tile | tile as the slide's `p:bg` picture fill, full-slide `p:pic` removed | **Tiles**, but each tile is about 1.33 times the preview's, as if the 640 px PNG were 72 dpi, and the grayscale recolor (`a:grayscl`) is lost: the tile shows in color | `experiments-1416/tile.png`, `tile2.png` |
+| | same, PNG with a 96 dpi `pHYs` chunk | no change: Keynote ignores the PNG's dpi | |
+| | same, tile `sx`/`sy` 75% | **2 by 2 tiles at the preview's size**, still in color | |
+| | `p:pic` with a 96 dpi PNG; `p:pic` with the tile at 50% | no change: one stretched tile | |
+
+Not run: the negative-bar label fix that #1416 says is written. It is not on any pushed branch or pull request (searched 2026-11-23).
 
 ## Not run
 

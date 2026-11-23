@@ -2,11 +2,12 @@
 usage: python3 sheet3.py <out.png> <caption> <label1>=<png1> [<label2>=<png2> ...]   (a missing file draws an empty panel)"""
 import os, sys
 from PIL import Image, ImageDraw
+from kload import load
 out, caption, panels = sys.argv[1], sys.argv[2], [a.split('=', 1) for a in sys.argv[3:]]
 W = 640
 ims = []
 for label, p in panels:
-    im = Image.open(p).convert('RGB') if os.path.exists(p) else None
+    im = load(p) if os.path.exists(p) else None
     ims.append((label, im))
 first = next(im for _, im in ims if im is not None)
 H = round(W * first.size[1] / first.size[0])

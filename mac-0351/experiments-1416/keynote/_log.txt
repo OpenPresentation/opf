@@ -1,0 +1,9 @@
+coverage-backgrounds~tile-as-bg exit=0 slides=19 size=960x540 docsBefore=0 docsAfter=0 
+coverage-backgrounds~tile-half exit=0 slides=19 size=960x540 docsBefore=0 docsAfter=0 
+coverage-backgrounds~tile-png-96dpi exit=0 slides=19 size=960x540 docsBefore=0 docsAfter=0 
+coverage-charts~axis-both exit=0 slides=19 size=960x540 docsBefore=0 docsAfter=0 
+coverage-charts~axis-general exit=0 slides=19 size=960x540 docsBefore=0 docsAfter=0 
+coverage-charts~axis-no-majorunit exit=0 slides=19 size=960x540 docsBefore=0 docsAfter=0 
+coverage-charts~radar-nofill exit=0 slides=19 size=960x540 docsBefore=0 docsAfter=0 
+coverage-backgrounds~tile-as-bg-96dpi exit=0 slides=19 size=960x540 docsBefore=0 docsAfter=0 
+coverage-backgrounds~tile-as-bg-75 exit=0 slides=19 size=960x540 docsBefore=0 docsAfter=0 
