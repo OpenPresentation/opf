@@ -945,12 +945,12 @@
  ],
  "two-column 2 long": [
   "area title 57.6,57.6,1164.8,112",
-  "region first 57.6,205.8,1164.8,444.4 column 2",
-  "region second 652,193.6,570.4,468.8 - 0 collapsed",
+  "region first 57.6,259.9,570.4,336.3 column 1",
+  "region second 652,259.9,570.4,336.3 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.text first 70.7,252.4,1138.5,150.5 32px",
-  "item blocks.1.text first 70.7,486.6,1138.5,150.5 32px"
+  "item blocks.0.text first 77.4,289.4,530.8,277.2 32px",
+  "item blocks.1.text second 671.8,289.4,530.8,277.2 32px"
  ],
  "two-column 3 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -1072,24 +1072,24 @@
  ],
  "three-column 2 long": [
   "area title 57.6,57.6,1164.8,112",
-  "region first 57.6,205.8,1164.8,444.4 column 2",
-  "region second 453.9,193.6,372.3,468.8 - 0 collapsed",
-  "region third 850.1,193.6,372.3,468.8 - 0 collapsed",
+  "region first 57.6,259.9,570.4,336.3 column 1",
+  "region second 652,259.9,570.4,336.3 column 1",
+  "region third 1222.4,193.6,0,468.8 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.text first 70.7,252.4,1138.5,150.5 32px",
-  "item blocks.1.text first 70.7,486.6,1138.5,150.5 32px"
+  "item blocks.0.text first 77.4,289.4,530.8,277.2 32px",
+  "item blocks.1.text second 671.8,289.4,530.8,277.2 32px"
  ],
  "three-column 3 long": [
   "area title 57.6,57.6,1164.8,112",
-  "region first 57.6,193.6,1164.8,468.8 column 3",
-  "region second 453.9,193.6,372.3,468.8 - 0 collapsed",
-  "region third 850.1,193.6,372.3,468.8 - 0 collapsed",
+  "region first 57.6,193.6,372.3,468.8 column 1",
+  "region second 453.9,193.6,372.3,468.8 column 1",
+  "region third 850.1,193.6,372.3,468.8 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.text first 69.6,212.5,1140.8,109.4 28px",
-  "item blocks.1.text first 69.6,376.8,1140.8,109.4 28px",
-  "item blocks.2.text first 69.6,541,1140.8,109.4 28px"
+  "item blocks.0.text first 80.9,256.5,325.7,343.1 28px",
+  "item blocks.1.text second 477.1,256.5,325.7,343.1 28px",
+  "item blocks.2.text third 873.4,256.5,325.7,343.1 28px"
  ],
  "three-column 4 long": [
   "area title 57.6,57.6,1164.8,112",
