@@ -1,4 +1,20 @@
 {
-  "version": "0.34.2",
-  "drawing": []
+  "version": "0.35.0",
+  "drawing": [
+    "fontSchemes:noto-naksh-arabic",
+    "fontSchemes:noto-sans-devangari",
+    "layouts:agenda-split",
+    "layouts:chart",
+    "layouts:comparison",
+    "layouts:flow",
+    "layouts:hero",
+    "layouts:inverted-pyramid",
+    "layouts:metrics",
+    "layouts:process",
+    "layouts:table",
+    "layouts:three-column",
+    "layouts:timeline",
+    "layouts:two-column",
+    "layouts:vertical-flow"
+  ]
 }
