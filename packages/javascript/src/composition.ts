@@ -4905,6 +4905,13 @@ const STACK_PLACE = Symbol('opf.stackPlace');
 export const PAIR_ARROW_WIDTH = 40, PAIR_ARROW_HEIGHT = 28, PAIR_ARROW_MARGIN = .75;
 /** LH-06: compose the pill at the foot of the body, where it has room, rather than right after the text it follows. */
 const PILL_AT_FOOT = Symbol('opf.pillAtFoot');
+/**
+ * opf#1412 (A4): compose an automatic slide's pull line and its data `drop` px lower, so the stack sits in the middle of the body, with the
+ * pull line's quote starting at `size` (reference px) instead of the lead size.
+ */
+const PULL_DROP = Symbol('opf.pullDrop');
+/** opf#1412 (A4): the share of the body a sparse stack of data and its grown pull line may cover (as LH-75's grown table and note). */
+const PULL_GROWN_TARGET = .75;
 /** LH-68: each tile metric's fitted sizes as a stack, by item path and role: the floor of its tile's sizes. */
 const TILE_FLOORS = Symbol('opf.tileFloors');
 /** LH-06: the longest last text that becomes a foot band, and the longest that becomes a pill beside a lone long text, in characters. */
@@ -7526,13 +7533,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // The pull line is laid out across the body's width from the top of a tall box, which measures its height; it is drawn at the foot
   // (the body ends a gap above it) or under the headings (the body starts a gap below it). A body under twice its height, or a quote
   // that needs more than QUOTE_PULL_LINES lines at the body text size, keeps the card.
-  let pullItem: ComposedItem | undefined, placePull: ((top: number) => ComposedItem) | undefined;
+  let pullItem: ComposedItem | undefined, placePull: ((top: number) => ComposedItem) | undefined, pullSpan: { top: number; bottom: number } | undefined;
+  let layPull: ((top: number, room: number, size: number) => QuoteLayout) | undefined;
   if (pullQuote) {
+    // opf#1412 (A4): the body the pull line and its data share, before either takes its part. The second composition (PULL_DROP) moves
+    // that body down whole, keeping its height, so every block is composed at the same size, one drop lower (the stack never reached the
+    // foot it moves into).
+    pullSpan = { top: y, bottom: bodyBottom };
+    const pullDrop = useTemplate ? undefined : (options as Record<symbol, unknown>)[PULL_DROP] as { drop: number; size: number } | undefined;
+    const drop = pullDrop?.drop ?? 0, pullSize = pullDrop?.size ?? LEAD_NOMINAL_SIZE;
+    y += drop; bodyBottom += drop;
     const blockPath = `${path}.blocks.${pullQuote.block}`, quotePath = `${blockPath}.quote`, value = record(slide.blocks[pullQuote.block]).quote as string | QuoteContent;
     const x = area.left + padding, width = area.right - area.left - padding * 2, language = quoteLanguage(options.presentation, options.slideIndex);
-    const lay = (top: number, room: number) => layoutQuote(value, { x, y: top, width, height: room }, {
+    const lay = (top: number, room: number, size = pullSize) => layoutQuote(value, { x, y: top, width, height: room }, {
       fontFamilies: options.fontFamilies, textMeasurement: options.textMeasurement, scale, minFontSize: composition.minFontSize, path: quotePath, direction: textDirection,
-      ...(citationMarker ? { citationMarker } : {}), ...(language !== undefined ? { language } : {}), pull: true, bodySize: LEAD_NOMINAL_SIZE, bodyLines: QUOTE_PULL_LINES });
+      ...(citationMarker ? { citationMarker } : {}), ...(language !== undefined ? { language } : {}), pull: true, bodySize: size, bodyLines: QUOTE_PULL_LINES });
+    layPull = lay;
     const measured = lay(y, Math.max(scale, bodyBottom - y)), bodyPart = measured.parts.find(part => part.role === 'body');
     const lines = bodyPart?.fit ? 'richLines' in bodyPart.fit ? (bodyPart.fit as RichTextFit).richLines.length : bodyPart.fit.lines.length : Infinity;
     const height = round(measured.bounds.height);
@@ -11183,6 +11199,29 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const extents = body.map(extent), top = Math.min(...extents.map(([from]) => from)), bottom = Math.max(...extents.map(([, to]) => to));
       const at = pullQuote?.position === 'foot' ? round(Math.min(pulled.box.y, bottom + gap)) : round(Math.max(pulled.box.y, top - gap - pulled.box.height));
       if (Math.abs(at - pulled.box.y) > .5) { const moved = placePull(at); if (items.includes(pulled)) items[items.indexOf(pulled)] = moved; pullItem = moved; }
+      // opf#1412 (A4): on a slide with no layout the stack of the data and its pull line sits in the middle of the body, not at its top
+      // over an empty foot. A sparse stack draws its pull line as a quote: the quote starts one or more steps of the type scale above the
+      // lead size, up to a lone quote's display size, at the largest start whose lines (at most QUOTE_PULL_LINES) keep the stack within
+      // PULL_GROWN_TARGET of the body (LH-75's grown share) and never set the quote smaller than the lead size does. The slide is then composed again with the body
+      // starting lower by half the space the stack leaves and the quote at that start (PULL_DROP).
+      if (!useTemplate && pullSpan && layPull && (options as Record<symbol, unknown>)[PULL_DROP] === undefined) {
+        const span = pullSpan.bottom - pullSpan.top, data = bottom - top, sizeOf = (laid: QuoteLayout) => laid.parts.find(part => part.role === 'body')?.fit?.fontSize ?? 0;
+        const linesOf = (laid: QuoteLayout) => { const fit = laid.parts.find(part => part.role === 'body')?.fit; return fit ? 'richLines' in fit ? (fit as RichTextFit).richLines.length : fit.lines.length : Infinity; };
+        let size = LEAD_NOMINAL_SIZE, height = pullItem.box.height, drawn = pullItem.text?.fontSize ?? 0;
+        for (let step = 1; LEAD_NOMINAL_SIZE * TYPE_SCALE_RATIO ** step <= LONE_DISPLAY_SIZES.quote + 1e-6; step++) {
+          const start = LEAD_NOMINAL_SIZE * TYPE_SCALE_RATIO ** step, laid = layPull(0, span, start), need = round(laid.bounds.height);
+          if (laid.overflow || linesOf(laid) > QUOTE_PULL_LINES || sizeOf(laid) < drawn + FONT_GRID_EPSILON || data + gap + need > PULL_GROWN_TARGET * span) continue;
+          size = start; height = need; drawn = sizeOf(laid);
+        }
+        const stackTop = Math.min(top, pullItem.box.y), drop = pullSpan.top + (span - (data + gap + height)) / 2 - stackTop;
+        if (drop > scale || size !== LEAD_NOMINAL_SIZE) return composeLayout(input, { ...options, [PULL_DROP]: { drop: round(Math.max(0, drop)), size } } as ComposeSlideOptions);
+      }
+      // The body moved down whole: the cells that now reach past its foot (empty there) end at it, and so does the content box.
+      if (pullSpan && (options as Record<symbol, unknown>)[PULL_DROP] !== undefined) {
+        const foot = pullSpan.bottom, clip = (box: LayoutBox): LayoutBox => box.y + box.height > foot ? { ...box, height: Math.max(scale, foot - box.y) } : box;
+        for (const item of body) { item.box = clip(item.box); if (item.frameBox) item.frameBox = clip(item.frameBox); }
+        contentBox.height = clip(contentBox).height;
+      }
     }
   }
   if (pullItem && pullQuote?.position === 'foot') items.push(pullItem);
