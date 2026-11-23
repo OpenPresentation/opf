@@ -56,6 +56,30 @@ with the text below, this section is current.
    - the conformance suite and governance document on `claude/amazing-faraday-28p6dh`, which is finished and has no
      pull request.
 
+7. **Keynote fixes from the Mac pass on 0.35.1** (Keynote 15.4, macOS 26.6.2, the published packages; results in
+   [opf#1416](https://github.com/OpenPresentation/opf/issues/1416#issuecomment-7117367803), evidence on
+   `codex/evidence-mac-0351` at `9c629a37`). None changes the format. Each is a small PPTX export fix that lands ahead of
+   the request work and ships in 0.36.0:
+   - **Radar drawn as lines only** (item 1): write no fill as each series' area fill, for the standard and the marker
+     radar. Verified in Keynote; the issue records that PowerPoint draws both forms the same. Not fixed by it: the
+     axis labels still collide and clip.
+   - **Secondary value axis** (item 2): do not write a fixed step on the secondary axis. Keynote then shows 0% to 40% in
+     steps of 10%. Still to check: that PowerPoint's automatic step gives the same labels; if not, write the step only
+     where the automatic one would differ. Not fixed by it: the legend over the top label.
+   - **Semi-transparent slide background** (item 3): Keynote lays it over black, so it draws darker than the preview
+     and PowerPoint. Writing the color already mixed onto white makes Keynote match. Recommendation: only in the opt-in
+     Keynote route ([opf#1298](https://github.com/OpenPresentation/opf/issues/1298)), because as the default it removes
+     the editable transparency value for every PowerPoint user. The owner decides.
+   - **Tiled picture background** (item 4): as the slide's background fill Keynote tiles, at 75% scale to match the
+     preview, but drops the grayscale recolor. Opt-in Keynote route only, since that scale is wrong in PowerPoint, with
+     the recolor baked into the picture. The baked variant has not been tested on the Mac.
+   - **Negative-value bar labels**: the fix the issue says is written is on no pushed branch or pull request. Push it
+     so it can get its Keynote check.
+   - **Items 5 to 8 of opf#1416** (reference label placement, direct line labels, the theme's hyperlink color,
+     connector routes) and [opf#1415](https://github.com/OpenPresentation/opf/issues/1415) (four preview differences
+     from PowerPoint), as those issues describe. For item 8: the elbow route changed because of Keynote 15.4, not
+     OPF; the same 0.34.0 file draws the new route.
+
 The original request texts are in the STORYD repository (`docs/opf-change-requests.md`,
 `docs/templates-and-variables.md`), which this work could not read. CR 11 still has no text here.
 
