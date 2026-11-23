@@ -4783,11 +4783,32 @@ function regionParts(key: string): [number[], number[]] | undefined {
   }
   return undefined;
 }
-function regionBox(parts: [number[], number[]], area: LayoutBox, requestedGap: number): LayoutBox {
+/** The rows and columns of the cell grid that take no space (cellTracks): none by default. */
+type CellTracks = { rows: readonly boolean[]; columns: readonly boolean[] };
+const ALL_CELL_TRACKS: CellTracks = { rows: [false, false, false], columns: [false, false, false] };
+/**
+ * OPF 0.35.1: the rows and the columns of a slide's 3 x 3 cell grid that give their space away. A row (a column) in which no block begins
+ * or ends (no block names it, or each block that does runs through it, as `start` runs through the middle row), with a block wholly before
+ * it and a block wholly after it, holds no position of its own: the blocks on either side already pin the top and the bottom (the start
+ * and the end), so it takes no space and the rows on either side share the body (a block that ran through it still spans them all). A
+ * row no block names at the edge of the grid keeps its third: it is what puts a lone `bottom:end` block at the bottom, or
+ * `middle+bottom` rows below an empty top; so does a row with nothing wholly on one side of it (`start` beside `top:center+end` alone).
+ */
+function cellTracks(cells: readonly [number[], number[]][]): CellTracks {
+  const between = (spans: number[][]) => [0, 1, 2].map(index => spans.every(span => !span.includes(index) || (span.includes(index - 1) && span.includes(index + 1)))
+    && spans.some(span => span.every(at => at < index)) && spans.some(span => span.every(at => at > index)));
+  return { rows: between(cells.map(cell => cell[0])), columns: between(cells.map(cell => cell[1])) };
+}
+function regionBox(parts: [number[], number[]], area: LayoutBox, requestedGap: number, tracks: CellTracks = ALL_CELL_TRACKS): LayoutBox {
   const gap = Math.min(requestedGap, area.width / 6, area.height / 6);
-  const cw = (area.width - gap * 2) / 3, ch = (area.height - gap * 2) / 3;
-  const [r, c] = parts;
-  return { x: area.x + Math.min(...c) * (cw + gap), y: area.y + Math.min(...r) * (ch + gap), width: (Math.max(...c) - Math.min(...c) + 1) * (cw + gap) - gap, height: (Math.max(...r) - Math.min(...r) + 1) * (ch + gap) - gap };
+  // Each track that takes space gets an equal share of the area, one gap between neighbors; a track that gives its space away has none.
+  const span = (start: number, length: number, named: number[], dropped: readonly boolean[]): [number, number] => {
+    const kept = [0, 1, 2].filter(index => !dropped[index]), size = (length - gap * (kept.length - 1)) / kept.length;
+    const first = Math.min(...named), last = Math.max(...named), before = kept.filter(index => index < first).length, inside = kept.filter(index => index >= first && index <= last).length;
+    return [start + before * (size + gap), inside * (size + gap) - gap];
+  };
+  const [y, height] = span(area.y, area.height, parts[0], tracks.rows), [x, width] = span(area.x, area.width, parts[1], tracks.columns);
+  return { x, y, width, height };
 }
 function gridGeometry(count: number, area: LayoutBox, cols: number, gap: number, weights: number[], vertical: boolean) {
   const rowCount = Math.ceil(count / cols);
@@ -7108,6 +7129,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const backgroundImage = resolveBackgroundImage(slide, options.presentation, options.themeBackground, options.layout, width, height, path, mirrorSide, imageDiagnostics);
   measuredPicture = backgroundImage !== undefined && typeof options.pictureLuminance === 'function';
   const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
+  const regionTracks = cellTracks(regions.map(key => regionParts(key)!));
   const assets = record(options.presentation).assets;
   // WI-3 (P33): a slide composed with no layout shows its pictures whole unless a design or the block sets a fit: the default
   // fit of automatic composition is `contain`, a placed (edge) picture and every layout keep the engine default `cover`.
@@ -8317,6 +8339,33 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const item = items[first];
     if (item && hasCards) item.frameBox = acceptedBox(cell);
   };
+  // OPF 0.35.1: when the middle row of the cell grid gives its space away (cellTracks), the bottom row moves up to meet the top one. A block
+  // of the bottom row with no top-row block above it (in none of its columns: a diagonal, a corner) then sits at the foot of its cell, so a
+  // `bottom` block stays at the bottom of the body; one under a top-row block keeps the top of its cell and follows that block. A lone
+  // block that grows (LH-48) grows as before and is then placed so; a text, list, quote, metric, code panel, table or timeline shorter than
+  // its cell takes the height it needs; a picture, video, diagram, shape and a chart its box allows are placed by the same anchor. Its
+  // cell stays its tile (LH-69). A slide that draws cards keeps every card filling its cell, its payload at the top, as every other block keeps
+  // the top of its cell.
+  const cellOfItem = new WeakMap<ComposedItem, LayoutBox>();
+  const cellAnchor = ([cellRows, cellColumns]: [number[], number[]]): RegionAnchor =>
+    !hasCards && regionTracks.rows[1] && cellRows.includes(2) && !regions.some(key => { const [above, under] = regionParts(key)!; return above.includes(0) && under.some(column => cellColumns.includes(column)); }) ? 'bottom' : 'top';
+  const placeInCell = (node: Pending, cell: LayoutBox, settings: Composition, anchor: RegionAnchor): void => {
+    const lone = node.fills ? fillLone(node, cell, settings, false) : undefined;
+    if (lone) {
+      contentSized.add(node);
+      placeNode(node, { ...lone, y: cell.y + anchoredOffset(cell.height - lone.height, anchor) }, settings, undefined, undefined, undefined, anchor);
+      return;
+    }
+    if (MEASURED_FIELDS.has(node.field)) {
+      const need = naturalHeight(node, cell.width, false, undefined, settings) + 2 * rasterPadding + scale;
+      if (need < cell.height) {
+        contentSized.add(node);
+        placeNode(node, { ...cell, y: cell.y + anchoredOffset(cell.height - need, anchor), height: need }, settings, undefined, undefined, undefined, anchor);
+        return;
+      }
+    }
+    placeNode(node, cell, settings, undefined, undefined, undefined, anchor);
+  };
   const arrange = (nodes: Pending[], area: LayoutBox, settings: Composition, reserved = 0, gapOverride?: number, containerPath = path, recorded = true): void => {
     const count = Math.max(nodes.length, reserved);
     if (!count) return;
@@ -8436,15 +8485,18 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // little of it (LH-48's growBody composes them with CENTER), set their blocks as one band in the middle of the body, each at the height
     // the tallest of them needs, instead of each at the top of its column over an empty foot.
     const regionBand = (options as Record<symbol, unknown>)[CENTER] === true && hasRegions && !pullItem && area === contentBox && nodes.every(node => node.region?.[0].length === rows.length && proseLeaf(node))
-      ? Math.max(...nodes.map(node => naturalHeight(node, regionBox(node.region!, area, actualGap).width, hasCards && !insideTier, undefined, settings) + 2 * rasterPadding + scale)) : undefined;
+      ? Math.max(...nodes.map(node => naturalHeight(node, regionBox(node.region!, area, actualGap, regionTracks).width, hasCards && !insideTier, undefined, settings) + 2 * rasterPadding + scale)) : undefined;
     nodes.forEach((node, index) => {
-      const placed = node.region ? mirrored(regionBox(node.region, area, actualGap)) : boxes[index]!;
+      const placed = node.region ? mirrored(regionBox(node.region, area, actualGap, regionTracks)) : boxes[index]!;
       const box = regionBand !== undefined && regionBand < placed.height ? { ...placed, y: placed.y + (placed.height - regionBand) / 2, height: regionBand } : placed;
       const first = items.length;
       // A retained timeline-note row was allocated its measured text height. As with a template auto row, a fully measured
       // short note cell is content-sized, rather than an arbitrary small grid cell.
       if ((options as Record<symbol, unknown>)[TIMELINE_NOTE_REFLOW] !== undefined && !node.children && node.field === 'text' && retainedProse?.has(node.path) && box.height >= naturalHeight(node, box.width, hasCards && !insideTier, undefined, settings) - 1e-6) contentSized.add(node);
-      if (filled) placeSplitBlock(node, box, settings); else placeNode(node, box, settings);
+      const anchor = node.region && box === placed && !filled && !node.children ? cellAnchor(node.region) : 'top';
+      if (filled) placeSplitBlock(node, box, settings);
+      else if (anchor !== 'top') { placeInCell(node, box, settings, anchor); for (const item of items.slice(first)) cellOfItem.set(item, box); }
+      else placeNode(node, box, settings);
       if (!hasRegions && (cols > 1 || stacks) && !node.children) stack.push(...range(first, items.length));
     });
     if (stack.length > 1) peerSets.push(stack);
@@ -8834,7 +8886,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     else if (node.field === 'chart' && !templateCell && modeFor(settings) === 'auto' && box.height > chartMaxHeight(node, box.width)) {
       // RR-105: the slide's only chart is centered in the body it does not fill (the owner's direction: a lone body is centered).
       const height = chartMaxHeight(node, box.width);
-      box = roundBox({ ...box, ...(node.lone ? { y: box.y + (box.height - height) / 2 } : {}), height });
+      box = roundBox({ ...box, ...(node.lone ? { y: box.y + (box.height - height) / 2 } : anchor !== 'top' ? { y: box.y + anchoredOffset(box.height - height, anchor) } : {}), height });
     }
     // LH-74: a picture alone on a card (no caption, no frame, shape or line of its own) that covers its frame fills the card to its edges,
     // clipped to the card's radius, with no inset and no stroke: the picture is the card, so none is drawn under it. A picture shown whole
@@ -12068,7 +12120,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const tiled = items.filter(item => item.field === 'text' && displayFaces.has(item.path) && item.text && !item.eyebrow && !item.emphasis && item.caption === undefined && typeof item.value === 'string' && !PLACED_SENTENCE.test(item.value.trim()));
     if (!tiled.length) return undefined;
     const heightOf = (fit: TextFit | RichTextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
-    const cells = tiled.map(item => item.box), texts = tiled.map(item => flatten(item.value).trim());
+    const cells = tiled.map(item => cellOfItem.get(item) ?? item.box), texts = tiled.map(item => flatten(item.value).trim());
     const fitAt = (index: number, box: LayoutBox, size: number) => fitPlacedText('text', tiled[index]!.value, texts[index]!, box, size, size, tiled[index]!.path, tiled[index]!.alignment);
     const reads = (index: number, size: number): boolean => {
       const inner = cardInner(cells[index]!), fit = fitAt(index, inner, size);
