@@ -20,7 +20,7 @@
     "titleAlignment": "start",
     "contentBox": true,
     "imageFit": "contain",
-    "listBullet": "image"
+    "listBullet": "character"
   },
   "slides": [
     {

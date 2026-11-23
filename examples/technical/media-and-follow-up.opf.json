@@ -1,5 +1,6 @@
 {
   "name": "Media And Follow-Up Example",
+  "language": "en-US",
   "design": {
     "imageFit": "contain"
   },
@@ -8,11 +9,9 @@
       "title": "Product Snapshot",
       "blocks": [
         {
-          "region": "start",
           "image": "asset:product-shot"
         },
         {
-          "region": "center+end",
           "text": "The dashboard pulls review status, owners, and exceptions into one operating view."
         }
       ]
@@ -21,7 +20,6 @@
       "title": "Follow-Up",
       "blocks": [
         {
-          "region": "start+center+end",
           "items": [
             "Confirm owners for open exceptions.",
             "Review aging thresholds with operations leads.",
@@ -32,6 +30,9 @@
     }
   ],
   "assets": {
-    "product-shot": "./assets/product-shot.png"
+    "product-shot": {
+      "src": "./assets/product-shot.png",
+      "alt": "Operations dashboard with review status, owners and exceptions"
+    }
   }
 }
