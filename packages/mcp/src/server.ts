@@ -1103,36 +1103,37 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		// The bundled example decks name image files by a relative path (./assets/logo.svg), which the viewer cannot load: it asks for
 		// them here by that path and draws the deck's ./assets/<name> with what comes back. The answer is a lookup in the examples'
 		// own files (ExamplePage.files): a path no example's file has is reported missing, and nothing is read from disk or fetched.
+		// It is registered whenever the viewer is, also with no example files (every path is then missing): a host that answers
+		// tools/list from a server built without its examples must still list the tool, or a client that lets a view call only
+		// the listed tools refuses the viewer's call.
 		const exampleFiles = new Map<string, string>();
 		for (const example of sources.examples) {
 			for (const [name, data] of Object.entries(example.files ?? {})) if (!exampleFiles.has(name) && EXAMPLE_FILE_DATA.test(data)) exampleFiles.set(name, data);
 		}
-		if (exampleFiles.size) {
-			server.registerTool(
-				"read_example_files",
-				{
-					title: "Read example images for the OPF viewer",
-					description: `Used by the OPF viewer only (it cannot fetch): the image files the bundled example decks name by a relative path (./assets/logo.svg), up to ${EXAMPLE_FILE_BATCH} a call, as base64 data URIs. Only the files the examples ship; any other path is reported missing. Do not call it yourself.`,
-					inputSchema: { names: z.array(z.string().max(200)).max(EXAMPLE_FILE_BATCH).describe(`Up to ${EXAMPLE_FILE_BATCH} paths as a deck names them (./assets/logo.svg).`) },
-					outputSchema: { files: z.record(z.string(), z.string()), missing: z.array(z.string()) },
-					annotations: { ...READ_ONLY, title: "Read example images for the OPF viewer" },
-					// SEP-1865: callable by the view, hidden from the model.
-					_meta: { ui: { visibility: ["app"] } },
-				},
-				async ({ names }) => {
-					const asked = [...new Set(names)];
-					const files: Record<string, string> = {};
-					const missing: string[] = [];
-					for (const name of asked) {
-						const data = exampleFiles.get(name);
-						if (data) files[name] = data;
-						else missing.push(name);
-					}
-					// The data goes to the view only: the text says what it is.
-					return { content: [{ type: "text" as const, text: `Example files: ${Object.keys(files).length} of ${asked.length}${missing.length ? `; not shipped: ${missing.join(", ")}` : ""}.` }], structuredContent: { files, missing } };
-				},
-			);
-		}
+		server.registerTool(
+			"read_example_files",
+			{
+				title: "Read example images for the OPF viewer",
+				description: `Used by the OPF viewer only (it cannot fetch): the image files the bundled example decks name by a relative path (./assets/logo.svg), up to ${EXAMPLE_FILE_BATCH} a call, as base64 data URIs. Only the files the examples ship; any other path is reported missing. Do not call it yourself.`,
+				inputSchema: { names: z.array(z.string().max(200)).max(EXAMPLE_FILE_BATCH).describe(`Up to ${EXAMPLE_FILE_BATCH} paths as a deck names them (./assets/logo.svg).`) },
+				outputSchema: { files: z.record(z.string(), z.string()), missing: z.array(z.string()) },
+				annotations: { ...READ_ONLY, title: "Read example images for the OPF viewer" },
+				// SEP-1865: callable by the view, hidden from the model.
+				_meta: { ui: { visibility: ["app"] } },
+			},
+			async ({ names }) => {
+				const asked = [...new Set(names)];
+				const files: Record<string, string> = {};
+				const missing: string[] = [];
+				for (const name of asked) {
+					const data = exampleFiles.get(name);
+					if (data) files[name] = data;
+					else missing.push(name);
+				}
+				// The data goes to the view only: the text says what it is.
+				return { content: [{ type: "text" as const, text: `Example files: ${Object.keys(files).length} of ${asked.length}${missing.length ? `; not shipped: ${missing.join(", ")}` : ""}.` }], structuredContent: { files, missing } };
+			},
+		);
 	}
 
 	// -------------------------------------------------------------------------------------------------------------------

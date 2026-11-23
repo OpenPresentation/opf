@@ -326,7 +326,9 @@ function rewriteText(text, db, generics, shape) {
         for (const line of decorationLines(run.face, decoration, scale)) parts.push(`<rect${paint} x="${stable(piece.x)}" y="${stable(y + line.offset)}" width="${stable(piece.advance)}" height="${stable(line.thickness)}"/>`);
         continue;
       }
-      const attrs = [...spanAttrs].map(([key, value]) => ` ${key}="${escapeAttr(value)}"`).join("");
+      // The piece states its own xml:space (its white space is already resolved), so a span's copy is not repeated: an attribute
+      // written twice is not XML, and resvg refuses the whole slide.
+      const attrs = [...spanAttrs].filter(([key]) => key !== "xml:space").map(([key, value]) => ` ${key}="${escapeAttr(value)}"`).join("");
       parts.push(`<text x="${stable(piece.x)}" y="${stable(y)}"${attrs} text-anchor="start" xml:space="preserve">${escapeText(value)}</text>`);
     }
   }

@@ -526,6 +526,9 @@ describe("the bundled sources", () => {
 		// specific arrangement (design-resolution.md +75, dynamic-composition.md -33), fix() returns the 0.35 form (node.md +39), embed
 		// replaces a stale copy with the current record (default-catalog.md +32), and opf fix drops layoutWithCells (cli.md -71). The
 		// limit is unchanged.
+		// Reviewed for the always-listed read_example_files on 2026-11-22: 1,400,272 exact bytes (main at 9523eddc3: 1,400,038).
+		// It adds 234 in mcp.md: the tool is listed whenever the viewer is offered, and a host that leaves the examples' files out
+		// answers every path as missing. The limit is unchanged.
 		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
 	});
 });
