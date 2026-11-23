@@ -161,7 +161,7 @@ assert.equal(measurement.measure('Revenue grew 12%.',25,style),fonts.registry.te
 assert.ok(measurement.outlineBounds('中文 and',25,style).width>0);
 
 // A Japanese language in a Latin deck: the East Asian slot is the language's
-// font (Meiryo), previewed with its designated replacement.
+// font (Yu Gothic since 0.35), previewed with its designated replacement.
 const latinJapanese=toSvg(deck('ja','roboto','Quarterly 四半期','Body'), 1, {fonts: fonts});
 assert.deepEqual(scriptRuns(latinJapanese).map(([family])=>family),['Noto Sans JP']);
 // Han with a Traditional Chinese language uses the TC face.
@@ -197,7 +197,7 @@ assert.ok(!diagnostics.some(item=>/^language-preview/.test(item.code)),'no langu
 
 // Estimated previews (no registry) name every candidate so the host resolves glyphs.
 const estimated=toSvg(deck('ja','roboto','Quarterly 四半期','Body'), 1);
-assert.match(estimated,/<tspan font-family="Meiryo, Noto Sans JP, Noto Serif JP, sans-serif">四半期<\/tspan>/);
+assert.match(estimated,/<tspan font-family="Yu Gothic, Noto Sans JP, Noto Serif JP, sans-serif">四半期<\/tspan>/);
 assert.doesNotMatch(toSvg(deck('en','roboto','Quarterly review','Body'), 1),/<tspan/);
 
 // Raster output is deterministic and draws the script faces from fontFiles.
