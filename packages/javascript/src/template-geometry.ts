@@ -193,7 +193,8 @@ export function listColumnBreaks(heights: readonly number[], levels: readonly nu
       if (!allowed[next]) continue;
       const rest = solve(next, columns - 1);
       const cost = Math.max(span(start, next), rest.cost);
-      if (cost < best.cost - 1e-9) best = { cost, breaks: [next, ...rest.breaks] };
+      // C09: of breaks that keep the tallest column as short, the later one wins, so the first columns are the longer (7 as 4 + 3).
+      if (cost < best.cost - 1e-9 || (best.breaks.length && cost <= best.cost + 1e-9)) best = { cost, breaks: [next, ...rest.breaks] };
     }
     memo.set(key, best);
     return best;

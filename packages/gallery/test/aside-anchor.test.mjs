@@ -1,6 +1,6 @@
 // A layout's aside beside a figure sets its content in the middle of the aside, level with the figure: chart-beside's aside was
 // as tall as the chart while its text, list, metric or quote stood in the top third (0.35.1 and before, C02); code's aside started
-// at the top of the snippet's column (C07).
+// at the top of the snippet's column (C07). An agenda's columns stand in the middle of its body (C09).
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { composeSlide } from '@openpresentation/opf/composition';
@@ -36,3 +36,18 @@ test('code: a short aside stands level with the middle of a short snippet', () =
   assert.ok(code && text);
   assert.ok(Math.abs(middle(code.box) - middle(text.box)) <= 0.25 * code.box.height, `the aside's middle (${middle(text.box)}) is level with the snippet's (${middle(code.box)})`);
 });
+
+// C09: an agenda's columns stand in the middle of the body as one block, as a short agenda does; the first column is the longer.
+test('agenda: the body region is anchored in the middle', () => assert.equal(gallery.layouts.agenda.regions.find((region) => region.name === 'body').anchor, 'middle'));
+for (const count of [7, 10]) {
+  test(`agenda: ${count} entries in columns stand in the middle of the body, the first column the longer`, () => {
+    const names = ['Welcome', 'Problem', 'Pilot design', 'Evidence', 'Team B', 'Options', 'Risks', 'Costs', 'Decision', 'Questions'];
+    const result = compose('agenda', { title: 'Agenda', blocks: [{ items: names.slice(0, count) }] });
+    const list = result.items.find((item) => item.field === 'items'), region = result.regions.find((entry) => entry.name === 'body');
+    assert.equal(list.listColumns.length, 2);
+    const [first, second] = list.listColumns.map((column) => column.end - column.start);
+    assert.ok(first >= second, `${first} + ${second}`);
+    const entries = list.text.listEntries, top = Math.min(...entries.map((entry) => entry.textBox.y)), bottom = Math.max(...entries.map((entry) => entry.textBox.y + entry.textBox.height));
+    assert.ok(Math.abs((top + bottom) / 2 - middle(region.box)) <= 0.08 * region.box.height, `centered (${top}..${bottom} in ${region.box.y}..${region.box.y + region.box.height})`);
+  });
+}

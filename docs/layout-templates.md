@@ -361,7 +361,9 @@ size (a column at least a quarter of the slide wide); `columns: 2` or `3` fixes 
 region's columns are kept only when they set the list at least as large as one column of the same cell would (a region whose first
 accepted kind is `list` keeps LH-184's reading measure: columns up to a type-scale step under one column whose lines would run past
 it), and columns that overflow give way to one column that fits (in a list region, one at least as large). `auto` never deals a
-list of 6 or fewer entries across columns (LH-42): such a list shrinks in its one column instead. A region with a diagram or the
+list of 6 or fewer entries across columns (LH-42): such a list shrinks in its one column instead. The columns keep the entries as even as
+they can, the first columns the longer on a tie (7 entries as 4 + 3), and under a `middle` or `bottom` anchor they stand at the anchor as one
+block, as tall as the tallest column (C09: the gallery `agenda` centers its columns as it centers a short agenda). A region with a diagram or the
 `steps` arrangement keeps its list in one column.
 
 **Several lists in a region (LH-42).** A region whose flow is not `row` that

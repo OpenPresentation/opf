@@ -66,6 +66,8 @@ const CHANGED = {
   "chart-beside": { aside: { anchor: "middle" } },
   // C07: the aside beside a snippet sets its explanation in the middle of its column.
   code: { aside: { anchor: "middle" } },
+  // C09: an agenda's columns stand in the middle of the body, as a short agenda does.
+  agenda: { body: { anchor: "middle" } },
 };
 
 /** Track weights as shares of their numeric total (core compiles to relative numbers; `auto` stays `auto`). */

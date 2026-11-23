@@ -384,6 +384,20 @@ function translateTextFit<T extends {placement?: TextPlacement}>(fit: T, dy: num
   };
 }
 /** LH-133, LH-172: a placed list's fit moved down by `dy` (its entries, markers, badges, icons, numerals and rules). */
+/**
+ * The height each entry of a list takes in a column: its top to the next entry's top. C09: the last entry takes the same gap below
+ * it as the entry before it, so a column that ends the list is not favored for lacking a gap (seven entries are 4 + 3, not 3 + 4).
+ */
+function listEntryPitches(fit: ListFit): number[] {
+  const entries = fit.listEntries, first = entries[0]!.textBox.y;
+  const pitches = entries.map((entry, index) => (entries[index + 1]?.textBox.y ?? first + fit.height) - entry.textBox.y);
+  if (entries.length > 1) {
+    const before = entries[entries.length - 2]!, bottom = Math.max(before.textBox.y + before.textBox.height, before.descriptionBox ? before.descriptionBox.y + before.descriptionBox.height : -Infinity);
+    const between = pitches[entries.length - 2]! - (bottom - before.textBox.y);
+    if (between > 0) pitches[entries.length - 1]! += between;
+  }
+  return pitches;
+}
 function translateListFit(fit: ListFit, dy: number): ListFit {
   if (!dy) return fit;
   const down = <T extends { y: number }>(box: T): T => ({ ...box, y: box.y + dy });
@@ -8981,7 +8995,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (caption) diagnostics.push(...caption.diagnostics);
     const timelineLayout = node.field === 'timeline' ? placeTimeline(node,box,settings) : undefined;
     const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
-    const columns = textValue !== undefined && !internal ? listColumnsFor(node, box, settings, listColumns) : undefined;
+    let columns = textValue !== undefined && !internal ? listColumnsFor(node, box, settings, listColumns) : undefined;
+    // C09: a list dealt into columns under a middle or bottom anchor stands at the anchor as one block, its tallest column setting the
+    // block's height, so a long agenda's columns do not start at the top of a body its short one is centered in.
+    if (columns && columns.length > 1 && anchor !== 'top') {
+      const dy = anchoredOffset(box.height - Math.max(...columns.map(column => column.text.height)), anchor);
+      if (dy > scale) columns = columns.map(column => ({ ...column, text: translateListFit(column.text, dy) }));
+    }
     // WI-4 (P34): a prose block in auto mode keeps a reading measure, placed by the content alignment. The measure never costs
     // size: a block that fits less well in it than across its whole cell takes the cell.
     const floorSize = snapFontSizeUp((settings.minFontSize??16)*scale);
@@ -9093,9 +9113,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // The breaks that keep the columns even at `at`: the entries' heights in one column of the columns' width, measured at that size.
     const breaksAt = (count: number, boxes: LayoutBox[], at: number) => {
       const whole = fitList(values, { ...boxes[0]!, height: 1e6 }, at, at, listOptions);
-      const first = whole.listEntries[0]!.textBox.y;
-      const heights = whole.listEntries.map((entry, index) => (whole.listEntries[index + 1]?.textBox.y ?? first + whole.height) - entry.textBox.y);
-      return [0, ...listColumnBreaks(heights, whole.listEntries.map(entry => entry.level), count), values.length];
+      return [0, ...listColumnBreaks(listEntryPitches(whole), whole.listEntries.map(entry => entry.level), count), values.length];
     };
     const place = (boxes: LayoutBox[], breaks: number[], size: number, minimum: number): ComposedListColumn[] =>
       boxes.slice(0, breaks.length - 1).map((cell, index) => ({ box: cell, start: breaks[index]!, end: breaks[index + 1]!, text: renumber(fitList(chunk(breaks[index]!, breaks[index + 1]!), cell, size, minimum, listOptions), breaks[index]!) }));
@@ -12613,8 +12631,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
             const boxes = Array.from({length: count}, (_, index) => roundBox({x: rtl ? left + width - columnWidth - index * (columnWidth + between) : left + index * (columnWidth + between), y: area.y, width: columnWidth, height: area.height}));
             const whole = fitList(values, {...boxes[0]!, height: 1e6}, size, size, listOptions);
             if (!readable(whole)) continue;
-            const first = whole.listEntries[0]!.textBox.y, heights = whole.listEntries.map((entry, index) => (whole.listEntries[index + 1]?.textBox.y ?? first + whole.height) - entry.textBox.y);
-            const breaks = [0, ...listColumnBreaks(heights, whole.listEntries.map(entry => entry.level), count), values.length];
+            const breaks = [0, ...listColumnBreaks(listEntryPitches(whole), whole.listEntries.map(entry => entry.level), count), values.length];
             const place = (dy: number, height: number) => boxes.slice(0, breaks.length - 1).map((box, index): ComposedListColumn => {
               const start = breaks[index]!, end = breaks[index + 1]!, chunk = numbering !== undefined ? sliceNumberedItems(values, numbering, start, end) : values.slice(start, end);
               const text = fitList(chunk, {...box, y: box.y + dy, height}, size, size, listOptions);

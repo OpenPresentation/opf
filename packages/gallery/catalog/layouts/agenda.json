@@ -18,7 +18,8 @@
         "text"
       ],
       "flow": "column",
-      "arrangement": "numbered"
+      "arrangement": "numbered",
+      "anchor": "middle"
     }
   ],
   "description": "Set expectations by listing the parts of a talk. Longer agendas flow across columns while preserving their order.",
