@@ -213,7 +213,20 @@ test('reviewed observer source remains exact and B07 source binds actual worker 
   const layoutRecordInputWorker=Buffer.from(layoutRecordInputState);assert.equal(layoutRecordInputWorker.length,93931);assert.equal(digest(layoutRecordInputWorker),'e0db6af0c1d94948554b0e324ad32dcf6a1f95ff11c8b314b46f0463be6c8018');
   let layoutRecordInputInverse=layoutRecordInputState;for(const [prior,next]of [...layoutRecordInputEdits].reverse()){assert.equal(layoutRecordInputInverse.split(next).length-1,1);layoutRecordInputInverse=layoutRecordInputInverse.replace(next,prior);}
   assert.deepEqual(Buffer.from(layoutRecordInputInverse),measuredInputWorker,'Ninth-stage inverse preserves all eight immutable earlier stages');
-  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),layoutRecordInputWorker);
+  // Stage10 (owner-approved 2026-11-23, "keep all three together": re-measure, re-seal and this worker edit for releasing 0.35.1)
+  // admits the 0.35.1 reference export, which differs from the stage-9 input only in the two-column and three-column layout-record
+  // tags (the 0.35.1 column layout records); its helper series names are unchanged. Nothing else in the worker changes.
+  const columnLayoutInputEdits=[
+  [
+    "if($SourceBytes -ne 124993 -or $SourceHash -cne 'a274f346d8acda750fb8ada0507038ea6c2e47847ae3a64b176c6c39a3344908'",
+    "if($SourceBytes -ne 124991 -or $SourceHash -cne '58e87d163fc0fe74765e62d7f8e2d382155a75e81ad425099f352038888c9a80'"
+  ]
+];
+  let columnLayoutInputState=layoutRecordInputState;for(const [prior,next]of columnLayoutInputEdits){assert.equal(columnLayoutInputState.split(prior).length-1,1);columnLayoutInputState=columnLayoutInputState.replace(prior,next);}
+  const columnLayoutInputWorker=Buffer.from(columnLayoutInputState);assert.equal(columnLayoutInputWorker.length,93931);assert.equal(digest(columnLayoutInputWorker),'755740808d1dd28dd5a44e8720cc5d11a06bd89e5a3412a3b7bdb7458e566bad');
+  let columnLayoutInputInverse=columnLayoutInputState;for(const [prior,next]of [...columnLayoutInputEdits].reverse()){assert.equal(columnLayoutInputInverse.split(next).length-1,1);columnLayoutInputInverse=columnLayoutInputInverse.replace(next,prior);}
+  assert.deepEqual(Buffer.from(columnLayoutInputInverse),layoutRecordInputWorker,'Tenth-stage inverse preserves all nine immutable earlier stages');
+  assert.deepEqual(readFileSync(new URL('../../'+worker,import.meta.url)),columnLayoutInputWorker);
   for(const name of ['packages/pptx/test/native-process.ps1','scripts/native-acceptance/reference-chart-worker.ps1'])assert.deepEqual(readFileSync(new URL('../../'+name,import.meta.url)),execFileSync('git',['show','562a04c83f0407a2c395f6a55172b1d8120bd881:'+name],{cwd:root}));
   const runner=readFileSync(new URL('./run-b07-current-profile.ps1',import.meta.url),'utf8');
   assert.ok(runner.indexOf('if(-not $RunOffice)')<runner.indexOf('$checked=& $node $validator verify-postflight'));

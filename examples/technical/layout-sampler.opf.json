@@ -1700,7 +1700,7 @@
             "contentBox": true
           },
           "direction": "column",
-          "anchor": "bottom",
+          "anchor": "middle",
           "regions": [
             {
               "name": "title"
@@ -1765,7 +1765,7 @@
             "contentBox": true
           },
           "direction": "column",
-          "anchor": "bottom",
+          "anchor": "middle",
           "regions": [
             {
               "name": "title"

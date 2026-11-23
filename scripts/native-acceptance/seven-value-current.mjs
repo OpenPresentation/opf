@@ -48,7 +48,9 @@ export const CURRENT_SEVEN_FIXTURE='packages/pptx/test/fixtures/chartex-fallback
 // (only the ppt/tags/opfLayout*.xml parts of agenda, faq and list differ (their record hashes: the records dropped listColumns); no slide layout, slide, chart, media or theme part differs), `decks` and `decks['all-seven']` are byte-identical to 175b55711 (JSON.stringify compared). Previous: 95f3243a580f78d8406fbfb561da78ab0f1d30654f5cd4bde6b0d80d66632629, 127143 bytes.
 // 0.35 script default fonts (owner decision 2026-11-23): the Japanese default is Yu Gothic; the fixture's `source` review record and note and the `world-category` entry's export hash moved
 // (only the world-category archive differs, in the family name Meiryo to Yu Gothic in its theme, chart, docProps font list and document tag; the all-seven archive is byte-identical), `decks` and `decks['all-seven']` are byte-identical to 9523eddc3 (JSON.stringify compared). Previous: 11c3bdee061e5a918ccda94af789bfa3aacc20d5e94df9deaf0145e86f20787e, 131121 bytes.
-export const CURRENT_SEVEN_FIXTURE_SHA256='813dc9dbc56127f4e7de59d55d610bd17a75ce693a35666632b1d585b7786320';
+// 0.35.1 column anchors (owner decision 2026-11-23): layout tags only; the fixture's `source` review record and `entries` export hashes moved
+// (only the ppt/tags/opfLayout*.xml parts of two-column and three-column differ (their record hashes: the records' anchor went from bottom to middle); no slide layout, slide, chart, media or theme part differs), `decks` and `decks['all-seven']` are byte-identical to 919a4d703 (JSON.stringify compared). Previous: 813dc9dbc56127f4e7de59d55d610bd17a75ce693a35666632b1d585b7786320, 133208 bytes.
+export const CURRENT_SEVEN_FIXTURE_SHA256='5f18de2c82ef725851fe32fa13550f30154f44d372704017911a68969efcef86';
 export const CURRENT_VALUE_PROFILE='seven-chart-treemap-single-value-edit-v1';
 export function currentSevenSource(root=fileURLToPath(new URL('../../',import.meta.url))){
  const bytes=fs.readFileSync(path.join(root,CURRENT_SEVEN_FIXTURE));
