@@ -357,8 +357,10 @@ pass are kept. LH-72's start alignment and sibling quotes sharing one size are a
 - **Lead plus stack.** Of three to five sibling texts or quotes, a paragraph of at least 100 characters, at least 2.5 times
   the median length of the others and twice the next longest, leads: a cell 55% of the width at full height, a text starting
   at the lead size (32 px), beside a stack of the others at one size. A chart or picture with two compact siblings (metrics, or
-  texts and quotes of at most 120 characters) leads at 58%. The lead sits at the start unless it is the last block. A
-  `flow: grid` region keeps its grid. `explain` reports `lead-stack`.
+  texts and quotes of at most 120 characters) leads at 58%. The lead sits at the start unless it is the last block. Only a first
+  or last block leads, so the author's order holds: an automatic body whose long block sits between its siblings is stacked in one
+  column instead, and a layout recomposed at the floor (LH-83) draws no lead plus stack for it. A `flow: grid` region keeps its
+  grid. `explain` reports `lead-stack`.
 - **Quotes beside other blocks.** A quote beside a block of another kind, or one of three or more quotes, starts at the
   lead size and steps down until it takes at most four lines (never below the 28 px body size), on a card that hugs it, when
   that makes no quote smaller; otherwise it keeps its size, on a card when the card costs no size. A card the slide does not

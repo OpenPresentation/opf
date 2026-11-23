@@ -8418,7 +8418,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const team = !hasRegions && count === nodes.length && settings.columns === undefined && !settings.weights?.length && nodes.every(node => personParts.has(node.path));
     if (team) cols = (portraitMode === 'top' || teamAvatar) && count <= PORTRAIT_TOP_MAX ? count : gridFlowShape(count, area.width >= area.height).columns;
     spannedContainer = false;
-    if (paragraphs) cols = paragraphs.shape.columns; else if (lead) cols = 2;
+    if (paragraphs) cols = paragraphs.shape.columns; else if (lead) cols = 2; else if (ownFlow && !paragraphs && !team && (options as Record<symbol, unknown>)[RECOMPOSE] !== true && middleLead(nodes)) cols = 1;
     // OPF 0.35: a weighted row whose list would break inside a word is rebalanced or stacked (wordRowWeights, guarded rule `list-words`).
     let wordWeights: number[] | undefined;
     if (!paragraphs && !lead && !hasRegions && !team && settings.weights?.length && cols === count && count === nodes.length && count > 1) {
@@ -9588,7 +9588,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const stackLeads = new WeakSet<Pending>();
   const leadLength = (node: Pending): number => textLength(node.field === 'quote' ? typeof node.value === 'string' ? node.value : record(node.value).text : node.value);
   // The lead plus stack a set of blocks reads as, with no side effect; leadStack marks its lead and fires the rule.
-  const leadStackPlan = (units: Pending[]): LeadStack | undefined => {
+  const leadStackShape = (units: Pending[]): LeadStack | undefined => {
     if (!ruleOn('lead-stack') || units.length < LEAD_STACK_MIN || units.length > LEAD_STACK_MAX || units.some(unit => unit.children)) return undefined;
     let plan: LeadStack | undefined;
     if (units.every(unit => unit.caption === undefined && (unit.field === 'text' || unit.field === 'quote'))) {
@@ -9603,6 +9603,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     return plan;
   };
+  // The author's order holds: a lead between its siblings would be drawn before the blocks that precede it (or after those that follow
+  // it), so only a first or last block leads. An automatic body whose lead is between its siblings is stacked instead (middleLead).
+  const leadStackPlan = (units: Pending[]): LeadStack | undefined => {
+    const plan = leadStackShape(units);
+    return plan && (plan.lead === 0 || plan.lead === units.length - 1) ? plan : undefined;
+  };
+  const middleLead = (units: Pending[]): boolean => { const plan = leadStackShape(units); return plan !== undefined && plan.lead !== 0 && plan.lead !== units.length - 1; };
   const leadStack = (units: Pending[]): LeadStack | undefined => {
     const plan = leadStackPlan(units);
     if (plan) { stackLeads.add(units[plan.lead]!); fire('lead-stack'); }
