@@ -38,10 +38,10 @@
     "font-schemes": {
       "mode": "mirror",
       "records": 93,
-      "contentSha256": "7029ff1df953e8128e762ab125c3ae090a7131e5977bdb6701fd44e01879006a",
+      "contentSha256": "114dfba071f3749b4d5acd2d48888cfc04a9b1c0a915e065394633b4e919f9a7",
       "gallery": {
         "records": 93,
-        "contentSha256": "7029ff1df953e8128e762ab125c3ae090a7131e5977bdb6701fd44e01879006a"
+        "contentSha256": "114dfba071f3749b4d5acd2d48888cfc04a9b1c0a915e065394633b4e919f9a7"
       }
     },
     "icon-sets": {
@@ -56,10 +56,10 @@
     "languages": {
       "mode": "mirror",
       "records": 93,
-      "contentSha256": "fbfdd9051d59c99a53227530d4c0a537fe2e24052b3ab65ec0d6c9280189f5f1",
+      "contentSha256": "4f6a60e4bc440f2028272f8fd90a81c7ab5cc44e716c201cb4371af74c48bf72",
       "gallery": {
         "records": 93,
-        "contentSha256": "fbfdd9051d59c99a53227530d4c0a537fe2e24052b3ab65ec0d6c9280189f5f1"
+        "contentSha256": "4f6a60e4bc440f2028272f8fd90a81c7ab5cc44e716c201cb4371af74c48bf72"
       }
     },
     "layouts": {

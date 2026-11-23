@@ -131,7 +131,7 @@ const style = {fontFamily: 'Aptos', fontWeight: 400, path: 'slides.0.text'};
 }
 
 // 4. The SVG: drawn size = composed size x multiplier, in the replacement's own face, measured or not. The control deck names the
-// replacement itself (font scheme noto-naksh-arabic, an English deck), so its composed sizes are the ones the multiplier scales.
+// replacement itself (font scheme noto-naskh-arabic, an English deck), so its composed sizes are the ones the multiplier scales.
 const fontSizes = svg => [...svg.matchAll(/<text\b[^>]*>/g)].map(match => match[0]).filter(tag => !/font-family="(?:Aptos|Intos)/.test(tag))
   .map(tag => ({size: Number(/font-size="([\d.]+)"/.exec(tag)[1]), family: /font-family="([^"]*)"/.exec(tag)[1], length: /textLength="([\d.]+)"/.exec(tag)?.[1]}));
 // Estimated layout: the same handle without its measurement (the faces still embed and rasterize).
@@ -139,7 +139,7 @@ const estimatedFonts = {embeddedFonts: prepared.embeddedFonts, fontFiles: prepar
 const estimatedOptions = {fonts: estimatedFonts};
 {
   const adjusted = fontSizes(toSvg(deck(undefined, TYPESET_AR), estimatedOptions)[0]);
-  const control = fontSizes(toSvg(deck('noto-naksh-arabic', 'en-US'), estimatedOptions)[0]);
+  const control = fontSizes(toSvg(deck('noto-naskh-arabic', 'en-US'), estimatedOptions)[0]);
   assert.ok(adjusted.length >= 2 && adjusted.length === control.length);
   for (const [index, item] of adjusted.entries()) {
     near(item.size, adjustedFontSize(control[index].size, ADJUST), 1e-9, `estimated line ${index}: drawn size is 0.64 of the composed size, on the quarter-pixel grid`);
@@ -183,7 +183,7 @@ const estimatedOptions = {fonts: estimatedFonts};
     assert.equal(item.family.split(',')[0], 'Noto Naskh Arabic');
     near(Number(item.length), registryMeasure.measure(WORDS, item.size, {...naskh, fontWeight: item === lines[0] ? 700 : 400}), 0.01, `textLength equals the advance at the drawn size ${item.size}`);
   }
-  const control = fontSizes(toSvg(deck('noto-naksh-arabic', 'en-US'), {fonts: prepared})[0]);
+  const control = fontSizes(toSvg(deck('noto-naskh-arabic', 'en-US'), {fonts: prepared})[0]);
   near(lines[0].size, adjustedFontSize(control[0].size, ADJUST), 1e-9, 'the title is drawn at 0.64 of the composed size, on the quarter-pixel grid');
 }
 
@@ -194,7 +194,7 @@ const estimatedOptions = {fonts: estimatedFonts};
     .map(tag => ({size: Number(/font-size="([0-9.]+)"/.exec(tag)[1]), y: Number(/ y="([0-9.]+)"/.exec(tag)[1]), family: /font-family="([^"]*)"/.exec(tag)[1]}));
   const estimated = estimatedOptions;
   const arabic = baselines(toSvg(deck(undefined, TYPESET_AR), estimated)[0]).filter(item => item.family.startsWith('Noto Naskh Arabic'));
-  const control = baselines(toSvg(deck('noto-naksh-arabic', 'en-US'), estimated)[0]);
+  const control = baselines(toSvg(deck('noto-naskh-arabic', 'en-US'), estimated)[0]);
   assert.equal(arabic.length, control.length);
   const up = 1 - ASCENT[0], upMixed = 1 - ASCENT[1];
   for (const [index, item] of arabic.entries()) near(control[index].y - item.y, up * control[index].size, 0.002, `estimated line ${index} moves up ${up.toFixed(2)} em of the composed size`);

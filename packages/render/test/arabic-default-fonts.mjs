@@ -60,7 +60,7 @@ const fontSizes = svg => [...svg.matchAll(/<text\b([^>]*)>([^<]*)</g)].filter(ma
   .map(([, tag, content]) => ({size: Number(/font-size="([\d.]+)"/.exec(tag)[1]), length: Number(/textLength="([\d.]+)"/.exec(tag)?.[1]), weight: Number(/font-weight="(\d+)"/.exec(tag)?.[1] ?? 400), text: content.replace(/[\u2066-\u2069]/g, '')}));
 {
   // The control deck names the replacement itself, so its drawn sizes are the composed sizes the multiplier scales.
-  const control = fontSizes(toSvg(deck('en-US', {design: {fontScheme: 'noto-naksh-arabic'}}), {fonts: prepared})[0]);
+  const control = fontSizes(toSvg(deck('en-US', {design: {fontScheme: 'noto-naskh-arabic'}}), {fonts: prepared})[0]);
   const diagnostics = [];
   const lines = fontSizes(toSvg(deck('ar'), {fonts: prepared, onDiagnostic: diagnostic => diagnostics.push(diagnostic)})[0]);
   // The replacement takes the family's place for Arabic-script runs: Tinos and Arimo, which have no Arabic, are never asked for it.

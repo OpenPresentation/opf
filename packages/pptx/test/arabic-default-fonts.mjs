@@ -33,7 +33,7 @@ for (const [language, [title, text]] of Object.entries(sample)) {
   for (const family of ['Noto Naskh Arabic', 'Noto Sans Arabic', 'Arabic Typesetting']) assert.ok(!named(xml).has(family), `${language}: ${family} is not written`);
   assert.ok(!xml['ppt/theme/theme1.xml'].includes('Arabic Typesetting'), `${language}: the theme no longer names Arabic Typesetting`);
   // The composed size: the same as a deck whose Arabic font is the open face itself (no multiplier anywhere), run for run.
-  const control = await files(deck({language: {bcp47: language, fontScheme: 'noto-naksh-arabic'}}));
+  const control = await files(deck({language: {bcp47: language, fontScheme: 'noto-naskh-arabic'}}));
   assert.ok(sizes(xml).length >= 2, `${language}: runs carry sizes`);
   assert.deepEqual(sizes(xml), sizes(control), `${language}: run sizes are the composed sizes`);
   assert.deepEqual(themeFonts(control, 'minorFont'), {cs: 'Noto Naskh Arabic', arab: 'Noto Naskh Arabic'});

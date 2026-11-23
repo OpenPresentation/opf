@@ -517,7 +517,7 @@
         "clearlake-data-theme": {
           "name": "ClearLake Data Working Theme",
           "colorScheme": "pastel-red",
-          "fontScheme": "noto-naksh-arabic",
+          "fontScheme": "noto-naskh-arabic",
           "background": {
             "type": "theme",
             "slot": "light2"
@@ -774,7 +774,7 @@
           "type": "serif",
           "description": "Georgia is a serif OPF font scheme for Latin presentations, using Georgia for both headings and body text."
         },
-        "noto-naksh-arabic": {
+        "noto-naskh-arabic": {
           "name": "Noto Naskh Arabic",
           "app": "google-slides",
           "languageFamily": "cs",

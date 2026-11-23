@@ -3,7 +3,7 @@
   "kind": "languages",
   "version": "1",
   "description": "Catalog of languages available in the openpresentation.org catalog. Each entry is a lightweight summary with the canonical BCP-47 tag; full language records live in the per-id JSON files alongside this index.",
-  "contentSha256": "fbfdd9051d59c99a53227530d4c0a537fe2e24052b3ab65ec0d6c9280189f5f1",
+  "contentSha256": "4f6a60e4bc440f2028272f8fd90a81c7ab5cc44e716c201cb4371af74c48bf72",
   "records": [
     {
       "id": "afrikaans",
