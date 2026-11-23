@@ -137,7 +137,8 @@ for (const direction of ['ltr', 'rtl']) {
       assert.deepEqual([process.kind, process.region, process.path], ['process', 'body', list.path]);
       assert.equal(process.nodes.length, items.length);
       assert.equal(list.listColumns.length, items.length);
-      assert.ok(process.fontSize >= body(stepped)[0].text.fontSize - 1e-6, `${items.length} entries: ${process.fontSize} is under the steps' ${body(stepped)[0].text.fontSize}`);
+      // PR1: the numbered steps of up to five entries draw as a row that grows past the list's size, so the process is held to the list's role size.
+      assert.ok(process.fontSize >= Math.min(body(stepped)[0].text.fontSize, 28) - 1e-6, `${items.length} entries: ${process.fontSize} is under the steps' ${body(stepped)[0].text.fontSize}`);
       assert.deepEqual(result.diagnostics.filter((entry) => entry.code === 'arrangement-adapted'), []);
       assert.deepEqual(findings(result), []);
     }
@@ -152,7 +153,8 @@ test('0.35: other lone lists of a steps region draw as before: 9 entries, a thre
   for (const block of [{ items: ['Plan', 'Build the prototype', 'Ship'] }, { items: ['Plan', { text: 'Build', description: 'Two weeks' }, 'Ship'] }, { items: ['Plan', 'Build', 'Ship'], numbering: 'arabic' }]) {
     const result = composeSlide({ title: 'Steps', blocks: [block] }, { layout: processLayout });
     assert.equal(result.arrangements, undefined);
-    assert.deepEqual(result.steps?.map((entry) => entry.form), ['column']);
+    // PR1: a lone list of up to five steps is a row of badged columns.
+    assert.deepEqual(result.steps?.map((entry) => entry.form), ['row']);
   }
   // A short list beside a paragraph in the region: the blocks are steps side by side. (A short closing line is the foot band instead, LH-06,
   // and leaves the list alone in the region.)
@@ -175,7 +177,8 @@ test('0.35: a short list that Basic Process does not hold at its size draws as s
 test('LH-07: a list of longer entries in a steps region draws beside badges, numbered in arabic', () => {
   const slide = { title: 'Five stages of the rollout', blocks: [{ items: ['Agree scope and owners', 'Run two teams for six weeks', 'Measure completion and task time', 'Scale to every regional team'] }] };
   const result = composeSlide(slide, { layout: processLayout });
-  assert.deepEqual(result.steps?.map((entry) => entry.form), ['column']);
+  // PR1: four entries are a row of badged columns.
+  assert.deepEqual(result.steps?.map((entry) => entry.form), ['row']);
   assert.deepEqual(result.steps[0].badges.map((badge) => badge.label), ['1', '2', '3', '4']);
   // The list has no numbering of its own, so no badge claims one for it.
   assert.ok(result.steps[0].badges.every((badge) => badge.list === undefined));
