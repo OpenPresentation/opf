@@ -367,7 +367,7 @@ list of 6 or fewer entries across columns (LH-42): such a list shrinks in its on
 **Several lists in a region (LH-42).** A region whose flow is not `row` that
 receives 2 or more lists and nothing else lays them out one list per cell, a card when the slide draws cards, so sibling
 lists never read as one table: 2 to 4 lists in that many columns, a multiple of 3 in 3 columns, any other count in 4
-(7 as 4 + 3). A column stays at least 7.5 list ems (240 px) wide; a narrower region fills its rows evenly (4 lists in 2 x 2),
+(7 as 4 + 3), in balanced rows, so no row is more than one list short of another (5 as 3 + 2, 10 as 4 + 3 + 3). A column stays at least 7.5 list ems (240 px) wide; a narrower region fills its rows evenly (4 lists in 2 x 2),
 and a region taller than wide stacks up to 3 lists and takes at most 2 columns. Each row is as tall as its tallest list needs,
 descriptions and nested entries counted, at the largest one size at which every row fits, and the region's lists share that
 size. Cards share the height left over, so they fill the region; lists without cards keep their rows and the region's

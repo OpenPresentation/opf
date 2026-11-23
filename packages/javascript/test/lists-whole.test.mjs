@@ -35,9 +35,11 @@ describe('LH-42: a list of 6 or fewer entries is never dealt across columns', ()
 });
 
 describe('LH-42: several lists in a region are one list per cell', () => {
-  test('the grid by count: n columns up to 4, 3 for a multiple of 3, otherwise 4; a narrow region fills its rows evenly', () => {
-    const shapes = Array.from({ length: 12 }, (_, index) => listGridShape(index + 1).perRow.join('+'));
-    assert.deepEqual(shapes, ['1', '2', '3', '4', '4+1', '3+3', '4+3', '4+4', '3+3+3', '4+4+2', '4+4+3', '3+3+3+3']);
+  test('the grid by count: n columns up to 4, 3 for a multiple of 3, otherwise 4, in balanced rows; a narrow region fills its rows evenly', () => {
+    const shapes = Array.from({ length: 13 }, (_, index) => listGridShape(index + 1).perRow.join('+'));
+    // TEA-1: no row is more than one list short of another, so an odd count strands no list alone (5 was 4 + 1, 10 was 4 + 4 + 2).
+    assert.deepEqual(shapes, ['1', '2', '3', '4', '3+2', '3+3', '4+3', '4+4', '3+3+3', '4+3+3', '4+4+3', '3+3+3+3', '4+3+3+3']);
+    assert.equal(listGridShape(5).columns, 3);
     assert.deepEqual(listGridShape(4, 3).perRow, [2, 2]);
     assert.deepEqual(listGridShape(5, 2).perRow, [2, 2, 1]);
   });
