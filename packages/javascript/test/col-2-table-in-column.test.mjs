@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { gallery } from '@openpresentation/gallery';
-import { composeSlide } from '../dist/composition.js';
+import { composeSlide, layoutTable } from '../dist/composition.js';
 import { resolveSlideContext } from '../dist/index.js';
 
 const compose = (slide, extra = {}) => {
@@ -19,4 +19,17 @@ test('a two-column table beside a short text grows with it', () => {
   assert.equal(result.diagnostics.filter((entry) => entry.code === 'text-overflow').length, 0);
   assert.ok(grown.tableGrowth > 1, 'the table grew');
   assert.ok(text.text.fontSize >= kept.items.find((item) => item.field === 'text').text.fontSize, 'the text is not smaller');
+});
+
+test('a four-column table in one of three columns takes the width it needs and keeps a readable size', () => {
+  const wide = { columns: ['Team', 'Participants', 'Completion', 'Median time (min)'], rows: [['A', '28', '89%', '5.8'], ['B', '24', '79%', '6.7']] };
+  const slide = { layout: 'three-column', title: 'Columns', blocks: [{ region: 'first', table: wide }, { region: 'second', text: 'Short text.' }, { region: 'third', text: 'Another.' }] };
+  const result = compose(slide);
+  assert.equal(result.diagnostics.filter((entry) => entry.code === 'text-overflow').length, 0);
+  const table = result.items.find((item) => item.field === 'table'), texts = result.items.filter((item) => item.field === 'text');
+  assert.ok(texts.every((text) => table.box.width > text.box.width), 'the table column is the widest');
+  const laid = layoutTable(table.value, table.box, { scale: 1, minFontSize: table.composition.minFontSize, ...(table.tableGrowth ? { growth: table.tableGrowth } : {}) });
+  const size = Math.min(...laid.rows.flatMap((row) => row.cells.map((cell) => cell.fit.fontSize)));
+  assert.ok(size >= 25 - 1e-6, `the table keeps at least its 25 px role size: ${size}`);
+  assert.ok(texts.every((text) => text.text.fontSize >= 28 - 1e-6), 'the texts keep their size');
 });

@@ -10181,7 +10181,29 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const wide = Math.min(3, Math.sqrt(ratio));
       return lengths.map(length => length === Math.max(...lengths) ? wide : 1);
     })();
-    const keptWidths = columnWidths(optionWeights ?? plan.columns.filter((_, column) => !vacated[column]), frame.width, gap);
+    let keptWidths = columnWidths(optionWeights ?? plan.columns.filter((_, column) => !vacated[column]), frame.width, gap);
+    // COL-2 (0.35.2): a layout of columns (each body region in one column of its own) whose one table does not fit its column's width at
+    // its starting size (a four-column table in a third of the slide was set at the 16 px floor, its header split over three lines) takes
+    // the width it needs, as LH-44 gives an automatic slide's table its natural width (at most TABLE_MAX_SHARE of the row, at least its
+    // minimum width), while the columns beside it hold only texts and lists that read no worse in what is left (tableRowWeights' rule).
+    {
+      const kept = plan.columns.flatMap((_, column) => vacated[column] ? [] : [column]);
+      const own = (name: string) => bodyName(name) && cells.every(row => row.every((cell, column) => cell !== name || column === cells.find(other => other.includes(name))!.indexOf(name)));
+      const columnUnits = kept.map(column => { const names = [...new Set(cells.map(row => row[column]!))].filter(name => name !== '.' && !headingOrBelow(name) && !collapsed.joined.has(name)); return names.every(own) ? names.flatMap(unitsOf) : undefined; });
+      const tables = columnUnits.flatMap((units, index) => units?.length === 1 && units[0]!.field === 'table' && !units[0]!.children ? [index] : []);
+      if (kept.length >= 2 && columnUnits.every(Boolean) && tables.length === 1 && columnUnits.every((units, index) => index === tables[0] || units!.every(unit => !unit.children && ['text', 'items', 'bullets'].includes(unit.field)))) {
+        const index = tables[0]!, table = columnUnits[index]![0]!, total = keptWidths.reduce((sum, width) => sum + width, 0), inset = tableCardInset();
+        const measured = measureTable(table, total, composition);
+        if (measured && keptWidths[index]! - inset < measured.minimumWidth - .5) {
+          const want = Math.min(TABLE_MAX_SHARE * total, measured.naturalWidth + inset), least = Math.min(want, measured.minimumWidth + inset);
+          const others = keptWidths.flatMap((_, other) => other === index ? [] : [other]);
+          const widthsAt = (width: number) => keptWidths.map((_, other) => other === index ? width : (total - width) / others.length);
+          const neighbors = (width: number) => others.reduce((sum, other) => sum + columnUnits[other]!.reduce((cost, unit) => cost + scoreNode(unit, { x: 0, y: 0, width: widthsAt(width)[other]!, height: frame.height }, composition), 0), 0);
+          const baseline = neighbors(keptWidths[index]!), step = (want - least) / 4;
+          for (let width = want; width >= least - .5; width -= Math.max(step, scale)) if (neighbors(width) <= baseline + TABLE_NEIGHBOR_REDUCTION) { keptWidths = widthsAt(width); break; }
+        }
+      }
+    }
     const widths = plan.columns.map((_, column) => vacated[column] ? 0 : keptWidths[vacated.slice(0, column).filter(gone => !gone).length]!);
     const columnX: number[] = [];
     widths.reduce((x, size, column) => { const kept = !vacated[column], start = kept && widths.slice(0, column).some((_, before) => !vacated[before]) ? x + gap : x; columnX.push(start); return kept ? start + size : x; }, 0);
