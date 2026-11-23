@@ -5502,13 +5502,16 @@ function composeGrid(input: unknown, options: ComposeSlideOptions): SlideComposi
 }
 function composeSlideOnce(input: unknown, options: ComposeSlideOptions): SlideComposition {
   const result = growMixedCode(input, options, readableProse(input, options, readableTimelineNotes(input, options, composeSlideBody(input, options))));
-  // LH-86: a layout whose whole body is one row of regions keeps its columns (longTextRows) while they hold their text; when they
-  // overflow at the floor, the long texts are drawn as full-width rows, kept when they overflow less.
-  if ((options as Record<symbol, unknown>)[ROWS_ON_OVERFLOW] === true || !overflowCount(result) || !rowOnlyLayout(options.layout)) return result;
+  // LH-86: a layout whose whole body is one row of regions keeps its columns (longTextRows) unless the long texts drawn as full-width
+  // rows read larger: the slide is composed both ways, and the rows are kept when they overflow less, or as little with a larger
+  // smallest fitted body size. Columns never cost a size the rows would give.
+  if ((options as Record<symbol, unknown>)[ROWS_ON_OVERFLOW] === true || !rowOnlyLayout(options.layout)) return result;
   const rows = composeSlideOnce(input, { ...options, [ROWS_ON_OVERFLOW]: true } as ComposeSlideOptions);
-  return overflowCount(rows) < overflowCount(result) ? rows : result;
+  const before = overflowCount(result), after = overflowCount(rows);
+  const smallest = (composed: SlideComposition) => Math.min(...bodyReadability(composed, options).sizes.map(entry => entry.size));
+  return after < before || (after === before && smallest(rows) > smallest(result) + FONT_GRID_EPSILON) ? rows : result;
 }
-/** LH-86: forces long texts into full-width rows on a layout whose whole body is one row of regions (composeSlideOnce). */
+/** LH-86: lets long texts become full-width rows on a layout whose whole body is one row of regions (composeSlideOnce's trial). */
 const ROWS_ON_OVERFLOW = Symbol('opf.rowsOnOverflow');
 /** LH-86: whether a layout's body regions all lie in one row of its grid, two or more of them (two-column, three-column). */
 function rowOnlyLayout(layout: unknown): boolean {
@@ -9702,7 +9705,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (key === undefined || filled.some(region => band(region.name) !== key)) return { binding: grouped };
     const row = plan.regions.filter(region => band(region.name) === key).sort((a, b) => rects.get(a.name)!.column - rects.get(b.name)!.column);
     // A layout whose whole body is one row of regions (two-column, three-column) is its columns: they stay columns, unless they
-    // overflow at the floor (composeSlideOnce composes the slide again with ROWS_ON_OVERFLOW).
+    // read larger as rows (composeSlideOnce composes the slide again with ROWS_ON_OVERFLOW and compares).
     if (row.length > 1 && row.length === plan.regions.length && (options as Record<symbol, unknown>)[ROWS_ON_OVERFLOW] !== true) return { binding: grouped };
     const units = row.flatMap(region => grouped.units.get(region.name) ?? []);
     const side = filled.length > 1 || filled[0]!.flow !== 'column';

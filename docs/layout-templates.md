@@ -212,7 +212,7 @@ several regions or in one region's grid), every paragraph moves to the first reg
 regions are left empty and collapse into it, and that region stacks them one card per row across the row. The layout must have no
 `row` region, the slide no composition of its own, and must have nothing beyond a region's room or below the grid. A layout whose
 whole body is that one row of regions (`two-column`, `three-column`) is its columns: long texts stay columns there, and become rows
-only when the columns overflow at the readability floor and the rows overflow less. The rule applies to one region's grid
+only when the rows overflow less, or as little with a larger fitted size (both arrangements are composed; columns never cost a size). The rule applies to one region's grid
 (`pillars`, `scorecard`, `team`) and to a row of regions beside others in a layout; automatic composition (no layout) never uses it.
 
 A stacked column of such cards (these rows, or more long paragraphs one region stacks) shares the region's height. The text is

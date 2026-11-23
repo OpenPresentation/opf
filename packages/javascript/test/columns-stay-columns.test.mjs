@@ -1,5 +1,6 @@
-// LH-86 with two-column and three-column: a layout whose whole body is one row of regions keeps its columns for long texts; only
-// when the columns overflow at the floor are the texts drawn as full-width rows. pillars (one region's grid) still takes the rows.
+// LH-86 with two-column and three-column: a layout whose whole body is one row of regions keeps its columns for long texts, unless the
+// texts drawn as full-width rows overflow less or read larger (no slide gets smaller text than the rows gave it). pillars (one region's
+// grid) still takes the rows.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { composeSlide } from '../dist/composition.js';
@@ -29,6 +30,10 @@ test('LH-86: columns that overflow at the floor give way to rows; pillars still 
   const sentence = 'Teams should focus the next cycle on recovering at-risk renewals with executive sponsorship and value proof while making the tradeoffs clear. ';
   const long = Array.from({ length: 3 }, () => ({ text: sentence.repeat(6).trim() }));
   assert.deepEqual(findings(composeSlide({ title: 'T', blocks: long }, { layout: layouts['three-column'] })), []);
+  // Three two-sentence texts in three columns read larger as rows: rows, at their size.
+  const pair = texts(composeSlide({ title: 'T', blocks: Array.from({ length: 3 }, () => ({ text: sentence.repeat(2).trim() })) }, { layout: layouts['three-column'] }));
+  assert.ok(pair[1].box.y > pair[0].box.y + pair[0].box.height, 'rows');
+  assert.ok(pair[0].text.fontSize >= 28 - 1e-9, `${pair[0].text.fontSize}`);
   const pillars = texts(composeSlide({ title: 'Decision options', blocks: [paragraph('Evergreen CRM'), paragraph('Asteria Robotics')] }, { layout: layouts.pillars }));
   assert.ok(pillars[1].box.y > pillars[0].box.y + pillars[0].box.height, 'one card per row');
 });
