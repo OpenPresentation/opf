@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.35.1 (2026-11-23)
+
+No package changes; released with the set.
+
 ## 0.35.0 (2026-11-23)
 
 - Breaking: American spelling everywhere, including four API values, renamed without an alias. Finding messages, help
