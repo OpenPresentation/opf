@@ -2121,7 +2121,7 @@ export const LONE_FILL = .5, LONE_TARGET = .6, LONE_METRIC_TARGET = .8;
  */
 export const MESSAGE_CEILINGS = {
   statement: [[30, 115], [60, 80], [120, 54]],
-  quote: [[30, 86], [60, 72], [120, 56]],
+  quote: [[12, 115], [30, 86], [60, 72], [120, 56]],
 } as const satisfies Record<string, readonly (readonly [number, number])[]>;
 /** LH-188: a lone metric whose value is a figure of at most `characters` characters grows to `size` (35% of the short edge) instead of LONE_DISPLAY_SIZES.value. */
 export const FIGURE_CEILING = { characters: 6, size: 252 } as const;
@@ -2150,6 +2150,20 @@ export function messageCeiling(kind: keyof typeof MESSAGE_CEILINGS, value: unkno
  * paragraph is a content slide, not a statement. Any layout qualifies (automatic, statement, quote, text, ...): the message is the slide's
  * lone block wherever the layout places it.
  */
+/**
+ * LH-188 for a quote record: whether the slide's body is one short quote (at most the first MESSAGE_CEILINGS.quote row, 30 characters)
+ * and no subtitle. A stacked record (the `quote` layout) on a landscape slide sets such a quote as its message under any title, so it
+ * grows to its length-keyed ceiling there too: "Simple." past the size of a quoted sentence. A longer quote keeps the quote display size:
+ * past it a step that leaves a stub line is refused (stubLine), which would set a sentence that reached 56 px at a smaller step. On
+ * other layouts a title that is a sentence keeps the quote at the quote display size (oneMessageField).
+ */
+export function loneQuote(slide: Record<string, any>): boolean {
+  const found = bodyPayloads(slide);
+  if (annotationText(slide.subtitle).trim() || found?.length !== 1 || found[0]!.field !== 'quote') return false;
+  const quote = found[0]!.host.quote, text = typeof quote === 'string' || Array.isArray(quote) ? quote : record(quote).text;
+  const length = messageCharacters(text);
+  return length > 0 && length <= MESSAGE_CEILINGS.quote[MESSAGE_CEILINGS.quote.length - 1]![0];
+}
 export function oneMessageField(slide: Record<string, any>): 'text' | 'quote' | 'metric' | undefined {
   if (annotationText(slide.subtitle).trim()) return undefined;
   const found = bodyPayloads(slide);
@@ -2431,9 +2445,12 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   // lines, and in the tight composition (TIGHT_DISPLAY) the display pitch too; otherwise it is fitted as body text. A quote among others
   // never tightens: its cell hugs the height it asks for, and the footer under a shorter body would lose its size to the room it gave up.
   const from = options.message && displayTracks(quoteText) ? displayFrom(scale) : Infinity, tight = (options as Record<symbol, unknown>)[TIGHT_DISPLAY] === true;
+  // LH-188: a one-message quote's body balances its lines (WI-4, as a heading does), so a growing quote ends in no stub line: "help." alone
+  // under a full line stopped its growth at the quote display size.
+  const balance = (part:QuoteTextPart) => options.message === true && part.role === 'body';
   const fitAs = (part:QuoteTextPart,area:LayoutBox,size:number,floor:number,pitchFrom:number,trackFrom:number):TextFit|RichTextFit => part.runs
-    ? fitRichText(part.runs,area,size,floor,{style:part.style,textMeasurement:options.textMeasurement,...(options.citationMarker?{citationMarker:options.citationMarker}:{}),...(options.direction?{direction:options.direction}:{}),...(Number.isFinite(trackFrom)?{displayFrom:trackFrom,displayPitch:Number.isFinite(pitchFrom)}:{})})
-    : fitText(part.text,area,size,floor,displayMeasure(textWidthMeasurer(part.style,options.textMeasurement),part.text,trackFrom),options.direction,false,pitchFrom);
+    ? fitRichText(part.runs,area,size,floor,{style:part.style,textMeasurement:options.textMeasurement,...(options.citationMarker?{citationMarker:options.citationMarker}:{}),...(options.direction?{direction:options.direction}:{}),...(Number.isFinite(trackFrom)?{displayFrom:trackFrom,displayPitch:Number.isFinite(pitchFrom)}:{}),...(balance(part)?{balance:true}:{})})
+    : fitText(part.text,area,size,floor,displayMeasure(textWidthMeasurer(part.style,options.textMeasurement),part.text,trackFrom),options.direction,balance(part),pitchFrom);
   const fit = (part:QuoteTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum):TextFit|RichTextFit|undefined => {
     if (!usable(area)) return undefined;
     if (part.role !== 'body' || !Number.isFinite(from)) return fitAs(part,area,size,floor,Infinity,Infinity);
@@ -6086,8 +6103,9 @@ function growTemplate(input: unknown, options: ComposeSlideOptions, result: Slid
     for (let steps = 1; steps <= 3 && step({ [GROW]: body, [HEADING_STEPS]: steps }); steps++);
   } else {
     // LH-188: a stacked record's one-message quote (oneMessageField) grows on toward its length-keyed ceiling (MESSAGE_CEILINGS.quote): up
-    // to six steps of the scale reach 86 px from the quote's 40; every other message keeps three.
-    const most = stacked && oneMessageField(record(input)) === 'quote' ? 6 : 3;
+    // to six steps of the scale reach 86 px from the quote's 40, as does its lone quote under any title (loneQuote); every other message
+    // keeps three.
+    const most = stacked && (oneMessageField(record(input)) === 'quote' || (result.width >= result.height && loneQuote(record(input)))) ? 8 : 3;
     for (let steps = 1; steps <= most && step(grownBy(steps)); steps++);
   }
   // LH-132: the steps are composed with the avatar (AVATAR_QUOTES); the step kept draws a quote's portrait again where that sets nothing smaller.
@@ -6771,7 +6789,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const titleStart = hints.titlePosition === 'start' && width >= height && !recomposing;
   const template = statementPlan && titleStart ? titleBesideTemplate(statementPlan) ?? statementPlan : statementPlan;
   // LH-188: the payload field of a one-message slide's message (oneMessageField): that block grows up to its length-keyed ceiling.
-  const messageField = options.fill !== false ? oneMessageField(slide) : undefined;
+  // LH-188 for a quote record: a stacked record's lone quote is its message under any title (loneQuote).
+  const messageField = options.fill !== false ? oneMessageField(slide) ?? (recordTemplate?.stack !== undefined && width >= height && loneQuote(slide) ? 'quote' : undefined) : undefined;
   const messageNode = (node: Pending): boolean => messageField !== undefined && node.field === messageField && !node.children && node.caption === undefined;
   const hasCards = hints.contentBox ?? false;
   const composition: Composition = { ...record(layout.composition), ...record(slide.composition) };

@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { gallery } from '@openpresentation/gallery';
-import { composeSlide, LONE_DISPLAY_SIZES } from '../dist/composition.js';
+import { composeSlide, LONE_DISPLAY_SIZES, MESSAGE_CEILINGS } from '../dist/composition.js';
 import { resolveSlideContext } from '../dist/index.js';
 
 const compose = (slide) => {
@@ -35,4 +35,17 @@ test('a lone list that is drawn, or fills half its body, keeps its size', () => 
   // A list that fills its body keeps its role size.
   const long = compose({ layout: 'list', title: 'Many', blocks: [{ region: 'body', items: Array.from({ length: 8 }, (_, index) => `Point number ${index + 1} about the pilot plan`) }] });
   for (const size of sizes(long, 'items')) assert.ok(size <= LONE_DISPLAY_SIZES.list + 1e-6, `a full list keeps its size: ${size}`);
+});
+
+test('the lone quote of a quote slide grows to its length-keyed ceiling under any title', () => {
+  const quote = (text) => compose({ layout: 'quote', title: 'A shared view makes decisions easier', blocks: [{ region: 'body', quote: { text, attribution: 'Pilot lead' } }] }).items.find((item) => item.field === 'quote');
+  const body = (item) => item.quoteLayout.parts.find((part) => part.role === 'body').fit.fontSize;
+  const word = body(quote('Simple.')), sentence = body(quote('We can now see where participants need help.'));
+  assert.ok(word > LONE_DISPLAY_SIZES.quote + 1, `"Simple." grows past the quote display size: ${word}`);
+  assert.ok(word > sentence, `"Simple." (${word}) is larger than a quoted sentence (${sentence})`);
+  assert.ok(word > MESSAGE_CEILINGS.quote.find(([most]) => most >= 30)[1] + 1, `a quoted word reaches a short statement's size: ${word}`);
+  // A sentence balances its two lines, so no stub line holds it at the quote display size.
+  assert.ok(sentence > LONE_DISPLAY_SIZES.quote + 1, `a quoted sentence grows past the quote display size: ${sentence}`);
+  const long = body(quote('We can now see where participants need help, and the weekly review keeps the next step clear for everyone on both teams, so nobody waits for a decision that has already been made.'));
+  assert.ok(long <= LONE_DISPLAY_SIZES.quote + 1e-6, `a long quote keeps the quote display size at most: ${long}`);
 });
