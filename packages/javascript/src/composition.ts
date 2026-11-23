@@ -5256,7 +5256,8 @@ function bodyFill(result: SlideComposition, options: ComposeSlideOptions = {}): 
   // grows with the texts on the cards beside it (every block on its card), as many as the layout has columns.
   const tableItem = body.find(item => item.field === 'table'), asides = body.filter(item => item !== tableItem);
   const tableNote = !!result.regions && !!tableItem && asides.length >= 1 && body.every(item => !item.emphasis && inBody(item))
-    && asides.every(noteItem => TABLE_ASIDE_FIELDS.has(noteItem.field) && !!noteItem.text && (!noteItem.frameBox || noteItem.field === 'quote' || !!tableItem.frameBox)
+    // C10: or two tables side by side (a comparison), which grow together.
+    && asides.every(noteItem => ((TABLE_ASIDE_FIELDS.has(noteItem.field) && !!noteItem.text) || (noteItem.field === 'table' && asides.length === 1)) && (!noteItem.frameBox || noteItem.field === 'quote' || !!tableItem.frameBox)
       && ((noteItem.box.y >= tableItem.box.y + 1 && noteItem.box.x < tableItem.box.x + tableItem.box.width - 1 && noteItem.box.x + noteItem.box.width > tableItem.box.x + 1)
         || noteItem.box.x >= tableItem.box.x + tableItem.box.width - 1 || noteItem.box.x + noteItem.box.width <= tableItem.box.x + 1
         // C12: or a dashboard's row of metrics over it (the metrics keep their size; the table grows).
@@ -7900,7 +7901,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // Whether the body's leaves (no groups) are two or more metrics, or one table and one text, list, metric or quote (TABLE_ASIDE_FIELDS): the
   // bodies LH-48 grows besides paragraphs and lists.
   const growsAsBody = (units: readonly Pending[]): boolean => units.every(unit => !unit.children && unit.caption === undefined && unit.emphasis === undefined && !unit.eyebrow)
-    && ((units.length >= 2 && units.every(unit => unit.field === 'metric')) || (units.length >= 2 && units.filter(unit => unit.field === 'table').length === 1 && units.filter(unit => TABLE_ASIDE_FIELDS.has(unit.field)).length === units.length - 1)
+    && ((units.length >= 2 && units.every(unit => unit.field === 'metric')) || (units.length === 2 && units.every(unit => unit.field === 'table')) || (units.length >= 2 && units.filter(unit => unit.field === 'table').length === 1 && units.filter(unit => TABLE_ASIDE_FIELDS.has(unit.field)).length === units.length - 1)
       // C07: a short snippet beside its explanation (a text or a list) grows with it, as a snippet alone grows.
       || (units.length === 2 && units.filter(unit => unit.field === 'code').length === 1 && units.some(unit => unit.field === 'text' || unit.field === 'items' || unit.field === 'bullets')));
   const growBodyUnits = (units: readonly Pending[]): void => {
