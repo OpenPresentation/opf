@@ -14,11 +14,15 @@ const compose = (slide, extra = {}) => {
 const metrics = [{ metric: { value: '52', label: 'Trial participants' } }, { metric: { value: '84%', label: 'Task completion' } }, { metric: { value: '6.2', label: 'Median task time' } }];
 const table = { columns: ['Team', 'Participants', 'Completion'], rows: [['A', '28', '89%'], ['B', '24', '79%']] };
 
-test('a dashboard table of two rows under three metrics grows; the metrics keep their size', () => {
+test('a dashboard table of two rows under three metrics grows and stays with them; the metrics keep their size', () => {
   const slide = { layout: 'dashboard', title: 'Pilot at a glance', blocks: [...metrics, { table }] };
   const result = compose(slide), kept = compose(slide, { fill: false });
   assert.equal(result.diagnostics.filter((entry) => entry.code === 'text-overflow').length, 0);
   assert.ok(result.items.find((item) => item.field === 'table').tableGrowth > 1, 'the table grew');
   const values = (composed) => composed.items.filter((item) => item.field === 'metric').map((item) => item.text.fontSize);
   assert.deepEqual(values(result), values(kept));
+  // One group: the table follows the metrics one gap down (each row hugs its blocks), not at the foot of its own row.
+  const metricBottom = Math.max(...result.items.filter((item) => item.field === 'metric').map((item) => item.box.y + item.box.height));
+  const placed = result.items.find((item) => item.field === 'table');
+  assert.ok(placed.box.y - metricBottom >= 0 && placed.box.y - metricBottom <= 40, `gap ${placed.box.y - metricBottom}`);
 });

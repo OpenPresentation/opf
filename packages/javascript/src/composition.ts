@@ -10128,10 +10128,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (belowUnits.length) { cells.push(Array.from({ length: columnCount }, () => BELOW)); rowSizes.push('auto'); }
     // LH-48 (growBody, CENTER): in a body of metrics that grows as one (growsAsBody), a row whose regions hold only metrics hugs them (an auto
     // row), so the grown metrics sit in the middle of the height the headings leave.
-    if ((options as Record<symbol, unknown>)[CENTER] === true && bodySteps > 0 && plan.stack === undefined && growsAsBody(bodyUnits) && bodyUnits.every(unit => unit.field === 'metric')) {
+    // C12 (0.35.2): so do a dashboard's row of metrics and the grown table under it (each row hugs its blocks), so the two stay one group
+    // in the middle of the body instead of each sitting in the middle of its own row with a band between them.
+    const huggedField = (unit: Pending) => unit.field === 'metric' || unit.field === 'table';
+    if ((options as Record<symbol, unknown>)[CENTER] === true && bodySteps > 0 && plan.stack === undefined && growsAsBody(bodyUnits) && (bodyUnits.every(unit => unit.field === 'metric') || (bodyUnits.every(huggedField) && bodyUnits.some(unit => unit.field === 'metric')))) {
       cells.forEach((row, index) => {
         const names = row.filter(name => name !== '.');
-        if (rowSizes[index] !== 'auto' && names.length && names.every(name => { const units = unitsOf(name); return units.length > 0 && units.every(unit => unit.field === 'metric'); })) rowSizes[index] = 'auto';
+        if (rowSizes[index] !== 'auto' && names.length && names.every(name => { const units = unitsOf(name); return units.length > 0 && units.every(huggedField) && (units.every(unit => unit.field === 'metric') || units.every(unit => unit.field === 'table')); })) rowSizes[index] = 'auto';
       });
     }
     // A valid 12 x 12 grid may request more gaps than fit. Keep the same physical gap on both axes and
