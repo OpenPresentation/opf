@@ -5511,6 +5511,10 @@ function composeSlideOnce(input: unknown, options: ComposeSlideOptions): SlideCo
   const smallest = (composed: SlideComposition) => Math.min(...bodyReadability(composed, options).sizes.map(entry => entry.size));
   return after < before || (after === before && smallest(rows) > smallest(result) + FONT_GRID_EPSILON) ? rows : result;
 }
+/** LG1: the proportions of a wordmark tile among logos when no sibling picture's proportions are known (a logo's usual 5:2). */
+const WORDMARK_ASPECT = 2.5;
+/** LG1: the size a name in a wordmark tile starts at (it steps down until it fits the tile), so a name reads beside the marks alike in any row. */
+const WORDMARK_SIZE = 40;
 /** LH-86: lets long texts become full-width rows on a layout whose whole body is one row of regions (composeSlideOnce's trial). */
 const ROWS_ON_OVERFLOW = Symbol('opf.rowsOnOverflow');
 /** LH-86: whether a layout's body regions all lie in one row of its grid, two or more of them (two-column, three-column). */
@@ -8771,6 +8775,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // C15: pictures (and videos) in one row of a region, some captioned and some not: an uncaptioned one keeps the room of the tallest
   // caption band beside it empty, so the pictures of the row share one height and their top and bottom edges line up.
   const captionReserve = new WeakMap<Pending, number>(), wholePictures = new WeakSet<Pending>();
+  /** LG1: the names drawn as wordmark tiles among logos; their text is centered in the tile. */
+  const wordmarks = new WeakSet<Pending>();
   const reserveCaptions = (units: Pending[], boxes: LayoutBox[], cards: boolean): void => {
     const media = (unit: Pending) => !unit.children && (unit.field === 'image' || unit.field === 'video');
     const rows = new Map<string, number[]>();
@@ -8909,12 +8915,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const side = alignmentFor(node.field), atEnd = rtl ? side === 'left' : side === 'right';
       box = { ...box, x: side === 'center' ? box.x + (box.width - prose.width) / 2 : atEnd ? box.x + box.width - prose.width : box.x, width: prose.width };
     }
-    let text = internal ? body?.fit : columns ? (columns.length > 1 ? mergeListColumns(columns) : columns[0]!.text) : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,prose?.size ?? contentNominalSize(node.field)*scale,floorSize,node.path,node.payload.numbering) : undefined;
+    let text = internal ? body?.fit : columns ? (columns.length > 1 ? mergeListColumns(columns) : columns[0]!.text) : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,wordmarks.has(node) ? snapFontSizeDown(WORDMARK_SIZE*scale) : prose?.size ?? contentNominalSize(node.field)*scale,floorSize,node.path,node.payload.numbering,wordmarks.has(node) ? 'center' : undefined) : undefined;
     if (prose && box !== wholeBox && text && textValue !== undefined && retainedProse?.get(node.path)?.limit === undefined) {
-      const wide = fitContent(node.field,node.value,textValue,wholeBox,prose.size,floorSize,node.path,node.payload.numbering);
+      const wide = fitContent(node.field,node.value,textValue,wholeBox,prose.size,floorSize,node.path,node.payload.numbering,wordmarks.has(node) ? 'center' : undefined);
       if (wide.fontSize > text.fontSize + 1e-9 || (text.overflow && !wide.overflow)) { text = wide; box = wholeBox; }
     }
-    let alignment = alignmentFor(node.field);
+    let alignment = wordmarks.has(node) ? 'center' as const : alignmentFor(node.field);
     const centered = text && textValue !== undefined && !internal && !columns ? startAlignedCenter(node, text, textValue, box) : undefined;
     if (centered) { alignment = 'left'; text = centered.text; box = centered.box; startAligned.add(items.length); }
     // WI-3 (P23): a video draws in a 16:9 frame, the largest that fits its cell, placed by the region's anchor. In automatic
@@ -10583,11 +10589,28 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         // that does not fit its own cell at the starting size tries columns before it shrinks (RR-81 review: the region's tools before overflow).
         const stack: number[] = [];
         reserveCaptions(units, boxes, cards);
+        // LG1: a name among logos (a plain text in a media region that takes pictures, the logos layout's body) is drawn as a wordmark:
+        // a tile of the pictures' proportions (the first sibling picture whose proportions core can read, else WORDMARK_ASPECT), as wide
+        // as its cell, at the region's anchor, with the name centered in it at the size it fits, so a name reads beside the marks.
+        // A layout master (LAYOUT_MASTER) and the placeholder sample a PPTX export composes at `fill: false` keep plain placeholders.
+        const wordmark = region.role === 'media' && region.accepts.includes('image') && (options as Record<symbol, unknown>)[LAYOUT_MASTER] !== true && options.fill !== false ? (() => {
+          const aspect = units.flatMap(unit => !unit.children && unit.field === 'image' ? [intrinsicImageAspect(unit.host?.image, assets)] : []).find(value => value !== undefined) ?? WORDMARK_ASPECT;
+          return (unit: Pending, box: LayoutBox): LayoutBox | undefined => {
+            if (unit.children || unit.field !== 'text' || unit.caption !== undefined) return undefined;
+            const height = Math.min(box.height, box.width / aspect);
+            return roundBox({ ...box, y: box.y + anchoredOffset(box.height - height, region.anchor), height });
+          };
+        })() : undefined;
         units.forEach((unit, index) => {
           const first = items.length;
-          placeNode(unit, boxes[index]!, settings, cards, listGrid ? 1 : listColumnsOf(region), region.anchor === 'top' || stacked || planned[index] ? undefined : referenceHeights[index], region.anchor, !cards || bands ? undefined : planned[index] ? frames[index] : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
+          const tile = wordmark?.(unit, cellBoxes[index] ?? boxes[index]!);
+          // The card of a placed frame starts CARD_FILL_SPACE of a gap down (placeNode), so the frame starts that much higher: the tile is
+          // exactly the pictures' frame.
+          const drop = gap * CARD_FILL_SPACE;
+          if (tile) { wordmarks.add(unit); placeNode(unit, tile, settings, true, undefined, undefined, 'middle', { ...tile, y: tile.y - drop, height: tile.height + drop }); }
+          else placeNode(unit, boxes[index]!, settings, cards, listGrid ? 1 : listColumnsOf(region), region.anchor === 'top' || stacked || planned[index] ? undefined : referenceHeights[index], region.anchor, !cards || bands ? undefined : planned[index] ? frames[index] : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
           if (!unit.children) { leafItems.push(...range(first, items.length)); stack.push(...range(first, items.length)); }
-          if (longRows) centeredCardText.push(...range(first, items.length));
+          if (longRows || tile) centeredCardText.push(...range(first, items.length));
         });
         // LH-43: the blocks of one kind in a region read at one size whatever their arrangement: across the rows of a grid (LH-42 did
         // it for a list grid), along a row and down a stacked column (WI-4; stackedBoxes sizes the stack for it). Uneven content no
