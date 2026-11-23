@@ -57,7 +57,8 @@ test("the reviewed families split into the owner's four classes", () => {
   // 153 policy families and 7 shipped dependencies were reviewed; opf#166 added the four Intos rows and FF-45 the four emoji and math faces
   // (Noto Color Emoji, Noto Emoji, STIX Two Math, Noto Sans Math).
   assert.equal(committed.summary.records, policy.families.length + overrides.extras.length);
-  assert.equal(committed.summary.records - INTOS.length - FF45_FACES.length, 160, "the owner's 160 reviewed families plus the Intos and FF-45 rows");
+  // 0.35 added one policy family, Leelawadee UI (the Thai and Khmer default).
+  assert.equal(committed.summary.records - INTOS.length - FF45_FACES.length, 161, "the owner's 160 reviewed families and Leelawadee UI, plus the Intos and FF-45 rows");
   for (const name of INTOS) assert.equal(committed.records.find((record) => record.family === name)?.class, "open", name);
   // The seven shipped script-font dependencies (Noto Sans Arabic, Lao, Myanmar, Sinhala, Syriac, Thaana, Noto Serif Tibetan) got policy rows in RR-17 (FF-44).
   assert.equal(overrides.extras.length, 0);
@@ -127,7 +128,7 @@ test("records agree with the policy table and the pinned manifest", () => {
 
 test("every proprietary script family and open script face carries its script-corpus qualification (FF-44)", () => {
   const proprietary = committed.records.filter((record) => record.class === "proprietary-script");
-  assert.equal(proprietary.length, 41);
+  assert.equal(proprietary.length, 42);
   for (const record of proprietary) {
     const corpus = record.scriptCorpus;
     assert.ok(corpus, `${record.family} has a script corpus record`);
@@ -488,11 +489,11 @@ test("the summary answers the owner's four questions from the records", () => {
   assert.equal(l.openDirectlyUsable.drawnAsItself + l.openDirectlyUsable.openAlias + l.openDirectlyUsable.notBundled, l.openDirectlyUsable.total);
   assert.deepEqual(l.openDirectlyUsable.aliases, ["Liberation Mono", "Liberation Sans", "Liberation Serif", "Source Sans Pro"]);
   assert.equal(l.needsReplacement.total, committed.summary.byClass["proprietary-latin"] + committed.summary.byClass["proprietary-script"] + committed.summary.byClass.special);
-  assert.deepEqual(l.needsReplacement.byClass, { "proprietary-latin": 53, "proprietary-script": 41, special: 3 });
+  assert.deepEqual(l.needsReplacement.byClass, { "proprietary-latin": 53, "proprietary-script": 42, special: 3 });
   const found = l.replacementFound;
   assert.equal(found.metricCompatible + found.visualLookAlike + found.scriptFace + found.specialPath, found.total);
   assert.equal(found.total + l.noRoute.total, l.needsReplacement.total);
-  assert.deepEqual([found.metricCompatible, found.visualLookAlike, found.scriptFace, found.specialPath], [9, 44, 41, 3]);
+  assert.deepEqual([found.metricCompatible, found.visualLookAlike, found.scriptFace, found.specialPath], [9, 44, 42, 3]);
   assert.deepEqual(l.openDirectlyUsable.byLicense, { "OFL-1.1": 71 });
   assert.equal(l.openDirectlyUsable.drawnAsItself, 67);
   assert.equal(l.openDirectlyUsable.openAlias, 4);
@@ -504,8 +505,8 @@ test("the summary answers the owner's four questions from the records", () => {
   assert.equal(Object.values(l.bundledFaceLicenses.replacementRecordsByLicense).reduce((sum, count) => sum + count, 0), found.total);
   const md = renderMarkdown(committed);
   const top = md.slice(0, md.indexOf("## Summary"));
-  assert.match(top, /How many fonts do we have\? \| 168 \|/);
-  assert.match(top, /\| 97 \| 9 metric-compatible, 44 visual look-alike \(Latin\), 41 script face, 3 special path/);
+  assert.match(top, /How many fonts do we have\? \| 169 \|/);
+  assert.match(top, /\| 98 \| 9 metric-compatible, 44 visual look-alike \(Latin\), 42 script face, 3 special path/);
   assert.doesNotMatch(md, /pptx\.gallery shows|support badge/i);
 });
 
@@ -515,7 +516,7 @@ test("a proprietary family without a bundled route counts as no route, not as fo
   calibri.bundled.yes = false;
   const l = licensingSummary(records, read(overrides.manifestSnapshot));
   assert.deepEqual(l.noRoute.families, ["Calibri"]);
-  assert.equal(l.replacementFound.total, 96);
+  assert.equal(l.replacementFound.total, 97);
   assert.equal(l.replacementFound.metricCompatible, 8);
 });
 
@@ -581,9 +582,13 @@ test("the symbol snapshot is reduced from the renderer module and refuses a bad 
 
 test("native verification comes from committed comparison output, and only for families the runs name", () => {
   const verified = committed.summary.nativeVerifiedFamilies;
-  // FF-46 (2026-10-02): every deck of the 0.12.0 native run passes, and every family is named by one, so every record is verified by name read-back.
-  assert.deepEqual([...verified].sort(), committed.records.map((item) => item.family).sort());
-  assert.deepEqual(committed.summary.nativeVerification, { verified: committed.records.length, partial: 0, failed: 0, unverified: 0, NA: 0 });
+  // FF-46 (2026-10-02): every deck of the 0.12.0 native run passes, and every family of that date is named by one, so those records are
+  // verified by name read-back. Leelawadee UI joined the policy with the 0.35 script defaults and no native run names it yet: the owner
+  // decided on 2026-11-23 to record it as not yet verified rather than hold the Thai and Khmer defaults. Its native run is opf#1399.
+  const NOT_YET_NATIVE = ["Leelawadee UI"];
+  assert.deepEqual([...verified].sort(), committed.records.map((item) => item.family).filter((family) => !NOT_YET_NATIVE.includes(family)).sort());
+  assert.deepEqual(committed.records.filter((item) => item.nativeVerification.status === "unverified").map((item) => item.family), NOT_YET_NATIVE);
+  assert.deepEqual(committed.summary.nativeVerification, { verified: committed.records.length - NOT_YET_NATIVE.length, partial: 0, failed: 0, unverified: NOT_YET_NATIVE.length, NA: 0 });
   assert.deepEqual(committed.summary.nativeFailedFamilies, []);
   assert.equal(committed.summary.nativeVerification.verified, verified.length);
   assert.deepEqual(committed.inputs.nativeEvidence.map((run) => run.id), ["rr-05b-native-20261002", "rr-05-cjk-native-20261002", "ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005", "ff-46-documented-visual-native-20261005-fonts"]);
@@ -709,7 +714,7 @@ test("a failing FF-46 deck marks failed the families only that deck reads back, 
     const failed = rebuilt.summary.nativeFailedFamilies;
     assert.ok(failed.includes("Tahoma"));
     assert.equal(rebuilt.summary.nativeVerification.failed, failed.length);
-    assert.equal(rebuilt.summary.nativeVerification.verified + failed.length, committed.records.length);
+    assert.equal(rebuilt.summary.nativeVerification.verified + failed.length + rebuilt.summary.nativeVerification.unverified, committed.records.length);
     assert.deepEqual(rebuilt.inputs.nativeEvidence.find((run) => run.id === "ff-46-native-0.12-20261002").failingChecks.map((item) => item.deck), ["latin-03-tahoma"]);
     // A family that a passing deck also reads back stays verified, with the failing deck as a caveat.
     const ok = JSON.parse(readFileSync(file, "utf8"));
