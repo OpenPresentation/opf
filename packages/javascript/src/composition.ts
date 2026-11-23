@@ -10603,7 +10603,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const stacked = !bands && arrangement === 'column' && !(units.length === 1 && region.anchor === 'top');
         // LH-86: a stack of long-text cards shares the region's height (longTextRowBoxes).
         const longRows = stacked && cards && units.length > 1 && units.every(longTextUnit);
-        if (stacked) boxes = longRows ? longTextRowBoxes(units, cell, settings, gap) : stackedBoxes(units, cell, gap, settings, cards, region.anchor);
+        // C02: a lone quote drawn on its own card (LH-78) at a middle or bottom anchor is given the card's insets too, so it keeps its card and mark.
+        if (stacked) boxes = longRows ? longTextRowBoxes(units, cell, settings, gap) : stackedBoxes(units, cell, gap, settings, cards || (units.length === 1 && besideQuote(units[0]!)), region.anchor);
         if (!bands && !lead && (arrangement === 'grid' || arrangement === 'row') && region.anchor !== 'top') {
           const naturals = boxes.map((box,index) => {
             const unit = units[index]!;

@@ -62,6 +62,8 @@ const CHANGED = {
   dashboard: { lead: { role: "supporting" } },
   // OPF 0.35: process says its row of steps with its region's flow, where it set design.contentDirection on a grid region.
   process: { body: { flow: "row" } },
+  // C02: the aside beside a chart sets its takeaway in the middle of its column, level with the chart.
+  "chart-beside": { aside: { anchor: "middle" } },
 };
 
 /** Track weights as shares of their numeric total (core compiles to relative numbers; `auto` stays `auto`). */
