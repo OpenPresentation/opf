@@ -911,7 +911,7 @@ Default severity: **info**. Cost: structure. The presentation does not declare i
 
 **Basis.** WCAG 2.2 SC 3.1.1 Language of Page, level A
 
-**Approximations.** Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.language`; opf/language-tag checks how those tags are written).
+**Approximations.** Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.language`; opf/language-tag checks how those tags are written). With no language set, a slide whose letters are mostly Arabic-script or Hebrew is laid out as Arabic or Hebrew, right to left (OPF 0.35); the message names those slides.
 
 
 ## Layout rules
