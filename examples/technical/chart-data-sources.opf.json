@@ -2,6 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Chart Data",
   "description": "Technical fixture for inline chart data.",
+  "language": "en-US",
   "slides": [
     {
       "title": "Inline Chart Data",

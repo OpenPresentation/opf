@@ -2,6 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Header Footer Logo Set",
   "description": "Technical fixture for organization logo shapes (onLight and onDark), logo references in header and footer zones, a zone row (logo beside text), repeated furniture, and watermark suppression.",
+  "language": "en-US",
   "organization": {
     "id": "fixture-org",
     "name": "Fixture Org",
@@ -61,10 +62,26 @@
     }
   ],
   "assets": {
-    "logo-dark": "./assets/logo-dark.svg",
-    "logo-light": "./assets/logo-light.svg",
-    "icon": "./assets/icon.svg",
-    "wordmark": "./assets/wordmark.svg",
+    "logo-dark": {
+      "src": "./assets/logo-dark.svg",
+      "alt": "Fixture Org logo for light backgrounds",
+      "mediaType": "image/svg+xml"
+    },
+    "logo-light": {
+      "src": "./assets/logo-light.svg",
+      "alt": "Fixture Org logo for dark backgrounds",
+      "mediaType": "image/svg+xml"
+    },
+    "icon": {
+      "src": "./assets/icon.svg",
+      "alt": "Fixture Org icon",
+      "mediaType": "image/svg+xml"
+    },
+    "wordmark": {
+      "src": "./assets/wordmark.svg",
+      "alt": "Fixture Org wordmark",
+      "mediaType": "image/svg+xml"
+    },
     "watermark": "./assets/watermark.png"
   }
 }
