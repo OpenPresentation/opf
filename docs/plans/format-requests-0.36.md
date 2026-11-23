@@ -5,6 +5,53 @@ deferred) against the tip of `main` at `c58cf0ba`, which holds the unreleased 0.
 decided before any of it is designed. Each question carries a recommendation. A recommendation that changes a requested
 shape goes back to Michael before it is built (rule 8 of the request).
 
+## Update of 2026-11-23
+
+The rest of this page is the analysis as written on 2026-11-20. Five things have changed since, and where they disagree
+with the text below, this section is current.
+
+1. **0.35.0 is released** (2026-11-23), and pptx.dev, pptx.gallery and openpresentation.org are on it. X-02 is settled.
+   0.35.1 (three slide fixes, no schema change) is open as
+   [OpenPresentation/opf#1414](https://github.com/OpenPresentation/opf/pull/1414); 0.36 work branches after it.
+2. **One release, not three** (owner, 2026-11-23). Everything below ships as 0.36.0, landed on `main` in the order A to F,
+   with a cut order agreed in advance: gauge and bullet, embed, localized date names, `refresh`, per-value layers of the
+   fill record. This replaces the recommendation in X-01.
+3. **The project moves to openpresentation.com** (owner, 2026-11-23). The site, the hosted MCP server, the docs and the
+   links move with 0.36.0. A document's `$schema` is a `const` in the schema, so moving the seventeen schema ids is
+   the one breaking change in the release; the recommendation is to move them with a safe fix in `opf fix`, and to keep
+   the old domain redirecting. The old name appears about 1,600 times in each of this repository, pptx.gallery and the
+   site.
+4. **Open issues and pull requests were read.** Added to 0.36.0: links to a slide of the same deck
+   ([opf#1297](https://github.com/OpenPresentation/opf/issues/1297), spelled `slide:<id>` like `asset:` and `var:`),
+   the slide `language` round trip ([opf#1404](https://github.com/OpenPresentation/opf/issues/1404)), a duplicate-id
+   test over items and rows ([opf#1103](https://github.com/OpenPresentation/opf/issues/1103)), a type test between core
+   and the renderer ([opf#1408](https://github.com/OpenPresentation/opf/issues/1408)), and room in the site's llms
+   schema chunk before the bump
+   ([openpresentation-site#247](https://github.com/Data-Advantage/openpresentation-site/issues/247): 3,544 bytes left).
+   The fill record of F-02 is named `filledFrom`, because `fill` already paints a shape and
+   [opf#1275](https://github.com/OpenPresentation/opf/issues/1275) would extend that word to backgrounds. A drawing
+   change to a gallery layout needs a minor, so the layout sweep
+   ([opf#1412](https://github.com/OpenPresentation/opf/issues/1412)) rides in 0.36.0.
+5. **Other OPF sessions were read**, the STORYD program's among them. What changes below:
+   - D-05: the 32 frameworks are already default gallery narratives (31 on `main`, two on the conformance branch). The
+     work is to add the new fields; no beat id is renamed, because STORYD's briefs are pinned to today's ids.
+   - A-06: hosts use typed prefixed ids (`dk_`, `dck_`), so the id is an opaque string with no recommended form.
+   - E-01: STORYD's lock map has a third state, "swappable", which the four requested aspects do not cover. It waits for
+     a definition.
+   - X-06: STORYD's first wave also expects transactions, proposals, merge, comment anchors, an asset store, server
+     rendering and reflowing PowerPoint body text by default. All but the ids are outside the format and still to do.
+   - A-04: a list or table split across pages keeps each item's id; only the continued block takes the `--N` suffix.
+   - CR 7 also fixes the MCP viewer, which keys a session on the deck's name because there is no document id.
+   - Two requests are still pending approval: chart-type records with `intents`, `dataShape`, `useWhen`, `avoidWhen`,
+     and a convention for `extensions` keys.
+
+The original request texts are in the STORYD repository (`docs/opf-change-requests.md`,
+`docs/templates-and-variables.md`), which this work could not read. CR 11 still has no text here.
+
+Two pages hold the current proposal: the change-by-change review, with before and after for each change and a
+recommendation on each of 65 decisions (`https://claude.ai/artifact/9MfLFtDMZmNFSEjgocinhB`), and the release plan
+(`https://claude.ai/artifact/YSMnrQySEPmarTqGH3jevR`). Nothing is built until the review is approved.
+
 What this analysis could and could not see:
 
 - Read: `spec/schemas/`, the core, pptx and editor sources, the docs, the `changes/` fragments, the open pull
