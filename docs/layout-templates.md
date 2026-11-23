@@ -544,6 +544,8 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   keeps its place unless it grows.
   A table beside its aside (`table-beside`, TAB-2) grows the same way: a note or a list grows with it, a metric or a quote (set
   larger than the table already) keeps its size, and the table and its aside start on one line.
+  A table on a column's card grows the same way with the texts on the cards beside it (COL-2, every block on its card); a table
+  that only fits its column at the readability floor (a wide table in a third of the slide) keeps its size.
 - **Never grown by these two rules.** A stacked record (`statement`, `quote`, `closing`, which place their message as one stack, a closing at the foot (LH-155), and grow by
   LH-129's rule below), blocks below
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a
