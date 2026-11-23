@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "anton-figtree",
+  "name": "Anton and Figtree",
+  "app": "google-slides",
+  "languageFamily": "latin",
+  "languages": [],
+  "major": "Anton",
+  "minor": "Figtree",
+  "textSample": "Say it big",
+  "type": "sans-serif",
+  "summary": "A heavy condensed display face over a friendly geometric sans, for short headlines and big numbers.",
+  "description": "Anton and Figtree is a sans serif OPF font scheme for Latin presentations, using Anton for headings with Figtree for body text. Anton is a heavy condensed display face that fits a large headline or figure in a narrow measure; Figtree is an open, geometric sans that stays readable in lists, tables and charts. Suits launches, campaigns and results decks with short titles.",
+  "tags": ["latin", "sans-serif", "pairing", "condensed", "display"]
+}

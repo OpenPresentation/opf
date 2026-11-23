@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "roboto-mono-figtree",
+  "name": "Roboto Mono and Figtree",
+  "app": "google-slides",
+  "languageFamily": "latin",
+  "languages": [],
+  "major": "Roboto Mono",
+  "minor": "Figtree",
+  "code": "Roboto Mono",
+  "textSample": "Ship the next build",
+  "type": "sans-serif",
+  "summary": "A monospace face for headings and code over a geometric sans for body text, for technical decks.",
+  "description": "Roboto Mono and Figtree is a sans serif OPF font scheme for Latin presentations, using Roboto Mono for headings and code with Figtree for body text. The monospace headings give engineering and product decks a technical voice and match the code blocks, while Figtree keeps lists, tables and chart labels proportional and easy to read.",
+  "tags": ["latin", "sans-serif", "pairing", "monospace", "technical"]
+}

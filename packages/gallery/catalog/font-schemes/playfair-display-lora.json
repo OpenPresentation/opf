@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "playfair-display-lora",
+  "name": "Playfair Display and Lora",
+  "app": "google-slides",
+  "languageFamily": "latin",
+  "languages": [],
+  "major": "Playfair Display",
+  "minor": "Lora",
+  "textSample": "A considered argument",
+  "type": "serif",
+  "summary": "A high-contrast display serif over a calm text serif, for narrative and long-form decks.",
+  "description": "Playfair Display and Lora is a serif OPF font scheme for Latin presentations, using Playfair Display for headings with Lora for body text. Playfair Display's high stroke contrast reads as a headline at display sizes; Lora's moderate contrast and sturdy serifs keep paragraphs, quotes and table cells readable. Suits reports, cultural programs and narrative decks.",
+  "tags": ["latin", "serif", "pairing", "display", "editorial"]
+}

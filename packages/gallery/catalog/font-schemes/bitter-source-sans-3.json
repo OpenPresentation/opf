@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "bitter-source-sans-3",
+  "name": "Bitter and Source Sans 3",
+  "app": "google-slides",
+  "languageFamily": "latin",
+  "languages": [],
+  "major": "Bitter",
+  "minor": "Source Sans 3",
+  "textSample": "Sturdy and direct",
+  "type": "sans-serif",
+  "summary": "A sturdy slab serif over a plain humanist sans, for clear headings that carry across a room.",
+  "description": "Bitter and Source Sans 3 is a sans serif OPF font scheme for Latin presentations, using Bitter for headings with Source Sans 3 for body text. Bitter's even strokes and square slabs hold up at a distance and on a projector; Source Sans 3 is a plain humanist sans that keeps lists, tables and chart labels quiet. Suits workshops, education, public-sector and operating reviews.",
+  "tags": ["latin", "sans-serif", "pairing", "slab-serif"]
+}
