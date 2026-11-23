@@ -542,6 +542,8 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   at most three quarters (`TABLE_NOTE_GROWN_TARGET`, the target of LH-75's pair beside each other), so a third row or a longer note
   keeps the size the two-row table grew to instead of dropping to the role sizes. A pair that already covers half the body or more
   keeps its place unless it grows.
+  A table beside its aside (`table-beside`, TAB-2) grows the same way: a note or a list grows with it, a metric or a quote (set
+  larger than the table already) keeps its size, and the table and its aside start on one line.
 - **Never grown by these two rules.** A stacked record (`statement`, `quote`, `closing`, which place their message as one stack, a closing at the foot (LH-155), and grow by
   LH-129's rule below), blocks below
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a

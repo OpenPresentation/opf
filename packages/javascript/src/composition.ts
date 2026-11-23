@@ -5252,9 +5252,11 @@ function bodyFill(result: SlideComposition, options: ComposeSlideOptions = {}): 
   // A body of metrics is metrics alone: a note on LH-06's band beside them keeps its size and place, so they stay as they are.
   const metrics = result.items.every(item => headings.has(item.field) || item.eyebrow || item.field === 'metric') && body.every(item => item.field === 'metric' && item.metricLayout && !item.frameBox && !item.metricTile && !item.emphasis && inBody(item));
   // The note under the table across its width (LH-75's note beside a table keeps its own growth, tableNote).
-  const tableItem = body.find(item => item.field === 'table'), noteItem = body.find(item => item.field === 'text');
-  const tableNote = !!result.regions && body.length === 2 && !!tableItem && !!noteItem?.text && !noteItem.frameBox && body.every(item => !item.emphasis && inBody(item))
-    && noteItem.box.y >= tableItem.box.y + 1 && noteItem.box.x < tableItem.box.x + tableItem.box.width - 1 && noteItem.box.x + noteItem.box.width > tableItem.box.x + 1;
+  const tableItem = body.find(item => item.field === 'table'), noteItem = body.find(item => item.field !== 'table' && TABLE_ASIDE_FIELDS.has(item.field));
+  const tableNote = !!result.regions && body.length === 2 && !!tableItem && !!noteItem?.text && (!noteItem.frameBox || noteItem.field === 'quote') && body.every(item => !item.emphasis && inBody(item))
+    && ((noteItem.box.y >= tableItem.box.y + 1 && noteItem.box.x < tableItem.box.x + tableItem.box.width - 1 && noteItem.box.x + noteItem.box.width > tableItem.box.x + 1)
+      // TAB-2: or beside it, in a layout's own row (table-beside); the pair grows as the one under it does.
+      || noteItem.box.x >= tableItem.box.x + tableItem.box.width - 1 || noteItem.box.x + noteItem.box.width <= tableItem.box.x + 1);
   // C07: a code snippet and the one text or list beside it grow together (growBodyUnits), as a snippet alone does.
   const codeAside = !!result.regions && body.length === 2 && body.some(item => item.field === 'code' && item.codeLayout) && body.some(item => (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text) && body.every(item => !item.emphasis && !item.frameBox && inBody(item));
   if (body.length < 2 || !(prose || metrics || tableNote || codeAside)) return undefined;
@@ -6423,6 +6425,8 @@ const TABLE_NOTE_GROWN_SHARES: readonly number[] = [.7, .65, .6, .55, .5];
  * same allowance holds for a table beside a picture track (automaticTracks).
  */
 const TABLE_NOTE_CELL_LINES = 2;
+/** TAB-1, TAB-2: the blocks that grow (LH-48) with the one table beside or under them in a layout's regions: a note, a list, a metric or a quote. */
+const TABLE_ASIDE_FIELDS = new Set(['text', 'items', 'bullets', 'metric', 'quote']);
 /** LH-75: actual growth may use three whole-word cell lines and three quarters of the body, while initial placement keeps its two-line/60% rules. */
 const TABLE_NOTE_GROWN_CELL_LINES = 3, TABLE_NOTE_GROWN_TARGET = .75;
 /** LH-75, LH-80: the most lines any one cell of a placed table is set on (Infinity when it cannot be laid out). */
@@ -7888,16 +7892,19 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // each grows by the body's steps, a metric's roles in proportion (MetricLayoutOptions.proportional).
   const bodyGrown = new WeakSet<Pending>();
   const grownOptions = (node: Pending): { growth?: number; proportional?: true } => { const growth = growthOf.get(node); return growth !== undefined && growth > 1 ? { growth, ...(bodyGrown.has(node) ? { proportional: true as const } : {}) } : {}; };
-  // Whether the body's leaves (no groups) are two or more metrics, or one table and one text: the bodies LH-48 grows besides paragraphs and lists.
+  // Whether the body's leaves (no groups) are two or more metrics, or one table and one text, list, metric or quote (TABLE_ASIDE_FIELDS): the
+  // bodies LH-48 grows besides paragraphs and lists.
   const growsAsBody = (units: readonly Pending[]): boolean => units.every(unit => !unit.children && unit.caption === undefined && unit.emphasis === undefined && !unit.eyebrow)
-    && ((units.length >= 2 && units.every(unit => unit.field === 'metric')) || (units.length === 2 && units.filter(unit => unit.field === 'table').length === 1 && units.filter(unit => unit.field === 'text').length === 1)
+    && ((units.length >= 2 && units.every(unit => unit.field === 'metric')) || (units.length === 2 && units.filter(unit => unit.field === 'table').length === 1 && units.filter(unit => TABLE_ASIDE_FIELDS.has(unit.field)).length === 1)
       // C07: a short snippet beside its explanation (a text or a list) grows with it, as a snippet alone grows.
       || (units.length === 2 && units.filter(unit => unit.field === 'code').length === 1 && units.some(unit => unit.field === 'text' || unit.field === 'items' || unit.field === 'bullets')));
   const growBodyUnits = (units: readonly Pending[]): void => {
     // LH-75's table beside its note (TABLE_NOTE) keeps its own growth.
     if (!bodySteps || !growsAsBody(units) || (options as Record<symbol, unknown>)[TABLE_NOTE] !== undefined) return;
     // At most LH-48's three steps (a compact grid's further steps are for paragraphs and lists).
-    for (const unit of units) if ((unit.field === 'metric' || unit.field === 'table' || unit.field === 'code') && !growthOf.has(unit)) { growthOf.set(unit, TYPE_SCALE_RATIO ** Math.min(3, bodySteps)); bodyGrown.add(unit); }
+    // TAB-2: beside a table, a metric or a quote keeps its own size (it is set larger than the table already); the table grows.
+    const besideTable = units.some(unit => unit.field === 'table');
+    for (const unit of units) if ((unit.field === 'table' || unit.field === 'code' || (unit.field === 'metric' && !besideTable)) && !growthOf.has(unit)) { growthOf.set(unit, TYPE_SCALE_RATIO ** Math.min(3, bodySteps)); bodyGrown.add(unit); }
   };
   // LH-78: a quote beside other blocks starts at the lead size and fits in QUOTE_BESIDE_LINES lines (besideQuote); `bodySize` (px) refits
   // one at the size its sibling quotes share.
