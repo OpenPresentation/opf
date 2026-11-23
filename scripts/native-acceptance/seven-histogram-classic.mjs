@@ -50,7 +50,9 @@ export const HISTOGRAM_SELECTION=Object.freeze({slideIndex:2,seriesIndex:1,point
 // Previous: {bytes:222791,sha256:'ec4dca43643897703946222dfae32f2e8b689b4ad8fb209551fb28919fceed27'}.
 // 0.35 list columns by default (owner decision 2026-11-18): layout tags only; only the ppt/tags/opfLayout*.xml parts of agenda, faq and list differ (their record hashes: the records dropped listColumns); no slide layout, slide, chart, media or theme part differs; part-by-part comparison with the export of 175b55711.
 // Previous: {bytes:222792,sha256:'e362f6c0797e45a3ad04cf2fcc51e11f75c3fe11b4ec451337e35df839b79336'}.
-export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:222790,sha256:'664db47e0148f2cacae21b6818a5f3cfaeebb63fb5f9e295e46030f671436341'});
+// 0.35.1 column anchors (owner decision 2026-11-23): layout tags only; only the ppt/tags/opfLayout*.xml parts of two-column and three-column differ (their record hashes: the records' anchor went from bottom to middle); no slide layout, slide, chart, media or theme part differs; part-by-part comparison with the export of 7697b2664.
+// Previous: {bytes:222790,sha256:'664db47e0148f2cacae21b6818a5f3cfaeebb63fb5f9e295e46030f671436341'}.
+export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:222788,sha256:'3b41ad559ae3b8e933813241ce6717fa91ae6799110b2a46e4271ebed1eb4417'});
 export const HISTOGRAM_SOURCE_ARCHIVE_BEFORE_RR105_PICTURE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
 const keys=(value,names)=>assert.deepEqual(Object.keys(value).sort(),[...names].sort());
 const modelHash=value=>digest(Buffer.from(JSON.stringify(value)));
