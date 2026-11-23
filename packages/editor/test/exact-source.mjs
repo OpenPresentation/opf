@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, findDuplicateKey, updateJsonSource } from '../src/exact-source.js';
+import { DuplicateKeyError, MAX_EXACT_SOURCE_LENGTH, createSourceMemory, findDuplicateKey, updateJsonSource } from '../src/exact-source.js';
 
 // Exact-source memory: only edited tokens are rewritten, and Escape/Undo/Redo restore the
 // authored bytes (escapes and irregular whitespace included), even after long typing drafts.
@@ -69,6 +69,31 @@ assert.throws(() => updateJsonSource('{', {}, createSourceMemory()));
   ]) {
     const result = updateJsonSource(source, next, createSourceMemory());
     assert.deepEqual(parsed(result), next, `duplicate keys keep the edit: ${source}`);
+  }
+  // duplicateKeys: "reject" throws a typed error that places the repeated key, and writes nothing; the default is unchanged.
+  {
+    const source = ['{', '  "a": 1,', '  "s": [{ "t": 1, "t": 2 }]', '}'].join('\r\n');
+    assert.throws(() => updateJsonSource(source, { a: 2, s: [{ t: 2 }] }, createSourceMemory(), { duplicateKeys: 'reject' }), (error) => {
+      assert.ok(error instanceof DuplicateKeyError && error instanceof Error);
+      assert.equal(error.name, 'DuplicateKeyError');
+      assert.equal(error.code, 'duplicate-key');
+      assert.equal(error.key, 't');
+      assert.deepEqual(error.path, ['s', 0]);
+      assert.equal(source.slice(error.offset, error.offset + 3), '"t"');
+      assert.equal(source.indexOf('"t"', source.indexOf('"t"') + 1), error.offset, 'the second occurrence');
+      assert.deepEqual([error.line, error.column], [3, 19]);
+      assert.match(error.message, /"t".*line 3, column 19/);
+      return true;
+    });
+    assert.deepEqual(findDuplicateKey(source), { key: 't', path: ['s', 0] }, 'findDuplicateKey keeps its shape');
+    // A source without a repeated key is edited as before, and an unchanged document is returned as it is.
+    const clean = '{"a":1,"a2":{"a":2}}';
+    assert.equal(updateJsonSource(clean, { a: 5, a2: { a: 2 } }, createSourceMemory(), { duplicateKeys: 'reject' }), '{"a":5,"a2":{"a":2}}');
+    // The default and "rewrite" still keep the edit by writing the document out.
+    for (const options of [undefined, {}, { duplicateKeys: 'rewrite' }]) assert.deepEqual(JSON.parse(updateJsonSource('{"a":1,"a":2}', { a: 3 }, createSourceMemory(), options)), { a: 3 });
+    assert.throws(() => updateJsonSource('{"a":1}', { a: 2 }, createSourceMemory(), { duplicateKeys: 'ignore' }), RangeError);
+    // Invalid JSON is still the parser's error.
+    assert.throws(() => updateJsonSource('{', {}, createSourceMemory(), { duplicateKeys: 'reject' }), SyntaxError);
   }
   // An edit elsewhere leaves the duplicated keys, and every other byte, alone.
   assert.equal(updateJsonSource('{"a":1,"a":2,"b":1}', { a: 2, b: 9 }, createSourceMemory()), '{"a":1,"a":2,"b":9}');
