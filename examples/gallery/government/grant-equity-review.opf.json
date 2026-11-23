@@ -16,7 +16,7 @@
     "titleAlignment": "end",
     "contentBox": false,
     "imageFit": "contain",
-    "listBullet": "image"
+    "listBullet": "character"
   },
   "slides": [
     {

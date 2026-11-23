@@ -14,7 +14,7 @@ The `examples/` directory has two shipped layers, plus a docs fixture kept outsi
 Use `examples/technical/` when you want a small file that exercises a specific schema surface:
 
 - content payloads, rich text, blocks, charts, tables, media, metrics, quotes, timelines, and diagrams
-- icons, shapes, connectors, and pyramid, matrix, cycle, chevrons, flow, organization chart, hierarchy, and Venn layouts
+- icons, shapes, connectors, and pyramid, matrix, cycle, chevrons, process, vertical-process, inverted-pyramid, organization chart, hierarchy, and Venn layouts
 - blocks placed in the cells of the slide grid (`region`), with span combinations
 - asset string/object forms and asset-backed chart data
 - design backgrounds, organization logo shapes, headers, footers, watermarks, and slide-level overrides
@@ -29,7 +29,7 @@ Use `examples/technical/` when you want a small file that exercises a specific s
 | `education/` | K-12, higher education, research, advising, workforce, advancement, and student services scenarios. |
 | `government/` | Public health, transit, emergency management, utilities, regulators, courts, parks, workforce, tax, and civic engagement decks. |
 | `presentation-types/` | Reusable deck archetypes such as pitches, board updates, QBRs, conference talks, workshops, postmortems, launches, policy briefings, training, and research reports. |
-| `international/` | Region- or language-specific decks, including examples of language object metadata and right-to-left direction. |
+| `international/` | Region-specific decks in English, tagged with the English of their region (`en-JP`, `en-AE`), including language object metadata. The technical fixtures carry other languages and right-to-left direction. |
 | `design-and-media/` | Decks that emphasize design controls, image/video assets, data storytelling, and self-running orientation patterns. |
 
 ## Patterns To Look For

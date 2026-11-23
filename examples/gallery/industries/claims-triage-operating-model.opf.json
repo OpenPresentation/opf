@@ -16,7 +16,7 @@
     "titleAlignment": "end",
     "contentBox": false,
     "imageFit": "contain",
-    "listBullet": "image"
+    "listBullet": "character"
   },
   "slides": [
     {
@@ -54,29 +54,24 @@
         "data": {
           "columns": [
             "Quarter",
-            "Current",
-            "Baseline"
+            "Current"
           ],
           "rows": [
             [
               "Q1",
-              23,
-              20
+              23
             ],
             [
               "Q2",
-              27,
-              22
+              27
             ],
             [
               "Q3",
-              30,
-              24
+              30
             ],
             [
               "Q4",
-              34,
-              26
+              34
             ]
           ]
         }

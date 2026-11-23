@@ -1,5 +1,6 @@
 {
   "name": "Singleton combo references on both value axes",
+  "language": "en-US",
   "design": {
     "theme": "minimal",
     "fontScheme": "roboto",
@@ -7,6 +8,7 @@
   },
   "slides": [
     {
+      "title": "Q1 revenue and margin both sit under their targets",
       "chart": {
         "type": "combo",
         "data": {

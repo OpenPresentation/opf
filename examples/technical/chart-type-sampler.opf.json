@@ -2,12 +2,12 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Chart Type Sampler",
   "description": "Technical fixture sampling specialized chart type ids from the catalog.",
+  "language": "en-US",
   "slides": [
     {
       "title": "Distribution And Outliers",
       "blocks": [
         {
-          "region": "start",
           "chart": {
             "type": "box-and-whisker",
             "data": {
@@ -33,7 +33,6 @@
           }
         },
         {
-          "region": "center",
           "chart": {
             "type": "histogram",
             "data": {
@@ -59,7 +58,6 @@
           }
         },
         {
-          "region": "end",
           "chart": {
             "type": "scatter",
             "data": {
