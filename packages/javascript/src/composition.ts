@@ -4221,6 +4221,8 @@ export interface ListFitOptions extends RichTextOptions {
    * no numbering. composeSlide sets it for a list block whose only entry has a description.
    */
   heading?:boolean;
+  /** PR2: with `heading`, the one entry draws as a heading even without a description (a step beside steps that have one). */
+  headingAlone?:boolean;
   /**
    * LH-136: the heading of a one-entry heading list (`heading`) is a display word over an accent rule: the word at LIST_DISPLAY_SCALE times
    * the list size (stepped down to the one line the box holds, never to under LIST_HEADING_SCALE), a rule of LIST_DISPLAY_RULE em across the
@@ -4356,7 +4358,8 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
   const listPlain=(value:ListText)=>typeof value==='string'?value:value.map(run=>typeof run==='string'?run:run.text).join('');
   // P3: a display word (LH-136) is a heading with or without a description under it.
   // LH-133: a one-entry list that shares its label column with sibling blocks (`rowLabels`) is a ruled row, not a heading list.
-  const heading=options.heading===true&&!numbers&&source.length===1&&(source[0]!.descriptionRuns!==undefined||options.display===true)&&!(options.rows===true&&options.rowLabels);
+  // PR2: a step without a description beside described steps is a heading too (headingAlone).
+  const heading=options.heading===true&&!numbers&&source.length===1&&(source[0]!.descriptionRuns!==undefined||options.display===true||options.headingAlone===true)&&!(options.rows===true&&options.rowLabels);
   // LH-07: entries drawn beside step badges (numbered, one level).
   const badged=options.badges===true&&numbers!==undefined&&source.every(item=>item.level===0);
   // LH-14: entries drawn beside icon chips (unnumbered, at least one first-level icon). RR-105: only a first-level entry draws its icon; a
@@ -7106,6 +7109,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // numbered in arabic when the payload has no numbering (from its badgeStarts entry: an agenda's unnumbered lists count on); a step
   // heading is a one-entry numbered list whose number its block's badge draws, so it fits as a heading list (LH-77) without the number.
   const badgeLists = new Set<string>(), stepHeadings = new Set<string>(), badgeStarts = new Map<string, number>();
+  // PR2: the step headings without a description in a row where another step has one: drawn as headings too, so the row reads alike.
+  const aloneHeadings = new Set<string>();
   // LH-165: the icon lists of an agenda (a `numbered` region), which draw no badges, and the number each starts from: drawn as icon cards,
   // their cards are numbered as the badges would number them.
   const iconAgendas = new Map<string, number>((options as Record<symbol, unknown>)[AGENDA_STARTS] as Map<string, number> | undefined ?? []);
@@ -7143,7 +7148,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const own = field === 'items' && !badgeLists.has(path) && !stepHeadings.has(path) && !numeralLists.has(path) && !chiplessLists.has(path) && iconList(value, numbering) ? { ...listed, icons: true, iconScale: chipScale } : listed;
     return own.rows && spreadLists.has(path) ? { ...own, spread: true } : own;
   };
-  const listOptionsOf = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none',...(headingCaps.has(path)?{headingMax:headingCaps.get(path)!}:{})}
+  const listOptionsOf = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,...(aloneHeadings.has(path)?{headingAlone:true}:{}),bullet:'none',...(headingCaps.has(path)?{headingMax:headingCaps.get(path)!}:{})}
     : numeralLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:badgeNumbering(path, numbering),rows:true,numerals:numeralLists.get(path)!,...pairsOf(value, path)}
     : badgeLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:badgeNumbering(path, numbering),badges:true}
     : pairRowLabels.has(path) ? {...richOptions(styleFor(field,path)),rows:true,pairs:'question',rowLabels:pairRowLabels.get(path)!,bullet:'none'}
@@ -10038,6 +10043,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     if (units.length < 2 || !units.every(unit => leaf(unit) && (unit.field === 'text' || isList(unit))) || units.some(unit => unit.field === 'items' && iconList(unit.value, unit.payload.numbering))) return;
     for (const unit of units) { stepUnits.add(unit); stepPaths.add(unit.path); if (isList(unit) && numbered(unit) && entries(unit).length === 1) stepHeadings.add(unit.path); }
+    // PR2: a step heading without a description beside step headings with one is a heading too (bold, a step up), not a plain line.
+    const described = (unit: Pending) => stepHeadings.has(unit.path) && record(entries(unit)[0]).description !== undefined;
+    if (units.some(described)) for (const unit of units) if (stepHeadings.has(unit.path) && !described(unit)) aloneHeadings.add(unit.path);
     fire('step-badges');
   };
   // LH-133: a region whose two or more blocks are each one question with its answer (a one-entry list whose entry is a question with a

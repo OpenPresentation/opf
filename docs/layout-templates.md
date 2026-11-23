@@ -487,7 +487,8 @@ A region whose `arrangement` is `steps` or `numbered` lists the steps of a seque
   1.75 times the step text across with its numeral at the step text size, in the scheme color readable on the accent. The badge sits
   0.4 of its width above the text, at the block's start (its right edge in a right-to-left deck), or over its middle when the block is
   centered. The badges of a row share one line, and a connector in the border color runs through their centers. A one-entry numbered
-  list gives its badge its number and draws as a heading over its description (LH-77); any other block is numbered by its position.
+  list gives its badge its number and draws as a heading over its description (LH-77), and as a heading without one when another step
+  of the region has one (PR2), so the row reads alike; any other block is numbered by its position.
   Each block keeps the band for its badge in the height it asks for and in its cell.
 - **A list's entries** (`steps` for a lone list of two or more entries, `numbered` for every list of two or more entries of one level,
   numbered or not, since an agenda runs in time): each entry draws beside its
