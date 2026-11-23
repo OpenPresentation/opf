@@ -77,7 +77,8 @@ test('LH-71: a table that wraps in a row takes the whole width above its text, c
 });
 
 test('LH-86: two long texts in cards side by side are drawn one card per row, across the row, filling the body', () => {
-  for (const id of ['two-column', 'three-column', 'pillars']) {
+  // two-column and three-column keep their columns (columns-stay-columns.test.mjs); pillars' one region's grid takes the rows.
+  for (const id of ['pillars']) {
     for (const direction of ['ltr', 'rtl']) {
       const result = composeSlide({ title: 'Decision options', blocks: [paragraph('Evergreen CRM'), paragraph('Asteria Robotics')] }, { layout: layouts[id], direction });
       assert.deepEqual(findings(result), [], id);

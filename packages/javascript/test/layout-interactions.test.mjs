@@ -255,7 +255,8 @@ test('LH-52 with LH-70 and LH-67: paragraph columns and a lead plus stack keep t
 
 test('LH-86 with LH-70 and LH-06: long texts moved into one region stay rows; a short last text is the foot band below them', () => {
   for (const direction of ['ltr', 'rtl']) {
-    const result = composeSlide({ title: 'Decision options', blocks: [longText('Evergreen CRM'), longText('Asteria Robotics'), longText('Lumina Foods'), { text: 'Decide by Friday.' }] }, { layout: layouts['three-column'], direction });
+    // pillars: one region's grid (two-column and three-column keep their columns, columns-stay-columns.test.mjs).
+    const result = composeSlide({ title: 'Decision options', blocks: [longText('Evergreen CRM'), longText('Asteria Robotics'), longText('Lumina Foods'), { text: 'Decide by Friday.' }] }, { layout: layouts.pillars, direction });
     assert.deepEqual(overflow(result), []);
     const texts = result.items.filter((item) => item.field === 'text' && !item.emphasis);
     assert.equal(texts.length, 3);
@@ -324,7 +325,7 @@ test('LH-48 with LH-86: long texts drawn as full-width rows grow together when t
   const text = (name) => ({ text: `${name} should focus the next cycle on move repetitive questions into self-service without hurting satisfaction.` });
   const slide = { title: 'Decision options', blocks: [text('Waypoint Apps'), text('Northwind Health')] };
   for (const direction of ['ltr', 'rtl']) {
-    const result = composeSlide(slide, { layout: layouts['three-column'], direction }), plain = composeSlide(slide, { layout: layouts['three-column'], direction, fill: false });
+    const result = composeSlide(slide, { layout: layouts.pillars, direction }), plain = composeSlide(slide, { layout: layouts.pillars, direction, fill: false });
     const rows = result.items.filter((item) => item.field === 'text'), before = plain.items.filter((item) => item.field === 'text');
     assert.deepEqual(overflow(result), []);
     assert.equal(new Set(rows.map((item) => item.text.fontSize)).size, 1, `${direction}: one size (LH-43)`);

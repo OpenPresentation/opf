@@ -210,7 +210,10 @@ columns of long lines, or as a short one in a wide card beside a long one in a n
 On a slide that draws cards, when the filled regions of a layout lie in one row and hold only such paragraphs (two or three, in
 several regions or in one region's grid), every paragraph moves to the first region of that row in reading order. The other
 regions are left empty and collapse into it, and that region stacks them one card per row across the row. The layout must have no
-`row` region, the slide no composition of its own, and must have nothing beyond a region's room or below the grid.
+`row` region, the slide no composition of its own, and must have nothing beyond a region's room or below the grid. A layout whose
+whole body is that one row of regions (`two-column`, `three-column`) is its columns: long texts stay columns there, and become rows
+only when the columns overflow at the readability floor and the rows overflow less. The rule applies to one region's grid
+(`pillars`, `scorecard`, `team`) and to a row of regions beside others in a layout; automatic composition (no layout) never uses it.
 
 A stacked column of such cards (these rows, or more long paragraphs one region stacks) shares the region's height. The text is
 set at the largest size of the type scale at which every row fits, each card as tall as its text plus the insets of a card that
