@@ -8767,7 +8767,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   };
   // C15: pictures (and videos) in one row of a region, some captioned and some not: an uncaptioned one keeps the room of the tallest
   // caption band beside it empty, so the pictures of the row share one height and their top and bottom edges line up.
-  const captionReserve = new WeakMap<Pending, number>();
+  const captionReserve = new WeakMap<Pending, number>(), wholePictures = new WeakSet<Pending>();
   const reserveCaptions = (units: Pending[], boxes: LayoutBox[], cards: boolean): void => {
     const media = (unit: Pending) => !unit.children && (unit.field === 'image' || unit.field === 'video');
     const rows = new Map<string, number[]>();
@@ -8855,6 +8855,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let metricHeight = metricReferenceHeight === undefined ? undefined : payloadBox({...box,height:metricReferenceHeight},cards).height;
     const cell = box;
     box = payloadBox(box, cards);
+    const captionArea = box;
     let caption = captionOf(node, box);
     if (caption) box = caption.mediaBox;
     else if (captionReserve.has(node)) box = { ...box, height: Math.max(scale, box.height - captionReserve.get(node)!) };
@@ -8932,7 +8933,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (composeImage(host, node.hostPath ?? node.path, frameBox, frameBox, { ...context, diagnostics: [], callout: undefined }).fit === 'cover') { imageHost = host; box = frameBox; frameBox = undefined; }
     }
     const image = node.field === 'image' ? composeImage(imageHost, node.hostPath ?? node.path, box, box, { ...imageContext(undefined, anchor, settings), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) }) : undefined;
-    if (caption) settleCaption(caption, image?.box ?? box, anchor);
+    // IM1: the caption of a picture shown whole in a bled region's cell starts at the picture's edge, as wide as the picture.
+    if (caption && image && wholePictures.has(node) && caption.position !== 'above' && image.box.width < captionArea.width - 1) caption = captionOf(node, { ...captionArea, x: image.box.x, width: image.box.width }) ?? caption;
+    if (caption) settleCaption(caption, image?.box ?? box, wholePictures.has(node) ? 'top' : anchor);
     const chart = node.field === 'chart' ? composeChart(node, box, settings) : undefined;
     const diagram = node.field === 'diagram' ? composeDiagram(node, box, settings, anchor) : undefined;
     if (caption && diagram && !diagram.issue) settleCaption(caption, diagram.box, anchor);
@@ -10614,10 +10617,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // OPF 0.35: a Basic Process candidate keeps its steps' cell; the process, when drawn, fills the whole cell as a diagram region's does.
       if (rect && !region.bleed && stepProcesses.has(region.name)) stepProcessCells.set(region.name, roundBox(physical(logical(rect))));
       const areaBox = region.bleed && rect ? roundBox(cell) : undefined;
-      if (region.bleed && rect && cell.width > 0) cell = bleed(cell);
+      // IM1: a lone picture a bled region shows whole (its proportions known and not cropped to cover the cell) or with a caption does
+      // not reach the slide's edges anyway: it keeps the cell inside the margins and above the footer, in the middle of it, with its caption beside it.
+      const lone = units.length === 1 && !units[0]!.children && units[0]!.field === 'image' ? units[0]! : undefined;
+      const whole = !!(region.bleed && rect && cell.width > 0 && lone && (lone.caption !== undefined || intrinsicImageAspect(lone.host?.image, assets) !== undefined && composeImage(lone.host ?? {}, lone.hostPath ?? lone.path, bleed(cell), bleed(cell), { ...imageContext(undefined, 'middle'), diagnostics: [], callout: undefined }).fit !== 'cover'));
+      if (region.bleed && rect && cell.width > 0 && !whole) cell = bleed(cell);
+      if (whole) wholePictures.add(lone!);
       else if (rect && loneUnit && units[0] === loneUnit && plan.regions.every(other => other === region || empty.has(other.name))) cell = { ...cell, height: Math.max(cell.height, frame.y + frame.height - cell.y) };
       leafItems = [];
-      const arrangement = units.length && rect ? placeRegion(region, units, cell, loneCards.get(region.name)) : undefined;
+      const arrangement = units.length && rect ? placeRegion(whole ? { ...region, anchor: 'middle' } : region, units, cell, loneCards.get(region.name)) : undefined;
       if (arrangement && rect) {
         const band = `${rect.row}:${rect.rowSpan}:${region.role}`;
         bands.set(band, [...bands.get(band) ?? [], leafItems]);
