@@ -84,7 +84,7 @@ import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './i
 import {
   CHART_BAR_GAP_WIDTH, catalogRecords, clrMapAttributes, DIAGRAM_SHAPE_FAMILIES, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, intrinsicImageAspect, itemAlignment, pictureOverlay, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, languageInEffect, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
+  chartNumberLanguage, chartPlotInset, horizontalBarPlot, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, languageInEffect, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -3898,6 +3898,33 @@ function applyChartTextSize(xml, size) {
     `<a:defRPr${/\bsz="[^"]*"/.test(attributes) ? attributes.replace(/\bsz="[^"]*"/, `sz="${size}"`) : `${attributes} sz="${size}"`}${close}>`));
 }
 
+// Keynote: a bar or column chart whose value range runs below zero writes its category names at the low edge of the plot (c:catAx
+// c:tickLblPos low), not at the zero line. Below a header row its plot area is an outer box (src/chart-layer.js); PowerPoint takes the room
+// for those names out of the box, but Keynote leaves none and draws them past the chart frame, cut off ("Cranes" read "ranes"). The plot
+// area is written as the plot itself (layoutTarget inner) with the names outside it: each side where PowerPoint draws axis labels (the
+// category names; the value tick labels unless the value axis is deleted) ends where the preview's plot ends (core horizontalBarPlot or
+// chartPlotInset), and the other sides stay on the outer box, where PowerPoint's plot already reaches. `outer` is that box (fractions of
+// the chart frame); undefined when core lays out no plot.
+function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale, valueAxisHidden, context, options, presentation}) {
+  const data = resolveChartData(isDatasetRef(chart?.data) ? inlineChartData(chart, presentation) : chart, presentation);
+  if (!data.ok) return undefined;
+  const box = {x: region.x * 96, y: region.y * 96, width: region.w * 96, height: region.h * 96};
+  const measure = textWidthMeasurer(resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, italic: false}, options.textMeasurement), options.textMeasurement);
+  const deckLanguage = typeof presentation?.language === 'string' ? presentation.language : presentation?.language?.bcp47;
+  const language = chartNumberLanguage(chart, deckLanguage), rtl = context.direction === 'rtl', horizontal = chartData.barDir === 'bar';
+  const geometry = {scale, minFontSize: context.composition?.minFontSize, measure, direction: rtl ? 'rtl' : 'ltr', ...(language === undefined ? {} : {language})};
+  const inset = (horizontal ? horizontalBarPlot(chart, data, layer, valueAxis, box, geometry) : undefined)
+    ?? chartPlotInset(chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...geometry, box});
+  if (!inset) return undefined;
+  // The labeled sides: a horizontal bar chart's category names at the left and value ticks at the bottom; a column chart's names at the
+  // bottom and value ticks at the left (the right when its categories run right to left).
+  const labeled = horizontal ? {left: true, bottom: !valueAxisHidden} : {bottom: true, [rtl ? 'right' : 'left']: !valueAxisHidden};
+  const left = labeled.left ? inset.left / box.width : outer.x, top = outer.y;
+  const right = labeled.right ? 1 - inset.right / box.width : outer.x + outer.w, bottom = labeled.bottom ? 1 - inset.bottom / box.height : outer.y + outer.h;
+  const fraction = value => Number(Math.min(1, Math.max(0, value)).toFixed(4));
+  return {x: fraction(left), y: fraction(top), w: fraction(right - left), h: fraction(bottom - top), target: 'inner'};
+}
+
 function addChartPayload(slide, chart, region, context, options = {}, path = "chart", presentation, chartLayout) {
   const chartData = toPptxChartData(chart, context.chartexMode, presentation, path);
   if (!chartData.series) {
@@ -4041,6 +4068,11 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const chartColors = chartData.type === 'bar' && chartData.series.length === 1 ? palette.slice(0, 1) : palette;
   const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
   const layerXml = chartLayerOptions(layer, {region, scale, textSize, labelColor: markLabelColor, font: context.fonts.body, chart, rtl: context.direction === 'rtl'});
+  // Keynote: the category names of a negative range at the low edge, outside an inner plot area (lowLabelPlot).
+  if (layerXml.layout.plot && !layerXml.layout.plot.target && chartData.type === 'bar' && !chartData.combo && chartLayout?.valueAxis?.min < 0) {
+    const plotBox = lowLabelPlot(chart, chartData, layer, chartLayout.valueAxis, layerXml.layout.plot, region, {scale, valueAxisHidden: layerXml.options.valAxisHidden === true, context, options, presentation});
+    if (plotBox) layerXml.layout.plot = plotBox;
+  }
   if (Object.keys(layerXml.layout).length) context.chartHeadings.get(objectName).layerLayout = layerXml.layout;
   const chartOptionsXml = {
     objectName,
