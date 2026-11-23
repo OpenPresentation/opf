@@ -45,6 +45,17 @@ with the text below, this section is current.
    - Two requests are still pending approval: chart-type records with `intents`, `dataShape`, `useWhen`, `avoidWhen`,
      and a convention for `extensions` keys.
 
+6. **Four fixes do not wait for the review.** None changes the format; each is its own pull request, lands ahead of the
+   request work and ships in 0.36.0 (0.35.1 was released on 2026-11-23 and no 0.35.2 is planned):
+   - room in the site's llms schema chunk
+     ([openpresentation-site#247](https://github.com/Data-Advantage/openpresentation-site/issues/247));
+   - the slide `language` lost in a PowerPoint round trip
+     ([opf#1404](https://github.com/OpenPresentation/opf/issues/1404));
+   - the type mismatch between core and the renderer in 0.35.0, with a test between the two
+     ([opf#1408](https://github.com/OpenPresentation/opf/issues/1408));
+   - the conformance suite and governance document on `claude/amazing-faraday-28p6dh`, which is finished and has no
+     pull request.
+
 The original request texts are in the STORYD repository (`docs/opf-change-requests.md`,
 `docs/templates-and-variables.md`), which this work could not read. CR 11 still has no text here.
 
