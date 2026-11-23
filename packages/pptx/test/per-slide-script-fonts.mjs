@@ -147,7 +147,7 @@ const threeProfiles = {name: 'Three script profiles', design: {colorScheme: 'coo
   assert.ok(!result.codes.includes('script-font-per-slide-not-exported'));
 }
 
-// 3. A per-slide override mixed with the deck default: slides 1 and 3 (Japanese, Meiryo through the language) share master 1.
+// 3. A per-slide override mixed with the deck default: slides 1 and 3 (Japanese, Yu Gothic through the language) share master 1.
 const mixed = {name: 'Mixed', language: 'ja', design: {colorScheme: 'cool-horizon'}, slides: [
   {title: '日本語の見出し', text: 'ひらがなとカタカナ', notes: 'メモ'},
   {title: '日本語の見出し', design: {fontScheme: 'ms-mincho'}, text: 'ひらがなとカタカナ'},
@@ -158,13 +158,14 @@ const mixed = {name: 'Mixed', language: 'ja', design: {colorScheme: 'cool-horizo
   const result = await exported(mixed);
   const {masters, chains} = assertProfiles('mixed', mixed, result);
   assert.deepEqual(masters, [1, 2, 1, 2], 'mixed: slides with the same profile share a master');
-  assert.deepEqual([fontGroup(result.xml, chains[0].theme, 'minorFont').ea, fontGroup(result.xml, chains[1].theme, 'minorFont').ea], ['Meiryo', 'MS Mincho']);
+  assert.deepEqual([fontGroup(result.xml, chains[0].theme, 'minorFont').ea, fontGroup(result.xml, chains[1].theme, 'minorFont').ea], ['Yu Gothic', 'MS Mincho']);
   assert.deepEqual(result.diagnostics.filter(diagnostic => /script|language/.test(diagnostic.code)), [], 'mixed: slides on master 1 with notes are not reported');
 }
 
 // 4. One profile: one master, one layout, the presentation theme and the notes theme (the 976-deck corpus is byte-identical).
 for (const [label, presentation] of [
-  ['same profile through the language', {name: 'Same', language: 'th', design: {theme: 'classic'}, slides: [{title: thai, design: {fontScheme: 'angsana-new'}}, {title: thai}]}],
+  // v0.35: the Thai default is Leelawadee UI, so the scheme that gives the same profile as the language is leelawadee-ui.
+  ['same profile through the language', {name: 'Same', language: 'th', design: {theme: 'classic'}, slides: [{title: thai, design: {fontScheme: 'leelawadee-ui'}}, {title: thai}]}],
   ['Latin-only per-slide schemes', {name: 'Latin', slides: [{title: 'One', design: {fontScheme: 'georgia'}}, {title: 'Two', design: {fontScheme: 'arial'}}]}],
   ['later slide selects nothing', {name: 'Nothing', slides: [{title: '日本語', design: {fontScheme: inline('eastAsian', 'Meiryo')}}, {title: 'Two'}]}],
   ['one slide', {name: 'One', language: 'ja', slides: [{title: '日本語', design: {fontScheme: 'ms-mincho'}, notes: 'メモ'}]}],

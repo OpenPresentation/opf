@@ -205,7 +205,7 @@ const runs = xml => [...xml.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]
   assert.doesNotMatch(by('Hello '), /altLang/);
   assert.match(by('hello'), /lang="en-US"/, 'a run in the deck language needs no override');
   assert.match(by('日本語'), /lang="ja-JP"/);
-  assert.match(by('日本語'), /<a:ea typeface="Meiryo"\/>/, 'the Japanese East Asian face');
+  assert.match(by('日本語'), /<a:ea typeface="Yu Gothic"\/>/, 'the Japanese East Asian face (Yu Gothic, the default since 0.35)');
   assert.match(by('中文'), /lang="zh-CN"/);
   assert.match(by('中文'), /<a:ea typeface="Microsoft YaHei"\/>/, 'the Simplified Chinese face');
   assert.doesNotMatch(by('bonjour'), /<a:ea /, 'a Latin run keeps following the theme');
