@@ -26,6 +26,7 @@ const GOLDEN = {
   "caption-unsupported-payload": ["A `caption` belongs to one image, chart, table, video or diagram; this block is text.", "put the `caption` on the image, chart, table, video or diagram it describes, or remove it."],
   "image-option-unsupported-payload": ["`fit` only applies to pictures; this block is a chart.", "remove `fit`, or move it onto an image."],
   "shape-option-unsupported-payload": ["`fill` only applies to shapes; this block is text.", "remove `fill`, or make the block a shape with `shape` (a preset such as roundRect) or `path`."],
+  "shape-path-units": ["The `path` spans 100 by 100 units, but a path without a `viewBox` is drawn in a 0 to 1 box, so the outline is far outside its frame.","add a `viewBox` for the grid the path is written on (for example `{ \"d\": ..., \"viewBox\": \"0 0 100 100\" }`), or write its coordinates from 0 to 1."],
   "shape-anchor-size-unit": ["`at.width: 6` is a fraction, not pixels.", "rename `width` to `widthPx` if it is pixels."],
   "shape-adjust-unknown": ["roundRect has no adjust value `adj1`; it has `adj`.", "use `adj`, or remove `adj1`."],
   "shape-adjust-range": ["`adjust.adj` of roundRect is 0.8, outside 0 to 0.5, so the preset's default is drawn.", "set it between 0 to 0.5."],
@@ -105,11 +106,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 103 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 104 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 103);
+	assert.equal(RULE_IDS.length, 104);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {
