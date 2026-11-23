@@ -496,6 +496,10 @@ A region whose `arrangement` is `steps` or `numbered` lists the steps of a seque
   arabic as drawing only: the document keeps no numbering and the PPTX import gives the list back unnumbered. In a `numbered`
   region the unnumbered lists count on from one list to the next, as one agenda, and keep their markers when one of the region's
   lists cannot take badges (a lone entry, nested entries), so a part of the agenda is never numbered alone.
+- **A row of a list's steps** (`steps`, PR1): a lone list of 2 to 5 entries of one level (no icons) that is not Basic Process draws
+  as the row its steps make when written as separate blocks: one column per entry across the region, a badge over each at its start,
+  the connector through the badges, the entries under them and the row in the middle of the region, at the list's size or larger (up
+  to a list's display size). Columns narrower than six ems of that size keep the badges down the side, as above.
 - **Basic Process** (`steps`, OPF 0.35): a lone list of 2 to 8 entries of one level, each of one or two words (24 characters at most),
   without numbering, descriptions or icons, draws as the `process` arrangement (PowerPoint's Basic Process: boxes joined by arrows, see
   [SmartArt](smartart.md)) in the region's whole cell, when the process holds every entry at the size its steps would have or larger;

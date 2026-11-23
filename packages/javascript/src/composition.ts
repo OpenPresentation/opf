@@ -4324,6 +4324,8 @@ export const STEP_BADGE_GAP=.4;
  * every entry at the size the steps would have or larger; otherwise it draws as steps.
  */
 export const STEP_PROCESS_MIN=2, STEP_PROCESS_MAX=8, STEP_PROCESS_CHARACTERS=24;
+/** PR1: a `steps` region's lone badge list of at most this many entries draws as a row of steps, each column at least this many ems wide. */
+export const STEP_ROW_MAX=5, STEP_ROW_MIN_EMS=6;
 /**
  * LH-85: the bullet of each nesting level, by `level % LIST_MARKERS.length`, drawn at the entry's size. Every bundled text face has
  * • (U+2022) and the en dash (U+2013); ◦ (U+25E6) and ▪ (U+25AA), the former level 1 and 2 bullets, are missing from most of them
@@ -12305,6 +12307,62 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   };
   const tiles = checkTiles();
   if (tiles) steps.push(tiles);
+  // PR1: the lone list of a `steps` region (2 to STEP_ROW_MAX entries of one level, LH-07's badge list) is drawn as the row its steps make
+  // when they are written as separate blocks: one column per entry across the region, a badge over each at its start (the right in a
+  // right-to-left deck) joined by the connector, the entries under their badges, the row in the middle of the region. The entries take
+  // the largest size from a list's display size down to the size the list had at which every one fits its column without breaking a word;
+  // where none does (columns narrower than STEP_ROW_MIN_EMS) the list keeps its badges down the side. Both engines draw it as a list in
+  // columns with LH-07's row of badges.
+  const stepRow = (): ComposedSteps | undefined => {
+    if (!useTemplate || !ruleOn('step-badges')) return undefined;
+    const body = items.filter(item => !headings.has(item.field) && !item.eyebrow);
+    const item = body.length === 1 ? body[0]! : undefined;
+    const region = item?.region === undefined ? undefined : template!.regions.find(entry => entry.name === item.region);
+    if (!item || !region || regionSequence(region) !== 'steps' || !badgeLists.has(item.path) || item.listColumns || item.caption || item.frameBox || !item.text || !('listEntries' in item.text) || item.text.overflow) return undefined;
+    const values = Array.isArray(item.value) ? item.value as ListValue[] : [], count = values.length;
+    if (count < 2 || count > STEP_ROW_MAX || values.some(value => (record(value).level ?? 0) !== 0 || record(value).icon !== undefined)) return undefined;
+    const area = templateRegions.find(entry => entry.name === region.name)?.box;
+    if (!area) return undefined;
+    const base = (item.text as ListFit).fontSize, columnWidth = (area.width - gap * (count - 1)) / count;
+    const listOptions: ListFitOptions = { ...richOptions(styleFor(item.field, item.path)), bullet: 'none' };
+    const tryAt = (size: number) => {
+      if (columnWidth < STEP_ROW_MIN_EMS * size) return undefined;
+      const diameter = STEP_BADGE * size, band = diameter * (1 + STEP_BADGE_GAP), fits: ComposedListColumn[] = [];
+      let height = 0;
+      for (let index = 0; index < count; index++) {
+        const own0 = `${item.path}.0`, ownPath = `${item.path}.${index}`, marker = listOptions.citationMarker;
+        const entryOptions: ListFitOptions = marker ? { ...listOptions, citationMarker: (run: string) => marker(run === own0 || run.startsWith(`${own0}.`) ? ownPath + run.slice(own0.length) : run) } : listOptions;
+        const probe = fitList([values[index]!], { x: 0, y: 0, width: columnWidth, height: 1e5 }, size, size, entryOptions);
+        if (probe.overflow || probe.fontSize < size - FONT_GRID_EPSILON || probe.listEntries.some(entry => blockCutsWord(entry))) return undefined;
+        height = Math.max(height, probe.height);
+        fits.push({ box: { x: 0, y: 0, width: columnWidth, height: probe.height }, start: index, end: index + 1, text: probe });
+      }
+      return band + height <= area.height + 1e-6 ? { size, diameter, band, height, fits, entryOptions: (index: number) => { const own0 = `${item.path}.0`, ownPath = `${item.path}.${index}`, marker = listOptions.citationMarker; return marker ? { ...listOptions, citationMarker: (run: string) => marker(run === own0 || run.startsWith(`${own0}.`) ? ownPath + run.slice(own0.length) : run) } : listOptions; } } : undefined;
+    };
+    let chosen: NonNullable<ReturnType<typeof tryAt>> | undefined;
+    const top = Math.max(base, Math.min(capOf(item.composition), snapFontSizeDown(LONE_DISPLAY_SIZES.list * scale)));
+    for (let size = top; size >= base - FONT_GRID_EPSILON && !chosen; size = snapFontSizeDown(size - 4 / 3 * scale)) chosen = tryAt(Math.max(size, base));
+    if (!chosen) return undefined;
+    const { size, diameter, band, height } = chosen, y = area.y + (area.height - band - height) / 2, badges: ComposedStepBadge[] = [], fits: ComposedListColumn[] = [];
+    for (let index = 0; index < count; index++) {
+      const logicalX = area.x + index * (columnWidth + gap), x = rtl ? area.x + area.width - (logicalX - area.x) - columnWidth : logicalX;
+      const object = typeof values[index] === 'object' && !Array.isArray(values[index]), textPath = `${item.path}.${index}${object ? '.text' : ''}`;
+      const box = { x, y: y + band, width: columnWidth, height: chosen.fits[index]!.box.height };
+      const own = fitList([values[index]!], box, size, size, chosen.entryOptions(index));
+      if (own.overflow) return undefined;
+      fits.push({ box, start: index, end: index + 1, text: { ...own, listEntries: own.listEntries.map(entry => ({ ...entry, index, textPath, ...(entry.description ? { descriptionPath: `${item.path}.${index}.description` } : {}) })) } });
+      const cx = rtl ? x + columnWidth - diameter / 2 : x + diameter / 2, cy = y + diameter / 2;
+      badges.push({ path: textPath, cx, cy, radius: diameter / 2, label: localizeDigits(String(index + 1), languageInEffect(options.presentation, options.slideIndex)), fontSize: size, baseline: cy + size * .35 });
+    }
+    item.listColumns = fits;
+    item.text = mergeListColumns(fits);
+    item.box = { x: area.x, y, width: area.width, height: band + height };
+    item.alignment = rtl ? 'right' : 'left';
+    const ordered = [...badges].sort((a, b) => rtl ? b.cx - a.cx : a.cx - b.cx);
+    return { form: 'row', region: region.name, path: badges[0]!.path, badges: ordered, connector: { x1: ordered[0]!.cx, y1: ordered[0]!.cy, x2: ordered.at(-1)!.cx, y2: ordered.at(-1)!.cy }, lineWidth: 2 * scale };
+  };
+  const row = stepRow();
+  if (row) { for (let index = steps.length - 1; index >= 0; index--) if (steps[index]!.region === row.region) steps.splice(index, 1); steps.push(row); }
   // LH-169: a figure-led list (figureRowOf: 2 to FIGURE_ROW_MAX entries, each a short figure with its label) is a row of metrics, as
   // Claude Design draws "62 minutes a day / 1 in 6 reports / 9 days" (n15): one column per entry across the list's box, in reading order
   // (from the right in a right-to-left deck), each the figure bold in the accent at display size (LH-136's display heading, at most the
