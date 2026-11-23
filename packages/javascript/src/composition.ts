@@ -6644,6 +6644,9 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
     return { ...best.result, items, track: { kind: 'picture', edge: physical(edge), size: best.size, path: blockPath } };
   }
   if (pictures.length || leaf('video').length || charts.length !== 1) return base;
+  // opf#1412 (A7): a slide that asks for a `grid` keeps its grid: the chart's track would set the chart beside the others and squeeze them
+  // into a grid of narrow cells.
+  if (own.mode === 'grid') return base;
   const chartOf = (result: SlideComposition) => result.items.find(item => item.field === 'chart');
   const chart = chartOf(base);
   if (!chart || !shortPlot(chart, bodyHeight(base), scale)) return base;
@@ -8490,8 +8493,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const grid = gridGeometry(count, area, cols, actualGap, wordWeights ?? (mode === 'auto' && !hasRegions ? autoRowWeights(nodes, count, cols, area, actualGap, settings) : mode === 'row' && !hasRegions ? tableRowWeights(nodes, count, cols, area, actualGap, settings) : undefined) ?? settings.weights ?? [], mode === "column");
     // LH-47 widened: the cells of the scored grid's short last row stretch to the full width, as a region's grid does (flowCells'
     // `stretch`), so two pictures and a text draw a row of pictures over a full-width text, not a 2 x 2 grid with an empty cell. A grid
-    // of pictures and videos only keeps one cell width, as LH-47 keeps a gallery's.
-    if (!paragraphs && !lead && mode === 'auto' && !hasRegions && count === nodes.length && cols > 1 && count % cols !== 0 && !settings.weights?.length && ruleOn('short-row')
+    // of pictures and videos only keeps one cell width, as LH-47 keeps a gallery's. opf#1412 (A7): so does a `grid` whose columns the
+    // engine chose.
+    if (!paragraphs && !lead && (mode === 'auto' || (mode === 'grid' && settings.columns === undefined)) && !hasRegions && count === nodes.length && cols > 1 && count % cols !== 0 && !settings.weights?.length && ruleOn('short-row')
       && !nodes.every(node => !node.children && (node.field === 'image' || node.field === 'video')) && !team) {
       const first = count - count % cols, short = count - first, cell = (area.width - grid.gap * (short - 1)) / short;
       for (let k = 0; k < short; k++) grid.boxes[first + k] = { ...grid.boxes[first + k]!, x: area.x + k * (cell + grid.gap), width: cell };
@@ -8536,6 +8540,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const stack: number[] = [];
     // LH-52 with LH-70 and LH-67: paragraph columns and a lead plus stack keep their own cells; LH-52 centers the scored grid or LH-71's row.
     const filled = !hasRegions && !paragraphs && !lead && count === nodes.length && fillsSplit(nodes, grid.boxes, area, settings, cols);
+    // opf#1412 (A7): the blocks of a grid of two or more rows the slide asked for (`mode: "grid"`, or its own column count) sit in the
+    // middle of their cells, as LH-52 centers a split's, instead of at the top of each cell.
+    const gridCells = !filled && !hasRegions && !paragraphs && !lead && !team && !hasCards && !pullItem && area === contentBox && settings === rootSettings
+      && (mode === 'grid' || settings.columns !== undefined) && cols > 1 && count > cols && count === nodes.length;
     // LH-102: promoted regions that each run the body's full height (`start`, `center+end`), holding paragraphs and lists that fill too
     // little of it (LH-48's growBody composes them with CENTER), set their blocks as one band in the middle of the body, each at the height
     // the tallest of them needs, instead of each at the top of its column over an empty foot.
@@ -8552,7 +8560,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // opf#1412 (A2): full-height cells of paragraphs and lists only are LH-102's band (regionBand, after LH-48's growth): they keep the top here.
       const cellAt = node.region && box === placed && !filled && !node.children ? cellAnchor(node.region) : 'top', anchor = cellAt === 'middle' && proseColumns ? 'top' : cellAt;
       if (filled) placeSplitBlock(node, box, settings);
-      else if (centerColumn && !node.children && !node.region) placeInCell(node, box, settings, 'middle');
+      else if ((centerColumn || gridCells) && !node.children && !node.region) placeInCell(node, box, settings, 'middle');
       else if (anchor !== 'top') { placeInCell(node, box, settings, anchor); for (const item of items.slice(first)) cellOfItem.set(item, box); }
       else placeNode(node, box, settings);
       if (!hasRegions && (cols > 1 || stacks) && !node.children) stack.push(...range(first, items.length));
