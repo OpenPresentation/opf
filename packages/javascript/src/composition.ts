@@ -3310,6 +3310,8 @@ const TIMELINE_GROWTH = 4;
 const TIMELINE_STEP_GROWTH = [15, 10, 6] as const;
 /** C03, VPR-1: PowerPoint's chevron or vertical-process design covering less of its region than this gives way to OPF's design. */
 const LINEAR_STRIP_COVER = .5;
+/** MX1: a matrix of other than four entries prefers, at one text size, the grid whose cards are nearest this width over height. */
+const MATRIX_CARD_ASPECT = 1.25;
 /** C03: at one text size, OPF's linear design with more lines is kept over fewer only when it covers this much more of the region. */
 const LINEAR_COVER_MARGIN = .1;
 /** LH-41: a size offset that takes every timeline part to the readability floor (to measure how far a timeline can shrink). */
@@ -11976,8 +11978,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     } else {
       // The grid's shape is the one whose cards hold the entries at the largest size: one column of wide cards in a narrow region, a balanced
       // grid (cardGridColumns) in a wide one.
-      const columns = [...new Set([1, ...(count > 1 ? cardGridColumns(count) : []), Math.min(count, 2)])].filter(column => column <= count);
-      for (const column of columns) designs.push({ design: 'cards', frame: area, nodes: cardNodes(area, count, column, gap, radius), margin: CARD_TEXT_MARGIN, align: 'start', paint: 'card', text: 'slide', lineWidth: scale, layout: { design: 'card-grid', area, gap, radius, columns: column } });
+      // MX1: of the grids that hold the entries at one size, the one whose cards are nearest MATRIX_CARD_ASPECT (three entries side by side,
+      // not three wide strips); each card in the matrix's paint with its entry centered, as the four quadrants draw theirs.
+      const shapeOf = (column: number) => { const rows = Math.ceil(count / column), width = (area.width - (column - 1) * gap) / column, height = (area.height - (rows - 1) * gap) / rows; return Math.abs(Math.log(width / Math.max(1e-6, height) / MATRIX_CARD_ASPECT)); };
+      const columns = [...new Set([1, ...(count > 1 ? cardGridColumns(count) : []), Math.min(count, 2)])].filter(column => column <= count).sort((a, b) => shapeOf(a) - shapeOf(b));
+      for (const column of columns) designs.push({ design: 'cards', frame: area, nodes: cardNodes(area, count, column, gap, radius), margin: CARD_TEXT_MARGIN, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine, layout: { design: 'card-grid', area, gap, radius, columns: column } });
       diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `A matrix needs four entries; its ${count} ${count === 1 ? 'entry is' : 'entries are'} drawn as ${count === 1 ? 'a card' : 'a grid of cards'}.` });
     }
     // PowerPoint's design only where the PPTX export can write it as live SmartArt (SMART_ART_DOMAIN); outside it OPF's own design, and
