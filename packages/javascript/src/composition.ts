@@ -8392,14 +8392,18 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     placeNode(node, cell, settings, undefined, undefined, undefined, anchor);
   };
-  const arrange = (nodes: Pending[], area: LayoutBox, settings: Composition, reserved = 0, gapOverride?: number, containerPath = path, recorded = true): void => {
+  // opf#1412 (A3): the blocks of a column beside the slide's chart (LH-49's track, or a group beside the chart in a root row or column) sit
+  // in the middle of their column, as LH-52 centers a split: a lone block shorter than the column takes the height it needs in its
+  // middle, and a stack keeps its blocks at the heights they need, one gap apart, as one group in the middle (centeredSplitStack).
+  const centeredColumns = new WeakSet<Pending[]>();
+  const arrange =(nodes: Pending[], area: LayoutBox, settings: Composition, reserved = 0, gapOverride?: number, containerPath = path, recorded = true): void => {
     const count = Math.max(nodes.length, reserved);
     if (!count) return;
     const mode = modeFor(settings), localGap = groupGap(settings, area);
     // Root gap retains the canvas-based contract; group gaps use their container.
     const actualGap = gapOverride ?? (settings === rootSettings ? gap : localGap);
     let cols = defaultColumns(count, area, settings);
-    const hasRegions = nodes.some(node => node.region);
+    const hasRegions = nodes.some(node => node.region), centerColumn = centeredColumns.has(nodes);
     if (mode === 'grid' && settings.columns === undefined && !hasRegions && count === nodes.length && count > 1) cols = measuredGridColumns(nodes, area, cols, actualGap, settings);
     // WI-4 (P34): auto mode keeps a reading measure for prose, and a lone short block asks for the lead size (proseMeasure).
     if (!hasRegions && (mode === 'auto' || nodes.length === 1)) for (const node of nodes) { node.auto = true; node.lone = nodes.length === 1 && reserved === 0; }
@@ -8491,7 +8495,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // media block sits in the middle of the body.
       const centeredProse = (options as Record<symbol, unknown>)[CENTER] === true && !pullItem && area === contentBox && nodes.every(proseLeaf);
       grid.boxes = stackedBoxes(nodes, area, actualGap, settings, undefined, centeredProse ? 'middle' : 'top');
-      if (!centeredProse && !pullItem && area === contentBox && splitBlocks(nodes) && !nodes.every(proseLeaf) && splitFill(nodes, grid.boxes, area, settings) < SPLIT_FILL) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
+      if (centerColumn) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
+      else if (!centeredProse && !pullItem && area === contentBox && splitBlocks(nodes) && !nodes.every(proseLeaf) && splitFill(nodes, grid.boxes, area, settings) < SPLIT_FILL) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
       grid.rows = grid.boxes.map(box => ({ offset: box.y - area.y, size: box.height }));
     } else if (stacks && cols > 1 && count > cols && nodes.every(proseLeaf)) {
       // LH-43: the rows of a grid of text and lists share one size, so they are sized jointly and fill the area (jointRowBoxes).
@@ -8521,6 +8526,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if ((options as Record<symbol, unknown>)[TIMELINE_NOTE_REFLOW] !== undefined && !node.children && node.field === 'text' && retainedProse?.has(node.path) && box.height >= naturalHeight(node, box.width, hasCards && !insideTier, undefined, settings) - 1e-6) contentSized.add(node);
       const anchor = node.region && box === placed && !filled && !node.children ? cellAnchor(node.region) : 'top';
       if (filled) placeSplitBlock(node, box, settings);
+      else if (centerColumn && !node.children && !node.region) placeInCell(node, box, settings, 'middle');
       else if (anchor !== 'top') { placeInCell(node, box, settings, anchor); for (const item of items.slice(first)) cellOfItem.set(item, box); }
       else placeNode(node, box, settings);
       if (!hasRegions && (cols > 1 || stacks) && !node.children) stack.push(...range(first, items.length));
@@ -11097,6 +11103,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   else if (chartSplit) {
     const primary = pending[chartIndex]!, rest = pending.filter((_, index) => index !== chartIndex);
     const support: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: chartTrack!.mode ? { mode: chartTrack!.mode } : ownMode ? { mode: ownMode } : {}, synthetic: true };
+    // opf#1412 (A3): the blocks beside LH-49's chart track sit in the middle of their column (LH-61's KPI column keeps its own stack).
+    if (!chartTrack!.mode) centeredColumns.add(rest);
     arrange(firstChart ? [primary, support] : [support, primary], contentBox, rootSettings, 0);
   } else {
     const grouped = groupRoot(pending), roots = grouped?.nodes ?? pending;
@@ -11107,6 +11115,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     else if (!regions.length && roots.length === 2 && (rootSettings.mode === 'row' || rootSettings.mode === 'column') && rootSettings.weights?.length === 2) {
       const chart = roots.findIndex(node => !node.children && node.field === 'chart'), text = chart >= 0 ? textBesideChart(roots[1 - chart]!) : undefined;
       if (text) text.fills = true;
+    }
+    // opf#1412 (A3): a group beside the slide's one chart in a root row or column of the two sits in the middle of its cell.
+    if (!regions.length && roots.length === 2 && (rootSettings.mode === 'row' || rootSettings.mode === 'column')) {
+      const chart = roots.findIndex(node => !node.children && node.field === 'chart'), other = chart >= 0 ? roots[1 - chart] : undefined;
+      if (other?.children && !other.synthetic && other.children.every(child => !child.children && child.field !== 'chart')) centeredColumns.add(other.children);
     }
     if (grouped?.settings) arrange(grouped.nodes, contentBox, grouped.settings, 0, gap); else arrange(grouped?.nodes ?? pending, contentBox, rootSettings, 0);
   }
