@@ -2,7 +2,7 @@
 // one word as the word at display size over an accent rule, without a card.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { composeSlide, EYEBROW_TAG_SIZE, LIST_DISPLAY_SCALE, METRIC_ROLE_VALUE_SIZE } from '../dist/composition.js';
+import { composeSlide, EYEBROW_TAG_SIZE, LIST_DISPLAY_SCALE, LONE_DISPLAY_SIZES, METRIC_ROLE_VALUE_SIZE } from '../dist/composition.js';
 import { layouts } from './support/template-samples.mjs';
 
 const tier = (label, value, description, bullets, extra = {}) => ({ composition: { mode: 'column' }, blocks: [{ metric: { value, label, description } }, { bullets }], ...extra });
@@ -146,5 +146,6 @@ test('LH-136: a long word steps down to one line and the description is never sm
   }
   // The same pillars with a two-word title are the plain cards: the display words cost the descriptions no size.
   const plain = composeSlide({ title: 'Values', blocks: pillars(long.map((block, index) => word(`Core of ${index}`, block.items[0].description))) }, { layout: layouts.pillars });
-  assert.ok(listOf(result, 0).text.fontSize >= listOf(plain, 0).text.fontSize - 0.01);
+  // LH-102: plain cards under half full grow on past a list's display size; the pillars keep at least that size.
+  assert.ok(listOf(result, 0).text.fontSize >= Math.min(listOf(plain, 0).text.fontSize, LONE_DISPLAY_SIZES.list) - 0.01);
 });

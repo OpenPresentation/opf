@@ -5195,6 +5195,12 @@ const REGION_MEASURED = new WeakSet<SlideComposition>(), NO_REGION_MEASURE = Sym
  */
 const COMPACT_GRIDS = new WeakSet<SlideComposition>(), GRID_GROW = Symbol('opf.gridGrow'), NO_COMPACT_GRID = Symbol('opf.noCompactGrid');
 const COMPACT_GRID_STEPS = 8, COMPACT_GRID_DISPLAY = 56;
+/**
+ * LH-102 for a lone list: how far a lone plain list grows past LONE_DISPLAY_SIZES.list (reference pixels) by its first-level entries, as
+ * [at most so many entries, cap]: one to three up to COMPACT_GRID_DISPLAY (a lone short text's message size), four or five up to 49 (a step
+ * of the type scale lower); a longer list keeps the list display size. Each step still takes no line more than the list had.
+ */
+export const SPARSE_LIST_DISPLAY = [[3, 56], [5, 49]] as const;
 /** LH-169: the composed lists drawn as a row of figures (figureRows). */
 const FIGURE_ROW_ITEMS = new WeakSet<ComposedItem>();
 /** LH-165, LH-162: the compositions that draw icon cards or text tiles, whose text grows inside its cards (no LH-48 body growth or centering). */
@@ -7085,6 +7091,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const numeralLists = new Map<string, 'display' | 'row'>(), pairRowLabels = new Map<string, ListText[]>(), pairGrid = new Set<string>(), spreadLists = new Set<string>();
   // LH-14: the icon lists measured without their chips while a lone block chooses its growth (fillLoneBlock's plainNeed).
   const chiplessLists = new Set<string>();
+  // LH-102 for a lone list: the template's lone list that may be drawn (a region with an arrangement, LH-134's few takeaways beside numerals),
+  // whether or not the rule that draws it is on: it keeps its list size (fillLoneBlock grows a plain lone list past it), so the drawing's
+  // guard compares like with like.
+  const drawnLoneLists = new Set<string>();
+  // LH-102 for a lone list: a slide set apart on a dark surface of its own may draw its lone list as check tiles (checkTiles), which keep
+  // the list's size; its list keeps that size too, so the tiles are not refused for a size the plain list only reaches without them.
+  const checkTileSlide = (): boolean => options.darkBackground === true && (record(slide.design).variant !== undefined || record(slide.design).background !== undefined);
   const listOptionsFor = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => {
     // LH-106: list numerals and badges are in the numbering system of the slide's language.
     const listed = {...listOptionsOf(field, path, numbering, value), ...numberLanguage(options)};
@@ -9511,6 +9524,33 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         chosen = step; best = height; size = step;
       }
       if (chosen === undefined) proseGrowth.delete(node); else { proseGrowth.set(node, chosen); loneGrowth = true; }
+      // LH-102 for a lone list: a list that reached its display size (LONE_DISPLAY_SIZES.list) and still fills under LONE_FILL of its cell
+      // grows on by the type scale's steps up to COMPACT_GRID_DISPLAY, as a short body of several blocks does past that size (growBody's
+      // GRID_GROW), while it fits at the step, fills at most LONE_TARGET of the cell and every entry stays on one line: two short points no
+      // longer sit at list size in an empty body beside the display size of the same words written as one text. A list that is or may be
+      // drawn keeps its drawing and its size: ruled rows or entries with descriptions (LH-133), badges, icons, a region's arrangement, or
+      // check tiles (checkTileSlide).
+      if (node.field !== 'text' && !ruled && !(Array.isArray(node.value) && node.value.some(entry => (node.payload.numbering === undefined && resolvedIcon(record(entry).icon) !== undefined) || record(entry).description !== undefined)) && !badgeLists.has(node.path) && !drawnLoneLists.has(node.path) && !checkTileSlide() && chosen !== undefined && best < LONE_FILL * inner.height) {
+        const lines = (size: number) => fitLines(fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { ...inner, width: proseMeasure(node, inner.width).width }, size, floor, node.path, node.payload.numbering));
+        // The cap by the list's first-level entries (SPARSE_LIST_DISPLAY): one to three up to the compact display size, four or five a step
+        // of the type scale lower, six or more none past the list display size.
+        const entries = Array.isArray(node.value) ? node.value.filter(entry => (record(entry).level ?? 0) === 0).length : 0;
+        const sparseCap = SPARSE_LIST_DISPLAY.find(([most]) => entries <= most)?.[1] ?? 0;
+        // Every entry stays on one line (a list that wraps at the larger size, or already wraps, keeps today's size).
+        const oneLine = Array.isArray(node.value) ? node.value.length : 0;
+        let size = chosen, further: number | undefined;
+        for (;;) {
+          if (lines(size) > oneLine) break;
+          const step = scaleAbove(size, settings.minFontSize ?? 16);
+          if (step <= display + 1e-9 || step > sparseCap * scale + 1e-9 || step > capOf(settings) + FONT_GRID_EPSILON) break;
+          proseGrowth.set(node, step);
+          const height = plainNeed(), measure = proseMeasure(node, inner.width);
+          const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { ...inner, width: measure.width }, step, floor, node.path, node.payload.numbering);
+          if (height > LONE_TARGET * inner.height || fit.overflow || fit.fontSize < step - 1e-9 || fitLines(fit) > oneLine) break;
+          further = step; best = height; size = step;
+        }
+        proseGrowth.set(node, further ?? chosen);
+      }
       // LH-09, LH-69: a lone text of at most SHORT_MESSAGE_WORDS words (messageWords) is the slide's message: it grows on with its lines
       // balanced, up to MESSAGE_DISPLAY_SIZE in at most MESSAGE_DISPLAY_LINES lines, while it fills at most LONE_TARGET of the body, as Claude
       // Design sets a short message (b09 s36, b06 s05); a text of at most SHORT_TEXT_WORDS words ("Ship in March") up to the display title's
@@ -10028,7 +10068,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (body.length === 1 && !binding.belowUnits.length) {
       const { unit, region } = body[0]!, values: unknown[] = Array.isArray(unit.value) ? unit.value : [];
       const list = !unit.children && unit.caption === undefined && (unit.field === 'items' || unit.field === 'bullets') && !badgeLists.has(unit.path);
-      if (list && !region.arrangement && ruleOn('numerals') && unit.payload.numbering !== undefined && values.length >= 2 && values.length <= NUMERAL_TAKEAWAYS && values.every(entry => (record(entry).level ?? 0) === 0)) {
+      const takeaways = list && !region.arrangement && unit.payload.numbering !== undefined && values.length >= 2 && values.length <= NUMERAL_TAKEAWAYS && values.every(entry => (record(entry).level ?? 0) === 0);
+      if (list && (takeaways || region.arrangement)) drawnLoneLists.add(unit.path);
+      if (takeaways && ruleOn('numerals')) {
         badgeLists.add(unit.path); numeralLists.set(unit.path, 'display'); fire('numerals');
       }
       if (list && !regionDiagram(region) && values.length >= 2 && values.every(entry => pairEntry(entry) === 'term') && 2 * values.filter(entry => flatten(record(entry).text).trim().split(/\s+/u).length === 1).length > values.length) termLists.add(unit.path);

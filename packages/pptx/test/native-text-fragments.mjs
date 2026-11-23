@@ -65,8 +65,8 @@ test('explicit Arabic-proofed LTR intervals retain source punctuation and space 
 });
 
 test('final native writer preserves full run/paragraph/carrier geometry and applies no Unicode control',()=>{
- const properties='<a:rPr lang="ar-SA" altLang="en-US" sz="2775"><a:solidFill><a:schemeClr val="tx1"/></a:solidFill><a:latin typeface="Aptos"/><a:cs typeface="Aptos"/><a:hlinkClick r:id="rLink"/></a:rPr>';
- const end='<a:endParaRPr lang="ar-SA" altLang="en-US" sz="2775" b="0" i="0"><a:latin typeface="Aptos"/><a:cs typeface="Aptos"/><a:extLst><a:ext uri="test-terminal-metadata"><unit value="retained"/></a:ext></a:extLst></a:endParaRPr>';
+ const properties='<a:rPr lang="ar-SA" altLang="en-US" sz="4200"><a:solidFill><a:schemeClr val="tx1"/></a:solidFill><a:latin typeface="Aptos"/><a:cs typeface="Aptos"/><a:hlinkClick r:id="rLink"/></a:rPr>';
+ const end='<a:endParaRPr lang="ar-SA" altLang="en-US" sz="4200" b="0" i="0"><a:latin typeface="Aptos"/><a:cs typeface="Aptos"/><a:extLst><a:ext uri="test-terminal-metadata"><unit value="retained"/></a:ext></a:extLst></a:endParaRPr>';
  const pPr='<a:pPr rtl="1" algn="r" marL="394654" indent="-394654"><a:lnSpc><a:spcPct val="100000"/></a:lnSpc><a:buAutoNum type="arabicPeriod"/></a:pPr>';
  const xml='<p:sp><p:nvSpPr><p:cNvPr id="3" name="OPF list source line 0"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x="548640" y="3627787"/><a:ext cx="11094720" cy="429959"/></a:xfrm></p:spPr><p:txBody><a:bodyPr rtlCol="0" wrap="none"/><a:lstStyle/><a:p>'+pPr+'<a:r>'+properties+'<a:t>البند: </a:t></a:r><a:r>'+properties+'<a:t>Bonjour 1</a:t></a:r>'+end+'</a:p></p:txBody></p:sp>';
  const writer=createNativeTextFragments(),groups=new Map();writer.remember(0,'OPF list source line 0',planNativeTextFragments(line,request));const output=writer.write(xml,0,groups),result=shapes(output);
@@ -94,7 +94,7 @@ test('actual measured public export preserves source, automatic numbering and fu
  const result=await actual(source,true),all=shapes(result.xml);assert.equal(all.length,4,'heading plus original carrier and two editable native members');
  assert.deepEqual(all.map(shape=>shape.text),['لغة عربية صريحة','البند: ','Bonjour ','1']);assert.equal(all.map(shape=>shape.text).join('').length,31);
  assert.equal((result.xml.match(/<a:buAutoNum\b/g)??[]).length,1);
- for(const member of all.filter(shape=>shape.name.startsWith('OPF native fragment '))){assert.match(member.xml,/<a:latin\b[^>]*typeface="Aptos"/);assert.match(member.xml,/<a:cs\b[^>]*typeface="Aptos"/);assert.match(member.xml,/lang="ar-SA" altLang="en-US" sz="2775"/);assert(!member.xml.includes('<a:buAutoNum'));}
+ for(const member of all.filter(shape=>shape.name.startsWith('OPF native fragment '))){assert.match(member.xml,/<a:latin\b[^>]*typeface="Aptos"/);assert.match(member.xml,/<a:cs\b[^>]*typeface="Aptos"/);assert.match(member.xml,/lang="ar-SA" altLang="en-US" sz="4200"/);assert(!member.xml.includes('<a:buAutoNum'));}
  const preview=[...result.svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].find(match=>match[2].includes('Bonjour'));
  assert(preview,'Actual public SVG retains the same source Latin phrase');
  const members=all.filter(shape=>shape.name.startsWith('OPF native fragment ')),carrier=all.find(shape=>shape.name.startsWith('OPF list ')),frame=xml=>{const match=/<a:xfrm><a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/><\/a:xfrm>/.exec(xml);assert(match);return match.slice(1).map(Number);};
@@ -193,20 +193,20 @@ test('actual public unfragmented paragraph-end bytes survive carrier and word/di
 });
 
 test('property evidence tolerates saved xml:space and attribute serialization but retains real style/boundary changes',()=>{
- const body='<p:sp><p:txBody><a:bodyPr rtlCol="0" wrap="none"/><a:lstStyle/><a:p><a:pPr algn="l" rtl="0"/><a:r><a:rPr lang="ar-SA" sz="2775"><a:latin typeface="Aptos"/></a:rPr><a:t>Bonjour </a:t></a:r><a:endParaRPr lang="ar-SA" sz="2775"/></a:p></p:txBody></p:sp>',binding={group:'unit',index:1},expected=nativeFragmentPropertiesHash(body,binding);
+ const body='<p:sp><p:txBody><a:bodyPr rtlCol="0" wrap="none"/><a:lstStyle/><a:p><a:pPr algn="l" rtl="0"/><a:r><a:rPr lang="ar-SA" sz="4200"><a:latin typeface="Aptos"/></a:rPr><a:t>Bonjour </a:t></a:r><a:endParaRPr lang="ar-SA" sz="4200"/></a:p></p:txBody></p:sp>',binding={group:'unit',index:1},expected=nativeFragmentPropertiesHash(body,binding);
  assert(expected);
- const saved=body.replace('rtlCol="0" wrap="none"','wrap="none" rtlCol="0"').replace('lang="ar-SA" sz="2775"','sz="2775" lang="ar-SA"').replace('<a:t>Bonjour </a:t>',"<a:t xml:space='preserve'>Edited longer 234 </a:t>");
+ const saved=body.replace('rtlCol="0" wrap="none"','wrap="none" rtlCol="0"').replace('lang="ar-SA" sz="4200"','sz="4200" lang="ar-SA"').replace('<a:t>Bonjour </a:t>',"<a:t xml:space='preserve'>Edited longer 234 </a:t>");
  assert.equal(nativeFragmentPropertiesHash(saved,binding),expected,'Saved preserved-space spelling and changed editable text do not become a property edit');
  assert.equal(nativeFragmentPropertiesHash(body.replace('<a:t>Bonjour </a:t>','<a:t xml:space="preserve"/>'),binding),expected,'Clearing native text keeps property evidence without restoring old text');
  for(const mutate of [
   xml=>xml.replace('lang="ar-SA"','lang="fr-FR"'),
   xml=>xml.replace('typeface="Aptos"','typeface="Georgia"'),
   xml=>xml.replace('<a:rPr ','<a:rPr b="1" '),
-  xml=>xml.replace('<a:endParaRPr lang="ar-SA" sz="2775"','<a:endParaRPr lang="ar-SA" sz="1800"'),
+  xml=>xml.replace('<a:endParaRPr lang="ar-SA" sz="4200"','<a:endParaRPr lang="ar-SA" sz="1800"'),
  ]){
   const changed=mutate(saved);assert.notEqual(changed,saved);assert.notEqual(nativeFragmentPropertiesHash(changed,binding),expected,'Real font/proofing/bold/terminal-size changes stay significant');
  }
- const newBoundary=body.replace('</a:r>','</a:r><a:r><a:rPr lang="ar-SA" sz="2775"><a:latin typeface="Aptos"/></a:rPr><a:t>1</a:t></a:r>');assert.notEqual(nativeFragmentPropertiesHash(newBoundary,binding),expected);
+ const newBoundary=body.replace('</a:r>','</a:r><a:r><a:rPr lang="ar-SA" sz="4200"><a:latin typeface="Aptos"/></a:rPr><a:t>1</a:t></a:r>');assert.notEqual(nativeFragmentPropertiesHash(newBoundary,binding),expected);
  assert.notEqual(nativeFragmentPropertiesHash(body.replace('<a:t>','<a:t xml:space="default">'),binding),expected,'Only preserve is the harmless saved attribute normalization');
  const metadata=body.replace('</a:rPr>','<a:extLst><a:ext uri="text-metadata"><a:t>Metadata A</a:t></a:ext></a:extLst></a:rPr>');assert.notEqual(nativeFragmentPropertiesHash(metadata.replace('Metadata A','Metadata B'),binding),nativeFragmentPropertiesHash(metadata,binding),'Text-like extension data is a property, not editable run text');
 });

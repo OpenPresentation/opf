@@ -526,7 +526,11 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   at its role sizes it steps up: a paragraph or a list by the steps of the type scale above its size, a quote, code panel,
   metric or table by the scale's ratio on every role, to the largest step at which it fills at most 60% of the body and
   every part keeps the size it asks for. No role grows past its display size (`LONE_DISPLAY_SIZES`: text 43 px, a list 37,
-  a quote 56, code 32, a metric's value 152, a table 32, at a 720-pixel short edge). The block then sits in the middle of
+  a quote 56, code 32, a metric's value 152, a table 32, at a 720-pixel short edge). A plain list that reaches its display
+  size and still fills under half of the body grows on, as a body of several short blocks does (LH-102), by the scale's steps
+  while it fills at most 60% and every entry stays on one line: one to three entries up to 56 px, four or five up to 49 px, more none
+  (`SPARSE_LIST_DISPLAY`); a list with descriptions, drawn as ruled rows, beside
+  numerals, with badges or icons, or in a region with an arrangement keeps its size. The block then sits in the middle of
   the body, its card hugging it; a grown table's rows grow with its type (`items[].tableGrowth`, which both engines pass to
   `layoutTable`). A block that fills half the body or more keeps its sizes and its place.
 - **A body of paragraphs and lists.** Two or more text and list blocks (in a layout's regions, or on a slide without a layout)
