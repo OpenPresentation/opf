@@ -556,7 +556,12 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   LH-129's rule below), blocks below
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a
   list in columns, an overflowing composition, and `composeSlide(slide, { fill: false })`, for hosts and tests of the
-  role sizes. Both engines read the result from core.
+  role sizes. Both engines read the result from core. A plain text or list beside a layout's one chart or picture is the
+  exception (LH-193): beside a chart, or a picture in a `media` region, and alone in its region (or each of several texts
+  alone in a one-block region, the columns of `three-column`, which keep their whole cards with the text in the middle) it
+  grows as a lone block of its cell, so "Look here." beside a picture and two short texts beside a
+  chart take display size as one text beside a chart already did; a text sharing a region with another text (a `hero`'s
+  lead over its body) keeps its size.
 - **A message in the middle of the slide (LH-129).** A slide whose title stands free (centered in a sized title area, or in a
   stacked record) over no primary or secondary block, such as `cover`, `section` and `closing` or a slide with no body and no
   layout record, grows its title and subtitle by one, two or three steps of the type scale, each up to its display size

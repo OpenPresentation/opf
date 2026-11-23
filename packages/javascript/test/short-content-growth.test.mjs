@@ -49,3 +49,25 @@ test('the lone quote of a quote slide grows to its length-keyed ceiling under an
   const long = body(quote('We can now see where participants need help, and the weekly review keeps the next step clear for everyone on both teams, so nobody waits for a decision that has already been made.'));
   assert.ok(long <= LONE_DISPLAY_SIZES.quote + 1e-6, `a long quote keeps the quote display size at most: ${long}`);
 });
+
+test('a short text or list beside a layout picture or chart grows as the lone block of its cell', () => {
+  const picture = { src: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAiIGhlaWdodD0iOTAiLz4=', alt: 'Illustrative picture' };
+  for (const body of [{ text: 'Look here.' }, { items: ['Two teams', 'Six weeks', 'One decision'] }]) {
+    const composed = compose({ layout: 'image-beside', title: 'Explain what the audience should notice', blocks: [{ region: 'media', image: picture }, { region: 'body', ...body }] });
+    const [size] = sizes(composed, body.text ? 'text' : 'items');
+    assert.ok(size > LONE_DISPLAY_SIZES.list + 1, `beside a picture: ${size}`);
+  }
+  const chart = { type: 'column', alt: 'Illustrative', data: { columns: ['Team', 'Rate'], rows: [['A', 5.8], ['B', 6.7]] } };
+  const columns = compose({ layout: 'three-column', title: 'Columns', blocks: [{ region: 'first', chart }, { region: 'second', text: 'Short text.' }, { region: 'third', text: 'Another short.' }] });
+  const texts = sizes(columns, 'text');
+  assert.equal(texts.length, 2);
+  for (const size of texts) assert.ok(size > LONE_DISPLAY_SIZES.list + 1, `two short texts beside a chart grow: ${size}`);
+  // Each keeps its whole column: the cards stay one height and one top beside the chart's card.
+  const boxes = columns.items.filter((item) => item.field === 'text').map((item) => item.frameBox ?? item.box), chartBox = (({ frameBox, box }) => frameBox ?? box)(columns.items.find((item) => item.field === 'chart'));
+  assert.equal(new Set(boxes.map((box) => Math.round(box.height))).size, 1, 'one height');
+  assert.equal(new Set(boxes.map((box) => Math.round(box.y))).size, 1, 'one top');
+  assert.ok(boxes[0].height >= chartBox.height - 1, 'as tall as the chart');
+  // A hero's lead over its body keeps its size: its region holds two texts.
+  const hero = compose({ layout: 'hero', title: 'One team', blocks: [{ text: 'One outcome.' }, { text: 'Narrow scope.' }, { image: picture }] });
+  for (const size of sizes(hero, 'text')) assert.ok(size <= LONE_DISPLAY_SIZES.list + 1e-6, `a hero's texts keep their sizes: ${size}`);
+});

@@ -7976,6 +7976,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // beside other blocks (LH-78's lead). `avatar` keeps the circle beside the attribution. While a lone quote chooses its growth (fillLone)
   // it is measured with the avatar (`avatarQuotes`), so the portrait never changes the size the quote grows to, only where it is drawn.
   const avatarQuotes = new WeakSet<Pending>();
+  // LH-193: the texts that each fill a one-block region beside a layout's one chart or picture (the columns of `three-column`): each grows
+  // in its cell and keeps the whole cell, so the columns' cards stay one height beside the figure's card and the text sits in their middle.
+  const columnTexts = new WeakSet<Pending>();
   const quotePortrait = (node: Pending, box: LayoutBox): 'side' | 'automatic' | undefined => {
     const value = record(node.value);
     if (value.photo === undefined || value.portrait === 'avatar') return undefined;
@@ -9463,13 +9466,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     for (let power = 0; ; power++) { const step = snapFontSizeDown(Math.round(floorPx * TYPE_SCALE_RATIO ** power) * scale); if (step > size + 1e-9) return step; }
   };
   // LH-193: the text of a cell beside the slide's one chart that grows as a lone block (fills), as design.chartPrimary grew and centered
-  // it in 0.34: a plain paragraph (no caption, eyebrow, emphasis or card of its own), the cell itself or the one block of a plain group.
-  // fillLoneBlock grows it only while it fills under LONE_FILL of its cell, by the type scale's steps (a short message on to its display
+  // it in 0.34: a plain paragraph or list (no caption, eyebrow, emphasis or card of its own), the cell itself or the one block of a plain
+  // group. fillLoneBlock grows it only while it fills under LONE_FILL of its cell, by the type scale's steps (a short message on to its display
   // size) to at most LONE_TARGET of the cell, and sets it in the cell's middle; it is never set smaller.
   const textBesideChart = (node: Pending): Pending | undefined => {
     const plain = (entry: Pending) => entry.emphasis === undefined && !entry.eyebrow && !entry.cardCell;
     const leaf = node.children?.length === 1 && !node.synthetic && plain(node) && record(node.payload).icon === undefined ? node.children[0]! : node;
-    return !leaf.children && leaf.field === 'text' && leaf.caption === undefined && plain(leaf) ? leaf : undefined;
+    return !leaf.children && (leaf.field === 'text' || leaf.field === 'items' || leaf.field === 'bullets') && leaf.caption === undefined && plain(leaf) ? leaf : undefined;
   };
   // LH-132: a lone quote whose photo may be drawn beside it grows as it would with the avatar (avatarQuotes); when the photo is then drawn
   // beside it, it takes its whole cell, and its layout centers the photo and the text in it.
@@ -9644,6 +9647,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     if (fillsPanel()) return wholePanel();
     if (ruled) return spreadCell();
+    if (columnTexts.has(node)) return cards ? { ...cell, y: cell.y + gap * CARD_FILL_SPACE, height: Math.max(scale, cell.height - gap * CARD_FILL_SPACE) } : cell;
     // The cell the block is placed in: its need, plus a card's vertical insets as payloadBox gives a card that tall, in the middle.
     let height = best;
     if (cards) for (let pass = 0; pass < 3; pass++) { const frame = acceptedBox({ ...cell, height: Math.min(cell.height, height) }), room = payloadBox(frame, true).height; if (room >= best - 1e-6) break; height += best - room; }
@@ -10111,12 +10115,21 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const bodyUnits = [...contents.values()].flat().concat(belowUnits);
     const loneUnit = options.fill !== false && plan.stack === undefined && bodyUnits.length === 1 && !bodyUnits[0]!.children ? bodyUnits[0] : undefined;
     if (loneUnit) loneUnit.fills = true;
-    // LH-193: a body of one chart and one text, the text alone in a single-block region (`max: 1`): the text is the lone block of its cell.
-    else if (options.fill !== false && plan.stack === undefined && bodyUnits.length === 2 && !belowUnits.length) {
-      const chart = bodyUnits.findIndex(unit => !unit.children && unit.field === 'chart'), other = chart >= 0 ? bodyUnits[1 - chart]! : undefined;
-      const region = other && plan.regions.find(entry => (contents.get(entry.name) ?? []).includes(other));
-      const text = region && singleBlockRegion(region) && !region.arrangement ? textBesideChart(other) : undefined;
-      if (text) text.fills = true;
+    // LH-193: a body of one chart or picture and one text or list alone in its region, or several each alone in a single-block region
+    // (`max: 1`, a column of three): each is the lone block of its cell (LH-102 for short text beside a figure: "Look here." beside a
+    // picture, two short texts beside a chart in three columns). A text in a region of several blocks among other texts (a hero's lead
+    // over its body) keeps the size its region gives it.
+    else if (options.fill !== false && plan.stack === undefined && bodyUnits.length >= 2 && !belowUnits.length) {
+      // A picture counts in a `media` region (image-beside, hero), which gives it the region's height; a picture in a column of its own
+      // (two-column) keeps its frame at the cell top beside a text that keeps its top too.
+      const mediaRegion = (unit: Pending) => plan.regions.find(entry => (contents.get(entry.name) ?? []).includes(unit))?.role === 'media';
+      const figures = bodyUnits.filter(unit => !unit.children && (unit.field === 'chart' || (unit.field === 'image' && mediaRegion(unit))));
+      const others = figures.length === 1 ? bodyUnits.filter(unit => unit !== figures[0]) : [];
+      const texts = others.map(other => {
+        const region = plan.regions.find(entry => (contents.get(entry.name) ?? []).includes(other));
+        return region && (others.length === 1 ? (contents.get(region.name) ?? []).length === 1 : singleBlockRegion(region)) && !region.arrangement ? textBesideChart(other) : undefined;
+      });
+      if (texts.length && texts.every(text => text !== undefined)) for (const text of texts) { text!.fills = true; if (texts.length > 1) columnTexts.add(text!); }
     }
     // LH-129: a stacked record's body grows with the slide (growTemplate, GROW): its paragraphs and lists by the type scale's steps
     // (proseMeasure) and its quotes by the scale's ratio on every role, each up to its display size (LONE_DISPLAY_SIZES).
@@ -10759,6 +10772,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           const first = items.length;
           placeNode(units[0]!, filled, settings, cards, listColumnsOf(region), undefined, region.anchor);
           leafItems.push(...range(first, items.length));
+          // LH-193: a column's text keeps its whole card and sits in its middle (columnTexts).
+          if (columnTexts.has(units[0]!)) centeredCardText.push(...range(first, items.length));
           return arrangementOf(region, units, cell);
         }
         // LH-41: several timelines are one stack of horizontal bands (bandBoxes), in one column or two, whatever the region's flow.
