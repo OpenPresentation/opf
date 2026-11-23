@@ -116,6 +116,41 @@ Some OPF features have no exact PowerPoint form. The export draws the nearest na
 | A `pyramid`, `matrix`, `cycle`, `chevrons`, `process` (a short list) or `vertical-process` layout (a region's `arrangement`) | Live SmartArt (PowerPoint's Basic Pyramid, Basic Matrix, Basic Cycle, Basic Chevron Process, Basic Process or Vertical Process, editable in its Text Pane) where PowerPoint lays it out exactly as the preview draws it; OPF's own design of the arrangement (drawn when the entries need it) is live SmartArt on OPF's own layout definition (a `urn:openpresentation.org/smartart/layout/...` uniqueId, titled "OPF Stepped Pyramid", "OPF Card Grid" and so on) inside its own compared domain; otherwise the same drawing as native shapes and measured lines. `--smart-art shapes` (`smartArt: 'shapes'`) always writes native shapes. Each live SmartArt carries OPF's preview of its frame as an `mc:Fallback` picture (SVG over PNG, the outline as alt text), which every app that does not lay SmartArt out shows; it needs opf-render and an SVG rasterizer (a browser passes `svgRasterizer`), without which the arrangement is native shapes. A node edited in PowerPoint keeps OPF's text size; PowerPoint lays the SmartArt out again with its own rules, and saving there drops the fallback | `smartart-unavailable` (info) with the reason, for an instance outside the compared domain (docs/smartart.md) |
 | A font a viewer may not have | The selected name; the viewer substitutes | `typeface-not-office-safe` in the `convert` report; `typefaces: 'safe'` replaces it (`typeface-replaced`) |
 
+## Keynote 15.1.1 differences (measured on OPF 0.34.0)
+
+A PPTX opened in Keynote is not drawn like OPF's preview or PowerPoint. The 0.34.0 qualification corpus (67 files, 592 slides) was opened in Keynote 15.1.1 on macOS 26.6: every file opened without a repair prompt, and the rows below are what its slides showed against the preview. They are observations of that one version, not promises of a fix, and the export is unchanged for them. If the deck will be read in Keynote, say which of these apply to it.
+
+| What the deck has | What an author sees in Keynote | What to do |
+| --- | --- | --- |
+| Slide number beside footer text | The whole footer shows only the number ("Page 1 of 4" reads "1") | Export with `--slide-numbers static` |
+| Right-to-left table | Only the first column, clipped at the left edge | None measured that keeps PowerPoint's right-to-left table; an opt-in route is undecided |
+| Extended chart (histogram, Pareto, waterfall, box and whisker, funnel, treemap) | A picture of OPF's preview in the chart's frame, not a live chart | None; the live chart stays for PowerPoint |
+| Bar chart with negative values | Category labels clipped at the frame's left edge | Not tested; check the slide in Keynote |
+| Sketch outline (`stroke.sketch`: curved, freehand, scribble) | A plain outline | None |
+| Compound line (double, thick-thin, thin-thick, triple) | One single line | None measured |
+| Solid background color with transparency (85% in the test) | Drawn opaque, so darker | None measured; an opaque color avoids the difference |
+| Tiled picture background | One large tile | Not tested; check the slide in Keynote |
+| Three-stop gradient background | The end color shifted (a teal end drew grayish); cause not determined | Check the slide in Keynote |
+| Radar chart with lines only | Drawn filled; axis labels can collide and clip at the right edge | None |
+| Area chart with a gap in the data | The gap is bridged by the area | None |
+| Secondary value axis | Only its first labels (0% and 40% in one deck); the legend overlaps them; cause not determined | Check the slide in Keynote |
+| Reference line | The line is drawn at the right value; its label is not (the legend names it); on one bar chart the label collided with a bar value | Name the line; do not rely on the label |
+| Direct line labels | Dropped | None measured |
+| Elbow connector | A different route (looped above its box in the test) | None measured |
+| Curved connector | Drawn straight | None |
+| Last three shape presets of the coverage deck (`chartX`, `chartStar`, `chartPlus`) | Stroke lines the preview does not draw | Not compared against PowerPoint; unconfirmed which side is right |
+| Quote beside a portrait | Ran off the right edge, because Helvetica replaces Aptos on a Mac without Office fonts and is wider | Install the deck's fonts on the Mac |
+| Link text in a footer, or a video link label | Drawn blue and underlined; low contrast on a dark ground | None measured |
+| Chart title | Centered, not left aligned | None |
+| Vertical text | Rotated, not stacked letters | None |
+| Per-point bar colors, the language's digits in charts, a right-to-left chart's value axis on the right | Not drawn | None |
+| Inner shadow, glow, soft edge, blur | Not drawn | None |
+| Saturated fills | Slightly grayer throughout (same hue); a color-profile shift of Keynote's image export | None |
+| Monospace and light faces | Replaced by Helvetica when the Mac lacks the face | Install the fonts |
+| Rotated narrow text (notes labels) or a callout | Wrapped mid-word | None measured |
+
+Pattern fills could not be judged at the review's resolution. Whether Keynote keeps the tight letter spacing of the large display text (`spc` -63 to -283), and its navigator, outline and notes page size, were not run, and PowerPoint for Mac was not tested.
+
 ## Ship fonts as pinned, licensed files
 
 Font bytes come from pinned packages or vendored files with a recorded hash, never from a font CDN at runtime. A stylesheet, import or preconnect hint that points at Google Fonts, Typekit, Bunny Fonts or a similar service hands every viewer's IP address to a third party (a German court treated that as a privacy violation in 2022), and it ties previews and audits to the network and to whatever the CDN serves that day. A build step that downloads a font once and then serves it from your own origin is fine; confirm the built output makes no font requests.
