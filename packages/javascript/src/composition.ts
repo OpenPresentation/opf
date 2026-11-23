@@ -3308,6 +3308,10 @@ const TIMELINE_GROWTH = 4;
  * above its 18 and 22 px label roles (to 28 and 32, or 24 and 28 px).
  */
 const TIMELINE_STEP_GROWTH = [15, 10, 6] as const;
+/** C03, VPR-1: PowerPoint's chevron or vertical-process design covering less of its region than this gives way to OPF's design. */
+const LINEAR_STRIP_COVER = .5;
+/** C03: at one text size, OPF's linear design with more lines is kept over fewer only when it covers this much more of the region. */
+const LINEAR_COVER_MARGIN = .1;
 /** LH-41: a size offset that takes every timeline part to the readability floor (to measure how far a timeline can shrink). */
 const TIMELINE_FLOOR_OFFSET = 1000;
 /** LH-41: several timelines in one region stack in one column of bands while each band is at least this tall (reference pixels). */
@@ -11962,7 +11966,19 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // PowerPoint's design only where the PPTX export can write it as live SmartArt (SMART_ART_DOMAIN); outside it OPF's own design, and
     // PowerPoint's geometry again (as native shapes) when OPF's does not hold the entries either. Of the card grids, the largest text.
     const script = smartArtScript(values.map(value => flatten(typeof value === 'object' && value !== null && !Array.isArray(value) ? record(value).text : value)));
-    let chosen: { design: ArrangementDesign; placed: NonNullable<ReturnType<typeof place>>; size: number } | undefined, outside: typeof chosen, skipped: string | undefined;
+    let chosen: { design: ArrangementDesign; placed: NonNullable<ReturnType<typeof place>>; size: number } | undefined, outside: typeof chosen, skipped: string | undefined, strip: typeof chosen;
+    // C03, VPR-1: the share of the region OPF's row or column design covers once its nodes take the height of their text (refit), and
+    // PowerPoint's fixed-proportion design as drawn: a strip of chevrons or a narrow column of boxes in the middle of a large region.
+    const covers = (nodes: readonly ArrangementNode[]) => {
+      if (!nodes.length || area.width <= 0 || area.height <= 0) return 0;
+      const left = Math.min(...nodes.map(node => node.box.x)), right = Math.max(...nodes.map(node => node.box.x + node.box.width)), top = Math.min(...nodes.map(node => node.box.y)), bottom = Math.max(...nodes.map(node => node.box.y + node.box.height));
+      return (right - left) * (bottom - top) / (area.width * area.height);
+    };
+    const refitCover = (result: NonNullable<typeof chosen>) => {
+      if (!result.design.refit) return covers(result.design.nodes);
+      const shapes = result.design.refit(Math.max(...result.placed.columns.map(column => column.box.height)) + result.placed.margins[1] + result.placed.margins[3]);
+      return covers(shapes?.nodes ?? result.design.nodes);
+    };
     for (const design of designs) {
       if (design.last && chosen) break;
       const result = sized(design);
@@ -11970,12 +11986,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const unavailable = design.design !== 'smartart' ? undefined : smartArtUnavailable({ kind: arrangement, count, frame: design.frame, rtl: rtl || script.rtl, ...(script.script ? { script: script.script } : {}),
         nodes: result.placed.lines.map((lines, index) => ({ lines, stable: result.placed.stable[index]! })), ...(isLinearArrangement(kind) ? { fill: result.placed.fill, ink: result.placed.ink } : {}), widest: result.placed.widest });
       if (unavailable !== undefined) { outside ??= result; skipped = unavailable; continue; }
+      // C03, VPR-1: PowerPoint's chevrons or vertical process covering under half of its region (LINEAR_STRIP_COVER) is kept only when no
+      // row or column design of OPF's holds the entries as large: OPF's fills the region where it does (and is then written as its own
+      // shapes). Basic Process keeps PowerPoint's design.
+      if (design.design === 'smartart' && (kind === 'chevrons' || kind === 'vertical-process') && !candidate && covers(design.nodes) < LINEAR_STRIP_COVER) { strip = result; continue; }
       // Of the card grids, of a cycle's designs and of OPF's rows or columns of a linear arrangement (SH-17, `largest`), the one that holds the largest text.
       const largest = design.design === 'cards' || kind === 'cycle' || design.largest === true;
-      if (largest && chosen && chosen.design.design === design.design && chosen.size >= result.size) continue;
+      // C03: of OPF's linear designs at one size, the one that covers clearly more of the region (two rows of four one-word chevrons, not a
+      // strip); designs that cover about as much keep the fewer lines.
+      if (largest && chosen && chosen.design.design === design.design && chosen.size >= result.size && !(strip && isLinearArrangement(kind) && chosen.size <= result.size + FONT_GRID_EPSILON && refitCover(result) > refitCover(chosen) + LINEAR_COVER_MARGIN)) continue;
       chosen = result;
       if (design.design === 'smartart' || !largest) break;
     }
+    if (strip && (!chosen || chosen.size < strip.size - FONT_GRID_EPSILON)) { chosen = strip; skipped = undefined; }
+    else if (strip) skipped = `PowerPoint's ${SMART_ART_NAMES[kind].layout} covers under half of the region at this count; OPF's own design fills it`;
     if (!chosen && outside) { chosen = outside; skipped = undefined; }
     if (!chosen && candidate) return undefined;
     if (!chosen) {

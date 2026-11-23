@@ -168,11 +168,12 @@ function split(count: number, lines: number): number[] {
 /**
  * OPF's own design of a linear arrangement in `area`, drawn where PowerPoint's does not hold the entries (or lies outside the SmartArt
  * domain), in the deck's paint and PowerPoint's proportions, so the two read as one family. The entries go into `lines` rows (chevrons,
- * flow) or columns (vertical flow), as evenly as possible; every line spans the area (a line of fewer entries widens them, a column of
- * fewer lengthens them), and the block is centered in the area.
+ * flow) or columns (vertical flow), as evenly as possible; every line of a flow spans the area (a line of fewer entries widens them, a
+ * column of fewer lengthens them), and the block is centered in the area.
  *
  * - chevrons: each row a run of chevrons left to right, 0.9 widths apart, the point at most 0.2 of a width deep; a row breaks after a
- *   chevron's point and the next row starts again at the left.
+ *   chevron's point and the next row starts again at the left. Every chevron is as wide as one of the fullest row's, so a shorter row
+ *   stops before the right edge (C03).
  * - flow: boxes 0.4 of a width apart with PowerPoint's arrow in each room; the rows snake: the second runs right to left under the first,
  *   joined by a down arrow at the end where the first stops, and so on.
  * - vertical flow: boxes half a height apart with a down arrow in each room; the columns snake the same way (the second runs bottom to
@@ -239,7 +240,9 @@ export function linearDesign(kind: LinearArrangement, area: Box, count: number, 
   let entry = 0;
   counts.forEach((k, row) => {
     const y = y0 + row * (h + rowGap), back = !chevrons && row % 2 === 1;
-    const w = chevrons ? widthOf(k) : (area.width - (k - 1) * room) / k;
+    // C03: every row of chevrons keeps the full row's width (a shorter last row starts at the left and stops early), so like stages
+    // read alike; a flow's shorter row still spans the area, where its arrows turn.
+    const w = chevrons ? full : (area.width - (k - 1) * room) / k;
     const left = (slot: number) => area.x + slot * (chevrons ? (compact ? w - COMPACT_CHEVRON_DEPTH * w + fixed : CHEVRON_STEP * w) : w + room);
     for (let j = 0; j < k; j++) {
       const slot = back ? k - 1 - j : j, box = { x: left(slot), y, width: w, height: h };

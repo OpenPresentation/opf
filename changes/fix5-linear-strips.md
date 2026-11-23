@@ -1,0 +1,5 @@
+---
+type: fixed
+packages: [opf]
+---
+C03, VPR-1 (output-changing for the `chevrons` and `vertical-process` arrangements): a row of four or five one-word chevrons (the chevrons layout's own example) was a strip a quarter of the body high, while the same stages under a subtitle filled the body in two rows, and three one-word steps of a vertical process were a column 40% as wide as their half of the slide while two-word steps filled it. PowerPoint's Basic Chevron Process and Vertical Process now give way to OPF's own rows or columns where they cover under half of their region and OPF's design holds the entries at least as large; at one text size OPF keeps the design that covers clearly more of the region (two rows of two chevrons, not a strip). Every chevron of a wrapped set is now as wide as the fullest row's (seven and eight stages drew the last row's chevrons wider). These slides now export as native shapes (OPF's chevron rows are written as live SmartArt only for six to eight entries, where they passed PowerPoint's comparison) instead of PowerPoint's live Basic Chevron Process or Vertical Process; Basic Process keeps PowerPoint's design.

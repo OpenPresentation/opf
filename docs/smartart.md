@@ -139,7 +139,11 @@ nodes of each in 20 frames from 250 x 120 to 800 x 540 pt; core places every nod
 but those where PowerPoint's 8 pt test letter did not fit a node (a node a few points tall), whose text made the node grow.
 
 PowerPoint's design is drawn where it holds the entries at the list's size and lies in the [domain](#the-domain); else OPF's own design
-of the arrangement, filling the region:
+of the arrangement, filling the region. PowerPoint's chevrons and vertical flow are also set aside where they cover under half of their region (C03, VPR-1:
+four one-word chevrons are a strip a quarter of the body high, three one-word boxes of a vertical flow a column 40% of its half wide)
+and one of OPF's rows or columns holds the entries at least as large: OPF's then fills the region and is exported as its own shapes
+(live SmartArt only within the domain of OPF's layouts below). Among OPF's designs that hold the text at one size, the one that covers
+more of the region is kept there (two rows of two chevrons rather than a strip of four):
 
 OPF's design keeps PowerPoint's proportions, so the two read as one family: a chevron 0.9 widths after the last (its point at
 most 0.2 of its width deep), a box 0.4 widths after the last with PowerPoint's arrow (0.212 x 0.248 of a box's width) in the room, a
@@ -149,11 +153,11 @@ is one size for every node, the largest from 1.5 times the list's role size down
 then every node takes the height that text needs with its margins (0.15 em above and below a box's text; PowerPoint's proportion at
 least: a chevron 0.4 of its width, a box 0.6, a vertical box 1/1.8), and the whole is centered in the region. Only where none of these
 holds the entries at the list's size does OPF draw a compact form of the same design (rooms of two gaps, the arrow 0.6 of the
-room, a chevron's point 0.12 of its width deep, no least height), so a list is left a list only when no design holds it. Every row spans the region: a row of fewer entries widens them (a
-column of fewer lengthens them).
+room, a chevron's point 0.12 of its width deep, no least height), so a list is left a list only when no design holds it. Every row of a flow spans the region: a row of fewer entries widens them (a
+column of fewer lengthens them). Every chevron is as wide as the fullest row's (C03), so a shorter last row stops before the right edge.
 
 - **chevrons**: each row a run of chevrons, left to right; a wrapped row breaks after a chevron's point and the next row starts again
-  at the left, full width, so the points carry the order;
+  at the left, so the points carry the order;
 - **flow**: the rows snake: the second runs right to left under the first, joined by a down arrow under the end where the first stops,
   the third runs left to right again, and so on;
 - **vertical flow**: the columns snake the same way: the second runs bottom to top, joined by a right arrow at the bottom.
