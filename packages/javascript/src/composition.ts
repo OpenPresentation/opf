@@ -5258,8 +5258,10 @@ function bodyFill(result: SlideComposition, options: ComposeSlideOptions = {}): 
   const tableNote = !!result.regions && !!tableItem && asides.length >= 1 && body.every(item => !item.emphasis && inBody(item))
     && asides.every(noteItem => TABLE_ASIDE_FIELDS.has(noteItem.field) && !!noteItem.text && (!noteItem.frameBox || noteItem.field === 'quote' || !!tableItem.frameBox)
       && ((noteItem.box.y >= tableItem.box.y + 1 && noteItem.box.x < tableItem.box.x + tableItem.box.width - 1 && noteItem.box.x + noteItem.box.width > tableItem.box.x + 1)
-        || noteItem.box.x >= tableItem.box.x + tableItem.box.width - 1 || noteItem.box.x + noteItem.box.width <= tableItem.box.x + 1))
-    && (asides.length === 1 || asides.every(item => !!item.frameBox));
+        || noteItem.box.x >= tableItem.box.x + tableItem.box.width - 1 || noteItem.box.x + noteItem.box.width <= tableItem.box.x + 1
+        // C12: or a dashboard's row of metrics over it (the metrics keep their size; the table grows).
+        || noteItem.field === 'metric'))
+    && (asides.length === 1 || asides.every(item => !!item.frameBox) || asides.every(item => item.field === 'metric'));
   // C07: a code snippet and the one text or list beside it grow together (growBodyUnits), as a snippet alone does.
   const codeAside = !!result.regions && body.length === 2 && body.some(item => item.field === 'code' && item.codeLayout) && body.some(item => (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text) && body.every(item => !item.emphasis && !item.frameBox && inBody(item));
   if (body.length < 2 || !(prose || metrics || tableNote || codeAside)) return undefined;
