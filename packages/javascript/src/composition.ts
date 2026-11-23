@@ -8721,7 +8721,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // by the anchor down. A source that cannot be drawn reports its issue; a drawing that only fits below the floor overflows.
   const directionName = (direction: string) => ({ LR: 'left to right', RL: 'right to left', TB: 'top to bottom', TD: 'top to bottom', BT: 'bottom to top' } as Record<string, string>)[direction] ?? direction;
   const composeDiagram = (node: Pending, box: LayoutBox, settings: Composition, anchor: RegionAnchor): ComposedDiagramItem => {
-    const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale), nominal = Math.max(floor, DIAGRAM_NOMINAL_SIZE * scale);
+    // C08, IM1: a diagram with room grows its base size past the nominal 32 px up to ARRANGEMENT_GROWTH times it (48 px, as an
+    // arrangement's text does), never past the composition's cap, so a three-node flowchart is not a small strip in a large body.
+    const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale), nominal = Math.max(floor, Math.min(capOf(settings), snapFontSizeDown(DIAGRAM_NOMINAL_SIZE * scale * ARRANGEMENT_GROWTH)));
     const measure = diagramMeasure(options.textMeasurement, options.fontFamilies?.body ?? 'sans-serif', options.fontFamilies?.code ?? FALLBACK_CODE_FAMILY);
     try {
       const laid = layoutDiagram(node.value, { width: box.width, height: box.height, nominal, floor, measure, idPrefix: `opf-${node.path.replace(/[^\w-]+/g, '-')}`, grid: { down: snapFontSizeDown, up: snapFontSizeUp } });
