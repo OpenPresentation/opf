@@ -318,7 +318,7 @@ export const languageRule = rule(
 	'info',
 	'The presentation does not declare its language.',
 	'Screen readers and text-to-speech choose pronunciation and hyphenation from the declared language; spell checkers and translation tools use it too.',
-	{ standard: 'WCAG 2.2 SC 3.1.1 Language of Page, level A', approximations: 'Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.language`; opf/language-tag checks how those tags are written).' },
+	{ standard: 'WCAG 2.2 SC 3.1.1 Language of Page, level A', approximations: 'Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.language`; opf/language-tag checks how those tags are written). With no language set, a slide whose letters are mostly Arabic-script or Hebrew is laid out as Arabic or Hebrew, right to left (OPF 0.35); the message names those slides.' },
 );
 
 // rules-layout-content.ts

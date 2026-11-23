@@ -8,6 +8,7 @@ import { timelineTextColor } from './timeline-status.js';
 import { resolveChartData } from './chart-data.js';
 import type { Finding, FindingFix } from './generated/types/finding.js';
 import type { RuleSlide, ValidationContext, ValidationRule } from './rule-context.js';
+import { languageOfText } from './language-inference.js';
 import {
 	altOf,
 	assetRefs,
@@ -671,10 +672,29 @@ const languageRules: ValidationRule[] = [
 		info: languageRule,
 		run(context) {
 			if (context.document.language !== undefined) return;
+			// v0.35: with no language set, a slide written in a right-to-left script is laid out as that script's language
+			// (language-inference.ts). The finding says which slides, so the author can confirm it or choose another.
+			const read = new Map<string, number[]>();
+			for (const slide of context.slides) {
+				const tag = slide.slide.language === undefined ? languageOfText(context.document, slide.index) : undefined;
+				if (tag) read.set(tag, [...(read.get(tag) ?? []), slide.index + 1]);
+			}
+			const NAMES: Record<string, string> = { ar: 'Arabic', he: 'Hebrew' };
+			const list = (numbers: number[]) => (numbers.length === 1 ? `slide ${numbers[0]} is` : `slides ${numbers.slice(0, -1).join(', ')} and ${numbers.at(-1)} are`);
+			const notes = [...read].map(([tag, numbers]) => {
+				const name = NAMES[tag] ?? tag;
+				const who = numbers.length === context.slides.length ? (numbers.length === 1 ? 'Its slide is' : 'Its slides are') : `${list(numbers).replace(/^s/, 'S')}`;
+				return `${who} written in the ${name} script, so OPF lays ${numbers.length === 1 ? 'it' : 'them'} out as ${name} ("${tag}"): right to left, with that language's default fonts.`;
+			});
+			const first = [...read.keys()][0];
 			context.report(languageRule, {
 				path: '',
-				message: 'The presentation has no language set.',
-				help: 'Set `language` to a BCP 47 tag, for example "en-US".',
+				message: ['The presentation has no language set.', ...notes].join(' '),
+				help: !first
+					? 'Set `language` to a BCP 47 tag, for example "en-US".'
+					: read.size === 1 && read.get(first)?.length === context.slides.length
+						? `Set \`language\` to say so, for example "${first}", or to another BCP 47 tag to choose differently.`
+						: `Set the deck's \`language\` to its main language, and \`language\` on those slides to say so (for example "${first}") or to choose differently.`,
 				fixes: [{ id: 'focus-language', title: 'Set the language', kind: 'focus', safe: true, focus: { path: '/language', field: 'language' } }],
 			});
 		},

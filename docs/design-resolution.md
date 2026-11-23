@@ -293,6 +293,15 @@ The colors of a solid background (`SolidBackground.color`), of each gradient sto
 
 ## Script fonts and language
 
+### A deck that declares no language (OPF 0.35)
+
+With no `language` on the deck or the slide, OPF reads one thing from the text: a slide whose letters are mostly Arabic-script or Hebrew is laid out as Arabic (`ar`) or Hebrew (`he`). It then gets everything a deck that declares the language gets: the script's default fonts, a right-to-left layout (alignment, list markers, columns), and in the exported PPTX right-to-left paragraphs, the language tag on the runs and the theme's script fonts. The picture and the PPTX are those of the declared deck; only the declaration itself is missing (the SVG's `lang`, the PPTX's `dc:language`), and an import gives back a deck with no language. Before 0.35 such a deck was laid out left to right, as English, with a fallback face.
+
+- Each slide is read on its own: the title, subtitle, text, list items and table cells it draws, not its notes. More than half of the letters decide; digits, punctuation and spaces do not count. An English slide with an Arabic phrase stays English.
+- A declared language always wins: the deck's, the slide's, or the `language` option. Declare `"language": "en-US"` to keep a slide of Arabic text left to right.
+- Only right-to-left scripts are read. For any other script the direction does not depend on the language, and one script can be many languages, so OPF does not guess.
+- `resolveScriptFonts()` reports where the language came from in `languageSource`: `document`, `option`, `text` or `default`. `opf/missing-language` names the slides that were read as Arabic or Hebrew.
+
 OOXML gives each theme font (major and minor) three script slots: `latin`, East Asian (`ea`) and complex script (`cs`). The presentation `language` and the effective font scheme resolve to all three:
 
 ```

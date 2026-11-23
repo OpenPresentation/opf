@@ -74,7 +74,7 @@ import {orderChartSeries} from './chart-order.js';
 import {lineXml, linkShapeBlocks, shapeBlockRecord, writeShapeBlocks} from './shape-blocks.js';
 import {connectorName, connectorRecord, writeConnectors} from './connectors.js';
 import {themeSlotColors, schemeColorTable, addTransformedColors, writeSchemeColors, authoredLiteralColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath, variantFromColorMap} from './theme-colors.js';
-import {languageDiagnostics, leftToRightPieces, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
+import {dropLanguagesReadFromText, languageDiagnostics, leftToRightPieces, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagramGroups, importDiagrams, tagDiagrams } from './diagram-provenance.js';
@@ -462,7 +462,11 @@ export async function toPptx(input, options = {}) {
       const used = plans.find(plan => plan.template.key === template.key);
       const colorMap = layoutColorMap(presentation, template, context, options);
       if (used) return {...template, ...(colorMap ? {colorMap} : {}), areaOptions: used.areaOptions};
-      const core = coreContext({...presentation, slides: [{layout: template.reference}]}, 0, options).options;
+      // v0.35: a deck that declares no language is read from its text (a slide in a right-to-left script is laid out as Arabic or
+      // Hebrew). A template no slide uses has no text to read, so it takes the reading of the first slide, as the theme does:
+      // without it the spare layouts of such a deck were left to right while its slides were right to left.
+      const read = presentation.language === undefined && context.scriptFonts?.deck?.languageSource === 'text' ? {language: context.scriptFonts.deck.bcp47} : {};
+      const core = coreContext({...presentation, ...read, slides: [{layout: template.reference}]}, 0, options).options;
       return {...template, ...(colorMap ? {colorMap} : {}), areaOptions: {...core, fontFamilies: first.areaOptions.fontFamilies, textRasterPadding: options.textRasterPadding, placements: []}};
     });
   }
@@ -659,8 +663,9 @@ export async function fromPptx(input, options = {}) {
       schemaOption: options.schema !== undefined,
       slides: slidePaths.map((path, index) => ({path, root: furnitureContexts[index].root, relationships: furnitureContexts[index].relationships, contentBounds: furnitureContexts[index].contentBounds}))}, report);
     // The stored language wins while the runs still carry its tag (FF-07).
-    restored.groups = reconcileLanguage(restored.groups, observedLanguage, report);
+    restored.groups = reconcileLanguage(restored.groups, observedLanguage, report, imported);
     imported = applyDocumentProvenance(imported, restored, checkImportedFormat, report);
+    dropLanguagesReadFromText(imported, options.catalogs);
     slideProvenance = restored.slides;
     restoredGroups = restored.groups;
   } catch (error) {
