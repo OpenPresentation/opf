@@ -9547,7 +9547,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       }
       if (chosen === undefined) growthOf.delete(node); else { growthOf.set(node, chosen); loneGrowth = true; }
     };
-    if (best >= (panel ? LONE_TARGET : LONE_FILL) * inner.height) { if (fillsPanel()) { growPanel(); return wholePanel(); } return ruled ? spreadCell() : undefined; }
+    if (best >= (panel ? LONE_TARGET : LONE_FILL) * inner.height) {
+      if (fillsPanel()) { growPanel(); return wholePanel(); }
+      if (ruled) return spreadCell();
+      // LH-102: a lone paragraph or list that fills half its cell at its role size, but at most LONE_TARGET of it (one long point among short
+      // ones), keeps its size and sits in the middle of the cell, as a grown block does, instead of hanging from its top over an empty foot.
+      if (prose && !cards && best <= LONE_TARGET * inner.height) return { ...cell, y: pullItem ? cell.y : cell.y + (cell.height - best) / 2, height: best };
+      return undefined;
+    }
     const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
     if (prose) {
       const start = proseMeasure(node, inner.width).size, display = (node.field === 'text' ? LONE_DISPLAY_SIZES.text : LONE_DISPLAY_SIZES.list) * scale;

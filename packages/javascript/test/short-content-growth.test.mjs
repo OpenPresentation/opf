@@ -43,6 +43,16 @@ test('a lone list that is drawn, or fills half its body, keeps its size', () => 
   for (const size of sizes(long, 'items')) assert.ok(size <= LONE_DISPLAY_SIZES.list + 1e-6, `a full list keeps its size: ${size}`);
 });
 
+test('a lone list with one long point keeps its size and sits in the middle of the body', () => {
+  const slide = { layout: 'list', title: 'Make the next step explicit', blocks: [{ region: 'body', items: ['Short', 'Two teams and one workflow keep the pilot focused, and every week the team reviews the evidence, compares it with the baseline, records what changed, and agrees who owns the next decision before anything is expanded.', 'Also short', 'Medium length point about the baseline.'] }] };
+  const composed = compose(slide), kept = compose({ ...slide, composition: undefined });
+  const list = composed.items.find((item) => item.field === 'items');
+  const top = list.box.y - composed.contentBox.y, title = composed.items.find((item) => item.field === 'title').box;
+  assert.ok(list.text.fontSize >= kept.items.find((item) => item.field === 'items').text.fontSize - 1e-6, 'never smaller');
+  const above = list.box.y - (title.y + title.height), below = composed.contentBox.y + composed.contentBox.height - (list.box.y + list.box.height);
+  assert.ok(top > 0 && Math.abs(above - below) < 0.25 * composed.contentBox.height, `in the middle: ${above} above, ${below} below`);
+});
+
 test('the lone quote of a quote slide grows to its length-keyed ceiling under any title', () => {
   const quote = (text) => compose({ layout: 'quote', title: 'A shared view makes decisions easier', blocks: [{ region: 'body', quote: { text, attribution: 'Pilot lead' } }] }).items.find((item) => item.field === 'quote');
   const body = (item) => item.quoteLayout.parts.find((part) => part.role === 'body').fit.fontSize;

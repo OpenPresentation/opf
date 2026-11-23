@@ -532,7 +532,8 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   (`SPARSE_LIST_DISPLAY`); a list with descriptions, drawn as ruled rows, beside
   numerals, with badges or icons, or in a region with an arrangement keeps its size. The block then sits in the middle of
   the body, its card hugging it; a grown table's rows grow with its type (`items[].tableGrowth`, which both engines pass to
-  `layoutTable`). A block that fills half the body or more keeps its sizes and its place.
+  `layoutTable`). A block that fills half the body or more keeps its sizes; a paragraph or list that fills at most 60% of it
+  sits in its middle, any more keeps its place.
 - **A body of paragraphs and lists.** Two or more text and list blocks (in a layout's regions, or on a slide without a layout)
   that fill under half of the body below the headings (the height their text covers, so the empty space inside cards that share
   the body, as LH-86's rows, does not count), with nothing overflowing and no text at the floor, are composed again one, two or three type-scale steps larger (each up to a
