@@ -1,5 +1,5 @@
 // LH-115 follow-up (0.35.1): a bar chart drawn on a short table's rows keeps its parts together. Its header row starts on the table's top
-// line, the rows and the table are centered as one group with the chart's parts, and the chart box and its text size stay as they were.
+// line, a centered short table grows (LH-48 growth) with the bars on its rows, the rows and the table are centered as one group with the chart's parts, and the chart box and its text size stay as they were.
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
@@ -17,7 +17,7 @@ const lesson = (chart = {}) => ({
   chart: { type: "bar", data: { dataset: "taskTimes" }, axisTitles: { category: "Prototype", value: "Median task time (min)" }, dataLabels: { content: ["value"] }, ...chart },
   table: { dataset: "taskTimes" },
 });
-const tableRows = (table, document) => layoutTable(table.value, table.box, { scale: 1, minFontSize: table.composition.minFontSize, presentation: document }).rows;
+const tableRows = (table, document) => layoutTable(table.value, table.box, { scale: 1, minFontSize: table.composition.minFontSize, presentation: document, ...(table.tableGrowth ? { growth: table.tableGrowth } : {}) }).rows;
 
 for (const count of [2, 4]) test(`a bar chart on the rows of a short table keeps its parts together (${count} categories)`, () => {
   const document = presentation(count), result = compose(lesson(), { presentation: document });
@@ -49,4 +49,17 @@ test("a chart with an explicit legend, or rows that do not fit its plot, keeps i
   const eight = chartOf(compose(lesson(), { presentation: presentation(8) }));
   assert.equal(eight.chart.layer.rows, undefined);
   assert.ok(Math.abs(eight.chart.layer.header.caption.box.y - (eight.box.y + 10)) < 1, "the caption at the top of the box");
+});
+
+test("the short table grows (LH-48 growth, up to its display size) and the bars follow its rows", () => {
+  const document = presentation(2), result = compose(lesson(), { presentation: document });
+  const chart = chartOf(result), table = tableOf(result), rows = chart.chart.layer.rows;
+  assert.ok(table.tableGrowth > 1, "the table grew");
+  const laid = layoutTable(table.value, table.box, { scale: 1, minFontSize: table.composition.minFontSize, presentation: document, growth: table.tableGrowth }).rows;
+  const sizes = laid.flatMap((row) => row.cells.map((cell) => cell.fit.fontSize));
+  assert.ok(Math.min(...sizes) > 25 && Math.max(...sizes) <= 32 + 1e-9, `grown cells between the nominal 25 px and the 32 px display size: ${sizes}`);
+  for (const [index, row] of laid.slice(1).entries()) assert.ok(Math.abs(chart.box.y + rows.centers[index] - (row.box.y + row.box.height / 2)) < row.box.height / 2, `row ${index} carries its bar`);
+  const layer = chart.chart.layer;
+  assert.ok(Math.abs(layer.header.caption.box.y - (laid[0].box.y + 10)) < 1, "the caption on the grown table's top line");
+  assert.ok(laid[0].box.y >= chart.box.y - 0.5 && laid.at(-1).box.y + laid.at(-1).box.height <= chart.box.y + chart.box.height + 0.5, "the grown table stays inside the chart box's height");
 });

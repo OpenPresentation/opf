@@ -11135,6 +11135,48 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       }
     }
   }
+  // LH-115 growth (0.35.1, with LH-48): a short table whose rows carry a bar chart's bars, centered beside the chart's 4:3 box (LH-52),
+  // grows as a sparse lone table does: its type by the type scale's ratio up to its display size (LONE_DISPLAY_SIZES.table) and its rows
+  // with it, while every word stays whole, no cell is set under the grown size, and the group (the table, and the chart's header row,
+  // rows, tick labels and axis title around them) still fits the chart box. The bars follow the grown rows (thicker with them); the chart
+  // box and the chart's text are unchanged. Text only grows.
+  for (const entry of rowAligned) {
+    const {chart, table} = entry, layer = chart.chart?.layer;
+    if (!layer?.rows || layer.stack || layer.references || layer.plot || record(chart.value).legend !== undefined || chart.frameBox || chart.caption || table.frameBox || table.caption) continue;
+    const box = rounded(chart.box);
+    if (Math.abs(box.y + box.height / 2 - (table.box.y + table.box.height / 2)) > 1) continue;
+    const data = resolveChartData(chart.value, options.presentation);
+    if (!data.ok) continue;
+    const inset = chartPlotInset(chart.value, data, chart.chart!, { ...plotGeometry(chart), box });
+    if (!inset) continue;
+    const headerHeight = layer.header?.height ?? 0, floor = snapFontSizeUp((table.composition.minFontSize ?? 16) * scale), start = table.tableGrowth ?? 1;
+    const laidAt = (at: LayoutBox, growth: number): TableLayout | undefined => { try { return layoutTable(table.value, at, { scale, minFontSize: table.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...numberLanguage(options), ...(rtl ? { direction: 'rtl' as const } : {}), growth }); } catch { return undefined; } };
+    let chosen: { growth: number; height: number } | undefined, size = gridFontSize(grownRoleSize(TABLE_NOMINAL_SIZE, start, LONE_DISPLAY_SIZES.table) * scale, floor);
+    for (let power = 1; power <= 5; power++) {
+      const growth = start * TYPE_SCALE_RATIO ** power, grown = gridFontSize(grownRoleSize(TABLE_NOMINAL_SIZE, growth, LONE_DISPLAY_SIZES.table) * scale, floor);
+      if (grown <= size + 1e-9) break;
+      const laid = laidAt({ ...rounded(table.box), height: box.height }, growth);
+      if (!laid || laid.overflow || laid.splitsWords || !laid.rows.every(row => row.cells.every(cell => cell.fit.fontSize >= grown - 1e-9 || Array.isArray(cell.value)))) break;
+      const body = laid.rows.filter(row => !row.cells.some(cell => cell.header));
+      if (!body.length) break;
+      const top = Math.min(...laid.rows.map(row => row.box.y)), bottom = Math.max(...laid.rows.map(row => row.box.y + row.box.height));
+      const rowsTop = body[0]!.box.y, rowsBottom = body.at(-1)!.box.y + body.at(-1)!.box.height;
+      if (Math.max(bottom, rowsBottom + inset.bottom) - Math.min(top, rowsTop - headerHeight) > box.height) break;
+      chosen = { growth, height: bottom - top }; size = grown;
+    }
+    if (!chosen) continue;
+    const before = { box: table.box, growth: table.tableGrowth, layer };
+    table.tableGrowth = chosen.growth;
+    table.box = { ...table.box, y: round(box.y + box.height / 2 - chosen.height / 2), height: round(chosen.height) };
+    const laid = laidAt(rounded(table.box), chosen.growth);
+    const body = laid?.rows.filter(row => !row.cells.some(cell => cell.header)) ?? [];
+    const centers = body.map(row => { const key = row.cells.find(cell => cell.column === 0) ?? row.cells[0]!; const fit = key.fit; return key.textBox.y + ('height' in fit ? fit.height : fit.lines.length * fit.lineHeight) / 2; });
+    const authored = record(chart.value);
+    const rows = laid && alignBarRows(data, box, body.map(row => row.box), centers, { scale, minFontSize: chart.composition.minFontSize, header: headerHeight, hiddenAxis: layer.small?.valueAxis === false, labels: Boolean(layer.small?.labels || (authored.dataLabels !== undefined && authored.dataLabels !== false)), measure: chartMeasure });
+    if (!laid || !rows) { table.box = before.box; if (before.growth === undefined) delete table.tableGrowth; else table.tableGrowth = before.growth; continue; }
+    chart.chart!.layer = restackForRows(chart.value, data, layer, rows, chart.box, chart.chart!.valueAxis, plotGeometry(chart));
+    entry.top = Math.min(...laid.rows.map(row => row.box.y)); entry.bottom = Math.max(...laid.rows.map(row => row.box.y + row.box.height));
+  }
   // LH-115 follow-up (0.35.1): a bar chart drawn on a table's rows has its plot on those rows, and its box is the largest 4:3 box of its
   // cell, much taller than the rows of a short table: the header row stood at the top of the box, the value axis title at its foot and the
   // bars in a thin band between them. The chart's parts now stand together around the rows: the header row starts on the table's top line
