@@ -233,7 +233,8 @@ centered on its column in the tag's color, the PPTX export a text box at that bo
   and grow to 120 (`METRIC_DISPLAY_SIZES`, `METRIC_DISPLAY_HEIGHT`, `METRIC_DISPLAY_WIDTH`). A value that would wrap at its start keeps
   one line at the largest size down to its 76 px role size. Such a metric is start-aligned with its column (value, label, description,
   delta), unless the slide or the deck sets `contentAlignment`; a layout's or theme's centering is the default for short text, as LH-70
-  reads it. A metric alone keeps its centered display (LH-101 below) and a grid of metrics alone, or a scorecard tile (LH-68), keeps its
+  reads it. C05: in a layout with a row of its own for metrics (a region that accepts only metrics, the dashboard's KPI row) the metrics
+  stand over the other blocks, so they keep their display size but are centered. A metric alone keeps its centered display (LH-101 below) and a grid of metrics alone, or a scorecard tile (LH-68), keeps its
   sizes.
 - **Lone metric (LH-101).** A lone metric grows by the type scale's ratio, up to nine steps, while it fills at most 80% of its cell
   (`LONE_METRIC_TARGET`), its value up to 232 px (`LONE_DISPLAY_SIZES.value`), as Claude Design sets a lone figure at about 230 px. On a

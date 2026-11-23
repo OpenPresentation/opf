@@ -7673,6 +7673,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // start-aligned with their column, as Claude Design draws a figure beside a chart, table, paragraph or picture. A lone metric (LH-48,
   // LH-101) and a grid of metrics alone keep their centered sizes; a scorecard tile keeps LH-68's.
   const metricDisplay = new Map<string, { start: number; max: number }>();
+  // C05: a layout with a row of its own for metrics (a dashboard's KPI row, a region that accepts only metrics) keeps one or two of them
+  // centered in their cells, as it draws three: they stand over the other blocks, not beside them (metricStarts).
+  const kpiRow = template?.regions.some(region => region.accepts.length === 1 && region.accepts[0] === 'metric') === true;
   {
     const leaves: Pending[] = [], walk = (nodes: Pending[]): void => { for (const node of nodes) if (node.children) walk(node.children); else leaves.push(node); };
     walk(pending);
@@ -7932,7 +7935,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   });
   // LH-112: whether a metric beside other blocks is start-aligned (metric-start, or with its display size, metric-display): unless the slide
   // or the deck sets the content alignment (a layout's or theme's centering is the default for short text, as LH-70 reads it).
-  const metricStarts = (node: Pending): boolean => tierMetricPaths.has(node.path) || metricDisplay.has(node.path) && (hints.contentAlignment === undefined || hints.sources.contentAlignment === 'layout' || hints.sources.contentAlignment === 'theme') && (ruleOn('metric-start') || ruleOn('metric-display'));
+  const metricStarts = (node: Pending): boolean => tierMetricPaths.has(node.path) || metricDisplay.has(node.path) && !kpiRow && (hints.contentAlignment === undefined || hints.sources.contentAlignment === 'layout' || hints.sources.contentAlignment === 'theme') && (ruleOn('metric-start') || ruleOn('metric-display'));
   // The display size grows against the slide's body height (contentBox), so the height a metric needs (naturalHeight) and its placed
   // layout ask for the same value.
   const measureMetric = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, roleSizes?: MetricLayoutOptions['roleSizes'], tile = false, pill?: 'above') => {

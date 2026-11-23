@@ -59,7 +59,8 @@ const CHANGED = {
   // LH-41: several timelines stack as bands in the timeline region, so it flows as a column (and takes up to six).
   timeline: { body: { flow: "column" } },
   // OPF 0.35 removed the role secondary; its one user, the KPI row, is supporting (it accepts only metrics, so it binds as before).
-  dashboard: { lead: { role: "supporting" } },
+  // C05: the KPI row flows as one row of metrics, so four or five stand side by side over the charts.
+  dashboard: { lead: { role: "supporting", flow: "row" } },
   // OPF 0.35: process says its row of steps with its region's flow, where it set design.contentDirection on a grid region.
   process: { body: { flow: "row" } },
   // C02: the aside beside a chart sets its takeaway in the middle of its column, level with the chart.

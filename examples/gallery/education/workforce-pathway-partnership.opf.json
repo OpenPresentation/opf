@@ -1006,7 +1006,7 @@
                 "metric"
               ],
               "role": "supporting",
-              "flow": "grid"
+              "flow": "row"
             },
             {
               "name": "body",
