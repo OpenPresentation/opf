@@ -2684,11 +2684,18 @@ export interface MetricLayoutOptions extends QuoteLayoutOptions {
    */
   roleSizes?: Partial<Record<MetricTextRole, number>>;
   /**
-   * LH-68: lay the metric out as a tile of its whole box (a scorecard card): the label first as an eyebrow, the value under it asking for
-   * METRIC_TILE_VALUE_SHARE of the box's height (between its role size and twice it), a stacked unit under the value, and the description,
-   * delta and trend at the foot of the box. Pass the start alignment (`align: 'left'`).
+   * LH-68: lay the metric out as a tile of its whole box (a scorecard card): the label first as an eyebrow, the value asking for
+   * METRIC_TILE_VALUE_SHARE of the box's height (between its role size and three times it), a stacked unit under the value, and the
+   * description, delta and trend at the foot of the box. SCO-1: the value stands in the middle of the room between the label and the foot
+   * (`tileFoot`). Pass the start alignment (`align: 'left'`).
    */
   tile?: boolean;
+  /**
+   * SCO-1: the height (canvas pixels) of the foot that the tiles of one row share: their tallest description, delta and trend. The value
+   * stands in the middle of the room between the label and that foot, so the values of a row share one line whatever each foot holds.
+   * The tile's own foot when absent.
+   */
+  tileFoot?: number;
   /**
    * LH-68: the smallest size of each role in canvas pixels (composition passes a tile the sizes its metric fitted at as a stack): a role starts
    * at least there and fits down no further; a part that does not fit at it overflows.
@@ -2754,7 +2761,7 @@ const oneFigure = (text: string): boolean => proseWords(text.trim()).length === 
 /** LH-39: the metric layouts that set a figure on one line where it would have wrapped (the guarded rule `metric-figure`). */
 const FIGURE_LINES = new WeakSet<MetricLayout>(), FIGURE_FITS = new WeakSet<CodeTextFit>();
 /** LH-68: the share of a tile's height its value asks for (Claude Design's scorecard values are about a quarter of the card). */
-export const METRIC_TILE_VALUE_SHARE = 0.25;
+export const METRIC_TILE_VALUE_SHARE = 0.4;
 /**
  * LH-112: a value at display size keeps its one line within this share of its box's width, and its line height within this share of the
  * box's height (Claude Design draws a metric beside a chart or a paragraph at 120 to 160 px, about a third of its cell tall).
@@ -2897,8 +2904,9 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     // Wave 6 (LH-141 with LH-137): so does a number as the delta, which the pill draws beside the grouped value.
     const text=(role==='value'||role==='delta')&&typeof sourceValue==='number'?formatNumber(sourceValue,options.language,{group:Math.abs(sourceValue)>=NUMBER_GROUPING_MIN}):String(sourceValue),path=scalar?sourcePath:`${sourcePath}.${role}`;
     // WI-1: the value asks for its role size (76 px) whatever the box; the box only limits it, and fitValue fits it down on overflow.
-    // LH-68: a tile's value asks for METRIC_TILE_VALUE_SHARE of the tile, between its role size and twice it. LH-48: a lone metric grows.
-    const valueSize=options.tile?Math.min(152,Math.max(76,box.height*METRIC_TILE_VALUE_SHARE/scale)):76;
+    // LH-68: a tile's value asks for METRIC_TILE_VALUE_SHARE of the tile, between its role size and three times it (SCO-1: the figure grows
+    // into the tile). LH-48: a lone metric grows.
+    const valueSize=options.tile?Math.min(228,Math.max(76,box.height*METRIC_TILE_VALUE_SHARE/scale)):76;
     const least=snapFontSizeUp(Math.max(minimum,options.minimumSizes?.[role]??0));
     // LH-135: an eyebrow label is the tag's size and style (bold, capitals and tracking where its script has case, in the accent family).
     const eyebrow=options.eyebrow===true&&role==='label'&&!options.tile,caps=eyebrow&&eyebrowCaps(text);
@@ -3117,6 +3125,20 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
       const foot=options.tile?allocations.filter(entry=>tail.includes(entry.part)&&entry.part!==unit):[];
       const drop=foot.length?box.y+box.height-Math.max(...foot.map(entry=>entry.box.y+entry.box.height)):0;
       if (drop>0) for (const entry of foot) entry.box={...entry.box,y:entry.box.y+drop};
+      // SCO-1: the value (and a unit beside or under it) stands in the middle of the room between the label and the row's foot (tileFoot),
+      // not under the label over an empty middle.
+      if (options.tile) {
+        const leadBottom=Math.max(box.y,...allocations.filter(entry=>lead.includes(entry.part)).map(entry=>entry.box.y+entry.box.height));
+        const ownFoot=foot.length?box.y+box.height-Math.min(...foot.map(entry=>entry.box.y)):0;
+        const footTop=box.y+box.height-Math.max(ownFoot,options.tileFoot??0)-(foot.length||options.tileFoot?primaryGap:0);
+        const middle=allocations.filter(entry=>entry.part===primary||(unit!==undefined&&entry.part===unit));
+        if (middle.length) {
+          const value=middle.find(entry=>entry.part===primary)??middle[0]!,bottom=Math.max(...middle.map(entry=>entry.box.y+entry.box.height));
+          // The value's own line is centered, so the values of a row share it; a unit stacked under it follows and stays above the foot.
+          const shift=Math.min((leadBottom+footTop)/2-(value.box.y+value.box.height/2),footTop-bottom);
+          if (shift>0) for (const entry of middle) entry.box={...entry.box,y:entry.box.y+shift};
+        }
+      }
       const overflow=!valueFit||valueFit.overflow||arrangement==='inline-unit'&&valueFit.lines.length!==1||primaryHeight>area.height+.01||allocations.some(({box:area,fit})=>!fit||fit.overflow||!usable(area)||area.y+area.height>box.y+box.height+.01);
       // LH-53: a unit drawn larger than it asked for (METRIC_UNIT_SHARE) is no gain that offsets smaller metadata.
       const score=allocations.reduce((sum,{part,fit})=>sum+Math.max(0,part.requestedFontSize-(fit?.fontSize??minimum))/scale,0);
@@ -7899,7 +7921,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,
       // LH-188: a figure with an icon keeps LH-101's display size: its chip (LH-14) takes the room the larger figure would.
       textRasterPadding:options.textRasterPadding,...(roleSizes?{roleSizes}:{}),...grownOptions(node),...(messageNode(node)&&!tile&&record(node.value).icon===undefined?{message:true}:{}),
-      align:tile||starts?'left':alignmentFor('metric'),direction:textDirection,...(tile?{tile,...(tileFloors?.get(node.path)?{minimumSizes:tileFloors.get(node.path)}:{})}:{}),
+      align:tile||starts?'left':alignmentFor('metric'),direction:textDirection,...(tile?{tile,...(tileFloors?.get(node.path)?{minimumSizes:tileFloors.get(node.path)}:{}),...(tileFoots.has(node)?{tileFoot:tileFoots.get(node)}:{})}:{}),
       ...(display?{display:{...display,height:contentBox.height}}:{}),...(tier?{eyebrow:true}:{}),
       // LH-135: a tier's price is a figure whatever the guard's other rules do (LH-127): "$1,200/mo" never splits.
       figure:ruleOn('metric-figure')||tier!==undefined,
@@ -7925,6 +7947,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const isStepProcess = (path: string) => [...stepProcesses.values()].includes(path);
   const stepBand = (size: number) => STEP_BADGE * size * (1 + STEP_BADGE_GAP);
   // LH-68: the metrics of a `metrics: "tile"` region (composeTemplate marks them); placeNode lays each out as a tile of its whole card.
+  // SCO-1: the foot (description, delta, trend) the tiles of a row share, by tile: the tallest of the row, so their values share a line.
+  const tileFoots = new WeakMap<Pending, number>();
   const metricTiles = new WeakSet<Pending>(), tileFloors = (options as Record<symbol, unknown>)[TILE_FLOORS] as Map<string, MetricLayoutOptions['minimumSizes']> | undefined;
   // LH-41: how a template region's timeline is laid out (composeTemplate sets it before rows are sized): a band of several in one
   // region (horizontal only, compact at four or more, all at one size) or a lone timeline that may grow. `sizes` is `role` for
@@ -10526,6 +10550,18 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const cellHeight = Math.min(...cells.map(cell => cell.height)), tallest = Math.max(...units.map((unit, index) => naturalHeight(unit, cells[index]!.width, true, undefined, settings) + 2 * rasterPadding + scale));
         return underFilled ? { mode: 'hug', height: hugHeight(units, cells, Math.min(cellHeight, tallest)) } : { mode: 'top', height: Math.min(cellHeight - fillSpace, tallest) };
       }
+      // SCO-1: the tiles of a row share one foot, the tallest of their descriptions, deltas and trends, so each value stands at one line in
+      // the middle of the room between its label and that foot (tileFoots); the tiles keep their filled cards.
+      const tileUnits = units.filter(unit => metricTiles.has(unit));
+      if (tileUnits.length > 1) {
+        const feet = units.flatMap((unit, index) => {
+          if (!metricTiles.has(unit)) return [];
+          const full = acceptedBox({ ...cells[index]!, y: cells[index]!.y + fillSpace, height: Math.max(scale, cells[index]!.height - fillSpace) }), inner = payloadBox(full, true);
+          const laid = measureMetric(unit, inner, settings, false, undefined, true), tail = laid.parts.filter(part => part.visible && part.fit && part.role !== 'value' && part.role !== 'label' && part.role !== 'unit');
+          return tail.length ? [inner.y + inner.height - Math.min(...tail.map(part => part.box.y))] : [];
+        });
+        if (feet.length) for (const unit of tileUnits) tileFoots.set(unit, Math.max(...feet));
+      }
       if (!units.length || !units.every(hugsContent)) return undefined;
       const cellHeight = Math.min(...cells.map(cell => cell.height));
       const naturals = units.map((unit, index) => naturalHeight(unit, cells[index]!.width, true, anchor === 'top' ? undefined : references?.[index], settings) + 2 * rasterPadding + scale);
@@ -10694,6 +10730,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if ((options as Record<symbol, unknown>)[CENTER] === true && plan.stack === undefined) for (const region of plan.regions) {
       const units = unitsOf(region.name), rect = rects.get(region.name);
       if (!units.length || !rect || region.bleed) continue;
+      // SCO-1: a band with LH-68 tiles keeps its cells: its tiles fill them, each value grown and centered between its label and the foot.
+      if (ruleOn('metric-tiles') && region.metrics === 'tile' && units.some(unit => metricTiles.has(unit))) { centerNeeds.set(`${rect.row}:${rect.rowSpan}`, Infinity); continue; }
       const key = `${rect.row}:${rect.rowSpan}`, need = regionNeed(region.name, spanWidth(rect)) + units.length * (2 * rasterPadding + scale + (hasCards ? gap * CARD_FILL_SPACE : 0));
       centerNeeds.set(key, Math.max(centerNeeds.get(key) ?? 0, need));
     }
