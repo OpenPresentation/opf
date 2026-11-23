@@ -178,6 +178,7 @@
       "Kartika",
       "DaunPenh",
       "Khmer UI",
+      "Leelawadee UI",
       "Nyala",
       "Sylfaen",
       "Ebrima",
@@ -300,6 +301,11 @@
       "Latin"
     ],
     "Khmer UI": [
+      "Khmer",
+      "Latin"
+    ],
+    "Leelawadee UI": [
+      "Thai",
       "Khmer",
       "Latin"
     ],
@@ -1658,6 +1664,14 @@
     },
     "Khmer UI": {
       "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Khmer (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; the same samples agree in Chromium within 0.1 px. The original is not installed on the measuring host (windows-optional), so its widths are unmeasured. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged).",
+      "evidence": [
+        "scriptAuto",
+        "scriptModel",
+        "measurement"
+      ]
+    },
+    "Leelawadee UI": {
+      "nextAction": "Added with the 0.35 script defaults (2026-11-23) as the default for Thai and Khmer: it ships with Windows by default. Thai text previews with Noto Sans Thai at 0.96 and Khmer with Noto Sans Khmer at 1.19 (the policy's size factors: the sum of the installed original's shaped advances over the open face's, HarfBuzz with the language tag, eight sentences per language; Thai 0.958, per-sentence 0.935 to 0.985; Khmer 1.19, per-sentence 1.163 to 1.235). Read-only PowerPoint check 2026-11-23 (16.0 build 20625), one slide per language exported with the default: PowerPoint broke every line at the same word as OPF. Not run: the native acceptance fixtures of FF-46 for this family, and a script-corpus measurement under its own name.",
       "evidence": [
         "scriptAuto",
         "scriptModel",
