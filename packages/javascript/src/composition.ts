@@ -5254,7 +5254,9 @@ function bodyFill(result: SlideComposition, options: ComposeSlideOptions = {}): 
   const tableItem = body.find(item => item.field === 'table'), noteItem = body.find(item => item.field === 'text');
   const tableNote = !!result.regions && body.length === 2 && !!tableItem && !!noteItem?.text && !noteItem.frameBox && body.every(item => !item.emphasis && inBody(item))
     && noteItem.box.y >= tableItem.box.y + 1 && noteItem.box.x < tableItem.box.x + tableItem.box.width - 1 && noteItem.box.x + noteItem.box.width > tableItem.box.x + 1;
-  if (body.length < 2 || !(prose || metrics || tableNote)) return undefined;
+  // C07: a code snippet and the one text or list beside it grow together (growBodyUnits), as a snippet alone does.
+  const codeAside = !!result.regions && body.length === 2 && body.some(item => item.field === 'code' && item.codeLayout) && body.some(item => (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text) && body.every(item => !item.emphasis && !item.frameBox && inBody(item));
+  if (body.length < 2 || !(prose || metrics || tableNote || codeAside)) return undefined;
   const height = (fit: TextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
   const scale = Math.min(result.width, result.height) / 720, metricRows = metrics ? new Set(body.map(item => Math.round(item.box.y))).size : 0;
   const extentOf = (item: ComposedItem): readonly [number, number] => {
@@ -5269,6 +5271,7 @@ function bodyFill(result: SlideComposition, options: ComposeSlideOptions = {}): 
       try { table = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...numberLanguage(options), ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }); } catch { table = undefined; }
       return [item.box.y, item.box.y + Math.min(item.box.height, table?.height ?? item.box.height)];
     }
+    if (item.field === 'code') return [item.box.y, item.box.y + item.box.height];
     return [item.box.y, item.box.y + height(item.text!)];
   };
   const top = Math.min(...body.map(item => extentOf(item)[0])), bottom = Math.max(...body.map(item => extentOf(item)[1]));
@@ -5283,6 +5286,8 @@ function bodyFill(result: SlideComposition, options: ComposeSlideOptions = {}): 
   const extents = grows.map(extentOf).sort((a, b) => a[0] - b[0]);
   let covered = 0, reach = -Infinity;
   for (const [from, to] of extents) { if (to > reach) { covered += to - Math.max(from, reach); reach = to; } }
+  // C07: a snippet and its aside stand side by side, each at its own anchor: the row covers the taller of the two.
+  if (codeAside) covered = Math.max(...extents.map(([from, to]) => to - from));
   return { fill: covered / (bodyBottom - bodyTop), spare: Math.max(0, bodyBottom - bottom) };
 }
 // LH-48: a body of two or more paragraphs and lists that fills under LONE_FILL of its height, with nothing overflowing, is composed again
@@ -7876,12 +7881,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const grownOptions = (node: Pending): { growth?: number; proportional?: true } => { const growth = growthOf.get(node); return growth !== undefined && growth > 1 ? { growth, ...(bodyGrown.has(node) ? { proportional: true as const } : {}) } : {}; };
   // Whether the body's leaves (no groups) are two or more metrics, or one table and one text: the bodies LH-48 grows besides paragraphs and lists.
   const growsAsBody = (units: readonly Pending[]): boolean => units.every(unit => !unit.children && unit.caption === undefined && unit.emphasis === undefined && !unit.eyebrow)
-    && ((units.length >= 2 && units.every(unit => unit.field === 'metric')) || (units.length === 2 && units.filter(unit => unit.field === 'table').length === 1 && units.filter(unit => unit.field === 'text').length === 1));
+    && ((units.length >= 2 && units.every(unit => unit.field === 'metric')) || (units.length === 2 && units.filter(unit => unit.field === 'table').length === 1 && units.filter(unit => unit.field === 'text').length === 1)
+      // C07: a short snippet beside its explanation (a text or a list) grows with it, as a snippet alone grows.
+      || (units.length === 2 && units.filter(unit => unit.field === 'code').length === 1 && units.some(unit => unit.field === 'text' || unit.field === 'items' || unit.field === 'bullets')));
   const growBodyUnits = (units: readonly Pending[]): void => {
     // LH-75's table beside its note (TABLE_NOTE) keeps its own growth.
     if (!bodySteps || !growsAsBody(units) || (options as Record<symbol, unknown>)[TABLE_NOTE] !== undefined) return;
     // At most LH-48's three steps (a compact grid's further steps are for paragraphs and lists).
-    for (const unit of units) if ((unit.field === 'metric' || unit.field === 'table') && !growthOf.has(unit)) { growthOf.set(unit, TYPE_SCALE_RATIO ** Math.min(3, bodySteps)); bodyGrown.add(unit); }
+    for (const unit of units) if ((unit.field === 'metric' || unit.field === 'table' || unit.field === 'code') && !growthOf.has(unit)) { growthOf.set(unit, TYPE_SCALE_RATIO ** Math.min(3, bodySteps)); bodyGrown.add(unit); }
   };
   // LH-78: a quote beside other blocks starts at the lead size and fits in QUOTE_BESIDE_LINES lines (besideQuote); `bodySize` (px) refits
   // one at the size its sibling quotes share.
