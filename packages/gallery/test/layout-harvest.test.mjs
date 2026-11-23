@@ -17,8 +17,8 @@ const textHeight = (item) => item.text.height ?? item.text.lines.length * item.t
 const long = 'Shift the library from stacks-first to research-services-first before the next budget cycle, and report the change in use each term so the board can judge it.';
 
 for (const [id, anchor, blocks] of [
-  ['pillars', 'bottom', [labelled('Clear scope', 'Two teams and one workflow keep the pilot focused.'), labelled('Consistent measures', 'Track completion and task time against a baseline.'), labelled('An explicit decision', 'Agree the evidence needed before expanding the rollout to every team.')]],
-  ['team', 'bottom', [labelled('Ana Ruiz', 'Pilot lead'), labelled('Sam Lee', 'Product lead. Turns participant feedback into product changes.'), labelled('Kai Moreau', 'Analytics lead')]],
+  ['pillars', 'middle', [labelled('Clear scope', 'Two teams and one workflow keep the pilot focused.'), labelled('Consistent measures', 'Track completion and task time against a baseline.'), labelled('An explicit decision', 'Agree the evidence needed before expanding the rollout to every team.')]],
+  ['team', 'middle', [labelled('Ana Ruiz', 'Pilot lead'), labelled('Sam Lee', 'Product lead. Turns participant feedback into product changes.'), labelled('Kai Moreau', 'Analytics lead')]],
   // LH-68: scorecard metrics are tiles: label at the card's top, value under it, description at its foot.
   ['scorecard', 'tile', [{ metric: { value: 52, label: 'Participants', description: 'Target: 50' } }, { metric: { value: '84%', label: 'Completion', description: 'Target: at least 80%' } }, { metric: { value: '6.2', unit: 'min', label: 'Median time' } }]],
 ]) {
@@ -35,7 +35,7 @@ for (const [id, anchor, blocks] of [
     assert.ok(cards[0].y - body[0].y > -1 && cards[0].y - body[0].y < 13 && Math.abs(bottomOf(cards[0]) - bottomOf(body[0])) < 1, 'a card fills its region');
     for (const item of items) {
       const above = item.box.y - item.frameBox.y, below = bottomOf(item.frameBox) - bottomOf(item.box);
-      if (anchor === 'bottom') assert.ok(above > below, `${item.path}: the content sits low in its card (${above} above, ${below} below)`);
+      if (anchor === 'middle') assert.ok(above <= below + 14, `${item.path}: the content does not sit low in its card (${above} above, ${below} below)`);
       else if (anchor === 'tile') {
         const part = (role) => item.metricLayout.parts.find((entry) => entry.role === role);
         assert.ok(above > 0 && above <= 24 && below > 0 && below <= 24, `${item.path}: the tile fills its card inside the inset`);
@@ -96,11 +96,11 @@ test('LH-64: body-text cards of very unequal length fill the body and start thei
   for (const item of items) assert.ok(item.box.y - item.frameBox.y < 25, `${item.path}: at the card's top, not its foot`);
 });
 
-test('LH-64: a heading line on one card keeps the row at the foot of full-height cards', () => {
+test('LH-64: a heading line on one card keeps the row in full-height cards, its content not at their foot', () => {
   const result = compose('pillars', { title: 'Side by side', blocks: [{ text: 'Two teams.' }, labelled('Scope', 'Six weeks.'), { text: 'One workflow.' }] });
   const items = carded(result), body = bodyOf(result)[0];
   for (const item of items) assert.ok(Math.abs(bottomOf(item.frameBox) - bottomOf(body)) < 1, `${item.path}: the card fills the body`);
-  assert.ok(items.every((item) => item.box.y - item.frameBox.y > bottomOf(item.frameBox) - bottomOf(item.box)), 'the content sits low');
+  assert.ok(items.every((item) => item.box.y - item.frameBox.y <= bottomOf(item.frameBox) - bottomOf(item.box) + 14), 'the content does not sit low');
 });
 
 // LH-04: a top-anchored region drawn on cards (here a deck with contentBox) hugs its content instead of filling the cell, with

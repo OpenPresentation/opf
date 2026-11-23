@@ -1001,7 +1001,8 @@
                     "chart"
                   ],
                   "role": "supporting",
-                  "flow": "column"
+                  "flow": "column",
+                  "anchor": "middle"
                 }
               ]
             }
@@ -1089,7 +1090,8 @@
                     "list"
                   ],
                   "role": "supporting",
-                  "flow": "column"
+                  "flow": "column",
+                  "anchor": "middle"
                 }
               ]
             }

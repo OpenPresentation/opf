@@ -1081,7 +1081,8 @@
                     "list"
                   ],
                   "role": "supporting",
-                  "flow": "column"
+                  "flow": "column",
+                  "anchor": "middle"
                 }
               ]
             }
