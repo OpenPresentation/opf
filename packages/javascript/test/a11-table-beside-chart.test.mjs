@@ -9,13 +9,15 @@ const table = { columns: ['Region', 'Revenue'], rows: [['North', '$4.2M'], ['Sou
 const compose = (slide, options = {}) => composeSlide(slide, { width: 1280, height: 720, ...options });
 const size = (item) => Math.min(...layoutTable(item.value, item.box, { scale: 1, minFontSize: item.composition.minFontSize, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap((row) => row.cells.map((cell) => cell.fit.fontSize)));
 
-for (const type of ['column', 'line', 'pie']) test(`a short table beside a ${type} chart grows and shares the chart's top line`, () => {
+for (const type of ['column', 'line', 'pie']) test(`a short table beside a ${type} chart grows beside it (the chart's top line, or centered beside a pie)`, () => {
   const slide = { title: `${type} + table`, blocks: [{ chart: { type, title: 'Revenue by region', data } }, { table }] };
   const result = compose(slide), kept = compose(slide, { fill: false });
   const chart = result.items.find((item) => item.field === 'chart'), placed = result.items.find((item) => item.field === 'table');
   assert.ok(placed.tableGrowth > 1, 'the table grew');
   assert.ok(size(placed) > size(kept.items.find((item) => item.field === 'table')) - 1e-6, 'never smaller');
-  assert.ok(Math.abs(placed.box.y - chart.box.y) < 1, `top ${placed.box.y} vs chart ${chart.box.y}`);
+  // A pie has no top line: the table stays centered beside it.
+  if (type === 'pie') assert.ok(Math.abs(placed.box.y + placed.box.height / 2 - (chart.box.y + chart.box.height / 2)) < 1, 'centered beside the pie');
+  else assert.ok(Math.abs(placed.box.y - chart.box.y) < 1, `top ${placed.box.y} vs chart ${chart.box.y}`);
   assert.ok(placed.box.height <= chart.box.height + 0.5, 'within the chart box');
 });
 

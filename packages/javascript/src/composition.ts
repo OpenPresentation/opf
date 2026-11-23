@@ -11550,7 +11550,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // column, line, pie or doughnut chart, or bars of other keys) stood at its role size in the middle of the chart's 4:3 box, with no line
   // shared with the chart. It grows as the table under a bar chart's bars does (grownTable: type-scale steps up to its display size, its
   // rows with it, words whole) while it stays within the chart box's height, and its top moves to the top of the chart box, where the
-  // chart's header row (its title) starts, so the two read as one row. The chart is unchanged. A table or chart on a card or with a
+  // chart's header row (its title) starts, so the two read as one row; beside a pie or doughnut, which has no top line, it stays centered. The chart is unchanged. A table or chart on a card or with a
   // caption, and a chart beside more than one table, keep their layout. Text only grows.
   const onRows = new Set(rowAligned.map(entry => entry.table));
   for (const chart of items) {
@@ -11562,7 +11562,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const height = chosen?.height ?? table.box.height;
     if (height >= box.height - 1) continue;
     if (chosen) table.tableGrowth = chosen.growth;
-    table.box = { ...table.box, y: box.y, height: round(height) };
+    // A pie or doughnut has no top line (no header row over a plot): the grown table stays in the middle of the chart box, beside the pie.
+    const resolved = resolveChartData(chart.value, options.presentation), plan = resolved.ok ? chartDrawPlan(chart.value, resolved, { language: deckLanguage() }) : undefined;
+    const circular = plan !== undefined && (plan.type === 'pie' || plan.type === 'doughnut');
+    table.box = { ...table.box, y: circular ? round(box.y + box.height / 2 - height / 2) : box.y, height: round(height) };
     onRows.add(table);
   }
   // Explicit labels report only their final placement, after sibling scales/plots and table-row alignment.
