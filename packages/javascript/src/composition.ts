@@ -3307,7 +3307,12 @@ const TIMELINE_GROWTH = 4;
  * LH-129: the growths (reference pixels on every role) a lone timeline tries first, largest first: three and two steps of the type scale
  * above its 18 and 22 px label roles (to 28 and 32, or 24 and 28 px).
  */
-const TIMELINE_STEP_GROWTH = [15, 10, 6] as const;
+const TIMELINE_STEP_GROWTH = [10, 6] as const;
+/**
+ * TLN-1: a lone band's `what` labels grow in proportion up to this size (reference pixels; LONE_DISPLAY_SIZES.quote), the size a short row
+ * of headings takes; a `what` label may take this many lines there; only factors past this share of the role size are tried this way.
+ */
+const TIMELINE_DISPLAY_SIZE = 56, TIMELINE_WHAT_LINES = 2, TIMELINE_STEP_MIN = 1.5;
 /** C03, VPR-1: PowerPoint's chevron or vertical-process design covering less of its region than this gives way to OPF's design. */
 const LINEAR_STRIP_COVER = .5;
 /** MX1: a matrix of other than four entries prefers, at one text size, the grid whose cards are nearest this width over height. */
@@ -3365,6 +3370,8 @@ export interface TimelineLayout {
   /** Each proportional range links to its readable label/marker track; labels never inherit a short period's narrow cell. */
   rangeLinks?: {path:string;eventIndex:number;x1:number;y1:number;x2:number;y2:number}[];
   connector: {x1:number;y1:number;x2:number;y2:number};
+  /** TLN-1: the connector's (and progress line's) width where the band grew with `sizeScale` or a size offset; absent: 3 reference pixels. */
+  lineWidth?: number;
   /**
    * LH-121: the part of the connector drawn in the primary color, from the first event to the current one (to the last `done` one when
    * no event is current). The rest of the connector stays in the border color. Absent when no event is done or current.
@@ -3394,6 +3401,11 @@ export interface TimelineLayoutOptions extends QuoteLayoutOptions {
    * No part goes below `minFontSize`.
    */
   sizeOffset?: number;
+  /**
+   * TLN-1: every role size times this factor (at least 1) before `sizeOffset`: a lone timeline grown to use its body, its dates and labels
+   * in proportion, its markers, gaps and connector with them. The narrow test (WI-5) stays at the role sizes.
+   */
+  sizeScale?: number;
   /** LH-121: draw a status word under the label of each event with a status (where a localized vocabulary exists; see timelineStatusWordsFor). */
   statusWords?: boolean;
   /** LH-16: measure the intrinsic height of proportional ranges rather than filling their allocated vertical rail. */
@@ -3416,13 +3428,13 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   const outlines=options.textMeasurement?.outlineBounds!==undefined,rtl=options.direction==='rtl';
   if(outlines&&typeof options.textMeasurement?.outlineBounds!=='function')throw new TypeError('Text outline provider must be a function.');
   const path=options.path??'timeline',eventPath=(index:number)=>shorthand?`${path}.${index}`:`${path}.events.${index}`;
-  const fonts=resolveFontFamilies(options.fontFamilies),source:TimelineTextPart[]=[],roles=options.compact?TIMELINE_COMPACT_SIZES:TIMELINE_ROLE_SIZES;
+  const fonts=resolveFontFamilies(options.fontFamilies),source:TimelineTextPart[]=[],roles=options.compact?TIMELINE_COMPACT_SIZES:TIMELINE_ROLE_SIZES,sizeScale=Math.max(1,Number.isFinite(options.sizeScale)?options.sizeScale!:1);
   const add=(role:TimelineTextPart['role'],text:string|undefined,partPath:string,weight:number,eventIndex?:number)=>{
     if(text===undefined)return;
     // A current event's label is bold ("we are here"); every other part keeps its weight.
     const status=eventIndex===undefined?undefined:timeline.events[eventIndex]!.status;
     const requestedStyle:TextStyle={fontFamily:fonts.body,fontWeight:status==='current'&&role==='what'?700:weight,italic:false,path:partPath};
-    source.push({role,eventIndex,...(status?{status}:{}),path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:gridFontSize(roles[role]*scale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
+    source.push({role,eventIndex,...(status?{status}:{}),path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:gridFontSize(roles[role]*scale*sizeScale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
   };
   add('name',timeline.name,`${path}.name`,700);add('description',timeline.description,`${path}.description`,400);
   // LH-121: the status word sits right under the label, before the event's description.
@@ -3452,8 +3464,8 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     if(!Number.isFinite(height))throw new RangeError('Timeline text exceeds finite layout coordinates.');
     measured={fit,ink,height};cache.set(key,measured);return measured;
   };
-  type Candidate={arrangement:TimelineLayout['arrangement'];parts:TimelineTextPart[];markers:TimelineLayout['markers'];ranges?:TimelineLayout['ranges'];rangeLinks?:TimelineLayout['rangeLinks'];connector:TimelineLayout['connector'];progress?:TimelineLayout['progress'];diagnostics:TimelineLayoutDiagnostic[];score:number};
-  let selected:Candidate|undefined,attempts=0;
+  type Candidate={arrangement:TimelineLayout['arrangement'];lineWidth?:number;parts:TimelineTextPart[];markers:TimelineLayout['markers'];ranges?:TimelineLayout['ranges'];rangeLinks?:TimelineLayout['rangeLinks'];connector:TimelineLayout['connector'];progress?:TimelineLayout['progress'];diagnostics:TimelineLayoutDiagnostic[];score:number};
+  let selected:Candidate|undefined,attempts=0,connectorWidth:number|undefined;
   // The search starts `sizeOffset` from the role sizes and steps down one reference pixel at a time to the floor.
   // LH-16: ranged labels never shrink, whatever offset a stack or a cap asks for (placement); their natural height (intrinsic) is measured
   // at the same sizes, so a stack gives a duration timeline the height it is drawn in (RR-105).
@@ -3466,7 +3478,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   // line, so the timeline is composed vertically (events stacked down the cell, the same markers, statuses and order). The full-width
   // timeline keeps a horizontal arrangement. A band of a stack (`horizontal`) never turns vertical. The test is at the role sizes, whatever
   // the size offset, so a timeline measured at the floor has the arrangement it is placed in.
-  const count=events.length,labelSize=source.find(part=>part.role==='what')?.requestedFontSize??gridFontSize(roles.what*scale,minimum);
+  const count=events.length,labelSize=gridFontSize(roles.what*scale,minimum);
   const bandStep=box.width/count;
   const narrow=!options.horizontal&&count>1&&(box.width/Math.max(2,count)<TIMELINE_NARROW_EM*labelSize||!!durations&&!options.intrinsic&&box.height>box.width*1.15);
   const bandWidth=count>1?Math.max(scale,bandStep-Math.min(16*scale,bandStep/4)):box.width;
@@ -3476,9 +3488,13 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   const lineWidth=(part:TimelineTextPart,reduction:number)=>{const measured=measure(part,sizeAt(part,reduction),1e6,'left');return measured.fit.sourceLines.length===1?measured.fit.sourceLines[0]!.width+(outlines?2*padding:0):Infinity;};
   // LH-41: labels alternate above and below only when a `when` or `what` label is wider than its event spacing; otherwise they all
   // sit in one band.
-  const wideAt=(reduction:number)=>count>1&&events.some((fields,index)=>fields.some(part=>(part.role==='when'||part.role==='what')&&lineWidth(part,reduction)>bandWidthAt(index)+.01));
+  const growthAt=(reduction:number)=>{const what=source.find(part=>part.role==='what');return (effectiveOffset>0||sizeScale>1)&&what?sizeScale*Math.max(1,sizeAt(what,reduction)/what.requestedFontSize):1;};
+  // TLN-1: a timeline grown in proportion (sizeScale) keeps its band while each `what` label takes at most TIMELINE_WHAT_LINES lines of
+  // whole words in its spacing.
+  const wrapsWell=(part:TimelineTextPart,reduction:number,index:number)=>{const fit=measure(part,sizeAt(part,reduction),bandWidthAt(index),'center').fit;return fit.sourceLines.length<=TIMELINE_WHAT_LINES&&!breaksInsideWord(part.text,fit);};
+  const wideAt=(reduction:number)=>count>1&&events.some((fields,index)=>fields.some(part=>(part.role==='when'||part.role==='what')&&lineWidth(part,reduction)>bandWidthAt(index)+.01&&!(sizeScale>1&&part.role==='what'&&wrapsWell(part,reduction,index))));
   const tryArrangement=(arrangement:TimelineLayout['arrangement'],reduction:number):TimelineLayoutDiagnostic[]=>{
-      attempts++;
+      attempts++;connectorWidth=undefined;
       const parts:TimelineTextPart[]=[],markers:TimelineLayout['markers']=[],ranges:NonNullable<TimelineLayout['ranges']>=[],rangeLinks:NonNullable<TimelineLayout['rangeLinks']>=[],diagnostics:TimelineLayoutDiagnostic[]=[];
       let score=0;
       const report=(part:TimelineTextPart,reason:TimelineLayoutDiagnostic['reason'],message:string,excess=1)=>{diagnostics.push({code:'text-overflow',reason,path:part.path,message});score+=Math.max(1,excess);};
@@ -3524,7 +3540,8 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         // A compact band draws smaller markers and tighter gaps (Claude Design's compact bands).
         // TLN-1: a lone timeline grown past its role sizes (a positive size offset) draws its markers and gaps in proportion to its
         // labels, so the band reads as one drawing at the larger size rather than large labels around small dots.
-        const what=source.find(part=>part.role==='what'),grown=effectiveOffset>0&&what?Math.max(1,sizeAt(what,reduction)/what.requestedFontSize):1;
+        const what=source.find(part=>part.role==='what'),grown=growthAt(reduction);
+        if(grown>1)connectorWidth=3*scale*grown;
         setRadius(Math.min((options.compact?7:9)*scale*grown,bandStep/5));
         const lift=(options.compact?5:6)*scale*grown,fieldGap=(options.compact?2:4)*scale,pairGap=6*scale,extent=hasRing?ringRadius+strokeWidth/2:radius+(outlined?strokeWidth/2:0);
         const whenOf=(fields:TimelineTextPart[])=>fields.find(part=>part.role==='when'),whatOf=(fields:TimelineTextPart[])=>fields.find(part=>part.role==='what')!;
@@ -3558,8 +3575,10 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         // (header and both label bands) is centered in the box.
         const gutter=count>1?Math.min(16*scale,box.width/(count+1)/4):0,step=count>1?(box.width+gutter)/(count+1):0,width=count>1?2*step-gutter:box.width;
         const start=count===1?box.x+box.width/2:box.x+width/2;
-        setRadius(Math.min(9*scale,box.width/Math.max(2,count)/5,Math.max(scale,box.height-headerHeight)*.04));
-        const fieldGap=4*scale,clearance=24*scale;
+        // TLN-1: a grown alternating timeline's markers, connector and clearance grow with its labels too.
+        const grown=growthAt(reduction);if(grown>1)connectorWidth=3*scale*grown;
+        setRadius(Math.min(9*scale*grown,box.width/Math.max(2,count)/5,Math.max(scale,box.height-headerHeight)*.04*grown));
+        const fieldGap=4*scale*grown,clearance=24*scale*grown;
         const alternatingWidth=(_index:number)=>width;
         const heights=events.map((fields,index)=>fields.reduce((height,part)=>height+heightOf(part,alternatingWidth(index),'center'),0)+Math.max(0,fields.length-1)*fieldGap);
         const markerExtent=hasRing?ringRadius+strokeWidth/2:radius;
@@ -3608,7 +3627,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       // LH-121: progress runs from the first event to the current one, or to the last done one when none is current.
       const current=markers.findIndex(entry=>entry.status==='current'),reached=current>=0?current:markers.map(entry=>entry.status).lastIndexOf('done');
       const end=reached>0?markers[reached]!:undefined,progress=end?rtl?{x1:Math.min(firstMarker.x,end.x),y1:firstMarker.y,x2:Math.max(firstMarker.x,end.x),y2:end.y}:{x1:firstMarker.x,y1:firstMarker.y,x2:end.x,y2:end.y}:undefined;
-      const candidate={arrangement,parts,markers,...(durations?{ranges,rangeLinks}:{}),connector,...(progress?{progress}:{}),diagnostics,score};
+      const candidate={arrangement,parts,markers,...(durations?{ranges,rangeLinks}:{}),connector,...(progress?{progress}:{}),...(arrangement!=='vertical'&&connectorWidth!==undefined?{lineWidth:connectorWidth}:{}),diagnostics,score};
       if(!selected||score<selected.score)selected=candidate;
       return diagnostics;
   };
@@ -6188,9 +6207,7 @@ function centerTemplate(input: unknown, options: ComposeSlideOptions, result: Sl
   // First what the body's content covers as the layout placed it (each block's lines, parts or rows, not its cell): a body that already
   // covers LONE_TARGET is not composed again.
   const scale = Math.min(result.width, result.height) / 720, extentOf = (item: ComposedItem): readonly [number, number] => {
-    // TLN-1: a timeline covers what it draws (its bounds: parts, markers and rings), not the top of the cell it sits in the middle of.
-    if (item.timelineLayout) return [item.timelineLayout.bounds.y, item.timelineLayout.bounds.y + item.timelineLayout.bounds.height];
-    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout;
+    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
     if (internal) { const parts = (internal.parts as readonly { box: LayoutBox }[]); return [Math.min(item.box.y, ...parts.map(part => part.box.y)), Math.max(...parts.map(part => part.box.y + part.box.height), item.box.y)]; }
     if (item.field === 'table') {
       let table: TableLayout | undefined;
@@ -8064,7 +8081,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // region (horizontal only, compact at four or more, all at one size) or a lone timeline that may grow. `sizes` is `role` for
   // the role sizes, `floor` for the readability floor and `placed` for the size the region chose.
   const timelineHints = new WeakMap<Pending, { horizontal?: true; compact?: true; inlineHeader?: boolean; sizeOffset?: number; grow?: true }>();
-  const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition, sizes: 'role' | 'floor' | 'placed' = 'role', sizeOffset?: number, intrinsic = false) => {
+  const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition, sizes: 'role' | 'floor' | 'placed' = 'role', sizeOffset?: number, intrinsic = false, sizeScale?: number) => {
     const retained = ((options as Record<symbol, unknown>)[TIMELINE_NOTE_REFLOW] as ReadonlyMap<string, number> | undefined)?.get(node.path);
     const hint: ReturnType<typeof timelineHints.get> = retained === undefined ? timelineHints.get(node) : {horizontal: true, sizeOffset: retained};
     // LH-121: status words under the labels, a guarded rule (they take height the timeline's text might need).
@@ -8073,7 +8090,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     return layoutTimeline(node.value as TimelineContent, acceptedBox(box), {
       ...(intrinsic?{intrinsic:true}:{}),...(statusWords ? {statusWords:true} : {}),...(deckLanguage() !== undefined ? {language:deckLanguage()!} : {}),
       fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,direction:textDirection,
-      ...(hint?.horizontal ? {horizontal:true} : {}),...(hint?.compact ? {compact:true} : {}),...(hint?.inlineHeader ? {inlineHeader:true} : {}),
+      ...(hint?.horizontal ? {horizontal:true} : {}),...(hint?.compact ? {compact:true} : {}),...(hint?.inlineHeader ? {inlineHeader:true} : {}),...(sizeScale !== undefined && sizeScale > 1 ? {sizeScale} : {}),
       sizeOffset: sizeOffset ?? (retained !== undefined ? retained : sizes === 'floor' ? -TIMELINE_FLOOR_OFFSET : sizes === 'placed' ? hint?.sizeOffset ?? 0 : 0),
     });
   };
@@ -8098,6 +8115,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         if (size <= start + FONT_GRID_EPSILON) continue;
         const grown = measureTimeline(node, box, settings, 'placed', (size - start) / scale);
         if (!grown.overflow && lines(grown) === lines(placed) && capped(grown) && grown.parts.every((part, index) => { const before = placed.parts[index]?.fit; return !!part.fit && !!before && part.fit.fontSize >= before.fontSize - FONT_GRID_EPSILON; })) return grown;
+      }
+    }
+    // TLN-1: a lone band (no durations) first grows in proportion, every role by one factor, its `what` labels up through the type
+    // scale to TIMELINE_DISPLAY_SIZE (the size a short row of headings takes), largest first, while it keeps its arrangement, fits its
+    // box with every word whole and no `when` or name takes another line; a `what` label may take a second line (TIMELINE_WHAT_LINES).
+    if (!ranged && placed.arrangement !== 'vertical') {
+      const start = TIMELINE_ROLE_SIZES.what * scale, display = Math.max(start, Math.min(TIMELINE_DISPLAY_SIZE * scale, capOf(settings)));
+      const fixed = (layout: TimelineLayout) => layout.parts.map(part => part.role === 'when' || part.role === 'name' ? part.fit?.lines.length ?? 0 : 0).join();
+      const whatLines = (layout: TimelineLayout) => Math.max(0, ...layout.parts.filter(part => part.role === 'what').map(part => part.fit?.lines.length ?? 0));
+      const candidates = [...new Set(Array.from({ length: 8 }, (_, index) => typeScaleStepsUp(start, index + 1, display, settings.minFontSize ?? 16, scale)))].sort((a, b) => b - a);
+      for (const size of candidates) {
+        if (size <= start * TIMELINE_STEP_MIN + FONT_GRID_EPSILON) continue;
+        const grown = measureTimeline(node, box, settings, 'placed', 0, false, size / start);
+        if (!grown.overflow && grown.arrangement === placed.arrangement && fixed(grown) === fixed(placed) && whatLines(grown) <= Math.max(TIMELINE_WHAT_LINES, whatLines(placed)) && capped(grown)) return grown;
       }
     }
     for (const growth of TIMELINE_STEP_GROWTH) {
@@ -9482,8 +9513,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-135: a tier's price at the floor of its stack is at its role size, not scaled down: display headroom is the only thing it gives up.
     else if (node.field === 'metric') content = measureMetric(node, {x:0,y:0,width:inner,height:metricReferenceHeight === undefined ? 1e6 : Math.max(scale,metricReferenceHeight-pad)}, naturalSettings, false, atFloor && tierMetricPaths.has(node.path) ? {value: METRIC_ROLE_VALUE_SIZE * scale} : undefined).bounds.height;
     // LH-41: laid out as the region will (a band, compact, at its role sizes or the floor): its name, label bands and markers.
-    // TLN-1: a lone timeline that may grow asks, in a centered body (CENTER), for the height it takes grown (placeTimeline).
-    else if (node.field === 'timeline') content = (!atFloor && (options as Record<symbol, unknown>)[CENTER] === true && timelineHints.get(node)?.grow ? placeTimeline(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings) : measureTimeline(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings, atFloor ? 'floor' : 'role', undefined, true)).bounds.height + scale;
+    else if (node.field === 'timeline') content = measureTimeline(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings, atFloor ? 'floor' : 'role', undefined, true).bounds.height + scale;
     else if (node.field === 'table') content = (atFloor ? measureTable(node, inner, naturalSettings, true)?.height : measureTable(node, inner, naturalSettings)?.naturalHeight) ?? ((Array.isArray(record(node.value).rows) ? record(node.value).rows.length : 4) + 1) * 36 * scale * (atFloor ? Math.min(1, floorSize / startSize) : 1);
     else content = inner / 1.6;
     if (atFloor && !tierMetricPaths.has(node.path) && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets' || node.field === 'table' || node.field === 'timeline')) content *= Math.min(1, floorSize / startSize);
@@ -10256,14 +10286,6 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       cells.forEach((row, index) => {
         const names = row.filter(name => name !== '.');
         if (rowSizes[index] !== 'auto' && names.length && names.every(name => { const units = unitsOf(name); return units.length > 0 && units.every(huggedField) && (units.every(unit => unit.field === 'metric') || units.every(unit => unit.field === 'table')); })) rowSizes[index] = 'auto';
-      });
-    }
-    // TLN-1 (LH-102, centerTemplate): a row whose regions each hold one lone timeline that may grow hugs it (an auto row, its need the
-    // grown timeline's height), so a lead above it and a note below it sit with it in the middle of the body, not at its top and foot.
-    if ((options as Record<symbol, unknown>)[CENTER] === true && plan.stack === undefined) {
-      cells.forEach((row, index) => {
-        const names = row.filter(name => name !== '.');
-        if (rowSizes[index] !== 'auto' && names.length && names.every(name => { const units = unitsOf(name); return units.length === 1 && !!timelineHints.get(units[0]!)?.grow; })) rowSizes[index] = 'auto';
       });
     }
     // A valid 12 x 12 grid may request more gaps than fit. Keep the same physical gap on both axes and

@@ -5093,7 +5093,7 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   const scale=Math.min(context.dimensions.widthInches,context.dimensions.heightInches)*96/720;
   const group=String(context.timelineTags.size),anchor=timelineManifest(value,layout),connectorName=`OPF timeline ${group} connector`;
   const {x1,y1,x2,y2}=layout.connector;
-  slide.addShape('line',{objectName:connectorName,x:x1/96,y:y1/96,w:(x2-x1)/96,h:(y2-y1)/96,line:{color:context.colors.border,width:3*scale*.75}});
+  slide.addShape('line',{objectName:connectorName,x:x1/96,y:y1/96,w:(x2-x1)/96,h:(y2-y1)/96,line:{color:context.colors.border,width:(layout.lineWidth??3*scale)*.75}});
   context.timelineTags.set(connectorName,{v:1,group,role:'connector'});
   for(const range of layout.ranges??[]){
     const name=`OPF timeline ${group} range ${range.eventIndex}`,box=range.box;
@@ -5108,7 +5108,7 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   // LH-121: the connector up to the current event, a second native line in the primary color over the first.
   if(layout.progress){
     const progressName=`OPF timeline ${group} progress`,{x1,y1,x2,y2}=layout.progress;
-    slide.addShape('line',{objectName:progressName,x:x1/96,y:y1/96,w:(x2-x1)/96,h:(y2-y1)/96,line:{color:context.colors.accent,width:3*scale*.75}});
+    slide.addShape('line',{objectName:progressName,x:x1/96,y:y1/96,w:(x2-x1)/96,h:(y2-y1)/96,line:{color:context.colors.accent,width:(layout.lineWidth??3*scale)*.75}});
     context.timelineTags.set(progressName,{v:1,group,role:'progress'});
   }
   // FA-11: a status draws from the deck's colors through core's shared shapes: native ellipses (solid fill, or the
