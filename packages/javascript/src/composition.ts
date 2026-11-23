@@ -11426,6 +11426,21 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       }
     }
   }
+  // LH-115 growth (0.35.1) and A11: `table` laid out in `at` with `growth`, and the largest step of the type scale's ratio (up to the table's
+  // display size, LONE_DISPLAY_SIZES.table) at which every word stays whole, no cell is set under the grown size and `fits` holds.
+  const tableAt = (table: ComposedItem, at: LayoutBox, growth: number): TableLayout | undefined => { try { return layoutTable(table.value, at, { scale, minFontSize: table.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...numberLanguage(options), ...(rtl ? { direction: 'rtl' as const } : {}), growth }); } catch { return undefined; } };
+  const grownTable = (table: ComposedItem, at: LayoutBox, fits: (laid: TableLayout) => boolean): { growth: number; height: number } | undefined => {
+    const floor = snapFontSizeUp((table.composition.minFontSize ?? 16) * scale), start = table.tableGrowth ?? 1;
+    let chosen: { growth: number; height: number } | undefined, size = gridFontSize(grownRoleSize(TABLE_NOMINAL_SIZE, start, LONE_DISPLAY_SIZES.table) * scale, floor);
+    for (let power = 1; power <= 5; power++) {
+      const growth = start * TYPE_SCALE_RATIO ** power, grown = gridFontSize(grownRoleSize(TABLE_NOMINAL_SIZE, growth, LONE_DISPLAY_SIZES.table) * scale, floor);
+      if (grown <= size + 1e-9) break;
+      const laid = tableAt(table, at, growth);
+      if (!laid || laid.overflow || laid.splitsWords || !laid.rows.every(row => row.cells.every(cell => cell.fit.fontSize >= grown - 1e-9 || Array.isArray(cell.value))) || !fits(laid)) break;
+      chosen = { growth, height: Math.max(...laid.rows.map(row => row.box.y + row.box.height)) - Math.min(...laid.rows.map(row => row.box.y)) }; size = grown;
+    }
+    return chosen;
+  };
   // LH-115 growth (0.35.1, with LH-48): a short table whose rows carry a bar chart's bars, centered beside the chart's 4:3 box (LH-52),
   // grows as a sparse lone table does: its type by the type scale's ratio up to its display size (LONE_DISPLAY_SIZES.table) and its rows
   // with it, while every word stays whole, no cell is set under the grown size, and the group (the table, and the chart's header row,
@@ -11440,26 +11455,19 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!data.ok) continue;
     const inset = chartPlotInset(chart.value, data, chart.chart!, { ...plotGeometry(chart), box });
     if (!inset) continue;
-    const headerHeight = layer.header?.height ?? 0, floor = snapFontSizeUp((table.composition.minFontSize ?? 16) * scale), start = table.tableGrowth ?? 1;
-    const laidAt = (at: LayoutBox, growth: number): TableLayout | undefined => { try { return layoutTable(table.value, at, { scale, minFontSize: table.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...numberLanguage(options), ...(rtl ? { direction: 'rtl' as const } : {}), growth }); } catch { return undefined; } };
-    let chosen: { growth: number; height: number } | undefined, size = gridFontSize(grownRoleSize(TABLE_NOMINAL_SIZE, start, LONE_DISPLAY_SIZES.table) * scale, floor);
-    for (let power = 1; power <= 5; power++) {
-      const growth = start * TYPE_SCALE_RATIO ** power, grown = gridFontSize(grownRoleSize(TABLE_NOMINAL_SIZE, growth, LONE_DISPLAY_SIZES.table) * scale, floor);
-      if (grown <= size + 1e-9) break;
-      const laid = laidAt({ ...rounded(table.box), height: box.height }, growth);
-      if (!laid || laid.overflow || laid.splitsWords || !laid.rows.every(row => row.cells.every(cell => cell.fit.fontSize >= grown - 1e-9 || Array.isArray(cell.value)))) break;
+    const headerHeight = layer.header?.height ?? 0;
+    const chosen = grownTable(table, { ...rounded(table.box), height: box.height }, laid => {
       const body = laid.rows.filter(row => !row.cells.some(cell => cell.header));
-      if (!body.length) break;
+      if (!body.length) return false;
       const top = Math.min(...laid.rows.map(row => row.box.y)), bottom = Math.max(...laid.rows.map(row => row.box.y + row.box.height));
       const rowsTop = body[0]!.box.y, rowsBottom = body.at(-1)!.box.y + body.at(-1)!.box.height;
-      if (Math.max(bottom, rowsBottom + inset.bottom) - Math.min(top, rowsTop - headerHeight) > box.height) break;
-      chosen = { growth, height: bottom - top }; size = grown;
-    }
+      return Math.max(bottom, rowsBottom + inset.bottom) - Math.min(top, rowsTop - headerHeight) <= box.height;
+    });
     if (!chosen) continue;
     const before = { box: table.box, growth: table.tableGrowth, layer };
     table.tableGrowth = chosen.growth;
     table.box = { ...table.box, y: round(box.y + box.height / 2 - chosen.height / 2), height: round(chosen.height) };
-    const laid = laidAt(rounded(table.box), chosen.growth);
+    const laid = tableAt(table, rounded(table.box), chosen.growth);
     const body = laid?.rows.filter(row => !row.cells.some(cell => cell.header)) ?? [];
     const centers = body.map(row => { const key = row.cells.find(cell => cell.column === 0) ?? row.cells[0]!; const fit = key.fit; return key.textBox.y + ('height' in fit ? fit.height : fit.lines.length * fit.lineHeight) / 2; });
     const authored = record(chart.value);
@@ -11505,6 +11513,25 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     };
     chart.chart!.layer = { ...layer, ...(header ? { header } : {}), rows: { ...rows, top: rows.top + dy, bottom: rows.bottom + dy, centers: rows.centers.map(center => center + dy) } };
     if (dy) table.box = { ...table.box, y: table.box.y + dy };
+  }
+  // A11 (0.35.2, LH-115's growth beside every chart): a short table centered (LH-52) beside a chart that does not draw on its rows (a
+  // column, line, pie or doughnut chart, or bars of other keys) stood at its role size in the middle of the chart's 4:3 box, with no line
+  // shared with the chart. It grows as the table under a bar chart's bars does (grownTable: type-scale steps up to its display size, its
+  // rows with it, words whole) while it stays within the chart box's height, and its top moves to the top of the chart box, where the
+  // chart's header row (its title) starts, so the two read as one row. The chart is unchanged. A table or chart on a card or with a
+  // caption, and a chart beside more than one table, keep their layout. Text only grows.
+  const onRows = new Set(rowAligned.map(entry => entry.table));
+  for (const chart of items) {
+    if (chart.field !== 'chart' || !chart.chart || chart.chart.layer?.rows || chart.frameBox || chart.caption) continue;
+    const box = rounded(chart.box), beside = items.filter(item => item.field === 'table' && besideEachOther(chart.box, item.box));
+    const table = beside.length === 1 ? beside[0]! : undefined;
+    if (!table || onRows.has(table) || table.frameBox || table.caption || Math.abs(box.y + box.height / 2 - (table.box.y + table.box.height / 2)) > 1) continue;
+    const chosen = grownTable(table, { ...rounded(table.box), height: box.height }, laid => Math.max(...laid.rows.map(row => row.box.y + row.box.height)) - Math.min(...laid.rows.map(row => row.box.y)) <= box.height);
+    const height = chosen?.height ?? table.box.height;
+    if (height >= box.height - 1) continue;
+    if (chosen) table.tableGrowth = chosen.growth;
+    table.box = { ...table.box, y: box.y, height: round(height) };
+    onRows.add(table);
   }
   // Explicit labels report only their final placement, after sibling scales/plots and table-row alignment.
   // A reference label past its chart is overflow; one that meets a data line or another label after both placements is a collision
