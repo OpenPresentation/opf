@@ -7225,7 +7225,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const measuredFurniture=layoutFurniture(slide,options);
   const furniture=measuredFurniture.configured||measuredFurniture.diagnostics.length?measuredFurniture:undefined;
   if(furniture)diagnostics.push(...furniture.diagnostics);
-  let bodyBottom=Math.min(area.bottom-padding,furniture&&furniture.footerTop<height?furniture.footerTop-gap*.5:height-padding);
+  // A layout that sets its content at the foot (anchor bottom: closing, cover, section) keeps a whole gap above the footer, so its last
+  // line does not sit on the footer text; every other body keeps half a gap.
+  const anchoredLow=(value:unknown,depth=0):boolean=>depth<=MAX_COMPOSITION_DEPTH&&(record(value).anchor==='bottom'||(Array.isArray(record(value).regions)&&record(value).regions.some((region:unknown)=>anchoredLow(region,depth+1))));
+  const footerGap=!recomposing&&options.layout!==null&&typeof options.layout==='object'&&anchoredLow(options.layout)?gap:gap*.5;
+  let bodyBottom=Math.min(area.bottom-padding,furniture&&furniture.footerTop<height?furniture.footerTop-footerGap:height-padding);
   const headingTop = Math.max(area.top+padding,furniture?.headerBottom?furniture.headerBottom+gap*.5:padding);
   // RR-34: the footnote area sits directly above the footer band (or the bottom padding) and takes its
   // height from the content area, honoring the same side margins. Slides without markers skip this.
