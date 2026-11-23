@@ -64,6 +64,8 @@ const CHANGED = {
   process: { body: { flow: "row" } },
   // C02: the aside beside a chart sets its takeaway in the middle of its column, level with the chart.
   "chart-beside": { aside: { anchor: "middle" } },
+  // C07: the aside beside a snippet sets its explanation in the middle of its column.
+  code: { aside: { anchor: "middle" } },
 };
 
 /** Track weights as shares of their numeric total (core compiles to relative numbers; `auto` stays `auto`). */

@@ -28,3 +28,11 @@ for (const [kind, block] of Object.entries(ASIDES)) {
     assert.ok(Math.abs((top + bottom) / 2 - middle(region.box)) <= 0.1 * region.box.height, `${kind}: centered in the aside (${top}..${bottom} in ${region.box.y}..${region.box.y + region.box.height})`);
   });
 }
+
+test('code: the aside region is anchored in the middle', () => assert.equal(aside('code').anchor, 'middle'));
+test('code: a short aside stands level with the middle of a short snippet', () => {
+  const result = compose('code', { title: 'Keep the implementation easy to inspect', blocks: [{ code: { language: 'javascript', source: 'const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);' } }, ASIDES.text] });
+  const code = result.items.find((item) => item.field === 'code'), text = result.items.find((item) => item.path === 'slides.0.blocks.1.text');
+  assert.ok(code && text);
+  assert.ok(Math.abs(middle(code.box) - middle(text.box)) <= 0.25 * code.box.height, `the aside's middle (${middle(text.box)}) is level with the snippet's (${middle(code.box)})`);
+});
