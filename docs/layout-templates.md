@@ -537,7 +537,12 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   that fill under half of the body below the headings (the height their text covers, so the empty space inside cards that share
   the body, as LH-86's rows, does not count), with nothing overflowing and no text at the floor, are composed again one, two or three type-scale steps larger (each up to a
   list's display size, 37 px), and the largest step that adds no finding, sets every block larger and fills at most 60%
-  is kept; siblings keep one size (LH-43) and no block reads smaller than before. On a layout the body then sits in the
+  is kept; siblings keep one size (LH-43) and no block reads smaller than before. A body that still fills under half after
+  those steps grows on (LH-102), on a layout as on a slide without one, by the scale's steps up to 56 px while every block
+  keeps its place, nothing overflows and it fills at most 60% (a body of texts of at most four words each up to 75 px, so two
+  short lines of a `text` slide grow together toward the size one reaches); on a layout its paragraphs keep one size, and
+  its lists one size, there too. A layout whose regions may draw their content (a sequence's badges, a diagram) keeps the
+  three steps. On a layout the body then sits in the
   middle of the space under the headings: rows that hug
   their content move down, regions take the height their blocks need in the middle of their cells, and cards hug their
   text (LH-64's hug, whatever it fills of a card).

@@ -5383,7 +5383,8 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   const done = (grown: SlideComposition | undefined): SlideComposition | undefined => !grown || grown === result ? undefined : portraitQuotes(result) && stepsOf.has(grown) ? withPortraits(input, options, grown, stepsOf.get(grown)!, before, floor) : grown;
   if (!COMPACT_GRIDS.has(result)) {
     const grown = climb(result, {}, 3, () => true), reached = bodyFill(grown, options);
-    // LH-102: a short body of an automatic slide (a stack, or full-height promoted regions) that still fills under LONE_FILL after LH-48's
+    // LH-102: a short body (of an automatic slide, a stack or full-height promoted regions, or of a layout's regions, as two short lines of
+    // a `text` slide) that still fills under LONE_FILL after LH-48's
     // three steps stopped at a list's display size, as LH-05's compact grid does past it: on by steps of the type scale up to
     // COMPACT_GRID_DISPLAY (GRID_GROW), each step larger, nothing overflowing, at most LONE_TARGET filled, then centered. Kept when its
     // smallest text is larger than the three steps left it.
@@ -5393,9 +5394,15 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
     // columns and rows as the three steps left.
     const blocks = record(input).blocks, drawn = bodyIcons(input) || (result.steps !== undefined && !PLACED_TILES.has(result))
       || (Array.isArray(blocks) && (blocks.some(block => Array.isArray(record(block).blocks)) || (blocks.length >= TEXT_TILE_MIN && blocks.length <= TEXT_TILE_MAX && permitsTextTiles(result.composition))));
-    if (result.regions || !reached || reached.fill >= LONE_FILL || drawn || (options as Record<symbol, unknown>)[NO_STEPS] === true) return done(grown);
+    // A layout whose regions may draw their content (a sequence's badges or Basic Process, a diagram) keeps LH-48's three steps there, so
+    // a drawing and the plain body its guard compares it with are held to the same size.
+    const arranged = isLayoutTemplate(options.layout) && layoutTemplate(options.layout).regions.some(region => region.arrangement !== undefined);
+    if (!reached || reached.fill >= LONE_FILL || drawn || arranged || (options as Record<symbol, unknown>)[NO_STEPS] === true) return done(grown);
     const shapeOf = (composed: SlideComposition) => { const body = composed.items.filter(item => !headings.has(item.field) && !item.eyebrow); return `${new Set(body.map(item => Math.round(item.box.x / 4))).size}:${new Set(body.map(item => Math.round(item.box.y / 4))).size}`; };
-    const shape = shapeOf(grown), further = climb(result, { [GRID_GROW]: true }, COMPACT_GRID_STEPS, next => shapeOf(next) === shape);
+    // On a layout, paragraphs that share one size keep one size (LH-43), and so do lists; a paragraph beside a list may part from it, as a
+    // paragraph held by its reading measure stops before a short list does.
+    const proseSizes = (composed: SlideComposition) => Math.max(0, ...[['text'], ['items', 'bullets']].map(kinds => new Set(composed.items.filter(item => !headings.has(item.field) && !item.eyebrow && kinds.includes(item.field) && item.text).map(item => item.text!.fontSize)).size));
+    const shape = shapeOf(grown), shared = result.regions !== undefined && proseSizes(grown) <= 1, further = climb(result, { [GRID_GROW]: true }, COMPACT_GRID_STEPS, next => shapeOf(next) === shape && (!shared || proseSizes(next) <= 1));
     return done(smallest(further) > smallest(grown) + FONT_GRID_EPSILON ? further : grown);
   }
   // LH-05: a hugging grid of short texts grows further than other bodies: past a list's display size, up to COMPACT_GRID_STEPS steps, while
@@ -9338,6 +9345,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const bodySteps = Math.max(0, Math.floor(Number((options as Record<symbol, unknown>)[GROW] ?? 0)) || 0);
   const retainedProse = (options as Record<symbol, unknown>)[PROSE_REFLOW] as RetainedProse | undefined;
   const retainedWidths = new WeakMap<Pending, Map<number, number>>();
+  // LH-102 with LH-69: whether the slide's body is two or more plain texts of at most SHORT_TEXT_WORDS words each (and nothing else).
+  let shortTexts: boolean | undefined;
+  const shortTextBody = (): boolean => shortTexts ??= recordTemplate !== undefined && (() => {
+    const found = bodyPayloads(slide);
+    return !!found && found.length >= 2 && found.every(entry => entry.field === 'text' && entry.host.caption === undefined && messageWords(entry.host.text) <= SHORT_TEXT_WORDS);
+  })();
   const proseMeasure = (node: Pending, cellWidth: number): { size: number; width: number } => {
     const retained = retainedProse?.get(node.path);
     if (retained && node.field === 'text' && !node.children) {
@@ -9364,8 +9377,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (set !== undefined) return { size: set, width: Math.min(cellWidth, PARAGRAPH_MEASURE_MAX * AVERAGE_CHARACTER_EM * set) };
     const base = baseProseMeasure(node, cellWidth);
     if (!bodySteps || node.children || proseGrowth.has(node) || (node.field !== 'text' && node.field !== 'items' && node.field !== 'bullets')) return base;
-    // Siblings stop a step under a lone message's display size, so a body of several blocks never reads louder than one statement.
-    const display = ((options as Record<symbol, unknown>)[GRID_GROW] === true ? COMPACT_GRID_DISPLAY : LONE_DISPLAY_SIZES.list) * scale;
+    // Siblings stop a step under a lone message's display size, so a body of several blocks never reads louder than one statement. LH-102
+    // with LH-69: a layout body of short texts only (shortTextBody: each of at most SHORT_TEXT_WORDS words, "Start small.", "Measure weekly.")
+    // grows on to the display title's size, as one such text does, so two of them are not set far smaller than one.
+    const display = ((options as Record<symbol, unknown>)[GRID_GROW] === true ? (shortTextBody() ? HEADING_DISPLAY_SIZES.title : COMPACT_GRID_DISPLAY) : LONE_DISPLAY_SIZES.list) * scale;
     let size = base.size;
     for (let step = 0; step < bodySteps; step++) { const next = scaleAbove(size, composition.minFontSize ?? 16); if (next > display + 1e-9) break; size = next; }
     if (size === base.size || node.field !== 'text' || !(node.auto || node.measure)) return { size, width: base.width };

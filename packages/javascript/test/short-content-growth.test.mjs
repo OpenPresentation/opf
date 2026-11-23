@@ -71,3 +71,14 @@ test('a short text or list beside a layout picture or chart grows as the lone bl
   const hero = compose({ layout: 'hero', title: 'One team', blocks: [{ text: 'One outcome.' }, { text: 'Narrow scope.' }, { image: picture }] });
   for (const size of sizes(hero, 'text')) assert.ok(size <= LONE_DISPLAY_SIZES.list + 1e-6, `a hero's texts keep their sizes: ${size}`);
 });
+
+test('two short lines on a text layout grow together past the list display size', () => {
+  const composed = compose({ layout: 'text', title: 'Learn', blocks: [{ region: 'body', text: 'Start small.' }, { region: 'body', text: 'Measure weekly.' }] });
+  const texts = sizes(composed, 'text');
+  assert.equal(new Set(texts).size, 1, `one size: ${texts}`);
+  // Texts of at most four words grow on to the display title's size, as one such text does.
+  assert.ok(texts[0] > 56 + 1, `they grow past the compact display size: ${texts[0]}`);
+  // A paragraph beside a short list grows too; the list may grow further than the paragraph its reading measure holds.
+  const mixed = compose({ layout: 'text', title: 'Learn', blocks: [{ region: 'body', text: 'Keep the scope narrow, collect feedback weekly and give each decision a named owner.' }, { region: 'body', items: ['Start small', 'Measure weekly'] }] });
+  for (const size of [...sizes(mixed, 'text'), ...sizes(mixed, 'items')]) assert.ok(size > LONE_DISPLAY_SIZES.list + 1, `both grow: ${size}`);
+});
