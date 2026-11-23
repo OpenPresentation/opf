@@ -65,7 +65,7 @@ import {choosePictureText,scorePictureText,PICTURE_PANEL_SHARES,PICTURE_TEXT_COL
 export {choosePictureText,scorePictureText,CALM_PICTURE_SPREAD,SALIENT_LIMIT,PANEL_SCRIM_LIMIT,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextInput,type PictureTextPlacement} from './picture-text.js';
 import {numericText} from './number-text.js';
 import {CYCLE_RING_MARGIN,cycleFrame,cycleLoop,cycleNodes,cycleRing,type ArrangementArrow} from './arrangements.js';
-import {ARRANGEMENT_CARDS_MAX,ARRANGEMENT_GROWTH,ARRANGEMENT_LINE_POINTS,ARRANGEMENT_MAX,ARRANGEMENT_TEXT_MARGIN,CARD_TEXT_MARGIN,cardNodes,MATRIX_ENTRIES,matrixNodes,matrixQuadrants,matrixSquare,nodeWidthAt,pyramidFrame,pyramidNodes,pyramidSteps,SMART_ART_DOMAIN,smartArtScript,smartArtUnavailable,SMART_ART_NAMES,type Arrangement,type ArrangementNode} from './arrangements.js';
+import {ARRANGEMENT_CARDS_MAX,ARRANGEMENT_GROWTH,ARRANGEMENT_LINE_POINTS,ARRANGEMENT_MAX,ARRANGEMENT_TEXT_MARGIN,CARD_TEXT_MARGIN,cardNodes,MATRIX_ENTRIES,matrixNodes,matrixQuadrants,matrixSquare,nodeWidthAt,pyramidFrame,pyramidNodes,pyramidSteps,PYRAMID_STEPS_ASPECT,SMART_ART_DOMAIN,smartArtScript,smartArtUnavailable,SMART_ART_NAMES,type Arrangement,type ArrangementNode} from './arrangements.js';
 import {isLinearArrangement,linearDesign,linearMargins,linearNodes,OPF_LINES_MAX} from './linear-arrangements.js';
 import type {OpfLayoutRecipe} from './smart-art-layout.js';
 export {MM_PER_PX,SMART_ART_OPF_DOMAIN,opfSmartArtUnavailable,type OpfSmartArtCandidate,OPF_LAYOUT_DESIGNS,OPF_LAYOUT_KIND,OPF_LAYOUT_MAX,TEXT_ONLY_LABELS,compositeLayoutDefinition,evaluateLayoutDefinition,layoutArrangement,opfLayoutGeometry,presetTextRect,turnedShapeBox,type LayoutAlgorithm,type LayoutBranch,type LayoutChild,type LayoutChoose,type LayoutConstraint,type LayoutDefinition,type LayoutForEach,type LayoutNodeDefinition,type LayoutPresOf,type LayoutShape,type LayoutShapeType,type LayoutStyle,type LayoutTable,type OpfLayoutDesign,type OpfLayoutRecipe} from './smart-art-layout.js';
@@ -3317,6 +3317,8 @@ const TIMELINE_DISPLAY_SIZE = 56, TIMELINE_WHAT_LINES = 2, TIMELINE_STEP_MIN = 1
 const LINEAR_STRIP_COVER = .5;
 /** MX1: a matrix of other than four entries prefers, at one text size, the grid whose cards are nearest this width over height. */
 const MATRIX_CARD_ASPECT = 1.25;
+/** IP1: OPF's stepped pyramid widens its bars until it and its widest label span this share of the region. */
+const PYRAMID_GROUP_SHARE = .9;
 /** C03: at one text size, OPF's linear design with more lines is kept over fewer only when it covers this much more of the region. */
 const LINEAR_COVER_MARGIN = .1;
 /** LH-41: a size offset that takes every timeline part to the readability floor (to measure how far a timeline can shrink). */
@@ -12071,9 +12073,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // the room the widest label leaves at the end (the labels keep their column's width, so their lines stay as fitted).
     if (design.layout?.design === 'pyramid-steps') {
       const widest = Math.max(0, ...placed.columns.flatMap(column => column.text.listEntries.flatMap(entry => entry.text.richLines.map(line => line.width))));
-      const start = Math.min(...design.nodes.map(node => node.textBox.x)), inset = Math.max(0, (design.frame.x + design.frame.width - start - widest) / 2);
-      const nodes = inset > 1 ? pyramidSteps(design.layout.area, count, design.layout.gap, design.layout.radius ?? 0, pyramidDirection, inset) : undefined;
-      const next = nodes ? { ...design, nodes, layout: { ...design.layout, inset } } : undefined, again = next ? place(next, size, true) : undefined;
+      // The bars also widen into the room the labels leave, the group (bars, two gaps, the widest label) PYRAMID_GROUP_SHARE of the region wide.
+      const frame = design.frame, bars = Math.max(...design.nodes.map(node => node.box.width)), room = PYRAMID_GROUP_SHARE * frame.width - 2 * design.layout.gap - widest;
+      const barWidth = room > bars + 1 ? Math.min(room, frame.height * PYRAMID_STEPS_ASPECT) : bars;
+      const inset = Math.max(0, (frame.width - barWidth - 2 * design.layout.gap - widest) / 2);
+      const nodes = inset > 1 || barWidth > bars + 1 ? pyramidSteps(design.layout.area, count, design.layout.gap, design.layout.radius ?? 0, pyramidDirection, inset, barWidth) : undefined;
+      const next = nodes ? { ...design, nodes, layout: { ...design.layout, inset, ...(barWidth > bars + 1 ? { barWidth } : {}) } } : undefined, again = next ? place(next, size, true) : undefined;
       if (next && again) { design = next; placed = again; }
     }
     if (design.layout) placed = place(design, size, true) ?? placed;

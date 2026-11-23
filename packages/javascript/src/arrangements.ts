@@ -174,9 +174,10 @@ export const PYRAMID_STEP_HEIGHT = .3;
  * rounded bars at the start of `area` (level i of n is i/n of the steps' width, centered on one axis, `gap` apart), and each entry's
  * text beside its level, in one column across the rest of the area, vertically centered on its level.
  */
-export function pyramidSteps(area: Box, count: number, gap: number, radius: number, direction: 'up' | 'down' = 'up', inset = 0): ArrangementNode[] {
-  if (direction === 'down') return invertedPyramid(pyramidSteps(area, count, gap, radius, 'up', inset), area);
-  const n = Math.max(1, Math.floor(count)), width = Math.min(area.width * PYRAMID_STEPS_SHARE, area.height * PYRAMID_STEPS_ASPECT);
+export function pyramidSteps(area: Box, count: number, gap: number, radius: number, direction: 'up' | 'down' = 'up', inset = 0, barWidth?: number): ArrangementNode[] {
+  if (direction === 'down') return invertedPyramid(pyramidSteps(area, count, gap, radius, 'up', inset, barWidth), area);
+  // IP1: `barWidth` (composition's, where the labels leave room) widens the bars past PYRAMID_STEPS_SHARE of the area.
+  const n = Math.max(1, Math.floor(count)), width = barWidth !== undefined && barWidth > 0 ? Math.min(barWidth, area.height * PYRAMID_STEPS_ASPECT) : Math.min(area.width * PYRAMID_STEPS_SHARE, area.height * PYRAMID_STEPS_ASPECT);
   // IP1, PY1: a level is at most PYRAMID_STEP_HEIGHT of the widest bar tall (one or two levels are bars, not a block filling the region),
   // the levels in the middle of the region's height; `inset` moves the bars and their labels in from the start edge, so composition can
   // set the drawing and its labels in the middle of the region.

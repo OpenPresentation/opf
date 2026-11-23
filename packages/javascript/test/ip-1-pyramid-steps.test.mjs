@@ -19,6 +19,9 @@ test('IP1: the inverted pyramid and its labels are centered in the region', () =
   assert.ok(left > 40, `left ${left}`);
   assert.ok(Math.abs(left - right) < 2, `left ${left}, right ${right}`);
   assert.ok(arrangement.layout.inset > 0);
+  // The bars widen into the room the short labels leave: the group spans about 90% of the region.
+  assert.ok(arrangement.layout.barWidth > 0.4 * arrangement.frame.width, `bars ${arrangement.layout.barWidth}`);
+  assert.ok(left + right < 0.15 * arrangement.frame.width);
 });
 
 test('IP1: one level is a bar in the middle of the region, not a block', () => {
