@@ -1,0 +1,3985 @@
+{
+  "manifestVersion": "0.34.0",
+  "revision": "f701ad61e2b608ac7df2cfd76c5ab52272be6200",
+  "opfVersion": "0.35.1",
+  "node": "v26.7.0",
+  "platform": "darwin-arm64",
+  "builtAt": "2026-11-23T23:17:20.508Z",
+  "decks": [
+    {
+      "id": "smartart",
+      "source": "scripts/native-acceptance/qualification/decks/smartart.opf.json",
+      "sourceSha256": "e93c2295432beaf0a1cc1603ea30c8eeef3cd61daab7e8662327eaff52fca47a",
+      "previewOk": true,
+      "previewSlides": 17,
+      "previewFindings": [
+        {
+          "ruleId": "render/arrangement-adapted",
+          "severity": "info",
+          "path": "/slides/3/items",
+          "message": "A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+        },
+        {
+          "ruleId": "render/arrangement-adapted",
+          "severity": "info",
+          "path": "/slides/13/items",
+          "message": "A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/smartart.pptx",
+          "ok": true,
+          "sha256": "8ba3481ef893ac3667bf588cbd6cf30207c26abee6580808e0df238f63eb9b20",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/1/items",
+              "message": "The pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: entry 4 wraps too close to its node's width for PowerPoint to break the same lines."
+            },
+            {
+              "ruleId": "pptx/arrangement-adapted",
+              "severity": "info",
+              "path": "/slides/3/items",
+              "message": "A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/3/items",
+              "message": "The matrix is exported as native shapes, not live SmartArt: OPF's matrix has no live SmartArt: its text covers 9% of the frame (at most 7.5% matched PowerPoint's text placement)."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/5/items",
+              "message": "The cycle is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Cycle at the list's size, so OPF's own cycle is drawn; OPF's own layout does not hold it either: OPF's cycle-loop layout did not pass PowerPoint's comparison."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/7/items",
+              "message": "The row of chevrons is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Chevron Process at the list's size, so OPF's own row of chevrons is drawn; OPF's own layout does not hold it either: entry 3 wraps too close to its node's width for PowerPoint to break the same lines."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/9/items",
+              "message": "The process is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Process at the list's size, so OPF's own process is drawn; OPF's own layout does not hold it either: entry 6 wraps too close to its node's width for PowerPoint to break the same lines."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/11/items",
+              "message": "The vertical process is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Vertical Process at the list's size, so OPF's own vertical process is drawn; OPF's own layout does not hold it either: entry 6 wraps too close to its node's width for PowerPoint to break the same lines."
+            },
+            {
+              "ruleId": "pptx/arrangement-adapted",
+              "severity": "info",
+              "path": "/slides/13/items",
+              "message": "A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        },
+        {
+          "name": "shapes",
+          "flags": [
+            "--smart-art",
+            "shapes"
+          ],
+          "pptx": "pptx/smartart~shapes.pptx",
+          "ok": true,
+          "sha256": "571a9e0b596a32bc1e8ff1e9e372c5b173c2291ae6e4003351b35645ada77ce0",
+          "findings": [
+            {
+              "ruleId": "pptx/arrangement-adapted",
+              "severity": "info",
+              "path": "/slides/3/items",
+              "message": "A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+            },
+            {
+              "ruleId": "pptx/arrangement-adapted",
+              "severity": "info",
+              "path": "/slides/13/items",
+              "message": "A matrix needs four entries; its 3 entries are drawn as a grid of cards."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "smartart-arabic",
+      "source": "scripts/native-acceptance/qualification/decks/smartart-arabic.opf.json",
+      "sourceSha256": "fb0bd5610854575864027c8bf23bfff6359879ad286a91e223eb4148f0c805a3",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/smartart-arabic.pptx",
+          "ok": true,
+          "sha256": "de90c77fbbd861f37a6aea6481868cfa2bec358d28660adc27f2e80afebef265",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/0/items",
+              "message": "The pyramid is exported as native shapes, not live SmartArt: right-to-left text sits off center in PowerPoint's SmartArt, so OPF's own pyramid is drawn; OPF's own layout does not hold it either: right-to-left text sits off center in PowerPoint's SmartArt."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/1/items",
+              "message": "The process is exported as native shapes, not live SmartArt: right-to-left text sits off center in PowerPoint's SmartArt, so OPF's own process is drawn; OPF's own layout does not hold it either: OPF's flow-rows layout passed PowerPoint's comparison for 6 to 8 entries, not 4."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/2/items",
+              "message": "The cycle is exported as native shapes, not live SmartArt: right-to-left text sits off center in PowerPoint's SmartArt, so OPF's own cycle is drawn; OPF's own layout does not hold it either: OPF's cycle-ring layout did not pass PowerPoint's comparison."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "smartart-japanese",
+      "source": "scripts/native-acceptance/qualification/decks/smartart-japanese.opf.json",
+      "sourceSha256": "71a004bbe5d90dea6adb7c01fab93e0ef50e6552f6ff136cda1154c893fca3fa",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Yu Gothic is drawn with Noto Sans JP, a visual substitute, so lines can break differently than with the requested font: Yu Gothic is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/smartart-japanese.pptx",
+          "ok": true,
+          "sha256": "26613f7859044cde88ab4e307294f8c68f2414adf846af6c0ec866cfdf70b0b6",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/0/items",
+              "message": "The matrix is exported as native shapes, not live SmartArt: Chinese and Japanese text sits several pixels off in PowerPoint's SmartArt, so OPF's own matrix is drawn; OPF's own layout does not hold it either: OPF's matrix-quadrants layout did not pass PowerPoint's comparison."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/1/items",
+              "message": "The row of chevrons is exported as native shapes, not live SmartArt: Chinese and Japanese text sits several pixels off in PowerPoint's SmartArt, so OPF's own row of chevrons is drawn; OPF's own layout does not hold it either: OPF's chevron-rows layout passed PowerPoint's comparison for 6 to 8 entries, not 4."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/2/items",
+              "message": "The vertical process is exported as native shapes, not live SmartArt: Chinese and Japanese text sits several pixels off in PowerPoint's SmartArt, so OPF's own vertical process is drawn; OPF's own layout does not hold it either: OPF's vertical-flow-columns layout passed PowerPoint's comparison for 5 to 6 entries, not 3."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Yu Gothic is drawn with Noto Sans JP, a visual substitute, so lines can break differently than with the requested font: Yu Gothic is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-harvest",
+      "source": "scripts/native-acceptance/qualification/decks/layout-harvest.opf.json",
+      "sourceSha256": "7ca8d43afd579672e058a9d1383a9dc687915870765c717ce4d8ab973aa11e3d",
+      "previewOk": true,
+      "previewSlides": 20,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/layout-harvest.pptx",
+          "ok": true,
+          "sha256": "b35690bdd6d180b11bc21edb83355ba0e88a69b8b202cc5747e1cbffa05e75ad",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a visual substitute, so lines can break differently than with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ],
+          "pptx": "pptx/layout-harvest~native-body.pptx",
+          "ok": true,
+          "sha256": "861a72acf504d59f8aa1aef9061865502c709a815e0809883f5ef229d993fb18",
+          "findings": [
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/2/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/4/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/0/blocks/0/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/0/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/1/blocks/0/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/1/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/2/blocks/0/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/2/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/8/blocks/0/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/8/blocks/1/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/8/blocks/2/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/8/blocks/3/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/3/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/12/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/12/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/13/blocks/2/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/15/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/15/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/15/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a visual substitute, so lines can break differently than with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "footers",
+      "source": "scripts/native-acceptance/qualification/decks/footers.opf.json",
+      "sourceSha256": "6dd88864e373015bb5393c3af5148dedbae71d14d46fbd8e83a22c410ea28bd3",
+      "previewOk": true,
+      "previewSlides": 4,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/footers.pptx",
+          "ok": true,
+          "sha256": "33c73e68f61da159c8b326b28d67b53ed115a609326458a79767a98b08d15d76",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        },
+        {
+          "name": "static",
+          "flags": [
+            "--slide-numbers",
+            "static"
+          ],
+          "pptx": "pptx/footers~static.pptx",
+          "ok": true,
+          "sha256": "4ffce1ea1660b950c5eb32b44035646af41b3846559030249f3fc8a9b60d5226",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shapes",
+      "source": "examples/technical/shapes.opf.json",
+      "sourceSha256": "bd1d459443c062019acbd158bde85c4097ab1fc4c267d348d41183ba5eabc7c1",
+      "previewOk": true,
+      "previewSlides": 8,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/shapes.pptx",
+          "ok": true,
+          "sha256": "a6a18c7fc1573f0367496bb7e2471894863eaead4b3e14cb2e5d8f4d0adcfe1b",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shape-effects",
+      "source": "examples/technical/shape-effects.opf.json",
+      "sourceSha256": "9cf8e779c7a527586256d435a4b74f28b8edb9b7f1894299f53331aff2de4420",
+      "previewOk": true,
+      "previewSlides": 4,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/shape-effects.pptx",
+          "ok": true,
+          "sha256": "2b7205126d23e6b93025a2f461fe4cb7b06d0e5c2b53783d1bf243c40ee4b26c",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shape-overlays",
+      "source": "examples/technical/shape-overlays.opf.json",
+      "sourceSha256": "e526b3bb72075d66287d9fc29784b75b9cecd61c36c79a6be5239f378be15724",
+      "previewOk": true,
+      "previewSlides": 6,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/shape-overlays.pptx",
+          "ok": true,
+          "sha256": "8cbabfb80dbf96d461012c92443b25789434ad39746dfff28d0c9c3abcefb166",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a visual substitute, so lines can break differently than with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shape-overlays-rtl",
+      "source": "examples/technical/shape-overlays-rtl.opf.json",
+      "sourceSha256": "967c951719c4b61f0b00e66a75995a849ccc879cdf655ce823bfd2f3d9cc8bc5",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/shape-overlays-rtl.pptx",
+          "ok": true,
+          "sha256": "26b22f853794269c9ed736582bb4fa8b0347fd8187fb6a379fa41aba1e2bac36",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "diagrams",
+      "source": "examples/technical/diagrams.opf.json",
+      "sourceSha256": "005ab6d345c501fd835b8c327fb9336dc38d544b15b50385360436dae2c783c4",
+      "previewOk": true,
+      "previewSlides": 7,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/diagrams.pptx",
+          "ok": true,
+          "sha256": "67a10ac7dc572784f65912b3dfe23e3d6280b2c428aba206d94d637d43aef305",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        },
+        {
+          "name": "picture",
+          "flags": [
+            "--diagrams",
+            "picture"
+          ],
+          "pptx": "pptx/diagrams~picture.pptx",
+          "ok": true,
+          "sha256": "3847e0d5d2e009e0a97071d12e28e9f93edbc6de414e5a9e347b0637bf67408a",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dot-diagrams",
+      "source": "examples/technical/dot-diagrams.opf.json",
+      "sourceSha256": "34c9598f0b61b4b50de8bcb746f053242bc37f28741d0fa137f2a7b58021eb3e",
+      "previewOk": true,
+      "previewSlides": 5,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/dot-diagrams.pptx",
+          "ok": true,
+          "sha256": "8668efbf8ececd06dbeb9e0780c105c12541dc6d1dee623232022e0a6e7d27b3",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plantuml-diagrams",
+      "source": "examples/technical/plantuml-diagrams.opf.json",
+      "sourceSha256": "26bcc7bfaad7859c202219d250d8069582cebd0f63d23f2789c647e57df6ac0e",
+      "previewOk": true,
+      "previewSlides": 8,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/plantuml-diagrams.pptx",
+          "ok": true,
+          "sha256": "c38c514b226b3d5f66a541adb1d4dc97c0f37e3111c15d467f8a69b2c7a945e7",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Open Sans, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "diagrams-markdown",
+      "source": "examples/markdown/diagrams.opf.md",
+      "sourceSha256": "8693d80c871036e408e88f9e4a6d49a63fc2bdedac3723c1e12158abbcabc3d4",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/diagrams-markdown.pptx",
+          "ok": true,
+          "sha256": "c6de99bdbb9db7252cadbe2c3f60ba0c12a42ff34d8477c333f4372417ede59a",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "diagram-connectors",
+      "source": "scripts/native-acceptance/qualification/decks/diagram-connectors.opf.json",
+      "sourceSha256": "f6aa89aab704e020e829bdce4525cd5cfab99e6ce39b06d6665bcef608a6d5c3",
+      "previewOk": true,
+      "previewSlides": 2,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/diagram-connectors.pptx",
+          "ok": true,
+          "sha256": "95a967b8e736389770387ef3619a4bd2ce96ea1c661f01e2c3996cd9607263b2",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-sampler",
+      "source": "examples/technical/layout-sampler.opf.json",
+      "sourceSha256": "551b9a19bf6dbba199d90693a86d2852c9d599b9c2be29f768591813072b1a9d",
+      "previewOk": true,
+      "previewSlides": 52,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/layout-sampler.pptx",
+          "ok": true,
+          "sha256": "ed31a5f3a57b3b702f6f21fd005c05b63eeead240282f9d1265ee5b61127f700",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/31/blocks/0/items",
+              "message": "The matrix is exported as native shapes, not live SmartArt: its entries wrap to 8 lines in all (at most 6 matched PowerPoint), so OPF's own matrix is drawn; OPF's own layout does not hold it either: OPF's matrix-quadrants layout did not pass PowerPoint's comparison."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/48/blocks/0/items",
+              "message": "The inverted pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own inverted pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/49/blocks/0/items",
+              "message": "The org-chart is exported as native shapes, not live SmartArt: Organization Chart text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/50/blocks/0/items",
+              "message": "The hierarchy is exported as native shapes, not live SmartArt: Hierarchy text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/51/blocks/0/items",
+              "message": "The venn is exported as native shapes, not live SmartArt: Basic Venn text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a visual substitute, so lines can break differently than with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ],
+          "pptx": "pptx/layout-sampler~native-body.pptx",
+          "ok": true,
+          "sha256": "21950bf6811b209f3008b22a8c5697aad785d1d3e487e81339d8373b4f5f0b5a",
+          "findings": [
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/2/blocks/0/items",
+              "message": "Native body export cannot represent this step badges; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/0/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/6/blocks/2/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/7/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/7/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/7/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/9/blocks/0/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/9/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/10/blocks/0/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/10/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/10/blocks/2/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/11/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/12/blocks/2/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/13/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/13/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/13/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/15/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/15/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/15/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/16/blocks/3/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/19/blocks/1/text",
+              "message": "Native body export cannot represent this tight wrap; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/26/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/26/blocks/2/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/26/blocks/3/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/28/blocks/0/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/28/blocks/1/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/28/blocks/2/items",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/30/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/31/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/31/blocks/0/items",
+              "message": "The matrix is exported as native shapes, not live SmartArt: its entries wrap to 8 lines in all (at most 6 matched PowerPoint), so OPF's own matrix is drawn; OPF's own layout does not hold it either: OPF's matrix-quadrants layout did not pass PowerPoint's comparison."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/32/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/33/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/34/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/36/blocks/0/items",
+              "message": "Native body export cannot represent this unsupported list; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/36/blocks/1/items",
+              "message": "Native body export cannot represent this unsupported list; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/36/blocks/2/items",
+              "message": "Native body export cannot represent this unsupported list; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/40/blocks/1/blocks/1/text",
+              "message": "Native body export cannot represent this complex composition; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/48/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/48/blocks/0/items",
+              "message": "The inverted pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own inverted pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/49/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/49/blocks/0/items",
+              "message": "The org-chart is exported as native shapes, not live SmartArt: Organization Chart text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/50/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/50/blocks/0/items",
+              "message": "The hierarchy is exported as native shapes, not live SmartArt: Hierarchy text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/native-body-fallback",
+              "severity": "warning",
+              "path": "/slides/51/blocks/0/items",
+              "message": "Native body export cannot represent this multi column; the current measured shapes were exported."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/51/blocks/0/items",
+              "message": "The venn is exported as native shapes, not live SmartArt: Basic Venn text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a visual substitute, so lines can break differently than with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chart-type-sampler",
+      "source": "examples/technical/chart-type-sampler.opf.json",
+      "sourceSha256": "96d86db082e764bb5038f52a8eb268e7036e368b4f2bcb4894f8887489387a8c",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/chart-type-sampler.pptx",
+          "ok": true,
+          "sha256": "36671483128858ef7924cea16d2254a966f6385fd1515d92f3dc6daf35122642",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "path": "/slides/0/blocks/0/chart",
+              "message": "The 'box-and-whisker' chart is drawn as core's box-per-series fallback: it has one value per category, so its rows form one group and each series is one box of its values, as the preview draws it."
+            },
+            {
+              "ruleId": "pptx/export-lossy",
+              "severity": "info",
+              "path": "/slides/1/blocks/1/chart",
+              "message": "PowerPoint chooses its own contrast color for native funnel value labels and can ignore the written label color (white where the preview uses black). The funnel remains an editable native chart; XML label colors do not establish physical color parity."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-and-code",
+      "source": "examples/technical/table-and-code.opf.json",
+      "sourceSha256": "fbde51991280165ea5ae9fa2caf1f959fc3a7741b5b88958c5d47d97120aa3c3",
+      "previewOk": true,
+      "previewSlides": 2,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/table-and-code.pptx",
+          "ok": true,
+          "sha256": "534a4c9efaa7aa064d1af1eea0e2e7493d6dc60913be44f60b2fbdd0a99050dc",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "columns",
+      "source": "examples/technical/columns.opf.json",
+      "sourceSha256": "78fa90765aaf0d26563ec9b507844d5c6d5e0960f6eebeba59c80a99235c570d",
+      "previewOk": true,
+      "previewSlides": 2,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/columns.pptx",
+          "ok": true,
+          "sha256": "783dd516e61f19654f6f9f86bf6e93a88de8d48c0d17a018bfd93adfb3942608",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "header-footer-logo-set",
+      "source": "examples/technical/header-footer-logo-set.opf.json",
+      "sourceSha256": "f2bac30758c5935abb90cc03ee279fc3c6ff219a75fea29a5e10d0437e50c13f",
+      "previewOk": true,
+      "previewSlides": 2,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/header-footer-logo-set.pptx",
+          "ok": true,
+          "sha256": "7c81bd95b02094223ca751a68d72b843a959d70486ef09997005cb6b28faf94b",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "full-feature-tour",
+      "source": "examples/technical/full-feature-tour.opf.json",
+      "sourceSha256": "3db197f907b2e8e63510f40a3dee1ced5372eb4030e50d17fa16df79db5e7381",
+      "previewOk": true,
+      "previewSlides": 10,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/full-feature-tour.pptx",
+          "ok": true,
+          "sha256": "0ceacfa7da6ee9c82660778b7698bceed75e6aa86868beef21cc16afcd48c969",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a visual substitute, so lines can break differently than with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "data-story-academy",
+      "source": "examples/gallery/design-and-media/data-story-academy-corporate-programs.opf.json",
+      "sourceSha256": "e490e4a40904cdce446a41f06f42971a3150fa4c47fa8381a42483fddc8b1b25",
+      "previewOk": true,
+      "previewSlides": 16,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/data-story-academy.pptx",
+          "ok": true,
+          "sha256": "acf4d219995cbef23abc900d394739e225b7858cf4932a0c36efa7c35ce10669",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Montserrat, Work Sans, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compliance-readiness-review",
+      "source": "examples/gallery/business-functions/compliance-readiness-review.opf.json",
+      "sourceSha256": "11016edfdc1c74121a0276e4d50ef321a89a451c2f4117cf3633e1e04f993799",
+      "previewOk": true,
+      "previewSlides": 9,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Consolas is drawn with Cousine, a visual substitute, so lines can break differently than with the requested font: Consolas is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/compliance-readiness-review.pptx",
+          "ok": true,
+          "sha256": "026c7527b3703a1031cf75913fa7314ceb175a3b7861fce49db5402d51275144",
+          "findings": [
+            {
+              "ruleId": "pptx/furniture-on-slide",
+              "severity": "warning",
+              "path": "/design/footer/center/text",
+              "message": "Slide content overlaps the footer center text on slide 8. PowerPoint draws slide master and layout shapes beneath slide content, so there this part stays a shape on the slide, drawn above the content as in the preview."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Consolas, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a visual substitute, so lines can break differently than with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Consolas is drawn with Cousine, a visual substitute, so lines can break differently than with the requested font: Consolas is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chart-point-overlays",
+      "source": "examples/technical/chart-point-overlays.opf.json",
+      "sourceSha256": "9e2a72f51d055177c323c6f5b5d3fb838ffe738dce6f3dd9bcb152883306faf1",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/chart-point-overlays.pptx",
+          "ok": true,
+          "sha256": "2c9d84e35d06b7a19dd4a5bbc6ef82e0ecb2b554214992992d09885291116546",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "duration-timeline",
+      "source": "examples/technical/duration-timeline.opf.json",
+      "sourceSha256": "45bd3a2dfaceae4b91a6bf0bf793340e499486c3303d37636b3aeea58c3f2150",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/duration-timeline.pptx",
+          "ok": true,
+          "sha256": "975e065f5c79d2ee38d0694615b8d934ac84c21392a45bb0bdc226ee3566b8bb",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Roboto, Roboto Medium, Roboto SemiBold, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "explicit-chart-reference-lines",
+      "source": "examples/technical/explicit-chart-reference-lines.opf.json",
+      "sourceSha256": "3bac666d2168b90418689d5983449deb671d01530a384a0ec8ed61c62f89ec98",
+      "previewOk": true,
+      "previewSlides": 5,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/explicit-chart-reference-lines.pptx",
+          "ok": true,
+          "sha256": "5341ee8963e284965079a850258aa9bd8958e277c2e7b342a70dfd6299bd7c5c",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-reference-overlay",
+              "severity": "warning",
+              "path": "/slides/3/chart",
+              "message": "Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes."
+            },
+            {
+              "ruleId": "pptx/chart-reference-overlay",
+              "severity": "warning",
+              "path": "/slides/4/chart",
+              "message": "Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "singleton-combo-reference-lines",
+      "source": "examples/technical/singleton-combo-reference-lines.opf.json",
+      "sourceSha256": "3348e2958b8ef1052a4e003de564f819945f899e313b1e1fdc10ccadea43a66b",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/singleton-combo-reference-lines.pptx",
+          "ok": true,
+          "sha256": "c5300954c2c9072a0df633262a07aaf7facb2870fb7f430be049aa59b1c7b8e4",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-reference-overlay",
+              "severity": "warning",
+              "path": "/slides/0/chart",
+              "message": "Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localized-chart-references",
+      "source": "examples/technical/localized-chart-references.opf.json",
+      "sourceSha256": "16aa9e352bfaac72d9c34430973042afd9b6510202e43a12692525e1b91060a9",
+      "previewOk": true,
+      "previewSlides": 7,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Arial is drawn with Arimo, a metric-compatible substitute, so lines break as they would with the requested font: Arial is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Arial Black is drawn with Montserrat, a visual substitute, so lines can break differently than with the requested font: Arial Black is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/localized-chart-references.pptx",
+          "ok": true,
+          "sha256": "1198829121e297696e4815ac0bdeff4b92551ee5de3011796ec8dff689322e37",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Arial Black, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Arial is drawn with Arimo, a metric-compatible substitute, so lines break as they would with the requested font: Arial is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Arial Black is drawn with Montserrat, a visual substitute, so lines can break differently than with the requested font: Arial Black is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-callouts",
+      "source": "examples/technical/image-callouts.opf.json",
+      "sourceSha256": "cc610d46c01ed6a2c88b6068b808ec19920ab808cdd4923402a1a17a59b32e6c",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/image-callouts.pptx",
+          "ok": true,
+          "sha256": "6621521144acfe6b7aa378ee946a6748246e69184904de45972f5fd6ee289d62",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "inverted-pyramids",
+      "source": "examples/technical/inverted-pyramids.opf.json",
+      "sourceSha256": "787f8840760db5efc807668a7e56409fadbe4264dc2e3990620d858a3b6c1a76",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/inverted-pyramids.pptx",
+          "ok": true,
+          "sha256": "13b944e732fe2cc1e367de0ca5705c46468a439b88865f8659054db5101d99bc",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/0/items",
+              "message": "The inverted pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own inverted pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/1/items",
+              "message": "The inverted pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own inverted pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/2/blocks/0/items",
+              "message": "The inverted pyramid is exported as native shapes, not live SmartArt: its entries are lists, which a SmartArt node does not hold, so OPF's own inverted pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localized-timeline",
+      "source": "examples/technical/localized-timeline.opf.json",
+      "sourceSha256": "e6d55fdd3a77d39dfba8550f3e6c530cab1da5474bff6b6eb43843650743fd7e",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/localized-timeline.pptx",
+          "ok": true,
+          "sha256": "267abee25d763f59e1574d26d0b82079229ab924bcc40fba1a5b19ffebe19f1c",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "multilingual-slides",
+      "source": "examples/technical/multilingual-slides.opf.json",
+      "sourceSha256": "c12aae7dcd89fab0ddf520ad549064f3c52cd250fd6debbd2a6f4ca683670add",
+      "previewOk": true,
+      "previewSlides": 4,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Yu Gothic is drawn with Noto Sans JP, a visual substitute, so lines can break differently than with the requested font: Yu Gothic is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/multilingual-slides.pptx",
+          "ok": true,
+          "sha256": "cf21ec745081f8dc80f12ed5c12fa8d4cee68fd27296a75b899ed7a577da254d",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a visual substitute, so lines can break differently than with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Yu Gothic is drawn with Noto Sans JP, a visual substitute, so lines can break differently than with the requested font: Yu Gothic is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trees-and-sets",
+      "source": "examples/technical/trees-and-sets.opf.json",
+      "sourceSha256": "b604e05d1a098d81e0d7c21209441e4c6ad396bf6c0e127227131b5be4eb7a4b",
+      "previewOk": true,
+      "previewSlides": 5,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/trees-and-sets.pptx",
+          "ok": true,
+          "sha256": "738684560768b83b69e7bbb86ce7240a3137d3756574d9906dd4bf68961d1980",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/0/blocks/0/items",
+              "message": "The org-chart is exported as native shapes, not live SmartArt: Organization Chart text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/1/blocks/0/items",
+              "message": "The hierarchy is exported as native shapes, not live SmartArt: Hierarchy text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/2/blocks/0/items",
+              "message": "The venn is exported as native shapes, not live SmartArt: Basic Venn text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/3/blocks/0/items",
+              "message": "The org-chart is exported as native shapes, not live SmartArt: Organization Chart text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/4/blocks/0/items",
+              "message": "The venn is exported as native shapes, not live SmartArt: Basic Venn text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-text",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-text.opf.json",
+      "sourceSha256": "b92bee0c9dc6df0fbbe59600e97da555d1e598a48a55a18e8463ce8fc7b93bd7",
+      "previewOk": true,
+      "previewSlides": 13,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-text.pptx",
+          "ok": true,
+          "sha256": "cb4a21db3b6a76f8c5c68efeb0e66ca0b45415decc3bd3bc9da3f3af72cd0ba7",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a visual substitute, so lines can break differently than with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-lists",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-lists.opf.json",
+      "sourceSha256": "d15ab0f7288b2382f21368e4c02ec5b030ae76937cb5808ce8a654552af358cf",
+      "previewOk": true,
+      "previewSlides": 13,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-lists.pptx",
+          "ok": true,
+          "sha256": "36b32bfc9f50ff9cd027d91b33c24a7a4a76181424001fc70d298df63ccd8e77",
+          "findings": [
+            {
+              "ruleId": "pptx/export-lossy",
+              "severity": "info",
+              "path": "/organization/logo",
+              "message": "A picture bullet can only be a raster in PowerPoint (a:buBlip), so the SVG icon exports as its PNG; it can look soft when the slide is enlarged."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-tables",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-tables.opf.json",
+      "sourceSha256": "6aa9c57b71a9eacd9b93fd56ab16d886dc1937e3ca5ea8130dffcfe2815ca364",
+      "previewOk": true,
+      "previewSlides": 6,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-tables.pptx",
+          "ok": true,
+          "sha256": "d364397b5db832ec9788b72a4351acd9e335f5b462a9d920571aa074ffc6eb2e",
+          "findings": [
+            {
+              "ruleId": "pptx/export-lossy",
+              "severity": "info",
+              "path": "/slides/1/table",
+              "message": "A dotted table border exports as PowerPoint's square dot, one line width on and one off; the preview leaves two widths between dots, so the dots sit closer together in PowerPoint."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-charts",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-charts.opf.json",
+      "sourceSha256": "f3d823caca2275c54f52e7ec8e9661626da6c8ee8655afdafa609a691a8fc6da",
+      "previewOk": true,
+      "previewSlides": 19,
+      "previewFindings": [
+        {
+          "ruleId": "opf/chart-mapping-adapted",
+          "severity": "warning",
+          "path": "/slides/17/chart/type",
+          "message": "a Pareto chart sorts one numeric series and draws its cumulative share; several numeric series are drawn as clustered columns in data order, with every series preserved; use one numeric series for a Pareto chart"
+        },
+        {
+          "ruleId": "render/chart-option-adapted",
+          "severity": "warning",
+          "path": "/slides/5/chart/dataLabels/content",
+          "message": "The labels of a doughnut sit inside their slices, and 'category, percent' does not fit the ring, so they show 'percent' instead (the legend names the slices)."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-charts.pptx",
+          "ok": true,
+          "sha256": "07bec3626784a9fafbc0f47962b0d45c1f409a449d79b8658ed8ea3b19d48a94",
+          "findings": [
+            {
+              "ruleId": "pptx/chart-option-adapted",
+              "severity": "warning",
+              "path": "/slides/5/chart/dataLabels/content",
+              "message": "The labels of a doughnut sit inside their slices, and 'category, percent' does not fit the ring, so they show 'percent' instead (the legend names the slices)."
+            },
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "path": "/slides/6/chart",
+              "message": "The 'world' chart is a PowerPoint extension (chartex) chart that PowerPoint has not yet accepted natively from this exporter (pass chartex: 'native' to write its chartex part); its data is exported as a native clustered column chart instead."
+            },
+            {
+              "ruleId": "pptx/chart-reference-overlay",
+              "severity": "warning",
+              "path": "/slides/15/chart",
+              "message": "Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes."
+            },
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "path": "/slides/16/blocks/0/chart",
+              "message": "PowerPoint's native categorical Pareto aggregation can omit negative categories. Every numeric category is exported in descending order as editable signed columns with an explicit positive-only cumulative-share line on a secondary 0–1 axis. The cumulative values are static: native bar edits do not recalculate them. Import returns this combo and its sorted/derived data, not the original Pareto data form."
+            },
+            {
+              "ruleId": "pptx/chart-data-adapted",
+              "severity": "warning",
+              "path": "/slides/17/chart",
+              "message": "The 'pareto' chart is drawn as core's pareto-as-columns fallback: a Pareto chart sorts one series, so its several series are exported as a clustered column chart of every series in data order, as the preview draws it."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-images",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-images.opf.json",
+      "sourceSha256": "ab50ab51e735648adc9756476b12b0a029b93efdc881a6fe1666a5e37e150441",
+      "previewOk": true,
+      "previewSlides": 16,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-images.pptx",
+          "ok": true,
+          "sha256": "5c751c690fbe5e055aad39da562ec252728469ac809f50c954e9f737b7c4fa4a",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-backgrounds",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-backgrounds.opf.json",
+      "sourceSha256": "fb1482e2403161fb19d20de64b6690af33510ea98c544821d4f8c97fff905956",
+      "previewOk": true,
+      "previewSlides": 19,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-backgrounds.pptx",
+          "ok": true,
+          "sha256": "235357c0c5dded262b79aa801a250c538de9e9f3947b74eb53ecfaa9ac206bc6",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-shape-presets",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-shape-presets.opf.json",
+      "sourceSha256": "01a5d00fd09da364e25536876f22203d919a338252f3ff7db95e2a0cc015e15d",
+      "previewOk": true,
+      "previewSlides": 16,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-shape-presets.pptx",
+          "ok": true,
+          "sha256": "f73226a815ae54d9dd14bc97929ea986a08e4d03ea02ba6a007550ad1a40ab3e",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-shape-styles",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-shape-styles.opf.json",
+      "sourceSha256": "bab067e2e440589be6cb2f115755c23b30592d0ba3eee8d346f83f82c75aa39a",
+      "previewOk": true,
+      "previewSlides": 12,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-shape-styles.pptx",
+          "ok": true,
+          "sha256": "3d5a9cf3498e1edaed8a0fb7173e3da7152bcb60a1d3b03b615905fd1cffb1f6",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-overlays",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-overlays.opf.json",
+      "sourceSha256": "5266e04fc342c53a2cbac2447a61cd27dfda89a4a29c51d90045bf5b16dd79c7",
+      "previewOk": true,
+      "previewSlides": 6,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-overlays.pptx",
+          "ok": true,
+          "sha256": "300bd1d8a111c45b0815c495e18cd1e1a6ee579a3614b270a7ef04f9b55e1440",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-diagrams",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-diagrams.opf.json",
+      "sourceSha256": "6a470eb6ca476c42f4bb85358f4dbe5783f9e0fdbea966a28c22f8444dd2a6ed",
+      "previewOk": true,
+      "previewSlides": 18,
+      "previewFindings": [
+        {
+          "ruleId": "render/arrangement-adapted",
+          "severity": "info",
+          "path": "/slides/16/blocks/0/items",
+          "message": "The entries of the hierarchy do not fit its nodes at the list's size, so they are drawn as a list."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-diagrams.pptx",
+          "ok": true,
+          "sha256": "5f6b71c5e0d7fda11e68fc94c74d6f66351535553de89a7a99920eab0c6f1967",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/9/items",
+              "message": "The vertical process is exported as native shapes, not live SmartArt: its entries wrap to 7 lines in all (at most 6 matched PowerPoint), so OPF's own vertical process is drawn; OPF's own layout does not hold it either: OPF's vertical-flow-columns layout passed PowerPoint's comparison for 5 to 6 entries, not 4."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/13/items",
+              "message": "The inverted pyramid is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Pyramid at the list's size, so OPF's own inverted pyramid is drawn; OPF's own layout does not hold it either: the inverted pyramid has no qualified live SmartArt domain."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/15/blocks/0/items",
+              "message": "The org-chart is exported as native shapes, not live SmartArt: Organization Chart text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/arrangement-adapted",
+              "severity": "info",
+              "path": "/slides/16/blocks/0/items",
+              "message": "The entries of the hierarchy do not fit its nodes at the list's size, so they are drawn as a list."
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/17/blocks/0/items",
+              "message": "The venn is exported as native shapes, not live SmartArt: Basic Venn text and edits are awaiting native qualification."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-regions",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-regions.opf.json",
+      "sourceSha256": "cc4840a71693c801c1659e4cac510c56650be3669c8e85e6625e98bbe7fb12f3",
+      "previewOk": true,
+      "previewSlides": 25,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-regions.pptx",
+          "ok": true,
+          "sha256": "7ad2e60c40b05acaf8a116e4f9d754ef07228a50bcee60c3111a57c8245aa580",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a visual substitute, so lines can break differently than with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-composition",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-composition.opf.json",
+      "sourceSha256": "8b261981a8ae434c52a66799472690fb35cc261ad4468737cecedf95de7f944c",
+      "previewOk": true,
+      "previewSlides": 10,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-composition.pptx",
+          "ok": true,
+          "sha256": "d79b111ecd8a9432b7b673136f7829693501d5c9c77b2b259d54450c989e10e2",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a visual substitute, so lines can break differently than with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-design",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-design.opf.json",
+      "sourceSha256": "e7582a5e69c9437ce55516cf66e4906341c7ebf844162e39c3325897d5e2a476",
+      "previewOk": true,
+      "previewSlides": 36,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Georgia is drawn with Gelasio, a metric-compatible substitute, so lines break as they would with the requested font: Georgia is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Segoe UI Light is drawn with Red Hat Display, a visual substitute, so lines can break differently than with the requested font: Segoe UI Light is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Segoe UI Semilight is drawn with Red Hat Display, a visual substitute, so lines can break differently than with the requested font: Segoe UI Semilight is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-design.pptx",
+          "ok": true,
+          "sha256": "a9568eccd43df65c5504f2dde7ac96d2bc46cb87d054c6b83bef70f3ea261c5d",
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "path": "/slides/35/blocks/0/items",
+              "message": "The cycle is exported as native shapes, not live SmartArt: its entries do not fit PowerPoint's Basic Cycle at the list's size, so OPF's own cycle is drawn; OPF's own layout does not hold it either: OPF's cycle-ring layout did not pass PowerPoint's comparison."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, Roboto Mono, Segoe UI Light, Segoe UI Semilight, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Georgia is drawn with Gelasio, a metric-compatible substitute, so lines break as they would with the requested font: Georgia is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Segoe UI Light is drawn with Red Hat Display, a visual substitute, so lines can break differently than with the requested font: Segoe UI Light is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Segoe UI Semilight is drawn with Red Hat Display, a visual substitute, so lines can break differently than with the requested font: Segoe UI Semilight is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-furniture",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-furniture.opf.json",
+      "sourceSha256": "73994df419677d433c0156c176258aabc710be30c39bddc8432c70006a1369e3",
+      "previewOk": true,
+      "previewSlides": 9,
+      "previewFindings": [
+        {
+          "ruleId": "render/unresolved-content",
+          "severity": "warning",
+          "path": "/design/footer/end/date",
+          "message": "A current date needs a host-supplied ISO date option. For fixed content use a literal date, or an ISO date with dateFormat."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-furniture.pptx",
+          "ok": true,
+          "sha256": "3dce7ece782578b1baca5195f33bbab99077e9e410aebd52038045461361f09e",
+          "findings": [
+            {
+              "ruleId": "pptx/unresolved-content",
+              "severity": "warning",
+              "path": "/design/footer/end/date",
+              "message": "A current date needs a host-supplied ISO date option. For fixed content use a literal date, or an ISO date with dateFormat."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-metadata",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-metadata.opf.json",
+      "sourceSha256": "43fc565aa8ebba3ba3b53890cf6a89c563ea77d57af9d7d2b26c7b59349384a8",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-metadata.pptx",
+          "ok": true,
+          "sha256": "d6ad4a3f2e6183f700475e35bdc670a0c455483fbe564d2ff246fff387e42272",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-variables",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-variables.opf.json",
+      "sourceSha256": "812734247d20d3b4c8433a126189c6043dc99cb45523aef612e78765fbc5c202",
+      "previewOk": true,
+      "previewSlides": 5,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-variables.pptx",
+          "ok": true,
+          "sha256": "a590b0e44fe11eee0ce2cf295b190d257265e7e5a7eb456dbd2299678e48f0db",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-template",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-template.opf.json",
+      "sourceSha256": "9c8f23c899189138ade5e8f5a72783f0952e8aaaea898bc92ff45c0bdc9a638b",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "opf/variable-unfilled",
+          "severity": "warning",
+          "path": "/variables/client",
+          "message": "Template variable \"client\" has no value."
+        },
+        {
+          "ruleId": "opf/variable-unfilled",
+          "severity": "warning",
+          "path": "/variables/revenue",
+          "message": "Template variable \"revenue\" has no value."
+        },
+        {
+          "ruleId": "render/variable-example-used",
+          "severity": "warning",
+          "path": "/variables/client",
+          "message": "'client' is unfilled; its example is used."
+        },
+        {
+          "ruleId": "render/variable-example-used",
+          "severity": "warning",
+          "path": "/variables/revenue",
+          "message": "'revenue' is unfilled; its example is used."
+        },
+        {
+          "ruleId": "render/variable-example-used",
+          "severity": "warning",
+          "path": "/variables/owner",
+          "message": "'owner' is unfilled; its example is used."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-template.pptx",
+          "ok": true,
+          "sha256": "15ed93722c6c1e9fcde73d647feb41f96540c9f7cc307bef5b7e867103ee6e5d",
+          "findings": [
+            {
+              "ruleId": "opf/variable-unfilled",
+              "severity": "warning",
+              "path": "/variables/client",
+              "message": "Template variable \"client\" has no value."
+            },
+            {
+              "ruleId": "opf/variable-unfilled",
+              "severity": "warning",
+              "path": "/variables/revenue",
+              "message": "Template variable \"revenue\" has no value."
+            },
+            {
+              "ruleId": "pptx/variable-example-used",
+              "severity": "warning",
+              "path": "/variables/client",
+              "message": "'client' is unfilled; its example is used."
+            },
+            {
+              "ruleId": "pptx/variable-example-used",
+              "severity": "warning",
+              "path": "/variables/revenue",
+              "message": "'revenue' is unfilled; its example is used."
+            },
+            {
+              "ruleId": "pptx/variable-example-used",
+              "severity": "warning",
+              "path": "/variables/owner",
+              "message": "'owner' is unfilled; its example is used."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a visual substitute, so lines can break differently than with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-languages",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-languages.opf.json",
+      "sourceSha256": "d368f884e4b582b56fbb44d0b93c7242ac46bffd7e606ef29037ad8ca442b768",
+      "previewOk": true,
+      "previewSlides": 10,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Microsoft YaHei is drawn with Noto Sans SC, a visual substitute, so lines can break differently than with the requested font: Microsoft YaHei is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Nirmala UI is drawn with Noto Sans Devanagari, a visual substitute, so lines can break differently than with the requested font: Nirmala UI is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Yu Gothic is drawn with Noto Sans JP, a visual substitute, so lines can break differently than with the requested font: Yu Gothic is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-languages.pptx",
+          "ok": true,
+          "sha256": "56bf006543dbfc090e9ea9f06071cc4f03f493724bb54980156949f41107a828",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a visual substitute, so lines can break differently than with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Microsoft YaHei is drawn with Noto Sans SC, a visual substitute, so lines can break differently than with the requested font: Microsoft YaHei is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Nirmala UI is drawn with Noto Sans Devanagari, a visual substitute, so lines can break differently than with the requested font: Nirmala UI is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Yu Gothic is drawn with Noto Sans JP, a visual substitute, so lines can break differently than with the requested font: Yu Gothic is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-catalogs",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-catalogs.opf.json",
+      "sourceSha256": "0cefb6dce7cec3ac2b41156b700276859d4e2eb7631d8330eacdec2e39d25fcc",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Georgia is drawn with Gelasio, a metric-compatible substitute, so lines break as they would with the requested font: Georgia is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-catalogs.pptx",
+          "ok": true,
+          "sha256": "b908c6a727085d82e9c67492c23f780138d46431bf6f96c049b0db9b6ecb2706",
+          "findings": [
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Georgia is drawn with Gelasio, a visual substitute, so lines can break differently than with the requested font: Georgia is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-catalogs-off",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-catalogs-off.opf.json",
+      "sourceSha256": "26d85b3015b37c8948ac0aec40924fc795fac47a05e52973ac84361f8fe905a9",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-catalogs-off.pptx",
+          "ok": true,
+          "sha256": "1a1f9d6cb9948f91ab9242ec68d3f036e951f7eecf24aa844e8959f6051d6481",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-warnings",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-warnings.opf.json",
+      "sourceSha256": "3861778a527230206d10fa3d5cc4f97a043716eb4340eacf13336955db82fb35",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "opf/shape-anchor-size-unit",
+          "severity": "warning",
+          "path": "/slides/1/shapes/0/at/width",
+          "message": "at.width is 6, a fraction; pixels are widthPx"
+        },
+        {
+          "ruleId": "render/shape-off-slide",
+          "severity": "warning",
+          "path": "/slides/0/shapes/0",
+          "message": "This shape lies wholly outside the slide (x 70, y 0.1), so nothing of it is drawn. x and y are fractions of the slide: 0.2 is 20% of its width, and 20 is twenty slide widths away."
+        },
+        {
+          "ruleId": "render/timeline-period-short",
+          "severity": "warning",
+          "path": "/slides/2/timeline/1",
+          "message": "Timeline period is too short to draw readably; enlarge the timeline or split its events."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-warnings.pptx",
+          "ok": true,
+          "sha256": "921a39774def85a3edad524de62762456d925488fb3ccb341efa69bea25e31a6",
+          "findings": [
+            {
+              "ruleId": "opf/shape-anchor-size-unit",
+              "severity": "warning",
+              "path": "/slides/1/shapes/0/at/width",
+              "message": "at.width is 6, a fraction; pixels are widthPx"
+            },
+            {
+              "ruleId": "pptx/shape-off-slide",
+              "severity": "warning",
+              "path": "/slides/0/shapes/0",
+              "message": "This shape lies wholly outside the slide (x 70, y 0.1), so nothing of it is drawn. x and y are fractions of the slide: 0.2 is 20% of its width, and 20 is twenty slide widths away."
+            },
+            {
+              "ruleId": "pptx/timeline-period-short",
+              "severity": "warning",
+              "path": "/slides/2/timeline/1",
+              "message": "Timeline period is too short to draw readably; enlarge the timeline or split its events."
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a visual substitute, so lines can break differently than with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-16x9",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-16x9.opf.json",
+      "sourceSha256": "3c69e32b8f3fed33ac64a4412eb1faf11c38d8fd218a219f340ae7a9738284c4",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-16x9.pptx",
+          "ok": true,
+          "sha256": "4cb6ade48e2796de8e528af3d0829bd32188e7053a739219895894304b969fc6",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-4x3",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-4x3.opf.json",
+      "sourceSha256": "111ecbed035c3d19fb0423513b00d990bd7d6021d6783efdd44e9207801c9c8e",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-4x3.pptx",
+          "ok": true,
+          "sha256": "8b308f35397a50f41c844e7ac7c4af2d202808771d5d773c121b2f9473c0c3e0",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-16x10",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-16x10.opf.json",
+      "sourceSha256": "a975147f36e516da6890528bfd92be96e7a81741ef87b8dd086d5767d17b7ab6",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-16x10.pptx",
+          "ok": true,
+          "sha256": "4766937f4fdad504bb3cc56729420d1bc08f395406b08e76979005bbce0c2941",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-1x1",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-1x1.opf.json",
+      "sourceSha256": "713be8fb465bd64d44ea3533169ea5b89829037aa5a949de1a913734df867621",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-1x1.pptx",
+          "ok": true,
+          "sha256": "13ffa402a111ce5438eaa9d52ebe8ab8e83b713d438cdb4d1f1ee6d9b00f25ae",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-4x5",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-4x5.opf.json",
+      "sourceSha256": "c60aef9d77a1ad05e9625651f29355d0994c66dd59b641dc83e690cc21ed6799",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-4x5.pptx",
+          "ok": true,
+          "sha256": "337a5addb774ce919d61dca31cbffb7edc795aed134afb8b48a31a1aa119c190",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-9x16",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-9x16.opf.json",
+      "sourceSha256": "27f379c9ae0e62bdcbd7cd03a283291ca6d17701c6a92f69da44dc17845a8273",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-9x16.pptx",
+          "ok": true,
+          "sha256": "9450439b9e23e21c553c7548c125de840a2cef9e295dcda992a37af69914aa9a",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-letter",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-letter.opf.json",
+      "sourceSha256": "8eea0142eaaf510c5889467bf1cb62794e9d1d0ba57df8f6bca6b4c6f54c8297",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-letter.pptx",
+          "ok": true,
+          "sha256": "6b5bd83eea9cc960ae3ca3750c6b38ea32794e3666a9df74f50e482cfd37f525",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-a4",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-a4.opf.json",
+      "sourceSha256": "1207498a59a815367d3eef1fd9b07910b533ce991bafe6b9197e1c09cf9369c2",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-a4.pptx",
+          "ok": true,
+          "sha256": "7528c026121d4acb179f4d7b83d36b6fcc5ab7a91ca09f7e759ae2ccf65e247d",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coverage-size-standard",
+      "source": "scripts/native-acceptance/qualification/decks/coverage-size-standard.opf.json",
+      "sourceSha256": "1fe743b23e60d596deaf180d254bd85517c595038bd08a9448144d8b41d6e3c5",
+      "previewOk": true,
+      "previewSlides": 3,
+      "previewFindings": [
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+        },
+        {
+          "ruleId": "fonts/font-substituted",
+          "severity": "info",
+          "path": "",
+          "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/coverage-size-standard.pptx",
+          "ok": true,
+          "sha256": "5d7e9c084c8b1394a13c9f169cadc0ba5361637c9c54522695bb987f5a71829b",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "path": "",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos is drawn with Intos, a metric-compatible substitute, so lines break as they would with the requested font: Aptos is a proprietary font that OPF does not bundle."
+            },
+            {
+              "ruleId": "fonts/font-substituted",
+              "severity": "info",
+              "path": "",
+              "message": "Aptos Display is drawn with Intos Display, a metric-compatible substitute, so lines break as they would with the requested font: Aptos Display is a proprietary font that OPF does not bundle."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

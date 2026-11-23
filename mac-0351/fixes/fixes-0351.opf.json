@@ -1,0 +1,57 @@
+{
+  "name": "OPF 0.35.1 layout fixes",
+  "language": "en-US",
+  "design": { "contentBox": true },
+  "datasets": {
+    "taskTimes2": { "columns": ["Prototype", "Minutes"], "rows": [["Prototype A", 5.8], ["Prototype B", 6.7]] },
+    "taskTimes4": { "columns": ["Prototype", "Minutes"], "rows": [["Prototype A", 5.8], ["Prototype B", 6.7], ["Prototype C", 4.9], ["Prototype D", 7.3]] }
+  },
+  "slides": [
+    {
+      "title": "Two columns: short text beside a chart",
+      "layout": "two-column",
+      "blocks": [
+        { "region": "first", "chart": { "type": "column", "data": { "columns": ["Week", "Completion"], "rows": [["1", 0.68], ["2", 0.72], ["3", 0.84]] } } },
+        { "region": "second", "text": "Weekly feedback and one named owner." }
+      ]
+    },
+    {
+      "title": "Three columns: one short statement among fuller columns",
+      "layout": "three-column",
+      "blocks": [
+        { "region": "first", "items": [{ "text": "Left column", "description": "Pinned to the first column." }, { "text": "Second item", "description": "Stays inside the first column." }] },
+        { "region": "second", "text": "Centered rich runs" },
+        { "region": "third", "bullets": ["Right bullets A", "Right bullets B with a longer line to test wrapping inside the narrow band"] }
+      ]
+    },
+    {
+      "title": "Blocks in cells",
+      "blocks": [
+        { "region": "top:start", "text": "Runs and colors" },
+        { "region": "top:center", "chart": { "type": "column", "data": { "columns": ["Quarter", "A", "B"], "rows": [["Q1", 12, 8], ["Q2", 19, 14], ["Q3", 11, 16], ["Q4", 24, 10]] } } },
+        { "region": "top:end", "table": { "columns": ["KPI", "Q1", "Q2"], "rows": [["ARR", "$1.2M", "$2.4M"], ["NRR", "118%", "121%"], ["Burn", "$400K", "$320K"]] } },
+        { "region": "bottom:start", "text": "Retries fell by a third after the queue moved to the edge, and the on-call load followed within two weeks." },
+        { "region": "bottom:center+end", "items": ["Retries fell by a third after the move", "On-call pages halved within two weeks", "The edge queue ships in March"] }
+      ]
+    },
+    {
+      "title": "Diagonal blocks in cells",
+      "blocks": [
+        { "region": "top:start", "text": "Retries fell by a third after the queue moved to the edge, and the on-call load followed within two weeks." },
+        { "region": "bottom:end", "text": "Ship it in March." }
+      ]
+    },
+    {
+      "title": "Compare the two prototypes",
+      "subtitle": "Illustrative data · median task time, minutes",
+      "chart": { "type": "bar", "data": { "dataset": "taskTimes2" }, "axisTitles": { "category": "Prototype", "value": "Median task time (min)" }, "dataLabels": { "content": ["value"] } },
+      "table": { "dataset": "taskTimes2" }
+    },
+    {
+      "title": "Compare four prototypes",
+      "subtitle": "Illustrative data · median task time, minutes",
+      "chart": { "type": "bar", "data": { "dataset": "taskTimes4" }, "axisTitles": { "category": "Prototype", "value": "Median task time (min)" }, "dataLabels": { "content": ["value"] } },
+      "table": { "dataset": "taskTimes4" }
+    }
+  ]
+}

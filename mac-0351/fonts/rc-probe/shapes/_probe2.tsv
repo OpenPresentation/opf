@@ -1,0 +1,11 @@
+layouts	42	DEFAULT,Cover,Section,Agenda,Agenda beside,Statement,Closing,Text,List,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Chart beside,Table,Table beside,Code,Hero,Dashboard,Team,Logos,OPF auto
+size	960x540
+slide	1	OPF auto	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Presets and adjust values
+slide	2	OPF auto	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Custom outlines and shaded paths
+slide	3	OPF auto	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Fills
+slide	4	OPF auto	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Strokes
+slide	5	OPF auto	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Theme styles
+slide	6	OPF auto	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Text inside a shape
+slide	7	OPF auto	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Rotation, flip, accessibility and links
+slide	8	OPF auto	true	1	Helvetica-Bold	40.0	0	Helvetica-Bold,Helvetica	Picture strokes and masks
+

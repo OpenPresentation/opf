@@ -1,0 +1,131 @@
+{
+ "name": "OPF 0.35.1 bar chart on table rows, no cards",
+ "language": "en-US",
+ "design": {
+  "contentBox": false
+ },
+ "datasets": {
+  "taskTimes2": {
+   "columns": [
+    "Prototype",
+    "Minutes"
+   ],
+   "rows": [
+    [
+     "Prototype A",
+     5.8
+    ],
+    [
+     "Prototype B",
+     6.7
+    ]
+   ]
+  },
+  "taskTimes4": {
+   "columns": [
+    "Prototype",
+    "Minutes"
+   ],
+   "rows": [
+    [
+     "Prototype A",
+     5.8
+    ],
+    [
+     "Prototype B",
+     6.7
+    ],
+    [
+     "Prototype C",
+     4.9
+    ],
+    [
+     "Prototype D",
+     7.3
+    ]
+   ]
+  }
+ },
+ "slides": [
+  {
+   "title": "Compare the two prototypes",
+   "subtitle": "Illustrative data \u00b7 median task time, minutes",
+   "chart": {
+    "type": "bar",
+    "data": {
+     "dataset": "taskTimes2"
+    },
+    "axisTitles": {
+     "category": "Prototype",
+     "value": "Median task time (min)"
+    },
+    "dataLabels": {
+     "content": [
+      "value"
+     ]
+    }
+   },
+   "table": {
+    "dataset": "taskTimes2"
+   }
+  },
+  {
+   "title": "Compare four prototypes",
+   "subtitle": "Illustrative data \u00b7 median task time, minutes",
+   "chart": {
+    "type": "bar",
+    "data": {
+     "dataset": "taskTimes4"
+    },
+    "axisTitles": {
+     "category": "Prototype",
+     "value": "Median task time (min)"
+    },
+    "dataLabels": {
+     "content": [
+      "value"
+     ]
+    }
+   },
+   "table": {
+    "dataset": "taskTimes4"
+   }
+  },
+  {
+   "title": "Two columns: short text beside a chart",
+   "layout": "two-column",
+   "blocks": [
+    {
+     "region": "first",
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Week",
+        "Completion"
+       ],
+       "rows": [
+        [
+         "1",
+         0.68
+        ],
+        [
+         "2",
+         0.72
+        ],
+        [
+         "3",
+         0.84
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "region": "second",
+     "text": "Weekly feedback and one named owner."
+    }
+   ]
+  }
+ ]
+}

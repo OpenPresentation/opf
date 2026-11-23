@@ -1,0 +1,53 @@
+{
+ "name": "OPF 0.35.1 two-column anchor",
+ "language": "en-US",
+ "design": {
+  "contentBox": true
+ },
+ "slides": [
+  {
+   "title": "Two columns: one short statement beside a fuller column",
+   "layout": "two-column",
+   "blocks": [
+    {
+     "region": "first",
+     "items": [
+      {
+       "text": "Left column",
+       "description": "Pinned to the first column."
+      },
+      {
+       "text": "Second item",
+       "description": "Stays inside the first column."
+      },
+      {
+       "text": "Third item",
+       "description": "Makes the first column the tall one."
+      }
+     ]
+    },
+    {
+     "region": "second",
+     "text": "Centered rich runs"
+    }
+   ]
+  },
+  {
+   "title": "Two columns: short text beside a picture",
+   "layout": "two-column",
+   "blocks": [
+    {
+     "region": "first",
+     "image": {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIj48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzdhYTdlNiIvPjwvc3ZnPg==",
+      "alt": "A landscape"
+     }
+    },
+    {
+     "region": "second",
+     "text": "Weekly feedback and one named owner."
+    }
+   ]
+  }
+ ]
+}

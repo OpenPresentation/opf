@@ -1,0 +1,10 @@
+coverage-design exit=0 slides=36 size=960x540 docsBefore=0 docsAfter=0 
+coverage-design~nospc exit=0 slides=36 size=960x540 docsBefore=0 docsAfter=0 
+coverage-text exit=0 slides=13 size=960x540 docsBefore=0 docsAfter=0 
+coverage-text~nospc exit=0 slides=13 size=960x540 docsBefore=0 docsAfter=0 
+data-story-academy exit=0 slides=16 size=960x540 docsBefore=0 docsAfter=0 
+data-story-academy~nospc exit=0 slides=16 size=960x540 docsBefore=0 docsAfter=0 
+footers exit=0 slides=4 size=960x540 docsBefore=0 docsAfter=0 
+footers~nospc exit=0 slides=4 size=960x540 docsBefore=0 docsAfter=0 
+layout-harvest exit=0 slides=20 size=960x540 docsBefore=0 docsAfter=0 
+layout-harvest~nospc exit=0 slides=20 size=960x540 docsBefore=0 docsAfter=0 

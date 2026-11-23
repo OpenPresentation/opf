@@ -1,0 +1,3 @@
+coverage-backgrounds.v0340 exit=0 slides=19 size=960x540 docsBefore=0 docsAfter=0 
+coverage-charts.v0340 exit=0 slides=19 size=960x540 docsBefore=0 docsAfter=0 
+coverage-overlays.v0340 exit=0 slides=6 size=960x540 docsBefore=0 docsAfter=0 

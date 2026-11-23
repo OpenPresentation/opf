@@ -1,0 +1,1266 @@
+{
+ "chart-point-overlays": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "chart-type-sampler": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "columns": {
+  "slidesOld": 2,
+  "slidesNew": 2,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "compliance-readiness-review": {
+  "slidesOld": 10,
+  "slidesNew": 10,
+  "fontsOld": [
+   "Courier",
+   "Courier-Bold",
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Courier",
+   "Courier-Bold",
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-backgrounds": {
+  "slidesOld": 19,
+  "slidesNew": 19,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-catalogs-off": {
+  "slidesOld": 1,
+  "slidesNew": 1,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-catalogs": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Georgia",
+   "Georgia-Bold"
+  ],
+  "fontsNew": [
+   "Georgia",
+   "Georgia-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-charts": {
+  "slidesOld": 19,
+  "slidesNew": 19,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-composition": {
+  "slidesOld": 11,
+  "slidesNew": 11,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-design": {
+  "slidesOld": 34,
+  "slidesNew": 36,
+  "fontsOld": [
+   "Georgia",
+   "Georgia-Bold",
+   "Helvetica",
+   "Helvetica-Bold",
+   "Helvetica-Light"
+  ],
+  "fontsNew": [
+   "Georgia",
+   "Georgia-Bold",
+   "Helvetica",
+   "Helvetica-Bold",
+   "Helvetica-Light"
+  ],
+  "differences": [
+   {
+    "slide": 35,
+    "old": null,
+    "new": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    }
+   },
+   {
+    "slide": 36,
+    "old": null,
+    "new": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    }
+   }
+  ]
+ },
+ "coverage-diagrams": {
+  "slidesOld": 18,
+  "slidesNew": 18,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-furniture": {
+  "slidesOld": 9,
+  "slidesNew": 9,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-images": {
+  "slidesOld": 16,
+  "slidesNew": 16,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-languages": {
+  "slidesOld": 10,
+  "slidesNew": 10,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Arial-BoldMT",
+   "ArialMT",
+   "Helvetica",
+   "Helvetica-Bold",
+   "TimesNewRomanPS-BoldMT",
+   "Verdana",
+   "Verdana-Bold",
+   "YuGo-Bold",
+   "YuGo-Medium"
+  ],
+  "differences": [
+   {
+    "slide": 2,
+    "old": {
+     "titleFont": "Helvetica",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica"
+     ]
+    },
+    "new": {
+     "titleFont": "TimesNewRomanPS-BoldMT",
+     "titleSize": "40.0",
+     "fonts": [
+      "ArialMT",
+      "Helvetica",
+      "TimesNewRomanPS-BoldMT"
+     ]
+    }
+   },
+   {
+    "slide": 3,
+    "old": {
+     "titleFont": "Helvetica",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica"
+     ]
+    },
+    "new": {
+     "titleFont": "TimesNewRomanPS-BoldMT",
+     "titleSize": "40.0",
+     "fonts": [
+      "ArialMT",
+      "Helvetica",
+      "TimesNewRomanPS-BoldMT"
+     ]
+    }
+   },
+   {
+    "slide": 4,
+    "old": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": {
+     "titleFont": "Verdana-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Verdana",
+      "Verdana-Bold"
+     ]
+    }
+   },
+   {
+    "slide": 5,
+    "old": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": {
+     "titleFont": "YuGo-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "YuGo-Bold",
+      "YuGo-Medium"
+     ]
+    }
+   },
+   {
+    "slide": 8,
+    "old": {
+     "titleFont": "Helvetica",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica"
+     ]
+    },
+    "new": {
+     "titleFont": "TimesNewRomanPS-BoldMT",
+     "titleSize": "40.0",
+     "fonts": [
+      "Arial-BoldMT",
+      "ArialMT",
+      "Helvetica",
+      "TimesNewRomanPS-BoldMT"
+     ]
+    }
+   },
+   {
+    "slide": 9,
+    "old": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": {
+     "titleFont": "YuGo-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "YuGo-Bold",
+      "YuGo-Medium"
+     ]
+    }
+   }
+  ]
+ },
+ "coverage-lists": {
+  "slidesOld": 13,
+  "slidesNew": 13,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-metadata": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-overlays": {
+  "slidesOld": 6,
+  "slidesNew": 6,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-regions": {
+  "slidesOld": 25,
+  "slidesNew": 25,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-shape-presets": {
+  "slidesOld": 16,
+  "slidesNew": 16,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-shape-styles": {
+  "slidesOld": 12,
+  "slidesNew": 12,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-size-16x10": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-size-16x9": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-size-1x1": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-size-4x3": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-size-4x5": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-size-9x16": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-size-a4": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-size-letter": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-size-standard": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-tables": {
+  "slidesOld": 6,
+  "slidesNew": 6,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-template": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-text": {
+  "slidesOld": 13,
+  "slidesNew": 13,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold",
+   "Helvetica-BoldOblique"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold",
+   "Helvetica-BoldOblique"
+  ],
+  "differences": []
+ },
+ "coverage-variables": {
+  "slidesOld": 5,
+  "slidesNew": 5,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "coverage-warnings": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "data-story-academy": {
+  "slidesOld": 16,
+  "slidesNew": 16,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "diagram-connectors": {
+  "slidesOld": 2,
+  "slidesNew": 2,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "diagrams-markdown": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "diagrams": {
+  "slidesOld": 7,
+  "slidesNew": 7,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "diagrams~picture": {
+  "slidesOld": 7,
+  "slidesNew": 7,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "dot-diagrams": {
+  "slidesOld": 5,
+  "slidesNew": 5,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "duration-timeline": {
+  "slidesOld": 1,
+  "slidesNew": 1,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "explicit-chart-reference-lines": {
+  "slidesOld": 5,
+  "slidesNew": 5,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "footers": {
+  "slidesOld": 4,
+  "slidesNew": 4,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "footers~static": {
+  "slidesOld": 4,
+  "slidesNew": 4,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "full-feature-tour": {
+  "slidesOld": 11,
+  "slidesNew": 11,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "header-footer-logo-set": {
+  "slidesOld": 2,
+  "slidesNew": 2,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "image-callouts": {
+  "slidesOld": 1,
+  "slidesNew": 1,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "inverted-pyramids": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "layout-harvest": {
+  "slidesOld": 20,
+  "slidesNew": 20,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "layout-harvest~native-body": {
+  "slidesOld": 20,
+  "slidesNew": 20,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "layout-sampler": {
+  "slidesOld": 53,
+  "slidesNew": 52,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": [
+   {
+    "slide": 44,
+    "old": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "33.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    }
+   },
+   {
+    "slide": 45,
+    "old": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "33.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    }
+   },
+   {
+    "slide": 53,
+    "old": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": null
+   }
+  ]
+ },
+ "layout-sampler~native-body": {
+  "slidesOld": 53,
+  "slidesNew": 52,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": [
+   {
+    "slide": 44,
+    "old": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "33.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    }
+   },
+   {
+    "slide": 45,
+    "old": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "33.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    }
+   },
+   {
+    "slide": 53,
+    "old": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": null
+   }
+  ]
+ },
+ "localized-chart-references": {
+  "slidesOld": 7,
+  "slidesNew": 7,
+  "fontsOld": [
+   "Arial-Black",
+   "ArialMT"
+  ],
+  "fontsNew": [
+   "Arial-Black",
+   "ArialMT"
+  ],
+  "differences": []
+ },
+ "localized-timeline": {
+  "slidesOld": 1,
+  "slidesNew": 1,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "multilingual-slides": {
+  "slidesOld": 4,
+  "slidesNew": 4,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold",
+   "YuGo-Bold"
+  ],
+  "differences": [
+   {
+    "slide": 3,
+    "old": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": {
+     "titleFont": "YuGo-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "YuGo-Bold"
+     ]
+    }
+   }
+  ]
+ },
+ "plantuml-diagrams": {
+  "slidesOld": 8,
+  "slidesNew": 8,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "shape-effects": {
+  "slidesOld": 4,
+  "slidesNew": 4,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "shape-overlays-rtl": {
+  "slidesOld": 1,
+  "slidesNew": 1,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "shape-overlays": {
+  "slidesOld": 6,
+  "slidesNew": 6,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "shapes": {
+  "slidesOld": 8,
+  "slidesNew": 8,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "singleton-combo-reference-lines": {
+  "slidesOld": 1,
+  "slidesNew": 1,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": [
+   {
+    "slide": 1,
+    "old": {
+     "titleFont": "",
+     "titleSize": "",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "37.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    }
+   }
+  ]
+ },
+ "smartart-arabic": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "smartart-japanese": {
+  "slidesOld": 3,
+  "slidesNew": 3,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "YuGo-Bold",
+   "YuGo-Medium"
+  ],
+  "differences": [
+   {
+    "slide": 1,
+    "old": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": {
+     "titleFont": "YuGo-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "YuGo-Bold",
+      "YuGo-Medium"
+     ]
+    }
+   },
+   {
+    "slide": 2,
+    "old": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": {
+     "titleFont": "YuGo-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "YuGo-Bold",
+      "YuGo-Medium"
+     ]
+    }
+   },
+   {
+    "slide": 3,
+    "old": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    },
+    "new": {
+     "titleFont": "YuGo-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "YuGo-Bold",
+      "YuGo-Medium"
+     ]
+    }
+   }
+  ]
+ },
+ "smartart": {
+  "slidesOld": 17,
+  "slidesNew": 17,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "smartart~shapes": {
+  "slidesOld": 17,
+  "slidesNew": 17,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "table-and-code": {
+  "slidesOld": 2,
+  "slidesNew": 2,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": []
+ },
+ "trees-and-sets": {
+  "slidesOld": 3,
+  "slidesNew": 5,
+  "fontsOld": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "fontsNew": [
+   "Helvetica",
+   "Helvetica-Bold"
+  ],
+  "differences": [
+   {
+    "slide": 4,
+    "old": null,
+    "new": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    }
+   },
+   {
+    "slide": 5,
+    "old": null,
+    "new": {
+     "titleFont": "Helvetica-Bold",
+     "titleSize": "40.0",
+     "fonts": [
+      "Helvetica",
+      "Helvetica-Bold"
+     ]
+    }
+   }
+  ]
+ }
+}

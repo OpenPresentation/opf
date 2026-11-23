@@ -1,0 +1,1 @@
+slides=18 size=960x540 docsBefore=0 docsAfter=0

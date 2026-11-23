@@ -1,0 +1,478 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Coverage: overlay shapes, anchors and connectors",
+  "description": "RR-105 format coverage: overlay shapes placed by slide fractions and anchored to blocks and chart points (every edge, offset, fraction and pixel sizes), layers, connectors on every route and site, and the shape style vocabulary on overlays.",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "id": "free-shapes",
+      "title": "Shapes placed on the slide",
+      "text": "Three overlay shapes sit around this paragraph.",
+      "shapes": [
+        {
+          "id": "band",
+          "shape": "rect",
+          "x": 0,
+          "y": 0.82,
+          "width": 1,
+          "height": 0.18,
+          "fill": "light2",
+          "layer": "back",
+          "decorative": true
+        },
+        {
+          "shape": "ellipse",
+          "x": 0.8,
+          "y": 0.1,
+          "width": 0.14,
+          "height": 0.25,
+          "fill": {
+            "color": "accent1",
+            "lighten": 0.3
+          },
+          "opacity": 0.8,
+          "text": "New",
+          "anchor": "middle",
+          "layer": "front",
+          "alt": "New badge"
+        },
+        {
+          "shape": "rect",
+          "x": -0.2,
+          "y": 0.95,
+          "width": 1.4,
+          "height": 0.03,
+          "fill": "accent1",
+          "decorative": true
+        },
+        {
+          "shape": "star5",
+          "x": -0.04,
+          "y": 0.7,
+          "width": 0.12,
+          "height": 0.21,
+          "fill": "accent2",
+          "rotate": 15,
+          "flip": "horizontal",
+          "alt": "Star hanging over the edge"
+        }
+      ]
+    },
+    {
+      "id": "anchored-edges",
+      "title": "Notes anchored to each edge of a block",
+      "center": {
+        "id": "plan",
+        "text": "Five parts, one owner each."
+      },
+      "shapes": [
+        {
+          "shape": "wedgeRectCallout",
+          "text": "Top",
+          "at": {
+            "block": "plan",
+            "edge": "top",
+            "offset": 12,
+            "widthPx": 140,
+            "heightPx": 56
+          },
+          "fill": "light2",
+          "anchor": "top"
+        },
+        {
+          "shape": "wedgeRectCallout",
+          "text": "Bottom",
+          "at": {
+            "block": "plan",
+            "edge": "bottom",
+            "offset": -8,
+            "widthPx": 160,
+            "heightPx": 56
+          },
+          "fill": "light2",
+          "anchor": "bottom"
+        },
+        {
+          "shape": "roundRect",
+          "text": "Start",
+          "at": {
+            "block": "plan",
+            "edge": "start",
+            "width": 0.25,
+            "height": 0.5
+          },
+          "fill": "accent1",
+          "textDirection": "vertical270"
+        },
+        {
+          "shape": "roundRect",
+          "text": "End",
+          "at": {
+            "block": "plan",
+            "edge": "end",
+            "widthPx": 120,
+            "height": 0.5
+          },
+          "fill": "accent1",
+          "textDirection": "vertical"
+        },
+        {
+          "shape": "ellipse",
+          "at": {
+            "block": "plan",
+            "edge": "center",
+            "width": 0.1,
+            "heightPx": 40
+          },
+          "fill": "none",
+          "stroke": {
+            "color": "accent2",
+            "width": 2,
+            "dash": "dash"
+          },
+          "alt": "Ring around the middle"
+        }
+      ]
+    },
+    {
+      "id": "chart-points",
+      "title": "Callouts on chart points",
+      "blocks": [
+        {
+          "id": "sales",
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Quarter",
+                "North",
+                "South"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  12,
+                  9
+                ],
+                [
+                  "Q2",
+                  15,
+                  11
+                ],
+                [
+                  "Q3",
+                  21,
+                  10
+                ],
+                [
+                  "Q4",
+                  18,
+                  14
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "shapes": [
+        {
+          "shape": "wedgeRoundRectCallout",
+          "text": "Best quarter",
+          "at": {
+            "block": "sales",
+            "edge": "top",
+            "point": "Q3",
+            "series": "North",
+            "widthPx": 150,
+            "heightPx": 50
+          },
+          "fill": "accent3",
+          "style": "moderate"
+        },
+        {
+          "shape": "wedgeEllipseCallout",
+          "text": "Recovery",
+          "at": {
+            "block": "sales",
+            "edge": "top",
+            "point": 3,
+            "series": 1,
+            "widthPx": 130,
+            "heightPx": 50
+          },
+          "fill": "light2",
+          "style": "subtle"
+        },
+        {
+          "shape": "ellipse",
+          "at": {
+            "block": "sales",
+            "edge": "center",
+            "point": 0
+          },
+          "fill": "none",
+          "stroke": {
+            "color": "accent2",
+            "width": 2
+          },
+          "style": "none",
+          "alt": "First quarter marked"
+        }
+      ]
+    },
+    {
+      "id": "connectors",
+      "title": "Three routes between three steps",
+      "blocks": [
+        {
+          "id": "draft",
+          "shape": "roundRect",
+          "fill": "light2",
+          "text": "Draft"
+        },
+        {
+          "id": "review",
+          "shape": "roundRect",
+          "fill": "light2",
+          "text": "Review"
+        },
+        {
+          "id": "ship",
+          "shape": "roundRect",
+          "fill": "accent1",
+          "text": "Ship"
+        }
+      ],
+      "shapes": [
+        {
+          "connector": {
+            "from": "draft",
+            "to": "review",
+            "route": "straight"
+          },
+          "stroke": {
+            "color": "dark2",
+            "width": 2,
+            "end": {
+              "type": "triangle"
+            }
+          }
+        },
+        {
+          "connector": {
+            "from": "review",
+            "to": "ship",
+            "route": "elbow",
+            "fromSite": 2,
+            "toSite": 0
+          },
+          "stroke": {
+            "color": "dark2",
+            "width": 2,
+            "dash": "dash",
+            "end": {
+              "type": "stealth"
+            }
+          }
+        },
+        {
+          "connector": {
+            "from": "ship",
+            "to": "draft",
+            "route": "curved"
+          },
+          "stroke": {
+            "color": "accent2",
+            "width": 2,
+            "end": {
+              "type": "arrow"
+            }
+          },
+          "adjust": {
+            "adj1": 0.5
+          }
+        }
+      ]
+    },
+    {
+      "id": "overlay-styles",
+      "title": "Overlay shapes with effects and text options",
+      "top": {
+        "text": "Every overlay below carries one effect or text option."
+      },
+      "shapes": [
+        {
+          "shape": "roundRect",
+          "x": 0.05,
+          "y": 0.55,
+          "width": 0.18,
+          "height": 0.16,
+          "fill": "light2",
+          "shadow": "soft",
+          "text": "Shadow",
+          "style": "intense"
+        },
+        {
+          "shape": "roundRect",
+          "x": 0.28,
+          "y": 0.55,
+          "width": 0.18,
+          "height": 0.16,
+          "fill": "light2",
+          "innerShadow": {
+            "blur": 8,
+            "distance": 3,
+            "angle": 90
+          },
+          "text": "Inner"
+        },
+        {
+          "shape": "roundRect",
+          "x": 0.51,
+          "y": 0.55,
+          "width": 0.18,
+          "height": 0.16,
+          "fill": "light2",
+          "glow": {
+            "color": "accent1",
+            "radius": 8
+          },
+          "text": "Glow"
+        },
+        {
+          "shape": "roundRect",
+          "x": 0.74,
+          "y": 0.55,
+          "width": 0.18,
+          "height": 0.16,
+          "fill": "light2",
+          "softEdge": 6,
+          "text": "Soft edge"
+        },
+        {
+          "shape": "roundRect",
+          "x": 0.05,
+          "y": 0.76,
+          "width": 0.18,
+          "height": 0.14,
+          "fill": "light2",
+          "reflection": {
+            "opacity": 0.3,
+            "size": 0.4
+          },
+          "text": "Reflection"
+        },
+        {
+          "shape": "roundRect",
+          "x": 0.28,
+          "y": 0.76,
+          "width": 0.18,
+          "height": 0.14,
+          "fill": "light2",
+          "blur": 2,
+          "text": "Blur"
+        },
+        {
+          "shape": "rect",
+          "x": 0.51,
+          "y": 0.76,
+          "width": 0.18,
+          "height": 0.14,
+          "fill": "light2",
+          "padding": {
+            "left": 20,
+            "top": 4
+          },
+          "anchor": "top",
+          "textDirection": "horizontal",
+          "text": "Padded"
+        },
+        {
+          "shape": "rect",
+          "x": 0.74,
+          "y": 0.76,
+          "width": 0.18,
+          "height": 0.14,
+          "fill": "light2",
+          "padding": 4,
+          "textDirection": "stacked",
+          "text": "AB"
+        }
+      ]
+    },
+    {
+      "id": "overlay-misc",
+      "title": "Paths, adjust values, links and hidden overlays",
+      "top": {
+        "text": "A custom outline, a rounded corner, a linked button and a hidden shape."
+      },
+      "shapes": [
+        {
+          "path": {
+            "d": "M 0 100 L 50 0 L 100 100 Z",
+            "viewBox": "0 0 100 100"
+          },
+          "x": 0.06,
+          "y": 0.55,
+          "width": 0.16,
+          "height": 0.3,
+          "fill": "accent2",
+          "flip": "vertical",
+          "alt": "A custom triangle"
+        },
+        {
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.45
+          },
+          "x": 0.3,
+          "y": 0.6,
+          "width": 0.2,
+          "height": 0.2,
+          "fill": "accent1",
+          "text": "Pill",
+          "opacity": 0.9
+        },
+        {
+          "shape": "roundRect",
+          "x": 0.56,
+          "y": 0.6,
+          "width": 0.2,
+          "height": 0.2,
+          "fill": "accent3",
+          "text": "Docs",
+          "link": "https://openpresentation.org/",
+          "extensions": {
+            "review": {
+              "owner": "ana"
+            }
+          }
+        },
+        {
+          "shape": "rect",
+          "x": 0.8,
+          "y": 0.6,
+          "width": 0.14,
+          "height": 0.2,
+          "fill": "accent4",
+          "hidden": true,
+          "flip": "both",
+          "text": "Hidden"
+        },
+        {
+          "shape": "rect",
+          "x": 0.8,
+          "y": 0.3,
+          "width": 0.14,
+          "height": 0.1,
+          "fill": "accent5",
+          "stroke": "none",
+          "decorative": true
+        }
+      ]
+    }
+  ]
+}

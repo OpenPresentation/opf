@@ -1,0 +1,14 @@
+layouts	51	DEFAULT,Section,Agenda,Agenda beside,Statement,Closing,Quote,Two columns,Three columns,Pillars,Comparison,Process,Timeline,FAQ,Pyramid,Inverted pyramid,Matrix,Cycle,Chevrons,Flow,Vertical flow,Organization chart,Hierarchy,Venn,Metrics,Scorecard,Image,Image beside,Gallery,Chart,Table,Table beside,Code,Hero,Dashboard,Team,Logos,Chart beside,Cover,List,Text,OPF auto,OPF auto 0,OPF auto 1,Cover (furniture 1),Text (furniture 1),Text (furniture 1) 0,OPF auto (furniture 1),Chart beside (furniture 1),List (furniture 1),OPF auto (furniture 2)
+size	960x540
+slide	1	Cover (furniture 1)	true	1	Helvetica-Bold	56.0	104	Helvetica,Helvetica-Bold	Full Feature Tour
+slide	2	Text (furniture 1) 0	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Rich Text
+slide	3	OPF auto (furniture 1)	true	1	Helvetica-Bold	40.0	131	Helvetica,Helvetica-Bold	Adoption Doubled
+slide	4	Chart beside (furniture 1)	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Revenue By Region
+slide	5	OPF auto (furniture 1)	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Proof Points
+slide	6	List (furniture 1)	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Challenges And Risks
+slide	7	OPF auto (furniture 2)	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	How The Pipeline Works
+slide	8	OPF auto (furniture 2)	true	1	Helvetica-Bold	40.0	0	Helvetica,Helvetica-Bold	Rollout Timeline
+slide	9	OPF auto 0	true	1	Helvetica-Bold	40.0	76	Helvetica,Helvetica-Bold	On The Floor
+slide	10	OPF auto (furniture 2)	true	1	Helvetica-Bold	40.0	56	Helvetica,Helvetica-Bold	Walkthrough
+slide	11	OPF auto 1	true	1	Helvetica-Bold	40.0	69	Helvetica,Helvetica-Bold	The Ask
+

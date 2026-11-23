@@ -1,0 +1,62 @@
+smartart: preview 17, default ok, shapes ok
+smartart-arabic: preview 3, default ok
+smartart-japanese: preview 3, default ok
+layout-harvest: preview 20, default ok, native-body ok
+footers: preview 4, default ok, static ok
+shapes: preview 8, default ok
+shape-effects: preview 4, default ok
+shape-overlays: preview 6, default ok
+shape-overlays-rtl: preview 1, default ok
+diagrams: preview 7, default ok, picture ok
+dot-diagrams: preview 5, default ok
+plantuml-diagrams: preview 8, default ok
+diagrams-markdown: preview 3, default ok
+diagram-connectors: preview 2, default ok
+layout-sampler: preview 52, default ok, native-body ok
+chart-type-sampler: preview 3, default ok
+table-and-code: preview 2, default ok
+columns: preview 2, default ok
+header-footer-logo-set: preview 2, default ok
+full-feature-tour: preview 10, default ok
+data-story-academy: preview 16, default ok
+compliance-readiness-review: preview 9, default ok
+chart-point-overlays: preview 3, default ok
+duration-timeline: preview 1, default ok
+explicit-chart-reference-lines: preview 5, default ok
+singleton-combo-reference-lines: preview 1, default ok
+localized-chart-references: preview 7, default ok
+image-callouts: preview 1, default ok
+inverted-pyramids: preview 3, default ok
+localized-timeline: preview 1, default ok
+multilingual-slides: preview 4, default ok
+trees-and-sets: preview 5, default ok
+coverage-text: preview 13, default ok
+coverage-lists: preview 13, default ok
+coverage-tables: preview 6, default ok
+coverage-charts: preview 19, default ok
+coverage-images: preview 16, default ok
+coverage-backgrounds: preview 19, default ok
+coverage-shape-presets: preview 16, default ok
+coverage-shape-styles: preview 12, default ok
+coverage-overlays: preview 6, default ok
+coverage-diagrams: preview 18, default ok
+coverage-regions: preview 25, default ok
+coverage-composition: preview 10, default ok
+coverage-design: preview 36, default ok
+coverage-furniture: preview 9, default ok
+coverage-metadata: preview 3, default ok
+coverage-variables: preview 5, default ok
+coverage-template: preview 3, default ok
+coverage-languages: preview 10, default ok
+coverage-catalogs: preview 3, default ok
+coverage-catalogs-off: preview 1, default ok
+coverage-warnings: preview 3, default ok
+coverage-size-16x9: preview 3, default ok
+coverage-size-4x3: preview 3, default ok
+coverage-size-16x10: preview 3, default ok
+coverage-size-1x1: preview 3, default ok
+coverage-size-4x5: preview 3, default ok
+coverage-size-9x16: preview 3, default ok
+coverage-size-letter: preview 3, default ok
+coverage-size-a4: preview 3, default ok
+coverage-size-standard: preview 3, default ok
