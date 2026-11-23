@@ -3,23 +3,23 @@
     "captureTextFonts":  false,
     "readOnlySurvey":  false,
     "source":  {
-                   "path":  "C:\\opf-work\\v035-reseal-out\\run\\inputs\\case.pptx",
-                   "sha256":  "a274f346d8acda750fb8ada0507038ea6c2e47847ae3a64b176c6c39a3344908",
-                   "openedPath":  "C:\\opf-work\\v035-reseal-out\\run\\native\\inputs\\input.pptx",
-                   "openedSha256":  "a274f346d8acda750fb8ada0507038ea6c2e47847ae3a64b176c6c39a3344908"
+                   "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\inputs\\case.pptx",
+                   "sha256":  "58e87d163fc0fe74765e62d7f8e2d382155a75e81ad425099f352038888c9a80",
+                   "openedPath":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\inputs\\input.pptx",
+                   "openedSha256":  "58e87d163fc0fe74765e62d7f8e2d382155a75e81ad425099f352038888c9a80"
                },
     "saved":  {
-                  "path":  "C:\\opf-work\\v035-reseal-out\\run\\native\\native-furniture-control.pptx",
-                  "sha256":  "dd914b3e8344bb9c2e2d6d4a278e2e99799b844dff131f8143f6cdbbfda66733"
+                  "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\native-furniture-control.pptx",
+                  "sha256":  "01acb03c13fdfd8031a44cdeeae79208af80dba93d0e3bc81e0faca3ae68e83e"
               },
     "reopened":  {
-                     "path":  "C:\\opf-work\\v035-reseal-out\\run\\native\\native-furniture-control.pptx",
-                     "sha256":  "dd914b3e8344bb9c2e2d6d4a278e2e99799b844dff131f8143f6cdbbfda66733"
+                     "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\native-furniture-control.pptx",
+                     "sha256":  "01acb03c13fdfd8031a44cdeeae79208af80dba93d0e3bc81e0faca3ae68e83e"
                  },
     "actionPlan":  {
-                       "path":  "C:\\opf-work\\v035-reseal-out\\run\\inputs\\action-plan.json",
+                       "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\inputs\\action-plan.json",
                        "sha256":  "2787ea8c725c254c676a1993ea3621c888170b84402c91709494f4de69fa1c3c",
-                       "snapshotPath":  "C:\\opf-work\\v035-reseal-out\\run\\native\\inputs\\action-plan.json",
+                       "snapshotPath":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\inputs\\action-plan.json",
                        "snapshotSha256":  "2787ea8c725c254c676a1993ea3621c888170b84402c91709494f4de69fa1c3c",
                        "actions":  [
                                        {
@@ -311,17 +311,17 @@
                                     "rasters":  [
                                                     {
                                                         "slideIndex":  1,
-                                                        "path":  "C:\\opf-work\\v035-reseal-out\\run\\native\\original-slide-01.png",
+                                                        "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\original-slide-01.png",
                                                         "sha256":  "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
                                                     },
                                                     {
                                                         "slideIndex":  2,
-                                                        "path":  "C:\\opf-work\\v035-reseal-out\\run\\native\\original-slide-02.png",
+                                                        "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\original-slide-02.png",
                                                         "sha256":  "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
                                                     },
                                                     {
                                                         "slideIndex":  3,
-                                                        "path":  "C:\\opf-work\\v035-reseal-out\\run\\native\\original-slide-03.png",
+                                                        "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\original-slide-03.png",
                                                         "sha256":  "f5c69fa9192cb1d5931d3ee2230a60e69c5492c2a173b9788e332fe5004c5777"
                                                     }
                                                 ],
@@ -522,17 +522,17 @@
                                   "rasters":  [
                                                   {
                                                       "slideIndex":  1,
-                                                      "path":  "C:\\opf-work\\v035-reseal-out\\run\\native\\edited-slide-01.png",
+                                                      "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\edited-slide-01.png",
                                                       "sha256":  "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
                                                   },
                                                   {
                                                       "slideIndex":  2,
-                                                      "path":  "C:\\opf-work\\v035-reseal-out\\run\\native\\edited-slide-02.png",
+                                                      "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\edited-slide-02.png",
                                                       "sha256":  "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
                                                   },
                                                   {
                                                       "slideIndex":  3,
-                                                      "path":  "C:\\opf-work\\v035-reseal-out\\run\\native\\edited-slide-03.png",
+                                                      "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\edited-slide-03.png",
                                                       "sha256":  "f5c69fa9192cb1d5931d3ee2230a60e69c5492c2a173b9788e332fe5004c5777"
                                                   }
                                               ],
@@ -733,17 +733,17 @@
                                     "rasters":  [
                                                     {
                                                         "slideIndex":  1,
-                                                        "path":  "C:\\opf-work\\v035-reseal-out\\run\\native\\reopened-slide-01.png",
+                                                        "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\reopened-slide-01.png",
                                                         "sha256":  "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
                                                     },
                                                     {
                                                         "slideIndex":  2,
-                                                        "path":  "C:\\opf-work\\v035-reseal-out\\run\\native\\reopened-slide-02.png",
+                                                        "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\reopened-slide-02.png",
                                                         "sha256":  "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
                                                     },
                                                     {
                                                         "slideIndex":  3,
-                                                        "path":  "C:\\opf-work\\v035-reseal-out\\run\\native\\reopened-slide-03.png",
+                                                        "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\reopened-slide-03.png",
                                                         "sha256":  "f5c69fa9192cb1d5931d3ee2230a60e69c5492c2a173b9788e332fe5004c5777"
                                                     }
                                                 ],
@@ -802,27 +802,27 @@
                },
     "inputs":  {
                    "verifier":  {
-                                    "path":  "C:\\opf-work\\v035-reseal-ctl\\packages\\pptx\\test\\native-furniture-control.ps1",
-                                    "sha256":  "e0db6af0c1d94948554b0e324ad32dcf6a1f95ff11c8b314b46f0463be6c8018",
-                                    "snapshotPath":  "C:\\opf-work\\v035-reseal-out\\run\\native\\inputs\\native-furniture-control.ps1",
-                                    "snapshotSha256":  "e0db6af0c1d94948554b0e324ad32dcf6a1f95ff11c8b314b46f0463be6c8018"
+                                    "path":  "C:\\opf-work\\v0351\\packages\\pptx\\test\\native-furniture-control.ps1",
+                                    "sha256":  "755740808d1dd28dd5a44e8720cc5d11a06bd89e5a3412a3b7bdb7458e566bad",
+                                    "snapshotPath":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\inputs\\native-furniture-control.ps1",
+                                    "snapshotSha256":  "755740808d1dd28dd5a44e8720cc5d11a06bd89e5a3412a3b7bdb7458e566bad"
                                 },
                    "processHelper":  {
-                                         "path":  "C:\\opf-work\\v035-reseal-ctl\\packages\\pptx\\test\\native-process.ps1",
+                                         "path":  "C:\\opf-work\\v0351\\packages\\pptx\\test\\native-process.ps1",
                                          "sha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
-                                         "snapshotPath":  "C:\\opf-work\\v035-reseal-out\\run\\native\\inputs\\native-process.ps1",
+                                         "snapshotPath":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\inputs\\native-process.ps1",
                                          "snapshotSha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
                                      }
                },
     "environment":  {
                         "hostVersion":  "5.1.26100.9818",
                         "windowsProductName":  "Windows 10 Home",
-                        "windowsDisplayVersion":  "25H2",
-                        "windowsBuild":  "26200.9974",
+                        "windowsDisplayVersion":  "26H2",
+                        "windowsBuild":  "26300.9974",
                         "powerPointVersion":  "16.0",
                         "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\Root\\Office16\\POWERPNT.EXE",
-                        "powerPointBuild":  "16.0.20527.20196",
-                        "powerPointExecutableSha256":  "ff848a883e58a4854c6f1d30e652b2a4cec23afa3543cd5c9d08b2d1b96e605b"
+                        "powerPointBuild":  "16.0.20625.20108",
+                        "powerPointExecutableSha256":  "a02798076cb3236f7c7e6c72beecc76d85a2b5274a90fa7a99b21425f7aa7ce9"
                     },
     "cleanupConfirmed":  true,
     "officeOperationsStopped":  false,
@@ -834,13 +834,13 @@
     "referenceNameSnapshots":  [
                                    {
                                        "phase":  "before",
-                                       "path":  "C:\\opf-work\\v035-reseal-out\\run\\native\\reference-name-before.pptx",
-                                       "sha256":  "011cf76b2bb96785e0687398984c2c2510ee01891cf3ed9ccb16b0ca5f6dfb18"
+                                       "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\reference-name-before.pptx",
+                                       "sha256":  "ed46e1e0dfb0b447bf30e03604d005be42d3bd1eeb76a01f1b3197c5e17e7906"
                                    },
                                    {
                                        "phase":  "reopened",
-                                       "path":  "C:\\opf-work\\v035-reseal-out\\run\\native\\reference-name-reopened.pptx",
-                                       "sha256":  "dd0f99e352d5ba2b7cb8cb45d73df99e763f821a0ca7a5c423a1bb1cf6485480"
+                                       "path":  "C:\\opf-work\\c34\\reseal-0351\\run\\native\\reference-name-reopened.pptx",
+                                       "sha256":  "b6040faa3e70bb8cc40d7fc1516aa66fc3fd31742136c78e0809d1edb8d35ce6"
                                    }
                                ],
     "globalPreflight":  {
