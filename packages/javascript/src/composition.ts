@@ -11271,6 +11271,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     item.box = box;
     item.text = fitPlacedText('text', item.value, contentText('text', item.value)!, box, item.text!.fontSize, item.text!.fontSize, item.path, 'center');
   }
+  // C14: a foot band under a body that ends well above it (a one-line snippet centered over a quarter-body gap) moves up to one gap under
+  // the body's lowest content, so the body and its takeaway stand together as one centered group instead of apart.
+  if (autoSurface && !noteBand && autoSurface.emphasis.shape === 'band' && autoSurface.emphasis.source === 'foot-band') {
+    const body = items.filter(item => !headings.has(item.field) && !item.eyebrow);
+    const bottom = Math.max(...body.map(item => item.frameBox ? item.frameBox.y + item.frameBox.height : item.box.y + item.box.height));
+    const surfaceBox = autoSurface.emphasis.box, dy = round(bottom + gap) - surfaceBox.y;
+    if (body.length && Number.isFinite(bottom) && dy < -gap) {
+      const item = autoSurface.item;
+      autoSurface.emphasis.box = { ...surfaceBox, y: surfaceBox.y + dy };
+      item.box = { ...item.box, y: item.box.y + dy };
+      if (item.text) item.text = translateTextFit(item.text, dy);
+      // The regions above end half a gap over the band, so it never lies across a region's box (their content ends a gap above it).
+      const limit = surfaceBox.y + dy - gap / 2;
+      for (const region of templateRegions) if (region.box.y < limit && region.box.y + region.box.height > limit) region.box = roundBox({ ...region.box, height: limit - region.box.y });
+    }
+  }
   if (autoSurface) items.push(autoSurface.item);
   // LH-114: the data and the pull line are one stack. A pull line reserved at the foot moves up to one gap under the lowest content of
   // the body (a table's last row, a text's last line, a card's edge, a chart's box), and one reserved under the headings moves down
