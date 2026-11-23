@@ -12,7 +12,8 @@ const overlap=(a:VennBox,b:VennBox,gap=0)=>a.x<b.x+b.width+gap&&b.x<a.x+a.width+
  * One positive uniform transform preserves every circle intersection and source index; labels are measured outside the union.
  */
 export function fitVennShapes(frame:VennBox,native:readonly VennNode[],labels:readonly LabelSize[],gap:number):Fit|undefined{
-  if(native.length<5||native.length>7||labels.length!==native.length||!Number.isFinite(gap)||gap<0)return undefined;
+  // VEN-1: four sets too, when their labels do not fit inside the Basic Venn circles (composition tries this before cards and the list).
+  if(native.length<4||native.length>7||labels.length!==native.length||!Number.isFinite(gap)||gap<0)return undefined;
   if(![frame.x,frame.y,frame.width,frame.height,...native.flatMap(n=>Object.values(n.box)),...labels.flatMap(n=>[n.width,n.height])].every(Number.isFinite))return undefined;
   if(frame.width<=2*gap||frame.height<=2*gap||native.some(n=>n.box.width<=0||n.box.height<=0)||labels.some(n=>n.width<=0||n.height<=0))return undefined;
   const cx=frame.x+frame.width/2,cy=frame.y+frame.height/2;
@@ -46,10 +47,13 @@ export function fitVennShapes(frame:VennBox,native:readonly VennNode[],labels:re
   let low=0,high=Math.min(inner.width/measured.width,inner.height/measured.height);
   if(fits(make(high)))low=high;
   else for(let step=0;step<40;step++){const mid=(low+high)/2;if(fits(make(mid)))low=mid;else high=mid;}
-  if(low<=1+1e-6)return undefined;
+  // Five to seven sets take this fit only where it enlarges the measured circles; four sets (VEN-1) take it where the measured circles
+  // do not hold their labels, so the circles may be smaller than the region's Basic Venn to leave the labels room outside.
+  if(low<=1+1e-6&&native.length>=5)return undefined;
   const result=make(low);
   for(let i=0;i<result.slots.length;i++)for(let j=i+1;j<result.slots.length;j++)if(overlap(result.slots[i]!,result.slots[j]!,gap/2))return undefined;
   const tx=cx-result.bounds.x-result.bounds.width/2,ty=cy-result.bounds.y-result.bounds.height/2;
   const move=(box:VennBox):VennBox=>({...box,x:box.x+tx,y:box.y+ty});
-  return{nodes:result.circles.map((node,index)=>({...node,box:move(node.box),textBox:move(result.slots[index]!)})),scale:low,circleHeight:measured.height*low};
+  // Every label is outside its circle (beside: no outline to keep its ink in), as the native five to seven sets' labels are.
+  return{nodes:result.circles.map((node,index)=>({...node,box:move(node.box),textBox:move(result.slots[index]!),beside:true as const})),scale:low,circleHeight:measured.height*low};
 }

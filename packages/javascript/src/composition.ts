@@ -11923,7 +11923,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       };
       const measuredDesign:ArrangementDesign={design:'smartart',frame:area,nodes:nativeNodes,margin:ARRANGEMENT_TEXT_MARGIN.venn,align:'center',paint:'primary',text:'slide',lineWidth:primaryLine,...(overlapAt<0?{}:{fitNodes:(size:number)=>withOverlap(nativeNodes,size)})};
       if(sets<=4)designs.push(measuredDesign);
-      else{
+      // VEN-1: four sets whose labels the Basic Venn circles do not hold (one label of eight letters) take the enlarged circles with
+      // outside labels and then the cards, as five to seven sets do, before the list (the last resort).
+      if(sets>=4){
         // Keep the previous measured design's actual type size as an additional floor. Reclaim unused native label slots, not type.
         const previous=sized(measuredDesign),previousList={...item};
         if(!previous)fillRegionWithList(previousList,area,top);
