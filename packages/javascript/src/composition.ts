@@ -6644,6 +6644,9 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
     return { ...best.result, items, track: { kind: 'picture', edge: physical(edge), size: best.size, path: blockPath } };
   }
   if (pictures.length || leaf('video').length || charts.length !== 1) return base;
+  // opf#1412 (A3): a slide that asks for its blocks in a column (a row on a portrait canvas) keeps them so: the chart's track would set
+  // the chart beside the others.
+  if (own.mode === (landscape ? 'column' : 'row')) return base;
   // opf#1412 (A7): a slide that asks for a `grid` keeps its grid: the chart's track would set the chart beside the others and squeeze them
   // into a grid of narrow cells.
   if (own.mode === 'grid') return base;
