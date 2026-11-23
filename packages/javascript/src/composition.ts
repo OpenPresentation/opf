@@ -70,7 +70,7 @@ import {isLinearArrangement,linearDesign,linearMargins,linearNodes,OPF_LINES_MAX
 import type {OpfLayoutRecipe} from './smart-art-layout.js';
 export {MM_PER_PX,SMART_ART_OPF_DOMAIN,opfSmartArtUnavailable,type OpfSmartArtCandidate,OPF_LAYOUT_DESIGNS,OPF_LAYOUT_KIND,OPF_LAYOUT_MAX,TEXT_ONLY_LABELS,compositeLayoutDefinition,evaluateLayoutDefinition,layoutArrangement,opfLayoutGeometry,presetTextRect,turnedShapeBox,type LayoutAlgorithm,type LayoutBranch,type LayoutChild,type LayoutChoose,type LayoutConstraint,type LayoutDefinition,type LayoutForEach,type LayoutNodeDefinition,type LayoutPresOf,type LayoutShape,type LayoutShapeType,type LayoutStyle,type LayoutTable,type OpfLayoutDesign,type OpfLayoutRecipe} from './smart-art-layout.js';
 export {CYCLE_ARROW,CYCLE_ARROW_ADJUST,CYCLE_ARROW_LIGHTEN,CYCLE_DIAMETER,CYCLE_RADIUS,CYCLE_RING_MARGIN,CYCLE_RING_NODE,CYCLE_TWO,cycleAspect,cycleFrame,cycleLoop,cycleNodes,cycleRing,rightArrowPoints,type ArrangementArrow} from './arrangements.js';
-export {ARRANGEMENTS,REGION_ARRANGEMENTS,SEQUENCE_ARRANGEMENTS,isArrangement,isRegionArrangement,isSequenceArrangement,ARRANGEMENT_CARDS_MAX,CARD_TEXT_MARGIN,MATRIX_ENTRIES,PYRAMID_STEPS_ASPECT,PYRAMID_STEPS_SHARE,cardNodes,matrixQuadrants,pyramidSteps,smartArtScript,ARRANGEMENT_GROWTH,ARRANGEMENT_LINE_POINTS,ARRANGEMENT_MAX,ARRANGEMENT_TEXT_MARGIN,MATRIX_BACKGROUND_LIGHTEN,MATRIX_GAP,MATRIX_INSET,MATRIX_QUADRANT,PYRAMID_MAX_ASPECT,PYRAMID_TEXT_WIDTH,ROUND_RECT_ADJUST,SMART_ART_DOMAIN,SMART_ART_LAYOUTS,arrangementPaint,matrixNodes,matrixSquare,nodeWidthAt,pyramidFrame,pyramidNodes,smartArtUnavailable,SMART_ART_NAMES,type Arrangement,type LiveArrangement,type RegionArrangement,type SequenceArrangement,type ArrangementColor,type ArrangementNode,type ArrangementPaint,type SmartArtCandidate} from './arrangements.js';
+export {ARRANGEMENTS,REGION_ARRANGEMENTS,SEQUENCE_ARRANGEMENTS,isArrangement,isRegionArrangement,isSequenceArrangement,ARRANGEMENT_CARDS_MAX,CARD_TEXT_MARGIN,MATRIX_ENTRIES,PYRAMID_STEPS_ASPECT,PYRAMID_STEPS_SHARE,PYRAMID_STEP_HEIGHT,cardNodes,matrixQuadrants,pyramidSteps,smartArtScript,ARRANGEMENT_GROWTH,ARRANGEMENT_LINE_POINTS,ARRANGEMENT_MAX,ARRANGEMENT_TEXT_MARGIN,MATRIX_BACKGROUND_LIGHTEN,MATRIX_GAP,MATRIX_INSET,MATRIX_QUADRANT,PYRAMID_MAX_ASPECT,PYRAMID_TEXT_WIDTH,ROUND_RECT_ADJUST,SMART_ART_DOMAIN,SMART_ART_LAYOUTS,arrangementPaint,matrixNodes,matrixSquare,nodeWidthAt,pyramidFrame,pyramidNodes,smartArtUnavailable,SMART_ART_NAMES,type Arrangement,type LiveArrangement,type RegionArrangement,type SequenceArrangement,type ArrangementColor,type ArrangementNode,type ArrangementPaint,type SmartArtCandidate} from './arrangements.js';
 export {ARROW_ADJUST,CHEVRON_ADJUST,FLOW_ROUND_ADJUST,LINEAR_ARRANGEMENTS,LINEAR_TEXT_MARGINS,SMART_ART_SCALES,chevronNodes,flowNodes,isLinearArrangement,linearDesign,linearMargins,linearNodes,OPF_ARROW_LENGTH,OPF_ARROW_ROOM,OPF_ARROW_THICKNESS,OPF_CHEVRON_DEPTH,OPF_COLUMN_ARROW_LENGTH,OPF_COLUMN_ARROW_THICKNESS,OPF_COLUMN_ROOM,OPF_LINES_MAX,verticalFlowNodes,type LinearArrangement,type LinearGeometry} from './linear-arrangements.js';
 export {emphasisSurface, EMPHASIS_TEXT_MIN_CONTRAST, EMPHASIS_SURFACE_MIN_CONTRAST} from './color.js';
 export type {EmphasisSurface} from './color.js';
@@ -12032,6 +12032,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (design.refit) {
       const need = Math.max(...placed.columns.map(column => column.box.height)) + placed.margins[1] + placed.margins[3], shapes = design.refit(need);
       const next = shapes ? { ...design, nodes: shapes.nodes, ...(shapes.arrows.length ? { arrows: shapes.arrows } : {}), ...(design.layout ? { layout: { ...design.layout, need } } : {}) } : undefined, again = next ? place(next, size) : undefined;
+      if (next && again) { design = next; placed = again; }
+    }
+    // IP1, PY1: OPF's stepped pyramid and its labels as one group in the middle of the region: the bars move in from the start edge by half
+    // the room the widest label leaves at the end (the labels keep their column's width, so their lines stay as fitted).
+    if (design.layout?.design === 'pyramid-steps') {
+      const widest = Math.max(0, ...placed.columns.flatMap(column => column.text.listEntries.flatMap(entry => entry.text.richLines.map(line => line.width))));
+      const start = Math.min(...design.nodes.map(node => node.textBox.x)), inset = Math.max(0, (design.frame.x + design.frame.width - start - widest) / 2);
+      const nodes = inset > 1 ? pyramidSteps(design.layout.area, count, design.layout.gap, design.layout.radius ?? 0, pyramidDirection, inset) : undefined;
+      const next = nodes ? { ...design, nodes, layout: { ...design.layout, inset } } : undefined, again = next ? place(next, size, true) : undefined;
       if (next && again) { design = next; placed = again; }
     }
     if (design.layout) placed = place(design, size, true) ?? placed;

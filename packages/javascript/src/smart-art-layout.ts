@@ -398,6 +398,8 @@ export interface OpfLayoutRecipe {
   compact?: boolean;
   /** A linear design's text height (linearDesign `need`). */
   need?: number;
+  /** IP1, PY1: how far a stepped pyramid's bars and labels sit in from the area's start edge (pyramidSteps `inset`). */
+  inset?: number;
 }
 /** The most entries a definition's tables cover (ARRANGEMENT_MAX and ARRANGEMENT_CARDS_MAX). */
 export const OPF_LAYOUT_MAX = 8;
@@ -409,7 +411,7 @@ export function opfLayoutGeometry(recipe: OpfLayoutRecipe, count: number): Layou
   switch (recipe.design) {
     case 'cycle-ring': return cycleRing(area, count, gap, rtl);
     case 'cycle-loop': case 'cycle-loop-3': return cycleLoop(area, count, gap, rtl, recipe.design === 'cycle-loop-3' ? 3 : 2) ?? cycleRing(area, count, gap, rtl);
-    case 'pyramid-steps': return { nodes: pyramidSteps(area, count, gap, radius) };
+    case 'pyramid-steps': return { nodes: pyramidSteps(area, count, gap, radius, 'up', recipe.inset ?? 0) };
     case 'matrix-quadrants': return count === 4 ? { nodes: matrixQuadrants(area, gap) } : grid(count, Math.ceil(Math.sqrt(count)));
     case 'card-grid': return grid(count, recipe.columns ?? Math.ceil(Math.sqrt(count)));
     default: {
