@@ -74,9 +74,9 @@ export interface EmbedResult {
   /** The records added, in the order they were embedded. */
   added: EmbeddedRecord[];
   /**
-   * OPF 0.35: the embedded copies of built-in layout records from before 0.35 that failed the layout schema and were made valid
-   * (`how`: `current`, `converted` or `renamed`; see refreshStaleLayouts), with `changesDrawing` when the refresh can change how its slides
-   * draw. Empty for any other deck. Take `document` whenever this or `added` is non-empty.
+   * OPF 0.35: the embedded copies of built-in layout records from before 0.35 that failed the layout schema and were replaced
+   * (`how`: `current` or `renamed`; see refreshStaleLayouts), with `changesDrawing` when the record changed. Empty for any other
+   * deck. Take `document` whenever this or `added` is non-empty.
    */
   refreshed: RefreshedRecord[];
   /** The references that resolve nowhere: they stay as written. */
@@ -87,10 +87,10 @@ export interface EmbedResult {
  * Embed every record the document references, once, in the group it resolves in, together with the records those
  * records reference (a theme's color and font schemes). A bare id that resolves in the host's default catalog is
  * embedded under `catalogs.default` (whose `source` is set to that catalog's). Records already embedded are kept as
- * they are, but for an embedded copy of a built-in layout record from before OPF 0.35 that fails the layout schema: it is made valid
- * first, without changing what it draws (`refreshed`): an unedited copy of the 0.34 release takes the current record (and the pins of
- * its slides the 0.35 region names), a copy of a layout 0.35 removed moves its slides to the replacement, and another copy gets the safe
- * fix of each removed key. Catalog display metadata (`x-*`), `$schema` and `id` are stripped from the copies. Idempotent.
+ * they are, but for an embedded copy of a built-in layout record from before OPF 0.35 that fails the layout schema: `catalogs.default`
+ * mirrors the built-in records, so it is replaced first (`refreshed`): it takes the current record (and the pins of its slides the 0.35
+ * region names), or, for a layout 0.35 removed, its slides move to the replacement. Catalog display metadata (`x-*`), `$schema` and
+ * `id` are stripped from the copies. Idempotent.
  */
 export function embed(document: unknown, options: CatalogOptions = {}): EmbedResult {
   const catalogs = { catalogs: checkCatalogsOption(options.catalogs, 'embed') };

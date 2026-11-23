@@ -1,18 +1,18 @@
 // `fix` (OPF 0.35): apply the safe fixes of a deck's findings, the verb behind `opf fix`. A finding's `fixes` may include a JSON
 // Patch marked `safe` (FindingFix: it loses no content, what it writes is valid, and it changes nothing beyond the repair but what
-// `changesDrawing` says), such as `use-max-1`, `remove:listColumns`, `rename-layout`, `rename-region` or `use-current-record` on an
-// unedited 0.34 copy. By default `fix` applies the fixes of the checks that repair the document (FIX_REPAIR_CATEGORIES: format,
+// `changesDrawing` says), such as `use-max-1`, `remove:listColumns`, `rename-layout`, `rename-region` or `use-current-record` on a
+// stale copy of a built-in layout. By default `fix` applies the fixes of the checks that repair the document (FIX_REPAIR_CATEGORIES: format,
 // references, policy and layout); the audits' fixes (accessibility, content and any other producer's category) only with `audits`.
 // It validates, applies one safe fix per finding, and validates again, round after round, until no safe fix is left: an error in the
 // deck's own keys stops the accessibility, layout and content checks, so later findings (and their fixes) appear only once it is
 // fixed. A fix that is not marked safe, and a `focus` fix, is never applied; its finding stays in `findings`. Each applied fix says
-// whether it can change how a slide draws (`changesDrawing`). The input is never changed.
+// whether it can change how a slide draws (`changesDrawing`): `fix` brings a deck to the 0.35 form, and the 0.35 engine draws it. The input
+// is never changed.
 import type { Finding, FindingFix, JsonPatchOperation } from "./generated/types/finding.js";
 import { OPFPatchError, applyPatch, documentHash, parsePointer } from "./patch.js";
 import type { Presentation } from "./types.js";
 import type { ValidateOptions, ValidationCategory, ValidationReport } from "./validation-types.js";
 import { createValidator } from "./validator.js";
-import { layoutCellsMove } from "./layout-cells.js";
 
 /** How many validate-and-fix rounds `fix` runs at most when `maxRounds` is not given. */
 export const DEFAULT_FIX_ROUNDS = 10;
@@ -48,33 +48,12 @@ export interface AppliedFix {
 	fix: string;
 	title: string;
 	/**
-	 * True when the fix can change how a slide draws (FindingFix `changesDrawing`): the fixed deck keeps every word and is valid, but does
-	 * not keep the drawing of the release that wrote it, such as `rename-layout` from `agenda-split` (its title column narrows from half the
-	 * width to two fifths) or `remove:contentDirection`. False when it draws as before.
+	 * True when the fix can change how a slide draws (FindingFix `changesDrawing`): the fixed deck keeps every word and is valid, and the
+	 * engine draws it in the new form, such as `rename-layout` from `agenda-split`, `use-current-record` or `remove:contentDirection`.
 	 */
 	changesDrawing: boolean;
 	/** The JSON Patch that was applied (with the removal of a `design` object the fixes of its round emptied). */
 	patch: JsonPatchOperation[];
-}
-
-/**
- * OPF 0.35: a slide that placed content in the cells of its grid with 0.34's slide keys and also named a `layout`. Through 0.34 the cells
- * composed it and the layout gave it only its design (alignment, boxes, bullets, image fit, color variant) and composition defaults. The
- * safe fix removes `layout`, names the cells on blocks and writes what the layout gave on the slide, when the slide then draws exactly
- * as before; otherwise the slide is left with its finding for a person to choose (remove the layout, or keep it and let the blocks bind
- * to its regions).
- */
-export interface LayoutWithCells {
-	/** The slide's index. */
-	slide: number;
-	/** The layout reference the slide had. */
-	layout: string;
-	/** True when `fix` rewrote the slide: `layout` removed, the cells named on blocks. */
-	rewritten: boolean;
-	/** What the rewrite wrote on the slide to keep the layout's contribution (`design.contentAlignment`, `design.variant`, ...). */
-	kept?: string[];
-	/** Why the slide was left as it is (its fixes are not safe). */
-	reason?: string;
 }
 
 export interface FixResult {
@@ -93,44 +72,6 @@ export interface FixResult {
 	 * rounds; `no-progress` when the safe fixes left no longer apply, or return the deck to a state it had.
 	 */
 	stopped: "stable" | "max-rounds" | "no-progress";
-	/** The slides that had both a `layout` and 0.34 cell keys (LayoutWithCells): each rewritten, or left with the reason. Empty when none. */
-	layoutWithCells: LayoutWithCells[];
-}
-
-const SLIDE_LAYOUT = /^\/slides\/(\d+)\/layout$/;
-
-/** The slides with a layout and 0.34 cell keys: those the applied fixes rewrote, then those the findings still carry unsafe fixes for. */
-function layoutWithCells(original: unknown, document: unknown, applied: readonly AppliedFix[], findings: readonly Finding[], options: ValidateOptions): LayoutWithCells[] {
-	const slidesOf = (deck: unknown) => (deck && typeof deck === "object" && Array.isArray((deck as { slides?: unknown }).slides) ? ((deck as { slides: unknown[] }).slides) : []);
-	const layoutOf = (deck: unknown, index: number) => {
-		const slide = slidesOf(deck)[index];
-		const value = slide && typeof slide === "object" ? (slide as { layout?: unknown }).layout : undefined;
-		return typeof value === "string" ? value : undefined;
-	};
-	const entries = new Map<number, LayoutWithCells>();
-	for (const entry of applied) {
-		if (entry.fix !== "cells-to-blocks") continue;
-		const removed = entry.patch.map((operation) => (operation.op === "remove" ? SLIDE_LAYOUT.exec(operation.path) : null)).find(Boolean);
-		if (!removed) continue;
-		const index = Number(removed[1]), layout = layoutOf(original, index) ?? "";
-		const prefix = `/slides/${index}/`;
-		const kept = entry.patch.flatMap((operation) => {
-			if (operation.op !== "add" || !operation.path.startsWith(prefix)) return [];
-			const [key, name] = parsePointer(operation.path).slice(2);
-			if (key !== "design" && key !== "composition") return [];
-			return name !== undefined ? [`${key}.${name}`] : Object.keys((operation.value ?? {}) as object).map((field) => `${key}.${field}`);
-		});
-		entries.set(index, { slide: index, layout, rewritten: true, ...(kept.length ? { kept } : {}) });
-	}
-	for (const finding of findings) {
-		if (!(finding.fixes ?? []).some((entry) => entry.id === "cells-to-blocks" && entry.safe !== true)) continue;
-		const index = finding.slide ?? Number(/^\/slides\/(\d+)\//.exec(finding.path)?.[1]);
-		const layout = Number.isInteger(index) ? layoutOf(document, index) : undefined;
-		if (layout === undefined || entries.has(index)) continue;
-		const move = layoutCellsMove(document, index, { catalogs: options.catalogs });
-		entries.set(index, { slide: index, layout, rewritten: false, reason: move?.reason ?? "its content cannot move into blocks as it is (the slide also has root content or blocks)" });
-	}
-	return [...entries.values()].sort((a, b) => a.slide - b.slide);
 }
 
 type Patch = FindingFix & { patch: JsonPatchOperation[] };
@@ -213,7 +154,7 @@ export function fix(document: unknown, options: FixOptions = {}): FixResult {
 	for (;;) {
 		const report = validator.validate(working, validateOptions);
 		const pending = candidates(report.findings, audits);
-		const result = (stopped: FixResult["stopped"]): FixResult => ({ document: working as Presentation, applied, findings: report.findings, report, rounds, stopped, layoutWithCells: layoutWithCells(document, working, applied, report.findings, validateOptions) });
+		const result = (stopped: FixResult["stopped"]): FixResult => ({ document: working as Presentation, applied, findings: report.findings, report, rounds, stopped });
 		if (!pending.length) return result("stable");
 		if (rounds === maxRounds) return result("max-rounds");
 		const touched: string[] = [];
@@ -244,7 +185,7 @@ export function fix(document: unknown, options: FixOptions = {}): FixResult {
 		const hash = documentHash(working);
 		if (seen.has(hash)) {
 			const last = validator.validate(working, validateOptions);
-			return { document: working as Presentation, applied, findings: last.findings, report: last, rounds, stopped: "no-progress", layoutWithCells: layoutWithCells(document, working, applied, last.findings, validateOptions) };
+			return { document: working as Presentation, applied, findings: last.findings, report: last, rounds, stopped: "no-progress" };
 		}
 		seen.add(hash);
 	}
