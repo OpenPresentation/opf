@@ -197,7 +197,9 @@ On a slide that draws content cards (`design.contentBox`), a row of cards is one
 of regions side by side (two-column, three-column). The anchor sets how the row stands:
 
 - `middle` or `bottom`: a card fills its cell (starting half a gap down, clear of the heading) and the anchor places its
-  content inside it, while a card carries a picture, a metric or a heading line (a labeled list item). A row of body text
+  content inside it, while a card carries a picture, a metric or a heading line (a labeled list item). P1: under `middle`, a row
+  whose cards carry heading lines (labeled lists, with body text and no picture, quote or metric) hugs its tallest card instead, the content of every card
+  starting on one line and the row centered in the region. A row of body text
   only (paragraphs and plain lists) does not (LH-64): when the tallest text fills under 45% of a filled card, the cards hug
   it with one height and the row centers in the region, since short text at the foot of a tall card reads as an empty card;
   a text shorter than the tallest sits in the middle of its card (COL-3); rows that all hug stack one gap apart. When the

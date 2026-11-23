@@ -10585,7 +10585,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const naturals = units.map((unit, index) => naturalHeight(unit, cells[index]!.width, true, anchor === 'top' ? undefined : references?.[index], settings) + 2 * rasterPadding + scale);
       const tallest = Math.max(...naturals);
       if (anchor === 'top') return { mode: 'hug', height: hugHeight(units, cells, Math.min(cellHeight, tallest)) };
-      if (!units.every(bodyOnly)) return undefined;
+      // P1: under a middle anchor, a row of labeled lists (a heading line over its text) and body text hugs its tallest card too and the
+      // row centers, the cards' content starting on one line, instead of full-height cards whose lower part is empty. A quote or a metric
+      // keeps its filled card, and a bottom anchor keeps its filled cards (LH-22).
+      const labeled = (unit: Pending) => !unit.children && unit.caption === undefined && (unit.field === 'items' || unit.field === 'bullets');
+      if (!units.every(bodyOnly)) return anchor === 'middle' && units.every(unit => bodyOnly(unit) || labeled(unit)) ? { mode: 'hug', height: hugHeight(units, cells, Math.min(cellHeight, tallest)) } : undefined;
       const card = cellHeight - fillSpace;
       const text = Math.max(...units.map((unit, index) => naturalHeight(unit, cells[index]!.width - 2 * Math.min(CARD_INSET * scale, cells[index]!.width / 4), false, undefined, settings)));
       // LH-48: the cards of a body growBody found under-filled hug their text and center, whatever it fills of a card.

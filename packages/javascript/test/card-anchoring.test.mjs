@@ -104,3 +104,13 @@ test('COL-3: a shorter text in a row of hugging cards sits in the middle of its 
     }
   }
 });
+
+test('P1: under a middle anchor a row of labeled cards hugs its tallest card and centers; a bottom anchor keeps filled cards', () => {
+  const blocks = [{ items: [{ text: 'Clear scope', description: 'Two teams.' }] }, { items: [{ text: 'Consistent measures', description: 'Track completion and task time against a baseline.' }] }, { items: [{ text: 'A decision', description: 'Agree first.' }] }];
+  const middle = cards(composeSlide({ title: 'Cards', blocks }, { layout: grid('middle'), fill: false })), area = body(composeSlide({ title: 'Cards', blocks }, { layout: grid('middle'), fill: false }));
+  assert.equal(new Set(middle.map((item) => item.frameBox.height)).size, 1, 'one card height');
+  assert.ok(middle[0].frameBox.height < area.height * 0.8 && Math.abs(middleOf(middle[0].frameBox) - middleOf(area)) < 1, 'the cards hug and the row centers');
+  assert.equal(new Set(middle.map((item) => item.box.y)).size, 1, 'the content starts on one line');
+  const bottom = composeSlide({ title: 'Cards', blocks }, { layout: grid('bottom'), fill: false });
+  for (const item of cards(bottom)) assert.ok(Math.abs(bottomOf(item.frameBox) - bottomOf(body(bottom))) < 1, `${item.path}: a bottom-anchored card fills its region`);
+});
