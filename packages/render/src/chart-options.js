@@ -56,7 +56,9 @@ export function reserveAxisTitles(c, spec, titles) {
 /**
  * Draw the axis titles after the chart: the bottom title centered under the plot, the left title rotated 270 degrees
  * (reading upwards, as PowerPoint draws a vertical axis title) and centered on the plot. `c.plotArea` is the plot the
- * renderer laid out; without one the title centers on the reserved band.
+ * renderer laid out; without one the title centers on the reserved band. A bar chart drawn on a table's rows (LH-115, `c.alignedRows`)
+ * has a plot shorter than its box: its bottom title sits right under the tick labels (core keeps the chart's parts together around the
+ * rows, as PowerPoint sets an axis title beside its axis), not at the foot of the box.
  */
 export function drawAxisTitles(c) {
   if (!c.axisTitleBands?.length) return;
@@ -65,7 +67,9 @@ export function drawAxisTitles(c) {
     const path = `${c.path}.axisTitles.${axis}`;
     if (side === "bottom") {
       const span = plot ? { x: plot.x, width: plot.width } : { x: inner.x, width: inner.width };
-      const rect = { x: span.x, y: outer.y + outer.height - c.lineHeight, width: span.width, height: c.lineHeight };
+      const foot = outer.y + outer.height - c.lineHeight;
+      const y = c.alignedRows && plot ? Math.min(foot, plot.y + plot.height + (c.valueAxisHidden ? 0 : c.lineHeight)) : foot;
+      const rect = { x: span.x, y, width: span.width, height: c.lineHeight };
       c.text(text, rect, path, "center");
     } else {
       const span = plot ? { y: plot.y, height: plot.height } : { y: inner.y, height: inner.height };

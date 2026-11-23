@@ -11106,6 +11106,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   }
   // LH-115: a horizontal bar chart beside a table of the same keys in the same order draws each bar on its table row (chart-rows.ts).
   const rounded = (box: LayoutBox): LayoutBox => ({ x: round(box.x), y: round(box.y), width: round(box.width), height: round(box.height) });
+  const rowAligned: {chart: ComposedItem; table: ComposedItem; top: number; bottom: number}[] = [];
   for (const chart of items) {
     if (chart.field !== 'chart' || !chart.chart?.layer || chart.chart.layer.rows) continue;
     const data = resolveChartData(chart.value, options.presentation);
@@ -11126,8 +11127,51 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const centers = body.map(row => { const key = row.cells.find(cell => cell.column === 0) ?? row.cells[0]!; const fit = key.fit; return key.textBox.y + ('height' in fit ? fit.height : fit.lines.length * fit.lineHeight) / 2; });
       const rows = alignBarRows(data, rounded(chart.box), body.map(row => row.box), centers, { scale, minFontSize: chart.composition.minFontSize, header: (layer.stack?.legend ?? layer.header)?.height ?? 0, hiddenAxis: layer.small?.valueAxis === false, labels: Boolean(layer.small?.labels || (authored.dataLabels !== undefined && authored.dataLabels !== false)), measure: chartMeasure });
       // LH-125: a horizontal stacked bar chart gives up its pinned plot and names row for the table's rows, keeping its legend (restackForRows).
-      if (rows) { chart.chart.layer = restackForRows(chart.value, data, layer, rows, chart.box, chart.chart.valueAxis, plotGeometry(chart)); break; }
+      if (rows) {
+        chart.chart.layer = restackForRows(chart.value, data, layer, rows, chart.box, chart.chart.valueAxis, plotGeometry(chart));
+        const edges = layout.rows.map(row => row.box);
+        rowAligned.push({chart, table, top: Math.min(...edges.map(box => box.y)), bottom: Math.max(...edges.map(box => box.y + box.height))});
+        break;
+      }
     }
+  }
+  // LH-115 follow-up (0.35.1): a bar chart drawn on a table's rows has its plot on those rows, and its box is the largest 4:3 box of its
+  // cell, much taller than the rows of a short table: the header row stood at the top of the box, the value axis title at its foot and the
+  // bars in a thin band between them. The chart's parts now stand together around the rows: the header row starts on the table's top line
+  // (or right above the first row when the table has no header row), and the preview draws the value axis title under the tick labels
+  // (charts.js; PowerPoint sets an axis title beside its axis). When LH-52 had centered both blocks in their row, the table and the chart's
+  // parts are then centered as one group. The chart box and every text size stay as they are (the chart text size follows the box); only
+  // the header, the rows and the table move. A chart with a card, a caption band, an explicit legend, a shared plot, stacked names or
+  // reference marks keeps its layout.
+  const sharedPlots = new Set<unknown>(siblingCharts.flat());
+  for (const {chart, table, top: tableTop, bottom: tableBottom} of rowAligned) {
+    const layer = chart.chart?.layer, rows = layer?.rows, authored = record(chart.value);
+    if (!layer || !rows || layer.stack || layer.references || layer.plot || authored.legend !== undefined || sharedPlots.has(chart) || chart.frameBox || chart.caption || table.frameBox || table.caption) continue;
+    const data = resolveChartData(chart.value, options.presentation);
+    if (!data.ok) continue;
+    const box = rounded(chart.box);
+    const inset = chartPlotInset(chart.value, data, chart.chart!, { ...plotGeometry(chart), box });
+    if (!inset) continue;
+    // The chart's parts: from its header row's new top to its plot's bottom plus what the preview sets under the plot (tick labels,
+    // the value axis title, the padding: the bottom inset of a plot laid out in the box).
+    const rowsTop = box.y + rows.top, rowsBottom = box.y + rows.bottom;
+    const top = Math.max(box.y, Math.min(tableTop, rowsTop - (layer.header?.height ?? 0)));
+    const bottom = Math.min(box.y + box.height, rowsBottom + inset.bottom);
+    // LH-52 centered both blocks in their row: the group (the table and the chart's parts) is centered on the same line, inside the chart box.
+    let dy = 0;
+    if (Math.abs(box.y + box.height / 2 - (table.box.y + table.box.height / 2)) <= 1) {
+      const groupTop = Math.min(top, tableTop), groupBottom = Math.max(bottom, tableBottom);
+      dy = round(Math.min(box.y + box.height - groupBottom, Math.max(box.y - groupTop, box.y + box.height / 2 - (groupTop + groupBottom) / 2)));
+    }
+    // The header boxes are slide pixels: they move down to the new header top, then with the group; the rows (offsets from the box top) and the table move with the group.
+    const down = top - box.y + dy, lower = (part: LayoutBox): LayoutBox => ({ ...part, y: part.y + down });
+    const header = layer.header && {
+      ...layer.header,
+      ...(layer.header.caption ? { caption: { ...layer.header.caption, box: lower(layer.header.caption.box) } } : {}),
+      ...(layer.header.legend ? { legend: { box: lower(layer.header.legend.box), entries: layer.header.legend.entries.map(entry => ({ ...entry, box: lower(entry.box) })) } } : {}),
+    };
+    chart.chart!.layer = { ...layer, ...(header ? { header } : {}), rows: { ...rows, top: rows.top + dy, bottom: rows.bottom + dy, centers: rows.centers.map(center => center + dy) } };
+    if (dy) table.box = { ...table.box, y: table.box.y + dy };
   }
   // Explicit labels report only their final placement, after sibling scales/plots and table-row alignment.
   // A reference label past its chart is overflow; one that meets a data line or another label after both placements is a collision
