@@ -557,18 +557,18 @@
  ],
  "text 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region body 57.6,379.4,1164.8,51.1 grid 2",
+  "region body 57.6,356.2,1164.8,97.5 grid 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text body 57.6,379.4,570.4,51.1 37px",
-  "item blocks.1.text body 652,379.4,570.4,51.1 37px"
+  "item blocks.0.text body 57.6,356.2,570.4,97.5 75px",
+  "item blocks.1.text body 652,356.2,570.4,97.5 75px"
  ],
  "text 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region body 57.6,377.9,1164.8,54.1 grid 3",
+  "region body 57.6,354.7,1164.8,100.5 grid 3",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text body 57.6,377.9,372.3,54.1 37px",
-  "item blocks.1.text body 453.9,377.9,372.3,54.1 37px",
-  "item blocks.2.text body 850.1,377.9,372.3,54.1 37px"
+  "item blocks.0.text body 57.6,354.7,372.3,100.5 75px",
+  "item blocks.1.text body 453.9,354.7,372.3,100.5 75px",
+  "item blocks.2.text body 850.1,354.7,372.3,100.5 75px"
  ],
  "text 4 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -661,22 +661,22 @@
   "area title 57.6,57.6,1164.8,65.9",
   "region body 57.6,147.5,1164.8,514.9 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.items body 57.6,325.4,1164.8,159.1 37px"
+  "item blocks.0.items body 57.6,285.3,1164.8,239.3 56px"
  ],
  "list 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region body 57.6,323.9,1164.8,162.1 grid 2",
+  "region body 57.6,283.8,1164.8,242.3 grid 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.items body 57.6,323.9,570.4,159.1 37px",
-  "item blocks.1.items body 652,323.9,570.4,159.1 37px"
+  "item blocks.0.items body 57.6,283.8,570.4,239.3 56px",
+  "item blocks.1.items body 652,283.8,570.4,239.3 56px"
  ],
  "list 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region body 57.6,322.4,1164.8,165.1 grid 3",
+  "region body 57.6,282.3,1164.8,245.3 grid 3",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.items body 57.6,322.4,372.3,159.1 37px",
-  "item blocks.1.items body 453.9,322.4,372.3,159.1 37px",
-  "item blocks.2.items body 850.1,322.4,372.3,159.1 37px"
+  "item blocks.0.items body 57.6,282.3,372.3,239.3 56px",
+  "item blocks.1.items body 453.9,282.3,372.3,239.3 56px",
+  "item blocks.2.items body 850.1,282.3,372.3,239.3 56px"
  ],
  "list 4 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -887,20 +887,20 @@
  ],
  "two-column 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region first 57.6,369.2,570.4,71.4 column 1",
-  "region second 652,369.2,570.4,71.4 column 1",
+  "region first 57.6,340.3,570.4,129.4 column 1",
+  "region second 652,340.3,570.4,129.4 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 69.6,381.2,546.4,47.5 37px",
-  "item blocks.1.text second 664,381.2,546.4,47.5 37px"
+  "item blocks.0.text first 69.6,358,546.4,93.9 75px",
+  "item blocks.1.text second 664,358,546.4,93.9 75px"
  ],
  "two-column 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region first 57.6,354.2,1164.8,101.4 grid 3",
+  "region first 57.6,325.3,1164.8,159.4 grid 3",
   "region second 652,147.5,570.4,514.9 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 69.6,381.2,348.3,47.5 37px",
-  "item blocks.1.text first 465.9,381.2,348.3,47.5 37px",
-  "item blocks.2.text first 862.1,381.2,348.3,47.5 37px"
+  "item blocks.0.text first 69.6,358,348.3,93.9 75px",
+  "item blocks.1.text first 465.9,358,348.3,93.9 75px",
+  "item blocks.2.text first 862.1,358,348.3,93.9 75px"
  ],
  "two-column 4 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1008,22 +1008,22 @@
  ],
  "three-column 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region first 57.6,369.2,570.4,71.4 column 1",
-  "region second 652,369.2,570.4,71.4 column 1",
+  "region first 57.6,340.3,570.4,129.4 column 1",
+  "region second 652,340.3,570.4,129.4 column 1",
   "region third 1222.4,147.5,0,514.9 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 69.6,381.2,546.4,47.5 37px",
-  "item blocks.1.text second 664,381.2,546.4,47.5 37px"
+  "item blocks.0.text first 69.6,358,546.4,93.9 75px",
+  "item blocks.1.text second 664,358,546.4,93.9 75px"
  ],
  "three-column 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region first 57.6,369.2,372.3,71.4 column 1",
-  "region second 453.9,369.2,372.3,71.4 column 1",
-  "region third 850.1,369.2,372.3,71.4 column 1",
+  "region first 57.6,340.3,372.3,129.4 column 1",
+  "region second 453.9,340.3,372.3,129.4 column 1",
+  "region third 850.1,340.3,372.3,129.4 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 69.6,381.2,348.3,47.5 37px",
-  "item blocks.1.text second 465.9,381.2,348.3,47.5 37px",
-  "item blocks.2.text third 862.1,381.2,348.3,47.5 37px"
+  "item blocks.0.text first 69.6,358,348.3,93.9 75px",
+  "item blocks.1.text second 465.9,358,348.3,93.9 75px",
+  "item blocks.2.text third 862.1,358,348.3,93.9 75px"
  ],
  "three-column 4 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1138,18 +1138,18 @@
  ],
  "pillars 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region body 57.6,361.7,1164.8,86.4 grid 2",
+  "region body 57.6,332.8,1164.8,144.4 grid 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text body 69.6,381.2,546.4,47.5 37px",
-  "item blocks.1.text body 664,381.2,546.4,47.5 37px"
+  "item blocks.0.text body 69.6,358,546.4,93.9 75px",
+  "item blocks.1.text body 664,358,546.4,93.9 75px"
  ],
  "pillars 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region body 57.6,354.2,1164.8,101.4 grid 3",
+  "region body 57.6,325.3,1164.8,159.4 grid 3",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text body 69.6,381.2,348.3,47.5 37px",
-  "item blocks.1.text body 465.9,381.2,348.3,47.5 37px",
-  "item blocks.2.text body 862.1,381.2,348.3,47.5 37px"
+  "item blocks.0.text body 69.6,358,348.3,93.9 75px",
+  "item blocks.1.text body 465.9,358,348.3,93.9 75px",
+  "item blocks.2.text body 862.1,358,348.3,93.9 75px"
  ],
  "pillars 4 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1248,22 +1248,22 @@
  ],
  "comparison 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region first 57.6,382.4,570.4,45.1 column 1",
-  "region second 652,382.4,570.4,45.1 column 1",
-  "region aside 57.6,427.5,1164.8,0 - 0",
+  "region first 57.6,359.2,570.4,91.5 column 1",
+  "region second 652,359.2,570.4,91.5 column 1",
+  "region aside 57.6,450.7,1164.8,0 - 0",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 57.6,382.4,570.4,45.1 37px",
-  "item blocks.1.text second 652,382.4,570.4,45.1 37px"
+  "item blocks.0.text first 57.6,359.2,570.4,91.5 75px",
+  "item blocks.1.text second 652,359.2,570.4,91.5 75px"
  ],
  "comparison 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region first 57.6,347.8,570.4,45.1 column 1",
-  "region second 652,347.8,570.4,45.1 column 1",
-  "region aside 57.6,416.9,1164.8,45.1 column 1",
+  "region first 57.6,301.4,570.4,91.5 column 1",
+  "region second 652,301.4,570.4,91.5 column 1",
+  "region aside 57.6,416.9,1164.8,91.5 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 57.6,347.8,570.4,45.1 37px",
-  "item blocks.1.text second 652,347.8,570.4,45.1 37px",
-  "item blocks.2.text aside 57.6,416.9,1164.8,45.1 37px"
+  "item blocks.0.text first 57.6,301.4,570.4,91.5 75px",
+  "item blocks.1.text second 652,301.4,570.4,91.5 75px",
+  "item blocks.2.text aside 57.6,416.9,1164.8,91.5 75px"
  ],
  "comparison 4 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1644,22 +1644,22 @@
   "area title 57.6,57.6,1164.8,65.9",
   "region body 57.6,147.5,1164.8,514.9 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.items body 57.6,325.4,1164.8,159.1 37px"
+  "item blocks.0.items body 57.6,285.3,1164.8,239.3 56px"
  ],
  "faq 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region body 57.6,323.9,1164.8,162.1 grid 2",
+  "region body 57.6,283.8,1164.8,242.3 grid 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.items body 57.6,323.9,570.4,159.1 37px",
-  "item blocks.1.items body 652,323.9,570.4,159.1 37px"
+  "item blocks.0.items body 57.6,283.8,570.4,239.3 56px",
+  "item blocks.1.items body 652,283.8,570.4,239.3 56px"
  ],
  "faq 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region body 57.6,322.4,1164.8,165.1 grid 3",
+  "region body 57.6,282.3,1164.8,245.3 grid 3",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.items body 57.6,322.4,372.3,159.1 37px",
-  "item blocks.1.items body 453.9,322.4,372.3,159.1 37px",
-  "item blocks.2.items body 850.1,322.4,372.3,159.1 37px"
+  "item blocks.0.items body 57.6,282.3,372.3,239.3 56px",
+  "item blocks.1.items body 453.9,282.3,372.3,239.3 56px",
+  "item blocks.2.items body 850.1,282.3,372.3,239.3 56px"
  ],
  "faq 4 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -3255,7 +3255,7 @@
   "region body 652,147.5,570.4,514.9 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item blocks.1.image media 57.6,147.5,570.4,514.9",
-  "item blocks.0.text body 652,383.9,570.4,42 32px"
+  "item blocks.0.text body 652,357.7,570.4,94.5 75px"
  ],
  "image-beside 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -3314,7 +3314,7 @@
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
   "item blocks.1.image media 57.6,193.6,570.4,468.8",
-  "item blocks.0.text body 652,324,570.4,208 28px"
+  "item blocks.0.text body 652,289.9,570.4,276.3 32px"
  ],
  "image-beside 3 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -3596,11 +3596,11 @@
  ],
  "chart-beside 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region body 57.6,147.5,1164.8,423.2 column 1",
-  "region aside 766.1,147.5,456.3,423.2 - 0 collapsed",
+  "region body 57.6,147.5,1164.8,386.9 column 1",
+  "region aside 766.1,147.5,456.3,386.9 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.chart body 57.6,147.5,1164.8,423.2",
-  "item blocks.1.text - 81.6,611.4,1116.8,34.2 28px"
+  "item blocks.0.chart body 57.6,147.5,1164.8,386.9",
+  "item blocks.1.text - 81.6,584.1,1116.8,52.5 43px"
  ],
  "chart-beside 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -3659,7 +3659,7 @@
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
   "item blocks.0.chart body 57.6,193.6,684.5,468.8",
-  "item blocks.1.text aside 766.1,193.6,456.3,468.8 28px"
+  "item blocks.1.text aside 766.1,307,456.3,242.1 28px"
  ],
  "chart-beside 3 long": [
   "item title - 57.6,57.6,1164.8,65.9 54px",
