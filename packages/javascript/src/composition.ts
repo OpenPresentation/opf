@@ -8389,8 +8389,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // cell stays its tile (LH-69). A slide that draws cards keeps every card filling its cell, its payload at the top, as every other block keeps
   // the top of its cell.
   const cellOfItem = new WeakMap<ComposedItem, LayoutBox>();
-  const cellAnchor = ([cellRows, cellColumns]: [number[], number[]]): RegionAnchor =>
-    !hasCards && regionTracks.rows[1] && cellRows.includes(2) && !regions.some(key => { const [above, under] = regionParts(key)!; return above.includes(0) && under.some(column => cellColumns.includes(column)); }) ? 'bottom' : 'top';
+  // opf#1412 (A2): on a slide whose cells all run the body's full height (`start` beside `center+end`, columns only), a block sits in the
+  // middle of its cell, as LH-102's band centers full-height paragraphs and lists: a block shorter than the column takes the height it
+  // needs there. Beside cells of their own rows a full-height block keeps the top, so the slide reads in the order its cells are composed.
+  const fullHeight = (cellRows: number[]) => rows.every((_, index) => regionTracks.rows[index] || cellRows.includes(index));
+  const columnsOnly = regions.every(key => fullHeight(regionParts(key)![0]));
+  const cellAnchor = ([cellRows, cellColumns]: [number[], number[]]): RegionAnchor => !hasCards && columnsOnly && fullHeight(cellRows) ? 'middle'
+    : !hasCards && regionTracks.rows[1] && cellRows.includes(2) && !regions.some(key => { const [above, under] = regionParts(key)!; return above.includes(0) && under.some(column => cellColumns.includes(column)); }) ? 'bottom' : 'top';
   const placeInCell = (node: Pending, cell: LayoutBox, settings: Composition, anchor: RegionAnchor): void => {
     const lone = node.fills ? fillLone(node, cell, settings, false) : undefined;
     if (lone) {
@@ -8399,7 +8404,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       return;
     }
     if (MEASURED_FIELDS.has(node.field)) {
-      const need = naturalHeight(node, cell.width, false, undefined, settings) + 2 * rasterPadding + scale;
+      // opf#1412 (A2): a quote beside other blocks keeps its own card (LH-78), measured with the card's insets, as LH-52 places it.
+      const carded = anchor === 'middle' && !hasCards && besideQuote(node);
+      const need = naturalHeight(node, cell.width, carded, undefined, settings) + 2 * rasterPadding + scale;
       if (need < cell.height) {
         contentSized.add(node);
         placeNode(node, { ...cell, y: cell.y + anchoredOffset(cell.height - need, anchor), height: need }, settings, undefined, undefined, undefined, anchor);
@@ -8532,7 +8539,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-102: promoted regions that each run the body's full height (`start`, `center+end`), holding paragraphs and lists that fill too
     // little of it (LH-48's growBody composes them with CENTER), set their blocks as one band in the middle of the body, each at the height
     // the tallest of them needs, instead of each at the top of its column over an empty foot.
-    const regionBand = (options as Record<symbol, unknown>)[CENTER] === true && hasRegions && !pullItem && area === contentBox && nodes.every(node => node.region?.[0].length === rows.length && proseLeaf(node))
+    const proseColumns = hasRegions && nodes.every(node => node.region?.[0].length === rows.length && proseLeaf(node));
+    const regionBand = (options as Record<symbol, unknown>)[CENTER] === true && proseColumns && !pullItem && area === contentBox
       ? Math.max(...nodes.map(node => naturalHeight(node, regionBox(node.region!, area, actualGap, regionTracks).width, hasCards && !insideTier, undefined, settings) + 2 * rasterPadding + scale)) : undefined;
     nodes.forEach((node, index) => {
       const placed = node.region ? mirrored(regionBox(node.region, area, actualGap, regionTracks)) : boxes[index]!;
@@ -8541,7 +8549,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // A retained timeline-note row was allocated its measured text height. As with a template auto row, a fully measured
       // short note cell is content-sized, rather than an arbitrary small grid cell.
       if ((options as Record<symbol, unknown>)[TIMELINE_NOTE_REFLOW] !== undefined && !node.children && node.field === 'text' && retainedProse?.has(node.path) && box.height >= naturalHeight(node, box.width, hasCards && !insideTier, undefined, settings) - 1e-6) contentSized.add(node);
-      const anchor = node.region && box === placed && !filled && !node.children ? cellAnchor(node.region) : 'top';
+      // opf#1412 (A2): full-height cells of paragraphs and lists only are LH-102's band (regionBand, after LH-48's growth): they keep the top here.
+      const cellAt = node.region && box === placed && !filled && !node.children ? cellAnchor(node.region) : 'top', anchor = cellAt === 'middle' && proseColumns ? 'top' : cellAt;
       if (filled) placeSplitBlock(node, box, settings);
       else if (centerColumn && !node.children && !node.region) placeInCell(node, box, settings, 'middle');
       else if (anchor !== 'top') { placeInCell(node, box, settings, anchor); for (const item of items.slice(first)) cellOfItem.set(item, box); }
