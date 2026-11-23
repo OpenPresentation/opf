@@ -5255,7 +5255,8 @@ function bodyFill(result: SlideComposition, options: ComposeSlideOptions = {}): 
   // TAB-2: or beside it, in a layout's own row (table-beside); the pair grows as the one under it does. COL-2: a table on a column's card
   // grows with the texts on the cards beside it (every block on its card), as many as the layout has columns.
   const tableItem = body.find(item => item.field === 'table'), asides = body.filter(item => item !== tableItem);
-  const tableNote = !!result.regions && !!tableItem && asides.length >= 1 && body.every(item => !item.emphasis && inBody(item))
+  // A body with LH-114's pull line keeps its stack at the top of the body (the pull line under its data), so it does not grow this way.
+  const tableNote = !!result.regions && !!tableItem && asides.length >= 1 && body.every(item => !item.emphasis && inBody(item)) && !result.items.some(item => item.quoteLayout?.rule)
     // C10: or two tables side by side (a comparison), which grow together.
     && asides.every(noteItem => ((TABLE_ASIDE_FIELDS.has(noteItem.field) && !!noteItem.text) || (noteItem.field === 'table' && asides.length === 1)) && (!noteItem.frameBox || noteItem.field === 'quote' || !!tableItem.frameBox)
       && ((noteItem.box.y >= tableItem.box.y + 1 && noteItem.box.x < tableItem.box.x + tableItem.box.width - 1 && noteItem.box.x + noteItem.box.width > tableItem.box.x + 1)
