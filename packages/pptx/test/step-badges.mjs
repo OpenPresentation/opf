@@ -19,7 +19,8 @@ const deck = {
 };
 const before = structuredClone(deck);
 const geometry = resolvePresentation(deck).slides.map(slide => slide.geometry);
-assert.deepEqual(geometry.map(slide => slide.steps?.map(entry => entry.form)), [['row'], ['column'], ['column'], ['column']]);
+// PR1: the process layout's lone list of three steps is a row of badged columns; the agendas keep their columns.
+assert.deepEqual(geometry.map(slide => slide.steps?.map(entry => entry.form)), [['row'], ['column'], ['row'], ['column']]);
 const bytes = await toPptx(deck), zip = unzipSync(bytes);
 const emu = value => Number(value) / 9525, near = (actual, expected, label) => assert.ok(Math.abs(actual - expected) < .01, `${label}: ${actual} vs ${expected}`);
 for (const [index, slide] of geometry.entries()) {

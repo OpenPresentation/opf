@@ -50,7 +50,8 @@ for (const [language, expectedWords] of cases) {
   assert.deepEqual(markers.map((entry) => entry['data-opf-timeline-status']), ['done', 'current', 'current', 'planned'], `${language}: canonical statuses survive translation or missing vocabulary`);
   assert.deepEqual(markers.map((entry) => entry['data-opf-path']), [0, 1, 1, 2].map((index) => `slides.1.blocks.0.timeline.${index}`), `${language}: markers retain canonical source traces`);
   for (const event of events) {
-    assert.ok(svgs[1].includes(event.when) && svgs[1].includes(event.what), `${language}: authored event labels remain visible`);
+    // TLN-1: a grown event label may take two lines, so each of its words is drawn.
+    assert.ok(svgs[1].includes(event.when) && event.what.split(/\s+/u).every((word) => svgs[1].includes(word)), `${language}: authored event labels remain visible`);
   }
   if (language !== 'en-US') {
     for (const word of cases[0][1]) assert.ok(!svgs[1].includes(`>${word}<`), `${language}: no English generated-word fallback`);
