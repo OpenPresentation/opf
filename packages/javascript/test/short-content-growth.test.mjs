@@ -13,6 +13,12 @@ const compose = (slide) => {
 };
 const sizes = (composed, field) => composed.items.filter((item) => item.field === field).map((item) => item.text.fontSize);
 
+test('a FAQ written as one list sets its answers at the question size', () => {
+  const composed = compose({ layout: 'faq', title: 'Questions', blocks: [{ items: [{ text: 'Who takes part?', description: 'Two teams.' }, { text: 'How long?', description: 'Six weeks.' }, { text: 'What next?', description: 'Review.' }] }] });
+  const list = composed.items.find((item) => item.field === 'items');
+  for (const entry of list.text.listEntries) assert.ok(Math.abs(entry.description.fontSize - list.text.fontSize) < 0.5, `answer ${entry.description.fontSize} at the question size ${list.text.fontSize}`);
+});
+
 test('a lone list of two short points grows past the list display size while its body is mostly empty', () => {
   for (const slide of [
     { title: 'Two points', blocks: [{ items: ['Faster reviews', 'Fewer handoffs'] }] },

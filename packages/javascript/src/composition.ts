@@ -4420,8 +4420,9 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       textBox.height=text.height;
       let description:RichTextFit|undefined,descriptionBox:LayoutBox|undefined,bottom=y+text.height;
       if(item.descriptionRuns!==undefined){
-        // LH-133: the answer of a one-entry row keeps the list size, as the heading list's description it would otherwise be (LH-77).
-        const ratio=options.rowLabels?1:.82,dx=side?(rtl?box.x:box.x+column+between):x,dWidth=side?Math.max(1,box.width-column-between):width;
+        // LH-133: the answer of a one-entry row keeps the list size, as the heading list's description it would otherwise be (LH-77). So does
+        // the answer of a row of a FAQ written as one list (`pairs: "question"`): the same questions and answers read alike in either form.
+        const ratio=options.rowLabels||(options.pairs==='question'&&side)?1:.82,dx=side?(rtl?box.x:box.x+column+between):x,dWidth=side?Math.max(1,box.width-column-between):width;
         descriptionBox={x:dx,y:side?y:bottom+fontSize*.12,width:dWidth,height:box.height};
         description=richTextLayouter(item.descriptionRuns,descriptionBox,requestedSize*ratio,{...options,style:{...options.style,path:item.descriptionPath}},minFontSize)(fontSize*ratio);
         // Beside its label, a description's first baseline sits on the label's.
