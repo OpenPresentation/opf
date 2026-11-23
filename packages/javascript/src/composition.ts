@@ -10506,14 +10506,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // that tall (a sixteenth of its shorter side), which are no larger, so every payload still fits and the margin under the
     // text matches the one above it.
     const HUG_FILL = .45, UNEQUAL_PAYLOADS = 1.5, fillSpace = requestedTemplateGap * CARD_FILL_SPACE, underFilled = bodySteps > 0 || (options as Record<symbol, unknown>)[CENTER] === true;
-    const hugHeight = (units: Pending[], cells: LayoutBox[], estimate: number): number => Math.min(estimate, Math.max(...units.map((unit, index) => {
+    const hugHeights = (units: Pending[], cells: LayoutBox[], estimate: number): number[] => units.map((unit, index) => {
       const frame = acceptedBox({ ...cells[index]!, height: estimate }), inner = payloadBox(frame, true);
-      return naturalHeight(unit, inner.width, false, undefined, settings) + 2 * rasterPadding + scale + 2 * (inner.y - frame.y);
-    })));
+      return Math.min(estimate, naturalHeight(unit, inner.width, false, undefined, settings) + 2 * rasterPadding + scale + 2 * (inner.y - frame.y));
+    });
+    const hugHeight = (units: Pending[], cells: LayoutBox[], estimate: number): number => Math.min(estimate, Math.max(...hugHeights(units, cells, estimate)));
     const hugsContent = (unit: Pending) => !unit.children && unit.caption === undefined && ['text', 'items', 'bullets', 'quote', 'metric'].includes(unit.field) && !metricTiles.has(unit);
     const bodyOnly = (unit: Pending) => !unit.children && unit.caption === undefined && (unit.field === 'text'
       || ((unit.field === 'items' || unit.field === 'bullets') && Array.isArray(unit.value) && !(unit.value as ListValue[]).some(entry => !!entry && typeof entry === 'object' && !Array.isArray(entry) && (entry as {description?: unknown}).description !== undefined)));
-    type CardRowRule = {mode: 'hug' | 'top'; height: number};
+    type CardRowRule = {mode: 'hug' | 'top'; height: number; own?: number[]};
     const cardRowRule = (units: Pending[], cells: LayoutBox[], anchor: RegionAnchor, references?: number[]): CardRowRule | undefined => {
       // LH-64 widened: a row of middle- or bottom-anchored cards with a table, code panel or timeline among other measured kinds (no
       // metric, which keeps its anchor) stood at three anchors (a list at the foot, a table at the top, a quote in the middle). They start
@@ -10534,13 +10535,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const card = cellHeight - fillSpace;
       const text = Math.max(...units.map((unit, index) => naturalHeight(unit, cells[index]!.width - 2 * Math.min(CARD_INSET * scale, cells[index]!.width / 4), false, undefined, settings)));
       // LH-48: the cards of a body growBody found under-filled hug their text and center, whatever it fills of a card.
-      if (text < HUG_FILL * card || underFilled) return { mode: 'hug', height: hugHeight(units, cells, Math.min(cellHeight, tallest)) };
-      return tallest > UNEQUAL_PAYLOADS * Math.min(...naturals) ? { mode: 'top', height: Math.min(card, tallest) } : undefined;
+      // COL-3: a shorter text in a row of hugging cards sits in the middle of its card (own), not at its top over an empty band.
+      if (text < HUG_FILL * card || underFilled) { const own = hugHeights(units, cells, Math.min(cellHeight, tallest)); return { mode: 'hug', height: Math.min(cellHeight, tallest, Math.max(...own)), own }; }
+      // Under a middle anchor a short text is centered in its filled card (beside a longer one it no longer starts at the card's top
+      // over an empty card, COL-3); the top start only keeps a short text from the foot of a bottom-anchored card.
+      return anchor === 'bottom' && tallest > UNEQUAL_PAYLOADS * Math.min(...naturals) ? { mode: 'top', height: Math.min(card, tallest) } : undefined;
     };
     // The rows of cards of one area, each with its rule: every card's box and its frame (the cell, for a card that fills it), or
     // undefined for a row that keeps the region's rule. Rows that all hug stack one gap apart, from the top under a top anchor and
     // centered otherwise; another hugging row sits in its own cell the same way.
-    type CardPlacement = {box: LayoutBox; frame?: LayoutBox};
+    type CardPlacement = {box: LayoutBox; frame?: LayoutBox; shift?: number};
     const placeCardRows = (rows: {cells: LayoutBox[]; rule?: CardRowRule}[], area: LayoutBox, anchor: RegionAnchor): (CardPlacement[] | undefined)[] => {
       const stack = rows.length > 1 && rows.every(row => row.rule?.mode === 'hug');
       const total = rows.reduce((sum, row) => sum + (row.rule?.height ?? 0), 0) + gap * (rows.length - 1);
@@ -10550,7 +10554,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const cell = cells[0]!, height = rule.height;
         const top = stack ? y : rule.mode === 'top' ? cell.y + fillSpace : cell.y + (anchor === 'top' ? Math.max(0, Math.min(fillSpace, cell.height - height)) : Math.max(0, (cell.height - height) / 2));
         y += height + gap;
-        return cells.map(entry => ({ box: { x: entry.x, y: top, width: entry.width, height }, ...(rule.mode === 'top' ? { frame: entry } : {}) }));
+        return cells.map((entry, index) => {
+          // COL-3: a payload shorter than its hugging card is moved down by half the difference, into the middle of the card.
+          const own = rule.own?.[index], shift = own !== undefined && own < height - scale ? (height - own) / 2 : 0;
+          return { box: { x: entry.x, y: top, width: entry.width, height }, ...(rule.mode === 'top' ? { frame: entry } : {}), ...(shift ? { shift } : {}) };
+        });
       });
     };
     const placeRegion = (region: LayoutRegion, units: Pending[], area: LayoutBox, lone?: CardPlacement): NonNullable<ComposedRegion['arrangement']> => {
@@ -10661,6 +10669,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           const drop = gap * CARD_FILL_SPACE;
           if (tile) { wordmarks.add(unit); placeNode(unit, tile, settings, true, undefined, undefined, 'middle', { ...tile, y: tile.y - drop, height: tile.height + drop }); }
           else placeNode(unit, boxes[index]!, settings, cards, listGrid ? 1 : listColumnsOf(region), region.anchor === 'top' || stacked || planned[index] ? undefined : referenceHeights[index], region.anchor, !cards || bands ? undefined : planned[index] ? frames[index] : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
+          const shift = tile ? undefined : planned[index]?.shift;
+          if (shift) for (const item of items.slice(first)) if (item.text && (item.field === 'text' || item.field === 'items' || item.field === 'bullets')) {
+            item.box = { ...item.box, y: item.box.y + shift, height: Math.max(scale, item.box.height - shift) };
+            item.text = 'listEntries' in item.text ? translateListFit(item.text as ListFit, shift) : translateTextFit(item.text, shift);
+          }
           if (!unit.children) { leafItems.push(...range(first, items.length)); stack.push(...range(first, items.length)); }
           if (longRows || tile) centeredCardText.push(...range(first, items.length));
         });

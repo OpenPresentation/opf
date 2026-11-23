@@ -200,8 +200,9 @@ of regions side by side (two-column, three-column). The anchor sets how the row 
   content inside it, while a card carries a picture, a metric or a heading line (a labeled list item). A row of body text
   only (paragraphs and plain lists) does not (LH-64): when the tallest text fills under 45% of a filled card, the cards hug
   it with one height and the row centers in the region, since short text at the foot of a tall card reads as an empty card;
-  rows that all hug stack one gap apart. When the texts are longer and their heights more than 1.5x apart, the cards still
-  fill but every text starts at the card's top, so a short text does not sit alone at a foot beside long ones.
+  a text shorter than the tallest sits in the middle of its card (COL-3); rows that all hug stack one gap apart. When the
+  texts are longer and their heights more than 1.5x apart, the cards still fill: under a `bottom` anchor every text starts at
+  the card's top, so a short text does not sit alone at a foot beside long ones; under `middle` each text is centered in its card.
 - `top`: cards of measured blocks (text, lists, quotes, metrics) hug the tallest of their row, from the top, with one height
   per row (LH-04); a row with a picture, chart, table or group keeps cells the size of the region's share.
 

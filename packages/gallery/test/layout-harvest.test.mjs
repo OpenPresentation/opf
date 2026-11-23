@@ -65,7 +65,11 @@ for (const [id, blocks] of [
       assert.ok(cards[0].height < body[0].height * 0.45, `the cards hug their text (${cards[0].height} of ${body[0].height})`);
       const middle = (box) => box.y + box.height / 2;
       assert.ok(Math.abs(middle(cards[0]) - middle(body[0])) < 1, 'the row centres in the body');
-      for (const item of items) assert.ok(item.box.y - item.frameBox.y < 25, `${item.path}: the text starts at the card's top`);
+      // COL-3: a shorter text sits in the middle of its card, not at its top over an empty band.
+      for (const item of items) {
+        const over = item.box.y - item.frameBox.y, below = bottomOf(item.frameBox) - item.box.y - textHeight(item);
+        assert.ok(Math.abs(over - below) < 16, `${item.path}: the text is centered in its card (${over} above, ${below} under)`);
+      }
       // The tallest text has about as much room under it as above it.
       const tallest = items.reduce((best, item) => (textHeight(item) > textHeight(best) ? item : best));
       const under = bottomOf(tallest.frameBox) - tallest.box.y - textHeight(tallest), above = tallest.box.y - tallest.frameBox.y;
@@ -86,14 +90,16 @@ test('LH-64: rows of short body-text cards stack one gap apart, centred in the b
   assert.ok(Math.abs(above - under) < 1, `the stack centres (${above} above, ${under} under)`);
 });
 
-test('LH-64: body-text cards of very unequal length fill the body and start their text at the top', () => {
+test('LH-64, COL-3: body-text cards of very unequal length fill the body and center their text', () => {
   const result = compose('three-column', { title: 'Side by side', blocks: [{ text: `${long} ${long}` }, { text: 'Two teams.' }, { text: 'Six weeks.' }] });
   assert.equal(result.diagnostics.length, 0);
   const items = carded(result), body = bodyOf(result)[0];
   assert.equal(new Set(items.map((item) => item.frameBox.height)).size, 1, 'the cards share a height');
   assert.ok(Math.abs(bottomOf(items[0].frameBox) - bottomOf(body)) < 1, 'the cards fill the body');
-  assert.equal(new Set(items.map((item) => item.box.y)).size, 1, 'the texts start on one line');
-  for (const item of items) assert.ok(item.box.y - item.frameBox.y < 25, `${item.path}: at the card's top, not its foot`);
+  for (const item of items.slice(1)) {
+    const over = item.box.y - item.frameBox.y, below = bottomOf(item.frameBox) - item.box.y - textHeight(item);
+    assert.ok(Math.abs(over - below) < 24, `${item.path}: a short text is in the middle of its card, not at its top or foot (${over} above, ${below} under)`);
+  }
 });
 
 test('LH-64: a heading line on one card keeps the row in full-height cards, its content not at their foot', () => {
