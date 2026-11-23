@@ -8493,7 +8493,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // growth) sits in the middle of the body under the headings, as a template's under-filled body does, instead of at its top over an
       // empty foot. Otherwise (LH-52 with LH-48) a stack of paragraphs and lists keeps its top; a stack with a panel, table, timeline or
       // media block sits in the middle of the body.
-      const centeredProse = (options as Record<symbol, unknown>)[CENTER] === true && !pullItem && area === contentBox && nodes.every(proseLeaf);
+      // opf#1412 (A5): beside LH-80's picture track the stack sits in the middle of its column as well, as a lone block beside it does.
+      const centeredProse = ((options as Record<symbol, unknown>)[CENTER] === true || autoTrack !== undefined) && !pullItem && area === contentBox && nodes.every(proseLeaf);
       grid.boxes = stackedBoxes(nodes, area, actualGap, settings, undefined, centeredProse ? 'middle' : 'top');
       if (centerColumn) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
       else if (!centeredProse && !pullItem && area === contentBox && splitBlocks(nodes) && !nodes.every(proseLeaf) && splitFill(nodes, grid.boxes, area, settings) < SPLIT_FILL) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
