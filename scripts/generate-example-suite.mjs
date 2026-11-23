@@ -164,7 +164,7 @@ async function loadCatalogIds(kind) {
 }
 
 /** Font schemes the gallery gained after the suite was designed (v0.35 script defaults): see loadCatalogs. */
-const FONT_SCHEMES_ADDED_SINCE = new Set(["times-new-roman-arial"]);
+const FONT_SCHEMES_ADDED_SINCE = new Set(["times-new-roman-arial", "leelawadee-ui", "ebrima", "segoe-ui-regular"]);
 
 function pick(values, index, offset = 0) {
   return values[(index + offset) % values.length];

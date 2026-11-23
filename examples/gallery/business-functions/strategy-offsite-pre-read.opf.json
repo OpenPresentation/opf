@@ -781,13 +781,24 @@
           "app": "powerpoint",
           "languageFamily": "cs",
           "languages": [
-            "hi"
+            "hi",
+            "mr",
+            "ne",
+            "bn",
+            "ctg",
+            "gu",
+            "kn",
+            "ml",
+            "or",
+            "pa-Guru",
+            "ta",
+            "te"
           ],
           "major": "Nirmala UI",
           "minor": "Nirmala UI",
           "textSample": "यह निर्मला यूआई फ़ॉन्ट में लिखा गया है",
           "type": "sans-serif",
-          "description": "Nirmala UI is a sans serif OPF font scheme for complex script presentations, using Nirmala UI for both headings and body text."
+          "description": "Nirmala UI is the default OPF font scheme for Hindi, Marathi, Nepali, Bengali, Chittagonian, Gujarati, Kannada, Malayalam, Odia, Punjabi (Gurmukhi), Tamil and Telugu presentations, using Nirmala UI for both headings and body text. It ships with Windows and draws these scripts at about the size of the Latin text beside them."
         },
         "tenorite": {
           "name": "Tenorite",
