@@ -89,6 +89,13 @@ An org chart's assistant (a chief of staff, an executive assistant) is an entry 
 ] }
 ```
 
+PowerPoint's tree is scaled as a whole to its region, so a wide or deep tree leaves most of the region empty (a three-level org chart in
+under half the width) and its fixed-proportion boxes may not hold a label of about twenty characters or a fourth level at the list's size.
+OPF then draws its own tree (HI1, H2: `opfTreeGeometry`): the same positions, rows and connectors scaled across and down on their own, every
+node as wide as the region allows and up to 0.75 of its width tall (0.6 of a row's step), the tree centered in the region; a hierarchy
+keeps its rear and front cards. PowerPoint's tree stays where it covers half of the region or more and holds the labels at least as large.
+A root with many children is still limited by the region's width: its row of nodes reads at the size the widest label fits across.
+
 Use `venn` with one flat list of one to seven set labels. One to four circles hold their labels inside. Five to seven sets use enlarged editable circles with outside labels fitted from the actual font measurements. This OPF adaptation preserves circle overlaps and set order while filling more of the body at the previous type size or larger. Basic Venn native measurements remain a separate, unqualified live reference. When the overlap cannot keep every label readable, the complete set labels use opaque cards or a list with `opf/arrangement-adapted`. Venn fallback lists try a bounded whole-word reading measure of70characters at the retained type size. If the complete list cannot fit that measure in the body, `opf/text-overflow` reports the refusal; strict composition rejects it. Explicit pagination or shorter labels resolves that limit. Entry order identifies the sets; the diagram implies no numeric overlap values.
 
 ```json

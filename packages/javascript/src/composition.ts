@@ -1,10 +1,10 @@
-import {nativeTreeGeometry,type NativeTreeConnector} from './native-tree-arrangement.js';
+import {nativeTreeGeometry,opfTreeGeometry,type NativeTreeConnector,type NativeTreeGeometry} from './native-tree-arrangement.js';
 import {HALF_STEPPED} from './composition-metadata.js';
 import {arrangementTree} from './tree-arrangement.js';
 import {vennNodes} from './venn-arrangement.js';
 import {fitVennShapes} from './venn-editable.js';
 import {presetTextRect} from './smart-art-layout.js';
-export {nativeTreeGeometry,type NativeTreeKind,type NativeTreeNode,type NativeTreeConnector,type NativeTreeGeometry,type NativeTreeGeometryResult} from './native-tree-arrangement.js';
+export {nativeTreeGeometry,opfTreeGeometry,type NativeTreeKind,type NativeTreeNode,type NativeTreeConnector,type NativeTreeGeometry,type NativeTreeGeometryResult} from './native-tree-arrangement.js';
 export {arrangementTree,type ArrangementTreeNode,type ArrangementTreeResult} from './tree-arrangement.js';
 export {vennNodes,type VennBox,type VennNode} from './venn-arrangement.js';
 import {timelineDurationFractions} from './timeline-duration.js';
@@ -11879,8 +11879,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     } else if(kind==='org-chart'||kind==='hierarchy'){
       const geometry=nativeTreeGeometry(kind,area,values);
       if(!geometry.ok){diagnostics.push({code:'arrangement-adapted',path:item.path,message:geometry.reason+' The complete authored list is retained.'});return undefined;}
-      const nodes:ArrangementNode[]=geometry.nodes.map(node=>{const preset=kind==='hierarchy'?'roundRect' as const:'rect' as const,adjust=kind==='hierarchy'?10000:0;return{index:node.index,box:node.box,preset,adjust,textBox:presetTextRect(preset,node.box,adjust),...(kind==='hierarchy'?{radius:.1*Math.min(node.box.width,node.box.height),background:node.background}: {})};});
-      designs.push({design:'smartart',frame:area,nodes,connectors:geometry.connectors,margin:ARRANGEMENT_TEXT_MARGIN[kind],align:'center',paint:'primary',text:kind==='hierarchy'?'slide':'node',lineWidth:primaryLine});
+      const treeNodes=(shapes:NativeTreeGeometry):ArrangementNode[]=>shapes.nodes.map(node=>{const preset=kind==='hierarchy'?'roundRect' as const:'rect' as const,adjust=kind==='hierarchy'?10000:0;return{index:node.index,box:node.box,preset,adjust,textBox:presetTextRect(preset,node.box,adjust),...(kind==='hierarchy'?{radius:.1*Math.min(node.box.width,node.box.height),background:node.background}: {})};});
+      designs.push({design:'smartart',frame:area,nodes:treeNodes(geometry),connectors:geometry.connectors,margin:ARRANGEMENT_TEXT_MARGIN[kind],align:'center',paint:'primary',text:kind==='hierarchy'?'slide':'node',lineWidth:primaryLine});
+      // HI1, H2: OPF's own tree, the same positions scaled across and down on their own to fill the region, where PowerPoint's leaves most of
+      // it empty (a strip under a root with seven children, a narrow three-level chart) or does not hold the labels (a fourth level, labels
+      // of twenty characters); exported as native shapes.
+      const own=opfTreeGeometry(kind,area,values);
+      if(own.ok)designs.push({design:'opf',frame:area,nodes:treeNodes(own),connectors:own.connectors,margin:ARRANGEMENT_TEXT_MARGIN[kind],align:'center',paint:'primary',text:kind==='hierarchy'?'slide':'node',lineWidth:primaryLine});
     } else if(kind==='venn'){
       const nativeNodes=vennNodes(area,sets);
       // The overlap label at a size: an opaque pill on the circles' common overlap, its text broken as wide as it can be without the pill
@@ -11999,7 +12004,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // C03, VPR-1: PowerPoint's chevrons or vertical process covering under half of its region (LINEAR_STRIP_COVER) is kept only when no
       // row or column design of OPF's holds the entries as large: OPF's fills the region where it does (and is then written as its own
       // shapes). Basic Process keeps PowerPoint's design.
-      if (design.design === 'smartart' && (kind === 'chevrons' || kind === 'vertical-process') && !candidate && covers(design.nodes) < LINEAR_STRIP_COVER) { strip = result; continue; }
+      if (design.design === 'smartart' && (kind === 'chevrons' || kind === 'vertical-process' || tree) && !candidate && covers(design.nodes) < LINEAR_STRIP_COVER) { strip = result; continue; }
       // Of the card grids, of a cycle's designs and of OPF's rows or columns of a linear arrangement (SH-17, `largest`), the one that holds the largest text.
       const largest = design.design === 'cards' || kind === 'cycle' || design.largest === true;
       // C03: of OPF's linear designs at one size, the one that covers clearly more of the region (two rows of four one-word chevrons, not a
@@ -12009,7 +12014,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (design.design === 'smartart' || !largest) break;
     }
     if (strip && (!chosen || chosen.size < strip.size - FONT_GRID_EPSILON)) { chosen = strip; skipped = undefined; }
-    else if (strip) skipped = `PowerPoint's ${SMART_ART_NAMES[kind].layout} covers under half of the region at this count; OPF's own design fills it`;
+    else if (strip) skipped = `PowerPoint's ${SMART_ART_NAMES[kind].layout} covers under half of the region${tree ? '' : ' at this count'}; OPF's own design fills it`;
+    // HI1: PowerPoint's tree (exported as native shapes) stays where it covers half of its region or holds the labels larger than OPF's.
+    if (tree && outside && chosen?.design.design === 'opf' && (covers(outside.design.nodes) >= LINEAR_STRIP_COVER || outside.size > chosen.size + FONT_GRID_EPSILON)) { chosen = outside; skipped = undefined; }
     if (!chosen && outside) { chosen = outside; skipped = undefined; }
     if (!chosen && candidate) return undefined;
     if (!chosen) {
