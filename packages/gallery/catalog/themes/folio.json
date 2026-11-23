@@ -1,0 +1,55 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-theme/v1",
+  "id": "folio",
+  "name": "Folio",
+  "background": {
+    "type": "theme",
+    "slot": "light1"
+  },
+  "colorScheme": "emerald-ink",
+  "description": "A high-contrast display serif over a calm text serif, in green-black ink on a cool paper white with an emerald lead. For reports, narratives and readouts where the writing carries the deck.",
+  "fontScheme": "playfair-display-lora",
+  "dimensions": "widescreen",
+  "variants": [
+    {
+      "id": "light",
+      "name": "Light",
+      "variant": "light1"
+    },
+    {
+      "id": "light-alt",
+      "name": "Light alt",
+      "variant": {
+        "background": "light1",
+        "accents": [
+          "accent3",
+          "accent1",
+          "accent2",
+          "accent4",
+          "accent5",
+          "accent6"
+        ]
+      }
+    },
+    {
+      "id": "dark",
+      "name": "Dark",
+      "variant": "dark1"
+    },
+    {
+      "id": "dark-alt",
+      "name": "Dark alt",
+      "variant": {
+        "background": "dark1",
+        "accents": [
+          "accent2",
+          "accent5",
+          "accent6",
+          "accent4",
+          "accent1",
+          "accent3"
+        ]
+      }
+    }
+  ]
+}

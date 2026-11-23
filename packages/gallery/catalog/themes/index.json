@@ -3,7 +3,7 @@
   "kind": "themes",
   "version": "1",
   "description": "Catalog of themes available in the openpresentation.org catalog. Each entry is a lightweight summary; full theme records live in the per-id JSON files alongside this index.",
-  "contentSha256": "ac7685c2e897c14a2921dbd3a9e3036b4c1bdfff068c28a43a9fb77c53a7f374",
+  "contentSha256": "7719262d959b2f493ffc0835573c8456fa55ca99d7203e9734391b3f62e944f5",
   "records": [
     {
       "id": "minimal",
@@ -28,6 +28,12 @@
       "name": "Duotone",
       "description": "Two colors that ink each other, claret on pale ice and ice on claret, with a sturdy slab serif for headings over a plain humanist sans. For workshops, programs and pitches that want a confident, recognizable look without a photograph.",
       "file": "duotone.json"
+    },
+    {
+      "id": "folio",
+      "name": "Folio",
+      "description": "A high-contrast display serif over a calm text serif, in green-black ink on a cool paper white with an emerald lead. For reports, narratives and readouts where the writing carries the deck.",
+      "file": "folio.json"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "kind": "color-schemes",
   "version": "1",
   "description": "Catalog of color schemes available in the openpresentation.org catalog. Each entry is a lightweight summary; full color-scheme records live in the per-id JSON files alongside this index.",
-  "contentSha256": "c5b5c1918a16429cc5e575ba8b2305ffc0c2ff023af44669dfe681cbe8996160",
+  "contentSha256": "c194b1e1f7009d340fe86f33745be456f6e728e3371ce77df3c2eddb54a118a4",
   "records": [
     {
       "id": "black-and-white",
@@ -44,6 +44,11 @@
       "id": "deep-purple",
       "name": "Deep Purple",
       "file": "deep-purple.json"
+    },
+    {
+      "id": "emerald-ink",
+      "name": "Emerald Ink",
+      "file": "emerald-ink.json"
     },
     {
       "id": "forest-green",

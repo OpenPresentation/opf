@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
+  "id": "emerald-ink",
+  "name": "Emerald Ink",
+  "accent1": "#187C5C",
+  "accent2": "#6B2C5C",
+  "accent3": "#C8962E",
+  "accent4": "#285F7C",
+  "accent5": "#93BFA5",
+  "accent6": "#C4627A",
+  "dark1": "#15201C",
+  "dark2": "#24463B",
+  "followedHyperlink": "#6B2C5C",
+  "hyperlink": "#285F7C",
+  "light1": "#F3F5F4",
+  "light2": "#E1E9E5",
+  "summary": "Green-black ink on a cool paper white, led by emerald with plum and ochre.",
+  "description": "A cool, quiet scheme: green-black ink on a neutral paper white, an emerald lead, deep plum for the contrasting series, and ochre, petrol blue, sage and rose for the rest. Suits narrative and report decks that want color without a corporate blue.",
+  "tags": [
+    "calm",
+    "editorial",
+    "natural",
+    "sophisticated"
+  ]
+}
