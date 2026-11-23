@@ -3,7 +3,7 @@
   "kind": "color-schemes",
   "version": "1",
   "description": "Catalog of color schemes available in the openpresentation.org catalog. Each entry is a lightweight summary; full color-scheme records live in the per-id JSON files alongside this index.",
-  "contentSha256": "ad2cf417a0cf6d2badca436c116c492c705f776d8f5de021f7d10c8085216450",
+  "contentSha256": "c5b5c1918a16429cc5e575ba8b2305ffc0c2ff023af44669dfe681cbe8996160",
   "records": [
     {
       "id": "black-and-white",
@@ -24,6 +24,11 @@
       "id": "burnt-orange",
       "name": "Burnt Orange",
       "file": "burnt-orange.json"
+    },
+    {
+      "id": "claret-ice",
+      "name": "Claret Ice",
+      "file": "claret-ice.json"
     },
     {
       "id": "cool-horizon",

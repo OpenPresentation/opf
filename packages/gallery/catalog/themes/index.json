@@ -3,7 +3,7 @@
   "kind": "themes",
   "version": "1",
   "description": "Catalog of themes available in the openpresentation.org catalog. Each entry is a lightweight summary; full theme records live in the per-id JSON files alongside this index.",
-  "contentSha256": "85e3ea03a8ad179ebf243b17f52fd76053238dac3d161299cf45797a3c8c9730",
+  "contentSha256": "ac7685c2e897c14a2921dbd3a9e3036b4c1bdfff068c28a43a9fb77c53a7f374",
   "records": [
     {
       "id": "minimal",
@@ -22,6 +22,12 @@
       "name": "Bold",
       "description": "A vibrant, high-energy theme with bold colors and a dynamic, attention-grabbing style. Great for presentations that need to stand out.",
       "file": "bold.json"
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "description": "Two colors that ink each other, claret on pale ice and ice on claret, with a sturdy slab serif for headings over a plain humanist sans. For workshops, programs and pitches that want a confident, recognizable look without a photograph.",
+      "file": "duotone.json"
     }
   ]
 }

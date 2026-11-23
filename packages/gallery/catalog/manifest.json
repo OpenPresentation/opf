@@ -28,11 +28,11 @@
     },
     "color-schemes": {
       "mode": "mirror",
-      "records": 14,
-      "contentSha256": "ad2cf417a0cf6d2badca436c116c492c705f776d8f5de021f7d10c8085216450",
+      "records": 15,
+      "contentSha256": "c5b5c1918a16429cc5e575ba8b2305ffc0c2ff023af44669dfe681cbe8996160",
       "gallery": {
-        "records": 14,
-        "contentSha256": "ad2cf417a0cf6d2badca436c116c492c705f776d8f5de021f7d10c8085216450"
+        "records": 15,
+        "contentSha256": "c5b5c1918a16429cc5e575ba8b2305ffc0c2ff023af44669dfe681cbe8996160"
       }
     },
     "font-schemes": {
@@ -100,11 +100,11 @@
     },
     "themes": {
       "mode": "mirror",
-      "records": 3,
-      "contentSha256": "85e3ea03a8ad179ebf243b17f52fd76053238dac3d161299cf45797a3c8c9730",
+      "records": 4,
+      "contentSha256": "ac7685c2e897c14a2921dbd3a9e3036b4c1bdfff068c28a43a9fb77c53a7f374",
       "gallery": {
-        "records": 3,
-        "contentSha256": "85e3ea03a8ad179ebf243b17f52fd76053238dac3d161299cf45797a3c8c9730"
+        "records": 4,
+        "contentSha256": "ac7685c2e897c14a2921dbd3a9e3036b4c1bdfff068c28a43a9fb77c53a7f374"
       }
     },
     "tones": {

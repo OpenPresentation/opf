@@ -1,0 +1,20 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
+  "id": "claret-ice",
+  "name": "Claret Ice",
+  "accent1": "#BE3266",
+  "accent2": "#125F5B",
+  "accent3": "#E58AA8",
+  "accent4": "#3FA39B",
+  "accent5": "#6C1840",
+  "accent6": "#9CCFC8",
+  "dark1": "#330A21",
+  "dark2": "#6A1E45",
+  "followedHyperlink": "#6C1840",
+  "hyperlink": "#125F5B",
+  "light1": "#E6F3F1",
+  "light2": "#CFE6E3",
+  "summary": "Two-color palette: deep claret ink on pale ice, and the reverse.",
+  "description": "A duotone scheme built on two chromatic colors that ink each other: deep claret on a pale ice ground in the light variant, pale ice on claret in the dark one. The accents are tints and shades of those two hues, raspberry and teal, so charts stay inside the pair.",
+  "tags": ["duotone", "expressive", "confident", "two-color"]
+}

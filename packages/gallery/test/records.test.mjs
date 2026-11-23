@@ -84,7 +84,7 @@ test("the repository and the package are MIT", () => {
 
 test("every theme offers its variants: light and dark maps over its one color scheme", async () => {
   const { records } = await readSnapshotKind(catalogRoot, "themes");
-  assert.deepEqual(records.map((record) => record.id), ["minimal", "classic", "bold"], "the dark theme is a variant of each theme");
+  assert.deepEqual(records.map((record) => record.id), ["minimal", "classic", "bold", "duotone"], "the dark theme is a variant of each theme");
   const accents = ["accent1", "accent2", "accent3", "accent4", "accent5", "accent6"];
   for (const theme of records) {
     const { variants } = theme;

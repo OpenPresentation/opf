@@ -10,7 +10,7 @@ import { convert } from "@openpresentation/opf";
 import { BUNDLED_FONT_MANIFEST, loadFonts } from "@openpresentation/opf-render/fonts-node";
 
 const PAIRINGS = ["anton-figtree", "archivo-narrow-lora", "bitter-source-sans-3", "playfair-display-lora", "roboto-mono-figtree"];
-const THEMES = {};
+const THEMES = { duotone: { colorScheme: "claret-ice", fontScheme: "bitter-source-sans-3" } };
 const tracker = JSON.parse(readFileSync(new URL("../../../docs/programs/font-fidelity-everywhere/font-tracker.json", import.meta.url), "utf8"));
 const faces = BUNDLED_FONT_MANIFEST.packages.flatMap((entry) => entry.faces);
 const styles = (family) => new Set(faces.filter((face) => face.family === family).map((face) => `${face.weight}${face.italic ? "i" : ""}`));

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-theme/v1",
+  "id": "duotone",
+  "name": "Duotone",
+  "background": {
+    "type": "theme",
+    "slot": "light1"
+  },
+  "colorScheme": "claret-ice",
+  "description": "Two colors that ink each other, claret on pale ice and ice on claret, with a sturdy slab serif for headings over a plain humanist sans. For workshops, programs and pitches that want a confident, recognizable look without a photograph.",
+  "fontScheme": "bitter-source-sans-3",
+  "dimensions": "widescreen",
+  "variants": [
+    {
+      "id": "light",
+      "name": "Light",
+      "variant": "light1"
+    },
+    {
+      "id": "light-alt",
+      "name": "Light alt",
+      "variant": {
+        "background": "light1",
+        "accents": [
+          "accent2",
+          "accent1",
+          "accent4",
+          "accent3",
+          "accent5",
+          "accent6"
+        ]
+      }
+    },
+    {
+      "id": "dark",
+      "name": "Dark",
+      "variant": "dark1"
+    },
+    {
+      "id": "dark-alt",
+      "name": "Dark alt",
+      "variant": {
+        "background": "dark1",
+        "accents": [
+          "accent4",
+          "accent3",
+          "accent6",
+          "accent1",
+          "accent2",
+          "accent5"
+        ]
+      }
+    }
+  ]
+}
