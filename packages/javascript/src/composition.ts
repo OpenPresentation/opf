@@ -9462,8 +9462,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (useTemplate || regions.length || !Array.isArray(slide.blocks) || chartSplit || modeFor(rootSettings) !== 'auto' || rootSettings.columns !== undefined || rootSettings.weights?.length) return undefined;
     const blockOf = (node: Pending) => node.children ? node.path : node.path.slice(0, node.path.lastIndexOf('.'));
     if (new Set(nodes.map(blockOf)).size !== nodes.length || slide.blocks.some((block: unknown) => record(block).region !== undefined)) return undefined;
-    // LH-50: a paragraph with an eyebrow pairs with nothing.
-    const grouping = nodes.map(node => node.children ? { kind: 'group', group: true } : node.eyebrow ? { kind: EYEBROW_TEXT_KIND } : { kind: kind(node.field), ...(node.field === 'text' ? { length: textLength(node.value) } : {}) });
+    // LH-50: a paragraph with an eyebrow pairs with nothing. A `bullets` list groups as the list it draws (an `items` list), never as
+    // a paragraph of no length, which paired every two of them as long + short paragraphs.
+    const grouping = nodes.map(node => node.children ? { kind: 'group', group: true } : node.eyebrow ? { kind: EYEBROW_TEXT_KIND } : { kind: node.field === 'bullets' ? 'list' : kind(node.field), ...(node.field === 'text' ? { length: textLength(node.value) } : {}) });
     const pairs = repeatedPairs(grouping);
     if (pairs) return { nodes: Array.from({ length: pairs.count }, (_, pair) => pairUnit([nodes[2 * pair]!, nodes[2 * pair + 1]!])) };
     const split = majorityKind(grouping);
