@@ -1,0 +1,5 @@
+---
+type: changed
+packages: [pptx]
+---
+opf#1415, open choice 6 (option D, the owner's decision of 2026-11-24; output-changing for `--body-text native` exports of slides without a layout region): a native body that the layout sets in the middle of the space it was given, the slide's content box, is written as a box over that space anchored in the middle (`anchor="ctr"`), and one set at the bottom as a box from the top of that space to the end of its lines anchored at the bottom (`anchor="b"`), so PowerPoint keeps the list where the layout put it when lines are added or removed. The box is centered on the text's own height as PowerPoint stacks it (the exact line spacing and the space before later entries, no insets, `a:noAutofit` as before), not on the slightly taller measured box, so the lines open exactly where the top-anchored box put them. A body pinned to the top, a body with another block above or below it in its column, and one whose box would cover another block keep the box that hugs their lines, anchored at the top; the automatic layout's Body placeholder takes the first body's box and anchor. Import reads the slides back as before.
