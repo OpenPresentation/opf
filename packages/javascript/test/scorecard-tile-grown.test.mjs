@@ -37,3 +37,13 @@ test('SCO-1: a text among tiles keeps its card and the tiles still share one val
   assert.equal(items.length, 2);
   assert.ok(Math.abs(line(items[0]) - line(items[1])) < 1, 'the two values share one line');
 });
+
+test('SCO-1 with LH-53: a grown figure keeps its unit beside it at the unit share, never smaller than before the figure grew', () => {
+  const withUnit = tiles.map((tile, index) => (index === 2 ? { metric: { ...tile.metric, unit: 'min', value: '6.2' } } : tile));
+  const result = composeSlide({ title: 'Units', blocks: withUnit }, { width: 1280, height: 720, layout: record });
+  const item = result.items.filter((entry) => entry.metricTile)[2], value = part(item, 'value'), unit = part(item, 'unit');
+  assert.ok(unit.box.x > value.box.x + value.box.width - 1, 'the unit stands beside the figure');
+  assert.ok(unit.fit.fontSize >= 0.6 * value.fit.fontSize - 2, `the unit at the unit share (${unit.fit.fontSize} beside ${value.fit.fontSize})`);
+  assert.ok(unit.fit.fontSize >= 68 - 1e-6, `never under the 68 px the unit had before the figure grew (${unit.fit.fontSize})`);
+  assert.ok(value.fit.fontSize > 113.09, `the figure still grows (${value.fit.fontSize})`);
+});

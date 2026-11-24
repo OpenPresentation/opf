@@ -3104,7 +3104,24 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
       if (!Number.isFinite(tailHeight)||!Number.isFinite(leadHeight)) throw new RangeError('Metric metadata exceeds finite coordinates.');
       const pillFit=pillBeside?measured.get(pillBeside):undefined,pillRoom=pillBeside&&pillFit?pillWidth(pillBeside,pillFit)+Math.max(gap,METRIC_UNIT_GAP*primary.requestedFontSize):0;
       const area={...box,y:top,width:Math.max(Number.MIN_VALUE,(arrangement==='inline-unit'?box.width-unitWidth-gap:box.width)-pillRoom),height:box.height-leadHeight-tailHeight-(tail.length?primaryGap:0)};
-      const valueFit=fitValue(area,arrangement==='inline-unit'),valueHeight=valueFit?occupied(valueFit):0;
+      let valueFit=fitValue(area,arrangement==='inline-unit'),valueAsk=primary.requestedFontSize;
+      // SCO-1 with LH-53: a tile's value grown so large that its unit at METRIC_UNIT_SHARE of it no longer fits beside it set the unit at
+      // its own, smaller size ("6.2 min": the unit fell from 68 to 45 px). The value steps down the font grid until the unit at that share
+      // fits on its line, so a grown figure never costs its unit its size.
+      if (options.tile&&arrangement==='inline-unit'&&unit&&unitFit&&valueFit&&valueFit.lines.length===1) {
+        const shareWidth=(size:number)=>{ const natural=measure(unit,gridFontSize(Math.round(METRIC_UNIT_SHARE*size/scale*.75)/.75*scale,unit.minFontSize),box.width); return natural.lines.length===1?naturalWidth(unit,natural):Infinity; };
+        const lineWidth=(size:number)=>naturalWidth(primary,measure(primary,size,box.width));
+        let size=valueFit.fontSize;
+        while (size>primary.minFontSize+1e-9&&lineWidth(size)+gap+shareWidth(size)>box.width+.01) size=Math.max(primary.minFontSize,snapFontSizeDown(size-.5*scale));
+        if (size<valueFit.fontSize-1e-9&&lineWidth(size)+gap+shareWidth(size)<=box.width+.01) {
+          const natural=measure(primary,size,area.width);
+          valueFit={...natural,overflow:!!natural.placement?.overflow||natural.lines.length!==1||occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
+          // The figure and its unit are one line at the size they share, which is what the value asks for here: a stacked unit under a larger
+          // value does not score better for that.
+          valueAsk=size;
+        }
+      }
+      const valueHeight=valueFit?occupied(valueFit):0;
       const allocations:Allocation[]=[];
       let leadY=box.y;
       for (const part of lead) { const natural=measured.get(part)!,height=occupied(natural),pad=leadPad(part),area=lineBox(part,box,leadY+pad,height,natural.fontSize); allocations.push({part,box:area,fit:{...natural,overflow:!!natural.placement?.overflow||natural.sourceLines.some(line=>line.width>area.width+.01)}}); leadY+=height+gap+2*pad; }
@@ -3172,7 +3189,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
       }
       const overflow=!valueFit||valueFit.overflow||arrangement==='inline-unit'&&valueFit.lines.length!==1||primaryHeight>area.height+.01||allocations.some(({box:area,fit})=>!fit||fit.overflow||!usable(area)||area.y+area.height>box.y+box.height+.01);
       // LH-53: a unit drawn larger than it asked for (METRIC_UNIT_SHARE) is no gain that offsets smaller metadata.
-      const score=allocations.reduce((sum,{part,fit})=>sum+Math.max(0,part.requestedFontSize-(fit?.fontSize??minimum))/scale,0);
+      const score=allocations.reduce((sum,{part,fit})=>sum+Math.max(0,(part===primary?Math.min(part.requestedFontSize,valueAsk):part.requestedFontSize)-(fit?.fontSize??minimum))/scale,0);
       const candidate={arrangement,allocations,score,overflow,...(pillFit?{pillFit}:{})};
       // LH-53: a later candidate (more reduced metadata) must score a whole reference pixel better: on a near tie the metadata keeps its
       // size and the value gives way, as when the trend took a line of its own.
