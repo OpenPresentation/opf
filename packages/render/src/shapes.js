@@ -2,7 +2,7 @@
 //
 // A shape block (core ComposedItem.shape) is drawn from core's evaluated geometry (SH-01 presetGeometry, in slide coordinates):
 // each path filled in its DrawingML mode (norm, or the fill shaded by lighten, lightenLess, darken and darkenLess) and stroked where
-// the path takes the line, in order; then the text, fitted by core in shape.textArea; then the effects (SH-03's effectsSvg through drawEffects) wrap the outline and the text. The
+// the path takes the line, all fills before all lines (renderShapeBlock says why); then the text, fitted by core in shape.textArea; then the effects (SH-03's effectsSvg through drawEffects) wrap the outline and the text. The
 // whole drawing turns about the frame's center (rotate) and mirrors (flip); the text turns with it but is not mirrored, and a vertical
 // flip turns it upside down, as PowerPoint draws it. The PPTX export writes the same shape natively (opf-pptx src/shape-blocks.js).
 //
@@ -254,6 +254,13 @@ export function renderShapeBlock(item, helpers) {
   const id = `${helpers.idPrefix}-shape-${item.path.replace(/[^A-Za-z0-9]+/g, "-")}`, box = shape.box, defs = [], parts = [];
   const effects = drawEffects(shape, id, helpers);
   if (effects.defs) defs.push(effects.defs);
+  // Paint order of a preset's paths: every path's fill first, in path order, then every path's line, in path order. A later path's
+  // fill never covers an earlier path's line. ECMA-376 (Part 1, 20.1.9.15 path) gives each path its own fill and stroke but no paint
+  // order across paths; this is the order PowerPoint 365 draws (qualification deck coverage-shape-presets): chartX, chartStar and
+  // chartPlus list their lines first (fill="none") and the square after them (stroke="false"), and PowerPoint and Keynote draw the lines
+  // over the square (slide 16); cloudCallout's overlapping bubbles each show their whole outline through the next one's fill (slide 10).
+  // Of the 187 presets drawn with their defaults only these four change; in every other one the lines are already the last paths.
+  const lines = [];
   shape.paths.forEach((path, index) => {
     const fill = fillPaint(shape.fill, path.fill, `${id}-fill-${index}`, box, helpers, shape, path);
     if (fill.defs) defs.push(fill.defs);
@@ -271,9 +278,10 @@ export function renderShapeBlock(item, helpers) {
       // A sketched line (core stroke.sketched) is drawn along its sketched outline, as PowerPoint draws it.
       const stroke = strokeElements(shape.stroke, shape.stroke.sketched?.lines[index] ?? path.d, `${id}-line-${index}`, { box, closed, ends: path.ends, helpers });
       if (stroke.defs) defs.push(stroke.defs);
-      parts.push(stroke.elements);
+      lines.push(stroke.elements);
     }
   });
+  parts.push(...lines);
   const cx = box.x + box.width / 2, cy = box.y + box.height / 2;
   const turn = shape.rotate ? `rotate(${number(shape.rotate)} ${number(cx)} ${number(cy)})` : "";
   const mirror = shape.flipH || shape.flipV ? `translate(${number(cx)} ${number(cy)}) scale(${shape.flipH ? -1 : 1} ${shape.flipV ? -1 : 1}) translate(${number(-cx)} ${number(-cy)})` : "";

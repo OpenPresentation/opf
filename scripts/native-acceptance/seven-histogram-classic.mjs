@@ -52,7 +52,9 @@ export const HISTOGRAM_SELECTION=Object.freeze({slideIndex:2,seriesIndex:1,point
 // Previous: {bytes:222792,sha256:'e362f6c0797e45a3ad04cf2fcc51e11f75c3fe11b4ec451337e35df839b79336'}.
 // 0.35.1 column anchors (owner decision 2026-11-23): layout tags only; only the ppt/tags/opfLayout*.xml parts of two-column and three-column differ (their record hashes: the records' anchor went from bottom to middle); no slide layout, slide, chart, media or theme part differs; part-by-part comparison with the export of 7697b2664.
 // Previous: {bytes:222790,sha256:'664db47e0148f2cacae21b6818a5f3cfaeebb63fb5f9e295e46030f671436341'}.
-export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:222788,sha256:'3b41ad559ae3b8e933813241ce6717fa91ae6799110b2a46e4271ebed1eb4417'});
+// LH-194 to LH-199, the layout-sweep fixes (owner decision 2026-11-24, "Yes, refresh them"): layout tags and one chart part; only the ppt/tags/opfLayout*.xml parts of agenda, pillars, chart-beside, code, dashboard and team differ (their record hashes), and ppt/charts/chart7.xml, the column chart with negative values, whose plot area is written with layoutTarget inner (the negative-bar fix); no slide layout, slide, other chart, media or theme part differs; part-by-part comparison with the export of af413076e.
+// Previous: {bytes:222788,sha256:'3b41ad559ae3b8e933813241ce6717fa91ae6799110b2a46e4271ebed1eb4417'}.
+export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:222791,sha256:'5eba8a9f1f5e1e6293a73e69ef79aef620f409cf81daccf557071d66b706050e'});
 export const HISTOGRAM_SOURCE_ARCHIVE_BEFORE_RR105_PICTURE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
 const keys=(value,names)=>assert.deepEqual(Object.keys(value).sort(),[...names].sort());
 const modelHash=value=>digest(Buffer.from(JSON.stringify(value)));

@@ -162,8 +162,10 @@ describe('composition exposes the axis on the chart item', () => {
 	test('a column chart carries its axis, computed from its own box', () => {
 		const chart = chartOf([[120, 480, 760, 310]]);
 		const item = chartItem(compose({ slides: [slide(chart)] }));
-		assert.deepEqual(item.chart.valueAxis, axisOf(chart, { width: item.box.width, height: item.box.height, scale: 1 }));
-		assert.equal(item.chart.valueAxis.max, 800);
+		// 0.35.2: the lone small chart hides its value axis and labels its columns, so its axis ends at the tallest column (760), not at 800.
+		assert.equal(item.chart.layer.small.valueAxis, false);
+		assert.deepEqual(item.chart.valueAxis, axisOf(chart, { width: item.box.width, height: item.box.height, scale: 1, labeled: true }));
+		assert.equal(item.chart.valueAxis.max, 760);
 		assert.equal(item.chart.valueAxis.majorUnit, 200);
 	});
 
@@ -178,8 +180,8 @@ describe('composition exposes the axis on the chart item', () => {
 	test('the slide scale follows the canvas, and a dataset chart is resolved too', () => {
 		const document = { datasets: { sales: { columns: ['Quarter', 'Sales'], rows: [['Q1', 120], ['Q2', 480], ['Q3', 790]] } }, slides: [slide({ type: 'column', data: { dataset: 'sales' } })] };
 		const item = chartItem(composeSlide(document.slides[0], { width: 1920, height: 1080, presentation: document, slideIndex: 0 }));
-		// LH-59: the axis ends at 900 (ticks 0 to 800 in steps of 200), within 1.25 x the data maximum, not at 1000.
-		assert.deepEqual(item.chart.valueAxis, { min: 0, max: 900, majorUnit: 200 });
+		// LH-59 kept the ticks 0 to 800 in steps of 200; 0.35.2: the small chart's hidden axis ends at its tallest column (790), not 900.
+		assert.deepEqual(item.chart.valueAxis, { min: 0, max: 790, majorUnit: 200 });
 	});
 
 	test('scatter carries numeric axes; non-chart items carry no chart', () => {

@@ -339,7 +339,7 @@ export interface ChartAxisGeometry {
   minFontSize?: number;
   /** LH-60: the deck language, which names the places a map chart plots (a map over other categories is drawn as columns). */
   language?: string;
-  /** LH-119: the chart is a line whose points carry their value labels and whose value axis is hidden (the small chart, LH-03). */
+  /** LH-119: the chart's points (or columns) carry their value labels and its value axis is hidden (the small chart, LH-03). */
   labeled?: boolean;
   /** LH-110: values the axis must hold besides the data (explicit reference lines). */
   include?: readonly number[];
@@ -396,6 +396,11 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   const titleBand = options.axisTitles.category ? lineHeight : 0;
   const length = spec.horizontal ? width * 0.7 - 2 * pad - fontPx : height - 2 * pad - lineHeight * 1.5 - legendBand - titleBand;
   const fitted = niceScale(dataMin, dataMax, chartIntervalsFor(Math.max(1, length), spec.horizontal ? 4 * fontPx : lineHeight * 1.2, scale), { percent, labeled: geometry.labeled === true && spec.kind === 'line' });
+  // 0.35.2 (the gap above a column chart's plot): a column chart whose value axis is hidden and whose columns carry their value labels (the
+  // small chart, LH-03) draws no tick, gridline or axis end, so nothing reads its scale and its round end (up to a quarter above the data,
+  // LH-59) was only an empty band between the chart's heading and its tallest column. Its axis ends at the tallest column, which reaches
+  // the top of the plot under the row its label takes (both engines keep that row). Columns that go below zero keep their scale.
+  if (geometry.labeled === true && spec.kind === 'bar' && !spec.horizontal && !percent && dataMin >= 0 && dataMax > 0 && fitted.max > dataMax) return { min: fitted.min, max: dataMax, majorUnit: fitted.step };
   return { min: fitted.min, max: fitted.max, majorUnit: fitted.step, ...(percent ? { percent: true as const } : {}) };
 }
 

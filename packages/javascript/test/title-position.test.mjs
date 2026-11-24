@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { gallery } from '@openpresentation/gallery';
-import { TITLE_BESIDE_SHARE, composeLayoutAreas, composeSlide, layoutTemplate, renamedLayout, renamedLayoutTitlePosition, titleBesideTemplate } from '../dist/composition.js';
+import { LONE_DISPLAY_SIZES, TITLE_BESIDE_SHARE, composeLayoutAreas, composeSlide, layoutTemplate, renamedLayout, renamedLayoutTitlePosition, titleBesideTemplate } from '../dist/composition.js';
 import { applyPatch, validate } from '../dist/index.js';
 
 const HEADINGS = new Set(['title', 'subtitle', 'tag']);
@@ -72,8 +72,9 @@ test('start on a template: the title column at the reading side, the body beside
   assert.ok(near(region.x, padding + column + gap), JSON.stringify(region));
   assert.ok(near(area.y, region.y) && near(area.height, region.height), 'the column runs down beside the body');
   assert.ok(title(start).box.x + title(start).box.width <= region.x, 'the title stays in its column');
-  // The list keeps its size: nothing shrinks.
-  assert.ok(body(start).every((item, index) => item.text.fontSize >= body(top)[index].text.fontSize - 1e-6));
+  // The list keeps its size: nothing shrinks. LH-102: past its display size a lone list grows on only while it takes no line more, so in the
+  // narrower body beside the title column it may stop sooner; it never ends under the display size it reaches on top.
+  assert.ok(body(start).every((item, index) => item.text.fontSize >= Math.min(body(top)[index].text.fontSize, LONE_DISPLAY_SIZES.list) - 1e-6));
   // A right-to-left deck draws the column at the right; design.mirror swaps the side; both together put it back at the left.
   const right = composeSlide(slide({ design: { titlePosition: 'start' } }), { layout: gallery.layouts.list, direction: 'rtl' });
   assert.ok(right.headingAreas[0].box.x > right.regions[0].box.x);
@@ -100,7 +101,7 @@ test('start on an automatic slide: the headings in the start column, the body be
   assert.ok(near(start.contentBox.x, padding + column + gap), JSON.stringify(start.contentBox));
   assert.ok(start.contentBox.y < heading.box.y, 'the body starts above the centered title');
   assert.ok(body(start).every((item) => item.box.x >= heading.box.x + heading.box.width));
-  assert.ok(body(start).every((item, index) => item.text.fontSize >= body(top)[index].text.fontSize - 1e-6), 'no text smaller');
+  assert.ok(body(start).every((item, index) => item.text.fontSize >= Math.min(body(top)[index].text.fontSize, LONE_DISPLAY_SIZES.list) - 1e-6), 'no text smaller');
   // Right to left, and mirrored.
   const rtl = composeSlide(slide({ design: { titlePosition: 'start' } }), { direction: 'rtl' });
   assert.ok(title(rtl).box.x > rtl.contentBox.x);

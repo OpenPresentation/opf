@@ -41,22 +41,22 @@
     {
       "id": "quote",
       "file": "quote.svg",
-      "bytes": 1416
+      "bytes": 1415
     },
     {
       "id": "two-column",
       "file": "two-column.svg",
-      "bytes": 1884
+      "bytes": 2631
     },
     {
       "id": "three-column",
       "file": "three-column.svg",
-      "bytes": 2476
+      "bytes": 5085
     },
     {
       "id": "pillars",
       "file": "pillars.svg",
-      "bytes": 5887
+      "bytes": 5907
     },
     {
       "id": "comparison",
@@ -71,7 +71,7 @@
     {
       "id": "timeline",
       "file": "timeline.svg",
-      "bytes": 3268
+      "bytes": 3598
     },
     {
       "id": "faq",
@@ -86,7 +86,7 @@
     {
       "id": "inverted-pyramid",
       "file": "inverted-pyramid.svg",
-      "bytes": 2674
+      "bytes": 2672
     },
     {
       "id": "matrix",
@@ -101,12 +101,12 @@
     {
       "id": "chevrons",
       "file": "chevrons.svg",
-      "bytes": 2856
+      "bytes": 2794
     },
     {
       "id": "vertical-process",
       "file": "vertical-process.svg",
-      "bytes": 2689
+      "bytes": 2685
     },
     {
       "id": "org-chart",
@@ -116,7 +116,7 @@
     {
       "id": "hierarchy",
       "file": "hierarchy.svg",
-      "bytes": 5034
+      "bytes": 5001
     },
     {
       "id": "venn",
@@ -131,17 +131,17 @@
     {
       "id": "scorecard",
       "file": "scorecard.svg",
-      "bytes": 3811
+      "bytes": 3819
     },
     {
       "id": "image",
       "file": "image.svg",
-      "bytes": 1515
+      "bytes": 1512
     },
     {
       "id": "image-beside",
       "file": "image-beside.svg",
-      "bytes": 2165
+      "bytes": 2524
     },
     {
       "id": "gallery",
@@ -156,7 +156,7 @@
     {
       "id": "chart-beside",
       "file": "chart-beside.svg",
-      "bytes": 5948
+      "bytes": 6130
     },
     {
       "id": "table",
@@ -166,12 +166,12 @@
     {
       "id": "table-beside",
       "file": "table-beside.svg",
-      "bytes": 6811
+      "bytes": 7236
     },
     {
       "id": "code",
       "file": "code.svg",
-      "bytes": 2984
+      "bytes": 3165
     },
     {
       "id": "hero",
@@ -186,7 +186,7 @@
     {
       "id": "team",
       "file": "team.svg",
-      "bytes": 6171
+      "bytes": 6180
     },
     {
       "id": "logos",

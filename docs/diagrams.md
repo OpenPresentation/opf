@@ -370,7 +370,7 @@ Mermaid's own theming (`%%{init: ...}%%`, themes, `themeVariables`) and click ca
 
 Core lays a diagram out for its block with the deck's measured fonts, the same way it fits text:
 
-1. It tries the largest base size from 32 reference pixels down at which the drawing fits the block. A small diagram grows to the size of a list; a large one steps down.
+1. It tries the largest base size from 48 reference pixels (1.5 times the nominal 32, as an arrangement's text grows; never past the composition's `maxFontSize`) down at which the drawing fits the block. A small diagram grows past the size of a list to fill its block (C08, IM1: a three-node flowchart in a full-width body); a large one steps down.
 2. Node labels never go below the readability floor (`minFontSize`, 16 reference pixels by default). The smallest secondary label (an edge label, an axis tick, a score) never goes below 75% of it.
 3. A diagram is centered in its block. A region anchored to the bottom places it there.
 4. Pele lays the diagram out for the width it has, so a smaller size is a new layout, not a shrunken picture: a wide flowchart may turn to run downward.

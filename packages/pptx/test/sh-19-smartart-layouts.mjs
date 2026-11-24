@@ -65,9 +65,9 @@ const live = await exported({slides});
   // The pyramid's entries beside their bars (text-only nodes on the slide), start-aligned; the cards in the card neutral with their border.
   assert.match(text('ppt/diagrams/layout1.xml'), /styleLbl="revTx"><dgm:varLst><dgm:bulletEnabled val="1"\/><\/dgm:varLst><dgm:alg type="tx"(?:\/>|>[\s\S]*?<\/dgm:alg>)<dgm:shape type="rect">/);
   assert.match(text('ppt/diagrams/data1.xml'), /<a:pPr algn="l">/);
-  assert.match(text('ppt/diagrams/layout2.xml'), /styleLbl="alignNode1"/);
-  assert.match(text('ppt/diagrams/colors2.xml'), /<dgm:styleLbl name="alignNode1"><dgm:fillClrLst meth="repeat"><a:srgbClr val="[0-9A-F]{6}"\/>/);
-  assert.match(text('ppt/diagrams/data2.xml'), /<dgm:prSet custT="1"\/><dgm:spPr><a:ln w="\d+"><a:solidFill><a:srgbClr val="[0-9A-F]{6}"\/><\/a:solidFill><\/a:ln><\/dgm:spPr>/);
+  // MX1: a matrix's cards take the matrix's primary paint with centered entries, as its quadrants do (node1, not the card neutral).
+  assert.match(text('ppt/diagrams/layout2.xml'), /styleLbl="node1"/);
+  assert.doesNotMatch(text('ppt/diagrams/layout2.xml'), /styleLbl="alignNode1"/);
   // A flow's arrows: axis-aligned rightArrow shapes, turned 180 degrees in a row that runs back and 90 between two rows.
   assert.match(text('ppt/diagrams/layout3.xml'), /<dgm:shape type="rightArrow" rot="180">/);
   assert.match(text('ppt/diagrams/layout3.xml'), /<dgm:shape type="rightArrow" rot="90">/);

@@ -24,7 +24,9 @@ for (const [language, expectedWords] of cases) {
   assert.ok(layout.rule, `${language}: a pull line`);
   const rule = [...svgs[0].matchAll(/<rect\b([^>]*)\/?>/g)].map(([, a]) => attrs(a)).find((entry) => entry['data-opf-quote-rule'] === 'true');
   assert.ok(rule, `${language}: the rule is drawn`);
-  assert.deepEqual([rule.x, rule.y, rule.width, rule.height].map(Number), [layout.rule.x, layout.rule.y, layout.rule.width, layout.rule.height].map((value) => Number(value.toFixed(4))));
+  // The rule is drawn where core composed it, at the precision the SVG writes (stableNumber: three decimals); the A4 pull stack's drop on a
+  // grown body leaves a fourth decimal (393.8396 is drawn as 393.84).
+  assert.deepEqual([rule.x, rule.y, rule.width, rule.height].map(Number), [layout.rule.x, layout.rule.y, layout.rule.width, layout.rule.height].map((value) => Number(value.toFixed(3))));
   assert.equal(rule.fill.toUpperCase(), bound[0].design.colors.primary.toUpperCase(), `${language}: in the primary color`);
   const timeline = bound[1].geometry.items.find((item) => item.timelineLayout).timelineLayout;
   const progress = [...svgs[1].matchAll(/<line\b([^>]*)\/?>/g)].map(([, a]) => attrs(a)).find((entry) => entry['data-opf-timeline-progress'] === 'true');
@@ -50,7 +52,8 @@ for (const [language, expectedWords] of cases) {
   assert.deepEqual(markers.map((entry) => entry['data-opf-timeline-status']), ['done', 'current', 'current', 'planned'], `${language}: canonical statuses survive translation or missing vocabulary`);
   assert.deepEqual(markers.map((entry) => entry['data-opf-path']), [0, 1, 1, 2].map((index) => `slides.1.blocks.0.timeline.${index}`), `${language}: markers retain canonical source traces`);
   for (const event of events) {
-    assert.ok(svgs[1].includes(event.when) && svgs[1].includes(event.what), `${language}: authored event labels remain visible`);
+    // TLN-1: a grown event label may take two lines, so each of its words is drawn.
+    assert.ok(svgs[1].includes(event.when) && event.what.split(/\s+/u).every((word) => svgs[1].includes(word)), `${language}: authored event labels remain visible`);
   }
   if (language !== 'en-US') {
     for (const word of cases[0][1]) assert.ok(!svgs[1].includes(`>${word}<`), `${language}: no English generated-word fallback`);

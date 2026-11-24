@@ -122,7 +122,7 @@ lists the 0.34 names of the built-ins.
 | `flow` | `auto`, `grid`, `row`, `column` (the words of `composition.mode`) | `auto` |
 | `max` | 1 to 12; `1` is a single-block region (below) | 6 |
 | `bleed` | boolean: outer edges on the content box reach the slide edge; never a card | `false` |
-| `metrics` | `stack` (value, unit, label and the rest as one block at the anchor) or `tile` (LH-68: each metric fills its cell, label first as an eyebrow, the value asking for a quarter of the cell's height between 76 and 152 px, description, delta and trend at the cell's foot, start-aligned; the gallery `scorecard` uses it) | `stack` |
+| `metrics` | `stack` (value, unit, label and the rest as one block at the anchor) or `tile` (LH-68: each metric fills its cell, label first as an eyebrow, description, delta and trend at the cell's foot, start-aligned; SCO-1: the value asks for 0.4 of the cell's height between 76 and 228 px and stands in the middle of the room between the label and the row's tallest foot, so the values of a row share one line and no tile has an empty middle; the gallery `scorecard` uses it) | `stack` |
 | `arrangement` | What the region draws its content as. A sequence: `steps` or `numbered` (LH-07: the region lists the steps of a sequence, drawn under numbered badges joined by a connector, see [Step sequences](#step-sequences-lh-07); the gallery `process` uses `steps`, `agenda` uses `numbered`). A diagram of the region's lone list of one level: `pyramid`, `inverted-pyramid`, `matrix`, `cycle`, `chevrons`, `process`, `vertical-process`, `org-chart`, `hierarchy` or `venn` (SH-09, SH-18: `pyramid`, `matrix` and `cycle` draw as PowerPoint's Basic Pyramid, Basic Matrix or Basic Cycle geometry, exported as live SmartArt where PowerPoint draws it as the preview does, or as OPF's own design of the arrangement where PowerPoint's does not hold the entries; a matrix of other than four entries draws cards; see [Pyramids, matrices and live SmartArt](smartart.md); the gallery `pyramid`, `matrix` and `cycle` use them; SH-24: `inverted-pyramid` is the pyramid upside down, the widest level first and the tip at the bottom, the entries in their authored top-to-bottom order, exported as editable native shapes until a live SmartArt domain is measured (the gallery `inverted-pyramid`); SH-17: `chevrons` draws the list as PowerPoint's Basic Chevron Process, `process` as its Basic Process (boxes with arrows) and `vertical-process` as its Vertical Process, or OPF's own rows or columns of them, used by the gallery `chevrons` and `vertical-process` layouts (and by `process` for a short list of its `steps` region); SH-21: `org-chart` and `hierarchy` preserve a single-root tree through list-entry `level` (an org chart also places an entry with `assistant: true` beside the line below its manager), and `venn` holds one to seven flat set labels (and a last entry with `overlap: true` that labels their common overlap); malformed trees or labels that do not fit keep the complete list with a finding). One value per region: a region is a sequence or a diagram, never both | none |
 | `anchor` | `top`, `middle`, `bottom` | inherited from the nearest split or the record, else `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
@@ -197,11 +197,14 @@ On a slide that draws content cards (`design.contentBox`), a row of cards is one
 of regions side by side (two-column, three-column). The anchor sets how the row stands:
 
 - `middle` or `bottom`: a card fills its cell (starting half a gap down, clear of the heading) and the anchor places its
-  content inside it, while a card carries a picture, a metric or a heading line (a labeled list item). A row of body text
+  content inside it, while a card carries a picture, a metric or a heading line (a labeled list item). P1: under `middle`, a row
+  whose cards carry heading lines (labeled lists, with body text and no picture, quote or metric) hugs its tallest card instead, the content of every card
+  starting on one line and the row centered in the region. A row of body text
   only (paragraphs and plain lists) does not (LH-64): when the tallest text fills under 45% of a filled card, the cards hug
   it with one height and the row centers in the region, since short text at the foot of a tall card reads as an empty card;
-  rows that all hug stack one gap apart. When the texts are longer and their heights more than 1.5x apart, the cards still
-  fill but every text starts at the card's top, so a short text does not sit alone at a foot beside long ones.
+  a text shorter than the tallest sits in the middle of its card (COL-3); rows that all hug stack one gap apart. When the
+  texts are longer and their heights more than 1.5x apart, the cards still fill: under a `bottom` anchor every text starts at
+  the card's top, so a short text does not sit alone at a foot beside long ones; under `middle` each text is centered in its card.
 - `top`: cards of measured blocks (text, lists, quotes, metrics) hug the tallest of their row, from the top, with one height
   per row (LH-04); a row with a picture, chart, table or group keeps cells the size of the region's share.
 
@@ -210,7 +213,10 @@ columns of long lines, or as a short one in a wide card beside a long one in a n
 On a slide that draws cards, when the filled regions of a layout lie in one row and hold only such paragraphs (two or three, in
 several regions or in one region's grid), every paragraph moves to the first region of that row in reading order. The other
 regions are left empty and collapse into it, and that region stacks them one card per row across the row. The layout must have no
-`row` region, the slide no composition of its own, and must have nothing beyond a region's room or below the grid.
+`row` region, the slide no composition of its own, and must have nothing beyond a region's room or below the grid. A layout whose
+whole body is that one row of regions (`two-column`, `three-column`) is its columns: long texts stay columns there, and become rows
+only when the rows overflow less, or as little with a larger fitted size (both arrangements are composed; columns never cost a size). The rule applies to one region's grid
+(`pillars`, `scorecard`, `team`) and to a row of regions beside others in a layout; automatic composition (no layout) never uses it.
 
 A stacked column of such cards (these rows, or more long paragraphs one region stacks) shares the region's height. The text is
 set at the largest size of the type scale at which every row fits, each card as tall as its text plus the insets of a card that
@@ -357,13 +363,15 @@ size (a column at least a quarter of the slide wide); `columns: 2` or `3` fixes 
 region's columns are kept only when they set the list at least as large as one column of the same cell would (a region whose first
 accepted kind is `list` keeps LH-184's reading measure: columns up to a type-scale step under one column whose lines would run past
 it), and columns that overflow give way to one column that fits (in a list region, one at least as large). `auto` never deals a
-list of 6 or fewer entries across columns (LH-42): such a list shrinks in its one column instead. A region with a diagram or the
+list of 6 or fewer entries across columns (LH-42): such a list shrinks in its one column instead. The columns keep the entries as even as
+they can, the first columns the longer on a tie (7 entries as 4 + 3), and under a `middle` or `bottom` anchor they stand at the anchor as one
+block, as tall as the tallest column (C09: the gallery `agenda` centers its columns as it centers a short agenda). A region with a diagram or the
 `steps` arrangement keeps its list in one column.
 
 **Several lists in a region (LH-42).** A region whose flow is not `row` that
 receives 2 or more lists and nothing else lays them out one list per cell, a card when the slide draws cards, so sibling
 lists never read as one table: 2 to 4 lists in that many columns, a multiple of 3 in 3 columns, any other count in 4
-(7 as 4 + 3). A column stays at least 7.5 list ems (240 px) wide; a narrower region fills its rows evenly (4 lists in 2 x 2),
+(7 as 4 + 3), in balanced rows, so no row is more than one list short of another (5 as 3 + 2, 10 as 4 + 3 + 3). A column stays at least 7.5 list ems (240 px) wide; a narrower region fills its rows evenly (4 lists in 2 x 2),
 and a region taller than wide stacks up to 3 lists and takes at most 2 columns. Each row is as tall as its tallest list needs,
 descriptions and nested entries counted, at the largest one size at which every row fits, and the region's lists share that
 size. Cards share the height left over, so they fill the region; lists without cards keep their rows and the region's
@@ -479,7 +487,8 @@ A region whose `arrangement` is `steps` or `numbered` lists the steps of a seque
   1.75 times the step text across with its numeral at the step text size, in the scheme color readable on the accent. The badge sits
   0.4 of its width above the text, at the block's start (its right edge in a right-to-left deck), or over its middle when the block is
   centered. The badges of a row share one line, and a connector in the border color runs through their centers. A one-entry numbered
-  list gives its badge its number and draws as a heading over its description (LH-77); any other block is numbered by its position.
+  list gives its badge its number and draws as a heading over its description (LH-77), and as a heading without one when another step
+  of the region has one (PR2), so the row reads alike; any other block is numbered by its position.
   Each block keeps the band for its badge in the height it asks for and in its cell.
 - **A list's entries** (`steps` for a lone list of two or more entries, `numbered` for every list of two or more entries of one level,
   numbered or not, since an agenda runs in time): each entry draws beside its
@@ -488,6 +497,10 @@ A region whose `arrangement` is `steps` or `numbered` lists the steps of a seque
   arabic as drawing only: the document keeps no numbering and the PPTX import gives the list back unnumbered. In a `numbered`
   region the unnumbered lists count on from one list to the next, as one agenda, and keep their markers when one of the region's
   lists cannot take badges (a lone entry, nested entries), so a part of the agenda is never numbered alone.
+- **A row of a list's steps** (`steps`, PR1): a lone list of 2 to 5 entries of one level (no icons) that is not Basic Process draws
+  as the row its steps make when written as separate blocks: one column per entry across the region, a badge over each at its start,
+  the connector through the badges, the entries under them and the row in the middle of the region, at the list's size or larger (up
+  to 56 px, each grown entry on at most three lines of whole words). Columns narrower than six ems of that size keep the badges down the side, as above.
 - **Basic Process** (`steps`, OPF 0.35): a lone list of 2 to 8 entries of one level, each of one or two words (24 characters at most),
   without numbering, descriptions or icons, draws as the `process` arrangement (PowerPoint's Basic Process: boxes joined by arrows, see
   [SmartArt](smartart.md)) in the region's whole cell, when the process holds every entry at the size its steps would have or larger;
@@ -518,22 +531,48 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   at its role sizes it steps up: a paragraph or a list by the steps of the type scale above its size, a quote, code panel,
   metric or table by the scale's ratio on every role, to the largest step at which it fills at most 60% of the body and
   every part keeps the size it asks for. No role grows past its display size (`LONE_DISPLAY_SIZES`: text 43 px, a list 37,
-  a quote 56, code 32, a metric's value 152, a table 32, at a 720-pixel short edge). The block then sits in the middle of
+  a quote 56, code 32, a metric's value 152, a table 32, at a 720-pixel short edge). A plain list that reaches its display
+  size and still fills under half of the body grows on, as a body of several short blocks does (LH-102), by the scale's steps
+  while it fills at most 60% and every entry stays on one line: one to three entries up to 56 px, four or five up to 49 px, more none
+  (`SPARSE_LIST_DISPLAY`); a list with descriptions, drawn as ruled rows, beside
+  numerals, with badges or icons, or in a region with an arrangement keeps its size. The block then sits in the middle of
   the body, its card hugging it; a grown table's rows grow with its type (`items[].tableGrowth`, which both engines pass to
-  `layoutTable`). A block that fills half the body or more keeps its sizes and its place.
+  `layoutTable`). A block that fills half the body or more keeps its sizes; a paragraph or list that fills at most 60% of it
+  sits in its middle, any more keeps its place.
 - **A body of paragraphs and lists.** Two or more text and list blocks (in a layout's regions, or on a slide without a layout)
   that fill under half of the body below the headings (the height their text covers, so the empty space inside cards that share
   the body, as LH-86's rows, does not count), with nothing overflowing and no text at the floor, are composed again one, two or three type-scale steps larger (each up to a
   list's display size, 37 px), and the largest step that adds no finding, sets every block larger and fills at most 60%
-  is kept; siblings keep one size (LH-43) and no block reads smaller than before. On a layout the body then sits in the
+  is kept; siblings keep one size (LH-43) and no block reads smaller than before. A body that still fills under half after
+  those steps grows on (LH-102), on a layout as on a slide without one, by the scale's steps up to 56 px while every block
+  keeps its place, nothing overflows and it fills at most 60% (a body of texts of at most four words each up to 75 px, so two
+  short lines of a `text` slide grow together toward the size one reaches); on a layout its paragraphs keep one size, and
+  its lists one size, there too. A layout whose regions may draw their content (a sequence's badges, a diagram) keeps the
+  three steps. On a layout the body then sits in the
   middle of the space under the headings: rows that hug
   their content move down, regions take the height their blocks need in the middle of their cells, and cards hug their
   text (LH-64's hug, whatever it fills of a card).
+- **A table and the note under it** (a `table` layout's body and aside, TAB-1). The pair grows as a body of paragraphs does, the
+  table by the scale's ratio up to its display size and its rows with it, while it covers under three quarters of the body and to
+  at most three quarters (`TABLE_NOTE_GROWN_TARGET`, the target of LH-75's pair beside each other), so a third row or a longer note
+  keeps the size the two-row table grew to instead of dropping to the role sizes. A pair that already covers half the body or more
+  keeps its place unless it grows.
+  A table beside its aside (`table-beside`, TAB-2) grows the same way: a note or a list grows with it, a metric or a quote (set
+  larger than the table already) keeps its size, and the table and its aside start on one line.
+  A table on a column's card grows the same way with the texts on the cards beside it (COL-2, every block on its card). A table that
+  does not fit its column at its starting size (a four-column table in a third of the slide) first takes the width it needs, as an
+  automatic slide's table does (LH-44: its natural width, at most 65% of the row, at least its minimum), while the columns beside it hold
+  only texts and lists that read no worse in what is left.
 - **Never grown by these two rules.** A stacked record (`statement`, `quote`, `closing`, which place their message as one stack, a closing at the foot (LH-155), and grow by
   LH-129's rule below), blocks below
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a
   list in columns, an overflowing composition, and `composeSlide(slide, { fill: false })`, for hosts and tests of the
-  role sizes. Both engines read the result from core.
+  role sizes. Both engines read the result from core. A plain text or list beside a layout's one chart or picture is the
+  exception (LH-193): beside a chart, or a picture in a `media` region, and alone in its region (or each of several texts
+  alone in a one-block region, the columns of `three-column`, which keep their whole cards with the text in the middle) it
+  grows as a lone block of its cell, so "Look here." beside a picture and two short texts beside a
+  chart take display size as one text beside a chart already did; a text sharing a region with another text (a `hero`'s
+  lead over its body) keeps its size.
 - **A message in the middle of the slide (LH-129).** A slide whose title stands free (centered in a sized title area, or in a
   stacked record) over no primary or secondary block, such as `cover`, `section` and `closing` or a slide with no body and no
   layout record, grows its title and subtitle by one, two or three steps of the type scale, each up to its display size
@@ -579,10 +618,13 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   line and to the height the box leaves over the description) in bold over an accent rule of 0.14 em across the block (a native
   line in PowerPoint, `ListFit.rules` with `accent`), with no card. Sibling words read at one size. Any other set, a title of
   several words included, keeps its cards. fitList's `display` option (with `heading`) draws one list this way.
-- **A lone timeline (LH-129)** in a template's `body` region, or an automatic slide's only block, first tries three and then two
-  steps of the type scale on its labels (its 18 and 22 px roles to 28 and 32, or 24 and 28 px), and keeps the first at which it fits
-  its box in the same arrangement and no label (the name, a date, an event) takes another line; otherwise it grows by LH-41's few
-  pixels as before.
+- **A lone timeline (LH-129, TLN-1)** in a template's `body` region, or an automatic slide's only block, that draws as a band or
+  alternating labels first grows in proportion (`sizeScale`): every role by one factor, its `what` labels up through the type scale
+  to 56 px (the size a short row of headings takes), largest first, kept at the first that fits its box in the same arrangement with
+  every word whole, no date or name on another line and a `what` label on at most two lines. Its markers, the gaps around them and
+  its connector (`TimelineLayout.lineWidth`) grow with it, and it sits in the middle of its box. Otherwise it tries two or three
+  steps of the type scale (to 28 and 32, or 24 and 28 px) with every label on its line, then LH-41's few pixels. A lead and a note
+  keep their places above and below it.
 - **A lone code panel (LH-101)** grows its code in type-scale steps up to the code display size (32 px) while it covers at most
   60% of the body, and its panel hugs it in the middle of the body. Only code that covers at least 60% of the body takes the whole
   body, its lines in the middle of the panel (`layoutCode`'s `fill`).

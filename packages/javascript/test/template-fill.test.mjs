@@ -105,8 +105,10 @@ test('a lone timeline grows by steps of the type scale while its labels keep the
     const result = composeSlide(slide, { layout: layouts.timeline, direction }), timeline = field(result, 'timeline').timelineLayout;
     assert.deepEqual(findings(result), []);
     const size = (role) => timeline.parts.find((part) => part.role === role).fit.fontSize;
-    assert.equal(size('when'), 28, direction);
-    assert.equal(size('what'), 32, direction);
-    assert.ok(timeline.parts.filter((part) => part.role === 'what' || part.role === 'when').every((part) => part.fit.lines.length === 1));
+    // TLN-1: the labels grow in proportion up to 56 px, a `what` label on at most two lines, every `when` on one.
+    assert.ok(size('what') >= 43, direction);
+    assert.ok(size('when') > 18 * 1.5, direction);
+    assert.ok(timeline.parts.filter((part) => part.role === 'when').every((part) => part.fit.lines.length === 1));
+    assert.ok(timeline.parts.filter((part) => part.role === 'what').every((part) => part.fit.lines.length <= 2));
   }
 });

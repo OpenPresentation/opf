@@ -74,7 +74,7 @@ window.addEventListener("message", async (event) => {
       return reply({
         protocolVersion: "2026-01-26",
         hostInfo: { name: setup.hostName ?? "test-host", version: "1.0.0" },
-        hostCapabilities: { ...(setup.noServerTools ? {} : { serverTools: {} }), serverResources: {}, updateModelContext: { text: {}, structuredContent: {} }, message: { text: {} }, ...(setup.download ? { downloadFile: {} } : {}) },
+        hostCapabilities: { ...(setup.noServerTools ? {} : { serverTools: {} }), serverResources: {}, ...(setup.noModelContext ? {} : { updateModelContext: { text: {}, structuredContent: {} } }), message: { text: {} }, ...(setup.download ? { downloadFile: {} } : {}) },
         hostContext: { theme: "light", displayMode: "inline", availableDisplayModes: ["inline", "fullscreen"], containerDimensions: { width: setup.width ?? 960, maxHeight: setup.height ?? 640 }, platform: "web", toolInfo: { id: setup.toolId, tool: { name: setup.tool, inputSchema: { type: "object" } } }, ...(setup.insets ? { safeAreaInsets: setup.insets } : {}) },
       });
     case "ui/notifications/initialized":
@@ -167,7 +167,7 @@ try {
 		await page.evaluate(([key, value]) => window.startView(key, value), [name, { viewUrl, tool, arguments: args, result, toolId: `toolu_${++toolIds}`, ...setup }]);
 		if (!setup.holdInput) {
 			await view(name).locator('#opf-deck[data-ready="true"]').waitFor({ state: "attached", timeout: 120000 });
-			await page.waitForFunction((key) => window.hosts[key].context.length > 0, name, { timeout: 60000 });
+			if (!setup.noModelContext) await page.waitForFunction((key) => window.hosts[key].context.length > 0, name, { timeout: 60000 });
 		}
 		return result;
 	};
@@ -701,6 +701,51 @@ try {
 		await frame.getByRole("button", { name: "Slide actions", exact: true }).click();
 		assert.ok(await frame.getByRole("menuitem", { name: "Delete slide" }).isDisabled());
 		await remove("noserver");
+	});
+
+	await run("the footer says the assistant can see the deck once a local file is shared, without opening the composer, and not before", async () => {
+		const line = (name) => view(name).locator("#deck-shared");
+		const sentence = (name) => view(name).locator("#deck-sync").textContent();
+		// A host that takes no model context never shares: the line is not there.
+		await open("unshared", "open_editor", { title: "Not shared" }, { noModelContext: true });
+		assert.equal(await line("unshared").isVisible(), false);
+		assert.equal(await view("unshared").locator("#deck-sync").textContent(), "", "the composer says nothing about sharing either");
+		await remove("unshared");
+		// A host that does: open a local file the way a person does.
+		await open("shared", "open_editor", { title: "Shared line" });
+		const frame = view("shared");
+		await frame.locator('#deck-sync[data-state="shared"]').waitFor({ state: "attached", timeout: 30000 });
+		await line("shared").waitFor({ state: "visible" });
+		const picker = page.waitForEvent("filechooser", { timeout: 10000 });
+		await frame.locator("#deck-open").click();
+		await frame.getByRole("button", { name: "Open from device…" }).click();
+		await (await picker).setFiles(path.join(import.meta.dirname, "../../editor/test/fixtures/deck-files", "quarterly.opf.json"));
+		await frame.locator("#deck-status", { hasText: "Opened quarterly.opf.json" }).waitFor({ timeout: 30000 });
+		// While the footer shows the "Opened …" note the line gives way to it.
+		assert.equal(await line("shared").isVisible(), false);
+		await page.waitForFunction(() => window.hosts.shared.context.some((update) => update.structuredContent?.document?.name === "Quarterly review"), null, { timeout: 30000 });
+		await frame.locator('#deck-sync[data-state="shared"]').waitFor({ state: "attached", timeout: 30000 });
+		assert.equal(await line("shared").isVisible(), false, "still hidden while the note shows");
+		await frame.locator("#deck-status:empty").waitFor({ state: "attached", timeout: 20000 });
+		await line("shared").waitFor({ state: "visible" });
+		// It is the composer's sentence, from the same words, with the composer closed, and not a live region.
+		assert.equal(await frame.locator("#deck-request").isVisible(), false);
+		assert.equal(await frame.locator("#deck-shared-text").textContent(), await sentence("shared"));
+		assert.equal(await frame.locator("#deck-shared-text").textContent(), "The assistant can see this version");
+		assert.equal(await line("shared").evaluate((el) => el.closest("[aria-live], [role=status], [role=alert], [role=log]")), null, "an edit must not announce it");
+		// A frame as narrow as a phone: the line is whole and the page does not scroll sideways.
+		await page.evaluate(() => { document.querySelector('iframe[name="shared"]').style.width = "400px"; });
+		await page.waitForTimeout(300);
+		const fit = await frameOf("shared").evaluate(() => {
+			const box = document.getElementById("deck-shared").getBoundingClientRect();
+			return { scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth, left: box.left, right: box.right, width: box.width, cut: document.getElementById("deck-shared").scrollWidth > document.getElementById("deck-shared").clientWidth + 1, size: document.documentElement.dataset.size };
+		});
+		assert.ok(fit.scroll <= fit.client, `400px: the page is ${fit.scroll}px wide in a ${fit.client}px frame`);
+		assert.ok(fit.width > 0 && fit.left >= 0 && fit.right <= fit.client, `400px: the line spans ${fit.left} to ${fit.right} in a ${fit.client}px frame`);
+		assert.equal(fit.cut, false, "400px: the sentence is not cut off");
+		assert.equal(await line("shared").isVisible(), true);
+		await shoot("viewer-shared-line-400", "shared");
+		await remove("shared");
 	});
 
 	await run("the expand control asks straight from the click, says the truth when refused, and offers the way back", async () => {

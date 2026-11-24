@@ -2,7 +2,7 @@
 // down a badge column); a lone list of 2 to 8 one- or two-word entries draws Basic Process (OPF 0.35); steps keep the size they have without it.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { composeSlide, fitList, STEP_BADGE, STEP_BADGE_GAP, listNumberLabel } from '../dist/composition.js';
+import { composeSlide, fitList, LONE_DISPLAY_SIZES, STEP_BADGE, STEP_BADGE_GAP, listNumberLabel } from '../dist/composition.js';
 import { layouts } from './support/template-samples.mjs';
 
 const { process: processLayout, agenda } = layouts;
@@ -49,8 +49,9 @@ for (const direction of ['ltr', 'rtl']) {
       assert.equal(badge.list.path, entry.path);
       assert.equal(badge.list.number.value, index + 1);
     }
-    // The size guard: every step keeps the size it has without the badges, and nothing overflows.
-    assert.deepEqual(items.map((entry) => entry.text.fontSize), body(without).map((entry) => entry.text.fontSize));
+    // The size guard: every step keeps the size it has without the badges, and nothing overflows. LH-102: a plain layout body under half full
+    // grows on past a list's display size; a layout that may draw its body keeps LH-48's three steps (up to that display size) there.
+    assert.deepEqual(items.map((entry) => entry.text.fontSize), body(without).map((entry) => Math.min(entry.text.fontSize, LONE_DISPLAY_SIZES.list)));
     assert.deepEqual(findings(result), []);
     // The region's cell holds its badges.
     const region = result.regions.find((entry) => entry.name === 'body');
@@ -70,7 +71,7 @@ test('LH-07: steps that would get smaller under their badges draw as before (the
   const slide = { title: 'Six steps to a funded program', blocks: Array.from({ length: 6 }, (_, index) => step(`Step number ${index + 1} of the program`, long, index + 1)) };
   const result = composeSlide(slide, { layout: processLayout }), without = composeSlide(slide, { layout: plain(processLayout) });
   assert.equal(result.steps, undefined);
-  assert.deepEqual(body(result).map((entry) => entry.text.fontSize), body(without).map((entry) => entry.text.fontSize));
+  assert.deepEqual(body(result).map((entry) => entry.text.fontSize), body(without).map((entry) => Math.min(entry.text.fontSize, LONE_DISPLAY_SIZES.list)));
 });
 
 for (const direction of ['ltr', 'rtl']) {
@@ -93,8 +94,9 @@ for (const direction of ['ltr', 'rtl']) {
       assert.ok(direction === 'rtl' ? entry.textBox.x + entry.textBox.width <= badge.cx - badge.radius : entry.textBox.x >= badge.cx + badge.radius);
       if (index) assert.ok(badge.cy - badge.radius - (column.badges[index - 1].cy + column.badges[index - 1].radius) >= STEP_BADGE_GAP * 2 * badge.radius - 1e-6, 'badges stay apart');
     }
-    // The list keeps the size it grows to without the badges (LH-48), and the badges stay on the slide body.
-    assert.equal(list.text.fontSize, body(without)[0].text.fontSize);
+    // The list keeps at least the size it grows to without the badges (LH-48; LH-102 grows a short agenda on past the list display size,
+    // where the same list drawn as numerals keeps it), and the badges stay on the slide body.
+    assert.ok(list.text.fontSize >= body(without)[0].text.fontSize - 1e-6);
     assert.deepEqual(findings(result), []);
   });
 }
@@ -108,7 +110,7 @@ test('LH-07: an agenda is ordered by nature: an unnumbered list draws beside bad
   assert.ok(result.steps[0].badges.every((badge) => badge.list === undefined));
   assert.deepEqual(slide, before);
   assert.equal(body(result)[0].payload.numbering, undefined);
-  assert.equal(body(result)[0].text.fontSize, body(without)[0].text.fontSize);
+  assert.ok(body(result)[0].text.fontSize >= Math.min(body(without)[0].text.fontSize, LONE_DISPLAY_SIZES.list) - 1e-6);
 });
 
 test('LH-07: the unnumbered lists of one agenda count on from one list to the next', () => {
@@ -119,7 +121,7 @@ test('LH-07: the unnumbered lists of one agenda count on from one list to the ne
   // The count runs over the whole agenda: with a list that cannot take badges (one entry), the unnumbered lists keep their markers.
   const partial = composeSlide({ title: 'Agenda', blocks: [{ items: ['Results', 'Drivers', 'Plan'] }, { items: [{ text: 'Decisions', description: 'What we need today' }] }] }, { layout: agenda });
   assert.equal(partial.steps, undefined);
-  assert.deepEqual(body(result).map((entry) => entry.text.fontSize), body(without).map((entry) => entry.text.fontSize));
+  assert.deepEqual(body(result).map((entry) => entry.text.fontSize), body(without).map((entry) => Math.min(entry.text.fontSize, LONE_DISPLAY_SIZES.list)));
 });
 
 for (const direction of ['ltr', 'rtl']) {
@@ -135,7 +137,8 @@ for (const direction of ['ltr', 'rtl']) {
       assert.deepEqual([process.kind, process.region, process.path], ['process', 'body', list.path]);
       assert.equal(process.nodes.length, items.length);
       assert.equal(list.listColumns.length, items.length);
-      assert.ok(process.fontSize >= body(stepped)[0].text.fontSize - 1e-6, `${items.length} entries: ${process.fontSize} is under the steps' ${body(stepped)[0].text.fontSize}`);
+      // PR1: the numbered steps of up to five entries draw as a row that grows past the list's size, so the process is held to the list's role size.
+      assert.ok(process.fontSize >= Math.min(body(stepped)[0].text.fontSize, 28) - 1e-6, `${items.length} entries: ${process.fontSize} is under the steps' ${body(stepped)[0].text.fontSize}`);
       assert.deepEqual(result.diagnostics.filter((entry) => entry.code === 'arrangement-adapted'), []);
       assert.deepEqual(findings(result), []);
     }
@@ -150,7 +153,8 @@ test('0.35: other lone lists of a steps region draw as before: 9 entries, a thre
   for (const block of [{ items: ['Plan', 'Build the prototype', 'Ship'] }, { items: ['Plan', { text: 'Build', description: 'Two weeks' }, 'Ship'] }, { items: ['Plan', 'Build', 'Ship'], numbering: 'arabic' }]) {
     const result = composeSlide({ title: 'Steps', blocks: [block] }, { layout: processLayout });
     assert.equal(result.arrangements, undefined);
-    assert.deepEqual(result.steps?.map((entry) => entry.form), ['column']);
+    // PR1: a lone list of up to five steps is a row of badged columns.
+    assert.deepEqual(result.steps?.map((entry) => entry.form), ['row']);
   }
   // A short list beside a paragraph in the region: the blocks are steps side by side. (A short closing line is the foot band instead, LH-06,
   // and leaves the list alone in the region.)
@@ -173,7 +177,8 @@ test('0.35: a short list that Basic Process does not hold at its size draws as s
 test('LH-07: a list of longer entries in a steps region draws beside badges, numbered in arabic', () => {
   const slide = { title: 'Five stages of the rollout', blocks: [{ items: ['Agree scope and owners', 'Run two teams for six weeks', 'Measure completion and task time', 'Scale to every regional team'] }] };
   const result = composeSlide(slide, { layout: processLayout });
-  assert.deepEqual(result.steps?.map((entry) => entry.form), ['column']);
+  // PR1: four entries are a row of badged columns.
+  assert.deepEqual(result.steps?.map((entry) => entry.form), ['row']);
   assert.deepEqual(result.steps[0].badges.map((badge) => badge.label), ['1', '2', '3', '4']);
   // The list has no numbering of its own, so no badge claims one for it.
   assert.ok(result.steps[0].badges.every((badge) => badge.list === undefined));

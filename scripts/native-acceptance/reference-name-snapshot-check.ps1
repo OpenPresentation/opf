@@ -34,7 +34,7 @@ $result='[pscustomobject]@{referenceSwitch=[bool]$ReferenceNameEdit;snapshotSwit
 [IO.File]::WriteAllText($startupFile,(@($ast.ParamBlock.Extent.Text,$early[0].Extent.Text,($definitions -join "`n"),$setup,($startupStatements -join "`n"),$result)-join "`n"),[Text.UTF8Encoding]::new($false))
 $startup=@()
 foreach($mode in @('enabled','old-name-only','disabled','missing-new-switch','missing-new-request','false-new-request','new-without-reference','wrong-source')){
-    $control=[ordered]@{request=[ordered]@{};declaredSourceHash='58e87d163fc0fe74765e62d7f8e2d382155a75e81ad425099f352038888c9a80';actions=@([ordered]@{op='set-chart-series-name';slideIndex=1;chartName='OPF chart 1';seriesIndex=1;expectedName='Actual';newName='Actual edited'})};$startupArguments=@{OutputDirectory=$Output;InputPresentation=$startupInput;Worker=$true}
+    $control=[ordered]@{request=[ordered]@{};declaredSourceHash='e6d2f88d45672535ac4e42faa7665d31813e52f603205cafac69bf231624b4e1';actions=@([ordered]@{op='set-chart-series-name';slideIndex=1;chartName='OPF chart 1';seriesIndex=1;expectedName='Actual';newName='Actual edited'})};$startupArguments=@{OutputDirectory=$Output;InputPresentation=$startupInput;Worker=$true}
     if($mode -cnotin @('disabled','new-without-reference')){$control.request.referenceNameEdit=$true;$startupArguments.ReferenceNameEdit=$true}
     if($mode -cnotin @('disabled','old-name-only','missing-new-request')){$control.request.referenceNameSnapshots=$true}
     if($mode -cnotin @('disabled','old-name-only','missing-new-switch')){$startupArguments.ReferenceNameSnapshots=$true}

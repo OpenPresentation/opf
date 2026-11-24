@@ -6,8 +6,8 @@
       "bytes": 6952
     },
     "technical/content-payload-matrix.opf.json#1": {
-      "sha256": "cd6dfc4ebc40bfbaf499e9dfd347f39278bf4164aeb24e9a9977ca8b3a5b5c59",
-      "bytes": 4121
+      "sha256": "f6b7a1412cfe60c46496f02aadc8b37c3d61de62c2d4da6cca2327af06c41646",
+      "bytes": 5078
     },
     "technical/content-payload-matrix.opf.json#2": {
       "sha256": "4943fd67916645ce176ec19592f9d1cb476279c12887dea65ac2ccfcffb0e551",
@@ -42,8 +42,8 @@
       "bytes": 7455
     },
     "technical/content-payload-matrix.opf.json#10": {
-      "sha256": "aedf3dc40ca693653a2af6e341fec438163f62670c32a900c3f6c365ccb38376",
-      "bytes": 4649
+      "sha256": "3fad6bfe0916a808b27854be0cb28c65dd8e6402b1b35608cc09e3faa59f514b",
+      "bytes": 6454
     }
   }
 }
