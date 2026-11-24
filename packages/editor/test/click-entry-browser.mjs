@@ -42,6 +42,8 @@ const bundled = await build({stdin: {resolveDir: fileURLToPath(new URL('../', im
 const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jP0cAAAAASUVORK5CYII=';
 const wrapped = 'Wrapped subtitle  with double spaces and a tab\tinside and a long tail that must wrap over several lines of the subtitle placeholder because it is long, really long, so very long indeed';
 const bullet = 'This is a fairly long bullet that will need to wrap across several lines of the placeholder because it is long, indeed and more words follow to reach a third line';
+// A heading's lines are balanced (WI-4): "teams in" fits the first line and is drawn on the second.
+const balanced = 'Scale the pilot to four teams in January.';
 const design = {fontScheme: 'roboto', footer: {center: {text: 'Confidential footer'}}};
 const deck = {design, slides: [
   {title: 'Quarterly review of everything', subtitle: wrapped},
@@ -57,6 +59,8 @@ const deck = {design, slides: [
     {text: 'Right placeholder text'},
   ]},
   {title: 'Numbers', blocks: [{table: {columns: ['Name', 'Amount'], rows: [['alpha', 12], ['beta', 18]]}}]},
+  {layout: 'statement', title: balanced},
+  {layout: 'statement', title: balanced, design: {titleAlignment: 'center'}},
 ]};
 
 const browser = await chromium.launch({channel: process.platform === 'win32' ? 'msedge' : undefined});
@@ -418,6 +422,46 @@ try {
     assert.equal(await page.evaluate(() => cv.slideIndex), 0);
     done('reveal shows the slide and selects the nearest target');
   }
+
+  // A balanced heading: the input breaks its lines where the slide does, so a press on the input, Home and End, and text typed
+  // into it all act on the drawn lines. (The input wraps greedily on its own: "January." alone on its second line, where a press
+  // on the drawn "January" fell past the end of the text and the caret stopped after "in".)
+  await mount();
+  for (const index of [8, 9]) {
+    await slide(index);
+    const path = `slides.${index}.title`, second = balanced.indexOf('teams');
+    assert.deepEqual(await target(path).locator('text').evaluateAll((nodes) => nodes.map((node) => node.textContent.trim())),
+      ['Scale the pilot to four', 'teams in January.'], 'the fixture heading is drawn in balanced lines');
+    await pressAt(path, 'January', 3, 'left');
+    // The second and later presses land on the input itself, which is over the glyphs while it is edited.
+    for (const [needle, k, side] of [['January', 5, 'right'], ['teams', 2, 'left'], ['four', 1, 'right'], ['January', 0, 'left'], ['.', 0, 'right']])
+      await pressAt(path, needle, k, side);
+    await pressAt(path, 'January', 3, 'left');
+    await page.keyboard.press('ArrowRight');
+    assert.equal((await state()).start, balanced.indexOf('January') + 4, 'the caret moves through the second drawn line');
+    await page.keyboard.press('Home');
+    assert.equal((await state()).start, second, 'Home is the start of the drawn line');
+    await page.keyboard.press('End');
+    assert.equal((await state()).start, balanced.length, 'End is the end of the drawn line');
+    await page.keyboard.press('ArrowUp');
+    assert.ok((await state()).start < second, 'ArrowUp reaches the first drawn line');
+    // Typing redraws the slide; the input follows the new lines.
+    await page.keyboard.press('Control+End');
+    await page.keyboard.type(' Then review the result with every team lead.');
+    await paint(); await paint();
+    const lines = await target(path).locator('text').evaluateAll((nodes) => nodes.map((node) => node.textContent.trim()));
+    assert.ok(lines.length > 1, 'the longer heading still wraps');
+    const typed = flat(await page.evaluate(() => document.activeElement.value));
+    for (const line of lines.slice(1)) {
+      const word = line.split(' ')[0], at = await point(path, line, 0, 'left');
+      await page.mouse.click(at.x, at.y);
+      assert.equal((await state()).start, typed.indexOf(line), `a press on ${JSON.stringify(word)} is the start of its drawn line`);
+      await page.keyboard.press('Home');
+      assert.equal((await state()).start, typed.indexOf(line), `${JSON.stringify(word)} starts a line of the input too`);
+    }
+    await discard();
+  }
+  done('balanced heading: presses on the input, Home, End and typed text follow the drawn lines (start and center aligned)');
 
   // 17. Touch: a tap enters at the tapped character; a touch drag (scroll) does not.
   const touch = await browser.newContext({hasTouch: true, viewport: {width: 1440, height: 1200}});

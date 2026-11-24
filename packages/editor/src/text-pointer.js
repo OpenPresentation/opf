@@ -30,7 +30,7 @@ const rangeOf = (node) => {
  * Rendered text lines of a target with their source ranges, in document order. A line is a traced `text` element; its
  * segments are the traced `tspan`s inside it (tabs, script or direction runs) or the element itself.
  */
-function traceLines(target, path) {
+export function traceLines(target, path) {
   const lines = [];
   // A target, or the list of groups a path draws (both parts of a split "Topic: qualifier" title, LH-76).
   for (const node of [target].flat().filter(Boolean).flatMap((root) => [...root.querySelectorAll('text')])) {
@@ -45,7 +45,7 @@ function traceLines(target, path) {
 }
 
 /** Source offset of every UTF-16 index of a rendered line, or null when the line is not its traced source slice. */
-function alignLine(text, source, start, end) {
+export function alignLine(text, source, start, end) {
   const slice = source.slice(start, end), positions = [];
   let at = 0;
   for (let i = 0; i < text.length; i++) {
@@ -127,7 +127,9 @@ function mirrorOffset({doc, win, input, clientX, clientY}) {
   if (!parent || !host) return null;
   const box = input.getBoundingClientRect(), style = win.getComputedStyle(input), mirror = doc.createElement('div');
   mirror.setAttribute('aria-hidden', 'true');
-  mirror.style.cssText = `position:absolute;visibility:hidden;pointer-events:none;margin:0;padding:0;border:0;overflow:hidden;box-sizing:border-box;white-space:pre-wrap;overflow-wrap:break-word;left:${box.left - host.left}px;top:${box.top - host.top}px;width:${box.width}px`;
+  // The input's side padding narrows its lines to the drawn line breaks (input-wrap.js): the copy takes the same content box.
+  const padLeft = parseFloat(style.paddingLeft) || 0, padRight = parseFloat(style.paddingRight) || 0;
+  mirror.style.cssText = `position:absolute;visibility:hidden;pointer-events:none;margin:0;padding:0;border:0;overflow:hidden;box-sizing:border-box;white-space:pre-wrap;overflow-wrap:break-word;left:${box.left - host.left + padLeft}px;top:${box.top - host.top}px;width:${box.width - padLeft - padRight}px`;
   for (const name of ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'fontStretch', 'fontKerning', 'fontVariantLigatures', 'lineHeight', 'letterSpacing', 'wordSpacing', 'textAlign', 'tabSize', 'direction', 'textTransform', 'textIndent'])
     mirror.style[name] = style[name];
   const value = input.value;
@@ -137,7 +139,7 @@ function mirrorOffset({doc, win, input, clientX, clientY}) {
     const child = mirror.firstChild;
     if (!child) return 0;
     const range = doc.createRange(), flat = [], align = style.textAlign;
-    const lineStart = align === 'right' || align === 'end' ? box.right : align === 'center' ? (box.left + box.right) / 2 : box.left;
+    const lineStart = align === 'right' || align === 'end' ? box.right - padRight : align === 'center' ? (box.left + padLeft + box.right - padRight) / 2 : box.left + padLeft;
     const pitch = parseFloat(style.lineHeight) || parseFloat(style.fontSize) * 1.2;
     for (const part of graphemes(value)) {
       range.setStart(child, part.index);
