@@ -22,6 +22,17 @@ describe('fix: cells', () => {
     assert.deepEqual(named, {layout: 'auto', blocks: [{text: 'First'}, {text: 'Last'}]});
   });
 
+  test('an embedded layout "auto" that fails its schema is the removed layout for the cell repair too: the pins stay', () => {
+    // The validator offers remove-layout-auto for it (the record is embedded but invalid); the cell repair must not keep the layout and
+    // drop the cells, or the two fixes together lose the positions.
+    const input = {...deck({layout: 'auto', 'top:start': {text: 'First'}, 'bottom:end': {text: 'Last'}}), catalogs: {custom: {layouts: {auto: {name: 'Auto', regions: 'not regions'}}}}};
+    const findings = validate(input, {catalogs}).findings;
+    assert.ok(findings.some((item) => item.fixes?.some((entry) => entry.id === 'remove-layout-auto')), JSON.stringify(findings.map((item) => item.ruleId)));
+    const slide = fix(input, {catalogs}).document.slides[0];
+    assert.deepEqual(slide.blocks, [{region: 'top:start', text: 'First'}, {region: 'bottom:end', text: 'Last'}]);
+    assert.equal(slide.layout, undefined);
+  });
+
   test('a slide in cells without a layout: one block per key in reading order of the cells, each payload as written', () => {
     const input = deck({ id: 'snapshot', title: 'Operating snapshot', 'center+end': { id: 'trend', chart }, start: { text: 'Revenue grew.' } });
     const result = fix(input, { catalogs });

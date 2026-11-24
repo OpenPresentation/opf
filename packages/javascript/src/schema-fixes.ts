@@ -12,7 +12,8 @@ import { starterValue } from "./finding-text.js";
 import { schemaAtPath, schemaVariants } from "./schema-navigation.js";
 import { REMOVED_DESIGN_KEYS } from "./design-hints.js";
 import { cellsInReadingOrder, type GridCell, nearestGridCell } from "./grid-cells.js";
-import { resolveReference, type CatalogOptions } from "./catalog-refs.js";
+import type { CatalogOptions } from "./catalog-refs.js";
+import { resolvesToValidRecord } from "./record-validity.js";
 
 /** The most "Change to ..." fixes one enum finding carries. */
 const MAX_CHANGES = 5;
@@ -229,7 +230,7 @@ function cellKeysAsBlocks(slide: unknown, placed: boolean): { keys: string[]; bl
 
 function cellKeyRepair(document: unknown, slideSegments: string[], key: string, options?: CatalogOptions): { help: string; fixes: FindingFix[]; dropSuggestions: true } {
   const slide = readAt(document, slideSegments), near = nearestGridCell(key)!;
-  const layout = isRecord(slide) && slide.layout !== undefined && (slide.layout !== "auto" || !!resolveReference(document, "layouts", "auto", options));
+  const layout = isRecord(slide) && slide.layout !== undefined && (slide.layout !== "auto" || resolvesToValidRecord(document, "layouts", "auto", options));
   const example = near.cell ? `{ "region": "${near.cell}", ... }` : '{ "region": "top:start", ... }';
   const help = `OPF 0.35 removed the slide keys that placed content in the cells of a slide's 3 x 3 grid (the promoted regions): a block of the slide's blocks names its cell with "region", as ${example}. Blocks that name the same cell stack in it, and a slide places every block in a cell or none.`
     + (layout ? " This slide also has a layout, and a cell word names no region of a layout: the fix keeps the layout and moves each cell's content into a block without region, which binds to the layout's regions by kind, so the slide draws on its layout. To keep a grid of cells instead, remove layout and name the cells on the blocks." : "")

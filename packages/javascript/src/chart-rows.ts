@@ -39,6 +39,9 @@ export function sameKeys(a: readonly string[], b: readonly string[], language = 
   return a.every((key, index) => key.trim() !== '' && collator.compare(key.trim(), b[index]!.trim()) === 0);
 }
 
+// The spaces a category label breaks at, as the preview splits it (render charts.js BREAKABLE): white space except the no-break spaces.
+const UNBREAKABLE_SPLIT = /[^\S  ﻿]+/u;
+
 /** LH-115: the key texts (first column) of a table's body rows. */
 export function tableRowKeys(rows: readonly (readonly unknown[])[]): string[] {
   return rows.map(row => tableKeyText(row[0]));
@@ -65,9 +68,11 @@ export function alignBarRows(data: Extract<ResolvedChartData, {ok: true}>, box: 
   const top = rows[0]!.y, bottom = rows[rows.length - 1]!.y + rows[rows.length - 1]!.height;
   // The plot band the preview leaves (charts.js renderCategoryChart): under the header row, above the value tick labels.
   if (top < box.y + header - 0.5 || bottom > box.y + box.height - (options.hiddenAxis ? 0 : lineHeight) + 0.5 || bottom - top < rows.length * scale) return undefined;
-  // The plot's sides as the preview lays them out: the category gutter (its widest label, at most 30% of the chart) and the value labels.
+  // The plot's sides as the preview lays them out (charts.js, LH-120): the category gutter (its widest label, at most 30% of the chart, or
+  // up to 40% for a word that does not break) and the value labels.
   const labels = data.rows.map(row => row[0] === null || row[0] === undefined ? '' : String(row[0]).replace(/[\r\n]+/g, ' '));
-  const gutter = Math.min(box.width * 0.3, Math.max(0, ...labels.map(label => options.measure(label, fontPx))) + fontPx * 0.5);
+  const longestWord = Math.max(0, ...labels.flatMap(label => label.split(UNBREAKABLE_SPLIT).map(word => options.measure(word, fontPx)))) + fontPx * 0.5;
+  const gutter = Math.min(Math.max(box.width * 0.3, Math.min(box.width * 0.4, longestWord)), Math.max(0, ...labels.map(label => options.measure(label, fontPx))) + fontPx * 0.5);
   const values = data.rows.flatMap(row => row.slice(1).filter((value): value is number => typeof value === 'number').map(String));
   const labelRoom = options.hiddenAxis && options.labels ? Math.max(0, ...values.map(value => options.measure(value, fontPx) + fontPx * 0.5)) : 0;
   const left = pad + gutter + pad / 2, right = pad + fontPx + labelRoom;

@@ -8,8 +8,11 @@ import {toSvg} from '@openpresentation/opf-render';
 import {toPptx} from '../dist/index.js';
 
 const EMU = 9525, decoder = new TextDecoder();
-const data = {columns: ['Prototype', 'Minutes'], rows: [['Prototype A', 5.8], ['Prototype B', 6.7]]};
-for (const axisTitles of [{value: 'Minutes'}, {value: 'Minutes', category: 'Prototype'}]) {
+const short = {columns: ['Prototype', 'Minutes'], rows: [['Prototype A', 5.8], ['Prototype B', 6.7]]};
+// A category that is one long word: the preview gives a word that does not break up to 40% of the chart for its gutter (charts.js LH-120),
+// and core's rows (chart-rows.ts alignBarRows) now do too, so the export's plot starts where the preview's does.
+const long = {columns: ['Workstream', 'Weeks'], rows: [['Internationalization', 7], ['Search', 3], ['Export', 4]]};
+for (const [data, axisTitles] of [[short, {value: 'Minutes'}], [short, {value: 'Minutes', category: 'Prototype'}], [long, {value: 'Weeks'}], [long, {value: 'Weeks', category: 'Workstream'}]]) {
   const deck = {slides: [{title: 'Compare', chart: {type: 'bar', data, axisTitles}, table: data}]};
   const entries = unzipSync(await toPptx(deck));
   const xml = decoder.decode(entries['ppt/charts/chart1.xml']);

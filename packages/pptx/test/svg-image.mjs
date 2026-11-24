@@ -27,6 +27,27 @@ const NS = 'xmlns="http://www.w3.org/2000/svg"';
   assert.match(vector, /stop-color="#ff0000"/);
   assert.match(vector, /stop-color:#00ff00;stop-opacity:.5/);
 }
+// opf#1438: every CSS Color 4 HSL form a browser draws (with an alpha folded into stop-opacity, multiplied by the stop-opacity that
+// applies), a form a browser does not draw left as it is, and an SVG without an HSL stop byte-identical.
+{
+  const stopOf = stop => {
+    const bytes = new TextEncoder().encode(`<svg ${NS} viewBox="0 0 1 1"><linearGradient id="g">${stop}</linearGradient></svg>`);
+    const prepared = prepareSvg(bytes);
+    return prepared.bytes === bytes ? null : /<stop[^>]*>/.exec(new TextDecoder().decode(prepared.bytes))[0];
+  };
+  assert.equal(stopOf('<stop stop-color="hsla(120,100%,50%,.5)"/>'), '<stop stop-color="#00ff00" stop-opacity="0.5"/>');
+  assert.equal(stopOf('<stop stop-color="hsl(120 100% 50% / 0.5)"/>'), '<stop stop-color="#00ff00" stop-opacity="0.5"/>');
+  assert.equal(stopOf('<stop stop-color="hsl(120 100 50)"/>'), '<stop stop-color="#00ff00"/>');
+  assert.equal(stopOf('<stop stop-color="hsla(120,100%,50%,50%)" stop-opacity="0.5"/>'), '<stop stop-color="#00ff00" stop-opacity="0.25"/>');
+  assert.equal(stopOf('<stop style="stop-color:hsla(120,100%,50%,.5);stop-opacity:.5"/>'), '<stop style="stop-color:#00ff00;stop-opacity:0.25"/>');
+  assert.equal(stopOf('<stop stop-opacity="0.4" style="stop-color:hsl(120 100% 50% / 50%)"/>'), '<stop stop-opacity="0.4" style="stop-color:#00ff00;stop-opacity:0.2"/>');
+  assert.equal(stopOf('<stop stop-color="hsla(120,100%,50%,.5)" style="stop-opacity:.8"/>'), '<stop stop-color="#00ff00" style="stop-opacity:0.4"/>');
+  assert.equal(stopOf('<stop stop-color="hsl(0 100%, 50%)"/>'), null, 'commas mixed with spaces: not CSS, left as it is');
+  assert.equal(stopOf('<stop stop-color="hsl(0, 100, 50)"/>'), null, 'the comma form needs percentages');
+  assert.equal(stopOf('<stop stop-color="#123456" stop-opacity=".5"/>'), null, 'no HSL stop: the same bytes');
+  const sheet = new TextEncoder().encode(`<svg ${NS} viewBox="0 0 1 1"><style>.a{stop-color:hsla(10,100%,50%,.25)} .b{stop-color:hsl(10 100% 50%);stop-opacity:.5}</style><linearGradient id="g"><stop class="a"/></linearGradient></svg>`);
+  assert.match(new TextDecoder().decode(prepareSvg(sheet).bytes), /<style>\.a\{stop-color:#ff2b00;stop-opacity:0\.25\} \.b\{stop-color:#ff2b00;stop-opacity:\.5\}<\/style>/);
+}
 const SVG_URI = '{96DAC541-7B7A-43D3-8B79-37D633B846F1}';
 const read = async name => new Uint8Array(await readFile(new URL(`./fixtures/images/${name}`, import.meta.url)));
 const uriOf = (text, type = 'image/svg+xml') => `data:${type};base64,${Buffer.from(text).toString('base64')}`;

@@ -19,6 +19,7 @@ import {
 	type CatalogOptions,
 } from './catalog-refs.js';
 import { schemaEntries, schemas, type SchemaName } from './schemas.js';
+import { recordIssues } from './record-validity.js';
 import { catalogSchemaNames } from './catalog-schemas.js';
 import { validateAgainstSchema, type SchemaCheckResult, type ValidationIssue } from './schema-check.js';
 import { respellings, type ForeignObjectParams } from './union-errors.js';
@@ -467,12 +468,8 @@ const recordRuleId = (issue: ValidationIssue): string => issue.keyword === 'opf'
 /** `group/kind/id` of the embedded records that fail their companion schema. */
 type InvalidRecords = Set<string>;
 const recordKey = (group: string, kind: CatalogKind, id: string) => `${group}/${kind}/${id}`;
-/** Validate one record against its companion schema as a published file would be, with the identity it is keyed by. */
-function recordIssues(kind: CatalogKind, id: string, value: unknown) {
-	const schemaName = catalogSchemaNames[kind];
-	return validateAgainstSchema(object(value) ? { $schema: schemas[schemaName].$id, id, ...value } : value, kind);
-}
-/** Every record the document embeds, checked against its companion schema. */
+/** Every record the document embeds, checked against its companion schema (record-validity.ts: the test schema-fixes.ts shares, so a
+ * layout "auto" that resolves only to an embedded record failing here is the removed layout in both). */
 function embeddedRecordFindings(document: unknown, options: CatalogOptions, findings: Finding[]): InvalidRecords {
 	const invalid: InvalidRecords = new Set();
 	if (!object(document) || !object(document.catalogs)) return invalid;
@@ -490,6 +487,7 @@ function embeddedRecordFindings(document: unknown, options: CatalogOptions, find
 				if (object(record) && (Object.hasOwn(record, '$schema') || Object.hasOwn(record, 'id'))) continue; // the schema reports it
 				const validation = recordIssues(kind, id, record);
 				for (const issue of validation.errors) findings.push(issueFinding(issue, recordRuleId(issue), catalogSchemaNames[kind], path, 'document'));
+				// embeddedRecordInvalid's test (the record is not skipped above, so it is exactly `!validation.valid`).
 				if (!validation.valid) invalid.add(recordKey(group, kind, id));
 				// A catalog group claims its records come from its source; a registered copy of that source that lacks one says otherwise.
 				if (group === 'custom') continue;

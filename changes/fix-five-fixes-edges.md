@@ -1,0 +1,5 @@
+---
+type: fixed
+packages: [pptx, opf]
+---
+Edges of the five PowerPoint fixes (opf#1436 to opf#1438), output-changing for SVG pictures with translucent or number-only HSL gradient stops and for horizontal bar charts beside a table whose category is one long word: an SVG picture's `hsla()` stops, the slash-alpha form `hsl(H S L / A)` and the number-only form `hsl(H S L)` are written in sRGB as the opaque `hsl()` form already was (PowerPoint paints any HSL stop black), the alpha folded into the stop's `stop-opacity` and multiplied by the one that applies; commas mixed with spaces, which a browser does not draw, stay as written, and an SVG without an HSL stop keeps its bytes. A slide's legacy `layout: "auto"` that resolves only to an embedded record failing its schema is the removed layout for the cell repair too (one shared test with the validator's `remove-layout-auto`), so its grid positions are kept. A horizontal bar chart on a table's rows gives a category that is one long word up to 40% of the chart for its labels, as the preview does, so its plot starts where the preview's does.

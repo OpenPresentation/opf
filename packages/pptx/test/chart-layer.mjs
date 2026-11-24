@@ -15,14 +15,20 @@ const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: ''})
   const data = {columns: ['Prototype', 'Minutes'], rows: [['Prototype A', 5.8], ['Prototype B', 6.7]]};
   const plot = async axisTitles => {
     const deck = {slides: [{title: 'Compare', chart: {type: 'bar', data, axisTitles}, table: data}]};
-    const bytes = await toPptx(deck);
-    const doc = parser.parse(decoder.decode(unzipSync(bytes)['ppt/charts/chart1.xml']));
-    return doc['c:chartSpace']['c:chart']['c:plotArea']['c:layout']['c:manualLayout'];
+    const entries = unzipSync(await toPptx(deck));
+    const xml = decoder.decode(entries['ppt/charts/chart1.xml']);
+    const doc = parser.parse(xml);
+    // The chart frame's width (px) and the chart text size (px: hundredths of a point x 96 / 72 / 100).
+    const width = Number(/<p:graphicFrame>[\s\S]*?<a:ext cx="(\d+)"/.exec(decoder.decode(entries['ppt/slides/slide1.xml']))[1]) / 9525;
+    const fontPx = Number(/<c:txPr>[\s\S]*?<a:defRPr\b[^>]*\bsz="(\d+)"/.exec(xml)[1]) / 75;
+    return {...doc['c:chartSpace']['c:chart']['c:plotArea']['c:layout']['c:manualLayout'], width, fontPx};
   };
   const a = await plot({value: 'Minutes'}), b = await plot({value: 'Minutes', category: 'Prototype'});
   assert.equal(b['c:layoutTarget'].val, 'inner');
-  assert.ok(Number(b['c:x'].val) > Number(a['c:x'].val));
-  assert.ok(Number(b['c:w'].val) < Number(a['c:w'].val));
+  // The plot moves right by the band the preview takes for the rotated title (reserveAxisTitles: a line, fontPx x 1.5), and keeps its right edge.
+  const band = 1.5 * b.fontPx;
+  assert.ok(Math.abs((Number(b['c:x'].val) - Number(a['c:x'].val)) * b.width - band) < 0.2, `shift ${((Number(b['c:x'].val) - Number(a['c:x'].val)) * b.width).toFixed(2)} px, band ${band.toFixed(2)} px`);
+  assert.ok(Math.abs((Number(a['c:w'].val) - Number(b['c:w'].val)) * b.width - band) < 0.2, 'the plot narrows by the same band');
   assert.deepEqual([b['c:y'], b['c:h']], [a['c:y'], a['c:h']]);
 }
 const two = {columns: ['Quarter', 'Current', 'Baseline'], rows: [['Q1', 28, 25], ['Q2', 32, 27], ['Q3', 35, 29], ['Q4', 39, 31]]};
