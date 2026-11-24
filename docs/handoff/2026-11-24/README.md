@@ -6,12 +6,12 @@ Written by the release supervisor session on the owner's Windows computer. Two o
 
 **The release numbers.** 0.36.0 is the fixes release: every fix made since 0.35.1, cut from the Windows computer as soon as all of them are in. The release gate refuses a patch number, because opf#1425 declares drawing changes for four gallery layouts (`scripts/gallery-stability.mjs`, rule 4). The format changes the owner kept in his review ship as 0.37.0, built later from the Mac mini. The owner also said that no 0.36.1 is to be planned: every known fix goes into 0.36.0.
 
-**The product split.** In the owner's words:
+**The product split.** As the owner decided it, with his correction of the same day about the MCP addresses ("We can have just /mcp route; the mcp.openpresentation subdomain was a mistake."):
 
 - openpresentation.org: the open source, free OPF format site. No paid or hosted AI chat there; users bring their own API key or connect their own agent via MCP.
-- mcp.openpresentation.org: a free MCP about the OPF format, CLI, docs, examples and resources.
+- openpresentation.org/mcp: the free MCP about the OPF format, CLI, docs, examples and resources. It stays at the address it has today.
 - openpresentation.com: takes over the whole pptx.dev platform plan. Developer PaaS/SaaS around OPF: presentations, documents, compute, AI, storage, analysis, retrieval, brand kits.
-- mcp.openpresentation.com: MCP for that PaaS/SaaS and the user's own resources, files and data (OAuth lives here).
+- openpresentation.com/mcp: the MCP for that PaaS/SaaS and the user's own resources, files and data (OAuth lives here).
 - storyd.ai builds on openpresentation.com, not pptx.dev.
 - pptx.dev becomes a simple microsaas for creating PPTX files in a browser tab, with OPF under the covers.
 - Schema IDs stay on openpresentation.org.
@@ -93,11 +93,10 @@ Keynote checks: the negative-bar fix that landed in opf#1425 has not been opened
 ## Decisions the owner still has to make
 
 1. Rounds 2 and 3 of the review and the three studies (for 0.37.0).
-2. The free MCP's address: when it moves to mcp.openpresentation.org, and whether the address people have already added (`https://www.openpresentation.org/mcp`) keeps answering. The DNS record and the route are his to set.
-3. The platform: which repository becomes openpresentation.com, and what pptx.dev keeps of its accounts and sign-in.
-4. The GitHub app's permission on the three sites: each site's "Merge OPF bump" step fails with HTTP 403, so the 0.35.1 bumps were merged by hand.
-5. The request texts and answers from STORYD, to confirm the shapes that differ from its requests.
-6. A session on the Mac for the Keynote checks, and one on the Windows computer whenever a PowerPoint pass is owed.
+2. The platform: which repository becomes openpresentation.com, and what pptx.dev keeps of its accounts and sign-in.
+3. The GitHub app's permission on the three sites: each site's "Merge OPF bump" step fails with HTTP 403, so the 0.35.1 bumps were merged by hand.
+4. The request texts and answers from STORYD, to confirm the shapes that differ from its requests.
+5. A session on the Mac for the Keynote checks, and one on the Windows computer whenever a PowerPoint pass is owed.
 
 ## How to resume
 
