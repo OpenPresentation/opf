@@ -514,6 +514,30 @@
           "candidateHelperSha256": "3baf818c1cfea66a9917aae8d32c0904bc018aa35f2437210a26728e397f99a1"
         },
         "scope": "Exact bare toPptx caller; every old archive hash, byte length, part count and applicable native-slide digest reproduced before generating a review candidate."
+      },
+      {
+        "baselineExportRef": "6c3ffbfe515a3f1698dc00a96ef3cb1a20a2c13e",
+        "baselineBuildHead": "6c3ffbfe515a3f1698dc00a96ef3cb1a20a2c13e",
+        "candidateHead": "7040ef028ffcabb16ecac4156e7e8731dfce7c9a",
+        "exportCaller": {
+          "api": "toPptx",
+          "input": "structuredClone(entry.deck)",
+          "options": "omitted",
+          "catalogs": "not registered"
+        },
+        "evidence": {
+          "directory": "C:\\opf-work\\c34\\five-fixes\\rr54-review",
+          "reviewFile": "review.json"
+        },
+        "sourceEvidence": {
+          "directory": "C:\\opf-work\\c34\\five-fixes\\rr54-review",
+          "baselineSourceTrees": "100644 blob 6651e2d00acc22100451b54ec15335e941d8b162\tpackage.json\n040000 tree 447e902948a48ace74350f734174e74a8cbecfbe\tpackages/gallery\n040000 tree 4364b08c77ead8bdc14e8863822d6c9516ee5369\tpackages/javascript\n040000 tree 5417cbca5bf930143f20e296cd9e913e9daee6a3\tpackages/pptx\n040000 tree dc2734c208fbc8c29100fe62db917b689b53a87a\tpackages/render\n100644 blob 936040bf412295e25d9899d2cc5f16af9d913a10\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree 1a518fd440a8a369947f1a359b2b0be96cd03c5d\tspec",
+          "candidateSourceTrees": "100644 blob 6651e2d00acc22100451b54ec15335e941d8b162\tpackage.json\n040000 tree 447e902948a48ace74350f734174e74a8cbecfbe\tpackages/gallery\n040000 tree 2a95daa91b99a4689f8c6722ddea9f99ac8e1b56\tpackages/javascript\n040000 tree 59e4c62cd58fb59f4fa0b51a4b721f9f5df76a35\tpackages/pptx\n040000 tree dc2734c208fbc8c29100fe62db917b689b53a87a\tpackages/render\n100644 blob 936040bf412295e25d9899d2cc5f16af9d913a10\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree 1a518fd440a8a369947f1a359b2b0be96cd03c5d\tspec",
+          "fixtureSha256": "7bf2c6a3dbbd34c9c02c4a62b42566f0b9867fa0a11237683301d4e57e58a7aa",
+          "reviewerSha256": "9a2a066909e61c6982f5869d098b8e23ae82f4ecc7416416734ef10cecadbd63",
+          "candidateHelperSha256": "3baf818c1cfea66a9917aae8d32c0904bc018aa35f2437210a26728e397f99a1"
+        },
+        "scope": "Exact bare toPptx caller; every old archive hash, byte length, part count and applicable native-slide digest reproduced before generating a review candidate."
       }
     ]
   },
@@ -1750,12 +1774,12 @@
           }
         ]
       },
-      "sha256": "94b7fe4c951bb07060c69ac2a52beaafbc6d982790c855b0e302f1f1f01195ca",
+      "sha256": "458ff90cd86b97d1b04d6ad15b040767e18c782b6bf4cf985dc946abeb5af5f7",
       "previousSha256": "3bc08c644ba443a9fde975c8f9cf39ffa44a4cd0f779c896a7be2ac64332ea9b",
       "rr81PreviousSha256": "a27ec34c283f59e04ba7ae02b885de0cacc7e0c46191079c6947f699a2c542de",
       "rr20PreviousSha256": "3929f43b2bcbfc72ce95f06e0e5604bf6fa3fbad145f6e9621d614781f3bf4b8",
-      "rr20PartCount": 30,
-      "rr20Bytes": 25906,
+      "rr20PartCount": 31,
+      "rr20Bytes": 26360,
       "rr90PreviousSha256": "07307458877dae4b4be2038c88e5dae5f0efff27febfb16ab6ec021f9eab1f0c",
       "rr90PreviousBytes": 25839,
       "wi5PreviousSha256": "89646e3b606f2fe238c6fbfea75e9f48ac25c890097fedbb8c90130efbb83525",
@@ -1822,6 +1846,12 @@
           "bytes": 25900,
           "partCount": 30,
           "reviewIndex": 11
+        },
+        {
+          "sha256": "94b7fe4c951bb07060c69ac2a52beaafbc6d982790c855b0e302f1f1f01195ca",
+          "bytes": 25906,
+          "partCount": 30,
+          "reviewIndex": 12
         }
       ]
     },
@@ -1852,12 +1882,12 @@
           }
         ]
       },
-      "sha256": "e2c5f5fd117b8f3fdc0804d2728d60a5c8f3507042de8fec60e379d7d9ed9419",
+      "sha256": "951df5b09178127289c32b09be434fa63063c950bbed9d3ce7b93ed2661aaf83",
       "previousSha256": "ce86707121a169b6fb13781f87acb279fd29ce2740640c6ba4f0eb6ea7283af5",
       "rr81PreviousSha256": "8e216e257f4c9b02bf2e51bf33566ea949dd95d5b84f2aa5b203a9569d8b249c",
       "rr20PreviousSha256": "edb9d38c631a7eca1cc37f10434b54a86313b36369e2380c0645782fcb725bbd",
-      "rr20PartCount": 30,
-      "rr20Bytes": 25724,
+      "rr20PartCount": 31,
+      "rr20Bytes": 26149,
       "rr90PreviousSha256": "90dc328f75ca4abae5a06c1ee36992f23ec891cd1748535c61666e835f66a726",
       "rr90PreviousBytes": 25671,
       "wi5PreviousSha256": "0db7a20e4f5a658fc9ec2fc19b7cf8f38f14058786b0a7e1a2c4536bd7ffbf41",
@@ -1922,6 +1952,12 @@
           "bytes": 25718,
           "partCount": 30,
           "reviewIndex": 11
+        },
+        {
+          "sha256": "e2c5f5fd117b8f3fdc0804d2728d60a5c8f3507042de8fec60e379d7d9ed9419",
+          "bytes": 25724,
+          "partCount": 30,
+          "reviewIndex": 12
         }
       ]
     },
@@ -2062,12 +2098,12 @@
           }
         ]
       },
-      "sha256": "ad61c1adb09ffa839c4e3e52067db6381221c4824529576b64684a3202b3ce97",
+      "sha256": "69043629555ff9ae4492bcf1b09e7413f5f16571b58ec5620c1ce2d5939fa62b",
       "previousSha256": "e37430a5255bbcd16dfdcb28250a692d0cde3c770a9c8471e8f80ed195e32575",
       "rr81PreviousSha256": "ad90e489c98bdd271b661bdd74971c0e65c297c9c6ec5ee019d0c4537c6adc5c",
       "rr20PreviousSha256": "a027fa049d3f679a71d9451c8fda5679c07eea9394e00fdba99744fd9b5ed9e8",
-      "rr20PartCount": 30,
-      "rr20Bytes": 25738,
+      "rr20PartCount": 31,
+      "rr20Bytes": 26170,
       "rr90PreviousSha256": "bb70b79eb88c74dc52ff83276047b6dccc227f162366ca9c6515a0850951e9f9",
       "rr90PreviousBytes": 25682,
       "wi5PreviousSha256": "538b7d98c2b3e3120d39c0cd98a6f08708decc67a3575108321539dfed94fac8",
@@ -2132,6 +2168,12 @@
           "bytes": 25733,
           "partCount": 30,
           "reviewIndex": 11
+        },
+        {
+          "sha256": "ad61c1adb09ffa839c4e3e52067db6381221c4824529576b64684a3202b3ce97",
+          "bytes": 25738,
+          "partCount": 30,
+          "reviewIndex": 12
         }
       ]
     },
