@@ -3,16 +3,17 @@
 <g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Six weeks to an informed decision</text></g>
 <g><text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="175.48">Test with two teams for six weeks. Measure task completion and time </text>
 <text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="209.64">before deciding what to scale.</text></g>
-<g><line aria-hidden="true" stroke="#CCCCCC" stroke-width="3" x1="251.73333333333332" x2="1028.2666666666667" y1="396.26" y2="396.26"/>
-<circle aria-hidden="true" cx="251.73333333333332" cy="396.26" fill="#2874A6" r="9"/>
-<circle aria-hidden="true" cx="640" cy="396.26" fill="#2874A6" r="9"/>
-<circle aria-hidden="true" cx="1028.2666666666667" cy="396.26" fill="#2874A6" r="9"/>
-<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="500" style="white-space:pre" text-anchor="middle" x="251.733" xml:space="preserve" y="375.1">Week 1</text></g></g>
-<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="32" font-weight="600" style="white-space:pre" text-anchor="middle" x="251.733" xml:space="preserve" y="443.26">Baseline</text></g></g>
-<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="500" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="375.1">Weeks 2–5</text></g></g>
-<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="32" font-weight="600" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="443.26">Pilot</text></g></g>
-<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="500" style="white-space:pre" text-anchor="middle" x="1028.267" xml:space="preserve" y="375.1">Week 6</text></g></g>
-<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="32" font-weight="600" style="white-space:pre" text-anchor="middle" x="1028.267" xml:space="preserve" y="443.26">Review and decide</text></g></g></g>
+<g><line aria-hidden="true" stroke="#CCCCCC" stroke-width="7.636363636363637" x1="251.73333333333332" x2="1028.2666666666667" y1="358.32613333333336" y2="358.32613333333336"/>
+<circle aria-hidden="true" cx="251.73333333333332" cy="358.32613333333336" fill="#2874A6" r="22.90909090909091"/>
+<circle aria-hidden="true" cx="640" cy="358.32613333333336" fill="#2874A6" r="22.90909090909091"/>
+<circle aria-hidden="true" cx="1028.2666666666667" cy="358.32613333333336" fill="#2874A6" r="22.90909090909091"/>
+<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="45.813" font-weight="500" style="white-space:pre" text-anchor="middle" x="251.733" xml:space="preserve" y="310.065">Week 1</text></g></g>
+<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="56" font-weight="600" style="white-space:pre" text-anchor="middle" x="251.733" xml:space="preserve" y="452.508">Baseline</text></g></g>
+<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="45.813" font-weight="500" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="310.065">Weeks 2–5</text></g></g>
+<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="56" font-weight="600" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="452.508">Pilot</text></g></g>
+<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="45.813" font-weight="500" style="white-space:pre" text-anchor="middle" x="1028.267" xml:space="preserve" y="310.065">Week 6</text></g></g>
+<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="56" font-weight="600" style="white-space:pre" text-anchor="middle" x="1028.267" xml:space="preserve" y="452.508">Review and </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="56" font-weight="600" style="white-space:pre" text-anchor="middle" x="1028.267" xml:space="preserve" y="520.828">decide</text></g></g></g>
 <g><text fill="#000000" font-family="Aptos, sans-serif" font-size="32" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="613.6">Keep the scope narrow, collect feedback weekly and give each </text>
 <text fill="#000000" font-family="Aptos, sans-serif" font-size="32" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="652.64">decision a named owner.</text></g>
 <g/>

@@ -29,7 +29,7 @@ const wire=e=>Buffer.from(e.stages.map(row=>JSON.stringify(row)).join('\n')+'\n'
 // test-fixtures/reference-name/reference-native-lines.pptx; its PowerPoint run is recorded under test-fixtures/reference-name/measurement
 // and checked by reference-name-measurement.test.mjs). Any export change fails here: re-measure in PowerPoint and re-seal with
 // scripts/native-acceptance/reference-name-reseal.mjs (see its header) instead of widening this assertion.
-const CURRENT_EXPORT=Object.freeze({bytes:124991,sha256:'58e87d163fc0fe74765e62d7f8e2d382155a75e81ad425099f352038888c9a80'});
+const CURRENT_EXPORT=Object.freeze({bytes:125008,sha256:'4dcab5dfa893a5223de20ef7c7ec07a363a00f14cf52916e9b2c16c1859003f1'});
 let current;
 function currentFixture(){current??=(async()=>{
  const deck=structuredClone(source),renderOptions={catalogs:[gallery]},fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck,renderOptions});await fonts.ensure(deck,{renderOptions});

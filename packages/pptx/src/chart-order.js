@@ -26,7 +26,7 @@ export const SERIES_SEQUENCES = Object.freeze({
 
 // The top-level children of an element body, each with the whitespace before it: [{name, text}], or null when the body is
 // not a plain run of elements (text content, comments or an unbalanced tag), which is then left alone.
-function children(body) {
+export function children(body) {
   const out = [];
   const tag = /<(\/?)([A-Za-z_][\w.:-]*)\b[^>]*?(\/?)>/g;
   let depth = 0, start = 0, name = null, match;

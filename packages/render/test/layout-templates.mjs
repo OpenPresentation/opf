@@ -81,7 +81,11 @@ for (const { keys, deck } of decks) {
         const pictures = geometry.items.filter((other) => other.region === item.region && other.field === 'image');
         const union = pictures.map((other) => other.box).reduce((a, b) => ({ x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), width: Math.max(a.x + a.width, b.x + b.width) - Math.min(a.x, b.x), height: Math.max(a.y + a.height, b.y + b.height) - Math.min(a.y, b.y) }));
         const cell = pictures.length > 1 ? union : item.box, edges = [cell.x <= 0.01, cell.y <= 0.01, cell.x + cell.width >= geometry.width - 0.01, cell.y + cell.height >= geometry.height - 0.01].filter(Boolean).length;
-        assert.ok(edges >= 2, `${key}: ${item.path} bleeds to the slide edge (${JSON.stringify(cell)})`);
+        // IM1: a lone picture the region shows whole (its proportions known, not cropped to cover) keeps the margins instead, inside the
+        // region's own area above the footer.
+        const whole = pictures.length === 1 && (item.image.box.width < item.box.width - 0.01 || item.image.box.height < item.box.height - 0.01);
+        if (whole) assert.ok(item.box.x >= geometry.contentBox.x - 0.01 && item.box.x + item.box.width <= geometry.contentBox.x + geometry.contentBox.width + 0.01, `${key}: ${item.path} keeps the margins`);
+        else assert.ok(edges >= 2, `${key}: ${item.path} bleeds to the slide edge (${JSON.stringify(cell)})`);
         assert.ok(item.box.x >= region.box.x - 0.01 && item.box.y >= region.box.y - 0.01 && item.box.x + item.box.width <= region.box.x + region.box.width + 0.01 && item.box.y + item.box.height <= region.box.y + region.box.height + 0.01, `${key}: ${item.path} inside its bled region`);
       }
       // A list in columns: every column core broke it into is drawn in its own box, with every item exactly once and the

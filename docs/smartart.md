@@ -24,8 +24,8 @@ one list of one level (no nested entries, no descriptions, no icons, no `numberi
 | Design (`design`) | Pyramid (1 to 8 entries) | Matrix |
 | --- | --- | --- |
 | PowerPoint's (`smartart`), where the PPTX export can write it as live SmartArt (the [domain](#the-domain)) | Basic Pyramid: level i of n is H/n tall and W·i/n wide, the apex a triangle, the entries centered on their levels | Basic Matrix, for exactly four entries: four rounded squares in a centered square over a diamond, the entries centered |
-| OPF's own (`opf`), where PowerPoint's does not hold the entries at the list's size or lies outside the domain | a stepped pyramid of rounded bars at the start of the region (level i is i/n of the steps' width), each entry beside its level in one column, start-aligned | four rounded quadrants filling the region two by two (rectangular where the region is), the entries centered |
-| A grid of cards (`cards`), for a matrix of other than four entries | — | one card per entry in the card neutral, in the grid that holds the text largest (one column of wide cards, or a balanced grid), start-aligned; reported as `opf/arrangement-adapted` (info): a matrix needs four entries |
+| OPF's own (`opf`), where PowerPoint's does not hold the entries at the list's size or lies outside the domain | a stepped pyramid of rounded bars (level i is i/n of the steps' width, each level at most 0.3 of the widest bar tall and the levels in the middle of the region's height), each entry beside its level in one column, start-aligned; the bars widen into the room the labels leave until the bars, two gaps and the widest label span 90% of the region (at most 1.6 times the region's height), and the group sits in the middle of the region (IP1, PY1: the layout recipe's `barWidth` and `inset`) | four rounded quadrants filling the region two by two (rectangular where the region is), the entries centered |
+| A grid of cards (`cards`), for a matrix of other than four entries | — | one card per entry in the matrix's primary paint, its entry centered as in the four quadrants, in the grid that holds the text largest and, at one size, whose cards are nearest 1.25 times as wide as tall (MX1: three entries two and one, not three wide strips); reported as `opf/arrangement-adapted` (info): a matrix needs four entries |
 
 When none of them holds the entries, or the list has a shape the arrangement does not draw (nested entries, descriptions, icons,
 numbering, more than 8 levels or 8 cards), the list draws as a list and `opf/arrangement-adapted` (info) says why. A list that no design
@@ -89,7 +89,14 @@ An org chart's assistant (a chief of staff, an executive assistant) is an entry 
 ] }
 ```
 
-Use `venn` with one flat list of one to seven set labels. One to four circles hold their labels inside. Five to seven sets use enlarged editable circles with outside labels fitted from the actual font measurements. This OPF adaptation preserves circle overlaps and set order while filling more of the body at the previous type size or larger. Basic Venn native measurements remain a separate, unqualified live reference. When the overlap cannot keep every label readable, the complete set labels use opaque cards or a list with `opf/arrangement-adapted`. Venn fallback lists try a bounded whole-word reading measure of70characters at the retained type size. If the complete list cannot fit that measure in the body, `opf/text-overflow` reports the refusal; strict composition rejects it. Explicit pagination or shorter labels resolves that limit. Entry order identifies the sets; the diagram implies no numeric overlap values.
+PowerPoint's tree is scaled as a whole to its region, so a wide or deep tree leaves most of the region empty (a three-level org chart in
+under half the width) and its fixed-proportion boxes may not hold a label of about twenty characters or a fourth level at the list's size.
+OPF then draws its own tree (HI1, H2: `opfTreeGeometry`): the same positions, rows and connectors scaled across and down on their own, every
+node as wide as the region allows and up to 0.75 of its width tall (0.6 of a row's step), the tree centered in the region; a hierarchy
+keeps its rear and front cards. PowerPoint's tree stays where it covers half of the region or more and holds the labels at least as large.
+A root with many children is still limited by the region's width: its row of nodes reads at the size the widest label fits across.
+
+Use `venn` with one flat list of one to seven set labels. One to four circles hold their labels inside. Five to seven sets use enlarged editable circles with outside labels fitted from the actual font measurements, and so do four sets whose labels the circles do not hold (VEN-1: one label of eight letters), before cards and the list. This OPF adaptation preserves circle overlaps and set order while filling more of the body at the previous type size or larger. Basic Venn native measurements remain a separate, unqualified live reference. When the overlap cannot keep every label readable, the complete set labels use opaque cards or a list with `opf/arrangement-adapted`. Venn fallback lists try a bounded whole-word reading measure of70characters at the retained type size. If the complete list cannot fit that measure in the body, `opf/text-overflow` reports the refusal; strict composition rejects it. Explicit pagination or shorter labels resolves that limit. Entry order identifies the sets; the diagram implies no numeric overlap values.
 
 ```json
 { "layout": "venn", "title": "Three conditions for a useful pilot", "items": ["Clear scope", "Evidence", "Shared goal"] }
@@ -139,7 +146,11 @@ nodes of each in 20 frames from 250 x 120 to 800 x 540 pt; core places every nod
 but those where PowerPoint's 8 pt test letter did not fit a node (a node a few points tall), whose text made the node grow.
 
 PowerPoint's design is drawn where it holds the entries at the list's size and lies in the [domain](#the-domain); else OPF's own design
-of the arrangement, filling the region:
+of the arrangement, filling the region. PowerPoint's chevrons and vertical flow are also set aside where they cover under half of their region (C03, VPR-1:
+four one-word chevrons are a strip a quarter of the body high, three one-word boxes of a vertical flow a column 40% of its half wide)
+and one of OPF's rows or columns holds the entries at least as large: OPF's then fills the region and is exported as its own shapes
+(live SmartArt only within the domain of OPF's layouts below). Among OPF's designs that hold the text at one size, the one that covers
+more of the region is kept there (two rows of two chevrons rather than a strip of four):
 
 OPF's design keeps PowerPoint's proportions, so the two read as one family: a chevron 0.9 widths after the last (its point at
 most 0.2 of its width deep), a box 0.4 widths after the last with PowerPoint's arrow (0.212 x 0.248 of a box's width) in the room, a
@@ -149,11 +160,11 @@ is one size for every node, the largest from 1.5 times the list's role size down
 then every node takes the height that text needs with its margins (0.15 em above and below a box's text; PowerPoint's proportion at
 least: a chevron 0.4 of its width, a box 0.6, a vertical box 1/1.8), and the whole is centered in the region. Only where none of these
 holds the entries at the list's size does OPF draw a compact form of the same design (rooms of two gaps, the arrow 0.6 of the
-room, a chevron's point 0.12 of its width deep, no least height), so a list is left a list only when no design holds it. Every row spans the region: a row of fewer entries widens them (a
-column of fewer lengthens them).
+room, a chevron's point 0.12 of its width deep, no least height), so a list is left a list only when no design holds it. Every row of a flow spans the region: a row of fewer entries widens them (a
+column of fewer lengthens them). Every chevron is as wide as the fullest row's (C03), so a shorter last row stops before the right edge, and chevrons never wrap to a row of one chevron (five stages are 3 + 2, six 3 + 3, seven 3 + 2 + 2 or 4 + 3, eight 4 + 4 or 3 + 3 + 2, whichever holds the text largest). One step of a vertical flow is OPF's box of PowerPoint's proportion, at most 0.6 of the region wide, not PowerPoint's box filling the frame (VPR-1).
 
 - **chevrons**: each row a run of chevrons, left to right; a wrapped row breaks after a chevron's point and the next row starts again
-  at the left, full width, so the points carry the order;
+  at the left, so the points carry the order;
 - **flow**: the rows snake: the second runs right to left under the first, joined by a down arrow under the end where the first stops,
   the third runs left to right again, and so on;
 - **vertical flow**: the columns snake the same way: the second runs bottom to top, joined by a right arrow at the bottom.

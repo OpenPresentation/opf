@@ -123,6 +123,18 @@ export function applyDataLabels(xml, info) {
   return groupLevel;
 }
 
+/**
+ * opf#1415: every data label of a classic chart part on one line, as the preview draws it. The preview never wraps a chart's data
+ * labels: a value label, an end label ("31 Self-serve"), a slice or ring name and a reference label each take the width of their text
+ * (an authored line break in a reference label is its own paragraph). PowerPoint wraps an automatic label at its own width limit, so a
+ * series name at the end of a line in a small chart broke onto two lines. Every text body inside a c:dLbls (the c:txPr of each label
+ * set and point, and the c:tx c:rich of a label with its own text) gets `wrap="none"` on its a:bodyPr, unless it names a wrap of its
+ * own. Axis titles, tick labels, the legend and the chart title keep their bodies.
+ */
+export function noWrapDataLabels(xml) {
+  return xml.replace(/<c:dLbls>[\s\S]*?<\/c:dLbls>/g, block => block.replace(/<a:bodyPr\b([^>]*?)(\/?)>/g, (body, attributes, close) => /\bwrap="/.test(attributes) ? body : `<a:bodyPr${attributes} wrap="none"${close}>`));
+}
+
 // ---------------------------------------------------------------------------
 // Import (classic)
 

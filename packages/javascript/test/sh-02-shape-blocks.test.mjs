@@ -161,6 +161,17 @@ test('validation: shape findings and shape-only keys', () => {
   assert.deepEqual(ruleIds(deck([{ shape: 'roundRect', adjust: { adj1: 0.3, adj: 0.9 } }])),
     [['opf/shape-adjust-unknown', '/slides/0/blocks/0/adjust/adj1'], ['opf/shape-adjust-range', '/slides/0/blocks/0/adjust/adj']]);
   assert.deepEqual(ruleIds(deck([{ path: 'M0 0 L1 1', adjust: { adj: 0.2 } }])), [['opf/shape-adjust-unknown', '/slides/0/blocks/0/adjust/adj']]);
+  // A path written from 0 to 100 (or relative, or as an object without a viewBox) is reported once; its own viewBox, a small overshoot
+  // and a preset are not.
+  const unit = (path) => ruleIds(deck([{ path }])).filter(([rule]) => rule === 'opf/shape-path-units');
+  assert.deepEqual(unit('M0 0 L100 0 L50 100 Z'), [['opf/shape-path-units', '/slides/0/blocks/0/path']]);
+  assert.deepEqual(unit('M10 10 l80 0 l-40 80 z'), [['opf/shape-path-units', '/slides/0/blocks/0/path']]);
+  assert.deepEqual(unit({ d: 'M0 0 H100 V100 Z' }), [['opf/shape-path-units', '/slides/0/blocks/0/path']]);
+  assert.deepEqual(unit('M0 0 C0 0 24 24 0 24 Z'), [['opf/shape-path-units', '/slides/0/blocks/0/path']]);
+  assert.deepEqual(unit({ d: 'M0 0 L100 0 L50 100 Z', viewBox: '0 0 100 100' }), []);
+  assert.deepEqual(unit('M0 0 L1 0 L0.5 1 Z'), []);
+  assert.deepEqual(unit('M-0.2 0.5 L1.3 -0.1 L1.3 1.1 Z'), []);
+  assert.deepEqual(unit('M0 0 L3 0 L3 1 Z'), []);
   assert.deepEqual(ruleIds(deck([{ shape: 'rect', hidden: true, link: 'https://example.com' }])), [['opf/shape-link-hidden', '/slides/0/blocks/0/link']]);
   assert.deepEqual(ruleIds(deck([{ text: 'x', fill: 'accent1', rotate: 10 }])),
     [['opf/shape-option-unsupported-payload', '/slides/0/blocks/0/fill'], ['opf/shape-option-unsupported-payload', '/slides/0/blocks/0/rotate']]);

@@ -1,5 +1,6 @@
 // LH-64 and LH-04: how a row of cards stands in a template region. Body-text cards in a bottom- or middle-anchored region hug a
-// short text and the row centres; very unequal texts start at the card's top; a heading line, a picture or a metric keeps the
+// short text and the row centres, a shorter text in the middle of its card (COL-3); very unequal texts start at the card's top
+// under a bottom anchor and center under a middle one; a heading line, a picture or a metric keeps the
 // anchor (LH-22). Top-anchored cards hug their content with one height per row. Short bodies are checked with `fill: false`: LH-48
 // grows an under-filled body and centers it (lone-fill.test.mjs).
 import assert from 'node:assert/strict';
@@ -80,4 +81,36 @@ test('top anchor: cards hug their content with one height per row; a chart or pi
   const picture = { src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', alt: 'A square' };
   const mixed = composeSlide({ title: 'Cards', blocks: [{ text: 'Two teams.' }, { image: picture }] }, { layout: grid('top') });
   for (const item of cards(mixed)) assert.ok(Math.abs(bottomOf(item.frameBox) - bottomOf(body(mixed))) < 1, `${item.path}: a row with a picture fills its cell`);
+});
+
+test('COL-3: under a middle anchor, very unequal texts center in their filled cards instead of starting at the top', () => {
+  const uneven = composeSlide({ title: 'Cards', blocks: [{ text: `${sentence} ${sentence} ${sentence}` }, { text: 'Two teams.' }, { text: 'Six weeks.' }] }, { layout: columns('middle'), recompose: false });
+  const items = cards(uneven);
+  for (const item of items.slice(1)) {
+    const over = item.box.y - item.frameBox.y, under = bottomOf(item.frameBox) - bottomOf(item.box);
+    assert.ok(over > 25 && Math.abs(over - under) < 24, `${item.path}: in the middle of its card (${over} above, ${under} under)`);
+  }
+});
+
+test('COL-3: a shorter text in a row of hugging cards sits in the middle of its card', () => {
+  for (const anchor of ['bottom', 'middle']) {
+    const result = composeSlide({ title: 'Cards', blocks: [{ text: 'Two teams.' }, { text: 'Keep the scope narrow, collect feedback weekly and give each decision a named owner.' }, { text: 'Six weeks.' }] }, { layout: columns(anchor), fill: false });
+    const items = cards(result), height = (item) => item.text.height ?? item.text.lines.length * item.text.lineHeight;
+    assert.equal(new Set(items.map((item) => item.frameBox.height)).size, 1, 'one card height');
+    for (const item of items) {
+      const over = item.box.y - item.frameBox.y, under = bottomOf(item.frameBox) - item.box.y - height(item);
+      assert.ok(Math.abs(over - under) < 16, `${anchor}: ${item.path} centered in its card (${over} above, ${under} under)`);
+      assert.ok(bottomOf(item.box) <= bottomOf(item.frameBox) + 0.01, `${item.path}: the payload stays on its card`);
+    }
+  }
+});
+
+test('P1: under a middle anchor a row of labeled cards hugs its tallest card and centers; a bottom anchor keeps filled cards', () => {
+  const blocks = [{ items: [{ text: 'Clear scope', description: 'Two teams.' }] }, { items: [{ text: 'Consistent measures', description: 'Track completion and task time against a baseline.' }] }, { items: [{ text: 'A decision', description: 'Agree first.' }] }];
+  const middle = cards(composeSlide({ title: 'Cards', blocks }, { layout: grid('middle'), fill: false })), area = body(composeSlide({ title: 'Cards', blocks }, { layout: grid('middle'), fill: false }));
+  assert.equal(new Set(middle.map((item) => item.frameBox.height)).size, 1, 'one card height');
+  assert.ok(middle[0].frameBox.height < area.height * 0.8 && Math.abs(middleOf(middle[0].frameBox) - middleOf(area)) < 1, 'the cards hug and the row centers');
+  assert.equal(new Set(middle.map((item) => item.box.y)).size, 1, 'the content starts on one line');
+  const bottom = composeSlide({ title: 'Cards', blocks }, { layout: grid('bottom'), fill: false });
+  for (const item of cards(bottom)) assert.ok(Math.abs(bottomOf(item.frameBox) - bottomOf(body(bottom))) < 1, `${item.path}: a bottom-anchored card fills its region`);
 });

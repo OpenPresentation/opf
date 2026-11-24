@@ -54,7 +54,8 @@ describe('the axis step depends on the axis length', () => {
 	test('the composed chart item carries the same axis', () => {
 		const document = { slides: [{ title: 'Completion', chart: completion }] };
 		const item = composeSlide(document.slides[0], { width: 1280, height: 720, presentation: document, slideIndex: 0 }).items.find((entry) => entry.field === 'chart');
-		assert.deepEqual(item.chart.valueAxis, axisOf(completion, { width: item.box.width, height: item.box.height, scale: 1 }));
+		// 0.35.2: a small chart with its value axis hidden is composed as labeled (a column chart's axis then ends at its tallest column).
+		assert.deepEqual(item.chart.valueAxis, axisOf(completion, { width: item.box.width, height: item.box.height, scale: 1, ...(item.chart.layer?.small?.valueAxis === false ? { labeled: true } : {}) }));
 	});
 });
 

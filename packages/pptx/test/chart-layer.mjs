@@ -90,7 +90,9 @@ for (const [design, label] of [[LIGHT, 'light'], [undefined, 'navy']]) {
   assert.match(title, /b="1"/, 'bold');
   assert.match(title, /<c:manualLayout><c:xMode val="edge"\/><c:yMode val="edge"\/><c:x val="[\d.]+"\/><c:y val="[\d.]+"\/><\/c:manualLayout>/);
   assert.match(xml, /<c:legend><c:legendPos val="t"\/><c:layout><c:manualLayout><c:xMode val="edge"\/><c:yMode val="edge"\/><c:x val="[\d.]+"\/><c:y val="[\d.]+"\/><c:w val="[\d.]+"\/><c:h val="[\d.]+"\/><\/c:manualLayout><\/c:layout><c:overlay val="0"\/>/);
-  assert.match(xml, /<c:plotArea><c:layout><c:manualLayout><c:layoutTarget val="outer"\/>/);
+  // opf#1415: the plot area is the preview's plot (layoutTarget inner, core chartPlotInset) under the header row, not an outer box from
+  // the header's bottom edge, where PowerPoint started the plot higher and taller than the preview.
+  assert.match(xml, /<c:plotArea><c:layout><c:manualLayout><c:layoutTarget val="inner"\/>/);
   assert.doesNotMatch(slide.match(/<p:cNvPr\b[^>]*name="OPF chart 1"[^>]*>/)[0], /\btitle=/, 'no alt title on the frame');
   // The caption's position is core's: the composed caption box over the composed chart box.
   const item = composeSlide(deckOf({type: 'column', data: two, axisTitles: {value: 'Signal'}}).slides[0], {dimensions: {width: 1280, height: 720}, fontFamilies: {body: 'Roboto', heading: 'Roboto'}}).items.find(entry => entry.field === 'chart');

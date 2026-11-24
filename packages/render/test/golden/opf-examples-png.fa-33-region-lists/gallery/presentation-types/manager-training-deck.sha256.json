@@ -2,8 +2,8 @@
   "deck": "gallery/presentation-types/manager-training-deck.opf.json",
   "entries": {
     "gallery/presentation-types/manager-training-deck.opf.json#0": {
-      "sha256": "e6c12d7c84b3727e1f4860dd630bc8b090eb49ce91ab7f698450cacfafd4f93d",
-      "bytes": 6059
+      "sha256": "f3581ddd435d6b6e495c4dd1c75d76408040359da0d32a2bec6b3c565cb0d48b",
+      "bytes": 6143
     },
     "gallery/presentation-types/manager-training-deck.opf.json#1": {
       "sha256": "d1a0e859ad85639528a46d9b8ba2e2b9960624dc2f63f21f306ae8e484daf899",
@@ -18,16 +18,16 @@
       "bytes": 9822
     },
     "gallery/presentation-types/manager-training-deck.opf.json#4": {
-      "sha256": "63c7ad8fe6a2e45e1122f5bd899f9c5477b4f9aa2f98e2cc6218eb400a3f3652",
-      "bytes": 12419
+      "sha256": "6391c8cde739184bc36749910abc51b2a7d996f6a9f17ff2ebae7124c27fbb26",
+      "bytes": 13798
     },
     "gallery/presentation-types/manager-training-deck.opf.json#5": {
       "sha256": "ded1c51cd6e5b4010b4a9762d9ae87eebb1dd2d80aa015c20503d978c320f2db",
       "bytes": 17040
     },
     "gallery/presentation-types/manager-training-deck.opf.json#6": {
-      "sha256": "423c564cb92ebb3f3c20096934fba3e37eab15e5d382cc1b7b383aafcafc55e4",
-      "bytes": 12523
+      "sha256": "13aef87b04760fdb014abccd5c5fbe124ae59facd62a0ac159a0195d73fa9ff3",
+      "bytes": 13085
     },
     "gallery/presentation-types/manager-training-deck.opf.json#7": {
       "sha256": "d483a8c0842c428359ecad323c523bae90645d4e5528289cdb056978e66e130c",

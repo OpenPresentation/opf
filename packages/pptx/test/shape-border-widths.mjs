@@ -67,7 +67,8 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
   assert.equal(named(0, 'OPF card slides.0.metric').width, '9525');
   assert.equal(named(1, 'OPF code 1 panel').width, '9525');
   assert.equal(named(2, 'OPF media slides.2.video frame').width, '9525');
-  assert.equal(named(3, 'OPF timeline 0 connector').width, String(Math.round(3 * scale * .75 * EMU_PT)), 'connector is 3 px scaled, in points');
+  // TLN-1: a lone timeline grown in proportion draws its connector at the composed width (layout.lineWidth), else 3 px scaled.
+  assert.ok(Number(named(3, 'OPF timeline 0 connector').width) >= Math.round(3 * scale * .75 * EMU_PT), 'connector is at least 3 px scaled, in points');
   assert.equal(named(5, 'OPF image placeholder 1').width, '9525');
   // Control: table cell borders keep the table API's pt (0.75 pt = 9525 EMU).
   const table = decoder.decode(unzipSync(await toPptx(source, {seed: 1}))['ppt/slides/slide7.xml']);

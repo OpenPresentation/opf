@@ -13,7 +13,7 @@ import {OWNED_POSTFLIGHT_POLICY} from './owned-postflight.mjs';
 export const REFERENCE_NAME_PROFILE='reference-line-one-series-name-edit-v1';
 export const REFERENCE_NAME_POLICY=Object.freeze({policy:'reference-name-exact-one-global-zero-after-completed-owned-quit-v1',...OWNED_POSTFLIGHT_POLICY});
 export const REFERENCE_NAME_CASE='reference-native-lines';
-export const REFERENCE_NAME_INPUT=Object.freeze({bytes:124991,sha256:'58e87d163fc0fe74765e62d7f8e2d382155a75e81ad425099f352038888c9a80'});
+export const REFERENCE_NAME_INPUT=Object.freeze({bytes:125008,sha256:'4dcab5dfa893a5223de20ef7c7ec07a363a00f14cf52916e9b2c16c1859003f1'});
 export const REFERENCE_NAME_ACTION=Object.freeze({op:'set-chart-series-name',slideIndex:1,chartName:'OPF chart 1',seriesIndex:1,expectedName:'Actual',newName:'Actual edited'});
 export const referenceNamePlan=()=>[{...REFERENCE_NAME_ACTION}];
 const sourceSha='87a3a6c20edcc4cb05d821019f3abc2b9bbaa5b0a73911853563665ae7b5a02e';

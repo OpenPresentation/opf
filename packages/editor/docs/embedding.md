@@ -227,6 +227,21 @@ const memory = createSourceMemory();                     // one per document
 buffer = updateJsonSource(buffer, editedDeck, memory);    // indentation, key order, escapes and CRLF kept
 ```
 
+If the text repeats an object key, `JSON.parse` keeps only the last value and an edit in place cannot keep the author's bytes, so by default the writer rewrites the whole document as indented JSON. A host that would rather refuse passes `{ duplicateKeys: "reject" }` as the fourth argument (the memory is the third; `undefined` takes the shared one). It then throws a `DuplicateKeyError` before writing anything, with `code: "duplicate-key"`, the `key`, the `path` of its object, and the `offset`, `line` and `column` of the repeated key (the second one), so the host can show the author where:
+
+```js
+import { DuplicateKeyError, updateJsonSource } from "@openpresentation/opf-editor/exact-source";
+
+try {
+  buffer = updateJsonSource(buffer, editedDeck, memory, { duplicateKeys: "reject" });
+} catch (error) {
+  if (error instanceof DuplicateKeyError) showProblem(`"${error.key}" is repeated at line ${error.line}, column ${error.column}`);
+  else throw error;
+}
+```
+
+`findDuplicateKey(source)` finds the same key without editing, as `{ key, path }`.
+
 ## The source worker
 
 `source: { worker }` (and `createSourcePane(el, { worker })`) runs the pane's text checks in a Web Worker, so typing in a deck of a thousand slides never blocks the page. Without it (the default) the checks run on the main thread, which is fast enough for ordinary decks. The worker script is `@openpresentation/opf-editor/source-worker`. It imports core, so it only runs bundled: serving `dist/source-worker.js` straight from `node_modules` fails (a module worker cannot resolve `@openpresentation/opf`, a classic one cannot read `import`).

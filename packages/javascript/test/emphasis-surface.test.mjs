@@ -109,18 +109,21 @@ test('LH-68: a tile metric leads with its label, sizes its value from the tile a
     const part = (role) => tile.parts.find((entry) => entry.role === role);
     assert.equal(tile.overflow, false, `${height}`);
     assert.ok(part('label').box.y < part('value').box.y, 'the label is the eyebrow');
-    const wanted = Math.min(152, Math.max(76, height * METRIC_TILE_VALUE_SHARE));
+    const wanted = Math.min(228, Math.max(76, height * METRIC_TILE_VALUE_SHARE));
     assert.ok(part('value').fit.fontSize <= wanted + 0.5 && part('value').fit.fontSize >= Math.min(wanted, 76) - 24, `${height}: value ${part('value').fit.fontSize} for ${wanted}`);
     const foot = Math.max(...['description', 'trend'].map((role) => part(role).box.y + part(role).box.height));
     assert.ok(Math.abs(foot - (box.y + box.height)) < 0.5, `${height}: the foot ends at the tile's bottom`);
     assert.ok(part('description').box.y > part('value').box.y + part('value').box.height);
+    // SCO-1: the value stands in the middle of the room between the label and the foot.
+    const above = part('value').box.y - (part('label').box.y + part('label').box.height), below = part('description').box.y - (part('value').box.y + part('value').box.height);
+    assert.ok(Math.abs(above - below) < 0.1 * height + 24, `${height}: the value is centered between label and foot (${above} above, ${below} below)`);
   }
   // Without `tile` the metric is the stacked block it was.
   const stacked = layoutMetric(metric, { x: 0, y: 0, width: 520, height: 480 }, {});
   assert.ok(stacked.parts.find((entry) => entry.role === 'value').box.y < stacked.parts.find((entry) => entry.role === 'label').box.y);
 });
 
-test('LH-68: the scorecard draws its metrics as tiles that fill their cards, one value size per row of siblings (LH-43)', () => {
+test('LH-68: the scorecard draws its metrics as tiles that fill their cards, one value size per row of siblings (LH-43); SCO-1: one value line', () => {
   const metric = (value, description) => ({ metric: { value, label: 'Primary signal', description, trend: 'up' } });
   const slide = { title: 'Why this matters', blocks: [metric('18%', 'Qualify suppliers'), metric('31%', 'Move analytics workloads with minimal reporting disruption'), metric('18%', 'Recover weekday occupancy')] };
   for (const direction of ['ltr', 'rtl']) {
@@ -135,6 +138,8 @@ test('LH-68: the scorecard draws its metrics as tiles that fill their cards, one
       assert.ok(item.frameBox && item.frameBox.height > result.contentBox.height * 0.6, 'the card fills its cell');
       if (direction === 'ltr') assert.equal(item.metricLayout.alignment, 'left');
     }
+    const line = (item) => { const value = item.metricLayout.parts.find((part) => part.role === 'value').box; return value.y + value.height / 2; };
+    assert.ok(Math.max(...metrics.map(line)) - Math.min(...metrics.map(line)) < 1, 'the values of the row share one line (SCO-1)');
     assert.deepEqual(result.diagnostics.filter((entry) => entry.code === 'text-overflow'), []);
   }
 });

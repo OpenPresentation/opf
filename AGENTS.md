@@ -66,7 +66,7 @@ GitHub API: every agent on the account shares one REST quota (5000 an hour), and
 
 ## Current handoff
 
-**Start here when resuming:** [docs/handoff/2026-11-12/README.md](docs/handoff/2026-11-12/README.md) has the state of v0.34.0, what was accepted and decided, the known gaps, the deferred items and the owner's steps. The binding [working rules](docs/handoff/2026-11-07/working-rules.md) are in the 2026-11-07 folder.
+**Start here when resuming:** [docs/handoff/2026-11-24/README.md](docs/handoff/2026-11-24/README.md) has the state after 0.35.1, what is open toward 0.36.0, and who has to do what. [KICKOFF.md](docs/handoff/2026-11-24/KICKOFF.md) in the same folder is the one prompt to give a new agent. The binding working rules are [docs/handoff/2026-11-24/working-rules.md](docs/handoff/2026-11-24/working-rules.md) (what changed) on top of [docs/handoff/2026-11-07/working-rules.md](docs/handoff/2026-11-07/working-rules.md). The state of v0.34.0 is in [docs/handoff/2026-11-12/README.md](docs/handoff/2026-11-12/README.md).
 
 ## Active programs
 

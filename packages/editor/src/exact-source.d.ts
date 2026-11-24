@@ -22,9 +22,31 @@ export declare function createSourceMemory(limit?: number, maxBytes?: number): S
 /**
  * Write `document` into `source` (JSON text) and return the new text. Only the affected values change; everything else is kept byte for byte.
  * Throws when `source` is not valid JSON. The result always parses to `document`: when an edit in place cannot achieve that (the source
- * repeats a key, say), the whole document is written as JSON indented like `source`. Without `memory` a memory shared by the module is used.
+ * repeats a key, say), the whole document is written as JSON indented like `source`; with `{ duplicateKeys: "reject" }` it throws a
+ * `DuplicateKeyError` for such a source instead, before anything is written. Without `memory` a memory shared by the module is used.
  */
-export declare function updateJsonSource(source: string, document: unknown, memory?: SourceMemory): string;
+export declare function updateJsonSource(source: string, document: unknown, memory?: SourceMemory, options?: UpdateJsonSourceOptions): string;
+
+/** Options of `updateJsonSource`. */
+export interface UpdateJsonSourceOptions {
+  /**
+   * What to do when the source repeats an object key (which `JSON.parse` collapses to the last value, so an in-place edit cannot keep the
+   * source's bytes): `"rewrite"` (the default) writes the whole document as indented JSON; `"reject"` throws a `DuplicateKeyError`.
+   */
+  duplicateKeys?: "rewrite" | "reject";
+}
+
+/** Thrown by `updateJsonSource` with `duplicateKeys: "reject"`: the source repeats an object key. */
+export declare class DuplicateKeyError extends Error {
+  readonly code: "duplicate-key";
+  /** The repeated key and the path of the object that holds it, as `findDuplicateKey` reports them. */
+  readonly key: string;
+  readonly path: (string | number)[];
+  /** Where the repeated key's opening quote is: a character offset into the source, and the line and column (from 1). */
+  readonly offset: number;
+  readonly line: number;
+  readonly column: number;
+}
 
 /** The first object key that JSON text repeats (which `JSON.parse` silently collapses to the last), as `{ key, path }`; null when there is none. */
 export declare function findDuplicateKey(source: string): { key: string; path: (string | number)[] } | null;

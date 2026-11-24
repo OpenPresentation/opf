@@ -1,7 +1,7 @@
 // LH-131 and LH-137: the featured card of a pair or a set, a before and after pair's arrow, the delta pill and the check-mark tiles.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { checkMarkPoints, composeSlide, featuredCells, layoutMetric } from '../dist/composition.js';
+import { checkMarkPoints, composeSlide, featuredCells, layoutMetric, LONE_DISPLAY_SIZES } from '../dist/composition.js';
 import { layouts } from './support/template-samples.mjs';
 
 const group = (label, ...rest) => ({ blocks: [{ text: [{ text: label, bold: true }] }, ...rest] });
@@ -99,7 +99,8 @@ for (const direction of ['ltr', 'rtl']) {
     assert.ok(tiles.badges.every((badge) => badge.check?.length === 6 && badge.label === ''));
     const list = (composed) => composed.items.find((item) => item.field === 'bullets');
     assert.equal(list(dark).listColumns.length, 4);
-    assert.equal(list(dark).text.fontSize, list(light).text.fontSize, 'the entries keep the list size');
+    // LH-102: a light lone list may grow past the list display size; a dark summary list keeps it, so its tiles hold the list size.
+    assert.equal(list(dark).text.fontSize, Math.min(list(light).text.fontSize, LONE_DISPLAY_SIZES.list), 'the entries keep the list size');
     // Each badge sits at its tile's reading start.
     for (const [index, badge] of tiles.badges.entries()) {
       const chip = tiles.chips[index].box, middle = chip.x + chip.width / 2;

@@ -992,7 +992,7 @@
                 "metric"
               ],
               "role": "supporting",
-              "flow": "grid"
+              "flow": "row"
             },
             {
               "name": "body",
@@ -1039,7 +1039,8 @@
                     "list"
                   ],
                   "role": "supporting",
-                  "flow": "column"
+                  "flow": "column",
+                  "anchor": "middle"
                 }
               ]
             }

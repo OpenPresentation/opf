@@ -16,6 +16,11 @@ assert.equal(samePictureAspect(10900293, 5450148, 120, 60), false);
 assert.equal(samePictureAspect(10900297, 5450148, 120, 60), false);
 assert.equal(samePictureAspect(5450148, 10900294, 60, 120), true);
 assert.equal(samePictureAspect(5450148, 10900293, 60, 120), false);
+// IM1: the image layout now shows a whole picture inside the margins, so K08's export is 9803014 x 4901508: the same two rounding
+// stages, two EMU short of the exact 2:1 width (9803016), and one more EMU outside either cell still fails.
+assert.equal(samePictureAspect(9803014, 4901508, 120, 60), true);
+assert.equal(samePictureAspect(9803013, 4901508, 120, 60), false);
+assert.equal(samePictureAspect(9803017, 4901508, 120, 60), false);
 // The cells touch only at an excluded upper endpoint: that is not overlap.
 assert.equal(samePictureAspect(16459202, 5486400, 3, 1), false);
 for (const dimensions of [[0, 1, 1, 1], [1.5, 1, 1, 1], [Infinity, 1, 1, 1], [1, 1, 0, 1], [1, 1, Number.MAX_SAFE_INTEGER + 1, 1]]) assert.equal(samePictureAspect(...dimensions), false);
@@ -36,7 +41,7 @@ const options = {catalogs: [gallery], fonts, seed: 86, timestamp: '2026-10-15T00
 const archive = unzipSync(await toPptx(source, options));
 const slidePath = 'ppt/slides/slide1.xml', xml = strFromU8(archive[slidePath]);
 const picture = xml.match(/<p:pic>[\s\S]*?<\/p:pic>/)[0];
-assert.match(picture, /<a:ext cx="10900294" cy="5450148"\/>/, 'Authored contain exercises the actual two-EMU regression');
+assert.match(picture, /<a:ext cx="9803014" cy="4901508"\/>/,'Authored contain exercises the actual two-EMU regression');
 const diagnostics = [], unchanged = await fromPptx(zipSync(archive), {...options, onDiagnostic: d => diagnostics.push(d)});
 assert.deepEqual(unchanged.slides[0].image, source.slides[0].image, 'Scalar image remains representable');
 assert.equal(unchanged.slides[0].blocks, undefined);
@@ -48,8 +53,8 @@ const mediaTarget = strFromU8(archive['ppt/slides/_rels/slide1.xml.rels']).match
 const mediaPath = 'ppt/' + mediaTarget.replace(/^\.\.\//, '');
 const edit = ({transform = value => value, media} = {}) => zipSync({...archive, [slidePath]: strToU8(xml.replace(picture, transform(picture)).replace('K08 Replace this picture', 'K08 CURRENT NATIVE TITLE')), ...(media ? {[mediaPath]: media} : {})});
 const currentImage = doc => doc.slides[0].image ? {image: doc.slides[0].image} : doc.slides[0].blocks.find(block => block.image);
-for (const cx of [10900293, 10900297]) {
-  const changed = await fromPptx(edit({transform: value => value.replace('cx="10900294"', `cx="${cx}"`)}), options);
+for (const cx of [9803013, 9803017]) {
+  const changed = await fromPptx(edit({transform: value => value.replace('cx="9803014"', `cx="${cx}"`)}), options);
   assert.equal(currentImage(changed).fit, 'stretch', 'A real frame change just outside the serialization cell remains stretch');
   assert.equal(changed.slides[0].title, 'K08 CURRENT NATIVE TITLE', 'Stored title never replays over current text');
 }

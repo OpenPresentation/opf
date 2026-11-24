@@ -45,6 +45,7 @@ await copyFile(new URL('src/default-alt.js', root), new URL('default-alt.js', di
 await copyFile(new URL('src/layout-names.js', root), new URL('layout-names.js', dist));
 await copyFile(new URL('src/chart-data.js', root), new URL('chart-data.js', dist));
 await copyFile(new URL('src/chart-highlight.js', root), new URL('chart-highlight.js', dist));
+await copyFile(new URL('src/chart-point-series.js', root), new URL('chart-point-series.js', dist));
 await copyFile(new URL('src/chart-layer.js', root), new URL('chart-layer.js', dist));
 await copyFile(new URL('src/chart-direct-labels.js', root), new URL('chart-direct-labels.js', dist));
 await copyFile(new URL('src/chart-marks.js', root), new URL('chart-marks.js', dist));

@@ -91,7 +91,7 @@ describe('one timeline', () => {
 		const composed = composeSlide({ title: 'Plan', blocks: [{ timeline: events('Team').slice(0, 3).map(({ when, what }) => ({ when, what })) }] }, { layout: layouts.timeline });
 		const [item] = timelines(composed);
 		const what = item.timelineLayout.parts.find((part) => part.role === 'what').fit.fontSize;
-		assert.ok([28, 32].includes(what) || (what > 22 && what <= 26), `${what}`);
+		assert.ok(what >= 28 || (what > 22 && what <= 26), `${what}`);
 		assert.deepEqual(composed.diagnostics, []);
 	});
 

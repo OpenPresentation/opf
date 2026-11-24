@@ -102,7 +102,8 @@ test('a matrix of four entries draws its quadrants; another count draws a grid o
   for (const items of [['North', 'South'], ['North', 'South', 'East'], ['North', 'South', 'East', 'West', 'Central', 'Online']]) {
     const other = compose({ layout: 'matrix', title: 'T', items });
     const [cards] = other.arrangements;
-    assert.deepEqual([cards.design, cards.paint, cards.align, cards.text, cards.nodes.length], ['cards', 'card', 'start', 'slide', items.length], items.join());
+    // MX1: the cards take the matrix's paint with their entries centered, as the four quadrants do.
+    assert.deepEqual([cards.design, cards.paint, cards.align, cards.text, cards.nodes.length], ['cards', 'primary', 'center', 'node', items.length], items.join());
     assert.equal(cards.background, undefined);
     assert.ok(cards.fontSize >= LIST_NOMINAL_SIZE - 1e-6);
     assert.match(adapted(other)[0], new RegExp(`its ${items.length} entries are drawn as a grid of cards`));

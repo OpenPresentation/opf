@@ -54,7 +54,11 @@ test("lean Worker preserves data exclusions and production size budgets", async 
 	// this branch: it is no longer a 3% headroom, so the release assembly must re-measure it. The unminified and gzip ceilings keep
 	// their 3% policy. RR-111's viewer size cut (above) replaces that ceiling with one at 3% again.
 	assert.ok(production.bytes < 4_818_000, `${production.bytes} minified bytes`);
-	assert.ok(compressed < 1_257_000, `${compressed} gzip bytes`);
+	// LH-194 to LH-199 (the layout-sweep fixes, opf#1425), measured on 2026-11-24: core's composition engine grew by the sweep's rules, and
+	// the lean Worker went from 7,489,056 / 4,765,387 / 1,253,969 bytes on origin/main af413076e to 7,533,524 / 4,787,568 / 1,261,424 on
+	// the branch (no MCP source changed). The gzip ceiling comes back to the 3% headroom policy, rounded up to 1,000 bytes: 1,300,000.
+	// The unminified and minified ceilings still hold, 0.27% and 0.63% above the branch.
+	assert.ok(compressed < 1_300_000, `${compressed} gzip bytes`);
 });
 
 describe("the MCP server in workerd", { skip: !available && "the workerd package has no binary for this platform" }, () => {
