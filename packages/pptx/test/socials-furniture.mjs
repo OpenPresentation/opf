@@ -34,8 +34,12 @@ for (const text of shown) assert.ok(xml.includes(`<a:t>${text}</a:t>`), text);
 for (const url of ['https://linkedin.com/company/acme', 'https://x.com/acme', 'https://bsky.app/profile/acme.bsky.social', 'http://acme.example/profile'])
   assert.ok(rels.includes(`Target="${url}" TargetMode="External"`), url);
 assert.equal((xml.match(/<a:hlinkClick /g) ?? []).length, 4, 'Only formatted or URL values link; raw text does not.');
-assert.equal((xml.match(/hlinkClr[^>]*val="tx"/g) ?? []).length, 4, 'Links keep the furniture text colour.');
-assert.equal((xml.match(/<a:rPr [^>]*u="none"[^>]*>(?:(?!<\/a:rPr>).)*<a:hlinkClick /g) ?? []).length, 4, 'Links are not underlined, matching the preview.');
+// opf#1415: a linked line is a text box whose whole text is the link, so the link is the shape's (PowerPoint underlines every linked run):
+// the runs are plain (u="none", the furniture text color), as the preview draws them.
+assert.equal((xml.match(/<p:cNvPr\b[^>]*>\s*<a:hlinkClick r:id="[^"]+"\/>\s*<\/p:cNvPr>/g) ?? []).length, 4, 'Each linked line links as a shape.');
+assert.equal((xml.match(/<a:rPr\b(?:(?!<\/a:rPr>)[\s\S])*?<a:hlinkClick /g) ?? []).length, 0, 'No run is a link.');
+for (const text of ['linkedin.com/company/acme', 'x.com/acme', 'bsky.app/profile/acme.bsky.social', 'http://acme.example/profile'])
+  assert.match(xml, new RegExp(`<a:rPr [^>]*u="none"[^>]*><a:solidFill>(?:(?!</a:rPr>)[\\s\\S])*</a:rPr><a:t>${text.replace(/[.]/g, '\\.')}</a:t>`), `${text}: not underlined, in the furniture text color`);
 
 // FA-31: no furniture part shows the organization's name any more ({{organization.name}} is resolved before export), so the profiles
 // belong to the organization the stored document record (FF-32) names by id. Without that record the lines stay ordinary current text.

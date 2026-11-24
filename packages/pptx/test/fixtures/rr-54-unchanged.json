@@ -490,6 +490,30 @@
           "candidateHelperSha256": "3baf818c1cfea66a9917aae8d32c0904bc018aa35f2437210a26728e397f99a1"
         },
         "scope": "Exact bare toPptx caller; every old archive hash, byte length, part count and applicable native-slide digest reproduced before generating a review candidate."
+      },
+      {
+        "baselineExportRef": "6f75482441445c80387d57dbc0b4ec22d475abb3",
+        "baselineBuildHead": "6f75482441445c80387d57dbc0b4ec22d475abb3",
+        "candidateHead": "2f3002db7faeb86fd89e40aa4cf3639ae342192a",
+        "exportCaller": {
+          "api": "toPptx",
+          "input": "structuredClone(entry.deck)",
+          "options": "omitted",
+          "catalogs": "not registered"
+        },
+        "evidence": {
+          "directory": "C:\\opf-work\\c34\\lock-refresh-2\\rr54-review",
+          "reviewFile": "review.json"
+        },
+        "sourceEvidence": {
+          "directory": "C:\\opf-work\\c34\\lock-refresh-2\\rr54-review",
+          "baselineSourceTrees": "100644 blob 6651e2d00acc22100451b54ec15335e941d8b162\tpackage.json\n040000 tree 447e902948a48ace74350f734174e74a8cbecfbe\tpackages/gallery\n040000 tree 25b5ba7ea710774cb43c2f1464ea6ad8add88453\tpackages/javascript\n040000 tree ae3c5cc85e190953732717cf6f759d6787cb19cd\tpackages/pptx\n040000 tree dc2734c208fbc8c29100fe62db917b689b53a87a\tpackages/render\n100644 blob 936040bf412295e25d9899d2cc5f16af9d913a10\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree 1a518fd440a8a369947f1a359b2b0be96cd03c5d\tspec",
+          "candidateSourceTrees": "100644 blob 6651e2d00acc22100451b54ec15335e941d8b162\tpackage.json\n040000 tree 447e902948a48ace74350f734174e74a8cbecfbe\tpackages/gallery\n040000 tree 4364b08c77ead8bdc14e8863822d6c9516ee5369\tpackages/javascript\n040000 tree 237f0b0e6f3ff4c2ccbbfa7c9eb28a58c86e6fa0\tpackages/pptx\n040000 tree dc2734c208fbc8c29100fe62db917b689b53a87a\tpackages/render\n100644 blob 936040bf412295e25d9899d2cc5f16af9d913a10\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree 1a518fd440a8a369947f1a359b2b0be96cd03c5d\tspec",
+          "fixtureSha256": "41f866960e901d694d5044214815b36467c472457e477393fc302b3bbdf55475",
+          "reviewerSha256": "9a2a066909e61c6982f5869d098b8e23ae82f4ecc7416416734ef10cecadbd63",
+          "candidateHelperSha256": "3baf818c1cfea66a9917aae8d32c0904bc018aa35f2437210a26728e397f99a1"
+        },
+        "scope": "Exact bare toPptx caller; every old archive hash, byte length, part count and applicable native-slide digest reproduced before generating a review candidate."
       }
     ]
   },
@@ -534,11 +558,11 @@
           }
         ]
       },
-      "sha256": "a1c8459265f7dfe6113a82e54c82cdb77e1cf4e6b34b38ff15c0d638c78a21f8",
+      "sha256": "802ae6a521a28b0b3320509147020bfce8bd66013d28c2d76119bea15c7017ac",
       "rr81PreviousSha256": "85196b38e1c71527b9c7d1c8d527bfbeb2244c182ce6a850634c3ae273f45685",
       "rr20PreviousSha256": "9267aeb25d11ae9f0a8e5a7ce9e719a2e069c043eb71d7d1ed583e8d7b589532",
       "rr20PartCount": 30,
-      "rr20Bytes": 26243,
+      "rr20Bytes": 26246,
       "rr90PreviousSha256": "10557a90788debcc5e0045481976b0d44c5eace4d180a16c91bbd88c7b35891c",
       "rr90PreviousBytes": 26053,
       "wi5PreviousSha256": "99954a11bc017161474a2c577aff23dd31e1a753efd07b3e47d879c131086c19",
@@ -604,6 +628,12 @@
           "bytes": 26235,
           "partCount": 30,
           "reviewIndex": 10
+        },
+        {
+          "sha256": "a1c8459265f7dfe6113a82e54c82cdb77e1cf4e6b34b38ff15c0d638c78a21f8",
+          "bytes": 26243,
+          "partCount": 30,
+          "reviewIndex": 11
         }
       ]
     },
@@ -652,11 +682,11 @@
           }
         ]
       },
-      "sha256": "c0783320c0b19a21c3b3f7cdc36b683902c35edd37ddddcac1762fc2114895d0",
+      "sha256": "44246c4dab90e188d6e7920d0b9828de67e905dfc2e0827273af13b3ede4e35d",
       "rr81PreviousSha256": "e1793caa675c7637a6c5c6e81dcde1cb76e7e317d17988ae9c2778d49745cbd6",
       "rr20PreviousSha256": "7d5fb91df2ecc073fc9e87ee42a9b25c17529c803e2a045bf1a9e05a1524998b",
       "rr20PartCount": 30,
-      "rr20Bytes": 26399,
+      "rr20Bytes": 26408,
       "rr90PreviousSha256": "7c18db3ff69b3fa0e04a9ad457b3251b7135e8c21baa56272ff0c0709187541f",
       "rr90PreviousBytes": 26123,
       "wi5PreviousSha256": "ff1731bf1af78da7560f8ee01822c9ee174763773b38db78eeda18f6e78b1e2f",
@@ -722,6 +752,12 @@
           "bytes": 26401,
           "partCount": 30,
           "reviewIndex": 10
+        },
+        {
+          "sha256": "c0783320c0b19a21c3b3f7cdc36b683902c35edd37ddddcac1762fc2114895d0",
+          "bytes": 26399,
+          "partCount": 30,
+          "reviewIndex": 11
         }
       ]
     },
@@ -766,11 +802,11 @@
           }
         ]
       },
-      "sha256": "6219fbb3342282f4a87bbcd5792af407e46c404e1dbd7828616cdcdd2ceac3b2",
+      "sha256": "a04d531ecdedb40f3e7d43bf4b51de895d7df6cc2fb80b67231261f9ddf8eb5d",
       "rr81PreviousSha256": "b067bb96b6ad58a5dc30f3ffc01c6218d0dd3ac3f64edc764ac2e6ae2a8e87cc",
       "rr20PreviousSha256": "aecf7b2f67b5b39ea5403632456a6cbfe095348850853c2d20462982137ade45",
       "rr20PartCount": 30,
-      "rr20Bytes": 26056,
+      "rr20Bytes": 26061,
       "rr90PreviousSha256": "71237ab580d86c9c9ae1ec984693666a438bb0050e827fed3c107aaf13e0aa30",
       "rr90PreviousBytes": 26055,
       "wi5PreviousSha256": "ed88c1b513ff14dbb51b12a4db2c99d86d05e15e71c857752d97c6d828a442b8",
@@ -841,6 +877,12 @@
           "bytes": 26060,
           "partCount": 30,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "6219fbb3342282f4a87bbcd5792af407e46c404e1dbd7828616cdcdd2ceac3b2",
+          "bytes": 26056,
+          "partCount": 30,
+          "reviewIndex": 11
         }
       ]
     },
@@ -884,12 +926,12 @@
           }
         ]
       },
-      "sha256": "8d942834f43b17b1d3ad3ee361bd6ba620ae806768528931d27d5f73683f2eb2",
+      "sha256": "f43214bebdb7caa18c9c607b47d1da509d427891ee9dbe471aa5233c1d78eaf5",
       "previousSha256": "4fc5d67908d8de2e60ce18c2db685d57c934a872f06bbc583896d3047aa319cb",
       "rr81PreviousSha256": "a2fb4e0a308b2e575aa15eab08a1f0abeacfaff5643dd19742a695b5e31f5413",
       "rr20PreviousSha256": "252bff4cbf7c0f678ae3fc2418c12cea22758d4faa568d2bb46a452b1896640c",
       "rr20PartCount": 30,
-      "rr20Bytes": 26307,
+      "rr20Bytes": 26314,
       "rr90PreviousSha256": "b545fe8b2d611afd020896577b81a58deecf37e80ccabf15b0f5cd91393c6b1d",
       "rr90PreviousBytes": 26097,
       "wi5PreviousSha256": "70a9a36833b37abbe178200c9911807f31718136c79275b6968129ee71473d95",
@@ -955,6 +997,12 @@
           "bytes": 26311,
           "partCount": 30,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "8d942834f43b17b1d3ad3ee361bd6ba620ae806768528931d27d5f73683f2eb2",
+          "bytes": 26307,
+          "partCount": 30,
+          "reviewIndex": 11
         }
       ]
     },
@@ -998,11 +1046,11 @@
           }
         ]
       },
-      "sha256": "c1fbfd6e839186bfbd63c623e38936a210d1a5928fbe0bfdfee91817d738b7d0",
+      "sha256": "a54d90a920c3b928694b3b1a77259eb623a15f992be1aed1cd1ffddc8bb403c2",
       "rr81PreviousSha256": "ebb99026f09b4375688f73bd314a543c1546d70a17fa5ce5d0a3134d241bd8cc",
       "rr20PreviousSha256": "41aa8199e5e697cd7cc1fb66da00fa0628b110c883e2f3c8a6ddd7e24cc3e77a",
       "rr20PartCount": 30,
-      "rr20Bytes": 26179,
+      "rr20Bytes": 26188,
       "rr90PreviousSha256": "9479bbdf42baa254125fc0520531599da8b6869b625cc4da42418f08fdbc3277",
       "rr90PreviousBytes": 26004,
       "wi5PreviousSha256": "5f960b18b1b4bcc35e191a1cec3bbb58639f27f702429a67a617aa699993c67c",
@@ -1068,6 +1116,12 @@
           "bytes": 26182,
           "partCount": 30,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "c1fbfd6e839186bfbd63c623e38936a210d1a5928fbe0bfdfee91817d738b7d0",
+          "bytes": 26179,
+          "partCount": 30,
+          "reviewIndex": 11
         }
       ]
     },
@@ -1111,11 +1165,11 @@
           }
         ]
       },
-      "sha256": "412073fa1fe1aaa6db94fee0a73678645de850bab73246a9924abf3f6062c18c",
+      "sha256": "4c2180928f3aefb1523cfca06817820ddfdbe217169a97f2df946688d268933c",
       "rr81PreviousSha256": "fbf8c62f3f49ebbdfaad0567bbcdc0fbe6d43e257cd6615ff4a4679728f070a1",
       "rr20PreviousSha256": "496cf08a2068665bc628345bd9f8f08140f4c336a7945bf18ccc03a1c9261ff0",
       "rr20PartCount": 34,
-      "rr20Bytes": 27914,
+      "rr20Bytes": 27917,
       "rr90PreviousSha256": "e633e97b11bba26c80d74237548b134d093f5986338e081b4463e7dbfe18c49e",
       "rr90PreviousBytes": 26058,
       "wi5PreviousSha256": "cef3917afdb2b46c1966b31f9f661b9b167aef871cc298445c7d3ad4206c7b97",
@@ -1176,6 +1230,12 @@
           "bytes": 27915,
           "partCount": 34,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "412073fa1fe1aaa6db94fee0a73678645de850bab73246a9924abf3f6062c18c",
+          "bytes": 27914,
+          "partCount": 34,
+          "reviewIndex": 11
         }
       ]
     },
@@ -1219,11 +1279,11 @@
           }
         ]
       },
-      "sha256": "e94597472f802754dfb94aa94697aea22b351a00a080371135e56d05a8ca238f",
+      "sha256": "6739ed9fddf04b3dd266bb8f9fc86fced01197bf0d73acc653a9d601193d1946",
       "rr81PreviousSha256": "f065e1ade5d975245e4df8c11d5be367ad27ddf53ee2f786527af53ac396b377",
       "rr20PreviousSha256": "fb4c8e449b37e21083b3d23ae64821d599640bc07286b8e8b71f59d2070fec8c",
       "rr20PartCount": 34,
-      "rr20Bytes": 27929,
+      "rr20Bytes": 27930,
       "rr90PreviousSha256": "f1b96d02685f92957830ec37151077ced0ad6e5fe11f863b0b59fe654473acaa",
       "rr90PreviousBytes": 26073,
       "wi5PreviousSha256": "97f6ce20baadc85d8668f3827876754d2b80881a43637fbcd93f20cf683c1468",
@@ -1282,6 +1342,12 @@
           "bytes": 27930,
           "partCount": 34,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "e94597472f802754dfb94aa94697aea22b351a00a080371135e56d05a8ca238f",
+          "bytes": 27929,
+          "partCount": 34,
+          "reviewIndex": 11
         }
       ]
     },
@@ -1331,13 +1397,13 @@
           }
         ]
       },
-      "sha256": "b5f922b644ec378b966496ad41876e022ab9072c6e1c13c2803d515522dcc8af",
+      "sha256": "533a34fbc99360d923b28db17f303af1293fb17df8d845d565e300726e5756a9",
       "rr105PreviousSha256": "3ea01cbc7853b1a76358cf1c3071f7aedd20309bb6342fb59a3d89f9edd11544",
       "rr105PreviousBytes": 26975,
       "rr105Review": "Keynote fix 1 (2026-11-13): percentage-only data labels name 0% instead of General; only ppt/charts/chart1.xml changes.",
       "rr81PreviousSha256": "c09695697b886e3c1af9fb3c32ef0427ff082d8ccf3be059778ca7483c4c510e",
       "rr20PartCount": 32,
-      "rr20Bytes": 26941,
+      "rr20Bytes": 26943,
       "rr90PreviousSha256": "8a5bdd94d625770f070bd2d47ec6bbf6d69a852e8c56facb3ffc1fb935378299",
       "rr90PreviousBytes": 25631,
       "wi5PreviousSha256": "3cfa0869e6d0c2fd8868a814197ccb6bc6ca0203b499bad1327fbdb5f786ed29",
@@ -1403,6 +1469,12 @@
           "bytes": 26945,
           "partCount": 32,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "b5f922b644ec378b966496ad41876e022ab9072c6e1c13c2803d515522dcc8af",
+          "bytes": 26941,
+          "partCount": 32,
+          "reviewIndex": 11
         }
       ]
     },
@@ -1446,10 +1518,10 @@
           }
         ]
       },
-      "sha256": "9646db0f441cf13f395e2571205e5be6133e7ea70262f8a177aa49215c0a45ee",
+      "sha256": "a3dee98983b8cf2291a5910fce0540ea7ad0196e6a92e671448ef943e93b8360",
       "rr81PreviousSha256": "f80a7e3a776b8c72cfb86b811a99e869799a91540377f55eef655461faebd1df",
       "rr20PartCount": 32,
-      "rr20Bytes": 26819,
+      "rr20Bytes": 26824,
       "rr90PreviousSha256": "1c46e14b031ae6168c6a39d86a22cff958ffb62984c8ee18ebb3c5854195bd23",
       "rr90PreviousBytes": 25573,
       "wi5PreviousSha256": "d4052fc62082484d6907a6c65906b946fda81f087c47eb1ffba198f3b671a8b5",
@@ -1514,6 +1586,12 @@
           "bytes": 26824,
           "partCount": 32,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "9646db0f441cf13f395e2571205e5be6133e7ea70262f8a177aa49215c0a45ee",
+          "bytes": 26819,
+          "partCount": 32,
+          "reviewIndex": 11
         }
       ]
     },
@@ -1557,12 +1635,12 @@
           }
         ]
       },
-      "sha256": "9434c37d195dc05520347300a851744f5aa66090efed3bb45b121fbb19f35433",
+      "sha256": "f87354982b4f137d302ecf4de4bf6f7791b8c071179e98063f9a3ca0c39e700f",
       "previousSha256": "17afa5c1028516fd59cf3be557b001e0c9b4cf840eeb9aaa74d053dbfc203d68",
       "rr81PreviousSha256": "da368cb1cf9a602b0faff65b26a5a45209952fb73e0f783dcd101e68ea01f29d",
       "rr20PreviousSha256": "b54d2a65469360cfe5e73ec0d5fb52db747af46801ff802b6d5746721dbe2b79",
       "rr20PartCount": 30,
-      "rr20Bytes": 26088,
+      "rr20Bytes": 26094,
       "rr90PreviousSha256": "db6a3e2d5b6c02795149a9373d9208e04806f2032d27fc7962327899894d115c",
       "rr90PreviousBytes": 26013,
       "wi5PreviousSha256": "1e5f469b3b64c2ef1139ee83ce64d1a4414ea46b3faa151821db09dd4f891875",
@@ -1624,6 +1702,12 @@
           "bytes": 26092,
           "partCount": 30,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "9434c37d195dc05520347300a851744f5aa66090efed3bb45b121fbb19f35433",
+          "bytes": 26088,
+          "partCount": 30,
+          "reviewIndex": 11
         }
       ]
     },
@@ -1666,12 +1750,12 @@
           }
         ]
       },
-      "sha256": "9e52d466fe05a268a365c57012e994a4543ac93362edc4bb11a78171f33ecaaf",
+      "sha256": "94b7fe4c951bb07060c69ac2a52beaafbc6d982790c855b0e302f1f1f01195ca",
       "previousSha256": "3bc08c644ba443a9fde975c8f9cf39ffa44a4cd0f779c896a7be2ac64332ea9b",
       "rr81PreviousSha256": "a27ec34c283f59e04ba7ae02b885de0cacc7e0c46191079c6947f699a2c542de",
       "rr20PreviousSha256": "3929f43b2bcbfc72ce95f06e0e5604bf6fa3fbad145f6e9621d614781f3bf4b8",
       "rr20PartCount": 30,
-      "rr20Bytes": 25900,
+      "rr20Bytes": 25906,
       "rr90PreviousSha256": "07307458877dae4b4be2038c88e5dae5f0efff27febfb16ab6ec021f9eab1f0c",
       "rr90PreviousBytes": 25839,
       "wi5PreviousSha256": "89646e3b606f2fe238c6fbfea75e9f48ac25c890097fedbb8c90130efbb83525",
@@ -1732,6 +1816,12 @@
           "bytes": 25903,
           "partCount": 30,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "9e52d466fe05a268a365c57012e994a4543ac93362edc4bb11a78171f33ecaaf",
+          "bytes": 25900,
+          "partCount": 30,
+          "reviewIndex": 11
         }
       ]
     },
@@ -1762,12 +1852,12 @@
           }
         ]
       },
-      "sha256": "b472ccfeeac3ebc7f0b35529a0c56ae89a32ad07cf6ff98a280849f006975637",
+      "sha256": "e2c5f5fd117b8f3fdc0804d2728d60a5c8f3507042de8fec60e379d7d9ed9419",
       "previousSha256": "ce86707121a169b6fb13781f87acb279fd29ce2740640c6ba4f0eb6ea7283af5",
       "rr81PreviousSha256": "8e216e257f4c9b02bf2e51bf33566ea949dd95d5b84f2aa5b203a9569d8b249c",
       "rr20PreviousSha256": "edb9d38c631a7eca1cc37f10434b54a86313b36369e2380c0645782fcb725bbd",
       "rr20PartCount": 30,
-      "rr20Bytes": 25718,
+      "rr20Bytes": 25724,
       "rr90PreviousSha256": "90dc328f75ca4abae5a06c1ee36992f23ec891cd1748535c61666e835f66a726",
       "rr90PreviousBytes": 25671,
       "wi5PreviousSha256": "0db7a20e4f5a658fc9ec2fc19b7cf8f38f14058786b0a7e1a2c4536bd7ffbf41",
@@ -1826,6 +1916,12 @@
           "bytes": 25722,
           "partCount": 30,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "b472ccfeeac3ebc7f0b35529a0c56ae89a32ad07cf6ff98a280849f006975637",
+          "bytes": 25718,
+          "partCount": 30,
+          "reviewIndex": 11
         }
       ]
     },
@@ -1865,11 +1961,11 @@
           }
         ]
       },
-      "sha256": "851f045e353969608df685c1f493d672eaecabd267195b45eef2da1b73d62294",
+      "sha256": "ee58bcf7674dc9b072a60c63b55e8021acc3658e553fa6f80e2707d82d80ce26",
       "rr81PreviousSha256": "7184993d0ee22c4e7c90ae9d17b3a2aefe55ec5972a331b117951d727f2d7059",
       "rr20PreviousSha256": "316edf265b150d7a41515676990d779a2e57accb0fe2f72e9c5203aa24541e54",
       "rr20PartCount": 31,
-      "rr20Bytes": 26349,
+      "rr20Bytes": 26351,
       "rr20RowDataPreviousSha256": "5162d4b32aa4a96a66809df9a76c636217dbac18d95060daed9d8d36ce42abe0",
       "rr20RowDataPreviousBytes": 25843,
       "rr20RowDataPreviousPartCount": 30,
@@ -1926,6 +2022,12 @@
           "bytes": 26353,
           "partCount": 31,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "851f045e353969608df685c1f493d672eaecabd267195b45eef2da1b73d62294",
+          "bytes": 26349,
+          "partCount": 31,
+          "reviewIndex": 11
         }
       ]
     },
@@ -1960,12 +2062,12 @@
           }
         ]
       },
-      "sha256": "d12250776d7e542745c3aa9d6a02d8229cb56f0dac9b81111d26526ad2d2c0f7",
+      "sha256": "ad61c1adb09ffa839c4e3e52067db6381221c4824529576b64684a3202b3ce97",
       "previousSha256": "e37430a5255bbcd16dfdcb28250a692d0cde3c770a9c8471e8f80ed195e32575",
       "rr81PreviousSha256": "ad90e489c98bdd271b661bdd74971c0e65c297c9c6ec5ee019d0c4537c6adc5c",
       "rr20PreviousSha256": "a027fa049d3f679a71d9451c8fda5679c07eea9394e00fdba99744fd9b5ed9e8",
       "rr20PartCount": 30,
-      "rr20Bytes": 25733,
+      "rr20Bytes": 25738,
       "rr90PreviousSha256": "bb70b79eb88c74dc52ff83276047b6dccc227f162366ca9c6515a0850951e9f9",
       "rr90PreviousBytes": 25682,
       "wi5PreviousSha256": "538b7d98c2b3e3120d39c0cd98a6f08708decc67a3575108321539dfed94fac8",
@@ -2024,6 +2126,12 @@
           "bytes": 25737,
           "partCount": 30,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "d12250776d7e542745c3aa9d6a02d8229cb56f0dac9b81111d26526ad2d2c0f7",
+          "bytes": 25733,
+          "partCount": 30,
+          "reviewIndex": 11
         }
       ]
     },
@@ -2054,11 +2162,11 @@
           }
         ]
       },
-      "sha256": "c119c09bf5ead68dd1f425c38e674df595555c7bd53735c7231e06677cb48511",
+      "sha256": "59c66e2251b7aa771f0b0a7ec3b3e4009ef9a604a908d6a596c99a2e0265ab9e",
       "rr81PreviousSha256": "f1be128128cf4c62067070de0f37f61f04cc85743797a1af745f0d2c8fec9849",
       "rr20PreviousSha256": "a6419c39cdc7fc66a32d77f0db2fe181bf9d35ad56ef96330e6edb827889317d",
       "rr20PartCount": 30,
-      "rr20Bytes": 25868,
+      "rr20Bytes": 25872,
       "rr90PreviousSha256": "d060611796845bedebd39d8b61bed229755f93aa93f0f505d863c9334a303d4f",
       "rr90PreviousBytes": 25830,
       "wi5PreviousSha256": "b8fd7037f3a48bc001644141092fcad2f36b5c78cc464b8288b49169d22f7e73",
@@ -2112,6 +2220,12 @@
           "bytes": 25872,
           "partCount": 30,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "c119c09bf5ead68dd1f425c38e674df595555c7bd53735c7231e06677cb48511",
+          "bytes": 25868,
+          "partCount": 30,
+          "reviewIndex": 11
         }
       ]
     },
@@ -2743,7 +2857,7 @@
           }
         ]
       },
-      "sha256": "3b240a0134b2c0b99fd2d668af7fed124736734365da414ef237b54621996bb5",
+      "sha256": "402aa2037079e53befba8b5a99c01fc87efbac62acdcdba474a97023dfc80704",
       "previousSha256": "8744ecbad37555637ec72667e4d884db982c0882da3c4c6d21b65df141de2534",
       "nativeSlideSha256": "5956d35eb0b2be7d7320798972f3027e43f2cb87a9604148d407cc2e68185e20",
       "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged.",
@@ -2751,7 +2865,7 @@
       "rr81PreviousNativeSlideSha256": "cf16e2a0717f35272ecac4c58806b1a45db8bca1f224f3211c7e6bfeaafbcbac",
       "rr20PreviousSha256": "595b3af0478b788077e7233fce2461c2512465058d7188505682c6c2900874e4",
       "rr20PartCount": 31,
-      "rr20Bytes": 27098,
+      "rr20Bytes": 27112,
       "rr20PreviousNativeSlideSha256": "72b7cbc76ec12a294480c933f66a247dd90449798a0008d3adf3d723fa0591ad",
       "rr90PreviousSha256": "d66b20b9afc9c15964238285d36eaf9cc783e51009bb29cdf8a00dc6e2b0f9ff",
       "rr90PreviousBytes": 26900,
@@ -2836,6 +2950,13 @@
           "partCount": 31,
           "nativeSlideSha256": "3bf43698928ed9970e8170667e56322875dbfcd36cefe1fbd768858c17a2c69d",
           "reviewIndex": 10
+        },
+        {
+          "sha256": "3b240a0134b2c0b99fd2d668af7fed124736734365da414ef237b54621996bb5",
+          "bytes": 27098,
+          "partCount": 31,
+          "nativeSlideSha256": "5956d35eb0b2be7d7320798972f3027e43f2cb87a9604148d407cc2e68185e20",
+          "reviewIndex": 11
         }
       ]
     }

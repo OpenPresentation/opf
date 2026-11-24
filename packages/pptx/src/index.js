@@ -22,7 +22,7 @@ import {chartRegionSvg} from './preview-region.js';
 import {applyDoughnutRings,applyRingLabels,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
 import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
 import {authoredChartAlt,authoredTableAlt,chartAlt,generatedChartAlts,logoAlt,photoAlt,tableAlt} from './default-alt.js';
-import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
+import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,noWrapDataLabels,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
 import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
@@ -70,6 +70,7 @@ import {placeLogos, importLogo, importLogoPlaceholders, logoName, LOGO_TAG} from
 import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} from './background.js';
 import {importBackground, readSlideTheme} from './background-import.js';
 import {chartHighlightPlan, applyChartHighlight} from './chart-highlight.js';
+import {joinPointSeries, splitPointSeries, writePointSeriesWorkbook} from './chart-point-series.js';
 import {orderChartSeries} from './chart-order.js';
 import {lineXml, linkShapeBlocks, shapeBlockRecord, writeShapeBlocks} from './shape-blocks.js';
 import {connectorName, connectorRecord, writeConnectors} from './connectors.js';
@@ -439,6 +440,8 @@ export async function toPptx(input, options = {}) {
   context.slideSchemeColors = [];
   // SH-02: the native parts of each shape block, by object name (src/shape-blocks.js), written into the finished slide parts.
   context.shapeBlocks = new Map();
+  // opf#1415: text boxes whose whole text is one link (a footer social line), by object name: the link is the shape's click link.
+  context.linkedTextShapes = new Map();
   context.shapeSchemeColors = new Map();
   // SH-04: the native connectors of the slides' overlays, by object name (src/connectors.js), written into the finished slide parts.
   context.connectors = new Map();
@@ -498,6 +501,12 @@ export async function fromPptx(input, options = {}) {
   // stored layout ids resolve against them; with none, a color scheme imports inline and no theme id is recovered.
   checkCatalogs('fromPptx', options.catalogs);
   const entries = readPptxZip(input);
+  // opf#1415: series an OPF export split off for the legend are joined back first, so every later step reads the authored chart.
+  for (const path of Object.keys(entries)) {
+    if (!/^ppt\/charts\/chart\d+\.xml$/.test(path)) continue;
+    const xml = decodeText(entries[path]), joined = joinPointSeries(xml, diagnostic => options.onDiagnostic?.({...diagnostic, path}));
+    if (joined !== xml) entries[path] = encodeText(joined);
+  }
   const presentationDoc = parseRequiredXml(entries, "ppt/presentation.xml");
   const presentationRoot = presentationDoc["p:presentation"];
   if (!presentationRoot) {
@@ -1347,7 +1356,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     // Names may preserve an ordinary drawing after all provenance is stripped; they NEVER identify a semantic reference.
     const shapeKind = drawnShape&&(referenceDrawing||referenceOverlays.preserved.has(shape)||chartMarks.preserved.has(shape))?'overlay':drawnShape ? shapeRole(drawnShape, {hasText: (paragraphs[index] ?? []).some(paragraph => paragraph.text)}) : 'text';
     if (shapeKind !== 'text') {
-      const imported = importNativeShape(drawnShape, shapeKind, {...shapeContext, text: shapeText(readBody(index), diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.shapes.${index}.text`}))});
+      const imported = importNativeShape(drawnShape, shapeKind, {...shapeContext, text: shapeText(readBody(index, {shapeLink: false}), diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.shapes.${index}.text`}))});
       roles.set(shapeKeys.get(shape), shapeKind === 'block' ? 'shape' : 'overlay');
       if (imported) items.push({...imported, sources: [`sp:${index}`]});
       continue;
@@ -3905,7 +3914,15 @@ function applyChartTextSize(xml, size) {
 // category names; the value tick labels unless the value axis is deleted) ends where the preview's plot ends (core horizontalBarPlot or
 // chartPlotInset), and the other sides stay on the outer box, where PowerPoint's plot already reaches. `outer` is that box (fractions of
 // the chart frame); undefined when core lays out no plot.
-function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale, valueAxisHidden, context, options, presentation}) {
+//
+// opf#1415, `whole`: the plot area is the preview's plot on every side (layoutTarget inner). Below a header row the export wrote an outer
+// plot area from the header's bottom edge (src/chart-layer.js), and PowerPoint started the plot right there: higher and taller than the
+// preview, which keeps its padding and half a text line (the top tick label's half) under the heading, or a whole line for the value label
+// of a small chart's tallest column (core chartPlotInset). Since a small column chart's axis ends at its tallest column (0.35.2, the column
+// plot gap), that label stood on the heading's line, or over the heading on a narrow chart. PowerPoint also keeps no room in an outer or
+// automatic plot area for a label outside a mark, so a small column or bar chart (no value axis, labeled marks) without a header gets the
+// preview's plot too, a horizontal bar chart with the widest label's room beyond its end (core horizontalBarPlot's labelRoom).
+function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale, valueAxisHidden, context, options, presentation, whole = false}) {
   const data = resolveChartData(isDatasetRef(chart?.data) ? inlineChartData(chart, presentation) : chart, presentation);
   if (!data.ok) return undefined;
   const box = {x: region.x * 96, y: region.y * 96, width: region.w * 96, height: region.h * 96};
@@ -3913,9 +3930,18 @@ function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale,
   const deckLanguage = typeof presentation?.language === 'string' ? presentation.language : presentation?.language?.bcp47;
   const language = chartNumberLanguage(chart, deckLanguage), rtl = context.direction === 'rtl', horizontal = chartData.barDir === 'bar';
   const geometry = {scale, minFontSize: context.composition?.minFontSize, measure, direction: rtl ? 'rtl' : 'ltr', ...(language === undefined ? {} : {language})};
-  const inset = (horizontal ? horizontalBarPlot(chart, data, layer, valueAxis, box, geometry) : undefined)
-    ?? chartPlotInset(chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...geometry, box});
+  const barInset = horizontal ? horizontalBarPlot(chart, data, layer, valueAxis, box, geometry) : undefined;
+  // A whole horizontal plot without its value axis needs the label room only horizontalBarPlot keeps (chartPlotInset's bar branch, the
+  // preview's plot of a bar chart with options, keeps none).
+  if (whole && horizontal && !barInset && valueAxisHidden) return undefined;
+  const inset = barInset ?? chartPlotInset(chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...geometry, box});
   if (!inset) return undefined;
+  if (whole) {
+    const fraction = value => Number(Math.min(1, Math.max(0, value)).toFixed(4));
+    const left = inset.left / box.width, top = inset.top / box.height, right = 1 - inset.right / box.width, bottom = 1 - inset.bottom / box.height;
+    if (!(right > left && bottom > top)) return undefined;
+    return {x: fraction(left), y: fraction(top), w: fraction(right - left), h: fraction(bottom - top), target: 'inner'};
+  }
   // The labeled sides: a horizontal bar chart's category names at the left and value ticks at the bottom; a column chart's names at the
   // bottom and value ticks at the left (the right when its categories run right to left).
   const labeled = horizontal ? {left: true, bottom: !valueAxisHidden} : {bottom: true, [rtl ? 'right' : 'left']: !valueAxisHidden};
@@ -4071,6 +4097,14 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // Keynote: the category names of a negative range at the low edge, outside an inner plot area (lowLabelPlot).
   if (layerXml.layout.plot && !layerXml.layout.plot.target && chartData.type === 'bar' && !chartData.combo && chartLayout?.valueAxis?.min < 0) {
     const plotBox = lowLabelPlot(chart, chartData, layer, chartLayout.valueAxis, layerXml.layout.plot, region, {scale, valueAxisHidden: layerXml.options.valAxisHidden === true, context, options, presentation});
+    if (plotBox) layerXml.layout.plot = plotBox;
+  }
+  // opf#1415: a column, bar, line or area chart below a header row, and a small column or bar chart (no value axis, labeled marks) with or
+  // without one, has the preview's plot (lowLabelPlot, whole): the plot starts where the preview's does under the heading, and the label of
+  // the tallest column (or longest bar) keeps the room the preview gives it.
+  else if (!layerXml.layout.plot?.target && ['bar', 'line', 'area'].includes(chartData.type) && !chartData.combo
+    && (layerXml.layout.plot || (chartData.type === 'bar' && layerXml.options.valAxisHidden === true && chartOptions.dataLabels))) {
+    const plotBox = lowLabelPlot(chart, chartData, layer, chartLayout?.valueAxis, layerXml.layout.plot, region, {scale, valueAxisHidden: layerXml.options.valAxisHidden === true, context, options, presentation, whole: true});
     if (plotBox) layerXml.layout.plot = plotBox;
   }
   if (Object.keys(layerXml.layout).length) context.chartHeadings.get(objectName).layerLayout = layerXml.layout;
@@ -4711,19 +4745,21 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     else if(config.media&&context.provenanceMode!==false)context.mediaTags.set(objectName,{v:1,role:'caption',path:config.path,line:index,count:fit.lines.length,boundary:sourceLine?.boundary??'end',...(context.provenanceMode==='full'?{fingerprint:mediaTextFingerprint(line),...boundary}:{})});
     else if(config.sourceText)context.plainTextTags.set(objectName,{v:1,group:config.path,line:index,count:fit.lines.length,...boundary});
     const area=placed?{x:(placed.x+placed.width*factor-box.width*factor)/96,y:(placed.baseline-fit.fontSize)/96,w:box.width/96,h:placed.height/96}:{x:box.x/96,y:(box.y+index*fit.lineHeight)/96,w:box.width/96,h:fit.lineHeight/96};
-    // A run-level link keeps the muted, non-underlined furniture look of the preview (hlinkClr=tx, u=none).
+    // opf#1415: a linked line (a footer social account) is a text box whose whole text is the link, so the link is the shape's click link
+    // (a:hlinkClick in its p:cNvPr, linkShapeBlocks): PowerPoint underlines every run that is a link, and the preview draws this line in
+    // its muted color without an underline. The run keeps that color and u="none".
     const lineColor = pptxColor(config.color ?? context.textColor);
     const latinStart = sourceLine?.start ?? String(text ?? '').indexOf(line,latinSourceOffset);
     context.nativeLatinSlots.remember(context.slideIndex,objectName,[{text:line,source:String(text ?? ''),start:latinStart,end:latinStart+line.length,style:{...style,...(config.lang?{lang:config.lang}:{})}}],config.path);
     latinSourceOffset = latinStart+line.length;
-    slide.addText(link?.href && line ? [{text: line, options: {hyperlink: {url: link.href}, color: lineColor, underline: {style: 'none'}}}] : line, {
+    if (link?.href && line) context.linkedTextShapes.set(objectName, {link: link.href});
+    // A linked caption box (a video placeholder's) links as a whole the same way, blank caption boxes included; its text keeps u="none".
+    else if (config.hyperlink?.url) context.linkedTextShapes.set(objectName, {link: config.hyperlink.url});
+    slide.addText(link?.href && line ? [{text: line, options: {color: lineColor, underline: {style: 'none'}}}] : line, {
       ...textBoxOptions(area, context, fit.fontSize * .75),
       ...nativeFontOptions(style), ...eyebrowOptions(style, fit.fontSize), ...langOptions(context, config.lang),
       color: lineColor, align: alignment,
       ...(fit.directions?.[index]==='rtl'?{rtlMode:true}:{}),
-      // Reuse the frame's existing relationship to cover blank caption boxes.
-      // PptxGenJS also inherits it into runs; keep their native text styling.
-      hyperlink: config.hyperlink,
       underline: config.hyperlink ? {style: 'none'} : undefined,
       tabStops:sourceLine?.segments.filter(segment=>segment.kind==='tab').map(segment=>({position:(segment.x+segment.width)/96,alignment:'l'})),
       objectName,
@@ -6123,10 +6159,11 @@ async function normalizePptxZip(raw, context) {
       if(!p||!entries[p])throw Error('Generated reference chart is missing.');entries[p]=encodeText(applyReferenceSeries(decodeText(entries[p]),info,{lang:referenceLabelLanguage(part),frame:new XMLParser({ignoreAttributes:false,attributeNamePrefix:"",parseTagValue:false,trimValues:false}).parse(frame)["p:graphicFrame"],shapes:asArray(parseRequiredXml(entries,part)?.["p:sld"]?.["p:cSld"]?.["p:spTree"]?.["p:sp"])}));
     }
   }
-  // opf-pptx#175: after every chart rewrite, each classic series in its CT_*Ser sequence (src/chart-order.js).
+  // opf-pptx#175: after every chart rewrite, each classic series in its CT_*Ser sequence (src/chart-order.js). opf#1415: every data label
+  // on one line, as the preview draws it (chart-options.js noWrapDataLabels).
   for(const part of Object.keys(entries)){
     if(!/^ppt\/charts\/chart\d+\.xml$/.test(part))continue;
-    const xml=decodeText(entries[part]),ordered=orderChartSeries(xml);
+    const xml=decodeText(entries[part]),ordered=orderChartSeries(noWrapDataLabels(xml));
     if(ordered!==xml)entries[part]=encodeText(ordered);
   }
   applyChartFonts(entries,context.chartFonts,parseRelationships);
@@ -6216,6 +6253,8 @@ async function normalizePptxZip(raw, context) {
   }
   // SH-02: a shape block's click link (a:hlinkClick in its p:cNvPr, with its slide's external hyperlink relationship).
   linkShapeBlocks(entries, context.shapeBlocks, {decode: decodeText, encode: encodeText});
+  // opf#1415: so is a text box whose whole text is one link.
+  linkShapeBlocks(entries, context.linkedTextShapes, {decode: decodeText, encode: encodeText});
   // Image pictures need the embedded dimensions (core's fitImage crops and pads them); document provenance (FF-32)
   // later records the placed frames as slide geometry evidence.
   try {
@@ -6367,6 +6406,24 @@ async function normalizePptxZip(raw, context) {
       }
     }
     for (const [path, bytes] of Object.entries(parts)) output[path] = [bytes, {level: context.compressionLevel, mtime: context.zipDate}];
+  }
+  // opf#1415: a lone series whose points have their own colors names the series in PowerPoint's legend: its colored points become
+  // series of their own, with their workbook columns (src/chart-point-series.js). Last, after every record has sealed the authored form.
+  for (const path of Object.keys(output)) {
+    const match = /^ppt\/charts\/(chart\d+\.xml)$/.exec(path);
+    if (!match) continue;
+    const split = splitPointSeries(decodeText(output[path][0]));
+    if (!split.workbook) continue;
+    const target = /<Relationship\b(?=[^>]*\bType="[^"]*\/package")[^>]*\bTarget="\.\.\/embeddings\/([^"/]+)"/.exec(decodeText(output[`ppt/charts/_rels/${match[1]}.rels`]?.[0] ?? new Uint8Array()))?.[1];
+    const workbookPath = target && `ppt/embeddings/${target}`;
+    if (!workbookPath || !output[workbookPath]) throw new OPFPptxError('packaging-failed', 'A split chart series has no embedded workbook.', {path});
+    try {
+      const workbook = writePointSeriesWorkbook(unzipSync(output[workbookPath][0]), split.workbook);
+      output[workbookPath] = [normalizeNestedZip(zipSync(workbook), context), output[workbookPath][1]];
+    } catch (error) {
+      throw new OPFPptxError('packaging-failed', 'The workbook columns of a split chart series could not be written.', {path, cause: errorMessage(error)});
+    }
+    output[path] = [encodeText(split.xml), output[path][1]];
   }
 
   // Sort after chart/worksheet renaming; source counters can cross digit widths.

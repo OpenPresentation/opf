@@ -54,7 +54,9 @@ export const HISTOGRAM_SELECTION=Object.freeze({slideIndex:2,seriesIndex:1,point
 // Previous: {bytes:222790,sha256:'664db47e0148f2cacae21b6818a5f3cfaeebb63fb5f9e295e46030f671436341'}.
 // LH-194 to LH-199, the layout-sweep fixes (owner decision 2026-11-24, "Yes, refresh them"): layout tags and one chart part; only the ppt/tags/opfLayout*.xml parts of agenda, pillars, chart-beside, code, dashboard and team differ (their record hashes), and ppt/charts/chart7.xml, the column chart with negative values, whose plot area is written with layoutTarget inner (the negative-bar fix); no slide layout, slide, other chart, media or theme part differs; part-by-part comparison with the export of af413076e.
 // Previous: {bytes:222788,sha256:'3b41ad559ae3b8e933813241ce6717fa91ae6799110b2a46e4271ebed1eb4417'}.
-export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:222791,sha256:'5eba8a9f1f5e1e6293a73e69ef79aef620f409cf81daccf557071d66b706050e'});
+// opf#1415, choices 1 to 3, the chart label fix and option D (owner decision 2026-11-24, "Yes, refresh them"): three chart parts; only ppt/charts/chart2.xml, chart3.xml and chart7.xml differ, each in its data label bodies, written with wrap="none" (choice 2); no slide, layout, tag, media or theme part differs; part-by-part comparison with the export of 6f7548244.
+// Previous: {bytes:222791,sha256:'5eba8a9f1f5e1e6293a73e69ef79aef620f409cf81daccf557071d66b706050e'}.
+export const HISTOGRAM_SOURCE_ARCHIVE=Object.freeze({bytes:222804,sha256:'ff801e6045ed260d3b2e695d2e7197ccc9764dc050db694ea68d765911ebd83e'});
 export const HISTOGRAM_SOURCE_ARCHIVE_BEFORE_RR105_PICTURE=Object.freeze({bytes:184592,sha256:'04c92723efe8485678dc087ab88506486542aee860ad7bc4db11005600ab55fb'});
 const keys=(value,names)=>assert.deepEqual(Object.keys(value).sort(),[...names].sort());
 const modelHash=value=>digest(Buffer.from(JSON.stringify(value)));

@@ -120,12 +120,19 @@ function bodyRunStyle(properties, context, relationships, report, extras = {}) {
 }
 
 export function nativeBodyReader(slidePath, archive, relationships, report, extras = {}) {
-  let bodies, context, inheritedStyles;
-  return (index, {languageOnly = false, onlyScaled = false} = {}) => {
+  let bodies, context, inheritedStyles, shapeLinks;
+  // opf#1415: `shapeLink` (default true): a text box's click link (one a:hlinkClick in its p:cNvPr, which the export writes for a box
+  // whose whole text is one link, such as a footer social line) is the link of every run that has none of its own. A caller that reads
+  // the shape's link itself (an OPF shape block) passes false.
+  return (index, {languageOnly = false, onlyScaled = false, shapeLink = true} = {}) => {
     if (!bodies) {
       const tree = archive.part(slidePath, parser);
       const currentShapes = shapes(child(child(child(tree, 'p:sld'), 'p:cSld'), 'p:spTree'));
       bodies = currentShapes.map(shape => child(shape, 'p:txBody'));
+      shapeLinks = currentShapes.map(shape => {
+        const links = nodes(child(child(shape, 'p:nvSpPr'), 'p:cNvPr'), 'a:hlinkClick');
+        return links.length === 1 ? {...links[0][':@']} : undefined;
+      });
       context = readSlideTheme(slidePath, archive);
       inheritedStyles = currentShapes.map(shape => bodyInheritedStyles(shape, context, archive, slidePath));
     }
@@ -161,7 +168,8 @@ export function nativeBodyReader(slidePath, archive, relationships, report, extr
         if (!tag) continue;
         const path = `shapes.${index}.paragraphs.${paragraphIndex}.runs.${runIndex++}`;
         const current = tag === 'a:br' ? '\n' : text(child(node[tag], 'a:t'));
-        const properties = mergeNativeRunProperties(defaults, drawingObject(node[tag])['a:rPr']);
+        const own = mergeNativeRunProperties(defaults, drawingObject(node[tag])['a:rPr']);
+        const properties = shapeLink && shapeLinks[index] && tag !== 'a:br' && !own['a:hlinkClick'] ? {...own, 'a:hlinkClick': shapeLinks[index]} : own;
         // RR-05: a Latin phrase of a right-to-left paragraph is its own en-US run; its East Asian/complex-script slots can render nothing in it, so the face loss is not reported.
         // LH-118: so is a number (core numberRanges), in a right-to-left paragraph or a letterless one.
         // The legacy splitter writes no alternate language. Unowned alternate pairs stay observed; owned pairs were normalized in the read view.
