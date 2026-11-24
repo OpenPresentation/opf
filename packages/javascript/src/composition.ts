@@ -8157,7 +8157,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // TLN-1: a lone band (no durations) first grows in proportion, every role by one factor, its `what` labels up through the type
     // scale to TIMELINE_DISPLAY_SIZE (the size a short row of headings takes), largest first, while it keeps its arrangement, fits its
     // box with every word whole and no `when` or name takes another line; a `what` label may take a second line (TIMELINE_WHAT_LINES).
+    // LH-129 and LH-41's growth by a size offset, as before TLN-1: the sizes the proportional growth must not set any part under.
+    const stepped = (): TimelineLayout => {
+      for (const growth of TIMELINE_STEP_GROWTH) {
+        const grown = measureTimeline(node, box, settings, 'placed', growth);
+        if (!grown.overflow && (ranged || grown.arrangement === placed.arrangement) && lines(grown) === lines(placed) && capped(grown)) return grown;
+      }
+      for (let growth = TIMELINE_GROWTH; growth > 0; growth--) {
+        const grown = measureTimeline(node, box, settings, 'placed', growth);
+        if (!grown.overflow && (ranged || grown.arrangement === placed.arrangement) && capped(grown)) return grown;
+      }
+      return placed;
+    };
     if (!ranged && placed.arrangement !== 'vertical') {
+      let floor: TimelineLayout | undefined;
       const start = TIMELINE_ROLE_SIZES.what * scale, display = Math.max(start, Math.min(TIMELINE_DISPLAY_SIZE * scale, capOf(settings)));
       const fixed = (layout: TimelineLayout) => layout.parts.map(part => part.role === 'when' || part.role === 'name' ? part.fit?.lines.length ?? 0 : 0).join();
       const whatLines = (layout: TimelineLayout) => Math.max(0, ...layout.parts.filter(part => part.role === 'what').map(part => part.fit?.lines.length ?? 0));
@@ -8165,18 +8178,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       for (const size of candidates) {
         if (size <= start * TIMELINE_STEP_MIN + FONT_GRID_EPSILON) continue;
         const grown = measureTimeline(node, box, settings, 'placed', 0, false, size / start);
-        if (!grown.overflow && grown.arrangement === placed.arrangement && fixed(grown) === fixed(placed) && whatLines(grown) <= Math.max(TIMELINE_WHAT_LINES, whatLines(placed)) && capped(grown)) return grown;
+        // The proportion only grows: no part is set under the size the offset growth gives it (a `when` label at 26.81 px where it had
+        // 28), so such a factor is not taken.
+        floor ??= stepped();
+        const kept = grown.parts.every((part, index) => { const before = floor!.parts[index]?.fit; return !before || (!!part.fit && part.fit.fontSize >= before.fontSize - FONT_GRID_EPSILON); });
+        if (!grown.overflow && kept && grown.arrangement === placed.arrangement && fixed(grown) === fixed(placed) && whatLines(grown) <= Math.max(TIMELINE_WHAT_LINES, whatLines(placed)) && capped(grown)) return grown;
       }
     }
-    for (const growth of TIMELINE_STEP_GROWTH) {
-      const grown = measureTimeline(node, box, settings, 'placed', growth);
-      if (!grown.overflow && (ranged || grown.arrangement === placed.arrangement) && lines(grown) === lines(placed) && capped(grown)) return grown;
-    }
-    for (let growth = TIMELINE_GROWTH; growth > 0; growth--) {
-      const grown = measureTimeline(node, box, settings, 'placed', growth);
-      if (!grown.overflow && (ranged || grown.arrangement === placed.arrangement) && capped(grown)) return grown;
-    }
-    return placed;
+    return stepped();
   };
   // RR-34: a captioned leaf is scored and placed on the media box that remains after its caption band.
   const captionOf = (node: Pending, box: LayoutBox) => node.caption !== undefined && node.captionPath ? layoutCaption(node.caption, box, node.captionPath, node.field === 'image' ? { ...annotationOptions, nameDetail: true } : annotationOptions) : undefined;

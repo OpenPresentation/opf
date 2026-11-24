@@ -51,3 +51,12 @@ test('TLN-1: the bands of a stack keep their role sizes and markers', () => {
     assert.equal(item.timelineLayout.lineWidth, undefined);
   }
 });
+
+test('TLN-1 with LH-129: the proportional growth never sets a date under the size the offset growth gives it', () => {
+  const six = [['Week 1', 'Baseline'], ['Weeks 2–5', 'Pilot'], ['Week 6', 'Review and decide'], ['Week 8', 'Scale'], ['Week 10', 'Report'], ['Week 12', 'Close']].map(([when, what]) => ({ when, what }));
+  const result = compose({ title: 'Six weeks to a decision', blocks: [{ region: 'body', timeline: { events: six } }, { region: 'lead', text: lead }, { region: 'aside', text: note }] });
+  const layout = of(result, 'timeline').timelineLayout;
+  // The offset growth sets the dates at 28 px and the events at 32; the proportional factor that would leave a date at 25.8 px is not taken.
+  assert.ok(Math.min(...layout.parts.filter((part) => part.role === 'when').map((part) => part.fit.fontSize)) >= 28 - 1e-6);
+  assert.ok(size(layout, 'what') > 32, `the events still grow (${size(layout, 'what')})`);
+});
