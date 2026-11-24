@@ -309,18 +309,22 @@ function doughnutLabelFit(chart: unknown, data: ResolvedChartData, geometry: Cha
  * the area the header, the legend and the padding leave, and a circle of 0.9 of its half side, or (a pie with names outside its slices,
  * LH-105) of the half side less the room the widest outside name takes. Undefined for a pie with outside data labels of the author's (their
  * text is the preview's own) or an unusable box. SH-25 pins a chart point's plot to it, so an anchored overlay never moves the chart.
+ * opf#1430: with `labels`, a pie with outside data labels of the author's has its square too: the half side less the room the widest label
+ * takes (the preview's charts.js outsideLabelReserve), each slice's label text as the preview writes it (the PPTX export pins its plot there).
  */
-export function chartCircleSquare(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, layer: ChartLayer | undefined): Box | undefined {
+export function chartCircleSquare(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, layer: ChartLayer | undefined, {labels = false}: {labels?: boolean} = {}): Box | undefined {
   if (!record(chart) || !data.ok || data.columns.length < 2 || !data.rows.length) return undefined;
   const {box, scale} = geometry;
   if (!usable(box, scale)) return undefined;
   const options = resolveChartOptions(chart, chartOptionTarget(typeOf(chart)));
   const {fontPx, pad, lineHeight} = metrics(box, scale, geometry.minFontSize);
   const square = (area: Box, radius: number): Box => { const cx = area.x + area.width / 2, cy = area.y + area.height / 2; return {x: cx - radius, y: cy - radius, width: 2 * radius, height: 2 * radius}; };
-  // A pie's outside names take room around it; outside data labels of the author's are the preview's text, which core does not measure.
+  // A pie's outside names take room around it; outside data labels of the author's are the preview's text, measured only with `labels`.
   const pie = typeOf(chart) === 'pie';
-  if (pie && options.dataLabels && (options.dataLabels.position ?? 'outside-end') === 'outside-end') return undefined;
-  const outside = pie && !options.dataLabels && layer?.slices ? layer.slices.labels.filter(entry => entry.position === 'outside').map(entry => label(data.rows[entry.row]?.[0])) : [];
+  const outsideLabels = pie && options.dataLabels && (options.dataLabels.position ?? 'outside-end') === 'outside-end';
+  if (outsideLabels && !labels) return undefined;
+  const outside = outsideLabels ? pieLabelTexts(data, options.dataLabels!, geometry.language)
+    : pie && !options.dataLabels && layer?.slices ? layer.slices.labels.filter(entry => entry.position === 'outside').map(entry => label(data.rows[entry.row]?.[0])) : [];
   const radiusIn = (area: Box) => outside.length
     ? Math.max(1, Math.min(area.width / 2 - (Math.max(0, ...outside.map(text => geometry.measure(text, fontPx, 400) + fontPx * 0.5)) + fontPx * 0.25), area.height / 2 - (lineHeight + fontPx * 0.25)))
     : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
@@ -359,6 +363,20 @@ export function chartCircleSquare(chart: unknown, data: ResolvedChartData, geome
   const legend = layer?.slices ? 0 : Math.min(box.width * 0.45, fontPx * 0.6 + fontPx * 0.4 + Math.max(0, ...names.map(name => geometry.measure(name, fontPx, 400))) + fontPx * 0.5) + pad;
   const area = {x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legend), height: Math.max(1, box.height - 2 * pad)};
   return square(area, radiusIn(area));
+}
+
+/**
+ * opf#1430: each slice's data label text as the preview writes it (charts.js renderCircularChart, labelString): the raw category name, the
+ * signed value in the column's format (else grouped as the column's default labels are) and the share of the total of the absolute values,
+ * for every row (a zero slice's label is measured too).
+ */
+function pieLabelTexts(data: ResolvedChartData, dataLabels: {content?: readonly ChartLabelContent[]; separator?: string}, language: string | undefined): string[] {
+  if (!data.ok) return [];
+  const values = data.rows.map(row => chartNumber(row[1]) ?? 0), total = values.reduce((sum, value) => sum + Math.abs(value), 0);
+  const format = typeof data.formats[1] === 'string' && data.formats[1] !== '' && !numberFormatError(data.formats[1]) ? data.formats[1] : undefined;
+  const group = format === undefined && columnGroups(data, 1) ? {language} : undefined;
+  return data.rows.map((row, index) => chartLabelText({category: row[0] === null || row[0] === undefined ? '' : String(row[0]), value: valueLabel(values[index]!, format, group, language),
+    percent: formatChartLabelPercent(total ? Math.abs(values[index]!) / total : 0, language)}, dataLabels.content ?? [], dataLabels.separator));
 }
 
 /**
