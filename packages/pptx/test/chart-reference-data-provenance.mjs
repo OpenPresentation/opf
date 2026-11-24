@@ -84,3 +84,64 @@ test('an edit of a number format is still detected with a theme-colored referenc
   const {diagnostics} = await roundTrip(deck(issue), xml => xml.replace(/<c:formatCode>[^<]*<\/c:formatCode>/, '<c:formatCode>0.00</c:formatCode>'));
   assert.equal(provenanceChanged(diagnostics).length, 1);
 });
+
+// opf#1431, second part: `dataLabels: false` on a chart whose export labels its marks by default (a small column, bar or line chart,
+// LH-03; a stacked chart's segment values, LH-109; a pie's or doughnut's value list, LH-108) exports a file without labels, which imported as no option, so the next export
+// drew the labels the author had turned off. It imports as `false` now; where the default would draw nothing, the option stays absent.
+const shownLabels = xml => /<c:show(?:Val|CatName|Percent|SerName) val="1"\/>/.test(xml);
+const firstChartPart = entries => strFromU8(entries[Object.keys(entries).find(name => /^ppt\/charts\/chart\d+\.xml$/.test(name))]);
+const offKinds = {
+  column: data, bar: data, line: data, 'line-with-markers': data, area: two,
+  'stacked-column': two, 'stacked-bar': two, 'stacked-area': two, '100pct-stacked-column': two, pie: data, doughnut: data,
+};
+const takesReference = new Set(['column', 'bar', 'line', 'line-with-markers', 'area']);
+for (const [type, chartData] of Object.entries(offKinds)) {
+  for (const where of ['chart', 'blocks']) {
+    for (const extra of ['plain', 'highlight and reference line']) {
+      if (extra !== 'plain' && !takesReference.has(type)) continue;
+      const options = extra === 'plain' ? {} : {legend: 'bottom', highlight: chartData === two ? {series: ['Walk']} : {categories: ['North']}, referenceLines: [reference]};
+      test(`dataLabels: false on ${type} (${where}, ${extra}) comes back off`, async () => {
+        const off = {type, data: chartData, dataLabels: false, ...options};
+        const {dataLabels: _off, ...plain} = off;
+        const offBytes = await toPptx(deck(off, where)), plainBytes = await toPptx(deck(plain, where));
+        assert.equal(shownLabels(firstChartPart(unzipSync(offBytes))), false, 'the control: the export of dataLabels: false shows no labels');
+        const {chart} = await roundTrip(deck(off, where));
+        // Where the default draws labels, the files differ and the import must say `false`; where they are the same file, either reads the same.
+        if (Buffer.compare(Buffer.from(offBytes), Buffer.from(plainBytes)) !== 0) assert.equal(chart.dataLabels, false);
+        else assert.equal(chart.dataLabels, undefined);
+        // The next export draws what the file showed: no labels.
+        const again = await toPptx({name: 'again', slides: [where === 'chart' ? {title: 'again', chart} : {title: 'again', blocks: [{type: 'chart', chart}]}]});
+        assert.equal(shownLabels(firstChartPart(unzipSync(again))), false);
+      });
+    }
+  }
+}
+
+test('which kinds label their marks by default: the cases above that must come back false', async () => {
+  // A record of the affected kinds, so a change in core's defaults shows up here rather than as a silently weaker test.
+  const affected = [];
+  for (const [type, chartData] of Object.entries(offKinds)) {
+    const off = await toPptx(deck({type, data: chartData, dataLabels: false})), plain = await toPptx(deck({type, data: chartData}));
+    if (Buffer.compare(Buffer.from(off), Buffer.from(plain)) !== 0) affected.push(type);
+  }
+  // Area draws no labels by default, so its `false` exports the same file as no option.
+  assert.deepEqual(affected, ['column', 'bar', 'line', 'line-with-markers', 'stacked-column', 'stacked-bar', 'stacked-area', '100pct-stacked-column', 'pie', 'doughnut']);
+});
+
+test('labels turned back on in the file import as labels, not as dataLabels: false', async () => {
+  for (const type of ['column', 'stacked-column']) {
+    const off = {type, data: type === 'column' ? data : two, dataLabels: false};
+    const {chart} = await roundTrip(deck(off), xml => xml.replaceAll('<c:showVal val="0"/>', '<c:showVal val="1"/>'));
+    assert.notEqual(chart.dataLabels, false, type);
+    const again = await toPptx(deck(chart));
+    assert.equal(shownLabels(firstChartPart(unzipSync(again))), true, type);
+  }
+});
+
+test('a chart whose default labels do not fit, exported without the option, comes back without it', async () => {
+  const wide = {columns: ['Month', 'Revenue'], rows: Array.from({length: 12}, (_, i) => [`Month ${i}`, 1234567 + i * 98765])};
+  for (const dataLabels of [undefined, false]) {
+    const {chart} = await roundTrip(deck({type: 'column', data: wide, ...(dataLabels === undefined ? {} : {dataLabels})}));
+    assert.equal(chart.dataLabels, undefined);
+  }
+});

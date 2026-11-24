@@ -24,8 +24,7 @@ for(const[name,chart,position]of scenarios){
  }
  if(position==='low')assert.match(xml,/<c:valAx>[\s\S]*?<c:min val="-\d/,name+': same negative numeric bound');
  const back=await fromPptx(bytes),expected=structuredClone(chart);
- // The existing importer normalizes an unshown default label block to omission; native false semantics are asserted above.
- if(name==='authored-options')delete expected.dataLabels;
+ // opf#1431: the authored dataLabels: false (no labels on a small chart that labels by default) comes back as written.
  assert.deepEqual(back.slides[0].chart,expected,name+': complete data, titles, legend and existing default normalization survive');
 }
 console.log('LH-93 negative category labels: clustered, stacked, all-negative, authored-option and ordinary/percent/column controls pass.');
