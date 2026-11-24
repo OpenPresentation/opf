@@ -316,6 +316,7 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     const box = leafBox(path);
     if (box) leaf.box = box;
     if (block.bullets !== undefined && block.items === undefined && ['list', 'text'].includes(kind)) leaf.bullets = true;
+    if ((kind === 'list' || leaf.bullets) && block.columns !== undefined) leaf.columns = block.columns;
     if (kind === 'text') { const styles = sourceRunStyles(block.text); if (styles) leaf.sourceStyles = styles; }
     if (kind === 'text' && wrapped.has(`${path}.text`)) Object.assign(leaf, wrapped.get(`${path}.text`));
     return leaf;
@@ -534,6 +535,7 @@ export function validateTopology(value) {
     if (item.typed !== undefined && item.typed !== true) throw Error('Invalid content node type flag.');
     if ((item.pin !== undefined && !pinOf(item.pin)) || (item.in !== undefined && !REGION_NAME.test(item.in ?? ''))) throw Error('Invalid content node region.');
     if (item.emph !== undefined && typeof item.emph !== 'boolean') throw Error('Invalid content node emphasis.');
+    if (item.columns !== undefined && (item.t !== 'leaf' || !(item.k === 'list' || (item.k === 'text' && item.bullets === true)) || ![1, 2, 3, 'auto'].includes(item.columns))) throw Error('Invalid list columns.');
     if (item.t === 'group') {
       if (depth >= MAX_GROUP_DEPTH) throw Error(`Content groups nest deeper than ${MAX_GROUP_DEPTH} levels.`);
       if (item.comp !== undefined && !object(item.comp)) throw Error('Invalid group composition.');
@@ -679,6 +681,7 @@ export function rebuildContent(topology, blocks, bounds, placed, intactStyles = 
     if (leaf.node.ext !== undefined) payload.extensions = clone(leaf.node.ext);
     if (leaf.node.pin !== undefined) payload.region = leaf.node.pin;
     if (leaf.node.emph !== undefined) payload.emphasis = leaf.node.emph;
+    if (leaf.node.columns !== undefined && (payload.items || payload.bullets)) payload.columns = leaf.node.columns;
     return payload;
   };
   const build = item => {

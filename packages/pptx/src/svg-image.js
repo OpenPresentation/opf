@@ -129,8 +129,33 @@ export function prepareSvg(input) {
   }
 }
 
+// Office's SVG reader paints literal HSL gradient stops black. Convert opaque literals to sRGB while keeping the gradient editable as SVG.
+function officeStopColor(value) {
+  const match = /^hsl\(\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))(deg|grad|rad|turn)?(?:\s*,\s*|\s+)([+-]?(?:\d+(?:\.\d*)?|\.\d+))%(?:\s*,\s*|\s+)([+-]?(?:\d+(?:\.\d*)?|\.\d+))%\s*\)$/i.exec(value.trim());
+  if (!match) return value;
+  const degrees = Number(match[1]) * ({deg: 1, grad: 0.9, rad: 180 / Math.PI, turn: 360}[(match[2] ?? 'deg').toLowerCase()]);
+  if (!Number.isFinite(degrees)) return value;
+  const hue = ((degrees % 360) + 360) % 360;
+  const saturation = Math.min(100, Math.max(0, Number(match[3]))) / 100;
+  const lightness = Math.min(100, Math.max(0, Number(match[4]))) / 100;
+  const amplitude = saturation * Math.min(lightness, 1 - lightness);
+  const channel = offset => {
+    const k = (offset + hue / 30) % 12;
+    const level = lightness - amplitude * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+    return Math.round(level * 255).toString(16).padStart(2, '0');
+  };
+  return '#' + channel(0) + channel(8) + channel(4);
+}
+
 function sanitize(input, text) {
   const out = [], stack = [], entities = new Map(), removed = new Set();
+  let normalizedColor = false;
+  const stopColor = value => {
+    const converted = officeStopColor(value);
+    if (converted !== value) normalizedColor = true;
+    return converted;
+  };
+  const stopDeclarations = css => css.replace(/((?:^|[;{])\s*stop-color\s*:\s*)(hsl\([^()]*\))(?=\s*(?:!important\s*)?(?:[;}]|$))/gi, (_, property, color) => property + stopColor(color));
   let index = 0, root = null, skipping = 0, expansion = 0, hasText = false;
   const malformed = message => { throw new SvgError('svg-malformed', `The SVG is not well-formed XML: ${message}`); };
   // Entity and character references in text and attribute values: only the five predefined entities, numeric
@@ -155,7 +180,7 @@ function sanitize(input, text) {
         const style = stack.at(-1).name === 'style';
         const filtered = style ? filterCss(chunk) : chunk;
         if (filtered !== chunk) removed.add('external references');
-        out.push(references(filtered));
+        out.push(references(style ? stopDeclarations(filtered) : filtered));
       }
       continue;
     }
@@ -173,7 +198,8 @@ function sanitize(input, text) {
         const chunk = text.slice(index + 9, end);
         const filtered = stack.at(-1).name === 'style' ? filterCss(chunk) : chunk;
         if (filtered !== chunk) removed.add('external references');
-        out.push(`<![CDATA[${filtered}]]>`);
+        const styled = stack.at(-1).name === 'style' ? stopDeclarations(filtered) : filtered;
+        out.push(`<![CDATA[${styled}]]>`);
       }
       index = end + 3;
       continue;
@@ -242,6 +268,8 @@ function sanitize(input, text) {
           if (filtered !== value) removed.add('external references');
           value = filtered;
         }
+        if (name === 'stop' && key === 'stop-color') value = stopColor(value);
+        if (key === 'style') value = stopDeclarations(value);
         tag += ` ${key}="${escapeAttribute(value)}"`;
       }
       out.push(selfClosing ? `${tag}/>` : `${tag}>`);
@@ -256,7 +284,7 @@ function sanitize(input, text) {
   const size = svgIntrinsicSize(root.attributes);
   if (!size) throw new SvgError('svg-no-size', 'The SVG has no width and height, and no viewBox, so it has no intrinsic size.');
   const list = [...removed], clean = out.join('');
-  return {bytes: list.length || entities.size ? encoder.encode(clean) : input, text: clean, hasText, width: size.width, height: size.height, removed: list};
+  return {bytes: list.length || entities.size || normalizedColor ? encoder.encode(clean) : input, text: clean, hasText, width: size.width, height: size.height, removed: list};
 }
 
 /**

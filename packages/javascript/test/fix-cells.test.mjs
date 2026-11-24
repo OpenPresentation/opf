@@ -13,6 +13,15 @@ const deck = (...slides) => ({ name: 'Quarterly review', language: 'en-US', slid
 const applied = (result) => result.applied.map((entry) => `${entry.round} ${entry.path} ${entry.fix}${entry.changesDrawing ? ' (changes the drawing)' : ''}`);
 
 describe('fix: cells', () => {
+  test('legacy auto keeps both grid pins unless a catalog supplies an actual layout named auto', () => {
+    const input = deck({layout: 'auto', 'top:start': {text: 'First'}, 'bottom:end': {text: 'Last'}});
+    const automatic = fix(input, {catalogs}).document.slides[0];
+    assert.deepEqual(automatic, {blocks: [{region: 'top:start', text: 'First'}, {region: 'bottom:end', text: 'Last'}]});
+    const registered = {...gallery, layouts: {...gallery.layouts, auto: gallery.layouts.text}};
+    const named = fix(input, {catalogs: [registered]}).document.slides[0];
+    assert.deepEqual(named, {layout: 'auto', blocks: [{text: 'First'}, {text: 'Last'}]});
+  });
+
   test('a slide in cells without a layout: one block per key in reading order of the cells, each payload as written', () => {
     const input = deck({ id: 'snapshot', title: 'Operating snapshot', 'center+end': { id: 'trend', chart }, start: { text: 'Revenue grew.' } });
     const result = fix(input, { catalogs });
