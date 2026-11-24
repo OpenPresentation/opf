@@ -6,7 +6,7 @@ import { mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 import referenceAdapter from "../conformance/adapters/opf-core.mjs";
 import { commandAdapter, formatMarkdown, loadSuite, pathMatches, preservedValues, runSuite } from "../conformance/run.mjs";
@@ -95,7 +95,8 @@ test("pathMatches accepts the expected pointer and anything inside it", () => {
 test("command adapters: exit 0 accepts, 1 rejects, JSON findings give the paths, and the writer writes {out}", async () => {
   const directory = mkdtempSync(path.join(tmpdir(), "opf-conformance-test-"));
   try {
-    const core = path.join(repoRoot, "packages", "javascript", "dist", "index.js");
+    // An import specifier is a URL: a Windows path ("C:\...") reads as the scheme "c:" and fails, so the checker imports a file URL.
+    const core = pathToFileURL(path.join(repoRoot, "packages", "javascript", "dist", "index.js")).href;
     const checker = path.join(directory, "check.mjs");
     writeFileSync(checker, `import { readFileSync } from "node:fs";\nimport { validate } from ${JSON.stringify(core)};\nconst report = validate(readFileSync(process.argv[2], "utf8"), { only: ["format", "references"], catalogs: [] });\nconsole.log(JSON.stringify({ findings: report.findings }));\nprocess.exit(report.valid ? 0 : 1);\n`);
     const writer = path.join(directory, "write.mjs");
