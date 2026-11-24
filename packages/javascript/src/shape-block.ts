@@ -227,8 +227,45 @@ export function validAdjust(preset: string, adjust: unknown, width = 100, height
   return out;
 }
 
+/**
+ * A custom `path` without a `viewBox` is drawn in a 0 to 1 box. Its extent (width or height of the points, control points included)
+ * above this many boxes means the path was written on another grid (0 to 100, or an icon's 0 to 24); a path that overshoots the box
+ * by less (a bulge, an arrow tip outside the frame) is not reported.
+ */
+export const PATH_UNITS_EXTENT = 3;
+const PATH_ARITY: Readonly<Record<string, number>> = { M: 2, L: 2, H: 1, V: 1, C: 6, S: 4, Q: 4, T: 2, A: 7, Z: 0 };
+
+/**
+ * The extent of SVG path data in its own units: the end points and control points of every segment (an arc's end point only), or
+ * undefined when the data does not parse. It reads the path itself, not the geometry engine, because validation runs where the
+ * engine is still loading (a browser before `ensureShapes`).
+ */
+export function pathExtent(data: string): { width: number; height: number } | undefined {
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity, x = 0, y = 0, startX = 0, startY = 0;
+  const point = (px: number, py: number) => { minX = Math.min(minX, px); maxX = Math.max(maxX, px); minY = Math.min(minY, py); maxY = Math.max(maxY, py); };
+  for (const [, command, rest] of data.matchAll(/([MmLlHhVvCcSsQqTtAaZz])([^MmLlHhVvCcSsQqTtAaZz]*)/g)) {
+    const upper = command!.toUpperCase(), relative = command !== upper, arity = PATH_ARITY[upper]!;
+    if (arity === 0) { x = startX; y = startY; continue; }
+    const numbers = (rest!.match(/[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?/g) ?? []).map(Number);
+    if (numbers.length === 0 || numbers.length % arity !== 0 || !numbers.every(Number.isFinite)) return undefined;
+    for (let index = 0; index < numbers.length; index += arity) {
+      const n = numbers.slice(index, index + arity), ox = relative ? x : 0, oy = relative ? y : 0;
+      if (upper === 'H') x = n[0]! + ox;
+      else if (upper === 'V') y = n[0]! + oy;
+      else {
+        for (let k = 0; k + 1 < arity && upper !== 'A'; k += 2) point(n[k]! + ox, n[k + 1]! + oy);
+        x = n[arity - 2]! + ox;
+        y = n[arity - 1]! + oy;
+      }
+      if (upper === 'M') { startX = x; startY = y; }
+      point(x, y);
+    }
+  }
+  return Number.isFinite(minX) ? { width: maxX - minX, height: maxY - minY } : undefined;
+}
+
 /** A validation issue of a shape or image block's `shape`/`adjust` (schema-check reports them). */
-export interface ShapeIssue { path: string; code: 'shape-adjust-unknown' | 'shape-adjust-range' | 'shape-link-hidden'; message: string; params: Record<string, unknown> }
+export interface ShapeIssue { path: string; code: 'shape-adjust-unknown' | 'shape-adjust-range' | 'shape-link-hidden' | 'shape-path-units'; message: string; params: Record<string, unknown> }
 /**
  * The findings of one block's preset and adjust values, and of a link on a hidden shape: an adjust name the preset does not have, a
  * value outside the preset's range (checked at the default square size; a range that depends on the size is checked there too), and
@@ -252,6 +289,12 @@ export function shapeIssues(host: unknown, at: (...keys: string[]) => string): S
           issues.push({ path: at('adjust', name), code: 'shape-adjust-range', message: `${preset} adjust '${name}' is ${number}, outside ${spec.min ?? '-∞'} to ${spec.max ?? '∞'} (${spec.unit === 'degrees' ? 'degrees' : 'a fraction'}); the default ${spec.default} is drawn`, params: { name, shape: preset, value: number, min: spec.min, max: spec.max, default: spec.default, unit: spec.unit } });
       }
     }
+  }
+  if (value.path !== undefined && value.shape === undefined && (typeof value.path === 'string' || (typeof value.path === 'object' && value.path !== null && record(value.path).viewBox === undefined))) {
+    const extent = pathExtent(typeof value.path === 'string' ? value.path : String(record(value.path).d));
+    const width = extent?.width ?? 0, height = extent?.height ?? 0;
+    if (extent && Math.max(width, height) > PATH_UNITS_EXTENT)
+      issues.push({ path: at('path'), code: 'shape-path-units', message: `the path spans ${Number(width.toPrecision(3))} by ${Number(height.toPrecision(3))} units, but a path without a viewBox is drawn in a 0 to 1 box`, params: { width, height, limit: PATH_UNITS_EXTENT } });
   }
   if (value.hidden === true && typeof value.link === 'string') issues.push({ path: at('link'), code: 'shape-link-hidden', message: 'a hidden shape is not drawn, so its link cannot be clicked', params: {} });
   return issues;

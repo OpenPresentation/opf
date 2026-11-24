@@ -60,15 +60,43 @@ const isObject = (value) => value !== null && typeof value === "object" && !Arra
 const compare = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 const canonical = (value) => JSON.stringify(value, (_name, item) => isObject(item) ? Object.fromEntries(Object.entries(item).sort(([a], [b]) => compare(a, b))) : item);
 
+/**
+ * Thrown by `updateJsonSource` with `{ duplicateKeys: "reject" }` when the source repeats an object key. `code` is
+ * `"duplicate-key"`; `key` and `path` are as `findDuplicateKey` reports them, and `offset`, `line` and `column` (the last two
+ * counted from 1) place the repeated key's opening quote in the source.
+ */
+export class DuplicateKeyError extends Error {
+  constructor(found) {
+    super(`The source repeats the key ${JSON.stringify(found.key)} at line ${found.line}, column ${found.column}; JSON keeps only the last value.`);
+    this.name = "DuplicateKeyError";
+    this.code = "duplicate-key";
+    this.key = found.key;
+    this.path = found.path;
+    this.offset = found.offset;
+    this.line = found.line;
+    this.column = found.column;
+  }
+}
+
 /** The first duplicate object key in JSON source, as `{ key, path }`, or null. */
 export function findDuplicateKey(source) {
+  const found = locateDuplicateKey(source);
+  return found ? { key: found.key, path: found.path } : null;
+}
+
+// The same search with the position of the repeated key (its second occurrence).
+function locateDuplicateKey(source) {
   const tree = parseTree(source);
   function walk(node, path) {
     if (node.type === "object") {
       const seen = new Set();
       for (const property of node.children ?? []) {
         const name = property.children?.[0]?.value;
-        if (seen.has(name)) return { key: name, path: [...path] };
+        if (seen.has(name)) {
+          const offset = property.children[0].offset;
+          const before = source.slice(0, offset).split(/\r\n|\r|\n/);
+          return { key: name, path: [...path], offset, line: before.length, column: before[before.length - 1].length + 1 };
+        }
         seen.add(name);
         const found = property.children?.[1] && walk(property.children[1], [...path, name]);
         if (found) return found;
@@ -230,10 +258,17 @@ function typingSignature(previous, ops) {
  * metadata/content byte-for-byte, including across canvas Escape, Undo and Redo.
  * Throws when `source` is not valid JSON. The result always parses to `presentation`; if an
  * in-place edit cannot achieve that (for example the source repeats an object key), the whole
- * document is written as indented JSON instead.
+ * document is written as indented JSON instead. With `{ duplicateKeys: "reject" }` in `options` a source that repeats
+ * an object key throws a `DuplicateKeyError` instead, before anything is written.
  */
-export function updateJsonSource(source, presentation, memory = sharedMemory) {
+export function updateJsonSource(source, presentation, memory = sharedMemory, options = {}) {
   const previous = JSON.parse(source);
+  const policy = options?.duplicateKeys ?? "rewrite";
+  if (policy !== "rewrite" && policy !== "reject") throw new RangeError(`duplicateKeys must be "rewrite" or "reject" (got ${JSON.stringify(policy)}).`);
+  if (policy === "reject") {
+    const found = locateDuplicateKey(source);
+    if (found) throw new DuplicateKeyError(found);
+  }
   const previousKey = JSON.stringify(previous);
   memory.limited = source.length > MAX_EXACT_SOURCE_LENGTH;
   if (memory.entries.get(previousKey) !== source) {
