@@ -1,0 +1,5 @@
+---
+type: fixed
+packages: [pptx]
+---
+opf#1415 (output-changing for column, bar, line and area charts below a heading row, and for small column and bar charts): the plot area is written as the plot the preview draws (`layoutTarget inner` at core's `chartPlotInset`, or `horizontalBarPlot` for a small horizontal bar chart), instead of an outer plot area from the heading's bottom edge, where PowerPoint started the plot higher and taller than the preview. Since a small column chart's axis ends at its tallest column (0.35.2, the column plot gap), its top value label stood on the heading's line in PowerPoint, or over the heading's text on a narrow chart; it now keeps the text line the preview leaves under the heading, and a small bar chart's longest bar keeps its label's room before the chart's edge. A small column or bar chart without a heading row gets the preview's plot too. Chartex charts (waterfall and the other chartex constructs) and combo charts are unchanged; the preview and the axes are unchanged.

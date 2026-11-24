@@ -3914,7 +3914,15 @@ function applyChartTextSize(xml, size) {
 // category names; the value tick labels unless the value axis is deleted) ends where the preview's plot ends (core horizontalBarPlot or
 // chartPlotInset), and the other sides stay on the outer box, where PowerPoint's plot already reaches. `outer` is that box (fractions of
 // the chart frame); undefined when core lays out no plot.
-function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale, valueAxisHidden, context, options, presentation}) {
+//
+// opf#1415, `whole`: the plot area is the preview's plot on every side (layoutTarget inner). Below a header row the export wrote an outer
+// plot area from the header's bottom edge (src/chart-layer.js), and PowerPoint started the plot right there: higher and taller than the
+// preview, which keeps its padding and half a text line (the top tick label's half) under the heading, or a whole line for the value label
+// of a small chart's tallest column (core chartPlotInset). Since a small column chart's axis ends at its tallest column (0.35.2, the column
+// plot gap), that label stood on the heading's line, or over the heading on a narrow chart. PowerPoint also keeps no room in an outer or
+// automatic plot area for a label outside a mark, so a small column or bar chart (no value axis, labeled marks) without a header gets the
+// preview's plot too, a horizontal bar chart with the widest label's room beyond its end (core horizontalBarPlot's labelRoom).
+function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale, valueAxisHidden, context, options, presentation, whole = false}) {
   const data = resolveChartData(isDatasetRef(chart?.data) ? inlineChartData(chart, presentation) : chart, presentation);
   if (!data.ok) return undefined;
   const box = {x: region.x * 96, y: region.y * 96, width: region.w * 96, height: region.h * 96};
@@ -3922,9 +3930,18 @@ function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale,
   const deckLanguage = typeof presentation?.language === 'string' ? presentation.language : presentation?.language?.bcp47;
   const language = chartNumberLanguage(chart, deckLanguage), rtl = context.direction === 'rtl', horizontal = chartData.barDir === 'bar';
   const geometry = {scale, minFontSize: context.composition?.minFontSize, measure, direction: rtl ? 'rtl' : 'ltr', ...(language === undefined ? {} : {language})};
-  const inset = (horizontal ? horizontalBarPlot(chart, data, layer, valueAxis, box, geometry) : undefined)
-    ?? chartPlotInset(chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...geometry, box});
+  const barInset = horizontal ? horizontalBarPlot(chart, data, layer, valueAxis, box, geometry) : undefined;
+  // A whole horizontal plot without its value axis needs the label room only horizontalBarPlot keeps (chartPlotInset's bar branch, the
+  // preview's plot of a bar chart with options, keeps none).
+  if (whole && horizontal && !barInset && valueAxisHidden) return undefined;
+  const inset = barInset ?? chartPlotInset(chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...geometry, box});
   if (!inset) return undefined;
+  if (whole) {
+    const fraction = value => Number(Math.min(1, Math.max(0, value)).toFixed(4));
+    const left = inset.left / box.width, top = inset.top / box.height, right = 1 - inset.right / box.width, bottom = 1 - inset.bottom / box.height;
+    if (!(right > left && bottom > top)) return undefined;
+    return {x: fraction(left), y: fraction(top), w: fraction(right - left), h: fraction(bottom - top), target: 'inner'};
+  }
   // The labeled sides: a horizontal bar chart's category names at the left and value ticks at the bottom; a column chart's names at the
   // bottom and value ticks at the left (the right when its categories run right to left).
   const labeled = horizontal ? {left: true, bottom: !valueAxisHidden} : {bottom: true, [rtl ? 'right' : 'left']: !valueAxisHidden};
@@ -4080,6 +4097,14 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // Keynote: the category names of a negative range at the low edge, outside an inner plot area (lowLabelPlot).
   if (layerXml.layout.plot && !layerXml.layout.plot.target && chartData.type === 'bar' && !chartData.combo && chartLayout?.valueAxis?.min < 0) {
     const plotBox = lowLabelPlot(chart, chartData, layer, chartLayout.valueAxis, layerXml.layout.plot, region, {scale, valueAxisHidden: layerXml.options.valAxisHidden === true, context, options, presentation});
+    if (plotBox) layerXml.layout.plot = plotBox;
+  }
+  // opf#1415: a column, bar, line or area chart below a header row, and a small column or bar chart (no value axis, labeled marks) with or
+  // without one, has the preview's plot (lowLabelPlot, whole): the plot starts where the preview's does under the heading, and the label of
+  // the tallest column (or longest bar) keeps the room the preview gives it.
+  else if (!layerXml.layout.plot?.target && ['bar', 'line', 'area'].includes(chartData.type) && !chartData.combo
+    && (layerXml.layout.plot || (chartData.type === 'bar' && layerXml.options.valAxisHidden === true && chartOptions.dataLabels))) {
+    const plotBox = lowLabelPlot(chart, chartData, layer, chartLayout?.valueAxis, layerXml.layout.plot, region, {scale, valueAxisHidden: layerXml.options.valAxisHidden === true, context, options, presentation, whole: true});
     if (plotBox) layerXml.layout.plot = plotBox;
   }
   if (Object.keys(layerXml.layout).length) context.chartHeadings.get(objectName).layerLayout = layerXml.layout;
