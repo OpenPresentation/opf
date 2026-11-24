@@ -101,7 +101,7 @@ The final clean npm installation passed 33 checks in the Codex browser. Results 
 
 ## Provider-neutral access and explanation site
 
-The user confirmed that all open-source format, skills, CLI, editor, preview, export, and docs capabilities must remain free and usable by agents of all types. The future paid AI layer at pptx.dev consumes the same public foundation; it does not supply required infrastructure. `docs/open-ecosystem.md` records this boundary.
+The user confirmed that all open-source format, skills, CLI, editor, preview, export, and docs capabilities must remain free and usable by agents of all types. The future paid AI layer on the platform at openpresentation.com consumes the same public foundation; it does not supply required infrastructure. `docs/open-ecosystem.md` records this boundary.
 
 The related `openpresentation-site` now builds its agent quickstart, raw Markdown, schemas/catalogs, checksum manifest, and downloadable self-contained skills from an explicit source snapshot. Local HTTP verification covered 580 raw-file hashes, six downloaded skill folders (including actual helper execution), and the agent/guide/discovery routes. The homepage uses a real renderer-produced SVG with matching downloadable JSON/PPTX, replacing its hand-built illustration. Site builds pass; these changes are local, not a production deployment.
 

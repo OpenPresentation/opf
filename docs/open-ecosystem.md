@@ -16,7 +16,7 @@ Public documentation should be generated from a recorded source snapshot, link t
 
 ## Commercial applications
 
-Commercial applications may use the MIT-licensed foundation, subject to license notices and third-party terms. [pptx.dev](https://www.pptx.dev) is the sponsor of OPF and runs hosted API, AI and file services on the same open format and public libraries. Application accounts, model orchestration, billing and hosted storage belong in that separate application, not in the libraries. Nothing in OPF requires pptx.dev: the open-source tools, the specification and the skills work without an account, a hosted service or an AI model.
+Commercial applications may use the MIT-licensed foundation, subject to license notices and third-party terms. [pptx.dev](https://www.pptx.dev) is the sponsor of OPF and makes PowerPoint files in a browser tab on the same open format and public libraries. The developer platform with its hosted API, AI and file services is being built at openpresentation.com. Application accounts, model orchestration, billing and hosted storage belong in that separate platform, not in the libraries. Nothing in OPF requires pptx.dev or openpresentation.com: the open-source tools, the specification and the skills work without an account, a hosted service or an AI model.
 
 ## Agent workflow
 

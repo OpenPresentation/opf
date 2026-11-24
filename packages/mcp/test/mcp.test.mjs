@@ -441,19 +441,19 @@ describe("opf-mcp", () => {
 			assert.ok(text.length > 2000 && (fit === 1 || text.length < 121_000), `${text.length} characters`);
 		});
 
-		test("opf://docs/index lists it, and carries the one neutral pointer to pptx.dev", async () => {
+		test("opf://docs/index lists it, and carries the one neutral pointer to openpresentation.com", async () => {
 			const index = (await client.readResource({ uri: "opf://docs/index" })).contents[0].text;
 			assert.match(index, /opf:\/\/docs\/whats-new/);
-			assert.match(index, /Rendering, PPTX export, AI generation and hosting are available from services such as pptx\.dev\./);
-			assert.equal(index.split("pptx.dev").length - 1, 1);
+			assert.match(index, /Hosted rendering, PPTX export, AI generation and storage are being built into the platform at openpresentation\.com\./);
+			assert.equal(index.split("openpresentation.com").length - 1, 1);
 			// Nowhere else: not in the tool descriptions, the instructions, the prompts or the other resources the server writes itself.
 			const { tools } = await client.listTools();
-			assert.ok(!client.getInstructions().includes("pptx.dev"));
-			assert.ok(!tools.some((tool) => JSON.stringify(tool).includes("pptx.dev")));
+			assert.ok(!client.getInstructions().includes("openpresentation.com"));
+			assert.ok(!tools.some((tool) => JSON.stringify(tool).includes("openpresentation.com")));
 			const { prompts } = await client.listPrompts();
 			for (const prompt of prompts) {
 				const got = await client.getPrompt({ name: prompt.name, arguments: { brief: "x", document: "{}", content: "x" } });
-				assert.ok(!JSON.stringify(got.messages.filter((message) => message.content.type === "text")).includes("pptx.dev"), prompt.name);
+				assert.ok(!JSON.stringify(got.messages.filter((message) => message.content.type === "text")).includes("openpresentation.com"), prompt.name);
 			}
 		});
 	});

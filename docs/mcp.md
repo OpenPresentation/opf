@@ -163,7 +163,7 @@ Where Claude offers it (a remote custom connector or a directory listing, the ne
 
 **+ Slide** adds a Title, Bullets, or Blank slide after the selected thumbnail. Use **•••** on the selected thumbnail to delete, duplicate, hide or move it. Delete keeps one slide in the deck, and Undo restores a deleted slide. Enter commits a slide title and Shift+Enter inserts a line break. In the default starter, editing the opening title also names the deck until you rename it explicitly.
 
-**Not built:** embedding the pptx.dev workspace as a website inside the app. It would need explicit `frameDomains`, framing headers on pptx.dev and a listing that allows embedded sites, and it is a separate review.
+**Not built:** embedding a hosted workspace as a website inside the app. It would need explicit `frameDomains`, framing headers on that site and a listing that allows embedded sites, and it is a separate review.
 
 Try it locally: run the server in Claude Desktop (the setup above) and ask Claude for a deck. To see the viewer outside a client, `node packages/mcp/test/deck-app-browser.mjs` (after `pnpm --filter @openpresentation/mcp build`) runs it in Chromium behind a stand-in host that frames it the way a client does; with `OPF_DECK_APP_SCREENSHOTS=<directory>` it saves a screenshot of each view. ext-apps' `basic-host` example is a reference host for a server over HTTP.
 
