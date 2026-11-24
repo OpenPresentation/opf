@@ -97,4 +97,25 @@ for (const provenance of [false, 'references-only']) {
   assert.deepEqual(marked.changed, ['slides.1.language']);
 }
 
+// (f) Review of #1421: a right-to-left slide whose title holds one Latin word exports as two runs, he-IL "תוצאות " and en-US
+// "Q3". The tie must not make the undeclared Hebrew slide English: Latin pieces beside the expected language are the export's
+// own split (RR-05), as languageDiagnostics treats them.
+for (const [name, source, languages] of [
+  ['(f) Hebrew beside a declared slide', deck([{title: 'Plan', language: 'en-US'}, {title: 'תוצאות Q3'}]), [undefined, 'en-US', undefined]],
+  ['(f) Arabic beside a declared slide', deck([{title: 'Plan', language: 'en-US'}, {title: 'نتائج Q3'}]), [undefined, 'en-US', undefined]],
+  ['(f) Hebrew, declared', deck([{title: 'Plan'}, {title: 'תוצאות Q3', language: 'he'}]), [undefined, undefined, 'he']],
+]) {
+  const back = await read(await exported(source));
+  assert.deepEqual(back.languages, languages, `${name}: no slide comes back in a language its author did not write`);
+  assert.deepEqual(back.changed, [], `${name}: an untouched file reports no changed language`);
+  assert.deepEqual(back.document, source, `${name}: the round trip is the source`);
+}
+// The rule is only for Latin pieces: a Hebrew slide whose runs were all retagged en-US in PowerPoint is English.
+{
+  const source = deck([{title: 'Plan', language: 'en-US'}, {title: 'תוצאות Q3'}]);
+  const retagged = await read(slideParts(await exported(source), xml => xml.replaceAll('lang="he-IL"', 'lang="en-US"')));
+  assert.deepEqual(retagged.languages, [undefined, 'en-US', 'en-US']);
+  assert.deepEqual(retagged.changed, ['slides.1.language']);
+}
+
 console.log(JSON.stringify({test: 'slide-language-declared', passed: true}));
