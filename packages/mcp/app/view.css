@@ -196,6 +196,9 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 #deck-version { padding: 6px 12px; color: var(--opf-ui-muted-fg); }
 .deck-feedback { grid-column: 3; justify-self: end; max-width: 100%; min-width: 0; display: flex; align-items: center; gap: 6px; }
 .deck-status { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.deck-shared { display: inline-flex; align-items: center; gap: 4px; min-width: 0; overflow: hidden; }
+.deck-shared svg { flex: none; }
+.deck-shared[hidden], .deck-feedback:has(.deck-status:not(:empty)) .deck-shared { display: none; }
 #deck-edit-undo { color: var(--opf-ui-accent); border: 0; background: none; height: auto; }
 .deck-request { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--opf-ui-border); }
 .deck-request label { font-weight: 500; }
@@ -273,7 +276,8 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root[data-size~="narrow"] .deck-status { flex: 1 1 auto; max-width: 100%; overflow: visible; white-space: normal; text-overflow: clip; padding: 2px 4px 6px; }
 :root[data-size~="narrow"] .deck-status:empty { display: none; }
 :root[data-size~="narrow"] .deck-feedback { grid-column: 1 / -1; }
-:root[data-size~="narrow"] .deck-feedback:has(.deck-status:empty):has(#deck-edit-undo[hidden]) { display: none; }
+:root[data-size~="narrow"] .deck-feedback:has(.deck-status:empty):has(#deck-edit-undo[hidden]):has(#deck-shared[hidden]) { display: none; }
+:root[data-size~="narrow"] .deck-shared { padding: 2px 4px 6px; }
 :root[data-size~="narrow"] #deck-status * { white-space: normal; overflow: visible; text-overflow: clip; }
 :root[data-size~="tiny"] .deck-nav .opf-nav-counter { min-width: 40px; }
 :root[data-size~="tiny"] .deck-title-row { min-height: 44px; }
