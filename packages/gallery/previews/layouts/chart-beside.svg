@@ -30,10 +30,11 @@
 <line stroke="#BFBFBF" stroke-width="1.333" x1="155.6" x2="722.08" y1="589.68" y2="589.68"/>
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="438.84" xml:space="preserve" y="652.48">Week</text></g>
 <g transform="rotate(-90 72.6 401.08)"><g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="72.6" xml:space="preserve" y="408.88">Task completion</text></g></g></g>
-<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="175.48">Test with two teams for six </text>
-<text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="209.64">weeks. Measure task completion </text>
-<text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="243.8">and time before deciding what to </text>
-<text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="277.96">scale.</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="326.23">Test with two teams for </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="371.37">six weeks. Measure task </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="416.51">completion and time </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="461.65">before deciding what to </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="506.79">scale.</text></g>
 <g/>
 <g><g><g><text fill="#011842" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="687.68">Illustrative example • fictional data</text></g></g></g>
 </svg>
