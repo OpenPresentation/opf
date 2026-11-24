@@ -203,7 +203,7 @@
         },
         {
           "id": "browser:metric-cards",
-          "command": "node test/metric-browser.mjs --cards"
+          "command": "pnpm run test:metric-cards-browser"
         },
         {
           "id": "browser:picture-luminance",
