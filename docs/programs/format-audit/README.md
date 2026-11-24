@@ -148,7 +148,7 @@ slide-scoped built-ins resolved per output slide.
 ## Narrative (FA-02 recommendation, adopted)
 
 A narrative is a **plan**: arc, beats and what each beat must do. Planners such
-as pptx.dev and STORYD use it before slides exist. A deck is the **product**.
+as the platform at openpresentation.com and STORYD use it before slides exist. A deck is the **product**.
 
 **Pros of keeping a full narrative inside the deck JSON:**
 

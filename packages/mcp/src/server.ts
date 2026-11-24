@@ -410,7 +410,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 	const docIndex = (): string =>
 		`# OPF documentation\n\nEvery page is a resource: opf://docs/<slug>. Search them with the search_docs tool; start_here gives a path for a goal.\n\n${sources.whatsNew ? `- [What's new](${URI.doc("whats-new")}): the most recent release notes\n` : ""}${docs.map((doc) => `- [${doc.title}](${URI.doc(doc.slug)}) (${doc.slug})`).join("\n")}\n\n## Skills\n\n${Object.entries(sources.skills)
 			.map(([name, files]) => `- [${name}](${URI.skill(name)}): ${/^description:\s*"?(.*?)"?\s*$/m.exec(files["SKILL.md"] ?? "")?.[1] ?? ""}`)
-			.join("\n")}\n\nRendering, PPTX export, AI generation and hosting are available from services such as pptx.dev.\n`;
+			.join("\n")}\n\nHosted rendering, PPTX export, AI generation and storage are being built into the platform at openpresentation.com.\n`;
 	const search = createSearch([
 		...docs.map((doc) => ({ uri: URI.doc(doc.slug), kind: "doc" as const, title: doc.title, text: doc.markdown })),
 		...Object.entries(sources.skills).flatMap(([name, files]) =>

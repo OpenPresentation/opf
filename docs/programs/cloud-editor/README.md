@@ -4,7 +4,7 @@ Opened 2026-10-25. Branches `codex/ce-<nn>-<slug>`, PR titles `CE-<nn>: `. Items
 
 ## Goal
 
-Any host can build a Figma-class presentation product on the open packages without copying the engine. The OPF engine runs unchanged on edge runtimes (Cloudflare Workers, Vercel Edge, Deno) as well as Node and browsers. The editor can be embedded with one call, or from React. Documents have stable ids that edits can be addressed to. Edits can be grouped, proposed and reviewed, diffed, permission-checked, anchored for comments and merged. pptx.dev is the first host to adopt each piece, and openpresentation.org and pptx.gallery adopt them too.
+Any host can build a Figma-class presentation product on the open packages without copying the engine. The OPF engine runs unchanged on edge runtimes (Cloudflare Workers, Vercel Edge, Deno) as well as Node and browsers. The editor can be embedded with one call, or from React. Documents have stable ids that edits can be addressed to. Edits can be grouped, proposed and reviewed, diffed, permission-checked, anchored for comments and merged. The platform at openpresentation.com is the first host to adopt each piece, and openpresentation.org and pptx.gallery adopt them too.
 
 ## Open-core boundary
 
