@@ -127,7 +127,7 @@ Keynote's exported images carry a Display P3 profile and an alpha channel. A com
 | Slide number beside footer text | The whole footer shows only the number ("Page 1 of 4" reads "1") | Export with `--slide-numbers static` |
 | Right-to-left table | Only the first column, clipped at the left edge (PowerPoint draws all three) | None measured that keeps PowerPoint's right-to-left table; an opt-in route is undecided |
 | Extended chart (histogram, Pareto, waterfall, box and whisker, funnel, treemap) | A picture of OPF's preview in the chart's frame, not a live chart | None; the live chart stays for PowerPoint |
-| Bar chart with negative values | Category labels clipped at the frame's left edge (measured on 0.34.0; PowerPoint draws them whole) | A fix is written and has not yet been checked in Keynote |
+| Bar chart with negative values | Category labels clipped at the frame's left edge (measured on 0.34.0; PowerPoint draws them whole) | Fixed after 0.35.1: the export now writes the plot area as the plot itself, which keeps the labels inside the frame. Not yet checked in Keynote |
 | Sketch outline (`stroke.sketch`: curved, freehand, scribble) | A plain outline (PowerPoint draws it) | None measured |
 | Compound line (double, thick-thin, thin-thick, triple) | One single line (PowerPoint draws it) | None measured |
 | Solid background color with transparency (85% in the test) | Keynote keeps the 85% alpha (its exported image has it). What shows through in Keynote's window and in Play has not been observed | Not yet observed |
