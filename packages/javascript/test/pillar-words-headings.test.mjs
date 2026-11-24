@@ -21,3 +21,10 @@ test('P3: one-word headings without descriptions are display words, as one-word 
   const size = (result) => result.items.find((item) => item.field === 'items').text.listEntries[0].text.fontSize;
   assert.ok(size(words) >= 48, `the word is at display size (${size(words)})`);
 });
+
+test('P3 with LH-102: one-word display words keep their display size when the body could grow on (text never shrinks)', () => {
+  // LH-102's further growth of a short layout body sets a display word from its list's grown base size (70 px), under the display size
+  // LH-136 gives it after LH-48's steps (74.85 px): the body keeps the three steps.
+  const words = compose([{ text: 'Scope' }, { text: 'Measures' }, { text: 'Decision' }]);
+  for (const item of words.items.filter((entry) => entry.field === 'items')) assert.ok(item.text.listEntries[0].text.fontSize > 74, `${item.path}: ${item.text.listEntries[0].text.fontSize}`);
+});

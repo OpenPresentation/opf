@@ -5442,8 +5442,12 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
     // On a layout, paragraphs that share one size keep one size (LH-43), and so do lists; a paragraph beside a list may part from it, as a
     // paragraph held by its reading measure stops before a short list does.
     const proseSizes = (composed: SlideComposition) => Math.max(0, ...[['text'], ['items', 'bullets']].map(kinds => new Set(composed.items.filter(item => !headings.has(item.field) && !item.eyebrow && kinds.includes(item.field) && item.text).map(item => item.text!.fontSize)).size));
+    // Text never shrinks: an entry LH-136 sets at its own display size (a pillar's display word, P3) whose list's base size grows on past
+    // it is then set from that base, smaller than the three steps left it; the body then keeps the three steps.
+    const entrySizes = (composed: SlideComposition) => new Map(composed.items.flatMap(item => item.text && 'listEntries' in item.text ? (item.text as ListFit).listEntries.flatMap((entry, index) => [[`${item.path}#${index}`, entry.text.fontSize] as const, ...(entry.description ? [[`${item.path}#${index}d`, entry.description.fontSize] as const] : [])]) : []));
+    const kept = entrySizes(grown), keeps = (next: SlideComposition) => [...entrySizes(next)].every(([key, size]) => size >= (kept.get(key) ?? 0) - FONT_GRID_EPSILON);
     const shape = shapeOf(grown), shared = result.regions !== undefined && proseSizes(grown) <= 1, further = climb(result, { [GRID_GROW]: true }, COMPACT_GRID_STEPS, next => shapeOf(next) === shape && (!shared || proseSizes(next) <= 1));
-    return done(smallest(further) > smallest(grown) + FONT_GRID_EPSILON ? further : grown);
+    return done(smallest(further) > smallest(grown) + FONT_GRID_EPSILON && keeps(further) ? further : grown);
   }
   // LH-05: a hugging grid of short texts grows further than other bodies: past a list's display size, up to COMPACT_GRID_STEPS steps, while
   // every text that was on one line spread over the area (LH-43, what the slide had before) stays on one line. The grid never ends smaller
