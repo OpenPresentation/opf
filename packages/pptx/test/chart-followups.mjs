@@ -30,8 +30,9 @@ async function exported(deck) {
   assert.deepEqual(named(plain.charts[0]), [[0], [1]], 'one named slice per ring: its largest');
   assert.doesNotMatch(plain.charts[0], /<c:showVal val="1"\/>|<c:showPercent val="1"\/>/, 'no other label is shown');
   assert.equal(plain.imported.chart.dataLabels, undefined, 'the ring names import as no option');
-  // The name runs along its ring: North's middle is 72 degrees past 12 o'clock (core's rotation, 60000ths of a degree).
-  assert.match(plain.charts[0].match(/<c:ser>[\s\S]*?<\/c:ser>/)[0], /<c:dLbl><c:idx val="0"\/>[\s\S]*?<a:bodyPr rot="4320000" vert="horz"\/>/);
+  // The name runs along its ring: North's middle is 72 degrees past 12 o'clock (core's rotation, 60000ths of a degree), on one line
+  // as the preview draws it (opf#1415).
+  assert.match(plain.charts[0].match(/<c:ser>[\s\S]*?<\/c:ser>/)[0], /<c:dLbl><c:idx val="0"\/>[\s\S]*?<a:bodyPr rot="4320000" vert="horz" wrap="none"\/>/);
   // With data labels the named slice shows the name before its own parts; a pie drawn as rings writes no c:dLblPos (a doughnut has none).
   const labeled = await exported(deck({type: 'pie', data, dataLabels: {content: ['percent']}}));
   assert.deepEqual(named(labeled.charts[0]), [[0], [1]]);

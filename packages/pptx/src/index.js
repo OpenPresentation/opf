@@ -22,7 +22,7 @@ import {chartRegionSvg} from './preview-region.js';
 import {applyDoughnutRings,applyRingLabels,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
 import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
 import {authoredChartAlt,authoredTableAlt,chartAlt,generatedChartAlts,logoAlt,photoAlt,tableAlt} from './default-alt.js';
-import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
+import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,noWrapDataLabels,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
 import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
@@ -6130,10 +6130,11 @@ async function normalizePptxZip(raw, context) {
       if(!p||!entries[p])throw Error('Generated reference chart is missing.');entries[p]=encodeText(applyReferenceSeries(decodeText(entries[p]),info,{lang:referenceLabelLanguage(part),frame:new XMLParser({ignoreAttributes:false,attributeNamePrefix:"",parseTagValue:false,trimValues:false}).parse(frame)["p:graphicFrame"],shapes:asArray(parseRequiredXml(entries,part)?.["p:sld"]?.["p:cSld"]?.["p:spTree"]?.["p:sp"])}));
     }
   }
-  // opf-pptx#175: after every chart rewrite, each classic series in its CT_*Ser sequence (src/chart-order.js).
+  // opf-pptx#175: after every chart rewrite, each classic series in its CT_*Ser sequence (src/chart-order.js). opf#1415: every data label
+  // on one line, as the preview draws it (chart-options.js noWrapDataLabels).
   for(const part of Object.keys(entries)){
     if(!/^ppt\/charts\/chart\d+\.xml$/.test(part))continue;
-    const xml=decodeText(entries[part]),ordered=orderChartSeries(xml);
+    const xml=decodeText(entries[part]),ordered=orderChartSeries(noWrapDataLabels(xml));
     if(ordered!==xml)entries[part]=encodeText(ordered);
   }
   applyChartFonts(entries,context.chartFonts,parseRelationships);
