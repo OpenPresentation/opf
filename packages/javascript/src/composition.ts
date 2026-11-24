@@ -5437,7 +5437,7 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
     // A layout whose regions may draw their content (a sequence's badges or Basic Process, a diagram) keeps LH-48's three steps there, so
     // a drawing and the plain body its guard compares it with are held to the same size.
     const arranged = isLayoutTemplate(options.layout) && layoutTemplate(options.layout).regions.some(region => region.arrangement !== undefined);
-    if (!reached || reached.fill >= LONE_FILL || drawn || arranged || (options as Record<symbol, unknown>)[NO_STEPS] === true) return done(grown);
+    if (!reached || reached.fill >= LONE_FILL || drawn || arranged || (options as Record<symbol, unknown>)[NO_STEPS] === true || (options as Record<symbol, unknown>)[GROW_ON_HELD] === true) return done(grown);
     const shapeOf = (composed: SlideComposition) => { const body = composed.items.filter(item => !headings.has(item.field) && !item.eyebrow); return `${new Set(body.map(item => Math.round(item.box.x / 4))).size}:${new Set(body.map(item => Math.round(item.box.y / 4))).size}`; };
     // On a layout, paragraphs that share one size keep one size (LH-43), and so do lists; a paragraph beside a list may part from it, as a
     // paragraph held by its reading measure stops before a short list does.
@@ -5651,17 +5651,27 @@ function composeSlideOnce(input: unknown, options: ComposeSlideOptions): SlideCo
   // LH-86: a layout whose whole body is one row of regions keeps its columns (longTextRows) unless the long texts drawn as full-width
   // rows read larger: the slide is composed both ways, and the rows are kept when they overflow less, or as little with a larger
   // smallest fitted body size. Columns never cost a size the rows would give.
-  if ((options as Record<symbol, unknown>)[ROWS_ON_OVERFLOW] === true || !rowOnlyLayout(options.layout)) return result;
+  if ((options as Record<symbol, unknown>)[ROWS_ON_OVERFLOW] !== undefined || !rowOnlyLayout(options.layout)) return result;
   const rows = composeSlideOnce(input, { ...options, [ROWS_ON_OVERFLOW]: true } as ComposeSlideOptions);
   const before = overflowCount(result), after = overflowCount(rows);
   const smallest = (composed: SlideComposition) => Math.min(...bodyReadability(composed, options).sizes.map(entry => entry.size));
-  return after < before || (after === before && smallest(rows) > smallest(result) + FONT_GRID_EPSILON) ? rows : result;
+  if (after < before) return rows;
+  if (after > before || smallest(rows) <= smallest(result) + FONT_GRID_EPSILON) return result;
+  // COL-4 with LH-102: the two arrangements are compared as LH-48's three steps leave them. LH-102's further growth of a short layout body
+  // grows full-width rows past columns of the same texts (43 against 37 px), which turned two short texts back into rows while three stayed
+  // columns; rows are kept only when they read larger without it.
+  const held = { ...options, [GROW_ON_HELD]: true } as ComposeSlideOptions;
+  const heldRows = composeSlideOnce(input, { ...held, [ROWS_ON_OVERFLOW]: true } as ComposeSlideOptions), heldColumns = composeSlideOnce(input, { ...held, [ROWS_ON_OVERFLOW]: false } as ComposeSlideOptions);
+  return overflowCount(heldRows) === overflowCount(heldColumns) && smallest(heldRows) > smallest(heldColumns) + FONT_GRID_EPSILON ? rows : result;
 }
+/** COL-4 with LH-102: composes a layout body without LH-102's growth past LH-48's three steps (composeSlideOnce's comparison of rows and columns). */
+const GROW_ON_HELD = Symbol('opf.growOnHeld');
 /** LG1: the proportions of a wordmark tile among logos when no sibling picture's proportions are known (a logo's usual 5:2). */
 const WORDMARK_ASPECT = 2.5;
 /** LG1: the size a name in a wordmark tile starts at (it steps down until it fits the tile), so a name reads beside the marks alike in any row. */
 const WORDMARK_SIZE = 40;
-/** LH-86: lets long texts become full-width rows on a layout whose whole body is one row of regions (composeSlideOnce's trial). */
+/** LH-86: lets long texts become full-width rows on a layout whose whole body is one row of regions (composeSlideOnce's trial); false
+ * composes the columns without the trial. */
 const ROWS_ON_OVERFLOW = Symbol('opf.rowsOnOverflow');
 /** LH-86: whether a layout's body regions all lie in one row of its grid, two or more of them (two-column, three-column). */
 function rowOnlyLayout(layout: unknown): boolean {

@@ -37,3 +37,10 @@ test('LH-86: columns that overflow at the floor give way to rows; pillars still 
   const pillars = texts(composeSlide({ title: 'Decision options', blocks: [paragraph('Evergreen CRM'), paragraph('Asteria Robotics')] }, { layout: layouts.pillars }));
   assert.ok(pillars[1].box.y > pillars[0].box.y + pillars[0].box.height, 'one card per row');
 });
+
+test('COL-4 with LH-102: two short texts stay columns, as three do, though rows would grow on past them', () => {
+  const blocks = [{ text: 'Test with two teams for six weeks. Measure task completion and time before deciding what to scale.' }, { text: 'Keep the scope narrow, collect feedback weekly and give each decision a named owner.' }];
+  const items = texts(composeSlide({ title: 'Columns', blocks }, { width: 1280, height: 720, layout: layouts['two-column'] })).sort((a, b) => a.box.x - b.box.x);
+  assert.ok(sideBySide(items), 'columns');
+  assert.ok(items.every((item) => item.text.fontSize >= 37 - 1e-9), `never smaller than the rows today (${items.map((item) => item.text.fontSize)})`);
+});
