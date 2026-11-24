@@ -80,7 +80,7 @@ test('LH-101: layoutCode `fill` sets the lines in the middle of the box and repo
 
 const pricing = { table: { columns: ['Region', 'Our price', 'Competitor average', 'Change'], rows: [['Northeast', '$42', '$41', 'Hold'], ['Southeast', '$38', '$44', '+3%'], ['Southwest', '$36', '$41', '+3%']] } };
 for (const direction of ['ltr', 'rtl']) {
-  test(`LH-102 (${direction}): an under-filled layout body of a table and a text sits in the middle of the body, at the same sizes`, () => {
+  test(`LH-102 (${direction}): an under-filled layout body of a table and a text sits in the middle of the body, never smaller`, () => {
     const slide = { title: 'Regional pricing review', blocks: [{ text: 'Prices rise 3% in the two regions where we trail competitors by more than 10%.' }, pricing] };
     const result = composeSlide(slide, { layout: layouts['table-beside'], direction }), top = composeSlide(slide, { layout: layouts['table-beside'], direction, fill: false });
     const y = (composed) => Math.min(...body(composed).map((entry) => entry.box.y));
@@ -88,7 +88,8 @@ for (const direction of ['ltr', 'rtl']) {
     const end = result.contentBox.y + result.contentBox.height, last = Math.max(...body(result).map((entry) => entry.box.y + entry.box.height));
     const title = item(result, 'title'), above = y(result) - (title.box.y + title.box.height);
     assert.ok(Math.abs(above - (end - last)) < 0.15 * (end - title.box.y), `${above} above, ${end - last} below`);
-    assert.equal(item(result, 'text').text.fontSize, item(top, 'text').text.fontSize);
+    // TAB-2 (0.35.2): the pair also grows (LH-48), so the text is at least its role size.
+    assert.ok(item(result, 'text').text.fontSize >= item(top, 'text').text.fontSize);
     assert.deepEqual(findings(result), []);
   });
 }

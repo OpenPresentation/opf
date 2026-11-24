@@ -11,7 +11,8 @@
   "scripts": {
     "build:deps": "pnpm --filter \"@openpresentation/integration^...\" --fail-if-no-match run build",
     "test": "pnpm run build:deps && node ../../scripts/run-tests.mjs",
-    "test:contract": "pnpm run build:deps && node ../../scripts/run-tests.mjs --suite contract"
+    "test:contract": "pnpm run build:deps && node ../../scripts/run-tests.mjs --suite contract",
+    "typecheck": "pnpm run build:deps && node ../../scripts/typecheck.mjs -p test/tsconfig.json"
   },
   "devDependencies": {
     "@expo-google-fonts/arimo": "0.4.3",

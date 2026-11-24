@@ -90,9 +90,10 @@ test('OPF\'s own designs: PowerPoint\'s proportions, lines that span the region,
   assert.ok(two.nodes[3].box.width > two.nodes[0].box.width, 'a row of fewer boxes widens them');
   assert.deepEqual(two.arrows.map(arrow => [arrow.index, arrow.rotation]), [[0, 0], [1, 0], [2, 90], [3, 180]]);
   assert.ok(two.arrows[2].box.x > two.nodes[2].box.x, 'the connector under the end of the first row');
-  // Chevrons wrap with each row full width, starting again at the left (a row breaks after a point).
+  // Chevrons wrap starting again at the left (a row breaks after a point); C03: every chevron is as wide as the full row's.
   const chevrons = linearDesign('chevrons', area, 5, 24, false, 2);
-  near(span(chevrons.nodes[3])[0], 0, 'the second row starts at the left'); near(span(chevrons.nodes[4])[1], 1200, 'and spans the region');
+  near(span(chevrons.nodes[3])[0], 0, 'the second row starts at the left'); near(chevrons.nodes[4].box.width, chevrons.nodes[0].box.width, 'at the full row\'s width');
+  assert.ok(span(chevrons.nodes[4])[1] < 1200 - 1, 'so the shorter row stops before the right edge');
   // A vertical flow's columns snake too: the second runs bottom to top, joined by a right arrow at the bottom.
   const column = linearDesign('vertical-process', { x: 0, y: 0, width: 600, height: 600 }, 5, 24, false, 2);
   assert.deepEqual(column.arrows.map(arrow => arrow.rotation), [90, 90, 0, 270]);
@@ -129,7 +130,13 @@ test('the gallery has a chevrons and a vertical-process layout, each a lone list
 });
 
 test('a lone list draws as PowerPoint\'s design, centered on its nodes at one size, never below the list\'s role size', () => {
-  for (const kind of ['chevrons', 'process', 'vertical-process']) {
+  // C03, VPR-1: PowerPoint's chevrons and vertical process cover under half of these regions, so OPF's rows and columns fill them.
+  for (const kind of ['chevrons', 'vertical-process']) {
+    const [arrangement] = compose({ layout: LAYOUT_OF[kind], title: 'How we work', items: ['Plan', 'Build', 'Test', 'Ship'] }).arrangements;
+    assert.equal(arrangement.design, 'opf', kind);
+    assert.match(arrangement.instead, /covers under half of the region/, kind);
+  }
+  for (const kind of ['process']) {
     const items = ['Plan', 'Build', 'Test', 'Ship'];
     const result = compose({ layout: LAYOUT_OF[kind], title: 'How we work', items });
     const [arrangement] = result.arrangements, list = result.items.find(item => item.field === 'items');

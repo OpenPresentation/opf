@@ -36,14 +36,17 @@ export const LIST_WHOLE_ENTRIES = 6;
 /**
  * LH-42: the grid of a region that holds 2 or more lists, one list per cell: `count` columns for up to 4 lists, 3 columns when
  * the count is a multiple of 3, otherwise 4. When the region is too narrow for that many (`maxColumns`), the rows the widest
- * allowed count needs are filled evenly instead (4 lists in 3 columns are 2 x 2, not 3 + 1).
+ * allowed count needs are filled evenly instead (4 lists in 3 columns are 2 x 2, not 3 + 1). The rows are balanced (TEA-1): no row is
+ * more than one list short of another (5 lists are 3 + 2, 10 are 4 + 3 + 3).
  */
 export function listGridShape(count: number, maxColumns = 4): FlowShape {
   if (!Number.isInteger(count) || count < 1) return { columns: 1, rows: 0, perRow: [] };
   const wanted = count <= 4 ? count : count % 3 === 0 ? 3 : 4, limit = Math.max(1, Math.floor(maxColumns));
   const columns = wanted <= limit ? wanted : Math.ceil(count / Math.ceil(count / limit));
-  const rows = Math.ceil(count / columns);
-  return { columns, rows, perRow: Array.from({ length: rows }, (_, row) => Math.min(columns, count - row * columns)) };
+  // TEA-1: the rows are balanced (LH-47), so no row is more than one list short of another: 5 lists are 3 + 2, not 4 + 1.
+  const rows = Math.ceil(count / columns), base = Math.floor(count / rows), extra = count % rows;
+  const perRow = Array.from({ length: rows }, (_, row) => base + (row < extra ? 1 : 0));
+  return { columns: perRow[0]!, rows, perRow };
 }
 
 /** One row (`row`), one column (`column`) or the grid sequence (`grid`) for `count` blocks. */
@@ -190,7 +193,8 @@ export function listColumnBreaks(heights: readonly number[], levels: readonly nu
       if (!allowed[next]) continue;
       const rest = solve(next, columns - 1);
       const cost = Math.max(span(start, next), rest.cost);
-      if (cost < best.cost - 1e-9) best = { cost, breaks: [next, ...rest.breaks] };
+      // C09: of breaks that keep the tallest column as short, the later one wins, so the first columns are the longer (7 as 4 + 3).
+      if (cost < best.cost - 1e-9 || (best.breaks.length && cost <= best.cost + 1e-9)) best = { cost, breaks: [next, ...rest.breaks] };
     }
     memo.set(key, best);
     return best;

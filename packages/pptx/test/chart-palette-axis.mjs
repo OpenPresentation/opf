@@ -75,8 +75,9 @@ let checked = 0;
   assert.ok(expected, 'composition exposes the value axis');
   const found = axis(await chartXml({type: 'column', data: small}));
   assert.deepEqual(found, {min: String(expected.min), max: String(expected.max), majorUnit: String(expected.majorUnit)});
-  // LH-105: at most six intervals, so 0 to 800 in steps of 200.
-  assert.deepEqual(found, {min: '0', max: '800', majorUnit: '200'});
+  // LH-105: at most six intervals, so steps of 200; 0.35.2: the lone small column chart hides its value axis and labels its columns, so
+  // its axis ends at its tallest column (760), the c:max PowerPoint draws.
+  assert.deepEqual(found, {min: '0', max: '760', majorUnit: '200'});
   checked += 2;
 }
 

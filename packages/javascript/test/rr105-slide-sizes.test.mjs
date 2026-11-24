@@ -32,7 +32,8 @@ for (const dimensions of SIZES) {
     // Its lines keep the minimum measure, or it is on three lines or fewer.
     assert.ok(message.body.text.lines.length <= 3 || message.body.box.width >= MIN_MEASURE_CHARS * 0.5 * message.body.text.fontSize);
     const list = compose(dimensions, 1);
-    assert.ok(Math.abs(list.body.text.fontSize / list.scale - LONE_DISPLAY_SIZES.list) < 0.05, `the list at its display size: ${list.body.text.fontSize / list.scale}`);
+    // LH-102: a short lone list grows past its display size, up to the compact display size (56 px), while its body is mostly empty.
+    assert.ok(list.body.text.fontSize / list.scale >= LONE_DISPLAY_SIZES.list - 0.05 && list.body.text.fontSize / list.scale <= 56 + 0.05, `the list at its display size or past it: ${list.body.text.fontSize / list.scale}`);
     const table = compose(dimensions, 2);
     assert.ok(table.body.tableGrowth > 1.9, `the table grows: ${table.body.tableGrowth}`);
     const metric = compose(dimensions, 3);

@@ -68,6 +68,11 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Plan", blocks: [{ shape: "rect", text: "Pricing", link: "https://example.com/pricing", hidden: true }] },
     { title: "Plan", blocks: [{ shape: "rect", text: "Pricing", link: "https://example.com/pricing" }] },
   ),
+  "opf/shape-path-units": ex(
+    "Write the path in the 0 to 1 box, or give it a `viewBox` for the grid it is drawn on.",
+    { title: "Plan", blocks: [{ path: "M0 0 L100 0 L50 100 Z" }] },
+    { title: "Plan", blocks: [{ path: { d: "M0 0 L100 0 L50 100 Z", viewBox: "0 0 100 100" } }] },
+  ),
   "opf/shape-anchor-size-unit": ex(
     "Write pixels as `widthPx`; `width` is a fraction.",
     { title: "T", blocks: [{ id: "a", text: "x" }], shapes: [{ shape: "ellipse", at: { block: "a", edge: "top", width: 6 } }] },

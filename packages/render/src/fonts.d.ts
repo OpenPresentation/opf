@@ -1,4 +1,4 @@
-import type { TextMeasurement, TextStyle, ScriptRole } from "@openpresentation/opf/composition";
+import type { ResolvedScriptFonts, TextMeasurement, TextStyle, ScriptRole } from "@openpresentation/opf/composition";
 import type { FontPolicyEntry } from "@openpresentation/opf/font-policy";
 import type { LazyFont } from "./fonts-node.js";
 import type {ToSvgOptions} from "./svg.js";
@@ -124,7 +124,7 @@ export interface ScriptFontProfile {
   heading?: ScriptFontSlots; body?: ScriptFontSlots;
   supplement?: { script: string; heading: string; body: string };
   script?: string; bcp47?: string; lang?: string; direction?: "ltr" | "rtl"; rtl?: boolean;
-  languageSource?: "document" | "option" | "default"; scriptRole?: ScriptRole; serif?: boolean;
+  languageSource?: ResolvedScriptFonts["languageSource"]; scriptRole?: ScriptRole; serif?: boolean;
 }
 export interface ScriptRun { text: string; script: string; role: ScriptRole }
 export interface PlannedRun { text: string; family: string; own: boolean; stack?: string[] }
