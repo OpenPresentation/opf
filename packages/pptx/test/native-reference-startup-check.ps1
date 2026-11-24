@@ -4,23 +4,37 @@ if($PSVersionTable.PSEdition -cne 'Desktop' -or $PSVersionTable.PSVersion.Major 
 if(Test-Path -LiteralPath $ReportPath){throw 'Preserve prior startup controls'}
 $root=$ReportPath+'.startup';if(Test-Path -LiteralPath $root){throw 'Preserve prior startup fixture'};[void](New-Item -ItemType Directory -Path $root)
 $before=(Get-FileHash -LiteralPath $ScriptPath -Algorithm SHA256).Hash.ToLowerInvariant()
-if((Get-Item -LiteralPath $ScriptPath).Length -ne 93931 -or $before -cne '755740808d1dd28dd5a44e8720cc5d11a06bd89e5a3412a3b7bdb7458e566bad'){throw 'Exact reviewed startup worker required'}
+if((Get-Item -LiteralPath $ScriptPath).Length -ne 93931 -or $before -cne '5719ddf5ee1fb1218ce4b854ee4e3fe2ed0e133d4085358fa64d9e03db4c8cd8'){throw 'Exact reviewed startup worker required'}
 $source=[IO.File]::ReadAllText($ScriptPath)
+# Stage11 (owner-approved 2026-11-24, "Yes, refresh them": the one lock refresh for the layout-sweep fixes, LH-194 to LH-199, and the negative-bar fix)
+# admits the layout-sweep reference export, which differs from the stage-10 input only in the agenda, pillars, chart-beside, code, dashboard and team layout-record tags; its helper series names are unchanged.
+# It accepts only the current worker, then proves the exact stage-10 worker before the earlier derivations.
+$sweepLayoutInputEdits=@(
+ ,@("if(`$SourceBytes -ne 124991 -or `$SourceHash -cne '58e87d163fc0fe74765e62d7f8e2d382155a75e81ad425099f352038888c9a80'","if(`$SourceBytes -ne 124991 -or `$SourceHash -cne 'e6d2f88d45672535ac4e42faa7665d31813e52f603205cafac69bf231624b4e1'")
+)
+$stage10Source=$source
+foreach($pair in $sweepLayoutInputEdits){$at=$stage10Source.IndexOf($pair[1],[StringComparison]::Ordinal);if($at -lt 0 -or $stage10Source.LastIndexOf($pair[1],[StringComparison]::Ordinal) -ne $at){throw 'Unique eleventh-stage sweep-layout input inverse required'};$stage10Source=$stage10Source.Replace($pair[1],$pair[0])}
+$stage10Bytes=[Text.Encoding]::UTF8.GetBytes($stage10Source)
+$sha=[Security.Cryptography.SHA256]::Create();try{$stage10Hash=([BitConverter]::ToString($sha.ComputeHash($stage10Bytes))).Replace('-','').ToLowerInvariant()}finally{$sha.Dispose()}
+if($stage10Bytes.Length -ne 93931 -or $stage10Hash -cne '755740808d1dd28dd5a44e8720cc5d11a06bd89e5a3412a3b7bdb7458e566bad'){throw 'Exact tenth-stage worker inverse required'}
+$sweepLayoutInputForward=$stage10Source
+foreach($pair in $sweepLayoutInputEdits){$at=$sweepLayoutInputForward.IndexOf($pair[0],[StringComparison]::Ordinal);if($at -lt 0 -or $sweepLayoutInputForward.LastIndexOf($pair[0],[StringComparison]::Ordinal) -ne $at){throw 'Unique eleventh-stage sweep-layout input forward required'};$sweepLayoutInputForward=$sweepLayoutInputForward.Replace($pair[0],$pair[1])}
+if($sweepLayoutInputForward -cne $source){throw 'Eleventh-stage sweep-layout input forward differs'}
 # Stage10 (owner-approved 2026-11-23, "keep all three together": re-measure, re-seal and this worker edit for releasing 0.35.1) admits
 # the 0.35.1 reference export, which differs from the stage-9 input only in the two-column and three-column layout-record tags (the
 # 0.35.1 column layout records); its helper series names are unchanged.
-# It accepts only the current worker, then proves the exact stage-9 worker before the earlier derivations.
+# It accepts only the stage-10 worker, then proves the exact stage-9 worker before the earlier derivations.
 $columnLayoutInputEdits=@(
  ,@("if(`$SourceBytes -ne 124993 -or `$SourceHash -cne 'a274f346d8acda750fb8ada0507038ea6c2e47847ae3a64b176c6c39a3344908'","if(`$SourceBytes -ne 124991 -or `$SourceHash -cne '58e87d163fc0fe74765e62d7f8e2d382155a75e81ad425099f352038888c9a80'")
 )
-$stage9Source=$source
+$stage9Source=$stage10Source
 foreach($pair in $columnLayoutInputEdits){$at=$stage9Source.IndexOf($pair[1],[StringComparison]::Ordinal);if($at -lt 0 -or $stage9Source.LastIndexOf($pair[1],[StringComparison]::Ordinal) -ne $at){throw 'Unique tenth-stage column-layout input inverse required'};$stage9Source=$stage9Source.Replace($pair[1],$pair[0])}
 $stage9Bytes=[Text.Encoding]::UTF8.GetBytes($stage9Source)
 $sha=[Security.Cryptography.SHA256]::Create();try{$stage9Hash=([BitConverter]::ToString($sha.ComputeHash($stage9Bytes))).Replace('-','').ToLowerInvariant()}finally{$sha.Dispose()}
 if($stage9Bytes.Length -ne 93931 -or $stage9Hash -cne 'e0db6af0c1d94948554b0e324ad32dcf6a1f95ff11c8b314b46f0463be6c8018'){throw 'Exact ninth-stage worker inverse required'}
 $columnLayoutInputForward=$stage9Source
 foreach($pair in $columnLayoutInputEdits){$at=$columnLayoutInputForward.IndexOf($pair[0],[StringComparison]::Ordinal);if($at -lt 0 -or $columnLayoutInputForward.LastIndexOf($pair[0],[StringComparison]::Ordinal) -ne $at){throw 'Unique tenth-stage column-layout input forward required'};$columnLayoutInputForward=$columnLayoutInputForward.Replace($pair[0],$pair[1])}
-if($columnLayoutInputForward -cne $source){throw 'Tenth-stage column-layout input forward differs'}
+if($columnLayoutInputForward -cne $stage10Source){throw 'Tenth-stage column-layout input forward differs'}
 # Stage9 (owner-approved 2026-11-18, "Yes, for the plan": lock refresh for layout-record changes) admits the 0.35 reference export,
 # which differs from the stage-8 input only in layout-record tags, region-derived placeholder names and removed/renamed built-in
 # layouts; its helper series names are unchanged.
@@ -107,4 +121,4 @@ foreach($mode in @('valid','old-collision','disabled','missing-switch','missing-
  $rows+=@([ordered]@{scenario=$mode;passed=$true;publicSwitch=if($null -eq $value){$null}else{$value.publicSwitch};internalEnabled=if($null -eq $value){$null}else{$value.internalEnabled};refusal=$caught})
 }
 if((Get-FileHash -LiteralPath $ScriptPath -Algorithm SHA256).Hash.ToLowerInvariant() -cne $before -or (Get-FileHash -LiteralPath $inputPath -Algorithm SHA256).Hash.ToLowerInvariant() -cne $inputHash){throw 'Startup controls mutated source/input bytes'}
-[ordered]@{schemaVersion=1;powerShellEdition=$PSVersionTable.PSEdition;powerShellVersion=$PSVersionTable.PSVersion.ToString();scope='Actual ParamBlock and two exact pre-COM startup statements only';earlierFullSourceBootstrapExercised=$false;syntheticLengthFixture=$true;genuineArchive=$false;officeConstructed=$false;processQueries=0;observerIO=0;workerSha256=$before;oldInverseSha256=$oldHash;columnLayoutInputDerivation=[ordered]@{edits=$columnLayoutInputEdits.Count;workerBytes=(Get-Item -LiteralPath $ScriptPath).Length;inverseBytes=$stage9Bytes.Length;inverseSha256=$stage9Hash;forwardExact=($columnLayoutInputForward -ceq $source)};layoutRecordInputDerivation=[ordered]@{edits=$layoutRecordInputEdits.Count;workerBytes=$stage9Bytes.Length;inverseBytes=$stage8Bytes.Length;inverseSha256=$stage8Hash;forwardExact=($layoutRecordInputForward -ceq $stage9Source)};measuredInputDerivation=[ordered]@{edits=$measuredInputEdits.Count;workerBytes=$stage8Bytes.Length;inverseBytes=$stage7Bytes.Length;inverseSha256=$stage7Hash;forwardExact=($measuredInputForward -ceq $stage8Source)};workerRootDerivation=[ordered]@{edits=$workerRootEdits.Count;workerBytes=$stage7Bytes.Length;inverseBytes=$snapshotBytes.Length;inverseSha256=$snapshotHash;forwardExact=($workerRootForward -ceq $stage7Source)};cases=$rows}|ConvertTo-Json -Depth 12|Set-Content -LiteralPath $ReportPath -Encoding UTF8
+[ordered]@{schemaVersion=1;powerShellEdition=$PSVersionTable.PSEdition;powerShellVersion=$PSVersionTable.PSVersion.ToString();scope='Actual ParamBlock and two exact pre-COM startup statements only';earlierFullSourceBootstrapExercised=$false;syntheticLengthFixture=$true;genuineArchive=$false;officeConstructed=$false;processQueries=0;observerIO=0;workerSha256=$before;oldInverseSha256=$oldHash;sweepLayoutInputDerivation=[ordered]@{edits=$sweepLayoutInputEdits.Count;workerBytes=(Get-Item -LiteralPath $ScriptPath).Length;inverseBytes=$stage10Bytes.Length;inverseSha256=$stage10Hash;forwardExact=($sweepLayoutInputForward -ceq $source)};columnLayoutInputDerivation=[ordered]@{edits=$columnLayoutInputEdits.Count;workerBytes=$stage10Bytes.Length;inverseBytes=$stage9Bytes.Length;inverseSha256=$stage9Hash;forwardExact=($columnLayoutInputForward -ceq $stage10Source)};layoutRecordInputDerivation=[ordered]@{edits=$layoutRecordInputEdits.Count;workerBytes=$stage9Bytes.Length;inverseBytes=$stage8Bytes.Length;inverseSha256=$stage8Hash;forwardExact=($layoutRecordInputForward -ceq $stage9Source)};measuredInputDerivation=[ordered]@{edits=$measuredInputEdits.Count;workerBytes=$stage8Bytes.Length;inverseBytes=$stage7Bytes.Length;inverseSha256=$stage7Hash;forwardExact=($measuredInputForward -ceq $stage8Source)};workerRootDerivation=[ordered]@{edits=$workerRootEdits.Count;workerBytes=$stage7Bytes.Length;inverseBytes=$snapshotBytes.Length;inverseSha256=$snapshotHash;forwardExact=($workerRootForward -ceq $stage7Source)};cases=$rows}|ConvertTo-Json -Depth 12|Set-Content -LiteralPath $ReportPath -Encoding UTF8
