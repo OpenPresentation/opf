@@ -453,6 +453,24 @@ export function partScriptFonts(path, xml, plan, slideIndex) {
 
 const LANGUAGE_TAG = /^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$/;
 const attribute = (xml, name) => new RegExp(`\\s${name}="([^"]*)"`).exec(xml)?.[1];
+// Values that name no language: malformed tags, x-none, und and zxx.
+const namesLanguage = lang => Boolean(lang) && LANGUAGE_TAG.test(lang) && !/^(?:und|zxx)(?:-|$)/i.test(lang);
+
+/**
+ * RR-05: in a right-to-left paragraph the export writes each Latin piece as its own en-US run beside the paragraph's language
+ * (a plain lang="en-US"), so "תוצאות Q3" is one he-IL run and one en-US run, and the tie would rank en-US first. Those pieces
+ * are not a second language. They are left out of the count wherever the paragraph also has a run in another language. A run
+ * whose author set its language (OPF marks it altLang="en-US") still counts, and so does a right-to-left paragraph that is all
+ * en-US.
+ */
+function withoutLatinPieces(xml) {
+  return xml.replace(/<a:p>[\s\S]*?<\/a:p>/g, paragraph => {
+    if (!/<a:pPr\b[^>]*?\srtl="1"/.test(paragraph)) return paragraph;
+    const tags = [...paragraph.matchAll(/<a:rPr\b[^>]*>/g)].map(([run]) => attribute(run, 'lang'));
+    if (!tags.some(lang => namesLanguage(lang) && lang.toLowerCase() !== 'en-us')) return paragraph;
+    return paragraph.replace(/<a:rPr\b[^>]*>/g, run => String(attribute(run, 'lang')).toLowerCase() === 'en-us' && attribute(run, 'altLang') === undefined ? '' : run);
+  });
+}
 
 /**
  * Observe the presentation language in run `lang`. `slides` and `theme` are
@@ -469,10 +487,9 @@ export function observeLanguage({slides, theme, themePath, slideThemes, catalogs
   let rtlParagraphs = 0;
   for (const [index, xml] of slides.entries()) {
     const preferBase = Array.isArray(preferBaseRuns) ? preferBaseRuns[index] === true : preferBaseRuns;
-    for (const [run] of xml.matchAll(/<a:rPr\b[^>]*>/g)) {
+    for (const [run] of withoutLatinPieces(xml).matchAll(/<a:rPr\b[^>]*>/g)) {
       const lang = attribute(run, 'lang');
-      // Values that name no language are not counted: malformed tags, x-none, und and zxx.
-      if (!lang || !LANGUAGE_TAG.test(lang) || /^(?:und|zxx)(?:-|$)/i.test(lang)) continue;
+      if (!namesLanguage(lang)) continue;
       counts.set(lang, (counts.get(lang) ?? 0) + 1);
       // OPF marks a run's authored language override with altLang=en-US. A wrapped override
       // may produce more native fragments than the slide's base language; it must not replace it.
