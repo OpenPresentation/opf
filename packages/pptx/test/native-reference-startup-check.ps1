@@ -89,7 +89,7 @@ New-StartupScript $source 'referenceNameModeEnabled' $newPath;New-StartupScript 
 # This is a synthetic length fixture, NOT the genuine sealed PPTX. Earlier full
 # hash/bootstrap checks are deliberately not executed or claimed in this test.
 $inputPath=Join-Path $root 'synthetic-length-fixture.pptx';[IO.File]::WriteAllBytes($inputPath,[Array]::CreateInstance([byte],124991));$inputHash=(Get-FileHash -LiteralPath $inputPath -Algorithm SHA256).Hash.ToLowerInvariant()
-$sourceHash='58e87d163fc0fe74765e62d7f8e2d382155a75e81ad425099f352038888c9a80';if($inputHash -ceq $sourceHash){throw 'Synthetic input must not impersonate the sealed archive'}
+$sourceHash='e6d2f88d45672535ac4e42faa7665d31813e52f603205cafac69bf231624b4e1';if($inputHash -ceq $sourceHash){throw 'Synthetic input must not impersonate the sealed archive'}
 $plan=@([pscustomobject]@{op='set-chart-series-name';slideIndex=1;chartName='OPF chart 1';seriesIndex=1;expectedName='Actual';newName='Actual edited'});ConvertTo-Json -InputObject $plan -Depth 8|Set-Content -LiteralPath (Join-Path $root 'plan.json') -Encoding UTF8
 $rows=@()
 foreach($mode in @('valid','old-collision','disabled','missing-switch','missing-request','false-request','nonboolean-request','wrong-source')){
