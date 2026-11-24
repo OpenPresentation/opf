@@ -12,7 +12,7 @@
       "technicalFluency": "mixed",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "persuasive-sales"
+        "persuade"
       ],
       "recommendedTones": [
         "conversational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "persuasive-sales",
+  "narrative": "persuade",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -276,7 +276,7 @@
   },
   "author": "OPF Example Generator",
   "takeaway": "Improve entry, concessions, and post-event transit flow",
-  "duration": 31,
+  "duration": 30,
   "tags": [
     "industries",
     "sports-venues",
@@ -326,87 +326,94 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "persuasive-sales": {
-          "name": "Persuasive Sales",
-          "summary": "Top-of-funnel sales arc that creates awareness and alignment with a prospective customer. Anchored in a market change, leading to your unique capabilities, supported by proof, ending with a clear call to action.",
+        "persuade": {
+          "name": "Persuade",
+          "summary": "Argument-driven keynote arc inspired by Ken Robinson: grip the audience, challenge the status quo, define the problem, anchor it in story and statistic, deliver a major revelation, propose change, and end on a question that stays with them.",
           "audienceFit": [
-            "prospects",
-            "customers",
-            "buyers"
+            "general-audience",
+            "policymakers",
+            "industry-peers"
           ],
           "duration": {
             "min": 15,
-            "max": 45
+            "max": 30
           },
           "tags": [
-            "sales",
-            "go-to-market",
-            "outbound",
-            "discovery"
+            "keynote",
+            "persuasive",
+            "advocacy",
+            "talk"
           ],
           "beats": [
             {
-              "id": "intro",
-              "name": "Introduction",
-              "description": "Open with a brief framing of who you are and why this conversation is worth the prospect's next thirty minutes. Keep credentials short; the audience cares about their problem, not your résumé.",
-              "instructions": "Name & logo",
+              "id": "gripping-introduction",
+              "name": "Gripping Introduction",
+              "description": "Open with a moment, image, or claim the audience can't easily look away from. The first sixty seconds buy you the next twenty minutes — spend them on something specific and emotionally charged, not on housekeeping.",
+              "instructions": "Draw in the audience with a compelling opener",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "big-change",
-              "name": "Big Change",
-              "description": "Name the market shift the prospect's industry is living through. Make it concrete, recent, and undeniable. The change — not the product — is the reason they should care.",
-              "instructions": "Highlight market shift",
+              "id": "challenge-status-quo",
+              "name": "Challenge the Status Quo",
+              "description": "Call out the system, norm, or assumption that needs examination. Be precise about what you're disagreeing with so the rest of the talk can be specific in response. Avoid strawmen — name the strongest version of the view you're contesting."
+            },
+            {
+              "id": "present-problem",
+              "name": "Present the Problem",
+              "description": "Define the issue the audience needs to care about. Concrete, scoped, attributable. The clearer the problem, the more credible the eventual solution."
+            },
+            {
+              "id": "personal-story",
+              "name": "Personal Story",
+              "description": "Anchor the issue in a specific person, place, or moment. Story is what gets the argument past the audience's defenses. Pick a story that personalizes the data without overstating it.",
+              "instructions": "Share significant stories to illuminate the issue",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "response-to-change",
-              "name": "Winners and Losers",
-              "description": "Show how the change is creating winners and losers in the prospect's space. Use named examples where you can. The goal is for the prospect to wonder which side they'll end up on.",
-              "instructions": "Show winners & losers",
+              "id": "statistic-shock",
+              "name": "Statistic Shock",
+              "description": "Drop in a single statistic that recasts the scale of the problem. One number, presented well, lands harder than a dashboard. Cite the source so the audience can repeat it with confidence.",
+              "instructions": "Use impactful stats to highlight the gravity of the issue",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "benefits",
-              "name": "Benefits",
-              "description": "Paint the outcome a winner experiences: a vivid picture of the prospect's life on the other side of the change. Lead with what changes for them, not with what your product does.",
-              "instructions": "Describe benefits, paint a vivid picture",
+              "id": "historical-context",
+              "name": "Historical Context",
+              "description": "Show how the issue evolved. Why it has the shape it does today, what was tried, what was missed. Historical context turns 'this is broken' into 'this stayed broken for these reasons.'",
+              "instructions": "Show the evolution or history of the issue",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "capabilities",
-              "name": "Capabilities",
-              "description": "Reveal the unique capabilities that make those outcomes possible. Frame them as the 'magic gifts' the prospect needs to win the new game. Highlight what's structurally different from the alternatives.",
-              "instructions": "Present unique features as 'magic gifts' to the customer",
+              "id": "weave-narrative",
+              "name": "Weave a Narrative",
+              "description": "Connect the threads — story, statistic, history — into a single argument. The audience should feel the case clicking together. This is the slide where rhetoric becomes architecture."
+            },
+            {
+              "id": "major-revelation",
+              "name": "Major Revelation",
+              "description": "Deliver the surprising or significant turn. The fact, finding, or reframing the rest of the talk has been earning. The revelation should redirect, not merely confirm.",
+              "instructions": "Deliver a surprising or significant discovery",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "evidence",
-              "name": "Evidence",
-              "description": "Share customer testimonials, case studies, and measurable outcomes from organizations like the prospect's. Pick evidence that maps to the benefits you promised, not generic logos.",
-              "instructions": "Share testimonials",
+              "id": "propose-solution",
+              "name": "Propose Solution",
+              "description": "Advocate for the change you want. Concrete enough to be acted on, broad enough to inspire. Pair the solution with the smallest credible first step.",
+              "instructions": "Advocate for change or propose an actionable solution",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "call-to-action",
-              "name": "Call to Action",
-              "description": "Ask for the next step in the sales process. Be specific: a pilot, a workshop, a follow-on conversation with a named stakeholder. Make the smallest credible commitment that keeps momentum.",
-              "layout": "list",
-              "instructions": "Encourage decision-making",
-              "type": "text"
-            },
-            {
-              "id": "close",
-              "name": "Close",
-              "description": "Close with a final image and contact path. Leave the prospect with one line about why they're better off acting now than later, and clear instructions for how to engage.",
-              "layout": "closing",
-              "instructions": "Logo & contact info",
+              "id": "final-question",
+              "name": "Final Question",
+              "description": "Close on a question rather than a summary. The right closing question follows the audience out of the room and into their conversations afterward.",
+              "layout": "statement",
+              "instructions": "Finish with a thought-provoking question to stimulate audience thinking",
               "type": "text"
             }
           ]

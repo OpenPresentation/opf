@@ -6,7 +6,7 @@
   ],
   "purpose": "align",
   "tone": "technical",
-  "narrative": "trend-analysis",
+  "narrative": "strategic-narrative",
   "design": {
     "theme": "classic",
     "colorScheme": "deep-purple",
@@ -102,80 +102,62 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "trend-analysis": {
-          "name": "Trend Analysis",
-          "summary": "Identify and discuss data-driven patterns to understand performance and forecast what's next. Useful for market reviews, strategic outlooks, and any deck where the audience must act on a direction-of-travel call.",
+        "strategic-narrative": {
+          "name": "Strategic Narrative",
+          "summary": "The change-driven founder/sales arc: a tectonic shift creates winners and losers, the audience must respond, and your product is the only credible way to land in the winners' camp. Used for top-of-funnel sales pitches, board re-positioning, and high-stakes founder talks.",
           "audienceFit": [
-            "executives",
-            "analysts",
-            "leadership"
+            "customers",
+            "prospects",
+            "board",
+            "investors",
+            "executives"
           ],
           "duration": {
-            "min": 15,
-            "max": 45
+            "min": 10,
+            "max": 30
           },
           "tags": [
-            "data-driven",
-            "forecasting",
-            "strategy",
-            "analysis"
+            "strategic",
+            "sales",
+            "positioning",
+            "category"
           ],
           "beats": [
             {
-              "id": "introduction",
-              "name": "Introduction",
-              "description": "Open by establishing why this trend matters now. Tie it to a decision on the table or a forecast that's about to be made. Trends without consequences are filler.",
-              "instructions": "Ignite interest, establish significance",
-              "type": "text",
-              "layout": "text"
+              "id": "shift",
+              "name": "The Shift",
+              "description": "Open by naming a large, undeniable change in the world that the audience already half-believes. Technology, regulation, customer behavior, economics — pick the shift that recasts the audience's reality. The shift, not your product, is the protagonist of the first half of the deck."
             },
             {
-              "id": "historical-comparison",
-              "name": "Historical Comparison",
-              "description": "Contrast current data with the relevant past. Pick the comparison window that makes the trend visible without cherry-picking. Be honest about base effects.",
-              "instructions": "Contrast current and past data",
-              "type": "text",
-              "layout": "text"
+              "id": "stakes",
+              "name": "Winners and Losers",
+              "description": "Make the consequences of the shift concrete. Who wins, who loses, by how much, on what timeframe. Use specific examples — companies, products, segments — that have already moved or are about to. The audience should feel that standing still is the riskiest choice."
             },
             {
-              "id": "pattern-identification",
-              "name": "Pattern Identification",
-              "description": "Name the recurring outcome you've spotted. Use one or two strong charts that show the pattern unambiguously. Avoid overclaiming significance from a small N.",
-              "instructions": "Point out recurring outcomes",
-              "type": "text",
-              "layout": "text"
+              "id": "promised-land",
+              "name": "Promised Land",
+              "description": "Paint a vivid picture of the future state your audience could occupy if they navigate the shift well. Describe outcomes, not features. The promised land must feel desirable, achievable, and meaningfully different from where they are today."
             },
             {
-              "id": "future-prediction",
-              "name": "Future Prediction",
-              "description": "Project where the trend leads if it continues. Show the forecast and the confidence interval. State the assumptions that would have to break for the prediction to fail.",
-              "instructions": "Predict using established patterns",
-              "type": "text",
-              "layout": "text"
+              "id": "obstacles",
+              "name": "Old Game",
+              "description": "Show why the existing playbook can't get the audience to the promised land. Name the legacy approach honestly and credit what it once did, then explain why the shift has rendered it insufficient. Avoid strawmen — the more fairly you state the old game, the more credible your new game becomes."
             },
             {
-              "id": "action-plan",
-              "name": "Action Plan",
-              "description": "Translate the prediction into the strategy it implies. Specific actions, sequenced. Each action should map to a particular reading of the trend, not a generic best practice.",
-              "instructions": "Strategies based on prediction",
-              "type": "text",
-              "layout": "text"
+              "id": "mechanism",
+              "name": "New Game",
+              "description": "Introduce your category-defining approach as the way to play the new game. Show the principles or capabilities that make it possible only now. Emphasize what's structurally different from the old game, not what's marginally better."
             },
             {
-              "id": "implementation",
-              "name": "Implementation",
-              "description": "Walk through how the actions get executed: owners, milestones, monitoring. The audience should leave understanding what to do tomorrow, not just what to think about.",
-              "instructions": "Discuss strategy execution",
-              "type": "text",
-              "layout": "text"
+              "id": "evidence",
+              "name": "Evidence",
+              "description": "Prove the new game works. Customer outcomes, named logos, before/after data, third-party validation. Choose evidence that maps directly to the shift you opened with — proof that other audiences in the same boat made it to the promised land."
             },
             {
-              "id": "conclusion",
-              "name": "Conclusion",
-              "description": "Recap the trend, the forecast, and the recommended action. End with the leading indicator you'll watch to know if the call is right.",
-              "layout": "closing",
-              "instructions": "Summarize key points",
-              "type": "text"
+              "id": "ask",
+              "name": "Call to Action",
+              "description": "Close with the single decision you want the audience to make. Frame it as the obvious next move given the shift, the stakes, and the new game. Make it small enough to say yes to today and large enough to start a real engagement.",
+              "layout": "list"
             }
           ]
         }

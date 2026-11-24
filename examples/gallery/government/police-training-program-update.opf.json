@@ -12,7 +12,7 @@
       "technicalFluency": "high",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "product-launch"
+        "persuasive-sales"
       ],
       "recommendedTones": [
         "inspirational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "product-launch",
+  "narrative": "persuasive-sales",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -318,104 +318,87 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "product-launch": {
-          "name": "Product Launch",
-          "summary": "Persuasive launch arc: open with brand, hook with a promise, set the conflict, raise the stakes, reveal the product, raise stakes again, sell, and call to action. Tuned for keynote-style launches and major announcement decks.",
+        "persuasive-sales": {
+          "name": "Persuasive Sales",
+          "summary": "Top-of-funnel sales arc that creates awareness and alignment with a prospective customer. Anchored in a market change, leading to your unique capabilities, supported by proof, ending with a clear call to action.",
           "audienceFit": [
+            "prospects",
             "customers",
-            "press",
-            "general-audience",
-            "partners"
+            "buyers"
           ],
           "duration": {
             "min": 15,
             "max": 45
           },
           "tags": [
-            "startup",
-            "launch",
-            "marketing",
-            "keynote"
+            "sales",
+            "go-to-market",
+            "outbound",
+            "discovery"
           ],
           "beats": [
             {
-              "id": "opening",
-              "name": "Opening",
-              "description": "Open with the company brand and a confident visual. Set the tone — this is a moment, not a meeting. One slide that signals the audience is somewhere worth being.",
-              "layout": "cover",
-              "instructions": "Show company branding",
+              "id": "intro",
+              "name": "Introduction",
+              "description": "Open with a brief framing of who you are and why this conversation is worth the prospect's next thirty minutes. Keep credentials short; the audience cares about their problem, not your résumé.",
+              "instructions": "Name & logo",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "big-change",
+              "name": "Big Change",
+              "description": "Name the market shift the prospect's industry is living through. Make it concrete, recent, and undeniable. The change — not the product — is the reason they should care.",
+              "instructions": "Highlight market shift",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "response-to-change",
+              "name": "Winners and Losers",
+              "description": "Show how the change is creating winners and losers in the prospect's space. Use named examples where you can. The goal is for the prospect to wonder which side they'll end up on.",
+              "instructions": "Show winners & losers",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "benefits",
+              "name": "Benefits",
+              "description": "Paint the outcome a winner experiences: a vivid picture of the prospect's life on the other side of the change. Lead with what changes for them, not with what your product does.",
+              "instructions": "Describe benefits, paint a vivid picture",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "capabilities",
+              "name": "Capabilities",
+              "description": "Reveal the unique capabilities that make those outcomes possible. Frame them as the 'magic gifts' the prospect needs to win the new game. Highlight what's structurally different from the alternatives.",
+              "instructions": "Present unique features as 'magic gifts' to the customer",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "evidence",
+              "name": "Evidence",
+              "description": "Share customer testimonials, case studies, and measurable outcomes from organizations like the prospect's. Pick evidence that maps to the benefits you promised, not generic logos.",
+              "instructions": "Share testimonials",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "call-to-action",
+              "name": "Call to Action",
+              "description": "Ask for the next step in the sales process. Be specific: a pilot, a workshop, a follow-on conversation with a named stakeholder. Make the smallest credible commitment that keeps momentum.",
+              "layout": "list",
+              "instructions": "Encourage decision-making",
               "type": "text"
             },
             {
-              "id": "promise",
-              "name": "Promise",
-              "description": "Hook the audience with the promise of the talk. Tell them, in one sentence, what they're about to see and why it matters to them. Specific promises buy patient audiences.",
-              "instructions": "Hook the audience",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "context",
-              "name": "Context",
-              "description": "Set the stage with the world the product enters. The customer reality, the market state, the unmet expectation. Context turns the launch from a product release into a moment in a larger story.",
-              "instructions": "Set the stage",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "conflict",
-              "name": "Conflict",
-              "description": "Introduce the villain — the problem, friction, or status quo the product opposes. Make the conflict concrete enough that the audience can name a moment they've felt it themselves.",
-              "instructions": "Introduce villain/problem",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "stakes",
-              "name": "Stakes",
-              "description": "Emphasize what's at risk if the conflict isn't resolved. Quantify, personalize, dramatize. Stakes are what convert a curious audience into an invested one.",
-              "instructions": "Emphasize importance",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "reveal",
-              "name": "Reveal",
-              "description": "Showcase the product. One striking visual, one defining capability, one sentence that captures what's new. Earn the applause line; don't bury it under a bullet list.",
-              "instructions": "Showcase the solution",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "raise-stakes",
-              "name": "Raise the Stakes",
-              "description": "Highlight where the alternatives fall short and what they cost the customer. Re-energize the room midway by sharpening the contrast with the reveal.",
-              "instructions": "Highlight shortcomings of alternatives",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "raise-stakes-again",
-              "name": "Reinforce the Need",
-              "description": "Reinforce why change is non-negotiable now. A second beat of stakes, framed differently — perhaps a customer voice or a future cost. Cement the reason to act.",
-              "instructions": "Reinforce the need for change",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "sell",
-              "name": "Sell",
-              "description": "Make the audience want the product. Lead with the outcome it produces in their lives. Pricing, packaging, availability go here, but only after the desire is built.",
-              "instructions": "Make them want your solution",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "cta",
-              "name": "Call to Action",
-              "description": "Close with the single action you want from the audience. Pre-order, sign up, attend, share. Make it simple, specific, and immediate.",
-              "layout": "list",
-              "instructions": "Inspire action",
+              "id": "close",
+              "name": "Close",
+              "description": "Close with a final image and contact path. Leave the prospect with one line about why they're better off acting now than later, and clear instructions for how to engage.",
+              "layout": "closing",
+              "instructions": "Logo & contact info",
               "type": "text"
             }
           ]

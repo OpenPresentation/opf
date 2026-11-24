@@ -12,7 +12,7 @@
       "technicalFluency": "medium",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "problem-solution"
+        "pitch-deck"
       ],
       "recommendedTones": [
         "inspirational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "problem-solution",
+  "narrative": "pitch-deck",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -256,7 +256,7 @@
   },
   "author": "OPF Example Generator",
   "takeaway": "Grow the strategic account through a measurable multi-threaded plan",
-  "duration": 8,
+  "duration": 10,
   "tags": [
     "business-functions",
     "sales",
@@ -300,62 +300,108 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "problem-solution": {
-          "name": "Problem → Solution",
-          "summary": "Classic business arc: name the pain, raise the stakes, present your fix, show how it works, prove it, ask. The default for sales decks, internal proposals, and most general business presentations.",
+        "pitch-deck": {
+          "name": "Startup Pitch Deck",
+          "summary": "The canonical investor-pitch arc, drawn from Sequoia and Y Combinator's templates. Optimized for 10–20 minute meetings with VCs and angels. Each beat answers the question an investor will ask next.",
           "audienceFit": [
-            "customers",
-            "stakeholders",
-            "executives",
-            "internal-teams"
+            "investors",
+            "venture-capitalists",
+            "angels",
+            "advisors"
           ],
           "duration": {
-            "min": 5,
-            "max": 30
+            "min": 10,
+            "max": 20
           },
           "tags": [
-            "business",
-            "sales",
-            "general",
-            "proposal"
+            "startup",
+            "fundraising",
+            "pitch",
+            "investor"
           ],
           "beats": [
             {
-              "id": "hook",
-              "name": "Hook",
-              "description": "Open with a striking question, statistic, customer quote, or moment that earns the audience's attention. The goal is to make them want to hear what comes next, not to convey information.",
-              "layout": "statement"
+              "id": "opening",
+              "name": "Opening",
+              "description": "Open with the company name, logo, and a one-line tagline that doubles as a positioning statement. Set the visual tone for the deck. Keep it confident and uncluttered — this is the cover.",
+              "layout": "cover"
+            },
+            {
+              "id": "purpose",
+              "name": "Company Purpose",
+              "description": "State in a single sentence what the company does and why it exists. Should be immediately understandable without industry jargon. Often doubles as the answer to 'so what do you do?'"
             },
             {
               "id": "problem",
-              "name": "The Problem",
-              "description": "Name the pain in concrete terms. Make it visceral and specific — describe who hurts, how, and what they're trying to do today that isn't working. Avoid abstractions; use real examples or scenarios the audience recognizes."
+              "name": "Problem",
+              "description": "Describe the pain point you solve. Make it concrete with a specific user or customer scenario. The more visceral and recognizable the problem, the stronger the rest of the pitch lands."
             },
             {
-              "id": "stakes",
-              "name": "Why It Matters",
-              "description": "Quantify the cost of inaction or the upside of action. Use numbers, trends, customer impact, competitive pressure — whatever makes the audience feel the size of the problem and care about solving it now rather than later."
+              "id": "why-now",
+              "name": "Why Now",
+              "description": "Explain the technological, regulatory, behavioral, or market shift that makes this opportunity possible today and impossible five years ago. Investors want to know why this is a window, not just an idea."
+            },
+            {
+              "id": "market",
+              "name": "Market Size",
+              "description": "Size the opportunity. Top-down (TAM/SAM/SOM) or bottom-up (units × price). Show how big the prize is if you win, and why this market is attractive to a venture-scale outcome."
+            },
+            {
+              "id": "competition",
+              "name": "Competition",
+              "description": "Map the competitive landscape honestly. A 2x2 matrix or feature-comparison grid is fine; what matters is showing you understand the alternatives and where you uniquely fit. Naïve 'no competition' answers tank credibility."
             },
             {
               "id": "solution",
-              "name": "The Solution",
-              "description": "Reveal your approach and what it produces for the customer. Lead with the outcome, not the architecture. Keep it concrete: what does the audience get, and what changes for them?"
+              "name": "Solution",
+              "description": "Show how you solve the problem and why your approach is uniquely better. Lead with the outcome for the customer, then show the mechanism. This is where you connect problem to product."
             },
             {
-              "id": "mechanism",
-              "name": "How It Works",
-              "description": "Show the moving parts that make the solution credible. Walk through the key mechanism, workflow, or technical insight that explains why this approach succeeds where others have failed. Enough detail to earn trust; not so much that you lose the room."
+              "id": "product",
+              "name": "Product",
+              "description": "Give the product its own moment. Screenshots or a key visual that captures what users actually see and feel. Pick one strong frame over a montage of small ones."
             },
             {
-              "id": "evidence",
-              "name": "Proof",
-              "description": "Demonstrate the solution works. Use customer logos, before/after metrics, demos, case studies, third-party validation — whatever de-risks the claim. One strong piece of proof beats three weak ones."
+              "id": "demo",
+              "name": "Demo",
+              "description": "Walk through the core user flow end-to-end. Show real software solving a real problem in a real workflow — not a marketing reel. If a live demo is too risky, use a tightly edited recording with narration."
+            },
+            {
+              "id": "traction",
+              "name": "Traction",
+              "description": "Prove momentum with one credible headline metric. Revenue, users, growth rate, customer logos — whatever best shows the business is working. One strong chart beats five vanity numbers."
+            },
+            {
+              "id": "growth",
+              "name": "Growth Drivers",
+              "description": "Show how the headline metric got there and where it's going. Cohorts, retention, expansion, channel mix — whatever explains the engine behind the number. Investors back the trajectory, not the snapshot."
+            },
+            {
+              "id": "business-model",
+              "name": "Business Model",
+              "description": "Explain how the company makes money. Pricing, unit economics, sales motion, payback period. Should answer: what does it cost to acquire a customer, and what do they pay you?"
+            },
+            {
+              "id": "team",
+              "name": "Team",
+              "description": "Establish why this team uniquely wins this market. Founder backgrounds, relevant experience, prior outcomes, key advisors. Investors back people first; make the case."
+            },
+            {
+              "id": "financials",
+              "name": "Financials",
+              "description": "Show the financial picture: historical revenue, burn, runway, and forward projection. Be conservative-but-credible — investors will discount aggressive numbers and reward defensible ones."
             },
             {
               "id": "ask",
               "name": "The Ask",
-              "description": "State a clear, specific call to action. What do you want the audience to do, decide, or commit to next? Make the smallest credible ask that moves things forward, and make it unambiguous.",
+              "description": "State the round size, intended use of funds, and what milestones the capital takes you to. Be specific — investors should leave knowing exactly what you want and what they get.",
               "layout": "list"
+            },
+            {
+              "id": "closing",
+              "name": "Closing",
+              "description": "Close on a strong final image: logo, contact info, and the one line you most want the investor to remember. Leave space for the conversation that follows.",
+              "layout": "closing"
             }
           ]
         }

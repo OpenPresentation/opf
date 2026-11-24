@@ -12,7 +12,7 @@
       "technicalFluency": "medium",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "situation-complication-resolution"
+        "reveal"
       ],
       "recommendedTones": [
         "persuasive"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "situation-complication-resolution",
+  "narrative": "reveal",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -321,57 +321,88 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "situation-complication-resolution": {
-          "name": "Situation-Complication-Resolution",
-          "summary": "McKinsey-style structure that builds tension before delivering insights.",
-          "description": "A McKinsey-style structure that builds tension before delivering the insight. Establish the context everyone already agrees on, introduce what has changed or what challenge has emerged, name the key question that change raises, then deliver the recommendation that resolves it. The tone is logical: a tight causal chain from context to recommendation. Best for strategy presentations, consulting decks, and analytical reports; typical decks run 4-10 slides (management consulting report, strategic recommendation, board update).",
+        "reveal": {
+          "name": "Reveal",
+          "summary": "Insight-driven keynote arc inspired by Amy Cuddy's 2012 talk on body language: connect through personal story, ground in research, illustrate with anecdote, summarize, break stereotypes, advise, demonstrate authenticity, close with impact. For talks that aim to change how the audience sees something they thought they understood.",
           "audienceFit": [
-            "senior-leadership",
-            "consultants",
-            "strategy-teams"
+            "general-audience",
+            "academics",
+            "professionals"
           ],
           "duration": {
-            "min": 5,
-            "max": 20
+            "min": 15,
+            "max": 25
           },
           "tags": [
-            "strategy",
-            "consulting",
-            "minto",
-            "recommendation"
+            "keynote",
+            "research",
+            "talk",
+            "inspirational"
           ],
           "beats": [
             {
-              "id": "situation",
-              "name": "Situation",
-              "description": "Set the scene with relevant background and context everyone agrees on.",
-              "instructions": "State the shared context the audience already accepts.",
-              "type": "list",
-              "layout": "list"
-            },
-            {
-              "id": "complication",
-              "name": "Complication",
-              "description": "Introduce what has changed or what challenge has emerged.",
-              "instructions": "Introduce the change, risk, or tension.",
+              "id": "personal-story",
+              "name": "Personal Story",
+              "description": "Open with a personal experience that establishes why the topic matters to you. Specificity earns intimacy; intimacy earns the audience's permission to be moved.",
+              "instructions": "Share personal experiences to connect with the audience",
               "type": "text",
-              "layout": "two-column"
+              "layout": "text"
             },
             {
-              "id": "question",
-              "name": "Question",
-              "description": "Articulate the key question that the complication raises.",
-              "instructions": "Frame the decision question raised by the complication.",
+              "id": "research-exposition",
+              "name": "Research Exposition",
+              "description": "Lay out the scientific or empirical data that backs the premise. Be rigorous but not academic — the audience needs to understand the evidence well enough to defend it later.",
+              "instructions": "Unravel scientific data backing the premise",
               "type": "text",
-              "layout": "statement"
+              "layout": "text"
             },
             {
-              "id": "answer",
-              "name": "Answer",
-              "description": "Deliver your recommendation or insight that resolves the question.",
-              "instructions": "Deliver the recommendation that resolves the question.",
-              "type": "timeline",
-              "layout": "timeline"
+              "id": "real-life-anecdote",
+              "name": "Real-Life Anecdote",
+              "description": "Illustrate the research with a story from the field. Make the abstract finding feel like something that happens to people the audience could imagine being.",
+              "instructions": "Illustrate with stories to make the point relatable",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "critical-insights",
+              "name": "Critical Insights",
+              "description": "Summarize the two or three findings the audience must walk away with. Distill them into language a non-specialist could repeat without distortion.",
+              "instructions": "Summarize key points",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "break-stereotypes",
+              "name": "Break Stereotypes",
+              "description": "Question redundant norms or beliefs the research undermines. Be specific about what's being challenged so the audience knows what to update.",
+              "instructions": "Question redundant norms and belief systems",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "empowering-advice",
+              "name": "Empowering Advice",
+              "description": "Translate the insights into a small, actionable practice. The advice should be doable today, not only next quarter — the goal is movement, not aspiration.",
+              "instructions": "Motivational message to act upon",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "authenticity",
+              "name": "Authenticity",
+              "description": "Speak honestly about your own struggle with the topic. Vulnerability, used with restraint, is what turns research into a felt truth.",
+              "instructions": "Honest and real communication to demonstrate authenticity",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "close-with-impact",
+              "name": "Close With Impact",
+              "description": "End on a motivational high — the line, image, or invitation you want to follow the audience out of the room. Close the talk where it began, transformed.",
+              "layout": "closing",
+              "instructions": "End on a motivational high",
+              "type": "text"
             }
           ]
         }

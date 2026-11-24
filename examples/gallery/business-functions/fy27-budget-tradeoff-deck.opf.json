@@ -6,7 +6,7 @@
   ],
   "purpose": "inform",
   "tone": "conversational",
-  "narrative": "rags-to-riches",
+  "narrative": "qbr",
   "design": {
     "theme": "classic",
     "colorScheme": "boost",
@@ -98,81 +98,86 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "rags-to-riches": {
-          "name": "Rags to Riches",
-          "summary": "Underdog journey from initial failure to eventual success. Pulls on resilience, grit, and perseverance — useful for founder stories, brand stories, and any deck where the audience needs to feel the cost behind the win.",
+        "qbr": {
+          "name": "Quarterly Business Review",
+          "summary": "Standard QBR / business-review arc for internal leadership reviews. Recap commitments, show what the numbers say, separate wins from challenges, lay out the plan, surface risks, and request the asks the team needs to execute.",
           "audienceFit": [
-            "general-audience",
-            "customers",
-            "press",
-            "candidates"
+            "leadership",
+            "executives",
+            "cross-functional-partners"
           ],
           "duration": {
-            "min": 5,
-            "max": 20
+            "min": 30,
+            "max": 90
           },
           "tags": [
-            "storytelling",
-            "founder",
-            "brand",
-            "inspirational"
+            "internal",
+            "review",
+            "operations",
+            "reporting"
           ],
           "beats": [
             {
-              "id": "origin",
-              "name": "Origin",
-              "description": "Start at the bottom. Describe the humble beginning, the constraint, the moment before anything had been built. Concrete details — a place, a year, a feeling — earn the audience's investment in what follows.",
-              "instructions": "Humble beginning",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "inspiration",
-              "name": "Inspiration",
-              "description": "Show the moment the protagonist found their calling. A conversation, a customer, a problem they couldn't unsee. The inspiration is the engine that pushes the rest of the story uphill.",
-              "instructions": "Discover true calling",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "opportunity",
-              "name": "Opportunity",
-              "description": "Reveal the chance the protagonist took. Why this and not something safer? Make the choice visible — opportunities only count when there was something else they passed up to grab them.",
-              "instructions": "Spot golden chance",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "adversity",
-              "name": "Adversity",
-              "description": "Walk through the hardest stretch. Concrete failures, near-misses, moments of doubt. Resist the temptation to skip past the pain — the audience trusts the win more when the loss was real.",
-              "instructions": "Face hardest struggles",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "overcoming",
-              "name": "Overcoming",
-              "description": "Show how the obstacles got beaten. What changed, what was learned, what hard call was made. The transition from 'rags' to 'riches' should feel earned, not granted.",
-              "instructions": "Surmount tough obstacles",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "impactful-change",
-              "name": "Impactful Change",
-              "description": "Describe the moment the world tipped. The customer who said yes, the product that broke through, the metric that turned. One concrete transformation lands harder than a montage.",
-              "instructions": "Alter the status quo",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "lasting-legacy",
-              "name": "Lasting Legacy",
-              "description": "Close on what the journey means for those who come next. The lesson, the people changed, the work that endures. Leave the audience with a takeaway that outlives the story.",
-              "layout": "closing",
-              "instructions": "Create enduring effect",
+              "id": "objectives",
+              "name": "Objectives",
+              "description": "Open with what this review is for and what decisions you want out of it. Frame the scope and the hour ahead, so the audience knows what they're being asked to weigh in on.",
+              "layout": "cover",
+              "instructions": "Set the expectations",
               "type": "text"
+            },
+            {
+              "id": "recap",
+              "name": "Recap",
+              "description": "Briefly remind the audience what the team committed to last quarter and the high-level results against those commitments. Keep it terse — this grounds the review in prior context, but the meat is ahead."
+            },
+            {
+              "id": "performance-headline",
+              "name": "Performance Headline",
+              "description": "Show the top three to five KPIs with target vs actual and direction-of-travel. One slide that lets a busy executive grasp the quarter's outcome at a glance. Lead with the number, not the methodology."
+            },
+            {
+              "id": "performance-detail",
+              "name": "Performance Detail",
+              "description": "Drill into the supporting metrics by area or function. One chart per metric; clear y-axis, clear unit, clear comparison period. Call out anomalies before someone else does."
+            },
+            {
+              "id": "wins",
+              "name": "Wins",
+              "description": "Highlight the quarter's biggest wins and who drove them. Be specific — name the deal, the launch, the customer, the team. Recognition belongs in the deck, not just in the meeting."
+            },
+            {
+              "id": "challenges",
+              "name": "Challenges",
+              "description": "Name the misses and headwinds honestly. What didn't work, what's still hard, what got harder. Pretending things are fine costs more credibility than acknowledging they aren't.",
+              "instructions": "Address difficulties",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "insights",
+              "name": "Insights",
+              "description": "Translate the numbers into 'so what.' What did the data tell you about customers, the market, your operations, your bets? Insights should be opinions backed by evidence, not restatements of the metrics."
+            },
+            {
+              "id": "priorities",
+              "name": "Next-Quarter Priorities",
+              "description": "Lay out the next quarter's top priorities. Each should trace clearly back to an insight or commitment. Three to five priorities, max — laundry lists are a tell that the team hasn't decided what matters most."
+            },
+            {
+              "id": "sequencing",
+              "name": "Sequencing",
+              "description": "Show the order in which priorities ship and how they fit together. Dependencies, milestones, target dates. The audience should leave able to predict what comes when, not just what."
+            },
+            {
+              "id": "risks",
+              "name": "Risks",
+              "description": "Name the risks to the plan honestly. Dependencies, assumptions, capacity gaps, market factors. For each risk, state the mitigation or the open question the audience can help resolve."
+            },
+            {
+              "id": "asks",
+              "name": "Asks",
+              "description": "Specific, named requests of the audience. Decisions needed, resources required, escalations to unblock. End with clarity on what happens next and who owns it.",
+              "layout": "list"
             }
           ]
         }

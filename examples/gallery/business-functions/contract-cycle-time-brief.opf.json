@@ -12,7 +12,7 @@
       "technicalFluency": "low",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "scqa"
+        "rags-to-riches"
       ],
       "recommendedTones": [
         "inspirational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "scqa",
+  "narrative": "rags-to-riches",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -325,56 +325,81 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "scqa": {
-          "name": "SCQA (Situation–Complication–Question–Answer)",
-          "summary": "Barbara Minto's pyramid-principle arc: surface the recommendation up front, then layer key arguments and supporting evidence beneath it. The default for executive memos, strategic recommendations, and consulting decks where the audience needs the answer fast.",
+        "rags-to-riches": {
+          "name": "Rags to Riches",
+          "summary": "Underdog journey from initial failure to eventual success. Pulls on resilience, grit, and perseverance — useful for founder stories, brand stories, and any deck where the audience needs to feel the cost behind the win.",
           "audienceFit": [
-            "executives",
-            "boards",
-            "leadership-teams"
+            "general-audience",
+            "customers",
+            "press",
+            "candidates"
           ],
           "duration": {
             "min": 5,
             "max": 20
           },
           "tags": [
-            "executive",
-            "strategy",
-            "consulting",
-            "minto",
-            "pyramid"
+            "storytelling",
+            "founder",
+            "brand",
+            "inspirational"
           ],
           "beats": [
             {
-              "id": "situation",
-              "name": "Situation",
-              "description": "Establish the shared context: what is true today that the audience already agrees on. State only facts the audience accepts without argument. The goal is alignment, not persuasion — you are setting the stage."
+              "id": "origin",
+              "name": "Origin",
+              "description": "Start at the bottom. Describe the humble beginning, the constraint, the moment before anything had been built. Concrete details — a place, a year, a feeling — earn the audience's investment in what follows.",
+              "instructions": "Humble beginning",
+              "type": "text",
+              "layout": "text"
             },
             {
-              "id": "complication",
-              "name": "Complication",
-              "description": "Introduce the disturbance to the situation: what changed, what is at risk, what is no longer working. This is the tension that makes the audience lean in. Be specific and quantify the change where possible."
+              "id": "inspiration",
+              "name": "Inspiration",
+              "description": "Show the moment the protagonist found their calling. A conversation, a customer, a problem they couldn't unsee. The inspiration is the engine that pushes the rest of the story uphill.",
+              "instructions": "Discover true calling",
+              "type": "text",
+              "layout": "text"
             },
             {
-              "id": "question",
-              "name": "Key Question",
-              "description": "Surface the question the complication forces the audience to answer. Frame it explicitly — 'Should we…?', 'How do we…?', 'What changes if…?'. The question should feel inevitable given the complication."
+              "id": "opportunity",
+              "name": "Opportunity",
+              "description": "Reveal the chance the protagonist took. Why this and not something safer? Make the choice visible — opportunities only count when there was something else they passed up to grab them.",
+              "instructions": "Spot golden chance",
+              "type": "text",
+              "layout": "text"
             },
             {
-              "id": "answer",
-              "name": "Answer",
-              "description": "Deliver the recommendation in a single sentence, up front. No arguments yet, no caveats — just the conclusion the rest of the deck will defend. This is the apex of the Minto pyramid; everything that follows supports it.",
-              "layout": "statement"
+              "id": "adversity",
+              "name": "Adversity",
+              "description": "Walk through the hardest stretch. Concrete failures, near-misses, moments of doubt. Resist the temptation to skip past the pain — the audience trusts the win more when the loss was real.",
+              "instructions": "Face hardest struggles",
+              "type": "text",
+              "layout": "text"
             },
             {
-              "id": "key-arguments",
-              "name": "Key Arguments",
-              "description": "Lay out the two or three top-level reasons the answer is correct. One slide per argument, or one summary slide naming all of them. Each argument should stand alone as a compelling reason; together they should be exhaustive of the case."
+              "id": "overcoming",
+              "name": "Overcoming",
+              "description": "Show how the obstacles got beaten. What changed, what was learned, what hard call was made. The transition from 'rags' to 'riches' should feel earned, not granted.",
+              "instructions": "Surmount tough obstacles",
+              "type": "text",
+              "layout": "text"
             },
             {
-              "id": "supporting-evidence",
-              "name": "Supporting Evidence",
-              "description": "Present the data, examples, and case studies that ground each argument. Pyramid-principle style: every claim above is backed by something verifiable here. Cite sources; show the numbers; let the evidence carry the weight."
+              "id": "impactful-change",
+              "name": "Impactful Change",
+              "description": "Describe the moment the world tipped. The customer who said yes, the product that broke through, the metric that turned. One concrete transformation lands harder than a montage.",
+              "instructions": "Alter the status quo",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "lasting-legacy",
+              "name": "Lasting Legacy",
+              "description": "Close on what the journey means for those who come next. The lesson, the people changed, the work that endures. Leave the audience with a takeaway that outlives the story.",
+              "layout": "closing",
+              "instructions": "Create enduring effect",
+              "type": "text"
             }
           ]
         }

@@ -6,7 +6,7 @@
   ],
   "purpose": "inform",
   "tone": "authoritative",
-  "narrative": "performance-review",
+  "narrative": "performance-improvement-plan",
   "design": {
     "theme": "classic",
     "colorScheme": "forest-green",
@@ -98,111 +98,87 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "performance-review": {
-          "name": "Performance Review",
-          "summary": "Analytical review of individual, team, or company performance grounded in metrics. Walks through results, key drivers, wins, challenges, and the adjustments that will shape the next period.",
+        "performance-improvement-plan": {
+          "name": "Performance Improvement Plan",
+          "summary": "Structured PIP arc that helps a struggling employee see expectations clearly, understand the gap, and walk into a credible improvement path. Designed to be respectful, specific, and outcome-focused — not punitive.",
           "audienceFit": [
-            "leadership",
-            "managers",
-            "teams"
+            "employee",
+            "manager",
+            "hr-partner"
           ],
           "duration": {
-            "min": 20,
+            "min": 30,
             "max": 60
           },
           "tags": [
-            "data-driven",
-            "review",
-            "operations",
-            "metrics"
+            "workforce",
+            "hr",
+            "performance",
+            "manager"
           ],
           "beats": [
             {
-              "id": "briefing",
-              "name": "Briefing",
-              "description": "Frame what this review covers: the period, the unit, the standard you're measuring against. One slide that lets the audience know exactly what they're being asked to evaluate.",
-              "layout": "cover",
-              "instructions": "Outline presentation objective",
-              "type": "text"
-            },
-            {
-              "id": "results",
-              "name": "Results",
-              "description": "Lead with the headline result. On track, ahead, or behind, and by how much. Resist softening — clear numbers up front earn credibility for the analysis that follows.",
-              "instructions": "Summarize performance findings",
+              "id": "introduction",
+              "name": "Introduction",
+              "description": "Begin respectfully and set a constructive tone. Be clear about what this conversation is and isn't. The opening shouldn't catastrophize or sugarcoat — clarity is kinder than either.",
+              "instructions": "Begin respectfully and positively",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "key-metrics",
-              "name": "Key Metrics",
-              "description": "Walk through the pivotal indicators. One chart per metric, clear comparison period, target or benchmark visible on the same frame. Help the audience see the data the way you do.",
-              "instructions": "Review pivotal indicators",
+              "id": "set-expectations",
+              "name": "Set Expectations",
+              "description": "Detail the level of performance expected in the role. Specific behaviors, deliverables, and standards. Expectations the employee can't quote back are expectations they can't meet.",
+              "instructions": "Detail desired performance",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "team-performance",
-              "name": "Team Performance",
-              "description": "Examine collective achievements and how the team contributed. Avoid generic praise; cite specific moves and the people behind them where the audience would expect it.",
-              "instructions": "Examine collective achievements",
+              "id": "identify-problems",
+              "name": "Identify Problems",
+              "description": "Name the gap between expected and observed performance. Use specific examples and dates rather than impressions. Avoid characterizing the person; focus on the work product and the impact.",
+              "instructions": "Highlight struggles and weaknesses",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "highlight",
-              "name": "Highlight",
-              "description": "Spotlight one standout contribution that defined the period. A landmark deal, a launch, a fix, a hire. One vivid example sticks longer than a list of accomplishments.",
-              "instructions": "Show key contribution",
+              "id": "possible-solutions",
+              "name": "Possible Solutions",
+              "description": "Suggest improvement strategies tailored to the gaps named above. Behavior changes, structural changes, support structures. Frame them as paths the employee can choose, not orders to follow.",
+              "instructions": "Suggest improvement strategies",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "analysis",
-              "name": "Analysis",
-              "description": "Dig under the metrics. What drove the numbers, what held them back, what's signal versus noise. Analysis is where the audience learns whether you actually understand the system you're reporting on.",
-              "instructions": "Uncover data insights",
+              "id": "offer-resources",
+              "name": "Offer Resources",
+              "description": "Make explicit what tools, coaching, training, or peer support is available. Resources demonstrate that the organization is investing in the outcome, not setting the employee up to fail.",
+              "instructions": "Propose help and tools",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "success",
-              "name": "Success",
-              "description": "Reinforce the past triumphs that show the system works. Briefly — the audience came for what's next, not a victory lap. Wins earn permission for the harder slides ahead.",
-              "instructions": "Reinforce past triumphs",
+              "id": "motivate-change",
+              "name": "Motivate Change",
+              "description": "Connect improvement to what the employee values: their growth, their team, their career. Inspire action without minimizing the seriousness of the situation.",
+              "instructions": "Inspire improvement action",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "challenges",
-              "name": "Challenges",
-              "description": "Name the obstacles encountered honestly. What didn't move, what regressed, what the team is still wrestling with. Understated challenges read as missed signal, not modesty.",
-              "instructions": "Highlight encountered obstacles",
+              "id": "follow-up",
+              "name": "Follow Up",
+              "description": "Schedule the check-ins. Frequency, format, criteria for progress. Predictable follow-up turns a PIP from a threat into a plan.",
+              "instructions": "Schedule progress check-ins",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "adjustments",
-              "name": "Adjustments",
-              "description": "Identify the changes you're making in response. New tactics, reallocations, sunsets. Each adjustment should map to a challenge above — adjustments without diagnosis feel arbitrary.",
-              "instructions": "Identify necessary changes",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "strategy-evolution",
-              "name": "Strategy Evolution",
-              "description": "Show how the strategy itself evolves heading into the next period. Refinements, sharpened bets, dropped initiatives. The audience should see continuity as well as change.",
-              "instructions": "Plan for improvement",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "discussion",
-              "name": "Discussion",
-              "description": "Open the floor with two or three specific prompts. End the review actively — questions you want answered, decisions you want made — so the meeting yields more than the deck.",
-              "layout": "text",
-              "instructions": "Promote active discourse",
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Close with confidence in the path forward and a clear restatement of what success looks like. End the meeting having both raised the bar and reaffirmed the relationship.",
+              "layout": "closing",
+              "instructions": "Encourage and remind success",
               "type": "text"
             }
           ]
