@@ -722,6 +722,8 @@ export async function fromPptx(input, options = {}) {
   restoreArrangementEntries(imported, new Map(furnitureContexts.flatMap(context => [...(context.arrangementEntries ?? [])])));
   // OPF 0.35: a list drawn on native arrangement nodes comes back without the node text color the export wrote on its runs.
   restoreArrangementPaint(imported, new Map(furnitureContexts.flatMap(context => [...(context.arrangementPaint ?? [])])));
+  // opf#1431: a chart without labels keeps `dataLabels: false` only where the next export would draw default labels without it.
+  settleDefaultLabels(imported, options);
   if (imported.design?.theme === undefined) for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code === "theme-unverified") report(diagnostic);
   languageDiagnostics(imported, observedLanguage, options.onDiagnostic && report);
 
@@ -1969,6 +1971,53 @@ function chartDataEvidence(xml, referenceXml, referenceContext) {
   return [...new Set([chartEvidence(referenceXml ?? xml), chartEvidence(exported)])];
 }
 
+// opf#1431: the classic chart types (chart-types.js chartTypeFromNative, and combo). Their export can label the marks by default (core's
+// small chart, LH-03; a stacked chart's segment values, LH-109; a pie's or doughnut's value list, LH-108), so a file without labels may
+// hold an authored `dataLabels: false`. The chartex types read their own `false` (chart-options.js chartOptionsFromChartex).
+const DEFAULT_LABEL_TYPES = new Set(['column', 'bar', 'line', 'line-with-markers', 'area', 'stacked-column', 'stacked-bar', 'stacked-area', '100pct-stacked-column', '100pct-stacked-bar', '100pct-stacked-area', 'stacked-line', 'stacked-line-with-markers', 'pie', 'doughnut', 'scatter', 'radar', 'radar-with-markers', 'filled-radar', 'combo']);
+// Whether any series or chart group of the plot area shows a data label (a value, category, percent or series name) that is not deleted.
+function showsNativeLabels(plotArea) {
+  const shown = node => node !== undefined && node?.val !== '0' && node?.val !== 'false' && node?.val !== 0;
+  const showing = label => !shown(label?.['c:delete']) && ['c:showVal', 'c:showCatName', 'c:showPercent', 'c:showSerName'].some(name => shown(label?.[name]));
+  const block = labels => labels !== undefined && !shown(labels?.['c:delete']) && (showing(labels) || asArray(labels?.['c:dLbl']).some(showing));
+  return Object.entries(plotArea ?? {}).some(([name, groups]) => /^c:\w+Chart$/.test(name) && asArray(groups).some(group => block(group?.['c:dLbls']) || asArray(group?.['c:ser']).some(ser => block(ser?.['c:dLbls']))));
+}
+
+// opf#1431: a chart imported with a `dataLabels: false` (chartFromRelationship) keeps it only where it changes the next export: core
+// composes the slide with the charts' `dataLabels` left out and with `false`, and a chart keeps `false` when its chart layer differs
+// between the two (the default value labels of a small chart, a stacked chart's segment values, a pie's value list: what the export
+// draws from the layer). A chart whose default labels would not fit composes the same either way, exports the same file, and comes back
+// without the option, as before. A slide that does not compose keeps the `false`, which draws what the file shows. Every `false` on
+// these types is settled this way.
+function settleDefaultLabels(imported, options) {
+  const at = path => String(path).split('.').reduce((value, key) => value?.[key], imported);
+  const chartsIn = value => {
+    if (Array.isArray(value)) return value.flatMap(chartsIn);
+    if (!isPlainObject(value)) return [];
+    if (value.dataLabels === false && DEFAULT_LABEL_TYPES.has(value.type) && value.data !== undefined) return [value];
+    return Object.values(value).flatMap(chartsIn);
+  };
+  for (const [index, slide] of imported.slides.entries()) {
+    const charts = chartsIn(slide);
+    if (!charts.length) continue;
+    // The chart layer of each chart item, by the chart object it composes.
+    const layers = () => {
+      const core = resolveCoreSlideContext(imported, index, options.catalogs !== undefined ? {catalogs: options.catalogs} : {});
+      return new Map(composeSlide(core.slide, core.options).items.filter(item => item.field === 'chart' || item.chart).map(item => [at(item.path), JSON.stringify(item.chart ?? null)]));
+    };
+    let kept = new Set(charts);
+    try {
+      const off = layers();
+      for (const chart of charts) delete chart.dataLabels;
+      const plain = layers();
+      kept = new Set(charts.filter(chart => !off.has(chart) || !plain.has(chart) || off.get(chart) !== plain.get(chart)));
+    } catch {
+      // The `false` stays: it draws what the file shows.
+    }
+    for (const chart of charts) if (kept.has(chart)) chart.dataLabels = false;
+  }
+}
+
 function chartFromRelationship(entries, slidePath, relationships, relId, report, {marked = false,referenceContext,referenceState={}} = {}) {
   const relationship = relationships.get(relId);
   if (!relationship?.path || !entries[relationship.path]) return null;
@@ -2019,7 +2068,11 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report,
     // LH-03: the value labels an export of a small chart writes by default are not an option. LH-105: every chart area is unfilled now, so
     // the small chart is told by its deleted value axis (a small chart whose value axis has a title keeps its labels as an option).
     const unfilled = asArray(plotArea?.["c:valAx"])[0]?.["c:delete"]?.val === '1' || asArray(plotArea?.["c:valAx"])[0]?.["c:delete"]?.val === 1;
-    return chart && Object.keys(options).length ? withoutLayerDefaults({...chart, ...options}, {unfilled}) : chart;
+    const read = chart && Object.keys(options).length ? withoutLayerDefaults({...chart, ...options}, {unfilled}) : chart;
+    // opf#1431: a chart of a type whose export can label its marks by default (a small chart's values, LH-03; a stacked chart's
+    // segment values, LH-109) that shows no label at all was exported with `dataLabels: false`, or its default labels did not fit.
+    // It imports as `false`; settleDefaultLabels (after the whole deck is read) drops the `false` where the next export would draw no labels without it.
+    return read && !marked && !direct && read.dataLabels === undefined && DEFAULT_LABEL_TYPES.has(read.type) && !showsNativeLabels(plotArea) ? {...read, dataLabels: false} : read;
   };
   if (chartNode.type === 'scatter') return withOptions(scatterFromSeries(entries, relationship.path, series, budget, cachePath, {codes: valueCodes, xCode, report}));
   const labels = cachedValues(series[0]?.["c:cat"], cachePath(0, 'c:cat'), budget);

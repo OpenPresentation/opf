@@ -384,7 +384,8 @@ function repack(parts, edits) {
   const powerpointShape = repack(parts, {'ppt/slides/slide1.xml': textFallback});
   assert.deepEqual(await importedChart(powerpointShape), {type: 'treemap', data: categoryData}, 'the choice is read even with a text fallback');
   const sunburst = repack(parts, {'ppt/charts/chartEx1.xml': (xml) => xml.replace('layoutId="treemap"', 'layoutId="sunburst"')});
-  assert.deepEqual(await importedChart(sunburst), {type: 'column', data: categoryData}, 'an unknown layout falls back to the classic chart frame');
+  // opf#1431: the classic frame is a small column chart without labels, which reads as `dataLabels: false` (without it, the next export would label it).
+  assert.deepEqual(await importedChart(sunburst), {type: 'column', data: categoryData, dataLabels: false}, 'an unknown layout falls back to the classic chart frame');
   const sunburstText = repack(parts, {'ppt/charts/chartEx1.xml': (xml) => xml.replace('layoutId="treemap"', 'layoutId="sunburst"'), 'ppt/slides/slide1.xml': textFallback});
   const slide = (await fromPptx(sunburstText)).slides[0];
   const texts = JSON.stringify(slide);
