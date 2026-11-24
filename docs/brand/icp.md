@@ -8,7 +8,7 @@ discussions, npm data and interviews with people who have shipped OPF support.
 
 **Own the stack, or have it done (STORYD D-62g).** openpresentation.org is for people who want to
 own their stack: an open format, MIT packages, self-hosted, no account or hosted service required.
-People who want it done (hosted, pay per call) go to pptx.dev, which builds on the same format.
+People who want it done (hosted, pay per call) will find the platform at openpresentation.com, which builds on the same format.
 
 Each ICP names the role and the moment, the job, what goes wrong today, how they want to work and
 what makes them adopt.
