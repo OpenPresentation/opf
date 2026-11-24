@@ -665,7 +665,7 @@ export async function fromPptx(input, options = {}) {
     // The stored language wins while the runs still carry its tag (FF-07).
     restored.groups = reconcileLanguage(restored.groups, observedLanguage, report, imported);
     imported = applyDocumentProvenance(imported, restored, checkImportedFormat, report);
-    dropLanguagesReadFromText(imported, options.catalogs);
+    dropLanguagesReadFromText(imported, options.catalogs, restored.slides);
     slideProvenance = restored.slides;
     restoredGroups = restored.groups;
   } catch (error) {

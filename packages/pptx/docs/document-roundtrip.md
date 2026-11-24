@@ -53,7 +53,7 @@ Only values the document states are stored; engine defaults are not. In `'full'`
 | `narrative` (a reference, `id` or `name:id`; FA-02), `tone`, `purpose`, `audience` | yes, any form | only as references (a string, or for `audience` an array of strings, that matches the reference pattern; free text is not stored) | |
 | `language` (a BCP-47 tag, or a language object) | yes | only as a tag string | |
 | `organization`, `speaker`, `takeaway`, `duration`, `tags`, `variables`, `filename`, `extensions` | yes | no | |
-| slide `id`, `section`, `extensions` | yes | no | |
+| slide `id`, `section`, `extensions`, `language` (each slide's own language, or that it has none, in a deck where a slide has one) | yes | no | |
 | slide `beat` (links to a beat of the narrative record), `layout`, `type`, `composition`, slide design references and hints | yes | yes (design values without image/file/URL sources) | |
 | slide `layoutRecord`: `{group, id, source?, record}`, the embedded record for the slide's `layout` (FF-29) | yes | yes, unless the record names an image, file or URL | |
 | slide `content`: the content topology (groups, regions, root form, block ids and extensions, group composition, leaf boxes; below) | yes | no | |

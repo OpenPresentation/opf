@@ -1,0 +1,5 @@
+---
+type: fixed
+packages: [pptx]
+---
+#1404 (import only; exported files are unchanged): in a deck that declares no language, a slide's own `language` survives a PPTX round trip even where the slide's text alone gives the same language (`"language": "en-US"` on an English slide, `"ar"` on an Arabic one). Since 0.35 the importer drops a slide language that the text gives, so that a deck read from its text comes back with no declaration, and it dropped the author's declaration with it. The slide's stored record (`OPF_SLIDE_V1`, `provenance: "full"`) already states the declared language, and the importer now keeps a language that record states. A slide that declared nothing beside one that did is compared with the language read from its text, so an untouched file no longer reports `metadata-reference-changed` for an Arabic or Hebrew slide, and a language set on it in PowerPoint is imported. A file without the record (`references-only`, `provenance: false`, tags removed by another application) imports as before.

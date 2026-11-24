@@ -498,6 +498,8 @@ export function observeLanguage({slides, theme, themePath, slideThemes, catalogs
 export function reconcileLanguage(groups, observed, report, document) {
   const slideGroups = groups.filter(item => /^slides\.\d+\.language$/.test(item.field));
   let index = groups.findIndex(item => item.field === "language");
+  // The document with every declaration removed: what a deck that declared no language is read as (v0.35).
+  const undeclared = document && Array.isArray(document.slides) ? {...document, language: undefined, slides: document.slides.map(slide => slide && typeof slide === "object" ? {...slide, language: undefined} : slide)} : {};
   if (slideGroups.length && observed.slides?.length && index >= 0) {
     const root = groups[index].ops.find(op => op.path?.length === 1 && op.path[0] === 'language' && !op.remove)?.value;
     const rootTag = resolver({language: root}, {}, observed.catalogs).lang.toLowerCase();
@@ -512,7 +514,9 @@ export function reconcileLanguage(groups, observed, report, document) {
       const match = /^slides\.(\d+)\.language$/.exec(item.field);
       if (!match) return item;
       const native = observed.slides[Number(match[1])], op = item.ops[0], value = op.remove ? root : op.value;
-      const expected = resolver({language: value}, {}, observed.catalogs);
+      let expected = resolver({language: value}, {}, observed.catalogs);
+      // #1404: a slide that declared no language in a deck that declared none was written in the language read from its text.
+      if (value === undefined) { try { expected = resolver(undeclared, {slideIndex: Number(match[1])}, observed.catalogs); } catch { /* the engine default stands */ } }
       if (!native?.lang || expected.lang.toLowerCase() === native.lang.toLowerCase()) return item;
       report?.({code: 'metadata-reference-changed', path: item.field, message: `Runs now use ${native.lang}, not ${expected.lang} of the stored slide language, so the imported slide follows its runs.`});
       return {...item, ops: [{path: ['slides', Number(match[1]), 'language'], value: native.language}]};
@@ -524,7 +528,6 @@ export function reconcileLanguage(groups, observed, report, document) {
   // PowerPoint is imported as observed.
   if (groups[index].ops.some(op => op.remove && op.path?.length === 1 && op.path[0] === "language")) {
     let fallback;
-    const undeclared = document && Array.isArray(document.slides) ? {...document, language: undefined, slides: document.slides.map(slide => slide && typeof slide === "object" ? {...slide, language: undefined} : slide)} : {};
     try { fallback = resolver(undeclared, {}, observed.catalogs).lang; } catch { fallback = undefined; }
     return typeof fallback === "string" && fallback.toLowerCase() === observed.lang.toLowerCase() ? groups : groups.filter((_, position) => position !== index);
   }
@@ -543,12 +546,16 @@ export function reconcileLanguage(groups, observed, report, document) {
  * script is Arabic or Hebrew, any other the engine default). On import the slides that are not in the language of most runs
  * carry an observed language of their own, which the source never had. Where the deck's language was restored as absent, a
  * slide's observed language is dropped when the slide's text gives the same language without it.
+ *
+ * #1404: a language the slide's stored record states (`stored[i].record`, the OPF_SLIDE_V1 value of `full` provenance) is the
+ * author's declaration, not a reading, and stays while the slide still has it. A package without that record (another
+ * application's save, `references-only`, no provenance) cannot tell the two apart, so there the language is dropped as before.
  */
-export function dropLanguagesReadFromText(imported, catalogs) {
+export function dropLanguagesReadFromText(imported, catalogs, stored) {
   if (!imported || imported.language !== undefined || !Array.isArray(imported.slides)) return;
   const bare = imported.slides.map(slide => slide && typeof slide === "object" ? {...slide, language: undefined} : slide);
   imported.slides.forEach((slide, slideIndex) => {
-    if (!slide || typeof slide.language !== "string") return;
+    if (!slide || typeof slide.language !== "string" || stored[slideIndex]?.record?.metadata?.language === slide.language) return;
     try {
       const read = resolver({...imported, slides: bare}, {slideIndex}, catalogs);
       const named = resolver({...imported, slides: bare.map((entry, index) => index === slideIndex ? slide : entry)}, {slideIndex}, catalogs);
