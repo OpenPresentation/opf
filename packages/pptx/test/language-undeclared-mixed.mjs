@@ -37,6 +37,11 @@ for (const [name, source] of [
   ['two English slides and an Arabic one', deck([english(), {id: 'c', title: 'Plan', bullets: ['One', 'Two', 'Three']}, rtl(ARABIC)])],
   ['the Arabic slide first', deck([rtl(ARABIC), english()])],
   ['English only', deck([english(), {id: 'c', title: 'Plan'}])],
+  // Review of #1421 and #1428: one Latin word in a right-to-left title exports as its own en-US run, which tied with the
+  // Hebrew run and made English the deck's language.
+  ['a Hebrew slide with a Latin word, the only slide', deck([rtl('תוצאות Q3')])],
+  ['an Arabic slide with a Latin word, the only slide', deck([rtl('نتائج Q3')])],
+  ['a Hebrew slide with a Latin word beside an English one', deck([{id: 'a', title: 'Plan'}, rtl('תוצאות Q3')])],
 ]) {
   const back = await read(await exported(source));
   assert.deepEqual(back.languages, source.slides.map(() => undefined).concat(undefined), `${name}: no language is invented`);
