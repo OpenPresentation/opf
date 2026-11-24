@@ -14,3 +14,16 @@ test('C14: a foot band follows a short snippet, one gap under it, and the group 
   assert.ok(bottom > 40, 'the band no longer sits at the foot of the body');
   assert.ok(top > 0, 'the snippet keeps its place under the title');
 });
+
+test('C14: a comparison\'s verdict band stays at the foot of the body, however short the options are', async () => {
+  const { layouts } = await import('./support/template-samples.mjs');
+  const options = [
+    { text: 'Option A: focused pilot\nTwo teams, six weeks, low setup cost.' },
+    { text: 'Option B: broad rollout\nAll teams, three months, wider reach, more coordination, a higher cost and a longer wait for the first result.' },
+    { text: 'Recommendation: Option A.' },
+  ];
+  const result = composeSlide({ title: 'Choose the smallest useful test', blocks: options }, { width: 1280, height: 720, layout: layouts.comparison });
+  assert.equal(result.emphasis?.source, 'foot-band');
+  const foot = result.contentBox.y + result.contentBox.height - (result.emphasis.box.y + result.emphasis.box.height);
+  assert.ok(foot < 40, `the verdict band stands at the foot of the body (${foot} px under it)`);
+});

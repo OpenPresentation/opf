@@ -11536,7 +11536,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const body = items.filter(item => !headings.has(item.field) && !item.eyebrow);
     const bottom = Math.max(...body.map(item => item.frameBox ? item.frameBox.y + item.frameBox.height : item.box.y + item.box.height));
     const surfaceBox = autoSurface.emphasis.box, dy = round(bottom + gap) - surfaceBox.y;
-    if (body.length && Number.isFinite(bottom) && dy < -gap) {
+    // The rule is for a code snippet's note: a verdict band (a comparison's recommendation) stays at the foot of the body, so every slide of
+    // that kind draws its verdict in one place however long the options are.
+    if (body.length && body.some(item => item.field === 'code') && Number.isFinite(bottom) && dy < -gap) {
       const item = autoSurface.item;
       autoSurface.emphasis.box = { ...surfaceBox, y: surfaceBox.y + dy };
       item.box = { ...item.box, y: item.box.y + dy };
