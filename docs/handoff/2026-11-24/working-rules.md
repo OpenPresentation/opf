@@ -35,8 +35,9 @@ There is no owner rule that text never shrinks. The line "never shrink text when
 
 ## Planning
 
-- Everything after 0.35.1 ships in 0.36.0. The plan and the release tracker are pages in the owner's Claude account; [README.md](README.md) gives their addresses and a snapshot. The tracker shows remaining work only, with finished items as one line.
-- None of the nineteen 0.36 format changes is built before the owner has gone through the review page.
+- 0.36.0 is the fixes release and carries every known fix made after 0.35.1; 0.37.0 carries the format changes (owner, 2026-11-24). Do not plan a patch release to hold what is left over: "Please don't start planning a 36.1 just get everything into 36". The plan and the release tracker are pages in the owner's Claude account; [README.md](README.md) gives their addresses and a snapshot. The tracker shows remaining work only, with finished items as one line.
+- No format change is built before the owner has answered the review page for it.
+- The product split of 2026-11-24 is in [README.md](README.md). The OPF site and its schema ids stay on openpresentation.org, openpresentation.com is the platform, and pptx.dev is a small browser tool. Surface the decisions this opens instead of assuming them: the owner asked to keep being shown the decisions he has to make for future releases.
 - Themes and font pairings that nobody asked for are parked in opf#1422 and are not part of 0.36.
 
 ## Agents
