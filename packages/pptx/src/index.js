@@ -440,6 +440,8 @@ export async function toPptx(input, options = {}) {
   context.slideSchemeColors = [];
   // SH-02: the native parts of each shape block, by object name (src/shape-blocks.js), written into the finished slide parts.
   context.shapeBlocks = new Map();
+  // opf#1415: text boxes whose whole text is one link (a footer social line), by object name: the link is the shape's click link.
+  context.linkedTextShapes = new Map();
   context.shapeSchemeColors = new Map();
   // SH-04: the native connectors of the slides' overlays, by object name (src/connectors.js), written into the finished slide parts.
   context.connectors = new Map();
@@ -1354,7 +1356,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     // Names may preserve an ordinary drawing after all provenance is stripped; they NEVER identify a semantic reference.
     const shapeKind = drawnShape&&(referenceDrawing||referenceOverlays.preserved.has(shape)||chartMarks.preserved.has(shape))?'overlay':drawnShape ? shapeRole(drawnShape, {hasText: (paragraphs[index] ?? []).some(paragraph => paragraph.text)}) : 'text';
     if (shapeKind !== 'text') {
-      const imported = importNativeShape(drawnShape, shapeKind, {...shapeContext, text: shapeText(readBody(index), diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.shapes.${index}.text`}))});
+      const imported = importNativeShape(drawnShape, shapeKind, {...shapeContext, text: shapeText(readBody(index, {shapeLink: false}), diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.shapes.${index}.text`}))});
       roles.set(shapeKeys.get(shape), shapeKind === 'block' ? 'shape' : 'overlay');
       if (imported) items.push({...imported, sources: [`sp:${index}`]});
       continue;
@@ -4718,19 +4720,21 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     else if(config.media&&context.provenanceMode!==false)context.mediaTags.set(objectName,{v:1,role:'caption',path:config.path,line:index,count:fit.lines.length,boundary:sourceLine?.boundary??'end',...(context.provenanceMode==='full'?{fingerprint:mediaTextFingerprint(line),...boundary}:{})});
     else if(config.sourceText)context.plainTextTags.set(objectName,{v:1,group:config.path,line:index,count:fit.lines.length,...boundary});
     const area=placed?{x:(placed.x+placed.width*factor-box.width*factor)/96,y:(placed.baseline-fit.fontSize)/96,w:box.width/96,h:placed.height/96}:{x:box.x/96,y:(box.y+index*fit.lineHeight)/96,w:box.width/96,h:fit.lineHeight/96};
-    // A run-level link keeps the muted, non-underlined furniture look of the preview (hlinkClr=tx, u=none).
+    // opf#1415: a linked line (a footer social account) is a text box whose whole text is the link, so the link is the shape's click link
+    // (a:hlinkClick in its p:cNvPr, linkShapeBlocks): PowerPoint underlines every run that is a link, and the preview draws this line in
+    // its muted color without an underline. The run keeps that color and u="none".
     const lineColor = pptxColor(config.color ?? context.textColor);
     const latinStart = sourceLine?.start ?? String(text ?? '').indexOf(line,latinSourceOffset);
     context.nativeLatinSlots.remember(context.slideIndex,objectName,[{text:line,source:String(text ?? ''),start:latinStart,end:latinStart+line.length,style:{...style,...(config.lang?{lang:config.lang}:{})}}],config.path);
     latinSourceOffset = latinStart+line.length;
-    slide.addText(link?.href && line ? [{text: line, options: {hyperlink: {url: link.href}, color: lineColor, underline: {style: 'none'}}}] : line, {
+    if (link?.href && line) context.linkedTextShapes.set(objectName, {link: link.href});
+    // A linked caption box (a video placeholder's) links as a whole the same way, blank caption boxes included; its text keeps u="none".
+    else if (config.hyperlink?.url) context.linkedTextShapes.set(objectName, {link: config.hyperlink.url});
+    slide.addText(link?.href && line ? [{text: line, options: {color: lineColor, underline: {style: 'none'}}}] : line, {
       ...textBoxOptions(area, context, fit.fontSize * .75),
       ...nativeFontOptions(style), ...eyebrowOptions(style, fit.fontSize), ...langOptions(context, config.lang),
       color: lineColor, align: alignment,
       ...(fit.directions?.[index]==='rtl'?{rtlMode:true}:{}),
-      // Reuse the frame's existing relationship to cover blank caption boxes.
-      // PptxGenJS also inherits it into runs; keep their native text styling.
-      hyperlink: config.hyperlink,
       underline: config.hyperlink ? {style: 'none'} : undefined,
       tabStops:sourceLine?.segments.filter(segment=>segment.kind==='tab').map(segment=>({position:(segment.x+segment.width)/96,alignment:'l'})),
       objectName,
@@ -6224,6 +6228,8 @@ async function normalizePptxZip(raw, context) {
   }
   // SH-02: a shape block's click link (a:hlinkClick in its p:cNvPr, with its slide's external hyperlink relationship).
   linkShapeBlocks(entries, context.shapeBlocks, {decode: decodeText, encode: encodeText});
+  // opf#1415: so is a text box whose whole text is one link.
+  linkShapeBlocks(entries, context.linkedTextShapes, {decode: decodeText, encode: encodeText});
   // Image pictures need the embedded dimensions (core's fitImage crops and pads them); document provenance (FF-32)
   // later records the placed frames as slide geometry evidence.
   try {
