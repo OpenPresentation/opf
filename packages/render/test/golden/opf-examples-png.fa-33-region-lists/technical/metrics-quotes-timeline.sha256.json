@@ -6,12 +6,12 @@
       "bytes": 6680
     },
     "technical/metrics-quotes-timeline.opf.json#1": {
-      "sha256": "907c19036124348d2a3464ffff7e39b00b581da8592d52de6caefb2e67ae56aa",
-      "bytes": 8159
+      "sha256": "79a4ca745f596f9a1c8f82b84d5cb0ea01f1139f5e39132e5673720051f0c7a9",
+      "bytes": 8113
     },
     "technical/metrics-quotes-timeline.opf.json#2": {
-      "sha256": "9ea01ba4adbdb37fab8fcc4765560adae44c5d9182abbf8b43f5ef1ff24a3204",
-      "bytes": 7172
+      "sha256": "6467a8798c5542148b44e4c71d897a8b22d37d388af4a5e2a7b09ca3c264371c",
+      "bytes": 11236
     }
   }
 }
