@@ -198,6 +198,14 @@
           "command": "pnpm run test:canvas-a11y-browser"
         },
         {
+          "id": "browser:metric",
+          "command": "pnpm run test:metric-browser"
+        },
+        {
+          "id": "browser:metric-cards",
+          "command": "node test/metric-browser.mjs --cards"
+        },
+        {
           "id": "browser:picture-luminance",
           "command": "pnpm run test:picture-luminance-browser"
         },
