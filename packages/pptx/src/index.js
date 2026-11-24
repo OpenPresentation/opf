@@ -1565,7 +1565,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
     const stored = imported && record('chart');
     const part = relationships.get(chartRelId)?.path;
     const restored = stored && part && entries[part]
-      ? restore('chart', imported, () => restoreChartData(imported, stored, chartEvidence(referenceState.xml??decodeText(entries[part])), {datasets: data.datasets, report: diagnostic => data.report?.('chart', diagnostic)}))
+      ? restore('chart', imported, () => restoreChartData(imported, stored, chartDataEvidence(decodeText(entries[part]), referenceState.xml, data.referenceContext), {datasets: data.datasets, report: diagnostic => data.report?.('chart', diagnostic)}))
       : imported;
     let chart = restored?.type === 'combo' ? elideComboDefault(restored, data.datasets) : restored;
     const references=[...(referenceState.references??[]),...(data.referenceOverlays?.get(part)??[])].sort((a,b)=>a.index-b.index).map(({index:_index,...ref})=>ref);
@@ -1958,6 +1958,15 @@ function payloadFromSlideItem(item, report) {
   }
   if (item.kind === "unknown" && item.text) return { type: "text", text: item.text };
   return null;
+}
+
+// opf#1431: the evidence a chart's data record is compared with. The import reads reference helpers with the slide theme's colors, so a
+// helper drawn in a theme color (accent2) is a reference and leaves the hashed part. The export hashes the part as attachDataProvenance's
+// `chartXml` reads it, with the deck's scale and no colors, where such a helper's paint is unreadable and it stays an ordinary series.
+// Both forms are deterministic functions of the current part, so a change to any plotted value or format still changes both.
+function chartDataEvidence(xml, referenceXml, referenceContext) {
+  const exported = !xml.includes(REFERENCE_URI) ? xml : readNativeReferences(xml, {scale: referenceContext?.scale ?? 1}).xml;
+  return [...new Set([chartEvidence(referenceXml ?? xml), chartEvidence(exported)])];
 }
 
 function chartFromRelationship(entries, slidePath, relationships, relId, report, {marked = false,referenceContext,referenceState={}} = {}) {
