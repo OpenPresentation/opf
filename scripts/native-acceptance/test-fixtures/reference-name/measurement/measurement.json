@@ -2,26 +2,26 @@
   "schemaVersion": 1,
   "profile": "reference-line-one-name-three-native-archives-v1",
   "input": {
-    "bytes": 124991,
-    "sha256": "e6d2f88d45672535ac4e42faa7665d31813e52f603205cafac69bf231624b4e1"
+    "bytes": 125008,
+    "sha256": "4dcab5dfa893a5223de20ef7c7ec07a363a00f14cf52916e9b2c16c1859003f1"
   },
-  "requestSha256": "8f9f3d347113792b79af70750860278516f4b2fdde1d79d017b5a3cc2c919be9",
-  "envelopeSha256": "576febb8bc2ad9a47bd61fd0fae8f7e0af409c6b2b6e6b4e1e87adfb7f017cce",
+  "requestSha256": "142281173e66f03e3ed7ffafe54eea3465b08a862478c1ed42ff05ee4a25c425",
+  "envelopeSha256": "dba9e2ac31d88ec9bbcaf482d3b792b05f8750d151435ec614b149de3d4f076e",
   "admission": {
-    "bytes": 2177167,
-    "sha256": "450fd257be773edb9511a533cd82c58caf416ca78b4ee07c296dc98813800c8e"
+    "bytes": 2193736,
+    "sha256": "43699908a52eb85315e7ba3eaaacb15b7659b25897e8a1df83f190aae7a2603f"
   },
   "routeComparison": {
-    "bytes": 287127,
-    "sha256": "8ddcbb49e03a041877e4633f26433b1adbd41d14c0e286110ed1a8e5698f3fea"
+    "bytes": 287871,
+    "sha256": "a77c3606a2e5da1d436702b4b0d5600fbed72fca756e0a2517212e9f82b8df2a"
   },
   "worker": {
-    "sha256": "5719ddf5ee1fb1218ce4b854ee4e3fe2ed0e133d4085358fa64d9e03db4c8cd8",
+    "sha256": "f33af723b875f59dedbfd7fbeffe863f703abc4257a5bf0165df158defd75f08",
     "bytes": 93931
   },
-  "controllerRevision": "89721c42955007bc39d59cbb1abff671b82b1a97",
-  "started": "2026-11-24T08:41:10.3851512Z",
-  "finished": "2026-11-24T08:41:14.0457430Z",
+  "controllerRevision": "8b26220d7be4acca4665be93d09a34c6a97314cf",
+  "started": "2026-11-24T17:08:16.4040046Z",
+  "finished": "2026-11-24T17:08:19.6486282Z",
   "stages": 886,
   "native": {
     "copies": 3,
@@ -85,16 +85,16 @@
   },
   "archives": {
     "before": {
-      "bytes": 130187,
-      "sha256": "4ad552b758d979e1cd540df3f629f55c600aa5d74771fcd1892dbd9b85c2ab88"
+      "bytes": 130186,
+      "sha256": "827d43e49d6742c8a35667cedef241ff76069389a07fb25e9483934c9e498500"
     },
     "edited": {
       "bytes": 130198,
-      "sha256": "350e5c27d243bafad6d64f3b9bb0b085ddc5cb8aa769cc5855230c5a51c982f8"
+      "sha256": "0ae28dc79981c8556baf23ba0f4c616926ea4683653784245d76999139eb40df"
     },
     "reopened": {
       "bytes": 130198,
-      "sha256": "8dd1799eb183ce0278269d06cbd5d5e06da7531ea7ff9d53f41b77e7545b39ca"
+      "sha256": "efdd6ab4f0f6c58d2f944c96074cc2854e8b93a986d2b6d71e18b07fc55645cf"
     }
   },
   "rasters": [
@@ -357,12 +357,12 @@
   },
   "retained": {
     "report.json": {
-      "bytes": 81046,
-      "sha256": "02c84bc4690fa7b274d3ec181968771654075c5b54746098f84ac7ad9412937d"
+      "bytes": 81112,
+      "sha256": "6c9c5106ac722997e347f936c768ca557e47c2e8b4788e676abe2c8f1094af0d"
     },
     "stages.jsonl": {
-      "bytes": 257345,
-      "sha256": "9862df267a651968901f2f523d6ca8e49b8bbf8aba3010ebbad695018955e987"
+      "bytes": 259049,
+      "sha256": "7de03d935303e4c8da4c765aa796b307c58bf2630e06bb67ffd5dd63f9c2e561"
     }
   }
 }

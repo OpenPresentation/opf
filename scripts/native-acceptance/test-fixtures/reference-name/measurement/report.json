@@ -3,23 +3,23 @@
     "captureTextFonts":  false,
     "readOnlySurvey":  false,
     "source":  {
-                   "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\inputs\\case.pptx",
-                   "sha256":  "e6d2f88d45672535ac4e42faa7665d31813e52f603205cafac69bf231624b4e1",
-                   "openedPath":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\inputs\\input.pptx",
-                   "openedSha256":  "e6d2f88d45672535ac4e42faa7665d31813e52f603205cafac69bf231624b4e1"
+                   "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\inputs\\case.pptx",
+                   "sha256":  "4dcab5dfa893a5223de20ef7c7ec07a363a00f14cf52916e9b2c16c1859003f1",
+                   "openedPath":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\inputs\\input.pptx",
+                   "openedSha256":  "4dcab5dfa893a5223de20ef7c7ec07a363a00f14cf52916e9b2c16c1859003f1"
                },
     "saved":  {
-                  "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\native-furniture-control.pptx",
-                  "sha256":  "350e5c27d243bafad6d64f3b9bb0b085ddc5cb8aa769cc5855230c5a51c982f8"
+                  "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\native-furniture-control.pptx",
+                  "sha256":  "0ae28dc79981c8556baf23ba0f4c616926ea4683653784245d76999139eb40df"
               },
     "reopened":  {
-                     "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\native-furniture-control.pptx",
-                     "sha256":  "350e5c27d243bafad6d64f3b9bb0b085ddc5cb8aa769cc5855230c5a51c982f8"
+                     "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\native-furniture-control.pptx",
+                     "sha256":  "0ae28dc79981c8556baf23ba0f4c616926ea4683653784245d76999139eb40df"
                  },
     "actionPlan":  {
-                       "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\inputs\\action-plan.json",
+                       "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\inputs\\action-plan.json",
                        "sha256":  "2787ea8c725c254c676a1993ea3621c888170b84402c91709494f4de69fa1c3c",
-                       "snapshotPath":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\inputs\\action-plan.json",
+                       "snapshotPath":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\inputs\\action-plan.json",
                        "snapshotSha256":  "2787ea8c725c254c676a1993ea3621c888170b84402c91709494f4de69fa1c3c",
                        "actions":  [
                                        {
@@ -311,17 +311,17 @@
                                     "rasters":  [
                                                     {
                                                         "slideIndex":  1,
-                                                        "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\original-slide-01.png",
+                                                        "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\original-slide-01.png",
                                                         "sha256":  "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
                                                     },
                                                     {
                                                         "slideIndex":  2,
-                                                        "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\original-slide-02.png",
+                                                        "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\original-slide-02.png",
                                                         "sha256":  "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
                                                     },
                                                     {
                                                         "slideIndex":  3,
-                                                        "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\original-slide-03.png",
+                                                        "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\original-slide-03.png",
                                                         "sha256":  "f5c69fa9192cb1d5931d3ee2230a60e69c5492c2a173b9788e332fe5004c5777"
                                                     }
                                                 ],
@@ -522,17 +522,17 @@
                                   "rasters":  [
                                                   {
                                                       "slideIndex":  1,
-                                                      "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\edited-slide-01.png",
+                                                      "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\edited-slide-01.png",
                                                       "sha256":  "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
                                                   },
                                                   {
                                                       "slideIndex":  2,
-                                                      "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\edited-slide-02.png",
+                                                      "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\edited-slide-02.png",
                                                       "sha256":  "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
                                                   },
                                                   {
                                                       "slideIndex":  3,
-                                                      "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\edited-slide-03.png",
+                                                      "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\edited-slide-03.png",
                                                       "sha256":  "f5c69fa9192cb1d5931d3ee2230a60e69c5492c2a173b9788e332fe5004c5777"
                                                   }
                                               ],
@@ -733,17 +733,17 @@
                                     "rasters":  [
                                                     {
                                                         "slideIndex":  1,
-                                                        "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\reopened-slide-01.png",
+                                                        "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\reopened-slide-01.png",
                                                         "sha256":  "3659e4173594078c55d36c3e00e5d0ca082f13a5011dad344abc3353400de134"
                                                     },
                                                     {
                                                         "slideIndex":  2,
-                                                        "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\reopened-slide-02.png",
+                                                        "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\reopened-slide-02.png",
                                                         "sha256":  "76eff3abd7d56c98e291ac695963739d6c638f486c803d773ad88c2098c201b5"
                                                     },
                                                     {
                                                         "slideIndex":  3,
-                                                        "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\reopened-slide-03.png",
+                                                        "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\reopened-slide-03.png",
                                                         "sha256":  "f5c69fa9192cb1d5931d3ee2230a60e69c5492c2a173b9788e332fe5004c5777"
                                                     }
                                                 ],
@@ -802,15 +802,15 @@
                },
     "inputs":  {
                    "verifier":  {
-                                    "path":  "C:\\opf-work\\fix5-int\\packages\\pptx\\test\\native-furniture-control.ps1",
-                                    "sha256":  "5719ddf5ee1fb1218ce4b854ee4e3fe2ed0e133d4085358fa64d9e03db4c8cd8",
-                                    "snapshotPath":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\inputs\\native-furniture-control.ps1",
-                                    "snapshotSha256":  "5719ddf5ee1fb1218ce4b854ee4e3fe2ed0e133d4085358fa64d9e03db4c8cd8"
+                                    "path":  "C:\\opf-work\\export-matches-preview\\packages\\pptx\\test\\native-furniture-control.ps1",
+                                    "sha256":  "f33af723b875f59dedbfd7fbeffe863f703abc4257a5bf0165df158defd75f08",
+                                    "snapshotPath":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\inputs\\native-furniture-control.ps1",
+                                    "snapshotSha256":  "f33af723b875f59dedbfd7fbeffe863f703abc4257a5bf0165df158defd75f08"
                                 },
                    "processHelper":  {
-                                         "path":  "C:\\opf-work\\fix5-int\\packages\\pptx\\test\\native-process.ps1",
+                                         "path":  "C:\\opf-work\\export-matches-preview\\packages\\pptx\\test\\native-process.ps1",
                                          "sha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
-                                         "snapshotPath":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\inputs\\native-process.ps1",
+                                         "snapshotPath":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\inputs\\native-process.ps1",
                                          "snapshotSha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
                                      }
                },
@@ -834,13 +834,13 @@
     "referenceNameSnapshots":  [
                                    {
                                        "phase":  "before",
-                                       "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\reference-name-before.pptx",
-                                       "sha256":  "4ad552b758d979e1cd540df3f629f55c600aa5d74771fcd1892dbd9b85c2ab88"
+                                       "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\reference-name-before.pptx",
+                                       "sha256":  "827d43e49d6742c8a35667cedef241ff76069389a07fb25e9483934c9e498500"
                                    },
                                    {
                                        "phase":  "reopened",
-                                       "path":  "C:\\opf-work\\c34\\lock-refresh\\route\\run\\native\\reference-name-reopened.pptx",
-                                       "sha256":  "8dd1799eb183ce0278269d06cbd5d5e06da7531ea7ff9d53f41b77e7545b39ca"
+                                       "path":  "C:\\opf-work\\c34\\lock-refresh-2\\route\\run\\native\\reference-name-reopened.pptx",
+                                       "sha256":  "efdd6ab4f0f6c58d2f944c96074cc2854e8b93a986d2b6d71e18b07fc55645cf"
                                    }
                                ],
     "globalPreflight":  {
