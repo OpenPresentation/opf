@@ -455,6 +455,32 @@ const LANGUAGE_TAG = /^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$/;
 const attribute = (xml, name) => new RegExp(`\\s${name}="([^"]*)"`).exec(xml)?.[1];
 
 /**
+ * #1404: the slide XML without the en-US runs the export split out of a right-to-left paragraph (splitLatinRuns): a run tagged
+ * en-US whose whole text is one left-to-right piece (a Latin phrase or a number), in a paragraph marked rtl="1", or in a paragraph
+ * of no letters marked rtl="0" on a slide with right-to-left paragraphs (LH-118 writes those left to right). Those runs say how
+ * PowerPoint orders a piece, not what language the slide is in (RR-05), so the slide's language is read without them. A run whose
+ * text is not one such piece (Hebrew or Arabic text set to English in PowerPoint), and a run its author tagged (altLang), still count.
+ */
+function withoutSplitPieces(xml) {
+  const rtlSlide = /<a:pPr\b[^>]*?\srtl="1"/.test(xml);
+  if (!rtlSlide) return xml;
+  return xml.replace(/<a:p>[\s\S]*?<\/a:p>/g, paragraph => {
+    const direction = /^<a:p>\s*<a:pPr\b[^>]*?\srtl="([01])"/.exec(paragraph)?.[1];
+    if (direction === undefined) return paragraph;
+    if (direction === "0") {
+      const text = [...paragraph.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => decodeText(match[1])).join("");
+      if (/[\p{L}\p{Nl}]/u.test(text)) return paragraph;
+    }
+    return paragraph.replace(RUN, (run, properties, escaped) => {
+      // altLang="en-US" marks a run whose language its author set (OWN_LANGUAGE_RUN): that run counts as before.
+      if (String(attribute(properties, "lang")).toLowerCase() !== "en-us" || attribute(properties, "altLang") !== undefined) return run;
+      const text = decodeText(escaped), pieces = leftToRightPieces(text);
+      return pieces.length === 1 && pieces[0][0] === 0 && pieces[0][1] === text.length ? "" : run;
+    });
+  });
+}
+
+/**
  * Observe the presentation language in run `lang`. `slides` and `theme` are
  * XML strings. `language` is the dominant run tag, imported as a BCP-47 tag
  * string (OPF 0.15: language is an engine vocabulary, not a catalog), or
@@ -465,25 +491,33 @@ const attribute = (xml, name) => new RegExp(`\\s${name}="([^"]*)"`).exec(xml)?.[
  * boolean for legacy callers or per-slide validated OPF ownership flags.
  */
 export function observeLanguage({slides, theme, themePath, slideThemes, catalogs, perSlide = true, preferBaseRuns = false}) {
-  const counts = new Map(), baseCounts = new Map();
+  // `counts` holds every run (the runs the mixed-run-languages diagnostic names); `own` leaves out the export's split pieces.
+  const counts = new Map(), baseCounts = new Map(), own = new Map(), ownBase = new Map();
   let rtlParagraphs = 0;
-  for (const [index, xml] of slides.entries()) {
-    const preferBase = Array.isArray(preferBaseRuns) ? preferBaseRuns[index] === true : preferBaseRuns;
+  const tally = (xml, preferBase, all, base) => {
     for (const [run] of xml.matchAll(/<a:rPr\b[^>]*>/g)) {
       const lang = attribute(run, 'lang');
       // Values that name no language are not counted: malformed tags, x-none, und and zxx.
       if (!lang || !LANGUAGE_TAG.test(lang) || /^(?:und|zxx)(?:-|$)/i.test(lang)) continue;
-      counts.set(lang, (counts.get(lang) ?? 0) + 1);
+      all.set(lang, (all.get(lang) ?? 0) + 1);
       // OPF marks a run's authored language override with altLang=en-US. A wrapped override
       // may produce more native fragments than the slide's base language; it must not replace it.
-      if (!preferBase || String(attribute(run, 'altLang')).toLowerCase() !== 'en-us') baseCounts.set(lang, (baseCounts.get(lang) ?? 0) + 1);
+      if (!preferBase || String(attribute(run, 'altLang')).toLowerCase() !== 'en-us') base.set(lang, (base.get(lang) ?? 0) + 1);
     }
+  };
+  for (const [index, xml] of slides.entries()) {
+    const preferBase = Array.isArray(preferBaseRuns) ? preferBaseRuns[index] === true : preferBaseRuns;
+    tally(xml, preferBase, counts, baseCounts);
+    tally(withoutSplitPieces(xml), preferBase, own, ownBase);
     rtlParagraphs += xml.match(/<a:pPr\b[^>]*?\srtl="1"/g)?.length ?? 0;
   }
-  const ranked = [...counts].sort((left, right) => right[1] - left[1] || (left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0));
+  const rank = map => [...map].sort((left, right) => right[1] - left[1] || (left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0));
+  const ranked = rank(counts);
   // With no unprotected runs, retain the stored base instead of promoting a protected run override.
-  const baseRanked = preferBaseRuns ? [...baseCounts].sort((left, right) => right[1] - left[1] || (left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0)) : ranked;
-  const lang = baseRanked[0]?.[0];
+  const pick = (all, base) => (preferBaseRuns ? rank(base) : rank(all))[0]?.[0];
+  // #1404: the language is that of most runs other than the split pieces (a right-to-left slide's Latin phrases and numbers
+  // are its own en-US runs and can outnumber its Hebrew or Arabic runs); with nothing else, the pieces' en-US as before.
+  const lang = pick(own, ownBase) ?? pick(counts, baseCounts);
   return {lang, language: lang, ranked, rtlParagraphs, theme, themePath, slideThemes, catalogs,
     ...(perSlide ? {slides: slides.map((xml, index) => observeLanguage({slides: [xml], catalogs, perSlide: false, preferBaseRuns: Array.isArray(preferBaseRuns) ? preferBaseRuns[index] === true : preferBaseRuns}))} : {})};
 }
