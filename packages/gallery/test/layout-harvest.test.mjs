@@ -17,9 +17,10 @@ const textHeight = (item) => item.text.height ?? item.text.lines.length * item.t
 const long = 'Shift the library from stacks-first to research-services-first before the next budget cycle, and report the change in use each term so the board can judge it.';
 
 for (const [id, anchor, blocks] of [
-  ['pillars', 'bottom', [labelled('Clear scope', 'Two teams and one workflow keep the pilot focused.'), labelled('Consistent measures', 'Track completion and task time against a baseline.'), labelled('An explicit decision', 'Agree the evidence needed before expanding the rollout to every team.')]],
-  ['team', 'bottom', [labelled('Ana Ruiz', 'Pilot lead'), labelled('Sam Lee', 'Product lead. Turns participant feedback into product changes.'), labelled('Kai Moreau', 'Analytics lead')]],
-  // LH-68: scorecard metrics are tiles: label at the card's top, value under it, description at its foot.
+  ['pillars', 'middle', [labelled('Clear scope', 'Two teams and one workflow keep the pilot focused.'), labelled('Consistent measures', 'Track completion and task time against a baseline.'), labelled('An explicit decision', 'Agree the evidence needed before expanding the rollout to every team.')]],
+  ['team', 'middle', [labelled('Ana Ruiz', 'Pilot lead'), labelled('Sam Lee', 'Product lead. Turns participant feedback into product changes.'), labelled('Kai Moreau', 'Analytics lead')]],
+  // LH-68: scorecard metrics are tiles: label at the card's top, description at its foot. SCO-1: the value grows and stands in the
+  // middle of the room between label and the row's foot, one line for the row, so no tile has an empty middle.
   ['scorecard', 'tile', [{ metric: { value: 52, label: 'Participants', description: 'Target: 50' } }, { metric: { value: '84%', label: 'Completion', description: 'Target: at least 80%' } }, { metric: { value: '6.2', unit: 'min', label: 'Median time' } }]],
 ]) {
   test(`${id}: cards with a heading line or a metric fill the body and set their content at the ${anchor === 'tile' ? 'tile positions' : anchor}`, () => {
@@ -32,10 +33,14 @@ for (const [id, anchor, blocks] of [
     assert.equal(new Set(cards.map((card) => card.height)).size, 1, 'the cards share a height');
     const body = bodyOf(result);
     // A filled card starts half a gap (12 px) under its region's top, clear of the heading, and reaches the region's foot.
-    assert.ok(cards[0].y - body[0].y > -1 && cards[0].y - body[0].y < 13 && Math.abs(bottomOf(cards[0]) - bottomOf(body[0])) < 1, 'a card fills its region');
+    if (anchor === 'middle') {
+      // P1: under a middle anchor the cards hug the tallest card's content and the row centers in the body.
+      const middle = (box) => box.y + box.height / 2;
+      assert.ok(cards[0].height < body[0].height * 0.75 && Math.abs(middle(cards[0]) - middle(body[0])) < 1, `the cards hug their content and the row centers (${cards[0].height} of ${body[0].height})`);
+    } else assert.ok(cards[0].y - body[0].y > -1 && cards[0].y - body[0].y < 13 && Math.abs(bottomOf(cards[0]) - bottomOf(body[0])) < 1, 'a card fills its region');
     for (const item of items) {
       const above = item.box.y - item.frameBox.y, below = bottomOf(item.frameBox) - bottomOf(item.box);
-      if (anchor === 'bottom') assert.ok(above > below, `${item.path}: the content sits low in its card (${above} above, ${below} below)`);
+      if (anchor === 'middle') assert.ok(above <= below + 14, `${item.path}: the content does not sit low in its card (${above} above, ${below} below)`);
       else if (anchor === 'tile') {
         const part = (role) => item.metricLayout.parts.find((entry) => entry.role === role);
         assert.ok(above > 0 && above <= 24 && below > 0 && below <= 24, `${item.path}: the tile fills its card inside the inset`);
@@ -65,7 +70,11 @@ for (const [id, blocks] of [
       assert.ok(cards[0].height < body[0].height * 0.45, `the cards hug their text (${cards[0].height} of ${body[0].height})`);
       const middle = (box) => box.y + box.height / 2;
       assert.ok(Math.abs(middle(cards[0]) - middle(body[0])) < 1, 'the row centres in the body');
-      for (const item of items) assert.ok(item.box.y - item.frameBox.y < 25, `${item.path}: the text starts at the card's top`);
+      // COL-3: a shorter text sits in the middle of its card, not at its top over an empty band.
+      for (const item of items) {
+        const over = item.box.y - item.frameBox.y, below = bottomOf(item.frameBox) - item.box.y - textHeight(item);
+        assert.ok(Math.abs(over - below) < 16, `${item.path}: the text is centered in its card (${over} above, ${below} under)`);
+      }
       // The tallest text has about as much room under it as above it.
       const tallest = items.reduce((best, item) => (textHeight(item) > textHeight(best) ? item : best));
       const under = bottomOf(tallest.frameBox) - tallest.box.y - textHeight(tallest), above = tallest.box.y - tallest.frameBox.y;
@@ -86,21 +95,24 @@ test('LH-64: rows of short body-text cards stack one gap apart, centred in the b
   assert.ok(Math.abs(above - under) < 1, `the stack centres (${above} above, ${under} under)`);
 });
 
-test('LH-64: body-text cards of very unequal length fill the body and start their text at the top', () => {
+test('LH-64, COL-3: body-text cards of very unequal length fill the body and center their text', () => {
   const result = compose('three-column', { title: 'Side by side', blocks: [{ text: `${long} ${long}` }, { text: 'Two teams.' }, { text: 'Six weeks.' }] });
   assert.equal(result.diagnostics.length, 0);
   const items = carded(result), body = bodyOf(result)[0];
   assert.equal(new Set(items.map((item) => item.frameBox.height)).size, 1, 'the cards share a height');
   assert.ok(Math.abs(bottomOf(items[0].frameBox) - bottomOf(body)) < 1, 'the cards fill the body');
-  assert.equal(new Set(items.map((item) => item.box.y)).size, 1, 'the texts start on one line');
-  for (const item of items) assert.ok(item.box.y - item.frameBox.y < 25, `${item.path}: at the card's top, not its foot`);
+  for (const item of items.slice(1)) {
+    const over = item.box.y - item.frameBox.y, below = bottomOf(item.frameBox) - item.box.y - textHeight(item);
+    assert.ok(Math.abs(over - below) < 24, `${item.path}: a short text is in the middle of its card, not at its top or foot (${over} above, ${below} under)`);
+  }
 });
 
-test('LH-64: a heading line on one card keeps the row at the foot of full-height cards', () => {
+test('P1: a heading line on one card: the row hugs its tallest card and centers, its content on one line', () => {
   const result = compose('pillars', { title: 'Side by side', blocks: [{ text: 'Two teams.' }, labelled('Scope', 'Six weeks.'), { text: 'One workflow.' }] });
-  const items = carded(result), body = bodyOf(result)[0];
-  for (const item of items) assert.ok(Math.abs(bottomOf(item.frameBox) - bottomOf(body)) < 1, `${item.path}: the card fills the body`);
-  assert.ok(items.every((item) => item.box.y - item.frameBox.y > bottomOf(item.frameBox) - bottomOf(item.box)), 'the content sits low');
+  const items = carded(result), body = bodyOf(result)[0], middle = (box) => box.y + box.height / 2;
+  assert.equal(new Set(items.map((item) => item.frameBox.height)).size, 1, 'one card height');
+  assert.ok(items[0].frameBox.height < body.height * 0.75 && Math.abs(middle(items[0].frameBox) - middle(body)) < 1, 'the cards hug and the row centers');
+  assert.equal(new Set(items.map((item) => item.box.y)).size, 1, 'the content starts on one line');
 });
 
 // LH-04: a top-anchored region drawn on cards (here a deck with contentBox) hugs its content instead of filling the cell, with
@@ -120,7 +132,8 @@ test('LH-04: top-anchored cards hug their content with one height per row', () =
 });
 
 test('a row of full-height cards starts one and a half gaps under the title', () => {
-  const result = compose('pillars', { title: 'Three conditions', blocks: [labelled('Scope', 'Two teams.')] });
+  const picture = { src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', alt: 'A square' };
+  const result = compose('pillars', { title: 'Three conditions', blocks: [{ image: picture }, labelled('Scope', 'Two teams.')] });
   const title = result.items.find((item) => item.field === 'title');
   const card = result.items.find((item) => item.frameBox).frameBox;
   assert.ok(Math.abs(card.y - bottomOf(title.box) - 36) < 1, `${card.y - bottomOf(title.box)} px under the title`);

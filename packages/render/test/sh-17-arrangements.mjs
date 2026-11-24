@@ -16,7 +16,9 @@ const arrowFill = applyColorTransform(primary, {lumMod: 60000, lumOff: 40000});
 
 {
   const svg = toSvg(deck, 1, {catalogs, trace: true});
-  assert.match(svg, /data-opf-arrangement="chevrons" data-opf-arrangement-design="smartart"/);
+  // C03 (the owner's choice of 2026-11-24): a short row of chevrons is OPF's own design, filled rows of chevrons, not PowerPoint's thin
+  // Basic Chevron Process strip.
+  assert.match(svg, /data-opf-arrangement="chevrons" data-opf-arrangement-design="opf"/);
   const chevrons = [...svg.matchAll(/<path [^>]*data-opf-arrangement-path="slides\.0\.items\.(\d)"[^>]*>/g)];
   assert.deepEqual(chevrons.map(match => match[1]), ['0', '1', '2', '3']);
   for (const [chevron] of chevrons) {

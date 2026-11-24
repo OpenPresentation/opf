@@ -32,7 +32,25 @@ export function planNativeBody(slide, geometry, {automatic = false, report = () 
     const plan = planOne(item, geometry, automatic, reason => reject(item, reason), textMeasurement, collectMeasurement);
     if (plan) plans.push(plan);
   }
+  keepBoxesApart(plans, geometry);
   return plans.length ? {...plans[0], others: plans.slice(1)} : undefined;
+}
+
+// Open choice 6 (automaticPlacement): a box that grew over its space must not cover another native body as written (its wrap's width) or
+// any other block; one that would keeps the box that hugs its text, anchored at the top.
+function keepBoxesApart(plans, geometry) {
+  const rect = plan => ({x: plan.wrap.x, y: plan.box.y, width: plan.wrap.width, height: plan.box.height});
+  const meet = (a, b) => a.x < b.x + b.width - .5 && b.x < a.x + a.width - .5 && a.y < b.y + b.height - .5 && b.y < a.y + a.height - .5;
+  for (let changed = true; changed;) {
+    changed = false;
+    for (const plan of plans) {
+      if (!plan.grown) continue;
+      const others = [...plans.filter(other => other !== plan).map(rect),
+        ...geometry.items.filter(item => item !== plan.item && !plans.some(other => other.item === item) && (item.frameBox ?? item.box)).map(item => item.frameBox ?? item.box)];
+      if (!others.some(box => meet(rect(plan), box))) continue;
+      plan.box = {...plan.item.box}; plan.anchor = 'top'; delete plan.grown; changed = true;
+    }
+  }
 }
 
 function planOne(item, geometry, automatic, reject, textMeasurement, collectMeasurement) {
@@ -82,7 +100,70 @@ function planOne(item, geometry, automatic, reject, textMeasurement, collectMeas
   if (item.frameBox) return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...item.box}, anchor: 'top', carded: true, wrap};
   // LH-48: core sets a lone block that fills too little of the body in the middle of its region; the placeholder anchors it there too.
   const centered = region && item.box.height < region.box.height - 1 && Math.abs(item.box.y + item.box.height / 2 - (region.box.y + region.box.height / 2)) < 1;
-  return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...(region?.box ?? item.box)}, anchor: centered ? 'middle' : region?.anchor ?? 'top', wrap};
+  if (region) return {item, values, list, ...(numbering ? {numbering} : {}), region: region.name, box: {...region.box}, anchor: centered ? 'middle' : region.anchor ?? 'top', wrap};
+  return {item, values, list, ...(numbering ? {numbering} : {}), region: 'Body', ...automaticPlacement(item, list, geometry, wrap), wrap};
+}
+
+/**
+ * The text's own height as PowerPoint stacks it (px): each line at its paragraph's exact spacing (a:lnSpc a:spcPts, which PptxGenJS
+ * writes in whole hundredths of a point) and each later list entry's space before (a:spcBef), with no space after and no insets
+ * (addNativeBody and nativeBodyDefaults write both as 0). It is what PowerPoint centers in a box anchored in the middle, and what it
+ * puts against the bottom of one anchored at the bottom.
+ */
+export function nativeTextHeight(item, list) {
+  const points = value => Math.round(value * 100) / 100;
+  if (!list) return (item.text.lines?.length ?? 1) * points(item.text.lineHeight * .75) / .75;
+  const entries = item.text.listEntries;
+  return entries.reduce((total, entry, index) => {
+    const previous = entries[index - 1];
+    const gap = previous ? Math.max(0, entry.textBox.y - (previous.textBox.y + previous.textBox.height)) * .75 : 0;
+    return total + (entry.text.lines?.length ?? 1) * points(entry.text.lineHeight * .75) / .75 + (gap > 0 ? points(gap) / .75 : 0);
+  }, 0);
+}
+
+/**
+ * Open choice 6, option D (the owner's decision, 2026-11-24): a native body on a slide without a layout region, which core set in the
+ * middle (or at the bottom) of the space it was given, is written as a box over that space anchored in the middle (or at the bottom), so
+ * PowerPoint keeps the text there when someone adds or removes lines; text core set at the top keeps its box, anchored at the top.
+ *
+ *   space     the slide's content box (core `contentBox`, below the headings and above the footer), when the text is the one block of
+ *             the column it stands in: a block above or below it that shares some of its width (two blocks stacked in one column, which
+ *             core centers as one group), or one beside it in its rows, leaves the text its own box, so no box covers another block
+ *   middle    the text's center lies in the middle of that space (core centered it, LH-48): the box grows by the same amount above and
+ *             below the text's own center (its top plus nativeTextHeight / 2, which is not the hugging box's center: core's box is a few
+ *             pixels taller than the lines PowerPoint stacks), as far as the nearer end of the space allows
+ *   bottom    the text ends at the bottom of the space and starts below its top: the box runs from the top of the space to the end of
+ *             the text's own height, so the last line stays where it is
+ *
+ * Either way the lines open exactly where the top-anchored box put them. The box stays horizontally as nativeWrapBox placed it.
+ */
+export function automaticPlacement(item, list, geometry, wrap = {x: item.box.x, width: item.box.width}) {
+  const hugging = {box: {...item.box}, anchor: 'top'};
+  const area = geometry.contentBox;
+  if (!area) return hugging;
+  // The column is as wide as the box PowerPoint gets: the item's, and the wrap's slack beyond it (nativeWrapBox).
+  const top = item.box.y, bottom = item.box.y + item.box.height, left = Math.min(item.box.x, wrap.x), right = Math.max(item.box.x + item.box.width, wrap.x + wrap.width);
+  const start = area.y, end = area.y + area.height;
+  if (top < start - 1 || bottom > end + 1) return hugging;
+  for (const other of geometry.items ?? []) {
+    if (other === item) continue;
+    const box = other.frameBox ?? other.box;
+    if (!box || box.x >= right - .5 || box.x + box.width <= left + .5) continue;
+    // A block above or below in the same column (a stack core set as one group), or beside the text in its rows: the text is not the one
+    // block of its space, so it keeps its own box; each block of a stack keeps to its own part of the column.
+    if (box.y + box.height > area.y + .5 && box.y < area.y + area.height - .5) return hugging;
+  }
+  const height = nativeTextHeight(item, list);
+  if (!(height > 0) || end - start <= item.box.height + 1) return hugging;
+  const middle = Math.abs((top + bottom) / 2 - (start + end) / 2) < 1;
+  const atBottom = !middle && Math.abs(bottom - end) < 1 && top - start > 1;
+  if (middle) {
+    const center = top + height / 2, half = Math.min(center - start, end - center);
+    if (half < height / 2) return hugging;
+    return {box: {...item.box, y: center - half, height: 2 * half}, anchor: 'middle', grown: true};
+  }
+  if (atBottom) return {box: {...item.box, y: start, height: top + height - start}, anchor: 'bottom', grown: true};
+  return hugging;
 }
 
 // RR-105 (opf#1089). PowerPoint's advances and kerning differ from core's measurement by a fraction of a percent, so a native body written

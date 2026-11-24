@@ -167,17 +167,24 @@ function roundNode(index: number, box: Box, radius: number): ArrangementNode {
 
 /** OPF's pyramid, at its start: the share of the area's width the steps take, at most this many times its height. */
 export const PYRAMID_STEPS_SHARE = .4, PYRAMID_STEPS_ASPECT = 1.6;
+/** IP1, PY1: a stepped pyramid's level is at most this share of the widest bar's width tall. */
+export const PYRAMID_STEP_HEIGHT = .3;
 /**
  * OPF's own pyramid design, drawn where PowerPoint's does not hold the entries at the list's size: the levels as a stepped pyramid of
  * rounded bars at the start of `area` (level i of n is i/n of the steps' width, centered on one axis, `gap` apart), and each entry's
  * text beside its level, in one column across the rest of the area, vertically centered on its level.
  */
-export function pyramidSteps(area: Box, count: number, gap: number, radius: number, direction: 'up' | 'down' = 'up'): ArrangementNode[] {
-  if (direction === 'down') return invertedPyramid(pyramidSteps(area, count, gap, radius), area);
-  const n = Math.max(1, Math.floor(count)), width = Math.min(area.width * PYRAMID_STEPS_SHARE, area.height * PYRAMID_STEPS_ASPECT);
-  const height = (area.height - (n - 1) * gap) / n, axis = area.x + width / 2, column = area.x + width + 2 * gap;
+export function pyramidSteps(area: Box, count: number, gap: number, radius: number, direction: 'up' | 'down' = 'up', inset = 0, barWidth?: number): ArrangementNode[] {
+  if (direction === 'down') return invertedPyramid(pyramidSteps(area, count, gap, radius, 'up', inset, barWidth), area);
+  // IP1: `barWidth` (composition's, where the labels leave room) widens the bars past PYRAMID_STEPS_SHARE of the area.
+  const n = Math.max(1, Math.floor(count)), width = barWidth !== undefined && barWidth > 0 ? Math.min(barWidth, area.height * PYRAMID_STEPS_ASPECT) : Math.min(area.width * PYRAMID_STEPS_SHARE, area.height * PYRAMID_STEPS_ASPECT);
+  // IP1, PY1: a level is at most PYRAMID_STEP_HEIGHT of the widest bar tall (one or two levels are bars, not a block filling the region),
+  // the levels in the middle of the region's height; `inset` moves the bars and their labels in from the start edge, so composition can
+  // set the drawing and its labels in the middle of the region.
+  const height = Math.min((area.height - (n - 1) * gap) / n, PYRAMID_STEP_HEIGHT * width), x0 = area.x + inset, axis = x0 + width / 2, column = x0 + width + 2 * gap;
+  const top = area.y + (area.height - n * height - (n - 1) * gap) / 2;
   return Array.from({ length: n }, (_, index) => {
-    const w = width * (index + 1) / n, y = area.y + index * (height + gap);
+    const w = width * (index + 1) / n, y = top + index * (height + gap);
     return { ...roundNode(index, { x: axis - w / 2, y, width: w, height }, radius), textBox: roundBox({ x: column, y, width: area.x + area.width - column, height }), beside: true as const };
   });
 }

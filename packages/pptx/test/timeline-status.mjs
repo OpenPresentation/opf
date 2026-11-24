@@ -48,7 +48,8 @@ for(const options of [{},fontOptions]){
   assert.equal(fillOf(planned),bg);assert.equal(hex(lineOf(planned)['a:solidFill']),fillOf(done));
   assert.equal(fillOf(rings[0]),bg);assert.equal(hex(lineOf(rings[0])['a:solidFill']),fillOf(done));
   const ext=shape=>Number(shape['p:spPr']['a:xfrm']['a:ext'].cx);
-  assert.equal(ext(rings[0]),1.6*ext(current),'the ring ellipse is exactly 1.6 times the dot');
+  // TLN-1: a grown timeline's radii are not whole EMU, so the ring is 1.6 times the dot to the EMU rounding.
+  assert.ok(Math.abs(ext(rings[0])-1.6*ext(current))<=2,'the ring ellipse is 1.6 times the dot');
   assert.equal(ext(planned),ext(done),'a hollow marker is the same size as a filled one');
   // Text: core measures the current label at 700 vs the ordinary 600. DrawingML's binary b flag
   // cannot encode that full distinction: font resolution may map a 600 face to bold too, while

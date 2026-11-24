@@ -30,8 +30,8 @@ test('only compact presentation intents opt into vertical centering', () => {
   for (const id of ['chart', 'table', 'dashboard', 'list', 'faq']) {
     assert.ok(bodyRegions(gallery.layouts[id]).every(([, region]) => !region.anchor || region.anchor === 'top'), id);
   }
-  // The column layouts draw full-height cards and set a column's content in the middle of its card, never at the card's foot (0.35.1).
-  for (const id of ['two-column', 'three-column']) {
+  // The column, pillars and team layouts draw full-height cards and set a column's content in the middle of its card, never at the card's foot (0.35.1).
+  for (const id of ['two-column', 'three-column', 'pillars', 'team']) {
     assert.ok(gallery.layouts[id].design?.contentBox === true && bodyRegions(gallery.layouts[id]).every(([, region]) => region.anchor === 'middle'), id);
   }
 });

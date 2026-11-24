@@ -533,8 +533,10 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
 {
   const catalogs = [defaultCatalog];
   const hexOf = (value, like) => { const hex = Buffer.from(JSON.stringify(value)).toString('hex'); return /[A-F]/.test(like) ? hex.toUpperCase() : hex; };
-  for (const [old, current] of [['flow', 'process'], ['vertical-flow', 'vertical-process']]) {
-    const deck = {name: 'A 0.34 layout', slides: [{layout: current, title: 'Steps', items: ['Plan', 'Build', 'Ship']}]};
+  // VPR-1 (the owner's choice of 2026-11-24): three vertical steps are drawn as OPF's own design, editable shapes that a file without
+  // OPF's tags cannot read back as a list; two are still PowerPoint's Vertical Process, which reads back from its data model either way.
+  for (const [old, current, list] of [['flow', 'process', ['Plan', 'Build', 'Ship']], ['vertical-flow', 'vertical-process', ['Plan', 'Ship']]]) {
+    const deck = {name: 'A 0.34 layout', slides: [{layout: current, title: 'Steps', items: list}]};
     for (const provenance of ['full', false]) {
       const {entries: parts} = await exportDeck(deck, {catalogs, provenance});
       const layout = layoutOf(parts, 1), tag = layoutTag(parts, layout);
@@ -550,7 +552,7 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
       assert.equal(Object.keys(edits).length, provenance === 'full' ? 2 : 1, `${old} ${provenance}: the tags written`);
       const {imported, reports} = await read(mutate(parts, edits), {catalogs});
       assert.equal(imported.slides[0].layout, current, `${old} ${provenance}`);
-      assert.deepEqual(imported.slides[0].items ?? imported.slides[0].blocks?.[0]?.items, ['Plan', 'Build', 'Ship']);
+      assert.deepEqual(imported.slides[0].items ?? imported.slides[0].blocks?.[0]?.items, list);
       assert.deepEqual(reports.filter(report => report.code === 'layout-renamed').map(report => report.path), provenance === 'full' ? ['slides.0.layout'] : [], `${old} ${provenance}: ${JSON.stringify(reports)}`);
       assert.deepEqual(reports.filter(report => report.code === 'unresolved-reference' || /layout tag/i.test(report.message ?? '')), []);
     }

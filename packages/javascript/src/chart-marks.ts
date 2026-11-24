@@ -208,8 +208,12 @@ export function chartValueList(chart: unknown, data: ResolvedChartData, geometry
   if (radius < alone * (crowded ? 0.8 : 1) - 0.5) return undefined;
   const rtl = geometry.direction === 'rtl';
   const mirror = (part: Box): Box => rtl ? {...part, x: box.x + box.width - (part.x - box.x) - part.width} : part;
-  const pie = mirror({x: area.x + pieWidth / 2 - radius, y: area.y + area.height / 2 - radius, width: 2 * radius, height: 2 * radius});
-  const listX = area.x + pieWidth + between, listHeight = headerHeight + entries.length * pitch, top = area.y + (area.height - listHeight) / 2;
+  // 0.35.2 (A12, C11): a pie bound by the box's height stood in the middle of its share of a wide box, the list pinned to the box's end
+  // a quarter of the slide away. The pie and its list are one group: the list stands `between` from the pie and the group is centered in
+  // the box (a pie that fills its share is placed as before).
+  const offset = Math.max(0, (pieWidth - 2 * radius) / 2);
+  const pie = mirror({x: area.x + offset, y: area.y + area.height / 2 - radius, width: 2 * radius, height: 2 * radius});
+  const listX = area.x + offset + 2 * radius + between, listHeight = headerHeight + entries.length * pitch, top = area.y + (area.height - listHeight) / 2;
   const hole = type === 'doughnut' ? doughnutHole(pie, entries, options.focus?.categories ?? [], {fontPx, textHeight: metrics(box, scale, geometry.minFontSize).textHeight, measure: geometry.measure}) : undefined;
   return {
     pie,

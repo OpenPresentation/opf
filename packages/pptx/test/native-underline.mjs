@@ -78,10 +78,16 @@ test('linked furniture retains explicit native underline none', {skip:registryLa
   const source = {organization:{id:'acme', name:'Acme', socials:{x:'@acme'}}, design:{footer:{start:{text:'{{organization.name}}'}, end:{socials:true}}}, slides:[{text:'Body'}]};
   const {entries} = await exportAndRetain('furniture-links', source);
   // RR-72: a one-slide deck draws its furniture once, on the slide master: read what the slide shows.
-  const shown = parser.parse(`<shown>${shownFurniture(entries, 1).map(shape => shape.xml).join('')}</shown>`);
-  const links = all(shown, 'a:r').filter(run => run['a:rPr']?.['a:hlinkClick']);
-  assert.ok(links.length > 0, 'Reach the linked furniture converter');
-  for (const run of links) assert.equal(run['a:rPr'].u, 'none', 'Furniture explicitly suppresses hyperlink underline');
+  // opf#1415: the line is a text box whose whole text is the link, so the link is the shape's (PowerPoint underlines every linked run)
+  // and its runs are plain, with an explicit u="none".
+  const linked = shownFurniture(entries, 1).filter(shape => /<p:cNvPr\b[^>]*>\s*<a:hlinkClick\b/.test(shape.xml));
+  assert.ok(linked.length > 0, 'Reach the linked furniture converter');
+  const runs = all(parser.parse(`<shown>${linked.map(shape => shape.xml).join('')}</shown>`), 'a:r');
+  assert.ok(runs.length > 0);
+  for (const run of runs) {
+    assert.equal(run['a:rPr']?.['a:hlinkClick'], undefined, 'The run is not a link');
+    assert.equal(run['a:rPr'].u, 'none', 'Furniture explicitly suppresses the underline');
+  }
 });
 test('ordinary false/absent underline and hyperlink export control', async () => {
   const ordinary = rich.filter(value => typeof value === 'string' || !value.underline);

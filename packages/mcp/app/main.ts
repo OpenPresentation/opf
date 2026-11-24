@@ -364,6 +364,9 @@ function setSync(state: SyncState): void {
 		unknown: "The message couldn't be confirmed",
 	};
 	sync.textContent = words[state];
+	// The footer says it too, while the composer is closed.
+	$("deck-shared").hidden = state !== "shared" && state !== "pending";
+	$("deck-shared-text").textContent = state === "pending" ? words.pending : words.shared;
 }
 
 /** The request composer is available as soon as the deck opens, including before the first manual edit. */

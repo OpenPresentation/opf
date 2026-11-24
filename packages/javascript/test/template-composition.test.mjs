@@ -67,8 +67,10 @@ describe('the grid flow by count', () => {
   test('auto: a grid when every block is short, a column when any block is long (more than 6 estimated lines)', () => {
     assert.equal(region(compose({ title: 'x', blocks: short(3) }, layouts.text), 'body').arrangement, 'grid');
     assert.equal(region(compose({ title: 'x', blocks: [text(long), text(`${long} Again.`), text('c')] }, layouts.text), 'body').arrangement, 'column');
-    // LH-67: one long block beside short ones leads beside a stack of them (a row of two cells).
-    assert.equal(region(compose({ title: 'x', blocks: [text('a'), text(long), text('c')] }, layouts.text), 'body').arrangement, 'row');
+    // LH-67: one long first block leads beside a stack of the short ones (a row of two cells); between them it would be drawn
+    // before the block that precedes it, so the blocks stay a column in the author's order.
+    assert.equal(region(compose({ title: 'x', blocks: [text(long), text('a'), text('c')] }, layouts.text), 'body').arrangement, 'row');
+    assert.equal(region(compose({ title: 'x', blocks: [text('a'), text(long), text('c')] }, layouts.text), 'body').arrangement, 'column');
     // The estimate, never the host's measurement: a wide measurement does not change the decision.
     const wide = { measure: (value, size) => value.length * size * 2 };
     assert.equal(region(compose({ title: 'x', blocks: short(3) }, layouts.text, { textMeasurement: wide }), 'body').arrangement, 'grid');
@@ -255,7 +257,8 @@ describe('one long list in columns', () => {
     const result = compose({ title: 'Agenda', items }, layouts.agenda);
     const list = result.items.find((item) => item.field === 'items');
     assert.equal(list.listColumns.length, 3);
-    assert.deepEqual(list.listColumns.map((column) => [column.start, column.end]), [[0, 4], [4, 9], [9, 14]]);
+    // C09: the first columns are the longer (5 + 5 + 4, not 4 + 5 + 5).
+    assert.deepEqual(list.listColumns.map((column) => [column.start, column.end]), [[0, 5], [5, 10], [10, 14]]);
     assert.ok(list.listColumns.every((column) => !column.text.overflow && near(column.text.fontSize, 32)));
     // The item's text is the whole list, every column's entries at their columns (RR-81 review).
     assert.equal(list.text.listEntries.length, 14);
@@ -294,6 +297,9 @@ describe('one long list in columns', () => {
     assert.deepEqual(listColumnBreaks([1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0], 3), [2, 4]);
     assert.deepEqual(listColumnBreaks([3, 1, 1, 1], [0, 0, 0, 0], 2), [1]);
     assert.deepEqual(listColumnBreaks([1, 1, 1, 1], [0, 1, 1, 0], 2), [3]);
+    // C09: of breaks as even, the first columns are the longer: 7 entries are 4 + 3, 10 in 3 columns 4 + 3 + 3.
+    assert.deepEqual(listColumnBreaks([1, 1, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0, 0, 0], 2), [4]);
+    assert.deepEqual(listColumnBreaks(Array(10).fill(1), Array(10).fill(0), 3), [4, 7]);
   });
 });
 
