@@ -177,7 +177,7 @@ The site lists products that read or write OPF as implementations, all in the sa
 name, what it does with OPF (read, write, render, convert, host), the OPF version it targets and a
 link. No implementation gets a logo, a badge or a call to action the others don't get.
 
-- pptx.dev (hosted API, AI and file services) and storyd.ai (a business storytelling app) are
+- pptx.dev (a browser tool for making PowerPoint files) and storyd.ai (a business storytelling app) are
   listed this way, beside any third-party tool.
 - pptx.gallery presents the default catalog; it is listed as the catalog browser.
 - Sponsorship, where the site shows it, is one line of text in the footer and the one factual
