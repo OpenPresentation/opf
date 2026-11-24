@@ -163,7 +163,9 @@ jobs:
       # read the font policy and (pptx-gallery) the editor example from it with git, the tag's commit is the documentation source ref
       # of a site, and pptx-gallery prepares its layout examples from the gallery package's preview sources, which it imports, so
       # those are files (packages/gallery, with the root scripts they import). A site script that found no such folder failed with
-      # "spawnSync git ENOENT" (opf#1177, opf#1324).
+      # "spawnSync git ENOENT" (opf#1177, opf#1324). pptx-gallery also reads the renderer's version from packages/render/package.json
+      # for its script-font manifest; cone mode takes folders, so the whole package is checked out. Without it the gallery bump of
+      # 0.35.1 failed and was made by hand (opf#1417).
       - name: Check out the release tag
         id: tag
         if: ${{ steps.app.outcome == 'success' }}
@@ -175,6 +177,7 @@ jobs:
           sparse-checkout: |
             scripts
             packages/gallery
+            packages/render
           sparse-checkout-cone-mode: true
           path: opf-tag
 
