@@ -1,0 +1,5 @@
+---
+type: fixed
+packages: [pptx, opf]
+---
+opf#1415 (output-changing for one-series column, bar and line charts with highlighted points and a legend): the legend names the series in PowerPoint, as the preview draws it, instead of listing every category. PowerPoint lists the points of a lone series as soon as one point has its own fill or marker, so the export now writes each look of the highlighted points as one more series of the same name (a column or bar point moves to it and leaves a gap; a line keeps every point and the added series draws only the marker), deletes that series' legend entry, sets the bar group's overlap to 100 and writes the added series' column into the embedded workbook, so Edit Data shows the values the chart draws. Each added series carries an `opf:pointSeries` record, and the import joins it back before it reads the chart, so the chart, its highlight, data labels and reference lines round-trip as before; a split that lost its exported shape imports as separate series with a `chart-point-series-uncertain` finding (core gives it its help text).

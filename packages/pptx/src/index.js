@@ -70,6 +70,7 @@ import {placeLogos, importLogo, importLogoPlaceholders, logoName, LOGO_TAG} from
 import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} from './background.js';
 import {importBackground, readSlideTheme} from './background-import.js';
 import {chartHighlightPlan, applyChartHighlight} from './chart-highlight.js';
+import {joinPointSeries, splitPointSeries, writePointSeriesWorkbook} from './chart-point-series.js';
 import {orderChartSeries} from './chart-order.js';
 import {lineXml, linkShapeBlocks, shapeBlockRecord, writeShapeBlocks} from './shape-blocks.js';
 import {connectorName, connectorRecord, writeConnectors} from './connectors.js';
@@ -498,6 +499,12 @@ export async function fromPptx(input, options = {}) {
   // stored layout ids resolve against them; with none, a color scheme imports inline and no theme id is recovered.
   checkCatalogs('fromPptx', options.catalogs);
   const entries = readPptxZip(input);
+  // opf#1415: series an OPF export split off for the legend are joined back first, so every later step reads the authored chart.
+  for (const path of Object.keys(entries)) {
+    if (!/^ppt\/charts\/chart\d+\.xml$/.test(path)) continue;
+    const xml = decodeText(entries[path]), joined = joinPointSeries(xml, diagnostic => options.onDiagnostic?.({...diagnostic, path}));
+    if (joined !== xml) entries[path] = encodeText(joined);
+  }
   const presentationDoc = parseRequiredXml(entries, "ppt/presentation.xml");
   const presentationRoot = presentationDoc["p:presentation"];
   if (!presentationRoot) {
@@ -6367,6 +6374,24 @@ async function normalizePptxZip(raw, context) {
       }
     }
     for (const [path, bytes] of Object.entries(parts)) output[path] = [bytes, {level: context.compressionLevel, mtime: context.zipDate}];
+  }
+  // opf#1415: a lone series whose points have their own colors names the series in PowerPoint's legend: its colored points become
+  // series of their own, with their workbook columns (src/chart-point-series.js). Last, after every record has sealed the authored form.
+  for (const path of Object.keys(output)) {
+    const match = /^ppt\/charts\/(chart\d+\.xml)$/.exec(path);
+    if (!match) continue;
+    const split = splitPointSeries(decodeText(output[path][0]));
+    if (!split.workbook) continue;
+    const target = /<Relationship\b(?=[^>]*\bType="[^"]*\/package")[^>]*\bTarget="\.\.\/embeddings\/([^"/]+)"/.exec(decodeText(output[`ppt/charts/_rels/${match[1]}.rels`]?.[0] ?? new Uint8Array()))?.[1];
+    const workbookPath = target && `ppt/embeddings/${target}`;
+    if (!workbookPath || !output[workbookPath]) throw new OPFPptxError('packaging-failed', 'A split chart series has no embedded workbook.', {path});
+    try {
+      const workbook = writePointSeriesWorkbook(unzipSync(output[workbookPath][0]), split.workbook);
+      output[workbookPath] = [normalizeNestedZip(zipSync(workbook), context), output[workbookPath][1]];
+    } catch (error) {
+      throw new OPFPptxError('packaging-failed', 'The workbook columns of a split chart series could not be written.', {path, cause: errorMessage(error)});
+    }
+    output[path] = [encodeText(split.xml), output[path][1]];
   }
 
   // Sort after chart/worksheet renaming; source counters can cross digit widths.
