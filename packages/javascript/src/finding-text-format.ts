@@ -156,6 +156,16 @@ const shapeLinkHidden: RuleText = () => ({
   next: "remove `hidden`, or remove the `link`.",
 });
 
+const shapePathUnits: RuleText = (finding) => {
+  const { width, height } = params(finding);
+  if (typeof width !== "number" || typeof height !== "number") return undefined;
+  const round = (value: number) => Number(value.toPrecision(3));
+  return {
+    message: `The ${code("path")} spans ${round(width)} by ${round(height)} units, but a path without a ${code("viewBox")} is drawn in a 0 to 1 box, so the outline is far outside its frame.`,
+    next: `add a ${code("viewBox")} for the grid the path is written on (for example ${code('{ "d": ..., "viewBox": "0 0 100 100" }')}), or write its coordinates from 0 to 1.`,
+  };
+};
+
 const shapeAnchorSizeUnit: RuleText = (finding) => {
   const { key, size } = params(finding);
   return typeof key === "string" ? { message: `${code(`at.${key}: ${String(size)}`)} is a fraction, not pixels.`, next: `rename ${code(key)} to ${code(`${key}Px`)} if it is pixels.` } : undefined;
@@ -748,6 +758,7 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/shape-adjust-unknown": shapeAdjustUnknown,
   "opf/shape-adjust-range": shapeAdjustRange,
   "opf/shape-link-hidden": shapeLinkHidden,
+  "opf/shape-path-units": shapePathUnits,
   "opf/shape-anchor-size-unit": shapeAnchorSizeUnit,
   "opf/shape-anchor-missing": shapeAnchorMissing,
   "opf/connector-end-missing": connectorEndMissing,

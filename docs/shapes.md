@@ -55,7 +55,7 @@ A name the preset does not have is `opf/shape-adjust-unknown`, and a value outsi
 
 ### Custom outlines
 
-`path` draws an outline of your own (`a:custGeom` in PowerPoint): SVG path data in a 0 to 1 box (`"M0 0 L1 0 L0.5 1 Z"`, stretched to the frame), or `{ "d": ..., "viewBox": "0 0 24 24" }` for a path drawn on its own grid, such as an icon. Every SVG command is accepted (M, L, H, V, C, S, Q, T, A, Z, absolute or relative). A subpath that does not end with Z is open: it takes arrowheads at its ends. A custom path's text rectangle is the whole frame.
+`path` draws an outline of your own (`a:custGeom` in PowerPoint): SVG path data in a 0 to 1 box (`"M0 0 L1 0 L0.5 1 Z"`, stretched to the frame), or `{ "d": ..., "viewBox": "0 0 24 24" }` for a path drawn on its own grid, such as an icon. Every SVG command is accepted (M, L, H, V, C, S, Q, T, A, Z, absolute or relative). A subpath that does not end with Z is open: it takes arrowheads at its ends. A custom path's text rectangle is the whole frame. A path with no `viewBox` whose width or height exceeds three boxes is `opf/shape-path-units` (a warning): it was most likely written from 0 to 100.
 
 ## Fill
 
@@ -350,6 +350,7 @@ The `pyramid`, `matrix`, `cycle`, `chevrons` and `vertical-process` layouts and 
 | `opf/schema` | `shape` is not a preset name (the nearest names are offered as fixes), or a property has the wrong form. |
 | `opf/shape-adjust-unknown` | `adjust` names a guide the preset does not have, or sits on a custom `path`. |
 | `opf/shape-adjust-range` | An adjust value is outside its handle's range; the default is drawn. |
+| `opf/shape-path-units` | A custom `path` without a `viewBox` is wider or taller than three boxes, which means it was written on a larger grid (0 to 100, an icon's 0 to 24): the outline is drawn far outside its frame. Add a `viewBox` or write it from 0 to 1. A path that overshoots the box by less is not reported. |
 | `opf/text-overflow` | The text does not fit inside the shape at the readable minimum size. |
 | `opf/shape-link-hidden` | A hidden shape has a link nobody can click. |
 | `opf/shape-option-unsupported-payload` | A shape-only property (`fill`, `style`, `rotate` and the others) is on a block that is not a shape. |

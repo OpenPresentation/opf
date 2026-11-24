@@ -244,6 +244,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/shape-adjust-unknown`](#opfshape-adjust-unknown) | Format | warning | structure | An adjust value names a guide the preset does not have. |
 | [`opf/shape-adjust-range`](#opfshape-adjust-range) | Format | warning | structure | An adjust value is outside the range of the preset's handle. |
 | [`opf/shape-link-hidden`](#opfshape-link-hidden) | Format | warning | structure | A hidden shape carries a link. |
+| [`opf/shape-path-units`](#opfshape-path-units) | Format | warning | structure | A custom path is written on a grid far larger than the 0 to 1 box. |
 | [`opf/shape-anchor-missing`](#opfshape-anchor-missing) | Format | error | structure | An overlay shape has no resolvable block or qualified plotted chart point. |
 | [`opf/shape-anchor-size-unit`](#opfshape-anchor-size-unit) | Format | warning | structure | A pixel size is under a fraction key. |
 | [`opf/connector-end-missing`](#opfconnector-end-missing) | Format | error | structure | A connector end names no block or overlay shape on the slide. |
@@ -441,6 +442,16 @@ Default severity: **warning**. Cost: structure. A hidden shape carries a link.
 **Why.** A hidden shape (`hidden: true`) is not drawn, so its `link` can never be clicked in a slide show.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/shape-path-units`
+
+Default severity: **warning**. Cost: structure. A custom path is written on a grid far larger than the 0 to 1 box.
+
+**Why.** A custom `path` without a `viewBox` is drawn in a 0 to 1 box stretched to the frame. Coordinates from 0 to 100 (or an icon's 0 to 24) put the outline far outside the frame, so it floods the slide or is not seen, with no other sign. Give the path a `viewBox` for its own grid, or write it from 0 to 1.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+**Approximations.** The extent is read from the path's end points and control points (an arc by its end point). A path whose width or height is at most three times the box is taken as a deliberate overshoot and not reported.
 
 ### `opf/shape-anchor-missing`
 
