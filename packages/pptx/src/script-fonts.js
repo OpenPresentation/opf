@@ -453,6 +453,24 @@ export function partScriptFonts(path, xml, plan, slideIndex) {
 
 const LANGUAGE_TAG = /^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$/;
 const attribute = (xml, name) => new RegExp(`\\s${name}="([^"]*)"`).exec(xml)?.[1];
+// Values that name no language: malformed tags, x-none, und and zxx.
+const namesLanguage = lang => Boolean(lang) && LANGUAGE_TAG.test(lang) && !/^(?:und|zxx)(?:-|$)/i.test(lang);
+
+/**
+ * RR-05: in a right-to-left paragraph the export writes each Latin piece as its own en-US run beside the paragraph's language
+ * (a plain lang="en-US"), so "תוצאות Q3" is one he-IL run and one en-US run, and the tie would rank en-US first. Those pieces
+ * are not a second language. They are left out of the count wherever the paragraph also has a run in another language. A run
+ * whose author set its language (OPF marks it altLang="en-US") still counts, and so does a right-to-left paragraph that is all
+ * en-US.
+ */
+function withoutLatinPieces(xml) {
+  return xml.replace(/<a:p>[\s\S]*?<\/a:p>/g, paragraph => {
+    if (!/<a:pPr\b[^>]*?\srtl="1"/.test(paragraph)) return paragraph;
+    const tags = [...paragraph.matchAll(/<a:rPr\b[^>]*>/g)].map(([run]) => attribute(run, 'lang'));
+    if (!tags.some(lang => namesLanguage(lang) && lang.toLowerCase() !== 'en-us')) return paragraph;
+    return paragraph.replace(/<a:rPr\b[^>]*>/g, run => String(attribute(run, 'lang')).toLowerCase() === 'en-us' && attribute(run, 'altLang') === undefined ? '' : run);
+  });
+}
 
 /**
  * Observe the presentation language in run `lang`. `slides` and `theme` are
@@ -469,10 +487,9 @@ export function observeLanguage({slides, theme, themePath, slideThemes, catalogs
   let rtlParagraphs = 0;
   for (const [index, xml] of slides.entries()) {
     const preferBase = Array.isArray(preferBaseRuns) ? preferBaseRuns[index] === true : preferBaseRuns;
-    for (const [run] of xml.matchAll(/<a:rPr\b[^>]*>/g)) {
+    for (const [run] of withoutLatinPieces(xml).matchAll(/<a:rPr\b[^>]*>/g)) {
       const lang = attribute(run, 'lang');
-      // Values that name no language are not counted: malformed tags, x-none, und and zxx.
-      if (!lang || !LANGUAGE_TAG.test(lang) || /^(?:und|zxx)(?:-|$)/i.test(lang)) continue;
+      if (!namesLanguage(lang)) continue;
       counts.set(lang, (counts.get(lang) ?? 0) + 1);
       // OPF marks a run's authored language override with altLang=en-US. A wrapped override
       // may produce more native fragments than the slide's base language; it must not replace it.
@@ -498,6 +515,8 @@ export function observeLanguage({slides, theme, themePath, slideThemes, catalogs
 export function reconcileLanguage(groups, observed, report, document) {
   const slideGroups = groups.filter(item => /^slides\.\d+\.language$/.test(item.field));
   let index = groups.findIndex(item => item.field === "language");
+  // The document with every declaration removed: what a deck that declared no language is read as (v0.35).
+  const undeclared = document && Array.isArray(document.slides) ? {...document, language: undefined, slides: document.slides.map(slide => slide && typeof slide === "object" ? {...slide, language: undefined} : slide)} : {};
   if (slideGroups.length && observed.slides?.length && index >= 0) {
     const root = groups[index].ops.find(op => op.path?.length === 1 && op.path[0] === 'language' && !op.remove)?.value;
     const rootTag = resolver({language: root}, {}, observed.catalogs).lang.toLowerCase();
@@ -512,7 +531,9 @@ export function reconcileLanguage(groups, observed, report, document) {
       const match = /^slides\.(\d+)\.language$/.exec(item.field);
       if (!match) return item;
       const native = observed.slides[Number(match[1])], op = item.ops[0], value = op.remove ? root : op.value;
-      const expected = resolver({language: value}, {}, observed.catalogs);
+      let expected = resolver({language: value}, {}, observed.catalogs);
+      // #1404: a slide that declared no language in a deck that declared none was written in the language read from its text.
+      if (value === undefined) { try { expected = resolver(undeclared, {slideIndex: Number(match[1])}, observed.catalogs); } catch { /* the engine default stands */ } }
       if (!native?.lang || expected.lang.toLowerCase() === native.lang.toLowerCase()) return item;
       report?.({code: 'metadata-reference-changed', path: item.field, message: `Runs now use ${native.lang}, not ${expected.lang} of the stored slide language, so the imported slide follows its runs.`});
       return {...item, ops: [{path: ['slides', Number(match[1]), 'language'], value: native.language}]};
@@ -524,7 +545,6 @@ export function reconcileLanguage(groups, observed, report, document) {
   // PowerPoint is imported as observed.
   if (groups[index].ops.some(op => op.remove && op.path?.length === 1 && op.path[0] === "language")) {
     let fallback;
-    const undeclared = document && Array.isArray(document.slides) ? {...document, language: undefined, slides: document.slides.map(slide => slide && typeof slide === "object" ? {...slide, language: undefined} : slide)} : {};
     try { fallback = resolver(undeclared, {}, observed.catalogs).lang; } catch { fallback = undefined; }
     return typeof fallback === "string" && fallback.toLowerCase() === observed.lang.toLowerCase() ? groups : groups.filter((_, position) => position !== index);
   }
@@ -543,12 +563,16 @@ export function reconcileLanguage(groups, observed, report, document) {
  * script is Arabic or Hebrew, any other the engine default). On import the slides that are not in the language of most runs
  * carry an observed language of their own, which the source never had. Where the deck's language was restored as absent, a
  * slide's observed language is dropped when the slide's text gives the same language without it.
+ *
+ * #1404: a language the slide's stored record states (`stored[i].record`, the OPF_SLIDE_V1 value of `full` provenance) is the
+ * author's declaration, not a reading, and stays while the slide still has it. A package without that record (another
+ * application's save, `references-only`, no provenance) cannot tell the two apart, so there the language is dropped as before.
  */
-export function dropLanguagesReadFromText(imported, catalogs) {
+export function dropLanguagesReadFromText(imported, catalogs, stored) {
   if (!imported || imported.language !== undefined || !Array.isArray(imported.slides)) return;
   const bare = imported.slides.map(slide => slide && typeof slide === "object" ? {...slide, language: undefined} : slide);
   imported.slides.forEach((slide, slideIndex) => {
-    if (!slide || typeof slide.language !== "string") return;
+    if (!slide || typeof slide.language !== "string" || stored[slideIndex]?.record?.metadata?.language === slide.language) return;
     try {
       const read = resolver({...imported, slides: bare}, {slideIndex}, catalogs);
       const named = resolver({...imported, slides: bare.map((entry, index) => index === slideIndex ? slide : entry)}, {slideIndex}, catalogs);
