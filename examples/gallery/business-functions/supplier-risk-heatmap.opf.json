@@ -12,7 +12,7 @@
       "technicalFluency": "low",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "status-update"
+        "sparkline"
       ],
       "recommendedTones": [
         "casual"

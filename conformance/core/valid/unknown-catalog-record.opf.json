@@ -1,0 +1,3 @@
+{
+  "slides": [{ "title": "A layout this reader may not know", "layout": "some-future-layout", "text": "A reference that resolves nowhere is a warning, not an error." }]
+}

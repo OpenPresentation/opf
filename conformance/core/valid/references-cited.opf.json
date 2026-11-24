@@ -1,0 +1,4 @@
+{
+  "references": [{ "id": "annual-report", "text": "Acme annual report 2026", "url": "https://example.com/report" }],
+  "slides": [{ "title": "Cited claim", "text": [{ "text": "Revenue grew 12%", "cite": "annual-report" }] }]
+}

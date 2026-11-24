@@ -12,7 +12,7 @@
       "technicalFluency": "medium",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "innovation"
+        "golden-circle"
       ],
       "recommendedTones": [
         "conversational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "innovation",
+  "narrative": "golden-circle",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -300,97 +300,51 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "innovation": {
-          "name": "Innovation",
-          "summary": "Keynote-style product reveal inspired by Steve Jobs's 2007 iPhone launch: stage-set, reveal, demonstrate, wow, differentiate, reframe the category, build excitement, call to action, and thank the audience. For category-defining product moments.",
+        "golden-circle": {
+          "name": "Golden Circle (Why / How / What)",
+          "summary": "Simon Sinek's keynote arc: lead with belief, follow with method, finish with proof. Best for brand stories, mission-driven keynotes, and any deck where the audience needs to feel why before they can evaluate what.",
           "audienceFit": [
             "customers",
-            "press",
-            "developers",
-            "general-audience"
+            "employees",
+            "general-audience",
+            "press"
           ],
           "duration": {
-            "min": 20,
-            "max": 60
+            "min": 10,
+            "max": 30
           },
           "tags": [
-            "inspirational",
             "keynote",
-            "launch",
-            "product"
+            "brand",
+            "mission",
+            "sinek"
           ],
           "beats": [
             {
-              "id": "opening",
-              "name": "Opening",
-              "description": "Set the stage. Tell the audience they're about to see something that matters, without yet showing it. The pause before the reveal is part of the reveal.",
-              "layout": "cover",
-              "instructions": "Set the stage",
-              "type": "text"
+              "id": "why",
+              "name": "Why",
+              "description": "Open with the belief or purpose that animates the work. Why does this exist, and why should anyone care beyond commerce? State it plainly and emotionally — the why is meant to be felt before it is understood."
             },
             {
-              "id": "revelation",
-              "name": "Revelation",
-              "description": "Announce the product. One image, one name, one sentence. Anything more competes with the moment. The slide should feel like the curtain going up.",
-              "instructions": "Announce product",
-              "type": "text",
-              "layout": "text"
+              "id": "how",
+              "name": "How",
+              "description": "Translate the belief into the principles that guide how you operate. The values, decisions, and trade-offs that make your approach distinctive. The 'how' is what people who share your why recognize as familiar."
             },
             {
-              "id": "demonstration",
-              "name": "Demonstration",
-              "description": "Show the product in real use. Choose a single defining workflow that captures what the product does and how it feels. Live beats canned wherever possible.",
-              "instructions": "Showcase the product",
-              "type": "text",
-              "layout": "text"
+              "id": "what",
+              "name": "What",
+              "description": "Show the products, services, or outputs that the why and how produce. Concrete examples, not abstractions. The what is the artifact of the belief — proof that the why is more than rhetoric."
             },
             {
-              "id": "wow-factor",
-              "name": "Wow Factor",
-              "description": "Highlight the cutting-edge feature that earns the headline. One thing, presented well — the audience should leave able to repeat it in a sentence.",
-              "instructions": "Highlight cutting-edge features",
-              "type": "text",
-              "layout": "text"
+              "id": "proof",
+              "name": "Proof",
+              "description": "Demonstrate the impact in lives, customers, or outcomes. Stories beat statistics here; specific people and moments earn the audience's belief better than aggregate numbers. End with proof that what you do works because of why you do it."
             },
             {
-              "id": "differentiation",
-              "name": "Differentiation",
-              "description": "Make the contrast with existing alternatives unmistakable. Use comparisons that the audience already understands; don't argue against straw versions of the competition.",
-              "instructions": "Distinctive factors",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "revolution",
-              "name": "Revolution",
-              "description": "Reframe the category. Show how the product changes what the playing field looks like, not just where you sit on it. This is the slide pundits will quote.",
-              "instructions": "Change in the playing field",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "excitement",
-              "name": "Excitement",
-              "description": "Build anticipation around what's next: availability, partnerships, what the audience can imagine doing with the product. Excitement is how the room exits the keynote into the world.",
-              "instructions": "Build anticipation",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "call-to-action",
-              "name": "Call to Action",
-              "description": "Give the audience the action that channels the excitement. Pre-order, try it, tell others. Be specific so the energy converts into behavior.",
-              "instructions": "Urge to explore",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "gratitude",
-              "name": "Gratitude",
-              "description": "Thank the team that built it and the audience that came. Brief, sincere, not perfunctory. The closing thanks is the period at the end of the keynote.",
-              "layout": "closing",
-              "instructions": "Thank the audience",
-              "type": "text"
+              "id": "invitation",
+              "name": "Invitation",
+              "description": "Close by inviting the audience to share the belief — to buy, build, join, or evangelize. The strongest invitations don't argue; they assume alignment and offer a way in.",
+              "layout": "statement"
             }
           ]
         }

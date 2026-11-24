@@ -12,7 +12,7 @@
       "technicalFluency": "mixed",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "star-method"
+        "reveal"
       ],
       "recommendedTones": [
         "technical"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "star-method",
+  "narrative": "reveal",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -271,7 +271,7 @@
   },
   "author": "OPF Example Generator",
   "takeaway": "Teach builders how to design observable agent workflows",
-  "duration": 15,
+  "duration": 16,
   "tags": [
     "presentation-types",
     "conference-talk",
@@ -321,57 +321,88 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "star-method": {
-          "name": "STAR Method",
-          "summary": "Results-focused framework that demonstrates impact through concrete examples.",
-          "description": "A results-focused framework that demonstrates impact through a concrete example: the Situation, the Task you were responsible for, the Actions you took, and the measurable Result. The tone is evidential: every claim is grounded in a specific, verifiable outcome. Best for project reviews, portfolio presentations, and achievement showcases; typical decks run 4-8 slides (case study, customer success story, project retrospective).",
+        "reveal": {
+          "name": "Reveal",
+          "summary": "Insight-driven keynote arc inspired by Amy Cuddy's 2012 talk on body language: connect through personal story, ground in research, illustrate with anecdote, summarize, break stereotypes, advise, demonstrate authenticity, close with impact. For talks that aim to change how the audience sees something they thought they understood.",
           "audienceFit": [
-            "hr-and-talent",
-            "performance-reviewers",
-            "award-committees"
+            "general-audience",
+            "academics",
+            "professionals"
           ],
           "duration": {
-            "min": 5,
-            "max": 15
+            "min": 15,
+            "max": 25
           },
           "tags": [
-            "case-study",
-            "proof",
-            "results",
-            "retrospective"
+            "keynote",
+            "research",
+            "talk",
+            "inspirational"
           ],
           "beats": [
             {
-              "id": "situation",
-              "name": "Situation",
-              "description": "Describe the context and background of the scenario.",
-              "instructions": "Describe the relevant context and constraints.",
+              "id": "personal-story",
+              "name": "Personal Story",
+              "description": "Open with a personal experience that establishes why the topic matters to you. Specificity earns intimacy; intimacy earns the audience's permission to be moved.",
+              "instructions": "Share personal experiences to connect with the audience",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "task",
-              "name": "Task",
-              "description": "Explain your specific role and responsibilities in this situation.",
-              "instructions": "Explain the responsibility or target outcome.",
-              "type": "list",
-              "layout": "two-column"
+              "id": "research-exposition",
+              "name": "Research Exposition",
+              "description": "Lay out the scientific or empirical data that backs the premise. Be rigorous but not academic — the audience needs to understand the evidence well enough to defend it later.",
+              "instructions": "Unravel scientific data backing the premise",
+              "type": "text",
+              "layout": "text"
             },
             {
-              "id": "action",
-              "name": "Action",
-              "description": "Detail the specific steps you took to address the challenge.",
-              "instructions": "Detail the actions taken and choices made.",
-              "type": "timeline",
-              "layout": "timeline"
+              "id": "real-life-anecdote",
+              "name": "Real-Life Anecdote",
+              "description": "Illustrate the research with a story from the field. Make the abstract finding feel like something that happens to people the audience could imagine being.",
+              "instructions": "Illustrate with stories to make the point relatable",
+              "type": "text",
+              "layout": "text"
             },
             {
-              "id": "result",
-              "name": "Result",
-              "description": "Share the measurable outcomes and impact of your actions.",
-              "instructions": "Show measurable impact and proof.",
-              "type": "metric",
-              "layout": "metrics"
+              "id": "critical-insights",
+              "name": "Critical Insights",
+              "description": "Summarize the two or three findings the audience must walk away with. Distill them into language a non-specialist could repeat without distortion.",
+              "instructions": "Summarize key points",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "break-stereotypes",
+              "name": "Break Stereotypes",
+              "description": "Question redundant norms or beliefs the research undermines. Be specific about what's being challenged so the audience knows what to update.",
+              "instructions": "Question redundant norms and belief systems",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "empowering-advice",
+              "name": "Empowering Advice",
+              "description": "Translate the insights into a small, actionable practice. The advice should be doable today, not only next quarter — the goal is movement, not aspiration.",
+              "instructions": "Motivational message to act upon",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "authenticity",
+              "name": "Authenticity",
+              "description": "Speak honestly about your own struggle with the topic. Vulnerability, used with restraint, is what turns research into a felt truth.",
+              "instructions": "Honest and real communication to demonstrate authenticity",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "close-with-impact",
+              "name": "Close With Impact",
+              "description": "End on a motivational high — the line, image, or invitation you want to follow the audience out of the room. Close the talk where it began, transformed.",
+              "layout": "closing",
+              "instructions": "End on a motivational high",
+              "type": "text"
             }
           ]
         }

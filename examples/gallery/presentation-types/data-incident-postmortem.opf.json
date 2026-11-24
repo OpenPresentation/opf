@@ -12,7 +12,7 @@
       "technicalFluency": "medium",
       "decisionPower": "advisory",
       "recommendedNarratives": [
-        "strategic-advisory"
+        "situation-complication-resolution"
       ],
       "recommendedTones": [
         "casual"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "strategic-advisory",
+  "narrative": "situation-complication-resolution",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -321,86 +321,57 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "strategic-advisory": {
-          "name": "Strategic Advisory",
-          "summary": "Consulting-style advisory deck applying Minto's pyramid: title, situation/complication/question, the answer in one sentence, and three argued points with a process. Use when the audience expects a recommendation and the case for it, in that order.",
+        "situation-complication-resolution": {
+          "name": "Situation-Complication-Resolution",
+          "summary": "McKinsey-style structure that builds tension before delivering insights.",
+          "description": "A McKinsey-style structure that builds tension before delivering the insight. Establish the context everyone already agrees on, introduce what has changed or what challenge has emerged, name the key question that change raises, then deliver the recommendation that resolves it. The tone is logical: a tight causal chain from context to recommendation. Best for strategy presentations, consulting decks, and analytical reports; typical decks run 4-10 slides (management consulting report, strategic recommendation, board update).",
           "audienceFit": [
-            "executives",
-            "boards",
-            "leadership-teams",
-            "clients"
+            "senior-leadership",
+            "consultants",
+            "strategy-teams"
           ],
           "duration": {
-            "min": 15,
-            "max": 45
+            "min": 5,
+            "max": 20
           },
           "tags": [
-            "consulting",
-            "advisory",
             "strategy",
-            "minto"
+            "consulting",
+            "minto",
+            "recommendation"
           ],
           "beats": [
             {
-              "id": "title",
-              "name": "Title",
-              "description": "Open with a one-line summary statement that captures the recommendation, not the topic. The title slide is the headline of the entire engagement — make it specific enough that someone reading only this slide already understands the position.",
-              "layout": "cover",
-              "instructions": "Brief summary sentence",
-              "type": "text"
+              "id": "situation",
+              "name": "Situation",
+              "description": "Set the scene with relevant background and context everyone agrees on.",
+              "instructions": "State the shared context the audience already accepts.",
+              "type": "list",
+              "layout": "list"
             },
             {
-              "id": "scq",
-              "name": "Situation, Complication, Question",
-              "description": "Frame the engagement on a single slide: the relevant status quo, what needs to change, and the question that needs to be resolved. This is the SCQ shorthand — context, tension, prompt. Don't yet answer."
+              "id": "complication",
+              "name": "Complication",
+              "description": "Introduce what has changed or what challenge has emerged.",
+              "instructions": "Introduce the change, risk, or tension.",
+              "type": "text",
+              "layout": "two-column"
+            },
+            {
+              "id": "question",
+              "name": "Question",
+              "description": "Articulate the key question that the complication raises.",
+              "instructions": "Frame the decision question raised by the complication.",
+              "type": "text",
+              "layout": "statement"
             },
             {
               "id": "answer",
               "name": "Answer",
-              "description": "Deliver the recommendation in a single sentence. No arguments yet, no caveats. The answer is the apex of the pyramid; the rest of the deck supports it.",
-              "instructions": "A solution in one sentence, no arguments yet",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "arguments",
-              "name": "Arguments",
-              "description": "Preview the three top-level arguments that defend the answer. One slide naming all three so the audience knows where the deck is going. Each argument should be a complete claim, not a topic.",
-              "instructions": "Support the solution",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "argument-1",
-              "name": "Argument 1",
-              "description": "Develop the first argument with supporting data, examples, and reasoning. Lead with the claim, then the evidence — Minto-style. The slide should stand alone if pulled out.",
-              "instructions": "First key point",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "argument-2",
-              "name": "Argument 2",
-              "description": "Develop the second argument the same way. Vary the type of evidence — quantitative, qualitative, comparative — so the audience hears the case from multiple angles.",
-              "instructions": "Second key point",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "argument-3",
-              "name": "Argument 3",
-              "description": "Develop the third argument and walk through the supporting process or methodology. This is often where the 'how' lives — the implementation insight that makes the recommendation feel actionable.",
-              "instructions": "Third key point with a process",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "summary",
-              "name": "Summary",
-              "description": "Recap the answer and arguments in a single slide and point to additional resources. Close with the explicit next step you want the audience to take.",
-              "layout": "closing",
-              "instructions": "Recap the answer, provide additional resources",
-              "type": "text"
+              "description": "Deliver your recommendation or insight that resolves the question.",
+              "instructions": "Deliver the recommendation that resolves the question.",
+              "type": "timeline",
+              "layout": "timeline"
             }
           ]
         }

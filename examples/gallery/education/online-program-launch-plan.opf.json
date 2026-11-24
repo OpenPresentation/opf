@@ -12,7 +12,7 @@
       "technicalFluency": "medium",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "change-story"
+        "capacity-planning"
       ],
       "recommendedTones": [
         "inspirational"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "change-story",
+  "narrative": "capacity-planning",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -284,7 +284,7 @@
   },
   "author": "OPF Example Generator",
   "takeaway": "Launch a flexible certificate program for working adults",
-  "duration": 15,
+  "duration": 20,
   "tags": [
     "education",
     "higher-education",
@@ -334,65 +334,89 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "change-story": {
-          "name": "Change Story",
-          "summary": "A change management narrative that addresses the emotional and rational objections employees face when asked to change.",
-          "description": "A change management narrative that addresses the emotional and rational objections people face when asked to change. Establish the burning platform, explain why the timing is urgent, show the chosen path and the alternatives it was chosen over, make the stakes concrete for the organization, the team, and individuals, and close on a shared vision in which the audience is the protagonist. The tone is motivational and empathetic: it acknowledges that change is hard while building conviction. Best for organizational change, transformation announcements, restructuring communications, and all-hands meetings; typical decks run 8-15 slides.",
+        "capacity-planning": {
+          "name": "Capacity Planning",
+          "summary": "Workforce and operational capacity-planning arc: kickoff, urgency, current state, projection, tactics, implementation, revision, conclusion. For decks where leadership must decide whether the organization has enough resources to meet upcoming demand.",
           "audienceFit": [
-            "employees",
-            "team-leads",
-            "cross-functional-teams"
+            "leadership",
+            "operations",
+            "hr-partners",
+            "finance"
           ],
           "duration": {
-            "min": 15,
+            "min": 20,
             "max": 45
           },
           "tags": [
-            "change-management",
-            "transformation",
-            "internal",
-            "alignment"
+            "workforce",
+            "operations",
+            "planning",
+            "resource-management"
           ],
           "beats": [
             {
-              "id": "why-change",
-              "name": "Why Change",
-              "description": "Acknowledge the current state and the external or internal forces requiring change. Don't skip the burning platform.",
-              "instructions": "Explain why the current state cannot continue.",
+              "id": "kickoff",
+              "name": "Kickoff",
+              "description": "Introduce what the planning exercise covers and the decision you need from the audience. Frame the time horizon and the resources in scope so the rest of the deck stays bounded.",
+              "layout": "cover",
+              "instructions": "Introduce the topic",
+              "type": "text"
+            },
+            {
+              "id": "urgency",
+              "name": "Urgency",
+              "description": "Show why this is the right moment to plan capacity. Pipeline shifts, hiring freezes, operational stress signals. Urgency turns capacity from an annual ritual into a decision the audience leans into.",
+              "instructions": "Show needs",
               "type": "text",
-              "layout": "two-column"
+              "layout": "text"
             },
             {
-              "id": "why-now",
-              "name": "Why Now",
-              "description": "Explain the urgency. What changes if we wait? What window is closing?",
-              "instructions": "Make the timing urgent and concrete.",
-              "type": "metric",
-              "layout": "metrics"
-            },
-            {
-              "id": "why-this-way",
-              "name": "Why This Way",
-              "description": "Show that alternatives were considered. Build trust by demonstrating thoughtful decision-making.",
-              "instructions": "Describe the proposed path and why it fits.",
-              "type": "timeline",
-              "layout": "timeline"
-            },
-            {
-              "id": "whats-at-stake",
-              "name": "What's at Stake",
-              "description": "Make consequences concrete for the organization, the team, and individuals. Avoid abstract language.",
-              "instructions": "Show the risks and rewards attached to the choice.",
+              "id": "situation",
+              "name": "Situation",
+              "description": "Highlight the current resource picture: people, tools, infrastructure, vendor capacity. Show utilization, not just headcount. The audience should know where slack and stress live today.",
+              "instructions": "Highlight current resources",
               "type": "text",
-              "layout": "two-column"
+              "layout": "text"
             },
             {
-              "id": "how-we-win-together",
-              "name": "How We Win Together",
-              "description": "Paint a shared vision of success. Make the audience the protagonist of the new story.",
-              "instructions": "Close with shared ownership and first commitments.",
+              "id": "projection",
+              "name": "Projection",
+              "description": "Predict future demand under your base case and a sensitivity case. Tie demand to specific drivers — pipeline, launches, seasonality — so the audience can challenge the assumptions, not just the totals.",
+              "instructions": "Predict future demands",
               "type": "text",
-              "layout": "list"
+              "layout": "text"
+            },
+            {
+              "id": "tactics",
+              "name": "Tactics",
+              "description": "Suggest the strategies for closing any gap: hiring, automation, outsourcing, prioritization. Each tactic should map to a specific demand driver and a defensible cost.",
+              "instructions": "Suggest coping strategies",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "implementation",
+              "name": "Implementation",
+              "description": "Discuss how the plan gets deployed. Sequencing, owners, dependencies, lead times. Capacity decisions slip the most when the rollout isn't planned with the same rigor as the sizing.",
+              "instructions": "Discuss deployment plans",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "revision",
+              "name": "Revision",
+              "description": "Define the leading indicators that would trigger a re-plan, and the cadence of review. Capacity plans age fast; show the audience how the plan stays alive.",
+              "instructions": "Evaluate and adjust",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Wrap up with the specific recommendations and the decisions you need today. End with the next checkpoint and what evidence will be on the table at it.",
+              "layout": "closing",
+              "instructions": "Wrap-up & recommendations",
+              "type": "text"
             }
           ]
         }

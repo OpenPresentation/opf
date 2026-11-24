@@ -6,7 +6,7 @@
   ],
   "purpose": "educate",
   "tone": "technical",
-  "narrative": "performance-improvement-plan",
+  "narrative": "operational-review",
   "design": {
     "theme": "bold",
     "colorScheme": "deep-purple",
@@ -98,88 +98,89 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "performance-improvement-plan": {
-          "name": "Performance Improvement Plan",
-          "summary": "Structured PIP arc that helps a struggling employee see expectations clearly, understand the gap, and walk into a credible improvement path. Designed to be respectful, specific, and outcome-focused — not punitive.",
+        "operational-review": {
+          "name": "Operational Review",
+          "summary": "Logical management arc for reviewing how an operation is running: the situation, the complication that threatens it, the resolution, and the roadmap and action plan that deliver it. Built for operations, program and service reviews where the audience needs a decision and a plan, not a story.",
           "audienceFit": [
-            "employee",
-            "manager",
-            "hr-partner"
+            "leadership",
+            "executives",
+            "managers",
+            "cross-functional-partners"
           ],
           "duration": {
-            "min": 30,
-            "max": 60
+            "min": 20,
+            "max": 45
           },
           "tags": [
-            "workforce",
-            "hr",
-            "performance",
-            "manager"
+            "management",
+            "operations",
+            "review",
+            "internal"
           ],
           "beats": [
             {
-              "id": "introduction",
-              "name": "Introduction",
-              "description": "Begin respectfully and set a constructive tone. Be clear about what this conversation is and isn't. The opening shouldn't catastrophize or sugarcoat — clarity is kinder than either.",
-              "instructions": "Begin respectfully and positively",
+              "id": "headline",
+              "name": "Headline",
+              "description": "Open with the operation under review and the one-sentence conclusion of the whole review, so the audience knows where it is going before the detail starts.",
+              "instructions": "State the conclusion first",
               "type": "text",
-              "layout": "text"
+              "layout": "cover"
             },
             {
-              "id": "set-expectations",
-              "name": "Set Expectations",
-              "description": "Detail the level of performance expected in the role. Specific behaviors, deliverables, and standards. Expectations the employee can't quote back are expectations they can't meet.",
-              "instructions": "Detail desired performance",
-              "type": "text",
-              "layout": "text"
+              "id": "situation",
+              "name": "Situation",
+              "description": "Describe how the operation runs today with the few metrics that define it: volume, quality, cost, time. Stick to facts the room will agree with.",
+              "instructions": "Establish the facts",
+              "type": "metric",
+              "layout": "metrics"
             },
             {
-              "id": "identify-problems",
-              "name": "Identify Problems",
-              "description": "Name the gap between expected and observed performance. Use specific examples and dates rather than impressions. Avoid characterizing the person; focus on the work product and the impact.",
-              "instructions": "Highlight struggles and weaknesses",
-              "type": "text",
-              "layout": "text"
+              "id": "complication",
+              "name": "Complication",
+              "description": "Name what has changed or is at risk: the trend, constraint or failure that makes the current way of running unsustainable. Quantify the cost of doing nothing.",
+              "instructions": "Show what is at stake",
+              "type": "chart",
+              "layout": "chart"
             },
             {
-              "id": "possible-solutions",
-              "name": "Possible Solutions",
-              "description": "Suggest improvement strategies tailored to the gaps named above. Behavior changes, structural changes, support structures. Frame them as paths the employee can choose, not orders to follow.",
-              "instructions": "Suggest improvement strategies",
+              "id": "root-causes",
+              "name": "Root Causes",
+              "description": "Explain why the complication is happening. Separate causes the team controls from those it does not, and point to the evidence for each.",
+              "instructions": "Diagnose the cause",
               "type": "text",
-              "layout": "text"
+              "layout": "two-column"
             },
             {
-              "id": "offer-resources",
-              "name": "Offer Resources",
-              "description": "Make explicit what tools, coaching, training, or peer support is available. Resources demonstrate that the organization is investing in the outcome, not setting the employee up to fail.",
-              "instructions": "Propose help and tools",
+              "id": "resolution",
+              "name": "Resolution",
+              "description": "Recommend the change that resolves the complication, with the expected effect on the metrics from the situation slide. One recommendation, stated plainly.",
+              "instructions": "Recommend the fix",
               "type": "text",
-              "layout": "text"
+              "layout": "statement"
             },
             {
-              "id": "motivate-change",
-              "name": "Motivate Change",
-              "description": "Connect improvement to what the employee values: their growth, their team, their career. Inspire action without minimizing the seriousness of the situation.",
-              "instructions": "Inspire improvement action",
-              "type": "text",
-              "layout": "text"
+              "id": "roadmap",
+              "name": "Roadmap",
+              "description": "Lay out the phases that deliver the resolution, with what each phase changes and the milestone that marks it done.",
+              "instructions": "Sequence the change",
+              "type": "timeline",
+              "layout": "timeline"
             },
             {
-              "id": "follow-up",
-              "name": "Follow Up",
-              "description": "Schedule the check-ins. Frequency, format, criteria for progress. Predictable follow-up turns a PIP from a threat into a plan.",
-              "instructions": "Schedule progress check-ins",
+              "id": "action-plan",
+              "name": "Action Plan",
+              "description": "List the immediate actions with an owner and a due date for each, plus the risks to watch. This is the slide people will screenshot.",
+              "instructions": "Assign owners and dates",
               "type": "text",
-              "layout": "text"
+              "layout": "list"
             },
             {
-              "id": "conclusion",
-              "name": "Conclusion",
-              "description": "Close with confidence in the path forward and a clear restatement of what success looks like. End the meeting having both raised the bar and reaffirmed the relationship.",
-              "layout": "closing",
-              "instructions": "Encourage and remind success",
-              "type": "text"
+              "id": "decision",
+              "name": "Decision",
+              "description": "Close with the decision or support you need from this audience today, and what happens next once you have it.",
+              "instructions": "Ask for the decision",
+              "type": "text",
+              "layout": "closing"
             }
           ]
         }

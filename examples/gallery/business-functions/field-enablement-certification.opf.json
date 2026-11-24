@@ -12,7 +12,7 @@
       "technicalFluency": "medium",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "vision-roadmap"
+        "underdog-victory"
       ],
       "recommendedTones": [
         "formal"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "vision-roadmap",
+  "narrative": "underdog-victory",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -284,7 +284,7 @@
     "Certify sellers on the new value narrative before launch",
     "The next decision and owner should be visible on the final slide."
   ],
-  "duration": 28,
+  "duration": 20,
   "tags": [
     "business-functions",
     "training-and-enablement",
@@ -328,66 +328,88 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "vision-roadmap": {
-          "name": "Vision to Roadmap",
-          "summary": "Connects a compelling long-term vision to near-term executable plans, bridging aspiration and action.",
-          "description": "Connects a compelling long-term vision to near-term executable plans, bridging aspiration and action. Open with a specific three-to-five-year North Star, honestly diagnose the gap between today and that vision, organize the strategy into two to four named pillars, show the phased roadmap with milestones and dependencies, and end with concrete, assigned first steps for the next 30-90 days. The tone is inspirational and strategic: it creates shared direction and commitment to a plan. Best for strategic planning, annual kickoffs, product strategy, and OKR launches; typical decks run 8-20 slides.",
+        "underdog-victory": {
+          "name": "Underdog Victory",
+          "summary": "Story arc of someone or something overlooked who triumphs in the end. Useful for founder narratives, brand stories, and team-building decks where the lesson is about resilience and unexpected wins.",
           "audienceFit": [
-            "leadership-teams",
-            "board",
-            "product-and-strategy-teams",
-            "all-hands"
+            "general-audience",
+            "internal-teams",
+            "candidates"
           ],
           "duration": {
-            "min": 15,
-            "max": 45
+            "min": 5,
+            "max": 20
           },
           "tags": [
-            "strategy",
-            "roadmap",
-            "planning",
-            "vision"
+            "storytelling",
+            "inspirational",
+            "founder",
+            "team"
           ],
           "beats": [
             {
-              "id": "vision",
-              "name": "Vision",
-              "description": "State the 3-5 year North Star. It should be specific, memorable, and directional rather than generic.",
-              "instructions": "Paint the future state clearly.",
+              "id": "origin",
+              "name": "Origin",
+              "description": "Establish the opening scene: who the underdog is and the world that overlooked them. Specific details make the rest of the journey feel real.",
+              "instructions": "Establish opening scene",
               "type": "text",
-              "layout": "cover"
+              "layout": "text"
             },
             {
-              "id": "current-state-gap",
-              "name": "Current State Gap",
-              "description": "Honestly assess where you are today versus the vision. The gap justifies the plan.",
-              "instructions": "Define the gap between today and the vision.",
+              "id": "struggles",
+              "name": "Struggles",
+              "description": "Highlight the early setbacks. What didn't work, who said no, where the path closed up. The audience needs to feel the doubt before they can feel the win.",
+              "instructions": "Highlight initial setbacks",
               "type": "text",
-              "layout": "two-column"
+              "layout": "text"
             },
             {
-              "id": "strategic-pillars",
-              "name": "Strategic Pillars",
-              "description": "Organize the strategy into 2-4 named priority themes. Each pillar should be independently compelling.",
-              "instructions": "Name the strategic pillars that close the gap.",
+              "id": "determination",
+              "name": "Determination",
+              "description": "Showcase the enduring passion that kept the underdog going. What they refused to give up on, and why. Determination, in this beat, is the only resource the underdog has.",
+              "instructions": "Showcase enduring passion",
               "type": "text",
-              "layout": "pillars"
+              "layout": "text"
             },
             {
-              "id": "roadmap",
-              "name": "Roadmap",
-              "description": "Show the phased execution plan with timeframes, milestones, and dependencies. Gantt or swim lane formats work well.",
-              "instructions": "Sequence the initiatives over time.",
-              "type": "timeline",
-              "layout": "timeline"
+              "id": "crisis",
+              "name": "Crisis",
+              "description": "Identify the lowest point of the journey. The moment the dream nearly ended. Don't soften — the contrast with the triumph ahead depends on the depth of this slide.",
+              "instructions": "Identify lowest point",
+              "type": "text",
+              "layout": "text"
             },
             {
-              "id": "first-steps",
-              "name": "First Steps",
-              "description": "Close with concrete, assigned actions for the next 30-90 days. Remove the gap between inspiration and execution.",
-              "instructions": "Identify the immediate moves that start execution.",
+              "id": "resolve",
+              "name": "Resolve",
+              "description": "Articulate the choice the underdog made to keep going. The strong will, the small bet, the borrowed faith. Resolve is where the protagonist becomes someone the audience roots for.",
+              "instructions": "Articulate strong will",
               "type": "text",
-              "layout": "list"
+              "layout": "text"
+            },
+            {
+              "id": "breakthrough",
+              "name": "Breakthrough",
+              "description": "Show the reward of perseverance: the customer who said yes, the door that opened, the fortune that turned. The breakthrough should feel earned, not granted.",
+              "instructions": "Reward of perseverance",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "triumph",
+              "name": "Triumph",
+              "description": "Reveal the ultimate success. Concrete outcomes, named milestones. The triumph is the audience's emotional payoff — let it land.",
+              "instructions": "Reveal ultimate success",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "legacy",
+              "name": "Legacy",
+              "description": "Share the lasting impact. What the underdog's victory makes possible for those who come after. The legacy beat is what turns a story into a lesson.",
+              "layout": "closing",
+              "instructions": "Share long-lasting impact",
+              "type": "text"
             }
           ]
         }

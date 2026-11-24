@@ -17,6 +17,7 @@
       "packages/gallery/test/**",
       "packages/integration/test/**",
       "scripts/**",
+      "conformance/**/*.mjs",
       "!packages/javascript/src/generated",
       "!packages/render",
       "!packages/pptx",

@@ -12,7 +12,7 @@
       "technicalFluency": "high",
       "decisionPower": "informational",
       "recommendedNarratives": [
-        "classic-story"
+        "challenge-resolution"
       ],
       "recommendedTones": [
         "persuasive"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "classic-story",
+  "narrative": "challenge-resolution",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -354,78 +354,80 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "classic-story": {
-          "name": "Classic Story",
-          "summary": "Movie-style narrative arc applied to any topic: open the scene, introduce the villain, raise the stakes, send in the hero, deliver the plan, and close with hope. A versatile go-to when you need to make information feel like a story.",
+        "challenge-resolution": {
+          "name": "Challenge → Resolution",
+          "summary": "Identify a current business challenge, trace its origins, and recommend an actionable resolution. Useful for management consulting, internal strategy memos, and any deck where the audience needs a clear path from problem to plan.",
           "audienceFit": [
-            "general-audience",
-            "customers",
+            "executives",
+            "managers",
+            "stakeholders",
             "internal-teams"
           ],
           "duration": {
-            "min": 5,
+            "min": 10,
             "max": 30
           },
           "tags": [
-            "storytelling",
-            "general",
-            "engagement"
+            "management",
+            "strategy",
+            "consulting",
+            "advisory"
           ],
           "beats": [
             {
-              "id": "opening",
-              "name": "Opening",
-              "description": "Capture attention with a vivid moment, image, or question that sets the world of the story. The audience should immediately know what kind of room they're in. Avoid agendas — the opening is the first scene, not a preamble.",
+              "id": "hook",
+              "name": "Hook",
+              "description": "Open with a specific, visible signal of the challenge — a metric heading the wrong way, a customer story, a competitive event. The hook should make the audience nod that yes, this matters.",
               "instructions": "Capture audience attention",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "context",
-              "name": "Context",
-              "description": "Establish what's normal in this world before anything goes wrong. Just enough background for the audience to feel the stakes when the villain shows up. Keep it tight; backstory is fuel, not the engine.",
-              "instructions": "Give background & importance",
+              "id": "dilemma",
+              "name": "Dilemma",
+              "description": "State the challenge plainly. What is failing, who is feeling it, and why has it now risen to a level that demands a decision? The dilemma must feel real, not academic.",
+              "instructions": "Present the problem",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "villain",
-              "name": "Villain",
-              "description": "Introduce the antagonist — a problem, a competitor, a market force, an inertia. Give it a face and a name where you can. The clearer the villain, the more the audience cares about how the story turns out.",
-              "instructions": "Introduce problem",
+              "id": "backdrop",
+              "name": "Backdrop",
+              "description": "Provide the context behind the dilemma: how it formed, what's been tried, what constraints exist. Just enough history that the audience trusts your diagnosis without drowning in detail.",
+              "instructions": "Provide context",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "despair",
-              "name": "Despair",
-              "description": "Show what's at risk if the villain wins. Emphasize the human or business cost of inaction. Don't rush past this beat — the discomfort here is what makes the resolution land.",
-              "instructions": "Emphasize negative impact",
+              "id": "remedy",
+              "name": "Remedy",
+              "description": "Propose the resolution. Lead with the recommendation, then sketch the approach. Be opinionated — vague remedies invite vague responses.",
+              "instructions": "Propose a solution",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "hero",
-              "name": "Hero",
-              "description": "Reveal the hero of the story. Often this is the audience themselves, your team, or your product. Frame the hero by what they uniquely bring to the fight, not by their résumé.",
-              "instructions": "Present solution",
+              "id": "evidence",
+              "name": "Evidence",
+              "description": "Demonstrate why the remedy will work. Comparable cases, supporting data, or pilot results. Choose evidence that addresses the audience's most likely objection, not the one easiest to answer.",
+              "instructions": "Demonstrate success",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "plan",
-              "name": "Plan",
-              "description": "Walk through how the hero defeats the villain. Concrete, sequential, credible. Generic plans signal weak heroes; specific plans earn belief that the ending you're promising is reachable.",
-              "instructions": "Detail implementation",
+              "id": "motivate",
+              "name": "Motivate",
+              "description": "Make the case for acting now. Quantify the cost of delay and the upside of decisive action. Help the audience picture the room a quarter from now if they say yes.",
+              "instructions": "Encourage action",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "closing",
-              "name": "Closing",
-              "description": "End with the resolution and the lesson. Show what the world looks like after the villain loses, and leave the audience with the feeling — and the line — they'll repeat afterwards.",
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Recap the challenge, the remedy, and the specific decision you need from the audience. End with a clear ask, not a summary slide.",
               "layout": "closing",
-              "instructions": "Inspire & conclude",
+              "instructions": "Recap and end powerfully",
               "type": "text"
             }
           ]

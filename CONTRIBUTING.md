@@ -52,7 +52,7 @@ Node 22, 24 and 26 and on Linux, Windows and macOS (pull requests run Linux on N
 
 ### Format and schema changes
 
-Changes to `spec/schemas/*.schema.json` or the shape of catalog records affect every consumer of the format. **Open an issue first** using the "Schema/catalog change proposal" issue template before sending a pull request, so the change can be discussed. Note whether the proposal is breaking (removes or renames fields/ids that existing documents may reference) or additive.
+Changes to `spec/schemas/*.schema.json` or the shape of catalog records affect every consumer of the format. **Open an issue first** using the "Schema/catalog change proposal" issue template before sending a pull request, so the change can be discussed. Note whether the proposal is breaking (removes or renames fields/ids that existing documents may reference) or additive. Who decides and how is written down in the [governance proposal](./docs/governance.md#how-the-spec-changes).
 
 When a schema or catalog change is accepted:
 

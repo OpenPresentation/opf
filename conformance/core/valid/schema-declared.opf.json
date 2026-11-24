@@ -1,0 +1,5 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Declared schema",
+  "slides": [{ "title": "A deck that names its schema line" }]
+}

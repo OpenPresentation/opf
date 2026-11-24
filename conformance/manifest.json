@@ -1,0 +1,408 @@
+{
+  "$comment": "The OPF conformance suite (docs/conformance.md). Paths are relative to this file. A case lists the levels it counts for and what a conforming tool does with it. `errorAt` is the JSON Pointer of the expected error: a tool that reports error paths should report one at or inside it (informational, never a failure). `basis` names the schema keyword or the documented rule the expectation rests on. Do not change an expectation without a change to the spec it rests on.",
+  "suite": "opf-conformance",
+  "format": 1,
+  "levels": [
+    {
+      "id": "reader",
+      "name": "Core Reader",
+      "status": "available",
+      "requires": [],
+      "summary": "Accepts every valid core document and rejects every invalid one: JSON syntax, schema validity, required fields, ids, document-internal references and the `extensions` rules. A reference to a catalog record the tool does not know is not an error."
+    },
+    {
+      "id": "writer",
+      "name": "Core Writer",
+      "status": "available",
+      "requires": ["reader"],
+      "summary": "Reads each valid document and writes it back as a valid document that keeps every `extensions` object and every id at the same place. Whether the rest of the document survives unchanged is reported, not required."
+    },
+    {
+      "id": "renderer",
+      "name": "Renderer",
+      "status": "planned",
+      "requires": ["reader"],
+      "summary": "Draws each slide of the core and example documents: slide count, hidden slides, slide size, and reference images compared with a stated tolerance. Will reuse the renderer's golden corpus (packages/render/test/golden/)."
+    },
+    {
+      "id": "converter",
+      "name": "Converter",
+      "status": "planned",
+      "requires": ["reader", "writer"],
+      "summary": "Exports to PPTX and imports from it: slide count, titles, text, notes, hidden slides and `extensions` survive a round trip. Will reuse the PPTX package's conformance and round-trip tests (packages/pptx/test/)."
+    }
+  ],
+  "groups": [
+    {
+      "directory": "../examples/technical",
+      "suffix": ".opf.json",
+      "idPrefix": "examples.technical.",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "The technical example decks, which CI validates on every change.",
+      "basis": "examples/technical/README.md"
+    }
+  ],
+  "cases": [
+    {
+      "id": "core.valid.title-only",
+      "file": "core/valid/title-only.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "The smallest document: one slide with a title.",
+      "basis": "opf.schema.json#/required (only `slides` is required)"
+    },
+    {
+      "id": "core.valid.schema-declared",
+      "file": "core/valid/schema-declared.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "`$schema` names the schema line.",
+      "basis": "opf.schema.json#/properties/$schema"
+    },
+    {
+      "id": "core.valid.unique-ids",
+      "file": "core/valid/unique-ids.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Slide and payload ids, nested groups, and a slide with no id.",
+      "basis": "opf.schema.json#/$defs/ContentPayload/properties/id (unique among slide and payload ids)"
+    },
+    {
+      "id": "core.valid.group-nesting-at-limit",
+      "file": "core/valid/group-nesting-at-limit.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Content groups nested 32 levels deep, the limit.",
+      "basis": "opf.schema.json#/$defs/ContentPayload (groups may nest up to 32 levels)"
+    },
+    {
+      "id": "core.valid.extensions-everywhere",
+      "file": "core/valid/extensions-everywhere.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Namespaced `extensions` at document, slide, payload and nested group scope.",
+      "basis": "opf.schema.json#/properties/extensions (preserved across read/write round trips)"
+    },
+    {
+      "id": "core.valid.extensions-opaque-content",
+      "file": "core/valid/extensions-opaque-content.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Extension data that looks like OPF fields (`slides`, `$schema`, an id equal to a slide id) is opaque: it is not validated and its ids do not collide.",
+      "basis": "opf.schema.json#/properties/extensions (ignored by the engine)"
+    },
+    {
+      "id": "core.valid.extensions-empty",
+      "file": "core/valid/extensions-empty.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Empty `extensions` objects at every scope.",
+      "basis": "opf.schema.json#/properties/extensions"
+    },
+    {
+      "id": "core.valid.unicode-text",
+      "file": "core/valid/unicode-text.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Right-to-left, CJK, combining marks, emoji and JSON escapes.",
+      "basis": "RFC 8259 (JSON text is Unicode)"
+    },
+    {
+      "id": "core.valid.references-cited",
+      "file": "core/valid/references-cited.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A text run cites a reference that exists.",
+      "basis": "opf.schema.json#/properties/references"
+    },
+    {
+      "id": "core.valid.dataset-referenced",
+      "file": "core/valid/dataset-referenced.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A chart plots a top-level dataset by id.",
+      "basis": "opf.schema.json#/$defs/DatasetRef"
+    },
+    {
+      "id": "core.valid.asset-referenced",
+      "file": "core/valid/asset-referenced.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "An image names an entry of the asset registry with `asset:<id>`.",
+      "basis": "opf.schema.json#/properties/assets"
+    },
+    {
+      "id": "core.valid.unknown-catalog-record",
+      "file": "core/valid/unknown-catalog-record.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A layout id the reader may not know. It resolves nowhere, which is a warning, not an error.",
+      "basis": "docs/validate.md, rule opf/unresolved-reference (warning)"
+    },
+    {
+      "id": "core.valid.hidden-slide",
+      "file": "core/valid/hidden-slide.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A hidden slide.",
+      "basis": "opf.schema.json#/$defs/Slide/properties/hidden"
+    },
+    {
+      "id": "core.invalid.json-trailing-comma",
+      "file": "core/invalid/json-trailing-comma.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false },
+      "description": "A trailing comma.",
+      "basis": "RFC 8259; docs/validate.md, rule opf/json-syntax"
+    },
+    {
+      "id": "core.invalid.json-comment",
+      "file": "core/invalid/json-comment.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false },
+      "description": "A comment.",
+      "basis": "RFC 8259; docs/validate.md, rule opf/json-syntax"
+    },
+    {
+      "id": "core.invalid.json-single-quotes",
+      "file": "core/invalid/json-single-quotes.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false },
+      "description": "Single-quoted strings.",
+      "basis": "RFC 8259; docs/validate.md, rule opf/json-syntax"
+    },
+    {
+      "id": "core.invalid.json-duplicate-key",
+      "file": "core/invalid/json-duplicate-key.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides" },
+      "description": "An object repeats the key `slides`.",
+      "basis": "RFC 8259 section 4; docs/validate.md, rule opf/duplicate-key"
+    },
+    {
+      "id": "core.invalid.root-not-object",
+      "file": "core/invalid/root-not-object.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "" },
+      "description": "The document is an array, not an object.",
+      "basis": "opf.schema.json#/type"
+    },
+    {
+      "id": "core.invalid.missing-slides",
+      "file": "core/invalid/missing-slides.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "" },
+      "description": "No `slides`.",
+      "basis": "opf.schema.json#/required"
+    },
+    {
+      "id": "core.invalid.empty-slides",
+      "file": "core/invalid/empty-slides.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides" },
+      "description": "`slides` is empty.",
+      "basis": "opf.schema.json#/properties/slides/minItems"
+    },
+    {
+      "id": "core.invalid.slides-not-array",
+      "file": "core/invalid/slides-not-array.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides" },
+      "description": "`slides` is an object.",
+      "basis": "opf.schema.json#/properties/slides/type"
+    },
+    {
+      "id": "core.invalid.slide-not-object",
+      "file": "core/invalid/slide-not-object.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0" },
+      "description": "A slide is a string.",
+      "basis": "opf.schema.json#/$defs/Slide/type"
+    },
+    {
+      "id": "core.invalid.unknown-root-property",
+      "file": "core/invalid/unknown-root-property.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/theme" },
+      "description": "A document field the spec does not define.",
+      "basis": "opf.schema.json#/additionalProperties"
+    },
+    {
+      "id": "core.invalid.unknown-slide-property",
+      "file": "core/invalid/unknown-slide-property.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/titel" },
+      "description": "A misspelled slide field.",
+      "basis": "opf.schema.json#/$defs/Slide/additionalProperties"
+    },
+    {
+      "id": "core.invalid.unknown-payload-property",
+      "file": "core/invalid/unknown-payload-property.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/blocks/0/colour" },
+      "description": "A payload field the spec does not define.",
+      "basis": "opf.schema.json#/$defs/ContentPayload/additionalProperties"
+    },
+    {
+      "id": "core.invalid.vendor-field-outside-extensions",
+      "file": "core/invalid/vendor-field-outside-extensions.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/example.com" },
+      "description": "Tool data written next to OPF fields instead of under `extensions`.",
+      "basis": "opf.schema.json#/$defs/Slide/additionalProperties; tool data belongs in extensions"
+    },
+    {
+      "id": "core.invalid.wrong-type-title",
+      "file": "core/invalid/wrong-type-title.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/title" },
+      "description": "A title that is a number.",
+      "basis": "opf.schema.json#/$defs/Slide/properties/title"
+    },
+    {
+      "id": "core.invalid.wrong-type-hidden",
+      "file": "core/invalid/wrong-type-hidden.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/hidden" },
+      "description": "`hidden` is a string.",
+      "basis": "opf.schema.json#/$defs/Slide/properties/hidden/type"
+    },
+    {
+      "id": "core.invalid.unknown-payload-type",
+      "file": "core/invalid/unknown-payload-type.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/blocks/0/type" },
+      "description": "A content kind outside the enumeration.",
+      "basis": "opf.schema.json#/$defs/ContentPayload/properties/type/enum"
+    },
+    {
+      "id": "core.invalid.group-mixes-leaf-fields",
+      "file": "core/invalid/group-mixes-leaf-fields.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/blocks/0" },
+      "description": "A group that also carries leaf content (`text`).",
+      "basis": "opf.schema.json#/$defs/ContentPayload (a group cannot mix blocks with leaf payload fields)"
+    },
+    {
+      "id": "core.invalid.group-nesting-too-deep",
+      "file": "core/invalid/group-nesting-too-deep.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/blocks/0" },
+      "description": "Content groups nested 33 levels deep, one past the limit.",
+      "basis": "opf.schema.json#/$defs/ContentPayload (groups may nest up to 32 levels)"
+    },
+    {
+      "id": "core.invalid.id-not-string",
+      "file": "core/invalid/id-not-string.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/id" },
+      "description": "A slide id that is a number.",
+      "basis": "opf.schema.json#/$defs/Slide/properties/id/type"
+    },
+    {
+      "id": "core.invalid.duplicate-slide-id",
+      "file": "core/invalid/duplicate-slide-id.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/1/id" },
+      "description": "Two slides share an id.",
+      "basis": "opf.schema.json#/$defs/ContentPayload/properties/id (unique among slide and payload ids)"
+    },
+    {
+      "id": "core.invalid.duplicate-payload-id",
+      "file": "core/invalid/duplicate-payload-id.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/1/blocks/0/id" },
+      "description": "Payloads on two slides share an id.",
+      "basis": "opf.schema.json#/$defs/ContentPayload/properties/id (unique in the document)"
+    },
+    {
+      "id": "core.invalid.payload-id-equals-slide-id",
+      "file": "core/invalid/payload-id-equals-slide-id.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/blocks/0/id" },
+      "description": "A payload id equal to a slide id.",
+      "basis": "opf.schema.json#/$defs/ContentPayload/properties/id (unique among slide and payload ids)"
+    },
+    {
+      "id": "core.invalid.duplicate-nested-payload-id",
+      "file": "core/invalid/duplicate-nested-payload-id.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/blocks/0/blocks/1/id" },
+      "description": "Two payloads in one group share an id.",
+      "basis": "opf.schema.json#/$defs/ContentPayload/properties/id"
+    },
+    {
+      "id": "core.invalid.duplicate-reference-id",
+      "file": "core/invalid/duplicate-reference-id.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/references/1/id" },
+      "description": "Two references share an id.",
+      "basis": "opf.schema.json#/properties/references (ids are unique); docs/validate.md, rule opf/reference-id-duplicate"
+    },
+    {
+      "id": "core.invalid.cite-unknown-reference",
+      "file": "core/invalid/cite-unknown-reference.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/text/0/cite/1" },
+      "description": "A citation names a reference that does not exist.",
+      "basis": "docs/validate.md, rule opf/cite-unknown-reference"
+    },
+    {
+      "id": "core.invalid.dataset-unknown",
+      "file": "core/invalid/dataset-unknown.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/chart/data/dataset" },
+      "description": "A chart names a dataset that does not exist.",
+      "basis": "opf.schema.json#/$defs/DatasetRef (an unknown id is an error); docs/validate.md, rule opf/dataset-unknown"
+    },
+    {
+      "id": "core.invalid.asset-unknown",
+      "file": "core/invalid/asset-unknown.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/image" },
+      "description": "`asset:<id>` names an asset that is not in the registry.",
+      "basis": "docs/validate.md, rule opf/asset-reference"
+    },
+    {
+      "id": "core.invalid.asset-cycle",
+      "file": "core/invalid/asset-cycle.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/assets" },
+      "description": "Two assets point at each other.",
+      "basis": "docs/validate.md, rule opf/asset-cycle"
+    },
+    {
+      "id": "core.invalid.undeclared-catalog-group",
+      "file": "core/invalid/undeclared-catalog-group.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/layout" },
+      "description": "`acme:hero` names a catalog group the document does not declare.",
+      "basis": "opf.schema.json#/$defs/CatalogReference; docs/validate.md, rule opf/undeclared-catalog"
+    },
+    {
+      "id": "core.invalid.extensions-array",
+      "file": "core/invalid/extensions-array.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/extensions" },
+      "description": "Document `extensions` is an array.",
+      "basis": "opf.schema.json#/properties/extensions/type"
+    },
+    {
+      "id": "core.invalid.extensions-string-on-slide",
+      "file": "core/invalid/extensions-string-on-slide.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/extensions" },
+      "description": "Slide `extensions` is a string.",
+      "basis": "opf.schema.json#/$defs/Slide/properties/extensions/type"
+    },
+    {
+      "id": "core.invalid.extensions-null-on-payload",
+      "file": "core/invalid/extensions-null-on-payload.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/blocks/0/extensions" },
+      "description": "Payload `extensions` is null.",
+      "basis": "opf.schema.json#/$defs/ContentPayload/properties/extensions/type"
+    }
+  ]
+}

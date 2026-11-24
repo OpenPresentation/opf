@@ -6,7 +6,7 @@
   ],
   "purpose": "persuade",
   "tone": "persuasive",
-  "narrative": "survival-story",
+  "narrative": "strategic-narrative",
   "design": {
     "theme": "bold",
     "colorScheme": "steel-blue",
@@ -98,104 +98,62 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "survival-story": {
-          "name": "Survival Story",
-          "summary": "Narrative arc of overcoming adversity through determination: catastrophe, backstory, plan, danger, effort, struggle, pivot, breakthrough, legacy, takeaway. For brand stories, founder histories, and leadership talks where the lesson lives in the comeback.",
+        "strategic-narrative": {
+          "name": "Strategic Narrative",
+          "summary": "The change-driven founder/sales arc: a tectonic shift creates winners and losers, the audience must respond, and your product is the only credible way to land in the winners' camp. Used for top-of-funnel sales pitches, board re-positioning, and high-stakes founder talks.",
           "audienceFit": [
-            "general-audience",
-            "internal-teams",
-            "press"
+            "customers",
+            "prospects",
+            "board",
+            "investors",
+            "executives"
           ],
           "duration": {
             "min": 10,
             "max": 30
           },
           "tags": [
-            "storytelling",
-            "inspirational",
-            "founder",
-            "comeback"
+            "strategic",
+            "sales",
+            "positioning",
+            "category"
           ],
           "beats": [
             {
-              "id": "catastrophe",
-              "name": "Catastrophe",
-              "description": "Open in the middle of the disaster. Specific moment, specific stakes, specific damage. Drop the audience into the worst point of the story before walking them back.",
-              "instructions": "Present initial disaster",
-              "type": "text",
-              "layout": "text"
+              "id": "shift",
+              "name": "The Shift",
+              "description": "Open by naming a large, undeniable change in the world that the audience already half-believes. Technology, regulation, customer behavior, economics — pick the shift that recasts the audience's reality. The shift, not your product, is the protagonist of the first half of the deck."
             },
             {
-              "id": "backstory",
-              "name": "Backstory",
-              "description": "Detail the events that led up to the catastrophe. Just enough for the audience to understand how the disaster could have happened. Avoid moralizing — the story does the work.",
-              "instructions": "Detail past events",
-              "type": "text",
-              "layout": "text"
+              "id": "stakes",
+              "name": "Winners and Losers",
+              "description": "Make the consequences of the shift concrete. Who wins, who loses, by how much, on what timeframe. Use specific examples — companies, products, segments — that have already moved or are about to. The audience should feel that standing still is the riskiest choice."
             },
             {
-              "id": "blueprint",
-              "name": "Blueprint",
-              "description": "Illustrate the recovery plan. Specific moves, specific bets, specific people. The audience should see the strategy as more than 'try hard.'",
-              "instructions": "Illustrate recovery plans",
-              "type": "text",
-              "layout": "text"
+              "id": "promised-land",
+              "name": "Promised Land",
+              "description": "Paint a vivid picture of the future state your audience could occupy if they navigate the shift well. Describe outcomes, not features. The promised land must feel desirable, achievable, and meaningfully different from where they are today."
             },
             {
-              "id": "danger",
-              "name": "Danger",
-              "description": "Highlight the emerging threats to the recovery plan. New risks, returning ones. Tension here makes the eventual triumph credible.",
-              "instructions": "Highlight emerging threats",
-              "type": "text",
-              "layout": "text"
+              "id": "obstacles",
+              "name": "Old Game",
+              "description": "Show why the existing playbook can't get the audience to the promised land. Name the legacy approach honestly and credit what it once did, then explain why the shift has rendered it insufficient. Avoid strawmen — the more fairly you state the old game, the more credible your new game becomes."
             },
             {
-              "id": "endeavor",
-              "name": "Endeavor",
-              "description": "Show the determined effort underway. The hours, the trade-offs, the discipline. The audience must feel the work, not just hear about it.",
-              "instructions": "Show determination effort",
-              "type": "text",
-              "layout": "text"
+              "id": "mechanism",
+              "name": "New Game",
+              "description": "Introduce your category-defining approach as the way to play the new game. Show the principles or capabilities that make it possible only now. Emphasize what's structurally different from the old game, not what's marginally better."
             },
             {
-              "id": "struggles",
-              "name": "Struggles",
-              "description": "Showcase challenging moments along the way: the setbacks, the false starts, the hard calls. Honest setbacks make eventual success feel earned.",
-              "instructions": "Showcase challenging encounters",
-              "type": "text",
-              "layout": "text"
+              "id": "evidence",
+              "name": "Evidence",
+              "description": "Prove the new game works. Customer outcomes, named logos, before/after data, third-party validation. Choose evidence that maps directly to the shift you opened with — proof that other audiences in the same boat made it to the promised land."
             },
             {
-              "id": "pivot",
-              "name": "Pivot",
-              "description": "Highlight the strategic shift that changed the trajectory. What got reconsidered, what got dropped, what got doubled down on. The pivot is the moment the protagonist became something new.",
-              "instructions": "Highlight strategy shift",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "breakthrough",
-              "name": "Breakthrough",
-              "description": "Emphasize the moment adversity finally broke. Concrete result, concrete date. Let the slide land — the audience came for this turn.",
-              "instructions": "Emphasize overcoming adversity",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "legacy",
-              "name": "Legacy",
-              "description": "Discuss the enduring impact. What survival made possible afterward, who benefited, what was built on top. Survival stories are most powerful when they create more than they restore.",
-              "instructions": "Discuss enduring impact",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "takeaway",
-              "name": "Takeaway",
-              "description": "Share the lesson the audience can carry away. One transferable insight, framed for their own challenges — not a general moral.",
-              "layout": "statement",
-              "instructions": "Share important lessons",
-              "type": "text"
+              "id": "ask",
+              "name": "Call to Action",
+              "description": "Close with the single decision you want the audience to make. Frame it as the obvious next move given the shift, the stakes, and the new game. Make it small enough to say yes to today and large enough to start a real engagement.",
+              "layout": "list"
             }
           ]
         }

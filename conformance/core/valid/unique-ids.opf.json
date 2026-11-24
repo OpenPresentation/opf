@@ -1,0 +1,14 @@
+{
+  "slides": [
+    { "id": "cover", "title": "Cover" },
+    {
+      "id": "body",
+      "title": "Body",
+      "blocks": [
+        { "id": "intro", "text": "Each slide and payload id is unique in the document." },
+        { "id": "group-1", "blocks": [{ "id": "point-a", "text": "A" }, { "id": "point-b", "text": "B" }] }
+      ]
+    },
+    { "title": "A slide without an id" }
+  ]
+}

@@ -6,7 +6,7 @@
   ],
   "purpose": "pitch",
   "tone": "technical",
-  "narrative": "transformation-arc",
+  "narrative": "survey-analysis",
   "design": {
     "theme": "classic",
     "colorScheme": "vibes",
@@ -93,51 +93,105 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "transformation-arc": {
-          "name": "Transformation Arc (Before / After / Bridge)",
-          "summary": "Marketing-copy arc adapted for slides: paint the painful 'before,' contrast it with a vivid 'after,' then deliver the bridge that gets the audience from one to the other. Tight, persuasive, and ideal for short pitches, landing-page-style decks, and product-marketing teasers.",
+        "survey-analysis": {
+          "name": "Survey Analysis",
+          "summary": "Structured walk-through of survey results: topic, executive summary, methodology, findings, analysis, implications, recommendations. Built so a reader who only sees the second slide already knows the headline insight.",
           "audienceFit": [
-            "customers",
-            "prospects",
-            "marketing-teams",
-            "general-audience"
+            "executives",
+            "researchers",
+            "stakeholders",
+            "marketing-teams"
           ],
           "duration": {
-            "min": 3,
-            "max": 15
+            "min": 20,
+            "max": 60
           },
           "tags": [
-            "marketing",
-            "copywriting",
-            "pitch",
-            "persuasive"
+            "data-driven",
+            "research",
+            "insights",
+            "voice-of-customer"
           ],
           "beats": [
             {
-              "id": "before",
-              "name": "Before",
-              "description": "Describe the audience's current world in the first person they recognize. Specific frustrations, specific costs, specific moments of friction. The clearer the 'before' lands, the more the rest of the deck has to push against."
+              "id": "introduction",
+              "name": "Introduction",
+              "description": "Open by naming the question the survey was meant to answer. Why this, why now, who commissioned it. Anchor the audience in the decision the survey is designed to inform.",
+              "instructions": "Present survey topic",
+              "type": "text",
+              "layout": "text"
             },
             {
-              "id": "after",
-              "name": "After",
-              "description": "Paint the world the audience could be in instead. Concrete outcomes, not feature lists — what a day looks like, what a quarter feels like, what becomes effortless that used to hurt. Make it desirable and credible at the same time."
+              "id": "executive-summary",
+              "name": "Executive Summary",
+              "description": "State the top three findings in plain language on a single slide. A reader who only sees this slide should still be able to make the right call. Avoid hedging — synthesis is the point.",
+              "instructions": "Summarize key findings",
+              "type": "text",
+              "layout": "text"
             },
             {
-              "id": "bridge",
-              "name": "Bridge",
-              "description": "Show the path from before to after: the product, service, or change that closes the gap. Lead with the simplest user-visible thing they do; the architecture can wait. The bridge must feel proportionate to the transformation it promises."
+              "id": "context",
+              "name": "Context",
+              "description": "Detail the situation behind the survey: prior knowledge, related research, the gap this work fills. Just enough to position the findings as new information rather than restated common sense.",
+              "instructions": "Detail survey background",
+              "type": "text",
+              "layout": "text"
             },
             {
-              "id": "evidence",
-              "name": "Evidence",
-              "description": "Prove the bridge has carried others across. One or two strong customer stories, before/after metrics, or named logos with concrete outcomes. Choose proof that maps directly to the 'after' you painted, not generic credibility markers."
+              "id": "data-methodology",
+              "name": "Data & Methodology",
+              "description": "Describe how the data was collected and from whom. Sample size, recruitment, instrument, timing. Be honest about limitations; methodological transparency is what gives the findings their weight.",
+              "instructions": "Discuss sourcing and collection",
+              "type": "text",
+              "layout": "text"
             },
             {
-              "id": "ask",
-              "name": "Ask",
-              "description": "Close with the single low-friction action that starts the audience across the bridge. Make it small enough to act on now and meaningful enough to count as commitment.",
-              "layout": "list"
+              "id": "data-summary",
+              "name": "Data Summary",
+              "description": "Give the audience an overview of the dataset before drilling in. Demographics, response rates, distribution of key variables. Help them calibrate what 'most' and 'few' mean in this study.",
+              "instructions": "Provide data overview",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "findings",
+              "name": "Findings",
+              "description": "Present the key insights one at a time. Lead each finding with the claim, then the chart. Avoid burying the point under the visualization — captions should restate the insight in words.",
+              "instructions": "Highlight key insights",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "data-analysis",
+              "name": "Data Analysis",
+              "description": "Break down the data behind each finding: cross-tabs, segment splits, statistical confidence. This is the slide skeptics will scrutinize — make it scrutinizable.",
+              "instructions": "Break down data",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "implications",
+              "name": "Implications",
+              "description": "Translate findings into 'so what.' What changes for product, marketing, ops, the customer? Implications without consequences are interesting trivia, not research.",
+              "instructions": "Discuss survey implications",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "recommendations",
+              "name": "Recommendations",
+              "description": "Provide the actions that follow from the implications. Prioritize, attach owners, mark which require decisions. This is where research becomes useful.",
+              "instructions": "Provide action plans",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Recap the headline finding and the most important recommendation. End with the next step — a follow-on study, a workshop, a decision — so the work doesn't sit on a shelf.",
+              "layout": "closing",
+              "instructions": "Recap and finalize",
+              "type": "text"
             }
           ]
         }

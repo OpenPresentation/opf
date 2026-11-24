@@ -12,7 +12,7 @@
       "technicalFluency": "mixed",
       "decisionPower": "decision-maker",
       "recommendedNarratives": [
-        "star-method"
+        "situation-complication-resolution"
       ],
       "recommendedTones": [
         "authoritative"
@@ -38,7 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": "star-method",
+  "narrative": "situation-complication-resolution",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -269,7 +269,7 @@
   },
   "author": "OPF Example Generator",
   "takeaway": "Recover at-risk renewals with executive sponsorship and value proof",
-  "duration": 15,
+  "duration": 18,
   "tags": [
     "business-functions",
     "customer-success",
@@ -313,57 +313,57 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "star-method": {
-          "name": "STAR Method",
-          "summary": "Results-focused framework that demonstrates impact through concrete examples.",
-          "description": "A results-focused framework that demonstrates impact through a concrete example: the Situation, the Task you were responsible for, the Actions you took, and the measurable Result. The tone is evidential: every claim is grounded in a specific, verifiable outcome. Best for project reviews, portfolio presentations, and achievement showcases; typical decks run 4-8 slides (case study, customer success story, project retrospective).",
+        "situation-complication-resolution": {
+          "name": "Situation-Complication-Resolution",
+          "summary": "McKinsey-style structure that builds tension before delivering insights.",
+          "description": "A McKinsey-style structure that builds tension before delivering the insight. Establish the context everyone already agrees on, introduce what has changed or what challenge has emerged, name the key question that change raises, then deliver the recommendation that resolves it. The tone is logical: a tight causal chain from context to recommendation. Best for strategy presentations, consulting decks, and analytical reports; typical decks run 4-10 slides (management consulting report, strategic recommendation, board update).",
           "audienceFit": [
-            "hr-and-talent",
-            "performance-reviewers",
-            "award-committees"
+            "senior-leadership",
+            "consultants",
+            "strategy-teams"
           ],
           "duration": {
             "min": 5,
-            "max": 15
+            "max": 20
           },
           "tags": [
-            "case-study",
-            "proof",
-            "results",
-            "retrospective"
+            "strategy",
+            "consulting",
+            "minto",
+            "recommendation"
           ],
           "beats": [
             {
               "id": "situation",
               "name": "Situation",
-              "description": "Describe the context and background of the scenario.",
-              "instructions": "Describe the relevant context and constraints.",
-              "type": "text",
-              "layout": "text"
+              "description": "Set the scene with relevant background and context everyone agrees on.",
+              "instructions": "State the shared context the audience already accepts.",
+              "type": "list",
+              "layout": "list"
             },
             {
-              "id": "task",
-              "name": "Task",
-              "description": "Explain your specific role and responsibilities in this situation.",
-              "instructions": "Explain the responsibility or target outcome.",
-              "type": "list",
+              "id": "complication",
+              "name": "Complication",
+              "description": "Introduce what has changed or what challenge has emerged.",
+              "instructions": "Introduce the change, risk, or tension.",
+              "type": "text",
               "layout": "two-column"
             },
             {
-              "id": "action",
-              "name": "Action",
-              "description": "Detail the specific steps you took to address the challenge.",
-              "instructions": "Detail the actions taken and choices made.",
-              "type": "timeline",
-              "layout": "timeline"
+              "id": "question",
+              "name": "Question",
+              "description": "Articulate the key question that the complication raises.",
+              "instructions": "Frame the decision question raised by the complication.",
+              "type": "text",
+              "layout": "statement"
             },
             {
-              "id": "result",
-              "name": "Result",
-              "description": "Share the measurable outcomes and impact of your actions.",
-              "instructions": "Show measurable impact and proof.",
-              "type": "metric",
-              "layout": "metrics"
+              "id": "answer",
+              "name": "Answer",
+              "description": "Deliver your recommendation or insight that resolves the question.",
+              "instructions": "Deliver the recommendation that resolves the question.",
+              "type": "timeline",
+              "layout": "timeline"
             }
           ]
         }

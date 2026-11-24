@@ -6,7 +6,7 @@
   ],
   "purpose": "plan",
   "tone": "conversational",
-  "narrative": "capacity-planning",
+  "narrative": "business-narrative",
   "design": {
     "theme": "minimal",
     "colorScheme": "luxury",
@@ -93,88 +93,87 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "capacity-planning": {
-          "name": "Capacity Planning",
-          "summary": "Workforce and operational capacity-planning arc: kickoff, urgency, current state, projection, tactics, implementation, revision, conclusion. For decks where leadership must decide whether the organization has enough resources to meet upcoming demand.",
+        "business-narrative": {
+          "name": "Business Narrative",
+          "summary": "Tell a business strategy or solution as a story: setting, challenge, tension, hero, plan, outcome. Useful for internal alignment decks, town halls, and any audience that responds better to story shape than to bullet lists.",
           "audienceFit": [
+            "internal-teams",
             "leadership",
-            "operations",
-            "hr-partners",
-            "finance"
+            "cross-functional-partners"
           ],
           "duration": {
-            "min": 20,
-            "max": 45
+            "min": 10,
+            "max": 30
           },
           "tags": [
-            "workforce",
-            "operations",
-            "planning",
-            "resource-management"
+            "management",
+            "storytelling",
+            "internal",
+            "strategy"
           ],
           "beats": [
             {
-              "id": "kickoff",
-              "name": "Kickoff",
-              "description": "Introduce what the planning exercise covers and the decision you need from the audience. Frame the time horizon and the resources in scope so the rest of the deck stays bounded.",
-              "layout": "cover",
-              "instructions": "Introduce the topic",
-              "type": "text"
-            },
-            {
-              "id": "urgency",
-              "name": "Urgency",
-              "description": "Show why this is the right moment to plan capacity. Pipeline shifts, hiring freezes, operational stress signals. Urgency turns capacity from an annual ritual into a decision the audience leans into.",
-              "instructions": "Show needs",
+              "id": "introduction",
+              "name": "Introduction",
+              "description": "Engage the audience and set expectations for the next twenty minutes. Tell them you're going to tell them a story — and then start telling it. Avoid a separate agenda slide; the introduction is the first scene.",
+              "instructions": "Engage and set expectations",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "situation",
-              "name": "Situation",
-              "description": "Highlight the current resource picture: people, tools, infrastructure, vendor capacity. Show utilization, not just headcount. The audience should know where slack and stress live today.",
-              "instructions": "Highlight current resources",
+              "id": "setting",
+              "name": "Setting",
+              "description": "Establish the world the story takes place in: the team, the market, the moment. Just enough context that the challenge will feel meaningful when it arrives.",
+              "instructions": "Establish the environment",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "projection",
-              "name": "Projection",
-              "description": "Predict future demand under your base case and a sensitivity case. Tie demand to specific drivers — pipeline, launches, seasonality — so the audience can challenge the assumptions, not just the totals.",
-              "instructions": "Predict future demands",
+              "id": "challenge",
+              "name": "Challenge",
+              "description": "Identify the issue at hand. Concrete, specific, attributable. The challenge is the inciting incident — the thing that pulled the rest of the story into motion.",
+              "instructions": "Identify the issue at hand",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "tactics",
-              "name": "Tactics",
-              "description": "Suggest the strategies for closing any gap: hiring, automation, outsourcing, prioritization. Each tactic should map to a specific demand driver and a defensible cost.",
-              "instructions": "Suggest coping strategies",
+              "id": "tension",
+              "name": "Tension",
+              "description": "Raise the stakes. What happens if the challenge isn't met? Quantify the cost, name the people affected, surface the trade-offs that make the choice hard. Tension is what makes the audience lean in.",
+              "instructions": "Emphasize the stakes",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "solution",
+              "name": "Solution",
+              "description": "Reveal the strategy or hero of the story. Lead with what changes for the audience or customer when the solution is in place. This is the turn from problem to promise.",
+              "instructions": "Present the hero/strategy",
               "type": "text",
               "layout": "text"
             },
             {
               "id": "implementation",
               "name": "Implementation",
-              "description": "Discuss how the plan gets deployed. Sequencing, owners, dependencies, lead times. Capacity decisions slip the most when the rollout isn't planned with the same rigor as the sizing.",
-              "instructions": "Discuss deployment plans",
+              "description": "Describe the path to success. Phases, owners, milestones, key bets. Show the audience that the solution has weight behind it — not just intent.",
+              "instructions": "Describe the path to success",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "revision",
-              "name": "Revision",
-              "description": "Define the leading indicators that would trigger a re-plan, and the cadence of review. Capacity plans age fast; show the audience how the plan stays alive.",
-              "instructions": "Evaluate and adjust",
+              "id": "recap",
+              "name": "Recap",
+              "description": "Bring the audience back to the surface with a clear summary of what was said and decided. Echo the language from the opening so the story feels closed.",
+              "instructions": "Review key points and insights",
               "type": "text",
               "layout": "text"
             },
             {
               "id": "conclusion",
               "name": "Conclusion",
-              "description": "Wrap up with the specific recommendations and the decisions you need today. End with the next checkpoint and what evidence will be on the table at it.",
+              "description": "Reinforce the key message and the call to action. End on the line you most want repeated in tomorrow's hallway conversations.",
               "layout": "closing",
-              "instructions": "Wrap-up & recommendations",
+              "instructions": "Reinforce takeaways and call to action",
               "type": "text"
             }
           ]

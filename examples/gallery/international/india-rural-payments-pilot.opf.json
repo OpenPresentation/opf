@@ -6,7 +6,7 @@
   ],
   "purpose": "decide",
   "tone": "authoritative",
-  "narrative": "underdog-victory",
+  "narrative": "survey-analysis",
   "design": {
     "theme": "minimal",
     "colorScheme": "forest-green",
@@ -93,87 +93,104 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "underdog-victory": {
-          "name": "Underdog Victory",
-          "summary": "Story arc of someone or something overlooked who triumphs in the end. Useful for founder narratives, brand stories, and team-building decks where the lesson is about resilience and unexpected wins.",
+        "survey-analysis": {
+          "name": "Survey Analysis",
+          "summary": "Structured walk-through of survey results: topic, executive summary, methodology, findings, analysis, implications, recommendations. Built so a reader who only sees the second slide already knows the headline insight.",
           "audienceFit": [
-            "general-audience",
-            "internal-teams",
-            "candidates"
+            "executives",
+            "researchers",
+            "stakeholders",
+            "marketing-teams"
           ],
           "duration": {
-            "min": 5,
-            "max": 20
+            "min": 20,
+            "max": 60
           },
           "tags": [
-            "storytelling",
-            "inspirational",
-            "founder",
-            "team"
+            "data-driven",
+            "research",
+            "insights",
+            "voice-of-customer"
           ],
           "beats": [
             {
-              "id": "origin",
-              "name": "Origin",
-              "description": "Establish the opening scene: who the underdog is and the world that overlooked them. Specific details make the rest of the journey feel real.",
-              "instructions": "Establish opening scene",
+              "id": "introduction",
+              "name": "Introduction",
+              "description": "Open by naming the question the survey was meant to answer. Why this, why now, who commissioned it. Anchor the audience in the decision the survey is designed to inform.",
+              "instructions": "Present survey topic",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "struggles",
-              "name": "Struggles",
-              "description": "Highlight the early setbacks. What didn't work, who said no, where the path closed up. The audience needs to feel the doubt before they can feel the win.",
-              "instructions": "Highlight initial setbacks",
+              "id": "executive-summary",
+              "name": "Executive Summary",
+              "description": "State the top three findings in plain language on a single slide. A reader who only sees this slide should still be able to make the right call. Avoid hedging — synthesis is the point.",
+              "instructions": "Summarize key findings",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "determination",
-              "name": "Determination",
-              "description": "Showcase the enduring passion that kept the underdog going. What they refused to give up on, and why. Determination, in this beat, is the only resource the underdog has.",
-              "instructions": "Showcase enduring passion",
+              "id": "context",
+              "name": "Context",
+              "description": "Detail the situation behind the survey: prior knowledge, related research, the gap this work fills. Just enough to position the findings as new information rather than restated common sense.",
+              "instructions": "Detail survey background",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "crisis",
-              "name": "Crisis",
-              "description": "Identify the lowest point of the journey. The moment the dream nearly ended. Don't soften — the contrast with the triumph ahead depends on the depth of this slide.",
-              "instructions": "Identify lowest point",
+              "id": "data-methodology",
+              "name": "Data & Methodology",
+              "description": "Describe how the data was collected and from whom. Sample size, recruitment, instrument, timing. Be honest about limitations; methodological transparency is what gives the findings their weight.",
+              "instructions": "Discuss sourcing and collection",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "resolve",
-              "name": "Resolve",
-              "description": "Articulate the choice the underdog made to keep going. The strong will, the small bet, the borrowed faith. Resolve is where the protagonist becomes someone the audience roots for.",
-              "instructions": "Articulate strong will",
+              "id": "data-summary",
+              "name": "Data Summary",
+              "description": "Give the audience an overview of the dataset before drilling in. Demographics, response rates, distribution of key variables. Help them calibrate what 'most' and 'few' mean in this study.",
+              "instructions": "Provide data overview",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "breakthrough",
-              "name": "Breakthrough",
-              "description": "Show the reward of perseverance: the customer who said yes, the door that opened, the fortune that turned. The breakthrough should feel earned, not granted.",
-              "instructions": "Reward of perseverance",
+              "id": "findings",
+              "name": "Findings",
+              "description": "Present the key insights one at a time. Lead each finding with the claim, then the chart. Avoid burying the point under the visualization — captions should restate the insight in words.",
+              "instructions": "Highlight key insights",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "triumph",
-              "name": "Triumph",
-              "description": "Reveal the ultimate success. Concrete outcomes, named milestones. The triumph is the audience's emotional payoff — let it land.",
-              "instructions": "Reveal ultimate success",
+              "id": "data-analysis",
+              "name": "Data Analysis",
+              "description": "Break down the data behind each finding: cross-tabs, segment splits, statistical confidence. This is the slide skeptics will scrutinize — make it scrutinizable.",
+              "instructions": "Break down data",
               "type": "text",
               "layout": "text"
             },
             {
-              "id": "legacy",
-              "name": "Legacy",
-              "description": "Share the lasting impact. What the underdog's victory makes possible for those who come after. The legacy beat is what turns a story into a lesson.",
+              "id": "implications",
+              "name": "Implications",
+              "description": "Translate findings into 'so what.' What changes for product, marketing, ops, the customer? Implications without consequences are interesting trivia, not research.",
+              "instructions": "Discuss survey implications",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "recommendations",
+              "name": "Recommendations",
+              "description": "Provide the actions that follow from the implications. Prioritize, attach owners, mark which require decisions. This is where research becomes useful.",
+              "instructions": "Provide action plans",
+              "type": "text",
+              "layout": "text"
+            },
+            {
+              "id": "conclusion",
+              "name": "Conclusion",
+              "description": "Recap the headline finding and the most important recommendation. End with the next step — a follow-on study, a workshop, a decision — so the work doesn't sit on a shelf.",
               "layout": "closing",
-              "instructions": "Share long-lasting impact",
+              "instructions": "Recap and finalize",
               "type": "text"
             }
           ]

@@ -6,7 +6,7 @@
   ],
   "purpose": "report",
   "tone": "authoritative",
-  "narrative": "persuade",
+  "narrative": "operational-review",
   "design": {
     "theme": "classic",
     "colorScheme": "black-and-white",
@@ -98,95 +98,89 @@
     "default": {
       "source": "https://www.pptx.gallery",
       "narratives": {
-        "persuade": {
-          "name": "Persuade",
-          "summary": "Argument-driven keynote arc inspired by Ken Robinson: grip the audience, challenge the status quo, define the problem, anchor it in story and statistic, deliver a major revelation, propose change, and end on a question that stays with them.",
+        "operational-review": {
+          "name": "Operational Review",
+          "summary": "Logical management arc for reviewing how an operation is running: the situation, the complication that threatens it, the resolution, and the roadmap and action plan that deliver it. Built for operations, program and service reviews where the audience needs a decision and a plan, not a story.",
           "audienceFit": [
-            "general-audience",
-            "policymakers",
-            "industry-peers"
+            "leadership",
+            "executives",
+            "managers",
+            "cross-functional-partners"
           ],
           "duration": {
-            "min": 15,
-            "max": 30
+            "min": 20,
+            "max": 45
           },
           "tags": [
-            "keynote",
-            "persuasive",
-            "advocacy",
-            "talk"
+            "management",
+            "operations",
+            "review",
+            "internal"
           ],
           "beats": [
             {
-              "id": "gripping-introduction",
-              "name": "Gripping Introduction",
-              "description": "Open with a moment, image, or claim the audience can't easily look away from. The first sixty seconds buy you the next twenty minutes — spend them on something specific and emotionally charged, not on housekeeping.",
-              "instructions": "Draw in the audience with a compelling opener",
+              "id": "headline",
+              "name": "Headline",
+              "description": "Open with the operation under review and the one-sentence conclusion of the whole review, so the audience knows where it is going before the detail starts.",
+              "instructions": "State the conclusion first",
               "type": "text",
-              "layout": "text"
+              "layout": "cover"
             },
             {
-              "id": "challenge-status-quo",
-              "name": "Challenge the Status Quo",
-              "description": "Call out the system, norm, or assumption that needs examination. Be precise about what you're disagreeing with so the rest of the talk can be specific in response. Avoid strawmen — name the strongest version of the view you're contesting."
+              "id": "situation",
+              "name": "Situation",
+              "description": "Describe how the operation runs today with the few metrics that define it: volume, quality, cost, time. Stick to facts the room will agree with.",
+              "instructions": "Establish the facts",
+              "type": "metric",
+              "layout": "metrics"
             },
             {
-              "id": "present-problem",
-              "name": "Present the Problem",
-              "description": "Define the issue the audience needs to care about. Concrete, scoped, attributable. The clearer the problem, the more credible the eventual solution."
+              "id": "complication",
+              "name": "Complication",
+              "description": "Name what has changed or is at risk: the trend, constraint or failure that makes the current way of running unsustainable. Quantify the cost of doing nothing.",
+              "instructions": "Show what is at stake",
+              "type": "chart",
+              "layout": "chart"
             },
             {
-              "id": "personal-story",
-              "name": "Personal Story",
-              "description": "Anchor the issue in a specific person, place, or moment. Story is what gets the argument past the audience's defenses. Pick a story that personalizes the data without overstating it.",
-              "instructions": "Share significant stories to illuminate the issue",
+              "id": "root-causes",
+              "name": "Root Causes",
+              "description": "Explain why the complication is happening. Separate causes the team controls from those it does not, and point to the evidence for each.",
+              "instructions": "Diagnose the cause",
               "type": "text",
-              "layout": "text"
+              "layout": "two-column"
             },
             {
-              "id": "statistic-shock",
-              "name": "Statistic Shock",
-              "description": "Drop in a single statistic that recasts the scale of the problem. One number, presented well, lands harder than a dashboard. Cite the source so the audience can repeat it with confidence.",
-              "instructions": "Use impactful stats to highlight the gravity of the issue",
+              "id": "resolution",
+              "name": "Resolution",
+              "description": "Recommend the change that resolves the complication, with the expected effect on the metrics from the situation slide. One recommendation, stated plainly.",
+              "instructions": "Recommend the fix",
               "type": "text",
-              "layout": "text"
+              "layout": "statement"
             },
             {
-              "id": "historical-context",
-              "name": "Historical Context",
-              "description": "Show how the issue evolved. Why it has the shape it does today, what was tried, what was missed. Historical context turns 'this is broken' into 'this stayed broken for these reasons.'",
-              "instructions": "Show the evolution or history of the issue",
+              "id": "roadmap",
+              "name": "Roadmap",
+              "description": "Lay out the phases that deliver the resolution, with what each phase changes and the milestone that marks it done.",
+              "instructions": "Sequence the change",
+              "type": "timeline",
+              "layout": "timeline"
+            },
+            {
+              "id": "action-plan",
+              "name": "Action Plan",
+              "description": "List the immediate actions with an owner and a due date for each, plus the risks to watch. This is the slide people will screenshot.",
+              "instructions": "Assign owners and dates",
               "type": "text",
-              "layout": "text"
+              "layout": "list"
             },
             {
-              "id": "weave-narrative",
-              "name": "Weave a Narrative",
-              "description": "Connect the threads — story, statistic, history — into a single argument. The audience should feel the case clicking together. This is the slide where rhetoric becomes architecture."
-            },
-            {
-              "id": "major-revelation",
-              "name": "Major Revelation",
-              "description": "Deliver the surprising or significant turn. The fact, finding, or reframing the rest of the talk has been earning. The revelation should redirect, not merely confirm.",
-              "instructions": "Deliver a surprising or significant discovery",
+              "id": "decision",
+              "name": "Decision",
+              "description": "Close with the decision or support you need from this audience today, and what happens next once you have it.",
+              "instructions": "Ask for the decision",
               "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "propose-solution",
-              "name": "Propose Solution",
-              "description": "Advocate for the change you want. Concrete enough to be acted on, broad enough to inspire. Pair the solution with the smallest credible first step.",
-              "instructions": "Advocate for change or propose an actionable solution",
-              "type": "text",
-              "layout": "text"
-            },
-            {
-              "id": "final-question",
-              "name": "Final Question",
-              "description": "Close on a question rather than a summary. The right closing question follows the audience out of the room and into their conversations afterward.",
-              "layout": "statement",
-              "instructions": "Finish with a thought-provoking question to stimulate audience thinking",
-              "type": "text"
+              "layout": "closing"
             }
           ]
         }

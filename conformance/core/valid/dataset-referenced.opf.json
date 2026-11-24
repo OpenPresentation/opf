@@ -1,0 +1,4 @@
+{
+  "datasets": { "revenue": { "columns": ["Quarter", "Revenue"], "rows": [["Q1", 12], ["Q2", 18]] } },
+  "slides": [{ "title": "Revenue", "chart": { "type": "bar", "data": { "dataset": "revenue" } } }]
+}

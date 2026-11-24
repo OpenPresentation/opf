@@ -33,7 +33,7 @@ const deck = (extra = {}) => ({
 const rule = (report, id) => report.findings.filter((issue) => issue.ruleId === id);
 
 test('the bundled narrative records use the planning vocabulary', () => {
-	assert.equal(narratives.length, 48);
+	assert.equal(narratives.length, 50);
 	const types = new Set(['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline']);
 	for (const entry of narratives) {
 		assert.ok(entry.duration.min > 0 && entry.duration.max >= entry.duration.min, entry.id);
