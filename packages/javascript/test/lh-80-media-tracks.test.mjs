@@ -74,24 +74,12 @@ test('LH-80: an authored mode keeps flowing the other blocks beside the track; a
   assert.equal(row.track, undefined);
 });
 
-test('LH-49: a chart whose plot is too short takes the filling track beside the other blocks, in their own mode', () => {
+test('LH-49 with opf#1412 A3 (alternative): a slide that asks for mode column keeps its column; a chart whose plot is large enough keeps the grid', () => {
   const blocks = [{ chart: chartData }, metric, quote];
-  const plain = composeSlide({ title: 'Why this matters', composition: { mode: 'column' }, blocks }, { recompose: false });
   const result = composeSlide({ title: 'Why this matters', composition: { mode: 'column' }, blocks });
-  assert.equal(result.track.kind, 'chart');
-  assert.equal(result.track.edge, 'left');
-  const chart = result.items.find((item) => item.field === 'chart'), plot = chartPlotBox(chart, 1);
-  assert.ok(plot.height >= Math.max(120, 0.22 * result.contentBox.height), `plot ${plot.height}`);
-  assert.ok(plot.width <= 3 * plot.height, `aspect ${plot.width} x ${plot.height}`);
-  assert.ok(chart.box.height === result.contentBox.height, 'the chart fills its track');
-  const others = result.items.filter((item) => item.field === 'metric' || item.field === 'quote');
-  assert.ok(others.every((item) => item.box.x > chart.box.x + chart.box.width), 'the others beside it');
-  assert.ok(others[1].box.y > others[0].box.y, 'stacked in their column');
-  assert.ok(result.items.filter((item) => item.field !== 'chart' && item.field !== 'title').every((item) => item.box.width >= 0.35 * 1280), 'text keeps 40% of the width');
-  assert.deepEqual(findings(result), findings(plain));
-  // Right to left the chart is at the right.
-  assert.equal(composeSlide({ title: 'T', composition: { mode: 'column' }, blocks }, { direction: 'rtl' }).track.edge, 'right');
-  // A chart whose plot is large enough keeps the grid.
+  assert.equal(result.track, undefined, 'no chart track: the blocks stay in one column');
+  const chart = result.items.find((item) => item.field === 'chart'), others = result.items.filter((item) => item.field === 'metric' || item.field === 'quote');
+  assert.ok(others.every((item) => item.box.y >= chart.box.y + chart.box.height - 1), 'the others below the chart');
   assert.equal(composeSlide({ title: 'T', blocks: [{ chart: chartData }, { text: 'Median review time fell 57%.' }] }).track, undefined);
 });
 

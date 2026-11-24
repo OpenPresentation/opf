@@ -55,7 +55,7 @@ test('unnamed rows and columns at the edge keep their third', () => {
   assert.ok(box.y >= body.y + 2 * (third(corner) + gapOf(corner)) - 1, 'a lone bottom:end block stays in the bottom row');
   assert.ok(box.x >= body.x + 2 * ((body.width - 2 * gapOf(corner)) / 3 + gapOf(corner)) - 1, 'and in the end column');
   const row = composeSlide({ title: 'Top row', blocks: [{ region: 'top:start', text: 'Runs and colors' }, { region: 'top:center', chart }, { region: 'top:end', table }] });
-  assert.ok(item(row, 1, 'chart').box.height <= third(row) + 1, 'a top row alone keeps its third');
+  assert.ok(item(row, 1, 'chart').box.height > third(row) + gapOf(row), 'a full top row alone takes the whole body (opf#1412 A1 alternative)');
   const lower = composeSlide({ title: 'Lower rows', blocks: [{ region: 'middle:start', text: paragraph }, { region: 'bottom:start', table }] });
   assert.ok(item(lower, 0).box.y >= lower.contentBox.y + third(lower) + gapOf(lower) - 1, 'an empty top row keeps its third');
 });
@@ -81,4 +81,30 @@ test('the editor\'s region layouts fill the body: side by side, stacked, one on 
   for (const index of [0, 1, 2, 3]) assert.ok(Math.abs(item(grid, index).box.width - quarter) < 1, 'two by two: four quarters');
   const below = composeSlide({ title: 'Below', blocks: [text('top'), text('bottom:start'), text('bottom:end')] });
   assert.ok(Math.abs(item(below, 0).box.width - below.contentBox.width) < 1 && Math.abs(item(below, 2).box.width - quarter) < 1, 'one on top across, two halves below');
+});
+
+// opf#1412 (A1): two or more cells whose rows are all full take the whole body; a lone block keeps its edge (0.35.1).
+test('a full row of two or more cells takes the whole body; a lone edge block stays at its edge', () => {
+  for (const region of ['top', 'bottom']) {
+    const row = composeSlide({ title: 'Row', blocks: [{ region: `${region}:start`, text: 'Runs and colors' }, { region: `${region}:center`, chart }, { region: `${region}:end`, table }] });
+    const drawn = item(row, 1, 'chart').box, body = row.contentBox;
+    assert.ok(drawn.height > third(row) + gapOf(row), `a full ${region} row takes more than its third`);
+    assert.ok(Math.abs(drawn.y + drawn.height / 2 - (body.y + body.height / 2)) < body.height / 10, 'its blocks sit in the middle of the body');
+  }
+  const quarters = composeSlide({ title: 'Two quarters', blocks: [{ region: 'top:start', text: paragraph }, { region: 'top:end', items }] });
+  assert.ok(item(quarters, 0).box.y > quarters.contentBox.y + 1, 'top:start and top:end around an empty center take the body');
+  for (const [region, edge] of [['bottom:end', 'bottom'], ['top:start', 'top'], ['top', 'top'], ['bottom', 'bottom']]) {
+    const lone = composeSlide({ title: 'Lone', blocks: [{ region, text: 'Ship it in March.' }] });
+    const box = item(lone, 0).box, body = lone.contentBox;
+    if (edge === 'top') assert.ok(box.y + box.height <= body.y + third(lone) + 1, `a lone ${region} block stays in the top third`);
+    else assert.ok(box.y >= body.y + 2 * (third(lone) + gapOf(lone)) - 1, `a lone ${region} block stays in the bottom third`);
+  }
+  const partial = composeSlide({ title: 'Not full', blocks: [{ region: 'top:start', text: 'Runs and colors' }, { region: 'top:center', table }] });
+  assert.ok(item(partial, 1).box.y + item(partial, 1).box.height <= partial.contentBox.y + third(partial) + 1, 'a row that is not full keeps its third');
+});
+
+test('a full row over a background picture keeps its third: its cells may sit on panels the picture draws', () => {
+  const svg = `data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9"><rect width="16" height="9" fill="#ccc"/></svg>').toString('base64')}`;
+  const row = composeSlide({ title: 'Row', design: { background: { type: 'image', src: svg, fit: 'cover' } }, blocks: [{ region: 'bottom:start', text: 'Runs and colors' }, { region: 'bottom:center', chart }, { region: 'bottom:end', table }] });
+  assert.ok(item(row, 1, 'chart').box.height <= third(row) + 1);
 });

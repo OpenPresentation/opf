@@ -2,8 +2,8 @@
   "deck": "gallery/business-functions/strategy-offsite-pre-read.opf.json",
   "entries": {
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#0": {
-      "sha256": "46947cf24aadced6686b03df893d87fd5c2a88ec936b12bc47c5c13c9dbc50df",
-      "bytes": 17785
+      "sha256": "f848ed57fd1fa9d266ce900bfffc99a8a9f1481de59384e704335647c3b8847f",
+      "bytes": 17842
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#1": {
       "sha256": "598775b63f7a2c44f7166fbb68ea04848e1db71f9be8f44b35555657948f455f",
@@ -18,16 +18,16 @@
       "bytes": 17282
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#4": {
-      "sha256": "c54b07178690fb9ab5326eb60f4ca384c56be40d179236ff8a8c900ab5eda877",
-      "bytes": 23850
+      "sha256": "a8f104cdc8b2c8966720e63d6b0c6ecc33b84bec6183cbf2b0912ccd660c5f97",
+      "bytes": 27565
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#5": {
       "sha256": "114487e06608b820d10116ceef3164cac10b96b3759b0d943f1e9d7c6fb45b4b",
       "bytes": 28016
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#6": {
-      "sha256": "5eb3ebb5341aca74954d7d5b63b39ce717f29f23da3df18dac48ba5b33bc23e3",
-      "bytes": 21395
+      "sha256": "f311d4e37aa58cf786fa97c825af9f36c056f91e5e0f152eb2247ffb24b428f2",
+      "bytes": 21553
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#7": {
       "sha256": "b470bc627cc2cccb6835e7f73ef6a063f64d23c0593a459bfcbf841db4b6cf99",
@@ -38,8 +38,8 @@
       "bytes": 13223
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#9": {
-      "sha256": "67acc80027e340859b926ece9d391b0d94f078a19f20486322680bb077673bb7",
-      "bytes": 23973
+      "sha256": "8c88afcebc4a78fb410397551c703539907dfed57c32ceabbf71ae62baf0fb58",
+      "bytes": 24382
     }
   }
 }

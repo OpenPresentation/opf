@@ -466,6 +466,30 @@
           "candidateHelperSha256": "3baf818c1cfea66a9917aae8d32c0904bc018aa35f2437210a26728e397f99a1"
         },
         "scope": "Exact bare toPptx caller; every old archive hash, byte length, part count and applicable native-slide digest reproduced before generating a review candidate."
+      },
+      {
+        "baselineExportRef": "af413076e58fb979f345b8e60d77a882061bab51",
+        "baselineBuildHead": "af413076e58fb979f345b8e60d77a882061bab51",
+        "candidateHead": "1e575a383fb648bf5e8a3958015449a3b529642e",
+        "exportCaller": {
+          "api": "toPptx",
+          "input": "structuredClone(entry.deck)",
+          "options": "omitted",
+          "catalogs": "not registered"
+        },
+        "evidence": {
+          "directory": "C:\\opf-work\\c34\\lock-refresh\\rr54-review",
+          "reviewFile": "review.json"
+        },
+        "sourceEvidence": {
+          "directory": "C:\\opf-work\\c34\\lock-refresh\\rr54-review",
+          "baselineSourceTrees": "100644 blob 6651e2d00acc22100451b54ec15335e941d8b162\tpackage.json\n040000 tree 3e79ab92892cd96142a64bbd6c207ff44c0d105a\tpackages/gallery\n040000 tree b30fba1e370787b192fdaa4aa42bc0338d46015c\tpackages/javascript\n040000 tree f379154e13c7bb088d34eb61a150205a5ca2075f\tpackages/pptx\n040000 tree f7c2ec26c6fb1bd80f33e713f03d226906d0d3dd\tpackages/render\n100644 blob 936040bf412295e25d9899d2cc5f16af9d913a10\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree 1a518fd440a8a369947f1a359b2b0be96cd03c5d\tspec",
+          "candidateSourceTrees": "100644 blob 6651e2d00acc22100451b54ec15335e941d8b162\tpackage.json\n040000 tree 447e902948a48ace74350f734174e74a8cbecfbe\tpackages/gallery\n040000 tree 25b5ba7ea710774cb43c2f1464ea6ad8add88453\tpackages/javascript\n040000 tree 3a1f98a7ed449007199eaaec2ad7cb5cf4b89748\tpackages/pptx\n040000 tree e8b0c43608468df01ed8c73b5ce116072f8ad268\tpackages/render\n100644 blob 936040bf412295e25d9899d2cc5f16af9d913a10\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree 1a518fd440a8a369947f1a359b2b0be96cd03c5d\tspec",
+          "fixtureSha256": "44ce85e9ad06fd1db10db010d2eaf8f1b8a74548a4888ca1cf51c00f50da49ac",
+          "reviewerSha256": "9a2a066909e61c6982f5869d098b8e23ae82f4ecc7416416734ef10cecadbd63",
+          "candidateHelperSha256": "3baf818c1cfea66a9917aae8d32c0904bc018aa35f2437210a26728e397f99a1"
+        },
+        "scope": "Exact bare toPptx caller; every old archive hash, byte length, part count and applicable native-slide digest reproduced before generating a review candidate."
       }
     ]
   },
@@ -510,11 +534,11 @@
           }
         ]
       },
-      "sha256": "d4fa99798675ca1b7b51cefe1b609c3426cd517cfd37b0ee6e5447ad5f8f5d88",
+      "sha256": "a1c8459265f7dfe6113a82e54c82cdb77e1cf4e6b34b38ff15c0d638c78a21f8",
       "rr81PreviousSha256": "85196b38e1c71527b9c7d1c8d527bfbeb2244c182ce6a850634c3ae273f45685",
       "rr20PreviousSha256": "9267aeb25d11ae9f0a8e5a7ce9e719a2e069c043eb71d7d1ed583e8d7b589532",
       "rr20PartCount": 30,
-      "rr20Bytes": 26235,
+      "rr20Bytes": 26243,
       "rr90PreviousSha256": "10557a90788debcc5e0045481976b0d44c5eace4d180a16c91bbd88c7b35891c",
       "rr90PreviousBytes": 26053,
       "wi5PreviousSha256": "99954a11bc017161474a2c577aff23dd31e1a753efd07b3e47d879c131086c19",
@@ -574,6 +598,12 @@
           "bytes": 26239,
           "partCount": 30,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "d4fa99798675ca1b7b51cefe1b609c3426cd517cfd37b0ee6e5447ad5f8f5d88",
+          "bytes": 26235,
+          "partCount": 30,
+          "reviewIndex": 10
         }
       ]
     },
@@ -622,11 +652,11 @@
           }
         ]
       },
-      "sha256": "fc66ba4ee411a17384e09967f65ede9ae3a40b35f2e7561c57a02f640f637c18",
+      "sha256": "c0783320c0b19a21c3b3f7cdc36b683902c35edd37ddddcac1762fc2114895d0",
       "rr81PreviousSha256": "e1793caa675c7637a6c5c6e81dcde1cb76e7e317d17988ae9c2778d49745cbd6",
       "rr20PreviousSha256": "7d5fb91df2ecc073fc9e87ee42a9b25c17529c803e2a045bf1a9e05a1524998b",
       "rr20PartCount": 30,
-      "rr20Bytes": 26401,
+      "rr20Bytes": 26399,
       "rr90PreviousSha256": "7c18db3ff69b3fa0e04a9ad457b3251b7135e8c21baa56272ff0c0709187541f",
       "rr90PreviousBytes": 26123,
       "wi5PreviousSha256": "ff1731bf1af78da7560f8ee01822c9ee174763773b38db78eeda18f6e78b1e2f",
@@ -686,6 +716,12 @@
           "bytes": 26405,
           "partCount": 30,
           "reviewIndex": 9
+        },
+        {
+          "sha256": "fc66ba4ee411a17384e09967f65ede9ae3a40b35f2e7561c57a02f640f637c18",
+          "bytes": 26401,
+          "partCount": 30,
+          "reviewIndex": 10
         }
       ]
     },
@@ -2707,15 +2743,15 @@
           }
         ]
       },
-      "sha256": "90983c1cb618be2d5dc45d657da6fdaa42db9b8f72935e65d75d10b119da3487",
+      "sha256": "3b240a0134b2c0b99fd2d668af7fed124736734365da414ef237b54621996bb5",
       "previousSha256": "8744ecbad37555637ec72667e4d884db982c0882da3c4c6d21b65df141de2534",
-      "nativeSlideSha256": "3bf43698928ed9970e8170667e56322875dbfcd36cefe1fbd768858c17a2c69d",
+      "nativeSlideSha256": "5956d35eb0b2be7d7320798972f3027e43f2cb87a9604148d407cc2e68185e20",
       "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged.",
       "rr81PreviousSha256": "884f2202724f38110ee08308371622d013f34604ea0af6584a66cfeabff1234a",
       "rr81PreviousNativeSlideSha256": "cf16e2a0717f35272ecac4c58806b1a45db8bca1f224f3211c7e6bfeaafbcbac",
       "rr20PreviousSha256": "595b3af0478b788077e7233fce2461c2512465058d7188505682c6c2900874e4",
       "rr20PartCount": 31,
-      "rr20Bytes": 27102,
+      "rr20Bytes": 27098,
       "rr20PreviousNativeSlideSha256": "72b7cbc76ec12a294480c933f66a247dd90449798a0008d3adf3d723fa0591ad",
       "rr90PreviousSha256": "d66b20b9afc9c15964238285d36eaf9cc783e51009bb29cdf8a00dc6e2b0f9ff",
       "rr90PreviousBytes": 26900,
@@ -2793,6 +2829,13 @@
           "partCount": 31,
           "nativeSlideSha256": "d234019ab2bffabb5a07b4ad0a989d1fba5aaf84b93fade153038c9d0266d4f7",
           "reviewIndex": 9
+        },
+        {
+          "sha256": "90983c1cb618be2d5dc45d657da6fdaa42db9b8f72935e65d75d10b119da3487",
+          "bytes": 27102,
+          "partCount": 31,
+          "nativeSlideSha256": "3bf43698928ed9970e8170667e56322875dbfcd36cefe1fbd768858c17a2c69d",
+          "reviewIndex": 10
         }
       ]
     }

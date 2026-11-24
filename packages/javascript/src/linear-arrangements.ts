@@ -47,6 +47,8 @@ export const SMART_ART_SCALES: Readonly<Record<LinearArrangement, readonly numbe
   process: Object.freeze([1024, 426.5, 269, 196.75, 155, 128, 108.875, 94.75, 83.875, 75.25].map(value => value / 1024)),
   'vertical-process': Object.freeze([1024, 409.5, 256, 186, 146.25, 120.375, 102.375, 89, 78.75, 70.5].map(value => value / 1024)),
 });
+/** VPR-1: OPF's vertical flow of one step draws its box at most this share of the area wide. */
+export const VERTICAL_SINGLE_SHARE = .6;
 /** One node squeezed by the frame's other side is this share of the frame (PowerPoint's search stops a step short of 1). */
 const SQUEEZED = 1023 / 1024;
 /** PowerPoint's proportions: a chevron's height over its width and its step, a box's height over its width and its step, a vertical box's. */
@@ -168,11 +170,12 @@ function split(count: number, lines: number): number[] {
 /**
  * OPF's own design of a linear arrangement in `area`, drawn where PowerPoint's does not hold the entries (or lies outside the SmartArt
  * domain), in the deck's paint and PowerPoint's proportions, so the two read as one family. The entries go into `lines` rows (chevrons,
- * flow) or columns (vertical flow), as evenly as possible; every line spans the area (a line of fewer entries widens them, a column of
- * fewer lengthens them), and the block is centered in the area.
+ * flow) or columns (vertical flow), as evenly as possible; every line of a flow spans the area (a line of fewer entries widens them, a
+ * column of fewer lengthens them), and the block is centered in the area.
  *
  * - chevrons: each row a run of chevrons left to right, 0.9 widths apart, the point at most 0.2 of a width deep; a row breaks after a
- *   chevron's point and the next row starts again at the left.
+ *   chevron's point and the next row starts again at the left. Every chevron is as wide as one of the fullest row's, so a shorter row
+ *   stops before the right edge (C03).
  * - flow: boxes 0.4 of a width apart with PowerPoint's arrow in each room; the rows snake: the second runs right to left under the first,
  *   joined by a down arrow at the end where the first stops, and so on.
  * - vertical flow: boxes half a height apart with a down arrow in each room; the columns snake the same way (the second runs bottom to
@@ -192,7 +195,8 @@ export function linearDesign(kind: LinearArrangement, area: Box, count: number, 
   const place = (box: Box) => rtl ? mirrorBox(box, area) : box, turn = (rotation: number) => rtl ? (rotation === 0 ? 180 : rotation === 180 ? 0 : rotation) : rotation;
   if (kind === 'vertical-process') {
     // Columns two gaps apart, which hold the right arrow from one column to the next; each box half its height from the next.
-    const between = 2 * gap, width = (area.width - (wrap - 1) * between) / wrap;
+    // VPR-1: one step is a box of PowerPoint's proportion at most VERTICAL_SINGLE_SHARE of the area wide, not a block filling it.
+    const between = 2 * gap, width = n === 1 ? Math.min(area.width, VERTICAL_SINGLE_SHARE * area.width, VERTICAL_FLOW_WIDTH * area.height) : (area.width - (wrap - 1) * between) / wrap;
     if (width <= 0) return undefined;
     const fixed = compact ? COMPACT_COLUMN_ROOM * gap : 0;
     const tallest = Math.min(compact ? (area.height - (most - 1) * fixed) / most : area.height / (most + OPF_COLUMN_ROOM * (most - 1)), OPF_MOST['vertical-process'] * width);
@@ -203,7 +207,7 @@ export function linearDesign(kind: LinearArrangement, area: Box, count: number, 
     const length = compact ? COMPACT_ARROW_LENGTH * room : OPF_COLUMN_ARROW_LENGTH * h, thick = compact ? COMPACT_ARROW_THICKNESS * room : OPF_COLUMN_ARROW_THICKNESS * h;
     let entry = 0;
     counts.forEach((k, column) => {
-      const own = (span - (k - 1) * room) / k, x = area.x + column * (width + between), up = column % 2 === 1;
+      const own = (span - (k - 1) * room) / k, x = (n === 1 ? area.x + (area.width - width) / 2 : area.x) + column * (width + between), up = column % 2 === 1;
       for (let j = 0; j < k; j++) {
         const slot = up ? k - 1 - j : j, y = y0 + slot * (own + room);
         nodes.push(boxNode(entry + j, place({ x, y, width, height: own }), FLOW_ROUND_ADJUST));
@@ -239,7 +243,9 @@ export function linearDesign(kind: LinearArrangement, area: Box, count: number, 
   let entry = 0;
   counts.forEach((k, row) => {
     const y = y0 + row * (h + rowGap), back = !chevrons && row % 2 === 1;
-    const w = chevrons ? widthOf(k) : (area.width - (k - 1) * room) / k;
+    // C03: every row of chevrons keeps the full row's width (a shorter last row starts at the left and stops early), so like stages
+    // read alike; a flow's shorter row still spans the area, where its arrows turn.
+    const w = chevrons ? full : (area.width - (k - 1) * room) / k;
     const left = (slot: number) => area.x + slot * (chevrons ? (compact ? w - COMPACT_CHEVRON_DEPTH * w + fixed : CHEVRON_STEP * w) : w + room);
     for (let j = 0; j < k; j++) {
       const slot = back ? k - 1 - j : j, box = { x: left(slot), y, width: w, height: h };

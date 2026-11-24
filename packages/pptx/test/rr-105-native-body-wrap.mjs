@@ -41,7 +41,9 @@ const margins = (item, shape) => {
 };
 
 // Select the original authored witnesses by identity: sampler additions must not silently change the regression cases.
-const fixtureIds = ['dynamic-six-points', 'layout-chart', 'layout-image-beside'];
+// The tight-wrap witness is the three-column sampler slide: the text beside image-beside's picture now grows in its cell (LH-193) and
+// wraps with room to spare, while three-column's columns keep their size (COL-4), so its first column still wraps tightly.
+const fixtureIds = ['dynamic-six-points', 'layout-chart', 'layout-three-column'];
 const selectFixtures = slides => fixtureIds.map(id => {
   const matches = slides.filter(slide => slide.id === id);
   assert.equal(matches.length, 1, id + ' must appear exactly once in the sampler');
@@ -55,8 +57,9 @@ assert.deepEqual(fixtures[0].blocks.map(block => block.text), [
   'Start with a baseline.', 'Keep the scope to one workflow.', 'Review feedback every week.',
   'Name one owner per decision.', 'Share results with both teams.', 'Decide with the evidence, not the calendar.',
 ], 'All six original card texts remain the tested source');
-for (const fixture of fixtures.slice(1)) assert.equal(fixture.blocks[1].text,
-  'Test with two teams for six weeks. Measure task completion and time before deciding what to scale.');
+const tested = 'Test with two teams for six weeks. Measure task completion and time before deciding what to scale.';
+assert.equal(fixtures[1].blocks[1].text, tested);
+assert.equal(fixtures[2].blocks[0].text, tested);
 
 // 1. Six step cards, a lead measured narrower than its region, and a body PowerPoint could break either way.
 // Their order within this three-slide deck preserves the original assertion paths.
@@ -93,10 +96,13 @@ for (const fixture of fixtures.slice(1)) assert.equal(fixture.blocks[1].text,
   assert.ok(leadMargins.overrun >= leadMargins.need && leadMargins.room >= leadMargins.need);
   assert.ok(frame(leadShape).width < region.width - 100);
 
-  // Tight-wrap witness: line 1 plus "task" overruns core's 570.4 px by 0.14 px, so no width keeps both: the measured lines stay.
-  assert.ok(diagnostics.some(diagnostic => diagnostic.code === 'native-body-fallback' && diagnostic.reason === 'tight-wrap' && diagnostic.path === 'slides.2.blocks.1.text'));
-  assert.equal(nativeBody(slideXml(2), 'slides.2.blocks.1.text'), undefined);
-  assert.ok(shapesOf(slideXml(2)).some(shape => shape.includes('name="OPF text slides.2.blocks.1.text line 0"')), 'measured lines exported');
+  // Tight-wrap witness: three-column's first column at its 37 px size. Its widest line leaves 1.74 px of its 332.3 px box and its
+  // narrowest soft break overruns it by 0.17 px, so no width keeps both: the measured lines stay.
+  const tightItem = compose(deck, 2).items.find(item => item.path === 'slides.2.blocks.0.text');
+  assert.ok(tightItem && tightItem.text.lines.length > 1, 'the witness wraps');
+  assert.ok(diagnostics.some(diagnostic => diagnostic.code === 'native-body-fallback' && diagnostic.reason === 'tight-wrap' && diagnostic.path === 'slides.2.blocks.0.text'));
+  assert.equal(nativeBody(slideXml(2), 'slides.2.blocks.0.text'), undefined);
+  assert.ok(shapesOf(slideXml(2)).some(shape => shape.includes('name="OPF text slides.2.blocks.0.text line 0"')), 'measured lines exported');
 }
 
 // 2. The corpus: every body of every example that the exporter writes natively keeps both margins in its planned box, and the check bites

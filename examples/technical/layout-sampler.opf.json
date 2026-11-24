@@ -1527,7 +1527,8 @@
                 "text"
               ],
               "flow": "column",
-              "arrangement": "numbered"
+              "arrangement": "numbered",
+              "anchor": "middle"
             }
           ],
           "description": "Set expectations by listing the parts of a talk. Longer agendas flow across columns while preserving their order.",
@@ -1849,7 +1850,7 @@
             "listBullet": "none"
           },
           "direction": "column",
-          "anchor": "bottom",
+          "anchor": "middle",
           "regions": [
             {
               "name": "title"
@@ -2288,7 +2289,8 @@
                     "chart"
                   ],
                   "role": "supporting",
-                  "flow": "column"
+                  "flow": "column",
+                  "anchor": "middle"
                 }
               ]
             }
@@ -2403,7 +2405,8 @@
                     "list"
                   ],
                   "role": "supporting",
-                  "flow": "column"
+                  "flow": "column",
+                  "anchor": "middle"
                 }
               ]
             }
@@ -2490,7 +2493,7 @@
                 "metric"
               ],
               "role": "supporting",
-              "flow": "grid"
+              "flow": "row"
             },
             {
               "name": "body",
@@ -2518,7 +2521,7 @@
             "contentBox": true
           },
           "direction": "column",
-          "anchor": "bottom",
+          "anchor": "middle",
           "regions": [
             {
               "name": "title"

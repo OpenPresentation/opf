@@ -50,7 +50,9 @@ export const CURRENT_SEVEN_FIXTURE='packages/pptx/test/fixtures/chartex-fallback
 // (only the world-category archive differs, in the family name Meiryo to Yu Gothic in its theme, chart, docProps font list and document tag; the all-seven archive is byte-identical), `decks` and `decks['all-seven']` are byte-identical to 9523eddc3 (JSON.stringify compared). Previous: 11c3bdee061e5a918ccda94af789bfa3aacc20d5e94df9deaf0145e86f20787e, 131121 bytes.
 // 0.35.1 column anchors (owner decision 2026-11-23): layout tags only; the fixture's `source` review record and `entries` export hashes moved
 // (only the ppt/tags/opfLayout*.xml parts of two-column and three-column differ (their record hashes: the records' anchor went from bottom to middle); no slide layout, slide, chart, media or theme part differs), `decks` and `decks['all-seven']` are byte-identical to 919a4d703 (JSON.stringify compared). Previous: 813dc9dbc56127f4e7de59d55d610bd17a75ce693a35666632b1d585b7786320, 133208 bytes.
-export const CURRENT_SEVEN_FIXTURE_SHA256='5f18de2c82ef725851fe32fa13550f30154f44d372704017911a68969efcef86';
+// LH-194 to LH-199, the layout-sweep fixes (owner decision 2026-11-24, "Yes, refresh them"): the fixture's `source` review record and `entries` export hashes moved
+// (in all nine archives the ppt/tags/opfLayout*.xml parts of agenda, pillars, chart-beside, code, dashboard and team differ (their record hashes: the sweep's anchor, flow and card changes); in all-seven also ppt/charts/chart7.xml, the column chart with negative values, whose plot area is now written with layoutTarget inner (the negative-bar fix); no other part differs), `decks` and `decks['all-seven']` are byte-identical to af413076e (JSON.stringify compared). Previous: 5f18de2c82ef725851fe32fa13550f30154f44d372704017911a68969efcef86, 137186 bytes.
+export const CURRENT_SEVEN_FIXTURE_SHA256='2dbbf5095eb4577ca67ec13e261a6acef349d0857ceda5157c27089552e4f9c3';
 export const CURRENT_VALUE_PROFILE='seven-chart-treemap-single-value-edit-v1';
 export function currentSevenSource(root=fileURLToPath(new URL('../../',import.meta.url))){
  const bytes=fs.readFileSync(path.join(root,CURRENT_SEVEN_FIXTURE));

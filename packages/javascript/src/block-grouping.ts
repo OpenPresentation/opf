@@ -126,6 +126,8 @@ export function eyebrowLabel(label: unknown, text: unknown): boolean {
 
 /** A grouping node of a root node of the binding. */
 export function groupingNode(node: { kind: string; value: Record<string, any> }): GroupingNode {
+  // A block of `bullets` alone groups as the list it draws, as an `items` list does.
+  if (node.kind === 'text' && node.value.text === undefined && node.value.bullets !== undefined) return { kind: 'list' };
   return { kind: node.kind, ...(node.kind === 'group' ? { group: true } : {}), ...(node.kind === 'text' ? { length: textLength(node.value.text ?? node.value.bullets) } : {}) };
 }
 

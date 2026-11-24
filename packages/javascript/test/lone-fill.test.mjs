@@ -102,7 +102,8 @@ test('a body of short paragraphs grows together, keeps one size and sits in the 
     const items = body(result), sizes = items.map((item) => item.text.fontSize);
     assert.deepEqual(findings(result), []);
     assert.equal(new Set(sizes).size, 1, `${direction}: one size (LH-43): ${sizes}`);
-    assert.ok(sizes[0] > body(kept)[0].text.fontSize && sizes[0] <= LONE_DISPLAY_SIZES.list, `${direction}: ${sizes[0]}`);
+    // LH-102: past LH-48's three steps (a list's display size) a layout body under half full grows on, up to the compact display size (56 px).
+    assert.ok(sizes[0] > body(kept)[0].text.fontSize && sizes[0] <= 56, `${direction}: ${sizes[0]}`);
     const top = Math.min(...items.map((item) => item.box.y)), bottom = Math.max(...items.map((item) => item.box.y + item.text.lines.length * item.text.lineHeight));
     const title = result.items.find((item) => item.field === 'title').box, end = result.contentBox.y + result.contentBox.height;
     assert.ok(Math.abs(top - (title.y + title.height) - (end - bottom)) < 40, `${direction}: about as much space above as below`);
