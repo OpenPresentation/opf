@@ -168,7 +168,7 @@ const HELP: Record<string, string> = {
 	"chart-reference-ownership-uncertain": REFERENCE_UNCERTAIN,
 	"chart-reference-overlay-uncertain": REFERENCE_UNCERTAIN,
 	"chart-point-series-uncertain":
-		"The series the export split off so that PowerPoint's legend names the chart's one series were moved, removed or edited, so they import as separate series and the highlight is not restored. Remove the extra series from the chart data in OPF and set its highlight again, or export the original OPF source again.",
+		"The series the export split off so that PowerPoint's legend names the chart's one series were moved, removed or edited, so the chart imports as the file holds it (separate series, or gaps where the points of a removed series were) and the highlight is not restored. Fix the chart data in OPF (merge the extra series back, or fill the gaps) and set its highlight again, or export the original OPF source again.",
 	"chart-number-format-adapted": "The values were imported as numbers without their PowerPoint number format, which has no OPF equivalent. Set a format on that column of the chart data in OPF if the display matters.",
 	"chart-option-adapted": "The chart option at this path was adapted (the message says how): on export to what the chart can draw, on import to what OPF can express. Change the option in OPF if the difference matters.",
 	"chart-value-not-numeric": "Each value that is not a number is plotted as a gap, never guessed. In an OPF deck, write chart values as numbers and put currency, percent and units in the column format; in a PPTX, make the chart's cached values numbers (Edit Data in PowerPoint).",

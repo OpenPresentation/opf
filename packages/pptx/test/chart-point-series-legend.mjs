@@ -24,6 +24,9 @@ const charts = {
   noLegend: {type: 'column', data: {columns: ['Terminal', 'Wait'], rows: [['North', 42], ['South', 28], ['East', 35]]}, highlight: {categories: ['North']}},
   twoSeries: {type: 'column', data: {columns: ['Terminal', 'Wait', 'Queue'], rows: [['North', 42, 12], ['South', 28, 9], ['East', 35, 14]]}, legend: 'bottom', highlight: {categories: ['North']}},
   pie: {type: 'pie', data: {columns: ['Region', 'Share'], rows: [['EMEA', 40], ['APAC', 35], ['AMER', 25]]}, legend: 'right', highlight: {categories: ['EMEA']}},
+  // A stacked line would draw an added series on top of the authored one (its marker at twice the value): it is not split.
+  stackedLine: {type: 'stacked-line-with-markers', data: {columns: ['Month', 'Visits'], rows: [['Jan', 12], ['Feb', 18], ['Mar', 15], ['Apr', 22]]}, legend: 'right', highlight: {categories: ['Mar']}},
+  stackedPlainLine: {type: 'stacked-line', data: {columns: ['Month', 'Visits'], rows: [['Jan', 12], ['Feb', 18], ['Mar', 15], ['Apr', 22]]}, legend: 'right', highlight: {categories: ['Mar']}},
 };
 
 async function exported(chart) {
@@ -108,7 +111,7 @@ const chartOf = imported => imported.slides[0].chart ?? imported.slides[0].block
 }
 
 // 3. Controls: no legend, two series and a pie keep their c:dPt and write no added series.
-for (const key of ['noLegend', 'twoSeries', 'pie']) {
+for (const key of ['noLegend', 'twoSeries', 'pie', 'stackedLine', 'stackedPlainLine']) {
   const {xml} = await exported(charts[key]);
   assert.ok(!xml.includes(POINT_SERIES_URI), key);
   assert.match(xml, /<c:dPt>/, key);
@@ -162,6 +165,20 @@ for (const key of ['noLegend', 'twoSeries', 'pie']) {
   const chart = chartOf(await fromPptx(zipSync(moved), {onDiagnostic: d => diagnostics.push(d)}));
   assert.ok(diagnostics.some(d => d.code === 'chart-point-series-uncertain'), JSON.stringify(diagnostics.map(d => d.code)));
   assert.equal(chart.data.columns.length, 3, 'the series import as they are');
+}
+
+// 7. The added series deleted (as Delete on it in PowerPoint does): the authored series' own record says a series is missing, so the gap
+//    where North was is reported, not read silently as the authored data.
+{
+  const {entries, part, xml} = await exported(charts.bar);
+  const added = series(xml).find(ser => /^<c:ser>\s*<c:idx val="1"\/>/.test(ser) && ser.includes(POINT_SERIES_URI));
+  assert.ok(added, 'the added series');
+  const removed = xml.replace(added, '').replace(/<c:legendEntry><c:idx val="1"\/><c:delete val="1"\/><\/c:legendEntry>/, '');
+  const diagnostics = [];
+  const chart = chartOf(await fromPptx(zipSync({...entries, [part]: encoder.encode(removed)}), {onDiagnostic: d => diagnostics.push(d)}));
+  assert.ok(diagnostics.some(d => d.code === 'chart-point-series-uncertain' && /removed/.test(d.message)), JSON.stringify(diagnostics.map(d => d.code)));
+  assert.equal(chart.data.rows[0][1], null, `North imports as the gap the file holds: ${JSON.stringify(chart)} ${JSON.stringify(diagnostics.map(d => d.code))}`);
+  assert.equal(chart.highlight, undefined);
 }
 
 console.log('Chart point series passed: one-series legends name the series (bar, column, line, stacked), workbook columns, exact split and join, controls, round trip, uncertain split.');

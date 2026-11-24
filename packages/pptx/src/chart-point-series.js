@@ -113,6 +113,10 @@ export function splitPointSeries(xml) {
   const ordinary = all.filter(entry => !entry.text.includes(REFERENCE_URI));
   if (ordinary.length !== 1 || !KINDS[ordinary[0].kind]) return {xml};
   const base = ordinary[0], kind = KINDS[base.kind], sequence = SERIES_SEQUENCES[base.kind];
+  // A stacked line (stacked or percentStacked c:grouping) would draw the added series on top of the authored one, its marker at the sum:
+  // it keeps its c:dPt (and PowerPoint's legend of points). A stacked column keeps its gap, so its added series starts at zero.
+  const grouping = /<c:grouping val="(\w+)"\/>/.exec(plot[0].slice(base.group, plot[0].indexOf(`</c:${base.kind}>`, base.group)))?.[1];
+  if (kind === 'line' && (grouping === 'stacked' || grouping === 'percentStacked')) return {xml};
   const series = parse(base.text);
   if (!series) return {xml};
   const points = series.items.filter(entry => entry.name === 'c:dPt');
@@ -168,6 +172,10 @@ export function splitPointSeries(xml) {
     if (labels) authored = edit(authored, 'c:dLbls', value => value.replace(LABEL, label => moved.has(idxOf(label)) ? '' : label));
     authored = edit(authored, 'c:val', value => value.replace(POINT, (pt, row) => moved.has(Number(row)) ? '' : pt));
   }
+  // The authored series records the split too, so an import can tell that the added series were removed (their points then read as
+  // gaps). A series of the generator carries no c:extLst; one that does keeps it, with the record as one more c:ext.
+  const own = `<c:ext uri="${POINT_SERIES_URI}"><opf:pointSeries xmlns:opf="${POINT_SERIES_URI}" data="${encodeTextTag({v: 1, role: 'authored', added: looks.size})}"/></c:ext>`;
+  authored = item(authored, 'c:extLst') ? edit(authored, 'c:extLst', value => value.replace('</c:extLst>', `${own}</c:extLst>`)) : put(authored, 'c:extLst', `<c:extLst>${own}</c:extLst>`, sequence);
   // Every other series and legend entry after the authored one moves up by the added count.
   let body = '';
   let cursor = 0;
@@ -238,7 +246,7 @@ export function joinPointSeries(xml, report) {
   try {
     return join(xml);
   } catch (error) {
-    report?.({code: 'chart-point-series-uncertain', option: 'highlight', message: `A chart's series that its export split for the legend (one series per point color, so the legend names the series) no longer have the exported shape (${error.message}); they import as separate series.`});
+    report?.({code: 'chart-point-series-uncertain', option: 'highlight', message: `A chart's series that its export split for the legend (one series per point color, so the legend names the series) no longer have the exported shape (${error.message}); the series import as the file holds them: separate series, and gaps where the points of a removed series were.`});
     return xml;
   }
 }
@@ -247,17 +255,27 @@ function join(xml) {
   const plot = /<c:plotArea>[\s\S]*<\/c:plotArea>/.exec(xml);
   if (!plot) throw Error('no plot area');
   const all = plotSeries(plot[0]);
-  const extras = all.map(entry => ({...entry, record: record(entry.text)})).filter(entry => entry.text.includes(POINT_SERIES_URI));
-  if (extras.some(entry => !entry.record)) throw Error('a split record cannot be read');
+  const recorded = all.map(entry => ({...entry, record: record(entry.text)})).filter(entry => entry.text.includes(POINT_SERIES_URI));
+  if (recorded.some(entry => !entry.record)) throw Error('a split record cannot be read');
+  const authoredRecords = recorded.filter(entry => entry.record.role === 'authored'), extras = recorded.filter(entry => entry.record.role !== 'authored');
+  if (authoredRecords.length > 1) throw Error('two series claim to be the authored one');
+  // The authored series' record names how many series the export added: fewer (all of them deleted in PowerPoint included) leaves the
+  // moved points as gaps, which is reported rather than read as the authored data.
+  if (authoredRecords.length && extras.length !== authoredRecords[0].record.added) throw Error('the added series were removed');
+  if (!extras.length) throw Error('the added series were removed');
   const P = extras[0].record.base, kind = extras[0].record.kind, overlap = extras[0].record.overlap;
   if (extras.some(entry => entry.record.base !== P || entry.record.kind !== kind || entry.record.overlap !== overlap) || KINDS[extras[0].kind] !== kind) throw Error('the split records disagree');
-  const bases = all.filter(entry => !entry.text.includes(POINT_SERIES_URI) && idxOf(entry.text) === P);
+  const bases = all.filter(entry => !extras.some(extra => extra.at === entry.at) && idxOf(entry.text) === P);
   if (bases.length !== 1) throw Error('the authored series is missing');
   const base = bases[0], at = all.indexOf(base), n = extras.length;
+  if (authoredRecords.length && authoredRecords[0].at !== base.at) throw Error('the authored series was moved');
   if (extras.some((entry, index) => all[at + index + 1]?.at !== entry.at || entry.group !== base.group || idxOf(entry.text) !== P + index + 1)) throw Error('the split series were moved');
   const sequence = SERIES_SEQUENCES[base.kind];
   let series = parse(base.text);
   if (!series) throw Error('the authored series cannot be read');
+  // The authored series' own record goes; an c:extLst that held only it goes with it.
+  series = edit(series, 'c:extLst', value => value.replace(new RegExp(`<c:ext uri="${POINT_SERIES_URI}">[\\s\\S]*?</c:ext>`), ''));
+  if (/^\s*<c:extLst>\s*<\/c:extLst>$/.test(item(series, 'c:extLst')?.text ?? 'x')) series = drop(series, 'c:extLst');
   const O = valOf(item(series, 'c:order')?.text ?? '');
   const pointsOf = ser => [...(item(ser, 'c:val')?.text ?? '').matchAll(POINT)].map(match => ({row: Number(match[1]), text: match[0]}));
   const dPts = [], labels = [], values = [];

@@ -89,6 +89,11 @@ near(nativeTextHeight(text(386.36), false), points(34.16), 'text height');
     + (index ? Number(/<a:spcBef><a:spcPts val="(\d+)"/.exec(paragraph)?.[1] ?? 0) / 75 : 0), 0);
   const top = y + (height - lines) / 2;
   assert.ok(top > y + 50 && top + lines < y + height - 50, `the lines sit in the middle of a box over the body (${top.toFixed(2)} in ${y.toFixed(2)}..${(y + height).toFixed(2)})`);
+  // The first line opens where the top-anchored box put it: at core's first line, which the measured export writes as the list's first
+  // line shape (and which the native body's box started at before option D).
+  const measured = new TextDecoder().decode(unzipSync(await toPptx(deck))['ppt/slides/slide1.xml']);
+  const first = Number(/name="OPF list slides\.0\.items line 0"[\s\S]*?<a:off x="\d+" y="(\d+)"/.exec(measured)[1]) / 9525;
+  assert.ok(Math.abs(top - first) < 0.01, `first line at ${top.toFixed(3)} px, where it opened before (${first.toFixed(3)} px)`);
   // The automatic layout's Body placeholder takes the same box and anchor, so Reset puts the text back where it is.
   const target = /Target="\.\.\/slideLayouts\/(slideLayout\d+\.xml)"/.exec(new TextDecoder().decode(entries['ppt/slides/_rels/slide1.xml.rels']))?.[1];
   assert.ok(target && entries[`ppt/slideLayouts/${target}`], 'the slide\'s layout');
