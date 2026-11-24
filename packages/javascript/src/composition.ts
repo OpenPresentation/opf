@@ -11725,9 +11725,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (height >= box.height - 1) continue;
     if (chosen) table.tableGrowth = chosen.growth;
     // A pie or doughnut has no top line (no header row over a plot): the grown table stays in the middle of the chart box, beside the pie.
+    // opf#1412 (A2 with A11): a table that A2 set in the middle of its own full-height cell (cellOfItem) stays there, grown, beside the
+    // chart that fills the cell beside it: at the chart box's top line it would stand over the empty foot of its column.
     const resolved = resolveChartData(chart.value, options.presentation), plan = resolved.ok ? chartDrawPlan(chart.value, resolved, { language: deckLanguage() }) : undefined;
     const circular = plan !== undefined && (plan.type === 'pie' || plan.type === 'doughnut');
-    table.box = { ...table.box, y: circular ? round(box.y + box.height / 2 - height / 2) : box.y, height: round(height) };
+    const topLine = !circular && !cellOfItem.has(table);
+    table.box = { ...table.box, y: topLine ? box.y : round(box.y + box.height / 2 - height / 2), height: round(height) };
     onRows.add(table);
   }
   // Explicit labels report only their final placement, after sibling scales/plots and table-row alignment.

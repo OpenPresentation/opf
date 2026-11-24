@@ -27,3 +27,12 @@ test('a table as tall as the chart box keeps its size', () => {
   const placed = compose(slide).items.find((item) => item.field === 'table');
   assert.equal(placed.tableGrowth, undefined);
 });
+
+test('a table in its own full-height cell beside a chart (A2) grows and stays in the middle of the chart box', () => {
+  const slide = { title: 'Sidebar', blocks: [{ region: 'start', table }, { region: 'center+end', chart: { type: 'line', data } }] };
+  const result = compose(slide), kept = compose(slide, { fill: false });
+  const chart = result.items.find((item) => item.field === 'chart'), placed = result.items.find((item) => item.field === 'table');
+  assert.ok(placed.tableGrowth > 1, 'the table grew');
+  assert.ok(size(placed) > size(kept.items.find((item) => item.field === 'table')) - 1e-6, 'never smaller');
+  assert.ok(Math.abs(placed.box.y + placed.box.height / 2 - (chart.box.y + chart.box.height / 2)) < 1, 'centered beside the chart');
+});
