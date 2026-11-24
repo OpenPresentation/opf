@@ -1,8 +1,9 @@
 # Governance
 
-Status: **Proposed for Michael's approval** (2026-11-04). Nothing here is in force until it is approved. Until then the
-process is the one in [CONTRIBUTING.md](../CONTRIBUTING.md) and the schema change issue template, which this document
-writes down and extends.
+Status: **Proposed for Michael's approval** (2026-11-04). One statement is approved and in force: who holds the name
+([Name and logo](#name-and-logo), approved 2026-11-20). Nothing else here is in force until it is approved. Until then
+the process is the one in [CONTRIBUTING.md](../CONTRIBUTING.md) and the schema change issue template, which this
+document writes down and extends.
 
 This document covers the Open Presentation Format: the specification and schemas in `spec/`, the conformance suite in
 `conformance/`, and the reference packages released from this repository. It changes by the same process as the spec.
@@ -51,7 +52,7 @@ as it is go straight to a pull request ([CONTRIBUTING.md](../CONTRIBUTING.md)).
 
 ## Versioning and stability
 
-- **One version.** The seven packages share one semantic version. Before 1.0 (today 0.31.0) a minor release may break
+- **One version.** The seven packages share one semantic version. Before 1.0 a minor release may break
   documents or APIs and a patch release never does. Every breaking change is in the changelog, with a migration note when
   documents must change.
 - **Schema lines.** A schema `$id` such as `https://openpresentation.org/schema/opf/v1` names a line, not a release;
@@ -91,6 +92,7 @@ period and explains it on the issue after the release.
 
 ## Name and logo
 
+- **Data Advantage holds the names "Open Presentation Format" and "OPF".** Neither is a registered trademark today.
 - "Open Presentation Format" and "OPF" name the format; the logo in [`docs/brand/`](brand/) identifies it.
 - You may say a tool reads, writes, supports or implements OPF, and use the name and logo to refer to the format, without
   asking.
