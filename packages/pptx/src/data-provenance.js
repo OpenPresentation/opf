@@ -431,7 +431,8 @@ const validImportedTable = (table, nativeSource) => checkImportedFormat({slides:
  * `data` and `mapping`. Otherwise the imported chart, and a diagnostic.
  */
 export function restoreChartData(chart, record, evidence, {datasets, report}) {
-  if (!record.evidence.includes(evidence)) {
+  // `evidence` is the current hash, or the hashes of the forms the export may have read the same part in (opf#1431).
+  if (![evidence].flat().some(value => record.evidence.includes(value))) {
     report({code: 'chart-data-provenance-changed', message: 'The chart\'s cached data or number formats changed after export (for example in Edit Data), so the authored data form, dataset reference, column mapping, column formats and data source recorded at export were not restored; the chart imports the values and formats it now shows.' + (record.highlight ? ' The chart highlight (series and categories named at export) was not restored either: its names refer to the data as exported.' : '')});
     return chart;
   }
