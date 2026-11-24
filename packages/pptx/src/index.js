@@ -85,7 +85,7 @@ import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './i
 import {
   CHART_BAR_GAP_WIDTH, catalogRecords, clrMapAttributes, DIAGRAM_SHAPE_FAMILIES, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, intrinsicImageAspect, itemAlignment, pictureOverlay, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  chartNumberLanguage, chartPlotInset, horizontalBarPlot, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, languageInEffect, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
+  chartCircleSquare, chartNumberLanguage, chartPlotInset, horizontalBarPlot, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, languageInEffect, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -4013,6 +4013,32 @@ function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale,
   return {x: fraction(left), y: fraction(top), w: fraction(right - left), h: fraction(bottom - top), target: 'inner'};
 }
 
+// opf#1430: a pie's or doughnut's plot area is the square the preview draws it in (layoutTarget inner), as a doughnut's and a pie's beside
+// its value list already were (LH-182, LH-108). With an automatic plot area (or an outer one below a header row) PowerPoint drew the pie about
+// a tenth larger than the preview and higher. The square is core's (chartCircleSquare: the box less the padding, the header, the legend at
+// its position and the room of the names or labels outside the slices, 0.9 of the half side), or the centered square of a plot core pinned
+// (layer.plot, which the preview fills). `plot` is the inner plot the layer already wrote, if any; fractions of the chart frame.
+function circularPlot(chart, chartData, layer, plot, region, {scale, context, options, presentation}) {
+  const fraction = value => Number(Math.min(1, Math.max(0, value)).toFixed(4));
+  const box = {x: region.x * 96, y: region.y * 96, width: region.w * 96, height: region.h * 96};
+  let square;
+  if (plot?.target === 'inner') {
+    // A value list's or a doughnut's square is already square; a pinned plot is centered on its shorter side, as the preview draws it.
+    const width = plot.w * box.width, height = plot.h * box.height, side = Math.min(width, height);
+    square = {x: box.x + plot.x * box.width + (width - side) / 2, y: box.y + plot.y * box.height + (height - side) / 2, width: side, height: side};
+  } else {
+    const data = resolveChartData(isDatasetRef(chart?.data) ? inlineChartData(chart, presentation) : chart, presentation);
+    if (!data.ok) return undefined;
+    const measure = textWidthMeasurer(resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, italic: false}, options.textMeasurement), options.textMeasurement);
+    const deckLanguage = typeof presentation?.language === 'string' ? presentation.language : presentation?.language?.bcp47;
+    const language = chartNumberLanguage(chart, deckLanguage);
+    const geometry = {box, scale, minFontSize: context.composition?.minFontSize, measure, direction: context.direction === 'rtl' ? 'rtl' : 'ltr', ...(language === undefined ? {} : {language})};
+    square = chartCircleSquare({...chart, type: chartData.type}, data, geometry, layer, {labels: true});
+  }
+  if (!square || !(square.width > 0)) return undefined;
+  return {x: fraction((square.x - box.x) / box.width), y: fraction((square.y - box.y) / box.height), w: fraction(square.width / box.width), h: fraction(square.height / box.height), target: 'inner'};
+}
+
 function addChartPayload(slide, chart, region, context, options = {}, path = "chart", presentation, chartLayout) {
   const chartData = toPptxChartData(chart, context.chartexMode, presentation, path);
   if (!chartData.series) {
@@ -4169,6 +4195,11 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     const plotBox = lowLabelPlot(chart, chartData, layer, chartLayout?.valueAxis, layerXml.layout.plot, region, {scale, valueAxisHidden: layerXml.options.valAxisHidden === true, context, options, presentation, whole: true});
     if (plotBox) layerXml.layout.plot = plotBox;
   }
+  // opf#1430: a pie or doughnut has the preview's square (circularPlot).
+  else if (circular) {
+    const plotBox = circularPlot(chart, chartData, layer, layerXml.layout.plot, region, {scale, context, options, presentation});
+    if (plotBox) layerXml.layout.plot = plotBox;
+  }
   if (Object.keys(layerXml.layout).length) context.chartHeadings.get(objectName).layerLayout = layerXml.layout;
   const chartOptionsXml = {
     objectName,
@@ -4197,7 +4228,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     dataLabelColor: markLabelColor,
     dataLabelFontSize: textSize / 100,
     showValue: false,
-    ...(circular ? {dataBorder: slicePlan?.bordered ? {color: normalizeHex(panelFill).slice(0, 6), pt: CHART_SLICE_SEPARATOR_PX * 0.75} : {color: normalizeHex(neutrals?.outline?.hex ?? `#${context.colors.background}`), pt: 0.75}} : {}),
+    // opf#1430: the outline between slices at the preview's width, which scales with the slide (CHART_SLICE_SEPARATOR_PX slide pixels, or
+    // 0.75 of the slide's point).
+    ...(circular ? {dataBorder: slicePlan?.bordered ? {color: normalizeHex(panelFill).slice(0, 6), pt: CHART_SLICE_SEPARATOR_PX * scale * 0.75} : {color: normalizeHex(neutrals?.outline?.hex ?? `#${context.colors.background}`), pt: 0.75 * scale}} : {}),
     valGridLine: { color: gridColor, size: 1 },
     // LH-105: no tick marks: the gridlines carry the value scale and the category labels name their bands (Few: few gridlines and ticks).
     catAxisMajorTickMark: 'none',
