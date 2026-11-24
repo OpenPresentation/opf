@@ -16,6 +16,9 @@ const UNITS: Record<string, number> = { deg: 1, grad: 0.9, rad: 180 / Math.PI, t
 /** One CSS declaration of a list, with what surrounds it, so a rewrite keeps every other byte. */
 const DECLARATION = /(^|;)(\s*)([-\w]+)(\s*:\s*)([^;]*?)(\s*(?:!important)?\s*)(?=;|$)/gi;
 
+/** Reads a stop-color value: the sRGB color and alpha to write for it, or undefined to leave it as written. */
+export type StopColorReader = (value: string) => { color: string; alpha: number } | undefined;
+
 /** An HSL stop color: `{color: '#rrggbb', alpha}` for a form a browser draws (see the file comment), else undefined. */
 export function hslStopColor(value: string): { color: string; alpha: number } | undefined {
 	const match = LEGACY_HSL.exec(value.trim()) ?? MODERN_HSL.exec(value.trim());
@@ -54,11 +57,11 @@ const scaleOpacities = (css: string, factor: number) =>
  * a stop's own attribute for its style attribute). `converted` is called for each conversion. Returns the list, the same string when
  * nothing converts.
  */
-export function stopDeclarationList(css: string, converted: () => void, inherited = 1): string {
+export function stopDeclarationList(css: string, converted: () => void, inherited = 1, color: StopColorReader = hslStopColor): string {
 	let alpha = 1;
 	const next = css.replace(DECLARATION, (whole, lead, space, property, colon, value, tail) => {
 		if (String(property).toLowerCase() !== 'stop-color') return whole;
-		const stop = hslStopColor(value);
+		const stop = color(value);
 		if (!stop) return whole;
 		converted();
 		alpha = stop.alpha;
@@ -78,8 +81,8 @@ export function stopDeclarationList(css: string, converted: () => void, inherite
 }
 
 /** A stylesheet: each rule's declaration list (stopDeclarationList). */
-export function stopStylesheet(css: string, converted: () => void): string {
-	return /stop-color/i.test(css) ? css.replace(/\{([^{}]*)\}/g, (_, body: string) => `{${stopDeclarationList(body, converted)}}`) : css;
+export function stopStylesheet(css: string, converted: () => void, color: StopColorReader = hslStopColor): string {
+	return /stop-color/i.test(css) ? css.replace(/\{([^{}]*)\}/g, (_, body: string) => `{${stopDeclarationList(body, converted, 1, color)}}`) : css;
 }
 
 /**
@@ -87,15 +90,15 @@ export function stopStylesheet(css: string, converted: () => void): string {
  * attribute's stop-color in sRGB, each alpha folded into the stop-opacity that applies to it (the style's beats the attribute's). A
  * stop-opacity attribute is added at the end when none applies.
  */
-export function stopElementAttributes(pairs: [string, string][], converted: () => void): [string, string][] {
+export function stopElementAttributes(pairs: [string, string][], converted: () => void, color: StopColorReader = hslStopColor): [string, string][] {
 	const at = (key: string) => pairs.findIndex(([name]) => name === key);
 	const styleIndex = at('style'), opacityIndex = at('stop-opacity');
 	const attributeOpacity = opacityIndex < 0 ? 1 : (stopOpacityValue(pairs[opacityIndex]![1]) ?? 1);
 	const style = styleIndex < 0 ? '' : pairs[styleIndex]![1];
 	const styleSetsColor = /(?:^|;)\s*stop-color\s*:/i.test(style), styleSetsOpacity = /(?:^|;)\s*stop-opacity\s*:/i.test(style);
-	if (styleIndex >= 0) pairs[styleIndex]![1] = stopDeclarationList(style, converted, attributeOpacity);
+	if (styleIndex >= 0) pairs[styleIndex]![1] = stopDeclarationList(style, converted, attributeOpacity, color);
 	const colorIndex = at('stop-color');
-	const stop = colorIndex < 0 ? undefined : hslStopColor(pairs[colorIndex]![1]);
+	const stop = colorIndex < 0 ? undefined : color(pairs[colorIndex]![1]);
 	if (!stop) return pairs;
 	converted();
 	pairs[colorIndex]![1] = stop.color;
@@ -115,18 +118,20 @@ const encode = (value: string, quote: string) => value.replace(/&/g, '&amp;').re
 /**
  * The text of an SVG document with its HSL gradient stops in sRGB (see the file comment): every <stop> start tag, every other element's
  * style attribute and every <style> element's rules. Text that holds no `hsl` is returned as it is, and so is text with nothing to convert.
+ * `keep` leaves the HSL values it accepts as written: a reader that already draws a form keeps that form's bytes.
  */
-export function svgHslStopsToSrgb(text: string): string {
+export function svgHslStopsToSrgb(text: string, { keep }: { keep?: (value: string) => boolean } = {}): string {
 	if (!/hsl/i.test(text)) return text;
 	let changed = false;
 	const converted = () => { changed = true; };
+	const color: StopColorReader = keep ? (value) => (keep(value.trim()) ? undefined : hslStopColor(value)) : hslStopColor;
 	const tag = (whole: string, name: string, rest: string) => {
 		const attributes: { space: string; key: string; equals: string; quote: string; value: string }[] = [];
 		for (const match of rest.matchAll(ATTRIBUTE)) attributes.push({ space: match[1]!, key: match[2]!, equals: match[3]!, quote: match[4] !== undefined ? '"' : "'", value: decode(match[4] ?? match[5] ?? '') });
 		if (!attributes.some(({ key }) => key === 'style' || key === 'stop-color')) return whole;
 		const local = name.slice(name.indexOf(':') + 1);
 		const pairs: [string, string][] = attributes.map(({ key, value }) => [key, value]);
-		const written = local === 'stop' ? stopElementAttributes(pairs, converted) : pairs.map(([key, value]): [string, string] => [key, key === 'style' ? stopDeclarationList(value, converted) : value]);
+		const written = local === 'stop' ? stopElementAttributes(pairs, converted, color) : pairs.map(([key, value]): [string, string] => [key, key === 'style' ? stopDeclarationList(value, converted, 1, color) : value]);
 		let index = 0;
 		const body = rest.replace(ATTRIBUTE, (match, space: string, key: string, equals: string, double?: string) => {
 			const quote = double !== undefined ? '"' : "'";
@@ -140,6 +145,6 @@ export function svgHslStopsToSrgb(text: string): string {
 	let out = text.replace(/<([A-Za-z_][\w.:-]*)(\s(?:"[^"]*"|'[^']*'|[^'">])*\/?>)/g, tag);
 	out = out.replace(/(<(?:[A-Za-z_][\w.-]*:)?style\b[^>]*>)([\s\S]*?)(<\/(?:[A-Za-z_][\w.-]*:)?style>)/g, (_, open: string, css: string, close: string) =>
 		open + css.replace(/(<!\[CDATA\[)([\s\S]*?)(\]\]>)|([^<]+)/g, (part, cdataOpen?: string, cdata?: string, cdataClose?: string, plain?: string) =>
-			cdataOpen ? cdataOpen + stopStylesheet(cdata!, converted) + cdataClose : plain !== undefined ? stopStylesheet(plain, converted) : part) + close);
+			cdataOpen ? cdataOpen + stopStylesheet(cdata!, converted, color) + cdataClose : plain !== undefined ? stopStylesheet(plain, converted, color) : part) + close);
 	return changed ? out : text;
 }

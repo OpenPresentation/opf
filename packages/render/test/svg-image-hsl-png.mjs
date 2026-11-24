@@ -1,6 +1,8 @@
-// opf#1438: an SVG picture's HSL gradient stops draw in the PNG as a browser draws them. resvg draws the slash-alpha form black and the
-// number-only form not at all, so the PNG path converts the stops of its private copy to sRGB (core's svg-stop-colors, the conversion the
-// PPTX export applies). Each form's band must match the same picture written with the converted colors; the SVG output is not touched.
+// opf#1438: an SVG picture's HSL gradient stops draw in the PNG as a browser draws them. resvg draws the slash-alpha form and a hue unit
+// black and the number-only form not at all, so the PNG path converts those stops of its private copy to sRGB (core's svg-stop-colors,
+// the conversion the PPTX export applies). Each form's band must match the same picture written with the converted colors. A form resvg
+// reads itself (hsla(), the plain comma form) keeps its bytes, so its pixels and the goldens drawn from it do not move; the SVG output is
+// not touched.
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import {svgHslStopsToSrgb} from '@openpresentation/opf/composition';
@@ -22,6 +24,7 @@ const forms = [
   // number-only: modern form without percentages, resvg draws nothing.
   {written: 'stop-color="hsl(0 100 50)"', converted: 'stop-color="#ff0000"', expected: [255, 0, 0]},
 ];
+const page3 = stops => page(picture(stops));
 const written = page(picture(forms.map(form => form.written)));
 const reference = page(picture(forms.map(form => form.converted)));
 const [actual, expected] = await Promise.all([pixels(written), pixels(reference)]);
@@ -42,4 +45,13 @@ assert.equal(svgHslStopsToSrgb(picture([forms[1].written])), picture(['stop-colo
 const invalid = picture(['stop-color="hsl(120, 100% 50%)"', 'stop-color="hsl(120, 100, 50)"']);
 assert.equal(svgHslStopsToSrgb(invalid), invalid);
 
-console.log('svg-image-hsl-png: 3 forms match their converted colors in the PNG; invalid forms kept');
+// A hue unit (resvg: black) converts too; the plain comma form resvg reads keeps its bytes: its pixel is resvg's own reading of it
+// (90, 225, 90, truncated), not the rounded conversion (90, 226, 90), which is what keeps the template goldens where they are.
+{
+  const unit = await pixels(page3(['stop-color="hsl(120deg 70% 62%)"']));
+  assert.deepEqual(at(unit, 45, 15), [90, 226, 90], 'a hue unit converts');
+  const plain = await pixels(page3(['stop-color="hsl(120,70%,62%)"']));
+  assert.deepEqual(at(plain, 45, 15), [90, 225, 90], 'the comma form resvg reads is left as written');
+}
+
+console.log('svg-image-hsl-png: hsla, slash-alpha, number-only and hue-unit stops match their converted colors in the PNG; forms resvg reads and invalid forms kept');

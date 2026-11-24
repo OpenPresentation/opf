@@ -38,10 +38,16 @@ export async function prepareRasterImages(svg, {nestedSvg} = {}) {
   return output + svg.slice(end);
 }
 
+// The HSL stop forms resvg reads as a browser does (measured with resvg 2.6.2): an integer hue without a unit, integer
+// percentages, commas or spaces between them and an optional alpha number after a fourth comma. resvg draws every other valid
+// form black or not at all (the slash alpha, number-only, a hue unit, decimals, a percentage alpha), so only those are converted:
+// a form resvg draws keeps its bytes and its pixels (resvg truncates where the conversion rounds, a one-level difference).
+const RESVG_HSL = /^hsla?\(\s*[+-]?\d+\s*(?:,\s*|\s+)\d+%\s*(?:,\s*|\s+)\d+%\s*(?:,\s*(?:\d+(?:\.\d*)?|\.\d+)\s*)?\)$/i;
+
 // An SVG picture that draws text is rendered to PNG here (transparent, up to 4x its size) so its text uses the render's fonts;
-// one without text stays vector for resvg. Either way its HSL gradient stops are first converted to sRGB (opf#1438, the
-// conversion the PPTX export applies): resvg draws the slash-alpha form black and the number-only form not at all, where a
-// browser draws both. A picture with nothing to convert keeps its bytes.
+// one without text stays vector for resvg. Either way the HSL gradient stops resvg cannot read are first converted to sRGB
+// (opf#1438, the conversion the PPTX export applies), so the PNG draws what a browser draws. A picture with nothing to convert
+// keeps its bytes.
 async function prepareSvgImage(uri, nestedSvg) {
   const comma = uri.indexOf(',');
   const header = uri.slice(0, comma), data = uri.slice(comma + 1);
@@ -49,7 +55,7 @@ async function prepareSvgImage(uri, nestedSvg) {
   try {
     source = /;base64$/i.test(header) ? Buffer.from(decodeURIComponent(data).replace(/\s/g, ''), 'base64').toString('utf8') : decodeURIComponent(data);
   } catch { return null; }
-  const text = svgHslStopsToSrgb(source);
+  const text = svgHslStopsToSrgb(source, {keep: value => RESVG_HSL.test(value)});
   if (nestedSvg && /<(?:[A-Za-z_][\w.-]*:)?text[\s>/]/.test(text)) {
     // A document resvg cannot read stays as it is: resvg then draws nothing for it, as for any broken picture.
     try { return 'data:image/png;base64,' + Buffer.from(await nestedSvg(text)).toString('base64'); } catch { return null; }
