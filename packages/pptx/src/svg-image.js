@@ -3,6 +3,8 @@
 // I/O: reading an SVG data URI, validating and sanitizing the XML (nothing executes, nothing is fetched), measuring
 // the intrinsic size, choosing the fallback raster size and writing the extension into a generated package.
 
+import {stopDeclarationList, stopElementAttributes, stopStylesheet} from '@openpresentation/opf/composition';
+
 export const SVG_BLIP_URI = '{96DAC541-7B7A-43D3-8B79-37D633B846F1}';
 export const SVG_BLIP_NS = 'http://schemas.microsoft.com/office/drawing/2016/SVG/main';
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -129,92 +131,16 @@ export function prepareSvg(input) {
   }
 }
 
-// Office's SVG reader paints literal HSL gradient stops black. Convert them to sRGB while keeping the gradient editable as SVG: the CSS
-// Color 4 forms a browser draws, `hsl()` and `hsla()` alike, the legacy comma form (percentages, optional alpha after a fourth comma) and
-// the modern space form (numbers or percentages, optional alpha after a slash). A form a browser does not draw (commas mixed with spaces,
-// a missing percent in the comma form) is left as it is. The alpha, when below one, is folded into the stop's stop-opacity (see
-// stopOpacity). Returns {color: '#rrggbb', alpha} or undefined.
-const NUMBER = '[+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+-]?\\d+)?';
-const LEGACY_HSL = new RegExp(`^hsla?\\(\\s*(${NUMBER})(deg|grad|rad|turn)?\\s*,\\s*(${NUMBER})%\\s*,\\s*(${NUMBER})%\\s*(?:,\\s*(${NUMBER})(%?)\\s*)?\\)$`, 'i');
-const MODERN_HSL = new RegExp(`^hsla?\\(\\s*(${NUMBER})(deg|grad|rad|turn)?\\s+(${NUMBER})%?\\s+(${NUMBER})%?\\s*(?:\\/\\s*(${NUMBER})(%?)\\s*)?\\)$`, 'i');
-function officeStopColor(value) {
-  const match = LEGACY_HSL.exec(value.trim()) ?? MODERN_HSL.exec(value.trim());
-  if (!match) return undefined;
-  const degrees = Number(match[1]) * ({deg: 1, grad: 0.9, rad: 180 / Math.PI, turn: 360}[(match[2] ?? 'deg').toLowerCase()]);
-  if (!Number.isFinite(degrees)) return undefined;
-  const hue = ((degrees % 360) + 360) % 360;
-  const saturation = Math.min(100, Math.max(0, Number(match[3]))) / 100;
-  const lightness = Math.min(100, Math.max(0, Number(match[4]))) / 100;
-  const amplitude = saturation * Math.min(lightness, 1 - lightness);
-  const channel = offset => {
-    const k = (offset + hue / 30) % 12;
-    const level = lightness - amplitude * Math.max(-1, Math.min(k - 3, 9 - k, 1));
-    return Math.round(level * 255).toString(16).padStart(2, '0');
-  };
-  const alpha = match[5] === undefined ? 1 : Math.min(1, Math.max(0, Number(match[5]) / (match[6] ? 100 : 1)));
-  if (!Number.isFinite(alpha)) return undefined;
-  return {color: '#' + channel(0) + channel(8) + channel(4), alpha};
-}
-// A stop-opacity value (a number or a percentage, clamped to 0..1); undefined when it is not one.
-const opacityOf = value => {
-  const match = new RegExp(`^\\s*(${NUMBER})(%?)\\s*$`, 'i').exec(value ?? '');
-  return match ? Math.min(1, Math.max(0, Number(match[1]) / (match[2] ? 100 : 1))) : undefined;
-};
-const opacityText = value => String(Number(value.toFixed(4)));
-const DECLARATION = /(^|;)(\s*)([-\w]+)(\s*:\s*)([^;]*?)(\s*(?:!important)?\s*)(?=;|$)/gi;
-// One declaration list (a style attribute, or the body of a stylesheet rule): its HSL stop-color in sRGB and, when that color carries an
-// alpha below one, the stop-opacity of the same list multiplied by it (or `inherited` times it added, `inherited` being the opacity the
-// list overrides: the stop's own attribute for a style attribute). `convert` reports a conversion. Returns the list.
-function stopList(css, convert, inherited = 1) {
-  let alpha = 1, hasOpacity = false;
-  let next = css.replace(DECLARATION, (whole, lead, space, property, colon, value, tail) => {
-    if (property.toLowerCase() !== 'stop-color') return whole;
-    const converted = officeStopColor(value);
-    if (!converted) return whole;
-    convert(); alpha = converted.alpha;
-    return `${lead}${space}${property}${colon}${converted.color}${tail}`;
-  });
-  if (alpha >= 1) return next;
-  next = next.replace(DECLARATION, (whole, lead, space, property, colon, value, tail) => {
-    if (property.toLowerCase() !== 'stop-opacity') return whole;
-    const own = opacityOf(value);
-    if (own === undefined) return whole;
-    hasOpacity = true;
-    return `${lead}${space}${property}${colon}${opacityText(own * alpha)}${tail}`;
-  });
-  if (hasOpacity) return next;
-  const trimmed = next.replace(/\s*;?\s*$/, '');
-  return `${trimmed}${trimmed ? ';' : ''}stop-opacity:${opacityText(inherited * alpha)}`;
-}
+// Office's SVG reader paints literal HSL gradient stops black: sanitize converts them to sRGB with the shared conversion (core's
+// svg-stop-colors: the forms a browser draws, each alpha folded into the stop's stop-opacity; other forms are left as written), keeping
+// the gradient editable as SVG.
 
 function sanitize(input, text) {
   const out = [], stack = [], entities = new Map(), removed = new Set();
   let normalizedColor = false;
   const converted = () => { normalizedColor = true; };
-  // A stylesheet: each rule's declaration list.
-  const stopDeclarations = css => /stop-color/i.test(css) ? css.replace(/\{([^{}]*)\}/g, (_, body) => `{${stopList(body, converted)}}`) : css;
-  // A <stop>'s attributes ([key, value] pairs): its stop-color attribute and its style attribute's stop-color, each with its alpha folded
-  // into the stop-opacity that applies to it (the style's beats the attribute, as in the cascade).
-  const stopAttributes = pairs => {
-    const at = key => pairs.findIndex(([name]) => name === key);
-    const styleIndex = at('style'), opacityIndex = at('stop-opacity');
-    const attributeOpacity = opacityIndex < 0 ? 1 : opacityOf(pairs[opacityIndex][1]) ?? 1;
-    const style = styleIndex < 0 ? '' : pairs[styleIndex][1];
-    const styleSetsColor = /(?:^|;)\s*stop-color\s*:/i.test(style), styleSetsOpacity = /(?:^|;)\s*stop-opacity\s*:/i.test(style);
-    if (styleIndex >= 0) pairs[styleIndex][1] = stopList(style, converted, attributeOpacity);
-    const colorIndex = at('stop-color');
-    const color = colorIndex < 0 ? undefined : officeStopColor(pairs[colorIndex][1]);
-    if (!color) return pairs;
-    converted();
-    pairs[colorIndex][1] = color.color;
-    // The style's own stop-color overrides the attribute (its alpha is the style's to fold); so does the style's stop-opacity.
-    if (color.alpha >= 1 || styleSetsColor) return pairs;
-    if (styleSetsOpacity) pairs[styleIndex][1] = pairs[styleIndex][1].replace(DECLARATION, (whole, lead, space, property, colon, value, tail) =>
-      property.toLowerCase() === 'stop-opacity' && opacityOf(value) !== undefined ? `${lead}${space}${property}${colon}${opacityText(opacityOf(value) * color.alpha)}${tail}` : whole);
-    else if (opacityIndex >= 0) pairs[opacityIndex][1] = opacityText(attributeOpacity * color.alpha);
-    else pairs.push(['stop-opacity', opacityText(color.alpha)]);
-    return pairs;
-  };
+  const stopDeclarations = css => stopStylesheet(css, converted);
+  const stopAttributes = pairs => stopElementAttributes(pairs, converted);
   let index = 0, root = null, skipping = 0, expansion = 0, hasText = false;
   const malformed = message => { throw new SvgError('svg-malformed', `The SVG is not well-formed XML: ${message}`); };
   // Entity and character references in text and attribute values: only the five predefined entities, numeric
@@ -330,8 +256,8 @@ function sanitize(input, text) {
         }
         kept.push([key, value]);
       }
-      // HSL gradient stops in sRGB (officeStopColor): a <stop>'s attributes together, any other element's style declarations.
-      const written = name === 'stop' ? stopAttributes(kept) : kept.map(([key, value]) => [key, key === 'style' ? stopList(value, converted) : value]);
+      // HSL gradient stops in sRGB (svg-stop-colors): a <stop>'s attributes together, any other element's style declarations.
+      const written = name === 'stop' ? stopAttributes(kept) : kept.map(([key, value]) => [key, key === 'style' ? stopDeclarationList(value, converted) : value]);
       for (const [key, value] of written) tag += ` ${key}="${escapeAttribute(value)}"`;
       out.push(selfClosing ? `${tag}/>` : `${tag}>`);
     }

@@ -1,3 +1,4 @@
+import {svgHslStopsToSrgb} from '@openpresentation/opf/composition';
 import {OPFRenderError} from './svg.js';
 import {isConverterMissing,loadConverter} from './converters.js';
 
@@ -38,15 +39,22 @@ export async function prepareRasterImages(svg, {nestedSvg} = {}) {
 }
 
 // An SVG picture that draws text is rendered to PNG here (transparent, up to 4x its size) so its text uses the render's fonts;
-// one without text stays vector for resvg.
+// one without text stays vector for resvg. Either way its HSL gradient stops are first converted to sRGB (opf#1438, the
+// conversion the PPTX export applies): resvg draws the slash-alpha form black and the number-only form not at all, where a
+// browser draws both. A picture with nothing to convert keeps its bytes.
 async function prepareSvgImage(uri, nestedSvg) {
-  if (!nestedSvg) return null;
   const comma = uri.indexOf(',');
   const header = uri.slice(0, comma), data = uri.slice(comma + 1);
-  const text = /;base64$/i.test(header) ? Buffer.from(decodeURIComponent(data).replace(/\s/g, ''), 'base64').toString('utf8') : decodeURIComponent(data);
-  if (!/<(?:[A-Za-z_][\w.-]*:)?text[\s>/]/.test(text)) return null;
-  // A document resvg cannot read stays as it is: resvg then draws nothing for it, as for any broken picture.
-  try { return 'data:image/png;base64,' + Buffer.from(await nestedSvg(text)).toString('base64'); } catch { return null; }
+  let source;
+  try {
+    source = /;base64$/i.test(header) ? Buffer.from(decodeURIComponent(data).replace(/\s/g, ''), 'base64').toString('utf8') : decodeURIComponent(data);
+  } catch { return null; }
+  const text = svgHslStopsToSrgb(source);
+  if (nestedSvg && /<(?:[A-Za-z_][\w.-]*:)?text[\s>/]/.test(text)) {
+    // A document resvg cannot read stays as it is: resvg then draws nothing for it, as for any broken picture.
+    try { return 'data:image/png;base64,' + Buffer.from(await nestedSvg(text)).toString('base64'); } catch { return null; }
+  }
+  return text === source ? null : 'data:image/svg+xml;base64,' + Buffer.from(text, 'utf8').toString('base64');
 }
 
 async function prepareRasterImage(uri) {
