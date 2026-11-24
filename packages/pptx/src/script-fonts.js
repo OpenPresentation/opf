@@ -544,6 +544,15 @@ export function reconcileLanguage(groups, observed, report, document) {
   // engine default, or (v0.35) the language read from the text of a deck in a right-to-left script. A language set in
   // PowerPoint is imported as observed.
   if (groups[index].ops.some(op => op.remove && op.path?.length === 1 && op.path[0] === "language")) {
+    // The export wrote each slide in the language read from that slide's text, so an untouched file is one whose every slide
+    // still carries that language. Comparing the most common run tag of the whole file with the reading of the whole deck's
+    // text is not the same test: one counts runs and the other letters, and they disagree where the slide in the
+    // engine default has more runs than the right-to-left slide has (the deck then came back with an invented language).
+    const tagged = (observed.slides ?? []).map((slide, slideIndex) => ({lang: slide?.lang, slideIndex})).filter(slide => slide.lang);
+    const asWritten = tagged.length > 0 && tagged.every(({lang, slideIndex}) => {
+      try { return resolver(undeclared, {slideIndex}, observed.catalogs).lang.toLowerCase() === lang.toLowerCase(); } catch { return false; }
+    });
+    if (asWritten) return groups;
     let fallback;
     try { fallback = resolver(undeclared, {}, observed.catalogs).lang; } catch { fallback = undefined; }
     return typeof fallback === "string" && fallback.toLowerCase() === observed.lang.toLowerCase() ? groups : groups.filter((_, position) => position !== index);
