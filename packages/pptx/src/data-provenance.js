@@ -224,7 +224,8 @@ const datasetHash = (datasets, id) => own(datasets, id) ? hash(canonical(dataset
 /** Authored chart data whose source form the native cache alone cannot preserve. */
 export function chartDataRecord(chart, datasets, {rowNumbers = false, fallback = false} = {}) {
   // LH-60: a chart drawn as core's fallback (a box per series writes its rows as one group) records its authored data, so import restores it.
-  if (!rowNumbers && !fallback && !chartUsesDataFields(chart) && !object(chart?.highlight)) return undefined;
+  // A scatter series caches only its X/Y coordinates. Its authored point names and first-column heading need the data tag.
+  if (chart?.type !== 'scatter' && !rowNumbers && !fallback && !chartUsesDataFields(chart) && !object(chart?.highlight)) return undefined;
   const dataset = isDatasetRef(chart.data) ? datasetHash(datasets, chart.data.dataset) : undefined;
   return {v: 1, kind: 'chart', data: clone(chart.data), ...(chart.mapping !== undefined ? {mapping: clone(chart.mapping)} : {}), ...(object(chart.highlight) ? {highlight: clone(chart.highlight)} : {}), ...(dataset ? {dataset} : {})};
 }
