@@ -667,9 +667,11 @@ export function createCanvasEditor(container, options = {}) {
     // The input's caret, selection and hit testing are the browser's, on the input's own lines: they are on the drawn glyphs only
     // while the input breaks its lines where the slide does. A heading's lines are balanced (WI-4) and the browser wraps greedily, so
     // the input takes the wrap width that gives the drawn breaks, as side padding (its box and outline keep the text box). A draft
-    // that is not drawn yet (a composition, an invalid value) keeps the last answer.
+    // that is not drawn yet (a composition, an invalid value) keeps the last answer. Once no width gives the drawn breaks (`null`) the
+    // input keeps showing its own text until the edit ends: the answer does not flip from one keystroke to the next, so the heading
+    // does not jump between the drawing and the browser's wrap while it is typed.
     if (ownText) active.wrap = undefined;
-    else {
+    else if (active.wrap !== null) {
       const fit = inputWrapWidth({ doc, win, input: active.input, target, path: active.path, source: inputSource(active), width: width * scale });
       if (fit !== undefined) active.wrap = fit;
     }
@@ -685,8 +687,15 @@ export function createCanvasEditor(container, options = {}) {
       paddingLeft: `${aligned === "right" ? slack : aligned === "center" ? slack / 2 : 0}px`,
       paddingRight: `${aligned === "left" ? slack : aligned === "center" ? slack / 2 : 0}px`,
     });
+    // The box grows to the right where the text is left aligned and to the left where it is end aligned (centered: both ways).
     active.input.style.left = `${svgRect.left - rootRect.left + (left - viewBox.x) * scale - (aligned === "right" ? grown : aligned === "center" ? grown / 2 : 0)}px`;
     active.input.style.top = `${svgRect.top - rootRect.top + (y - viewBox.y) * scale}px`;
+    // The input's own wrap can take more rows than the drawing has: its box grows to hold them (it does not scroll or clip).
+    if (active.wrap === null && !ownText) {
+      const input = active.input, drawn = parseFloat(input.style.height);
+      input.style.height = "0px";
+      input.style.height = `${Math.max(drawn, input.scrollHeight)}px`;
+    }
     // When the input supplies visible text, its selected text needs the same fill.
     active.input.style.setProperty('--opf-inline-selection-color',visibleText ? font.fill : 'transparent');
     // Other text keeps the canonical SVG visible beneath the transparent input.
