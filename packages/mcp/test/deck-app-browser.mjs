@@ -18,6 +18,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { chromium } from "playwright";
+import { typefacesNotOfficeSafe, typefacesNotOfficeSafeMessage } from "@openpresentation/opf-pptx";
 import { createOpfServer } from "../dist/index.js";
 import { installedFontFiles } from "../dist/stdio.js";
 import { minifyAppCss } from "../scripts/app-css.mjs";
@@ -617,6 +618,26 @@ try {
 			assert.equal((await hostState()).downloads.length, 1);
 			await shoot("host-download-" + mode);
 		}
+	});
+
+	await run("a PowerPoint export names the fonts a viewer's PowerPoint may lack, as a note beside the file, and still succeeds", async () => {
+		// The note `opf convert` reports as pptx/typeface-not-office-safe (opf-pptx's typefacesNotOfficeSafe and the same sentence).
+		await open({ document: downloadDeck }, "light", { downloadMode: "accepted" });
+		await view().locator("#deck-export .opf-export-trigger").click();
+		await view().locator('.opf-export-item[data-format="pptx"]').click();
+		await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 120000 });
+		const bytes = Buffer.from((await hostState()).downloads[0].contents[0].resource.blob, "base64");
+		const families = typefacesNotOfficeSafe(new Uint8Array(bytes));
+		assert.ok(families.includes("Roboto"), `the file names Roboto (${families.join(", ")})`);
+		const status = view().locator(".opf-export-status");
+		const notes = view().locator(".opf-export-notes li");
+		await status.filter({ hasText: /.pptx/ }).waitFor({ timeout: 30000 });
+		await shoot("export-font-note");
+		await notes.first().waitFor({ timeout: 30000 });
+		assert.deepEqual(await notes.allInnerTexts(), [typefacesNotOfficeSafeMessage(families)], "one note, the sentence the command line prints");
+		assert.match(await notes.first().innerText(), /^The PPTX names .*Roboto.*not on every Windows and macOS machine/);
+		assert.match(await status.innerText(), /1 note to review/);
+		assert.doesNotMatch(await status.innerText(), /failed|error/i, "information: the export succeeded");
 	});
 
 	await run("a capable host binary Export denial is visible and never uses an iframe download", async () => {
