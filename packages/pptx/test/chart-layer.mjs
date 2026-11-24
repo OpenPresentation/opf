@@ -10,6 +10,21 @@ import {toPptx, fromPptx} from '../dist/index.js';
 
 const decoder = new TextDecoder();
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: ''});
+// A rotated title needs a separate horizontal band while the bars stay on the adjacent table rows.
+{
+  const data = {columns: ['Prototype', 'Minutes'], rows: [['Prototype A', 5.8], ['Prototype B', 6.7]]};
+  const plot = async axisTitles => {
+    const deck = {slides: [{title: 'Compare', chart: {type: 'bar', data, axisTitles}, table: data}]};
+    const bytes = await toPptx(deck);
+    const doc = parser.parse(decoder.decode(unzipSync(bytes)['ppt/charts/chart1.xml']));
+    return doc['c:chartSpace']['c:chart']['c:plotArea']['c:layout']['c:manualLayout'];
+  };
+  const a = await plot({value: 'Minutes'}), b = await plot({value: 'Minutes', category: 'Prototype'});
+  assert.equal(b['c:layoutTarget'].val, 'inner');
+  assert.ok(Number(b['c:x'].val) > Number(a['c:x'].val));
+  assert.ok(Number(b['c:w'].val) < Number(a['c:w'].val));
+  assert.deepEqual([b['c:y'], b['c:h']], [a['c:y'], a['c:h']]);
+}
 const two = {columns: ['Quarter', 'Current', 'Baseline'], rows: [['Q1', 28, 25], ['Q2', 32, 27], ['Q3', 35, 29], ['Q4', 39, 31]]};
 // LH-105: the last point is emphasised only when the categories run in time, so they are quarters.
 const one = {columns: ['Quarter', 'Count'], rows: [['Q1', 120], ['Q2', 64], ['Q3', 31], ['Q4', 12]]};

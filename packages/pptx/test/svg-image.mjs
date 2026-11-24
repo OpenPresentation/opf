@@ -19,6 +19,14 @@ import {prepareSvg, svgDataUriBytes, svgIntrinsicSize, svgRasterScale} from '../
 import {shownFurnitureParts} from './helpers/master-furniture.mjs';
 
 const NS = 'xmlns="http://www.w3.org/2000/svg"';
+{
+  const svg = '<svg ' + NS + ' viewBox="0 0 1 1"><linearGradient id="g"><stop stop-color="hsl(0,100%,50%)"/><stop offset="1" style="stop-color:hsl(-.666666667turn 100% 50%);stop-opacity:.5"/></linearGradient></svg>';
+  const prepared = prepareSvg(new TextEncoder().encode(svg));
+  assert.deepEqual(prepared.removed, []);
+  const vector = new TextDecoder().decode(prepared.bytes);
+  assert.match(vector, /stop-color="#ff0000"/);
+  assert.match(vector, /stop-color:#00ff00;stop-opacity:.5/);
+}
 const SVG_URI = '{96DAC541-7B7A-43D3-8B79-37D633B846F1}';
 const read = async name => new Uint8Array(await readFile(new URL(`./fixtures/images/${name}`, import.meta.url)));
 const uriOf = (text, type = 'image/svg+xml') => `data:${type};base64,${Buffer.from(text).toString('base64')}`;
