@@ -30,6 +30,7 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 - Metadata array forms for organizations, speakers, authors, and takeaways.
 - Custom narrative records, slide beat links and catalog override surfaces.
 - Limits on a template's variables: `maxLength` and `maxLines` on text variables and `maxItems` on a list variable, with values inside them ([`variable-limits.opf.json`](./variable-limits.opf.json), from core 0.37.0).
+- Links to a slide of the same deck: `slide:<id>` on a text run, a shape and a table cell, one of them to a hidden slide ([`slide-links.opf.json`](./slide-links.opf.json)).
 
 - `multilingual-slides.opf.json`: English, Arabic, Japanese and French slides in one deck, with a selected Arabic script font and locale-aware numbers.
 

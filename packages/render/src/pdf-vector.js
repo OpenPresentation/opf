@@ -188,6 +188,9 @@ class Converter {
     };
     page.section.page = page;
     this.pages.push(page);
+    // FR-03: the slide this page draws, when another slide links to it (the first page of a slide that continues).
+    const slideId = attrs["data-opf-slide"];
+    if (slideId !== undefined && !(this.slidePages ??= new Map()).has(slideId)) this.slidePages.set(slideId, page);
     // The page is painted white unless `background` says otherwise (raster mode composites on white too), so the page looks
     // the same in viewers that show a dark or transparent paper.
     const background = parseColor(this.options.background ?? "#FFFFFF");
@@ -317,7 +320,8 @@ class Converter {
     };
     if (node.name === "a") {
       const href = attrs.href ?? attrs["xlink:href"];
-      if (href !== undefined) next.link = { href, node };
+      // FR-03: a slide link (`data-opf-slide-link`) is a link to the page of that slide, not to an address.
+      if (href !== undefined) next.link = { href, node, slide: attrs["data-opf-slide-link"] };
     }
     const opacity = attrs.opacity === undefined ? 1 : Math.min(1, Math.max(0, parseFloat(attrs.opacity)));
     if (opacity === 0 || Number.isNaN(opacity)) return;
@@ -906,7 +910,8 @@ class Converter {
   }
 
   linkAnnotation(run, ctx) {
-    const uri = safeUri(run.link.href);
+    const slide = run.link.slide;
+    const uri = slide === undefined ? safeUri(run.link.href) : "";
     if (uri === null) {
       this.unsupported("pdf-link-skipped", `The link target ${JSON.stringify(run.link.href).slice(0, 80)} is not an http, https, mailto or tel address; no PDF link is created.`, {});
       return;
@@ -916,7 +921,7 @@ class Converter {
     const corners = [[run.x, top], [run.x + run.width, top], [run.x + run.width, bottom], [run.x, bottom]].map(([x, y]) => applyPoint(ctx.matrix, x, y));
     const box = boundsOf(corners);
     const page = ctx.page;
-    const annotation = { rect: [box.x, page.height - box.y - box.height, box.x + box.width, page.height - box.y], uri, object: this.file.reserve(), parent: null };
+    const annotation = { rect: [box.x, page.height - box.y - box.height, box.x + box.width, page.height - box.y], uri, ...(slide === undefined ? {} : { slide }), object: slide === undefined ? this.file.reserve() : undefined, parent: null };
     page.annotations.push(annotation);
     const last = page.mcids.at(-1);
     annotation.parent = last?.role === "Link" ? last : null;
@@ -994,6 +999,18 @@ class Converter {
     }
     for (const report of reports) this.diagnostic(report);
     const file = this.file;
+    // FR-03: a link to a slide becomes a go-to-page link once every page is known. A slide that is not in this PDF (left out of the
+    // selection, a hidden slide the export skips) has no page: its text stays, without a link.
+    for (const page of this.pages) {
+      page.annotations = page.annotations.filter((annotation) => {
+        if (annotation.slide === undefined) return true;
+        annotation.target = this.slidePages?.get(annotation.slide);
+        if (annotation.target) { annotation.object = file.reserve(); return true; }
+        if (annotation.parent?.annots) annotation.parent.annots = annotation.parent.annots.filter((other) => other !== annotation);
+        this.diagnostic({ code: "pdf-link-skipped", message: `The link to slide ${JSON.stringify(annotation.slide).slice(0, 80)} has no page in this PDF (the slide is not part of the output); no PDF link is created.` });
+        return false;
+      });
+    }
     const pagesObject = file.reserve();
     const pageObjects = [];
     const tagged = this.tagged;
@@ -1003,7 +1020,7 @@ class Converter {
       const contents = file.addStream("", page.content.text());
       const annotations = page.annotations.map((annotation) => {
         const struct = tagged && annotation.parent ? ` /StructParent ${structure.annotationKey(annotation)}` : "";
-        file.set(annotation.object, `/Type/Annot/Subtype/Link/Rect[${annotation.rect.map((value) => num(value, 3)).join(" ")}]/Border[0 0 0]/F 4/A<</S/URI/URI${asciiString(annotation.uri)}>>/P ${ref(page.object)}${struct}`);
+        file.set(annotation.object, `/Type/Annot/Subtype/Link/Rect[${annotation.rect.map((value) => num(value, 3)).join(" ")}]/Border[0 0 0]/F 4/A${annotation.target ? `<</S/GoTo/D[${ref(annotation.target.object)} /XYZ 0 ${num(annotation.target.height)} null]>>` : `<</S/URI/URI${asciiString(annotation.uri)}>>`}/P ${ref(page.object)}${struct}`);
         return ref(annotation.object);
       });
       const structParents = tagged && page.mcids.length ? `/StructParents ${structure.pageKey(page)}` : "";

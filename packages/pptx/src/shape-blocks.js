@@ -174,12 +174,13 @@ export function shapeBlockRecord(shape, paint, context) {
 }
 
 const HYPERLINK = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink';
+const SLIDE_REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide';
 /**
  * Give every recorded shape block with a `link` its click link: an external hyperlink relationship in its slide's rels part and
  * a:hlinkClick in its p:cNvPr (PptxGenJS links a text shape's runs, not the shape). `entries` is the package (part name to bytes).
  */
 export function linkShapeBlocks(entries, records, {decode, encode}) {
-  const linked = [...(records?.entries() ?? [])].filter(([, record]) => record.link);
+  const linked = [...(records?.entries() ?? [])].filter(([, record]) => record.link || record.slide);
   if (!linked.length) return;
   const byName = new Map(linked);
   for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
@@ -194,8 +195,11 @@ export function linkShapeBlocks(entries, records, {decode, encode}) {
       let n = 1, rid;
       do rid = `rId${n++}`; while (taken.has(rid));
       taken.add(rid);
-      rels = rels.replace('</Relationships>', `<Relationship Id="${rid}" Type="${HYPERLINK}" Target="${escape(record.link)}" TargetMode="External"/></Relationships>`);
-      const link = `<a:hlinkClick r:id="${rid}"/>`;
+      // FR-03: a slide link is PowerPoint's own jump: a relationship to the slide part and the hlinksldjump action.
+      rels = rels.replace('</Relationships>', record.slide
+        ? `<Relationship Id="${rid}" Type="${SLIDE_REL}" Target="slide${record.slide}.xml"/></Relationships>`
+        : `<Relationship Id="${rid}" Type="${HYPERLINK}" Target="${escape(record.link)}" TargetMode="External"/></Relationships>`);
+      const link = record.slide ? `<a:hlinkClick r:id="${rid}" action="ppaction://hlinksldjump"/>` : `<a:hlinkClick r:id="${rid}"/>`;
       return close ? `<p:cNvPr${attributes}>${link}</p:cNvPr>` : `<p:cNvPr${attributes}>${link}`;
     });
     entries[part] = encode(xml);

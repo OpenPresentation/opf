@@ -125,6 +125,14 @@
       "basis": "opf.schema.json#/properties/references"
     },
     {
+      "id": "core.valid.slide-link",
+      "file": "core/valid/slide-link.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Links to slides of the same deck, as `slide:<id>`, on a text run, a shape block and a table cell; one names a hidden slide.",
+      "basis": "opf.schema.json#/$defs/TextRun/properties/link; docs/validate.md, rule opf/slide-link-unknown"
+    },
+    {
       "id": "core.valid.dataset-referenced",
       "file": "core/valid/dataset-referenced.opf.json",
       "levels": ["reader", "writer"],
@@ -403,6 +411,14 @@
       "expect": { "valid": false, "errorAt": "/slides/0/text/0/cite/1" },
       "description": "A citation names a reference that does not exist.",
       "basis": "docs/validate.md, rule opf/cite-unknown-reference"
+    },
+    {
+      "id": "core.invalid.slide-link-unknown",
+      "file": "core/invalid/slide-link-unknown.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/text/0/link" },
+      "description": "A link names a slide id no slide of the document has.",
+      "basis": "docs/validate.md, rule opf/slide-link-unknown"
     },
     {
       "id": "core.invalid.dataset-unknown",

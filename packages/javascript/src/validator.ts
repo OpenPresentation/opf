@@ -68,7 +68,7 @@ export { gridCells } from './schema-check.js';
  */
 
 const SEVERITIES: readonly string[] = ['error', 'warning', 'info'];
-const OPTION_KEYS = ['only', 'ignore', 'severity', 'ignorePaths', 'catalogs', 'contracts', 'thresholds', 'fonts', 'chartPalette', 'template', 'values'];
+const OPTION_KEYS = ['only', 'ignore', 'severity', 'ignorePaths', 'catalogs', 'contracts', 'thresholds', 'fonts', 'chartPalette', 'template', 'values', 'slideLinks'];
 
 const isObject = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 
@@ -233,7 +233,7 @@ function syntaxReport(parsed: ParsedSource, run: Resolved): ValidationReport {
 }
 
 function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSource, cache?: ValidationCompositionCache): ValidationReport {
-	const engine = validateAgainstSchema(document, 'presentation', { template: run.options.template, values: run.options.values, ...(run.options.catalogs ? { catalogs: run.options.catalogs } : {}) });
+	const engine = validateAgainstSchema(document, 'presentation', { template: run.options.template, values: run.options.values, ...(run.options.catalogs ? { catalogs: run.options.catalogs } : {}), ...(run.options.slideLinks !== undefined ? { slideLinks: run.options.slideLinks } : {}) });
 	const schemaValid = engine.errors.length === 0;
 	const slides = isObject(document) && Array.isArray(document.slides) ? document.slides : [];
 	const auditWanted = auditInfos.some((info) => run.enabled(info));

@@ -9,6 +9,7 @@ import { chartDrawDiagnostics } from "./chart-fallback.js";
 import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions, resolveSlideDirection } from "./composition.js";
 import { layoutTemplateIssues } from "./layout-template.js";
 import { annotationIssues } from "./annotation-validation.js";
+import { slideLinkIssues } from "./slide-links.js";
 import { isShapeBlock, shapeIssues, SHAPE_BLOCK_KEYS } from "./shape-block.js";
 import { PositionRangeError, connectorAdjustPreset, isOverlayConnector, overlayIssues, representablePositionBox } from "./overlay-shapes.js";
 import { codeHighlightLines } from "./code-highlight.js";
@@ -37,6 +38,8 @@ export interface SchemaCheckOptions {
   values?: VariableValues;
   /** Registered catalogs, for the checks that read a resolved theme (slide-theme-dimensions). */
   catalogs?: readonly Catalog[];
+  /** See `ValidateOptions.slideLinks`. */
+  slideLinks?: false | readonly string[];
 }
 
 export interface SchemaCheckResult {
@@ -503,7 +506,7 @@ function deckMetadataIssues(value: Record<string, unknown>): ValidationIssue[] {
   return issues;
 }
 
-function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[]): ValidationIssue[] {
+function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[], slideLinks?: false | readonly string[]): ValidationIssue[] {
   if (!isRecord(value) || !Array.isArray(value.slides)) {
     return [];
   }
@@ -592,6 +595,8 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
   });
   // RR-34: reference ids, cited ids and where cite/footnote may appear.
   issues.push(...annotationIssues(value));
+  // FR-03: a `slide:<id>` link names a slide of the document.
+  if (slideLinks !== false) issues.push(...slideLinkIssues(value, slideLinks));
 
   return issues;
 }
@@ -1104,7 +1109,7 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
   const warnings: ValidationIssue[] = [];
 
   if (resolved.schemaName === "presentation") {
-    errors.push(...presentationSemanticIssues(subject, options.catalogs));
+    errors.push(...presentationSemanticIssues(subject, options.catalogs, options.slideLinks));
     errors.push(...variableIssues.errors);
     const data = dataIssues(subject);
     errors.push(...data.errors);

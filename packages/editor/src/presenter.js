@@ -221,9 +221,10 @@ export function createPresenter(container, options = {}) {
     live.textContent = position < 0 ? "" : `${labels.position(position + 1, shown.length)}${pages > 1 ? labels.page(page + 1, pages) : ""}`;
   }
 
-  function show(wanted, { notify = true, page = 0 } = {}) {
+  function show(wanted, { notify = true, page = 0, exact = false } = {}) {
     const deck = deckNow();
-    const index = resolve(deck, wanted);
+    // `exact`: that slide even when it is hidden (a slide link to it); a number past the end still resolves to the nearest shown slide.
+    const index = exact && Number.isInteger(wanted) && deck?.slides?.[wanted] ? wanted : resolve(deck, wanted);
     if (index < 0) {
       current = -1;
       currentPage = 0;
@@ -365,8 +366,21 @@ export function createPresenter(container, options = {}) {
     const box = root.getBoundingClientRect();
     return move(clientX < box.left + box.width / 3 ? -1 : 1);
   }
+  // FR-03: the id of the slide a `slide:<id>` link names (the renderer marks its anchor with `data-opf-slide-link`). It is the one link the presenter
+  // follows itself: it goes to that slide, a hidden one included (the way PowerPoint jumps to a hidden slide), and an id no slide has goes nowhere.
+  function slideLinkAt(target) {
+    const link = target && typeof target.closest === "function" ? target.closest("a[data-opf-slide-link]") : null;
+    return link && root.contains(link) ? link.getAttribute("data-opf-slide-link") : undefined;
+  }
+  function followSlideLink(id) {
+    const index = (deckNow()?.slides ?? []).findIndex((entry) => entry && entry.id === id);
+    return index < 0 ? false : show(index, { exact: true });
+  }
   function onClick(event) {
-    if (!active || closeButton.contains(event.target) || onLink(event.target)) return;
+    if (!active || closeButton.contains(event.target)) return;
+    const slideId = slideLinkAt(event.target);
+    if (slideId !== undefined) { event.preventDefault(); followSlideLink(slideId); return; }
+    if (onLink(event.target)) return;
     // A touch is handled on pointerup (below); the click the browser adds after it must not move a second time.
     if (win.performance.now() < clickGuardUntil) return;
     byZone(event.clientX);

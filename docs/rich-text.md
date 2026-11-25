@@ -4,7 +4,24 @@ OPF text arrays preserve run formatting in the document. Text payloads now use a
 
 The shared fit accounts for each run's font family, weight, italic style, and requested point size. Run point sizes are converted to pixels at 96 DPI; default text sizes and composition minimum sizes remain canvas-relative. Fitting can shrink the run sizes together, preserving their relative sizes. Superscripts and subscripts use smaller glyphs and explicit baseline offsets. Line height accounts for the largest ascent/descent. Long tokens wrap at grapheme boundaries; spaces and explicit empty lines are retained.
 
-SVG displays bold, italic, underline, strikethrough, color, font family, size, superscript, subscript, and HTTP(S)/mailto hyperlinks. Other link schemes remain in the OPF source but are not emitted as active links. Use the same loaded font files and measurement provider for SVG and PPTX.
+SVG displays bold, italic, underline, strikethrough, color, font family, size, superscript, subscript, and HTTP(S), mailto, tel and slide hyperlinks (see Links below). Other link schemes are not valid. Use the same loaded font files and measurement provider for SVG and PPTX.
+
+## Links
+
+A `link` on a run (and on a shape block or overlay shape, and so on a table cell, whose text is runs) is an `https://` or `http://` address, a `mailto:` address, a `tel:` number, or `slide:<id>`, a jump to the slide of the same deck with that `id`. `slide:<id>` is spelled like `asset:<id>` and `var:<id>`: a kind, a colon, an id.
+
+```json
+{ "id": "agenda", "title": "Agenda", "text": [{ "text": "Pricing", "link": "slide:pricing" }] },
+{ "id": "pricing", "title": "Pricing", "text": "Plans" }
+```
+
+- **Ids.** A slide is linked to by its `id`, so the slide needs one; `assignIds` (core, and `assignIds()` on an editor session) gives every slide an id without changing an existing one. The link follows the slide when slides are reordered (it names an id, not a position). The editor's slide manager does not delete a slide other slides link to: it names the links so they can be changed first; a patch that removes the slide anyway leaves `opf/slide-link-unknown` findings.
+- **Validate.** A link to a slide id no slide has is the error `opf/slide-link-unknown`, at the path of the link. A link to a hidden slide is valid.
+- **Preview and player.** The SVG draws a slide link as a link (underlined, in the hyperlink color, like any link) that opens no tab: the anchor carries `data-opf-slide-link` with the id. The slideshow player (`present()`), the page element (`<opf-deck>`), the editor's presenter and the MCP viewer's Present go to that slide when it is clicked or activated with Enter, and leave every other link to the browser (a click on a link no longer moves the player's show by zone). The editor's canvas is for editing and does not follow links. A hidden slide is not part of the player's sequence, so a link to it goes nowhere there; the editor's presenter follows a link to a hidden slide (the way PowerPoint does) and continues with the next slide that plays.
+- **PDF.** A link on text becomes a go-to-page link to the first page of the target slide. A slide that is not in the PDF (a selection, or a hidden slide the export skips) has no page: the text stays and is not linked, and the export reports `pdf-link-skipped`.
+- **PowerPoint.** Export writes PowerPoint's own slide jump (`a:hlinkClick` with `ppaction://hlinksldjump` and a relationship to the target slide part) on a text run, a shape and a table cell; a hidden slide is still a slide in the file, so the jump to it works. Import returns `slide:<id>`: the stored id of the target slide, or `slide-<number>` (given to the slides a jump names, and only those) for a deck PowerPoint wrote.
+- **Markdown and YAML.** `[Pricing](slide:pricing)` in Markdown, `link: slide:pricing` in YAML.
+- **Editor.** The formatting toolbar and the shape panel have a slide picker beside the link field; a slide with no id is listed and cannot be picked. A part of a deck checked on its own (a slide paginated by itself) is judged against the deck's other slides: `validate` takes `slideLinks` (`false`, or the ids of the other slides) for that.
 
 An underline, link or strikethrough ends with a line's last visible character (RR-105): the space a decorated run ends a wrapped line with is drawn undecorated, and natively it is a run of its own without the hyperlink or underline (PowerPoint underlines hyperlink text), which import joins back into its run when the run goes on in the next line.
 

@@ -164,6 +164,7 @@ export type { ApplyPatchOptions, PatchResult } from './patch.js';
 // CE-04, CE-05: ids and id-addressed paths, the document hash behind `expectHash`, and what a patch reads and writes.
 export { assignIds, documentHash, idToken, isIdToken, OPFIdError, resolveIdPatch, resolveIdPointer, toIdPatch, toIdPointer, touches } from './ids.js';
 export type { AssignedId, AssignIdsContext, AssignIdsOptions, AssignIdsResult, IdErrorCode, PatchScope, PatchScopeKind, PatchTouch } from './ids.js';
+export { collectSlideLinks, slideLink, slideLinkId } from './slide-links.js';
 export { diff, merge } from './diff.js';
 export type { DiffOptions, MergeConflict, MergeOptions, MergeResult, PresentationDiff } from './diff.js';
 // RR-75: `opf edit` and `opf fill` as functions. The Node build registers the default catalog for edit's check, as the CLI does.

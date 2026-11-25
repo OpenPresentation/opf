@@ -6,8 +6,15 @@ import {validate} from '@openpresentation/opf';
 /** Core's `format` report for a deck or a fragment (`findings`, `valid`). */
 export const checkFormat = value => validate(value, {only: ['format']});
 
-/** True when the value has no `format` error. */
-export const isValidFormat = value => checkFormat(value).valid;
+// FR-03: a fragment (a block, a table, a metric) or a document still being imported has not got its slides' ids yet, so a `slide:<id>` link in it
+// names a slide the value does not hold. That one finding is not a fault of the value; the finished document is checked whole (checkFormat).
+const withoutSlideLinkFindings = report => {
+  const findings = report.findings.filter(finding => finding.ruleId !== 'opf/slide-link-unknown');
+  return findings.length === report.findings.length ? report : {...report, findings, valid: !findings.some(finding => finding.severity === 'error')};
+};
+
+/** True when the value has no `format` error (a link to a slide the value does not hold is not one). */
+export const isValidFormat = value => withoutSlideLinkFindings(checkFormat(value)).valid;
 
 const withoutMarkers = (value, nativeObjects) => Array.isArray(value) ? value.map(entry => withoutMarkers(entry, nativeObjects))
   : value !== null && typeof value === 'object' ? Object.fromEntries(Object.entries(value).filter(([key]) => !key.startsWith('_opf') || (nativeObjects && !nativeObjects.has(value))).map(([key, entry]) => [key, withoutMarkers(entry, nativeObjects)]))
@@ -31,4 +38,4 @@ const objectsWithin = value => {
  * with stored authored values, nativeSource restricts this exception to objects from the native parser. Unknown keys in a
  * restored record still fail the ordinary schema. Neither the native values nor the candidate are changed by this view.
  */
-export const checkImportedFormat = (value, nativeSource) => checkFormat(withoutMarkers(value, nativeSource === undefined ? undefined : objectsWithin(nativeSource)));
+export const checkImportedFormat = (value, nativeSource) => withoutSlideLinkFindings(checkFormat(withoutMarkers(value, nativeSource === undefined ? undefined : objectsWithin(nativeSource))));

@@ -14,6 +14,7 @@ import { collectReservedPresentationIds, remapSlideTreeIds } from "./presentatio
 import { prepareDimensionSwitch } from "./switches.js";
 import { mergeCatalogs } from "./catalogs.js";
 import { checkFormat } from "./checks.js";
+import { collectSlideLinks } from "@openpresentation/opf";
 
 export { slideTitle };
 
@@ -203,6 +204,14 @@ export function prepareRemoveSlides(presentation, indices) {
   const list = selectionOf(presentation, indices, "Choose at least one slide to delete.");
   const slides = presentation.slides;
   if (list.length >= slides.length) throw fail("cannot-remove-all-slides", "A presentation needs at least one slide.", { count: slides.length });
+  // FR-03: a slide that another slide links to (`slide:<id>`) is not deleted out from under the link: the links are named so they can be changed first.
+  const removedIds = new Map(list.flatMap((index) => (typeof slides[index]?.id === "string" ? [[slides[index].id, index]] : [])));
+  const broken = slides.flatMap((slide, index) => (list.includes(index) ? [] : collectSlideLinks(slide, `/slides/${index}`).filter((entry) => removedIds.has(entry.id)).map((entry) => ({ ...entry, slideIndex: index }))));
+  if (broken.length) {
+    const target = slideTitle(slides[removedIds.get(broken[0].id)]) || broken[0].id;
+    const where = [...new Set(broken.map((entry) => entry.slideIndex + 1))];
+    throw fail("slide-link-target", `${removedIds.size > 1 || list.length > 1 ? "A slide you chose" : "This slide"} (${target}) is linked to from ${broken.length} place${broken.length === 1 ? "" : "s"} (slide${where.length === 1 ? "" : "s"} ${where.join(", ")}). Change or remove those links first.`, { links: broken.map((entry) => ({ path: entry.pointer, id: entry.id })) });
+  }
   const patches = [...list].reverse().map((index) => ({ op: "remove", path: slidePointer(index) }));
   const remaining = slides.length - list.length;
   return finish(presentation, patches, { action: "remove", removed: list, selection: [Math.min(list[0], remaining - 1)] });

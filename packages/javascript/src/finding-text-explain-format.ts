@@ -33,6 +33,11 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { references: [{ id: "gartner", text: "Gartner, 2026" }], slides: [{ title: "Market", text: [{ text: "Up 12%", cite: "gartnr" }] }] },
     { references: [{ id: "gartner", text: "Gartner, 2026" }], slides: [{ title: "Market", text: [{ text: "Up 12%", cite: "gartner" }] }] },
   ),
+  "opf/slide-link-unknown": ex(
+    "Change the link to `slide:<id>` with the id of a slide of this document, or give the slide it means that id (`assignIds` gives every slide one).",
+    { slides: [{ id: "pricing", title: "Pricing" }, { title: "Agenda", text: [{ text: "Pricing", link: "slide:prices" }] }] },
+    { slides: [{ id: "pricing", title: "Pricing" }, { title: "Agenda", text: [{ text: "Pricing", link: "slide:pricing" }] }] },
+  ),
   "opf/cite-unsupported-location": ex(
     "Move the cited run into a text block, bullets or a list item (titles and quotes work too). Table cells, captions and reference text do not draw citation markers.",
     { references: [{ id: "gartner", text: "Gartner, 2026" }], slides: [{ title: "Market", table: { columns: ["Region", "Growth"], rows: [["EMEA", [{ text: "12%", cite: "gartner" }]]] } }] },
