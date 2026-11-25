@@ -43,8 +43,9 @@ for(const text of ['Full source\nSecond paragraph.', ['Exact spacing ',{text:'wi
       // core's pitch at single spacing (1.2 sizes a line); a natively wrapped one is one paragraph at single spacing.
       assert.equal(paragraphs.length,soft?1:item.text.lines.length,'Accepted native title paragraphs');
       const lineAnchor=index=>{const p=paragraphs[soft?0:index]['a:pPr'],marL=Number(p.marL??0)/9525,marR=Number(p.marR??0)/9525;return factor===0?x+marL:factor===1?x+width-marR:x+marL+(width-marL-marR)/2;};
-      near(lineAnchor(0),soft?item.box.x+item.box.width*factor:placed.x+placed.width*factor,'Accepted native title alignment anchor');
-      if(!soft)item.text.placement.lines.forEach((line,index)=>assert.ok(Math.abs(lineAnchor(index)-(line.x+line.width*factor))<.002+1e-6,'Accepted native title line anchor'));
+      // opf#1493: a title of fixed lines is written without its hanging spaces, so each paragraph is anchored at its glyphs.
+      {const expected=soft?item.box.x+item.box.width*factor:placed.x+(placed.width-(placed.hang??0))*factor;assert.ok(Math.abs(lineAnchor(0)-expected)<.5,`Accepted native title alignment anchor: ${lineAnchor(0)} vs ${expected}`);}
+      if(!soft)item.text.placement.lines.forEach((line,index)=>assert.ok(Math.abs(lineAnchor(index)-(line.x+(line.width-(line.hang??0))*factor))<.5,'Accepted native title line anchor'));
       near(y,placed.baseline-item.text.fontSize,'Accepted native title top');
       for(const [index,paragraph] of paragraphs.entries()){
         assert.equal(Number(paragraph['a:pPr']['a:lnSpc']['a:spcPct'].val),100000,'Accepted native title single spacing');
