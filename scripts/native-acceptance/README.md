@@ -5,6 +5,86 @@ the reviewed core and PPTX revisions on the Windows machine, prepare the fixture
 there, and run the tracked supervisor command. Do not send generated decks or a
 temporary ZIP between computers as the test distribution mechanism.
 
+## One command: pnpm native
+
+`pnpm native <target>` (`native.mjs`) takes OPF's qualification decks to a classified result for one native application:
+it exports the decks, has the application open, draw and resave each file, and says what is new.
+
+```sh
+pnpm native <target> [--tier smoke|release|full] [--decks a,b] [--variants default,native-body] [--baseline <opf version>|none]
+                     [--out <dir>] [--from-run <dir>] [--inputs <dir>] [--previews <dir>] [--warnings-dir <dir>]
+                     [--look deck#slide,...] [--no-sheets] [--write-summary] [--json]
+```
+
+**Targets.**
+
+| Target | Driver |
+| --- | --- |
+| `keynote` | `apps/keynote/driver.mjs`, on a Mac where the owner has started Keynote and the screen is unlocked. |
+| `powerpoint` | The PowerPoint driver runs on the release supervisor's Windows computer and writes a run directory; classify it here with `--from-run`. |
+| `impress` | The LibreOffice runner (`scripts/libreoffice/run.mjs`). The command refuses when LibreOffice is missing. When it is installed, the command builds the decks and prints the runner's command and the `--from-run` command that classifies the runner's `native/` folder; it does not start the runner itself yet. |
+| `powerpoint-mac` | No driver yet (opf#1314); the command says so. |
+
+**Tiers** come from `qualification/manifest.json` (`qualification/README.md`, "Tiers"). `smoke`, the default, runs about
+ten decks and adds the decks that unreleased changelog fragments name in `native:` (`changes/README.md`). `release` runs
+every deck and variant. `full` adds sources the runner cannot build yet (example decks, gallery layouts, language decks):
+they are listed as "not run" and the run exits with 2. `--decks` replaces the tier's decks (the tier still says which
+variants, unless `--variants` does), and a run narrowed by `--decks` is not stopped by a source it does not run. In every
+tier the slides the fragments name, and `--look deck#slide`, are new whatever their score: someone looks at each one.
+
+**The steps**, each printed as it starts and with its duration when it ends:
+
+1. **select**: the decks and variants, and the slides to look at.
+2. **check**: the target's driver says whether this machine can run it now. It runs before the build, so a machine that
+   cannot run the target spends no time building, and again before every file. A refusal prints the reasons and opens
+   nothing. Keynote's check reads the process list, the screen's lock state and the macOS version, and sends Keynote its
+   one read-only `info` event only when Keynote runs and the screen is unlocked (`apps/keynote/README.md`).
+3. **build**: the selected decks' `.pptx` files and OPF's previews (`qualification/build.mjs --only`) into `<out>/build`,
+   with the OPF version of the workspace's CLI package and the checkout's commit. A workspace that is not built stops here
+   with the command to run (`pnpm build:packages`).
+4. **run**: per file `open`, `probe`, `render`, `resave` and `close` through the driver (`apps/keynote/run-file.mjs`) into
+   `<out>/run`, in the shared format (`core/result/README.md`) with the tier and the baseline in `run.json`.
+   `--warnings-dir <dir>` gives the Keynote driver the text of Keynote's Warnings window per file (`<dir>/<fileId>.txt`).
+5. **round trip** (`core/roundtrip/`), **compare** with OPF's previews (`core/compare/`) and **classify**
+   (`core/classify/README.md`) against `known/<target>.json` and the baseline summary `runs/<version>/<target>.json`. A
+   target without known records is classified with an empty list, and a note says so. The baseline is `--baseline
+   <version>`, `none`, or by default the newest version under `runs/` that has the target. Then a labeled sheet for every
+   new slide (`<run>/sheets/`), unless `--no-sheets`.
+6. **report**: files opened; slides same, known and still there, known and gone, new, and not compared; file findings; new
+   import-warning lines. Then every new item with its reason and its sheet, then what was not run. `--json` prints the
+   same as one JSON object on standard output (the step lines go to standard error).
+
+**Exit codes.** 0: nothing new. 1: something new: look at each item, then add or extend a record in `known/<target>.json`
+or fix OPF (`core/classify/README.md`, "When a slide is new"). 2: refused, something not run (a tier source, a deck a
+fragment names that is not in the manifest, a failed export, a verb that did not finish on a file that opened), or the run
+could not finish.
+
+**Where output goes.** `--out <dir>` must be a new or empty folder outside the repository; the command refuses one inside
+it. Without `--out` the run goes to `~/opf-work/native/<target>-<date>-<time>` (UTC) when `~/opf-work` exists (the agents'
+work folder), else to `<system temp>/opf-native/<target>-<date>-<time>`. `<out>/build` holds the exported files and the
+previews, `<out>/run` the run directory with `classify.json` and the sheets. All of it is evidence and stays out of `main`.
+Nothing is written inside the repository unless `--write-summary` is given: it writes `runs/<opf version>/<target>.json`
+(`core/classify/summary.mjs`) for a run that finished (exit 0 or 1), prints the path, and notes how many new items the
+summary keeps as new. Commit that one file, and only after review.
+
+**`--from-run <dir>`** skips the check, build and run steps and classifies a run directory of the shared format in place:
+one the Windows PowerPoint driver wrote, the LibreOffice runner's `<out>/native`, or one from
+`apps/keynote/import-recorded.mjs`. The exported files are found with `--inputs` (the folder that `file.path` in each
+`result.json` is relative to), else in `<dir>/../build`, `<dir>/../inputs` or `<dir>/inputs`; OPF's previews with
+`--previews`, else in `<dir>/preview` or `<dir>/../build/preview`. A file that was round-tripped before keeps its
+outcomes (merging them again would add objects twice), and a directory whose slides were all compared keeps its scores
+unless `--previews` is given. For Impress, the previews of qualification deck `<deck>` are copied to the run's own
+`preview/q-<deck>[.<variant>]/`, the names the LibreOffice runner gives its files.
+
+```sh
+pnpm native keynote --from-run ~/opf-work/round/run --baseline 0.36.0
+pnpm native powerpoint --from-run D:/opf-work/native/run --inputs D:/opf-work/native/build --previews D:/opf-work/native/build/preview
+```
+
+**What needs an agent.** Two steps stay with an agent that can see the screen. Keynote shows its import warnings only while
+it is in front, so an agent reads the Warnings window of each file and passes the text with `--warnings-dir`; without it
+the warnings are "not-read". And someone looks at the sheet of every new slide and decides whose difference it is.
+
 ## Prepare
 
 Use the repository's coordinated installed-package qualification to create the
