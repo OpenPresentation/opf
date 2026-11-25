@@ -123,7 +123,8 @@ CR 3 decisions:
 | --- | --- | --- | --- |
 | `cr3-hash`: What does `sha256` cover? | The source file's bytes as retrieved (recommended); the rows in the deck | The source file's bytes | Owner, 2026-11-24 |
 | `cr3-transform`: A separate hash of the transform? | No, `query` holds the text (recommended); yes | No | Owner, 2026-11-24 |
-| `cr3-generator`: What shape is `generator`? | `{ kind: "human" \| "model", name }` (recommended); the bare word | The object | Owner, 2026-11-24 |
+| `cr3-generator`: What shape is `generator`? | `{ type: "human" \| "model", name }` (recommended); the bare word | The object; the key is `type` (the owner, 2026-11-25, said in the analysis session; it was `kind`) | Owner, 2026-11-24 |
+| `cr3-refresh-every`: What is the key for how often a data source is meant to be refreshed? | `refreshEvery` (recommended); keep `refresh` | `refreshEvery`, an ISO 8601 duration as before (the owner, 2026-11-25, said in the analysis session; the key-names study, finding A5) | Owner, 2026-11-25 |
 
 ## FR-05: CR 2, typed columns
 

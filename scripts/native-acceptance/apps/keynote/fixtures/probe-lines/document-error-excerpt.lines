@@ -1,0 +1,105 @@
+app/version	s	16.0
+document	err	-10000 Keynote got an error: AppleEvent handler failed.
+document/theme	s	Custom Theme
+slides/#0/slide number	n	1
+slides/#0/skipped	b	false
+slides/#0/title showing	b	true
+slides/#0/body showing	b	false
+slides/#0/presenter notes	s	
+slides/#0/transition	list	4
+slides/#0/transition/#0	s	no transition effect
+slides/#0/transition/#1	n	1.0
+slides/#0/transition/#2	n	0.5
+slides/#0/transition/#3	b	false
+slides/#0/layout	s	Title Only 0
+slides/#0/default title item/position	list	2
+slides/#0/default title item/position/#0	n	44
+slides/#0/default title item/position/#1	n	43
+slides/#0/default title item/width	n	874
+slides/#0/default title item/height	n	49
+slides/#0/default title item/object text	s	An English slide in an English deck
+slides/#0/default body item/position	list	2
+slides/#0/default body item/position/#0	n	0
+slides/#0/default body item/position/#1	n	0
+slides/#0/default body item/width	n	0
+slides/#0/default body item/height	n	0
+slides/#0/default body item/object text	s	
+slides/#0/itemCount	n	3
+slides/#0/items/#0/class	s	shape
+slides/#0/items/#0/depth	n	0
+slides/#0/items/#0/position	list	2
+slides/#0/items/#0/position/#0	n	44
+slides/#0/items/#0/position/#1	n	43
+slides/#0/items/#0/width	n	874
+slides/#0/items/#0/height	n	49
+slides/#0/items/#0/rotation	n	0
+slides/#0/items/#0/opacity	n	100
+slides/#0/items/#0/reflection showing	b	false
+slides/#0/items/#0/reflection value	n	0
+slides/#0/items/#0/locked	b	false
+slides/#0/items/#0/background fill type	e	no fill
+slides/#0/items/#0/text	s	An English slide in an English deck
+slides/#0/items/#0/paragraphCount	n	1
+slides/#0/items/#0/paragraphs/#0/text	s	An English slide in an English deck
+slides/#0/items/#0/paragraphs/#0/font	s	Helvetica-Bold
+slides/#0/items/#0/paragraphs/#0/size	n	40.0
+slides/#0/items/#0/paragraphs/#0/color	list	3
+slides/#0/items/#0/paragraphs/#0/color/#0	n	65535
+slides/#0/items/#0/paragraphs/#0/color/#1	n	65535
+slides/#0/items/#0/paragraphs/#0/color/#2	n	65535
+slides/#0/items/#0/wordFonts	list	1
+slides/#0/items/#0/wordFonts/#0	s	Helvetica-Bold
+slides/#0/items/#0/wordSizes	list	1
+slides/#0/items/#0/wordSizes/#0	n	40.0
+slides/#0/items/#1/class	s	text item
+slides/#0/items/#1/depth	n	0
+slides/#0/items/#1/position	list	2
+slides/#0/items/#1/position/#0	n	43
+slides/#0/items/#1/position/#1	n	251
+slides/#0/items/#1/width	n	540
+slides/#0/items/#1/height	n	50
+slides/#0/items/#1/rotation	n	0
+slides/#0/items/#1/opacity	n	100
+slides/#0/items/#1/reflection showing	b	false
+slides/#0/items/#1/reflection value	n	0
+slides/#0/items/#1/locked	b	false
+slides/#0/items/#1/background fill type	e	no fill
+slides/#0/items/#1/text	s	Revenue grew 18 percent to 
+slides/#0/items/#1/paragraphCount	n	1
+slides/#0/items/#1/paragraphs/#0/text	s	Revenue grew 18 percent to 
+slides/#0/items/#1/paragraphs/#0/font	s	Helvetica
+slides/#0/items/#1/paragraphs/#0/size	n	42.0
+slides/#0/items/#1/paragraphs/#0/color	list	3
+slides/#0/items/#1/paragraphs/#0/color/#0	n	65535
+slides/#0/items/#1/paragraphs/#0/color/#1	n	65535
+slides/#0/items/#1/paragraphs/#0/color/#2	n	65535
+slides/#0/items/#1/wordFonts	list	1
+slides/#0/items/#1/wordFonts/#0	s	Helvetica
+slides/#0/items/#1/wordSizes	list	1
+slides/#0/items/#1/wordSizes/#0	n	42.0
+slides/#0/items/#2/class	s	text item
+slides/#0/items/#2/depth	n	0
+slides/#0/items/#2/position	list	2
+slides/#0/items/#2/position/#0	n	43
+slides/#0/items/#2/position/#1	n	303
+slides/#0/items/#2/width	n	484
+slides/#0/items/#2/height	n	50
+slides/#0/items/#2/rotation	n	0
+slides/#0/items/#2/opacity	n	100
+slides/#0/items/#2/reflection showing	b	false
+slides/#0/items/#2/reflection value	n	0
+slides/#0/items/#2/locked	b	false
+slides/#0/items/#2/background fill type	e	no fill
+slides/#0/items/#2/text	s	1,240,000 dollars in 2026.
+slides/#0/items/#2/paragraphCount	n	1
+slides/#0/items/#2/paragraphs/#0/text	s	1,240,000 dollars in 2026.
+slides/#0/items/#2/paragraphs/#0/font	s	Helvetica
+slides/#0/items/#2/paragraphs/#0/size	n	42.0
+slides/#0/items/#2/paragraphs/#0/color	list	3
+slides/#0/items/#2/paragraphs/#0/color/#0	n	65535
+slides/#0/items/#2/paragraphs/#0/color/#1	n	65535
+slides/#0/items/#2/paragraphs/#0/color/#2	n	65535
+slides/#0/items/#2/wordFonts	list	1
+slides/#0/items/#2/wordFonts/#0	s	Helvetica
+slides/#0/items/#2/wordSizes	list	1
+slides/#0/items/#2/wordSizes/#0	n	42.0

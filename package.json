@@ -137,6 +137,8 @@
     "native:prepare": "node scripts/native-acceptance/prepare.mjs",
     "check:native": "node scripts/native-acceptance/check-native.mjs",
     "check:native-acceptance": "node --test scripts/native-acceptance/*.test.mjs",
+    "check:native-known": "node --test scripts/native-acceptance/known/known.test.mjs && node scripts/native-acceptance/known/build-skill-table.mjs --check",
+    "build:native-known": "node scripts/native-acceptance/known/build-skill-table.mjs",
     "check:format-coverage": "node --test scripts/check-format-coverage.test.mjs && node scripts/check-format-coverage.mjs",
     "check:libreoffice": "node --test scripts/libreoffice/*.test.mjs",
     "qualify:libreoffice": "node scripts/libreoffice/run.mjs",

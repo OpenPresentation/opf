@@ -39,10 +39,10 @@ describe("opf fix rewrites a 0.36 source", () => {
 });
 
 describe("opf validate --as-of", () => {
-	const withRefresh = deck({ datasources: { warehouse: { refresh: "P1D" } }, datasets: { revenue: { columns, rows, datasource: "warehouse", retrieved: "2026-01-01" } } });
+	const withRefresh = deck({ datasources: { warehouse: { refreshEvery: "P1D" } }, datasets: { revenue: { columns, rows, datasource: "warehouse", retrieved: "2026-01-01" } } });
 	const findings = (report) => JSON.parse(report.stdout).findings.map((finding) => finding.ruleId);
 
-	test("without a date nothing is stale; with one a dataset older than its refresh is a warning", async () => {
+	test("without a date nothing is stale; with one a dataset older than its refreshEvery is a warning", async () => {
 		await writeFile(path.join(temp, "stale.opf.json"), JSON.stringify(withRefresh));
 		assert.equal(findings(run(["validate", "stale.opf.json", "--only", "content"])).includes("opf/dataset-stale"), false);
 		assert.equal(findings(run(["validate", "stale.opf.json", "--only", "content", "--as-of", "2026-11-25"])).includes("opf/dataset-stale"), true);

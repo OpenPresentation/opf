@@ -88,7 +88,7 @@ describe("opf-mcp", () => {
 		});
 
 		test("asOf checks data freshness against the date the caller gives; an unknown data source is an error", async () => {
-			const deck = { name: "Fresh", language: "en-US", datasources: { warehouse: { refresh: "P1D" } }, datasets: { sales: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12]], datasource: "warehouse", retrieved: "2026-01-01" } }, slides: [{ title: "Sales", table: { dataset: "sales" } }] };
+			const deck = { name: "Fresh", language: "en-US", datasources: { warehouse: { refreshEvery: "P1D" } }, datasets: { sales: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12]], datasource: "warehouse", retrieved: "2026-01-01" } }, slides: [{ title: "Sales", table: { dataset: "sales" } }] };
 			const call = async (document, extra = {}) => (await client.callTool({ name: "validate_deck", arguments: { document, ...extra } })).structuredContent;
 			assert.ok(!(await call(deck)).findings.some((finding) => finding.ruleId === "opf/dataset-stale"), "no date, nothing is stale");
 			const stale = (await call(deck, { asOf: "2026-11-25" })).findings.find((finding) => finding.ruleId === "opf/dataset-stale");
