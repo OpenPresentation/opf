@@ -76,6 +76,7 @@
         "lastSeen": { "$ref": "#/definitions/version", "description": "The last application and OPF versions a round saw it in." },
         "issue": { "type": ["string", "null"], "pattern": "^OpenPresentation/opf#[1-9][0-9]*$", "description": "The issue that tracks it, or null." },
         "finding": { "type": "string", "pattern": "^[A-Z]{2}-[0-9]{2}$", "description": "The id a round gave it (MX-03, LG-02 ...)." },
+        "importError": { "type": "string", "pattern": "^[a-z0-9-]+$", "description": "The error code OPF's importer gives when it reads the application's copy back (invalid-chart-cache, unsupported-chart-cache): a failed import with this code is explained by this record." },
         "skill": { "type": "boolean", "description": "true: a row of the generated table in skills/opf-export/SKILL.md." },
         "status": { "enum": ["open", "retired"], "description": "open while the latest round shows it; retired when a later round no longer does." },
         "note": { "type": "string", "minLength": 1, "description": "What a later round changed or narrowed, kept beside the table text it does not rewrite." }
