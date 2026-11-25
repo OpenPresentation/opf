@@ -34,6 +34,12 @@ export interface VariableDeclaration {
   format?: string;
   label?: string;
   description?: string;
+  /** Text: the most characters (as a reader sees them) the value may have. */
+  maxLength?: number;
+  /** Text: the most lines the value may take where it is drawn (checked by composition, `opf/variable-overflow`). */
+  maxLines?: number;
+  /** List: the most entries the value may have. */
+  maxItems?: number;
 }
 
 export type VariableUseForm = "token" | "reference";
@@ -55,7 +61,8 @@ export type VariableDiagnosticCode =
   | "variable-unused"
   | "variable-rich-flattened"
   | "variable-format"
-  | "variable-group-omitted";
+  | "variable-group-omitted"
+  | "variable-overflow";
 export type VariableDiagnosticSeverity = "error" | "warning" | "info";
 export interface VariableDiagnostic {
   code: VariableDiagnosticCode;
@@ -231,7 +238,42 @@ export function variableDeclarations(presentation: unknown): VariableDeclaration
     if (typeof entry.format === "string") declaration.format = entry.format;
     if (typeof entry.label === "string") declaration.label = entry.label;
     if (typeof entry.description === "string") declaration.description = entry.description;
+    const limit = (key: "maxLength" | "maxLines" | "maxItems", allowed: VariableKind) => {
+      const raw = entry[key];
+      if (kind === allowed && typeof raw === "number" && Number.isInteger(raw) && raw >= 1) declaration[key] = raw;
+    };
+    limit("maxLength", "text");
+    limit("maxLines", "text");
+    limit("maxItems", "list");
     out.push(declaration);
+  }
+  return out;
+}
+
+const graphemes = new Intl.Segmenter("und", { granularity: "grapheme" });
+
+/** The length of a text as a reader sees it: grapheme clusters, so an accented letter or an emoji counts once however it is encoded. */
+export function visibleLength(text: string): number {
+  let count = 0;
+  for (const _segment of graphemes.segment(text)) count++;
+  return count;
+}
+
+/**
+ * `variable-overflow` for a value against its declaration's `maxLength` and `maxItems` (`maxLines` needs the box, so composition
+ * checks it where the variable is drawn). Empty when the value is within its limits or the variable declares none.
+ */
+export function variableLimitDiagnostics(declaration: VariableDeclaration, value: unknown): VariableDiagnostic[] {
+  const out: VariableDiagnostic[] = [];
+  const overflow = (message: string): void => {
+    out.push({ code: "variable-overflow", severity: "warning", path: declaration.path, id: declaration.id, message });
+  };
+  if (declaration.kind === "text" && declaration.maxLength !== undefined) {
+    const length = visibleLength(plainText(value));
+    if (length > declaration.maxLength) overflow(`'${declaration.id}' has ${length} characters; its maxLength is ${declaration.maxLength}.`);
+  }
+  if (declaration.kind === "list" && declaration.maxItems !== undefined && Array.isArray(value) && value.length > declaration.maxItems) {
+    overflow(`'${declaration.id}' has ${value.length} items; its maxItems is ${declaration.maxItems}.`);
   }
   return out;
 }
@@ -863,6 +905,7 @@ function plan(presentation: Record<string, unknown>, values: VariableValues, opt
         });
       }
     }
+    if (effective.status === "filled" || effective.status === "example") context.diagnostics.push(...variableLimitDiagnostics(declaration, effective.value));
     context.effective.set(declaration.id, effective);
   }
   return { context, declarations, unfilled, examplesUsed, providedColors };

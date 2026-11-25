@@ -64,7 +64,7 @@ every surface, listed in FR-03; the presenter has a bug where a click on a link 
 | --- | --- | --- | --- |
 | `links-in`: Is it in, and how is the target spelled? | In, `slide:<id>` (recommended); in, `#<id>`; not in 0.37.0 | In, spelled `slide:<id>` | Owner, 2026-11-24 |
 | `links-comments`: Does exporting comments to PowerPoint come with it? | No, it waits for comment anchors (recommended); yes | No | Owner, 2026-11-24 |
-| Round 2: When is the presenter's double action fixed? | Now, as its own small pull request (recommended); with `slide:` links | Now, as its own small pull request, before `slide:` links build on it | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Round 2: When is the presenter's double action fixed? | Now, as its own small pull request (recommended); with `slide:` links | Done before the question was answered: the editor's presenter was fixed in 0.36.0 (opf#1449). The web player had the same defect and is fixed inside FR-03, in the click handling the slide links use | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 
 ## FR-04: CR 1 with CR 3, data sources and a flat dataset
 
@@ -201,6 +201,12 @@ matter because `maxLines` is measured where the variable is drawn.
 | `cr14-count`: What does `maxLength` count? | Characters as a reader sees them (recommended); code units | Characters as a reader sees them (grapheme clusters) | Owner, 2026-11-24 |
 | `cr14-lines`: Where is `maxLines` checked? | By composition, at each place the variable is drawn (recommended); by validate | Composition | Owner, 2026-11-24 |
 | Round 2: Does it ship in 0.37, ahead of slide templates? | Yes, it works with today's deck templates (recommended); no, move it with slide templates | Yes (the review's option key for this answer is `036`, the old release number) | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: which category is the rule in? | One rule in `layout`; two rules, one in `format` | One rule, `opf/variable-overflow`, in `layout`: `validate({ only: ['format'] })` does not report it | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: which value is measured? | The value given, else the declared value, else the example; the example never | The value given to the check, else the declared `value`, else the `example`; a type sample is never measured | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: where is `maxLines` measured? | Titles, subtitles, tags, text blocks and list entries; every text | A title, a subtitle, a tag, a text block or a list entry; inside longer text, the lines the variable's own characters occupy; not a table cell, a chart label or text in a shape | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: does `opf fill` refuse an overflowing value? | Warn and write; refuse | It warns per record (stderr and `fill.overflow`) and still writes, because the finding is a warning. The review's example said a template "refuses" a long headline | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: a limit on the wrong kind of variable | A schema error; a warning | A schema error, with one invalid conformance case | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: the lean MCP Worker passed its unminified size ceiling | Raise both byte ceilings to 3% above the measured size; cut code from the bundle | Raised: 7,791,000 unminified and 4,953,000 minified (measured 7,563,294 and 4,808,255; gzip 1,267,042 under its 1,300,000). Every 0.37.0 item adds validator code; an item that passes a ceiling reports its sizes first | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 
 ## FR-10: CR 15, translations and localized date names
 
@@ -244,7 +250,6 @@ Round 1 left these unanswered. The owner's decisions of 2026-11-24 settled two (
 | R5 | Do the schema identifiers move to openpresentation.com? | Move, with a safe fix; keep them on openpresentation.org (recommended); accept both | They stay on openpresentation.org. No `$schema` fix, no document changes | Owner, 2026-11-24 (his product split) |
 | R6 | STORYD's launch also expects editor features. Are they part of 0.37.0? | A parallel track, comment anchors designed alongside CR 6 (recommended); all in 0.37.0; none | A parallel track in the cloud-editor program; only the anchor design rides with FR-02 | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 | R7 | Merge the governance and conformance branch before any of this? | Yes, first (recommended); later | Yes, first. Already merged as opf#1419 on 2026-11-24, with the sentence that Data Advantage holds the names and neither is a registered trademark. Every item adds its cases to that suite | Supervisor, on the owner's go-ahead of 2026-11-24 for good pull requests in the plan; done |
-| R8 | What does a 0.36 reader say about a 0.37 document? | The validator names the release a field needs (recommended); a version field in documents; nothing | The validator names the release a field needs, from a small table built with the schema, for example `opf/unknown-key /slides/2/locked: "locked" needs OPF 0.37 or later; this validator is 0.36.0`. No version field | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| R8 | What does a 0.36 reader say about a 0.37 document? | The validator names the release a field needs (recommended); a version field in documents; nothing | Changed while planning the build: a released validator cannot know the keys of a later release, so from 0.37.0 the unknown-key finding names the validator's own version and says a later release may define the key (FR-11). A table of the keys 0.37.0 adds, shipped in a 0.36.x patch, only if the owner asks for it. No version field | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 
-R8 needs an item no change owns: the table of "field needs release" is built with the schema, so the first item that adds a schema key
-(FR-01) adds the generator and each later item adds its rows.
+R8 is item FR-11 in the burndown.

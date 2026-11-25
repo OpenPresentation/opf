@@ -1,0 +1,13 @@
+{
+  "deck": "technical/variable-limits.opf.json",
+  "entries": {
+    "technical/variable-limits.opf.json#0": {
+      "sha256": "397e0fdd0e5bf373c3103a9790c94a98f04b36afbac67543725c1ade0f938d46",
+      "bytes": 5482
+    },
+    "technical/variable-limits.opf.json#1": {
+      "sha256": "ee97cdf9ef96f11a908eb6297f3f03ca85edc75ff61e3f401310c85dcde2d310",
+      "bytes": 4237
+    }
+  }
+}

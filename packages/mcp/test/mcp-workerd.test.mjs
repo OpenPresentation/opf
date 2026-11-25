@@ -43,7 +43,12 @@ test("lean Worker preserves data exclusions and production size budgets", async 
 	// functions. On the integration-034 wave 3 head d27954fc3 the lean Worker measured 8,542,441 unminified / 5,577,531 minified /
 	// 1,265,413 gzip bytes (over its own ceilings) and 7,333,178 / 4,677,145 / 1,219,884 with the cut, so all three ceilings come back
 	// to the 3% headroom policy, rounded up to 1,000 bytes: 7,554,000, 4,818,000 and 1,257,000.
-	assert.ok(lean.bytes < 7_554_000, `${lean.bytes} unminified bytes`);
+	// FR-09 (limits on a variable's value), measured on 2026-11-25 (vetoable): the validator gains the rule opf/variable-overflow and its
+	// texts, and the lean Worker measures 7,563,294 unminified / 4,808,255 minified / 1,267,042 gzip bytes on the branch, 0.12% over the
+	// unminified ceiling above and 0.2% under the minified one (no MCP source changed). The 0.37.0 format changes each add schema and
+	// validator code, so both byte ceilings come back to the 3% headroom policy, rounded up to 1,000 bytes: 7,791,000 and 4,953,000.
+	// The gzip ceiling holds, 2.6% above the branch.
+	assert.ok(lean.bytes < 7_791_000, `${lean.bytes} unminified bytes`);
 	const production = await bundleWorker("mcp-worker-lean.mjs", { minify: true });
 	assert.deepEqual(retainedData(production), [], "production also excludes every data source");
 	const compressed = gzipSync(production.text, { level: 9 }).length;
@@ -53,7 +58,7 @@ test("lean Worker preserves data exclusions and production size budgets", async 
 	// tool descriptions) brings it to 5,563,948. 5,565,000 is 3.1% above the reviewed 5,397,634, 0.12% above the base and 0.02% above
 	// this branch: it is no longer a 3% headroom, so the release assembly must re-measure it. The unminified and gzip ceilings keep
 	// their 3% policy. RR-111's viewer size cut (above) replaces that ceiling with one at 3% again.
-	assert.ok(production.bytes < 4_818_000, `${production.bytes} minified bytes`);
+	assert.ok(production.bytes < 4_953_000, `${production.bytes} minified bytes`);
 	// LH-194 to LH-199 (the layout-sweep fixes, opf#1425), measured on 2026-11-24: core's composition engine grew by the sweep's rules, and
 	// the lean Worker went from 7,489,056 / 4,765,387 / 1,253,969 bytes on origin/main af413076e to 7,533,524 / 4,787,568 / 1,261,424 on
 	// the branch (no MCP source changed). The gzip ceiling comes back to the 3% headroom policy, rounded up to 1,000 bytes: 1,300,000.

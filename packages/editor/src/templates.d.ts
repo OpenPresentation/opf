@@ -33,6 +33,12 @@ export interface TemplateField {
   placeholder: string;
   /** True when the value is rich text (formatting is kept until the field is edited). */
   rich: boolean;
+  /** Text: the declaration's `maxLength`, in characters as a reader sees them. */
+  maxLength?: number;
+  /** Text: the declaration's `maxLines`, checked where the variable is drawn (`opf/variable-overflow`). */
+  maxLines?: number;
+  /** List: the declaration's `maxItems`. */
+  maxItems?: number;
   /** "filled" (supplied), "default" (declared value), "unfilled" (required, no value) or "optional". */
   status: TemplateFieldStatus;
   uses: TemplateVariableUse[];
@@ -61,6 +67,8 @@ export declare function hasTemplateVariables(presentation: unknown): boolean;
 export declare function valueToFieldText(kind: TemplateVariableKind, value: unknown): string;
 /** Parse a form control's text. A blank control clears the value. */
 export declare function fieldTextToValue(kind: TemplateVariableKind, text: string): { ok: true; value: unknown } | { ok: false; message: string };
+/** What a value uses of its declaration's `maxLength` (characters as a reader sees them) or `maxItems`; undefined when no such limit is set. `maxLines` has no count: composition checks it where the variable is drawn. */
+export declare function limitUsage(kind: TemplateVariableKind, value: unknown, limits: { maxLength?: number; maxItems?: number }): { unit: "characters" | "items"; used: number; max: number; over: boolean } | undefined;
 export declare function listTemplateFields(presentation: unknown, values?: Record<string, unknown>): TemplateField[];
 export declare function templateStatus(presentation: unknown, values?: Record<string, unknown>): TemplateStatus;
 /** The concrete deck for the values with each unfilled variable's example. Never throws for missing values. */
