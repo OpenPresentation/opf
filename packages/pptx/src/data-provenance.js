@@ -1,4 +1,5 @@
 import {XMLParser} from 'fast-xml-parser';
+import {rowCells} from '@openpresentation/opf';
 import {checkFormat, checkImportedFormat, isValidFormat} from './format-check.js';
 import {stripNumeralShape} from './numeral-shapes.js';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
@@ -246,8 +247,9 @@ export function tableDataRecord(table, layout, language) {
     const dataColumn = object(header) && typeof header.name === 'string' && !own(header, 'value');
     if (dataColumn || format !== undefined) headers.push([column, clone(header), shown(0, column)]);
   });
-  (table.rows ?? []).forEach((row, rowIndex) => {
-    if (!Array.isArray(row)) return;
+  (table.rows ?? []).forEach((rowEntry, rowIndex) => {
+    // FR-02: a row is an array of cells or an object { id, cells }; its position and cells are the same either way.
+    const row = rowCells(rowEntry);
     row.forEach((cell, column) => {
       const value = own(cell, 'value') ? cell.value : cell;
       const format = own(cell, 'value') && typeof cell.format === 'string' ? cell.format : undefined;
@@ -494,7 +496,7 @@ export function restoreTableData(table, record, {datasets, report, evidence: cur
       return table;
     }
     const authored = record.authored, headerOffset = authored.columns?.length ? 1 : 0;
-    const expected = [...(headerOffset ? [authored.columns] : []), ...authored.rows];
+    const expected = [...(headerOffset ? [authored.columns] : []), ...authored.rows.map(rowCells)];
     if (record.environment === environment && canonical(record.evidence) === canonical(evidence)) return clone(authored);
     const next = {...table, ...(columns ? {columns: [...columns]} : {}), rows: rows.map(row => [...row])};
     let changed = 0;

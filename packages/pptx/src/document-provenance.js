@@ -5,6 +5,7 @@ import {currentTag, legacyRegionOrder, upgradeTag} from './legacy-tags.js';
 import {contentTopology, rebuildContent, validateTopology, listLineBreaks, validateListBreaks, validateListRuns, validateListScalars, listLineRoles, validateListRoles, MAX_LIST_PATHS} from './content-topology.js';
 import {runColorRecord, validateRunColors} from './run-colors.js';
 import {overlayRecord, validateOverlayRecord} from './shape-restore.js';
+import {entryIdRecord, validateEntryIdRecord} from './entry-ids.js';
 import {validateCatalogRecord} from '@openpresentation/opf';
 import {SMART_ART_URI} from './smart-art.js';
 import {parseReference, renamedLayout, renamedLayoutTitlePosition, resolveReference, resolveSocialProfile} from '@openpresentation/opf/composition';
@@ -583,6 +584,16 @@ export function recordContentTopology(provenance, slide, index, items) {
 }
 
 /**
+ * FR-02: record the ids of slide `index`'s list items, bullets, timeline events and table rows with a fingerprint of each entry, so import
+ * can restore an id while its entry is still recognizable (`full` mode only; see src/entry-ids.js). A slide with no such id records nothing.
+ */
+export function recordEntryIds(provenance, slide, index) {
+  if (!provenance || provenance.mode !== 'full' || !provenance.slides[index]) return;
+  const entryIds = entryIdRecord(slide);
+  if (entryIds) provenance.slides[index].entryIds = entryIds;
+}
+
+/**
  * SH-05: record the ids and anchors of slide `index`'s overlay entries (`slide.shapes`, as authored), which their native shapes cannot carry
  * (`full` mode only; see overlayRecord).
  */
@@ -761,7 +772,7 @@ function storable(entries, provenance) {
     const result = {v: 1, slide: index};
     if (record.omittedContent) omit(`slides.${index}.content`, record.omittedContent);
     for (const [path, reason] of record.omittedLists ?? []) omit(path, reason);
-    for (const key of ['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content', 'colors', 'overlays', 'lists', 'listRuns', 'listRoles', 'listScalars']) {
+    for (const key of ['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content', 'colors', 'overlays', 'entryIds', 'lists', 'listRuns', 'listRoles', 'listScalars']) {
       if (record[key] === undefined) continue;
       const value = prepare(`slides.${index}.${key}`, record[key]);
       if (value !== undefined) result[key] = value;
@@ -798,7 +809,7 @@ function storable(entries, provenance) {
   }
   for (const [index, record] of slides.entries()) {
     while (tagChars(record) > budget) {
-      const candidates = [...['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content', 'colors', 'overlays', 'lists', 'listRuns', 'listRoles', 'listScalars', 'layoutRecord'].filter(key => record[key] !== undefined).map(key => ({key, size: sizeOf(record[key])})),
+      const candidates = [...['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content', 'colors', 'overlays', 'entryIds', 'lists', 'listRuns', 'listRoles', 'listScalars', 'layoutRecord'].filter(key => record[key] !== undefined).map(key => ({key, size: sizeOf(record[key])})),
         ...Object.keys(record.design ?? {}).map(key => ({key, design: true, size: sizeOf(record.design[key])}))];
       if (!candidates.length) break;
       const largest = candidates.sort((a, b) => b.size - a.size)[0];
@@ -938,6 +949,7 @@ function validateSlide(stored) {
   if (value.content !== undefined) validateTopology(value.content);
   if (value.colors !== undefined) validateRunColors(value.colors);
   if (value.overlays !== undefined) validateOverlayRecord(value.overlays);
+  if (value.entryIds !== undefined) validateEntryIdRecord(value.entryIds);
   if (value.lists !== undefined) validateListBreaks(value.lists);
   if (value.listRuns !== undefined) validateListRuns(value.listRuns);
   if (value.listScalars !== undefined) { validateListScalars(value.listScalars); if (!/^[a-f0-9]{14}$/.test(value.native.listIdentity ?? '')) throw Error('Invalid native scalar list identity.'); }

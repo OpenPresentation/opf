@@ -1,3 +1,4 @@
+import {rowCells} from '@openpresentation/opf';
 // LH-20: the pictures-only PPTX (`toPptx(deck, {as: 'images'})`, `opf convert deck.opf.json deck.pptx --as images`). Each slide
 // is one full-bleed PNG drawn by opf-render, so the file looks exactly like the preview in every viewer and needs no fonts. It
 // keeps the slide's speaker notes, its hidden flag and its section, and the picture's alternative text (the `descr` screen
@@ -59,7 +60,7 @@ export function slideText(slide) {
     const table = payload.table;
     if (isObject(table)) {
       if (Array.isArray(table.columns)) lines.push(table.columns.map(cellText).join(', '));
-      if (Array.isArray(table.rows)) for (const row of table.rows) if (Array.isArray(row)) lines.push(row.map(cellText).join(', '));
+      if (Array.isArray(table.rows)) for (const row of table.rows) lines.push(rowCells(row).map(cellText).join(', '));
     }
     const quote = payload.quote;
     if (typeof quote === 'string' || Array.isArray(quote)) lines.push(runsText(quote));

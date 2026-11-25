@@ -43,7 +43,9 @@ test("lean Worker preserves data exclusions and production size budgets", async 
 	// functions. On the integration-034 wave 3 head d27954fc3 the lean Worker measured 8,542,441 unminified / 5,577,531 minified /
 	// 1,265,413 gzip bytes (over its own ceilings) and 7,333,178 / 4,677,145 / 1,219,884 with the cut, so all three ceilings come back
 	// to the 3% headroom policy, rounded up to 1,000 bytes: 7,554,000, 4,818,000 and 1,257,000.
-	assert.ok(lean.bytes < 7_554_000, `${lean.bytes} unminified bytes`);
+	// FR-02 (vetoable): ids on items, bullets, events and table rows add a TableRow union and four id properties to the precompiled validators;
+	// the lean Worker measured 7,562,043 unminified bytes, so the ceiling moves to 7,570,000 (about 0.1% headroom).
+	assert.ok(lean.bytes < 7_570_000, `${lean.bytes} unminified bytes`);
 	const production = await bundleWorker("mcp-worker-lean.mjs", { minify: true });
 	assert.deepEqual(retainedData(production), [], "production also excludes every data source");
 	const compressed = gzipSync(production.text, { level: 9 }).length;
