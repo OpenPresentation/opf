@@ -1,0 +1,23 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "id": "0192f4c8-6b1e-7c3a-9d42-5e8f1a7b3c90",
+  "name": "Document id",
+  "description": "A deck with a document id: an opaque string, kept on save, export, import and publish.",
+  "slides": [
+    {
+      "id": "cover",
+      "title": "One deck, one id",
+      "subtitle": "The root id says this is the same deck, wherever it is saved or published"
+    },
+    {
+      "id": "rules",
+      "title": "How the id behaves",
+      "bullets": [
+        "Opaque: any non-empty string; a UUID is recommended",
+        "Core never makes one; opf create and hosts do",
+        "A copy, fork or filled deck is a new deck with a new id",
+        "A claim, not a credential: a host checks ownership"
+      ]
+    }
+  ]
+}

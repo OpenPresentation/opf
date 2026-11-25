@@ -69,7 +69,7 @@ export function fillRecords(raw: string, options: Pick<FillOptions, "format" | "
 /**
  * Fill a template: `data` is text (CSV, TSV or JSON), one record or a list of records; omitted, one deck is filled from the
  * variables' own values (and their examples with `examples`). Each deck is the template resolved with one record
- * (`resolveVariables`), no longer marked as a template. Throws `OPFDataImportError` for data without records and a `TypeError`
+ * (`resolveVariables`), no longer marked as a template and without the template's document `id` (a filled deck is a new deck; core never mints an id, so the host does). Throws `OPFDataImportError` for data without records and a `TypeError`
  * for a template that is not an object.
  */
 export function fill(template: unknown, data?: string | FillRecord | readonly FillRecord[], options: FillOptions = {}): FillResult {
@@ -77,7 +77,12 @@ export function fill(template: unknown, data?: string | FillRecord | readonly Fi
 	const records: FillRecord[] = data === undefined ? [{}] : typeof data === "string" ? fillRecords(data, options) : Array.isArray(data) ? [...data] : [data as FillRecord];
 	if (!records.length) throw new OPFDataImportError("Data contains no records.");
 	if (!records.every(isRecord)) throw new OPFDataImportError("Each record must be an object keyed by variable id.");
-	const decks = records.map((record, offset) => ({ index: offset + 1, record, ...resolveVariables(template, record, { template: false, partial: options.partial === true, examples: options.examples === true }) }));
+	const decks = records.map((record, offset) => {
+		const resolved = resolveVariables(template, record, { template: false, partial: options.partial === true, examples: options.examples === true });
+		// A filled deck is a new deck, not the template: it must not claim the template's document id. Core never mints one, so the host (`opf fill`) gives each deck its own.
+		const { id: _template, ...presentation } = resolved.presentation as Record<string, unknown>;
+		return { index: offset + 1, record, ...resolved, presentation };
+	});
 	return {
 		decks: decks.map(({ index, record, presentation, diagnostics, unfilled, complete }) => ({ index, record, presentation: presentation as Record<string, unknown>, diagnostics, unfilled, complete })),
 		...(options.combine ? { presentation: combine(decks as unknown as FilledDeck[]) } : {}),

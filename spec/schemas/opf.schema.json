@@ -13,6 +13,12 @@
       "const": "https://openpresentation.org/schema/opf/v1",
       "description": "Optional OPF schema version. When omitted, validators and engines should assume the latest supported OPF schema."
     },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional identity of the document: an opaque, non-empty string that says 'this is the same deck' across saves, exports, imports and publishes. Core never makes one (it has no clock and no randomness); 'opf create' and hosts do, and a UUID is recommended. Any string is valid, so a host keeps the deck id it already has (such as 'dk_5e8f1a7b3c909d426b1e7c3a'). Kept on save, export, import and publish; a duplicate, a fork or a deck filled from a template is a new deck and gets a new id. PowerPoint round trip: written to the OPF_DOCUMENT_V1 tag and restored on import, and an export with provenance off drops it. The id is a claim, not a credential: a file can carry any id, so a host must check who owns an id before it selects a stored deck.",
+      "examples": ["0192f4c8-6b1e-7c3a-9d42-5e8f1a7b3c90", "dk_5e8f1a7b3c909d426b1e7c3a"]
+    },
     "name": {
       "type": "string",
       "description": "Display name of the presentation for GUI/TUI lists, library/search indexing, OS-level metadata, and default export filenames. This is deck identity, not slide content. Use slides[].title and slides[].subtitle for text that should appear on presented slides. Also the built-in variable 'deck.name'.",

@@ -545,7 +545,12 @@ describe("the bundled sources", () => {
 		// Reviewed for the 0.35 font defaults (a deck that declares no language) on 2026-11-23: 1,402,000 exact bytes (main at cf79e66a7:
 		// 1,400,272). It adds 1,728: the section on a deck with no language whose text is Arabic or Hebrew (design-resolution.md +1,558)
 		// and the missing-language rule naming the slides it read (validate.md +170). The limit is unchanged.
-		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
+		// Reviewed for the 0.37.0 format changes on 2026-11-25 (vetoable): 1,437,909 exact bytes with the document id (FR-01) on main at
+		// 04f265afc, which already documents the limits on a variable's value, the ids on list items, bullets, events and rows, and slide
+		// links, and was under the limit without it. Every 0.37.0 item documents a new part of the format (data sources, typed columns,
+		// the computed metric and the rest are still to come), so the limit comes back to the 3% headroom, rounded up to 1,000 bytes:
+		// 1,482,000.
+		assert.ok(bytes < 1_482_000, `${bytes} bytes of documentation`);
 	});
 });
 
