@@ -494,18 +494,6 @@ const layoutMonotony: RuleText = (finding) => {
   };
 };
 
-const straightQuotes: RuleText = (finding) => {
-  const open = measuredText(finding, "open");
-  const close = measuredText(finding, "close");
-  const text = unquote(match(finding.message, /: ("(?:[^"\\]|\\.)*")\.$/)?.[1]);
-  if (!open || !close) return undefined;
-  const fix = finding.fixes?.find((entry) => entry.id === "use-typographic-quotes");
-  return {
-    message: `${text ? `${code(brief(text, 50))} uses` : "This text uses"} straight quotation marks; this deck's language uses ${open}…${close}.`,
-    next: fix ? `apply the quick fix, or type ${open} and ${close} instead.` : `type ${open} and ${close} instead, and the matching single marks.`,
-  };
-};
-
 const chartDualAxis: RuleText = (finding) => {
   const names = match(finding.message, /^The combo chart plots (.+) on a second value axis/)?.[1];
   return {
@@ -748,7 +736,6 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/centered-body": centeredBody,
   "opf/tight-spacing": tightSpacing,
   "opf/layout-monotony": layoutMonotony,
-  "opf/straight-quotes": straightQuotes,
   "opf/chart-dual-axis": chartDualAxis,
   "opf/chart-pie-many-slices": chartPieManySlices,
 };
