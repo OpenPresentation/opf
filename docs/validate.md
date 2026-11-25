@@ -86,12 +86,14 @@ validate(presentation, {
   fonts,                                          // the host's fonts: layout rules read fonts.textMeasurement
   chartPalette: ['#0072B2', '#E69F00'],           // the engine's chart colors
   template: true, values: { client: 'Acme' },     // check as a template, or fill variables first
+  slideLinks: ['pricing'],                        // one slide checked alone: the deck's other slide ids (false: skip opf/slide-link-unknown)
 });
 ```
 
 - **Names.** `only`, `ignore`, `severity` and `ignorePaths` take full rule ids (`opf/text-contrast`), bare rule names (`text-contrast`) or category names (`accessibility`). No rule is named like a category. A rule beats its category in `severity`. An unknown rule, category, threshold or option throws a `TypeError`, so a typo cannot silently disable a check.
 - **`fonts`.** An object with a `textMeasurement` (the renderer's `loadFonts()` result has one). Without it the layout rules use core's portable estimate and `checks.layout` says `estimated`; with it, `measured`. `textMeasurement` may also be a function of the zero-based slide index, for a script-aware measurement per slide. When the measurement has a `forScripts(profile)` method (a script planner), the layout rules ask it for each slide's script-aware measurement, built from the slide's `resolveScriptFonts` profile and a run language's own profile, the way the renderer and the exporter measure, so Arabic or Japanese text is measured in its script face rather than the Latin face its style names.
 - **`template` and `values`.** A deck that declares content variables is checked as the deck it resolves to; see [templates and variables](templates-and-variables.md).
+- **`slideLinks`.** For a value that is one part of a deck (a single slide checked on its own, as pagination does), `false` skips `opf/slide-link-unknown` and a list of ids adds the deck's other slides that a `slide:<id>` link may name. Leave it out for a whole deck.
 - **Thresholds.** `DEFAULT_VALIDATION_THRESHOLDS` holds `contrastNormal`, `contrastLarge`, `minFontSizePt`, `minImagePpi` and `minSeriesColorDifference`; each rule below lists the ones it reads.
 
 `validationRules` lists every rule with its metadata (`id`, `name`, `category`, `severity`, `cost`, `summary`, `rationale`, `standard`, `approximations`, `thresholds`), and `findValidationRule(name)` finds one by id or bare name.
