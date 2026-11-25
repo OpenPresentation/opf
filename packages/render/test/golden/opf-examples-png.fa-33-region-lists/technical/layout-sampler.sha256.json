@@ -58,16 +58,16 @@
       "bytes": 13974
     },
     "technical/layout-sampler.opf.json#14": {
-      "sha256": "49a16e54f22e04dc6da20b8f8182a2e762f807103cd742a3436b4c6778ff4180",
-      "bytes": 11691
+      "sha256": "3946084c4f8bbbb6b2ebaf8c2eed15f4c361720f22b56348735345eb14a9239d",
+      "bytes": 11700
     },
     "technical/layout-sampler.opf.json#15": {
       "sha256": "a8e76daeee485ad51f3cd425ee641081bd90f5a5edd186410b220fc037608893",
       "bytes": 11661
     },
     "technical/layout-sampler.opf.json#16": {
-      "sha256": "efa0bd920fed43834500711bf3ac209b3cc18de43d9006b405d7515edf43eeb7",
-      "bytes": 9827
+      "sha256": "30bdf686c16dc4af6084ebafc9f6db527b7e8cc3bcc5f2a6ef21d9f48b1f75b2",
+      "bytes": 9767
     },
     "technical/layout-sampler.opf.json#17": {
       "sha256": "68d43d6d81ce9c435b34e1da76a511ba56da04704faa2cec5abca3104c48eda0",
@@ -98,8 +98,8 @@
       "bytes": 11440
     },
     "technical/layout-sampler.opf.json#24": {
-      "sha256": "1d48a1e0029d57664bed6a44a32bb9834ed6ba0a7c8442e7e7afb0755a3108b1",
-      "bytes": 11181
+      "sha256": "c24713125ec9b5d20af0f2177d2557ac470e29f5560a13e0bad0edf9261500cf",
+      "bytes": 11157
     },
     "technical/layout-sampler.opf.json#25": {
       "sha256": "1fe47a4eec51ca5ce7d945b1529e90d9d4bf8d0eb82f27fc6f7de61512bcdc28",
@@ -126,8 +126,8 @@
       "bytes": 9371
     },
     "technical/layout-sampler.opf.json#31": {
-      "sha256": "da6944afee213767d3412bca0714d1cba2488f57456d7ca2ee57cc95c920182c",
-      "bytes": 9880
+      "sha256": "b05046868d949a7db594f54c64f18ebc289e806e17109b1c8e4b9975ec7a99b8",
+      "bytes": 9804
     },
     "technical/layout-sampler.opf.json#32": {
       "sha256": "a6e2afed034910fb54c547daee835c4a16f4f014c1daec48bb569c3c1be59540",
@@ -178,8 +178,8 @@
       "bytes": 9084
     },
     "technical/layout-sampler.opf.json#44": {
-      "sha256": "c3a09c75d5bec2152618eb4f100a555b5e5d8f5173d6f24dd1da1382e05da4ae",
-      "bytes": 9505
+      "sha256": "c0671e9f32d3e9cd160de0b37075b71c89164a4b6e980562c4b0456c09d75eca",
+      "bytes": 9452
     },
     "technical/layout-sampler.opf.json#45": {
       "sha256": "b9c9bb66dde47c7fd94e0d052172aeabf4cc92bb30d264f88e88ce650f48c689",
@@ -206,8 +206,8 @@
       "bytes": 10644
     },
     "technical/layout-sampler.opf.json#51": {
-      "sha256": "e4d607463e023237392eb96293072e51c5644770f697ad10d6943dcade6373ad",
-      "bytes": 11031
+      "sha256": "3a2594f264a68ae4e3ca44651eb3d9e16b52d9a0599e35e83580ef0cad02dcf6",
+      "bytes": 10987
     }
   }
 }
