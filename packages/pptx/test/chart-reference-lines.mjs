@@ -421,7 +421,7 @@ test('unknown marker, unsupported dash and invalid helper point counts are retai
   const e = await exported(doc('area'));
   for (const fn of [
     (s) => s.replace('symbol val="none"', 'symbol val="circle"'),
-    (s) => s.replace('prstDash val="dash"', 'prstDash val="sysDash"'),
+    (s) => s.replace('prstDash val="dash"', 'prstDash val="notADash"'),
     (s) => s.replace(/(<c:val>[\s\S]*?<c:ptCount val=")3"/, '$1' + '100001"'),
   ]) {
     let out;

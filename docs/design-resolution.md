@@ -235,13 +235,13 @@ Which variant a slide has, from the most specific to the least (slide design, th
 
 1. a `variant`;
 2. a theme-slot background (`"dark1"`, `{ "type": "theme", "slot": "dark1" }`), which is the variant of that slot, so `design.background` stays a shorthand;
-3. a picture or gradient background with a `tone` (`"dark"` or `"light"`), which is the `dark1` or `light1` variant. Without a tone a picture takes the tone its recolor, opacity and overlay imply ([images](image-treatments.md)); when they imply none, only a variant of a less specific level can apply, and with none the slide counts as light, as before;
+3. a picture or gradient background with an `appearance` (`"dark"` or `"light"`), which is the `dark1` or `light1` variant. Without one a picture takes the appearance its recolor, opacity and overlay imply ([images](image-treatments.md)); when they imply none, only a variant of a less specific level can apply, and with none the slide counts as light, as before;
 4. any other background (a solid or pattern color) decides by luminance (dark below 0.179), as before.
 
 A layout record's `design.variant` (LH-01) is a default a gallery layout gives, and a background the author fixed beats it (LH-103; docs/programs/layout-harvest/README.md, Decisions). From the most specific:
 
 1. The slide's own `variant` or `background` always wins.
-2. If the background the deck or the theme draws is **fixed**, the layout's variant does not apply: the slide keeps that background, and its text follows that background's `tone` or luminance, exactly as on a slide whose layout names no variant. Fixed is a hex color (the `"#0B1020"` shorthand or a solid's `color`), a solid whose color is a `var:` reference (whatever the variable holds: the author named a color of the deck's own, not a place in the scheme), a gradient, a pattern or a picture.
+2. If the background the deck or the theme draws is **fixed**, the layout's variant does not apply: the slide keeps that background, and its text follows that background's `appearance` or luminance, exactly as on a slide whose layout names no variant. Fixed is a hex color (the `"#0B1020"` shorthand or a solid's `color`), a solid whose color is a `var:` reference (whatever the variable holds: the author named a color of the deck's own, not a place in the scheme), a gradient, a pattern or a picture.
 3. If that background is **scheme-based** (none, so the theme's slot or the engine default applies; a theme slot, `"dark1"` or `{ "type": "theme" }`; a solid whose color is a scheme slot or role name, such as `accent2`, `primary` or `background`; or a deck `variant`), the layout's variant applies on top, ranking above the deck and the theme, unlike the layout's other design keys.
 4. Otherwise the deck, then the theme, then the engine default, as above.
 
@@ -308,8 +308,8 @@ OOXML gives each theme font (major and minor) three script slots: `latin`, East 
 ```
   latin          design font scheme heading/body (the chain above)
   eastAsian      1. design.fontScheme.eastAsian      explicit slot
-  complexScript  2. the scheme's own major/minor     when scriptGroup is ea / cs (or eastAsian /
-                                                     complexScript, the same values) and its
+  complexScript  2. the scheme's own major/minor     when scriptGroup is eastAsian / complexScript
+                                                     (the group of the slot) and its
                                                      languages list (language ids) is empty or
                                                      names the language
                  3. the language's font scheme       when the language's script uses the slot
