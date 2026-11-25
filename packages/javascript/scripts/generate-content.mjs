@@ -201,3 +201,12 @@ async function generateRepoReadme() {
 await generateExamples();
 await generateDocs();
 await generateRepoReadme();
+
+// The core package's own version, so the validator can say which release it is without a file read at run time (edge-safe).
+async function generateVersion() {
+  const { version } = JSON.parse(await fs.readFile(path.join(packageRoot, "package.json"), "utf8"));
+  await fs.writeFile(path.join(generatedRoot, "version.ts"), `${generatedHeader("package.json")}export const OPF_CORE_VERSION: string = ${JSON.stringify(version)};\n`, "utf8");
+  console.log(`Generated src/generated/version.ts (${version})`);
+}
+
+await generateVersion();
