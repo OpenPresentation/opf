@@ -2538,8 +2538,9 @@ function renderTextBox(text, box, bound, config) {
     // A line whose whitespace hangs at its wrap is anchored past its glyphs' anchor point, which these name the same way (the anchor of its
     // glyphs, where an editor's input, which hangs the whitespace too, has its own), with the hanging advance in data-opf-hang: the
     // anchor of the text, whitespace included (where the native export anchors its paragraph), is that advance (half when centered) further.
-    ...(exactStart||hung?{'data-opf-anchor':anchor,'data-opf-anchor-x':stableNumber(glyphAnchor)}:{}),
-    ...(hung?{'data-opf-hang':stableNumber(hang)}:{}),
+    // A traced drawing names them for every such line; an untraced one only where it names the anchor anyway (a line that starts at x).
+    ...(exactStart||hung&&config.options.trace?{'data-opf-anchor':anchor,'data-opf-anchor-x':stableNumber(glyphAnchor)}:{}),
+    ...(hung&&(exactStart||config.options.trace)?{'data-opf-hang':stableNumber(hang)}:{}),
   }, content);
   });
   return tag("g", { ...traceAttrs(config.options, config.path),
