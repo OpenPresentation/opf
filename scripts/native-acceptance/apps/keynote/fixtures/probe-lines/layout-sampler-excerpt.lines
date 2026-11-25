@@ -1,0 +1,979 @@
+app/version	s	16.0
+document/name	s	layout-sampler
+document/id	s	C47CF19E-DAD8-4D2C-9D67-0C0B280AF467
+document/width	n	960
+document/height	n	540
+document/slide numbers showing	b	false
+document/auto play	b	false
+document/auto loop	b	false
+document/auto restart	b	false
+document/maximum idle duration	n	15
+document/password protected	b	false
+document/theme	s	Custom Theme
+document/slide layouts	list	44
+document/slide layouts/#0	s	Blank
+document/slide layouts/#1	s	Agenda
+document/slide layouts/#2	s	Chart
+document/slide layouts/#3	s	Chart beside
+document/slide layouts/#4	s	Chevrons
+document/slide layouts/#5	s	Closing
+document/slide layouts/#6	s	Closing 0
+document/slide layouts/#7	s	Code
+document/slide layouts/#8	s	Comparison
+document/slide layouts/#9	s	Cover
+document/slide layouts/#10	s	Cycle
+document/slide layouts/#11	s	Dashboard
+document/slide layouts/#12	s	FAQ
+document/slide layouts/#13	s	Gallery
+document/slide layouts/#14	s	Hero
+document/slide layouts/#15	s	Hierarchy
+document/slide layouts/#16	s	Image
+document/slide layouts/#17	s	Image beside
+document/slide layouts/#18	s	Inverted pyramid
+document/slide layouts/#19	s	List
+document/slide layouts/#20	s	Logos
+document/slide layouts/#21	s	Matrix
+document/slide layouts/#22	s	Metrics
+document/slide layouts/#23	s	Organization chart
+document/slide layouts/#24	s	Pillars
+document/slide layouts/#25	s	Process
+document/slide layouts/#26	s	Pyramid
+document/slide layouts/#27	s	Quote
+document/slide layouts/#28	s	Quote 0
+document/slide layouts/#29	s	Scorecard
+document/slide layouts/#30	s	Section
+document/slide layouts/#31	s	Section 0
+document/slide layouts/#32	s	Statement
+document/slide layouts/#33	s	Statement 0
+document/slide layouts/#34	s	Table
+document/slide layouts/#35	s	Table beside
+document/slide layouts/#36	s	Team
+document/slide layouts/#37	s	Text
+document/slide layouts/#38	s	Three columns
+document/slide layouts/#39	s	Timeline
+document/slide layouts/#40	s	Two columns
+document/slide layouts/#41	s	Venn
+document/slide layouts/#42	s	Vertical process
+document/slide layouts/#43	s	Title Only
+slides/#0/slide number	n	1
+slides/#0/skipped	b	false
+slides/#0/title showing	b	true
+slides/#0/body showing	b	false
+slides/#0/presenter notes	s	
+slides/#0/transition	list	4
+slides/#0/transition/#0	s	no transition effect
+slides/#0/transition/#1	n	1.0
+slides/#0/transition/#2	n	0.5
+slides/#0/transition/#3	b	false
+slides/#0/layout	s	Cover
+slides/#0/default title item/position	list	2
+slides/#0/default title item/position/#0	n	44
+slides/#0/default title item/position/#1	n	327
+slides/#0/default title item/width	n	428
+slides/#0/default title item/height	n	180
+slides/#0/default title item/object text	s	A smaller pilot. \nA clearer decision.
+slides/#0/default body item/position	list	2
+slides/#0/default body item/position/#0	n	0
+slides/#0/default body item/position/#1	n	0
+slides/#0/default body item/width	n	0
+slides/#0/default body item/height	n	0
+slides/#0/default body item/object text	s	
+slides/#0/itemCount	n	4
+slides/#0/items/#0/class	s	shape
+slides/#0/items/#0/depth	n	0
+slides/#0/items/#0/readMode	s	item
+slides/#0/items/#0/position	list	2
+slides/#0/items/#0/position/#0	n	43
+slides/#0/items/#0/position/#1	n	315
+slides/#0/items/#0/width	n	60
+slides/#0/items/#0/height	n	4
+slides/#0/items/#0/rotation	n	0
+slides/#0/items/#0/opacity	n	100
+slides/#0/items/#0/reflection showing	b	false
+slides/#0/items/#0/reflection value	n	0
+slides/#0/items/#0/locked	b	false
+slides/#0/items/#0/background fill type	e	color fill
+slides/#0/items/#0/text	s	
+slides/#0/items/#0/paragraphCount	n	1
+slides/#0/items/#0/paragraphs/#0/text	s	
+slides/#0/items/#0/paragraphs/#0/font	s	Helvetica
+slides/#0/items/#0/paragraphs/#0/size	n	18.0
+slides/#0/items/#0/paragraphs/#0/color	list	3
+slides/#0/items/#0/paragraphs/#0/color/#0	n	0
+slides/#0/items/#0/paragraphs/#0/color/#1	n	0
+slides/#0/items/#0/paragraphs/#0/color/#2	n	0
+slides/#0/items/#0/wordFonts	list	0
+slides/#0/items/#0/wordSizes	list	0
+slides/#0/items/#1/class	s	shape
+slides/#0/items/#1/depth	n	0
+slides/#0/items/#1/readMode	s	item
+slides/#0/items/#1/position	list	2
+slides/#0/items/#1/position/#0	n	44
+slides/#0/items/#1/position/#1	n	327
+slides/#0/items/#1/width	n	428
+slides/#0/items/#1/height	n	180
+slides/#0/items/#1/rotation	n	0
+slides/#0/items/#1/opacity	n	100
+slides/#0/items/#1/reflection showing	b	false
+slides/#0/items/#1/reflection value	n	0
+slides/#0/items/#1/locked	b	false
+slides/#0/items/#1/background fill type	e	no fill
+slides/#0/items/#1/text	s	A smaller pilot. \nA clearer decision.
+slides/#0/items/#1/paragraphCount	n	2
+slides/#0/items/#1/paragraphs/#0/text	s	A smaller pilot. 
+slides/#0/items/#1/paragraphs/#0/font	s	Helvetica-Bold
+slides/#0/items/#1/paragraphs/#0/size	n	56.0
+slides/#0/items/#1/paragraphs/#0/color	list	3
+slides/#0/items/#1/paragraphs/#0/color/#0	n	0
+slides/#0/items/#1/paragraphs/#0/color/#1	n	0
+slides/#0/items/#1/paragraphs/#0/color/#2	n	0
+slides/#0/items/#1/paragraphs/#1/text	s	A clearer decision.
+slides/#0/items/#1/paragraphs/#1/font	s	Helvetica-Bold
+slides/#0/items/#1/paragraphs/#1/size	n	56.0
+slides/#0/items/#1/paragraphs/#1/color	list	3
+slides/#0/items/#1/paragraphs/#1/color/#0	n	0
+slides/#0/items/#1/paragraphs/#1/color/#1	n	0
+slides/#0/items/#1/paragraphs/#1/color/#2	n	0
+slides/#0/items/#1/wordFonts	list	1
+slides/#0/items/#1/wordFonts/#0	s	Helvetica-Bold
+slides/#0/items/#1/wordSizes	list	1
+slides/#0/items/#1/wordSizes/#0	n	56.0
+slides/#0/items/#2/class	s	text item
+slides/#0/items/#2/depth	n	0
+slides/#0/items/#2/readMode	s	item
+slides/#0/items/#2/position	list	2
+slides/#0/items/#2/position/#0	n	44
+slides/#0/items/#2/position/#1	n	463
+slides/#0/items/#2/width	n	373
+slides/#0/items/#2/height	n	32
+slides/#0/items/#2/rotation	n	0
+slides/#0/items/#2/opacity	n	100
+slides/#0/items/#2/reflection showing	b	false
+slides/#0/items/#2/reflection value	n	0
+slides/#0/items/#2/locked	b	false
+slides/#0/items/#2/background fill type	e	no fill
+slides/#0/items/#2/text	s	A six-week pilot with two teams
+slides/#0/items/#2/paragraphCount	n	1
+slides/#0/items/#2/paragraphs/#0/text	s	A six-week pilot with two teams
+slides/#0/items/#2/paragraphs/#0/font	s	Helvetica
+slides/#0/items/#2/paragraphs/#0/size	n	27.0
+slides/#0/items/#2/paragraphs/#0/color	list	3
+slides/#0/items/#2/paragraphs/#0/color/#0	n	0
+slides/#0/items/#2/paragraphs/#0/color/#1	n	0
+slides/#0/items/#2/paragraphs/#0/color/#2	n	0
+slides/#0/items/#2/wordFonts	list	1
+slides/#0/items/#2/wordFonts/#0	s	Helvetica
+slides/#0/items/#2/wordSizes	list	1
+slides/#0/items/#2/wordSizes/#0	n	27.0
+slides/#0/items/#3/class	s	image
+slides/#0/items/#3/depth	n	0
+slides/#0/items/#3/readMode	s	single
+slides/#0/items/#3/position	list	2
+slides/#0/items/#3/position/#0	n	489
+slides/#0/items/#3/position/#1	n	0
+slides/#0/items/#3/width	n	471
+slides/#0/items/#3/height	n	540
+slides/#0/items/#3/locked	b	false
+slides/#0/items/#3/rotation	n	0
+slides/#0/items/#3/opacity	n	100
+slides/#0/items/#3/reflection showing	b	false
+slides/#0/items/#3/reflection value	n	0
+slides/#0/items/#3/description	s	OPF image 1
+slides/#0/items/#3/file name	s	image-1-1.png
+slides/#1/slide number	n	2
+slides/#1/skipped	b	false
+slides/#1/title showing	b	true
+slides/#1/body showing	b	false
+slides/#1/presenter notes	s	
+slides/#1/transition	list	4
+slides/#1/transition/#0	s	no transition effect
+slides/#1/transition/#1	n	1.0
+slides/#1/transition/#2	n	0.5
+slides/#1/transition/#3	b	false
+slides/#1/layout	s	Agenda
+slides/#1/default title item/position	list	2
+slides/#1/default title item/position/#0	n	43
+slides/#1/default title item/position/#1	n	43
+slides/#1/default title item/width	n	874
+slides/#1/default title item/height	n	49
+slides/#1/default title item/object text	s	From the problem to the next decision
+slides/#1/default body item/position	list	2
+slides/#1/default body item/position/#0	n	0
+slides/#1/default body item/position/#1	n	0
+slides/#1/default body item/width	n	0
+slides/#1/default body item/height	n	0
+slides/#1/default body item/object text	s	
+slides/#1/itemCount	n	10
+slides/#1/items/#0/class	s	text item
+slides/#1/items/#0/depth	n	0
+slides/#1/items/#0/readMode	s	bulk
+slides/#1/items/#0/position	list	2
+slides/#1/items/#0/position/#0	n	44
+slides/#1/items/#0/position/#1	n	503
+slides/#1/items/#0/width	n	182
+slides/#1/items/#0/height	n	14
+slides/#1/items/#0/rotation	n	0
+slides/#1/items/#0/opacity	n	100
+slides/#1/items/#0/reflection showing	b	false
+slides/#1/items/#0/reflection value	n	0
+slides/#1/items/#0/locked	b	false
+slides/#1/items/#0/background fill type	e	no fill
+slides/#1/items/#0/text	s	Illustrative example • fictional data
+slides/#1/items/#0/paragraphCount	n	1
+slides/#1/items/#0/paragraphs/#0/text	s	Illustrative example • fictional data
+slides/#1/items/#0/paragraphs/#0/font	s	Helvetica
+slides/#1/items/#0/paragraphs/#0/size	n	12.0
+slides/#1/items/#0/paragraphs/#0/color	list	3
+slides/#1/items/#0/paragraphs/#0/color/#0	n	448
+slides/#1/items/#0/paragraphs/#0/color/#1	n	4406
+slides/#1/items/#0/paragraphs/#0/color/#2	n	12991
+slides/#1/items/#0/wordFonts	list	1
+slides/#1/items/#0/wordFonts/#0	s	Helvetica
+slides/#1/items/#0/wordSizes	list	1
+slides/#1/items/#0/wordSizes/#0	n	12.0
+slides/#1/items/#1/class	s	line
+slides/#1/items/#1/depth	n	0
+slides/#1/items/#1/readMode	s	bulk
+slides/#1/items/#1/position	list	2
+slides/#1/items/#1/position/#0	n	67
+slides/#1/items/#1/position/#1	n	233
+slides/#1/items/#1/width	n	136
+slides/#1/items/#1/height	n	0
+slides/#1/items/#1/rotation	n	270
+slides/#1/items/#1/reflection showing	b	false
+slides/#1/items/#1/reflection value	n	0
+slides/#1/items/#1/locked	b	false
+slides/#1/items/#1/start point	list	2
+slides/#1/items/#1/start point/#0	n	67
+slides/#1/items/#1/start point/#1	n	233
+slides/#1/items/#1/end point	list	2
+slides/#1/items/#1/end point/#0	n	67
+slides/#1/items/#1/end point/#1	n	369
+slides/#1/items/#2/class	s	group
+slides/#1/items/#2/depth	n	0
+slides/#1/items/#2/readMode	s	bulk
+slides/#1/items/#2/position	list	2
+slides/#1/items/#2/position/#0	n	43
+slides/#1/items/#2/position/#1	n	209
+slides/#1/items/#2/width	n	49
+slides/#1/items/#2/height	n	49
+slides/#1/items/#2/rotation	n	0
+slides/#1/items/#2/itemCount	n	2
+slides/#1/items/#2/items/#0/class	s	shape
+slides/#1/items/#2/items/#0/depth	n	1
+slides/#1/items/#2/items/#0/readMode	s	bulk
+slides/#1/items/#2/items/#0/position	list	2
+slides/#1/items/#2/items/#0/position/#0	n	43
+slides/#1/items/#2/items/#0/position/#1	n	209
+slides/#1/items/#2/items/#0/width	n	49
+slides/#1/items/#2/items/#0/height	n	49
+slides/#1/items/#2/items/#0/rotation	n	0
+slides/#1/items/#2/items/#0/opacity	n	100
+slides/#1/items/#2/items/#0/reflection showing	b	false
+slides/#1/items/#2/items/#0/reflection value	n	0
+slides/#1/items/#2/items/#0/locked	b	false
+slides/#1/items/#2/items/#0/background fill type	e	color fill
+slides/#1/items/#2/items/#0/text	s	
+slides/#1/items/#2/items/#0/paragraphCount	n	1
+slides/#1/items/#2/items/#0/paragraphs/#0/text	s	
+slides/#1/items/#2/items/#0/paragraphs/#0/font	s	Helvetica
+slides/#1/items/#2/items/#0/paragraphs/#0/size	n	27.0
+slides/#1/items/#2/items/#0/paragraphs/#0/color	list	3
+slides/#1/items/#2/items/#0/paragraphs/#0/color/#0	n	0
+slides/#1/items/#2/items/#0/paragraphs/#0/color/#1	n	0
+slides/#1/items/#2/items/#0/paragraphs/#0/color/#2	n	0
+slides/#1/items/#2/items/#0/wordFonts	list	0
+slides/#1/items/#2/items/#0/wordSizes	list	0
+slides/#1/items/#2/items/#1/class	s	text item
+slides/#1/items/#2/items/#1/depth	n	1
+slides/#1/items/#2/items/#1/readMode	s	bulk
+slides/#1/items/#2/items/#1/position	list	2
+slides/#1/items/#2/items/#1/position/#0	n	59
+slides/#1/items/#2/items/#1/position/#1	n	217
+slides/#1/items/#2/items/#1/width	n	16
+slides/#1/items/#2/items/#1/height	n	32
+slides/#1/items/#2/items/#1/rotation	n	0
+slides/#1/items/#2/items/#1/opacity	n	100
+slides/#1/items/#2/items/#1/reflection showing	b	false
+slides/#1/items/#2/items/#1/reflection value	n	0
+slides/#1/items/#2/items/#1/locked	b	false
+slides/#1/items/#2/items/#1/background fill type	e	no fill
+slides/#1/items/#2/items/#1/text	s	1
+slides/#1/items/#2/items/#1/paragraphCount	n	1
+slides/#1/items/#2/items/#1/paragraphs/#0/text	s	1
+slides/#1/items/#2/items/#1/paragraphs/#0/font	s	Helvetica-Bold
+slides/#1/items/#2/items/#1/paragraphs/#0/size	n	27.0
+slides/#1/items/#2/items/#1/paragraphs/#0/color	list	3
+slides/#1/items/#2/items/#1/paragraphs/#0/color/#0	n	65535
+slides/#1/items/#2/items/#1/paragraphs/#0/color/#1	n	65535
+slides/#1/items/#2/items/#1/paragraphs/#0/color/#2	n	65535
+slides/#1/items/#2/items/#1/wordFonts	list	1
+slides/#1/items/#2/items/#1/wordFonts/#0	s	Helvetica-Bold
+slides/#1/items/#2/items/#1/wordSizes	list	1
+slides/#1/items/#2/items/#1/wordSizes/#0	n	27.0
+slides/#1/items/#3/class	s	group
+slides/#1/items/#3/depth	n	0
+slides/#1/items/#3/readMode	s	bulk
+slides/#1/items/#3/position	list	2
+slides/#1/items/#3/position/#0	n	43
+slides/#1/items/#3/position/#1	n	277
+slides/#1/items/#3/width	n	49
+slides/#1/items/#3/height	n	49
+slides/#1/items/#3/rotation	n	0
+slides/#1/items/#3/itemCount	n	2
+slides/#1/items/#3/items/#0/class	s	shape
+slides/#1/items/#3/items/#0/depth	n	1
+slides/#1/items/#3/items/#0/readMode	s	bulk
+slides/#1/items/#3/items/#0/position	list	2
+slides/#1/items/#3/items/#0/position/#0	n	43
+slides/#1/items/#3/items/#0/position/#1	n	277
+slides/#1/items/#3/items/#0/width	n	49
+slides/#1/items/#3/items/#0/height	n	49
+slides/#1/items/#3/items/#0/rotation	n	0
+slides/#1/items/#3/items/#0/opacity	n	100
+slides/#1/items/#3/items/#0/reflection showing	b	false
+slides/#1/items/#3/items/#0/reflection value	n	0
+slides/#1/items/#3/items/#0/locked	b	false
+slides/#1/items/#3/items/#0/background fill type	e	color fill
+slides/#1/items/#3/items/#0/text	s	
+slides/#1/items/#3/items/#0/paragraphCount	n	1
+slides/#1/items/#3/items/#0/paragraphs/#0/text	s	
+slides/#1/items/#3/items/#0/paragraphs/#0/font	s	Helvetica
+slides/#1/items/#3/items/#0/paragraphs/#0/size	n	27.0
+slides/#1/items/#3/items/#0/paragraphs/#0/color	list	3
+slides/#1/items/#3/items/#0/paragraphs/#0/color/#0	n	0
+slides/#1/items/#3/items/#0/paragraphs/#0/color/#1	n	0
+slides/#1/items/#3/items/#0/paragraphs/#0/color/#2	n	0
+slides/#1/items/#3/items/#0/wordFonts	list	0
+slides/#1/items/#3/items/#0/wordSizes	list	0
+slides/#1/items/#3/items/#1/class	s	text item
+slides/#1/items/#3/items/#1/depth	n	1
+slides/#1/items/#3/items/#1/readMode	s	bulk
+slides/#1/items/#3/items/#1/position	list	2
+slides/#1/items/#3/items/#1/position/#0	n	59
+slides/#1/items/#3/items/#1/position/#1	n	285
+slides/#1/items/#3/items/#1/width	n	16
+slides/#1/items/#3/items/#1/height	n	32
+slides/#1/items/#3/items/#1/rotation	n	0
+slides/#1/items/#3/items/#1/opacity	n	100
+slides/#1/items/#3/items/#1/reflection showing	b	false
+slides/#1/items/#3/items/#1/reflection value	n	0
+slides/#1/items/#3/items/#1/locked	b	false
+slides/#1/items/#3/items/#1/background fill type	e	no fill
+slides/#1/items/#3/items/#1/text	s	2
+slides/#1/items/#3/items/#1/paragraphCount	n	1
+slides/#1/items/#3/items/#1/paragraphs/#0/text	s	2
+slides/#1/items/#3/items/#1/paragraphs/#0/font	s	Helvetica-Bold
+slides/#1/items/#3/items/#1/paragraphs/#0/size	n	27.0
+slides/#1/items/#3/items/#1/paragraphs/#0/color	list	3
+slides/#1/items/#3/items/#1/paragraphs/#0/color/#0	n	65535
+slides/#1/items/#3/items/#1/paragraphs/#0/color/#1	n	65535
+slides/#1/items/#3/items/#1/paragraphs/#0/color/#2	n	65535
+slides/#1/items/#3/items/#1/wordFonts	list	1
+slides/#1/items/#3/items/#1/wordFonts/#0	s	Helvetica-Bold
+slides/#1/items/#3/items/#1/wordSizes	list	1
+slides/#1/items/#3/items/#1/wordSizes/#0	n	27.0
+slides/#1/items/#4/class	s	group
+slides/#1/items/#4/depth	n	0
+slides/#1/items/#4/readMode	s	bulk
+slides/#1/items/#4/position	list	2
+slides/#1/items/#4/position/#0	n	43
+slides/#1/items/#4/position/#1	n	345
+slides/#1/items/#4/width	n	49
+slides/#1/items/#4/height	n	49
+slides/#1/items/#4/rotation	n	0
+slides/#1/items/#4/itemCount	n	2
+slides/#1/items/#4/items/#0/class	s	shape
+slides/#1/items/#4/items/#0/depth	n	1
+slides/#1/items/#4/items/#0/readMode	s	bulk
+slides/#1/items/#4/items/#0/position	list	2
+slides/#1/items/#4/items/#0/position/#0	n	43
+slides/#1/items/#4/items/#0/position/#1	n	345
+slides/#1/items/#4/items/#0/width	n	49
+slides/#1/items/#4/items/#0/height	n	49
+slides/#1/items/#4/items/#0/rotation	n	0
+slides/#1/items/#4/items/#0/opacity	n	100
+slides/#1/items/#4/items/#0/reflection showing	b	false
+slides/#1/items/#4/items/#0/reflection value	n	0
+slides/#1/items/#4/items/#0/locked	b	false
+slides/#1/items/#4/items/#0/background fill type	e	color fill
+slides/#1/items/#4/items/#0/text	s	
+slides/#1/items/#4/items/#0/paragraphCount	n	1
+slides/#1/items/#4/items/#0/paragraphs/#0/text	s	
+slides/#1/items/#4/items/#0/paragraphs/#0/font	s	Helvetica
+slides/#1/items/#4/items/#0/paragraphs/#0/size	n	27.0
+slides/#1/items/#4/items/#0/paragraphs/#0/color	list	3
+slides/#1/items/#4/items/#0/paragraphs/#0/color/#0	n	0
+slides/#1/items/#4/items/#0/paragraphs/#0/color/#1	n	0
+slides/#1/items/#4/items/#0/paragraphs/#0/color/#2	n	0
+slides/#1/items/#4/items/#0/wordFonts	list	0
+slides/#1/items/#4/items/#0/wordSizes	list	0
+slides/#1/items/#4/items/#1/class	s	text item
+slides/#1/items/#4/items/#1/depth	n	1
+slides/#1/items/#4/items/#1/readMode	s	bulk
+slides/#1/items/#4/items/#1/position	list	2
+slides/#1/items/#4/items/#1/position/#0	n	59
+slides/#1/items/#4/items/#1/position/#1	n	353
+slides/#1/items/#4/items/#1/width	n	16
+slides/#1/items/#4/items/#1/height	n	32
+slides/#1/items/#4/items/#1/rotation	n	0
+slides/#1/items/#4/items/#1/opacity	n	100
+slides/#1/items/#4/items/#1/reflection showing	b	false
+slides/#1/items/#4/items/#1/reflection value	n	0
+slides/#1/items/#4/items/#1/locked	b	false
+slides/#1/items/#4/items/#1/background fill type	e	no fill
+slides/#1/items/#4/items/#1/text	s	3
+slides/#1/items/#4/items/#1/paragraphCount	n	1
+slides/#1/items/#4/items/#1/paragraphs/#0/text	s	3
+slides/#1/items/#4/items/#1/paragraphs/#0/font	s	Helvetica-Bold
+slides/#1/items/#4/items/#1/paragraphs/#0/size	n	27.0
+slides/#1/items/#4/items/#1/paragraphs/#0/color	list	3
+slides/#1/items/#4/items/#1/paragraphs/#0/color/#0	n	65535
+slides/#1/items/#4/items/#1/paragraphs/#0/color/#1	n	65535
+slides/#1/items/#4/items/#1/paragraphs/#0/color/#2	n	65535
+slides/#1/items/#4/items/#1/wordFonts	list	1
+slides/#1/items/#4/items/#1/wordFonts/#0	s	Helvetica-Bold
+slides/#1/items/#4/items/#1/wordSizes	list	1
+slides/#1/items/#4/items/#1/wordSizes/#0	n	27.0
+slides/#1/items/#5/class	s	shape
+slides/#1/items/#5/depth	n	0
+slides/#1/items/#5/readMode	s	bulk
+slides/#1/items/#5/position	list	2
+slides/#1/items/#5/position/#0	n	43
+slides/#1/items/#5/position/#1	n	43
+slides/#1/items/#5/width	n	874
+slides/#1/items/#5/height	n	49
+slides/#1/items/#5/rotation	n	0
+slides/#1/items/#5/opacity	n	100
+slides/#1/items/#5/reflection showing	b	false
+slides/#1/items/#5/reflection value	n	0
+slides/#1/items/#5/locked	b	false
+slides/#1/items/#5/background fill type	e	no fill
+slides/#1/items/#5/text	s	From the problem to the next decision
+slides/#1/items/#5/paragraphCount	n	1
+slides/#1/items/#5/paragraphs/#0/text	s	From the problem to the next decision
+slides/#1/items/#5/paragraphs/#0/font	s	Helvetica-Bold
+slides/#1/items/#5/paragraphs/#0/size	n	40.0
+slides/#1/items/#5/paragraphs/#0/color	list	3
+slides/#1/items/#5/paragraphs/#0/color/#0	n	0
+slides/#1/items/#5/paragraphs/#0/color/#1	n	0
+slides/#1/items/#5/paragraphs/#0/color/#2	n	0
+slides/#1/items/#5/wordFonts	list	1
+slides/#1/items/#5/wordFonts/#0	s	Helvetica-Bold
+slides/#1/items/#5/wordSizes	list	1
+slides/#1/items/#5/wordSizes/#0	n	40.0
+slides/#1/items/#6/class	s	text item
+slides/#1/items/#6/depth	n	0
+slides/#1/items/#6/readMode	s	bulk
+slides/#1/items/#6/position	list	2
+slides/#1/items/#6/position/#0	n	106
+slides/#1/items/#6/position/#1	n	215
+slides/#1/items/#6/width	n	229
+slides/#1/items/#6/height	n	32
+slides/#1/items/#6/rotation	n	0
+slides/#1/items/#6/opacity	n	100
+slides/#1/items/#6/reflection showing	b	false
+slides/#1/items/#6/reflection value	n	0
+slides/#1/items/#6/locked	b	false
+slides/#1/items/#6/background fill type	e	no fill
+slides/#1/items/#6/text	s	Define the problem
+slides/#1/items/#6/paragraphCount	n	1
+slides/#1/items/#6/paragraphs/#0/text	s	Define the problem
+slides/#1/items/#6/paragraphs/#0/font	s	Helvetica
+slides/#1/items/#6/paragraphs/#0/size	n	27.0
+slides/#1/items/#6/paragraphs/#0/color	list	3
+slides/#1/items/#6/paragraphs/#0/color/#0	n	0
+slides/#1/items/#6/paragraphs/#0/color/#1	n	0
+slides/#1/items/#6/paragraphs/#0/color/#2	n	0
+slides/#1/items/#6/wordFonts	list	1
+slides/#1/items/#6/wordFonts/#0	s	Helvetica
+slides/#1/items/#6/wordSizes	list	1
+slides/#1/items/#6/wordSizes/#0	n	27.0
+slides/#1/items/#7/class	s	text item
+slides/#1/items/#7/depth	n	0
+slides/#1/items/#7/readMode	s	bulk
+slides/#1/items/#7/position	list	2
+slides/#1/items/#7/position/#0	n	106
+slides/#1/items/#7/position/#1	n	283
+slides/#1/items/#7/width	n	307
+slides/#1/items/#7/height	n	32
+slides/#1/items/#7/rotation	n	0
+slides/#1/items/#7/opacity	n	100
+slides/#1/items/#7/reflection showing	b	false
+slides/#1/items/#7/reflection value	n	0
+slides/#1/items/#7/locked	b	false
+slides/#1/items/#7/background fill type	e	no fill
+slides/#1/items/#7/text	s	Review the pilot evidence
+slides/#1/items/#7/paragraphCount	n	1
+slides/#1/items/#7/paragraphs/#0/text	s	Review the pilot evidence
+slides/#1/items/#7/paragraphs/#0/font	s	Helvetica
+slides/#1/items/#7/paragraphs/#0/size	n	27.0
+slides/#1/items/#7/paragraphs/#0/color	list	3
+slides/#1/items/#7/paragraphs/#0/color/#0	n	0
+slides/#1/items/#7/paragraphs/#0/color/#1	n	0
+slides/#1/items/#7/paragraphs/#0/color/#2	n	0
+slides/#1/items/#7/wordFonts	list	1
+slides/#1/items/#7/wordFonts/#0	s	Helvetica
+slides/#1/items/#7/wordSizes	list	1
+slides/#1/items/#7/wordSizes/#0	n	27.0
+slides/#1/items/#8/class	s	text item
+slides/#1/items/#8/depth	n	0
+slides/#1/items/#8/readMode	s	bulk
+slides/#1/items/#8/position	list	2
+slides/#1/items/#8/position/#0	n	106
+slides/#1/items/#8/position/#1	n	351
+slides/#1/items/#8/width	n	283
+slides/#1/items/#8/height	n	32
+slides/#1/items/#8/rotation	n	0
+slides/#1/items/#8/opacity	n	100
+slides/#1/items/#8/reflection showing	b	false
+slides/#1/items/#8/reflection value	n	0
+slides/#1/items/#8/locked	b	false
+slides/#1/items/#8/background fill type	e	no fill
+slides/#1/items/#8/text	s	Agree the next decision
+slides/#1/items/#8/paragraphCount	n	1
+slides/#1/items/#8/paragraphs/#0/text	s	Agree the next decision
+slides/#1/items/#8/paragraphs/#0/font	s	Helvetica
+slides/#1/items/#8/paragraphs/#0/size	n	27.0
+slides/#1/items/#8/paragraphs/#0/color	list	3
+slides/#1/items/#8/paragraphs/#0/color/#0	n	0
+slides/#1/items/#8/paragraphs/#0/color/#1	n	0
+slides/#1/items/#8/paragraphs/#0/color/#2	n	0
+slides/#1/items/#8/wordFonts	list	1
+slides/#1/items/#8/wordFonts/#0	s	Helvetica
+slides/#1/items/#8/wordSizes	list	1
+slides/#1/items/#8/wordSizes/#0	n	27.0
+slides/#1/items/#9/class	s	text item
+slides/#1/items/#9/depth	n	0
+slides/#1/items/#9/readMode	s	bulk
+slides/#1/items/#9/position	list	2
+slides/#1/items/#9/position/#0	n	906
+slides/#1/items/#9/position/#1	n	503
+slides/#1/items/#9/width	n	10
+slides/#1/items/#9/height	n	14
+slides/#1/items/#9/rotation	n	0
+slides/#1/items/#9/opacity	n	100
+slides/#1/items/#9/reflection showing	b	false
+slides/#1/items/#9/reflection value	n	0
+slides/#1/items/#9/locked	b	false
+slides/#1/items/#9/background fill type	e	no fill
+slides/#1/items/#9/text	s	￼
+slides/#1/items/#9/paragraphCount	n	1
+slides/#1/items/#9/paragraphs/#0/text	s	￼
+slides/#1/items/#9/paragraphs/#0/font	s	Helvetica
+slides/#1/items/#9/paragraphs/#0/size	n	12.0
+slides/#1/items/#9/paragraphs/#0/color	list	3
+slides/#1/items/#9/paragraphs/#0/color/#0	n	448
+slides/#1/items/#9/paragraphs/#0/color/#1	n	4406
+slides/#1/items/#9/paragraphs/#0/color/#2	n	12991
+slides/#1/items/#9/wordFonts	list	0
+slides/#1/items/#9/wordSizes	list	0
+slides/#2/slide number	n	3
+slides/#2/skipped	b	false
+slides/#2/title showing	b	true
+slides/#2/body showing	b	false
+slides/#2/presenter notes	s	
+slides/#2/transition	list	4
+slides/#2/transition/#0	s	no transition effect
+slides/#2/transition/#1	n	1.0
+slides/#2/transition/#2	n	0.5
+slides/#2/transition/#3	b	false
+slides/#2/layout	s	Table
+slides/#2/default title item/position	list	2
+slides/#2/default title item/position/#0	n	43
+slides/#2/default title item/position/#1	n	43
+slides/#2/default title item/width	n	874
+slides/#2/default title item/height	n	49
+slides/#2/default title item/object text	s	Compare outcomes on consistent measures
+slides/#2/default body item/position	list	2
+slides/#2/default body item/position/#0	n	0
+slides/#2/default body item/position/#1	n	0
+slides/#2/default body item/width	n	0
+slides/#2/default body item/height	n	0
+slides/#2/default body item/object text	s	
+slides/#2/itemCount	n	6
+slides/#2/items/#0/class	s	text item
+slides/#2/items/#0/depth	n	0
+slides/#2/items/#0/readMode	s	bulk
+slides/#2/items/#0/position	list	2
+slides/#2/items/#0/position/#0	n	44
+slides/#2/items/#0/position/#1	n	503
+slides/#2/items/#0/width	n	182
+slides/#2/items/#0/height	n	14
+slides/#2/items/#0/rotation	n	0
+slides/#2/items/#0/opacity	n	100
+slides/#2/items/#0/reflection showing	b	false
+slides/#2/items/#0/reflection value	n	0
+slides/#2/items/#0/locked	b	false
+slides/#2/items/#0/background fill type	e	no fill
+slides/#2/items/#0/text	s	Illustrative example • fictional data
+slides/#2/items/#0/paragraphCount	n	1
+slides/#2/items/#0/paragraphs/#0/text	s	Illustrative example • fictional data
+slides/#2/items/#0/paragraphs/#0/font	s	Helvetica
+slides/#2/items/#0/paragraphs/#0/size	n	12.0
+slides/#2/items/#0/paragraphs/#0/color	list	3
+slides/#2/items/#0/paragraphs/#0/color/#0	n	448
+slides/#2/items/#0/paragraphs/#0/color/#1	n	4406
+slides/#2/items/#0/paragraphs/#0/color/#2	n	12991
+slides/#2/items/#0/wordFonts	list	1
+slides/#2/items/#0/wordFonts/#0	s	Helvetica
+slides/#2/items/#0/wordSizes	list	1
+slides/#2/items/#0/wordSizes/#0	n	12.0
+slides/#2/items/#1/class	s	shape
+slides/#2/items/#1/depth	n	0
+slides/#2/items/#1/readMode	s	bulk
+slides/#2/items/#1/position	list	2
+slides/#2/items/#1/position/#0	n	43
+slides/#2/items/#1/position/#1	n	43
+slides/#2/items/#1/width	n	874
+slides/#2/items/#1/height	n	49
+slides/#2/items/#1/rotation	n	0
+slides/#2/items/#1/opacity	n	100
+slides/#2/items/#1/reflection showing	b	false
+slides/#2/items/#1/reflection value	n	0
+slides/#2/items/#1/locked	b	false
+slides/#2/items/#1/background fill type	e	no fill
+slides/#2/items/#1/text	s	Compare outcomes on consistent measures
+slides/#2/items/#1/paragraphCount	n	1
+slides/#2/items/#1/paragraphs/#0/text	s	Compare outcomes on consistent measures
+slides/#2/items/#1/paragraphs/#0/font	s	Helvetica-Bold
+slides/#2/items/#1/paragraphs/#0/size	n	40.0
+slides/#2/items/#1/paragraphs/#0/color	list	3
+slides/#2/items/#1/paragraphs/#0/color/#0	n	0
+slides/#2/items/#1/paragraphs/#0/color/#1	n	0
+slides/#2/items/#1/paragraphs/#0/color/#2	n	0
+slides/#2/items/#1/wordFonts	list	1
+slides/#2/items/#1/wordFonts/#0	s	Helvetica-Bold
+slides/#2/items/#1/wordSizes	list	1
+slides/#2/items/#1/wordSizes/#0	n	40.0
+slides/#2/items/#2/class	s	table
+slides/#2/items/#2/depth	n	0
+slides/#2/items/#2/readMode	s	bulk
+slides/#2/items/#2/position	list	2
+slides/#2/items/#2/position/#0	n	43
+slides/#2/items/#2/position/#1	n	201
+slides/#2/items/#2/width	n	874
+slides/#2/items/#2/height	n	124
+slides/#2/items/#2/locked	b	false
+slides/#2/items/#2/name	s	Table 1
+slides/#2/items/#2/row count	n	3
+slides/#2/items/#2/column count	n	4
+slides/#2/items/#2/header row count	n	1
+slides/#2/items/#2/header column count	n	0
+slides/#2/items/#2/footer row count	n	0
+slides/#2/items/#2/cells/value	list	12
+slides/#2/items/#2/cells/value/#0	s	Team
+slides/#2/items/#2/cells/value/#1	s	Participants
+slides/#2/items/#2/cells/value/#2	s	Completion
+slides/#2/items/#2/cells/value/#3	s	Median time (min)
+slides/#2/items/#2/cells/value/#4	s	A
+slides/#2/items/#2/cells/value/#5	s	28
+slides/#2/items/#2/cells/value/#6	s	89%
+slides/#2/items/#2/cells/value/#7	s	5.8
+slides/#2/items/#2/cells/value/#8	s	B
+slides/#2/items/#2/cells/value/#9	s	24
+slides/#2/items/#2/cells/value/#10	s	79%
+slides/#2/items/#2/cells/value/#11	s	6.7
+slides/#2/items/#2/cells/formatted value	list	12
+slides/#2/items/#2/cells/formatted value/#0	s	Team
+slides/#2/items/#2/cells/formatted value/#1	s	Participants
+slides/#2/items/#2/cells/formatted value/#2	s	Completion
+slides/#2/items/#2/cells/formatted value/#3	s	Median time (min)
+slides/#2/items/#2/cells/formatted value/#4	s	A
+slides/#2/items/#2/cells/formatted value/#5	s	28
+slides/#2/items/#2/cells/formatted value/#6	s	89%
+slides/#2/items/#2/cells/formatted value/#7	s	5.8
+slides/#2/items/#2/cells/formatted value/#8	s	B
+slides/#2/items/#2/cells/formatted value/#9	s	24
+slides/#2/items/#2/cells/formatted value/#10	s	79%
+slides/#2/items/#2/cells/formatted value/#11	s	6.7
+slides/#2/items/#2/cells/formula	list	12
+slides/#2/items/#2/cells/formula/#0	null	
+slides/#2/items/#2/cells/formula/#1	null	
+slides/#2/items/#2/cells/formula/#2	null	
+slides/#2/items/#2/cells/formula/#3	null	
+slides/#2/items/#2/cells/formula/#4	null	
+slides/#2/items/#2/cells/formula/#5	null	
+slides/#2/items/#2/cells/formula/#6	null	
+slides/#2/items/#2/cells/formula/#7	null	
+slides/#2/items/#2/cells/formula/#8	null	
+slides/#2/items/#2/cells/formula/#9	null	
+slides/#2/items/#2/cells/formula/#10	null	
+slides/#2/items/#2/cells/formula/#11	null	
+slides/#2/items/#2/cells/format	list	12
+slides/#2/items/#2/cells/format/#0	e	automatic
+slides/#2/items/#2/cells/format/#1	e	automatic
+slides/#2/items/#2/cells/format/#2	e	automatic
+slides/#2/items/#2/cells/format/#3	e	automatic
+slides/#2/items/#2/cells/format/#4	e	automatic
+slides/#2/items/#2/cells/format/#5	e	automatic
+slides/#2/items/#2/cells/format/#6	e	automatic
+slides/#2/items/#2/cells/format/#7	e	automatic
+slides/#2/items/#2/cells/format/#8	e	automatic
+slides/#2/items/#2/cells/format/#9	e	automatic
+slides/#2/items/#2/cells/format/#10	e	automatic
+slides/#2/items/#2/cells/format/#11	e	automatic
+slides/#2/items/#2/cells/alignment	list	12
+slides/#2/items/#2/cells/alignment/#0	e	left
+slides/#2/items/#2/cells/alignment/#1	e	right
+slides/#2/items/#2/cells/alignment/#2	e	right
+slides/#2/items/#2/cells/alignment/#3	e	right
+slides/#2/items/#2/cells/alignment/#4	e	left
+slides/#2/items/#2/cells/alignment/#5	e	right
+slides/#2/items/#2/cells/alignment/#6	e	right
+slides/#2/items/#2/cells/alignment/#7	e	right
+slides/#2/items/#2/cells/alignment/#8	e	left
+slides/#2/items/#2/cells/alignment/#9	e	right
+slides/#2/items/#2/cells/alignment/#10	e	right
+slides/#2/items/#2/cells/alignment/#11	e	right
+slides/#2/items/#2/cells/vertical alignment	list	12
+slides/#2/items/#2/cells/vertical alignment/#0	e	top
+slides/#2/items/#2/cells/vertical alignment/#1	e	top
+slides/#2/items/#2/cells/vertical alignment/#2	e	top
+slides/#2/items/#2/cells/vertical alignment/#3	e	top
+slides/#2/items/#2/cells/vertical alignment/#4	e	top
+slides/#2/items/#2/cells/vertical alignment/#5	e	top
+slides/#2/items/#2/cells/vertical alignment/#6	e	top
+slides/#2/items/#2/cells/vertical alignment/#7	e	top
+slides/#2/items/#2/cells/vertical alignment/#8	e	top
+slides/#2/items/#2/cells/vertical alignment/#9	e	top
+slides/#2/items/#2/cells/vertical alignment/#10	e	top
+slides/#2/items/#2/cells/vertical alignment/#11	e	top
+slides/#2/items/#2/cells/text color	list	12
+slides/#2/items/#2/cells/text color/#0	list	3
+slides/#2/items/#2/cells/text color/#0/#0	n	65535
+slides/#2/items/#2/cells/text color/#0/#1	n	65535
+slides/#2/items/#2/cells/text color/#0/#2	n	65535
+slides/#2/items/#2/cells/text color/#1	list	3
+slides/#2/items/#2/cells/text color/#1/#0	n	65535
+slides/#2/items/#2/cells/text color/#1/#1	n	65535
+slides/#2/items/#2/cells/text color/#1/#2	n	65535
+slides/#2/items/#2/cells/text color/#2	list	3
+slides/#2/items/#2/cells/text color/#2/#0	n	65535
+slides/#2/items/#2/cells/text color/#2/#1	n	65535
+slides/#2/items/#2/cells/text color/#2/#2	n	65535
+slides/#2/items/#2/cells/text color/#3	list	3
+slides/#2/items/#2/cells/text color/#3/#0	n	65535
+slides/#2/items/#2/cells/text color/#3/#1	n	65535
+slides/#2/items/#2/cells/text color/#3/#2	n	65535
+slides/#2/items/#2/cells/text color/#4	list	3
+slides/#2/items/#2/cells/text color/#4/#0	n	0
+slides/#2/items/#2/cells/text color/#4/#1	n	0
+slides/#2/items/#2/cells/text color/#4/#2	n	0
+slides/#2/items/#2/cells/text color/#5	list	3
+slides/#2/items/#2/cells/text color/#5/#0	n	0
+slides/#2/items/#2/cells/text color/#5/#1	n	0
+slides/#2/items/#2/cells/text color/#5/#2	n	0
+slides/#2/items/#2/cells/text color/#6	list	3
+slides/#2/items/#2/cells/text color/#6/#0	n	0
+slides/#2/items/#2/cells/text color/#6/#1	n	0
+slides/#2/items/#2/cells/text color/#6/#2	n	0
+slides/#2/items/#2/cells/text color/#7	list	3
+slides/#2/items/#2/cells/text color/#7/#0	n	0
+slides/#2/items/#2/cells/text color/#7/#1	n	0
+slides/#2/items/#2/cells/text color/#7/#2	n	0
+slides/#2/items/#2/cells/text color/#8	list	3
+slides/#2/items/#2/cells/text color/#8/#0	n	0
+slides/#2/items/#2/cells/text color/#8/#1	n	0
+slides/#2/items/#2/cells/text color/#8/#2	n	0
+slides/#2/items/#2/cells/text color/#9	list	3
+slides/#2/items/#2/cells/text color/#9/#0	n	0
+slides/#2/items/#2/cells/text color/#9/#1	n	0
+slides/#2/items/#2/cells/text color/#9/#2	n	0
+slides/#2/items/#2/cells/text color/#10	list	3
+slides/#2/items/#2/cells/text color/#10/#0	n	0
+slides/#2/items/#2/cells/text color/#10/#1	n	0
+slides/#2/items/#2/cells/text color/#10/#2	n	0
+slides/#2/items/#2/cells/text color/#11	list	3
+slides/#2/items/#2/cells/text color/#11/#0	n	0
+slides/#2/items/#2/cells/text color/#11/#1	n	0
+slides/#2/items/#2/cells/text color/#11/#2	n	0
+slides/#2/items/#2/cells/background color	list	12
+slides/#2/items/#2/cells/background color/#0	list	3
+slides/#2/items/#2/cells/background color/#0/#0	n	8372
+slides/#2/items/#2/cells/background color/#0/#1	n	24539
+slides/#2/items/#2/cells/background color/#0/#2	n	38306
+slides/#2/items/#2/cells/background color/#1	list	3
+slides/#2/items/#2/cells/background color/#1/#0	n	8372
+slides/#2/items/#2/cells/background color/#1/#1	n	24539
+slides/#2/items/#2/cells/background color/#1/#2	n	38306
+slides/#2/items/#2/cells/background color/#2	list	3
+slides/#2/items/#2/cells/background color/#2/#0	n	8372
+slides/#2/items/#2/cells/background color/#2/#1	n	24539
+slides/#2/items/#2/cells/background color/#2/#2	n	38306
+slides/#2/items/#2/cells/background color/#3	list	3
+slides/#2/items/#2/cells/background color/#3/#0	n	8372
+slides/#2/items/#2/cells/background color/#3/#1	n	24539
+slides/#2/items/#2/cells/background color/#3/#2	n	38306
+slides/#2/items/#2/cells/background color/#4	list	3
+slides/#2/items/#2/cells/background color/#4/#0	n	60708
+slides/#2/items/#2/cells/background color/#4/#1	n	60708
+slides/#2/items/#2/cells/background color/#4/#2	n	60708
+slides/#2/items/#2/cells/background color/#5	list	3
+slides/#2/items/#2/cells/background color/#5/#0	n	60708
+slides/#2/items/#2/cells/background color/#5/#1	n	60708
+slides/#2/items/#2/cells/background color/#5/#2	n	60708
+slides/#2/items/#2/cells/background color/#6	list	3
+slides/#2/items/#2/cells/background color/#6/#0	n	60708
+slides/#2/items/#2/cells/background color/#6/#1	n	60708
+slides/#2/items/#2/cells/background color/#6/#2	n	60708
+slides/#2/items/#2/cells/background color/#7	list	3
+slides/#2/items/#2/cells/background color/#7/#0	n	60708
+slides/#2/items/#2/cells/background color/#7/#1	n	60708
+slides/#2/items/#2/cells/background color/#7/#2	n	60708
+slides/#2/items/#2/cells/background color/#8	list	3
+slides/#2/items/#2/cells/background color/#8/#0	n	60708
+slides/#2/items/#2/cells/background color/#8/#1	n	60708
+slides/#2/items/#2/cells/background color/#8/#2	n	60708
+slides/#2/items/#2/cells/background color/#9	list	3
+slides/#2/items/#2/cells/background color/#9/#0	n	60708
+slides/#2/items/#2/cells/background color/#9/#1	n	60708
+slides/#2/items/#2/cells/background color/#9/#2	n	60708
+slides/#2/items/#2/cells/background color/#10	list	3
+slides/#2/items/#2/cells/background color/#10/#0	n	60708
+slides/#2/items/#2/cells/background color/#10/#1	n	60708
+slides/#2/items/#2/cells/background color/#10/#2	n	60708
+slides/#2/items/#2/cells/background color/#11	list	3
+slides/#2/items/#2/cells/background color/#11/#0	n	60708
+slides/#2/items/#2/cells/background color/#11/#1	n	60708
+slides/#2/items/#2/cells/background color/#11/#2	n	60708
+slides/#2/items/#2/cells/font name	list	12
+slides/#2/items/#2/cells/font name/#0	s	Helvetica-Bold
+slides/#2/items/#2/cells/font name/#1	s	Helvetica-Bold
+slides/#2/items/#2/cells/font name/#2	s	Helvetica-Bold
+slides/#2/items/#2/cells/font name/#3	s	Helvetica-Bold
+slides/#2/items/#2/cells/font name/#4	s	Helvetica
+slides/#2/items/#2/cells/font name/#5	s	Helvetica
+slides/#2/items/#2/cells/font name/#6	s	Helvetica
+slides/#2/items/#2/cells/font name/#7	s	Helvetica
+slides/#2/items/#2/cells/font name/#8	s	Helvetica
+slides/#2/items/#2/cells/font name/#9	s	Helvetica
+slides/#2/items/#2/cells/font name/#10	s	Helvetica
+slides/#2/items/#2/cells/font name/#11	s	Helvetica
+slides/#2/items/#2/cells/font size	list	12
+slides/#2/items/#2/cells/font size/#0	n	24.0
+slides/#2/items/#2/cells/font size/#1	n	24.0
+slides/#2/items/#2/cells/font size/#2	n	24.0
+slides/#2/items/#2/cells/font size/#3	n	24.0
+slides/#2/items/#2/cells/font size/#4	n	24.0
+slides/#2/items/#2/cells/font size/#5	n	24.0
+slides/#2/items/#2/cells/font size/#6	n	24.0
+slides/#2/items/#2/cells/font size/#7	n	24.0
+slides/#2/items/#2/cells/font size/#8	n	24.0
+slides/#2/items/#2/cells/font size/#9	n	24.0
+slides/#2/items/#2/cells/font size/#10	n	24.0
+slides/#2/items/#2/cells/font size/#11	n	24.0
+slides/#2/items/#2/cells/text wrap	list	12
+slides/#2/items/#2/cells/text wrap/#0	b	true
+slides/#2/items/#2/cells/text wrap/#1	b	true
+slides/#2/items/#2/cells/text wrap/#2	b	true
+slides/#2/items/#2/cells/text wrap/#3	b	true
+slides/#2/items/#2/cells/text wrap/#4	b	true
+slides/#2/items/#2/cells/text wrap/#5	b	true
+slides/#2/items/#2/cells/text wrap/#6	b	true
+slides/#2/items/#2/cells/text wrap/#7	b	true
+slides/#2/items/#2/cells/text wrap/#8	b	true
+slides/#2/items/#2/cells/text wrap/#9	b	true
+slides/#2/items/#2/cells/text wrap/#10	b	true
+slides/#2/items/#2/cells/text wrap/#11	b	true
+slides/#2/items/#2/cells/name	list	12
+slides/#2/items/#2/cells/name/#0	s	A1
+slides/#2/items/#2/cells/name/#1	s	B1
+slides/#2/items/#2/cells/name/#2	s	C1
+slides/#2/items/#2/cells/name/#3	s	D1
+slides/#2/items/#2/cells/name/#4	s	A2
+slides/#2/items/#2/cells/name/#5	s	B2
+slides/#2/items/#2/cells/name/#6	s	C2
+slides/#2/items/#2/cells/name/#7	s	D2
+slides/#2/items/#2/cells/name/#8	s	A3
+slides/#2/items/#2/cells/name/#9	s	B3
+slides/#2/items/#2/cells/name/#10	s	C3
+slides/#2/items/#2/cells/name/#11	s	D3
+slides/#2/items/#2/rowHeights	list	3
+slides/#2/items/#2/rowHeights/#0	n	41.469531595707
+slides/#2/items/#2/rowHeights/#1	n	41.469531595707
+slides/#2/items/#2/rowHeights/#2	n	41.469531595707
+slides/#2/items/#2/columnWidths	list	4
+slides/#2/items/#2/columnWidths/#0	n	111.307083129883
+slides/#2/items/#2/columnWidths/#1	n	223.785278320312
+slides/#2/items/#2/columnWidths/#2	n	218.905670166016
+slides/#2/items/#2/columnWidths/#3	n	319.601959228516
+slides/#2/items/#3/class	s	text item
+slides/#2/items/#3/depth	n	0
+slides/#2/items/#3/readMode	s	bulk
+slides/#2/items/#3/position	list	2
+slides/#2/items/#3/position/#0	n	44
+slides/#2/items/#3/position/#1	n	336
+slides/#2/items/#3/width	n	834
+slides/#2/items/#3/height	n	32
+slides/#2/items/#3/rotation	n	0
+slides/#2/items/#3/opacity	n	100
+slides/#2/items/#3/reflection showing	b	false
+slides/#2/items/#3/reflection value	n	0
+slides/#2/items/#3/locked	b	false
+slides/#2/items/#3/background fill type	e	no fill
+slides/#2/items/#3/text	s	Test with two teams for six weeks. Measure task completion and time 
+slides/#2/items/#3/paragraphCount	n	1
+slides/#2/items/#3/paragraphs/#0/text	s	Test with two teams for six weeks. Measure task completion and time 
+slides/#2/items/#3/paragraphs/#0/font	s	Helvetica
+slides/#2/items/#3/paragraphs/#0/size	n	27.0
+slides/#2/items/#3/paragraphs/#0/color	list	3
+slides/#2/items/#3/paragraphs/#0/color/#0	n	0
+slides/#2/items/#3/paragraphs/#0/color/#1	n	0
+slides/#2/items/#3/paragraphs/#0/color/#2	n	0
+slides/#2/items/#3/wordFonts	list	1
+slides/#2/items/#3/wordFonts/#0	s	Helvetica
+slides/#2/items/#3/wordSizes	list	1
+slides/#2/items/#3/wordSizes/#0	n	27.0
+slides/#2/items/#4/class	s	text item
+slides/#2/items/#4/depth	n	0
+slides/#2/items/#4/readMode	s	bulk
+slides/#2/items/#4/position	list	2
+slides/#2/items/#4/position/#0	n	43
+slides/#2/items/#4/position/#1	n	370
+slides/#2/items/#4/width	n	358
+slides/#2/items/#4/height	n	32
+slides/#2/items/#4/rotation	n	0
+slides/#2/items/#4/opacity	n	100
+slides/#2/items/#4/reflection showing	b	false
+slides/#2/items/#4/reflection value	n	0
+slides/#2/items/#4/locked	b	false
+slides/#2/items/#4/background fill type	e	no fill
+slides/#2/items/#4/text	s	before deciding what to scale.
+slides/#2/items/#4/paragraphCount	n	1
+slides/#2/items/#4/paragraphs/#0/text	s	before deciding what to scale.
+slides/#2/items/#4/paragraphs/#0/font	s	Helvetica
+slides/#2/items/#4/paragraphs/#0/size	n	27.0
+slides/#2/items/#4/paragraphs/#0/color	list	3
+slides/#2/items/#4/paragraphs/#0/color/#0	n	0
+slides/#2/items/#4/paragraphs/#0/color/#1	n	0
+slides/#2/items/#4/paragraphs/#0/color/#2	n	0
+slides/#2/items/#4/wordFonts	list	1
+slides/#2/items/#4/wordFonts/#0	s	Helvetica
+slides/#2/items/#4/wordSizes	list	1
+slides/#2/items/#4/wordSizes/#0	n	27.0
+slides/#2/items/#5/class	s	text item
+slides/#2/items/#5/depth	n	0
+slides/#2/items/#5/readMode	s	bulk
+slides/#2/items/#5/position	list	2
+slides/#2/items/#5/position/#0	n	901
+slides/#2/items/#5/position/#1	n	503
+slides/#2/items/#5/width	n	14
+slides/#2/items/#5/height	n	14
+slides/#2/items/#5/rotation	n	0
+slides/#2/items/#5/opacity	n	100
+slides/#2/items/#5/reflection showing	b	false
+slides/#2/items/#5/reflection value	n	0
+slides/#2/items/#5/locked	b	false
+slides/#2/items/#5/background fill type	e	no fill
+slides/#2/items/#5/text	s	￼
+slides/#2/items/#5/paragraphCount	n	1
+slides/#2/items/#5/paragraphs/#0/text	s	￼
+slides/#2/items/#5/paragraphs/#0/font	s	Helvetica
+slides/#2/items/#5/paragraphs/#0/size	n	12.0
+slides/#2/items/#5/paragraphs/#0/color	list	3
+slides/#2/items/#5/paragraphs/#0/color/#0	n	448
+slides/#2/items/#5/paragraphs/#0/color/#1	n	4406
+slides/#2/items/#5/paragraphs/#0/color/#2	n	12991
+slides/#2/items/#5/wordFonts	list	0
+slides/#2/items/#5/wordSizes	list	0
