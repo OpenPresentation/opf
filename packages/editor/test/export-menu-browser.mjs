@@ -3,11 +3,14 @@
 // the disabled state; the three OPF source formats read back with core; `items`; the agent handoff entry; the mobile bottom sheet; destroy.
 // The real PDF, PNG and SVG conversions run in the playground suite (test/export-menu-playground-browser.mjs), which has the fonts.
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import { fromMarkdown } from '@openpresentation/opf/markdown';
 import { fromYaml } from '@openpresentation/opf/yaml';
 import { startFixture, deck } from './support/export-fixture.mjs';
 
+const axeSource = readFileSync(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8');
 const checks = [];
 const mark = (name) => checks.push(name);
 const app = await startFixture();
@@ -484,6 +487,21 @@ try {
   assert.equal(await page.locator('.opf-export-scrim').isHidden(), true);
   await page.keyboard.press('Escape');
   mark('mobile bottom sheet');
+
+  // ---- accessibility: the panel with its card, light and dark ------------------------------------------------------------------------------
+  await mountWithPptx(`{ exportPptx: async () => ({ bytes: new Uint8Array([1,2,3,4]), warnings: ['Plain sentence note.'] }) }`);
+  await page.addScriptTag({ content: axeSource });
+  for (const scheme of ['light', 'dark']) {
+    await page.evaluate((dark) => document.body.classList.toggle('dark', dark), scheme === 'dark');
+    await openMenu();
+    await download(() => item(/^PowerPoint/).click());
+    await page.locator('.opf-export-notes li').first().waitFor();
+    const axe = await page.evaluate(async () => (await window.axe.run('.opf-export-panel')).violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`));
+    assert.deepEqual(axe, [], `no axe violations (contrast included) in the panel with its card (${scheme})`);
+    await page.keyboard.press('Escape');
+  }
+  await page.evaluate(() => document.body.classList.remove('dark'));
+  mark('axe, light and dark');
 
   // ---- destroy ---------------------------------------------------------------------------------------------------------------------------------
   await mountWithPptx(`{ exportPptx: (d, { signal }) => { window.log.signals.push(signal); return new Promise(() => {}); } }`);

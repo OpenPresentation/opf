@@ -1,5 +1,9 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { startPlayground } from './support/playground-harness.mjs';
+
+const axeSource = readFileSync(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8');
 
 // RR-25 in a real browser, on the built playground: deck-wide find and replace. Keyboard (Ctrl+F, Ctrl+H, Enter, Shift+Enter,
 // F3, Ctrl+Alt+Enter, Esc), the match case / whole word / regex options, the results list going to the match on the canvas
@@ -237,7 +241,12 @@ try {
   assert.match(await results.first().ariaSnapshot(), new RegExp(`^- '?button "${resultName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`));
   assert.ok((await page.locator('.opf-find-results').getAttribute('aria-label')) === 'Matches');
   for (const key of ['Control+F', 'Control+H']) assert.ok((await page.locator('#find-open').getAttribute('aria-keyshortcuts')).includes(key));
-  mark('panel controls are labelled; count is a polite live region; errors are alerts');
+  // The panel with results (the current match tinted), checked by axe, contrast included.
+  await page.addScriptTag({ content: axeSource });
+  const axe = await page.evaluate(async () => (await window.axe.run('.opf-find')).violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`));
+  assert.deepEqual(axe, [], 'no axe violations in the panel with results');
+  assert.equal(await page.evaluate(() => document.querySelector('.opf-find').classList.contains('opf-panel')), true, 'the editor\'s one panel');
+  mark('panel controls are labelled; count is a polite live region; errors are alerts; axe');
 
   // The panel stays out of a modal dialog (the source editor keeps its own find).
   await page.keyboard.press('Escape');
