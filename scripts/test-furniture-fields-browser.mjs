@@ -140,7 +140,11 @@ function cacheRows(bytes) {
       const lifted = /name="OPF furniture (?:header|footer) /;
       const all = [...shapes(name, /name="OPF furniture/), ...(slideShows && layout ? shapes(layout, lifted) : []), ...(slideShows && layoutShows && master ? shapes(master, lifted) : [])];
       const at = shape => shape.match(/<a:off x="(-?\d+)" y="(-?\d+)"\/>/).slice(1).map(Number);
-      return {part: name, paragraphs: all.sort((a, b) => at(a)[0] - at(b)[0] || at(a)[1] - at(b)[1])
+      // Reading order: the zones left to right, each zone's lines top to bottom. The lines of one zone start within a space of each
+      // other (a line whose whitespace hangs at its soft wrap is anchored by its glyphs), so starts closer than 30 px are one zone.
+      const zone = 30 * 9525;
+      const order = (a, b) => { const [ax, ay] = at(a), [bx, by] = at(b); return Math.abs(ax - bx) > zone ? ax - bx : ay - by || ax - bx; };
+      return {part: name, paragraphs: all.sort(order)
         .flatMap(shape => [...shape.matchAll(/<a:p>[\s\S]*?<\/a:p>/g)].map(match => [...match[0].matchAll(/<a:(r|fld)\b([^>]*)>[\s\S]*?<a:t>([^<]*)<\/a:t><\/a:\1>/g)]
           .map(([, kind, attributes, text]) => ({text, ...(kind === 'fld' ? {type: attributes.match(/type="([^"]+)"/)[1]} : {})}))))};
     });
