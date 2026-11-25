@@ -5,7 +5,7 @@ import type { EditorSession } from "./index.js";
 export interface DesignMenuLabels {
   /** The visible text of the toolbar button. Default: "Design". */
   trigger?: string;
-  /** The accessible name of the popover, and the title of the bottom sheet on a phone. Default: "Design". */
+  /** The panel's title and accessible name. Default: "Design". */
   title?: string;
   /** Default: "Theme". */
   theme?: string;
@@ -13,18 +13,38 @@ export interface DesignMenuLabels {
   colors?: string;
   /** The font scheme section. Default: "Fonts". */
   fonts?: string;
-  /** The section for the current slide's layout. Default: "This slide: Layout". */
+  /** The name of the current slide's layout choices. Default: "This slide: Layout". */
   layout?: string;
-  /** The layout section's segment in the bottom sheet's section switch. Default: "Layout". */
+  /** The layout section's tab. Default: "Layout". */
   layoutTab?: string;
   /** The row that opens the full Design panel (only shown when `onOpenPanel` is given). Default: "More design options…". */
   more?: string;
   /** What the toolbar's overflow menu lists (`menuItems()`). Default: "Design…". */
   menuItem?: string;
-  /** The accessible name of the sheet's close button. Default: "Close". */
+  /** The accessible name of the panel's close button. Default: "Close". */
   close?: string;
   /** Shown when no catalog offers any choice. */
   empty?: string;
+  /** The small label over a section: `kind` is "theme", "colors" or "layout", `slide` 0-based. Default: "Theme · 3", "Color scheme · 14", "Slide 02 · 39 layouts". */
+  count?: (kind: "theme" | "colors" | "layout", count: number, slide: number) => string;
+  /** The font filter's accessible name. Default: "Filter fonts". */
+  filterFonts?: string;
+  /** The font filter's placeholder. Default: "Filter 29 fonts". */
+  filterPlaceholder?: (count: number) => string;
+  /** Shown when the filter matches no font. */
+  noFonts?: (query: string) => string;
+  /** The group of the font scheme in use. Default: "In use". */
+  inUse?: string;
+  /** The font groups, by the font scheme record's `type`. */
+  fontTypes?: { "sans-serif"?: string; serif?: string; monospace?: string; other?: string };
+  /** The foot's line on the Fonts section; `language` is the deck language's name. */
+  fontsFor?: (language: string) => string;
+  /** The foot's line on the Theme section. */
+  themeHint?: string;
+  /** The foot's button that undoes the last choice. Default: "Undo". */
+  undo?: string;
+  /** The foot's line after Undo. Default: "Undone.". */
+  undone?: string;
   /** The status line after a choice. `kind` is "theme", "colors", "fonts" or "layout". Default: "Theme set to Classic.". */
   applied?: (kind: "theme" | "colors" | "fonts" | "layout", name: string) => string;
   /** The status line when the choice was already set. */
@@ -48,6 +68,11 @@ export interface DesignMenuOptions {
    * The icons carry `class="opf-icon"` and `data-opf-icon`.
    */
   icons?: OpfIcons<"trigger" | "close" | "check">;
+  /**
+   * Where the panel opens: under this element (a bar), its end edge on the element's content edge, at most as tall as the room below. A function
+   * is read at each opening. Default: the button. Design, Find and Export share one panel: opening one closes the other.
+   */
+  anchor?: HTMLElement | (() => HTMLElement | null | undefined);
   /** True to disable the button (the document cannot be edited). Default false. */
   readOnly?: boolean;
   /** Adds a "More design options…" row that closes the menu and calls this, to open the host's full Design panel. Hidden when not given. */
@@ -74,7 +99,7 @@ export interface DesignMenu {
   setReadOnly(readOnly: boolean): void;
   /** Read the document and catalogs again. The open menu also follows the editor session on its own. */
   refresh(): void;
-  /** Open the popover and focus the current theme. From a button that is not on screen (the overflow menu) it opens as a sheet. */
+  /** Open the panel on the section shown last (Theme at first) and focus its current choice. From a button that is not on screen (the overflow menu) it opens as a sheet. */
   open(): void;
   /** Close the popover and return focus to the button (or to what had it when the menu opened). */
   close(options?: { restoreFocus?: boolean }): void;
@@ -86,7 +111,8 @@ export interface DesignMenu {
 }
 
 /**
- * The Design quick menu: a toolbar button and a compact popover for Theme, Colors, Fonts and the current slide's Layout, for embeds that have no room
- * for the full Design panel. Choosing applies at once (one undoable edit) and keeps the menu open. On a phone (`max-width: 600px`) the popover is a bottom sheet.
+ * The Design quick menu: a toolbar button and the editor's one panel with four tabs, Theme, Colors, Fonts (for the deck's language) and the current
+ * slide's Layout, for embeds that have no room for the full Design panel. Choosing applies at once (one undoable edit, with Undo in the panel's foot)
+ * and keeps the panel open. On a phone (`max-width: 600px`) the panel is a bottom sheet.
  */
 export declare function createDesignMenu(container: HTMLElement, options: DesignMenuOptions): DesignMenu;

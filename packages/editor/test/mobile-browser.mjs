@@ -125,7 +125,7 @@ for (const device of devices.filter((entry) => !process.argv[2] || entry.name.in
     await panel.getByLabel('Find', { exact: true }).fill('Acme');
     await page.waitForFunction(() => document.querySelectorAll('.opf-find-result').length >= 3);
     const results = panel.locator('.opf-find-result');
-    const target = results.filter({ hasText: 'Slide 2' }).first();
+    const target = panel.locator('.opf-find-group').filter({ hasText: 'Slide 02' }).locator('.opf-find-result').first();
     assert.ok((await target.boundingBox()).height >= 44, tag('result rows are touch sized'));
     await target.scrollIntoViewIfNeeded();
     await page.touchscreen.tap(...(await centre(target)));

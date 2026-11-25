@@ -1,65 +1,19 @@
-// Find and replace panel (RR-25): the DOM over the find-replace model. A docked, non-modal panel with a find field,
-// a replace field, match case / whole word / regular expression options, a "this slide only" scope, previous and next,
-// replace one and replace all, and a results list whose entries go to the match on the canvas. Replace all is one
-// undo step and the panel offers it right there. Keyboard: Ctrl/Cmd+F opens find, Ctrl/Cmd+H (and Ctrl/Cmd+Shift+H)
-// opens find and replace (see `installFindShortcuts`), Enter / Shift+Enter in the find field go to the next / previous
-// match, F3 and Shift+F3 do the same anywhere in the panel, Enter in the replace field replaces the current match,
-// Ctrl/Cmd+Alt+Enter replaces all, Esc closes and returns focus. Importing this module does not need a DOM.
+// Find and replace panel (RR-25): the DOM over the find-replace model, in the editor's one panel (src/panel.js, shared with Design and
+// Export). A non-modal panel with a find field (the match count inside it), previous and next, a replace field with Replace and All, the
+// options as toggle chips (match case, whole word, regular expression, this slide only), and the results grouped by slide, whose entries go to
+// the match on the canvas. Replace all is one undo step and the panel offers it right there. Keyboard: Ctrl/Cmd+F opens find, Ctrl/Cmd+H (and
+// Ctrl/Cmd+Shift+H) opens find and replace (see `installFindShortcuts`), Enter / Shift+Enter in the find field go to the next / previous
+// match, F3 and Shift+F3 do the same anywhere in the panel, Enter in the replace field replaces the current match, Ctrl/Cmd+Alt+Enter
+// replaces all, Esc closes and returns focus. With an `anchor` the panel opens under it (a bottom sheet on a phone) and closes when Design or
+// Export opens; without one it is a card in its container. A press outside does not close it: the person edits the match on the slide.
+// Styles in src/styles/panel.css (classes `opf-find-*`). Importing this module does not need a DOM.
+import { el as h, icon } from "./export-dom.js";
 import { getValueAtPath } from "./index.js";
 import { collectSearchFields, expandReplacement, findMatches, replaceAll, replaceMatch, textOf } from "./find-replace.js";
+import { PANEL_SHEET_QUERY, claimPanel, createPanelFrame, panelLabel, placePanel, releasePanel, shown } from "./panel.js";
 
 const MAX_LISTED = 300;
 let panelCounter = 0;
-
-const STYLE_ID = "opf-find-panel-style";
-const CSS = `
-.opf-find{box-sizing:border-box;display:flex;flex-direction:column;gap:8px;width:100%;max-width:560px;padding:10px 12px 12px;background:#fff;color:#2c2838;border:1px solid #dcd5eb;border-radius:8px;box-shadow:0 8px 30px #28203922;font:13px/1.45 system-ui,sans-serif}
-.opf-find[hidden]{display:none}
-.opf-find *{box-sizing:border-box}
-.opf-find-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.opf-find-head strong{font-size:13px}
-.opf-find-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
-.opf-find-row[hidden]{display:none}
-.opf-find-field{flex:1 1 180px;display:flex;flex-direction:column;gap:2px;min-width:0}
-.opf-find-field>span{font-size:11px;color:#6d6580}
-.opf-find input[type=text]{width:100%;min-height:34px;padding:6px 8px;font:inherit;border:1px solid #cfc8de;border-radius:6px;background:#fff;color:inherit}
-.opf-find input[type=text][aria-invalid=true]{border-color:#b4381f}
-.opf-find button{min-height:34px;padding:5px 10px;font:inherit;border:1px solid #cfc8de;border-radius:6px;background:#f6f3fc;color:#463a63;cursor:pointer}
-.opf-find button:disabled{opacity:.45;cursor:default}
-.opf-find button.opf-find-primary{background:#6559cf;border-color:#6559cf;color:#fff}
-.opf-find button.opf-find-close{min-width:34px;padding:0 8px;font-size:18px;line-height:1;background:transparent;border-color:transparent}
-.opf-find button:focus-visible,.opf-find input:focus-visible,.opf-find-result:focus-visible{outline:2px solid #6559cf;outline-offset:2px}
-.opf-find-opt{display:inline-flex;align-items:center;gap:5px;min-height:30px;padding:2px 8px;border:1px solid #cfc8de;border-radius:6px;font-size:12px;cursor:pointer;user-select:none}
-.opf-find-opt:has(input:checked){background:#e9e5fa;border-color:#6559cf}
-.opf-find-opt input{margin:0}
-.opf-find-count{font-size:12px;color:#5d5666;min-height:1.4em}
-.opf-find-error{font-size:12px;color:#b4381f}
-.opf-find-error:empty{display:none}
-.opf-find-undo{min-height:26px;padding:1px 8px}
-.opf-find-results{list-style:none;margin:0;padding:0;max-height:min(30vh,240px);overflow:auto;border:1px solid #ebe7f4;border-radius:6px}
-.opf-find-results:empty{display:none}
-.opf-find-results li{margin:0;padding:0;border-top:1px solid #f1eef8}
-.opf-find-results li:first-child{border-top:0}
-.opf-find-result{display:block;width:100%;min-height:44px;padding:6px 10px;text-align:left;border:0;border-radius:0;background:transparent;color:inherit;font:inherit;cursor:pointer}
-.opf-find-result[aria-current=true]{background:#efebfc}
-.opf-find-where{display:block;font-size:11px;color:#6d6580}
-.opf-find-text{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.opf-find-text mark{background:#ffe08a;color:inherit;border-radius:2px;padding:0 1px}
-.opf-find-more{font-size:11px;color:#6d6580;padding:6px 10px}
-@media (pointer:coarse){.opf-find input[type=text]{font-size:16px}.opf-find button,.opf-find-opt{min-height:44px}.opf-find button.opf-find-close{min-width:44px}}
-`;
-
-function h(doc, tag, attributes = {}, ...children) {
-  const element = doc.createElement(tag);
-  for (const [key, value] of Object.entries(attributes)) {
-    if (value === undefined || value === false) continue;
-    if (key === "class") element.className = value;
-    else if (key === "text") element.textContent = value;
-    else element.setAttribute(key, value === true ? "" : String(value));
-  }
-  for (const child of children) if (child) element.append(child);
-  return element;
-}
 
 const plural = (count, one, many = `${one}s`) => `${count} ${count === 1 ? one : many}`;
 const whereLabel = (match) => (match.slideIndex < 0 ? `Presentation · ${match.label}` : `Slide ${match.slideIndex + 1} · ${match.label}`);
@@ -88,45 +42,50 @@ export function createFindPanel(container, options) {
   let opener = null;
   let lastReplaceAll = null;
 
-  if (!doc.getElementById(STYLE_ID)) {
-    const style = h(doc, "style", { id: STYLE_ID });
-    style.textContent = CSS;
-    (doc.head ?? container).append(style);
-  }
+  const frame = createPanelFrame(doc, { id, title: "Find", label: "Find and replace", closeLabel: "Close find and replace", className: "opf-find" });
+  const { element: root, heading: title, close: closeButton } = frame;
+  root.dataset.opfComponent = "find-panel";
+  root.dataset.mode = "docked";
+  root.setAttribute("aria-modal", "false");
+  closeButton.title = "Close (Esc)";
 
-  const root = h(doc, "section", { class: "opf-find", id, role: "dialog", "aria-modal": "false", "aria-label": "Find and replace", "data-opf-component": "find-panel", hidden: true });
-  const title = h(doc, "strong", { text: "Find" });
-  const closeButton = h(doc, "button", { type: "button", class: "opf-find-close", "aria-label": "Close find and replace", title: "Close (Esc)", text: "×" });
-  const head = h(doc, "div", { class: "opf-find-head" }, title, closeButton);
-
-  const findInput = h(doc, "input", { type: "text", id: `${id}-find`, autocomplete: "off", autocapitalize: "off", spellcheck: "false", enterkeyhint: "search", "aria-keyshortcuts": "Control+F Meta+F", "aria-describedby": `${id}-count ${id}-error` });
-  const findField = h(doc, "label", { class: "opf-find-field", for: `${id}-find` }, h(doc, "span", { text: "Find" }), findInput);
-  const previousButton = h(doc, "button", { type: "button", "aria-label": "Previous match", title: "Previous match (Shift+Enter)", text: "↑" });
-  const nextButton = h(doc, "button", { type: "button", "aria-label": "Next match", title: "Next match (Enter)", text: "↓" });
+  // The find field with the match count inside it, then previous and next.
+  const findInput = h(doc, "input", { type: "text", id: `${id}-find`, "aria-label": "Find", autocomplete: "off", autocapitalize: "off", spellcheck: "false", enterkeyhint: "search", "aria-keyshortcuts": "Control+F Meta+F", "aria-describedby": `${id}-count ${id}-error` });
+  const position = h(doc, "span", { class: "opf-panel-meta opf-find-position", "aria-hidden": "true" });
+  const findField = h(doc, "label", { class: "opf-panel-field opf-find-field" }, icon(doc, "Search", 14), findInput, position);
+  const previousButton = h(doc, "button", { type: "button", class: "opf-panel-icon opf-find-step", "aria-label": "Previous match", title: "Previous match (Shift+Enter)" }, icon(doc, "ChevronUp", 14));
+  const nextButton = h(doc, "button", { type: "button", class: "opf-panel-icon opf-find-step", "aria-label": "Next match", title: "Next match (Enter)" }, icon(doc, "ChevronDown", 14));
   const findRow = h(doc, "div", { class: "opf-find-row" }, findField, previousButton, nextButton);
 
-  const replaceInput = h(doc, "input", { type: "text", id: `${id}-replace`, autocomplete: "off", autocapitalize: "off", spellcheck: "false", enterkeyhint: "go", "aria-keyshortcuts": "Control+H Meta+H" });
-  const replaceField = h(doc, "label", { class: "opf-find-field", for: `${id}-replace` }, h(doc, "span", { text: "Replace with" }), replaceInput);
-  const replaceOneButton = h(doc, "button", { type: "button", text: "Replace" });
-  const replaceAllButton = h(doc, "button", { type: "button", class: "opf-find-primary", "aria-keyshortcuts": "Control+Alt+Enter", text: "Replace all" });
+  // The replace field, Replace (the current match) and All.
+  const replaceInput = h(doc, "input", { type: "text", id: `${id}-replace`, "aria-label": "Replace with", placeholder: "Replace with", autocomplete: "off", autocapitalize: "off", spellcheck: "false", enterkeyhint: "go", "aria-keyshortcuts": "Control+H Meta+H" });
+  const replaceField = h(doc, "label", { class: "opf-panel-field opf-find-field" }, replaceInput);
+  const replaceOneButton = h(doc, "button", { type: "button", class: "opf-panel-button", text: "Replace" });
+  const replaceAllButton = h(doc, "button", { type: "button", class: "opf-panel-button opf-panel-primary", "aria-label": "Replace all", "aria-keyshortcuts": "Control+Alt+Enter", text: "All" });
   const replaceRow = h(doc, "div", { class: "opf-find-row", hidden: true }, replaceField, replaceOneButton, replaceAllButton);
 
-  const option = (key, label) => {
-    const input = h(doc, "input", { type: "checkbox", "data-option": key });
-    return { input, label: h(doc, "label", { class: "opf-find-opt" }, input, h(doc, "span", { text: label })) };
-  };
+  // The options: toggle chips.
+  const option = (key, label) => h(doc, "button", { type: "button", class: "opf-find-opt", "aria-pressed": "false", "data-option": key, text: label });
   const optCase = option("matchCase", "Match case");
   const optWord = option("wholeWord", "Whole word");
   const optRegex = option("regex", "Regex");
-  const optSlide = option("thisSlide", "This slide only");
-  const optionsRow = h(doc, "div", { class: "opf-find-row", role: "group", "aria-label": "Search options" }, optCase.label, optWord.label, optRegex.label, optSlide.label);
-
-  const count = h(doc, "p", { class: "opf-find-count", id: `${id}-count`, role: "status", "aria-live": "polite" });
-  const undoButton = h(doc, "button", { type: "button", class: "opf-find-undo", text: "Undo", hidden: true });
-  const statusRow = h(doc, "div", { class: "opf-find-row" }, count, undoButton);
+  const optSlide = option("thisSlide", "This slide");
+  const chips = [optCase, optWord, optRegex, optSlide];
+  const optionsRow = h(doc, "div", { class: "opf-find-row opf-find-options", role: "group", "aria-label": "Search options" }, ...chips);
   const errorLine = h(doc, "p", { class: "opf-find-error", id: `${id}-error`, role: "alert" });
+  frame.head.after(h(doc, "div", { class: "opf-find-controls" }, findRow, replaceRow, optionsRow, errorLine));
+
+  // The results, grouped by slide; the foot says how many and offers Undo after Replace all.
   const list = h(doc, "ul", { class: "opf-find-results", "aria-label": "Matches" });
-  root.append(head, findRow, replaceRow, optionsRow, statusRow, errorLine, list);
+  frame.body.append(list);
+  const count = frame.note;
+  count.id = `${id}-count`;
+  count.classList.add("opf-find-count");
+  count.setAttribute("role", "status");
+  count.setAttribute("aria-live", "polite");
+  const undoButton = h(doc, "button", { type: "button", class: "opf-panel-button opf-find-undo", text: "Undo", hidden: true });
+  frame.foot.append(undoButton);
+  frame.foot.hidden = false;
   container.append(root);
 
   const report = (message, error = false) => options.onStatus?.(message, { error });
@@ -141,18 +100,29 @@ export function createFindPanel(container, options) {
     slideIndex: state.thisSlide ? (options.getSlideIndex?.() ?? getCanvas()?.slideIndex ?? 0) : undefined,
   });
 
+  // One small label per slide ("Slide 02 · 2 matches", "Presentation · 1 match") over its matches; each match names its place and shows the line.
   function renderResults() {
     const { matches } = result;
-    list.replaceChildren();
-    matches.slice(0, MAX_LISTED).forEach((match, index) => {
-      const mark = h(doc, "mark", { text: match.context.match });
-      const text = h(doc, "span", { class: "opf-find-text" }, doc.createTextNode(match.context.before), mark, doc.createTextNode(match.context.after));
-      const button = h(doc, "button", { type: "button", class: "opf-find-result", "aria-current": index === current ? "true" : "false", "data-index": String(index) },
-        // WCAG 2.5.3 (label in name): no aria-label. The name is the visible text, the place and then the matching line, kept apart by a space.
-        h(doc, "span", { class: "opf-find-where", text: whereLabel(match) }), " ", text);
-      list.append(h(doc, "li", {}, button));
+    const shown = matches.slice(0, MAX_LISTED);
+    const groups = [];
+    shown.forEach((match, index) => {
+      if (groups.at(-1)?.slide !== match.slideIndex) groups.push({ slide: match.slideIndex, items: [] });
+      groups.at(-1).items.push([match, index]);
     });
+    list.replaceChildren(...groups.map(({ slide, items }, at) => {
+      const all = matches.filter((match) => match.slideIndex === slide).length;
+      const label = panelLabel(doc, `${slide < 0 ? "Presentation" : `Slide ${String(slide + 1).padStart(2, "0")}`} · ${plural(all, "match", "matches")}`, { id: `${id}-group-${at}` });
+      const rows = items.map(([match, index]) => {
+        const mark = h(doc, "mark", { text: match.context.match });
+        const text = h(doc, "span", { class: "opf-find-text" }, doc.createTextNode(match.context.before), mark, doc.createTextNode(match.context.after));
+        // WCAG 2.5.3 (label in name): no aria-label. The name is the visible text, the place and then the matching line, kept apart by a space.
+        return h(doc, "li", {}, h(doc, "button", { type: "button", class: "opf-panel-row opf-find-result", "aria-current": index === current ? "true" : "false", "data-index": String(index) },
+          h(doc, "span", { class: "opf-find-where", text: match.label }), " ", text));
+      });
+      return h(doc, "li", { class: "opf-find-group" }, label, h(doc, "ul", { class: "opf-panel-list", "aria-labelledby": label.id }, ...rows));
+    }));
     if (matches.length > MAX_LISTED) list.append(h(doc, "li", { class: "opf-find-more", text: `Showing the first ${MAX_LISTED} of ${matches.length}${result.truncated ? "+" : ""} matches.` }));
+    list.hidden = !shown.length;
   }
 
   function renderCount() {
@@ -166,6 +136,7 @@ export function createFindPanel(container, options) {
       const where = [slides ? plural(slides, "slide") : "", deck ? "the presentation settings" : ""].filter(Boolean).join(" and ");
       count.textContent = `${current >= 0 ? `${current + 1} of ` : ""}${matches.length}${result.truncated ? "+" : ""} ${matches.length === 1 ? "match" : "matches"} in ${where}`;
     }
+    position.textContent = state.query === "" || result.error ? "" : `${current >= 0 ? `${current + 1} of ` : ""}${matches.length}${result.truncated ? "+" : ""}`;
   }
 
   function renderButtons() {
@@ -290,10 +261,7 @@ export function createFindPanel(container, options) {
   function readOptions() {
     state.query = findInput.value;
     state.replacement = replaceInput.value;
-    state.matchCase = optCase.input.checked;
-    state.wholeWord = optWord.input.checked;
-    state.regex = optRegex.input.checked;
-    state.thisSlide = optSlide.input.checked;
+    for (const chip of chips) state[chip.dataset.option] = chip.getAttribute("aria-pressed") === "true";
   }
   const onInput = () => {
     readOptions();
@@ -303,7 +271,12 @@ export function createFindPanel(container, options) {
   };
   findInput.addEventListener("input", onInput);
   replaceInput.addEventListener("input", readOptions);
-  for (const item of [optCase, optWord, optRegex, optSlide]) item.input.addEventListener("change", onInput);
+  for (const chip of chips) {
+    chip.addEventListener("click", () => {
+      chip.setAttribute("aria-pressed", String(chip.getAttribute("aria-pressed") !== "true"));
+      onInput();
+    });
+  }
   previousButton.addEventListener("click", () => step(-1));
   nextButton.addEventListener("click", () => step(1));
   replaceOneButton.addEventListener("click", doReplaceOne);
@@ -356,6 +329,42 @@ export function createFindPanel(container, options) {
     search(true);
   });
 
+  // ---- where it opens: under the anchor (a bottom sheet on a phone), or in its container --------------------------------------------------
+  const win = doc.defaultView;
+  const media = win?.matchMedia?.(PANEL_SHEET_QUERY);
+  function place() {
+    if (!state.open) return;
+    const given = typeof options.anchor === "function" ? options.anchor() : options.anchor;
+    if (!given) {
+      root.dataset.mode = "docked";
+      return;
+    }
+    placePanel(root, shown(given) ? given : null, Boolean(media?.matches) || !shown(given));
+  }
+  const onReflow = () => place();
+  const resizer = win?.ResizeObserver ? new win.ResizeObserver(() => win.requestAnimationFrame(onReflow)) : null;
+  function listen(on) {
+    const method = on ? "addEventListener" : "removeEventListener";
+    win?.[method]("resize", onReflow);
+    win?.[method]("scroll", onReflow, true);
+    media?.[method]?.("change", onReflow);
+    if (on) resizer?.observe(root);
+    else resizer?.disconnect();
+  }
+  // Design or Export opening closes this panel without moving the focus (they take it).
+  const swapClose = () => close(false);
+  function close(restoreFocus) {
+    if (!state.open) return;
+    state.open = false;
+    root.hidden = true;
+    releasePanel(doc, swapClose);
+    listen(false);
+    const restore = restoreFocus && opener && doc.contains(opener) ? opener : null;
+    opener = null;
+    restore?.focus?.({ preventScroll: true });
+    options.onClose?.();
+  }
+
   const api = {
     element: root,
     get isOpen() { return state.open; },
@@ -367,28 +376,25 @@ export function createFindPanel(container, options) {
       opener = state.open ? opener : doc.activeElement;
       const seed = query ?? options.getSelectionText?.();
       if (typeof seed === "string" && seed.trim() && !/[\r\n]/.test(seed) && seed.length <= 200) findInput.value = seed;
+      if (!state.open) {
+        claimPanel(doc, swapClose);
+        listen(true);
+      }
       state.open = true;
       root.hidden = false;
       setMode(replace);
       readOptions();
       search(false);
+      place();
       findInput.focus();
       findInput.select();
     },
-    close() {
-      if (!state.open) return;
-      state.open = false;
-      root.hidden = true;
-      const restore = opener && doc.contains(opener) ? opener : null;
-      opener = null;
-      restore?.focus?.({ preventScroll: true });
-      options.onClose?.();
-    },
+    close: () => close(true),
     /** Set the search programmatically (tests and hosts). */
     set(values = {}) {
       if (typeof values.query === "string") findInput.value = values.query;
       if (typeof values.replacement === "string") replaceInput.value = values.replacement;
-      for (const [key, item] of [["matchCase", optCase], ["wholeWord", optWord], ["regex", optRegex], ["thisSlide", optSlide]]) if (typeof values[key] === "boolean") item.input.checked = values[key];
+      for (const chip of chips) if (typeof values[chip.dataset.option] === "boolean") chip.setAttribute("aria-pressed", String(values[chip.dataset.option]));
       readOptions();
       search(false);
     },
@@ -399,6 +405,10 @@ export function createFindPanel(container, options) {
     replaceAll: doReplaceAll,
     refresh: () => search(true),
     destroy() {
+      if (state.open) {
+        releasePanel(doc, swapClose);
+        listen(false);
+      }
       destroyed = true;
       unsubscribe();
       root.remove();

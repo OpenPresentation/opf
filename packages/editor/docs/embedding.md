@@ -79,6 +79,7 @@ Slot names: `toolbar` and the toolbar items `title`, `history`, `counter`, `view
 | `expand` | `{ target, fullscreen }` for the expanded editor (the `expand` item, `editor.expand()`), or `false` to turn it off |
 | `actions` | the host's own toolbar buttons (`{ id, label, icon, title, run, enabled, pressed, primary }`); see [Actions](#actions) |
 | `designMenu` | `{ onOpenPanel }`: the Design quick menu's "More design options…" opens your own Design panel (the editor's own panel wins when it has one) |
+| `panelAnchor` | an element (or a function that returns one): Design, Find and Export open their one panel under it, aligned to its end edge, so the three open in the same place (default: each under its own button, and Find in its slot) |
 | `slideActions` | "+" and the context menu on the thumbnail strip (default true in `full` and `embed`) |
 | `guardUnload` | `true` (the browser asks before the page closes while `dirty`) or `(editor) => boolean`; see [Unsaved changes and save](#unsaved-changes-and-save) |
 | `icons` | the chrome's icons by name, one flat map; see [styling](styling.md) |

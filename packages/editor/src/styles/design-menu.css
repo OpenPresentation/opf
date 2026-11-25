@@ -1,4 +1,5 @@
-/* CE-29: the Design quick menu (src/design-menu.js). Only --opf-ui-* tokens, no color literals (test/styles.mjs). */
+/* CE-29: the Design quick menu (src/design-menu.js): its button and what its sections draw. The panel itself (frame, tabs, rows, sheet) is
+   src/styles/panel.css. Only --opf-ui-* tokens, no color literals (test/styles.mjs); a theme's and a scheme's own colors are inline styles. */
 .opf-design-menu,
 .opf-design-menu *,
 .opf-design-menu *::before,
@@ -6,7 +7,6 @@
 .opf-design-menu [hidden] { display: none !important; }
 
 .opf-design-menu {
-  --opf-design-menu-row: 32px;
   position: relative;
   display: inline-flex;
   font-family: var(--opf-ui-font);
@@ -14,7 +14,6 @@
   line-height: 1.4;
   color: var(--opf-ui-fg);
 }
-.opf-design-menu[data-density="touch"] { --opf-design-menu-row: 40px; }
 :where(.opf-design-menu button) { font: inherit; color: inherit; margin: 0; }
 .opf-design-menu .opf-icon { flex: none; }
 .opf-design-menu button:focus-visible {
@@ -42,85 +41,8 @@
 .opf-design-menu .opf-design-menu-trigger:disabled { opacity: 0.5; cursor: not-allowed; }
 .opf-design-menu[data-density="touch"] .opf-design-menu-trigger { height: max(var(--opf-ui-control-h), 40px); }
 
-/* ---- the popover ---------------------------------------------------------------------------------------------------------------------- */
-.opf-design-menu .opf-design-menu-popover {
-  position: fixed;
-  z-index: 40;
-  display: flex;
-  flex-direction: column;
-  width: 296px;
-  max-width: calc(100vw - 16px);
-  background: var(--opf-ui-surface);
-  border: 1px solid var(--opf-ui-border);
-  border-radius: var(--opf-ui-radius-md);
-  box-shadow: var(--opf-ui-shadow-pop);
-  overflow: hidden;
-}
-.opf-design-menu .opf-design-menu-handle,
-.opf-design-menu .opf-design-menu-head { display: none; }
-.opf-design-menu .opf-design-menu-menu {
-  flex: 1 1 auto;
-  min-height: 0;
-  padding: 4px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-.opf-design-menu .opf-design-menu-group + .opf-design-menu-group {
-  margin-top: 4px;
-  padding-top: 4px;
-  border-top: 1px solid var(--opf-ui-border);
-}
-.opf-design-menu .opf-design-menu-group-label {
-  padding: 6px 8px 4px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--opf-ui-muted-fg);
-}
-.opf-design-menu .opf-design-menu-list {
-  max-height: calc(var(--opf-design-menu-row) * 5.5);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-.opf-design-menu .opf-design-menu-empty { margin: 0; padding: 12px 8px; color: var(--opf-ui-muted-fg); }
-
-.opf-design-menu .opf-design-menu-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  min-height: var(--opf-design-menu-row);
-  padding: 0 8px;
-  border: 0;
-  border-radius: var(--opf-ui-radius);
-  background: transparent;
-  text-align: start;
-  cursor: pointer;
-  transition: background-color var(--opf-ui-ease);
-}
-.opf-design-menu .opf-design-menu-item:hover { background: var(--opf-ui-muted-2); }
-.opf-design-menu .opf-design-menu-item:focus-visible { background: var(--opf-ui-muted); }
-.opf-design-menu .opf-design-menu-item[aria-checked="true"] { background: var(--opf-ui-muted); font-weight: 600; }
-.opf-design-menu .opf-design-menu-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.opf-design-menu .opf-design-menu-check { display: inline-flex; flex: none; width: 14px; color: var(--opf-ui-accent-strong); }
-.opf-design-menu .opf-design-menu-item[aria-checked="false"] .opf-design-menu-check { visibility: hidden; }
-.opf-design-menu .opf-design-menu-more {
-  margin-top: 4px;
-  border-top: 1px solid var(--opf-ui-border);
-  border-radius: 0 0 var(--opf-ui-radius) var(--opf-ui-radius);
-  color: var(--opf-ui-accent-strong);
-}
-
-.opf-design-menu .opf-design-menu-swatches { display: inline-flex; flex: none; gap: 2px; }
-.opf-design-menu .opf-design-menu-swatch {
-  width: 12px;
-  height: 12px;
-  border-radius: var(--opf-ui-radius-sm);
-  border: 1px solid var(--opf-ui-border-strong);
-}
-
-/* Screen-reader only. */
+/* Screen-reader only: the live region, and the current choice in each tab's name. */
+.opf-design-menu-tab-value,
 .opf-design-menu .opf-design-menu-live {
   position: absolute;
   width: 1px;
@@ -133,100 +55,76 @@
   border: 0;
 }
 
-/* ---- the bottom sheet (a phone, or a button that is not on screen) --------------------------------------------------------------------- */
-.opf-design-menu .opf-design-menu-scrim {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  background: color-mix(in srgb, var(--opf-ui-fg) 32%, transparent);
-}
-/* About half the screen, so the slide above stays in view and a choice shows at once; a host can set the height (the MCP viewer pins
-   the slide above the sheet). */
-.opf-design-menu[data-mode="sheet"] .opf-design-menu-popover {
-  z-index: 51;
-  inset: auto 0 0 0;
-  width: auto;
-  max-width: 560px;
-  height: var(--opf-design-menu-sheet-h, auto);
-  max-height: var(--opf-design-menu-sheet-h, 55vh);
-  max-height: var(--opf-design-menu-sheet-h, 55dvh);
-  margin-inline: auto;
-  padding-bottom: max(12px, env(safe-area-inset-bottom));
-  border-width: 1px 0 0;
-  border-radius: var(--opf-ui-radius-lg) var(--opf-ui-radius-lg) 0 0;
-}
-.opf-design-menu[data-mode="sheet"] .opf-design-menu-handle {
-  display: block;
-  flex: none;
-  width: 36px;
-  height: 4px;
-  margin: 8px auto 4px;
-  border-radius: 2px;
-  background: var(--opf-ui-border-strong);
-}
-.opf-design-menu[data-mode="sheet"] .opf-design-menu-head {
-  display: flex;
-  flex: none;
-  align-items: center;
-  padding: 0 8px 0 16px;
-}
-.opf-design-menu .opf-design-menu-title { font-size: 15px; font-weight: 600; }
-.opf-design-menu .opf-design-menu-close {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  margin-inline-start: auto;
-  border: 0;
-  border-radius: var(--opf-ui-radius);
-  background: transparent;
-  color: var(--opf-ui-muted-fg);
-  cursor: pointer;
-}
-.opf-design-menu .opf-design-menu-close:hover { background: var(--opf-ui-muted-2); color: var(--opf-ui-fg); }
-.opf-design-menu[data-mode="sheet"] .opf-design-menu-item { padding: 0 12px; font-size: 14px; }
-/* One section at a time, in the sheet's one scroll container: the lists do not scroll on their own. */
-.opf-design-menu[data-mode="sheet"] .opf-design-menu-list { max-height: none; overflow: visible; }
-.opf-design-menu[data-mode="sheet"] .opf-design-menu-group:not([data-active]) { display: none; }
-.opf-design-menu[data-mode="sheet"] .opf-design-menu-group { margin: 0; padding: 0; border: 0; }
-.opf-design-menu[data-mode="sheet"] .opf-design-menu-group-label { display: none; }
+/* ---- the sections ----------------------------------------------------------------------------------------------------------------- */
+.opf-design-menu-tabs + .opf-panel-body { margin-top: 4px; }
+.opf-design-menu-filter { margin: 6px 12px 0; }
+.opf-design-menu-more { margin: 6px 8px 0; width: calc(100% - 16px); color: var(--opf-ui-accent-strong); }
+.opf-design-menu-group-label:empty { display: none; }
 
-/* The section switch: a segmented control in the sheet's head, each segment with its section and the current choice. */
-.opf-design-menu .opf-design-menu-tabs { display: none; }
-.opf-design-menu[data-mode="sheet"] .opf-design-menu-head { gap: 8px; padding: 0 4px 4px 12px; }
-.opf-design-menu[data-mode="sheet"] .opf-design-menu-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.opf-design-menu[data-mode="sheet"] .opf-design-menu-tabs {
+/* Theme: a small slide in the theme's colors, the name, and the schemes it brings. */
+.opf-design-menu-list[data-section="theme"] { gap: 4px; }
+.opf-design-menu-item[data-section="theme"] { gap: 12px; padding: 8px; border-radius: var(--opf-ui-radius-md); }
+.opf-design-menu-names { display: flex; flex: 1 1 auto; flex-direction: column; gap: 2px; min-width: 0; }
+.opf-design-menu-sub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; font-weight: 400; color: var(--opf-ui-muted-fg); }
+.opf-design-menu-thumb {
   display: flex;
-  flex: 1 1 auto;
-  min-width: 0;
-  gap: 2px;
-  padding: 2px;
-  border-radius: var(--opf-ui-radius);
-  background: var(--opf-ui-muted);
-}
-.opf-design-menu .opf-design-menu-tab {
-  display: flex;
-  flex: 1 1 0;
+  flex: none;
   flex-direction: column;
-  justify-content: center;
-  min-width: 0;
-  min-height: 44px;
-  padding: 2px 6px;
-  border: 0;
-  border-radius: calc(var(--opf-ui-radius) - 2px);
-  background: transparent;
-  color: var(--opf-ui-muted-fg);
-  text-align: start;
-  cursor: pointer;
+  gap: 5px;
+  width: 96px;
+  height: 54px;
+  padding: 9px 10px;
+  overflow: hidden;
+  border: 1px solid var(--opf-ui-border-strong);
+  border-radius: var(--opf-ui-radius-sm);
+  background: var(--opf-ui-surface);
 }
-.opf-design-menu .opf-design-menu-tab[aria-selected="true"] { background: var(--opf-ui-surface); color: var(--opf-ui-fg); box-shadow: 0 0 0 1px var(--opf-ui-border); }
-.opf-design-menu .opf-design-menu-tab-label { font-size: 11px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; }
-.opf-design-menu .opf-design-menu-tab-value { font-size: 12.5px; }
-.opf-design-menu .opf-design-menu-tab-label,
-.opf-design-menu .opf-design-menu-tab-value { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.opf-design-menu-thumb > span { display: block; flex: none; border-radius: 2px; background: var(--opf-ui-muted-fg); }
+.opf-design-menu-thumb-title { width: 46%; height: 6px; }
+.opf-design-menu-thumb-line { width: 64%; height: 3px; opacity: 0.45; }
+.opf-design-menu-thumb-line + .opf-design-menu-thumb-line { width: 54%; }
+.opf-design-menu-thumb-accent { width: 18px; height: 3px; }
 
-@media (prefers-reduced-motion: reduce) {
-  .opf-design-menu *,
-  .opf-design-menu *::before,
-  .opf-design-menu *::after { transition: none !important; }
+/* Colors: two columns, four accents joined in one chip. */
+.opf-design-menu-list[data-section="colors"],
+.opf-design-menu-list[data-section="layout"] { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.opf-design-menu-swatches { display: inline-flex; flex: none; overflow: hidden; border: 1px solid var(--opf-ui-border-strong); border-radius: var(--opf-ui-radius-sm); }
+.opf-design-menu-swatch { width: 10px; height: 16px; }
+.opf-design-menu-item[data-section="colors"] .opf-design-menu-check { margin-inline-start: 0; }
+
+/* Fonts: "Ag" and the name in the scheme's own face, grouped by type. */
+.opf-design-menu-font-group { display: flex; flex-direction: column; gap: 2px; }
+.opf-design-menu-font-group .opf-panel-label { padding: 8px 6px 2px; }
+.opf-design-menu-item[data-section="fonts"] { gap: 10px; min-height: max(38px, var(--opf-panel-row)); font-size: 14px; }
+.opf-design-menu-item[data-section="fonts"][aria-checked="true"] { font-weight: 400; }
+.opf-design-menu-sample { flex: none; width: 34px; font-size: 19px; line-height: 1; }
+
+/* Layout: three columns of schematic thumbnails, drawn from each layout's regions. */
+.opf-design-menu-list[data-section="layout"] { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 4px 10px; }
+.opf-design-menu-item[data-section="layout"] { position: relative; flex-direction: column; align-items: stretch; gap: 5px; padding: 5px 5px 6px; border-radius: var(--opf-ui-radius-md); font-size: 12px; }
+.opf-design-menu-item[data-section="layout"] .opf-design-menu-check { position: absolute; top: 9px; inset-inline-end: 9px; }
+.opf-design-menu-thumb[data-section="layout"] { width: auto; height: 56px; padding: 7px; background: var(--opf-ui-bg); border-color: var(--opf-ui-border); }
+.opf-design-menu-item[aria-checked="true"] .opf-design-menu-thumb[data-section="layout"] { border-color: var(--opf-ui-ring); }
+.opf-design-menu-thumb[data-section="layout"] > .opf-design-menu-thumb-title { background: var(--opf-ui-fg); }
+.opf-design-menu-thumb-title[data-alone] { width: 70%; height: 8px; margin: auto 0; }
+.opf-design-menu-thumb[data-section="layout"] > .opf-design-menu-thumb-row { flex: 1 1 auto; }
+.opf-design-menu-thumb .opf-design-menu-thumb-row { display: flex; gap: 3px; min-width: 0; min-height: 0; background: none; }
+.opf-design-menu-thumb-row[data-direction="column"] { flex-direction: column; }
+.opf-design-menu-thumb-block { flex: 1 1 0; min-width: 0; min-height: 3px; border-radius: 2px; background: var(--opf-ui-border-strong); }
+.opf-design-menu-thumb-block[data-tone="accent"] { background: var(--opf-ui-accent); }
+.opf-design-menu-thumb-block[data-tone="quiet"] { background: var(--opf-ui-border); }
+.opf-design-menu-thumb-block:not([data-shape="fill"]) { display: flex; gap: 3px; background: none; }
+.opf-design-menu-thumb-block[data-shape="lines"] { flex-direction: column; justify-content: center; }
+.opf-design-menu-thumb-part { flex: 1 1 0; min-width: 0; border-radius: 2px; background: var(--opf-ui-border-strong); }
+.opf-design-menu-thumb-block[data-shape="lines"] > .opf-design-menu-thumb-part { flex: none; height: 3px; width: 100%; }
+.opf-design-menu-thumb-block[data-shape="lines"] > .opf-design-menu-thumb-part + .opf-design-menu-thumb-part { width: 82%; }
+.opf-design-menu-thumb-block[data-shape="lines"] > .opf-design-menu-thumb-part:last-child { width: 64%; }
+.opf-design-menu-thumb-block[data-shape="metrics"] > .opf-design-menu-thumb-part { background: var(--opf-ui-accent); }
+.opf-design-menu-thumb-block[data-tone="quiet"] > .opf-design-menu-thumb-part { background: var(--opf-ui-border); }
+
+/* The sheet is about half the screen, so the slide above stays in view and a choice shows at once; a host can set the height (the MCP viewer
+   pins the slide above the sheet). Its height stays when the section changes. */
+.opf-design-menu-popover[data-mode="sheet"] {
+  --opf-panel-sheet-h: var(--opf-design-menu-sheet-h, 55dvh);
+  height: var(--opf-design-menu-sheet-h, auto);
 }

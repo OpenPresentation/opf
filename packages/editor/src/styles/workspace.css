@@ -36,7 +36,7 @@
   overflow: hidden;
   visibility: hidden;
 }
-.opf-tb > .opf-ws-export[data-collapsed] :is(.opf-export-sheet, .opf-export-scrim, .opf-export-status) {
+.opf-tb > .opf-ws-export[data-collapsed] :is(.opf-panel, .opf-panel-scrim) {
   visibility: visible;
 }
 /* CE-28, `layout: "embed"`: the slide alone under a compact bar, for a page that shows a deck. The status line is read, not shown. */

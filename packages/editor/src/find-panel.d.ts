@@ -16,6 +16,11 @@ export interface FindPanelOptions {
   getSelectionText?: () => string | undefined;
   /** Finish an inline edit before the document is replaced; return false to stop. Defaults to `canvas.commit`. */
   commit?: () => boolean;
+  /**
+   * Where the panel opens: under this element (a bar), its end edge on the element's content edge, at most as tall as the room below. A function
+   * is read at each opening. Default: none: the panel is a card in its container. Design, Find and Export share one panel: opening one closes the other.
+   */
+  anchor?: HTMLElement | (() => HTMLElement | null | undefined);
   onStatus?: (message: string, details: { error: boolean }) => void;
   onClose?: () => void;
 }

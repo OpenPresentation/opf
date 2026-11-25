@@ -25,7 +25,7 @@ const styles = await buildStyles(new URL('../src/styles/', import.meta.url));
         .opf-nav-counter { color: rgb(255, 0, 0); }
         .opf-design-menu-popover { width: 400px; }
       </style><body><div class="opf-ui"><span class="opf-nav-counter">01 / 03</span>
-        <div class="opf-design-menu"><div class="opf-design-menu-popover">x</div></div></div></body>`);
+        <div class="opf-design-menu"><div class="opf-panel opf-design-menu-popover">x</div></div></div></body>`);
       await page.addStyleTag({ content: stylesheet });
       const result = await page.evaluate(() => ({
         color: getComputedStyle(document.querySelector('.opf-nav-counter')).color,
@@ -39,7 +39,7 @@ const styles = await buildStyles(new URL('../src/styles/', import.meta.url));
     const layered = await probe(styles.layered);
     assert.equal(plain.color, 'rgb(20, 25, 36)', 'plain styles.css: the package rule (same specificity, later) beats the host rule');
     assert.notEqual(plain.color, 'rgb(255, 0, 0)');
-    assert.equal(plain.width, '296px', 'plain styles.css: a two-class package rule beats a one-class host rule');
+    assert.equal(plain.width, '360px', 'plain styles.css: the package rule (same specificity, later) beats the host rule');
     assert.equal(layered.color, 'rgb(255, 0, 0)', 'layered: a host rule with one class beats the package rule');
     assert.equal(layered.width, '400px', 'layered: it also beats a rule with more specificity');
     mark('an unlayered one-class host rule beats the package in styles.layered.css and not in styles.css');
@@ -148,7 +148,7 @@ const BODY = '<div id="stage" class="opf-ui" style="padding:12px;display:flex;fl
     // -- design menu: trigger, close, check -----------------------------------------------------------------------------------------------
     await ev(() => { const host = window.fresh('d1'); window.opfParts.design.createDesignMenu(host, { editor: window.session(), catalogs: [window.opfWs.gallery] }); });
     assert.deepEqual({ ...(await icon('#d1 .opf-design-menu-trigger svg')), d: undefined }, { cls: 'opf-icon', name: 'trigger', aria: 'true', focusable: 'false', d: undefined, marker: null, width: 14, height: 14 }, 'default trigger icon 14px');
-    assert.equal(await ev(() => document.querySelector('#d1 .opf-design-menu-close svg').getAttribute('width')), '18', 'default close icon 18px (hidden until the sheet opens)');
+    assert.equal(await ev(() => document.querySelector('#d1 .opf-design-menu-close svg').getAttribute('width')), '16', 'default close icon 16px (in the panel\'s header, hidden until it opens)');
     await ev(() => { const host = window.fresh('d2'); window.dm = window.opfParts.design.createDesignMenu(host, { editor: window.session(), catalogs: [window.opfWs.gallery], icons: { trigger: () => window.own('trigger'), close: 'M5 5l14 14', check: 'M4 12l5 5L20 6' } }); });
     assert.equal((await icon('#d2 .opf-design-menu-trigger svg')).marker, 'trigger');
     assert.equal((await icon('#d2 .opf-design-menu-trigger svg')).width, 14, 'sized by the part when the element has no size');
@@ -403,10 +403,10 @@ const BODY = '<div id="stage" class="opf-ui" style="padding:12px;display:flex;fl
     mark('example Thumbnail strip: a thicker ring and a round add button');
     // Design menu
     await page.click('#design .opf-design-menu-trigger');
-    assert.equal(await css('.opf-design-menu-popover', 'width'), '360px');
+    assert.equal(await css('.opf-design-menu-popover', 'width'), '420px');
     assert.equal(await css('.opf-design-menu-popover', 'borderTopLeftRadius'), '0px');
     await page.keyboard.press('Escape');
-    mark('example Design menu: a wider popover with square corners');
+    mark('example Design menu: a wider panel with square corners');
     // The element
     await ev(() => new Promise((resolve) => setTimeout(resolve, 0)));
     const element = await ev(() => { const el = document.querySelector('#el'); const style = getComputedStyle(el); return { height: style.height, border: style.borderTopWidth, radius: style.borderTopLeftRadius, state: el.getAttribute('data-opf-state'), opacity: style.opacity, display: style.display }; });

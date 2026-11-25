@@ -21,7 +21,7 @@ const PARTS = {
   'Toolbar': { root: '.opf-tb', js: ['toolbar.js', 'workspace-shell.js'], css: ['toolbar.css', 'workspace.css'], types: 'toolbar.d.ts' },
   'Deck title': { root: '.opf-title', js: ['deck-title.js'], css: ['deck-title.css'], types: 'deck-title.d.ts' },
   'Expand': { root: '.opf-expand-button', js: ['editor-expand.js', 'workspace.js'], css: ['expand.css'], types: 'editor-expand.d.ts' },
-  'Design menu': { root: '.opf-design-menu', js: ['design-menu.js'], css: ['design-menu.css'], types: 'design-menu.d.ts' },
+  'Design menu': { root: '.opf-design-menu', js: ['design-menu.js', 'panel.js'], css: ['design-menu.css', 'panel.css'], types: 'design-menu.d.ts' },
   'Review pill': { root: '.opf-review-pill', js: ['review-pill.js'], css: ['review-pill.css'], types: 'review-pill.d.ts' },
   'Help': { root: '.opf-help-button', js: ['shortcuts-sheet.js'], css: ['shortcuts-sheet.css', 'shortcuts.css'], types: 'shortcuts-sheet.d.ts' },
   'Toolbar actions': { root: '.opf-actions', js: ['toolbar-actions.js'], css: ['toolbar-actions.css'], types: 'toolbar-actions.d.ts' },
