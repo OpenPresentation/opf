@@ -83,4 +83,26 @@ const slidePayloads = (document) => document.slides.map(slide => slide.chart ?? 
   assert.deepEqual(back.datasources, only.datasources);
 }
 
+{
+  // What a 0.36.0 importer does with these files (document-roundtrip.md, "Decks written by a newer OPF"): it reads OPF_DATASETS_V1 and
+  // checks it with its own core, whose closed Dataset takes only title, description, columns, rows and source, so a record that carries a
+  // new key is rejected whole (invalid-data-provenance) and the datasets are not restored; a chart or table that referenced one imports
+  // the values it shows (chart-dataset-unavailable, table-dataset-unavailable). An inline chart-data record with a new key does not
+  // validate either (invalid-data-provenance) and the chart imports the values it shows. OPF_DATASOURCES_V1 is unknown to it and ignored.
+  // This pins the premise: the new keys are written inside the dataset record and the chart-data record, and a deck without them writes none.
+  const OLD_DATASET_KEYS = new Set(['title', 'description', 'columns', 'rows', 'source']);
+  const tags = parts => Object.entries(parts).filter(([name]) => /^ppt\/tags\//.test(name)).flatMap(([, bytes]) => [...strFromU8(bytes).matchAll(/<p:tag name="([^"]+)" val="([0-9A-F]*)"\/>/g)].map(([, name, hex]) => [name, JSON.parse(Buffer.from(hex, 'hex').toString('utf8'))]));
+  const {parts} = await exported(deck);
+  const stored = Object.fromEntries(tags(parts));
+  const outside = Object.values(stored.OPF_DATASETS_V1).flatMap(dataset => Object.keys(dataset).filter(key => !OLD_DATASET_KEYS.has(key)));
+  assert.ok(outside.includes('datasource') && outside.includes('generator'), 'a 0.36 importer sees keys its Dataset does not allow, so it rejects the record');
+  assert.deepEqual(Object.keys(stored.OPF_DATASOURCES_V1).sort(), ['forecast', 'spare', 'warehouse'], 'the data sources are in a tag a 0.36 importer does not read');
+  const dataRecords = tags(parts).filter(([name]) => name === 'OPF_DATA_V1').map(([, record]) => record);
+  assert.ok(dataRecords.some(record => record.kind === 'chart' && record.data?.datasource !== undefined), 'inline chart data keeps its keys in the chart-data record');
+  const plain = {name: 'Plain', datasets: {revenue: {columns: ['Quarter', 'Revenue'], rows: [['Q1', 12]], title: 'Revenue'}}, slides: [{title: 'Chart', chart: {type: 'column', data: {dataset: 'revenue'}}}]};
+  const {parts: plainParts} = await exported(plain);
+  assert.equal(tags(plainParts).some(([name]) => name === 'OPF_DATASOURCES_V1'), false, 'a deck without data sources writes no new tag');
+  assert.deepEqual(Object.keys(Object.fromEntries(tags(plainParts)).OPF_DATASETS_V1.revenue).filter(key => !OLD_DATASET_KEYS.has(key)), [], 'and a dataset without the new keys is a record a 0.36 importer accepts');
+}
+
 console.log('FR-04 data sources in PPTX: ok');

@@ -4,13 +4,13 @@
     "browser": 657392,
     "composition": 310520,
     "convert": 545540,
-    "data": 12831,
+    "data": 13224,
     "deck": 584047,
     "diagram-engine-eager": 294825,
     "diagram-engine-lazy": 11669,
     "diff": 6237,
     "font-policy": 17383,
-    "format": 68609,
+    "format": 70737,
     "ids": 528431,
     "markdown": 579776,
     "pagination": 531725,
@@ -45,8 +45,8 @@
       "gzip": 529650
     },
     "data": {
-      "minified": 36148,
-      "gzip": 12457
+      "minified": 37224,
+      "gzip": 12838
     },
     "deck": {
       "minified": 1715553,
@@ -77,8 +77,8 @@
       "gzip": 16876
     },
     "format": {
-      "minified": 236389,
-      "gzip": 66610
+      "minified": 242357,
+      "gzip": 68676
     },
     "ids": {
       "minified": 1549748,

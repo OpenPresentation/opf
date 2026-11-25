@@ -183,6 +183,20 @@ Import reads the list: a slide in a section named exactly `Default Section` has 
 
 Restores are applied as independent groups, one per OPF field. The deck background group also removes background copies observed on unchanged inheriting slides. When the combined result does not validate, each group is tried on its own. Only a group that makes the document invalid is left out, with `invalid-document-provenance` at its path; all other restores still apply. A record that cannot be decoded, has an unknown version or names an unknown field is rejected as a whole and reported at `''` or `slides.N`.
 
+## Decks written by a newer OPF (FR-04, data sources)
+
+OPF 0.37 writes where a dataset came from in its own keys (`datasource`, `query`, `retrieved`, `version`, `sha256`, `generator`; core `docs/data-sources.md`). They travel inside the `OPF_DATASETS_V1` dataset record and the `OPF_DATA_V1` record of a chart with inline data. The root `datasources` map is a new tag, `OPF_DATASOURCES_V1`, beside `OPF_DATASETS_V1`.
+
+What an importer of 0.36.0 and earlier does with such a file (read from `v0.36.0`: `readDatasetsTag`, `restoreChartData`, `restoreTableData`): answer (c), the record is rejected and the import falls back to the native values; it never restores the unknown keys, so the deck it returns is valid for 0.36.
+
+- `OPF_DATASETS_V1`: it checks the map with its own core (`checkFormat`), whose `Dataset` is a closed object (title, description, columns, rows, source). One dataset with a new key makes the whole map invalid: `invalid-data-provenance` at `datasets`, and no dataset is restored, including those without new keys.
+- A chart or table that referenced a dataset then imports the values it shows (`chart-dataset-unavailable`, `table-dataset-unavailable`): the native chart's own data, with the number formats core maps back from the native codes. The dataset reference is lost.
+- A chart with inline data and a new key: the chart-data record does not validate there, so `invalid-data-provenance` and the chart imports the values it shows (its mapping and DataColumn names from the record are lost with it).
+- `OPF_DATASOURCES_V1` is not read; it is ignored without a diagnostic.
+- A deck without data sources and without the new keys writes the same bytes as before and a 0.36 importer restores it as before.
+
+An importer of 0.37 reads all of it; `datasources` is read first, so a dataset that names a data source by id validates. The test `packages/pptx/test/fr-04-data-sources.mjs` pins where the keys are written.
+
 ## Untrusted input
 
 Tags can be written by anyone who can edit the file. The hash is a change detector, not a signature. Tag values are size-limited and decoded as JSON. Only known fields are accepted, media references must name an existing `ppt/media/` part, and every restored field must pass core's `format` check (`validate(value, { only: ['format'] })`). Nothing in a tag is executed or fetched. A package whose tags were all stripped imports as an ordinary foreign deck without a diagnostic. When only `OPF_DOCUMENT_V1` is missing or unreadable, the slide tags still restore their layout intent (below).

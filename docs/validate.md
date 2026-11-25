@@ -321,6 +321,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/centered-body`](#opfcentered-body) | Layout | info | composition | A paragraph or list of more than 2 lines or 120 characters is centered. |
 | [`opf/tight-spacing`](#opftight-spacing) | Layout | info | composition | Blocks are closer than 0.25 in to each other or 0.5 in to the slide edge. |
 | [`opf/layout-monotony`](#opflayout-monotony) | Layout | info | structure | 4 or more content slides in a row use the same layout record. |
+| [`opf/variable-overflow`](#opfvariable-overflow) | Layout | warning | composition | A variable's value is longer than the room its declaration allows. |
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
 | [`opf/datasource-credentials`](#opfdatasource-credentials) | Content | warning | structure | A data source holds a credential. |
 | [`opf/dataset-stale`](#opfdataset-stale) | Content | warning | structure | A dataset is older than its data source says it should be. |
@@ -1101,6 +1102,16 @@ Default severity: **info**. Cost: structure. 4 or more content slides in a row u
 **Basis.** Counted on the slide sequence: 4 or more consecutive visible slides with body content and the same `layout`.
 
 **Approximations.** Compares the layout reference of each slide (a catalog prefix is ignored). Cover, section and closing slides, slides with no body content and slides without a layout record (automatic composition) break a run and are not counted; hidden slides are skipped. One finding per run, at its first slide.
+
+### `opf/variable-overflow`
+
+Default severity: **warning**. Cost: composition. A variable's value is longer than the room its declaration allows.
+
+**Why.** A template slot is sized for a short value. A value over the declaration's maxLength, a list over its maxItems, or text that takes more lines than maxLines where it is drawn still draws, but not as the template was designed; the finding is raised before the deck is exported, not found on one slide of a batch.
+
+**Basis.** The variable declaration's maxLength, maxLines and maxItems (spec/schemas/opf.schema.json, TextVariable and ListVariable).
+
+**Approximations.** maxLength counts characters as a reader sees them (grapheme clusters, Intl.Segmenter), not code units, and maxItems counts entries; both are read on the value (the declared value, or the value given to the check with `values`) and reported once at the declaration. maxLines is read from composition at each place the variable is drawn, with the fonts and measurement of the check: a title, a subtitle, a tag, a text block or a list entry, on its own or inside longer text (then the lines are those the variable's own characters occupy). One finding per place, naming the slide. A place composition does not break into lines (a table cell, a chart label, text in a shape) and a value the layout reshapes are not measured. A variable with no value or example is not measured, and neither is a type sample.
 
 
 ## Content rules
