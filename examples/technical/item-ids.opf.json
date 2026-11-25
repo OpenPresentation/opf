@@ -1,0 +1,94 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Ids on list items, bullets, timeline events and table rows",
+  "description": "A comment, a patch or a merge can name one entry of a list, a timeline or a table by its id and still find it after the entries move. Ids are optional and share one namespace with slide and block ids.",
+  "language": "en-US",
+  "slides": [
+    {
+      "id": "wins",
+      "title": "Three wins this quarter",
+      "items": [
+        {
+          "id": "win-pilot",
+          "text": "Signed the pilot",
+          "description": "Two teams, six weeks."
+        },
+        {
+          "id": "win-emea",
+          "text": "Expanded to EMEA",
+          "description": "Two new accounts."
+        },
+        "Hired a regional lead"
+      ]
+    },
+    {
+      "id": "talking-points",
+      "title": "What to say",
+      "bullets": [
+        {
+          "id": "point-growth",
+          "text": "Revenue grew in every region"
+        },
+        "EMEA grew fastest",
+        {
+          "id": "point-next",
+          "text": "Next quarter we scale the pilot"
+        }
+      ]
+    },
+    {
+      "id": "plan",
+      "title": "The plan in three steps",
+      "timeline": [
+        {
+          "id": "step-pilot",
+          "when": "Q1",
+          "what": "Pilot",
+          "status": "done"
+        },
+        {
+          "id": "step-rollout",
+          "when": "Q2",
+          "what": "Rollout",
+          "status": "current"
+        },
+        {
+          "when": "Q3",
+          "what": "Scale",
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "regions",
+      "title": "EMEA led the quarter",
+      "table": {
+        "columns": [
+          "Region",
+          "Revenue ($M)"
+        ],
+        "rows": [
+          {
+            "id": "row-emea",
+            "cells": [
+              "EMEA",
+              8.2
+            ]
+          },
+          [
+            "APAC",
+            5.1
+          ],
+          {
+            "id": "row-amer",
+            "cells": [
+              "Americas",
+              12.4
+            ]
+          }
+        ],
+        "alt": "Americas earned $12.4M, EMEA $8.2M and APAC $5.1M."
+      }
+    }
+  ]
+}

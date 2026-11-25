@@ -92,23 +92,26 @@
           ]
         ],
         "rows": [
-          [
-            "Atlas",
-            {
-              "value": "On track",
-              "style": {
-                "fill": {
-                  "color": "accent3",
-                  "darken": 0.35
-                },
-                "color": "light1",
-                "align": "center",
-                "bold": true
-              }
-            },
-            120000,
-            "Ana"
-          ],
+          {
+            "id": "row-north",
+            "cells": [
+              "Atlas",
+              {
+                "value": "On track",
+                "style": {
+                  "fill": {
+                    "color": "accent3",
+                    "darken": 0.35
+                  },
+                  "color": "light1",
+                  "align": "center",
+                  "bold": true
+                }
+              },
+              120000,
+              "Ana"
+            ]
+          },
           [
             "Beacon",
             {

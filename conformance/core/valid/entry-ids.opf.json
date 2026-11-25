@@ -1,0 +1,20 @@
+{
+  "slides": [
+    {
+      "id": "kpis",
+      "title": "KPIs",
+      "blocks": [
+        { "id": "wins", "items": ["Signed the pilot", { "id": "it-7f3k", "text": "Expanded to EMEA" }] },
+        { "id": "points", "bullets": [{ "id": "b-1", "text": "One" }, "Two"] },
+        { "id": "plan", "timeline": [{ "id": "ev-1", "when": "Q1", "what": "Pilot" }, { "when": "Q2", "what": "Rollout" }] },
+        {
+          "id": "regions",
+          "table": {
+            "columns": ["Region", "Revenue"],
+            "rows": [{ "id": "r-emea", "cells": ["EMEA", 8.2] }, ["APAC", 5.1], { "cells": ["AMER", 12.4] }]
+          }
+        }
+      ]
+    }
+  ]
+}

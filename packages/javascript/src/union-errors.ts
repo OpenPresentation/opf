@@ -163,7 +163,8 @@ function analyze(engine: SchemaEngine, rootId: string, union: ErrorObject): Anal
 	}
 	const chosen = top.flatMap((result) => result.errors).map((error, index) => {
 		const mapped = { ...error, parentSchema: original(error.parentSchema), schema: original(error.schema) } as UnionError;
-		if (index === 0 && others.length) mapped.alternatives = summary(others);
+		// An inner union that already named its own other forms (a table cell inside a table row) is the more specific summary.
+		if (index === 0 && others.length) mapped.alternatives ??= summary(others);
 		return mapped;
 	});
 	return { union, span, replacement: chosen };

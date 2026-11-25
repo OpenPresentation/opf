@@ -8,6 +8,7 @@ import { chartOptionTarget } from './chart-options.js';
 import { CHART_REFERENCE_TYPES } from './chart-reference-types.js';
 import { formatVariableNumber } from './variables.js';
 import { localizeNumberText } from './numerals.js';
+import { tableRows } from './table.js';
 
 /** A scalar data cell (chart data, dataset rows). */
 export type DataCellValue = string | number | boolean | null;
@@ -845,7 +846,8 @@ export function resolveTableData(table: unknown, document?: unknown, options: Da
     return { columns: selection.columns as DataTableHeader[], rows, formats: selection.formats, dataset: id, diagnostics };
   }
   const columns = Array.isArray(table.columns) ? (table.columns as DataTableHeader[]) : undefined;
-  const rows = Array.isArray(table.rows) ? (table.rows.filter(Array.isArray) as DataTableCell[][]) : [];
+  const bodyRows = tableRows(table, base);
+  const rows = bodyRows.map(row => row.cells as DataTableCell[]);
   const width = Math.max(columns?.length ?? 0, ...rows.map(row => row.length), 0);
   const formats: (string | undefined)[] = Array.from({ length: width }, (_, index) => {
     const header = columns?.[index];
@@ -857,8 +859,8 @@ export function resolveTableData(table: unknown, document?: unknown, options: Da
     if (error) diagnostics.push({ code: 'number-format-invalid', severity: 'error', path: at(path, 'format'), message: error });
   };
   columns?.forEach((header, index) => { check(header, at(base, 'columns', index)); });
-  if (Array.isArray(table.rows)) table.rows.forEach((row: unknown, rowIndex: number) => {
-    if (Array.isArray(row)) row.forEach((cell, index) => { check(cell, at(base, 'rows', rowIndex, index)); });
+  bodyRows.forEach((row, rowIndex) => {
+    row.cells.forEach((cell, index) => { check(cell, row.object ? at(base, 'rows', rowIndex, 'cells', index) : at(base, 'rows', rowIndex, index)); });
   });
   highlightDiagnostics(table, rows, base, diagnostics);
   return { ...(columns ? { columns } : {}), rows, formats, diagnostics };

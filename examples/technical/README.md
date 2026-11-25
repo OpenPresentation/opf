@@ -41,3 +41,5 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 The exhaustive [layout sampler](./layout-sampler.opf.json) has all 38 default layouts and 14 dynamic compositions (52 slides). Regenerate its referenced current records and append new layouts with `node scripts/update-layout-sampler.mjs`; existing slide identities, words and ordinals remain unchanged.
 
 When reviewing dense grouped examples, use the default whole-block continuation path from convert, or call continueOverfull first for slide-by-slide rendering. It retains settled sizes for comparable automatic body roles before choosing the page count; explicit rich sizes and author minima/maxima keep their own constraints. Later pages cap actual arrangement text to the first page. No fixed minimum is added. Inspect the returned pages and continued/source mappings; an indivisible unfit block preserves the original fit refusal and content. Use explicit paginate for splits inside a block.
+
+- `item-ids.opf.json`: ids on list items, bullets, timeline events and table rows (a row is an array or `{ "id", "cells" }`), one namespace with slide and block ids; every id is optional.

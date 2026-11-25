@@ -1160,6 +1160,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
+| `id` | no | `string` | Optional stable identifier for this timeline event, unique among every slide, payload, overlay, item, bullet, event and table-row id in the document (one namespace). An opaque string: readers never parse it. Use it wh... |
 | `when` | no | `string` | Event time, date, or sequence label. Use ISO-like values when possible, but human labels are allowed for quarters, eras, and relative milestones. |
 | `duration` | no | `number` | Relative length of this consecutive event period. Use the same unit for every event (for example 1 for Week 1 and 4 for Weeks 2 5). Omitted means one unit. When any event supplies duration, both engines draw proportio... |
 | `what` | yes | `string` | Short event label. |
@@ -1350,7 +1351,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `columns` | no | `array<oneOf:string / array<ref:TextRun> / ref:StyledTableCell / ref:DataColumn / null>` | Optional column labels. Labels may be strings, rich runs, styled cell objects or DataColumn objects ({ "name", "format" }). A header's 'format' (DataColumn or StyledTableCell) is the column's number format; a body cel... |
-| `rows` | no | `array<array<ref:TableCell>>` | Two-dimensional table row data; each row aligns by index with columns when columns are supplied. |
+| `rows` | no | `array<ref:TableRow>` | Two-dimensional table row data; each row aligns by index with columns when columns are supplied. A row is an array of cells, or an object { "id", "cells" } when it needs an id; both forms may mix in one table. `tableR... |
 | `dataset` | no | `ref:DatasetId` | Id of a top-level dataset that supplies this table's headers, rows and column formats. Excludes 'rows' and 'columns'. An unknown id is a 'dataset-unknown' error. |
 | `fields` | no | `ref:DatasetFields` | Dataset tables only: the dataset columns to show, by name and in order. Absent shows every column. An unknown name is a 'dataset-field-unknown' error. |
 | `alt` | no | `string` | Text alternative for the table: what it shows (the point and the key numbers), not 'a table'. The preview exposes it as the table's accessible name (role group with aria-label; the cells stay readable) and the PowerPo... |
@@ -1470,6 +1471,15 @@ _No named properties._
 - Type: `oneOf:string / number / boolean / null`
 - Required fields: none
 - Purpose: A cell in inline chart data.
+
+_No named properties._
+
+
+### TableRow
+
+- Type: `oneOf:array<ref:TableCell> / object`
+- Required fields: none
+- Purpose: One body row of an inline table: an array of cells, or an object that adds an optional id. Position (the cell's index in 'cells' or in the array) is its column either way.
 
 _No named properties._
 

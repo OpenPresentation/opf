@@ -4024,6 +4024,12 @@
       "required": ["what"],
       "additionalProperties": false,
       "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional stable identifier for this timeline event, unique among every slide, payload, overlay, item, bullet, event and table-row id in the document (one namespace). An opaque string: readers never parse it. Use it when another system must address the timeline event across edits (a comment anchor, an `@id` patch token, a merge). Edit, move and reorder keep it; a copy inside the document gets a new one. A document without ids is valid and is addressed by index.",
+          "examples": ["ev-launch", "e-4"]
+        },
         "when": {
           "type": "string",
           "description": "Event time, date, or sequence label. Use ISO-like values when possible, but human labels are allowed for quarters, eras, and relative milestones.",
@@ -4067,7 +4073,13 @@
           "required": ["text"],
           "additionalProperties": false,
           "properties": {
-            "text": {
+            "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional stable identifier for this list item, unique among every slide, payload, overlay, item, bullet, event and table-row id in the document (one namespace). An opaque string: readers never parse it. Use it when another system must address the list item across edits (a comment anchor, an `@id` patch token, a merge). Edit, move and reorder keep it; a copy inside the document gets a new one. A document without ids is valid and is addressed by index.",
+          "examples": ["it-7f3k", "pilot"]
+        },
+        "text": {
               "oneOf": [
                 { "type": "string" },
                 {
@@ -4142,7 +4154,13 @@
           "required": ["text"],
           "additionalProperties": false,
           "properties": {
-            "text": {
+            "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional stable identifier for this bullet, unique among every slide, payload, overlay, item, bullet, event and table-row id in the document (one namespace). An opaque string: readers never parse it. Use it when another system must address the bullet across edits (a comment anchor, an `@id` patch token, a merge). Edit, move and reorder keep it; a copy inside the document gets a new one. A document without ids is valid and is addressed by index.",
+          "examples": ["b-2m9q", "point-1"]
+        },
+        "text": {
               "oneOf": [
                 { "type": "string" },
                 {
@@ -4617,13 +4635,8 @@
         },
         "rows": {
           "type": "array",
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/$defs/TableCell"
-            }
-          },
-          "description": "Two-dimensional table row data; each row aligns by index with columns when columns are supplied.",
+          "items": { "$ref": "#/$defs/TableRow" },
+          "description": "Two-dimensional table row data; each row aligns by index with columns when columns are supplied. A row is an array of cells, or an object { \"id\", \"cells\" } when it needs an id; both forms may mix in one table. `tableRows` in the core package returns every row in one form.",
           "examples": [
             [
               [
@@ -4886,6 +4899,33 @@
         { "type": "null" }
       ],
       "description": "A cell in inline chart data."
+    },
+    "TableRow": {
+      "description": "One body row of an inline table: an array of cells, or an object that adds an optional id. Position (the cell's index in 'cells' or in the array) is its column either way.",
+      "oneOf": [
+        {
+          "type": "array",
+          "items": { "$ref": "#/$defs/TableCell" }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["cells"],
+          "properties": {
+            "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional stable identifier for this table row, unique among every slide, payload, overlay, item, bullet, event and table-row id in the document (one namespace). An opaque string: readers never parse it. Use it when another system must address the table row across edits (a comment anchor, an `@id` patch token, a merge). Edit, move and reorder keep it; a copy inside the document gets a new one. A document without ids is valid and is addressed by index.",
+          "examples": ["r-emea", "total"]
+        },
+            "cells": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/TableCell" },
+              "description": "The row's cells, aligned by index with 'columns' exactly like the array form."
+            }
+          }
+        }
+      ]
     },
     "TableCell": {
       "oneOf": [

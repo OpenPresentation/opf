@@ -1,11 +1,11 @@
 // Ids and patch scope (CE-04, CE-05).
 //
 // - `assignIds` fills the missing `id` of slides and content payloads (blocks, groups, regions) so edits can be addressed to
-//   them across reordering; the id-addressed pointer (`/slides/@intro/blocks/@kpi`) is `resolveIdPointer` / `toIdPointer` in ./patch.ts.
+//   them across reordering, and with `items: true` of list items, bullets, timeline events and table rows too (FR-02); the id-addressed pointer (`/slides/@intro/blocks/@kpi`) is `resolveIdPointer` / `toIdPointer` in ./patch.ts.
 // - `touches` reports what a patch reads and writes: the pointers, in index and id form, the ids of the slides and payloads
 //   involved, and the part of the document each location belongs to. Hosts build conflict detection and permission checks on it.
 // - `documentHash` is the content hash a patch application can require (`expectHash`).
-import { isRecord, visitContentPayloads } from "./content-walk.js";
+import { entryId, isRecord, type ItemKind, visitContentPayloads, visitPayloadItems } from "./content-walk.js";
 import type { JsonPatchOperation } from "./generated/types/finding.js";
 import {
   applyPatch,
@@ -43,8 +43,11 @@ export class OPFIdError extends Error {
 }
 
 export interface AssignIdsContext {
-  /** `slide` for an entry of `slides`; `block` for a content payload (a block or a nested group). */
-  kind: "slide" | "block";
+  /**
+   * `slide` for an entry of `slides`; `block` for a content payload (a block or a nested group); with `items: true` also `item` (a list
+   * item), `bullet`, `event` (a timeline event) and `row` (an inline table row).
+   */
+  kind: "slide" | "block" | ItemKind;
   /** The JSON Pointer of the node, in index form (`/slides/2/blocks/0`). */
   pointer: string;
   /** The node, read only. */
@@ -60,12 +63,18 @@ export interface AssignIdsOptions {
    * result is to be deterministic. The default makes `slide-1`, `slide-2`, ... and `block-1`, `block-2`, ... skipping ids in use.
    */
   generate?: (context: AssignIdsContext) => string;
+  /**
+   * Also give an id to every list item, bullet, timeline event and inline table row (FR-02). Off by default: a deck nobody co-edits keeps
+   * its short forms. When on, a string or run-array item becomes `{ "id", "text" }` and an array row becomes `{ "id", "cells" }`, since only
+   * the object forms can carry an id. The default ids are `item-1`, `bullet-1`, `event-1` and `row-1`. Dataset and chart data rows never get ids.
+   */
+  items?: boolean;
 }
 
 export interface AssignedId {
   /** The JSON Pointer of the node that got the id, in index form. */
   pointer: string;
-  kind: "slide" | "block";
+  kind: "slide" | "block" | ItemKind;
   id: string;
 }
 
@@ -83,23 +92,26 @@ export interface AssignIdsResult {
  * use, so a valid document stays valid. The input is not changed; `patch` is the same change as operations, for an editor to apply as one
  * undoable edit. The id is added as the node's last member (`format` puts it in canonical order).
  *
- * Slides and payloads share one id namespace in the schema; list items, table rows and runs have no id.
+ * Slides, payloads, overlays, list items, bullets, timeline events and table rows share ONE id namespace in the schema (a duplicate is a
+ * validation error); runs, dataset rows and chart data rows have no id.
  */
 export function assignIds(document: unknown, options: AssignIdsOptions = {}): AssignIdsResult {
   if (!isRecord(document)) throw new OPFIdError("invalid-document", "assignIds expects a presentation object.");
   const taken = new Set<string>();
   const slides = Array.isArray(document.slides) ? document.slides : [];
   const known = (node: Record<string, unknown>) => { if (typeof node.id === "string") taken.add(node.id); };
+  const knownEntries = (node: Record<string, unknown>, path: string) => visitPayloadItems(node, path, (_kind, value) => { if (isRecord(value) && typeof value.id === "string") taken.add(value.id); });
   slides.forEach((slide, index) => {
     if (!isRecord(slide)) return;
     known(slide);
-    visitContentPayloads(slide, `/slides/${index}`, known);
+    knownEntries(slide, `/slides/${index}`);
+    visitContentPayloads(slide, `/slides/${index}`, (payload, path) => { known(payload); knownEntries(payload, path); });
   });
 
-  const counters = { slide: 0, block: 0 };
-  const byDefault = (kind: "slide" | "block"): string => {
+  const counters: Record<string, number> = { slide: 0, block: 0, item: 0, bullet: 0, event: 0, row: 0 };
+  const byDefault = (kind: AssignIdsContext["kind"]): string => {
     let id: string;
-    do { counters[kind] += 1; id = `${kind}-${counters[kind]}`; } while (taken.has(id));
+    do { counters[kind] = (counters[kind] ?? 0) + 1; id = `${kind}-${counters[kind]}`; } while (taken.has(id));
     return id;
   };
   const idOf = new Map<string, string>();
@@ -113,26 +125,49 @@ export function assignIds(document: unknown, options: AssignIdsOptions = {}): As
 
   const patch: JsonPatchOperation[] = [];
   const assigned: AssignedId[] = [];
-  const visit = (kind: "slide" | "block", node: Record<string, unknown>, pointer: string): void => {
-    if (typeof node.id === "string") { idOf.set(pointer, node.id); return; }
-    if (Object.hasOwn(node, "id")) return;
+  const mint = (kind: AssignIdsContext["kind"], node: Record<string, unknown>, pointer: string): string => {
     let id: string;
     if (options.generate) {
       const parentId = parentIdOf(pointer);
       id = options.generate({ kind, pointer, node, ...(parentId !== undefined ? { parentId } : {}) });
       if (typeof id !== "string" || id === "") throw new OPFIdError("invalid-id", `generate returned ${JSON.stringify(id)} for ${pointer}; an id is a non-empty string.`, pointer);
-      if (taken.has(id)) throw new OPFIdError("duplicate-id", `generate returned '${id}' for ${pointer}, which another slide or block already has.`, pointer);
+      if (taken.has(id)) throw new OPFIdError("duplicate-id", `generate returned '${id}' for ${pointer}, which another slide, block, item, event or row already has.`, pointer);
     } else id = byDefault(kind);
     taken.add(id);
     idOf.set(pointer, id);
-    patch.push({ op: "add", path: `${pointer}/id`, value: id });
     assigned.push({ pointer, kind, id });
+    return id;
+  };
+  const visit = (kind: "slide" | "block", node: Record<string, unknown>, pointer: string): void => {
+    if (typeof node.id === "string") { idOf.set(pointer, node.id); return; }
+    if (Object.hasOwn(node, "id")) return;
+    patch.push({ op: "add", path: `${pointer}/id`, value: mint(kind, node, pointer) });
+  };
+  // An entry that can carry an id: an object takes it as a member; a string, a run array or an array row is rewritten as the object form.
+  const visitEntries = (payload: Record<string, unknown>, path: string): void => {
+    if (!options.items) return;
+    visitPayloadItems(payload, path, (kind, value, pointer) => {
+      if (isRecord(value)) {
+        const id = entryId(value);
+        if (id !== undefined) { idOf.set(pointer, id); return; }
+        if (Object.hasOwn(value, "id")) return;
+        patch.push({ op: "add", path: `${pointer}/id`, value: mint(kind, value, pointer) });
+        return;
+      }
+      if (kind === "row") {
+        if (!Array.isArray(value)) return;
+        patch.push({ op: "replace", path: pointer, value: { id: mint(kind, { cells: value }, pointer), cells: value } });
+      } else if (typeof value === "string" || Array.isArray(value)) {
+        patch.push({ op: "replace", path: pointer, value: { id: mint(kind, { text: value }, pointer), text: value } });
+      }
+    });
   };
   slides.forEach((slide, index) => {
     if (!isRecord(slide)) return;
     const pointer = `/slides/${index}`;
     visit("slide", slide, pointer);
-    visitContentPayloads(slide, pointer, (payload, path) => visit("block", payload, path));
+    visitEntries(slide, pointer);
+    visitContentPayloads(slide, pointer, (payload, path) => { visit("block", payload, path); visitEntries(payload, path); });
   });
   return { document: applyPatch(document, patch), patch, assigned };
 }
@@ -220,7 +255,8 @@ function locate(tokens: readonly string[], document: unknown, readOnlyOrReplace:
   if (tokens[2] === "design") return out("design", "other");
   let kind: PatchScopeKind = "slide", shape: Shape = "other";
   let node = slide.node;
-  for (let i = 2; i < tokens.length;) {
+  let i = 2;
+  while (i < tokens.length) {
     const token = tokens[i]!;
     if (token === "blocks") {
       kind = "block"; i += 1;
@@ -231,6 +267,22 @@ function locate(tokens: readonly string[], document: unknown, readOnlyOrReplace:
       shape = i === tokens.length ? "payload" : "other";
     } else break;
   }
+  // FR-02: an id of a list item, bullet, timeline event or table row on the way to the location is one of its ids too.
+  if (shape === "other" && node) {
+    const name = tokens[i];
+    let list: unknown, at = i + 1;
+    if (name === "items" || name === "bullets") list = node[name];
+    else if (name === "table" && tokens[i + 1] === "rows" && isRecord(node.table)) { list = node.table.rows; at = i + 2; }
+    else if (name === "timeline") {
+      const timeline = node.timeline;
+      if (Array.isArray(timeline)) list = timeline;
+      else if (isRecord(timeline) && tokens[i + 1] === "events") { list = timeline.events; at = i + 2; }
+    }
+    if (list !== undefined && tokens[at] !== undefined) {
+      const entry = elementAt(list, tokens[at]!);
+      if (entry.id !== undefined) ids.push(entry.id);
+    }
+  }
   return out(kind, shape);
 }
 
@@ -239,7 +291,9 @@ function idsWithin(shape: Shape, value: unknown, into: { ids: string[]; slideIds
   const payload = (node: unknown, slide: boolean): void => {
     if (!isRecord(node)) return;
     if (typeof node.id === "string") { into.ids.push(node.id); if (slide) into.slideIds.push(node.id); }
-    visitContentPayloads(node, "", (child) => { if (typeof child.id === "string") into.ids.push(child.id); });
+    const entries = (owner: Record<string, unknown>): void => visitPayloadItems(owner, "", (_kind, entry) => { const id = entryId(entry); if (id !== undefined) into.ids.push(id); });
+    entries(node);
+    visitContentPayloads(node, "", (child) => { if (typeof child.id === "string") into.ids.push(child.id); entries(child); });
   };
   if (shape === "document") { if (isRecord(value) && Array.isArray(value.slides)) for (const slide of value.slides) payload(slide, true); }
   else if (shape === "slides") { if (Array.isArray(value)) for (const slide of value) payload(slide, true); }
