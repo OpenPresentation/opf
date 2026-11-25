@@ -215,3 +215,22 @@ test('translations round-trip through Markdown and YAML, a text, a list and a da
   assert.deepEqual(fromYaml(toYaml(deck).yaml, { validate: false }).presentation, deck);
   assert.deepEqual(fromMarkdown(toMarkdown(deck).markdown, { validate: false }).presentation, deck);
 });
+
+test('a deck-level header and footer are drawn in the language of each slide they appear on', () => {
+  const deck = bilingual();
+  deck.design = { footer: { start: { text: '{{cta}} {{event-date|yyyy}}' }, end: { text: '{{slide.number}}' } } };
+  deck.slides.push({ language: 'de-AT', title: 'x' }, { language: 'fr', design: { footer: false }, title: 'y' }, { language: 'fr', design: { footer: { start: { text: 'own {{cta}}' } } }, title: 'z' });
+  const result = drawn(deck);
+  // The deck footer stays as it is for the deck's language, and a slide in another language gets the same footer in its own.
+  assert.equal(result.design.footer.start.text, 'Demo buchen 2026');
+  assert.equal(result.slides[0].design, undefined);
+  assert.equal(result.slides[1].design.footer.start.text, 'Réserver une démo 2026');
+  assert.equal(result.slides[1].design.footer.end.text, '{{slide.number}}');
+  assert.equal(result.slides[2].design, undefined, 'de-AT has the deck language');
+  assert.equal(result.slides[3].design.footer, false);
+  assert.equal(result.slides[4].design.footer.start.text, 'own Réserver une démo');
+  // A deck whose slides all draw in the deck's language, or whose footer has no translated variable, is unchanged.
+  const plain = bilingual();
+  plain.design = { footer: { start: { text: 'Hello' } } };
+  assert.equal(drawn(plain).slides[1].design, undefined);
+});

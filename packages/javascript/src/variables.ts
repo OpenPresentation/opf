@@ -1119,6 +1119,42 @@ function slideSectionDiagnostics(presentation: Record<string, unknown>, uses: Va
   return out;
 }
 
+/**
+ * FR-10: the deck's header and footer are drawn on every slide, so a variable in them takes the language of the slide it is drawn on, not
+ * only the deck's. The deck-level furniture is resolved once, in the deck's language; a slide that declares another language, whose design
+ * does not set that header or footer itself, gets a resolved copy of it (the same furniture, in that slide's language). Only furniture that
+ * uses a variable with translations or a date, on a deck where a slide's language differs from the deck's, is copied. Undefined when no
+ * slide changes.
+ */
+function slideFurniture(presentation: Record<string, unknown>, walked: Record<string, unknown>, context: Context): unknown[] | undefined {
+  const design = presentation.design;
+  if (!isRecord(design) || !Array.isArray(walked.slides) || context.dependencyOnly) return undefined;
+  const same = (a: string | undefined, b: string | undefined) => (a ?? "").toLowerCase() === (b ?? "").toLowerCase();
+  const deckLanguage = languageInEffect(presentation);
+  const differing = walked.slides.flatMap((_slide, index) => {
+    const language = languageInEffect(presentation, index);
+    return language !== undefined && !same(language, deckLanguage) ? [index] : [];
+  });
+  if (!differing.length) return undefined;
+  let slides: unknown[] | undefined;
+  for (const kind of ["header", "footer"] as const) {
+    const raw = design[kind];
+    if (!isRecord(raw)) continue;
+    const dependent = [...subtreeVariables(raw, `/design/${kind}`, context).keys()].some((id) => {
+      const declaration = context.effective.get(id)?.declaration;
+      return declaration !== undefined && (declaration.kind === "date" || declaration.translations !== undefined);
+    });
+    if (!dependent) continue;
+    for (const index of differing) {
+      const slide = (slides ?? walked.slides)[index];
+      if (!isRecord(slide) || (isRecord(slide.design) && slide.design[kind] !== undefined)) continue;
+      slides ??= [...walked.slides];
+      slides[index] = { ...slide, design: { ...(isRecord(slide.design) ? slide.design : {}), [kind]: walk(clone(raw), `/slides/${index}/design/${kind}`, false, context) } };
+    }
+  }
+  return slides;
+}
+
 /** `variable-translation-unused`: a translation that no slide (and not the deck) selects, because its language is declared nowhere. */
 function translationsUnused(presentation: Record<string, unknown>, declarations: readonly VariableDeclaration[]): VariableDiagnostic[] {
   if (!declarations.some((declaration) => declaration.translations)) return [];
@@ -1142,6 +1178,10 @@ function finish(presentation: Record<string, unknown>, built: Plan, options: Res
   context.unescape = complete && context.content && !context.shape;
   const walked = context.content ? (walk(presentation, "", false, context) as Record<string, unknown>) : presentation;
   const result: Record<string, unknown> = { ...walked };
+  if (context.content) {
+    const slides = slideFurniture(presentation, walked, context);
+    if (slides) result.slides = slides;
+  }
   const variables = rebuildVariables(presentation, built, context.shape);
   if (variables) result.variables = variables;
   else delete result.variables;
