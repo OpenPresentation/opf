@@ -8,6 +8,7 @@
 import { createDesignControls } from "./design-controls.js";
 import { setActionState } from "./content-controls.js";
 import { createChartOptionsPanel } from "./chart-options-panel.js";
+import { createTableColorScalePanel } from "./table-color-scale-panel.js";
 import { createNumberingPanel } from "./numbering-panel.js";
 import { buildLayoutDiagram } from "./layout-diagram.js";
 import { listSwitchOptions } from "./switches.js";
@@ -67,7 +68,7 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
   const live = el("p", `${p}-design-live`, { role: "status", "aria-live": "polite" });
   container.append(head, notice, own, shared, advanced, live);
   const panels = new Map();
-  let chartPanel = null, numberingPanel = null, inspector = null, inspectorPath = null;
+  let chartPanel = null, scalePanel = null, numberingPanel = null, inspector = null, inspectorPath = null;
   let mode = null;
   let lastKey = null;
 
@@ -304,6 +305,11 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
       own.append(chartPanel.element.parentElement ?? chartPanel.element);
       chartPanel.refresh();
     }
+    if (next === "table") {
+      scalePanel ??= createTableColorScalePanel(el("div", `${p}-design-scale`), { editor: ui, getSelectedPath: selectedPath, onStatus: (message) => studio.status(message) });
+      own.append(scalePanel.element.parentElement ?? scalePanel.element);
+      scalePanel.refresh();
+    }
     if (next === "list") {
       numberingPanel ??= createNumberingPanel(el("div", `${p}-design-numbering`), { editor: ui, getTarget: selectedPath, getSlideIndex: () => studio.slideIndex, onStatus: (message) => studio.status(message) });
       own.append(numberingPanel.element.parentElement ?? numberingPanel.element);
@@ -349,6 +355,7 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
     destroy() {
       for (const entry of panels.values()) entry.controls.destroy();
       chartPanel?.destroy();
+      scalePanel?.destroy();
       numberingPanel?.destroy();
       inspector?.destroy();
       container.replaceChildren();

@@ -4,7 +4,7 @@
  * draws the same colors. Only scheme color names are allowed; the ends are resolved through the effective color scheme by the caller.
  * No renderer, fonts, DOM or network dependencies.
  */
-import { colorContrast } from './color.js';
+import { textColorForFill } from './color.js';
 import { mixOklab } from './oklab.js';
 import { tableRows } from './table.js';
 
@@ -19,14 +19,12 @@ export interface TableColorScaleSpec {
   center?: number; min?: number; max?: number;
 }
 
-/** What the caller supplies: how a scheme name resolves in the effective color scheme, and the scheme's text and background colors. */
+/** What the caller supplies: how a scheme name resolves in the effective color scheme, and the scheme's text color. */
 export interface TableColorScaleColors {
   /** The color of a scheme name as `#RRGGBB`. */
   resolve: (name: SchemeColorName) => string;
-  /** The scheme's `text` color: the cell text on a fill it reads on. */
+  /** The scheme's `text` color: the cell text on a fill it reads on (4.5:1); on any other fill black or white. */
   text: string;
-  /** The scheme's `background` color: the cell text on a fill `text` does not read on. */
-  background: string;
 }
 
 /** One shaded cell: the fill (`#RRGGBB`) and the text color that reads on it. `row` is the body row (0-based, after the header). */
@@ -119,10 +117,11 @@ function shade(value: number, range: TableColorScaleRange, ends: { from: string;
 }
 
 /**
- * The text color for a cell on `fill`: the scheme's `text` or `background` color, whichever has the higher contrast on it. A tie takes `text`.
+ * The text color for a cell on `fill`: the scheme's `text` color when it reaches 4.5:1 on the fill, else black or white (core `textColorForFill`,
+ * the rule every engine already applies to default cell text on a filled cell).
  */
-export function tableColorScaleText(fill: string, colors: Pick<TableColorScaleColors, 'text' | 'background'>): string {
-  return (colorContrast(colors.background, fill) ?? 0) > (colorContrast(colors.text, fill) ?? 0) ? colors.background : colors.text;
+export function tableColorScaleText(fill: string, colors: Pick<TableColorScaleColors, 'text'>): string {
+  return textColorForFill(fill, colors.text);
 }
 
 /**

@@ -247,6 +247,14 @@
       "types": "./dist/chart-options-panel.d.ts",
       "default": "./dist/chart-options-panel.js"
     },
+    "./table-color-scale": {
+      "types": "./dist/table-color-scale.d.ts",
+      "default": "./dist/table-color-scale.js"
+    },
+    "./table-color-scale-panel": {
+      "types": "./dist/table-color-scale-panel.d.ts",
+      "default": "./dist/table-color-scale-panel.js"
+    },
     "./numbering": {
       "types": "./dist/numbering.d.ts",
       "default": "./dist/numbering.js"

@@ -1,0 +1,13 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+import { gallery } from '@openpresentation/gallery';
+import { toPptx, fromPptx } from '../dist/index.js';
+const file = process.argv[2], out = process.argv[3];
+const deck = JSON.parse(readFileSync(file, 'utf8'));
+const diagnostics = [];
+const bytes = await toPptx(deck, { catalogs: [gallery], onDiagnostic: d => diagnostics.push(d) });
+writeFileSync(out, bytes);
+console.log('export diagnostics', diagnostics.map(d => d.code));
+const back = [];
+const imported = await fromPptx(bytes, { catalogs: [gallery], onDiagnostic: d => back.push(d) });
+console.log('import diagnostics', back.map(d => d.code + ': ' + d.message.slice(0, 120)));
+imported.slides.forEach((s, i) => console.log(i, JSON.stringify(s.table ?? s.blocks?.[0]?.table).slice(0, 600)));

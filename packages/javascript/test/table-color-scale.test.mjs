@@ -13,7 +13,7 @@ const close = (actual, expected, epsilon, message) => assert.ok(Math.abs(actual 
 
 // A fixed palette: the colors a test scale resolves against.
 const palette = { surface: '#FFFFFF', primary: '#0000FF', accent1: '#1B9E4B', accent2: '#C0392B', text: '#111111', background: '#FFFFFF' };
-const colors = { resolve: (name) => palette[name] ?? '#808080', text: palette.text, background: palette.background };
+const colors = { resolve: (name) => palette[name] ?? '#808080', text: palette.text };
 const shades = (table) => Object.fromEntries(resolveTableColorScale(table, colors).cells.map((cell) => [`${cell.row}:${cell.column}`, cell.fill]));
 
 describe('OKLab (FR-07)', () => {
@@ -125,9 +125,10 @@ describe('the computed fills (FR-07)', () => {
     assert.deepEqual(fills, { '0:1': '#FFFFFF', '1:1': '#0000FF', '2:1': mixOklab('#FFFFFF', '#0000FF', 0.5) });
   });
 
-  test('the text color is the scheme text or background color, whichever contrasts more on the fill', () => {
+  test('the text color is the scheme text color where it reads (4.5:1), else black or white', () => {
     assert.equal(tableColorScaleText('#FFFFFF', colors), '#111111');
     assert.equal(tableColorScaleText('#0000FF', colors), '#FFFFFF');
+    assert.equal(tableColorScaleText('#306DFF', colors), '#000000', 'neither the scheme text nor white reads: black');
     // The ends are the contract (4.5:1); a mid-tone mix between two ends can have no text color that reaches it.
     const ends = resolveTableColorScale({ columns: ['K', 'V'], rows: [['a', 1], ['b', 5]], colorScale: { columns: ['V'] } }, colors).cells;
     for (const cell of ends) assert.ok(colorContrast(cell.text, cell.fill) >= 4.5, `${cell.fill} ${cell.text}`);
@@ -243,7 +244,7 @@ describe('every gallery color scheme (FR-07)', () => {
       const deck = { design: { theme: 'classic', colorScheme, ...(variant ? { variant } : {}) }, slides: [{ title: 'T', text: 'x' }] };
       const { resolved } = resolveSlideContext(deck, 0, { catalogs: [gallery] });
       const resolve = (name) => resolveColorRef(name, { colorScheme: resolved.colorScheme, roles: resolved.roles, variables: {}, fallback: '#000000' }).slice(0, 7);
-      const scheme = { resolve, text: resolved.roles.text.slice(0, 7), background: resolved.roles.background.slice(0, 7) };
+      const scheme = { resolve, text: resolved.roles.text.slice(0, 7) };
       for (const [name, scale] of [['surface to primary', { columns: ['V'] }], ['accent2 / surface / accent1', { columns: ['V'], from: 'accent2', mid: 'surface', to: 'accent1', center: 0 }]]) {
         const result = resolveTableColorScale({ columns: ['K', 'V'], rows: [['lowest', -1], ['highest', 1]], colorScale: scale }, scheme);
         assert.equal(result.cells[0].fill, resolve(scale.from ?? 'surface'), 'the lowest value is the from color as the scheme resolves it');
