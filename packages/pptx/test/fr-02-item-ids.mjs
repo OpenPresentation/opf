@@ -152,3 +152,18 @@ test('alignment: equal entries anchor, an equal gap pairs by position, an unequa
   assert.deepEqual(alignEntries(['a', 'b', 'c'], ['x', 'y', 'z', 'q']), [-1, -1, -1, -1], 'unrelated and a different count');
   assert.deepEqual(alignEntries(['a', 'b', 'c'], ['c', 'b', 'a']).filter(index => index >= 0).length, 1, 'a reorder keeps one anchor');
 });
+
+// A 0.36.0 importer reads a slide record it did not write: its validateSlide checks the keys it knows and has no allowlist for the others (the
+// document record's supplement section is the one that throws on an unknown key, and entryIds is not in it), and its restore code only reads the
+// keys it knows. So entryIds is ignored and everything else restores. This pins the placement that makes that true.
+test('entryIds is a top-level key of the slide record, outside supplement and native, so a 0.36.0 importer ignores it', async () => {
+  // The keys 0.36.0 wrote for the same slide without ids: the vocabulary an older importer knows.
+  const [plain] = slideTags(await exportDeck({name: 'D', slides: [{id: 's', title: 'T', items: ['x', 'y']}]}));
+  const known036 = new Set(Object.keys(plain));
+  const [record] = slideTags(await exportDeck({name: 'D', slides: [{id: 's', title: 'T', items: [{id: 'a', text: 'x'}, 'y']}]}));
+  assert.ok(record.entryIds, 'the record stores the ids');
+  assert.equal(record.supplement?.metadata?.entryIds, undefined);
+  assert.equal(record.native.entryIds, undefined);
+  const extra = Object.keys(record).filter(key => !known036.has(key));
+  assert.deepEqual(extra, ['entryIds'], 'entryIds is the only key a 0.36.0 importer has not seen');
+});
