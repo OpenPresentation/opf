@@ -48,9 +48,9 @@ export function collectSlideLinks(value: unknown, base = ''): Array<{ pointer: s
 }
 
 /** Slide links that name no slide of the document, as issues (reported as `opf/slide-link-unknown`). */
-export function slideLinkIssues(value: unknown): ValidationIssue[] {
+export function slideLinkIssues(value: unknown, otherSlides: readonly string[] = []): ValidationIssue[] {
   if (!isRecord(value) || !Array.isArray(value.slides)) return [];
-  const ids = new Set<string>();
+  const ids = new Set<string>(otherSlides);
   for (const slide of value.slides) if (isRecord(slide) && typeof slide.id === 'string') ids.add(slide.id);
   const issues: ValidationIssue[] = [];
   value.slides.forEach((slide, index) => {

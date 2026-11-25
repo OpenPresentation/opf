@@ -3,6 +3,7 @@ import { describe, test } from "node:test";
 
 import { assignIds, collectSlideLinks, slideLink, slideLinkId } from "../dist/index.js";
 import { fromMarkdown, toMarkdown } from "../dist/markdown.js";
+import { continueOverfull, paginate, paginateSlide } from "../dist/pagination.js";
 import { validate } from "../dist/validator.js";
 import { fromYaml, toYaml } from "../dist/yaml.js";
 
@@ -92,5 +93,20 @@ describe("FR-03 slide links", () => {
     const read = fromYaml(written.yaml);
     assert.equal(read.valid, true);
     assert.deepEqual(read.presentation, deck());
+  });
+
+  test("a slide checked on its own is judged against the rest of its deck, and not at all without one", () => {
+    const document = deck();
+    // validate: a part of a deck can say its slide links are the enclosing document's check, or list the other slides.
+    const alone = { slides: [document.slides[0]] };
+    assert.ok(slideLinkFindings(alone).length > 0, "alone, the links name slides the document does not have");
+    assert.equal(validate(alone, { only: ["format"], slideLinks: false }).findings.filter((finding) => finding.ruleId === "opf/slide-link-unknown").length, 0);
+    assert.equal(validate(alone, { only: ["format"], slideLinks: ["pricing"] }).findings.filter((finding) => finding.ruleId === "opf/slide-link-unknown").length, 0);
+    assert.ok(validate(alone, { only: ["format"], slideLinks: ["other"] }).findings.some((finding) => finding.ruleId === "opf/slide-link-unknown"));
+    // pagination and continuation check one slide at a time: they must not reject links to the deck's other slides.
+    assert.equal(continueOverfull(document, {}).presentation.slides.length, 2);
+    assert.equal(paginate(document, {}).presentation.slides.length, 2);
+    assert.doesNotThrow(() => paginateSlide(document.slides[0], { presentation: document }));
+    assert.doesNotThrow(() => paginateSlide(document.slides[0], {}), "with no deck given the links are not judged");
   });
 });

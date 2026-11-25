@@ -75,7 +75,8 @@ export function assertValidOutput(value: Obj | Obj[], as: "block" | "slide" | "s
   // An explicit empty references list is still a context: it must reject unknown citations.
   const datasets = isRecord(context.datasets) ? context.datasets : undefined;
   const referencesProvided = own(context, "references");
-  const report = validate({ ...(datasets ? { datasets } : {}), ...(referencesProvided ? { references: context.references } : {}), slides }, { only: ["format"] });
+  // FR-03: the slides here are a part of a deck, so a slide link in them is the enclosing document's check.
+  const report = validate({ ...(datasets ? { datasets } : {}), ...(referencesProvided ? { references: context.references } : {}), slides }, { only: ["format"], slideLinks: false });
   const errors = report.findings.filter((entry) => entry.severity === "error").filter((entry) =>
     (datasets || (entry.ruleId !== "opf/dataset-unknown" && entry.ruleId !== "opf/dataset-field-unknown")) &&
     (referencesProvided || entry.ruleId !== "opf/cite-unknown-reference"));
