@@ -10,14 +10,14 @@
       "connector": "xlsx",
       "src": "https://example.com/data/revenue.xlsx",
       "license": "CC-BY-4.0",
-      "refresh": "P1M"
+      "refreshEvery": "P1M"
     },
     "warehouse": {
       "title": "Finance warehouse",
       "connector": "postgres",
       "src": "postgres://warehouse.example.com/finance",
       "license": "Internal use only",
-      "refresh": "P1D",
+      "refreshEvery": "P1D",
       "extensions": {
         "com.example": {
           "pool": "reporting"
@@ -60,7 +60,7 @@
       "version": "r42",
       "sha256": "9f2c41b1d1b6e0a8a56e7c3d2f4b8a90c1e3d5f7a9b0c2d4e6f8a0b1c3d5e07a",
       "generator": {
-        "kind": "human",
+        "type": "human",
         "name": "Finance team"
       }
     },
@@ -87,7 +87,7 @@
       "query": "SELECT stage, COUNT(*) FROM deals GROUP BY 1",
       "retrieved": "2026-11-24T06:00:00Z",
       "generator": {
-        "kind": "model",
+        "type": "model",
         "name": "metricgen 2.1"
       }
     }

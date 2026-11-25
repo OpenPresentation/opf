@@ -24,9 +24,9 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { datasources: { warehouse: { src: "https://data.example.com/export.csv" } }, slides: [{ title: "Revenue", text: "Revenue grew." }] },
   ),
   "opf/dataset-stale": ex(
-    "Take the data from its data source again and update `retrieved`, or change the data source's `refresh` to how often the data really needs taking. Only a validation given a date (`asOf`) reports it.",
-    { datasources: { warehouse: { refresh: "P1D" } }, datasets: { sales: { datasource: "warehouse", retrieved: "2026-01-01", columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
-    { datasources: { warehouse: { refresh: "P1D" } }, datasets: { sales: { datasource: "warehouse", retrieved: "2026-11-30", columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
+    "Take the data from its data source again and update `retrieved`, or change the data source's `refreshEvery` to how often the data really needs taking. Only a validation given a date (`asOf`) reports it.",
+    { datasources: { warehouse: { refreshEvery: "P1D" } }, datasets: { sales: { datasource: "warehouse", retrieved: "2026-01-01", columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
+    { datasources: { warehouse: { refreshEvery: "P1D" } }, datasets: { sales: { datasource: "warehouse", retrieved: "2026-11-30", columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
   ),
   "opf/chart-mapping-adapted": ex(
     "Remove the mapping entry, or name a column the chart type can use. The entry is ignored.",

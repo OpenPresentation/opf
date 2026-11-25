@@ -12,12 +12,12 @@ export interface DatasetImportOptions {
    * already has). A string `datasource` is the id of an entry of the root `datasources` map. Engines never read, fetch or refresh it.
    */
   provenance?: {
-    datasource?: string | { title?: string; description?: string; connector?: string; src?: string; license?: string; refresh?: string; extensions?: Record<string, unknown> };
+    datasource?: string | { title?: string; description?: string; connector?: string; src?: string; license?: string; refreshEvery?: string; extensions?: Record<string, unknown> };
     query?: string;
     retrieved?: string;
     version?: string;
     sha256?: string;
-    generator?: { kind: "human" | "model"; name: string };
+    generator?: { type: "human" | "model"; name: string };
   };
 }
 export interface DatasetImport {

@@ -16,11 +16,11 @@ export interface DataSource {
   src?: string;
   license?: string;
   /** An ISO 8601 duration. No engine acts on it. */
-  refresh?: string;
+  refreshEvery?: string;
   extensions?: Record<string, unknown>;
 }
 /** Who produced the data: a person or a model, and which. */
-export interface DataGenerator { kind: 'human' | 'model'; name: string }
+export interface DataGenerator { type: 'human' | 'model'; name: string }
 /** What a dataset or inline chart data says about where it came from. */
 export interface DataProvenance {
   /** The id of an entry in the root `datasources` map (a string is always an id), or a data source written inline. */

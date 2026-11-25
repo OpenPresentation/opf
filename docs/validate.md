@@ -1155,7 +1155,7 @@ Default severity: **warning**. Cost: structure. A data source holds a credential
 
 Default severity: **warning**. Cost: structure. A dataset is older than its data source says it should be.
 
-**Why.** A data source may say how often it is meant to be taken again (`refresh`, an ISO 8601 duration). Given a date to check as of, a dataset whose `retrieved` is older than that is reported. Core has no clock, so without a date nothing is reported, and no engine takes the data again.
+**Why.** A data source may say how often it is meant to be taken again (`refreshEvery`, an ISO 8601 duration). Given a date to check as of, a dataset whose `retrieved` is older than that is reported. Core has no clock, so without a date nothing is reported, and no engine takes the data again.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

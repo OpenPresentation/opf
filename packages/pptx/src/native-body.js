@@ -101,6 +101,12 @@ function planOne(item, geometry, automatic, reject, textMeasurement, collectMeas
   if (item.frameBox) return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...item.box}, anchor: 'top', carded: true, wrap};
   // LH-48: core sets a lone block that fills too little of the body in the middle of its region; the placeholder anchors it there too.
   const centered = region && item.box.height < region.box.height - 1 && Math.abs(item.box.y + item.box.height / 2 - (region.box.y + region.box.height / 2)) < 1;
+  // opf#1481: core moves a block out of its region's box (a note follows its table a gap under the last row, LH-48): the placeholder is
+  // written where core drew the text, at the item's box anchored at the top, not at the region's box, which would put the note at the
+  // region's top. A block at the region's top (or its bottom, in a bottom-anchored region) or centered in it keeps the region's box.
+  const regionAnchor = region?.anchor ?? 'top';
+  const atRegionEdge = region && (regionAnchor === 'bottom' ? Math.abs(item.box.y + item.box.height - (region.box.y + region.box.height)) < 1 : Math.abs(item.box.y - region.box.y) < 1);
+  if (region && !centered && !atRegionEdge && regionAnchor !== 'middle') return {item, values, list, ...(numbering ? {numbering} : {}), region: region.name, box: {...item.box}, anchor: 'top', wrap};
   if (region) return {item, values, list, ...(numbering ? {numbering} : {}), region: region.name, box: {...region.box}, anchor: centered ? 'middle' : region.anchor ?? 'top', wrap};
   return {item, values, list, ...(numbering ? {numbering} : {}), region: 'Body', ...automaticPlacement(item, list, geometry, wrap), wrap};
 }

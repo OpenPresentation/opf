@@ -116,7 +116,7 @@ Validation:
 - an unknown field is a `dataset-field-unknown` error;
 - duplicate column names in a dataset, or in chart data that a `mapping` or `fields` addresses, are a `data-column-duplicate` error;
 - a dataset nothing references is the warning `opf/unused-dataset` (category `references`);
-- a string `datasource` that names no entry of `datasources` is a `datasource-unknown` error (on a dataset and on inline chart data); a credential in a data source's `src` is the warning `datasource-credentials`, and data older than its data source's `refresh` is the warning `dataset-stale` when the caller passes a date (see [Data sources](data-sources.md)).
+- a string `datasource` that names no entry of `datasources` is a `datasource-unknown` error (on a dataset and on inline chart data); a credential in a data source's `src` is the warning `datasource-credentials`, and data older than its data source's `refreshEvery` is the warning `dataset-stale` when the caller passes a date (see [Data sources](data-sources.md)).
 
 ### Series mapping
 
