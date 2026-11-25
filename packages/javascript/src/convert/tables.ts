@@ -1,6 +1,12 @@
 // Conversions that read or write a table: list, timeline, text and a set of metric blocks. Each returns the
 // new content field and records what it cannot carry. Internal module.
 import { type Json, type Loss, type Obj, type Run, hasFormatting, isRecord, plainOf, refuse, runsOf } from "./shared.js";
+import { rowCells, rowId } from "../table.js";
+
+// FR-02: list items, table rows and timeline events convert one to one, so an entry keeps its id across the conversion (the old block is
+// replaced, so the id stays unique). An entry without an id gets none: converting never mints one.
+const idOf = (entry: unknown): string | undefined => (isRecord(entry) && typeof entry.id === "string" && entry.id !== "" ? entry.id : undefined);
+const withId = <T extends Obj>(entry: T, id: string | undefined): T => (id === undefined ? entry : ({ id, ...entry } as T));
 
 export interface TableOptions {
   /** Timeline and metrics to table: write the column headings (default true). A table without headings cannot be read back by role. */
@@ -40,9 +46,11 @@ export const valuePlain = (value: Json): string => (Array.isArray(value) ? plain
 export const valueEmpty = (value: Json): boolean => valuePlain(value).trim() === "";
 
 /** Scan a table's cells: styled cells are reported, merged cells are refused unless `allowMerged`. */
-function readCells(table: Obj, loss: Loss, purpose: string, allowMerged = false): { columns: Json[] | undefined; rows: Json[][] } {
-  const rows = table?.rows;
-  if (!Array.isArray(rows) || rows.some((row) => !Array.isArray(row))) throw refuse("This table has no rows to convert.");
+function readCells(table: Obj, loss: Loss, purpose: string, allowMerged = false): { columns: Json[] | undefined; rows: Json[][]; ids: (string | undefined)[] } {
+  const source = table?.rows;
+  if (!Array.isArray(source) || source.some((row) => !Array.isArray(row) && !(isRecord(row) && Array.isArray(row.cells)))) throw refuse("This table has no rows to convert.");
+  const rows: Json[][] = source.map((row) => rowCells(row) as Json[]);
+  const ids = source.map((row) => rowId(row));
   const all = [...(Array.isArray(table.columns) ? [table.columns] : []), ...rows];
   for (const row of all) {
     for (const raw of row) {
@@ -55,7 +63,7 @@ function readCells(table: Obj, loss: Loss, purpose: string, allowMerged = false)
       if (cell.formatted) loss.note("number formats");
     }
   }
-  return { columns: Array.isArray(table.columns) ? table.columns.map((cell: Json) => cellOf(cell).value) : undefined, rows: rows.map((row: Json[]) => row.map((cell) => cellOf(cell).value)) };
+  return { columns: Array.isArray(table.columns) ? table.columns.map((cell: Json) => cellOf(cell).value) : undefined, rows: rows.map((row: Json[]) => row.map((cell) => cellOf(cell).value)), ids };
 }
 
 // --- list <-> table ----------------------------------------------------------------------------
@@ -65,28 +73,28 @@ export function listToTable(items: Json[], loss: Loss): Json {
     const object = isRecord(item);
     if (object && (item.level ?? 0) > 0) loss.note("list nesting levels");
     const text = object ? item.text : item;
-    return { text: valueText(text), description: object && item.description !== undefined && plainOf(item.description) !== "" ? valueText(item.description) : undefined };
+    return { id: idOf(item), text: valueText(text), description: object && item.description !== undefined && plainOf(item.description) !== "" ? valueText(item.description) : undefined };
   });
   if (!entries.length) throw refuse("A table needs at least one row, and this list has no items.");
   const described = entries.some((entry) => entry.description !== undefined);
-  return { rows: entries.map((entry) => (described ? [entry.text, entry.description ?? null] : [entry.text])) };
+  return { rows: entries.map((entry) => { const cells = described ? [entry.text, entry.description ?? null] : [entry.text]; return entry.id === undefined ? cells : { id: entry.id, cells }; }) };
 }
 
 export function tableToList(table: Obj, loss: Loss): Json {
-  const { columns, rows } = readCells(table, loss, "a list");
+  const { columns, rows, ids } = readCells(table, loss, "a list");
   if (!rows.length) throw refuse("A list needs at least one item, and this table has no rows.");
   if (columns) loss.note("column headings");
   const width = Math.max(columns?.length ?? 0, ...rows.map((row) => row.length));
   if (width > 2) loss.note("table columns beyond the second (joined into the description)");
-  return rows.map((row) => {
+  return rows.map((row, index) => {
     const text = valueText(row[0]);
     const rest = row.slice(1).filter((value) => !valueEmpty(value));
-    if (!rest.length) return text;
+    if (!rest.length) return ids[index] === undefined ? text : { id: ids[index], text };
     let description: string | Run[];
     if (rest.length === 1) description = valueText(rest[0]);
     else if (rest.some(Array.isArray)) description = rest.flatMap((value, index) => [...(index ? [", "] : []), ...runsOf(valueText(value))]);
     else description = rest.map(valuePlain).join(", ");
-    return { text, description };
+    return withId({ text, description }, ids[index]);
   });
 }
 
@@ -103,7 +111,11 @@ export function timelineToTable(timeline: Json, options: TableOptions, loss: Los
   const hasWhen = events.some((event) => event.when);
   const hasDescription = events.some((event) => event.description);
   const columns = [...(hasWhen ? ["When"] : []), "What", ...(hasDescription ? ["Description"] : [])];
-  const rows = events.map((event) => [...(hasWhen ? [event.when ?? null] : []), event.what, ...(hasDescription ? [event.description ?? null] : [])]);
+  const rows = events.map((event) => {
+    const cells = [...(hasWhen ? [event.when ?? null] : []), event.what, ...(hasDescription ? [event.description ?? null] : [])];
+    const id = idOf(event);
+    return id === undefined ? cells : { id, cells };
+  });
   return { ...(options.headings === false ? {} : { columns }), rows };
 }
 
@@ -135,7 +147,7 @@ function noteRenamedHeadings(columns: Json[] | undefined, roles: Record<string, 
 }
 
 export function tableToTimeline(table: Obj, options: TableOptions, loss: Loss): Json {
-  const { columns, rows } = readCells(table, loss, "a timeline");
+  const { columns, rows, ids } = readCells(table, loss, "a timeline");
   if (!columns && !options.columns) throw refuse('A timeline reads its columns by their headings. Add a heading row that names a "When", a "What" and optionally a "Description" column.');
   const roles = rolesFrom(columns, { when: WHEN_HEADINGS, what: WHAT_HEADINGS, description: DESCRIPTION_HEADINGS }, options.columns);
   const width = Math.max(columns?.length ?? 0, ...rows.map((row) => row.length));
@@ -154,8 +166,9 @@ export function tableToTimeline(table: Obj, options: TableOptions, loss: Loss): 
     if (hasFormatting(value)) loss.note("text formatting");
     return valuePlain(value);
   };
-  const events = rows.map((row) => {
+  const events = rows.map((row, index) => {
     const event: Obj = {};
+    if (ids[index] !== undefined) event.id = ids[index];
     if (roles.when !== undefined && !valueEmpty(row[roles.when])) event.when = flat(row[roles.when]);
     event.what = flat(row[roles.what!]);
     if (roles.description !== undefined && !valueEmpty(row[roles.description])) event.description = flat(row[roles.description]);

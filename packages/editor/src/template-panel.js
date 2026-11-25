@@ -8,6 +8,7 @@ import {
   createTemplateFill,
   insertVariableToken,
   isTemplateDocument,
+  limitUsage,
   listBuiltins,
   setTemplate,
   suggestVariableId,
@@ -121,7 +122,7 @@ export function createTemplatePanel(container, options) {
   }
 
   function control(field) {
-    const base = { id: `${id}-field-${field.id}`, "aria-describedby": `${id}-help-${field.id} ${id}-error-${field.id}` };
+    const base = { id: `${id}-field-${field.id}`, "aria-describedby": `${id}-limit-${field.id} ${id}-help-${field.id} ${id}-error-${field.id}` };
     let input;
     switch (field.kind) {
       case "list":
@@ -151,6 +152,7 @@ export function createTemplatePanel(container, options) {
     const error = h(doc, "p", { class: "opf-template-error", id: `${id}-error-${field.id}`, role: "alert", hidden: true });
     const status = h(doc, "span", { class: "opf-template-status" });
     const help = h(doc, "p", { class: "opf-template-help", id: `${id}-help-${field.id}` });
+    const counter = h(doc, "p", { class: "opf-template-limit", id: `${id}-limit-${field.id}`, hidden: true });
     const useDefault = h(doc, "button", { type: "button", class: "opf-template-default quiet", text: "Use default" });
     const extras = [];
     let colorInput;
@@ -194,7 +196,7 @@ export function createTemplatePanel(container, options) {
       extras.push(fileInput);
     }
     const label = h(doc, "label", { for: input.id }, field.label, field.required ? h(doc, "span", { class: "opf-required", "aria-hidden": "true", text: " *" }) : null, h(doc, "span", { class: "opf-template-kind", text: ` (${KIND_LABELS[field.kind]})` }));
-    const element = h(doc, "div", { class: "opf-template-field", "data-variable": field.id, "data-kind": field.kind }, label, status, input, ...extras, help, error, useDefault);
+    const element = h(doc, "div", { class: "opf-template-field", "data-variable": field.id, "data-kind": field.kind }, label, status, input, ...extras, counter, help, error, useDefault);
 
     function showError(message) {
       error.hidden = !message;
@@ -211,7 +213,7 @@ export function createTemplatePanel(container, options) {
       fill.clear(field.id);
       showError(undefined);
     });
-    return { element, input, status, help, useDefault, colorInput, showError };
+    return { element, input, status, help, counter, useDefault, colorInput, showError };
   }
 
   function rebuild() {
@@ -261,6 +263,11 @@ export function createTemplatePanel(container, options) {
       row.status.textContent = STATUS_TEXT[field.status];
       row.useDefault.hidden = field.status !== "filled";
       const uses = field.uses.length;
+      // FR-09: the room the declaration gives the value, and how much of it the value in the control uses.
+      const usage = limitUsage(field.kind, field.value, field);
+      row.counter.hidden = !usage && field.maxLines === undefined;
+      row.counter.textContent = [usage ? `${usage.used} of ${usage.max} ${usage.unit}${usage.over ? " (too many)" : ""}` : undefined, field.maxLines !== undefined ? `at most ${field.maxLines} line${field.maxLines === 1 ? "" : "s"} where it is drawn` : undefined].filter(Boolean).join("; ");
+      row.counter.dataset.over = usage?.over ? "true" : "false";
       row.help.textContent = [
         field.description,
         uses ? `Used in ${uses} place${uses === 1 ? "" : "s"}.` : "Not used anywhere yet.",

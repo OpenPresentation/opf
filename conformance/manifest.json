@@ -69,6 +69,14 @@
       "basis": "opf.schema.json#/$defs/ContentPayload/properties/id (unique among slide and payload ids)"
     },
     {
+      "id": "core.valid.entry-ids",
+      "file": "core/valid/entry-ids.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Ids on a list item, a bullet, a timeline event and a table row (object form beside the array form); entries without an id stay valid.",
+      "basis": "opf.schema.json#/$defs/ListItem, BulletItem, TimelineEvent, TableRow (optional id; ids kept at the same JSON Pointer)"
+    },
+    {
       "id": "core.valid.group-nesting-at-limit",
       "file": "core/valid/group-nesting-at-limit.opf.json",
       "levels": ["reader", "writer"],
@@ -253,6 +261,14 @@
       "basis": "opf.schema.json#/$defs/ContentPayload/additionalProperties"
     },
     {
+      "id": "core.invalid.variable-limit-wrong-kind",
+      "file": "core/invalid/variable-limit-wrong-kind.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/variables/revenue/maxLength" },
+      "description": "A length limit on a number variable: maxLength belongs to a text variable, maxLines to a text variable and maxItems to a list variable.",
+      "basis": "opf.schema.json#/$defs/NumberVariable/additionalProperties"
+    },
+    {
       "id": "core.invalid.vendor-field-outside-extensions",
       "file": "core/invalid/vendor-field-outside-extensions.opf.json",
       "levels": ["reader"],
@@ -339,6 +355,46 @@
       "expect": { "valid": false, "errorAt": "/slides/0/blocks/0/blocks/1/id" },
       "description": "Two payloads in one group share an id.",
       "basis": "opf.schema.json#/$defs/ContentPayload/properties/id"
+    },
+    {
+      "id": "core.invalid.duplicate-item-id",
+      "file": "core/invalid/duplicate-item-id.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/blocks/0/items/1/id" },
+      "description": "Two list items share an id.",
+      "basis": "opf.schema.json#/$defs/ListItem/properties/id (unique in the document)"
+    },
+    {
+      "id": "core.invalid.duplicate-entry-id-across-kinds",
+      "file": "core/invalid/duplicate-entry-id-across-kinds.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/blocks/1/table/rows/0/id" },
+      "description": "A bullet and a table row share an id: one namespace for every kind of id.",
+      "basis": "opf.schema.json#/$defs/TableRow/properties/id (unique among every slide, payload, item, bullet, event and row id)"
+    },
+    {
+      "id": "core.invalid.entry-id-equals-payload-id",
+      "file": "core/invalid/entry-id-equals-payload-id.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/blocks/1/timeline/0/id" },
+      "description": "A timeline event takes the id of a block.",
+      "basis": "opf.schema.json#/$defs/TimelineEvent/properties/id (one namespace with payload ids)"
+    },
+    {
+      "id": "core.invalid.table-row-object-without-cells",
+      "file": "core/invalid/table-row-object-without-cells.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/table/rows/0" },
+      "description": "A table row object has an id but no cells.",
+      "basis": "opf.schema.json#/$defs/TableRow (the object form requires cells)"
+    },
+    {
+      "id": "core.invalid.entry-id-empty",
+      "file": "core/invalid/entry-id-empty.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/items/0/id" },
+      "description": "An id is a non-empty string.",
+      "basis": "opf.schema.json#/$defs/ListItem/properties/id (minLength 1)"
     },
     {
       "id": "core.invalid.duplicate-reference-id",

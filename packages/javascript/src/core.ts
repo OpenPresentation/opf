@@ -66,6 +66,7 @@ export {
   listVariables,
   resolveVariables,
   variableDeclarations,
+  visibleLength,
 } from "./variables.js";
 export type {
   ResolveVariablesOptions,
@@ -188,6 +189,8 @@ export type { DataCell, TabularData, ImportedChartData, ImportedChartType, Impor
 // LH-106: the numbering system and number text of the language in effect (one path for every number the engines generate).
 export { formatNumber, formatPercentNumber, localizeDigits, numberLocale, numberingSystemOf, numberingSystemExtension, isSupportedNumberingSystem, supportedNumberingSystems, plainLanguageTag, languageInEffect, numeralScripts, asciiDigits } from './numerals.js';
 export type { NumberLocale } from './numerals.js';
+export { tableRows, rowCells, rowId } from './table.js';
+export type { TableRowEntry } from './table.js';
 // RR-54: chart and table data: strict numbers, number formats and Excel codes, datasets, series mapping.
 export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
 // LH-60: how a chart is drawn when its data does not fit its type (map, box, pie and scatter fallbacks; series a type cannot plot).

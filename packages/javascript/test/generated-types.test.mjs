@@ -47,3 +47,29 @@ void [deck,value,invalid,arbitrary,focused,font,nextStart,tabSize,segmentKind,ac
   const errors=ts.getPreEmitDiagnostics(program);
   assert.equal(errors.length,0,ts.formatDiagnosticsWithColorAndContext(errors,{getCurrentDirectory:()=>process.cwd(),getCanonicalFileName:file=>file,getNewLine:()=> '\n'}));
 });
+
+test('FR-02: ids on list items, bullets, timeline events and table rows are in the generated declarations', () => {
+  const fixture=fileURLToPath(new URL('./generated-entry-ids-fixture.ts',import.meta.url));
+  const source=`import { type Presentation, rowCells, tableRows } from '../dist/index.js';
+type Block = NonNullable<Presentation['slides'][number]['blocks']>[number];
+const items: Block = {items:['plain',{id:'it-1',text:'with an id'}]};
+const bullets: Block = {bullets:[{id:'b-1',text:'with an id'}]};
+const timeline: Block = {timeline:[{id:'e-1',what:'Pilot'}]};
+const table: Block = {table:{rows:[['a',1],{id:'r-1',cells:['b',2]}]}};
+// @ts-expect-error A row object needs its cells.
+const noCells: Block = {table:{rows:[{id:'r-2'}]}};
+// @ts-expect-error A row object takes no other member.
+const extra: Block = {table:{rows:[{id:'r-3',cells:['c'],height:3}]}};
+// @ts-expect-error An id is a string.
+const numeric: Block = {items:[{id:7,text:'x'}]};
+const cells: unknown[] = rowCells({id:'r-1',cells:['b']});
+const rows = tableRows({rows:[['a']]}).map((row) => row.id ?? row.cellsPath);
+void [items,bullets,timeline,table,noCells,extra,numeric,cells,rows];`;
+  const options={strict:true,noEmit:true,skipLibCheck:false,target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.NodeNext,moduleResolution:ts.ModuleResolutionKind.NodeNext,types:[]};
+  const host=ts.createCompilerHost(options),read=host.readFile.bind(host),exists=host.fileExists.bind(host);
+  host.readFile=file=>path.resolve(file)===fixture?source:read(file);
+  host.fileExists=file=>path.resolve(file)===fixture||exists(file);
+  const program=ts.createProgram([fixture],options,host);
+  const errors=ts.getPreEmitDiagnostics(program);
+  assert.equal(errors.length,0,ts.formatDiagnosticsWithColorAndContext(errors,{getCurrentDirectory:()=>process.cwd(),getCanonicalFileName:file=>file,getNewLine:()=> '\n'}));
+});

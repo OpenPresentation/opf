@@ -50,7 +50,7 @@ Prefer names and variables over hex — they survive re-theming. Unknown `var:` 
 
 ## Ids and extensions
 
-`id` is optional on slides and on any content payload (including groups), unique document-wide. Use ids when something outside the document must address content across edits — patch edits, comments, review state. `extensions` objects at document, slide, and payload scope carry machine state; engines ignore and preserve them.
+`id` is optional on slides, on any content payload (including groups) and (OPF 0.37) on a list item, a bullet, a timeline event and a table row (`rows: [{ "id": "r1", "cells": [...] }, [...]]`); every id is unique document-wide, in one namespace. Use ids when something outside the document must address content across edits — patch edits, comments, review state. A string item stays a string until it needs an id; dataset rows and chart data rows have none. `extensions` objects at document, slide, and payload scope carry machine state; engines ignore and preserve them.
 
 ## Catalog references
 

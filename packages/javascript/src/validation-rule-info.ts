@@ -595,6 +595,20 @@ export const straightQuotesRule = rule(
 	},
 );
 
+// rules-variable-overflow.ts (FR-09): a variable's value is longer than its declaration allows.
+export const variableOverflowRule = rule(
+	'variable-overflow',
+	'layout',
+	'warning',
+	"A variable's value is longer than the room its declaration allows.",
+	"A template slot is sized for a short value. A value over the declaration's maxLength, a list over its maxItems, or text that takes more lines than maxLines where it is drawn still draws, but not as the template was designed; the finding is raised before the deck is exported, not found on one slide of a batch.",
+	{
+		cost: 'composition',
+		standard: "The variable declaration's maxLength, maxLines and maxItems (spec/schemas/opf.schema.json, TextVariable and ListVariable).",
+		approximations: "maxLength counts characters as a reader sees them (grapheme clusters, Intl.Segmenter), not code units, and maxItems counts entries; both are read on the value (the declared value, or the value given to the check with `values`) and reported once at the declaration. maxLines is read from composition at each place the variable is drawn, with the fonts and measurement of the check: a title, a subtitle, a tag, a text block or a list entry, on its own or inside longer text (then the lines are those the variable's own characters occupy). One finding per place, naming the slide. A place composition does not break into lines (a table cell, a chart label, text in a shape) and a value the layout reshapes are not measured. A variable with no value or example is not measured, and neither is a type sample.",
+	},
+);
+
 // rules-chart-findings.ts (LH-105): info findings for charts that Few's principles advise against; nothing drawn changes.
 
 /** `opf/chart-pie-many-slices`: a pie or doughnut of more than this many categories. */
@@ -666,6 +680,7 @@ const implementedRules: ValidationRuleInfo[] = [
 	tightSpacingRule,
 	layoutMonotonyRule,
 	straightQuotesRule,
+	variableOverflowRule,
 	chartDualAxisRule,
 	chartPieManySlicesRule,
 ];

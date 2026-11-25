@@ -52,7 +52,8 @@ import {restoreRunColors} from './run-colors.js';
 import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, settleLayers, shapeRole, shapeText} from './shape-import.js';
 import {assembleOverlayShapes, restoreShapes} from './shape-restore.js';
 import {joinWrappedText, rejoinDetachedSpace} from './content-topology.js';
-import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordListScalars, recordOverlays, opfSlideOwnership, restoreDocumentProvenance, storedSlideIds, joinAuthors, splitAuthors, slideListRecord, storedMetadata, exportedThemeView, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
+import {restoreEntryIds, usedIdsOf} from './entry-ids.js';
+import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordEntryIds, recordListRuns, recordListScalars, recordOverlays, opfSlideOwnership, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, exportedThemeView, DEFAULT_AUTHOR, DEFAULT_TITLE, storedSlideIds} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
@@ -741,6 +742,8 @@ export async function fromPptx(input, options = {}) {
   restoreArrangementPaint(imported, new Map(furnitureContexts.flatMap(context => [...(context.arrangementPaint ?? [])])));
   // opf#1431: a chart without labels keeps `dataLabels: false` only where the next export would draw default labels without it.
   settleDefaultLabels(imported, options);
+  // FR-02: the ids of list items, bullets, timeline events and table rows return while their entries are still recognizable.
+  restoreItemIds(imported, slideProvenance, restoredGroups, report);
   if (imported.design?.theme === undefined) for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code === "theme-unverified") report(diagnostic);
   languageDiagnostics(imported, observedLanguage, options.onDiagnostic && report);
 
@@ -791,6 +794,20 @@ function colorResolver(imported, options) {
       return undefined;
     }
   };
+}
+
+// FR-02: the stored entry ids go back on the entries PowerPoint still shows (src/entry-ids.js). A slide whose native structure or content
+// topology no longer matches its export restores none; ONE finding names how many ids were not restored.
+function restoreItemIds(imported, slideProvenance, restoredGroups, report) {
+  const restoredContent = new Set(restoredGroups.filter(group => group.applied && group.contentPaths).map(group => group.contentPaths.slide));
+  const taken = usedIdsOf(imported);
+  let lost = 0;
+  slideProvenance.forEach((entry, index) => {
+    const record = entry?.record?.entryIds;
+    if (!record) return;
+    lost += restoreEntryIds(imported.slides[index], record, {changed: entry.structure !== 'match' || !restoredContent.has(index), taken});
+  });
+  if (lost) report({code: 'entry-ids-not-restored', path: '', message: `${lost} list item, bullet, timeline event or table row ${lost === 1 ? 'id was' : 'ids were'} not restored: PowerPoint no longer shows the entry ${lost === 1 ? 'it' : 'they'} belonged to (entries were added or removed, or the slide's objects changed), so ${lost === 1 ? 'that entry comes' : 'those entries come'} back without ${lost === 1 ? 'an id' : 'ids'}.`});
 }
 
 // SH-05: the overlay shapes and connectors of each slide join it, in the order they were drawn.
@@ -2874,6 +2891,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   const nativePlans = nativeBody ? [nativeBody, ...nativeBody.others] : [];
   recordContentTopology(context.documentProvenance, opfSlide, slideIndex, nativeBody ? geometry.items.map(item => { const plan = nativePlans.find(plan => plan.item === item); return plan ? {...item, box: plan.box, text: undefined} : item; }) : geometry.items);
   recordOverlays(context.documentProvenance, authoredSlide, slideIndex);
+  recordEntryIds(context.documentProvenance, opfSlide, slideIndex);
   // Paint order, as in the preview (FA-22 contract): canvas color, the background picture and its overlay, design.watermark,
   // the logo, then the items in core's order: the headings, the placed image blocks at their bands, then the flowed body.
   if (geometry.backgroundImage) await addBackgroundImage(slide, presentation, geometry.backgroundImage, slideIndex, slideContext, context, options);

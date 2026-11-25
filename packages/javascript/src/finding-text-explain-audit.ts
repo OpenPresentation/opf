@@ -168,6 +168,11 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { slides: [{ title: "Findings", blocks: [{ items: LONG_ITEMS }, { items: LONG_ITEMS }, { items: LONG_ITEMS }] }] },
     { slides: [{ title: "Findings", items: LONG_ITEMS.slice(0, 3) }, { title: "Findings (continued)", items: LONG_ITEMS.slice(3) }] },
   ),
+  "opf/variable-overflow": ex(
+    "Shorten the value, or raise the limit (`maxLength`, `maxLines`, `maxItems`) in the variable's declaration if the slide has the room. The limit is the room the template was designed for; the deck still draws.",
+    { variables: { headline: { type: "text", value: "A headline that runs well past the room the template has for it", maxLength: 24 } }, slides: [{ title: "{{headline}}" }] },
+    { variables: { headline: { type: "text", value: "A short headline", maxLength: 24 } }, slides: [{ title: "{{headline}}" }] },
+  ),
   "opf/centered-body": ex(
     "Align paragraphs and lists to the start edge (`contentAlignment: \"start\"`), and keep centering for titles, numbers and one- or two-line statements.",
     { title: "Why now", items: LONG_ITEMS.slice(0, 3), design: { contentAlignment: "center" } },
