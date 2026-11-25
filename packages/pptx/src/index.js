@@ -5078,11 +5078,14 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
       for(const field of furniturePartFields(part)){
         // RR-91: with slideNumberFields 'static' a number with words around it is fixed text; Keynote drops the words next to a live number.
         if(field.type==='slideNumber'&&context.staticSlideNumbers&&!isBareSlideNumber(part))continue;
-        const nativeType=nativeFieldType(field,context.deckLang);
-        // RR-102: a date field whose words are English (United States), not the deck's language, says so in its own `lang`.
-        const date=field.type==='date'?nativeDateField(field.format??DEFAULT_DATE_FORMAT,context.deckLang):undefined;
-        if(nativeType)fields.push({...field,nativeType,...(date&&date.lang!==context.deckLang?{lang:date.lang}:{})});
-        else options.onDiagnostic?.({code:'furniture-date-fixed',path:part.path,message:`dateFormat '${field.format}' is not a PowerPoint date field format in ${context.deckLang==='en-US'?'en-US':`${context.deckLang} or en-US`}; the current date is exported as fixed text that PowerPoint will not update.`});
+        // FR-10: PowerPoint formats a date field by the language of its run, which is the slide's (its declared language, else the deck's), so
+        // the field is looked up in that language: a deck footer drawn on a French slide in a German deck is a French field or fixed text.
+        const fieldLang=context.scriptFonts?.slides?.[slideIndex]?.lang??context.deckLang;
+        const nativeType=nativeFieldType(field,fieldLang);
+        // RR-102: a date field whose words are English (United States), not the slide's language, says so in its own `lang`.
+        const date=field.type==='date'?nativeDateField(field.format??DEFAULT_DATE_FORMAT,fieldLang):undefined;
+        if(nativeType)fields.push({...field,nativeType,...(date&&date.lang!==fieldLang?{lang:date.lang}:{})});
+        else options.onDiagnostic?.({code:'furniture-date-fixed',path:part.path,message:`dateFormat '${field.format}' is not a PowerPoint date field format in ${fieldLang==='en-US'?'en-US':`${fieldLang} or en-US`}; the current date is exported as fixed text that PowerPoint will not update.`});
       }
       const liveFields=fields.length?lineFields(part.text,fields,part.fit.sourceLines,part.fit.lines):undefined;
       for(const field of fields.filter(field => !lineFields(part.text,[field],part.fit.sourceLines,part.fit.lines).some(line => line.length))) {

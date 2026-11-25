@@ -244,6 +244,38 @@ for (const measured of [false, true]) {
   assert.match(german.issues.find(issue => issue.code === 'furniture-date-fixed')?.message ?? '', /not a PowerPoint date field format in de-DE or en-US/);
   const english = await exportDeck({language: 'en-GB', design: {fontScheme: 'roboto', footer: {start: {date: true, dateFormat: 'MMMM d, yyyy'}}}, slides: [{title: 'A', text: 'Body'}]});
   assert.deepEqual(english.issues.filter(issue => issue.code === 'furniture-date-fixed'), []);
+  // FR-10: PowerPoint formats a date field by the language of its run, which is the slide's (its declared language, else the deck's), so a deck
+  // footer is looked up in each slide's language: a German deck's footer on a French slide is a French field, or fixed text.
+  {
+    const mixed = (dateFormat, place = 'footer', slideDesign) => ({language: 'de-DE', design: {fontScheme: 'roboto', [place]: {start: {date: true, dateFormat}}}, slides: [{title: 'A', text: 'Body'}, {language: 'fr-FR', title: 'B', text: 'Body', ...(slideDesign ? {design: slideDesign} : {})}]});
+    const fields = (entries, number) => [...text(entries, slidePath(number)).matchAll(/<a:fld [^>]*type="(datetime\d+)"><a:rPr ([^>]*?)\/?>[\s\S]*?<a:t>([^<]*)<\/a:t>/g)].map(match => ({type: match[1], lang: /\blang="([^"]*)"/.exec(match[2])[1], text: match[3]}));
+    // dd.MM.yyyy is German's datetime1; no French or en-US field shows it, so on the French slide it is fixed text and the message names fr-FR.
+    const german = await exportDeck(mixed('dd.MM.yyyy'));
+    assert.deepEqual(fields(german.entries, 1), [{type: 'datetime1', lang: 'de-DE', text: '10.09.2026'}]);
+    assert.deepEqual(fields(german.entries, 2), []);
+    assert.match(text(german.entries, slidePath(2)), /10\.09\.2026/);
+    assert.equal(german.issues.filter(issue => issue.code === 'furniture-date-fixed').length, 1);
+    assert.match(german.issues.find(issue => issue.code === 'furniture-date-fixed').message, /in fr-FR or en-US/);
+    // dd/MM/yyyy is French's datetime1: a fr-FR field on the French slide (German has no field for it, so the German slide is fixed text).
+    const french = await exportDeck(mixed('dd/MM/yyyy'));
+    assert.deepEqual(fields(french.entries, 2), [{type: 'datetime1', lang: 'fr-FR', text: '10/09/2026'}]);
+    assert.deepEqual(fields(french.entries, 1), []);
+    assert.match(french.issues.find(issue => issue.code === 'furniture-date-fixed').message, /in de-DE or en-US/);
+    // The import returns each slide's footer as the slide drew it: the slide that wrote a field gets the footer as authored (a current date
+    // with its pattern, read in the language of the field), the slide whose date is fixed text (no field shows it) gets that date as
+    // text, as for every pattern no PowerPoint field shows.
+    for (const [exported, format, fieldSlide, text] of [[german, 'dd.MM.yyyy', 0, '10.09.2026'], [french, 'dd/MM/yyyy', 1, '10/09/2026']]) {
+      const {imported} = await read(exported.bytes);
+      const footers = imported.slides.map(slide => slide.design?.footer);
+      assert.deepEqual(footers[fieldSlide], {start: {date: true, dateFormat: format}}, `the slide with the ${format} field returns it as authored`);
+      assert.deepEqual(footers[1 - fieldSlide], {start: {date: text}}, `the slide with fixed text returns ${text}`);
+    }
+    // The same lookup for a header and for a slide-level footer: the slide's language, wherever the part is configured.
+    const header = await exportDeck(mixed('dd/MM/yyyy', 'header'));
+    assert.deepEqual(fields(header.entries, 2), [{type: 'datetime1', lang: 'fr-FR', text: '10/09/2026'}]);
+    const own = await exportDeck(mixed('dd.MM.yyyy', 'footer', {footer: {start: {date: true, dateFormat: 'dd/MM/yyyy'}}}));
+    assert.deepEqual(fields(own.entries, 2), [{type: 'datetime1', lang: 'fr-FR', text: '10/09/2026'}]);
+  }
   // The dialog on such a deck: placeholders it adds have no xfrm and inherit the master's, which names the zones.
   const bare = await exportDeck({design: {fontScheme: 'roboto'}, slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}]});
   const ph = (type, idx, sz, body) => '<p:sp><p:nvSpPr><p:cNvPr id="90" name="' + type + '"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="' + type + '" sz="' + sz + '" idx="' + idx + '"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p>' + body + '</a:p></p:txBody></p:sp>';
