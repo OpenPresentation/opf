@@ -286,6 +286,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/variable-unknown`](#opfvariable-unknown) | References | warning | structure | A `{{token}}` names a variable that is not declared. |
 | [`opf/variable-unknown-value`](#opfvariable-unknown-value) | References | warning | structure | A value was supplied for a variable that is not declared. |
 | [`opf/variable-unused`](#opfvariable-unused) | References | warning | structure | A variable is declared but never used. |
+| [`opf/variable-translation-duplicate`](#opfvariable-translation-duplicate) | References | warning | structure | Two translations of a variable have the same language tag. |
+| [`opf/variable-translation-unused`](#opfvariable-translation-unused) | References | warning | structure | A translation of a variable is never drawn. |
 | [`opf/variable-reference-unknown`](#opfvariable-reference-unknown) | References | warning | structure | A `var:` color names a variable that is not declared. |
 | [`opf/contract`](#opfcontract) | Policy | error | structure | A field is outside the values a host policy allows. |
 | [`opf/text-contrast`](#opftext-contrast) | Accessibility | warning | composition | Text color has too little contrast against the background it sits on. |
@@ -785,6 +787,24 @@ Default severity: **warning**. Cost: structure. A variable is declared but never
 **Why.** A declaration nothing refers to has no effect.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/variable-translation-duplicate`
+
+Default severity: **warning**. Cost: structure. Two translations of a variable have the same language tag.
+
+**Why.** Language tags compare without regard to case, so 'de-AT' and 'de-at' name one language. The first in document order is used; the other is never drawn.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/variable-translation-unused`
+
+Default severity: **warning**. Cost: structure. A translation of a variable is never drawn.
+
+**Why.** A translation is drawn on a slide whose declared language (else the deck's) selects it. When no slide and not the deck declares a language that selects it, it has no effect. A language read from the text does not select a translation.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+**Approximations.** Reads the declared language of the deck and of each slide, not where the variable is used.
 
 ### `opf/variable-reference-unknown`
 

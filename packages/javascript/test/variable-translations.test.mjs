@@ -226,7 +226,7 @@ test('a deck-level header and footer are drawn in the language of each slide the
   assert.equal(result.slides[0].design, undefined);
   assert.equal(result.slides[1].design.footer.start.text, 'Réserver une démo 2026');
   assert.equal(result.slides[1].design.footer.end.text, '{{slide.number}}');
-  assert.equal(result.slides[2].design, undefined, 'de-AT has the deck language');
+  assert.equal(result.slides[2].design.footer.start.text, 'Demo buchen 2026', 'de-AT selects de');
   assert.equal(result.slides[3].design.footer, false);
   assert.equal(result.slides[4].design.footer.start.text, 'own Réserver une démo');
   // A deck whose slides all draw in the deck's language, or whose footer has no translated variable, is unchanged.
