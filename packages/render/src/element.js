@@ -2,8 +2,8 @@
 // the slide a page shows is the slide the preview, the editor and the PDF show. Importing this module touches no DOM, so it
 // is safe on a server (Next.js); `defineOpfDeck()` registers the tag in a browser.
 import {
-  DeckError, counterText, createCursor, createDeckStore, isRtlLanguage, localIsoDate, parseDeckDocument, parseSlideNumber, presentableIndexes,
-  prepareSlideSvg, sanitizeSvgTree, slideInfo, slideLabel, svgDimensions, plainText,
+  DeckError, counterText, createCursor, createDeckStore, isRtlLanguage, linkAt, localIsoDate, parseDeckDocument, parseSlideNumber, presentableIndexes,
+  prepareSlideSvg, sanitizeSvgTree, slideIndexById, slideInfo, slideLabel, svgDimensions, plainText,
 } from "./deck-runtime.js";
 import { loadPreviewFonts } from "./preview-fonts.js";
 import { toSvg } from "./svg.js";
@@ -347,6 +347,14 @@ function createElementClass() {
       parts.next.addEventListener("click", () => this.next());
       parts.present.addEventListener("click", () => { this.present().catch((error) => this.#report(error instanceof DeckError ? error : new DeckError("present-failed", error?.message ?? "Could not start the slideshow.", { cause: error }), false)); });
       parts.viewport.addEventListener("keydown", (event) => this.#onKey(event));
+      // FR-03: a slide link in the slide shows that slide (a hidden slide is not in the sequence, so a link to it goes nowhere here); other links are the browser's.
+      parts.viewport.addEventListener("click", (event) => {
+        const slide = linkAt(event.composedPath?.()[0] ?? event.target)?.slide;
+        if (slide === undefined) return;
+        event.preventDefault();
+        const index = slideIndexById(this.#deck, slide);
+        if (index >= 0 && this.#cursor?.sequence.includes(index)) { this.#announce = true; this.#go(() => this.#cursor?.gotoIndex(index)); }
+      });
       parts.viewport.addEventListener("pointerdown", (event) => { if (event.pointerType !== "mouse") this.#pointer = { x: event.clientX, y: event.clientY, id: event.pointerId }; });
       parts.viewport.addEventListener("pointerup", (event) => this.#onPointerUp(event));
       parts.viewport.addEventListener("pointercancel", () => { this.#pointer = undefined; });

@@ -617,6 +617,38 @@ try {
   assert.deepEqual(await first.evaluate(async (deck) => { const session = await window.opf.present(deck, {fullscreen: false}); const out = {slide: session.slide, total: session.total, title: document.querySelector('[data-opf-player]').shadowRoot.querySelector('.frame svg text').textContent}; session.close(); return out; }, hiddenFirst), {slide: 1, total: 2, title: 'Visible one'});
   await first.close();
 
+  // FR-03: a slide link in the show goes to its slide (a click on it never moves the show by zone), and any other link leaves the show where it is.
+  const linked = {name: 'Slide links', slides: [
+    {id: 'start', title: 'Start', text: [{text: 'last slide', link: 'slide:last'}, ' and ', {text: 'the site', link: 'https://example.test/site'}]},
+    {id: 'middle', title: 'Middle'},
+    {id: 'last', title: 'Last'},
+  ]};
+  const linkedPage = await open('/empty.html', {wait: false});
+  await linkedPage.route(url => url.hostname === 'example.test', route => route.abort());
+  await linkedPage.evaluate(async (deck) => { window.__session = await window.opf.present(deck, {fullscreen: false, channel: false}); }, linked);
+  await linkedPage.waitForFunction(() => document.querySelector('[data-opf-player]')?.shadowRoot.querySelector('.frame svg a'));
+  const anchorBox = async (selector) => linkedPage.evaluate((query) => { const box = document.querySelector('[data-opf-player]').shadowRoot.querySelector(query).getBoundingClientRect(); return {x: box.x + box.width / 2, y: box.y + box.height / 2}; }, selector);
+  const slideLinkAt = await anchorBox('.frame svg a[data-opf-slide-link="last"]');
+  await linkedPage.mouse.click(slideLinkAt.x, slideLinkAt.y);
+  assert.equal(await linkedPage.evaluate(() => window.__session.slide), 3, 'a click on a slide link goes to that slide, not by zone');
+  await linkedPage.evaluate(() => window.__session.goto(1));
+  await linkedPage.waitForFunction(() => document.querySelector('[data-opf-player]')?.shadowRoot.querySelector('.frame svg a[href^="https"]'));
+  const webLinkAt = await anchorBox('.frame svg a[href^="https"]');
+  await linkedPage.mouse.click(webLinkAt.x, webLinkAt.y);
+  assert.equal(await linkedPage.evaluate(() => window.__session.slide), 1, 'a click on a web link does not move the show');
+  await linkedPage.evaluate(() => window.__session.close());
+  // The same in the page element: a click on a slide link shows that slide, a web link leaves it where it is.
+  await linkedPage.evaluate(async (deck) => {
+    const element = document.createElement('opf-deck');
+    element.id = 'd'; document.getElementById('host').append(element);
+    element.document = deck;
+    await element.ready;
+  }, linked);
+  const elementLink = await linkedPage.evaluate(() => { const box = document.querySelector('opf-deck#d').shadowRoot.querySelector('.slide svg a[data-opf-slide-link="last"]').getBoundingClientRect(); return {x: box.x + box.width / 2, y: box.y + box.height / 2}; });
+  await linkedPage.mouse.click(elementLink.x, elementLink.y);
+  assert.equal(await linkedPage.evaluate(() => document.querySelector('opf-deck#d').slide), 3, 'a click on a slide link in <opf-deck> shows that slide');
+  await linkedPage.close();
+
   // ------------------------------------------------------------------------------------------------------------------
   // Static markup from the server upgrades in place.
   const ssr = watch(await context.newPage(), 'ssr');
