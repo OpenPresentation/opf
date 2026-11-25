@@ -94,6 +94,10 @@
       "source": "examples/technical/shape-overlays-rtl.opf.json"
     },
     {
+      "id": "embed",
+      "source": "examples/technical/embed.opf.json"
+    },
+    {
       "id": "diagrams",
       "source": "examples/technical/diagrams.opf.json",
       "variants": [

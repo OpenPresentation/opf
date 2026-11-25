@@ -28,14 +28,15 @@
           "text": "The checkout flow we tested with twelve customers."
         },
         {
-          "embed": "https://prototype.example.com/checkout",
-          "caption": "Prototype, version 3"
+          "type": "embed",
+          "embed": "https://prototype.example.com/checkout"
         }
       ]
     },
     {
       "id": "card",
       "title": "No picture, a card",
+      "type": "embed",
       "embed": {
         "src": "https://www.maps.example.com/places/riverside-office",
         "title": "Riverside office, floor plan and directions"

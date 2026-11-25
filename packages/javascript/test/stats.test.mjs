@@ -139,7 +139,7 @@ describe("stats: structure", () => {
 
   test("counts payload kinds across roots, blocks, cells and groups", () => {
     assert.deepEqual(result.payloads, {
-      text: 2, items: 0, bullets: 1, quote: 1, metric: 1, code: 1, timeline: 1, diagram: 0, chart: 2, table: 2, image: 4, video: 1,
+      text: 2, items: 0, bullets: 1, quote: 1, metric: 1, code: 1, timeline: 1, diagram: 0, chart: 2, table: 2, image: 4, video: 1, embed: 0,
       blocks: 9, cells: 0, groups: 1, maxDepth: 2,
     });
     // OPF 0.35: the root blocks of a slide placed in the cells of its grid.
