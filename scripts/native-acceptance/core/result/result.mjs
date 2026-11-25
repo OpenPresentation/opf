@@ -12,7 +12,7 @@ const require = createRequire(path.join(root, 'packages/javascript/package.json'
 
 export const SCHEMA_VERSION = 1;
 export const TARGETS = Object.freeze(['keynote', 'powerpoint', 'impress', 'powerpoint-mac']);
-export const OBJECT_KINDS = Object.freeze(['title', 'body', 'text', 'list', 'table', 'chart', 'shape', 'connector', 'group', 'picture', 'link', 'notes', 'footer']);
+export const OBJECT_KINDS = Object.freeze(['title', 'body', 'text', 'list', 'table', 'chart', 'shape', 'connector', 'group', 'picture', 'link', 'notes', 'footer', 'diagram', 'media']);
 export const OUTCOMES = Object.freeze(['native', 'changed', 'picture', 'dropped', null]);
 export const VERB_STATUSES = Object.freeze(['done', 'failed', 'timeout', 'alert', 'not-run']);
 /** The verbs a result.json records, in the order a driver runs them. */
@@ -20,6 +20,8 @@ export const VERBS = Object.freeze(['open', 'render', 'probe', 'resave']);
 /** The functions apps/<target>/driver.mjs exports: check runs once per run (its answer is in run.json), close after each file. */
 export const DRIVER_FUNCTIONS = Object.freeze(['check', 'open', 'render', 'probe', 'resave', 'close']);
 export const TEXT_LIMIT = 200;
+/** An edit case's id: safe as a file name. Its copy is edits/<id>.pptx (editPath). */
+export const EDIT_ID = /^[a-z0-9][a-z0-9._-]*$/u;
 
 export const resultSchema = JSON.parse(readFileSync(path.join(here, 'native-result.schema.json'), 'utf8'));
 export const runSchema = JSON.parse(readFileSync(path.join(here, 'native-run.schema.json'), 'utf8'));
@@ -62,6 +64,12 @@ export function validateResult(value) {
     if (file.id !== fileId(file.deck, file.variant)) errors.push(`/file/id: must be "${fileId(file.deck, file.variant)}" (<deck>~<variant>)`);
     value.slides.forEach((slide, position) => {
       if (slide.index !== position + 1) errors.push(`/slides/${position}/index: must be ${position + 1} (slides are listed in file order)`);
+    });
+    const seen = new Set();
+    (value.verbs.edits ?? []).forEach((edit, position) => {
+      if (edit.path !== editPath(edit.id)) errors.push(`/verbs/edits/${position}/path: must be "${editPath(edit.id)}"`);
+      if (seen.has(edit.id)) errors.push(`/verbs/edits/${position}/id: "${edit.id}" is listed twice`);
+      seen.add(edit.id);
     });
     const count = value.verbs.open.slideCount;
     if (count !== undefined && value.slides.length > 0 && value.slides.length !== count) {
@@ -116,6 +124,12 @@ export function cutText(text) {
 /** The picture path of slide `index` inside a file's folder: slides/slide-001.png. */
 export function picturePath(index) {
   return `slides/slide-${String(index).padStart(3, '0')}.png`;
+}
+
+/** The copy of edit case `id` inside a file's folder: edits/<id>.pptx. */
+export function editPath(id) {
+  if (!EDIT_ID.test(String(id))) throw new Error(`editPath: "${id}" must be a-z 0-9 . _ - only, starting with a letter or digit`);
+  return `edits/${id}.pptx`;
 }
 
 /**

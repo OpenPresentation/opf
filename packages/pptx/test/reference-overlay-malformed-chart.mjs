@@ -9,5 +9,12 @@ const deck = {slides: [{title: 'Target', chart: {type: 'line', data: {columns: [
 const zip = unzipSync(new Uint8Array(await toPptx(deck)));
 const deep = `${'<x>'.repeat(150)}${'</x>'.repeat(150)}`;
 for (const path of Object.keys(zip).filter(name => /^ppt\/charts\/chart\d+\.xml$/.test(name))) zip[path] = strToU8(strFromU8(zip[path]).replace('</c:chartSpace>', `${deep}</c:chartSpace>`));
-await assert.rejects(fromPptx(zipSync(zip)), error => error instanceof OPFPptxError && error.code === 'invalid-pptx', 'an OPF error, never the XML reader\'s own');
+// opf#1477: the part is unreadable for that chart only: the deck imports, the chart is a placeholder, one diagnostic names the OPF error.
+const found = [];
+const document = await fromPptx(zipSync(zip), {onDiagnostic: diagnostic => found.push(diagnostic)});
+assert.equal(document.slides.length, 1);
+const unreadable = found.filter(diagnostic => diagnostic.code === 'chart-unreadable');
+assert.equal(unreadable.length, 1, JSON.stringify(found.map(diagnostic => diagnostic.code)));
+assert.equal(unreadable[0].reason, 'invalid-pptx', "an OPF error, never the XML reader's own");
+assert.ok(OPFPptxError);
 console.log('Reference overlays: a malformed chart part is an OPF import error.');

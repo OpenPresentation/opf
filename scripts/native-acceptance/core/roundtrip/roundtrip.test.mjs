@@ -4,12 +4,12 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
-import { emptyResult, OBJECT_KINDS, validateResult } from '../result/result.mjs';
+import { editPath, emptyResult, OBJECT_KINDS, validateResult } from '../result/result.mjs';
 import { errorOf, importResaved } from './import.mjs';
 import { allItems, inspectPptx } from './inspect.mjs';
-import { countOutcomes, mergeOutcomes, objectOutcomes } from './outcomes.mjs';
+import { countOutcomes, editOutcomes, mergeOutcomes, objectOutcomes } from './outcomes.mjs';
 import { formatTable, roundTripRun } from './roundtrip-run.mjs';
-import { alternate, chartFrame, cxnSp, diagramFrame, grpSp, makePptx, pic, sp, table } from './test-deck.mjs';
+import { alternate, chartFrame, cxnSp, described, diagramDataXml, diagramFrame, diagramLayoutXml, grpSp, makePptx, pic, sp, table } from './test-deck.mjs';
 
 const TITLE = [44, 43, 874, 49];
 const heading = (slide, text, type = 'title') => sp(2, `OPF heading slides.${slide}.title line 0`, { ph: { type }, box: TITLE, paragraphs: [text] });
@@ -144,7 +144,7 @@ test('inspectPptx reads slides in order, hidden slides, kinds, boxes, links and 
       ['sp', null, 'title', 'slide title'],
       ['graphicFrame', 'table', 'table', 'table'],
       ['graphicFrame', 'chart', 'chart', 'chart (native)'],
-      ['graphicFrame', 'diagram', 'group', 'diagram'],
+      ['graphicFrame', 'diagram', 'diagram', 'diagram'],
       ['grpSp', null, 'group', 'diagram'],
       ['sp', null, 'text', 'body text'],
     ],
@@ -160,11 +160,11 @@ test('inspectPptx reads slides in order, hidden slides, kinds, boxes, links and 
   );
   assert.equal(three.items[1].kind, 'body', 'a body placeholder without bullets is body text');
   assert.equal(three.items[1].text, 'Plain');
-  // Every kind but link and notes is an object kind here; links and notes are the slide's.
+  // Every kind but link and notes is an object kind here; links and notes are the slide's. Media has its own test below.
   const kinds = new Set(deck.slides.flatMap((slide) => [...allItems(slide.items)].map((item) => item.kind)));
   assert.deepEqual(
     OBJECT_KINDS.filter((kind) => !kinds.has(kind)),
-    ['link', 'notes'],
+    ['link', 'notes', 'media'],
   );
 });
 
@@ -233,7 +233,7 @@ test('objectOutcomes: native, changed, picture and dropped, matched by name', ()
   );
   const counts = countOutcomes(objects);
   for (const outcome of ['native', 'changed', 'picture', 'dropped']) assert.ok(Object.values(counts).some((row) => row[outcome] > 0), `no ${outcome}`);
-  assert.deepEqual(new Set(Object.keys(counts)), new Set(OBJECT_KINDS));
+  assert.deepEqual(new Set(Object.keys(counts)), new Set(OBJECT_KINDS.filter((kind) => kind !== 'media')));
   assert.equal(countOutcomes(objects, 'label')['link to a slide'].native, 3);
 });
 
@@ -341,7 +341,8 @@ test('mergeOutcomes writes outcomes into the probe objects, says how sure each p
   assert.deepEqual(two.objects.map(view).slice(0, 5), [
     ['title', 'changed', 'OPF heading slides.1.title line 0', 'box'],
     ['table', 'native', 'OPF table 1', 'box'],
-    ['picture', 'picture', 'OPF smartart slides.1.blocks.0.items', 'box'],
+    // The exported SmartArt takes its kind over the probe's picture: the diagram became a picture.
+    ['diagram', 'picture', 'OPF smartart slides.1.blocks.0.items', 'box'],
     ['group', 'native', 'OPF diagram 1', 'box'],
     ['text', null, null, 'none'],
   ]);
@@ -420,4 +421,300 @@ test('roundTripRun fills a run directory: outcomes, the import, a valid result.j
   } finally {
     rmSync(folder, { recursive: true, force: true });
   }
+});
+
+// ---- NT-01b: diagram and media kinds, alt text, edit cases
+
+const PYRAMID = 'urn:microsoft.com/office/officeart/2005/8/layout/pyramid1';
+/** One slide with a live SmartArt frame of `texts` (layout part optional), a video, an audio clip and described objects. */
+function liveDeck({ texts = ['Goal', 'Evidence', 'Pilot'], layoutPart = true, diagramAlt = 'Pyramid of 3 levels', pictureAlt = 'Harbor at dusk', extra = [] } = {}) {
+  return makePptx({
+    slides: [
+      {
+        diagrams: { rDm: { type: 'diagramData', xml: diagramDataXml(texts, PYRAMID) }, ...(layoutPart ? { rLo: { type: 'diagramLayout', xml: diagramLayoutXml(PYRAMID, 'Basic Pyramid') } } : {}) },
+        shapes: [
+          heading(0, 'Live'),
+          diagramFrame(3, 'OPF smartart slides.0.blocks.0.items', [40, 120, 400, 300], { lo: layoutPart ? 'rLo' : '', descr: diagramAlt }),
+          pic(4, 'OPF video 1', { box: [500, 120, 320, 180], media: 'video' }),
+          pic(5, 'OPF audio 1', { box: [500, 320, 40, 40], media: 'audio' }),
+          pic(6, 'OPF image 1', { box: [600, 320, 200, 120], descr: pictureAlt }),
+          described(7, 'OPF shape slides.0.blocks.1.shape', 'A blue square', { box: [40, 440, 60, 60] }),
+          ...extra,
+        ],
+      },
+    ],
+  });
+}
+
+test('inspectPptx: a live SmartArt frame is a diagram with its layout and node count; video and audio are media; alt is the description', () => {
+  const [slide] = inspectPptx(liveDeck()).slides;
+  assert.deepEqual(
+    slide.items.map((item) => [item.element, item.kind, item.label, item.media ?? null, item.alt ?? null]),
+    [
+      ['sp', 'title', 'slide title', null, null],
+      ['graphicFrame', 'diagram', 'diagram', null, 'Pyramid of 3 levels'],
+      ['pic', 'media', 'media', 'video', null],
+      ['pic', 'media', 'media', 'audio', null],
+      ['pic', 'picture', 'picture', null, 'Harbor at dusk'],
+      ['sp', 'shape', 'shape', null, 'A blue square'],
+    ],
+  );
+  assert.deepEqual(slide.items[1].diagram, { layoutId: PYRAMID, layout: 'Basic Pyramid', nodes: 3 });
+  // Without a layout part the data model's document point names the layout.
+  assert.deepEqual(inspectPptx(liveDeck({ layoutPart: false })).slides[0].items[1].diagram, { nodes: 3, layoutId: PYRAMID });
+  // A frame whose parts are missing states nothing.
+  assert.deepEqual(inspectPptx(exported).slides[1].items[3].diagram, {});
+  // OPF's own diagram (a group of shapes) stays a group.
+  assert.deepEqual([inspectPptx(exported).slides[1].items[4].kind, inspectPptx(exported).slides[1].items[4].label], ['group', 'diagram']);
+});
+
+test('objectOutcomes: a diagram stays live, loses nodes, becomes a group or a picture; media becomes a picture or is dropped', () => {
+  const kept = find(objectOutcomes(liveDeck(), liveDeck()).objects, 'OPF smartart slides.0.blocks.0.items');
+  assert.deepEqual([kept.kind, kept.outcome, kept.diagram], ['diagram', 'native', { layoutId: PYRAMID, layout: 'Basic Pyramid', nodes: 3 }]);
+  const fewer = find(objectOutcomes(liveDeck(), liveDeck({ texts: ['Goal', 'Evidence'] })).objects, 'OPF smartart slides.0.blocks.0.items');
+  assert.deepEqual([fewer.outcome, fewer.how], ['changed', 'nodes 3 -> 2']);
+  const relaid = makePptx({
+    slides: [
+      {
+        diagrams: { rDm: { type: 'diagramData', xml: diagramDataXml(['Goal', 'Evidence', 'Pilot']) }, rLo: { type: 'diagramLayout', xml: diagramLayoutXml('urn:microsoft.com/office/officeart/2005/8/layout/default', 'Basic Block List') } },
+        shapes: [heading(0, 'Live'), diagramFrame(3, 'OPF smartart slides.0.blocks.0.items', [40, 120, 400, 300], { lo: 'rLo' })],
+      },
+    ],
+  });
+  const other = find(objectOutcomes(liveDeck(), relaid).objects, 'OPF smartart slides.0.blocks.0.items');
+  assert.deepEqual([other.outcome, other.how], ['changed', 'layout Basic Pyramid -> Basic Block List']);
+
+  const shown = makePptx({
+    slides: [
+      {
+        shapes: [
+          heading(0, 'Live'),
+          grpSp(3, 'OPF smartart slides.0.blocks.0.items', [40, 120, 400, 300], null, [sp(20, 'Node 1', { box: [40, 120, 400, 100], paragraphs: ['Goal'] }), sp(21, 'Node 2', { box: [40, 220, 400, 100], paragraphs: ['Evidence'] })]),
+          pic(4, 'OPF video 1', { box: [500, 120, 320, 180] }),
+          pic(6, 'OPF image 1', { box: [600, 320, 200, 120], descr: 'OPF image 1' }),
+          described(7, 'OPF shape slides.0.blocks.1.shape', 'A blue square', { box: [40, 440, 60, 60] }),
+        ],
+      },
+    ],
+  });
+  const { objects } = objectOutcomes(liveDeck(), shown);
+  const view = (name) => {
+    const entry = find(objects, name);
+    return [entry.kind, entry.outcome, entry.how ?? entry.why ?? null];
+  };
+  assert.deepEqual(view('OPF smartart slides.0.blocks.0.items'), ['diagram', 'changed', 'drawn as a group of 2 parts: no longer a live diagram']);
+  assert.deepEqual(view('OPF video 1'), ['media', 'picture', 'the video became a still picture']);
+  assert.deepEqual(view('OPF audio 1'), ['media', 'dropped', 'not in the copy']);
+});
+
+test('objectOutcomes records alt text kept, changed, lost or added without changing the outcome', () => {
+  const copy = makePptx({
+    slides: [
+      {
+        diagrams: { rDm: { type: 'diagramData', xml: diagramDataXml(['Goal', 'Evidence', 'Pilot'], PYRAMID) } },
+        shapes: [
+          heading(0, 'Live'),
+          diagramFrame(3, 'OPF smartart slides.0.blocks.0.items', [40, 120, 400, 300], { descr: 'Pyramid of 3 levels' }),
+          // As Keynote writes it back: the description is the picture's name (opf#1479).
+          pic(6, 'OPF image 1', { box: [600, 320, 200, 120], descr: 'OPF image 1' }),
+          sp(7, 'OPF shape slides.0.blocks.1.shape', { box: [40, 440, 60, 60], fill: 'solid' }),
+          described(8, 'Keynote 1', 'added by the application', { box: [800, 10, 10, 10] }),
+        ],
+      },
+    ],
+  });
+  const { objects } = objectOutcomes(liveDeck(), copy);
+  const alt = (name) => {
+    const entry = find(objects, name);
+    return [entry.outcome, entry.alt ?? null, entry.copyAlt ?? null, entry.altChange ?? null];
+  };
+  assert.deepEqual(alt('OPF smartart slides.0.blocks.0.items'), ['native', 'Pyramid of 3 levels', 'Pyramid of 3 levels', 'kept']);
+  assert.deepEqual(alt('OPF image 1'), ['native', 'Harbor at dusk', 'OPF image 1', 'changed']);
+  assert.deepEqual(alt('OPF shape slides.0.blocks.1.shape'), ['native', 'A blue square', null, 'lost']);
+  assert.deepEqual(alt('OPF heading slides.0.title line 0'), ['native', null, null, null]);
+  const added = objectOutcomes(makePptx({ slides: [{ shapes: [sp(2, 'OPF shape 1', { box: [1, 1, 10, 10], fill: 'solid' })] }] }), makePptx({ slides: [{ shapes: [described(2, 'OPF shape 1', 'now described', { box: [1, 1, 10, 10] })] }] }));
+  assert.equal(added.objects[0].altChange, 'added');
+});
+
+test('mergeOutcomes: a probe that cannot read alt text gets the copy\'s description; the exported kind wins for diagram and media', () => {
+  const result = emptyResult({
+    target: 'keynote',
+    application: { name: 'Keynote', version: '16.0' },
+    system: { os: 'macOS', version: '26.1' },
+    opf: { version: '0.37.0' },
+    file: { deck: 'live', variant: 'default', path: 'live.pptx', sha256: 'b'.repeat(64) },
+    started: '2026-11-25T10:00:00Z',
+  });
+  result.verbs.open = { status: 'done', slideCount: 1, warnings: { status: 'not-read', source: null, lines: [] } };
+  result.verbs.probe = { status: 'done' };
+  result.verbs.resave = { status: 'done', path: 'resaved.pptx' };
+  const o = (kind, appClass, box, extra = {}) => ({ kind, outcome: null, appClass, box, ...extra });
+  result.slides = [
+    {
+      index: 1,
+      hidden: false,
+      layout: 'Title and Content',
+      picture: 'slides/slide-001.png',
+      notes: null,
+      objects: [
+        o('title', 'shape', TITLE, { text: 'Live' }),
+        o('picture', 'image', [40, 120, 400, 300], { name: 'OPF smartart slides.0.blocks.0.items' }),
+        o('picture', 'image', [500, 120, 320, 180]),
+        o('picture', 'image', [600, 320, 200, 120], { name: 'OPF image 1', alt: 'Harbor at dusk' }),
+        o('shape', 'shape', [40, 440, 60, 60]),
+      ],
+    },
+  ];
+  const keynoteCopy = makePptx({
+    slides: [
+      {
+        shapes: [
+          heading(0, 'Live'),
+          pic(3, 'OPF smartart slides.0.blocks.0.items', { box: [40, 120, 400, 300], descr: 'OPF smartart slides.0.blocks.0.items' }),
+          pic(4, 'OPF video 1', { box: [500, 120, 320, 180], descr: 'OPF video 1' }),
+          pic(6, 'OPF image 1', { box: [600, 320, 200, 120], descr: 'OPF image 1' }),
+          sp(7, 'OPF shape slides.0.blocks.1.shape', { box: [40, 440, 60, 60], fill: 'solid' }),
+        ],
+      },
+    ],
+  });
+  mergeOutcomes(result, objectOutcomes(liveDeck(), keynoteCopy, { target: 'keynote' }));
+  assert.deepEqual(validateResult(result).errors, []);
+  const objects = result.slides[0].objects;
+  const view = (object) => [object.kind, object.outcome, object.alt ?? null, object.details.altFrom ?? null];
+  assert.deepEqual(objects.slice(0, 5).map(view), [
+    ['title', 'native', null, null],
+    ['diagram', 'picture', 'OPF smartart slides.0.blocks.0.items', 'copy'],
+    ['media', 'picture', 'OPF video 1', 'copy'],
+    // The probe's own alt stays: it is what the application shows.
+    ['picture', 'native', 'Harbor at dusk', null],
+    ['shape', 'native', null, null],
+  ]);
+  // The audio clip is gone from the copy: added as a dropped media object.
+  assert.deepEqual(objects.slice(5).map((object) => [object.kind, object.outcome, object.name]), [['media', 'dropped', 'OPF audio 1']]);
+});
+
+test('editOutcomes and roundTripRun: an edit case is compared and imported on its own, the slides untouched', () => {
+  const edited = liveDeck({ texts: ['Goal', 'Evidence', 'Pilot', 'Scale'] });
+  const outcomes = editOutcomes(liveDeck(), edited);
+  assert.deepEqual(outcomes.objects, [{ slide: 1, kind: 'diagram', name: 'OPF smartart slides.0.blocks.0.items', outcome: 'changed', how: 'nodes 3 -> 4' }]);
+  assert.deepEqual(outcomes.counts, { 'diagram.changed': 1, 'media.native': 2, 'picture.native': 1, 'shape.native': 1, 'title.native': 1 });
+
+  const folder = mkdtempSync(path.join(tmpdir(), 'nt-edits-'));
+  try {
+    const inputs = path.join(folder, 'inputs');
+    const run = path.join(folder, 'run');
+    const files = path.join(run, 'files', 'round-trip~default');
+    mkdirSync(inputs);
+    mkdirSync(path.join(files, 'edits'), { recursive: true });
+    writeFileSync(path.join(inputs, 'round-trip.pptx'), liveDeck());
+    const result = probedResult();
+    result.verbs.resave = { status: 'done', path: 'resaved.pptx' };
+    result.verbs.edits = [
+      { id: 'add-node', what: 'added a fourth node to the pyramid on slide 1', path: editPath('add-node'), status: 'done' },
+      { id: 'move-shape', what: 'moved the blue square on slide 1', path: editPath('move-shape'), status: 'timeout', message: 'no answer in 60 s' },
+    ];
+    const before = JSON.stringify(result.slides);
+    writeFileSync(path.join(files, 'result.json'), JSON.stringify(result));
+    writeFileSync(path.join(files, 'resaved.pptx'), liveDeck());
+    writeFileSync(path.join(files, 'edits', 'add-node.pptx'), edited);
+    const seen = [];
+    const { files: summary } = roundTripRun(run, inputs, {
+      importer: (file) => {
+        seen.push(path.relative(files, file));
+        return { status: 'imported', slideCount: 1 };
+      },
+    });
+    assert.deepEqual(seen, ['resaved.pptx', path.join('edits', 'add-node.pptx')]);
+    assert.deepEqual(summary[0].edits, [
+      { id: 'add-node', status: 'done', import: { status: 'imported', slideCount: 1 } },
+      { id: 'move-shape', status: 'not-run', import: { status: 'not-run', error: 'no copy to import (edit timeout)' } },
+    ]);
+    const written = JSON.parse(readFileSync(path.join(files, 'result.json'), 'utf8'));
+    assert.deepEqual(validateResult(written).errors, []);
+    assert.deepEqual(written.verbs.edits[0].outcomes, outcomes);
+    assert.equal(written.verbs.edits[1].outcomes, undefined);
+    // The slides were merged from resaved.pptx only: the edit's changed diagram is not in them.
+    assert.notEqual(JSON.stringify(written.slides), before);
+    assert.ok(!JSON.stringify(written.slides).includes('nodes 3 -> 4'));
+  } finally {
+    rmSync(folder, { recursive: true, force: true });
+  }
+});
+
+test('roundTripRun keepDone: a file and an edit case that already have their import are kept; an edit case without one runs', () => {
+  const folder = mkdtempSync(path.join(tmpdir(), 'nt-keep-'));
+  try {
+    const inputs = path.join(folder, 'inputs');
+    const run = path.join(folder, 'run');
+    const files = path.join(run, 'files', 'round-trip~default');
+    mkdirSync(inputs);
+    mkdirSync(path.join(files, 'edits'), { recursive: true });
+    writeFileSync(path.join(inputs, 'round-trip.pptx'), liveDeck());
+    const result = probedResult();
+    result.verbs.resave = { status: 'done', path: 'resaved.pptx', import: { status: 'imported', slideCount: 1 } };
+    result.verbs.edits = [
+      { id: 'add-node', what: 'added a fourth node', path: editPath('add-node'), status: 'done', import: { status: 'imported', slideCount: 1 } },
+      { id: 'recolor', what: 'recolored the square', path: editPath('recolor'), status: 'done' },
+    ];
+    const slides = JSON.stringify(result.slides);
+    writeFileSync(path.join(files, 'result.json'), JSON.stringify(result));
+    writeFileSync(path.join(files, 'resaved.pptx'), liveDeck());
+    for (const id of ['add-node', 'recolor']) writeFileSync(path.join(files, 'edits', `${id}.pptx`), liveDeck());
+    const seen = [];
+    const importer = (file) => {
+      seen.push(path.relative(files, file));
+      return { status: 'imported', slideCount: 1 };
+    };
+    const first = roundTripRun(run, inputs, { importer, keepDone: true });
+    assert.deepEqual(seen, [path.join('edits', 'recolor.pptx')]);
+    assert.equal(first.files[0].status, 'kept');
+    assert.deepEqual(
+      first.files[0].edits.map((edit) => [edit.id, edit.status]),
+      [
+        ['add-node', 'kept'],
+        ['recolor', 'done'],
+      ],
+    );
+    const written = JSON.parse(readFileSync(path.join(files, 'result.json'), 'utf8'));
+    assert.equal(JSON.stringify(written.slides), slides, 'the kept slides are not merged again');
+    assert.deepEqual(written.verbs.edits[1].import, { status: 'imported', slideCount: 1 });
+    // Everything has its import now: a second pass keeps the whole file and imports nothing.
+    const second = roundTripRun(run, inputs, { importer, keepDone: true });
+    assert.equal(seen.length, 1);
+    assert.deepEqual(second.files[0].edits.map((edit) => edit.status), ['kept', 'kept']);
+  } finally {
+    rmSync(folder, { recursive: true, force: true });
+  }
+});
+
+test('mergeOutcomes: a diagram still live in the copy carries its layout and node count in details', () => {
+  const result = emptyResult({
+    target: 'powerpoint',
+    application: { name: 'PowerPoint', version: '16.0' },
+    system: { os: 'Windows', version: '11' },
+    opf: { version: '0.37.0' },
+    file: { deck: 'live', variant: 'default', path: 'live.pptx', sha256: 'c'.repeat(64) },
+    started: '2026-11-25T10:00:00Z',
+  });
+  result.verbs.open = { status: 'done', slideCount: 1, warnings: { status: 'read', source: 'application', lines: [] } };
+  result.verbs.probe = { status: 'done' };
+  result.verbs.resave = { status: 'done', path: 'resaved.pptx' };
+  result.slides = [
+    {
+      index: 1,
+      hidden: false,
+      layout: 'Title Only',
+      picture: 'slides/slide-001.png',
+      notes: null,
+      objects: [
+        { kind: 'title', outcome: null, name: 'OPF heading slides.0.title line 0', box: TITLE },
+        { kind: 'diagram', outcome: null, appClass: 'msoSmartArt', name: 'OPF smartart slides.0.blocks.0.items', box: [40, 120, 400, 300], details: { nodes: 3 } },
+      ],
+    },
+  ];
+  mergeOutcomes(result, objectOutcomes(liveDeck(), liveDeck()));
+  assert.deepEqual(validateResult(result).errors, []);
+  const diagram = result.slides[0].objects[1];
+  assert.deepEqual([diagram.kind, diagram.outcome, diagram.alt, diagram.details], ['diagram', 'native', 'Pyramid of 3 levels', { nodes: 3, match: 'name', label: 'diagram', layoutId: PYRAMID, layout: 'Basic Pyramid', altFrom: 'copy' }]);
 });

@@ -22,7 +22,7 @@ const DEFAULT_TAG = "opf-editor";
 export const OPF_EDITOR_EVENTS = Object.freeze([
   "mounted", "ready", "change", "selection", "zoom", "layout", "command", "layoutStudio", "cursor", "slide", "view", "source", "checking", "fonts",
   "geometry", "sync", "render", "draft", "commit", "cancel", "status", "error", "kept", "rename", "export", "persistence", "review", "review-goto",
-  "review-focus", "panel", "destroy", "deckName", "expand", "dirty", "save", "review-open",
+  "review-focus", "panel", "destroy", "deckName", "expand", "dirty", "save", "review-open", "link",
 ]);
 
 /** The DOM event type of a workspace event: `layoutStudio` becomes `opf-layout-studio`. */

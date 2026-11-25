@@ -38,7 +38,7 @@ The native-testing driver for Keynote on macOS (NT-02). It opens OPF-exported `.
 node scripts/native-acceptance/apps/keynote/run.mjs --out <dir outside the repository> --opf <version> [--opf-commit <sha>] [--input-root <dir>] [--warnings-dir <dir>] <file.pptx>...
 ```
 
-It runs `check` before every file and stops with exit code 2 and the reasons when it refuses. Exit 0: every verb of every file done; 1: some verb did not finish; 2: refused, bad arguments, or stopped (an `open` that timed out, or a document that would not close). File ids come from the paths: `<deck>/<variant>.pptx` (variant `default`, `native`, `static`, ...), `<deck>~<variant>.pptx`, else `<deck>.pptx` with variant `default`. The general `pnpm native` entry point is NT-05.
+It runs `check` before every file and stops with exit code 2 and the reasons when it refuses. Exit 0: every verb of every file done; 1: some verb did not finish; 2: refused, bad arguments, or stopped (an `open` that timed out, or a document that would not close). File ids come from the paths: `<deck>/<variant>.pptx` (variant `default`, `native`, `static`, ...), `<deck>~<variant>.pptx`, else `<deck>.pptx` with variant `default`. The general entry point, `pnpm native keynote` (`scripts/native-acceptance/native.mjs`), builds the decks, runs this driver and classifies the result; see "One command: pnpm native" in `scripts/native-acceptance/README.md`.
 
 ## Tested without Keynote
 

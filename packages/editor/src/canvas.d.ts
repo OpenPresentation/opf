@@ -32,6 +32,13 @@ export declare function whenFontsReady(
 ): Promise<void>;
 export interface CanvasEditorOptions {
   editor?: EditorSession;
+  /** FR-03: show the slide read only: no editing targets or handles, and its links work through `onLink`. Default false. */
+  readOnly?: boolean;
+  /**
+   * FR-03: a link of the slide was followed (a click or Enter in a read-only canvas, Ctrl or Cmd with a click in an editable one): `{ slide }` for a
+   * `slide:<id>` link, `{ href }` for any other. The canvas never navigates its frame itself.
+   */
+  onLink?: (link: { slide: string; href?: undefined } | { href: string; slide?: undefined }, event: MouseEvent) => void;
   presentation?: unknown;
   /**
    * The host's catalogs (core `Catalog[]`, for example `[gallery]` from `@openpresentation/gallery`) for the session the
@@ -145,6 +152,12 @@ export interface CanvasEditor {
   /** How a pointer enters text editing now; `setTextEntry` changes it without remounting. */
   readonly textEntry: "click" | "dblclick";
   setTextEntry(mode: "click" | "dblclick"): void;
+  /** FR-03: true while the canvas only shows the slide. */
+  readonly readOnly: boolean;
+  /** FR-03: show the slide read only (links work, nothing edits) or editable again; false when an edit in progress could not be committed. */
+  setReadOnly(value: boolean): boolean;
+  /** FR-03: move the focus to the slide itself. */
+  focusSlide(): void;
   readonly targets: "interactive" | "passive";
   setTargets(mode: "interactive" | "passive"): void;
   /** Open structured controls, including rich run fields. */

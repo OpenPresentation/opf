@@ -11,7 +11,7 @@ for(const type of ['column','scatter']){
   assert.equal(current.data.columns[nameIndex],value,type+': literal c:tx/c:v preserves exact current native string');assert.deepEqual(current.data.columns.slice(nameIndex+1),nativeBefore.data.columns.slice(nameIndex+1),type+': other cached names unchanged');assert.deepEqual(current.data.rows,nativeBefore.data.rows,type+': numeric data/categories unchanged');assert.deepEqual(input,before,'import must not mutate input archive');controls++;
  }
  for(const raw of ['<c:v>One</c:v><c:v>Two</c:v>','<c:v>One</c:v>'+tx.slice('<c:tx>'.length,-'</c:tx>'.length),'<c:v><c:v>Nested</c:v></c:v>']){
-  await assert.rejects(fromPptx(changed(raw)),error=>error.code==='invalid-chart-cache'&&error.path.startsWith(chartPart+'#c:ser[0]/c:tx'),type+': malformed or competing literal name refuses explicitly');controls++;
+  {const found=[],doc=await fromPptx(changed(raw),{onDiagnostic:d=>found.push(d)}),bad=found.filter(d=>d.code==='chart-unreadable');assert.equal(bad.length,1,type+': malformed or competing literal name refuses explicitly (opf#1477: the chart, not the deck)');assert.equal(bad[0].reason,'invalid-chart-cache');assert.ok(bad[0].location.startsWith(chartPart+'#c:ser[0]/c:tx'));assert.equal(doc.slides[0].blocks?.find(b=>b.chart)?.chart??doc.slides[0].chart,undefined);}controls++;
  }
 }
 console.log('Current literal series-name import: '+controls+' exact-string/classic/scatter/source-integrity/refusal controls PASS.');

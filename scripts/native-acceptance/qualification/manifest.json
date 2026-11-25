@@ -1011,11 +1011,12 @@
       "targets": {
         "powerpoint": {
           "outcome": "native",
+          "kind": "diagram",
           "note": "Live SmartArt with one node per entry: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
         },
         "keynote": {
           "outcome": "picture",
-          "kind": "picture",
+          "kind": "diagram",
           "known": [
             "kn-smartart-picture-alt"
           ],
@@ -1023,6 +1024,7 @@
         },
         "impress": {
           "outcome": "changed",
+          "kind": "diagram",
           "note": "LibreOffice does not lay SmartArt out; it draws the file's SmartArt drawing part (docs/libreoffice.md). features.mjs grades smartArt n/a, and the smartart deck is an advanced case, where a failing check is a known difference (corpus.mjs)."
         }
       }
@@ -1058,11 +1060,12 @@
       "targets": {
         "powerpoint": {
           "outcome": "native",
+          "kind": "diagram",
           "note": "Live SmartArt with one node per entry: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
         },
         "keynote": {
           "outcome": "picture",
-          "kind": "picture",
+          "kind": "diagram",
           "known": [
             "kn-smartart-picture-alt"
           ],
@@ -1070,6 +1073,7 @@
         },
         "impress": {
           "outcome": "changed",
+          "kind": "diagram",
           "note": "LibreOffice does not lay SmartArt out; it draws the file's SmartArt drawing part (docs/libreoffice.md). features.mjs grades smartArt n/a, and the smartart deck is an advanced case, where a failing check is a known difference (corpus.mjs)."
         }
       }
@@ -1103,11 +1107,12 @@
       "targets": {
         "powerpoint": {
           "outcome": "native",
+          "kind": "diagram",
           "note": "Live SmartArt with one node per entry: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
         },
         "keynote": {
           "outcome": "picture",
-          "kind": "picture",
+          "kind": "diagram",
           "known": [
             "kn-smartart-picture-alt"
           ],
@@ -1115,6 +1120,7 @@
         },
         "impress": {
           "outcome": "changed",
+          "kind": "diagram",
           "note": "LibreOffice does not lay SmartArt out; it draws the file's SmartArt drawing part (docs/libreoffice.md). features.mjs grades smartArt n/a, and the smartart deck is an advanced case, where a failing check is a known difference (corpus.mjs)."
         }
       }
@@ -1153,11 +1159,12 @@
       "targets": {
         "powerpoint": {
           "outcome": "native",
+          "kind": "diagram",
           "note": "Live SmartArt with one node per entry: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
         },
         "keynote": {
           "outcome": "picture",
-          "kind": "picture",
+          "kind": "diagram",
           "known": [
             "kn-smartart-picture-alt"
           ],
@@ -1165,6 +1172,7 @@
         },
         "impress": {
           "outcome": "changed",
+          "kind": "diagram",
           "note": "LibreOffice does not lay SmartArt out; it draws the file's SmartArt drawing part (docs/libreoffice.md). features.mjs grades smartArt n/a, and the smartart deck is an advanced case, where a failing check is a known difference (corpus.mjs)."
         }
       }
@@ -1275,7 +1283,7 @@
         },
         "keynote": {
           "outcome": "picture",
-          "kind": "picture",
+          "kind": "diagram",
           "known": [
             "kn-smartart-picture-alt"
           ],
@@ -1283,6 +1291,7 @@
         },
         "impress": {
           "outcome": "changed",
+          "kind": "diagram",
           "note": "LibreOffice does not lay SmartArt out; it draws the file's SmartArt drawing part (docs/libreoffice.md). features.mjs grades smartArt n/a, and the smartart deck is an advanced case, where a failing check is a known difference (corpus.mjs)."
         }
       }

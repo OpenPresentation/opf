@@ -1,6 +1,6 @@
 # Working with OPF
 
-For CI, package releases, hosted previews and deployments, read the current [CI/CD contract](docs/ci-cd.md). The owner authorized agent deployments and native Cloudflare Previews on 2026-11-08; older no-deploy notes are historical. New logins, DNS and account-plan/visibility changes remain owner actions.
+For CI, package releases, hosted previews and deployments, read the current [CI/CD contract](docs/ci-cd.md). The owner authorized agent deployments and native Cloudflare Previews on 2026-11-08; older no-deploy notes are historical. New logins, DNS and account-plan/visibility changes remain owner actions. Before any run in Keynote, PowerPoint or LibreOffice Impress, read [native-app testing](docs/native-testing.md).
 
 For tasks involving OPF documents, read the relevant skill entrypoint in `skills/`:
 
