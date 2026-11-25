@@ -15,6 +15,8 @@ There is no owner rule that text never shrinks. The line "never shrink text when
 
 ## PowerPoint before merge
 
+> Current process: [docs/native-testing.md](../../native-testing.md). Decision D1 of 2026-11-25 makes a Keynote run a release gate for OPF's defects; this page stays as history.
+
 - OPF's preview does not prove what PowerPoint draws. A change that moves what the export writes (layout rules, chart geometry, text boxes) is opened in PowerPoint and compared with the preview before the owner is asked to approve it and before it merges. opf#1425 was approved from preview pictures alone, and in PowerPoint it put a column chart's top value label on the chart's heading.
 - PowerPoint is on the owner's Windows computer only. A session on another machine cannot do this check. It keeps such a pull request open, says in it that the PowerPoint pass is owed, and asks the owner for a Windows session. Batch these, so one Windows session covers many.
 - The COM rules of 2026-11-07 stand. Added since: the owner allowed running PowerPoint and Excel on the Windows computer on 2026-11-23 ("you can run powerpoint and excel here that's fine"). A PowerPoint started through COM exits only when the PowerShell process that started it ends, so run one script per PowerShell process. Subagents never start Office; the root session does.
