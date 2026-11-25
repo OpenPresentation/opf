@@ -96,6 +96,8 @@ export interface PptxModule {
 	fromPptx(input: Uint8Array, options?: Record<string, unknown>): Promise<Record<string, unknown>>;
 	/** LH-28: the Latin text typefaces of a PPTX that are not Office-safe. Absent from releases before LH-28. */
 	typefacesNotOfficeSafe?(input: Uint8Array): string[];
+	/** The note's sentence for those families; shared with the MCP viewer. Absent from releases before it. */
+	typefacesNotOfficeSafeMessage?(families: readonly string[]): string | undefined;
 }
 export interface Peer<T> {
 	module: T;

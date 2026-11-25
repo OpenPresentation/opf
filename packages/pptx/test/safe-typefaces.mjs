@@ -6,7 +6,7 @@ import {strFromU8, unzipSync} from 'fflate';
 import {FONT_POLICY} from '@openpresentation/opf';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
-import {OFFICE_SAFE_TYPEFACES, officeSafeTypeface, typefacesNotOfficeSafe} from '../dist/index.js';
+import {OFFICE_SAFE_TYPEFACES, officeSafeTypeface, typefacesNotOfficeSafe, typefacesNotOfficeSafeMessage} from '../dist/index.js';
 import {SAFE_TYPEFACE_FOR_CLASS, isLatinTextFamily, typefaceClasses, writeSafeTypefaces} from '../dist/safe-typefaces.js';
 
 let checks = 0;
@@ -93,6 +93,12 @@ const exported = async (document, options = {}) => {
   assert.match(arimo.diagnostics.find(item => item.family === 'Arimo').message, /same character widths/);
   checks++;
 }
+
+// The note both the command line and the MCP viewer show: one sentence for the families typefacesNotOfficeSafe names, none for none.
+assert.equal(typefacesNotOfficeSafeMessage([]), undefined);
+assert.match(typefacesNotOfficeSafeMessage(['Roboto']), /^The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font/);
+assert.match(typefacesNotOfficeSafeMessage(['Aptos', 'Roboto']), /^The PPTX names Aptos, Roboto, which are not on every .* A viewer without them substitutes/);
+checks++;
 
 await assert.rejects(toPptx(deck(), {typefaces: 'office'}), error => error.code === 'invalid-typefaces-option');
 checks++;

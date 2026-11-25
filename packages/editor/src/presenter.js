@@ -347,6 +347,7 @@ export function createPresenter(container, options = {}) {
     if (key === "Escape") stop();
     else if (key === "Tab") (doc.activeElement === closeButton ? root : closeButton).focus();
     else if (onButton && (key === "Enter" || key === " ")) handled = false; // the button's own click exits
+    else if (key === "Enter" && onLink(event.target)) handled = false; // a focused link: Enter follows it and the slide stays
     else if (NEXT_KEYS.has(key)) move(1);
     else if (PREVIOUS_KEYS.has(key)) move(-1);
     else if (key === "Home") show(0);
@@ -354,13 +355,18 @@ export function createPresenter(container, options = {}) {
     else handled = false;
     if (handled) { event.preventDefault(); event.stopPropagation(); }
   }
+  // A link in a slide (a text run, a shape, a table cell is drawn as an `a`): activating it follows the link and does not move the slide.
+  function onLink(target) {
+    const link = target && typeof target.closest === "function" ? target.closest("a[href]") : null;
+    return !!link && root.contains(link);
+  }
   // A press on the left third goes back, anywhere else forward.
   function byZone(clientX) {
     const box = root.getBoundingClientRect();
     return move(clientX < box.left + box.width / 3 ? -1 : 1);
   }
   function onClick(event) {
-    if (!active || closeButton.contains(event.target)) return;
+    if (!active || closeButton.contains(event.target) || onLink(event.target)) return;
     // A touch is handled on pointerup (below); the click the browser adds after it must not move a second time.
     if (win.performance.now() < clickGuardUntil) return;
     byZone(event.clientX);
@@ -378,7 +384,7 @@ export function createPresenter(container, options = {}) {
     if (Math.abs(dx) >= SWIPE_MIN && Math.abs(dx) >= Math.abs(dy) * 1.5 && elapsed <= SWIPE_MAX_MS) {
       clickGuardUntil = now + CLICK_GUARD_MS;
       move(dx < 0 ? 1 : -1);
-    } else if (Math.abs(dx) <= TAP_SLOP && Math.abs(dy) <= TAP_SLOP && elapsed <= TAP_MAX_MS && !closeButton.contains(event.target)) {
+    } else if (Math.abs(dx) <= TAP_SLOP && Math.abs(dy) <= TAP_SLOP && elapsed <= TAP_MAX_MS && !closeButton.contains(event.target) && !onLink(event.target)) {
       clickGuardUntil = now + CLICK_GUARD_MS;
       byZone(event.clientX);
     }

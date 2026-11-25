@@ -119,6 +119,10 @@
           "command": "node test/presenter-browser.mjs"
         },
         {
+          "id": "playground:presenter-links-browser",
+          "command": "node test/presenter-links-browser.mjs"
+        },
+        {
           "id": "playground:present-button-browser",
           "command": "node test/present-button-browser.mjs"
         },

@@ -673,6 +673,8 @@ export declare const OFFICE_SAFE_TYPEFACES: readonly string[];
 export declare function officeSafeTypeface(family: string, classes?: ReadonlyMap<string, "sans-serif" | "serif" | "monospace">): string;
 /** LH-28: the Latin text typefaces a finished PPTX names that are not Office-safe, sorted. */
 export declare function typefacesNotOfficeSafe(input: Uint8Array | ArrayBuffer): string[];
+/** The note an export shows for the families `typefacesNotOfficeSafe` returned (the sentence of the `pptx/typeface-not-office-safe` finding); `undefined` for none. */
+export declare function typefacesNotOfficeSafeMessage(families: readonly string[]): string | undefined;
 
 export declare function packageFontsUsed(inventory: TypefaceInventory): string[];
 
