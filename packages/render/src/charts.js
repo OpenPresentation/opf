@@ -77,7 +77,14 @@ function drawHeader(c, spec, header) {
   if (header.legend) {
     c.legendManaged = true;
     const plan = spec.kind === "combo" ? comboPlan(c, c.series()) : undefined;
+    // FR-07: a band's entry (the bands come first) in the band's color.
+    const bandFills = header.legend.entries.some((entry) => entry.band !== undefined) ? new Map(bandLegendEntries(c).map((entry) => [entry.path, entry.color])) : undefined;
     for (const entry of header.legend.entries) {
+      if (entry.band !== undefined) {
+        const path = `${c.path}.bands.${entry.band}`, metrics = { swatch: c.fontPx * 0.6, gap: c.fontPx * 0.4, keyWidth: c.fontPx * 0.6 };
+        if (bandFills?.has(path)) drawLegendEntry(c, { name: entry.name, color: bandFills.get(path), path }, entry.box.x, entry.box.y, entry.box.height, metrics, entry.box.width);
+        continue;
+      }
       const s = c.series()[entry.series];
       const key = entry.key === "line" ? "line" : undefined;
       const marker = key === "line" && (spec.kind === "combo" ? plan?.[entry.series]?.role === "line" : Boolean(spec.markers));

@@ -213,6 +213,9 @@ export function applyBulletTarget(xml, info) {
   const scatterSeries = `<c:ser>${head[1]}${head[2]}${head[3]}<c:spPr><a:ln w="19050"><a:noFill/></a:ln></c:spPr><c:marker><c:symbol val="none"/></c:marker>${errorBars}<c:xVal>${values}</c:xVal><c:yVal>${yLit}</c:yVal><c:smooth val="0"/>${ext('target', { v: 1 })}</c:ser>`;
   const scatter = `<c:scatterChart><c:scatterStyle val="lineMarker"/><c:varyColors val="0"/>${scatterSeries}<c:axId val="${value}"/><c:axId val="${category}"/></c:scatterChart>`;
   body = body.replace(measure, () => group + scatter);
+  // The category names a third of PowerPoint's default distance from the plot (c:lblOffset 100 put them about 9 px away where the preview has
+  // 3, native check 2026-11-25). The value axis has no such attribute (CT_ValAx has no lblOffset), so its labels keep PowerPoint's distance.
+  body = body.replace(/<c:catAx>[\s\S]*?<\/c:catAx>/g, (axis) => /<c:delete val="1"\/>/.test(axis) ? axis : axis.replace(/<c:lblOffset val="[^"]*"\/>/, '').replace(/(<c:lblAlgn val="[^"]*"\/>)/, (align) => `${align}<c:lblOffset val="33"/>`));
   let out = xml.slice(0, plot.index) + body + xml.slice(plot.index + plot[0].length);
   // The target has no legend entry (its key would be empty). PowerPoint lists it after every other series.
   const last = (out.match(/<c:ser>/g) ?? []).length - 1;

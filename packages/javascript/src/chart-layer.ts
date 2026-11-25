@@ -16,6 +16,7 @@
 // header caption. PPTX import does not write these defaults back as options (src/chart-options.js in opf-pptx).
 import {chartOptionTarget, chartLabelText, formatChartLabelNumber} from './chart-options.js';
 import {chartTextSize} from './chart-axis.js';
+import {chartBands} from './chart-bands.js';
 import {groupsThousands} from './number-grouping.js';
 import {chartNumber, formatDataNumber, type ResolvedChartData} from './chart-data.js';
 import {chartCategoriesInTime} from './chart-time-order.js';
@@ -52,8 +53,10 @@ export interface ChartLayerSmall {
 
 /** One legend entry of the header row: its series, its name and the box of its key and name (slide pixels). */
 export interface ChartHeaderLegendEntry {
-  /** Index of the series among the plotted series. */
+  /** Index of the series among the plotted series; -1 for a band's entry. */
   series: number;
+  /** FR-07: a labeled band's entry: its index in `chart.bands` as authored. The bands come first (PowerPoint lists them first). */
+  band?: number;
   name: string;
   /** `line`: a line key (with a marker on a line chart with markers and on a combo line series); otherwise a square swatch. */
   key?: 'line';
@@ -332,8 +335,10 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
   if (options.legend !== false && names.length >= 2 && names.length <= CHART_HEADER_MAX_LEGEND) {
     const lineKey = (index: number) => spec.kind === 'line' || (spec.kind === 'combo' && data.combo?.[index]?.role === 'line');
     const spacing = fontPx * 0.8;
-    const sized = names.map((name, series) => ({series, name, key: lineKey(series) ? 'line' as const : undefined,
-      width: (lineKey(series) ? fontPx * 1.4 : fontPx * 0.6) + fontPx * 0.4 + geometry.measure(name, fontPx, 400)}));
+    // FR-07: the labeled bands first, then the series (PowerPoint lists the band group, which it draws first, before the data).
+    const bandEntries = chartBands(chart).flatMap(band => band.label === undefined ? [] : [{series: -1, band: band.index, name: label(band.label), key: undefined, width: fontPx * 0.6 + fontPx * 0.4 + geometry.measure(label(band.label), fontPx, 400)}]);
+    const sized = [...bandEntries, ...names.map((name, series) => ({series, band: undefined as number | undefined, name, key: lineKey(series) ? 'line' as const : undefined,
+      width: (lineKey(series) ? fontPx * 1.4 : fontPx * 0.6) + fontPx * 0.4 + geometry.measure(name, fontPx, 400)}))];
     const legendWidth = sized.reduce((sum, entry) => sum + entry.width, 0) + spacing * (sized.length - 1);
     // LH-143: the entries in rows of at most the available width; undefined when one entry is wider or the rows exceed the limit.
     const wrapped = (() => {
@@ -355,9 +360,10 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
       wrapped.forEach((line, index) => {
         let x = left;
         const y = box.y + pad + (first + index) * lineHeight;
-        for (const entry of line) { entries.push({series: entry.series, name: entry.name, ...(entry.key ? {key: entry.key} : {}), box: {x, y, width: entry.width, height: lineHeight}}); x += entry.width + spacing; }
+        for (const entry of line) { entries.push({series: entry.series, ...(entry.band !== undefined ? {band: entry.band} : {}), name: entry.name, ...(entry.key ? {key: entry.key} : {}), box: {x, y, width: entry.width, height: lineHeight}}); x += entry.width + spacing; }
       });
-      legend = {box: {x: left, y: box.y + pad + first * lineHeight, width: Math.max(...widths), height: wrapped.length * lineHeight}, entries: entries.sort((a, b) => a.series - b.series)};
+      const order = (entry: ChartHeaderLegendEntry) => entry.band !== undefined ? -1000 + sized.findIndex(item => item.band === entry.band) : entry.series;
+      legend = {box: {x: left, y: box.y + pad + first * lineHeight, width: Math.max(...widths), height: wrapped.length * lineHeight}, entries: entries.sort((a, b) => order(a) - order(b))};
     } else if (legendWidth <= available + 0.01) {
       const sameRow = text !== undefined && captionWidth + 2 * fontPx + legendWidth <= available + 0.01;
       const row = sameRow || !text ? 0 : 1;
@@ -368,7 +374,7 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
       let x = start;
       const entries: ChartHeaderLegendEntry[] = [];
       for (const entry of sized) {
-        entries.push({series: entry.series, name: entry.name, ...(entry.key ? {key: entry.key} : {}), box: {x, y, width: entry.width, height: lineHeight}});
+        entries.push({series: entry.series, ...(entry.band !== undefined ? {band: entry.band} : {}), name: entry.name, ...(entry.key ? {key: entry.key} : {}), box: {x, y, width: entry.width, height: lineHeight}});
         x += entry.width + spacing;
       }
       legend = {box: {x: start, y, width: legendWidth, height: lineHeight}, entries};
