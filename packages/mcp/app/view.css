@@ -81,6 +81,8 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 .deck-export .opf-export-trigger svg:last-child { display: none; }
 .deck-expand-close, #deck-expand[data-mode="fullscreen"] .deck-expand-open { display: none; }
 #deck-expand[data-mode="fullscreen"] .deck-expand-close { display: block; }
+/* Claude draws its own expand control above the view: the bar does not draw a second one (More keeps its item on a phone). */
+:root[data-host-expand="true"] #deck-expand { display: none; }
 /* The one primary action of the view, and only while there is something to send. */
 .deck-send[data-unsent="true"] { border-color: var(--opf-ui-accent); background: var(--opf-ui-accent); color: var(--opf-ui-accent-fg); }
 .deck-send[data-unsent="true"]:hover:not(:disabled) { border-color: var(--opf-ui-accent); background: color-mix(in srgb, var(--opf-ui-accent) 88%, var(--opf-ui-fg)); }

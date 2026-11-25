@@ -749,22 +749,30 @@ try {
 	});
 
 	await run("the expand control asks straight from the click, says the truth when refused, and offers the way back", async () => {
-		const expand = view("start").locator("#deck-expand");
+		// Claude draws its own expand control above the view, so in Claude the bar draws none: one control, not two in the same corner.
+		assert.equal(await view("start").locator("#deck-expand").isVisible(), false, "in Claude the bar leaves the expand control to the host");
+		assert.equal(await frameOf("start").evaluate(() => document.documentElement.dataset.hostExpand), "true");
+		// Another host: the bar's own control.
+		await open("expand", "show_deck", { document: deckNamed("Expand") });
+		assert.equal(await frameOf("expand").evaluate(() => document.documentElement.dataset.hostExpand), "false");
+		const expand = view("expand").locator("#deck-expand");
+		assert.equal(await expand.isVisible(), true);
 		assert.equal(await expand.getAttribute("aria-label"), "Expand");
 		// A click the page makes up (no user activation): the host refuses, and the label does not change.
 		// (An evaluate counts as a gesture, so the click is made later, from a timer, after the transient activation of about 5 s lapsed.)
-		await frameOf("start").evaluate(() => { setTimeout(() => document.getElementById("deck-expand").click(), 7000); });
-		await page.waitForFunction(() => window.hosts.start.displayModes.length === 1, null, { timeout: 20000 });
+		await frameOf("expand").evaluate(() => { setTimeout(() => document.getElementById("deck-expand").click(), 7000); });
+		await page.waitForFunction(() => window.hosts.expand.displayModes.length === 1, null, { timeout: 20000 });
 		await page.waitForTimeout(500);
-		assert.equal(await view("start").locator("#deck-status").innerText(), "Claude kept the viewer in the conversation.", `host mode ${(await host("start")).mode}`);
+		assert.equal(await view("expand").locator("#deck-status").innerText(), "The assistant kept the viewer in the conversation.", `host mode ${(await host("expand")).mode}`);
 		assert.equal(await expand.getAttribute("aria-label"), "Expand");
 		// The person's click: granted; the container is now fixed-height, so the view fills it; and the way back is offered.
 		await expand.click();
-		await view("start").locator('#deck-expand[aria-label="Back to the conversation"]').waitFor();
-		assert.equal(await frameOf("start").evaluate(() => document.documentElement.dataset.fill), "true");
+		await view("expand").locator('#deck-expand[aria-label="Back to the conversation"]').waitFor();
+		assert.equal(await frameOf("expand").evaluate(() => document.documentElement.dataset.fill), "true");
 		await expand.click();
-		await view("start").locator('#deck-expand[aria-label="Expand"]').waitFor();
-		assert.deepEqual((await host("start")).displayModes, ["fullscreen", "fullscreen", "inline"]);
+		await view("expand").locator('#deck-expand[aria-label="Expand"]').waitFor();
+		assert.deepEqual((await host("expand")).displayModes, ["fullscreen", "fullscreen", "inline"]);
+		await remove("expand");
 	});
 
 	await run("full screen without container dimensions still fills the frame, borderless", async () => {

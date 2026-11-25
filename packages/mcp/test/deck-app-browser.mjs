@@ -55,6 +55,11 @@ const HOST_PAGE = `<!doctype html><meta charset="utf-8"><title>host</title><styl
 window.host = { requests: [], context: [], messages: [], toolCalls: [], displayModes: [], downloads: [] };
 const frame = document.getElementById("view");
 const send = (message) => frame.contentWindow.postMessage({ jsonrpc: "2.0", ...message }, "*");
+// The host's own expand control (Claude draws one above the view): the host changes the mode itself and tells the view.
+window.hostSetMode = (mode) => {
+  host.mode = mode;
+  send({ method: "ui/notifications/host-context-changed", params: { displayMode: mode, containerDimensions: mode === "fullscreen" ? { width: 960, height: 640 } : { width: window.setup.width ?? 960, maxHeight: 640 } } });
+};
 let initialized = false;
 window.startView = (setup) => {
   window.setup = setup;
@@ -106,6 +111,7 @@ window.addEventListener("message", async (event) => {
       return reply({});
     case "ui/request-display-mode": {
       host.displayModes.push(message.params.mode);
+      // (window.hostSetMode below is the host's own control: the host changes the mode and tells the view, with no request from it.)
       // As Claude does: only right after a press in the view (user activation); otherwise the mode stays and is the answer.
       if (!navigator.userActivation.isActive) return reply({ mode: host.mode ?? "inline" });
       host.mode = message.params.mode;
@@ -492,8 +498,11 @@ try {
 		await view().locator(".opf-source-action-download").click();
 		await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 15000 });
 		assert.match((await hostState()).downloads[0].contents[0].resource.uri, /\.opf\.json$/);
-		await view().locator("#deck-expand").click();
-		await page.waitForFunction(() => window.host.displayModes.length === 2);
+		// Claude draws its own expand control above the view, so in Claude the bar draws none; the way back is the host's control.
+		assert.equal(await view().locator("#deck-expand").isVisible(), false, "in Claude the bar leaves the expand control to the host");
+		await page.evaluate(() => window.hostSetMode("inline"));
+		await view().locator(':root[data-display="inline"]').waitFor();
+		assert.deepEqual((await hostState()).displayModes, ["fullscreen"], "the view asked once; the host changed the mode back itself");
 		await shoot("chat-dark-both");
 	});
 

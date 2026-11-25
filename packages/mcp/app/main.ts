@@ -807,6 +807,10 @@ function applyContext(update: Partial<McpUiHostContext>): void {
 	expandButton.setAttribute("aria-label", expandLabel);
 	expandButton.title = expandLabel;
 	expandButton.dataset.mode = context.displayMode ?? "inline";
+	// Claude draws its own expand control in the tool's header above the view, and its own way back: the bar's would be a second one
+	// in the same corner, so in Claude the bar leaves it to the host (view.css). The More menu of a phone-size bar keeps its item. No
+	// capability says whether a host draws this control, so this one follows the product the host named.
+	root.dataset.hostExpand = String(isClaude());
 	const can = app.getHostCapabilities();
 	sendButton.hidden = !can?.message;
 	// What the host said it is and what it announced that the view acts on, where one look finds it: the More menu (each part wraps
