@@ -241,7 +241,7 @@ export function referenceScope(context, text, format) {
   };
 }
 
-const REFERENCE_LABELS = { asset: "asset", dataset: "dataset", datasetColumn: "dataset column", cite: "reference", beat: "narrative beat", region: "layout region", color: "color variable" };
+const REFERENCE_LABELS = { asset: "asset", dataset: "dataset", datasource: "data source", datasetColumn: "dataset column", cite: "reference", beat: "narrative beat", region: "layout region", color: "color variable" };
 const referenceOption = (id, value, extra) => literalOption(id, JSON.stringify(value), { type: "reference", value, ...extra });
 
 function referenceOptions(site, context, catalogs, scope) {
@@ -255,6 +255,9 @@ function referenceOptions(site, context, catalogs, scope) {
       break;
     case "dataset":
       for (const dataset of facts.datasets) add(dataset.id, dataset.id, { detail: dataset.title || `${dataset.columns.length} columns`, doc: dataset.columns.join(", ") });
+      break;
+    case "datasource":
+      for (const source of facts.datasources) add(source.id, source.id, { detail: source.title || source.detail || "data source", doc: [source.title, source.detail].filter(Boolean).join(": ") });
       break;
     case "datasetColumn": {
       const source = columnSourceFor(site, (path) => scope.read(path));

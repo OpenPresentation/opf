@@ -8,7 +8,7 @@ import { chartOptionTarget } from './chart-options.js';
 import { CHART_REFERENCE_TYPES } from './chart-reference-types.js';
 import { formatVariableNumber } from './variables.js';
 import { localizeNumberText } from './numerals.js';
-import { dataProvenance, dataSourceDiagnostics, provenanceDiagnostics, type DataGenerator, type DataProvenance, type DataSource } from './data-sources.js';
+import { dataProvenance, unknownDataSourceDiagnostics, type DataGenerator, type DataProvenance, type DataSource } from './data-sources.js';
 
 export type { DataGenerator, DataProvenance, DataSource };
 
@@ -65,8 +65,6 @@ export interface DataDiagnostic {
 export interface DataResolveOptions {
   /** JSON Pointer of the chart or table object, used as the base of diagnostic paths. Default: "" (paths start at `/data` or `/rows`). */
   path?: string;
-  /** The date the data is checked as of (an ISO 8601 date or date-time), for the `dataset-stale` warning. Core has no clock: without a date no data is reported stale. */
-  asOf?: string;
 }
 
 export type ResolvedChartData =
@@ -379,13 +377,13 @@ function formatDiagnostics(columns: unknown[], columnsPath: string, diagnostics:
 }
 
 /**
- * Diagnostics of the top-level datasets and data sources themselves: duplicate column names, invalid column formats, a `datasource`
- * that names no data source, a credential in a data source's `src`, and (given `asOf`) data older than its data source's `refresh`.
+ * Diagnostics of the top-level datasets themselves: duplicate column names, invalid column formats and a `datasource` that names no
+ * data source. (The credential and staleness checks of data sources are `validate`'s: data-source-checks.ts.)
  */
-export function datasetDiagnostics(document: unknown, options: { asOf?: string } = {}): DataDiagnostic[] {
-  const diagnostics: DataDiagnostic[] = [...dataSourceDiagnostics(document)];
+export function datasetDiagnostics(document: unknown): DataDiagnostic[] {
+  const diagnostics: DataDiagnostic[] = [];
   for (const [id, dataset] of Object.entries(datasetsOf(document))) {
-    diagnostics.push(...provenanceDiagnostics(dataset, at('/datasets', id), document, options));
+    diagnostics.push(...unknownDataSourceDiagnostics(dataset, at('/datasets', id), document));
     if (!record(dataset) || !Array.isArray(dataset.columns)) continue;
     const columnsPath = at('/datasets', id, 'columns');
     duplicateColumns(dataset.columns.map(column => columnName(column) ?? ''), columnsPath, diagnostics);
@@ -542,7 +540,7 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     rowsPath = at(base, 'data', 'rows');
     formatDiagnostics(columns, columnsPath, diagnostics);
     provenance = dataProvenance(data);
-    if (document !== undefined) diagnostics.push(...provenanceDiagnostics(data, at(base, 'data'), document, options));
+    diagnostics.push(...unknownDataSourceDiagnostics(data, at(base, 'data'), document));
   }
   if (!columns.length) return fail('no-columns', 'The chart data has no columns.');
   const names = columns.map(column => columnName(column) ?? '');

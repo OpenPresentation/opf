@@ -4,7 +4,8 @@ import type { Catalog } from "./catalog-refs.js";
 import { catalogSchemaNames, type CatalogRecordKind } from "./catalog-schemas.js";
 import { resolveDesignRecords } from "./design-records.js";
 import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
-import { datasetDiagnostics, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
+import { dataSourceDiagnostics, provenanceDiagnostics } from "./data-source-checks.js";
+import { datasetDiagnostics, isDatasetRef, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
 import { chartDrawDiagnostics } from "./chart-fallback.js";
 import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions, resolveSlideDirection } from "./composition.js";
 import { layoutTemplateIssues } from "./layout-template.js";
@@ -723,10 +724,14 @@ function dataIssues(value: unknown, asOf?: string): { errors: ValidationIssue[];
       (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code }));
     }
   };
-  add(datasetDiagnostics(value, { asOf }));
+  add(datasetDiagnostics(value));
+  // FR-04: the checks on data sources a `validate` makes and the browser-safe data entry does not carry (data-source-checks.ts).
+  add(dataSourceDiagnostics(value));
+  for (const [id, dataset] of Object.entries(isRecord(value.datasets) ? value.datasets : {})) add(provenanceDiagnostics(dataset, `/datasets/${id.replaceAll("~", "~0").replaceAll("/", "~1")}`, value, { asOf }));
   const payload = (node: Record<string, unknown>, path: string): void => {
     if (isRecord(node.chart)) {
-      const resolved = resolveChartData(node.chart, value, { path: pathFor(path, "chart"), asOf });
+      const resolved = resolveChartData(node.chart, value, { path: pathFor(path, "chart") });
+      if (isRecord(node.chart.data) && !isDatasetRef(node.chart.data)) add(provenanceDiagnostics(node.chart.data, pathFor(pathFor(path, "chart"), "data"), value, { asOf }));
       add(resolved.diagnostics);
       // LH-60: a series the drawn chart type cannot plot is named (chart-series-dropped).
       add(chartDrawDiagnostics(node.chart, resolved, pathFor(path, "chart"), { language: typeof value.language === "string" ? value.language : undefined }));

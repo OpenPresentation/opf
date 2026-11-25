@@ -115,7 +115,7 @@ try {
   const shared=run(['ingest','data.csv','--as','chart','--series','["Revenue"]','--dataset','revenue']).json;
   assert.deepEqual(shared.slides[0].chart.data,{dataset:'revenue'});
   assert.deepEqual(shared.datasets.revenue.rows,[['Q1',12],['Q2',18]]);
-  assert.equal(shared.datasets.revenue.source.src,'data.csv');
+  assert.equal(shared.datasets.revenue.datasource.src,'data.csv');
   run(['ingest','data.csv','--as','table','--into','data-deck.json','--dataset','revenue','--in-place']);
   const withDataset=JSON.parse(await readFile(path.join(temp,'data-deck.json'),'utf8'));
   assert.deepEqual(withDataset.slides.at(-1).table,{dataset:'revenue'});

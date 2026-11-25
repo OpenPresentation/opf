@@ -9,7 +9,7 @@ import {
 	undeclaredCatalogFindings,
 	variableFindings,
 } from './check-document.js';
-import { parseInstant } from './data-sources.js';
+import { parseInstant } from './data-source-checks.js';
 import { parseSource, type ParsedSource } from './check-source.js';
 import type { Finding, FindingFix, FindingSeverity } from './generated/types/finding.js';
 import type { Rec } from './rule-design.js';
