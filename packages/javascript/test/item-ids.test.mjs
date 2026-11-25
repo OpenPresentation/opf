@@ -359,3 +359,24 @@ describe("conversions and slide edits keep the ids", () => {
     assert.deepEqual(whole.slides[0].table.rows.map((row) => row.id), rows.map((row) => row.id));
   });
 });
+
+describe("a cell path inside a row object names cells (every core consumer of a cell path)", () => {
+  const mk = (row) => ({ name: "D", slides: [{ title: "T", table: { columns: ["A", "B"], rows: [row] } }] });
+  const pathsOf = (document) => validate(document).findings.filter((finding) => finding.severity !== "info").map((finding) => `${finding.ruleId} ${finding.path}`);
+  test("annotation rule, span rule and content rule give the same finding at the row object's cell", () => {
+    const cite = [{ text: "x", cite: ["nope"] }];
+    assert.deepEqual(pathsOf(mk([cite, "b"])), ["opf/cite-unsupported-location /slides/0/table/rows/0/0/0"]);
+    assert.deepEqual(pathsOf(mk({ id: "r", cells: [cite, "b"] })), ["opf/cite-unsupported-location /slides/0/table/rows/0/cells/0/0"]);
+    assert.deepEqual(pathsOf(mk([{ value: "a", colSpan: 2 }, "x"])), ["opf/schema /slides/0/table/rows/0/1"]);
+    assert.deepEqual(pathsOf(mk({ id: "r", cells: [{ value: "a", colSpan: 2 }, "x"] })), ["opf/schema /slides/0/table/rows/0/cells/1"]);
+    assert.deepEqual(pathsOf(mk(["TODO fill in", "b"])), ["opf/placeholder-text /slides/0/table/rows/0/0"]);
+    assert.deepEqual(pathsOf(mk({ id: "r", cells: ["TODO fill in", "b"] })), ["opf/placeholder-text /slides/0/table/rows/0/cells/0"]);
+  });
+  test("the grid names each cell's source path with cells, and the row's id", async () => {
+    const { tableGrid } = await import("../dist/composition.js");
+    const grid = tableGrid({ columns: ["A", "B"], rows: [{ id: "r1", cells: ["x", "y"] }, ["p", "q"]] });
+    assert.deepEqual(grid.rowIds, [undefined, "r1", undefined]);
+    assert.equal(grid.rows[1][1].path, "table.rows.0.cells.1");
+    assert.equal(grid.rows[2][1].path, "table.rows.1.1");
+  });
+});
