@@ -95,7 +95,7 @@ export const DESIGN_REFERENCES = Object.freeze(['theme', 'colorScheme', 'fontSch
 export const COMPOSITION_HINTS = Object.freeze(['titleAlignment', 'titlePosition', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet']);
 // `references` (RR-34): the deck's cited sources. Like `author`, stored as a top-level key of OPF_DOCUMENT_V1 (importers up to
 // 0.11.9 drop a tag with an unknown `supplement` field but ignore an unknown top-level key) and read back into metadata.
-export const METADATA = Object.freeze(['narrative', 'tone', 'audience', 'purpose', 'language', 'organization', 'speaker', 'takeaway', 'duration', 'tags', 'variables', 'filename', 'extensions', 'author', 'references', 'icons']);
+export const METADATA = Object.freeze(['narrative', 'tone', 'audience', 'purpose', 'language', 'organization', 'speaker', 'takeaway', 'duration', 'tags', 'variables', 'filename', 'extensions', 'author', 'references', 'icons', 'id']);
 
 // `author` is native (docProps/core.xml dc:creator), where several authors share one field joined by "; " (the join the
 // schema documents). Import splits a creator on exactly that separator, and only when every part is a non-empty name
@@ -132,7 +132,7 @@ const SLIDE_DESIGN_FIELDS = [...STYLE_REFERENCES, 'background', ...COMPOSITION_H
 // whose `design` does. Keys added since are written under `supplement`, a
 // top-level container those importers ignore, and merged back on read. Add
 // every new design or metadata key here, never to the legacy sections.
-const DOCUMENT_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['filename', 'extensions'])});
+const DOCUMENT_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['filename', 'extensions', 'id'])});
 const SLIDE_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['language'])});
 // RR-59: document-level values the import reads back although export only baked them in from engine defaults: the
 // canonical `$schema`, the package title (`name`), the language the runs carry, and the theme, color scheme, font scheme
@@ -509,7 +509,9 @@ export function documentProvenance(presentation, {mode = 'full', layoutOf = () =
     if (!own(presentation, key)) continue;
     const value = presentation[key];
     if (key === 'author' && (referencesOnly || !authorNeedsRecord(value))) continue;
-    if (referencesOnly) {
+    // CR 7: the document id is opaque identity, not content, so a references-only export keeps it.
+    if (key === 'id' && (typeof value !== 'string' || value === '')) continue;
+    if (referencesOnly && key !== 'id') {
       // A language tag is stored as it is; a reference field only while every value is a reference (never free text).
       const ids = typeof value === 'string' ? [value] : key === 'audience' && Array.isArray(value) && value.every(item => typeof item === 'string') ? value : null;
       if (!ids || !(key === 'language' || (METADATA_REFERENCES.includes(key) && ids.every(id => parseReference(id))))) continue;
@@ -740,6 +742,11 @@ function storable(entries, provenance) {
     const fields = {};
     for (const [key, value] of Object.entries(source[section] ?? {})) {
       const path = section === 'design' ? `design.${key}` : key;
+      if (section === 'metadata' && key === 'id') {
+        // An opaque string: never read as a media or asset reference.
+        if (sizeOf(value) > MAX_FIELD_BYTES) omit(path, `it is larger than ${MAX_FIELD_BYTES / 1024} KiB`); else fields[key] = value;
+        continue;
+      }
       if (section === 'metadata' && (key === 'author' || key === 'references')) {
         const prepared = prepare(path, value);
         if (prepared !== undefined) document[key] = prepared;
@@ -907,6 +914,7 @@ function validateDocument(stored) {
   for (const key of Object.keys(value.metadata ?? {})) if (!METADATA.includes(key)) throw Error(`Unknown metadata field ${key}.`);
   if (value.metadata?.filename !== undefined && typeof value.metadata.filename !== 'string') throw Error('Invalid filename record.');
   if (value.metadata?.extensions !== undefined && !object(value.metadata.extensions)) throw Error('Invalid extensions record.');
+  if (value.metadata?.id !== undefined && (typeof value.metadata.id !== 'string' || value.metadata.id === '')) throw Error('Invalid id record.');
   const author = stored.author;
   if (author !== undefined && !((typeof author === 'string' && author.length <= MAX_AUTHOR_LENGTH * 256) || (Array.isArray(author) && author.length > 0 && author.length <= 256 && author.every(name => typeof name === 'string' && name.length <= MAX_AUTHOR_LENGTH)))) throw Error('Invalid author record.');
   const references = stored.references;
@@ -1403,7 +1411,8 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
       report({code: 'metadata-reference-changed', path: 'tags', message: 'The PowerPoint tags (keywords) no longer match the stored tags, so the stored tags were not restored; the current keywords are kept.'});
       continue;
     }
-    let value = restorable(key, metadata[key], {prune: true});
+    // CR 7: the id is an opaque string, restored as stored (it is a claim; hosts check ownership).
+    let value = key === 'id' ? metadata.id : restorable(key, metadata[key], {prune: true});
     if (value === undefined) continue;
     if (key === 'organization' && object(imported.organization)) {
       const observed = imported.organization;

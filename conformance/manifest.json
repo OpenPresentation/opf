@@ -69,6 +69,22 @@
       "basis": "opf.schema.json#/$defs/ContentPayload/properties/id (unique among slide and payload ids)"
     },
     {
+      "id": "core.valid.document-id",
+      "file": "core/valid/document-id.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A root `id` (a UUID). The same string may also be a slide id: the document id is not an element id.",
+      "basis": "opf.schema.json#/properties/id"
+    },
+    {
+      "id": "core.valid.document-id-opaque",
+      "file": "core/valid/document-id-opaque.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A root `id` that is not a UUID: any non-empty string is valid.",
+      "basis": "opf.schema.json#/properties/id (an opaque string)"
+    },
+    {
       "id": "core.valid.group-nesting-at-limit",
       "file": "core/valid/group-nesting-at-limit.opf.json",
       "levels": ["reader", "writer"],
@@ -299,6 +315,22 @@
       "expect": { "valid": false, "errorAt": "/slides/0/id" },
       "description": "A slide id that is a number.",
       "basis": "opf.schema.json#/$defs/Slide/properties/id/type"
+    },
+    {
+      "id": "core.invalid.document-id-empty",
+      "file": "core/invalid/document-id-empty.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/id" },
+      "description": "The root `id` is the empty string.",
+      "basis": "opf.schema.json#/properties/id/minLength"
+    },
+    {
+      "id": "core.invalid.document-id-not-string",
+      "file": "core/invalid/document-id-not-string.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/id" },
+      "description": "The root `id` is a number.",
+      "basis": "opf.schema.json#/properties/id/type"
     },
     {
       "id": "core.invalid.duplicate-slide-id",

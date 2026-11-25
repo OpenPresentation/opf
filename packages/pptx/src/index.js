@@ -424,6 +424,10 @@ export async function toPptx(input, options = {}) {
     },
     report: diagnostic => options.onDiagnostic?.(diagnostic)
   });
+  // CR 7: the document id lives only in the OPF_DOCUMENT_V1 tag, so an export without provenance drops it and says so.
+  if (options.provenance === false && typeof presentation.id === 'string' && presentation.id !== '') {
+    options.onDiagnostic?.({code: 'document-provenance-omitted', path: 'id', message: 'id is not stored in the PPTX because provenance is off; reimport has no document id.'});
+  }
   context.scriptFonts = planScriptFonts(presentation, options.onDiagnostic, {catalogs: options.catalogs});
   context.nativeLatinSlots = createNativeLatinSlots(context.scriptFonts, (language, slideIndex) => resolveScriptFonts(presentation, {slideIndex, ...(language ? {language} : {}), ...(options.catalogs !== undefined ? {catalogs:options.catalogs} : {})}), options.onDiagnostic);
   context.nativeTextFragments = createNativeTextFragments(options.onDiagnostic);
