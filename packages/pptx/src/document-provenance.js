@@ -960,6 +960,18 @@ export function opfSlideOwnership(entries, paths) {
   });
 }
 
+/** FR-03: the id each slide's stored OPF_SLIDE_V1 record carries (undefined for a slide with no record or no id), read before the document is restored. */
+export function storedSlideIds(entries, paths) {
+  return paths.map(path => {
+    try {
+      const root = parser.parse(dec.decode(entries[path]))?.['p:sld'];
+      const found = readTag(entries, root?.['p:cSld']?.['p:custDataLst'], relationships(entries, path), SLIDE_TAG);
+      const id = found.missing ? undefined : validateSlide(found.value).id;
+      return typeof id === 'string' && id ? id : undefined;
+    } catch { return undefined; }
+  });
+}
+
 const label = value => typeof value === 'string' ? `'${value}'` : object(value) && typeof value.id === 'string' ? `'${value.id}' (with inline overrides)` : 'inline value';
 
 function changedSlots(stored, observed) {

@@ -6,6 +6,7 @@
 // rich-text fits and export through the ordinary rich-run path as superscript runs. RR-105: the rule's tag lists the markers of
 // empty runs (`detached`), which natively follow the text before them.
 import {paragraphDirection, walkCitationRuns} from '@openpresentation/opf/composition';
+import {exportHyperlink} from './slide-links.js';
 
 // The whitespace that hangs at a line's soft wrap (core's TextLineSource.hang, RichTextLine.hang, TextPlacementLine.hang) in a PowerPoint
 // line box: one paragraph that ends in that whitespace. Core aligns the line's glyphs and the preview draws them there; PowerPoint aligns
@@ -99,7 +100,7 @@ export function addFitLines(slide, value, fit, box, context, helpers, {objectNam
         return {text: fragment.text, options: {...helpers.nativeFontOptions(fragment.style), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: native,
           underline: fragment.run.underline ? {style: 'sng', color: native} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined,
           baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined,
-          hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:|tel:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined}};
+          hyperlink: (fragment.kind !== 'marker' ? exportHyperlink(fragment.run.link, context) : undefined)}};
       });
       if (!runs.length) runs.push({text: '', options: {}});
       const placed = fit.placement?.lines[index];
