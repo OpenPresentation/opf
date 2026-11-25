@@ -1,0 +1,283 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openpresentation.org/schema/native-result/v1",
+  "title": "Native result",
+  "description": "What one application did with one OPF-exported .pptx file: the files/<fileId>/result.json of a native run directory. Every driver (Keynote, PowerPoint, Impress) writes this same shape; scripts/native-acceptance/core/result/README.md explains it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "target", "application", "system", "fonts", "opf", "file", "started", "finished", "verbs", "slides"],
+  "properties": {
+    "schemaVersion": { "const": 1, "description": "The version of this format. Always 1." },
+    "target": { "$ref": "#/$defs/target" },
+    "application": { "$ref": "#/$defs/application" },
+    "system": { "$ref": "#/$defs/system" },
+    "fonts": { "$ref": "#/$defs/fonts" },
+    "opf": { "$ref": "#/$defs/opf" },
+    "file": {
+      "type": "object",
+      "description": "The input file.",
+      "additionalProperties": false,
+      "required": ["id", "deck", "variant", "path", "sha256", "unchangedAfterRun"],
+      "properties": {
+        "id": { "$ref": "#/$defs/fileId" },
+        "deck": { "$ref": "#/$defs/namePart", "description": "The deck the file was exported from, lower case (for example \"slide-links\")." },
+        "variant": { "$ref": "#/$defs/namePart", "description": "Which export of the deck: \"default\" when the deck has one export only, else the export's name (for example \"native\", \"static\")." },
+        "path": { "$ref": "#/$defs/relativePath", "description": "The file's path relative to the run's input root, with forward slashes. Never absolute." },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "Lower-case hex SHA-256 of the input file, read before the application opened it." },
+        "unchangedAfterRun": {
+          "type": ["boolean", "null"],
+          "description": "True when the file's SHA-256 after the run equals the one before (the application did not save over it); null when it was not checked."
+        }
+      }
+    },
+    "started": { "type": "string", "format": "date-time", "description": "When the driver began work on this file, UTC (for example \"2026-11-25T17:15:25Z\")." },
+    "finished": { "type": "string", "format": "date-time", "description": "When the driver finished work on this file, UTC." },
+    "verbs": {
+      "type": "object",
+      "description": "One entry per verb the driver implements. Every key is required: a verb that did not run says \"not-run\".",
+      "additionalProperties": false,
+      "required": ["open", "render", "probe", "resave"],
+      "properties": {
+        "open": {
+          "type": "object",
+          "description": "Opening the file. \"done\" means it opened with no repair prompt.",
+          "additionalProperties": false,
+          "required": ["status", "warnings"],
+          "properties": {
+            "status": { "$ref": "#/$defs/verbStatus" },
+            "seconds": { "$ref": "#/$defs/seconds" },
+            "message": { "$ref": "#/$defs/message" },
+            "slideCount": { "type": "integer", "minimum": 0, "description": "How many slides the application says the opened file has, hidden slides counted." },
+            "warnings": {
+              "type": "object",
+              "description": "The application's own import warnings, word for word.",
+              "additionalProperties": false,
+              "required": ["status", "source", "lines"],
+              "properties": {
+                "status": {
+                  "enum": ["read", "partial", "not-read"],
+                  "description": "\"read\": the whole list was read (an empty lines means the application reported none). \"partial\": some lines were read and the list was cut off. \"not-read\": the warnings could not be read (for example Keynote shows its Warnings window only while it is in front)."
+                },
+                "source": {
+                  "enum": ["application", "screen", "log", null],
+                  "description": "Where the lines came from: \"application\" (its scripting interface), \"screen\" (text recognized in a capture of its window), \"log\" (a log file it wrote); null when nothing was captured."
+                },
+                "lines": {
+                  "type": "array",
+                  "description": "One entry per warning, in the application's order.",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["text"],
+                    "properties": {
+                      "text": { "type": "string", "minLength": 1, "description": "The warning as the application wrote it (for example \"The font Roboto is missing. Your text might look different.\")." },
+                      "slides": { "type": "array", "items": { "type": "integer", "minimum": 1 }, "description": "The slide numbers the application names for this warning (Keynote: a \"Slide(s) 4\" line under it)." },
+                      "layouts": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "The slide layout names the application names for this warning (Keynote: a \"Slide Layout(s): Cover, Gallery\" line under it)." }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "render": {
+          "type": "object",
+          "description": "The application's own picture of every slide, written as slides/slide-001.png and so on.",
+          "additionalProperties": false,
+          "required": ["status"],
+          "properties": {
+            "status": { "$ref": "#/$defs/verbStatus" },
+            "seconds": { "$ref": "#/$defs/seconds" },
+            "message": { "$ref": "#/$defs/message" },
+            "pixelSize": { "type": "array", "prefixItems": [{ "type": "integer", "minimum": 1 }, { "type": "integer", "minimum": 1 }], "minItems": 2, "maxItems": 2, "description": "[width, height] of the pictures in pixels." },
+            "colorProfile": { "type": "string", "description": "The ICC profile embedded in the pictures, by its description (Keynote: \"Display P3\")." },
+            "alpha": { "type": "boolean", "description": "True when the pictures have an alpha channel." }
+          }
+        },
+        "probe": {
+          "type": "object",
+          "description": "Reading the object list of every slide through the application's scripting interface.",
+          "additionalProperties": false,
+          "required": ["status"],
+          "properties": {
+            "status": { "$ref": "#/$defs/verbStatus" },
+            "seconds": { "$ref": "#/$defs/seconds" },
+            "message": { "$ref": "#/$defs/message" }
+          }
+        },
+        "resave": {
+          "type": "object",
+          "description": "The application's own PowerPoint copy of the opened file (resaved.pptx), then closing the file without saving it.",
+          "additionalProperties": false,
+          "required": ["status"],
+          "properties": {
+            "status": { "$ref": "#/$defs/verbStatus" },
+            "seconds": { "$ref": "#/$defs/seconds" },
+            "message": { "$ref": "#/$defs/message" },
+            "path": { "$ref": "#/$defs/relativePath", "description": "The copy's path relative to this result.json's folder, normally \"resaved.pptx\"." },
+            "import": {
+              "type": "object",
+              "description": "OPF's importer run on the copy (filled by the round-trip step, absent before).",
+              "additionalProperties": false,
+              "required": ["status"],
+              "properties": {
+                "status": { "enum": ["imported", "failed", "not-run"], "description": "Whether OPF imported the copy." },
+                "error": { "type": "string", "description": "The importer's error when status is \"failed\"." },
+                "slideCount": { "type": "integer", "minimum": 0, "description": "How many slides the imported deck has." }
+              }
+            }
+          }
+        }
+      }
+    },
+    "slides": {
+      "type": "array",
+      "description": "Every slide of the opened file in file order, hidden slides included. Empty when neither render nor probe ran.",
+      "items": { "$ref": "#/$defs/slide" }
+    }
+  },
+  "$defs": {
+    "target": {
+      "enum": ["keynote", "powerpoint", "impress", "powerpoint-mac"],
+      "description": "The application under test: \"keynote\" (Keynote on macOS), \"powerpoint\" (PowerPoint on Windows), \"impress\" (LibreOffice Impress), \"powerpoint-mac\" (PowerPoint on macOS)."
+    },
+    "application": {
+      "type": "object",
+      "description": "The application as it reports itself. Read from the application at run time, never hard-coded.",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "description": "Its name (for example \"Keynote\", \"PowerPoint\", \"LibreOffice Impress\")." },
+        "version": { "type": "string", "minLength": 1, "description": "Its version (for example \"16.0\")." },
+        "build": { "type": "string", "minLength": 1, "description": "Its build number when known (for example \"7052.0.68\")." }
+      }
+    },
+    "system": {
+      "type": "object",
+      "description": "The operating system the application ran on.",
+      "additionalProperties": false,
+      "required": ["os", "version"],
+      "properties": {
+        "os": { "enum": ["macOS", "Windows", "Linux"], "description": "The operating system." },
+        "version": { "type": "string", "minLength": 1, "description": "Its version (for example \"26.6.2\")." }
+      }
+    },
+    "fonts": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Which fonts the application could use: \"installed\" (whatever the machine has), or a named font profile (Impress: \"opf\", \"stock\")."
+    },
+    "opf": {
+      "type": "object",
+      "description": "The OPF that exported the input.",
+      "additionalProperties": false,
+      "required": ["version"],
+      "properties": {
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+(-[0-9A-Za-z.-]+)?$", "description": "The @openpresentation/opf-pptx version (for example \"0.36.0\" or \"0.37.0-rc.1\")." },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$", "description": "The git commit it was built from, when it was not a published release." }
+      }
+    },
+    "namePart": { "type": "string", "pattern": "^[a-z0-9._-]+$" },
+    "fileId": {
+      "type": "string",
+      "pattern": "^[a-z0-9._-]+~[a-z0-9._-]+$",
+      "description": "<deck>~<variant>, lower case, characters a-z 0-9 . _ - and one ~. Names the file's folder under files/."
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(^|/)\\.\\.(/|$))[^\\\\]+$",
+      "description": "A relative path with forward slashes: no leading slash, no drive letter, no backslash, no .. segment."
+    },
+    "verbStatus": {
+      "enum": ["done", "failed", "timeout", "alert", "not-run"],
+      "description": "\"done\": the verb finished. \"failed\": the application returned an error. \"timeout\": it did not answer in time. \"alert\": an unexpected dialog or window appeared (captured, never clicked). \"not-run\": the verb was not asked for or could not start."
+    },
+    "seconds": { "type": "number", "minimum": 0, "description": "Wall-clock seconds the verb took." },
+    "message": { "type": "string", "description": "What went wrong, in the driver's or the application's words; absent when nothing did." },
+    "outcome": {
+      "enum": ["native", "changed", "picture", "dropped", null],
+      "description": "What the exported object became in the application: \"native\" (the same kind of editable object), \"changed\" (editable, but something changed; say what in how), \"picture\" (a picture of it), \"dropped\" (gone); null when not determined (a probe alone cannot tell; the round-trip step fills it)."
+    },
+    "slide": {
+      "type": "object",
+      "description": "One slide of the opened file.",
+      "additionalProperties": false,
+      "required": ["index", "hidden", "layout", "picture", "notes", "objects"],
+      "properties": {
+        "index": { "type": "integer", "minimum": 1, "description": "The slide's position in the file, 1 for the first, hidden slides counted." },
+        "hidden": { "type": "boolean", "description": "True when the slide is hidden (Keynote: skipped)." },
+        "layout": { "type": ["string", "null"], "description": "The application's name for the slide's layout (Keynote may add \" 0\", \" 1\" to repeated names); null when unknown." },
+        "picture": {
+          "anyOf": [{ "$ref": "#/$defs/relativePath" }, { "type": "null" }],
+          "description": "The application's picture of the slide, relative to this result.json's folder (\"slides/slide-001.png\", numbered by index); null when the application exported none (a hidden slide) or render did not run."
+        },
+        "notes": { "type": ["string", "null"], "description": "The slide's presenter notes as the application reads them; null when it has none or they were not read." },
+        "objects": { "type": "array", "description": "The slide's objects in z-order, back to front. Empty when probe did not run.", "items": { "$ref": "#/$defs/object" } },
+        "compare": {
+          "type": "object",
+          "description": "The application's picture compared with OPF's preview (filled by the compare step, absent before).",
+          "additionalProperties": false,
+          "required": ["preview", "score"],
+          "properties": {
+            "preview": { "$ref": "#/$defs/relativePath", "description": "OPF's preview picture of the slide, relative to the run directory." },
+            "score": { "type": ["number", "null"], "minimum": 0, "maximum": 1, "description": "Share of pixels that differ (0 = none); null when there was no pair to compare. A score ranks slides; it is not a verdict." },
+            "regions": {
+              "type": "array",
+              "description": "The largest areas that differ.",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["box"],
+                "properties": {
+                  "box": { "type": "array", "items": { "type": "number", "minimum": 0, "maximum": 1 }, "minItems": 4, "maxItems": 4, "description": "[x0, y0, x1, y1] as fractions of the slide's width and height." },
+                  "cells": { "type": "integer", "minimum": 1, "description": "How many grid cells the area covers." },
+                  "share": { "type": "number", "minimum": 0, "maximum": 1, "description": "The area's share of all differing cells." }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "object": {
+      "type": "object",
+      "description": "One object on a slide, in the shared vocabulary.",
+      "additionalProperties": false,
+      "required": ["kind", "outcome"],
+      "properties": {
+        "kind": {
+          "enum": ["title", "body", "text", "list", "table", "chart", "shape", "connector", "group", "picture", "link", "notes", "footer"],
+          "description": "What the object is. \"title\": the slide's title placeholder. \"body\": its body placeholder. \"text\": other text (a text box, or a shape with text). \"list\": text with bullets or numbering. \"table\". \"chart\". \"shape\": a shape without text. \"connector\": a line or connector. \"group\": a group (its members in objects). \"picture\": an image. \"link\": a hyperlink (on text, a shape or a cell). \"notes\": the slide's presenter notes. \"footer\": footer text, slide number or date. A driver that cannot tell a title from other text reports \"text\"."
+        },
+        "outcome": { "$ref": "#/$defs/outcome" },
+        "how": { "type": "string", "minLength": 1, "description": "For outcome \"changed\": what changed, one phrase (for example \"split into a group: the shape plus a separate text box\")." },
+        "name": { "type": "string", "description": "The object's name in the file (OPF names its shapes and applications keep them); absent when the application does not expose names." },
+        "appClass": { "type": "string", "minLength": 1, "description": "The application's own class name for the object (Keynote: \"text item\", \"shape\", \"image\", \"chart\", \"line\", \"group\", \"table\"; PowerPoint: its MsoShapeType name)." },
+        "box": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 4,
+          "maxItems": 4,
+          "description": "[x, y, width, height] in points, slide coordinates, origin at the top left."
+        },
+        "text": { "type": "string", "maxLength": 200, "description": "The object's plain text, cut to at most 200 characters." },
+        "fonts": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "The font names the application reports for the object's text, each once, in order of first use." },
+        "rows": { "type": "integer", "minimum": 0, "description": "Kind table: the number of rows." },
+        "columns": { "type": "integer", "minimum": 0, "description": "Kind table: the number of columns." },
+        "role": { "enum": ["footer", "slide-number", "date"], "description": "Kind footer: which piece of furniture it is." },
+        "on": { "enum": ["text", "shape", "cell"], "description": "Kind link: what carries the link." },
+        "target": { "type": "string", "minLength": 1, "description": "Kind link: where it goes, a URL or \"slide:<index>\"." },
+        "objects": { "type": "array", "description": "Kind group: the group's members, back to front.", "items": { "$ref": "#/$defs/object" } },
+        "details": { "type": "object", "description": "Target-specific facts that no shared code reads. The only free-form object in the format." }
+      },
+      "allOf": [
+        { "if": { "anyOf": [{ "required": ["rows"] }, { "required": ["columns"] }] }, "then": { "properties": { "kind": { "const": "table" } } } },
+        { "if": { "required": ["role"] }, "then": { "properties": { "kind": { "const": "footer" } } } },
+        { "if": { "anyOf": [{ "required": ["on"] }, { "required": ["target"] }] }, "then": { "properties": { "kind": { "const": "link" } } } },
+        { "if": { "required": ["objects"] }, "then": { "properties": { "kind": { "const": "group" } } } },
+        { "if": { "required": ["how"] }, "then": { "properties": { "outcome": { "const": "changed" } } } }
+      ]
+    }
+  }
+}
