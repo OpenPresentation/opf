@@ -89,7 +89,10 @@
 .opf-design-menu-list[data-section="colors"],
 .opf-design-menu-list[data-section="layout"] { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .opf-design-menu-swatches { display: inline-flex; flex: none; overflow: hidden; border: 1px solid var(--opf-ui-border-strong); border-radius: var(--opf-ui-radius-sm); }
-.opf-design-menu-swatch { width: 10px; height: 16px; }
+.opf-design-menu-swatch { width: 9px; height: 16px; }
+/* Every name of the default catalog fits a column at 360px: the room comes from the chip and the spacing, not the type. */
+.opf-design-menu-list[data-section="colors"] { padding-inline: 6px; }
+.opf-design-menu-item[data-section="colors"] { gap: 6px; padding-inline: 6px; }
 .opf-design-menu-item[data-section="colors"] .opf-design-menu-check { margin-inline-start: 0; }
 
 /* Fonts: "Ag" and the name in the scheme's own face, grouped by type. */

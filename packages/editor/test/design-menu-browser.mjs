@@ -439,17 +439,20 @@ try {
   assert.equal(swatches.length, 4, 'four accent swatches, joined in one chip');
   assert.ok(swatches.every((color) => /^rgb/.test(color)));
   assert.equal(await ev(() => getComputedStyle(document.querySelector('[data-section=colors] .opf-design-menu-list')).gridTemplateColumns.split(' ').length), 2, 'two columns');
+  const cut = await ev(() => { const names = [...document.querySelectorAll('[data-section=colors].opf-design-menu-item .opf-design-menu-label')]; return { count: names.length, width: document.querySelector('.opf-design-menu-popover').getBoundingClientRect().width, cut: names.filter((name) => name.scrollWidth > name.clientWidth).map((name) => name.textContent) }; });
+  assert.deepEqual(cut, { count: 14, width: 360, cut: [] }, 'none of the 14 color scheme names is truncated at 360px');
   await tab('Layout').click();
   assert.equal(await ev(() => getComputedStyle(document.querySelector('[data-section=layout] .opf-design-menu-list')).gridTemplateColumns.split(' ').length), 3, 'three columns of layouts');
   assert.ok(await radio('This slide: Layout', 'Metrics').locator('.opf-design-menu-thumb-block[data-shape="metrics"]').count() >= 1, 'a schematic drawn from the layout\'s regions');
   await tab('Fonts').click();
-  const face = (name) => radio('Fonts', name).locator('.opf-design-menu-label').evaluate((node) => node.style.fontFamily);
-  assert.match(await face('Roboto'), /Roboto/, 'a face loaded in the document (the fonts handle added Roboto) is used for its name');
-  assert.match(await radio('Fonts', 'Roboto').locator('.opf-design-menu-sample').evaluate((node) => node.style.fontFamily), /Roboto/, 'and its "Ag"');
-  assert.equal(await face('Consolas'), '', 'a face that is not loaded stays plain');
-  // A face that loads while the menu is open updates its row.
-  await ev(async (url) => { document.fonts.add(new FontFace('Consolas', `url(${url})`)); await document.fonts.load('16px Consolas'); }, app.faces[0].dataUrl);
-  await page.waitForFunction(() => /Consolas/.test(document.querySelector('[data-section=fonts][data-value=consolas] .opf-design-menu-label').style.fontFamily));
+  // Every row asks for its own face (the browser draws it where this computer has it or the editor loaded it), the UI font after it.
+  const faces = await ev(() => [...document.querySelectorAll('[data-section=fonts].opf-design-menu-item')].map((row) => ({ major: row.dataset.major, name: getComputedStyle(row.querySelector('.opf-design-menu-label')).fontFamily, sample: getComputedStyle(row.querySelector('.opf-design-menu-sample')).fontFamily })));
+  assert.equal(faces.length, 29);
+  const unquote = (value) => value.split(',')[0].trim().replace(/^["']|["']$/g, '');
+  assert.deepEqual(faces.filter((row) => unquote(row.name) !== row.major || unquote(row.sample) !== row.major), [], 'each row names its own family first in its computed font-family, the name and the "Ag"');
+  assert.ok(faces.every((row) => /Inter|system-ui|sans-serif/.test(row.name.split(',').slice(1).join(','))), 'then the UI font');
+  assert.match(await radio('Fonts', 'Consolas').locator('.opf-design-menu-label').evaluate((node) => node.style.fontFamily), /^"Consolas", var\(--opf-ui-font\)$/, 'whether or not a face of that family is loaded in the document');
+  assert.match(await foot().innerText(), /A name is drawn in its own face where that face is available here\.$/);
   await page.keyboard.press('Escape');
   assert.equal(await box('.opf-design-menu-trigger').then((b) => b.height), 32, 'comfortable density');
   await trigger().click();

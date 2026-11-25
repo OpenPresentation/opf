@@ -51,7 +51,7 @@ const DEFAULT_LABELS = {
   inUse: "In use",
   fontTypes: { "sans-serif": "Sans serif", serif: "Serif", monospace: "Monospace", other: "Other" },
   /** The foot's line on the Fonts section: `language` is the deck language's name. */
-  fontsFor: (language) => `Fonts for ${language}. Each name is drawn in its own face once it is loaded.`,
+  fontsFor: (language) => `Fonts for ${language}. A name is drawn in its own face where that face is available here.`,
   themeHint: "A theme sets colors, fonts and backgrounds together. Each choice is one undo step.",
   undo: "Undo",
   undone: "Undone.",
@@ -228,24 +228,9 @@ export function createDesignMenu(container, options = {}) {
   // ---- rows ---------------------------------------------------------------------------------------------------------------------------
   const schemeRecords = new Map();
   const fontRecords = new Map();
-  const loadedFamilies = () => {
-    const families = new Set();
-    try {
-      for (const face of doc.fonts ?? []) if (face.status === "loaded") families.add(String(face.family).replace(/^["']|["']$/g, ""));
-    } catch { /* an old engine without iterable FontFaceSet: names stay plain */ }
-    return families;
-  };
-  // A font scheme's sample and name in its own heading face, once that face is loaded in this document. Otherwise they stay in the UI font.
-  function paintFaces() {
-    const loaded = loadedFamilies();
-    for (const row of fontSection.rows.values()) {
-      const family = row.dataset.major;
-      for (const node of row.querySelectorAll(".opf-design-menu-label, .opf-design-menu-sample")) {
-        if (family && loaded.has(family)) node.style.fontFamily = `"${family.replace(/["\\]/g, "")}", var(--opf-ui-font)`;
-        else node.style.removeProperty("font-family");
-      }
-    }
-  }
+  // A font scheme's sample and name ask for its own heading face: the browser draws it where this computer has it or the editor loaded it,
+  // and the UI font otherwise. The menu loads no font file.
+  const faceOf = (family) => `"${family.replace(/["\\]/g, "")}", var(--opf-ui-font)`;
 
   // A small slide in the theme's own colors: its background, a title bar, two lines of text and an accent.
   function themeThumb(record) {
@@ -300,7 +285,10 @@ export function createDesignMenu(container, options = {}) {
     const tip = [record.summary, record.description].find((text) => typeof text === "string" && text) ?? "";
     const row = el(doc, "button", { type: "button", class: "opf-panel-row opf-design-menu-item", role: "menuitemradio", "aria-checked": "false", "aria-labelledby": nameId, "aria-describedby": sub ? sub.id : undefined, tabindex: "-1", "data-section": section.key, "data-value": option.id, title: tip || false },
       ...parts, el(doc, "span", { class: "opf-panel-check opf-design-menu-check" }, icon(doc, "Check", 14, icons.check)));
-    if (section.key === "fonts" && typeof record.major === "string") row.dataset.major = record.major;
+    if (section.key === "fonts" && typeof record.major === "string" && record.major) {
+      row.dataset.major = record.major;
+      for (const node of row.querySelectorAll(".opf-design-menu-label, .opf-design-menu-sample")) node.style.fontFamily = faceOf(record.major);
+    }
     row.addEventListener("click", () => choose(section, option));
     return row;
   }
@@ -430,7 +418,6 @@ export function createDesignMenu(container, options = {}) {
     root.toggleAttribute("data-empty", !any);
     applyFilter();
     showSection(active);
-    paintFaces();
     if (focusedKey && popover.contains(doc.activeElement) === false) {
       const row = focusedKey === "more" ? moreRow : [...menu.querySelectorAll("[data-value]")].find((item) => `${item.dataset.section}|${item.dataset.value}` === focusedKey);
       row?.focus({ preventScroll: true });
@@ -545,7 +532,6 @@ export function createDesignMenu(container, options = {}) {
     }
   };
   const onReflow = () => place();
-  const onFaces = () => paintFaces();
   // A change of the open panel's size (another section, the font filter) lays it out again, on the next frame.
   const resizer = win?.ResizeObserver ? new win.ResizeObserver(() => win.requestAnimationFrame(onReflow)) : null;
 
@@ -568,7 +554,6 @@ export function createDesignMenu(container, options = {}) {
     doc.addEventListener("keydown", onDocKey);
     win?.addEventListener("resize", onReflow);
     win?.addEventListener("scroll", onReflow, true);
-    doc.fonts?.addEventListener?.("loadingdone", onFaces);
     resizer?.observe(popover);
     focusItem(current() ?? items()[0] ?? closeButton);
   }
@@ -584,7 +569,6 @@ export function createDesignMenu(container, options = {}) {
     doc.removeEventListener("keydown", onDocKey);
     win?.removeEventListener("resize", onReflow);
     win?.removeEventListener("scroll", onReflow, true);
-    doc.fonts?.removeEventListener?.("loadingdone", onFaces);
     resizer?.disconnect();
     const returnTarget = anchored() && !trigger.disabled ? trigger : opener?.isConnected ? opener : null;
     usePortal(false);
