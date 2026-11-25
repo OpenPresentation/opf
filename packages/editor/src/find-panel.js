@@ -410,6 +410,7 @@ export function createFindPanel(container, options) {
         listen(false);
       }
       destroyed = true;
+      resizer?.disconnect();
       unsubscribe();
       root.remove();
     },

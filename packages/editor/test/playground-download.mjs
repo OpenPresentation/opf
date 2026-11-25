@@ -182,7 +182,8 @@ try {
   assert.equal(pptx.name, 'q3-review.pptx');
   const slideXml = await (await JSZip.loadAsync(pptx.bytes)).file('ppt/slides/slide1.xml').async('string');
   assert.match(slideXml, /Revenue grew in every region/);
-  assert.match(await status.innerText(), /^q3-review\.pptx · 3 slides · \d+ KB/);
+  assert.equal(await status.locator('.opf-export-status-text').innerText(), 'q3-review.pptx');
+  assert.match(await status.locator('.opf-export-status-detail').innerText(), /^3 slides · \d+ KB/);
   mark('pptx');
 
   // ---- OPF source: JSON as "Save OPF" writes it; YAML and Markdown read back with core -------------------------------------------------------------

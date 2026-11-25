@@ -143,7 +143,7 @@ export function createDesignMenu(container, options = {}) {
   popover.firstChild.classList.add("opf-design-menu-handle");
   menu.classList.add("opf-design-menu-menu");
   const tabs = el(doc, "div", { class: "opf-panel-tabs opf-design-menu-tabs", role: "tablist", "aria-label": labels.title });
-  frame.head.after(tabs);
+  // The tabs are in the document only while the panel is open, so a closed menu has no tabs for a screen reader (or a host's query) to find.
   const empty = el(doc, "p", { class: "opf-panel-empty opf-design-menu-empty", text: labels.empty, hidden: true });
   const moreRow = el(doc, "button", { type: "button", class: "opf-panel-row opf-design-menu-item opf-design-menu-more", tabindex: "-1", text: labels.more, hidden: typeof options.onOpenPanel !== "function" });
   const undoButton = el(doc, "button", { type: "button", class: "opf-panel-button", text: labels.undo, hidden: true });
@@ -560,6 +560,7 @@ export function createDesignMenu(container, options = {}) {
     fontsInUse = null;
     usePortal(!anchored());
     paintMenu();
+    frame.head.after(tabs);
     popover.hidden = false;
     trigger.setAttribute("aria-expanded", "true");
     place();
@@ -576,6 +577,7 @@ export function createDesignMenu(container, options = {}) {
     isOpen = false;
     releasePanel(doc, swapClose);
     popover.hidden = true;
+    tabs.remove();
     scrim.hidden = true;
     trigger.setAttribute("aria-expanded", "false");
     doc.removeEventListener("pointerdown", onDocPointer, true);
@@ -698,6 +700,7 @@ export function createDesignMenu(container, options = {}) {
       destroyed = true;
       unsubscribe?.();
       media?.removeEventListener?.("change", onMedia);
+      resizer?.disconnect();
       win?.clearTimeout(typedTimer);
       root.remove();
     },
