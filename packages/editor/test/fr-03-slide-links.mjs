@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import {gallery} from '@openpresentation/gallery';
 import {createEditorSession} from '../src/index.js';
 import {slideLinkOptions} from '../src/slide-link-options.js';
+import {prepareRemoveSlides, removeSlides} from '../src/slides.js';
 
 const deck = () => ({
   name: 'Agenda',
@@ -57,5 +58,18 @@ const unknown = editor => editor.validation.findings.filter(finding => finding.r
   // A link to a slide that does not exist is refused when it is typed too.
   assert.throws(() => editor.set('slides.0.blocks.1.link', 'slide:nowhere'), error => error.code === 'invalid-opf-edit');
   editor.set('slides.0.blocks.1.link', 'slide:agenda');
+}
+// The slide manager does not delete a slide another slide links to: it names the links; a slide that only links away, or whose linking
+// slides go with it, is deleted as before.
+{
+  const editor = createEditorSession(deck(), {catalogs: [gallery]});
+  assert.throws(() => removeSlides(editor, [1]), error => error.code === 'slide-link-target' && /Pricing/.test(error.message) && /slide 1/.test(error.message)
+    && JSON.stringify(error.details?.links ?? error.links ?? []).includes('/slides/0/blocks/0/text/0/link'));
+  assert.equal(editor.presentation.slides.length, 3, 'nothing was removed');
+  assert.doesNotThrow(() => prepareRemoveSlides(editor.presentation, [0]), 'the agenda only links away');
+  assert.doesNotThrow(() => prepareRemoveSlides(editor.presentation, [0, 1]), 'the links go with the slide that holds them');
+  assert.doesNotThrow(() => prepareRemoveSlides(editor.presentation, [2]), 'a slide nobody links to');
+  removeSlides(editor, [0]);
+  assert.equal(unknown(editor).length, 0);
 }
 console.log('editor slide links: ok');
