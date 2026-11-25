@@ -1,5 +1,0 @@
----
-type: fixed
-packages: [pptx]
----
-opf#1431 (import only; exported files are unchanged): a chart with a reference line drawn in a theme color (`accent2`, or the default stroke) and a data record (a `highlight`, a dataset reference, a mapping or data columns) imports its record again. The export hashes the chart's cached data with the reference helper series read without the theme's colors, so such a helper stayed in the hashed part, while the import read it with the slide theme, removed it and hashed the rest: the hashes never matched, the import reported `chart-data-provenance-changed` on a file nobody had edited and dropped the highlight. The import now also compares the form the export hashed. An edit of a plotted value or a number format is still detected and reported as before. One limit remains: moving such a theme-colored reference line in PowerPoint's Edit Data also counts as a change of the chart's data (its values are in the hash the export recorded), while one in an RGB color does not.
