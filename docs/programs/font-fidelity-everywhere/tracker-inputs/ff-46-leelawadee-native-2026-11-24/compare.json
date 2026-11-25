@@ -1,0 +1,100 @@
+{
+ "sets": [
+  "leelawadee"
+ ],
+ "manifests": [],
+ "nativeDir": "native",
+ "generated": "2026-11-25T01:50:13.748Z",
+ "source": {
+  "pptx": "leelawadee-ui.pptx",
+  "sha256": "0f2e79b773a5c2ffef541e99977a9deb6559393ced44d46a7990fdf71929f09b",
+  "report": "native/report.json",
+  "powerPointVersion": "16.0",
+  "auditPassed": true
+ },
+ "decks": [
+  {
+   "id": "leelawadee-ui-default",
+   "tier": 1,
+   "language": "th-TH, km-KH",
+   "opened": true,
+   "error": null,
+   "truncated": false,
+   "readErrors": 0,
+   "slidesExpected": 2,
+   "slidesRead": 2,
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Aptos Display",
+      "Aptos"
+     ],
+     "expected": [
+      "Aptos",
+      "Aptos Display",
+      "Leelawadee UI"
+     ],
+     "required": [
+      "Aptos",
+      "Aptos Display"
+     ],
+     "extras": [],
+     "missingRequired": [],
+     "missingFromNative": [
+      "Leelawadee UI"
+     ],
+     "emptyNameEntries": 0
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "slot": "major.latin",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "slot": "major.ea",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "slot": "major.cs",
+       "expected": "Leelawadee UI",
+       "native": "Leelawadee UI",
+       "ok": true
+      },
+      {
+       "slot": "minor.latin",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "slot": "minor.ea",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "slot": "minor.cs",
+       "expected": "Leelawadee UI",
+       "native": "Leelawadee UI",
+       "ok": true
+      }
+     ]
+    },
+    "fonts": {
+     "shapes": 6,
+     "ok": 6
+    },
+    "shapesMissing": 0
+   },
+   "mismatches": [],
+   "verdict": "pass"
+  }
+ ]
+}
