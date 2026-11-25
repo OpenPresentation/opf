@@ -1,0 +1,1080 @@
+{
+ "written": "2026-11-25T19:30Z",
+ "keynote": "16.0 (7052.0.68)",
+ "opf": "0.36.0",
+ "conventions": "seen = looked at in the slide pictures, probe.json, back.pptx or the warnings capture; verdict against the OPF 0.36.0 preview; control rows name the Keynote output of byte-identical files; \"not read\" = Keynote warnings panel captured before it showed the list",
+ "results": [
+  {
+   "group": "one-series-highlight",
+   "id": "MX-03",
+   "variant": "a-exported",
+   "question": "MX-03/RT-01: a highlight form with one legend entry, full-width columns on their names, the highlight color, and a back.pptx OPF imports",
+   "seen": "control (bytes = keynote/036/matrix/m-charts~default): legend \"Wait Wait\" / \"Visits Visits\"; columns and bars half width beside their names; highlight color drawn on columns and bars; March marker gray; back.pptx two same-named series, overlap 0, no legendEntry, sparse caches with ptCount 2 (import fails, invalid-chart-cache)",
+   "verdict": "control",
+   "evidence": [
+    "keynote/036/matrix/m-charts~default/slides/slide-01..03.png",
+    "evidence/sheets/X-one-series-highlight.jpg"
+   ]
+  },
+  {
+   "group": "one-series-highlight",
+   "id": "MX-03",
+   "variant": "b-0351",
+   "question": "MX-03/RT-01: a highlight form with one legend entry, full-width columns on their names, the highlight color, and a back.pptx OPF imports",
+   "seen": "control (bytes = keynote/0351/matrix/m-charts~default): one series with c:dPt; highlight color drawn; column and bar legends list the categories (North South East West); columns spread edge to edge; line legend \"Visits\" once, March marker gray; back.pptx keeps 4/3 c:dPt and imports",
+   "verdict": "control",
+   "evidence": [
+    "keynote/0351/matrix/m-charts~default/slides/slide-01..03.png"
+   ]
+  },
+  {
+   "group": "one-series-highlight",
+   "id": "MX-03",
+   "variant": "c1-second-no-tx",
+   "question": "MX-03/RT-01: a highlight form with one legend entry, full-width columns on their names, the highlight color, and a back.pptx OPF imports",
+   "seen": "legend \"Wait Series2\" / \"Visits Series2\"; geometry as a; back.pptx names the series \"Series2\"; import fails (invalid-chart-cache)",
+   "verdict": "worse",
+   "evidence": [
+    "keynote/036/experiments/one-series-highlight__MX-03__c1-second-no-tx/"
+   ]
+  },
+  {
+   "group": "one-series-highlight",
+   "id": "MX-03",
+   "variant": "c2-second-empty-tx",
+   "question": "MX-03/RT-01: a highlight form with one legend entry, full-width columns on their names, the highlight color, and a back.pptx OPF imports",
+   "seen": "legend \"Wait\" plus a nameless second key; geometry as a (half width, off the names); back.pptx names the second series after the first category (\"North\", \"Jan\"); import fails",
+   "verdict": "partly",
+   "evidence": [
+    "keynote/036/experiments/one-series-highlight__MX-03__c2-second-empty-tx/",
+    "evidence/sheets/X-one-series-highlight.jpg"
+   ],
+   "note": "legend text closer, still two keys; round trip names worse"
+  },
+  {
+   "group": "one-series-highlight",
+   "id": "MX-03",
+   "variant": "d1-one-series-dpt",
+   "question": "MX-03/RT-01: a highlight form with one legend entry, full-width columns on their names, the highlight color, and a back.pptx OPF imports",
+   "seen": "column/bar: highlight color drawn; legend lists the categories; columns placed edge to edge, first and last cut in half at the plot edges, bar widths uneven; line: legend \"Visits\" once, March marker gray (c:dPt marker dropped); back.pptx keeps c:dPt on column/bar, overlap 100; imports",
+   "verdict": "partly",
+   "evidence": [
+    "keynote/036/experiments/one-series-highlight__MX-03__d1-one-series-dpt/",
+    "evidence/sheets/X-one-series-highlight.jpg"
+   ],
+   "note": "line chart: one legend entry (= 0.35.1); column/bar worse geometry than 0.35.1"
+  },
+  {
+   "group": "one-series-highlight",
+   "id": "MX-03",
+   "variant": "d2-one-series-dpt-legend-deletes",
+   "question": "MX-03/RT-01: a highlight form with one legend entry, full-width columns on their names, the highlight color, and a back.pptx OPF imports",
+   "seen": "pixel-equal in effect to d1: legendEntry deletes ignored, legend still lists the categories",
+   "verdict": "partly",
+   "evidence": [
+    "keynote/036/experiments/one-series-highlight__MX-03__d2-one-series-dpt-legend-deletes/"
+   ]
+  },
+  {
+   "group": "one-series-highlight",
+   "id": "RT-01",
+   "variant": "e-two-series-dense-empty-points",
+   "question": "MX-03/RT-01: a highlight form with one legend entry, full-width columns on their names, the highlight color, and a back.pptx OPF imports",
+   "seen": "empty c:v read as 0: \"0\" data labels at every empty point and blue markers on the axis on the line chart; legend \"Wait Wait\"; back.pptx caches dense with 0.000000 and consistent ptCount; imports (but with zeros as values)",
+   "verdict": "worse",
+   "evidence": [
+    "keynote/036/experiments/one-series-highlight__RT-01__e-two-series-dense-empty-points/",
+    "evidence/sheets/X-one-series-highlight.jpg"
+   ],
+   "note": "fixes the import only by turning gaps into zeros"
+  },
+  {
+   "group": "plot-area",
+   "id": "MX-02",
+   "variant": "a-exported",
+   "question": "MX-02: does an inner (or no) manual plot area keep the bar names whole?",
+   "seen": "control (keynote/036/matrix/m-negative-bars~default slide 8): \"ranes\", \"tware\", \"asing\", \"epairs\" cut at the left edge",
+   "verdict": "control",
+   "evidence": [
+    "evidence/sheets/X-plot-area.jpg"
+   ]
+  },
+  {
+   "group": "plot-area",
+   "id": "MX-02",
+   "variant": "b-inner",
+   "question": "MX-02: does an inner (or no) manual plot area keep the bar names whole?",
+   "seen": "names whole; plot left edge where the preview has it; back.pptx inner x 0.0848",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/plot-area__MX-02__b-inner/slides/slide-08.png",
+    "evidence/sheets/X-plot-area.jpg"
+   ]
+  },
+  {
+   "group": "plot-area",
+   "id": "MX-02",
+   "variant": "c-automatic",
+   "question": "MX-02: does an inner (or no) manual plot area keep the bar names whole?",
+   "seen": "names whole; plot narrower and lower than the preview; warnings panel read: \"Unsupported media were removed. Slide Layout(s): Cover, Gallery, Hero, Image, Image beside\" + missing Aptos Display (deck-wide, not this chart)",
+   "verdict": "partly",
+   "evidence": [
+    "keynote/036/experiments/plot-area__MX-02__c-automatic/"
+   ]
+  },
+  {
+   "group": "flush-space",
+   "id": "MX-01",
+   "variant": "m-text-flush-a-exported",
+   "question": "MX-01: which line-box form ends flush in Keynote?",
+   "seen": "control (keynote/036/matrix/m-text-flush~default): lines shifted by the hang: text-flush 3 right ends 1229/1229/1229/1218 px; 4 centers 644/644/645; 1 heading line 1 1231; 6 caption 643; rtl 5 starts 46/46/48/61; rtl 4 centers 636/634/636; rtl 7 centers 644/644/644; rtl 6 line 2 1233",
+   "verdict": "control",
+   "evidence": [
+    "evidence/sheets/X-flush-space.jpg",
+    "evidence/sheets/X-flush-space-rtl.jpg"
+   ]
+  },
+  {
+   "group": "flush-space",
+   "id": "MX-01",
+   "variant": "m-text-flush-b-nospace-0351-box",
+   "question": "MX-01: which line-box form ends flush in Keynote?",
+   "seen": "flush on every measured slide (1, 3, 4, 6): identical numbers to Keynote with 0.35.1: text-flush 3 1220/1220/1221/1218, 4 centers 638/639/640, 1 heading 1219, 6 caption 641; rtl 5 58/58/60/61, rtl 4 641/640/640, rtl 7 638/639/639, rtl 6 line 2 1218",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/flush-space__MX-01__m-text-flush-b-nospace-0351-box/",
+    "evidence/sheets/X-flush-space.jpg",
+    "evidence/sheets/X-flush-space-rtl.jpg"
+   ]
+  },
+  {
+   "group": "flush-space",
+   "id": "MX-01",
+   "variant": "m-text-flush-b2-nospace-036-box",
+   "question": "MX-01: which line-box form ends flush in Keynote?",
+   "seen": "identical numbers to the control a on every slide: the box shift alone moves the line; removing the space changes nothing in Keynote",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/flush-space__MX-01__m-text-flush-b2-nospace-036-box/"
+   ]
+  },
+  {
+   "group": "flush-space",
+   "id": "MX-01",
+   "variant": "m-text-flush-c-space-own-run",
+   "question": "MX-01: which line-box form ends flush in Keynote?",
+   "seen": "identical numbers to the control a",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/flush-space__MX-01__m-text-flush-c-space-own-run/"
+   ]
+  },
+  {
+   "group": "flush-space",
+   "id": "MX-01",
+   "variant": "m-text-flush-rtl-a-exported",
+   "question": "MX-01: which line-box form ends flush in Keynote?",
+   "seen": "control (keynote/036/matrix/m-text-flush-rtl~default): lines shifted by the hang: text-flush 3 right ends 1229/1229/1229/1218 px; 4 centers 644/644/645; 1 heading line 1 1231; 6 caption 643; rtl 5 starts 46/46/48/61; rtl 4 centers 636/634/636; rtl 7 centers 644/644/644; rtl 6 line 2 1233",
+   "verdict": "control",
+   "evidence": [
+    "evidence/sheets/X-flush-space.jpg",
+    "evidence/sheets/X-flush-space-rtl.jpg"
+   ]
+  },
+  {
+   "group": "flush-space",
+   "id": "MX-01",
+   "variant": "m-text-flush-rtl-b-nospace-0351-box",
+   "question": "MX-01: which line-box form ends flush in Keynote?",
+   "seen": "flush on every measured slide (4, 5, 6, 7): identical numbers to Keynote with 0.35.1: text-flush 3 1220/1220/1221/1218, 4 centers 638/639/640, 1 heading 1219, 6 caption 641; rtl 5 58/58/60/61, rtl 4 641/640/640, rtl 7 638/639/639, rtl 6 line 2 1218",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/flush-space__MX-01__m-text-flush-rtl-b-nospace-0351-box/",
+    "evidence/sheets/X-flush-space.jpg",
+    "evidence/sheets/X-flush-space-rtl.jpg"
+   ]
+  },
+  {
+   "group": "flush-space",
+   "id": "MX-01",
+   "variant": "m-text-flush-rtl-b2-nospace-036-box",
+   "question": "MX-01: which line-box form ends flush in Keynote?",
+   "seen": "identical numbers to the control a on every slide: the box shift alone moves the line; removing the space changes nothing in Keynote",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/flush-space__MX-01__m-text-flush-rtl-b2-nospace-036-box/"
+   ]
+  },
+  {
+   "group": "flush-space",
+   "id": "MX-01",
+   "variant": "m-text-flush-rtl-c-space-own-run",
+   "question": "MX-01: which line-box form ends flush in Keynote?",
+   "seen": "identical numbers to the control a",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/flush-space__MX-01__m-text-flush-rtl-c-space-own-run/"
+   ]
+  },
+  {
+   "group": "rtl-explicit",
+   "id": "MX-06",
+   "variant": "a-exported",
+   "question": "MX-06: does rtl=\"0\" (or \"1\") fix the word order of a Hebrew line with Latin words?",
+   "seen": "control: right-to-left word order (preview: left-to-right paragraph order); back.pptx rtl=\"1\" on 3 lines",
+   "verdict": "control",
+   "evidence": [
+    "evidence/sheets/X-rtl-explicit.jpg"
+   ]
+  },
+  {
+   "group": "rtl-explicit",
+   "id": "MX-06",
+   "variant": "b-rtl0",
+   "question": "MX-06: does rtl=\"0\" (or \"1\") fix the word order of a Hebrew line with Latin words?",
+   "seen": "same word order as a; back.pptx again rtl=\"1\" on 3 lines (rtl=\"0\" not kept)",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/rtl-explicit__MX-06__b-rtl0/",
+    "evidence/sheets/X-rtl-explicit.jpg"
+   ]
+  },
+  {
+   "group": "rtl-explicit",
+   "id": "MX-06",
+   "variant": "c-rtl1",
+   "question": "MX-06: does rtl=\"0\" (or \"1\") fix the word order of a Hebrew line with Latin words?",
+   "seen": "same as a",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/rtl-explicit__MX-06__c-rtl1/"
+   ]
+  },
+  {
+   "group": "rtl-table",
+   "id": "LG-02",
+   "variant": "a-exported",
+   "question": "LG-02: how does Keynote place an rtl=\"1\" table?",
+   "seen": "control: probe x 61 pt (file a:off 489 pt), table over the chart; columns in right order",
+   "verdict": "control",
+   "evidence": [
+    "evidence/sheets/X-rtl-table.jpg"
+   ]
+  },
+  {
+   "group": "rtl-table",
+   "id": "LG-02",
+   "variant": "b-ltr-visual-order",
+   "question": "LG-02: how does Keynote place an rtl=\"1\" table?",
+   "seen": "probe x 489 pt, width 428; first logical column at the right as the preview; slides 1 (ar) and 2 (he)",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/rtl-table__LG-02__b-ltr-visual-order/",
+    "evidence/sheets/X-rtl-table.jpg"
+   ]
+  },
+  {
+   "group": "rtl-table",
+   "id": "LG-02",
+   "variant": "c1-rtl-x-right-edge",
+   "question": "LG-02: how does Keynote place an rtl=\"1\" table?",
+   "seen": "probe x 489 pt with a:off 917 pt: Keynote takes a:off x as the right edge of an rtl table (proved: x_keynote = a:off x - cx in a, c1 and c2)",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/rtl-table__LG-02__c1-rtl-x-right-edge/",
+    "evidence/sheets/X-rtl-table.jpg"
+   ],
+   "note": "Keynote only: PowerPoint would place the table at 917 pt, off the slide (inferred)"
+  },
+  {
+   "group": "rtl-table",
+   "id": "LG-02",
+   "variant": "c2-rtl-x-mirrored",
+   "question": "LG-02: how does Keynote place an rtl=\"1\" table?",
+   "seen": "probe x -385 pt: off the slide",
+   "verdict": "worse",
+   "evidence": [
+    "keynote/036/experiments/rtl-table__LG-02__c2-rtl-x-mirrored/"
+   ]
+  },
+  {
+   "group": "title-one-paragraph",
+   "id": "LY-01",
+   "variant": "a-exported",
+   "question": "LY-01: does a one-paragraph title (wrap none or square) or normAutofit stop the third line overprinting?",
+   "seen": "control: lots 13 three lines, third over the step list; same on 10, 26, 28, 34",
+   "verdict": "control",
+   "evidence": [
+    "evidence/sheets/X-title-one-paragraph.jpg"
+   ]
+  },
+  {
+   "group": "title-one-paragraph",
+   "id": "LY-01",
+   "variant": "b1-one-paragraph-wrap-none",
+   "question": "LY-01: does a one-paragraph title (wrap none or square) or normAutofit stop the third line overprinting?",
+   "seen": "Keynote wraps the one paragraph at the box anyway: still three lines, third line over the content (13, 10, 26, 28, 34); only the break points move",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/title-one-paragraph__LY-01__b1-one-paragraph-wrap-none/",
+    "evidence/sheets/X-title-one-paragraph.jpg"
+   ]
+  },
+  {
+   "group": "title-one-paragraph",
+   "id": "LY-01",
+   "variant": "b2-one-paragraph-wrap-square",
+   "question": "LY-01: does a one-paragraph title (wrap none or square) or normAutofit stop the third line overprinting?",
+   "seen": "same as b1",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/title-one-paragraph__LY-01__b2-one-paragraph-wrap-square/"
+   ]
+  },
+  {
+   "group": "title-one-paragraph",
+   "id": "LY-01",
+   "variant": "c-normautofit",
+   "question": "LY-01: does a one-paragraph title (wrap none or square) or normAutofit stop the third line overprinting?",
+   "seen": "same as a; probe title size stays 39 pt (no shrink on the slide); back.pptx writes defRPr sz 3509 instead of 3666",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/title-one-paragraph__LY-01__c-normautofit/"
+   ]
+  },
+  {
+   "group": "legend-frame",
+   "id": "LY-03",
+   "variant": "lots-a-exported",
+   "question": "LY-03, MX-07: does a bottom legend or a manual legend layout stay in the frame?",
+   "seen": "control: lots 31 legend over the list; 36 entries cut \"(thous\"",
+   "verdict": "control",
+   "evidence": [
+    "evidence/sheets/X-legend-frame.jpg"
+   ]
+  },
+  {
+   "group": "legend-frame",
+   "id": "LY-03",
+   "variant": "lots-b-legend-bottom",
+   "question": "LY-03, MX-07: does a bottom legend or a manual legend layout stay in the frame?",
+   "seen": "legend under the plot, entries whole, inside the frame on 31 and 36; plot much shorter (36: a thin strip); warnings panel read: Unsupported media (layouts) + Aptos",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/legend-frame__LY-03__lots-b-legend-bottom/",
+    "evidence/sheets/X-legend-frame.jpg"
+   ],
+   "note": "changes the design: the preview has the legend on the right"
+  },
+  {
+   "group": "legend-frame",
+   "id": "LY-03",
+   "variant": "lots-c1-legend-manual",
+   "question": "LY-03, MX-07: does a bottom legend or a manual legend layout stay in the frame?",
+   "seen": "legend moved to the top of its box but drawn at its own width: still over the list (31), entries cut (36)",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/legend-frame__LY-03__lots-c1-legend-manual/"
+   ]
+  },
+  {
+   "group": "legend-frame",
+   "id": "LY-03",
+   "variant": "lots-c2-legend-and-plot-manual",
+   "question": "LY-03, MX-07: does a bottom legend or a manual legend layout stay in the frame?",
+   "seen": "same as c1; plot narrower",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/legend-frame__LY-03__lots-c2-legend-and-plot-manual/"
+   ]
+  },
+  {
+   "group": "legend-frame",
+   "id": "MX-07",
+   "variant": "mcharts-a-exported",
+   "question": "LY-03, MX-07: does a bottom legend or a manual legend layout stay in the frame?",
+   "seen": "control: m-charts 5 \"Europe, Middle East and A\" cut at the frame",
+   "verdict": "control",
+   "evidence": []
+  },
+  {
+   "group": "legend-frame",
+   "id": "MX-07",
+   "variant": "mcharts-d-legend-manual",
+   "question": "LY-03, MX-07: does a bottom legend or a manual legend layout stay in the frame?",
+   "seen": "legend moved to the top right; entry still cut (\"Europe, Middle East and Afri\")",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/legend-frame__MX-07__mcharts-d-legend-manual/"
+   ]
+  },
+  {
+   "group": "tick-skip",
+   "id": "MX-04",
+   "variant": "a-exported",
+   "question": "MX-04: does c:tickLblSkip 1 (and line breaks) make Keynote draw all four long names?",
+   "seen": "control: 2 of 4 names, one line each",
+   "verdict": "control",
+   "evidence": [
+    "evidence/sheets/X-tick-skip.jpg"
+   ]
+  },
+  {
+   "group": "tick-skip",
+   "id": "MX-04",
+   "variant": "b-ticklblskip-1",
+   "question": "MX-04: does c:tickLblSkip 1 (and line breaks) make Keynote draw all four long names?",
+   "seen": "no change: 2 of 4; back.pptx has no tickLblSkip",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/tick-skip__MX-04__b-ticklblskip-1/",
+    "evidence/sheets/X-tick-skip.jpg"
+   ]
+  },
+  {
+   "group": "tick-skip",
+   "id": "MX-04",
+   "variant": "c-ticklblskip-1-linebreaks",
+   "question": "MX-04: does c:tickLblSkip 1 (and line breaks) make Keynote draw all four long names?",
+   "seen": "all four names, two lines each, as the preview; back.pptx keeps the newline in the category cache",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/tick-skip__MX-04__c-ticklblskip-1-linebreaks/",
+    "evidence/sheets/X-tick-skip.jpg"
+   ],
+   "note": "the newline does it; tickLblSkip alone does not (whether the newline alone suffices was not tried)"
+  },
+  {
+   "group": "label-separator",
+   "id": "MX-05",
+   "variant": "a-exported",
+   "question": "MX-05: does a per-point showCatName survive; does Keynote ever use c:separator?",
+   "seen": "control: \"42\" for \"North: 42\"; pie labels on two lines",
+   "verdict": "control",
+   "evidence": [
+    "evidence/sheets/X-label-separator.jpg"
+   ]
+  },
+  {
+   "group": "label-separator",
+   "id": "MX-05",
+   "variant": "b1-catname-per-point-moved",
+   "question": "MX-05: does a per-point showCatName survive; does Keynote ever use c:separator?",
+   "seen": "slide 5 labels \"42\"; back.pptx 3 x showCatName 0, no c:dLbl",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/label-separator__MX-05__b1-catname-per-point-moved/",
+    "evidence/sheets/X-label-separator.jpg"
+   ]
+  },
+  {
+   "group": "label-separator",
+   "id": "MX-05",
+   "variant": "b2-catname-per-point-added",
+   "question": "MX-05: does a per-point showCatName survive; does Keynote ever use c:separator?",
+   "seen": "same as b1",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/label-separator__MX-05__b2-catname-per-point-added/",
+    "evidence/sheets/X-label-separator.jpg"
+   ]
+  },
+  {
+   "group": "label-separator",
+   "id": "MX-05",
+   "variant": "c1-separator-semicolon",
+   "question": "MX-05: does a per-point showCatName survive; does Keynote ever use c:separator?",
+   "seen": "slide 12 labels on two lines; back.pptx has no c:separator",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/label-separator__MX-05__c1-separator-semicolon/",
+    "evidence/sheets/X-label-separator.jpg"
+   ]
+  },
+  {
+   "group": "label-separator",
+   "id": "MX-05",
+   "variant": "c2-separator-newline",
+   "question": "MX-05: does a per-point showCatName survive; does Keynote ever use c:separator?",
+   "seen": "same as c1",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/label-separator__MX-05__c2-separator-newline/",
+    "evidence/sheets/X-label-separator.jpg"
+   ]
+  },
+  {
+   "group": "alt-text",
+   "id": "LY-04",
+   "variant": "a-exported",
+   "question": "Which p:cNvPr attribute Keynote shows as an image Description",
+   "seen": "name=\"OPF image 1\" descr=alt -> Description \"OPF image 1\" (SmartArt picture: \"OPF smartart slides.1.blocks.0.items\"); back.pptx name = descr = that (probe.json images[].description)",
+   "verdict": "control",
+   "evidence": [
+    "keynote/036/experiments/alt-text__LY-04__a-exported/probe.json",
+    "keynote/036/experiments/alt-text__LY-04__a-exported/back.pptx"
+   ]
+  },
+  {
+   "group": "alt-text",
+   "id": "LY-04",
+   "variant": "b-name-is-alt",
+   "question": "Which p:cNvPr attribute Keynote shows as an image Description",
+   "seen": "name = alt, descr = alt -> Description = the alt exactly (multi-line alt kept with line breaks); back.pptx name = descr = alt with the line breaks removed (\"top to bottom:GoalEvidence...\") (probe.json images[].description)",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/alt-text__LY-04__b-name-is-alt/probe.json",
+    "keynote/036/experiments/alt-text__LY-04__b-name-is-alt/back.pptx"
+   ]
+  },
+  {
+   "group": "alt-text",
+   "id": "LY-04",
+   "variant": "c-title-is-alt",
+   "question": "Which p:cNvPr attribute Keynote shows as an image Description",
+   "seen": "title = alt, no descr -> Description \"<alt>\\n\\nOPF image 1\"; back.pptx name = descr = \"<alt>OPF image 1\" (probe.json images[].description)",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/alt-text__LY-04__c-title-is-alt/probe.json",
+    "keynote/036/experiments/alt-text__LY-04__c-title-is-alt/back.pptx"
+   ]
+  },
+  {
+   "group": "alt-text",
+   "id": "LY-04",
+   "variant": "d-descr-only",
+   "question": "Which p:cNvPr attribute Keynote shows as an image Description",
+   "seen": "name=\"\" descr = alt -> Description \"\" (descr not used even as a fallback); back.pptx name = descr = media file name \"image-1-1.png\" (probe.json images[].description)",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/alt-text__LY-04__d-descr-only/probe.json",
+    "keynote/036/experiments/alt-text__LY-04__d-descr-only/back.pptx"
+   ]
+  },
+  {
+   "group": "alt-text",
+   "id": "LY-04",
+   "variant": "e-title-and-descr",
+   "question": "Which p:cNvPr attribute Keynote shows as an image Description",
+   "seen": "as c (probe.json images[].description)",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/alt-text__LY-04__e-title-and-descr/probe.json",
+    "keynote/036/experiments/alt-text__LY-04__e-title-and-descr/back.pptx"
+   ]
+  },
+  {
+   "group": "alt-text",
+   "id": "RT-03",
+   "variant": "a-no-title",
+   "question": "Which p:cNvPr attribute Keynote shows as an image Description",
+   "seen": "Description \"OPF image 1\" (probe.json images[].description)",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/alt-text__RT-03__a-no-title/probe.json",
+    "keynote/036/experiments/alt-text__RT-03__a-no-title/back.pptx"
+   ]
+  },
+  {
+   "group": "alt-text",
+   "id": "RT-03",
+   "variant": "b-name-alt",
+   "question": "Which p:cNvPr attribute Keynote shows as an image Description",
+   "seen": "Description = alt; back.pptx name = descr = alt (probe.json images[].description)",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/alt-text__RT-03__b-name-alt/probe.json",
+    "keynote/036/experiments/alt-text__RT-03__b-name-alt/back.pptx"
+   ]
+  },
+  {
+   "group": "alt-text",
+   "id": "RT-03",
+   "variant": "c-name-empty",
+   "question": "Which p:cNvPr attribute Keynote shows as an image Description",
+   "seen": "Description \"\"; back.pptx \"image-1-1.png\" (probe.json images[].description)",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/alt-text__RT-03__c-name-empty/probe.json",
+    "keynote/036/experiments/alt-text__RT-03__c-name-empty/back.pptx"
+   ]
+  },
+  {
+   "group": "alt-text",
+   "id": "RT-03",
+   "variant": "d-title-alt-no-descr",
+   "question": "Which p:cNvPr attribute Keynote shows as an image Description",
+   "seen": "Description \"<alt>\\n\\nOPF image 1\" (probe.json images[].description)",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/alt-text__RT-03__d-title-alt-no-descr/probe.json",
+    "keynote/036/experiments/alt-text__RT-03__d-title-alt-no-descr/back.pptx"
+   ]
+  },
+  {
+   "group": "pic-placeholders",
+   "id": "UNSUPPORTED-MEDIA",
+   "variant": "a-exported",
+   "question": "What triggers \"Unsupported media were removed. Slide Layout(s): Cover, Gallery, Hero, Image, Image beside\"",
+   "seen": "control (keynote/036/qualification/coverage-images/import-warnings-6131.png, read by eye): the line is there; back.pptx layouts still carry p:ph type=\"pic\" idx 21",
+   "verdict": "control",
+   "evidence": [
+    "evidence/sheets/X-pic-placeholders.jpg"
+   ]
+  },
+  {
+   "group": "pic-placeholders",
+   "id": "UNSUPPORTED-MEDIA",
+   "variant": "b-removed",
+   "question": "What triggers \"Unsupported media were removed. Slide Layout(s): Cover, Gallery, Hero, Image, Image beside\"",
+   "seen": "warnings panel not read (captured too early: \"To view warnings, click or open a presentation.\"); slides pixel-identical to a",
+   "verdict": "not read",
+   "evidence": [
+    "keynote/036/experiments/pic-placeholders__UNSUPPORTED-MEDIA__b-removed/"
+   ]
+  },
+  {
+   "group": "pic-placeholders",
+   "id": "UNSUPPORTED-MEDIA",
+   "variant": "c1-body",
+   "question": "What triggers \"Unsupported media were removed. Slide Layout(s): Cover, Gallery, Hero, Image, Image beside\"",
+   "seen": "panel read: only \"The font Aptos Display is missing\" and \"The font Aptos is missing\": no Unsupported media line; slides pixel-identical to a; back.pptx: Image/Gallery layouts have a body placeholder idx 1 where the picture was, Cover/Hero lose it (no picture placeholder anywhere)",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/pic-placeholders__UNSUPPORTED-MEDIA__c1-body/import-warnings-7134.png",
+    "evidence/sheets/X-pic-placeholders.jpg"
+   ],
+   "note": "silences the line by giving up the picture placeholder (text placeholder in PowerPoint too)"
+  },
+  {
+   "group": "pic-placeholders",
+   "id": "UNSUPPORTED-MEDIA",
+   "variant": "c2-no-type",
+   "question": "What triggers \"Unsupported media were removed. Slide Layout(s): Cover, Gallery, Hero, Image, Image beside\"",
+   "seen": "panel read: as c1, no Unsupported media line; back.pptx as c1",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/pic-placeholders__UNSUPPORTED-MEDIA__c2-no-type/import-warnings-7134.png",
+    "evidence/sheets/X-pic-placeholders.jpg"
+   ],
+   "note": "an obj placeholder: PowerPoint offers its insert-picture icon among others (inferred)"
+  },
+  {
+   "group": "pic-placeholders",
+   "id": "UNSUPPORTED-MEDIA",
+   "variant": "d-powerpoint-form",
+   "question": "What triggers \"Unsupported media were removed. Slide Layout(s): Cover, Gallery, Hero, Image, Image beside\"",
+   "seen": "panel not read (captured too early); slides pixel-identical; back.pptx keeps pic placeholders as a",
+   "verdict": "not read",
+   "evidence": [
+    "keynote/036/experiments/pic-placeholders__UNSUPPORTED-MEDIA__d-powerpoint-form/"
+   ]
+  },
+  {
+   "group": "pic-placeholders",
+   "id": "UNSUPPORTED-MEDIA",
+   "variant": "e1-ordinary-slides-unbound",
+   "question": "What triggers \"Unsupported media were removed. Slide Layout(s): Cover, Gallery, Hero, Image, Image beside\"",
+   "seen": "panel not read (captured too early); slides 1, 2, 10, 35 pixel-identical to the layouts-ordinary control",
+   "verdict": "not read",
+   "evidence": [
+    "keynote/036/experiments/pic-placeholders__UNSUPPORTED-MEDIA__e1-ordinary-slides-unbound/"
+   ]
+  },
+  {
+   "group": "graders",
+   "id": "SW-01",
+   "variant": "b-header-arial",
+   "question": "SW-01: header words whole?",
+   "seen": "no change: \"Tea|m\", \"Participant|s\", \"Completio|n\" still split (Arial Bold as wide as Helvetica Bold)",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/graders__SW-01__b-header-arial/"
+   ]
+  },
+  {
+   "group": "graders",
+   "id": "SW-01",
+   "variant": "c-grid-wider",
+   "question": "SW-01: header words whole?",
+   "seen": "slides 12, 13: every header whole; slide 7 not edited (still split)",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/graders__SW-01__c-grid-wider/",
+    "evidence/sheets/X-graders.jpg"
+   ]
+  },
+  {
+   "group": "graders",
+   "id": "SW-02",
+   "variant": "b-native-note-at-core-box",
+   "question": "SW-02: native note under the table?",
+   "seen": "note right under the table as in the preview",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/graders__SW-02__b-native-note-at-core-box/",
+    "evidence/sheets/X-graders.jpg"
+   ]
+  },
+  {
+   "group": "graders",
+   "id": "MX-08",
+   "variant": "b-col1-wider",
+   "question": "MX-08: \"Terminal\" on one line?",
+   "seen": "\"Terminal\" on one line; second column text rewraps the same",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/graders__MX-08__b-col1-wider/",
+    "evidence/sheets/X-graders.jpg"
+   ]
+  },
+  {
+   "group": "graders",
+   "id": "LG-01",
+   "variant": "b-ethi-kefa",
+   "question": "LG-01: Amharic column still runs into \"Latin line\"?",
+   "seen": "no change: still runs into the Latin block (Keynote already drew Kefa for Ebrima: inferred)",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/graders__LG-01__b-ethi-kefa/"
+   ]
+  },
+  {
+   "group": "graders",
+   "id": "LG-04",
+   "variant": "b-altlang",
+   "question": "LG-04: Korean wraps at spaces?",
+   "seen": "no change: still breaks \"권 / 리에\"",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/graders__LG-04__b-altlang/"
+   ]
+  },
+  {
+   "group": "graders",
+   "id": "LG-04",
+   "variant": "c-ealnbrk0",
+   "question": "LG-04: Korean wraps at spaces?",
+   "seen": "no change: still breaks inside the word",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/graders__LG-04__c-ealnbrk0/"
+   ]
+  },
+  {
+   "group": "graders",
+   "id": "LY-02",
+   "variant": "b-first-column-one-box",
+   "question": "LY-02: left column clear of the right?",
+   "seen": "left column wraps inside its box, clear of the right column and above the recommendation",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/graders__LY-02__b-first-column-one-box/",
+    "evidence/sheets/X-graders.jpg"
+   ]
+  },
+  {
+   "group": "graders",
+   "id": "LY-06",
+   "variant": "b-no-slide-bg",
+   "question": "LY-06: layout copies gone?",
+   "seen": "background still accent1 (correct); slide 2 layout still \"Section 0\", back.pptx 43 layouts (same copies Section 0, Statement 0, Closing 0, Quote 0)",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/graders__LY-06__b-no-slide-bg/"
+   ]
+  },
+  {
+   "group": "graders",
+   "id": "LY-06",
+   "variant": "c-bg-on-layout",
+   "question": "LY-06: layout copies gone?",
+   "seen": "same as b",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/graders__LY-06__c-bg-on-layout/"
+   ]
+  },
+  {
+   "group": "roundtrip-xml",
+   "id": "RT-06",
+   "variant": "b-sz4800",
+   "question": "RT-06: title size read/written",
+   "seen": "probe 48 pt (48.75 also read as 48); back.pptx sz 4608 as for 4875",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/roundtrip-xml__RT-06__b-sz4800/"
+   ],
+   "note": "fractional sizes truncate; the 96% write-back shrink is independent of the size"
+  },
+  {
+   "group": "roundtrip-xml",
+   "id": "RT-06",
+   "variant": "c-sz4900",
+   "question": "RT-06: title size read/written",
+   "seen": "probe 49 pt; back.pptx sz 4606",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/roundtrip-xml__RT-06__c-sz4900/"
+   ]
+  },
+  {
+   "group": "roundtrip-xml",
+   "id": "RT-06",
+   "variant": "e-agenda-title-wrap-square",
+   "question": "RT-06: agenda title still shrunk?",
+   "seen": "probe 30 pt in both; back.pptx sz 2670 in both",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/roundtrip-xml__RT-06__e-agenda-title-wrap-square/"
+   ]
+  },
+  {
+   "group": "roundtrip-xml",
+   "id": "RT-07",
+   "variant": "b-rlm",
+   "question": "RT-07: rtl kept on digit lines?",
+   "seen": "picture unchanged (already placed as the preview); back.pptx writes algn=\"l\" rtl=\"1\" on both digit lines (control: bare a:pPr) and keeps U+200F in the text",
+   "verdict": "partly",
+   "evidence": [
+    "keynote/036/experiments/roundtrip-xml__RT-07__b-rlm/"
+   ],
+   "note": "round trip keeps the direction at the cost of an invisible character in the text"
+  },
+  {
+   "group": "roundtrip-xml",
+   "id": "RT-08",
+   "variant": "b-plain-numbers",
+   "question": "RT-08: numbers as numbers, alignment kept?",
+   "seen": "probe values \"89\", \"79\" still strings, format automatic, alignment right in the probe; back.pptx still writes no algn",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/roundtrip-xml__RT-08__b-plain-numbers/"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-1",
+   "variant": "radar-nofill",
+   "question": "#1416 item 1",
+   "seen": "standard radar drawn as lines, legend keys lines; marker radar already lines in the control; labels still collide (\"Rshiparch\") and clip (\"Researc\")",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-1__radar-nofill/",
+    "evidence/sheets/X-1416-1-radar.jpg"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-2",
+   "variant": "axis-no-majorunit",
+   "question": "#1416 item 2",
+   "seen": "secondary axis 0%, 10%, 20%, 30%, 40%; legend still over the top label",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-2__axis-no-majorunit/",
+    "evidence/sheets/X-1416-2-axis.jpg"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-2",
+   "variant": "axis-general",
+   "question": "#1416 item 2",
+   "seen": "only 0 and 0.4",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-2__axis-general/"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-2",
+   "variant": "axis-both",
+   "question": "#1416 item 2",
+   "seen": "0 to 0.4 by 0.1, no %",
+   "verdict": "partly",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-2__axis-both/"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-3",
+   "variant": "bg-alpha-on-white",
+   "question": "#1416 item 3",
+   "seen": "exported slide picture: corner raw (68,96,121,255), no alpha; over white (60,97,123) against the preview (59,98,123); control raw alpha 217, over white (58,97,122). Window and Play: not looked at (owner/interface check pending)",
+   "verdict": "partly",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-3__bg-alpha-on-white/slides/slide-05.png"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-4",
+   "variant": "tile-as-bg",
+   "question": "#1416 item 4",
+   "seen": "tiles, each about 1.33x the preview tile; in color",
+   "verdict": "partly",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-4__tile-as-bg/",
+    "evidence/sheets/X-1416-4-tile.jpg"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-4",
+   "variant": "tile-as-bg-75",
+   "question": "#1416 item 4",
+   "seen": "2 by 2 at the preview size; full color (5,105,162): a:grayscl and alphaModFix 40% both dropped",
+   "verdict": "partly",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-4__tile-as-bg-75/",
+    "evidence/sheets/X-1416-4-tile.jpg"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-4",
+   "variant": "tile-as-bg-75-gray-png",
+   "question": "#1416 item 4",
+   "seen": "2 by 2 at the preview size, gray; squares (81,81,81) where the preview has (185,185,185): the 40% opacity is lost",
+   "verdict": "partly",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-4__tile-as-bg-75-gray-png/",
+    "evidence/sheets/X-1416-4-tile.jpg"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-5",
+   "variant": "reflabel-above-plot",
+   "question": "#1416 item 5",
+   "seen": "\"Target 30 min\" above the plot at the line top, clear of every label, inside the frame",
+   "verdict": "fixes",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-5__reflabel-above-plot/",
+    "evidence/sheets/X-1416-5-reflabel.jpg"
+   ],
+   "note": "the control no longer collides either (bars half width since M13)"
+  },
+  {
+   "group": "1416",
+   "id": "1416-5",
+   "variant": "reflabel-below-plot",
+   "question": "#1416 item 5",
+   "seen": "label on the \"30\" tick label",
+   "verdict": "worse",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-5__reflabel-below-plot/"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-6",
+   "variant": "linelabel-series-level",
+   "question": "#1416 item 6",
+   "seen": "no labels on slides 4 and 10",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-6__linelabel-series-level/",
+    "evidence/sheets/X-1416-6-linelabels.jpg"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-6",
+   "variant": "linelabel-point-fields",
+   "question": "#1416 item 6",
+   "seen": "no labels",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-6__linelabel-point-fields/"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-6",
+   "variant": "stacked-as-cumulative",
+   "question": "#1416 item 6",
+   "seen": "slide 4 lines at the stacked heights (top line to 122) as the preview; labels still dropped",
+   "verdict": "partly",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-6__stacked-as-cumulative/",
+    "evidence/sheets/X-1416-6-linelabels.jpg"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-7",
+   "variant": "mlinks-hlink-text",
+   "question": "#1416 item 7",
+   "seen": "link run drawn in 000000 (probe color 0,0,0 on m-links), black on the blue ground; preview draws it white",
+   "verdict": "partly",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-7__mlinks-hlink-text/",
+    "evidence/sheets/X-1416-7-link-color.jpg"
+   ],
+   "note": "proves Keynote takes the theme a:hlink"
+  },
+  {
+   "group": "1416",
+   "id": "1416-7",
+   "variant": "mlinks-hlink-accent",
+   "question": "#1416 item 7",
+   "seen": "link run in accent1 2874A6, the color of the ground: invisible",
+   "verdict": "worse",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-7__mlinks-hlink-accent/",
+    "evidence/sheets/X-1416-7-link-color.jpg"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-7",
+   "variant": "ordinary-hlink-text",
+   "question": "#1416 item 7",
+   "seen": "link run drawn in 000000 (probe color 0,0,0 on m-links), black on the blue ground; preview draws it white",
+   "verdict": "partly",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-7__ordinary-hlink-text/",
+    "evidence/sheets/X-1416-7-link-color.jpg"
+   ],
+   "note": "proves Keynote takes the theme a:hlink"
+  },
+  {
+   "group": "1416",
+   "id": "1416-7",
+   "variant": "ordinary-hlink-accent",
+   "question": "#1416 item 7",
+   "seen": "link run in accent1 2874A6, the color of the ground: invisible",
+   "verdict": "worse",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-7__ordinary-hlink-accent/",
+    "evidence/sheets/X-1416-7-link-color.jpg"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-7",
+   "variant": "furniture-hlink-text",
+   "question": "#1416 item 7",
+   "seen": "footer links already white in the control (M65 links the shape); no change",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-7__furniture-hlink-text/"
+   ]
+  },
+  {
+   "group": "1416",
+   "id": "1416-7",
+   "variant": "furniture-hlink-accent",
+   "question": "#1416 item 7",
+   "seen": "as hlink-text: no change",
+   "verdict": "no change",
+   "evidence": [
+    "keynote/036/experiments/1416__1416-7__furniture-hlink-accent/"
+   ]
+  }
+ ]
+}
