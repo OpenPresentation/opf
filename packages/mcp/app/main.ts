@@ -122,6 +122,8 @@ const pasteButton = $<HTMLButtonElement>("deck-paste");
 const undoButton = $<HTMLButtonElement>("deck-undo");
 const redoButton = $<HTMLButtonElement>("deck-redo");
 const findButton = $<HTMLButtonElement>("deck-find-open");
+/** The editor's panels are bottom sheets at this width and under (its own breakpoint). */
+const phoneQuery = window.matchMedia?.("(max-width: 600px)");
 const reviewDrawer = $("deck-review");
 const reviewClose = $<HTMLButtonElement>("deck-review-close");
 const sendButton = $<HTMLButtonElement>("deck-send");
@@ -807,6 +809,10 @@ function applyContext(update: Partial<McpUiHostContext>): void {
 	expandButton.setAttribute("aria-label", expandLabel);
 	expandButton.title = expandLabel;
 	expandButton.dataset.mode = context.displayMode ?? "inline";
+	// Claude draws its own expand control in the tool's header above the view, and its own way back: the bar's would be a second one
+	// in the same corner, so in Claude the bar leaves it to the host (view.css). The More menu of a phone-size bar keeps its item. No
+	// capability says whether a host draws this control, so this one follows the product the host named.
+	root.dataset.hostExpand = String(isClaude());
 	const can = app.getHostCapabilities();
 	sendButton.hidden = !can?.message;
 	// What the host said it is and what it announced that the view acts on, where one look finds it: the More menu (each part wraps
@@ -1116,6 +1122,9 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		// source.) A template still draws its variables as written.
 		variables: "resolved",
 		theme: hostTheme(),
+		// Design, Find and Export open the editor's one panel under the bar, in the same place: one at a time, a bottom sheet on a phone.
+		panelAnchor: () => shell.querySelector<HTMLElement>(".deck-bar"),
+		exportMode: phoneQuery?.matches ? "sheet" : "menu",
 		// The footer opens Review and shows its issue count when the deck needs attention.
 		labels: { ready: "", reviewPill: { valid: "Review", name: ({ state, text, parts }) => state === "valid" ? "Review deck" : [text, ...parts].join(", ") } },
 		icons: { valid: "M20 6 9 17l-5-5" },
@@ -1224,7 +1233,17 @@ undoButton.addEventListener("click", () => {
 	if (!undoButton.disabled) editor?.undo();
 });
 redoButton.addEventListener("click", () => editor?.redo());
-findButton.addEventListener("click", () => editor?.openFind());
+// Find toggles like Design and Export, and says when it is open.
+findButton.addEventListener("click", () => {
+	const panel = $("deck-find").querySelector<HTMLElement>(".opf-find");
+	if (panel && !panel.hidden) panel.querySelector<HTMLButtonElement>(".opf-panel-close")?.click();
+	else editor?.openFind({ replace: true });
+});
+new MutationObserver(() => {
+	const panel = $("deck-find").querySelector<HTMLElement>(".opf-find");
+	findButton.setAttribute("aria-expanded", String(Boolean(panel && !panel.hidden)));
+}).observe($("deck-find"), { subtree: true, childList: true, attributes: true, attributeFilter: ["hidden"] });
+phoneQuery?.addEventListener?.("change", () => editor?.setExportMode(phoneQuery.matches ? "sheet" : "menu"));
 reviewClose.addEventListener("click", () => setReviewOpen(false));
 reviewDrawer.addEventListener("keydown", (event) => {
 	if (event.key === "Escape") setReviewOpen(false);

@@ -129,44 +129,53 @@ An expanded editor above a sticky site header at `z-index: 5000` (the editor is 
 
 ## Design menu
 
-The `design` item: a button with a popover (a bottom sheet on a phone) that sets the theme, colors, fonts and the slide's layout.
+The `design` item: a button that opens the editor's one panel (shared with Find and Export: the same frame and place, one open at a time; a bottom sheet on a phone) with four tabs that set the theme, colors, fonts and the slide's layout. The panel's frame, tabs and rows also carry the shared `.opf-panel-*` classes.
 
 | Hook | Kind | What it is |
 | --- | --- | --- |
-| `.opf-design-menu` | root | The button and its popover. Also `.opf-ui`. |
+| `.opf-design-menu` | root | The button and its panel. Also `.opf-ui`. |
 | `.opf-design-menu-trigger` | class | The button. |
 | `.opf-design-menu-trigger-label` | class | The button's text. |
-| `.opf-design-menu-popover` | class | The popover or sheet (`role="dialog"`). |
+| `.opf-design-menu-popover` | class | The panel or sheet (`role="dialog"`, also `.opf-panel`). |
 | `.opf-design-menu-scrim` | class | The backdrop of the sheet. |
-| `.opf-design-menu-head` | class | The sheet's header row. |
+| `.opf-design-menu-handle` | class | The sheet's grabber. |
+| `.opf-design-menu-head` | class | The panel's header row. |
 | `.opf-design-menu-title` | class | The heading. |
-| `.opf-design-menu-close` | class | The close button of the sheet. |
-| `.opf-design-menu-menu` | class | The list of choices (`role="menu"`). |
-| `.opf-design-menu-group` | class | One section (Theme, Colors, Fonts, Layout). |
-| `.opf-design-menu-group-label` | class | The section's heading. |
+| `.opf-design-menu-close` | class | The close button. |
+| `.opf-design-menu-tabs` | class | The segmented switch (`role="tablist"`). |
+| `.opf-design-menu-tab` | class | One tab: Theme, Colors, Fonts, Layout. |
+| `.opf-design-menu-menu` | class | The panel's scrolling body. |
+| `.opf-design-menu-group` | class | One section (`role="tabpanel"`). |
+| `.opf-design-menu-group-label` | class | The section's small label ("Theme · 3"). |
+| `.opf-design-menu-list` | class | The section's choices (`role="menu"`). |
 | `.opf-design-menu-item` | class | One choice (`role="menuitemradio"`). |
 | `.opf-design-menu-label` | class | The choice's name. |
-| `.opf-design-menu-swatches` | class | The color dots on a choice. |
+| `.opf-design-menu-thumb` | class | A theme's small slide, or a layout's schematic. |
+| `.opf-design-menu-swatches` | class | A color scheme's four accents. |
+| `.opf-design-menu-sample` | class | A font scheme's "Ag" in its own face. |
+| `.opf-design-menu-filter` | class | The font filter field. |
 | `.opf-design-menu-check` | class | The mark on the chosen row. |
 | `.opf-design-menu-more` | class | The "More design options" row. |
 | `.opf-design-menu-empty` | class | The text shown when there is nothing to choose. |
 | `data-mode` | attribute | On the root: `popover` or `sheet`. |
 | `data-density` | attribute | `comfortable` or `touch`. |
-| `data-section` | attribute | On a choice: `theme`, `colors`, `fonts` or `layout`. |
+| `data-section` | attribute | On a tab, a section and a choice: `theme`, `colors`, `fonts` or `layout`. |
 | `data-value` | attribute | On a choice: the record or layout id. |
 | `aria-checked` | attribute | On a choice: `true` for the one in use. |
+| `aria-selected` | attribute | On a tab: `true` for the section shown. |
 | `aria-expanded` | attribute | On the button: `true` while open. |
-| `--opf-ui-shadow-pop` | token | The popover's shadow. |
-| `--opf-ui-radius-md` | token | The popover's corners. |
+| `--opf-ui-shadow-pop` | token | The panel's shadow. |
+| `--opf-ui-radius-lg` | token | The panel's corners. |
+| `--opf-ui-border-strong` | token | The panel's border. |
 | `trigger` | icon | The palette on the button. |
-| `close` | icon | The X in the sheet. |
+| `close` | icon | The X in the panel's header. |
 | `check` | icon | The mark on the chosen row. |
 
-A wider popover with square corners:
+A wider panel with square corners:
 
 ```css
 .opf-design-menu-popover {
-  width: 360px;
+  width: 420px;
   border-radius: 0;
 }
 ```

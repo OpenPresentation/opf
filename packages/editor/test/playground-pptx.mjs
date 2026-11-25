@@ -105,7 +105,7 @@ try {
   assert.match(xml, /gridSpan="2"/);
   const expectedImport = await fromPptx(bytes);
   assert.equal(validate(expectedImport, { only: ["format"] }).valid, true);
-  assert.match(await page.locator('.opf-export-status').innerText(), /^Local-browser-PowerPoint\.pptx · 1 slide · \d+ KB/, 'the status line reports the file');
+  assert.match(await page.locator('.opf-export-status').innerText(), /^Local-browser-PowerPoint\.pptx\s[\s\S]*1 slide · \d+ KB/, 'the status card reports the file');
   const edited = await source();
   assert.equal(edited.slides[0].title, 'Edited before export');
   await button('Undo').click();

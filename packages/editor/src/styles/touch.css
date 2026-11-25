@@ -140,17 +140,9 @@
   }
 
   /* ---- menus, dialogs and the compact controls of the panels --------------------------------------------------------------------- */
-  .opf-export .opf-export-close {
-    width: 44px;
-    height: 44px;
-  }
   .opf-export[data-density="touch"] .opf-export-trigger,
-  .opf-export[data-density="touch"] .opf-export-item,
-  .opf-export .opf-export-item {
+  .opf-export .opf-export-trigger {
     min-height: 44px;
-  }
-  .opf-export .opf-export-status-action {
-    height: 44px;
   }
   .opf-handoff[data-density="touch"] .opf-handoff-button,
   .opf-handoff .opf-handoff-button {
@@ -178,11 +170,6 @@
   :root .opf-review-fix {
     min-height: 44px;
     padding: 0 12px;
-  }
-  :root .opf-find button.opf-find-close,
-  :root .opf-find button[aria-label="Previous match"],
-  :root .opf-find button[aria-label="Next match"] {
-    min-width: 44px;
   }
   .opf-dc-tool,
   .opf-dc-path {
@@ -251,18 +238,10 @@
 
 /* CE-29: the Design quick menu (src/design-menu.js). */
 @media (pointer: coarse) {
-  .opf-design-menu,
-  .opf-design-menu[data-density="touch"] {
-    --opf-design-menu-row: 44px;
-  }
   .opf-design-menu .opf-design-menu-trigger,
   .opf-design-menu[data-density="touch"] .opf-design-menu-trigger {
     min-width: 44px;
     min-height: 44px;
-  }
-  .opf-design-menu .opf-design-menu-close {
-    width: 44px;
-    height: 44px;
   }
 }
 

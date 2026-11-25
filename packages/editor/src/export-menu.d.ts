@@ -86,8 +86,14 @@ export interface ExportMenuOptions {
   agentGuideUrl?: string;
   /** Hide groups or formats. */
   items?: ExportMenuItems;
-  /** `"menu"` (default) is a popover under the trigger; `"sheet"` is the mobile bottom sheet with a scrim, a drag handle and Close. */
+  /** `"menu"` (default) is the panel under the trigger (or `anchor`); `"sheet"` is the mobile bottom sheet with a scrim and a grabber. */
   mode?: "menu" | "sheet";
+  /**
+   * Where the panel opens: under this element (a bar), its end edge on the element's content edge, at most as tall as the room below. A function
+   * is read at each opening. Default: the trigger. Design, Find and Export share one panel: opening one closes the other.
+   */
+  anchor?: HTMLElement | (() => HTMLElement | null | undefined);
+
   /** `"touch"` makes controls 40px (sheet rows 44px). Default `"comfortable"` (32px). */
   density?: "comfortable" | "touch";
   /**
@@ -125,6 +131,6 @@ export declare const EXPORT_DISABLED_REASON: string;
 /**
  * The Export menu: a trigger button and a grouped `role="menu"` (Slides, OPF source, For an agent). Slides use this package's headless
  * `convert`; PowerPoint comes from `exportPptx`; source formats use core's `toYaml` and `toMarkdown`. Progress, Cancel and a success or
- * failure line show under the trigger and are announced through `aria-live`. CSS: `src/styles/export-menu.css`, classes `opf-export-*`.
+ * failure card show at the top of the panel, which stays open, and are announced through `aria-live`. CSS: `src/styles/panel.css` and `export-menu.css`, classes `opf-export-*`.
  */
 export declare function createExportMenu(container: HTMLElement, options: ExportMenuOptions): ExportMenu;

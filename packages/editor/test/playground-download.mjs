@@ -73,12 +73,14 @@ try {
     await button('Close source editor').click();
     return deck;
   };
+  // Choosing a format keeps the panel open: it is opened only when it is closed.
+  const openMenu = async () => { if (!(await page.getByRole('menu', { name: 'Export formats' }).isVisible())) await trigger.click(); };
   // Choose a format in the menu and take the file the browser downloads; a failure shows in the status line, so look at it before waiting for ever.
   const exportAs = async (name, { timeout = 120000 } = {}) => {
     const event = page.waitForEvent('download', { timeout });
     const failure = page.waitForFunction(() => document.querySelector('.opf-export-status')?.dataset.state === 'error', undefined, { timeout }).then(() => 'failed');
     event.catch(() => {}); failure.catch(() => {});
-    await trigger.click();
+    await openMenu();
     await item(name).click();
     const winner = await Promise.race([event, failure]);
     if (winner === 'failed') throw new Error(`Export failed: ${await status.innerText()}`);
@@ -111,7 +113,7 @@ try {
   await page.keyboard.press('Enter');
   await page.getByRole('menu', { name: 'Export formats' }).waitFor({ state: 'visible' });
   assert.match(await page.evaluate(() => document.activeElement.textContent), /^PowerPoint/, 'focus starts on the first item');
-  assert.equal(await item(/^SVG slides/).locator('.opf-export-item-meta').innerText(), 'ZIP');
+  assert.equal(await item(/^SVG slides/).locator('.opf-export-item-meta').innerText(), '.zip');
   await page.keyboard.press('Escape');
   await page.getByRole('menu').waitFor({ state: 'hidden' });
   assert.equal(await page.evaluate(() => document.activeElement.textContent.trim()), 'Export', 'focus returns to the trigger');
@@ -128,7 +130,8 @@ try {
   const embedded = Buffer.from(pdf.bytes).toString('latin1');
   assert.match(embedded, /\/FontFile2/, 'font subsets are embedded');
   assert.doesNotMatch(embedded, /Hidden backup/);
-  assert.match(await status.innerText(), /^q3-review\.pdf · 2 slides · \d+ KB/, 'the status line reports the file');
+  assert.equal(await status.locator('.opf-export-status-text').innerText(), 'q3-review.pdf', 'the status card names the file');
+  assert.match(await status.locator('.opf-export-status-detail').innerText(), /^2 slides · \d+ KB/, 'and says what it holds');
   assert.match(await page.locator('.opf-export-live').innerText(), /q3-review\.pdf · 2 slides/, 'and announces it');
   mark('pdf');
 
@@ -148,7 +151,7 @@ try {
   const single = { name: 'Single', slides: [{ id: 'a', title: 'Revenue grew in every region', text: 'The enterprise segment led the quarter.' }], design: { fontScheme: 'roboto' } };
   await loadDeck(single, 'Revenue grew');
   assert.equal(await item(/^SVG slides/).count(), 0, 'closed');
-  await trigger.click();
+  await openMenu();
   assert.equal(await item(/^SVG slides/).locator('.opf-export-item-meta').innerText(), '.svg', 'the hint follows the deck');
   await page.keyboard.press('Escape');
   const png = await exportAs(/^PNG images/);
@@ -179,7 +182,8 @@ try {
   assert.equal(pptx.name, 'q3-review.pptx');
   const slideXml = await (await JSZip.loadAsync(pptx.bytes)).file('ppt/slides/slide1.xml').async('string');
   assert.match(slideXml, /Revenue grew in every region/);
-  assert.match(await status.innerText(), /^q3-review\.pptx · 3 slides · \d+ KB/);
+  assert.equal(await status.locator('.opf-export-status-text').innerText(), 'q3-review.pptx');
+  assert.match(await status.locator('.opf-export-status-detail').innerText(), /^3 slides · \d+ KB/);
   mark('pptx');
 
   // ---- OPF source: JSON as "Save OPF" writes it; YAML and Markdown read back with core -------------------------------------------------------------
@@ -200,7 +204,7 @@ try {
   mark('opf source');
 
   // ---- The agent handoff: the session's exact deck -----------------------------------------------------------------------------------------------------
-  await trigger.click();
+  await openMenu();
   await item(/^Agent handoff/).click();
   const dialog = page.getByRole('dialog', { name: 'Agent handoff' });
   await dialog.waitFor();
@@ -226,7 +230,7 @@ try {
   await loadDeck(long, 'Slide 1');
   let downloaded = false;
   page.once('download', () => { downloaded = true; });
-  await trigger.click();
+  await openMenu();
   await item(/^PDF/).click();
   await status.locator('progress').waitFor({ state: 'visible' });
   await page.waitForFunction(() => /Page \d+ of 60/.test(document.querySelector('.opf-export-status-text').textContent), undefined, { timeout: 60000 });
@@ -235,7 +239,7 @@ try {
   await page.waitForFunction(() => document.querySelector('.opf-export-status')?.dataset.state === 'canceled');
   assert.match(await status.innerText(), /Export canceled\./);
   assert.equal(downloaded, false, 'a canceled export offers no file');
-  await trigger.click();
+  await openMenu();
   assert.equal(await item(/^PDF/).getAttribute('aria-disabled'), null, 'the menu is usable again');
   await page.keyboard.press('Escape');
   mark('cancel');
@@ -265,7 +269,8 @@ try {
   await page.keyboard.press('Escape');
   const phone = await exportAs(/^JSON/);
   assert.equal(phone.name, 'Notes-deck.opf.json');
-  assert.equal(await sheet.isHidden(), true, 'choosing a format closes the sheet');
+  assert.equal(await sheet.isVisible(), true, 'choosing a format keeps the sheet open, with the file in its card');
+  await page.keyboard.press('Escape');
   await page.setViewportSize({ width: 1440, height: 1000 });
   mark('phone sheet');
 

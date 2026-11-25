@@ -793,6 +793,8 @@ export function createOpfEditor(element, options = {}) {
     }
   }
 
+  // Design, Find and Export open their one panel under the host's bar when it names one (`panelAnchor`), so the three open in the same place.
+  const panelAnchor = options.panelAnchor ? { anchor: options.panelAnchor } : {};
   function exportOptions() {
     const configured = options.export ?? {};
     return {
@@ -823,6 +825,7 @@ export function createOpfEditor(element, options = {}) {
       handoffContainer: configured.handoffContainer ?? overlay,
       mode: exportMode,
       density,
+      ...panelAnchor,
     };
   }
 
@@ -1053,6 +1056,7 @@ export function createOpfEditor(element, options = {}) {
         return win?.getSelection?.().toString() || undefined;
       },
       onGoTo: configured.onGoTo,
+      ...panelAnchor,
       onStatus: (message) => say(message),
       onClose() {
         controls.find?.setAttribute("aria-expanded", "false");
@@ -1415,6 +1419,7 @@ export function createOpfEditor(element, options = {}) {
         getSlideIndex: () => slideIndex,
         density,
         readOnly,
+        ...panelAnchor,
         ...iconsFor("designMenu"),
         ...(labels.designMenu ? { labels: labels.designMenu } : {}),
         // "More design options…": the workspace's Design panel when there is one, else the host's (`designMenu.onOpenPanel`), else no row.

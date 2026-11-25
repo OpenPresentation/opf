@@ -274,10 +274,10 @@ try {
   const exportEntries = await ev(() => [...document.querySelectorAll('.opf-tb-menu [data-opf-toolbar-part=export]')].map((node) => node.textContent));
   assert.deepEqual(exportEntries, ['Export…'], 'one entry for Export');
   await page.locator('.opf-tb-menu [data-opf-toolbar-menu-item=export]').click();
-  await page.waitForFunction(() => { const sheet = document.querySelector('#host .opf-export-sheet'); return sheet && !sheet.hidden && sheet.getBoundingClientRect().height > 40 && getComputedStyle(sheet).visibility === 'visible'; }, undefined, { timeout: 5000 });
+  await page.waitForFunction(() => { const sheet = document.querySelector('#host .opf-export-panel'); return sheet && !sheet.hidden && sheet.getBoundingClientRect().height > 40 && getComputedStyle(sheet).visibility === 'visible'; }, undefined, { timeout: 5000 });
   assert.equal(await ev(() => document.querySelector('#host .opf-export').dataset.mode), 'sheet');
   await page.keyboard.press('Escape');
-  await page.waitForFunction(() => document.querySelector('#host .opf-export-sheet').hidden, undefined, { timeout: 5000 });
+  await page.waitForFunction(() => document.querySelector('#host .opf-export-panel').hidden, undefined, { timeout: 5000 });
   await page.waitForFunction(() => document.activeElement?.classList.contains('opf-tb-more-button'), undefined, { timeout: 5000 }).catch(async () => { throw new Error(`focus after the sheet: ${await ev(() => document.activeElement?.outerHTML.slice(0, 100))}`); });
   await ev(() => { document.querySelector('#host').style.width = '1600px'; });
   await page.waitForFunction(() => !window.ed.toolbar.collapsed.includes('export') && document.querySelector('#host .opf-export').dataset.mode === 'menu', undefined, { timeout: 5000 });

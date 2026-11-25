@@ -1,16 +1,19 @@
-// RR-98: the Export menu. A trigger button ("Download Export v") and a grouped `role="menu"`: Slides (PowerPoint, PDF, SVG slides, PNG images),
-// OPF source (JSON, YAML, Markdown) and For an agent (the handoff dialog). `mode: "sheet"` draws the same menu as the mobile bottom sheet.
+// RR-98: the Export menu. A trigger button ("Download Export v") that opens the editor's one panel (src/panel.js, shared with Design and Find)
+// holding a grouped `role="menu"`: Slides (PowerPoint, PDF, SVG slides, PNG images), OPF source (JSON, YAML, Markdown) and For an agent (the
+// handoff dialog). `mode: "sheet"` draws the same panel as the mobile bottom sheet.
 //
 // Slides go through this package's headless `convert` (`export.js`) with the host's fonts, catalogs and render options; PowerPoint lives in
 // @openpresentation/opf-pptx, which the editor does not import, so the host injects `exportPptx(deck, { signal, onProgress })`. The source
 // formats are core's `toYaml` and `toMarkdown` (`@openpresentation/opf/yaml`, `/markdown`, loaded on first use); JSON is the document as
-// "Save OPF" writes it (catalog records embedded). Progress, Cancel (an AbortController), a success or failure line and the converter's
-// notes show in a small panel under the trigger and are announced through an `aria-live` region. Downloads go to a Blob link unless the
-// host takes them with `onDownload`. Plain DOM; styles in src/styles/export-menu.css (classes `opf-export-*`).
+// "Save OPF" writes it (catalog records embedded). Choosing a format keeps the panel open: progress, Cancel (an AbortController), the file
+// made or the failure, and the converter's notes show in a card at the top of the panel and are announced through an `aria-live` region.
+// Downloads go to a Blob link unless the host takes them with `onDownload`. Plain DOM; styles in src/styles/panel.css and export-menu.css
+// (classes `opf-export-*`).
 import { createAgentHandoffDialog } from "./agent-handoff-dialog.js";
 import { prepareSave } from "./catalogs.js";
 import { el, icon, saveBlob } from "./export-dom.js";
 import { convert, exportFileName, slidesToConvert } from "./export.js";
+import { claimPanel, createPanelFrame, panelLabel, placePanel, releasePanel, shown, tabWithin } from "./panel.js";
 import { measureDeck } from "./picture-luminance.js";
 
 const PPTX_TYPE = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
@@ -19,11 +22,12 @@ const BUSY_REASON = "Another export is running. Cancel it first.";
 const AUTO_HIDE_MS = 4000;
 const MAX_NOTES = 6;
 
+// Each row: the name, and at the right the file type and a hint.
 const SLIDE_FORMATS = {
-  pptx: { label: "PowerPoint (.pptx)", icon: "Presentation", meta: () => "editable" },
-  pdf: { label: "PDF", icon: "FileText", meta: () => "all slides" },
-  svg: { label: "SVG slides", icon: "Image", meta: (count) => (count > 1 ? "ZIP" : ".svg") },
-  png: { label: "PNG images", icon: "Images", meta: (count) => (count > 1 ? "ZIP" : ".png") },
+  pptx: { label: "PowerPoint", icon: "Presentation", meta: () => ".pptx · editable" },
+  pdf: { label: "PDF", icon: "FileText", meta: () => ".pdf · all slides" },
+  svg: { label: "SVG slides", icon: "Image", meta: (count) => (count > 1 ? ".zip" : ".svg") },
+  png: { label: "PNG images", icon: "Images", meta: (count) => (count > 1 ? ".zip" : ".png") },
 };
 const SOURCE_FORMATS = {
   json: { label: "JSON", icon: "FileJson", meta: ".opf.json", extension: "opf.json", type: "application/json" },
@@ -80,37 +84,39 @@ export function createExportMenu(container, options = {}) {
   const peekDeck = () => { try { return getDeck(); } catch { return undefined; } };
 
   // ---- the DOM ----------------------------------------------------------------------------------------------------------------------------
-  const trigger = el(doc, "button", { type: "button", class: "opf-export-trigger", "aria-haspopup": "menu", "aria-expanded": "false", "aria-controls": `${id}-menu` },
+  const trigger = el(doc, "button", { type: "button", class: "opf-export-trigger", "aria-haspopup": "dialog", "aria-expanded": "false", "aria-controls": `${id}-panel` },
     icon(doc, "Download"), el(doc, "span", { class: "opf-export-trigger-label", text: options.label ?? "Export" }), icon(doc, "ChevronDown"));
+  const frame = createPanelFrame(doc, { id: `${id}-panel`, title: "Export", className: "opf-export-panel" });
+  const { element: panel, close: closeButton } = frame;
   const menu = el(doc, "div", { class: "opf-export-menu", role: "menu", id: `${id}-menu`, "aria-label": "Export formats" });
-  const popover = el(doc, "div", { class: "opf-export-popover", hidden: true }, menu);
-  const scrim = el(doc, "div", { class: "opf-export-scrim", hidden: true });
-  const closeButton = el(doc, "button", { type: "button", class: "opf-export-close", "aria-label": "Close" }, icon(doc, "X", 18));
-  const sheet = el(doc, "div", { class: "opf-export-sheet", role: "dialog", "aria-modal": "true", "aria-label": "Export", hidden: true },
-    el(doc, "div", { class: "opf-export-handle", "aria-hidden": "true" }),
-    el(doc, "div", { class: "opf-export-sheet-head" }, el(doc, "span", { class: "opf-export-sheet-title", text: "Export" }), closeButton));
+  const scrim = el(doc, "div", { class: "opf-panel-scrim opf-export-scrim", hidden: true });
   const live = el(doc, "div", { class: "opf-export-live", role: "status", "aria-live": "polite", "aria-atomic": "true" });
+  // The card at the top of the panel: what is being made (with Cancel and its progress), the file made or the failure (with Dismiss), and the notes.
   const statusIcon = el(doc, "span", { class: "opf-export-status-icon" });
   const statusText = el(doc, "p", { class: "opf-export-status-text" });
-  const statusAction = el(doc, "button", { type: "button", class: "opf-export-status-action" });
+  const statusAction = el(doc, "button", { type: "button", class: "opf-panel-button opf-export-status-action" });
+  const statusDetail = el(doc, "p", { class: "opf-export-status-detail", hidden: true });
   const statusBar = el(doc, "progress", { class: "opf-export-progress", max: "1", hidden: true, "aria-label": "Export progress" });
-  const statusNotes = el(doc, "ul", { class: "opf-export-notes", "aria-label": "Export notes", hidden: true });
+  const statusNotes = el(doc, "ul", { class: "opf-export-notes", "aria-label": "Export notes" });
+  const notesBox = el(doc, "div", { class: "opf-export-notes-box", hidden: true }, icon(doc, "Info"), statusNotes);
   const statusPanel = el(doc, "div", { class: "opf-export-status", role: "group", "aria-label": "Export status", hidden: true },
-    el(doc, "div", { class: "opf-export-status-row" }, statusIcon, statusText, statusAction), statusBar, statusNotes);
-  const root = el(doc, "div", { class: "opf-export opf-ui", "data-mode": mode, "data-density": density }, trigger, popover, scrim, sheet, statusPanel, live);
+    el(doc, "div", { class: "opf-export-status-row" }, statusIcon, statusText, statusAction), statusDetail, statusBar, notesBox);
+  frame.body.append(statusPanel, menu);
+  const root = el(doc, "div", { class: "opf-export opf-ui", "data-mode": mode, "data-density": density }, trigger, panel, scrim, live);
 
   // ---- the menu ---------------------------------------------------------------------------------------------------------------------------
   function buildMenu() {
     const deck = peekDeck();
     const count = deck ? slidesToConvertSafe(deck) : 0;
     const groups = [];
-    const row = (kind, format, label, iconName, meta) => el(doc, "button", { type: "button", class: "opf-export-item", role: "menuitem", tabindex: "-1", "data-kind": kind, "data-format": format },
-      icon(doc, iconName), el(doc, "span", { class: "opf-export-item-label", text: label }), el(doc, "span", { class: "opf-export-item-meta", text: meta }));
-    const group = (key, rows) => {
-      const label = el(doc, "div", { class: "opf-export-group-label", id: `${id}-${key}`, text: GROUP_LABELS[key] });
-      return el(doc, "div", { class: "opf-export-group", role: "group", "aria-labelledby": label.id, "data-group": key }, label, ...rows);
+    const row = (kind, format, label, iconName, meta) => el(doc, "button", { type: "button", class: "opf-panel-row opf-export-item", role: "menuitem", tabindex: "-1", "data-kind": kind, "data-format": format },
+      icon(doc, iconName, 16), el(doc, "span", { class: "opf-panel-name opf-export-item-label", text: label }), el(doc, "span", { class: "opf-panel-meta opf-export-item-meta", text: meta }));
+    const group = (key, rows, extra) => {
+      const label = panelLabel(doc, GROUP_LABELS[key], { class: "opf-export-group-label", id: `${id}-${key}` });
+      if (extra) label.append(el(doc, "span", { "aria-hidden": "true", text: ` · ${extra}` }));
+      return el(doc, "div", { class: "opf-export-group", role: "group", "aria-labelledby": label.id, "data-group": key }, label, el(doc, "div", { class: "opf-panel-list" }, ...rows));
     };
-    if (items.slides.length) groups.push(group("slides", items.slides.map((name) => row("slides", name, SLIDE_FORMATS[name].label, SLIDE_FORMATS[name].icon, SLIDE_FORMATS[name].meta(count)))));
+    if (items.slides.length) groups.push(group("slides", items.slides.map((name) => row("slides", name, SLIDE_FORMATS[name].label, SLIDE_FORMATS[name].icon, SLIDE_FORMATS[name].meta(count))), count || undefined));
     if (items.source.length) groups.push(group("source", items.source.map((name) => row("source", name, SOURCE_FORMATS[name].label, SOURCE_FORMATS[name].icon, SOURCE_FORMATS[name].meta))));
     if (items.agent) groups.push(group("agent", [row("agent", "handoff", "Agent handoff", "Bot", ".md")]));
     menu.replaceChildren(...groups);
@@ -138,62 +144,73 @@ export function createExportMenu(container, options = {}) {
   }
 
   // ---- open and close ---------------------------------------------------------------------------------------------------------------------
+  // The panel opens under the anchor (the host's bar, else the trigger) or, as `mode: "sheet"` or with nothing on screen to open under, as the bottom sheet.
+  const anchorNow = () => {
+    const given = typeof options.anchor === "function" ? options.anchor() : options.anchor;
+    return shown(given) ? given : shown(trigger) ? trigger : null;
+  };
   function layout() {
-    const sheeted = mode === "sheet";
-    root.dataset.mode = mode;
-    (sheeted ? sheet : popover).append(menu);
-    popover.hidden = sheeted || !isOpen;
-    sheet.hidden = !sheeted || !isOpen;
+    const anchor = anchorNow();
+    const sheeted = mode === "sheet" || !anchor;
+    root.dataset.mode = sheeted ? "sheet" : "menu";
+    panel.hidden = !isOpen;
     scrim.hidden = !sheeted || !isOpen;
+    panel.setAttribute("aria-modal", String(sheeted));
     trigger.setAttribute("aria-expanded", String(isOpen));
-    trigger.setAttribute("aria-haspopup", sheeted ? "dialog" : "menu");
+    if (isOpen) placePanel(panel, anchor, sheeted);
   }
+  // One item is in the Tab order (roving): the focused one.
   function focusItem(which = "first") {
     const list = menuItems();
     const enabled = list.filter((item) => item.getAttribute("aria-disabled") !== "true");
     const pool = enabled.length ? enabled : list;
-    (which === "last" ? pool[pool.length - 1] : pool[0])?.focus();
+    const target = typeof which === "object" ? which : which === "last" ? pool[pool.length - 1] : pool[0];
+    for (const item of list) item.tabIndex = item === target ? 0 : -1;
+    target?.focus();
   }
+  const swapClose = () => close({ restoreFocus: false });
   function onDocumentPointerdown(event) { if (!root.contains(event.target)) close({ restoreFocus: false }); }
   function onDocumentKeydown(event) {
     if (event.key === "Escape" && isOpen) { event.preventDefault(); event.stopPropagation(); close(); }
   }
+  const onReflow = () => layout();
   function open(which = "first") {
     if (destroyed || isOpen) return;
+    claimPanel(doc, swapClose);
     buildMenu();
     if (!busy) hideStatus();
     isOpen = true;
     layout();
     doc.addEventListener("pointerdown", onDocumentPointerdown, true);
     doc.addEventListener("keydown", onDocumentKeydown, true);
+    doc.defaultView?.addEventListener("resize", onReflow);
     focusItem(which);
   }
   function close({ restoreFocus = true } = {}) {
     if (!isOpen) return;
     isOpen = false;
+    releasePanel(doc, swapClose);
     layout();
     doc.removeEventListener("pointerdown", onDocumentPointerdown, true);
     doc.removeEventListener("keydown", onDocumentKeydown, true);
+    doc.defaultView?.removeEventListener("resize", onReflow);
     if (restoreFocus) trigger.focus();
   }
-  function onMenuKeydown(event) {
+  function onPanelKeydown(event) {
     const list = menuItems();
     const at = list.indexOf(doc.activeElement);
+    if (event.key === "Tab") {
+      // Tab moves through the panel (the card's button, the menu, Close); from the last stop the focus leaves and the popover closes. The sheet keeps it.
+      if (!tabWithin(panel, event, root.dataset.mode === "sheet")) close({ restoreFocus: false });
+      return;
+    }
+    if (at < 0) return;
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
       const step = event.key === "ArrowDown" ? 1 : -1;
-      list[(at + step + list.length) % list.length]?.focus();
-    } else if (event.key === "Home") { event.preventDefault(); list[0]?.focus(); }
-    else if (event.key === "End") { event.preventDefault(); list[list.length - 1]?.focus(); }
-    else if (event.key === "Tab") {
-      if (mode === "menu") close({ restoreFocus: false });
-      else {
-        // The sheet is modal: Tab cycles through its items and Close.
-        const stops = [...list, closeButton], here = stops.indexOf(doc.activeElement);
-        event.preventDefault();
-        stops[(here + (event.shiftKey ? -1 : 1) + stops.length) % stops.length].focus();
-      }
-    }
+      focusItem(list[(at + step + list.length) % list.length]);
+    } else if (event.key === "Home") { event.preventDefault(); focusItem(list[0]); }
+    else if (event.key === "End") { event.preventDefault(); focusItem(list[list.length - 1]); }
   }
 
   // ---- status -----------------------------------------------------------------------------------------------------------------------------
@@ -204,23 +221,34 @@ export function createExportMenu(container, options = {}) {
   }
   function hideStatus() {
     globalThis.clearTimeout(hideTimer);
+    const was = statusPanel.hidden;
     statusPanel.hidden = true;
+    if (isOpen && !was) layout();
   }
-  // state: "busy" | "success" | "error" | "canceled". `progress`: { value, indeterminate }. Notes keep the panel up until dismissed.
-  function showStatus(state, message, { notes = [], progress, announceIt = true } = {}) {
+  // state: "busy" | "success" | "error" | "canceled". `progress`: { value, indeterminate }. Notes keep the card up until dismissed. A file
+  // made shows its name on the card's first line and the rest of the message (slides, size, notes) under it.
+  function showStatus(state, message, { notes = [], progress, announceIt = true, title } = {}) {
     globalThis.clearTimeout(hideTimer);
+    const fresh = statusPanel.hidden || statusPanel.dataset.state !== state;
     statusPanel.dataset.state = state;
-    statusText.textContent = message;
-    statusIcon.replaceChildren(...(state === "success" ? [icon(doc, "Check")] : state === "error" ? [icon(doc, "X")] : []));
+    statusText.textContent = title ?? message;
+    statusDetail.textContent = title ? message.slice(title.length).replace(/^ · /, "") : "";
+    statusDetail.hidden = !statusDetail.textContent;
+    statusIcon.replaceChildren(...(state === "success" ? [icon(doc, "Check", 16)] : state === "error" ? [icon(doc, "X", 16)] : []));
     statusBar.hidden = state !== "busy";
     if (state === "busy" && progress) { if (progress.indeterminate) statusBar.removeAttribute("value"); else statusBar.value = progress.value; }
     statusAction.textContent = state === "busy" ? "Cancel" : "Dismiss";
     statusAction.setAttribute("aria-label", state === "busy" ? "Cancel export" : "Dismiss export status");
-    const shown = notes.slice(0, MAX_NOTES).map((note) => el(doc, "li", { text: noteText(note) }));
-    if (notes.length > MAX_NOTES) shown.push(el(doc, "li", { text: `…and ${notes.length - MAX_NOTES} more` }));
-    statusNotes.replaceChildren(...shown);
-    statusNotes.hidden = !shown.length;
+    const listed = notes.slice(0, MAX_NOTES).map((note) => el(doc, "li", { text: noteText(note) }));
+    if (notes.length > MAX_NOTES) listed.push(el(doc, "li", { text: `…and ${notes.length - MAX_NOTES} more` }));
+    statusNotes.replaceChildren(...listed);
+    notesBox.hidden = !listed.length;
     statusPanel.hidden = false;
+    // The card is at the top of the panel: a new state scrolls it into view.
+    if (isOpen && fresh) {
+      frame.body.scrollTop = 0;
+      layout();
+    }
     if (announceIt) announce(state === "success" && notes.length ? `${message}. ${plural(notes.length, "note")} to review.` : message);
     if ((state === "success" || state === "canceled") && !notes.length) hideTimer = globalThis.setTimeout(hideStatus, AUTO_HIDE_MS);
     options.onStatus?.({ state, message, notes: notes.map(noteText) });
@@ -306,7 +334,7 @@ export function createExportMenu(container, options = {}) {
       if (destroyed) return;
       const notes = made.notes ?? [];
       const parts = [made.fileName, ...(made.count !== undefined ? [plural(made.count, "slide")] : []), sizeText(made.blob.size), ...(notes.length ? [`${plural(notes.length, "note")} to review`] : [])];
-      showStatus("success", parts.join(" · "), { notes });
+      showStatus("success", parts.join(" · "), { notes, title: made.fileName });
       options.onExport?.({ ...download, notes: notes.map(noteText) });
     } catch (error) {
       if (destroyed) return;
@@ -334,9 +362,11 @@ export function createExportMenu(container, options = {}) {
   function activate(item) {
     if (item.getAttribute("aria-disabled") === "true") return;
     const { kind, format } = item.dataset;
-    close();
-    if (kind === "agent") handoff();
-    else run(kind, format);
+    // The handoff is a dialog of its own; a file is made with the panel open, its card at the top.
+    if (kind === "agent") {
+      close();
+      handoff();
+    } else run(kind, format);
   }
 
   // ---- wiring -----------------------------------------------------------------------------------------------------------------------------
@@ -345,13 +375,12 @@ export function createExportMenu(container, options = {}) {
     if (event.key === "ArrowDown" || event.key === "ArrowUp") { event.preventDefault(); if (!isOpen) open(event.key === "ArrowUp" ? "last" : "first"); else focusItem(event.key === "ArrowUp" ? "last" : "first"); }
   });
   menu.addEventListener("click", (event) => { const item = event.target.closest?.(".opf-export-item"); if (item && menu.contains(item)) activate(item); });
-  menu.addEventListener("keydown", onMenuKeydown);
-  sheet.addEventListener("keydown", (event) => { if (event.target === closeButton && event.key === "Tab") onMenuKeydown(event); });
+  panel.addEventListener("keydown", onPanelKeydown);
   closeButton.addEventListener("click", () => close());
   scrim.addEventListener("click", () => close());
   statusAction.addEventListener("click", () => {
     if (busy) busy.controller.abort();
-    else { hideStatus(); trigger.focus(); }
+    else { hideStatus(); focusItem("first"); }
   });
 
   buildMenu();

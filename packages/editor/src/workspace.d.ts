@@ -351,6 +351,11 @@ export interface OpfEditorOptions {
   actions?: ToolbarAction[];
   /** CE-28 wave 2: the Design quick menu (the `design` item). `onOpenPanel` adds its "More design options…" row for your own Design panel; the editor's own Design panel wins when it has one. */
   designMenu?: { onOpenPanel?: () => void };
+  /**
+   * The element Design, Find and Export open their one panel under (your bar), so the three open in the same place, aligned to its end edge.
+   * A function is read at each opening. Default: each opens under its own button, and Find stays in its slot.
+   */
+  panelAnchor?: HTMLElement | (() => HTMLElement | null | undefined);
   /** Enable thumbnail actions (default in full and embed). "starters" offers Title, Bullets and Blank and focuses a new title. */
   slideActions?: boolean | "starters";
   /** CE-28 wave 2: the browser asks before the page closes while the editor is `dirty` (`true`), or while the function says so (default false). */
@@ -358,7 +363,7 @@ export interface OpfEditorOptions {
 
   source?: OpfEditorSourceOptions;
   canvas?: Omit<CanvasEditorOptions, "editor" | "fonts" | "renderOptions" | "slideIndex" | "presentation" | "catalogs" | "propertiesContainer">;
-  export?: Omit<ExportMenuOptions, "getDeck" | "fonts" | "catalogs" | "mode" | "density" | "beforeExport">;
+  export?: Omit<ExportMenuOptions, "getDeck" | "fonts" | "catalogs" | "mode" | "density" | "beforeExport" | "anchor">;
   review?: boolean | (Omit<ReviewPanelOptions, "editor" | "getSlideIndex" | "getValidateOptions" | "autoRefresh" | "onGoTo" | "onFocusField" | "onStatus" | "onChange" | "review"> & { hook?: ReviewHook });
   find?: boolean | { onGoTo?: FindPanelOptions["onGoTo"] };
   design?: boolean | Omit<DesignControlsOptions, "editor" | "getSlideIndex" | "getSelectedPath" | "onSelectPath" | "onStatus" | "catalogs" | "onAddAsset">;

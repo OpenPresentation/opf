@@ -1,5 +1,9 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { startPlayground } from './support/playground-harness.mjs';
+
+const axeSource = readFileSync(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8');
 
 // RR-25 in a real browser, on the built playground: deck-wide find and replace. Keyboard (Ctrl+F, Ctrl+H, Enter, Shift+Enter,
 // F3, Ctrl+Alt+Enter, Esc), the match case / whole word / regex options, the results list going to the match on the canvas
@@ -26,6 +30,22 @@ try {
   const replacement = panel.getByLabel('Replace with');
   const count = page.locator('.opf-find-count');
   const results = page.locator('.opf-find-result');
+  // The options are toggle chips (aria-pressed).
+  const setChip = async (name, on) => {
+    const chip = panel.getByRole('button', { name, exact: true });
+    if ((await chip.getAttribute('aria-pressed')) !== String(on)) await chip.click();
+    assert.equal(await chip.getAttribute('aria-pressed'), String(on));
+  };
+  // Results are grouped under a label per slide ("Slide 02 · 3 matches"); each names its place in the slide. "Slide 2 · List item 2" is both.
+  const whereOf = () => page.evaluate(() => [...document.querySelectorAll('.opf-find-result')].map((button) => {
+    const group = /^Slide (\d+)/.exec(button.closest('.opf-find-group').querySelector('.opf-panel-label').textContent);
+    return `${group ? `Slide ${Number(group[1])}` : 'Presentation'} · ${button.querySelector('.opf-find-where').textContent}`;
+  }));
+  const resultAt = (where) => {
+    const [, slide, label] = /^(?:Slide (\d+)|Presentation) · (.*)$/.exec(where);
+    const group = panel.locator('.opf-find-group').filter({ has: page.locator('.opf-panel-label', { hasText: slide ? `Slide ${slide.padStart(2, '0')} ·` : 'Presentation ·' }) });
+    return group.locator('.opf-find-result').filter({ has: page.getByText(label, { exact: true }) });
+  };
   const selectedPath = () => page.evaluate(() => document.querySelector('#preview [data-canvas-selected]')?.getAttribute('data-opf-path') ?? null);
 
   // Ctrl+F opens the panel with the find field focused; Esc closes it and gives focus back.
@@ -45,7 +65,7 @@ try {
   // Ctrl+H opens find and replace.
   await page.keyboard.press('Control+h');
   await replacement.waitFor({ state: 'visible' });
-  assert.equal(await page.locator('.opf-find strong').textContent(), 'Find and replace');
+  assert.equal(await page.locator('.opf-find .opf-panel-title').textContent(), 'Find and replace');
   mark('Ctrl+H opens find and replace');
 
   // Search the whole deck. Matches in titles, subtitle, notes, rich text, list, table, quote.
@@ -54,7 +74,9 @@ try {
   const total = await results.count();
   assert.ok(total >= 9, `found matches across the deck: ${total}`);
   assert.match(await count.textContent(), /^\d+ of \d+ matches in 3 slides? and the presentation settings|^\d+ of \d+ matches in 3 slides?$/);
-  const whereLabels = await page.locator('.opf-find-where').allTextContents();
+  const whereLabels = await whereOf();
+  assert.deepEqual(await page.locator('.opf-find-group .opf-panel-label').allTextContents().then((labels) => labels.map((label) => label.replace(/ · .*/, ''))), ['Presentation', 'Slide 01', 'Slide 02', 'Slide 03'], 'grouped under a label per slide');
+  assert.equal(await page.locator('.opf-find-position').textContent(), await count.textContent().then((text) => text.replace(/ matches in .*/, '')), 'the field shows "n of m"');
   assert.ok(whereLabels.includes('Slide 1 · Speaker notes'), `notes are searched: ${whereLabels}`);
   assert.ok(whereLabels.some((label) => /^Slide 2 · List item 2$/.test(label)), 'list items are searched');
   assert.ok(whereLabels.some((label) => /^Slide 3 · Block 1 · Table header 2$/.test(label)), 'table cells are searched');
@@ -63,17 +85,17 @@ try {
   mark(`finds text in titles, notes, rich text, lists, tables and the presentation name (${total} matches)`);
 
   // Match case / whole word / regex change the result.
-  await panel.getByLabel('Match case').check();
+  await setChip('Match case', true);
   await page.waitForFunction((before) => document.querySelectorAll('.opf-find-result').length < before, total);
   const sensitive = await results.count();
   assert.ok(sensitive < total && sensitive > 0);
-  await panel.getByLabel('Match case').uncheck();
+  await setChip('Match case', false);
   await find.fill('cat');
   assert.equal(await results.count(), 3, 'cat matches inside concatenate too');
-  await panel.getByLabel('Whole word').check();
+  await setChip('Whole word', true);
   assert.equal(await results.count(), 2, 'whole word skips concatenate');
-  await panel.getByLabel('Whole word').uncheck();
-  await panel.getByLabel('Regex').check();
+  await setChip('Whole word', false);
+  await setChip('Regex', true);
   await find.fill('Q\\d+');
   assert.deepEqual(await page.locator('.opf-find-result mark').allTextContents(), ['Q1', 'Q22']);
   await find.fill('(');
@@ -83,7 +105,7 @@ try {
   assert.equal(await panel.getByRole('button', { name: 'Replace all' }).isDisabled(), true);
   await find.fill('Q(\\d)');
   assert.equal(await find.getAttribute('aria-invalid'), 'false');
-  await panel.getByLabel('Regex').uncheck();
+  await setChip('Regex', false);
   mark('match case, whole word and regex options; an invalid pattern is reported and disables replacing');
 
   // FA-31: a variable token is not text. The footer's {{slide.number}} and {{deck.slideCount}} are never offered as matches.
@@ -95,26 +117,26 @@ try {
   assert.equal(await results.count(), 1, 'the text around the tokens is still searched');
   assert.equal(await page.locator('.opf-find-result mark').first().textContent(), 'Page');
   await find.fill('number');
-  assert.deepEqual(await page.locator('.opf-find-where').allTextContents(), ['Slide 2 · Title'], 'only the word in the title, not the token');
+  assert.deepEqual(await whereOf(), ['Slide 2 · Title'], 'only the word in the title, not the token');
   mark('variable tokens are not offered as matches');
 
 
   // Go to: a result on another slide selects that slide and the canvas target (a list item selects its list).
   await find.fill('acme');
   await page.waitForFunction(() => document.querySelectorAll('.opf-find-result').length > 5);
-  await results.filter({ hasText: 'Slide 2 · List item 2' }).click();
+  await resultAt('Slide 2 · List item 2').click();
   await page.waitForFunction(() => [...document.querySelector('#slide-list').children].findIndex((node) => node.getAttribute('aria-current') === 'true') === 1);
   await app.settle();
   await page.waitForFunction(() => document.querySelector('#preview [data-canvas-selected]'));
   assert.match(await selectedPath(), /^slides\.1\.items(\.1)?$/, `the list is selected on the canvas: ${await selectedPath()}`);
-  assert.equal(await results.filter({ hasText: 'Slide 2 · List item 2' }).getAttribute('aria-current'), 'true');
+  assert.equal(await resultAt('Slide 2 · List item 2').getAttribute('aria-current'), 'true');
   // A table cell on slide 3.
-  await results.filter({ hasText: 'Slide 3 · Block 1 · Table header 2' }).click();
+  await resultAt('Slide 3 · Block 1 · Table header 2').click();
   await page.waitForFunction(() => [...document.querySelector('#slide-list').children].findIndex((node) => node.getAttribute('aria-current') === 'true') === 2);
   await app.settle();
   await page.waitForFunction(() => /^slides\.2\.blocks\.0/.test(document.querySelector('#preview [data-canvas-selected]')?.getAttribute('data-opf-path') ?? ''));
   // Speaker notes: the notes box gets the focus with the match selected.
-  await results.filter({ hasText: 'Slide 1 · Speaker notes' }).click();
+  await resultAt('Slide 1 · Speaker notes').click();
   await page.waitForFunction(() => document.activeElement?.id === 'notes');
   assert.equal(await page.evaluate(() => { const n = document.querySelector('#notes'); return n.value.slice(n.selectionStart, n.selectionEnd); }), 'Acme');
   mark('go to selects the slide and the canvas content, or focuses notes with the match selected');
@@ -133,13 +155,13 @@ try {
   mark('Enter, Shift+Enter and F3 step through matches');
 
   // Replace one: one undo step, the next match is current, formatting stays.
-  await panel.getByLabel('Match case').check();
+  await setChip('Match case', true);
   await find.fill('Acme');
   await replacement.fill('Globex');
   await page.waitForFunction(() => document.querySelectorAll('.opf-find-result').length > 0);
   const before = await app.doc();
   const startCount = await results.count();
-  await results.filter({ hasText: 'Slide 1 · Text' }).click();
+  await resultAt('Slide 1 · Text').click();
   await panel.getByRole('button', { name: 'Replace', exact: true }).click();
   await app.waitDoc((deck) => JSON.stringify(deck.slides[0].text) === JSON.stringify([{ text: 'Globex ', bold: true }, { text: 'is the best', italic: true }, ' place to work']), 'rich text replaced in place');
   await page.waitForFunction((n) => document.querySelectorAll('.opf-find-result').length === n - 1, startCount);
@@ -172,25 +194,25 @@ try {
   mark('Ctrl+Alt+Enter replaces all');
 
   // Regex replacement with groups.
-  await panel.getByLabel('Match case').uncheck();
-  await panel.getByLabel('Regex').check();
+  await setChip('Match case', false);
+  await setChip('Regex', true);
   await find.fill('Q(\\d+) and Q(\\d+)');
   await replacement.fill('Q$2 and Q$1');
   await page.waitForFunction(() => document.querySelectorAll('.opf-find-result').length === 1);
   await panel.getByRole('button', { name: 'Replace all' }).click();
   await app.waitDoc((deck) => deck.slides[3].text === 'cat concatenate cat. Q22 and Q1.', 'regex groups');
   await page.locator('#undo').click();
-  await panel.getByLabel('Regex').uncheck();
+  await setChip('Regex', false);
   mark('regex replacement with capture groups');
 
   // This slide only.
   await find.fill('Acme');
   await replacement.fill('Zed');
-  await panel.getByLabel('This slide only').check();
+  await setChip('This slide', true);
   await page.waitForFunction(() => document.querySelectorAll('.opf-find-result').length >= 1);
   const slideOnly = await results.count();
   assert.ok(slideOnly < total);
-  await panel.getByLabel('This slide only').uncheck();
+  await setChip('This slide', false);
 
   // Inline editing: Ctrl+F while a text edit is open commits it first, and a draft is never lost.
   await page.keyboard.press('Escape');
@@ -202,7 +224,7 @@ try {
   await page.keyboard.press('Control+f');
   await panel.waitFor({ state: 'visible' });
   await find.fill('Acme');
-  await panel.getByLabel('Match case').uncheck();
+  await setChip('Match case', false);
   const typed = await app.doc();
   assert.ok(/X/.test(typed.slides[0].title), `the open edit was committed, not lost: ${typed.slides[0].title}`);
   await page.waitForFunction(() => document.querySelectorAll('.opf-find-result').length > 0);
@@ -219,7 +241,12 @@ try {
   assert.match(await results.first().ariaSnapshot(), new RegExp(`^- '?button "${resultName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`));
   assert.ok((await page.locator('.opf-find-results').getAttribute('aria-label')) === 'Matches');
   for (const key of ['Control+F', 'Control+H']) assert.ok((await page.locator('#find-open').getAttribute('aria-keyshortcuts')).includes(key));
-  mark('panel controls are labelled; count is a polite live region; errors are alerts');
+  // The panel with results (the current match tinted), checked by axe, contrast included.
+  await page.addScriptTag({ content: axeSource });
+  const axe = await page.evaluate(async () => (await window.axe.run('.opf-find')).violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`));
+  assert.deepEqual(axe, [], 'no axe violations in the panel with results');
+  assert.equal(await page.evaluate(() => document.querySelector('.opf-find').classList.contains('opf-panel')), true, 'the editor\'s one panel');
+  mark('panel controls are labelled; count is a polite live region; errors are alerts; axe');
 
   // The panel stays out of a modal dialog (the source editor keeps its own find).
   await page.keyboard.press('Escape');

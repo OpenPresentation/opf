@@ -55,6 +55,11 @@ const HOST_PAGE = `<!doctype html><meta charset="utf-8"><title>host</title><styl
 window.host = { requests: [], context: [], messages: [], toolCalls: [], displayModes: [], downloads: [] };
 const frame = document.getElementById("view");
 const send = (message) => frame.contentWindow.postMessage({ jsonrpc: "2.0", ...message }, "*");
+// The host's own expand control (Claude draws one above the view): the host changes the mode itself and tells the view.
+window.hostSetMode = (mode) => {
+  host.mode = mode;
+  send({ method: "ui/notifications/host-context-changed", params: { displayMode: mode, containerDimensions: mode === "fullscreen" ? { width: 960, height: 640 } : { width: window.setup.width ?? 960, maxHeight: 640 } } });
+};
 let initialized = false;
 window.startView = (setup) => {
   window.setup = setup;
@@ -106,6 +111,7 @@ window.addEventListener("message", async (event) => {
       return reply({});
     case "ui/request-display-mode": {
       host.displayModes.push(message.params.mode);
+      // (window.hostSetMode below is the host's own control: the host changes the mode and tells the view, with no request from it.)
       // As Claude does: only right after a press in the view (user activation); otherwise the mode stays and is the answer.
       if (!navigator.userActivation.isActive) return reply({ mode: host.mode ?? "inline" });
       host.mode = message.params.mode;
@@ -146,6 +152,10 @@ try {
 	await page.exposeFunction("callServer", (params) => serverClient.callTool(params));
 	await page.goto(hostUrl);
 	const view = () => page.frameLocator("#view");
+	// Choosing a format keeps the Export panel open: it is opened only when it is closed.
+	const openExport = async () => {
+		if (!(await view().locator(".opf-export-panel").isVisible())) await view().locator("#deck-export .opf-export-trigger").click();
+	};
 	const hostState = () => page.evaluate(() => window.host);
 	const shots = process.env.OPF_DECK_APP_SCREENSHOTS;
 	if (shots) mkdirSync(shots, { recursive: true });
@@ -321,15 +331,15 @@ try {
 		await view().locator("#deck-redo").click();
 		await page.waitForFunction(() => window.host.context.at(-1)?.structuredContent?.document?.name === "Q3 board update", null, { timeout: 15000 });
 
-		assert.equal(await view().locator("#deck-find").isVisible(), false);
+		assert.equal(await view().locator("#deck-find .opf-find").isVisible(), false);
 		await view().locator("#deck-find-open").click();
 		const field = view().locator("#deck-find input").first();
 		await field.waitFor();
 		await field.fill("churn");
-		assert.equal(await view().locator("#deck-find").isVisible(), true);
+		assert.equal(await view().locator("#deck-find .opf-find").isVisible(), true);
 		await shoot("find-light");
 		await field.press("Escape");
-		await view().locator("#deck-find").waitFor({ state: "hidden" });
+		await view().locator("#deck-find .opf-find").waitFor({ state: "hidden" });
 
 		await view().locator("#deck-verdict .opf-review-pill").click();
 		await view().locator("#deck-review").waitFor();
@@ -345,6 +355,70 @@ try {
 		const chosen = await theme.getAttribute("data-value");
 		await theme.click();
 		await page.waitForFunction((id) => window.host.context.at(-1)?.structuredContent?.document?.design?.theme === id, chosen, { timeout: 15000 });
+	});
+
+	await run("Design, Find and Export open one panel in one place under the bar, one at a time, swapped in place", async () => {
+		await open({ document: deck }, "light", { hostName: "Claude", download: true });
+		await view().locator("#deck-canvas svg").first().waitFor({ timeout: 60000 });
+		const frame = page.frame({ url: /\/view$/ });
+		// The three buttons are one bordered group of icon buttons.
+		const group = await frame.evaluate(() => {
+			const box = document.querySelector(".deck-panels");
+			return { label: box.getAttribute("aria-label"), role: box.getAttribute("role"), buttons: [...box.querySelectorAll("button")].filter((button) => button.getClientRects().length).map((button) => button.getAttribute("aria-label") || button.textContent.trim()), border: getComputedStyle(box).borderTopStyle };
+		});
+		assert.deepEqual(group, { label: "Design, find and export", role: "group", buttons: ["Design", "Find and replace", "Export"], border: "solid" });
+		const panelState = () => frame.evaluate(() => {
+			const open = [...document.querySelectorAll(".opf-panel")].filter((panel) => !panel.hidden && panel.getClientRects().length);
+			const bar = document.querySelector(".deck-bar").getBoundingClientRect();
+			const pressed = [...document.querySelectorAll(".deck-panels button")].filter((button) => button.getAttribute("aria-expanded") === "true").map((button) => button.getAttribute("aria-label") || button.textContent.trim());
+			return open.map((panel) => {
+				const box = panel.getBoundingClientRect();
+				const body = panel.querySelector(".opf-panel-body").getBoundingClientRect();
+				const covered = [...panel.querySelectorAll(".opf-panel-body .opf-panel-row")].filter((row) => !row.closest("[hidden]")).filter((row) => {
+					const r = row.getBoundingClientRect();
+					const y = (r.top + r.bottom) / 2;
+					return y > body.top + 2 && y < body.bottom - 2 && !row.contains(document.elementFromPoint((r.left + r.right) / 2, y));
+				}).length;
+				return { name: panel.getAttribute("aria-label") || panel.querySelector(".opf-panel-title").textContent, left: Math.round(box.left), top: Math.round(box.top), width: Math.round(box.width), gap: Math.round(box.top - bar.bottom), end: Math.round(bar.right - 12 - box.right), fits: box.bottom <= innerHeight - 8 + 0.5, covered, pressed };
+			});
+		});
+		await view().locator(".opf-design-menu-trigger").click();
+		const design = await panelState();
+		assert.equal(design.length, 1);
+		assert.deepEqual({ name: design[0].name, width: design[0].width, gap: design[0].gap, end: design[0].end, fits: design[0].fits, covered: design[0].covered, pressed: design[0].pressed }, { name: "Design", width: 360, gap: 8, end: 0, fits: true, covered: 0, pressed: ["Design"] }, "under the bar, 8px down, its end on the bar's content edge, inside the frame, nothing over its list, its button pressed");
+		await view().locator("#deck-find-open").click();
+		const find = await panelState();
+		assert.deepEqual(find.map((panel) => panel.name), ["Find and replace"], "Find replaces Design: one panel open");
+		assert.deepEqual([find[0].left, find[0].top, find[0].width], [design[0].left, design[0].top, design[0].width], "in the same place");
+		assert.deepEqual(find[0].pressed, ["Find and replace"]);
+		assert.equal(await view().locator("#deck-find input").first().evaluate((node) => node === document.activeElement), true, "the find field has the focus");
+		await openExport();
+		const exported = await panelState();
+		assert.deepEqual(exported.map((panel) => panel.name), ["Export"], "Export replaces Find");
+		assert.deepEqual([exported[0].left, exported[0].top, exported[0].width], [design[0].left, design[0].top, design[0].width], "in the same place");
+		assert.deepEqual(exported[0].pressed, ["Export"]);
+		assert.equal(exported[0].fits && exported[0].covered === 0, true);
+		await page.keyboard.press("Escape");
+		assert.deepEqual(await panelState(), [], "Escape closes it");
+		assert.equal(await frame.evaluate(() => document.activeElement.classList.contains("opf-export-trigger")), true, "and the focus returns to its button");
+		await view().locator("#deck-find-open").click();
+		await page.keyboard.press("Escape");
+		assert.equal(await frame.evaluate(() => document.activeElement.id), "deck-find-open", "Find gives the focus back to its button");
+		await view().locator("#deck-find-open").click();
+		await view().locator("#deck-find-open").click();
+		assert.deepEqual(await panelState(), [], "the Find button toggles");
+		await view().locator(".opf-design-menu-trigger").click();
+		await view().locator("#deck-stage").click({ position: { x: 20, y: 20 } });
+		assert.deepEqual(await panelState(), [], "a press outside closes Design");
+		// In a short frame the panel is never taller than the room under the bar: the body scrolls.
+		await page.evaluate(() => { document.getElementById("view").style.height = "360px"; });
+		await view().locator(".opf-design-menu-trigger").click();
+		await view().getByRole("tab", { name: "Layout" }).click();
+		const short = await panelState();
+		assert.equal(short[0].fits, true, "the panel fits the room under the bar");
+		assert.equal(short[0].covered, 0, "and nothing overlaps its scrolling list");
+		assert.equal(await frame.evaluate(() => { const body = document.querySelector(".opf-design-menu-popover .opf-panel-body"); return body.scrollHeight > body.clientHeight; }), true, "the body scrolls");
+		await page.keyboard.press("Escape");
 	});
 
 	await run("renames the deck over its row at 1280, 600 and 320px: Save, Cancel, Escape, blur keeps the draft, one undoable edit", async () => {
@@ -492,8 +566,11 @@ try {
 		await view().locator(".opf-source-action-download").click();
 		await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 15000 });
 		assert.match((await hostState()).downloads[0].contents[0].resource.uri, /\.opf\.json$/);
-		await view().locator("#deck-expand").click();
-		await page.waitForFunction(() => window.host.displayModes.length === 2);
+		// Claude draws its own expand control above the view, so in Claude the bar draws none; the way back is the host's control.
+		assert.equal(await view().locator("#deck-expand").isVisible(), false, "in Claude the bar leaves the expand control to the host");
+		await page.evaluate(() => window.hostSetMode("inline"));
+		await view().locator(':root[data-display="inline"]').waitFor();
+		assert.deepEqual((await hostState()).displayModes, ["fullscreen"], "the view asked once; the host changed the mode back itself");
 		await shoot("chat-dark-both");
 	});
 
@@ -501,7 +578,7 @@ try {
 		// The host of the last check saves files (ui/download-file), so the editor's Export menu is in the bar.
 		const exported = async (format) => {
 			const before = (await hostState()).downloads.length;
-			await view().locator("#deck-export .opf-export-trigger").click();
+			await openExport();
 			if (format === "pptx") await shoot("export-menu");
 			await view().locator(`.opf-export-item[data-format="${format}"]`).click();
 			await page.waitForFunction((count) => window.host.downloads.length > count, before, { timeout: 120000 });
@@ -624,7 +701,7 @@ try {
 	await run("a PowerPoint export names the fonts a viewer's PowerPoint may lack, as a note beside the file, and still succeeds", async () => {
 		// The note `opf convert` reports as pptx/typeface-not-office-safe (opf-pptx's typefacesNotOfficeSafe and the same sentence).
 		await open({ document: downloadDeck }, "light", { downloadMode: "accepted" });
-		await view().locator("#deck-export .opf-export-trigger").click();
+		await openExport();
 		await view().locator('.opf-export-item[data-format="pptx"]').click();
 		await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 120000 });
 		const bytes = Buffer.from((await hostState()).downloads[0].contents[0].resource.blob, "base64");
@@ -644,14 +721,14 @@ try {
 	await run("a capable host binary Export denial is visible and never uses an iframe download", async () => {
 		await open({ document: downloadDeck }, "light", { downloadMode: "denied" });
 		await probeIframeDownload();
-		await view().locator("#deck-export .opf-export-trigger").click();
+		await openExport();
 		await view().locator('.opf-export-item[data-format="pptx"]').click();
 		await page.waitForFunction(() => window.host.downloads.length === 1, null, { timeout: 120000 });
 		const resource = (await hostState()).downloads[0].contents[0].resource;
 		assert.equal(resource.mimeType, "application/vnd.openxmlformats-officedocument.presentationml.presentation");
 		assert.equal(Buffer.from(resource.blob, "base64").subarray(0, 2).toString("latin1"), "PK", "the denied transfer really contains a generated PowerPoint archive");
 		await view().locator(".opf-export-status").filter({ hasText: /export failed\. The download didn't finish\./i }).waitFor();
-		assert.match(await view().locator("#deck-status").innerText(), /^(PowerPoint \(\.pptx\) export failed\. )?The download didn't finish\.$/);
+		assert.match(await view().locator("#deck-status").innerText(), /^(PowerPoint export failed\. )?The download didn't finish\.$/);
 		await noIframeDownload();
 		await shoot("host-download-export-denied");
 	});
@@ -964,7 +1041,7 @@ try {
 		await shoot("example-pictures");
 		const exported = async (format) => {
 			const before = (await hostState()).downloads.length;
-			await view().locator("#deck-export .opf-export-trigger").click();
+			await openExport();
 			await view().locator(`.opf-export-item[data-format="${format}"]`).click();
 			await page.waitForFunction((count) => window.host.downloads.length > count, before, { timeout: 120000 });
 			const { resource } = (await hostState()).downloads.at(-1).contents[0];

@@ -1,0 +1,229 @@
+/* The one panel of Design, Find and replace and Export (src/panel.js): one frame, one place, one look. Only --opf-ui-* tokens, no color
+   literals (test/styles.mjs). Rows are 36px (40px at touch density, 44px for a finger), section labels 11px mono capitals, the current
+   choice the accent tint with a check. Motion is color only, 120ms, and none with reduced motion (tokens.css). */
+.opf-panel {
+  --opf-panel-row: 36px;
+  --opf-panel-tint: color-mix(in srgb, var(--opf-ui-accent) 16%, transparent);
+  position: fixed;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  width: min(360px, calc(100vw - 16px));
+  max-height: calc(100vh - 16px);
+  box-sizing: border-box;
+  overflow: hidden;
+  background: var(--opf-ui-surface);
+  color: var(--opf-ui-fg);
+  border: 1px solid var(--opf-ui-border-strong);
+  border-radius: var(--opf-ui-radius-lg);
+  box-shadow: var(--opf-ui-shadow-pop);
+  font: 13px/1.4 var(--opf-ui-font);
+  text-align: start;
+}
+.opf-panel[hidden],
+.opf-panel [hidden] { display: none !important; }
+.opf-panel *,
+.opf-panel *::before,
+.opf-panel *::after { box-sizing: border-box; }
+[data-density="touch"] .opf-panel { --opf-panel-row: 40px; }
+:where(.opf-panel) :is(button, input) { font: inherit; color: inherit; margin: 0; }
+.opf-panel :is(button, input):focus-visible { outline: 2px solid var(--opf-ui-ring); outline-offset: -2px; }
+.opf-panel .opf-icon { flex: none; }
+
+/* ---- head, body, foot ------------------------------------------------------------------------------------------------------------------- */
+.opf-panel-grab { display: none; }
+.opf-panel-head { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 44px; padding-block: 0; padding-inline: 14px 8px; }
+.opf-panel-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 600; }
+.opf-panel .opf-panel-close,
+.opf-panel .opf-panel-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--opf-ui-radius);
+  background: transparent;
+  color: var(--opf-ui-muted-fg);
+  cursor: pointer;
+  transition: background-color var(--opf-ui-ease), color var(--opf-ui-ease);
+}
+.opf-panel .opf-panel-close:hover,
+.opf-panel .opf-panel-icon:hover:not(:disabled) { background: var(--opf-ui-muted); color: var(--opf-ui-fg); }
+.opf-panel-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-bottom: 8px; }
+.opf-panel-foot { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 45px; padding: 8px; padding-inline-start: 14px; border-top: 1px solid var(--opf-ui-border); }
+.opf-panel-note { min-width: 0; font-size: 12px; color: var(--opf-ui-muted-fg); overflow-wrap: anywhere; }
+
+/* A quiet secondary button (Undo, Replace, Dismiss) and the filled one (All). */
+.opf-panel .opf-panel-button {
+  flex: none;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius);
+  background: transparent;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--opf-ui-ease), border-color var(--opf-ui-ease);
+}
+.opf-panel .opf-panel-button:hover:not(:disabled) { background: var(--opf-ui-muted); border-color: var(--opf-ui-border-strong); }
+.opf-panel .opf-panel-button:disabled,
+.opf-panel .opf-panel-icon:disabled { opacity: 0.5; cursor: default; }
+.opf-panel .opf-panel-primary { border-color: var(--opf-ui-accent); background: var(--opf-ui-accent); color: var(--opf-ui-accent-fg); font-weight: 600; }
+.opf-panel .opf-panel-primary:hover:not(:disabled) { border-color: var(--opf-ui-accent); background: color-mix(in srgb, var(--opf-ui-accent) 88%, var(--opf-ui-fg)); }
+
+/* ---- labels, rows, the current choice ----------------------------------------------------------------------------------------------- */
+.opf-panel-label { padding: 10px 14px 4px; font: 400 11px/1.4 var(--opf-ui-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--opf-ui-muted-fg); }
+.opf-panel-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--opf-panel-row);
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--opf-ui-radius);
+  background: transparent;
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--opf-ui-ease);
+}
+.opf-panel-row:hover { background: var(--opf-ui-muted-2); }
+.opf-panel .opf-panel-row:focus-visible { background: var(--opf-ui-muted); }
+.opf-panel-row:is([aria-checked="true"], [aria-current="true"]),
+.opf-panel-row:is([aria-checked="true"], [aria-current="true"]):hover { background: var(--opf-panel-tint); }
+.opf-panel-row[aria-checked="true"] { font-weight: 600; }
+.opf-panel-check { display: inline-flex; flex: none; width: 14px; margin-inline-start: auto; color: var(--opf-ui-accent-strong); }
+.opf-panel-row:not([aria-checked="true"]) .opf-panel-check { visibility: hidden; }
+.opf-panel-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.opf-panel-meta { flex: none; font: 400 11px/1.4 var(--opf-ui-mono); color: var(--opf-ui-muted-fg); }
+.opf-panel-list { display: flex; flex-direction: column; gap: 2px; padding: 2px 8px; }
+.opf-panel-empty { margin: 0; padding: 12px 14px; color: var(--opf-ui-muted-fg); }
+
+/* A field: the find box, the font filter. */
+.opf-panel-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius);
+  background: var(--opf-ui-bg);
+  color: var(--opf-ui-muted-fg);
+  transition: border-color var(--opf-ui-ease);
+}
+.opf-panel-field:hover { border-color: var(--opf-ui-border-strong); }
+.opf-panel-field:focus-within { border-color: var(--opf-ui-ring); }
+.opf-panel-field input { flex: 1 1 auto; min-width: 0; height: 100%; padding: 0; border: 0; outline: 0; background: transparent; color: var(--opf-ui-fg); }
+.opf-panel-field input::placeholder { color: var(--opf-ui-muted-fg); opacity: 1; }
+.opf-panel .opf-panel-field input:focus-visible { outline: 0; }
+.opf-panel-field:has(input:focus-visible) { outline: 2px solid var(--opf-ui-ring); outline-offset: -1px; }
+.opf-panel-field:has(input[aria-invalid="true"]) { border-color: var(--opf-ui-danger); }
+
+/* ---- the segmented switch (Design's tabs) --------------------------------------------------------------------------------------------- */
+.opf-panel-tabs {
+  flex: none;
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: 2px;
+  margin: 0 12px;
+  padding: 2px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-md);
+  background: var(--opf-ui-muted-2);
+}
+.opf-panel-tab {
+  min-width: 0;
+  height: 28px;
+  padding: 0 4px;
+  border: 1px solid transparent;
+  border-radius: var(--opf-ui-radius);
+  background: transparent;
+  color: var(--opf-ui-muted-fg);
+  font-size: 12px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--opf-ui-ease), color var(--opf-ui-ease);
+}
+.opf-panel-tab:hover { color: var(--opf-ui-fg); }
+.opf-panel-tab[aria-selected="true"] { border-color: var(--opf-ui-border-strong); background: var(--opf-ui-surface); color: var(--opf-ui-fg); font-weight: 600; }
+
+/* ---- Find and replace (src/find-panel.js): the fields and chips stay, the results scroll ------------------------------------------- */
+.opf-find-controls { flex: none; display: flex; flex-direction: column; gap: 8px; padding: 0 12px 10px; }
+.opf-find-row { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.opf-find-field { flex: 1 1 auto; }
+.opf-panel .opf-find-step { width: 32px; height: 32px; border: 1px solid var(--opf-ui-border); color: var(--opf-ui-fg); }
+.opf-panel .opf-find-row .opf-panel-button { height: 32px; }
+.opf-find-options { flex-wrap: wrap; }
+.opf-panel .opf-find-opt {
+  height: 26px;
+  padding: 0 9px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--opf-ui-muted-fg);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color var(--opf-ui-ease), border-color var(--opf-ui-ease), color var(--opf-ui-ease);
+}
+.opf-panel .opf-find-opt:hover { color: var(--opf-ui-fg); border-color: var(--opf-ui-border-strong); }
+.opf-panel .opf-find-opt[aria-pressed="true"] { border-color: var(--opf-ui-accent); background: var(--opf-panel-tint); color: var(--opf-ui-accent-strong); font-weight: 500; }
+.opf-find-error { margin: 0; font-size: 12px; color: var(--opf-ui-danger); }
+.opf-find-error:empty { display: none; }
+.opf-find .opf-panel-body { border-top: 1px solid var(--opf-ui-border); }
+.opf-find-results,
+.opf-find-results ul { margin: 0; padding: 0; list-style: none; }
+.opf-find-group .opf-panel-label { padding-top: 8px; }
+.opf-find-result { flex-direction: column; align-items: stretch; gap: 2px; padding: 6px 8px; }
+.opf-find-where { font-size: 11px; color: var(--opf-ui-muted-fg); }
+.opf-find-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.opf-find-text mark { padding: 0 1px; border-radius: 2px; background: color-mix(in srgb, var(--opf-ui-warn) 28%, transparent); color: inherit; }
+.opf-find-result[aria-current="true"] mark { background: var(--opf-ui-warn); color: var(--opf-ui-surface); }
+.opf-find-more { padding: 6px 14px; font-size: 11px; color: var(--opf-ui-muted-fg); }
+.opf-find .opf-panel-foot:has(.opf-panel-note:empty):has(.opf-find-undo[hidden]) { display: none; }
+/* Without an anchor the panel is a card in its container (the playground's dock). */
+.opf-panel[data-mode="docked"] { position: relative; z-index: auto; width: 100%; max-width: 560px; max-height: none; }
+.opf-panel[data-mode="docked"] .opf-panel-body { max-height: min(40vh, 320px); }
+
+/* ---- the bottom sheet: a phone, or a button that is not on screen ------------------------------------------------------------------- */
+.opf-panel-scrim { position: fixed; inset: 0; z-index: 50; background: color-mix(in srgb, var(--opf-ui-fg) 32%, transparent); }
+.opf-panel[data-mode="sheet"] {
+  z-index: 51;
+  inset: auto 0 0 0;
+  width: auto;
+  max-width: 560px;
+  max-height: var(--opf-panel-sheet-h, 85vh);
+  margin-inline: auto;
+  padding-bottom: env(safe-area-inset-bottom);
+  border-width: 1px 0 0;
+  border-radius: 16px 16px 0 0;
+  font-size: 14px;
+}
+.opf-panel[data-mode="sheet"] .opf-panel-grab { display: block; flex: none; width: 36px; height: 4px; margin: 10px auto 0; border-radius: 2px; background: var(--opf-ui-border-strong); }
+.opf-panel[data-mode="sheet"] .opf-panel-head { height: 48px; padding-inline: 16px 4px; }
+.opf-panel[data-mode="sheet"] .opf-panel-title { font-size: 15px; }
+.opf-panel[data-mode="sheet"] .opf-panel-close { width: 44px; height: 44px; }
+.opf-panel[data-mode="sheet"] .opf-panel-tab { height: 44px; font-size: 13px; }
+.opf-panel[data-mode="sheet"] { --opf-panel-row: 44px; }
+.opf-panel[data-mode="sheet"] .opf-panel-button { height: 44px; padding: 0 14px; font-size: 13px; }
+
+/* A finger gets 44px targets wherever the panel is. */
+@media (pointer: coarse) {
+  .opf-panel { --opf-panel-row: 44px; }
+  .opf-panel .opf-panel-close,
+  .opf-panel .opf-panel-icon { width: 44px; height: 44px; }
+  .opf-panel .opf-panel-tab,
+  .opf-panel .opf-panel-button { min-height: 44px; }
+  .opf-panel .opf-panel-field { height: 44px; }
+  .opf-panel-field input { font-size: 16px; }
+}
