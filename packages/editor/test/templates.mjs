@@ -245,8 +245,7 @@ assert.deepEqual(editor.presentation, filled);
   assert.equal(session.presentation.variables.cta.translations.de.value, "Jetzt buchen");
   setVariableTranslation(session, "cta", "fr-CA", "Réserver", { from: "fr" });
   assert.deepEqual(Object.keys(session.presentation.variables.cta.translations), ["de", "fr-CA"]);
-  setVariableTranslation(session, "steps", "de", "Eins
-Zwei");
+  setVariableTranslation(session, "steps", "de", "Eins\nZwei");
   assert.deepEqual(session.presentation.variables.steps.translations.de.value, ["Eins", "Zwei"]);
   setVariableTranslation(session, "event-date", "de", "d. MMMM yyyy");
   assert.deepEqual(session.presentation.variables["event-date"].translations, { de: { format: "d. MMMM yyyy" } });
@@ -257,7 +256,7 @@ Zwei");
   assert.deepEqual(session.presentation, before);
   // The preview draws each slide in its own language (the panel's preview and the canvas resolve through core).
   const drawn = previewTemplate(session.presentation).presentation.slides;
-  assert.deepEqual([drawn[0].title, drawn[1].title], ["Jetzt buchen", "Réserver"]);
+  assert.deepEqual([drawn[0].title, drawn[1].title], ["Jetzt buchen", "Book a demo"]);
   // One undo per edit, and the last removal drops the map.
   removeVariableTranslation(session, "event-date", "de");
   assert.equal("translations" in session.presentation.variables["event-date"], false);
