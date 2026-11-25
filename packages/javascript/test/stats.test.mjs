@@ -43,7 +43,7 @@ const deck = () => ({
   },
   references: [{ id: "r1", text: "Source one" }, { id: "r2", text: "Source two" }],
   datasets: {
-    sales: { title: "Sales", columns: ["Q", "Rev"], rows: [["Q1", 1], ["Q2", 2]], source: { src: "./sales.csv" } },
+    sales: { title: "Sales", columns: ["Q", "Rev"], rows: [["Q1", 1], ["Q2", 2]], datasource: { src: "./sales.csv" } },
     costs: { columns: ["Q", "Cost"], rows: [["Q1", 1]] },
   },
   assets: {
@@ -69,7 +69,7 @@ const deck = () => ({
         { image: { src: "./decor.png", alt: "" } },
         { image: "./noalt.png" },
         { blocks: [{ bullets: ["One two", { text: "Three" }] }, { code: { source: "const a = 1;", language: "ts" } }] },
-        { chart: { type: "column", data: { columns: ["A", "B"], rows: [["x", 1]], source: { src: "./c.csv" } } } },
+        { chart: { type: "column", data: { columns: ["A", "B"], rows: [["x", 1]], datasource: { src: "./c.csv" } } } },
         { chart: { type: "pie", data: { dataset: "sales" } } },
         { table: { dataset: "sales" } },
       ],
@@ -211,8 +211,8 @@ describe("stats: images, assets, charts, tables, datasets", () => {
     assert.equal(result.assets.embeddedBytes, 16);
   });
 
-  test("counts charts by type and data kind, tables with rows and columns, datasets with sources", () => {
-    assert.deepEqual(result.charts, { total: 2, byType: { column: 1, pie: 1 }, data: { inline: 1, dataset: 1, withSource: 1 } });
+  test("counts charts by type and data kind, tables with rows and columns, datasets with data sources", () => {
+    assert.deepEqual(result.charts, { total: 2, byType: { column: 1, pie: 1 }, data: { inline: 1, dataset: 1, withDatasource: 1 } });
     assert.equal(result.tables.total, 2);
     assert.equal(result.tables.datasetBacked, 1);
     assert.deepEqual(result.tables.items.map((item) => [item.slide, item.rows, item.columns, item.dataset]), [[2, 2, 2, "sales"], [3, 3, 2, null]]);
@@ -220,10 +220,10 @@ describe("stats: images, assets, charts, tables, datasets", () => {
     assert.equal(result.tables.columns, 4);
     assert.deepEqual(result.datasets, {
       count: 2,
-      withSource: 1,
+      withDatasource: 1,
       items: [
-        { id: "sales", title: "Sales", columns: 2, rows: 2, source: "./sales.csv", referencedBy: 2 },
-        { id: "costs", title: null, columns: 2, rows: 1, source: null, referencedBy: 0 },
+        { id: "sales", title: "Sales", columns: 2, rows: 2, datasource: "./sales.csv", referencedBy: 2 },
+        { id: "costs", title: null, columns: 2, rows: 1, datasource: null, referencedBy: 0 },
       ],
     });
   });

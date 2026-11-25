@@ -576,14 +576,14 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			title: "Validate an OPF deck",
 			description:
 				"Check a deck as `opf validate` does: format (JSON syntax, schema), references, policy, accessibility, layout and content. Returns { ok, findings[] }; each finding has ruleId, severity, category, path (a JSON Pointer), message, help and sometimes fixes, and a line and column when the text is JSON, YAML or Markdown. Only format, references and policy findings are errors by default, so a valid deck can still carry warnings. Reads nothing but the document; images are not fetched or looked up. Passing validation is not proof of how the deck looks.",
-			inputSchema: { document: documentSchema, format: formatSchema.optional().describe("The form of the document text. Default: JSON for an object or text that starts with { or [."), failOn: z.enum(["error", "warning", "info"]).optional().describe("ok is false when a finding is at or above this severity. Default error.") },
+			inputSchema: { document: documentSchema, format: formatSchema.optional().describe("The form of the document text. Default: JSON for an object or text that starts with { or [."), failOn: z.enum(["error", "warning", "info"]).optional().describe("ok is false when a finding is at or above this severity. Default error."), asOf: z.string().optional().describe("An ISO 8601 date (2026-11-25) or date-time to check data freshness as of: a dataset whose retrieved date is older than its data source's refresh is the warning opf/dataset-stale. Without it nothing is reported stale; the server never reads a clock for it.") },
 			outputSchema: { ok: z.boolean(), valid: z.boolean(), schemaValid: z.boolean().nullable(), failOn: z.string(), format: formatSchema, counts: countsSchema, findings: z.array(findingSchema), checks: z.record(z.string(), z.string()), hint: z.string().optional(), opfVersion: z.string().optional() },
 			annotations: { ...READ_ONLY, title: "Validate an OPF deck" },
 		},
-		({ document, format, failOn }) =>
+		({ document, format, failOn, asOf }) =>
 			respond(async () => {
 				const input = inputOf(document, format);
-				const report = await check(input.raw, input.format, { catalogs: checkCatalogs });
+				const report = await check(input.raw, input.format, { catalogs: checkCatalogs, ...(asOf !== undefined ? { asOf } : {}) });
 				const level = failOn ?? "error";
 				const { findings, counts, valid, schemaValid, checks, ...rest } = report;
 				return { ok: !reaches(findings, level), valid, schemaValid, failOn: level, format: input.format, counts, findings, checks, ...(typeof (rest as { hint?: string }).hint === "string" ? { hint: (rest as { hint: string }).hint } : {}), ...(opfVersion ? { opfVersion } : {}) };

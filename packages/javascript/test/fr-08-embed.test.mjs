@@ -7,7 +7,7 @@ import { fromYaml, toYaml } from '../dist/yaml.js';
 import { convertContent, contentConversionTargets } from '../dist/convert.js';
 import { composeSlide, regionAccepts } from '../dist/composition.js';
 import { layouts } from './support/template-samples.mjs';
-import { EMBED_DEFAULT_ASPECT, embedAspect, embedCardLayout, embedSite, embedTitle, embedValue, isSecretParameterName, stats, urlCredential, validate } from '../dist/index.js';
+import { EMBED_DEFAULT_ASPECT, embedAspect, embedCardLayout, embedSite, embedTitle, credentialInSrc, embedValue, stats, validate } from '../dist/index.js';
 
 const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
 const findings = (deck, id) => validate(deck).findings.filter((finding) => finding.ruleId === `opf/${id}`);
@@ -62,18 +62,18 @@ test('opf/embed-credentials warns for a user name, a password or a secret query 
   const found = findings(deck, 'embed-credentials');
   assert.deepEqual(found.map((finding) => finding.path), ['/slides/0/embed', '/slides/1/embed/src', '/slides/2/blocks/0/embed']);
   assert.ok(found.every((finding) => finding.severity === 'warning'));
-  assert.equal(found[0].message, 'This embed\'s address carries what looks like a credential (the query parameter "api_key"). Anyone with the deck can read it.');
-  assert.match(found[1].message, /the user name and password/);
+  assert.equal(found[0].message, 'This embed\'s address carries what looks like a credential (a query parameter named "api_key"). Anyone with the deck can read it.');
+  assert.match(found[1].message, /a user and password/);
   assert.equal(validate(deck).valid, true, 'a warning never makes a deck invalid');
 });
 
 test('the shared credential test reads names by word', () => {
-  for (const name of ['key', 'token', 'secret', 'password', 'sig', 'signature', 'auth', 'api_key', 'apiKey', 'access-token', 'X-Amz-Signature', 'authorization', 'client_secret', 'accesstoken', 'TOKEN']) assert.equal(isSecretParameterName(name), true, name);
-  for (const name of ['page', 'monkey', 'design', 'author_name', 'keyboard', 'sign', 'q', 'theme', 'hotkey_id']) assert.equal(isSecretParameterName(name), false, name);
-  assert.equal(urlCredential('https://app.example.com/?page=1'), undefined);
-  assert.equal(urlCredential('https://u@app.example.com/'), 'the user name');
-  assert.equal(urlCredential('not a url'), undefined);
-  assert.equal(urlCredential(undefined), undefined);
+  for (const name of ['key', 'token', 'secret', 'password', 'sig', 'signature', 'auth', 'api_key', 'apiKey', 'access-token', 'X-Amz-Signature', 'authorization', 'client_secret', 'accesstoken', 'TOKEN']) assert.equal(credentialInSrc(`https://app.example.com/?${name}=1`), `a query parameter named "${name}"`, name);
+  for (const name of ['page', 'monkey', 'design', 'author_name', 'keyboard', 'sign', 'q', 'theme', 'hotkey_id']) assert.equal(credentialInSrc(`https://app.example.com/?${name}=1`), undefined, name);
+  assert.equal(credentialInSrc('https://app.example.com/?page=1'), undefined);
+  assert.equal(credentialInSrc('https://u@app.example.com/'), undefined, 'a user name alone is not a secret, as for a data source');
+  assert.equal(credentialInSrc('not a url'), undefined);
+  assert.equal(credentialInSrc(undefined), undefined);
 });
 
 test('a preview that names an asset the deck lacks is the existing missing-asset error', () => {

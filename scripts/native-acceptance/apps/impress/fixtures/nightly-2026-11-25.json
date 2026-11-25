@@ -1,0 +1,717 @@
+{
+  "source": "Cut from the libreoffice-qualification artifact of the Nightly run of 2026-11-25 (OpenPresentation/opf Actions run 45602993331, commit 293d956a9): results.json's environment, and per case its pptxSha256, the hidden flag of each slide of inputs/<id>.pptx, the slide count of LibreOffice's own copy (profiles/opf/roundtrip/<id>.pptx) and cases/<id>/result-opf.json unchanged.",
+  "environment": {
+    "libreoffice": "LibreOffice 26.8.2.2 9dea406ab7695df6325b11b0e19fdca8db4b7276",
+    "libreofficePinned": "26.8.2.2",
+    "pinned": true,
+    "tarballSha256": "8290c8f46cb33d6df8f681cb796e0697461ea070f86ec55b63c94d7eb9d9a476",
+    "os": "Ubuntu 24.04.5 LTS",
+    "image": "mcr.microsoft.com/playwright:v1.65.0-noble@sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d",
+    "fontconfig": "fontconfig version 2.15.0",
+    "node": "v24.22.3",
+    "commit": "293d956a9933a75859970ff8e633d18ea1652d49",
+    "packages": {
+      "@openpresentation/opf": "0.36.0",
+      "@openpresentation/opf-render": "0.36.0",
+      "@openpresentation/opf-pptx": "0.36.0",
+      "@openpresentation/gallery": "0.36.0"
+    },
+    "date": "2026-11-07"
+  },
+  "cases": [
+    {
+      "id": "tables",
+      "scope": "baseline",
+      "pptxSha256": "c26c79ce7a6bf0f1a8c2aeda3c95b6636fee39445a18c532f4863c84a26a0aeb",
+      "hidden": [
+        false,
+        false,
+        false
+      ],
+      "copySlideCount": 3,
+      "result": {
+        "id": "tables",
+        "profile": "opf",
+        "slides": 3,
+        "converted": true,
+        "pdfSha256": "80ddee301114bfe94e4e2abc82227369f3228297e303cd716cdaf5e6aeb3baf7",
+        "pages": 3,
+        "fonts": {
+          "drawn": [
+            {
+              "name": "NotoSans-Bold",
+              "embedded": true,
+              "subtype": "TrueType"
+            },
+            {
+              "name": "NotoSans-Regular",
+              "embedded": true,
+              "subtype": "TrueType"
+            }
+          ],
+          "requested": [
+            {
+              "family": "Aptos",
+              "resolution": "substituted",
+              "matched": "WenQuanYi Zen Hei",
+              "style": "Regular",
+              "file": "wqy-zenhei.ttc",
+              "sha256": "79c18ebe7b811951e8311bad7103ebeae8c337ed9988ea69e8a78a66cfe029b9",
+              "drawn": null,
+              "alias": "Intos",
+              "aliasCompatibility": "metric"
+            },
+            {
+              "family": "Aptos Display",
+              "resolution": "substituted",
+              "matched": "WenQuanYi Zen Hei",
+              "style": "Regular",
+              "file": "wqy-zenhei.ttc",
+              "sha256": "79c18ebe7b811951e8311bad7103ebeae8c337ed9988ea69e8a78a66cfe029b9",
+              "drawn": null,
+              "alias": "Intos Display",
+              "aliasCompatibility": "metric"
+            }
+          ]
+        },
+        "perSlide": [
+          {
+            "number": 1,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [],
+            "atEdge": [],
+            "unattributed": 0,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "text": 1,
+              "table": 1
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 4.08,
+              "largePercent": 2.78
+            }
+          },
+          {
+            "number": 2,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [],
+            "atEdge": [],
+            "unattributed": 1,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "text": 1,
+              "table": 1
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 12.67,
+              "largePercent": 8.55
+            }
+          },
+          {
+            "number": 3,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [],
+            "atEdge": [],
+            "unattributed": 0,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "text": 4,
+              "table": 1
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 4.34,
+              "largePercent": 2.89
+            }
+          }
+        ],
+        "roundTrip": {
+          "converted": true,
+          "findings": [],
+          "kinds": [
+            {
+              "text": 1,
+              "table": 1
+            },
+            {
+              "text": 1,
+              "table": 1
+            },
+            {
+              "text": 4,
+              "table": 1
+            }
+          ],
+          "import": {
+            "ok": true,
+            "slides": 3
+          }
+        },
+        "status": "pass",
+        "defects": [],
+        "differences": [
+          {
+            "check": "preview",
+            "slide": 2,
+            "detail": "8.6% of pixels differ from OPF's preview"
+          },
+          {
+            "check": "fonts",
+            "detail": "not installed: Aptos, Aptos Display; LibreOffice drew NotoSans-Bold, NotoSans-Regular"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q-coverage-composition",
+      "scope": "baseline",
+      "pptxSha256": "f3c771ae7cc1dd6b192b330842b35278cb60bbee0e47332742a0d00834843ff5",
+      "hidden": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+      ],
+      "copySlideCount": 11,
+      "result": {
+        "id": "q-coverage-composition",
+        "profile": "opf",
+        "slides": 10,
+        "converted": true,
+        "pdfSha256": "88f5c4f3f24fb23cc7ed95362a29ff4a7b80b1ce63bbf5ab8efeedb4a485e9f6",
+        "pages": 10,
+        "fonts": {
+          "drawn": [
+            {
+              "name": "DejaVuSansMono",
+              "embedded": true,
+              "subtype": "TrueType"
+            },
+            {
+              "name": "DejaVuSansMono-Bold",
+              "embedded": true,
+              "subtype": "TrueType"
+            },
+            {
+              "name": "NotoSans-Bold",
+              "embedded": true,
+              "subtype": "TrueType"
+            },
+            {
+              "name": "NotoSans-Regular",
+              "embedded": true,
+              "subtype": "TrueType"
+            }
+          ],
+          "requested": [
+            {
+              "family": "Aptos",
+              "resolution": "substituted",
+              "matched": "WenQuanYi Zen Hei",
+              "style": "Regular",
+              "file": "wqy-zenhei.ttc",
+              "sha256": "79c18ebe7b811951e8311bad7103ebeae8c337ed9988ea69e8a78a66cfe029b9",
+              "drawn": null,
+              "alias": "Intos",
+              "aliasCompatibility": "metric"
+            },
+            {
+              "family": "Aptos Display",
+              "resolution": "substituted",
+              "matched": "WenQuanYi Zen Hei",
+              "style": "Regular",
+              "file": "wqy-zenhei.ttc",
+              "sha256": "79c18ebe7b811951e8311bad7103ebeae8c337ed9988ea69e8a78a66cfe029b9",
+              "drawn": null,
+              "alias": "Intos Display",
+              "aliasCompatibility": "metric"
+            },
+            {
+              "family": "Roboto Mono",
+              "resolution": "substituted",
+              "matched": "WenQuanYi Zen Hei",
+              "style": "Regular",
+              "file": "wqy-zenhei.ttc",
+              "sha256": "79c18ebe7b811951e8311bad7103ebeae8c337ed9988ea69e8a78a66cfe029b9",
+              "drawn": null
+            }
+          ]
+        },
+        "perSlide": [
+          {
+            "number": 1,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [
+              {
+                "str": "Twelve pilots ran this year; nine of them moved",
+                "shape": "OPF text slides.0.blocks.1.text line 0",
+                "kind": "text",
+                "wrap": "none",
+                "side": "right",
+                "by": 34.05
+              }
+            ],
+            "atEdge": [],
+            "unattributed": 0,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "text": 7
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 6.43,
+              "largePercent": 3.79
+            }
+          },
+          {
+            "number": 2,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [],
+            "atEdge": [],
+            "unattributed": 0,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "text": 4
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 8.33,
+              "largePercent": 4.57
+            }
+          },
+          {
+            "number": 3,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [],
+            "atEdge": [],
+            "unattributed": 0,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "text": 7
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 3.17,
+              "largePercent": 1.86
+            }
+          },
+          {
+            "number": 4,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [
+              {
+                "str": "Automatic placement found",
+                "shape": "OPF quote 0 part 0 line 0",
+                "kind": "text",
+                "wrap": "none",
+                "side": "right",
+                "by": 36.51
+              }
+            ],
+            "atEdge": [],
+            "unattributed": 0,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "text": 6,
+              "other": 2
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 7.91,
+              "largePercent": 4.13
+            }
+          },
+          {
+            "number": 5,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [],
+            "atEdge": [],
+            "unattributed": 0,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "text": 6,
+              "other": 3,
+              "chart": 1
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 6.24,
+              "largePercent": 4.04
+            }
+          },
+          {
+            "number": 6,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [],
+            "atEdge": [],
+            "unattributed": 0,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "text": 9,
+              "picture": 1,
+              "table": 1,
+              "other": 6
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 6.78,
+              "largePercent": 3.62
+            }
+          },
+          {
+            "number": 7,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [],
+            "atEdge": [],
+            "unattributed": 0,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "text": 3,
+              "other": 3
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 4.11,
+              "largePercent": 2.15
+            }
+          },
+          {
+            "number": 8,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [],
+            "atEdge": [],
+            "unattributed": 0,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "text": 16,
+              "other": 12
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 11.23,
+              "largePercent": 6.49
+            }
+          },
+          {
+            "number": 9,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [],
+            "atEdge": [],
+            "unattributed": 0,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "text": 5,
+              "other": 1
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 9.02,
+              "largePercent": 4.8
+            }
+          },
+          {
+            "number": 10,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [],
+            "atEdge": [],
+            "unattributed": 0,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "other": 1,
+              "text": 5
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 8.51,
+              "largePercent": 4.93
+            }
+          }
+        ],
+        "roundTrip": {
+          "converted": true,
+          "findings": [],
+          "kinds": [
+            {
+              "text": 7
+            },
+            {
+              "text": 4
+            },
+            {
+              "text": 7
+            },
+            {
+              "text": 6,
+              "other": 2
+            },
+            {
+              "text": 6,
+              "other": 3,
+              "chart": 1
+            },
+            {
+              "text": 9,
+              "picture": 1,
+              "table": 1,
+              "other": 6
+            },
+            {
+              "text": 3,
+              "other": 3
+            },
+            {
+              "text": 16,
+              "other": 12
+            },
+            {
+              "text": 5,
+              "other": 1
+            },
+            {
+              "other": 1,
+              "text": 5
+            }
+          ],
+          "import": {
+            "ok": true,
+            "slides": 11
+          }
+        },
+        "status": "fail",
+        "defects": [
+          {
+            "check": "text-box",
+            "slide": 1,
+            "detail": "\"year; nine of them moved\" right +34.05 pt"
+          },
+          {
+            "check": "text-box",
+            "slide": 4,
+            "detail": "\"utomatic placement found\" right +36.51 pt"
+          }
+        ],
+        "differences": [
+          {
+            "check": "preview",
+            "slide": 8,
+            "detail": "6.5% of pixels differ from OPF's preview"
+          },
+          {
+            "check": "fonts",
+            "detail": "not installed: Aptos, Aptos Display, Roboto Mono; LibreOffice drew DejaVuSansMono, DejaVuSansMono-Bold, NotoSans-Bold, NotoSans-Regular"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q-singleton-combo-reference-lines",
+      "scope": "baseline",
+      "pptxSha256": "8567c62c0c7da29d9419ed4efc4f7997c92b690ef4a73dc49b86213b7bafc502",
+      "hidden": [
+        false
+      ],
+      "copySlideCount": 1,
+      "result": {
+        "id": "q-singleton-combo-reference-lines",
+        "profile": "opf",
+        "slides": 1,
+        "converted": true,
+        "pdfSha256": "da7a6de11b7a5483fb66b4a238d781239902fb5be1f803a8cf4c2b11dd67634d",
+        "pages": 1,
+        "fonts": {
+          "drawn": [
+            {
+              "name": "NotoSans-Bold",
+              "embedded": true,
+              "subtype": "TrueType"
+            },
+            {
+              "name": "NotoSans-Regular",
+              "embedded": true,
+              "subtype": "TrueType"
+            }
+          ],
+          "requested": [
+            {
+              "family": "Roboto",
+              "resolution": "substituted",
+              "matched": "WenQuanYi Zen Hei",
+              "style": "Regular",
+              "file": "wqy-zenhei.ttc",
+              "sha256": "79c18ebe7b811951e8311bad7103ebeae8c337ed9988ea69e8a78a66cfe029b9",
+              "drawn": null
+            }
+          ]
+        },
+        "perSlide": [
+          {
+            "number": 1,
+            "missing": [],
+            "offSlide": [],
+            "outsideBox": [],
+            "atEdge": [],
+            "unattributed": 0,
+            "inkOutside": {
+              "left": 0,
+              "right": 0,
+              "top": 0,
+              "bottom": 0
+            },
+            "bleeds": [],
+            "kinds": {
+              "text": 3,
+              "chart": 1,
+              "other": 2
+            },
+            "unsupportedCharts": 0,
+            "shrink": 0,
+            "preview": {
+              "mae": 6.22,
+              "largePercent": 3.5
+            }
+          }
+        ],
+        "roundTrip": {
+          "converted": true,
+          "findings": [],
+          "kinds": [
+            {
+              "text": 3,
+              "chart": 1,
+              "other": 2
+            }
+          ],
+          "import": {
+            "ok": false,
+            "error": "Imported PPTX did not produce valid OPF."
+          }
+        },
+        "status": "pass",
+        "defects": [],
+        "differences": [
+          {
+            "check": "round-trip-import",
+            "detail": "OPF could not import LibreOffice's copy: Imported PPTX did not produce valid OPF."
+          },
+          {
+            "check": "fonts",
+            "detail": "not installed: Roboto; LibreOffice drew NotoSans-Bold, NotoSans-Regular"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -112,7 +112,7 @@ const formatted = {slides: [{title: 'Formats', chart: {type: 'column', dataLabel
 
 // 3. Dataset charts, mapping and scatter X export exactly like their inline equivalents.
 {
-  const datasets = {revenue: {title: 'Revenue', columns: ['Quarter', {name: 'Revenue', format: '$#,##0.0'}, 'Costs', 'Notes'], rows: [['Q1', 12, 8, 'a'], ['Q2', 18, 11, 'b'], ['Q3', 24, 15, 'c']], source: {src: './data/revenue.csv', retrieved: '2026-10-05'}}};
+  const datasets = {revenue: {title: 'Revenue', columns: ['Quarter', {name: 'Revenue', format: '$#,##0.0'}, 'Costs', 'Notes'], rows: [['Q1', 12, 8, 'a'], ['Q2', 18, 11, 'b'], ['Q3', 24, 15, 'c']], datasource: {src: './data/revenue.csv'}, retrieved: '2026-10-05'}};
   const byReference = await exported({datasets, slides: [{title: 'Dataset', chart: {type: 'column', dataLabels: true, data: {dataset: 'revenue', fields: ['Quarter', 'Revenue', 'Costs']}}}]}, {provenance: false});
   const inline = await exported({slides: [{title: 'Dataset', chart: {type: 'column', dataLabels: true, data: {columns: ['Quarter', {name: 'Revenue', format: '$#,##0.0'}, 'Costs'], rows: [['Q1', 12, 8], ['Q2', 18, 11], ['Q3', 24, 15]]}}}]}, {provenance: false});
   assert.equal(byReference.chart, inline.chart, 'a dataset chart writes the chart XML of its inline equivalent');
@@ -150,15 +150,15 @@ const formatted = {slides: [{title: 'Formats', chart: {type: 'column', dataLabel
 }
 
 // 5. Export -> import restores every new field: datasets (unused ones too), dataset references with fields, mapping,
-// DataColumn formats, data.source, dataset tables, DataColumn headers and StyledTableCell formats.
+// DataColumn formats, the data source keys, dataset tables, DataColumn headers and StyledTableCell formats.
 const roundTripDeck = {
   datasets: {
-    revenue: {title: 'Revenue', description: 'Quarterly revenue', columns: ['Quarter', {name: 'Revenue', format: '$#,##0.0'}, 'Costs'], rows: [['Q1', 12.4, 8], ['Q2', 18, 11]], source: {src: './revenue.csv', retrieved: '2026-10-05'}},
+    revenue: {title: 'Revenue', description: 'Quarterly revenue', columns: ['Quarter', {name: 'Revenue', format: '$#,##0.0'}, 'Costs'], rows: [['Q1', 12.4, 8], ['Q2', 18, 11]], datasource: {src: './revenue.csv'}, query: 'FY26!A1:C3', retrieved: '2026-10-05'},
     spare: {columns: ['a', 'b'], rows: [['x', 1]]},
   },
   slides: [
     {title: 'Dataset chart', chart: {type: 'column', dataLabels: {position: 'inside-end'}, data: {dataset: 'revenue', fields: ['Quarter', 'Revenue']}}},
-    {title: 'Mapped chart', chart: {type: 'line', mapping: {category: 'Quarter', series: ['Costs', 'Revenue']}, data: {columns: ['Revenue', 'Quarter', {name: 'Costs', format: '#,##0'}], rows: [[1, 'a', 2], [3, 'b', 4]], source: {src: 'https://example.com/q.csv', description: 'Finance export'}}}},
+    {title: 'Mapped chart', chart: {type: 'line', mapping: {category: 'Quarter', series: ['Costs', 'Revenue']}, data: {columns: ['Revenue', 'Quarter', {name: 'Costs', format: '#,##0'}], rows: [[1, 'a', 2], [3, 'b', 4]], datasource: {src: 'https://example.com/q.csv', description: 'Finance export'}, version: 'r7'}}},
     {title: 'Scatter', chart: {type: 'scatter', mapping: {x: 'W'}, data: {columns: ['N', 'H', {name: 'W', format: '0.0'}], rows: [['a', 170, 60.5], ['b', 180, 75]]}}},
     {title: 'Dataset table', table: {dataset: 'revenue', fields: ['Quarter', 'Revenue']}},
     {title: 'Inline table', table: {columns: ['Region', {name: 'Revenue', format: '$#,##0.0'}, {value: 'Growth', style: {align: 'end'}, format: '0%'}], rows: [['EMEA', 8.2, 0.4], ['APAC', 6.1, {value: 0.52, format: '0.0%'}]]}},
@@ -173,7 +173,7 @@ const roundTripDeck = {
   assert.deepEqual(datasetChart.data, {dataset: 'revenue', fields: ['Quarter', 'Revenue']}, 'the dataset reference returns, not the inlined snapshot');
   // LH-03: plain value labels are a small chart's default and import as no option, so the deck asks for a position.
   assert.deepEqual(datasetChart.dataLabels, {position: 'inside-end'}, 'the native chart options stay');
-  assert.deepEqual({data: mappedChart.data, mapping: mappedChart.mapping}, {data: roundTripDeck.slides[1].chart.data, mapping: roundTripDeck.slides[1].chart.mapping}, 'mapping, DataColumn formats and data.source return as authored');
+  assert.deepEqual({data: mappedChart.data, mapping: mappedChart.mapping}, {data: roundTripDeck.slides[1].chart.data, mapping: roundTripDeck.slides[1].chart.mapping}, 'mapping, DataColumn formats and the data source keys return as authored');
   assert.deepEqual({data: scatter.data, mapping: scatter.mapping}, {data: roundTripDeck.slides[2].chart.data, mapping: roundTripDeck.slides[2].chart.mapping}, 'the scatter X mapping returns');
   assert.deepEqual(datasetTable, roundTripDeck.slides[3].table, 'a dataset table returns as its reference');
   assert.deepEqual(inlineTable.columns[1], {name: 'Revenue', format: '$#,##0.0'}, 'a DataColumn header returns');

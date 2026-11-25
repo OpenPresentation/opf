@@ -1,5 +1,5 @@
 // LH-19 and LH-31: the info findings that read the composed geometry and the slide sequence (opf/text-shrunk, opf/centered-body,
-// opf/tight-spacing, opf/layout-monotony, opf/straight-quotes). Each rule fires on its fixture, stays quiet on the default layouts at
+// opf/tight-spacing, opf/layout-monotony). Each rule fires on its fixture, stays quiet on the default layouts at
 // their intended counts, and keeps its false-positive guards.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -93,29 +93,9 @@ test('opf/layout-monotony: four content slides in a row with one layout; framing
 	assert.equal(findings(deck([...['A', 'B', 'C', 'D'].map(list), { title: 'Chart', layout: 'text', text: 'x' }, ...['E', 'F', 'G', 'H'].map(list)]), 'opf/layout-monotony').length, 2);
 });
 
-test('opf/straight-quotes: quotation marks, not apostrophes, inch and foot marks, code or data', () => {
-	const quotes = (text, extra) => findings(deck([{ title: 'T', text }], extra), 'opf/straight-quotes');
-	const [double] = quotes('They called it "the easiest setup" in the survey.');
-	assert.equal(double.measured.double, 2);
-	assert.deepEqual(double.fixes[0].patch, [{ op: 'replace', path: '/slides/0/text', value: 'They called it “the easiest setup” in the survey.' }]);
-	assert.equal(quotes("The board said 'ship it' on Friday.")[0].measured.single, 2);
-	assert.equal(quotes("The board said 'ship it' on Friday.")[0].fixes, undefined);
-	for (const fine of ["We don't ship on Fridays.", "O'Brien's team", 'A 27" monitor and a 6\' 2" desk', "Revenue since the '90s", "The students' results improved.", 'Already “typographic” and ‘fine’.'])
-		assert.deepEqual(quotes(fine), [], fine);
-	// Code runs, code blocks and table cells are not prose.
-	assert.deepEqual(findings(deck([{ title: 'T', text: ['Set ', { text: 'name="x"', code: true }, ' in the file.'] }]), 'opf/straight-quotes'), []);
-	assert.deepEqual(findings(deck([{ title: 'T', code: 'print("hello")' }]), 'opf/straight-quotes'), []);
-	assert.deepEqual(findings(deck([{ title: 'T', table: { columns: ['Key', 'Value'], rows: [['name', '"x"']] } }]), 'opf/straight-quotes'), []);
-	// A run in a run array is patched at its own text; the marks follow the deck language.
-	const [german] = findings(deck([{ title: 'T', text: ['Sie sagten ', { text: '"schnell"', bold: true }] }], { language: 'de-DE' }), 'opf/straight-quotes');
-	assert.deepEqual(german.fixes[0].patch, [{ op: 'replace', path: '/slides/0/text/1/text', value: '„schnell“' }]);
-	// The title and list items are prose too.
-	assert.equal(findings(deck([{ title: 'The "best" plan', items: ['A "fast" start'] }]), 'opf/straight-quotes').length, 2);
-});
-
 test('the layout findings are info and never make an example deck invalid', () => {
 	const sampler = JSON.parse(readFileSync(new URL('../../../examples/technical/layout-sampler.opf.json', import.meta.url), 'utf8'));
-	const report = validate(sampler, { catalogs: [gallery], only: ['text-shrunk', 'centered-body', 'tight-spacing', 'layout-monotony', 'straight-quotes'] });
+	const report = validate(sampler, { catalogs: [gallery], only: ['text-shrunk', 'centered-body', 'tight-spacing', 'layout-monotony'] });
 	assert.equal(report.valid, true);
 	for (const finding of report.findings) assert.equal(finding.severity, 'info');
 });

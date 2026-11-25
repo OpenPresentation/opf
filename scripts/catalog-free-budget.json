@@ -4,27 +4,27 @@
     "browser": 657392,
     "composition": 310520,
     "convert": 545540,
-    "data": 12831,
+    "data": 13399,
     "deck": 584047,
     "diagram-engine-eager": 294825,
     "diagram-engine-lazy": 11669,
     "diff": 6237,
     "font-policy": 17383,
-    "format": 68609,
+    "format": 71704,
     "ids": 528431,
     "markdown": 579776,
     "pagination": 531725,
     "patch": 526518,
-    "precompiled": 202789,
-    "schema": 97074,
-    "schema-engine-ajv": 137660,
-    "schema-engine-precompiled": 202825,
-    "schemas": 92285,
+    "precompiled": 209577,
+    "schema": 100175,
+    "schema-engine-ajv": 142305,
+    "schema-engine-precompiled": 209617,
+    "schemas": 95359,
     "shape-catalog": 3784,
     "shape-engine-eager": 39085,
     "shape-engine-lazy": 141,
     "shape-geometry": 36548,
-    "source": 222287,
+    "source": 229693,
     "spec-files": 625,
     "symbol-font-encodings": 26562,
     "types": 21,
@@ -45,8 +45,8 @@
       "gzip": 529650
     },
     "data": {
-      "minified": 36148,
-      "gzip": 12457
+      "minified": 37700,
+      "gzip": 13008
     },
     "deck": {
       "minified": 1715553,
@@ -77,8 +77,8 @@
       "gzip": 16876
     },
     "format": {
-      "minified": 236389,
-      "gzip": 66610
+      "minified": 245833,
+      "gzip": 69615
     },
     "ids": {
       "minified": 1549748,
@@ -97,28 +97,28 @@
       "gzip": 511182
     },
     "precompiled": {
-      "minified": 1320105,
-      "gzip": 196882
+      "minified": 1349245,
+      "gzip": 203472
     },
     "repo-readme": {
       "minified": 19815,
       "gzip": 7158
     },
     "schema": {
-      "minified": 344356,
-      "gzip": 94246
+      "minified": 353800,
+      "gzip": 97257
     },
     "schema-engine-ajv": {
-      "minified": 481096,
-      "gzip": 133650
+      "minified": 494117,
+      "gzip": 138160
     },
     "schema-engine-precompiled": {
-      "minified": 1320152,
-      "gzip": 196917
+      "minified": 1349292,
+      "gzip": 203511
     },
     "schemas": {
-      "minified": 332402,
-      "gzip": 89597
+      "minified": 341846,
+      "gzip": 92581
     },
     "shape-catalog": {
       "minified": 12018,
@@ -137,8 +137,8 @@
       "gzip": 35483
     },
     "source": {
-      "minified": 724549,
-      "gzip": 215812
+      "minified": 746443,
+      "gzip": 223002
     },
     "spec-files": {
       "minified": 5164,

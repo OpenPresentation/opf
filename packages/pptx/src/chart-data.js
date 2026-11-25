@@ -24,7 +24,7 @@ const object = value => value !== null && typeof value === 'object' && !Array.is
  */
 export function chartUsesDataFields(chart) {
   const data = chart?.data;
-  return object(chart) && (chart.mapping !== undefined || isDatasetRef(data) || (object(data) && (data.source !== undefined || (Array.isArray(data.columns) && data.columns.some(object))))
+  return object(chart) && (chart.mapping !== undefined || isDatasetRef(data) || (object(data) && (['datasource', 'query', 'retrieved', 'version', 'sha256', 'generator'].some(key => data[key] !== undefined) || (Array.isArray(data.columns) && data.columns.some(object))))
     || (chart.type === 'combo' && (chart.line !== undefined || chart.secondaryAxis !== undefined)));
 }
 

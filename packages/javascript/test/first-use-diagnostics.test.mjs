@@ -50,21 +50,21 @@ describe("schema errors name the form the value chose", () => {
   test("an object with no field of either object form is one error that lists both forms, without the forms the type rules out", () => {
     const errors = schemaErrors({ name: "Old chart data", slides: [{ chart: { type: "line", data: { labels: ["Q1"] } } }] });
     assert.deepEqual(errors.map((error) => [error.path, error.message]), [["/slides/0/chart/data", 'none of the forms accepted here has "labels"']]);
-    assert.deepEqual(errors[0].validation.alternatives, ["ChartData: { columns, rows, source }", "DatasetRef: { dataset, fields }"]);
+    assert.deepEqual(errors[0].validation.alternatives, ["ChartData: { columns, rows, datasource, query, … }", "DatasetRef: { dataset, fields }"]);
     assert.equal(errors.some((error) => /must be string/.test(error.message)), false);
   });
 });
 
-describe("opf stats counts chart source metadata apart from where the data comes from", () => {
-  test("inline rows with data.source are inline data with a recorded source", () => {
+describe("opf stats counts chart data source metadata apart from where the data comes from", () => {
+  test("inline rows with a datasource are inline data with a recorded data source", () => {
     const deck = {
       name: "Sources",
       slides: [
-        { chart: { type: "column", data: { columns: ["Q", "R"], rows: [["Q1", 1]], source: { src: "./revenue.csv", retrieved: "2026-10-05" } } } },
+        { chart: { type: "column", data: { columns: ["Q", "R"], rows: [["Q1", 1]], datasource: { src: "./revenue.csv" }, retrieved: "2026-10-05" } } },
         { chart: { type: "column", data: { columns: ["Q", "R"], rows: [["Q1", 1]] } } },
       ],
     };
-    assert.deepEqual(stats(deck).charts.data, { inline: 2, dataset: 0, withSource: 1 });
+    assert.deepEqual(stats(deck).charts.data, { inline: 2, dataset: 0, withDatasource: 1 });
   });
 });
 

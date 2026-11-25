@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openpresentation.org/schema/native-run/v1",
+  "title": "Native run",
+  "description": "One run of one application over a list of OPF-exported .pptx files: the run.json at the top of a native run directory. Each file's own result is files/<fileId>/result.json (native-result.schema.json). scripts/native-acceptance/core/result/README.md explains it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "target", "application", "system", "fonts", "opf", "tier", "baseline", "started", "finished", "check", "files"],
+  "properties": {
+    "schemaVersion": { "const": 1, "description": "The version of this format. Always 1." },
+    "target": {
+      "enum": ["keynote", "powerpoint", "impress", "powerpoint-mac"],
+      "description": "The application under test: \"keynote\" (Keynote on macOS), \"powerpoint\" (PowerPoint on Windows), \"impress\" (LibreOffice Impress), \"powerpoint-mac\" (PowerPoint on macOS)."
+    },
+    "application": {
+      "type": "object",
+      "description": "The application as it reports itself. Read from the application at run time, never hard-coded.",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "description": "Its name (for example \"Keynote\", \"PowerPoint\", \"LibreOffice Impress\")." },
+        "version": { "type": "string", "minLength": 1, "description": "Its version (for example \"16.0\")." },
+        "build": { "type": "string", "minLength": 1, "description": "Its build number when known (for example \"7052.0.68\")." }
+      }
+    },
+    "system": {
+      "type": "object",
+      "description": "The operating system the application ran on.",
+      "additionalProperties": false,
+      "required": ["os", "version"],
+      "properties": {
+        "os": { "enum": ["macOS", "Windows", "Linux"], "description": "The operating system." },
+        "version": { "type": "string", "minLength": 1, "description": "Its version (for example \"26.6.2\")." }
+      }
+    },
+    "fonts": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Which fonts the application could use: \"installed\" (whatever the machine has), or a named font profile (Impress: \"opf\", \"stock\")."
+    },
+    "opf": {
+      "type": "object",
+      "description": "The OPF that exported the input.",
+      "additionalProperties": false,
+      "required": ["version"],
+      "properties": {
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+(-[0-9A-Za-z.-]+)?$", "description": "The @openpresentation/opf-pptx version (for example \"0.36.0\" or \"0.37.0-rc.1\")." },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$", "description": "The git commit it was built from, when it was not a published release." }
+      }
+    },
+    "tier": {
+      "enum": ["smoke", "release", "full", null],
+      "description": "Which set of decks the run covered: \"smoke\" (about ten decks), \"release\" (the qualification corpus), \"full\" (corpus, examples, gallery layouts, language decks); null for a hand-picked list."
+    },
+    "baseline": { "type": ["string", "null"], "description": "The OPF version whose results this run is compared with (for example \"0.36.0\"); null for none." },
+    "started": { "type": "string", "format": "date-time", "description": "When the run began, UTC." },
+    "finished": { "type": "string", "format": "date-time", "description": "When the run ended, UTC." },
+    "check": {
+      "type": "object",
+      "description": "What the driver's check verb said before the run.",
+      "additionalProperties": false,
+      "required": ["status", "reasons"],
+      "properties": {
+        "status": { "enum": ["ready", "refused"], "description": "\"ready\": the machine could run the target. \"refused\": it could not, and no file was opened." },
+        "reasons": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "Why it refused (for example \"the screen is locked\"), or notes when ready; empty when there is nothing to say." }
+      }
+    },
+    "files": {
+      "type": "array",
+      "description": "One entry per input file, in run order.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "deck", "variant", "result", "open", "slideCount"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9._-]+~[a-z0-9._-]+$", "description": "The file id, <deck>~<variant>." },
+          "deck": { "type": "string", "pattern": "^[a-z0-9._-]+$", "description": "The deck the file was exported from." },
+          "variant": { "type": "string", "pattern": "^[a-z0-9._-]+$", "description": "Which export of the deck (\"default\" when there is one)." },
+          "result": { "type": "string", "pattern": "^files/[a-z0-9._-]+~[a-z0-9._-]+/result\\.json$", "description": "The file's result, relative to the run directory: files/<id>/result.json." },
+          "open": { "enum": ["done", "failed", "timeout", "alert", "not-run"], "description": "The status of the file's open verb, repeated here so a reader of run.json sees failures at once." },
+          "slideCount": { "type": ["integer", "null"], "minimum": 0, "description": "How many slides the opened file has, hidden slides counted; null when it did not open." }
+        }
+      }
+    }
+  }
+}

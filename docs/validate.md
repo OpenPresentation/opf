@@ -254,6 +254,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/image-placement-invalid`](#opfimage-placement-invalid) | Format | error | structure | An image placement cannot be honored. |
 | [`opf/layout-placeholder-group`](#opflayout-placeholder-group) | Format | error | structure | A layout record's placeholder group breaks a nesting rule. |
 | [`opf/dataset-unknown`](#opfdataset-unknown) | Format | error | structure | A chart or table names a dataset that does not exist. |
+| [`opf/datasource-unknown`](#opfdatasource-unknown) | Format | error | structure | A dataset or chart data names a data source that does not exist. |
 | [`opf/dataset-field-unknown`](#opfdataset-field-unknown) | Format | error | structure | A table asks a dataset for a column it does not have. |
 | [`opf/data-column-duplicate`](#opfdata-column-duplicate) | Format | error | structure | A dataset or table has two columns with the same name. |
 | [`opf/chart-mapping-unknown-column`](#opfchart-mapping-unknown-column) | Format | error | structure | A chart mapping names a column the data does not have. |
@@ -324,6 +325,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/variable-overflow`](#opfvariable-overflow) | Layout | warning | composition | A variable's value is longer than the room its declaration allows. |
 | [`opf/embed-credentials`](#opfembed-credentials) | Content | warning | structure | An embed address carries what looks like a credential. |
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
+| [`opf/datasource-credentials`](#opfdatasource-credentials) | Content | warning | structure | A data source holds a credential. |
+| [`opf/dataset-stale`](#opfdataset-stale) | Content | warning | structure | A dataset is older than its data source says it should be. |
 | [`opf/chart-mapping-adapted`](#opfchart-mapping-adapted) | Content | warning | structure | A chart mapping entry is ignored. |
 | [`opf/chart-highlight-adapted`](#opfchart-highlight-adapted) | Content | warning | structure | A chart highlight is adapted by the chart type. |
 | [`opf/chart-series-dropped`](#opfchart-series-dropped) | Content | warning | structure | A chart series is not drawn by the chart type. |
@@ -338,7 +341,6 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/unused-beat`](#opfunused-beat) | Content | info | structure | A beat of the narrative has no slide that references it. |
 | [`opf/empty-slide`](#opfempty-slide) | Content | warning | structure | A slide has no content at all. |
 | [`opf/language-tag`](#opflanguage-tag) | Content | warning | structure | A language tag is malformed, uses an unassigned region, is not in canonical case or names a numbering system OPF does not draw. |
-| [`opf/straight-quotes`](#opfstraight-quotes) | Content | info | structure | Text uses straight quotation marks (" or ') where the language has typographic ones. |
 | [`opf/chart-dual-axis`](#opfchart-dual-axis) | Content | info | structure | A combo chart plots a series on a secondary value axis. |
 | [`opf/chart-pie-many-slices`](#opfchart-pie-many-slices) | Content | info | structure | A pie or doughnut chart has more than 5 slices. |
 
@@ -511,6 +513,14 @@ Default severity: **error**. Cost: structure. A layout record's placeholder grou
 Default severity: **error**. Cost: structure. A chart or table names a dataset that does not exist.
 
 **Why.** The data cannot be drawn without the dataset it refers to.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/datasource-unknown`
+
+Default severity: **error**. Cost: structure. A dataset or chart data names a data source that does not exist.
+
+**Why.** A string `datasource` is the id of an entry in the top-level `datasources` map. An id that is not there says nothing about where the data came from. A file or a URL is written as an inline data source object, `{ "src": "./revenue.csv" }`.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -1135,6 +1145,22 @@ Default severity: **warning**. Cost: structure. A chart value is text, not a num
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
+### `opf/datasource-credentials`
+
+Default severity: **warning**. Cost: structure. A data source holds a credential.
+
+**Why.** A data source says where data lives and never holds credentials. A `src` with a user and password, or a query parameter named like a key or a token, writes a secret into a document that is shared, versioned and exported. Keep the secret in the host's own store and name the connection in `connector` or `extensions`.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/dataset-stale`
+
+Default severity: **warning**. Cost: structure. A dataset is older than its data source says it should be.
+
+**Why.** A data source may say how often it is meant to be taken again (`refresh`, an ISO 8601 duration). Given a date to check as of, a dataset whose `retrieved` is older than that is reported. Core has no clock, so without a date nothing is reported, and no engine takes the data again.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
 ### `opf/chart-mapping-adapted`
 
 Default severity: **warning**. Cost: structure. A chart mapping entry is ignored.
@@ -1248,16 +1274,6 @@ Default severity: **warning**. Cost: structure. A language tag is malformed, use
 **Basis.** BCP 47 (RFC 5646, section 2.1) and the platform locale data (Intl.getCanonicalLocales, Intl.DisplayNames)
 
 **Approximations.** Checks the root and slide `language` (a tag string, or the `bcp47` of an inline Language object) and `language` on the TextRun objects of titles, subtitles, tags, text, lists, tables, quotes, metrics and timelines. A region is assigned when the runtime's CLDR data names it (ISO 3166-1 codes and UN M.49 areas such as 419); private-use regions (`AA`, `QM`-`QZ`, `XA`-`XZ`) and `ZZ` are accepted, as are private-use (`x-...`) tags. Only the spelling of a tag is checked, not whether the language subtag is assigned or whether the language suits the text. The schema rejects tags with characters other than letters, digits and hyphens (`en_US` is a schema error, with no suggestion), and `en-UK` as the deck language is already an error of the schema rule, so those are not reported twice.
-
-### `opf/straight-quotes`
-
-Default severity: **info**. Cost: structure. Text uses straight quotation marks (" or ') where the language has typographic ones.
-
-**Why.** Straight marks are a typewriter substitute. Typeset text uses the quotation marks of its language (“…” in English, «…» in French, „…“ in German), and a deck that mixes them with the marks the engine draws around quotes looks unfinished.
-
-**Basis.** The quotation marks of the deck language, as the engines draw them around a quote (QUOTE_MARKS in core).
-
-**Approximations.** Checks titles, subtitles, tags, body text, list items and descriptions, and quotes; not table cells, metrics, timelines, code or runs with `code: true`. A `"` after a digit is an inch mark and a `'` between letters or after a digit is an apostrophe or a foot mark; single quotes count only as a pair around words. A language with no typographic marks of its own (one OPF draws ASCII quotes for) is not checked. When only double quotes are found, the finding carries a patch to the language's marks.
 
 ### `opf/chart-dual-axis`
 

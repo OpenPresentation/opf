@@ -109,16 +109,16 @@ function sentenceEnds(text: string): number[] {
   }
   return ends;
 }
-/** The deck-level fields a single slide needs to validate: the references it cites and the datasets it plots. */
-// FR-03: a slide is checked on its own with the deck's references and datasets; a link to a slide may name any slide of that deck, and with no deck given the links are not judged.
+// FR-03: a slide is checked on its own with the deck's references, datasets and data sources; a link to a slide may name any slide of that deck, and with no deck given the links are not judged.
 const otherSlideIds = (presentation: unknown): false | string[] => {
   const slides = (presentation as { slides?: unknown } | null | undefined)?.slides;
   if (!Array.isArray(slides)) return false;
   return slides.flatMap((slide) => (slide && typeof (slide as { id?: unknown }).id === 'string' ? [(slide as { id: string }).id] : []));
 };
+/** The deck-level fields a single slide needs to validate: the references it cites, the datasets it plots and the data sources they name. */
 const deckContext = (presentation: unknown): Record<string, unknown> => {
   const deck = isRecord(presentation) ? presentation : {};
-  return {...(Array.isArray(deck.references)?{references:deck.references}:{}),...(isRecord(deck.datasets)?{datasets:deck.datasets}:{})};
+  return {...(Array.isArray(deck.references)?{references:deck.references}:{}),...(isRecord(deck.datasets)?{datasets:deck.datasets}:{}),...(isRecord(deck.datasources)?{datasources:deck.datasources}:{})};
 };
 interface Leaf {
   path: string; field: string; value: any;

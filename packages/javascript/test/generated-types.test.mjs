@@ -76,7 +76,7 @@ void [items,bullets,timeline,table,noCells,extra,numeric,cells,rows];`;
 
 test('FR-08: the embed payload is in the generated declarations, on a slide and on a block', () => {
   const fixture=fileURLToPath(new URL('./generated-embed-fixture.ts',import.meta.url));
-  const source=`import { type Presentation, embedAspect, embedCardLayout, embedTitle, embedValue, urlCredential } from '../dist/index.js';
+  const source=`import { type Presentation, embedAspect, embedCardLayout, credentialInSrc, embedTitle, embedValue } from '../dist/index.js';
 type Slide = Presentation['slides'][number];
 type Block = NonNullable<Slide['blocks']>[number];
 const shorthand: Slide = {embed:'https://app.example.com/dashboard'};
@@ -91,7 +91,7 @@ const ratio: Block = {embed:{src:'https://app.example.com/',aspectRatio:'16:9'}}
 const value: { src: string; title?: string; aspectRatio?: number; preview?: string } | undefined = embedValue('https://app.example.com/');
 const name: string = embedTitle(full.embed);
 const aspect: number = embedAspect(shorthand.embed);
-const credential: string | undefined = urlCredential('https://app.example.com/?token=1');
+const credential: string | undefined = credentialInSrc('https://app.example.com/?token=1');
 const card = embedCardLayout({frame:{x:0,y:0,width:800,height:450},title:name,site:'app.example.com',headingFamily:'Roboto',bodyFamily:'Roboto',scale:1});
 const lines: string[] | undefined = card.title?.lines;
 const badge: number = card.icon.badge.width;

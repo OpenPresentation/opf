@@ -30,8 +30,8 @@ export const jsonTriggers = [
 const CTRL = [
   ['empty line in object', '{\n  "slides": [],\n  |\n}', ['name', 'design', 'description'], null],
   ['inside empty key quotes', '{\n  "slides": [],\n  "|"\n}', ['name', 'design'], null],
-  ['partial key in quotes', '{\n  "slides": [],\n  "des|"\n}', ['description', 'design', 'datasets'], [3, 3]],
-  ['bare partial key', '{\n  "slides": [],\n  des|\n}', ['description', 'design', 'datasets'], [3, 3]],
+  ['partial key in quotes', '{\n  "slides": [],\n  "des|"\n}', ['description', 'design', 'datasets', 'datasources'], [4, 4]],
+  ['bare partial key', '{\n  "slides": [],\n  des|\n}', ['description', 'design', 'datasets', 'datasources'], [4, 4]],
   ['boolean right after the colon', '{\n  "slides": [],\n  "template":|\n}', ['true', 'false'], [2, 2]],
   ['boolean after the colon and a space', '{\n  "slides": [],\n  "template": |\n}', ['true', 'false'], [2, 2]],
   ['enum after the colon', '{\n  "slides": [],\n  "design": {"titleAlignment": |}\n}', ['start', 'center', 'end'], [3, 3]],
@@ -204,7 +204,7 @@ export const jsonDocs = [
   ['J-DOC-001', 'R-CMP-17', 'the selected key shows its schema description', 'json', KEY, [T('"desc')], { docs: { shown: true, has: ['description', 'Free-form prose describing what this presentation is about'] } }],
   ['J-DOC-002', 'R-CMP-17', 'layout ids show name, description and regions', 'json', '{\n  "slides": [{"layout": "|"}]\n}', [T('pill')], { docs: { has: ['Pillars', 'Regions: title, body'] } }],
   ['J-DOC-003', 'R-CMP-17', 'the required badge is in the documentation', 'json', '{\n  "slides": [],\n  "organization": {\n    |\n  }\n}', [T('"i')], { popup: { has: ['id'] }, docs: { has: 'required' } }],
-  ['J-DOC-004', 'R-A11Y-01', 'each option has an accessible name with its position', 'json', KEY, [T('"des'), ['waitLabels']], { popup: { ariaNames: [/^design, property, Design\. 1 of 3$/, /^description, property, string\. 2 of 3$/] } }],
+  ['J-DOC-004', 'R-A11Y-01', 'each option has an accessible name with its position', 'json', KEY, [T('"des'), ['waitLabels']], { popup: { ariaNames: [/^design, property, Design\. 1 of 4$/, /^description, property, string\. 2 of 4$/] } }],
   ['J-DOC-005', 'R-CMP-17', 'an enum value shows its description when the schema has one', 'json', '{\n  "slides": [{"type": "|"}]\n}', [T('ch')], { popup: { has: ['chart'] } }],
   ['J-DOC-006', 'R-CMP-17', 'the documentation follows the selection', 'json', KEY, [T('"des'), K('ArrowDown')], { docs: { has: 'description' } }],
 ];
@@ -232,7 +232,7 @@ export const jsonSnippets = [
   ['J-SNP-025', 'R-CMP-16', 'speaker: Tab walks from the id to the name', 'json', KEY, [T('"speak'), K('Tab'), T('ada'), K('Tab'), T('Ada')], { deck: { '/speaker/id': 'ada', '/speaker/name': 'Ada' } }],
   ['J-SNP-026', 'R-CMP-16', 'organization: a comma follows when a property comes after', 'json', '{\n  "slides": [],\n  |\n  "name": "x"\n}', [T('"organ'), K('Tab')], { has: '    "name": "Acme Inc."\n  },\n  "name": "x"' }],
   ['J-SNP-027', 'R-CMP-16', 'design: the snippet is one undo step', 'json', KEY, [T('"design'), K('Tab')], { undo: [1, '{\n  "slides": [],\n  "design|"\n}'] }],
-  ['J-SNP-028', 'R-CMP-16', 'design: the key is listed once (the snippet is what the key writes, not an item of its own)', 'json', KEY, [T('"des')], { popup: { open: 1, has: ['design', 'description', 'datasets'], count: [3, 3] } }],
+  ['J-SNP-028', 'R-CMP-16', 'design: the key is listed once (the snippet is what the key writes, not an item of its own)', 'json', KEY, [T('"des')], { popup: { open: 1, has: ['design', 'description', 'datasets', 'datasources'], count: [4, 4] } }],
   ['J-SNP-029', 'R-CMP-16', 'design: accepting the snippet announces it and its first stop', 'json', KEY, [T('"design'), K('Tab')], { live: 'Inserted design. Tab stop 1 of 3' }],
   ['J-SNP-030', 'R-CMP-16', 'design: a key with a colon after it keeps the plain key', 'json', '{\n  "slides": [],\n  "des|": {}\n}', [K('Control+Space'), K('ArrowDown'), K('ArrowDown'), K('Enter')], { not: '"theme"' }],
   ['J-SNP-031', 'R-CMP-16', 'deck keys in a slide are not snippets: design in a slide is the plain key', 'json', '{\n  "slides": [{\n    |\n  }]\n}', [T('"design'), K('Tab')], { text: '{\n  "slides": [{\n    "design": {|}\n  }]\n}' }],

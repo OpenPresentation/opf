@@ -35,6 +35,7 @@ const GOLDEN = {
   "connector-end-missing": ["The connector's `to: \"shipping\"` names no block or overlay shape on this slide, so the connector is not drawn. Ids on this slide: plan, ship.", "pick one of `plan` or `ship`, or give the block or shape it should join `id: \"shipping\"`."],
   "image-placement-invalid": ["Blocks 1 and 2 are both placed on the start edge, and a slide edge takes one placed image.", "move one of them to another edge, or remove its `placement`."],
   "dataset-unknown": ["`dataset: \"sale\"` does not exist. Datasets in this deck: sales.", "did you mean `sales`? Or add `datasets.sale`."],
+  "datasource-unknown": ["`datasource: \"wharehouse\"` does not exist. Data sources in this deck: warehouse.", "did you mean `warehouse`? Or add `datasources.wharehouse`, or write the data source inline as an object such as `{ \"src\": \"./data.csv\" }`."],
   "dataset-field-unknown": ["`regon` is not a column of `sales`. Columns: region, revenue.", "did you mean `region`?"],
   "data-column-duplicate": ["Two columns are named `region`. Series and mappings address columns by name.", "rename the second one (for example `region-2`)."],
   "chart-mapping-unknown-column": ["The chart mapping names column `Profit`, which the data does not have. Columns: Q, R, S.", "pick one of `Q`, `R` or `S`."],
@@ -67,7 +68,7 @@ const GOLDEN = {
   "chart-colors-adjusted-contrast": ["Chart color 2 (`#7B241C`) has 1.7:1 contrast against the slide background (`#011842`), so it is drawn lighter or darker to reach 3:1.", "pick a color with at least 3:1 contrast against `#011842`, or remove `colors` to use the palette."],
   "chart-text-alternative": ["The chart on slide 1 has no text alternative.", "write the message it carries in `alt`, or add text beside it that states what it shows."],
   "missing-language": ["The deck doesn't declare its language.", "add `\"language\": \"en-US\"` (or the language the text is written in) to the deck."],
-  "embed-credentials": ["This embed's address carries what looks like a credential (the query parameter \"api_key\"), and anyone with the deck can read it.", "take the credential out of `src`: the host that shows the page holds it."],
+  "embed-credentials": ["This embed's address carries what looks like a credential (a query parameter named \"api_key\"), and anyone with the deck can read it.", "take the credential out of `src`: the host that shows the page holds it."],
   "chart-series-dropped": ["A 'treemap' chart plots one series, so \"Costs\" is not drawn; use a chart type that plots several series (column, bar, line) or one chart per series.", "use a chart type that plots every series, or one chart per series."],
   "chart-option-adapted": ["`dataLabels.position` isn't supported by a pie chart and is adapted. The type's default position is used.", "remove `dataLabels.position`, or choose a chart type that can show it."],
   "text-overflow": ["Text on slide 1 doesn't fit at the smallest allowed size.", "shorten it, split the slide, or choose a roomier layout."],
@@ -100,7 +101,6 @@ const GOLDEN = {
   "chart-dual-axis": ["\"Margin\" is on a second value axis, so two scales share one plot and its crossings mean nothing.", "show the secondary series in a chart of its own beside this one, or drop `secondaryAxis` when the series share a unit."],
   "variable-group-omitted": ["A group on slide 1 is left out when `quote` has no value, with its pictures, cards and other text.", "give it a value to draw the group, or move what should always show out of the group."],
   "chart-pie-many-slices": ["This chart has 6 slices, more than 5; the small ones are hard to compare and to label.", "compare the parts with bars (`type: \"bar\"`), or group the smallest into one \"Other\" slice."],
-  "straight-quotes": ["`They called it \"the easiest setup we’ve done\".` uses straight quotation marks; this deck's language uses “…”.", "apply the quick fix, or type “ and ” instead."],
 };
 
 const firstOf = (name) => {
@@ -110,11 +110,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 107 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 109 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 107);
+	assert.equal(RULE_IDS.length, 109);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {
@@ -232,7 +232,7 @@ function runExample(rule, text) {
 	const parsed = JSON.parse(text);
 	const base = rule === 'opf/missing-language' ? { name: 'Example' } : DECK_BASE;
 	const document = Array.isArray(parsed.slides) ? { ...base, ...parsed } : { ...base, slides: [parsed] };
-	return validate(document, { catalogs: [gallery], ...(rule === 'opf/contract' ? { contracts: [{ path: '/slides/*/layout', allowedValues: ['text'] }] } : {}) }).findings;
+	return validate(document, { catalogs: [gallery], ...(rule === 'opf/dataset-stale' ? { asOf: '2026-11-25' } : {}), ...(rule === 'opf/contract' ? { contracts: [{ path: '/slides/*/layout', allowedValues: ['text'] }] } : {}) }).findings;
 }
 
 test('every explain example triggers its rule on the problem side and not on the repaired side', () => {
