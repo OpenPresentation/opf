@@ -18,6 +18,12 @@ Who decided what:
 shows the number; a gauge shows where it sits in its range and which band it falls in. It binds to data like any metric, so the arc moves
 when the data does.
 
+## Proposed, waiting for the owner's pick: the key is `gauge`, not `scale`
+
+From the key-names study (`key-names-study.md`, finding A3, decision `k-gauge`). If the owner picks it, every `scale` below reads `gauge`
+(`Metric.gauge`, the definition `MetricGauge`, the rules `metric-gauge-range` and `metric-gauge-value`, the diagnostic
+`metric-gauge-dropped`, the tag key); nothing else changes. The supervisor's brief says which name to build.
+
 ## Schema
 
 A new property on `Metric`:

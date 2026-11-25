@@ -108,6 +108,30 @@ On `Metric`:
 
 Generated types: `DataCondition`, `DataFilter`, `DataLink`, `MetricData`, `MetricDelta`, and `Metric.data`, `Metric.better`.
 
+## Proposed, waiting for the owner's pick: `Metric.format`
+
+From the key-names study (`key-names-study.md` in this folder, finding A4, decision `k-metric-format`). **Build it only if the owner has
+picked "add"; the supervisor says so in the builder's brief.**
+
+```json
+"format": { "$ref": "#/$defs/NumberFormat", "description": "How a number 'value' is written, the same pattern language as a number variable, a dataset column and a table cell ('0.0%', '$#,##0.0M'). A string 'value' is drawn as written. Absent: a linked metric uses its column's format, and an unlinked one today's number rules (grouping by the slide's language)." }
+```
+
+- **Precedence, one line:** `metric.format`, else the linked column's `format`, else today's number rules.
+- It applies to `value` only. The change keeps its own format (`data.delta.format`, else the defaults below); a typed numeric `delta` on an
+  unlinked metric is drawn with sign sections built from `metric.format` when there is one, else as today.
+- `unit` is still printed after the value, as today. New rule:
+
+| Id | Severity | When | Message | Path |
+| --- | --- | --- | --- | --- |
+| `metric-unit-repeated` | warning | The metric has a `unit`, and the format that draws its value (its own, or the linked column's) already prints that same text as a literal prefix or suffix (compared after trimming, case-sensitively) | `The metric's unit "{unit}" is already printed by its number format "{format}", so it is drawn twice.` | `/.../metric/unit` |
+
+- The stale-value comparison (`metric-data-stale`) uses the format that draws the value.
+- A percent format multiplies by 100, as everywhere: `{ "value": 0.044, "format": "0.0%" }` draws "4.4%".
+- PowerPoint: `format` is a 0.37 key, so it rides in the manifest's top-level `link` key (`link.format`), not in the validated `value`,
+  also on an unlinked metric (then `link` holds only `format`). The manifest's `value` holds the drawn text's number, as designed.
+- The gauge's end labels (part 3) use the same precedence.
+
 ## Computing
 
 Core gets one function, `resolveMetric(metric, datasets, options)`, returning the metric to draw (`value`, `delta`, `trend`, `sentiment`

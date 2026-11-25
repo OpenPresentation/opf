@@ -17,6 +17,14 @@ A scorecard, a cohort table or a regional comparison reads faster when each numb
 each cell's `style.fill` by hand, and the shading is wrong as soon as a number changes. A table names the columns to shade and the scheme
 colors to shade between, and engines compute every cell's fill from its number.
 
+## Proposed, waiting for the owner's pick: one `colors` list
+
+From the key-names study (`key-names-study.md`, finding A2, decision `k-colors`). If the owner picks it, `from`, `mid` and `to` are replaced
+by `colors`: an array of two or three `SchemeColorName`, low to high (`minItems: 2`, `maxItems: 3`, default `["surface", "primary"]`). Three
+colors make the scale diverging; `center` is valid only with three and stays optional (without it: 0 when the values span both signs, else
+the midpoint of the range, with the supervisor's symmetric rule when no end is pinned). `min`, `center` and `max` keep their names. The
+drawing does not change.
+
 ## Schema
 
 A new property on `Table`:
