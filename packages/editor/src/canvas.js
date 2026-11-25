@@ -720,7 +720,7 @@ export function createCanvasEditor(container, options = {}) {
   function editKind(path) {
     const value = editor.get(path), target = getTarget(path);
     if (value === undefined || !target) return null;
-    if ((typeof value === "string" || typeof value === "number") && target.querySelector("text") && !/\.(image|video|diagram)$/.test(path))
+    if ((typeof value === "string" || typeof value === "number") && target.querySelector("text") && !/\.(image|video|embed|diagram)$/.test(path))
       return "text";
     if (Array.isArray(value) && target.hasAttribute("data-opf-rich-text")) return "rich-text";
     return "properties";
@@ -815,7 +815,7 @@ export function createCanvasEditor(container, options = {}) {
     if (
       (typeof value === "string" || typeof value === "number") &&
       text &&
-      !/\.(image|video|diagram)$/.test(path)
+      !/\.(image|video|embed|diagram)$/.test(path)
     ) {
       const input = doc.createElement("textarea");
       input.className = "opf-inline-input";
