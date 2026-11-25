@@ -13,6 +13,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `$schema` | no | `const:"https://openpresentation.org/schema/opf/v1"` | Optional OPF schema version. When omitted, validators and engines should assume the latest supported OPF schema. |
+| `id` | no | `string` | Optional identity of the document: an opaque, non-empty string that says 'this is the same deck' across saves, exports, imports and publishes. Core never makes one (it has no clock and no randomness); 'opf create' and... |
 | `name` | no | `string` | Display name of the presentation for GUI/TUI lists, library/search indexing, OS-level metadata, and default export filenames. This is deck identity, not slide content. Use slides[].title and slides[].subtitle for text... |
 | `description` | no | `string` | Free-form prose describing what this presentation is about. Used by agents and humans as a deck-level summary; complements purpose (the goal) and narrative (the structured storyline). Round-trips to OOXML 'docProps/co... |
 | `filename` | no | `string` | Optional base filename for exports (without extension). The opf CLI (convert) and the editor strip a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and append the target format's extension. When omitted, they... |

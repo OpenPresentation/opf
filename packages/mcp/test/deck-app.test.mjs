@@ -149,6 +149,23 @@ describe("the deck view", () => {
 		await client.close();
 	});
 
+	test("CR 7: a deck's document id keys its viewer session, so two decks with one name stay apart and a rename keeps the session", async () => {
+		const client = await connected({});
+		const show = async (document) => (await client.callTool({ name: "show_deck", arguments: { document } })).structuredContent.viewer.session;
+		const one = await show({ id: "0192f4c8-6b1e-7c3a-9d42-5e8f1a7b3c90", name: "Untitled", slides: [{ title: "A" }] });
+		const two = await show({ id: "0192f4c8-7d2a-7b51-8c3e-4a6d9e1f2b05", name: "Untitled", slides: [{ title: "B" }] });
+		assert.notEqual(one, two, "two decks both called Untitled no longer share a session");
+		assert.match(one, /^deck-[0-9a-f]{32}$/);
+		assert.equal(await show({ id: "0192f4c8-6b1e-7c3a-9d42-5e8f1a7b3c90", name: "Renamed", slides: [{ title: "A" }] }), one, "the same id is the same session after a rename");
+		assert.equal(await show(JSON.stringify({ id: "0192f4c8-6b1e-7c3a-9d42-5e8f1a7b3c90", slides: [{ title: "A" }] })), one, "JSON text with the id, and no name, is the same deck");
+		assert.equal(await show("id: 0192f4c8-6b1e-7c3a-9d42-5e8f1a7b3c90\nname: Other\nslides:\n  - title: A\n"), one, "YAML text names the same deck by its id");
+		assert.notEqual(await show({ id: "0192F4C8-6B1E-7C3A-9D42-5E8F1A7B3C90", slides: [{ title: "A" }] }), one, "the id is opaque: compared exactly, not case-folded");
+		const byName = await show({ name: "Untitled", slides: [{ title: "A" }] });
+		assert.notEqual(byName, one, "a deck without an id still falls back to its name, which is not its id's session");
+		assert.equal(await show({ name: " untitled ", slides: [{ title: "C" }] }), byName);
+		await client.close();
+	});
+
 	test("the server names itself for a client's connector list: title, website and an icon it needs no request for", async () => {
 		const client = await connected({});
 		const info = client.getServerVersion();
@@ -192,7 +209,7 @@ describe("the deck view", () => {
 		assert.doesNotMatch(entry.name, /__|\.\.|\._|_\./);
 		assert.ok(entry.description.split("\n")[0].length <= 200);
 		assert.doesNotMatch(JSON.stringify(entry), /studio/i, "the editor, not a studio");
-		for (const name of ["show_deck", "open_editor"]) assert.match(tools.find((tool) => tool.name === name).description, /same deck \(the same name\) replaces the viewer/, `${name} says a new call replaces the open viewer`);
+		for (const name of ["show_deck", "open_editor"]) assert.match(tools.find((tool) => tool.name === name).description, /same deck \(the same id, or with no id the same name\) replaces the viewer/, `${name} says a new call replaces the open viewer`);
 		assert.deepEqual(tools.find((tool) => tool.name === "show_deck").inputSchema.required, ["document"], "show_deck still needs its deck");
 		const empty = await client.callTool({ name: "open_editor", arguments: {} });
 		assert.equal(empty.isError, undefined);

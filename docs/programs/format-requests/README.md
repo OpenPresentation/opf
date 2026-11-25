@@ -20,7 +20,8 @@ The baseline is 0.36.0 on `main`.
 On 2026-11-25 the owner said to start 0.37 now and that the supervisor "can make good decisions for open items too". An open decision
 therefore does not stop work: the option the review marks as recommended is taken, written into [decisions.md](decisions.md) as a
 supervisor decision on the owner's delegation, and built. The owner can overrule any of them; an overruled decision changes its row there
-and the item that depends on it.
+and the item that depends on it. Later on 2026-11-25 the owner answered most of the open questions on the review page himself; each row
+in decisions.md says who gave its answer.
 
 ## Landing order
 
@@ -33,9 +34,10 @@ and the item that depends on it.
 
 Group 0 (the layout sweep, the Keynote fixes, the guardrails and the 0.35.1 leftovers) is the 0.36.0 release and is not an item here.
 
-The cut order if the date is at risk, first to go first: the gauge, then the bullet chart (FR-07), embed (FR-08), localized month and
-weekday names (FR-10), then the stale-data warning (`dataset-stale`, FR-04). Each is an addition, so it can follow in a 0.37.x patch
-without breaking anything. A change that is not accepted in PowerPoint by the release date drops out the same way.
+Nothing is cut. On 2026-11-25 the owner answered the release question with "one release, nothing may be cut", so 0.37.0 ships when
+every item of the burndown is done. A change that PowerPoint does not accept is fixed before the release; it does not move to a patch.
+The cut order this page had before (the gauge, the bullet chart, embed, the localized date names, the stale-data warning) no longer
+applies.
 
 ## Definition of done
 
