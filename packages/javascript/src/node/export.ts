@@ -95,6 +95,14 @@ export interface ExportOptions {
 	 */
 	typefaces?: "selected" | "safe";
 	/**
+	 * `pptx` (NT-09): the application the file will be read in, standing for a set of the options above, which opf-pptx owns
+	 * (`readerOptions`); an option set here as well wins over the set. `powerpoint` (the default) sets none. `keynote` sets
+	 * `typefaces: "safe"`, `slideNumbers: "static"`, `smartArt: "shapes"` and `bodyText: "native"`. What it costs a PowerPoint reader
+	 * of the same file: Arial, Georgia and Courier New replace the deck's faces; slide numbers with words around them are fixed text;
+	 * there is no live SmartArt; and body paragraphs wrap in the application.
+	 */
+	reader?: "powerpoint" | "keynote";
+	/**
 	 * `pptx`: `native` (the default) writes editable shapes, text and charts. `images` writes each slide as one full-bleed PNG
 	 * picture drawn like the preview (at `scale`, default 2: 2560 x 1440 for the 1280 x 720 reference slide), with the speaker
 	 * notes and the slide's text as the picture's alternative text: a fidelity fallback that needs no fonts and has no editable text.
@@ -252,11 +260,12 @@ export function resolveExportOptions(options: ExportOptions): ResolvedExportOpti
 	const slideNumbers = oneOf("slideNumbers", options.slideNumbers, ["static", "live"] as const);
 	const text = oneOf("text", options.text, EXPORT_TEXT);
 	const typefaces = oneOf("typefaces", options.typefaces, ["selected", "safe"] as const);
+	const reader = oneOf("reader", options.reader, ["powerpoint", "keynote"] as const);
 	const as = oneOf("as", options.as, ["native", "images"] as const);
 	if (options.raster && format !== "pdf") throw invalid("raster applies to format pdf.");
-	if ((charts !== undefined || diagrams !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || smartArt !== undefined || slideNumbers !== undefined || typefaces !== undefined || as !== undefined) && format !== "pptx") throw invalid("charts, diagrams, provenance, images, bodyText, smartArt, slideNumbers, typefaces and as apply to format pptx.");
+	if ((charts !== undefined || diagrams !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || smartArt !== undefined || slideNumbers !== undefined || typefaces !== undefined || reader !== undefined || as !== undefined) && format !== "pptx") throw invalid("charts, diagrams, provenance, images, bodyText, smartArt, slideNumbers, typefaces, reader and as apply to format pptx.");
 	// A pictures-only PPTX has no text, fonts, charts or source records: the options that shape them do not apply.
-	if (as === "images" && (charts !== undefined || diagrams !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || smartArt !== undefined || slideNumbers !== undefined || typefaces !== undefined)) throw invalid("charts, diagrams, provenance, images, bodyText, smartArt, slideNumbers and typefaces do not apply to as: \"images\", where each slide is one picture.");
+	if (as === "images" && (charts !== undefined || diagrams !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || smartArt !== undefined || slideNumbers !== undefined || typefaces !== undefined || reader !== undefined)) throw invalid("charts, diagrams, provenance, images, bodyText, smartArt, slideNumbers, typefaces and reader do not apply to as: \"images\", where each slide is one picture.");
 	if (options.scale !== undefined && format !== "png" && format !== "pdf" && !(format === "pptx" && as === "images")) throw invalid("scale applies to format png (and raster pdf, and pptx with as: \"images\").");
 	if (options.includeHidden && format === "pptx") throw invalid("includeHidden applies to per-slide image and PDF output; the PPTX keeps a hidden slide as a hidden slide.");
 	if (options.slides !== undefined && format === "pptx") throw invalid("slides is not available for pptx: the whole presentation is exported.");
@@ -494,12 +503,15 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 				...(options.smartArt ? { smartArt: options.smartArt } : {}),
 				...(options.slideNumbers ? { slideNumberFields: options.slideNumbers } : {}),
 				...(options.typefaces ? { typefaces: options.typefaces } : {}),
+				// NT-09: opf-pptx applies the reader's set under the options above, which win.
+				...(options.reader ? { reader: options.reader } : {}),
 				...(pictures ? { as: "images", scale: options.pictureScale, slideRasterizer } : {}),
 				...(date ? { date } : {}),
 			});
 			// LH-28: a family that is not on every Windows and macOS machine, or that OPF measures with a look-alike, can wrap
 			// differently in a viewer that substitutes it. One note per export names them and the option that avoids it.
-			const unsafe = pictures || options.typefaces === "safe" || typeof module.typefacesNotOfficeSafe !== "function" ? [] : module.typefacesNotOfficeSafe(bytes);
+			const typefaces = options.typefaces ?? (options.reader ? module.readerOptions?.(options.reader).typefaces : undefined);
+			const unsafe = pictures || typefaces === "safe" || typeof module.typefacesNotOfficeSafe !== "function" ? [] : module.typefacesNotOfficeSafe(bytes);
 			if (unsafe.length)
 				reporter.add(
 					"pptx",

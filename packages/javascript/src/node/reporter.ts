@@ -62,7 +62,7 @@ const HELP: Record<string, string> = {
 	"font-unavailable": "Pass --fonts with the font files, or choose a font the bundled pack covers (opf catalog fontSchemes).",
 	"missing-glyph": "Install the script font package named by script-font-not-installed, or supply a covering font with --fonts.",
 	"export-lossy": "The PowerPoint file draws this with its nearest native form (see feature and the message). Change the content if the difference matters, or export with --as images for an exact picture.",
-	"typeface-not-office-safe": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+	"typeface-not-office-safe": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file. For a file read in Keynote, --reader keynote (reader: \"keynote\") sets safe typefaces among its options.",
 	"typeface-replaced": "Drop --typefaces safe to keep the selected families in the file.",
 	"diagram-shapes-unavailable": "The diagram stays one picture in PowerPoint (see the message). It looks the same; to edit it, change its source in OPF and export again.",
 	"smartart-unavailable": "The pyramid, matrix or cycle is exported as editable native shapes, which look the same; live SmartArt is written only where PowerPoint draws it exactly as the preview (docs/smartart.md). Shorten the entries named in the message, or give the region other proportions, to get live SmartArt. When the message names the fallback picture, install @openpresentation/opf-render: every live SmartArt carries OPF's picture of it for apps without SmartArt.",

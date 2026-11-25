@@ -24,7 +24,7 @@ type Target = { kind: "deck"; format: DeckFormat } | { kind: "export"; format: E
 const MD_INPUT = ["split", "title"] as const;
 const YAML_INPUT = ["aliases"] as const;
 const PPTX_INPUT = ["signals"] as const;
-const EXPORT_ONLY = ["slides", "include-hidden", "paginate", "keep-slides", "scale", "raster", "text", "charts", "diagrams", "provenance", "images", "body-text", "smart-art", "slide-numbers", "typefaces", "as", "date", "asset-dir", "fonts"] as const;
+const EXPORT_ONLY = ["slides", "include-hidden", "paginate", "keep-slides", "scale", "raster", "text", "charts", "diagrams", "provenance", "images", "body-text", "smart-art", "slide-numbers", "typefaces", "reader", "as", "date", "asset-dir", "fonts"] as const;
 const MEDIA: Record<string, string> = { svg: "image/svg+xml", png: "image/png", pdf: "application/pdf", pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation", zip: "application/zip" };
 
 export const spec: CommandSpec = {
@@ -33,7 +33,7 @@ export const spec: CommandSpec = {
 	summary: "Convert a deck or a .pptx to another form: a deck form, PDF, PPTX, PNG or SVG per slide, a .zip of slides, or stdout.",
 	operands: ["<input> (a deck, a .pptx, or - for stdin)", "<output> (a file whose extension names the format, or - for stdout with --to)"],
 	positional: [2, 2],
-	values: ["from", "to", "fail-on", "split", "title", "signals", "slides", "scale", "text", "charts", "diagrams", "provenance", "images", "body-text", "smart-art", "slide-numbers", "typefaces", "as", "date", "asset-dir"],
+	values: ["from", "to", "fail-on", "split", "title", "signals", "slides", "scale", "text", "charts", "diagrams", "provenance", "images", "body-text", "smart-art", "slide-numbers", "typefaces", "reader", "as", "date", "asset-dir"],
 	repeated: ["fonts"],
 	flags: ["force", "aliases", "schema-comment", "drop-unsupported", "include-hidden", "paginate", "keep-slides", "raster"],
 	help: `Formats. Input: .json, .opf.yaml/.yaml/.yml, .opf.md and a plain .md (OPF Markdown, an outline included), .pptx, or -
@@ -80,6 +80,11 @@ Flags, each only where its format is involved (otherwise exit 2):
                                                   each Latin text family as Arial, Georgia, Courier New or Times New Roman,
                                                   on every Windows and macOS machine, and lay the text out with it, so every
                                                   viewer breaks lines where the file does (typeface-replaced)
+                   --reader <powerpoint|keynote>  the application the file is for. powerpoint (the default) sets nothing.
+                                                  keynote sets --typefaces safe --slide-numbers static --smart-art shapes
+                                                  --body-text native (a flag given beside it wins), for a file read in
+                                                  Keynote; a PowerPoint reader of it gets Arial, Georgia and Courier New, fixed
+                                                  slide numbers, no live SmartArt and paragraphs wrapped by PowerPoint
                    --as <native|images>           native (the default): editable shapes, text and charts. images: a
                                                   fidelity fallback, each slide one full-bleed PNG picture drawn like the
                                                   preview (--scale, default 2), with its speaker notes and its text as the
@@ -102,6 +107,7 @@ Examples:
   opf convert outline.md deck.opf.yaml
   opf convert deck.opf.json deck.opf.yaml --schema-comment
   opf convert deck.opf.json deck.pptx --typefaces safe
+  opf convert deck.opf.json deck.pptx --reader keynote
   opf convert deck.opf.json deck.pptx --as images
   opf convert deck.opf.md - --to pdf > deck.pdf`,
 };
@@ -166,6 +172,7 @@ export async function run(args: string[], host: Host): Promise<void> {
 	oneOf("--smart-art", options["smart-art"], ["live", "shapes"] as const);
 	oneOf("--slide-numbers", options["slide-numbers"], ["static", "live"] as const);
 	oneOf("--typefaces", options.typefaces, ["selected", "safe"] as const);
+	oneOf("--reader", options.reader, ["powerpoint", "keynote"] as const);
 	oneOf("--as", options.as, ["native", "images"] as const);
 	oneOf("--text", options.text, ["fonts", "system", "paths"] as const);
 
@@ -326,6 +333,7 @@ async function exportDeck(
 			smartArt: text("smart-art"),
 			slideNumbers: text("slide-numbers"),
 			typefaces: text("typefaces"),
+			reader: text("reader"),
 			as: text("as"),
 			fonts: repeated.fonts,
 			paginate: options.paginate === true ? true : options["keep-slides"] === true ? false : undefined,

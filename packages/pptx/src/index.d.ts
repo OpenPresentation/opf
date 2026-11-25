@@ -123,7 +123,20 @@ export interface VariableExampleUsedDiagnostic {
   id: string;
 }
 
+/** NT-09: the application a PPTX is written for (`reader`). */
+export type PptxReader = "powerpoint" | "keynote";
+
 export interface ToPptxOptions {
+  /**
+   * NT-09: the application the file will be read in, standing for a set of the options below (`readerOptions`); an option set here
+   * as well wins over the set. "powerpoint" (the default) sets none, so the file is the default export byte for byte. "keynote" sets
+   * `typefaces: "safe"`, `slideNumberFields: "static"`, `smartArt: "shapes"` and `bodyText: "native"`, each of which the 0.36.0 Keynote
+   * round saw help there; the combined set has not been opened in Keynote yet. What it costs a PowerPoint reader of the same file:
+   * Arial, Georgia and Courier New replace the deck's faces; slide numbers with words around them are fixed text that PowerPoint does
+   * not renumber; there is no live SmartArt; and body paragraphs wrap in the application. Any other value throws
+   * `invalid-reader-option`, and so does a reader with `as: "images"`.
+   */
+  reader?: PptxReader;
   /**
    * How a footer or header text with words around `{{slide.number}}` (`{{slide.number}} / {{deck.slideCount}}`, `Page {{slide.number}}`)
    * writes its number. "live" (default since RR-102) keeps PowerPoint's slide-number field with the words as fixed runs, in the Slide
@@ -685,3 +698,11 @@ export declare function checkTypefaces(input: Uint8Array | ArrayBuffer | Record<
   /** The "Fonts Used" list the package's own fonts imply. */
   fontsUsed: string[];
 };
+
+/** NT-09: the readers `reader` takes, the default ("powerpoint") first. */
+export declare const READERS: readonly PptxReader[];
+/**
+ * NT-09: the toPptx options `reader` stands for, as a new object: `{}` for "powerpoint"; for "keynote"
+ * `{ typefaces: "safe", slideNumberFields: "static", smartArt: "shapes", bodyText: "native" }`. Any other value throws `invalid-reader-option`.
+ */
+export declare function readerOptions(reader: PptxReader): Pick<ToPptxOptions, "typefaces" | "slideNumberFields" | "smartArt" | "bodyText">;
