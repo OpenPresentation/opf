@@ -920,9 +920,9 @@ export function createOpfEditor(element, options = {}) {
       emit("link", { slide: link.slide, index });
       return true;
     }
-    const opened = openOutside(link.href, { openLink: options.onOpenLink ? (href) => options.onOpenLink(href, event) : undefined, win });
-    if (opened) emit("link", { href: link.href });
-    return opened;
+    openOutside(link.href, { openLink: options.onOpenLink ? (href) => options.onOpenLink(href, event) : undefined, win });
+    emit("link", { href: link.href });
+    return true;
   }
 
   function mountCanvas() {

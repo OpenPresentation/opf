@@ -7,6 +7,7 @@ import {
   splitOpfPath,
 } from "./index.js";
 import {
+  isOpenableLink,
   toSvg,
   resolvePresentation,
 } from "@openpresentation/opf-render/svg";
@@ -1273,7 +1274,9 @@ export function createCanvasEditor(container, options = {}) {
     if (!hit || !followsLink(event)) return;
     event.preventDefault();
     event.stopPropagation();
-    options.onLink?.(hit.slide !== undefined ? { slide: hit.slide } : { href: hit.href }, event);
+    // Only a slide link or an http, https, mailto or tel address is handed on; any other address (javascript:, data:, file:) is ignored.
+    if (hit.slide !== undefined) options.onLink?.({ slide: hit.slide }, event);
+    else if (isOpenableLink(hit.href.trim())) options.onLink?.({ href: hit.href.trim() }, event);
   }, true);
   root.addEventListener("keydown", (event) => {
     if (

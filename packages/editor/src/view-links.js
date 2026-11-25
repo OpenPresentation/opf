@@ -1,7 +1,5 @@
 // FR-03: links in a slide that is read, not edited (the editor's viewer layout, a read-only editor, the MCP viewer). One place finds the link an
 // event sits in, finds the slide a `slide:<id>` link names and opens any other link through the host; the canvas and the presenter use it.
-import { isOpenableLink } from "@openpresentation/opf-render/svg";
-
 /**
  * The link an event target sits in: `{ anchor, slide }` for a `slide:<id>` link (the renderer marks its anchor with `data-opf-slide-link`),
  * `{ anchor, href }` for any other, undefined for a target in no link (or in one outside `root`).
@@ -21,10 +19,9 @@ export function slideIndexOf(presentation, id) {
 
 /**
  * Open a web, mail or phone link outside the deck: the host's `openLink(href)` when it gave one, else a new tab that cannot reach back
- * (`noopener`, `noreferrer`). Any other address is ignored. Returns whether the link was handed on.
+ * (`noopener`, `noreferrer`). The caller has already kept only the schemes a link may open (the renderer's `isOpenableLink`).
  */
 export function openOutside(href, { openLink, win } = {}) {
-  if (!isOpenableLink(href)) return false;
   const address = href.trim();
   if (typeof openLink === "function") {
     openLink(address);
