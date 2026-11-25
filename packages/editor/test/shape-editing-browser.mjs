@@ -338,6 +338,13 @@ try {
   assert.equal(await field('Link').inputValue(), 'https://example.com/plan', 'the field returns to the document');
   mark('a refused value is reported and the field returns to the document');
 
+  // FR-03: the slide picker beside the link writes slide:<id>; the field shows it back, and a slide the deck has no id for cannot be named.
+  await step('a slide link from the picker', async () => { await field('Link to a slide').selectOption('slide:empty'); }, current => current.slides[1].blocks[0].link === 'slide:empty');
+  assert.equal(await field('Link').inputValue(), 'slide:empty', 'the link field shows the slide link');
+  assert.equal(await field('Link to a slide').inputValue(), 'slide:empty', 'the picker shows the slide');
+  await setText('Link', 'https://example.com/plan');
+  await waitDoc(current => current.slides[1].blocks[0].link === 'https://example.com/plan', 'a web link replaces it');
+
   assert.deepEqual(errors, [], 'no page errors');
   console.log(`shape editing browser test ok: ${checks.length} checks`);
   for (const name of checks) console.log(`  - ${name}`);
