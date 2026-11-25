@@ -1,0 +1,92 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Slide links",
+  "language": "en-US",
+  "design": {
+    "fontScheme": "roboto",
+    "colorScheme": "corporate-blue"
+  },
+  "slides": [
+    {
+      "id": "agenda",
+      "title": "Agenda",
+      "blocks": [
+        {
+          "text": [
+            {
+              "text": "Pricing",
+              "link": "slide:pricing"
+            },
+            " | ",
+            {
+              "text": "Roadmap",
+              "link": "slide:roadmap"
+            },
+            " | ",
+            {
+              "text": "Appendix (hidden slide)",
+              "link": "slide:appendix"
+            },
+            " | ",
+            {
+              "text": "acme.com",
+              "link": "https://acme.com"
+            }
+          ]
+        },
+        {
+          "shape": "roundRect",
+          "text": "Shape: go to Roadmap",
+          "link": "slide:roadmap"
+        }
+      ]
+    },
+    {
+      "id": "pricing",
+      "title": "Pricing",
+      "table": {
+        "columns": [
+          "Plan",
+          "Details"
+        ],
+        "rows": [
+          [
+            "Pro",
+            [
+              {
+                "text": "Table cell: back to the agenda",
+                "link": "slide:agenda"
+              }
+            ]
+          ],
+          [
+            "Team",
+            "No link"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "roadmap",
+      "title": "Roadmap",
+      "text": [
+        {
+          "text": "Text run: back to the agenda",
+          "link": "slide:agenda"
+        }
+      ]
+    },
+    {
+      "id": "appendix",
+      "title": "Appendix",
+      "hidden": true,
+      "blocks": [
+        {
+          "shape": "roundRect",
+          "text": "Shape: back to the agenda",
+          "link": "slide:agenda"
+        }
+      ]
+    }
+  ]
+}

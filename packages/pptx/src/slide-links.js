@@ -61,10 +61,30 @@ export function slideLinkResolver({slidePaths, storedIds}) {
       return relationships;
     },
     assignIds(slides) {
+      // Slide, block and overlay ids share one namespace, so a generated id must also differ from every id the restored document carries.
+      const inUse = new Set();
+      const collect = node => {
+        if (Array.isArray(node)) node.forEach(collect);
+        else if (node && typeof node === 'object') for (const [key, value] of Object.entries(node)) { if (key === 'id' && typeof value === 'string') inUse.add(value); else collect(value); }
+      };
+      collect(slides);
+      const renamed = new Map();
       for (const path of used) {
         const slide = slides[slidePaths.indexOf(path)];
-        if (slide && slide.id === undefined) slide.id = idOf(path);
+        if (!slide || slide.id !== undefined) continue;
+        const first = idOf(path);
+        let id = first;
+        for (let n = 2; inUse.has(id); n += 1) id = `${first}-${n}`;
+        if (id !== first) { ids.set(path, {id, stored: false}); taken.add(id); renamed.set(`slide:${first}`, `slide:${id}`); }
+        inUse.add(id);
+        slide.id = id;
       }
+      if (!renamed.size) return;
+      const rewrite = node => {
+        if (Array.isArray(node)) node.forEach(rewrite);
+        else if (node && typeof node === 'object') for (const [key, value] of Object.entries(node)) { if (key === 'link' && renamed.has(value)) node[key] = renamed.get(value); else rewrite(value); }
+      };
+      rewrite(slides);
     },
   };
 }

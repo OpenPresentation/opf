@@ -89,3 +89,35 @@ console.log('ok');
   assert.equal(validate(result, {only: ['format']}).valid, true);
 }
 console.log('ok (partial)');
+
+// A second export and import of a deck whose ids were generated keeps the same ids and links (the ids are stored by the export).
+{
+  const partial = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Stable', slides: [
+    {id: 'a', title: 'A', text: [{text: 'to B', link: 'slide:b'}]}, {id: 'b', title: 'B', text: 'B'},
+  ]};
+  const bare = Object.fromEntries(Object.entries(unzipSync(await toPptx(partial))).filter(([path]) => !/^ppt\/tags\//.test(path)));
+  for (const path of Object.keys(bare)) {
+    if (/^ppt\/slides\/slide\d+\.xml$/.test(path) || path === 'ppt/presentation.xml' || /_rels\/.*\.rels$/.test(path) || path === '[Content_Types].xml') {
+      bare[path] = enc.encode(dec.decode(bare[path]).replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g, '').replace(/<Relationship\b[^>]*relationships\/tags"[^>]*\/>/g, '').replace(/<Override\b[^>]*\/ppt\/tags\/[^>]*\/>/g, ''));
+    }
+  }
+  const first = await fromPptx(zipSync(bare));
+  const second = await fromPptx(await toPptx(first));
+  assert.deepEqual(second.slides.map(slide => slide.id), first.slides.map(slide => slide.id));
+  assert.equal(JSON.stringify(second.slides[0]).includes('"link":"slide:slide-2"'), true);
+}
+
+// A generated id never equals an id the restored document already carries (slide, block and overlay ids share one namespace).
+{
+  const {slideLinkResolver} = await import('../dist/slide-links.js');
+  const paths = ['ppt/slides/slide1.xml', 'ppt/slides/slide2.xml'];
+  const resolver = slideLinkResolver({slidePaths: paths, storedIds: [undefined, undefined]});
+  const rels = resolver.attach(new Map([['rId1', {type: 'http://x/relationships/slide', path: paths[1], targetMode: 'Internal'}]]));
+  const link = rels.get('rId1').slideLink;
+  assert.equal(link, 'slide:slide-2');
+  const slides = [{blocks: [{id: 'slide-2', text: [{text: 'x', link}]}]}, {}];
+  resolver.assignIds(slides);
+  assert.equal(slides[1].id, 'slide-2-2');
+  assert.equal(slides[0].blocks[0].text[0].link, 'slide:slide-2-2');
+}
+console.log('ok (stable, no collision)');

@@ -139,7 +139,7 @@ Shapes stack in the order the blocks compose (the shape tree order in PowerPoint
 | `alt` | Alternative text. Without it, a shape's text is what is read. | `p:cNvPr descr` |
 | `decorative` | `true`: screen readers skip the shape. | the decorative extension (`adec:decorative`, "Mark as decorative") |
 | `hidden` | `true`: kept in the file but not drawn; it keeps its room. | `p:cNvPr hidden` |
-| `link` | An http(s), `mailto:` or `tel:` URL, or `slide:<id>` (a jump to the slide of the deck with that id, `ppaction://hlinksldjump`), followed when the shape is clicked in a slide show. A link on a hidden shape is `opf/shape-link-hidden`; an unknown slide id is `opf/slide-link-unknown`. | `a:hlinkClick` |
+| `link` | An http(s), `mailto:` or `tel:` URL, or `slide:<id>` (a jump to the slide of the deck with that id, `ppaction://hlinksldjump`), followed when the shape is clicked in a slide show. A link on a hidden shape is `opf/shape-link-hidden`; an unknown slide id is `opf/slide-link-unknown`. In a PDF a shape's link covers the shape's text only (a link annotation per text run, as for a web link); a shape without text has no link area, for a web link and a slide link alike. | `a:hlinkClick` |
 
 The shape's name in PowerPoint is `OPF shape <path>`, from the block's place in the deck.
 
