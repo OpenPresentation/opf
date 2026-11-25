@@ -136,6 +136,11 @@ from the new scheme. *(analysis)*
 
 ## PowerPoint export and import
 
+> Owner, 2026-11-25, to the release supervisor: "We don't need to worry about backwards compatibility since we don't have existing
+> users just yet all our stuff updated".
+> The supervisor's application of it: what this section does to keep a released 0.36.0 importer reading the file was built before
+> that direction and is acceptable as built; nothing new is owed to a 0.36.0 importer, and no test needs to run it.
+
 - **Record.** Tables are recorded in `OPF_DATA_V1` on the table frame. Since opf#1464 that record stores an authored table with array rows,
   and a released 0.36.0 importer validates the stored table: a `colorScale` key inside it would make that importer drop the record.
   So the stored table is written **without** `colorScale`, and the color scale goes in a top-level key of the record,
@@ -233,3 +238,11 @@ Invalid (schema: `minItems`):
 | No numbers in the columns *(analysis, confirm)* | A warning, not an error | A refresh must not invalidate a deck. |
 | Storage *(analysis, confirm in the build)* | A top-level key of `OPF_DATA_V1`, else a new whole tag | The stored table must stay a 0.36 table. |
 | Paged tables *(analysis)* | One range over the whole table | Same value, same color. |
+
+## Two lessons from the earlier 0.37 builds (supervisor, 2026-11-25)
+
+- **The editor's keyboard browser suites pin completion counts by key name.** A new or renamed key changes how many completions the
+  source editor offers at the pinned positions, so those suites fail until their counts are updated. Run them before the pull request
+  opens, not after the first red check.
+- **The breaking-change gate needs every removed schema path named.** A `type: changed` fragment must name each schema path the change
+  removes, in the gate's form (for example `opf.schema.json:$defs.DataSourceRef`); a renamed key is a removed path and an added one.

@@ -268,3 +268,11 @@ Conformance: the valid deck above; the two invalid decks.
 | Table encoding *(analysis)* | Joined strings per list | Smaller after compression. |
 | The budget *(analysis, for the supervisor and the owner)* | Raise by the table's measured size (no cut: owner, 2026-11-25) | Trimming does not avoid the raise. |
 | Storage in PowerPoint | Nothing stored: content variables do not round-trip; the export holds each slide's resolved text (supervisor, 2026-11-25) | Measured with both importers. |
+
+## Two lessons from the earlier 0.37 builds (supervisor, 2026-11-25)
+
+- **The editor's keyboard browser suites pin completion counts by key name.** A new or renamed key changes how many completions the
+  source editor offers at the pinned positions, so those suites fail until their counts are updated. Run them before the pull request
+  opens, not after the first red check.
+- **The breaking-change gate needs every removed schema path named.** A `type: changed` fragment must name each schema path the change
+  removes, in the gate's form (for example `opf.schema.json:$defs.DataSourceRef`); a renamed key is a removed path and an added one.

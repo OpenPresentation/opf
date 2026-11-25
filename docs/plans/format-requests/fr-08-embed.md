@@ -131,6 +131,11 @@ true for an embed's `src`, the presenter draws an `iframe` in the frame instead 
 
 ## PowerPoint export and import
 
+> Owner, 2026-11-25, to the release supervisor: "We don't need to worry about backwards compatibility since we don't have existing
+> users just yet all our stuff updated".
+> The supervisor's application of it: what this section does to keep a released 0.36.0 importer reading the file was built before
+> that direction and is acceptable as built; nothing new is owed to a 0.36.0 importer, and no test needs to run it.
+
 **Export**:
 
 - With `preview`: a native picture (`p:pic`) in the frame, `descr` set to the title, with `a:hlinkClick` to `src`. The picture's bytes are
@@ -244,3 +249,11 @@ Warns (`embed-credentials` at `/slides/0/embed/src`):
 | Which presenters go live *(analysis)* | The editor's presenter and the web player, with the host's `embeds` option; never the MCP viewer | Only surfaces whose host can decide. |
 | How the 0.36.0 importer stays able to read it *(analysis, confirm in the build)* | The topology records `image` or a group; the embed rides in `OPF_EMBED_V1` or a top-level slide-record key | An unknown kind in the topology would drop the slide record. |
 | Credentials in `src` *(analysis)* | A warning, sharing FR-04's test | The same risk as a data source address. |
+
+## Two lessons from the earlier 0.37 builds (supervisor, 2026-11-25)
+
+- **The editor's keyboard browser suites pin completion counts by key name.** A new or renamed key changes how many completions the
+  source editor offers at the pinned positions, so those suites fail until their counts are updated. Run them before the pull request
+  opens, not after the first red check.
+- **The breaking-change gate needs every removed schema path named.** A `type: changed` fragment must name each schema path the change
+  removes, in the gate's form (for example `opf.schema.json:$defs.DataSourceRef`); a renamed key is a removed path and an added one.

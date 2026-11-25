@@ -125,6 +125,11 @@ with optional seconds and zone), keyed by the instant. A test covers it.
 
 ## PowerPoint export and import
 
+> Owner, 2026-11-25, to the release supervisor: "We don't need to worry about backwards compatibility since we don't have existing
+> users just yet all our stuff updated".
+> The supervisor's application of it: what this section does to keep a released 0.36.0 importer reading the file was built before
+> that direction and is acceptable as built; nothing new is owed to a 0.36.0 importer, and no test needs to run it.
+
 Nothing drawn changes, so the native parts are unchanged. The keys travel in the tags.
 
 - **Where they are stored.** Datasets travel in `OPF_DATASETS_V1` (the whole `datasets` map) and inline chart data in `OPF_DATA_V1` on
@@ -234,3 +239,11 @@ Conformance: two valid decks (a dataset and inline chart data, each typed), one 
 | One warning per cell or per column? *(analysis)* | Per cell up to 5, then one per column | Large ingests stay readable. |
 | Does ingest fill the keys? | Yes, from the cells | The card's value list says ingest fills them in. |
 | Storage in PowerPoint tags *(analysis, supervisor to confirm)* | Follow FR-04: inline if FR-04 accepted the 0.36 loss; else a side tag | Consistency with the item that lands first. |
+
+## Two lessons from the earlier 0.37 builds (supervisor, 2026-11-25)
+
+- **The editor's keyboard browser suites pin completion counts by key name.** A new or renamed key changes how many completions the
+  source editor offers at the pinned positions, so those suites fail until their counts are updated. Run them before the pull request
+  opens, not after the first red check.
+- **The breaking-change gate needs every removed schema path named.** A `type: changed` fragment must name each schema path the change
+  removes, in the gate's form (for example `opf.schema.json:$defs.DataSourceRef`); a renamed key is a removed path and an added one.

@@ -153,17 +153,14 @@ item's test file is opened on the Mac once it is built, and a Keynote difference
 
 ### Records and import
 
-- The chart's `OPF_DATA_V1` record stores the authored chart data as today. `bands` and `mapping.target` are chart properties. Where the
-  record stores the chart's authored properties in a validated section, the 0.37 keys go in a top-level key of the record instead,
-  `chart37: { "bands": [...], "target": "Target", "type": "bullet" }`, and the validated part holds what a 0.36.0 importer can read: the
-  type `bar`, and the data without the target column's role. *(analysis: the builder reads which parts of the record the released
-  importer validates and puts only the 0.36 form there; the rule is the one FR-06 and part 1 follow. A 0.36.0 importer ignores unknown
-  top-level keys of the slide and document records, verified on 2026-11-25; the builder proves the same for this record, else uses a new
-  whole tag, `OPF_CHART_BANDS_V1`, on the frame.)*
-- **Import (0.37)**: restores `bands`, `target` and `bullet` while the native caches still hash the same (the existing evidence rule of the
+Owner, 2026-11-25, to the release supervisor: "We don't need to worry about backwards compatibility since we don't have existing users just yet all our stuff updated". The supervisor's application of it: a 0.37 file is written for a 0.37
+importer, and nothing here is shaped for the released 0.36.0 importer.
+
+- The chart's record holds the chart **as authored**: `bands`, `mapping.target` and `type: "bullet"` sit where the chart's other
+  authored properties sit, in the 0.37 form. No side key, no extra tag, no second form of the chart, and no run of the released 0.36.0
+  importer in the item's tests.
+- **Import**: restores `bands`, `target` and `bullet` while the native caches still hash the same (the existing evidence rule of the
   chart record); an edit in Edit Data makes the chart import as what PowerPoint now holds, with the existing diagnostic.
-- **Import (0.36.0, released)**: reads a bar chart with extra series (the bands, and the target as a scatter series it may drop); the deck
-  is valid. The builder proves it with the released importer.
 - **Native check**: a column chart with three labeled bands, a line chart with bands and a reference line, a bullet chart of five KPIs
   with targets and three bands, and a bullet chart in a right-to-left deck. PowerPoint draws each as the preview does (bands behind,
   ticks on the targets); after its own save each comes back. A Mac check covers Keynote.
@@ -300,4 +297,12 @@ Invalid (schema: `minItems`):
 | The band group's axes *(analysis)* | Deleted secondary axes fixed to the primary scale | Bands must not stack with stacked data. |
 | Bands in the workbook *(analysis)* | Extra columns after the data | Edit Data shows what the chart draws. |
 | Errors vs warnings *(analysis)* | Only the unknown target column is an error; the rest warn | The README's fixed severities. |
-| Record storage *(analysis, confirm in the build)* | The 0.36 form in the validated part, the 0.37 keys in a top-level record key or a new tag | A 0.36.0 importer must still read the chart. |
+| Record storage (owner's direction of 2026-11-25, applied by the supervisor) | The chart as authored, in its own record | No backward compatibility is owed before there are users; one form is simpler to build and to read. |
+
+## Two lessons from the earlier 0.37 builds (supervisor, 2026-11-25)
+
+- **The editor's keyboard browser suites pin completion counts by key name.** A new or renamed key changes how many completions the
+  source editor offers at the pinned positions, so those suites fail until their counts are updated. Run them before the pull request
+  opens, not after the first red check.
+- **The breaking-change gate needs every removed schema path named.** A `type: changed` fragment must name each schema path the change
+  removes, in the gate's form (for example `opf.schema.json:$defs.DataSourceRef`); a renamed key is a removed path and an added one.

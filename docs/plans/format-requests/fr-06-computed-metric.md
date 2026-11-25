@@ -128,8 +128,8 @@ picked "add"; the supervisor says so in the builder's brief.**
 
 - The stale-value comparison (`metric-data-stale`) uses the format that draws the value.
 - A percent format multiplies by 100, as everywhere: `{ "value": 0.044, "format": "0.0%" }` draws "4.4%".
-- PowerPoint: `format` is a 0.37 key, so it rides in the manifest's top-level `link` key (`link.format`), not in the validated `value`,
-  also on an unlinked metric (then `link` holds only `format`). The manifest's `value` holds the drawn text's number, as designed.
+- PowerPoint: `format` is stored in the metric's record as authored, beside its other keys, also on an unlinked metric (see "PowerPoint
+  export and import"; in the careful form built before the owner's direction it sits in the top-level `link` key).
 - The gauge's end labels (part 3) use the same precedence.
 
 ## Computing
@@ -230,41 +230,34 @@ Severities are the program README's: errors for a data link to an unknown datase
 Drawing: the metric's native shapes are unchanged in kind (the value, unit, label, description, change and arrow text shapes of today);
 they carry the computed text. A deck without `data` exports byte for byte as before.
 
-The record: the metric's `OPF_METRIC_V1` manifest holds the metric as `value`, and a released 0.36.0 importer validates that `value` as
-a 0.36 metric: a `data` or `better` key in it would make that importer drop the whole metric and keep only its visible native shapes. So:
+The record. Owner, 2026-11-25, to the release supervisor: "We don't need to worry about backwards compatibility since we don't have existing users just yet all our stuff updated". The supervisor's application of it: the simple
+form below is the design.
 
-- `value` holds the **0.36 form of what is drawn**: the computed numbers as `value` and `delta`, the drawn `trend` and `sentiment`, and
-  the other keys as authored. A 0.36.0 importer reads a correct, plain metric.
-- A new top-level manifest key, `link`, holds the 0.37 part: `{ "data": {...}, "better": "down", "derived": ["value", "delta", "trend",
-  "sentiment"] }`, where `derived` lists the keys of `value` that were computed rather than written.
-- **To confirm in the build** *(analysis)*: that the released 0.36.0 importer ignores an unknown top-level key of the metric manifest.
-  Its manifest check reads named keys only (`v`, `group`, `role`, `part`, `line`, `value`, `parts`), so it should; the item's test runs
-  the released importer on the file, as FR-02 did for `entryIds`. If it does not, `link` moves to the slide record as a top-level key
-  (as `entryIds`), keyed by the metric's path.
+- The metric's `OPF_METRIC_V1` manifest stores the metric **as authored** in its `value`: `data`, `better` and `format` sit in it beside
+  the other keys, exactly as the deck has them. There is no top-level `link` key and no `derived` list.
+- The drawn numbers are not stored as a second metric. What tells import an untouched metric from an edited one is the evidence of the
+  drawn text that the manifest already keeps for every metric; the builder confirms it covers the computed value and change text, and
+  adds them to the evidence if it does not.
+- No test runs the released 0.36.0 importer on the file.
 
-What the released 0.36.0 importer does, verified by the supervisor on 2026-11-25:
+**Built before the owner's direction, acceptable**: the careful form, in which `value` holds the 0.36 form of what is drawn (the computed
+numbers as `value` and `delta`, the drawn `trend` and `sentiment`) and a top-level manifest key `link` holds `{ "data", "better",
+"format", "derived" }`. A build that already has it need not be redone for this reason alone; a later change to this record moves it to
+the simple form. An importer reads whichever form the 0.37 exporter writes, not both.
 
-- It rejects a record that carries an unknown key inside a validated section, and then loses the whole record (the metric manifest's
-  `value` is such a section).
-- It ignores unknown top-level keys of the document record (verified for the document id, FR-01) and of the slide record (verified for
-  `entryIds`, FR-02), and unknown whole tags.
-- Since opf#1464 the table data record stores an authored table with array rows. Nothing this item stores about a metric (or anything a
-  later item stores about tables) puts a new row or cell form into that record.
+Import:
 
-Import (0.37):
-
-- With `link` and the native value and change text unchanged: restore `data` and `better`; set `value` and `delta` to the drawn numbers
-  (the last computed numbers, as `cr4-literal` says); drop from the metric the keys `derived` lists other than `value` and `delta`, so a
-  derived `trend` or `sentiment` does not come back typed.
+- With the native value and change text unchanged: the metric comes back as authored, with its `data`, `better` and `format`. (In the
+  careful form: restore them from `link`, set `value` and `delta` to the drawn numbers and drop the other keys `derived` lists, so a
+  derived `trend` or `sentiment` does not come back typed.)
 - With the value or change text edited in PowerPoint: the edit is the author's, so the edited number is imported as the literal and
   `data` is **not** restored, with a `metric-data-dropped` diagnostic (`The metric's value was edited in PowerPoint, so its data link was
   not restored.`). *(analysis: the pattern of the chart data records, which restore only while the native evidence is unchanged; keeping
   the link would overwrite the edit at the next draw.)*
-- Provenance off: no `link` is written (the export report says so), as for the other records.
+- Provenance off: no record is written (the export report says so), as for the other records.
 
 Native check: a deck with four computed metrics (value only, `previous`, a baseline filter, a change column; one with `better: "down"`),
-exported, opened and saved by PowerPoint, imported: every link and the drawn numbers come back. The released 0.36.0 importer imports the
-same file as a valid deck with plain metrics showing the same numbers.
+exported, opened and saved by PowerPoint, imported: every link and the drawn numbers come back.
 
 ## Editor
 
@@ -393,6 +386,14 @@ invalid decks with an unknown dataset and an unknown field.
 | Comparison of strings with `<` *(analysis)* | Time-order key in a `date` column, else code point | Dates in decks are written as labels, not timestamps. |
 | `better` on unlinked metrics *(analysis)* | Allowed | It is the rule for a verdict, useful on a typed trend too. |
 | An edit in PowerPoint to a computed value *(analysis)* | The edit wins; the link is not restored, with a diagnostic | The native evidence rule of the other data records. |
-| Where the link goes in the PowerPoint tag *(analysis, confirm in the build)* | A top-level `link` key of the metric manifest; else the slide record | A 0.36.0 importer must still read the metric. |
+| Where the link goes in the PowerPoint tag (owner's direction of 2026-11-25, applied by the supervisor) | In the metric's own record, as authored; the earlier top-level `link` form is acceptable where already built | No backward compatibility is owed before there are users. |
 | Rule names *(analysis)* | `metric-data-stale`, `metric-data-aggregate`, `metric-data-empty`, `metric-data-delta`; the two errors reuse `dataset-unknown` and `dataset-field-unknown` | One family for the metric's link; the existing data errors already say the right thing. |
 | A period-grouped `previous` *(analysis)* | Not now; a documented limit, addable later | Keeps the item to what was reviewed. |
+
+## Two lessons from the earlier 0.37 builds (supervisor, 2026-11-25)
+
+- **The editor's keyboard browser suites pin completion counts by key name.** A new or renamed key changes how many completions the
+  source editor offers at the pinned positions, so those suites fail until their counts are updated. Run them before the pull request
+  opens, not after the first red check.
+- **The breaking-change gate needs every removed schema path named.** A `type: changed` fragment must name each schema path the change
+  removes, in the gate's form (for example `opf.schema.json:$defs.DataSourceRef`); a renamed key is a removed path and an added one.

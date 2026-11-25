@@ -7,9 +7,8 @@ A brief for one pull request that renames eight released keys and widens one lis
 Who decided: **Owner, 2026-11-25, said in the analysis session.** His words: "this is still pre-v1 so we can update any even niggling
 things without penalizing users yet"; "i like all you ideas"; for the background key, "ok go with appearance"; and for the font scheme key, after asking whether it needs its "Family", "ok go with
 scriptGroup". That these renames go
-into 0.37.0, beside his answer of the same day that no breaking proposal rides along (R4), rests on the analysis session's reading of the
-first two sentences; the supervisor confirms it with him before this note is built. Everything marked *(analysis)* is a choice for the
-supervisor to confirm.
+into 0.37.0 he confirmed the same day, in the analysis session ("yes put the released key renames in 0.37.0") and to the supervisor.
+Everything marked *(analysis)* is a choice for the supervisor to confirm.
 
 OPF adds no aliases before 1.0, so each rename is complete: the old key stops validating in 0.37.0, validation says what it became, and
 `opf fix` rewrites it. No rename changes what a deck draws.
@@ -56,30 +55,27 @@ one table of renamed keys in core, read by validation and by `fix`.
 
 ## PowerPoint files
 
-A rule the other 0.37 items already follow: a released 0.36.0 importer validates the records it restores as 0.36 OPF and drops a whole
-record that carries a key it does not know. Four of these keys sit inside such records: `organizationId` (the document record's
-`speaker`), `tone` on a background and a font scheme's `languageFamily` with its short values (the document record's `design`), `verticalAlign` (the table
-record), `minFontSize` and `maxFontSize` (a slide record's `composition`), `line` (the chart record, if it stores it) and `url` (the
-document record's `references`).
+Owner, 2026-11-25, to the release supervisor: "We don't need to worry about backwards compatibility since we don't have existing users just yet all our stuff updated". The
+supervisor's application of it replaces the earlier recommendation of this note (records keep the 0.36 spelling, with five conditions):
 
-**Recommendation** *(analysis, for the supervisor to confirm)*: the PowerPoint records keep the 0.36 spelling. The exporter writes each
-record in its stored form (new name mapped to old, long `languageFamily` value to short) and the importer maps back. This is a storage
-detail of the tags, like the other legacy forms `legacy-tags.js` reads, not an alias in the format. It buys three things:
-
-1. A 0.36.0 importer still restores the document, table and slide records of a 0.37 file.
-2. Files written by 0.36 and earlier import unchanged; the importer needs the old-to-new mapping for them in any case.
-3. Exported bytes do not change, so no golden and no locked archive moves. The builder proves this by exporting the native-acceptance
-   fixtures and the example decks before and after and comparing bytes. **If any locked archive would change, stop and report: a lock
-   refresh needs the owner's word.**
-
-Confirmed by the supervisor on 2026-11-25, with two more conditions:
-
-4. The mapping lives in one table in the PowerPoint package, next to the legacy tag forms, with a test that every renamed key and value
-   of the release is in it, so a later rename cannot forget it.
-5. The docs of the records say that the stored spelling is the 0.36 one, and why.
-
-The alternative, writing the new names into the records, makes a 0.36.0 importer drop those records (the deck stays valid and falls back
-to what PowerPoint shows) and moves every archive that holds one of the keys. Not recommended.
+- **Records store the new spelling.** The exporter writes every record as the deck has it: `organization` in the document record's
+  `speaker`, `appearance` on a background and `scriptGroup` with its long values in the document record's `design`, `anchor` in the table
+  record, `minFontSizePx` and `maxFontSizePx` in a slide record's `composition`, `lineSeries` in the chart record (if it stores it) and
+  `link` in the document record's `references`. There is no table in the PowerPoint package that maps new names back to 0.36 ones, and
+  the record docs describe one spelling, the current one.
+- **Nothing is proved with the released 0.36.0 importer.** A 0.36.0 importer drops a record that carries a key it does not know; that is
+  accepted.
+- **Older files still restore, through core's one rename table.** PowerPoint-saved evidence files and decks exported before 0.37 hold
+  records in the old spelling. The importer passes each restored record through the rename table of core (the same `rename-key` and
+  `rename-value` data `opf fix` uses, see above) before it validates the record. One table, in core; a test asserts that the importer
+  applies every entry of it, so a later rename cannot forget the import path. This is reading old evidence, not an alias in the format: a
+  deck with an old key still fails validation.
+- **Exports are not byte identical, and that is expected.** Every file whose record parts hold one of the keys changes. The builder
+  exports the native-acceptance fixtures and the example decks before and after, and lists in the pull request (1) every file whose
+  record parts change, and (2) every locked archive and every golden that moves, each by name. The supervisor then asks the owner
+  **once**, with that list, for his word on the locked archives; none is refreshed before it. A picture golden should not move (no
+  rename changes what a deck draws); one that does is a defect to explain, not to refresh.
+- `opf fix` and the validation messages above are unchanged by this.
 
 N2 (more dash patterns on a chart reference line) is the one drawing addition: the preview and the export draw the new patterns
 (`c:spPr/a:ln/a:prstDash` with the preset's own name), and import reads them back. A deck that uses none exports as before.
@@ -102,7 +98,8 @@ Counts are files on `main` at d05326af that contain the old key; most hits are m
   pull request (a stale tracker only warns on a pull request and then turns `main` red), and the gallery changelog names the change.
   pptx.gallery takes the records at its next sync.
 - **Examples**: rewritten with `opf fix`, then regenerated where a generator owns them (`scripts/generate-example-suite.mjs` writes
-  `organizationId` today). Goldens should not move; the builder says so in the pull request or shows which did and why.
+  `organizationId` today). Picture goldens should not move; PowerPoint files that hold a renamed key in a record do, and the pull
+  request lists them (see "PowerPoint files").
 - **Editor**: the table cell inspector (B2), the font scheme editor (B1), and any panel for a speaker's organization, composition limits,
   a background's dark or light, a combo chart's line series and a chart line's dash follow the new names.
 - **MCP server**: its schema and docs are regenerated; the bundled-documentation and bundle ceilings are measured and reported, not
@@ -132,10 +129,19 @@ Type `changed`, marked breaking, packages core, render, pptx, editor, gallery, c
 - A font scheme's `languageFamily` is `scriptGroup`, and its values are `latin`, `eastAsian` or `complexScript`; `ea` and `cs` are no longer
   accepted.
 - A chart reference line's `dash` accepts every preset pattern a shape's outline does.
-- `opf fix` rewrites all of the above; no slide draws differently. PowerPoint files written by earlier releases import unchanged.
+- `opf fix` rewrites all of the above; no slide draws differently. PowerPoint files written by earlier releases still import: their
+  records are renamed as they are read. A 0.37 file's records use the new names, so an importer older than 0.37 does not restore them.
 
 ## Order and collisions
 
 Every 0.37 item touches the schema and the example counts, so this pull request takes a turn like the others: it merges `main` first and
 lands when no other item is in its golden run. It adds no example deck. It should land before the bump of the three sites, each of which
 runs `opf fix` over its own decks at the bump and lists the renamed API names it used.
+
+## Two lessons from the earlier 0.37 builds (supervisor, 2026-11-25)
+
+- **The editor's keyboard browser suites pin completion counts by key name.** A new or renamed key changes how many completions the
+  source editor offers at the pinned positions, so those suites fail until their counts are updated. Run them before the pull request
+  opens, not after the first red check.
+- **The breaking-change gate needs every removed schema path named.** A `type: changed` fragment must name each schema path the change
+  removes, in the gate's form (for example `opf.schema.json:$defs.DataSourceRef`); a renamed key is a removed path and an added one.

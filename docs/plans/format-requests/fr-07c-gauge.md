@@ -18,11 +18,12 @@ Who decided what:
 shows the number; a gauge shows where it sits in its range and which band it falls in. It binds to data like any metric, so the arc moves
 when the data does.
 
-## Proposed, waiting for the owner's pick: the key is `gauge`, not `scale`
+## Picked by the owner, 2026-11-25: the key is `gauge`, not `scale`
 
-From the key-names study (`key-names-study.md`, finding A3, decision `k-gauge`). If the owner picks it, every `scale` below reads `gauge`
-(`Metric.gauge`, the definition `MetricGauge`, the rules `metric-gauge-range` and `metric-gauge-value`, the diagnostic
-`metric-gauge-dropped`, the tag key); nothing else changes. The supervisor's brief says which name to build.
+From the key-names study (`key-names-study.md`, finding A3, decision `k-gauge`, answered `gauge`). Every `scale` below reads `gauge`:
+`Metric.gauge`, the definition `MetricGauge`, the rules `metric-gauge-range` and `metric-gauge-value`, the diagnostics
+`metric-gauge-dropped` and `metric-gauge-not-restored`, and the key in the metric's record. Nothing else changes. The text below keeps
+the working name `scale` so that its examples stay as reviewed; the builder builds `gauge`.
 
 ## Schema
 
@@ -122,24 +123,27 @@ to data) and one invalid deck (no `max`).
 - The ends' labels and the metric's text are the text boxes of today's metric.
 - **The angles and the thickness above are a starting point, not a pin** (supervisor, 2026-11-25). The builder reads back each arc's start,
   end and thickness from PowerPoint over COM and compares the picture with OPF's preview before anything is pinned in a test.
-- **The group's frame** is the arc's bounding square, of which only the top half is drawn. The builder checks that the text boxes under the
-  arc are not covered by the group's empty lower half in a way that makes them hard to select in PowerPoint; if they are, the group's frame
-  is cropped to the top half and the arcs' frames extend outside it (PowerPoint allows that), whichever PowerPoint handles better
-  (supervisor, 2026-11-25).
-- The gauge's shapes are grouped (`p:grpSp`) with a tag `OPF_GAUGE_V1` on the group: `{ "v": 1, "group": "<metric group id>", "scale":
-  <the authored scale>, "evidence": [[shape name, "<preset>", "<adj1>", "<adj2>", "<fill>"], ...] }`.
+- **The arcs' frames** are the arc's bounding square, of which only the top half is drawn. The builder checks that the text boxes under
+  the arc are not covered by the empty lower half in a way that makes them hard to select in PowerPoint; if they are, the arcs go into a
+  nested group whose frame is cropped to the top half, with the arcs' frames extending outside it (PowerPoint allows that), whichever
+  PowerPoint handles better (supervisor, 2026-11-25).
+- The gauge's shapes (track, band segments, value arc, target) are **parts of the metric's group**, marked as generated decoration as
+  the trend arrow is (role `mark`), each with its own part name. A 0.37 importer therefore accepts **any number** of generated decoration
+  marks on a metric (0.36 accepted one, the arrow); it tells them apart by part name, not by count. No separate gauge group and no
+  `OPF_GAUGE_V1` tag. *(analysis: the simplest correct design once only a 0.37 importer reads the file; if PowerPoint's selection of the
+  text boxes under the arc turns out better with the arcs in a nested group, the builder nests them and keeps the part marks.)*
 
-**The metric record**: the metric's `OPF_METRIC_V1` manifest stays as FR-06 leaves it. `scale` does not go into its validated `value` (a
-0.36.0 importer would drop the metric) nor into its `link` key; it lives only in `OPF_GAUGE_V1`. The gauge's arcs are **not** tagged as
-parts of the metric group: a 0.36.0 importer accepts at most one generated decoration mark per metric (the trend arrow, role `mark`), so
-several arcs marked that way would make it drop the metric. *(analysis)*
+**The metric record**. Owner, 2026-11-25, to the release supervisor: "We don't need to worry about backwards compatibility since we don't have
+existing users just yet all our stuff updated". The supervisor's application of it: the gauge key rides in the metric's own
+`OPF_METRIC_V1` record as authored, inside the stored metric, beside `data` and `better` (FR-06). The record also lists the evidence of
+the gauge's parts: `[part name, "<preset>", "<adj1>", "<adj2>", "<fill>"]` for each arc and the target's two end points.
 
-**Import (0.37)**: the gauge is restored onto its metric while every recorded shape still has its recorded preset, angles and fill (the
-value arc's angles change with the value, so they are evidence of an untouched file). An edited arc imports the arcs as ordinary shapes
-beside the metric, with a `metric-scale-not-restored` diagnostic.
+**Import**: the gauge is restored onto its metric while every recorded part still has its recorded preset, angles and fill (the value
+arc's angles change with the value, so they are evidence of an untouched file). When an arc was edited, moved out of the group or
+deleted, the metric is restored **without** its gauge, the remaining arcs import as ordinary shapes beside it, and import reports
+`metric-scale-not-restored`. The evidence rule is unchanged from the earlier design; only where the gauge is stored moved.
 
-**Import (0.36.0, released)**: reads the metric from its manifest as a plain metric, and the gauge group, whose tag it does not know, as
-ordinary shapes beside it. The deck is valid; it draws the arcs as shapes. The builder proves it with the released importer.
+No test runs the released 0.36.0 importer on the file.
 
 **Native check**: a gauge without bands, a gauge with three colored bands and a target, a gauge bound to data (FR-06), a gauge in a metric
 tile row, and a right-to-left deck. PowerPoint draws the arcs on one center with the angles above; after its own save each `scale` comes
@@ -222,5 +226,13 @@ Warns (`metric-scale-value` at `/slides/0/metric/value`):
 | The value arc's color *(analysis)* | The color of the band it falls in, when that band has one; else `primary` | The band is the verdict. |
 | `target` from data *(analysis)* | A number only in 0.37.0 | Smallest step; a link can follow. |
 | Small regions *(analysis)* | A plain metric below 96 px, reported by composition | Dashboards stay readable. |
-| Storage *(analysis)* | `scale` only in a new `OPF_GAUGE_V1` group tag; arcs not marked as metric parts | A 0.36.0 importer must still read the metric. |
+| Storage (owner's direction of 2026-11-25, applied by the supervisor) | The gauge key in the metric's own record, as authored; the arcs are parts of the metric group; the importer accepts more than one generated mark | No backward compatibility is owed before there are users. |
 | RTL *(analysis)* | Follow what bar charts do with their value axis | One rule for dials and axes. |
+
+## Two lessons from the earlier 0.37 builds (supervisor, 2026-11-25)
+
+- **The editor's keyboard browser suites pin completion counts by key name.** A new or renamed key changes how many completions the
+  source editor offers at the pinned positions, so those suites fail until their counts are updated. Run them before the pull request
+  opens, not after the first red check.
+- **The breaking-change gate needs every removed schema path named.** A `type: changed` fragment must name each schema path the change
+  removes, in the gate's form (for example `opf.schema.json:$defs.DataSourceRef`); a renamed key is a removed path and an added one.
