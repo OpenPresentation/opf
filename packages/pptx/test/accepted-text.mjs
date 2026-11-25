@@ -50,7 +50,7 @@ for(const text of ['Full source\nSecond paragraph.', ['Exact spacing ',{text:'wi
         assert.equal(Number(paragraph['a:pPr']['a:lnSpc']['a:spcPct'].val),100000,'Accepted native title single spacing');
         if(index)assert.ok(Math.abs(Number(paragraph['a:pPr']['a:spcBef']['a:spcPts'].val)/100-(item.text.placement.lines[index].baseline-item.text.placement.lines[index-1].baseline-1.2*item.text.fontSize)*.75)<.006,'Accepted native title space before');
       }
-      assert.equal(nativeText(shape).replaceAll('\n',''),item.text.lines.join(''));
+      assert.equal(nativeText(shape).replaceAll('\n',''),item.text.lines.map(line=>line.replace(/ +$/u,'')).join(''),'opf#1493: the paragraphs are written without their hanging space');
       for(const paragraph of array(shape['p:txBody']['a:p']))assert.equal(paragraph['a:pPr'].algn,{start:'l',center:'ctr',end:'r'}[alignment]);
       for(const auto of ['a:normAutofit','a:spAutoFit'])assert.ok(!Object.hasOwn(shape['p:txBody']['a:bodyPr'],auto),'PowerPoint must not silently refit a title');
       for(const run of array(shape['p:txBody']['a:p']).flatMap(p=>array(p['a:r']))){

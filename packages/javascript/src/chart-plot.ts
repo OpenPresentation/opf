@@ -196,11 +196,13 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
     let labelRoom = 0;
     if (hidden && options.dataLabels) {
       const {content, separator} = options.dataLabels;
-      resolved.rows.forEach((row, index) => row.slice(1).forEach((cell, j) => {
-        const value = chartNumber(cell);
-        if (value === null) return;
-        labelRoom = Math.max(labelRoom, width(chartLabelText({category: categories[index]!, value: columnValueLabel(resolved, j + 1, value, geometry.language)}, content, separator)) + fontPx * 0.5);
-      }));
+      for (const [index, row] of resolved.rows.entries()) {
+        for (const [j, cell] of row.slice(1).entries()) {
+          const value = chartNumber(cell);
+          if (value === null) continue;
+          labelRoom = Math.max(labelRoom, width(chartLabelText({category: categories[index]!, value: columnValueLabel(resolved, j + 1, value, geometry.language)}, content, separator)) + fontPx * 0.5);
+        }
+      }
     }
     let x = inner.x + pad + gutter + pad / 2, plotWidth = Math.max(1, right - x - fontPx - labelRoom);
     // The composed scale is fixed, so one pass leaves both formatted end tick labels inside the chart.
