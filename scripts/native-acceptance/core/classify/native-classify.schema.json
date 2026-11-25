@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openpresentation.org/schema/native-classify/v1",
+  "title": "Native classification",
+  "description": "NT-04c: <run>/classify.json, every slide and file-level finding of a native run classified against the known differences and a baseline summary. scripts/native-acceptance/core/classify/README.md explains the rule.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "target", "application", "opf", "tier", "baseline", "settings", "counts", "files", "knownGone"],
+  "properties": {
+    "schemaVersion": { "const": 1, "description": "The version of this format. Always 1." },
+    "target": { "enum": ["keynote", "powerpoint", "impress", "powerpoint-mac"], "description": "The application the run opened the files in." },
+    "application": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": { "name": { "type": "string" }, "version": { "type": "string" }, "build": { "type": "string" } },
+      "description": "The application as run.json names it."
+    },
+    "opf": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version"],
+      "properties": { "version": { "type": "string" }, "commit": { "type": "string" } },
+      "description": "The OPF that exported the files."
+    },
+    "tier": { "enum": ["smoke", "release", "full", null], "description": "The run's tier, null for a run that was not a tier run." },
+    "baseline": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["opf", "date"],
+          "properties": { "opf": { "type": "string" }, "date": { "type": "string" } }
+        }
+      ],
+      "description": "The baseline summary the run was classified against (its OPF version and date), null when none."
+    },
+    "settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["threshold", "tolerance", "knownBefore", "look"],
+      "properties": {
+        "threshold": { "type": "number", "minimum": 0, "description": "T: a score at or below it is no visible difference." },
+        "tolerance": { "type": "number", "minimum": 0, "description": "How far a score may move from the baseline's and still count as unchanged." },
+        "knownBefore": { "type": ["string", "null"], "description": "When set, only the known records first seen before this OPF version were used." },
+        "look": { "type": "integer", "minimum": 0, "description": "How many deck#slide entries a change named to look at (each is new whatever its score)." }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["files", "slides", "findings", "new"],
+      "properties": {
+        "files": { "type": "integer", "minimum": 0 },
+        "slides": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["same", "known-present", "known-gone", "new", "not-compared"],
+          "properties": {
+            "same": { "type": "integer", "minimum": 0 },
+            "known-present": { "type": "integer", "minimum": 0 },
+            "known-gone": { "type": "integer", "minimum": 0 },
+            "new": { "type": "integer", "minimum": 0 },
+            "not-compared": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "findings": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["known-present", "new"],
+          "properties": { "known-present": { "type": "integer", "minimum": 0 }, "new": { "type": "integer", "minimum": 0 } }
+        },
+        "new": { "type": "integer", "minimum": 0, "description": "New slides plus new findings: the run's exit is 1 when this is above 0." }
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "deck", "variant", "open", "slides", "findings", "notes"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9._-]+~[a-z0-9._-]+$" },
+          "deck": { "type": "string" },
+          "variant": { "type": "string" },
+          "open": { "enum": ["done", "failed", "timeout", "alert", "not-run"] },
+          "slides": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["index", "class", "score", "known", "reasons"],
+              "properties": {
+                "index": { "type": "integer", "minimum": 1 },
+                "class": { "$ref": "#/$defs/slideClass" },
+                "score": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+                "known": { "$ref": "#/$defs/ids" },
+                "reasons": { "type": "array", "items": { "type": "string" } },
+                "direction": { "enum": ["up", "down"], "description": "For a slide whose score moved since the baseline: up (more differs) or down (less differs: usually a fix or an improvement, which someone confirms and then retires or narrows the record)." }
+              }
+            }
+          },
+          "notes": { "type": "array", "items": { "type": "string" }, "description": "What was not compared and why (for example the exported content changed since the baseline, so outcome counts were not compared)." },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "class", "known", "text", "reasons"],
+              "properties": {
+                "kind": { "enum": ["open", "warning", "import", "outcomes"], "description": "open not done; an import-warning line; a failed import of the application's copy; object outcomes that differ from the baseline's." },
+                "class": { "enum": ["known-present", "new"] },
+                "known": { "$ref": "#/$defs/ids" },
+                "text": { "type": "string" },
+                "reasons": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "knownGone": {
+      "type": "array",
+      "description": "Every record that names a slide whose score is at or below the threshold: the difference no longer shows there.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["record", "deck", "variant", "slide"],
+        "properties": {
+          "record": { "type": "string", "pattern": "^kn-[a-z0-9-]+$" },
+          "deck": { "type": "string" },
+          "variant": { "type": "string" },
+          "slide": { "type": "integer", "minimum": 1 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "slideClass": { "enum": ["same", "known-present", "known-gone", "new", "not-compared"] },
+    "ids": { "type": "array", "items": { "type": "string", "pattern": "^kn-[a-z0-9-]+$" }, "uniqueItems": true }
+  }
+}
