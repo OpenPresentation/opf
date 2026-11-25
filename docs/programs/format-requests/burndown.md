@@ -141,9 +141,8 @@ Progress log:
   root `datasources` and every data source key of a dataset and of inline chart data come back the same from the export and from
   PowerPoint's own save. A released 0.36.0 importer reads the file as a valid deck but restores no shared dataset; charts and tables
   import the values they show (accepted for the one breaking change). `query` is optional, as the owner asked: a CSV file or rows typed
-  into the deck need none.
-- 2026-11-25: key names (FR-04b, from the key-names study, the owner's picks): `generator.kind` is now `generator.type` and a data
-  source's `refresh` is now `refreshEvery`. Nothing was released with the old names, so there is no alias and no `opf fix` rewrite.
+  into the deck need none. Two key names changed in a follow-up (FR-04b, the owner's picks from the key-names study): `generator.kind` is now
+  `generator.type` and a data source's `refresh` is now `refreshEvery`. Nothing was released with the old names: no alias, no `opf fix` rewrite.
 
 ## FR-05: typed columns (CR 2)
 

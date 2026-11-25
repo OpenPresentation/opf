@@ -148,9 +148,9 @@ yamlCases.push(...yamlFixes);
 export const yamlAccess = [
   ['Y-DOC-001', 'R-CMP-17', 'the selected key shows its schema description', 'yaml', 'name: x\n|', [T('desc')], { docs: { shown: true, has: ['description'] } }],
   ['Y-DOC-002', 'R-CMP-17', 'layout ids show name, description and regions', 'yaml', 'slides:\n  - layout: |', [T('pill')], { docs: { has: ['Pillars', 'Regions: title, body'] } }],
-  ['Y-DOC-003', 'R-A11Y-01', 'each option has an accessible name with its position', 'yaml', 'slides: []\n|', [T('des'), ['waitLabels']], { popup: { ariaNames: [/^design, property, Design\. 1 of 3$/, /^description, property, string\. 2 of 3$/] } }],
+  ['Y-DOC-003', 'R-A11Y-01', 'each option has an accessible name with its position', 'yaml', 'slides: []\n|', [T('des'), ['waitLabels']], { popup: { ariaNames: [/^design, property, Design\. 1 of 4$/, /^description, property, string\. 2 of 4$/] } }],
   ['Y-DOC-004', 'R-CMP-17', 'Ctrl+Space with the list open hides and shows the documentation', 'yaml', 'name: x\n|', [T('des'), K('Control+Space'), ['expectDocs', false], K('Control+Space'), ['expectDocs', true]], {}],
-  ['Y-A11Y-001', 'R-A11Y-02', 'opening the list says how many suggestions', 'yaml', 'slides: []\ndes|', [K('Control+Space')], { live: '3 suggestions' }],
+  ['Y-A11Y-001', 'R-A11Y-02', 'opening the list says how many suggestions', 'yaml', 'slides: []\ndes|', [K('Control+Space')], { live: '4 suggestions' }],
   ['Y-A11Y-002', 'R-A11Y-02', 'accepting says what was inserted', 'yaml', 'name: x\n|', [T('descr'), K('Tab')], { live: 'Inserted description' }],
   ['Y-A11Y-003', 'R-A11Y-02', 'a snippet announces its first tab stop', 'yaml', 'slides:\n  - |', [T('slide'), K('Tab')], { live: 'Tab stop 1 of 2' }],
   ['Y-A11Y-004', 'R-A11Y-01', 'the list is announced to assistive technology while open', 'yaml', 'name: x\n|', [T('des')], { attrs: { '.opf-source-code .cm-content': { 'aria-autocomplete': 'list', 'aria-haspopup': 'listbox' } } }],
@@ -210,7 +210,7 @@ export const yamlSnippets = [
   ['Y-SNP-005', 'R-CMP-16', 'design in a flow mapping of a slide is the plain key', 'yaml', 'slides:\n  - {title: a, |}', [T('design'), K('Tab')], { has: '{title: a, design: ' }],
   ['Y-SNP-006', 'R-CMP-16', 'design in a slide is the plain key', 'yaml', 'slides:\n  - title: a\n    |', [T('design'), K('Tab')], { text: 'slides:\n  - title: a\n    design:\n      |' }],
   ['Y-SNP-007', 'R-CMP-16', 'design: the snippet is one undo step', 'yaml', 'name: x\n|', [T('design'), K('Tab')], { undo: [1, 'name: x\ndesign|'] }],
-  ['Y-SNP-008', 'R-CMP-16', 'design: the key is listed once', 'yaml', 'slides: []\n|', [T('des')], { popup: { open: 1, has: ['design', 'description', 'datasets'], count: [3, 3] } }],
+  ['Y-SNP-008', 'R-CMP-16', 'design: the key is listed once', 'yaml', 'slides: []\n|', [T('des')], { popup: { open: 1, has: ['design', 'description', 'datasets', 'datasources'], count: [4, 4] } }],
   ['Y-INS-020', 'R-CMP-14', 'chain: accepting the key and its value is one undo step', 'yaml', 'design:\n  |', [T('titleA'), K('Tab'), K('Tab')], { undo: [1, 'design:\n  titleA|'] }],
   ['Y-INS-021', 'R-CMP-14', 'redo puts the key and its value back together', 'yaml', 'design:\n  |', [T('titleA'), K('Tab'), K('Tab')], { undo: [1, 'design:\n  titleA|'], redo: [1, 'design:\n  titleAlignment: start|'] }],
 ];
