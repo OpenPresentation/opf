@@ -33,7 +33,7 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :where(#opf-deck) button { font: inherit; color: inherit; }
 #opf-deck [hidden] { display: none !important; }
 
-/* ---- the bar: history, the deck's name, the view switch, Design, Find, full screen, Send -------------------------------------- */
+/* ---- the bar: history, the deck's name, the view switch, Design, Find and Export, full screen, Send ---------------------------- */
 .deck-bar { flex: none; display: flex; align-items: center; gap: 8px; height: 48px; min-width: 0; padding: 0 12px; border-bottom: 1px solid var(--opf-ui-border); }
 .deck-group { flex: none; display: inline-flex; align-items: center; gap: 2px; }
 /* The name takes the room the bar has left and never pushes a control off the row. Renaming opens the editor's Save and Cancel over the
@@ -74,10 +74,14 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 .deck-icon { width: var(--opf-ui-control-h); padding: 0; border-color: transparent; background: transparent; color: var(--opf-ui-muted-fg); }
 .deck-icon:hover:not(:disabled) { border-color: transparent; color: var(--opf-ui-fg); }
 .deck-icon:disabled { opacity: 0.45; }
-/* The editor's Export menu, worn as an icon button: Send stays the view's one filled button. Its name stays for a screen reader. */
-.deck-export .opf-export .opf-export-trigger { width: var(--opf-ui-control-h); padding: 0; justify-content: center; border-color: transparent; background: transparent; color: var(--opf-ui-muted-fg); }
-.deck-export .opf-export .opf-export-trigger:hover, .deck-export .opf-export .opf-export-trigger[aria-expanded="true"] { opacity: 1; background: var(--opf-ui-muted); color: var(--opf-ui-fg); }
-.deck-export .opf-export-trigger-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* Design, Find and Export: one bordered group of icon buttons that open the editor's one panel under the bar; the open one is pressed (the
+   muted ground). Send stays the view's one filled button. Design's and Export's names stay for a screen reader. */
+.deck-panels { flex: none; display: inline-flex; align-items: center; gap: 2px; padding: 2px; border: 1px solid var(--opf-ui-border); border-radius: var(--opf-ui-radius-md); }
+.deck-panels :is(#deck-find-open, .opf-design-menu .opf-design-menu-trigger, .opf-export .opf-export-trigger) { width: 32px; height: 28px; padding: 0; justify-content: center; border: 0; border-radius: var(--opf-ui-radius); background: transparent; color: var(--opf-ui-muted-fg); opacity: 1; }
+.deck-panels :is(#deck-find-open, .opf-design-menu .opf-design-menu-trigger, .opf-export .opf-export-trigger):hover:not(:disabled) { background: var(--opf-ui-muted-2); color: var(--opf-ui-fg); }
+.deck-panels :is(#deck-find-open, .opf-design-menu .opf-design-menu-trigger, .opf-export .opf-export-trigger)[aria-expanded="true"] { background: var(--opf-ui-muted); color: var(--opf-ui-fg); }
+.deck-panels svg { width: 16px; height: 16px; }
+.deck-panels :is(.opf-design-menu-trigger-label, .opf-export-trigger-label) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .deck-export .opf-export-trigger svg:last-child { display: none; }
 .deck-expand-close, #deck-expand[data-mode="fullscreen"] .deck-expand-open { display: none; }
 #deck-expand[data-mode="fullscreen"] .deck-expand-close { display: block; }
@@ -165,11 +169,6 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root:not([data-fill="true"]) #opf-deck[data-show="both"] .deck-panes { height: 460px; }
 :root:not([data-fill="true"]) #opf-deck[data-show="both"] .deck-stage { aspect-ratio: auto; max-height: none; }
 
-/* Find and replace is the editor's floating card: it sits over the panes, top left, instead of pushing the slide down. */
-.deck-find { position: absolute; top: 8px; left: 8px; width: min(560px, calc(100% - 16px)); z-index: 6; }
-/* Where the panes are shorter than the card (a narrow inline view), it scrolls inside them instead of being cut off at the bottom. */
-.deck-find:not(:empty) { max-height: calc(100% - 16px); overflow: auto; border-radius: var(--opf-ui-radius-md); }
-.deck-find:empty { display: none; }
 /* The Review panel slides over the right edge of the panes; the verdict in the footer opens it. */
 .deck-review { position: absolute; inset: 0 0 0 auto; width: min(380px, 100%); display: flex; flex-direction: column; background: var(--opf-ui-surface); border-left: 1px solid var(--opf-ui-border); box-shadow: var(--opf-ui-shadow-pop); z-index: 5; }
 .deck-review-head { flex: none; display: flex; align-items: center; justify-content: space-between; height: 40px; padding: 0 8px 0 12px; border-bottom: 1px solid var(--opf-ui-border); }
@@ -214,10 +213,6 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root[data-size~="compact"] .deck-send-label { display: none; }
 :root[data-size~="compact"] .deck-send-short { display: inline; }
 :root[data-size~="compact"] .deck-title { flex: 0 1 140px; min-width: 56px; }
-/* Design keeps its palette icon and its name for a screen reader. */
-:root[data-size~="compact"] #deck-design .opf-design-menu-trigger { width: var(--opf-ui-control-h); padding: 0; justify-content: center; border-color: transparent; background: transparent; color: var(--opf-ui-muted-fg); }
-:root[data-size~="compact"] #deck-design .opf-design-menu-trigger:hover, :root[data-size~="compact"] #deck-design .opf-design-menu-trigger[aria-expanded="true"] { background: var(--opf-ui-muted); color: var(--opf-ui-fg); }
-:root[data-size~="compact"] #deck-design .opf-design-menu-trigger-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 :root[data-size~="compact"] #opf-deck[data-show="both"] .deck-panes { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
 :root[data-size~="compact"] #opf-deck[data-show="both"] .deck-stage-col { order: -1; }
 :root[data-size~="compact"] #opf-deck[data-show="both"] .deck-source { border-right: 0; border-top: 1px solid var(--opf-ui-border); }
@@ -235,7 +230,8 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root[data-size~="narrow"] .deck-tabs { order: 1; align-self: auto; height: var(--opf-ui-control-h); }
 :root[data-size~="narrow"] .deck-spacer { order: 2; }
 :root[data-size~="narrow"] .deck-group { order: 3; }
-:root[data-size~="narrow"] #deck-design { order: 4; }
+:root[data-size~="narrow"] .deck-panels { order: 4; padding: 0; border: 0; }
+:root[data-size~="narrow"] .deck-panels :is(#deck-find-open, .opf-design-menu .opf-design-menu-trigger, .opf-export .opf-export-trigger) { width: var(--opf-ui-control-h); height: var(--opf-ui-control-h); }
 :root[data-size~="narrow"] #tab-both, :root[data-size~="narrow"] :is(#deck-find-open, #deck-expand) { display: none; }
 /* Export opens from More: its menu stays in the page (its sheet is drawn from here), its button does not take room. */
 :root[data-size~="narrow"] #deck-export { position: absolute; width: 0; height: 0; }
@@ -265,15 +261,16 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root[data-size~="narrow"] #deck-thumbs .opf-thumbs-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 /* Source is as tall as the slide and its strip, so switching views does not change the frame's height. */
 :root[data-size~="narrow"]:not([data-fill="true"]) #opf-deck[data-show="source"] .deck-panes { height: calc(56.25vw + 64px); min-height: 260px; }
-/* The Design sheet sits under the slide instead of over it: the view grows by the sheet (the strip and the footer give way), so every
-   choice shows on the slide at once. */
-:root[data-size~="narrow"] #opf-deck { --opf-design-menu-sheet-h: 288px; }
-:root[data-size~="narrow"] #opf-deck:has(.opf-design-menu[data-mode="sheet"] .opf-design-menu-trigger[aria-expanded="true"]) { padding-bottom: var(--opf-design-menu-sheet-h); }
-:root[data-size~="narrow"] #opf-deck:has(.opf-design-menu[data-mode="sheet"] .opf-design-menu-trigger[aria-expanded="true"]) :is(.deck-row, .deck-foot) { display: none; }
-:root[data-size~="narrow"] #opf-deck .opf-design-menu-scrim { background: transparent; }
+/* A panel's sheet sits under the slide instead of over it: the view grows by the sheet (the strip and the footer give way), so every
+   Design choice and every Find match shows on the slide at once. */
+:root[data-size~="narrow"] #opf-deck { --opf-design-menu-sheet-h: 288px; --opf-panel-sheet-h: 288px; }
+:root[data-size~="narrow"] #opf-deck .opf-panel[data-mode="sheet"] { height: var(--opf-panel-sheet-h); }
+:root[data-size~="narrow"] #opf-deck:has(.opf-panel[data-mode="sheet"]:not([hidden])) { padding-bottom: var(--opf-panel-sheet-h); }
+:root[data-size~="narrow"] #opf-deck:has(.opf-panel[data-mode="sheet"]:not([hidden])) :is(.deck-row, .deck-foot) { display: none; }
+:root[data-size~="narrow"] #opf-deck .opf-panel-scrim { background: transparent; }
 /* The narrowest frames (under 400px, a phone or the narrowest side panel): every control is at least 44 by 44 CSS pixels, with a mouse
    too down to 300px and with a finger at any width ("tiny", main.ts); the footer wraps instead of cutting a message short. */
-:root[data-size~="tiny"] :is(.deck-button, .deck-menu-item, .deck-select, .deck-tabs [role="tab"], #deck-design .opf-design-menu-trigger, .deck-export .opf-export .opf-export-trigger, .deck-nav .opf-nav .opf-nav-button, .deck-verdict .opf-review-pill) { min-width: 44px; min-height: 44px; }
+:root[data-size~="tiny"] :is(.deck-button, .deck-menu-item, .deck-select, .deck-tabs [role="tab"], .deck-panels :is(#deck-find-open, .opf-design-menu .opf-design-menu-trigger, .opf-export .opf-export-trigger), .deck-nav .opf-nav .opf-nav-button, .deck-verdict .opf-review-pill) { min-width: 44px; min-height: 44px; }
 :root[data-size~="tiny"] .deck-tabs { height: 44px; }
 :root[data-size~="tiny"] .deck-tabs [role="tab"] { padding: 0 10px; }
 :root[data-size~="narrow"] .deck-foot { height: auto; gap: 0 6px; padding: 0 6px 0 2px; white-space: normal; }
@@ -302,8 +299,8 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 :root[data-size~="micro"] .deck-send { padding: 0 6px; }
 :root[data-size~="micro"] .deck-tabs [role="tab"] { padding: 0 8px; }
 :root[data-size~="micro"] .deck-stage { margin: 4px 0; }
-:root[data-size~="micro"] #opf-deck { --opf-design-menu-sheet-h: 320px; }
-:root[data-size~="micro"] .opf-design-menu[data-mode="sheet"] .opf-design-menu-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+:root[data-size~="micro"] #opf-deck { --opf-design-menu-sheet-h: 320px; --opf-panel-sheet-h: 320px; }
+:root[data-size~="micro"] .opf-design-menu-tabs { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 /* The narrowest the view lays itself out for: below 200px it keeps 200px and the frame scrolls sideways, rather than overlap controls. */
 @media (max-width: 199.98px) {
 	html { overflow-x: auto; }
