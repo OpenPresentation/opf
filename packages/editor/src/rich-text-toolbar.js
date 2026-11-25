@@ -1,5 +1,6 @@
 import {richTextContent, formatRichTextRange, replaceRichTextRange} from './rich-text.js';
 import { isAuthoringColorRef } from './color-authoring.js';
+import { slideLinkOptions } from './slide-link-options.js';
 
 /** Native SVG selection stays on the exact rendered glyphs; no HTML reflow. */
 export function createRichTextToolbar(root, {editor, report, beforeChange, onProperties, onTyping, validateChange, onChange}) {
@@ -42,7 +43,7 @@ export function createRichTextToolbar(root, {editor, report, beforeChange, onPro
       node.style.background=values.every(Boolean)?'#eae4fa':'#faf9fc';
     }
     color.value=common('color')??'';size.value=common('fontSize')??'';
-    family.value=common('fontFamily')??'';link.value=common('link')??'';
+    family.value=common('fontFamily')??'';link.value=common('link')??'';fillSlidePicker();
     replacement.value=richTextContent(editor.get(selected.path)).slice(selected.start,selected.end);
     status.textContent=`${selected.end-selected.start} characters selected`;
   }
@@ -85,7 +86,17 @@ export function createRichTextToolbar(root, {editor, report, beforeChange, onPro
   const size=field('Font size (pt)','number');size.min='0.1';size.step='0.5';size.style.width='80px';
   size.onchange=()=>{try{apply({fontSize:size.value?Number(size.value):null});}catch(error){report(error);}};
   const family=field('Font family');family.onchange=()=>{try{apply({fontFamily:family.value||null});}catch(error){report(error);}};
-  const link=field('Link URL');link.onchange=()=>{try{if(link.value&&!/^(https?:\/\/|mailto:|tel:)\S+$/.test(link.value))throw new Error('Use an HTTP, HTTPS, mailto or tel link without spaces.');apply({link:link.value||null});}catch(error){report(error);}};
+  const link=field('Link URL');link.onchange=()=>{try{if(link.value&&!/^(https?:\/\/|mailto:|tel:|slide:)\S+$/.test(link.value))throw new Error('Use an HTTP, HTTPS, mailto or tel link, or slide:<id>, without spaces.');apply({link:link.value||null});}catch(error){report(error);}};
+  // FR-03: a slide picker beside the URL field; choosing a slide links the selection to `slide:<id>` (a slide needs an id to be named).
+  const slidePick=doc.createElement('select');slidePick.setAttribute('aria-label','Link to a slide');slidePick.style.cssText='max-width:130px;padding:4px 6px;border:1px solid #ded8e8;border-radius:4px;background:white;color:inherit;font:inherit';
+  toolbar.append(slidePick);
+  const fillSlidePicker=()=>{
+    slidePick.replaceChildren();
+    const none=doc.createElement('option');none.value='';none.textContent='Link to slide…';slidePick.append(none);
+    for(const entry of slideLinkOptions(editor.presentation)){const option=doc.createElement('option');option.value=entry.value;option.textContent=entry.label;if(entry.disabled){option.disabled=true;option.title=entry.title;}slidePick.append(option);}
+    const current=common('link');slidePick.value=typeof current==='string'&&[...slidePick.options].some(option=>option.value===current)?current:'';
+  };
+  slidePick.onchange=()=>{try{if(slidePick.value){link.value=slidePick.value;apply({link:slidePick.value});}}catch(error){report(error);}};
   const language=field('Language tag');language.style.width='80px';
   language.onchange=()=>{try{if(language.value&&!/^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/.test(language.value))throw new Error('Use a BCP-47 language tag such as fr-FR or ja-JP.');apply({language:language.value||null});}catch(error){report(error);}};
   const replacement=field('Selected text');replacement.style.width='160px';

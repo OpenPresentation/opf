@@ -11,6 +11,7 @@ import { createShapePicker, shapeThumbnailNode } from "./shape-picker.js";
 import { loadShapeEngine, shapeEngine } from "./shape-engine.js";
 import { readShape, readShapeAdjust, setShapeAdjust, setShapePreset, setShapeProperties, shapeLabel } from "./shape-options.js";
 import { CONNECTOR_ROUTES, setOverlayAnchor, listChartPointTargets, detachOverlay, listConnectionEnds, moveOverlayLayer, readOverlay, removeOverlay, setConnector, setOverlayFrame, slideIsRtl } from "./shape-overlays.js";
+import { slideLinkOptions } from "./slide-link-options.js";
 
 // The groups open when the section does; the rest open on a click.
 const OPEN = new Set(["shape-preset-group", "shape-fill-group", "shape-line-group", "shape-text-group", "shape-placement-group", "shape-stack-group", "shape-connector-group"]);
@@ -379,7 +380,13 @@ export function createShapeControls(ctx) {
   const decorative = checkField("shape-decorative", "Decorative", { help: "Screen readers skip the shape", onChange: (checked) => commit({ decorative: checked }, checked ? "Marked decorative." : "No longer decorative.") });
   const hidden = checkField("shape-hidden", "Hidden", { help: "Kept in the file but not drawn; it keeps its room", onChange: (checked) => commit({ hidden: checked }, checked ? "Shape hidden." : "Shape shown.") });
   const link = textField("shape-link", "Link", { placeholder: "https://…", help: "An http(s) URL, mailto: or tel: opened when the shape is clicked in a slide show", onCommit: (value) => commit({ link: value }, value.trim() === "" ? "Link removed." : "Link set.") });
-  const accessGroup = group("Alt text and link", "shape-access-group", alt.wrap, decorative.wrap, hidden.wrap, link.wrap);
+  // FR-03: a slide picker beside the link: choosing a slide writes `slide:<id>`. A slide with no id cannot be named, so it is listed but cannot be picked.
+  const linkSlide = selectField("shape-link-slide", "Link to a slide", {
+    empty: "Choose a slide…",
+    help: "A jump to a slide of this deck when the shape is clicked in a slide show; a slide needs an id to be named",
+    onChange: (value) => { if (value !== "") commit({ link: value }, "Link set."); },
+  });
+  const accessGroup = group("Alt text and link", "shape-access-group", alt.wrap, decorative.wrap, hidden.wrap, link.wrap, linkSlide.wrap);
 
   // --- an overlay shape: where it is, what is over it (Part B) -----------------------------------------------------------------------------
   const place = (change, done) => run(() => setOverlayFrame(editor, path, change), done);
@@ -649,6 +656,8 @@ export function createShapeControls(ctx) {
     decorative.set(block.decorative === true);
     hidden.set(block.hidden === true);
     link.set(show(block.link));
+    linkSlide.setOptions(slideLinkOptions(editor.presentation));
+    linkSlide.set(typeof block.link === "string" && block.link.startsWith("slide:") ? block.link : "");
   }
 
   return {
