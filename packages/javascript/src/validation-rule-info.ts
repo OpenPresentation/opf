@@ -583,18 +583,6 @@ export const layoutMonotonyRule = rule(
 		approximations: 'Compares the layout reference of each slide (a catalog prefix is ignored). Cover, section and closing slides, slides with no body content and slides without a layout record (automatic composition) break a run and are not counted; hidden slides are skipped. One finding per run, at its first slide.',
 	},
 );
-export const straightQuotesRule = rule(
-	'straight-quotes',
-	'content',
-	'info',
-	'Text uses straight quotation marks (" or \') where the language has typographic ones.',
-	'Straight marks are a typewriter substitute. Typeset text uses the quotation marks of its language (“…” in English, «…» in French, „…“ in German), and a deck that mixes them with the marks the engine draws around quotes looks unfinished.',
-	{
-		standard: 'The quotation marks of the deck language, as the engines draw them around a quote (QUOTE_MARKS in core).',
-		approximations: 'Checks titles, subtitles, tags, body text, list items and descriptions, and quotes; not table cells, metrics, timelines, code or runs with `code: true`. A `"` after a digit is an inch mark and a `\'` between letters or after a digit is an apostrophe or a foot mark; single quotes count only as a pair around words. A language with no typographic marks of its own (one OPF draws ASCII quotes for) is not checked. When only double quotes are found, the finding carries a patch to the language\'s marks.',
-	},
-);
-
 // rules-variable-overflow.ts (FR-09): a variable's value is longer than its declaration allows.
 export const variableOverflowRule = rule(
 	'variable-overflow',
@@ -679,7 +667,6 @@ const implementedRules: ValidationRuleInfo[] = [
 	centeredBodyRule,
 	tightSpacingRule,
 	layoutMonotonyRule,
-	straightQuotesRule,
 	variableOverflowRule,
 	chartDualAxisRule,
 	chartPieManySlicesRule,

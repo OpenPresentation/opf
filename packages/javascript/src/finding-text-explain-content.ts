@@ -93,9 +93,4 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Traffic sources", chart: { type: "pie", alt: "Traffic sources", data: { columns: ["Source", "Visits"], rows: [["Search", 48], ["Direct", 22], ["Social", 12], ["Email", 8], ["Referral", 5], ["Ads", 3], ["Other", 2]] } } },
     { title: "Traffic sources", chart: { type: "bar", alt: "Traffic sources", data: { columns: ["Source", "Visits"], rows: [["Search", 48], ["Direct", 22], ["Social", 12], ["Email", 8], ["Referral", 5], ["Ads", 3], ["Other", 2]] } } },
   ),
-  "opf/straight-quotes": ex(
-    "Type the quotation marks of the deck's language (“…” and ‘…’ in English, «…» in French, „…“ in German) instead of the straight \" and '. Apostrophes inside words and inch and foot marks after numbers are fine.",
-    { title: "What customers said", text: "They called it \"the easiest setup we've done\"." },
-    { title: "What customers said", text: "They called it “the easiest setup we've done”." },
-  ),
 };
