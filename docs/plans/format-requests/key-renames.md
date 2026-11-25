@@ -1,11 +1,12 @@
 # Builder's note: the key renames of the key-names study (0.37.0)
 
-A brief for one pull request that renames seven released keys and widens one list of values. Source: `key-names-study.md` in this folder
+A brief for one pull request that renames eight released keys and widens one list of values. Source: `key-names-study.md` in this folder
 (findings B1 to B5 and N1 to N3). The renames of keys that 0.37 itself adds (`generator.type`, `refreshEvery`, `colorScale.colors`,
 `metric.gauge`, `Metric.format`) are not here: they go into their own items.
 
 Who decided: **Owner, 2026-11-25, said in the analysis session.** His words: "this is still pre-v1 so we can update any even niggling
-things without penalizing users yet"; "i like all you ideas"; and for the background key, "ok go with appearance". That these renames go
+things without penalizing users yet"; "i like all you ideas"; for the background key, "ok go with appearance"; and for the font scheme key, after asking whether it needs its "Family", "ok go with
+scriptGroup". That these renames go
 into 0.37.0, beside his answer of the same day that no breaking proposal rides along (R4), rests on the analysis session's reading of the
 first two sentences; the supervisor confirms it with him before this note is built. Everything marked *(analysis)* is a choice for the
 supervisor to confirm.
@@ -17,7 +18,7 @@ OPF adds no aliases before 1.0, so each rename is complete: the old key stops va
 
 | # | Where | 0.36 | 0.37 | Values |
 | --- | --- | --- | --- | --- |
-| B1 | `FontScheme.languageFamily` (document schema and `font-scheme.schema.json`) | `"ea"`, `"cs"` (and the long names) | `"eastAsian"`, `"complexScript"` only | A value rename; `"latin"` is unchanged |
+| B1 | `FontScheme` (document schema and `font-scheme.schema.json`) | `languageFamily`: `"latin"`, `"ea"`, `"cs"` (and the long names) | `scriptGroup`: `"latin"`, `"eastAsian"`, `"complexScript"` | A key rename and a value rename. `latin` covers every script outside the other two groups (Cyrillic and Greek too), as today; the description says so |
 | B2 | `TableCellStyle` | `verticalAlign` | `anchor` | Same `top`, `middle`, `bottom` |
 | B3 | `Speaker` | `organizationId` | `organization` | Same string id; still must name an organization in the deck |
 | B4 | `Composition` (document and layout schemas) | `minFontSize`, `maxFontSize` | `minFontSizePx`, `maxFontSizePx` | Same numbers (reference pixels), same ranges and defaults |
@@ -28,7 +29,7 @@ OPF adds no aliases before 1.0, so each rename is complete: the old key stops va
 
 ## Schema and types
 
-- `spec/schemas/opf.schema.json`: the seven changes above, each description updated; `font-scheme.schema.json` (B1) and
+- `spec/schemas/opf.schema.json`: the eight changes above, each description updated; `font-scheme.schema.json` (B1) and
   `layout.schema.json` (B4, wherever a layout's composition takes the two keys; the builder confirms from the schema).
 - Generated types and the precompiled validators are regenerated. The site freezes each release's schemas by itself.
 - Public API names that mirror a renamed key follow it (no alias): for example an option named `tone` that means the background's dark or
@@ -41,8 +42,8 @@ one table of renamed keys in core, read by validation and by `fix`.
 
 | Old | Finding (rule `opf/schema`, error) | Fix |
 | --- | --- | --- |
-| A renamed key (B2, B3, B4, B5, N1, N3) | `"{old}" was renamed "{new}" in OPF 0.37.` at the key's path, in place of the generic unknown-key text | id `rename-key`, **safe**, `changesDrawing` not set: a JSON Patch `move` from the old key to the new one |
-| `"languageFamily": "ea"` or `"cs"` (B1) | `"{old}" is written "{new}" since OPF 0.37.` at the value's path | id `rename-value`, **safe**: `replace` with the long name |
+| A renamed key (B1's `languageFamily`, B2, B3, B4, B5, N1, N3) | `"{old}" was renamed "{new}" in OPF 0.37.` at the key's path, in place of the generic unknown-key text | id `rename-key`, **safe**, `changesDrawing` not set: a JSON Patch `move` from the old key to the new one |
+| `"ea"` or `"cs"` as the value of `languageFamily` or `scriptGroup` (B1) | `"{old}" is written "{new}" since OPF 0.37.` at the value's path | id `rename-value`, **safe**: `replace` with the long name. A 0.36 font scheme gets both fixes: the key in one round of `opf fix`, the value in the same or the next |
 | A renamed key whose new key is already present in the same object | The same finding, saying both are present | No safe fix: the author removes one *(analysis)* |
 | B5 after the rename, when the value does not match the link pattern (`"acme.com/report"`) | The ordinary pattern finding on `link` | Not safe: a fix titled `Add https://` (kind `patch`, `safe: false`), offered only when the value looks like a host and path. `opf fix` leaves it and reports it *(analysis: prefixing guesses the author's intent)* |
 
@@ -57,7 +58,7 @@ one table of renamed keys in core, read by validation and by `fix`.
 
 A rule the other 0.37 items already follow: a released 0.36.0 importer validates the records it restores as 0.36 OPF and drops a whole
 record that carries a key it does not know. Four of these keys sit inside such records: `organizationId` (the document record's
-`speaker`), `tone` on a background and a font scheme's `languageFamily` (the document record's `design`), `verticalAlign` (the table
+`speaker`), `tone` on a background and a font scheme's `languageFamily` with its short values (the document record's `design`), `verticalAlign` (the table
 record), `minFontSize` and `maxFontSize` (a slide record's `composition`), `line` (the chart record, if it stores it) and `url` (the
 document record's `references`).
 
@@ -83,7 +84,7 @@ Counts are files on `main` at d05326af that contain the old key; most hits are m
 
 | Key | Schema | Core | Render | PPTX | Editor | Examples | Gallery | Docs, skills, scripts |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `languageFamily` values | 2 schemas | 2 src, 6 tests | 12 tests | 2 tests | 2 src, 2 tests | 117 decks (embedded font schemes; only `ea` and `cs` values change) | 93 font scheme records hold the key; **64 change** (48 `cs`, 16 `ea`) | 7 native-acceptance files, 5 doc fixtures, 2 skills, programs docs |
+| `languageFamily` (key and values) | 2 schemas | 2 src, 6 tests | 12 tests | 2 tests | 2 src, 2 tests | 117 decks (embedded font schemes: every one gets the new key, those with `ea` or `cs` the new value too) | **All 93** font scheme records get the new key; 64 of them also a new value (48 `cs`, 16 `ea`) | 7 native-acceptance files, 5 doc fixtures, 2 skills, programs docs |
 | `verticalAlign` | 1 | 2 src, 2 tests | 2 src, 1 test | 2 src, 5 tests | 3 src, 1 test | none | none | 1 native-acceptance file, schema reference, 1 script |
 | `organizationId` | 1 | 3 src, 4 tests | none | 1 src, 1 test | none found | 82 decks (97 uses) | none | 2 native-acceptance files, the example generator, 2 skills, 3 docs |
 | `minFontSize`, `maxFontSize` | 2 | 20 src, 55 tests | 2 src, 15 tests | 7 src, 15 tests | 7 tests | 1 deck (28 uses of `maxFontSize`) | none in records | 2 skills, handoff and program docs, 3 scripts |
@@ -91,7 +92,7 @@ Counts are files on `main` at d05326af that contain the old key; most hits are m
 | background `tone` | 1 | color role resolution, finding texts | background drawing | background export and import | background panel | 1 deck (17 uses) | themes: builder checks | docs |
 | `Chart.line` | 1 | combo chart resolution | combo drawing | combo export and import | chart panel | about 5 uses | none | docs, skills |
 
-- **Gallery**: the 64 font scheme records are rewritten by their generator, the gallery tracker and manifest are regenerated in the same
+- **Gallery**: the 93 font scheme records are rewritten by their generator, the gallery tracker and manifest are regenerated in the same
   pull request (a stale tracker only warns on a pull request and then turns `main` red), and the gallery changelog names the change.
   pptx.gallery takes the records at its next sync.
 - **Examples**: rewritten with `opf fix`, then regenerated where a generator owns them (`scripts/generate-example-suite.mjs` writes
@@ -100,8 +101,8 @@ Counts are files on `main` at d05326af that contain the old key; most hits are m
   a background's dark or light, a combo chart's line series and a chart line's dash follow the new names.
 - **MCP server**: its schema and docs are regenerated; the bundled-documentation and bundle ceilings are measured and reported, not
   edited by the builder.
-- **Conformance**: for each rename one valid deck with the new key and one invalid deck with the old one (seven pairs), and for B1 an
-  invalid deck with `"cs"`.
+- **Conformance**: for each rename one valid deck with the new key and one invalid deck with the old one (eight pairs), and for B1 an
+  invalid deck with `"scriptGroup": "cs"`.
 - **Markdown and YAML**: the round-trip tests use the new names.
 
 ## Docs
@@ -122,7 +123,8 @@ Type `changed`, marked breaking, packages core, render, pptx, editor, gallery, c
 - A reference's `url` is `link`, and it must be an http, https, mail or phone link.
 - A picture or gradient background's `tone` is `appearance`.
 - A combo chart's `line` is `lineSeries`.
-- A font scheme's `languageFamily` is `latin`, `eastAsian` or `complexScript`; `ea` and `cs` are no longer accepted.
+- A font scheme's `languageFamily` is `scriptGroup`, and its values are `latin`, `eastAsian` or `complexScript`; `ea` and `cs` are no longer
+  accepted.
 - A chart reference line's `dash` accepts every preset pattern a shape's outline does.
 - `opf fix` rewrites all of the above; no slide draws differently. PowerPoint files written by earlier releases import unchanged.
 
