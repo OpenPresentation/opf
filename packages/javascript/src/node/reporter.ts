@@ -147,6 +147,7 @@ const HELP: Record<string, string> = {
 	"list-line-break-changed": EDITED,
 	"list-line-role-changed": EDITED,
 	"list-scalar-reference-changed": EDITED,
+	"entry-ids-not-restored": EDITED,
 	"slide-reference-changed": EDITED,
 	"content-structure-changed": EDITED,
 	"metadata-reference-changed": EDITED,

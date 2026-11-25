@@ -1,4 +1,5 @@
 import { visitContentPayloads } from './content-walk.js';
+import { tableRows } from './table.js';
 import { type Rec, rec } from './rule-design.js';
 import { LOGO_SHAPES } from './logos.js';
 
@@ -89,15 +90,13 @@ export function textValues(slide: Rec, slidePath: string): TextValue[] {
 					push(at('table', 'columns', c, ...(Object.hasOwn(styled, 'value') ? ['value'] : [])), value, 'table-header', 'table');
 				}
 			});
-		if (Array.isArray(table.rows))
-			table.rows.forEach((row: unknown, r: number) => {
-				if (!Array.isArray(row)) return;
-				row.forEach((cell: unknown, c: number) => {
-					const styled = rec(cell);
-					const value = Object.hasOwn(styled, 'value') ? styled.value : cell;
-					push(at('table', 'rows', r, c, ...(Object.hasOwn(styled, 'value') ? ['value'] : [])), value, 'table', 'table');
-				});
+		tableRows(table).forEach((row, r) => {
+			row.cells.forEach((cell: unknown, c: number) => {
+				const styled = rec(cell);
+				const value = Object.hasOwn(styled, 'value') ? styled.value : cell;
+				push(at('table', 'rows', r, ...(row.object ? ['cells'] : []), c, ...(Object.hasOwn(styled, 'value') ? ['value'] : [])), value, 'table', 'table');
 			});
+		});
 		// An image callout's text is plain; the rules that read text (placeholders, language) see it too.
 		const callouts = rec(node.image).callouts;
 		if (Array.isArray(callouts)) callouts.forEach((callout: unknown, index: number) => {

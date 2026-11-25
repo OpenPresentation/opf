@@ -28,7 +28,7 @@ The Reader cases cover what a tool can decide from the document alone, with no c
 - **Schema validity:** the document is an object, field types and enumerations hold, and an unknown field is an error
   at every level (the root, a slide, a payload).
 - **Required fields:** `slides` exists and holds at least one slide; each slide is an object.
-- **Ids and references:** slide and payload ids are strings, unique together in the document; reference ids are unique;
+- **Ids and references:** slide, payload, list item, bullet, timeline event and table row ids are non-empty strings, unique together in the document (one namespace); reference ids are unique;
   a citation, a dataset, an `asset:` reference and a `name:id` catalog prefix each resolve inside the document; groups
   nest at most 32 levels and do not mix child blocks with leaf content.
 - **Extensions:** `extensions` is an object wherever it appears; tool data written next to OPF fields instead of under

@@ -64,3 +64,31 @@ export function visitContentPayloads(
     });
   }
 }
+
+/** The entries of a payload that can carry an `id` of their own (FR-02): list items, bullets, timeline events and inline table rows. */
+export type ItemKind = "item" | "bullet" | "event" | "row";
+
+/** One such entry: its kind, its JSON Pointer (index form) and the value as written (a string, runs, an array row or an object). */
+export type ItemVisitor = (kind: ItemKind, value: unknown, pointer: string) => void;
+
+/**
+ * Visit the id-bearing entries of ONE payload (a slide, which is its own root payload, or a block): `items`, `bullets`, the events of
+ * `timeline` (array or object form) and the rows of an inline `table`. Nested blocks are not entered (walk them with
+ * `visitContentPayloads`); dataset and chart data rows are data and never visited. A dataset-backed table has no rows.
+ */
+export function visitPayloadItems(payload: Record<string, unknown>, path: string, visit: ItemVisitor): void {
+  const each = (kind: ItemKind, list: unknown, listPath: string): void => {
+    if (Array.isArray(list)) list.forEach((entry, index) => { visit(kind, entry, `${listPath}/${index}`); });
+  };
+  each("item", payload.items, pathFor(path, "items"));
+  each("bullet", payload.bullets, pathFor(path, "bullets"));
+  const timeline = payload.timeline;
+  if (Array.isArray(timeline)) each("event", timeline, pathFor(path, "timeline"));
+  else if (isRecord(timeline)) each("event", timeline.events, pathFor(pathFor(path, "timeline"), "events"));
+  if (isRecord(payload.table)) each("row", payload.table.rows, pathFor(pathFor(path, "table"), "rows"));
+}
+
+/** The `id` of an entry as written: the object form's non-empty string `id` (an array row has none). */
+export function entryId(value: unknown): string | undefined {
+  return isRecord(value) && typeof value.id === "string" && value.id !== "" ? value.id : undefined;
+}

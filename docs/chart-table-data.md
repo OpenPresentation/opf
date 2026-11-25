@@ -75,6 +75,7 @@ Top-level `datasets` maps ids (the `assets` id pattern) to a `Dataset`:
 
 Rows hold `ChartDataCell` scalars (string, number, boolean, null). A `DatasetRef` is `{ "dataset": "<id>", "fields"?: string[] }`; `fields` selects and orders columns by name, each at most once (a repeated name is a schema error).
 - **Chart:** `chart.data` may be a `DatasetRef`. It is the second `oneOf` branch beside `ChartData`.
+- **Table rows:** an inline row is an array of cells, or (OPF 0.37) an object `{ "id", "cells" }` that gives the row an id, so a comment, a patch or a merge can name it (`/rows/@r-emea/cells/1`). Both forms may mix in one table and mean the same thing; `tableRows` in `@openpresentation/opf` returns every row in one form. Rows of a dataset or of chart data carry no ids.
 - **Table:** a table is either inline (`rows` required, optional `columns`) or dataset-backed (`dataset` required, optional `fields`, and no `rows` or `columns`). Dataset tables take their headers and column formats from the dataset; per-cell styles need an inline table.
 
 Validation:
