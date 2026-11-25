@@ -4719,12 +4719,12 @@
           "items": {
             "oneOf": [
               { "type": "string" },
-              { "$ref": "#/$defs/DataColumn" }
+              { "$ref": "#/$defs/DatasetColumn" }
             ]
           },
           "minItems": 1,
-          "description": "Ordered column labels for the chart data table. A label is a string or a DataColumn ({ \"name\", \"format\" }) whose number format the data labels, value axis and exported workbook use.",
-          "examples": [["Quarter", "Revenue"], ["Quarter", "Revenue", "Costs"], ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }]]
+          "description": "Ordered column labels for the chart data table. A label is a string or a DatasetColumn ({ \"name\", \"format\", \"type\", \"role\", \"unit\" }) whose number format the data labels, value axis and exported workbook use, and which may declare what its cells hold and what the column is for.",
+          "examples": [["Quarter", "Revenue"], ["Quarter", "Revenue", "Costs"], ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }], [{ "name": "Month", "type": "date", "role": "dimension" }, { "name": "Revenue", "type": "number", "role": "measure", "unit": "USD" }]]
         },
         "rows": {
           "type": "array",
@@ -4761,6 +4761,40 @@
         }
       },
       "examples": [{ "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }]
+    },
+    "DatasetColumn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "description": "A named data column: a dataset column or an inline chart data column. Adds to DataColumn what its cells hold (type), what it is for (role) and a unit label. The string form is { \"name\": value } with nothing declared. A table column header keeps DataColumn.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Column label, used as the series name, the table header and the name 'fields', 'chart.mapping' and data links address.",
+          "examples": ["Revenue", "Month"]
+        },
+        "format": {
+          "$ref": "#/$defs/NumberFormat",
+          "description": "Number format of the column's number values (data labels, value axis, table cells, exported workbook). Absent: the General form."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["text", "number", "date", "boolean"],
+          "description": "What the column's cells hold. text: strings. number: finite numbers (a string such as \"12\" is not one). date: time labels (a year, a period, a month, a week or a date, as the time-order rule reads them, and an ISO 8601 date-time). boolean: true or false. null is a gap in any type. A cell of another kind is a 'data-cell-type' warning. A date category column is drawn as time (the title fallback of the time-order rule is skipped); a text or boolean one never is. Absent: undeclared, read from the cells as before."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["dimension", "measure"],
+          "description": "What the column is for. dimension: it labels or groups rows (a region, a product, a month). measure: its values are measured and can be aggregated (revenue, count, rate). Time is type 'date' with role 'dimension'. Absent: undeclared. Engines do not draw differently for a role; tools that pick a chart or aggregate a column read it."
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The unit of the column's values, as a label for tools: 'USD', 'ms', 'people'. Engines never print it; 'format' alone decides how a number is drawn.",
+          "examples": ["USD", "ms", "people"]
+        }
+      },
+      "examples": [{ "name": "Month", "type": "date", "role": "dimension" }, { "name": "Revenue", "format": "$#,##0", "type": "number", "role": "measure", "unit": "USD" }]
     },
     "DataSourceId": {
       "type": "string",
@@ -4900,7 +4934,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["columns", "rows"],
-      "description": "One shared data table: named columns (strings or DataColumn objects with a number format) and rows of scalar cells. Column names are unique ('data-column-duplicate' error). Rich text and styling belong in an inline table.",
+      "description": "One shared data table: named columns (strings or DatasetColumn objects with a number format, a type, a role and a unit) and rows of scalar cells. Column names are unique ('data-column-duplicate' error). Rich text and styling belong in an inline table.",
       "properties": {
         "title": {
           "type": "string",
@@ -4917,12 +4951,12 @@
           "items": {
             "oneOf": [
               { "type": "string" },
-              { "$ref": "#/$defs/DataColumn" }
+              { "$ref": "#/$defs/DatasetColumn" }
             ]
           },
           "minItems": 1,
-          "description": "Ordered, uniquely named columns.",
-          "examples": [["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, "Costs"]]
+          "description": "Ordered, uniquely named columns. A column may declare what its cells hold (type), what it is for (role) and a unit label; a string column declares nothing.",
+          "examples": [["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, "Costs"], [{ "name": "Month", "type": "date", "role": "dimension" }, { "name": "Revenue", "format": "$#,##0", "type": "number", "role": "measure", "unit": "USD" }]]
         },
         "rows": {
           "type": "array",

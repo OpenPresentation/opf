@@ -3,7 +3,7 @@
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { ingest, CHART_TYPES, type ImportedChartType } from "@openpresentation/opf";
+import { ingest, declareColumns, CHART_TYPES, type ImportedChartType } from "@openpresentation/opf";
 import { applyPatch, parsePointer } from "@openpresentation/opf/patch";
 import { type CommandSpec, oneOf, parseArgs, printHelp } from "./args.js";
 import { deckFormatFlag } from "./deck.js";
@@ -110,7 +110,8 @@ export async function run(args: string[], _host: Host): Promise<void> {
   const datasetId = options.dataset === undefined ? undefined : String(options.dataset);
   if (datasetId !== undefined && (options.dataset === true || !/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(datasetId))) throw usage('--dataset needs an id of letters, digits, ".", "_" or "-".', "invalid-value", { option: "--dataset" });
   const data = "table" in imported ? imported.table : imported.chart.data;
-  const content = datasetId === undefined ? imported : "table" in imported ? { table: { dataset: datasetId } } : { chart: { type: imported.chart.type, data: { dataset: datasetId } } };
+  // FR-05: chart data written inline declares the type and role its cells say; a table's headings are DataColumns and declare nothing, and a dataset's columns are declared where it is written (withDataset).
+  const content = datasetId === undefined ? ("table" in imported ? imported : { chart: { type: imported.chart.type, data: declareColumns(imported.chart.data) } }) : "table" in imported ? { table: { dataset: datasetId } } : { chart: { type: imported.chart.type, data: { dataset: datasetId } } };
   // The deck file the data goes into, else the one written. Written to stdout there is none, and a path reads from the working directory.
   const deckFile = options.into !== undefined && options.into !== "-" ? String(options.into) : destination.file !== "-" ? destination.file : undefined;
   // FR-04: the data file as the deck sees it, and the SHA-256 of its bytes (stdin has neither).
@@ -121,9 +122,10 @@ export async function run(args: string[], _host: Host): Promise<void> {
     const record = isRecord(deck) ? deck : {};
     const datasets = isRecord(record.datasets) ? record.datasets : {};
     const previous = isRecord(datasets[datasetId]) ? datasets[datasetId] as Record<string, unknown> : {};
-    // A column that keeps its name keeps its number format.
-    const formats = new Map((Array.isArray(previous.columns) ? previous.columns : []).flatMap((column: unknown) => isRecord(column) && typeof column.name === "string" && typeof column.format === "string" ? [[column.name, column.format] as const] : []));
-    const newColumns = data.columns.map(name => { const format = formats.get(name); return format === undefined ? name : { name, format }; });
+    // A column that keeps its name keeps its declaration (its number format, type, role and unit). FR-05: a new column declares the type and role its
+    // cells say and holds them as that type, so a typed number column never warns; a column whose type cannot be told stays a plain string.
+    const declared = declareColumns(data, Array.isArray(previous.columns) ? previous.columns : [], { language: typeof record.language === "string" ? record.language : undefined });
+    const newColumns = declared.columns;
     // FR-04: where the rows came from is written in the dataset's own keys. `retrieved` only ever comes from --date, never from the
     // clock, and `sha256` is the hash of the data file's bytes. A re-import never keeps the old `retrieved`, `sha256`, `version` or
     // `generator`, which described the old data. The data source describes the new origin only: a data source named by id (an entry of
@@ -135,7 +137,7 @@ export async function run(args: string[], _host: Host): Promise<void> {
     const same = fileOrigin !== undefined && inline.src === fileOrigin.src;
     const datasource = named ? before : fileOrigin === undefined ? undefined : same ? { ...inline, ...fileOrigin } : fileOrigin;
     const entry = {
-      ...kept, columns: newColumns, rows: data.rows,
+      ...kept, columns: newColumns, rows: declared.rows,
       ...(datasource === undefined ? {} : { datasource }),
       ...(query !== undefined && (named || same) ? { query } : {}),
       ...(date === undefined ? {} : { retrieved: date }),

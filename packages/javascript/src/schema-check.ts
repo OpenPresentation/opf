@@ -736,7 +736,7 @@ function dataIssues(value: unknown, asOf?: string): { errors: ValidationIssue[];
       const key = `${diagnostic.code}|${diagnostic.path}`;
       if (seen.has(key)) continue;
       seen.add(key);
-      (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code }));
+      (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code, ...(diagnostic.aggregate ? { aggregate: true } : {}) }));
     }
   };
   add(datasetDiagnostics(value));

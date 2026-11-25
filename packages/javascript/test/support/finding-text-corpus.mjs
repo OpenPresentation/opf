@@ -136,6 +136,7 @@ export const CASES = [
 	{ name: 'font-outside-scheme', rule: 'opf/font-outside-scheme', input: deck([{ title: 'T', text: [{ text: 'x', fontFamily: 'Comic Sans MS' }] }], { design: { fontScheme: 'aptos' } }) },
 	{ name: 'image-resolution', rule: 'opf/image-resolution', input: deck([{ title: 'T', image: { src: png(100, 100), alt: 'x' } }]) },
 	{ name: 'chart-value-not-numeric', rule: 'opf/chart-value-not-numeric', input: deck([{ title: 'T', chart: { type: 'column', data: { columns: ['Q', 'V'], rows: [['Q1', 'about 12']] } } }]) },
+	{ name: 'data-cell-type', rule: 'opf/data-cell-type', input: deck([{ title: 'T', chart: { type: 'column', data: { columns: ['Q', { name: 'V', type: 'number' }], rows: [['Q1', 'about 12']] } } }]) },
 	{ name: 'chart-mapping-adapted', rule: 'opf/chart-mapping-adapted', input: deck([{ title: 'T', chart: { type: 'column', data: { columns: ['Quarter', 'Revenue', 'Costs'], rows: [['Q1', 1, 2]] }, mapping: { category: 'Quarter', x: 'Costs', series: ['Quarter', 'Revenue'] } } }]) },
 	{ name: 'chart-series-dropped', rule: 'opf/chart-series-dropped', input: deck([{ title: 'T', chart: { type: 'treemap', data: { columns: ['Quarter', 'Revenue', 'Costs'], rows: [['Q1', 1, 2]] } } }]) },
 	{ name: 'table-highlight-unknown-name', rule: 'opf/table-highlight-unknown-name', input: deck([{ title: 'T', table: { columns: ['Region', 'Change'], rows: [['Northeast', 'Hold'], ['Southeast', '+3%']], highlight: { rows: ['South'] } } }]) },
