@@ -70,16 +70,37 @@ describe('the computed fills (FR-07)', () => {
   test('a diverging scale draws the center in mid with each side on its own span', () => {
     const table = { columns: ['Product', 'YoY'], rows: [['A', 0.12], ['B', -0.08], ['C', 0], ['D', 0.03]], colorScale: { columns: ['YoY'], from: 'accent2', mid: 'surface', to: 'accent1', center: 0 } };
     const fills = shades(table);
-    assert.equal(fills['1:1'], '#C0392B', 'the lowest value is from');
     assert.equal(fills['0:1'], '#1B9E4B', 'the highest value is to');
     assert.equal(fills['2:1'], '#FFFFFF', 'the center is mid');
-    // 0.03 is a quarter of the way from the center to the highest value; -0.08 is as far below as the span is long.
+    // Symmetric around the center: the largest distance (0.12) is the end, so -0.08 is two thirds of the way to from, not at from.
+    assert.equal(fills['1:1'], mixOklab('#FFFFFF', '#C0392B', 2 / 3));
     assert.equal(fills['3:1'], mixOklab('#FFFFFF', '#1B9E4B', 0.25));
     // Without center the values spanning both signs center on 0, positive-only values on the middle of the range.
     const spanning = shades({ ...table, colorScale: { columns: ['YoY'], from: 'accent2', mid: 'surface', to: 'accent1' } });
     assert.deepEqual(spanning, fills);
     const positive = shades({ columns: ['K', 'V'], rows: [['a', 10], ['b', 20], ['c', 30]], colorScale: { columns: ['V'], from: 'accent2', mid: 'surface', to: 'accent1' } });
     assert.equal(positive['1:1'], '#FFFFFF');
+  });
+
+  test('a diverging scale with no pinned end is symmetric: a lone small negative is pale, equal distances get equal strength', () => {
+    const table = (rows, extra = {}) => ({ columns: ['K', 'V'], rows, colorScale: { columns: ['V'], from: 'accent2', mid: 'surface', to: 'accent1', center: 0, ...extra } });
+    const lone = shades(table([['a', 10], ['b', -1], ['c', 5]]));
+    const strength = (fill, end) => { const [l] = srgbToOklab('#FFFFFF'), [e] = srgbToOklab(end), [f] = srgbToOklab(fill); return (l - f) / (l - e); };
+    assert.ok(strength(lone['1:1'], '#C0392B') < 0.2, 'a lone -1 among +10 is pale: ' + lone['1:1']);
+    assert.equal(lone['1:1'], mixOklab('#FFFFFF', '#C0392B', 0.1));
+    const equal = shades(table([['a', 6], ['b', -6], ['c', 12]]));
+    const [lightness] = srgbToOklab('#FFFFFF');
+    const [up] = srgbToOklab(equal['0:1']), [down] = srgbToOklab(equal['1:1']);
+    // Equal magnitudes sit at the same fraction of the way from mid to their ends.
+    assert.equal(equal['0:1'], mixOklab('#FFFFFF', '#1B9E4B', 0.5));
+    assert.equal(equal['1:1'], mixOklab('#FFFFFF', '#C0392B', 0.5));
+    assert.ok(lightness > up && lightness > down);
+    // A pinned end keeps that end exactly, each side on its own span.
+    const pinned = shades(table([['a', 10], ['b', -1]], { min: -2 }));
+    assert.equal(pinned['0:1'], '#1B9E4B');
+    assert.equal(pinned['1:1'], mixOklab('#FFFFFF', '#C0392B', 0.5));
+    // Sequential scales are unchanged.
+    assert.equal(shades({ columns: ['K', 'V'], rows: [['a', -1], ['b', 10]], colorScale: { columns: ['V'] } })['0:1'], '#FFFFFF');
   });
 
   test('a range on one side of the center draws only that side', () => {
@@ -184,6 +205,10 @@ describe('a paged table keeps one range (FR-07)', () => {
     const whole = resolveTableColorScale(table, colors);
     const index = Number(last.cells[0].value) / 10;
     assert.equal(last.cells[0].fill, whole.at(index, 1).fill);
+    // A diverging scale is pinned at its symmetric ends.
+    const diverging = paginateSlide({ title: 'Change', table: { columns: ['Name', 'Change'], rows: rows.map(([name, value]) => [name, value - 100]), colorScale: { columns: ['Change'], mid: 'surface', center: 0 } } }, { width: 1280, height: 720, minFontSize: 24 });
+    assert.ok(diverging.slides.length > 1);
+    for (const page of diverging.slides) assert.deepEqual([page.table.colorScale.min, page.table.colorScale.max, page.table.colorScale.center], [-290, 290, 0]);
     // A table that fits on one page is not rewritten.
     const small = paginateSlide({ title: 'Scores', table: { ...table, rows: rows.slice(0, 3) } }, { width: 1280, height: 720 });
     assert.equal(small.slides.length, 1);

@@ -9,7 +9,7 @@ import { CHART_REFERENCE_TYPES } from './chart-reference-types.js';
 import { formatVariableNumber } from './variables.js';
 import { localizeNumberText } from './numerals.js';
 import { tableRows } from './table.js';
-import { tableColorScaleDiagnostics } from './table-color-scale.js';
+import { tableColorScaleDiagnostics } from './table-color-scale-range.js';
 
 /** A scalar data cell (chart data, dataset rows). */
 export type DataCellValue = string | number | boolean | null;

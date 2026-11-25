@@ -3,7 +3,7 @@ import {isShapeBlock} from "./shape-block.js";
 import {isOverlayConnector, slideBlockIds} from "./overlay-shapes.js";
 import { codeHighlightSlice } from './code-highlight.js';
 import {tableRowBoundaries} from './table.js';
-import {pinTableColorScale} from './table-color-scale.js';
+import {pinTableColorScale} from './table-color-scale-range.js';
 import { composeSlide, OPFCompositionError, type ComposeSlideOptions, type Fonts, type LayoutDiagnostic, type SlideComposition } from './composition.js';
 import { checkCatalogsOption, type Catalog, type CatalogOptions } from './catalog-refs.js';
 import { resolveSlideContext, type SlideContextDiagnostic } from './slide-context.js';

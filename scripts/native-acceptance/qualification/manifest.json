@@ -216,6 +216,10 @@
       "source": "examples/technical/variable-limits.opf.json"
     },
     {
+      "id": "table-color-scale",
+      "source": "examples/technical/table-color-scale.opf.json"
+    },
+    {
       "id": "coverage-text",
       "source": "scripts/native-acceptance/qualification/decks/coverage-text.opf.json"
     },

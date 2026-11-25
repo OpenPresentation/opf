@@ -34,7 +34,8 @@
         "rows": [
           ["Core", 0.12],
           ["Add-ons", -0.08],
-          ["Services", 0.03]
+          ["Services", 0.03],
+          ["Support", -0.01]
         ],
         "colorScale": { "columns": ["YoY %"], "from": "accent2", "mid": "surface", "to": "accent1", "center": 0 }
       }

@@ -4706,7 +4706,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["columns"],
-      "description": "A color scale over the number cells of one or more columns. One scale is shared by all named columns, so equal numbers get equal colors. Only cells whose value is a finite number are shaded; a cell with its own style.fill keeps it. Sequential (no 'mid'): the lowest value is 'from', the highest 'to'. Diverging ('mid'): 'center' is drawn in 'mid', lower values towards 'from' and higher values towards 'to', each side on its own span. Colors are mixed in OKLab. A table that is paged is shaded over its whole range, so a value has the same color on every page.",
+      "description": "A color scale over the number cells of one or more columns. One scale is shared by all named columns, so equal numbers get equal colors. Only cells whose value is a finite number are shaded; a cell with its own style.fill keeps it. Sequential (no 'mid'): the lowest value is 'from', the highest 'to'. Diverging ('mid'): 'center' is drawn in 'mid', lower values towards 'from' and higher values towards 'to', each side on its own span. A diverging scale with no pinned 'min' or 'max' is symmetric around 'center', so equal distances from the center get equal strength. Colors are mixed in OKLab. A table that is paged is shaded over its whole range, so a value has the same color on every page.",
       "properties": {
         "columns": {
           "type": "array",
@@ -4718,9 +4718,9 @@
         "from": { "$ref": "#/$defs/SchemeColorName", "description": "The color of the lowest value. Absent: 'surface'." },
         "to": { "$ref": "#/$defs/SchemeColorName", "description": "The color of the highest value. Absent: 'primary'." },
         "mid": { "$ref": "#/$defs/SchemeColorName", "description": "Makes the scale diverging: the color of 'center', with 'from' below it and 'to' above it." },
-        "center": { "type": "number", "description": "The value drawn in 'mid'. Only with 'mid'. Absent: 0 when the values span both signs, else the middle of the range." },
-        "min": { "type": "number", "description": "The value drawn in 'from'; lower values draw in 'from' too. Absent: the lowest number in the named columns." },
-        "max": { "type": "number", "description": "The value drawn in 'to'; higher values draw in 'to' too. Absent: the highest number in the named columns." }
+        "center": { "type": "number", "description": "The value drawn in 'mid'. Only with 'mid'. Absent: 0 when the values span both signs, else the middle of the range. With no 'min' and no 'max' the scale is symmetric around it." },
+        "min": { "type": "number", "description": "The value drawn in 'from'; lower values draw in 'from' too. Absent: the lowest number in the named columns (a diverging scale with neither 'min' nor 'max' is symmetric around 'center': it runs from center minus d to center plus d, d the largest distance of any value from the center). A given 'min' or 'max' pins that end exactly, and each side of a diverging scale is then on its own span." },
+        "max": { "type": "number", "description": "The value drawn in 'to'; higher values draw in 'to' too. Absent: the highest number in the named columns (see 'min' for a diverging scale)." }
       },
       "dependentRequired": { "center": ["mid"] },
       "examples": [
