@@ -955,7 +955,7 @@ async function exportPptx(deck: unknown, request: { signal: AbortSignal; onProgr
 	await fonts?.ensure(whole as never, { signal: request.signal, catalogs } as never);
 	check();
 	request.onProgress({ stage: "convert", done: 0, total: 1, message: "Building the PowerPoint file…" });
-	const [{ toPptx }, { toPng }] = await Promise.all([import("./pptx-export.js"), import("@openpresentation/opf-render/export-browser")]);
+	const [{ toPptx, typefacesNotOfficeSafe, typefacesNotOfficeSafeMessage }, { toPng }] = await Promise.all([import("./pptx-export.js"), import("@openpresentation/opf-render/export-browser")]);
 	const notes = new Set<string>();
 	const png = (svg: string, options: { scale?: number; background?: string }) => toPng(svg as `<${string}`, { ...options, svgSource: "data" });
 	const bytes = await toPptx(whole as never, {
@@ -975,7 +975,9 @@ async function exportPptx(deck: unknown, request: { signal: AbortSignal; onProgr
 		},
 	} as never);
 	check();
-	return { bytes: bytes as Uint8Array, warnings: [...notes] };
+	// The note `opf convert` reports as pptx/typeface-not-office-safe: the fonts a viewer's PowerPoint may not have. Information, not a failure.
+	const fontNote = typefacesNotOfficeSafeMessage(typefacesNotOfficeSafe(bytes as Uint8Array));
+	return { bytes: bytes as Uint8Array, warnings: [...notes, ...(fontNote ? [fontNote] : [])] };
 }
 /** A deck's file path (not a data URI, an asset: reference or a URL, which the exporter handles itself) is never read by the view. */
 function refuseFilePath(src: string): undefined {

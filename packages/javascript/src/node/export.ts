@@ -507,7 +507,8 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 						code: "typeface-not-office-safe",
 						path: "",
 						families: unsafe,
-						message: `The PPTX names ${unsafe.join(", ")}, which ${unsafe.length === 1 ? "is" : "are"} not on every Windows and macOS machine or not measured exactly by OPF. A viewer without ${unsafe.length === 1 ? "it" : "them"} substitutes another font, and lines can break differently from the preview.`,
+						// The sentence is opf-pptx's (the MCP viewer shows the same one); an opf-pptx that predates it gets a short form.
+						message: module.typefacesNotOfficeSafeMessage?.(unsafe) ?? `The PPTX names ${unsafe.join(", ")}, which a viewer's PowerPoint may not have.`,
 					},
 					"info",
 				);

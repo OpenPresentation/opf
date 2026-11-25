@@ -118,6 +118,16 @@ export function typefacesNotOfficeSafe(input) {
   return unsafeTypefacesIn(readInputZip(input));
 }
 
+/**
+ * The note an export shows for `families` (the result of typefacesNotOfficeSafe): the one sentence the command line reports as
+ * `pptx/typeface-not-office-safe` and the MCP viewer lists with its other export notes. Empty families give no note.
+ */
+export function typefacesNotOfficeSafeMessage(families) {
+  if (!families?.length) return undefined;
+  const one = families.length === 1;
+  return `The PPTX names ${families.join(', ')}, which ${one ? 'is' : 'are'} not on every Windows and macOS machine or not measured exactly by OPF. A viewer without ${one ? 'it' : 'them'} substitutes another font, and lines can break differently from the preview.`;
+}
+
 // LH-20: draw each slide with `options.slideRasterizer` (default: opf-render's toPng, an optional peer) and export the picture
 // deck: no layout, fonts or provenance of the source deck reach the file, only the pictures, their alt text and the notes.
 async function pictureSlidesPptx(presentation, options) {
