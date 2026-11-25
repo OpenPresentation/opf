@@ -13,6 +13,10 @@ import {
 // example `defaultCatalog` from `@openpresentation/gallery`) and core resolves every reference against them.
 import {
   collectSlideLinks,
+  embedCardLayout,
+  embedSite,
+  embedTitle,
+  embedValue,
   hasContentVariables,
   isTemplate,
   resolveDrawnFontFamilies,
@@ -81,6 +85,7 @@ const ROOT_PAYLOAD_FIELDS = [
   "bullets",
   "image",
   "video",
+  "embed",
   "chart",
   "table",
   "code",
@@ -95,6 +100,7 @@ const FIELD_TYPE = Object.freeze({
   bullets: "list",
   image: "image",
   video: "video",
+  embed: "embed",
   chart: "chart",
   table: "table",
   code: "code",
@@ -1116,6 +1122,8 @@ function renderPayload(item, box, bound, options) {
       return renderShapeBlock(item, shapeHelpers(item, bound, options));
     case "video":
       return renderMedia(item, box, bound, options);
+    case "embed":
+      return renderEmbed(item, box, bound, options);
     case "code":
       return renderCode(item, box, bound, options);
     case "metric":
@@ -1546,6 +1554,53 @@ function renderMedia(item, box, bound, options) {
     })
   ];
   return tag("g", traceAttrs(options, item.path), children.join("\n"));
+}
+
+// FR-08: an embed is drawn as its static form, wherever the page is not shown live: the `preview` picture whole (contain) on the scheme's
+// surface color, or, without a preview (or one that does not resolve), the card (core embedCardLayout: a link badge, the title and the
+// site name). The frame is a link to `src` that opens a new tab; a web presenter whose host allows the page reads the frame's
+// data-opf-embed attributes and puts a sandboxed iframe over it (the engines never load `src`). The transparent rect in the link is
+// the area a PDF link annotation covers.
+function renderEmbed(item, box, bound, options) {
+  const embed = embedValue(item.value);
+  if (!embed) return "";
+  const title = embedTitle(item.value), site = embedSite(embed.src), scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
+  const frame = { x: box.x, y: box.y, width: box.width, height: box.height };
+  const children = [];
+  let picture;
+  if (embed.preview !== undefined) {
+    const resolved = resolveImageSource({ value: embed.preview, path: item.path }, bound, options);
+    if (resolved.drawable) picture = resolved.source;
+    else {
+      const reason = resolved.missingReference ? "missing-reference" : "unsupported-source";
+      const message = unresolvedImageMessage("Embed preview", embed.preview, resolved.missingReference, "the preview draws the embed's card instead");
+      if (options.strictAssets) throw new OPFRenderError("unresolved-asset", message, { path: `${item.path}.preview`, reason });
+      reportDiagnostic({ code: "unresolved-asset", path: `${item.path}.preview`, message, reason, source: embed.preview, assetId: resolved.missingReference, description: title, placeholder: "card" }, options);
+    }
+  }
+  if (picture !== undefined) {
+    children.push(tag("rect", { ...HIDDEN, x: frame.x, y: frame.y, width: frame.width, height: frame.height, fill: bound.design.colors.surface, ...traceAttrs(options, item.path) }));
+    children.push(tag("image", { ...HIDDEN, href: picture, x: frame.x, y: frame.y, width: frame.width, height: frame.height, preserveAspectRatio: "xMidYMid meet" }));
+  } else {
+    const card = embedCardLayout({ frame, title, site, headingFamily: bound.design.fonts.heading, bodyFamily: bound.design.fonts.body, scale,
+      minFontSize: (bound.composition ?? bound.geometry.composition).minFontSize ?? 16, measurement: options.textMeasurement });
+    children.push(tag("rect", { ...HIDDEN, x: frame.x, y: frame.y, width: frame.width, height: frame.height, rx: stableNumber(card.radius), fill: bound.design.colors.surface, stroke: bound.design.colors.border, "stroke-width": 1, ...traceAttrs(options, item.path) }));
+    children.push(tag("circle", { ...HIDDEN, cx: stableNumber(card.icon.badge.x + card.icon.badge.width / 2), cy: stableNumber(card.icon.badge.y + card.icon.badge.height / 2), r: stableNumber(card.icon.badge.width / 2), fill: bound.design.colors.primary }));
+    children.push(tag("path", { ...HIDDEN, d: `M ${card.icon.points.map(([x, y]) => `${stableNumber(x)} ${stableNumber(y)}`).join(" L ")} Z`, fill: readableSchemeColor(bound.design.colors.primary, bound.design.roles).hex }));
+    for (const [text, fill] of [[card.title, bound.design.colors.text], [card.site, bound.design.colors.mutedText]]) {
+      if (!text) continue;
+      const family = fontStack(text.style.fontFamily, bound.design.fontScheme.type);
+      children.push(tag("g", { "data-opf-embed-text": text === card.title ? "title" : "site" }, text.lines.map((line, index) => tag("text", {
+        x: stableNumber(text.box.x), y: stableNumber(text.box.y + text.fontSize + index * text.lineHeight), "font-family": family, "font-size": stableNumber(text.fontSize),
+        "font-weight": text.style.fontWeight === 400 ? undefined : text.style.fontWeight, fill
+      }, escapeText(line))).join("\n")));
+    }
+  }
+  // The area a link annotation covers, and what a presenter measures to put a live frame over this one.
+  children.push(tag("rect", { ...HIDDEN, "data-opf-link-area": "true", x: frame.x, y: frame.y, width: frame.width, height: frame.height, fill: "none", "pointer-events": "all" }));
+  const link = tag("a", { ...linkAnchorAttrs(embed.src, { newTab: true }), "aria-label": title }, children.join("\n"));
+  return tag("g", { ...traceAttrs(options, item.path), "data-opf-embed": item.path, "data-opf-embed-src": embed.src, "data-opf-embed-title": title,
+    "data-opf-embed-x": stableNumber(frame.x), "data-opf-embed-y": stableNumber(frame.y), "data-opf-embed-width": stableNumber(frame.width), "data-opf-embed-height": stableNumber(frame.height) }, link);
 }
 
 function renderCode(item, box, bound, options) {

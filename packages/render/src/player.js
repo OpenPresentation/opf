@@ -7,6 +7,7 @@ import {
   linkAt, parseDeckDocument, plainText, presentableIndexes, prepareSlideSvg, sanitizeSvgTree, slideIndexById, slideLabel, stateWins, svgDimensions,
 } from "./deck-runtime.js";
 import { loadPreviewFonts } from "./preview-fonts.js";
+import { mountLiveEmbeds } from "./live-embeds.js";
 
 export { DeckError } from "./deck-runtime.js";
 
@@ -260,7 +261,7 @@ class Surface {
 
 // --- the audience view: the full-screen overlay ---------------------------------------------------------------------------
 
-function mountAudience({ doc, win, container, session }) {
+function mountAudience({ doc, win, container, session, embeds }) {
   const el = makeElement(doc);
   const host = doc.createElement("div");
   host.setAttribute("data-opf-player", "");
@@ -298,7 +299,10 @@ function mountAudience({ doc, win, container, session }) {
       let svg;
       try { svg = store.svg(cursor.index, cursor.page); } catch (error) { view.failed(error.message); return; }
       parts.message.hidden = true;
+      view.live?.destroy();
       const { width, height } = drawInto(parts.slide, svg, doc);
+      // FR-08: the pages the host allows (the `embeds` option) are shown live over their static form; none by default.
+      view.live = mountLiveEmbeds({ host: parts.slide, svg: parts.slide.firstElementChild, embeds, document: doc });
       parts.frame.style.setProperty("--ratio", `${width} / ${height}`);
       parts.frame.style.setProperty("--ratio-n", String(width / height));
       const label = slideLabel(info, cursor.number, cursor.total, cursor.page + 1, cursor.pages);
@@ -340,6 +344,7 @@ function mountAudience({ doc, win, container, session }) {
     },
     dispose() {
       win.clearTimeout(view.idleTimer);
+      view.live?.destroy();
       for (const node of view.previouslyInert) node.inert = false;
       view.previouslyInert = [];
       host.remove();
@@ -666,7 +671,8 @@ async function readSource(source, signal) {
  * Options: `fonts` (the self-hosted font root URL, or a browser fonts handle from `loadFonts`), `renderOptions` (extra `toSvg` options),
  * `startSlide` (1-based), `includeHidden`, `fullscreen` (default true), `presenterView` (open the speaker view too),
  * `role: "presenter"` (this window is the speaker view: for a second tab or window of your page), `channel` (name, or `false`
- * for no sync), `container`, `signal` and `now` (an injectable clock).
+ * for no sync), `container`, `signal`, `now` (an injectable clock) and `embeds` (FR-08: `(src) => boolean`, which embedded pages
+ * are shown live; none by default).
  */
 export async function present(source, options = {}) {
   const container = options.container ?? globalThis.document?.body;
@@ -683,7 +689,7 @@ export async function present(source, options = {}) {
   // Cover the page and ask for full screen before awaiting anything: the click that called us must still count.
   let view;
   if (role === "audience") {
-    view = mountAudience({ doc, win, container, session });
+    view = mountAudience({ doc, win, container, session, embeds: options.embeds });
     session.audienceHost = view.host;
     view.attach(options.returnFocus ?? doc.activeElement);
     if (options.fullscreen !== false) session.requestFullscreen();
