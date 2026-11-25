@@ -1,0 +1,1818 @@
+{
+ "name": "Layout sweep (lots)",
+ "language": "en-US",
+ "slides": [
+  {
+   "id": "s-cover",
+   "layout": "cover",
+   "title": "cover - Rollout plan for the northern, coastal and inland hubs, with every dependency, owner and review date in one place",
+   "subtitle": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publish",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/harbor.png",
+      "alt": "Warm sunset over layered hills and a harbor with colored crates"
+     }
+    }
+   ],
+   "notes": "cover: lots"
+  },
+  {
+   "id": "s-section",
+   "layout": "section",
+   "title": "section - The evidence from the pilot, the open risks and what we still need to decide before the end of the year",
+   "subtitle": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-p",
+   "notes": "section: lots"
+  },
+  {
+   "id": "s-agenda",
+   "layout": "agenda",
+   "title": "agenda - What this long session covers from the first problem statement to the final decision on the rollout budget",
+   "blocks": [
+    {
+     "items": [
+      "Define the problem we are solving together with every stakeholder",
+      "Review the pilot evidence",
+      "Compare the three options on cost, risk and speed of delivery for the regions",
+      "Agree the budget",
+      "Decide the next step",
+      "Assign owners",
+      "Confirm the review dates and who attends each one",
+      "Collect open questions",
+      "Summarize the decisions in one page",
+      "Close the session and thank the teams"
+     ]
+    }
+   ],
+   "notes": "agenda: lots"
+  },
+  {
+   "id": "s-statement",
+   "layout": "statement",
+   "title": "statement - Start small enough to learn quickly, then scale only when the evidence from two full cycles supports it",
+   "blocks": [
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes."
+    }
+   ],
+   "notes": "statement: lots"
+  },
+  {
+   "id": "s-closing",
+   "layout": "closing",
+   "title": "closing - Agree the pilot team, the start date, the first review and the budget owner before everyone leaves this room today",
+   "blocks": [
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes."
+    },
+    {
+     "items": [
+      "Align the regional hubs on one shared delivery calendar before the first shipment window opens",
+      "Name an owner for every handover",
+      "Review readiness every Monday and publish a one-page status the same week so that hub managers can act on it",
+      "Keep the scope narrow",
+      "Collect feedback from drivers and dock staff",
+      "Compare weekly results with the agreed baseline and flag every deviation larger than five percent"
+     ]
+    }
+   ],
+   "notes": "closing: lots"
+  },
+  {
+   "id": "s-text",
+   "layout": "text",
+   "title": "text - Learn before scaling the rollout to every region, hub and partner in the network",
+   "blocks": [
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes."
+    },
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes."
+    },
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes. Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep."
+    },
+    {
+     "text": [
+      "Details are on the ",
+      {
+       "text": "rollout page",
+       "link": "https://example.com/rollout"
+      },
+      " for every hub."
+     ]
+    }
+   ],
+   "notes": "text: lots"
+  },
+  {
+   "id": "s-list",
+   "layout": "list",
+   "title": "list - Make the next step explicit for every region, hub and owner in the rollout plan",
+   "blocks": [
+    {
+     "items": [
+      "Align the regional hubs on one shared delivery calendar before the first shipment window opens",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      },
+      "Name an owner for every handover",
+      "Review readiness every Monday and publish a one-page status the same week so that hub managers can act on it",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      },
+      "Keep the scope narrow",
+      "Collect feedback from drivers and dock staff",
+      "Compare weekly results with the agreed baseline and flag every deviation larger than five percent",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      },
+      "Escalate open risks to the steering group within one working day",
+      "Retire the legacy spreadsheet once two clean cycles are complete",
+      "Report outcomes to the board each quarter and agree the next decision together with the finance lead"
+     ]
+    }
+   ],
+   "notes": "list: lots"
+  },
+  {
+   "id": "s-quote",
+   "layout": "quote",
+   "title": "quote - A shared view of the whole network makes decisions easier, faster and much less dependent on who happens to speak first",
+   "blocks": [
+    {
+     "quote": {
+      "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes.",
+      "attribution": "Ana Ruiz, pilot lead for the northern and coastal field teams",
+      "source": "Interview notes, internal operations review, third quarter"
+     }
+    }
+   ],
+   "notes": "quote: lots"
+  },
+  {
+   "id": "s-two-column",
+   "layout": "two-column",
+   "title": "two-column - Opportunity and constraints across the northern, coastal and inland regions of the network",
+   "blocks": [
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes."
+    },
+    {
+     "items": [
+      "Align the regional hubs on one shared delivery calendar before the first shipment window opens",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      },
+      "Name an owner for every handover",
+      "Review readiness every Monday and publish a one-page status the same week so that hub managers can act on it",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      },
+      "Keep the scope narrow",
+      "Collect feedback from drivers and dock staff"
+     ]
+    }
+   ],
+   "notes": "two-column: lots"
+  },
+  {
+   "id": "s-three-column",
+   "layout": "three-column",
+   "title": "three-column - Scope, evidence and the next decision, presented for all three regions of the rollout",
+   "blocks": [
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes."
+    },
+    {
+     "items": [
+      "Align the regional hubs on one shared delivery calendar before the first shipment window opens",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      },
+      "Name an owner for every handover",
+      "Review readiness every Monday and publish a one-page status the same week so that hub managers can act on it",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      }
+     ]
+    },
+    {
+     "text": "Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep. Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep."
+    }
+   ],
+   "notes": "three-column: lots"
+  },
+  {
+   "id": "s-pillars",
+   "layout": "pillars",
+   "title": "pillars - Three conditions for a useful pilot that the steering group can still defend in a year",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Clear scope and a named owner for each workflow",
+       "description": "Two teams and one workflow keep the pilot focused. Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "Consistent measures reviewed every week",
+       "description": "Track completion and task time against a baseline. Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "An explicit decision with written criteria",
+       "description": "Agree the evidence needed before expanding. Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "Budget",
+       "description": "Confirm the owner. Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep."
+      }
+     ]
+    }
+   ],
+   "notes": "pillars: lots"
+  },
+  {
+   "id": "s-comparison",
+   "layout": "comparison",
+   "title": "comparison - Choose the smallest useful test, and compare it honestly with the broad rollout that everyone wants",
+   "blocks": [
+    {
+     "text": "Option A: focused pilot\nEvery region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes.",
+     "region": "first"
+    },
+    {
+     "text": "Option B: broad rollout\nEvery region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes.",
+     "region": "second"
+    },
+    {
+     "text": "Recommendation: Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes.",
+     "region": "aside"
+    }
+   ],
+   "notes": "comparison: lots"
+  },
+  {
+   "id": "s-process",
+   "layout": "process",
+   "title": "process - Three steps from the first piece of evidence to the final decision, with owners and dates for each",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Establish a baseline for every hub",
+       "description": "Measure the current completion rate and task time. Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep.",
+       "start": 1
+      }
+     ],
+     "numbering": "arabic"
+    },
+    {
+     "items": [
+      {
+       "text": "Run the pilot with two teams",
+       "description": "Test and review feedback each week. Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep.",
+       "start": 2
+      }
+     ],
+     "numbering": "arabic"
+    },
+    {
+     "items": [
+      {
+       "text": "Decide what to scale and when",
+       "description": "Compare outcomes with the baseline. Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep.",
+       "start": 3
+      }
+     ],
+     "numbering": "arabic"
+    },
+    {
+     "items": [
+      {
+       "text": "Report",
+       "description": "Publish one page. Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep.",
+       "start": 4
+      }
+     ],
+     "numbering": "arabic"
+    },
+    {
+     "items": [
+      {
+       "text": "Review",
+       "description": "Repeat the cycle. Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep.",
+       "start": 5
+      }
+     ],
+     "numbering": "arabic"
+    }
+   ],
+   "notes": "process: lots"
+  },
+  {
+   "id": "s-timeline",
+   "layout": "timeline",
+   "title": "timeline - Six weeks to an informed decision, and what has to happen in each of them",
+   "blocks": [
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes.",
+     "region": "lead"
+    },
+    {
+     "timeline": {
+      "events": [
+       {
+        "when": "Week 1: phase 1",
+        "what": "Milestone 1: Coordinating the regional hubs requires a shared calendar, a named own"
+       },
+       {
+        "when": "Week 2: phase 2",
+        "what": "Milestone 2: Coordinating the regional hubs requires a shared calendar, a named own"
+       },
+       {
+        "when": "Week 3: phase 3",
+        "what": "Milestone 3: Coordinating the regional hubs requires a shared calendar, a named own"
+       },
+       {
+        "when": "Week 4: phase 4",
+        "what": "Milestone 4: Coordinating the regional hubs requires a shared calendar, a named own"
+       },
+       {
+        "when": "Week 5: phase 5",
+        "what": "Milestone 5: Coordinating the regional hubs requires a shared calendar, a named own"
+       },
+       {
+        "when": "Week 6: phase 6",
+        "what": "Milestone 6: Coordinating the regional hubs requires a shared calendar, a named own"
+       },
+       {
+        "when": "Week 7: phase 7",
+        "what": "Milestone 7: Coordinating the regional hubs requires a shared calendar, a named own"
+       },
+       {
+        "when": "Week 8: phase 8",
+        "what": "Milestone 8: Coordinating the regional hubs requires a shared calendar, a named own"
+       }
+      ]
+     },
+     "region": "body"
+    },
+    {
+     "items": [
+      "Align the regional hubs on one shared delivery calendar before the first shipment window opens",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      },
+      "Name an owner for every handover",
+      "Review readiness every Monday and publish a one-page status the same week so that hub managers can act on it",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      }
+     ],
+     "region": "aside"
+    }
+   ],
+   "notes": "timeline: lots"
+  },
+  {
+   "id": "s-faq",
+   "layout": "faq",
+   "title": "faq - What the pilot involves, who takes part and what happens after the review in the spring",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Who takes part in the pilot and who is explicitly excluded from it?",
+       "description": "Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "How long does the pilot run, including the baseline?",
+       "description": "Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "What happens next, and who decides?",
+       "description": "Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "How is the budget approved?",
+       "description": "Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "Which risks matter most?",
+       "description": "Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "Where do we find the status?",
+       "description": "Coordinating the regional hubs requires a shared calendar, a named owner for every handover and a weekly review that is short enough to keep."
+      }
+     ]
+    }
+   ],
+   "notes": "faq: lots"
+  },
+  {
+   "id": "s-pyramid",
+   "layout": "pyramid",
+   "title": "pyramid - What the pilot builds on across every region, hub and partner involved in the rollout",
+   "blocks": [
+    {
+     "items": [
+      "Goal: with a long explanation of what happens in this part of the process and who owns it",
+      "Evidence: with a long explanation of what happens in this part of the process and who owns it",
+      "Pilot teams: with a long explanation of what happens in this part of the process and who owns it",
+      "Shared baseline: with a long explanation of what happens in this part of the process and who owns it",
+      "Extra one: with a long explanation of what happens in this part of the process and who owns it",
+      "Extra two: with a long explanation of what happens in this part of the process and who owns it"
+     ]
+    }
+   ],
+   "notes": "pyramid: lots"
+  },
+  {
+   "id": "s-inverted-pyramid",
+   "layout": "inverted-pyramid",
+   "title": "inverted-pyramid - From possibilities to a decision across every region, hub and partner involved in the rollout",
+   "blocks": [
+    {
+     "items": [
+      "Possibilities: with a long explanation of what happens in this part of the process and who owns it",
+      "Qualified options: with a long explanation of what happens in this part of the process and who owns it",
+      "Shortlist: with a long explanation of what happens in this part of the process and who owns it",
+      "Decision: with a long explanation of what happens in this part of the process and who owns it",
+      "Extra one: with a long explanation of what happens in this part of the process and who owns it",
+      "Extra two: with a long explanation of what happens in this part of the process and who owns it"
+     ]
+    }
+   ],
+   "notes": "inverted-pyramid: lots"
+  },
+  {
+   "id": "s-matrix",
+   "layout": "matrix",
+   "title": "matrix - Four ways to run the pilot across every region, hub and partner involved in the rollout",
+   "blocks": [
+    {
+     "items": [
+      "Small, fast: with a long explanation of what happens in this part of the process and who owns it",
+      "Small, slow: with a long explanation of what happens in this part of the process and who owns it",
+      "Broad, fast: with a long explanation of what happens in this part of the process and who owns it",
+      "Broad, slow: with a long explanation of what happens in this part of the process and who owns it",
+      "Extra one: with a long explanation of what happens in this part of the process and who owns it",
+      "Extra two: with a long explanation of what happens in this part of the process and who owns it"
+     ]
+    }
+   ],
+   "notes": "matrix: lots"
+  },
+  {
+   "id": "s-cycle",
+   "layout": "cycle",
+   "title": "cycle - How each pilot round feeds the next across every region, hub and partner involved in the rollout",
+   "blocks": [
+    {
+     "items": [
+      "Plan: with a long explanation of what happens in this part of the process and who owns it",
+      "Pilot: with a long explanation of what happens in this part of the process and who owns it",
+      "Measure: with a long explanation of what happens in this part of the process and who owns it",
+      "Adjust: with a long explanation of what happens in this part of the process and who owns it",
+      "Extra one: with a long explanation of what happens in this part of the process and who owns it",
+      "Extra two: with a long explanation of what happens in this part of the process and who owns it"
+     ]
+    }
+   ],
+   "notes": "cycle: lots"
+  },
+  {
+   "id": "s-chevrons",
+   "layout": "chevrons",
+   "title": "chevrons - Four stages of the pilot across every region, hub and partner involved in the rollout",
+   "blocks": [
+    {
+     "items": [
+      "Baseline: with a long explanation of what happens in this part of the process and who owns it",
+      "Pilot: with a long explanation of what happens in this part of the process and who owns it",
+      "Review: with a long explanation of what happens in this part of the process and who owns it",
+      "Decide: with a long explanation of what happens in this part of the process and who owns it",
+      "Extra one: with a long explanation of what happens in this part of the process and who owns it",
+      "Extra two: with a long explanation of what happens in this part of the process and who owns it"
+     ]
+    }
+   ],
+   "notes": "chevrons: lots"
+  },
+  {
+   "id": "s-vertical-process",
+   "layout": "vertical-process",
+   "title": "vertical-process - How a team joins the pilot across every region, hub and partner involved in the rollout",
+   "blocks": [
+    {
+     "items": [
+      "Nominate: with a long explanation of what happens in this part of the process and who owns it",
+      "Train: with a long explanation of what happens in this part of the process and who owns it",
+      "Start: with a long explanation of what happens in this part of the process and who owns it",
+      "Extra one: with a long explanation of what happens in this part of the process and who owns it",
+      "Extra two: with a long explanation of what happens in this part of the process and who owns it"
+     ]
+    }
+   ],
+   "notes": "vertical-process: lots"
+  },
+  {
+   "id": "s-org-chart",
+   "layout": "org-chart",
+   "title": "org-chart - Give the pilot a clear reporting structure that every hub manager can find on one page",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Pilot lead and program sponsor for the whole network",
+       "level": 0
+      },
+      {
+       "text": "Workstream 1: delivery of the regional hubs",
+       "level": 1
+      },
+      {
+       "text": "Workstream 2: delivery of the regional hubs",
+       "level": 1
+      },
+      {
+       "text": "Workstream 3: delivery of the regional hubs",
+       "level": 1
+      },
+      {
+       "text": "Workstream 4: delivery of the regional hubs",
+       "level": 1
+      },
+      {
+       "text": "Workstream 5: delivery of the regional hubs",
+       "level": 1
+      }
+     ]
+    }
+   ],
+   "notes": "org-chart: lots"
+  },
+  {
+   "id": "s-hierarchy",
+   "layout": "hierarchy",
+   "title": "hierarchy - Break the pilot into focused workstreams, tasks and owners for every region",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Pilot program for the whole network",
+       "level": 0
+      },
+      {
+       "text": "Workstream 1: regional delivery",
+       "level": 1
+      },
+      {
+       "text": "Task 1a: design the handover",
+       "level": 2
+      },
+      {
+       "text": "Task 1b: build the dashboard",
+       "level": 2
+      },
+      {
+       "text": "Workstream 2: regional delivery",
+       "level": 1
+      },
+      {
+       "text": "Task 2a: design the handover",
+       "level": 2
+      },
+      {
+       "text": "Task 2b: build the dashboard",
+       "level": 2
+      },
+      {
+       "text": "Workstream 3: regional delivery",
+       "level": 1
+      },
+      {
+       "text": "Task 3a: design the handover",
+       "level": 2
+      },
+      {
+       "text": "Task 3b: build the dashboard",
+       "level": 2
+      }
+     ]
+    }
+   ],
+   "notes": "hierarchy: lots"
+  },
+  {
+   "id": "s-venn",
+   "layout": "venn",
+   "title": "venn - Three conditions that overlap in a useful pilot, and what happens in the middle",
+   "blocks": [
+    {
+     "items": [
+      "Clear scope with a named owner",
+      "Evidence from two complete cycles",
+      "A shared goal across the regions"
+     ]
+    }
+   ],
+   "notes": "venn: lots"
+  },
+  {
+   "id": "s-metrics",
+   "layout": "metrics",
+   "title": "metrics - Pilot outcomes in four measures, with the context each of them needs to be read correctly",
+   "blocks": [
+    {
+     "metric": {
+      "value": "52,000",
+      "label": "Trial participants across both field teams and every partner depot",
+      "description": "Across the northern, coastal and inland regions for twelve weeks"
+     }
+    },
+    {
+     "metric": {
+      "value": "84%",
+      "label": "Task completion",
+      "description": "Up from 68% at baseline, a gain of sixteen points in four weeks"
+     }
+    },
+    {
+     "metric": {
+      "value": "6.2",
+      "label": "Median task time",
+      "description": "Down from 9.4 min after the new checklist reached both teams",
+      "unit": "min"
+     }
+    },
+    {
+     "metric": {
+      "value": 2,
+      "label": "Teams",
+      "description": "One workflow each, with a deputy"
+     }
+    },
+    {
+     "metric": {
+      "value": "97.5%",
+      "label": "Delivery accuracy",
+      "description": "Measured against the signed baseline"
+     }
+    },
+    {
+     "metric": {
+      "value": "$1.2M",
+      "label": "Savings",
+      "description": "Annualized, before tax"
+     }
+    },
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes.",
+     "region": "aside"
+    }
+   ],
+   "notes": "metrics: lots"
+  },
+  {
+   "id": "s-scorecard",
+   "layout": "scorecard",
+   "title": "scorecard - Track performance against a target, for every region and for the whole network together",
+   "blocks": [
+    {
+     "metric": {
+      "value": "52,000",
+      "label": "Trial participants across every region",
+      "description": "Target: 50,000 participants"
+     }
+    },
+    {
+     "metric": {
+      "value": "84%",
+      "label": "Task completion",
+      "description": "Target: at least 80%"
+     }
+    },
+    {
+     "metric": {
+      "value": "6.2",
+      "label": "Median task time with the new checklist",
+      "description": "Target: under 7 min",
+      "unit": "min"
+     }
+    },
+    {
+     "metric": {
+      "value": "97%",
+      "label": "Accuracy",
+      "description": "Target: 95%"
+     }
+    },
+    {
+     "metric": {
+      "value": "1.2M",
+      "label": "Savings",
+      "description": "Target: 1.0M"
+     }
+    },
+    {
+     "metric": {
+      "value": 14,
+      "label": "Open risks",
+      "description": "Target: fewer than 10"
+     }
+    },
+    {
+     "metric": {
+      "value": "3.1",
+      "label": "Complaints per 1000",
+      "description": "Target: below 4"
+     }
+    },
+    {
+     "metric": {
+      "value": "88%",
+      "label": "Staff satisfaction",
+      "description": "Target: 85%"
+     }
+    }
+   ],
+   "notes": "scorecard: lots"
+  },
+  {
+   "id": "s-image",
+   "layout": "image",
+   "title": "image - Give the visual room to speak, even when the caption underneath it is long enough to wrap",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/ridge.png",
+      "alt": "Blue sky with two green ridges and a small red cabin"
+     },
+     "caption": "A long caption that describes the northern field site in week three, with the harbor in the distance and the new conveyor line under construction, so that it needs two lines or more"
+    }
+   ],
+   "notes": "image: lots"
+  },
+  {
+   "id": "s-image-beside",
+   "layout": "image-beside",
+   "title": "image-beside - Explain what the audience should notice in the picture, and why the third ridge matters",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/dawn.png",
+      "alt": "Pink dawn over layered green hills"
+     },
+     "caption": "The coastal depot at dawn, photographed from the loading bay with the first trucks arriving; a caption long enough to wrap"
+    },
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes."
+    },
+    {
+     "items": [
+      "Align the regional hubs on one shared delivery calendar before the first shipment window opens",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      },
+      "Name an owner for every handover",
+      "Review readiness every Monday and publish a one-page status the same week so that hub managers can act on it",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      },
+      "Keep the scope narrow"
+     ]
+    }
+   ],
+   "notes": "image-beside: lots"
+  },
+  {
+   "id": "s-gallery",
+   "layout": "gallery",
+   "title": "gallery - Compare three visual directions for the regional signage, with notes on each",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/field.png",
+      "alt": "Green fields"
+     },
+     "caption": "Direction 1: a long caption about the palette, the mood and where it works best on site"
+    },
+    {
+     "image": {
+      "src": "./assets/dawn.png",
+      "alt": "Pink dawn"
+     },
+     "caption": "Direction 2: a long caption about the palette, the mood and where it works best on site"
+    },
+    {
+     "image": {
+      "src": "./assets/dusk.png",
+      "alt": "Purple dusk"
+     },
+     "caption": "Direction 3: a long caption about the palette, the mood and where it works best on site"
+    },
+    {
+     "image": {
+      "src": "./assets/night.png",
+      "alt": "Night hills"
+     },
+     "caption": "Direction 4: a long caption about the palette, the mood and where it works best on site"
+    },
+    {
+     "image": {
+      "src": "./assets/ridge.png",
+      "alt": "Blue ridges"
+     },
+     "caption": "Direction 5: a long caption about the palette, the mood and where it works best on site"
+    },
+    {
+     "image": {
+      "src": "./assets/harbor.png",
+      "alt": "Harbor sunset"
+     },
+     "caption": "Direction 6: a long caption about the palette, the mood and where it works best on site"
+    },
+    {
+     "image": {
+      "src": "./assets/portrait.png",
+      "alt": "Pale square landscape"
+     },
+     "caption": "Direction 7: a long caption about the palette, the mood and where it works best on site"
+    },
+    {
+     "image": {
+      "src": "./assets/cover.png",
+      "alt": "Blue sky hills"
+     },
+     "caption": "Direction 8: a long caption about the palette, the mood and where it works best on site"
+    },
+    {
+     "image": {
+      "src": "./assets/dawn.png",
+      "alt": "Pink dawn again"
+     },
+     "caption": "Direction 9: a long caption about the palette, the mood and where it works best on site"
+    }
+   ],
+   "notes": "gallery: lots"
+  },
+  {
+   "id": "s-chart",
+   "layout": "chart",
+   "title": "chart - Completion rose through the whole pilot, with the largest gain in the fourth week of the trial",
+   "blocks": [
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Month",
+        "Parcels processed (thousands)",
+        "On-time deliveries (thousands)",
+        "Returns handled (thousands)",
+        "Damaged items (hundreds)",
+        "Manual escalations (hundreds)"
+       ],
+       "rows": [
+        [
+         "January: northern hubs",
+         64,
+         69,
+         84,
+         81,
+         85
+        ],
+        [
+         "February: coastal depots",
+         69,
+         64,
+         70,
+         105,
+         107
+        ],
+        [
+         "March: inland warehouses",
+         72,
+         74,
+         68,
+         99,
+         98
+        ],
+        [
+         "April: cross-dock terminals",
+         78,
+         77,
+         96,
+         108,
+         99
+        ],
+        [
+         "May: regional returns centers",
+         73,
+         61,
+         77,
+         108,
+         116
+        ],
+        [
+         "June: seasonal overflow sites",
+         80,
+         69,
+         79,
+         91,
+         107
+        ],
+        [
+         "July: partner fulfillment",
+         55,
+         72,
+         103,
+         95,
+         103
+        ],
+        [
+         "August: peak preparation",
+         69,
+         93,
+         102,
+         90,
+         110
+        ],
+        [
+         "September: cold-chain network",
+         85,
+         90,
+         86,
+         91,
+         118
+        ],
+        [
+         "October: last-mile micro-hubs",
+         78,
+         73,
+         107,
+         90,
+         100
+        ],
+        [
+         "November: holiday surge capacity",
+         87,
+         94,
+         96,
+         99,
+         129
+        ],
+        [
+         "December: year-end reconciliation",
+         65,
+         76,
+         102,
+         110,
+         102
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes.",
+     "region": "aside"
+    }
+   ],
+   "notes": "chart: lots"
+  },
+  {
+   "id": "s-chart-beside",
+   "layout": "chart-beside",
+   "title": "chart-beside - The largest gain came in week four, and the chart shows twelve months of context beside the notes",
+   "blocks": [
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Month",
+        "Parcels processed (thousands)",
+        "On-time deliveries (thousands)",
+        "Returns handled (thousands)",
+        "Damaged items (hundreds)",
+        "Manual escalations (hundreds)"
+       ],
+       "rows": [
+        [
+         "January: northern hubs",
+         64,
+         69,
+         84,
+         81,
+         85
+        ],
+        [
+         "February: coastal depots",
+         69,
+         64,
+         70,
+         105,
+         107
+        ],
+        [
+         "March: inland warehouses",
+         72,
+         74,
+         68,
+         99,
+         98
+        ],
+        [
+         "April: cross-dock terminals",
+         78,
+         77,
+         96,
+         108,
+         99
+        ],
+        [
+         "May: regional returns centers",
+         73,
+         61,
+         77,
+         108,
+         116
+        ],
+        [
+         "June: seasonal overflow sites",
+         80,
+         69,
+         79,
+         91,
+         107
+        ],
+        [
+         "July: partner fulfillment",
+         55,
+         72,
+         103,
+         95,
+         103
+        ],
+        [
+         "August: peak preparation",
+         69,
+         93,
+         102,
+         90,
+         110
+        ],
+        [
+         "September: cold-chain network",
+         85,
+         90,
+         86,
+         91,
+         118
+        ],
+        [
+         "October: last-mile micro-hubs",
+         78,
+         73,
+         107,
+         90,
+         100
+        ],
+        [
+         "November: holiday surge capacity",
+         87,
+         94,
+         96,
+         99,
+         129
+        ],
+        [
+         "December: year-end reconciliation",
+         65,
+         76,
+         102,
+         110,
+         102
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "items": [
+      "Align the regional hubs on one shared delivery calendar before the first shipment window opens",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      },
+      "Name an owner for every handover",
+      "Review readiness every Monday and publish a one-page status the same week so that hub managers can act on it",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      },
+      "Keep the scope narrow",
+      "Collect feedback from drivers and dock staff"
+     ]
+    }
+   ],
+   "notes": "chart-beside: lots"
+  },
+  {
+   "id": "s-table",
+   "layout": "table",
+   "title": "table - Compare outcomes on consistent measures, for every hub and region of the network",
+   "blocks": [
+    {
+     "table": {
+      "columns": [
+       "Region",
+       "Hub",
+       "Owner",
+       "Status",
+       "Next review",
+       "Open risks"
+      ],
+      "rows": [
+       [
+        "Region 1: northern and coastal territories",
+        "Hub A: main sorting facility with cold storage",
+        "Owner 1: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 3: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 2: northern and coastal territories",
+        "Hub B: main sorting facility with cold storage",
+        "Owner 2: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 4: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 3: northern and coastal territories",
+        "Hub C: main sorting facility with cold storage",
+        "Owner 3: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 5: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 4: northern and coastal territories",
+        "Hub D: main sorting facility with cold storage",
+        "Owner 4: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 6: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 5: northern and coastal territories",
+        "Hub E: main sorting facility with cold storage",
+        "Owner 5: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 7: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 6: northern and coastal territories",
+        "Hub F: main sorting facility with cold storage",
+        "Owner 6: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 8: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 7: northern and coastal territories",
+        "Hub G: main sorting facility with cold storage",
+        "Owner 7: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 9: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ]
+      ]
+     },
+     "region": "body"
+    },
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes.",
+     "region": "aside"
+    }
+   ],
+   "notes": "table: lots"
+  },
+  {
+   "id": "s-table-beside",
+   "layout": "table-beside",
+   "title": "table-beside - Team B needs targeted support, and the table next to it lists every hub with its owner and risks",
+   "blocks": [
+    {
+     "table": {
+      "columns": [
+       "Region",
+       "Hub",
+       "Owner",
+       "Status",
+       "Next review",
+       "Open risks"
+      ],
+      "rows": [
+       [
+        "Region 1: northern and coastal territories",
+        "Hub A: main sorting facility with cold storage",
+        "Owner 1: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 3: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 2: northern and coastal territories",
+        "Hub B: main sorting facility with cold storage",
+        "Owner 2: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 4: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 3: northern and coastal territories",
+        "Hub C: main sorting facility with cold storage",
+        "Owner 3: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 5: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 4: northern and coastal territories",
+        "Hub D: main sorting facility with cold storage",
+        "Owner 4: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 6: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 5: northern and coastal territories",
+        "Hub E: main sorting facility with cold storage",
+        "Owner 5: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 7: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 6: northern and coastal territories",
+        "Hub F: main sorting facility with cold storage",
+        "Owner 6: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 8: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 7: northern and coastal territories",
+        "Hub G: main sorting facility with cold storage",
+        "Owner 7: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 9: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ]
+      ]
+     }
+    },
+    {
+     "items": [
+      "Align the regional hubs on one shared delivery calendar before the first shipment window opens",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      },
+      "Name an owner for every handover",
+      "Review readiness every Monday and publish a one-page status the same week so that hub managers can act on it",
+      {
+       "text": "Sub-point: the owner confirms the date in writing and the hub acknowledges it",
+       "level": 1
+      },
+      {
+       "text": "Second sub-point with a shorter note",
+       "level": 1
+      },
+      "Keep the scope narrow"
+     ]
+    }
+   ],
+   "notes": "table-beside: lots"
+  },
+  {
+   "id": "s-code",
+   "layout": "code",
+   "title": "code - Keep the implementation easy to inspect, even when the listing is long and the notes are longer",
+   "blocks": [
+    {
+     "code": {
+      "language": "python",
+      "source": "def stage_0(order, calendar, hub):\n    # keep each handover explicit and easy to audit later\n    if hub.is_open(calendar.week) and order.ready:\n        return hub.accept(order, owner=order.owner)\ndef stage_1(order, calendar, hub):\n    # keep each handover explicit and easy to audit later\n    if hub.is_open(calendar.week) and order.ready:\n        return hub.accept(order, owner=order.owner)\ndef stage_2(order, calendar, hub):\n    # keep each handover explicit and easy to audit later\n    if hub.is_open(calendar.week) and order.ready:\n        return hub.accept(order, owner=order.owner)\ndef stage_3(order, calendar, hub):\n    # keep each handover explicit and easy to audit later\n    if hub.is_open(calendar.week) and order.ready:\n        return hub.accept(order, owner=order.owner)\ndef stage_4(order, calendar, hub):\n    # keep each handover explicit and easy to audit later\n    if hub.is_open(calendar.week) and order.ready:\n        return hub.accept(order, owner=order.owner)\ndef stage_5(order, calendar, hub):\n    # keep each handover explicit and easy to audit later\n    if hub.is_open(calendar.week) and order.ready:\n        return hub.accept(order, owner=order.owner)\ndef stage_6(order, calendar, hub):\n    # keep each handover explicit and easy to audit later\n    if hub.is_open(calendar.week) and order.ready:\n        return hub.accept(order, owner=order.owner)"
+     }
+    },
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes."
+    }
+   ],
+   "notes": "code: lots"
+  },
+  {
+   "id": "s-hero",
+   "layout": "hero",
+   "title": "hero - One team, one outcome, and a title that is long enough to wrap onto a second line",
+   "blocks": [
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes."
+    },
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes."
+    },
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes."
+    },
+    {
+     "text": "Every region reports its readiness each Monday; the steering group reviews open risks on Wednesday, agrees the mitigation owners and publishes a one-page status that the hub managers can act on the same week, before the next shipment window closes."
+    },
+    {
+     "image": {
+      "src": "./assets/harbor.png",
+      "alt": "Warm sunset over layered hills and a harbor with colored crates"
+     }
+    }
+   ],
+   "notes": "hero: lots"
+  },
+  {
+   "id": "s-dashboard",
+   "layout": "dashboard",
+   "title": "dashboard - Pilot performance at a glance, for the whole network, with the charts and tables that back it",
+   "blocks": [
+    {
+     "metric": {
+      "value": "52,000",
+      "label": "Participants",
+      "description": "Across both regions and partners"
+     }
+    },
+    {
+     "metric": {
+      "value": "84%",
+      "label": "Completion",
+      "description": "Up from 68% at baseline"
+     }
+    },
+    {
+     "metric": {
+      "value": "6.2",
+      "label": "Median time",
+      "description": "Down from 9.4 min",
+      "unit": "min"
+     }
+    },
+    {
+     "metric": {
+      "value": "97%",
+      "label": "Accuracy",
+      "description": "Target 95%"
+     }
+    },
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Month",
+        "Parcels processed (thousands)",
+        "On-time deliveries (thousands)",
+        "Returns handled (thousands)",
+        "Damaged items (hundreds)",
+        "Manual escalations (hundreds)"
+       ],
+       "rows": [
+        [
+         "January: northern hubs",
+         64,
+         69,
+         84,
+         81,
+         85
+        ],
+        [
+         "February: coastal depots",
+         69,
+         64,
+         70,
+         105,
+         107
+        ],
+        [
+         "March: inland warehouses",
+         72,
+         74,
+         68,
+         99,
+         98
+        ],
+        [
+         "April: cross-dock terminals",
+         78,
+         77,
+         96,
+         108,
+         99
+        ],
+        [
+         "May: regional returns centers",
+         73,
+         61,
+         77,
+         108,
+         116
+        ],
+        [
+         "June: seasonal overflow sites",
+         80,
+         69,
+         79,
+         91,
+         107
+        ],
+        [
+         "July: partner fulfillment",
+         55,
+         72,
+         103,
+         95,
+         103
+        ],
+        [
+         "August: peak preparation",
+         69,
+         93,
+         102,
+         90,
+         110
+        ],
+        [
+         "September: cold-chain network",
+         85,
+         90,
+         86,
+         91,
+         118
+        ],
+        [
+         "October: last-mile micro-hubs",
+         78,
+         73,
+         107,
+         90,
+         100
+        ],
+        [
+         "November: holiday surge capacity",
+         87,
+         94,
+         96,
+         99,
+         129
+        ],
+        [
+         "December: year-end reconciliation",
+         65,
+         76,
+         102,
+         110,
+         102
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "table": {
+      "columns": [
+       "Region",
+       "Hub",
+       "Owner",
+       "Status",
+       "Next review",
+       "Open risks"
+      ],
+      "rows": [
+       [
+        "Region 1: northern and coastal territories",
+        "Hub A: main sorting facility with cold storage",
+        "Owner 1: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 3: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 2: northern and coastal territories",
+        "Hub B: main sorting facility with cold storage",
+        "Owner 2: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 4: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 3: northern and coastal territories",
+        "Hub C: main sorting facility with cold storage",
+        "Owner 3: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 5: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 4: northern and coastal territories",
+        "Hub D: main sorting facility with cold storage",
+        "Owner 4: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 6: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 5: northern and coastal territories",
+        "Hub E: main sorting facility with cold storage",
+        "Owner 5: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 7: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 6: northern and coastal territories",
+        "Hub F: main sorting facility with cold storage",
+        "Owner 6: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 8: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ],
+       [
+        "Region 7: northern and coastal territories",
+        "Hub G: main sorting facility with cold storage",
+        "Owner 7: operations lead and deputy",
+        "On track, with two minor dependencies still open",
+        "Week 9: steering group review in the main office",
+        "Staffing for the night shift; supplier delay on the new conveyor line"
+       ]
+      ]
+     }
+    }
+   ],
+   "notes": "dashboard: lots"
+  },
+  {
+   "id": "s-team",
+   "layout": "team",
+   "title": "team - Give each workstream a clear owner, a deputy and a named place to ask for help",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Person 1: Ana Maria Fernandez de la Vega",
+       "description": "Role 1: pilot lead for the northern and coastal field teams\nCoordinates the weekly reviews. Coordinating the regional hubs requires a shared calendar, a named owner for eve"
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "Person 2: Ana Maria Fernandez de la Vega",
+       "description": "Role 2: pilot lead for the northern and coastal field teams\nCoordinates the weekly reviews. Coordinating the regional hubs requires a shared calendar, a named owner for eve"
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "Person 3: Ana Maria Fernandez de la Vega",
+       "description": "Role 3: pilot lead for the northern and coastal field teams\nCoordinates the weekly reviews. Coordinating the regional hubs requires a shared calendar, a named owner for eve"
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "Person 4: Ana Maria Fernandez de la Vega",
+       "description": "Role 4: pilot lead for the northern and coastal field teams\nCoordinates the weekly reviews. Coordinating the regional hubs requires a shared calendar, a named owner for eve"
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "Person 5: Ana Maria Fernandez de la Vega",
+       "description": "Role 5: pilot lead for the northern and coastal field teams\nCoordinates the weekly reviews. Coordinating the regional hubs requires a shared calendar, a named owner for eve"
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "Person 6: Ana Maria Fernandez de la Vega",
+       "description": "Role 6: pilot lead for the northern and coastal field teams\nCoordinates the weekly reviews. Coordinating the regional hubs requires a shared calendar, a named owner for eve"
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "Person 7: Ana Maria Fernandez de la Vega",
+       "description": "Role 7: pilot lead for the northern and coastal field teams\nCoordinates the weekly reviews. Coordinating the regional hubs requires a shared calendar, a named owner for eve"
+      }
+     ]
+    }
+   ],
+   "notes": "team: lots"
+  },
+  {
+   "id": "s-logos",
+   "layout": "logos",
+   "title": "logos - Recognize the partners who made the pilot possible, in alphabetical order, with thanks",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/logo-1.png",
+      "alt": "Partner 1, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-2.png",
+      "alt": "Partner 2, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-3.png",
+      "alt": "Partner 3, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-4.png",
+      "alt": "Partner 4, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-5.png",
+      "alt": "Partner 5, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-6.png",
+      "alt": "Partner 6, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-7.png",
+      "alt": "Partner 7, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-8.png",
+      "alt": "Partner 8, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-9.png",
+      "alt": "Partner 9, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-10.png",
+      "alt": "Partner 10, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-11.png",
+      "alt": "Partner 11, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-12.png",
+      "alt": "Partner 12, fictional geometric mark"
+     }
+    }
+   ],
+   "notes": "logos: lots"
+  }
+ ],
+ "design": {
+  "fontScheme": {
+   "major": "Arial",
+   "minor": "Arial",
+   "heading": "Arial",
+   "body": "Arial",
+   "accent": "Arial",
+   "code": "Courier New"
+  }
+ }
+}

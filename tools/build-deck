@@ -1,0 +1,181 @@
+#!/usr/bin/env node
+// build-deck [--force] [--suffix <text>] <ver> <family> <source-deck> [name] [-- <pptx flags>]
+// See README.md next to this file.
+import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const W = '/Users/michael/opf-work/keynote-036';
+const argv = process.argv.slice(2);
+const dd = argv.indexOf('--');
+const extra = dd >= 0 ? argv.slice(dd + 1) : [];
+const own = dd >= 0 ? argv.slice(0, dd) : argv;
+let force = false;
+let suffix = '';
+const pos = [];
+for (let i = 0; i < own.length; i++) {
+  if (own[i] === '--force') force = true;
+  else if (own[i] === '--suffix') suffix = own[++i] ?? '';
+  else pos.push(own[i]);
+}
+if (pos.length < 3) {
+  console.error('usage: build-deck [--force] [--suffix <text>] <036|0351|main> <family> <source-deck> [name] [-- <pptx flags>]');
+  process.exit(2);
+}
+const [ver, family, srcArg, nameArg] = pos;
+if (!['036', '0351', 'main'].includes(ver)) {
+  console.error('ver must be 036, 0351 or main');
+  process.exit(2);
+}
+const opf = `${W}/bin/opf-${ver}`;
+const src = path.resolve(srcArg);
+if (!fs.existsSync(src)) {
+  console.error(`no such file: ${src}`);
+  process.exit(2);
+}
+const base = path.basename(src).replace(/\.(opf\.json|opf\.yaml|opf\.md|yaml|yml|md|json)$/i, '');
+const name = (nameArg ?? base) + suffix;
+const out = `${W}/build/${ver}/${family}/${name}`;
+const sha = (f) => createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+
+if (fs.existsSync(`${out}/build.json`) && !force) {
+  console.error(`exists: ${out} (use --force)`);
+  process.exit(3);
+}
+fs.rmSync(out, { recursive: true, force: true });
+fs.mkdirSync(`${out}/preview`, { recursive: true });
+
+function run(args) {
+  const r = spawnSync(opf, args, { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024, timeout: 600000, cwd: path.dirname(src) });
+  let json = null;
+  try {
+    json = JSON.parse(r.stdout);
+  } catch {}
+  return { status: r.status, json, stdout: r.stdout, stderr: r.stderr };
+}
+const finds = (j) => (j?.findings ?? []).map((f) => ({ code: f.ruleId, severity: f.severity, path: f.path, message: f.message, reason: f.reason }));
+const codes = (fs_) => [...new Set(fs_.map((f) => f.code))].sort();
+
+const rec = {
+  source: src,
+  sourceSha256: sha(src),
+  name,
+  family,
+  ver,
+  flags: extra,
+  utc: new Date().toISOString(),
+  cli: null,
+  slides: null,
+  hiddenSlides: [],
+  validate: null,
+  preview: null,
+  exports: {},
+};
+const ver0 = run(['--version']);
+rec.cli = ver0.json?.cli ?? ver0.stdout.trim();
+
+// slide count and hidden slides (read the deck as JSON through the CLI so YAML and Markdown work)
+{
+  const tmp = `${out}/.deck.json`;
+  const r = run(['convert', src, tmp, '--force']);
+  if (r.status === 0 && fs.existsSync(tmp)) {
+    try {
+      const d = JSON.parse(fs.readFileSync(tmp, 'utf8'));
+      const sl = d.slides ?? [];
+      rec.slides = sl.length;
+      sl.forEach((s, i) => s?.hidden === true && rec.hiddenSlides.push(i + 1));
+    } catch {}
+    fs.rmSync(tmp, { force: true });
+  }
+}
+
+// validate
+{
+  const r = run(['validate', src, ...(/\.md$/i.test(src) && !/\.opf\.md$/i.test(src) ? ['--from', 'md'] : [])]);
+  const f = finds(r.json);
+  rec.validate = {
+    status: r.status,
+    ok: r.status === 0,
+    errors: f.filter((x) => x.severity === 'error').length,
+    warnings: f.filter((x) => x.severity === 'warning').length,
+    codes: codes(f),
+    findings: f,
+    stderr: r.status === 0 ? undefined : r.stderr.slice(0, 2000),
+  };
+  if (r.json?.slides != null && rec.slides == null) rec.slides = r.json.slides;
+}
+function finish(code) {
+  fs.writeFileSync(`${out}/build.json`, `${JSON.stringify(rec, null, 2)}\n`);
+  const x = rec.exports;
+  console.log(
+    `${code === 0 ? 'ok  ' : 'FAIL'} ${ver}/${family}/${name} slides=${rec.slides} validate=${rec.validate.ok ? 'ok' : `errors=${rec.validate.errors}`} ` +
+      Object.entries(x).map(([k, v]) => `${k}=${v.ok ? (v.sameAsDefault ? 'same' : 'ok') : 'FAIL'}`).join(' '),
+  );
+  process.exit(code);
+}
+if (rec.validate.errors > 0 || rec.validate.status >= 2 || rec.validate.status == null) {
+  rec.validate.stopped = true;
+  finish(1);
+}
+
+// preview
+{
+  const r = run(['convert', src, `${out}/preview/slide-{n}.png`, '--force']);
+  const files = fs.existsSync(`${out}/preview`) ? fs.readdirSync(`${out}/preview`).filter((f) => f.endsWith('.png')).sort() : [];
+  const f = finds(r.json);
+  rec.preview = { ok: r.status === 0, status: r.status, files: files.length, names: files.length ? [files[0], files[files.length - 1]] : [], codes: codes(f), findings: f, stderr: r.status === 0 ? undefined : r.stderr.slice(0, 2000) };
+}
+
+// exports
+const modes = [
+  ['default', []],
+  ['native', ['--body-text', 'native']],
+  ['static', ['--slide-numbers', 'static']],
+];
+for (const [mode, flags] of modes) {
+  const file = `${out}/${mode}.pptx`;
+  const r = run(['convert', src, file, '--force', ...flags, ...extra]);
+  const f = finds(r.json);
+  rec.exports[mode] = {
+    ok: r.status === 0 && fs.existsSync(file),
+    status: r.status,
+    flags: [...flags, ...extra],
+    file: `${mode}.pptx`,
+    sha256: fs.existsSync(file) ? sha(file) : null,
+    codes: codes(f),
+    counts: r.json?.counts,
+    findings: f,
+    stderr: r.status === 0 ? undefined : r.stderr.slice(0, 2000),
+  };
+}
+
+// compare slide/layout/master/chart parts of native and static with default
+const PY = `
+import sys, zipfile, re, hashlib
+def parts(p):
+    z = zipfile.ZipFile(p)
+    pat = re.compile(r'^ppt/(slides|slideLayouts|slideMasters|charts)/[^/]+\\.xml$|^ppt/(slides|slideLayouts|slideMasters|charts)/_rels/.+$|^ppt/(diagrams|embeddings|media)/.+$')
+    return {n: hashlib.sha256(z.read(n)).hexdigest() for n in z.namelist() if pat.match(n)}
+a = parts(sys.argv[1]); b = parts(sys.argv[2])
+diff = sorted(set(a) ^ set(b)) + sorted(n for n in a if n in b and a[n] != b[n])
+print(len(a), len(diff)); print("\\n".join(diff[:50]))
+`;
+const d = rec.exports.default;
+for (const mode of ['native', 'static']) {
+  const e = rec.exports[mode];
+  if (!e.ok || !d.ok) continue;
+  const r = spawnSync('python3', ['-I', '-c', PY, `${out}/default.pptx`, `${out}/${mode}.pptx`], { encoding: 'utf8' });
+  const lines = r.stdout.split('\n');
+  const [nparts, ndiff] = (lines[0] || '0 -1').split(' ').map(Number);
+  e.partsCompared = nparts;
+  e.differingParts = lines.slice(1).filter(Boolean);
+  e.sameAsDefault = ndiff === 0;
+  e['same-as-default'] = ndiff === 0;
+  if (ndiff === 0) {
+    e.sha256Deleted = e.sha256;
+    fs.rmSync(`${out}/${mode}.pptx`, { force: true });
+    e.file = null;
+  }
+}
+finish(Object.values(rec.exports).some((e) => !e.ok) || !rec.preview.ok ? 1 : 0);

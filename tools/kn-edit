@@ -1,0 +1,130 @@
+#!/usr/bin/env python3
+"""Edit a deck in Keynote 16.0 in memory, through the dictionary, and keep pictures before and after. Never saves.
+
+  kn-edit --file <deck.pptx> --out <dir> --slide N --op <op> [args...] [--version 0.36.0 --mode default]
+
+ops (see kn-edit.applescript):
+  title "<text>"                     the default title item's text (e.g. a title long enough for two lines)
+  body-append "<l1>" "<l2>" "<l3>"   append lines to the default body item (turns the body on)
+  text <item> "<text>" / append <item> "<l1>" ...   object text of iWork item <item> (1-based, as in probe.json + 1)
+  rows <table> <count>               raise (or lower) a table's row count; then optionally:
+  cell <table> <B4> "<value>" ...    set cells (repeat name/value pairs)
+  move <item> <dx> <dy>              move an item; prints the lines' end points before/after (attached connection lines follow)
+  slide-numbers true|false           the document's slide numbers showing
+Steps: guards (as kn-run) -> open -> export slide pictures -> the edit -> read the slide back -> export again -> close saving no.
+Writes <out>/before.png, after.png (the edited slide), edit.json (the op, Keynote's answer, the slide's items before/after),
+edit.jpg (sheet: before | after, labeled). The input's SHA-256 is checked before and after.
+Chart data cannot be edited through the dictionary (the chart class has no properties; there is no data element): use the
+computer-use recipe "Edit Chart Data" in UI-RECIPES.md.
+"""
+import importlib.machinery
+import importlib.util
+import json
+import os
+import shutil
+import subprocess
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+loader = importlib.machinery.SourceFileLoader('knrun', os.path.join(HERE, 'kn-run'))
+spec = importlib.util.spec_from_loader('knrun', loader)
+kr = importlib.util.module_from_spec(spec)
+loader.exec_module(kr)
+EDIT = os.path.join(HERE, 'kn-edit.applescript')
+
+
+def edit(args, timeout=120):
+    p = subprocess.run(['osascript', EDIT] + args, capture_output=True, text=True, timeout=timeout)
+    return (p.stdout or p.stderr).strip()
+
+
+def export_slide(doc_id, tmp, n, dst):
+    shutil.rmtree(tmp, ignore_errors=True)
+    os.makedirs(tmp)
+    rc, o, e, _ = kr.osa(['slides', doc_id, tmp, 'yes'], 600)
+    files = sorted(f for f in os.listdir(tmp) if f.endswith('.png'))
+    if rc != 0 or len(files) < n:
+        raise RuntimeError('slide export failed: %s %s' % (o, e))
+    shutil.copy(os.path.join(tmp, files[n - 1]), dst)
+    shutil.rmtree(tmp, ignore_errors=True)
+
+
+def main(argv):
+    if not argv or '-h' in argv or '--help' in argv:
+        print(__doc__)
+        return 0
+    path = os.path.abspath(kr.arg(argv, '--file'))
+    out = os.path.abspath(kr.arg(argv, '--out'))
+    n = int(kr.arg(argv, '--slide', '1'))
+    version = kr.arg(argv, '--version', '0.36.0')
+    mode = kr.arg(argv, '--mode', 'default')
+    i = argv.index('--op')
+    op = argv[i + 1]
+    rest = []
+    for a in argv[i + 2:]:
+        if a.startswith('--'):
+            break
+        rest.append(a)
+    os.makedirs(out, exist_ok=True)
+    kr.guards()
+    sha0 = kr.sha(path)
+    rc, o, e, sec = kr.osa(['open', path, '120'], 140)
+    if rc != 0 or not o.startswith('OPENED'):
+        print('kn-edit: open failed: %s %s' % (o, e), file=sys.stderr)
+        return 4
+    _, doc_id, cnt = o.split('\t')
+    kr.ledger_add(doc_id, path, 'open-edit')
+    rec = {'input': path, 'slide': n, 'op': op, 'args': rest, 'documentId': doc_id, 'keynote': '16.0'}
+    try:
+        tmp = os.path.join(out, '_export')
+        export_slide(doc_id, tmp, n, os.path.join(out, 'before.png'))
+        rec['before'] = edit(['read', doc_id, str(n)])
+        answers = []
+        if op == 'title':
+            answers.append(edit(['title', doc_id, str(n), ' '.join(rest)]))
+        elif op == 'body-append':
+            answers.append(edit(['body-append', doc_id, str(n), '\n'.join(rest)]))
+        elif op in ('text', 'append'):
+            answers.append(edit([op, doc_id, str(n), rest[0], '\n'.join(rest[1:])]))
+        elif op == 'rows':
+            answers.append(edit(['rows', doc_id, str(n), rest[0], rest[1]]))
+            k = 2
+            while k + 2 < len(rest) + 1 and k < len(rest):
+                if rest[k] == 'cell':
+                    answers.append(edit(['cell', doc_id, str(n), rest[0], rest[k + 1], rest[k + 2]]))
+                    k += 3
+                else:
+                    k += 1
+        elif op == 'cell':
+            for k in range(1, len(rest) - 1, 2):
+                answers.append(edit(['cell', doc_id, str(n), rest[0], rest[k], rest[k + 1]]))
+        elif op == 'move':
+            answers.append(edit(['move', doc_id, str(n), rest[0], rest[1], rest[2]]))
+        elif op == 'slide-numbers':
+            answers.append(edit(['slide-numbers', doc_id, '0', rest[0]]))
+        else:
+            answers.append('ERROR\tunknown op')
+        rec['answers'] = answers
+        rec['after'] = edit(['read', doc_id, str(n)])
+        export_slide(doc_id, tmp, n, os.path.join(out, 'after.png'))
+    finally:
+        r, o2, e2, _ = kr.osa(['close', doc_id], 90)
+        rec['closed'] = o2 or e2
+        if o2 in ('CLOSED', 'GONE'):
+            kr.ledger_add(doc_id, path, 'closed')
+    rec['sha256Unchanged'] = kr.sha(path) == sha0
+    with open(os.path.join(out, 'edit.json'), 'w') as f:
+        json.dump(rec, f, ensure_ascii=False, indent=1)
+    if os.path.exists(os.path.join(out, 'after.png')):
+        cap = '%s %s' % (op, ' '.join(rest))[:120]
+        subprocess.run([sys.executable, os.path.join(HERE, 'sheet.py'), '--out', os.path.join(out, 'edit.jpg'),
+                        '--title', '%s slide %d: in-memory edit through the dictionary (%s)' % (os.path.basename(path), n, op),
+                        '--panel', os.path.join(out, 'before.png'), 'keynote', version, mode, 'before the edit',
+                        '--panel', os.path.join(out, 'after.png'), 'keynote', version, mode, 'after: ' + cap],
+                       capture_output=True)
+    print(json.dumps({k: rec[k] for k in ('op', 'answers', 'closed', 'sha256Unchanged') if k in rec}, ensure_ascii=False, indent=1))
+    return 0 if rec.get('sha256Unchanged') and rec.get('closed') == 'CLOSED' else 1
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))

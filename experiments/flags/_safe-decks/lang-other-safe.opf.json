@@ -1,0 +1,78 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "Languages: lang-other",
+ "description": "Article 1 of the UDHR per language tag, to see which font each default language gets.",
+ "language": "en-US",
+ "slides": [
+  {
+   "language": "am",
+   "title": "am · Amharic · Ethi · expects Ebrima",
+   "blocks": [
+    {
+     "text": "የሰው፡ልጅ፡ሁሉ፡ሲወለድ፡ነጻና፡በክብርና፡በመብትም፡እኩልነት፡ያለው፡ነው። ፡የተፈጥሮ፡ማስተዋልና፡ሕሊና፡ስላለው፡አንዱ፡ሌላውን፡በወንድማማችነት፡መንፈስ፡መመልከት፡ይገባዋል።\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "የሰው ልጅ ሁሉ",
+      "ሲወለድ ነጻና በክብርና",
+      "በመብትም እኩልነት ያለው"
+     ]
+    }
+   ],
+   "notes": "am; expected default font: Ebrima"
+  },
+  {
+   "language": "hy",
+   "title": "hy · Armenian · Armn · expects Sylfaen",
+   "blocks": [
+    {
+     "text": "Բոլոր մարդիկ ծնվում են ազատ ու հավասար իրենց արժանապատվությամբ ու իրավունքներով։ Նրանք ունեն բանականություն ու խիղճ և միմյանց պետք է եղբայրաբար վերաբերվեն։\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Բոլոր մարդիկ ծնվում",
+      "են ազատ ու",
+      "հավասար իրենց արժանապատվությամբ"
+     ]
+    }
+   ],
+   "notes": "hy; expected default font: Sylfaen"
+  },
+  {
+   "language": "ka",
+   "title": "ka · Georgian · Geor · expects Sylfaen",
+   "blocks": [
+    {
+     "text": "ყოველი ადამიანი იბადება თავისუფალი და თანასწორი თავისი ღირსებითა და უფლებებით. მათ მინიჭებული აქვთ გონება და სინდისი და ერთმანეთის მიმართ უნდა ექცეოდნენ ძმობის სულისკვეთებით.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "ყოველი ადამიანი იბადება",
+      "თავისუფალი და თანასწორი",
+      "თავისი ღირსებითა და"
+     ]
+    }
+   ],
+   "notes": "ka; expected default font: Sylfaen"
+  }
+ ],
+ "design": {
+  "fontScheme": {
+   "major": "Arial",
+   "minor": "Arial",
+   "heading": "Arial",
+   "body": "Arial",
+   "accent": "Arial",
+   "code": "Courier New"
+  }
+ }
+}

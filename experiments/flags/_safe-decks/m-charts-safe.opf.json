@@ -1,0 +1,896 @@
+{
+ "name": "Matrix: chart export fixes",
+ "language": "en-US",
+ "slides": [
+  {
+   "title": "M13 one-series column, North and East highlighted: legend names the series",
+   "chart": {
+    "type": "column",
+    "data": {
+     "columns": [
+      "Terminal",
+      "Wait"
+     ],
+     "rows": [
+      [
+       "North",
+       42
+      ],
+      [
+       "South",
+       28
+      ],
+      [
+       "East",
+       35
+      ],
+      [
+       "West",
+       31
+      ]
+     ]
+    },
+    "legend": "bottom",
+    "dataLabels": {
+     "position": "outside-end"
+    },
+    "highlight": {
+     "categories": [
+      "North",
+      "East"
+     ]
+    },
+    "alt": "Average wait in minutes per terminal; North and East are above the 30 minute target"
+   },
+   "notes": "M13 slide 1. One-series column chart with two highlighted columns and a bottom legend. Look at the legend under the chart: one entry, 'Wait', not four category names. The highlighted columns are North and East. Edit Chart Data: column C holds the highlighted values."
+  },
+  {
+   "title": "M13 one-series bar, North highlighted: legend says Wait only",
+   "chart": {
+    "type": "bar",
+    "data": {
+     "columns": [
+      "Terminal",
+      "Wait",
+      "Target"
+     ],
+     "rows": [
+      [
+       "North",
+       42,
+       30
+      ],
+      [
+       "South",
+       28,
+       30
+      ],
+      [
+       "East",
+       35,
+       30
+      ]
+     ]
+    },
+    "mapping": {
+     "category": "Terminal",
+     "series": [
+      "Wait"
+     ]
+    },
+    "legend": "bottom",
+    "dataLabels": {
+     "position": "inside-end"
+    },
+    "axisTitles": {
+     "category": "Terminal",
+     "value": "Minutes"
+    },
+    "highlight": {
+     "categories": [
+      "North"
+     ]
+    },
+    "referenceLines": [
+     {
+      "value": 30,
+      "label": "Target 30 min",
+      "stroke": {
+       "color": "accent2",
+       "dash": "dot"
+      }
+     }
+    ],
+    "alt": "Wait per terminal; North is the longest at 42 minutes"
+   },
+   "notes": "M13 slide 2. One-series horizontal bar chart, North highlighted, legend at the bottom, axis titles and a dotted target line. Look at the legend: one entry 'Wait'. North's bar keeps its place in the top row."
+  },
+  {
+   "title": "M13 one-series line with markers, March highlighted: legend says Visits",
+   "chart": {
+    "type": "line-with-markers",
+    "data": {
+     "columns": [
+      "Month",
+      "Visits"
+     ],
+     "rows": [
+      [
+       "Jan",
+       12
+      ],
+      [
+       "Feb",
+       18
+      ],
+      [
+       "Mar",
+       15
+      ],
+      [
+       "Apr",
+       22
+      ],
+      [
+       "May",
+       24
+      ],
+      [
+       "Jun",
+       21
+      ]
+     ]
+    },
+    "legend": "right",
+    "highlight": {
+     "categories": [
+      "Mar"
+     ]
+    },
+    "alt": "Monthly visits in thousands; March dipped before the spring rise"
+   },
+   "notes": "M13 slide 3. One-series line chart with markers, the March point highlighted, legend on the right. Look at the legend: one entry 'Visits'. The line is unbroken; March has its own marker."
+  },
+  {
+   "title": "M64 data labels on one line: '31 Self-serve' at the line ends",
+   "blocks": [
+    {
+     "chart": {
+      "type": "stacked-line",
+      "data": {
+       "columns": [
+        "Quarter",
+        "Enterprise",
+        "Mid-market",
+        "Self-serve"
+       ],
+       "rows": [
+        [
+         "Q1",
+         42,
+         30,
+         18
+        ],
+        [
+         "Q2",
+         46,
+         33,
+         22
+        ],
+        [
+         "Q3",
+         51,
+         31,
+         27
+        ],
+        [
+         "Q4",
+         55,
+         36,
+         31
+        ]
+       ]
+      },
+      "alt": "Cumulative bookings by segment"
+     }
+    },
+    {
+     "chart": {
+      "type": "stacked-line-with-markers",
+      "data": {
+       "columns": [
+        "Quarter",
+        "Enterprise",
+        "Mid-market",
+        "Self-serve"
+       ],
+       "rows": [
+        [
+         "Q1",
+         42,
+         30,
+         18
+        ],
+        [
+         "Q2",
+         46,
+         33,
+         22
+        ],
+        [
+         "Q3",
+         51,
+         31,
+         27
+        ],
+        [
+         "Q4",
+         55,
+         36,
+         31
+        ]
+       ]
+      },
+      "alt": "Cumulative bookings by segment with markers"
+     }
+    }
+   ],
+   "notes": "M64 slide 4. Two small stacked line charts side by side with the series names at the line ends. Look at the end labels on the right of each chart: '31 Self-serve', '36 Mid-market' stay on one line each, not broken in two."
+  },
+  {
+   "title": "M64 data labels 'Terminal: value' and slice names stay on one line",
+   "blocks": [
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Terminal",
+        "Wait",
+        "Queue"
+       ],
+       "rows": [
+        [
+         "North",
+         42,
+         12
+        ],
+        [
+         "South",
+         28,
+         9
+        ],
+        [
+         "East",
+         35,
+         14
+        ]
+       ]
+      },
+      "legend": "bottom",
+      "dataLabels": {
+       "content": [
+        "category",
+        "value"
+       ],
+       "separator": ": ",
+       "position": "inside-end"
+      },
+      "axisTitles": {
+       "category": "Terminal",
+       "value": "Minutes"
+      },
+      "referenceLines": [
+       {
+        "value": 30,
+        "label": "Target 30 min"
+       }
+      ],
+      "alt": "Wait and queue per terminal"
+     }
+    },
+    {
+     "chart": {
+      "type": "pie",
+      "data": {
+       "columns": [
+        "Region",
+        "Share"
+       ],
+       "rows": [
+        [
+         "Europe, Middle East and Africa",
+         40
+        ],
+        [
+         "Asia Pacific",
+         35
+        ],
+        [
+         "Americas",
+         25
+        ]
+       ]
+      },
+      "alt": "Share of volume by region"
+     }
+    }
+   ],
+   "notes": "M64 slide 5. A two-series column chart labeled 'North: 42' inside the column ends beside a pie with slice names. Look at every data label: one line each."
+  },
+  {
+   "title": "M66 dashboard: charts below their heading row keep the preview's plot",
+   "layout": "dashboard",
+   "blocks": [
+    {
+     "metric": {
+      "value": 52,
+      "label": "Trial participants"
+     }
+    },
+    {
+     "metric": {
+      "value": "84%",
+      "label": "Task completion"
+     }
+    },
+    {
+     "chart": {
+      "type": "column",
+      "axisTitles": {
+       "category": "Week",
+       "value": "Task completion"
+      },
+      "data": {
+       "columns": [
+        "Week",
+        {
+         "name": "Task completion",
+         "format": "0%"
+        }
+       ],
+       "rows": [
+        [
+         "1",
+         0.68
+        ],
+        [
+         "2",
+         0.72
+        ],
+        [
+         "3",
+         0.76
+        ],
+        [
+         "4",
+         0.84
+        ]
+       ]
+      },
+      "alt": "Task completion rose each week"
+     }
+    },
+    {
+     "chart": {
+      "type": "bar",
+      "axisTitles": {
+       "value": "Median task time (min)"
+      },
+      "data": {
+       "columns": [
+        "Team",
+        {
+         "name": "Median task time (min)",
+         "format": "0.0"
+        }
+       ],
+       "rows": [
+        [
+         "A",
+         5.8
+        ],
+        [
+         "B",
+         6.7
+        ]
+       ]
+      },
+      "alt": "Median task time per team"
+     }
+    }
+   ],
+   "notes": "M66 slide 6. Dashboard with two metrics over a column chart (axis titles) and a bar chart (value-axis title). Look at the top of each chart's plot: the first gridline sits half a text line under the chart's top edge as in the OPF preview, not right under it; axis titles keep their room."
+  },
+  {
+   "title": "M66 small column chart under a top legend: label of the tallest column below the legend",
+   "chart": {
+    "type": "column",
+    "data": {
+     "columns": [
+      "Terminal",
+      "Wait",
+      "Queue"
+     ],
+     "rows": [
+      [
+       "North",
+       42,
+       12
+      ],
+      [
+       "South",
+       28,
+       31
+      ],
+      [
+       "East",
+       35,
+       14
+      ]
+     ]
+    },
+    "legend": "top",
+    "alt": "Wait and queue per terminal"
+   },
+   "notes": "M66 slide 7. Small two-series column chart (no value axis, every column labeled) with the legend at the top. Look at the label '42' on the tallest column: it stands under the legend row, not on it."
+  },
+  {
+   "title": "M66 three narrow small column charts: top labels clear of the chart tops",
+   "blocks": [
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Terminal",
+        "Wait"
+       ],
+       "rows": [
+        [
+         "North",
+         42
+        ],
+        [
+         "South",
+         28
+        ],
+        [
+         "East",
+         35
+        ]
+       ]
+      },
+      "alt": "Wait"
+     },
+     "caption": {
+      "text": "Wait (min)",
+      "position": "above"
+     }
+    },
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Terminal",
+        "Queue"
+       ],
+       "rows": [
+        [
+         "North",
+         12
+        ],
+        [
+         "South",
+         31
+        ],
+        [
+         "East",
+         14
+        ]
+       ]
+      },
+      "alt": "Queue"
+     },
+     "caption": {
+      "text": "Queue (trucks)",
+      "position": "above"
+     }
+    },
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Terminal",
+        "Lifts"
+       ],
+       "rows": [
+        [
+         "North",
+         18
+        ],
+        [
+         "South",
+         28
+        ],
+        [
+         "East",
+         47
+        ]
+       ]
+      },
+      "alt": "Lifts"
+     },
+     "caption": {
+      "text": "Lifts per hour",
+      "position": "above"
+     }
+    }
+   ],
+   "notes": "M66 slide 8. Three narrow one-series column charts side by side, each with a caption above (the header row). Look at the tallest column of each: its value label sits under the caption, not over the caption's text."
+  },
+  {
+   "title": "M66 small bar chart: the longest bar keeps room for its label",
+   "chart": {
+    "type": "bar",
+    "data": {
+     "columns": [
+      "Terminal",
+      "Wait"
+     ],
+     "rows": [
+      [
+       "North",
+       18
+      ],
+      [
+       "South",
+       28
+      ],
+      [
+       "East",
+       47
+      ]
+     ]
+    },
+    "alt": "Wait per terminal; East is longest"
+   },
+   "notes": "M66 slide 9. Small horizontal bar chart (no value axis) whose longest bar is last. Look at the right end of the East bar: its value label '47' is fully inside the chart frame."
+  },
+  {
+   "title": "M14 pie, legend right, EMEA highlighted: white lines separate every slice",
+   "chart": {
+    "type": "pie",
+    "data": {
+     "columns": [
+      "Region",
+      "Share"
+     ],
+     "rows": [
+      [
+       "EMEA",
+       40
+      ],
+      [
+       "APAC",
+       35
+      ],
+      [
+       "AMER",
+       25
+      ]
+     ]
+    },
+    "legend": "right",
+    "highlight": {
+     "categories": [
+      "EMEA"
+     ]
+    },
+    "alt": "EMEA has the largest share"
+   },
+   "notes": "M14 slide 10. Pie with legend on the right and one highlighted slice (EMEA). Look between APAC and AMER: both are muted in one color, and a separator line in the background color divides them. The pie's size and position match the OPF preview (not about a tenth larger and higher)."
+  },
+  {
+   "title": "M14 doughnut, four muted segments of one color: separators between all",
+   "chart": {
+    "type": "doughnut",
+    "data": {
+     "columns": [
+      "Region",
+      "Share"
+     ],
+     "rows": [
+      [
+       "EMEA",
+       30
+      ],
+      [
+       "APAC",
+       26
+      ],
+      [
+       "AMER",
+       20
+      ],
+      [
+       "LATAM",
+       14
+      ],
+      [
+       "ANZ",
+       10
+      ]
+     ]
+    },
+    "legend": "bottom",
+    "highlight": {
+     "categories": [
+      "APAC"
+     ]
+    },
+    "alt": "APAC is the second largest region"
+   },
+   "notes": "M14 slide 11. Doughnut with five segments, one highlighted (APAC), legend at the bottom. Look at the four muted segments: each is separated from its neighbors by a line in the background color."
+  },
+  {
+   "title": "M14 pie with outside labels and no legend: plot square as in the preview",
+   "chart": {
+    "type": "pie",
+    "data": {
+     "columns": [
+      "Region",
+      "Share"
+     ],
+     "rows": [
+      [
+       "EMEA",
+       40
+      ],
+      [
+       "APAC",
+       35
+      ],
+      [
+       "AMER",
+       25
+      ]
+     ]
+    },
+    "legend": "none",
+    "dataLabels": {
+     "content": [
+      "category",
+      "value"
+     ],
+     "position": "outside-end"
+    },
+    "alt": "Share by region"
+   },
+   "notes": "M14 slide 12. Pie with category and value labels outside the slices, no legend, no highlight. Look at the pie's size and position against the OPF preview: same circle, labels outside it."
+  },
+  {
+   "title": "M14 pie beside a table, highlight: square plot beside the rows",
+   "blocks": [
+    {
+     "chart": {
+      "type": "pie",
+      "data": {
+       "columns": [
+        "Region",
+        "Share"
+       ],
+       "rows": [
+        [
+         "EMEA",
+         40
+        ],
+        [
+         "APAC",
+         35
+        ],
+        [
+         "AMER",
+         25
+        ]
+       ]
+      },
+      "legend": "right",
+      "highlight": {
+       "categories": [
+        "AMER"
+       ]
+      },
+      "alt": "AMER share"
+     }
+    },
+    {
+     "table": {
+      "columns": [
+       "Region",
+       "Share",
+       "Change"
+      ],
+      "rows": [
+       [
+        "EMEA",
+        "40%",
+        "+2"
+       ],
+       [
+        "APAC",
+        "35%",
+        "-1"
+       ],
+       [
+        "AMER",
+        "25%",
+        "-1"
+       ]
+      ]
+     }
+    }
+   ],
+   "notes": "M14 slide 13. Pie with a highlighted slice beside a table of the same regions. Look at the pie: same size and place as in the preview, separators between the muted slices."
+  },
+  {
+   "title": "M30 bar chart on a table's rows: one long word gets room for its label",
+   "chart": {
+    "type": "bar",
+    "data": {
+     "columns": [
+      "Workstream",
+      "Weeks"
+     ],
+     "rows": [
+      [
+       "Internationalization",
+       7
+      ],
+      [
+       "Search",
+       3
+      ],
+      [
+       "Export",
+       4
+      ]
+     ]
+    },
+    "axisTitles": {
+     "value": "Weeks"
+    },
+    "alt": "Weeks per workstream"
+   },
+   "table": {
+    "columns": [
+     "Workstream",
+     "Weeks"
+    ],
+    "rows": [
+     [
+      "Internationalization",
+      7
+     ],
+     [
+      "Search",
+      3
+     ],
+     [
+      "Export",
+      4
+     ]
+    ]
+   },
+   "notes": "M30 slide 14. Horizontal bar chart drawn on the rows of the table beside it; one category is the long word 'Internationalization'. Look at the category label column: 'Internationalization' is whole, and the bars start where the OPF preview's do (up to 40% of the chart for the labels)."
+  },
+  {
+   "title": "M11 bar chart on a table's rows with a category axis title: title beside its labels",
+   "chart": {
+    "type": "bar",
+    "data": {
+     "columns": [
+      "Workstream",
+      "Weeks"
+     ],
+     "rows": [
+      [
+       "Internationalization",
+       7
+      ],
+      [
+       "Search",
+       3
+      ],
+      [
+       "Export",
+       4
+      ]
+     ]
+    },
+    "axisTitles": {
+     "value": "Weeks",
+     "category": "Workstream"
+    },
+    "alt": "Weeks per workstream"
+   },
+   "table": {
+    "columns": [
+     "Workstream",
+     "Weeks"
+    ],
+    "rows": [
+     [
+      "Internationalization",
+      7
+     ],
+     [
+      "Search",
+      3
+     ],
+     [
+      "Export",
+      4
+     ]
+    ]
+   },
+   "notes": "M11 slide 15. Same bar chart on the table's rows, with a category axis title 'Workstream' and value title 'Weeks'. Look at the rotated 'Workstream' title left of the category labels: it does not overlap them."
+  },
+  {
+   "title": "M11 bar chart on a table's rows, short names, both axis titles",
+   "chart": {
+    "type": "bar",
+    "data": {
+     "columns": [
+      "Prototype",
+      "Minutes"
+     ],
+     "rows": [
+      [
+       "Prototype A",
+       5.8
+      ],
+      [
+       "Prototype B",
+       6.7
+      ]
+     ]
+    },
+    "axisTitles": {
+     "value": "Minutes",
+     "category": "Prototype"
+    },
+    "alt": "Minutes per prototype"
+   },
+   "table": {
+    "columns": [
+     "Prototype",
+     "Minutes"
+    ],
+    "rows": [
+     [
+      "Prototype A",
+      5.8
+     ],
+     [
+      "Prototype B",
+      6.7
+     ]
+    ]
+   },
+   "notes": "M11 slide 16. Bar chart on the rows of a two-row table, both axis titles. Look at the 'Prototype' title left of 'Prototype A' and 'Prototype B': no overlap."
+  }
+ ],
+ "design": {
+  "fontScheme": {
+   "major": "Arial",
+   "minor": "Arial",
+   "heading": "Arial",
+   "body": "Arial",
+   "accent": "Arial",
+   "code": "Courier New"
+  }
+ }
+}

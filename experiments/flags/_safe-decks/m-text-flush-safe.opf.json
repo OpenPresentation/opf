@@ -1,0 +1,114 @@
+{
+ "name": "Matrix M16: flush wrapped text",
+ "language": "en-US",
+ "slides": [
+  {
+   "layout": "statement",
+   "title": "M16 right-aligned wrapped heading: each line of this title ends flush on the right edge",
+   "design": {
+    "titleAlignment": "end"
+   },
+   "notes": "M16 slide 1. Right-aligned wrapped heading. Look at the right ends of the title lines: they share one edge."
+  },
+  {
+   "layout": "statement",
+   "title": "M16 centered wrapped heading: the lines of this long title are centered on the same middle",
+   "design": {
+    "titleAlignment": "center"
+   },
+   "notes": "M16 slide 2. Centered wrapped heading. Every line is centered; no line is pushed half a space left."
+  },
+  {
+   "title": "M16 right-aligned body: wrapped lines end flush right",
+   "design": {
+    "titleAlignment": "end",
+    "contentAlignment": "end"
+   },
+   "blocks": [
+    {
+     "text": "The northern hubs cut the average wait at the gates from 31 to 24 minutes in the pilot, and the same scheduling rules can be rolled out to the four remaining terminals before the January peak without new hardware."
+    }
+   ],
+   "notes": "M16 slide 3. Right-aligned body paragraph of three or more lines. Look at the right edge of the paragraph: all line ends on one vertical line."
+  },
+  {
+   "title": "M16 centered body: wrapped lines centered on one axis",
+   "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center"
+   },
+   "blocks": [
+    {
+     "text": "The northern hubs cut the average wait at the gates from 31 to 24 minutes in the pilot, and the same scheduling rules can be rolled out to the four remaining terminals before the January peak without new hardware."
+    }
+   ],
+   "notes": "M16 slide 4. Centered body paragraph. Lines centered, none offset by half a space."
+  },
+  {
+   "title": "M16 right-aligned table cells: wrapped cell text flush right",
+   "table": {
+    "columns": [
+     "Terminal",
+     {
+      "value": "What changes in January",
+      "style": {
+       "align": "end"
+      }
+     }
+    ],
+    "rows": [
+     [
+      "North",
+      {
+       "value": "The dock scheduler replaces the fixed weekly plan and gate staff follow its forecast for every shift",
+       "style": {
+        "align": "end"
+       }
+      }
+     ],
+     [
+      "East",
+      {
+       "value": "The scheduler goes live one week later, after the staff have been trained on the new handheld screens",
+       "style": {
+        "align": "end"
+       }
+      }
+     ]
+    ]
+   },
+   "notes": "M16 slide 5. Table whose second column is right-aligned and wraps. Look at the right edge of the long cells."
+  },
+  {
+   "title": "M16 centered caption under a picture: wrapped caption centered",
+   "caption": {
+    "text": "The North terminal at dusk in the sixth pilot week: the orange gate building on the left is where the dock scheduler's forecast is shown to the gate staff, and the gray warehouse on the right holds the handheld screens that the East terminal will receive in January.",
+    "align": "center"
+   },
+   "notes": "M16 slide 6. Centered caption that wraps to two or three lines under a picture. Look at the caption lines: each centered on the picture's middle.",
+   "image": {
+    "src": "./assets/terminal.png",
+    "alt": "Drawing of a container terminal with two buildings at dusk"
+   }
+  },
+  {
+   "title": "M16 control: start-aligned body does not move",
+   "blocks": [
+    {
+     "text": "The northern hubs cut the average wait at the gates from 31 to 24 minutes in the pilot, and the same scheduling rules can be rolled out to the four remaining terminals before the January peak without new hardware."
+    }
+   ],
+   "notes": "M16 slide 7. Control: left-aligned English body. Lines start on the left edge; nothing should differ from 0.35.1."
+  }
+ ],
+ "design": {
+  "fontScheme": {
+   "major": "Arial",
+   "minor": "Arial",
+   "heading": "Arial",
+   "body": "Arial",
+   "accent": "Arial",
+   "code": "Courier New"
+  }
+ }
+}

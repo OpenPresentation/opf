@@ -1,0 +1,56 @@
+ok   036/x-safe/layouts-ordinary-safe slides=38 validate=ok default=ok native=ok static=ok
+ok   036/x-safe/layouts-little-safe slides=38 validate=ok default=ok native=ok static=same
+ok   036/x-safe/layouts-lots-safe slides=38 validate=ok default=ok native=ok static=same
+ok   036/x-safe/sweep-tables-safe slides=13 validate=ok default=ok native=ok static=same
+ok   036/x-safe/m-text-flush-safe slides=7 validate=ok default=ok native=ok static=same
+ok   036/x-safe/m-charts-safe slides=16 validate=ok default=ok native=same static=same
+ok   036/x-safe/lang-latin-1-safe slides=24 validate=ok default=ok native=ok static=same
+ok   036/x-safe/lang-cyrillic-greek-safe slides=9 validate=ok default=ok native=ok static=same
+ok   036/x-safe/lang-other-safe slides=3 validate=ok default=ok native=ok static=same
+ok   036/x-safe/layout-sampler-safe slides=52 validate=ok default=ok native=ok static=same
+ok   036/x-safe/data-story-academy-safe slides=16 validate=ok default=ok native=same static=ok
+ok   036/x-safe/full-feature-tour-safe slides=11 validate=ok default=ok native=ok static=same
+ok   036/x-safe/table-and-code-safe slides=2 validate=ok default=ok native=ok static=same
+ok   036/x-smartart-shapes/layouts-ordinary-smartart-shapes slides=38 validate=ok default=ok native=ok static=ok
+ok   036/x-smartart-shapes/layouts-little-smartart-shapes slides=38 validate=ok default=ok native=ok static=same
+ok   036/x-smartart-shapes/layouts-lots-smartart-shapes slides=38 validate=ok default=ok native=ok static=same
+FAIL 036/x-keynote-profile/layouts-ordinary-keynote-profile slides=38 validate=ok default=ok native=FAIL static=FAIL
+FAIL 036/x-keynote-profile/layouts-lots-keynote-profile slides=38 validate=ok default=ok native=FAIL static=FAIL
+FAIL 036/x-keynote-profile/footers-keynote-profile slides=4 validate=ok default=ok native=FAIL static=FAIL
+FAIL 036/x-keynote-profile/data-story-academy-keynote-profile slides=16 validate=ok default=ok native=FAIL static=FAIL
+x-safe/layouts-ordinary-safe: safe preview 38 png, default diff 0, native diff 0
+x-safe/layouts-little-safe: safe preview 38 png, default diff 0, native diff 0
+x-safe/layouts-lots-safe: safe preview 38 png, default diff 0, native diff 0
+x-safe/sweep-tables-safe: safe preview 13 png, default diff 0, native diff 0
+x-safe/m-text-flush-safe: safe preview 7 png, default diff 0, native diff 0
+x-safe/m-charts-safe: safe preview 16 png, default diff 0, native diff 0
+x-safe/lang-latin-1-safe: safe preview 24 png, default diff 0, native diff 0
+x-safe/lang-cyrillic-greek-safe: safe preview 9 png, default diff 0, native diff 0
+x-safe/lang-other-safe: safe preview 3 png, default diff 0, native diff 0
+x-safe/layout-sampler-safe: safe preview 52 png, default diff 0, native diff 0
+x-safe/data-story-academy-safe: safe preview 16 png, default diff 0, native diff 0
+x-safe/full-feature-tour-safe: safe preview 10 png, default diff 0, native diff 0
+x-safe/table-and-code-safe: safe preview 2 png, default diff 0, native diff 0
+x-smartart-shapes/layouts-ordinary-smartart-shapes: preview as built
+x-smartart-shapes/layouts-little-smartart-shapes: preview as built
+x-smartart-shapes/layouts-lots-smartart-shapes: preview as built
+Traceback (most recent call last):
+  File "/Users/michael/opf-work/keynote-036/experiments/flags/make.py", line 95, in <module>
+    for line in ex.map(lambda j: safe_preview(*j) if '--typefaces' in j[2] else f'{j[0]}/{j[3]}{j[1]}: preview as built', jobs): print(line, flush=True)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 608, in result_iterator
+    yield fs.pop().result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 438, in result
+    return self.__get_result()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/_base.py", line 390, in __get_result
+    raise self._exception
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/michael/opf-work/keynote-036/experiments/flags/make.py", line 95, in <lambda>
+    for line in ex.map(lambda j: safe_preview(*j) if '--typefaces' in j[2] else f'{j[0]}/{j[3]}{j[1]}: preview as built', jobs): print(line, flush=True)
+  File "/Users/michael/opf-work/keynote-036/experiments/flags/make.py", line 76, in safe_preview
+    a, b = parts(tgt), parts(tmp)
+  File "/Users/michael/opf-work/keynote-036/experiments/flags/make.py", line 43, in parts
+    z = zipfile.ZipFile(p)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/zipfile.py", line 1239, in __init__
+    self.fp = io.open(file, filemode)
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/michael/opf-work/keynote-036/experiments/flags/_safe-decks/layouts-ordinary-keynote-profile~native.pptx'

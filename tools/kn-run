@@ -1,0 +1,548 @@
+#!/usr/bin/env python3
+"""Open .pptx files in Keynote 16.0 one at a time and keep what Keynote makes of them.
+
+  kn-run --list <file> --out <dir> [--probe] [--pptx-back] [--force] [--name-from auto|base|parent]
+         [--with-skipped] [--open-timeout 120] [--op-timeout 900]
+  kn-run --hold <file.pptx> --out <dir> [--name <name>]     open one file, print its document id, leave it open (computer-use look)
+  kn-close --id <id> | --all-ours | --list                    close one of ours saving no / close every one of ours / list documents
+
+List file: one .pptx path per line; optional second column (TAB) = output name. Blank lines and lines starting with # are ignored.
+Output per input: <out>/<name>/ with slides/slide-NN.png (NN = Keynote's slide number), probe.json (--probe), back.pptx
+(--pptx-back), import-notes.txt, run.json; one line per file in <out>/_log.tsv:
+  name  status  seconds  slides  skipped  pictures  sha_unchanged  message
+status: OPENED (everything asked for was done), TIMEOUT, ALERT (an unexpected Keynote window appeared), ERROR.
+Names (--name-from auto): <...>/build/<ver>/<family>/<deck>/<mode>.pptx -> <deck>~<mode>; anything else -> base name without .pptx.
+Two inputs with one name stop the run before Keynote is touched (exit 2).
+
+Skipped (hidden) slides: by default NOT exported, as a viewer of the show would see; their numbers go into the log and run.json, and the
+pictures are named by Keynote's slide number, so slide-03.png is missing when slide 3 is skipped. --with-skipped exports them too.
+
+Guards before every file (no Keynote event is sent until these pass): Keynote is running (pgrep -x Keynote; never started here),
+the screen is unlocked (ioreg CGSSessionScreenIsLocked), and every open document is one this tool opened (ledger
+tools/.kn-ledger.tsv). Imported .pptx documents have no file in Keynote's object model, so "ours" is decided by document id.
+A foreign document: its names are printed and the run exits 3. TIMEOUT or ALERT: windows are captured into <name>/, nothing is
+clicked or closed, the batch stops with exit 4 and says what to do (a sheet is handled with computer use, then kn-close).
+Resumable: names already OPENED in _log.tsv are skipped unless --force. Exit 0 = every file OPENED; 1 = some ERROR (batch went on).
+The watchdog only observes: it lists Keynote's windows every 2 s while an action runs (tools/kwin) and never clicks.
+"""
+import datetime
+import hashlib
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import threading
+import time
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+W = os.path.dirname(HERE)
+KN = os.path.join(HERE, 'kn.applescript')
+KWIN = os.path.join(HERE, 'kwin')
+LEDGER = os.path.join(HERE, '.kn-ledger.tsv')
+sys.path.insert(0, HERE)
+import knprobe  # noqa: E402
+
+try:
+    import fonts as fontsmod  # noqa: E402
+except Exception:  # pragma: no cover
+    fontsmod = None
+
+
+def now():
+    return datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+def sha(path):
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for b in iter(lambda: f.read(1 << 20), b''):
+            h.update(b)
+    return h.hexdigest()
+
+
+# ---------- ledger of documents this tool opened ----------
+
+def ledger_read():
+    rows = {}
+    if os.path.exists(LEDGER):
+        with open(LEDGER) as f:
+            for line in f:
+                p = line.rstrip('\n').split('\t')
+                if len(p) >= 4:
+                    rows[p[0]] = p
+    return rows
+
+
+def ledger_add(doc_id, path, state):
+    with open(LEDGER, 'a') as f:
+        f.write('%s\t%s\t%s\t%s\n' % (doc_id, now(), path, state))
+
+
+# ---------- guards ----------
+
+def keynote_running():
+    return subprocess.run(['pgrep', '-x', 'Keynote'], capture_output=True).returncode == 0
+
+
+def screen_locked():
+    out = subprocess.run(['ioreg', '-n', 'Root', '-d1', '-a'], capture_output=True, text=True).stdout
+    m = re.search(r'<key>CGSSessionScreenIsLocked</key>\s*<(true|false)/>', out)
+    return bool(m and m.group(1) == 'true')
+
+
+def osa(args, timeout):
+    """Run one kn.applescript action. Returns (rc, stdout, stderr, seconds); rc None = our own timeout hit."""
+    t0 = time.time()
+    try:
+        p = subprocess.run(['osascript', KN] + args, capture_output=True, text=True, timeout=timeout)
+        return p.returncode, p.stdout.strip(), p.stderr.strip(), time.time() - t0
+    except subprocess.TimeoutExpired:
+        return None, '', 'timed out after %ds' % timeout, time.time() - t0
+
+
+def open_docs():
+    rc, out, err, _ = osa(['docs'], 60)
+    if rc != 0:
+        raise SystemExit('kn-run: cannot list Keynote documents: %s' % err)
+    docs = []
+    for line in out.splitlines():
+        p = line.split('\t')
+        if p and p[0]:
+            docs.append({'id': p[0], 'name': p[1] if len(p) > 1 else '', 'file': p[2] if len(p) > 2 else ''})
+    return docs
+
+
+def guards():
+    if not keynote_running():
+        print('kn-run: Keynote is not running. The owner starts it; this tool never does.', file=sys.stderr)
+        sys.exit(3)
+    if screen_locked():
+        print('kn-run: the screen is locked; Keynote cannot open files. Ask the owner to unlock it.', file=sys.stderr)
+        sys.exit(3)
+    led = ledger_read()
+    docs = open_docs()
+    foreign = [d for d in docs if d['id'] not in led]
+    if foreign:
+        print('kn-run: Keynote has documents this tool did not open; not starting:', file=sys.stderr)
+        for d in foreign:
+            print('  %s  %s  %s' % (d['name'], d['file'] or '(no file)', d['id']), file=sys.stderr)
+        sys.exit(3)
+    return docs
+
+
+# ---------- watchdog ----------
+
+def windows():
+    try:
+        out = subprocess.run([KWIN], capture_output=True, text=True, timeout=10).stdout
+    except Exception:
+        return []
+    res = []
+    for line in out.splitlines():
+        p = line.split('\t')
+        if len(p) >= 7:
+            res.append({'id': int(p[0]), 'layer': int(p[1]), 'x': int(p[2]), 'y': int(p[3]), 'w': int(p[4]), 'h': int(p[5]),
+                        'name': p[6]})
+    return res
+
+
+class Watch(threading.Thread):
+    """Lists Keynote's windows every 2 s while an action runs and never clicks. Keynote 16.0 shows import warnings in a floating
+    panel "Warnings – <document>" (only while Keynote is the active app) and missing fonts in a small untitled banner window over
+    the document window; both are expected: the panel is captured once and read with Vision OCR (tools/kocr) into
+    import-notes.txt, the banner is ignored. Any other window that is not a known document window counts as an alert."""
+
+    def __init__(self, known_names, odir=None):
+        super().__init__(daemon=True)
+        self.known = set(known_names)
+        self.stop_ev = threading.Event()
+        self.unexpected = {}
+        self.odir = odir
+        self.warnings = []
+
+    def look(self):
+        for w in windows():
+            if w['name'].startswith('Warnings'):
+                self.capture_warnings(w)
+                continue
+            if w['layer'] != 0 or (w['name'] and w['name'] in self.known):
+                continue
+            if is_banner(w):
+                continue
+            self.unexpected[w['id']] = w
+
+    def capture_warnings(self, w):
+        if not self.odir or any(x['window'] == w['id'] for x in self.warnings):
+            return
+        fn = os.path.join(self.odir, 'import-warnings-%d.png' % w['id'])
+        subprocess.run(['screencapture', '-x', '-o', '-l', str(w['id']), fn], capture_output=True)
+        text = ''
+        if os.path.exists(fn):
+            text = subprocess.run([os.path.join(HERE, 'kocr'), fn], capture_output=True, text=True).stdout
+        self.warnings.append({'window': w['id'], 'title': w['name'], 'file': os.path.basename(fn), 'ocr': text})
+
+    def run(self):
+        while not self.stop_ev.wait(2.0):
+            self.look()
+
+    def add_known(self, name):
+        self.known.add(name)
+
+    def stop(self):
+        self.stop_ev.set()
+        self.join(5)
+        self.look()
+
+
+def is_banner(w):
+    """The missing-fonts banner: an untitled window about 324-350 x 100-112 pt (shadow included)."""
+    return (not w['name']) and w['w'] <= 420 and w['h'] <= 140
+
+
+def capture_windows(outdir, tag):
+    caps = []
+    for w in windows():
+        fn = os.path.join(outdir, '_%s-window-%d.png' % (tag, w['id']))
+        subprocess.run(['screencapture', '-x', '-o', '-l', str(w['id']), fn], capture_output=True)
+        caps.append({'window': w, 'file': os.path.basename(fn) if os.path.exists(fn) else None})
+    return caps
+
+
+# ---------- names ----------
+
+BUILD_RE = re.compile(r'/build/([^/]+)/([^/]+)/([^/]+)/([^/]+)\.pptx$')
+
+
+def derive_name(path, how):
+    if how == 'base':
+        return os.path.basename(path)[:-5] if path.endswith('.pptx') else os.path.basename(path)
+    if how == 'parent':
+        return '%s~%s' % (os.path.basename(os.path.dirname(path)), os.path.basename(path)[:-5])
+    m = BUILD_RE.search(path)
+    if m:
+        return '%s~%s' % (m.group(3), m.group(4))
+    return os.path.basename(path)[:-5] if path.endswith('.pptx') else os.path.basename(path)
+
+
+def read_list(fn, how):
+    items = []
+    with open(fn) as f:
+        for line in f:
+            line = line.rstrip('\n')
+            if not line.strip() or line.lstrip().startswith('#'):
+                continue
+            p = line.split('\t')
+            path = os.path.abspath(os.path.expanduser(p[0].strip()))
+            name = p[1].strip() if len(p) > 1 and p[1].strip() else derive_name(path, how)
+            items.append((path, name))
+    seen = {}
+    for path, name in items:
+        if name in seen and seen[name] != path:
+            print('kn-run: two inputs get the name %s:\n  %s\n  %s\nGive names in a second column or use --name-from parent.'
+                  % (name, seen[name], path), file=sys.stderr)
+            sys.exit(2)
+        seen[name] = path
+    return items
+
+
+# ---------- log ----------
+
+LOG_HEAD = 'name\tstatus\tseconds\tslides\tskipped\tpictures\tsha_unchanged\tmessage\n'
+
+
+def log_done(out):
+    done = {}
+    fn = os.path.join(out, '_log.tsv')
+    if os.path.exists(fn):
+        with open(fn) as f:
+            for line in f:
+                p = line.rstrip('\n').split('\t')
+                if len(p) >= 2 and p[0] != 'name':
+                    done[p[0]] = p[1]
+    return done
+
+
+def log_line(out, row):
+    fn = os.path.join(out, '_log.tsv')
+    new = not os.path.exists(fn)
+    with open(fn, 'a') as f:
+        if new:
+            f.write(LOG_HEAD)
+        f.write('\t'.join(str(x).replace('\t', ' ').replace('\n', ' ') for x in row) + '\n')
+
+
+# ---------- one file ----------
+
+def import_notes(path, odir):
+    """What Keynote's missing-fonts banner will be about: the fonts the package names that this Mac lacks (fonts.py).
+    Keynote 16.0 shows only 'This presentation has missing fonts.' in the window; the list itself needs a computer-use look."""
+    lines = ['Keynote 16.0 shows missing fonts as a banner in the document window ("This presentation has missing fonts."),',
+             'not as a sheet, and reports nothing about it through AppleScript. Fonts this package names that are not installed',
+             '(tools/fonts.py; predicted, not read from Keynote):']
+    if fontsmod:
+        try:
+            idx = fontsmod.index(fontsmod.load_list(fontsmod.DEFAULT_LIST))
+            r = fontsmod.check(path, idx)
+            lines.append('  named in runs or theme latin/ea/cs: %s' % (', '.join(r['missingUsedOutsideThemeScriptList']) or '-'))
+            only = [m for m in r['missing'] if m not in r['missingUsedOutsideThemeScriptList']]
+            lines.append('  only in the theme per-script font list (%d): %s' % (len(only), ', '.join(only)))
+        except Exception as e:  # noqa: BLE001
+            lines.append('  (fonts.py failed: %s)' % e)
+    with open(os.path.join(odir, 'import-notes.txt'), 'w') as f:
+        f.write('\n'.join(lines) + '\n')
+
+
+def run_one(path, name, out, a):
+    odir = os.path.join(out, name)
+    os.makedirs(odir, exist_ok=True)
+    rec = {'input': path, 'name': name, 'started': now(), 'keynote': '16.0', 'phases': {}}
+    t_all = time.time()
+    sha0 = sha(path)
+    rec['sha256Before'] = sha0
+    import_notes(path, odir)
+    docs_before = {d['id'] for d in open_docs()}
+    watch = Watch([d['name'] for d in open_docs()], odir)
+    watch.start()
+    status, msg, doc_id = 'ERROR', '', None
+    nslides, skipped, pics = -1, [], 0
+
+    def alert_seen():
+        # an unexpected window counts only while it is still there (a new document window is untitled for a moment)
+        return [w for w in windows() if w['layer'] == 0 and w['name'] not in watch.known and not w['name'].startswith('Warnings')
+                and not is_banner(w) and w['w'] >= 120 and w['h'] >= 60]
+
+    try:
+        rc, o, e, sec = osa(['open', path, str(a.open_timeout)], a.open_timeout + 20)
+        rec['phases']['open'] = round(sec, 2)
+        if rc is None or o.startswith('TIMEOUT'):
+            status = 'TIMEOUT'
+            msg = 'open did not return in %ds' % a.open_timeout
+            rec['windows'] = capture_windows(odir, 'timeout')
+            new = [d for d in open_docs() if d['id'] not in docs_before] if rc is not None else []
+            if new:
+                for d in new:
+                    ledger_add(d['id'], path, 'opened-after-timeout')
+                msg += '; it opened later as %s (left open)' % ', '.join(d['id'] for d in new)
+            return finish(rec, odir, out, name, status, msg, t_all, nslides, skipped, pics, path, sha0, stop=True)
+        if rc != 0 or not o.startswith('OPENED'):
+            status = 'ERROR'
+            msg = (o or e)[:300]
+            new = [d for d in open_docs() if d['id'] not in docs_before]
+            for d in new:
+                ledger_add(d['id'], path, 'opened-after-error')
+                watch.add_known(d['name'])
+            if new:
+                msg += '; the document opened anyway as %s (left open; close it with kn-close --id)' % ', '.join(
+                    d['id'] for d in new)
+                rec['windows'] = capture_windows(odir, 'error')
+                return finish(rec, odir, out, name, status, msg, t_all, nslides, skipped, pics, path, sha0, stop=True)
+            if alert_seen():
+                status = 'ALERT'
+                rec['windows'] = capture_windows(odir, 'alert')
+                return finish(rec, odir, out, name, status, msg, t_all, nslides, skipped, pics, path, sha0, stop=True)
+            return finish(rec, odir, out, name, status, msg, t_all, nslides, skipped, pics, path, sha0)
+        _, doc_id, n = o.split('\t')
+        ledger_add(doc_id, path, 'open')
+        rec['documentId'] = doc_id
+        nslides = int(n)
+        rc, o2, e2, _ = osa(['docs'], 60)
+        for line in o2.splitlines():
+            p = line.split('\t')
+            if p[0] == doc_id and len(p) > 1:
+                watch.add_known(p[1])
+                rec['documentName'] = p[1]
+        time.sleep(1.0)
+        if alert_seen():
+            status = 'ALERT'
+            msg = 'an unexpected Keynote window appeared after open; document %s left open' % doc_id
+            rec['windows'] = capture_windows(odir, 'alert')
+            return finish(rec, odir, out, name, status, msg, t_all, nslides, skipped, pics, path, sha0, stop=True)
+        rc, o, e, _ = osa(['info', doc_id], 120)
+        if rc == 0:
+            n, sk = (o.split('\t') + [''])[:2]
+            nslides = int(n)
+            skipped = [int(x) for x in sk.split(',') if x]
+        rec['slideCount'] = nslides
+        rec['skippedSlides'] = skipped
+        errs = []
+        if a.probe:
+            lines = os.path.join(odir, 'probe.lines')
+            if os.path.exists(lines):
+                os.unlink(lines)
+            rc, o, e, sec = osa(['probe', doc_id, lines], a.op_timeout)
+            rec['phases']['probe'] = round(sec, 2)
+            if rc == 0 and os.path.exists(lines):
+                with open(lines, encoding='utf-8') as f:
+                    pj = knprobe.convert(f)
+                pj['input'] = path
+                with open(os.path.join(odir, 'probe.json'), 'w', encoding='utf-8') as f:
+                    json.dump(pj, f, ensure_ascii=False, indent=1)
+                os.unlink(lines)
+                if pj['errors']:
+                    errs.append('probe: %d property errors' % len(pj['errors']))
+            else:
+                errs.append('probe failed: %s' % (e or o)[:200])
+        sdir = os.path.join(odir, 'slides')
+        tmp = os.path.join(odir, '_export')
+        shutil.rmtree(tmp, ignore_errors=True)
+        os.makedirs(tmp)
+        rc, o, e, sec = osa(['slides', doc_id, tmp, 'yes' if a.with_skipped else 'no'], a.op_timeout)
+        rec['phases']['slides'] = round(sec, 2)
+        if rc == 0:
+            files = sorted(f for f in os.listdir(tmp) if f.lower().endswith('.png'))
+            numbers = [i for i in range(1, nslides + 1) if a.with_skipped or i not in skipped]
+            if len(files) != len(numbers):
+                errs.append('exported %d pictures for %d slides' % (len(files), len(numbers)))
+                numbers = list(range(1, len(files) + 1))
+            shutil.rmtree(sdir, ignore_errors=True)
+            os.makedirs(sdir)
+            mapping = {}
+            for fn, num in zip(files, numbers):
+                dst = 'slide-%02d.png' % num
+                os.rename(os.path.join(tmp, fn), os.path.join(sdir, dst))
+                mapping[dst] = {'keynoteFile': fn, 'slide': num}
+            pics = len(files)
+            rec['pictures'] = mapping
+        else:
+            errs.append('slide export failed: %s' % (e or o)[:200])
+        shutil.rmtree(tmp, ignore_errors=True)
+        if a.pptx_back:
+            bp = os.path.join(odir, 'back.pptx')
+            if os.path.exists(bp):
+                os.unlink(bp)
+            rc, o, e, sec = osa(['pptx', doc_id, bp], a.op_timeout)
+            rec['phases']['pptxBack'] = round(sec, 2)
+            if rc != 0 or not os.path.exists(bp):
+                errs.append('export as PowerPoint failed: %s' % (e or o)[:200])
+        if alert_seen():
+            status = 'ALERT'
+            msg = 'an unexpected Keynote window appeared; document %s left open; %s' % (doc_id, '; '.join(errs))
+            rec['windows'] = capture_windows(odir, 'alert')
+            return finish(rec, odir, out, name, status, msg, t_all, nslides, skipped, pics, path, sha0, stop=True)
+        rc, o, e, sec = osa(['close', doc_id], 90)
+        rec['phases']['close'] = round(sec, 2)
+        if o in ('CLOSED', 'GONE'):
+            ledger_add(doc_id, path, 'closed')
+        else:
+            errs.append('close: %s %s' % (o, e))
+            status = 'ERROR'
+            msg = '; '.join(errs)
+            return finish(rec, odir, out, name, status, msg, t_all, nslides, skipped, pics, path, sha0, stop=True)
+        status = 'OPENED' if not any(x.startswith(('slide export', 'export as', 'probe failed')) for x in errs) else 'ERROR'
+        msg = '; '.join(errs)
+        return finish(rec, odir, out, name, status, msg, t_all, nslides, skipped, pics, path, sha0)
+    finally:
+        watch.stop()
+        add_warnings(odir, watch.warnings)
+
+
+def add_warnings(odir, warns):
+    fn = os.path.join(odir, 'import-notes.txt')
+    with open(fn, 'a') as f:
+        if warns:
+            for w in warns:
+                f.write('\nKeynote\'s warnings panel, captured (%s) and read with OCR:\n%s' % (w['file'], w['ocr']))
+        else:
+            f.write('\nKeynote\'s warnings panel was not on screen during this run (it shows only while Keynote is the active '
+                    'app); read it with the UI recipe "Import warnings" (View > Show Warnings) on a --hold document.\n')
+    rj = os.path.join(odir, 'run.json')
+    if os.path.exists(rj):
+        with open(rj) as f:
+            r = json.load(f)
+        r['warningsPanel'] = warns
+        with open(rj, 'w') as f:
+            json.dump(r, f, ensure_ascii=False, indent=1)
+
+
+def finish(rec, odir, out, name, status, msg, t_all, nslides, skipped, pics, path, sha0, stop=False):
+    sha1 = sha(path)
+    rec.update({'status': status, 'message': msg, 'seconds': round(time.time() - t_all, 2), 'sha256After': sha1,
+                'shaUnchanged': sha1 == sha0, 'finished': now()})
+    with open(os.path.join(odir, 'run.json'), 'w') as f:
+        json.dump(rec, f, ensure_ascii=False, indent=1)
+    log_line(out, [name, status, '%.1f' % rec['seconds'], nslides, ','.join(map(str, skipped)) or 0, pics,
+                   'yes' if sha1 == sha0 else 'NO', msg])
+    print('%-40s %-7s %6.1fs slides=%s skipped=%s pictures=%s %s' % (name, status, rec['seconds'], nslides,
+                                                                   ','.join(map(str, skipped)) or '-', pics, msg))
+    return status, stop
+
+
+# ---------- main ----------
+
+def arg(argv, k, default=None):
+    if k in argv:
+        i = argv.index(k)
+        return argv[i + 1]
+    return default
+
+
+class A:
+    pass
+
+
+def main(argv):
+    sys.stdout.reconfigure(line_buffering=True)
+    if not argv or '-h' in argv or '--help' in argv:
+        print(__doc__)
+        return 0
+    a = A()
+    a.out = arg(argv, '--out')
+    a.probe = '--probe' in argv
+    a.pptx_back = '--pptx-back' in argv
+    a.force = '--force' in argv
+    a.with_skipped = '--with-skipped' in argv
+    a.open_timeout = int(arg(argv, '--open-timeout', '120'))
+    a.op_timeout = int(arg(argv, '--op-timeout', '900'))
+    how = arg(argv, '--name-from', 'auto')
+    if not a.out:
+        print('kn-run: --out <dir> is required', file=sys.stderr)
+        return 2
+    a.out = os.path.abspath(a.out)
+    os.makedirs(a.out, exist_ok=True)
+    if '--hold' in argv:
+        path = os.path.abspath(arg(argv, '--hold'))
+        name = arg(argv, '--name') or derive_name(path, how)
+        guards()
+        odir = os.path.join(a.out, name)
+        os.makedirs(odir, exist_ok=True)
+        import_notes(path, odir)
+        rc, o, e, sec = osa(['open', path, str(a.open_timeout)], a.open_timeout + 20)
+        if rc != 0 or not o.startswith('OPENED'):
+            print('kn-run --hold: %s %s' % (o, e), file=sys.stderr)
+            return 4
+        _, doc_id, n = o.split('\t')
+        ledger_add(doc_id, path, 'open-hold')
+        print('HELD\t%s\t%s slides\t%.1fs\tclose with: %s/kn-close --id %s' % (doc_id, n, sec, HERE, doc_id))
+        return 0
+    lst = arg(argv, '--list')
+    if not lst:
+        print('kn-run: --list <file> or --hold <file.pptx> is required', file=sys.stderr)
+        return 2
+    items = read_list(lst, how)
+    missing = [p for p, _ in items if not os.path.exists(p)]
+    if missing:
+        print('kn-run: inputs not found:\n  ' + '\n  '.join(missing), file=sys.stderr)
+        return 2
+    done = log_done(a.out)
+    any_err = False
+    for path, name in items:
+        if not a.force and done.get(name) == 'OPENED':
+            print('%-40s skip (OPENED in _log.tsv)' % name)
+            continue
+        guards()
+        status, stop = run_one(path, name, a.out, a)
+        if status != 'OPENED':
+            any_err = True
+        if stop:
+            print('kn-run: stopped after %s (%s). Nothing was clicked or closed. Look at the window with computer use '
+                  '(app_screenshot com.apple.Keynote), dismiss a sheet with its plain acknowledging button, then close our '
+                  'document with kn-close --id <id> (see %s/%s/run.json) and run the same command again to resume.'
+                  % (name, status, a.out, name), file=sys.stderr)
+            return 4
+    return 1 if any_err else 0
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))

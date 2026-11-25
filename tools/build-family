@@ -1,0 +1,116 @@
+#!/usr/bin/env node
+// build-family [--force] [--suffix <text>] [-j N] <ver> <family> <dir|list.txt|deck> [-- <pptx flags>]
+// dir: every deck below it (*.opf.json|yaml|yml|md, plus plain .json/.yaml/.yml/.md that are not README, schema or in assets/data/node_modules/dot folders)
+// list.txt: one deck path per line (# comments allowed). Runs up to 4 build-deck at once.
+import { spawn } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const W = '/Users/michael/opf-work/keynote-036';
+const argv = process.argv.slice(2);
+const dd = argv.indexOf('--');
+const extra = dd >= 0 ? argv.slice(dd + 1) : [];
+const own = dd >= 0 ? argv.slice(0, dd) : argv;
+const pass = [];
+let jobs = 4;
+const pos = [];
+for (let i = 0; i < own.length; i++) {
+  if (own[i] === '--force') pass.push('--force');
+  else if (own[i] === '--suffix') pass.push('--suffix', own[++i] ?? '');
+  else if (own[i] === '-j') jobs = Number(own[++i]) || 4;
+  else pos.push(own[i]);
+}
+if (pos.length < 3) {
+  console.error('usage: build-family [--force] [--suffix <text>] [-j N] <036|0351|main> <family> <dir|list.txt|deck> [-- <pptx flags>]');
+  process.exit(2);
+}
+const [ver, family, input] = pos;
+const suffix = pass.includes('--suffix') ? pass[pass.indexOf('--suffix') + 1] : '';
+const skipped = [];
+const deckRe = /\.(opf\.json|opf\.yaml|opf\.yml|opf\.md)$/i;
+const plainRe = /\.(json|yaml|yml|md)$/i;
+function walk(d, acc) {
+  for (const e of fs.readdirSync(d, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+    const p = path.join(d, e.name);
+    if (e.isDirectory()) {
+      if (/^(node_modules|assets|data)$/.test(e.name) || e.name.startsWith('.')) skipped.push([p, 'folder of assets/data/dot/node_modules']);
+      else walk(p, acc);
+    } else if (deckRe.test(e.name)) acc.push(p);
+    else if (plainRe.test(e.name)) {
+      if (/^README/i.test(e.name) || /schema\.json$|package\.json$/.test(e.name)) skipped.push([p, 'readme/schema/package, not a deck']);
+      else acc.push(p);
+    }
+  }
+}
+let decks = [];
+const st = fs.statSync(input);
+if (st.isDirectory()) walk(path.resolve(input), decks);
+else if (/\.(txt|list)$/.test(input)) decks = fs.readFileSync(input, 'utf8').split('\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#')).map((l) => path.resolve(l));
+else decks = [path.resolve(input)];
+
+const strip = (f) => path.basename(f).replace(/\.(opf\.json|opf\.yaml|opf\.md|yaml|yml|md|json)$/i, '');
+const count = {};
+for (const d of decks) count[strip(d)] = (count[strip(d)] ?? 0) + 1;
+const items = decks.map((d) => ({ src: d, name: count[strip(d)] > 1 ? `${path.basename(path.dirname(d))}-${strip(d)}` : strip(d) }));
+
+const outRoot = `${W}/build/${ver}/${family}`;
+fs.mkdirSync(outRoot, { recursive: true });
+let next = 0;
+const results = [];
+function runOne(it) {
+  return new Promise((res) => {
+    const p = spawn(`${W}/bin/build-deck`, [...pass, ver, family, it.src, it.name, ...(extra.length ? ['--', ...extra] : [])], { stdio: ['ignore', 'pipe', 'pipe'] });
+    let o = '';
+    p.stdout.on('data', (c) => (o += c));
+    p.stderr.on('data', (c) => (o += c));
+    p.on('close', (code) => {
+      process.stdout.write(o || `exit ${code} ${it.name}\n`);
+      res({ ...it, exit: code });
+    });
+  });
+}
+async function worker() {
+  while (next < items.length) {
+    const it = items[next++];
+    results.push(await runOne(it));
+  }
+}
+await Promise.all(Array.from({ length: Math.min(jobs, items.length) }, worker));
+
+const manifest = [];
+const list = [];
+for (const it of items) {
+  const dir = `${outRoot}/${it.name}`;
+  const e = { name: it.name, source: it.src, dir, exit: results.find((r) => r.name === it.name)?.exit };
+  try {
+    const b = JSON.parse(fs.readFileSync(`${dir}/build.json`, 'utf8'));
+    e.slides = b.slides;
+    e.hiddenSlides = b.hiddenSlides;
+    e.validate = b.validate.ok ? 'ok' : b.validate.errors > 0 ? 'errors' : 'failed';
+    e.validateErrors = b.validate.errors;
+    e.validateWarnings = b.validate.warnings;
+    e.previewFiles = b.preview?.files ?? 0;
+    e.pptx = [];
+    e.sameAsDefault = {};
+    e.exportFailed = [];
+    e.codes = {};
+    for (const [m, x] of Object.entries(b.exports)) {
+      if (!x.ok) e.exportFailed.push(m);
+      if (x.file) {
+        e.pptx.push(x.file);
+        list.push(`${dir}/${x.file}`);
+      }
+      if (m !== 'default') e.sameAsDefault[m] = !!x.sameAsDefault;
+      e.codes[m] = x.codes;
+    }
+    e.validateCodes = b.validate.codes;
+  } catch (err) {
+    e.error = `no build.json: ${err.message}`;
+  }
+  manifest.push(e);
+}
+fs.writeFileSync(`${outRoot}/manifest${suffix}.json`, `${JSON.stringify({ ver, family, input: path.resolve(input), utc: new Date().toISOString(), flags: extra, skipped, decks: manifest }, null, 2)}\n`);
+fs.writeFileSync(`${outRoot}/pptx-list${suffix}.txt`, `${list.join('\n')}\n`);
+const bad = manifest.filter((m) => m.exit !== 0 && m.exit !== 3); // 3 = already built (no --force)
+console.log(`family ${ver}/${family}: ${manifest.length} decks, ${list.length} pptx files, ${bad.length} failed, ${skipped.length} skipped`);
+process.exit(bad.length ? 1 : 0);

@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+"""Close Keynote documents this tool set opened, without saving.
+
+  kn-close --id <document id>   close that document (only if tools/.kn-ledger.tsv says we opened it)
+  kn-close --all-ours           close every open document that the ledger says we opened
+  kn-close --list               list Keynote's open documents and whether each is ours
+
+Uses `close document id <id> saving no` (no save dialog is involved). Never closes a document that is not in the ledger.
+"""
+import importlib.machinery
+import importlib.util
+import os
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+loader = importlib.machinery.SourceFileLoader('knrun', os.path.join(HERE, 'kn-run'))
+spec = importlib.util.spec_from_loader('knrun', loader)
+kr = importlib.util.module_from_spec(spec)
+loader.exec_module(kr)
+
+
+def main(argv):
+    if not argv or argv[0] in ('-h', '--help'):
+        print(__doc__)
+        return 0
+    if not kr.keynote_running():
+        print('kn-close: Keynote is not running', file=sys.stderr)
+        return 3
+    led = kr.ledger_read()
+    docs = kr.open_docs()
+    if argv[0] == '--list':
+        for d in docs:
+            print('%s\t%s\t%s' % (d['id'], d['name'], 'ours' if d['id'] in led else 'NOT OURS'))
+        return 0
+    if argv[0] == '--id':
+        ids = [argv[1]]
+    elif argv[0] == '--all-ours':
+        ids = [d['id'] for d in docs if d['id'] in led]
+    else:
+        print(__doc__)
+        return 2
+    rc = 0
+    for i in ids:
+        if i not in led:
+            print('kn-close: %s is not in the ledger (not opened by these tools); not closing it' % i, file=sys.stderr)
+            rc = 3
+            continue
+        r, o, e, _ = kr.osa(['close', i], 90)
+        print('%s\t%s' % (i, o or e))
+        if o in ('CLOSED', 'GONE'):
+            kr.ledger_add(i, led[i][2], 'closed')
+        else:
+            rc = 1
+    return rc
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))

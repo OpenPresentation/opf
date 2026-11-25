@@ -1,0 +1,1078 @@
+{
+ "name": "Layout sweep (ordinary)",
+ "language": "en-US",
+ "slides": [
+  {
+   "id": "s-cover",
+   "layout": "cover",
+   "title": "cover: Rollout plan for the northern hubs",
+   "subtitle": "Q3 operations review",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/cover.png",
+      "alt": "Blue sky over green hills with a small orange building"
+     }
+    }
+   ],
+   "notes": "cover: ordinary"
+  },
+  {
+   "id": "s-section",
+   "layout": "section",
+   "title": "section: The evidence from the pilot",
+   "subtitle": "Part 2: results",
+   "notes": "section: ordinary"
+  },
+  {
+   "id": "s-agenda",
+   "layout": "agenda",
+   "title": "agenda: From the problem to the decision",
+   "blocks": [
+    {
+     "items": [
+      "Define the problem",
+      "Review the pilot evidence",
+      "Compare the options",
+      "Agree the budget",
+      "Decide the next step"
+     ]
+    }
+   ],
+   "notes": "agenda: ordinary"
+  },
+  {
+   "id": "s-statement",
+   "layout": "statement",
+   "title": "statement: Start small enough to learn quickly",
+   "blocks": [
+    {
+     "text": "Learn with two teams before expanding the rollout."
+    }
+   ],
+   "notes": "statement: ordinary"
+  },
+  {
+   "id": "s-closing",
+   "layout": "closing",
+   "title": "closing: Agree the pilot team and start date",
+   "blocks": [
+    {
+     "text": "Next step: name the pilot lead and agree the start date."
+    },
+    {
+     "items": [
+      "pilot@example.com",
+      "+1 555 0100",
+      "example.com/pilot"
+     ]
+    }
+   ],
+   "notes": "closing: ordinary"
+  },
+  {
+   "id": "s-text",
+   "layout": "text",
+   "title": "text: Learn before scaling",
+   "blocks": [
+    {
+     "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+    },
+    {
+     "text": "Keep the scope narrow, collect feedback weekly and give each decision a named owner."
+    },
+    {
+     "text": [
+      "Details are on the ",
+      {
+       "text": "rollout page",
+       "link": "https://example.com/rollout"
+      },
+      " for every hub."
+     ]
+    }
+   ],
+   "notes": "text: ordinary"
+  },
+  {
+   "id": "s-list",
+   "layout": "list",
+   "title": "list: Make the next step explicit",
+   "blocks": [
+    {
+     "items": [
+      "Close the audit gaps",
+      "Pilot with two teams",
+      "Report every week",
+      "Agree the budget",
+      "Name the owners"
+     ]
+    }
+   ],
+   "notes": "list: ordinary"
+  },
+  {
+   "id": "s-quote",
+   "layout": "quote",
+   "title": "quote: A shared view makes decisions easier",
+   "blocks": [
+    {
+     "quote": {
+      "text": "We can now see where participants need help.",
+      "attribution": "Ana Ruiz",
+      "source": "Pilot lead, field team"
+     }
+    }
+   ],
+   "notes": "quote: ordinary"
+  },
+  {
+   "id": "s-two-column",
+   "layout": "two-column",
+   "title": "two-column: Opportunity and constraints",
+   "blocks": [
+    {
+     "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+    },
+    {
+     "items": [
+      "Keep the scope narrow",
+      "Collect feedback weekly",
+      "Name an owner per decision"
+     ]
+    }
+   ],
+   "notes": "two-column: ordinary"
+  },
+  {
+   "id": "s-three-column",
+   "layout": "three-column",
+   "title": "three-column: Scope, evidence and the next decision",
+   "blocks": [
+    {
+     "text": "Test with two teams for six weeks."
+    },
+    {
+     "items": [
+      "Weekly feedback",
+      "Named owners",
+      "Shared baseline"
+     ]
+    },
+    {
+     "metric": {
+      "value": "84%",
+      "label": "Task completion",
+      "description": "Up from 68%"
+     }
+    }
+   ],
+   "notes": "three-column: ordinary"
+  },
+  {
+   "id": "s-pillars",
+   "layout": "pillars",
+   "title": "pillars: Three conditions for a useful pilot",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Clear scope",
+       "description": "Two teams and one workflow keep the pilot focused."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "Consistent measures",
+       "description": "Track completion and task time against a baseline."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "An explicit decision",
+       "description": "Agree the evidence needed before expanding."
+      }
+     ]
+    }
+   ],
+   "notes": "pillars: ordinary"
+  },
+  {
+   "id": "s-comparison",
+   "layout": "comparison",
+   "title": "comparison: Choose the smallest useful test",
+   "blocks": [
+    {
+     "text": "Option A: focused pilot\nTwo teams, six weeks. Low setup cost and a clear baseline.",
+     "region": "first"
+    },
+    {
+     "text": "Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs.",
+     "region": "second"
+    },
+    {
+     "text": "Recommendation: establish the evidence with Option A before committing to Option B.",
+     "region": "aside"
+    }
+   ],
+   "notes": "comparison: ordinary"
+  },
+  {
+   "id": "s-process",
+   "layout": "process",
+   "title": "process: Three steps from evidence to decision",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Establish a baseline",
+       "description": "Measure the current completion rate and task time.",
+       "start": 1
+      }
+     ],
+     "numbering": "arabic"
+    },
+    {
+     "items": [
+      {
+       "text": "Run the pilot",
+       "description": "Test with two teams and review feedback each week.",
+       "start": 2
+      }
+     ],
+     "numbering": "arabic"
+    },
+    {
+     "items": [
+      {
+       "text": "Decide what to scale",
+       "description": "Compare outcomes with the baseline and agree the next step.",
+       "start": 3
+      }
+     ],
+     "numbering": "arabic"
+    }
+   ],
+   "notes": "process: ordinary"
+  },
+  {
+   "id": "s-timeline",
+   "layout": "timeline",
+   "title": "timeline: Six weeks to an informed decision",
+   "blocks": [
+    {
+     "text": "Test with two teams for six weeks.",
+     "region": "lead"
+    },
+    {
+     "timeline": {
+      "events": [
+       {
+        "when": "Week 1",
+        "what": "Baseline"
+       },
+       {
+        "when": "Weeks 2-5",
+        "what": "Pilot"
+       },
+       {
+        "when": "Week 6",
+        "what": "Review and decide"
+       }
+      ]
+     },
+     "region": "body"
+    },
+    {
+     "text": "Keep the scope narrow and the owners named.",
+     "region": "aside"
+    }
+   ],
+   "notes": "timeline: ordinary"
+  },
+  {
+   "id": "s-faq",
+   "layout": "faq",
+   "title": "faq: What the pilot involves",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Who takes part?",
+       "description": "Two field teams, with 52 participants in total."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "How long does it run?",
+       "description": "Six weeks, including a baseline measurement."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "What happens next?",
+       "description": "Review completion and task time before expanding."
+      }
+     ]
+    }
+   ],
+   "notes": "faq: ordinary"
+  },
+  {
+   "id": "s-pyramid",
+   "layout": "pyramid",
+   "title": "pyramid: What the pilot builds on",
+   "blocks": [
+    {
+     "items": [
+      "Goal",
+      "Evidence",
+      "Pilot teams",
+      "Shared baseline"
+     ]
+    }
+   ],
+   "notes": "pyramid: ordinary"
+  },
+  {
+   "id": "s-inverted-pyramid",
+   "layout": "inverted-pyramid",
+   "title": "inverted-pyramid: From possibilities to a decision",
+   "blocks": [
+    {
+     "items": [
+      "Possibilities",
+      "Qualified options",
+      "Shortlist",
+      "Decision"
+     ]
+    }
+   ],
+   "notes": "inverted-pyramid: ordinary"
+  },
+  {
+   "id": "s-matrix",
+   "layout": "matrix",
+   "title": "matrix: Four ways to run the pilot",
+   "blocks": [
+    {
+     "items": [
+      "Small, fast",
+      "Small, slow",
+      "Broad, fast",
+      "Broad, slow"
+     ]
+    }
+   ],
+   "notes": "matrix: ordinary"
+  },
+  {
+   "id": "s-cycle",
+   "layout": "cycle",
+   "title": "cycle: How each pilot round feeds the next",
+   "blocks": [
+    {
+     "items": [
+      "Plan",
+      "Pilot",
+      "Measure",
+      "Adjust"
+     ]
+    }
+   ],
+   "notes": "cycle: ordinary"
+  },
+  {
+   "id": "s-chevrons",
+   "layout": "chevrons",
+   "title": "chevrons: Four stages of the pilot",
+   "blocks": [
+    {
+     "items": [
+      "Baseline",
+      "Pilot",
+      "Review",
+      "Decide"
+     ]
+    }
+   ],
+   "notes": "chevrons: ordinary"
+  },
+  {
+   "id": "s-vertical-process",
+   "layout": "vertical-process",
+   "title": "vertical-process: How a team joins the pilot",
+   "blocks": [
+    {
+     "items": [
+      "Nominate",
+      "Train",
+      "Start"
+     ]
+    }
+   ],
+   "notes": "vertical-process: ordinary"
+  },
+  {
+   "id": "s-org-chart",
+   "layout": "org-chart",
+   "title": "org-chart: Give the pilot a clear reporting structure",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Pilot lead",
+       "level": 0
+      },
+      {
+       "text": "Delivery",
+       "level": 1
+      },
+      {
+       "text": "Evidence",
+       "level": 1
+      },
+      {
+       "text": "Support",
+       "level": 1
+      }
+     ]
+    }
+   ],
+   "notes": "org-chart: ordinary"
+  },
+  {
+   "id": "s-hierarchy",
+   "layout": "hierarchy",
+   "title": "hierarchy: Break the pilot into focused workstreams",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Pilot",
+       "level": 0
+      },
+      {
+       "text": "Delivery",
+       "level": 1
+      },
+      {
+       "text": "Design",
+       "level": 2
+      },
+      {
+       "text": "Build",
+       "level": 2
+      },
+      {
+       "text": "Evidence",
+       "level": 1
+      }
+     ]
+    }
+   ],
+   "notes": "hierarchy: ordinary"
+  },
+  {
+   "id": "s-venn",
+   "layout": "venn",
+   "title": "venn: Three conditions for a useful pilot",
+   "blocks": [
+    {
+     "items": [
+      "Clear scope",
+      "Evidence",
+      "Shared goal"
+     ]
+    }
+   ],
+   "notes": "venn: ordinary"
+  },
+  {
+   "id": "s-metrics",
+   "layout": "metrics",
+   "title": "metrics: Pilot outcomes in four measures",
+   "blocks": [
+    {
+     "metric": {
+      "value": 52,
+      "label": "Trial participants",
+      "description": "Across two field teams"
+     }
+    },
+    {
+     "metric": {
+      "value": "84%",
+      "label": "Task completion",
+      "description": "Up from 68% at baseline"
+     }
+    },
+    {
+     "metric": {
+      "value": "6.2",
+      "label": "Median task time",
+      "description": "Down from 9.4 min",
+      "unit": "min"
+     }
+    },
+    {
+     "metric": {
+      "value": 2,
+      "label": "Teams",
+      "description": "One workflow each"
+     }
+    },
+    {
+     "text": "Test with two teams for six weeks.",
+     "region": "aside"
+    }
+   ],
+   "notes": "metrics: ordinary"
+  },
+  {
+   "id": "s-scorecard",
+   "layout": "scorecard",
+   "title": "scorecard: Track performance against a target",
+   "blocks": [
+    {
+     "metric": {
+      "value": 52,
+      "label": "Trial participants",
+      "description": "Target: 50 participants"
+     }
+    },
+    {
+     "metric": {
+      "value": "84%",
+      "label": "Task completion",
+      "description": "Target: at least 80%"
+     }
+    },
+    {
+     "metric": {
+      "value": "6.2",
+      "label": "Median task time",
+      "description": "Target: under 7 min",
+      "unit": "min"
+     }
+    }
+   ],
+   "notes": "scorecard: ordinary"
+  },
+  {
+   "id": "s-image",
+   "layout": "image",
+   "title": "image: Give the visual room to speak",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/field.png",
+      "alt": "Green fields under a pale blue sky"
+     },
+     "caption": "The northern field site, week three"
+    }
+   ],
+   "notes": "image: ordinary"
+  },
+  {
+   "id": "s-image-beside",
+   "layout": "image-beside",
+   "title": "image-beside: Explain what the audience should notice",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/dawn.png",
+      "alt": "Pink dawn over layered green hills"
+     },
+     "caption": "The coastal depot at dawn"
+    },
+    {
+     "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+    },
+    {
+     "items": [
+      "Keep the scope narrow",
+      "Collect feedback weekly",
+      "Name owners"
+     ]
+    }
+   ],
+   "notes": "image-beside: ordinary"
+  },
+  {
+   "id": "s-gallery",
+   "layout": "gallery",
+   "title": "gallery: Compare three visual directions",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/field.png",
+      "alt": "Green fields under a pale blue sky"
+     },
+     "caption": "Field"
+    },
+    {
+     "image": {
+      "src": "./assets/dawn.png",
+      "alt": "Pink dawn over layered green hills"
+     },
+     "caption": "Dawn"
+    },
+    {
+     "image": {
+      "src": "./assets/dusk.png",
+      "alt": "Purple dusk over hills"
+     },
+     "caption": "Dusk"
+    }
+   ],
+   "notes": "gallery: ordinary"
+  },
+  {
+   "id": "s-chart",
+   "layout": "chart",
+   "title": "chart: Completion rose through the pilot",
+   "subtitle": "Share of tasks completed, by month",
+   "blocks": [
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Month",
+        "Parcels",
+        "Returns"
+       ],
+       "rows": [
+        [
+         "Jan",
+         52,
+         12
+        ],
+        [
+         "Feb",
+         58,
+         11
+        ],
+        [
+         "Mar",
+         61,
+         14
+        ],
+        [
+         "Apr",
+         67,
+         10
+        ],
+        [
+         "May",
+         72,
+         9
+        ],
+        [
+         "Jun",
+         80,
+         8
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale.",
+     "region": "aside"
+    }
+   ],
+   "notes": "chart: ordinary"
+  },
+  {
+   "id": "s-chart-beside",
+   "layout": "chart-beside",
+   "title": "chart-beside: The largest gain came in week four",
+   "blocks": [
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Month",
+        "Parcels",
+        "Returns"
+       ],
+       "rows": [
+        [
+         "Jan",
+         52,
+         12
+        ],
+        [
+         "Feb",
+         58,
+         11
+        ],
+        [
+         "Mar",
+         61,
+         14
+        ],
+        [
+         "Apr",
+         67,
+         10
+        ],
+        [
+         "May",
+         72,
+         9
+        ],
+        [
+         "Jun",
+         80,
+         8
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "items": [
+      "Parcels rose every month",
+      "Returns fell by a third",
+      "Team B needs support"
+     ]
+    }
+   ],
+   "notes": "chart-beside: ordinary"
+  },
+  {
+   "id": "s-table",
+   "layout": "table",
+   "title": "table: Compare outcomes on consistent measures",
+   "blocks": [
+    {
+     "table": {
+      "columns": [
+       "Region",
+       "Hub",
+       "Owner",
+       "Status"
+      ],
+      "rows": [
+       [
+        "North",
+        "Hub A",
+        "Ana Ruiz",
+        "On track"
+       ],
+       [
+        "Coast",
+        "Hub B",
+        "Sam Lee",
+        "At risk"
+       ],
+       [
+        "Inland",
+        "Hub C",
+        "Kai Moreau",
+        "On track"
+       ],
+       [
+        "South",
+        "Hub D",
+        "Lena Cho",
+        "Done"
+       ]
+      ]
+     },
+     "region": "body"
+    },
+    {
+     "text": "Hub B is at risk; the others are on track.",
+     "region": "aside"
+    }
+   ],
+   "notes": "table: ordinary"
+  },
+  {
+   "id": "s-table-beside",
+   "layout": "table-beside",
+   "title": "table-beside: Team B needs targeted support",
+   "blocks": [
+    {
+     "table": {
+      "columns": [
+       "Region",
+       "Hub",
+       "Owner",
+       "Status"
+      ],
+      "rows": [
+       [
+        "North",
+        "Hub A",
+        "Ana Ruiz",
+        "On track"
+       ],
+       [
+        "Coast",
+        "Hub B",
+        "Sam Lee",
+        "At risk"
+       ],
+       [
+        "Inland",
+        "Hub C",
+        "Kai Moreau",
+        "On track"
+       ],
+       [
+        "South",
+        "Hub D",
+        "Lena Cho",
+        "Done"
+       ]
+      ]
+     }
+    },
+    {
+     "text": "Hub B is at risk; the others are on track."
+    }
+   ],
+   "notes": "table-beside: ordinary"
+  },
+  {
+   "id": "s-code",
+   "layout": "code",
+   "title": "code: Keep the implementation easy to inspect",
+   "blocks": [
+    {
+     "code": {
+      "language": "python",
+      "source": "def total(items):\n    return sum(i.value for i in items)\n\nprint(total(orders))"
+     }
+    },
+    {
+     "text": "The function adds every order value to a running sum."
+    }
+   ],
+   "notes": "code: ordinary"
+  },
+  {
+   "id": "s-hero",
+   "layout": "hero",
+   "title": "hero: One team. One outcome.",
+   "blocks": [
+    {
+     "text": "Test with two teams for six weeks."
+    },
+    {
+     "text": "Keep the scope narrow, collect feedback weekly."
+    },
+    {
+     "text": "Compare the results with the baseline."
+    },
+    {
+     "image": {
+      "src": "./assets/ridge.png",
+      "alt": "Blue sky with two green ridges and a small red cabin"
+     }
+    }
+   ],
+   "notes": "hero: ordinary"
+  },
+  {
+   "id": "s-dashboard",
+   "layout": "dashboard",
+   "title": "dashboard: Pilot performance at a glance",
+   "blocks": [
+    {
+     "metric": {
+      "value": 52,
+      "label": "Participants",
+      "description": "Six-week pilot"
+     }
+    },
+    {
+     "metric": {
+      "value": "84%",
+      "label": "Completion",
+      "description": "Up from 68%"
+     }
+    },
+    {
+     "metric": {
+      "value": "6.2",
+      "label": "Median time",
+      "description": "Down from 9.4 min",
+      "unit": "min"
+     }
+    },
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Month",
+        "Parcels",
+        "Returns"
+       ],
+       "rows": [
+        [
+         "Jan",
+         52,
+         12
+        ],
+        [
+         "Feb",
+         58,
+         11
+        ],
+        [
+         "Mar",
+         61,
+         14
+        ],
+        [
+         "Apr",
+         67,
+         10
+        ],
+        [
+         "May",
+         72,
+         9
+        ],
+        [
+         "Jun",
+         80,
+         8
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "chart": {
+      "type": "bar",
+      "data": {
+       "columns": [
+        "Month",
+        "Median time (min)"
+       ],
+       "rows": [
+        [
+         "A",
+         5.8
+        ],
+        [
+         "B",
+         6.7
+        ]
+       ]
+      }
+     }
+    }
+   ],
+   "notes": "dashboard: ordinary"
+  },
+  {
+   "id": "s-team",
+   "layout": "team",
+   "title": "team: Give each workstream a clear owner",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Ana Ruiz",
+       "description": "Pilot lead\nCoordinates the two teams and weekly reviews."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "Sam Lee",
+       "description": "Product lead\nTurns participant feedback into product changes."
+      }
+     ]
+    },
+    {
+     "items": [
+      {
+       "text": "Kai Moreau",
+       "description": "Analytics lead\nMeasures completion and task time consistently."
+      }
+     ]
+    }
+   ],
+   "notes": "team: ordinary"
+  },
+  {
+   "id": "s-logos",
+   "layout": "logos",
+   "title": "logos: Recognize the partners",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/logo-1.png",
+      "alt": "Partner 1, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-2.png",
+      "alt": "Partner 2, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-3.png",
+      "alt": "Partner 3, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-4.png",
+      "alt": "Partner 4, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-5.png",
+      "alt": "Partner 5, fictional geometric mark"
+     }
+    },
+    {
+     "image": {
+      "src": "./assets/logo-6.png",
+      "alt": "Partner 6, fictional geometric mark"
+     }
+    }
+   ],
+   "notes": "logos: ordinary"
+  }
+ ],
+ "design": {
+  "footer": {
+   "end": {
+    "text": "{{slide.number}} / {{deck.slideCount}}"
+   }
+  },
+  "fontScheme": {
+   "major": "Arial",
+   "minor": "Arial",
+   "heading": "Arial",
+   "body": "Arial",
+   "accent": "Arial",
+   "code": "Courier New"
+  }
+ }
+}

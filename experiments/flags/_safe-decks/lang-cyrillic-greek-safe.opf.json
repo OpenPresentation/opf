@@ -1,0 +1,198 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "Languages: lang-cyrillic-greek",
+ "description": "Article 1 of the UDHR per language tag, to see which font each default language gets.",
+ "language": "en-US",
+ "slides": [
+  {
+   "language": "bg",
+   "title": "bg · Bulgarian · Cyrl · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Всички хора се раждат свободни и равни по достойнство и права. Те са надарени с разум и съвест и следва да се отнасят помежду си в дух на братство.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Всички хора се",
+      "раждат свободни и",
+      "равни по достойнство"
+     ]
+    }
+   ],
+   "notes": "bg; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "el",
+   "title": "el · Greek · Grek · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Όλοι οι άνθρωποι γεννιούνται ελεύθεροι και ίσοι στην αξιοπρέπεια και τα δικαιώματα. Είναι προικισμένοι με λογική και συνείδηση, και οφείλουν να συμπεριφέρονται μεταξύ τους με πνεύμα αδελφοσύνης.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Όλοι οι άνθρωποι",
+      "γεννιούνται ελεύθεροι και",
+      "ίσοι στην αξιοπρέπεια"
+     ]
+    }
+   ],
+   "notes": "el; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "kk",
+   "title": "kk · Kazakh · Cyrl · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Барлық адамдар тумысынан азат және қадір‐қасиеті мен кұқықтары тең болып дүниеге келеді. Адамдарға ақыл‐парасат, ар‐ождан берілген, сондықтан олар бір‐бірімен туыстық, бауырмалдық қарым‐қатынас жасаулары тиіс.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Барлық адамдар тумысынан",
+      "азат және қадір‐қасиеті",
+      "мен кұқықтары тең"
+     ]
+    }
+   ],
+   "notes": "kk; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "mk",
+   "title": "mk · Macedonian · Cyrl · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Сите човечки суштества се раѓаат слободни и еднакви по достоинство и права. Тие се обдарени со разум и совест и треба да се однесуваат еден кон друг во духот на општо човечката припадност.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Сите човечки суштества",
+      "се раѓаат слободни",
+      "и еднакви по"
+     ]
+    }
+   ],
+   "notes": "mk; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "mn",
+   "title": "mn · Mongolian · Cyrl · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Хүн бүр төрж мэндлэхэд эрх чөлөөтэй, адилхан нэр төртэй, ижил эрхтэй байдаг. Оюун ухаан, нандин чанар заяасан хүн гэгч өөр хоорондоо ахан дүүгийн үзэл санаагаар харьцах учиртай.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Хүн бүр төрж",
+      "мэндлэхэд эрх чөлөөтэй",
+      "адилхан нэр төртэй"
+     ]
+    }
+   ],
+   "notes": "mn; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "ru",
+   "title": "ru · Russian · Cyrl · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Все люди рождаются свободными и равными в своем достоинстве и правах. Они наделены разумом и совестью и должны поступать в отношении друг друга в духе братства.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Все люди рождаются",
+      "свободными и равными",
+      "в своем достоинстве"
+     ]
+    }
+   ],
+   "notes": "ru; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "sr-Cyrl",
+   "title": "sr-Cyrl · Serbian (Cyrillic) · Cyrl · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Сва људска бића рађају се слободна и једнака у достојанству и правима. Она су обдарена разумом и свешћу и треба једни према другима да поступају у духу братства.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Сва људска бића",
+      "рађају се слободна",
+      "и једнака у"
+     ]
+    }
+   ],
+   "notes": "sr-Cyrl; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "tg",
+   "title": "tg · Tajik · Cyrl · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Тамоми одамон озод ва аз лиҳози шарафу ҳуқуқ ба ҳам баробар ба дунё меоянд. Онҳо соҳиби ақлу виҷдонанд ва бояд бо якдигар муносибати бародарона дошта бошанд.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Тамоми одамон озод",
+      "ва аз лиҳози",
+      "шарафу ҳуқуқ ба"
+     ]
+    }
+   ],
+   "notes": "tg; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "uk",
+   "title": "uk · Ukrainian · Cyrl · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Всі люди народжуються вільними і рівними у своїй гідності та правах. Вони наділені розумом і совістю і повинні діяти у відношенні один до одного в дусі братерства.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Всі люди народжуються",
+      "вільними і рівними",
+      "у своїй гідності"
+     ]
+    }
+   ],
+   "notes": "uk; expected default font: Aptos Display / Aptos"
+  }
+ ],
+ "design": {
+  "fontScheme": {
+   "major": "Arial",
+   "minor": "Arial",
+   "heading": "Arial",
+   "body": "Arial",
+   "accent": "Arial",
+   "code": "Courier New"
+  }
+ }
+}

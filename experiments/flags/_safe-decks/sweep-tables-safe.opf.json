@@ -1,0 +1,567 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "Layout sweep LH-196: tables and charts",
+ "language": "en-US",
+ "description": "Keynote 0.36.0 round, changelog matrix rows of the layout sweep (opf#1425). Each slide is built to show the weakness 0.35.1 had and the fix of 0.36.0. Fictional data.",
+ "design": {
+  "background": "light1",
+  "fontScheme": {
+   "major": "Arial",
+   "minor": "Arial",
+   "heading": "Arial",
+   "body": "Arial",
+   "accent": "Arial",
+   "code": "Courier New"
+  }
+ },
+ "slides": [
+  {
+   "id": "m15-a11-1",
+   "title": "M15 A11: table beside a column chart grows, top-aligned",
+   "blocks": [
+    {
+     "chart": {
+      "type": "column",
+      "alt": "Two regions.",
+      "data": {
+       "columns": [
+        "Region",
+        "Revenue"
+       ],
+       "rows": [
+        [
+         "North",
+         42
+        ],
+        [
+         "South",
+         31
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "table": {
+      "columns": [
+       "Region",
+       "Revenue"
+      ],
+      "rows": [
+       [
+        "North",
+        "$4.2M"
+       ],
+       [
+        "South",
+        "$3.1M"
+       ]
+      ]
+     }
+    }
+   ],
+   "notes": "M15 / A11 (LH-196). Look at: no layout: the short table beside the column chart is larger than 0.35.1 and its top is on the chart box top line (where the chart heading stands)."
+  },
+  {
+   "id": "m15-a11-2",
+   "title": "M15 A11: table beside a line chart grows, top-aligned",
+   "blocks": [
+    {
+     "chart": {
+      "type": "line",
+      "alt": "Two regions.",
+      "data": {
+       "columns": [
+        "Region",
+        "Revenue"
+       ],
+       "rows": [
+        [
+         "North",
+         42
+        ],
+        [
+         "South",
+         31
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "table": {
+      "columns": [
+       "Region",
+       "Revenue"
+      ],
+      "rows": [
+       [
+        "North",
+        "$4.2M"
+       ],
+       [
+        "South",
+        "$3.1M"
+       ]
+      ]
+     }
+    }
+   ],
+   "notes": "M15 / A11 (LH-196). Look at: as above, beside a line chart."
+  },
+  {
+   "id": "m15-a11-3",
+   "title": "M15 A11: table beside a pie grows, centered",
+   "blocks": [
+    {
+     "chart": {
+      "type": "pie",
+      "alt": "Two regions.",
+      "data": {
+       "columns": [
+        "Region",
+        "Revenue"
+       ],
+       "rows": [
+        [
+         "North",
+         42
+        ],
+        [
+         "South",
+         31
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "table": {
+      "columns": [
+       "Region",
+       "Revenue"
+      ],
+      "rows": [
+       [
+        "North",
+        "$4.2M"
+       ],
+       [
+        "South",
+        "$3.1M"
+       ]
+      ]
+     }
+    }
+   ],
+   "notes": "M15 / A11 (LH-196). Look at: beside a pie the grown table stays centered on the pie (no top line)."
+  },
+  {
+   "id": "m18-c10-4",
+   "title": "M18 C10: two comparison tables grow together",
+   "layout": "comparison",
+   "blocks": [
+    {
+     "table": {
+      "columns": [
+       "Team",
+       "Participants",
+       "Completion"
+      ],
+      "rows": [
+       [
+        "A",
+        "28",
+        "89%"
+       ],
+       [
+        "B",
+        "24",
+        "79%"
+       ]
+      ]
+     }
+    },
+    {
+     "table": {
+      "columns": [
+       "Team",
+       "Participants",
+       "Completion"
+      ],
+      "rows": [
+       [
+        "A",
+        "28",
+        "89%"
+       ],
+       [
+        "B",
+        "24",
+        "79%"
+       ]
+      ]
+     }
+    }
+   ],
+   "notes": "M18 / C10 (LH-196). Look at: comparison: both tables larger than 0.35.1 (header ~25 px -> larger), same size, same top line."
+  },
+  {
+   "id": "m19-c12-5",
+   "title": "M19 C12: dashboard table grows under its metrics",
+   "layout": "dashboard",
+   "blocks": [
+    {
+     "metric": {
+      "value": "52",
+      "label": "Trial participants"
+     }
+    },
+    {
+     "metric": {
+      "value": "84%",
+      "label": "Task completion"
+     }
+    },
+    {
+     "metric": {
+      "value": "6.2",
+      "label": "Median task time"
+     }
+    },
+    {
+     "table": {
+      "columns": [
+       "Team",
+       "Participants",
+       "Completion"
+      ],
+      "rows": [
+       [
+        "A",
+        "28",
+        "89%"
+       ],
+       [
+        "B",
+        "24",
+        "79%"
+       ]
+      ]
+     }
+    }
+   ],
+   "notes": "M19 / C12 (LH-196). Look at: dashboard: the two-row table under the three metrics is larger and follows the metrics one gap down (one centered group); metrics keep their size."
+  },
+  {
+   "id": "m25-col-2-6",
+   "title": "M25 COL-2: table in a column grows beside short text",
+   "layout": "two-column",
+   "blocks": [
+    {
+     "region": "first",
+     "table": {
+      "columns": [
+       "Team",
+       "Participants",
+       "Completion"
+      ],
+      "rows": [
+       [
+        "A",
+        "28",
+        "89%"
+       ],
+       [
+        "B",
+        "24",
+        "79%"
+       ]
+      ]
+     }
+    },
+    {
+     "region": "second",
+     "text": "Short text."
+    }
+   ],
+   "notes": "M25 / COL-2 (LH-196). Look at: two-column: the table (left) is larger than its 25 px role size; the text is not smaller."
+  },
+  {
+   "id": "m25-col-2-7",
+   "title": "M25 COL-2: wide table takes the width it needs",
+   "layout": "three-column",
+   "blocks": [
+    {
+     "region": "first",
+     "table": {
+      "columns": [
+       "Team",
+       "Participants",
+       "Completion",
+       "Median time (min)"
+      ],
+      "rows": [
+       [
+        "A",
+        "28",
+        "89%",
+        "5.8"
+       ],
+       [
+        "B",
+        "24",
+        "79%",
+        "6.7"
+       ]
+      ]
+     }
+    },
+    {
+     "region": "second",
+     "text": "Short text."
+    },
+    {
+     "region": "third",
+     "text": "Another."
+    }
+   ],
+   "notes": "M25 / COL-2 (LH-196). Look at: three-column: the four-column table gets the widest column (up to 65% of the row) at >= 25 px; 0.35.1: one third, table at the 16 px floor."
+  },
+  {
+   "id": "m26-lh-03-8",
+   "title": "M26 LH-03: small column chart axis ends at tallest bar",
+   "blocks": [
+    {
+     "chart": {
+      "type": "column",
+      "alt": "Two regions.",
+      "data": {
+       "columns": [
+        "Region",
+        "Revenue"
+       ],
+       "rows": [
+        [
+         "North",
+         42
+        ],
+        [
+         "South",
+         31
+        ]
+       ]
+      }
+     }
+    }
+   ],
+   "notes": "M26 / LH-03 (LH-196). Look at: lone two-column chart with labeled columns and hidden value axis: the North column reaches the top of the plot under its label (c:max = 42 in the export); 0.35.1: round end up to 25% above."
+  },
+  {
+   "id": "m37-a12-c11-9",
+   "title": "M37 A12: pie and its value list stand together",
+   "blocks": [
+    {
+     "chart": {
+      "type": "pie",
+      "alt": "Two regions.",
+      "data": {
+       "columns": [
+        "Region",
+        "Revenue"
+       ],
+       "rows": [
+        [
+         "North",
+         42
+        ],
+        [
+         "South",
+         31
+        ]
+       ]
+      }
+     }
+    }
+   ],
+   "notes": "M37 / A12/C11 (LH-196). Look at: lone pie: the value list stands next to the pie (< 60 px gap) and the pie+list group is centered; 0.35.1: list pinned to the far right ~270 px away."
+  },
+  {
+   "id": "m37-a12-c11-10",
+   "title": "M37 C11: doughnut and its value list together",
+   "blocks": [
+    {
+     "chart": {
+      "type": "doughnut",
+      "alt": "Two regions.",
+      "data": {
+       "columns": [
+        "Region",
+        "Revenue"
+       ],
+       "rows": [
+        [
+         "North",
+         42
+        ],
+        [
+         "South",
+         31
+        ]
+       ]
+      }
+     }
+    }
+   ],
+   "notes": "M37 / A12/C11 (LH-196). Look at: as above for a doughnut."
+  },
+  {
+   "id": "m39-tab-1-11",
+   "title": "M39 TAB-1: three-row table and note grow",
+   "layout": "table",
+   "blocks": [
+    {
+     "region": "body",
+     "table": {
+      "columns": [
+       "Team",
+       {
+        "name": "Participants",
+        "format": "0"
+       },
+       {
+        "name": "Completion",
+        "format": "0%"
+       },
+       {
+        "name": "Median time (min)",
+        "format": "0.0"
+       }
+      ],
+      "rows": [
+       [
+        "A",
+        28,
+        0.89,
+        5.8
+       ],
+       [
+        "B",
+        24,
+        0.79,
+        6.7
+       ],
+       [
+        "C",
+        31,
+        0.91,
+        5.1
+       ]
+      ]
+     }
+    },
+    {
+     "region": "aside",
+     "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+    }
+   ],
+   "notes": "M39 / TAB-1 (LH-196). Look at: table layout: a three-row table and its note grow (cells and note larger than 25 px role size); 0.35.1 left a third of the body empty."
+  },
+  {
+   "id": "m40-tab-2-12",
+   "title": "M40 TAB-2: table-beside table grows with a note",
+   "layout": "table-beside",
+   "blocks": [
+    {
+     "region": "body",
+     "table": {
+      "columns": [
+       "Team",
+       {
+        "name": "Participants",
+        "format": "0"
+       },
+       {
+        "name": "Completion",
+        "format": "0%"
+       },
+       {
+        "name": "Median time (min)",
+        "format": "0.0"
+       }
+      ],
+      "rows": [
+       [
+        "A",
+        28,
+        0.89,
+        5.8
+       ],
+       [
+        "B",
+        24,
+        0.79,
+        6.7
+       ]
+      ]
+     }
+    },
+    {
+     "region": "aside",
+     "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+    }
+   ],
+   "notes": "M40 / TAB-2 (LH-196). Look at: table-beside: the table grows past its 25 px role size and starts on the same line as its note."
+  },
+  {
+   "id": "m40-tab-2-13",
+   "title": "M40 TAB-2: table-beside table grows beside a metric",
+   "layout": "table-beside",
+   "blocks": [
+    {
+     "region": "body",
+     "table": {
+      "columns": [
+       "Team",
+       {
+        "name": "Participants",
+        "format": "0"
+       },
+       {
+        "name": "Completion",
+        "format": "0%"
+       },
+       {
+        "name": "Median time (min)",
+        "format": "0.0"
+       }
+      ],
+      "rows": [
+       [
+        "A",
+        28,
+        0.89,
+        5.8
+       ],
+       [
+        "B",
+        24,
+        0.79,
+        6.7
+       ]
+      ]
+     }
+    },
+    {
+     "region": "aside",
+     "metric": {
+      "value": "84%",
+      "label": "Completion",
+      "description": "Target 80%"
+     }
+    }
+   ],
+   "notes": "M40 / TAB-2 (LH-196). Look at: table-beside with a metric aside: table grows, metric keeps its size, both start on one line."
+  }
+ ]
+}

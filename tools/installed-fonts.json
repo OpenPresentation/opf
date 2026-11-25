@@ -1,0 +1,7227 @@
+{
+ "source": "CoreText CTFontCollectionCreateFromAvailableFonts + name tables",
+ "faceCount": 530,
+ "familyCount": 181,
+ "families": [
+  {
+   "family": "Academy Engraved LET",
+   "names": [
+    "Academy Engraved LET",
+    "Academy Engraved LET Plain:1.0",
+    "AcademyEngravedLetPlain"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Academy Engraved LET Fonts.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "AcademyEngravedLetPlain",
+     "display": "Academy Engraved LET Plain:1.0",
+     "style": "Plain"
+    }
+   ]
+  },
+  {
+   "family": "Al Bayan",
+   "names": [
+    ".Al Bayan PUA",
+    ".Al Bayan PUA Bold",
+    ".Al Bayan PUA Plain",
+    "Al Bayan",
+    "Al Bayan Bold",
+    "Al Bayan Plain",
+    "AlBayan",
+    "AlBayan-Bold",
+    "البيان",
+    "البيان بسيط",
+    "البيان عريض"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/AlBayan.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "AlBayan-Bold",
+     "display": "Al Bayan Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "AlBayan",
+     "display": "Al Bayan Plain",
+     "style": "Plain"
+    }
+   ]
+  },
+  {
+   "family": "Al Nile",
+   "names": [
+    ".Al Nile PUA",
+    ".Al Nile PUA Bold",
+    "Al Nile",
+    "Al Nile Bold",
+    "AlNile",
+    "AlNile-Bold",
+    "النيل",
+    "النيل عادي",
+    "النيل عريض"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Al Nile.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "AlNile",
+     "display": "Al Nile",
+     "style": "Regular"
+    },
+    {
+     "postscript": "AlNile-Bold",
+     "display": "Al Nile Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Al Tarikh",
+   "names": [
+    ".Al Tarikh PUA",
+    "Al Tarikh",
+    "Al Tarikh Regular",
+    "AlTarikh",
+    "التاريخ",
+    "التاريخ عادي"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Al Tarikh.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "AlTarikh",
+     "display": "Al Tarikh Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "American Typewriter",
+   "names": [
+    "American Typewriter",
+    "American Typewriter Bold",
+    "American Typewriter Condensed",
+    "American Typewriter Condensed Bold",
+    "American Typewriter Condensed Light",
+    "American Typewriter Light",
+    "American Typewriter Semibold",
+    "AmericanTypewriter",
+    "AmericanTypewriter-Bold",
+    "AmericanTypewriter-Condensed",
+    "AmericanTypewriter-CondensedBold",
+    "AmericanTypewriter-CondensedLight",
+    "AmericanTypewriter-Light",
+    "AmericanTypewriter-Semibold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/AmericanTypewriter.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "AmericanTypewriter",
+     "display": "American Typewriter",
+     "style": "Regular"
+    },
+    {
+     "postscript": "AmericanTypewriter-Light",
+     "display": "American Typewriter Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "AmericanTypewriter-Bold",
+     "display": "American Typewriter Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "AmericanTypewriter-CondensedLight",
+     "display": "American Typewriter Condensed Light",
+     "style": "Condensed Light"
+    },
+    {
+     "postscript": "AmericanTypewriter-Condensed",
+     "display": "American Typewriter Condensed",
+     "style": "Condensed"
+    },
+    {
+     "postscript": "AmericanTypewriter-CondensedBold",
+     "display": "American Typewriter Condensed Bold",
+     "style": "Condensed Bold"
+    },
+    {
+     "postscript": "AmericanTypewriter-Semibold",
+     "display": "American Typewriter Semibold",
+     "style": "Semibold"
+    }
+   ]
+  },
+  {
+   "family": "Andale Mono",
+   "names": [
+    "Andale Mono",
+    "AndaleMono"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Andale Mono.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "AndaleMono",
+     "display": "Andale Mono",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Apple Braille",
+   "names": [
+    "Apple Braille",
+    "Apple Braille Outline 6 Dot",
+    "Apple Braille Outline 8 Dot",
+    "Apple Braille Pinpoint 6 Dot",
+    "Apple Braille Pinpoint 8 Dot",
+    "AppleBraille",
+    "AppleBraille-Outline6Dot",
+    "AppleBraille-Outline8Dot",
+    "AppleBraille-Pinpoint6Dot",
+    "AppleBraille-Pinpoint8Dot"
+   ],
+   "files": [
+    "/System/Library/Fonts/Apple Braille Outline 6 Dot.ttf",
+    "/System/Library/Fonts/Apple Braille Outline 8 Dot.ttf",
+    "/System/Library/Fonts/Apple Braille Pinpoint 6 Dot.ttf",
+    "/System/Library/Fonts/Apple Braille Pinpoint 8 Dot.ttf",
+    "/System/Library/Fonts/Apple Braille.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "AppleBraille",
+     "display": "Apple Braille",
+     "style": "Regular"
+    },
+    {
+     "postscript": "AppleBraille-Pinpoint8Dot",
+     "display": "Apple Braille Pinpoint 8 Dot",
+     "style": "Pinpoint 8 Dot"
+    },
+    {
+     "postscript": "AppleBraille-Outline6Dot",
+     "display": "Apple Braille Outline 6 Dot",
+     "style": "Outline 6 Dot"
+    },
+    {
+     "postscript": "AppleBraille-Outline8Dot",
+     "display": "Apple Braille Outline 8 Dot",
+     "style": "Outline 8 Dot"
+    },
+    {
+     "postscript": "AppleBraille-Pinpoint6Dot",
+     "display": "Apple Braille Pinpoint 6 Dot",
+     "style": "Pinpoint 6 Dot"
+    }
+   ]
+  },
+  {
+   "family": "Apple Chancery",
+   "names": [
+    "Apple Chancery",
+    "Apple-Chancery"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Apple Chancery.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Apple-Chancery",
+     "display": "Apple Chancery",
+     "style": "Chancery"
+    }
+   ]
+  },
+  {
+   "family": "Apple Color Emoji",
+   "names": [
+    ".Apple Color Emoji UI",
+    "Apple Color Emoji",
+    "AppleColorEmoji"
+   ],
+   "files": [
+    "/System/Library/Fonts/Apple Color Emoji.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "AppleColorEmoji",
+     "display": "Apple Color Emoji",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Apple SD Gothic Neo",
+   "names": [
+    ".Apple SD Gothic NeoI",
+    ".Apple SD Gothic NeoI Bold",
+    ".Apple SD Gothic NeoI ExtraBold",
+    ".Apple SD Gothic NeoI Heavy",
+    ".Apple SD Gothic NeoI Light",
+    ".Apple SD Gothic NeoI Medium",
+    ".Apple SD Gothic NeoI Regular",
+    ".Apple SD Gothic NeoI SemiBold",
+    ".Apple SD Gothic NeoI Thin",
+    ".Apple SD Gothic NeoI UltraLight",
+    "Apple SD Gothic Neo",
+    "Apple SD Gothic Neo Bold",
+    "Apple SD Gothic Neo ExtraBold",
+    "Apple SD Gothic Neo Heavy",
+    "Apple SD Gothic Neo Light",
+    "Apple SD Gothic Neo Medium",
+    "Apple SD Gothic Neo Regular",
+    "Apple SD Gothic Neo SemiBold",
+    "Apple SD Gothic Neo Thin",
+    "Apple SD Gothic Neo UltraLight",
+    "Apple SD 산돌고딕 Neo",
+    "AppleSDGothicNeo-Bold",
+    "AppleSDGothicNeo-ExtraBold",
+    "AppleSDGothicNeo-Heavy",
+    "AppleSDGothicNeo-Light",
+    "AppleSDGothicNeo-Medium",
+    "AppleSDGothicNeo-Regular",
+    "AppleSDGothicNeo-SemiBold",
+    "AppleSDGothicNeo-Thin",
+    "AppleSDGothicNeo-UltraLight"
+   ],
+   "files": [
+    "/System/Library/Fonts/AppleSDGothicNeo.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "AppleSDGothicNeo-ExtraBold",
+     "display": "Apple SD Gothic Neo ExtraBold",
+     "style": "ExtraBold"
+    },
+    {
+     "postscript": "AppleSDGothicNeo-Medium",
+     "display": "Apple SD Gothic Neo Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "AppleSDGothicNeo-Light",
+     "display": "Apple SD Gothic Neo Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "AppleSDGothicNeo-SemiBold",
+     "display": "Apple SD Gothic Neo SemiBold",
+     "style": "SemiBold"
+    },
+    {
+     "postscript": "AppleSDGothicNeo-Regular",
+     "display": "Apple SD Gothic Neo Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "AppleSDGothicNeo-Heavy",
+     "display": "Apple SD Gothic Neo Heavy",
+     "style": "Heavy"
+    },
+    {
+     "postscript": "AppleSDGothicNeo-Thin",
+     "display": "Apple SD Gothic Neo Thin",
+     "style": "Thin"
+    },
+    {
+     "postscript": "AppleSDGothicNeo-UltraLight",
+     "display": "Apple SD Gothic Neo UltraLight",
+     "style": "UltraLight"
+    },
+    {
+     "postscript": "AppleSDGothicNeo-Bold",
+     "display": "Apple SD Gothic Neo Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Apple Symbols",
+   "names": [
+    "Apple Symbols",
+    "AppleSymbols"
+   ],
+   "files": [
+    "/System/Library/Fonts/Apple Symbols.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "AppleSymbols",
+     "display": "Apple Symbols",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "AppleGothic",
+   "names": [
+    "AppleGothic",
+    "AppleGothic Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/AppleGothic.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "AppleGothic",
+     "display": "AppleGothic Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "AppleMyungjo",
+   "names": [
+    "AppleMyungjo",
+    "AppleMyungjo Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/AppleMyungjo.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "AppleMyungjo",
+     "display": "AppleMyungjo Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Arial",
+   "names": [
+    "Arial",
+    "Arial Bold",
+    "Arial Bold Italic",
+    "Arial Corsivo",
+    "Arial Cursief",
+    "Arial Cursiva",
+    "Arial Dőlt",
+    "Arial Etzana",
+    "Arial Fet",
+    "Arial Fet Kursiv",
+    "Arial Fett",
+    "Arial Fett Kursiv",
+    "Arial Félkövér",
+    "Arial Félkövér dőlt",
+    "Arial Gras",
+    "Arial Gras Italique",
+    "Arial Grassetto",
+    "Arial Grassetto Corsivo",
+    "Arial Halvfet",
+    "Arial Halvfet Kursiv",
+    "Arial Italic",
+    "Arial Italique",
+    "Arial Itálico",
+    "Arial Kalın",
+    "Arial Kalın İtalik",
+    "Arial Krepko",
+    "Arial Krepko poševno",
+    "Arial Kursiv",
+    "Arial Kursivoitu",
+    "Arial Kursywa",
+    "Arial Kurzíva",
+    "Arial Lihavoitu",
+    "Arial Lihavoitu Kursivoi",
+    "Arial Lodi etzana",
+    "Arial Lodia",
+    "Arial Negreta",
+    "Arial Negreta cursiva",
+    "Arial Negrita",
+    "Arial Negrita Cursiva",
+    "Arial Negrito",
+    "Arial Negrito Itálico",
+    "Arial Pogrubiona kursywa",
+    "Arial Pogrubiony",
+    "Arial Poševno",
+    "Arial Tučná kurzíva",
+    "Arial Tučné",
+    "Arial Vet",
+    "Arial Vet Cursief",
+    "Arial fed",
+    "Arial fed kursiv",
+    "Arial kursiv",
+    "Arial kurzíva",
+    "Arial nghiêng",
+    "Arial nghiêng đậm",
+    "Arial tučné",
+    "Arial tučné kurzíva",
+    "Arial đậm",
+    "Arial İtalik",
+    "Arial Έντονα",
+    "Arial Έντονα Πλάγια",
+    "Arial Πλάγια",
+    "Arial Курсив",
+    "Arial Полужирный",
+    "Arial Полужирный Курсив",
+    "Arial-BoldItalicMT",
+    "Arial-BoldMT",
+    "Arial-ItalicMT",
+    "ArialMT"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Arial Bold Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Arial Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Arial.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Arial-BoldItalicMT",
+     "display": "Arial Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "ArialMT",
+     "display": "Arial",
+     "style": "Regular"
+    },
+    {
+     "postscript": "Arial-ItalicMT",
+     "display": "Arial Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "Arial-BoldMT",
+     "display": "Arial Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Arial Black",
+   "names": [
+    "Arial Black",
+    "Arial Black Arrunta",
+    "Arial Black Navadno",
+    "Arial Black Normaali",
+    "Arial Black Normal",
+    "Arial Black Normale",
+    "Arial Black Normalny",
+    "Arial Black Normál",
+    "Arial Black Normálne",
+    "Arial Black Standaard",
+    "Arial Black Standard",
+    "Arial Black normal",
+    "Arial Black obyčejné",
+    "Arial Black Κανονικά",
+    "Arial Black Обычный",
+    "Arial-Black"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Arial Black.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Arial-Black",
+     "display": "Arial Black",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Arial Hebrew",
+   "names": [
+    ".Arial Hebrew Desk Interface",
+    ".Arial Hebrew Desk Interface Bold",
+    ".Arial Hebrew Desk Interface Light",
+    "Arial Hebrew",
+    "Arial Hebrew Bold",
+    "Arial Hebrew Light",
+    "Arial Hebrew Scholar",
+    "Arial Hebrew Scholar Bold",
+    "Arial Hebrew Scholar Light",
+    "ArialHebrew",
+    "ArialHebrew-Bold",
+    "ArialHebrew-Light"
+   ],
+   "files": [
+    "/System/Library/Fonts/ArialHB.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "ArialHebrew-Light",
+     "display": "Arial Hebrew Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "ArialHebrew-Bold",
+     "display": "Arial Hebrew Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "ArialHebrew",
+     "display": "Arial Hebrew",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Arial Hebrew Scholar",
+   "names": [
+    ".Arial Hebrew Desk Interface",
+    ".Arial Hebrew Desk Interface Bold",
+    ".Arial Hebrew Desk Interface Light",
+    "Arial Hebrew",
+    "Arial Hebrew Bold",
+    "Arial Hebrew Light",
+    "Arial Hebrew Scholar",
+    "Arial Hebrew Scholar Bold",
+    "Arial Hebrew Scholar Light",
+    "ArialHebrewScholar",
+    "ArialHebrewScholar-Bold",
+    "ArialHebrewScholar-Light"
+   ],
+   "files": [
+    "/System/Library/Fonts/ArialHB.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "ArialHebrewScholar",
+     "display": "Arial Hebrew Scholar",
+     "style": "Regular"
+    },
+    {
+     "postscript": "ArialHebrewScholar-Light",
+     "display": "Arial Hebrew Scholar Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "ArialHebrewScholar-Bold",
+     "display": "Arial Hebrew Scholar Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Arial Narrow",
+   "names": [
+    "Arial Narrow",
+    "Arial Narrow Bold",
+    "Arial Narrow Bold Italic",
+    "Arial Narrow Corsivo",
+    "Arial Narrow Cursief",
+    "Arial Narrow Cursiva",
+    "Arial Narrow Dőlt",
+    "Arial Narrow Etzana",
+    "Arial Narrow Fet",
+    "Arial Narrow Fet Kursiv",
+    "Arial Narrow Fett",
+    "Arial Narrow Fett Kursiv",
+    "Arial Narrow Félkövér",
+    "Arial Narrow Félkövér dőlt",
+    "Arial Narrow Gras",
+    "Arial Narrow Gras Italique",
+    "Arial Narrow Grassetto",
+    "Arial Narrow Grassetto Corsivo",
+    "Arial Narrow Halvfet",
+    "Arial Narrow Halvfet Kursiv",
+    "Arial Narrow Italic",
+    "Arial Narrow Italique",
+    "Arial Narrow Itálico",
+    "Arial Narrow Kalın",
+    "Arial Narrow Kalın İtalik",
+    "Arial Narrow Krepko",
+    "Arial Narrow Krepko poševno",
+    "Arial Narrow Kursiv",
+    "Arial Narrow Kursivoitu",
+    "Arial Narrow Kursywa",
+    "Arial Narrow Kurzíva",
+    "Arial Narrow Lihavoitu",
+    "Arial Narrow Lihavoitu Kursivoi",
+    "Arial Narrow Lodi etzana",
+    "Arial Narrow Lodia",
+    "Arial Narrow Negreta",
+    "Arial Narrow Negreta cursiva",
+    "Arial Narrow Negrita",
+    "Arial Narrow Negrita Cursiva",
+    "Arial Narrow Negrito",
+    "Arial Narrow Negrito Itálico",
+    "Arial Narrow Pogrubiona kursywa",
+    "Arial Narrow Pogrubiony",
+    "Arial Narrow Poševno",
+    "Arial Narrow Tučná kurzíva",
+    "Arial Narrow Tučné",
+    "Arial Narrow Vet",
+    "Arial Narrow Vet Cursief",
+    "Arial Narrow fed",
+    "Arial Narrow fed kursiv",
+    "Arial Narrow kursiv",
+    "Arial Narrow kurzíva",
+    "Arial Narrow tučné",
+    "Arial Narrow tučné kurzíva",
+    "Arial Narrow İtalik",
+    "Arial Narrow Έντονα",
+    "Arial Narrow Έντονα Πλάγια",
+    "Arial Narrow Πλάγια",
+    "Arial Narrow Курсив",
+    "Arial Narrow Полужирный",
+    "Arial Narrow Полужирный Курсив",
+    "ArialNarrow",
+    "ArialNarrow-Bold",
+    "ArialNarrow-BoldItalic",
+    "ArialNarrow-Italic"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Arial Narrow Bold Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Arial Narrow Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Arial Narrow Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Arial Narrow.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "ArialNarrow-Bold",
+     "display": "Arial Narrow Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "ArialNarrow-Italic",
+     "display": "Arial Narrow Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "ArialNarrow",
+     "display": "Arial Narrow",
+     "style": "Regular"
+    },
+    {
+     "postscript": "ArialNarrow-BoldItalic",
+     "display": "Arial Narrow Bold Italic",
+     "style": "Bold Italic"
+    }
+   ]
+  },
+  {
+   "family": "Arial Rounded MT Bold",
+   "names": [
+    "Arial Rounded MT Bold",
+    "ArialRoundedMTBold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "ArialRoundedMTBold",
+     "display": "Arial Rounded MT Bold",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Arial Unicode MS",
+   "names": [
+    "Arial Unicode MS",
+    "ArialUnicodeMS"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Arial Unicode.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "ArialUnicodeMS",
+     "display": "Arial Unicode MS",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Avenir",
+   "names": [
+    "Avenir",
+    "Avenir Black",
+    "Avenir Black Oblique",
+    "Avenir Book",
+    "Avenir Book Oblique",
+    "Avenir Heavy",
+    "Avenir Heavy Oblique",
+    "Avenir Light",
+    "Avenir Light Oblique",
+    "Avenir Medium",
+    "Avenir Medium Oblique",
+    "Avenir Oblique",
+    "Avenir Roman",
+    "Avenir-Black",
+    "Avenir-BlackOblique",
+    "Avenir-Book",
+    "Avenir-BookOblique",
+    "Avenir-Heavy",
+    "Avenir-HeavyOblique",
+    "Avenir-Light",
+    "Avenir-LightOblique",
+    "Avenir-Medium",
+    "Avenir-MediumOblique",
+    "Avenir-Oblique",
+    "Avenir-Roman"
+   ],
+   "files": [
+    "/System/Library/Fonts/Avenir.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Avenir-Book",
+     "display": "Avenir Book",
+     "style": "Book"
+    },
+    {
+     "postscript": "Avenir-Heavy",
+     "display": "Avenir Heavy",
+     "style": "Heavy"
+    },
+    {
+     "postscript": "Avenir-HeavyOblique",
+     "display": "Avenir Heavy Oblique",
+     "style": "Heavy Oblique"
+    },
+    {
+     "postscript": "Avenir-Medium",
+     "display": "Avenir Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "Avenir-Roman",
+     "display": "Avenir Roman",
+     "style": "Roman"
+    },
+    {
+     "postscript": "Avenir-BlackOblique",
+     "display": "Avenir Black Oblique",
+     "style": "Black Oblique"
+    },
+    {
+     "postscript": "Avenir-Black",
+     "display": "Avenir Black",
+     "style": "Black"
+    },
+    {
+     "postscript": "Avenir-BookOblique",
+     "display": "Avenir Book Oblique",
+     "style": "Book Oblique"
+    },
+    {
+     "postscript": "Avenir-Light",
+     "display": "Avenir Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "Avenir-Oblique",
+     "display": "Avenir Oblique",
+     "style": "Oblique"
+    },
+    {
+     "postscript": "Avenir-LightOblique",
+     "display": "Avenir Light Oblique",
+     "style": "Light Oblique"
+    },
+    {
+     "postscript": "Avenir-MediumOblique",
+     "display": "Avenir Medium Oblique",
+     "style": "Medium Oblique"
+    }
+   ]
+  },
+  {
+   "family": "Avenir Next",
+   "names": [
+    "Avenir Next",
+    "Avenir Next Bold",
+    "Avenir Next Bold Italic",
+    "Avenir Next Demi Bold",
+    "Avenir Next Demi Bold Italic",
+    "Avenir Next Heavy",
+    "Avenir Next Heavy Italic",
+    "Avenir Next Italic",
+    "Avenir Next Medium",
+    "Avenir Next Medium Italic",
+    "Avenir Next Regular",
+    "Avenir Next Ultra Light",
+    "Avenir Next Ultra Light Italic",
+    "AvenirNext-Bold",
+    "AvenirNext-BoldItalic",
+    "AvenirNext-DemiBold",
+    "AvenirNext-DemiBoldItalic",
+    "AvenirNext-Heavy",
+    "AvenirNext-HeavyItalic",
+    "AvenirNext-Italic",
+    "AvenirNext-Medium",
+    "AvenirNext-MediumItalic",
+    "AvenirNext-Regular",
+    "AvenirNext-UltraLight",
+    "AvenirNext-UltraLightItalic"
+   ],
+   "files": [
+    "/System/Library/Fonts/Avenir Next.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "AvenirNext-HeavyItalic",
+     "display": "Avenir Next Heavy Italic",
+     "style": "Heavy Italic"
+    },
+    {
+     "postscript": "AvenirNext-BoldItalic",
+     "display": "Avenir Next Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "AvenirNext-DemiBoldItalic",
+     "display": "Avenir Next Demi Bold Italic",
+     "style": "Demi Bold Italic"
+    },
+    {
+     "postscript": "AvenirNext-Regular",
+     "display": "Avenir Next Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "AvenirNext-Medium",
+     "display": "Avenir Next Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "AvenirNext-Heavy",
+     "display": "Avenir Next Heavy",
+     "style": "Heavy"
+    },
+    {
+     "postscript": "AvenirNext-MediumItalic",
+     "display": "Avenir Next Medium Italic",
+     "style": "Medium Italic"
+    },
+    {
+     "postscript": "AvenirNext-DemiBold",
+     "display": "Avenir Next Demi Bold",
+     "style": "Demi Bold"
+    },
+    {
+     "postscript": "AvenirNext-Italic",
+     "display": "Avenir Next Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "AvenirNext-UltraLightItalic",
+     "display": "Avenir Next Ultra Light Italic",
+     "style": "Ultra Light Italic"
+    },
+    {
+     "postscript": "AvenirNext-UltraLight",
+     "display": "Avenir Next Ultra Light",
+     "style": "Ultra Light"
+    },
+    {
+     "postscript": "AvenirNext-Bold",
+     "display": "Avenir Next Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Avenir Next Condensed",
+   "names": [
+    "Avenir Next Condensed",
+    "Avenir Next Condensed Bold",
+    "Avenir Next Condensed Bold Italic",
+    "Avenir Next Condensed Demi Bold",
+    "Avenir Next Condensed Demi Bold Italic",
+    "Avenir Next Condensed Heavy",
+    "Avenir Next Condensed Heavy Italic",
+    "Avenir Next Condensed Italic",
+    "Avenir Next Condensed Medium",
+    "Avenir Next Condensed Medium Italic",
+    "Avenir Next Condensed Regular",
+    "Avenir Next Condensed Ultra Light",
+    "Avenir Next Condensed Ultra Light Italic",
+    "Avenir Next Medium Condensed Italic",
+    "AvenirNextCondensed-Bold",
+    "AvenirNextCondensed-BoldItalic",
+    "AvenirNextCondensed-DemiBold",
+    "AvenirNextCondensed-DemiBoldItalic",
+    "AvenirNextCondensed-Heavy",
+    "AvenirNextCondensed-HeavyItalic",
+    "AvenirNextCondensed-Italic",
+    "AvenirNextCondensed-Medium",
+    "AvenirNextCondensed-MediumItalic",
+    "AvenirNextCondensed-Regular",
+    "AvenirNextCondensed-UltraLight",
+    "AvenirNextCondensed-UltraLightItalic"
+   ],
+   "files": [
+    "/System/Library/Fonts/Avenir Next Condensed.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "AvenirNextCondensed-MediumItalic",
+     "display": "Avenir Next Condensed Medium Italic",
+     "style": "Medium Italic"
+    },
+    {
+     "postscript": "AvenirNextCondensed-Regular",
+     "display": "Avenir Next Condensed Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "AvenirNextCondensed-UltraLightItalic",
+     "display": "Avenir Next Condensed Ultra Light Italic",
+     "style": "Ultra Light Italic"
+    },
+    {
+     "postscript": "AvenirNextCondensed-HeavyItalic",
+     "display": "Avenir Next Condensed Heavy Italic",
+     "style": "Heavy Italic"
+    },
+    {
+     "postscript": "AvenirNextCondensed-BoldItalic",
+     "display": "Avenir Next Condensed Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "AvenirNextCondensed-Medium",
+     "display": "Avenir Next Condensed Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "AvenirNextCondensed-DemiBoldItalic",
+     "display": "Avenir Next Condensed Demi Bold Italic",
+     "style": "Demi Bold Italic"
+    },
+    {
+     "postscript": "AvenirNextCondensed-DemiBold",
+     "display": "Avenir Next Condensed Demi Bold",
+     "style": "Demi Bold"
+    },
+    {
+     "postscript": "AvenirNextCondensed-Bold",
+     "display": "Avenir Next Condensed Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "AvenirNextCondensed-Italic",
+     "display": "Avenir Next Condensed Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "AvenirNextCondensed-Heavy",
+     "display": "Avenir Next Condensed Heavy",
+     "style": "Heavy"
+    },
+    {
+     "postscript": "AvenirNextCondensed-UltraLight",
+     "display": "Avenir Next Condensed Ultra Light",
+     "style": "Ultra Light"
+    }
+   ]
+  },
+  {
+   "family": "Ayuthaya",
+   "names": [
+    "Ayuthaya"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Ayuthaya.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Ayuthaya",
+     "display": "Ayuthaya",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Baghdad",
+   "names": [
+    ".Baghdad PUA",
+    "Baghdad",
+    "Baghdad Regular",
+    "بغداد",
+    "بغداد عادي"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Baghdad.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Baghdad",
+     "display": "Baghdad Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Bangla MN",
+   "names": [
+    "Bangla MN",
+    "Bangla MN Bold",
+    "BanglaMN",
+    "BanglaMN-Bold",
+    "बांग्ला एमएन",
+    "बांग्ला एमएन बोल्ड",
+    "বাংলা এমএন",
+    "বাংলা এমএন বোল্ড"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Bangla MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "BanglaMN-Bold",
+     "display": "Bangla MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "BanglaMN",
+     "display": "Bangla MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Bangla Sangam MN",
+   "names": [
+    "Bangla Sangam MN",
+    "Bangla Sangam MN Bold",
+    "BanglaSangamMN",
+    "BanglaSangamMN-Bold",
+    "बांग्ला संगम एमएन",
+    "बांग्ला संगम एमएन बोल्ड",
+    "বাংলা সংগ্রাম এমএন",
+    "বাংলা সংগ্রাম এমএন বোল্ড"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Bangla Sangam MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "BanglaSangamMN-Bold",
+     "display": "Bangla Sangam MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "BanglaSangamMN",
+     "display": "Bangla Sangam MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Baskerville",
+   "names": [
+    "Baskerville",
+    "Baskerville Bold",
+    "Baskerville Bold Italic",
+    "Baskerville Italic",
+    "Baskerville SemiBold",
+    "Baskerville SemiBold Italic",
+    "Baskerville-Bold",
+    "Baskerville-BoldItalic",
+    "Baskerville-Italic",
+    "Baskerville-SemiBold",
+    "Baskerville-SemiBoldItalic"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Baskerville.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Baskerville-SemiBold",
+     "display": "Baskerville SemiBold",
+     "style": "SemiBold"
+    },
+    {
+     "postscript": "Baskerville-BoldItalic",
+     "display": "Baskerville Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "Baskerville-Bold",
+     "display": "Baskerville Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Baskerville",
+     "display": "Baskerville",
+     "style": "Regular"
+    },
+    {
+     "postscript": "Baskerville-Italic",
+     "display": "Baskerville Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "Baskerville-SemiBoldItalic",
+     "display": "Baskerville SemiBold Italic",
+     "style": "SemiBold Italic"
+    }
+   ]
+  },
+  {
+   "family": "Beirut",
+   "names": [
+    ".Beirut PUA",
+    "Beirut",
+    "Beirut Regular",
+    "بيروت",
+    "بيروت عادي"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Beirut.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Beirut",
+     "display": "Beirut Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Big Caslon",
+   "names": [
+    "Big Caslon",
+    "Big Caslon Medium",
+    "BigCaslon-Medium"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/BigCaslon.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "BigCaslon-Medium",
+     "display": "Big Caslon Medium",
+     "style": "Medium"
+    }
+   ]
+  },
+  {
+   "family": "Bodoni 72",
+   "names": [
+    "Bodoni 72",
+    "Bodoni 72 Bold",
+    "Bodoni 72 Book",
+    "Bodoni 72 Book Italic",
+    "BodoniSvtyTwoITCTT-Bold",
+    "BodoniSvtyTwoITCTT-Book",
+    "BodoniSvtyTwoITCTT-BookIta"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Bodoni 72.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "BodoniSvtyTwoITCTT-Bold",
+     "display": "Bodoni 72 Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "BodoniSvtyTwoITCTT-Book",
+     "display": "Bodoni 72 Book",
+     "style": "Book"
+    },
+    {
+     "postscript": "BodoniSvtyTwoITCTT-BookIta",
+     "display": "Bodoni 72 Book Italic",
+     "style": "Book Italic"
+    }
+   ]
+  },
+  {
+   "family": "Bodoni 72 Oldstyle",
+   "names": [
+    "Bodoni 72 Oldstyle",
+    "Bodoni 72 Oldstyle Bold",
+    "Bodoni 72 Oldstyle Book",
+    "Bodoni 72 Oldstyle Book Italic",
+    "BodoniSvtyTwoOSITCTT-Bold",
+    "BodoniSvtyTwoOSITCTT-Book",
+    "BodoniSvtyTwoOSITCTT-BookIt"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Bodoni 72 OS.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "BodoniSvtyTwoOSITCTT-BookIt",
+     "display": "Bodoni 72 Oldstyle Book Italic",
+     "style": "Book Italic"
+    },
+    {
+     "postscript": "BodoniSvtyTwoOSITCTT-Book",
+     "display": "Bodoni 72 Oldstyle Book",
+     "style": "Book"
+    },
+    {
+     "postscript": "BodoniSvtyTwoOSITCTT-Bold",
+     "display": "Bodoni 72 Oldstyle Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Bodoni 72 Smallcaps",
+   "names": [
+    "Bodoni 72 Smallcaps",
+    "Bodoni 72 Smallcaps Book",
+    "BodoniSvtyTwoSCITCTT-Book"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Bodoni 72 Smallcaps Book.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "BodoniSvtyTwoSCITCTT-Book",
+     "display": "Bodoni 72 Smallcaps Book",
+     "style": "Book"
+    }
+   ]
+  },
+  {
+   "family": "Bodoni Ornaments",
+   "names": [
+    "Bodoni Ornaments",
+    "BodoniOrnamentsITCTT"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Bodoni Ornaments.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "BodoniOrnamentsITCTT",
+     "display": "Bodoni Ornaments",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Bradley Hand",
+   "names": [
+    "Bradley Hand",
+    "Bradley Hand Bold",
+    "Bradley Hand Fed",
+    "Bradley Hand Fet",
+    "Bradley Hand Fett",
+    "Bradley Hand Gras",
+    "Bradley Hand Grassetto",
+    "Bradley Hand Negrita",
+    "Bradley Hand Negrito",
+    "Bradley Hand Puolilihava",
+    "Bradley Hand Vet",
+    "BradleyHandITCTT-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Bradley Hand Bold.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "BradleyHandITCTT-Bold",
+     "display": "Bradley Hand Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Brush Script MT",
+   "names": [
+    "Brush Script MT",
+    "Brush Script MT Corsivo",
+    "Brush Script MT Cursief",
+    "Brush Script MT Cursiva",
+    "Brush Script MT Italic",
+    "Brush Script MT Italique",
+    "Brush Script MT Itálico",
+    "Brush Script MT Kursiv",
+    "Brush Script MT Kursivoitu",
+    "Brush Script MT kursiv",
+    "BrushScriptMT"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Brush Script.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "BrushScriptMT",
+     "display": "Brush Script MT Italic",
+     "style": "Italic"
+    }
+   ]
+  },
+  {
+   "family": "Chalkboard",
+   "names": [
+    "Chalkboard",
+    "Chalkboard Bold",
+    "Chalkboard-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Chalkboard.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Chalkboard-Bold",
+     "display": "Chalkboard Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Chalkboard",
+     "display": "Chalkboard",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Chalkboard SE",
+   "names": [
+    "Chalkboard SE",
+    "Chalkboard SE Bold",
+    "Chalkboard SE Light",
+    "Chalkboard SE Regular",
+    "ChalkboardSE-Bold",
+    "ChalkboardSE-Light",
+    "ChalkboardSE-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/ChalkboardSE.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "ChalkboardSE-Bold",
+     "display": "Chalkboard SE Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "ChalkboardSE-Regular",
+     "display": "Chalkboard SE Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "ChalkboardSE-Light",
+     "display": "Chalkboard SE Light",
+     "style": "Light"
+    }
+   ]
+  },
+  {
+   "family": "Chalkduster",
+   "names": [
+    "Chalkduster"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Chalkduster.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Chalkduster",
+     "display": "Chalkduster",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Charter",
+   "names": [
+    "Charter",
+    "Charter BT Bold Italic",
+    "Charter Black",
+    "Charter Black Italic",
+    "Charter Bold",
+    "Charter Bold Italic",
+    "Charter Italic",
+    "Charter Roman",
+    "Charter-Black",
+    "Charter-BlackItalic",
+    "Charter-Bold",
+    "Charter-BoldItalic",
+    "Charter-Italic",
+    "Charter-Roman"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Charter.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Charter-Italic",
+     "display": "Charter Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "Charter-BlackItalic",
+     "display": "Charter Black Italic",
+     "style": "Black Italic"
+    },
+    {
+     "postscript": "Charter-Bold",
+     "display": "Charter Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Charter-BoldItalic",
+     "display": "Charter Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "Charter-Roman",
+     "display": "Charter Roman",
+     "style": "Roman"
+    },
+    {
+     "postscript": "Charter-Black",
+     "display": "Charter Black",
+     "style": "Black"
+    }
+   ]
+  },
+  {
+   "family": "Cochin",
+   "names": [
+    "Cochin",
+    "Cochin Bold",
+    "Cochin Bold Italic",
+    "Cochin Italic",
+    "Cochin-Bold",
+    "Cochin-BoldItalic",
+    "Cochin-Italic"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Cochin.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Cochin-Bold",
+     "display": "Cochin Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Cochin-BoldItalic",
+     "display": "Cochin Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "Cochin-Italic",
+     "display": "Cochin Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "Cochin",
+     "display": "Cochin",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Comic Sans MS",
+   "names": [
+    "Comic Sans MS",
+    "Comic Sans MS Bold",
+    "Comic Sans MS Fet",
+    "Comic Sans MS Fett",
+    "Comic Sans MS Félkövér",
+    "Comic Sans MS Gras",
+    "Comic Sans MS Grassetto",
+    "Comic Sans MS Halvfet",
+    "Comic Sans MS Kalın",
+    "Comic Sans MS Krepko",
+    "Comic Sans MS Lihavoitu",
+    "Comic Sans MS Lodia",
+    "Comic Sans MS Negreta",
+    "Comic Sans MS Negrita",
+    "Comic Sans MS Negrito",
+    "Comic Sans MS Pogrubiony",
+    "Comic Sans MS Tučné",
+    "Comic Sans MS Vet",
+    "Comic Sans MS fed",
+    "Comic Sans MS tučné",
+    "Comic Sans MS Έντονα",
+    "Comic Sans MS Полужирный",
+    "ComicSansMS",
+    "ComicSansMS-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Comic Sans MS Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Comic Sans MS.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "ComicSansMS",
+     "display": "Comic Sans MS",
+     "style": "Regular"
+    },
+    {
+     "postscript": "ComicSansMS-Bold",
+     "display": "Comic Sans MS Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Copperplate",
+   "names": [
+    "Copperplate",
+    "Copperplate Bold",
+    "Copperplate Light",
+    "Copperplate-Bold",
+    "Copperplate-Light"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Copperplate.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Copperplate",
+     "display": "Copperplate",
+     "style": "Regular"
+    },
+    {
+     "postscript": "Copperplate-Bold",
+     "display": "Copperplate Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Copperplate-Light",
+     "display": "Copperplate Light",
+     "style": "Light"
+    }
+   ]
+  },
+  {
+   "family": "Corsiva Hebrew",
+   "names": [
+    "Corsiva Hebrew",
+    "Corsiva Hebrew Bold",
+    "CorsivaHebrew",
+    "CorsivaHebrew-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Corsiva.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "CorsivaHebrew",
+     "display": "Corsiva Hebrew",
+     "style": "Regular"
+    },
+    {
+     "postscript": "CorsivaHebrew-Bold",
+     "display": "Corsiva Hebrew Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Courier New",
+   "names": [
+    "Courier New",
+    "Courier New Bold",
+    "Courier New Bold Italic",
+    "Courier New Corsivo",
+    "Courier New Cursief",
+    "Courier New Cursiva",
+    "Courier New Dőlt",
+    "Courier New Etzana",
+    "Courier New Fet",
+    "Courier New Fet Kursiv",
+    "Courier New Fett",
+    "Courier New Fett Kursiv",
+    "Courier New Félkövér",
+    "Courier New Félkövér dőlt",
+    "Courier New Gras",
+    "Courier New Gras Italique",
+    "Courier New Grassetto",
+    "Courier New Grassetto Corsivo",
+    "Courier New Halvfet",
+    "Courier New Halvfet Kursiv",
+    "Courier New Italic",
+    "Courier New Italique",
+    "Courier New Itálico",
+    "Courier New Kalın",
+    "Courier New Kalın İtalik",
+    "Courier New Krepko",
+    "Courier New Krepko poševno",
+    "Courier New Kursiv",
+    "Courier New Kursivoitu",
+    "Courier New Kursywa",
+    "Courier New Kurzíva",
+    "Courier New Lihavoitu",
+    "Courier New Lihavoitu Kursivoi",
+    "Courier New Lodi etzana",
+    "Courier New Lodia",
+    "Courier New Negreta",
+    "Courier New Negreta cursiva",
+    "Courier New Negrita",
+    "Courier New Negrita Cursiva",
+    "Courier New Negrito",
+    "Courier New Negrito Itálico",
+    "Courier New Pogrubiona kursywa",
+    "Courier New Pogrubiony",
+    "Courier New Poševno",
+    "Courier New Tučná kurzíva",
+    "Courier New Tučné",
+    "Courier New Vet",
+    "Courier New Vet Cursief",
+    "Courier New fed",
+    "Courier New fed kursiv",
+    "Courier New kursiv",
+    "Courier New kurzíva",
+    "Courier New nghiêng",
+    "Courier New tučné",
+    "Courier New tučné kurzíva",
+    "Courier New đậm",
+    "Courier New İtalik",
+    "Courier New Έντονα",
+    "Courier New Έντονα Πλάγια",
+    "Courier New Πλάγια",
+    "Courier New Курсив",
+    "Courier New Полужирный",
+    "Courier New Полужирный Курсив",
+    "CourierNewPS-BoldItalicMT",
+    "CourierNewPS-BoldMT",
+    "CourierNewPS-ItalicMT",
+    "CourierNewPSMT"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Courier New Bold Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Courier New Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Courier New Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Courier New.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "CourierNewPS-BoldMT",
+     "display": "Courier New Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "CourierNewPS-ItalicMT",
+     "display": "Courier New Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "CourierNewPSMT",
+     "display": "Courier New",
+     "style": "Regular"
+    },
+    {
+     "postscript": "CourierNewPS-BoldItalicMT",
+     "display": "Courier New Bold Italic",
+     "style": "Bold Italic"
+    }
+   ]
+  },
+  {
+   "family": "Damascus",
+   "names": [
+    ".Damascus PUA",
+    ".Damascus PUA Bold",
+    ".Damascus PUA Light",
+    ".Damascus PUA Medium",
+    ".Damascus PUA Semi Bold",
+    "Damascus",
+    "Damascus Bold",
+    "Damascus Light",
+    "Damascus Medium",
+    "Damascus Regular",
+    "Damascus Semi Bold",
+    "DamascusBold",
+    "DamascusLight",
+    "DamascusMedium",
+    "DamascusSemiBold",
+    "دمشق",
+    "دمشق شبه عريض",
+    "دمشق عادي",
+    "دمشق عريض",
+    "دمشق فاتح",
+    "دمشق متوسط",
+    "ڈیمسکس",
+    "ڈیمسکس بولڈ",
+    "ڈیمسکس ریگولر",
+    "ڈیمسکس سیمی بولڈ",
+    "ڈیمسکس لائٹ",
+    "ڈیمسکس میڈیم",
+    "दमिश्कश",
+    "दमिश्कश बोल्ड",
+    "दमिश्कश मीडियम",
+    "दमिश्कश रेग्युलर",
+    "दमिश्कश लाइट",
+    "दमिश्कश सेमी बोल्ड"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Damascus.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "DamascusLight",
+     "display": "Damascus Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "Damascus",
+     "display": "Damascus Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "DamascusBold",
+     "display": "Damascus Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "DamascusMedium",
+     "display": "Damascus Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "DamascusSemiBold",
+     "display": "Damascus Semi Bold",
+     "style": "Semi Bold"
+    }
+   ]
+  },
+  {
+   "family": "DecoType Naskh",
+   "names": [
+    ".DecoType Naskh PUA",
+    "DecoType Naskh",
+    "DecoType Naskh Regular",
+    "DecoTypeNaskh",
+    "نسخ",
+    "نسخ عادي"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/DecoTypeNaskh.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "DecoTypeNaskh",
+     "display": "DecoType Naskh Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Devanagari MT",
+   "names": [
+    "Devanagari MT",
+    "Devanagari MT Bold",
+    "DevanagariMT",
+    "DevanagariMT-Bold",
+    "देवनागरी एमटी",
+    "देवनागरी एमटी बोल्ड"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/DevanagariMT.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "DevanagariMT",
+     "display": "Devanagari MT",
+     "style": "Regular"
+    },
+    {
+     "postscript": "DevanagariMT-Bold",
+     "display": "Devanagari MT Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Devanagari Sangam MN",
+   "names": [
+    "Devanagari Sangam MN",
+    "Devanagari Sangam MN Bold",
+    "DevanagariSangamMN",
+    "DevanagariSangamMN-Bold",
+    "देवनागरी संगम एमएन",
+    "देवनागरी संगम एमएन बोल्ड"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Devanagari Sangam MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "DevanagariSangamMN-Bold",
+     "display": "Devanagari Sangam MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "DevanagariSangamMN",
+     "display": "Devanagari Sangam MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Didot",
+   "names": [
+    "Didot",
+    "Didot Bold",
+    "Didot Italic",
+    "Didot-Bold",
+    "Didot-Italic"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Didot.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Didot-Bold",
+     "display": "Didot Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Didot",
+     "display": "Didot",
+     "style": "Regular"
+    },
+    {
+     "postscript": "Didot-Italic",
+     "display": "Didot Italic",
+     "style": "Italic"
+    }
+   ]
+  },
+  {
+   "family": "DIN Alternate",
+   "names": [
+    "DIN Alternate",
+    "DIN Alternate Bold",
+    "DINAlternate-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/DIN Alternate Bold.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "DINAlternate-Bold",
+     "display": "DIN Alternate Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "DIN Condensed",
+   "names": [
+    "DIN Condensed",
+    "DIN Condensed Bold",
+    "DINCondensed-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/DIN Condensed Bold.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "DINCondensed-Bold",
+     "display": "DIN Condensed Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Diwan Kufi",
+   "names": [
+    ".Diwan Kufi PUA",
+    "Diwan Kufi",
+    "Diwan Kufi Regular",
+    "DiwanKufi",
+    "ديوان كوفي",
+    "ديوان كوفي عادي"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Diwan Kufi.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "DiwanKufi",
+     "display": "Diwan Kufi Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Diwan Thuluth",
+   "names": [
+    "Diwan Thuluth",
+    "Diwan Thuluth Regular",
+    "DiwanThuluth",
+    "ديوان ثلث",
+    "ديوان ثلث عادي"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Diwan Thuluth.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "DiwanThuluth",
+     "display": "Diwan Thuluth Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Euphemia UCAS",
+   "names": [
+    "Euphemia UCAS",
+    "Euphemia UCAS Bold",
+    "Euphemia UCAS Italic",
+    "EuphemiaUCAS",
+    "EuphemiaUCAS-Bold",
+    "EuphemiaUCAS-Italic"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "EuphemiaUCAS",
+     "display": "Euphemia UCAS",
+     "style": "Regular"
+    },
+    {
+     "postscript": "EuphemiaUCAS-Italic",
+     "display": "Euphemia UCAS Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "EuphemiaUCAS-Bold",
+     "display": "Euphemia UCAS Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Farah",
+   "names": [
+    ".Farah PUA",
+    "Farah",
+    "Farah Regular",
+    "فرح",
+    "فرح عادي"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Farah.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Farah",
+     "display": "Farah Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Farisi",
+   "names": [
+    "Farisi",
+    "Farisi Regular",
+    "فارسي",
+    "فارسي عادي"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Farisi.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Farisi",
+     "display": "Farisi Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Futura",
+   "names": [
+    "Futura",
+    "Futura Bold",
+    "Futura Condensed ExtraBold",
+    "Futura Condensed Medium",
+    "Futura Medium",
+    "Futura Medium Italic",
+    "Futura-Bold",
+    "Futura-CondensedExtraBold",
+    "Futura-CondensedMedium",
+    "Futura-Medium",
+    "Futura-MediumItalic"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Futura.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Futura-CondensedMedium",
+     "display": "Futura Condensed Medium",
+     "style": "Condensed Medium"
+    },
+    {
+     "postscript": "Futura-CondensedExtraBold",
+     "display": "Futura Condensed ExtraBold",
+     "style": "Condensed ExtraBold"
+    },
+    {
+     "postscript": "Futura-MediumItalic",
+     "display": "Futura Medium Italic",
+     "style": "Medium Italic"
+    },
+    {
+     "postscript": "Futura-Medium",
+     "display": "Futura Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "Futura-Bold",
+     "display": "Futura Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Galvji",
+   "names": [
+    "Galvji",
+    "Galvji Bold",
+    "Galvji Bold Oblique",
+    "Galvji Oblique",
+    "Galvji-Bold",
+    "Galvji-BoldOblique",
+    "Galvji-Oblique"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Galvji.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Galvji-Oblique",
+     "display": "Galvji Oblique",
+     "style": "Oblique"
+    },
+    {
+     "postscript": "Galvji",
+     "display": "Galvji",
+     "style": "Regular"
+    },
+    {
+     "postscript": "Galvji-BoldOblique",
+     "display": "Galvji Bold Oblique",
+     "style": "Bold Oblique"
+    },
+    {
+     "postscript": "Galvji-Bold",
+     "display": "Galvji Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "GB18030 Bitmap",
+   "names": [
+    "GB18030 Bitmap",
+    "GB18030Bitmap"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/NISC18030.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "GB18030Bitmap",
+     "display": "GB18030 Bitmap",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Geeza Pro",
+   "names": [
+    ".Geeza Pro Interface",
+    ".Geeza Pro Interface Bold",
+    ".Geeza Pro Interface Light",
+    ".Geeza Pro Interface Regular",
+    ".Geeza Pro PUA",
+    ".Geeza Pro PUA Bold",
+    "Geeza Pro",
+    "Geeza Pro Bold",
+    "Geeza Pro Regular",
+    "GeezaPro",
+    "GeezaPro-Bold",
+    "جيزة",
+    "جيزة عادي",
+    "جيزة عريض",
+    "گیزا پرو",
+    "گیزا پرو بولڈ",
+    "گیزا پرو ریگولر",
+    "गीज़ा प्रो",
+    "गीज़ा प्रो बोल्ड",
+    "गीज़ा प्रो रेग्युलर"
+   ],
+   "files": [
+    "/System/Library/Fonts/GeezaPro.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "GeezaPro-Bold",
+     "display": "Geeza Pro Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "GeezaPro",
+     "display": "Geeza Pro Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Geneva",
+   "names": [
+    "Geneva"
+   ],
+   "files": [
+    "/System/Library/Fonts/Geneva.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Geneva",
+     "display": "Geneva",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Georgia",
+   "names": [
+    "Georgia",
+    "Georgia Bold",
+    "Georgia Bold Italic",
+    "Georgia Corsivo",
+    "Georgia Cursief",
+    "Georgia Cursiva",
+    "Georgia Dőlt",
+    "Georgia Etzana",
+    "Georgia Fet",
+    "Georgia Fet Kursiv",
+    "Georgia Fett",
+    "Georgia Fett Kursiv",
+    "Georgia Félkövér",
+    "Georgia Félkövér dőlt",
+    "Georgia Gras",
+    "Georgia Gras Italique",
+    "Georgia Grassetto",
+    "Georgia Grassetto Corsivo",
+    "Georgia Halvfet",
+    "Georgia Halvfet Kursiv",
+    "Georgia Italic",
+    "Georgia Italique",
+    "Georgia Itálico",
+    "Georgia Kalın",
+    "Georgia Kalın İtalik",
+    "Georgia Krepko",
+    "Georgia Krepko poševno",
+    "Georgia Kursiv",
+    "Georgia Kursivoitu",
+    "Georgia Kursywa",
+    "Georgia Kurzíva",
+    "Georgia Lihavoitu",
+    "Georgia Lihavoitu Kursivoi",
+    "Georgia Lodi etzana",
+    "Georgia Lodia",
+    "Georgia Negreta",
+    "Georgia Negreta cursiva",
+    "Georgia Negrita",
+    "Georgia Negrita Cursiva",
+    "Georgia Negrito",
+    "Georgia Negrito Itálico",
+    "Georgia Pogrubiona kursywa",
+    "Georgia Pogrubiony",
+    "Georgia Poševno",
+    "Georgia Tučná kurzíva",
+    "Georgia Tučné",
+    "Georgia Vet",
+    "Georgia Vet Cursief",
+    "Georgia fed",
+    "Georgia fed kursiv",
+    "Georgia kursiv",
+    "Georgia kurzíva",
+    "Georgia tučné",
+    "Georgia tučné kurzíva",
+    "Georgia İtalik",
+    "Georgia Έντονα",
+    "Georgia Έντονα Πλάγια",
+    "Georgia Πλάγια",
+    "Georgia Курсив",
+    "Georgia Полужирный",
+    "Georgia Полужирный Курсив",
+    "Georgia-Bold",
+    "Georgia-BoldItalic",
+    "Georgia-Italic"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Georgia Bold Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Georgia Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Georgia Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Georgia.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Georgia-Italic",
+     "display": "Georgia Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "Georgia-BoldItalic",
+     "display": "Georgia Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "Georgia-Bold",
+     "display": "Georgia Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Georgia",
+     "display": "Georgia",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Gill Sans",
+   "names": [
+    "Gill Sans",
+    "Gill Sans Bold",
+    "Gill Sans Bold Italic",
+    "Gill Sans Italic",
+    "Gill Sans Light",
+    "Gill Sans Light Italic",
+    "Gill Sans SemiBold",
+    "Gill Sans SemiBold Italic",
+    "Gill Sans UltraBold",
+    "GillSans",
+    "GillSans-Bold",
+    "GillSans-BoldItalic",
+    "GillSans-Italic",
+    "GillSans-Light",
+    "GillSans-LightItalic",
+    "GillSans-SemiBold",
+    "GillSans-SemiBoldItalic",
+    "GillSans-UltraBold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/GillSans.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "GillSans-SemiBold",
+     "display": "Gill Sans SemiBold",
+     "style": "SemiBold"
+    },
+    {
+     "postscript": "GillSans-Italic",
+     "display": "Gill Sans Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "GillSans-UltraBold",
+     "display": "Gill Sans UltraBold",
+     "style": "UltraBold"
+    },
+    {
+     "postscript": "GillSans-BoldItalic",
+     "display": "Gill Sans Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "GillSans",
+     "display": "Gill Sans",
+     "style": "Regular"
+    },
+    {
+     "postscript": "GillSans-Bold",
+     "display": "Gill Sans Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "GillSans-Light",
+     "display": "Gill Sans Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "GillSans-SemiBoldItalic",
+     "display": "Gill Sans SemiBold Italic",
+     "style": "SemiBold Italic"
+    },
+    {
+     "postscript": "GillSans-LightItalic",
+     "display": "Gill Sans Light Italic",
+     "style": "Light Italic"
+    }
+   ]
+  },
+  {
+   "family": "Grantha Sangam MN",
+   "names": [
+    "Grantha Sangam MN",
+    "Grantha Sangam MN Bold",
+    "Grantha Sangam MN Regular",
+    "GranthaSangamMN-Bold",
+    "GranthaSangamMN-Regular",
+    "Tamil Sangam MN",
+    "Tamil Sangam MN Bold",
+    "ग्रंथ संगम एमएन",
+    "ग्रंथ संगम एमएन बोल्ड",
+    "ग्रंथ संगम एमएन रेग्युलर",
+    "तमिल संगम एमएन",
+    "तमिल संगम एमएन बोल्ड",
+    "கிரந்த சங்கம் எம்என்",
+    "கிரந்த சங்கம் எம்என் போல்ட்",
+    "கிரந்த சங்கம் எம்என் ரெகுலர்",
+    "தமிழ் சங்கம் எம்என்",
+    "தமிழ் சங்கம் எம்என் போல்ட்"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "GranthaSangamMN-Bold",
+     "display": "Grantha Sangam MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "GranthaSangamMN-Regular",
+     "display": "Grantha Sangam MN Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Gujarati MT",
+   "names": [
+    "Gujarati MT",
+    "Gujarati MT Bold",
+    "GujaratiMT",
+    "GujaratiMT-Bold",
+    "गुजराती एचटी",
+    "गुजराती एचटी बोल्ड",
+    "ગુજરાતી એમટી",
+    "ગુજરાતી એમટી બોલ્ડ"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/GujaratiMT.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "GujaratiMT-Bold",
+     "display": "Gujarati MT Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "GujaratiMT",
+     "display": "Gujarati MT",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Gujarati Sangam MN",
+   "names": [
+    "Gujarati Sangam MN",
+    "Gujarati Sangam MN Bold",
+    "GujaratiSangamMN",
+    "GujaratiSangamMN-Bold",
+    "गुजराती संगम एमएन",
+    "गुजराती संगम एमएन बोल्ड",
+    "ગુજરાતી સંગમ એમએન",
+    "ગુજરાતી સંગમ એમએન બોલ્ડ"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Gujarati Sangam MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "GujaratiSangamMN-Bold",
+     "display": "Gujarati Sangam MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "GujaratiSangamMN",
+     "display": "Gujarati Sangam MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Gurmukhi MN",
+   "names": [
+    "Gurmukhi MN",
+    "Gurmukhi MN Bold",
+    "GurmukhiMN",
+    "GurmukhiMN-Bold",
+    "गुरुमुखी एमएन",
+    "गुरुमुखी एमएन बोल्ड",
+    "ਗੁਰਮੁਖੀ ਐਮਐੱਨ",
+    "ਗੁਰਮੁਖੀ ਐਮਐੱਨ ਬੋਲਡ"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Gurmukhi MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "GurmukhiMN",
+     "display": "Gurmukhi MN",
+     "style": "Regular"
+    },
+    {
+     "postscript": "GurmukhiMN-Bold",
+     "display": "Gurmukhi MN Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Gurmukhi MT",
+   "names": [
+    "Gurmukhi MT",
+    "MonotypeGurmukhi",
+    "गुरुमुखी एमटी",
+    "ਗੁਰਮੁਖੀ ਐਮਜੀ"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Gurmukhi.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "MonotypeGurmukhi",
+     "display": "Gurmukhi MT",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Gurmukhi Sangam MN",
+   "names": [
+    "Gurmukhi Sangam MN",
+    "Gurmukhi Sangam MN Bold",
+    "GurmukhiSangamMN",
+    "GurmukhiSangamMN-Bold",
+    "गुरुमुखी संगति एमएन",
+    "गुरुमुखी संगति एमएन बोल्ड",
+    "ਗੁਰਮੁਖੀ ਸੰਗਮ ਐਮਐੱਨ",
+    "ਗੁਰਮੁਖੀ ਸੰਗਮ ਐਮਐੱਨ ਬੋਲਡ"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Gurmukhi Sangam MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "GurmukhiSangamMN-Bold",
+     "display": "Gurmukhi Sangam MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "GurmukhiSangamMN",
+     "display": "Gurmukhi Sangam MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Heiti SC",
+   "names": [
+    "Heiti SC",
+    "Heiti SC Light",
+    "Heiti SC Medium",
+    "Heiti TC",
+    "Heiti TC Light",
+    "Heiti TC Medium",
+    "Heiti-간체",
+    "Heiti-간체 가는체",
+    "Heiti-간체 중간체",
+    "Heiti-번체",
+    "Heiti-번체 가는체",
+    "Heiti-번체 중간체",
+    "STHeitiSC-Light",
+    "STHeitiSC-Medium",
+    "黑体-简",
+    "黑体-简 中等",
+    "黑体-简 细体",
+    "黑体-繁",
+    "黑体-繁 中等",
+    "黑体-繁 细体",
+    "黑體-簡",
+    "黑體-簡 中黑",
+    "黑體-簡 細體",
+    "黑體-繁",
+    "黑體-繁 中黑",
+    "黑體-繁 細體",
+    "黒体-簡",
+    "黒体-簡 ミディアム",
+    "黒体-簡 ライト",
+    "黒体-繁",
+    "黒体-繁 ミディアム",
+    "黒体-繁 ライト"
+   ],
+   "files": [
+    "/System/Library/Fonts/STHeiti Light.ttc",
+    "/System/Library/Fonts/STHeiti Medium.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "STHeitiSC-Light",
+     "display": "Heiti SC Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "STHeitiSC-Medium",
+     "display": "Heiti SC Medium",
+     "style": "Medium"
+    }
+   ]
+  },
+  {
+   "family": "Heiti TC",
+   "names": [
+    "Heiti SC",
+    "Heiti SC Light",
+    "Heiti SC Medium",
+    "Heiti TC",
+    "Heiti TC Light",
+    "Heiti TC Medium",
+    "Heiti-간체",
+    "Heiti-간체 가는체",
+    "Heiti-간체 중간체",
+    "Heiti-번체",
+    "Heiti-번체 가는체",
+    "Heiti-번체 중간체",
+    "STHeitiTC-Light",
+    "STHeitiTC-Medium",
+    "黑体-简",
+    "黑体-简 中等",
+    "黑体-简 细体",
+    "黑体-繁",
+    "黑体-繁 中等",
+    "黑体-繁 细体",
+    "黑體-簡",
+    "黑體-簡 中黑",
+    "黑體-簡 細體",
+    "黑體-繁",
+    "黑體-繁 中黑",
+    "黑體-繁 細體",
+    "黒体-簡",
+    "黒体-簡 ミディアム",
+    "黒体-簡 ライト",
+    "黒体-繁",
+    "黒体-繁 ミディアム",
+    "黒体-繁 ライト"
+   ],
+   "files": [
+    "/System/Library/Fonts/STHeiti Light.ttc",
+    "/System/Library/Fonts/STHeiti Medium.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "STHeitiTC-Light",
+     "display": "Heiti TC Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "STHeitiTC-Medium",
+     "display": "Heiti TC Medium",
+     "style": "Medium"
+    }
+   ]
+  },
+  {
+   "family": "Helvetica",
+   "names": [
+    "Helvetica",
+    "Helvetica Bold",
+    "Helvetica Bold Oblique",
+    "Helvetica Carregado",
+    "Helvetica Fet",
+    "Helvetica Fett",
+    "Helvetica Gras",
+    "Helvetica Halvfet",
+    "Helvetica Light",
+    "Helvetica Light Oblique",
+    "Helvetica Negrita",
+    "Helvetica Oblique",
+    "Helvetica grassetto",
+    "Helvetica lihava",
+    "Helvetica vet",
+    "Helvetica-Bold",
+    "Helvetica-BoldOblique",
+    "Helvetica-Light",
+    "Helvetica-LightOblique",
+    "Helvetica-Oblique"
+   ],
+   "files": [
+    "/System/Library/Fonts/Helvetica.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Helvetica-Bold",
+     "display": "Helvetica Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Helvetica-Light",
+     "display": "Helvetica Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "Helvetica-BoldOblique",
+     "display": "Helvetica Bold Oblique",
+     "style": "Bold Oblique"
+    },
+    {
+     "postscript": "Helvetica",
+     "display": "Helvetica",
+     "style": "Regular"
+    },
+    {
+     "postscript": "Helvetica-LightOblique",
+     "display": "Helvetica Light Oblique",
+     "style": "Light Oblique"
+    },
+    {
+     "postscript": "Helvetica-Oblique",
+     "display": "Helvetica Oblique",
+     "style": "Oblique"
+    }
+   ]
+  },
+  {
+   "family": "Helvetica Neue",
+   "names": [
+    "Helvetica Neue",
+    "Helvetica Neue Bold",
+    "Helvetica Neue Bold Italic",
+    "Helvetica Neue Condensed Black",
+    "Helvetica Neue Condensed Bold",
+    "Helvetica Neue Italic",
+    "Helvetica Neue Light",
+    "Helvetica Neue Light Italic",
+    "Helvetica Neue Medium",
+    "Helvetica Neue Medium Italic",
+    "Helvetica Neue Thin",
+    "Helvetica Neue Thin Italic",
+    "Helvetica Neue UltraLight",
+    "Helvetica Neue UltraLight Italic",
+    "HelveticaNeue",
+    "HelveticaNeue-Bold",
+    "HelveticaNeue-BoldItalic",
+    "HelveticaNeue-CondensedBlack",
+    "HelveticaNeue-CondensedBold",
+    "HelveticaNeue-Italic",
+    "HelveticaNeue-Light",
+    "HelveticaNeue-LightItalic",
+    "HelveticaNeue-Medium",
+    "HelveticaNeue-MediumItalic",
+    "HelveticaNeue-Thin",
+    "HelveticaNeue-ThinItalic",
+    "HelveticaNeue-UltraLight",
+    "HelveticaNeue-UltraLightItalic"
+   ],
+   "files": [
+    "/System/Library/Fonts/HelveticaNeue.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "HelveticaNeue-CondensedBold",
+     "display": "Helvetica Neue Condensed Bold",
+     "style": "Condensed Bold"
+    },
+    {
+     "postscript": "HelveticaNeue-Bold",
+     "display": "Helvetica Neue Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "HelveticaNeue-Thin",
+     "display": "Helvetica Neue Thin",
+     "style": "Thin"
+    },
+    {
+     "postscript": "HelveticaNeue-Italic",
+     "display": "Helvetica Neue Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "HelveticaNeue-LightItalic",
+     "display": "Helvetica Neue Light Italic",
+     "style": "Light Italic"
+    },
+    {
+     "postscript": "HelveticaNeue-ThinItalic",
+     "display": "Helvetica Neue Thin Italic",
+     "style": "Thin Italic"
+    },
+    {
+     "postscript": "HelveticaNeue-MediumItalic",
+     "display": "Helvetica Neue Medium Italic",
+     "style": "Medium Italic"
+    },
+    {
+     "postscript": "HelveticaNeue-Medium",
+     "display": "Helvetica Neue Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "HelveticaNeue-BoldItalic",
+     "display": "Helvetica Neue Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "HelveticaNeue-CondensedBlack",
+     "display": "Helvetica Neue Condensed Black",
+     "style": "Condensed Black"
+    },
+    {
+     "postscript": "HelveticaNeue-Light",
+     "display": "Helvetica Neue Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "HelveticaNeue",
+     "display": "Helvetica Neue",
+     "style": "Regular"
+    },
+    {
+     "postscript": "HelveticaNeue-UltraLightItalic",
+     "display": "Helvetica Neue UltraLight Italic",
+     "style": "UltraLight Italic"
+    },
+    {
+     "postscript": "HelveticaNeue-UltraLight",
+     "display": "Helvetica Neue UltraLight",
+     "style": "UltraLight"
+    }
+   ]
+  },
+  {
+   "family": "Herculanum",
+   "names": [
+    "Herculanum"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Herculanum.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Herculanum",
+     "display": "Herculanum",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Hiragino Maru Gothic ProN",
+   "names": [
+    "HiraMaruPro-W4",
+    "HiraMaruProN-W4",
+    "Hiragino Maru Gothic Pro",
+    "Hiragino Maru Gothic Pro W4",
+    "Hiragino Maru Gothic ProN",
+    "Hiragino Maru Gothic ProN W4",
+    "ヒラギノ丸ゴ Pro",
+    "ヒラギノ丸ゴ Pro W4",
+    "ヒラギノ丸ゴ ProN",
+    "ヒラギノ丸ゴ ProN W4"
+   ],
+   "files": [
+    "/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "HiraMaruProN-W4",
+     "display": "Hiragino Maru Gothic ProN W4",
+     "style": "W4"
+    }
+   ]
+  },
+  {
+   "family": "Hiragino Mincho ProN",
+   "names": [
+    "HiraMinPro-W3",
+    "HiraMinPro-W6",
+    "HiraMinProN-W3",
+    "HiraMinProN-W6",
+    "Hiragino Mincho Pro",
+    "Hiragino Mincho Pro W3",
+    "Hiragino Mincho Pro W6",
+    "Hiragino Mincho ProN",
+    "Hiragino Mincho ProN W3",
+    "Hiragino Mincho ProN W6",
+    "ヒラギノ明朝 Pro",
+    "ヒラギノ明朝 Pro W3",
+    "ヒラギノ明朝 Pro W6",
+    "ヒラギノ明朝 ProN",
+    "ヒラギノ明朝 ProN W3",
+    "ヒラギノ明朝 ProN W6"
+   ],
+   "files": [
+    "/System/Library/Fonts/ヒラギノ明朝 ProN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "HiraMinProN-W3",
+     "display": "Hiragino Mincho ProN W3",
+     "style": "W3"
+    },
+    {
+     "postscript": "HiraMinProN-W6",
+     "display": "Hiragino Mincho ProN W6",
+     "style": "W6"
+    }
+   ]
+  },
+  {
+   "family": "Hiragino Sans",
+   "names": [
+    ".Hiragino Kaku Gothic Interface",
+    ".Hiragino Kaku Gothic Interface W0",
+    ".Hiragino Kaku Gothic Interface W1",
+    ".Hiragino Kaku Gothic Interface W2",
+    ".Hiragino Kaku Gothic Interface W3",
+    ".Hiragino Kaku Gothic Interface W4",
+    ".Hiragino Kaku Gothic Interface W5",
+    ".Hiragino Kaku Gothic Interface W6",
+    ".Hiragino Kaku Gothic Interface W7",
+    ".Hiragino Kaku Gothic Interface W8",
+    ".Hiragino Kaku Gothic Interface W9",
+    "Hiragino Kaku Gothic Pro",
+    "Hiragino Kaku Gothic Pro W3",
+    "Hiragino Kaku Gothic Pro W6",
+    "Hiragino Kaku Gothic ProN",
+    "Hiragino Kaku Gothic ProN W3",
+    "Hiragino Kaku Gothic ProN W6",
+    "Hiragino Kaku Gothic Std",
+    "Hiragino Kaku Gothic Std W8",
+    "Hiragino Kaku Gothic StdN",
+    "Hiragino Kaku Gothic StdN W8",
+    "Hiragino Sans",
+    "Hiragino Sans W0",
+    "Hiragino Sans W1",
+    "Hiragino Sans W2",
+    "Hiragino Sans W3",
+    "Hiragino Sans W4",
+    "Hiragino Sans W5",
+    "Hiragino Sans W6",
+    "Hiragino Sans W7",
+    "Hiragino Sans W8",
+    "Hiragino Sans W9",
+    "HiraginoSans-W0",
+    "HiraginoSans-W1",
+    "HiraginoSans-W2",
+    "HiraginoSans-W3",
+    "HiraginoSans-W4",
+    "HiraginoSans-W5",
+    "HiraginoSans-W6",
+    "HiraginoSans-W7",
+    "HiraginoSans-W8",
+    "HiraginoSans-W9",
+    "ヒラギノ角ゴ Pro",
+    "ヒラギノ角ゴ Pro W3",
+    "ヒラギノ角ゴ Pro W6",
+    "ヒラギノ角ゴ ProN",
+    "ヒラギノ角ゴ ProN W3",
+    "ヒラギノ角ゴ ProN W6",
+    "ヒラギノ角ゴ Std",
+    "ヒラギノ角ゴ Std W8",
+    "ヒラギノ角ゴ StdN",
+    "ヒラギノ角ゴ StdN W8",
+    "ヒラギノ角ゴシック",
+    "ヒラギノ角ゴシック W0",
+    "ヒラギノ角ゴシック W1",
+    "ヒラギノ角ゴシック W2",
+    "ヒラギノ角ゴシック W3",
+    "ヒラギノ角ゴシック W4",
+    "ヒラギノ角ゴシック W5",
+    "ヒラギノ角ゴシック W6",
+    "ヒラギノ角ゴシック W7",
+    "ヒラギノ角ゴシック W8",
+    "ヒラギノ角ゴシック W9"
+   ],
+   "files": [
+    "/System/Library/Fonts/ヒラギノ角ゴシック W0.ttc",
+    "/System/Library/Fonts/ヒラギノ角ゴシック W1.ttc",
+    "/System/Library/Fonts/ヒラギノ角ゴシック W2.ttc",
+    "/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc",
+    "/System/Library/Fonts/ヒラギノ角ゴシック W4.ttc",
+    "/System/Library/Fonts/ヒラギノ角ゴシック W5.ttc",
+    "/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc",
+    "/System/Library/Fonts/ヒラギノ角ゴシック W7.ttc",
+    "/System/Library/Fonts/ヒラギノ角ゴシック W8.ttc",
+    "/System/Library/Fonts/ヒラギノ角ゴシック W9.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "HiraginoSans-W8",
+     "display": "Hiragino Sans W8",
+     "style": "W8"
+    },
+    {
+     "postscript": "HiraginoSans-W6",
+     "display": "Hiragino Sans W6",
+     "style": "W6"
+    },
+    {
+     "postscript": "HiraginoSans-W4",
+     "display": "Hiragino Sans W4",
+     "style": "W4"
+    },
+    {
+     "postscript": "HiraginoSans-W2",
+     "display": "Hiragino Sans W2",
+     "style": "W2"
+    },
+    {
+     "postscript": "HiraginoSans-W0",
+     "display": "Hiragino Sans W0",
+     "style": "W0"
+    },
+    {
+     "postscript": "HiraginoSans-W9",
+     "display": "Hiragino Sans W9",
+     "style": "W9"
+    },
+    {
+     "postscript": "HiraginoSans-W7",
+     "display": "Hiragino Sans W7",
+     "style": "W7"
+    },
+    {
+     "postscript": "HiraginoSans-W5",
+     "display": "Hiragino Sans W5",
+     "style": "W5"
+    },
+    {
+     "postscript": "HiraginoSans-W3",
+     "display": "Hiragino Sans W3",
+     "style": "W3"
+    },
+    {
+     "postscript": "HiraginoSans-W1",
+     "display": "Hiragino Sans W1",
+     "style": "W1"
+    }
+   ]
+  },
+  {
+   "family": "Hiragino Sans GB",
+   "names": [
+    ".Hiragino Sans GB Interface",
+    ".Hiragino Sans GB Interface W3",
+    ".Hiragino Sans GB Interface W6",
+    "Hiragino Sans GB",
+    "Hiragino Sans GB W3",
+    "Hiragino Sans GB W6",
+    "HiraginoSansGB-W3",
+    "HiraginoSansGB-W6",
+    "ヒラギノ角ゴ 簡体中文",
+    "ヒラギノ角ゴ 簡体中文 W3",
+    "ヒラギノ角ゴ 簡体中文 W6",
+    "冬青黑体简体中文",
+    "冬青黑体简体中文 W3",
+    "冬青黑体简体中文 W6",
+    "冬青黑體簡體中文",
+    "冬青黑體簡體中文 W3",
+    "冬青黑體簡體中文 W6"
+   ],
+   "files": [
+    "/System/Library/Fonts/Hiragino Sans GB.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "HiraginoSansGB-W6",
+     "display": "Hiragino Sans GB W6",
+     "style": "W6"
+    },
+    {
+     "postscript": "HiraginoSansGB-W3",
+     "display": "Hiragino Sans GB W3",
+     "style": "W3"
+    }
+   ]
+  },
+  {
+   "family": "Hoefler Text",
+   "names": [
+    "Hoefler Text",
+    "Hoefler Text Black",
+    "Hoefler Text Black Italic",
+    "Hoefler Text Italic",
+    "Hoefler Text Ornaments",
+    "HoeflerText-Black",
+    "HoeflerText-BlackItalic",
+    "HoeflerText-Italic",
+    "HoeflerText-Ornaments",
+    "HoeflerText-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Hoefler Text Ornaments.ttf",
+    "/System/Library/Fonts/Supplemental/Hoefler Text.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "HoeflerText-BlackItalic",
+     "display": "Hoefler Text Black Italic",
+     "style": "Black Italic"
+    },
+    {
+     "postscript": "HoeflerText-Italic",
+     "display": "Hoefler Text Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "HoeflerText-Regular",
+     "display": "Hoefler Text",
+     "style": "Regular"
+    },
+    {
+     "postscript": "HoeflerText-Ornaments",
+     "display": "Hoefler Text Ornaments",
+     "style": "Ornaments"
+    },
+    {
+     "postscript": "HoeflerText-Black",
+     "display": "Hoefler Text Black",
+     "style": "Black"
+    }
+   ]
+  },
+  {
+   "family": "Impact",
+   "names": [
+    "Impact"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Impact.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Impact",
+     "display": "Impact",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "InaiMathi",
+   "names": [
+    "InaiMathi",
+    "InaiMathi Bold",
+    "InaiMathi-Bold",
+    "इनाईमाथी",
+    "इनाईमाथी बोल्ड",
+    "இணைமதி",
+    "இணைமதி போல்ட்"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/InaiMathi-MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "InaiMathi-Bold",
+     "display": "InaiMathi Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "InaiMathi",
+     "display": "InaiMathi",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "ITF Devanagari",
+   "names": [
+    "ITF Devanagari",
+    "ITF Devanagari Bold",
+    "ITF Devanagari Book",
+    "ITF Devanagari Demi",
+    "ITF Devanagari Light",
+    "ITF Devanagari Marathi",
+    "ITF Devanagari Marathi Bold",
+    "ITF Devanagari Marathi Book",
+    "ITF Devanagari Marathi Demi",
+    "ITF Devanagari Marathi Light",
+    "ITF Devanagari Marathi Medium",
+    "ITF Devanagari Medium",
+    "ITFDevanagari Marathi Light",
+    "ITFDevanagari Marathi-Bold",
+    "ITFDevanagari Marathi-Book",
+    "ITFDevanagari Marathi-Demi",
+    "ITFDevanagari-Bold",
+    "ITFDevanagari-Book",
+    "ITFDevanagari-Demi",
+    "ITFDevanagari-Light",
+    "ITFDevanagari-Medium",
+    "आईटीएफ़ देवनागरी",
+    "आईटीएफ़ देवनागरी डेमी",
+    "आईटीएफ़ देवनागरी बुक",
+    "आईटीएफ़ देवनागरी बोल्ड",
+    "आईटीएफ़ देवनागरी मराठी",
+    "आईटीएफ़ देवनागरी मराठी डेमी",
+    "आईटीएफ़ देवनागरी मराठी बुक",
+    "आईटीएफ़ देवनागरी मराठी बोल्ड",
+    "आईटीएफ़ देवनागरी मराठी मीडियम",
+    "आईटीएफ़ देवनागरी मराठी लाइट",
+    "आईटीएफ़ देवनागरी मीडियम",
+    "आईटीएफ़ देवनागरी लाइट",
+    "आयटीएफ देवनागरी",
+    "आयटीएफ देवनागरी डेमी",
+    "आयटीएफ देवनागरी बुक",
+    "आयटीएफ देवनागरी बोल्ड",
+    "आयटीएफ देवनागरी मराठी",
+    "आयटीएफ देवनागरी मराठी डेमी",
+    "आयटीएफ देवनागरी मराठी बुक",
+    "आयटीएफ देवनागरी मराठी बोल्ड",
+    "आयटीएफ देवनागरी मराठी मीडियम",
+    "आयटीएफ देवनागरी मराठी लाइट",
+    "आयटीएफ देवनागरी मीडियम",
+    "आयटीएफ देवनागरी लाइट"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/ITFDevanagari.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "ITFDevanagari-Demi",
+     "display": "ITF Devanagari Demi",
+     "style": "Demi"
+    },
+    {
+     "postscript": "ITFDevanagari-Medium",
+     "display": "ITF Devanagari Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "ITFDevanagari-Bold",
+     "display": "ITF Devanagari Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "ITFDevanagari-Light",
+     "display": "ITF Devanagari Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "ITFDevanagari-Book",
+     "display": "ITF Devanagari Book",
+     "style": "Book"
+    }
+   ]
+  },
+  {
+   "family": "ITF Devanagari Marathi",
+   "names": [
+    "ITF Devanagari",
+    "ITF Devanagari Bold",
+    "ITF Devanagari Book",
+    "ITF Devanagari Demi",
+    "ITF Devanagari Light",
+    "ITF Devanagari Marathi",
+    "ITF Devanagari Marathi Bold",
+    "ITF Devanagari Marathi Book",
+    "ITF Devanagari Marathi Demi",
+    "ITF Devanagari Marathi Light",
+    "ITF Devanagari Marathi Medium",
+    "ITF Devanagari Medium",
+    "ITFDevanagari Marathi Light",
+    "ITFDevanagari Marathi-Bold",
+    "ITFDevanagari Marathi-Book",
+    "ITFDevanagari Marathi-Demi",
+    "ITFDevanagari-Bold",
+    "ITFDevanagari-Book",
+    "ITFDevanagari-Demi",
+    "ITFDevanagari-Light",
+    "ITFDevanagari-Medium",
+    "ITFDevanagariMarathi-Bold",
+    "ITFDevanagariMarathi-Book",
+    "ITFDevanagariMarathi-Demi",
+    "ITFDevanagariMarathi-Light",
+    "ITFDevanagariMarathi-Medium",
+    "आईटीएफ़ देवनागरी",
+    "आईटीएफ़ देवनागरी डेमी",
+    "आईटीएफ़ देवनागरी बुक",
+    "आईटीएफ़ देवनागरी बोल्ड",
+    "आईटीएफ़ देवनागरी मराठी",
+    "आईटीएफ़ देवनागरी मराठी डेमी",
+    "आईटीएफ़ देवनागरी मराठी बुक",
+    "आईटीएफ़ देवनागरी मराठी बोल्ड",
+    "आईटीएफ़ देवनागरी मराठी मीडियम",
+    "आईटीएफ़ देवनागरी मराठी लाइट",
+    "आईटीएफ़ देवनागरी मीडियम",
+    "आईटीएफ़ देवनागरी लाइट",
+    "आयटीएफ देवनागरी",
+    "आयटीएफ देवनागरी डेमी",
+    "आयटीएफ देवनागरी बुक",
+    "आयटीएफ देवनागरी बोल्ड",
+    "आयटीएफ देवनागरी मराठी",
+    "आयटीएफ देवनागरी मराठी डेमी",
+    "आयटीएफ देवनागरी मराठी बुक",
+    "आयटीएफ देवनागरी मराठी बोल्ड",
+    "आयटीएफ देवनागरी मराठी मीडियम",
+    "आयटीएफ देवनागरी मराठी लाइट",
+    "आयटीएफ देवनागरी मीडियम",
+    "आयटीएफ देवनागरी लाइट"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/ITFDevanagari.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "ITFDevanagariMarathi-Bold",
+     "display": "ITF Devanagari Marathi Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "ITFDevanagariMarathi-Medium",
+     "display": "ITF Devanagari Marathi Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "ITFDevanagariMarathi-Demi",
+     "display": "ITF Devanagari Marathi Demi",
+     "style": "Demi"
+    },
+    {
+     "postscript": "ITFDevanagariMarathi-Light",
+     "display": "ITF Devanagari Marathi Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "ITFDevanagariMarathi-Book",
+     "display": "ITF Devanagari Marathi Book",
+     "style": "Book"
+    }
+   ]
+  },
+  {
+   "family": "Kailasa",
+   "names": [
+    "Kailasa",
+    "Kailasa Bold",
+    "Kailasa Regular",
+    "Kailasa-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Kailasa.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Kailasa",
+     "display": "Kailasa Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "Kailasa-Bold",
+     "display": "Kailasa Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Kannada MN",
+   "names": [
+    "Kannada MN",
+    "Kannada MN Bold",
+    "KannadaMN",
+    "KannadaMN-Bold",
+    "कन्नड़ एमएन",
+    "कन्नड़ एमएन बोल्ड",
+    "ಕನ್ನಡ ಎಮ್ಎನ್",
+    "ಕನ್ನಡ ಎಮ್ಎನ್ ಬೋಲ್ಡ್"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Kannada MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "KannadaMN",
+     "display": "Kannada MN",
+     "style": "Regular"
+    },
+    {
+     "postscript": "KannadaMN-Bold",
+     "display": "Kannada MN Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Kannada Sangam MN",
+   "names": [
+    "Kannada Sangam MN",
+    "Kannada Sangam MN Bold",
+    "KannadaSangamMN",
+    "KannadaSangamMN-Bold",
+    "कन्नड़ संगम एमएन",
+    "कन्नड़ संगम एमएन बोल्ड",
+    "ಕನ್ನಡ ಸಂಗಂ ಎಮ್ಎನ್",
+    "ಕನ್ನಡ ಸಂಗಂ ಎಮ್ಎನ್ ಬೋಲ್ಡ್"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Kannada Sangam MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "KannadaSangamMN-Bold",
+     "display": "Kannada Sangam MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "KannadaSangamMN",
+     "display": "Kannada Sangam MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Kefa III",
+   "names": [
+    "Kefa III",
+    "Kefa III Regular",
+    "Kefa III Regular Bold",
+    "Kefa III Regular ExtraBold",
+    "Kefa III Regular Light",
+    "Kefa III Regular Regular",
+    "KefaIII-Bold",
+    "KefaIII-ExtraBold",
+    "KefaIII-Light",
+    "KefaIII-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/KefaIII.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "KefaIII-Light",
+     "display": "Kefa III Regular Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "KefaIII-Bold",
+     "display": "Kefa III Regular Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "KefaIII-Regular",
+     "display": "Kefa III Regular Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "KefaIII-ExtraBold",
+     "display": "Kefa III Regular ExtraBold",
+     "style": "ExtraBold"
+    }
+   ]
+  },
+  {
+   "family": "Khmer MN",
+   "names": [
+    "Khmer MN",
+    "Khmer MN Bold",
+    "KhmerMN",
+    "KhmerMN-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Khmer MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "KhmerMN",
+     "display": "Khmer MN",
+     "style": "Regular"
+    },
+    {
+     "postscript": "KhmerMN-Bold",
+     "display": "Khmer MN Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Khmer Sangam MN",
+   "names": [
+    "Khmer Sangam MN",
+    "KhmerSangamMN"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Khmer Sangam MN.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "KhmerSangamMN",
+     "display": "Khmer Sangam MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Kohinoor Bangla",
+   "names": [
+    "Kohinoor Bangla",
+    "Kohinoor Bangla Bold",
+    "Kohinoor Bangla Light",
+    "Kohinoor Bangla Medium",
+    "Kohinoor Bangla Semibold",
+    "KohinoorBangla-Bold",
+    "KohinoorBangla-Light",
+    "KohinoorBangla-Medium",
+    "KohinoorBangla-Regular",
+    "KohinoorBangla-Semibold",
+    "कोहिनूर बांग्ला",
+    "कोहिनूर बांग्ला बोल्ड",
+    "कोहिनूर बांग्ला मीडियम",
+    "कोहिनूर बांग्ला लाइट",
+    "कोहिनूर बांग्ला सेमी बोल्ड",
+    "কোহিনূর বাংলা",
+    "কোহিনূর বাংলা বোল্ড",
+    "কোহিনূর বাংলা মিডিয়াম",
+    "কোহিনূর বাংলা লাইট",
+    "কোহিনূর বাংলা সেমিবোল্ড"
+   ],
+   "files": [
+    "/System/Library/Fonts/KohinoorBangla.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "KohinoorBangla-Bold",
+     "display": "Kohinoor Bangla Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "KohinoorBangla-Medium",
+     "display": "Kohinoor Bangla Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "KohinoorBangla-Regular",
+     "display": "Kohinoor Bangla",
+     "style": "Regular"
+    },
+    {
+     "postscript": "KohinoorBangla-Light",
+     "display": "Kohinoor Bangla Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "KohinoorBangla-Semibold",
+     "display": "Kohinoor Bangla Semibold",
+     "style": "Semibold"
+    }
+   ]
+  },
+  {
+   "family": "Kohinoor Devanagari",
+   "names": [
+    "Kohinoor Devanagari",
+    "Kohinoor Devanagari Bold",
+    "Kohinoor Devanagari Light",
+    "Kohinoor Devanagari Medium",
+    "Kohinoor Devanagari Regular",
+    "Kohinoor Devanagari Semibold",
+    "KohinoorDevanagari-Bold",
+    "KohinoorDevanagari-Light",
+    "KohinoorDevanagari-Medium",
+    "KohinoorDevanagari-Regular",
+    "KohinoorDevanagari-Semibold",
+    "कोहिनूर देवनागरी",
+    "कोहिनूर देवनागरी बोल्ड",
+    "कोहिनूर देवनागरी मीडियम",
+    "कोहिनूर देवनागरी रेग्युलर",
+    "कोहिनूर देवनागरी लाइट",
+    "कोहिनूर देवनागरी सेमी बोल्ड",
+    "कोहिनूर देवनागरी सेमीबोल्ड"
+   ],
+   "files": [
+    "/System/Library/Fonts/Kohinoor.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "KohinoorDevanagari-Light",
+     "display": "Kohinoor Devanagari Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "KohinoorDevanagari-Bold",
+     "display": "Kohinoor Devanagari Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "KohinoorDevanagari-Regular",
+     "display": "Kohinoor Devanagari Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "KohinoorDevanagari-Medium",
+     "display": "Kohinoor Devanagari Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "KohinoorDevanagari-Semibold",
+     "display": "Kohinoor Devanagari Semibold",
+     "style": "Semibold"
+    }
+   ]
+  },
+  {
+   "family": "Kohinoor Gujarati",
+   "names": [
+    "Kohinoor Gujarati",
+    "Kohinoor Gujarati Bold",
+    "Kohinoor Gujarati Light",
+    "Kohinoor Gujarati Medium",
+    "Kohinoor Gujarati Regular",
+    "Kohinoor Gujarati Semibold",
+    "KohinoorGujarati-Bold",
+    "KohinoorGujarati-Light",
+    "KohinoorGujarati-Medium",
+    "KohinoorGujarati-Regular",
+    "KohinoorGujarati-Semibold",
+    "कोहिनूर गुजराती",
+    "कोहिनूर गुजराती बोल्ड",
+    "कोहिनूर गुजराती मीडियम",
+    "कोहिनूर गुजराती रेग्युलर",
+    "कोहिनूर गुजराती लाइट",
+    "कोहिनूर गुजराती सेमी बोल्ड",
+    "કોહિનૂર ગુજરાતી",
+    "કોહિનૂર ગુજરાતી બોલ્ડ",
+    "કોહિનૂર ગુજરાતી મીડિઅમ",
+    "કોહિનૂર ગુજરાતી રૅગ્યુલર",
+    "કોહિનૂર ગુજરાતી લાઇટ",
+    "કોહિનૂર ગુજરાતી સૅમિબૉલ્ડ"
+   ],
+   "files": [
+    "/System/Library/Fonts/KohinoorGujarati.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "KohinoorGujarati-Light",
+     "display": "Kohinoor Gujarati Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "KohinoorGujarati-Bold",
+     "display": "Kohinoor Gujarati Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "KohinoorGujarati-Medium",
+     "display": "Kohinoor Gujarati Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "KohinoorGujarati-Semibold",
+     "display": "Kohinoor Gujarati Semibold",
+     "style": "Semibold"
+    },
+    {
+     "postscript": "KohinoorGujarati-Regular",
+     "display": "Kohinoor Gujarati Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Kohinoor Telugu",
+   "names": [
+    "Kohinoor Telugu",
+    "Kohinoor Telugu Bold",
+    "Kohinoor Telugu Light",
+    "Kohinoor Telugu Medium",
+    "Kohinoor Telugu Semibold",
+    "KohinoorTelugu-Bold",
+    "KohinoorTelugu-Light",
+    "KohinoorTelugu-Medium",
+    "KohinoorTelugu-Regular",
+    "KohinoorTelugu-Semibold",
+    "कोहिनूर तेलुगु",
+    "कोहिनूर तेलुगु बोल्ड",
+    "कोहिनूर तेलुगु मीडियम",
+    "कोहिनूर तेलुगु लाइट",
+    "कोहिनूर तेलुगु सेमी बोल्ड",
+    "కోహినూర్ తెలుగు",
+    "కోహినూర్ తెలుగు బోల్డ్",
+    "కోహినూర్ తెలుగు మీడియం",
+    "కోహినూర్ తెలుగు లైట్",
+    "కోహినూర్ తెలుగు సెమిబోల్డ్"
+   ],
+   "files": [
+    "/System/Library/Fonts/KohinoorTelugu.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "KohinoorTelugu-Regular",
+     "display": "Kohinoor Telugu",
+     "style": "Regular"
+    },
+    {
+     "postscript": "KohinoorTelugu-Medium",
+     "display": "Kohinoor Telugu Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "KohinoorTelugu-Bold",
+     "display": "Kohinoor Telugu Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "KohinoorTelugu-Light",
+     "display": "Kohinoor Telugu Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "KohinoorTelugu-Semibold",
+     "display": "Kohinoor Telugu Semibold",
+     "style": "Semibold"
+    }
+   ]
+  },
+  {
+   "family": "Kokonor",
+   "names": [
+    "Kokonor",
+    "Kokonor Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Kokonor.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Kokonor",
+     "display": "Kokonor Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Krungthep",
+   "names": [
+    "Krungthep"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Krungthep.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Krungthep",
+     "display": "Krungthep",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "KufiStandardGK",
+   "names": [
+    ".KufiStandardGK PUA",
+    "KufiStandardGK",
+    "KufiStandardGK Regular",
+    "كوفي",
+    "كوفي عادي"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/KufiStandardGK.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "KufiStandardGK",
+     "display": "KufiStandardGK Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Lao MN",
+   "names": [
+    "Lao MN",
+    "Lao MN Bold",
+    "LaoMN",
+    "LaoMN-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Lao MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "LaoMN-Bold",
+     "display": "Lao MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "LaoMN",
+     "display": "Lao MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Lao Sangam MN",
+   "names": [
+    "Lao Sangam MN",
+    "LaoSangamMN"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Lao Sangam MN.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "LaoSangamMN",
+     "display": "Lao Sangam MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Lucida Grande",
+   "names": [
+    ".Lucida Grande UI",
+    ".Lucida Grande UI Bold",
+    ".Lucida Grande UI Regular",
+    "Lucida Grande",
+    "Lucida Grande Bold",
+    "LucidaGrande",
+    "LucidaGrande-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/LucidaGrande.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "LucidaGrande-Bold",
+     "display": "Lucida Grande Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "LucidaGrande",
+     "display": "Lucida Grande",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Luminari",
+   "names": [
+    "Luminari",
+    "Luminari-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Luminari.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Luminari-Regular",
+     "display": "Luminari",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Malayalam MN",
+   "names": [
+    "Malayalam MN",
+    "Malayalam MN Bold",
+    "MalayalamMN",
+    "MalayalamMN-Bold",
+    "मलयालम एमएन",
+    "मलयालम एमएन बोल्ड",
+    "മലയാളം എംഎൻ",
+    "മലയാളം എംഎൻ ബോൾഡ്"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Malayalam MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "MalayalamMN-Bold",
+     "display": "Malayalam MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "MalayalamMN",
+     "display": "Malayalam MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Malayalam Sangam MN",
+   "names": [
+    "Malayalam Sangam MN",
+    "Malayalam Sangam MN Bold",
+    "MalayalamSangamMN",
+    "MalayalamSangamMN-Bold",
+    "मलयालम संगम एमएन",
+    "मलयालम संगम एमएन बोल्ड",
+    "മലയാളം സംഗം എംഎൻ",
+    "മലയാളം സംഗം എംഎൻ ബോൾഡ്"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Malayalam Sangam MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "MalayalamSangamMN",
+     "display": "Malayalam Sangam MN",
+     "style": "Regular"
+    },
+    {
+     "postscript": "MalayalamSangamMN-Bold",
+     "display": "Malayalam Sangam MN Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Marker Felt",
+   "names": [
+    "Marker Felt",
+    "Marker Felt Thin",
+    "Marker Felt Wide",
+    "MarkerFelt-Thin",
+    "MarkerFelt-Wide"
+   ],
+   "files": [
+    "/System/Library/Fonts/MarkerFelt.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "MarkerFelt-Wide",
+     "display": "Marker Felt Wide",
+     "style": "Wide"
+    },
+    {
+     "postscript": "MarkerFelt-Thin",
+     "display": "Marker Felt Thin",
+     "style": "Thin"
+    }
+   ]
+  },
+  {
+   "family": "Menlo",
+   "names": [
+    "Menlo",
+    "Menlo Bold",
+    "Menlo Bold Italic",
+    "Menlo Italic",
+    "Menlo Regular",
+    "Menlo-Bold",
+    "Menlo-BoldItalic",
+    "Menlo-Italic",
+    "Menlo-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Menlo.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Menlo-Bold",
+     "display": "Menlo Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Menlo-BoldItalic",
+     "display": "Menlo Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "Menlo-Regular",
+     "display": "Menlo Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "Menlo-Italic",
+     "display": "Menlo Italic",
+     "style": "Italic"
+    }
+   ]
+  },
+  {
+   "family": "Microsoft Sans Serif",
+   "names": [
+    "Microsoft Sans Serif",
+    "MicrosoftSansSerif"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Microsoft Sans Serif.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "MicrosoftSansSerif",
+     "display": "Microsoft Sans Serif",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Mishafi",
+   "names": [
+    "DiwanMishafi",
+    "Mishafi",
+    "Mishafi Regular",
+    "مِصحفي",
+    "مِصحفي عادي"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Mishafi.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "DiwanMishafi",
+     "display": "Mishafi Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Mishafi Gold",
+   "names": [
+    "DiwanMishafiGold",
+    "Mishafi Gold",
+    "Mishafi Gold Regular",
+    "مِصحفي ذهبي",
+    "مِصحفي ذهبي عادي"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Mishafi Gold.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "DiwanMishafiGold",
+     "display": "Mishafi Gold Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Monaco",
+   "names": [
+    "Monaco"
+   ],
+   "files": [
+    "/System/Library/Fonts/Monaco.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Monaco",
+     "display": "Monaco",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Mshtakan",
+   "names": [
+    "Mshtakan",
+    "Mshtakan Bold",
+    "Mshtakan BoldOblique",
+    "Mshtakan Oblique",
+    "MshtakanBold",
+    "MshtakanBoldOblique",
+    "MshtakanOblique"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Mshtakan.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Mshtakan",
+     "display": "Mshtakan",
+     "style": "Regular"
+    },
+    {
+     "postscript": "MshtakanBold",
+     "display": "Mshtakan Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "MshtakanBoldOblique",
+     "display": "Mshtakan BoldOblique",
+     "style": "BoldOblique"
+    },
+    {
+     "postscript": "MshtakanOblique",
+     "display": "Mshtakan Oblique",
+     "style": "Oblique"
+    }
+   ]
+  },
+  {
+   "family": "Mukta Mahee",
+   "names": [
+    "Mukta Mahee",
+    "MuktaMahee Bold",
+    "MuktaMahee ExtraBold",
+    "MuktaMahee ExtraLight",
+    "MuktaMahee Light",
+    "MuktaMahee Medium",
+    "MuktaMahee Regular",
+    "MuktaMahee SemiBold",
+    "MuktaMahee-Bold",
+    "MuktaMahee-ExtraBold",
+    "MuktaMahee-ExtraLight",
+    "MuktaMahee-Light",
+    "MuktaMahee-Medium",
+    "MuktaMahee-Regular",
+    "MuktaMahee-SemiBold",
+    "मुक्ता माही",
+    "मुक्ता माही एक्स्ट्रा बोल्ड",
+    "मुक्ता माही एक्स्ट्रा लाइट",
+    "मुक्ता माही बोल्ड",
+    "मुक्ता माही मीडियम",
+    "मुक्ता माही रेग्युलर",
+    "मुक्ता माही लाइट",
+    "मुक्ता माही सेमी बोल्ड",
+    "ਮੁਕਤਾ ਮਾਹੀ",
+    "ਮੁਕਤਾ ਮਾਹੀ ਐਕਸਟ੍ਰਾਬੋਲਡ",
+    "ਮੁਕਤਾ ਮਾਹੀ ਐਕਸਟ੍ਰਾਲਾਈਟ",
+    "ਮੁਕਤਾ ਮਾਹੀ ਬੋਲਡ",
+    "ਮੁਕਤਾ ਮਾਹੀ ਮੀਡੀਅਮ",
+    "ਮੁਕਤਾ ਮਾਹੀ ਰੈਗੂਲਰ",
+    "ਮੁਕਤਾ ਮਾਹੀ ਲਾਈਟ",
+    "ਮੁਕਤਾ ਮਾਹੀ ਸੈਮੀਬੋਲਡ"
+   ],
+   "files": [
+    "/System/Library/Fonts/MuktaMahee.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "MuktaMahee-Bold",
+     "display": "MuktaMahee Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "MuktaMahee-Regular",
+     "display": "MuktaMahee Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "MuktaMahee-ExtraBold",
+     "display": "MuktaMahee ExtraBold",
+     "style": "ExtraBold"
+    },
+    {
+     "postscript": "MuktaMahee-Light",
+     "display": "MuktaMahee Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "MuktaMahee-Medium",
+     "display": "MuktaMahee Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "MuktaMahee-SemiBold",
+     "display": "MuktaMahee SemiBold",
+     "style": "SemiBold"
+    },
+    {
+     "postscript": "MuktaMahee-ExtraLight",
+     "display": "MuktaMahee ExtraLight",
+     "style": "ExtraLight"
+    }
+   ]
+  },
+  {
+   "family": "Muna",
+   "names": [
+    ".Muna PUA",
+    ".Muna PUA Black",
+    ".Muna PUA Bold",
+    "Muna",
+    "Muna Black",
+    "Muna Bold",
+    "Muna Regular",
+    "MunaBlack",
+    "MunaBold",
+    "منى",
+    "منى أسود",
+    "منى عادي",
+    "منى عريض"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Muna.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "MunaBlack",
+     "display": "Muna Black",
+     "style": "Black"
+    },
+    {
+     "postscript": "MunaBold",
+     "display": "Muna Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Muna",
+     "display": "Muna Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Myanmar MN",
+   "names": [
+    "Myanmar MN",
+    "Myanmar MN Bold",
+    "MyanmarMN",
+    "MyanmarMN-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Myanmar MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "MyanmarMN-Bold",
+     "display": "Myanmar MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "MyanmarMN",
+     "display": "Myanmar MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Myanmar Sangam MN",
+   "names": [
+    "Myanmar Sangam MN",
+    "Myanmar Sangam MN Bold",
+    "MyanmarSangamMN",
+    "MyanmarSangamMN-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Myanmar Sangam MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "MyanmarSangamMN-Bold",
+     "display": "Myanmar Sangam MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "MyanmarSangamMN",
+     "display": "Myanmar Sangam MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Nadeem",
+   "names": [
+    ".Nadeem PUA",
+    "Nadeem",
+    "Nadeem Regular",
+    "نديم",
+    "نديم عادي"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Nadeem.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Nadeem",
+     "display": "Nadeem Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "New Peninim MT",
+   "names": [
+    "New Peninim MT",
+    "New Peninim MT Bold",
+    "New Peninim MT Bold Inclined",
+    "New Peninim MT Inclined",
+    "NewPeninimMT",
+    "NewPeninimMT-Bold",
+    "NewPeninimMT-BoldInclined",
+    "NewPeninimMT-Inclined"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/NewPeninimMT.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "NewPeninimMT-Bold",
+     "display": "New Peninim MT Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "NewPeninimMT-Inclined",
+     "display": "New Peninim MT Inclined",
+     "style": "Inclined"
+    },
+    {
+     "postscript": "NewPeninimMT-BoldInclined",
+     "display": "New Peninim MT Bold Inclined",
+     "style": "Bold Inclined"
+    },
+    {
+     "postscript": "NewPeninimMT",
+     "display": "New Peninim MT",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Noteworthy",
+   "names": [
+    "Noteworthy",
+    "Noteworthy Bold",
+    "Noteworthy Light",
+    "Noteworthy-Bold",
+    "Noteworthy-Light"
+   ],
+   "files": [
+    "/System/Library/Fonts/Noteworthy.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Noteworthy-Bold",
+     "display": "Noteworthy Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Noteworthy-Light",
+     "display": "Noteworthy Light",
+     "style": "Light"
+    }
+   ]
+  },
+  {
+   "family": "Noto Nastaliq Urdu",
+   "names": [
+    ".Noto Nastaliq Urdu UI",
+    ".Noto Nastaliq Urdu UI Bold",
+    "Noto Nastaliq Urdu",
+    "Noto Nastaliq Urdu Bold",
+    "NotoNastaliqUrdu",
+    "NotoNastaliqUrdu-Bold",
+    "نوٹو نستعلیق اردو",
+    "نوٹو نستعلیق اردو بولڈ",
+    "नोटो नास्तालिक़ उर्दू",
+    "नोटो नास्तालिक़ उर्दू बोल्ड"
+   ],
+   "files": [
+    "/System/Library/Fonts/NotoNastaliq.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "NotoNastaliqUrdu-Bold",
+     "display": "Noto Nastaliq Urdu Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "NotoNastaliqUrdu",
+     "display": "Noto Nastaliq Urdu",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Noto Sans Batak",
+   "names": [
+    "Noto Sans Batak",
+    "Noto Sans Batak Regular",
+    "NotoSansBatak-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/NotoSansBatak-Regular.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "NotoSansBatak-Regular",
+     "display": "Noto Sans Batak Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Noto Sans Kannada",
+   "names": [
+    "Noto Sans Kannada",
+    "Noto Sans Kannada Black",
+    "Noto Sans Kannada Bold",
+    "Noto Sans Kannada ExtraBold",
+    "Noto Sans Kannada ExtraLight",
+    "Noto Sans Kannada Light",
+    "Noto Sans Kannada Medium",
+    "Noto Sans Kannada Regular",
+    "Noto Sans Kannada SemiBold",
+    "Noto Sans Kannada Thin",
+    "NotoSansKannada-Black",
+    "NotoSansKannada-Bold",
+    "NotoSansKannada-ExtraBold",
+    "NotoSansKannada-ExtraLight",
+    "NotoSansKannada-Light",
+    "NotoSansKannada-Medium",
+    "NotoSansKannada-Regular",
+    "NotoSansKannada-SemiBold",
+    "NotoSansKannada-Thin",
+    "नोटो संस कन्नड़",
+    "नोटो संस कन्नड़ एक्स्ट्रा बोल्ड",
+    "नोटो संस कन्नड़ एक्स्ट्रा लाइट",
+    "नोटो संस कन्नड़ थिन",
+    "नोटो संस कन्नड़ बोल्ड",
+    "नोटो संस कन्नड़ ब्लैक",
+    "नोटो संस कन्नड़ मीडियम",
+    "नोटो संस कन्नड़ रेग्युलर",
+    "नोटो संस कन्नड़ लाइट",
+    "नोटो संस कन्नड़ सेमी बोल्ड",
+    "ನೊಟೊ ಸ್ಯಾನ್ಸ್ ಕನ್ನಡ",
+    "ನೊಟೊ ಸ್ಯಾನ್ಸ್ ಕನ್ನಡ ಎಕ್ಸ್‌ಟ್ರಾ ಲೈಟ್",
+    "ನೊಟೊ ಸ್ಯಾನ್ಸ್ ಕನ್ನಡ ಎಕ್ಸ್‌ಟ್ರಾಬೋಲ್ಡ್",
+    "ನೊಟೊ ಸ್ಯಾನ್ಸ್ ಕನ್ನಡ ಥಿನ್",
+    "ನೊಟೊ ಸ್ಯಾನ್ಸ್ ಕನ್ನಡ ಬೋಲ್ಡ್",
+    "ನೊಟೊ ಸ್ಯಾನ್ಸ್ ಕನ್ನಡ ಬ್ಲ್ಯಾಕ್",
+    "ನೊಟೊ ಸ್ಯಾನ್ಸ್ ಕನ್ನಡ ಮೀಡಿಯಮ್",
+    "ನೊಟೊ ಸ್ಯಾನ್ಸ್ ಕನ್ನಡ ರೆಗ್ಯುಲರ್",
+    "ನೊಟೊ ಸ್ಯಾನ್ಸ್ ಕನ್ನಡ ಲೈಟ್",
+    "ನೊಟೊ ಸ್ಯಾನ್ಸ್ ಕನ್ನಡ ಸೆಮಿಬೋಲ್ಡ್"
+   ],
+   "files": [
+    "/System/Library/Fonts/NotoSansKannada.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "NotoSansKannada-Bold",
+     "display": "Noto Sans Kannada Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "NotoSansKannada-SemiBold",
+     "display": "Noto Sans Kannada SemiBold",
+     "style": "SemiBold"
+    },
+    {
+     "postscript": "NotoSansKannada-ExtraBold",
+     "display": "Noto Sans Kannada ExtraBold",
+     "style": "ExtraBold"
+    },
+    {
+     "postscript": "NotoSansKannada-Regular",
+     "display": "Noto Sans Kannada Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "NotoSansKannada-ExtraLight",
+     "display": "Noto Sans Kannada ExtraLight",
+     "style": "ExtraLight"
+    },
+    {
+     "postscript": "NotoSansKannada-Black",
+     "display": "Noto Sans Kannada Black",
+     "style": "Black"
+    },
+    {
+     "postscript": "NotoSansKannada-Thin",
+     "display": "Noto Sans Kannada Thin",
+     "style": "Thin"
+    },
+    {
+     "postscript": "NotoSansKannada-Medium",
+     "display": "Noto Sans Kannada Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "NotoSansKannada-Light",
+     "display": "Noto Sans Kannada Light",
+     "style": "Light"
+    }
+   ]
+  },
+  {
+   "family": "Noto Sans Myanmar",
+   "names": [
+    "Noto Sans Myanmar",
+    "Noto Sans Myanmar Black",
+    "Noto Sans Myanmar Blk",
+    "Noto Sans Myanmar Bold",
+    "Noto Sans Myanmar ExtBd",
+    "Noto Sans Myanmar ExtLt",
+    "Noto Sans Myanmar ExtraBold",
+    "Noto Sans Myanmar ExtraLight",
+    "Noto Sans Myanmar Light",
+    "Noto Sans Myanmar Med",
+    "Noto Sans Myanmar Medium",
+    "Noto Sans Myanmar Regular",
+    "Noto Sans Myanmar SemBd",
+    "Noto Sans Myanmar SemiBold",
+    "Noto Sans Myanmar Thin",
+    "Noto Sans Zawgyi",
+    "Noto Sans Zawgyi Black",
+    "Noto Sans Zawgyi Blk",
+    "Noto Sans Zawgyi Bold",
+    "Noto Sans Zawgyi ExtBd",
+    "Noto Sans Zawgyi ExtLt",
+    "Noto Sans Zawgyi ExtraBold",
+    "Noto Sans Zawgyi ExtraLight",
+    "Noto Sans Zawgyi Light",
+    "Noto Sans Zawgyi Med",
+    "Noto Sans Zawgyi Medium",
+    "Noto Sans Zawgyi Regular",
+    "Noto Sans Zawgyi SemBd",
+    "Noto Sans Zawgyi SemiBold",
+    "Noto Sans Zawgyi Thin",
+    "NotoSansMyanmar-Black",
+    "NotoSansMyanmar-Bold",
+    "NotoSansMyanmar-ExtraBold",
+    "NotoSansMyanmar-ExtraLight",
+    "NotoSansMyanmar-Light",
+    "NotoSansMyanmar-Medium",
+    "NotoSansMyanmar-Regular",
+    "NotoSansMyanmar-SemiBold",
+    "NotoSansMyanmar-Thin"
+   ],
+   "files": [
+    "/System/Library/Fonts/NotoSansMyanmar.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "NotoSansMyanmar-Thin",
+     "display": "Noto Sans Myanmar Thin",
+     "style": "Thin"
+    },
+    {
+     "postscript": "NotoSansMyanmar-Black",
+     "display": "Noto Sans Myanmar Black",
+     "style": "Black"
+    },
+    {
+     "postscript": "NotoSansMyanmar-Regular",
+     "display": "Noto Sans Myanmar Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "NotoSansMyanmar-Bold",
+     "display": "Noto Sans Myanmar Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "NotoSansMyanmar-Light",
+     "display": "Noto Sans Myanmar Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "NotoSansMyanmar-Medium",
+     "display": "Noto Sans Myanmar Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "NotoSansMyanmar-SemiBold",
+     "display": "Noto Sans Myanmar SemiBold",
+     "style": "SemiBold"
+    },
+    {
+     "postscript": "NotoSansMyanmar-ExtraBold",
+     "display": "Noto Sans Myanmar ExtraBold",
+     "style": "ExtraBold"
+    },
+    {
+     "postscript": "NotoSansMyanmar-ExtraLight",
+     "display": "Noto Sans Myanmar ExtraLight",
+     "style": "ExtraLight"
+    }
+   ]
+  },
+  {
+   "family": "Noto Sans NKo",
+   "names": [
+    "Noto Sans NKo",
+    "Noto Sans NKo Regular",
+    "NotoSansNKo-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/NotoSansNKo-Regular.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "NotoSansNKo-Regular",
+     "display": "Noto Sans NKo Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Noto Sans Oriya",
+   "names": [
+    "Noto Sans Oriya",
+    "Noto Sans Oriya Bold",
+    "NotoSansOriya",
+    "NotoSansOriya-Bold",
+    "नोटो सैंस उडिया",
+    "नोटो सैंस उडिया बोल्ड",
+    "ନୋଟୋ ସାନ୍ସ ଓରିୟା",
+    "ନୋଟୋ ସାନ୍ସ ଓରିୟା ବୋଲ୍ଡ"
+   ],
+   "files": [
+    "/System/Library/Fonts/NotoSansOriya.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "NotoSansOriya",
+     "display": "Noto Sans Oriya",
+     "style": "Regular"
+    },
+    {
+     "postscript": "NotoSansOriya-Bold",
+     "display": "Noto Sans Oriya Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Noto Sans Syriac",
+   "names": [
+    "Noto Sans Syriac",
+    "Noto Sans Syriac Regular",
+    "Noto Sans Syriac Regular Black",
+    "Noto Sans Syriac Regular Bold",
+    "Noto Sans Syriac Regular ExtraBold",
+    "Noto Sans Syriac Regular ExtraLight",
+    "Noto Sans Syriac Regular Light",
+    "Noto Sans Syriac Regular Medium",
+    "Noto Sans Syriac Regular Regular",
+    "Noto Sans Syriac Regular SemiBold",
+    "Noto Sans Syriac Regular Thin",
+    "NotoSansSyriac-Regular",
+    "NotoSansSyriac-Regular_Black",
+    "NotoSansSyriac-Regular_Bold",
+    "NotoSansSyriac-Regular_ExtraBold",
+    "NotoSansSyriac-Regular_ExtraLight",
+    "NotoSansSyriac-Regular_Light",
+    "NotoSansSyriac-Regular_Medium",
+    "NotoSansSyriac-Regular_SemiBold",
+    "NotoSansSyriac-Regular_Thin"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/NotoSansSyriac-Regular.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "NotoSansSyriac-Regular_Light",
+     "display": "Noto Sans Syriac Regular Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "NotoSansSyriac-Regular_Bold",
+     "display": "Noto Sans Syriac Regular Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "NotoSansSyriac-Regular_Thin",
+     "display": "Noto Sans Syriac Regular Thin",
+     "style": "Thin"
+    },
+    {
+     "postscript": "NotoSansSyriac-Regular_Black",
+     "display": "Noto Sans Syriac Regular Black",
+     "style": "Black"
+    },
+    {
+     "postscript": "NotoSansSyriac-Regular_SemiBold",
+     "display": "Noto Sans Syriac Regular SemiBold",
+     "style": "SemiBold"
+    },
+    {
+     "postscript": "NotoSansSyriac-Regular",
+     "display": "Noto Sans Syriac Regular Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "NotoSansSyriac-Regular_Medium",
+     "display": "Noto Sans Syriac Regular Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "NotoSansSyriac-Regular_ExtraLight",
+     "display": "Noto Sans Syriac Regular ExtraLight",
+     "style": "ExtraLight"
+    },
+    {
+     "postscript": "NotoSansSyriac-Regular_ExtraBold",
+     "display": "Noto Sans Syriac Regular ExtraBold",
+     "style": "ExtraBold"
+    }
+   ]
+  },
+  {
+   "family": "Noto Sans Tagalog",
+   "names": [
+    "Noto Sans Tagalog",
+    "Noto Sans Tagalog Regular",
+    "NotoSansTagalog-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/NotoSansTagalog-Regular.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "NotoSansTagalog-Regular",
+     "display": "Noto Sans Tagalog Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Noto Serif Myanmar",
+   "names": [
+    "Noto Serif Myanmar",
+    "Noto Serif Myanmar Black",
+    "Noto Serif Myanmar Blk",
+    "Noto Serif Myanmar Bold",
+    "Noto Serif Myanmar ExtBd",
+    "Noto Serif Myanmar ExtLt",
+    "Noto Serif Myanmar ExtraBold",
+    "Noto Serif Myanmar ExtraLight",
+    "Noto Serif Myanmar Light",
+    "Noto Serif Myanmar Med",
+    "Noto Serif Myanmar Medium",
+    "Noto Serif Myanmar Regular",
+    "Noto Serif Myanmar SemBd",
+    "Noto Serif Myanmar SemiBold",
+    "Noto Serif Myanmar Thin",
+    "NotoSerifMyanmar-Black",
+    "NotoSerifMyanmar-Bold",
+    "NotoSerifMyanmar-ExtraBold",
+    "NotoSerifMyanmar-ExtraLight",
+    "NotoSerifMyanmar-Light",
+    "NotoSerifMyanmar-Medium",
+    "NotoSerifMyanmar-Regular",
+    "NotoSerifMyanmar-SemiBold",
+    "NotoSerifMyanmar-Thin"
+   ],
+   "files": [
+    "/System/Library/Fonts/NotoSerifMyanmar.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "NotoSerifMyanmar-Bold",
+     "display": "Noto Serif Myanmar Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "NotoSerifMyanmar-Regular",
+     "display": "Noto Serif Myanmar Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "NotoSerifMyanmar-SemiBold",
+     "display": "Noto Serif Myanmar SemiBold",
+     "style": "SemiBold"
+    },
+    {
+     "postscript": "NotoSerifMyanmar-Light",
+     "display": "Noto Serif Myanmar Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "NotoSerifMyanmar-Black",
+     "display": "Noto Serif Myanmar Black",
+     "style": "Black"
+    },
+    {
+     "postscript": "NotoSerifMyanmar-ExtraBold",
+     "display": "Noto Serif Myanmar ExtraBold",
+     "style": "ExtraBold"
+    },
+    {
+     "postscript": "NotoSerifMyanmar-ExtraLight",
+     "display": "Noto Serif Myanmar ExtraLight",
+     "style": "ExtraLight"
+    },
+    {
+     "postscript": "NotoSerifMyanmar-Medium",
+     "display": "Noto Serif Myanmar Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "NotoSerifMyanmar-Thin",
+     "display": "Noto Serif Myanmar Thin",
+     "style": "Thin"
+    }
+   ]
+  },
+  {
+   "family": "Optima",
+   "names": [
+    "Optima",
+    "Optima Bold",
+    "Optima Bold Italic",
+    "Optima ExtraBlack",
+    "Optima Italic",
+    "Optima Regular",
+    "Optima-Bold",
+    "Optima-BoldItalic",
+    "Optima-ExtraBlack",
+    "Optima-Italic",
+    "Optima-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Optima.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Optima-Italic",
+     "display": "Optima Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "Optima-ExtraBlack",
+     "display": "Optima ExtraBlack",
+     "style": "ExtraBlack"
+    },
+    {
+     "postscript": "Optima-Regular",
+     "display": "Optima Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "Optima-Bold",
+     "display": "Optima Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Optima-BoldItalic",
+     "display": "Optima Bold Italic",
+     "style": "Bold Italic"
+    }
+   ]
+  },
+  {
+   "family": "Oriya MN",
+   "names": [
+    "Oriya MN",
+    "Oriya MN Bold",
+    "OriyaMN",
+    "OriyaMN-Bold",
+    "उड़िया एमएन",
+    "ଓରିୟା ଏମ୍ଏନ୍"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Oriya MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "OriyaMN-Bold",
+     "display": "Oriya MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "OriyaMN",
+     "display": "Oriya MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Oriya Sangam MN",
+   "names": [
+    "Oriya Sangam MN",
+    "Oriya Sangam MN Bold",
+    "OriyaSangamMN",
+    "OriyaSangamMN-Bold",
+    "उड़िया संग एमएन",
+    "ଓରିୟା ସଙ୍ଗମ ଏମ୍ଏନ୍"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Oriya Sangam MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "OriyaSangamMN-Bold",
+     "display": "Oriya Sangam MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "OriyaSangamMN",
+     "display": "Oriya Sangam MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Palatino",
+   "names": [
+    "Palatino",
+    "Palatino Bold",
+    "Palatino Bold Italic",
+    "Palatino Italic",
+    "Palatino-Bold",
+    "Palatino-BoldItalic",
+    "Palatino-Italic",
+    "Palatino-Roman"
+   ],
+   "files": [
+    "/System/Library/Fonts/Palatino.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Palatino-Bold",
+     "display": "Palatino Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Palatino-Roman",
+     "display": "Palatino",
+     "style": "Regular"
+    },
+    {
+     "postscript": "Palatino-Italic",
+     "display": "Palatino Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "Palatino-BoldItalic",
+     "display": "Palatino Bold Italic",
+     "style": "Bold Italic"
+    }
+   ]
+  },
+  {
+   "family": "Papyrus",
+   "names": [
+    "Papyrus",
+    "Papyrus Condensed",
+    "Papyrus-Condensed"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Papyrus.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Papyrus",
+     "display": "Papyrus",
+     "style": "Regular"
+    },
+    {
+     "postscript": "Papyrus-Condensed",
+     "display": "Papyrus Condensed",
+     "style": "Condensed"
+    }
+   ]
+  },
+  {
+   "family": "Party LET",
+   "names": [
+    "Party LET",
+    "Party LET Plain",
+    "PartyLetPlain"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/PartyLET-plain.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "PartyLetPlain",
+     "display": "Party LET Plain",
+     "style": "Plain"
+    }
+   ]
+  },
+  {
+   "family": "Phosphate",
+   "names": [
+    "Phosphate",
+    "Phosphate Inline",
+    "Phosphate Solid",
+    "Phosphate-Inline",
+    "Phosphate-Solid"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Phosphate.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Phosphate-Solid",
+     "display": "Phosphate Solid",
+     "style": "Solid"
+    },
+    {
+     "postscript": "Phosphate-Inline",
+     "display": "Phosphate Inline",
+     "style": "Inline"
+    }
+   ]
+  },
+  {
+   "family": "PingFang HK",
+   "names": [
+    ".PingFang HK",
+    ".PingFang MO",
+    ".PingFang SC",
+    ".PingFang TC",
+    ".PingFang UI Display HK",
+    ".PingFang UI Display JA",
+    ".PingFang UI Display MO",
+    ".PingFang UI Display SC",
+    ".PingFang UI Display TC",
+    ".PingFang UI HK",
+    ".PingFang UI JA",
+    ".PingFang UI MO",
+    ".PingFang UI SC",
+    ".PingFang UI TC",
+    ".PingFang UI Text HK",
+    ".PingFang UI Text JA",
+    ".PingFang UI Text MO",
+    ".PingFang UI Text SC",
+    ".PingFang UI Text TC",
+    ".PingFang UI Watch Display HK",
+    ".PingFang UI Watch Display JA",
+    ".PingFang UI Watch Display MO",
+    ".PingFang UI Watch Display SC",
+    ".PingFang UI Watch Display TC",
+    ".PingFang UI Watch HK",
+    ".PingFang UI Watch JA",
+    ".PingFang UI Watch MO",
+    ".PingFang UI Watch SC",
+    ".PingFang UI Watch TC",
+    ".PingFang UI Watch Text HK",
+    ".PingFang UI Watch Text JA",
+    ".PingFang UI Watch Text MO",
+    ".PingFang UI Watch Text SC",
+    ".PingFang UI Watch Text TC",
+    ".PingFang Watch HK",
+    ".PingFang Watch MO",
+    ".PingFang Watch SC",
+    ".PingFang Watch TC",
+    ".苹方 UI Display-日",
+    ".苹方 UI Display-港",
+    ".苹方 UI Display-澳",
+    ".苹方 UI Display-简",
+    ".苹方 UI Display-繁",
+    ".苹方 UI Text-日",
+    ".苹方 UI Text-港",
+    ".苹方 UI Text-澳",
+    ".苹方 UI Text-简",
+    ".苹方 UI Text-繁",
+    ".苹方 UI Watch Display-日",
+    ".苹方 UI Watch Display-港",
+    ".苹方 UI Watch Display-澳",
+    ".苹方 UI Watch Display-简",
+    ".苹方 UI Watch Display-繁",
+    ".苹方 UI Watch Text-日",
+    ".苹方 UI Watch Text-港",
+    ".苹方 UI Watch Text-澳",
+    ".苹方 UI Watch Text-简",
+    ".苹方 UI Watch Text-繁",
+    ".苹方 UI Watch-日",
+    ".苹方 UI Watch-港",
+    ".苹方 UI Watch-澳",
+    ".苹方 UI Watch-简",
+    ".苹方 UI Watch-繁",
+    ".苹方 UI-日",
+    ".苹方 UI-港",
+    ".苹方 UI-澳",
+    ".苹方 UI-简",
+    ".苹方 UI-繁",
+    ".苹方 Watch-港",
+    ".苹方 Watch-澳",
+    ".苹方 Watch-简",
+    ".苹方 Watch-繁",
+    ".苹方-港",
+    ".苹方-澳",
+    ".苹方-简",
+    ".苹方-繁",
+    ".蘋方 UI Display-日",
+    ".蘋方 UI Display-港",
+    ".蘋方 UI Display-澳",
+    ".蘋方 UI Display-簡",
+    ".蘋方 UI Display-繁",
+    ".蘋方 UI Text-日",
+    ".蘋方 UI Text-港",
+    ".蘋方 UI Text-澳",
+    ".蘋方 UI Text-簡",
+    ".蘋方 UI Text-繁",
+    ".蘋方 UI Watch Display-日",
+    ".蘋方 UI Watch Display-港",
+    ".蘋方 UI Watch Display-澳",
+    ".蘋方 UI Watch Display-簡",
+    ".蘋方 UI Watch Display-繁",
+    ".蘋方 UI Watch Text-日",
+    ".蘋方 UI Watch Text-港",
+    ".蘋方 UI Watch Text-澳",
+    ".蘋方 UI Watch Text-簡",
+    ".蘋方 UI Watch Text-繁",
+    ".蘋方 UI Watch-日",
+    ".蘋方 UI Watch-港",
+    ".蘋方 UI Watch-澳",
+    ".蘋方 UI Watch-簡",
+    ".蘋方 UI Watch-繁",
+    ".蘋方 UI-日",
+    ".蘋方 UI-港",
+    ".蘋方 UI-澳",
+    ".蘋方 UI-簡",
+    ".蘋方 UI-繁",
+    ".蘋方 Watch-港",
+    ".蘋方 Watch-澳",
+    ".蘋方 Watch-簡",
+    ".蘋方 Watch-繁",
+    ".蘋方-港",
+    ".蘋方-澳",
+    ".蘋方-簡",
+    ".蘋方-繁",
+    "PingFang HK",
+    "PingFang HK Light",
+    "PingFang HK Medium",
+    "PingFang HK Regular",
+    "PingFang HK Semibold",
+    "PingFang HK Thin",
+    "PingFang HK Ultralight",
+    "PingFang MO",
+    "PingFang SC",
+    "PingFang TC",
+    "PingFangHK-Light",
+    "PingFangHK-Medium",
+    "PingFangHK-Regular",
+    "PingFangHK-Semibold",
+    "PingFangHK-Thin",
+    "PingFangHK-Ultralight",
+    "苹方-港",
+    "苹方-澳",
+    "苹方-简",
+    "苹方-繁",
+    "蘋方-港",
+    "蘋方-澳",
+    "蘋方-簡",
+    "蘋方-繁"
+   ],
+   "files": [
+    "/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "PingFangHK-Medium",
+     "display": "PingFang HK Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "PingFangHK-Ultralight",
+     "display": "PingFang HK Ultralight",
+     "style": "Ultralight"
+    },
+    {
+     "postscript": "PingFangHK-Semibold",
+     "display": "PingFang HK Semibold",
+     "style": "Semibold"
+    },
+    {
+     "postscript": "PingFangHK-Thin",
+     "display": "PingFang HK Thin",
+     "style": "Thin"
+    },
+    {
+     "postscript": "PingFangHK-Regular",
+     "display": "PingFang HK Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "PingFangHK-Light",
+     "display": "PingFang HK Light",
+     "style": "Light"
+    }
+   ]
+  },
+  {
+   "family": "PingFang MO",
+   "names": [
+    ".PingFang HK",
+    ".PingFang MO",
+    ".PingFang SC",
+    ".PingFang TC",
+    ".PingFang UI Display HK",
+    ".PingFang UI Display JA",
+    ".PingFang UI Display MO",
+    ".PingFang UI Display SC",
+    ".PingFang UI Display TC",
+    ".PingFang UI HK",
+    ".PingFang UI JA",
+    ".PingFang UI MO",
+    ".PingFang UI SC",
+    ".PingFang UI TC",
+    ".PingFang UI Text HK",
+    ".PingFang UI Text JA",
+    ".PingFang UI Text MO",
+    ".PingFang UI Text SC",
+    ".PingFang UI Text TC",
+    ".PingFang UI Watch Display HK",
+    ".PingFang UI Watch Display JA",
+    ".PingFang UI Watch Display MO",
+    ".PingFang UI Watch Display SC",
+    ".PingFang UI Watch Display TC",
+    ".PingFang UI Watch HK",
+    ".PingFang UI Watch JA",
+    ".PingFang UI Watch MO",
+    ".PingFang UI Watch SC",
+    ".PingFang UI Watch TC",
+    ".PingFang UI Watch Text HK",
+    ".PingFang UI Watch Text JA",
+    ".PingFang UI Watch Text MO",
+    ".PingFang UI Watch Text SC",
+    ".PingFang UI Watch Text TC",
+    ".PingFang Watch HK",
+    ".PingFang Watch MO",
+    ".PingFang Watch SC",
+    ".PingFang Watch TC",
+    ".苹方 UI Display-日",
+    ".苹方 UI Display-港",
+    ".苹方 UI Display-澳",
+    ".苹方 UI Display-简",
+    ".苹方 UI Display-繁",
+    ".苹方 UI Text-日",
+    ".苹方 UI Text-港",
+    ".苹方 UI Text-澳",
+    ".苹方 UI Text-简",
+    ".苹方 UI Text-繁",
+    ".苹方 UI Watch Display-日",
+    ".苹方 UI Watch Display-港",
+    ".苹方 UI Watch Display-澳",
+    ".苹方 UI Watch Display-简",
+    ".苹方 UI Watch Display-繁",
+    ".苹方 UI Watch Text-日",
+    ".苹方 UI Watch Text-港",
+    ".苹方 UI Watch Text-澳",
+    ".苹方 UI Watch Text-简",
+    ".苹方 UI Watch Text-繁",
+    ".苹方 UI Watch-日",
+    ".苹方 UI Watch-港",
+    ".苹方 UI Watch-澳",
+    ".苹方 UI Watch-简",
+    ".苹方 UI Watch-繁",
+    ".苹方 UI-日",
+    ".苹方 UI-港",
+    ".苹方 UI-澳",
+    ".苹方 UI-简",
+    ".苹方 UI-繁",
+    ".苹方 Watch-港",
+    ".苹方 Watch-澳",
+    ".苹方 Watch-简",
+    ".苹方 Watch-繁",
+    ".苹方-港",
+    ".苹方-澳",
+    ".苹方-简",
+    ".苹方-繁",
+    ".蘋方 UI Display-日",
+    ".蘋方 UI Display-港",
+    ".蘋方 UI Display-澳",
+    ".蘋方 UI Display-簡",
+    ".蘋方 UI Display-繁",
+    ".蘋方 UI Text-日",
+    ".蘋方 UI Text-港",
+    ".蘋方 UI Text-澳",
+    ".蘋方 UI Text-簡",
+    ".蘋方 UI Text-繁",
+    ".蘋方 UI Watch Display-日",
+    ".蘋方 UI Watch Display-港",
+    ".蘋方 UI Watch Display-澳",
+    ".蘋方 UI Watch Display-簡",
+    ".蘋方 UI Watch Display-繁",
+    ".蘋方 UI Watch Text-日",
+    ".蘋方 UI Watch Text-港",
+    ".蘋方 UI Watch Text-澳",
+    ".蘋方 UI Watch Text-簡",
+    ".蘋方 UI Watch Text-繁",
+    ".蘋方 UI Watch-日",
+    ".蘋方 UI Watch-港",
+    ".蘋方 UI Watch-澳",
+    ".蘋方 UI Watch-簡",
+    ".蘋方 UI Watch-繁",
+    ".蘋方 UI-日",
+    ".蘋方 UI-港",
+    ".蘋方 UI-澳",
+    ".蘋方 UI-簡",
+    ".蘋方 UI-繁",
+    ".蘋方 Watch-港",
+    ".蘋方 Watch-澳",
+    ".蘋方 Watch-簡",
+    ".蘋方 Watch-繁",
+    ".蘋方-港",
+    ".蘋方-澳",
+    ".蘋方-簡",
+    ".蘋方-繁",
+    "PingFang HK",
+    "PingFang MO",
+    "PingFang MO Light",
+    "PingFang MO Medium",
+    "PingFang MO Regular",
+    "PingFang MO Semibold",
+    "PingFang MO Thin",
+    "PingFang MO Ultralight",
+    "PingFang SC",
+    "PingFang TC",
+    "PingFangMO-Light",
+    "PingFangMO-Medium",
+    "PingFangMO-Regular",
+    "PingFangMO-Semibold",
+    "PingFangMO-Thin",
+    "PingFangMO-Ultralight",
+    "苹方-港",
+    "苹方-澳",
+    "苹方-简",
+    "苹方-繁",
+    "蘋方-港",
+    "蘋方-澳",
+    "蘋方-簡",
+    "蘋方-繁"
+   ],
+   "files": [
+    "/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "PingFangMO-Ultralight",
+     "display": "PingFang MO Ultralight",
+     "style": "Ultralight"
+    },
+    {
+     "postscript": "PingFangMO-Light",
+     "display": "PingFang MO Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "PingFangMO-Thin",
+     "display": "PingFang MO Thin",
+     "style": "Thin"
+    },
+    {
+     "postscript": "PingFangMO-Semibold",
+     "display": "PingFang MO Semibold",
+     "style": "Semibold"
+    },
+    {
+     "postscript": "PingFangMO-Regular",
+     "display": "PingFang MO Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "PingFangMO-Medium",
+     "display": "PingFang MO Medium",
+     "style": "Medium"
+    }
+   ]
+  },
+  {
+   "family": "PingFang SC",
+   "names": [
+    ".PingFang HK",
+    ".PingFang MO",
+    ".PingFang SC",
+    ".PingFang TC",
+    ".PingFang UI Display HK",
+    ".PingFang UI Display JA",
+    ".PingFang UI Display MO",
+    ".PingFang UI Display SC",
+    ".PingFang UI Display TC",
+    ".PingFang UI HK",
+    ".PingFang UI JA",
+    ".PingFang UI MO",
+    ".PingFang UI SC",
+    ".PingFang UI TC",
+    ".PingFang UI Text HK",
+    ".PingFang UI Text JA",
+    ".PingFang UI Text MO",
+    ".PingFang UI Text SC",
+    ".PingFang UI Text TC",
+    ".PingFang UI Watch Display HK",
+    ".PingFang UI Watch Display JA",
+    ".PingFang UI Watch Display MO",
+    ".PingFang UI Watch Display SC",
+    ".PingFang UI Watch Display TC",
+    ".PingFang UI Watch HK",
+    ".PingFang UI Watch JA",
+    ".PingFang UI Watch MO",
+    ".PingFang UI Watch SC",
+    ".PingFang UI Watch TC",
+    ".PingFang UI Watch Text HK",
+    ".PingFang UI Watch Text JA",
+    ".PingFang UI Watch Text MO",
+    ".PingFang UI Watch Text SC",
+    ".PingFang UI Watch Text TC",
+    ".PingFang Watch HK",
+    ".PingFang Watch MO",
+    ".PingFang Watch SC",
+    ".PingFang Watch TC",
+    ".苹方 UI Display-日",
+    ".苹方 UI Display-港",
+    ".苹方 UI Display-澳",
+    ".苹方 UI Display-简",
+    ".苹方 UI Display-繁",
+    ".苹方 UI Text-日",
+    ".苹方 UI Text-港",
+    ".苹方 UI Text-澳",
+    ".苹方 UI Text-简",
+    ".苹方 UI Text-繁",
+    ".苹方 UI Watch Display-日",
+    ".苹方 UI Watch Display-港",
+    ".苹方 UI Watch Display-澳",
+    ".苹方 UI Watch Display-简",
+    ".苹方 UI Watch Display-繁",
+    ".苹方 UI Watch Text-日",
+    ".苹方 UI Watch Text-港",
+    ".苹方 UI Watch Text-澳",
+    ".苹方 UI Watch Text-简",
+    ".苹方 UI Watch Text-繁",
+    ".苹方 UI Watch-日",
+    ".苹方 UI Watch-港",
+    ".苹方 UI Watch-澳",
+    ".苹方 UI Watch-简",
+    ".苹方 UI Watch-繁",
+    ".苹方 UI-日",
+    ".苹方 UI-港",
+    ".苹方 UI-澳",
+    ".苹方 UI-简",
+    ".苹方 UI-繁",
+    ".苹方 Watch-港",
+    ".苹方 Watch-澳",
+    ".苹方 Watch-简",
+    ".苹方 Watch-繁",
+    ".苹方-港",
+    ".苹方-澳",
+    ".苹方-简",
+    ".苹方-繁",
+    ".蘋方 UI Display-日",
+    ".蘋方 UI Display-港",
+    ".蘋方 UI Display-澳",
+    ".蘋方 UI Display-簡",
+    ".蘋方 UI Display-繁",
+    ".蘋方 UI Text-日",
+    ".蘋方 UI Text-港",
+    ".蘋方 UI Text-澳",
+    ".蘋方 UI Text-簡",
+    ".蘋方 UI Text-繁",
+    ".蘋方 UI Watch Display-日",
+    ".蘋方 UI Watch Display-港",
+    ".蘋方 UI Watch Display-澳",
+    ".蘋方 UI Watch Display-簡",
+    ".蘋方 UI Watch Display-繁",
+    ".蘋方 UI Watch Text-日",
+    ".蘋方 UI Watch Text-港",
+    ".蘋方 UI Watch Text-澳",
+    ".蘋方 UI Watch Text-簡",
+    ".蘋方 UI Watch Text-繁",
+    ".蘋方 UI Watch-日",
+    ".蘋方 UI Watch-港",
+    ".蘋方 UI Watch-澳",
+    ".蘋方 UI Watch-簡",
+    ".蘋方 UI Watch-繁",
+    ".蘋方 UI-日",
+    ".蘋方 UI-港",
+    ".蘋方 UI-澳",
+    ".蘋方 UI-簡",
+    ".蘋方 UI-繁",
+    ".蘋方 Watch-港",
+    ".蘋方 Watch-澳",
+    ".蘋方 Watch-簡",
+    ".蘋方 Watch-繁",
+    ".蘋方-港",
+    ".蘋方-澳",
+    ".蘋方-簡",
+    ".蘋方-繁",
+    "PingFang HK",
+    "PingFang MO",
+    "PingFang SC",
+    "PingFang SC Light",
+    "PingFang SC Medium",
+    "PingFang SC Regular",
+    "PingFang SC Semibold",
+    "PingFang SC Thin",
+    "PingFang SC Ultralight",
+    "PingFang TC",
+    "PingFangSC-Light",
+    "PingFangSC-Medium",
+    "PingFangSC-Regular",
+    "PingFangSC-Semibold",
+    "PingFangSC-Thin",
+    "PingFangSC-Ultralight",
+    "苹方-港",
+    "苹方-澳",
+    "苹方-简",
+    "苹方-繁",
+    "蘋方-港",
+    "蘋方-澳",
+    "蘋方-簡",
+    "蘋方-繁"
+   ],
+   "files": [
+    "/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "PingFangSC-Medium",
+     "display": "PingFang SC Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "PingFangSC-Ultralight",
+     "display": "PingFang SC Ultralight",
+     "style": "Ultralight"
+    },
+    {
+     "postscript": "PingFangSC-Thin",
+     "display": "PingFang SC Thin",
+     "style": "Thin"
+    },
+    {
+     "postscript": "PingFangSC-Light",
+     "display": "PingFang SC Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "PingFangSC-Semibold",
+     "display": "PingFang SC Semibold",
+     "style": "Semibold"
+    },
+    {
+     "postscript": "PingFangSC-Regular",
+     "display": "PingFang SC Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "PingFang TC",
+   "names": [
+    ".PingFang HK",
+    ".PingFang MO",
+    ".PingFang SC",
+    ".PingFang TC",
+    ".PingFang UI Display HK",
+    ".PingFang UI Display JA",
+    ".PingFang UI Display MO",
+    ".PingFang UI Display SC",
+    ".PingFang UI Display TC",
+    ".PingFang UI HK",
+    ".PingFang UI JA",
+    ".PingFang UI MO",
+    ".PingFang UI SC",
+    ".PingFang UI TC",
+    ".PingFang UI Text HK",
+    ".PingFang UI Text JA",
+    ".PingFang UI Text MO",
+    ".PingFang UI Text SC",
+    ".PingFang UI Text TC",
+    ".PingFang UI Watch Display HK",
+    ".PingFang UI Watch Display JA",
+    ".PingFang UI Watch Display MO",
+    ".PingFang UI Watch Display SC",
+    ".PingFang UI Watch Display TC",
+    ".PingFang UI Watch HK",
+    ".PingFang UI Watch JA",
+    ".PingFang UI Watch MO",
+    ".PingFang UI Watch SC",
+    ".PingFang UI Watch TC",
+    ".PingFang UI Watch Text HK",
+    ".PingFang UI Watch Text JA",
+    ".PingFang UI Watch Text MO",
+    ".PingFang UI Watch Text SC",
+    ".PingFang UI Watch Text TC",
+    ".PingFang Watch HK",
+    ".PingFang Watch MO",
+    ".PingFang Watch SC",
+    ".PingFang Watch TC",
+    ".苹方 UI Display-日",
+    ".苹方 UI Display-港",
+    ".苹方 UI Display-澳",
+    ".苹方 UI Display-简",
+    ".苹方 UI Display-繁",
+    ".苹方 UI Text-日",
+    ".苹方 UI Text-港",
+    ".苹方 UI Text-澳",
+    ".苹方 UI Text-简",
+    ".苹方 UI Text-繁",
+    ".苹方 UI Watch Display-日",
+    ".苹方 UI Watch Display-港",
+    ".苹方 UI Watch Display-澳",
+    ".苹方 UI Watch Display-简",
+    ".苹方 UI Watch Display-繁",
+    ".苹方 UI Watch Text-日",
+    ".苹方 UI Watch Text-港",
+    ".苹方 UI Watch Text-澳",
+    ".苹方 UI Watch Text-简",
+    ".苹方 UI Watch Text-繁",
+    ".苹方 UI Watch-日",
+    ".苹方 UI Watch-港",
+    ".苹方 UI Watch-澳",
+    ".苹方 UI Watch-简",
+    ".苹方 UI Watch-繁",
+    ".苹方 UI-日",
+    ".苹方 UI-港",
+    ".苹方 UI-澳",
+    ".苹方 UI-简",
+    ".苹方 UI-繁",
+    ".苹方 Watch-港",
+    ".苹方 Watch-澳",
+    ".苹方 Watch-简",
+    ".苹方 Watch-繁",
+    ".苹方-港",
+    ".苹方-澳",
+    ".苹方-简",
+    ".苹方-繁",
+    ".蘋方 UI Display-日",
+    ".蘋方 UI Display-港",
+    ".蘋方 UI Display-澳",
+    ".蘋方 UI Display-簡",
+    ".蘋方 UI Display-繁",
+    ".蘋方 UI Text-日",
+    ".蘋方 UI Text-港",
+    ".蘋方 UI Text-澳",
+    ".蘋方 UI Text-簡",
+    ".蘋方 UI Text-繁",
+    ".蘋方 UI Watch Display-日",
+    ".蘋方 UI Watch Display-港",
+    ".蘋方 UI Watch Display-澳",
+    ".蘋方 UI Watch Display-簡",
+    ".蘋方 UI Watch Display-繁",
+    ".蘋方 UI Watch Text-日",
+    ".蘋方 UI Watch Text-港",
+    ".蘋方 UI Watch Text-澳",
+    ".蘋方 UI Watch Text-簡",
+    ".蘋方 UI Watch Text-繁",
+    ".蘋方 UI Watch-日",
+    ".蘋方 UI Watch-港",
+    ".蘋方 UI Watch-澳",
+    ".蘋方 UI Watch-簡",
+    ".蘋方 UI Watch-繁",
+    ".蘋方 UI-日",
+    ".蘋方 UI-港",
+    ".蘋方 UI-澳",
+    ".蘋方 UI-簡",
+    ".蘋方 UI-繁",
+    ".蘋方 Watch-港",
+    ".蘋方 Watch-澳",
+    ".蘋方 Watch-簡",
+    ".蘋方 Watch-繁",
+    ".蘋方-港",
+    ".蘋方-澳",
+    ".蘋方-簡",
+    ".蘋方-繁",
+    "PingFang HK",
+    "PingFang MO",
+    "PingFang SC",
+    "PingFang TC",
+    "PingFang TC Light",
+    "PingFang TC Medium",
+    "PingFang TC Regular",
+    "PingFang TC Semibold",
+    "PingFang TC Thin",
+    "PingFang TC Ultralight",
+    "PingFangTC-Light",
+    "PingFangTC-Medium",
+    "PingFangTC-Regular",
+    "PingFangTC-Semibold",
+    "PingFangTC-Thin",
+    "PingFangTC-Ultralight",
+    "苹方-港",
+    "苹方-澳",
+    "苹方-简",
+    "苹方-繁",
+    "蘋方-港",
+    "蘋方-澳",
+    "蘋方-簡",
+    "蘋方-繁"
+   ],
+   "files": [
+    "/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/PingFangUI.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "PingFangTC-Light",
+     "display": "PingFang TC Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "PingFangTC-Medium",
+     "display": "PingFang TC Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "PingFangTC-Ultralight",
+     "display": "PingFang TC Ultralight",
+     "style": "Ultralight"
+    },
+    {
+     "postscript": "PingFangTC-Regular",
+     "display": "PingFang TC Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "PingFangTC-Semibold",
+     "display": "PingFang TC Semibold",
+     "style": "Semibold"
+    },
+    {
+     "postscript": "PingFangTC-Thin",
+     "display": "PingFang TC Thin",
+     "style": "Thin"
+    }
+   ]
+  },
+  {
+   "family": "Plantagenet Cherokee",
+   "names": [
+    "Plantagenet Cherokee",
+    "PlantagenetCherokee"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/PlantagenetCherokee.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "PlantagenetCherokee",
+     "display": "Plantagenet Cherokee",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "PT Mono",
+   "names": [
+    "PT Mono",
+    "PT Mono Bold",
+    "PTMono-Bold",
+    "PTMono-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/PTMono.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "PTMono-Regular",
+     "display": "PT Mono",
+     "style": "Regular"
+    },
+    {
+     "postscript": "PTMono-Bold",
+     "display": "PT Mono Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "PT Sans",
+   "names": [
+    "PT Sans",
+    "PT Sans Bold",
+    "PT Sans Bold Italic",
+    "PT Sans Caption",
+    "PT Sans Caption Bold",
+    "PT Sans Italic",
+    "PT Sans Narrow",
+    "PT Sans Narrow Bold",
+    "PTSans-Bold",
+    "PTSans-BoldItalic",
+    "PTSans-Italic",
+    "PTSans-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/PTSans.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "PTSans-Regular",
+     "display": "PT Sans",
+     "style": "Regular"
+    },
+    {
+     "postscript": "PTSans-Bold",
+     "display": "PT Sans Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "PTSans-Italic",
+     "display": "PT Sans Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "PTSans-BoldItalic",
+     "display": "PT Sans Bold Italic",
+     "style": "Bold Italic"
+    }
+   ]
+  },
+  {
+   "family": "PT Sans Caption",
+   "names": [
+    "PT Sans",
+    "PT Sans Bold",
+    "PT Sans Bold Italic",
+    "PT Sans Caption",
+    "PT Sans Caption Bold",
+    "PT Sans Italic",
+    "PT Sans Narrow",
+    "PT Sans Narrow Bold",
+    "PTSans-Caption",
+    "PTSans-CaptionBold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/PTSans.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "PTSans-CaptionBold",
+     "display": "PT Sans Caption Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "PTSans-Caption",
+     "display": "PT Sans Caption",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "PT Sans Narrow",
+   "names": [
+    "PT Sans",
+    "PT Sans Bold",
+    "PT Sans Bold Italic",
+    "PT Sans Caption",
+    "PT Sans Caption Bold",
+    "PT Sans Italic",
+    "PT Sans Narrow",
+    "PT Sans Narrow Bold",
+    "PTSans-Narrow",
+    "PTSans-NarrowBold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/PTSans.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "PTSans-NarrowBold",
+     "display": "PT Sans Narrow Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "PTSans-Narrow",
+     "display": "PT Sans Narrow",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "PT Serif",
+   "names": [
+    "PT Serif",
+    "PT Serif Bold",
+    "PT Serif Bold Italic",
+    "PT Serif Italic",
+    "PTSerif-Bold",
+    "PTSerif-BoldItalic",
+    "PTSerif-Italic",
+    "PTSerif-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/PTSerif.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "PTSerif-Bold",
+     "display": "PT Serif Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "PTSerif-BoldItalic",
+     "display": "PT Serif Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "PTSerif-Regular",
+     "display": "PT Serif",
+     "style": "Regular"
+    },
+    {
+     "postscript": "PTSerif-Italic",
+     "display": "PT Serif Italic",
+     "style": "Italic"
+    }
+   ]
+  },
+  {
+   "family": "PT Serif Caption",
+   "names": [
+    "PT Serif Caption",
+    "PT Serif Caption Italic",
+    "PTSerif-Caption",
+    "PTSerif-CaptionItalic"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/PTSerifCaption.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "PTSerif-Caption",
+     "display": "PT Serif Caption",
+     "style": "Regular"
+    },
+    {
+     "postscript": "PTSerif-CaptionItalic",
+     "display": "PT Serif Caption Italic",
+     "style": "Italic"
+    }
+   ]
+  },
+  {
+   "family": "Raanana",
+   "names": [
+    "Raanana",
+    "Raanana Bold",
+    "RaananaBold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Raanana.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Raanana",
+     "display": "Raanana",
+     "style": "Regular"
+    },
+    {
+     "postscript": "RaananaBold",
+     "display": "Raanana Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Rockwell",
+   "names": [
+    "Rockwell",
+    "Rockwell Bold",
+    "Rockwell Bold Italic",
+    "Rockwell Italic",
+    "Rockwell-Bold",
+    "Rockwell-BoldItalic",
+    "Rockwell-Italic",
+    "Rockwell-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Rockwell.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Rockwell-Italic",
+     "display": "Rockwell Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "Rockwell-BoldItalic",
+     "display": "Rockwell Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "Rockwell-Bold",
+     "display": "Rockwell Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Rockwell-Regular",
+     "display": "Rockwell",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Sana",
+   "names": [
+    ".Sana PUA",
+    "Sana",
+    "Sana Regular",
+    "صنعاء",
+    "صنعاء عادي"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Sana.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Sana",
+     "display": "Sana Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Sathu",
+   "names": [
+    "Sathu"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Sathu.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Sathu",
+     "display": "Sathu",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Savoye LET",
+   "names": [
+    ".Savoye LET CC.",
+    "Savoye LET",
+    "Savoye LET Plain CC.:1.0",
+    "Savoye LET Plain:1.0",
+    "SavoyeLetPlain"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Savoye LET.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "SavoyeLetPlain",
+     "display": "Savoye LET Plain:1.0",
+     "style": "Plain"
+    }
+   ]
+  },
+  {
+   "family": "Shree Devanagari 714",
+   "names": [
+    "Shree Devanagari 714",
+    "Shree Devanagari 714 Bold",
+    "Shree Devanagari 714 Bold Italic",
+    "Shree Devanagari 714 Italic",
+    "ShreeDev0714",
+    "ShreeDev0714-Bold",
+    "ShreeDev0714-BoldItalic",
+    "ShreeDev0714-Italic",
+    "श्री देवनागरी 714",
+    "श्री देवनागरी 714 इटॅलिक",
+    "श्री देवनागरी 714 इटैलिक",
+    "श्री देवनागरी 714 बोल्ड",
+    "श्री देवनागरी 714 बोल्ड इटॅलिक",
+    "श्री देवनागरी 714 बोल्ड इटैलिक"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Shree714.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "ShreeDev0714-Bold",
+     "display": "Shree Devanagari 714 Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "ShreeDev0714",
+     "display": "Shree Devanagari 714",
+     "style": "Regular"
+    },
+    {
+     "postscript": "ShreeDev0714-BoldItalic",
+     "display": "Shree Devanagari 714 Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "ShreeDev0714-Italic",
+     "display": "Shree Devanagari 714 Italic",
+     "style": "Italic"
+    }
+   ]
+  },
+  {
+   "family": "SignPainter",
+   "names": [
+    "SignPainter",
+    "SignPainter-HouseScript",
+    "SignPainter-HouseScript Semibold",
+    "SignPainter-HouseScriptSemibold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/SignPainter.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "SignPainter-HouseScript",
+     "display": "SignPainter-HouseScript",
+     "style": "HouseScript"
+    },
+    {
+     "postscript": "SignPainter-HouseScriptSemibold",
+     "display": "SignPainter-HouseScript Semibold",
+     "style": "HouseScript Semibold"
+    }
+   ]
+  },
+  {
+   "family": "Silom",
+   "names": [
+    "Silom"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Silom.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Silom",
+     "display": "Silom",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Sinhala MN",
+   "names": [
+    "Sinhala MN",
+    "Sinhala MN Bold",
+    "SinhalaMN",
+    "SinhalaMN-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Sinhala MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "SinhalaMN-Bold",
+     "display": "Sinhala MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "SinhalaMN",
+     "display": "Sinhala MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Sinhala Sangam MN",
+   "names": [
+    "Sinhala Sangam MN",
+    "Sinhala Sangam MN Bold",
+    "SinhalaSangamMN",
+    "SinhalaSangamMN-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Sinhala Sangam MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "SinhalaSangamMN-Bold",
+     "display": "Sinhala Sangam MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "SinhalaSangamMN",
+     "display": "Sinhala Sangam MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Skia",
+   "names": [
+    "Skia",
+    "Skia Black",
+    "Skia Black Condensed",
+    "Skia Black Extended",
+    "Skia Bold",
+    "Skia Condensed",
+    "Skia Extended",
+    "Skia Light",
+    "Skia Light Condensed",
+    "Skia Light Extended",
+    "Skia Regular",
+    "Skia-Regular",
+    "Skia-Regular_Black",
+    "Skia-Regular_Black-Condensed",
+    "Skia-Regular_Black-Extended",
+    "Skia-Regular_Bold",
+    "Skia-Regular_Condensed",
+    "Skia-Regular_Extended",
+    "Skia-Regular_Light",
+    "Skia-Regular_Light-Condensed",
+    "Skia-Regular_Light-Extended"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Skia.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Skia-Regular_Extended",
+     "display": "Skia Extended",
+     "style": "Extended"
+    },
+    {
+     "postscript": "Skia-Regular_Light-Extended",
+     "display": "Skia Light Extended",
+     "style": "Light Extended"
+    },
+    {
+     "postscript": "Skia-Regular_Light",
+     "display": "Skia Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "Skia-Regular_Bold",
+     "display": "Skia Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Skia-Regular",
+     "display": "Skia Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "Skia-Regular_Black-Condensed",
+     "display": "Skia Black Condensed",
+     "style": "Black Condensed"
+    },
+    {
+     "postscript": "Skia-Regular_Black-Extended",
+     "display": "Skia Black Extended",
+     "style": "Black Extended"
+    },
+    {
+     "postscript": "Skia-Regular_Light-Condensed",
+     "display": "Skia Light Condensed",
+     "style": "Light Condensed"
+    },
+    {
+     "postscript": "Skia-Regular_Black",
+     "display": "Skia Black",
+     "style": "Black"
+    },
+    {
+     "postscript": "Skia-Regular_Condensed",
+     "display": "Skia Condensed",
+     "style": "Condensed"
+    }
+   ]
+  },
+  {
+   "family": "Snell Roundhand",
+   "names": [
+    "Snell Roundhand",
+    "Snell Roundhand Black",
+    "Snell Roundhand Bold",
+    "SnellRoundhand",
+    "SnellRoundhand-Black",
+    "SnellRoundhand-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/SnellRoundhand.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "SnellRoundhand-Black",
+     "display": "Snell Roundhand Black",
+     "style": "Black"
+    },
+    {
+     "postscript": "SnellRoundhand-Bold",
+     "display": "Snell Roundhand Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "SnellRoundhand",
+     "display": "Snell Roundhand",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Songti SC",
+   "names": [
+    "STSong",
+    "STSongti-SC-Black",
+    "STSongti-SC-Bold",
+    "STSongti-SC-Light",
+    "STSongti-SC-Regular",
+    "Songti SC",
+    "Songti SC Black",
+    "Songti SC Bold",
+    "Songti SC Light",
+    "Songti SC Regular",
+    "Songti TC",
+    "Songti TC Bold",
+    "Songti TC Light",
+    "Songti TC Regular",
+    "宋体-简",
+    "宋体-简 常规体",
+    "宋体-简 粗体",
+    "宋体-简 细体",
+    "宋体-简 黑体",
+    "宋体-繁",
+    "宋体-繁 常规体",
+    "宋体-繁 粗体",
+    "宋体-繁 细体",
+    "宋體-簡",
+    "宋體-簡 標準體",
+    "宋體-簡 粗體",
+    "宋體-簡 細體",
+    "宋體-簡 黑體",
+    "宋體-繁",
+    "宋體-繁 標準體",
+    "宋體-繁 粗體",
+    "宋體-繁 細體"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Songti.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "STSongti-SC-Black",
+     "display": "Songti SC Black",
+     "style": "Black"
+    },
+    {
+     "postscript": "STSongti-SC-Light",
+     "display": "Songti SC Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "STSongti-SC-Regular",
+     "display": "Songti SC Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "STSongti-SC-Bold",
+     "display": "Songti SC Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Songti TC",
+   "names": [
+    "STSong",
+    "STSongti-TC-Bold",
+    "STSongti-TC-Light",
+    "STSongti-TC-Regular",
+    "Songti SC",
+    "Songti SC Black",
+    "Songti SC Bold",
+    "Songti SC Light",
+    "Songti SC Regular",
+    "Songti TC",
+    "Songti TC Bold",
+    "Songti TC Light",
+    "Songti TC Regular",
+    "宋体-简",
+    "宋体-简 常规体",
+    "宋体-简 粗体",
+    "宋体-简 细体",
+    "宋体-简 黑体",
+    "宋体-繁",
+    "宋体-繁 常规体",
+    "宋体-繁 粗体",
+    "宋体-繁 细体",
+    "宋體-簡",
+    "宋體-簡 標準體",
+    "宋體-簡 粗體",
+    "宋體-簡 細體",
+    "宋體-簡 黑體",
+    "宋體-繁",
+    "宋體-繁 標準體",
+    "宋體-繁 粗體",
+    "宋體-繁 細體"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Songti.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "STSongti-TC-Light",
+     "display": "Songti TC Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "STSongti-TC-Regular",
+     "display": "Songti TC Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "STSongti-TC-Bold",
+     "display": "Songti TC Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "STIX Two Math",
+   "names": [
+    "STIX Two Math",
+    "STIX Two Math Regular",
+    "STIXTwoMath-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/STIXTwoMath.otf"
+   ],
+   "faces": [
+    {
+     "postscript": "STIXTwoMath-Regular",
+     "display": "STIX Two Math Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "STIX Two Text",
+   "names": [
+    "STIX Two Text",
+    "STIX Two Text Bold",
+    "STIX Two Text Italic",
+    "STIX Two Text Italic Bold Italic",
+    "STIX Two Text Italic Italic",
+    "STIX Two Text Italic Medium Italic",
+    "STIX Two Text Italic SemiBold Italic",
+    "STIX Two Text Medium",
+    "STIX Two Text Regular",
+    "STIX Two Text SemiBold",
+    "STIXTwoText",
+    "STIXTwoText-Italic",
+    "STIXTwoText-Italic_Bold-Italic",
+    "STIXTwoText-Italic_Medium-Italic",
+    "STIXTwoText-Italic_SemiBold-Italic",
+    "STIXTwoText_Bold",
+    "STIXTwoText_Medium",
+    "STIXTwoText_SemiBold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/STIXTwoText-Italic.ttf",
+    "/System/Library/Fonts/Supplemental/STIXTwoText.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "STIXTwoText",
+     "display": "STIX Two Text Regular",
+     "style": "Regular"
+    },
+    {
+     "postscript": "STIXTwoText_SemiBold",
+     "display": "STIX Two Text SemiBold",
+     "style": "SemiBold"
+    },
+    {
+     "postscript": "STIXTwoText_Medium",
+     "display": "STIX Two Text Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "STIXTwoText-Italic_Bold-Italic",
+     "display": "STIX Two Text Italic Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "STIXTwoText-Italic",
+     "display": "STIX Two Text Italic Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "STIXTwoText-Italic_SemiBold-Italic",
+     "display": "STIX Two Text Italic SemiBold Italic",
+     "style": "SemiBold Italic"
+    },
+    {
+     "postscript": "STIXTwoText_Bold",
+     "display": "STIX Two Text Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "STIXTwoText-Italic_Medium-Italic",
+     "display": "STIX Two Text Italic Medium Italic",
+     "style": "Medium Italic"
+    }
+   ]
+  },
+  {
+   "family": "STSong",
+   "names": [
+    "STSong",
+    "Songti SC",
+    "Songti SC Black",
+    "Songti SC Bold",
+    "Songti SC Light",
+    "Songti SC Regular",
+    "Songti TC",
+    "Songti TC Bold",
+    "Songti TC Light",
+    "Songti TC Regular",
+    "宋体-简",
+    "宋体-简 常规体",
+    "宋体-简 粗体",
+    "宋体-简 细体",
+    "宋体-简 黑体",
+    "宋体-繁",
+    "宋体-繁 常规体",
+    "宋体-繁 粗体",
+    "宋体-繁 细体",
+    "宋體-簡",
+    "宋體-簡 標準體",
+    "宋體-簡 粗體",
+    "宋體-簡 細體",
+    "宋體-簡 黑體",
+    "宋體-繁",
+    "宋體-繁 標準體",
+    "宋體-繁 粗體",
+    "宋體-繁 細體"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Songti.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "STSong",
+     "display": "STSong",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Sukhumvit Set",
+   "names": [
+    "Sukhumvit Set",
+    "Sukhumvit Set Bold",
+    "Sukhumvit Set Light",
+    "Sukhumvit Set Medium",
+    "Sukhumvit Set Semi Bold",
+    "Sukhumvit Set Text",
+    "Sukhumvit Set Thin",
+    "SukhumvitSet-Bold",
+    "SukhumvitSet-Light",
+    "SukhumvitSet-Medium",
+    "SukhumvitSet-SemiBold",
+    "SukhumvitSet-Text",
+    "SukhumvitSet-Thin"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/SukhumvitSet.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "SukhumvitSet-Text",
+     "display": "Sukhumvit Set Text",
+     "style": "Text"
+    },
+    {
+     "postscript": "SukhumvitSet-Medium",
+     "display": "Sukhumvit Set Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "SukhumvitSet-Light",
+     "display": "Sukhumvit Set Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "SukhumvitSet-Bold",
+     "display": "Sukhumvit Set Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "SukhumvitSet-SemiBold",
+     "display": "Sukhumvit Set Semi Bold",
+     "style": "Semi Bold"
+    },
+    {
+     "postscript": "SukhumvitSet-Thin",
+     "display": "Sukhumvit Set Thin",
+     "style": "Thin"
+    }
+   ]
+  },
+  {
+   "family": "Symbol",
+   "names": [
+    "Symbol"
+   ],
+   "files": [
+    "/System/Library/Fonts/Symbol.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Symbol",
+     "display": "Symbol",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Tahoma",
+   "names": [
+    "Tahoma",
+    "Tahoma Bold",
+    "Tahoma Fet",
+    "Tahoma Fett",
+    "Tahoma Félkövér",
+    "Tahoma Gras",
+    "Tahoma Grassetto",
+    "Tahoma Halvfet",
+    "Tahoma Kalın",
+    "Tahoma Krepko",
+    "Tahoma Lihavoitu",
+    "Tahoma Lodia",
+    "Tahoma Negreta",
+    "Tahoma Negrita",
+    "Tahoma Negrito",
+    "Tahoma Pogrubiony",
+    "Tahoma Tučné",
+    "Tahoma Vet",
+    "Tahoma fed",
+    "Tahoma tučné",
+    "Tahoma đậm",
+    "Tahoma Έντονα",
+    "Tahoma Полужирный",
+    "Tahoma-Bold"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Tahoma Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Tahoma.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Tahoma-Bold",
+     "display": "Tahoma Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Tahoma",
+     "display": "Tahoma",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Tamil MN",
+   "names": [
+    "Tamil MN",
+    "Tamil MN Bold",
+    "TamilMN",
+    "TamilMN-Bold",
+    "तमिल एमएन",
+    "तमिल एमएन बोल्ड",
+    "தமிழ் எம்என்",
+    "தமிழ் எம்என் போல்ட்"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Tamil MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "TamilMN-Bold",
+     "display": "Tamil MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "TamilMN",
+     "display": "Tamil MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Tamil Sangam MN",
+   "names": [
+    "Grantha Sangam MN",
+    "Grantha Sangam MN Bold",
+    "Grantha Sangam MN Regular",
+    "Tamil Sangam MN",
+    "Tamil Sangam MN Bold",
+    "TamilSangamMN",
+    "TamilSangamMN-Bold",
+    "ग्रंथ संगम एमएन",
+    "ग्रंथ संगम एमएन बोल्ड",
+    "ग्रंथ संगम एमएन रेग्युलर",
+    "तमिल संगम एमएन",
+    "तमिल संगम एमएन बोल्ड",
+    "கிரந்த சங்கம் எம்என்",
+    "கிரந்த சங்கம் எம்என் போல்ட்",
+    "கிரந்த சங்கம் எம்என் ரெகுலர்",
+    "தமிழ் சங்கம் எம்என்",
+    "தமிழ் சங்கம் எம்என் போல்ட்"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "TamilSangamMN",
+     "display": "Tamil Sangam MN",
+     "style": "Regular"
+    },
+    {
+     "postscript": "TamilSangamMN-Bold",
+     "display": "Tamil Sangam MN Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Telugu MN",
+   "names": [
+    "Telugu MN",
+    "Telugu MN Bold",
+    "TeluguMN",
+    "TeluguMN-Bold",
+    "तेलुगु एमएन",
+    "तेलुगु एमएन बोल्ड",
+    "తెలుగు ఎమ్ఎన్",
+    "తెలుగు ఎమ్ఎన్ బోల్డ్"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Telugu MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "TeluguMN-Bold",
+     "display": "Telugu MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "TeluguMN",
+     "display": "Telugu MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Telugu Sangam MN",
+   "names": [
+    "Telugu Sangam MN",
+    "Telugu Sangam MN Bold",
+    "TeluguSangamMN",
+    "TeluguSangamMN-Bold",
+    "तेलुगु संगम एमएन",
+    "तेलुगु संगम एमएन बोल्ड",
+    "తెలుగు సంగం ఎమ్ఎన్",
+    "తెలుగు సంగం ఎమ్ఎన్ బోల్డ్"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Telugu Sangam MN.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "TeluguSangamMN-Bold",
+     "display": "Telugu Sangam MN Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "TeluguSangamMN",
+     "display": "Telugu Sangam MN",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Thonburi",
+   "names": [
+    "Thonburi",
+    "Thonburi Bold",
+    "Thonburi Carregado",
+    "Thonburi Fed",
+    "Thonburi Fet",
+    "Thonburi Fett",
+    "Thonburi Gras",
+    "Thonburi Halvfet",
+    "Thonburi Light",
+    "Thonburi Negrita",
+    "Thonburi grassetto",
+    "Thonburi lihava",
+    "Thonburi vet",
+    "Thonburi-Bold",
+    "Thonburi-Light"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Thonburi.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "Thonburi-Light",
+     "display": "Thonburi Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "Thonburi-Bold",
+     "display": "Thonburi Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Thonburi",
+     "display": "Thonburi",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Times New Roman",
+   "names": [
+    "Times New Roman",
+    "Times New Roman Bold",
+    "Times New Roman Bold Italic",
+    "Times New Roman Corsivo",
+    "Times New Roman Cursief",
+    "Times New Roman Cursiva",
+    "Times New Roman Dőlt",
+    "Times New Roman Etzana",
+    "Times New Roman Fet",
+    "Times New Roman Fet Kursiv",
+    "Times New Roman Fett",
+    "Times New Roman Fett Kursiv",
+    "Times New Roman Félkövér",
+    "Times New Roman Félkövér dőlt",
+    "Times New Roman Gras",
+    "Times New Roman Gras Italique",
+    "Times New Roman Grassetto",
+    "Times New Roman Grassetto Corsivo",
+    "Times New Roman Halvfet",
+    "Times New Roman Halvfet Kursiv",
+    "Times New Roman Italic",
+    "Times New Roman Italique",
+    "Times New Roman Itálico",
+    "Times New Roman Kalın",
+    "Times New Roman Kalın İtalik",
+    "Times New Roman Krepko",
+    "Times New Roman Krepko poševno",
+    "Times New Roman Kursiv",
+    "Times New Roman Kursivoitu",
+    "Times New Roman Kurzíva",
+    "Times New Roman Lihavoitu",
+    "Times New Roman Lihavoitu Kursivoi",
+    "Times New Roman Lodi etzana",
+    "Times New Roman Lodia",
+    "Times New Roman Negreta",
+    "Times New Roman Negreta cursiva",
+    "Times New Roman Negrita",
+    "Times New Roman Negrita Cursiva",
+    "Times New Roman Negrito",
+    "Times New Roman Negrito Itálico",
+    "Times New Roman Pogrubiona",
+    "Times New Roman Pogrubiona kursywa",
+    "Times New Roman Poševno",
+    "Times New Roman Tučná kurzíva",
+    "Times New Roman Tučné",
+    "Times New Roman Vet",
+    "Times New Roman Vet Cursief",
+    "Times New Roman cursiva",
+    "Times New Roman fed",
+    "Times New Roman fed kursiv",
+    "Times New Roman kursiv",
+    "Times New Roman kursywa",
+    "Times New Roman kurzíva",
+    "Times New Roman nghiêng",
+    "Times New Roman nghiêng đậm",
+    "Times New Roman tučné",
+    "Times New Roman tučné kurzíva",
+    "Times New Roman đậm",
+    "Times New Roman İtalik",
+    "Times New Roman Έντονα",
+    "Times New Roman Έντονα Πλάγια",
+    "Times New Roman Πλάγια",
+    "Times New Roman Курсив",
+    "Times New Roman Полужирный",
+    "Times New Roman Полужирный Курсив",
+    "TimesNewRomanPS-BoldItalicMT",
+    "TimesNewRomanPS-BoldMT",
+    "TimesNewRomanPS-ItalicMT",
+    "TimesNewRomanPSMT"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Times New Roman Bold Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Times New Roman Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Times New Roman.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "TimesNewRomanPS-ItalicMT",
+     "display": "Times New Roman Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "TimesNewRomanPS-BoldMT",
+     "display": "Times New Roman Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "TimesNewRomanPSMT",
+     "display": "Times New Roman",
+     "style": "Regular"
+    },
+    {
+     "postscript": "TimesNewRomanPS-BoldItalicMT",
+     "display": "Times New Roman Bold Italic",
+     "style": "Bold Italic"
+    }
+   ]
+  },
+  {
+   "family": "Trattatello",
+   "names": [
+    "Trattatello"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Trattatello.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Trattatello",
+     "display": "Trattatello",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Trebuchet MS",
+   "names": [
+    "Trebuchet MS",
+    "Trebuchet MS Bold",
+    "Trebuchet MS Bold Italic",
+    "Trebuchet MS Corsivo",
+    "Trebuchet MS Cursief",
+    "Trebuchet MS Cursiva",
+    "Trebuchet MS Dőlt",
+    "Trebuchet MS Etzana",
+    "Trebuchet MS Fet",
+    "Trebuchet MS Fet Kursiv",
+    "Trebuchet MS Fett",
+    "Trebuchet MS Fett Kursiv",
+    "Trebuchet MS Félkövér",
+    "Trebuchet MS Félkövér dőlt",
+    "Trebuchet MS Gras",
+    "Trebuchet MS Gras Italique",
+    "Trebuchet MS Grassetto",
+    "Trebuchet MS Grassetto Corsivo",
+    "Trebuchet MS Halvfet",
+    "Trebuchet MS Halvfet Kursiv",
+    "Trebuchet MS Italic",
+    "Trebuchet MS Italique",
+    "Trebuchet MS Itálico",
+    "Trebuchet MS Kalın",
+    "Trebuchet MS Kalın İtalik",
+    "Trebuchet MS Krepko",
+    "Trebuchet MS Krepko poševno",
+    "Trebuchet MS Kursiv",
+    "Trebuchet MS Kursivoitu",
+    "Trebuchet MS Kursywa",
+    "Trebuchet MS Kurzíva",
+    "Trebuchet MS Lihavoitu",
+    "Trebuchet MS Lihavoitu Kursivoi",
+    "Trebuchet MS Lodi etzana",
+    "Trebuchet MS Lodia",
+    "Trebuchet MS Negreta",
+    "Trebuchet MS Negreta cursiva",
+    "Trebuchet MS Negrita",
+    "Trebuchet MS Negrita Cursiva",
+    "Trebuchet MS Negrito",
+    "Trebuchet MS Negrito Itálico",
+    "Trebuchet MS Pogrubiona kursywa",
+    "Trebuchet MS Pogrubiony",
+    "Trebuchet MS Poševno",
+    "Trebuchet MS Tučná kurzíva",
+    "Trebuchet MS Tučné",
+    "Trebuchet MS Vet",
+    "Trebuchet MS Vet Cursief",
+    "Trebuchet MS fed",
+    "Trebuchet MS fed kursiv",
+    "Trebuchet MS kursiv",
+    "Trebuchet MS kurzíva",
+    "Trebuchet MS tučné",
+    "Trebuchet MS tučné kurzíva",
+    "Trebuchet MS İtalik",
+    "Trebuchet MS Έντονα",
+    "Trebuchet MS Έντονα Πλάγια",
+    "Trebuchet MS Πλάγια",
+    "Trebuchet MS Курсив",
+    "Trebuchet MS Полужирный",
+    "Trebuchet MS Полужирный Курсив",
+    "Trebuchet-BoldItalic",
+    "TrebuchetMS",
+    "TrebuchetMS-Bold",
+    "TrebuchetMS-Italic"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Trebuchet MS Bold Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Trebuchet MS Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Trebuchet MS Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Trebuchet MS.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "TrebuchetMS-Italic",
+     "display": "Trebuchet MS Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "TrebuchetMS",
+     "display": "Trebuchet MS",
+     "style": "Regular"
+    },
+    {
+     "postscript": "Trebuchet-BoldItalic",
+     "display": "Trebuchet MS Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "TrebuchetMS-Bold",
+     "display": "Trebuchet MS Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Verdana",
+   "names": [
+    "Verdana",
+    "Verdana Bold",
+    "Verdana Bold Italic",
+    "Verdana Corsivo",
+    "Verdana Cursief",
+    "Verdana Cursiva",
+    "Verdana Dőlt",
+    "Verdana Etzana",
+    "Verdana Fet",
+    "Verdana Fet Kursiv",
+    "Verdana Fett",
+    "Verdana Fett Kursiv",
+    "Verdana Félkövér",
+    "Verdana Félkövér dőlt",
+    "Verdana Gras",
+    "Verdana Gras Italique",
+    "Verdana Grassetto",
+    "Verdana Grassetto Corsivo",
+    "Verdana Halvfet",
+    "Verdana Halvfet Kursiv",
+    "Verdana Italic",
+    "Verdana Italique",
+    "Verdana Itálico",
+    "Verdana Kalın",
+    "Verdana Kalın İtalik",
+    "Verdana Krepko",
+    "Verdana Krepko poševno",
+    "Verdana Kursiv",
+    "Verdana Kursivoitu",
+    "Verdana Kursywa",
+    "Verdana Kurzíva",
+    "Verdana Lihavoitu",
+    "Verdana Lihavoitu Kursivoi",
+    "Verdana Lodi etzana",
+    "Verdana Lodia",
+    "Verdana Negreta",
+    "Verdana Negreta cursiva",
+    "Verdana Negrita",
+    "Verdana Negrita Cursiva",
+    "Verdana Negrito",
+    "Verdana Negrito Itálico",
+    "Verdana Pogrubiona kursywa",
+    "Verdana Pogrubiony",
+    "Verdana Poševno",
+    "Verdana Tučná kurzíva",
+    "Verdana Tučné",
+    "Verdana Vet",
+    "Verdana Vet Cursief",
+    "Verdana fed",
+    "Verdana fed kursiv",
+    "Verdana kursiv",
+    "Verdana kurzíva",
+    "Verdana tučné",
+    "Verdana tučné kurzíva",
+    "Verdana İtalik",
+    "Verdana Έντονα",
+    "Verdana Έντονα Πλάγια",
+    "Verdana Πλάγια",
+    "Verdana Курсив",
+    "Verdana Полужирный",
+    "Verdana Полужирный Курсив",
+    "Verdana-Bold",
+    "Verdana-BoldItalic",
+    "Verdana-Italic"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Verdana Bold Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Verdana Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Verdana Italic.ttf",
+    "/System/Library/Fonts/Supplemental/Verdana.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Verdana-Bold",
+     "display": "Verdana Bold",
+     "style": "Bold"
+    },
+    {
+     "postscript": "Verdana-BoldItalic",
+     "display": "Verdana Bold Italic",
+     "style": "Bold Italic"
+    },
+    {
+     "postscript": "Verdana-Italic",
+     "display": "Verdana Italic",
+     "style": "Italic"
+    },
+    {
+     "postscript": "Verdana",
+     "display": "Verdana",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Waseem",
+   "names": [
+    "Waseem",
+    "Waseem Light",
+    "Waseem Regular",
+    "WaseemLight",
+    "وسيم",
+    "وسيم عادي",
+    "وسيم فاتح"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Waseem.ttc"
+   ],
+   "faces": [
+    {
+     "postscript": "WaseemLight",
+     "display": "Waseem Light",
+     "style": "Light"
+    },
+    {
+     "postscript": "Waseem",
+     "display": "Waseem Regular",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Webdings",
+   "names": [
+    "Webdings"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Webdings.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Webdings",
+     "display": "Webdings",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Wingdings",
+   "names": [
+    "Wingdings",
+    "Wingdings-Regular"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Wingdings.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Wingdings-Regular",
+     "display": "Wingdings",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Wingdings 2",
+   "names": [
+    "Wingdings 2",
+    "Wingdings2"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Wingdings 2.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Wingdings2",
+     "display": "Wingdings 2",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Wingdings 3",
+   "names": [
+    "Wingdings 3",
+    "Wingdings3"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Wingdings 3.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Wingdings3",
+     "display": "Wingdings 3",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "YuGothic",
+   "names": [
+    "YuGo-Bold",
+    "YuGo-Medium",
+    "YuGothic",
+    "YuGothic Bold",
+    "YuGothic Medium",
+    "游ゴシック体",
+    "游ゴシック体 ボールド",
+    "游ゴシック体 ミディアム"
+   ],
+   "files": [
+    "/System/Library/AssetsV2/com_apple_MobileAsset_Font8/b7a6a6575a699e801915b73b9e1e75c74a3404ce.asset/AssetData/YuGothic-Bold.otf",
+    "/System/Library/AssetsV2/com_apple_MobileAsset_Font8/ee89e7987a76cc8cfdff36c96bd7bc77655b343e.asset/AssetData/YuGothic-Medium.otf"
+   ],
+   "faces": [
+    {
+     "postscript": "YuGo-Medium",
+     "display": "YuGothic Medium",
+     "style": "Medium"
+    },
+    {
+     "postscript": "YuGo-Bold",
+     "display": "YuGothic Bold",
+     "style": "Bold"
+    }
+   ]
+  },
+  {
+   "family": "Zapf Dingbats",
+   "names": [
+    "Zapf Dingbats",
+    "ZapfDingbatsITC"
+   ],
+   "files": [
+    "/System/Library/Fonts/ZapfDingbats.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "ZapfDingbatsITC",
+     "display": "Zapf Dingbats",
+     "style": "Regular"
+    }
+   ]
+  },
+  {
+   "family": "Zapfino",
+   "names": [
+    "Zapfino"
+   ],
+   "files": [
+    "/System/Library/Fonts/Supplemental/Zapfino.ttf"
+   ],
+   "faces": [
+    {
+     "postscript": "Zapfino",
+     "display": "Zapfino",
+     "style": "Regular"
+    }
+   ]
+  }
+ ]
+}
