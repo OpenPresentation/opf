@@ -1,0 +1,6 @@
+---
+type: added
+packages: [opf, render, pptx, editor, cli, mcp]
+---
+
+A table can shade the number cells of named columns by value: `table.colorScale` (`columns`, `from`, `mid`, `to`, `center`, `min`, `max`), in scheme colors only (the new `SchemeColorName`), sequential or diverging, mixed in OKLab, with the text color that reads on each fill. Core computes the fills (`resolveTableColorScale`, `layoutTable`'s `colorScale` option and each cell's `scaled`); the preview, PNG and PDF draw them; a table split across slides keeps one range. The PowerPoint export writes native cell fills and text colors, records the scale beside the stored table (a released 0.36.0 importer still restores the table, without the scale), and import restores it while every shaded cell still has its fill, else it returns plain fills with `table-color-scale-not-restored`. The editor edits the scale as one undoable patch (`@openpresentation/opf-editor/table-color-scale`) with a Color scale section in the table inspector. New rules: the error `table-color-scale-unknown-column` and the warnings `table-color-scale-no-data` and `table-color-scale-range`.

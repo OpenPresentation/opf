@@ -8,6 +8,8 @@ import {
 } from '../dist/composition.js';
 import { resolveSlideContext, tableRows, validate } from '../dist/index.js';
 import { paginateSlide } from '../dist/pagination.js';
+import { fromMarkdown, toMarkdown } from '../dist/markdown.js';
+import { fromYaml, toYaml } from '../dist/yaml.js';
 
 const close = (actual, expected, epsilon, message) => assert.ok(Math.abs(actual - expected) <= epsilon, `${message ?? ''} ${actual} vs ${expected}`);
 
@@ -237,11 +239,11 @@ describe('the rules (FR-07)', () => {
 });
 
 describe('every gallery color scheme (FR-07)', () => {
-  test('the default scale and a diverging scale keep their text at 4.5:1 on both ends, light and dark', () => {
+  test('the default scale and a diverging scale keep their text at 4.5:1 on both ends, in every theme, default and dark', () => {
     let lowest = { ratio: Infinity, label: '' };
     let checked = 0;
-    for (const colorScheme of Object.keys(gallery.colorSchemes)) for (const variant of [undefined, 'dark1']) {
-      const deck = { design: { theme: 'classic', colorScheme, ...(variant ? { variant } : {}) }, slides: [{ title: 'T', text: 'x' }] };
+    for (const theme of Object.keys(gallery.themes)) for (const colorScheme of Object.keys(gallery.colorSchemes)) for (const variant of [undefined, 'dark1']) {
+      const deck = { design: { theme, colorScheme, ...(variant ? { variant } : {}) }, slides: [{ title: 'T', text: 'x' }] };
       const { resolved } = resolveSlideContext(deck, 0, { catalogs: [gallery] });
       const resolve = (name) => resolveColorRef(name, { colorScheme: resolved.colorScheme, roles: resolved.roles, variables: {}, fallback: '#000000' }).slice(0, 7);
       const scheme = { resolve, text: resolved.roles.text.slice(0, 7) };
@@ -251,13 +253,39 @@ describe('every gallery color scheme (FR-07)', () => {
         assert.equal(result.cells[1].fill, resolve(scale.to ?? 'primary'), 'the highest value is the to color as the scheme resolves it');
         for (const [end, cell] of [['from', result.cells[0]], ['to', result.cells[1]]]) {
           const ratio = colorContrast(cell.text, cell.fill);
-          if (ratio < lowest.ratio) lowest = { ratio, label: `${colorScheme} ${variant ?? 'light'}, ${name}, ${end} end (${cell.fill} with ${cell.text})` };
-          assert.ok(ratio >= 4.5, `${colorScheme} ${variant ?? 'light'} ${name} ${end}: ${cell.text} on ${cell.fill} is ${ratio}`);
+          if (ratio < lowest.ratio) lowest = { ratio, label: `${theme} ${colorScheme} ${variant ?? 'default'}, ${name}, ${end} end (${cell.fill} with ${cell.text})` };
+          assert.ok(ratio >= 4.5, `${theme} ${colorScheme} ${variant ?? 'default'} ${name} ${end}: ${cell.text} on ${cell.fill} is ${ratio}`);
         }
         checked++;
       }
     }
-    assert.ok(checked >= 60);
+    assert.equal(checked, Object.keys(gallery.themes).length * Object.keys(gallery.colorSchemes).length * 4);
     console.log(`lowest contrast ratio over ${checked} scales: ${lowest.ratio.toFixed(2)}:1 at ${lowest.label}`);
+  });
+});
+
+describe('Markdown and YAML (FR-07)', () => {
+  const document = () => ({
+    name: 'Scale',
+    slides: [
+      { title: 'Win rate', table: { columns: ['Region', { name: 'Q1', format: '0%' }, { name: 'Q2', format: '0%' }], rows: [['EMEA', 0.22, 0.25], ['APAC', 0.18, 0.21]], colorScale: { columns: ['Q1', 'Q2'], min: 0, max: 0.4 } } },
+      { title: 'Year on year', table: { columns: ['Product', 'YoY'], rows: [['Core', 0.12], ['Add-ons', -0.08]], colorScale: { columns: ['YoY'], from: 'accent2', mid: 'surface', to: 'accent1', center: 0 } } },
+    ],
+  });
+
+  test('a sequential and a diverging scale round-trip through YAML', () => {
+    const { yaml } = toYaml(document());
+    assert.match(yaml, /colorScale:/);
+    const back = fromYaml(yaml);
+    assert.deepEqual(back.findings.filter((finding) => finding.severity === 'error'), []);
+    assert.deepEqual(back.presentation.slides.map((slide) => slide.table), document().slides.map((slide) => slide.table));
+  });
+
+  test('a sequential and a diverging scale round-trip through Markdown', () => {
+    const { markdown } = toMarkdown(document());
+    assert.match(markdown, /colorScale:/);
+    const back = fromMarkdown(markdown, {});
+    assert.deepEqual(back.findings.filter((finding) => finding.severity === 'error'), []);
+    assert.deepEqual(back.presentation.slides.map((slide) => slide.table), document().slides.map((slide) => slide.table));
   });
 });
