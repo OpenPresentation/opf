@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "target": "keynote",
+  "application": {
+    "name": "Keynote",
+    "version": "16.0"
+  },
+  "system": {
+    "os": "macOS",
+    "version": "26.6.2"
+  },
+  "fonts": "installed",
+  "opf": {
+    "version": "0.36.0"
+  },
+  "file": {
+    "id": "image-callouts~default",
+    "deck": "image-callouts",
+    "variant": "default",
+    "path": "build/036/qualification/pptx/image-callouts.pptx",
+    "sha256": "d9d03619d5262fb582cb002d026aab77646ee1025f1698d8353d5a18942b312c",
+    "unchangedAfterRun": true
+  },
+  "started": "2026-11-25T17:29:21Z",
+  "finished": "2026-11-25T17:29:28Z",
+  "verbs": {
+    "open": {
+      "status": "done",
+      "seconds": 1.14,
+      "slideCount": 1,
+      "warnings": {
+        "status": "read",
+        "source": "screen",
+        "lines": [
+          {
+            "text": "Unsupported media were removed.",
+            "layouts": [
+              "Cover",
+              "Gallery",
+              "Hero",
+              "Image",
+              "Image beside"
+            ]
+          },
+          {
+            "text": "The font Roboto is missing. Your text might look different."
+          },
+          {
+            "text": "SVG images were converted to PNG."
+          }
+        ]
+      }
+    },
+    "render": {
+      "status": "done",
+      "seconds": 0.69
+    },
+    "probe": {
+      "status": "done",
+      "seconds": 2.02
+    },
+    "resave": {
+      "status": "done",
+      "seconds": 0.76,
+      "path": "resaved.pptx"
+    }
+  },
+  "slides": [
+    {
+      "index": 1,
+      "hidden": false,
+      "layout": "Image",
+      "picture": "slides/slide-001.png",
+      "notes": null,
+      "objects": [
+        {
+          "kind": "title",
+          "outcome": null,
+          "appClass": "shape",
+          "box": [
+            43,
+            43,
+            874,
+            49
+          ],
+          "text": "Read the picture and its labels together",
+          "fonts": [
+            "Helvetica-Bold"
+          ]
+        },
+        {
+          "kind": "picture",
+          "outcome": null,
+          "appClass": "image",
+          "name": "OPF image 1",
+          "box": [
+            94,
+            111,
+            772,
+            386
+          ]
+        },
+        {
+          "kind": "shape",
+          "outcome": null,
+          "appClass": "shape",
+          "box": [
+            125,
+            134,
+            293,
+            116
+          ]
+        },
+        {
+          "kind": "text",
+          "outcome": null,
+          "appClass": "text item",
+          "box": [
+            181,
+            166,
+            181,
+            50
+          ],
+          "text": "Red zone",
+          "fonts": [
+            "Helvetica"
+          ]
+        },
+        {
+          "kind": "shape",
+          "outcome": null,
+          "appClass": "shape",
+          "box": [
+            542,
+            134,
+            293,
+            116
+          ]
+        },
+        {
+          "kind": "text",
+          "outcome": null,
+          "appClass": "text item",
+          "box": [
+            594,
+            166,
+            188,
+            50
+          ],
+          "text": "Blue zone",
+          "fonts": [
+            "Helvetica"
+          ]
+        },
+        {
+          "kind": "shape",
+          "outcome": null,
+          "appClass": "shape",
+          "box": [
+            248,
+            331,
+            463,
+            131
+          ]
+        },
+        {
+          "kind": "text",
+          "outcome": null,
+          "appClass": "text item",
+          "box": [
+            332,
+            371,
+            295,
+            50
+          ],
+          "text": "Inspection point",
+          "fonts": [
+            "Helvetica"
+          ]
+        }
+      ]
+    }
+  ]
+}
