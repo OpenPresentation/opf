@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "target": "keynote",
+  "application": {
+    "name": "Keynote",
+    "version": "16.0"
+  },
+  "system": {
+    "os": "macOS",
+    "version": "26.6.2"
+  },
+  "fonts": "installed",
+  "opf": {
+    "version": "0.36.0"
+  },
+  "file": {
+    "id": "singleton-combo-reference-lines~default",
+    "deck": "singleton-combo-reference-lines",
+    "variant": "default",
+    "path": "build/036/qualification/pptx/singleton-combo-reference-lines.pptx",
+    "sha256": "8567c62c0c7da29d9419ed4efc4f7997c92b690ef4a73dc49b86213b7bafc502",
+    "unchangedAfterRun": true
+  },
+  "started": "2026-11-25T17:33:32Z",
+  "finished": "2026-11-25T17:33:37Z",
+  "verbs": {
+    "open": {
+      "status": "done",
+      "seconds": 1.13,
+      "slideCount": 1,
+      "warnings": {
+        "status": "read",
+        "source": "screen",
+        "lines": [
+          {
+            "text": "Unsupported media were removed.",
+            "layouts": [
+              "Cover",
+              "Gallery",
+              "Hero",
+              "Image",
+              "Image beside"
+            ]
+          },
+          {
+            "text": "The font Roboto is missing. Your text might look different."
+          }
+        ]
+      }
+    },
+    "render": {
+      "status": "done",
+      "seconds": 0.72
+    },
+    "probe": {
+      "status": "done",
+      "seconds": 0.7
+    },
+    "resave": {
+      "status": "done",
+      "seconds": 0.81,
+      "path": "resaved.pptx"
+    }
+  },
+  "slides": [
+    {
+      "index": 1,
+      "hidden": false,
+      "layout": "Title Only",
+      "picture": "slides/slide-001.png",
+      "notes": null,
+      "objects": [
+        {
+          "kind": "title",
+          "outcome": null,
+          "appClass": "shape",
+          "box": [
+            43,
+            43,
+            874,
+            45
+          ],
+          "text": "Q1 revenue and margin both sit under their targets",
+          "fonts": [
+            "Helvetica-Bold"
+          ]
+        },
+        {
+          "kind": "chart",
+          "outcome": null,
+          "appClass": "chart",
+          "box": [
+            83,
+            126,
+            790,
+            341
+          ]
+        },
+        {
+          "kind": "connector",
+          "outcome": null,
+          "appClass": "line",
+          "box": [
+            83,
+            160,
+            790,
+            0
+          ]
+        },
+        {
+          "kind": "text",
+          "outcome": null,
+          "appClass": "text item",
+          "box": [
+            83,
+            137,
+            90,
+            18
+          ],
+          "text": "Revenue 180",
+          "fonts": [
+            "Helvetica"
+          ]
+        },
+        {
+          "kind": "connector",
+          "outcome": null,
+          "appClass": "line",
+          "box": [
+            83,
+            182,
+            790,
+            0
+          ]
+        },
+        {
+          "kind": "text",
+          "outcome": null,
+          "appClass": "text item",
+          "box": [
+            793,
+            160,
+            81,
+            18
+          ],
+          "text": "Margin 25%",
+          "fonts": [
+            "Helvetica"
+          ]
+        }
+      ]
+    }
+  ]
+}

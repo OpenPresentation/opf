@@ -1,0 +1,844 @@
+{
+ "app": {
+  "version": "16.0"
+ },
+ "document": {
+  "name": "default",
+  "id": "F3C9648D-BA06-4764-9717-0BB2DC7A938D",
+  "width": 960,
+  "height": 540,
+  "slide numbers showing": false,
+  "auto play": false,
+  "auto loop": false,
+  "auto restart": false,
+  "maximum idle duration": 15,
+  "password protected": false,
+  "theme": "Custom Theme",
+  "slide layouts": [
+   "Blank",
+   "Cover",
+   "Section",
+   "Agenda",
+   "Statement",
+   "Closing",
+   "Text",
+   "List",
+   "Quote",
+   "Two columns",
+   "Three columns",
+   "Pillars",
+   "Comparison",
+   "Process",
+   "Timeline",
+   "FAQ",
+   "Pyramid",
+   "Inverted pyramid",
+   "Matrix",
+   "Cycle",
+   "Chevrons",
+   "Vertical process",
+   "Organization chart",
+   "Hierarchy",
+   "Venn",
+   "Metrics",
+   "Scorecard",
+   "Image",
+   "Image beside",
+   "Gallery",
+   "Chart",
+   "Chart beside",
+   "Table",
+   "Table beside",
+   "Code",
+   "Hero",
+   "Dashboard",
+   "Team",
+   "Logos",
+   "Title Only",
+   "Title Only 0"
+  ]
+ },
+ "slides": [
+  {
+   "slide number": 1,
+   "skipped": false,
+   "title showing": true,
+   "body showing": false,
+   "presenter notes": "",
+   "transition": {
+    "effect": "no transition effect",
+    "duration": 1.0,
+    "delay": 0.5,
+    "automatic": false
+   },
+   "layout": "Title Only",
+   "default title item": {
+    "position": [
+     44,
+     43
+    ],
+    "width": 874,
+    "height": 49,
+    "object text": "Agenda"
+   },
+   "default body item": {
+    "position": [
+     0,
+     0
+    ],
+    "width": 0,
+    "height": 0,
+    "object text": ""
+   },
+   "itemCount": 3,
+   "items": [
+    {
+     "class": "shape",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      44,
+      43
+     ],
+     "width": 874,
+     "height": 49,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "Agenda",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "Agenda",
+       "font": "Helvetica-Bold",
+       "size": 40.0,
+       "color": [
+        65535,
+        65535,
+        65535
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica-Bold"
+     ],
+     "wordSizes": [
+      40.0
+     ],
+     "isDefaultTitle": true
+    },
+    {
+     "class": "text item",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      43,
+      111
+     ],
+     "width": 523,
+     "height": 25,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "Pricing | Roadmap | Appendix (hidden slide) | acme.com",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "Pricing | Roadmap | Appendix (hidden slide) | acme.com",
+       "font": "Helvetica",
+       "size": 21.0,
+       "color": [
+        0,
+        0,
+        59964
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica"
+     ],
+     "wordSizes": [
+      21.0
+     ],
+     "isDefaultTitle": false
+    },
+    {
+     "class": "group",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      223,
+      154
+     ],
+     "width": 514,
+     "height": 343,
+     "rotation": 0,
+     "itemCount": 2,
+     "items": [
+      {
+       "class": "shape",
+       "depth": 1,
+       "readMode": "bulk",
+       "position": [
+        223,
+        154
+       ],
+       "width": 514,
+       "height": 343,
+       "rotation": 0,
+       "opacity": 100,
+       "reflection showing": false,
+       "reflection value": 0,
+       "locked": false,
+       "background fill type": "color fill",
+       "text": "",
+       "paragraphCount": 1,
+       "paragraphs": [
+        {
+         "text": "",
+         "font": "Helvetica",
+         "size": 32.0,
+         "color": [
+          65535,
+          65535,
+          65535
+         ]
+        }
+       ],
+       "wordFonts": [],
+       "wordSizes": [],
+       "isDefaultTitle": false
+      },
+      {
+       "class": "text item",
+       "depth": 1,
+       "readMode": "bulk",
+       "position": [
+        244,
+        303
+       ],
+       "width": 472,
+       "height": 46,
+       "rotation": 0,
+       "opacity": 100,
+       "reflection showing": false,
+       "reflection value": 0,
+       "locked": false,
+       "background fill type": "no fill",
+       "text": "Shape: go to Roadmap",
+       "paragraphCount": 1,
+       "paragraphs": [
+        {
+         "text": "Shape: go to Roadmap",
+         "font": "Helvetica",
+         "size": 32.0,
+         "color": [
+          65535,
+          65535,
+          65535
+         ]
+        }
+       ],
+       "wordFonts": [
+        "Helvetica"
+       ],
+       "wordSizes": [
+        32.0
+       ],
+       "isDefaultTitle": false
+      }
+     ],
+     "isDefaultTitle": false
+    }
+   ]
+  },
+  {
+   "slide number": 2,
+   "skipped": false,
+   "title showing": true,
+   "body showing": false,
+   "presenter notes": "",
+   "transition": {
+    "effect": "no transition effect",
+    "duration": 1.0,
+    "delay": 0.5,
+    "automatic": false
+   },
+   "layout": "Title Only",
+   "default title item": {
+    "position": [
+     43,
+     43
+    ],
+    "width": 874,
+    "height": 49,
+    "object text": "Pricing"
+   },
+   "default body item": {
+    "position": [
+     0,
+     0
+    ],
+    "width": 0,
+    "height": 0,
+    "object text": ""
+   },
+   "itemCount": 2,
+   "items": [
+    {
+     "class": "shape",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      43,
+      43
+     ],
+     "width": 874,
+     "height": 49,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "Pricing",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "Pricing",
+       "font": "Helvetica-Bold",
+       "size": 40.0,
+       "color": [
+        65535,
+        65535,
+        65535
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica-Bold"
+     ],
+     "wordSizes": [
+      40.0
+     ],
+     "isDefaultTitle": true
+    },
+    {
+     "class": "table",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      43,
+      225
+     ],
+     "width": 874,
+     "height": 156,
+     "locked": false,
+     "name": "Table 1",
+     "row count": 3,
+     "column count": 2,
+     "header row count": 1,
+     "header column count": 0,
+     "footer row count": 0,
+     "cells": {
+      "value": [
+       "Plan",
+       "Details",
+       "Pro",
+       "Table cell: back to the agenda",
+       "Team",
+       "No link"
+      ],
+      "formatted value": [
+       "Plan",
+       "Details",
+       "Pro",
+       "Table cell: back to the agenda",
+       "Team",
+       "No link"
+      ],
+      "formula": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      "format": [
+       "automatic",
+       "automatic",
+       "automatic",
+       "automatic",
+       "automatic",
+       "automatic"
+      ],
+      "alignment": [
+       "left",
+       "left",
+       "left",
+       "left",
+       "left",
+       "left"
+      ],
+      "vertical alignment": [
+       "top",
+       "top",
+       "top",
+       "top",
+       "top",
+       "top"
+      ],
+      "text color": [
+       [
+        65535,
+        65535,
+        65535
+       ],
+       [
+        65535,
+        65535,
+        65535
+       ],
+       [
+        65535,
+        65535,
+        65535
+       ],
+       [
+        65535,
+        65535,
+        65535
+       ],
+       [
+        65535,
+        65535,
+        65535
+       ],
+       [
+        65535,
+        65535,
+        65535
+       ]
+      ],
+      "background color": [
+       [
+        8372,
+        24539,
+        38306
+       ],
+       [
+        8372,
+        24539,
+        38306
+       ],
+       [
+        448,
+        4406,
+        12991
+       ],
+       [
+        448,
+        4406,
+        12991
+       ],
+       [
+        448,
+        4406,
+        12991
+       ],
+       [
+        448,
+        4406,
+        12991
+       ]
+      ],
+      "font name": [
+       "Helvetica-Bold",
+       "Helvetica-Bold",
+       "Helvetica",
+       "Helvetica",
+       "Helvetica",
+       "Helvetica"
+      ],
+      "font size": [
+       24.0,
+       24.0,
+       24.0,
+       24.0,
+       24.0,
+       24.0
+      ],
+      "text wrap": [
+       true,
+       true,
+       true,
+       true,
+       true,
+       true
+      ],
+      "name": [
+       "A1",
+       "B1",
+       "A2",
+       "B2",
+       "A3",
+       "B3"
+      ]
+     },
+     "rowHeights": [
+      51.840000152588,
+      51.840000152588,
+      51.840000152588
+     ],
+     "columnWidths": [
+      158.241104125977,
+      715.35888671875
+     ],
+     "isDefaultTitle": false,
+     "cellsByRow": [
+      [
+       "Plan",
+       "Details"
+      ],
+      [
+       "Pro",
+       "Table cell: back to the agenda"
+      ],
+      [
+       "Team",
+       "No link"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "slide number": 3,
+   "skipped": false,
+   "title showing": true,
+   "body showing": false,
+   "presenter notes": "",
+   "transition": {
+    "effect": "no transition effect",
+    "duration": 1.0,
+    "delay": 0.5,
+    "automatic": false
+   },
+   "layout": "Title Only 0",
+   "default title item": {
+    "position": [
+     43,
+     43
+    ],
+    "width": 874,
+    "height": 49,
+    "object text": "Roadmap"
+   },
+   "default body item": {
+    "position": [
+     0,
+     0
+    ],
+    "width": 0,
+    "height": 0,
+    "object text": ""
+   },
+   "itemCount": 3,
+   "items": [
+    {
+     "class": "shape",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      43,
+      43
+     ],
+     "width": 874,
+     "height": 49,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "Roadmap",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "Roadmap",
+       "font": "Helvetica-Bold",
+       "size": 40.0,
+       "color": [
+        65535,
+        65535,
+        65535
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica-Bold"
+     ],
+     "wordSizes": [
+      40.0
+     ],
+     "isDefaultTitle": true
+    },
+    {
+     "class": "text item",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      43,
+      199
+     ],
+     "width": 547,
+     "height": 101,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "Text run: back ",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "Text run: back ",
+       "font": "Helvetica",
+       "size": 84.0,
+       "color": [
+        0,
+        0,
+        59964
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica"
+     ],
+     "wordSizes": [
+      84.0
+     ],
+     "isDefaultTitle": false
+    },
+    {
+     "class": "text item",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      43,
+      303
+     ],
+     "width": 515,
+     "height": 101,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "to the agenda",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "to the agenda",
+       "font": "Helvetica",
+       "size": 84.0,
+       "color": [
+        0,
+        0,
+        59964
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica"
+     ],
+     "wordSizes": [
+      84.0
+     ],
+     "isDefaultTitle": false
+    }
+   ]
+  },
+  {
+   "slide number": -1,
+   "skipped": true,
+   "title showing": true,
+   "body showing": false,
+   "presenter notes": "",
+   "transition": {
+    "effect": "no transition effect",
+    "duration": 1.0,
+    "delay": 0.5,
+    "automatic": false
+   },
+   "layout": "Title Only",
+   "default title item": {
+    "position": [
+     44,
+     43
+    ],
+    "width": 874,
+    "height": 49,
+    "object text": "Appendix"
+   },
+   "default body item": {
+    "position": [
+     0,
+     0
+    ],
+    "width": 0,
+    "height": 0,
+    "object text": ""
+   },
+   "itemCount": 2,
+   "items": [
+    {
+     "class": "shape",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      44,
+      43
+     ],
+     "width": 874,
+     "height": 49,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "Appendix",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "Appendix",
+       "font": "Helvetica-Bold",
+       "size": 40.0,
+       "color": [
+        65535,
+        65535,
+        65535
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica-Bold"
+     ],
+     "wordSizes": [
+      40.0
+     ],
+     "isDefaultTitle": true
+    },
+    {
+     "class": "group",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      190,
+      111
+     ],
+     "width": 579,
+     "height": 386,
+     "rotation": 0,
+     "itemCount": 2,
+     "items": [
+      {
+       "class": "shape",
+       "depth": 1,
+       "readMode": "bulk",
+       "position": [
+        190,
+        111
+       ],
+       "width": 579,
+       "height": 386,
+       "rotation": 0,
+       "opacity": 100,
+       "reflection showing": false,
+       "reflection value": 0,
+       "locked": false,
+       "background fill type": "color fill",
+       "text": "",
+       "paragraphCount": 1,
+       "paragraphs": [
+        {
+         "text": "",
+         "font": "Helvetica",
+         "size": 32.0,
+         "color": [
+          65535,
+          65535,
+          65535
+         ]
+        }
+       ],
+       "wordFonts": [],
+       "wordSizes": [],
+       "isDefaultTitle": false
+      },
+      {
+       "class": "text item",
+       "depth": 1,
+       "readMode": "bulk",
+       "position": [
+        213,
+        281
+       ],
+       "width": 533,
+       "height": 46,
+       "rotation": 0,
+       "opacity": 100,
+       "reflection showing": false,
+       "reflection value": 0,
+       "locked": false,
+       "background fill type": "no fill",
+       "text": "Shape: back to the agenda",
+       "paragraphCount": 1,
+       "paragraphs": [
+        {
+         "text": "Shape: back to the agenda",
+         "font": "Helvetica",
+         "size": 32.0,
+         "color": [
+          65535,
+          65535,
+          65535
+         ]
+        }
+       ],
+       "wordFonts": [
+        "Helvetica"
+       ],
+       "wordSizes": [
+        32.0
+       ],
+       "isDefaultTitle": false
+      }
+     ],
+     "isDefaultTitle": false
+    }
+   ]
+  }
+ ],
+ "errors": [],
+ "skippedSlides": [
+  -1
+ ],
+ "derived": [
+  "skippedSlides",
+  "isDefaultTitle",
+  "isDefaultBody",
+  "cellsByRow"
+ ],
+ "input": "build/main/main-features/slide-links/default.pptx"
+}
