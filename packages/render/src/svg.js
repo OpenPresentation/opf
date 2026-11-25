@@ -2346,7 +2346,10 @@ function renderRichLines(value,fit,box,bound,config) {
     const {edgeTrim,line,placed,baseline}=richLineGeometry(sourceLine,lineIndex,fit,box,bound,alignment,rtl,config.options.textMeasurement);
     const lineHasTab=line.fragments.some(fragment=>fragment.kind==='tab');
     const flow=naturalFlow&&!lineHasTab;
-    const offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
+    // Whitespace that hangs at a soft wrap (core's RichTextLine.hang) takes no room: the line is aligned by its glyphs (core placed a
+    // measured line so already).
+    const hang=!rtl&&!edgeTrim&&line.hang>0?line.hang:0,glyphs=(hang?line.advance:line.width)-hang;
+    const offset=alignment==='right'?box.width-glyphs:alignment==='center'?(box.width-glyphs)/2:0;
     const originX=placed?placed.x+(edgeTrim?sourceLine.width-line.width:0):box.x+offset;
     const firstFragment=line.fragments[0];
     const renderFragment=(fragment,asFlow,edges={})=>{
@@ -2420,7 +2423,7 @@ function renderRichLines(value,fit,box,bound,config) {
     // A flowing right-to-left line is one isolate across its fragments.
     const fragments=line.fragments.map((fragment,index)=>renderFragment(fragment,flow,flow?{first:rtl&&!index,last:rtl&&index===line.fragments.length-1}:{}));
     if(!flow)return fragments.join('\n');
-    const x=alignment==='right'?box.x+box.width:alignment==='center'?box.x+box.width/2:box.x;
+    const x=(alignment==='right'?box.x+box.width:alignment==='center'?box.x+box.width/2:box.x)+hang*(alignment==='right'?1:alignment==='center'?.5:0);
     const first=line.fragments[0];
     return tag('text',{x:stableNumber(x),y:stableNumber(baseline),'text-anchor':alignment==='right'?'end':alignment==='center'?'middle':'start','xml:space':'preserve','font-family':fontStack(first?.style.fontFamily??config.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(first?.fontSize??fit.fontSize),'font-weight':first?.style.fontWeight??config.fontWeight??400,'font-style':first?.style.italic?'italic':undefined,[NO_POLICY_FEATURES]:true},fragments.join(''));
   });
@@ -2430,7 +2433,9 @@ function renderRichLines(value,fit,box,bound,config) {
     if(index){const newline=/^(\r\n|\r|\n)/.exec(whole.slice(cursor));if(newline)cursor+=newline[0].length;}
     const start=cursor;cursor+=(fit.lines[index]??'').length;
     const alignment=lineAlignment(index);
-    const offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
+    // The line's start: its glyphs aligned, any whitespace hanging at its wrap after them (as drawn above).
+    const glyphs=line.hang>0&&fit.directions?.[index]!=='rtl'?line.advance-line.hang:line.width;
+    const offset=alignment==='right'?box.width-glyphs:alignment==='center'?(box.width-glyphs)/2:0;
     const placed=fit.placement?.lines[index];
     return {start,end:cursor,x:placed?.x??box.x+offset,y:placed?.y??box.y+line.y,height:placed?.height??line.height,
       ...(naturalFlow&&line.fragments.some(fragment=>fragment.kind==='tab')?{spacing:'natural-chunks-estimated-tabs'}:{})};
@@ -2475,7 +2480,12 @@ function renderTextBox(text, box, bound, config) {
     // The line's paragraph decides its direction: source offsets when layout has them, else the next match.
     const found=sourceLine?sourceLine.start:source.indexOf(line,cursor),lineStart=found>=0?found:cursor;cursor=lineStart+line.length;
     const rtl=fit.directions?fit.directions[index]==='rtl':boxRtl(lineStart);
-    const origin=placed?.x??x-(sourceLine?.width??0)*factor;
+    // Whitespace that hangs at a soft wrap (core's TextLineSource.hang) takes no room: the glyphs are aligned and the text, its
+    // whitespace included, is drawn that much further toward the anchor. Core placed a measured line so already (placed.x, placed.width).
+    const hang=placed?placed.hang??0:!rtl&&sourceLine?.hang>0?sourceLine.hang:0;
+    const origin=placed?.x??x-((sourceLine?.advance??sourceLine?.width??0)-hang)*factor;
+    // The anchor point of the glyphs (the box edge or center), which an editor lays its input on: the drawn anchor is past it by the hang.
+    const glyphAnchor=placed?placed.x+(placed.width-hang)*factor:x;
     const tabs=sourceLine?.segments.some(segment=>segment.kind==='tab');
     let content,family,positioned=false,trimWidth=0,sizeAdjust,shift=0;
     if(tabs) content=sourceLine.segments.map(segment=>{
@@ -2511,8 +2521,9 @@ function renderTextBox(text, box, bound, config) {
     // rasterizer, so the line starts there instead of hanging from its middle or end. Estimated widths keep the anchor: the shaper's
     // width differs from core's there, and the anchor keeps the edge.
     const exactStart=!start&&factor>0&&style.tracking<0&&!rtl&&!trimWidth&&!!config.options.textMeasurement?.measure&&(placed?.width>0||sourceLine?.width>0);
+    const hung=!start&&!exactStart&&factor>0&&hang>0;
     return tag("text", {
-    x: stableNumber(tabs||exactStart?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
+    x: stableNumber(tabs||exactStart?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x+hang*factor), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
     "text-anchor": start||exactStart?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),
     "font-size": stableNumber(adjustedFontSize(size,sizeAdjust)), "font-weight": style.fontWeight, "font-style": style.italic ? "italic" : undefined, fill: config.fill,
     // LH-32: an eyebrow (the tag, a label core sets as one) draws its capitals with core's letter spacing, as core measured it, at its
@@ -2524,7 +2535,8 @@ function renderTextBox(text, box, bound, config) {
     ...(config.options.trace&&sourceLine?{'data-opf-source-start':sourceOffset+sourceLine.start,'data-opf-source-end':sourceOffset+sourceLine.end,'data-opf-source-next-start':sourceOffset+sourceLine.nextStart,'data-opf-line-boundary':sourceLine.boundary}:{}),
     // opf#1322: a line that starts at core's x still says how it is aligned and where its anchor point is (text-anchor no longer does):
     // an editor lays its input over the line from them, and a reader of the SVG compares them with the native export.
-    ...(exactStart?{'data-opf-anchor':anchor,'data-opf-anchor-x':stableNumber(placed?placed.x+placed.width*factor:x)}:{}),
+    // A line whose whitespace hangs at its wrap is anchored past its glyphs' anchor point, which these name the same way.
+    ...(exactStart||hung?{'data-opf-anchor':anchor,'data-opf-anchor-x':stableNumber(glyphAnchor)}:{}),
   }, content);
   });
   return tag("g", { ...traceAttrs(config.options, config.path),
