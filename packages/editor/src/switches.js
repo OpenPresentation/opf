@@ -81,7 +81,7 @@ const DESIGN_KEYS = Object.freeze({
   backgrounds: ["background"],
   "headers-footers": ["header", "footer"],
 });
-const BLOCK_KINDS = ["text", "list", "chart", "table", "metric", "quote", "code", "diagram", "timeline", "group", "image", "video", "embed"];
+const BLOCK_KINDS = ["text", "list", "chart", "table", "metric", "quote", "code", "diagram", "timeline", "group", "image", "video"];
 const RESERVED_GROUPS = new Set(["default", "custom"]);
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
