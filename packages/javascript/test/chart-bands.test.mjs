@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 
 import {
-  CHART_BAND_NEUTRAL_SHARES, chartBandDiagnostics, chartBandFill, chartBandMaximum, chartBandRanges, chartBands, chartValueAxis, mixOklab, resolveChartData,
+  CHART_BAND_NEUTRAL_CONTRASTS, chartBandDiagnostics, colorContrast, chartBandFill, chartBandMaximum, chartBandRanges, chartBands, chartValueAxis, mixOklab, resolveChartData,
 } from '../dist/composition.js';
 import { validate } from '../dist/index.js';
 
@@ -30,13 +30,14 @@ describe('band list (FR-07)', () => {
     assert.deepEqual(ranges.map(({ from, to, neutral, color }) => [from, to, neutral, color]), [[0, 4, undefined, 'accent1'], [4, 30, 0, undefined], [30, 40, 1, undefined]]);
     assert.deepEqual(chartBandRanges(chartBands({ type: 'column', bands: [{ to: 5 }] }), { min: -10, max: 10 }).map(({ from, to }) => [from, to]), [[-10, 5]], 'the first band starts at a negative minimum');
   });
-  test('neutral fills darkest lowest, a scheme color as a light tint, mixed in OKLab', () => {
-    const colors = { surface: '#FFFFFF', text: '#000000', resolve: (name) => ({ accent3: '#1B9E4B' })[name] ?? '#808080' };
-    const fills = [0, 1, 2, 3, 4, 5, 9].map((neutral) => chartBandFill({ neutral }, colors));
-    assert.deepEqual(fills.slice(0, 6), CHART_BAND_NEUTRAL_SHARES.map((share) => mixOklab('#FFFFFF', '#000000', share)));
-    assert.equal(fills[6], fills[5], 'past six neutrals the lightest repeats');
-    assert.equal(chartBandFill({ color: 'accent3' }, colors), mixOklab('#FFFFFF', '#1B9E4B', 0.25));
-    assert.equal(fills[0], '#C4C4C4');
+  test('neutral fills by contrast against the surface (1.75, 1.45, 1.25, then again), a scheme color as a light tint, in OKLab', () => {
+    for (const [surface, text] of [['#FFFFFF', '#000000'], ['#000000', '#FFFFFF'], ['#0B1F3A', '#F2F2F2']]) {
+      const colors = { surface, text, resolve: (name) => ({ accent3: '#1B9E4B' })[name] ?? '#808080' };
+      const fills = [0, 1, 2, 3].map((neutral) => chartBandFill({ neutral }, colors));
+      CHART_BAND_NEUTRAL_CONTRASTS.forEach((ratio, k) => assert.ok(Math.abs(colorContrast(fills[k], surface) - ratio) < 0.02, `${surface} band ${k}: ${colorContrast(fills[k], surface)}`));
+      assert.equal(fills[3], fills[0], 'a fourth band starts again');
+      assert.equal(chartBandFill({ color: 'accent3' }, colors), mixOklab(surface, '#1B9E4B', 0.25));
+    }
   });
 });
 

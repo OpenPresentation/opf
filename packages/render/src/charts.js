@@ -502,14 +502,14 @@ function legendSource(c, spec) {
     case "pie":
     case "doughnut": return c.rows.map((row, i) => ({ name: c.label(row[0]), color: sliceColor(c, i), path: `${c.path}.data.rows.${i}.0` }));
     case "scatter": return fromSeries(scatterSeries(c.rows, c.columns, c.formats, c.hasX).series, "marker");
-    case "line": return [...fromSeries(c.series(), "line", spec.markers), ...bandLegendEntries(c)];
+    case "line": return [...bandLegendEntries(c), ...fromSeries(c.series(), "line", spec.markers)];
     case "radar": return fromSeries(c.series(), spec.style === "filled" ? undefined : "line", spec.markers);
     case "box": return fromSeries(c.columns.length === 1 ? [{ name: c.label(c.columns[0]), column: 0, index: 0 }] : c.series());
     case "bar":
-    case "area": return [...fromSeries(c.series()), ...bandLegendEntries(c)];
+    case "area": return [...bandLegendEntries(c), ...fromSeries(c.series())];
     case "combo": return comboLegendEntries(c, c.series());
     // FR-07: a bullet chart's legend names its measure and its labeled bands.
-    case "bullet": return [...fromSeries(c.series().slice(0, 1)), ...bandLegendEntries(c)];
+    case "bullet": return [...bandLegendEntries(c), ...fromSeries(c.series().slice(0, 1))];
     default: return [];
   }
 }
@@ -559,7 +559,7 @@ function placeLegend(c, spec, position) {
 
 function seriesLegend(c, series, key, marker = false) {
   return series.length > 1
-    ? legendEntries(c, [...series.map((s) => ({ name: s.name, color: seriesColor(c, s.index), path: `${c.path}.data.columns.${s.column}`, key, marker })), ...bandLegendEntries(c)])
+    ? legendEntries(c, [...bandLegendEntries(c), ...series.map((s) => ({ name: s.name, color: seriesColor(c, s.index), path: `${c.path}.data.columns.${s.column}`, key, marker }))])
     : 0;
 }
 
@@ -574,7 +574,8 @@ function bandsOver(c, scale) {
   const colors = bandColors(c);
   return chartBandRanges(bands, scale).map((band) => ({ ...band, fill: chartBandFill(band, colors) }));
 }
-// A labeled band's legend entry, after the series (a band without a label has none).
+// A labeled band's legend entry, before the series (a band without a label has none). PowerPoint lists the band group, which it draws first,
+// before the data whatever the file says (native check 2026-11-25), so both engines list the bands first.
 function bandLegendEntries(c) {
   const bands = chartBands(c.item.value);
   if (!bands.length) return [];
@@ -1137,7 +1138,8 @@ function renderBulletChart(c) {
   const width = Math.max(1, right2left ? gutterX - c.pad / 2 - x : box.x + box.width - pad - fontPx - x);
   const tickWidth = Math.max(c.width(formatTick(dataMax, false, format, tickGroup, c.language)), c.width(formatTick(dataMin, false, format, tickGroup, c.language))) + fontPx;
   const scale = categoryScale(c, dataMin, dataMax, width, tickWidth, false);
-  const plot = { x, y: top, width, height: Math.max(1, bottom - top) };
+  // Core's plot (bulletPlot), which the PowerPoint export writes as the inner plot layout; the same arithmetic without it.
+  const plot = c.plotBox ? { ...c.plotBox } : { x, y: top, width, height: Math.max(1, bottom - top) };
   c.plotArea = plot;
   const at = (value) => right2left ? plot.x + plot.width - axisFraction(value, scale) * plot.width : plot.x + axisFraction(value, scale) * plot.width;
   const rowBand = plot.height / count, rowTop = (i) => plot.y + i * rowBand;

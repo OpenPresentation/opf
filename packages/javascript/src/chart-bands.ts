@@ -3,6 +3,7 @@
 // and the editor draw the same bands. The gauge (FR-07, part 3) reuses the sorted and clamped list and the band colors on an arc.
 //
 // Browser-safe and synchronous: no fonts, DOM or network. Colors are mixed in OKLab (oklab.ts, the table color scale's mixer).
+import { colorContrast } from './color.js';
 import { mixOklab } from './oklab.js';
 import { SCHEME_COLOR_NAMES, type SchemeColorName } from './table-color-scale-range.js';
 
@@ -13,10 +14,12 @@ export const CHART_BAND_TYPES: ReadonlySet<string> = new Set([
 ]);
 
 /**
- * The neutral bands' share of the scheme's `text` color over its `surface`, lowest band first (the darkest): 18%, 12%, 8%, 5%, 3% and 2%.
- * A band that names a color is that color at {@link CHART_BAND_COLOR_SHARE} over the surface.
+ * The neutral bands' contrast ratio against the chart's surface, lowest band first (the darkest on a light surface, the lightest on a dark one):
+ * 1.75, 1.45 and 1.25, then again from the first for a fourth to sixth band (so neighbors always differ). Each neutral is the scheme's `text`
+ * mixed into the `surface` in OKLab until it reaches its ratio, so the bands read alike on a light and a dark variant (a fixed share of the text
+ * color drew #121212 on black). A band that names a color is that color at {@link CHART_BAND_COLOR_SHARE} over the surface.
  */
-export const CHART_BAND_NEUTRAL_SHARES: readonly number[] = Object.freeze([0.18, 0.12, 0.08, 0.05, 0.03, 0.02]);
+export const CHART_BAND_NEUTRAL_CONTRASTS: readonly number[] = Object.freeze([1.75, 1.45, 1.25]);
 /** The share of a band's own scheme color over the surface (a light tint). */
 export const CHART_BAND_COLOR_SHARE = 0.25;
 
@@ -96,13 +99,22 @@ export function chartBandRanges(bands: readonly ChartBandSpec[], axis: { min: nu
 }
 
 /**
- * The fill of a band: a neutral (the scheme's text mixed into the surface, {@link CHART_BAND_NEUTRAL_SHARES}, the first neutral band the
- * darkest), or the band's own scheme color at {@link CHART_BAND_COLOR_SHARE} over the surface. Uppercase `#RRGGBB`.
+ * The fill of a band: a neutral (the scheme's text mixed into the surface to {@link CHART_BAND_NEUTRAL_CONTRASTS}, the first neutral band the
+ * strongest), or the band's own scheme color at {@link CHART_BAND_COLOR_SHARE} over the surface. Uppercase `#RRGGBB`.
  */
 export function chartBandFill(band: Pick<ChartBandRange, 'color' | 'neutral'>, colors: ChartBandColors): string {
   if (band.color !== undefined) return mixOklab(colors.surface, colors.resolve(band.color), CHART_BAND_COLOR_SHARE);
-  const shares = CHART_BAND_NEUTRAL_SHARES;
-  return mixOklab(colors.surface, colors.text, shares[Math.min(shares.length - 1, Math.max(0, band.neutral ?? 0))]!);
+  const targets = CHART_BAND_NEUTRAL_CONTRASTS, target = targets[Math.max(0, band.neutral ?? 0) % targets.length]!;
+  return neutralFill(colors.surface, colors.text, target);
+}
+
+/** The mix of `text` into `surface` (OKLab) whose contrast against the surface is `ratio` (the text itself when it has less). */
+export function neutralFill(surface: string, text: string, ratio: number): string {
+  const contrast = (t: number) => colorContrast(mixOklab(surface, text, t), surface) ?? 1;
+  if (contrast(1) <= ratio) return mixOklab(surface, text, 1);
+  let low = 0, high = 1;
+  for (let step = 0; step < 40; step++) { const middle = (low + high) / 2; if (contrast(middle) < ratio) low = middle; else high = middle; }
+  return mixOklab(surface, text, high);
 }
 
 /** The fills of a list of band ranges, in order ({@link chartBandFill}). */

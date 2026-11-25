@@ -10,6 +10,7 @@ export {vennNodes,type VennBox,type VennNode} from './venn-arrangement.js';
 import {timelineDurationFractions} from './timeline-duration.js';
 import {tableGrid,type TableCellStyle} from './table.js';
 import {inlineChartData,inlineTableData,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText,type DataTableCell} from './chart-data.js';
+import {bulletPlot} from './chart-bullet.js';
 import {chartTextSize,chartValueAxis,chartComboAxes,shareSiblingChartAxes,type ChartValueAxis} from './chart-axis.js';
 import {chartHeader,chartLayer,type ChartLayer} from './chart-layer.js';
 import {NUMBER_GROUPING_MIN} from './number-grouping.js';
@@ -9003,6 +9004,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         }
       }
     }
+    // FR-07: a bullet chart's plot, which the preview draws and the PowerPoint export writes as its inner plot layout.
+    const bullet = drawn.data.ok ? bulletPlot(drawn.chart, drawn.data, valueAxis, box, {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})}) : undefined;
+    if (bullet) layer = {...layer, plot: bullet};
     // LH-105: the context of a focus may be a light neutral when every context mark carries its text (value labels, names at the line
     // ends, names on the slices); an unlabeled context is read against the axis and keeps 3:1.
     if (layer?.focus) {
@@ -13337,8 +13341,9 @@ export type {ChartLayerDoughnut,WaterfallRole,ChartLayerWaterfall,ChartValueList
 export type {ChartReference,ChartReferenceDiagnostic} from './chart-references.js';
 export {CHART_REFERENCE_TYPES,chartReferenceSources} from './chart-references.js';
 // FR-07: bands on value axes and the bullet chart; the gauge reuses the sorted, clamped band list and the band colors.
-export {CHART_BAND_TYPES,CHART_BAND_NEUTRAL_SHARES,CHART_BAND_COLOR_SHARE,chartBands,chartBandMaximum,chartBandRanges,chartBandFill,chartBandFills,chartBandDiagnostics,BULLET_CHART_TYPE,BULLET_BAR_SHARE,BULLET_TARGET_SHARE,BULLET_TARGET_WIDTH_PX,BULLET_GAP_WIDTH} from './chart-bands.js';
+export {CHART_BAND_TYPES,CHART_BAND_NEUTRAL_CONTRASTS,neutralFill as chartBandNeutral,CHART_BAND_COLOR_SHARE,chartBands,chartBandMaximum,chartBandRanges,chartBandFill,chartBandFills,chartBandDiagnostics,BULLET_CHART_TYPE,BULLET_BAR_SHARE,BULLET_TARGET_SHARE,BULLET_TARGET_WIDTH_PX,BULLET_GAP_WIDTH} from './chart-bands.js';
 export type {ChartBandSpec,ChartBandRange,ChartBandColors,ChartBandDiagnostic} from './chart-bands.js';
+export {bulletPlot,bandLegendNames} from './chart-bullet.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartNumericAxes} from './chart-numeric-axes.js';
 export type {ChartNumericAxes} from './chart-numeric-axes.js';

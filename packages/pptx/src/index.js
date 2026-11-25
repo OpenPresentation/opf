@@ -4415,25 +4415,24 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const bands = chartData.chartex || chartData.combo || !chartLayout?.valueAxis ? undefined : bandPlan(
     chartBandRanges(chartBands(chart), chartLayout.valueAxis),
     chartBandRanges(chartBands(chart), chartLayout.valueAxis).map(band => chartBandFill(band, {surface: `#${normalizeHex(panelFill).slice(0, 6)}`, text: `#${context.colors.text}`, resolve: name => `#${resolveExportColor(name, {...context, fallback: context.colors.text}).slice(0, 6)}`})),
-    chartLayout.valueAxis, {reserved: [chartData.heading, ...chartData.series.map(entry => entry.name), ...(chartData.target ? [chartData.target.column] : [])]});
+    chartLayout.valueAxis, {kind: chartData.type === 'bar' ? 'bar' : 'area', reserved: [chartData.heading, ...chartData.series.map(entry => entry.name), ...(chartData.target ? [chartData.target.column] : [])]});
   const target = chartData.spec.bullet && chartData.target && chartLayout?.valueAxis ? chartData.target : undefined;
   const targetSeries = target ? {name: target.column, labels: [...chartData.series[0].labels], values: target.values.map(value => value ?? null)} : undefined;
   const bandTypes = (types) => [...types, ...(bands ? [bandChartType(bands, chartData.series[0].labels, {kind: chartData.type === 'bar' ? 'bar' : 'area', barDir: chartData.barDir})] : [])];
   const bandOptions = (options) => bands ? {...options, ...bandAxisOptions(bands, {catAxisOrientation: options.catAxisOrientation, valAxisOrientation: options.valAxisOrientation})} : options;
   if (bands || target) {
     const heading = context.chartHeadings.get(objectName);
-    const dataCount = chartData.series.length + (target ? 1 : 0);
-    if (bands) heading.bands = {plan: bands, edge: Boolean(layer?.stack?.edge), legendBase: dataCount + (layer?.references?.lines?.filter(l => l.native && l.axis === 'value').length ?? 0)};
-    if (target) heading.bullet = {count: chartData.pointCount, axis: chartLayout.valueAxis, half: BULLET_TARGET_SHARE / 2, gapWidth: BULLET_GAP_WIDTH, color: normalizeHex(markLabelColor).slice(0, 6), widthEmu: Math.round(BULLET_TARGET_WIDTH_PX * scale * 0.75 * 12700), legendIndex: 1};
+    if (bands) heading.bands = {plan: bands, edge: Boolean(layer?.stack?.edge)};
+    if (target) heading.bullet = {half: BULLET_TARGET_SHARE / 2, gapWidth: BULLET_GAP_WIDTH, color: normalizeHex(markLabelColor).slice(0, 6), widthEmu: Math.round(BULLET_TARGET_WIDTH_PX * scale * 0.75 * 12700)};
     // The number formats of the extra series: the target its column's, each band the value axis's.
     if (heading.numberFormats || target?.format !== undefined) {
       const formats = heading.numberFormats ?? {series: chartData.series.map(() => undefined), labels: true};
-      heading.numberFormats = {...formats, series: [...formats.series.slice(0, chartData.series.length), ...(target ? [target.format === undefined ? undefined : excelCode(target.format)] : []), ...(bands ? bands.bands.map(() => formats.axis) : [])]};
+      heading.numberFormats = {...formats, series: [...formats.series.slice(0, chartData.series.length), ...(target ? [target.format === undefined ? undefined : excelCode(target.format)] : []), ...(bands ? bands.series.map(() => formats.axis) : [])]};
     }
   }
   const referenceLines=layer?.references?.lines??[];
   if(referenceLines.some(l=>!l.native))options.onDiagnostic?.({code:'chart-reference-overlay',path,message:'Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes.'});
-  const refInfo=referenceLines.length?{key:objectName,lines:referenceLines,primaryCount:chartData.series.length,...(bands?{bandCount:bands.bands.length}:{}),color:labelColor,labelColor:markLabelColor,surface:normalizeHex(panelFill).slice(0,6),font:context.fonts.body,context:{...context},textSize,hidden:[]}:undefined;
+  const refInfo=referenceLines.length?{key:objectName,lines:referenceLines,primaryCount:chartData.series.length,...(bands?{bandCount:bands.series.length}:{}),color:labelColor,labelColor:markLabelColor,surface:normalizeHex(panelFill).slice(0,6),font:context.fonts.body,context:{...context},textSize,hidden:[]}:undefined;
   if(refInfo&&!referenceLines.some(l=>l.native))assertReferenceExportBudget(chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines',multiAxisOverlays:chartData.combo?.some(entry=>entry.axis==='secondary')??false});
   if(refInfo)context.chartHeadings.get(objectName).references=refInfo;
   const comboArgs=chartData.combo?.length&&chartData.combo.length===chartData.series.length?comboChart(chartData,chartOptionsXml,{palette,chartOptions,labelColor,font:context.fonts.body,textSize}):undefined;
