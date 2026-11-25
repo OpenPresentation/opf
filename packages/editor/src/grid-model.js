@@ -1077,7 +1077,7 @@ function declareNewColumns(model, before) {
   if (!model.hasHeader || !(model.kind === "chart" || model.dataset) || model.width <= before) return;
   for (let column = before; column < model.width; column++) {
     const raw = model.lines[0][column];
-    if (isStyled(raw) || Array.isArray(raw) || (isColumnObject(raw) && (raw.type !== undefined || raw.role !== undefined))) continue;
+    if (isStyled(raw) || Array.isArray(raw) || valueOf(raw) === null || valueOf(raw) === undefined || String(valueOf(raw)).trim() === "" || (isColumnObject(raw) && (raw.type !== undefined || raw.role !== undefined))) continue;
     const inferred = inferColumnDeclaration(model.lines.slice(1).map((line) => valueOf(line[column])), { first: column === 0 });
     if (inferred) model.lines[0][column] = withColumnDeclaration(raw, inferred);
   }

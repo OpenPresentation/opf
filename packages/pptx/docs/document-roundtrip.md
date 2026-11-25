@@ -220,6 +220,12 @@ What an importer of 0.36.0 and earlier does with such a file (read from `v0.36.0
 
 An importer of 0.37 reads all of it; `datasources` is read first, so a dataset that names a data source by id validates. The test `packages/pptx/test/fr-04-data-sources.mjs` pins where the keys are written.
 
+## Typed dataset columns (FR-05)
+
+OPF 0.37 lets a dataset column and an inline chart data column declare `type`, `role` and `unit` (core `docs/chart-table-data.md`, "Typed columns"). The keys stay inline in the column objects of the `OPF_DATASETS_V1` record and of a chart's `OPF_DATA_V1` record; there is no tag of their own. Nothing drawn changes: a deck with and without the keys writes the same slide and chart parts. They come back after a save and re-import with the rest of those records (the records are restored while the native evidence is unchanged, and a plain PowerPoint save keeps them).
+
+A deck written with them is a 0.37 deck. An importer of 0.36.0 and earlier checks both records with its own closed `DataColumn`, so a record with a declared column does not validate there and is dropped whole (`invalid-data-provenance`): no dataset of that file is restored and the charts and tables import the values they show. The owner decided on 2026-11-25 that released importers need no compatibility work, so this was not shaped around and the 0.36.0 importer was not run on the file. `packages/pptx/test/fr-05-typed-columns.mjs` pins where the keys are written and that a deck without them writes only keys a 0.36 importer accepts.
+
 ## Untrusted input
 
 Tags can be written by anyone who can edit the file. The hash is a change detector, not a signature. Tag values are size-limited and decoded as JSON. Only known fields are accepted, media references must name an existing `ppt/media/` part, and every restored field must pass core's `format` check (`validate(value, { only: ['format'] })`). Nothing in a tag is executed or fetched. A package whose tags were all stripped imports as an ordinary foreign deck without a diagnostic. When only `OPF_DOCUMENT_V1` is missing or unreadable, the slide tags still restore their layout intent (below).

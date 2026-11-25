@@ -75,10 +75,14 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
 {
   // A paste that adds columns declares them from their cells; a column that existed keeps what it declares.
   const editor = session();
-  grid.pasteGridText(editor, I, { section: "body", row: 0, column: 1 }, "0.3\t1\t2");
-  const columns = editor.get(`${I}.data.columns`);
-  assert.equal(columns[1], "Margin", "the existing column keeps its declaration (none)");
-  assert.deepEqual(columns.slice(2).map((column) => [column.type, column.role]), [["number", "measure"], ["number", "measure"]]);
+  grid.pasteGridText(editor, D, { section: "body", row: 0, column: 1 }, "1\t2\t3");
+  const columns = editor.get("datasets.revenue.columns");
+  assert.equal(columns[0], "Month", "an existing plain column stays a plain string");
+  assert.equal(columns[1].unit, "USD", "an existing declaration is kept");
+  assert.deepEqual(columns.slice(3).map((column) => [column.type, column.role]), [["number", "measure"], ["number", "measure"]]);
+  // A column added with no name (chart data) declares nothing.
+  grid.pasteGridText(editor, I, { section: "body", row: 0, column: 1 }, "0.3\t1");
+  assert.equal(editor.get(`${I}.data.columns.2`), "");
 }
 
 console.log("FR-05 editor column declarations: ok");
