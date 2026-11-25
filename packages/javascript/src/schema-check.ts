@@ -10,6 +10,7 @@ import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions, resolveSlideDirection }
 import { layoutTemplateIssues } from "./layout-template.js";
 import { annotationIssues } from "./annotation-validation.js";
 import { slideLinkIssues } from "./slide-links.js";
+import { urlCredential } from "./url-credential.js";
 import { isShapeBlock, shapeIssues, SHAPE_BLOCK_KEYS } from "./shape-block.js";
 import { PositionRangeError, connectorAdjustPreset, isOverlayConnector, overlayIssues, representablePositionBox } from "./overlay-shapes.js";
 import { codeHighlightLines } from "./code-highlight.js";
@@ -73,6 +74,7 @@ const rootPayloadFields = [
   "bullets",
   "image",
   "video",
+  "embed",
   "chart",
   "table",
   "code",
@@ -91,6 +93,7 @@ type ContentKind =
   | "chart"
   | "table"
   | "video"
+  | "embed"
   | "code"
   | "metric"
   | "quote"
@@ -131,6 +134,10 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
     fields: ["video"],
     required: ["video"],
   },
+  embed: {
+    fields: ["embed"],
+    required: ["embed"],
+  },
   code: {
     fields: ["code"],
     required: ["code"],
@@ -160,7 +167,7 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
 };
 
 // RR-34: payload kinds whose blocks may carry a caption.
-const captionableKinds = new Set<ContentKind>(["image", "chart", "table", "video", "diagram"]);
+const captionableKinds = new Set<ContentKind>(["image", "chart", "table", "video", "embed", "diagram"]);
 // FA-22: fit, focus, the image treatments and placement belong to image payloads only (LH-132: and a person's `portrait`).
 const imageOptionFields = ["fit", "focus", "aspectRatio", "shape", "adjust", "stroke", "opacity", "recolor", "overlay", "placement", "portrait"] as const;
 // SH-02: the image options a shape block also takes, and the keys only a shape block takes.
@@ -273,6 +280,7 @@ function inferredKinds(value: Record<string, unknown>): ContentKind[] {
   if (hasOwn(value, "items")) kinds.push("list");
   if (hasOwn(value, "image")) kinds.push("image");
   if (hasOwn(value, "video")) kinds.push("video");
+  if (hasOwn(value, "embed")) kinds.push("embed");
   if (hasOwn(value, "chart")) kinds.push("chart");
   if (hasOwn(value, "table")) kinds.push("table");
   if (hasOwn(value, "code")) kinds.push("code");
@@ -305,8 +313,8 @@ function validateContentPayload(
   const explicitType = value.type;
   const payloadFields = presentFields(value, rootPayloadFields);
   const hasBlocks = hasOwn(value, "blocks");
-  // RR-34: a caption belongs to exactly one image, chart, table, video or diagram payload of this host.
-  const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table, video or diagram payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
+  // RR-34: a caption belongs to exactly one image, chart, table, video, embed or diagram payload of this host.
+  const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table, video, embed or diagram payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
   // FA-22: image options on anything but an image payload, and a placement anywhere but a top-level block.
   const imageOptionIssues = (reason: string, params: Record<string, unknown> = {}, except: ReadonlySet<string> = new Set()) => {
     for (const field of imageOptionFields) if (hasOwn(value, field) && !except.has(field)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on an image payload; ${reason}`, { code: "image-option-unsupported-payload", field, ...params }));
@@ -591,6 +599,13 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
       };
       payloadNumberingIssues(slide, slidePath);
       visitContentPayloads(slide, slidePath, payloadNumberingIssues);
+      // FR-08: an embed's address must not carry a credential (the text of the warning says what and where).
+      const payloadEmbedIssues = (payload: Record<string, unknown>, path: string): void => {
+        const embed = payload.embed, address = isRecord(embed) ? embed.src : embed, part = urlCredential(address);
+        if (part !== undefined) issues.push(semanticIssue(isRecord(embed) ? pathFor(pathFor(path, "embed"), "src") : pathFor(path, "embed"), `This embed's address carries what looks like a credential (${part}). Anyone with the deck can read it.`, { code: "embed-credentials", credential: part }));
+      };
+      payloadEmbedIssues(slide, slidePath);
+      visitContentPayloads(slide, slidePath, payloadEmbedIssues);
     }
   });
   // RR-34: reference ids, cited ids and where cite/footnote may appear.

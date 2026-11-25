@@ -44,7 +44,7 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { references: [{ id: "gartner", text: "Gartner, 2026" }], slides: [{ title: "Market", text: [{ text: "EMEA grew 12%", cite: "gartner" }], table: { columns: ["Region", "Growth"], rows: [["EMEA", "12%"]] } }] },
   ),
   "opf/caption-unsupported-payload": ex(
-    "Put the `caption` on the image, chart, table, video or diagram it describes, or remove it.",
+    "Put the `caption` on the image, chart, table, video, embed or diagram it describes, or remove it.",
     { title: "Revenue", blocks: [{ text: "Revenue grew", caption: "Source: finance" }] },
     { title: "Revenue", blocks: [{ chart: CHART, caption: "Source: finance" }] },
   ),

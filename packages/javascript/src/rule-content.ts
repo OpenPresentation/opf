@@ -22,7 +22,7 @@ export interface Payload {
 	root: boolean;
 }
 
-const BODY_FIELDS = ['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'path'] as const;
+const BODY_FIELDS = ['text', 'items', 'bullets', 'image', 'video', 'embed', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'path'] as const;
 export const bodyFields = BODY_FIELDS;
 
 /** Root payload, then every block of a slide (recursively). */

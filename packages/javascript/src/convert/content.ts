@@ -41,7 +41,7 @@ import { chartNumber, inlineTableData, isDatasetRef } from "../chart-data.js";
 import { rowCells } from "../table.js";
 import { fenceCode, levelsFromIndents, parseCodeFence, parseListLine, parseQuoteLines, splitWhen } from "./text-lines.js";
 
-export type ContentKind = "text" | "list" | "quote" | "metric" | "code" | "timeline" | "chart" | "table" | "image" | "video" | "group" | "metrics";
+export type ContentKind = "text" | "list" | "quote" | "metric" | "code" | "timeline" | "chart" | "table" | "image" | "video" | "embed" | "group" | "metrics";
 
 /** Display label of every content kind. `metrics` is the target "a group of metric blocks". */
 export const CONTENT_KIND_LABELS: Readonly<Record<ContentKind, string>> = Object.freeze({
@@ -55,6 +55,7 @@ export const CONTENT_KIND_LABELS: Readonly<Record<ContentKind, string>> = Object
   table: "Table",
   image: "Image",
   video: "Video",
+  embed: "Embed",
   group: "Group",
   metrics: "Metric blocks",
 });
@@ -74,6 +75,9 @@ export const CONTENT_CONVERSIONS: Readonly<Record<string, readonly ContentKind[]
   chart: ["table"],
   table: ["chart", "list", "timeline", "text", "metrics"],
   group: ["table"],
+  // FR-08: a video and an embed both point at an address; the address and the title carry over, and only an https address can be embedded.
+  video: ["embed"],
+  embed: ["video"],
 });
 
 export interface ConvertOptions extends TableOptions {
@@ -335,6 +339,23 @@ function tableToChart(table: Json): Field {
 }
 
 function convertField(from: ContentKind, to: ContentKind, content: Json, options: ConvertOptions, loss: Loss): Field {
+  if (from === "video" && to === "embed") {
+    const source = typeof content === "string" ? content : isRecord(content) && typeof content.src === "string" ? content.src : undefined;
+    if (source === undefined || !/^https:\/\/[^\s/?#]/.test(source)) throw refuse("Only a video with an https address can become an embed: an embed never loads a file or an asset.");
+    if (isRecord(content)) {
+      const dropped = Object.keys(content).filter((key) => key !== "src" && key !== "title");
+      if (dropped.length) loss.note(`video ${dropped.join(", ")}`);
+    }
+    return { key: "embed", value: isRecord(content) && typeof content.title === "string" && content.title !== "" ? { src: source, title: content.title } : source };
+  }
+  if (from === "embed" && to === "video") {
+    if (isRecord(content)) {
+      const dropped = Object.keys(content).filter((key) => key !== "src" && key !== "title");
+      if (dropped.length) loss.note(`embed ${dropped.join(", ")}`);
+      return { key: "video", value: typeof content.title === "string" && content.title !== "" ? { src: content.src, title: content.title } : content.src };
+    }
+    return { key: "video", value: content };
+  }
   if (from === "chart") return chartToTable(content, loss);
   if (from === "group") return { key: "table", value: metricsToTable(content, options, loss) };
   if (from === "table") {

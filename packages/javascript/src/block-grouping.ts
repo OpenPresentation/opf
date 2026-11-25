@@ -23,7 +23,7 @@ import { MAX_REGION_BLOCKS, singleBlockRegion, type LayoutTemplate } from './lay
 import { areaRects } from './template-geometry.js';
 
 /** LH-58: the kinds that pair with a paragraph as one cell. */
-export const PAIR_FIGURE_KINDS: readonly string[] = ['metric', 'chart', 'table', 'image', 'video', 'code'];
+export const PAIR_FIGURE_KINDS: readonly string[] = ['metric', 'chart', 'table', 'image', 'video', 'embed', 'code'];
 /** LH-58: a pair of paragraphs is long + short when one is at least this many times the other's length. */
 export const PAIR_LENGTH_RATIO = 2;
 /** LH-46: a single-block region (`max: 1`, OPF 0.35; `flow: none` before) takes at most this many blocks when extra blocks join it. */

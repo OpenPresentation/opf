@@ -165,6 +165,12 @@ export type { ApplyPatchOptions, PatchResult } from './patch.js';
 export { assignIds, documentHash, idToken, isIdToken, OPFIdError, resolveIdPatch, resolveIdPointer, toIdPatch, toIdPointer, touches } from './ids.js';
 export type { AssignedId, AssignIdsContext, AssignIdsOptions, AssignIdsResult, IdErrorCode, PatchScope, PatchScopeKind, PatchTouch } from './ids.js';
 export { collectSlideLinks, slideLink, slideLinkId } from './slide-links.js';
+// FR-08: the embed content kind's shared readings, and the one test for a credential in a web address.
+export { EMBED_DEFAULT_ASPECT, embedAspect, embedSite, embedTitle, embedValue } from './embed.js';
+export type { EmbedValue } from './embed.js';
+export { embedArrowPoints, embedCardLayout } from './embed-card.js';
+export type { EmbedCardInput, EmbedCardLayout, EmbedCardText } from './embed-card.js';
+export { isSecretParameterName, urlCredential } from './url-credential.js';
 export { diff, merge } from './diff.js';
 export type { DiffOptions, MergeConflict, MergeOptions, MergeResult, PresentationDiff } from './diff.js';
 // RR-75: `opf edit` and `opf fill` as functions. The Node build registers the default catalog for edit's check, as the CLI does.

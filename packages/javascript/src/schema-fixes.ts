@@ -197,7 +197,7 @@ export function removedKeyRepair(finding: Finding, document: unknown, options?: 
 }
 
 /** The fields that make a slide hold root content: with any of them, a slide had no promoted regions to move. */
-const ROOT_CONTENT = ["type", "text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "diagram", "shape", "path", "blocks"];
+const ROOT_CONTENT = ["type", "text", "items", "bullets", "image", "video", "embed", "chart", "table", "code", "metric", "quote", "timeline", "diagram", "shape", "path", "blocks"];
 
 /**
  * OPF 0.35: the slide keys of `slide` that named a cell of its 3 x 3 grid through 0.34 (the promoted regions `start`, `top:start`, ...,

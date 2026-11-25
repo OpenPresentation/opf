@@ -1638,6 +1638,49 @@
       "description": "An image source in a string shorthand: an 'asset:<id>' reference, an HTTPS URL, a data URI, or a relative path starting with './' or '../' (resolved against the OPF file location).",
       "examples": ["asset:cover-photo", "https://cdn.acme.com/backgrounds/cover.jpg", "./images/harbour.jpg"]
     },
+    "EmbedUrl": {
+      "type": "string",
+      "pattern": "^https://[^\\s/?#]+[^\\s]*$",
+      "maxLength": 2048,
+      "description": "An https URL. Any other scheme (http, data, javascript, a relative path) is a schema error.",
+      "examples": ["https://app.example.com/dashboards/revenue"]
+    },
+    "EmbedPayload": {
+      "description": "A live web page, shown in a web presenter when its host allows and as a linked picture everywhere else (PDF, PNG, PowerPoint, print, thumbnails). A string is shorthand for { \"src\": value }. Engines never load 'src': whether and from which sites a page is shown live is the host's decision (the presenter's 'embeds' option), not the deck's, so a deck holds no sandbox policy.",
+      "oneOf": [
+        { "$ref": "#/$defs/EmbedUrl" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["src"],
+          "properties": {
+            "src": {
+              "$ref": "#/$defs/EmbedUrl",
+              "description": "The page's https address. Never loaded by an engine; a click on the static form opens it in a new tab."
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "description": "What the page is: its accessible name, and the heading of the card drawn when there is no 'preview'. Absent: the site name (the host of 'src' without 'www.')."
+            },
+            "aspectRatio": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 10,
+              "description": "Width to height of the frame, as an image block's aspectRatio (1.6 is 16:10). The frame is the largest box of that ratio inside the block's region. Absent: 16:9 (1.7777777777777777)."
+            },
+            "preview": {
+              "$ref": "#/$defs/ImageSource",
+              "description": "A picture of the page, drawn wherever the page is not shown live: PDF, PNG, PowerPoint, print and thumbnails. It is drawn whole (contain) on the scheme's surface color. Absent: a card with the title, the site name and a link icon."
+            }
+          }
+        }
+      ],
+      "examples": [
+        "https://app.example.com/dashboards/revenue",
+        { "src": "https://app.example.com/dashboards/revenue", "title": "Revenue dashboard", "aspectRatio": 1.6, "preview": "asset:revenue-dashboard" }
+      ]
+    },
     "ColorVariant": {
       "type": "object",
       "additionalProperties": false,
@@ -2915,8 +2958,8 @@
       "additionalProperties": false,
       "dependentSchemas": {
         "caption": {
-          "anyOf": [{ "required": ["image"] }, { "required": ["chart"] }, { "required": ["table"] }, { "required": ["video"] }, { "required": ["diagram"] }],
-          "description": "A slide's caption belongs to its root image, chart, table, video or diagram."
+          "anyOf": [{ "required": ["image"] }, { "required": ["chart"] }, { "required": ["table"] }, { "required": ["video"] }, { "required": ["embed"] }, { "required": ["diagram"] }],
+          "description": "A slide's caption belongs to its root image, chart, table, video, embed or diagram."
         }
       },
       "properties": {
@@ -2932,7 +2975,7 @@
         },
         "type": {
           "type": "string",
-          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline", "diagram"],
+          "enum": ["text", "list", "image", "chart", "table", "video", "embed", "code", "metric", "quote", "timeline", "diagram"],
           "description": "Optional full-slide content kind. When omitted, engines infer the kind from root payload fields."
         },
         "beat": {
@@ -3016,6 +3059,10 @@
           "$ref": "#/$defs/Asset",
           "description": "Full-slide video source. Presence of this field infers type 'video'. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the same placeholder as native shapes linked to an http(s) source, with no embedded media. Native playback is out of scope (docs/programs/release-readiness)."
         },
+        "embed": {
+          "$ref": "#/$defs/EmbedPayload",
+          "description": "Full-slide embed: a live web page. Presence of this field infers type 'embed'. A web presenter whose host allows the page shows it live; every other output (PDF, PNG, PowerPoint, print, thumbnails) shows a picture of it linked to its address. Engines never load 'src'. See EmbedPayload."
+        },
         "chart": {
           "$ref": "#/$defs/Chart",
           "description": "Full-slide chart payload. Presence of this field infers type 'chart'."
@@ -3059,7 +3106,7 @@
         },
         "caption": {
           "$ref": "#/$defs/Caption",
-          "description": "Caption for the slide's root image, chart, table, video or diagram payload. Valid only when the slide root holds exactly one of those payloads."
+          "description": "Caption for the slide's root image, chart, table, video, embed or diagram payload. Valid only when the slide root holds exactly one of those payloads."
         },
         "blocks": {
           "type": "array",
@@ -3233,11 +3280,16 @@
             },
             {
               "required": [
+                "embed"
+              ]
+            },
+            {
+              "required": [
                 "diagram"
               ]
             }
           ],
-          "description": "A caption belongs to an image, chart, table, video or diagram."
+          "description": "A caption belongs to an image, chart, table, video, embed or diagram."
         }
       },
       "properties": {
@@ -3258,7 +3310,7 @@
         },
         "type": {
           "type": "string",
-          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline", "diagram", "shape", "group"],
+          "enum": ["text", "list", "image", "chart", "table", "video", "embed", "code", "metric", "quote", "timeline", "diagram", "shape", "group"],
           "description": "Optional content kind. When omitted, engines infer the kind from the fields present: a block with 'shape' and no 'image', or with 'path', is a shape block."
         },
         "text": {
@@ -3486,6 +3538,10 @@
             "./media/demo.mp4"
           ]
         },
+        "embed": {
+          "$ref": "#/$defs/EmbedPayload",
+          "description": "Embed payload: a live web page. Presence of this field infers type 'embed'. Takes a caption and none of the image options (fit, focus, aspectRatio, recolor, ...): the frame's proportions are EmbedPayload.aspectRatio. See EmbedPayload."
+        },
         "chart": {
           "$ref": "#/$defs/Chart",
           "description": "Chart payload. Presence of this field infers type 'chart'."
@@ -3577,7 +3633,7 @@
         },
         "caption": {
           "$ref": "#/$defs/Caption",
-          "description": "Caption for an image, chart, table, video or diagram payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups."
+          "description": "Caption for an image, chart, table, video, embed or diagram payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups."
         },
         "blocks": {
           "type": "array",
@@ -3665,6 +3721,19 @@
           },
           "then": {
             "required": ["video"]
+          }
+        },
+        {
+          "if": {
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "const": "embed"
+              }
+            }
+          },
+          "then": {
+            "required": ["embed"]
           }
         },
         {
@@ -3799,6 +3868,9 @@
                 },
                 {
                   "required": ["video"]
+                },
+                {
+                  "required": ["embed"]
                 },
                 {
                   "required": ["chart"]
@@ -4357,7 +4429,7 @@
       ]
     },
     "Caption": {
-      "description": "A caption for an image, chart, table, video or diagram payload. A string or TextRun[] is the caption text placed below the media; object form adds the position and alignment.",
+      "description": "A caption for an image, chart, table, video, embed or diagram payload. A string or TextRun[] is the caption text placed below the media; object form adds the position and alignment.",
       "oneOf": [
         { "type": "string" },
         { "type": "array", "items": { "$ref": "#/$defs/TextRun" } },

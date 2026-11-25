@@ -105,6 +105,7 @@ const HELP: Record<string, string> = {
 	"invalid-card-provenance": INVALID_TAG,
 	"invalid-code-provenance": INVALID_TAG,
 	"invalid-data-provenance": INVALID_TAG,
+	"embed-provenance-changed": "The embed was imported as what the file shows (a linked picture, or its shapes): its link, picture or title text was changed after the export, so the stored embed no longer matches. Add the embed again in OPF, or restore the link and picture in PowerPoint.",
 	"invalid-diagram-provenance": INVALID_TAG,
 	"invalid-document-provenance": INVALID_TAG,
 	"invalid-furniture-provenance": INVALID_TAG,

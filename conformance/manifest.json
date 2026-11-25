@@ -133,6 +133,14 @@
       "basis": "opf.schema.json#/$defs/TextRun/properties/link; docs/validate.md, rule opf/slide-link-unknown"
     },
     {
+      "id": "core.valid.embed",
+      "file": "core/valid/embed.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "An embed on a slide, with a title, an aspect ratio and a preview asset, and an embed block with a caption.",
+      "basis": "opf.schema.json#/$defs/EmbedPayload"
+    },
+    {
       "id": "core.valid.dataset-referenced",
       "file": "core/valid/dataset-referenced.opf.json",
       "levels": ["reader", "writer"],
@@ -419,6 +427,22 @@
       "expect": { "valid": false, "errorAt": "/slides/0/text/0/link" },
       "description": "A link names a slide id no slide of the document has.",
       "basis": "docs/validate.md, rule opf/slide-link-unknown"
+    },
+    {
+      "id": "core.invalid.embed-http",
+      "file": "core/invalid/embed-http.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/embed" },
+      "description": "An embed whose address is http, not https.",
+      "basis": "opf.schema.json#/$defs/EmbedUrl"
+    },
+    {
+      "id": "core.invalid.embed-no-src",
+      "file": "core/invalid/embed-no-src.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/embed" },
+      "description": "An embed object with no address.",
+      "basis": "opf.schema.json#/$defs/EmbedPayload"
     },
     {
       "id": "core.invalid.dataset-unknown",

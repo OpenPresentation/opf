@@ -73,3 +73,34 @@ void [items,bullets,timeline,table,noCells,extra,numeric,cells,rows];`;
   const errors=ts.getPreEmitDiagnostics(program);
   assert.equal(errors.length,0,ts.formatDiagnosticsWithColorAndContext(errors,{getCurrentDirectory:()=>process.cwd(),getCanonicalFileName:file=>file,getNewLine:()=> '\n'}));
 });
+
+test('FR-08: the embed payload is in the generated declarations, on a slide and on a block', () => {
+  const fixture=fileURLToPath(new URL('./generated-embed-fixture.ts',import.meta.url));
+  const source=`import { type Presentation, embedAspect, embedCardLayout, embedTitle, embedValue, urlCredential } from '../dist/index.js';
+type Slide = Presentation['slides'][number];
+type Block = NonNullable<Slide['blocks']>[number];
+const shorthand: Slide = {embed:'https://app.example.com/dashboard'};
+const full: Block = {embed:{src:'https://app.example.com/dashboard',title:'Dashboard',aspectRatio:1.6,preview:'asset:shot'},caption:'Live'};
+const typed: Slide = {type:'embed',embed:'https://app.example.com/dashboard'};
+// @ts-expect-error An embed object needs its address.
+const noSrc: Block = {embed:{title:'Dashboard'}};
+// @ts-expect-error The deck holds no sandbox policy.
+const sandbox: Block = {embed:{src:'https://app.example.com/',sandbox:'allow-scripts'}};
+// @ts-expect-error The aspect ratio is a number.
+const ratio: Block = {embed:{src:'https://app.example.com/',aspectRatio:'16:9'}};
+const value: { src: string; title?: string; aspectRatio?: number; preview?: string } | undefined = embedValue('https://app.example.com/');
+const name: string = embedTitle(full.embed);
+const aspect: number = embedAspect(shorthand.embed);
+const credential: string | undefined = urlCredential('https://app.example.com/?token=1');
+const card = embedCardLayout({frame:{x:0,y:0,width:800,height:450},title:name,site:'app.example.com',headingFamily:'Roboto',bodyFamily:'Roboto',scale:1});
+const lines: string[] | undefined = card.title?.lines;
+const badge: number = card.icon.badge.width;
+void [shorthand,full,typed,noSrc,sandbox,ratio,value,aspect,credential,lines,badge];`;
+  const options={strict:true,noEmit:true,skipLibCheck:false,target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.NodeNext,moduleResolution:ts.ModuleResolutionKind.NodeNext,types:[]};
+  const host=ts.createCompilerHost(options),read=host.readFile.bind(host),exists=host.fileExists.bind(host);
+  host.readFile=file=>path.resolve(file)===fixture?source:read(file);
+  host.fileExists=file=>path.resolve(file)===fixture||exists(file);
+  const program=ts.createProgram([fixture],options,host);
+  const errors=ts.getPreEmitDiagnostics(program);
+  assert.equal(errors.length,0,ts.formatDiagnosticsWithColorAndContext(errors,{getCurrentDirectory:()=>process.cwd(),getCanonicalFileName:file=>file,getNewLine:()=> '\n'}));
+});
