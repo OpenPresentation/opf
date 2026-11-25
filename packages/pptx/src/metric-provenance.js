@@ -1,5 +1,5 @@
 import {XMLParser} from 'fast-xml-parser';
-import {isValidFormat} from './format-check.js';
+import {checkFormat,isValidFormat} from './format-check.js';
 import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
 
 const TAG='OPF_METRIC_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
@@ -51,8 +51,11 @@ function editedNumber(text,source,original){
 const spelled=(role,original)=>(role==='value'||role==='delta')&&typeof original==='number';
 
 // The first value line carries the complete manifest: no invisible panel is introduced.
-export function metricManifest(value,layout,group) {
-  return {v:1,group,role:'anchor',part:0,line:0,value,parts:layout.parts.map(part=>{const original=sourceFor(value,part.role);return {role:part.role,visible:part.visible,
+// FR-06: `value` holds the 0.36 form of what is drawn (a 0.36.0 importer validates it as a metric and must read a plain one), and the
+// 0.37 part (a data link, `better`, `format`, which keys were derived, the numbers behind formatted text) rides in the top-level `link`
+// key, which that importer never reads.
+export function metricManifest(value,layout,group,link) {
+  return {v:1,group,role:'anchor',part:0,line:0,value,...(link?{link}:{}),parts:layout.parts.map(part=>{const original=sourceFor(value,part.role);return {role:part.role,visible:part.visible,
     ...(spelled(part.role,original)&&typeof part.text==='string'&&part.text!==String(original)?{text:part.text}:{}),
     lines:part.fit?.sourceLines.map(({start,end,nextStart,boundary})=>({start,end,nextStart,boundary}))??[]};})};
 }
@@ -87,6 +90,39 @@ function validateManifest(manifest,nativeLines=new Map()) {
     }
     if (cursor!==source.length) throw new Error('Incomplete source range.');
   }
+}
+
+const DERIVED=['value','delta','trend','sentiment'];
+// A metric fragment whose link names a dataset (or a column of one) that the fragment does not hold is not at fault: the datasets are
+// restored with the document, and the finished document is checked whole.
+const ONLY_IN_DOCUMENT=new Set(['opf/slide-link-unknown','opf/dataset-unknown','opf/dataset-field-unknown']);
+const isValidMetric=metric=>!checkFormat({slides:[{metric}]}).findings.some(finding=>finding.severity==='error'&&!ONLY_IN_DOCUMENT.has(finding.ruleId));
+const finite=number=>typeof number==='number'&&Number.isFinite(number);
+// The link of a metric tag when it has the shape export writes and the 0.37 schema accepts with the drawn metric; undefined otherwise.
+function readMetricLink(link,drawn) {
+  if (!link||typeof link!=='object'||Array.isArray(link)) return undefined;
+  const {data,better,format,derived,numbers,...rest}=link;
+  if (Object.keys(rest).length||(data===undefined&&better===undefined&&format===undefined)) return undefined;
+  if (derived!==undefined&&(!Array.isArray(derived)||derived.some(key=>!DERIVED.includes(key))||new Set(derived).size!==derived.length)) return undefined;
+  if (numbers!==undefined&&(!numbers||typeof numbers!=='object'||Array.isArray(numbers)||Object.keys(numbers).some(key=>key!=='value'&&key!=='delta')||Object.values(numbers).some(number=>!finite(number)))) return undefined;
+  const candidate={...drawn,...(data===undefined?{}:{data}),...(better===undefined?{}:{better}),...(format===undefined?{}:{format})};
+  if (!isValidMetric(candidate)) return undefined;
+  return {data,better,format,derived:derived??[],numbers:numbers??{}};
+}
+// The metric an unedited tag restores: the drawn form with the link, `better` and `format` back, the last computed numbers as the
+// literal value and change, and a trend or sentiment that was derived (not typed) left to derive again.
+function restoreMetricLink(drawn,link,edited) {
+  const metric={...drawn};
+  if (link.format!==undefined) metric.format=link.format;
+  if (link.better!==undefined) metric.better=link.better;
+  // The number behind a text stands for it only while what wrote the text is back too: the link (with its column's format) or the metric's format.
+  if (link.numbers.value!==undefined&&!edited.has('value')&&(link.data||link.format!==undefined)) metric.value=link.numbers.value;
+  if (link.numbers.delta!==undefined&&!edited.has('delta')&&(link.data||(link.format!==undefined&&!link.derived.includes('delta')))) metric.delta=link.numbers.delta;
+  if (link.data) {
+    metric.data=link.data;
+    for (const key of ['trend','sentiment']) if (link.derived.includes(key)) delete metric[key];
+  } else if (link.better!==undefined&&link.derived.includes('sentiment')) delete metric.sentiment;
+  return metric;
 }
 
 export function importMetricGroups(shapes,paragraphs,relationships,entries,report) {
@@ -129,7 +165,7 @@ export function importMetricGroups(shapes,paragraphs,relationships,entries,repor
       nativeLines.set(key,item.text);
     }
     validateManifest(manifest,nativeLines);
-    const value=scalar(manifest.value)?{value:manifest.value}:{...manifest.value},typeChanges=[];
+    const value=scalar(manifest.value)?{value:manifest.value}:{...manifest.value},typeChanges=[],changedRoles=new Set();
     for (const [partIndex,part] of manifest.parts.entries()) {
       if (!part.visible) continue;
       const original=sourceFor(manifest.value,part.role),source=partText(manifest,partIndex,nativeLines),newline=source.match(/\r\n|\r|\n/)?.[0]??'\n';
@@ -146,9 +182,21 @@ export function importMetricGroups(shapes,paragraphs,relationships,entries,repor
       value[part.role]=typeof original==='number'&&rebuilt===source?original:edited?edited.value:
         typeof original==='number'&&Number.isFinite(Number(rebuilt))&&String(Number(rebuilt))===rebuilt?Number(rebuilt):rebuilt;
       if (typeof original!==typeof value[part.role]) typeChanges.push(part.role);
+      if (rebuilt!==source) changedRoles.add(part.role);
     }
-    const metric=scalar(manifest.value)?value.value:value;
-    if (!isValidFormat({slides:[{metric}]})) throw new Error('Edited native text cannot form a valid metric.');
+    let metric=scalar(manifest.value)?value.value:value;
+    // FR-06: the 0.37 part restores while the native evidence of the value and the change is unchanged.
+    let link;
+    if (manifest.link!==undefined) {
+      link=readMetricLink(manifest.link,value);
+      if (!link) report({code:'invalid-metric-provenance',message:'Invalid metric link; the metric was imported as drawn.'});
+      else if (link.data&&(changedRoles.has('value')||changedRoles.has('delta'))) {
+        report({code:'metric-data-dropped',message:"The metric's value was edited in PowerPoint, so its data link was not restored."});
+        link={...link,data:undefined};
+      }
+      if (link) metric=restoreMetricLink(value,link,changedRoles);
+    }
+    if (!isValidMetric(metric)) throw new Error('Edited native text cannot form a valid metric.');
     for (const item of group) consumed.add(item.shape);
     items.push({shape:anchor.shape,payload:{type:'metric',metric}});
     if (typeChanges.length) report({code:'metric-value-type-changed',message:`Edited numeric ${typeChanges.join(', ')} retained as literal text to avoid discarding spelling or precision.`});

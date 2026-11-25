@@ -3131,7 +3131,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     } else {
       // RR-34: a captioned item draws its media in item.box; the caption band follows as tagged text boxes linked to the media shape by name.
       const mediaNames = item.caption ? new Set([...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()]) : undefined;
-      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", tableAlignment: itemAlignment(geometry.design.contentAlignment), direction: geometry.direction, tableGrowth: item.tableGrowth, tableHighlight: item.tableHighlight }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout, item.chart);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", tableAlignment: itemAlignment(geometry.design.contentAlignment), direction: geometry.direction, tableGrowth: item.tableGrowth, tableHighlight: item.tableHighlight, metricRecord: item.metricRecord }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout, item.chart);
       if (item.caption) {
         const mediaName = item.field === 'video' ? `OPF media ${item.path} frame` : [...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()].find(name => !mediaNames.has(name));
         addCaption(slide, item, mediaName, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
@@ -5239,7 +5239,10 @@ function codePanelColor(context) {
 
 function addMetricPayload(slide,value,layout,context,path,options,presentation) {
   if (!layout) throw new OPFPptxError('missing-metric-layout','Metric export requires coordinated core metric geometry.',{path});
-  const group=String(context.metricTags.size+1),manifest=metricManifest(value,layout,group);
+  // FR-06: the 0.37 part of a computed or formatted metric is stored only with full provenance (the datasets it links to are stored then too).
+  const record=context.metricRecord,link=record&&context.provenanceMode==='full'?record:undefined;
+  if (record&&!link) options.onDiagnostic?.({code:'metric-link-omitted',path,message:"The metric's data link, format and direction are not stored in the PPTX because provenance is not full; reimport has the numbers as drawn."});
+  const group=String(context.metricTags.size+1),manifest=metricManifest(value,layout,group,link);
   // RR-07, LH-53: a trend adds one native arrow shape where core placed it (before the delta; the trend word is not drawn) and colors
   // the delta text. LH-54: a metric in a card is colored against the card fill (context.cardFill), as the preview does. LH-57: on a
   // dark one, a value whose accent falls under 4.5:1 takes the text color.
