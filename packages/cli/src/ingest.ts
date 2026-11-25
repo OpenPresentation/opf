@@ -110,8 +110,8 @@ export async function run(args: string[], _host: Host): Promise<void> {
   const datasetId = options.dataset === undefined ? undefined : String(options.dataset);
   if (datasetId !== undefined && (options.dataset === true || !/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(datasetId))) throw usage('--dataset needs an id of letters, digits, ".", "_" or "-".', "invalid-value", { option: "--dataset" });
   const data = "table" in imported ? imported.table : imported.chart.data;
-  // FR-05: chart data written inline declares the type and role its cells say; a table's headings are DataColumns and declare nothing, and a dataset's columns are declared where it is written (withDataset).
-  const content = datasetId === undefined ? ("table" in imported ? imported : { chart: { type: imported.chart.type, data: declareColumns(imported.chart.data) } }) : "table" in imported ? { table: { dataset: datasetId } } : { chart: { type: imported.chart.type, data: { dataset: datasetId } } };
+  // FR-05: a dataset's columns declare the type and role their cells say where the dataset is written (withDataset). Inline chart data and a table stay as ingest returns them: a table's headings are DataColumns and declare nothing, and inline chart data stays plain strings so it still converts to a Markdown chart block.
+  const content = datasetId === undefined ? imported : "table" in imported ? { table: { dataset: datasetId } } : { chart: { type: imported.chart.type, data: { dataset: datasetId } } };
   // The deck file the data goes into, else the one written. Written to stdout there is none, and a path reads from the working directory.
   const deckFile = options.into !== undefined && options.into !== "-" ? String(options.into) : destination.file !== "-" ? destination.file : undefined;
   // FR-04: the data file as the deck sees it, and the SHA-256 of its bytes (stdin has neither).
