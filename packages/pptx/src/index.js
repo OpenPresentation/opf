@@ -4425,7 +4425,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
     // LH-113: the highlighted body rows composition gave the table (table.highlight, or the rows the slide's texts name).
     ...(context.tableHighlight ? {highlight: context.tableHighlight} : {}),
     // FR-07: the color scale's fills and text colors, resolved on the slide's colors as the preview resolves them.
-    ...(table?.colorScale ? {colorScale: {resolve: name => `#${exportColor(name, context, '000000')}`.slice(0, 7).toUpperCase(), text: `#${context.colors.text}`}} : {})
+    ...(table?.colorScale ? {colorScale: {resolve: name => `#${exportColor(name, context, '000000')}`.slice(0, 7).toUpperCase(), text: `#${context.colors.text}`, background: `#${context.colors.background}`}} : {})
   });
   const columnCount = layout.columnCount;
   // LH-113: a highlighted row's cells take the accent tint of the surface the preview draws (core tableHighlightColor), an sRGB literal;
@@ -4448,6 +4448,9 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
     const inheritedText = header && context.roles ? readableSchemeColor(`#${baseFill}`, context.roles).hex : scaled ? scaled.text : textColorForFill(`#${baseFill}`, header ? "#FFFFFF" : `#${context.colors.text}`);
     const baseColor = exportColor(cellStyle.color ?? inheritedText.replace(/^#/, ""), context, inheritedText.replace(/^#/, ""));
     // Default cell text follows the theme only with a theme-referenced fill: paired slot on a light or dark fill, light1/dark1 on an accent fill.
+    // FR-07: a scaled cell's computed text color is named as a color reference, so a theme color it equals is written as that theme color.
+    const scaledTextHex = scaled ? scaled.text.replace(/^#/, '').toUpperCase() : undefined;
+    const textReference = cellStyle.color ?? (scaled ? [context.roles?.map?.tx1, context.roles?.map?.bg1].find(slot => slot && schemeColorValue(slot, scaledTextHex, context, {vendor: true})) ?? scaled.text : undefined);
     const defaultText = cellStyle.color === undefined && !scaled ? tableTextSchemeValue(fillValue, baseColor, context) : undefined;
     const alpha = value => value.length === 8 ? (1 - parseInt(value.slice(6), 16) / 255) * 100 : 0;
     const text = stringifyText(cell.value), style = cell.textStyle;
@@ -4458,7 +4461,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
       const fragment = fragments.find(item => item.runIndex === index);
       const runStyle = fragment?.style ?? resolveTextStyle({...style,fontFamily:run.fontFamily ?? style.fontFamily,fontWeight:run.bold === undefined ? style.fontWeight : run.bold ? 700 : 400,italic:run.italic ?? style.italic}, options.textMeasurement);
       const rawColor = run.color !== undefined && run.color !== '' ? exportColor(run.color, context, baseColor) : baseColor;
-      const color = nativeColor(run.color !== undefined && run.color !== '' ? run.color : cellStyle.color, rawColor, context, defaultText), transparency = rawColor.length === 8 ? (1 - parseInt(rawColor.slice(6), 16) / 255) * 100 : 0;
+      const color = nativeColor(run.color !== undefined && run.color !== '' ? run.color : textReference, rawColor, context, defaultText), transparency = rawColor.length === 8 ? (1 - parseInt(rawColor.slice(6), 16) / 255) * 100 : 0;
       const runOptions = {
         ...nativeFontOptions(runStyle),fontSize:fragment ? fragment.fontSize * .75 : fit.fontSize * .75,
         underline:run.underline ? {style:'sng',color:linkColor(run,color,context)} : undefined,strike:run.strikethrough ? 'sngStrike' : undefined,
@@ -4490,11 +4493,11 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
         valign: cellStyle.verticalAlign ?? 'top',
         ...(cell.colSpan > 1 ? {colspan:cell.colSpan} : {}),
         ...(cell.rowSpan > 1 ? {rowspan:cell.rowSpan} : {}),
-        color: nativeColor(cellStyle.color, baseColor, context, defaultText),
+        color: nativeColor(textReference, baseColor, context, defaultText),
         // Rich runs carry resolved alpha. A translucent cell default would
         // overwrite an explicit opaque run because PptxGenJS inherits falsy 0.
         ...(cellStyle.color && !rich ? {transparency:alpha(baseColor)} : {}),
-        fill: { color: scaled ? scaledFill : tinted ? highlightHex : nativeColor(fillReference, baseFill, context), ...(cellStyle.fill ? {transparency:alpha(baseFill)} : {}) },
+        fill: { color: tinted ? highlightHex : nativeColor(fillReference, baseFill, context), ...(cellStyle.fill ? {transparency:alpha(baseFill)} : {}) },
       },
     };
   }));

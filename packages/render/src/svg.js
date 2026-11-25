@@ -1752,7 +1752,7 @@ function renderTimeline(item, box, bound, options) {
 
 // FR-07: how a color scale's scheme names resolve on this slide (the same ColorRef resolution fills use), and the slide's text color.
 function tableScaleColors(bound) {
-  return {resolve:(name) => String(resolveColorRef(name, bound, "#000000")).slice(0, 7).toUpperCase(), text:bound.design.colors.text};
+  return {resolve:(name) => String(resolveColorRef(name, bound, "#000000")).slice(0, 7).toUpperCase(), text:bound.design.colors.text, background:bound.design.colors.background};
 }
 
 function renderTable(item, box, bound, options) {

@@ -256,7 +256,7 @@
       }
     },
     {
-      "title": "Scheme colors: accent3, accent4, accent5",
+      "title": "Scheme colors: secondary, primary, accent4",
       "table": {
         "columns": [
           "Week",
@@ -269,83 +269,7 @@
           ],
           [
             "W2",
-            0
-          ],
-          [
-            "W3",
-            3
-          ],
-          [
-            "W4",
-            6
-          ]
-        ],
-        "colorScale": {
-          "columns": [
-            "Change"
-          ],
-          "colors": [
-            "accent3",
-            "accent4",
-            "accent5"
-          ],
-          "center": 0
-        }
-      }
-    },
-    {
-      "title": "Scheme colors: accent6, accent, primary",
-      "table": {
-        "columns": [
-          "Week",
-          "Change"
-        ],
-        "rows": [
-          [
-            "W1",
-            -6
-          ],
-          [
-            "W2",
-            0
-          ],
-          [
-            "W3",
-            3
-          ],
-          [
-            "W4",
-            6
-          ]
-        ],
-        "colorScale": {
-          "columns": [
-            "Change"
-          ],
-          "colors": [
-            "accent6",
-            "accent",
-            "primary"
-          ],
-          "center": 0
-        }
-      }
-    },
-    {
-      "title": "Scheme colors: secondary, background, surfaceAlt",
-      "table": {
-        "columns": [
-          "Week",
-          "Change"
-        ],
-        "rows": [
-          [
-            "W1",
-            -6
-          ],
-          [
-            "W2",
-            0
+            -3
           ],
           [
             "W3",
@@ -362,15 +286,17 @@
           ],
           "colors": [
             "secondary",
-            "background",
-            "surfaceAlt"
+            "primary",
+            "accent4"
           ],
-          "center": 0
+          "center": 0,
+          "min": -8,
+          "max": 8
         }
       }
     },
     {
-      "title": "Scheme colors: dark1, dark2, light1",
+      "title": "Scheme colors: textSecondary, surfaceAlt, light2",
       "table": {
         "columns": [
           "Week",
@@ -383,7 +309,7 @@
           ],
           [
             "W2",
-            0
+            -3
           ],
           [
             "W3",
@@ -399,16 +325,18 @@
             "Change"
           ],
           "colors": [
-            "dark1",
-            "dark2",
-            "light1"
+            "textSecondary",
+            "surfaceAlt",
+            "light2"
           ],
-          "center": 0
+          "center": 0,
+          "min": -8,
+          "max": 8
         }
       }
     },
     {
-      "title": "Scheme colors: light2, text, textSecondary",
+      "title": "Scheme colors: accent3, light1, background",
       "table": {
         "columns": [
           "Week",
@@ -421,7 +349,7 @@
           ],
           [
             "W2",
-            0
+            -3
           ],
           [
             "W3",
@@ -437,11 +365,93 @@
             "Change"
           ],
           "colors": [
-            "light2",
+            "accent3",
+            "light1",
+            "background"
+          ],
+          "center": 0,
+          "min": -8,
+          "max": 8
+        }
+      }
+    },
+    {
+      "title": "Scheme colors: accent5, text, accent6",
+      "table": {
+        "columns": [
+          "Week",
+          "Change"
+        ],
+        "rows": [
+          [
+            "W1",
+            -6
+          ],
+          [
+            "W2",
+            -3
+          ],
+          [
+            "W3",
+            3
+          ],
+          [
+            "W4",
+            6
+          ]
+        ],
+        "colorScale": {
+          "columns": [
+            "Change"
+          ],
+          "colors": [
+            "accent5",
             "text",
-            "textSecondary"
+            "accent6"
           ],
-          "center": 0
+          "center": 0,
+          "min": -8,
+          "max": 8
+        }
+      }
+    },
+    {
+      "title": "Scheme colors: dark2, dark1, accent",
+      "table": {
+        "columns": [
+          "Week",
+          "Change"
+        ],
+        "rows": [
+          [
+            "W1",
+            -6
+          ],
+          [
+            "W2",
+            -3
+          ],
+          [
+            "W3",
+            3
+          ],
+          [
+            "W4",
+            6
+          ]
+        ],
+        "colorScale": {
+          "columns": [
+            "Change"
+          ],
+          "colors": [
+            "dark2",
+            "dark1",
+            "accent"
+          ],
+          "center": 0,
+          "min": -8,
+          "max": 8
         }
       }
     }

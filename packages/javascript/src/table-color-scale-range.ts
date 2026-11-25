@@ -21,8 +21,10 @@ export interface TableColorScaleSpec {
 export interface TableColorScaleColors {
   /** The color of a scheme name as `#RRGGBB`. */
   resolve: (name: SchemeColorName) => string;
-  /** The scheme's `text` color: the cell text on a fill it reads on (4.5:1); on any other fill black or white. */
+  /** The scheme's `text` color: the cell text on a fill it reads on (4.5:1). */
   text: string;
+  /** The scheme's `background` color: the cell text on a fill `text` does not read on but this does (4.5:1); without it, or when it does not read either, black or white. */
+  background?: string;
 }
 
 /** One shaded cell: the fill (`#RRGGBB`) and the text color that reads on it. `row` is the body row (0-based, after the header). */
@@ -81,11 +83,13 @@ export interface Numbers { column: number; row: number; value: number; own: bool
 
 export function scaleNumbers(columns: Set<number>, rows: readonly (readonly unknown[])[]): Numbers[] {
   const numbers: Numbers[] = [];
-  rows.forEach((cells, row) => cells.forEach((cell, column) => {
-    if (!columns.has(column)) return;
-    const value = cellNumber(cell);
-    if (value !== undefined) numbers.push({ column, row, value, own: cellFill(cell) });
-  }));
+  for (const [row, cells] of rows.entries()) {
+    for (const [column, cell] of cells.entries()) {
+      if (!columns.has(column)) continue;
+      const value = cellNumber(cell);
+      if (value !== undefined) numbers.push({ column, row, value, own: cellFill(cell) });
+    }
+  }
   return numbers;
 }
 

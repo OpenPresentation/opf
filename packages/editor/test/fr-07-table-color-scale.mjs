@@ -22,7 +22,7 @@ assert.equal(parseTablePath("slides.0.title"), undefined);
   const state = readTableColorScale(deck().slides[0].table);
   assert.equal(state.kind, "none");
   assert.deepEqual(state.columns.map((column) => [column.name, column.numeric, column.shaded]), [["Region", false, false], ["Q1", true, false], ["Q2", true, false], ["Note", false, false]]);
-  assert.deepEqual([state.from, state.to], ["surface", "primary"]);
+  assert.deepEqual(state.colors, ["surface", "primary"]);
 }
 
 // Add a scale, change it, remove it: one undo step each.
