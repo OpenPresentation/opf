@@ -4,7 +4,8 @@
 // record's slides. Without data the template fills from its own values (and their examples with --examples).
 import { randomUUID } from "node:crypto";
 import path from "node:path";
-import { type FilledDeck, fill } from "@openpresentation/opf";
+import { type FilledDeck, fill, validate, variableDeclarations } from "@openpresentation/opf";
+import { CLI_CATALOGS } from "./catalogs.js";
 import { type CommandSpec, oneOf, parseArgs, printHelp } from "./args.js";
 import { DECK_MEDIA, deckFormatFlag, fenceWarning, outputFormatOf, serialize } from "./deck.js";
 import { CliError, usage } from "./errors.js";
@@ -26,7 +27,9 @@ slug of that column's value, and a repeated name gets -2, -3. Several records ne
 with every record's slides); without an output the deck goes to stdout. A template alone fills from its own values (and
 their examples with --examples), to stdout. Blank cells keep the variable's
 declared value. An unfilled required variable fails (exit 1) unless --partial; --examples fills unfilled variables from
-their example. Every deck passes the format and references check (--fail-on) before anything is written. The report
+their example. Every deck passes the format and references check (--fail-on) before anything is written. A value
+longer than its variable's maxLength, maxItems or maxLines is reported as a warning (opf/variable-overflow, with the record and
+the slide) on stderr and in the report's fill.overflow before anything is written; the decks are still written. The report
 { command, ok, input, outputs: [{ file, record, ... }], findings, counts, fill } goes to stdout, or stderr for stdout output.
 
 Examples:
@@ -65,6 +68,20 @@ function slug(value: string): string {
 		.replace(/-+$/, "");
 }
 
+/**
+ * A value longer than its variable's limits (FR-09), for each record, before anything is written: `maxLength` and `maxItems` on the value,
+ * `maxLines` where the variable is drawn (composition, so the slide is named). The template is checked with the record's values, as
+ * `opf validate` would check it; the decks are still written, because a limit is a warning.
+ */
+function overflowOf(template: unknown, decks: readonly FilledDeck[]) {
+	if (!variableDeclarations(template).some((entry) => entry.maxLength !== undefined || entry.maxLines !== undefined || entry.maxItems !== undefined)) return [];
+	return decks.flatMap((deck) =>
+		validate(template, { only: ["variable-overflow"], values: deck.record, template: true, catalogs: CLI_CATALOGS })
+			.findings.filter((finding) => finding.ruleId === "opf/variable-overflow")
+			.map((finding) => ({ record: deck.index, path: finding.path, ...(finding.slide !== undefined ? { slide: finding.slide + 1, ...(finding.slideId ? { slideId: finding.slideId } : {}) } : {}), message: finding.message })),
+	);
+}
+
 export async function run(args: string[], _host: Host): Promise<void> {
 	const parsed = parseArgs(spec, args);
 	if (parsed === "help") return printHelp(spec);
@@ -96,7 +113,9 @@ export async function run(args: string[], _host: Host): Promise<void> {
 			.map((entry) => ({ record: deck.index, ...entry, ...(entry.code === "variable-unfilled" ? { message: `Required variable '${entry.id}' has no value. Give it in the data, use --examples, or keep an incomplete result with --partial.` } : {}) })),
 	);
 	if (errors.length) throw new CliError(`Filling failed: ${errors[0]?.message}`, "fill-failed", 1, { errors });
-	const summary = { records: result.decks.length, complete: result.complete, unfilled: result.unfilled, diagnostics: result.diagnostics };
+	const overflow = overflowOf(source.value, result.decks);
+	for (const entry of overflow) process.stderr.write(`warning: opf/variable-overflow${result.decks.length > 1 ? ` record ${entry.record}` : ""}${entry.slide !== undefined ? ` slide ${entry.slide}` : ""} ${entry.path}: ${entry.message}\n`);
+	const summary = { records: result.decks.length, complete: result.complete, unfilled: result.unfilled, diagnostics: result.diagnostics, ...(overflow.length ? { overflow } : {}) };
 	const inputs = [inputFact(template, source.raw), ...(data !== undefined && raw !== undefined ? [inputFact(data, raw)] : [])];
 
 	if (options.combine || result.decks.length === 1) {

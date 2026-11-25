@@ -261,6 +261,14 @@
       "basis": "opf.schema.json#/$defs/ContentPayload/additionalProperties"
     },
     {
+      "id": "core.invalid.variable-limit-wrong-kind",
+      "file": "core/invalid/variable-limit-wrong-kind.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/variables/revenue/maxLength" },
+      "description": "A length limit on a number variable: maxLength belongs to a text variable, maxLines to a text variable and maxItems to a list variable.",
+      "basis": "opf.schema.json#/$defs/NumberVariable/additionalProperties"
+    },
+    {
       "id": "core.invalid.vendor-field-outside-extensions",
       "file": "core/invalid/vendor-field-outside-extensions.opf.json",
       "levels": ["reader"],
