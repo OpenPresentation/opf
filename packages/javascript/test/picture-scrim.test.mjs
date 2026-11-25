@@ -20,7 +20,7 @@ const inside = (box, area) => box.x >= area.x - 0.5 && box.y >= area.y - 0.5 && 
 
 test('a cover over a photo passes 4.5:1 on the worst-case gray ramp with no author overlay, in both variants', () => {
   for (const tone of [undefined, 'dark', 'light']) {
-    const document = deck([{ title: 'Shipping, rebuilt', subtitle: 'The harbor plan for 2027', design: picture(tone ? { tone } : {}) }]);
+    const document = deck([{ title: 'Shipping, rebuilt', subtitle: 'The harbor plan for 2027', design: picture(tone ? { appearance: tone } : {}) }]);
     const { context, result } = composed(document);
     const scrim = result.backgroundImage.scrims?.[0];
     assert.ok(scrim, `${tone}: a scrim`);

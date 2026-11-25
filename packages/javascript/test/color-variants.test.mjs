@@ -257,8 +257,8 @@ describe('schema', () => {
 		const gradient = { type: 'gradient', gradient: { stops: [{ color: '#000000', position: 0 }, { color: '#111111', position: 1 }] } };
 		assert.deepEqual(errors(doc({ background: { ...gradient, appearance: 'dark' } })), []);
 		assert.deepEqual(errors(doc({ background: { type: 'image', src: 'asset:x', appearance: 'light' } })), []);
-		assert.ok(errors(doc({ background: { ...gradient, tone: 'grey' } })).length > 0);
-		assert.ok(errors(doc({ background: { type: 'image', src: 'asset:x', tone: 'grey' } })).length > 0);
+		assert.ok(errors(doc({ background: { ...gradient, appearance: 'grey' } })).length > 0);
+		assert.ok(errors(doc({ background: { type: 'image', src: 'asset:x', appearance: 'grey' } })).length > 0);
 	});
 });
 

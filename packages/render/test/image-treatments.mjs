@@ -45,7 +45,7 @@ for (const treatment of TREATMENTS) {
   for (const slide of document.slides) { const background = slide.design?.background; if (background && typeof background === 'object' && background.overlay === undefined) background.overlay = false; }
   // RR-105: the 0.14 renders also predate the tone a dark overlay implies (light text over text-overlay's darkened picture); they drew the
   // text of a light picture, stated here as the background's tone.
-  for (const slide of document.slides) { const background = slide.design?.background; if (background && typeof background === 'object' && background.tone === undefined && background.overlay) background.tone = 'light'; }
+  for (const slide of document.slides) { const background = slide.design?.background; if (background && typeof background === 'object' && background.appearance === undefined && background.overlay) background.appearance = 'light'; }
   // RR-105: and the step a short message beside a picture now grows to where its lines keep the minimum measure; the 0.14 renders set it at
   // the lone text's display size, stated here as the slide's largest body size.
   if (['side-by-side', 'rounded-card'].includes(slug)) for (const slide of document.slides) slide.composition = { ...slide.composition, maxFontSizePx: LONE_DISPLAY_SIZES.text };

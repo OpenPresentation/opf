@@ -111,7 +111,7 @@ test('a slide link is not a reference link', () => {
 test('renameRecordKeys renames the old keys by place, never copies a record that needs nothing, and leaves authored data alone', () => {
   const current = { speaker: { organization: 'acme' }, design: { background: { appearance: 'dark' }, fontScheme: { scriptGroup: 'eastAsian' } }, tone: 'formal', slides: [{ chart: { lineSeries: ['A'] } }] };
   assert.equal(renameRecordKeys(current), current, 'the same object when nothing changes');
-  const old = { speaker: { organizationId: 'acme' }, design: { background: { tone: 'dark' }, fontScheme: { languageFamily: 'ea' } }, tone: 'formal', references: [{ url: 'https://a.example' }], extensions: { tone: 'x', line: [1], verticalAlign: 'top' }, datasets: { d: { rows: [{ line: 1, url: 2 }] } } };
+  const old = { speaker: { organizationId: 'acme' }, design: { background: { tone: 'dark' }, fontScheme: { languageFamily: 'ea' } }, tone: 'formal', references: [{ url: 'https://a.example' }], extensions: { tone: 'x', lineSeries: [1], verticalAlign: 'top' }, datasets: { d: { rows: [{ line: 1, url: 2 }] } } };
   const next = renameRecordKeys(old);
   assert.deepEqual(next.speaker, { organization: 'acme' });
   assert.deepEqual(next.design, { background: { appearance: 'dark' }, fontScheme: { scriptGroup: 'eastAsian' } });

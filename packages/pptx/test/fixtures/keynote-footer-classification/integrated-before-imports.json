@@ -621,7 +621,7 @@
                     "style": {
                       "fill": "#2874A6",
                       "align": "left",
-                      "anchor": "top",
+                      "verticalAlign": "top",
                       "padding": {
                         "top": 8,
                         "right": 8,
@@ -662,7 +662,7 @@
                     "style": {
                       "fill": "#2874A6",
                       "align": "left",
-                      "anchor": "top",
+                      "verticalAlign": "top",
                       "padding": {
                         "top": 8,
                         "right": 8,
@@ -706,7 +706,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -747,7 +747,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -790,7 +790,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -831,7 +831,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -903,7 +903,7 @@
                     "style": {
                       "fill": "#2874A6",
                       "align": "left",
-                      "anchor": "top",
+                      "verticalAlign": "top",
                       "padding": {
                         "top": 8,
                         "right": 8,
@@ -944,7 +944,7 @@
                     "style": {
                       "fill": "#2874A6",
                       "align": "left",
-                      "anchor": "top",
+                      "verticalAlign": "top",
                       "padding": {
                         "top": 8,
                         "right": 8,
@@ -988,7 +988,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -1035,7 +1035,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -1078,7 +1078,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -1119,7 +1119,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -2018,7 +2018,7 @@
                     "style": {
                       "fill": "#2874A6",
                       "align": "left",
-                      "anchor": "top",
+                      "verticalAlign": "top",
                       "padding": {
                         "top": 8,
                         "right": 8,
@@ -2059,7 +2059,7 @@
                     "style": {
                       "fill": "#2874A6",
                       "align": "left",
-                      "anchor": "top",
+                      "verticalAlign": "top",
                       "padding": {
                         "top": 8,
                         "right": 8,
@@ -2103,7 +2103,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -2144,7 +2144,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -2187,7 +2187,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -2228,7 +2228,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -2300,7 +2300,7 @@
                     "style": {
                       "fill": "#2874A6",
                       "align": "left",
-                      "anchor": "top",
+                      "verticalAlign": "top",
                       "padding": {
                         "top": 8,
                         "right": 8,
@@ -2341,7 +2341,7 @@
                     "style": {
                       "fill": "#2874A6",
                       "align": "left",
-                      "anchor": "top",
+                      "verticalAlign": "top",
                       "padding": {
                         "top": 8,
                         "right": 8,
@@ -2385,7 +2385,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -2432,7 +2432,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -2475,7 +2475,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,
@@ -2516,7 +2516,7 @@
                       "style": {
                         "fill": "#011842",
                         "align": "left",
-                        "anchor": "top",
+                        "verticalAlign": "top",
                         "padding": {
                           "top": 8,
                           "right": 8,

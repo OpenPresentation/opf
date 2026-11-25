@@ -12,7 +12,7 @@ export const attachPlainTextTags=(entries,records)=>attachTextTags(entries,recor
 export function sourceLineParagraphs(ordered,paragraphs,{legacy=false}={}) {
  const source=ordered.some(item=>item.data.boundary!==undefined||item.data.separator!==undefined);
  if(!source&&legacy)return ordered.flatMap(item=>paragraphs[item.index]??[]);
- let text='',maxFontSizePx=0;
+ let text='',maxFontSize=0;
  for(const [index,item]of ordered.entries()) {
   const {boundary,separator}=item.data,last=index===ordered.length-1;
   // LH-76: `split` joins the topic of a split "Topic: qualifier" title to its qualifier with the authored colon.
@@ -20,9 +20,9 @@ export function sourceLineParagraphs(ordered,paragraphs,{legacy=false}={}) {
   const current=paragraphs[item.index]??[];
   if(current.some(p=>p.bullet))throw Error('Tagged plain text now has native bullets.');
   text+=current.map(p=>p.text).join('\n')+separator;
-  maxFontSizePx=Math.max(maxFontSizePx,...current.map(p=>p.maxFontSizePx??0));
+  maxFontSize=Math.max(maxFontSize,...current.map(p=>p.maxFontSize??0));
  }
- return [{text,maxFontSizePx,bullet:false,level:0}];
+ return [{text,maxFontSize,bullet:false,level:0}];
 }
 
 // Boundaries own only line joins, never native proofing language. Keep current

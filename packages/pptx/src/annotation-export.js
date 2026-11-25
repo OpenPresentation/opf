@@ -161,7 +161,7 @@ export function addFootnotes(slide, footnotes, slideIndex, context, helpers, err
   if (context.provenanceMode !== false) context.footnoteTags.set(ruleName, {v: 1, role: 'rule', slide: slideIndex, ...(detached.length ? {detached} : {})});
   slide.addShape('line', {x: rule.x / 96, y: (rule.y + rule.thickness / 2) / 96, w: rule.width / 96, h: 0, line: {color: context.colors.border, width: rule.thickness * .75}, objectName: ruleName});
   footnotes.entries.forEach((entry, index) => {
-    const record = {v: 1, role: 'entry', slide: slideIndex, entry: index, number: entry.number, kind: entry.kind, ...(entry.id !== undefined ? {id: entry.id} : {}), source: entry.sourcePath, ...(entry.url !== undefined ? {url: entry.url} : {})};
+    const record = {v: 1, role: 'entry', slide: slideIndex, entry: index, number: entry.number, kind: entry.kind, ...(entry.id !== undefined ? {id: entry.id} : {}), source: entry.sourcePath, ...(entry.link !== undefined ? {link: entry.link} : {})};
     addFitLines(slide, entry.value, entry.fit, entry.box, context, helpers, {objectName: footnoteEntryName(slideIndex, index), record, tags: context.footnoteTags, align: 'left', color: context.mutedColor, fontFamily: helpers.nativeFontOptions(entry.textStyle).fontFace, error});
   });
 }

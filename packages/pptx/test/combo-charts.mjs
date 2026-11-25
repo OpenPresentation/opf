@@ -112,7 +112,7 @@ const attr = (xml, element) => new RegExp(`<c:${element} val="([^"]*)"/>`).exec(
   assert.deepEqual(lines.map(seriesNames), [['Target'], ['Margin']], 'a line group per axis');
   assert.equal(imported.type, 'combo');
   assert.deepEqual(imported.data, data, 'the authored column order is restored');
-  assert.deepEqual([...imported.line].sort(), ['Margin', 'Target']);
+  assert.deepEqual([...imported.lineSeries].sort(), ['Margin', 'Target']);
   assert.deepEqual(imported.secondaryAxis, ['Margin']);
 }
 

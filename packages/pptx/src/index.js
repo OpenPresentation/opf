@@ -1413,8 +1413,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
       // scaled bodies use resolved sizes here; ordinary classification is unchanged.
       if (currentBody?.some(paragraph => paragraph.nativeFontScale !== undefined)) {
         const pointSize = paragraph => Math.max(0, ...asArray(paragraph?.richText).filter(run => run && typeof run === 'object' && run.text?.trim()).map(run => run.fontSize ?? 0));
-        item.paragraphs = item.paragraphs.map((paragraph, paragraphIndex) => ({...paragraph, maxFontSizePx: pointSize(currentBody[paragraphIndex])}));
-        item.maxFontSizePx = Math.max(0, ...item.paragraphs.map(paragraph => paragraph.maxFontSizePx));
+        item.paragraphs = item.paragraphs.map((paragraph, paragraphIndex) => ({...paragraph, maxFontSize: pointSize(currentBody[paragraphIndex])}));
+        item.maxFontSize = Math.max(0, ...item.paragraphs.map(paragraph => paragraph.maxFontSize));
       }
     }
     if (item && !item.bounds && nativeContext.layoutBounds) item.bounds = nativeContext.layoutBounds(shape) ?? item.bounds;
@@ -1540,7 +1540,7 @@ function importShape(shape, dimensions, paragraphs = readParagraphs(shape["p:txB
       bounds,
       placeholder,
       name,
-      maxFontSizePx: Math.max(0, ...paragraphs.map((paragraph) => paragraph.maxFontSizePx))
+      maxFontSize: Math.max(0, ...paragraphs.map((paragraph) => paragraph.maxFontSize))
     };
   }
 
@@ -1763,7 +1763,7 @@ function readParagraphs(txBody) {
         text: unbindNoBreak(texts.join("")),
         bullet: asArray(paragraph?.["a:pPr"]).some(props => props?.["a:buChar"] !== undefined || props?.["a:buBlip"] !== undefined || props?.["a:buAutoNum"] !== undefined),
         level: Number(asArray(paragraph?.["a:pPr"])[0]?.lvl ?? 0),
-        maxFontSizePx: sizes.length > 0 ? Math.max(...sizes) : 0,
+        maxFontSize: sizes.length > 0 ? Math.max(...sizes) : 0,
         ...(zones.length ? {math: {zones: zones.length, text: linear}} : {}),
         ...autoNumberOf(asArray(paragraph?.["a:pPr"])[0])
       };
@@ -1805,7 +1805,7 @@ function takeTitleItem(items, dimensions, inferHeadings) {
   const candidateIndex = items.findIndex((item) => {
     if (item.heading || item.placeholder === 'body' || item.kind !== "text" || !item.text || item.paragraphs.some(p=>p.bullet)) return false;
     const y = item.bounds?.y ?? 0;
-    return y <= titleLimit && (item.maxFontSizePx >= 20 || /^title\b/i.test(item.name ?? ""));
+    return y <= titleLimit && (item.maxFontSize >= 20 || /^title\b/i.test(item.name ?? ""));
   });
   if (candidateIndex >= 0) return items.splice(candidateIndex, 1)[0];
   return null;
@@ -1826,7 +1826,7 @@ function takeSubtitleItem(items, titleItem, dimensions, inferHeadings) {
       && y <= subtitleLimit
       && h <= 0.75
       && item.paragraphs.length === 1
-      && item.maxFontSizePx <= Math.max(22, titleItem.maxFontSizePx);
+      && item.maxFontSize <= Math.max(22, titleItem.maxFontSize);
   });
   if (candidateIndex >= 0) return items.splice(candidateIndex, 1)[0];
   return null;
@@ -1916,13 +1916,13 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
     let bounds, size = 0;
     for (const {item, line} of entries) {
       const [paragraph] = item.paragraphs, current = paragraphs.at(-1);
-      if(item.v2Scalar){const copy={...paragraph};paragraphs.push(copy);protectedParagraphs.add(copy);size=paragraph.maxFontSizePx;consumed.add(item);const b=item.visualBounds??item.bounds;if(b){const x=Math.min(bounds?.x??b.x,b.x),y=Math.min(bounds?.y??b.y,b.y);bounds={x,y,w:Math.max((bounds?bounds.x+bounds.w:-Infinity),b.x+b.w)-x,h:Math.max((bounds?bounds.y+bounds.h:-Infinity),b.y+b.h)-y};}continue;}
+      if(item.v2Scalar){const copy={...paragraph};paragraphs.push(copy);protectedParagraphs.add(copy);size=paragraph.maxFontSize;consumed.add(item);const b=item.visualBounds??item.bounds;if(b){const x=Math.min(bounds?.x??b.x,b.x),y=Math.min(bounds?.y??b.y,b.y);bounds={x,y,w:Math.max((bounds?bounds.x+bounds.w:-Infinity),b.x+b.w)-x,h:Math.max((bounds?bounds.y+bounds.h:-Infinity),b.y+b.h)-y};}continue;}
       if(paragraph[V2_CURRENT_RICH]&&current&&!paragraph.bullet)current[V2_CURRENT_RICH]=true;
       const gap = recorded?.get(line);
       const join = (a, b) => gap === undefined ? joinRich(a, b) : joinWrappedText([a, b], [gap]);
-      if (unbulleted || (lineRoles && !paragraph.bullet) ? lineRoles?.[line][2] : paragraph.bullet) { paragraphs.push({...paragraph, bullet: true, richText: own(paragraph, textLook)}); size = paragraph.maxFontSizePx; }
+      if (unbulleted || (lineRoles && !paragraph.bullet) ? lineRoles?.[line][2] : paragraph.bullet) { paragraphs.push({...paragraph, bullet: true, richText: own(paragraph, textLook)}); size = paragraph.maxFontSize; }
       else if (paragraph.text === '') { /* a blank line of the entry: no text, no description */ }
-      else if (lineRoles ? lineRoles[line][1] === 'description' : paragraph.maxFontSizePx < size - 0.01) {
+      else if (lineRoles ? lineRoles[line][1] === 'description' : paragraph.maxFontSize < size - 0.01) {
         const text = own(paragraph, descriptionLook) ?? paragraph.text;
         if (current.description === undefined) current.description = text;
         else { current.description = join(current.description, text); applied.add(line); }
@@ -2187,10 +2187,10 @@ function comboFields(comboSeries, names, report) {
   if (unmarked.length) report?.({option: 'line', message: `The combo chart's line ${unmarked.length === 1 ? 'series' : 'series'} ${unmarked.map(name => `'${name}'`).join(', ')} ${unmarked.length === 1 ? 'has' : 'have'} no markers; OPF combo lines always draw markers, so ${unmarked.length === 1 ? 'it imports' : 'they import'} with markers.`});
   if(comboSeries.every(e=>e.role==='line'))report?.({option:'type',message:`Native line groups with incompatible axes/grouping require an OPF combo: the first current series '${names[0]}' becomes primary-axis columns to satisfy its required column role; remaining line/axis roles are retained where expressible. All current data columns and source order are preserved.`});
   if (new Set(line).size !== line.length || new Set(names).size !== names.length) {
-    report?.({option: 'line', message: 'Two series of the combo chart share a name, so which of them is a line cannot be said by name; the chart imports with its default line (the last series).'});
+    report?.({option: 'lineSeries', message: 'Two series of the combo chart share a name, so which of them is a line cannot be said by name; the chart imports with its default line (the last series).'});
     return {};
   }
-  return {...(line.length ? {line} : {}), ...(secondaryAxis.length ? {secondaryAxis} : {})};
+  return {...(line.length ? {lineSeries: line} : {}), ...(secondaryAxis.length ? {secondaryAxis} : {})};
 }
 
 // An imported combo chart writes `line` only when it differs from the default (the last plotted series), judged on the final

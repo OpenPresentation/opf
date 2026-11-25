@@ -39,8 +39,8 @@ export function renamedKeyAt(segments: readonly string[]): KeyRename | undefined
   return name === undefined ? undefined : KEY_RENAMES.find((entry) => entry.from === name && (entry.at === undefined || entry.at(segments)));
 }
 
-/** Subtrees that hold the author's own keys, never walked by `renameRecordKeys`: extension data and the rows of a dataset. */
-const AUTHORED_KEYS: ReadonlySet<string> = new Set(["extensions", "rows", "datasets"]);
+/** Subtrees that hold the author's own keys, never walked by `renameRecordKeys`: extension data and the datasets. */
+const AUTHORED_KEYS: ReadonlySet<string> = new Set(["extensions", "datasets"]);
 
 /** The 0.36 short values of a font scheme's `scriptGroup` and what they are written since 0.37. */
 export const RENAMED_SCRIPT_GROUP_VALUES: Readonly<Record<string, string>> = Object.freeze({ ea: "eastAsian", cs: "complexScript" });
