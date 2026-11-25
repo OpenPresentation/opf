@@ -16,6 +16,7 @@ import {
   suggestVariableId,
   valueToFieldText,
 } from "./templates.js";
+import { longDatePattern } from "@openpresentation/opf";
 import { slideTitle } from "./slides.js";
 
 const KIND_LABELS = { text: "Text", number: "Number", date: "Date", image: "Image", url: "Link", list: "List", color: "Color" };
@@ -169,7 +170,7 @@ export function createTemplatePanel(container, options) {
     };
     const rowsOf = field.translations.map((entry) => {
       const tag = h(doc, "input", { type: "text", list: listId, value: entry.tag, "aria-label": `${field.label}: language of a translation`, class: "opf-translation-tag" });
-      const value = field.kind === "list" ? h(doc, "textarea", { rows: 3, "aria-label": `${field.label}: ${entry.tag}`, class: "opf-translation-value" }) : h(doc, "input", { type: "text", "aria-label": `${field.label}: ${entry.tag}${date ? " display pattern" : ""}`, class: "opf-translation-value", placeholder: date ? "d MMMM yyyy" : "" });
+      const value = field.kind === "list" ? h(doc, "textarea", { rows: 3, "aria-label": `${field.label}: ${entry.tag}`, class: "opf-translation-value" }) : h(doc, "input", { type: "text", "aria-label": `${field.label}: ${entry.tag}${date ? " display pattern" : ""}`, class: "opf-translation-value", placeholder: date ? (longDatePattern(entry.tag) ?? "MMMM d, yyyy") : "" });
       value.value = entry.text;
       const remove = h(doc, "button", { type: "button", class: "opf-translation-remove quiet", text: "Remove", "aria-label": `Remove the ${entry.tag} translation of ${field.label}` });
       const commit = () => {
@@ -185,7 +186,7 @@ export function createTemplatePanel(container, options) {
     add.addEventListener("click", () => {
       const used = new Set(field.translations.map((entry) => entry.tag.toLowerCase()));
       const tag = field.translationLanguages.find((language) => !used.has(language.toLowerCase())) ?? "en";
-      const start = date ? (field.format ?? "MMMM d, yyyy") : field.defaultValue !== undefined ? valueToFieldText(field.kind, field.defaultValue) : valueToFieldText(field.kind, field.example);
+      const start = date ? (field.format ?? longDatePattern(tag) ?? "MMMM d, yyyy") : field.defaultValue !== undefined ? valueToFieldText(field.kind, field.defaultValue) : valueToFieldText(field.kind, field.example);
       attempt(() => setVariableTranslation(editor, field.id, tag, start || (date ? "MMMM d, yyyy" : "")));
     });
     return h(doc, "details", { class: "opf-template-translations", "data-opf-component": "template-translations", open: field.translations.length > 0 },

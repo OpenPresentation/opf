@@ -1527,7 +1527,7 @@
         },
         "format": {
           "type": "string",
-          "description": "Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. English names. Default 'MMMM d, yyyy'.",
+          "description": "Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. The month and weekday names are those of the language where the date is drawn (the slide's declared language, else the deck's; English when none is declared or the table has no data for it); a month after a day token is in its form after a day, else its stand-alone form. Default: the language's long date pattern ('d. MMMM yyyy' in German), 'MMMM d, yyyy' for US English and a deck with no language.",
           "examples": [
             "MMMM d, yyyy",
             "dd MMM yyyy",
@@ -2705,7 +2705,7 @@
         "dateFormat": {
           "type": "string",
           "minLength": 1,
-          "description": "Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and weekday names are English, independent of host locale. Defaults to \"M/d/yyyy\" for a current date. PPTX export writes a native current-date field only when its complete value fits within one accepted text line and the pattern matches a PowerPoint en-US date field ('M/d/yyyy'; 'EEEE, MMMM d, yyyy'; 'd MMMM yyyy'; 'MMMM d, yyyy'; 'd-MMM-yy'; 'MMMM yy'; 'MMM-yy'). Other patterns and wrapped fields export as static text with a diagnostic. Full provenance can recover generated-date intent from unchanged supported wrapped dates on OPF reimport; the existing PPTX text remains static.",
+          "description": "Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and weekday names are those of the language of the slide the date is on (its declared language, else the deck's), from OPF's own table and independent of the host's locale; English when no language is declared. Defaults to \"M/d/yyyy\" for a current date. PPTX export writes a native current-date field only when its complete value fits within one accepted text line and the pattern matches a PowerPoint en-US date field ('M/d/yyyy'; 'EEEE, MMMM d, yyyy'; 'd MMMM yyyy'; 'MMMM d, yyyy'; 'd-MMM-yy'; 'MMMM yy'; 'MMM-yy'). Other patterns and wrapped fields export as static text with a diagnostic. Full provenance can recover generated-date intent from unchanged supported wrapped dates on OPF reimport; the existing PPTX text remains static.",
           "examples": ["MMM d, yyyy", "yyyy-MM-dd", "MMM yyyy", "MMMM d, yyyy"]
         },
         "socials": {

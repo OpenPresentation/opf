@@ -81,7 +81,7 @@ A pattern is an optional literal prefix, a numeric part of `#`, `0`, `,` and `.`
 
 ### Date formats
 
-Dates are calendar dates, never instants: no clock, no time zone. The pattern uses the same LDML-style tokens as header and footer `dateFormat` (`yyyy`, `yy`, `MMMM`, `MMM`, `MM`, `M`, `dd`, `d`, `EEEE`, `EEE`, quoted literals) with fixed English names. `2026-10-01` with `dd MMM yyyy` is `01 Oct 2026`.
+Dates are calendar dates, never instants: no clock, no time zone. The pattern uses the same LDML-style tokens as header and footer `dateFormat` (`yyyy`, `yy`, `MMMM`, `MMM`, `MM`, `M`, `dd`, `d`, `EEEE`, `EEE`, quoted literals). The names are those of the language where the date is drawn; see [Dates in other languages](#dates-in-other-languages). `2026-10-01` with `dd MMM yyyy` is `01 Oct 2026` in English.
 
 ## Using a variable
 
@@ -100,6 +100,16 @@ Which fields can use variables is decided by the schema of the *resolved* deck, 
 **Untouched content.** `extensions`, inline `catalogs`, `$schema`, and the declarations themselves are never searched.
 
 **Compatibility.** A deck that declares no content variable, uses no built-in variable (the slide-scoped ones included) and is not a template is resolved by identity: nothing is searched, `{{` and `\{{` in its text keep their meaning (a Handlebars snippet in a code block is safe), and its color variables behave as before. Escapes are only processed in a deck that uses content or built-in variables.
+
+### Dates in other languages
+
+`MMMM` and `MMM` print the month's long and short name and `EEEE` and `EEE` the weekday's **in the language where the date is drawn**: the slide's declared `language`, else the deck's, as for [translations](#translations). With no declared language, or a language the table has no data for, the names are English, as every date was drawn before. The same rule draws a header or footer date (`dateFormat`), on the slide it is on.
+
+- **Format and stand-alone forms.** In a pattern with a day token (`d`, `dd`) `MMMM` and `MMM` print the form that follows a day (`d MMMM` is "5 марта" in Russian, "5 marca" in Polish); without one, the stand-alone form ("март 2026", "marzec"). A language that does not inflect its months prints the same either way. A language that writes its months as numbers with a counter (Japanese, Chinese, Korean) prints the whole label ("3月", "3월").
+- **The default pattern.** A date variable with no `format` (and no translated `format`) uses the language's long date pattern: `d. MMMM yyyy` in German ("5. März 2026"), `d MMMM yyyy` in French and British English, `yyyy年M月d日` in Japanese, `d' de 'MMMM' de 'yyyy` in Spanish. US English and a deck that declares no language keep `MMMM d, yyyy`, so an English deck draws as before. A footer date with no `dateFormat` keeps PowerPoint's `M/d/yyyy`.
+- **Digits** are the numerals table's, as for every number: `ar-SA` draws Arabic-Indic digits, `fa-IR` Persian ones. A deck with no language draws Latin digits.
+- **The data.** The names come from a table in the engine (`src/date-name-data.ts`, read from the runtime's `Intl` data once by `scripts/build-date-names.mjs`: ICU 78.3, CLDR 48.0), never from the runtime that draws, so every runtime draws the same text. It holds the 88 languages of the gallery the runtime has data for. `ay` (Aymara), `ber-Latn` (Berber) and `ctg` (Chittagonian) have none and draw English names. The lookup is the one of translations: the exact tag, then the tag without its last subtag (`pt-BR` uses `pt`; `sr-Latn` and `sr-Cyrl` are separate entries); it only removes subtags, so `zh-TW` uses `zh`, not `zh-Hant`.
+- **PowerPoint.** A fixed date is exported as the text OPF draws. A current date (`date: true`) stays a native field only where PowerPoint's field shows the same words: a pattern with month or weekday names is a native English field only in a deck whose names are English, and fixed text in another language.
 
 ## Limits on a value
 
@@ -343,7 +353,7 @@ Each is vetoable; the alternative says what changing it would cost.
 10. **Renderers and the exporter call `resolveVariables`** (rather than require resolved input), so the editor can pass its in-progress values straight to the preview. Templates preview with examples; decks with unfilled required variables are refused at export.
 11. **No template provenance in PPTX in this release.** The package stores the resolved deck. Re-import returns the filled deck. Storing the template form needs a provenance part and a re-import path; recorded as a follow-up.
 12. **`opf fill`: a deck per record, plus `--combine`; no `repeat` construct yet.** A slide marked `repeat` (one instance per row inside one deck, with shared slides emitted once) is the natural next step but needs a schema addition and a per-record scope; `--combine` covers "one slide group per record" without it.
-13. **English number and date formats only.** Separators and names are fixed so output never depends on host locale; a `locale` field is a follow-up.
+13. **English number formats only; date names follow the language.** Number separators are fixed so output never depends on host locale; month and weekday names are the language's, from a generated table (FR-10), never the host's. A `locale` field is not needed: a subtag on `language` says it (`de-AT`).
 14. **Optional unfilled variables vanish; required ones never do.** The resolver does not guess a replacement for a missing value. A group whose content variables are all optional and unfilled vanishes whole, its static content too (LH-30). Alternative: omit only the fields, which leaves a picture or card with no text.
 
 15. **Built-ins are dotted and read from the document, not declared, and per-slide values are slide-scoped built-ins (FA-31, owner decision 2026-10-09).** A dot can never appear in a user id, so there is no collision rule to learn. The cost is one non-dotted name, `speakers`, which is reserved. `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}` resolve per output slide at composition time (`resolveSlideVariables`, `layoutFurniture`), and a furniture `{{slide.number}}` keeps the native PPTX field, so headers and footers need no flags and no second template syntax (the 0.16 `organization`, `speaker`, `section`, `slideNumber` and `slideNumberFormat` keys and `{current}`/`{total}` are removed). Alternative: keep per-field booleans, which fix the order of values in a zone and duplicate the built-ins.

@@ -1,5 +1,6 @@
 import { isRecord, pathFor } from "./content-walk.js";
 import { formatFurnitureDate, parseIsoDate } from "./furniture-fields.js";
+import { longDatePattern } from "./date-names.js";
 import { organizationsOf, primaryOrganization, primarySpeaker, speakersOf } from "./deck-metadata.js";
 import { SLIDE_SCOPED_BUILTINS, isSlideScopedBuiltin, isSlideScopedName, slideTokenFollows } from "./slide-variables.js";
 import { LOGO_SHAPES, logoReferenceName, parseLogoName, resolveOrganizationLogo, type LogoReference } from "./logos.js";
@@ -18,7 +19,7 @@ export const VARIABLE_KINDS = ["color", "text", "number", "date", "image", "url"
 export type VariableKind = (typeof VARIABLE_KINDS)[number];
 export type VariableValues = Record<string, unknown>;
 
-/** Default display pattern of a date variable inserted inline. */
+/** Default display pattern of a date variable inserted inline, in a deck that declares no language (or one the date-name table has no pattern for). */
 export const DEFAULT_VARIABLE_DATE_FORMAT = "MMMM d, yyyy";
 
 export interface VariableDeclaration {
@@ -568,8 +569,10 @@ function inlineText(effective: Effective, format: string | undefined, path: stri
       return formatted.text;
     }
     case "date": {
-      const pattern = (format ?? effective.format ?? declaration.format)?.trim() || DEFAULT_VARIABLE_DATE_FORMAT;
-      const formatted = formatFurnitureDate(String(value), pattern);
+      // FR-10: a date is drawn in the language where it is drawn (names, digits and, with no format, the language's long date pattern).
+      const language = translationLanguageAt(context.doc, path);
+      const pattern = (format ?? effective.format ?? declaration.format)?.trim() || longDatePattern(language) || DEFAULT_VARIABLE_DATE_FORMAT;
+      const formatted = formatFurnitureDate(String(value), pattern, language);
       if ("error" in formatted) {
         diag(context, { code: "variable-format", severity: "error", path, id: declaration.id, message: formatted.error }, `fmt:${declaration.id}:${format ?? ""}`);
         return String(value);

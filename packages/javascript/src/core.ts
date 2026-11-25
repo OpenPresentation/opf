@@ -86,6 +86,8 @@ export type {
   VariableUseForm,
   VariableValues,
 } from "./variables.js";
+export { dateNamesOf, longDatePattern } from "./date-names.js";
+export type { DateNames } from "./date-names.js";
 export { SLIDE_SCOPED_BUILTINS, resolveSlideVariables } from "./slide-variables.js";
 export type { SlideScopedBuiltin } from "./slide-variables.js";
 // RR-71: logos live on the organization (resolveLogo, the one resolution, is on /composition with the layout engine).

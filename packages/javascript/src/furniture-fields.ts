@@ -1,8 +1,11 @@
 /**
  * Deterministic header/footer field formatting. Nothing here consults a clock,
  * the host locale or the host time zone: dates are calendar dates supplied by the
- * document or the host, and month/weekday names are fixed English names.
+ * document or the host, and month/weekday names are the language's from a generated
+ * table (date-names.ts), English when no language is given or the table has none.
  */
+import {dateNamesOf} from './date-names.js';
+import {localizeDigits} from './numerals.js';
 
 /** A live field inside displayed furniture text, as half-open UTF-16 offsets into the part's `text`. */
 export interface FurnitureField {
@@ -16,8 +19,6 @@ export interface FurnitureField {
 /** PowerPoint's first Insert > Date and Time choice for en-US (`datetime1`). */
 export const DEFAULT_FURNITURE_DATE_FORMAT = 'M/d/yyyy';
 
-const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const tokenWidths: Record<string, number[]> = {y:[1,2,4],M:[1,2,3,4],d:[1,2],E:[1,2,3,4]};
 
 export type DateToken = {kind:'literal';text:string}|{kind:'field';letter:'y'|'M'|'d'|'E';width:number};
@@ -62,22 +63,29 @@ export function parseIsoDate(value: string): {year:number;month:number;day:numbe
   return {year, month, day};
 }
 
-/** Format an ISO calendar date with an LDML-style pattern. Returns an error message when either input is unsupported. */
-export function formatFurnitureDate(iso: string, pattern: string): {text: string} | {error: string} {
+/**
+ * Format an ISO calendar date with an LDML-style pattern. Returns an error message when either input is unsupported. FR-10: with
+ * `language`, `MMMM`, `MMM`, `EEEE` and `EEE` print that language's names (a month in the form that follows a day number when the
+ * pattern has a day token, else its stand-alone form) and the digits are the language's (LH-106); without one, or where the table has no
+ * data for it, the names are English and the digits Latin, as every date was drawn before.
+ */
+export function formatFurnitureDate(iso: string, pattern: string, language?: string): {text: string} | {error: string} {
   const date = parseIsoDate(iso);
   if (!date) return {error: `'${iso}' is not an ISO YYYY-MM-DD calendar date.`};
   const tokens = parseFurnitureDateFormat(pattern);
   if (typeof tokens === 'string') return {error: tokens};
   const utc = new Date(Date.UTC(2000, date.month - 1, date.day)); utc.setUTCFullYear(date.year);
-  const pad = (value: number, width: number) => String(value).padStart(width, '0');
+  const pad = (value: number, width: number) => localizeDigits(String(value).padStart(width, '0'), language);
+  const names = dateNamesOf(language);
+  const afterDay = tokens.some(token => token.kind === 'field' && token.letter === 'd');
   let text = '';
   for (const token of tokens) {
     if (token.kind === 'literal') { text += token.text; continue; }
     const {letter, width} = token;
-    if (letter === 'y') text += width === 2 ? pad(date.year % 100, 2) : width === 4 ? pad(date.year, 4) : String(date.year);
-    else if (letter === 'M') { const name = months[date.month - 1] ?? ''; text += width >= 3 ? (width === 4 ? name : name.slice(0, 3)) : pad(date.month, width); }
+    if (letter === 'y') text += width === 2 ? pad(date.year % 100, 2) : width === 4 ? pad(date.year, 4) : pad(date.year, 1);
+    else if (letter === 'M') text += width >= 3 ? ((width === 4 ? (afterDay ? names.months : names.monthsStandalone) : (afterDay ? names.monthsShort : names.monthsShortStandalone))[date.month - 1] ?? '') : pad(date.month, width);
     else if (letter === 'd') text += pad(date.day, width);
-    else { const name = weekdays[utc.getUTCDay()] ?? ''; text += width === 4 ? name : name.slice(0, 3); }
+    else text += (width === 4 ? names.weekdays : names.weekdaysShort)[utc.getUTCDay()] ?? '';
   }
   return {text};
 }
