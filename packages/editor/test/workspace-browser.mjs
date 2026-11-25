@@ -509,15 +509,26 @@ try {
     const editor = window.opfWs.createOpfEditor(host, { document: d, ...window.base(), readOnly: true, slots: { canvas: host.querySelector('#r-canvas'), slides: host.querySelector('#r-list'), source: host.querySelector('#r-source') }, onError: (error) => errors.push(error.message) });
     await editor.ready;
     const before = JSON.stringify(editor.getDocument());
+    // FR-03: a read-only slide is not inert (its links work): the canvas is read only, with no editing target or handle, and a click, a double click
+    // and typing on its text change nothing in the document.
+    const canvasNode = host.querySelector('#r-canvas');
+    const canvasState = () => ({ inert: canvasNode.hasAttribute('inert') || !!canvasNode.closest('[inert]'), readonly: !!canvasNode.querySelector('.opf-canvas[data-readonly]'), targets: canvasNode.querySelectorAll('[data-canvas-target]').length, handles: canvasNode.querySelectorAll('.opf-selection, .opf-canvas-overlay > *').length, inputs: [...canvasNode.querySelectorAll('textarea, input, [contenteditable=true]')].filter((node) => node.getClientRects().length > 0).length });
+    const lockedCanvas = canvasState();
+    const text = canvasNode.querySelector('svg text');
+    for (const type of ['pointerdown', 'mousedown', 'pointerup', 'mouseup', 'click', 'dblclick']) text.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, clientX: 10, clientY: 10, detail: 1 }));
+    for (const key of ['Enter', 'F2', 'x']) canvasNode.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+    const afterGestures = { ...canvasState(), same: JSON.stringify(editor.getDocument()) === before };
     editor.slideManager.setSelection([1]);
     editor.slideManager.run('delete');
     editor.sourcePane.editor.api.replace(0, 2, 'zz');
-    const result = { unchanged: JSON.stringify(editor.getDocument()) === before, errors, locked: host.querySelector('#r-canvas').hasAttribute('inert'), paneLocked: host.querySelector('.cm-content').getAttribute('contenteditable'), undo: editor.undo(), readOnly: editor.readOnly };
+    const result = { unchanged: JSON.stringify(editor.getDocument()) === before, errors, lockedCanvas, afterGestures, paneLocked: host.querySelector('.cm-content').getAttribute('contenteditable'), undo: editor.undo(), readOnly: editor.readOnly };
     // The host itself still writes, and unlocking works.
     editor.session.set('name', 'Host edit');
     result.hostEdit = editor.getDocument().name;
     editor.setReadOnly(false);
-    result.unlocked = !host.querySelector('#r-canvas').hasAttribute('inert') && host.querySelector('.cm-content').getAttribute('contenteditable');
+    result.unlocked = !canvasNode.querySelector('.opf-canvas[data-readonly]') && host.querySelector('.cm-content').getAttribute('contenteditable');
+    await new Promise((done) => setTimeout(done, 300));
+    result.editableTargets = canvasNode.querySelectorAll('[data-canvas-target]').length > 0;
     editor.slideManager.setSelection([1]);
     editor.slideManager.run('delete');
     result.deleted = editor.getDocument().slides.length;
@@ -526,7 +537,9 @@ try {
   }, deck());
   assert.equal(readOnly.unchanged, true, 'no write through the editor reaches a read-only document');
   assert.ok(readOnly.errors.some((message) => /read-only/.test(message)), `the refused write is reported: ${JSON.stringify(readOnly.errors)}`);
-  assert.equal(readOnly.locked, true);
+  assert.deepEqual(readOnly.lockedCanvas, { inert: false, readonly: true, targets: 0, handles: 0, inputs: 0 }, 'a read-only slide is not inert: the canvas is read only, with no editing target, handle or visible input (the block controls keep their hidden fields)');
+  assert.deepEqual(readOnly.afterGestures, { inert: false, readonly: true, targets: 0, handles: 0, inputs: 0, same: true }, 'a click, a double click and typing on a read-only slide start no edit and change nothing');
+  assert.equal(readOnly.editableTargets, true, 'switched off, the slide has its editing targets again');
   assert.equal(readOnly.paneLocked, 'false');
   assert.equal(readOnly.undo, false);
   assert.equal(readOnly.hostEdit, 'Host edit', 'the host may still write to its own session');
