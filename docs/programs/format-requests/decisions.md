@@ -1,6 +1,7 @@
 # Format requests: decisions
 
-Read from the review page (rounds 1, 2 and 3) and the owner's saved answers of 2026-11-24 (`C:\opf-work\t\review-answers.md`). Program:
+Read from the review page (rounds 1, 2 and 3) and the owner's saved answers of 2026-11-24. Both are private and outside this repository
+(the answers are in `C:\opf-work\t\review-answers.md` on the supervisor's Windows computer), so this page is the record. Program:
 [README.md](README.md); items: [burndown.md](burndown.md).
 
 Who decided:
@@ -153,8 +154,9 @@ Round 2 decisions:
 
 ## FR-07: CR 5, table color scale, bands and bullet, gauge
 
-Owner's call: Change. Owner's note, quoted exactly: "i haven't really built or reviewed metricgen yet just go with what is best for OPF
-and ignore metricgen (but borrow any good ideas it has)". Round 2 is the result.
+Owner's call: Change. Owner's note, in short (it names the tool that sent the request, which is left out here): he has not built or
+reviewed that tool yet, so go with what is best for OPF, ignore the tool's own shapes and borrow any good ideas it has. Round 2 is the
+result.
 
 Round 1 answers, and what became of them:
 
@@ -162,7 +164,7 @@ Round 1 answers, and what became of them:
 | --- | --- | --- | --- |
 | `cr5-export`: What does each type become in PowerPoint? | Native parts, editable | Kept and made exact: the color scale is a native table with cell fills, the bullet a native bar chart with a target marker series, the gauge native `blockArc` shapes plus text (not a doughnut) | Owner, 2026-11-24 |
 | `cr5-which`: Which of the three are in 0.37.0? | All three, built in order and cut from the end | Kept: built heatmap (color scale), bullet, gauge; the gauge is cut first, then the bullet | Owner, 2026-11-24 |
-| `cr5-contract`: Whose data shape wins? | "Use the shapes shown here" (metricgen adapts) | Replaced by the note: ignore metricgen and take what is best for OPF; no question to metricgen first | Owner, 2026-11-24 |
+| `cr5-contract`: Whose data shape wins? | "Use the shapes shown here" (the requesting tool adapts) | Replaced by the note: take what is best for OPF; no question to the requesting tool first | Owner, 2026-11-24 |
 
 Round 2 decisions:
 
@@ -186,7 +188,7 @@ poster". Round 2 is the result (`poster` becomes an optional `preview`).
 
 Replaced: round 1's `cr11-in` (owner: "only if the request text arrives before the schema work starts"). Round 2 asks the question again
 because the owner has now reviewed the schema himself, and its recommended answer is taken. This takes embed from "wait" to "build", so
-it is the decision most worth an owner's look. Embed stays second in the cut order, after the gauge and the bullet chart.
+it is the decision most worth an owner's look. Embed stays third in the cut order, after the gauge and the bullet chart.
 
 ## FR-09: CR 14, limits on a variable's value
 

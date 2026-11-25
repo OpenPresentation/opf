@@ -12,8 +12,10 @@ date names. Each change lands on `main` whole (schema, engines, docs, tests and 
 
 The review page and the plan page were written when this release was still called 0.36. The owner then chose to ship the fixes now as
 0.36.0 (from the Windows computer) and to build the format changes later as 0.37.0, so the review's "0.36" is this program's 0.37.0 and
-its "0.37" (the three studies) is 0.38. Group letters, change numbers (CR 1 to CR 17) and question ids are unchanged, and the analysis in
-`C:\opf-work\t\format-requests-0.36.md` keeps its old file name. The baseline is 0.36.0 on `main`.
+its "0.37" (the three studies) is 0.38. Group letters, change numbers (CR 1 to CR 17) and question ids are unchanged. The review page,
+the plan page and the analysis are private and outside this repository (the analysis is `C:\opf-work\t\format-requests-0.36.md` on the
+supervisor's Windows computer and keeps its old file name), so the burndown and the decision log here are written to stand on their own.
+The baseline is 0.36.0 on `main`.
 
 On 2026-11-25 the owner said to start 0.37 now and that the supervisor "can make good decisions for open items too". An open decision
 therefore does not stop work: the option the review marks as recommended is taken, written into [decisions.md](decisions.md) as a
@@ -97,8 +99,8 @@ in [cloud-editor](../cloud-editor/README.md) and not format.
 
 ## Resume protocol
 
-Read this file, [burndown.md](burndown.md) and [decisions.md](decisions.md), then the card of your item on the review page and the
-analysis (`C:\opf-work\t\format-requests-0.36.md`). Work in your own worktree (`node scripts/agent-worktree.mjs add fr-<nn>-<slug>`)
+Read this file, [burndown.md](burndown.md) and [decisions.md](decisions.md), then, where you can reach them, the card of your item on
+the review page and the analysis (`C:\opf-work\t\format-requests-0.36.md`). Work in your own worktree (`node scripts/agent-worktree.mjs add fr-<nn>-<slug>`)
 from a fresh `origin/main`. Take an open decision from [decisions.md](decisions.md); if you must decide something new, add a row there
 as a supervisor decision the owner can overrule. Run `pnpm check:changed` before you report. In the pull request that changes an item's
 state, edit its row in the burndown and append a line to its progress log. Never edit a sealed fixture or a golden; if one moves, stop

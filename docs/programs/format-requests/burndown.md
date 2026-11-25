@@ -162,7 +162,7 @@ Progress log:
 
 ## FR-07: table color scale, bands with the bullet chart, and the gauge (CR 5)
 
-Redone on OPF's own terms, ignoring metricgen. `chart.type` lists only what the preview and PowerPoint draw as native charts, so a heatmap
+Redone on OPF's own terms, not on the requesting tool's shapes. `chart.type` lists only what the preview and PowerPoint draw as native charts, so a heatmap
 is a table option, the bullet is a chart type with value-axis bands, and the gauge is a way to draw a metric. Built and cut in this order:
 the table color scale, then bands with the bullet chart, then the gauge. Each part is its own pull request with its own PowerPoint check.
 
