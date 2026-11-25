@@ -13,7 +13,7 @@ it exports the decks, has the application open, draw and resave each file, and s
 ```sh
 pnpm native <target> [--tier smoke|release|full] [--decks a,b] [--variants default,native-body] [--baseline <opf version>|none]
                      [--out <dir>] [--from-run <dir>] [--inputs <dir>] [--previews <dir>] [--warnings-dir <dir>]
-                     [--look deck#slide,...] [--no-sheets] [--write-summary] [--json]
+                     [--look deck#slide,...] [--no-sheets] [--write-summary] [--release <x.y.z>] [--force-summary] [--json]
 ```
 
 **Targets.**
@@ -48,7 +48,8 @@ tier the slides the fragments name, and `--look deck#slide`, are new whatever th
 5. **round trip** (`core/roundtrip/`), **compare** with OPF's previews (`core/compare/`) and **classify**
    (`core/classify/README.md`) against `known/<target>.json` and the baseline summary `runs/<version>/<target>.json`. A
    target without known records is classified with an empty list, and a note says so. The baseline is `--baseline
-   <version>`, `none`, or by default the newest version under `runs/` that has the target. Then a labeled sheet for every
+   <version>`, `none`, or by default the newest version under `runs/` that has the target (below `--release` when it is
+   given). Then a labeled sheet for every
    new slide (`<run>/sheets/`), unless `--no-sheets`.
 6. **report**: files opened; slides same, known and still there, known and gone, new, and not compared; file findings; new
    import-warning lines. Then every new item with its reason and its sheet, then what was not run. `--json` prints the
@@ -63,9 +64,25 @@ could not finish.
 it. Without `--out` the run goes to `~/opf-work/native/<target>-<date>-<time>` (UTC) when `~/opf-work` exists (the agents'
 work folder), else to `<system temp>/opf-native/<target>-<date>-<time>`. `<out>/build` holds the exported files and the
 previews, `<out>/run` the run directory with `classify.json` and the sheets. All of it is evidence and stays out of `main`.
-Nothing is written inside the repository unless `--write-summary` is given: it writes `runs/<opf version>/<target>.json`
+Nothing is written inside the repository unless `--write-summary` is given: it writes `runs/<version>/<target>.json`
 (`core/classify/summary.mjs`) for a run that finished (exit 0 or 1), prints the path, and notes how many new items the
 summary keeps as new. Commit that one file, and only after review.
+
+**Summaries of a release candidate.** A candidate is built from a workspace that still carries the previous release's
+version, so without more the summary would be named after that release and replace the baseline the run was classified
+against. `--release <x.y.z>` names the version the candidate will be released as: `--write-summary` then writes
+`runs/<release>/<target>.json`, whose `opf` is `{ version: <release>, commit: <the candidate's commit> }`. `run.json` and
+every `result.json` keep the truth (the workspace's version and commit; the run format has no field for the release, so the
+release lives in the summary only). The report names both: "OPF workspace 0.36.0 at <commit>, release candidate 0.37.0".
+A baseline equal to the release is refused (a run cannot be its own baseline), and the default baseline is the newest
+summary below the release. `--write-summary` never replaces an existing summary unless `--force-summary` is given: it
+prints the report, says which file it would have replaced, and exits with 2. Both flags work with `--from-run`, so a
+reviewed candidate run is written later without opening the application again:
+
+```sh
+pnpm native keynote --tier release --release 0.37.0                       # run, review the new items
+pnpm native keynote --from-run <out>/run --release 0.37.0 --write-summary   # after review: runs/0.37.0/keynote.json
+```
 
 **`--from-run <dir>`** skips the check, build and run steps and classifies a run directory of the shared format in place:
 one the Windows PowerPoint driver wrote, the LibreOffice runner's `<out>/native`, or one from

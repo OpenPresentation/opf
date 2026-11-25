@@ -12,7 +12,7 @@ import { validateSummary } from './core/classify/summary.mjs';
 import { sharp } from './core/compare/picture.mjs';
 import { picturePath } from './core/result/result.mjs';
 import { makePptx, sp } from './core/roundtrip/test-deck.mjs';
-import { defaultOut, impressDeck, insideRepository, lookForTarget, parseArgs, ROOT, resolveBaseline, runNative, selectFiles, UsageError } from './native.mjs';
+import { defaultOut, impressDeck, opfLine, insideRepository, lookForTarget, parseArgs, ROOT, resolveBaseline, runNative, selectFiles, UsageError } from './native.mjs';
 
 const MANIFEST = {
   version: 'test',
@@ -306,4 +306,52 @@ test('the default output folder and the baseline', () => {
   assert.equal(resolveBaseline('keynote', 'none', runs), null);
   assert.equal(resolveBaseline('impress', undefined, runs), null);
   assert.throws(() => resolveBaseline('keynote', '0.1.0', runs), /no runs\/0\.1\.0\/keynote\.json/u);
+});
+
+test('--release names the summary after the release, keeps the truth in run.json, and a summary is never replaced unasked', async () => {
+  assert.throws(() => parseArgs(['keynote', '--release', 'next']), UsageError);
+  assert.throws(() => parseArgs(['keynote', '--release', '0.37.0', '--baseline', '0.37.0']), /cannot be its own baseline/u);
+  const { deps, lines, out } = await setup();
+  mkdirSync(path.join(deps.runsDir, '0.36.0'));
+  writeFileSync(path.join(deps.runsDir, '0.36.0', 'keynote.json'), 'the 0.36.0 baseline');
+  // The workspace still says 0.37.0 here; the candidate is released as 0.38.0.
+  const { exit, report } = await runNative(['keynote', '--out', out, '--baseline', 'none', '--write-summary', '--release', '0.38.0'], deps);
+  assert.equal(exit, 0, lines.join('\n'));
+  const file = path.join(deps.runsDir, '0.38.0', 'keynote.json');
+  assert.equal(report.summary, file);
+  assert.deepEqual(JSON.parse(readFileSync(file, 'utf8')).opf, { version: '0.38.0', commit: 'abc1234' });
+  assert.deepEqual(JSON.parse(readFileSync(path.join(out, 'run', 'run.json'), 'utf8')).opf, { version: '0.37.0', commit: 'abc1234' });
+  assert.equal(JSON.parse(readFileSync(path.join(out, 'run', 'files', 'alpha~default', 'result.json'), 'utf8')).opf.version, '0.37.0');
+  assert.match(lines.join('\n'), /OPF workspace 0\.37\.0 at abc1234, release candidate 0\.38\.0/u);
+  assert.equal(readFileSync(path.join(deps.runsDir, '0.36.0', 'keynote.json'), 'utf8'), 'the 0.36.0 baseline', 'the baseline is untouched');
+
+  // --from-run writes the reviewed run later; an existing summary is refused (exit 2, after the report) unless forced.
+  const runDir = path.join(out, 'run');
+  const before = readFileSync(file, 'utf8');
+  lines.length = 0;
+  const refused = await runNative(['keynote', '--from-run', runDir, '--baseline', 'none', '--write-summary', '--release', '0.38.0'], deps);
+  assert.equal(refused.exit, 2);
+  assert.match(lines.join('\n'), /files opened[\s\S]*--write-summary: not written: .*0\.38\.0\/keynote\.json exists and would be replaced; pass --force-summary/u);
+  assert.equal(readFileSync(file, 'utf8'), before);
+  const forced = await runNative(['keynote', '--from-run', runDir, '--baseline', 'none', '--write-summary', '--release', '0.38.0', '--force-summary'], deps);
+  assert.equal(forced.exit, 0);
+  assert.equal(forced.report.summary, file);
+
+  // Without --release the summary goes under the workspace version, and it too is not replaced unasked.
+  const plain = await runNative(['keynote', '--from-run', runDir, '--baseline', 'none', '--write-summary'], deps);
+  assert.equal(plain.exit, 0);
+  assert.ok(existsSync(path.join(deps.runsDir, '0.37.0', 'keynote.json')));
+  assert.equal((await runNative(['keynote', '--from-run', runDir, '--baseline', 'none', '--write-summary'], deps)).exit, 2);
+});
+
+test('the default baseline of a release candidate is the newest summary below the release', () => {
+  const runs = temp('runs');
+  for (const version of ['0.36.0', '0.37.0']) {
+    mkdirSync(path.join(runs, version));
+    writeFileSync(path.join(runs, version, 'keynote.json'), '{}');
+  }
+  assert.equal(resolveBaseline('keynote', undefined, runs).version, '0.37.0');
+  assert.equal(resolveBaseline('keynote', undefined, runs, '0.37.0').version, '0.36.0');
+  assert.equal(opfLine({ opf: { version: '0.36.0', commit: '0123456789abcdef' }, release: '0.37.0' }), 'OPF workspace 0.36.0 at 012345678, release candidate 0.37.0');
+  assert.equal(opfLine({ opf: { version: '0.36.0' }, release: null }), 'OPF 0.36.0');
 });

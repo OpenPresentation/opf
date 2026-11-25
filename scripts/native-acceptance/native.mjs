@@ -3,7 +3,7 @@
 //
 //   pnpm native <target> [--tier smoke|release|full] [--decks a,b] [--variants default,native-body] [--baseline <opf version>|none]
 //                        [--out <dir>] [--from-run <dir>] [--inputs <dir>] [--previews <dir>] [--warnings-dir <dir>]
-//                        [--look deck#slide,...] [--no-sheets] [--write-summary] [--json]
+//                        [--look deck#slide,...] [--no-sheets] [--write-summary] [--release <x.y.z>] [--force-summary] [--json]
 //
 // Targets: keynote, powerpoint, impress, powerpoint-mac. The steps (README.md, "One command: pnpm native"):
 //   a. select   the decks and variants of the tier (qualification/manifest.json, tiers.mjs) or --decks; the smoke tier adds the
@@ -15,6 +15,9 @@
 //               known/<target>.json and the baseline summary runs/<version>/<target>.json; a sheet per new slide
 //   f. report   the counts, every new item with its reason and sheet, and what was not run
 // --from-run <dir> skips a to d and classifies a run directory another machine's driver (or import-recorded.mjs) wrote.
+// --write-summary writes runs/<version>/<target>.json: the workspace's version, or with --release <x.y.z> the version a
+// release candidate will be released as (run.json and result.json keep the workspace's version and commit). It never
+// replaces a summary unless --force-summary is given. Both work with --from-run.
 // Exit: 0 nothing new, 1 something new, 2 refused, not run, or failed to finish.
 import { execFileSync, spawnSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, realpathSync } from 'node:fs';
@@ -37,7 +40,7 @@ export const ROOT = path.resolve(here, '../..');
 
 export const USAGE = `usage: pnpm native <${TARGETS.join('|')}> [--tier ${TIERS.join('|')}] [--decks a,b] [--variants default,native-body]
                    [--baseline <opf version>|none] [--out <dir>] [--from-run <dir>] [--inputs <dir>] [--previews <dir>]
-                   [--warnings-dir <dir>] [--look deck#slide,...] [--no-sheets] [--write-summary] [--json]`;
+                   [--warnings-dir <dir>] [--look deck#slide,...] [--no-sheets] [--write-summary] [--release <x.y.z>] [--force-summary] [--json]`;
 
 /** What a target without a driver in this repository says instead of a check. */
 export const NO_DRIVER = Object.freeze({
@@ -64,8 +67,9 @@ export function parseArgs(argv) {
     '--previews': 'previews',
     '--warnings-dir': 'warningsDir',
     '--look': 'look',
+    '--release': 'release',
   };
-  const flags = { '--no-sheets': ['sheets', false], '--write-summary': ['writeSummary', true], '--json': ['json', true], '--help': ['help', true], '-h': ['help', true] };
+  const flags = { '--no-sheets': ['sheets', false], '--write-summary': ['writeSummary', true], '--force-summary': ['forceSummary', true], '--json': ['json', true], '--help': ['help', true], '-h': ['help', true] };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     if (valued[arg]) {
@@ -91,6 +95,8 @@ export function parseArgs(argv) {
   for (const key of ['decks', 'variants']) if (options[key] && options[key].length === 0) throw new UsageError(`--${key} names nothing`);
   for (const item of options.look) if (!LOOK.test(item)) throw new UsageError(`--look "${item}" is not deck#slide`);
   if (options.baseline !== undefined && options.baseline !== 'none' && !/^\d+\.\d+\.\d+$/u.test(options.baseline)) throw new UsageError(`--baseline "${options.baseline}" is not an OPF version (such as 0.36.0) or none`);
+  if (options.release !== undefined && !/^\d+\.\d+\.\d+$/u.test(options.release)) throw new UsageError(`--release "${options.release}" is not a version (such as 0.37.0)`);
+  if (options.release && options.baseline === options.release) throw new UsageError(`--baseline ${options.baseline} is the release this run is for; a run cannot be its own baseline`);
   if (options.fromRun && options.out) throw new UsageError('--from-run classifies that run directory in place; --out does not apply');
   if (options.fromRun && (options.decks || options.variants)) throw new UsageError('--from-run classifies every file of the run directory; --decks and --variants do not apply');
   if (!options.fromRun && (options.inputs || options.previews)) throw new UsageError('--inputs and --previews go with --from-run');
@@ -173,9 +179,10 @@ const compareVersions = (a, b) => {
 
 /**
  * The baseline summary: `none` -> null; a version -> runs/<version>/<target>.json (must exist); absent -> the newest version
- * under runs/ that has this target, or null. Returns { version, file } or null.
+ * under runs/ that has this target (below `release` when one is given: a run is never its own baseline), or null.
+ * Returns { version, file } or null.
  */
-export function resolveBaseline(target, requested, runsDir) {
+export function resolveBaseline(target, requested, runsDir, release = null) {
   if (requested === 'none') return null;
   if (requested) {
     const file = path.join(runsDir, requested, `${target}.json`);
@@ -184,7 +191,7 @@ export function resolveBaseline(target, requested, runsDir) {
   }
   const versions = existsSync(runsDir)
     ? readdirSync(runsDir)
-        .filter((name) => /^\d+\.\d+\.\d+$/u.test(name) && existsSync(path.join(runsDir, name, `${target}.json`)))
+        .filter((name) => /^\d+\.\d+\.\d+$/u.test(name) && existsSync(path.join(runsDir, name, `${target}.json`)) && (!release || compareVersions(name, release) < 0))
         .sort(compareVersions)
     : [];
   const version = versions.at(-1);
@@ -337,12 +344,13 @@ export async function runNative(argv, deps = {}) {
   let stopped = false;
   let baseline;
   try {
-    baseline = resolveBaseline(target, options.baseline, d.runsDir);
+    baseline = resolveBaseline(target, options.baseline, d.runsDir, options.release ?? null);
   } catch (problem) {
     d.error(`pnpm native: ${problem.message}`);
     return finish(2);
   }
   report.baseline = baseline?.version ?? null;
+  report.release = options.release ?? null;
 
   if (options.fromRun) {
     runDir = path.resolve(options.fromRun);
@@ -610,15 +618,19 @@ export async function runNative(argv, deps = {}) {
   if (options.writeSummary) {
     if (exit === 2) report.notes.push('--write-summary: not written, the run did not finish (exit 2)');
     else {
+      // run.json and every result.json keep the workspace's version and commit; a release candidate's summary is named
+      // after the release it will become (--release), with the candidate's commit.
       const run = readJson(path.join(runDir, 'run.json'));
-      const file = path.join(d.runsDir, run.opf.version, `${target}.json`);
+      const opf = options.release ? { version: options.release, ...(run.opf.commit ? { commit: run.opf.commit } : {}) } : run.opf;
+      const file = path.join(d.runsDir, opf.version, `${target}.json`);
       try {
+        if (existsSync(file) && !options.forceSummary) throw new Error(`not written: ${file} exists and would be replaced; pass --force-summary to replace it`);
         mkdirSync(path.dirname(file), { recursive: true });
-        writeSummary(file, summarize({ run, results: all, classified: classified.files, settings: classified.settings }));
+        writeSummary(file, summarize({ run: { ...run, opf }, results: all, classified: classified.files, settings: classified.settings }));
         report.summary = file;
         if (counts.new > 0) report.notes.push(`the summary keeps ${counts.new} new item(s) as new: they stay new in the next run until a known record or a fix covers them`);
       } catch (problem) {
-        report.notes.push(`--write-summary failed: ${problem.message}`);
+        report.notes.push(`--write-summary: ${problem.message}`);
         exit = 2;
       }
     }
@@ -645,11 +657,18 @@ function table(rows) {
   return rows.map(([label, value]) => `  ${label.padEnd(width)}  ${value}`);
 }
 
+/** "OPF 0.37.0 abc123456", or with --release "OPF workspace 0.36.0 at abc123456, release candidate 0.37.0". */
+export function opfLine({ opf, release }) {
+  const commit = opf?.commit ? opf.commit.slice(0, 9) : null;
+  if (!release) return `OPF ${opf?.version ?? '?'}${commit ? ` ${commit}` : ''}`;
+  return `OPF workspace ${opf?.version ?? '?'}${commit ? ` at ${commit}` : ''}, release candidate ${release}`;
+}
+
 /** Step f as text. */
 export function printReport(report, log) {
   const { counts } = report;
   log('');
-  log(`${report.target}${report.application ? ` (${report.application.name} ${report.application.version}${report.application.build ? ` ${report.application.build}` : ''})` : ''}, OPF ${report.opf?.version ?? '?'}${report.opf?.commit ? ` ${report.opf.commit.slice(0, 9)}` : ''}, tier ${report.tier ?? 'none'}, baseline ${report.baseline ?? 'none'}`);
+  log(`${report.target}${report.application ? ` (${report.application.name} ${report.application.version}${report.application.build ? ` ${report.application.build}` : ''})` : ''}, ${opfLine(report)}, tier ${report.tier ?? 'none'}, baseline ${report.baseline ?? 'none'}`);
   for (const line of table([
     ['files opened', `${counts.opened} of ${counts.files}`],
     ['slides same', counts.slides.same],
