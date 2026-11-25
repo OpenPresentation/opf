@@ -1543,9 +1543,22 @@
 }
 
 .opf-template-kind,
+.opf-template-limit,
 .opf-template-help {
   font: 400 11px/1.5 var(--opf-ui-mono);
   color: var(--opf-ui-muted-fg);
+}
+
+.opf-template-limit {
+  margin: 0;
+}
+
+.opf-template-limit[hidden] {
+  display: none;
+}
+
+.opf-template-limit[data-over="true"] {
+  color: var(--opf-ui-danger);
 }
 
 .opf-template-status {

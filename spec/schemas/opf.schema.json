@@ -1391,6 +1391,16 @@
             }
           ],
           "description": "Illustrative text shown in fill forms and used when a template is previewed with examples. Never written to output."
+        },
+        "maxLength": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The most characters the value may have, counted as a reader sees them (an accented letter or an emoji counts once, however it is encoded). Checked on the declared value and on a value given to a fill; a longer value is the warning opf/variable-overflow. Fill forms and models read it before writing."
+        },
+        "maxLines": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The most lines the value may take where it is drawn. Checked by composition at each place the variable is drawn (a title, a subtitle, a text block or a list entry), because the line count depends on the width of the box; a value that takes more lines is the warning opf/variable-overflow at that place, naming the slide. Inside longer text, the lines are those the variable's own characters occupy."
         }
       },
       "description": "Text content. Plain string or rich TextRun[]. Insert it inline as '{{<id>}}' inside any string (rich text is flattened to plain text there), or reference it whole as 'var:<id>' in a field that accepts string or TextRun[] (the rich runs are kept)."
@@ -1608,6 +1618,11 @@
             "type": "string"
           },
           "description": "Illustrative entries shown in fill forms and used when a template is previewed with examples. Never written to output."
+        },
+        "maxItems": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The most entries the list may have. Checked on the declared value and on a value given to a fill; a longer list is the warning opf/variable-overflow. Fill forms and models read it before writing."
         }
       },
       "description": "A list of strings, for bullets and list items. A whole-string array element 'var:<id>' splices every entry into the array in place; a whole field 'var:<id>' becomes the array; '{{<id>}}' joins the entries with ', ' (or the separator after a pipe: '{{<id>|; }}')."

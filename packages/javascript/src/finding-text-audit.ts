@@ -428,6 +428,28 @@ const textShrunk: RuleText = (finding) => {
   };
 };
 
+const variableOverflow: RuleText = (finding) => {
+  const id = match(finding.message, /^'([a-z][a-z0-9-]*)'/)?.[1];
+  if (!id) return undefined;
+  const lines = measuredNumber(finding, "lines");
+  const maxLines = measuredNumber(finding, "maxLines");
+  if (lines !== undefined && maxLines !== undefined) {
+    return {
+      message: `Variable ${code(id)} takes ${lines} lines${onSlide(finding)}, over its ${code("maxLines")} of ${maxLines}.`,
+      next: `shorten the value, draw it in a wider place, or raise ${code("maxLines")} if the slide has the room.`,
+    };
+  }
+  const characters = measuredNumber(finding, "characters");
+  const maxLength = measuredNumber(finding, "maxLength");
+  if (characters !== undefined && maxLength !== undefined) {
+    return { message: `Variable ${code(id)} has ${characters} characters, over its ${code("maxLength")} of ${maxLength}.`, next: `shorten the value to ${maxLength} characters or fewer, or raise ${code("maxLength")}.` };
+  }
+  const items = measuredNumber(finding, "items");
+  const maxItems = measuredNumber(finding, "maxItems");
+  if (items === undefined || maxItems === undefined) return undefined;
+  return { message: `Variable ${code(id)} has ${items} items, over its ${code("maxItems")} of ${maxItems}.`, next: `give it ${maxItems} items or fewer, or raise ${code("maxItems")}.` };
+};
+
 const centeredBody: RuleText = (finding) => {
   const lines = measuredNumber(finding, "lines");
   const characters = measuredNumber(finding, "characters");
@@ -713,6 +735,7 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/empty-slide": emptySlide,
   "opf/language-tag": languageTag,
   "opf/text-shrunk": textShrunk,
+  "opf/variable-overflow": variableOverflow,
   "opf/centered-body": centeredBody,
   "opf/tight-spacing": tightSpacing,
   "opf/layout-monotony": layoutMonotony,

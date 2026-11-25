@@ -3,7 +3,7 @@
 // Everything here reads and writes the document through the session, so a fill, a declaration
 // and a token insertion are validated, undoable JSON Patch edits like any other. Importing this
 // module needs no DOM.
-import { coerceVariableValue, hasContentVariables, listBuiltinVariables, listVariables, resolveVariables, variableDeclarations } from "@openpresentation/opf";
+import { coerceVariableValue, hasContentVariables, listBuiltinVariables, listVariables, resolveVariables, variableDeclarations, visibleLength } from "@openpresentation/opf";
 import { OPFEditorError, getValueAtPath, opfPathToJsonPointer } from "./index.js";
 
 const VARIABLE_ID = /^[a-z][a-z0-9-]*$/;
@@ -85,6 +85,23 @@ export function fieldTextToValue(kind, text) {
 }
 
 /**
+ * What a value uses of the limits its declaration sets (FR-09): `maxLength` counts characters as a reader sees them, `maxItems` the
+ * entries of a list. `maxLines` has no count here: the line count depends on the box where the variable is drawn, so composition
+ * reports it (`opf/variable-overflow`). Undefined when the variable sets no limit this value can be counted against.
+ */
+export function limitUsage(kind, value, limits) {
+  if (kind === "text" && limits.maxLength !== undefined) {
+    const used = visibleLength(valueToFieldText("text", value));
+    return { unit: "characters", used, max: limits.maxLength, over: used > limits.maxLength };
+  }
+  if (kind === "list" && limits.maxItems !== undefined) {
+    const used = Array.isArray(value) ? value.length : 0;
+    return { unit: "items", used, max: limits.maxItems, over: used > limits.maxItems };
+  }
+  return undefined;
+}
+
+/**
  * The variables of a document as form fields, with the state a panel needs:
  * `status` is "filled" (a value was supplied), "default" (the declaration has a value), "unfilled"
  * (required, no value) or "optional" (not required, no value).
@@ -111,6 +128,9 @@ export function listTemplateFields(presentation, values = {}) {
       text: supplied ? valueToFieldText(info.kind, value) : "",
       placeholder: valueToFieldText(info.kind, defaultValue !== undefined ? defaultValue : info.example),
       rich: info.kind === "text" && Array.isArray(value),
+      ...(declaration?.maxLength !== undefined ? { maxLength: declaration.maxLength } : {}),
+      ...(declaration?.maxLines !== undefined ? { maxLines: declaration.maxLines } : {}),
+      ...(declaration?.maxItems !== undefined ? { maxItems: declaration.maxItems } : {}),
       status,
       uses: info.uses,
     };
