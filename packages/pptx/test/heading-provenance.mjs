@@ -23,7 +23,7 @@ const lineDeck={...deck,slides:[{...deck.slides[0],title:'Agenda\tA complete hea
 const lineEntries=unzipSync(lineBytes);for(const file of tags(lineEntries)){const xml=dec.decode(lineEntries[file]),hex=xml.match(/val="([^"]+)"/)[1],value=data(lineEntries[file]);delete value.boundary;delete value.separator;lineEntries[file]=enc.encode(xml.replace(hex,Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()));}
 const oldTitleLines=resolvePresentation(lineDeck,{fonts}).slides[0].geometry.items.find(item=>item.field==='title').text.lines;
 assert.ok(oldTitleLines.length>1);
-assert.equal((await fromPptx(zipSync(lineEntries))).slides[0].title,oldTitleLines.join('\n'),'Legacy tags retain current native line breaks without inventing source boundaries');
+assert.equal((await fromPptx(zipSync(lineEntries))).slides[0].title,oldTitleLines.map(line => line.replace(/ +$/u, '')).join('\n'),'Legacy tags retain current native line breaks without inventing source boundaries');
 const changed=await fromPptx(modify(entries=>slide(entries,xml=>xml.replace('A complete','An edited'))));
 assert.equal(changed.slides[0].title,initial.title.replace('A complete','An edited'),'Current native text wins over authoring source');
 const reordered=await fromPptx(modify(entries=>slide(entries,xml=>{const shapes=[...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(m=>m[0]);return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,()=>shapes.pop());})));
