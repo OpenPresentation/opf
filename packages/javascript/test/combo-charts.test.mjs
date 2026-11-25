@@ -69,7 +69,7 @@ describe("combo plan (resolveChartData)", () => {
 
   test("unknown names are errors; names that cannot apply are adapted with a warning", () => {
     const unknown = resolveChartData(combo({ lineSeries: ["Profit"], secondaryAxis: ["Loss"] }), undefined, { path: "/slides/0/chart" });
-    assert.deepEqual(codes(unknown.diagnostics), ["chart-mapping-unknown-column /slides/0/chart/line/0", "chart-mapping-unknown-column /slides/0/chart/secondaryAxis/0"]);
+    assert.deepEqual(codes(unknown.diagnostics), ["chart-mapping-unknown-column /slides/0/chart/lineSeries/0", "chart-mapping-unknown-column /slides/0/chart/secondaryAxis/0"]);
     assert.equal(unknown.diagnostics[0].severity, "error");
     // An explicit line list that names nothing usable leaves every series a column.
     assert.deepEqual(unknown.combo.map((entry) => entry.role), ["bar", "bar", "bar"]);
@@ -79,14 +79,14 @@ describe("combo plan (resolveChartData)", () => {
     assert.equal(notLine.combo[0].axis, "primary");
 
     const notPlotted = resolveChartData(combo({ mapping: { series: ["Revenue", "Cost"] }, lineSeries: ["Margin"] }));
-    assert.deepEqual(codes(notPlotted.diagnostics), ["chart-mapping-adapted /line/0"]);
+    assert.deepEqual(codes(notPlotted.diagnostics), ["chart-mapping-adapted /lineSeries/0"]);
     assert.match(notPlotted.diagnostics[0].message, /not a plotted series/);
   });
 
   test("at least one column series: a line list naming every series keeps the first as columns", () => {
     const resolved = resolveChartData(combo({ lineSeries: ["Revenue", "Cost", "Margin"] }));
     assert.deepEqual(resolved.combo.map((entry) => entry.role), ["bar", "line", "line"]);
-    assert.deepEqual(codes(resolved.diagnostics), ["chart-mapping-adapted /line"]);
+    assert.deepEqual(codes(resolved.diagnostics), ["chart-mapping-adapted /lineSeries"]);
   });
 
   test("one series is drawn as columns with a warning", () => {
@@ -133,7 +133,7 @@ describe("combo options (resolveChartOptions)", () => {
 
   test("line, secondaryAxis and the secondary title are adapted on other chart types", () => {
     const resolved = resolveChartOptions({ ...combo({ lineSeries: ["Margin"], secondaryAxis: ["Margin"], axisTitles: { secondary: "Margin" } }), type: "line" }, chartOptionTarget("line"));
-    assert.deepEqual(resolved.diagnostics.map((entry) => entry.option), ["line", "secondaryAxis", "axisTitles.secondary"]);
+    assert.deepEqual(resolved.diagnostics.map((entry) => entry.option), ["lineSeries", "secondaryAxis", "axisTitles.secondary"]);
     assert.equal(resolved.active, false);
   });
 });
@@ -148,10 +148,10 @@ describe("combo validation", () => {
   test("an unknown series name is an error; line on another type is a warning", () => {
     const unknown = check(deck(combo({ lineSeries: ["Profit"] })));
     assert.equal(unknown.valid, false);
-    assert.deepEqual(errorsOf(unknown).map((entry) => entry.path), ["/slides/0/chart/line/0"]);
+    assert.deepEqual(errorsOf(unknown).map((entry) => entry.path), ["/slides/0/chart/lineSeries/0"]);
     const other = check(deck({ ...combo({ lineSeries: ["Margin"] }), type: "column" }), { only: ["format", "layout"] });
     assert.equal(other.valid, true);
-    assert.deepEqual(warningsOf(other).map((entry) => `${entry.ruleId} ${entry.path}`), ["opf/chart-option-adapted /slides/0/chart/line"]);
+    assert.deepEqual(warningsOf(other).map((entry) => `${entry.ruleId} ${entry.path}`), ["opf/chart-option-adapted /slides/0/chart/lineSeries"]);
   });
 
   test("the schema rejects an empty or repeated list", () => {

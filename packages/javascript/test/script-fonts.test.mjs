@@ -250,13 +250,13 @@ describe('script classes', () => {
     }
   });
 
-  test('scriptGroup: eastAsian is ea and complexScript is cs, and core reads both spellings as one value', () => {
-    assert.deepEqual(['latin', 'ea', 'eastAsian', 'cs', 'complexScript', 'arabic', undefined, 3].map(normalizeScriptGroup), ['latin', 'ea', 'ea', 'cs', 'cs', undefined, undefined, undefined]);
+  test('scriptGroup: eastAsian is the ea slot and complexScript the cs slot; the short names are no longer read', () => {
+    assert.deepEqual(['latin', 'ea', 'eastAsian', 'cs', 'complexScript', 'arabic', undefined, 3].map(normalizeScriptGroup), ['latin', undefined, 'ea', undefined, 'cs', undefined, undefined, undefined]);
     const base = {major: 'Ebrima', minor: 'Nyala'};
     for (const [short, long, language, slot] of [['ea', 'eastAsian', 'japanese', 'eastAsian'], ['cs', 'complexScript', 'arabic', 'complexScript']]) {
       const withShort = resolveScriptFonts(deck(language, {...base, scriptGroup: short}));
       const withLong = resolveScriptFonts(deck(language, {...base, scriptGroup: long}));
-      assert.deepEqual(withLong, withShort, long);
+      assert.notEqual(withShort.sources[slot], 'schemeFamily', `${short} is not read since 0.37`);
       assert.equal(withLong.sources[slot], 'schemeFamily', long);
       assert.equal(withLong.body[slot], 'Nyala', long);
       assert.equal(withLong.heading[slot], 'Ebrima', long);
@@ -288,7 +288,7 @@ describe('script classes', () => {
       const resolved = resolveScriptFonts({language: language.bcp47, design: {fontScheme: scheme.id}}, {app});
       const own = app === 'google-slides' ? language.googleFontScheme : language.fontScheme;
       const ownScheme = fontSchemes.find((entry) => entry.id === own);
-      const serves = scheme.scriptGroup === 'cs' && (!scheme.languages?.length || scheme.languages.includes(language.bcp47));
+      const serves = scheme.scriptGroup === 'complexScript' && (!scheme.languages?.length || scheme.languages.includes(language.bcp47));
       const expected = serves ? scheme : ownScheme;
       const label = `${language.id} on ${scheme.id} (${app})`;
       assert.equal(resolved.sources.complexScript === 'schemeFamily', serves, label);

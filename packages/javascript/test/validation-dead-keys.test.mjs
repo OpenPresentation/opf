@@ -240,16 +240,16 @@ describe('FontScheme.app and scriptGroup', () => {
       assert.equal(result.valid, true, `${record.id}: ${JSON.stringify(errorsOf(result))}`);
     }
   });
-  test('scriptGroup accepts latin, ea, cs, eastAsian and complexScript', () => {
+  test('scriptGroup accepts latin, eastAsian and complexScript, and not the short names of 0.36', () => {
     const base = { $schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: 'x', name: 'X', major: 'A', minor: 'B' };
-    for (const scriptGroup of ['latin', 'ea', 'cs', 'eastAsian', 'complexScript']) {
+    for (const scriptGroup of ['latin', 'eastAsian', 'complexScript']) {
       valid(deck({ design: { fontScheme: { id: 'aptos', scriptGroup } } }));
       assert.equal(validateCatalogRecord('fontSchemes', { ...base, scriptGroup }).valid, true, scriptGroup);
     }
-    for (const scriptGroup of ['arabic', 'EA', 'east-asian']) invalid(deck({ design: { fontScheme: { id: 'aptos', scriptGroup } } }), '/design/fontScheme/scriptGroup');
+    for (const scriptGroup of ['arabic', 'EA', 'east-asian', 'ea', 'cs']) invalid(deck({ design: { fontScheme: { id: 'aptos', scriptGroup } } }), '/design/fontScheme/scriptGroup');
   });
-  test('core normalizes the long names to the short ones', () => {
-    assert.deepEqual(['latin', 'ea', 'eastAsian', 'cs', 'complexScript', 'x', undefined].map(normalizeScriptGroup), ['latin', 'ea', 'ea', 'cs', 'cs', undefined, undefined]);
+  test('core normalizes the long names to the slot names', () => {
+    assert.deepEqual(['latin', 'ea', 'eastAsian', 'cs', 'complexScript', 'x', undefined].map(normalizeScriptGroup), ['latin', undefined, 'ea', undefined, 'cs', undefined, undefined]);
   });
 });
 

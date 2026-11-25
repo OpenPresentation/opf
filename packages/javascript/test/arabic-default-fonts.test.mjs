@@ -33,7 +33,7 @@ describe("the Arabic, Persian and Urdu default fonts (v0.35)", () => {
       const language = catalogDisplay.languages[record];
       assert.equal(language.fontScheme, "times-new-roman-arial");
       const scheme = gallery.fontSchemes[language.fontScheme];
-      assert.deepEqual([scheme.major, scheme.minor, scheme.scriptGroup], ["Times New Roman", "Arial", "cs"]);
+      assert.deepEqual([scheme.major, scheme.minor, scheme.scriptGroup], ["Times New Roman", "Arial", "complexScript"]);
       assert.ok(scheme.languages.includes(tag));
     });
   }
