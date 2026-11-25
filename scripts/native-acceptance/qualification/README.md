@@ -2,8 +2,9 @@
 
 One deck set that exercises every user-facing change of a release, run in every native app the release supports: PowerPoint for
 Windows (COM), PowerPoint for Mac and Keynote (the Mac mini), and LibreOffice on Linux (experimental). `manifest.json` lists the decks
-(new ones in `decks/`, existing examples by path), the PPTX variants each is exported in, and per feature the slides and what to
-check. It is platform-neutral: every stream builds the same files from a fresh checkout and grades the same features.
+(new ones in `decks/`, existing examples by path), the PPTX variants each is exported in, the run tiers, and per feature the
+slides, what to check and what each application is expected to make of it. `version` is the release whose export the content
+describes. It is platform-neutral: every stream builds the same files from a fresh checkout and grades the same features.
 
 ## Build (any OS)
 
@@ -35,12 +36,60 @@ PowerPoint while another presentation is open and never kills Office.
 slide (`sheets/<file>-<n>.png`: OPF's preview, PowerPoint's slide, their difference) for the visual review, and the import of each
 saved copy (`roundtrip/`). The visual verdict is a reviewer's; the score only says where to look.
 
-## PowerPoint for Mac, Keynote and LibreOffice
+## Keynote, LibreOffice Impress and PowerPoint for Mac
 
-Build the corpus on that machine, open each file, and grade the manifest's features by hand where the app has no object model
-(Keynote is opened read-only and never saved). `checks` in the manifest says what each check means; `fallback` (SH-16's picture
-fallback for SmartArt) is graded only where the app does not lay SmartArt out. Record the results beside the Windows table in
-`docs/programs/release-readiness/`.
+Keynote and Impress runs belong to the native-testing program ([docs/programs/native-testing/README.md](../../../docs/programs/native-testing/README.md)):
+one command per application and tier, one result format for every application, known differences as data
+(`scripts/native-acceptance/known/<target>.json`), and a comparison of each run with the `targets` below. Until that command
+lands, `scripts/libreoffice/run.mjs --qualification <dir>` grades the features in Impress (`docs/libreoffice.md`). PowerPoint for
+Mac has a slot in the result format (`powerpoint-mac`) and no driver yet. `checks` in the manifest says what each check means;
+`fallback` (SH-16's picture fallback for SmartArt) applies only where the app does not lay SmartArt out.
+
+## Tiers
+
+`tiers` says which decks a run takes; `qualification/tiers.mjs` reads it (`decksForTier(manifest, tier)` returns
+`[{ deck, variants }]`, `sourcesForTier` the named sources):
+
+| Tier | Decks | Variants |
+| --- | --- | --- |
+| `smoke` | the decks listed in `tiers.smoke.decks`, each with a `why`, plus the source `native-fragments` | `default`, unless an entry lists its `variants` |
+| `release` | `"all"`: every deck of `decks` | `"all"`: every variant a deck lists |
+| `full` | `"all"`, plus the sources `examples`, `gallery-layouts` and `languages` | `"all"` |
+
+The smoke decks together show every one of the 13 object kinds of the result format, a hidden slide, a right-to-left slide,
+a chart of each family Keynote reads differently, and every place of an open known difference graded `wrong` in OPF's own
+file or importer; a test fails when a change to the tier or the features loses one of these. `sources` names what the
+runner builds or collects beyond the corpus (the decks a changelog fragment's `native:` key names, every example, the gallery
+layouts at three content sizes, the language decks); they are names the runner resolves, not file lists.
+
+## Targets
+
+A feature's `targets` says what each application is expected to make of the feature's object, keyed by the result format's
+target names (`powerpoint`, `keynote`, `impress`; `powerpoint-mac` once it has a driver):
+
+```json
+"targets": {
+  "powerpoint": { "outcome": "native", "note": "Live SmartArt with one node per entry ..." },
+  "keynote": { "outcome": "picture", "kind": "picture", "known": ["kn-smartart-picture-alt"], "note": "Keynote has no SmartArt ..." },
+  "impress": { "outcome": "changed", "note": "LibreOffice does not lay SmartArt out ..." }
+}
+```
+
+- `outcome`: `native`, `changed`, `picture` or `dropped`, the outcomes of the result format (`core/result/README.md`), or `n/a`
+  when the object does not apply to that application (SmartArt's picture fallback in PowerPoint, a footer that Impress
+  cannot be asked about headless, a feature with no exported object).
+- `kind`: the object kind, one of the 13 of the result format, that the application's object is expected to be reported as.
+- `known`: ids of records in `scripts/native-acceptance/known/<target>.json` that explain the outcome or a difference on the
+  feature's slides. Records with a `scope` (missing fonts, alt text, OPF's tags dropped in the application's copy) apply to
+  every deck and are named only where they explain the outcome.
+- `note`: the evidence in one or two sentences.
+
+**No entry means no expectation recorded**, never "expected native": a run reports what the application did and does not
+compare that feature. The entries come from evidence only: Keynote's from the 0.36.0 round (opf#1466, its corpus reports and
+the known records), Impress's from what `scripts/libreoffice/features.mjs` and `docs/libreoffice.md` state, PowerPoint's from
+the object checks the Windows runner grades (smartArt, nativeChart, nativeTable, connectors, shapes, footer) and the changelog
+lines that say what PowerPoint does. `expectationsFor(manifest, target)` in `tiers.mjs` lists them per file and slide
+(`slide` null: every slide of the file).
 
 ## Format coverage
 
@@ -56,4 +105,6 @@ uses, unless `scripts/format-coverage-allowlist.json` lists it with a reason; a 
 ## Maintain
 
 Add a feature as a slide in `decks/` (or an example by path) and a `features` entry naming its change fragments, deck, variant,
-slides, checks and expectations. Keep decks free of fonts or assets that only one platform has; images go in `decks/assets/`.
+slides, checks and expectations, and its `targets` where there is evidence for an application. Keep decks free of fonts or
+assets that only one platform has; images go in `decks/assets/`. `node --test scripts/native-acceptance/qualification.test.mjs`
+checks the manifest, the tiers and the targets (`pnpm check:native-acceptance` runs it).
