@@ -66,7 +66,7 @@ it. The fragment names that slide (NT-07), so a native-app run reads the list in
 ---
 type: fixed
 packages: [pptx]
-native: [coverage-charts#16, m-charts#1]
+native: [coverage-charts#16, chart-type-sampler#1]
 ---
 Chart data labels keep their number format in the exported file.
 ```

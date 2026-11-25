@@ -117,7 +117,7 @@ export function parseFragment(name, text, config = DEFAULT_CONFIG) {
       native = [];
     } else {
       const entries = flowList(meta.native);
-      if (!entries?.length) fail('native must be a list such as [coverage-charts#16, m-charts#1] or none');
+      if (!entries?.length) fail('native must be a list such as [coverage-charts#16, chart-type-sampler#1] or none');
       native = entries.map((entry) => {
         const parts = NATIVE_ENTRY.exec(entry);
         if (!parts) fail(`native entry "${entry}" is not <deck>#<slide> with a positive whole slide number (for example coverage-charts#16)`);
