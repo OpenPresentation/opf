@@ -467,7 +467,7 @@ _No named properties._
 | `label` | no | `string` | Optional short human label for forms and fill panels. |
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `string` | Illustrative ISO date shown in fill forms and used when a template is previewed with examples. Never written to output. |
-| `format` | no | `string` | Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. English names. Default 'MMMM d, yyyy'. |
+| `format` | no | `string` | Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. The month and weekday names are those of the language where the date is d... |
 | `translations` | no | `object` | How the date is written in other languages, keyed by language tag, each entry a 'format': the date is the same in every language, its pattern is not. Where the variable is drawn, the slide's declared language (else th... |
 
 

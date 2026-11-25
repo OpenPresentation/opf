@@ -226,7 +226,7 @@ for (const measured of [false, true]) {
   }
   // RR-102: a pattern the deck's language has a field for is that language's field (Insert > Header & Footer shows its Language).
   for (const [language, dateFormat, type, lang] of [['en-GB', 'dd/MM/yyyy', 'datetime1', 'en-GB'], ['en-GB', 'd MMMM, yyyy', 'datetime3', 'en-GB'], ['de-DE', 'dd.MM.yyyy', 'datetime1', 'de-DE'],
-    ['ja-JP', 'yyyy年M月d日', 'datetime4', 'ja-JP'], ['de-DE', 'MMMM d, yyyy', 'datetime4', 'en-US" altLang="en-US'], ['ar-SA', 'M/d/yyyy', 'datetime1', 'en-US" altLang="en-US']]) {
+    ['ja-JP', 'yyyy年M月d日', 'datetime4', 'ja-JP'], ['ar-SA', 'M/d/yyyy', 'datetime1', 'en-US" altLang="en-US']]) {
     const {bytes, entries, issues} = await exportDeck({language, design: {fontScheme: 'roboto', footer: {start: {date: true, dateFormat}}}, slides: [{title: 'A', text: 'Body'}]});
     assert.deepEqual(issues.filter(issue => issue.code === 'furniture-date-fixed'), [], `${language} ${dateFormat} is a live field`);
     for (const path of [slidePath(1), 'ppt/slideMasters/slideMaster1.xml', 'ppt/slideLayouts/slideLayout1.xml', 'ppt/notesMasters/notesMaster1.xml']) {
@@ -238,6 +238,12 @@ for (const measured of [false, true]) {
   // A pattern no field shows, in the deck's language or en-US, stays fixed text and says so.
   const fixed = await exportDeck({language: 'en-GB', design: {fontScheme: 'roboto', footer: {start: {date: true, dateFormat: 'MMM d, yyyy'}}}, slides: [{title: 'A', text: 'Body'}]});
   assert.match(fixed.issues.find(issue => issue.code === 'furniture-date-fixed')?.message ?? '', /not a PowerPoint date field format in en-GB or en-US/);
+  // FR-10: OPF draws a month name in the deck's language, so a pattern with names the deck's language has no field for is fixed text in that
+  // language (an en-US field would show English words), and a deck whose names are English still takes the en-US field.
+  const german = await exportDeck({language: 'de-DE', design: {fontScheme: 'roboto', footer: {start: {date: true, dateFormat: 'MMMM d, yyyy'}}}, slides: [{title: 'A', text: 'Body'}]});
+  assert.match(german.issues.find(issue => issue.code === 'furniture-date-fixed')?.message ?? '', /not a PowerPoint date field format in de-DE or en-US/);
+  const english = await exportDeck({language: 'en-GB', design: {fontScheme: 'roboto', footer: {start: {date: true, dateFormat: 'MMMM d, yyyy'}}}, slides: [{title: 'A', text: 'Body'}]});
+  assert.deepEqual(english.issues.filter(issue => issue.code === 'furniture-date-fixed'), []);
   // The dialog on such a deck: placeholders it adds have no xfrm and inherit the master's, which names the zones.
   const bare = await exportDeck({design: {fontScheme: 'roboto'}, slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}]});
   const ph = (type, idx, sz, body) => '<p:sp><p:nvSpPr><p:cNvPr id="90" name="' + type + '"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="' + type + '" sz="' + sz + '" idx="' + idx + '"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p>' + body + '</a:p></p:txBody></p:sp>';
