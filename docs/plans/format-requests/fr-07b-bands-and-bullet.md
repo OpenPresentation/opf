@@ -7,8 +7,8 @@ Who decided what:
 
 - **Owner, 2026-11-24**: native, editable PowerPoint parts (`cr5-export`); built in order (`cr5-which`; "cut from the end" is replaced by the owner's no-cut answer of 2026-11-25); what is
   best for OPF over the requesting tool's shapes (the note on CR 5).
-- **Supervisor, 2026-11-25, on the owner's delegation**: bands belong to every bar, column, line and area chart, not only the bullet;
-  `bullet` is its own chart type.
+- **Owner, 2026-11-25**: bands belong to any bar, column, line and area chart, not only the bullet ("go with any chart for bands",
+  after the question was asked again); `bullet` is its own chart type (`c-bullet`).
 - **Analysis, for the supervisor to confirm**: everything else, marked *(analysis)*.
 
 ## The need
