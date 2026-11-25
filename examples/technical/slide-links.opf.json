@@ -2,10 +2,6 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Slide links",
   "language": "en-US",
-  "design": {
-    "fontScheme": "roboto",
-    "colorScheme": "corporate-blue"
-  },
   "slides": [
     {
       "id": "agenda",
