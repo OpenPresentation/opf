@@ -35,6 +35,7 @@ import { splitPointer } from './rule-content.js';
 import { droppedCopyOperations, staleCopyCause, staleCopyFix, staleCopyUsers, staleLayoutCopy } from './stale-records.js';
 import { documentIcons, iconIssue } from './icons.js';
 import type { Finding, FindingSeverity, FindingSuggestion } from './generated/types/finding.js';
+import { OPF_CORE_VERSION } from './generated/version.js';
 import type { Contract, ValidateOptions } from './validation-types.js';
 
 /**
@@ -194,6 +195,10 @@ export function issueFinding(
 		help = `Write ${JSON.stringify(nearest[0].value)} instead; ${JSON.stringify(typedName)} is not a field of this object.`;
 	else if (typedName !== undefined && typeof nearest[0]?.value === 'string')
 		help = `Did you mean ${JSON.stringify(nearest[0].value)}? ${JSON.stringify(typedName)} is not a field of this object. To keep custom metadata, put it in extensions; do not delete authored content to clear this error.`;
+	// No close known key means this is not a typo: a later release may define the key. A released validator cannot know what
+	// a later release adds, so it says only its own version (also as data, validation.params.validatorVersion).
+	const unknownKey = typedName !== undefined && nearest.length === 0;
+	if (unknownKey) help = `${JSON.stringify(typedName)} is not a field of this object. This validator is OPF ${OPF_CORE_VERSION}; a later OPF release may define it. ${help}`;
 	return finding(ruleId, {
 		...(severity ? { severity } : {}),
 		path,
@@ -202,7 +207,7 @@ export function issueFinding(
 		help,
 		definition,
 		lookup,
-		validation: issue,
+		validation: unknownKey ? { ...issue, params: { ...issue.params, validatorVersion: OPF_CORE_VERSION } } : issue,
 		...(allowed.length
 			? {
 					suggestions: allowed.map((value) => ({
