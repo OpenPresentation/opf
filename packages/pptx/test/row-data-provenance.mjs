@@ -24,6 +24,15 @@ function repack(bytes,edit){
 }
 const hasDataTag=bytes=>Object.values(unzipSync(bytes)).some(entry=>strFromU8(entry).includes('OPF_DATA_V1'));
 let controls=0;
+{
+  const source = {columns: ['Idea', 'Effort', 'Impact'], rows: [['Search', 2, 8], ['Export', 5, 6]]};
+  const bytes = await toPptx(deckOf('scatter', source));
+  assert.deepEqual((await imported(bytes)).chart.data, source);
+  const edited = repack(bytes, (name, xml) => name === 'ppt/charts/chart1.xml' ? xml.replace('<c:v>8</c:v>', '<c:v>9</c:v>') : xml);
+  const result = await imported(edited);
+  assert.ok(result.diagnostics.some(entry => entry.code === 'chart-data-provenance-changed'));
+  assert.equal(result.chart.data.rows[0][2], 9);
+}
 for(const type of ['waterfall','funnel']){
   const diagnostics=[];
   const bytes=await toPptx(deckOf(type),{chartex:'native',onDiagnostic:entry=>diagnostics.push(entry)});
@@ -90,13 +99,14 @@ for(const type of ['column','scatter','treemap','box-and-whisker']){
   }
   controls++;
 }
-// A two-column scatter with synthesized X is a different structural adaptation
-// and does not opt in just because it shares the row-numbers diagnostic.
+// A two-column scatter also has authored point names. Full provenance restores them and their original implicit X.
 {
   const source={columns:['Label','Sample'],rows:[['a',3],['b',5]]};
   const bytes=await toPptx(deckOf('scatter',source));
-  assert.equal(hasDataTag(bytes),false);
-  assert.deepEqual((await imported(bytes)).chart.data.columns,['Point','X','Sample']);
+  assert.ok(hasDataTag(bytes));
+  assert.deepEqual((await imported(bytes)).chart.data,source);
+  const plain=await toPptx(deckOf('scatter',source),{provenance:false});
+  assert.deepEqual((await imported(plain)).chart.data.columns,['Point','X','Sample']);
   controls++;
 }
 // A category named Row is authored data, even when all labels resemble numbers.

@@ -37,6 +37,8 @@ import {METRIC_TREND_ARROW_GAP,METRIC_TREND_ARROW_SIZE,type MetricSentiment} fro
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
 /** The pixel size and aspect (width / height) of an embedded picture (a data URI, or an `asset:<id>` that names one), the reading composeSlide uses, for engines that place host-resolved pictures. */
 export {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
+/** The HSL gradient stops of an SVG picture in sRGB (opf#1438), shared by the PPTX export and the renderer's PNG path. */
+export {hslStopColor,stopDeclarationList,stopElementAttributes,stopOpacityValue,stopStylesheet,svgHslStopsToSrgb,type StopColorReader} from './svg-stop-colors.js';
 import {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 import {resolveSlideDirection,type ScriptMeasurementProfile} from './script-fonts.js';
 import {quoteLanguage,quoteMarksFor,type QuoteMarks} from './quote-marks.js';
@@ -13218,7 +13220,7 @@ export {groupNumber,groupsThousands,groupsAxisTicks,groupsDataRange,NUMBER_GROUP
 export {formatNumber,formatPercentNumber,localizeDigits,localizeNumberText,localizeNumberParts,localizePatternNumber,numberLocale,numberingSystemOf,numberingSystemExtension,isSupportedNumberingSystem,supportedNumberingSystems,plainLanguageTag,languageInEffect,numeralScripts,asciiDigits,NUMERAL_SHAPES,numeralShapePrefix,type NumberLocale} from './numerals.js';
 export {NUMBER_LOCALES,NUMBER_SEPARATOR_OVERRIDES,NUMBERING_SYSTEMS,NUMBER_LOCALE_SOURCE} from './number-locale-data.js';
 export {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
-export {horizontalBarPlot} from './chart-marks.js';
+export {chartCircleSquare,horizontalBarPlot} from './chart-marks.js';
 export {chartDoughnut,restackForRows,chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';
 export type {ChartLayerDoughnut,WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartLayerReferences} from './chart-marks.js';
 export type {ChartReference,ChartReferenceDiagnostic} from './chart-references.js';

@@ -339,7 +339,7 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 			if (location) next.location = location;
 		}
 		// OPF 0.35: a removed design key or region flow says what replaced it and carries the safe fix.
-		const removed = next.scope !== 'context' ? removedKeyRepair(next, document) : undefined;
+		const removed = next.scope !== 'context' ? removedKeyRepair(next, document, run.options) : undefined;
 		if (removed) next = withRepair(next, removed);
 		if (next.ruleId === 'opf/schema' && next.fixes === undefined && next.scope !== 'context') {
 			const fixes = schemaFixes(next, document);

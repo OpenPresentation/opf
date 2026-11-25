@@ -3,6 +3,8 @@
 // I/O: reading an SVG data URI, validating and sanitizing the XML (nothing executes, nothing is fetched), measuring
 // the intrinsic size, choosing the fallback raster size and writing the extension into a generated package.
 
+import {stopDeclarationList, stopElementAttributes, stopStylesheet} from '@openpresentation/opf/composition';
+
 export const SVG_BLIP_URI = '{96DAC541-7B7A-43D3-8B79-37D633B846F1}';
 export const SVG_BLIP_NS = 'http://schemas.microsoft.com/office/drawing/2016/SVG/main';
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -129,8 +131,16 @@ export function prepareSvg(input) {
   }
 }
 
+// Office's SVG reader paints literal HSL gradient stops black: sanitize converts them to sRGB with the shared conversion (core's
+// svg-stop-colors: the forms a browser draws, each alpha folded into the stop's stop-opacity; other forms are left as written), keeping
+// the gradient editable as SVG.
+
 function sanitize(input, text) {
   const out = [], stack = [], entities = new Map(), removed = new Set();
+  let normalizedColor = false;
+  const converted = () => { normalizedColor = true; };
+  const stopDeclarations = css => stopStylesheet(css, converted);
+  const stopAttributes = pairs => stopElementAttributes(pairs, converted);
   let index = 0, root = null, skipping = 0, expansion = 0, hasText = false;
   const malformed = message => { throw new SvgError('svg-malformed', `The SVG is not well-formed XML: ${message}`); };
   // Entity and character references in text and attribute values: only the five predefined entities, numeric
@@ -155,7 +165,7 @@ function sanitize(input, text) {
         const style = stack.at(-1).name === 'style';
         const filtered = style ? filterCss(chunk) : chunk;
         if (filtered !== chunk) removed.add('external references');
-        out.push(references(filtered));
+        out.push(references(style ? stopDeclarations(filtered) : filtered));
       }
       continue;
     }
@@ -173,7 +183,8 @@ function sanitize(input, text) {
         const chunk = text.slice(index + 9, end);
         const filtered = stack.at(-1).name === 'style' ? filterCss(chunk) : chunk;
         if (filtered !== chunk) removed.add('external references');
-        out.push(`<![CDATA[${filtered}]]>`);
+        const styled = stack.at(-1).name === 'style' ? stopDeclarations(filtered) : filtered;
+        out.push(`<![CDATA[${styled}]]>`);
       }
       index = end + 3;
       continue;
@@ -230,6 +241,7 @@ function sanitize(input, text) {
     if (!drop) {
       if (name === 'text') hasText = true;
       let tag = `<${qualified}`;
+      const kept = [];
       for (const [key, raw] of attributes) {
         const local = key.slice(key.indexOf(':') + 1);
         let value = references(raw);
@@ -242,8 +254,11 @@ function sanitize(input, text) {
           if (filtered !== value) removed.add('external references');
           value = filtered;
         }
-        tag += ` ${key}="${escapeAttribute(value)}"`;
+        kept.push([key, value]);
       }
+      // HSL gradient stops in sRGB (svg-stop-colors): a <stop>'s attributes together, any other element's style declarations.
+      const written = name === 'stop' ? stopAttributes(kept) : kept.map(([key, value]) => [key, key === 'style' ? stopDeclarationList(value, converted) : value]);
+      for (const [key, value] of written) tag += ` ${key}="${escapeAttribute(value)}"`;
       out.push(selfClosing ? `${tag}/>` : `${tag}>`);
     }
     if (!selfClosing) {
@@ -256,7 +271,7 @@ function sanitize(input, text) {
   const size = svgIntrinsicSize(root.attributes);
   if (!size) throw new SvgError('svg-no-size', 'The SVG has no width and height, and no viewBox, so it has no intrinsic size.');
   const list = [...removed], clean = out.join('');
-  return {bytes: list.length || entities.size ? encoder.encode(clean) : input, text: clean, hasText, width: size.width, height: size.height, removed: list};
+  return {bytes: list.length || entities.size || normalizedColor ? encoder.encode(clean) : input, text: clean, hasText, width: size.width, height: size.height, removed: list};
 }
 
 /**

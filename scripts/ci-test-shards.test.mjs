@@ -1,7 +1,9 @@
 // RR-57: a sibling's test script, split into parallel shards, runs exactly the commands of the whole script.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { LEG_PLAN } from './ci-scope.mjs';
 import { DEFAULT_WEIGHT, PACKAGE_SHARD_ONE_OVERHEAD, SHARD_ONE_OVERHEAD, SHARDED_PACKAGES, listArguments, listedTestArguments, parseChain, parseShard, partitionTests, planPackageShard, runnerPath, shardCommands } from './ci-test-shards.mjs';
@@ -111,7 +113,7 @@ test('--package plans a shard of a workspace package: every listed test once acr
   assert.throws(() => planPackageShard({ id: 'core', scriptName: 'test', shard: { index: 1, count: 2 } }), /--package must be one of/);
   for (const id of Object.keys(SHARDED_PACKAGES)) {
     const { packageRoot, commands: first } = planPackageShard({ id, scriptName: 'test', shard: { index: 1, count: 3 } });
-    assert.ok(packageRoot.endsWith(`packages/${id}`));
+    assert.ok(packageRoot.endsWith(path.join('packages', id)));
     const tests = [1, 2, 3].flatMap((index) => planPackageShard({ id, scriptName: 'test', shard: { index, count: 3 } }).commands.filter((entry) => /test\/[\w.-]+\.mjs$/.test(entry.text)).map((entry) => entry.text));
     assert.equal(new Set(tests).size, tests.length, `${id}: no test runs twice`);
     assert.ok(tests.length > 20, `${id}: the shards list the package's tests`);
@@ -120,7 +122,7 @@ test('--package plans a shard of a workspace package: every listed test once acr
 });
 
 test('the command line prints a shard with --package --dry-run and refuses an unknown package', () => {
-  const script = new URL('./ci-test-shards.mjs', import.meta.url).pathname;
+  const script = fileURLToPath(new URL('./ci-test-shards.mjs', import.meta.url));
   const dry = spawnSync(process.execPath, [script, '--package', 'editor', '--script', 'test:contract', '--shard', '1/2', '--dry-run'], { encoding: 'utf8' });
   assert.equal(dry.status, 0, dry.stderr);
   assert.match(dry.stdout, /^\+ .*run build/mu);

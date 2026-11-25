@@ -141,7 +141,8 @@ try {
 		if (message.type() === "error" || /Content Security Policy|Refused to/.test(message.text())) problems.push(message.text());
 	});
 	page.on("pageerror", (error) => problems.push(String(error)));
-	await page.exposeFunction("callServer", (params) => client.callTool(params));
+	let serverClient = client;
+	await page.exposeFunction("callServer", (params) => serverClient.callTool(params));
 	await page.goto(hostUrl);
 	const view = () => page.frameLocator("#view");
 	const hostState = () => page.evaluate(() => window.host);
@@ -958,6 +959,37 @@ try {
 
 	await run("runs without a CSP violation or a page error", async () => {
 		assert.deepEqual(problems, []);
+	});
+
+	// A host that passes no readFontFile offers no read_font_file: the deck's fonts cannot be had, and the view says so in place of the
+	// slides instead of waiting under "Drawing the slides…" for ever (docs/mcp.md, "Fonts for a hosted viewer").
+	await run("a server without font files says the slides cannot be drawn, in place of the slide", async () => {
+		const bareServer = createOpfServer({ version: "0.0.0-test" });
+		const [bareClientSide, bareServerSide] = InMemoryTransport.createLinkedPair();
+		await bareServer.connect(bareServerSide);
+		const bare = new Client({ name: "deck-app-browser-bare", version: "1.0.0" });
+		await bare.connect(bareClientSide);
+		try {
+			assert.equal((await bare.listTools()).tools.some((tool) => tool.name === "read_font_file"), false, "the bare server has no font tool");
+			serverClient = bare;
+			const args = { document: deck };
+			const result = await bare.callTool({ name: "show_deck", arguments: args });
+			await page.evaluate((setup) => {
+				window.host = { requests: [], context: [], messages: [], toolCalls: [], displayModes: [], downloads: [] };
+				window.startView(setup);
+			}, { viewUrl, arguments: args, result, theme: "light" });
+			const wait = view().locator("#deck-wait-text");
+			await wait.filter({ hasText: "The slides cannot be drawn" }).waitFor({ timeout: 60000 });
+			assert.match(await wait.innerText(), /fonts this deck needs could not be loaded from the server/);
+			assert.match(await wait.innerText(), /read_font_file/);
+			assert.equal(await view().locator("#deck-wait").isVisible(), true, "the message is on the stage");
+			assert.equal(await view().locator("#deck-wait").getAttribute("data-failed"), "true", "the placeholder's lines give way to the words");
+			assert.equal(await view().locator("#deck-canvas svg").count(), 0, "no slide was drawn");
+			await shoot("no-fonts");
+		} finally {
+			serverClient = client;
+			await bare.close();
+		}
 	});
 } finally {
 	await browser.close();

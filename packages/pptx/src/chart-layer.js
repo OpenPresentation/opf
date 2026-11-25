@@ -64,7 +64,12 @@ export function chartLayerOptions(layer, {region, scale, textSize, labelColor, f
   // PowerPoint spaces the categories evenly over that span, so on rows of unequal height a bar sits off its row's center by at most half
   // the difference (the preview centers each on its row).
   const rows = layer.rows;
-  if (rows && !plot) layout.plot = {x: fraction(rows.left / width), y: fraction(rows.top / height), w: fraction((width - rows.left - rows.right) / width), h: fraction((rows.bottom - rows.top) / height), target: 'inner'};
+  if (rows && !plot) {
+    // The row gutter accommodates the tick labels. The native rotated title needs its own band outside those labels.
+    const titleBand = chart?.axisTitles?.category?.trim() ? 1.5 * textSize / 75 : 0;
+    const leftInset = Math.min(rows.left + titleBand, width - rows.right - 1);
+    layout.plot = {x: fraction(leftInset / width), y: fraction(rows.top / height), w: fraction((width - leftInset - rows.right) / width), h: fraction((rows.bottom - rows.top) / height), target: 'inner'};
+  }
   if (!header) return {options, layout};
   // The chart text size in slide pixels (hundredths of a point x 96 / 72 / 100) and the preview's padding.
   const fontPx = textSize / 75, inset = 10 * scale;

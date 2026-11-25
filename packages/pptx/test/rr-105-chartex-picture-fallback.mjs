@@ -103,7 +103,17 @@ for (const [id, {source, importSha256, identity}] of Object.entries(fixture.deck
   const bytes = await toPptx(deck, {catalogs: [gallery], imageResolver});
   const entries = unzipSync(bytes);
   assert.deepEqual(chartexIdentity(entries), identity, `${id}: the mc:Choice, chartEx parts and workbooks are byte-identical to the base (ids masked)`);
-  assert.equal(sha256(JSON.stringify(await fromPptx(bytes, {catalogs: [gallery]}))), importSha256, `${id}: the export imports to the same document as before`);
+  const imported = await fromPptx(bytes, {catalogs: [gallery]});
+  if (id === 'chart-type-sampler') {
+    // #1440: this classic scatter shares the fixture with the ChartEx controls. Verify the complete restored data first.
+    // Reconstruct only its three formerly synthesized strings for the historical whole-document digest below.
+    const scatter = imported.slides[0].blocks.find(block => block.chart?.type === 'scatter').chart;
+    const authored = deck.slides[0].blocks.find(block => block.chart?.type === 'scatter').chart;
+    assert.deepEqual(scatter.data, authored.data);
+    scatter.data.columns[0] = 'Point';
+    scatter.data.rows.forEach((row, index) => { row[0] = String(index + 1); });
+  }
+  assert.equal(sha256(JSON.stringify(imported)), importSha256, `${id}: all other imported content matches the recorded document`);
   assert.equal(assertPictureFallbacks(entries, id), identity.length, `${id}: every chartex chart has its picture`);
   checks += 3;
 }
@@ -172,4 +182,4 @@ for (const [id, {source, importSha256, identity}] of Object.entries(fixture.deck
   checks += 3;
 }
 
-console.log(`RR-105 chartex picture fallback passed: ${checks} checks (Choice and import identical to the base, picture form, classic part removal, alt text, picture-only import, rasterizer fallback).`);
+console.log(`RR-105 chartex picture fallback passed: ${checks} checks (Choice identity, historical import and scatter identities, picture form, classic part removal, alt text, picture-only import, rasterizer fallback).`);

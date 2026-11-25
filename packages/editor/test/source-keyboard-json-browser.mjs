@@ -6,6 +6,7 @@ import { engineName, platform, runCases, startKeyboardSuite } from './support/so
 import { jsonList } from './support/source-cases/json-list.mjs';
 import { jsonComplete } from './support/source-cases/json-complete.mjs';
 import { jsonDiagnostics } from './support/source-cases/json-diagnostics.mjs';
+import { assertLatency } from './support/latency-budget.mjs';
 import { ATTEMPTS, longest, observeLongTasks, taskFailures, taskLimit } from './support/task-budget.mjs';
 
 const suite = await startKeyboardSuite();
@@ -50,7 +51,7 @@ try {
       shown.sort((a, b) => a - b);
       const worst = shown.at(-1);
       console.log(`P-002 completion list on 300 slides: median ${shown[shown.length >> 1].toFixed(0)} ms, worst ${worst.toFixed(0)} ms (budget 100 ms, limit 200 ms).`);
-      assert.ok(worst <= 200, `the list shows within 200 ms on 300 slides (took ${worst} ms)`);
+      assertLatency('the list shows within 200 ms on 300 slides', { samples: shown, budget: 100, limit: 200 });
       const typed = [], bursts = [];
       await page.evaluate(() => { const { api } = demo.pane.editor; const at = api.getValue().indexOf('"Slide 150 headline"'); api.focus(); api.setSelection(at + 7); });
       for (let burst = 0; burst < ATTEMPTS; burst++) {
@@ -73,7 +74,7 @@ try {
       }
       typed.sort((a, b) => a - b);
       console.log(`P-001 keystroke to painted text on 300 slides: median ${typed[typed.length >> 1].toFixed(0)} ms, worst ${typed.at(-1).toFixed(0)} ms (budget 16 ms, limit 32 ms).`);
-      assert.ok(typed.at(-1) <= 64, `a keystroke is painted within 64 ms on 300 slides (took ${typed.at(-1)} ms)`);
+      assertLatency('a keystroke is painted within 64 ms on 300 slides', { samples: typed, budget: 32, limit: 64 });
       console.log(`P-003 longest main-thread task per attempt on 300 slides, opening the list: ${opening.join(', ')} ms; typing and pausing: ${bursts.join(', ')} ms (limit ${limit} ms for the typical attempt).`);
       assert.deepEqual(taskFailures({ attempts: opening, limit }), [], `opening the list: no main-thread task of ${limit} ms or more in the typical round (${opening})`);
       assert.deepEqual(taskFailures({ attempts: bursts, limit }), [], `typing and pausing: no main-thread task of ${limit} ms or more in the typical burst (${bursts})`);

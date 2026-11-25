@@ -85,7 +85,7 @@ import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './i
 import {
   CHART_BAR_GAP_WIDTH, catalogRecords, clrMapAttributes, DIAGRAM_SHAPE_FAMILIES, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, intrinsicImageAspect, itemAlignment, pictureOverlay, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  chartNumberLanguage, chartPlotInset, horizontalBarPlot, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, languageInEffect, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
+  chartCircleSquare, chartNumberLanguage, chartPlotInset, horizontalBarPlot, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, languageInEffect, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -722,6 +722,8 @@ export async function fromPptx(input, options = {}) {
   restoreArrangementEntries(imported, new Map(furnitureContexts.flatMap(context => [...(context.arrangementEntries ?? [])])));
   // OPF 0.35: a list drawn on native arrangement nodes comes back without the node text color the export wrote on its runs.
   restoreArrangementPaint(imported, new Map(furnitureContexts.flatMap(context => [...(context.arrangementPaint ?? [])])));
+  // opf#1431: a chart without labels keeps `dataLabels: false` only where the next export would draw default labels without it.
+  settleDefaultLabels(imported, options);
   if (imported.design?.theme === undefined) for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code === "theme-unverified") report(diagnostic);
   languageDiagnostics(imported, observedLanguage, options.onDiagnostic && report);
 
@@ -1565,7 +1567,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
     const stored = imported && record('chart');
     const part = relationships.get(chartRelId)?.path;
     const restored = stored && part && entries[part]
-      ? restore('chart', imported, () => restoreChartData(imported, stored, chartEvidence(referenceState.xml??decodeText(entries[part])), {datasets: data.datasets, report: diagnostic => data.report?.('chart', diagnostic)}))
+      ? restore('chart', imported, () => restoreChartData(imported, stored, chartDataEvidence(decodeText(entries[part]), referenceState.xml, data.referenceContext), {datasets: data.datasets, report: diagnostic => data.report?.('chart', diagnostic)}))
       : imported;
     let chart = restored?.type === 'combo' ? elideComboDefault(restored, data.datasets) : restored;
     const references=[...(referenceState.references??[]),...(data.referenceOverlays?.get(part)??[])].sort((a,b)=>a.index-b.index).map(({index:_index,...ref})=>ref);
@@ -1960,6 +1962,62 @@ function payloadFromSlideItem(item, report) {
   return null;
 }
 
+// opf#1431: the evidence a chart's data record is compared with. The import reads reference helpers with the slide theme's colors, so a
+// helper drawn in a theme color (accent2) is a reference and leaves the hashed part. The export hashes the part as attachDataProvenance's
+// `chartXml` reads it, with the deck's scale and no colors, where such a helper's paint is unreadable and it stays an ordinary series.
+// Both forms are deterministic functions of the current part, so a change to any plotted value or format still changes both.
+function chartDataEvidence(xml, referenceXml, referenceContext) {
+  const exported = !xml.includes(REFERENCE_URI) ? xml : readNativeReferences(xml, {scale: referenceContext?.scale ?? 1}).xml;
+  return [...new Set([chartEvidence(referenceXml ?? xml), chartEvidence(exported)])];
+}
+
+// opf#1431: the classic chart types (chart-types.js chartTypeFromNative, and combo). Their export can label the marks by default (core's
+// small chart, LH-03; a stacked chart's segment values, LH-109; a pie's or doughnut's value list, LH-108), so a file without labels may
+// hold an authored `dataLabels: false`. The chartex types read their own `false` (chart-options.js chartOptionsFromChartex).
+const DEFAULT_LABEL_TYPES = new Set(['column', 'bar', 'line', 'line-with-markers', 'area', 'stacked-column', 'stacked-bar', 'stacked-area', '100pct-stacked-column', '100pct-stacked-bar', '100pct-stacked-area', 'stacked-line', 'stacked-line-with-markers', 'pie', 'doughnut', 'scatter', 'radar', 'radar-with-markers', 'filled-radar', 'combo']);
+// Whether any series or chart group of the plot area shows a data label (a value, category, percent or series name) that is not deleted.
+function showsNativeLabels(plotArea) {
+  const shown = node => node !== undefined && node?.val !== '0' && node?.val !== 'false' && node?.val !== 0;
+  const showing = label => !shown(label?.['c:delete']) && ['c:showVal', 'c:showCatName', 'c:showPercent', 'c:showSerName'].some(name => shown(label?.[name]));
+  const block = labels => labels !== undefined && !shown(labels?.['c:delete']) && (showing(labels) || asArray(labels?.['c:dLbl']).some(showing));
+  return Object.entries(plotArea ?? {}).some(([name, groups]) => /^c:\w+Chart$/.test(name) && asArray(groups).some(group => block(group?.['c:dLbls']) || asArray(group?.['c:ser']).some(ser => block(ser?.['c:dLbls']))));
+}
+
+// opf#1431: a chart imported with a `dataLabels: false` (chartFromRelationship) keeps it only where it changes the next export: core
+// composes the slide with the charts' `dataLabels` left out and with `false`, and a chart keeps `false` when its chart layer differs
+// between the two (the default value labels of a small chart, a stacked chart's segment values, a pie's value list: what the export
+// draws from the layer). A chart whose default labels would not fit composes the same either way, exports the same file, and comes back
+// without the option, as before. A slide that does not compose keeps the `false`, which draws what the file shows. Every `false` on
+// these types is settled this way.
+function settleDefaultLabels(imported, options) {
+  const at = path => String(path).split('.').reduce((value, key) => value?.[key], imported);
+  const chartsIn = value => {
+    if (Array.isArray(value)) return value.flatMap(chartsIn);
+    if (!isPlainObject(value)) return [];
+    if (value.dataLabels === false && DEFAULT_LABEL_TYPES.has(value.type) && value.data !== undefined) return [value];
+    return Object.values(value).flatMap(chartsIn);
+  };
+  for (const [index, slide] of imported.slides.entries()) {
+    const charts = chartsIn(slide);
+    if (!charts.length) continue;
+    // The chart layer of each chart item, by the chart object it composes.
+    const layers = () => {
+      const core = resolveCoreSlideContext(imported, index, options.catalogs !== undefined ? {catalogs: options.catalogs} : {});
+      return new Map(composeSlide(core.slide, core.options).items.filter(item => item.field === 'chart' || item.chart).map(item => [at(item.path), JSON.stringify(item.chart ?? null)]));
+    };
+    let kept = new Set(charts);
+    try {
+      const off = layers();
+      for (const chart of charts) delete chart.dataLabels;
+      const plain = layers();
+      kept = new Set(charts.filter(chart => !off.has(chart) || !plain.has(chart) || off.get(chart) !== plain.get(chart)));
+    } catch {
+      // The `false` stays: it draws what the file shows.
+    }
+    for (const chart of charts) if (kept.has(chart)) chart.dataLabels = false;
+  }
+}
+
 function chartFromRelationship(entries, slidePath, relationships, relId, report, {marked = false,referenceContext,referenceState={}} = {}) {
   const relationship = relationships.get(relId);
   if (!relationship?.path || !entries[relationship.path]) return null;
@@ -2010,7 +2068,11 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report,
     // LH-03: the value labels an export of a small chart writes by default are not an option. LH-105: every chart area is unfilled now, so
     // the small chart is told by its deleted value axis (a small chart whose value axis has a title keeps its labels as an option).
     const unfilled = asArray(plotArea?.["c:valAx"])[0]?.["c:delete"]?.val === '1' || asArray(plotArea?.["c:valAx"])[0]?.["c:delete"]?.val === 1;
-    return chart && Object.keys(options).length ? withoutLayerDefaults({...chart, ...options}, {unfilled}) : chart;
+    const read = chart && Object.keys(options).length ? withoutLayerDefaults({...chart, ...options}, {unfilled}) : chart;
+    // opf#1431: a chart of a type whose export can label its marks by default (a small chart's values, LH-03; a stacked chart's
+    // segment values, LH-109) that shows no label at all was exported with `dataLabels: false`, or its default labels did not fit.
+    // It imports as `false`; settleDefaultLabels (after the whole deck is read) drops the `false` where the next export would draw no labels without it.
+    return read && !marked && !direct && read.dataLabels === undefined && DEFAULT_LABEL_TYPES.has(read.type) && !showsNativeLabels(plotArea) ? {...read, dataLabels: false} : read;
   };
   if (chartNode.type === 'scatter') return withOptions(scatterFromSeries(entries, relationship.path, series, budget, cachePath, {codes: valueCodes, xCode, report}));
   const labels = cachedValues(series[0]?.["c:cat"], cachePath(0, 'c:cat'), budget);
@@ -3951,6 +4013,32 @@ function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale,
   return {x: fraction(left), y: fraction(top), w: fraction(right - left), h: fraction(bottom - top), target: 'inner'};
 }
 
+// opf#1430: a pie's or doughnut's plot area is the square the preview draws it in (layoutTarget inner), as a doughnut's and a pie's beside
+// its value list already were (LH-182, LH-108). With an automatic plot area (or an outer one below a header row) PowerPoint drew the pie about
+// a tenth larger than the preview and higher. The square is core's (chartCircleSquare: the box less the padding, the header, the legend at
+// its position and the room of the names or labels outside the slices, 0.9 of the half side), or the centered square of a plot core pinned
+// (layer.plot, which the preview fills). `plot` is the inner plot the layer already wrote, if any; fractions of the chart frame.
+function circularPlot(chart, chartData, layer, plot, region, {scale, context, options, presentation}) {
+  const fraction = value => Number(Math.min(1, Math.max(0, value)).toFixed(4));
+  const box = {x: region.x * 96, y: region.y * 96, width: region.w * 96, height: region.h * 96};
+  let square;
+  if (plot?.target === 'inner') {
+    // A value list's or a doughnut's square is already square; a pinned plot is centered on its shorter side, as the preview draws it.
+    const width = plot.w * box.width, height = plot.h * box.height, side = Math.min(width, height);
+    square = {x: box.x + plot.x * box.width + (width - side) / 2, y: box.y + plot.y * box.height + (height - side) / 2, width: side, height: side};
+  } else {
+    const data = resolveChartData(isDatasetRef(chart?.data) ? inlineChartData(chart, presentation) : chart, presentation);
+    if (!data.ok) return undefined;
+    const measure = textWidthMeasurer(resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, italic: false}, options.textMeasurement), options.textMeasurement);
+    const deckLanguage = typeof presentation?.language === 'string' ? presentation.language : presentation?.language?.bcp47;
+    const language = chartNumberLanguage(chart, deckLanguage);
+    const geometry = {box, scale, minFontSize: context.composition?.minFontSize, measure, direction: context.direction === 'rtl' ? 'rtl' : 'ltr', ...(language === undefined ? {} : {language})};
+    square = chartCircleSquare({...chart, type: chartData.type}, data, geometry, layer, {labels: true});
+  }
+  if (!square || !(square.width > 0)) return undefined;
+  return {x: fraction((square.x - box.x) / box.width), y: fraction((square.y - box.y) / box.height), w: fraction(square.width / box.width), h: fraction(square.height / box.height), target: 'inner'};
+}
+
 function addChartPayload(slide, chart, region, context, options = {}, path = "chart", presentation, chartLayout) {
   const chartData = toPptxChartData(chart, context.chartexMode, presentation, path);
   if (!chartData.series) {
@@ -4107,6 +4195,11 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     const plotBox = lowLabelPlot(chart, chartData, layer, chartLayout?.valueAxis, layerXml.layout.plot, region, {scale, valueAxisHidden: layerXml.options.valAxisHidden === true, context, options, presentation, whole: true});
     if (plotBox) layerXml.layout.plot = plotBox;
   }
+  // opf#1430: a pie or doughnut has the preview's square (circularPlot).
+  else if (circular) {
+    const plotBox = circularPlot(chart, chartData, layer, layerXml.layout.plot, region, {scale, context, options, presentation});
+    if (plotBox) layerXml.layout.plot = plotBox;
+  }
   if (Object.keys(layerXml.layout).length) context.chartHeadings.get(objectName).layerLayout = layerXml.layout;
   const chartOptionsXml = {
     objectName,
@@ -4135,7 +4228,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     dataLabelColor: markLabelColor,
     dataLabelFontSize: textSize / 100,
     showValue: false,
-    ...(circular ? {dataBorder: slicePlan?.bordered ? {color: normalizeHex(panelFill).slice(0, 6), pt: CHART_SLICE_SEPARATOR_PX * 0.75} : {color: normalizeHex(neutrals?.outline?.hex ?? `#${context.colors.background}`), pt: 0.75}} : {}),
+    // opf#1430: the outline between slices at the preview's width, which scales with the slide (CHART_SLICE_SEPARATOR_PX slide pixels, or
+    // 0.75 of the slide's point).
+    ...(circular ? {dataBorder: slicePlan?.bordered ? {color: normalizeHex(panelFill).slice(0, 6), pt: CHART_SLICE_SEPARATOR_PX * scale * 0.75} : {color: normalizeHex(neutrals?.outline?.hex ?? `#${context.colors.background}`), pt: 0.75 * scale}} : {}),
     valGridLine: { color: gridColor, size: 1 },
     // LH-105: no tick marks: the gridlines carry the value scale and the category labels name their bands (Few: few gridlines and ticks).
     catAxisMajorTickMark: 'none',
