@@ -12,7 +12,7 @@ The document records intent; an engine (a renderer, exporter, or editor) turns t
 
 ```
 Presentation
-├── identity ...... name, description, organization, speaker, author
+├── identity ...... id, name, description, organization, speaker, author
 ├── intent ........ audience, purpose, tone, language, narrative, takeaway, duration
 ├── content ....... slides[]
 │                     ├── title / subtitle / tag / notes / section / beat / layout
@@ -39,6 +39,25 @@ Only `slides` is required. The smallest valid document:
 ```
 
 Everything else in the format is optional and additive.
+
+### The document id
+
+A deck has a name and a filename, and neither says "this is the same deck". The optional root `id` does:
+
+```json
+{
+  "id": "0192f4c8-6b1e-7c3a-9d42-5e8f1a7b3c90",
+  "name": "Q3 business review",
+  "slides": [{ "title": "Summary" }]
+}
+```
+
+- **An opaque string.** Any non-empty string is valid, so a host keeps the deck id it already has (`dk_5e8f1a7b3c909d426b1e7c3a` and a UUID are both fine). The docs recommend a UUID. Core never makes one, because core has no clock and no randomness: `opf create` and hosts (the editor's host, the MCP server's host, your product) mint it.
+- **Same deck keeps it, a new deck gets a new one.** The id is kept on save, export, import and publish; a published copy is the same deck in another place. A duplicate, a fork and a deck filled from a template are new decks: the host gives them a new id. `opf create` mints one (for a starter and for a copied example), core's `fill` drops the template's id from every filled deck, and `opf fill` gives each deck its own new id when the template had one. `merge` never mints.
+- **A claim, not a credential.** Anyone can type any id into a file. An imported file's id says what the file claims to be; it does not prove the file belongs to whoever uploaded it. A host must check ownership (match on owner and id) before an id selects a stored deck to replace; an upload that carries another customer's id should import as a new deck.
+- **PowerPoint.** `toPptx` writes the id into the `OPF_DOCUMENT_V1` tag (also in `references-only` mode) and `fromPptx` restores it. An export with `provenance: false` drops it and reports `document-provenance-omitted` at `id`. A PPTX that was never exported by OPF has no id.
+- **The MCP viewer** keys an editing session on the id when the deck has one, so two decks that are both called "Untitled" no longer share a session; a deck without an id still falls back to its name.
+- **Editing, `diff` and `merge`.** Edits keep the id. `diff` reports a changed id as a metadata change at `/id`. `merge` treats `/id` like any other field: if both sides carry different ids that are not the base's id, it reports a `modify-modify` (or `add-add`) conflict at `/id` and keeps ours (or theirs with `prefer: "theirs"`); if only one side changed it, that change applies.
 
 ## Slides and content
 

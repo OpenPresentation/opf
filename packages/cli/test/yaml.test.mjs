@@ -224,10 +224,11 @@ describe("decks read from YAML by every command", () => {
     assert.deepEqual(JSON.parse(read("copy.opf.json")), deck);
     const created = run(["create", "new.opf.yaml", "--title", "Fresh", "--schema-comment"]);
     assert.equal(created.status, 0, created.stderr);
-    assert.equal(read("new.opf.yaml"), "# yaml-language-server: $schema=https://openpresentation.org/schema/opf/v1\n$schema: https://openpresentation.org/schema/opf/v1\nname: Fresh\nlanguage: en-US\nslides:\n  - id: slide-1\n    title: Fresh\n");
+    // `opf create` mints the document id (core never does), so it is the one line that differs between two runs.
+    assert.match(read("new.opf.yaml"), /^# yaml-language-server: \$schema=https:\/\/openpresentation\.org\/schema\/opf\/v1\n\$schema: https:\/\/openpresentation\.org\/schema\/opf\/v1\nid: [0-9a-f-]{36}\nname: Fresh\nlanguage: en-US\nslides:\n  - id: slide-1\n    title: Fresh\n$/);
     assert.equal(JSON.parse(created.stdout).outputs[0].sha256, sha(run(["validate", "new.opf.yaml"])));
     const stdout = run(["create", "-", "--title", "Piped", "--to", "yaml"]);
-    assert.match(stdout.stdout, /^\$schema: .*\nname: Piped\nlanguage: en-US\nslides:\n {2}- id: slide-1\n {4}title: Piped\n$/);
+    assert.match(stdout.stdout, /^\$schema: .*\nid: [0-9a-f-]{36}\nname: Piped\nlanguage: en-US\nslides:\n {2}- id: slide-1\n {4}title: Piped\n$/);
     assert.equal(run(["create", "-", "--title", "Piped", "--to", "toml"]).status, 2);
     assert.equal(run(["create", "-", "--to", "json"]).stdout.trimStart()[0], "{");
     assert.equal(run(["create", "-", "--format", "yaml"]).status, 2, "--format names a report format only");

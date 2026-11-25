@@ -304,7 +304,7 @@ Call start_here (with your goal) for a path through the docs, skills, examples a
 To author a deck: write JSON (or YAML or Markdown), call validate_deck, fix the findings (each has a rule id, a JSON Pointer path and a hint), repeat until ok. convert changes a deck between JSON, YAML and Markdown. Validation is not proof of how a deck looks: it does not render.`;
 
 const INSTRUCTIONS_SHOW = "To show the user a deck, call show_deck: in a client that supports MCP Apps it opens the OPF viewer (Preview, Source and Both), where the user can edit it; their edits come back to you as context, and you continue from that version. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI does (opf convert deck.opf.json deck.pptx).";
-const INSTRUCTIONS_IN_PLACE = "Where the client offers the viewer's own tools (read_deck, select_slide, edit_deck), change the deck that is already open with them instead of sending a new one: read_deck, then edit_deck with its revision. A new show_deck for the same deck (the same name) replaces the viewer that shows it; open_editor opens the viewer's editor with a starter or example deck.";
+const INSTRUCTIONS_IN_PLACE = "Where the client offers the viewer's own tools (read_deck, select_slide, edit_deck), change the deck that is already open with them instead of sending a new one: read_deck, then edit_deck with its revision. A new show_deck for the same deck (the same id, or with no id the same name) replaces the viewer that shows it; open_editor opens the viewer's editor with a starter or example deck.";
 const INSTRUCTIONS_VIEWER = `OPF (Open Presentation Format) is a JSON format for slide decks. This server teaches it and opens decks in the OPF viewer; it keeps no state and reads no files.
 Call start_here (with your goal) for a path through the docs, skills, examples and catalog; or start with the resource opf://docs/format-card (the whole authoring surface on one page) and opf://docs/index (every page). Look up exact fields with get_schema (or the opf://schema/<name> resources), default design records (layouts, themes, color and font schemes, ...) with search_catalog and get_catalog_record, worked decks with list_examples (opf://examples/<slug>), and prose with search_docs. Skills are resources too: opf://skills/<name>.
 To author a deck: write JSON (or YAML or Markdown) and open it with show_deck. The viewer checks it on the user's machine and sends you its findings (each has a rule id, a JSON Pointer path and a message) as context; fix them and call show_deck again. The user can edit the deck in the viewer; their edits come back to you as context. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI makes them on the user's machine.`;
@@ -335,33 +335,39 @@ export const DECK_APP_CONTENT_META = { ui: { prefersBorder: false, preferredDisp
 
 /** A session key the caller passes (read_deck's `session`, or its own): letters, digits and - _ . : only. Anything else is ignored. */
 const SESSION_KEY = /^[A-Za-z0-9._:-]{1,64}$/;
-/** A deck's identity for its session: OPF has no document id, so its name, trimmed, lowercased and with runs of spaces collapsed. */
-const deckIdentity = (name: unknown) => (typeof name === "string" && name.trim() ? name.trim().toLowerCase().replace(/\s+/g, " ") : undefined);
+/**
+ * A deck's identity for its session: its document `id` when it has one (an opaque string, compared exactly), else its name, trimmed,
+ * lowercased and with runs of spaces collapsed. The id is a claim, not a credential: here it only keys a viewer in the caller's own conversation.
+ */
+const deckIdentity = (id: unknown, name: unknown) => {
+	if (typeof id === "string" && id !== "") return `opf-deck-id:${id}`;
+	return typeof name === "string" && name.trim() ? `opf-deck-name:${name.trim().toLowerCase().replace(/\s+/g, " ")}` : undefined;
+};
 const hex = (bytes: ArrayBuffer) => [...new Uint8Array(bytes)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 /**
  * The key of one viewer (MCP Apps instance supersession): the editing session it belongs to and its order in it. The server keeps
  * nothing and counts nothing. `session` is the caller's `session` when it passes one; otherwise it is derived from the deck's own
- * identity (its name: `deck-` and 32 hex digits of its SHA-256), so a newer view of the same deck replaces the older one while a deck
- * with another name stays independent; a deck without a name gets a random key of its own. `createdAt` (the server's clock) and a
+ * identity (its `id`, else its name: `deck-` and 32 hex digits of its SHA-256), so a newer view of the same deck replaces the older one
+ * while a deck with another id (or name) stays independent, even when two decks share a name; a deck with neither gets a random key. `createdAt` (the server's clock) and a
  * random `tie` order the views of a session, compared only with other server-minted keys. Views of one session meet on a channel
  * named by `session`; the view's origin is per conversation because the viewer declares no `ui.domain`.
  */
-async function viewerKey(session: string | undefined, name: unknown): Promise<{ session: string; createdAt: number; tie: number }> {
-	const identity = deckIdentity(name);
-	const key = session !== undefined && SESSION_KEY.test(session) ? session : identity ? `deck-${hex(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`opf-deck-name:${identity}`))).slice(0, 32)}` : crypto.randomUUID();
+async function viewerKey(session: string | undefined, id: unknown, name: unknown): Promise<{ session: string; createdAt: number; tie: number }> {
+	const identity = deckIdentity(id, name);
+	const key = session !== undefined && SESSION_KEY.test(session) ? session : identity ? `deck-${hex(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(identity))).slice(0, 32)}` : crypto.randomUUID();
 	return { session: key, createdAt: Date.now(), tie: crypto.getRandomValues(new Uint32Array(1))[0] as number };
 }
-/** The deck's `name`, read cheaply: an object's, JSON text's, or the `name:` line of YAML text or Markdown front matter. */
-function nameOf(document: unknown): unknown {
-	if (typeof document !== "string") return (document as { name?: unknown } | null)?.name;
+/** One root field of the deck (`name` or `id`), read cheaply: an object's, JSON text's, or the `<field>:` line of YAML text or Markdown front matter. */
+function fieldOf(document: unknown, field: "name" | "id"): unknown {
+	if (typeof document !== "string") return (document as Record<string, unknown> | null)?.[field];
 	if (/^[\s﻿]*\{/.test(document)) {
 		try {
-			return (JSON.parse(document.replace(/^﻿/, "")) as { name?: unknown }).name;
+			return (JSON.parse(document.replace(/^﻿/, "")) as Record<string, unknown>)[field];
 		} catch {
 			return undefined;
 		}
 	}
-	const line = /^name:[ \t]*(.*?)[ \t]*$/m.exec(document.slice(0, 4000))?.[1];
+	const line = new RegExp(`^${field}:[ \\t]*(.*?)[ \\t]*$`, "m").exec(document.slice(0, 4000))?.[1];
 	return line?.replace(/^(["'])(.*)\1$/, "$2");
 }
 
@@ -849,7 +855,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 
 	if (deckApp) {
 		const view = z.enum(["preview", "source", "both"]);
-		const sessionSchema = z.string().max(64).optional().describe("Which viewer this replaces. Leave it out and a deck replaces the open viewer of a deck with the same name. Pass the session key a viewer reported (read_deck, or this tool's earlier result) to replace that viewer, or any other key (letters, digits, - _ . :) to keep this viewer apart.");
+		const sessionSchema = z.string().max(64).optional().describe("Which viewer this replaces. Leave it out and a deck replaces the open viewer of a deck with the same id (or, for a deck with no id, the same name). Pass the session key a viewer reported (read_deck, or this tool's earlier result) to replace that viewer, or any other key (letters, digits, - _ . :) to keep this viewer apart.");
 		const viewerSchema = z.object({ session: z.string(), createdAt: z.number(), tie: z.number() });
 		// RR-111: the icon sets the viewer can read through read_icons (empty: the tool is not offered), so it asks only for those.
 		const iconSetsSchema = z.array(z.string()).optional().describe("The icon sets the viewer reads icons from (read_icons).");
@@ -882,8 +888,8 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			{
 				title: "Show a deck in the OPF viewer",
 				description: processDecks
-					? "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. Their edits come back to you as context: continue from that version. Also checks the deck as validate_deck does and returns its name, slide titles and findings as text, so a client without MCP Apps still gets an answer. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one grays out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI does (opf convert deck.opf.json deck.pptx)."
-					: "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. The viewer checks the deck on the user's machine and sends you its findings, and the user's edits, as context: fix the findings and continue from the user's version. This server does no deck work itself, so a client without MCP Apps gets no check. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one grays out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI does (opf convert deck.opf.json deck.pptx).",
+					? "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. Their edits come back to you as context: continue from that version. Also checks the deck as validate_deck does and returns its name, slide titles and findings as text, so a client without MCP Apps still gets an answer. A new call for the same deck (the same id, or with no id the same name) replaces the viewer that already shows it: the older one grays out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI does (opf convert deck.opf.json deck.pptx)."
+					: "Show the user a deck. In a client that supports MCP Apps (such as Claude on web, desktop and iOS) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. The viewer checks the deck on the user's machine and sends you its findings, and the user's edits, as context: fix the findings and continue from the user's version. This server does no deck work itself, so a client without MCP Apps gets no check. A new call for the same deck (the same id, or with no id the same name) replaces the viewer that already shows it: the older one grays out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both. Where the client can save files the viewer exports PowerPoint, PDF and PNG; otherwise the opf CLI does (opf convert deck.opf.json deck.pptx).",
 				inputSchema: {
 					document: documentSchema,
 					format: formatSchema.optional().describe("The form of the document text. Default: JSON for an object or text that starts with { or [."),
@@ -911,7 +917,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				_meta: { ui: { resourceUri: DECK_APP_URI }, "ui/resourceUri": DECK_APP_URI },
 			},
 			async ({ document, format, view: first, slide, session }) => {
-				const viewer = await viewerKey(session, nameOf(document));
+				const viewer = await viewerKey(session, fieldOf(document, "id"), fieldOf(document, "name"));
 				const opened = { opened: true, view: first ?? "preview", ...(slide ? { slide } : {}), viewer, iconSets: setNames };
 				if (!processDecks) {
 					// No deck work here: the view reads and checks the deck. Only the shape of the arguments is looked at.
@@ -948,7 +954,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			{
 				title: "OpenPresentation",
 				description:
-					"Create and edit slide decks in OpenPresentation: a starter deck (optionally with a title), or one of the bundled example decks by slug.\nAll inputs are optional; with none it opens a two-slide starter deck. In the editor the user can edit it at once, open a local OPF file, browse bundled examples, or paste a deck into Source. In a client that supports MCP Apps the viewer's own tools (read_deck, select_slide, edit_deck) then read and change that deck in place. list_examples lists the slugs. A new call for the same deck (the same name) replaces the viewer that already shows it: the older one grays out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both.",
+					"Create and edit slide decks in OpenPresentation: a starter deck (optionally with a title), or one of the bundled example decks by slug.\nAll inputs are optional; with none it opens a two-slide starter deck. In the editor the user can edit it at once, open a local OPF file, browse bundled examples, or paste a deck into Source. In a client that supports MCP Apps the viewer's own tools (read_deck, select_slide, edit_deck) then read and change that deck in place. list_examples lists the slugs. A new call for the same deck (the same id, or with no id the same name) replaces the viewer that already shows it: the older one grays out and stops taking changes. Pass session to choose: the key a viewer reported to replace that viewer, or a new key of your own to keep both.",
 				inputSchema: {
 					example: z.string().max(100).optional().describe("A bundled example deck to open, by slug (list_examples). Leave it out for the starter deck."),
 					title: z.string().max(120).optional().describe('The deck\'s name: the starter deck\'s title, or a new name for the example. Default "Untitled deck" for the starter deck.'),
@@ -977,7 +983,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				const deck = (found ? structuredClone(found.deck) : starterDeck(name)) as Record<string, unknown>;
 				// A title with an example renames the example deck (its slides keep their own titles).
 				if (found && named) deck.name = named;
-				const viewer = await viewerKey(session, deck.name);
+				const viewer = await viewerKey(session, deck.id, deck.name);
 				const slides = Array.isArray(deck.slides) ? deck.slides.length : 0;
 				const deckName = typeof deck.name === "string" ? deck.name : null;
 				const result = { opened: true, editor: true as const, ...(!found && !named ? { nameFromOpeningTitle: true } : {}), example: found ? found.slug : null, name: deckName, slides, document: deck, examples: exampleList(), viewer, iconSets: setNames };
