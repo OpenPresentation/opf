@@ -3,6 +3,7 @@
 // no clock. The deck is not checked here: `validate` (or `opf fill`, which runs the format and references check) does that.
 import { OPFDataImportError, parseTabularData } from "./data.js";
 import { type ResolveVariablesOptions, type VariableDiagnostic, resolveVariables } from "./variables.js";
+import { updateMetricLiterals } from "./metric-literals.js";
 
 /**
  * The values of one deck, keyed by variable id. A variable's entry is its value; FR-10: for a text, list, url, image or date variable it may
@@ -86,7 +87,9 @@ export function fill(template: unknown, data?: string | FillRecord | readonly Fi
 	const decks = records.map((record, offset) => {
 		const resolved = resolveVariables(template, record, { template: false, partial: options.partial === true, examples: options.examples === true });
 		// A filled deck is a new deck, not the template: it must not claim the template's document id. Core never mints one, so the host (`opf fill`) gives each deck its own.
-		const { id: _template, ...presentation } = resolved.presentation as Record<string, unknown>;
+		const { id: _template, ...filled } = resolved.presentation as Record<string, unknown>;
+		// FR-06: a metric linked to data written into a filled dataset shows the numbers of the filled data, also to readers that do not compute.
+		const presentation = updateMetricLiterals(filled);
 		return { index: offset + 1, record, ...resolved, presentation };
 	});
 	const removed = new Map<string, number[]>();

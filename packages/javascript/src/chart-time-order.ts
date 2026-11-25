@@ -222,3 +222,13 @@ export function monthOf(text: unknown, language?: string): number | undefined {
   if (typeof text !== 'string' || !text.trim()) return undefined;
   return vocabulary(language).months.get(asciiDigits(text.normalize('NFKC')).toLocaleLowerCase(language || 'en').replace(/\.$/, '').trim());
 }
+
+/**
+ * FR-06: a time label as a point on a line, for comparing two labels of a `date` column: the family of the label ("year", "period", "week",
+ * "month", "date", "number") and its sort key, or undefined for a label that names no time. Two labels compare only when they are of the
+ * same family ("2026-03" before "2026-11"; "Q1 2026" before "Q3 2026"); the key is ordering only and means nothing else.
+ */
+export function timeOrderKey(label: unknown, language?: string): {family: string; key: number} | undefined {
+  const parsed = parse(label, vocabulary(language), language);
+  return parsed ? {family: parsed.family, key: parsed.key} : undefined;
+}

@@ -1,0 +1,142 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Computed metrics",
+  "description": "Technical fixture: metrics that compute their value and change from a dataset of the deck (the last row, a change against the previous row, a baseline, a fixed plan or a column), an arrow and a color that follow the change, a direction that is good (better), and a number format on the metric itself.",
+  "language": "en-US",
+  "datasets": {
+    "arr": {
+      "title": "ARR by month",
+      "description": "Annual recurring revenue (in $M), monthly churn and the month's change in ARR.",
+      "columns": [
+        "Month",
+        "Region",
+        { "name": "ARR", "format": "$#,##0.0M" },
+        { "name": "Churn", "format": "0.0%" },
+        { "name": "ARR change", "format": "+$#,##0.0M;-$#,##0.0M;$0" }
+      ],
+      "rows": [
+        ["2026-09", "EMEA", 3.9, 0.041, null],
+        ["2026-10", "EMEA", 4.2, 0.036, 0.3],
+        ["2026-11", "EMEA", 4.4, 0.044, 0.2]
+      ]
+    }
+  },
+  "slides": [
+    {
+      "id": "emea-arr",
+      "title": "EMEA ARR",
+      "metric": {
+        "label": "EMEA ARR",
+        "description": "The last month, against the month before.",
+        "value": 4.4,
+        "delta": 0.2,
+        "data": {
+          "dataset": "arr",
+          "field": "ARR",
+          "aggregate": "last",
+          "filter": [{ "field": "Region", "op": "=", "value": "EMEA" }],
+          "delta": { "compare": "previous" }
+        }
+      }
+    },
+    {
+      "id": "churn",
+      "title": "Churn rose",
+      "metric": {
+        "label": "Monthly churn",
+        "description": "Up, and that is bad news: the arrow points up and the color is red.",
+        "value": 0.044,
+        "delta": 0.2222222222222222,
+        "better": "down",
+        "data": {
+          "dataset": "arr",
+          "field": "Churn",
+          "aggregate": "last",
+          "delta": { "compare": "previous", "as": "percent" }
+        }
+      }
+    },
+    {
+      "id": "since-september",
+      "title": "ARR against September",
+      "metric": {
+        "label": "ARR since September",
+        "description": "The last month, against a baseline of the rows of September.",
+        "value": 4.4,
+        "delta": 0.5,
+        "data": {
+          "dataset": "arr",
+          "field": "ARR",
+          "aggregate": "last",
+          "delta": { "compare": { "filter": [{ "field": "Month", "op": "=", "value": "2026-09" }] } }
+        }
+      }
+    },
+    {
+      "id": "against-plan",
+      "title": "ARR against the plan",
+      "metric": {
+        "label": "ARR against plan",
+        "description": "The plan is a number typed into the deck.",
+        "value": 4.4,
+        "delta": 0.4,
+        "data": {
+          "dataset": "arr",
+          "field": "ARR",
+          "aggregate": "last",
+          "delta": { "compare": { "value": 4 } }
+        }
+      }
+    },
+    {
+      "id": "change-column",
+      "title": "ARR, change from a column",
+      "metric": {
+        "label": "EMEA ARR",
+        "description": "The change is read from a column of the dataset that already holds it.",
+        "value": 4.4,
+        "delta": 0.2,
+        "data": {
+          "dataset": "arr",
+          "field": "ARR",
+          "aggregate": "last",
+          "delta": { "field": "ARR change" }
+        }
+      }
+    },
+    {
+      "id": "peak-churn",
+      "title": "Peak churn",
+      "metric": {
+        "label": "Highest monthly churn",
+        "value": 0.044,
+        "data": { "dataset": "arr", "field": "Churn", "aggregate": "max" }
+      }
+    },
+    {
+      "id": "net-new",
+      "title": "Net new ARR",
+      "metric": {
+        "label": "Net new ARR, October and November",
+        "value": 0.5,
+        "data": {
+          "dataset": "arr",
+          "field": "ARR change",
+          "aggregate": "sum",
+          "filter": [{ "field": "Month", "op": "in", "value": ["2026-10", "2026-11"] }]
+        }
+      }
+    },
+    {
+      "id": "number-format",
+      "title": "A number format on the metric",
+      "metric": {
+        "label": "Gross margin",
+        "value": 0.724,
+        "format": "0.0%",
+        "delta": 0.012,
+        "trend": "up"
+      }
+    }
+  ]
+}

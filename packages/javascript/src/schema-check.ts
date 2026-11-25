@@ -7,6 +7,7 @@ import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { dataSourceDiagnostics, provenanceDiagnostics } from "./data-source-checks.js";
 import { datasetDiagnostics, isDatasetRef, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
 import { chartDrawDiagnostics } from "./chart-fallback.js";
+import { resolveMetric, type MetricDataDiagnostic } from "./metric-data.js";
 import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions, resolveSlideDirection } from "./composition.js";
 import { layoutTemplateIssues } from "./layout-template.js";
 import { annotationIssues } from "./annotation-validation.js";
@@ -736,7 +737,8 @@ function dataIssues(value: unknown, asOf?: string): { errors: ValidationIssue[];
       const key = `${diagnostic.code}|${diagnostic.path}`;
       if (seen.has(key)) continue;
       seen.add(key);
-      (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code, ...(diagnostic.aggregate ? { aggregate: true } : {}) }));
+      const fix = (diagnostic as MetricDataDiagnostic).fix;
+      (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code, ...(diagnostic.aggregate ? { aggregate: true } : {}), ...(fix ? { fix } : {}) }));
     }
   };
   add(datasetDiagnostics(value));
@@ -752,6 +754,8 @@ function dataIssues(value: unknown, asOf?: string): { errors: ValidationIssue[];
       add(chartDrawDiagnostics(node.chart, resolved, pathFor(path, "chart"), { language: typeof value.language === "string" ? value.language : undefined }));
     }
     if (isRecord(node.table)) add(resolveTableData(node.table, value, { path: pathFor(path, "table") }).diagnostics);
+    // FR-06: a metric linked to data: its dataset and fields (errors), its aggregate, empty rows, change and stale literals (warnings).
+    if (isRecord(node.metric)) add(resolveMetric(node.metric, value, { path: pathFor(path, "metric"), ...(typeof value.language === "string" ? { language: value.language } : {}) }).diagnostics);
   };
   value.slides.forEach((slide, index) => {
     if (!isRecord(slide)) return;

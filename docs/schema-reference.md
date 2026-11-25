@@ -1126,7 +1126,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `value`
-- Purpose: Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news. A string or number value in a metric field is shorthand for { "value": value }; numeric values remain numbers and are formatted by renderers.
+- Purpose: Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news, 'format' for how a number value is written, 'better' for which direction of change is good news, and 'data' to compute the value and the change from a dataset of this deck. A string or number value in a metric field...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -1138,6 +1138,9 @@ _No named properties._
 | `trend` | no | `enum:up \| down \| flat` | Metric trend direction. The preview and the PowerPoint export draw it as an arrow that always points the way the trend does (up, down or flat), before the delta on its line (or before the label without a delta), and c... |
 | `sentiment` | no | `enum:positive \| negative \| neutral` | Whether the change is good news. Positive draws the trend arrow and the trend and delta text in green, negative in red and neutral in the neutral text color, each kept at 4.5:1 contrast or more against the slide backg... |
 | `icon` | no | `ref:IconReference` | An icon drawn on a chip above the metric: "<set>:<name>" ("lucide:users"), a name from the deck's icons, or an SVG source. Decoration only: when the slide has no room for it without setting text smaller, it is not dra... |
+| `format` | no | `ref:NumberFormat` | How a number 'value' is written, the same pattern language as a number variable, a dataset column and a table cell ('0.0%', '$#,##0.0M'). A string 'value' is drawn as written. Absent: a metric linked to data uses its... |
+| `data` | no | `ref:MetricData` | Computes the value and, optionally, the change from a dataset of this deck. While it resolves, engines draw the computed numbers; 'value' and 'delta' are then the last computed numbers, kept for readers that do not co... |
+| `better` | no | `enum:up \| down` | Which direction of change is good news. Without 'sentiment', an up trend is positive and a down trend negative when 'better' is "up" (the default), and the reverse when it is "down"; a flat trend is neutral. An explic... |
 
 
 ### Diagram
@@ -1562,6 +1565,71 @@ _No named properties._
 | --- | --- | --- | --- |
 | `dataset` | yes | `ref:DatasetId` | Id of the dataset. An unknown id is a 'dataset-unknown' error. |
 | `fields` | no | `ref:DatasetFields` | The dataset columns to use, by name and in order. Absent uses every column. |
+
+
+### DataCondition
+
+- Type: `object`
+- Required fields: `field`, `op`, `value`
+- Purpose: One condition on a row: the row's cell in 'field' compared with 'value'. Nothing is parsed or evaluated. '=' and '!=' compare the same JSON value (null equals only null, 1 does not equal "1"); '<', '<=', '>' and '>=' compare two numbers as numbers, or two strings by the time order of a 'date' column ("2026-03" before "2026-11", "Q1 2026" before "Q3 2026") and else by code point, and any other pair does not meet the condition; 'in' is equal to one of the listed values.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `field` | yes | `string` | A column name of the linked dataset. An unknown name is a 'dataset-field-unknown' error. |
+| `op` | yes | `enum:= \| != \| < \| <= \| > \| >= \| in` | How the row's cell is compared with 'value'. |
+| `value` | yes | `oneOf:ref:ChartDataCell / array<ref:ChartDataCell>` | The value to compare with. For 'in', a list of values. |
+
+
+### DataFilter
+
+- Type: `array<ref:DataCondition>`
+- Required fields: none
+- Purpose: Conditions a row must all meet (AND). No OR and no expressions: a host that needs more writes a column that holds it.
+
+_No named properties._
+
+
+### DataLink
+
+- Type: `object`
+- Required fields: `dataset`, `field`, `aggregate`
+- Purpose: A number computed from a dataset of this deck: 'aggregate' over the cells of 'field' in the rows that meet 'filter'. Engines compute it from the embedded rows and never fetch. The shape every content that can be linked to data shares; MetricData is this shape plus a change.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `dataset` | yes | `ref:DatasetId` | Id of the dataset. An unknown id is a 'dataset-unknown' error. |
+| `field` | yes | `string` | The column whose cells are aggregated. An unknown name is a 'dataset-field-unknown' error. |
+| `aggregate` | yes | `enum:sum \| mean \| min \| max \| count \| first \| last` | How the cells are combined: 'count' is the number of rows kept (cells included whatever they hold); 'sum' and 'mean' read numbers (in a column with no declared type also strings in strict decimal syntax); 'min' and 'm... |
+| `filter` | no | `ref:DataFilter` | Only the rows that meet every condition are used. Absent: every row. |
+
+
+### MetricData
+
+- Type: `object`
+- Required fields: `dataset`, `field`, `aggregate`
+- Purpose: A DataLink for a metric, with an optional change. The DataLink properties, repeated because both definitions are closed, plus 'delta'.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `dataset` | yes | `ref:DatasetId` | Id of the dataset. An unknown id is a 'dataset-unknown' error. |
+| `field` | yes | `string` | The column whose cells are aggregated. An unknown name is a 'dataset-field-unknown' error. |
+| `aggregate` | yes | `enum:sum \| mean \| min \| max \| count \| first \| last` | How the cells are combined; see DataLink. |
+| `filter` | no | `ref:DataFilter` | Only the rows that meet every condition are used. Absent: every row. |
+| `delta` | no | `ref:MetricDelta` | How the metric's change is computed. Absent: no change is computed, and a typed 'delta' on the metric is drawn as written. |
+
+
+### MetricDelta
+
+- Type: `oneOf:schema / schema`
+- Required fields: none
+- Purpose: How a metric's change is computed: against the previous row ('compare': "previous", the same aggregate without the last kept row), against a baseline ('compare': { filter }, the same aggregate over the rows that meet this filter instead of the metric's own), against a fixed number ('compare': { value }), or read from a column that already holds it ('field'). Exactly one of 'compare' and 'field'. 'previous' compares row sets, not periods: with several rows per period, filter to one series firs...
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `compare` | no | `oneOf:const:"previous" / object / object` | What the value is compared with. |
+| `field` | no | `string` | A column that holds the change. The change is the metric's aggregate over the same rows of this column. An unknown name is a 'dataset-field-unknown' error. |
+| `as` | no | `enum:difference \| percent` | With 'compare': the change as a difference (value minus base) or as a ratio ((value minus base) over the absolute base; 0.12 is 12%). With 'field': what the column holds, which only picks the default format. |
+| `format` | no | `ref:NumberFormat` | How the change is drawn, usually with sign sections ('+0.0;-0.0;0', '+0%;-0%;0%'). Absent: the value column's format with sign sections built from it ('+#,##0.##;-#,##0.##;0' without one), and '+0%;-0%;0%' for a percent. |
 
 
 ### ChartMapping

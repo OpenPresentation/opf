@@ -127,6 +127,65 @@ Validation:
 
 An unknown name is a `chart-mapping-unknown-column` error. A series that repeats the category or X column is a `chart-mapping-adapted` warning and is dropped. Mapping only reorders and selects columns; single-series constructs still plot one series (see [Chart fallbacks](#chart-fallbacks-lh-60)).
 
+### A metric computed from data
+
+A KPI on a slide is a typed number. When the data changes, the KPI, its change and its arrow disagree with the table beside it until someone retypes them, and a refresh that turns growth into decline leaves a green arrow pointing up. A metric can link to rows of a dataset of the same deck: core computes the value and, optionally, the change from them, and the arrow and its color follow. Core computes from the rows the deck holds and never fetches.
+
+```json
+{
+  "datasets": { "arr": { "columns": ["Month", "Region", { "name": "ARR", "format": "$#,##0.0M" }], "rows": [["2026-10", "EMEA", 4.2], ["2026-11", "EMEA", 4.4]] } },
+  "slides": [{
+    "title": "EMEA ARR",
+    "metric": {
+      "label": "EMEA ARR", "value": 4.4, "delta": 0.2,
+      "data": { "dataset": "arr", "field": "ARR", "aggregate": "last",
+                "filter": [{ "field": "Region", "op": "=", "value": "EMEA" }],
+                "delta": { "compare": "previous" } }
+    }
+  }]
+}
+```
+
+This draws `$4.4M` with `+$0.2M` and an up arrow in green. `value` stays required: it is the last computed number, kept for readers that do not compute, and for the slide when the link does not resolve.
+
+**The link** (`metric.data`) is `dataset` (an id of `datasets`), `field` (a column), `aggregate` and an optional `filter`. A filter is a list of `{ field, op, value }` conditions that every row must meet (no OR, no expressions). `op` is `=`, `!=`, `<`, `<=`, `>`, `>=` or `in` (then `value` is a list). `=` and `!=` compare the same JSON value (`1` is not `"1"`); the order operators compare two numbers as numbers, or two strings by time order in a column typed `date` (`"2026-03"` before `"2026-11"`, `"Q1 2026"` before `"Q3 2026"`) and otherwise by code point; any other pair does not meet the condition.
+
+| `aggregate` | Cells used | Result |
+| --- | --- | --- |
+| `count` | every row kept, whatever its cells hold | the number of rows |
+| `sum`, `mean` | numbers (an undeclared column also reads strings in strict decimal syntax, as chart values do) | a number |
+| `min`, `max` | numbers; in a `date` column, time labels by their time order | a number, or the cell as written |
+| `first`, `last` | the first or last cell that is not null, in dataset order | the cell as written |
+
+A column typed `text` or `boolean` refuses `sum`, `mean`, `min` and `max` (the warning `metric-data-aggregate`). When no row is kept or no cell is usable, the warning is `metric-data-empty`. In both cases the written value is drawn.
+
+**The change** (`metric.data.delta`) is optional, and the typed `delta` is drawn as written when it is absent. It is exactly one of:
+
+| `delta` | The change is |
+| --- | --- |
+| `{ "compare": "previous" }` | the value against the same aggregate over the kept rows without the last one, in dataset order |
+| `{ "compare": { "filter": [...] } }` | the value against the same aggregate over the rows that meet this filter instead of the metric's own (a baseline names everything it means: `Region = EMEA` and `Quarter = Q2`) |
+| `{ "compare": { "value": 4 } }` | the value against a fixed number: a plan, a budget, last year's figure typed in |
+| `{ "field": "ARR change" }` | the same aggregate, over the same rows, of a column that already holds the change |
+
+`as` is `difference` (the default; value minus base) or `percent` (value minus base, over the absolute base; a ratio, so `0.12` is 12%); for `field` it says what the column holds, which only picks the default format. `format` is how the change is drawn. Without one, a difference uses the value column's format with sign sections built from it (`"$#,##0"` gives `"+$#,##0;-$#,##0;$#,##0"`), or `"+#,##0.##;-#,##0.##;0"` when the column has none, and a percent `"+0%;-0%;0%"`. A change that is undefined (`previous` with fewer than two kept rows, a baseline that meets no row, a percent of 0, a value that is not a number) is the warning `metric-data-delta`: no change is drawn and the value still is.
+
+`previous` compares row sets, not periods. With several rows per period (one per region), filter to one series first, or have the host write the change in a column and use `field`.
+
+**The arrow and its color** follow the computed change. A typed `trend` wins; otherwise the sign of the change gives `up`, `down` or `flat`. A typed `sentiment` wins; otherwise `better` decides: with `better: "up"` (the default) an up trend is positive and a down trend negative, and with `better: "down"` the reverse (a rising churn is red); a flat trend is neutral. `better` is valid on any metric: it also colors a typed `trend`.
+
+**What is drawn.** While the link resolves, the computed numbers are drawn, not the written ones, so the slide agrees with its data. When it does not resolve (an unknown dataset or field is an error; the warnings above leave the link unresolved) the written `value` and `delta` are drawn exactly as before. A string `value` that the aggregate gives (`first` or `last` of a text column) is drawn as written. The change is drawn in the format above, and `unit` is printed after the value as always.
+
+**The written numbers.** `value` and `delta` are the last computed numbers, for readers that do not compute. When they differ from the computed ones the warning `metric-data-stale` carries a safe fix that writes the computed number into `value` (a number, replacing a string such as `"$12.4M"`) and into `delta`; it adds no `trend` or `sentiment`. Two numbers are equal when they draw the same text; a string is equal when it is exactly the drawn text. `opf fix --audits` applies the fix, and `opf fill` applies it to every filled deck, so a deck filled from data carries the numbers of that data.
+
+**The number format** (`metric.format`) says how a number `value` is written, in the pattern language of a number variable, a dataset column and a table cell: `{ "value": 0.044, "format": "0.0%" }` draws `4.4%`. The metric's `format` wins, then the linked column's `format`, then the number rules of today (grouping by the slide's language). A string `value` is drawn as written. It applies to the value only; a typed numeric `delta` of a metric with a `format` is drawn with sign sections built from it, and the change of a link keeps `data.delta.format`. A `unit` that the format already prints as a prefix or suffix is the warning `metric-unit-repeated`.
+
+**For a host that draws a metric another way** (a gauge's arc and its end labels), core exports `resolveMetric(metric, datasets, { path?, language? })`. It returns the metric to draw (`metric`: the plain `value`, `delta`, `trend` and `sentiment` as drawn), `resolved`, the value as drawn (`value`: `{ text, number?, format?, isNumber, computed }`: the number behind the text, the pattern that wrote it and whether it is a number), the change as drawn (`delta`), the record that a PowerPoint tag keeps (`record`) and the findings (`diagnostics`, with the safe fix of a stale number). Composition calls it before it measures, so layout measures the text that is drawn, and every engine draws its result.
+
+**Findings.** An unknown dataset (`data.dataset`) and an unknown column (`data.field`, a filter's `field`, a baseline's `field`, `delta.field`) are `dataset-unknown` and `dataset-field-unknown` errors at the key. `metric-data-stale`, `metric-data-aggregate`, `metric-data-empty`, `metric-data-delta` and `metric-unit-repeated` are `content` warnings (see [validate](validate.md)).
+
+**PowerPoint.** The native shapes are those of a typed metric, carrying the computed text. The metric's tag (`OPF_METRIC_V1`) holds the metric as drawn (a plain 0.36 metric) as `value`, so a 0.36.0 importer reads a correct metric with the same numbers. The 0.37 part (`data`, `better`, `format`, which keys were derived, and the numbers behind formatted text) rides in a separate top-level `link` key of the tag, stored with full provenance. Import restores it while the native value and change text are unchanged. A value or change edited in PowerPoint is the author's: the edited text is imported as the written number, the link is not restored, and the diagnostic is `metric-data-dropped`. A derived `trend` or `sentiment` is not imported as typed.
+
 ### Chart fallbacks (LH-60)
 
 Some data does not fit the chart type it is written for. Core's `chartDrawPlan(chart, resolved, { language })` (on `@openpresentation/opf` and `/composition`) decides from the data alone how the preview and the PPTX export draw such a chart, so both draw the same:

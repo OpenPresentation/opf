@@ -4049,7 +4049,7 @@
     },
     "Metric": {
       "type": "object",
-      "description": "Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news. A string or number value in a metric field is shorthand for { \"value\": value }; numeric values remain numbers and are formatted by renderers.",
+      "description": "Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news, 'format' for how a number value is written, 'better' for which direction of change is good news, and 'data' to compute the value and the change from a dataset of this deck. A string or number value in a metric field is shorthand for { \"value\": value }; numeric values remain numbers and are formatted by renderers. Only the object form carries 'data'.",
       "additionalProperties": false,
       "required": ["value"],
       "properties": {
@@ -4097,6 +4097,19 @@
         "icon": {
           "$ref": "#/$defs/IconReference",
           "description": "An icon drawn on a chip above the metric: \"<set>:<name>\" (\"lucide:users\"), a name from the deck's icons, or an SVG source. Decoration only: when the slide has no room for it without setting text smaller, it is not drawn (finding opf/icon-dropped). See docs/icons.md."
+        },
+        "format": {
+          "$ref": "#/$defs/NumberFormat",
+          "description": "How a number 'value' is written, the same pattern language as a number variable, a dataset column and a table cell ('0.0%', '$#,##0.0M'). A string 'value' is drawn as written. Absent: a metric linked to data uses its column's format, and any other metric today's number rules (grouping by the slide's language). It applies to the value only; the change keeps its own format. 'unit' is still printed after the value ('metric-unit-repeated' warning when the format already prints it)."
+        },
+        "data": {
+          "$ref": "#/$defs/MetricData",
+          "description": "Computes the value and, optionally, the change from a dataset of this deck. While it resolves, engines draw the computed numbers; 'value' and 'delta' are then the last computed numbers, kept for readers that do not compute, and 'trend' (the sign of the computed change) and 'sentiment' (from 'better') follow unless they are written. When the link does not resolve, the written value and delta are drawn."
+        },
+        "better": {
+          "type": "string",
+          "enum": ["up", "down"],
+          "description": "Which direction of change is good news. Without 'sentiment', an up trend is positive and a down trend negative when 'better' is \"up\" (the default), and the reverse when it is \"down\"; a flat trend is neutral. An explicit 'sentiment' still wins. It also colors a typed 'trend'."
         }
       }
     },
@@ -5106,6 +5119,79 @@
         }
       },
       "examples": [{ "dataset": "revenue" }, { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }]
+    },
+    "DataCondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "op", "value"],
+      "description": "One condition on a row: the row's cell in 'field' compared with 'value'. Nothing is parsed or evaluated. '=' and '!=' compare the same JSON value (null equals only null, 1 does not equal \"1\"); '<', '<=', '>' and '>=' compare two numbers as numbers, or two strings by the time order of a 'date' column (\"2026-03\" before \"2026-11\", \"Q1 2026\" before \"Q3 2026\") and else by code point, and any other pair does not meet the condition; 'in' is equal to one of the listed values.",
+      "properties": {
+        "field": { "type": "string", "description": "A column name of the linked dataset. An unknown name is a 'dataset-field-unknown' error.", "examples": ["Region"] },
+        "op": { "type": "string", "enum": ["=", "!=", "<", "<=", ">", ">=", "in"], "description": "How the row's cell is compared with 'value'." },
+        "value": {
+          "description": "The value to compare with. For 'in', a list of values.",
+          "oneOf": [
+            { "$ref": "#/$defs/ChartDataCell" },
+            { "type": "array", "items": { "$ref": "#/$defs/ChartDataCell" }, "minItems": 1 }
+          ]
+        }
+      },
+      "examples": [{ "field": "Region", "op": "=", "value": "EMEA" }, { "field": "Month", "op": "in", "value": ["2026-10", "2026-11"] }]
+    },
+    "DataFilter": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/DataCondition" },
+      "minItems": 1,
+      "description": "Conditions a row must all meet (AND). No OR and no expressions: a host that needs more writes a column that holds it.",
+      "examples": [[{ "field": "Region", "op": "=", "value": "EMEA" }]]
+    },
+    "DataLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset", "field", "aggregate"],
+      "description": "A number computed from a dataset of this deck: 'aggregate' over the cells of 'field' in the rows that meet 'filter'. Engines compute it from the embedded rows and never fetch. The shape every content that can be linked to data shares; MetricData is this shape plus a change.",
+      "properties": {
+        "dataset": { "$ref": "#/$defs/DatasetId", "description": "Id of the dataset. An unknown id is a 'dataset-unknown' error." },
+        "field": { "type": "string", "description": "The column whose cells are aggregated. An unknown name is a 'dataset-field-unknown' error.", "examples": ["ARR"] },
+        "aggregate": { "type": "string", "enum": ["sum", "mean", "min", "max", "count", "first", "last"], "description": "How the cells are combined: 'count' is the number of rows kept (cells included whatever they hold); 'sum' and 'mean' read numbers (in a column with no declared type also strings in strict decimal syntax); 'min' and 'max' read numbers, or time labels in a 'date' column; 'first' and 'last' are the first or last cell that is not null, in dataset order. A column typed 'text' or 'boolean' refuses 'sum', 'mean', 'min' and 'max' ('metric-data-aggregate' warning)." },
+        "filter": { "$ref": "#/$defs/DataFilter", "description": "Only the rows that meet every condition are used. Absent: every row." }
+      }
+    },
+    "MetricData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset", "field", "aggregate"],
+      "description": "A DataLink for a metric, with an optional change. The DataLink properties, repeated because both definitions are closed, plus 'delta'.",
+      "properties": {
+        "dataset": { "$ref": "#/$defs/DatasetId", "description": "Id of the dataset. An unknown id is a 'dataset-unknown' error." },
+        "field": { "type": "string", "description": "The column whose cells are aggregated. An unknown name is a 'dataset-field-unknown' error.", "examples": ["ARR"] },
+        "aggregate": { "type": "string", "enum": ["sum", "mean", "min", "max", "count", "first", "last"], "description": "How the cells are combined; see DataLink." },
+        "filter": { "$ref": "#/$defs/DataFilter", "description": "Only the rows that meet every condition are used. Absent: every row." },
+        "delta": { "$ref": "#/$defs/MetricDelta", "description": "How the metric's change is computed. Absent: no change is computed, and a typed 'delta' on the metric is drawn as written." }
+      },
+      "examples": [
+        { "dataset": "arr", "field": "ARR", "aggregate": "last", "filter": [{ "field": "Region", "op": "=", "value": "EMEA" }], "delta": { "compare": "previous" } }
+      ]
+    },
+    "MetricDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "How a metric's change is computed: against the previous row ('compare': \"previous\", the same aggregate without the last kept row), against a baseline ('compare': { filter }, the same aggregate over the rows that meet this filter instead of the metric's own), against a fixed number ('compare': { value }), or read from a column that already holds it ('field'). Exactly one of 'compare' and 'field'. 'previous' compares row sets, not periods: with several rows per period, filter to one series first or have the host write the change in a column and use 'field'.",
+      "oneOf": [{ "required": ["compare"] }, { "required": ["field"] }],
+      "properties": {
+        "compare": {
+          "description": "What the value is compared with.",
+          "oneOf": [
+            { "const": "previous" },
+            { "type": "object", "additionalProperties": false, "required": ["filter"], "properties": { "filter": { "$ref": "#/$defs/DataFilter", "description": "The rows the baseline is computed over. It replaces the metric's own filter instead of adding to it, so it names everything it means." } } },
+            { "type": "object", "additionalProperties": false, "required": ["value"], "properties": { "value": { "$ref": "#/$defs/FiniteNumber", "description": "A fixed number to compare with: a plan, a budget, last year's figure typed in." } } }
+          ],
+          "examples": ["previous", { "filter": [{ "field": "Month", "op": "=", "value": "2026-09" }] }, { "value": 4 }]
+        },
+        "field": { "type": "string", "description": "A column that holds the change. The change is the metric's aggregate over the same rows of this column. An unknown name is a 'dataset-field-unknown' error." },
+        "as": { "type": "string", "enum": ["difference", "percent"], "default": "difference", "description": "With 'compare': the change as a difference (value minus base) or as a ratio ((value minus base) over the absolute base; 0.12 is 12%). With 'field': what the column holds, which only picks the default format." },
+        "format": { "$ref": "#/$defs/NumberFormat", "description": "How the change is drawn, usually with sign sections ('+0.0;-0.0;0', '+0%;-0%;0%'). Absent: the value column's format with sign sections built from it ('+#,##0.##;-#,##0.##;0' without one), and '+0%;-0%;0%' for a percent." }
+      }
     },
     "ChartMapping": {
       "type": "object",

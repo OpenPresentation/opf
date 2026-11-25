@@ -61,7 +61,12 @@ export type DataDiagnosticCode =
   | 'chart-reference-axis-unavailable'
   | 'chart-reference-unsupported-type'
   | 'table-highlight-unknown-name'
-  | 'number-format-invalid';
+  | 'number-format-invalid'
+  | 'metric-data-stale'
+  | 'metric-data-aggregate'
+  | 'metric-data-empty'
+  | 'metric-data-delta'
+  | 'metric-unit-repeated';
 
 export interface DataDiagnostic {
   code: DataDiagnosticCode;
