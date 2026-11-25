@@ -1391,6 +1391,13 @@
         "dataLabels": false,
         "legend": "none"
       }
+    },
+    {
+      "id": "plan-status-table",
+      "title": "Plan status by region, from a typed dataset",
+      "table": {
+        "dataset": "plan"
+      }
     }
   ]
 }
