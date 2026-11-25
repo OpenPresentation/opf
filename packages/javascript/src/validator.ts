@@ -341,7 +341,7 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 		// OPF 0.35: a removed design key or region flow says what replaced it and carries the safe fix.
 		const removed = next.scope !== 'context' ? removedKeyRepair(next, document, run.options) : undefined;
 		if (removed) next = withRepair(next, removed);
-		if (next.ruleId === 'opf/schema' && next.fixes === undefined && next.scope !== 'context') {
+		if (next.ruleId === 'opf/schema' && next.fixes === undefined && next.scope !== 'context' && !removed?.exclusive) {
 			const fixes = schemaFixes(next, document);
 			if (fixes.length) next.fixes = fixes;
 		}
@@ -447,7 +447,7 @@ export function assertValid(value: unknown, options: ValidateOptions = {}): asse
 /** A finding with what replaced its removed key (removedKeyRepair): the help, the fixes and, for a slide's cell key, no near-miss names. */
 function withRepair(finding: Finding, removed: NonNullable<ReturnType<typeof removedKeyRepair>>): Finding {
 	const { suggestions, ...rest } = finding;
-	return { ...(removed.dropSuggestions ? rest : { ...rest, ...(suggestions ? { suggestions } : {}) }), help: removed.help, ...(removed.fixes.length ? { fixes: removed.fixes } : {}) };
+	return { ...(removed.dropSuggestions ? rest : { ...rest, ...(suggestions ? { suggestions } : {}) }), ...(removed.message ? { message: removed.message } : {}), help: removed.help, ...(removed.fixes.length ? { fixes: removed.fixes } : {}) };
 }
 
 /**

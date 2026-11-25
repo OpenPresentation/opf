@@ -136,6 +136,7 @@ export type {
 } from "./catalog-refs.js";
 export { CATALOG_SCHEMA, catalogDisplayKinds, catalogIconKinds, catalogSchemaNames } from "./catalog-schemas.js";
 export type { CatalogDisplayKind, CatalogRecordKind } from "./catalog-schemas.js";
+export { renameRecordKeys } from "./renamed-keys.js";
 export { copySlides, embed, moveToCustom, OPFMoveToCustomError, sameRecord, updateFromCatalog } from "./catalog-helpers.js";
 export type { CatalogPatchOperation, CatalogRecordChange, CatalogRef, CatalogUpdate, CopiedRecordRename, CopySlidesResult, EmbedResult, EmbeddedRecord, RefreshedRecord, MovedRecord, MoveToCustomErrorCode, MoveToCustomPatchOperation, MoveToCustomResult } from "./catalog-helpers.js";
 export { resolveDesignRecords, resolveFontScheme } from "./design-records.js";
