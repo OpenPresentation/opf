@@ -29,7 +29,7 @@ const TARGETS = [
   ['Shonar Bangla', 'Beng', {400: 'Shonar.ttf'}], ['Vrinda', 'Beng', {400: 'vrinda.ttf'}], ['Raavi', 'Guru', {400: 'raavi.ttf'}], ['Shruti', 'Gujr', {400: 'shruti.ttf'}],
   ['Kalinga', 'Orya', {400: 'kalinga.ttf'}], ['Latha', 'Taml', {400: 'latha.ttf'}], ['Gautami', 'Telu', {400: 'gautami.ttf'}], ['Tunga', 'Knda', {400: 'tunga.ttf'}], ['Kartika', 'Mlym', {400: 'kartika.ttf'}],
   ['Iskoola Pota', 'Sinh', {400: 'iskpota.ttf'}],
-  ['Angsana New', 'Thai', {400: 'angsana.ttc'}], ['DilleniaUPC', 'Thai', {400: 'upcdl.ttf'}], ['Leelawadee', 'Thai', {400: 'leelawad.ttf', 700: 'leelawdb.ttf'}], ['Cordia New', 'Thai', {400: 'cordia.ttc'}], ['Browallia New', 'Thai', {400: 'browalia.ttc'}],
+  ['Angsana New', 'Thai', {400: 'angsana.ttc'}], ['DilleniaUPC', 'Thai', {400: 'upcdl.ttf'}], ['Leelawadee', 'Thai', {400: 'leelawad.ttf', 700: 'leelawdb.ttf'}], ['Leelawadee UI', 'Thai', {400: 'LeelawUI.ttf', 700: 'LeelaUIb.ttf'}],['Cordia New', 'Thai', {400: 'cordia.ttc'}], ['Browallia New', 'Thai', {400: 'browalia.ttc'}],
   ['DokChampa', 'Laoo', {400: 'dokchamp.ttf'}], ['DaunPenh', 'Khmr', {400: 'daunpenh.ttf'}], ['Khmer UI', 'Khmr', {400: 'KhmerUI.ttf'}], ['MoolBoran', 'Khmr', {400: 'moolbor.ttf'}],
   ['Myanmar Text', 'Mymr', {400: 'mmrtext.ttf', 700: 'mmrtextb.ttf'}], ['Microsoft Himalaya', 'Tibt', {400: 'himalaya.ttf'}], ['Mongolian Baiti', 'Mong', {400: 'monbaiti.ttf'}],
   ['MV Boli', 'Thaa', {400: 'mvboli.ttf'}], ['Estrangelo Edessa', 'Syrc', {400: 'estre.ttf'}], ['Nyala', 'Ethi', {400: 'nyala.ttf'}], ['Sylfaen', 'Armn', {400: 'sylfaen.ttf'}], ['Sylfaen', 'Geor', {400: 'sylfaen.ttf'}],
