@@ -1,0 +1,155 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Data Sources",
+  "description": "Technical fixture: data sources described once, datasets that say what they took, when and by whom, and a source line that names the same source.",
+  "language": "en-US",
+  "datasources": {
+    "forecast": {
+      "title": "FY26 forecast workbook",
+      "description": "Finance team's working forecast, unaudited.",
+      "connector": "xlsx",
+      "src": "https://example.com/data/revenue.xlsx",
+      "license": "CC-BY-4.0",
+      "refresh": "P1M"
+    },
+    "warehouse": {
+      "title": "Finance warehouse",
+      "connector": "postgres",
+      "src": "postgres://warehouse.example.com/finance",
+      "license": "Internal use only",
+      "refresh": "P1D",
+      "extensions": {
+        "com.example": {
+          "pool": "reporting"
+        }
+      }
+    }
+  },
+  "datasets": {
+    "revenue": {
+      "title": "Revenue by quarter",
+      "description": "Recognized revenue, in $M.",
+      "columns": [
+        "Quarter",
+        {
+          "name": "Revenue",
+          "format": "$#,##0.0"
+        }
+      ],
+      "rows": [
+        [
+          "Q1",
+          12.4
+        ],
+        [
+          "Q2",
+          18
+        ],
+        [
+          "Q3",
+          24.5
+        ],
+        [
+          "Q4",
+          31.2
+        ]
+      ],
+      "datasource": "forecast",
+      "query": "'Q3 plan'!A1:B5",
+      "retrieved": "2026-11-01",
+      "version": "r42",
+      "sha256": "9f2c41b1d1b6e0a8a56e7c3d2f4b8a90c1e3d5f7a9b0c2d4e6f8a0b1c3d5e07a",
+      "generator": {
+        "kind": "human",
+        "name": "Finance team"
+      }
+    },
+    "pipeline": {
+      "columns": [
+        "Stage",
+        "Deals"
+      ],
+      "rows": [
+        [
+          "Qualified",
+          42
+        ],
+        [
+          "Proposal",
+          27
+        ],
+        [
+          "Won",
+          11
+        ]
+      ],
+      "datasource": "warehouse",
+      "query": "SELECT stage, COUNT(*) FROM deals GROUP BY 1",
+      "retrieved": "2026-11-24T06:00:00Z",
+      "generator": {
+        "kind": "model",
+        "name": "metricgen 2.1"
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "revenue",
+      "title": "Revenue grew every quarter",
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "alt": "Column chart of revenue by quarter, rising from $12.4M in Q1 to $31.2M in Q4",
+            "data": {
+              "dataset": "revenue"
+            }
+          }
+        },
+        {
+          "text": "Source: FY26 forecast workbook (CC-BY-4.0), retrieved 1 November 2026"
+        }
+      ]
+    },
+    {
+      "id": "pipeline",
+      "title": "Where the pipeline stands",
+      "table": {
+        "dataset": "pipeline"
+      }
+    },
+    {
+      "id": "inline",
+      "title": "Inline data says where it came from too",
+      "chart": {
+        "type": "line-with-markers",
+        "alt": "Line chart of active teams rising from 8 in July to 17 in September",
+        "data": {
+          "columns": [
+            "Month",
+            "Active teams"
+          ],
+          "rows": [
+            [
+              "Jul",
+              8
+            ],
+            [
+              "Aug",
+              12
+            ],
+            [
+              "Sep",
+              17
+            ]
+          ],
+          "datasource": {
+            "src": "./data/adoption.csv",
+            "connector": "csv"
+          },
+          "retrieved": "2026-10-05T09:30:00Z"
+        }
+      }
+    }
+  ]
+}

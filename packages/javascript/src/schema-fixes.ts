@@ -134,6 +134,52 @@ function listColumnsChangeDrawing(region: unknown): boolean {
   return !(accepts[0] === "list" && (arrangement === undefined || arrangement === "numbered"));
 }
 
+/** A sheet name as spreadsheets write it in a reference: quoted, with a quote doubled, unless it is plain letters, digits and underscores (a name such as FY26 is written as it is). */
+function sheetReference(name: string): string {
+  return /^[A-Za-z_][A-Za-z0-9_]*$/.test(name) ? name : `'${name.replaceAll("'", "''")}'`;
+}
+
+/**
+ * OPF 0.37: a string `datasource` on a dataset or on inline chart data that is no id (a path or a URL). A string is only ever the id of an entry of
+ * `datasources`; the file or URL is written as an inline data source. The fix is not marked safe: the author may have meant an id.
+ */
+function datasourceStringRepair(finding: Finding, document: unknown, segments: string[]): { help: string; fixes: FindingFix[] } | undefined {
+  const parent = segments.slice(0, -1), owner = readAt(document, parent), value = readAt(document, segments);
+  const where = parent.length === 2 && parent[0] === "datasets" ? "dataset" : parent.at(-1) === "data" && parent.at(-2) === "chart" ? "chart data" : undefined;
+  if (where === undefined || !isRecord(owner) || typeof value !== "string") return undefined;
+  return {
+    help: `A string \`datasource\` is only ever the id of an entry of the root \`datasources\` map (letters, digits, dots, hyphens and underscores). A file or a URL is written as an inline data source: { "src": ${JSON.stringify(value)} }.`,
+    fixes: [patch("datasource-to-src", `Write the ${where}'s datasource as { "src": ${JSON.stringify(value)} }`, [{ op: "replace", path: finding.path, value: { src: value } }])],
+  };
+}
+
+/** OPF 0.37: what replaced a dataset's or inline chart data's nested `source` object (sourceRepair). */
+export const REMOVED_SOURCE = "OPF 0.37 removed the nested `source` object. Where the data came from is written in the keys of the dataset or chart data itself: `datasource` (the id of an entry of the root `datasources` map, or an inline data source such as { \"src\": \"./revenue.csv\" }), `query` (the sheet and range, \"FY26!A1:C13\"), `retrieved`, `version`, `sha256` and `generator`.";
+/**
+ * OPF 0.37: the repair of a dataset's or inline chart data's `source` object, which the flat provenance keys replaced. `src` becomes
+ * `datasource: { src }` (with the source's `description`), `retrieved` moves up, `sheet` and `range` fold into `query`
+ * (`FY26!A1:C13`), and `fields` is dropped: the data holds its own columns. Undefined for any other `source`.
+ */
+function sourceRepair(finding: Finding, document: unknown, segments: string[]): { help: string; fixes: FindingFix[] } | undefined {
+  const parent = segments.slice(0, -1), owner = readAt(document, parent), old = readAt(document, segments);
+  const where = parent.length === 2 && parent[0] === "datasets" ? "dataset" : parent.at(-1) === "data" && parent.at(-2) === "chart" ? "chart data" : undefined;
+  if (where === undefined || !isRecord(owner) || !isRecord(old)) return undefined;
+  const text = (value: unknown): string | undefined => (typeof value === "string" && value !== "" ? value : undefined);
+  const src = text(old.src), description = text(old.description), retrieved = text(old.retrieved), sheet = text(old.sheet), range = text(old.range);
+  const query = sheet !== undefined && range !== undefined ? `${sheetReference(sheet)}!${range}` : sheet !== undefined ? sheetReference(sheet) : range;
+  const dropped = Array.isArray(old.fields) && old.fields.length ? " Its `fields` list is dropped: the data holds its own columns." : "";
+  const help = `${REMOVED_SOURCE}${dropped}`;
+  // The keys the source would write must be free in the owner; an owner that already says where its data came from keeps its own words.
+  const writes: [string, unknown][] = [];
+  if (src !== undefined) writes.push(["datasource", { src, ...(description !== undefined ? { description } : {}) }]);
+  if (query !== undefined) writes.push(["query", query]);
+  if (retrieved !== undefined) writes.push(["retrieved", retrieved]);
+  if (writes.some(([key]) => Object.hasOwn(owner, key))) return { help, fixes: [] };
+  const operations: JsonPatchOperation[] = [{ op: "remove", path: finding.path }, ...writes.map(([key, value]): JsonPatchOperation => ({ op: "add", path: pointerOf([...parent, key]), value }))];
+  const title = `Write the ${where}'s ${writes.map(([key]) => key).join(", ") || "provenance"} keys in place of source${dropped ? " (fields is dropped)" : ""}`;
+  return { help, fixes: [patch("use-datasource", title, operations, true)] };
+}
+
 /** OPF 0.35: what replaced a layout region's `listColumns` (removedKeyRepair). */
 export const REMOVED_LIST_COLUMNS = "OPF 0.35 removed the region key listColumns. Delete it: a list of more than 6 entries flows into up to three columns in any region without an arrangement (or with the numbered one) when that sets it at least as large as one column; a list payload's own columns (1, 2, 3 or \"auto\") still chooses.";
 export function removedKeyRepair(finding: Finding, document: unknown, options?: CatalogOptions): { help: string; fixes: FindingFix[]; dropSuggestions?: true } | undefined {
@@ -141,6 +187,14 @@ export function removedKeyRepair(finding: Finding, document: unknown, options?: 
   if (!validation || (finding.ruleId !== "opf/schema" && finding.ruleId !== "opf/catalog-record")) return undefined;
   const segments = segmentsOf(finding.path);
   if (validation.keyword === "additionalProperties" && segments.length === 3 && segments[0] === "slides" && readAt(document, segments) !== undefined && nearestGridCell(segments[2]!) !== undefined) return cellKeyRepair(document, segments.slice(0, 2), segments[2]!, options);
+  if (validation.keyword === "pattern" && finding.ruleId === "opf/schema" && segments.at(-1) === "datasource") {
+    const repaired = datasourceStringRepair(finding, document, segments);
+    if (repaired) return repaired;
+  }
+  if (validation.keyword === "additionalProperties" && finding.ruleId === "opf/schema" && segments.at(-1) === "source") {
+    const repaired = sourceRepair(finding, document, segments);
+    if (repaired) return repaired;
+  }
   const inRegion = segments.at(-3) === "regions";
   if (validation.keyword === "additionalProperties" && inRegion && (segments.at(-1) === "sequence" || segments.at(-1) === "pyramidDirection")) {
     const parent = segments.slice(0, -1), region = readAt(document, parent), value = readAt(document, segments);
