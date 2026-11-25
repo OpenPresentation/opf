@@ -14,7 +14,7 @@ import {giveNotesMastersOwnThemes, giveSlidesScriptMasters} from './master-theme
 import {legacyVendorOutput} from './vendor-compat.js';
 import {readChartCategoryHeading,writeChartCategoryHeading,writeChartWorkbookFormats,repairChartWorkbookRanges} from './chart-workbook.js';
 import {applyChartNumberFormats,chartNumber,groupsThousands,excelCode,formattedColumns,inlineChartData,inlineTableData,isDatasetRef,numericRanges,resolveChartData} from './chart-data.js';
-import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord,tableCellEvidence,tableEnvironmentEvidence} from './data-provenance.js';
+import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,readDatasourcesTag,restoreChartData,restoreTableData,tableDataRecord,tableCellEvidence,tableEnvironmentEvidence} from './data-provenance.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,comboFromNative,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {paragraphDirection, paretoPlan} from '@openpresentation/opf/composition';
 import {attachChartexFallbacks,attachChartexParts,chartexFallbackName,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
@@ -398,6 +398,7 @@ export async function toPptx(input, options = {}) {
   context.dataRecords = new Map();
   context.dataRecordPaths = new Map();
   context.datasets = presentation.datasets;
+  context.datasources = presentation.datasources;
   context.reportDiagnostic = options.onDiagnostic;
   context.safeTypeface = safeTypeface;
   context.imageFormat = options.imageFormat ?? "compatible";
@@ -648,7 +649,8 @@ export async function fromPptx(input, options = {}) {
 
   // RR-54: the datasets recorded at export (OPF_DATASETS_V1). Chart and table frames restore their dataset references against
   // them, so the document carries them before document provenance validates the restored document.
-  const datasets = readDatasetsTag(entries, presentationRoot, presentationRels, options.onDiagnostic);
+  const datasources = readDatasourcesTag(entries, presentationRoot, presentationRels, options.onDiagnostic);
+  const datasets = readDatasetsTag(entries, presentationRoot, presentationRels, options.onDiagnostic, datasources);
   const mediaRegistry = Object.create(null);
   // SH-05: shape readers are synchronous; the preset geometry they read (SH-01) loads here, when a slide has a shape other than a rectangle.
   // SH-08: a SmartArt's drawing (ppt/diagrams/drawingN.xml) is read as shapes when its layout has no OPF form.
@@ -656,10 +658,11 @@ export async function fromPptx(input, options = {}) {
   for (let index = 0; index < slidePaths.length; index += 1) {
     furnitureContexts[index].mediaRegistry = mediaRegistry;
     const slideLanguage = observedLanguage.slides?.[index] ?? observedLanguage;
-    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, nativeScalars,nativeLanguages, rtlDeck: observedRtl(slideLanguage), deckLang: slideLanguage.lang, codeFamily: hasOpfTags ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
+    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, nativeScalars,nativeLanguages, rtlDeck: observedRtl(slideLanguage), deckLang: slideLanguage.lang, codeFamily: hasOpfTags ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets, datasources}}, furniture.slides[index], furnitureContexts[index]));
     if (slideLanguage.language !== undefined && slideLanguage.language !== observedLanguage.language) imported.slides[index].language = slideLanguage.language;
   }
   if (datasets) imported.datasets = datasets;
+  if (datasources) imported.datasources = datasources;
   // A watermark carried identically by every slide is the deck's design.watermark.
   const carried = imported.slides.map(slide => slide.design?.watermark);
   if (carried.length && carried[0] && carried.every(value => JSON.stringify(value) === JSON.stringify(carried[0]))) {
@@ -1449,7 +1452,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
       part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
     }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`}), dimensions, {rtlDeck: options.rtlDeck === true, deckLang: options.deckLang}) : [];
   // RR-54: chart and table data records (OPF_DATA_V1) restore against the stored datasets; their diagnostics name the frame.
-  const dataContext = label => ({datasets: options.dataProvenance?.datasets, markedCharts: chartMarks.charts, referenceContext, referenceOverlays: referenceOverlays.byPart, report: (kind, diagnostic) => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.${kind === 'table' ? 'tables' : 'charts'}.${label}`})});
+  const dataContext = label => ({datasets: options.dataProvenance?.datasets, datasources: options.dataProvenance?.datasources, markedCharts: chartMarks.charts, referenceContext, referenceOverlays: referenceOverlays.byPart, report: (kind, diagnostic) => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.${kind === 'table' ? 'tables' : 'charts'}.${label}`})});
   // SH-09: a Basic Pyramid or Basic Matrix SmartArt (OPF's or PowerPoint's) is its list again, on the pyramid or matrix layout (src/smart-art.js);
   // SH-08: any SmartArt is a list (an arrangement's layout, the list or the process layout), a Mermaid hierarchy, or its drawing as overlay shapes.
   const smartArt = importSmartArt({frames, relationships, entries, slideIndex, report: diagnostic => options.onDiagnostic?.(diagnostic)});
@@ -1579,7 +1582,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
   };
   if (table) {
     const stored = importedTable && record('table');
-    const restoredTable = stored ? restore('table', importedTable, () => restoreTableData(importedTable, stored, {evidence: tableCellEvidence(table, relationships), olderEvidence: [tableCellEvidence(table, relationships, {form: 'raw'}), tableCellEvidence(table, relationships, {form: 'saved'})], environment: [tableEnvironmentEvidence(entries), tableEnvironmentEvidence(exportedThemeView(entries))], datasets: data.datasets, report: diagnostic => data.report?.('table', diagnostic)})) : importedTable;
+    const restoredTable = stored ? restore('table', importedTable, () => restoreTableData(importedTable, stored, {evidence: tableCellEvidence(table, relationships), olderEvidence: [tableCellEvidence(table, relationships, {form: 'raw'}), tableCellEvidence(table, relationships, {form: 'saved'})], environment: [tableEnvironmentEvidence(entries), tableEnvironmentEvidence(exportedThemeView(entries))], datasets: data.datasets, datasources: data.datasources, report: diagnostic => data.report?.('table', diagnostic)})) : importedTable;
     // FA-27: the frame's descr (or PowerPoint's decorative marker) is the table's text alternative.
     // RR-105 (#1290): the description OPF generates when no alt was authored is not an alt (src/default-alt.js).
     const alt = restoredTable && typeof restoredTable === 'object' ? authoredTableAlt(readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]), tableAlt(restoredTable, {datasets: data.datasets})) : undefined;
@@ -1612,7 +1615,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
     const stored = imported && record('chart');
     const part = relationships.get(chartRelId)?.path;
     const restored = stored && part && entries[part]
-      ? restore('chart', imported, () => restoreChartData(imported, stored, chartDataEvidence(decodeText(entries[part]), referenceState.xml, data.referenceContext), {datasets: data.datasets, report: diagnostic => data.report?.('chart', diagnostic)}))
+      ? restore('chart', imported, () => restoreChartData(imported, stored, chartDataEvidence(decodeText(entries[part]), referenceState.xml, data.referenceContext), {datasets: data.datasets, datasources: data.datasources, report: diagnostic => data.report?.('chart', diagnostic)}))
       : imported;
     let chart = restored?.type === 'combo' ? elideComboDefault(restored, data.datasets) : restored;
     const references=[...(referenceState.references??[]),...(data.referenceOverlays?.get(part)??[])].sort((a,b)=>a.index-b.index).map(({index:_index,...ref})=>ref);
@@ -6593,7 +6596,7 @@ async function normalizePptxZip(raw, context) {
     // datasets map beside the document tag.
     if (context.provenanceMode === 'full') {
       try {
-        attachDataProvenance(parts, {records: context.dataRecords, paths: context.dataRecordPaths, datasets: context.datasets, parseRelationships, report: context.reportDiagnostic, chartXml: xml=>!xml.includes(REFERENCE_URI)?xml:readNativeReferences(xml,{scale:Math.min(context.dimensions.widthInches,context.dimensions.heightInches)*96/720}).xml});
+        attachDataProvenance(parts, {records: context.dataRecords, paths: context.dataRecordPaths, datasets: context.datasets, datasources: context.datasources, parseRelationships, report: context.reportDiagnostic, chartXml: xml=>!xml.includes(REFERENCE_URI)?xml:readNativeReferences(xml,{scale:Math.min(context.dimensions.widthInches,context.dimensions.heightInches)*96/720}).xml});
       } catch (error) {
         throw new OPFPptxError("packaging-failed", "Chart and table data tags could not be attached.", {cause: errorMessage(error)});
       }

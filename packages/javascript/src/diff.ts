@@ -68,7 +68,7 @@ export interface PresentationDiff {
 export type DiffOptions = MatchOptions;
 
 const isObject = (value: unknown): value is Record<string, unknown> => !!value && typeof value === "object" && !Array.isArray(value);
-const ROOT_CATEGORIES: Record<string, DiffCategory> = { design: "design", assets: "assets", datasets: "datasets", catalogs: "catalogs", variables: "variables", narrative: "narrative", extensions: "extensions" };
+const ROOT_CATEGORIES: Record<string, DiffCategory> = { design: "design", assets: "assets", datasets: "datasets", datasources: "datasets", catalogs: "catalogs", variables: "variables", narrative: "narrative", extensions: "extensions" };
 
 /** The category a change at `tokens` belongs to. */
 export function categoryOf(tokens: readonly string[]): DiffCategory {

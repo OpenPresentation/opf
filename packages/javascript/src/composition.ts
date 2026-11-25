@@ -11597,7 +11597,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const item = autoSurface.item, dx = x - surfaceBox.x, dy = top - surfaceBox.y, box = { ...item.box, x: item.box.x + dx, y: item.box.y + dy };
     autoSurface.emphasis.box = { ...surfaceBox, x, y: top };
     item.box = box;
-    item.text = fitPlacedText('text', item.value, contentText('text', item.value)!, box, item.text!.fontSize, item.text!.fontSize, item.path, 'center');
+    item.text = fitPlacedText('text', item.runs ?? item.value, contentText('text', item.value)!, box, item.text!.fontSize, item.text!.fontSize, item.path, 'center');
   }
   // C14: a foot band under a body that ends well above it (a one-line snippet centered over a quarter-body gap) moves up to one gap under
   // the body's lowest content, so the body and its takeaway stand together as one centered group instead of apart.
@@ -12800,7 +12800,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const lay = (index: number, cell: LayoutBox, size: number) => {
       const item = body[index]!, inner = cardInner(cell), dot = TEXT_TILE_MARKER * size, indent = dot + .6 * size, width = inner.width - indent;
       if (width < 4 * size) return undefined;
-      const x = rtl ? inner.x : inner.x + indent, fitAt = (y: number, height: number) => fitPlacedText('text', item.value, texts[index]!, { x, y, width, height }, size, size, item.path, alignment);
+      const x = rtl ? inner.x : inner.x + indent, fitAt = (y: number, height: number) => fitPlacedText('text', item.runs ?? item.value, texts[index]!, { x, y, width, height }, size, size, item.path, alignment);
       const probe = fitAt(inner.y, inner.height), height = heightOf(probe), lines = probe.lines.length;
       const bad = probe.overflow || probe.fontSize < size - FONT_GRID_EPSILON || lines > TEXT_TILE_LINES || splitsWord(texts[index]!, probe.lines);
       const place = (): ComposedStepBadge => {
@@ -12939,7 +12939,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!tiled.length) return undefined;
     const heightOf = (fit: TextFit | RichTextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
     const cells = tiled.map(item => cellOfItem.get(item) ?? item.box), texts = tiled.map(item => flatten(item.value).trim());
-    const fitAt = (index: number, box: LayoutBox, size: number) => fitPlacedText('text', tiled[index]!.value, texts[index]!, box, size, size, tiled[index]!.path, tiled[index]!.alignment);
+    const fitAt = (index: number, box: LayoutBox, size: number) => fitPlacedText('text', tiled[index]!.runs ?? tiled[index]!.value, texts[index]!, box, size, size, tiled[index]!.path, tiled[index]!.alignment);
     const reads = (index: number, size: number): boolean => {
       const inner = cardInner(cells[index]!), fit = fitAt(index, inner, size);
       return !fit.overflow && fit.fontSize >= size - FONT_GRID_EPSILON && fit.lines.length <= PLACED_TILE_LINES && !splitsWord(texts[index]!, fit.lines) && heightOf(fit) <= PLACED_TILE_SHARE * inner.height + 1e-6;
@@ -13309,7 +13309,7 @@ export {chartWaterfallColors,chartContextColor,chartContextColors,chartFocusCont
 export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartHighlight,ChartHighlightMarks,ResolvedChartOptions} from './chart-options.js';
 // RR-54: chart and table data resolution, for engines that import the composition entry.
 export {chartNumber,formatDataNumber,numberFormatError,toExcelNumberFormat,fromExcelNumberFormat,inlineDatasets,inlineTableData,inlineChartData,isDatasetRef,isXYChartType,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText} from './chart-data.js';
-export type {DataCellValue,DataColumn,DataSourceRef,Dataset,DatasetRef,ChartMapping,ChartComboSeries,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
+export type {DataCellValue,DataColumn,DataSource,DataGenerator,DataProvenance,Dataset,DatasetRef,ChartMapping,ChartComboSeries,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
 export {chartDrawPlan,chartDrawDiagnostics,isPlaceLabel,markLabelColor} from './chart-fallback.js';
 export type {ChartDrawPlan,ChartFallback} from './chart-fallback.js';
 

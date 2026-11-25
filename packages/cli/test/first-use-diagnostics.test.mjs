@@ -76,12 +76,12 @@ describe("opf validate: local images", () => {
   });
 });
 
-describe("opf stats: chart sources", () => {
-  test("inline data with data.source is inline data with a recorded source", () => {
-    const withSource = { name: "S", slides: [{ chart: { type: "column", data: { columns: ["A", "B"], rows: [["x", 1]], source: { src: "./a.csv", retrieved: "2026-10-05" } } } }] };
+describe("opf stats: chart data sources", () => {
+  test("inline data with a datasource is inline data with a recorded data source", () => {
+    const withSource = { name: "S", slides: [{ chart: { type: "column", data: { columns: ["A", "B"], rows: [["x", 1]], datasource: { src: "./a.csv" }, retrieved: "2026-10-05" } } }] };
     const text = run(["stats", "-", "--format", "text"], { input: JSON.stringify(withSource) }).stdout;
-    assert.match(text, /^Charts {9}1 \(column 1\); data inline 1, dataset 0; 1 with a recorded source$/m);
-    assert.deepEqual(JSON.parse(run(["stats", "-"], { input: JSON.stringify(withSource) }).stdout).stats.charts.data, { inline: 1, dataset: 0, withSource: 1 });
+    assert.match(text, /^Charts {9}1 \(column 1\); data inline 1, dataset 0; 1 with a recorded data source$/m);
+    assert.deepEqual(JSON.parse(run(["stats", "-"], { input: JSON.stringify(withSource) }).stdout).stats.charts.data, { inline: 1, dataset: 0, withDatasource: 1 });
   });
 });
 
