@@ -119,7 +119,8 @@ try {
   run(['ingest','data.csv','--as','table','--into','data-deck.json','--dataset','revenue','--in-place']);
   const withDataset=JSON.parse(await readFile(path.join(temp,'data-deck.json'),'utf8'));
   assert.deepEqual(withDataset.slides.at(-1).table,{dataset:'revenue'});
-  assert.deepEqual(withDataset.datasets.revenue.columns,['Quarter','Revenue','Cost']);
+  // FR-05: the new columns declare what their cells say.
+  assert.deepEqual(withDataset.datasets.revenue.columns,[{name:'Quarter',type:'date',role:'dimension'},{name:'Revenue',type:'number',role:'measure'},{name:'Cost',type:'number',role:'measure'}]);
   run(['ingest','data.csv','--as','table','--dataset','bad id'],{status:2});
   // Re-importing into an existing dataset keeps each same-named column's format, and the data source only describes the new
   // origin: the old query of another file is dropped, and data from stdin has no file data source.

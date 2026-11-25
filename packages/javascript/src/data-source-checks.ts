@@ -1,4 +1,4 @@
-// FR-04: the checks `validate` makes on data sources: a credential in a `src` and data older than its data source's `refresh`.
+// FR-04: the checks `validate` makes on data sources: a credential in a `src` and data older than its data source's `refreshEvery`.
 // They live apart from data-sources.ts so the browser-safe `data` entry (chart and table data) does not carry them.
 // Core has no clock, so staleness is checked as of a date the caller passes.
 //
@@ -98,7 +98,7 @@ function credentialDiagnostics(source: unknown, path: string, diagnostics: DataD
 
 /**
  * The checks of one dataset or one inline chart data object at `path`: an inline data source with a credential in its `src`
- * (warning `datasource-credentials`), and a `retrieved` older than the data source's `refresh` as of `options.asOf` (warning
+ * (warning `datasource-credentials`), and a `retrieved` older than the data source's `refreshEvery` as of `options.asOf` (warning
  * `dataset-stale`).
  */
 export function provenanceDiagnostics(node: unknown, path: string, document: unknown, options: DataSourceCheckOptions = {}): DataDiagnostic[] {
@@ -109,9 +109,9 @@ export function provenanceDiagnostics(node: unknown, path: string, document: unk
   if (options.asOf !== undefined && typeof node.retrieved === 'string') {
     const source = resolveDataSource(datasource, document);
     const asOf = parseInstant(options.asOf), retrieved = parseInstant(node.retrieved);
-    const due = source?.refresh !== undefined && retrieved !== undefined ? addDuration(retrieved, source.refresh) : undefined;
+    const due = source?.refreshEvery !== undefined && retrieved !== undefined ? addDuration(retrieved, source.refreshEvery) : undefined;
     if (asOf !== undefined && due !== undefined && due < asOf) {
-      diagnostics.push({ code: 'dataset-stale', severity: 'warning', path: at(path, 'retrieved'), message: `retrieved ${node.retrieved}, and its data source refreshes every ${source!.refresh}, so as of ${options.asOf} the data is stale; take it from the data source again and update retrieved` });
+      diagnostics.push({ code: 'dataset-stale', severity: 'warning', path: at(path, 'retrieved'), message: `retrieved ${node.retrieved}, and its data source refreshes every ${source!.refreshEvery}, so as of ${options.asOf} the data is stale; take it from the data source again and update retrieved` });
     }
   }
   return diagnostics;

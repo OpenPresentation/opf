@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openpresentation.org/schema/native-summary/v1",
+  "title": "Native run summary",
+  "description": "NT-04c: the small committed summary of one classified native run (scripts/native-acceptance/runs/<opf version>/<target>.json): per file the score and class of every slide as it stood after review. The next release's run is classified against it. scripts/native-acceptance/core/classify/README.md explains it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "target", "application", "system", "opf", "tier", "date", "settings", "counts", "warnings", "files"],
+  "properties": {
+    "schemaVersion": { "const": 1, "description": "The version of this format. Always 1." },
+    "target": { "enum": ["keynote", "powerpoint", "impress", "powerpoint-mac"] },
+    "application": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": { "name": { "type": "string" }, "version": { "type": "string" }, "build": { "type": "string" } }
+    },
+    "system": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["os", "version"],
+      "properties": { "os": { "enum": ["macOS", "Windows", "Linux"] }, "version": { "type": "string" } }
+    },
+    "opf": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version"],
+      "properties": { "version": { "type": "string" }, "commit": { "type": "string" } }
+    },
+    "tier": { "enum": ["smoke", "release", "full", null], "description": "The run's tier; null for a run that was not a tier run." },
+    "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$", "description": "The day the run finished (UTC)." },
+    "note": { "type": "string", "minLength": 1, "description": "How the summary was made, when not by `pnpm native` (for example a one-time import of a round's hand grades)." },
+    "settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["threshold", "tolerance"],
+      "properties": { "threshold": { "type": "number", "minimum": 0 }, "tolerance": { "type": "number", "minimum": 0 } },
+      "description": "The classifier's threshold and tolerance the classes were given with."
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["files", "slides"],
+      "properties": {
+        "files": { "type": "integer", "minimum": 0 },
+        "slides": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["same", "known-present", "known-gone", "new", "not-compared"],
+          "properties": {
+            "same": { "type": "integer", "minimum": 0 },
+            "known-present": { "type": "integer", "minimum": 0 },
+            "known-gone": { "type": "integer", "minimum": 0 },
+            "new": { "type": "integer", "minimum": 0 },
+            "not-compared": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "description": "The distinct import-warning lines of the run, the application's wording, with how many files showed each.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["text", "files"],
+        "properties": { "text": { "type": "string", "minLength": 1 }, "files": { "type": "integer", "minimum": 1 } }
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "sha256", "open", "slideCount", "scores", "classes", "known"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9._-]+~[a-z0-9._-]+$", "description": "<deck>~<variant>." },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "The exported file's SHA-256." },
+          "open": { "enum": ["done", "failed", "timeout", "alert", "not-run"] },
+          "slideCount": { "type": ["integer", "null"], "minimum": 0 },
+          "scores": { "type": "array", "items": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }, "description": "One picture score per slide, rounded to 5 places; null where the slide was not compared." },
+          "classes": { "type": "string", "pattern": "^[skgn-]*$", "description": "One letter per slide: s same, k known-present, g known-gone, n new, - not-compared." },
+          "known": {
+            "type": "object",
+            "description": "The record ids per slide number, for the slides that have any.",
+            "propertyNames": { "pattern": "^[1-9][0-9]*$" },
+            "additionalProperties": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^kn-[a-z0-9-]+$" } }
+          },
+          "import": { "enum": ["imported", "failed", "not-run"], "description": "Whether OPF imported the application's copy (verbs.resave.import)." },
+          "importError": { "type": "string", "pattern": "^[a-z0-9-]+$", "description": "The importer's error code when the import failed (invalid-chart-cache ...)." },
+          "outcomes": {
+            "type": "object",
+            "description": "Object outcomes counted by \"<kind>.<outcome>\". Summed per kind they are the exported objects of that kind, which the classifier compares before it compares outcomes.",
+            "propertyNames": { "pattern": "^[a-z]+\\.(native|changed|picture|dropped)$" },
+            "additionalProperties": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    }
+  }
+}

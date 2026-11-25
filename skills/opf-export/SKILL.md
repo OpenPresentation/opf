@@ -116,11 +116,14 @@ Some OPF features have no exact PowerPoint form. The export draws the nearest na
 | A `pyramid`, `matrix`, `cycle`, `chevrons`, `process` (a short list) or `vertical-process` layout (a region's `arrangement`) | Live SmartArt (PowerPoint's Basic Pyramid, Basic Matrix, Basic Cycle, Basic Chevron Process, Basic Process or Vertical Process, editable in its Text Pane) where PowerPoint lays it out exactly as the preview draws it; OPF's own design of the arrangement (drawn when the entries need it) is live SmartArt on OPF's own layout definition (a `urn:openpresentation.org/smartart/layout/...` uniqueId, titled "OPF Stepped Pyramid", "OPF Card Grid" and so on) inside its own compared domain; otherwise the same drawing as native shapes and measured lines. `--smart-art shapes` (`smartArt: 'shapes'`) always writes native shapes. Each live SmartArt carries OPF's preview of its frame as an `mc:Fallback` picture (SVG over PNG, the outline as alt text), which every app that does not lay SmartArt out shows; it needs opf-render and an SVG rasterizer (a browser passes `svgRasterizer`), without which the arrangement is native shapes. A node edited in PowerPoint keeps OPF's text size; PowerPoint lays the SmartArt out again with its own rules, and saving there drops the fallback | `smartart-unavailable` (info) with the reason, for an instance outside the compared domain (docs/smartart.md) |
 | A font a viewer may not have | The selected name; the viewer substitutes | `typeface-not-office-safe` in the `convert` report; `typefaces: 'safe'` replaces it (`typeface-replaced`) |
 
-## Keynote 15.1.1 differences
+## Keynote differences
 
-A PPTX opened in Keynote is not drawn like OPF's preview or PowerPoint. The 0.34.0 qualification corpus (67 files, 592 slides) was opened in Keynote 15.1.1 on macOS 26.6: every file opened without a repair prompt, and the rows below are what its slides showed against the preview. A re-check on 2026-11-23 (the 0.35.1 fixes) compared Keynote's images after applying their Display P3 profile and alpha, and the same slides in PowerPoint on Windows; a row says when it rests on that. They are observations of those versions, not promises of a fix, and the export is unchanged for them. If the deck will be read in Keynote, say which of these apply to it.
+A PPTX opened in Keynote is not drawn like OPF's preview or PowerPoint. The 0.34.0 qualification corpus (67 files, 592 slides) was opened in Keynote 15.1.1 on macOS 26.6: every file opened without a repair prompt, and the rows below are what its slides showed against the preview. The 0.36.0 round opened 154 files in Keynote 16.0 on macOS 26.6.2, all without an alert, checked those rows again and added the rows from "Fonts the Mac lacks" on. A re-check on 2026-11-23 (the 0.35.1 fixes) compared Keynote's images after applying their Display P3 profile and alpha, and the same slides in PowerPoint on Windows; a row says when it rests on that. They are observations of those versions, not promises of a fix, and the export is unchanged for them. If the deck will be read in Keynote, say which of these apply to it.
 
 Keynote's exported images carry a Display P3 profile and an alpha channel. A comparison that ignores the profile reads colors as grayer and a gradient as shifted, and one that drops alpha without compositing reads a transparent fill as opaque. The first pass did both, so its "gradients shift" and "saturated fills grayer" rows are not differences and are not listed; no remaining row about color has evidence that survives the correction.
+
+<!-- native-known:keynote:start -->
+These rows were seen in Keynote 15.1.1 and 16.0, opening the PPTX export of OPF 0.34.0 to 0.36.0.
 
 | What the deck has | What an author sees in Keynote | What to do |
 | --- | --- | --- |
@@ -148,8 +151,17 @@ Keynote's exported images carry a Display P3 profile and an alpha channel. A com
 | Inner shadow, glow, soft edge, blur | Not drawn | None |
 | Monospace and light faces | Replaced by Helvetica when the Mac lacks the face | Install the fonts |
 | Rotated narrow text (notes labels) or a callout | Wrapped mid-word | None measured |
+| Fonts the Mac lacks (Aptos without Office) | Helvetica, which is wider: long titles gain a line over the content, side-by-side text touches, table headers break mid-word, bullet dots are smaller; the Warnings window names the missing fonts | Export with `--typefaces safe` (it removes the warning; whether it removes the overlaps is not yet measured), or install the fonts on the Mac. A Keynote export profile is planned (OpenPresentation/opf#1298) |
+| Hidden slides and a live slide number | The number skips each hidden slide | Export with `--slide-numbers static` (not yet tried in Keynote) |
+| Footer over a full-bleed picture | The footer text is drawn behind the picture | Keep the footer off full-bleed pictures (not yet tried in Keynote) |
+| Data labels with the category name; pie labels with a separator | The category is dropped ("42" for "North: 42"); a pie label loses its separator and takes two lines | Name the category on the axis or in the legend (not yet tried in Keynote) |
+| Long category names on a column chart | Every other name is drawn, each on one line | Shorter names, or a bar chart (not yet tried in Keynote) |
+| Labels on some points of a stacked area chart | The labels between the labeled points are dropped in every series | Label every point or none (not yet tried in Keynote) |
+| Long legend entries | The legend leaves the chart frame, over the block beside it, or is cut | Shorter series names, or the legend at the bottom (not yet tried in Keynote) |
+| Picture alt text | Not shown: the image Description is the object name ("OPF image 1"), and Keynote's PowerPoint export writes that name back as the alt | Check the alt text after a round trip through Keynote (not yet tried in Keynote) |
+<!-- native-known:keynote:end -->
 
-Pattern fills could not be judged at the review's resolution. Whether Keynote keeps the tight letter spacing of the large display text (`spc` -63 to -283), and its navigator, outline and notes page size, were not run, and PowerPoint for Mac was not tested.
+Pattern fills are not a difference in Keynote 16.0, and it applies the tight letter spacing of the large display text (`spc` -63 to -283). Its navigator, outline and notes page size were not run, and PowerPoint for Mac was not tested.
 
 ## Ship fonts as pinned, licensed files
 

@@ -187,7 +187,7 @@ A native PowerPoint save test (the supervisor's pass) edits a saved export: chan
 
 ### Translations and date names (OPF 0.37)
 
-Nothing is stored. Content variables are resolved before the export, so each slide's text is in that slide's language (the translation its declared language selects, the date in that language's names) and a deck's header and footer variables are resolved for each slide; the document record keeps only the variables that remain after resolution (colors). Import returns each slide's resolved text as literals, as it does for any variable: a template's translations live in its OPF file, not in its PowerPoint export. A released importer (0.36.0 and earlier) reads such a file like any other export, because the file carries no new key; the supervisor's measurement of the 0.36.0 importer on the bilingual example is in the FR-10 report. A current date with month or weekday names in a language other than English is fixed text (`furniture-date-fixed`), not a native field, because PowerPoint's field would show other words (see native-header-footer.md).
+Nothing is stored. Content variables are resolved before the export, so each slide's text is in that slide's language (the translation its declared language selects, the date in that language's names) and a deck's header and footer variables are resolved for each slide; the document record keeps only the variables that remain after resolution (colors). Import returns each slide's resolved text as literals, as it does for any variable: a template's translations live in its OPF file, not in its PowerPoint export. The file carries no key for a translation, so nothing here depends on the importer's release. Checked in PowerPoint on 2026-11-25 with a German deck that has a French slide: after PowerPoint's own save, import returns each slide's text in that slide's language. A current date with month or weekday names in a language other than English is fixed text (`furniture-date-fixed`) unless PowerPoint has a date field that shows the same text in the language of that slide (see native-header-footer.md; PowerPoint's long forms per language are not in the field table yet, #1507).
 
 ### Hard line breaks inside list items (RR-09)
 
@@ -223,6 +223,12 @@ What an importer of 0.36.0 and earlier does with such a file (read from `v0.36.0
 - A deck without data sources and without the new keys writes the same bytes as before and a 0.36 importer restores it as before.
 
 An importer of 0.37 reads all of it; `datasources` is read first, so a dataset that names a data source by id validates. The test `packages/pptx/test/fr-04-data-sources.mjs` pins where the keys are written.
+
+## Typed dataset columns (FR-05)
+
+OPF 0.37 lets a dataset column and an inline chart data column declare `type`, `role` and `unit` (core `docs/chart-table-data.md`, "Typed columns"). The keys stay inline in the column objects of the `OPF_DATASETS_V1` record and of a chart's `OPF_DATA_V1` record; there is no tag of their own. Nothing drawn changes: a deck with and without the keys writes the same slide and chart parts. They come back after a save and re-import with the rest of those records (the records are restored while the native evidence is unchanged, and a plain PowerPoint save keeps them).
+
+A deck written with them is a 0.37 deck. An importer of 0.36.0 and earlier checks both records with its own closed `DataColumn`, so a record with a declared column does not validate there and is dropped whole (`invalid-data-provenance`): no dataset of that file is restored and the charts and tables import the values they show. The owner decided on 2026-11-25 that released importers need no compatibility work, so this was not shaped around and the 0.36.0 importer was not run on the file. `packages/pptx/test/fr-05-typed-columns.mjs` pins where the keys are written and that a deck without them writes only keys a 0.36 importer accepts.
 
 ## Untrusted input
 

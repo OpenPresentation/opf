@@ -36,7 +36,7 @@ outside it; only image files), is a cli/asset-missing warning (cli/asset-blocked
 image), so convert would not stop on it later. --only skips that check; --ignore asset-missing or asset-blocked drops one kind.
 A --config JSON file may hold {catalogs, contracts, severity, only, ignore, ignorePaths, thresholds, chartPalette, asOf}; --only
 replaces its only and --ignore adds to its ignore. --as-of <date> (an ISO 8601 date or date-time; the config key asOf) is the date to
-check data freshness as of: a dataset whose retrieved date is older than its data source's refresh is an opf/dataset-stale warning.
+check data freshness as of: a dataset whose retrieved date is older than its data source's refreshEvery is an opf/dataset-stale warning.
 The CLI never reads the clock for it, so without --as-of nothing is reported stale.
 --format json (the default) prints one input's report { command, ok, input, valid, schemaValid, findings, counts, checks, file,
 sha256, ... }, or for several { command, ok, files: [reports], counts }; text prints a line per finding; github prints

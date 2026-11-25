@@ -219,9 +219,16 @@
           "description": "The application's picture compared with OPF's preview (filled by the compare step, absent before).",
           "additionalProperties": false,
           "required": ["preview", "score"],
+          "if": { "properties": { "score": { "type": "null" } } },
+          "then": { "required": ["note"] },
           "properties": {
-            "preview": { "$ref": "#/$defs/relativePath", "description": "OPF's preview picture of the slide, relative to the run directory." },
+            "preview": {
+              "anyOf": [{ "$ref": "#/$defs/relativePath" }, { "type": "null" }],
+              "description": "OPF's preview picture of the slide, relative to the run directory (the compare step copies it to preview/<deck>/slide-<n>.png there); null when OPF has no preview of the slide (a hidden slide)."
+            },
             "score": { "type": ["number", "null"], "minimum": 0, "maximum": 1, "description": "Share of pixels that differ (0 = none); null when there was no pair to compare. A score ranks slides; it is not a verdict." },
+            "note": { "type": "string", "minLength": 1, "description": "Why there was no pair to compare (score null): a hidden slide, no application picture, no preview picture." },
+            "aspectDiffers": { "type": "boolean", "description": "True when the two pictures' aspect ratios differ by more than 0.01 (the application's slide size is not the preview's)." },
             "regions": {
               "type": "array",
               "description": "The largest areas that differ.",

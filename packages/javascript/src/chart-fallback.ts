@@ -8,7 +8,7 @@
 // language, so a right-to-left or CJK deck's country names count as places too.
 import { chartOptionTarget, type ChartOptionKind } from './chart-options.js';
 import { colorContrast, textColorForFill } from './color.js';
-import type { DataCellValue, DataDiagnostic, ResolvedChartData } from './chart-data.js';
+import type { DataCellValue, DataColumnType, DataDiagnostic, ResolvedChartData } from './chart-data.js';
 
 /** Why a chart is drawn as another construct (or with its data regrouped). */
 export type ChartFallback = 'map-as-columns' | 'pareto-as-columns' | 'box-per-series' | 'nested-rings' | 'scatter-by-position';
@@ -24,6 +24,8 @@ export interface ChartDrawPlan {
   columns: string[];
   hasX: boolean;
   formats: (string | undefined)[];
+  /** FR-05: the declared type of each drawn column, aligned with `columns`. */
+  types: (DataColumnType | undefined)[];
   rows: DataCellValue[][];
   /** The index in the resolved columns of each drawn column (a dropped scatter X column shifts the series by one). */
   sources: number[];
@@ -174,7 +176,7 @@ export function chartDrawPlan(chart: unknown, resolved: Extract<ResolvedChartDat
     hasX = false;
   }
   if (kind && ONE_SERIES.has(kind) && categorized && columns.length > 2) dropped.push(...columns.slice(2));
-  return { type, kind: kind ?? 'bar', ...(fallback ? { fallback } : {}), columns, hasX, formats, rows, sources, dropped };
+  return { type, kind: kind ?? 'bar', ...(fallback ? { fallback } : {}), columns, hasX, formats, types: sources.map(index => resolved.types[index]), rows, sources, dropped };
 }
 
 const quoted = (names: readonly string[]): string => names.map(name => JSON.stringify(name)).join(', ');

@@ -123,7 +123,8 @@ CR 3 decisions:
 | --- | --- | --- | --- |
 | `cr3-hash`: What does `sha256` cover? | The source file's bytes as retrieved (recommended); the rows in the deck | The source file's bytes | Owner, 2026-11-24 |
 | `cr3-transform`: A separate hash of the transform? | No, `query` holds the text (recommended); yes | No | Owner, 2026-11-24 |
-| `cr3-generator`: What shape is `generator`? | `{ kind: "human" \| "model", name }` (recommended); the bare word | The object | Owner, 2026-11-24 |
+| `cr3-generator`: What shape is `generator`? | `{ type: "human" \| "model", name }` (recommended); the bare word | The object; the key is `type` (the owner, 2026-11-25, said in the analysis session; it was `kind`) | Owner, 2026-11-24 |
+| `cr3-refresh-every`: What is the key for how often a data source is meant to be refreshed? | `refreshEvery` (recommended); keep `refresh` | `refreshEvery`, an ISO 8601 duration as before (the owner, 2026-11-25, said in the analysis session; the key-names study, finding A5) | Owner, 2026-11-25 |
 
 ## FR-05: CR 2, typed columns
 
@@ -133,6 +134,10 @@ Owner's call: Keep, with every recommended answer. No note.
 | --- | --- | --- | --- |
 | `cr2-role`: Does `role` have the value `temporal`? | No, `dimension` and `measure` (recommended); yes, three values | No; time is `type: "date"` with `role: "dimension"` | Owner, 2026-11-24 |
 | `cr2-unit`: What does `unit` do? | A label engines never print (recommended); engines print it | A label; `format` alone draws the number | Owner, 2026-11-24 |
+| Built: which category is the cell rule in, and what may its fix do? | A format error; a content warning with a safe fix | `opf/data-cell-type` is a warning in `content`: at most five findings per column, then one for the column. Its fix stores a strict decimal string as a number and a number in a text column as text, never changes the declared type, and runs only with `opf fix --audits` | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: what counts as a number, and as a date? | Anything a chart can plot; a strict kind | A `number` cell is a finite number, so `"12"` warns. A `date` cell is an ISO 8601 date or date-time. A `date` category column is time ordered when its labels run forward; `text` and `boolean` never are | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: where do the three keys live in a PowerPoint file? | In the data records, as authored; in a side record an older importer skips | In the data records, as authored. An importer of an older release does not restore such a record and imports the values the charts and tables show (the owner on 2026-11-25: no compatibility work for older importers) | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: does `opf ingest --dataset` declare columns? | Yes, from the cells; no | Yes: it declares what it can tell from the cells and stores typed cells as that type; a column it cannot tell stays a plain string, and a column that already exists keeps its declaration | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 
 ## FR-06: CR 4, a metric computed from data
 
@@ -226,6 +231,11 @@ Owner's call: Keep, with every recommended answer. No note.
 | `cr15-locale`: Add a `locale` field as asked? | No, a subtag on `language` says it (recommended); yes | No | Owner, 2026-11-24 |
 | `cr15-pick`: Which language selects a translation? | The language where the variable is drawn, slide else deck (recommended); always the deck's | Where it is drawn | Owner, 2026-11-24 |
 | `cr15-names`: Where do month and weekday names come from? | A generated table, measured before it is committed (recommended); the runtime's own data | A generated table | Owner, 2026-11-24 |
+| Built: which language does a deck's header or footer take? | The deck's on every slide; the slide's | The slide's: a slide in another language than the deck's draws the deck's header and footer resolved in its own language, so a translated call to action and a date read in the language of the slide they stand on | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: how far does a translation fall back? | Only by removing subtags (`zh-TW` uses `zh`); also to a related language | Only by removing subtags, ignoring case. A language read from the text selects nothing; only a declared language does | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: what does `opf fill` do with translations? | Keep them; remove them when a value is given | A value given without translations removes them and the report says so; a date's formats stay; a record may give `{ value, translations }` | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: a date with no format | Always `MMMM d, yyyy`; the language's own long pattern | The language's long pattern ("5. März 2026", "5 March 2026" in British English). United States English and a deck with no language keep `MMMM d, yyyy`; a footer date with no `dateFormat` keeps `M/d/yyyy` | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: a current date in PowerPoint | A field in the deck's language; a field in the language of its slide, else fixed text | A native field only where PowerPoint shows what OPF draws in the language of that slide; otherwise the date is fixed text with `furniture-date-fixed`. An English field is no longer used for a pattern with names in a deck whose names are not English | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 | Built: what does PowerPoint hold of a translation? | Nothing stored; a record of every translation | Nothing. Measured on 2026-11-25: content variables do not come back from PowerPoint; the export holds each slide's resolved text, and import returns that text. A translated deck exports the text of each slide's language | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 
 ## Not in 0.37.0: the owner's notes, for the record

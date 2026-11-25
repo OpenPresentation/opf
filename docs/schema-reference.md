@@ -1376,7 +1376,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered column labels for the chart data table. A label is a string or a DataColumn ({ "name", "format" }) whose number format the data labels, value axis and exported workbook use. |
+| `columns` | yes | `array<oneOf:string / ref:DatasetColumn>` | Ordered column labels for the chart data table. A label is a string or a DatasetColumn ({ "name", "format", "type", "role", "unit" }) whose number format the data labels, value axis and exported workbook use, and whic... |
 | `rows` | yes | `array<array<ref:ChartDataCell>>` | Tabular chart rows. Each row aligns by index with columns. |
 | `datasource` | no | `ref:DataSourceChoice` |  |
 | `query` | no | `ref:DataQuery` |  |
@@ -1396,6 +1396,21 @@ _No named properties._
 | --- | --- | --- | --- |
 | `name` | yes | `string` | Column label, used as the series name, the table header and the name 'fields' and 'chart.mapping' address. |
 | `format` | no | `ref:NumberFormat` | Number format of the column's number values (data labels, value axis, table cells, exported workbook). Absent: the General form. |
+
+
+### DatasetColumn
+
+- Type: `object`
+- Required fields: `name`
+- Purpose: A named data column: a dataset column or an inline chart data column. Adds to DataColumn what its cells hold (type), what it is for (role) and a unit label. The string form is { "name": value } with nothing declared. A table column header keeps DataColumn.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `name` | yes | `string` | Column label, used as the series name, the table header and the name 'fields', 'chart.mapping' and data links address. |
+| `format` | no | `ref:NumberFormat` | Number format of the column's number values (data labels, value axis, table cells, exported workbook). Absent: the General form. |
+| `type` | no | `enum:text \| number \| date \| boolean` | What the column's cells hold. text: strings. number: finite numbers (a string such as "12" is not one). date: time labels (a year, a period, a month, a week or a date, as the time-order rule reads them, and an ISO 860... |
+| `role` | no | `enum:dimension \| measure` | What the column is for. dimension: it labels or groups rows (a region, a product, a month). measure: its values are measured and can be aggregated (revenue, count, rate). Time is type 'date' with role 'dimension'. Abs... |
+| `unit` | no | `string` | The unit of the column's values, as a label for tools: 'USD', 'ms', 'people'. Engines never print it; 'format' alone decides how a number is drawn. |
 
 
 ### DataSourceId
@@ -1420,7 +1435,7 @@ _No named properties._
 | `connector` | no | `string` | The kind of data source, in the host's or the author's words: a name a tool recognizes, such as 'csv', 'xlsx', 'postgres', 'bigquery' or 'rest'. Engines do not interpret it. It also says what language a dataset's 'que... |
 | `src` | no | `string` | Where the data is: an 'asset:<id>' reference, a URL, or a relative or local path. A URL carries no credentials. |
 | `license` | no | `string` | The terms the data is under: an SPDX license identifier or a short statement. It travels with the data. |
-| `refresh` | no | `string` | How often the data is meant to be taken again, as an ISO 8601 duration. No engine acts on it. A validator given a date warns when a dataset's 'retrieved' is older than this (opf/dataset-stale). |
+| `refreshEvery` | no | `string` | How often the data is meant to be taken again, as an ISO 8601 duration. No engine acts on it. A validator given a date warns when a dataset's 'retrieved' is older than this (opf/dataset-stale). |
 | `extensions` | no | `object` | Custom data passthrough, for example the connection settings a host owns; ignored by the engine but preserved across read/write round-trips. Never credentials. |
 
 
@@ -1481,12 +1496,12 @@ _No named properties._
 ### DataGenerator
 
 - Type: `object`
-- Required fields: `kind`, `name`
+- Required fields: `type`, `name`
 - Purpose: Who produced the data: a person or a model, and which. A reviewer of a generated deck can see that a table came from a model, and from which one.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `kind` | yes | `enum:human \| model` | 'human' for a person, 'model' for a language model or another generating program. |
+| `type` | yes | `enum:human \| model` | 'human' for a person, 'model' for a language model or another generating program. |
 | `name` | yes | `string` | The person, model or tool, as its owner names it. |
 
 
@@ -1521,13 +1536,13 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `columns`, `rows`
-- Purpose: One shared data table: named columns (strings or DataColumn objects with a number format) and rows of scalar cells. Column names are unique ('data-column-duplicate' error). Rich text and styling belong in an inline table.
+- Purpose: One shared data table: named columns (strings or DatasetColumn objects with a number format, a type, a role and a unit) and rows of scalar cells. Column names are unique ('data-column-duplicate' error). Rich text and styling belong in an inline table.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `title` | no | `string` | Human name of the dataset, shown by editors. |
 | `description` | no | `string` | What the dataset holds. |
-| `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered, uniquely named columns. |
+| `columns` | yes | `array<oneOf:string / ref:DatasetColumn>` | Ordered, uniquely named columns. A column may declare what its cells hold (type), what it is for (role) and a unit label; a string column declares nothing. |
 | `rows` | yes | `array<array<ref:ChartDataCell>>` | Rows of scalar cells (string, number, boolean, null); each row aligns by index with columns. |
 | `datasource` | no | `ref:DataSourceChoice` |  |
 | `query` | no | `ref:DataQuery` |  |

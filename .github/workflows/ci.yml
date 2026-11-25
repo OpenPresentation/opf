@@ -165,7 +165,9 @@ jobs:
       - name: Changelog fragment
         if: ${{ matrix.job == 'lint' && matrix.kind == 'static' && github.event_name == 'pull_request' }}
         continue-on-error: true
-        run: node scripts/changelog-fragments.mjs warn-missing --base "origin/${{ github.base_ref }}"
+        run: |
+          node scripts/changelog-fragments.mjs warn-missing --base "origin/${{ github.base_ref }}"
+          node scripts/changelog-fragments.mjs warn-native --base "origin/${{ github.base_ref }}"
 
       # Every root check:* script (spec, schema, text, workspace-graph, pins, versions, playwright-pin, changes, engines-range,
       # catalog, trackers, ...), one log per check (artifacts/checks).
