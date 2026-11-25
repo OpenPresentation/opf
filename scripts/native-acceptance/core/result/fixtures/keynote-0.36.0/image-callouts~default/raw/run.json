@@ -1,0 +1,38 @@
+{
+ "input": "build/036/qualification/pptx/image-callouts.pptx",
+ "name": "image-callouts",
+ "started": "2026-11-25T17:29:21Z",
+ "keynote": "16.0",
+ "phases": {
+  "open": 1.14,
+  "probe": 2.02,
+  "slides": 0.69,
+  "pptxBack": 0.76,
+  "close": 0.23
+ },
+ "sha256Before": "d9d03619d5262fb582cb002d026aab77646ee1025f1698d8353d5a18942b312c",
+ "documentId": "B8B003D1-C427-4FC4-B2F3-6392BBC7EA64",
+ "documentName": "image-callouts",
+ "slideCount": 1,
+ "skippedSlides": [],
+ "pictures": {
+  "slide-01.png": {
+   "keynoteFile": "_export.001.png",
+   "slide": 1
+  }
+ },
+ "status": "OPENED",
+ "message": "",
+ "seconds": 6.53,
+ "sha256After": "d9d03619d5262fb582cb002d026aab77646ee1025f1698d8353d5a18942b312c",
+ "shaUnchanged": true,
+ "finished": "2026-11-25T17:29:28Z",
+ "warningsPanel": [
+  {
+   "window": 6131,
+   "title": "Warnings – image-callouts",
+   "file": "import-warnings-6131.png",
+   "ocr": "Warnings - image-callouts\nThis PowerPoint presentation may look different.\nHere's a list of what changed when you opened it in Keynote.\nUnsupported media were removed.\nSlide Layout(s): Cover, Gallery, Hero, Image, Image beside\nThe font Roboto is missing. Your text might look different.\nSVG images were converted to PNG.\nReplace Fonts...\n"
+  }
+ ]
+}

@@ -20,7 +20,7 @@ The strict rule is core `chartNumber` (RR-54): a finite number, or a trimmed str
 
 ### Datasets and provenance
 
-Data that several charts or tables show can live once in the top-level `datasets` map and be referenced by id: `"chart": { "type": "line", "data": { "dataset": "revenue" } }`, `"table": { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }`. A dataset (or inline chart data) records where it came from with `source`: `{ "src": "./data/revenue.csv", "sheet"?, "range"?, "fields"?, "retrieved": "2026-10-05", "description"? }`. Engines keep `source` through editing, export and re-import, and never read, fetch or refresh it; re-import to update the data.
+Data that several charts or tables show can live once in the top-level `datasets` map and be referenced by id: `"chart": { "type": "line", "data": { "dataset": "revenue" } }`, `"table": { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }`. A dataset (or inline chart data) records where it came from in its own keys: `datasource` (the id of an entry of the root `datasources` map, or an inline data source such as `{ "src": "./data/revenue.csv" }`), `query` (`"FY26!A1:C13"`), `retrieved` (`"2026-10-05"`), `version`, `sha256` and `generator`. Engines keep them through editing, export and re-import, and never read, fetch or refresh a data source; re-import to update the data. See [Data sources](data-sources.md), which also says how `opf fix` rewrites the nested `source` object that OPF 0.36 wrote.
 
 The browser preview supports imported column, bar, line, area, pie, and donut charts, including multiple series for the first four types. Large tables or long labels can still need layout adjustments or pagination.
 

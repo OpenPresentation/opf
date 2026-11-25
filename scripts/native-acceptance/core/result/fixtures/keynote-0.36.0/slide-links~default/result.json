@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "target": "keynote",
+  "application": {
+    "name": "Keynote",
+    "version": "16.0"
+  },
+  "system": {
+    "os": "macOS",
+    "version": "26.6.2"
+  },
+  "fonts": "installed",
+  "opf": {
+    "version": "0.36.0",
+    "commit": "04f265afc"
+  },
+  "file": {
+    "id": "slide-links~default",
+    "deck": "slide-links",
+    "variant": "default",
+    "path": "build/main/main-features/slide-links/default.pptx",
+    "sha256": "fffb16f8d4ffb0c22d2973d29f50460c32543d39c1fbd9b5b835047a2f35dcf4",
+    "unchangedAfterRun": true
+  },
+  "started": "2026-11-25T17:15:25Z",
+  "finished": "2026-11-25T17:15:32Z",
+  "verbs": {
+    "open": {
+      "status": "done",
+      "seconds": 1.67,
+      "slideCount": 4,
+      "warnings": {
+        "status": "not-read",
+        "source": null,
+        "lines": []
+      }
+    },
+    "render": {
+      "status": "done",
+      "seconds": 0.74
+    },
+    "probe": {
+      "status": "done",
+      "seconds": 1.85
+    },
+    "resave": {
+      "status": "done",
+      "seconds": 0.83,
+      "path": "resaved.pptx"
+    }
+  },
+  "slides": [
+    {
+      "index": 1,
+      "hidden": false,
+      "layout": "Title Only",
+      "picture": "slides/slide-001.png",
+      "notes": null,
+      "objects": [
+        {
+          "kind": "title",
+          "outcome": null,
+          "appClass": "shape",
+          "box": [
+            44,
+            43,
+            874,
+            49
+          ],
+          "text": "Agenda",
+          "fonts": [
+            "Helvetica-Bold"
+          ]
+        },
+        {
+          "kind": "text",
+          "outcome": null,
+          "appClass": "text item",
+          "box": [
+            43,
+            111,
+            523,
+            25
+          ],
+          "text": "Pricing | Roadmap | Appendix (hidden slide) | acme.com",
+          "fonts": [
+            "Helvetica"
+          ]
+        },
+        {
+          "kind": "group",
+          "outcome": null,
+          "appClass": "group",
+          "box": [
+            223,
+            154,
+            514,
+            343
+          ],
+          "objects": [
+            {
+              "kind": "shape",
+              "outcome": null,
+              "appClass": "shape",
+              "box": [
+                223,
+                154,
+                514,
+                343
+              ]
+            },
+            {
+              "kind": "text",
+              "outcome": null,
+              "appClass": "text item",
+              "box": [
+                244,
+                303,
+                472,
+                46
+              ],
+              "text": "Shape: go to Roadmap",
+              "fonts": [
+                "Helvetica"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "hidden": false,
+      "layout": "Title Only",
+      "picture": "slides/slide-002.png",
+      "notes": null,
+      "objects": [
+        {
+          "kind": "title",
+          "outcome": null,
+          "appClass": "shape",
+          "box": [
+            43,
+            43,
+            874,
+            49
+          ],
+          "text": "Pricing",
+          "fonts": [
+            "Helvetica-Bold"
+          ]
+        },
+        {
+          "kind": "table",
+          "outcome": null,
+          "appClass": "table",
+          "box": [
+            43,
+            225,
+            874,
+            156
+          ],
+          "fonts": [
+            "Helvetica-Bold",
+            "Helvetica"
+          ],
+          "rows": 3,
+          "columns": 2
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "hidden": false,
+      "layout": "Title Only 0",
+      "picture": "slides/slide-003.png",
+      "notes": null,
+      "objects": [
+        {
+          "kind": "title",
+          "outcome": null,
+          "appClass": "shape",
+          "box": [
+            43,
+            43,
+            874,
+            49
+          ],
+          "text": "Roadmap",
+          "fonts": [
+            "Helvetica-Bold"
+          ]
+        },
+        {
+          "kind": "text",
+          "outcome": null,
+          "appClass": "text item",
+          "box": [
+            43,
+            199,
+            547,
+            101
+          ],
+          "text": "Text run: back ",
+          "fonts": [
+            "Helvetica"
+          ]
+        },
+        {
+          "kind": "text",
+          "outcome": null,
+          "appClass": "text item",
+          "box": [
+            43,
+            303,
+            515,
+            101
+          ],
+          "text": "to the agenda",
+          "fonts": [
+            "Helvetica"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "hidden": true,
+      "layout": "Title Only",
+      "picture": null,
+      "notes": null,
+      "objects": [
+        {
+          "kind": "title",
+          "outcome": null,
+          "appClass": "shape",
+          "box": [
+            44,
+            43,
+            874,
+            49
+          ],
+          "text": "Appendix",
+          "fonts": [
+            "Helvetica-Bold"
+          ]
+        },
+        {
+          "kind": "group",
+          "outcome": null,
+          "appClass": "group",
+          "box": [
+            190,
+            111,
+            579,
+            386
+          ],
+          "objects": [
+            {
+              "kind": "shape",
+              "outcome": null,
+              "appClass": "shape",
+              "box": [
+                190,
+                111,
+                579,
+                386
+              ]
+            },
+            {
+              "kind": "text",
+              "outcome": null,
+              "appClass": "text item",
+              "box": [
+                213,
+                281,
+                533,
+                46
+              ],
+              "text": "Shape: back to the agenda",
+              "fonts": [
+                "Helvetica"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

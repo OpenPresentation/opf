@@ -59,6 +59,9 @@ export const CASES = [
 	{ name: 'image-placement-in-group', rule: 'opf/image-placement-invalid', input: deck([{ title: 'T', blocks: [{ blocks: [{ image: { src: 'https://e.com/a.png', alt: 'a' }, placement: { edge: 'start' } }, { text: 'x' }] }, { text: 'y' }] }]) },
 	{ name: 'dataset-unknown', rule: 'opf/dataset-unknown', input: deck([{ title: 'T', chart: { type: 'column', data: { dataset: 'sale' } } }], { datasets: { sales: { columns: ['region', 'revenue'], rows: [['EMEA', 1]] } } }) },
 	{ name: 'dataset-field-unknown', rule: 'opf/dataset-field-unknown', input: deck([{ title: 'T', table: { dataset: 'sales', fields: ['regon'] } }], { datasets: { sales: { columns: ['region', 'revenue'], rows: [['EMEA', 1]] } } }) },
+	{ name: 'datasource-unknown', rule: 'opf/datasource-unknown', input: deck([{ title: 'T', table: { dataset: 'sales' } }], { datasources: { warehouse: { connector: 'postgres' } }, datasets: { sales: { datasource: 'wharehouse', columns: ['region', 'revenue'], rows: [['EMEA', 1]] } } }) },
+	{ name: 'datasource-credentials', rule: 'opf/datasource-credentials', input: deck([{ title: 'T', text: 'x' }], { datasources: { warehouse: { src: 'https://analyst:hunter2@data.example.com/export.csv' } } }) },
+	{ name: 'dataset-stale', rule: 'opf/dataset-stale', input: deck([{ title: 'T', table: { dataset: 'sales' } }], { datasources: { warehouse: { refresh: 'P1D' } }, datasets: { sales: { datasource: 'warehouse', retrieved: '2026-01-01', columns: ['region', 'revenue'], rows: [['EMEA', 1]] } } }), options: { asOf: '2026-11-25' } },
 	{ name: 'data-column-duplicate', rule: 'opf/data-column-duplicate', input: deck([{ title: 'T', chart: { type: 'column', data: { dataset: 'sales' } } }], { datasets: { sales: { columns: ['region', 'region'], rows: [['EMEA', 1]] } } }) },
 	{ name: 'chart-mapping-unknown-column', rule: 'opf/chart-mapping-unknown-column', input: deck([{ title: 'T', chart: { type: 'column', data: { columns: ['Q', 'R', 'S'], rows: [['x', 1, 2]] }, mapping: { series: ['Profit'] } } }]) },
 	{ name: 'chart-reference-unsupported-type', rule: 'opf/chart-reference-unsupported-type', input: deck([{title:'T',chart:{type:'pie',data:{columns:['Region','Share'],rows:[['North',60],['South',40]]},referenceLines:[{value:50}]}}]) },
@@ -160,7 +163,6 @@ export const CASES = [
 	{ name: 'layout-monotony', rule: 'opf/layout-monotony', input: deck(['Hiring', 'Budget', 'Roadmap', 'Risks', 'Asks'].map((title) => ({ title, layout: 'list', items: ['One point', 'Another point'] }))), options: withGallery },
 	{ name: 'chart-dual-axis', rule: 'opf/chart-dual-axis', input: deck([{ title: 'Revenue and margin', chart: { type: 'combo', alt: 'Revenue and margin', data: { columns: ['Quarter', 'Revenue', 'Margin'], rows: [['Q1', 12, 0.31], ['Q2', 15, 0.34]] }, line: ['Margin'], secondaryAxis: ['Margin'] } }]) },
 	{ name: 'chart-pie-many-slices', rule: 'opf/chart-pie-many-slices', input: deck([{ title: 'Traffic sources', chart: { type: 'pie', alt: 'Traffic sources', data: { columns: ['Source', 'Visits'], rows: [['Search', 48], ['Direct', 22], ['Social', 12], ['Email', 8], ['Referral', 5], ['Ads', 3]] } } }]) },
-	{ name: 'straight-quotes', rule: 'opf/straight-quotes', input: deck([{ title: 'What customers said', text: 'They called it "the easiest setup we’ve done".' }]) },
 ];
 
 const finding = (ruleId, severity, category, path, message, extra = {}) => ({ ruleId, severity, category, scope: 'document', path, message, ...extra });

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "target": "keynote",
+  "application": { "name": "Keynote", "version": "16.0" },
+  "system": { "os": "macOS", "version": "26.6.2" },
+  "fonts": "installed",
+  "opf": { "version": "0.36.0" },
+  "tier": null,
+  "baseline": null,
+  "started": "2026-11-25T17:15:20Z",
+  "finished": "2026-11-25T17:33:40Z",
+  "check": { "status": "ready", "reasons": [] },
+  "files": [
+    { "id": "slide-links~default", "deck": "slide-links", "variant": "default", "result": "files/slide-links~default/result.json", "open": "done", "slideCount": 4 },
+    {
+      "id": "image-callouts~default",
+      "deck": "image-callouts",
+      "variant": "default",
+      "result": "files/image-callouts~default/result.json",
+      "open": "done",
+      "slideCount": 1
+    },
+    {
+      "id": "singleton-combo-reference-lines~default",
+      "deck": "singleton-combo-reference-lines",
+      "variant": "default",
+      "result": "files/singleton-combo-reference-lines~default/result.json",
+      "open": "done",
+      "slideCount": 1
+    }
+  ]
+}

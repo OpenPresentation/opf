@@ -152,7 +152,7 @@ function frozenSlides(incoming, current, catalogs) {
  * Apply a parsed transfer to the current document. `mode` "selection" replaces the selected value, "replace" opens the transfer
  * as the presentation, and "insert" copies its slides in after `slideIndex` with core's `copySlides`: catalog groups match by
  * `source`, identical records are reused, a differing record is renamed, and `renamed` / `addedGroups` say what changed so the
- * host can tell the user. Assets and shared datasets come along under free ids. `catalogs` are the host's registered catalogs.
+ * host can tell the user. Assets, shared datasets and the data sources they name come along under free ids. `catalogs` are the host's registered catalogs.
  * Returns `{ presentation, slideIndex, renamed, addedGroups }`.
  */
 export function prepareOpfImport(
@@ -212,12 +212,39 @@ export function prepareOpfImport(
     datasetIds.add(next);
     datasetMap.set(id, next);
   }
+  // FR-04: a dataset, or inline chart data, that names a data source by id (`datasource: "<id>"`) brings that data source along, under the
+  // same rules: the deck's own entry of the same content is shared, one with the same id and other content makes the incoming one live under
+  // a free id and the references follow it.
+  const sourceMap = new Map();
+  const usedSources = new Set();
+  const collectSources = (value, key = "") => {
+    if (Array.isArray(value)) value.forEach((child) => collectSources(child, key));
+    else if (value && typeof value === "object") for (const [childKey, child] of Object.entries(value)) collectSources(child, childKey);
+    else if (key === "datasource" && typeof value === "string") usedSources.add(value);
+  };
+  collectSources(incoming.slides);
+  for (const id of datasetMap.keys()) collectSources(incoming.datasets[id]);
+  const sourceIds = new Set(Object.keys(target.datasources ?? {}));
+  for (const id of usedSources) {
+    const mine = incoming.datasources && Object.hasOwn(incoming.datasources, id) ? incoming.datasources[id] : undefined;
+    if (mine === undefined) continue;
+    if (sourceIds.has(id) && JSON.stringify(target.datasources[id]) === JSON.stringify(mine)) {
+      sourceMap.set(id, id);
+      continue;
+    }
+    let next = id,
+      n = 2;
+    while (sourceIds.has(next)) next = `${id}-${n++}`;
+    sourceIds.add(next);
+    sourceMap.set(id, next);
+  }
   const rewrite = (value, key = "") => {
     if (Array.isArray(value)) return value.map((child) => rewrite(child, key));
     if (value && typeof value === "object")
       return Object.fromEntries(Object.entries(value).map(([childKey, child]) => [childKey, rewrite(child, childKey)]));
     if (typeof value === "string") {
       if (key === "dataset" && datasetMap.has(value)) return datasetMap.get(value);
+      if (key === "datasource" && sourceMap.has(value)) return sourceMap.get(value);
       if (["src", "image", "video", "poster", "background"].includes(key) && value.startsWith("asset:") && assetMap.has(value.slice(6)))
         return `asset:${assetMap.get(value.slice(6))}`;
     }
@@ -233,7 +260,12 @@ export function prepareOpfImport(
   for (const [id, next] of datasetMap) {
     if (target.datasets && Object.hasOwn(target.datasets, next)) continue;
     target.datasets ??= {};
-    target.datasets[next] = clone(incoming.datasets[id]);
+    target.datasets[next] = rewrite(clone(incoming.datasets[id]));
+  }
+  for (const [id, next] of sourceMap) {
+    if (target.datasources && Object.hasOwn(target.datasources, next)) continue;
+    target.datasources ??= {};
+    target.datasources[next] = clone(incoming.datasources[id]);
   }
   const index = Math.max(0, Math.min(target.slides.length, slideIndex + 1));
   // Core copies the catalog records the slides use and rewrites their references (FA-20).

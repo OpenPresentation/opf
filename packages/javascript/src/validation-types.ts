@@ -108,6 +108,11 @@ export interface ValidateOptions {
 	/** Values to fill variables with before checking, keyed by variable id. */
 	values?: VariableValues;
 	/**
+	 * The date to check data freshness as of (an ISO 8601 date or date-time). Core has no clock, so a dataset is reported stale
+	 * (`opf/dataset-stale`) only when the caller passes one: its `retrieved` is older than its data source's `refresh`.
+	 */
+	asOf?: string;
+	/**
 	 * For a value that is one part of a deck (a single slide checked on its own, with the rest of the deck elsewhere): `false` skips
 	 * `opf/slide-link-unknown`, a list adds the ids of the deck's other slides that a `slide:<id>` link may name. Leave it out for a whole deck.
 	 */

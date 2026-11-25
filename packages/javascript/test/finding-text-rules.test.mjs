@@ -35,6 +35,7 @@ const GOLDEN = {
   "connector-end-missing": ["The connector's `to: \"shipping\"` names no block or overlay shape on this slide, so the connector is not drawn. Ids on this slide: plan, ship.", "pick one of `plan` or `ship`, or give the block or shape it should join `id: \"shipping\"`."],
   "image-placement-invalid": ["Blocks 1 and 2 are both placed on the start edge, and a slide edge takes one placed image.", "move one of them to another edge, or remove its `placement`."],
   "dataset-unknown": ["`dataset: \"sale\"` does not exist. Datasets in this deck: sales.", "did you mean `sales`? Or add `datasets.sale`."],
+  "datasource-unknown": ["`datasource: \"wharehouse\"` does not exist. Data sources in this deck: warehouse.", "did you mean `warehouse`? Or add `datasources.wharehouse`, or write the data source inline as an object such as `{ \"src\": \"./data.csv\" }`."],
   "dataset-field-unknown": ["`regon` is not a column of `sales`. Columns: region, revenue.", "did you mean `region`?"],
   "data-column-duplicate": ["Two columns are named `region`. Series and mappings address columns by name.", "rename the second one (for example `region-2`)."],
   "chart-mapping-unknown-column": ["The chart mapping names column `Profit`, which the data does not have. Columns: Q, R, S.", "pick one of `Q`, `R` or `S`."],
@@ -101,7 +102,6 @@ const GOLDEN = {
   "chart-dual-axis": ["\"Margin\" is on a second value axis, so two scales share one plot and its crossings mean nothing.", "show the secondary series in a chart of its own beside this one, or drop `secondaryAxis` when the series share a unit."],
   "variable-group-omitted": ["A group on slide 1 is left out when `quote` has no value, with its pictures, cards and other text.", "give it a value to draw the group, or move what should always show out of the group."],
   "chart-pie-many-slices": ["This chart has 6 slices, more than 5; the small ones are hard to compare and to label.", "compare the parts with bars (`type: \"bar\"`), or group the smallest into one \"Other\" slice."],
-  "straight-quotes": ["`They called it \"the easiest setup we’ve done\".` uses straight quotation marks; this deck's language uses “…”.", "apply the quick fix, or type “ and ” instead."],
 };
 
 const firstOf = (name) => {
@@ -233,7 +233,7 @@ function runExample(rule, text) {
 	const parsed = JSON.parse(text);
 	const base = rule === 'opf/missing-language' ? { name: 'Example' } : DECK_BASE;
 	const document = Array.isArray(parsed.slides) ? { ...base, ...parsed } : { ...base, slides: [parsed] };
-	return validate(document, { catalogs: [gallery], ...(rule === 'opf/contract' ? { contracts: [{ path: '/slides/*/layout', allowedValues: ['text'] }] } : {}) }).findings;
+	return validate(document, { catalogs: [gallery], ...(rule === 'opf/dataset-stale' ? { asOf: '2026-11-25' } : {}), ...(rule === 'opf/contract' ? { contracts: [{ path: '/slides/*/layout', allowedValues: ['text'] }] } : {}) }).findings;
 }
 
 test('every explain example triggers its rule on the problem side and not on the repaired side', () => {

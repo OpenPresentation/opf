@@ -22,4 +22,8 @@ opf schema         # the whole presentation schema; its $comment ends "This copy
 - A schema fetched from the web (`https://openpresentation.org/schema/opf/v1`) is the latest release's copy. Use it for editor completion, not as a contract for an older document. Versioned URLs on the website are a separate piece of work.
 - Check a document against the version it was written for before you migrate it; OPF ships no migration tooling before 1.0, so a breaking change is listed in the [changelog](../CHANGELOG.md) and the examples and docs are converted with it.
 
+## A key the validator does not know
+
+Objects are closed, so a validator of one release rejects a key that a later release adds ("must NOT have additional properties"). When the key is not close to a known one (a typo gets a "did you mean" instead), the finding says which OPF release the validator is and that a later release may define the key; the version is also in `validation.params.validatorVersion`. Then either update `@openpresentation/opf` (and the CLI with it) to the release that wrote the document, or check the key against the schema of that release (`opf schema` of that package version). A validator cannot name the release a key needs, and documents carry no version field to say it.
+
 At 1.0 the line becomes a contract: `v1` then changes only in ways that keep every valid `v1` document valid.

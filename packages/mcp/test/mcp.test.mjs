@@ -87,6 +87,18 @@ describe("opf-mcp", () => {
 			assert.equal(strict.valid, true, "a warning does not make a deck invalid");
 		});
 
+		test("asOf checks data freshness against the date the caller gives; an unknown data source is an error", async () => {
+			const deck = { name: "Fresh", language: "en-US", datasources: { warehouse: { refresh: "P1D" } }, datasets: { sales: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12]], datasource: "warehouse", retrieved: "2026-01-01" } }, slides: [{ title: "Sales", table: { dataset: "sales" } }] };
+			const call = async (document, extra = {}) => (await client.callTool({ name: "validate_deck", arguments: { document, ...extra } })).structuredContent;
+			assert.ok(!(await call(deck)).findings.some((finding) => finding.ruleId === "opf/dataset-stale"), "no date, nothing is stale");
+			const stale = (await call(deck, { asOf: "2026-11-25" })).findings.find((finding) => finding.ruleId === "opf/dataset-stale");
+			assert.equal(stale?.severity, "warning");
+			assert.equal(stale?.path, "/datasets/sales/retrieved");
+			const unknown = await call({ ...deck, datasets: { sales: { ...deck.datasets.sales, datasource: "wharehouse" } } });
+			assert.equal(unknown.valid, false);
+			assert.ok(unknown.findings.some((finding) => finding.ruleId === "opf/datasource-unknown" && finding.severity === "error"));
+		});
+
 		test("reports syntax errors with a location, and invalid decks as not ok", async () => {
 			const broken = (await client.callTool({ name: "validate_deck", arguments: { document: '{ "name": "x", "slides": [ }' } })).structuredContent;
 			assert.equal(broken.ok, false);
