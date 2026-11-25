@@ -41,7 +41,7 @@
     "record": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "title", "feature", "sees", "workaround", "whose", "grade", "where", "firstSeen", "lastSeen", "issue", "skill", "status"],
+      "required": ["id", "title", "feature", "sees", "workaround", "workaroundTried", "whose", "grade", "where", "firstSeen", "lastSeen", "issue", "skill", "status"],
       "description": "One known difference.",
       "properties": {
         "id": { "type": "string", "pattern": "^kn-[a-z0-9-]+$", "description": "A stable id, never reused for another difference." },
@@ -52,6 +52,7 @@
         },
         "sees": { "type": "string", "minLength": 1, "description": "What a user sees in the application: the second column of the skill table." },
         "workaround": { "type": ["string", "null"], "minLength": 1, "description": "What to do: the third column of the skill table; null when there is nothing to say." },
+        "workaroundTried": { "type": ["boolean", "null"], "description": "Whether the workaround was run: true = tried in the application and it worked; false = a suggestion not tried in the application yet (the generated table then says so); null = not recorded, or there is no workaround." },
         "whose": {
           "enum": ["opf-file", "opf-importer", "application", "preview"],
           "description": "Who would change for the difference to go: OPF's file, OPF's importer, the application (the file is valid and it reads it differently), or OPF's preview."
@@ -83,6 +84,10 @@
         {
           "if": { "properties": { "where": { "type": "array", "maxItems": 0 } } },
           "then": { "anyOf": [{ "required": ["scope"] }, { "required": ["located"], "properties": { "located": { "type": "boolean", "const": false } } }] }
+        },
+        {
+          "if": { "properties": { "workaround": { "type": "null" } } },
+          "then": { "properties": { "workaroundTried": { "type": "null" } } }
         },
         {
           "if": { "required": ["located"], "properties": { "located": { "type": "boolean", "const": false } } },

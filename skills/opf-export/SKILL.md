@@ -152,13 +152,13 @@ These rows were seen in Keynote 15.1.1 and 16.0, opening the PPTX export of OPF 
 | Monospace and light faces | Replaced by Helvetica when the Mac lacks the face | Install the fonts |
 | Rotated narrow text (notes labels) or a callout | Wrapped mid-word | None measured |
 | Fonts the Mac lacks (Aptos without Office) | Helvetica, which is wider: long titles gain a line over the content, side-by-side text touches, table headers break mid-word, bullet dots are smaller; the Warnings window names the missing fonts | Export with `--typefaces safe` (it removes the warning; whether it removes the overlaps is not yet measured), or install the fonts on the Mac. A Keynote export profile is planned (OpenPresentation/opf#1298) |
-| Hidden slides and a live slide number | The number skips each hidden slide | Export with `--slide-numbers static` |
-| Footer over a full-bleed picture | The footer text is drawn behind the picture | Keep the footer off full-bleed pictures |
-| Data labels with the category name; pie labels with a separator | The category is dropped ("42" for "North: 42"); a pie label loses its separator and takes two lines | Name the category on the axis or in the legend |
-| Long category names on a column chart | Every other name is drawn, each on one line | Shorter names, or a bar chart |
-| Labels on some points of a stacked area chart | The labels between the labeled points are dropped in every series | Label every point or none |
-| Long legend entries | The legend leaves the chart frame, over the block beside it, or is cut | Shorter series names, or the legend at the bottom |
-| Picture alt text | Not shown: the image Description is the object name ("OPF image 1"), and Keynote's PowerPoint export writes that name back as the alt | Check the alt text after a round trip through Keynote |
+| Hidden slides and a live slide number | The number skips each hidden slide | Export with `--slide-numbers static` (not yet tried in Keynote) |
+| Footer over a full-bleed picture | The footer text is drawn behind the picture | Keep the footer off full-bleed pictures (not yet tried in Keynote) |
+| Data labels with the category name; pie labels with a separator | The category is dropped ("42" for "North: 42"); a pie label loses its separator and takes two lines | Name the category on the axis or in the legend (not yet tried in Keynote) |
+| Long category names on a column chart | Every other name is drawn, each on one line | Shorter names, or a bar chart (not yet tried in Keynote) |
+| Labels on some points of a stacked area chart | The labels between the labeled points are dropped in every series | Label every point or none (not yet tried in Keynote) |
+| Long legend entries | The legend leaves the chart frame, over the block beside it, or is cut | Shorter series names, or the legend at the bottom (not yet tried in Keynote) |
+| Picture alt text | Not shown: the image Description is the object name ("OPF image 1"), and Keynote's PowerPoint export writes that name back as the alt | Check the alt text after a round trip through Keynote (not yet tried in Keynote) |
 <!-- native-known:keynote:end -->
 
 Pattern fills are not a difference in Keynote 16.0, and it applies the tight letter spacing of the large display text (`spc` -63 to -283). Its navigator, outline and notes page size were not run, and PowerPoint for Mac was not tested.

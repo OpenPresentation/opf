@@ -56,6 +56,25 @@ test('the table between the markers in skills/opf-export/SKILL.md is generated f
   assert.match(generated, /^These rows were seen in Keynote [\d. and,]+, opening the PPTX export of OPF /);
 });
 
+test('an untried workaround says so in the table; tried and unrecorded ones do not', () => {
+  const base = { ...records.find((record) => record.skill && record.workaround), skill: true };
+  const row = (workaroundTried) => renderSkillTable([{ ...base, workaroundTried }]).split('\n').at(-1);
+  assert.ok(row(false).endsWith(' (not yet tried in Keynote) |'), row(false));
+  assert.ok(!row(true).includes('not yet tried') && !row(null).includes('not yet tried'));
+  const broken = structuredClone(known);
+  const target = broken.records.find((record) => record.workaround === null);
+  target.workaroundTried = false;
+  assert.notDeepEqual(validateKnown(broken), [], 'no workaround, nothing tried');
+  delete target.workaroundTried;
+  assert.notDeepEqual(validateKnown(broken), [], 'workaroundTried is required');
+});
+
+test('the 24 rows of the first Keynote round have no untried marker', () => {
+  const old = records.filter((record) => record.skill && record.firstSeen.application === '15.1.1' && record.id !== 'kn-missing-fonts');
+  assert.equal(old.length, 24);
+  for (const record of old) assert.notEqual(record.workaroundTried, false, record.id);
+});
+
 test('replaceMarkedText rewrites only the text between the markers', () => {
   const text = 'before\n<!-- native-known:keynote:start -->\nold\n<!-- native-known:keynote:end -->\nafter\n';
   const next = replaceMarkedText(text, 'new');

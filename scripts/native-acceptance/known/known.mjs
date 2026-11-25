@@ -42,6 +42,9 @@ const cell = (text) => String(text).replaceAll('|', '\\|').replaceAll('\n', ' ')
 
 const APPLICATION = { keynote: 'Keynote' };
 
+/** The last column: the workaround, and whether it is still untried in the application. */
+export const whatToDo = (record, name) => `${record.workaround ?? 'None'}${record.workaroundTried === false ? ` (not yet tried in ${name})` : ''}`;
+
 /** The generated text between the skill's markers: one sentence on the versions the rows were seen in, and the table. */
 export function renderSkillTable(records, target = 'keynote') {
   const rows = records.filter((record) => record.skill);
@@ -55,7 +58,7 @@ export function renderSkillTable(records, target = 'keynote') {
     '',
     `| What the deck has | What an author sees in ${name} | What to do |`,
     '| --- | --- | --- |',
-    ...rows.map((record) => `| ${cell(record.title)} | ${cell(record.sees)} | ${cell(record.workaround ?? 'None')} |`),
+    ...rows.map((record) => `| ${cell(record.title)} | ${cell(record.sees)} | ${cell(whatToDo(record, name))} |`),
   ].join('\n');
 }
 

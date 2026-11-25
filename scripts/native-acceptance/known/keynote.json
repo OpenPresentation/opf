@@ -8,6 +8,7 @@
       "feature": "furniture",
       "sees": "The whole footer shows only the number (\"Page 1 of 4\" reads \"1\")",
       "workaround": "Export with `--slide-numbers static`",
+      "workaroundTried": true,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -451,6 +452,7 @@
       "feature": "tables",
       "sees": "Only the first column, clipped at the left edge (PowerPoint draws all three)",
       "workaround": "None measured that keeps PowerPoint's right-to-left table; an opt-in route is undecided",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -483,6 +485,7 @@
       "feature": "charts",
       "sees": "A picture of OPF's preview in the chart's frame, not a live chart",
       "workaround": "None; the live chart stays for PowerPoint",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -517,6 +520,7 @@
       "feature": "charts",
       "sees": "Category labels clipped at the frame's left edge (measured on 0.34.0; PowerPoint draws them whole)",
       "workaround": "Fixed after 0.35.1: the export now writes the plot area as the plot itself, which keeps the labels inside the frame. Not yet checked in Keynote",
+      "workaroundTried": true,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -552,6 +556,7 @@
       "feature": "shapes",
       "sees": "A plain outline (PowerPoint draws it)",
       "workaround": "None measured",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -582,6 +587,7 @@
       "feature": "shapes",
       "sees": "One single line (PowerPoint draws it)",
       "workaround": "None measured",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -612,6 +618,7 @@
       "feature": "pictures",
       "sees": "Keynote keeps the 85% alpha (its exported image has it). What shows through in Keynote's window and in Play has not been observed",
       "workaround": "Not yet observed",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -639,6 +646,7 @@
       "feature": "pictures",
       "sees": "One tile stretched over the frame, exactly twice the preview's tile (PowerPoint draws the 2 by 2 tiles as the preview does)",
       "workaround": "None measured",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -665,6 +673,7 @@
       "feature": "charts",
       "sees": "Drawn filled, and the axis labels can collide and clip at the right edge. Each series also carries an area fill beside its line, and Keynote fills the marker radar as well, so that fill is the likely cause; cause not confirmed",
       "workaround": "Not tested: variants with the area fill set to no fill look the same in PowerPoint and have not been opened in Keynote",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -692,6 +701,7 @@
       "feature": "charts",
       "sees": "The gap is bridged by the area (PowerPoint shows the gap)",
       "workaround": "None measured",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -718,6 +728,7 @@
       "feature": "charts",
       "sees": "Only its 0% and 40% labels, and the legend overlaps them (PowerPoint shows 0% to 40% in steps of 10%); cause not confirmed",
       "workaround": "Not tested: variants without the major unit and with the General number format have not been opened in Keynote",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -762,6 +773,7 @@
       "feature": "charts",
       "sees": "The line is drawn at the right value; its label is not (the legend names it). On one bar chart the label collided with a bar value, because Keynote lays the bars out on the tick marks",
       "workaround": "Name the line; do not rely on the label",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -841,6 +853,7 @@
       "feature": "charts",
       "sees": "Dropped",
       "workaround": "None measured",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -875,6 +888,7 @@
       "feature": "charts",
       "sees": "Drawn unstacked (values 18 to 55 where the preview stacks to 122)",
       "workaround": "None measured",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -907,6 +921,7 @@
       "feature": "shapes",
       "sees": "Keynote reroutes around the target box; PowerPoint draws the route as the preview does, through the box to its top edge",
       "workaround": "None measured",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -941,6 +956,7 @@
       "feature": "shapes",
       "sees": "Drawn straight",
       "workaround": "None",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -975,6 +991,7 @@
       "feature": "fonts",
       "sees": "Ran off the right edge, because Helvetica replaces Aptos on a Mac without Office fonts and is wider (PowerPoint fits it)",
       "workaround": "Install the deck's fonts on the Mac",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -1018,6 +1035,7 @@
       "feature": "links",
       "sees": "Drawn in the theme's hyperlink color (blue), because Keynote ignores the hyperlink color extension; low contrast on a dark ground",
       "workaround": "None measured",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -1086,6 +1104,7 @@
       "feature": "charts",
       "sees": "Centered, not left aligned",
       "workaround": "None",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -1351,6 +1370,7 @@
       "feature": "text",
       "sees": "Rotated, not stacked letters",
       "workaround": "None",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -1385,6 +1405,7 @@
       "feature": "charts",
       "sees": "Not drawn",
       "workaround": "None",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -1613,6 +1634,7 @@
       "feature": "shapes",
       "sees": "Not drawn",
       "workaround": "None",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -1651,6 +1673,7 @@
       "feature": "fonts",
       "sees": "Replaced by Helvetica when the Mac lacks the face",
       "workaround": "Install the fonts",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -1778,6 +1801,7 @@
       "feature": "text",
       "sees": "Wrapped mid-word",
       "workaround": "None measured",
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -1816,6 +1840,7 @@
       "feature": "fonts",
       "sees": "Helvetica, which is wider: long titles gain a line over the content, side-by-side text touches, table headers break mid-word, bullet dots are smaller; the Warnings window names the missing fonts",
       "workaround": "Export with `--typefaces safe` (it removes the warning; whether it removes the overlaps is not yet measured), or install the fonts on the Mac. A Keynote export profile is planned (OpenPresentation/opf#1298)",
+      "workaroundTried": true,
       "whose": "application",
       "grade": "wrong",
       "where": [],
@@ -1843,6 +1868,7 @@
       "feature": "furniture",
       "sees": "The number skips each hidden slide",
       "workaround": "Export with `--slide-numbers static`",
+      "workaroundTried": false,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -1875,6 +1901,7 @@
       "feature": "furniture",
       "sees": "The footer text is drawn behind the picture",
       "workaround": "Keep the footer off full-bleed pictures",
+      "workaroundTried": false,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -1903,6 +1930,7 @@
       "feature": "charts",
       "sees": "The category is dropped (\"42\" for \"North: 42\"); a pie label loses its separator and takes two lines",
       "workaround": "Name the category on the axis or in the legend",
+      "workaroundTried": false,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -1934,6 +1962,7 @@
       "feature": "charts",
       "sees": "Every other name is drawn, each on one line",
       "workaround": "Shorter names, or a bar chart",
+      "workaroundTried": false,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -1961,6 +1990,7 @@
       "feature": "charts",
       "sees": "The labels between the labeled points are dropped in every series",
       "workaround": "Label every point or none",
+      "workaroundTried": false,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -1989,6 +2019,7 @@
       "feature": "charts",
       "sees": "The legend leaves the chart frame, over the block beside it, or is cut",
       "workaround": "Shorter series names, or the legend at the bottom",
+      "workaroundTried": false,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -2040,6 +2071,7 @@
       "feature": "pictures",
       "sees": "Not shown: the image Description is the object name (\"OPF image 1\"), and Keynote's PowerPoint export writes that name back as the alt",
       "workaround": "Check the alt text after a round trip through Keynote",
+      "workaroundTried": false,
       "whose": "application",
       "grade": "wrong",
       "where": [],
@@ -2064,6 +2096,7 @@
       "feature": "round-trip",
       "sees": "A deck with a one-series highlight chart cannot be imported back after Keynote (sparse cache; Keynote writes ptCount = points present)",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "opf-importer",
       "grade": "wrong",
       "where": [
@@ -2100,6 +2133,7 @@
       "feature": "round-trip",
       "sees": "Any chart with a missing value (authored null) makes the deck fail to import after Keynote; same mechanism as RT-01",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "opf-importer",
       "grade": "wrong",
       "where": [
@@ -2132,6 +2166,7 @@
       "feature": "charts",
       "sees": "One-series highlight (M13): legend shows the series twice, columns half width and off their names, highlight marker gray",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -2171,6 +2206,7 @@
       "feature": "text",
       "sees": "Right-aligned and centered wrapped lines end a space off (hanging-space line-box shift of M16)",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -2236,6 +2272,7 @@
       "feature": "text",
       "sees": "Native mode: TAB-1 note placed at the layout note region foot, ~97 px below the preview (native-body.js planOne uses region.box)",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "opf-file",
       "grade": "wrong",
       "where": [
@@ -2270,6 +2307,7 @@
       "feature": "round-trip",
       "sees": "Categories containing \": \" make Keynote write a hierarchical cache; the whole deck fails to import",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "opf-importer",
       "grade": "wrong",
       "where": [
@@ -2320,6 +2358,7 @@
       "feature": "round-trip",
       "sees": "layouts-lots round trip fails on colon categories (same as RT-02); colon as trigger inferred",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "opf-importer",
       "grade": "wrong",
       "where": [
@@ -2370,6 +2409,7 @@
       "feature": "round-trip",
       "sees": "Keynote drops OPF tags; the import recovers no OPF structure (no fallback to OPF shape names)",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "opf-importer",
       "grade": "wrong",
       "where": [],
@@ -2394,6 +2434,7 @@
       "feature": "fonts",
       "sees": "Long titles (one paragraph per OPF line, wrap none) wrap to a third line in Helvetica Bold and overprint the content",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -2512,6 +2553,7 @@
       "feature": "fonts",
       "sees": "Per-line text boxes sized for Aptos run into each other or off the slide",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -2595,6 +2637,7 @@
       "feature": "languages",
       "sees": "Wider substitute font: first column runs into the neighbor block on 15 language slides (default) and 7 (native)",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -2725,6 +2768,7 @@
       "feature": "fonts",
       "sees": "Grown table header words break mid-word in Helvetica Bold",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -2793,6 +2837,7 @@
       "feature": "fonts",
       "sees": "Pie legend entry cut at the frame (Helvetica wider)",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -2820,6 +2865,7 @@
       "feature": "fonts",
       "sees": "Table header \"Terminal\" broken as \"Termina\"/\"l\"",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -2852,6 +2898,7 @@
       "feature": "round-trip",
       "sees": "Titles written back smaller; fractional sizes truncated",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -2879,6 +2926,7 @@
       "feature": "lists",
       "sees": "Bullet dot smaller (buFont Aptos replaced by Helvetica)",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -2914,6 +2962,7 @@
       "feature": "diagrams",
       "sees": "SmartArt arrives as a picture; description is the shape name, not the alt",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3032,6 +3081,7 @@
       "feature": "charts",
       "sees": "All-positive bar chart with a manual outer plot area: category names cut at the left edge",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -3059,6 +3109,7 @@
       "feature": "charts",
       "sees": "General number format shows one decimal",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3086,6 +3137,7 @@
       "feature": "charts",
       "sees": "Axes without written scaling get Keynote own scale",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3113,6 +3165,7 @@
       "feature": "charts",
       "sees": "Scatter labels left/right drawn above the point",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3140,6 +3193,7 @@
       "feature": "charts",
       "sees": "Legend order reversed on radar and area charts",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3171,6 +3225,7 @@
       "feature": "round-trip",
       "sees": "Chart axis details and number formats rewritten in back.pptx; no value lost",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3198,6 +3253,7 @@
       "feature": "languages",
       "sees": "Hebrew paragraph with Latin words and no rtl attribute: word order differs",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "wrong",
       "where": [
@@ -3225,6 +3281,7 @@
       "feature": "round-trip",
       "sees": "rtl lost on right-to-left paragraphs that start with Latin text or digits",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [],
@@ -3249,6 +3306,7 @@
       "feature": "furniture",
       "sees": "Keynote copies a layout per slide with a color-map override (\"Section 0\", \"Cover 0\")",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3293,6 +3351,7 @@
       "feature": "round-trip",
       "sees": "Text in a non-rectangular shape becomes a group of shape plus text box",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [],
@@ -3317,6 +3376,7 @@
       "feature": "shapes",
       "sees": "Text shapes and textNoShape rectangle blocks become groups; glue lost in back.pptx",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3352,6 +3412,7 @@
       "feature": "shapes",
       "sees": "Presets lose their preset (95 freeforms, 63 groups, 6 lines of 187)",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3439,6 +3500,7 @@
       "feature": "shapes",
       "sees": "Pentagon and heptagon drawn too wide (hf/vf dropped)",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3466,6 +3528,7 @@
       "feature": "shapes",
       "sees": "flowChartPunchedTape wave 40% instead of 20%",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3493,6 +3556,7 @@
       "feature": "shapes",
       "sees": "leftRightRibbon fold drawn light gray",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3520,6 +3584,7 @@
       "feature": "shapes",
       "sees": "path rect/shape gradients drawn as a circle",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3547,6 +3612,7 @@
       "feature": "shapes",
       "sees": "Arrowhead sizes ignored; arrow written back as triangle",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3574,6 +3640,7 @@
       "feature": "shapes",
       "sees": "Perspective shadow becomes a plain drop shadow",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3605,6 +3672,7 @@
       "feature": "languages",
       "sees": "Native mode: Korean wraps inside a word; Keynote writes no lang back",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3633,6 +3701,7 @@
       "feature": "round-trip",
       "sees": "Table right alignment not written back; numbers are text cells",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [
@@ -3660,6 +3729,7 @@
       "feature": "warnings",
       "sees": "The Warnings window says \"Unsupported media were removed. Slide Layout(s): Cover, Gallery, Hero, Image, Image beside\"; nothing on the slides is missing",
       "workaround": null,
+      "workaroundTried": null,
       "whose": "application",
       "grade": "small",
       "where": [],
