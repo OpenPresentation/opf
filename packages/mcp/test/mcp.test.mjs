@@ -544,7 +544,8 @@ describe("the bundled sources", () => {
 		// Reviewed for the 0.35 font defaults (a deck that declares no language) on 2026-11-23: 1,402,000 exact bytes (main at cf79e66a7:
 		// 1,400,272). It adds 1,728: the section on a deck with no language whose text is Arabic or Hebrew (design-resolution.md +1,558)
 		// and the missing-language rule naming the slides it read (validate.md +170). The limit is unchanged.
-		assert.ok(bytes < 1_436_000, `${bytes} bytes of documentation`);
+		// Reviewed for FR-04 (vetoable): docs/data-sources.md (about 11 KB) and the data source text in validate.md, chart-table-data.md and the other pages measured 1,436,660 exact bytes; the limit is raised to 1,445,000.
+		assert.ok(bytes < 1_445_000, `${bytes} bytes of documentation`);
 	});
 });
 
