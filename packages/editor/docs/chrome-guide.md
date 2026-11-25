@@ -326,7 +326,7 @@ const editor = createOpfEditor(document.querySelector("#viewer"), {
 });
 ```
 
-The viewer is read-only (the title shows as text, `setDeckName` returns `false`), has no Undo keys, and keeps Present and Expand. [`viewer.html`](../examples/chrome/viewer.html) is the page.
+The viewer is read-only (the title shows as text, `setDeckName` returns `false`), has no Undo keys, and keeps Present and Expand. Its links work: a click or Enter on a `slide:<id>` link shows that slide (a hidden one too) and puts the focus on it, and a web, mail or phone link goes to the `onOpenLink(href, event)` option (a host that opens links its own way), else opens a new tab with `noopener` and `noreferrer`; any other address is ignored, and the `link` event reports each followed link. [`viewer.html`](../examples/chrome/viewer.html) is the page.
 
 ## Restyle it
 

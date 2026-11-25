@@ -32,6 +32,7 @@ import { checkFormat, firstErrorMessage } from "./checks.js";
 import { createCanvasPages } from "./canvas-pages.js";
 import { continuationOf, pageCount } from "./continuation.js";
 import { createPictureMeter } from "./picture-luminance.js";
+import { linkAt } from "./view-links.js";
 export { getEditableFields } from "./canvas-fields.js";
 export { whenFontsReady, FONTS_PENDING, FONTS_UNAVAILABLE } from "./font-gate.js";
 
@@ -108,6 +109,8 @@ export function createCanvasEditor(container, options = {}) {
   // How a pointer enters text editing: "click" (default; PowerPoint / Google Slides) puts the caret at the pressed
   // character on a single press and lets a press-drag select a range; "dblclick" keeps the older double-click gesture
   // but still places the caret at the pointer. Keyboard entry (Enter, Space, F2) always selects all text.
+  // FR-03: a read-only canvas only shows the slide: no editing targets or handles, and its links work (`onLink`).
+  let readOnly = Boolean(options.readOnly);
   let textEntry = options.textEntry ?? "click";
   if (textEntry !== "click" && textEntry !== "dblclick")
     throw new RangeError('textEntry must be "click" or "dblclick".');
@@ -135,7 +138,9 @@ export function createCanvasEditor(container, options = {}) {
   // title), which would look like a selection nobody made.
   const style = doc.createElement("style");
   style.textContent =
-    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas [data-opf-trend-arrow]{cursor:pointer}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus,.opf-canvas .opf-selection:focus{outline:none}@media (hover:hover){.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection,.opf-canvas .opf-selection:focus-visible{stroke:#7765d0}.opf-canvas [data-canvas-target][data-canvas-editing]>.opf-selection{stroke:none}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
+    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas [data-opf-trend-arrow]{cursor:pointer}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus,.opf-canvas .opf-selection:focus{outline:none}@media (hover:hover){.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection,.opf-canvas .opf-selection:focus-visible{stroke:#7765d0}.opf-canvas [data-canvas-target][data-canvas-editing]>.opf-selection{stroke:none}.opf-canvas[data-readonly] a[href]{cursor:pointer}.opf-canvas[data-readonly] a[href]:focus-visible{outline:2px solid #8170d5;outline-offset:2px}.opf-canvas[data-readonly]:focus{outline:none}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
+  root.toggleAttribute("data-readonly", readOnly);
+  if (readOnly) root.tabIndex = -1;
   root.append(style, preview, overlay, notice);
   container.replaceChildren(root);
   // LH-99: a slide the export continues on further pages (LH-90) is edited as written; the indicator names its pages and previews each
@@ -353,18 +358,22 @@ export function createCanvasEditor(container, options = {}) {
     preview.innerHTML = svgText;
     pictures?.update(presentation, resolveOptions());
     const svg = preview.querySelector("svg");
-    svg.setAttribute("role", "group");
-    svg.setAttribute("aria-label", "Editable slide");
+    if (!readOnly) {
+      svg.setAttribute("role", "group");
+      svg.setAttribute("aria-label", "Editable slide");
+    }
     if (targetMode === "passive") svg.setAttribute("aria-hidden", "true");
     // FA-30: the renderer labels its slide root a "slide" group named by the title; the canvas is named for editing instead, so it drops
     // the roledescription rather than announce "Editable slide, slide".
-    svg.removeAttribute("aria-roledescription");
-    svg.removeAttribute("aria-labelledby");
+    if (!readOnly) {
+      svg.removeAttribute("aria-roledescription");
+      svg.removeAttribute("aria-labelledby");
+    }
     // Only the slide on show is bound (CE-20): a long deck is not composed slide by slide for one draw.
     const geometry = resolvePresentation(presentation, drawOptions(), { slides: [slideIndex] }).slides[
       slideIndex
     ].geometry;
-    const candidates = [...svg.querySelectorAll("[data-opf-path]")];
+    const candidates = readOnly ? [] : [...svg.querySelectorAll("[data-opf-path]")];
     const seen = new Set();
     for (const node of candidates) {
       const path = node.getAttribute("data-opf-path");
@@ -468,7 +477,7 @@ export function createCanvasEditor(container, options = {}) {
     }
     // LH-123: the trend is drawn as an arrow, not typed (LH-53), so it has no text to edit in place. The arrow is a target of its own over
     // core's `trendBox`; a press opens the trend field (the properties form, with the choices up, down and flat), like Enter on it.
-    for (const item of geometry.items) {
+    for (const item of readOnly ? [] : geometry.items) {
       const layout = item.metricLayout, part = layout?.parts.find((candidate) => candidate.role === "trend");
       if (!layout?.trendBox || !part || seen.has(part.path) || typeof getValueAtPath(presentation, part.path) !== "string") continue;
       const host = [...svg.querySelectorAll("g[data-canvas-target]")].find((node) => node.getAttribute("data-opf-path") === item.path);
@@ -511,11 +520,13 @@ export function createCanvasEditor(container, options = {}) {
     }
     if (targetMode === "passive")
       for (const node of svg.querySelectorAll("[tabindex]")) node.setAttribute("tabindex", "-1");
-    layoutHandles.update(presentation, geometry);
-    shapeHandles?.update(presentation, geometry);
-    overlayTools?.update(presentation, geometry);
-    blockControls.update(presentation, geometry);
-    imageCropper?.update();
+    if (!readOnly) {
+      layoutHandles.update(presentation, geometry);
+      shapeHandles?.update(presentation, geometry);
+      overlayTools?.update(presentation, geometry);
+      blockControls.update(presentation, geometry);
+      imageCropper?.update();
+    }
     if (active?.kind === "text") positionInput();
     if (active?.kind === "rich-text") active.rich?.update();
     if (fontsShown) {
@@ -1251,6 +1262,19 @@ export function createCanvasEditor(container, options = {}) {
   const keepEditVisible = () => { if (active?.input && coarse?.matches) active.input.scrollIntoView?.({ block: "center", inline: "nearest" }); };
   win.visualViewport?.addEventListener("resize", keepEditVisible);
   root.addEventListener("pointerdown", () => { pointerTaken = null; }, true);
+  // FR-03: a link in the slide. A read-only canvas follows it on a click or Enter (a slide link shows its slide, any other link goes to the host's
+  // `onLink`); the frame never navigates. An editable canvas keeps a click for editing and follows a link only on Ctrl or Cmd with the click.
+  const followsLink = (event) => readOnly || event.ctrlKey || event.metaKey;
+  root.addEventListener("pointerdown", (event) => {
+    if (!readOnly && followsLink(event) && linkAt(event.target, root)) { event.stopPropagation(); }
+  }, true);
+  root.addEventListener("click", (event) => {
+    const hit = linkAt(event.target, root);
+    if (!hit || !followsLink(event)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    options.onLink?.(hit.slide !== undefined ? { slide: hit.slide } : { href: hit.href }, event);
+  }, true);
   root.addEventListener("keydown", (event) => {
     if (
       (event.metaKey || event.ctrlKey) &&
@@ -1341,6 +1365,22 @@ export function createCanvasEditor(container, options = {}) {
       if (mode !== "click" && mode !== "dblclick") throw new RangeError('textEntry must be "click" or "dblclick".');
       textEntry = mode;
     },
+    /** FR-03: true while the canvas only shows the slide (no editing, working links). */
+    get readOnly() { return readOnly; },
+    /** FR-03: show the slide read only (links work, nothing edits) or editable again; redraws. */
+    setReadOnly(value) {
+      const next = Boolean(value);
+      if (next === readOnly) return true;
+      if (next && !commit()) return false;
+      readOnly = next;
+      root.toggleAttribute("data-readonly", readOnly);
+      if (readOnly) root.tabIndex = -1; else root.removeAttribute("tabindex");
+      richToolbar.hide();
+      if (!active) renderFor();
+      return true;
+    },
+    /** FR-03: move the focus to the slide itself (a keyboard user follows a slide link and goes on from the slide). */
+    focusSlide() { root.focus({ preventScroll: true }); },
     get targets() { return targetMode; },
     /** CE-20: "interactive" targets (buttons in the tab order) or "passive" ones (the host draws selection); redraws. */
     setTargets(mode) {
