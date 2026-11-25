@@ -302,8 +302,8 @@
   "addressedDefinition": "A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).",
   "summary": {
     "records": 864,
-    "addressed": 550,
-    "unaddressed": 314,
+    "addressed": 551,
+    "unaddressed": 313,
     "byStatus": {
       "done": 420,
       "deprecated": 0,
@@ -459,8 +459,8 @@
           "done": 143,
           "font-gap": 26
         },
-        "addressed": 168,
-        "unaddressed": 1
+        "addressed": 169,
+        "unaddressed": 0
       },
       "slide-sizes": {
         "records": 10,
@@ -485,7 +485,6 @@
       "layouts unknown": 34,
       "charts unknown": 9,
       "charts missing-export": 1,
-      "fonts works-unverified": 1,
       "slide-sizes missing-gallery": 3,
       "slide-sizes unknown": 3
     }
@@ -1241,7 +1240,7 @@
     {"type":"fonts","id":"Kartika","name":"Kartika","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"script-gap"},"gaps":[{"code":"font-gap","detail":"font tracker status script-gap","next":"Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Malayalam (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; th...","rule":"font-tracker-gaps","link":"RR-17","addressed":true,"linkStatus":"in-progress"}],"status":"font-gap","addressed":true},
     {"type":"fonts","id":"Khmer UI","name":"Khmer UI","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"script-gap"},"gaps":[{"code":"font-gap","detail":"font tracker status script-gap","next":"Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Khmer (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; the sa...","rule":"font-tracker-gaps","link":"RR-17","addressed":true,"linkStatus":"in-progress"}],"status":"font-gap","addressed":true},
     {"type":"fonts","id":"Latha","name":"Latha","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"script-gap"},"gaps":[{"code":"font-gap","detail":"font tracker status script-gap","next":"Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Tamil (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 10 of 10 face-samples; the ...","rule":"font-tracker-gaps","link":"RR-17","addressed":true,"linkStatus":"in-progress"}],"status":"font-gap","addressed":true},
-    {"type":"fonts","id":"Leelawadee UI","name":"Leelawadee UI","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"unverified","fonts":"script-gap"},"gaps":[{"code":"font-gap","detail":"font tracker status script-gap","next":"Native PowerPoint comparison (FF-46) is the remaining acceptance gate and has not been run for this family: the owner decided on 2026-11-23 to record it as not yet natively verified (opf#1399). Added with the 0.35 script defaults (2026-1...","rule":"font-tracker-gaps","link":"RR-17","addressed":true,"linkStatus":"in-progress"},{"code":"works-unverified","detail":"font tracker native verification unverified (FF-46)","next":"Native PowerPoint comparison (FF-46) is the remaining acceptance gate and has not been run for this family: the owner decided on 2026-11-23 to record it as not yet natively verified (opf#1399). Added with the 0.35 script defaults (2026-1...","addressed":false}],"status":"font-gap","addressed":false},
+    {"type":"fonts","id":"Leelawadee UI","name":"Leelawadee UI","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"script-gap"},"gaps":[{"code":"font-gap","detail":"font tracker status script-gap","next":"Native PowerPoint comparison (FF-46) is the remaining acceptance gate and has not been run for this family: the owner decided on 2026-11-23 to record it as not yet natively verified (opf#1399). Added with the 0.35 script defaults (2026-1...","rule":"font-tracker-gaps","link":"RR-17","addressed":true,"linkStatus":"in-progress"}],"status":"font-gap","addressed":true},
     {"type":"fonts","id":"Liberation Mono","name":"Liberation Mono","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"qualified"},"gaps":[],"status":"done","addressed":true},
     {"type":"fonts","id":"Liberation Sans","name":"Liberation Sans","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"qualified"},"gaps":[],"status":"done","addressed":true},
     {"type":"fonts","id":"Liberation Serif","name":"Liberation Serif","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"qualified"},"gaps":[],"status":"done","addressed":true},
