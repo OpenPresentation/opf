@@ -1,0 +1,5 @@
+---
+type: fixed
+packages: [opf]
+---
+A layout body that grows keeps its bold run-in heading (#1470). Since 0.36.0 the growth of a short body (LH-102) composed each step without any drawing rule that did not read as well at the larger size, so the team layout's "name, line break, role" cards lost their bold names, drew them larger and broke a two-word name over two lines. A growth step now never drops a drawing rule the slide's own composition kept (a step that reads well only without it is refused, and the body stays at the last size that reads as well), and never breaks a run-in heading that sat on one line. The three-person team deck of the report ends with bold names on one line each at size 37 of the 1280-wide reference slide scale used by the preview (it ended at 56 with regular names); a slide of the bundled `dynamic-composition` example (`Evidence:`, `Action:` over a paragraph) draws its bold labels again at a smaller size. The PowerPoint export follows the preview (bold name runs). Placement rules (nested gaps, region measure and the like) still yield to growth as before.
