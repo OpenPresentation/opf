@@ -551,6 +551,8 @@ function chartNumberFixPaths(document: unknown): Map<string, ChartNumberFix> {
 const HELP: Record<string, string> = {
 	'chart-value-not-numeric':
 		'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.',
+	'datasource-credentials': 'Remove the user, password, key or token from the data source and keep the secret in your own store; name the connection in `connector` or `extensions`. A data source never holds credentials.',
+	'dataset-stale': "Take the data from its data source again and update `retrieved`, or change the data source's `refresh` to how often the data really needs taking.",
 	'chart-mapping-adapted': 'Choose a compatible chart type or mapping for the selected data. The message explains how the mapping or drawing was adapted.',
 	'chart-series-dropped': 'The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.',
 	'chart-highlight-adapted': 'The highlight is adapted by every engine. Name a series or category the chart type can emphasize, or remove the entry.',

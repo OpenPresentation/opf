@@ -35,6 +35,7 @@ const GOLDEN = {
   "connector-end-missing": ["The connector's `to: \"shipping\"` names no block or overlay shape on this slide, so the connector is not drawn. Ids on this slide: plan, ship.", "pick one of `plan` or `ship`, or give the block or shape it should join `id: \"shipping\"`."],
   "image-placement-invalid": ["Blocks 1 and 2 are both placed on the start edge, and a slide edge takes one placed image.", "move one of them to another edge, or remove its `placement`."],
   "dataset-unknown": ["`dataset: \"sale\"` does not exist. Datasets in this deck: sales.", "did you mean `sales`? Or add `datasets.sale`."],
+  "datasource-unknown": ["`datasource: \"wharehouse\"` does not exist. Data sources in this deck: warehouse.", "did you mean `warehouse`? Or add `datasources.wharehouse`, or write the data source inline as an object such as `{ \"src\": \"./data.csv\" }`."],
   "dataset-field-unknown": ["`regon` is not a column of `sales`. Columns: region, revenue.", "did you mean `region`?"],
   "data-column-duplicate": ["Two columns are named `region`. Series and mappings address columns by name.", "rename the second one (for example `region-2`)."],
   "chart-mapping-unknown-column": ["The chart mapping names column `Profit`, which the data does not have. Columns: Q, R, S.", "pick one of `Q`, `R` or `S`."],
@@ -109,11 +110,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 106 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 109 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 106);
+	assert.equal(RULE_IDS.length, 109);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {
@@ -231,7 +232,7 @@ function runExample(rule, text) {
 	const parsed = JSON.parse(text);
 	const base = rule === 'opf/missing-language' ? { name: 'Example' } : DECK_BASE;
 	const document = Array.isArray(parsed.slides) ? { ...base, ...parsed } : { ...base, slides: [parsed] };
-	return validate(document, { catalogs: [gallery], ...(rule === 'opf/contract' ? { contracts: [{ path: '/slides/*/layout', allowedValues: ['text'] }] } : {}) }).findings;
+	return validate(document, { catalogs: [gallery], ...(rule === 'opf/dataset-stale' ? { asOf: '2026-11-25' } : {}), ...(rule === 'opf/contract' ? { contracts: [{ path: '/slides/*/layout', allowedValues: ['text'] }] } : {}) }).findings;
 }
 
 test('every explain example triggers its rule on the problem side and not on the repaired side', () => {

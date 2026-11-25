@@ -171,7 +171,7 @@ const deck = {datasets, slides: [
 // 7. A record over the tag limit is omitted with the chart's document path.
 {
   const description = 'x'.repeat(9 * 1024 * 1024);
-  const {parts, diagnostics} = await exported({slides: [{title: 'Big', chart: {type: 'column', data: {columns: ['a', 'b'], rows: [['x', 1]], source: {src: './big.csv', description}}}}]});
+  const {parts, diagnostics} = await exported({slides: [{title: 'Big', chart: {type: 'column', data: {columns: ['a', 'b'], rows: [['x', 1]], datasource: {src: './big.csv', description}}}}]});
   const omitted = diagnostics.filter(entry => entry.code === 'data-provenance-omitted');
   assert.deepEqual(omitted.map(entry => entry.path), ['slides.0.chart'], 'reported once, on the chart path (not the generated frame name)');
   assert.ok(!Object.keys(parts).some(name => /^ppt\/tags\/opfData/.test(name)), 'and not written');
