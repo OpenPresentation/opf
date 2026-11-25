@@ -244,6 +244,295 @@
       "id": "metric-root-number",
       "title": "A root metric as a number",
       "metric": 7
+    },
+    {
+      "id": "metric-data-previous",
+      "type": "metric",
+      "title": "A metric computed from the last row, against the previous row",
+      "metric": {
+        "label": "EMEA ARR",
+        "value": 4.4,
+        "delta": 0.2,
+        "data": {
+          "dataset": "arr",
+          "field": "ARR",
+          "aggregate": "last",
+          "filter": [
+            {
+              "field": "Region",
+              "op": "=",
+              "value": "EMEA"
+            },
+            {
+              "field": "Month",
+              "op": "!=",
+              "value": "2026-08"
+            }
+          ],
+          "delta": {
+            "compare": "previous",
+            "as": "difference"
+          }
+        }
+      }
+    },
+    {
+      "id": "metric-data-percent",
+      "type": "metric",
+      "title": "A rising churn is bad news",
+      "metric": {
+        "label": "Monthly churn",
+        "value": 0.044,
+        "delta": 0.2222222222222222,
+        "better": "down",
+        "data": {
+          "dataset": "arr",
+          "field": "Churn",
+          "aggregate": "last",
+          "filter": [
+            {
+              "field": "ARR",
+              "op": ">",
+              "value": 1
+            },
+            {
+              "field": "ARR",
+              "op": ">=",
+              "value": 1
+            },
+            {
+              "field": "ARR",
+              "op": "<",
+              "value": 9
+            },
+            {
+              "field": "ARR",
+              "op": "<=",
+              "value": 9
+            },
+            {
+              "field": "Month",
+              "op": "in",
+              "value": [
+                "2026-09",
+                "2026-10",
+                "2026-11"
+              ]
+            }
+          ],
+          "delta": {
+            "compare": "previous",
+            "as": "percent",
+            "format": "+0%;-0%;0%"
+          }
+        }
+      }
+    },
+    {
+      "id": "metric-data-baseline",
+      "type": "metric",
+      "title": "Against a baseline",
+      "metric": {
+        "label": "ARR since September",
+        "value": 4.4,
+        "delta": 0.5,
+        "better": "up",
+        "data": {
+          "dataset": "arr",
+          "field": "ARR",
+          "aggregate": "last",
+          "delta": {
+            "compare": {
+              "filter": [
+                {
+                  "field": "Month",
+                  "op": "=",
+                  "value": "2026-09"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "metric-data-fixed",
+      "type": "metric",
+      "title": "Against a plan",
+      "metric": {
+        "label": "ARR against plan",
+        "value": 4.4,
+        "delta": 0.4,
+        "data": {
+          "dataset": "arr",
+          "field": "ARR",
+          "aggregate": "last",
+          "delta": {
+            "compare": {
+              "value": 4
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "metric-data-column",
+      "type": "metric",
+      "title": "The change from a column",
+      "metric": {
+        "label": "EMEA ARR",
+        "value": 4.4,
+        "delta": 0.2,
+        "data": {
+          "dataset": "arr",
+          "field": "ARR",
+          "aggregate": "last",
+          "delta": {
+            "field": "ARR change",
+            "as": "difference"
+          }
+        }
+      }
+    },
+    {
+      "id": "metric-data-sum",
+      "type": "metric",
+      "title": "Net new ARR",
+      "metric": {
+        "label": "Net new ARR",
+        "value": 0.5,
+        "data": {
+          "dataset": "arr",
+          "field": "ARR change",
+          "aggregate": "sum"
+        }
+      }
+    },
+    {
+      "id": "metric-data-mean",
+      "type": "metric",
+      "title": "Mean churn",
+      "metric": {
+        "label": "Mean churn",
+        "value": 0.040333333333,
+        "data": {
+          "dataset": "arr",
+          "field": "Churn",
+          "aggregate": "mean"
+        }
+      }
+    },
+    {
+      "id": "metric-data-min",
+      "type": "metric",
+      "title": "Lowest churn",
+      "metric": {
+        "label": "Lowest churn",
+        "value": 0.036,
+        "data": {
+          "dataset": "arr",
+          "field": "Churn",
+          "aggregate": "min"
+        }
+      }
+    },
+    {
+      "id": "metric-data-max",
+      "type": "metric",
+      "title": "Highest churn",
+      "metric": {
+        "label": "Highest churn",
+        "value": 0.044,
+        "data": {
+          "dataset": "arr",
+          "field": "Churn",
+          "aggregate": "max"
+        }
+      }
+    },
+    {
+      "id": "metric-data-count",
+      "type": "metric",
+      "title": "Months of data",
+      "metric": {
+        "label": "Months",
+        "value": 3,
+        "data": {
+          "dataset": "arr",
+          "field": "ARR",
+          "aggregate": "count"
+        }
+      }
+    },
+    {
+      "id": "metric-data-first",
+      "type": "metric",
+      "title": "The first month",
+      "metric": {
+        "label": "First ARR",
+        "value": 3.9,
+        "data": {
+          "dataset": "arr",
+          "field": "ARR",
+          "aggregate": "first"
+        }
+      }
+    },
+    {
+      "id": "metric-format",
+      "type": "metric",
+      "title": "A number format on the metric",
+      "metric": {
+        "label": "Gross margin",
+        "value": 0.724,
+        "format": "0.0%",
+        "delta": 0.012,
+        "trend": "up"
+      }
     }
-  ]
+  ],
+  "datasets": {
+    "arr": {
+      "title": "ARR by month",
+      "columns": [
+        "Month",
+        "Region",
+        {
+          "name": "ARR",
+          "format": "$#,##0.0M"
+        },
+        {
+          "name": "Churn",
+          "format": "0.0%"
+        },
+        {
+          "name": "ARR change",
+          "format": "+$#,##0.0M;-$#,##0.0M;$0"
+        }
+      ],
+      "rows": [
+        [
+          "2026-09",
+          "EMEA",
+          3.9,
+          0.041,
+          null
+        ],
+        [
+          "2026-10",
+          "EMEA",
+          4.2,
+          0.036,
+          0.3
+        ],
+        [
+          "2026-11",
+          "EMEA",
+          4.4,
+          0.044,
+          0.2
+        ]
+      ]
+    }
+  }
 }

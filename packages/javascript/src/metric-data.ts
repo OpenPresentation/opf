@@ -324,7 +324,7 @@ export function resolveMetric(metric: unknown, datasets: unknown, options: Resol
   const shown: ResolvedMetricValue = (() => {
     if (resolved && computedValue) {
       if (computedValue.kind === 'number') return valueFormat ? { text: textOf(computedValue.value, valueFormat, language), number: computedValue.value, format: valueFormat, isNumber: true, computed: true } : { text: textOf(computedValue.value, undefined, language), number: computedValue.value, isNumber: true, computed: true };
-      return { text: String(computedValue.cell), isNumber: false, computed: true };
+      return { text: String('cell' in computedValue ? computedValue.cell : ''), isNumber: false, computed: true };
     }
     return shownValue(metric.value, false, format, language);
   })();
@@ -335,7 +335,7 @@ export function resolveMetric(metric: unknown, datasets: unknown, options: Resol
   const derived: MetricDerivedKey[] = [];
   const numbers: { value?: number; delta?: number } = {};
   if (resolved && computedValue) {
-    drawn.value = computedValue.kind === 'number' ? (valueFormat ? shown.text : computedValue.value) : String(computedValue.cell);
+    drawn.value = computedValue.kind === 'number' ? (valueFormat ? shown.text : computedValue.value) : String('cell' in computedValue ? computedValue.cell : '');
     derived.push('value');
     if (computedValue.kind === 'number' && valueFormat) numbers.value = computedValue.value;
   } else if (format !== undefined && typeof metric.value === 'number' && Number.isFinite(metric.value)) {
