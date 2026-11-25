@@ -9,8 +9,8 @@ Who decided what:
 - **Owner, 2026-11-24**: the change is part of the metric and optional ("delta is intrinsically tied to the metric ... also delta is
   optional"); one link shape for metric and variable (`cr4-shape`); a filter is a list of `{ field, op, value }` (`cr4-filter`); a bound
   metric keeps its literal as the last computed value (`cr4-literal`).
-- **Supervisor, 2026-11-25, on the owner's delegation**: the link is called `data`; all three ways of computing the change; `better`;
-  the arrow follows the computed change when `trend` is not typed.
+- **Owner, 2026-11-25** (review round 2, confirming the supervisor's delegated picks): the link is called `data`; all three ways of
+  computing the change, **plus a fixed value**; `better`; the arrow follows the computed change when `trend` is not typed.
 - **Analysis, for the supervisor to confirm**: everything else, marked *(analysis)*.
 
 ## The need
@@ -75,13 +75,14 @@ Four new definitions and two new metric properties.
 "MetricDelta": {
   "type": "object",
   "additionalProperties": false,
-  "description": "How the metric's change is computed: against the previous row ('compare': \"previous\"), against a baseline ('compare': { filter }), or read from a column that already holds it ('field'). Exactly one of 'compare' and 'field'.",
+  "description": "How the metric's change is computed: against the previous row ('compare': \"previous\"), against a baseline ('compare': { filter }), against a fixed number ('compare': { value }), or read from a column that already holds it ('field'). Exactly one of 'compare' and 'field'.",
   "oneOf": [ { "required": ["compare"] }, { "required": ["field"] } ],
   "properties": {
     "compare": {
       "oneOf": [
         { "const": "previous" },
-        { "type": "object", "additionalProperties": false, "required": ["filter"], "properties": { "filter": { "$ref": "#/$defs/DataFilter" } } }
+        { "type": "object", "additionalProperties": false, "required": ["filter"], "properties": { "filter": { "$ref": "#/$defs/DataFilter" } } },
+        { "type": "object", "additionalProperties": false, "required": ["value"], "properties": { "value": { "$ref": "#/$defs/FiniteNumber", "description": "A fixed number to compare with: a plan, a budget, last year's figure typed in." } } }
       ]
     },
     "field": { "type": "string", "description": "A column that holds the change. An unknown name is a 'dataset-field-unknown' error." },
@@ -158,6 +159,7 @@ Only when `data.delta` is present. The comparison number `base` is:
 | --- | --- |
 | `compare: "previous"` | The same aggregate over the kept rows without the last one, in dataset order. With `aggregate: "last"` and one row per period, that is the period before. |
 | `compare: { filter }` | The same aggregate over the rows that meet this filter instead of `data.filter`. The baseline filter replaces the main one, it does not add to it, so a baseline names everything it means (`Region = EMEA` and `Quarter = Q2`). *(analysis)* |
+| `compare: { value }` | The fixed number. **Owner, 2026-11-25** ("all three, but fixed value/constant too?"): a plan or budget typed into the deck. |
 | `field` | No base: the change is the same aggregate, over the same rows, of the column `field`, which already holds the change. |
 
 Then, for `compare`: `as: "difference"` gives `value - base`; `as: "percent"` gives `(value - base) / |base|`, a ratio (`0.12` is 12%).

@@ -59,8 +59,8 @@ For example, on `TextVariable`:
   value is the same everywhere, and "5. März 2026" against "March 5, 2026" is a difference of pattern, which the date names of part 2
   alone do not fix.)*
 - No translations on `number` and `color`. *(analysis)*
-- Keys compare case-insensitively (`de-at` matches `de-AT`); two keys that differ only in case are a schema-adjacent error,
-  `variable-translation-duplicate`. *(analysis)*
+- Keys compare case-insensitively (`de-at` matches `de-AT`); two keys that differ only in case are the warning
+  `variable-translation-duplicate`.
 
 ### Which entry is drawn
 
@@ -87,11 +87,11 @@ deck with no declared language always draws `value`.
 | Id | Severity | When | Path |
 | --- | --- | --- | --- |
 | schema | error | A key that is not a language tag, a `value` of the wrong form for the kind | the key |
-| `variable-translation-duplicate` *(analysis: name)* | error | Two keys equal except for case | `/variables/{id}/translations` |
+| `variable-translation-duplicate` *(analysis: name)* | warning | Two keys equal except for case: the first matching key in document order is used, and the message names it | `/variables/{id}/translations` |
 | `variable-translation-unused` *(analysis: name)* | warning | No slide and not the deck selects a translation (its language is used nowhere) | `/variables/{id}/translations/{tag}` |
 
-The duplicate is an error because the drawn entry would depend on key order. *(analysis: the README's fixed error list does not name it;
-the supervisor may make it a warning that picks the first key.)*
+The duplicate is a warning (supervisor, 2026-11-25): the README fixes the errors to a short list. The first matching key in document order
+is used, and the message says which.
 
 ## Part 2: date names
 
@@ -116,7 +116,8 @@ The date tokens of `DateVariable.format` and of the footer's `dateFormat` (`yyyy
 
 ### The table
 
-- A generator, `packages/javascript/scripts/build-date-names.mjs`, writes `packages/javascript/src/date-name-data.ts` from the runtime's
+- A generator, `packages/javascript/scripts/build-date-names.mjs` (a starting point is `build-date-names.mjs` beside this note, the script
+  the sizes below were measured with), writes `packages/javascript/src/date-name-data.ts` from the runtime's
   `Intl` data, as `build-number-locales.mjs` writes the numbers table: the same ICU and CLDR versions (ICU 78.3, CLDR 48.0 today), recorded
   in the file. `test/date-names.mjs` compares the table with the running `Intl` and fails on the ICU version the table was made with when
   they disagree; the table is regenerated on purpose, with a changelog fragment.
@@ -136,6 +137,7 @@ Measured on 2026-11-25 with ICU 78.3 / CLDR 48.0, for the 88 languages, as a Typ
 | Month and weekday names, long and short, format and stand-alone | 33,836 | 11,963 | 9,504 |
 | Long date patterns | 1,864 | 543 | |
 | **Both** | 35,700 | **12,502** | |
+| As one generated module, comments included (`build-date-names.mjs` beside this note) | 36,418 | 12,967 | |
 | Variants: long names only (no `MMM`, `EEE`) | | 9,013 | |
 | Variants: without stand-alone forms | | 11,099 | |
 
@@ -166,16 +168,18 @@ rule: a drawing change needs his yes on pictures.)*
 
 ## PowerPoint export and import
 
-- Variables resolve before export, so the drawn text is the selected translation and the localized date: no new native part.
-- The document record stores the deck's `variables` in a section the released 0.36.0 importer validates; a `translations` key inside a
-  variable would make that importer drop the whole document record. So the stored `variables` hold no `translations`, and a top-level key
-  of the document record holds them: `variableTranslations: { "<id>": { "<tag>": {...} } }`. A 0.36.0 importer ignores unknown top-level
-  keys of the document record (verified for the document id, 2026-11-25). Import (0.37) puts each map back on its variable.
-- The text a variable draws is restored from the variables as today (the variable token records of the existing round trip); a German
-  slide's run carries the German text and comes back as `{{cta}}` while it still equals the selected translation.
-- **Native check**: a two-language deck (German and French slides) with a translated call to action, a translated date format and a
-  footer date, saved by PowerPoint and imported: the translations and tokens come back; the released 0.36.0 importer imports a valid
-  deck with the plain variables.
+Content variables do not round-trip through PowerPoint today, so there is nothing to store for translations (supervisor, measured on
+2026-11-25: a deck with a text, a list and a color variable, exported with a 0.37 build and imported with the 0.37 build and with the
+released 0.36.0 importer alike, comes back with the resolved text, and its `variables` hold only the color variable; the document record
+stores the variables that remain after resolution, which are colors).
+
+- Variables resolve before export, so each slide's text is in that slide's language: the selected translation and the localized date.
+  No new native part, no new record key.
+- Import returns that text as literals, as it does today. The docs say so: a template's translations live in the OPF file, not in its
+  PowerPoint export.
+- **Native check**: a two-language deck (German and French slides) with a translated call to action, a translated date format and a footer
+  date exports; PowerPoint shows each slide in its own language; the released 0.36.0 importer and the 0.37 importer both return a valid
+  deck with the resolved text.
 
 ## Editor
 
@@ -234,7 +238,7 @@ Invalid (schema: `translations` on a number variable):
   "slides": [ { "title": "{{growth}}" } ] }
 ```
 
-Conformance: the valid deck above; the two invalid decks; the duplicate-key error if it stays an error.
+Conformance: the valid deck above; the two invalid decks.
 
 ## Edge cases
 
@@ -263,4 +267,4 @@ Conformance: the valid deck above; the two invalid decks; the duplicate-key erro
 | The default pattern *(analysis)* | The language's long date pattern; US English unchanged | A German name in English order is wrong. |
 | Table encoding *(analysis)* | Joined strings per list | Smaller after compression. |
 | The budget *(analysis, for the supervisor and the owner)* | Raise by the table's measured size, else cut part 2 | Trimming does not avoid the raise. |
-| Storage in PowerPoint *(analysis)* | Translations in a top-level document-record key | The stored `variables` must stay 0.36 variables. |
+| Storage in PowerPoint | Nothing stored: content variables do not round-trip; the export holds each slide's resolved text (supervisor, 2026-11-25) | Measured with both importers. |
