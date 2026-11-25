@@ -1,6 +1,7 @@
 // `opf ingest`: turn CSV, TSV or JSON rows into a table or chart. The output is a pure function of the inputs:
 // no clock, no randomness, and no dependence on the working directory (RR-62).
 import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { ingest, CHART_TYPES, type ImportedChartType } from "@openpresentation/opf";
 import { applyPatch, parsePointer } from "@openpresentation/opf/patch";
@@ -105,28 +106,41 @@ export async function run(args: string[], _host: Host): Promise<void> {
   const columns = list("columns"), series = list("series");
   const imported = ingest(raw, { as: options.as, format: format as "csv" | "tsv" | "json" | undefined, header: !options["no-header"], delimiter: options.delimiter as string | undefined, columns, category: options.category as string | undefined, series, chartType: chartType as ImportedChartType | undefined });
   // RR-54: --dataset <id> writes the data into the top-level datasets map (replacing that dataset's columns and rows,
-  // keeping its title, description and source) and references it from the table or chart.
+  // keeping its title and description, and writing where the rows came from) and references it from the table or chart.
   const datasetId = options.dataset === undefined ? undefined : String(options.dataset);
   if (datasetId !== undefined && (options.dataset === true || !/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(datasetId))) throw usage('--dataset needs an id of letters, digits, ".", "_" or "-".', "invalid-value", { option: "--dataset" });
   const data = "table" in imported ? imported.table : imported.chart.data;
   const content = datasetId === undefined ? imported : "table" in imported ? { table: { dataset: datasetId } } : { chart: { type: imported.chart.type, data: { dataset: datasetId } } };
   // The deck file the data goes into, else the one written. Written to stdout there is none, and a path reads from the working directory.
   const deckFile = options.into !== undefined && options.into !== "-" ? String(options.into) : destination.file !== "-" ? destination.file : undefined;
+  // FR-04: the data file as the deck sees it, and the SHA-256 of its bytes (stdin has neither).
+  const fileOrigin = datasetId === undefined || input === "-" ? undefined : { src: deckRelativeSrc(deckFile, input) };
+  const fileHash = fileOrigin === undefined ? undefined : createHash("sha256").update(await readFile(input)).digest("hex");
   const withDataset = (deck: unknown): unknown => {
     if (datasetId === undefined) return deck;
     const record = isRecord(deck) ? deck : {};
     const datasets = isRecord(record.datasets) ? record.datasets : {};
     const previous = isRecord(datasets[datasetId]) ? datasets[datasetId] as Record<string, unknown> : {};
-    // `retrieved` only ever comes from --date, never from the clock, and a re-import never keeps the old date, which described the old data.
-    const origin = input === "-" ? undefined : { src: deckRelativeSrc(deckFile, input), ...(date === undefined ? {} : { retrieved: date }) };
-    // A column that keeps its name keeps its number format. The source describes the new origin only: its other
-    // fields (sheet, range, description) survive a re-import of the same file, and data from stdin has none.
+    // A column that keeps its name keeps its number format.
     const formats = new Map((Array.isArray(previous.columns) ? previous.columns : []).flatMap((column: unknown) => isRecord(column) && typeof column.name === "string" && typeof column.format === "string" ? [[column.name, column.format] as const] : []));
     const newColumns = data.columns.map(name => { const format = formats.get(name); return format === undefined ? name : { name, format }; });
-    const before = isRecord(previous.source) ? previous.source : {};
-    const { retrieved: _stale, ...beforeKept } = before;
-    const { source: _source, ...kept } = previous;
-    const entry = { ...kept, columns: newColumns, rows: data.rows, ...(origin ? { source: before.src === origin.src ? { ...beforeKept, ...origin } : origin } : {}) };
+    // FR-04: where the rows came from is written in the dataset's own keys. `retrieved` only ever comes from --date, never from the
+    // clock, and `sha256` is the hash of the data file's bytes. A re-import never keeps the old `retrieved`, `sha256`, `version` or
+    // `generator`, which described the old data. The data source describes the new origin only: a data source named by id (an entry of
+    // `datasources`) is the author's own description of the place and stays; an inline one keeps its other keys and the `query` when the
+    // same file is imported again, and data from stdin has no file origin.
+    const { datasource: before, query, retrieved: _retrieved, version: _version, sha256: _sha256, generator: _generator, ...kept } = previous;
+    const named = typeof before === "string";
+    const inline = isRecord(before) ? before : {};
+    const same = fileOrigin !== undefined && inline.src === fileOrigin.src;
+    const datasource = named ? before : fileOrigin === undefined ? undefined : same ? { ...inline, ...fileOrigin } : fileOrigin;
+    const entry = {
+      ...kept, columns: newColumns, rows: data.rows,
+      ...(datasource === undefined ? {} : { datasource }),
+      ...(query !== undefined && (named || same) ? { query } : {}),
+      ...(date === undefined ? {} : { retrieved: date }),
+      ...(fileHash === undefined ? {} : { sha256: fileHash }),
+    };
     return { ...record, datasets: { ...datasets, [datasetId]: entry } };
   };
   const source = options.into ? await readDeck(String(options.into), { from, rewrite: destination.file !== "-" }) : undefined;

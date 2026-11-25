@@ -1,0 +1,1 @@
+{"slides":[{"title":"Revenue","chart":{"type":"bar","data":{"columns":["Quarter","Revenue"],"rows":[["Q1",12]],"source":{"src":"./revenue.csv"}}}}]}

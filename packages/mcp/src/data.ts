@@ -72,6 +72,7 @@ export const DOC_SLUGS: readonly string[] = [
 	"icons",
 	"chart-options",
 	"chart-table-data",
+	"data-sources",
 	"footnotes-citations-captions",
 	"templates-and-variables",
 	"data-import",
