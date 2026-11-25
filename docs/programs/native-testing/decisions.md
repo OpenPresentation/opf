@@ -99,6 +99,15 @@ Who: the owner, 2026-11-25, as recommended.
 
 Follows: NT-02 ports the evidence branch's Python probe to Node or to AppleScript.
 
-## Open
+## Agreed after the decisions
 
-- The result format and the five verbs are to be agreed with the Windows release supervisor on opf#1468 before NT-02 merges.
+- **2026-11-25: the result format and the five verbs.** The release supervisor on Windows agreed the shared result format
+  (`scripts/native-acceptance/core/result/README.md`) and the five verbs on opf#1468
+  ([comment of 2026-11-25](https://github.com/OpenPresentation/opf/issues/1468#issuecomment-7174529699)), with the additions
+  of NT-01b that it asked for: the kinds `diagram` and `media` (15 kinds), alt text, `details` on the result and the slide,
+  and edit cases beside `resave`. The Windows command that writes a run directory is the release supervisor's and comes after
+  the 0.37.0 format changes.
+- **2026-11-25: the Keynote export profile's design (D2).** Agreed on opf#1298 by the 0.37.0 release supervisor under the
+  owner's delegation: `reader` with the values `powerpoint` and `keynote`. Version 1 of `keynote` sets safe typefaces, static
+  slide numbers, SmartArt as shapes and native body text; native body text is on condition of one Keynote smoke run of
+  profile exports. The profile is NT-09 (#1508).

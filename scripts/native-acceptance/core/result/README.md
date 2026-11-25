@@ -110,7 +110,7 @@ A driver is `apps/<target>/driver.mjs`, exporting async functions the shared run
 - `resave(ctx, handle)`: the application's own PowerPoint copy.
 - `close(ctx, handle)`: close without saving.
 
-The Windows driver may instead be a command that writes the same files. `validateResult` and `validateRun` in `result.mjs` check the schema and what it cannot say (the id matches deck and variant, slides are in order); each returns `{ ok, errors }` with paths such as `/verbs: must have required property 'resave'`.
+The Windows driver may instead be a command that writes the same files. The format and these verbs are agreed with the release supervisor on Windows ([opf#1468, comment of 2026-11-25](https://github.com/OpenPresentation/opf/issues/1468#issuecomment-7174529699)), with the additions of NT-01b (the `diagram` and `media` kinds, `alt`, `details` on the result and the slide, edit cases); the Windows command that writes a run directory is the release supervisor's and comes after the 0.37.0 format changes. `validateResult` and `validateRun` in `result.mjs` check the schema and what it cannot say (the id matches deck and variant, slides are in order); each returns `{ ok, errors }` with paths such as `/verbs: must have required property 'resave'`.
 
 ## Example
 

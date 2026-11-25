@@ -13,7 +13,7 @@ and answers four questions for every file and slide:
 
 1. **Does it open?** With no repair prompt; the application's own import warnings are recorded word for word.
 2. **Does it look right?** The application's picture of each slide against OPF's preview.
-3. **Is it native?** What each object became (`native`, `changed`, `picture`, `dropped`), in the 13 kinds of the shared result
+3. **Is it native?** What each object became (`native`, `changed`, `picture`, `dropped`), in the 15 kinds of the shared result
    format ([core/result/README.md](../scripts/native-acceptance/core/result/README.md)).
 4. **Does it come back?** The application's own PowerPoint copy of the file, imported with OPF.
 
@@ -24,7 +24,7 @@ Editing in the application's user interface is not part of a run.
 | Application | System | How it is driven | Who runs it | State today |
 | --- | --- | --- | --- | --- |
 | Keynote (`keynote`) | macOS | AppleScript through Keynote's own scripting dictionary ([apps/keynote/](../scripts/native-acceptance/apps/keynote/README.md)) | An agent session or the owner on the Mac | The driver is in the repository and tested without Keynote. Not run in Keynote yet |
-| PowerPoint (`powerpoint`) | Windows | COM | The release supervisor session on the owner's Windows computer | Its driver runs there and writes a run directory in the shared format, which `pnpm native powerpoint --from-run` classifies. The format is proposed to that session on opf#1468: to be agreed |
+| PowerPoint (`powerpoint`) | Windows | COM | The release supervisor session on the owner's Windows computer | Its driver runs there and writes a run directory in the shared format, which `pnpm native powerpoint --from-run` classifies. The format and the five verbs are agreed with the release supervisor on Windows ([opf#1468, comment of 2026-11-25](https://github.com/OpenPresentation/opf/issues/1468#issuecomment-7174529699)); the Windows command that writes the run directory is the release supervisor's and comes after the 0.37.0 format changes |
 | LibreOffice Impress (`impress`) | Linux, in CI | LibreOffice's headless conversion, `scripts/libreoffice/run.mjs` in `nightly.yml` | GitHub's runners | The runner writes the shared format into its artifact ([libreoffice.md](libreoffice.md)); the first real run is the nightly after that change merges. The nightly does not run the classify step, and there is no `known/impress.json` yet |
 | PowerPoint for Mac (`powerpoint-mac`) | macOS | A reserved slot, no driver (decision D3) | The owner's: it needs a license and an install (opf#1314) | The command says "no driver yet" |
 
