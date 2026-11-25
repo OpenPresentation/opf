@@ -1,0 +1,1000 @@
+{
+ "round": "Keynote 16.0 test round of OPF 0.36.0",
+ "issue": "OpenPresentation/opf#1466",
+ "evidence_commit": "5e3c2e728487b4e7cf09bd028947a06eee553b28",
+ "paths_relative_to": "evidence branch codex/evidence-mac-036 root (local: /Users/michael/opf-work/keynote-036/evidence/)",
+ "classes": {
+  "a": "regression in Keynote caused by a 0.36.0 change",
+  "b": "OPF's file or OPF's importer is wrong",
+  "c": "valid file, Keynote reads it differently",
+  "other": "not a Keynote matter (found in passing)"
+ },
+ "findings": [
+  {
+   "id": "RT-01",
+   "title": "A deck with a one-series highlight chart cannot be imported back after Keynote (sparse cache; Keynote writes ptCount = points present)",
+   "grade": "wrong",
+   "class": "a",
+   "whose": "OPF importer (too strict); Keynote writes an inconsistent cache; 0.36.0 M13 export is the trigger",
+   "group": "chart-cache-import",
+   "sheet": "sheets/QC-01-coverage-charts-reimport-fails.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QC-01-coverage-charts-reimport-fails.jpg"
+   ],
+   "minimal_deck": "min/roundtrip/RT-01.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/roundtrip/RT-01.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/roundtrip/REPORT.md",
+    "grades/corpus-charts/REPORT.md"
+   ],
+   "needs_experiment": false,
+   "issue": "OpenPresentation/opf#1477",
+   "note": "Importer rule is not new: #1477 reproduces it without Keynote on 0.35.1, 0.36.0 and main; a 0.35.1 deck with a gap fails too. 0.36.0 M13 newly exposes it."
+  },
+  {
+   "id": "QC-01",
+   "title": "Any chart with a missing value (authored null) makes the deck fail to import after Keynote; same mechanism as RT-01",
+   "grade": "wrong",
+   "class": "a",
+   "whose": "OPF importer (too strict); Keynote writes an inconsistent cache",
+   "group": "chart-cache-import",
+   "sheet": "sheets/QC-01-coverage-charts-reimport-fails.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QC-01-coverage-charts-reimport-fails.jpg"
+   ],
+   "minimal_deck": "min/corpus-charts/QC-01.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-charts/QC-01.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-charts/REPORT.md",
+    "grades/roundtrip/REPORT.md"
+   ],
+   "needs_experiment": false,
+   "issue": "OpenPresentation/opf#1477",
+   "note": "See #1477: reproduced on 0.35.1, 0.36.0 and main without Keynote."
+  },
+  {
+   "id": "MX-03",
+   "title": "One-series highlight (M13): legend shows the series twice, columns half width and off their names, highlight marker gray",
+   "grade": "wrong",
+   "class": "a",
+   "whose": "the file is valid and Keynote reads it differently (form introduced by 0.36.0)",
+   "group": "highlight",
+   "sheet": "sheets/MX-03-one-series-legend-twice.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/MX-03-one-series-legend-twice.jpg"
+   ],
+   "minimal_deck": "min/matrix-m/MX-03.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/matrix-m/MX-03.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/matrix-m/REPORT.md",
+    "grades/corpus-charts/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "MX-01",
+   "title": "Right-aligned and centered wrapped lines end a space off (hanging-space line-box shift of M16)",
+   "grade": "small",
+   "class": "a",
+   "whose": "the file is valid and Keynote reads it differently (regression against 0.35.1)",
+   "group": "flush",
+   "sheet": "sheets/MX-01-flush-lines-hang-a-space-in-keynote.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/MX-01-flush-lines-hang-a-space-in-keynote.jpg"
+   ],
+   "minimal_deck": "min/matrix-m/MX-01.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/matrix-m/MX-01.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/matrix-m/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "SW-02",
+   "title": "Native mode: TAB-1 note placed at the layout note region foot, ~97 px below the preview (native-body.js planOne uses region.box)",
+   "grade": "wrong",
+   "class": "b",
+   "whose": "OPF's file is wrong (cause proved)",
+   "group": "native-body",
+   "sheet": "sheets/SW-02-native-note-at-foot.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/SW-02-native-note-at-foot.jpg"
+   ],
+   "minimal_deck": "min/matrix-sweep/SW-02.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/matrix-sweep/SW-02.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/matrix-sweep/REPORT.md",
+    "grades/corpus-text/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": "OpenPresentation/opf#1481",
+   "note": "Cause proved (#1481): native-body.js lines 102-103 use the layout region box; y 572.1 vs 475.4 in default; not a 0.36.0 regression (inferred from 0.34.2)."
+  },
+  {
+   "id": "RT-02",
+   "title": "Categories containing \": \" make Keynote write a hierarchical cache; the whole deck fails to import",
+   "grade": "wrong",
+   "class": "b",
+   "whose": "OPF importer (fails the deck instead of one chart); Keynote writes an odd cache",
+   "group": "chart-cache-import",
+   "sheet": "sheets/LY-05-roundtrip-colon-categories.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/LY-05-roundtrip-colon-categories.jpg"
+   ],
+   "minimal_deck": "min/roundtrip/RT-02.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/roundtrip/RT-02.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/roundtrip/REPORT.md",
+    "grades/layouts/findings.md"
+   ],
+   "needs_experiment": false,
+   "issue": "OpenPresentation/opf#1478"
+  },
+  {
+   "id": "LY-05",
+   "title": "layouts-lots round trip fails on colon categories (same as RT-02); colon as trigger inferred",
+   "grade": "wrong",
+   "class": "b",
+   "whose": "OPF importer; Keynote writes an odd cache",
+   "group": "chart-cache-import",
+   "sheet": "sheets/LY-05-roundtrip-colon-categories.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/LY-05-roundtrip-colon-categories.jpg"
+   ],
+   "minimal_deck": "min/layouts/LY-05.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/layouts/LY-05.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/layouts/findings.md",
+    "grades/roundtrip/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": "OpenPresentation/opf#1478"
+  },
+  {
+   "id": "RT-04",
+   "title": "Keynote drops OPF tags; the import recovers no OPF structure (no fallback to OPF shape names)",
+   "grade": "wrong",
+   "class": "b",
+   "whose": "OPF importer",
+   "group": "roundtrip-structure",
+   "sheet": null,
+   "sheet_urls": [],
+   "minimal_deck": "min/roundtrip/RT-04.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/roundtrip/RT-04.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/roundtrip/REPORT.md"
+   ],
+   "needs_experiment": false,
+   "issue": "OpenPresentation/opf#1480",
+   "note": "Correction (#1480): chart header loss Month -> Category is not caused by the tags; Keynote rewrites the embedded workbook without cell A1."
+  },
+  {
+   "id": "LY-01",
+   "title": "Long titles (one paragraph per OPF line, wrap none) wrap to a third line in Helvetica Bold and overprint the content",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently (font substitution; OPF per-line title makes it fragile)",
+   "group": "font-substitution",
+   "sheet": "sheets/LY-01-title-overflow.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/LY-01-title-overflow.jpg"
+   ],
+   "minimal_deck": "min/layouts/LY-01.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/layouts/LY-01.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/layouts/findings.md",
+    "grades/corpus-text/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "LY-02",
+   "title": "Per-line text boxes sized for Aptos run into each other or off the slide",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently (font substitution)",
+   "group": "font-substitution",
+   "sheet": "sheets/LY-02-line-boxes-overrun.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/LY-02-line-boxes-overrun.jpg"
+   ],
+   "minimal_deck": "min/layouts/LY-02.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/layouts/LY-02.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/layouts/findings.md",
+    "grades/corpus-text/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "LG-01",
+   "title": "Wider substitute font: first column runs into the neighbor block on 15 language slides (default) and 7 (native)",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently (font substitution)",
+   "group": "font-substitution",
+   "sheet": "sheets/LG-01-substitute-font-wider-collides.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/LG-01-substitute-font-wider-collides.jpg"
+   ],
+   "minimal_deck": "min/languages/LG-01.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/languages/LG-01.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/languages/findings.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "SW-01",
+   "title": "Grown table header words break mid-word in Helvetica Bold",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently (font substitution; exposed by 0.36.0 table growth)",
+   "group": "font-substitution",
+   "sheet": "sheets/SW-01-table-header-split.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/SW-01-table-header-split.jpg"
+   ],
+   "minimal_deck": "min/matrix-sweep/SW-01.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/matrix-sweep/SW-01.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/matrix-sweep/REPORT.md",
+    "grades/corpus-text/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "MX-07",
+   "title": "Pie legend entry cut at the frame (Helvetica wider)",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently (font substitution)",
+   "group": "font-substitution",
+   "sheet": "sheets/MX-07-pie-legend-clipped.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/MX-07-pie-legend-clipped.jpg"
+   ],
+   "minimal_deck": "min/matrix-m/MX-07.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/matrix-m/MX-07.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/matrix-m/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "MX-08",
+   "title": "Table header \"Terminal\" broken as \"Termina\"/\"l\"",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently (font substitution)",
+   "group": "font-substitution",
+   "sheet": "sheets/MX-08-table-header-broken-mid-word.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/MX-08-table-header-broken-mid-word.jpg"
+   ],
+   "minimal_deck": "min/matrix-m/MX-08.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/matrix-m/MX-08.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/matrix-m/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "RT-06",
+   "title": "Titles written back smaller; fractional sizes truncated",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "font-substitution",
+   "sheet": null,
+   "sheet_urls": [],
+   "minimal_deck": "min/roundtrip/RT-06.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/roundtrip/RT-06.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/roundtrip/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QT-01",
+   "title": "Bullet dot smaller (buFont Aptos replaced by Helvetica)",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "font-substitution",
+   "sheet": null,
+   "sheet_urls": [],
+   "minimal_deck": null,
+   "minimal_deck_url": null,
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-text/REPORT.md"
+   ],
+   "needs_experiment": false,
+   "issue": null
+  },
+  {
+   "id": "LG-02",
+   "title": "Right-to-left table drawn left of its frame, over the chart (all columns now show)",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "rtl-table",
+   "sheet": "sheets/LG-02-rtl-table-mirrored-over-chart.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/LG-02-rtl-table-mirrored-over-chart.jpg"
+   ],
+   "minimal_deck": "min/languages/LG-02.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/languages/LG-02.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/languages/findings.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "RT-03",
+   "title": "Alt text never reaches Keynote (Description = shape name); the round trip writes the stand-in back and OPF imports it as alt",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently; OPF importer accepts the stand-in",
+   "group": "alt-text",
+   "sheet": "sheets/LY-04-smartart-picture-alt.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/LY-04-smartart-picture-alt.jpg"
+   ],
+   "minimal_deck": "min/roundtrip/RT-03.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/roundtrip/RT-03.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/roundtrip/REPORT.md",
+    "grades/corpus-shapes/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": "OpenPresentation/opf#1479"
+  },
+  {
+   "id": "LY-04",
+   "title": "SmartArt arrives as a picture; description is the shape name, not the alt",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "alt-text",
+   "sheet": "sheets/LY-04-smartart-picture-alt.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/LY-04-smartart-picture-alt.jpg"
+   ],
+   "minimal_deck": "min/layouts/LY-04.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/layouts/LY-04.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/layouts/findings.md"
+   ],
+   "needs_experiment": true,
+   "issue": "OpenPresentation/opf#1479"
+  },
+  {
+   "id": "QC-03",
+   "title": "Footer placeholder drawn behind a full-bleed picture (Keynote moves ph ftr to the back)",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "footer",
+   "sheet": "sheets/QC-03-footer-behind-full-bleed-picture.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QC-03-footer-behind-full-bleed-picture.jpg"
+   ],
+   "minimal_deck": "min/corpus-charts/QC-03.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-charts/QC-03.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-charts/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QC-04",
+   "title": "Live slide number skips a hidden slide",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "slide-numbers",
+   "sheet": "sheets/QC-04-slide-number-skips-hidden-slide.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QC-04-slide-number-skips-hidden-slide.jpg"
+   ],
+   "minimal_deck": "min/corpus-charts/QC-04.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-charts/QC-04.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-charts/REPORT.md",
+    "grades/corpus-text/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "MX-02",
+   "title": "All-positive bar chart with a manual outer plot area: category names cut at the left edge",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "plot-area",
+   "sheet": "sheets/MX-02-positive-bar-labels-clipped.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/MX-02-positive-bar-labels-clipped.jpg"
+   ],
+   "minimal_deck": "min/matrix-m/MX-02.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/matrix-m/MX-02.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/matrix-m/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QC-02",
+   "title": "Keynote rewrites the value-axis major unit; percent axes keep only 0% and the maximum",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "axis",
+   "sheet": "sheets/QC-02-axis-major-unit-rewritten.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QC-02-axis-major-unit-rewritten.jpg"
+   ],
+   "minimal_deck": "min/corpus-charts/QC-02.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-charts/QC-02.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-charts/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "LY-03",
+   "title": "Chart legend leaves the chart frame or is cut",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "legend",
+   "sheet": "sheets/LY-03-chart-legend-leaves-frame.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/LY-03-chart-legend-leaves-frame.jpg"
+   ],
+   "minimal_deck": "min/layouts/LY-03.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/layouts/LY-03.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/layouts/findings.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "MX-04",
+   "title": "Long column names: every other one drawn, on one line",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "chart-details",
+   "sheet": "sheets/MX-04-long-column-names-every-other.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/MX-04-long-column-names-every-other.jpg"
+   ],
+   "minimal_deck": "min/matrix-m/MX-04.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/matrix-m/MX-04.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/matrix-m/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "MX-05",
+   "title": "Data labels lose the category name; pie label separator dropped",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "chart-details",
+   "sheet": "sheets/MX-05-data-label-category-dropped.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/MX-05-data-label-category-dropped.jpg"
+   ],
+   "minimal_deck": "min/matrix-m/MX-05.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/matrix-m/MX-05.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/matrix-m/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QC-05",
+   "title": "Stacked-area middle value labels dropped when some points delete their label",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "chart-details",
+   "sheet": "sheets/QC-05-stacked-area-middle-labels-dropped.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QC-05-stacked-area-middle-labels-dropped.jpg"
+   ],
+   "minimal_deck": "min/corpus-charts/QC-05.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-charts/QC-05.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-charts/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QC-07",
+   "title": "General number format shows one decimal",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "chart-details",
+   "sheet": "sheets/QC-07-general-format-one-decimal.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QC-07-general-format-one-decimal.jpg"
+   ],
+   "minimal_deck": "min/corpus-charts/QC-07.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-charts/QC-07.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-charts/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QC-08",
+   "title": "Axes without written scaling get Keynote own scale",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "chart-details",
+   "sheet": "sheets/QC-08-automatic-axes-keynote-scale.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QC-08-automatic-axes-keynote-scale.jpg"
+   ],
+   "minimal_deck": "min/corpus-charts/QC-08.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-charts/QC-08.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-charts/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QC-09",
+   "title": "Scatter labels left/right drawn above the point",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "chart-details",
+   "sheet": "sheets/QC-09-scatter-label-left-right-lost.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QC-09-scatter-label-left-right-lost.jpg"
+   ],
+   "minimal_deck": "min/corpus-charts/QC-09.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-charts/QC-09.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-charts/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QC-10",
+   "title": "Legend order reversed on radar and area charts",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "chart-details",
+   "sheet": "sheets/QC-10-legend-order-reversed.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QC-10-legend-order-reversed.jpg"
+   ],
+   "minimal_deck": "min/corpus-charts/QC-10.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-charts/QC-10.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-charts/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "RT-09",
+   "title": "Chart axis details and number formats rewritten in back.pptx; no value lost",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "chart-details",
+   "sheet": null,
+   "sheet_urls": [],
+   "minimal_deck": "min/roundtrip/RT-09.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/roundtrip/RT-09.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/roundtrip/REPORT.md"
+   ],
+   "needs_experiment": false,
+   "issue": null
+  },
+  {
+   "id": "MX-06",
+   "title": "Hebrew paragraph with Latin words and no rtl attribute: word order differs",
+   "grade": "wrong",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "direction",
+   "sheet": "sheets/MX-06-mixed-hebrew-latin-order.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/MX-06-mixed-hebrew-latin-order.jpg"
+   ],
+   "minimal_deck": "min/matrix-m/MX-06.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/matrix-m/MX-06.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/matrix-m/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "RT-07",
+   "title": "rtl lost on right-to-left paragraphs that start with Latin text or digits",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "direction",
+   "sheet": "sheets/MX-06-mixed-hebrew-latin-order.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/MX-06-mixed-hebrew-latin-order.jpg"
+   ],
+   "minimal_deck": "min/roundtrip/RT-07.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/roundtrip/RT-07.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/roundtrip/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "LY-06",
+   "title": "Keynote copies a layout per slide with a color-map override (\"Section 0\", \"Cover 0\")",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently (Keynote import behavior)",
+   "group": "layout-copies",
+   "sheet": "sheets/LY-06-layout-copies.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/LY-06-layout-copies.jpg"
+   ],
+   "minimal_deck": "min/layouts/LY-06.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/layouts/LY-06.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/layouts/findings.md",
+    "grades/corpus-shapes/REPORT.md",
+    "grades/roundtrip/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "RT-05",
+   "title": "Text in a non-rectangular shape becomes a group of shape plus text box",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "shapes",
+   "sheet": "sheets/QS-01-text-shapes-become-groups.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QS-01-text-shapes-become-groups.jpg"
+   ],
+   "minimal_deck": "min/roundtrip/RT-05.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/roundtrip/RT-05.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/roundtrip/REPORT.md"
+   ],
+   "needs_experiment": false,
+   "issue": null
+  },
+  {
+   "id": "QS-01",
+   "title": "Text shapes and textNoShape rectangle blocks become groups; glue lost in back.pptx",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "shapes",
+   "sheet": "sheets/QS-01-text-shapes-become-groups.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QS-01-text-shapes-become-groups.jpg"
+   ],
+   "minimal_deck": "min/corpus-shapes/QS-01.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-shapes/QS-01.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-shapes/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QS-02",
+   "title": "Presets lose their preset (95 freeforms, 63 groups, 6 lines of 187)",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "shapes",
+   "sheet": "sheets/QS-02-presets-split-into-groups.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QS-02-presets-split-into-groups.jpg"
+   ],
+   "minimal_deck": "min/corpus-shapes/QS-02.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-shapes/QS-02.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-shapes/REPORT.md"
+   ],
+   "needs_experiment": false,
+   "issue": null
+  },
+  {
+   "id": "QS-03",
+   "title": "Pentagon and heptagon drawn too wide (hf/vf dropped)",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "shapes",
+   "sheet": "sheets/QS-03-pentagon-heptagon-proportions.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QS-03-pentagon-heptagon-proportions.jpg"
+   ],
+   "minimal_deck": "min/corpus-shapes/QS-03.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-shapes/QS-03.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-shapes/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QS-04",
+   "title": "flowChartPunchedTape wave 40% instead of 20%",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "shapes",
+   "sheet": "sheets/QS-04-punched-tape-wave.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QS-04-punched-tape-wave.jpg"
+   ],
+   "minimal_deck": "min/corpus-shapes/QS-04.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-shapes/QS-04.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-shapes/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QS-05",
+   "title": "leftRightRibbon fold drawn light gray",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "shapes",
+   "sheet": "sheets/QS-05-ribbon-fold-gray.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QS-05-ribbon-fold-gray.jpg"
+   ],
+   "minimal_deck": "min/corpus-shapes/QS-05.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-shapes/QS-05.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-shapes/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QS-06",
+   "title": "path rect/shape gradients drawn as a circle",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "shapes",
+   "sheet": "sheets/QS-06-gradient-path-radial.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QS-06-gradient-path-radial.jpg"
+   ],
+   "minimal_deck": "min/corpus-shapes/QS-06.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-shapes/QS-06.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-shapes/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QS-07",
+   "title": "Arrowhead sizes ignored; arrow written back as triangle",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "shapes",
+   "sheet": "sheets/QS-07-arrowhead-sizes.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QS-07-arrowhead-sizes.jpg"
+   ],
+   "minimal_deck": "min/corpus-shapes/QS-07.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-shapes/QS-07.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-shapes/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QS-08",
+   "title": "Perspective shadow becomes a plain drop shadow",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "shapes",
+   "sheet": "sheets/QS-08-perspective-shadow.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QS-08-perspective-shadow.jpg"
+   ],
+   "minimal_deck": "min/corpus-shapes/QS-08.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-shapes/QS-08.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-shapes/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "LG-04",
+   "title": "Native mode: Korean wraps inside a word; Keynote writes no lang back",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently",
+   "group": "languages",
+   "sheet": "sheets/LG-04-korean-native-wraps-inside-words.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/LG-04-korean-native-wraps-inside-words.jpg"
+   ],
+   "minimal_deck": "min/languages/LG-04.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/languages/LG-04.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/languages/findings.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "RT-08",
+   "title": "Table right alignment not written back; numbers are text cells",
+   "grade": "small",
+   "class": "c",
+   "whose": "the file is valid and Keynote reads it differently (Keynote export)",
+   "group": "tables",
+   "sheet": null,
+   "sheet_urls": [],
+   "minimal_deck": "min/roundtrip/RT-08.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/roundtrip/RT-08.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/roundtrip/REPORT.md"
+   ],
+   "needs_experiment": true,
+   "issue": null
+  },
+  {
+   "id": "QC-06",
+   "title": "Map chart drawn as a tile map in the preview but exported as clustered columns (not Keynote)",
+   "grade": "wrong",
+   "class": "other",
+   "whose": "documented behavior (no issue)",
+   "group": "not-keynote",
+   "sheet": "sheets/QC-06-map-chart-preview-vs-export.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/QC-06-map-chart-preview-vs-export.jpg"
+   ],
+   "minimal_deck": "min/corpus-charts/QC-06.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/corpus-charts/QC-06.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-charts/REPORT.md"
+   ],
+   "needs_experiment": false,
+   "issue": null,
+   "note": "Documented behavior (SKILL.md chartex row, packages/pptx/README.md, docs/chart-table-data.md:101); no issue; --charts picture makes the file match the preview."
+  },
+  {
+   "id": "QS-09",
+   "title": "Qualification manifest lists smartart 7 and 11 as live SmartArt; 0.36.0 writes native shapes (not Keynote)",
+   "grade": "n/a",
+   "class": "other",
+   "whose": "OPF manifest",
+   "group": "not-keynote",
+   "sheet": null,
+   "sheet_urls": [],
+   "minimal_deck": null,
+   "minimal_deck_url": null,
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/corpus-shapes/REPORT.md"
+   ],
+   "needs_experiment": false,
+   "issue": "OpenPresentation/opf#1482"
+  },
+  {
+   "id": "LG-03",
+   "title": "Amharic line starts with the word separator (OPF line breaking); overlap part is LG-01",
+   "grade": "small",
+   "class": "other",
+   "whose": "OPF line breaking (file)",
+   "group": "not-keynote",
+   "sheet": "sheets/LG-03-amharic-overflow-and-word-separator.jpg",
+   "sheet_urls": [
+    "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/sheets/LG-03-amharic-overflow-and-word-separator.jpg"
+   ],
+   "minimal_deck": "min/languages/LG-03.opf.json",
+   "minimal_deck_url": "https://github.com/OpenPresentation/opf/blob/5e3c2e728487b4e7cf09bd028947a06eee553b28/min/languages/LG-03.opf.json",
+   "minimal_opened_in_keynote": false,
+   "reports": [
+    "grades/languages/findings.md"
+   ],
+   "needs_experiment": false,
+   "issue": null
+  }
+ ]
+}
