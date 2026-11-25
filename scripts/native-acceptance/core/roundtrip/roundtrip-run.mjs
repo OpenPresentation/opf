@@ -24,11 +24,12 @@ function resultFiles(runDir) {
 }
 
 /**
- * roundTripRun(runDir, inputRoot, { importCopies = true, importer = importResaved }) -> { files: [{ id, status, import, objects }], records }
- * status: "done", or "not-run" with a reason when the file has no copy. records: every outcome record with its file and
- * `row` (the kind; "text (empty box)" and "hidden slide" apart), for counting.
+ * roundTripRun(runDir, inputRoot, { importCopies = true, importer = importResaved, keepDone = false }) -> { files: [{ id, status, import, objects }], records }
+ * status: "done", or "not-run" with a reason when the file has no copy, or "kept" (keepDone: the result already has
+ * verbs.resave.import, so an earlier round trip merged its outcomes; merging again would add its objects twice).
+ * records: every outcome record with its file and `row` (the kind; "text (empty box)" and "hidden slide" apart), for counting.
  */
-export function roundTripRun(runDir, inputRoot, { importCopies = true, importer = importResaved } = {}) {
+export function roundTripRun(runDir, inputRoot, { importCopies = true, importer = importResaved, keepDone = false } = {}) {
   const files = [];
   const records = [];
   for (const resultFile of resultFiles(runDir)) {
@@ -38,6 +39,10 @@ export function roundTripRun(runDir, inputRoot, { importCopies = true, importer 
     const resave = result.verbs.resave;
     const copy = path.join(folder, resave.path ?? 'resaved.pptx');
     const entry = { id: result.file.id };
+    if (keepDone && resave.import) {
+      files.push({ ...entry, status: 'kept', import: resave.import });
+      continue;
+    }
     if (resave.status !== 'done' || !existsSync(copy)) {
       entry.status = 'not-run';
       entry.reason = resave.status !== 'done' ? `resave ${resave.status}` : 'no resaved.pptx';

@@ -136,6 +136,7 @@
     "check:audit-picture-bullets": "node --test docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/picture-bullets.test.mjs",
     "native:prepare": "node scripts/native-acceptance/prepare.mjs",
     "check:native": "node scripts/native-acceptance/check-native.mjs",
+    "native": "node scripts/native-acceptance/native.mjs",
     "check:native-acceptance": "node --test scripts/native-acceptance/*.test.mjs",
     "check:native-known": "node --test scripts/native-acceptance/known/known.test.mjs && node scripts/native-acceptance/known/build-skill-table.mjs --check",
     "build:native-known": "node scripts/native-acceptance/known/build-skill-table.mjs",

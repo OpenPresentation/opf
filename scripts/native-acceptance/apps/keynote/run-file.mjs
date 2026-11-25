@@ -1,7 +1,7 @@
 // NT-02: one input file end to end through the Keynote driver: open -> probe -> render -> resave -> close, and the
 // result.json of the shared format (core/result). close runs whenever the run opened a document, also after a failure or
 // an exception, so the run never leaves a document of its own open unless Keynote refuses to close it (then the run
-// stops). The general runner (`pnpm native`, NT-05) will call the same functions.
+// stops). The general runner (`pnpm native`, NT-05) calls the same functions with the driver (and its target) it was given.
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { emptyResult, fileId, runFileEntry, SCHEMA_VERSION, validateResult, validateRun } from '../../core/result/result.mjs';
@@ -14,12 +14,13 @@ const failedVerb = (error) => ({ status: 'failed', message: String(error?.messag
 
 /**
  * Runs one file. input = { path (absolute), relativePath (to the run's input root), deck, variant? }.
- * options = { opf: { version, commit? }, fonts?, driver? }. ctx must have been through check() (ctx.facts).
+ * options = { opf: { version, commit? }, fonts?, driver?, target? } (driver and target default to Keynote's). ctx must have
+ * been through check() (ctx.facts).
  * Returns { result, validation, close, stop }: stop is true when the run must not go on (open timed out, a document of
  * the run's own could not be closed).
  */
-export async function runFile(ctx, input, { opf, fonts = 'installed', driver = keynoteDriver }) {
-  if (!ctx.facts?.application || !ctx.facts?.system) throw new Error('runFile: run check(ctx) first; it reads the Keynote and macOS versions');
+export async function runFile(ctx, input, { opf, fonts = 'installed', driver = keynoteDriver, target = 'keynote' }) {
+  if (!ctx.facts?.application || !ctx.facts?.system) throw new Error('runFile: run check(ctx) first; it reads the application and system versions');
   const variant = input.variant ?? 'default';
   const file = { id: fileId(input.deck, variant), path: input.path };
   const started = iso(ctx.now());
@@ -75,7 +76,7 @@ export async function runFile(ctx, input, { opf, fonts = 'installed', driver = k
     // The input went away during the run: unchangedAfterRun stays unknown.
   }
   const result = emptyResult({
-    target: 'keynote',
+    target,
     application: ctx.facts.application,
     system: ctx.facts.system,
     fonts,
@@ -97,17 +98,17 @@ export async function runFile(ctx, input, { opf, fonts = 'installed', driver = k
   return { result, validation, close: closed, stop: Boolean(handle?.stop) || leftOpen };
 }
 
-/** run.json for the files run so far (core/result/native-run.schema.json). */
-export function buildRun(ctx, { opf, fonts = 'installed', started, check, results }) {
+/** run.json for the files run so far (core/result/native-run.schema.json); tier and baseline are the runner's (NT-05). */
+export function buildRun(ctx, { opf, fonts = 'installed', started, check, results, target = 'keynote', tier = null, baseline = null }) {
   return {
     schemaVersion: SCHEMA_VERSION,
-    target: 'keynote',
+    target,
     application: ctx.facts.application,
     system: ctx.facts.system,
     fonts,
     opf,
-    tier: null,
-    baseline: null,
+    tier,
+    baseline,
     started,
     finished: iso(ctx.now()),
     check: { status: check.status, reasons: check.reasons },
