@@ -40,7 +40,7 @@
       "properties": {
         "open": {
           "type": "object",
-          "description": "Opening the file. \"done\" means it opened with no repair prompt.",
+          "description": "Opening the file. \"done\" means it opened without an error; whether a repair prompt appeared is established only by a driver that can see the application's dialogs (one that cannot says so in message).",
           "additionalProperties": false,
           "required": ["status", "warnings"],
           "properties": {
@@ -115,18 +115,13 @@
             "seconds": { "$ref": "#/$defs/seconds" },
             "message": { "$ref": "#/$defs/message" },
             "path": { "$ref": "#/$defs/relativePath", "description": "The copy's path relative to this result.json's folder, normally \"resaved.pptx\"." },
-            "import": {
-              "type": "object",
-              "description": "OPF's importer run on the copy (filled by the round-trip step, absent before).",
-              "additionalProperties": false,
-              "required": ["status"],
-              "properties": {
-                "status": { "enum": ["imported", "failed", "not-run"], "description": "Whether OPF imported the copy." },
-                "error": { "type": "string", "description": "The importer's error when status is \"failed\"." },
-                "slideCount": { "type": "integer", "minimum": 0, "description": "How many slides the imported deck has." }
-              }
-            }
+            "import": { "$ref": "#/$defs/import" }
           }
+        },
+        "edits": {
+          "type": "array",
+          "description": "Optional edit cases: per case the driver made one edit to the opened file in the application, wrote one PowerPoint copy of it with the application's own writer (edits/<id>.pptx) and left the opened file unsaved. resave keeps the unedited copy. Absent when the driver made no edits.",
+          "items": { "$ref": "#/$defs/edit" }
         }
       }
     },
@@ -134,7 +129,8 @@
       "type": "array",
       "description": "Every slide of the opened file in file order, hidden slides included. Empty when neither render nor probe ran.",
       "items": { "$ref": "#/$defs/slide" }
-    }
+    },
+    "details": { "$ref": "#/$defs/details", "description": "Target-specific facts about the file as the application opened it (for example the fonts it reports for the presentation, the slide size). No shared code reads it." }
   },
   "$defs": {
     "target": {
@@ -191,7 +187,63 @@
     },
     "verbStatus": {
       "enum": ["done", "failed", "timeout", "alert", "not-run"],
-      "description": "\"done\": the verb finished. \"failed\": the application returned an error. \"timeout\": it did not answer in time. \"alert\": an unexpected dialog or window appeared (captured, never clicked). \"not-run\": the verb was not asked for or could not start."
+      "description": "\"done\": the verb finished without an error. \"failed\": the application returned an error. \"timeout\": it did not answer in time (a driver without screen access also reports a modal prompt it cannot see this way). \"alert\": an unexpected dialog or window appeared (captured, never clicked). \"not-run\": the verb was not asked for or could not start."
+    },
+    "details": { "type": "object", "description": "Target-specific facts that no shared code reads. Free-form." },
+    "import": {
+      "type": "object",
+      "description": "OPF's importer run on a copy (filled by the round-trip step, absent before).",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["imported", "failed", "not-run"], "description": "Whether OPF imported the copy." },
+        "error": { "type": "string", "description": "The importer's error when status is \"failed\"." },
+        "slideCount": { "type": "integer", "minimum": 0, "description": "How many slides the imported deck has." }
+      }
+    },
+    "edit": {
+      "type": "object",
+      "description": "One edit case: one edit made in the application, then one PowerPoint copy written by the application.",
+      "additionalProperties": false,
+      "required": ["id", "what", "path", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$", "description": "The case's id, safe as a file name: a-z 0-9 . _ - (for example \"retype-cell\")." },
+        "what": { "type": "string", "minLength": 1, "description": "What was edited, one phrase (for example \"retyped the text of table cell B2 on slide 3\")." },
+        "path": { "$ref": "#/$defs/relativePath", "description": "The copy's path relative to this result.json's folder: edits/<id>.pptx." },
+        "status": { "$ref": "#/$defs/verbStatus", "description": "The edit and the copy together: \"done\" when both finished; otherwise as for a verb." },
+        "seconds": { "$ref": "#/$defs/seconds" },
+        "message": { "$ref": "#/$defs/message" },
+        "import": { "$ref": "#/$defs/import" },
+        "outcomes": {
+          "type": "object",
+          "description": "What every exported object became in this copy (filled by the round-trip step, absent before). Kept here, never merged into the slides' objects, which describe the unedited file.",
+          "additionalProperties": false,
+          "required": ["counts", "objects"],
+          "properties": {
+            "counts": { "type": "object", "description": "Exported objects counted by \"<kind>.<outcome>\".", "additionalProperties": { "type": "integer", "minimum": 0 } },
+            "objects": {
+              "type": "array",
+              "description": "The exported objects whose outcome is not native, in slide order.",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["slide", "kind", "outcome"],
+                "properties": {
+                  "slide": { "type": "integer", "minimum": 1, "description": "The slide's index." },
+                  "kind": { "$ref": "#/$defs/kind" },
+                  "name": { "type": "string", "description": "The object's name in the exported file." },
+                  "outcome": { "enum": ["changed", "picture", "dropped"], "description": "What it became in the copy." },
+                  "how": { "type": "string", "minLength": 1, "description": "What changed, or why it is gone, one phrase." }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "kind": {
+      "enum": ["title", "body", "text", "list", "table", "chart", "shape", "connector", "group", "picture", "link", "notes", "footer", "diagram", "media"],
+      "description": "What the object is. \"title\": the slide's title placeholder. \"body\": its body placeholder. \"text\": other text (a text box, or a shape with text). \"list\": text with bullets or numbering. \"table\". \"chart\". \"shape\": a shape without text. \"connector\": a line or connector. \"group\": a group (its members in objects). \"picture\": an image. \"link\": a hyperlink (on text, a shape or a cell). \"notes\": the slide's presenter notes. \"footer\": footer text, slide number or date. \"diagram\": a live SmartArt graphic (layout and node count in details). \"media\": a video or audio object. A driver that cannot tell a title from other text reports \"text\"."
     },
     "seconds": { "type": "number", "minimum": 0, "description": "Wall-clock seconds the verb took." },
     "message": { "type": "string", "description": "What went wrong, in the driver's or the application's words; absent when nothing did." },
@@ -210,10 +262,11 @@
         "layout": { "type": ["string", "null"], "description": "The application's name for the slide's layout (Keynote may add \" 0\", \" 1\" to repeated names); null when unknown." },
         "picture": {
           "anyOf": [{ "$ref": "#/$defs/relativePath" }, { "type": "null" }],
-          "description": "The application's picture of the slide, relative to this result.json's folder (\"slides/slide-001.png\", numbered by index); null when the application exported none (a hidden slide) or render did not run."
+          "description": "The application's picture of the slide, relative to this result.json's folder (\"slides/slide-001.png\", numbered by index), any pixel size; null when the application exported none (Keynote and LibreOffice skip a hidden slide; PowerPoint exports one), render did not run, or render failed for this slide."
         },
         "notes": { "type": ["string", "null"], "description": "The slide's presenter notes as the application reads them; null when it has none or they were not read." },
         "objects": { "type": "array", "description": "The slide's objects in z-order, back to front. Empty when probe did not run.", "items": { "$ref": "#/$defs/object" } },
+        "details": { "$ref": "#/$defs/details", "description": "Target-specific facts about the slide (for example its placeholders as the application reports them). No shared code reads it." },
         "compare": {
           "type": "object",
           "description": "The application's picture compared with OPF's preview (filled by the compare step, absent before).",
@@ -224,7 +277,7 @@
           "properties": {
             "preview": {
               "anyOf": [{ "$ref": "#/$defs/relativePath" }, { "type": "null" }],
-              "description": "OPF's preview picture of the slide, relative to the run directory (the compare step copies it to preview/<deck>/slide-<n>.png there); null when OPF has no preview of the slide (a hidden slide)."
+              "description": "OPF's preview picture of the slide, relative to the run directory (the compare step copies it to preview/<deck>/slide-<n>.png there); null when OPF has no preview of the slide (a hidden slide: OPF previews visible slides only, even when the application exported a picture of it)."
             },
             "score": { "type": ["number", "null"], "minimum": 0, "maximum": 1, "description": "Share of pixels that differ (0 = none); null when there was no pair to compare. A score ranks slides; it is not a verdict." },
             "note": { "type": "string", "minLength": 1, "description": "Why there was no pair to compare (score null): a hidden slide, no application picture, no preview picture." },
@@ -253,20 +306,18 @@
       "additionalProperties": false,
       "required": ["kind", "outcome"],
       "properties": {
-        "kind": {
-          "enum": ["title", "body", "text", "list", "table", "chart", "shape", "connector", "group", "picture", "link", "notes", "footer"],
-          "description": "What the object is. \"title\": the slide's title placeholder. \"body\": its body placeholder. \"text\": other text (a text box, or a shape with text). \"list\": text with bullets or numbering. \"table\". \"chart\". \"shape\": a shape without text. \"connector\": a line or connector. \"group\": a group (its members in objects). \"picture\": an image. \"link\": a hyperlink (on text, a shape or a cell). \"notes\": the slide's presenter notes. \"footer\": footer text, slide number or date. A driver that cannot tell a title from other text reports \"text\"."
-        },
+        "kind": { "$ref": "#/$defs/kind" },
         "outcome": { "$ref": "#/$defs/outcome" },
         "how": { "type": "string", "minLength": 1, "description": "For outcome \"changed\": what changed, one phrase (for example \"split into a group: the shape plus a separate text box\")." },
         "name": { "type": "string", "description": "The object's name in the file (OPF names its shapes and applications keep them); absent when the application does not expose names." },
+        "alt": { "type": "string", "description": "The object's alt text (DrawingML's description, PowerPoint's AlternativeText) as the application holds it; absent when it has none or does not expose it. Compared across applications (opf#1479)." },
         "appClass": { "type": "string", "minLength": 1, "description": "The application's own class name for the object (Keynote: \"text item\", \"shape\", \"image\", \"chart\", \"line\", \"group\", \"table\"; PowerPoint: its MsoShapeType name)." },
         "box": {
           "type": "array",
           "items": { "type": "number" },
           "minItems": 4,
           "maxItems": 4,
-          "description": "[x, y, width, height] in points, slide coordinates, origin at the top left."
+          "description": "[x, y, width, height] in points, slide coordinates, origin at the top left; a group's members too (never relative to their group)."
         },
         "text": { "type": "string", "maxLength": 200, "description": "The object's plain text, cut to at most 200 characters." },
         "fonts": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "The font names the application reports for the object's text, each once, in order of first use." },
@@ -276,7 +327,7 @@
         "on": { "enum": ["text", "shape", "cell"], "description": "Kind link: what carries the link." },
         "target": { "type": "string", "minLength": 1, "description": "Kind link: where it goes, a URL or \"slide:<index>\"." },
         "objects": { "type": "array", "description": "Kind group: the group's members, back to front.", "items": { "$ref": "#/$defs/object" } },
-        "details": { "type": "object", "description": "Target-specific facts that no shared code reads. The only free-form object in the format." }
+        "details": { "$ref": "#/$defs/details", "description": "Target-specific facts about the object that no shared code reads (kind diagram: layout and nodes)." }
       },
       "allOf": [
         { "if": { "anyOf": [{ "required": ["rows"] }, { "required": ["columns"] }] }, "then": { "properties": { "kind": { "const": "table" } } } },
