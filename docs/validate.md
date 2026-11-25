@@ -86,12 +86,14 @@ validate(presentation, {
   fonts,                                          // the host's fonts: layout rules read fonts.textMeasurement
   chartPalette: ['#0072B2', '#E69F00'],           // the engine's chart colors
   template: true, values: { client: 'Acme' },     // check as a template, or fill variables first
+  slideLinks: ['pricing'],                        // one slide checked alone: the deck's other slide ids (false: skip opf/slide-link-unknown)
 });
 ```
 
 - **Names.** `only`, `ignore`, `severity` and `ignorePaths` take full rule ids (`opf/text-contrast`), bare rule names (`text-contrast`) or category names (`accessibility`). No rule is named like a category. A rule beats its category in `severity`. An unknown rule, category, threshold or option throws a `TypeError`, so a typo cannot silently disable a check.
 - **`fonts`.** An object with a `textMeasurement` (the renderer's `loadFonts()` result has one). Without it the layout rules use core's portable estimate and `checks.layout` says `estimated`; with it, `measured`. `textMeasurement` may also be a function of the zero-based slide index, for a script-aware measurement per slide. When the measurement has a `forScripts(profile)` method (a script planner), the layout rules ask it for each slide's script-aware measurement, built from the slide's `resolveScriptFonts` profile and a run language's own profile, the way the renderer and the exporter measure, so Arabic or Japanese text is measured in its script face rather than the Latin face its style names.
 - **`template` and `values`.** A deck that declares content variables is checked as the deck it resolves to; see [templates and variables](templates-and-variables.md).
+- **`slideLinks`.** For a value that is one part of a deck (a single slide checked on its own, as pagination does), `false` skips `opf/slide-link-unknown` and a list of ids adds the deck's other slides that a `slide:<id>` link may name. Leave it out for a whole deck.
 - **Thresholds.** `DEFAULT_VALIDATION_THRESHOLDS` holds `contrastNormal`, `contrastLarge`, `minFontSizePt`, `minImagePpi` and `minSeriesColorDifference`; each rule below lists the ones it reads.
 
 `validationRules` lists every rule with its metadata (`id`, `name`, `category`, `severity`, `cost`, `summary`, `rationale`, `standard`, `approximations`, `thresholds`), and `findValidationRule(name)` finds one by id or bare name.
@@ -238,6 +240,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/reference-id-duplicate`](#opfreference-id-duplicate) | Format | error | structure | Two references share an id. |
 | [`opf/cite-unknown-reference`](#opfcite-unknown-reference) | Format | error | structure | A citation names a reference that does not exist. |
 | [`opf/cite-unsupported-location`](#opfcite-unsupported-location) | Format | error | structure | A citation or footnote sits where no engine draws it. |
+| [`opf/slide-link-unknown`](#opfslide-link-unknown) | Format | error | structure | A link names a slide the document does not have. |
 | [`opf/caption-unsupported-payload`](#opfcaption-unsupported-payload) | Format | error | structure | A caption is on a payload that cannot carry one. |
 | [`opf/image-option-unsupported-payload`](#opfimage-option-unsupported-payload) | Format | error | structure | An image option is on a payload that is not an image. |
 | [`opf/shape-option-unsupported-payload`](#opfshape-option-unsupported-payload) | Format | error | structure | A shape option is on a payload that is not a shape block. |
@@ -391,6 +394,14 @@ Default severity: **error**. Cost: structure. A citation names a reference that 
 Default severity: **error**. Cost: structure. A citation or footnote sits where no engine draws it.
 
 **Why.** `cite` and `footnote` apply to runs in text, bullets and list items; table cells, captions, and reference and footnote texts have no marker.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/slide-link-unknown`
+
+Default severity: **error**. Cost: structure. A link names a slide the document does not have.
+
+**Why.** A `slide:<id>` link jumps to the slide with that `id`; an id no slide has leaves the link with nowhere to go in the preview, in PDF and in PowerPoint. A slide with no `id` cannot be linked to; `assignIds` gives every slide one.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

@@ -1,5 +1,6 @@
 import { collectCitations, walkCitationRuns } from './annotations.js';
 import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
+import { tableRows } from './table.js';
 import type { ValidationIssue } from './generated/types/finding.js';
 
 /**
@@ -40,7 +41,7 @@ export function annotationIssues(value: unknown): ValidationIssue[] {
     if (isRecord(node.table)) {
       const table = node.table, tablePath = pathFor(path, 'table');
       if (Array.isArray(table.columns)) table.columns.forEach((column, index) => { cell(column, `${pathFor(tablePath, 'columns')}/${index}`); });
-      if (Array.isArray(table.rows)) table.rows.forEach((row, rowIndex) => { if (Array.isArray(row)) row.forEach((entry, cellIndex) => { cell(entry, `${pathFor(tablePath, 'rows')}/${rowIndex}/${cellIndex}`); }); });
+      tableRows(table).forEach((row, rowIndex) => { row.cells.forEach((entry, cellIndex) => { cell(entry, `${pathFor(tablePath, 'rows')}/${rowIndex}${row.object ? '/cells' : ''}/${cellIndex}`); }); });
     }
     if (node.caption !== undefined) {
       const caption = node.caption, captionPath = pathFor(path, 'caption');

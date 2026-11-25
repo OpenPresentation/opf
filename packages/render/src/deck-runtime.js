@@ -80,6 +80,23 @@ export function counterText(position, total, page = 1, pages = 1) {
   return `${position} / ${total}${pages > 1 ? ` · ${page}/${pages}` : ""}`;
 }
 
+/**
+ * FR-03: the link an event target sits in. `slide` is the id of a `slide:<id>` link (the renderer marks its anchor with `data-opf-slide-link`),
+ * `link` is the anchor, and a target in no link gives undefined. A player or presenter jumps to a slide link itself and leaves every other link to the browser.
+ */
+export function linkAt(target) {
+  const anchor = target && typeof target.closest === "function" ? target.closest("a[href]") : null;
+  if (!anchor) return undefined;
+  const slide = anchor.getAttribute("data-opf-slide-link");
+  return { link: anchor, ...(slide ? { slide } : {}) };
+}
+
+/** FR-03: the document index of the slide with this id, or -1 (the id of a slide link names a slide of the deck). */
+export function slideIndexById(document, id) {
+  const slides = Array.isArray(document?.slides) ? document.slides : [];
+  return slides.findIndex((slide) => isObject(slide) && slide.id === id);
+}
+
 /** Whole numbers only: "3", " 3 " and 3 are slide 3; "", "3.5", "x" and 0 are not slide numbers. */
 export function parseSlideNumber(value) {
   if (typeof value === "number") return Number.isInteger(value) ? value : undefined;

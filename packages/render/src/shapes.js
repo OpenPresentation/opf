@@ -18,6 +18,16 @@ const number = value => (Number.isInteger(value) ? String(value) : Number(value)
 const precise = value => String(Math.round(value * 1e6) / 1e6);
 
 /** DrawingML preset dashes as dash and gap lengths in line widths (PowerPoint's patterns for a flat cap). */
+/**
+ * FR-03: the attributes of the `a` a link draws. A web, mail or phone link opens in a new tab; a `slide:<id>` link is a fragment link that
+ * carries the slide's id in `data-opf-slide-link`: the player and the presenter jump to that slide, the PDF export writes a link to its
+ * page, and the PowerPoint export writes a slide jump. Nothing here opens a tab.
+ */
+export function linkAnchorAttrs(link, { newTab = false } = {}) {
+  if (typeof link === "string" && link.startsWith("slide:") && link.length > 6) return { href: `#slide:${link.slice(6)}`, "data-opf-slide-link": link.slice(6) };
+  return newTab ? { href: link, target: "_blank", rel: "noopener noreferrer" } : { href: link };
+}
+
 export const PRESET_DASHES = Object.freeze({
   solid: null, dot: [1, 3], dash: [4, 3], longDash: [8, 3], dashDot: [4, 3, 1, 3], longDashDot: [8, 3, 1, 3], longDashDotDot: [8, 3, 1, 3, 1, 3],
   sysDot: [1, 1], sysDash: [3, 1], sysDashDot: [3, 1, 1, 1], sysDashDotDot: [3, 1, 1, 1, 1, 1],
@@ -297,7 +307,7 @@ export function renderShapeBlock(item, helpers) {
   // A decorative shape is hidden from assistive technology; alt text names the shape; otherwise its text is what is read.
   const accessible = shape.decorative ? HIDDEN : shape.alt !== undefined ? { role: "img", "aria-label": shape.alt } : {};
   const body = (defs.length ? helpers.tag("defs", {}, defs.join("")) : "") + effects.wrap(outline, text);
-  const content = shape.link ? helpers.tag("a", { href: shape.link }, body) : body;
+  const content = shape.link ? helpers.tag("a", linkAnchorAttrs(shape.link), body) : body;
   return helpers.tag("g", { ...accessible, ...helpers.trace }, content);
 }
 

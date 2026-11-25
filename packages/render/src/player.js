@@ -4,7 +4,7 @@
 // slides are skipped. No transitions or builds (deferred, opf#250) and no rich notes (opf#251): notes are plain text.
 import {
   DeckError, counterText, createCursor, createDeckStore, createSync, createTimer, deckChannelName, formatDuration, localIsoDate, newSurfaceId,
-  parseDeckDocument, plainText, presentableIndexes, prepareSlideSvg, sanitizeSvgTree, slideLabel, stateWins, svgDimensions,
+  linkAt, parseDeckDocument, plainText, presentableIndexes, prepareSlideSvg, sanitizeSvgTree, slideIndexById, slideLabel, stateWins, svgDimensions,
 } from "./deck-runtime.js";
 import { loadPreviewFonts } from "./preview-fonts.js";
 
@@ -205,6 +205,14 @@ class Surface {
   last() { const position = this.cursor.total - 1; return this.navigate(position, this.store.pages(this.cursor.sequence[position]) - 1); }
   goto(number) { return this.navigate(number - 1); }
   setBlank(mode) { return this.apply({ blank: this.blank === mode ? "none" : mode }); }
+  /**
+   * FR-03: the slide a `slide:<id>` link names, on its first page. A hidden slide is not in the sequence the show plays (`includeHidden`
+   * puts it there), so a link to one goes nowhere; an unknown id goes nowhere too. Returns whether the show moved.
+   */
+  gotoSlideId(id) {
+    const position = this.cursor.sequence.indexOf(slideIndexById(this.store.document, id));
+    return position < 0 ? false : this.navigate(position);
+  }
 
   setDigits(value) {
     this.digits = value;
@@ -220,8 +228,9 @@ class Surface {
     if (target?.closest?.("input, textarea, select")) return;
     const action = keyAction(event, this.digits);
     if (!action) return;
-    // A focused button handles its own Enter and Space.
+    // A focused button handles its own Enter and Space, and a focused link its own Enter (a slide link then jumps, in the click handler).
     if (action.type === "next" && (event.key === "Enter" || event.key === " ") && target?.localName === "button") return;
+    if (action.type === "next" && event.key === "Enter" && linkAt(target)) return;
     event.preventDefault();
     switch (action.type) {
       case "digit": this.setDigits((this.digits + action.digit).slice(0, 4)); break;
@@ -354,6 +363,9 @@ function mountAudience({ doc, win, container, session }) {
   parts.root.addEventListener("click", (event) => {
     if (view.swiped) { view.swiped = false; return; }
     if (!view.surface || event.composedPath().includes(parts.hud)) return;
+    // FR-03: a slide link jumps to its slide; any other link is the browser's and does not move the show.
+    const hit = linkAt(event.composedPath?.()[0] ?? event.target);
+    if (hit && view.surface.blank === "none") { if (hit.slide) { event.preventDefault(); view.surface.gotoSlideId(hit.slide); } return; }
     if (view.surface.blank !== "none") { view.surface.apply({ blank: "none" }); return; }
     const box = parts.root.getBoundingClientRect();
     if (event.clientX - box.left < box.width / 3) view.surface.previous(); else view.surface.next();

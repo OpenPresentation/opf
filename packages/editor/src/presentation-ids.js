@@ -1,4 +1,9 @@
-/** Shared slide and content-payload id collection (matches @openpresentation/opf pagination). */
+/**
+ * Shared id collection for slides, content payloads and (FR-02) the list items, bullets, timeline events and table rows inside them: one
+ * document-wide namespace (matches @openpresentation/opf). Edit, move and reorder keep an id. A copy inside the document gets a new one
+ * (remapSlideTreeIds); pasting from another document keeps an id that is free and replaces one that is taken (the same call). Splitting a
+ * slide keeps every id on the part that holds the entry, and merging keeps the first slide's id (core splitSlide and mergeSlides).
+ */
 
 const MAX_COMPOSITION_DEPTH = 8;
 
@@ -22,11 +27,21 @@ export function visitContentPayloads(slide, slidePath, visit) {
   }
 }
 
+/** The entries of one payload (or slide) that can carry an id: items, bullets, timeline events, inline table rows. Dataset and chart rows are data. */
+export function payloadEntries(payload) {
+  if (!isRecord(payload)) return [];
+  const timeline = Array.isArray(payload.timeline) ? payload.timeline : isRecord(payload.timeline) && Array.isArray(payload.timeline.events) ? payload.timeline.events : [];
+  const rows = isRecord(payload.table) && Array.isArray(payload.table.rows) ? payload.table.rows : [];
+  return [payload.items, payload.bullets, timeline, rows].flatMap((list) => (Array.isArray(list) ? list : [])).filter(isRecord);
+}
+
 export function slideIds(slide) {
   const ids = typeof slide?.id === "string" ? [slide.id] : [];
   if (isRecord(slide)) {
+    for (const entry of payloadEntries(slide)) if (typeof entry.id === "string") ids.push(entry.id);
     visitContentPayloads(slide, "", (payload) => {
       if (typeof payload.id === "string") ids.push(payload.id);
+      for (const entry of payloadEntries(payload)) if (typeof entry.id === "string") ids.push(entry.id);
     });
   }
   return ids;
@@ -49,5 +64,9 @@ function remapNodeId(node, ids) {
 /** Remap slide and payload ids when inserting slides (shared document namespace). */
 export function remapSlideTreeIds(slide, ids) {
   remapNodeId(slide, ids);
-  visitContentPayloads(slide, "", (payload) => remapNodeId(payload, ids));
+  for (const entry of payloadEntries(slide)) remapNodeId(entry, ids);
+  visitContentPayloads(slide, "", (payload) => {
+    remapNodeId(payload, ids);
+    for (const entry of payloadEntries(payload)) remapNodeId(entry, ids);
+  });
 }

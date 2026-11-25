@@ -554,6 +554,8 @@ export function readShape(drawn, context) {
   if (object(link)) {
     const target = context.relationships?.get(link['r:id']);
     if (target?.targetMode === 'External' && /^(https?:\/\/|mailto:|tel:)\S+$/.test(target.target ?? '')) fields.link = target.target;
+    // FR-03: a click jump to a slide of the deck is `slide:<id>`.
+    else if (link.action === 'ppaction://hlinksldjump' && target?.slideLink) fields.link = target.slideLink;
     else drop('click action');
   }
   // What OPF does not represent.

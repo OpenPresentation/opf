@@ -2747,9 +2747,9 @@
         },
         "link": {
           "type": "string",
-          "pattern": "^(https?://|mailto:|tel:)\\S+$",
-          "description": "URL opened when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address or a 'tel:' number.",
-          "examples": ["https://acme.com/pricing"]
+          "pattern": "^(https?://|mailto:|tel:|slide:)\\S+$",
+          "description": "Link followed when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address, a 'tel:' number or 'slide:<id>', a jump to the slide of this deck with that id (ppaction://hlinksldjump). An unknown slide id is a validation error (opf/slide-link-unknown).",
+          "examples": ["https://acme.com/pricing", "slide:pricing"]
         },
         "extensions": {
           "type": "object",
@@ -3409,9 +3409,9 @@
         },
         "link": {
           "type": "string",
-          "pattern": "^(https?://|mailto:|tel:)\\S+$",
-          "description": "Shape blocks only. URL opened when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address or a 'tel:' number.",
-          "examples": ["https://acme.com/pricing"]
+          "pattern": "^(https?://|mailto:|tel:|slide:)\\S+$",
+          "description": "Shape blocks only. Link followed when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address, a 'tel:' number or 'slide:<id>', a jump to the slide of this deck with that id (ppaction://hlinksldjump). An unknown slide id is a validation error (opf/slide-link-unknown).",
+          "examples": ["https://acme.com/pricing", "slide:pricing"]
         },
         "shadow": {
           "$ref": "#/$defs/Shadow",
@@ -4045,6 +4045,12 @@
       "required": ["what"],
       "additionalProperties": false,
       "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional stable identifier for this timeline event, unique among every slide, payload, overlay, item, bullet, event and table-row id in the document (one namespace). An opaque string: readers never parse it. Use it when another system must address the timeline event across edits (a comment anchor, an `@id` patch token, a merge). Edit, move and reorder keep it; a copy inside the document gets a new one. A document without ids is valid and is addressed by index.",
+          "examples": ["ev-launch", "e-4"]
+        },
         "when": {
           "type": "string",
           "description": "Event time, date, or sequence label. Use ISO-like values when possible, but human labels are allowed for quarters, eras, and relative milestones.",
@@ -4088,6 +4094,12 @@
           "required": ["text"],
           "additionalProperties": false,
           "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Optional stable identifier for this list item, unique among every slide, payload, overlay, item, bullet, event and table-row id in the document (one namespace). An opaque string: readers never parse it. Use it when another system must address the list item across edits (a comment anchor, an `@id` patch token, a merge). Edit, move and reorder keep it; a copy inside the document gets a new one. A document without ids is valid and is addressed by index.",
+              "examples": ["it-7f3k", "pilot"]
+            },
             "text": {
               "oneOf": [
                 { "type": "string" },
@@ -4163,6 +4175,12 @@
           "required": ["text"],
           "additionalProperties": false,
           "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Optional stable identifier for this bullet, unique among every slide, payload, overlay, item, bullet, event and table-row id in the document (one namespace). An opaque string: readers never parse it. Use it when another system must address the bullet across edits (a comment anchor, an `@id` patch token, a merge). Edit, move and reorder keep it; a copy inside the document gets a new one. A document without ids is valid and is addressed by index.",
+              "examples": ["b-2m9q", "point-1"]
+            },
             "text": {
               "oneOf": [
                 { "type": "string" },
@@ -4312,9 +4330,9 @@
             },
             "link": {
               "type": "string",
-              "pattern": "^(https?://|mailto:|tel:)\\S+$",
-              "description": "URL to link the run text to: an http(s) URL, a 'mailto:' address or a 'tel:' number, without whitespace. The preview draws it as a link and PPTX export writes a native hyperlink for all three; any other scheme is not valid.",
-              "examples": ["https://acme.com", "https://acme.com/case-studies/beta", "mailto:hello@acme.com", "tel:+15551234567"]
+              "pattern": "^(https?://|mailto:|tel:|slide:)\\S+$",
+              "description": "Link to put on the run text: an http(s) URL, a 'mailto:' address or a 'tel:' number, or 'slide:<id>', a jump to the slide of this deck with that id (the same kind:id spelling as 'asset:' and 'var:'; the slide needs an 'id', which assignIds can add). The text must not contain whitespace. The preview draws it as a link, PDF export writes a link annotation (a go-to-page link for 'slide:'), and PPTX export writes a native hyperlink (a slide jump for 'slide:'); any other scheme is not valid. A link to an unknown slide id is a validation error (opf/slide-link-unknown).",
+              "examples": ["https://acme.com", "https://acme.com/case-studies/beta", "mailto:hello@acme.com", "tel:+15551234567", "slide:pricing"]
             },
             "superscript": {
               "type": "boolean",
@@ -4638,13 +4656,8 @@
         },
         "rows": {
           "type": "array",
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/$defs/TableCell"
-            }
-          },
-          "description": "Two-dimensional table row data; each row aligns by index with columns when columns are supplied.",
+          "items": { "$ref": "#/$defs/TableRow" },
+          "description": "Two-dimensional table row data; each row aligns by index with columns when columns are supplied. A row is an array of cells, or an object { \"id\", \"cells\" } when it needs an id; both forms may mix in one table. `tableRows` in the core package returns every row in one form.",
           "examples": [
             [
               [
@@ -4907,6 +4920,33 @@
         { "type": "null" }
       ],
       "description": "A cell in inline chart data."
+    },
+    "TableRow": {
+      "description": "One body row of an inline table: an array of cells, or an object that adds an optional id. Position (the cell's index in 'cells' or in the array) is its column either way.",
+      "oneOf": [
+        {
+          "type": "array",
+          "items": { "$ref": "#/$defs/TableCell" }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["cells"],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Optional stable identifier for this table row, unique among every slide, payload, overlay, item, bullet, event and table-row id in the document (one namespace). An opaque string: readers never parse it. Use it when another system must address the table row across edits (a comment anchor, an `@id` patch token, a merge). Edit, move and reorder keep it; a copy inside the document gets a new one. A document without ids is valid and is addressed by index.",
+              "examples": ["r-emea", "total"]
+            },
+            "cells": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/TableCell" },
+              "description": "The row's cells, aligned by index with 'columns' exactly like the array form."
+            }
+          }
+        }
+      ]
     },
     "TableCell": {
       "oneOf": [

@@ -110,6 +110,12 @@ function sentenceEnds(text: string): number[] {
   return ends;
 }
 /** The deck-level fields a single slide needs to validate: the references it cites and the datasets it plots. */
+// FR-03: a slide is checked on its own with the deck's references and datasets; a link to a slide may name any slide of that deck, and with no deck given the links are not judged.
+const otherSlideIds = (presentation: unknown): false | string[] => {
+  const slides = (presentation as { slides?: unknown } | null | undefined)?.slides;
+  if (!Array.isArray(slides)) return false;
+  return slides.flatMap((slide) => (slide && typeof (slide as { id?: unknown }).id === 'string' ? [(slide as { id: string }).id] : []));
+};
 const deckContext = (presentation: unknown): Record<string, unknown> => {
   const deck = isRecord(presentation) ? presentation : {};
   return {...(Array.isArray(deck.references)?{references:deck.references}:{}),...(isRecord(deck.datasets)?{datasets:deck.datasets}:{})};
@@ -176,7 +182,7 @@ function bodySizes(composed: SlideComposition, options: ComposeSlideOptions = {}
 /** Explicit, lossless authoring transform. It never changes slide count during rendering. */
 export function paginateSlide(input: unknown, options: PaginationOptions = {}): PaginationResult {
   // RR-34: a slide that cites references validates only with the deck's references list (RR-54: and its datasets).
-  assertValid({...deckContext(options.presentation),slides:[input]}, { only: ['format'] });
+  assertValid({...deckContext(options.presentation),slides:[input]}, { only: ['format'], slideLinks: otherSlideIds(options.presentation) });
   let source = clone(input) as Record<string, any>;
   const maxSlides = options.maxSlides ?? 100;
   if (!Number.isInteger(maxSlides) || maxSlides < 1 || maxSlides > 10000) throw new RangeError('maxSlides must be an integer between 1 and 10000.');
@@ -402,7 +408,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     drawnSizes.push({kinds: new Set([...selected.values()].map(portion => kindOf(portion.leaf.field))), sizes: bodySizes(drawn,composeOptions)});
     assignPageIds(slide,slides.length);
     // RR-34: a page that cites references validates only with the deck's references list (RR-54: and its datasets).
-    assertValid({...deckContext(options.presentation),slides:[slide]}, { only: ['format'] });
+    assertValid({...deckContext(options.presentation),slides:[slide]}, { only: ['format'], slideLinks: otherSlideIds(options.presentation) });
     slides.push(slide); pages.push({slideIndex:sourceIndex+slides.length-1,mappings,...(initial.furniture?{repeatedMappings:repeatedMappings(slides.length-1)}:{})});
     pageConnectors.push(overlay);
     selected = new Map();

@@ -107,6 +107,11 @@ export interface ValidateOptions {
 	template?: boolean;
 	/** Values to fill variables with before checking, keyed by variable id. */
 	values?: VariableValues;
+	/**
+	 * For a value that is one part of a deck (a single slide checked on its own, with the rest of the deck elsewhere): `false` skips
+	 * `opf/slide-link-unknown`, a list adds the ids of the deck's other slides that a `slide:<id>` link may name. Leave it out for a whole deck.
+	 */
+	slideLinks?: false | readonly string[];
 }
 
 export interface ValidationChecks {

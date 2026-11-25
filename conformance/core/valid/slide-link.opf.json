@@ -1,0 +1,14 @@
+{
+  "slides": [
+    {
+      "id": "agenda",
+      "title": "Agenda",
+      "blocks": [
+        { "text": [{ "text": "Pricing", "link": "slide:pricing" }, { "text": " and the " }, { "text": "appendix", "link": "slide:appendix" }] },
+        { "shape": "roundRect", "text": "Back to start", "link": "slide:agenda" }
+      ]
+    },
+    { "id": "pricing", "title": "Pricing", "table": { "columns": ["Plan", "More"], "rows": [["Pro", [{ "text": "Agenda", "link": "slide:agenda" }]]] } },
+    { "id": "appendix", "title": "Appendix", "hidden": true }
+  ]
+}
