@@ -314,7 +314,9 @@ export function createDesignMenu(container, options = {}) {
     } catch { /* an unreadable language: the Latin schemes */ }
     let name = script.bcp47;
     try {
-      name = new Intl.DisplayNames([doc.documentElement.lang || "en"], { type: "language" }).of(script.bcp47) ?? name;
+      // "standard" names the language and its region the same way in every browser ("English (United States)"); the default, "dialect",
+      // reads "American English" in some and not in others.
+      name = new Intl.DisplayNames([doc.documentElement.lang || "en"], { type: "language", languageDisplay: "standard" }).of(script.bcp47) ?? name;
     } catch { /* no display names: the tag */ }
     language = { name, bcp47: script.bcp47 };
     const primary = script.bcp47.split("-")[0].toLowerCase();
