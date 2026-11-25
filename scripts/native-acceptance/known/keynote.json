@@ -1,0 +1,3756 @@
+{
+  "schemaVersion": 1,
+  "target": "keynote",
+  "records": [
+    {
+      "id": "kn-slide-number-beside-footer-text",
+      "title": "Slide number beside footer text",
+      "feature": "furniture",
+      "sees": "The whole footer shows only the number (\"Page 1 of 4\" reads \"1\")",
+      "workaround": "Export with `--slide-numbers static`",
+      "workaroundTried": true,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "data-story-academy",
+          "slide": 2
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 3
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 4
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 5
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 6
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 7
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 8
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 9
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 10
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 11
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 12
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 13
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 14
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 15
+        },
+        {
+          "deck": "coverage-furniture",
+          "slide": 1
+        },
+        {
+          "deck": "coverage-furniture",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-furniture",
+          "slide": 5
+        },
+        {
+          "deck": "coverage-furniture",
+          "slide": 6
+        },
+        {
+          "deck": "coverage-furniture",
+          "slide": 7
+        },
+        {
+          "deck": "footers",
+          "slide": 1
+        },
+        {
+          "deck": "footers",
+          "slide": 2
+        },
+        {
+          "deck": "footers",
+          "slide": 4
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 2
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 3
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 4
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 5
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 6
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 7
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 8
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 9
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 10
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 11
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 12
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 13
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 14
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 15
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 16
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 17
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 18
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 19
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 20
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 21
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 22
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 23
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 24
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 25
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 26
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 27
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 28
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 29
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 30
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 31
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 32
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 33
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 34
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 35
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 36
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 37
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 38
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 2
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 3
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 4
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 5
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 6
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 7
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 8
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 9
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 10
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 11
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 12
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 13
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 14
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 15
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 16
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 17
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 18
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 19
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 20
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 21
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 22
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 23
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 24
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 25
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 26
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 27
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 28
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 29
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 30
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 31
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 32
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 33
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 34
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 35
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 36
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 37
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 38
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1298",
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-rtl-table",
+      "title": "Right-to-left table",
+      "feature": "tables",
+      "sees": "Only the first column, clipped at the left edge (PowerPoint draws all three)",
+      "workaround": "None measured that keeps PowerPoint's right-to-left table; an opt-in route is undecided",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "lang-rtl",
+          "slide": 1
+        },
+        {
+          "deck": "lang-rtl",
+          "slide": 2
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1298",
+      "finding": "LG-02",
+      "skill": true,
+      "status": "open",
+      "note": "Keynote 16.0 with OPF 0.36.0 (finding LG-02) draws all three columns, but anchors the table by its right edge at the frame's left edge, so it is drawn left of its frame, over the block beside it (lang-rtl 1 and 2). Whether Keynote or OPF changed is pending the 0.35.1 control run. The row text describes Keynote 15.1.1."
+    },
+    {
+      "id": "kn-extended-chart",
+      "title": "Extended chart (histogram, Pareto, waterfall, box and whisker, funnel, treemap)",
+      "feature": "charts",
+      "sees": "A picture of OPF's preview in the chart's frame, not a live chart",
+      "workaround": "None; the live chart stays for PowerPoint",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 17
+        },
+        {
+          "deck": "chart-type-sampler",
+          "slide": 1
+        },
+        {
+          "deck": "chart-type-sampler",
+          "slide": 2
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-negative-bar-labels",
+      "title": "Bar chart with negative values",
+      "feature": "charts",
+      "sees": "Category labels clipped at the frame's left edge (measured on 0.34.0; PowerPoint draws them whole)",
+      "workaround": "Fixed after 0.35.1: the export now writes the plot area as the plot itself, which keeps the labels inside the frame. Not yet checked in Keynote",
+      "workaroundTried": true,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "m-negative-bars",
+          "slide": 1
+        },
+        {
+          "deck": "m-negative-bars",
+          "slide": 2
+        },
+        {
+          "deck": "m-negative-bars",
+          "slide": 3
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.35.1"
+      },
+      "issue": "OpenPresentation/opf#1278",
+      "skill": true,
+      "status": "retired",
+      "note": "No longer shows with OPF 0.36.0 in Keynote 16.0 (m-negative-bars 1 to 6, coverage-charts 15: names whole). The places listed are the slides where the 0.35.1 export still cut the names in Keynote 16.0. All-positive bars with a manual outer plot area still clip: kn-outer-plot-area-bar-labels (MX-02)."
+    },
+    {
+      "id": "kn-sketch-outline",
+      "title": "Sketch outline (`stroke.sketch`: curved, freehand, scribble)",
+      "feature": "shapes",
+      "sees": "A plain outline (PowerPoint draws it)",
+      "workaround": "None measured",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "shapes",
+          "slide": 4
+        },
+        {
+          "deck": "coverage-shape-styles",
+          "slide": 5
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-compound-line",
+      "title": "Compound line (double, thick-thin, thin-thick, triple)",
+      "feature": "shapes",
+      "sees": "One single line (PowerPoint draws it)",
+      "workaround": "None measured",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "shapes",
+          "slide": 4
+        },
+        {
+          "deck": "coverage-shape-styles",
+          "slide": 3
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-background-transparency",
+      "title": "Solid background color with transparency (85% in the test)",
+      "feature": "pictures",
+      "sees": "Keynote keeps the 85% alpha (its exported image has it). What shows through in Keynote's window and in Play has not been observed",
+      "workaround": "Not yet observed",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-backgrounds",
+          "slide": 5
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1418",
+      "skill": true,
+      "status": "open",
+      "note": "Keynote 16.0 with OPF 0.36.0: the exported picture composited over white matches the preview (coverage-backgrounds 5); the document window and Play were not run. Keynote 15.4 showed the background over black (#1416 item 3)."
+    },
+    {
+      "id": "kn-tiled-background",
+      "title": "Tiled picture background",
+      "feature": "pictures",
+      "sees": "One tile stretched over the frame, exactly twice the preview's tile (PowerPoint draws the 2 by 2 tiles as the preview does)",
+      "workaround": "None measured",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "coverage-backgrounds",
+          "slide": 11
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1416",
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-radar-lines-only",
+      "title": "Radar chart with lines only",
+      "feature": "charts",
+      "sees": "Drawn filled, and the axis labels can collide and clip at the right edge. Each series also carries an area fill beside its line, and Keynote fills the marker radar as well, so that fill is the likely cause; cause not confirmed",
+      "workaround": "Not tested: variants with the area fill set to no fill look the same in PowerPoint and have not been opened in Keynote",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 5
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1416",
+      "skill": true,
+      "status": "open",
+      "note": "In Keynote 15.4 a series area set to no fill (a:noFill) drew the radar unfilled (#1416 item 1); OPF 0.36.0 does not write it, and Keynote 16.0 still fills the radar (coverage-charts 5)."
+    },
+    {
+      "id": "kn-area-gap",
+      "title": "Area chart with a gap in the data",
+      "feature": "charts",
+      "sees": "The gap is bridged by the area (PowerPoint shows the gap)",
+      "workaround": "None measured",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 13
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-secondary-value-axis",
+      "title": "Secondary value axis",
+      "feature": "charts",
+      "sees": "Only its 0% and 40% labels, and the legend overlaps them (PowerPoint shows 0% to 40% in steps of 10%); cause not confirmed",
+      "workaround": "Not tested: variants without the major unit and with the General number format have not been opened in Keynote",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 14
+        },
+        {
+          "deck": "explicit-chart-reference-lines",
+          "slide": 3
+        },
+        {
+          "deck": "singleton-combo-reference-lines",
+          "slide": 1
+        },
+        {
+          "deck": "chart-type-sampler",
+          "slide": 1
+        },
+        {
+          "deck": "explicit-chart-reference-lines",
+          "slide": 2
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1416",
+      "finding": "QC-02",
+      "skill": true,
+      "status": "open",
+      "note": "Finding QC-02 (Keynote 16.0, OPF 0.36.0) narrows the cause: Keynote rewrites a value-axis step that does not divide the range (46/20 becomes 23, 250/100 becomes 83.3) and a percent axis keeps only 0% and its maximum; even steps are kept. It shows on any value axis with such a step, not only a secondary one. In Keynote 15.4, leaving out c:majorUnit restored the labels (#1416 item 2); not re-run on 16.0."
+    },
+    {
+      "id": "kn-reference-line-label",
+      "title": "Reference line",
+      "feature": "charts",
+      "sees": "The line is drawn at the right value; its label is not (the legend names it). On one bar chart the label collided with a bar value, because Keynote lays the bars out on the tick marks",
+      "workaround": "Name the line; do not rely on the label",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 14
+        },
+        {
+          "deck": "coverage-charts",
+          "slide": 16
+        },
+        {
+          "deck": "explicit-chart-reference-lines",
+          "slide": 1
+        },
+        {
+          "deck": "explicit-chart-reference-lines",
+          "slide": 2
+        },
+        {
+          "deck": "explicit-chart-reference-lines",
+          "slide": 3
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 1
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 2
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 3
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 4
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 5
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 6
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 7
+        },
+        {
+          "deck": "m-charts",
+          "slide": 2
+        },
+        {
+          "deck": "m-charts",
+          "slide": 5
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1416",
+      "skill": true,
+      "status": "open",
+      "note": "Keynote 16.0 with OPF 0.36.0: the label is still dropped; the collision with a bar value is gone on coverage-charts 16, inferred only because the highlight form (MX-03) moves the bars."
+    },
+    {
+      "id": "kn-direct-line-labels",
+      "title": "Direct line labels",
+      "feature": "charts",
+      "sees": "Dropped",
+      "workaround": "None measured",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 4
+        },
+        {
+          "deck": "coverage-charts",
+          "slide": 10
+        },
+        {
+          "deck": "m-charts",
+          "slide": 4
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1416",
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-stacked-lines",
+      "title": "Stacked lines",
+      "feature": "charts",
+      "sees": "Drawn unstacked (values 18 to 55 where the preview stacks to 122)",
+      "workaround": "None measured",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 4
+        },
+        {
+          "deck": "m-charts",
+          "slide": 4
+        }
+      ],
+      "warning": "Stacked Line charts aren't supported and were converted to regular Line chart type.",
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": true,
+      "status": "open",
+      "note": "Keynote 16.0 names the conversion in its Warnings window (coverage-charts, slide 4)."
+    },
+    {
+      "id": "kn-elbow-connector",
+      "title": "Elbow connector",
+      "feature": "shapes",
+      "sees": "Keynote reroutes around the target box; PowerPoint draws the route as the preview does, through the box to its top edge",
+      "workaround": "None measured",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "shape-overlays",
+          "slide": 4
+        },
+        {
+          "deck": "shape-overlays",
+          "slide": 5
+        },
+        {
+          "deck": "coverage-overlays",
+          "slide": 4
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1416",
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-curved-connector",
+      "title": "Curved connector",
+      "feature": "shapes",
+      "sees": "Drawn straight",
+      "workaround": "None",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "shape-overlays",
+          "slide": 3
+        },
+        {
+          "deck": "shape-overlays",
+          "slide": 4
+        },
+        {
+          "deck": "shape-overlays",
+          "slide": 5
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-quote-beside-portrait",
+      "title": "Quote beside a portrait",
+      "feature": "fonts",
+      "sees": "Ran off the right edge, because Helvetica replaces Aptos on a Mac without Office fonts and is wider (PowerPoint fits it)",
+      "workaround": "Install the deck's fonts on the Mac",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "layout-harvest",
+          "slide": 10
+        },
+        {
+          "deck": "coverage-text",
+          "slide": 5
+        },
+        {
+          "deck": "full-feature-tour",
+          "slide": 5
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 8
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 8
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-link-color",
+      "title": "Link text in a footer, or a video link label",
+      "feature": "links",
+      "sees": "Drawn in the theme's hyperlink color (blue), because Keynote ignores the hyperlink color extension; low contrast on a dark ground",
+      "workaround": "None measured",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "full-feature-tour",
+          "slide": 2
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 6
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 6
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "static",
+          "slide": 6
+        },
+        {
+          "deck": "layouts-little",
+          "slide": 6
+        },
+        {
+          "deck": "layouts-little",
+          "variant": "native",
+          "slide": 6
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 6
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 6
+        },
+        {
+          "deck": "m-links",
+          "slide": 3
+        },
+        {
+          "deck": "m-links",
+          "variant": "native",
+          "slide": 3
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1416",
+      "skill": true,
+      "status": "open",
+      "note": "Narrowed with OPF 0.36.0 (changelog row M65): a link on a whole text box now links the shape and the text keeps its color, so a footer link or video link label no longer shows it; a link inside a sentence is still drawn in the theme's hyperlink color, underlined (the places listed)."
+    },
+    {
+      "id": "kn-chart-title",
+      "title": "Chart title",
+      "feature": "charts",
+      "sees": "Centered, not left aligned",
+      "workaround": "None",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 9
+        },
+        {
+          "deck": "coverage-charts",
+          "slide": 10
+        },
+        {
+          "deck": "coverage-charts",
+          "slide": 11
+        },
+        {
+          "deck": "coverage-charts",
+          "slide": 13
+        },
+        {
+          "deck": "coverage-charts",
+          "slide": 15
+        },
+        {
+          "deck": "chart-type-sampler",
+          "slide": 3
+        },
+        {
+          "deck": "chart-point-overlays",
+          "slide": 1
+        },
+        {
+          "deck": "explicit-chart-reference-lines",
+          "slide": 1
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 1
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 2
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 3
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 4
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 5
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 6
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 7
+        },
+        {
+          "deck": "layouts-little",
+          "slide": 30
+        },
+        {
+          "deck": "layouts-little",
+          "slide": 31
+        },
+        {
+          "deck": "layouts-little",
+          "slide": 36
+        },
+        {
+          "deck": "layouts-little",
+          "variant": "native",
+          "slide": 30
+        },
+        {
+          "deck": "layouts-little",
+          "variant": "native",
+          "slide": 31
+        },
+        {
+          "deck": "layouts-little",
+          "variant": "native",
+          "slide": 36
+        },
+        {
+          "deck": "m-charts",
+          "slide": 14
+        },
+        {
+          "deck": "m-charts",
+          "slide": 15
+        },
+        {
+          "deck": "m-charts",
+          "slide": 16
+        },
+        {
+          "deck": "sweep-auto",
+          "slide": 2
+        },
+        {
+          "deck": "sweep-auto",
+          "slide": 3
+        },
+        {
+          "deck": "sweep-auto",
+          "slide": 4
+        },
+        {
+          "deck": "sweep-auto",
+          "slide": 5
+        },
+        {
+          "deck": "sweep-auto",
+          "slide": 6
+        },
+        {
+          "deck": "sweep-auto",
+          "slide": 7
+        },
+        {
+          "deck": "sweep-auto",
+          "slide": 8
+        },
+        {
+          "deck": "sweep-auto",
+          "variant": "native",
+          "slide": 2
+        },
+        {
+          "deck": "sweep-auto",
+          "variant": "native",
+          "slide": 3
+        },
+        {
+          "deck": "sweep-auto",
+          "variant": "native",
+          "slide": 4
+        },
+        {
+          "deck": "sweep-auto",
+          "variant": "native",
+          "slide": 5
+        },
+        {
+          "deck": "sweep-auto",
+          "variant": "native",
+          "slide": 6
+        },
+        {
+          "deck": "sweep-auto",
+          "variant": "native",
+          "slide": 7
+        },
+        {
+          "deck": "sweep-auto",
+          "variant": "native",
+          "slide": 8
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 1
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 2
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 3
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 8
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 9
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 1
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 2
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 3
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 8
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 9
+        },
+        {
+          "deck": "sweep-tables",
+          "slide": 1
+        },
+        {
+          "deck": "sweep-tables",
+          "slide": 2
+        },
+        {
+          "deck": "sweep-tables",
+          "slide": 8
+        },
+        {
+          "deck": "sweep-tables",
+          "variant": "native",
+          "slide": 1
+        },
+        {
+          "deck": "sweep-tables",
+          "variant": "native",
+          "slide": 2
+        },
+        {
+          "deck": "sweep-tables",
+          "variant": "native",
+          "slide": 8
+        },
+        {
+          "deck": "sweep-growth",
+          "slide": 11
+        },
+        {
+          "deck": "sweep-growth",
+          "variant": "native",
+          "slide": 11
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-vertical-text",
+      "title": "Vertical text",
+      "feature": "text",
+      "sees": "Rotated, not stacked letters",
+      "workaround": "None",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "shapes",
+          "slide": 6
+        },
+        {
+          "deck": "coverage-shape-styles",
+          "slide": 10
+        },
+        {
+          "deck": "coverage-overlays",
+          "slide": 5
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-per-point-colors",
+      "title": "Per-point bar colors, the language's digits in charts, a right-to-left chart's value axis on the right",
+      "feature": "charts",
+      "sees": "Not drawn",
+      "workaround": "None",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "data-story-academy",
+          "slide": 3
+        },
+        {
+          "deck": "data-story-academy",
+          "slide": 4
+        },
+        {
+          "deck": "coverage-images",
+          "slide": 16
+        },
+        {
+          "deck": "layout-sampler",
+          "slide": 22
+        },
+        {
+          "deck": "layout-sampler",
+          "slide": 23
+        },
+        {
+          "deck": "layout-sampler",
+          "slide": 28
+        },
+        {
+          "deck": "layout-sampler",
+          "slide": 39
+        },
+        {
+          "deck": "layout-sampler",
+          "slide": 40
+        },
+        {
+          "deck": "layout-sampler",
+          "slide": 41
+        },
+        {
+          "deck": "layout-sampler",
+          "slide": 48
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 22
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 23
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 28
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 39
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 40
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 41
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 48
+        },
+        {
+          "deck": "coverage-design",
+          "slide": 12
+        },
+        {
+          "deck": "coverage-design",
+          "slide": 15
+        },
+        {
+          "deck": "coverage-design",
+          "slide": 16
+        },
+        {
+          "deck": "coverage-design",
+          "slide": 17
+        },
+        {
+          "deck": "coverage-design",
+          "slide": 18
+        },
+        {
+          "deck": "coverage-design",
+          "slide": 19
+        },
+        {
+          "deck": "coverage-design",
+          "slide": 20
+        },
+        {
+          "deck": "coverage-design",
+          "slide": 21
+        },
+        {
+          "deck": "coverage-size-16x9",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-size-16x10",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-size-4x3",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-size-1x1",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-size-4x5",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-size-9x16",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-size-a4",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-size-letter",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-size-standard",
+          "slide": 2
+        },
+        {
+          "deck": "m-charts",
+          "slide": 6
+        },
+        {
+          "deck": "m-charts",
+          "slide": 9
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 1
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 2
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 3
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 8
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 9
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 1
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 2
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 3
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 8
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 9
+        },
+        {
+          "deck": "sweep-growth",
+          "slide": 11
+        },
+        {
+          "deck": "sweep-growth",
+          "variant": "native",
+          "slide": 11
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": true,
+      "status": "open",
+      "note": "Keynote 16.0 with OPF 0.36.0 still draws per-point bar colors in the series color; the language's digits and a right-to-left chart's value axis were not in the round's decks (not checked)."
+    },
+    {
+      "id": "kn-shape-effects",
+      "title": "Inner shadow, glow, soft edge, blur",
+      "feature": "shapes",
+      "sees": "Not drawn",
+      "workaround": "None",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "shape-effects",
+          "slide": 2
+        },
+        {
+          "deck": "shape-effects",
+          "slide": 3
+        },
+        {
+          "deck": "coverage-shape-styles",
+          "slide": 7
+        },
+        {
+          "deck": "coverage-overlays",
+          "slide": 5
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-monospace-light-faces",
+      "title": "Monospace and light faces",
+      "feature": "fonts",
+      "sees": "Replaced by Helvetica when the Mac lacks the face",
+      "workaround": "Install the fonts",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "table-and-code",
+          "slide": 2
+        },
+        {
+          "deck": "duration-timeline",
+          "slide": 1
+        },
+        {
+          "deck": "layout-sampler",
+          "slide": 26
+        },
+        {
+          "deck": "layout-sampler",
+          "slide": 47
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 26
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 47
+        },
+        {
+          "deck": "coverage-design",
+          "slide": 31
+        },
+        {
+          "deck": "coverage-design",
+          "slide": 33
+        },
+        {
+          "deck": "coverage-text",
+          "slide": 1
+        },
+        {
+          "deck": "full-feature-tour",
+          "slide": 7
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 34
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 34
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "static",
+          "slide": 34
+        },
+        {
+          "deck": "layouts-little",
+          "slide": 34
+        },
+        {
+          "deck": "layouts-little",
+          "variant": "native",
+          "slide": 34
+        },
+        {
+          "deck": "m-gallery-anchors",
+          "slide": 1
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 4
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 5
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 10
+        },
+        {
+          "deck": "sweep-records",
+          "slide": 11
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 4
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 5
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 10
+        },
+        {
+          "deck": "sweep-records",
+          "variant": "native",
+          "slide": 11
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-rotated-narrow-text",
+      "title": "Rotated narrow text (notes labels) or a callout",
+      "feature": "text",
+      "sees": "Wrapped mid-word",
+      "workaround": "None measured",
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "shape-effects",
+          "slide": 4
+        },
+        {
+          "deck": "shape-overlays",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-overlays",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-overlays",
+          "slide": 3
+        }
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-missing-fonts",
+      "title": "Fonts the Mac lacks (Aptos without Office)",
+      "feature": "fonts",
+      "sees": "Helvetica, which is wider: long titles gain a line over the content, side-by-side text touches, table headers break mid-word, bullet dots are smaller; the Warnings window names the missing fonts",
+      "workaround": "Export with `--typefaces safe` (it removes the warning; whether it removes the overlaps is not yet measured), or install the fonts on the Mac. A Keynote export profile is planned (OpenPresentation/opf#1298)",
+      "workaroundTried": true,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [],
+      "scope": "default-theme",
+      "warning": [
+        "The font Aptos is missing. Your text might look different.",
+        "The font Aptos Display is missing. Your text might look different."
+      ],
+      "firstSeen": {
+        "application": "15.1.1",
+        "opf": "0.34.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1298",
+      "skill": true,
+      "status": "open",
+      "note": "Aptos and Aptos Display are the default theme's fonts; on a Mac without Office Keynote draws Latin text in Helvetica and Helvetica Bold. Findings LY-01, LY-02, LG-01, SW-01, MX-07, MX-08, RT-06 and QT-01 are its effects (59 of the round's 100 wrong slides). A font the deck chose itself is named the same way (Roboto, Roboto Mono, Open Sans, Noto Naskh Arabic in the round). --typefaces safe removed the banner and the lines in the round's font test. The first round (Keynote 15.1.1, OPF 0.34.0) recorded the effect in the quote row."
+    },
+    {
+      "id": "kn-hidden-slide-numbering",
+      "title": "Hidden slides and a live slide number",
+      "feature": "furniture",
+      "sees": "The number skips each hidden slide",
+      "workaround": "Export with `--slide-numbers static`",
+      "workaroundTried": false,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "compliance-readiness-review",
+          "slide": 10
+        },
+        {
+          "deck": "full-feature-tour",
+          "slide": 11
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QC-04",
+      "skill": true,
+      "status": "open",
+      "note": "PowerPoint counts hidden slides (inferred from its documented behavior). full-feature-tour 11 reads 10 and is graded small there."
+    },
+    {
+      "id": "kn-footer-behind-picture",
+      "title": "Footer over a full-bleed picture",
+      "feature": "furniture",
+      "sees": "The footer text is drawn behind the picture",
+      "workaround": "Keep the footer off full-bleed pictures",
+      "workaroundTried": false,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "compliance-readiness-review",
+          "slide": 8
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QC-03",
+      "skill": true,
+      "status": "open",
+      "note": "Keynote moves the footer placeholder (p:ph type=\"ftr\") to the back; a footer or slide number that is not a placeholder stays on top."
+    },
+    {
+      "id": "kn-label-category-dropped",
+      "title": "Data labels with the category name; pie labels with a separator",
+      "feature": "charts",
+      "sees": "The category is dropped (\"42\" for \"North: 42\"); a pie label loses its separator and takes two lines",
+      "workaround": "Name the category on the axis or in the legend",
+      "workaroundTried": false,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "m-charts",
+          "slide": 5
+        },
+        {
+          "deck": "m-charts",
+          "slide": 12
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.35.1"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "MX-05",
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-long-column-names",
+      "title": "Long category names on a column chart",
+      "feature": "charts",
+      "sees": "Every other name is drawn, each on one line",
+      "workaround": "Shorter names, or a bar chart",
+      "workaroundTried": false,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "m-negative-bars",
+          "slide": 5
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.35.1"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "MX-04",
+      "skill": true,
+      "status": "open"
+    },
+    {
+      "id": "kn-stacked-area-labels",
+      "title": "Labels on some points of a stacked area chart",
+      "feature": "charts",
+      "sees": "The labels between the labeled points are dropped in every series",
+      "workaround": "Label every point or none",
+      "workaroundTried": false,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 3
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QC-05",
+      "skill": true,
+      "status": "open",
+      "note": "Cause inferred: a per-point c:dLbl delete seems to turn off the series' labels; possibly also the cause of the direct line labels row."
+    },
+    {
+      "id": "kn-legend-leaves-frame",
+      "title": "Long legend entries",
+      "feature": "charts",
+      "sees": "The legend leaves the chart frame, over the block beside it, or is cut",
+      "workaround": "Shorter series names, or the legend at the bottom",
+      "workaroundTried": false,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "layouts-lots",
+          "slide": 30
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 31
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 36
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 30
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 31
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 36
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "LY-03",
+      "skill": true,
+      "status": "open",
+      "note": "The pie legend cut of MX-07 is the same family (kn-pie-legend-cut). The legend at the bottom is the round's proposal, not tried in Keynote."
+    },
+    {
+      "id": "kn-alt-text",
+      "title": "Picture alt text",
+      "feature": "pictures",
+      "sees": "Not shown: the image Description is the object name (\"OPF image 1\"), and Keynote's PowerPoint export writes that name back as the alt",
+      "workaround": "Check the alt text after a round trip through Keynote",
+      "workaroundTried": false,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [],
+      "scope": "every-deck",
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1479",
+      "finding": "RT-03",
+      "skill": true,
+      "status": "open",
+      "note": "Seen on every picture of the round (0 of 251 descriptions in pass A, 0 of 64 in the corpus). OPF's import accepts the written-back name as alt; that part is OPF's importer (#1479)."
+    },
+    {
+      "id": "kn-import-highlight-chart",
+      "title": "A deck with a one-series highlight chart cannot be imported back after Keynote (sparse cache; Keynote writes ptCount = points present)",
+      "feature": "round-trip",
+      "sees": "A deck with a one-series highlight chart cannot be imported back after Keynote (sparse cache; Keynote writes ptCount = points present)",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "opf-importer",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "m-charts",
+          "slide": 1
+        },
+        {
+          "deck": "m-charts",
+          "slide": 2
+        },
+        {
+          "deck": "m-charts",
+          "slide": 3
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1477",
+      "finding": "RT-01",
+      "importError": "invalid-chart-cache",
+      "skill": false,
+      "status": "open",
+      "note": "Importer rule is not new: #1477 reproduces it without Keynote on 0.35.1, 0.36.0 and main; a 0.35.1 deck with a gap fails too. 0.36.0 M13 newly exposes it."
+    },
+    {
+      "id": "kn-import-missing-value",
+      "title": "Any chart with a missing value (authored null) makes the deck fail to import after Keynote; same mechanism as RT-01",
+      "feature": "round-trip",
+      "sees": "Any chart with a missing value (authored null) makes the deck fail to import after Keynote; same mechanism as RT-01",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "opf-importer",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 13
+        },
+        {
+          "deck": "coverage-charts",
+          "slide": 16
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1477",
+      "finding": "QC-01",
+      "importError": "invalid-chart-cache",
+      "skill": false,
+      "status": "open",
+      "note": "See #1477: reproduced on 0.35.1, 0.36.0 and main without Keynote."
+    },
+    {
+      "id": "kn-highlight-legend-twice",
+      "title": "One-series highlight (M13): legend shows the series twice, columns half width and off their names, highlight marker gray",
+      "feature": "charts",
+      "sees": "One-series highlight (M13): legend shows the series twice, columns half width and off their names, highlight marker gray",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "m-charts",
+          "slide": 1
+        },
+        {
+          "deck": "m-charts",
+          "slide": 2
+        },
+        {
+          "deck": "m-charts",
+          "slide": 3
+        },
+        {
+          "deck": "coverage-charts",
+          "slide": 16
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "MX-03",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-flush-lines-hang",
+      "title": "Right-aligned and centered wrapped lines end a space off (hanging-space line-box shift of M16)",
+      "feature": "text",
+      "sees": "Right-aligned and centered wrapped lines end a space off (hanging-space line-box shift of M16)",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "m-text-flush",
+          "slide": 1
+        },
+        {
+          "deck": "m-text-flush",
+          "slide": 3
+        },
+        {
+          "deck": "m-text-flush",
+          "slide": 4
+        },
+        {
+          "deck": "m-text-flush",
+          "slide": 6
+        },
+        {
+          "deck": "m-text-flush",
+          "variant": "native",
+          "slide": 1
+        },
+        {
+          "deck": "m-text-flush",
+          "variant": "native",
+          "slide": 6
+        },
+        {
+          "deck": "m-text-flush-rtl",
+          "slide": 4
+        },
+        {
+          "deck": "m-text-flush-rtl",
+          "slide": 5
+        },
+        {
+          "deck": "m-text-flush-rtl",
+          "slide": 6
+        },
+        {
+          "deck": "m-text-flush-rtl",
+          "slide": 7
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "MX-01",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-native-note-at-foot",
+      "title": "Native mode: TAB-1 note placed at the layout note region foot, ~97 px below the preview (native-body.js planOne uses region.box)",
+      "feature": "text",
+      "sees": "Native mode: TAB-1 note placed at the layout note region foot, ~97 px below the preview (native-body.js planOne uses region.box)",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "opf-file",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 24
+        },
+        {
+          "deck": "sweep-tables",
+          "variant": "native",
+          "slide": 11
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.35.1"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1481",
+      "finding": "SW-02",
+      "skill": false,
+      "status": "open",
+      "note": "Cause proved (#1481): native-body.js lines 102-103 use the layout region box; y 572.1 vs 475.4 in default; not a 0.36.0 regression (inferred from 0.34.2)."
+    },
+    {
+      "id": "kn-import-colon-categories",
+      "title": "Categories containing \": \" make Keynote write a hierarchical cache; the whole deck fails to import",
+      "feature": "round-trip",
+      "sees": "Categories containing \": \" make Keynote write a hierarchical cache; the whole deck fails to import",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "opf-importer",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "layouts-lots",
+          "slide": 30
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 31
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 36
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 30
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 31
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 36
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1478",
+      "finding": "RT-02",
+      "importError": "unsupported-chart-cache",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-import-colon-categories-layouts",
+      "title": "layouts-lots round trip fails on colon categories (same as RT-02); colon as trigger inferred",
+      "feature": "round-trip",
+      "sees": "layouts-lots round trip fails on colon categories (same as RT-02); colon as trigger inferred",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "opf-importer",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "layouts-lots",
+          "slide": 30
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 31
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 36
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 30
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 31
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 36
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1478",
+      "finding": "LY-05",
+      "importError": "unsupported-chart-cache",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-import-tags-dropped",
+      "title": "Keynote drops OPF tags; the import recovers no OPF structure (no fallback to OPF shape names)",
+      "feature": "round-trip",
+      "sees": "Keynote drops OPF tags; the import recovers no OPF structure (no fallback to OPF shape names)",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "opf-importer",
+      "grade": "wrong",
+      "where": [],
+      "scope": "every-deck",
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1480",
+      "finding": "RT-04",
+      "skill": false,
+      "status": "open",
+      "note": "Correction (#1480): chart header loss Month -> Category is not caused by the tags; Keynote rewrites the embedded workbook without cell A1."
+    },
+    {
+      "id": "kn-title-overprints",
+      "title": "Long titles (one paragraph per OPF line, wrap none) wrap to a third line in Helvetica Bold and overprint the content",
+      "feature": "fonts",
+      "sees": "Long titles (one paragraph per OPF line, wrap none) wrap to a third line in Helvetica Bold and overprint the content",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "layout-sampler",
+          "slide": 1
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 1
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 1
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "native",
+          "slide": 1
+        },
+        {
+          "deck": "layouts-ordinary",
+          "variant": "static",
+          "slide": 1
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 1
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 10
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 13
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 22
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 25
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 26
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 28
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 34
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 1
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 10
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 13
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 22
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 25
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 26
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 28
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 34
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "LY-01",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-line-boxes-overrun",
+      "title": "Per-line text boxes sized for Aptos run into each other or off the slide",
+      "feature": "fonts",
+      "sees": "Per-line text boxes sized for Aptos run into each other or off the slide",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "layout-sampler",
+          "slide": 27
+        },
+        {
+          "deck": "layout-sampler",
+          "slide": 36
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 27
+        },
+        {
+          "deck": "layout-harvest",
+          "slide": 5
+        },
+        {
+          "deck": "layout-harvest",
+          "slide": 13
+        },
+        {
+          "deck": "coverage-design",
+          "slide": 18
+        },
+        {
+          "deck": "coverage-furniture",
+          "slide": 9
+        },
+        {
+          "deck": "full-feature-tour",
+          "slide": 8
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 6
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 8
+        },
+        {
+          "deck": "layouts-lots",
+          "slide": 12
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 6
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 8
+        },
+        {
+          "deck": "layouts-lots",
+          "variant": "native",
+          "slide": 12
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "LY-02",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-substitute-collides",
+      "title": "Wider substitute font: first column runs into the neighbor block on 15 language slides (default) and 7 (native)",
+      "feature": "languages",
+      "sees": "Wider substitute font: first column runs into the neighbor block on 15 language slides (default) and 7 (native)",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "columns",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-text",
+          "slide": 10
+        },
+        {
+          "deck": "coverage-text",
+          "slide": 12
+        },
+        {
+          "deck": "lang-latin-1",
+          "slide": 1
+        },
+        {
+          "deck": "lang-latin-1",
+          "slide": 7
+        },
+        {
+          "deck": "lang-latin-1",
+          "slide": 10
+        },
+        {
+          "deck": "lang-latin-1",
+          "slide": 20
+        },
+        {
+          "deck": "lang-latin-1",
+          "variant": "native",
+          "slide": 10
+        },
+        {
+          "deck": "lang-latin-1",
+          "variant": "native",
+          "slide": 11
+        },
+        {
+          "deck": "lang-latin-1",
+          "variant": "native",
+          "slide": 20
+        },
+        {
+          "deck": "lang-latin-2",
+          "slide": 17
+        },
+        {
+          "deck": "lang-latin-2",
+          "slide": 24
+        },
+        {
+          "deck": "lang-latin-2",
+          "variant": "native",
+          "slide": 17
+        },
+        {
+          "deck": "lang-latin-3",
+          "slide": 1
+        },
+        {
+          "deck": "lang-latin-3",
+          "slide": 3
+        },
+        {
+          "deck": "lang-latin-3",
+          "slide": 6
+        },
+        {
+          "deck": "lang-latin-3",
+          "variant": "native",
+          "slide": 3
+        },
+        {
+          "deck": "lang-cyrillic-greek",
+          "slide": 1
+        },
+        {
+          "deck": "lang-cyrillic-greek",
+          "slide": 2
+        },
+        {
+          "deck": "lang-cyrillic-greek",
+          "slide": 4
+        },
+        {
+          "deck": "lang-cyrillic-greek",
+          "slide": 6
+        },
+        {
+          "deck": "lang-cyrillic-greek",
+          "slide": 9
+        },
+        {
+          "deck": "lang-cyrillic-greek",
+          "variant": "native",
+          "slide": 1
+        },
+        {
+          "deck": "lang-cyrillic-greek",
+          "variant": "native",
+          "slide": 9
+        },
+        {
+          "deck": "lang-other",
+          "slide": 1
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "LG-01",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-table-header-split",
+      "title": "Grown table header words break mid-word in Helvetica Bold",
+      "feature": "fonts",
+      "sees": "Grown table header words break mid-word in Helvetica Bold",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "layout-sampler",
+          "slide": 25
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 25
+        },
+        {
+          "deck": "layout-harvest",
+          "slide": 15
+        },
+        {
+          "deck": "layout-harvest",
+          "variant": "native",
+          "slide": 15
+        },
+        {
+          "deck": "sweep-tables",
+          "slide": 7
+        },
+        {
+          "deck": "sweep-tables",
+          "slide": 12
+        },
+        {
+          "deck": "sweep-tables",
+          "slide": 13
+        },
+        {
+          "deck": "sweep-tables",
+          "variant": "native",
+          "slide": 7
+        },
+        {
+          "deck": "sweep-tables",
+          "variant": "native",
+          "slide": 12
+        },
+        {
+          "deck": "sweep-tables",
+          "variant": "native",
+          "slide": 13
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.35.1"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "SW-01",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-pie-legend-cut",
+      "title": "Pie legend entry cut at the frame (Helvetica wider)",
+      "feature": "fonts",
+      "sees": "Pie legend entry cut at the frame (Helvetica wider)",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "m-charts",
+          "slide": 5
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.35.1"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "MX-07",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-table-header-terminal",
+      "title": "Table header \"Terminal\" broken as \"Termina\"/\"l\"",
+      "feature": "fonts",
+      "sees": "Table header \"Terminal\" broken as \"Termina\"/\"l\"",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "m-text-flush",
+          "slide": 5
+        },
+        {
+          "deck": "m-text-flush",
+          "variant": "native",
+          "slide": 5
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.35.1"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "MX-08",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-titles-written-smaller",
+      "title": "Titles written back smaller; fractional sizes truncated",
+      "feature": "round-trip",
+      "sees": "Titles written back smaller; fractional sizes truncated",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "m-agenda",
+          "slide": 2
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "RT-06",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-bullet-dot-smaller",
+      "title": "Bullet dot smaller (buFont Aptos replaced by Helvetica)",
+      "feature": "lists",
+      "sees": "Bullet dot smaller (buFont Aptos replaced by Helvetica)",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-lists",
+          "slide": 3
+        },
+        {
+          "deck": "coverage-lists",
+          "slide": 4
+        },
+        {
+          "deck": "coverage-lists",
+          "slide": 13
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QT-01",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-smartart-picture-alt",
+      "title": "SmartArt arrives as a picture; description is the shape name, not the alt",
+      "feature": "diagrams",
+      "sees": "SmartArt arrives as a picture; description is the shape name, not the alt",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "layouts-ordinary",
+          "slide": 16
+        },
+        {
+          "deck": "layouts-ordinary",
+          "slide": 19
+        },
+        {
+          "deck": "layouts-little",
+          "slide": 16
+        },
+        {
+          "deck": "layouts-little",
+          "slide": 18
+        },
+        {
+          "deck": "layouts-little",
+          "slide": 19
+        },
+        {
+          "deck": "layouts-little",
+          "slide": 20
+        },
+        {
+          "deck": "smartart",
+          "slide": 1
+        },
+        {
+          "deck": "smartart",
+          "slide": 3
+        },
+        {
+          "deck": "smartart",
+          "slide": 5
+        },
+        {
+          "deck": "smartart",
+          "slide": 9
+        },
+        {
+          "deck": "smartart",
+          "slide": 13
+        },
+        {
+          "deck": "smartart",
+          "slide": 14
+        },
+        {
+          "deck": "smartart",
+          "slide": 15
+        },
+        {
+          "deck": "smartart",
+          "slide": 16
+        },
+        {
+          "deck": "smartart",
+          "slide": 17
+        },
+        {
+          "deck": "coverage-diagrams",
+          "slide": 9
+        },
+        {
+          "deck": "coverage-diagrams",
+          "slide": 12
+        },
+        {
+          "deck": "coverage-diagrams",
+          "slide": 13
+        },
+        {
+          "deck": "coverage-diagrams",
+          "slide": 15
+        },
+        {
+          "deck": "sweep-diagrams",
+          "slide": 6
+        },
+        {
+          "deck": "sweep-diagrams",
+          "slide": 7
+        },
+        {
+          "deck": "sweep-diagrams",
+          "variant": "native",
+          "slide": 6
+        },
+        {
+          "deck": "sweep-diagrams",
+          "variant": "native",
+          "slide": 7
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": "OpenPresentation/opf#1479",
+      "finding": "LY-04",
+      "skill": false,
+      "status": "open",
+      "note": "The SmartArt fallback picture itself is documented export behavior; the places tied to it by the grades are listed here because the graders tied them to LY-04."
+    },
+    {
+      "id": "kn-outer-plot-area-bar-labels",
+      "title": "All-positive bar chart with a manual outer plot area: category names cut at the left edge",
+      "feature": "charts",
+      "sees": "All-positive bar chart with a manual outer plot area: category names cut at the left edge",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "m-negative-bars",
+          "slide": 8
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.35.1"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "MX-02",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-general-one-decimal",
+      "title": "General number format shows one decimal",
+      "feature": "charts",
+      "sees": "General number format shows one decimal",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "chart-point-overlays",
+          "slide": 1
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QC-07",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-automatic-axis-scale",
+      "title": "Axes without written scaling get Keynote own scale",
+      "feature": "charts",
+      "sees": "Axes without written scaling get Keynote own scale",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "chart-type-sampler",
+          "slide": 3
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QC-08",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-scatter-label-position",
+      "title": "Scatter labels left/right drawn above the point",
+      "feature": "charts",
+      "sees": "Scatter labels left/right drawn above the point",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 9
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QC-09",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-legend-order-reversed",
+      "title": "Legend order reversed on radar and area charts",
+      "feature": "charts",
+      "sees": "Legend order reversed on radar and area charts",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 5
+        },
+        {
+          "deck": "compliance-readiness-review",
+          "slide": 7
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QC-10",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-axis-details-rewritten",
+      "title": "Chart axis details and number formats rewritten in back.pptx; no value lost",
+      "feature": "round-trip",
+      "sees": "Chart axis details and number formats rewritten in back.pptx; no value lost",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "m-charts",
+          "slide": 1
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "RT-09",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-mixed-direction-order",
+      "title": "Hebrew paragraph with Latin words and no rtl attribute: word order differs",
+      "feature": "languages",
+      "sees": "Hebrew paragraph with Latin words and no rtl attribute: word order differs",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "m-text-flush-rtl",
+          "slide": 6
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.35.1"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "MX-06",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-rtl-lost-on-export",
+      "title": "rtl lost on right-to-left paragraphs that start with Latin text or digits",
+      "feature": "round-trip",
+      "sees": "rtl lost on right-to-left paragraphs that start with Latin text or digits",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [],
+      "located": false,
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "RT-07",
+      "skill": false,
+      "status": "open",
+      "note": "Seen on 9 paragraphs: 7 in m-text-flush-rtl and 2 in lang-rtl (default); the round's data does not record their slides."
+    },
+    {
+      "id": "kn-layout-copies",
+      "title": "Keynote copies a layout per slide with a color-map override (\"Section 0\", \"Cover 0\")",
+      "feature": "furniture",
+      "sees": "Keynote copies a layout per slide with a color-map override (\"Section 0\", \"Cover 0\")",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-backgrounds",
+          "slide": 13
+        },
+        {
+          "deck": "coverage-backgrounds",
+          "slide": 14
+        },
+        {
+          "deck": "coverage-backgrounds",
+          "slide": 15
+        },
+        {
+          "deck": "coverage-backgrounds",
+          "slide": 16
+        },
+        {
+          "deck": "coverage-backgrounds",
+          "slide": 19
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "LY-06",
+      "skill": false,
+      "status": "open",
+      "note": "Keynote copies a layout for a slide with a color-map override (\"Cover 0\" is coverage-backgrounds 13 to 16, \"Cover 1\" slide 19); on 52 of 784 slides of pass A. Looks right."
+    },
+    {
+      "id": "kn-text-shape-group",
+      "title": "Text in a non-rectangular shape becomes a group of shape plus text box",
+      "feature": "round-trip",
+      "sees": "Text in a non-rectangular shape becomes a group of shape plus text box",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [],
+      "located": false,
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "RT-05",
+      "skill": false,
+      "status": "open",
+      "note": "Seen on 116 objects of pass A (98 badges, 8 diagram nodes, 2 vertical-text boxes, 8 rare presets); the round's data does not record their slides. The same as QS-01 in the corpus."
+    },
+    {
+      "id": "kn-text-shape-group-corpus",
+      "title": "Text shapes and textNoShape rectangle blocks become groups; glue lost in back.pptx",
+      "feature": "shapes",
+      "sees": "Text shapes and textNoShape rectangle blocks become groups; glue lost in back.pptx",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "shape-overlays",
+          "slide": 3
+        },
+        {
+          "deck": "shape-overlays",
+          "slide": 4
+        },
+        {
+          "deck": "coverage-overlays",
+          "slide": 4
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QS-01",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-presets-lose-preset",
+      "title": "Presets lose their preset (95 freeforms, 63 groups, 6 lines of 187)",
+      "feature": "shapes",
+      "sees": "Presets lose their preset (95 freeforms, 63 groups, 6 lines of 187)",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 1
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 3
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 4
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 5
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 6
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 7
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 8
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 9
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 10
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 11
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 12
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 13
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 14
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 15
+        },
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 16
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QS-02",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-pentagon-heptagon",
+      "title": "Pentagon and heptagon drawn too wide (hf/vf dropped)",
+      "feature": "shapes",
+      "sees": "Pentagon and heptagon drawn too wide (hf/vf dropped)",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 1
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QS-03",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-punched-tape",
+      "title": "flowChartPunchedTape wave 40% instead of 20%",
+      "feature": "shapes",
+      "sees": "flowChartPunchedTape wave 40% instead of 20%",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 13
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QS-04",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-ribbon-fold",
+      "title": "leftRightRibbon fold drawn light gray",
+      "feature": "shapes",
+      "sees": "leftRightRibbon fold drawn light gray",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-shape-presets",
+          "slide": 11
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QS-05",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-path-gradient",
+      "title": "path rect/shape gradients drawn as a circle",
+      "feature": "shapes",
+      "sees": "path rect/shape gradients drawn as a circle",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-shape-styles",
+          "slide": 1
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QS-06",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-arrowhead-size",
+      "title": "Arrowhead sizes ignored; arrow written back as triangle",
+      "feature": "shapes",
+      "sees": "Arrowhead sizes ignored; arrow written back as triangle",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-shape-styles",
+          "slide": 4
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QS-07",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-perspective-shadow",
+      "title": "Perspective shadow becomes a plain drop shadow",
+      "feature": "shapes",
+      "sees": "Perspective shadow becomes a plain drop shadow",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "shape-effects",
+          "slide": 1
+        },
+        {
+          "deck": "coverage-shape-styles",
+          "slide": 7
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "QS-08",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-korean-native-wrap",
+      "title": "Native mode: Korean wraps inside a word; Keynote writes no lang back",
+      "feature": "languages",
+      "sees": "Native mode: Korean wraps inside a word; Keynote writes no lang back",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "lang-cjk",
+          "variant": "native",
+          "slide": 4
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "LG-04",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-table-alignment-export",
+      "title": "Table right alignment not written back; numbers are text cells",
+      "feature": "round-trip",
+      "sees": "Table right alignment not written back; numbers are text cells",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "m-charts",
+          "slide": 13
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "finding": "RT-08",
+      "skill": false,
+      "status": "open"
+    },
+    {
+      "id": "kn-unsupported-media",
+      "title": "Empty picture placeholders on the default theme's layouts",
+      "feature": "warnings",
+      "sees": "The Warnings window says \"Unsupported media were removed. Slide Layout(s): Cover, Gallery, Hero, Image, Image beside\"; nothing on the slides is missing",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [],
+      "scope": "default-theme",
+      "warning": "Unsupported media were removed. Slide Layout(s): Cover, Gallery, Hero, Image, Image beside",
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.36.0"
+      },
+      "issue": null,
+      "skill": false,
+      "status": "open",
+      "note": "Proved in the round's font test: a copy without the five layouts' empty picture placeholders (p:ph type=\"pic\") opens with \"There aren't any warnings for this presentation.\" Keynote's per-slide layout copies (\"Cover 0\", \"Cover 1\", \"Cover 2\", kn-layout-copies) inherit the placeholder and are named in the same line."
+    }
+  ]
+}
