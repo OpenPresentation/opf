@@ -5499,7 +5499,7 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   // The guarded rules the slide's own composition kept and that drew something in it (a placement rule only spaces the body, and yields to its
   // growth as before): no growth step drops one (composeVariant's `held`).
   const used = KEPT_RULES.get(result), fires = new Set<GuardedRule>();
-  if (used) { try { composeLayout(input, { ...options, ...avatar, [RULES]: used.rules, ...used.seeds, [FIRED]: fires } as ComposeSlideOptions); } catch (error) { if (!(error instanceof OPFCompositionError)) throw error; fires.clear(); } }
+  if (used) { try { composeLayout(input, { ...options, ...avatar, ...used.seeds, ...{ [RULES]: used.rules, [FIRED]: fires } as Record<symbol, unknown> } as ComposeSlideOptions); } catch (error) { if (!(error instanceof OPFCompositionError)) throw error; fires.clear(); } }
   for (const rule of [...fires]) if (PLACEMENT_RULES.has(rule)) fires.delete(rule);
   const held = fires.size ? fires : undefined, headed = runInLines(result);
   const runInIntact = (grown: SlideComposition) => { const now = runInLines(grown); return [...headed].every(([path, lines]) => (now.get(path) ?? lines) <= lines); };
