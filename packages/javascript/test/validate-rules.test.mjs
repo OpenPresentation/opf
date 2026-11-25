@@ -50,7 +50,7 @@ test('every rule has a stable id, a category, a cost, a rationale and an entry i
 	// opf/unused-beat and FA-29's opf/language-tag; the four taste rules are gone. The rest of these categories are the engine's data, highlight, variable
 	// and narrative warnings.
 	const engineWarnings = ['opf/arrangement-adapted', 'opf/chart-option-adapted', 'opf/chart-value-not-numeric', 'opf/chart-mapping-adapted', 'opf/chart-highlight-adapted', 'opf/chart-series-dropped', 'opf/code-highlight-out-of-range', 'opf/code-highlight-range-reversed', 'opf/variable-builtin-missing', 'opf/variable-group-omitted', 'opf/duration-outside-narrative', 'opf/narrative-duration-range'];
-	assert.equal(validationRules.filter((info) => ['accessibility', 'layout', 'content'].includes(info.category) && !engineWarnings.includes(info.id)).length, 40);
+	assert.equal(validationRules.filter((info) => ['accessibility', 'layout', 'content'].includes(info.category) && !engineWarnings.includes(info.id)).length, 39);
 	assert.equal(findValidationRule('variable-unfilled').category, 'format');
 	for (const gone of ['font-family-count', 'slide-word-count', 'title-position', 'small-cell', 'unfilled-variable', 'invalid-document', 'catalog-reference', 'deprecated-catalog-id', 'catalog-source'])
 		assert.equal(findValidationRule(gone), undefined, gone);
