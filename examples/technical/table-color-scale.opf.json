@@ -5,12 +5,54 @@
   "datasets": {
     "retention": {
       "title": "Cohort retention",
-      "columns": ["Cohort", { "name": "Month 1", "format": "0%" }, { "name": "Month 3", "format": "0%" }, { "name": "Month 6", "format": "0%" }, { "name": "Month 12", "format": "0%" }],
+      "columns": [
+        "Cohort",
+        {
+          "name": "Month 1",
+          "format": "0%"
+        },
+        {
+          "name": "Month 3",
+          "format": "0%"
+        },
+        {
+          "name": "Month 6",
+          "format": "0%"
+        },
+        {
+          "name": "Month 12",
+          "format": "0%"
+        }
+      ],
       "rows": [
-        ["Jan", 0.92, 0.81, 0.7, 0.58],
-        ["Feb", 0.9, 0.78, 0.66, 0.52],
-        ["Mar", 0.94, 0.84, 0.74, 0.63],
-        ["Apr", 0.89, 0.76, 0.61, 0.47]
+        [
+          "Jan",
+          0.92,
+          0.81,
+          0.7,
+          0.58
+        ],
+        [
+          "Feb",
+          0.9,
+          0.78,
+          0.66,
+          0.52
+        ],
+        [
+          "Mar",
+          0.94,
+          0.84,
+          0.74,
+          0.63
+        ],
+        [
+          "Apr",
+          0.89,
+          0.76,
+          0.61,
+          0.47
+        ]
       ]
     }
   },
@@ -18,50 +60,377 @@
     {
       "title": "Win rate by region and quarter",
       "table": {
-        "columns": ["Region", { "name": "Q1", "format": "0%" }, { "name": "Q2", "format": "0%" }, { "name": "Q3", "format": "0%" }],
-        "rows": [
-          ["EMEA", 0.22, 0.25, 0.31],
-          ["Americas", 0.28, 0.27, 0.24],
-          ["APAC", 0.18, 0.21, 0.26]
+        "columns": [
+          "Region",
+          {
+            "name": "Q1",
+            "format": "0%"
+          },
+          {
+            "name": "Q2",
+            "format": "0%"
+          },
+          {
+            "name": "Q3",
+            "format": "0%"
+          }
         ],
-        "colorScale": { "columns": ["Q1", "Q2", "Q3"], "min": 0, "max": 0.4 }
+        "rows": [
+          [
+            "EMEA",
+            0.22,
+            0.25,
+            0.31
+          ],
+          [
+            "Americas",
+            0.28,
+            0.27,
+            0.24
+          ],
+          [
+            "APAC",
+            0.18,
+            0.21,
+            0.26
+          ]
+        ],
+        "colorScale": {
+          "columns": [
+            "Q1",
+            "Q2",
+            "Q3"
+          ],
+          "min": 0,
+          "max": 0.4
+        }
       }
     },
     {
       "title": "Year on year",
       "table": {
-        "columns": ["Product", { "name": "YoY %", "format": "+0%;-0%;0%" }],
-        "rows": [
-          ["Core", 0.12],
-          ["Add-ons", -0.08],
-          ["Services", 0.03],
-          ["Support", -0.01]
+        "columns": [
+          "Product",
+          {
+            "name": "YoY %",
+            "format": "+0%;-0%;0%"
+          }
         ],
-        "colorScale": { "columns": ["YoY %"], "from": "accent2", "mid": "surface", "to": "accent1", "center": 0 }
+        "rows": [
+          [
+            "Core",
+            0.12
+          ],
+          [
+            "Add-ons",
+            -0.08
+          ],
+          [
+            "Services",
+            0.03
+          ],
+          [
+            "Support",
+            -0.01
+          ]
+        ],
+        "colorScale": {
+          "columns": [
+            "YoY %"
+          ],
+          "from": "accent2",
+          "mid": "surface",
+          "to": "accent1",
+          "center": 0
+        }
       }
     },
     {
       "title": "Retention by cohort",
       "table": {
         "dataset": "retention",
-        "fields": ["Cohort", "Month 1", "Month 3", "Month 6", "Month 12"],
-        "colorScale": { "columns": ["Month 1", "Month 3", "Month 6", "Month 12"], "min": 0.4, "max": 1 }
+        "fields": [
+          "Cohort",
+          "Month 1",
+          "Month 3",
+          "Month 6",
+          "Month 12"
+        ],
+        "colorScale": {
+          "columns": [
+            "Month 1",
+            "Month 3",
+            "Month 6",
+            "Month 12"
+          ],
+          "min": 0.4,
+          "max": 1
+        }
       }
     },
     {
       "title": "Scorecard with a highlighted row",
       "table": {
-        "columns": ["Team", "Speed", "Quality", "Cost", "Reach", "Support", "Growth"],
-        "rows": [
-          ["North", 72, 88, 64, 91, 77, 69],
-          ["South", 65, 74, 81, 58, 83, 72],
-          ["East", 90, 79, 70, 84, 66, 88],
-          ["West", 58, 92, 75, 63, 71, 60],
-          ["Central", 83, 67, 89, 76, 94, 81],
-          ["Remote", 76, 85, 59, 70, 62, 95]
+        "columns": [
+          "Team",
+          "Speed",
+          "Quality",
+          "Cost",
+          "Reach",
+          "Support",
+          "Growth"
         ],
-        "highlight": { "rows": ["East"] },
-        "colorScale": { "columns": ["Speed", "Quality", "Cost", "Reach", "Support", "Growth"] }
+        "rows": [
+          [
+            "North",
+            72,
+            88,
+            64,
+            91,
+            77,
+            69
+          ],
+          [
+            "South",
+            65,
+            74,
+            81,
+            58,
+            83,
+            72
+          ],
+          [
+            "East",
+            90,
+            79,
+            70,
+            84,
+            66,
+            88
+          ],
+          [
+            "West",
+            58,
+            92,
+            75,
+            63,
+            71,
+            60
+          ],
+          [
+            "Central",
+            83,
+            67,
+            89,
+            76,
+            94,
+            81
+          ],
+          [
+            "Remote",
+            76,
+            85,
+            59,
+            70,
+            62,
+            95
+          ]
+        ],
+        "highlight": {
+          "rows": [
+            "East"
+          ]
+        },
+        "colorScale": {
+          "columns": [
+            "Speed",
+            "Quality",
+            "Cost",
+            "Reach",
+            "Support",
+            "Growth"
+          ]
+        }
+      }
+    },
+    {
+      "title": "Scheme colors: accent3, accent4, accent5",
+      "table": {
+        "columns": [
+          "Week",
+          "Change"
+        ],
+        "rows": [
+          [
+            "W1",
+            -6
+          ],
+          [
+            "W2",
+            0
+          ],
+          [
+            "W3",
+            3
+          ],
+          [
+            "W4",
+            6
+          ]
+        ],
+        "colorScale": {
+          "columns": [
+            "Change"
+          ],
+          "from": "accent3",
+          "mid": "accent4",
+          "to": "accent5",
+          "center": 0
+        }
+      }
+    },
+    {
+      "title": "Scheme colors: accent6, accent, primary",
+      "table": {
+        "columns": [
+          "Week",
+          "Change"
+        ],
+        "rows": [
+          [
+            "W1",
+            -6
+          ],
+          [
+            "W2",
+            0
+          ],
+          [
+            "W3",
+            3
+          ],
+          [
+            "W4",
+            6
+          ]
+        ],
+        "colorScale": {
+          "columns": [
+            "Change"
+          ],
+          "from": "accent6",
+          "mid": "accent",
+          "to": "primary",
+          "center": 0
+        }
+      }
+    },
+    {
+      "title": "Scheme colors: secondary, background, surfaceAlt",
+      "table": {
+        "columns": [
+          "Week",
+          "Change"
+        ],
+        "rows": [
+          [
+            "W1",
+            -6
+          ],
+          [
+            "W2",
+            0
+          ],
+          [
+            "W3",
+            3
+          ],
+          [
+            "W4",
+            6
+          ]
+        ],
+        "colorScale": {
+          "columns": [
+            "Change"
+          ],
+          "from": "secondary",
+          "mid": "background",
+          "to": "surfaceAlt",
+          "center": 0
+        }
+      }
+    },
+    {
+      "title": "Scheme colors: dark1, dark2, light1",
+      "table": {
+        "columns": [
+          "Week",
+          "Change"
+        ],
+        "rows": [
+          [
+            "W1",
+            -6
+          ],
+          [
+            "W2",
+            0
+          ],
+          [
+            "W3",
+            3
+          ],
+          [
+            "W4",
+            6
+          ]
+        ],
+        "colorScale": {
+          "columns": [
+            "Change"
+          ],
+          "from": "dark1",
+          "mid": "dark2",
+          "to": "light1",
+          "center": 0
+        }
+      }
+    },
+    {
+      "title": "Scheme colors: light2, text, textSecondary",
+      "table": {
+        "columns": [
+          "Week",
+          "Change"
+        ],
+        "rows": [
+          [
+            "W1",
+            -6
+          ],
+          [
+            "W2",
+            0
+          ],
+          [
+            "W3",
+            3
+          ],
+          [
+            "W4",
+            6
+          ]
+        ],
+        "colorScale": {
+          "columns": [
+            "Change"
+          ],
+          "from": "light2",
+          "mid": "text",
+          "to": "textSecondary",
+          "center": 0
+        }
       }
     }
   ]
