@@ -84,4 +84,46 @@ let cases = 0;
     cases++;
   }
 }
+
+// Right to left: the whitespace that hangs at a soft wrap is on the left of the line. The preview draws the line's glyphs without it, where
+// core aligned them (a right-aligned line on the edge, also when its space did not fit in the box), and names the glyphs' anchor.
+{
+  const hebrew = 'פסקה של טקסט גוף שהיא ארוכה מספיק כדי לגלוש לשורה שנייה ושלישית בתוך תיבת הטקסט שלה, כך שכל שורה עוטפת מסתיימת ברווח.';
+  const rtlDeck = {language: 'he', design: {fontScheme: 'roboto'}, slides: [
+    {title: 'ימין', blocks: [{text: hebrew}]},
+    {title: 'מרכז', design: {contentAlignment: 'center'}, blocks: [{text: hebrew}]},
+    {title: 'שמאל', design: {contentAlignment: 'end'}, blocks: [{text: hebrew}]},
+  ]};
+  await fonts.ensure(rtlDeck);
+  const resolved = resolvePresentation(rtlDeck, {fonts});
+  for (const [slide, factor] of [[0, 1], [1, .5], [2, 0]]) {
+    const path = `slides.${slide}.blocks.0.text`, item = resolved.slides[slide].geometry.items.find(entry => entry.path === path), placed = item.text.placement.lines;
+    assert.ok(placed.slice(0, -1).every(line => line.hang > 0), 'every wrapped line hangs its space');
+    if (slide === 0) assert.ok(item.text.sourceLines.some(line => line.hang && line.width < line.advance - .01), 'a line whose space did not fit (RR-17)');
+    const nodes = lineNodes(toSvg(rtlDeck, slide + 1, {fonts, trace: true}), path);
+    const anchors = nodes.map((node, index) => {
+      const place = placed[index], glyphs = place.width - (place.hang ?? 0), anchor = item.box.x + item.box.width * factor;
+      assert.ok(!/\s⁩?$/.test(node.text) || !place.hang, 'the hanging whitespace is not drawn');
+      near(Number(node.x), place.x + (place.hang ?? 0) + glyphs * factor, 'drawn at the glyphs of the placed line');
+      if (node.textLength !== undefined) near(Number(node.textLength), glyphs, 'its textLength is the glyphs\' advance');
+      return Number(node.x) - anchor;
+    });
+    for (const offset of anchors) near(offset, anchors.at(-1), `the lines' glyphs share one anchor (${factor})`, .5);
+    cases++;
+  }
+}
+
+// Right-to-left text in a left-to-right deck is set left to right: its whitespace hangs on the right, as in English.
+{
+  const mixed = {language: 'en', design: {fontScheme: 'roboto'}, slides: [{title: 'Hebrew', design: {contentAlignment: 'end'}, blocks: [{text: 'פסקה של טקסט גוף שהיא ארוכה מספיק כדי לגלוש לשורה שנייה ושלישית בתוך תיבת הטקסט שלה, כך שכל שורה עוטפת מסתיימת ברווח.'}]}]};
+  await fonts.ensure(mixed);
+  const item = resolvePresentation(mixed, {fonts}).slides[0].geometry.items.find(entry => entry.path === 'slides.0.blocks.0.text'), placed = item.text.placement.lines;
+  const [first] = lineNodes(toSvg(mixed, 1, {fonts, trace: true}), 'slides.0.blocks.0.text');
+  assert.ok(placed[0].hang > 0);
+  // The script face draws it as positioned runs from the line's start, or anchored at its end with its space.
+  near(Number(first.x), first['text-anchor'] === 'end' ? placed[0].x + placed[0].width : placed[0].x, 'drawn from the placed line');
+  near(placed[0].x + placed[0].width - placed[0].hang, item.box.x + item.box.width, 'its glyphs on the edge', .5);
+  near(placed[1].x + placed[1].width - (placed[1].hang ?? 0), item.box.x + item.box.width, 'as are the next line\'s', .5);
+  cases++;
+}
 console.log(`aligned line hang: ${cases} cases`);

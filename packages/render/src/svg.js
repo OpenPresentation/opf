@@ -2309,7 +2309,8 @@ function trimRichLineEdges(line,textMeasurement) {
   if(!changed)return null;
   let x=0;
   for(const fragment of fragments){fragment.x=x;x+=fragment.width;}
-  return {...line,fragments,width:x};
+  // The trimmed line is its glyphs: no whitespace hangs from it any more.
+  return {...line,fragments,width:x,hang:undefined,advance:undefined};
 }
 
 function richLineContext(value,fit,bound,config) {
@@ -2346,11 +2347,12 @@ function renderRichLines(value,fit,box,bound,config) {
     const {edgeTrim,line,placed,baseline}=richLineGeometry(sourceLine,lineIndex,fit,box,bound,alignment,rtl,config.options.textMeasurement);
     const lineHasTab=line.fragments.some(fragment=>fragment.kind==='tab');
     const flow=naturalFlow&&!lineHasTab;
-    // Whitespace that hangs at a soft wrap (core's RichTextLine.hang) takes no room: the line is aligned by its glyphs (core placed a
-    // measured line so already).
-    const hang=!rtl&&!edgeTrim&&line.hang>0?line.hang:0,glyphs=(hang?line.advance:line.width)-hang;
-    const offset=alignment==='right'?box.width-glyphs:alignment==='center'?(box.width-glyphs)/2:0;
-    const originX=placed?placed.x+(edgeTrim?sourceLine.width-line.width:0):box.x+offset;
+    // Whitespace that hangs at a soft wrap (core's RichTextLine.hang) takes no room: the line is aligned by its glyphs and its text,
+    // whitespace included, reaches past them on its end side (the left of a right-to-left line). Core placed a measured line so already.
+    // `span` is the advance of the text the line draws, from originX.
+    const hang=line.hang>0?line.hang:0,span=hang?line.advance:line.width,glyphs=span-hang,hangLead=rtl?hang:0;
+    const offset=(alignment==='right'?box.width-glyphs:alignment==='center'?(box.width-glyphs)/2:0)-hangLead;
+    const originX=placed?placed.x+(edgeTrim?(sourceLine.hang>0?sourceLine.advance:sourceLine.width)-line.width:0):box.x+offset;
     const firstFragment=line.fragments[0];
     const renderFragment=(fragment,asFlow,edges={})=>{
     const run=fragment.run;
@@ -2359,7 +2361,7 @@ function renderRichLines(value,fit,box,bound,config) {
     // quantization drift. Height and baseline retain the selected font size.
     // A right-to-left line places its fragments from the right edge (FF-19).
     // Estimated (natural-flow) lines keep logical order; the browser reorders them.
-    const fragmentX=rtl&&!naturalFlow?line.width-fragment.x-fragment.width:fragment.x;
+    const fragmentX=rtl&&!naturalFlow?span-fragment.x-fragment.width:fragment.x;
     const position=asFlow?{'baseline-shift':fragment.baselineShift?stableNumber(-fragment.baselineShift):undefined}:{x:stableNumber(originX+fragmentX),y:stableNumber(baseline+fragment.baselineShift)};
     // A link run is drawn as PowerPoint draws one: underlined, in the scheme hyperlink color unless the run sets its own color.
     const linked = fragment.kind !== 'marker' && typeof run.link === 'string' && LINK_URL.test(run.link);
@@ -2423,7 +2425,8 @@ function renderRichLines(value,fit,box,bound,config) {
     // A flowing right-to-left line is one isolate across its fragments.
     const fragments=line.fragments.map((fragment,index)=>renderFragment(fragment,flow,flow?{first:rtl&&!index,last:rtl&&index===line.fragments.length-1}:{}));
     if(!flow)return fragments.join('\n');
-    const x=(alignment==='right'?box.x+box.width:alignment==='center'?box.x+box.width/2:box.x)+hang*(alignment==='right'?1:alignment==='center'?.5:0);
+    const factor=alignment==='right'?1:alignment==='center'?.5:0;
+    const x=(alignment==='right'?box.x+box.width:alignment==='center'?box.x+box.width/2:box.x)+hang*(rtl?factor-1:factor);
     const first=line.fragments[0];
     return tag('text',{x:stableNumber(x),y:stableNumber(baseline),'text-anchor':alignment==='right'?'end':alignment==='center'?'middle':'start','xml:space':'preserve','font-family':fontStack(first?.style.fontFamily??config.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(first?.fontSize??fit.fontSize),'font-weight':first?.style.fontWeight??config.fontWeight??400,'font-style':first?.style.italic?'italic':undefined,[NO_POLICY_FEATURES]:true},fragments.join(''));
   });
@@ -2434,8 +2437,8 @@ function renderRichLines(value,fit,box,bound,config) {
     const start=cursor;cursor+=(fit.lines[index]??'').length;
     const alignment=lineAlignment(index);
     // The line's start: its glyphs aligned, any whitespace hanging at its wrap after them (as drawn above).
-    const glyphs=line.hang>0&&fit.directions?.[index]!=='rtl'?line.advance-line.hang:line.width;
-    const offset=alignment==='right'?box.width-glyphs:alignment==='center'?(box.width-glyphs)/2:0;
+    const glyphs=line.hang>0?line.advance-line.hang:line.width,hangLead=line.hang>0&&fit.directions?.[index]==='rtl'?line.hang:0;
+    const offset=(alignment==='right'?box.width-glyphs:alignment==='center'?(box.width-glyphs)/2:0)-hangLead;
     const placed=fit.placement?.lines[index];
     return {start,end:cursor,x:placed?.x??box.x+offset,y:placed?.y??box.y+line.y,height:placed?.height??line.height,
       ...(naturalFlow&&line.fragments.some(fragment=>fragment.kind==='tab')?{spacing:'natural-chunks-estimated-tabs'}:{})};
@@ -2481,11 +2484,14 @@ function renderTextBox(text, box, bound, config) {
     const found=sourceLine?sourceLine.start:source.indexOf(line,cursor),lineStart=found>=0?found:cursor;cursor=lineStart+line.length;
     const rtl=fit.directions?fit.directions[index]==='rtl':boxRtl(lineStart);
     // Whitespace that hangs at a soft wrap (core's TextLineSource.hang) takes no room: the glyphs are aligned and the text, its
-    // whitespace included, is drawn that much further toward the anchor. Core placed a measured line so already (placed.x, placed.width).
-    const hang=placed?placed.hang??0:!rtl&&sourceLine?.hang>0?sourceLine.hang:0;
-    const origin=placed?.x??x-((sourceLine?.advance??sourceLine?.width??0)-hang)*factor;
-    // The anchor point of the glyphs (the box edge or center), which an editor lays its input on: the drawn anchor is past it by the hang.
-    const glyphAnchor=placed?placed.x+(placed.width-hang)*factor:x;
+    // whitespace included, reaches past them on the line's end side (the right of a left-to-right line, the left of a right-to-left
+    // one). Core placed a measured line so already (placed.x, placed.width); `shift` is how far the text's anchor is from the glyphs'.
+    const hang=placed?placed.hang??0:sourceLine?.hang>0?sourceLine.hang:0,lineRtl=placed?fit.directions?.[index]==='rtl':rtl;
+    // A right-to-left line is drawn without its hanging whitespace, by its glyphs (below), as its native paragraph is anchored.
+    const hangShift=lineRtl?0:hang*factor,hangLead=lineRtl?hang:0;
+    const origin=placed?.x??x-((sourceLine?.advance??sourceLine?.width??0)-hang)*factor-hangLead;
+    // The anchor point of the glyphs (the box edge or center), which an editor lays its input on.
+    const glyphAnchor=placed?placed.x+hangLead+(placed.width-hang)*factor:x;
     const tabs=sourceLine?.segments.some(segment=>segment.kind==='tab');
     let content,family,positioned=false,trimWidth=0,sizeAdjust,shift=0;
     if(tabs) content=sourceLine.segments.map(segment=>{
@@ -2504,8 +2510,12 @@ function renderTextBox(text, box, bound, config) {
     else {
       // PowerPoint ignores whitespace at either edge of a right-aligned right-to-left line (the glyph edge stays on the box edge, native check
       // 2026-10-02), so a soft-wrapped line that keeps its trailing space, or a leading space, draws without it (RR-05).
-      const edge=rtl&&alignment==='right'?/^(\s*)([\s\S]*?)(\s*)$/.exec(line):null,trimmed=edge&&edge[2]&&(edge[1]||edge[3])?edge:null;
-      if(trimmed){const measureEdge=textWidthMeasurer(style,config.options.textMeasurement);trimWidth=measureEdge(trimmed[1],size)+measureEdge(trimmed[3],size);}
+      // A right-to-left line of any other alignment draws without the whitespace that hangs at its wrap too: the SVG sets it in an isolate
+      // in a left-to-right text, where trailing whitespace would go to the right (Unicode bidi L1), while core and PowerPoint hang it on
+      // the line's left; the glyphs are drawn where core aligned them (glyphAnchor).
+      const edge=rtl&&alignment==='right'?/^(\s*)([\s\S]*?)(\s*)$/.exec(line):rtl&&hang>0?/^()([\s\S]*?)(\s*)$/.exec(line):null,trimmed=edge&&edge[2]&&(edge[1]||edge[3])?edge:null;
+      // The whitespace that hangs at the wrap is core's measured hang (the advance its placement leaves for it).
+      if(trimmed){const measureEdge=textWidthMeasurer(style,config.options.textMeasurement);trimWidth=measureEdge(trimmed[1],size)+(placed&&hang&&trimmed[3]?hang:measureEdge(trimmed[3],size));}
       ({content,family,positioned=false,sizeAdjust,baselineShift:shift=0}=scriptLine(styledText(trimmed?trimmed[2]:line,style),style,bound,type,{rtl,placement:placed?.width>0?{x:placed.x+trimWidth,width:placed.width-trimWidth,fontSize:size}:undefined,fontSize:size}));
     }
     // Positioned script runs carry their own x and textLength (FF-19).
@@ -2521,9 +2531,9 @@ function renderTextBox(text, box, bound, config) {
     // rasterizer, so the line starts there instead of hanging from its middle or end. Estimated widths keep the anchor: the shaper's
     // width differs from core's there, and the anchor keeps the edge.
     const exactStart=!start&&factor>0&&style.tracking<0&&!rtl&&!trimWidth&&!!config.options.textMeasurement?.measure&&(placed?.width>0||sourceLine?.width>0);
-    const hung=!start&&factor>0&&hang>0;
+    const hung=!start&&hangShift!==0;
     return tag("text", {
-    x: stableNumber(tabs||exactStart?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x+hang*factor), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
+    x: stableNumber(tabs||exactStart?origin:positioned?placed.x:trimWidth?glyphAnchor:placed?placed.x+placed.width*factor:x+hangShift), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
     "text-anchor": start||exactStart?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),
     "font-size": stableNumber(adjustedFontSize(size,sizeAdjust)), "font-weight": style.fontWeight, "font-style": style.italic ? "italic" : undefined, fill: config.fill,
     // LH-32: an eyebrow (the tag, a label core sets as one) draws its capitals with core's letter spacing, as core measured it, at its
@@ -2536,11 +2546,12 @@ function renderTextBox(text, box, bound, config) {
     // opf#1322: a line that starts at core's x still says how it is aligned and where its anchor point is (text-anchor no longer does):
     // an editor lays its input over the line from them, and a reader of the SVG compares them with the native export.
     // A line whose whitespace hangs at its wrap is anchored past its glyphs' anchor point, which these name the same way (the anchor of its
-    // glyphs, where an editor's input, which hangs the whitespace too, has its own), with the hanging advance in data-opf-hang: the
-    // anchor of the text, whitespace included (where the native export anchors its paragraph), is that advance (half when centered) further.
+    // glyphs, where an editor's input, which hangs the whitespace too, has its own), and data-opf-hang says how far from it the anchor of
+    // the text, whitespace included, is (where the native export anchors its paragraph): `hang` times the alignment factor. A
+    // right-to-left line is drawn and exported by its glyphs and names nothing.
     // A traced drawing names them for every such line; an untraced one only where it names the anchor anyway (a line that starts at x).
     ...(exactStart||hung&&config.options.trace?{'data-opf-anchor':anchor,'data-opf-anchor-x':stableNumber(glyphAnchor)}:{}),
-    ...(hung&&(exactStart||config.options.trace)?{'data-opf-hang':stableNumber(hang)}:{}),
+    ...(hung&&(exactStart||config.options.trace)?{'data-opf-hang':stableNumber(hangShift)}:{}),
   }, content);
   });
   return tag("g", { ...traceAttrs(config.options, config.path),

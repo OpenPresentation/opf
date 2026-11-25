@@ -14,9 +14,10 @@ export const captionShapeName = path => `OPF caption ${path}`;
 export const footnotesRuleName = slideIndex => `OPF footnotes ${slideIndex} rule`;
 export const footnoteEntryName = (slideIndex, entry) => `OPF footnotes ${slideIndex} entry ${entry}`;
 
-// The advance of the whitespace that hangs at a soft-wrapped line's end (core's TextLineSource.hang, RichTextLine.hang), 0 for a line
-// drawn right to left or without it.
-const hangingWhitespace = (line, direction) => direction !== 'rtl' && line?.hang > 0 ? line.hang : 0;
+// Where a line's paragraph is anchored against its glyphs, by the whitespace that hangs at its soft wrap (index.js hangShift and
+// paragraphAnchor): `hang * factor` past them in a left-to-right line, by its glyphs in a right-to-left one.
+const hangShift = (line, factor, direction) => direction === 'rtl' || !(line?.hang > 0) ? 0 : line.hang * factor;
+const paragraphAnchor = (placed, factor, direction) => direction === 'rtl' && placed.hang > 0 ? placed.x + placed.hang + (placed.width - placed.hang) * factor : placed.x + placed.width * factor;
 
 const INVALID_XML = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF￾￿]/u;
 
@@ -49,8 +50,8 @@ export function addFitLines(slide, value, fit, box, context, helpers, {objectNam
       const placed = fit.placement?.lines[index];
       // PowerPoint counts the whitespace at a paragraph end in its alignment: a line whose whitespace hangs at a soft wrap is anchored that
       // much past its glyphs (core's placement does it for a placed line, RichTextLine.hang for one it did not place).
-      const area = placed ? {x: (placed.x + placed.width * factor - box.width * factor) / 96, y: placed.y / 96, w: box.width / 96, h: placed.height / 96}
-        : {x: (box.x + hangingWhitespace(line, fit.directions?.[index]) * factor) / 96, y: (box.y + line.y) / 96, w: box.width / 96, h: line.height / 96};
+      const area = placed ? {x: (paragraphAnchor(placed, factor, fit.directions?.[index]) - box.width * factor) / 96, y: placed.y / 96, w: box.width / 96, h: placed.height / 96}
+        : {x: (box.x + hangShift(line, factor, fit.directions?.[index])) / 96, y: (box.y + line.y) / 96, w: box.width / 96, h: line.height / 96};
       const name = `${objectName} line ${index}`;
       tags.set(name, {...record, line: index, count, boundary: index === count - 1 ? 'end' : 'soft', separator: '', rich: true});
       slide.addText(runs, {...helpers.textBoxOptions(area, context, fit.fontSize * .75), ...(fontFamily ? {fontFace: fontFamily} : {}), color: lineColor, align, fit: 'none', wrap: false, lineSpacingMultiple: 1, objectName: name});
@@ -61,8 +62,8 @@ export function addFitLines(slide, value, fit, box, context, helpers, {objectNam
   fit.lines.forEach((line, index) => {
     const placed = fit.placement?.lines[index], sourceLine = fit.sourceLines?.[index];
     const boundary = sourceLine ? {boundary: sourceLine.boundary, separator: text.slice(sourceLine.end, sourceLine.nextStart)} : {boundary: index === count - 1 ? 'end' : 'soft', separator: ''};
-    const area = placed ? {x: (placed.x + placed.width * factor - box.width * factor) / 96, y: (placed.baseline - fit.fontSize) / 96, w: box.width / 96, h: placed.height / 96}
-      : {x: (box.x + hangingWhitespace(sourceLine, fit.directions?.[index]) * factor) / 96, y: (box.y + index * fit.lineHeight) / 96, w: box.width / 96, h: fit.lineHeight / 96};
+    const area = placed ? {x: (paragraphAnchor(placed, factor, fit.directions?.[index]) - box.width * factor) / 96, y: (placed.baseline - fit.fontSize) / 96, w: box.width / 96, h: placed.height / 96}
+      : {x: (box.x + hangShift(sourceLine, factor, fit.directions?.[index])) / 96, y: (box.y + index * fit.lineHeight) / 96, w: box.width / 96, h: fit.lineHeight / 96};
     const name = `${objectName} line ${index}`;
     tags.set(name, {...record, line: index, count, ...boundary});
     slide.addText(line, {...helpers.textBoxOptions(area, context, fit.fontSize * .75), ...(fontFamily ? {fontFace: fontFamily} : {}), color: lineColor, align, fit: 'none', wrap: false, lineSpacingMultiple: 1,

@@ -328,6 +328,8 @@ export interface TextPlacementLine {
    * (0, 0.5 or 1). A line with `hang` (whitespace that hangs at its soft wrap) is placed by its glyphs, which take `width - hang`:
    * an end-aligned line's glyphs end on the box edge and the anchor is `hang` past it, a centered line's are centered and the anchor
    * is half of `hang` past the center. `width` then includes the whitespace, which a drawing scales with the text (an SVG textLength).
+   * In a right-to-left line the whitespace is on the left: `x` is `hang` before the glyphs, so a right-aligned line's anchor stays on the
+   * edge, a centered one's is half of `hang` before the center and a left-aligned one's text starts `hang` before the edge.
    */
   x: number; y: number; baseline: number; height: number; width: number; outline: LayoutBox | null;
   /** Physical alignment this line was placed with. Present only in a right-to-left deck, where `left` and `right` are logical start and end. */
@@ -361,13 +363,15 @@ export function placeTextLines(lines: readonly TextLineInk[], box: LayoutBox, al
     // Logical alignment: a right-to-left line starts at the right edge (RR-05).
     const lineAlignment=physicalAlignment(alignment,directions?.[lineIndex]),factor=lineAlignment==='right'?1:lineAlignment==='center'?.5:0;
     if(!line||![line.width,line.y,line.baseline,line.height].every(Number.isFinite)||line.width<0||line.height<=0||line.y<0||line.baseline<line.y) throw new RangeError('Text lines require finite coordinates, nonnegative advances and a baseline at or below their top.');
-    const ink=line.outline;
-    if(ink!==null&&(!ink||![ink.x,ink.y,ink.width,ink.height].every(Number.isFinite)||ink.width<0||ink.height<0)) throw new RangeError('Text outlines must be null or finite coordinates with nonnegative dimensions.');
-    // Whitespace that hangs at a soft wrap takes no room: the glyphs are aligned and the text, whitespace included, starts at x.
-    // A right-to-left line keeps it in its width (its whitespace is on its other side, which PowerPoint trims).
-    const hung=directions?.[lineIndex]!=='rtl'&&line.hang!==undefined&&line.advance!==undefined&&Number.isFinite(line.hang)&&Number.isFinite(line.advance)&&line.hang>0&&line.advance>=line.hang;
+    if(line.outline!==null&&(!line.outline||![line.outline.x,line.outline.y,line.outline.width,line.outline.height].every(Number.isFinite)||line.outline.width<0||line.outline.height<0)) throw new RangeError('Text outlines must be null or finite coordinates with nonnegative dimensions.');
+    // Whitespace that hangs at a soft wrap takes no room: the glyphs are aligned and the text, whitespace included, starts at x. It is
+    // at the line's end: on the right of a left-to-right line, on the left of a right-to-left one, whose text then starts `hang` before
+    // its glyphs. The outline of a hung line is its glyphs' (inkText), from their own start.
+    const hung=line.hang!==undefined&&line.advance!==undefined&&Number.isFinite(line.hang)&&Number.isFinite(line.advance)&&line.hang>0&&line.advance>=line.hang;
+    const rtl=directions?.[lineIndex]==='rtl',lead=hung&&rtl?line.hang!:0;
     const advance=hung?line.advance!:line.width;
-    let x=box.x+(box.width-(hung?advance-line.hang!:line.width))*factor;
+    const ink=line.outline&&lead?{...line.outline,x:line.outline.x+lead}:line.outline;
+    let x=box.x+(box.width-(hung?advance-line.hang!:line.width))*factor-lead;
     if(ink) {
       const low=box.x+rasterPadding-ink.x,high=box.x+box.width-rasterPadding-ink.x-ink.width;
       if(low>high+.01)overflow=true;else x=Math.max(low,Math.min(x,high));
@@ -1736,7 +1740,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         const ink:TextLineInk[]=fit.sourceLines.map((line,index)=>{
           let outline:LayoutBox|null=null;
           if(outlines)for(const segment of line.segments)if(segment.kind==='text'){
-            const bounds=measureTextOutline(part.text.slice(segment.start,segment.end),size,part.style,options.textMeasurement);
+            const bounds=measureTextOutline(inkText(part.text.slice(segment.start,segment.end),line),size,part.style,options.textMeasurement);
             if(bounds){const next={...bounds,x:bounds.x+segment.x};if(!outline)outline=next;else{const right=Math.max(outline.x+outline.width,next.x+next.width),bottom=Math.max(outline.y+outline.height,next.y+next.height);outline.x=Math.min(outline.x,next.x);outline.y=Math.min(outline.y,next.y);outline.width=right-outline.x;outline.height=bottom-outline.y;}}
           }
           return {width:line.width,...hangOf(line),y:index*fit.lineHeight,baseline:size+index*fit.lineHeight,height:fit.lineHeight,outline};
@@ -1928,6 +1932,11 @@ function hangingAdvance(pieces: readonly {kind?: string; text: string; width: nu
   }
   return 0;
 }
+/**
+ * The text of a piece of a line whose ink is measured: without the whitespace that hangs at the line's wrap. Whitespace has no ink, but a
+ * shaper that reads the text as right to left puts trailing whitespace before the glyphs, which would move the ink by its advance.
+ */
+const inkText = (text: string, line: {hang?: number}): string => line.hang !== undefined && line.hang > 0 ? text.replace(TRAILING_HANGING_SPACE, '') : text;
 /** A measured line's hanging whitespace for placeTextLines (TextLineInk), when it has any. */
 const hangOf = (line: {hang?: number; advance?: number}): {hang?: number; advance?: number} => line.hang !== undefined && line.advance !== undefined ? {hang: line.hang, advance: line.advance} : {};
 
@@ -3512,7 +3521,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     const ink:TextLineInk[]=fit.sourceLines.map((line,index)=>{
       let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity,hasInk=false;
       if(outlines)for(const segment of line.segments)if(segment.kind==='text'){
-        const outline=measureTextOutline(part.text.slice(segment.start,segment.end),size,part.style,options.textMeasurement);
+        const outline=measureTextOutline(inkText(part.text.slice(segment.start,segment.end),line),size,part.style,options.textMeasurement);
         if(outline){hasInk=true;left=Math.min(left,outline.x+segment.x);top=Math.min(top,outline.y);right=Math.max(right,outline.x+segment.x+outline.width);bottom=Math.max(bottom,outline.y+outline.height);}
       }
       return {width:line.width,...hangOf(line),y:index*fit.lineHeight,baseline:size+index*fit.lineHeight,height:fit.lineHeight,outline:hasInk?{x:left,y:top,width:right-left,height:bottom-top}:null};
@@ -3736,9 +3745,10 @@ export interface TextLineSource {
   /**
    * The whitespace at the end of a soft-wrapped line of prose (spaces, tabs, Unicode spaces) hangs at the wrap: it stays in the
    * line's text but takes no room in its alignment, as PowerPoint and a browser draw it. `hang` is its advance and `advance` the
-   * advance of the line's whole text with it, so the line's glyphs take `advance - hang`. An end-aligned line is drawn `hang`
-   * further toward its end edge, a centered one half of it (TextPlacementLine). Present only when the line ends in such whitespace
-   * and is drawn left to right; a line drawn right to left, a hard line break and the end of the text keep their whitespace.
+   * advance of the line's whole text with it, so the line's glyphs take `advance - hang`. The whitespace is at the line's end edge
+   * (the right of a left-to-right line, the left of a right-to-left one), so the glyphs are aligned and the text is drawn past them by
+   * `hang` on that side (TextPlacementLine). Present only when the line ends in such whitespace; a hard line break and the end of the
+   * text keep theirs.
    */
   hang?: number;
   advance?: number;
@@ -3845,7 +3855,7 @@ function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step
     const push=(last:number,nextStart:number,boundary:CodeLineSource['boundary'])=>{
       const measured=measureLine(start,last,true),advance=measured.width;
       // The whitespace that ends a soft-wrapped line of prose hangs at the wrap, fit or not: drawing aligns the line by its glyphs (hang).
-      const hang=prose&&boundary==='soft'&&directionAt?.(start)!=='rtl'?hangingAdvance(measured.segments.map(segment=>({kind:segment.kind,text:text.slice(segment.start,segment.end),width:segment.width})),kept=>measure(kept,fontSize)):0;
+      const hang=prose&&boundary==='soft'?hangingAdvance(measured.segments.map(segment=>({kind:segment.kind,text:text.slice(segment.start,segment.end),width:segment.width})),kept=>measure(kept,fontSize)):0;
       // RR-17: a space that did not fit hangs at the end of its line: it stays in the line's source range but not in its width.
       if(hangFrom>=0&&hangFrom<last)measured.width=measureLine(start,hangFrom).width;
       hangFrom=-1;
@@ -4173,7 +4183,7 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
       const parts=fragments(range.start,range.end),shown=hung.get(rangeIndex)??range.end,ascent=Math.max(fontSize,...parts.map(part=>part.fontSize-part.baselineShift)),descent=Math.max(fontSize*lead,...parts.map(part=>part.fontSize*lead+part.baselineShift));
       // The whitespace that ends a soft-wrapped line hangs at the wrap, fit or not: drawing aligns the line by its glyphs (TextLineSource.hang).
       const advance=parts.reduce((sum,p)=>sum+p.width,0),soft=rangeIndex<ranges.length-1&&!/[\r\n]/.test(whole[range.end]??'\n');
-      const hang=soft&&directionAt?.(range.start)!=='rtl'?hangingAdvance(parts,(kept,index)=>textWidthMeasurer(parts[index]!.style,options.textMeasurement)(kept,parts[index]!.fontSize)):0;
+      const hang=soft?hangingAdvance(parts,(kept,index)=>textWidthMeasurer(parts[index]!.style,options.textMeasurement)(kept,parts[index]!.fontSize)):0;
       const height=ascent+descent,line:RichTextLine={fragments:parts,width:shown===range.end?advance:width(range.start,shown),y,baseline:y+ascent,height,...(hang>0?{hang,advance}:{})};y+=height;return line;
     });
     if (options.uniformLineHeight) {
@@ -7086,7 +7096,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         let outline:LayoutBox|null=null;
         for(const fragment of line.fragments) {
           if(fragment.kind==='tab')continue;
-          const bounds=measureTextOutline(fragment.text,fragment.fontSize,fragment.style,options.textMeasurement);
+          const bounds=measureTextOutline(inkText(fragment.text,line),fragment.fontSize,fragment.style,options.textMeasurement);
           if(!bounds)continue;
           const next={...bounds,x:fragment.x+bounds.x,y:fragment.baselineShift+bounds.y};
           if(!outline)outline=next;else{const right=Math.max(outline.x+outline.width,next.x+next.width),bottom=Math.max(outline.y+outline.height,next.y+next.height);outline.x=Math.min(outline.x,next.x);outline.y=Math.min(outline.y,next.y);outline.width=right-outline.x;outline.height=bottom-outline.y;}
@@ -7096,7 +7106,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         let outline:LayoutBox|null=null;
         for(const segment of line.segments) {
           if(segment.kind==='tab')continue;
-          const bounds=measureTextOutline(text.slice(segment.start,segment.end),fontSize,inkStyle,options.textMeasurement);
+          const bounds=measureTextOutline(inkText(text.slice(segment.start,segment.end),line),fontSize,inkStyle,options.textMeasurement);
           if(!bounds)continue;
           const next={...bounds,x:segment.x+bounds.x};
           if(!outline)outline=next;else{const right=Math.max(outline.x+outline.width,next.x+next.width),bottom=Math.max(outline.y+outline.height,next.y+next.height);outline.x=Math.min(outline.x,next.x);outline.y=Math.min(outline.y,next.y);outline.width=right-outline.x;outline.height=bottom-outline.y;}

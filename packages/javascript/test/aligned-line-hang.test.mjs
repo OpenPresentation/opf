@@ -40,10 +40,11 @@ describe('the whitespace that hangs at a soft wrap', () => {
     assert.equal(result.lines[0], 'aaa bbb ');
     assert.equal(result.sourceLines[0].hang, 10, 'only the breaking space after it hangs');
   });
-  test('a line drawn right to left keeps its whitespace; a left-to-right line of a right-to-left deck hangs it', () => {
+  test('a line drawn right to left hangs its whitespace too, as does a left-to-right line of a right-to-left deck', () => {
     const rtl = fit('אאא בבב גגג', 85, 'rtl');
     assert.deepEqual(rtl.directions, ['rtl', 'rtl']);
-    assert.equal(rtl.sourceLines[0].hang, undefined);
+    assert.deepEqual(lines(rtl)[0], {text: 'אאא בבב ', width: 80, hang: 10, advance: 80});
+    assert.deepEqual(lines(fit('אאא בבב גגג', 75, 'rtl'))[0], {text: 'אאא בבב ', width: 70, hang: 10, advance: 80}, 'RR-17: the space did not fit');
     const ltr = fit('aaa bbb ccc', 85, 'rtl');
     assert.deepEqual(ltr.directions, ['ltr', 'ltr']);
     assert.equal(ltr.sourceLines[0].hang, 10);
@@ -90,12 +91,24 @@ describe('placeTextLines aligns a line by its glyphs', () => {
     assert.equal(line.width, 80);
     assert.equal(placeTextLines([{...hung, width: 70}], area, 'left').lines[0].width, 80, 'the text, its whitespace included, is 80 wide');
   });
-  test('a right-to-left line is placed by its width, as before', () => {
-    const [line] = placeTextLines([hung], area, 'left', 0, ['rtl']).lines;
-    assert.equal(line.alignment, 'right');
-    assert.equal(line.x, 30);
-    assert.equal(line.width, 80);
-    assert.equal(line.hang, undefined);
+  // In a right-to-left line the whitespace is on the left: the text starts `hang` before the glyphs, which are aligned.
+  for (const [logical, physical, glyphLeft] of [['left', 'right', 40], ['center', 'center', 25], ['right', 'left', 10]]) {
+    test(`a right-to-left line aligned ${physical}: the glyphs are aligned and the whitespace hangs on their left`, () => {
+      for (const line of [hung, {...hung, width: 70}]) {
+        const [placed] = placeTextLines([line], area, logical, 0, ['rtl']).lines;
+        assert.equal(placed.alignment, physical);
+        assert.equal(placed.x + placed.hang, glyphLeft, 'glyphs start after the whitespace');
+        assert.equal(placed.width, 80);
+        assert.equal(placed.hang, 10);
+      }
+    });
+  }
+  test('a right-to-left line whose space did not fit (RR-17) and whose ink is measured stays on the edge', () => {
+    // The glyphs' ink (measured without the hanging whitespace) fills the box; the whitespace is outside it on the left.
+    const full = {width: 100, hang: 10, advance: 110, y: 0, baseline: 20, height: 25, outline: {x: 0, y: -15, width: 100, height: 18}};
+    const [placed] = placeTextLines([full], area, 'left', 0, ['rtl']).lines;
+    assert.equal(placed.x + placed.width, 110, 'the text, with its whitespace on the left, ends on the right edge');
+    assert.equal(placed.outline.x, 10, 'its ink starts on the left edge');
   });
   test('a line without a hang is placed as before', () => {
     assert.deepEqual(placeTextLines([plain], area, 'right').lines[0], {x: 40, y: 25, baseline: 45, height: 25, width: 70, outline: null});
@@ -124,4 +137,21 @@ describe('composition', () => {
     const title = result.items.find(item => item.field === 'title');
     for (const line of title.text.placement.lines) assert.equal(line.x, title.text.placement.lines[0].x);
   });
+  // A shaper reads Hebrew right to left and puts trailing whitespace before the glyphs (its ink starts after it), as HarfBuzz does.
+  const rtlMeasurement = {
+    measure: textMeasurement.measure,
+    outlineBounds: (text, size) => text.trim() ? {x: (/[֐-׿]/.test(text) ? text.length - text.trimEnd().length : text.length - text.trimStart().length) * size * .5, y: -size * .8, width: text.trim().length * size * .5, height: size} : null,
+  };
+  const hebrew = 'אאאא בבבב גגגג דדדד הההה ווו זזזזז חחחח טטטט יייי כככככ לללל מממממ נננ סססס עעעע פפפפ צצצצ קקק';
+  for (const [alignment, factor] of [['start', 1], ['center', .5], ['end', 0]]) {
+    test(`a wrapped right-to-left paragraph aligned ${alignment} has every line's glyphs on one anchor, the whitespace on their left`, () => {
+      for (const width of [1280, 1250, 1220, 1190, 1160]) {
+        const result = composeSlide({title: 'כותרת', text: hebrew, design: {contentAlignment: alignment}}, {textMeasurement: rtlMeasurement, direction: 'rtl', width, height: 720});
+        const text = result.items.find(item => item.field === 'text'), placed = text.text.placement.lines;
+        assert.ok(placed.length > 1 && placed.slice(0, -1).every(line => line.hang > 0), 'every wrapped line hangs a space');
+        const anchors = placed.map(line => line.x + (line.hang ?? 0) + (line.width - (line.hang ?? 0)) * factor);
+        for (const anchor of anchors) assert.ok(Math.abs(anchor - anchors.at(-1)) < .01, `${width}: one glyph anchor (${anchors})`);
+      }
+    });
+  }
 });

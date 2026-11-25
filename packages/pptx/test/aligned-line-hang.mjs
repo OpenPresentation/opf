@@ -87,4 +87,37 @@ for (const [index, factor] of [[0, 1], [1, .5]]) {
   }
   cases++;
 }
+
+// Right to left: the whitespace that hangs at a soft wrap is on the left of the line. A right-aligned paragraph (PowerPoint does not count
+// whitespace at the edges of a right-aligned right-to-left line) has its box on the edge, also when the line's space did not fit in the box
+// (it was a space short before). A centered or left-aligned one is anchored by its glyphs too, as before: whether PowerPoint counts the
+// whitespace at the left end of such a paragraph is not measured.
+{
+  const hebrew = 'פסקה של טקסט גוף שהיא ארוכה מספיק כדי לגלוש לשורה שנייה ושלישית בתוך תיבת הטקסט שלה, כך שכל שורה עוטפת מסתיימת ברווח.';
+  const rtlDeck = {language: 'he', design: {fontScheme: 'roboto'}, slides: [
+    {title: 'ימין', blocks: [{text: hebrew}]},
+    {title: 'מרכז', design: {contentAlignment: 'center'}, blocks: [{text: hebrew}]},
+    {title: 'שמאל', design: {contentAlignment: 'end'}, blocks: [{text: hebrew}]},
+  ]};
+  await fonts.ensure(rtlDeck);
+  const rtlBound = resolvePresentation(rtlDeck, {fonts, catalogs: [gallery]}).slides;
+  const rtlBytes = new Uint8Array(await toPptx(rtlDeck, base)), rtlEntries = unzipSync(rtlBytes);
+  for (const [index, factor] of [[0, 1], [1, .5], [2, 0]]) {
+    const path = `slides.${index}.blocks.0.text`, item = rtlBound[index].geometry.items.find(entry => entry.path === path), placed = item.text.placement.lines;
+    if (!index) assert.ok(item.text.sourceLines.some(line => line.hang && line.width < line.advance - .01), 'a line whose space did not fit (RR-17)');
+    const xml = strFromU8(rtlEntries[`ppt/slides/slide${index + 1}.xml`]);
+    for (const [line, place] of placed.entries()) {
+      const shape = named(xml, `OPF text ${path} line ${line}`), box = frame(shape);
+      assert.equal(texts(shape)[0], item.text.lines[line], 'the line keeps its text');
+      // The glyphs of every line share one anchor, the whitespace hanging on their left, and the paragraph is anchored there.
+      const glyphs = place.x + (place.hang ?? 0) + (place.width - (place.hang ?? 0)) * factor;
+      near(box.x + box.width * factor, glyphs, 'the paragraph is anchored by its glyphs');
+      near(glyphs, placed.at(-1).x + placed.at(-1).width * factor, 'glyphs aligned', .5);
+      if (factor === 1) near(box.x + box.width, item.box.x + item.box.width, 'a right-aligned line box ends on the edge', .5);
+    }
+  }
+  const value = await fromPptx(rtlBytes);
+  for (const index of [0, 1, 2]) assert.equal(value.slides[index].text ?? value.slides[index].blocks?.[0]?.text, hebrew, 'reads back as authored');
+  cases++;
+}
 console.log(`aligned line hang (pptx): ${cases} cases`);
