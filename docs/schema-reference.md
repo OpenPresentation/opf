@@ -1415,7 +1415,7 @@ _No named properties._
 | `connector` | no | `string` | The kind of data source, in the host's or the author's words: a name a tool recognizes, such as 'csv', 'xlsx', 'postgres', 'bigquery' or 'rest'. Engines do not interpret it. It also says what language a dataset's 'que... |
 | `src` | no | `string` | Where the data is: an 'asset:<id>' reference, a URL, or a relative or local path. A URL carries no credentials. |
 | `license` | no | `string` | The terms the data is under: an SPDX license identifier or a short statement. It travels with the data. |
-| `refresh` | no | `string` | How often the data is meant to be taken again, as an ISO 8601 duration. No engine acts on it. A validator given a date warns when a dataset's 'retrieved' is older than this (opf/dataset-stale). |
+| `refreshEvery` | no | `string` | How often the data is meant to be taken again, as an ISO 8601 duration. No engine acts on it. A validator given a date warns when a dataset's 'retrieved' is older than this (opf/dataset-stale). |
 | `extensions` | no | `object` | Custom data passthrough, for example the connection settings a host owns; ignored by the engine but preserved across read/write round-trips. Never credentials. |
 
 
@@ -1476,12 +1476,12 @@ _No named properties._
 ### DataGenerator
 
 - Type: `object`
-- Required fields: `kind`, `name`
+- Required fields: `type`, `name`
 - Purpose: Who produced the data: a person or a model, and which. A reviewer of a generated deck can see that a table came from a model, and from which one.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `kind` | yes | `enum:human \| model` | 'human' for a person, 'model' for a language model or another generating program. |
+| `type` | yes | `enum:human \| model` | 'human' for a person, 'model' for a language model or another generating program. |
 | `name` | yes | `string` | The person, model or tool, as its owner names it. |
 
 

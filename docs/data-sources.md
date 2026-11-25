@@ -19,7 +19,7 @@ A number on a slide is only as good as what stands behind it. OPF lets a documen
       "connector": "xlsx",
       "src": "https://example.com/data/revenue.xlsx",
       "license": "CC-BY-4.0",
-      "refresh": "P1M"
+      "refreshEvery": "P1M"
     }
   },
   "datasets": {
@@ -32,7 +32,7 @@ A number on a slide is only as good as what stands behind it. OPF lets a documen
       "retrieved": "2026-11-01",
       "version": "r42",
       "sha256": "9f2c41b1d1b6e0a8a56e7c3d2f4b8a90c1e3d5f7a9b0c2d4e6f8a0b1c3d5e07a",
-      "generator": { "kind": "human", "name": "Finance team" }
+      "generator": { "type": "human", "name": "Finance team" }
     }
   },
   "slides": [
@@ -62,7 +62,7 @@ The caption names the same source the dataset records. The caption is the author
 | `connector` | The kind of place it is, in the host's or author's words: `csv`, `xlsx`, `postgres`, `bigquery`, `rest`. Engines do not interpret it. It also says what language a dataset's `query` is written in. |
 | `src` | Where it is: an `asset:<id>` reference, a URL or a path. A URL carries no credentials. |
 | `license` | The terms the data is under: an SPDX identifier (`CC-BY-4.0`) or a short statement. It travels with the data. |
-| `refresh` | How often the data is meant to be taken again, as an ISO 8601 duration (`P1D`, `P1W`, `P3M`, `PT6H`). No engine acts on it. |
+| `refreshEvery` | How often the data is meant to be taken again, as an ISO 8601 duration (`P1D`, `P1W`, `P3M`, `PT6H`). No engine acts on it. |
 | `extensions` | Settings a host owns, such as connection options. Kept, never read. |
 
 A data source never holds credentials: no password, token or key in `src` or in `extensions`. A host keeps secrets in its own store and names the connection in `connector` or `extensions`.
@@ -78,7 +78,7 @@ A dataset (an entry of `datasets`) and the inline data of a chart (`chart.data` 
 | `retrieved` | When it was taken: an ISO 8601 date or date-time. Never read from a clock by an engine. |
 | `version` | A free string the source system gives the snapshot: a revision, an etag, a commit. |
 | `sha256` | The SHA-256 of the source file's bytes as retrieved, as 64 lowercase hexadecimal digits. It answers "has the file changed since". It is not a hash of the rows (anything can hash the document), and no engine computes or checks it; `opf ingest --dataset` writes it for the file it imports. |
-| `generator` | Who produced the data: `{ "kind": "human" | "model", "name": "metricgen 2.1" }`. A reviewer of a generated deck can see that a table came from a model, and which one. |
+| `generator` | Who produced the data: `{ "type": "human" | "model", "name": "metricgen 2.1" }`. A reviewer of a generated deck can see that a table came from a model, and which one. |
 
 There is no `queryLanguage` (the `connector` says it) and no hash of a transform (a `query` holds its own text).
 
@@ -88,9 +88,9 @@ There is no `queryLanguage` (the `connector` says it) and no hash of a transform
 | --- | --- | --- |
 | `opf/datasource-unknown` | error | A string `datasource`, on a dataset or on inline chart data, names no entry of `datasources`. |
 | `opf/datasource-credentials` | warning | A data source's `src` carries a user and password (`https://user:secret@host/`), or a query parameter named like a key or a token (`?api_key=`, `?access_token=`, `?signature=`). The finding never repeats the secret. |
-| `opf/dataset-stale` | warning | Only when the caller passes a date: `retrieved` plus the data source's `refresh` is earlier than that date. |
+| `opf/dataset-stale` | warning | Only when the caller passes a date: `retrieved` plus the data source's `refreshEvery` is earlier than that date. |
 
-Core has no clock, so staleness is checked as of a date you pass: `validate(deck, { asOf: "2026-11-25" })` and `opf validate deck.opf.json --as-of 2026-11-25`. Without a date nothing is reported stale. The CLI never reads the clock for it either. `refresh` is calendar arithmetic in UTC (`P3M` after 31 August is 30 November). A dataset with no `retrieved`, or whose data source has no `refresh`, is never stale.
+Core has no clock, so staleness is checked as of a date you pass: `validate(deck, { asOf: "2026-11-25" })` and `opf validate deck.opf.json --as-of 2026-11-25`. Without a date nothing is reported stale. The CLI never reads the clock for it either. `refreshEvery` is calendar arithmetic in UTC (`P3M` after 31 August is 30 November). A dataset with no `retrieved`, or whose data source has no `refreshEvery`, is never stale.
 
 A bare string that is a path or a URL where an id belongs (`"datasource": "./revenue.csv"`) is a schema error, because a string `datasource` is only an id. Write `{ "src": "./revenue.csv" }`.
 

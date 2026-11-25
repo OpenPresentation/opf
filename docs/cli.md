@@ -211,7 +211,7 @@ For a file that will be opened in LibreOffice, `--charts picture` writes the cha
   `node_modules` and dot folders) and `-`. One input prints its report; several print `{ command, ok, files: [reports], counts }`.
   The exit status is the worst over every file. `--format github` prints `::error`, `::warning` and `::notice` annotations with the
   file, line and column. `--as-of <date>` (an ISO 8601 date or date-time; the `asOf` key of a `--config` file) is the date to check data
-  freshness as of: a dataset whose `retrieved` is older than its data source's `refresh` is an `opf/dataset-stale` warning. The CLI never
+  freshness as of: a dataset whose `retrieved` is older than its data source's `refreshEvery` is an `opf/dataset-stale` warning. The CLI never
   reads the clock for it, so without `--as-of` nothing is reported stale. See [validate](validate.md).
 - **`opf paginate`** measures the page breaks with the fonts `opf convert --paginate` draws with when `@openpresentation/opf-render`
   is installed (`layout: "measured"`); without it they are estimated (`layout: "estimated"`) and `hint` names the install command.
