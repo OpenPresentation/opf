@@ -526,9 +526,9 @@ export async function runNative(argv, deps = {}) {
   let classified;
   try {
     await step('round trip', (entry) => {
-      const pending = results().filter((result) => !result.verbs.resave.import);
+      const pending = results().filter((result) => !result.verbs.resave.import || (result.verbs.edits ?? []).some((edit) => !edit.import));
       if (pending.length === 0) {
-        entry.message = 'kept: every file was round-tripped before';
+        entry.message = 'kept: every file (and edit case) was round-tripped before';
         return;
       }
       if (!inputRoot) throw new Error('no exported files to compare the copies with: pass --inputs <the folder that file.path in result.json is relative to>');

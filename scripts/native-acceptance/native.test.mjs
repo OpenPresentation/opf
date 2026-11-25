@@ -273,7 +273,7 @@ test('--from-run classifies an existing run directory in place; a target that do
   assert.equal(exit, 1, lines.join('\n'));
   assert.deepEqual(driver.calls, [], 'no driver for --from-run');
   assert.deepEqual(build.calls, []);
-  assert.equal(report.steps.find((step) => step.name === 'round trip').message, 'kept: every file was round-tripped before');
+  assert.equal(report.steps.find((step) => step.name === 'round trip').message, 'kept: every file (and edit case) was round-tripped before');
   assert.deepEqual(
     report.new.map((item) => [item.file, item.slide, item.reason]),
     [['alpha~default', 2, 'named by a change: --look']],

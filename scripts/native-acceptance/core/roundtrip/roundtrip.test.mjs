@@ -642,6 +642,52 @@ test('editOutcomes and roundTripRun: an edit case is compared and imported on it
   }
 });
 
+test('roundTripRun keepDone: a file and an edit case that already have their import are kept; an edit case without one runs', () => {
+  const folder = mkdtempSync(path.join(tmpdir(), 'nt-keep-'));
+  try {
+    const inputs = path.join(folder, 'inputs');
+    const run = path.join(folder, 'run');
+    const files = path.join(run, 'files', 'round-trip~default');
+    mkdirSync(inputs);
+    mkdirSync(path.join(files, 'edits'), { recursive: true });
+    writeFileSync(path.join(inputs, 'round-trip.pptx'), liveDeck());
+    const result = probedResult();
+    result.verbs.resave = { status: 'done', path: 'resaved.pptx', import: { status: 'imported', slideCount: 1 } };
+    result.verbs.edits = [
+      { id: 'add-node', what: 'added a fourth node', path: editPath('add-node'), status: 'done', import: { status: 'imported', slideCount: 1 } },
+      { id: 'recolor', what: 'recolored the square', path: editPath('recolor'), status: 'done' },
+    ];
+    const slides = JSON.stringify(result.slides);
+    writeFileSync(path.join(files, 'result.json'), JSON.stringify(result));
+    writeFileSync(path.join(files, 'resaved.pptx'), liveDeck());
+    for (const id of ['add-node', 'recolor']) writeFileSync(path.join(files, 'edits', `${id}.pptx`), liveDeck());
+    const seen = [];
+    const importer = (file) => {
+      seen.push(path.relative(files, file));
+      return { status: 'imported', slideCount: 1 };
+    };
+    const first = roundTripRun(run, inputs, { importer, keepDone: true });
+    assert.deepEqual(seen, [path.join('edits', 'recolor.pptx')]);
+    assert.equal(first.files[0].status, 'kept');
+    assert.deepEqual(
+      first.files[0].edits.map((edit) => [edit.id, edit.status]),
+      [
+        ['add-node', 'kept'],
+        ['recolor', 'done'],
+      ],
+    );
+    const written = JSON.parse(readFileSync(path.join(files, 'result.json'), 'utf8'));
+    assert.equal(JSON.stringify(written.slides), slides, 'the kept slides are not merged again');
+    assert.deepEqual(written.verbs.edits[1].import, { status: 'imported', slideCount: 1 });
+    // Everything has its import now: a second pass keeps the whole file and imports nothing.
+    const second = roundTripRun(run, inputs, { importer, keepDone: true });
+    assert.equal(seen.length, 1);
+    assert.deepEqual(second.files[0].edits.map((edit) => edit.status), ['kept', 'kept']);
+  } finally {
+    rmSync(folder, { recursive: true, force: true });
+  }
+});
+
 test('mergeOutcomes: a diagram still live in the copy carries its layout and node count in details', () => {
   const result = emptyResult({
     target: 'powerpoint',
