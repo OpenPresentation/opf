@@ -3369,7 +3369,7 @@
   },
   "scriptCorpus": {
     "qualification": "docs/programs/font-fidelity-everywhere/tracker-inputs/script-corpora-20261001/qualification.json",
-    "references": "docs/programs/font-fidelity-everywhere/tracker-inputs/script-corpora-20261001/references.json",
+    "references": "docs/programs/font-fidelity-everywhere/tracker-inputs/script-references-2026-11-24/references.json",
     "corpus": "docs/programs/font-fidelity-everywhere/tracker-inputs/script-corpora-20261001/script-corpora.json"
   },
   "symbolFontsSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.symbol-fonts.json",
@@ -3414,6 +3414,14 @@
       "readme": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/README.md",
       "date": "2026-10-05",
       "host": "PowerPoint 365, Windows (supplemental fonts installed)"
+    },
+    {
+      "id": "ff-46-leelawadee-native-2026-11-24",
+      "label": "FF-46 native run: Leelawadee UI, the Thai and Khmer default since 0.35 (opf#1399, 2026-11-24)",
+      "file": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-leelawadee-native-2026-11-24/compare.json",
+      "readme": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-leelawadee-native-2026-11-24/README.md",
+      "date": "2026-11-24",
+      "host": "PowerPoint 16.0, Windows"
     }
   ]
 }

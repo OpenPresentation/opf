@@ -140,6 +140,17 @@
             ]
           }
         ]
+      },
+      {
+        "id": "ff-46-leelawadee-native-2026-11-24",
+        "label": "FF-46 native run: Leelawadee UI, the Thai and Khmer default since 0.35 (opf#1399, 2026-11-24)",
+        "file": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-leelawadee-native-2026-11-24/compare.json",
+        "readme": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-leelawadee-native-2026-11-24/README.md",
+        "date": "2026-11-24",
+        "host": "PowerPoint 16.0, Windows",
+        "decks": 1,
+        "decksPassing": 1,
+        "failingChecks": []
       }
     ],
     "qualification": {
@@ -598,10 +609,10 @@
       }
     },
     "nativeVerification": {
-      "verified": 168,
+      "verified": 169,
       "partial": 0,
       "failed": 0,
-      "unverified": 1,
+      "unverified": 0,
       "NA": 0
     },
     "nativeVerifiedFamilies": [
@@ -671,6 +682,7 @@
       "Kartika",
       "Khmer UI",
       "Latha",
+      "Leelawadee UI",
       "Liberation Mono",
       "Liberation Sans",
       "Liberation Serif",
@@ -1567,7 +1579,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.3,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Deva",
+            "weight": 400,
+            "file": "aparaj.ttf",
+            "version": "Version 6.91",
+            "samples": 9,
+            "meanWidthDelta": 0.0966,
+            "maxAbsWidthDelta": 0.2405,
+            "lineHeightEm": {
+              "original": 1.18,
+              "replacement": 1.3
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -1852,7 +1878,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in rr-05b-native-20261002, rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005, ff-46-documented-visual-native-20261005-fonts: lang-ar (24/24 shapes; theme minor.latin, Presentation.Fonts); lang-he (22/22 shapes; theme minor.latin, Presentation.Fonts); rtl-structures-ar (16/16 shapes; theme minor.latin, Presentation.Fonts); rtl-structures-he (16/16 shapes; theme minor.latin, Presentation.Fonts); and 13 more.",
+        "note": "Passed in rr-05b-native-20261002, rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005, ff-46-documented-visual-native-20261005-fonts, ff-46-leelawadee-native-2026-11-24: lang-ar (24/24 shapes; theme minor.latin, Presentation.Fonts); lang-he (22/22 shapes; theme minor.latin, Presentation.Fonts); rtl-structures-ar (16/16 shapes; theme minor.latin, Presentation.Fonts); rtl-structures-he (16/16 shapes; theme minor.latin, Presentation.Fonts); and 14 more.",
         "caveat": "FF-05: PowerPoint adds an Aptos entry to Presentation.Fonts of a deck that names only other fonts (lang-ja-meiryo); which part or style requests it, and which face draws, is open. A theme slot read-back is not a rendering acceptance.",
         "runs": [
           {
@@ -2038,6 +2064,24 @@
                 ]
               }
             ]
+          },
+          {
+            "run": "ff-46-leelawadee-native-2026-11-24",
+            "label": "FF-46 native run: Leelawadee UI, the Thai and Khmer default since 0.35 (opf#1399, 2026-11-24)",
+            "readme": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-leelawadee-native-2026-11-24/README.md",
+            "file": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-leelawadee-native-2026-11-24/compare.json",
+            "date": "2026-11-24",
+            "decks": [
+              {
+                "deck": "leelawadee-ui-default",
+                "shapesFontsOk": "6/6",
+                "via": [
+                  "theme minor.latin",
+                  "theme minor.ea",
+                  "Presentation.Fonts"
+                ]
+              }
+            ]
           }
         ]
       },
@@ -2131,7 +2175,7 @@
       "phase": 5,
       "status": "qualified",
       "statusReason": "metric route qualified: fixtures in every host, four-style widths and line breaks within the bar",
-      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the drawn behaviour of this family's slide in the RR-17 native check decks (rr-17-native/latin). Native name read-back passed (rr-05b-native-20261002, rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005, ff-46-documented-visual-native-20261005-fonts), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the drawn behaviour of this family's slide in the RR-17 native check decks (rr-17-native/latin). Native name read-back passed (rr-05b-native-20261002, rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005, ff-46-documented-visual-native-20261005-fonts, ff-46-leelawadee-native-2026-11-24), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf#166 (Intos policy, merged 338ddcd4)",
@@ -2200,6 +2244,10 @@
         {
           "label": "FF-46 native visual run with the Windows supplemental fonts installed: script, visual and code-table families (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/README.md"
+        },
+        {
+          "label": "FF-46 native run: Leelawadee UI, the Thai and Khmer default since 0.35 (opf#1399, 2026-11-24)",
+          "url": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-leelawadee-native-2026-11-24/README.md"
         }
       ],
       "priority": {
@@ -2417,7 +2465,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in rr-05b-native-20261002, rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005, ff-46-documented-visual-native-20261005-fonts: lang-ar (24/24 shapes; theme major.latin, Presentation.Fonts); lang-he (22/22 shapes; theme major.latin, Presentation.Fonts); rtl-structures-ar (16/16 shapes; theme major.latin, Presentation.Fonts); rtl-structures-he (16/16 shapes; theme major.latin, Presentation.Fonts); and 13 more.",
+        "note": "Passed in rr-05b-native-20261002, rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005, ff-46-documented-visual-native-20261005-fonts, ff-46-leelawadee-native-2026-11-24: lang-ar (24/24 shapes; theme major.latin, Presentation.Fonts); lang-he (22/22 shapes; theme major.latin, Presentation.Fonts); rtl-structures-ar (16/16 shapes; theme major.latin, Presentation.Fonts); rtl-structures-he (16/16 shapes; theme major.latin, Presentation.Fonts); and 14 more.",
         "runs": [
           {
             "run": "rr-05b-native-20261002",
@@ -2598,6 +2646,24 @@
                 ]
               }
             ]
+          },
+          {
+            "run": "ff-46-leelawadee-native-2026-11-24",
+            "label": "FF-46 native run: Leelawadee UI, the Thai and Khmer default since 0.35 (opf#1399, 2026-11-24)",
+            "readme": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-leelawadee-native-2026-11-24/README.md",
+            "file": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-leelawadee-native-2026-11-24/compare.json",
+            "date": "2026-11-24",
+            "decks": [
+              {
+                "deck": "leelawadee-ui-default",
+                "shapesFontsOk": "6/6",
+                "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "Presentation.Fonts"
+                ]
+              }
+            ]
           }
         ]
       },
@@ -2691,7 +2757,7 @@
       "phase": 5,
       "status": "qualified",
       "statusReason": "metric route qualified: fixtures in every host, four-style widths and line breaks within the bar",
-      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the drawn behaviour of this family's slide in the RR-17 native check decks (rr-17-native/latin). Native name read-back passed (rr-05b-native-20261002, rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005, ff-46-documented-visual-native-20261005-fonts), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the drawn behaviour of this family's slide in the RR-17 native check decks (rr-17-native/latin). Native name read-back passed (rr-05b-native-20261002, rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005, ff-46-documented-visual-native-20261005-fonts, ff-46-leelawadee-native-2026-11-24), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf#166 (Intos policy, merged 338ddcd4)",
@@ -2752,6 +2818,10 @@
         {
           "label": "FF-46 native visual run with the Windows supplemental fonts installed: script, visual and code-table families (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/README.md"
+        },
+        {
+          "label": "FF-46 native run: Leelawadee UI, the Thai and Khmer default since 0.35 (opf#1399, 2026-11-24)",
+          "url": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-leelawadee-native-2026-11-24/README.md"
         }
       ],
       "priority": {
@@ -5973,7 +6043,21 @@
           "size": 8318
         },
         "lineHeightEm": 1.45,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Kore",
+            "weight": 400,
+            "file": "batang.ttc",
+            "version": "Version 5.03",
+            "samples": 4,
+            "meanWidthDelta": -0.181,
+            "maxAbsWidthDelta": 0.5248,
+            "lineHeightEm": {
+              "original": 1.15,
+              "replacement": 1.45
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -11586,7 +11670,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.36,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Khmr",
+            "weight": 400,
+            "file": "daunpenh.ttf",
+            "version": "Version 5.05",
+            "samples": 4,
+            "meanWidthDelta": 0.795,
+            "maxAbsWidthDelta": 0.8531,
+            "lineHeightEm": {
+              "original": 1.36,
+              "replacement": 1.36
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -11943,7 +12041,34 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.19,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Hebr",
+            "weight": 400,
+            "file": "david.ttf",
+            "version": "Version 6.01",
+            "samples": 6,
+            "meanWidthDelta": 0.0991,
+            "maxAbsWidthDelta": 0.141,
+            "lineHeightEm": {
+              "original": 0.98,
+              "replacement": 1.19
+            }
+          },
+          {
+            "script": "Hebr",
+            "weight": 700,
+            "file": "davidbd.ttf",
+            "version": "Version 6.01",
+            "samples": 6,
+            "meanWidthDelta": 0.094,
+            "maxAbsWidthDelta": 0.1451,
+            "lineHeightEm": {
+              "original": 0.98,
+              "replacement": 1.19
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -13311,7 +13436,21 @@
           "size": 8178
         },
         "lineHeightEm": 1.45,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Hans",
+            "weight": 400,
+            "file": "simfang.ttf",
+            "version": "Version 5.03",
+            "samples": 4,
+            "meanWidthDelta": -0.0115,
+            "maxAbsWidthDelta": 0.0461,
+            "lineHeightEm": {
+              "original": 1.14,
+              "replacement": 1.45
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -14647,7 +14786,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 0.99,
         "lineHeightEm": 1.35,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Telu",
+            "weight": 400,
+            "file": "gautami.ttf",
+            "version": "Version 6.90",
+            "samples": 4,
+            "meanWidthDelta": -0.0038,
+            "maxAbsWidthDelta": 0.047,
+            "lineHeightEm": {
+              "original": 1.91,
+              "replacement": 1.35
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -15749,7 +15902,34 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.36,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Hebr",
+            "weight": 400,
+            "file": "gisha.ttf",
+            "version": "Version 6.01",
+            "samples": 6,
+            "meanWidthDelta": 0.0404,
+            "maxAbsWidthDelta": 0.0519,
+            "lineHeightEm": {
+              "original": 1.17,
+              "replacement": 1.36
+            }
+          },
+          {
+            "script": "Hebr",
+            "weight": 700,
+            "file": "gishabd.ttf",
+            "version": "Version 6.01",
+            "samples": 6,
+            "meanWidthDelta": 0.0012,
+            "maxAbsWidthDelta": 0.0212,
+            "lineHeightEm": {
+              "original": 1.17,
+              "replacement": 1.36
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -18295,7 +18475,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.36,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Orya",
+            "weight": 400,
+            "file": "kalinga.ttf",
+            "version": "Version 6.90",
+            "samples": 3,
+            "meanWidthDelta": 0.1216,
+            "maxAbsWidthDelta": 0.1299,
+            "lineHeightEm": {
+              "original": 1.58,
+              "replacement": 1.36
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -18580,7 +18774,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.25,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Mlym",
+            "weight": 400,
+            "file": "kartika.ttf",
+            "version": "Version 6.90",
+            "samples": 4,
+            "meanWidthDelta": -0.1604,
+            "maxAbsWidthDelta": 0.1888,
+            "lineHeightEm": {
+              "original": 1.43,
+              "replacement": 1.25
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -18858,7 +19066,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.36,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Khmr",
+            "weight": 400,
+            "file": "KhmerUI.ttf",
+            "version": "Version 5.05",
+            "samples": 4,
+            "meanWidthDelta": -0.1061,
+            "maxAbsWidthDelta": 0.1454,
+            "lineHeightEm": {
+              "original": 1.13,
+              "replacement": 1.36
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -19142,7 +19364,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.24,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Taml",
+            "weight": 400,
+            "file": "latha.ttf",
+            "version": "Version 6.90",
+            "samples": 5,
+            "meanWidthDelta": -0.1278,
+            "maxAbsWidthDelta": 0.1694,
+            "lineHeightEm": {
+              "original": 1.66,
+              "replacement": 1.24
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -19308,8 +19544,28 @@
         "galleryCards": "self-hosted preview webfont: @fontsource/noto-sans-thai 5.3.0 (static, weights 400 700, upright only); no font scheme uses this family, so no card test covers it"
       },
       "nativeVerification": {
-        "status": "unverified",
-        "note": "No native PowerPoint check recorded for this family in docs/evidence."
+        "status": "verified",
+        "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
+        "note": "Passed in ff-46-leelawadee-native-2026-11-24: leelawadee-ui-default (6/6 shapes; theme major.cs, theme minor.cs).",
+        "runs": [
+          {
+            "run": "ff-46-leelawadee-native-2026-11-24",
+            "label": "FF-46 native run: Leelawadee UI, the Thai and Khmer default since 0.35 (opf#1399, 2026-11-24)",
+            "readme": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-leelawadee-native-2026-11-24/README.md",
+            "file": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-leelawadee-native-2026-11-24/compare.json",
+            "date": "2026-11-24",
+            "decks": [
+              {
+                "deck": "leelawadee-ui-default",
+                "shapesFontsOk": "6/6",
+                "via": [
+                  "theme major.cs",
+                  "theme minor.cs"
+                ]
+              }
+            ]
+          }
+        ]
       },
       "acceptance": {
         "fixture": "pending",
@@ -19333,7 +19589,34 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.51,
-        "original": null
+        "original": [
+          {
+            "script": "Thai",
+            "weight": 400,
+            "file": "LeelawUI.ttf",
+            "version": "Version 6.00",
+            "samples": 7,
+            "meanWidthDelta": 0.0278,
+            "maxAbsWidthDelta": 0.0538,
+            "lineHeightEm": {
+              "original": 1.33,
+              "replacement": 1.51
+            }
+          },
+          {
+            "script": "Thai",
+            "weight": 700,
+            "file": "LeelaUIb.ttf",
+            "version": "Version 6.00",
+            "samples": 7,
+            "meanWidthDelta": -0.0434,
+            "maxAbsWidthDelta": 0.0789,
+            "lineHeightEm": {
+              "original": 1.33,
+              "replacement": 1.51
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -19354,7 +19637,7 @@
       "phase": 4,
       "status": "script-gap",
       "statusReason": "visual script route: the script corpus (FF-44) qualifies coverage and shaping; native PowerPoint comparison and the recorded appearance gap remain",
-      "nextAction": "Native PowerPoint comparison (FF-46) is the remaining acceptance gate and has not been run for this family: the owner decided on 2026-11-23 to record it as not yet natively verified (opf#1399). Added with the 0.35 script defaults (2026-11-23) as the default for Thai and Khmer: it ships with Windows by default. Thai text previews with Noto Sans Thai at 0.96 and Khmer with Noto Sans Khmer at 1.19 (the policy's size factors: the sum of the installed original's shaped advances over the open face's, HarfBuzz with the language tag, eight sentences per language; Thai 0.958, per-sentence 0.935 to 0.985; Khmer 1.19, per-sentence 1.163 to 1.235). Read-only PowerPoint check 2026-11-23 (16.0 build 20625), one slide per language exported with the default: PowerPoint broke every line at the same word as OPF. Not run: the native acceptance fixtures of FF-46 for this family, and a script-corpus measurement under its own name.",
+      "nextAction": "Native PowerPoint comparison (FF-46) is the remaining acceptance gate and has not been run for this family: the owner decided on 2026-11-23 to record it as not yet natively verified (opf#1399). Added with the 0.35 script defaults (2026-11-23) as the default for Thai and Khmer: it ships with Windows by default. Thai text previews with Noto Sans Thai at 0.96 and Khmer with Noto Sans Khmer at 1.19 (the policy's size factors: the sum of the installed original's shaped advances over the open face's, HarfBuzz with the language tag, eight sentences per language; Thai 0.958, per-sentence 0.935 to 0.985; Khmer 1.19, per-sentence 1.163 to 1.235). Read-only PowerPoint check 2026-11-23 (16.0 build 20625), one slide per language exported with the default: PowerPoint broke every line at the same word as OPF. Not run: the native acceptance fixtures of FF-46 for this family, and a script-corpus measurement under its own name. Native name read-back passed (ff-46-leelawadee-native-2026-11-24), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -19379,6 +19662,10 @@
         {
           "label": "Script corpora evidence (2026-10-01)",
           "url": "docs/evidence/script-corpora-20261001/README.md"
+        },
+        {
+          "label": "FF-46 native run: Leelawadee UI, the Thai and Khmer default since 0.35 (opf#1399, 2026-11-24)",
+          "url": "docs/programs/font-fidelity-everywhere/tracker-inputs/ff-46-leelawadee-native-2026-11-24/README.md"
         }
       ],
       "priority": {
@@ -21859,7 +22146,34 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.3,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Deva",
+            "weight": 400,
+            "file": "mangal.ttf",
+            "version": "Version 6.91",
+            "samples": 9,
+            "meanWidthDelta": -0.1581,
+            "maxAbsWidthDelta": 0.2044,
+            "lineHeightEm": {
+              "original": 1.68,
+              "replacement": 1.3
+            }
+          },
+          {
+            "script": "Deva",
+            "weight": 700,
+            "file": "mangalb.ttf",
+            "version": "Version 6.91",
+            "samples": 9,
+            "meanWidthDelta": -0.0923,
+            "maxAbsWidthDelta": 0.1324,
+            "lineHeightEm": {
+              "original": 1.68,
+              "replacement": 1.3
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -22175,7 +22489,34 @@
           "size": 7389
         },
         "lineHeightEm": 1.45,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Jpan",
+            "weight": 400,
+            "file": "meiryo.ttc",
+            "version": "Version 6.51",
+            "samples": 7,
+            "meanWidthDelta": -0.0319,
+            "maxAbsWidthDelta": 0.0752,
+            "lineHeightEm": {
+              "original": 1.5,
+              "replacement": 1.45
+            }
+          },
+          {
+            "script": "Jpan",
+            "weight": 700,
+            "file": "meiryob.ttc",
+            "version": "Version 6.51",
+            "samples": 7,
+            "meanWidthDelta": -0.0314,
+            "maxAbsWidthDelta": 0.0686,
+            "lineHeightEm": {
+              "original": 1.5,
+              "replacement": 1.45
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -23783,7 +24124,21 @@
           "size": 13031
         },
         "lineHeightEm": 1.45,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Hant",
+            "weight": 400,
+            "file": "mingliu.ttc",
+            "version": "Version 7.10",
+            "samples": 4,
+            "meanWidthDelta": -0.0476,
+            "maxAbsWidthDelta": 0.1445,
+            "lineHeightEm": {
+              "original": 1.2,
+              "replacement": 1.45
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -24108,7 +24463,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.36,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Hebr",
+            "weight": 400,
+            "file": "mriam.ttf",
+            "version": "Version 6.01",
+            "samples": 6,
+            "meanWidthDelta": 0.0845,
+            "maxAbsWidthDelta": 0.1428,
+            "lineHeightEm": {
+              "original": 1.02,
+              "replacement": 1.36
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -24929,7 +25298,21 @@
           "size": 7389
         },
         "lineHeightEm": 1.45,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Jpan",
+            "weight": 400,
+            "file": "msmincho.ttc",
+            "version": "Version 5.32",
+            "samples": 7,
+            "meanWidthDelta": -0.0497,
+            "maxAbsWidthDelta": 0.1624,
+            "lineHeightEm": {
+              "original": 1,
+              "replacement": 1.45
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -33005,7 +33388,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.36,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Ethi",
+            "weight": 400,
+            "file": "nyala.ttf",
+            "version": "Version 5.05",
+            "samples": 3,
+            "meanWidthDelta": 0.0644,
+            "maxAbsWidthDelta": 0.0747,
+            "lineHeightEm": {
+              "original": 1.05,
+              "replacement": 1.36
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -34061,7 +34458,21 @@
           "size": 13031
         },
         "lineHeightEm": 1.45,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Hant",
+            "weight": 400,
+            "file": "mingliu.ttc",
+            "version": "Version 7.10",
+            "samples": 4,
+            "meanWidthDelta": -0.011,
+            "maxAbsWidthDelta": 0.1077,
+            "lineHeightEm": {
+              "original": 1.2,
+              "replacement": 1.45
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -34780,7 +35191,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.3,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Guru",
+            "weight": 400,
+            "file": "raavi.ttf",
+            "version": "Version 6.91",
+            "samples": 3,
+            "meanWidthDelta": -0.081,
+            "maxAbsWidthDelta": 0.0895,
+            "lineHeightEm": {
+              "original": 1.79,
+              "replacement": 1.3
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -38924,7 +39349,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.33,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Beng",
+            "weight": 400,
+            "file": "Shonar.ttf",
+            "version": "Version 6.90",
+            "samples": 6,
+            "meanWidthDelta": 0.3868,
+            "maxAbsWidthDelta": 0.4275,
+            "lineHeightEm": {
+              "original": 1,
+              "replacement": 1.33
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -39209,7 +39648,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.3,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Gujr",
+            "weight": 400,
+            "file": "shruti.ttf",
+            "version": "Version 6.90",
+            "samples": 3,
+            "meanWidthDelta": -0.1511,
+            "maxAbsWidthDelta": 0.1663,
+            "lineHeightEm": {
+              "original": 1.83,
+              "replacement": 1.3
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -39534,7 +39987,21 @@
           "size": 8178
         },
         "lineHeightEm": 1.45,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Hans",
+            "weight": 400,
+            "file": "simhei.ttf",
+            "version": "Version 5.05",
+            "samples": 4,
+            "meanWidthDelta": -0.0115,
+            "maxAbsWidthDelta": 0.0461,
+            "lineHeightEm": {
+              "original": 1.14,
+              "replacement": 1.45
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -44089,7 +44556,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 0.989,
         "lineHeightEm": 1.35,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Knda",
+            "weight": 400,
+            "file": "tunga.ttf",
+            "version": "Version 6.90",
+            "samples": 3,
+            "meanWidthDelta": 0.0342,
+            "maxAbsWidthDelta": 0.068,
+            "lineHeightEm": {
+              "original": 1.77,
+              "replacement": 1.35
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -44663,7 +45144,21 @@
         "recordedFontkitLimits": 0,
         "ownScriptBmpCoverage": 1,
         "lineHeightEm": 1.33,
-        "original": "not installed on the measuring host"
+        "original": [
+          {
+            "script": "Beng",
+            "weight": 400,
+            "file": "vrinda.ttf",
+            "version": "Version 6.90",
+            "samples": 6,
+            "meanWidthDelta": -0.0517,
+            "maxAbsWidthDelta": 0.1157,
+            "lineHeightEm": {
+              "original": 1.41,
+              "replacement": 1.33
+            }
+          }
+        ]
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
