@@ -87,6 +87,16 @@ const citeUnknownReference: RuleText = (finding, _context, helpers) => {
   };
 };
 
+const slideLinkUnknown: RuleText = (finding, _context, helpers) => {
+  const id = text(params(finding).id) ?? unquote(match(finding.message, /^unknown slide '(.+?)'/)?.[1]);
+  const ids = idsAt(helpers, ["slides"]);
+  const add = `give a slide the id ${code(id)}`;
+  return {
+    message: `${code(`link: "slide:${id}"`)} names a slide the document does not have.`,
+    next: ids.length ? chooseNext(id, ids, add) : `${add} (assignIds gives every slide one), or link to another target.`,
+  };
+};
+
 const citeUnsupportedLocation: RuleText = (finding) => {
   const where = match(finding.message, /^cite and footnote are not supported in ([^;]+);/)?.[1];
   const inReferences = /^reference text cannot cite/.test(finding.message);
@@ -750,6 +760,7 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/schema": schemaPlain,
   "opf/reference-id-duplicate": referenceIdDuplicate,
   "opf/cite-unknown-reference": citeUnknownReference,
+  "opf/slide-link-unknown": slideLinkUnknown,
   "opf/cite-unsupported-location": citeUnsupportedLocation,
   "opf/caption-unsupported-payload": captionUnsupportedPayload,
   "opf/image-option-unsupported-payload": imageOptionUnsupportedPayload,

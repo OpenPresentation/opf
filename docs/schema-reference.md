@@ -913,7 +913,7 @@ _No named properties._
 | `alt` | no | `string` | Alternative text (p:cNvPr descr). Without it the shape's text is what is read. |
 | `decorative` | no | `boolean` | Mark the shape decorative (a16:decorative): screen readers skip it. |
 | `hidden` | no | `boolean` | Keep the shape in the file but do not draw it (p:cNvPr hidden). A link on a hidden shape is a validation finding (opf/shape-link-hidden). |
-| `link` | no | `string` | URL opened when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address or a 'tel:' number. |
+| `link` | no | `string` | Link followed when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address, a 'tel:' number or 'slide:<id>', a jump to the slide of this deck with that id (ppaction://hlinksldjump). An... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips. |
 
 
@@ -1054,7 +1054,7 @@ _No named properties._
 | `alt` | no | `string` | Shape blocks only. Alternative text for screen readers (p:cNvPr descr). Without it a shape's text is what is read. |
 | `decorative` | no | `boolean` | Shape blocks only. Mark the shape decorative (a16:decorative): screen readers skip it and the accessibility checker does not ask for alt text. |
 | `hidden` | no | `boolean` | Shape blocks only. Keep the shape in the file but do not draw it (p:cNvPr hidden). Composition still gives it its room. A link on a hidden shape cannot be clicked and is a validation finding (opf/shape-link-hidden). |
-| `link` | no | `string` | Shape blocks only. URL opened when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address or a 'tel:' number. |
+| `link` | no | `string` | Shape blocks only. Link followed when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address, a 'tel:' number or 'slide:<id>', a jump to the slide of this deck with that id (ppaction:... |
 | `shadow` | no | `ref:Shadow` | Shape blocks only. Outer shadow. |
 | `innerShadow` | no | `ref:InnerShadow` | Shape blocks only. Inner shadow. |
 | `glow` | no | `ref:Glow` | Shape blocks only. Glow. |

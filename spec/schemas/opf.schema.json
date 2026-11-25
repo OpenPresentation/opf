@@ -2726,9 +2726,9 @@
         },
         "link": {
           "type": "string",
-          "pattern": "^(https?://|mailto:|tel:)\\S+$",
-          "description": "URL opened when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address or a 'tel:' number.",
-          "examples": ["https://acme.com/pricing"]
+          "pattern": "^(https?://|mailto:|tel:|slide:)\\S+$",
+          "description": "Link followed when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address, a 'tel:' number or 'slide:<id>', a jump to the slide of this deck with that id (ppaction://hlinksldjump). An unknown slide id is a validation error (opf/slide-link-unknown).",
+          "examples": ["https://acme.com/pricing", "slide:pricing"]
         },
         "extensions": {
           "type": "object",
@@ -3388,9 +3388,9 @@
         },
         "link": {
           "type": "string",
-          "pattern": "^(https?://|mailto:|tel:)\\S+$",
-          "description": "Shape blocks only. URL opened when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address or a 'tel:' number.",
-          "examples": ["https://acme.com/pricing"]
+          "pattern": "^(https?://|mailto:|tel:|slide:)\\S+$",
+          "description": "Shape blocks only. Link followed when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address, a 'tel:' number or 'slide:<id>', a jump to the slide of this deck with that id (ppaction://hlinksldjump). An unknown slide id is a validation error (opf/slide-link-unknown).",
+          "examples": ["https://acme.com/pricing", "slide:pricing"]
         },
         "shadow": {
           "$ref": "#/$defs/Shadow",
@@ -4291,9 +4291,9 @@
             },
             "link": {
               "type": "string",
-              "pattern": "^(https?://|mailto:|tel:)\\S+$",
-              "description": "URL to link the run text to: an http(s) URL, a 'mailto:' address or a 'tel:' number, without whitespace. The preview draws it as a link and PPTX export writes a native hyperlink for all three; any other scheme is not valid.",
-              "examples": ["https://acme.com", "https://acme.com/case-studies/beta", "mailto:hello@acme.com", "tel:+15551234567"]
+              "pattern": "^(https?://|mailto:|tel:|slide:)\\S+$",
+              "description": "Link to put on the run text: an http(s) URL, a 'mailto:' address or a 'tel:' number, or 'slide:<id>', a jump to the slide of this deck with that id (the same kind:id spelling as 'asset:' and 'var:'; the slide needs an 'id', which assignIds can add). The text must not contain whitespace. The preview draws it as a link, PDF export writes a link annotation (a go-to-page link for 'slide:'), and PPTX export writes a native hyperlink (a slide jump for 'slide:'); any other scheme is not valid. A link to an unknown slide id is a validation error (opf/slide-link-unknown).",
+              "examples": ["https://acme.com", "https://acme.com/case-studies/beta", "mailto:hello@acme.com", "tel:+15551234567", "slide:pricing"]
             },
             "superscript": {
               "type": "boolean",

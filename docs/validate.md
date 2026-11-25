@@ -238,6 +238,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/reference-id-duplicate`](#opfreference-id-duplicate) | Format | error | structure | Two references share an id. |
 | [`opf/cite-unknown-reference`](#opfcite-unknown-reference) | Format | error | structure | A citation names a reference that does not exist. |
 | [`opf/cite-unsupported-location`](#opfcite-unsupported-location) | Format | error | structure | A citation or footnote sits where no engine draws it. |
+| [`opf/slide-link-unknown`](#opfslide-link-unknown) | Format | error | structure | A link names a slide the document does not have. |
 | [`opf/caption-unsupported-payload`](#opfcaption-unsupported-payload) | Format | error | structure | A caption is on a payload that cannot carry one. |
 | [`opf/image-option-unsupported-payload`](#opfimage-option-unsupported-payload) | Format | error | structure | An image option is on a payload that is not an image. |
 | [`opf/shape-option-unsupported-payload`](#opfshape-option-unsupported-payload) | Format | error | structure | A shape option is on a payload that is not a shape block. |
@@ -390,6 +391,14 @@ Default severity: **error**. Cost: structure. A citation names a reference that 
 Default severity: **error**. Cost: structure. A citation or footnote sits where no engine draws it.
 
 **Why.** `cite` and `footnote` apply to runs in text, bullets and list items; table cells, captions, and reference and footnote texts have no marker.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/slide-link-unknown`
+
+Default severity: **error**. Cost: structure. A link names a slide the document does not have.
+
+**Why.** A `slide:<id>` link jumps to the slide with that `id`; an id no slide has leaves the link with nowhere to go in the preview, in PDF and in PowerPoint. A slide with no `id` cannot be linked to; `assignIds` gives every slide one.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

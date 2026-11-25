@@ -607,7 +607,7 @@ export function composeShape(host: Rec, region: Box, options: { scale: number; a
     fill, ...(stroke ? { stroke } : {}), textColor: look.text, ...(shapeBackdrop(fill) !== undefined ? { textBackdrop: shapeBackdrop(fill) } : {}), textBold: look.bold,
     ...(rotate !== undefined ? { rotate } : {}), ...(flip === 'horizontal' || flip === 'both' ? { flipH: true } : {}), ...(flip === 'vertical' || flip === 'both' ? { flipV: true } : {}),
     ...(typeof host.alt === 'string' ? { alt: host.alt } : {}), ...(host.decorative === true ? { decorative: true as const } : {}), ...(host.hidden === true ? { hidden: true as const } : {}),
-    ...(typeof host.link === 'string' && /^(https?:\/\/|mailto:|tel:)\S+$/.test(host.link) ? { link: host.link } : {}),
+    ...(typeof host.link === 'string' && /^(https?:\/\/|mailto:|tel:|slide:)\S+$/.test(host.link) ? { link: host.link } : {}),
     ...(Object.keys(effects).length ? { effects, effectScale: scale } : {}),
   };
   return result;

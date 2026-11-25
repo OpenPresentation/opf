@@ -9,6 +9,7 @@ import { chartDrawDiagnostics } from "./chart-fallback.js";
 import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions, resolveSlideDirection } from "./composition.js";
 import { layoutTemplateIssues } from "./layout-template.js";
 import { annotationIssues } from "./annotation-validation.js";
+import { slideLinkIssues } from "./slide-links.js";
 import { isShapeBlock, shapeIssues, SHAPE_BLOCK_KEYS } from "./shape-block.js";
 import { PositionRangeError, connectorAdjustPreset, isOverlayConnector, overlayIssues, representablePositionBox } from "./overlay-shapes.js";
 import { codeHighlightLines } from "./code-highlight.js";
@@ -582,6 +583,8 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
   });
   // RR-34: reference ids, cited ids and where cite/footnote may appear.
   issues.push(...annotationIssues(value));
+  // FR-03: a `slide:<id>` link names a slide of the document.
+  issues.push(...slideLinkIssues(value));
 
   return issues;
 }
