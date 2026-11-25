@@ -1,0 +1,18 @@
+Warnings - compliance-readiness-review
+This PowerPoint presentation may look different.
+Here's a list of what changed when you opened it in Keynote.
+Unsupported media were removed.
+Slide Layout(s): Cover, Gallery, Hero, Image, Image 2, Image beside
+The font Aptos is missing. Your text might look different.
+The font Consolas is missing. Your text might look different.
+Replace Fonts...
+--- scrolled to the end ---
+Warnings - compliance-readiness-review
+This PowerPoint presentation may look different.
+Here's a list of what changed when you opened it in Keynote.
+•J1
+-----
+The font Aptos is missing. Your text might look different.
+The font Consolas is missing. Your text might look different.
+The font Aptos Display is missing. Your text might look different.
+Replace Fonts...

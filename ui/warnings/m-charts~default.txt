@@ -1,0 +1,9 @@
+Warnings - default
+This PowerPoint presentation may look different.
+Here's a list of what changed when you opened it in Keynote.
+Unsupported media were removed.
+Slide Layout(s): Cover, Gallery, Hero, Image, Image beside
+Stacked Line charts aren't supported and were converted to regular Line chart type.
+Slide(s) 4
+The font Aptos Display is missing. Your text might look different.
+Replace Fonts...

@@ -1,0 +1,16 @@
+Warnings - default
+This PowerPoint presentation may look different.
+Here's a list of what changed when you opened it in Keynote.
+Unsupported media were removed.
+Slide Layout(s): Cover, Gallery, Hero, Image, Image beside
+The font Aptos is missing. Your text might look different.
+The font Roboto Mono is missing. Your text might look different.
+Replace Fonts...
+--- scrolled to the end ---
+Warnings - default
+This PowerPoint presentation may look different.
+Here's a list of what changed when you opened it in Keynote.
+The font Roboto Mono is missing. Your text might look different.
+The font Aptos Display is missing. Your text might look different.
+SVG images were converted to PNG.
+Replace Fonts...
