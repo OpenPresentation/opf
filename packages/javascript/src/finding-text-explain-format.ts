@@ -158,6 +158,11 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Pricing", table: { columns: ["Region", "Change"], rows: [["Northeast", "Hold"], ["Southeast", "+3%"]], highlight: { rows: ["South"] } } },
     { title: "Pricing", table: { columns: ["Region", "Change"], rows: [["Northeast", "Hold"], ["Southeast", "+3%"]], highlight: { rows: ["Southeast"] } } },
   ),
+  "opf/table-color-scale-unknown-column": ex(
+    "Name a column of the table in `colorScale.columns` by its header text; a name that matches no column shades nothing.",
+    { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", 0.22]], colorScale: { columns: ["Q4"] } } },
+    { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", 0.22]], colorScale: { columns: ["Q1"] } } },
+  ),
   "opf/variable-format": ex(
     "Give the variable a `format` that fits its type and its values: `#,##0.0` for a number, a date pattern for a date.",
     { variables: { amount: { type: "number", value: 1e308, format: "0%" } }, slides: [{ title: "Value {{amount}}" }] },

@@ -4695,8 +4695,43 @@
             }
           },
           "examples": [{ "rows": ["Southeast", "Southwest"] }]
+        },
+        "colorScale": {
+          "$ref": "#/$defs/TableColorScale",
+          "description": "Shades the number cells of the named columns by value, between scheme colors. Engines compute each cell's fill; the text color follows it for contrast."
         }
       }
+    },
+    "TableColorScale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["columns"],
+      "description": "A color scale over the number cells of one or more columns. One scale is shared by all named columns, so equal numbers get equal colors. Only cells whose value is a finite number are shaded; a cell with its own style.fill keeps it. Sequential (no 'mid'): the lowest value is 'from', the highest 'to'. Diverging ('mid'): 'center' is drawn in 'mid', lower values towards 'from' and higher values towards 'to', each side on its own span. Colors are mixed in OKLab. A table that is paged is shaded over its whole range, so a value has the same color on every page.",
+      "properties": {
+        "columns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "The columns to shade, by header text (an inline table) or by dataset column name after 'fields' (a dataset-backed table). A name no column has is a 'table-color-scale-unknown-column' error."
+        },
+        "from": { "$ref": "#/$defs/SchemeColorName", "description": "The color of the lowest value. Absent: 'surface'." },
+        "to": { "$ref": "#/$defs/SchemeColorName", "description": "The color of the highest value. Absent: 'primary'." },
+        "mid": { "$ref": "#/$defs/SchemeColorName", "description": "Makes the scale diverging: the color of 'center', with 'from' below it and 'to' above it." },
+        "center": { "type": "number", "description": "The value drawn in 'mid'. Only with 'mid'. Absent: 0 when the values span both signs, else the middle of the range." },
+        "min": { "type": "number", "description": "The value drawn in 'from'; lower values draw in 'from' too. Absent: the lowest number in the named columns." },
+        "max": { "type": "number", "description": "The value drawn in 'to'; higher values draw in 'to' too. Absent: the highest number in the named columns." }
+      },
+      "dependentRequired": { "center": ["mid"] },
+      "examples": [
+        { "columns": ["Q1", "Q2", "Q3", "Q4"] },
+        { "columns": ["YoY %"], "from": "accent2", "mid": "surface", "to": "accent1", "center": 0 }
+      ]
+    },
+    "SchemeColorName": {
+      "type": "string",
+      "enum": ["accent1", "accent2", "accent3", "accent4", "accent5", "accent6", "dark1", "dark2", "light1", "light2", "primary", "secondary", "accent", "background", "surface", "surfaceAlt", "text", "textSecondary"],
+      "description": "A color of the effective color scheme, by slot or role, resolved as ColorRef resolves the same names (the hyperlink slots are left out). No hex and no variable: what names it follows the deck's colors."
     },
     "ChartData": {
       "type": "object",

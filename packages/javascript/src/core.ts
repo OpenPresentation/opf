@@ -191,6 +191,10 @@ export { formatNumber, formatPercentNumber, localizeDigits, numberLocale, number
 export type { NumberLocale } from './numerals.js';
 export { tableRows, rowCells, rowId } from './table.js';
 export type { TableRowEntry } from './table.js';
+// FR-07: the table color scale and the OKLab mix it uses.
+export { resolveTableColorScale, pinTableColorScale, tableColorScaleText, tableColorScaleOf, tableColorScaleDiagnostics, SCHEME_COLOR_NAMES } from './table-color-scale.js';
+export type { TableColorScaleColors, TableColorScaleCell, TableColorScaleRange, TableColorScaleResult, TableColorScaleSpec, SchemeColorName } from './table-color-scale.js';
+export { mixOklab, srgbToOklab, oklabToSrgb } from './oklab.js';
 // RR-54: chart and table data: strict numbers, number formats and Excel codes, datasets, series mapping.
 export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
 // LH-60: how a chart is drawn when its data does not fit its type (map, box, pie and scatter fallbacks; series a type cannot plot).

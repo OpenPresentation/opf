@@ -555,6 +555,16 @@ const chartHighlightAdapted: RuleText = (finding) => {
   };
 };
 
+const tableColorScaleNoData: RuleText = (finding) => finding.message.startsWith("The color scale's columns hold no numbers") ? {
+  message: "None of the color scale's columns holds a number, so no cell is shaded.",
+  next: "name columns that hold numbers, or remove the color scale.",
+} : undefined;
+
+const tableColorScaleRange: RuleText = (finding) => finding.message.startsWith("The color scale's range is empty") ? {
+  message: "The color scale's range is empty or its center is outside it, so part of the scale is unused.",
+  next: "pin min below max and keep center between them, or leave the range to the data.",
+} : undefined;
+
 const codeHighlightOutOfRange: RuleText = (finding) => {
   const found = match(finding.message, /line (\d+) is past the last line \(the code has (\d+) lines?\)/);
   if (!found) return undefined;
@@ -710,6 +720,8 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/chart-value-not-numeric": chartValueNotNumeric,
   "opf/chart-mapping-adapted": chartMappingAdapted,
   "opf/chart-highlight-adapted": chartHighlightAdapted,
+  "opf/table-color-scale-no-data": tableColorScaleNoData,
+  "opf/table-color-scale-range": tableColorScaleRange,
   "opf/chart-series-dropped": chartSeriesDropped,
   "opf/code-highlight-out-of-range": codeHighlightOutOfRange,
   "opf/code-highlight-range-reversed": codeHighlightRangeReversed,
