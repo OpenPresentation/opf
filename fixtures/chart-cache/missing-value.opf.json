@@ -1,0 +1,8 @@
+{
+ "name": "QC-01 area chart with a missing value (sparse cache after Keynote)",
+ "language": "en-US",
+ "slides": [
+  {"title": "Visits with one month missing",
+   "chart": {"type": "area", "data": {"columns": ["Month", "Visits"], "rows": [["Jul", 1200], ["Aug", 1350], ["Sep", null], ["Oct", 1610]]}, "dataLabels": true}}
+ ]
+}

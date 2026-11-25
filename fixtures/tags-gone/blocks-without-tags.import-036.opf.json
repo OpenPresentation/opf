@@ -1,0 +1,304 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "RT-04 OPF blocks without their tags",
+  "slides": [
+    {
+      "title": "Quarterly review",
+      "subtitle": "what the pilot changed for the northern hubs and why it matters",
+      "blocks": [
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "84%",
+              "bold": true,
+              "fontSize": 114,
+              "fontFamily": "Aptos Display",
+              "color": "light1"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "“",
+              "bold": true,
+              "fontSize": 45,
+              "fontFamily": "Aptos Display",
+              "color": "light1"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "PowerPoint shape: OPF card slides.0.blocks.1.quote"
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "The scheduler gave us our ",
+              "bold": true,
+              "fontSize": 30,
+              "fontFamily": "Aptos Display",
+              "color": "light1"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "mornings back.”",
+              "bold": true,
+              "fontSize": 30,
+              "fontFamily": "Aptos Display",
+              "color": "light1"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "Dock lead, North",
+              "fontSize": 12.75,
+              "fontFamily": "Aptos",
+              "color": "light2"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "Task completion",
+              "fontSize": 17.25,
+              "fontFamily": "Aptos",
+              "color": "light1"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "Up from 68%",
+              "fontSize": 15,
+              "fontFamily": "Aptos",
+              "color": "light1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Release steps",
+      "blocks": [
+        {
+          "type": "text",
+          "text": "PowerPoint shape: OPF code 1 panel"
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "sh",
+              "bold": true,
+              "fontSize": 13.5,
+              "fontFamily": "Roboto Mono",
+              "color": "#2E85BF"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "pnpm install",
+              "fontSize": 24,
+              "fontFamily": "Roboto Mono",
+              "color": "light1"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "pnpm build",
+              "fontSize": 24,
+              "fontFamily": "Roboto Mono",
+              "color": "light1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Pilot timeline",
+      "blocks": [
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "March",
+              "fontSize": 34.36,
+              "fontFamily": "Aptos",
+              "color": "light1"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "June",
+              "fontSize": 34.36,
+              "fontFamily": "Aptos",
+              "color": "light1"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "September",
+              "fontSize": 34.36,
+              "fontFamily": "Aptos",
+              "color": "light1"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "PowerPoint shape: OPF timeline 0 marker 0"
+        },
+        {
+          "type": "text",
+          "text": "PowerPoint shape: OPF timeline 0 marker 1"
+        },
+        {
+          "type": "text",
+          "text": "PowerPoint shape: OPF timeline 0 marker 2"
+        },
+        {
+          "type": "text",
+          "text": "PowerPoint shape: OPF timeline 0 connector"
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "Pilot starts",
+              "bold": true,
+              "fontSize": 42,
+              "fontFamily": "Aptos",
+              "color": "light1"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "Review",
+              "bold": true,
+              "fontSize": 42,
+              "fontFamily": "Aptos",
+              "color": "light1"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": [
+            {
+              "text": "Rollout",
+              "bold": true,
+              "fontSize": 42,
+              "fontFamily": "Aptos",
+              "color": "light1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Next steps",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            [
+              {
+                "text": "Train the dock leads",
+                "fontSize": 42,
+                "fontFamily": "Aptos",
+                "color": "light1"
+              }
+            ],
+            [
+              {
+                "text": "Move the morning shift",
+                "fontSize": 42,
+                "fontFamily": "Aptos",
+                "color": "light1"
+              }
+            ],
+            [
+              {
+                "text": "Measure again in June",
+                "fontSize": 42,
+                "fontFamily": "Aptos",
+                "color": "light1"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Parcels by month",
+      "blocks": [
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Month",
+                "Parcels"
+              ],
+              "rows": [
+                [
+                  "Jan",
+                  64
+                ],
+                [
+                  "Feb",
+                  69
+                ],
+                [
+                  "Mar",
+                  72
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "language": "en-US",
+  "author": "OpenPresentation",
+  "design": {
+    "colorScheme": "cool-horizon",
+    "dimensions": {
+      "widthInches": 13.333333333333334,
+      "heightInches": 7.5
+    }
+  }
+}

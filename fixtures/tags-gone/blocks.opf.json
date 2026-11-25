@@ -1,0 +1,100 @@
+{
+ "name": "RT-04 OPF blocks without their tags",
+ "language": "en-US",
+ "slides": [
+  {
+   "title": "Quarterly review: what the pilot changed for the northern hubs and why it matters",
+   "blocks": [
+    {
+     "metric": {
+      "value": "84%",
+      "label": "Task completion",
+      "description": "Up from 68%"
+     }
+    },
+    {
+     "quote": {
+      "text": "The scheduler gave us our mornings back.",
+      "attribution": "Dock lead, North"
+     }
+    }
+   ]
+  },
+  {
+   "title": "Release steps",
+   "blocks": [
+    {
+     "code": {
+      "language": "sh",
+      "source": "pnpm install\npnpm build"
+     }
+    }
+   ]
+  },
+  {
+   "title": "Pilot timeline",
+   "blocks": [
+    {
+     "timeline": {
+      "events": [
+       {
+        "when": "March",
+        "what": "Pilot starts"
+       },
+       {
+        "when": "June",
+        "what": "Review"
+       },
+       {
+        "when": "September",
+        "what": "Rollout"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "title": "Next steps",
+   "blocks": [
+    {
+     "items": [
+      "Train the dock leads",
+      "Move the morning shift",
+      "Measure again in June"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Parcels by month",
+   "blocks": [
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Month",
+        "Parcels"
+       ],
+       "rows": [
+        [
+         "Jan",
+         64
+        ],
+        [
+         "Feb",
+         69
+        ],
+        [
+         "Mar",
+         72
+        ]
+       ]
+      }
+     }
+    }
+   ]
+  }
+ ]
+}
