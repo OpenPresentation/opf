@@ -510,7 +510,26 @@ function withColorScale(next, record, native, report, datasets) {
   report({code: 'table-color-scale-not-restored', message: refilled
     ? `The table's color scale was not restored: ${refilled} shaded ${refilled === 1 ? 'cell was' : 'cells were'} refilled after export, so the table imports its cell fills as plain fills.`
     : "The table's color scale was not restored: it does not fit the imported table (a column it names is gone), so the table imports its cell fills as plain fills."});
-  return next;
+  return plainFills(next, recorded, native);
+}
+
+/**
+ * The scale was not restored: every cell it shaded comes back with the fill (and the text color) it has in the native table, as a style on the
+ * restored value (a number keeps its authored value and format). Cells the scale never shaded stay as restored. A dataset reference cannot carry
+ * a cell fill, so such a table imports as the native table, its cells inline.
+ */
+function plainFills(next, recorded, native) {
+  if (!Array.isArray(next.rows)) return native;
+  const nativeCell = (row, column) => (Array.isArray(native.rows?.[row]) ? native.rows[row] : rowCells(native.rows?.[row]))[column];
+  const rows = next.rows.map(row => Array.isArray(row) ? [...row] : row);
+  for (const [row, column] of recorded.evidence) {
+    const source = nativeCell(row, column);
+    if (!Array.isArray(rows[row]) || column >= rows[row].length || !object(source) || !object(source.style) || typeof source.style.fill !== 'string') continue;
+    const cell = rows[row][column];
+    const current = object(cell) && own(cell, 'value') ? cell : {value: cell};
+    rows[row][column] = {...current, style: {...(object(current.style) ? current.style : {}), fill: source.style.fill, ...(typeof source.style.color === 'string' ? {color: source.style.color} : {})}};
+  }
+  return {...next, rows};
 }
 
 export function restoreTableData(table, record, options) {

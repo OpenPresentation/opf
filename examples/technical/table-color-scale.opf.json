@@ -139,9 +139,9 @@
             "YoY %"
           ],
           "colors": [
-            "accent2",
+            "accent1",
             "surface",
-            "accent1"
+            "accent5"
           ],
           "center": 0
         }

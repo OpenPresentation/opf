@@ -82,3 +82,49 @@ test('a deck without a color scale exports the same bytes as before the scale ex
   const a = unzipSync(await exportDeck(plain)), b = unzipSync(await exportDeck(JSON.parse(JSON.stringify(plain))));
   assert.deepEqual(Object.keys(a), Object.keys(b));
 });
+
+// The scale is not restored: every cell it shaded comes back with the fill it has in the file, so the imported table draws as PowerPoint shows it.
+const hexOf = fill => String(fill).replace(/^#/, '').toUpperCase();
+const cellsOf = table => table.rows.map(row => (Array.isArray(row) ? row : row.cells));
+test('a refilled shaded cell: every shaded cell comes back with its fill, the refilled one with its new fill, and re-exporting draws the same', async () => {
+  const bytes = await exportDeck(deck());
+  const [record] = dataRecords(bytes).filter(entry => entry.kind === 'table');
+  const evidence = record.colorScale.evidence;
+  const [, , refilledFill] = evidence[0];
+  const edited = editPart(bytes, 'ppt/slides/slide1.xml', xml => xml.replace(`<a:srgbClr val="${refilledFill}"/>`, '<a:srgbClr val="123456"/>'));
+  const diagnostics = [];
+  const back = await importDeck(edited, diagnostics);
+  const table = back.slides[0].table;
+  assert.equal(table.colorScale, undefined);
+  assert.ok(diagnostics.some(d => d.code === 'table-color-scale-not-restored'));
+  const rows = cellsOf(table);
+  evidence.forEach(([row, column, fill], index) => {
+    const cell = rows[row][column];
+    assert.ok(cell && typeof cell === 'object' && cell.style?.fill, `cell ${row},${column} has a fill`);
+    assert.equal(hexOf(cell.style.fill), index === 0 ? '123456' : fill, `cell ${row},${column}`);
+  });
+  const values = rows.map(row => row.map(cell => (cell && typeof cell === 'object' && 'value' in cell ? cell.value : cell)));
+  // The refilled cell's own XML changed, so its value is the native one; every other cell keeps the authored value.
+  values[0][1] = 'refilled';
+  assert.deepEqual(values, [['EMEA', 'refilled', 0.3], ['APAC', 0.1, 0.4], ['AMER', 'n/a', 0.25]], 'the values stay the authored values');
+  assert.equal(rows[2][2].style.fill, '#FF00FF', 'a cell with a fill of its own keeps it');
+  // Exporting the imported deck writes the same fills on those cells (the picture does not change), the refilled cell with its new color.
+  const again = await exportDeck(back);
+  const fills = xml => cellFills(xml);
+  const second = fills(strFromU8(unzipSync(again)['ppt/slides/slide1.xml']));
+  // Every shaded cell has the same color as in the first export (a color that is exactly a theme color was a theme color there and is the same sRGB color now).
+  assert.deepEqual(second, [...evidence.map(([, , fill], index) => (index === 0 ? '123456' : fill)), 'FF00FF']);
+});
+
+test('a scale that does not fit the imported table: the shaded cells come back as plain fills', async () => {
+  const {restoreTableData} = await import('../dist/data-provenance.js');
+  const authored = {columns: ['A', 'B'], rows: [['x', 1], ['y', 2]]};
+  const evidence = [['h1', 'h2'], ['h3', 'h4'], ['h5', 'h6']];
+  const record = {v: 1, kind: 'table', headers: [], cells: [], authored, evidence, environment: 'env', colorScale: {scale: {columns: ['Missing']}, evidence: [[0, 1, '112233', 'FFFFFF'], [1, 1, '445566', 'FFFFFF']]}};
+  const native = {columns: ['A', 'B'], rows: [['x', {value: 1, style: {fill: '#112233', color: '#FFFFFF'}}], ['y', {value: 2, style: {fill: '#445566'}}]]};
+  const reports = [];
+  const restored = restoreTableData(native, record, {datasets: undefined, report: d => reports.push(d), evidence, environment: 'env'});
+  assert.equal(restored.colorScale, undefined);
+  assert.deepEqual(restored.rows, [['x', {value: 1, style: {fill: '#112233', color: '#FFFFFF'}}], ['y', {value: 2, style: {fill: '#445566'}}]]);
+  assert.deepEqual(reports.map(d => d.code), ['table-color-scale-not-restored']);
+});
