@@ -70,6 +70,8 @@ A new property on `Table`:
   of changes would center on the middle of the range, not on zero; without `min` and `max` a 0 to 100% scale cannot be pinned when the
   data spans 62 to 88%.)*
 - `SchemeColorName` is new so later items (bands, the gauge) use the same restriction.
+- **Supervisor, 2026-11-25:** the builder takes the name list from what `ColorRef` really resolves in the schema (minus the hyperlink
+  colors) and reports any difference from the enum above.
 
 Generated types: `TableColorScale`, `SchemeColorName`, `Table.colorScale`.
 
@@ -92,7 +94,8 @@ and the diagnostics. Composition calls it; every engine draws its result.
    linear RGB mix goes muddy through the middle)*
 5. **The text color.** Of the scheme's `text` and `background` colors, the one with the higher contrast on the fill; rich runs with their
    own color keep it. The chosen pair is at least 4.5:1 for both ends of any scheme that passes the existing contrast checks; a test
-   covers every gallery color scheme with `surface` to `primary` and `accent2` / `surface` / `accent1`. *(analysis)*
+   covers every gallery color scheme with `surface` to `primary` and `accent2` / `surface` / `accent1`. *(analysis)* **Supervisor, 2026-11-25:** if any gallery scheme ends below 4.5:1 with the default colors, the builder stops and
+   reports the numbers rather than weakening the test.
 
 **With `table.highlight`.** A highlighted row's scaled cells take the scale's fill (the scale is about each number; the highlight tint
 would hide it); its other cells keep the highlight tint. *(analysis)*
