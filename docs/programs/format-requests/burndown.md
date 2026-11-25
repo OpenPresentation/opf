@@ -9,16 +9,19 @@ Every item also meets the definition of done in the README; the acceptance colum
 | FR-01 | CR 7: an `id` on the document | [Below](#fr-01-the-document-id-cr-7) | in-progress |
 | FR-02 | CR 6: ids on list items, bullets, timeline events and table rows | [Below](#fr-02-ids-inside-a-deck-cr-6) | in-progress |
 | FR-03 | opf#1297: links to a slide of the same deck, `slide:<id>` | [Below](#fr-03-links-to-a-slide-opf1297) | in-progress |
-| FR-04 | CR 1 with CR 3: data sources and a flat dataset | [Below](#fr-04-data-sources-and-a-flat-dataset-cr-1-with-cr-3) | todo |
+| FR-04 | CR 1 with CR 3: data sources and a flat dataset | [Below](#fr-04-data-sources-and-a-flat-dataset-cr-1-with-cr-3) | in-progress |
 | FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | todo |
 | FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | todo |
 | FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | todo |
 | FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | todo |
-| FR-09 | CR 14: limits on a variable's value | [Below](#fr-09-limits-on-a-variables-value-cr-14) | todo |
+| FR-09 | CR 14: limits on a variable's value | [Below](#fr-09-limits-on-a-variables-value-cr-14) | done |
 | FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | todo |
+| FR-11 | What a validator says about a key it does not know | [Below](#fr-11-what-a-validator-says-about-a-key-it-does-not-know) | todo |
 
-Order of landing: FR-01 to FR-03 (ids), FR-04 to FR-07 (data), FR-08 (embed), FR-09 and FR-10 (variables). Cut order if the date is at
-risk: the gauge, then the bullet chart (both FR-07), embed (FR-08), localized date names (FR-10), the `dataset-stale` warning (FR-04).
+Order of landing: FR-01 to FR-03 (ids), FR-04 to FR-07 (data), FR-08 (embed), FR-09 and FR-10 (variables). The tracks do not depend on
+each other, so an item lands when it is ready and each later branch merges `main` first; FR-09 was the first to land. Cut order if the
+date is at risk: the gauge, then the bullet chart (both FR-07), embed (FR-08), localized date names (FR-10), the `dataset-stale` warning
+(FR-04).
 
 ## FR-01: the document id (CR 7)
 
@@ -221,6 +224,11 @@ Acceptance:
 
 Progress log:
 
+- 2026-11-25: done, opf#1460. The rule is `opf/variable-overflow` (category `layout`); `opf fill` reports an overflow per record and
+  still writes; a limit on the wrong kind of variable is a schema error, with one invalid conformance case. Nothing is written to a
+  PowerPoint file, so there was no native check. The lean MCP Worker's unminified and minified size ceilings came back to 3% above the
+  measured size in this change.
+
 ## FR-10: translations and localized date names (CR 15)
 
 A template for a German team needs German text in its blanks and German dates. Numbers already follow the deck's language; dates do not.
@@ -234,5 +242,21 @@ Acceptance:
   before it is committed against the edge bundle, the MCP viewer and the site's size limits. A German deck prints "5. März 2026".
 - This part (the date names) is the cut candidate; the translations stay if it is cut.
 - Conformance: valid decks with translations; a Markdown and YAML round trip keeps them. Docs and an example deck in two languages.
+
+Progress log:
+
+## FR-11: what a validator says about a key it does not know
+
+Objects have been closed since 0.34, so a reader of one release rejects a key a later release adds, and says only that the key is
+unknown. The review's answer (decision R8) was a table of "this key needs release N". A released validator cannot know the keys of a
+later release, so the table only helps if it ships in a patch of the older line.
+
+Acceptance:
+
+- The `opf/schema` finding for an unknown key names the validator's own version and says that a later OPF release may define the key
+  (`"locked" is not a key this validator knows (OPF 0.37.0); a later release may define it`).
+- The docs say what to do: update the package, or check the key against the schema of the release that wrote the document.
+- No version field in documents. A table of the keys 0.37.0 adds, shipped in a 0.36.x patch so that 0.36 readers can name the release,
+  is built only if the owner asks for it (he planned no 0.36.1).
 
 Progress log:
