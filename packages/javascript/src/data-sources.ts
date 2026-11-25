@@ -39,6 +39,9 @@ export interface DataProvenance {
 /** The six keys that say where a dataset or inline chart data came from, in the order the schema lists them. */
 export const PROVENANCE_KEYS = ['datasource', 'query', 'retrieved', 'version', 'sha256', 'generator'] as const;
 
+/** The id pattern of an entry of `datasources` (the `datasets` and `assets` id pattern). A string `datasource` that does not match it is a path or a URL, which the schema reports. */
+export const DATA_SOURCE_ID = /^[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
+
 const record = (value: unknown): value is Record<string, any> => typeof value === 'object' && value !== null && !Array.isArray(value);
 const segment = (key: string | number): string => String(key).replaceAll('~', '~0').replaceAll('/', '~1');
 const at = (base: string, ...keys: (string | number)[]): string => `${base}${keys.map(key => `/${segment(key)}`).join('')}`;
@@ -161,7 +164,7 @@ export function provenanceDiagnostics(node: unknown, path: string, document: unk
   if (!record(node)) return diagnostics;
   const { datasource } = node;
   if (typeof datasource === 'string') {
-    if (document !== undefined && !Object.hasOwn(dataSourcesOf(document), datasource)) {
+    if (document !== undefined && DATA_SOURCE_ID.test(datasource) && !Object.hasOwn(dataSourcesOf(document), datasource)) {
       diagnostics.push({ code: 'datasource-unknown', severity: 'error', path: at(path, 'datasource'), message: `unknown data source '${datasource}'; add it to the top-level datasources map, or write the data source inline as an object such as { "src": "./data.csv" }` });
     }
   } else if (record(datasource)) credentialDiagnostics(datasource, at(path, 'datasource'), diagnostics);

@@ -295,6 +295,23 @@ describe('opf fix rewrites a 0.36 source', () => {
     assert.equal(validate(document, { catalogs: [gallery] }).valid, false, 'the input is never changed');
   });
 
+  test('a bare string that is a path or a URL gets one finding, with the inline form as an unsafe fix', () => {
+    for (const value of ['./revenue.csv', 'https://example.com/revenue.csv']) {
+      const document = deck({ datasets: { revenue: dataset({ datasource: value }) } });
+      const report = run(document);
+      assert.equal(rules(report, 'opf/datasource-unknown').length, 0, 'a string that is no id is the schema\'s finding, not an unknown id');
+      const found = report.findings.filter((finding) => finding.path === '/datasets/revenue/datasource');
+      assert.equal(found.length, 1, JSON.stringify(found));
+      assert.match(found[0].help, /only ever the id/);
+      const [repair] = found[0].fixes;
+      assert.equal(repair.id, 'datasource-to-src');
+      assert.equal(repair.safe, false);
+      const fixed = applyPatch(document, repair.patch);
+      assert.deepEqual(fixed.datasets.revenue.datasource, { src: value });
+      assert.equal(run(fixed).valid, true);
+    }
+  });
+
   test('a valid deck without source is left alone', () => {
     const result = fix(deck({ datasets: { revenue: dataset({ datasource: { src: './r.csv' } }) } }), { catalogs: [gallery] });
     assert.deepEqual(result.applied, []);

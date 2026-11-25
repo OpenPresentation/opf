@@ -139,6 +139,20 @@ function sheetReference(name: string): string {
   return /^[A-Za-z_][A-Za-z0-9_]*$/.test(name) ? name : `'${name.replaceAll("'", "''")}'`;
 }
 
+/**
+ * OPF 0.37: a string `datasource` on a dataset or on inline chart data that is no id (a path or a URL). A string is only ever the id of an entry of
+ * `datasources`; the file or URL is written as an inline data source. The fix is not marked safe: the author may have meant an id.
+ */
+function datasourceStringRepair(finding: Finding, document: unknown, segments: string[]): { help: string; fixes: FindingFix[] } | undefined {
+  const parent = segments.slice(0, -1), owner = readAt(document, parent), value = readAt(document, segments);
+  const where = parent.length === 2 && parent[0] === "datasets" ? "dataset" : parent.at(-1) === "data" && parent.at(-2) === "chart" ? "chart data" : undefined;
+  if (where === undefined || !isRecord(owner) || typeof value !== "string") return undefined;
+  return {
+    help: `A string \`datasource\` is only ever the id of an entry of the root \`datasources\` map (letters, digits, dots, hyphens and underscores). A file or a URL is written as an inline data source: { "src": ${JSON.stringify(value)} }.`,
+    fixes: [patch("datasource-to-src", `Write the ${where}'s datasource as { "src": ${JSON.stringify(value)} }`, [{ op: "replace", path: finding.path, value: { src: value } }])],
+  };
+}
+
 /** OPF 0.37: what replaced a dataset's or inline chart data's nested `source` object (sourceRepair). */
 export const REMOVED_SOURCE = "OPF 0.37 removed the nested `source` object. Where the data came from is written in the keys of the dataset or chart data itself: `datasource` (the id of an entry of the root `datasources` map, or an inline data source such as { \"src\": \"./revenue.csv\" }), `query` (the sheet and range, \"FY26!A1:C13\"), `retrieved`, `version`, `sha256` and `generator`.";
 /**
@@ -173,6 +187,10 @@ export function removedKeyRepair(finding: Finding, document: unknown, options?: 
   if (!validation || (finding.ruleId !== "opf/schema" && finding.ruleId !== "opf/catalog-record")) return undefined;
   const segments = segmentsOf(finding.path);
   if (validation.keyword === "additionalProperties" && segments.length === 3 && segments[0] === "slides" && readAt(document, segments) !== undefined && nearestGridCell(segments[2]!) !== undefined) return cellKeyRepair(document, segments.slice(0, 2), segments[2]!, options);
+  if (validation.keyword === "pattern" && finding.ruleId === "opf/schema" && segments.at(-1) === "datasource") {
+    const repaired = datasourceStringRepair(finding, document, segments);
+    if (repaired) return repaired;
+  }
   if (validation.keyword === "additionalProperties" && finding.ruleId === "opf/schema" && segments.at(-1) === "source") {
     const repaired = sourceRepair(finding, document, segments);
     if (repaired) return repaired;

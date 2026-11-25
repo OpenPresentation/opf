@@ -109,10 +109,10 @@ function sentenceEnds(text: string): number[] {
   }
   return ends;
 }
-/** The deck-level fields a single slide needs to validate: the references it cites and the datasets it plots. */
+/** The deck-level fields a single slide needs to validate: the references it cites, the datasets it plots and the data sources they name. */
 const deckContext = (presentation: unknown): Record<string, unknown> => {
   const deck = isRecord(presentation) ? presentation : {};
-  return {...(Array.isArray(deck.references)?{references:deck.references}:{}),...(isRecord(deck.datasets)?{datasets:deck.datasets}:{})};
+  return {...(Array.isArray(deck.references)?{references:deck.references}:{}),...(isRecord(deck.datasets)?{datasets:deck.datasets}:{}),...(isRecord(deck.datasources)?{datasources:deck.datasources}:{})};
 };
 interface Leaf {
   path: string; field: string; value: any;

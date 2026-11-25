@@ -184,7 +184,8 @@ A column is a string or a `DataColumn` with a number format, which the data labe
     "data": {
       "columns": ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }],
       "rows": [["Q1", 12.4, 0.31], ["Q2", 18.1, 0.34]],
-      "source": { "src": "./data/revenue.csv", "retrieved": "2026-10-05" }
+      "datasource": { "src": "./data/revenue.csv" },
+      "retrieved": "2026-10-05"
     },
     "mapping": { "category": "Quarter", "series": ["Revenue"] }
   }

@@ -210,12 +210,14 @@ For a file that will be opened in LibreOffice, `--charts picture` writes the cha
 - **`opf validate`** checks files, folders (their `*.opf.json`, `*.opf.yaml`, `*.opf.yml` and `*.opf.md`, sorted, skipping
   `node_modules` and dot folders) and `-`. One input prints its report; several print `{ command, ok, files: [reports], counts }`.
   The exit status is the worst over every file. `--format github` prints `::error`, `::warning` and `::notice` annotations with the
-  file, line and column. See [validate](validate.md).
+  file, line and column. `--as-of <date>` (an ISO 8601 date or date-time; the `asOf` key of a `--config` file) is the date to check data
+  freshness as of: a dataset whose `retrieved` is older than its data source's `refresh` is an `opf/dataset-stale` warning. The CLI never
+  reads the clock for it, so without `--as-of` nothing is reported stale. See [validate](validate.md).
 - **`opf paginate`** measures the page breaks with the fonts `opf convert --paginate` draws with when `@openpresentation/opf-render`
   is installed (`layout: "measured"`); without it they are estimated (`layout: "estimated"`) and `hint` names the install command.
 - **`opf fix`** validates the deck as `opf validate` does and applies each finding's fix that is marked `safe` (it loses no
   content and writes valid OPF: `use-max-1`, `remove:listColumns`, `rename-layout`, `rename-region`, `remove-layout-auto`,
-  `use-current-record` on a stale copy of a built-in layout, a renamed icon, ...), one fix per finding, then validates again, because an error
+  `use-current-record` on a stale copy of a built-in layout, a renamed icon, `use-datasource` for the nested `source` object of OPF 0.36, ...), one fix per finding, then validates again, because an error
   in the deck's own keys hides the accessibility, layout and content checks. By default only the checks that repair the document
   apply their fixes (`format`, `references`, `policy`, `layout`); `--audits` applies the audits' safe fixes too (accessibility,
   content), which `fix.audits` lists otherwise. The fixes bring the deck to the 0.35 form and the 0.35 engine draws it: a safe fix that can change

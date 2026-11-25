@@ -73,11 +73,14 @@ export function assertValidOutput(value: Obj | Obj[], as: "block" | "slide" | "s
   // edit) the dataset references cannot be checked here and are left to the caller's document validation.
   // Citations likewise resolve against supplied document references, or remain the enclosing document's check.
   // An explicit empty references list is still a context: it must reject unknown citations.
+  // FR-04: a dataset names its data source by id, so the document's data sources travel with its datasets.
   const datasets = isRecord(context.datasets) ? context.datasets : undefined;
+  const datasources = isRecord(context.datasources) ? context.datasources : undefined;
   const referencesProvided = own(context, "references");
-  const report = validate({ ...(datasets ? { datasets } : {}), ...(referencesProvided ? { references: context.references } : {}), slides }, { only: ["format"] });
+  const report = validate({ ...(datasets ? { datasets } : {}), ...(datasources ? { datasources } : {}), ...(referencesProvided ? { references: context.references } : {}), slides }, { only: ["format"] });
   const errors = report.findings.filter((entry) => entry.severity === "error").filter((entry) =>
     (datasets || (entry.ruleId !== "opf/dataset-unknown" && entry.ruleId !== "opf/dataset-field-unknown")) &&
+    (datasources || entry.ruleId !== "opf/datasource-unknown") &&
     (referencesProvided || entry.ruleId !== "opf/cite-unknown-reference"));
   if (errors.length) {
     const first = errors[0];

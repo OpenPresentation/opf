@@ -593,6 +593,32 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
   assert.equal(validate(bare.presentation, { only: ["format"] }).valid, true);
 }
 
+// --- inserting slides whose data names a data source (FR-04) ---------------------------------------------------------------
+{
+  const incoming = (source) => ({
+    name: "Other", design: { theme: "minimal", fontScheme: "aptos" },
+    datasources: { warehouse: source, unused: { title: "No dataset names it" } },
+    datasets: { feed: { columns: ["Quarter", "Revenue"], rows: [["Q1", 1]], datasource: "warehouse", retrieved: "2026-11-01" } },
+    slides: [{ id: "in", title: "In", blocks: [{ table: { dataset: "feed" } }, { chart: { type: "column", data: { columns: ["A", "B"], rows: [["x", 1]], datasource: "warehouse" } } }] }],
+  });
+  const bare = { name: "Bare", design: { theme: "minimal", fontScheme: "aptos" }, slides: [{ id: "b", title: "B", blocks: [{ text: "x" }] }] };
+  // A deck without data sources takes the ones the inserted slides use, and no more.
+  const first = prepareOpfImport(bare, { presentation: incoming({ connector: "postgres" }) }, { mode: "insert", slideIndex: 0 });
+  assert.deepEqual(Object.keys(first.presentation.datasources), ["warehouse"], "the data source the dataset names comes along; the unused one does not");
+  assert.equal(validate(first.presentation, { only: ["format"] }).valid, true, JSON.stringify(validate(first.presentation, { only: ["format"] }).findings));
+  // The same id with other content: the incoming one is stored under a free id and the dataset and the inline data follow it.
+  const taken = { ...bare, datasources: { warehouse: { connector: "csv" } } };
+  const merged = prepareOpfImport(taken, { presentation: incoming({ connector: "postgres" }) }, { mode: "insert", slideIndex: 0 });
+  assert.deepEqual(merged.presentation.datasources, { warehouse: { connector: "csv" }, "warehouse-2": { connector: "postgres" } }, "the deck's own data source is untouched");
+  assert.equal(merged.presentation.datasets.feed.datasource, "warehouse-2");
+  assert.equal(merged.presentation.slides[1].blocks[1].chart.data.datasource, "warehouse-2");
+  assert.equal(validate(merged.presentation, { only: ["format"] }).valid, true);
+  // The same data source under the same id is shared.
+  const same = prepareOpfImport(taken, { presentation: incoming({ connector: "csv" }) }, { mode: "insert", slideIndex: 0 });
+  assert.deepEqual(Object.keys(same.presentation.datasources), ["warehouse"]);
+  assert.equal(same.presentation.datasets.feed.datasource, "warehouse");
+}
+
 // --- numbers show formatted in the grid; the raw value is what editing and copying use ------------------------------------
 {
   const editor = session();
