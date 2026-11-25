@@ -83,7 +83,7 @@ export interface DataGridDescription {
   /** Body rows. */
   rowCount: number;
   columnCount: number;
-  /** For a chart: "category", "series", for scatter "label" and "x", and "other" for a column a `mapping` leaves out. Empty for a table. */
+  /** For a chart: "category", "series", for scatter "label" and "x", for a bullet chart "target", and "other" for a column a `mapping` leaves out. Empty for a table. */
   columnRoles: string[];
   /** The number format of each column (from its header), or undefined. */
   columnFormats: Array<string | undefined>;
@@ -115,12 +115,14 @@ export interface ChartMappingColumns {
   category?: string;
   x?: string;
   series?: string[];
+  /** A bullet chart's target column. */
+  target?: string;
 }
 export interface ChartMappingDescription {
   path: string;
   /** True for a chart with an X axis (scatter). */
   xy: boolean;
-  columns: Array<{ name: string; format?: string; role: "category" | "label" | "x" | "series" | "other" }>;
+  columns: Array<{ name: string; format?: string; role: "category" | "label" | "x" | "series" | "target" | "other" }>;
   /** The label column's name (the mapping's, or the first column). */
   category: string;
   /** The X column's name, for an XY chart. */

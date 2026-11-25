@@ -124,6 +124,8 @@ export interface CompatibleChartType extends SwitchOption {
 /** Values a picker can offer: a catalog dimension lists core's `catalogRecords` (embedded records, then `catalogs`); `charts` and `socials` list core's vocabularies, `languages` core's `LANGUAGES` tags; `blocks` lists the content kinds and `slide-sizes` the presets. `purposes` lists the catalogs; any other goal text is also a valid switch value. */
 export declare function listSwitchOptions(presentation: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "catalogs" | "vocabularies">): SwitchOption[];
 /** Chart types the chart's inline data can use as it is (data-shape compatibility from `vocabularies.chartTypes`, not an engine-support claim). `path` or `slideIndex` picks the chart. */
+/** FR-07: the column a bullet chart would take as its target (named Target, Goal, Plan, Budget or Quota), or undefined. */
+export declare function bulletTargetColumn(chart: unknown, presentation?: unknown): string | undefined;
 export declare function compatibleChartTypes(presentation: unknown, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "catalogs" | "vocabularies">): CompatibleChartType[];
 /** The value a dimension currently has: `{ value, scope }`, with the reference (`id` or `name:id`) for catalog dimensions. `slide-sizes` reads the deck's design.dimensions, else its theme's (a preset string, or the object for a custom size); `purposes` reads the goal text or Purpose id. */
 export declare function currentSwitchValue(presentation: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "owner" | "index" | "catalogs">): { value: unknown; scope: "deck" | "slide" | "block" };

@@ -94,3 +94,19 @@ describe('bullet data and the value axis (FR-07)', () => {
     assert.equal(chartValueAxis(noBands, resolveChartData(noBands), geometry).max, 55, 'the largest target');
   });
 });
+
+describe('Markdown and YAML (FR-07)', () => {
+  test('a column chart with bands and a bullet chart round-trip as nested chart properties', async () => {
+    const { fromMarkdown, toMarkdown } = await import('../dist/markdown.js');
+    const { fromYaml, toYaml } = await import('../dist/yaml.js');
+    const deck = { name: 'Bands', language: 'en-US', slides: [
+      { title: 'Wait', chart: { type: 'column', alt: 'Wait by week.', data: wait, bands: [{ to: 10, label: 'Within target', color: 'accent3' }, { to: 20, label: 'Over target' }] } },
+      { title: 'KPIs', chart: { type: 'bullet', alt: 'KPIs against targets.', data: kpis, mapping: { category: 'KPI', series: ['Actual'], target: 'Target' }, bands: [{ to: 0.6, label: 'Poor' }, { to: 1 }] } },
+    ] };
+    const charts = (value) => value.slides.map((slide) => slide.chart);
+    for (const back of [fromYaml(toYaml(deck).yaml), fromMarkdown(toMarkdown(deck).markdown, {})]) {
+      assert.deepEqual(back.findings.filter((finding) => finding.severity === 'error'), []);
+      assert.deepEqual(charts(back.presentation), charts(deck));
+    }
+  });
+});
