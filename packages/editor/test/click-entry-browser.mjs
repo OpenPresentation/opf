@@ -35,6 +35,21 @@ const bundled = await build({stdin: {resolveDir: fileURLToPath(new URL('../', im
     return {x: box.left + box.width * (side === 'left' ? 0.25 : 0.75), y: box.top + box.height / 2, width: box.width, left: box.left, right: box.right, top: box.top, bottom: box.bottom};
   };
   window.inputWrapWidth = inputWrapWidth;
+  // Client box of one character of the open input, from a hidden copy laid out like it (the browser places the input's own glyphs there).
+  window.inputCharBox = (needle, k = 0) => {
+    const input = document.activeElement, cs = getComputedStyle(input), rect = input.getBoundingClientRect(), mirror = document.createElement('div');
+    for (const name of ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'lineHeight', 'letterSpacing', 'wordSpacing', 'textAlign', 'textRendering', 'fontKerning', 'tabSize', 'direction',
+      'paddingLeft', 'paddingRight', 'paddingTop', 'paddingBottom', 'borderLeftWidth', 'borderRightWidth', 'borderTopWidth', 'borderBottomWidth', 'borderStyle', 'boxSizing'])
+      mirror.style[name] = cs[name];
+    Object.assign(mirror.style, {position: 'fixed', left: rect.left + 'px', top: rect.top + 'px', width: rect.width + 'px', margin: '0', visibility: 'hidden', whiteSpace: 'pre-wrap', overflowWrap: 'break-word'});
+    mirror.textContent = input.value;
+    document.body.append(mirror);
+    const index = input.value.indexOf(needle) + k, range = document.createRange();
+    range.setStart(mirror.firstChild, index); range.setEnd(mirror.firstChild, index + 1);
+    const box = range.getBoundingClientRect();
+    mirror.remove();
+    return {left: box.left, right: box.right};
+  };
   // The look of the open input, and the rows a plain greedy textarea of the same box would give a prefix of its text.
   window.inputLook = (greedyPrefix) => {
     const input = document.activeElement;
@@ -470,11 +485,15 @@ try {
       assert.equal(look.visible, false, 'the input text stays transparent over the drawn glyphs');
     }
     // The second and later presses land on the input itself, which is over the glyphs while it is edited.
-    // The first drawn line ends in the space that hangs at its wrap. The drawing (SVG text-anchor) counts that space in the line's width and the browser's
-    // textarea does not, so on an end aligned (and, by half, a centered) heading the glyphs of that line sit a space apart; the presses on it are checked for the
-    // start aligned heading only, and the second line, which has no hanging space, for all three.
-    for (const [needle, k, side] of [['January', 5, 'right'], ['teams', 2, 'left'], ...(index === 8 ? [['four', 1, 'right']] : []), ['January', 0, 'left'], ['.', 0, 'right']])
+    // The first drawn line ends in the space that hangs at its wrap: the drawing hangs it as the browser's textarea does, so the input's first line is on the
+    // drawn glyphs for the start, centered and end aligned heading alike, and the presses on both lines are checked for all three.
+    for (const [needle, k, side] of [['January', 5, 'right'], ['teams', 2, 'left'], ['four', 1, 'right'], ['Scale', 0, 'left'], ['January', 0, 'left'], ['.', 0, 'right']])
       await pressAt(path, needle, k, side);
+    for (const [needle, k] of [['Scale', 0], ['four', 3], ['teams', 0], ['.', 0]]) {
+      const drawn = await point(path, needle, k), typed = await page.evaluate((args) => inputCharBox(...args), [needle, k]);
+      assert.ok(Math.abs(typed.left - drawn.left) < 1.5 && Math.abs(typed.right - drawn.right) < 1.5,
+        `slide ${index}: the input's ${JSON.stringify(needle)}+${k} is on the drawn glyph (input ${typed.left.toFixed(1)}-${typed.right.toFixed(1)}, drawn ${drawn.left.toFixed(1)}-${drawn.right.toFixed(1)})`);
+    }
     await pressAt(path, 'January', 3, 'left');
     await page.keyboard.press('ArrowRight');
     assert.equal((await state()).start, balanced.indexOf('January') + 4, 'the caret moves through the second drawn line');
