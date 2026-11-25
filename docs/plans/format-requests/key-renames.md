@@ -72,6 +72,12 @@ detail of the tags, like the other legacy forms `legacy-tags.js` reads, not an a
    fixtures and the example decks before and after and comparing bytes. **If any locked archive would change, stop and report: a lock
    refresh needs the owner's word.**
 
+Confirmed by the supervisor on 2026-11-25, with two more conditions:
+
+4. The mapping lives in one table in the PowerPoint package, next to the legacy tag forms, with a test that every renamed key and value
+   of the release is in it, so a later rename cannot forget it.
+5. The docs of the records say that the stored spelling is the 0.36 one, and why.
+
 The alternative, writing the new names into the records, makes a 0.36.0 importer drop those records (the deck stays valid and falls back
 to what PowerPoint shows) and moves every archive that holds one of the keys. Not recommended.
 
