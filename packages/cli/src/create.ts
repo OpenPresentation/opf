@@ -1,6 +1,7 @@
 // `opf create [output]`: a new deck, a one-slide starter or one of core's bundled examples (`--example <slug>`, RR-75; `opf
 // catalog examples` lists them). It replaced `create --from`, which `opf convert` covers.
 import { copyFile, lstat, mkdir, readFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { localAssetSources } from "@openpresentation/opf";
@@ -20,6 +21,7 @@ export const spec: CommandSpec = {
 starter deck and its first slide; --language <tag> sets its BCP 47 language (default en-US). --example <slug> copies a bundled
 example deck (opf catalog examples lists them) and the image files it names, into an assets/ folder next to the output (an
 existing file is refused unless --force; with the deck on stdout no files are copied).
+Every new deck, starter or example, gets its own id (a UUID, the deck's document id): core never makes one, this command does.
 --to json|yaml|md picks the form for stdout; --schema-comment starts a YAML deck with its $schema line. The report
 { command, ok, input, outputs, findings, counts } goes to stdout, or to stderr when stdout carries the deck.
 
@@ -48,17 +50,23 @@ export async function run(args: string[], _host: Host): Promise<void> {
 			const guess = nearest(slug, examples.map((item) => item.slug));
 			throw usage(`Unknown example ${slug}.${guess ? ` Did you mean ${guess}?` : ""} Run opf catalog examples for the list.`, "unknown-example", { example: slug });
 		}
-		document = structuredClone(example.deck);
+		document = withNewId(structuredClone(example.deck));
 		exampleFolder = path.posix.dirname(example.file.replace(/^examples\//, ""));
 	} else {
 		const title = options.title === undefined ? "Untitled presentation" : String(options.title);
-		document = { $schema: "https://openpresentation.org/schema/opf/v1", name: title, language: options.language === undefined ? "en-US" : String(options.language), slides: [{ id: "slide-1", title }] };
+		document = { $schema: "https://openpresentation.org/schema/opf/v1", id: randomUUID(), name: title, language: options.language === undefined ? "en-US" : String(options.language), slides: [{ id: "slide-1", title }] };
 	}
 	const files = exampleFolder !== undefined && destination.file !== "-" ? await exampleFiles(document, exampleFolder, path.dirname(path.resolve(destination.file))) : [];
 	if (!destination.overwrite) {
 		for (const file of files) if (await lstat(file.to).then(() => true, () => false)) throw new CliError(`Output already exists: ${file.to}. Use --force to replace it.`, "output-exists", 1, { file: file.to });
 	}
 	await writeDeck("create", document, destination, { afterWrite: () => copyFiles(files),  to, schemaComment: options["schema-comment"] === true, failOn, ...(options.example !== undefined ? { extra: { example: String(options.example) } } : {}) });
+}
+
+/** A copy of a bundled example is a new deck: it gets its own id (core never mints one; `opf create` does), placed after `$schema`. */
+function withNewId(deck: unknown): unknown {
+	const { $schema, id: _bundled, ...rest } = deck as Record<string, unknown>;
+	return { ...($schema === undefined ? {} : { $schema }), id: randomUUID(), ...rest };
 }
 
 interface ExampleFile {

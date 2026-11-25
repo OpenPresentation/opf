@@ -206,7 +206,7 @@ For a file that will be opened in LibreOffice, `--charts picture` writes the cha
 
 ## The other commands
 
-- **`opf create`** writes a starter deck (`--title`, `--language`, default `en-US`) or a bundled example (`--example <slug>`, from `opf catalog examples`) together with the image files it names, copied into `assets/` next to the output (an existing file is refused unless `--force`).
+- **`opf create`** writes a starter deck (`--title`, `--language`, default `en-US`) or a bundled example (`--example <slug>`, from `opf catalog examples`) together with the image files it names, copied into `assets/` next to the output (an existing file is refused unless `--force`). Either way the new deck gets its own document `id` (a UUID): core never makes one, so `opf create` does, and `opf fill` gives each filled deck a new one when the template had one.
 - **`opf validate`** checks files, folders (their `*.opf.json`, `*.opf.yaml`, `*.opf.yml` and `*.opf.md`, sorted, skipping
   `node_modules` and dot folders) and `-`. One input prints its report; several print `{ command, ok, files: [reports], counts }`.
   The exit status is the worst over every file. `--format github` prints `::error`, `::warning` and `::notice` annotations with the
