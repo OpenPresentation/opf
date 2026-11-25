@@ -13336,6 +13336,9 @@ export {chartDoughnut,restackForRows,chartWaterfall,waterfallRoles,waterfallLabe
 export type {ChartLayerDoughnut,WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartLayerReferences} from './chart-marks.js';
 export type {ChartReference,ChartReferenceDiagnostic} from './chart-references.js';
 export {CHART_REFERENCE_TYPES,chartReferenceSources} from './chart-references.js';
+// FR-07: bands on value axes and the bullet chart; the gauge reuses the sorted, clamped band list and the band colors.
+export {CHART_BAND_TYPES,CHART_BAND_NEUTRAL_SHARES,CHART_BAND_COLOR_SHARE,chartBands,chartBandMaximum,chartBandRanges,chartBandFill,chartBandFills,chartBandDiagnostics,BULLET_CHART_TYPE,BULLET_BAR_SHARE,BULLET_TARGET_SHARE,BULLET_TARGET_WIDTH_PX,BULLET_GAP_WIDTH} from './chart-bands.js';
+export type {ChartBandSpec,ChartBandRange,ChartBandColors,ChartBandDiagnostic} from './chart-bands.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartNumericAxes} from './chart-numeric-axes.js';
 export type {ChartNumericAxes} from './chart-numeric-axes.js';

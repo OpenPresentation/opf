@@ -12,6 +12,7 @@ import { dataProvenance, unknownDataSourceDiagnostics, type DataGenerator, type 
 import { tableRows } from './table.js';
 import { tableColorScaleDiagnostics } from './table-color-scale-range.js';
 import { isTimeLabel } from './chart-time-order.js';
+import { chartBandDiagnostics } from './chart-bands.js';
 
 export type { DataGenerator, DataProvenance, DataSource };
 
@@ -30,7 +31,7 @@ export interface Dataset extends DataProvenance { title?: string; description?: 
 /** Chart data (or, as `{ dataset, fields }`, a table) taken from a top-level dataset. */
 export interface DatasetRef { dataset: string; fields?: string[] }
 /** `chart.mapping`: the category, X and series columns by name (after any `fields` selection). */
-export interface ChartMapping { category?: string; x?: string; series?: string[] }
+export interface ChartMapping { category?: string; x?: string; series?: string[]; target?: string }
 /** One series of a combo chart: drawn as a clustered column or as a line with markers, against the primary (left) or secondary (right) value axis. */
 export interface ChartComboSeries { role: 'bar' | 'line'; axis: 'primary' | 'secondary' }
 
@@ -61,6 +62,8 @@ export type DataDiagnosticCode =
   | 'chart-series-dropped'
   | 'chart-reference-axis-unavailable'
   | 'chart-reference-unsupported-type'
+  | 'chart-bands-order'
+  | 'chart-bands-unsupported'
   | 'table-highlight-unknown-name'
   | 'table-color-scale-unknown-column'
   | 'table-color-scale-no-data'
@@ -113,6 +116,11 @@ export type ResolvedChartData =
        * plotted order, so every engine draws, exports and lists them in the legend alike.
        */
       combo?: ChartComboSeries[];
+      /**
+       * Bullet charts only (FR-07): the target column `mapping.target` names, with its number format and each row's target (null: no tick
+       * in that row). The target is not a series: `columns` and `rows` hold the category and the plotted series only.
+       */
+      target?: { column: string; format?: string; values: (number | null)[] };
       diagnostics: DataDiagnostic[];
     }
   | {
@@ -728,6 +736,16 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
   } else if (mapping?.x !== undefined) {
     diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path: at(mappingPath, 'x'), message: `a '${String(record(chart) ? chart.type : '')}' chart has no X value axis; mapping.x is ignored` });
   }
+  // FR-07: a bullet chart's target column (mapping.target); on any other chart type it is ignored with a warning.
+  const bullet = record(chart) && typeof chart.type === 'string' && chart.type.trim().toLowerCase() === 'bullet';
+  let target: number | undefined;
+  if (mapping?.target !== undefined) {
+    const path = at(mappingPath, 'target');
+    const found = known(mapping.target, path);
+    if (found !== undefined && !bullet) diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path, message: `a '${String(record(chart) ? chart.type : '')}' chart draws no target; mapping.target is ignored (only a bullet chart draws a target tick)` });
+    else if (found !== undefined && found === category) diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path, message: `the target column ${JSON.stringify(names[found])} is also the category column; no target is drawn` });
+    else target = found;
+  }
   let series: number[];
   if (Array.isArray(mapping?.series)) {
     series = [];
@@ -739,13 +757,17 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
         diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path, message: `series ${JSON.stringify(name)} is the ${found === category ? 'category' : 'X'} column; it is not plotted as a series` });
         return;
       }
+      if (found === target) {
+        diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path, message: `series ${JSON.stringify(name)} is the target column; it is drawn as the target tick, not as a series` });
+        return;
+      }
       if (series.includes(found)) {
         diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path, message: `series ${JSON.stringify(name)} is listed twice; it is plotted once` });
         return;
       }
       series.push(found);
     });
-  } else series = names.map((_, index) => index).filter(index => index !== category && index !== x);
+  } else series = names.map((_, index) => index).filter(index => index !== category && index !== x && index !== target);
   // An X column needs at least one series beside it; otherwise it is plotted as the series against row numbers.
   if (x !== undefined && !series.length) {
     diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path: at(mappingPath, mapping?.x !== undefined ? 'x' : 'series'), message: `no series is left beside the X column ${JSON.stringify(names[x])}; it is plotted as the series against row numbers` });
@@ -801,6 +823,8 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
   if (record(chart) && Array.isArray(chart.referenceLines)) chart.referenceLines.forEach((entry, index) => {
     if (record(entry) && entry.axis === 'secondary' && !combo?.some(series => series.axis === 'secondary')) diagnostics.push({code:'chart-reference-axis-unavailable',severity:'error',path:at(base,'referenceLines',index,'axis'),message:'A secondary reference requires a combo chart with a plotted line series on its secondary value axis.'});
   });
+  // FR-07: bands are drawn by bar, column, line and area charts and the bullet chart; unordered bands are drawn sorted.
+  diagnostics.push(...chartBandDiagnostics(chart, base));
   const order = [category, ...(x === undefined ? [] : [x]), ...series];
   if (!rows.length) return fail('no-rows', 'The chart data has no rows.');
   // A lone column (no category column) is the chart's values, plotted against row numbers or binned: it is read as numbers too.
@@ -815,6 +839,19 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     }
     return number;
   }));
+  // FR-07: the bullet's targets, read as numbers like the series (a cell that is not a number is a gap and a warning: no tick in that row).
+  let targetValues: (number | null)[] | undefined;
+  if (target !== undefined) {
+    const sourceIndex = selected ? selected[target]! : target;
+    targetValues = rows.map((row, rowIndex) => {
+      const cell = Array.isArray(row) && sourceIndex < row.length ? row[sourceIndex] : null;
+      const number = chartNumber(cell);
+      if (number === null && cell !== null && cell !== undefined && cell !== '' && !numberVariable(document, cell)) {
+        diagnostics.push({ code: 'chart-value-not-numeric', severity: 'warning', path: at(rowsPath, rowIndex, sourceIndex), message: `chart value ${JSON.stringify(cell)} is not a number; it is plotted as a gap. Write numbers as plain decimals (12, -3.5, 1e6) and put units, currency and percent in the column format` });
+      }
+      return number;
+    });
+  }
   // FA-14: chart.highlight names plotted series (columns) and category labels (row label values).
   const highlight = record(chart) && record(chart.highlight) ? chart.highlight : undefined;
   if (highlight) {
@@ -846,6 +883,7 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     ...(provenance && Object.keys(provenance).length ? { provenance } : {}),
     ...(datasetId !== undefined ? { dataset: datasetId } : {}),
     ...(combo ? { combo } : {}),
+    ...(target !== undefined && targetValues ? { target: { column: names[target]!, ...(formats[target] !== undefined ? { format: formats[target] } : {}), values: targetValues } } : {}),
     diagnostics,
   };
 }

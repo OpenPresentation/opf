@@ -229,9 +229,12 @@ const datasetHash = (datasets, id) => own(datasets, id) ? hash(canonical(dataset
 export function chartDataRecord(chart, datasets, {rowNumbers = false, fallback = false} = {}) {
   // LH-60: a chart drawn as core's fallback (a box per series writes its rows as one group) records its authored data, so import restores it.
   // A scatter series caches only its X/Y coordinates. Its authored point names and first-column heading need the data tag.
-  if (chart?.type !== 'scatter' && !rowNumbers && !fallback && !chartUsesDataFields(chart) && !object(chart?.highlight)) return undefined;
+  // FR-07: a chart with bands, and a bullet chart, record them as authored (the 0.37 form; no older importer is served).
+  const banded = Array.isArray(chart?.bands) || chart?.type === 'bullet';
+  if (chart?.type !== 'scatter' && !rowNumbers && !fallback && !banded && !chartUsesDataFields(chart) && !object(chart?.highlight)) return undefined;
   const dataset = isDatasetRef(chart.data) ? datasetHash(datasets, chart.data.dataset) : undefined;
-  return {v: 1, kind: 'chart', data: clone(chart.data), ...(chart.mapping !== undefined ? {mapping: clone(chart.mapping)} : {}), ...(object(chart.highlight) ? {highlight: clone(chart.highlight)} : {}), ...(dataset ? {dataset} : {})};
+  return {v: 1, kind: 'chart', data: clone(chart.data), ...(chart.mapping !== undefined ? {mapping: clone(chart.mapping)} : {}), ...(object(chart.highlight) ? {highlight: clone(chart.highlight)} : {}), ...(dataset ? {dataset} : {}),
+    ...(chart.type === 'bullet' ? {type: 'bullet'} : {}), ...(Array.isArray(chart.bands) ? {bands: clone(chart.bands)} : {})};
 }
 
 /**
@@ -493,8 +496,10 @@ export function restoreChartData(chart, record, evidence, {datasets, datasources
     report({code: 'chart-dataset-unavailable', message: `The chart referenced dataset '${record.data.dataset}', but this package's dataset of that id holds other data than at export (a slide pasted from another deck); the chart imports its values inline.`});
     return chart;
   }
-  const {mapping: _mapping, highlight: _highlight, ...rest} = chart;
-  const restored = {...rest, data: clone(record.data), ...(record.mapping !== undefined ? {mapping: clone(record.mapping)} : {}), ...(record.highlight !== undefined ? {highlight: clone(record.highlight)} : {})};
+  const {mapping: _mapping, highlight: _highlight, bands: _bands, ...rest} = chart;
+  // FR-07: the authored bands and bullet type come back with the data they were drawn over.
+  const restored = {...rest, ...(record.type === 'bullet' ? {type: 'bullet'} : {}), data: clone(record.data), ...(record.mapping !== undefined ? {mapping: clone(record.mapping)} : {}), ...(record.highlight !== undefined ? {highlight: clone(record.highlight)} : {}),
+    ...(Array.isArray(record.bands) ? {bands: clone(record.bands)} : {})};
   if (!validWith({chart: restored}, isDatasetRef(record.data) ? datasets : undefined, datasources)) {
     report({code: 'invalid-data-provenance', message: 'The chart data recorded at export does not form a valid chart; the chart imports the values it shows.'});
     return chart;

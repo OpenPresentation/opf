@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, paretoPlan, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartFocusContextColors, chartSeriesStrokes, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer, formatNumber, formatPercentNumber, chartNumberLanguage } from "@openpresentation/opf/composition";
+import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, paretoPlan, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartFocusContextColors, chartSeriesStrokes, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer, formatNumber, formatPercentNumber, chartNumberLanguage, chartBands, chartBandRanges, chartBandFill, BULLET_BAR_SHARE, BULLET_TARGET_SHARE, BULLET_TARGET_WIDTH_PX } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colors for a chart panel: core's `chartSeriesPalette` (the deck color scheme's accents, RR-89, with the chart's own
@@ -137,7 +137,9 @@ export const CHART_TYPES = Object.freeze({
   funnel: { kind: "funnel" },
   world: { kind: "map" },
   // FA-15: clustered columns with line series (markers), the lines optionally on a secondary value axis (core resolves the plan).
-  combo: { kind: "combo", dir: "col", grouping: "clustered", markers: true }
+  combo: { kind: "combo", dir: "col", grouping: "clustered", markers: true },
+  // FR-07: one thin horizontal bar per category against its target tick, over the chart's bands.
+  bullet: { kind: "bullet", dir: "bar", grouping: "clustered" }
 });
 
 /** Resolve a chart type (core's CHART_TYPES vocabulary, OPF 0.15) to its preview spec id, or null for any other value. */
@@ -162,7 +164,8 @@ const RENDERERS = {
   waterfall: renderWaterfallChart,
   funnel: renderFunnelChart,
   map: renderRegionMapChart,
-  combo: renderComboChart
+  combo: renderComboChart,
+  bullet: renderBulletChart
 };
 
 // Chartex constructs also accept a lone value column (the exporter plots it
@@ -268,7 +271,7 @@ export function chartData(item, bound) {
   const language = bound?.scriptFonts?.profile?.bcp47;
   const plan = chartDrawPlan(chart, resolved, { language: typeof language === "string" ? language : undefined });
   const formats = plan.formats.map((format) => typeof format === "string" && format !== "" && !numberFormatError(format) ? format : undefined);
-  return { type: plan.type, fallback: plan.fallback, columns: plan.columns, hasX: plan.hasX, rows: plan.rows, formats, trace: tracePaths(item, bound, { ...resolved, columns: plan.columns, regrouped: plan.columns.length !== resolved.columns.length }), ...(resolved.combo ? { combo: resolved.combo } : {}) };
+  return { type: plan.type, fallback: plan.fallback, columns: plan.columns, hasX: plan.hasX, rows: plan.rows, formats, trace: tracePaths(item, bound, { ...resolved, columns: plan.columns, regrouped: plan.columns.length !== resolved.columns.length }), ...(resolved.combo ? { combo: resolved.combo } : {}), ...(resolved.target ? { target: resolved.target } : {}) };
 }
 
 // The authored object at a composed path ("slides.0.blocks.1.chart"), or undefined.
@@ -307,7 +310,7 @@ function tracePaths(item, bound, resolved) {
   return columnMap.every((column, index) => column === index) ? null : { columnMap };
 }
 
-function chartContext(item, box, bound, options, svg, { rows, columns, formats, trace, combo, hasX = false }, layer) {
+function chartContext(item, box, bound, options, svg, { rows, columns, formats, trace, combo, hasX = false, target }, layer) {
   const u = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
   const composition = bound.composition ?? bound.geometry.composition ?? {};
   // RR-90: core's chart text size (20 px, shrunk only for a small box, never below minFontSize), the size core's value-axis density assumes.
@@ -333,7 +336,7 @@ const neutrals = bound.design.roles.neutrals;
     return path.replace(/^(.*\.data\.(?:columns\.|rows\.\d+\.))(\d+)$/, (whole, head, column) => `${head}${trace.columnMap[Number(column)] ?? column}`);
   };
   const c = {
-    item, box, bound, options, svg, rows, columns, formats, combo, hasX, children, u, fontPx, surface, labelColor, chartTextColor,
+    item, box, bound, options, svg, rows, columns, formats, combo, hasX, target, children, u, fontPx, surface, labelColor, chartTextColor,
     path: item.path,
     tracePath,
     pt: u * 4 / 3,
@@ -499,12 +502,14 @@ function legendSource(c, spec) {
     case "pie":
     case "doughnut": return c.rows.map((row, i) => ({ name: c.label(row[0]), color: sliceColor(c, i), path: `${c.path}.data.rows.${i}.0` }));
     case "scatter": return fromSeries(scatterSeries(c.rows, c.columns, c.formats, c.hasX).series, "marker");
-    case "line": return fromSeries(c.series(), "line", spec.markers);
+    case "line": return [...fromSeries(c.series(), "line", spec.markers), ...bandLegendEntries(c)];
     case "radar": return fromSeries(c.series(), spec.style === "filled" ? undefined : "line", spec.markers);
     case "box": return fromSeries(c.columns.length === 1 ? [{ name: c.label(c.columns[0]), column: 0, index: 0 }] : c.series());
     case "bar":
-    case "area": return fromSeries(c.series());
+    case "area": return [...fromSeries(c.series()), ...bandLegendEntries(c)];
     case "combo": return comboLegendEntries(c, c.series());
+    // FR-07: a bullet chart's legend names its measure and its labeled bands.
+    case "bullet": return [...fromSeries(c.series().slice(0, 1)), ...bandLegendEntries(c)];
     default: return [];
   }
 }
@@ -554,8 +559,37 @@ function placeLegend(c, spec, position) {
 
 function seriesLegend(c, series, key, marker = false) {
   return series.length > 1
-    ? legendEntries(c, series.map((s) => ({ name: s.name, color: seriesColor(c, s.index), path: `${c.path}.data.columns.${s.column}`, key, marker })))
+    ? legendEntries(c, [...series.map((s) => ({ name: s.name, color: seriesColor(c, s.index), path: `${c.path}.data.columns.${s.column}`, key, marker })), ...bandLegendEntries(c)])
     : 0;
+}
+
+// FR-07: the chart's bands (core chartBands, sorted; empty for a type that draws none) over an axis, with their fills (core chartBandFill:
+// the scheme's text mixed into the surface, darkest lowest, or a band's own scheme color as a light tint, mixed in OKLab).
+function bandColors(c) {
+  return { surface: c.surface, text: c.bound.design.colors.text, resolve: (name) => String(c.resolveColorRef(name, c.bound.design.colors.text) ?? c.bound.design.colors.text).slice(0, 7).toUpperCase() };
+}
+function bandsOver(c, scale) {
+  const bands = chartBands(c.item.value);
+  if (!bands.length) return [];
+  const colors = bandColors(c);
+  return chartBandRanges(bands, scale).map((band) => ({ ...band, fill: chartBandFill(band, colors) }));
+}
+// A labeled band's legend entry, after the series (a band without a label has none).
+function bandLegendEntries(c) {
+  const bands = chartBands(c.item.value);
+  if (!bands.length) return [];
+  const axis = c.valueAxis ?? { min: Math.min(0, ...bands.map((band) => band.to)) - 1, max: Math.max(...bands.map((band) => band.to)) };
+  const colors = bandColors(c);
+  return chartBandRanges(bands, axis).filter((band) => band.label !== undefined).map((band) => ({ name: band.label, color: chartBandFill(band, colors), path: `${c.path}.bands.${band.index}` }));
+}
+// FR-07: bands as rectangles across the plot, behind the gridlines and the data. `along` is the extent on the category axis: the whole plot
+// for bars and columns, the first to the last category center for lines and areas (what PowerPoint's area series covers).
+function drawBands(c, bands, { plot, at, horizontal, along }) {
+  for (const band of bands) {
+    const a = at(band.from), b = at(band.to);
+    const rect = horizontal ? { x: Math.min(a, b), y: along.start, width: Math.abs(b - a), height: along.end - along.start } : { x: along.start, y: Math.min(a, b), width: along.end - along.start, height: Math.abs(b - a) };
+    if (rect.width > 0 && rect.height > 0) c.mark("rect", { ...rect, fill: band.fill }, `${c.path}.bands.${band.index}`);
+  }
 }
 
 function gridline(c, x1, y1, x2, y2) {
@@ -757,11 +791,11 @@ function planRowLabels(c, entries, band, gutter) {
 
 // `rowTop(i)` is the top of category i's row; rows are `band` tall. A two-line label is given its two lines' height around its row's
 // middle, so it is drawn at the chart text size even where it reaches past its row (LH-120).
-function drawRowLabels(c, plan, entries, band, gutter, x, rowTop) {
+function drawRowLabels(c, plan, entries, band, gutter, x, rowTop, align = "right") {
   const span = plan.n * band;
   for (const label of plan.labels) {
     const middle = rowTop(label.i) + band / 2, height = Math.max(span, label.text.split(/\n/).length * c.textHeight);
-    c.text(label.text, { x, y: middle - height / 2, width: gutter, height }, entries[label.i].path, "right");
+    c.text(label.text, { x, y: middle - height / 2, width: gutter, height }, entries[label.i].path, align);
   }
   reportTruncatedLabels(c, plan.labels.filter((label) => label.truncated).map((label) => entries[label.i].path));
 }
@@ -865,6 +899,15 @@ function renderCategoryChart(c, spec) {
   const at = (value) => horizontal ? plot.x + axisFraction(value, scale) * plot.width : plot.y + axisFraction(value, scale, true) * plot.height;
   // Category axis crosses at zero when zero is on the axis (autoZero).
   const crossing = at(Math.min(scale.max, Math.max(scale.min, 0)));
+  // FR-07: bands behind the gridlines and the data. A line or area chart's bands run from the first to the last category center (an
+  // edge-to-edge area's points are the plot's edges), as PowerPoint's area series covers; a bar or column chart's the whole plot.
+  const bands = bandsOver(c, scale);
+  if (bands.length) {
+    const length = horizontal ? plot.height : plot.width, start = horizontal ? plot.y : plot.x;
+    const edge = labelPlot !== undefined && labelPlot !== plot;
+    const inset = spec.kind !== "bar" && count >= 2 && !edge ? length / count / 2 : 0;
+    drawBands(c, bands, { plot, at, horizontal, along: { start: start + inset, end: start + length - inset } });
+  }
   for (const tick of hidden ? [] : scale.ticks) {
     const position = at(tick), label = formatTick(tick, percent, valueFormat, tickGroup, c.language);
     if (horizontal) {
@@ -1067,6 +1110,70 @@ function drawValueList(c, list) {
 // the primary axis, whose ticks take the first column series' format. The PPTX export writes the same plan natively.
 
 /** The combo plan of a chart: core's, or (a core without it) every series a column except the last, a line, all on the primary axis. */
+// ---------------------------------------------------------------------------
+// FR-07: the bullet chart. One row per category, top to bottom in data order; within a row, from back to front: the bands across the
+// full row height (one rectangle per band over every row), the measure bar (a third of the row, centered, in the series color) and the
+// target tick (two thirds of the row, 2 reference pixels wide, in the text color). The value axis is core's (chartValueAxis: from 0,
+// unless a value or band is negative, to the largest value, target or band end). Right to left, the category names stand at the right
+// and the value axis runs from the right.
+
+function renderBulletChart(c) {
+  const { box, pad, fontPx } = c;
+  const right2left = rtl(c);
+  const [measure] = c.series();
+  if (!measure) return;
+  const format = measure.format;
+  const categories = c.rows.map((row) => c.label(row[0]));
+  const count = categories.length;
+  const targets = c.target?.values ?? [];
+  const extents = [...measure.values, ...targets].filter((value) => value !== null);
+  const dataMin = Math.min(0, ...extents), dataMax = Math.max(0, ...extents, ...chartBands(c.item.value).map((band) => band.to));
+  const tickGroup = format === undefined && c.valueAxis && groupsAxisTicks(c.valueAxis) ? { language: typeof c.language === "string" ? c.language : undefined } : undefined;
+  const longestWord = Math.max(0, ...categories.flatMap((name) => flatLabel(name).split(BREAKABLE).map((word) => c.width(word)))) + fontPx * 0.5;
+  const categoryWidth = Math.min(Math.max(box.width * 0.3, Math.min(box.width * 0.4, longestWord)), Math.max(0, ...categories.map((name) => c.width(flatLabel(name)))) + fontPx * 0.5);
+  const top = box.y + pad + c.lineHeight / 2, bottom = box.y + box.height - pad - c.lineHeight;
+  const gutterX = right2left ? box.x + box.width - pad - categoryWidth : box.x + pad;
+  const x = right2left ? box.x + pad + fontPx : box.x + pad + categoryWidth + c.pad / 2;
+  const width = Math.max(1, right2left ? gutterX - c.pad / 2 - x : box.x + box.width - pad - fontPx - x);
+  const tickWidth = Math.max(c.width(formatTick(dataMax, false, format, tickGroup, c.language)), c.width(formatTick(dataMin, false, format, tickGroup, c.language))) + fontPx;
+  const scale = categoryScale(c, dataMin, dataMax, width, tickWidth, false);
+  const plot = { x, y: top, width, height: Math.max(1, bottom - top) };
+  c.plotArea = plot;
+  const at = (value) => right2left ? plot.x + plot.width - axisFraction(value, scale) * plot.width : plot.x + axisFraction(value, scale) * plot.width;
+  const rowBand = plot.height / count, rowTop = (i) => plot.y + i * rowBand;
+  const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
+  drawRowLabels(c, planRowLabels(c, entries, rowBand, categoryWidth), entries, rowBand, categoryWidth, gutterX, rowTop, right2left ? "left" : "right");
+  // The bands across every row, behind the gridlines.
+  drawBands(c, bandsOver(c, scale), { plot, at, horizontal: true, along: { start: plot.y, end: plot.y + plot.height } });
+  for (const tick of scale.ticks) {
+    const position = at(tick), label = formatTick(tick, false, format, tickGroup, c.language);
+    gridline(c, position, plot.y, position, plot.y + plot.height);
+    const labelWidth = c.width(label) + fontPx;
+    c.text(label, { x: position - labelWidth / 2, y: plot.y + plot.height, width: labelWidth, height: c.lineHeight }, c.path);
+  }
+  const crossing = at(Math.min(scale.max, Math.max(scale.min, 0)));
+  const barHeight = rowBand * BULLET_BAR_SHARE, tickHeight = rowBand * BULLET_TARGET_SHARE;
+  const labels = [];
+  measure.values.forEach((value, i) => {
+    if (value === null) return;
+    const end = at(Math.min(scale.max, Math.max(scale.min, value)));
+    const rect = { x: Math.min(crossing, end), y: rowTop(i) + (rowBand - barHeight) / 2, width: Math.abs(end - crossing), height: barHeight };
+    const path = `${c.path}.data.rows.${i}.${measure.column}`, color = markColor(c, 0, i);
+    c.mark("rect", { ...rect, fill: color }, path);
+    const grows = (value >= 0) !== right2left ? "right" : "left";
+    if (c.dataLabels) labels.push({ rect, direction: grows, path, color, text: labelString(c, { category: categories[i], value, format, group: measure.group }) });
+  });
+  // The target ticks over the bars; a row without a target has none.
+  targets.forEach((target, i) => {
+    if (target === null || target < scale.min || target > scale.max) return;
+    const position = at(target), middle = rowTop(i) + rowBand / 2;
+    c.mark("line", { x1: position, y1: middle - tickHeight / 2, x2: position, y2: middle + tickHeight / 2, stroke: c.labelColor, "stroke-width": BULLET_TARGET_WIDTH_PX * c.u }, `${c.path}.mapping.target`);
+  });
+  for (const label of labels) drawBarLabel(c, label.text, label.rect, label.direction, label.path, label.color);
+  axisLine(c, crossing, plot.y, crossing, plot.y + plot.height);
+  axisLine(c, plot.x, plot.y + plot.height, plot.x + plot.width, plot.y + plot.height);
+}
+
 function comboPlan(c, series) {
   if (Array.isArray(c.combo) && c.combo.length === series.length) return c.combo;
   return series.map((_, index) => ({ role: series.length > 1 && index === series.length - 1 ? "line" : "bar", axis: "primary" }));

@@ -164,6 +164,8 @@ const KEPT: Readonly<Record<string, ChartOptionTarget>> = {
   funnel: {kind: 'funnel'},
   world: {kind: 'map'},
   combo: {kind: 'combo'},
+  // FR-07: a bullet chart is a horizontal bar chart of one series (its target tick and bands are drawn with it): a bar's options.
+  bullet: {kind: 'bar'},
 };
 
 /** The option target for a catalog chart type id; undefined for an id outside the catalog. */

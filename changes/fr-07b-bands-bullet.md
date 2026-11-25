@@ -1,0 +1,6 @@
+---
+type: added
+packages: [opf, render, pptx]
+---
+
+A chart can shade ranges of its value axis behind the data: `chart.bands`, one to six `{ to, label?, color? }` (`ChartBand`), each running from the previous band's `to` (the first from the axis minimum) to its own, in the scheme's neutrals (the text color mixed into the surface in OKLab, darkest lowest) or a light tint of a scheme color. Bar, column, line and area charts and their stacked forms draw them, and the last `to` extends an automatic axis. A new chart type, `bullet`, draws one thin bar per category against a target tick (`mapping.target`) over its bands. Core sorts and clamps the bands and computes their colors for every engine (`chartBands`, `chartBandRanges`, `chartBandFill`; the gauge reuses them). The PowerPoint export writes the bands as a stacked chart group drawn first on deleted axes fixed to the value axis's span (so a chart with bands has fixed value-axis bounds in PowerPoint), and the bullet's target as a scatter series with fixed Y error bars; the band series are workbook columns after the data, and import restores the authored bands, target and type while the caches are unchanged, else reads the bands and targets PowerPoint holds. New warnings: `chart-bands-order` and `chart-bands-unsupported`.

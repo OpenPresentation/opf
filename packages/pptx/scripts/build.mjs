@@ -107,3 +107,5 @@ await copyFile(new URL('src/numbered-list.js', root), new URL('numbered-list.js'
 
 // SH-03: the shape effects (a:effectLst), kept on their own line so other work on the list above does not collide.
 await copyFile(new URL('src/effects.js', root), new URL('effects.js', dist));
+// FR-07: bands on value axes and the bullet chart, kept on their own line so other work on the lists above does not collide.
+await copyFile(new URL('src/chart-bands.js', root), new URL('chart-bands.js', dist));

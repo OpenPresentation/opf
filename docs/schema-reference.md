@@ -1303,7 +1303,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `value`
-- Purpose: One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement. A reference at a category or a band between two values is not expressible yet; 'axis' and a separate key are reserved for them.
+- Purpose: One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement. A reference at a category is not expressible yet; 'axis' is reserved for it. Ranges of the value axis are the chart's 'bands'.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -1314,6 +1314,19 @@ _No named properties._
 | `stroke` | no | `ref:Line` | The line's color, width and dash, or 'none' to draw only the label. Defaults: the chart-text neutral, 4/3 reference pixels (1 point) and 'dash'. The value expands the axis bounds whether or not the line is drawn. |
 
 
+### ChartBand
+
+- Type: `object`
+- Required fields: `to`
+- Purpose: One range of a chart's value axis, shaded behind the data (see Chart.bands).
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `to` | yes | `ref:FiniteNumber` | The band's upper end, in the value axis's units (with format 0%, 0.8 is 80%). Bands expand automatic axis bounds to the last 'to', as reference lines do. |
+| `label` | no | `string` | The band's name, such as 'Poor' or 'On target': its legend entry and its text alternative. Absent: the band has no legend entry. |
+| `color` | no | `ref:SchemeColorName` | A scheme color instead of the neutral, for ranges that mean good or bad. Drawn as a light tint of that color (25% of it over the chart's surface). Absent: the next neutral. |
+
+
 ### Chart
 
 - Type: `object`
@@ -1322,12 +1335,13 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | yes | `enum:100pct-stacked-area \| 100pct-stacked-bar \| 100pct-stacked-column \| area \| bar \| box-and-whisker \| column \| combo \| doughnut \| filled-radar \| funnel \| histogram \| line \| line-with-markers \| pareto \| pie \| radar \| radar-with-markers \| scatter \| stacked-area \| stacked-bar \| stacked-column \| stacked-line \| stacked-line-with-markers \| treemap \| waterfall \| world` | Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types OPF supports natively in its preview and PPTX export, plus 'combo' (clustered columns with line series, see 'line' and 'secondar... |
+| `type` | yes | `enum:100pct-stacked-area \| 100pct-stacked-bar \| 100pct-stacked-column \| area \| bar \| box-and-whisker \| bullet \| column \| combo \| doughnut \| filled-radar \| funnel \| histogram \| line \| line-with-markers \| pareto \| pie \| radar \| radar-with-markers \| scatter \| stacked-area \| stacked-bar \| stacked-column \| stacked-line \| stacked-line-with-markers \| treemap \| waterfall \| world` | Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types OPF supports natively in its preview and PPTX export, plus 'combo' (clustered columns with line series, see 'line' and 'secondar... |
 | `data` | yes | `oneOf:ref:ChartData / ref:DatasetRef` | Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ "dataset": "<id>" }) plots a top-level dataset instead. Data from a spreadsheet or file is... |
 | `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name: which column is the category, which is the X column of a scatter chart, and which columns are plotted, in order. Absent keeps the positional rule (first column the category, the... |
 | `line` | no | `array<string>` | Combo charts only (type 'combo'): the plotted series, by column name, that are drawn as lines with markers; every other plotted series is drawn as clustered columns. Absent: the last plotted series is the line. A comb... |
 | `secondaryAxis` | no | `array<string>` | Combo charts only: line series, by column name, plotted against a secondary value axis at the end of the plot (the right; the left in a right-to-left deck, where the category axis runs from the right). That axis has i... |
 | `referenceLines` | no | `array<ref:ChartReferenceLine>` | Explicit numeric references on the chart's value axis, supported on the chart types with one value axis for every series: column, bar, line, line-with-markers, area and combo. A non-empty list on any other type (the s... |
+| `bands` | no | `array<ref:ChartBand>` | Ranges of the value axis shaded behind the data, in increasing order: each band runs from the previous band's 'to' (the first from the axis minimum) to its own 'to'. Colors come from the scheme's neutrals, darkest fir... |
 | `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-... |
 | `legend` | no | `enum:none \| top \| bottom \| left \| right` | Optional legend position. 'none' hides the legend. Absent leaves it to the engines: a line chart of two to four series names its series at the line ends and a pie or one-series doughnut names its slices, with no legen... |
 | `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels. true shows value labels at each type's default position and false shows none. Absent leaves it to the engines: no labels, except on a small chart, which labels its values in place of its value ax... |
@@ -1688,7 +1702,8 @@ _No named properties._
 | --- | --- | --- | --- |
 | `category` | no | `string` | The label (category) column. Default: the first column. |
 | `x` | no | `string` | The X column of an XY (scatter) chart. Default: the second column (the first, when the category is the second column), and only when there are three or more columns: with two, the second column is the one series, plot... |
-| `series` | no | `array<string>` | The plotted columns, in order. Default: every column that is not the category or the X column. |
+| `series` | no | `array<string>` | The plotted columns, in order. Default: every column that is not the category or the X column (or, on a bullet chart, the target column). |
+| `target` | no | `string` | Bullet charts: the column that holds each category's target, drawn as a tick across the bar. An unknown name is a 'chart-mapping-unknown-column' error. On other chart types it is ignored with a 'chart-mapping-adapted'... |
 
 
 ### ChartDataCell
