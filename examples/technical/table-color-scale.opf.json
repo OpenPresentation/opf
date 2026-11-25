@@ -376,7 +376,7 @@
       }
     },
     {
-      "title": "Scheme colors: accent5, text, accent6",
+      "title": "Scheme colors: accent2, text, accent6",
       "table": {
         "columns": [
           "Week",
@@ -405,7 +405,7 @@
             "Change"
           ],
           "colors": [
-            "accent5",
+            "accent2",
             "text",
             "accent6"
           ],
