@@ -122,6 +122,9 @@ true for an embed's `src`, the presenter draws an `iframe` in the frame instead 
 - The static form is drawn under the frame until the frame loads, and stays if it fails.
 - Keyboard: Tab enters the frame only after a click on it; the presenter's slide keys keep working while the frame does not have focus.
   A click on a live frame never changes the slide (the defect fixed for links in opf#1449 must not return here).
+- **Never live on the host's own origin** (supervisor, 2026-11-25): a `src` whose origin equals the presenting page's origin is drawn in
+  its static form whatever `embeds` returns, because a sandbox with `allow-scripts allow-same-origin` does not contain a page of the
+  host's own origin. The docs say so for hosts.
 - Which presenters take the option: the editor's presenter and the web player. The MCP viewer never shows an embed live: its host page
   forbids frames of other sites. *(analysis)*
 
