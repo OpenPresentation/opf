@@ -1,4 +1,4 @@
-// FR-07 (CR 5): bands behind the gridlines and the data of column, bar, line and area charts, the bullet chart (bands, a thin measure bar
+// FR-07 (CR 5): bands over the gridlines and behind the data of column, bar, line and area charts, the bullet chart (bands, a thin measure bar
 // and a target tick per row), right to left, and the lowest contrast between a data mark and a band over every gallery color scheme.
 import assert from 'node:assert/strict';
 import { readdirSync } from 'node:fs';
@@ -13,7 +13,7 @@ let checks = 0;
 const wait = { columns: ['Week', 'Wait'], rows: [['W1', 14], ['W2', 11], ['W3', 9], ['W4', 12]] };
 const deck = (chart, extra = {}) => ({ design: { fontScheme: 'roboto' }, ...extra, slides: [{ title: 'Wait time', chart: { alt: 'Wait time by week.', ...chart } }] });
 
-// A column chart: three bands across the whole plot, behind the gridlines and the columns, darkest lowest, in core's colors.
+// A column chart: three bands across the whole plot, over the gridlines and behind the columns, darkest lowest, in core's colors.
 {
   const input = deck({ type: 'column', data: wait, legend: 'right', bands: [{ to: 10, label: 'Good' }, { to: 15 }, { to: 20, label: 'Over' }] });
   const svg = toSvg(input, 1, { trace: true }), all = marks(svg);
@@ -21,8 +21,8 @@ const deck = (chart, extra = {}) => ({ design: { fontScheme: 'roboto' }, ...extr
   const bands = all.filter((mark) => mark.tag === 'rect' && /\.bands\.\d+$/.test(mark['data-opf-path'] ?? '') && num(mark.width) > 30);
   assert.equal(bands.length, 3);
   const columns = all.filter((mark) => mark.tag === 'rect' && /\.data\.rows\.\d+\.1$/.test(mark['data-opf-path'] ?? ''));
-  const firstBand = all.indexOf(bands[0]), firstGrid = all.findIndex((mark) => mark.tag === 'line' && !mark['data-opf-path']), firstColumn = all.indexOf(columns[0]);
-  assert.ok(firstBand < firstGrid && firstBand < firstColumn, 'bands come before the gridlines and the columns');
+  const firstBand = all.indexOf(bands[0]), firstColumn = all.indexOf(columns[0]);
+  assert.ok(firstBand < firstColumn, 'bands come before the columns');
   // Bands span the plot width; each next band sits above the previous one and they touch.
   assert.ok(bands.every((band) => band.x === bands[0].x && band.width === bands[0].width));
   for (let i = 1; i < bands.length; i++) assert.ok(Math.abs(num(bands[i].y) + num(bands[i].height) - num(bands[i - 1].y)) < 0.02, `band ${i} sits on band ${i - 1}`);
@@ -78,6 +78,20 @@ const deck = (chart, extra = {}) => ({ design: { fontScheme: 'roboto' }, ...extr
     assert.ok(Math.abs((language === 'ar' ? num(bars[1].x) : num(bars[1].x) + num(bars[1].width)) - at(0.92)) < 0.05, `bar to its value (${language})`);
     checks += 7;
   }
+}
+
+// Draw order, as PowerPoint draws it (its gridlines lie behind every series, and the bands are series): gridlines, then bands, then the data, on
+// column, bar, line and area charts and the bullet chart, so a gridline shows only where no band is.
+for (const type of ['column', 'bar', 'line', 'area', 'bullet']) {
+  const chart = { type, legend: 'none', data: { columns: ['Q', 'A', 'T'], rows: [['Q1', 10, 12], ['Q2', 14, 11], ['Q3', 9, 13]] }, bands: [{ to: 8 }, { to: 16 }], ...(type === 'bullet' ? { mapping: { target: 'T' } } : { mapping: { series: ['A'] } }) };
+  const all = marks(toSvg(deck(chart), 1, { trace: true }));
+  const grid = all.map((mark, index) => [mark, index]).filter(([mark]) => mark.tag === 'line' && !mark['data-opf-path']).map(([, index]) => index);
+  const bands = all.map((mark, index) => [mark, index]).filter(([mark]) => mark.tag === 'rect' && /\.bands\.\d+$/.test(mark['data-opf-path'] ?? '') && num(mark.width) > 30).map(([, index]) => index);
+  const data = all.map((mark, index) => [mark, index]).filter(([mark]) => /\.data\.(rows\.\d+\.1|columns\.1)$/.test(mark['data-opf-path'] ?? '') && mark.tag !== 'text' && mark.tag !== 'g').map(([, index]) => index);
+  assert.ok(grid.length && bands.length && data.length, `${type}: gridlines, bands and data drawn`);
+  assert.ok(Math.max(...grid.filter((index) => index < Math.min(...data))) < Math.min(...bands), `${type}: the gridlines come before the bands`);
+  assert.ok(Math.max(...bands) < Math.min(...data), `${type}: the bands come before the data`);
+  checks += 2;
 }
 
 // The bands over every gallery color scheme, light and dark: (1) each default neutral differs from the surface and from the next band by at least

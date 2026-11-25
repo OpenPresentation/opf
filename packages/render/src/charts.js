@@ -590,7 +590,7 @@ function bandLegendEntries(c) {
   const colors = bandColors(c);
   return chartBandRanges(bands, axis).filter((band) => band.label !== undefined).map((band) => ({ name: band.label, color: chartBandFill(band, colors), path: `${c.path}.bands.${band.index}` }));
 }
-// FR-07: bands as rectangles across the plot, behind the gridlines and the data. `along` is the extent on the category axis: the whole plot
+// FR-07: bands as rectangles across the plot, over the gridlines and behind the data (as PowerPoint draws them). `along` is the extent on the category axis: the whole plot
 // for bars and columns, the first to the last category center for lines and areas (what PowerPoint's area series covers).
 function drawBands(c, bands, { plot, at, horizontal, along }) {
   for (const band of bands) {
@@ -907,15 +907,6 @@ function renderCategoryChart(c, spec) {
   const at = (value) => horizontal ? plot.x + axisFraction(value, scale) * plot.width : plot.y + axisFraction(value, scale, true) * plot.height;
   // Category axis crosses at zero when zero is on the axis (autoZero).
   const crossing = at(Math.min(scale.max, Math.max(scale.min, 0)));
-  // FR-07: bands behind the gridlines and the data. A line or area chart's bands run from the first to the last category center (an
-  // edge-to-edge area's points are the plot's edges), as PowerPoint's area series covers; a bar or column chart's the whole plot.
-  const bands = bandsOver(c, scale);
-  if (bands.length) {
-    const length = horizontal ? plot.height : plot.width, start = horizontal ? plot.y : plot.x;
-    const edge = labelPlot !== undefined && labelPlot !== plot;
-    const inset = spec.kind !== "bar" && count >= 2 && !edge ? length / count / 2 : 0;
-    drawBands(c, bands, { plot, at, horizontal, along: { start: start + inset, end: start + length - inset } });
-  }
   for (const tick of hidden ? [] : scale.ticks) {
     const position = at(tick), label = formatTick(tick, percent, valueFormat, tickGroup, c.language);
     if (horizontal) {
@@ -927,6 +918,16 @@ function renderCategoryChart(c, spec) {
       if (rtl) c.text(label, { x: plot.x + plot.width + fontPx * 0.35, y: position - c.lineHeight / 2, width: Math.max(1, valueTickWidth - fontPx * 0.35), height: c.lineHeight }, c.path, "left");
       else c.text(label, { x: box.x + pad, y: position - c.lineHeight / 2, width: plot.x - box.x - pad - fontPx * 0.35, height: c.lineHeight }, c.path, "right");
     }
+  }
+  // FR-07: bands over the gridlines and behind the data, as PowerPoint draws them (its gridlines are behind every series, and the bands
+  // are series): a gridline shows only where no band is. A line or area chart's bands run from the first to the last category center (an
+  // edge-to-edge area's points are the plot's edges), as PowerPoint's area series covers; a bar or column chart's the whole plot.
+  const bands = bandsOver(c, scale);
+  if (bands.length) {
+    const length = horizontal ? plot.height : plot.width, start = horizontal ? plot.y : plot.x;
+    const edge = labelPlot !== undefined && labelPlot !== plot;
+    const inset = spec.kind !== "bar" && count >= 2 && !edge ? length / count / 2 : 0;
+    drawBands(c, bands, { plot, at, horizontal, along: { start: start + inset, end: start + length - inset } });
   }
   const band = (horizontal ? plot.height : plot.width) / count;
   if (spec.kind === "bar") drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, categorySlot, rowTop });
@@ -1152,14 +1153,14 @@ function renderBulletChart(c) {
   const rowBand = plot.height / count, rowTop = (i) => plot.y + i * rowBand;
   const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
   drawRowLabels(c, planRowLabels(c, entries, rowBand, categoryWidth), entries, rowBand, categoryWidth, gutterX, rowTop, right2left ? "left" : "right");
-  // The bands across every row, behind the gridlines.
-  drawBands(c, bandsOver(c, scale), { plot, at, horizontal: true, along: { start: plot.y, end: plot.y + plot.height } });
   for (const tick of scale.ticks) {
     const position = at(tick), label = formatTick(tick, false, format, tickGroup, c.language);
     gridline(c, position, plot.y, position, plot.y + plot.height);
     const labelWidth = c.width(label) + fontPx;
     c.text(label, { x: position - labelWidth / 2, y: plot.y + plot.height, width: labelWidth, height: c.lineHeight }, c.path);
   }
+  // The bands across every row, over the gridlines (as PowerPoint draws them) and behind the bars.
+  drawBands(c, bandsOver(c, scale), { plot, at, horizontal: true, along: { start: plot.y, end: plot.y + plot.height } });
   const crossing = at(Math.min(scale.max, Math.max(scale.min, 0)));
   const barHeight = rowBand * BULLET_BAR_SHARE, tickHeight = rowBand * BULLET_TARGET_SHARE;
   const labels = [];

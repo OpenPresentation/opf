@@ -173,7 +173,9 @@ function audit(entries, deck, {label = 'deck'} = {}) {
       const scatter = ['scatterChart', 'bubbleChart'].includes(type);
       if (ids.length < 2 || kinds.includes(undefined)) fail('chart-axes', path, `${type} lists axis ids ${ids.join(',')} that are not all declared`);
       else if (scatter ? kinds[0] !== 'valAx' : !['catAx', 'dateAx'].includes(kinds[0])) fail('chart-axes', path, `${type} has a ${kinds[0]} as its category axis`);
-      else if (kinds[1] !== 'valAx') fail('chart-axes', path, `${type} has a ${kinds[1]} as its value axis`);
+      // FR-07: a bullet chart's target scatter shares the measure's axes, its Y on the bar chart's category axis (PowerPoint opens it and draws
+      // the ticks on the targets, native check 2026-11-25; a third axis pair is rejected).
+      else if (kinds[1] !== 'valAx' && !(scatter && kinds[1] === 'catAx' && /<opf:target\b/.test(body))) fail('chart-axes', path, `${type} has a ${kinds[1]} as its value axis`);
     }
   }
   return {problems, counts};

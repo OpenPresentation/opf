@@ -34,7 +34,7 @@ describe('band list (FR-07)', () => {
     for (const [surface, text] of [['#FFFFFF', '#000000'], ['#000000', '#FFFFFF'], ['#0B1F3A', '#F2F2F2']]) {
       const colors = { surface, text, resolve: (name) => ({ accent3: '#1B9E4B' })[name] ?? '#808080' };
       const fills = [0, 1, 2, 3].map((neutral) => chartBandFill({ neutral }, colors));
-      CHART_BAND_NEUTRAL_CONTRASTS.forEach((ratio, k) => assert.ok(Math.abs(colorContrast(fills[k], surface) - ratio) < 0.02, `${surface} band ${k}: ${colorContrast(fills[k], surface)}`));
+      for (const [k, ratio] of CHART_BAND_NEUTRAL_CONTRASTS.entries()) assert.ok(Math.abs(colorContrast(fills[k], surface) - ratio) < 0.02, `${surface} band ${k}: ${colorContrast(fills[k], surface)}`);
       assert.equal(fills[3], fills[0], 'a fourth band starts again');
       assert.equal(chartBandFill({ color: 'accent3' }, colors), mixOklab(surface, '#1B9E4B', 0.25));
     }
