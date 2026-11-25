@@ -1,0 +1,378 @@
+{
+ "app": {
+  "version": "16.0"
+ },
+ "document": {
+  "name": "image-callouts",
+  "id": "B8B003D1-C427-4FC4-B2F3-6392BBC7EA64",
+  "width": 960,
+  "height": 540,
+  "slide numbers showing": false,
+  "auto play": false,
+  "auto loop": false,
+  "auto restart": false,
+  "maximum idle duration": 15,
+  "password protected": false,
+  "theme": "Custom Theme",
+  "slide layouts": [
+   "Blank",
+   "Cover",
+   "Section",
+   "Agenda",
+   "Statement",
+   "Closing",
+   "Text",
+   "List",
+   "Quote",
+   "Two columns",
+   "Three columns",
+   "Pillars",
+   "Comparison",
+   "Process",
+   "Timeline",
+   "FAQ",
+   "Pyramid",
+   "Inverted pyramid",
+   "Matrix",
+   "Cycle",
+   "Chevrons",
+   "Vertical process",
+   "Organization chart",
+   "Hierarchy",
+   "Venn",
+   "Metrics",
+   "Scorecard",
+   "Image beside",
+   "Gallery",
+   "Chart",
+   "Chart beside",
+   "Table",
+   "Table beside",
+   "Code",
+   "Hero",
+   "Dashboard",
+   "Team",
+   "Logos",
+   "Image"
+  ]
+ },
+ "slides": [
+  {
+   "slide number": 1,
+   "skipped": false,
+   "title showing": true,
+   "body showing": false,
+   "presenter notes": "",
+   "transition": {
+    "effect": "no transition effect",
+    "duration": 1.0,
+    "delay": 0.5,
+    "automatic": false
+   },
+   "layout": "Image",
+   "default title item": {
+    "position": [
+     43,
+     43
+    ],
+    "width": 874,
+    "height": 49,
+    "object text": "Read the picture and its labels together"
+   },
+   "default body item": {
+    "position": [
+     0,
+     0
+    ],
+    "width": 0,
+    "height": 0,
+    "object text": ""
+   },
+   "itemCount": 8,
+   "items": [
+    {
+     "class": "shape",
+     "depth": 0,
+     "readMode": "item",
+     "position": [
+      43,
+      43
+     ],
+     "width": 874,
+     "height": 49,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "Read the picture and its labels together",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "Read the picture and its labels together",
+       "font": "Helvetica-Bold",
+       "size": 40.0,
+       "color": [
+        0,
+        0,
+        0
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica-Bold"
+     ],
+     "wordSizes": [
+      40.0
+     ],
+     "isDefaultTitle": true
+    },
+    {
+     "class": "image",
+     "depth": 0,
+     "readMode": "single",
+     "position": [
+      94,
+      111
+     ],
+     "width": 772,
+     "height": 386,
+     "locked": false,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "description": "OPF image 1",
+     "file name": "image-1-1.png",
+     "isDefaultTitle": false
+    },
+    {
+     "class": "shape",
+     "depth": 0,
+     "readMode": "item",
+     "position": [
+      125,
+      134
+     ],
+     "width": 293,
+     "height": 116,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "color fill",
+     "text": "",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "",
+       "font": "Helvetica",
+       "size": 18.0,
+       "color": [
+        0,
+        0,
+        0
+       ]
+      }
+     ],
+     "wordFonts": [],
+     "wordSizes": [],
+     "isDefaultTitle": false
+    },
+    {
+     "class": "text item",
+     "depth": 0,
+     "readMode": "item",
+     "position": [
+      181,
+      166
+     ],
+     "width": 181,
+     "height": 50,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "Red zone",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "Red zone",
+       "font": "Helvetica",
+       "size": 42.0,
+       "color": [
+        0,
+        0,
+        0
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica"
+     ],
+     "wordSizes": [
+      42.0
+     ],
+     "isDefaultTitle": false
+    },
+    {
+     "class": "shape",
+     "depth": 0,
+     "readMode": "item",
+     "position": [
+      542,
+      134
+     ],
+     "width": 293,
+     "height": 116,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "color fill",
+     "text": "",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "",
+       "font": "Helvetica",
+       "size": 18.0,
+       "color": [
+        0,
+        0,
+        0
+       ]
+      }
+     ],
+     "wordFonts": [],
+     "wordSizes": [],
+     "isDefaultTitle": false
+    },
+    {
+     "class": "text item",
+     "depth": 0,
+     "readMode": "item",
+     "position": [
+      594,
+      166
+     ],
+     "width": 188,
+     "height": 50,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "Blue zone",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "Blue zone",
+       "font": "Helvetica",
+       "size": 42.0,
+       "color": [
+        0,
+        0,
+        0
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica"
+     ],
+     "wordSizes": [
+      42.0
+     ],
+     "isDefaultTitle": false
+    },
+    {
+     "class": "shape",
+     "depth": 0,
+     "readMode": "item",
+     "position": [
+      248,
+      331
+     ],
+     "width": 463,
+     "height": 131,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "color fill",
+     "text": "",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "",
+       "font": "Helvetica",
+       "size": 18.0,
+       "color": [
+        0,
+        0,
+        0
+       ]
+      }
+     ],
+     "wordFonts": [],
+     "wordSizes": [],
+     "isDefaultTitle": false
+    },
+    {
+     "class": "text item",
+     "depth": 0,
+     "readMode": "item",
+     "position": [
+      332,
+      371
+     ],
+     "width": 295,
+     "height": 50,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "Inspection point",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "Inspection point",
+       "font": "Helvetica",
+       "size": 42.0,
+       "color": [
+        0,
+        0,
+        0
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica"
+     ],
+     "wordSizes": [
+      42.0
+     ],
+     "isDefaultTitle": false
+    }
+   ]
+  }
+ ],
+ "errors": [],
+ "skippedSlides": [],
+ "derived": [
+  "skippedSlides",
+  "isDefaultTitle",
+  "isDefaultBody",
+  "cellsByRow"
+ ],
+ "input": "build/036/qualification/pptx/image-callouts.pptx"
+}

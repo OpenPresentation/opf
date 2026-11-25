@@ -389,7 +389,7 @@ describe("validation findings", () => {
       datasets: { revenue: revenue() },
       slides: [
         { title: "Chart", chart: { type: "column", data: { dataset: "revenue", fields: ["Quarter", "Revenue", "Costs"] }, mapping: { category: "Quarter", series: ["Costs", "Revenue"] } } },
-        { title: "Inline", chart: { type: "line", data: { columns: ["Quarter", { name: "Margin", format: "0%" }], rows: [["Q1", 0.31], ["Q2", "0.34"]], datasource: { src: "./margin.csv", description: "Finance export" }, query: "Sheet1!A1:B3", retrieved: "2026-10-05T09:30:00Z", version: "r2", sha256: "9f2c41b1d1b6e0a8a56e7c3d2f4b8a90c1e3d5f7a9b0c2d4e6f8a0b1c3d5e07a", generator: { kind: "model", name: "metricgen 2.1" } } } },
+        { title: "Inline", chart: { type: "line", data: { columns: ["Quarter", { name: "Margin", format: "0%" }], rows: [["Q1", 0.31], ["Q2", "0.34"]], datasource: { src: "./margin.csv", description: "Finance export" }, query: "Sheet1!A1:B3", retrieved: "2026-10-05T09:30:00Z", version: "r2", sha256: "9f2c41b1d1b6e0a8a56e7c3d2f4b8a90c1e3d5f7a9b0c2d4e6f8a0b1c3d5e07a", generator: { type: "model", name: "metricgen 2.1" } } } },
         { title: "Table", table: { dataset: "revenue", fields: ["Quarter", "Revenue"] } },
         { title: "Formats", table: { columns: ["Region", { name: "Revenue", format: "$#,##0.0" }, { value: "Growth", style: { align: "end" }, format: "0%" }], rows: [["EMEA", 8.2, 0.4], ["APAC", 6.1, { value: 0.52, format: "0.0%" }]] } },
       ],
@@ -588,7 +588,7 @@ describe("core integration", () => {
       datasets: { revenue: revenue() },
       slides: [
         { title: "Chart", chart: { type: "column", data: { dataset: "revenue" }, mapping: { series: ["Costs"] } } },
-        { title: "Inline", chart: { type: "line", data: { columns: ["Quarter", { name: "Margin", format: "0%" }], rows: [["Q1", 0.31]], datasource: { src: "./m.csv" }, query: "A1:B2", retrieved: "2026-10-05", generator: { kind: "human", name: "Avery" } } } },
+        { title: "Inline", chart: { type: "line", data: { columns: ["Quarter", { name: "Margin", format: "0%" }], rows: [["Q1", 0.31]], datasource: { src: "./m.csv" }, query: "A1:B2", retrieved: "2026-10-05", generator: { type: "human", name: "Avery" } } } },
         { title: "Table", table: { columns: ["Region", { name: "Revenue", format: "$#,##0" }], rows: [["EMEA", { value: "8", format: "0" }]] } },
         { title: "Data table", table: { dataset: "revenue", fields: ["Quarter"] } },
       ],

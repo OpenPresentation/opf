@@ -108,7 +108,7 @@ const escapeXml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&":
  * system's, and `cacheDir` names its cache. An alias replaces the family even where the original is installed.
  */
 export function fontconfigConf({ fontDir, aliases = fontconfigAliases(), includeSystem = false, cacheDir } = {}) {
-  const lines = ['<?xml version="1.0"?>', '<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">', "<!-- OPF preview fonts and font-policy aliases (opf-preview-fonts --fontconfig). -->", "<fontconfig>"];
+  const lines = ['<?xml version="1.0"?>', '<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">', "<!-- OPF preview fonts and font-policy aliases, written by opf-preview-fonts with its fontconfig option. -->", "<fontconfig>"];
   if (includeSystem) lines.push('  <include ignore_missing="yes">/etc/fonts/fonts.conf</include>');
   if (fontDir) lines.push(`  <dir>${escapeXml(fontDir)}</dir>`);
   if (cacheDir) lines.push(`  <cachedir>${escapeXml(cacheDir)}</cachedir>`);

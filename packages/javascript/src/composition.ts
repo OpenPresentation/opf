@@ -5465,6 +5465,18 @@ function bodyIcons(input: unknown): boolean {
     : value !== null && typeof value === 'object' ? (value as Record<string, unknown>).icon !== undefined || Object.values(value as Record<string, unknown>).some(walk) : false;
   return Object.entries(record(input)).some(([key, value]) => !NON_BODY_FIELDS.has(key) && walk(value));
 }
+/**
+ * LH-63 with LH-102: the lines each run-in heading (a text's bold first run, `runs`) takes, by item path. A growth step never breaks a heading
+ * that sat on fewer lines in the slide it grows from: a name on one line stays on one line (growBody, runInIntact).
+ */
+function runInLines(result: SlideComposition): Map<string, number> {
+  const lines = new Map<string, number>();
+  for (const item of result.items) {
+    if (!item.runs || !item.text || !('richLines' in item.text)) continue;
+    lines.set(item.path, (item.text as RichTextFit).richLines.filter(line => line.fragments.some(fragment => fragment.runIndex === 0 && fragment.kind === undefined && fragment.text.trim())).length);
+  }
+  return lines;
+}
 function growBody(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition | undefined {
   if (options.fill === false || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || overflowCount(result) > 0) return undefined;
   const start = bodyFill(result, options);
@@ -5484,7 +5496,14 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && composed.emphasis !== undefined && composed.emphasis.shape !== 'card') && !item.quoteLayout?.rule && !PLACED_TILE_ITEMS.has(item)).map(item => item.text?.fontSize ?? bodyReadability(composed, options).byPath.get(item.path) ?? Infinity));
   const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
   const avatar = portraitQuotes(result) ? { [AVATAR_QUOTES]: true } : {};
-  const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...avatar, ...extra } as ComposeSlideOptions, before, floor);
+  // The guarded rules the slide's own composition kept and that drew something in it (a placement rule only spaces the body, and yields to its
+  // growth as before): no growth step drops one (composeVariant's `held`).
+  const used = KEPT_RULES.get(result), fires = new Set<GuardedRule>();
+  if (used) { try { composeLayout(input, { ...options, ...avatar, ...used.seeds, ...{ [RULES]: used.rules, [FIRED]: fires } as Record<symbol, unknown> } as ComposeSlideOptions); } catch (error) { if (!(error instanceof OPFCompositionError)) throw error; fires.clear(); } }
+  for (const rule of [...fires]) if (PLACEMENT_RULES.has(rule)) fires.delete(rule);
+  const held = fires.size ? fires : undefined, headed = runInLines(result);
+  const runInIntact = (grown: SlideComposition) => { const now = runInLines(grown); return [...headed].every(([path, lines]) => (now.get(path) ?? lines) <= lines); };
+  const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...avatar, ...extra } as ComposeSlideOptions, before, floor, held);
   // LH-114: a body with a pull line is one stack with it at the top of the body, so it grows but is not centered.
   const pulled = result.items.some(item => item.quoteLayout?.rule);
   // TAB-1: a table and its note past LONE_FILL are only composed again when they grow; at their role sizes they keep their place.
@@ -5498,7 +5517,7 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
     for (let next = 1; next <= limit; next++) {
       const grown = attempt({ [GROW]: next, ...extra }), fill = grown && bodyFill(grown, options);
       // LH-173: a step that breaks more words than the body had (a label or description of a list included) is no growth.
-      if (!grown || !fill || overflowCount(grown) > 0 || fill.fill > (fill.target ?? LONE_TARGET) || smallest(grown) <= smallest(best) + FONT_GRID_EPSILON || shrinks(grown, best, options) || !accept(grown) || bodyReadability(grown, options).splitWords + listSplitWords(grown) > bodyReadability(best, options).splitWords + listSplitWords(best)) break;
+      if (!grown || !fill || overflowCount(grown) > 0 || fill.fill > (fill.target ?? LONE_TARGET) || smallest(grown) <= smallest(best) + FONT_GRID_EPSILON || shrinks(grown, best, options) || !accept(grown) || !runInIntact(grown) || bodyReadability(grown, options).splitWords + listSplitWords(grown) > bodyReadability(best, options).splitWords + listSplitWords(best)) break;
       best = grown; steps = next;
     }
     const centered = pulled || (past && !steps) ? undefined : attempt({ [GROW]: steps, [CENTER]: true, ...extra }), fill = centered && bodyFill(centered, options);
@@ -6366,7 +6385,7 @@ function composeArranged(input: unknown, options: ComposeSlideOptions): SlideCom
  * `before`. The caller keeps it only when it reads as well as `before`, so neither the arrangement nor a rule leaves a block smaller
  * than wave 2 did, and each arrangement keeps the rules that read well in it.
  */
-function composeVariant(input: unknown, options: ComposeSlideOptions, before: TrackQuality, floor: number): SlideComposition | undefined {
+function composeVariant(input: unknown, options: ComposeSlideOptions, before: TrackQuality, floor: number, held?: ReadonlySet<GuardedRule>): SlideComposition | undefined {
   const fired = new Set<GuardedRule>(), compose = (rules: ReadonlySet<GuardedRule>, collect?: Set<GuardedRule>) => {
     try { return composeLayout(input, { ...options, [RULES]: rules, ...(collect ? { [FIRED]: collect } : {}) } as ComposeSlideOptions); }
     catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
@@ -6395,7 +6414,9 @@ function composeVariant(input: unknown, options: ComposeSlideOptions, before: Tr
     const rules = new Set([...kept, rule]), trial = compose(rules);
     if (reads(trial)) { kept = rules; best = trial; }
   }
-  if (fired.has('portraits') && !kept.has('portraits')) return composeVariant(input, { ...options, [NO_PORTRAITS]: true } as ComposeSlideOptions, before, floor);
+  if (fired.has('portraits') && !kept.has('portraits')) return composeVariant(input, { ...options, [NO_PORTRAITS]: true } as ComposeSlideOptions, before, floor, held);
+  // A growth step (growBody) never drops a rule the slide's own composition kept: an arrangement that reads well only without it is refused.
+  if (held && [...held].some(rule => fired.has(rule) && !kept.has(rule))) return undefined;
   return figure(kept, best);
 }
 /**

@@ -127,7 +127,7 @@ describe("opf ingest is deterministic", () => {
 		assert.deepEqual(again.datasets.revenue.datasource, { src: "data/revenue.csv" });
 		assert.equal(again.datasets.revenue.retrieved, undefined);
 		// A re-import of the same file keeps the inline data source's other keys and the query; what described the old data goes.
-		const old = { columns: ["a"], rows: [], datasource: { src: "data/revenue.csv", connector: "xlsx", description: "Finance export" }, query: "S!A1:B2", retrieved: "2020-01-01", version: "r1", sha256: "0".repeat(64), generator: { kind: "model", name: "m" }, title: "Kept" };
+		const old = { columns: ["a"], rows: [], datasource: { src: "data/revenue.csv", connector: "xlsx", description: "Finance export" }, query: "S!A1:B2", retrieved: "2020-01-01", version: "r1", sha256: "0".repeat(64), generator: { type: "model", name: "m" }, title: "Kept" };
 		await writeFile(path.join(work, "stale.json"), JSON.stringify({ name: "Stale", datasets: { revenue: old }, slides: [{ title: "T", table: { dataset: "revenue" } }] }));
 		const kept = JSON.parse(run([...base, "--into", "stale.json"], { noClock: true }).stdout).datasets.revenue;
 		assert.deepEqual(kept.datasource, { src: "data/revenue.csv", connector: "xlsx", description: "Finance export" });

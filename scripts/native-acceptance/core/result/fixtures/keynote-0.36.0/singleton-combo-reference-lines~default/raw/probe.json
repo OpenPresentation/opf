@@ -1,0 +1,281 @@
+{
+ "app": {
+  "version": "16.0"
+ },
+ "document": {
+  "name": "singleton-combo-reference-lines",
+  "id": "561B1877-EF5D-4921-87C7-D4B6A2F67170",
+  "width": 960,
+  "height": 540,
+  "slide numbers showing": false,
+  "auto play": false,
+  "auto loop": false,
+  "auto restart": false,
+  "maximum idle duration": 15,
+  "password protected": false,
+  "theme": "Custom Theme",
+  "slide layouts": [
+   "Blank",
+   "Cover",
+   "Section",
+   "Agenda",
+   "Statement",
+   "Closing",
+   "Text",
+   "List",
+   "Quote",
+   "Two columns",
+   "Three columns",
+   "Pillars",
+   "Comparison",
+   "Process",
+   "Timeline",
+   "FAQ",
+   "Pyramid",
+   "Inverted pyramid",
+   "Matrix",
+   "Cycle",
+   "Chevrons",
+   "Vertical process",
+   "Organization chart",
+   "Hierarchy",
+   "Venn",
+   "Metrics",
+   "Scorecard",
+   "Image",
+   "Image beside",
+   "Gallery",
+   "Chart",
+   "Chart beside",
+   "Table",
+   "Table beside",
+   "Code",
+   "Hero",
+   "Dashboard",
+   "Team",
+   "Logos",
+   "Title Only"
+  ]
+ },
+ "slides": [
+  {
+   "slide number": 1,
+   "skipped": false,
+   "title showing": true,
+   "body showing": false,
+   "presenter notes": "",
+   "transition": {
+    "effect": "no transition effect",
+    "duration": 1.0,
+    "delay": 0.5,
+    "automatic": false
+   },
+   "layout": "Title Only",
+   "default title item": {
+    "position": [
+     43,
+     43
+    ],
+    "width": 874,
+    "height": 45,
+    "object text": "Q1 revenue and margin both sit under their targets"
+   },
+   "default body item": {
+    "position": [
+     0,
+     0
+    ],
+    "width": 0,
+    "height": 0,
+    "object text": ""
+   },
+   "itemCount": 6,
+   "items": [
+    {
+     "class": "shape",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      43,
+      43
+     ],
+     "width": 874,
+     "height": 45,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "Q1 revenue and margin both sit under their targets",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "Q1 revenue and margin both sit under their targets",
+       "font": "Helvetica-Bold",
+       "size": 37.0,
+       "color": [
+        0,
+        0,
+        0
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica-Bold"
+     ],
+     "wordSizes": [
+      37.0
+     ],
+     "isDefaultTitle": true
+    },
+    {
+     "class": "chart",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      83,
+      126
+     ],
+     "width": 790,
+     "height": 341,
+     "locked": false,
+     "isDefaultTitle": false
+    },
+    {
+     "class": "line",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      83,
+      160
+     ],
+     "width": 790,
+     "height": 0,
+     "rotation": 0,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "start point": [
+      83,
+      160
+     ],
+     "end point": [
+      874,
+      160
+     ],
+     "isDefaultTitle": false
+    },
+    {
+     "class": "text item",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      83,
+      137
+     ],
+     "width": 90,
+     "height": 18,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "Revenue 180",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "Revenue 180",
+       "font": "Helvetica",
+       "size": 15.0,
+       "color": [
+        0,
+        0,
+        0
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica"
+     ],
+     "wordSizes": [
+      15.0
+     ],
+     "isDefaultTitle": false
+    },
+    {
+     "class": "line",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      83,
+      182
+     ],
+     "width": 790,
+     "height": 0,
+     "rotation": 0,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "start point": [
+      83,
+      182
+     ],
+     "end point": [
+      874,
+      182
+     ],
+     "isDefaultTitle": false
+    },
+    {
+     "class": "text item",
+     "depth": 0,
+     "readMode": "bulk",
+     "position": [
+      793,
+      160
+     ],
+     "width": 81,
+     "height": 18,
+     "rotation": 0,
+     "opacity": 100,
+     "reflection showing": false,
+     "reflection value": 0,
+     "locked": false,
+     "background fill type": "no fill",
+     "text": "Margin 25%",
+     "paragraphCount": 1,
+     "paragraphs": [
+      {
+       "text": "Margin 25%",
+       "font": "Helvetica",
+       "size": 15.0,
+       "color": [
+        0,
+        0,
+        0
+       ]
+      }
+     ],
+     "wordFonts": [
+      "Helvetica"
+     ],
+     "wordSizes": [
+      15.0
+     ],
+     "isDefaultTitle": false
+    }
+   ]
+  }
+ ],
+ "errors": [],
+ "skippedSlides": [],
+ "derived": [
+  "skippedSlides",
+  "isDefaultTitle",
+  "isDefaultBody",
+  "cellsByRow"
+ ],
+ "input": "build/036/qualification/pptx/singleton-combo-reference-lines.pptx"
+}

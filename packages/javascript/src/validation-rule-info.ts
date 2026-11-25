@@ -187,7 +187,7 @@ const dataRules: ValidationRuleInfo[] = [
 		{ standard: SCHEMA },
 	),
 	rule('datasource-credentials', 'content', 'warning', 'A data source holds a credential.', 'A data source says where data lives and never holds credentials. A `src` with a user and password, or a query parameter named like a key or a token, writes a secret into a document that is shared, versioned and exported. Keep the secret in the host\'s own store and name the connection in `connector` or `extensions`.', { standard: SCHEMA }),
-	rule('dataset-stale', 'content', 'warning', 'A dataset is older than its data source says it should be.', 'A data source may say how often it is meant to be taken again (`refresh`, an ISO 8601 duration). Given a date to check as of, a dataset whose `retrieved` is older than that is reported. Core has no clock, so without a date nothing is reported, and no engine takes the data again.', { standard: SCHEMA }),
+	rule('dataset-stale', 'content', 'warning', 'A dataset is older than its data source says it should be.', 'A data source may say how often it is meant to be taken again (`refreshEvery`, an ISO 8601 duration). Given a date to check as of, a dataset whose `retrieved` is older than that is reported. Core has no clock, so without a date nothing is reported, and no engine takes the data again.', { standard: SCHEMA }),
 	rule('chart-mapping-adapted', 'content', 'warning', 'A chart mapping entry is ignored.', 'A mapping that names a column the chart type cannot use is left out of the chart.', { standard: SCHEMA }),
 	rule('chart-highlight-adapted', 'content', 'warning', 'A chart highlight is adapted by the chart type.', 'A highlight the chart type cannot show as authored (a category highlight on a chart without categories, for example) is adapted by every engine, so the emphasis is not exactly what was written.', { standard: SCHEMA }),
 	rule('chart-series-dropped', 'content', 'warning', 'A chart series is not drawn by the chart type.', 'A treemap, histogram, one-series Pareto, waterfall, funnel, map or single-series pie plots one value series, and a scatter plots no X column without numbers. Every engine leaves the same columns out (LH-60), so the warning names them instead of losing them silently.', { standard: SCHEMA, approximations: 'Read from the drawn chart (chartDrawPlan): a world chart over categories that are mostly not places and a Pareto chart of several series are drawn as columns, a box-and-whisker chart with one value per category as one box per series and a pie or doughnut of several series as nested rings, and none of those drops a series.' }),
@@ -586,18 +586,6 @@ export const layoutMonotonyRule = rule(
 		approximations: 'Compares the layout reference of each slide (a catalog prefix is ignored). Cover, section and closing slides, slides with no body content and slides without a layout record (automatic composition) break a run and are not counted; hidden slides are skipped. One finding per run, at its first slide.',
 	},
 );
-export const straightQuotesRule = rule(
-	'straight-quotes',
-	'content',
-	'info',
-	'Text uses straight quotation marks (" or \') where the language has typographic ones.',
-	'Straight marks are a typewriter substitute. Typeset text uses the quotation marks of its language (“…” in English, «…» in French, „…“ in German), and a deck that mixes them with the marks the engine draws around quotes looks unfinished.',
-	{
-		standard: 'The quotation marks of the deck language, as the engines draw them around a quote (QUOTE_MARKS in core).',
-		approximations: 'Checks titles, subtitles, tags, body text, list items and descriptions, and quotes; not table cells, metrics, timelines, code or runs with `code: true`. A `"` after a digit is an inch mark and a `\'` between letters or after a digit is an apostrophe or a foot mark; single quotes count only as a pair around words. A language with no typographic marks of its own (one OPF draws ASCII quotes for) is not checked. When only double quotes are found, the finding carries a patch to the language\'s marks.',
-	},
-);
-
 // rules-variable-overflow.ts (FR-09): a variable's value is longer than its declaration allows.
 export const variableOverflowRule = rule(
 	'variable-overflow',
@@ -682,7 +670,6 @@ const implementedRules: ValidationRuleInfo[] = [
 	centeredBodyRule,
 	tightSpacingRule,
 	layoutMonotonyRule,
-	straightQuotesRule,
 	variableOverflowRule,
 	chartDualAxisRule,
 	chartPieManySlicesRule,
