@@ -63,6 +63,7 @@ Every object variable may also carry `label` (short form label), `description`, 
 - `example` only illustrates the slot. Fill forms show it as a placeholder, and previews of a template use it (see [Previews](#previews-and-export)). It never reaches a filled deck.
 - `required: false` makes a variable optional. An unfilled optional variable resolves to empty text inline, and a field that references it as `var:id` is omitted.
 - `format` (number and date only) is the display pattern used by `{{id}}`.
+- `maxLength`, `maxLines` (a text variable) and `maxItems` (a list variable) say how much room the slot has; see [Limits on a value](#limits-on-a-value).
 
 Color variables are unchanged: `"risk": "#B42318"` or `{ "type": "color", "value": "#B42318" }`, referenced as `var:risk` in color fields, resolved at render time by `resolveColorRef`. The only addition is that a color variable can now be filled or overridden like the others.
 
@@ -98,6 +99,33 @@ Which fields can use variables is decided by the schema of the *resolved* deck, 
 **Untouched content.** `extensions`, inline `catalogs`, `$schema`, and the declarations themselves are never searched.
 
 **Compatibility.** A deck that declares no content variable, uses no built-in variable (the slide-scoped ones included) and is not a template is resolved by identity: nothing is searched, `{{` and `\{{` in its text keep their meaning (a Handlebars snippet in a code block is safe), and its color variables behave as before. Escapes are only processed in a deck that uses content or built-in variables.
+
+## Limits on a value
+
+A slot is sized for a short value, and a longer one is found only on one slide of a batch. A variable's declaration can say how much room it has, in any deck that declares variables (a deck template, `template: true`, filled by `opf fill`, uses them today):
+
+```json
+"variables": {
+  "headline": { "type": "text", "maxLength": 48, "maxLines": 2 },
+  "agenda":   { "type": "list", "maxItems": 5 }
+}
+```
+
+| Key | On | Counts | Checked |
+| --- | --- | --- | --- |
+| `maxLength` | a text variable | characters as a reader sees them (grapheme clusters, `Intl.Segmenter`): "Café" is four however it is encoded, and an emoji counts once | on the value, once |
+| `maxItems` | a list variable | entries | on the value, once |
+| `maxLines` | a text variable | lines where the variable is drawn | by composition, at each place the variable is drawn |
+
+A limit on any other kind of variable, or a limit below 1, is a schema error. A value over a limit is the warning `opf/variable-overflow` (the deck still draws; a warning, so it has no invalid conformance case). It is reported:
+
+- by `validate` (and `opf validate`, and the MCP `validate_deck`) on the declared value, and on a value given to `validate` with its `values` option, at `/variables/<id>` for `maxLength` and `maxItems`;
+- for `maxLines`, at every place the variable is drawn, naming the slide (`slide`, `slideId`) and the path of the text, with `measured: { lines, maxLines }`. A variable drawn on three slides is up to three findings. The line count depends on the width of the box, so only composition can say it: one variable fits two lines in a cover title and takes three in a narrow column. It is checked with the fonts and text measurement of the check, in a title, a subtitle, a tag, a text block or a list entry. When the variable is drawn inside longer text (`"Intro: {{headline}} and more"`), the lines are the ones the variable's own characters occupy, not the whole block. A place composition does not break into lines (a table cell, a chart label, text inside a shape), and a variable with no `value` or `example`, are not measured;
+- by `fill()` and `resolveVariables` for `maxLength` and `maxItems`, as a `variable-overflow` diagnostic (severity `warning`) on the value given, and by `opf fill` for all three: a warning on stderr with the record and the slide, and `fill.overflow` in the report, before anything is written. The decks are still written.
+
+Fill forms and models read the limits before they write: `listVariables` and the editor's `listTemplateFields` return `maxLength`, `maxLines` and `maxItems` with each variable; the Fill template panel shows the count ("12 of 48 characters", "at most 2 lines where it is drawn", "3 of 5 items"); a model reads them in the declaration of the template it fills (`get_schema` documents the keys; this page is `search_docs` `templates-and-variables`) and learns of an overflow from `validate_deck`.
+
+Limits change nothing that is drawn or exported: a deck without limits, and a deck within them, validates, previews and exports exactly as before. The PowerPoint export holds the resolved deck (see [Previews and export](#previews-and-export)), so a limit is not written to the file, like the declaration that carries it; the Markdown and YAML forms keep the keys.
 
 ## Built-in variables
 
@@ -232,7 +260,7 @@ The result of a complete pass:
 
 Values are coerced per kind, so data files work as they are: number accepts a finite number or a strict decimal string (`"1250000"`, not `"1,250,000"`); date accepts `YYYY-MM-DD` or an ISO date-time (the date part is kept, no zone conversion); list accepts an array, or a string split on newlines; text accepts a string, a number, a boolean or runs; image accepts a string or `{src}`; url accepts http, https, mailto and tel; color accepts hex. `null`, `undefined` and, for every kind but text, a blank string mean "not provided". A rejected value is an `error` diagnostic (`variable-invalid-value`) and falls back to the declaration. A value for an undeclared variable is a `variable-unknown-value` warning.
 
-Diagnostic codes: `variable-unfilled` (error in a deck, info in a template or partial fill), `variable-invalid-value`, `variable-format` (an unusable number or date pattern), `variable-unknown` (undeclared token), `variable-unknown-builtin`, `variable-builtin-missing`, `variable-unknown-value`, `variable-unused`, `variable-example-used`, `variable-rich-flattened`, `variable-group-omitted` (info: a group of only unfilled optional variables, omitted whole).
+Diagnostic codes: `variable-overflow` (warning: a value past its `maxLength` or `maxItems`), `variable-unfilled` (error in a deck, info in a template or partial fill), `variable-invalid-value`, `variable-format` (an unusable number or date pattern), `variable-unknown` (undeclared token), `variable-unknown-builtin`, `variable-builtin-missing`, `variable-unknown-value`, `variable-unused`, `variable-example-used`, `variable-rich-flattened`, `variable-group-omitted` (info: a group of only unfilled optional variables, omitted whole).
 
 `listVariables(presentation, values?)` returns each declaration with `filled` and every place it is used (`uses: [{ path, form: 'token' | 'reference' }]`). Fill forms, agents and the editor read it.
 
@@ -294,7 +322,7 @@ Each is vetoable; the alternative says what changing it would cost.
 - Variables are not computed: no arithmetic, conditionals or loops. A deck that needs them generates its data upstream.
 - A variable cannot change structure beyond splicing a list into an array and omitting an optional field. Which slides exist is the author's choice (or `opf fill`'s per-record decks).
 - Variables that point at relative image paths depend on where the filled file is saved.
-- Schema support is not fidelity: the renderer and exporter lay out the resolved deck, so a long substituted value can overflow like any long authored value. Check the filled deck with the usual composition diagnostics.
+- Schema support is not fidelity: the renderer and exporter lay out the resolved deck, so a long substituted value can overflow like any long authored value. Declare [limits](#limits-on-a-value) to be told before it does, and check the filled deck with the usual composition diagnostics.
 
 ## Follow-ups
 

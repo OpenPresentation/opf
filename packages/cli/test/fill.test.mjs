@@ -138,6 +138,26 @@ describe("opf fill", () => {
     assert.equal(JSON.parse(await readFile(path.join(temp, "named.opf.json"), "utf8")).slides[0].title, "Quarterly review: Initech");
   });
 
+  test("a value over its variable's limits is reported before anything is written, and the decks are still written (FR-09)", async () => {
+    const limited = await file("limited.opf.json", JSON.stringify({ name: "Limits", template: true, variables: { headline: { type: "text", maxLength: 12, maxLines: 1 }, agenda: { type: "list", maxItems: 2 } }, slides: [{ id: "cover", title: "{{headline}}" }, { id: "agenda", title: "Agenda", items: "var:agenda" }] }));
+    const data = await file("limited.json", JSON.stringify([{ headline: "Short", agenda: ["a"] }, { headline: "A headline that is far too long to fit one line", agenda: ["a", "b", "c"] }]));
+    const result = run(["fill", limited, data, path.join(temp, "limited-{n}.opf.json")]);
+    assert.equal(result.status, 0, result.stderr);
+    const warnings = result.stderr.split("\n").filter((line) => line.startsWith("warning: opf/variable-overflow"));
+    assert.deepEqual(warnings.map((line) => line.replace(/ \S+: .*$/, "")), [
+      "warning: opf/variable-overflow record 2",
+      "warning: opf/variable-overflow record 2",
+      "warning: opf/variable-overflow record 2 slide 1",
+    ]);
+    assert.ok(warnings.some((line) => line.includes("/variables/headline") && line.includes("maxLength is 12")));
+    assert.ok(warnings.some((line) => line.includes("/variables/agenda") && line.includes("maxItems is 2")));
+    assert.ok(warnings.some((line) => line.includes("/slides/0/title") && line.includes("maxLines is 1")));
+    assert.deepEqual((await readdir(temp)).filter((name) => name.startsWith("limited-")).sort(), ["limited-1.opf.json", "limited-2.opf.json"]);
+    const within = run(["fill", limited, await file("within.json", JSON.stringify({ headline: "Short", agenda: ["a"] }))]);
+    assert.equal(within.status, 0, within.stderr);
+    assert.equal(within.stderr.includes("variable-overflow"), false);
+  });
+
   test("usage mistakes exit 2", () => {
     assert.equal(run(["fill"]).status, 2);
     for (const removed of [["--name", "x"], ["--out-dir", temp], ["--output", "x.json"], ["--data", "x.csv"], ["--format", "csv"]]) assert.equal(run(["fill", TEMPLATE, ...removed]).status, 2, removed[0]);

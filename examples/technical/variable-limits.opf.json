@@ -1,0 +1,44 @@
+{
+  "name": "Quarterly review template with limits",
+  "description": "A deck template (template: true, filled by opf fill) whose variables say how much room they have: maxLength and maxLines on a text variable, maxItems on a list variable. The values here are within their limits, so the deck validates without warnings; a longer value is the warning opf/variable-overflow.",
+  "language": "en-US",
+  "template": true,
+  "variables": {
+    "headline": {
+      "type": "text",
+      "label": "Headline",
+      "description": "The one-line message of the cover. Keep it to a short sentence.",
+      "value": "Quarterly review for Acme",
+      "example": "Quarterly review for Example Corp",
+      "maxLength": 48,
+      "maxLines": 2
+    },
+    "summary": {
+      "type": "text",
+      "label": "Summary",
+      "description": "Two sentences at most; the slide has room for three lines.",
+      "value": "Revenue grew 12 percent on the same quarter last year.",
+      "maxLength": 160,
+      "maxLines": 3
+    },
+    "agenda": {
+      "type": "list",
+      "label": "Agenda",
+      "description": "Up to five topics, one per entry.",
+      "value": ["Results", "Customers", "Roadmap"],
+      "maxItems": 5
+    }
+  },
+  "slides": [
+    {
+      "id": "cover",
+      "title": "{{headline}}",
+      "subtitle": "{{summary}}"
+    },
+    {
+      "id": "agenda",
+      "title": "Agenda",
+      "items": ["var:agenda"]
+    }
+  ]
+}
