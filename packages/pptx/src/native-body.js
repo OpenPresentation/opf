@@ -2,6 +2,7 @@
 // single editable body. No source words or per-line recovery tags are stored.
 import {bindNoBreak, paragraphDirection, resolveTextStyle, styledText, textWidthMeasurer} from '@openpresentation/opf/composition';
 import {autoNumScheme} from './numbered-list.js';
+import {exportHyperlink} from './slide-links.js';
 
 const FIELDS = new Set(['text', 'items', 'bullets']);
 const RUN_KEYS = new Set(['text', 'bold', 'italic', 'underline', 'strikethrough', 'color', 'fontFamily', 'fontSize', 'language', 'link']);
@@ -349,7 +350,7 @@ export function addNativeBody(slide, plan, context, options, helpers) {
       const runOptions = {...helpers.nativeFontOptions(style), fontSize: run.fontSize ?? item.text.fontSize * .75,
         color, transparency: hex.length === 8 ? (1 - parseInt(hex.slice(6), 16) / 255) * 100 : 0,
         underline: run.underline ? {style: 'sng', color} : {style: 'none'}, strike: run.strikethrough ? 'sngStrike' : undefined,
-        hyperlink: run.link && /^(https?:|mailto:|tel:)/i.test(run.link) ? {url: run.link} : undefined, ...helpers.langOptions(context, run.language)};
+        hyperlink: exportHyperlink(run.link, context), ...helpers.langOptions(context, run.language)};
       // LH-11: PowerPoint wraps the body itself, so the spaces core's line breaker never breaks at are no-break spaces (import writes them back).
       const pieces = bindNoBreak(run.text).split(/\r\n|\r|\n/);
       let sourceOffset = 0;

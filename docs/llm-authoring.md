@@ -1,6 +1,6 @@
 # Authoring OPF with an LLM
 
-Write a complete JSON document with `name` and `slides`. Put visible words in slide fields, not presentation metadata. Use `*.opf.json` filenames and stable, unique slide `id` values when a deck will be revised repeatedly.
+Write a complete JSON document with `name` and `slides`. Put visible words in slide fields, not presentation metadata. Use `*.opf.json` filenames and stable, unique slide `id` values when a deck will be revised repeatedly. Do not add `id` to list items, bullets, timeline events or table rows unless the user or the host asks for it (a host that co-edits asks for it with `assignIds(doc, { items: true })`): the short forms (`items: ["One", "Two"]`, rows as arrays) are the normal shape, and an id there must be unique across the whole document.
 
 ```json
 {

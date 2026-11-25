@@ -5,6 +5,7 @@
 // Cells are addressed by `{ section: "header" | "body", row, column }`; `row` is ignored for the
 // header section. Nothing here invents text: merging cells that hold text refuses unless you pass
 // `join: true`, which keeps every word in the merged cell.
+import { rowCells } from "@openpresentation/opf";
 import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { checkedDocument, fail } from "./edit-helpers.js";
 import { checkFormat } from "./checks.js";
@@ -54,8 +55,10 @@ export function parseTableCellPath(path) {
     const kind = parts[index];
     const tablePath = parts.slice(0, index).join(".");
     if (kind === "columns" && /^(0|[1-9]\d*)$/.test(parts[index + 1] ?? "")) return { tablePath, cell: { section: "header", row: 0, column: Number(parts[index + 1]) } };
-    if (kind === "rows" && /^(0|[1-9]\d*)$/.test(parts[index + 1] ?? "") && /^(0|[1-9]\d*)$/.test(parts[index + 2] ?? ""))
-      return { tablePath, cell: { section: "body", row: Number(parts[index + 1]), column: Number(parts[index + 2]) } };
+    // A row is an array of cells (rows.1.2) or an object with an id (rows.1.cells.2, FR-02).
+    const column = parts[index + 2] === "cells" ? parts[index + 3] : parts[index + 2];
+    if (kind === "rows" && /^(0|[1-9]\d*)$/.test(parts[index + 1] ?? "") && /^(0|[1-9]\d*)$/.test(column ?? ""))
+      return { tablePath, cell: { section: "body", row: Number(parts[index + 1]), column: Number(column) } };
   }
   return undefined;
 }
@@ -70,7 +73,7 @@ function tableAt(presentation, tablePath) {
 }
 
 function widthOf(table) {
-  return Math.max(table.columns?.length ?? 0, ...table.rows.map((row) => row.length));
+  return Math.max(table.columns?.length ?? 0, ...table.rows.map((row) => rowCells(row).length));
 }
 
 function lineOf(table, cell) {
@@ -78,7 +81,8 @@ function lineOf(table, cell) {
     if (!Array.isArray(table.columns)) throw fail("table-cell-not-found", "This table has no header row.", { cell });
     return table.columns;
   }
-  const line = table.rows[cell.row];
+  const entry = table.rows[cell.row];
+  const line = Array.isArray(entry) ? entry : isObject(entry) && Array.isArray(entry.cells) ? entry.cells : undefined;
   if (!Array.isArray(line)) throw fail("table-cell-not-found", `Row ${cell.row + 1} does not exist.`, { cell });
   return line;
 }
@@ -102,7 +106,7 @@ export function tableMerges(table) {
       if (colSpan > 1 || rowSpan > 1) merges.push({ section, row, column, rowSpan, colSpan });
     });
   visit(table.columns, "header", 0);
-  table.rows.forEach((line, row) => visit(line, "body", row));
+  table.rows.forEach((line, row) => visit(rowCells(line), "body", row));
   return merges;
 }
 
@@ -186,7 +190,7 @@ function unmerge(table, cell) {
   for (let r = 0; r < rowSpan; r += 1)
     for (let c = 0; c < colSpan; c += 1) {
       if (r === 0 && c === 0) continue;
-      const target = cell.section === "header" ? table.columns : table.rows[cell.row + r];
+      const target = cell.section === "header" ? table.columns : rowCells(table.rows[cell.row + r]);
       if (Array.isArray(target) && target[cell.column + c] === null) target[cell.column + c] = "";
     }
   line[cell.column] = withCell(raw, { colSpan: undefined, rowSpan: undefined });
@@ -215,7 +219,7 @@ export function prepareTableMerge(presentation, tablePath, cell, span, options =
     if (target.column + colSpan > widthOf(table)) throw fail("invalid-table-span", `Only ${widthOf(table) - target.column} column(s) are available from this cell.`, { span });
     if (target.section === "body" && target.row + rowSpan > table.rows.length) throw fail("invalid-table-span", `Only ${table.rows.length - target.row} row(s) are available from this cell.`, { span });
     const lines = [];
-    for (let r = 0; r < rowSpan; r += 1) lines.push({ row: target.row + r, line: target.section === "header" ? table.columns : table.rows[target.row + r] });
+    for (let r = 0; r < rowSpan; r += 1) lines.push({ row: target.row + r, line: target.section === "header" ? table.columns : rowCells(table.rows[target.row + r]) });
     const covered = [];
     for (const { row, line } of lines)
       for (let c = 0; c < colSpan; c += 1) {

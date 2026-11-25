@@ -1,10 +1,28 @@
 import { applyJsonPatch, createValuePatch, getValueAtPath } from "./index.js";
 import { ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_THEME, copySlides, parseReference, resolveReference } from "@openpresentation/opf";
-import { collectReservedPresentationIds, remapSlideTreeIds } from "./presentation-ids.js";
+import { collectReservedPresentationIds, remapSlideTreeIds, slideIds } from "./presentation-ids.js";
 import { checkFormat, firstErrorMessage } from "./checks.js";
 import { mergeCatalogs, prepareSave } from "./catalogs.js";
 export const MAX_OPF_BYTES = 20 * 1024 * 1024;
 const clone = (value) => structuredClone(value);
+/**
+ * Pasting a slide or a block from another document (FR-02): an id (of the slide, a payload, a list item, bullet, timeline event or table row) that
+ * is free in this document stays; one that is taken by something this paste does not replace gets a new id. Other values are returned as they are.
+ */
+function withFreeIds(current, path, value) {
+  if (!value || typeof value !== "object" || Array.isArray(value) || typeof path !== "string") return value;
+  const parts = path.split(".");
+  const isSlide = parts.length === 2 && parts[0] === "slides";
+  const isBlock = parts.length >= 4 && parts.at(-2) === "blocks";
+  if (!isSlide && !isBlock) return value;
+  const old = getValueAtPath(current, path);
+  const replaced = new Set(old && typeof old === "object" ? (isSlide ? slideIds(old) : slideIds({ blocks: [old] })) : []);
+  const taken = new Set(collectReservedPresentationIds(current).filter((id) => !replaced.has(id)));
+  const copy = clone(value);
+  if (isSlide) remapSlideTreeIds(copy, taken);
+  else remapSlideTreeIds({ blocks: [copy] }, taken);
+  return copy;
+}
 export function assertOpf(presentation) {
   bounded(presentation);
   const result = checkFormat(presentation);
@@ -145,7 +163,7 @@ export function prepareOpfImport(
   if (mode === "selection") {
     const presentation = applyJsonPatch(
       current,
-      createValuePatch(current, path, transfer.value),
+      createValuePatch(current, path, withFreeIds(current, path, transfer.value)),
     );
     assertOpf(presentation);
     return { presentation, slideIndex, renamed: [], addedGroups: [] };

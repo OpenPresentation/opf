@@ -69,6 +69,14 @@
       "basis": "opf.schema.json#/$defs/ContentPayload/properties/id (unique among slide and payload ids)"
     },
     {
+      "id": "core.valid.entry-ids",
+      "file": "core/valid/entry-ids.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Ids on a list item, a bullet, a timeline event and a table row (object form beside the array form); entries without an id stay valid.",
+      "basis": "opf.schema.json#/$defs/ListItem, BulletItem, TimelineEvent, TableRow (optional id; ids kept at the same JSON Pointer)"
+    },
+    {
       "id": "core.valid.group-nesting-at-limit",
       "file": "core/valid/group-nesting-at-limit.opf.json",
       "levels": ["reader", "writer"],
@@ -115,6 +123,14 @@
       "expect": { "valid": true },
       "description": "A text run cites a reference that exists.",
       "basis": "opf.schema.json#/properties/references"
+    },
+    {
+      "id": "core.valid.slide-link",
+      "file": "core/valid/slide-link.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Links to slides of the same deck, as `slide:<id>`, on a text run, a shape block and a table cell; one names a hidden slide.",
+      "basis": "opf.schema.json#/$defs/TextRun/properties/link; docs/validate.md, rule opf/slide-link-unknown"
     },
     {
       "id": "core.valid.dataset-referenced",
@@ -357,6 +373,46 @@
       "basis": "opf.schema.json#/$defs/ContentPayload/properties/id"
     },
     {
+      "id": "core.invalid.duplicate-item-id",
+      "file": "core/invalid/duplicate-item-id.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/blocks/0/items/1/id" },
+      "description": "Two list items share an id.",
+      "basis": "opf.schema.json#/$defs/ListItem/properties/id (unique in the document)"
+    },
+    {
+      "id": "core.invalid.duplicate-entry-id-across-kinds",
+      "file": "core/invalid/duplicate-entry-id-across-kinds.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/blocks/1/table/rows/0/id" },
+      "description": "A bullet and a table row share an id: one namespace for every kind of id.",
+      "basis": "opf.schema.json#/$defs/TableRow/properties/id (unique among every slide, payload, item, bullet, event and row id)"
+    },
+    {
+      "id": "core.invalid.entry-id-equals-payload-id",
+      "file": "core/invalid/entry-id-equals-payload-id.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/blocks/1/timeline/0/id" },
+      "description": "A timeline event takes the id of a block.",
+      "basis": "opf.schema.json#/$defs/TimelineEvent/properties/id (one namespace with payload ids)"
+    },
+    {
+      "id": "core.invalid.table-row-object-without-cells",
+      "file": "core/invalid/table-row-object-without-cells.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/table/rows/0" },
+      "description": "A table row object has an id but no cells.",
+      "basis": "opf.schema.json#/$defs/TableRow (the object form requires cells)"
+    },
+    {
+      "id": "core.invalid.entry-id-empty",
+      "file": "core/invalid/entry-id-empty.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/items/0/id" },
+      "description": "An id is a non-empty string.",
+      "basis": "opf.schema.json#/$defs/ListItem/properties/id (minLength 1)"
+    },
+    {
       "id": "core.invalid.duplicate-reference-id",
       "file": "core/invalid/duplicate-reference-id.opf.json",
       "levels": ["reader"],
@@ -371,6 +427,14 @@
       "expect": { "valid": false, "errorAt": "/slides/0/text/0/cite/1" },
       "description": "A citation names a reference that does not exist.",
       "basis": "docs/validate.md, rule opf/cite-unknown-reference"
+    },
+    {
+      "id": "core.invalid.slide-link-unknown",
+      "file": "core/invalid/slide-link-unknown.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/text/0/link" },
+      "description": "A link names a slide id no slide of the document has.",
+      "basis": "docs/validate.md, rule opf/slide-link-unknown"
     },
     {
       "id": "core.invalid.dataset-unknown",

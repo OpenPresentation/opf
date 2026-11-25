@@ -36,10 +36,14 @@ const clone = (value) => structuredClone(value);
 const columnNameOf = (column) => (typeof column === "string" ? column : isObject(column) && typeof column.name === "string" ? column.name : "");
 // A body row remembers which dataset row it came from, so a row that moves, sorts or is deleted keeps the columns `fields` hides.
 const LINE_ORIGIN = Symbol("opf.grid.row");
+// An inline table row written as { id, cells } remembers its id, so a row that is edited, moved or sorted keeps it (FR-02). A new line has
+// none: ids are minted by the host (assignIds), never by the grid.
+const LINE_ID = Symbol("opf.grid.rowId");
 const cloneLines = (lines) =>
   lines.map((line) => {
     const copy = clone(line);
     if (line[LINE_ORIGIN] !== undefined) copy[LINE_ORIGIN] = line[LINE_ORIGIN];
+    if (line[LINE_ID] !== undefined) copy[LINE_ID] = line[LINE_ID];
     return copy;
   });
 const spansOf = (raw) => ({ rs: isStyled(raw) ? (raw.rowSpan ?? 1) : 1, cs: isStyled(raw) ? (raw.colSpan ?? 1) : 1 });
@@ -160,7 +164,7 @@ function toModel(found) {
     // The dataset as the item shows it: only the columns `fields` selects, in that order. Each body row remembers its dataset row.
     const pick = (row) => dataset.indices.map((index) => (Array.isArray(row) && index < row.length ? clone(row[index]) : null));
     lines = [clone(dataset.indices.map((index) => data.columns[index])), ...data.rows.map((row, r) => Object.assign(pick(row), { [LINE_ORIGIN]: r }))];
-  } else lines = [...(hasHeader ? [clone(data.columns)] : []), ...clone(data.rows).map((row) => (Array.isArray(row) ? row : [row]))];
+  } else lines = [...(hasHeader ? [clone(data.columns)] : []), ...clone(data.rows).map((row) => (Array.isArray(row) ? row : isObject(row) && Array.isArray(row.cells) ? Object.assign(row.cells, typeof row.id === "string" && row.id !== "" ? { [LINE_ID]: row.id } : {}) : [row]))];
   const mapping = kind === "chart" && isObject(found.owner?.mapping) ? clone(found.owner.mapping) : undefined;
   // `datasetNames` are every column of the shared dataset, also the ones `fields` hides: a new column's name must differ from them.
   const model = { kind, hasHeader, lines, width: 0, chartType: found.chartType, dataset, mapping, colOrigin: [], origNames: [], datasetNames: dataset ? data.columns.map(columnNameOf) : [] };
@@ -180,7 +184,7 @@ function fromModel(model, original) {
   const rest = Object.fromEntries(Object.entries(original).filter(([key]) => key !== "columns" && key !== "rows"));
   const out = {};
   if (model.hasHeader) out.columns = model.lines[0];
-  out.rows = model.lines.slice(model.hasHeader ? 1 : 0);
+  out.rows = model.lines.slice(model.hasHeader ? 1 : 0).map((line) => (line[LINE_ID] === undefined ? line : { id: line[LINE_ID], cells: line }));
   return { ...out, ...rest };
 }
 

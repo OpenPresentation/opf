@@ -86,14 +86,14 @@ validate(presentation, {
   fonts,                                          // the host's fonts: layout rules read fonts.textMeasurement
   chartPalette: ['#0072B2', '#E69F00'],           // the engine's chart colors
   template: true, values: { client: 'Acme' },     // check as a template, or fill variables first
-  asOf: '2026-11-25',                             // the date to check data freshness as of (opf/dataset-stale)
+  slideLinks: ['pricing'],                        // one slide checked alone: the deck's other slide ids (false: skip opf/slide-link-unknown)
 });
 ```
 
 - **Names.** `only`, `ignore`, `severity` and `ignorePaths` take full rule ids (`opf/text-contrast`), bare rule names (`text-contrast`) or category names (`accessibility`). No rule is named like a category. A rule beats its category in `severity`. An unknown rule, category, threshold or option throws a `TypeError`, so a typo cannot silently disable a check.
 - **`fonts`.** An object with a `textMeasurement` (the renderer's `loadFonts()` result has one). Without it the layout rules use core's portable estimate and `checks.layout` says `estimated`; with it, `measured`. `textMeasurement` may also be a function of the zero-based slide index, for a script-aware measurement per slide. When the measurement has a `forScripts(profile)` method (a script planner), the layout rules ask it for each slide's script-aware measurement, built from the slide's `resolveScriptFonts` profile and a run language's own profile, the way the renderer and the exporter measure, so Arabic or Japanese text is measured in its script face rather than the Latin face its style names.
 - **`template` and `values`.** A deck that declares content variables is checked as the deck it resolves to; see [templates and variables](templates-and-variables.md).
-- **`asOf`.** An ISO 8601 date (`2026-11-25`) or date-time. Core has no clock, so a dataset is reported stale (`opf/dataset-stale`) only when the caller passes the date to check as of: its `retrieved` is older than its data source's `refresh`. Without `asOf` nothing is reported stale. See [data sources](data-sources.md).
+- **`slideLinks`.** For a value that is one part of a deck (a single slide checked on its own, as pagination does), `false` skips `opf/slide-link-unknown` and a list of ids adds the deck's other slides that a `slide:<id>` link may name. Leave it out for a whole deck.
 - **Thresholds.** `DEFAULT_VALIDATION_THRESHOLDS` holds `contrastNormal`, `contrastLarge`, `minFontSizePt`, `minImagePpi` and `minSeriesColorDifference`; each rule below lists the ones it reads.
 
 `validationRules` lists every rule with its metadata (`id`, `name`, `category`, `severity`, `cost`, `summary`, `rationale`, `standard`, `approximations`, `thresholds`), and `findValidationRule(name)` finds one by id or bare name.
@@ -186,7 +186,7 @@ A file ending `.yaml` or `.yml` (or stdin with `--from yaml`) is read as YAML th
 
 **Schema errors in a union.** Where a value can take several forms (a table cell is a scalar, runs or a styled object), a failing value reports the errors of the form it was written for, and each finding's `validation.alternatives` lists the other forms in one line each (`--format text` prints them as `other forms: ...`). When no form fits the value's type, one error names the types accepted.
 
-`--only` and `--ignore` take comma-separated rule ids, bare names or category names. `--config` takes an explicit local JSON file, never `-`, holding `{ catalogs, contracts, severity, only, ignore, ignorePaths, thresholds, chartPalette, asOf }`; `--only` replaces the file's `only` and `--ignore` adds to its `ignore`, and `--as-of <date>` replaces its `asOf`.
+`--only` and `--ignore` take comma-separated rule ids, bare names or category names. `--config` takes an explicit local JSON file, never `-`, holding `{ catalogs, contracts, severity, only, ignore, ignorePaths, thresholds, chartPalette }`; `--only` replaces the file's `only` and `--ignore` adds to its `ignore`.
 
 | Exit | Meaning |
 | --- | --- |
@@ -240,6 +240,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/reference-id-duplicate`](#opfreference-id-duplicate) | Format | error | structure | Two references share an id. |
 | [`opf/cite-unknown-reference`](#opfcite-unknown-reference) | Format | error | structure | A citation names a reference that does not exist. |
 | [`opf/cite-unsupported-location`](#opfcite-unsupported-location) | Format | error | structure | A citation or footnote sits where no engine draws it. |
+| [`opf/slide-link-unknown`](#opfslide-link-unknown) | Format | error | structure | A link names a slide the document does not have. |
 | [`opf/caption-unsupported-payload`](#opfcaption-unsupported-payload) | Format | error | structure | A caption is on a payload that cannot carry one. |
 | [`opf/image-option-unsupported-payload`](#opfimage-option-unsupported-payload) | Format | error | structure | An image option is on a payload that is not an image. |
 | [`opf/shape-option-unsupported-payload`](#opfshape-option-unsupported-payload) | Format | error | structure | A shape option is on a payload that is not a shape block. |
@@ -253,7 +254,6 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/image-placement-invalid`](#opfimage-placement-invalid) | Format | error | structure | An image placement cannot be honored. |
 | [`opf/layout-placeholder-group`](#opflayout-placeholder-group) | Format | error | structure | A layout record's placeholder group breaks a nesting rule. |
 | [`opf/dataset-unknown`](#opfdataset-unknown) | Format | error | structure | A chart or table names a dataset that does not exist. |
-| [`opf/datasource-unknown`](#opfdatasource-unknown) | Format | error | structure | A dataset or chart data names a data source that does not exist. |
 | [`opf/dataset-field-unknown`](#opfdataset-field-unknown) | Format | error | structure | A table asks a dataset for a column it does not have. |
 | [`opf/data-column-duplicate`](#opfdata-column-duplicate) | Format | error | structure | A dataset or table has two columns with the same name. |
 | [`opf/chart-mapping-unknown-column`](#opfchart-mapping-unknown-column) | Format | error | structure | A chart mapping names a column the data does not have. |
@@ -323,8 +323,6 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/layout-monotony`](#opflayout-monotony) | Layout | info | structure | 4 or more content slides in a row use the same layout record. |
 | [`opf/variable-overflow`](#opfvariable-overflow) | Layout | warning | composition | A variable's value is longer than the room its declaration allows. |
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
-| [`opf/datasource-credentials`](#opfdatasource-credentials) | Content | warning | structure | A data source holds a credential. |
-| [`opf/dataset-stale`](#opfdataset-stale) | Content | warning | structure | A dataset is older than its data source says it should be. |
 | [`opf/chart-mapping-adapted`](#opfchart-mapping-adapted) | Content | warning | structure | A chart mapping entry is ignored. |
 | [`opf/chart-highlight-adapted`](#opfchart-highlight-adapted) | Content | warning | structure | A chart highlight is adapted by the chart type. |
 | [`opf/chart-series-dropped`](#opfchart-series-dropped) | Content | warning | structure | A chart series is not drawn by the chart type. |
@@ -396,6 +394,14 @@ Default severity: **error**. Cost: structure. A citation names a reference that 
 Default severity: **error**. Cost: structure. A citation or footnote sits where no engine draws it.
 
 **Why.** `cite` and `footnote` apply to runs in text, bullets and list items; table cells, captions, and reference and footnote texts have no marker.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/slide-link-unknown`
+
+Default severity: **error**. Cost: structure. A link names a slide the document does not have.
+
+**Why.** A `slide:<id>` link jumps to the slide with that `id`; an id no slide has leaves the link with nowhere to go in the preview, in PDF and in PowerPoint. A slide with no `id` cannot be linked to; `assignIds` gives every slide one.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -504,14 +510,6 @@ Default severity: **error**. Cost: structure. A layout record's placeholder grou
 Default severity: **error**. Cost: structure. A chart or table names a dataset that does not exist.
 
 **Why.** The data cannot be drawn without the dataset it refers to.
-
-**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
-
-### `opf/datasource-unknown`
-
-Default severity: **error**. Cost: structure. A dataset or chart data names a data source that does not exist.
-
-**Why.** A string `datasource` is the id of an entry in the top-level `datasources` map. An id that is not there says nothing about where the data came from. A file or a URL is written as an inline data source object, `{ "src": "./revenue.csv" }`.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -1123,22 +1121,6 @@ Default severity: **warning**. Cost: composition. A variable's value is longer t
 Default severity: **warning**. Cost: structure. A chart value is text, not a number.
 
 **Why.** A chart plots numbers. A text cell such as "12%" is plotted as a gap. When every text value of a column is written in one display style the finding carries the fix that stores the numbers and gives the column the matching format.
-
-**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
-
-### `opf/datasource-credentials`
-
-Default severity: **warning**. Cost: structure. A data source holds a credential.
-
-**Why.** A data source says where data lives and never holds credentials. A `src` with a user and password, or a query parameter named like a key or a token, writes a secret into a document that is shared, versioned and exported. Keep the secret in the host's own store and name the connection in `connector` or `extensions`.
-
-**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
-
-### `opf/dataset-stale`
-
-Default severity: **warning**. Cost: structure. A dataset is older than its data source says it should be.
-
-**Why.** A data source may say how often it is meant to be taken again (`refresh`, an ISO 8601 duration). Given a date to check as of, a dataset whose `retrieved` is older than that is reported. Core has no clock, so without a date nothing is reported, and no engine takes the data again.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

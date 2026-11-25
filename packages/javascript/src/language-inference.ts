@@ -1,4 +1,5 @@
 import { isRecord, visitContentPayloads } from "./content-walk.js";
+import { rowCells } from "./table.js";
 
 /**
  * v0.35: the language a slide's text implies when the document declares none.
@@ -43,7 +44,7 @@ function slideText(slide: Record<string, unknown>): string {
     }
     const table = isRecord(node.table) ? node.table : undefined;
     for (const cell of Array.isArray(table?.columns) ? table.columns : []) parts.push(isRecord(cell) && typeof cell.name === "string" ? cell.name : plain(isRecord(cell) && "value" in cell ? cell.value : cell));
-    for (const row of Array.isArray(table?.rows) ? table.rows : []) for (const cell of Array.isArray(row) ? row : []) parts.push(plain(isRecord(cell) && "value" in cell ? cell.value : cell));
+    for (const row of Array.isArray(table?.rows) ? table.rows : []) for (const cell of rowCells(row)) parts.push(plain(isRecord(cell) && "value" in cell ? cell.value : cell));
   };
   payload(slide);
   visitContentPayloads(slide, "", (node) => payload(node));

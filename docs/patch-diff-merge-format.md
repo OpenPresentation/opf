@@ -39,7 +39,7 @@ applyPatch(after, inverse); // deep-equals `presentation`: this is the undo patc
 
 ## Ids, id-addressed paths, hashes and patch scope
 
-Indexes move: `/slides/3/blocks/1` is another block once a slide is inserted above it. Anything that edits with other people or other programs (remote patches, comments, review, an agent's proposal) needs paths that name the thing, and a way to say "only if nothing changed". Slides and content payloads (blocks, groups, regions) already have an optional `id`, unique among slide and payload ids; these pieces build on it. They live in `@openpresentation/opf/ids` and on the package root (the pointer, hash and `expectHash` parts are also on `/patch`); all of them are deterministic, offline and browser-safe.
+Indexes move: `/slides/3/blocks/1` is another block once a slide is inserted above it. Anything that edits with other people or other programs (remote patches, comments, review, an agent's proposal) needs paths that name the thing, and a way to say "only if nothing changed". Slides, content payloads (blocks, groups, regions), list items, bullets, timeline events and table rows have an optional `id`, all in ONE document-wide namespace (a duplicate is a validation error); these pieces build on it. They live in `@openpresentation/opf/ids` and on the package root (the pointer, hash and `expectHash` parts are also on `/patch`); all of them are deterministic, offline and browser-safe.
 
 ### `assignIds`
 
@@ -52,7 +52,23 @@ const { document, patch, assigned } = assignIds(presentation);
 // assigned: [{ pointer: "/slides/0", kind: "slide", id: "slide-1" }, ...]
 ```
 
-Missing ids are filled in document order (slides, then each slide's blocks and nested groups), as `slide-1`, `slide-2`, ... and `block-1`, `block-2`, ..., skipping ids already in use, so the same document always gets the same ids and the result is valid against the schema. An existing id is never changed. Pass `generate({ kind, pointer, node, parentId })` to choose the ids yourself (a UUID, a slug of the title); it must return a non-empty string no slide or payload uses, or `assignIds` throws `OPFIdError` (`invalid-id`, `duplicate-id`). The id is added as the node's last member; `format` puts it in canonical order. List items, table rows and runs have no id.
+Missing ids are filled in document order (slides, then each slide's blocks and nested groups), as `slide-1`, `slide-2`, ... and `block-1`, `block-2`, ..., skipping ids already in use, so the same document always gets the same ids and the result is valid against the schema. An existing id is never changed. Pass `generate({ kind, pointer, node, parentId })` to choose the ids yourself (a UUID, a slug of the title); it must return a non-empty string no slide, payload, item, bullet, event or row uses, or `assignIds` throws `OPFIdError` (`invalid-id`, `duplicate-id`). The id is added as the node's last member; `format` puts it in canonical order.
+
+#### Ids on items, bullets, events and rows
+
+By default `assignIds` fills slides and payloads only, so a deck nobody co-edits keeps its short forms (`items: ["One", "Two"]`). A host that co-edits passes `assignIds(doc, { items: true })`: every list item, bullet, timeline event and inline table row then gets an id, and the forms that cannot carry one are rewritten (a string or run-array item becomes `{ "id", "text" }`, an array row becomes `{ "id", "cells" }`). The default ids are `item-1`, `bullet-1`, `event-1` and `row-1`; `generate` receives `kind` `item`, `bullet`, `event` or `row`. Dataset rows and chart data rows are data, replaced by re-import, and never get ids; a comment on a dataset-backed row can name the row's key cell.
+
+The rules (the editor follows them, and the tests in `packages/editor/test/item-ids.mjs` hold them):
+
+- An id is an opaque non-empty string. Readers never parse it. A document with no ids is valid and is addressed by index; nothing adds ids unless asked.
+- `assignIds` keeps its ordered, repeatable default for offline use. A writer that co-edits passes `generate` and mints random ids (for example a short slice of `crypto.randomUUID()`); core stays pure and never makes one itself. Two people who each add an item offline with the default both mint `item-5`, so a co-editing host must not use it.
+- Edit, move and reorder keep the id.
+- A copy inside the document gets a new id.
+- Split keeps the id on the first part; join keeps the first id. (`splitSlide` and `mergeSlides` move every entry to exactly one slide; a list or table split across pages by pagination keeps each entry's id, and only the continued block takes the `--2` suffix.)
+- Paste from another document keeps an id that is free and replaces one that is taken.
+- A row is an array of cells or the object `{ "id", "cells" }`, both in one table; `tableRows(table)` returns every row in one form (`{ id?, cells, path, cellsPath, object }`) so engines, converters and editors never branch on the two spellings. The `@id` token reaches a row (`/slides/@kpis/blocks/@regions/table/rows/@r-emea/cells/1`), an item (`.../items/@it-7f3k/text`) and an event.
+
+`diff` and `merge` pair array elements by a shared `id` already, so two writers who change different rows of one table merge without a conflict, and a reordered list is a move, not a rewrite. A repeated id inside one array is a validation error and `@id` then throws `patch-id-ambiguous`; `diff` and `merge` fall back to content matching for the repeated elements.
 
 ### Id-addressed paths
 

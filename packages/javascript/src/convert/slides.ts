@@ -2,7 +2,7 @@
 // pagination), merge consecutive slides, and put paginated slides back together. They take a presentation and
 // return the replacement slides, the range they replace and the new presentation. Pure; every result is
 // validated as OPF. Internal module.
-import { visitContentPayloads } from "../content-walk.js";
+import { entryId, visitContentPayloads, visitPayloadItems } from "../content-walk.js";
 import { OPFPaginationError, type PaginatedPage, type PresentationPaginationOptions, paginate } from "../pagination.js";
 import { CONTENT_KEYS, type ConversionReport, type Json, Loss, type Obj, assertValidOutput, clone, concatText, contentKeysOf, isRecord, refuse, report, same } from "./shared.js";
 import { blocksInCellOrder, withoutCell } from "./structure.js";
@@ -29,8 +29,12 @@ function slideAt(presentation: unknown, index: number): Obj {
 }
 const slideIds = (slide: Obj): string[] => {
   const ids = typeof slide.id === "string" ? [slide.id] : [];
+  // One namespace: list items, bullets, timeline events and table rows share it with slides and payloads (FR-02).
+  const entries = (owner: Obj): void => visitPayloadItems(owner, "", (_kind, entry) => { const id = entryId(entry); if (id !== undefined) ids.push(id); });
+  entries(slide);
   visitContentPayloads(slide, "", (payload) => {
     if (typeof payload.id === "string") ids.push(payload.id);
+    entries(payload);
   });
   return ids;
 };

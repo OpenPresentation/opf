@@ -52,7 +52,8 @@ import {restoreRunColors} from './run-colors.js';
 import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, settleLayers, shapeRole, shapeText} from './shape-import.js';
 import {assembleOverlayShapes, restoreShapes} from './shape-restore.js';
 import {joinWrappedText, rejoinDetachedSpace} from './content-topology.js';
-import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordListScalars, recordOverlays, opfSlideOwnership, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, exportedThemeView, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
+import {restoreEntryIds, usedIdsOf} from './entry-ids.js';
+import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordEntryIds, recordListRuns, recordListScalars, recordOverlays, opfSlideOwnership, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, exportedThemeView, DEFAULT_AUTHOR, DEFAULT_TITLE, storedSlideIds} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
@@ -102,6 +103,7 @@ import {
 } from "@openpresentation/opf";
 import {checkFormat, checkImportedFormat, isValidFormat} from "./format-check.js";
 import {OPFPptxError} from './errors.js';
+import {exportHyperlink, slideLinkNumber, slideLinkResolver, slideLinkTargets} from './slide-links.js';
 import {readInputZip} from './input-safety.js';
 const V2_CURRENT_RICH=Symbol('current native scalar rich paragraph');
 export {OPFPptxError} from './errors.js';
@@ -457,6 +459,8 @@ export async function toPptx(input, options = {}) {
   // SH-04: the native connectors of the slides' overlays, by object name (src/connectors.js), written into the finished slide parts.
   context.connectors = new Map();
   context.linkSentinels = linkSentinels(presentation);
+  // FR-03: the slide number of each slide id, for a `slide:<id>` link (PowerPoint's slide jump).
+  context.slideLinkTargets = slideLinkTargets(presentation);
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:exportSlideContext(presentation,0,context,options).fonts});
 
@@ -595,10 +599,12 @@ export async function fromPptx(input, options = {}) {
     if (!layoutTags.has(layoutPath)) layoutTags.set(layoutPath, readLayoutTag(entries, layoutPath, message => options.onDiagnostic?.({code: 'invalid-layout-provenance', path: `slides.${index}.layout`, message})));
     return layoutTags.get(layoutPath);
   };
+  // FR-03: a slide jump is `slide:<id>` again: the target's stored id, else `slide-<n>` for a slide a link names.
+  const slideLinks = slideLinkResolver({slidePaths, storedIds: storedSlideIds(entries, slidePaths)});
   const furnitureContexts = slidePaths.map((slidePath, index) => {
     const root = parseRequiredXml(entries, slidePath)['p:sld'];
     if (!root) throw new OPFPptxError('invalid-pptx', `PPTX slide is not a PresentationML slide: ${slidePath}.`, {path: slidePath});
-    const tree = root['p:cSld']?.['p:spTree'], relationships = parseRelationships(entries, slidePath);
+    const tree = root['p:cSld']?.['p:spTree'], relationships = slideLinks.attach(parseRelationships(entries, slidePath));
     const layoutPath = relatedPath(slidePath, 'slideLayout'), layoutTag = layoutTagOf(layoutPath, index);
     return {root, relationships, shapes: nativeTextShapes(tree), pictures: nativePictures(tree), layoutTag, foreignLayout: layoutTag ? undefined : foreignLayoutReference(cachedPart(layoutPath)?.['p:sldLayout'], options.catalogs),
       // RR-81: a region placeholder typed into in PowerPoint has no xfrm of its own; it sits where the template layout puts it.
@@ -687,11 +693,13 @@ export async function fromPptx(input, options = {}) {
     // The stored language wins while the runs still carry its tag (FF-07).
     restored.groups = reconcileLanguage(restored.groups, observedLanguage, report, imported);
     imported = applyDocumentProvenance(imported, restored, checkImportedFormat, report);
+    slideLinks.assignIds(imported.slides);
     dropLanguagesReadFromText(imported, options.catalogs, restored.slides);
     slideProvenance = restored.slides;
     restoredGroups = restored.groups;
   } catch (error) {
     report({code: "invalid-document-provenance", path: "", message: `${errorMessage(error)} Ordinary import keeps the values observed in the PPTX.`});
+    slideLinks.assignIds(imported.slides);
   }
   if (slideProvenance.length !== imported.slides.length) throw new OPFPptxError("invalid-import-opf", "Slide provenance does not match the imported slides.");
   // RR-81: a slide on a 0.19 template layout takes that layout's reference (a slide added in PowerPoint, Change Layout), and a
@@ -737,6 +745,8 @@ export async function fromPptx(input, options = {}) {
   restoreArrangementPaint(imported, new Map(furnitureContexts.flatMap(context => [...(context.arrangementPaint ?? [])])));
   // opf#1431: a chart without labels keeps `dataLabels: false` only where the next export would draw default labels without it.
   settleDefaultLabels(imported, options);
+  // FR-02: the ids of list items, bullets, timeline events and table rows return while their entries are still recognizable.
+  restoreItemIds(imported, slideProvenance, restoredGroups, report);
   if (imported.design?.theme === undefined) for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code === "theme-unverified") report(diagnostic);
   languageDiagnostics(imported, observedLanguage, options.onDiagnostic && report);
 
@@ -787,6 +797,20 @@ function colorResolver(imported, options) {
       return undefined;
     }
   };
+}
+
+// FR-02: the stored entry ids go back on the entries PowerPoint still shows (src/entry-ids.js). A slide whose native structure or content
+// topology no longer matches its export restores none; ONE finding names how many ids were not restored.
+function restoreItemIds(imported, slideProvenance, restoredGroups, report) {
+  const restoredContent = new Set(restoredGroups.filter(group => group.applied && group.contentPaths).map(group => group.contentPaths.slide));
+  const taken = usedIdsOf(imported);
+  let lost = 0;
+  slideProvenance.forEach((entry, index) => {
+    const record = entry?.record?.entryIds;
+    if (!record) return;
+    lost += restoreEntryIds(imported.slides[index], record, {changed: entry.structure !== 'match' || !restoredContent.has(index), taken});
+  });
+  if (lost) report({code: 'entry-ids-not-restored', path: '', message: `${lost} list item, bullet, timeline event or table row ${lost === 1 ? 'id was' : 'ids were'} not restored: PowerPoint no longer shows the entry ${lost === 1 ? 'it' : 'they'} belonged to (entries were added or removed, or the slide's objects changed), so ${lost === 1 ? 'that entry comes' : 'those entries come'} back without ${lost === 1 ? 'an id' : 'ids'}.`});
 }
 
 // SH-05: the overlay shapes and connectors of each slide join it, in the order they were drawn.
@@ -2612,7 +2636,7 @@ const sameBox = (a, b) => !!a && !!b && a.x === b.x && a.y === b.y && a.width ==
 // A link run with no color of its own is written in the theme hyperlink color (a:schemeClr hlink where the deck theme
 // holds that exact color, else the literal), underlined by PowerPoint, as the preview draws it. A run color is kept.
 function linkColor(run, color, context) {
-  const link = typeof run?.link === 'string' && /^(https?:|mailto:|tel:)/i.test(run.link);
+  const link = exportHyperlink(run?.link, context) !== undefined;
   if (!link || !(run.color === undefined || run.color === null || run.color === '')) return color;
   return nativeColor('hyperlink', normalizeHex(context.roles.hyperlink), context);
 }
@@ -2870,6 +2894,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   const nativePlans = nativeBody ? [nativeBody, ...nativeBody.others] : [];
   recordContentTopology(context.documentProvenance, opfSlide, slideIndex, nativeBody ? geometry.items.map(item => { const plan = nativePlans.find(plan => plan.item === item); return plan ? {...item, box: plan.box, text: undefined} : item; }) : geometry.items);
   recordOverlays(context.documentProvenance, authoredSlide, slideIndex);
+  recordEntryIds(context.documentProvenance, opfSlide, slideIndex);
   // Paint order, as in the preview (FA-22 contract): canvas color, the background picture and its overlay, design.watermark,
   // the logo, then the items in core's order: the headings, the placed image blocks at their bands, then the flowed body.
   if (geometry.backgroundImage) await addBackgroundImage(slide, presentation, geometry.backgroundImage, slideIndex, slideContext, context, options);
@@ -3286,7 +3311,7 @@ function richLineRuns(line,color,native,context,path) {
     assertXmlText(fragment.run.text ?? fragment.text, path);
     const runColor=exportColor(fragment.run.color,context,fallback),color=nativeColor(fragment.run.color,runColor,context,native);
     colors.push(color);
-    return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color:linkColor(fragment.run,color,context),underline:fragment.run.underline?{style:'sng',color:linkColor(fragment.run,color,context)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:|tel:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined,...langOptions(context,fragment.style.lang)}};
+    return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color:linkColor(fragment.run,color,context),underline:fragment.run.underline?{style:'sng',color:linkColor(fragment.run,color,context)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:exportHyperlink(fragment.run.link, context),...langOptions(context,fragment.style.lang)}};
   }),colors);
 }
 // Every native line of a list, marker paragraph or not, is named for the list's
@@ -3514,7 +3539,7 @@ function addShapeItem(slide, item, slideIndex, context, deck) {
     const lines = String(text).split(/\r\n|\r|\n/);
     lines.forEach((line, index) => {
       const own = {...base, ...(run.bold !== undefined ? {bold: run.bold} : {}), ...(run.italic !== undefined ? {italic: run.italic} : {}), ...(run.underline ? {underline: {style: 'sng'}} : {}), ...(run.strikethrough ? {strike: 'sngStrike'} : {}),
-        ...(run.color !== undefined && run.color !== '' ? {color: exportColor(run.color, context, textHex).slice(0, 6)} : {}), ...(typeof run.link === 'string' ? {hyperlink: {url: run.link}, color: linkColor(run, run.color !== undefined && run.color !== '' ? exportColor(run.color, context, textHex).slice(0, 6) : textHex, context)} : {}),
+        ...(run.color !== undefined && run.color !== '' ? {color: exportColor(run.color, context, textHex).slice(0, 6)} : {}), ...(exportHyperlink(run.link, context) ? {hyperlink: exportHyperlink(run.link, context), color: linkColor(run, run.color !== undefined && run.color !== '' ? exportColor(run.color, context, textHex).slice(0, 6) : textHex, context)} : {}),
         ...(typeof run.fontFamily === 'string' ? {fontFace: run.fontFamily} : {}), ...(typeof run.fontSize === 'number' ? {fontSize: run.fontSize} : {}), ...(run.superscript ? {superscript: true} : {}), ...(run.subscript ? {subscript: true} : {}),
         ...(index < lines.length - 1 ? {breakLine: true} : {})};
       // LH-11: a space core's line breaker never breaks at ("16 px") is written as a no-break space, so PowerPoint wraps the shape's text as the preview does.
@@ -3527,7 +3552,7 @@ function addShapeItem(slide, item, slideIndex, context, deck) {
   const box = shape.box;
   slide.addText(runs.length ? runs : '', {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96, objectName: name, ...base, align: 'center', valign: 'middle', margin: 0, paraSpaceAfter: 0, paraSpaceBefore: 0,
     ...(lineHeight ? {lineSpacing: Math.round(lineHeight * 100) / 100} : {}), fit: 'none'});
-  deck.shapeBlocks.set(name, {...shapeBlockRecord(shape, paint, palette), ...(shape.link ? {link: shape.link} : {})});
+  deck.shapeBlocks.set(name, {...shapeBlockRecord(shape, paint, palette), ...(shape.link ? (slideLinkNumber(shape.link, context) !== undefined ? {slide: slideLinkNumber(shape.link, context)} : /^slide:/.test(shape.link) ? {} : {link: shape.link}) : {})});
   return name;
 }
 
@@ -4432,7 +4457,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
         ...nativeFontOptions(runStyle),fontSize:fragment ? fragment.fontSize * .75 : fit.fontSize * .75,
         underline:run.underline ? {style:'sng',color:linkColor(run,color,context)} : undefined,strike:run.strikethrough ? 'sngStrike' : undefined,
         color:linkColor(run,color,context),transparency,baseline:fragment?.baselineShift ? -fragment.baselineShift / fragment.fontSize * 2000 : undefined,
-        hyperlink:run.link && /^(https?:|mailto:|tel:)/i.test(run.link) ? {url:run.link} : undefined,
+        hyperlink:exportHyperlink(run.link, context),
         ...langOptions(context, run.language),
       };
       // PptxGenJS marks every part of a newline-containing run as a paragraph
@@ -4517,7 +4542,7 @@ function richFitLineRuns(line, context, fallback) {
     const runColor = exportColor(fragment.run.color, context, context.colors.text);
     const color = nativeColor(fragment.run.color, runColor, context, fallback);
     colors.push(color);
-    return {text: fragment.text, options: {...nativeFontOptions(fragment.style), ...eyebrowOptions(fragment.style, fragment.nominalSize ?? fragment.fontSize), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: linkColor(fragment.run, color, context), underline: fragment.run.underline ? {style: 'sng', color: linkColor(fragment.run, color, context)} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined, baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined, hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:|tel:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined, ...langOptions(context, fragment.style.lang)}};
+    return {text: fragment.text, options: {...nativeFontOptions(fragment.style), ...eyebrowOptions(fragment.style, fragment.nominalSize ?? fragment.fontSize), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: linkColor(fragment.run, color, context), underline: fragment.run.underline ? {style: 'sng', color: linkColor(fragment.run, color, context)} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined, baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined, hyperlink: (fragment.kind !== 'marker' ? exportHyperlink(fragment.run.link, context) : undefined), ...langOptions(context, fragment.style.lang)}};
   }), colors);
 }
 
@@ -4723,7 +4748,7 @@ function addNativeTitle(slide, item, context, options, deckContext, wrap) {
     const written = linkColor(run, nativeColor(run.color, runColor, context, color), context);
     runs.push({text: bindNoBreak(text), options: {...nativeFontOptions(fragment.style), ...eyebrowOptions(fragment.style, size), fontSize: size * .75, color: written,
       underline: run.underline ? {style: 'sng', color: written} : undefined, strike: run.strikethrough ? 'sngStrike' : undefined,
-      hyperlink: run.link && /^(https?:|mailto:|tel:)/i.test(run.link) ? {url: run.link} : undefined, ...langOptions(context, fragment.style.lang)}});
+      hyperlink: exportHyperlink(run.link, context), ...langOptions(context, fragment.style.lang)}});
     fragments.push({text: bindNoBreak(text), source: text, start: 0, end: text.length, sourceRun: index, style: fragment.style});
   }
   context.nativeLatinSlots.remember(context.slideIndex, objectName, fragments, item.path);
@@ -5659,7 +5684,7 @@ function textRuns(value, context, fallbackFontSize, path) {
         fontSize: run?.fontSize ?? fallbackFontSize,
         superscript: run?.superscript,
         subscript: !run?.superscript && run?.subscript,
-        hyperlink: run?.link && /^(https?:|mailto:|tel:)/i.test(run.link) ? { url: run.link } : undefined,
+        hyperlink: exportHyperlink(run?.link, context),
         ...langOptions(context, run?.language)
       }
     };

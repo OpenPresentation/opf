@@ -10,12 +10,13 @@ import { chartDrawDiagnostics } from "./chart-fallback.js";
 import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions, resolveSlideDirection } from "./composition.js";
 import { layoutTemplateIssues } from "./layout-template.js";
 import { annotationIssues } from "./annotation-validation.js";
+import { slideLinkIssues } from "./slide-links.js";
 import { isShapeBlock, shapeIssues, SHAPE_BLOCK_KEYS } from "./shape-block.js";
 import { PositionRangeError, connectorAdjustPreset, isOverlayConnector, overlayIssues, representablePositionBox } from "./overlay-shapes.js";
 import { codeHighlightLines } from "./code-highlight.js";
-import { isRecord, pathFor, visitContentPayloads } from "./content-walk.js";
+import { entryId, isRecord, pathFor, visitContentPayloads, visitPayloadItems } from "./content-walk.js";
 import { gridCellSpan, isGridCell, nearestGridCell } from "./grid-cells.js";
-import {tableGrid} from "./table.js";
+import {rowCells, tableGrid} from "./table.js";
 import { numberingFindings } from "./numbering.js";
 import { schemaEngine } from "#schema-engine";
 import { schemas, type SchemaName } from "./schemas.js";
@@ -40,6 +41,8 @@ export interface SchemaCheckOptions {
   catalogs?: readonly Catalog[];
   /** The date the data is checked as of (an ISO 8601 date or date-time), for the `dataset-stale` warning. Without one no data is reported stale. */
   asOf?: string;
+  /** See `ValidateOptions.slideLinks`. */
+  slideLinks?: false | readonly string[];
 }
 
 export interface SchemaCheckResult {
@@ -506,7 +509,7 @@ function deckMetadataIssues(value: Record<string, unknown>): ValidationIssue[] {
   return issues;
 }
 
-function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[]): ValidationIssue[] {
+function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[], slideLinks?: false | readonly string[]): ValidationIssue[] {
   if (!isRecord(value) || !Array.isArray(value.slides)) {
     return [];
   }
@@ -523,7 +526,8 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
 
   // Slide and payload ids share one namespace, so the origin of the id already
   // seen decides which message describes the collision truthfully.
-  const documentIds = new Map<string, "slide" | "payload">();
+  // FR-02: list items, bullets, timeline events and table rows join the same namespace (origin "entry").
+  const documentIds = new Map<string, "slide" | "payload" | "entry">();
   let overlayCanvas: {width: number; height: number} | undefined, overlayCanvasResolved = false;
   // The deck's canvas, resolved once and only for a deck that positions something by fractions (an overlay shape or an image callout).
   const deckCanvas = () => {
@@ -548,13 +552,22 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
         const seen = documentIds.get(slide.id);
         if (seen === "slide") issues.push(semanticIssue(`${slidePath}/id`, "slide ids must be unique within a presentation", { id: slide.id }));
         else if (seen === "payload") issues.push(semanticIssue(`${slidePath}/id`, "slide id duplicates a content payload id; ids must be unique among slide and payload ids within a presentation", { id: slide.id }));
+        else if (seen === "entry") issues.push(semanticIssue(`${slidePath}/id`, "slide id duplicates a list item, bullet, timeline event or table row id; ids are unique across the whole presentation", { id: slide.id }));
         else documentIds.set(slide.id, "slide");
       }
+      const claimEntries = (owner: Record<string, unknown>, path: string): void => visitPayloadItems(owner, path, (kind, entry, entryPath) => {
+        const id = entryId(entry);
+        if (id === undefined) return;
+        if (documentIds.has(id)) issues.push(semanticIssue(`${entryPath}/id`, `${kind === "event" ? "timeline event" : kind === "row" ? "table row" : kind} ids must be unique among every slide, payload, overlay, list item, bullet, timeline event and table row id within a presentation`, { id }));
+        else documentIds.set(id, "entry");
+      });
+      claimEntries(slide, slidePath);
       visitContentPayloads(slide, slidePath, (payload, path) => {
         if (typeof payload.id === "string") {
           if (documentIds.has(payload.id)) issues.push(semanticIssue(`${path}/id`, "content payload ids must be unique among slide and payload ids within a presentation", { id: payload.id }));
           else documentIds.set(payload.id, "payload");
         }
+        claimEntries(payload, path);
       });
       // SH-04: overlay shapes and connectors share the namespace; a connector or an `at` names blocks and overlay shapes by id.
       if (Array.isArray(slide.shapes)) slide.shapes.forEach((entry, shapeIndex) => {
@@ -585,6 +598,8 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
   });
   // RR-34: reference ids, cited ids and where cite/footnote may appear.
   issues.push(...annotationIssues(value));
+  // FR-03: a `slide:<id>` link names a slide of the document.
+  if (slideLinks !== false) issues.push(...slideLinkIssues(value, slideLinks));
 
   return issues;
 }
@@ -838,8 +853,8 @@ function variableReferenceWarnings(value: Record<string, unknown>): ValidationIs
     if (Array.isArray(node.rows)) {
       const rowsPath = pathFor(path, "rows");
       node.rows.forEach((row, rowIndex) => {
-        if (!Array.isArray(row)) return;
-        row.forEach((cell, cellIndex) => { tableCell(cell, `${rowsPath}/${rowIndex}/${cellIndex}`); });
+        const cellsPath = isRecord(row) ? `${rowsPath}/${rowIndex}/cells` : `${rowsPath}/${rowIndex}`;
+        rowCells(row).forEach((cell, cellIndex) => { tableCell(cell, `${cellsPath}/${cellIndex}`); });
       });
     }
   };
@@ -1016,7 +1031,18 @@ function pointerValue(root: unknown, pointer: string): unknown {
 const datasetTableMessage = (field: string) => `'${field}' is not allowed on a dataset-backed table: it takes its headers, rows and column formats from the dataset`;
 function dataUnionErrors(errors: ErrorObject[], value: unknown): ErrorObject[] {
   let kept = errors;
+  // FR-02: a table row is an array of cells or an object { id, cells }. A row that writes one form is judged by that form alone, so the
+  // errors of its cells read as they did before the object form existed, and the form it did not write is not offered as an alternative.
   for (const union of errors) {
+    if (union.keyword !== "oneOf" || !/\/table\/rows\/\d+$/.test(union.instancePath) || !union.schemaPath.endsWith("/$defs/TableRow/oneOf")) continue;
+    const target = pointerValue(value, union.instancePath);
+    const other = Array.isArray(target) ? 1 : isRecord(target) ? 0 : undefined;
+    if (other === undefined) continue;
+    const prefix = `${union.instancePath}/`;
+    const otherBranch = `/$defs/TableRow/oneOf/${other}/`;
+    kept = kept.filter((error) => error !== union && !(error.schemaPath.includes(otherBranch) && (error.instancePath === union.instancePath || error.instancePath.startsWith(prefix))));
+  }
+  for (const union of kept) {
     if (union.keyword !== "oneOf") continue;
     const chartData = /\/chart\/data$/.test(union.instancePath) && /\/properties\/data\/oneOf$/.test(union.schemaPath);
     const header = /\/table\/columns\/\d+$/.test(union.instancePath) && /\/properties\/columns\/items\/oneOf$/.test(union.schemaPath);
@@ -1090,7 +1116,7 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
   const warnings: ValidationIssue[] = [];
 
   if (resolved.schemaName === "presentation") {
-    errors.push(...presentationSemanticIssues(subject, options.catalogs));
+    errors.push(...presentationSemanticIssues(subject, options.catalogs, options.slideLinks));
     errors.push(...variableIssues.errors);
     const data = dataIssues(subject, options.asOf);
     errors.push(...data.errors);

@@ -12,6 +12,7 @@
 //     (a field never ends up with no run: its first run stays, empty).
 //   - a run written as a plain string stays a plain string when its text is the only thing that changed.
 // Fields that are numbers, ids, asset references, URLs, colors and layout names are never searched or changed.
+import { rowCells } from "@openpresentation/opf";
 import { OPFEditorError, getValueAtPath, opfPathToJsonPointer } from "./index.js";
 
 /** At most this many matches are collected; `truncated` says so. */
@@ -120,7 +121,7 @@ function payloadFields(fields, state, base, payload, prefix = "") {
   const table = payload.table;
   if (isObject(table)) {
     if (Array.isArray(table.columns)) table.columns.forEach((cell, c) => (isObject(cell) && !("value" in cell) ? field(fields, state, at("table", "columns", String(c), "name"), cell.name, `${prefix}Table header ${c + 1}`, "table") : cellFields(fields, state, at("table", "columns", String(c)), cell, `${prefix}Table header ${c + 1}`)));
-    if (Array.isArray(table.rows)) table.rows.forEach((row, r) => Array.isArray(row) && row.forEach((cell, c) => cellFields(fields, state, at("table", "rows", String(r), String(c)), cell, `${prefix}Table row ${r + 1}, column ${c + 1}`)));
+    if (Array.isArray(table.rows)) table.rows.forEach((row, r) => rowCells(row).forEach((cell, c) => cellFields(fields, state, isObject(row) ? at("table", "rows", String(r), "cells", String(c)) : at("table", "rows", String(r), String(c)), cell, `${prefix}Table row ${r + 1}, column ${c + 1}`)));
   }
   if (isObject(payload.image)) field(fields, state, at("image", "alt"), payload.image.alt, `${prefix}Image alt text`, "alt");
   if (isObject(payload.video)) field(fields, state, at("video", "alt"), payload.video.alt, `${prefix}Video alt text`, "alt");

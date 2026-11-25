@@ -123,6 +123,69 @@ try {
   assert.equal(await shown(), 2, 'a tap on plain slide area still moves by zone');
   mark('a tap on a link follows it and keeps the slide; a tap elsewhere still moves');
 
+  // ---- a link to a slide of the deck (FR-03) ---------------------------------------------------------------------------------------------
+  // A `slide:<id>` link is the one link the presenter follows itself: it goes to that slide (a hidden one too) and never reaches the browser's navigation.
+  await page.evaluate(() => window.presenter.destroy());
+  await page.evaluate((d) => {
+    window.editor = window.opfPresent.createEditorSession(d, { rejectInvalid: true, catalogs: [window.opfPresent.gallery] });
+    window.presenter = window.opfPresent.createPresenter(document.getElementById('host'), { editor: window.editor, fonts: window.fonts });
+    window.slideClicks = [];
+    window.addEventListener('click', (event) => {
+      const anchor = event.target.closest?.('a[data-opf-slide-link]');
+      if (anchor) window.slideClicks.push({ slide: anchor.getAttribute('data-opf-slide-link'), prevented: event.defaultPrevented });
+    }, true);
+    // A click that reaches the bubbling phase unprevented would be the browser changing the page's address.
+    window.addEventListener('click', (event) => { const anchor = event.target.closest?.('a[data-opf-slide-link]'); if (anchor && window.slideClicks.length) window.slideClicks.at(-1).prevented = event.defaultPrevented; });
+  }, {
+    name: 'Slide links', design: { theme: 'classic', fontScheme: 'roboto' },
+    slides: [
+      { id: 'start', title: 'Start', blocks: [{ text: ['Jump to the ', { text: 'last slide', link: 'slide:last' }, ' or the ', { text: 'appendix', link: 'slide:appendix' }] }, { text: 'Go', shape: 'roundRect', link: 'slide:middle' }] },
+      { id: 'middle', title: 'Middle', text: 'Second' },
+      { id: 'last', title: 'Last', text: [{ text: 'Back to the start', link: 'slide:start' }] },
+      { id: 'appendix', title: 'Appendix', hidden: true, text: 'Hidden detail' },
+    ],
+  });
+  const slideLink = (id) => page.locator(`.opf-presenter a[data-opf-slide-link="${id}"]`).first();
+  const clicks = () => page.evaluate(() => window.slideClicks.splice(0));
+  const waitAt = (index) => page.waitForFunction((i) => window.presenter.getSlide() === i && document.querySelector('.opf-presenter-slide svg'), index);
+  await open(0);
+  await waitAt(0);
+  await page.waitForSelector('.opf-presenter a[data-opf-slide-link="last"]');
+  const jump = await center(slideLink('last'));
+  assert.ok(jump.x < 333, `the text link is in the back zone (x ${jump.x}): a plain click here would go back`);
+  await page.mouse.click(jump.x, jump.y);
+  await waitAt(2);
+  assert.equal(await shown(), 2, 'a click on a slide link goes to that slide');
+  assert.deepEqual(await clicks(), [{ slide: 'last', prevented: true }], 'the presenter handled the click and the browser did not navigate');
+  assert.deepEqual(await followed(), ['#slide:last'], 'the click reached the page as a link click and was stopped there');
+  mark('a click on a slide link goes to its slide and keeps the browser where it is');
+
+  await page.waitForSelector('.opf-presenter a[data-opf-slide-link="start"]');
+  await slideLink('start').focus();
+  await page.keyboard.press('Enter');
+  await waitAt(0);
+  assert.equal(await shown(), 0, 'Enter on a focused slide link goes to that slide');
+  mark('Enter on a focused slide link follows it');
+
+  await page.waitForSelector('.opf-presenter a[data-opf-slide-link="middle"]');
+  const shapeJump = await center(slideLink('middle'));
+  await page.mouse.click(shapeJump.x, shapeJump.y);
+  await waitAt(1);
+  assert.equal(await shown(), 1, 'a shape slide link goes to its slide');
+  mark('a shape slide link goes to its slide');
+
+  await page.evaluate(() => window.presenter.goTo(0));
+  await waitAt(0);
+  await page.waitForSelector('.opf-presenter a[data-opf-slide-link="appendix"]');
+  const hiddenJump = await center(slideLink('appendix'));
+  await page.mouse.click(hiddenJump.x, hiddenJump.y);
+  await waitAt(3);
+  assert.equal(await shown(), 3, 'a slide link goes to a hidden slide, as PowerPoint does');
+  await page.keyboard.press('ArrowLeft');
+  await waitAt(2);
+  assert.equal(await shown(), 2, 'back from the hidden slide is the slide before it in the show');
+  mark('a slide link goes to a hidden slide; the show goes on from there');
+
   assert.deepEqual(errors, [], 'no page errors or console errors');
   console.log(`presenter links: ${checks.length} checks passed\n- ${checks.join('\n- ')}`);
 } catch (error) {

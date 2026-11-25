@@ -917,7 +917,7 @@ _No named properties._
 | `alt` | no | `string` | Alternative text (p:cNvPr descr). Without it the shape's text is what is read. |
 | `decorative` | no | `boolean` | Mark the shape decorative (a16:decorative): screen readers skip it. |
 | `hidden` | no | `boolean` | Keep the shape in the file but do not draw it (p:cNvPr hidden). A link on a hidden shape is a validation finding (opf/shape-link-hidden). |
-| `link` | no | `string` | URL opened when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address or a 'tel:' number. |
+| `link` | no | `string` | Link followed when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address, a 'tel:' number or 'slide:<id>', a jump to the slide of this deck with that id (ppaction://hlinksldjump). An... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips. |
 
 
@@ -1058,7 +1058,7 @@ _No named properties._
 | `alt` | no | `string` | Shape blocks only. Alternative text for screen readers (p:cNvPr descr). Without it a shape's text is what is read. |
 | `decorative` | no | `boolean` | Shape blocks only. Mark the shape decorative (a16:decorative): screen readers skip it and the accessibility checker does not ask for alt text. |
 | `hidden` | no | `boolean` | Shape blocks only. Keep the shape in the file but do not draw it (p:cNvPr hidden). Composition still gives it its room. A link on a hidden shape cannot be clicked and is a validation finding (opf/shape-link-hidden). |
-| `link` | no | `string` | Shape blocks only. URL opened when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address or a 'tel:' number. |
+| `link` | no | `string` | Shape blocks only. Link followed when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address, a 'tel:' number or 'slide:<id>', a jump to the slide of this deck with that id (ppaction:... |
 | `shadow` | no | `ref:Shadow` | Shape blocks only. Outer shadow. |
 | `innerShadow` | no | `ref:InnerShadow` | Shape blocks only. Inner shadow. |
 | `glow` | no | `ref:Glow` | Shape blocks only. Glow. |
@@ -1164,6 +1164,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
+| `id` | no | `string` | Optional stable identifier for this timeline event, unique among every slide, payload, overlay, item, bullet, event and table-row id in the document (one namespace). An opaque string: readers never parse it. Use it wh... |
 | `when` | no | `string` | Event time, date, or sequence label. Use ISO-like values when possible, but human labels are allowed for quarters, eras, and relative milestones. |
 | `duration` | no | `number` | Relative length of this consecutive event period. Use the same unit for every event (for example 1 for Week 1 and 4 for Weeks 2 5). Omitted means one unit. When any event supplies duration, both engines draw proportio... |
 | `what` | yes | `string` | Short event label. |
@@ -1354,7 +1355,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `columns` | no | `array<oneOf:string / array<ref:TextRun> / ref:StyledTableCell / ref:DataColumn / null>` | Optional column labels. Labels may be strings, rich runs, styled cell objects or DataColumn objects ({ "name", "format" }). A header's 'format' (DataColumn or StyledTableCell) is the column's number format; a body cel... |
-| `rows` | no | `array<array<ref:TableCell>>` | Two-dimensional table row data; each row aligns by index with columns when columns are supplied. |
+| `rows` | no | `array<ref:TableRow>` | Two-dimensional table row data; each row aligns by index with columns when columns are supplied. A row is an array of cells, or an object { "id", "cells" } when it needs an id; both forms may mix in one table. `tableR... |
 | `dataset` | no | `ref:DatasetId` | Id of a top-level dataset that supplies this table's headers, rows and column formats. Excludes 'rows' and 'columns'. An unknown id is a 'dataset-unknown' error. |
 | `fields` | no | `ref:DatasetFields` | Dataset tables only: the dataset columns to show, by name and in order. Absent shows every column. An unknown name is a 'dataset-field-unknown' error. |
 | `alt` | no | `string` | Text alternative for the table: what it shows (the point and the key numbers), not 'a table'. The preview exposes it as the table's accessible name (role group with aria-label; the cells stay readable) and the PowerPo... |
@@ -1560,6 +1561,15 @@ _No named properties._
 - Type: `oneOf:string / number / boolean / null`
 - Required fields: none
 - Purpose: A cell in inline chart data.
+
+_No named properties._
+
+
+### TableRow
+
+- Type: `oneOf:array<ref:TableCell> / object`
+- Required fields: none
+- Purpose: One body row of an inline table: an array of cells, or an object that adds an optional id. Position (the cell's index in 'cells' or in the array) is its column either way.
 
 _No named properties._
 

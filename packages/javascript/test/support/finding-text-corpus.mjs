@@ -42,6 +42,7 @@ export const CASES = [
 	{ name: 'schema-type', rule: 'opf/schema', input: deck([{ title: 'T', text: ['a'], items: 'One string' }]), pick: (f) => f.validation?.keyword === 'type' },
 	{ name: 'reference-id-duplicate', rule: 'opf/reference-id-duplicate', input: deck([{ title: 'T', text: [{ text: 'x', cite: 'a' }] }], { references: [{ id: 'a', text: 'A' }, { id: 'a', text: 'B' }] }) },
 	{ name: 'cite-unknown-reference', rule: 'opf/cite-unknown-reference', input: deck([{ title: 'T', text: [{ text: 'x', cite: 'smth' }] }], { references: [{ id: 'smith', text: 'A' }] }) },
+	{ name: 'slide-link-unknown', rule: 'opf/slide-link-unknown', input: deck([{ id: 'pricing', title: 'Pricing' }, { title: 'Agenda', text: [{ text: 'Pricing', link: 'slide:prices' }] }]) },
 	{ name: 'cite-unsupported-location', rule: 'opf/cite-unsupported-location', input: deck([{ title: 'Table', blocks: [{ table: { columns: [[{ text: 'H', cite: 'a' }]], rows: [['c']] } }] }], { references: [{ id: 'a', text: 'A' }] }) },
 	{ name: 'cite-unsupported-location-reference-text', rule: 'opf/cite-unsupported-location', input: deck([{ title: 'T', text: 'x' }], { references: [{ id: 'a', text: [{ text: 'dup', cite: 'a' }] }] }) },
 	{ name: 'caption-unsupported-payload', rule: 'opf/caption-unsupported-payload', input: deck([{ title: 'T', blocks: [{ text: 'x', caption: 'c' }] }]) },

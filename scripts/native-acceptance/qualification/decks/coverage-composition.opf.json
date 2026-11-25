@@ -247,6 +247,7 @@
           "type": "timeline",
           "timeline": [
             {
+              "id": "event-beta",
               "when": "May",
               "what": "Beta",
               "status": "done"

@@ -5,6 +5,7 @@ import { resolveDesignRecords } from './design-records.js';
 import { LOGO_SHAPES } from './logos.js';
 import { isRecord, visitContentPayloads } from './content-walk.js';
 import { cellBlocks } from './grid-cells.js';
+import { tableRows as bodyRowsOf } from './table.js';
 import { listVariables, type VariableKind } from './variables.js';
 
 /**
@@ -547,9 +548,9 @@ function compute(presentation: unknown, options: StatsOptions, onFile?: (src: st
           rows = Array.isArray(source?.rows) ? source.rows.length : 0;
           columns = Array.isArray(table.fields) ? table.fields.length : Array.isArray(source?.columns) ? source.columns.length : 0;
         } else {
-          const body = Array.isArray(table.rows) ? table.rows : [];
-          rows = body.length;
-          columns = Array.isArray(table.columns) ? table.columns.length : body.reduce((widest: number, row: unknown) => Math.max(widest, Array.isArray(row) ? row.length : 0), 0);
+          const body = bodyRowsOf(table).map((row) => row.cells);
+          rows = Array.isArray(table.rows) ? table.rows.length : 0;
+          columns = Array.isArray(table.columns) ? table.columns.length : body.reduce((widest: number, row: unknown[]) => Math.max(widest, row.length), 0);
           run(table.columns);
           for (const row of body) run(row);
         }

@@ -28,7 +28,7 @@ The Reader cases cover what a tool can decide from the document alone, with no c
 - **Schema validity:** the document is an object, field types and enumerations hold, and an unknown field is an error
   at every level (the root, a slide, a payload).
 - **Required fields:** `slides` exists and holds at least one slide; each slide is an object.
-- **Ids and references:** slide and payload ids are strings, unique together in the document; reference ids are unique;
+- **Ids and references:** slide, payload, list item, bullet, timeline event and table row ids are non-empty strings, unique together in the document (one namespace); reference ids are unique;
   a citation, a dataset, an `asset:` reference and a `name:id` catalog prefix each resolve inside the document; groups
   nest at most 32 levels and do not mix child blocks with leaf content.
 - **Extensions:** `extensions` is an object wherever it appears; tool data written next to OPF fields instead of under
@@ -64,8 +64,8 @@ keyword or the documented rule the expectation rests on, so an implementer can c
 `errorAt` is the JSON Pointer of the expected error. A tool that reports error paths should report one at or inside it;
 the report counts how many do, but a different path never fails a case, because tools may point at a different node
 for the same mistake. A group in the manifest adds every technical example deck (`examples/technical/*.opf.json`) as a
-valid case, so the decks CI already validates are part of the suite. In November 2026 the suite has 76 cases: 13 valid
-core documents, 31 technical examples and 32 invalid documents.
+valid case, so the decks CI already validates are part of the suite. In November 2026 the suite has 111 cases: 17 valid
+core documents, 52 technical examples and 42 invalid documents.
 
 ## Run it
 

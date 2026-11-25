@@ -12,6 +12,7 @@ import {
 // The renderer is a library: it never imports a catalog. Hosts register theirs (`options.catalogs`, core `Catalog[]`, for
 // example `defaultCatalog` from `@openpresentation/gallery`) and core resolves every reference against them.
 import {
+  collectSlideLinks,
   hasContentVariables,
   isTemplate,
   resolveDrawnFontFamilies,
@@ -25,7 +26,7 @@ import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { disabledFeaturesStyle } from "./font-compatibility.js";
 import { isDatasetChart, isDatasetTable, renderCatalogChart } from "./charts.js";
 import { renderCaption, renderFootnotes } from "./annotations.js";
-import { renderConnector, renderShapeBlock, strokeElements } from "./shapes.js";
+import { linkAnchorAttrs, renderConnector, renderShapeBlock, strokeElements } from "./shapes.js";
 import { drawnFaces } from "./drawn-faces.js";
 import { dataUrlFsType, embeddingAllowed } from "./font-fstype.js";
 import { rejectRenamedOptions, selectSlides } from "./slide-sources.js";
@@ -309,7 +310,7 @@ function untrackLast(content) {
 }
 const sameBox = (a, b) => !!a && !!b && a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
 
-const LINK_URL = /^(https?:|mailto:|tel:)/i;
+const LINK_URL = /^(https?:|mailto:|tel:|slide:)/i;
 
 // What the renderer paints with, from the records core's `resolveSlideContext` resolved (slide design, then deck design, then
 // theme, then the engine default, per field: the one order every engine uses). The theme and the color scheme keep their
@@ -667,6 +668,11 @@ export function toSvg(input, slides, options) {
   return numbers.map(number => renderResolvedSlide(resolved, number - 1, drawn));
 }
 
+// FR-03: the ids the slide links of the deck name, collected once per resolved deck.
+function linkedSlideIds(resolved) {
+  return (resolved.slideLinkIds ??= new Set(collectSlideLinks(resolved.presentation.slides).map(entry => entry.id)));
+}
+
 function renderResolvedSlide(resolved, slideIndex, options) {
   const bound = resolved.slides[slideIndex];
   // Paint with the same script-aware measurement composition used.
@@ -717,6 +723,8 @@ function renderResolvedSlide(resolved, slideIndex, options) {
       role: "group",
       "aria-roledescription": "slide",
       "aria-label": title,
+      // FR-03: the id of a slide another slide links to (`slide:<id>`), so a PDF page knows which slide it is. Other slides stay as they were.
+      "data-opf-slide": linkedSlideIds(resolved).has(bound.slide.id) ? bound.slide.id : undefined,
       viewBox: `0 0 ${width} ${height}`,
       width,
       height,
@@ -2410,7 +2418,7 @@ function renderRichLines(value,fit,box,bound,config) {
     // and outside the link, so every source offset still has a traced node whose text is its source text (an editor selects by offset;
     // a selection ending after that space found no node). Without a trace the output is unchanged.
     const cutSpace=config.options.trace&&endTrail&&!marker?tag(asFlow?'tspan':'text',{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.end-endTrail.length,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end,'data-opf-segment':fragment.kind,...(asFlow?{}:{x:stableNumber(originX+fragmentX+gap+drawnWidth),y:position.y}),'xml:space':'preserve','font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,fill:runFill},escapeText(endTrail)):'';
-    if(linked)return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered)+cutSpace;
+    if(linked)return tag('a',linkAnchorAttrs(run.link,{newTab:true}),rendered)+cutSpace;
     return rendered+cutSpace;
     };
     if(naturalFlow&&lineHasTab) {

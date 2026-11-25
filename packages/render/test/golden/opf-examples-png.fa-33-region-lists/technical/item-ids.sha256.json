@@ -1,0 +1,21 @@
+{
+  "deck": "technical/item-ids.opf.json",
+  "entries": {
+    "technical/item-ids.opf.json#0": {
+      "sha256": "3d0b67bea78a0e5bc13f6ca7bcbeedadd3c15c8d089ef8c282f4cc090e0bdd87",
+      "bytes": 6317
+    },
+    "technical/item-ids.opf.json#1": {
+      "sha256": "1bca166820b671241aa7da2cb9674a834c9e3fa359fb531fbfc49f45cfc0cec5",
+      "bytes": 7497
+    },
+    "technical/item-ids.opf.json#2": {
+      "sha256": "26e668b0c048ea9cfe136a72d273c8ab3e58e9d2074de06b829db1b92639148c",
+      "bytes": 7431
+    },
+    "technical/item-ids.opf.json#3": {
+      "sha256": "f26b27f22a27472e608cbf9d022c7b4a94db25c8eb2b86145877162e1e33b720",
+      "bytes": 5381
+    }
+  }
+}

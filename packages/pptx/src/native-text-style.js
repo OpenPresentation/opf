@@ -81,6 +81,8 @@ export function nativeRunStyle(properties, context, relationships, report, kind 
   if (hyperlink) {
     const relationship = relationships.get(hyperlink['r:id']);
     if (relationship?.type.endsWith('/hyperlink') && relationship.targetMode === 'External' && relationship.target && !hyperlink.action) result.link = relationship.target;
+    // FR-03: PowerPoint's jump to a slide of the deck is `slide:<id>`.
+    else if (hyperlink.action === 'ppaction://hlinksldjump' && relationship?.slideLink) result.link = relationship.slideLink;
     else report(`unsupported-${kind}-link`, 'The native hyperlink action or relationship cannot be represented as a URL.');
   }
   // A link in the theme hyperlink color (what the export writes for a link with no color of its own) is a link with no color.

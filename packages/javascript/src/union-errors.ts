@@ -163,7 +163,10 @@ function analyze(engine: SchemaEngine, rootId: string, union: ErrorObject): Anal
 	}
 	const chosen = top.flatMap((result) => result.errors).map((error, index) => {
 		const mapped = { ...error, parentSchema: original(error.parentSchema), schema: original(error.schema) } as UnionError;
-		if (index === 0 && others.length) mapped.alternatives = summary(others);
+		// A table row is an array of cells or an object { id, cells } (FR-02). Its two forms are not what a mistake inside one of its cells is about,
+		// so the row union adds no summary of its own and the cell's union keeps its own; every other union overwrites as it always did.
+		const rowUnion = /\/table\/rows\/\d+$/.test(union.instancePath);
+		if (index === 0 && others.length && !(rowUnion && mapped.alternatives !== undefined)) mapped.alternatives = summary(others);
 		return mapped;
 	});
 	return { union, span, replacement: chosen };

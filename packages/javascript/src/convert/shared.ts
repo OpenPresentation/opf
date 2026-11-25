@@ -77,7 +77,8 @@ export function assertValidOutput(value: Obj | Obj[], as: "block" | "slide" | "s
   const datasets = isRecord(context.datasets) ? context.datasets : undefined;
   const datasources = isRecord(context.datasources) ? context.datasources : undefined;
   const referencesProvided = own(context, "references");
-  const report = validate({ ...(datasets ? { datasets } : {}), ...(datasources ? { datasources } : {}), ...(referencesProvided ? { references: context.references } : {}), slides }, { only: ["format"] });
+  // FR-03: the slides here are a part of a deck, so a slide link in them is the enclosing document's check.
+  const report = validate({ ...(datasets ? { datasets } : {}), ...(datasources ? { datasources } : {}), ...(referencesProvided ? { references: context.references } : {}), slides }, { only: ["format"], slideLinks: false });
   const errors = report.findings.filter((entry) => entry.severity === "error").filter((entry) =>
     (datasets || (entry.ruleId !== "opf/dataset-unknown" && entry.ruleId !== "opf/dataset-field-unknown")) &&
     (datasources || entry.ruleId !== "opf/datasource-unknown") &&

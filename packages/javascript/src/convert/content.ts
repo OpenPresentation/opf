@@ -38,6 +38,7 @@ import {
   timelineToTable,
 } from "./tables.js";
 import { chartNumber, inlineTableData, isDatasetRef } from "../chart-data.js";
+import { rowCells } from "../table.js";
 import { fenceCode, levelsFromIndents, parseCodeFence, parseListLine, parseQuoteLines, splitWhen } from "./text-lines.js";
 
 export type ContentKind = "text" | "list" | "quote" | "metric" | "code" | "timeline" | "chart" | "table" | "image" | "video" | "group" | "metrics";
@@ -315,7 +316,8 @@ function tableToChart(table: Json): Field {
   // A DataColumn header ({ name, format }) keeps its format as the chart column's.
   const label = (column: unknown): unknown => (isRecord(column) && !Object.hasOwn(column, "value") && typeof column.name === "string" ? column.name : column);
   if (!Array.isArray(columns) || !columns.length || columns.some((column: unknown) => typeof label(column) !== "string" || label(column) === "")) throw refuse("A chart needs a plain text label for every column. Add column labels to the table first.");
-  const body = rows.map((row: Json[], rowIndex: number) => {
+  const body = (rows as Json[]).map((entry: Json, rowIndex: number) => {
+    const row: Json[] = rowCells(entry) as Json[];
     if (row.length !== columns.length) throw refuse(`Row ${rowIndex + 1} does not have ${columns.length} cells.`, { row: rowIndex });
     return row.map((cell, columnIndex) => {
       if (cell !== null && typeof cell === "object") throw refuse("This table has styled, merged or formatted cells. Chart data is plain values; clear them first.", { row: rowIndex, column: columnIndex });
