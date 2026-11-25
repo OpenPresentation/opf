@@ -68,3 +68,24 @@ const foreignLinks = JSON.stringify(foreign.slides);
 assert.ok(foreignLinks.includes('"link":"slide:slide-2"') && foreignLinks.includes('"link":"slide:slide-3"') && foreignLinks.includes('"link":"slide:slide-1"'));
 assert.equal(validate(foreign, {only: ['format']}).valid, true);
 console.log('ok');
+
+// Only the slides a jump names get an id on a deck PowerPoint wrote: here the second slide is the one target.
+{
+  const partial = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Partial', slides: [
+    {id: 'a', title: 'A', text: [{text: 'to B', link: 'slide:b'}]},
+    {id: 'b', title: 'B', text: 'B'},
+    {id: 'c', title: 'C', text: 'C'},
+  ]};
+  const parts = unzipSync(await toPptx(partial));
+  const bare = Object.fromEntries(Object.entries(parts).filter(([path]) => !/^ppt\/tags\//.test(path)));
+  for (const path of Object.keys(bare)) {
+    if (/^ppt\/slides\/slide\d+\.xml$/.test(path) || path === 'ppt/presentation.xml' || /_rels\/.*\.rels$/.test(path) || path === '[Content_Types].xml') {
+      bare[path] = enc.encode(dec.decode(bare[path]).replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g, '').replace(/<Relationship\b[^>]*relationships\/tags"[^>]*\/>/g, '').replace(/<Override\b[^>]*\/ppt\/tags\/[^>]*\/>/g, ''));
+    }
+  }
+  const result = await fromPptx(zipSync(bare));
+  assert.deepEqual(result.slides.map(slide => slide.id), [undefined, 'slide-2', undefined]);
+  assert.ok(JSON.stringify(result.slides[0]).includes('"link":"slide:slide-2"'));
+  assert.equal(validate(result, {only: ['format']}).valid, true);
+}
+console.log('ok (partial)');
