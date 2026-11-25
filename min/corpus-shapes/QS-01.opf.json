@@ -1,0 +1,13 @@
+{ "$schema": "https://openpresentation.org/schema/opf/v1", "language": "en-US", "name": "QS-01 text in shapes and connector glue",
+  "slides": [
+    { "title": "Text boxes vs empty boxes",
+      "composition": {"mode": "grid", "columns": 3},
+      "blocks": [
+        {"id": "a", "shape": "roundRect", "fill": "accent1", "text": "With text"},
+        {"id": "b", "shape": "rect", "fill": "accent1", "text": "Rectangle"},
+        {"id": "c", "shape": "rect", "fill": "accent2"}
+      ],
+      "shapes": [
+        {"connector": {"from": "a", "to": "b", "route": "straight"}, "stroke": {"color": "dark2", "width": 2, "end": {"type": "triangle"}}},
+        {"connector": {"from": "b", "to": "c", "route": "straight"}, "stroke": {"color": "dark2", "width": 2, "end": {"type": "triangle"}}}
+      ] } ] }

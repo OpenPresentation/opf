@@ -1,0 +1,8 @@
+{
+ "name": "QC-05 stacked area with value labels",
+ "language": "en-US",
+ "slides": [
+  {"title": "Stacked area labels",
+   "chart": {"type": "stacked-area", "data": {"columns": ["Quarter", "Enterprise", "Self-serve"], "rows": [["Q1", 42, 18], ["Q2", 46, 22], ["Q3", 51, 27], ["Q4", 55, 31]]}}}
+ ]
+}

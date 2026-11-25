@@ -1,0 +1,10 @@
+{
+ "name": "QC-04 live slide numbers after a hidden slide",
+ "language": "en-US",
+ "design": {"footer": {"end": {"text": "{{slide.number}}"}}},
+ "slides": [
+  {"title": "One"},
+  {"title": "Two (hidden)", "hidden": true},
+  {"title": "Three: the number should read 3"}
+ ]
+}

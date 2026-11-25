@@ -1,0 +1,2 @@
+{ "$schema": "https://openpresentation.org/schema/opf/v1", "language": "en-US", "name": "QS-05 left-right ribbon fold",
+  "slides": [ { "title": "leftRightRibbon", "blocks": [ {"shape": "leftRightRibbon", "fill": "accent1", "alt": "left-right ribbon"} ] } ] }

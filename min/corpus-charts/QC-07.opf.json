@@ -1,0 +1,8 @@
+{
+ "name": "QC-07 General number format with two decimals",
+ "language": "en-US",
+ "slides": [
+  {"title": "Cost by country",
+   "chart": {"type": "bar", "data": {"columns": ["Country", "Cost"], "rows": [["United States", 109.4], ["Germany", 23.7], ["Japan", 15.16], ["France", 10.9]]}, "dataLabels": true}}
+ ]
+}

@@ -1,0 +1,8 @@
+{ "$schema": "https://openpresentation.org/schema/opf/v1", "language": "en-US", "name": "QS-06 rectangle and shape gradients",
+  "slides": [
+    { "title": "Gradient paths",
+      "composition": {"mode": "grid", "columns": 2},
+      "blocks": [
+        {"shape": "rect", "fill": {"gradient": {"type": "rectangle", "stops": [{"color": "accent4", "position": 0}, {"color": "dark2", "position": 1}]}}, "text": "Rectangle"},
+        {"shape": "hexagon", "fill": {"gradient": {"type": "shape", "stops": [{"color": "accent5", "position": 0}, {"color": "accent6", "position": 0.5}, {"color": "dark1", "position": 1}]}}, "text": "Shape"}
+      ] } ] }

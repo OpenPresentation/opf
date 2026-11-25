@@ -1,0 +1,2 @@
+{ "$schema": "https://openpresentation.org/schema/opf/v1", "language": "en-US", "name": "QS-04 punched tape wave",
+  "slides": [ { "title": "flowChartPunchedTape", "blocks": [ {"shape": "flowChartPunchedTape", "fill": "accent1", "alt": "punched tape"} ] } ] }

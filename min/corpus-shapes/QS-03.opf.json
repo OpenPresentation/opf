@@ -1,0 +1,8 @@
+{ "$schema": "https://openpresentation.org/schema/opf/v1", "language": "en-US", "name": "QS-03 pentagon and heptagon proportions",
+  "slides": [
+    { "title": "hf adjust on polygons",
+      "composition": {"mode": "grid", "columns": 2},
+      "blocks": [
+        {"shape": "pentagon", "adjust": {"hf": 0.894}, "fill": "accent1", "alt": "pentagon hf 0.894"},
+        {"shape": "heptagon", "adjust": {"hf": 0.872}, "fill": "accent1", "alt": "heptagon hf 0.872"}
+      ] } ] }

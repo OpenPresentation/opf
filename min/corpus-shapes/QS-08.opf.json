@@ -1,0 +1,2 @@
+{ "$schema": "https://openpresentation.org/schema/opf/v1", "language": "en-US", "name": "QS-08 perspective shadow",
+  "slides": [ { "title": "Perspective shadow", "blocks": [ {"text": "perspective", "shape": "roundRect", "fill": "accent3", "shadow": "perspective"} ] } ] }

@@ -1,0 +1,8 @@
+{
+ "name": "QC-08 combo chart with automatic axes",
+ "language": "en-US",
+ "slides": [
+  {"title": "Revenue and margin",
+   "chart": {"type": "combo", "data": {"columns": ["Quarter", {"name": "Revenue", "format": "$#,##0.0"}, {"name": "Margin", "format": "0%"}], "rows": [["Q1", 12.4, 0.31], ["Q2", 18.1, 0.34], ["Q3", 21.7, 0.29], ["Q4", 26.3, 0.37]]}, "line": ["Margin"], "secondaryAxis": ["Margin"]}}
+ ]
+}

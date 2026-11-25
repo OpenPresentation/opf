@@ -1,0 +1,8 @@
+{
+ "name": "QC-06 map chart: preview tiles, export columns",
+ "language": "en-US",
+ "slides": [
+  {"title": "Sales by country",
+   "chart": {"type": "world", "data": {"columns": ["Country", "Sales"], "rows": [["Germany", 9], ["France", 6], ["United States", 8], ["Brazil", 3], ["Japan", 5]]}}}
+ ]
+}

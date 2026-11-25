@@ -1,0 +1,10 @@
+{
+ "name": "QC-10 legend order of radar and area charts",
+ "language": "en-US",
+ "slides": [
+  {"title": "Radar legend",
+   "chart": {"type": "radar-with-markers", "data": {"columns": ["Skill", "Team A", "Team B"], "rows": [["Design", 4, 3], ["Research", 3, 5], ["Build", 5, 4], ["Test", 2, 4], ["Ship", 4, 3]]}, "legend": "bottom"}},
+  {"title": "Area legend",
+   "chart": {"type": "area", "data": {"columns": ["Quarter", "Current", "Baseline"], "rows": [["Q1", 20, 12], ["Q2", 24, 14], ["Q3", 27, 15], ["Q4", 31, 17]]}, "legend": "top"}}
+ ]
+}

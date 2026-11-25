@@ -1,0 +1,12 @@
+{
+ "name": "QC-02 percent value axes whose range is not a whole number of steps",
+ "language": "en-US",
+ "slides": [
+  {"title": "Margin benchmarks",
+   "chart": {"type": "column", "data": {"columns": ["Quarter", {"name": "Margin", "format": "0%"}], "rows": [["Q1", 0.18], ["Q2", 0.24], ["Q3", 0.27]]},
+    "referenceLines": [{"value": 0.3, "label": "Target 30%"}], "dataLabels": false}},
+  {"title": "Revenue and margin",
+   "chart": {"type": "combo", "data": {"columns": ["Quarter", "Revenue", {"name": "Margin", "format": "0%"}], "rows": [["Q1", 120, 0.2], ["Q2", 140, 0.24], ["Q3", 160, 0.27]]},
+    "line": ["Margin"], "secondaryAxis": ["Margin"], "referenceLines": [{"value": 0.25, "axis": "secondary", "label": "Margin 25%"}]}}
+ ]
+}

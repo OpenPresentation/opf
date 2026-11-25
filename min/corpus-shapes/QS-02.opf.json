@@ -1,0 +1,9 @@
+{ "$schema": "https://openpresentation.org/schema/opf/v1", "language": "en-US", "name": "QS-02 presets that Keynote splits or turns into freeforms",
+  "slides": [
+    { "title": "Split, freeform, kept",
+      "composition": {"mode": "grid", "columns": 3},
+      "blocks": [
+        {"shape": "cube", "fill": "accent1", "alt": "cube: becomes a group"},
+        {"shape": "triangle", "adjust": {"adj": 0.425}, "fill": "accent1", "alt": "triangle: becomes one freeform"},
+        {"shape": "chevron", "fill": "accent1", "alt": "chevron: kept as a preset"}
+      ] } ] }

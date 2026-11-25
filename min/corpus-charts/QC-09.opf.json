@@ -1,0 +1,10 @@
+{
+ "name": "QC-09 scatter labels left and right",
+ "language": "en-US",
+ "slides": [
+  {"title": "Labels left and right",
+   "blocks": [
+    {"chart": {"type": "scatter", "data": {"columns": ["Idea", "Effort", "Impact"], "rows": [["Search", 2, 8], ["Export", 5, 6], ["Themes", 8, 3]]}, "dataLabels": {"position": "left"}}},
+    {"chart": {"type": "scatter", "data": {"columns": ["Idea", "Effort", "Impact"], "rows": [["Alerts", 1, 4], ["Sharing", 4, 9], ["Offline", 7, 5]]}, "dataLabels": {"position": "right"}}}]}
+ ]
+}

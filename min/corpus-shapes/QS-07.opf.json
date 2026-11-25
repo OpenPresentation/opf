@@ -1,0 +1,8 @@
+{ "$schema": "https://openpresentation.org/schema/opf/v1", "language": "en-US", "name": "QS-07 arrowhead sizes",
+  "slides": [
+    { "title": "Arrowhead sizes",
+      "composition": {"mode": "grid", "columns": 2},
+      "blocks": [
+        {"shape": "line", "stroke": {"color": "dark2", "width": 3, "end": {"type": "triangle", "width": "small", "length": "small"}}, "alt": "small triangle"},
+        {"shape": "line", "stroke": {"color": "dark2", "width": 3, "start": {"type": "arrow"}, "end": {"type": "arrow", "width": "large", "length": "small"}}, "alt": "open arrows"}
+      ] } ] }

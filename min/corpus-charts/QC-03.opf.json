@@ -1,0 +1,9 @@
+{
+ "name": "QC-03 footer placeholder over a full-bleed picture",
+ "language": "en-US",
+ "organization": {"id": "harbor", "name": "Harbor Labs"},
+ "design": {"footer": {"start": {"text": "{{organization.name}}"}, "center": {"text": "Internal planning draft"}, "end": {"text": "{{slide.number}}"}}},
+ "slides": [
+  {"layout": "image", "title": "Field context", "image": {"src": "context-photo.png", "alt": "A harbor at dusk"}}
+ ]
+}

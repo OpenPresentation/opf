@@ -1,0 +1,24 @@
+## PASS-B family 1: 0.36.0 qualification  (036/qualification)
+- files listed 67 / OPENED 67 / not run 0 (non-OPENED statuses: none; _notrun.tsv lines: 0); Keynote slides total 594; wall time (summed per-file) 13.9 min
+- files with Warnings-panel OCR text: 67 of 67
+  - "Unsupported media were removed.": 53 files (chart-point-overlays, chart-type-sampler, columns, coverage-backgrounds, coverage-catalogs)
+  - "Slide Layout(s): Cover, Gallery, Hero, Image, Image beside": 49 files (chart-point-overlays, chart-type-sampler, columns, coverage-catalogs, coverage-composition)
+  - "The font Roboto is missing. Your text might look different.": 5 files (chart-point-overlays, duration-timeline, explicit-chart-reference-lines, image-callouts, singleton-combo-reference-lines)
+  - "The font Aptos Display is missing. Your text might look different.": 43 files (chart-type-sampler, columns, coverage-backgrounds, coverage-catalogs-off, coverage-diagrams)
+  - "The font Aptos is missing. Your text might look different.": 46 files (chart-type-sampler, columns, coverage-backgrounds, coverage-catalogs-off, coverage-composition)
+  - "To view warnings, click or open a presentation.": 13 files (compliance-readiness-review, coverage-charts, coverage-design, coverage-languages, coverage-text)
+  - "Slide Layout(s): Cover, Cover 0, Cover 1, Gallery, Hero, Image, Image beside": 1 files (coverage-backgrounds)
+  - "SVG images were converted to PNG.": 2 files (coverage-catalogs, image-callouts)
+  - "The font Roboto Mono is missing. Your text might look different.": 2 files (coverage-composition, full-feature-tour)
+  - "Slide Layout(s): Cover, Cover 2, Gallery, Hero, Image, Image beside": 2 files (coverage-furniture, full-feature-tour)
+  - "The font Roboto Medium is missing. Your text might look different.": 1 files (duration-timeline)
+  - "Slide Layout(s): Cover, Cover 0, Gallery, Hero, Image, Image beside": 1 files (layout-harvest)
+  - "The font Open Sans is missing. Your text might look different.": 1 files (plantuml-diagrams)
+  - "The font Noto Naskh Arabic is missing. Your text might look different.": 1 files (smartart-arabic)
+- input SHA changes: 0 (none)
+- Keynote slide count differs from preview: none
+- top 20 compare scores (name, slide, score; scores only rank): coverage-charts s7 0.465; coverage-charts s13 0.300; chart-type-sampler s3 0.133; coverage-charts s16 0.130; coverage-charts s19 0.115; coverage-backgrounds s11 0.098; layout-sampler~native-body s24 0.096; coverage-charts s5 0.093; coverage-text s11 0.090; coverage-charts s15 0.090; data-story-academy s1 0.086; coverage-variables s1 0.082; layout-harvest s2 0.080; multilingual-slides s4 0.079; localized-chart-references s2 0.079; layout-harvest~native-body s15 0.078; layout-harvest~native-body s2 0.077; coverage-size-16x10 s3 0.077; localized-chart-references s3 0.077; coverage-size-1x1 s2 0.077
+- round-trip OPF import of back.pptx: 66 of 67 ok; failures (1):
+  - coverage-charts (19->19 slides): {   "command": "convert", 
+- slide count original vs back differs: none
+
