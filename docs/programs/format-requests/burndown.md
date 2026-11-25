@@ -16,7 +16,7 @@ Every item also meets the definition of done in the README; the acceptance colum
 | FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | in-progress |
 | FR-09 | CR 14: limits on a variable's value | [Below](#fr-09-limits-on-a-variables-value-cr-14) | done |
 | FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | in-progress |
-| FR-11 | What a validator says about a key it does not know | [Below](#fr-11-what-a-validator-says-about-a-key-it-does-not-know) | in-progress |
+| FR-11 | What a validator says about a key it does not know | [Below](#fr-11-what-a-validator-says-about-a-key-it-does-not-know) | done |
 
 Order of landing: FR-01 to FR-03 (ids), FR-04 to FR-07 (data), FR-08 (embed), FR-09 and FR-10 (variables). The tracks do not depend on
 each other, so an item lands when it is ready and each later branch merges `main` first; FR-09 was the first to land. Nothing is cut
@@ -269,10 +269,16 @@ later release, so the table only helps if it ships in a patch of the older line.
 
 Acceptance:
 
-- The `opf/schema` finding for an unknown key names the validator's own version and says that a later OPF release may define the key
-  (`"locked" is not a key this validator knows (OPF 0.37.0); a later release may define it`).
+- The `opf/schema` finding for an unknown key names the validator's own version and says that a later OPF release may define the key:
+  its help ends with `This validator is OPF 0.37.0; a later OPF release may define "locked".`, and its parameters carry the version as
+  `validatorVersion`. A key the validator can suggest a correction for keeps its suggestion and gets no such sentence.
 - The docs say what to do: update the package, or check the key against the schema of the release that wrote the document.
 - No version field in documents. A table of the keys 0.37.0 adds, shipped in a 0.36.x patch so that 0.36 readers can name the release,
   is built only if the owner asks for it (he planned no 0.36.1).
 
 Progress log:
+
+- 2026-11-25: done, in the pull request that adds this line. The owner confirmed the approach the same day (decision R8). The
+  version comes from core's own package version at build time, so a release needs no edit. One sealed editor fixture
+  (`source-read-text.golden.json`) was regenerated with its generator on the owner's word; it stores the version as `{{version}}`,
+  so a version bump does not move it.

@@ -524,7 +524,7 @@
     "column": 12,
     "kind": "schema",
     "ruleId": "opf/schema",
-    "help": "Review \"bogus\" against this object's schema. Preserve custom metadata in document.extensions where appropriate; do not delete authored content to clear this error.",
+    "help": "Review \"bogus\" against this object's schema. Preserve custom metadata in document.extensions where appropriate; do not delete authored content to clear this error. This validator is OPF {{version}}; a later OPF release may define \"bogus\".",
     "category": "format",
     "location": {
      "offset": 117,
@@ -538,7 +538,8 @@
      "keyword": "additionalProperties",
      "schemaPath": "#/additionalProperties",
      "params": {
-      "additionalProperty": "bogus"
+      "additionalProperty": "bogus",
+      "validatorVersion": "{{version}}"
      }
     },
     "fixes": [
@@ -930,7 +931,7 @@
     "column": 8,
     "kind": "schema",
     "ruleId": "opf/schema",
-    "help": "Review \"bogus\" against this object's schema. Preserve custom metadata in document.extensions where appropriate; do not delete authored content to clear this error.",
+    "help": "Review \"bogus\" against this object's schema. Preserve custom metadata in document.extensions where appropriate; do not delete authored content to clear this error. This validator is OPF {{version}}; a later OPF release may define \"bogus\".",
     "category": "format",
     "location": {
      "offset": 15,
@@ -944,7 +945,8 @@
      "keyword": "additionalProperties",
      "schemaPath": "#/additionalProperties",
      "params": {
-      "additionalProperty": "bogus"
+      "additionalProperty": "bogus",
+      "validatorVersion": "{{version}}"
      }
     },
     "fixes": [
@@ -983,7 +985,7 @@
     "column": 12,
     "kind": "schema",
     "ruleId": "opf/schema",
-    "help": "Review \"wrong\" against this object's schema. Preserve custom metadata in document.extensions where appropriate; do not delete authored content to clear this error.",
+    "help": "Review \"wrong\" against this object's schema. Preserve custom metadata in document.extensions where appropriate; do not delete authored content to clear this error. This validator is OPF {{version}}; a later OPF release may define \"wrong\".",
     "category": "format",
     "location": {
      "offset": 49,
@@ -997,7 +999,8 @@
      "keyword": "additionalProperties",
      "schemaPath": "#/additionalProperties",
      "params": {
-      "additionalProperty": "wrong"
+      "additionalProperty": "wrong",
+      "validatorVersion": "{{version}}"
      }
     },
     "fixes": [
