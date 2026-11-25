@@ -196,7 +196,11 @@ test('global metadata, variables, reference texts, IDs, order and count still in
   ];
   for (const mutate of mutations) { mutate(document); assert.ok(allComputed(api.audit(checker, document, config))); }
   document.slides[0].blocks[0].text = [{ text: 'No inferred target label', link: 'slide:renamed' }];
-  assert.equal(api.audit(checker, document, config).report.schemaValid, false, 'internal slide links are not accepted by the current URL-only schema');
+  assert.equal(api.audit(checker, document, config).report.schemaValid, true, 'a slide link names a slide of the document (FR-03)');
+  document.slides[0].blocks[0].text = [{ text: 'No inferred target label', link: 'slide:missing' }];
+  assert.equal(api.audit(checker, document, config).report.schemaValid, false, 'a slide link to a slide the document does not have is not valid');
+  document.slides[0].blocks[0].text = [{ text: 'No inferred target label', link: 'ftp://acme.com' }];
+  assert.equal(api.audit(checker, document, config).report.schemaValid, false, 'a link scheme the schema does not allow is not valid');
 });
 
 test('unknown catalog callables fall back to the full raw prefix without invoking loaders', () => {
