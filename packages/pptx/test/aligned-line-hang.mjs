@@ -122,4 +122,31 @@ for (const [index, factor] of [[0, 1], [1, .5]]) {
   for (const index of [0, 1, 2]) assert.equal(value.slides[index].text ?? value.slides[index].blocks?.[0]?.text, hebrew, 'reads back as authored');
   cases++;
 }
+
+// The side PowerPoint counts the whitespace on follows the line's own text (annotation-export.js paragraphHangShift): Hebrew in a left-to-right deck has it on the
+// left as in a right-to-left deck; English in a right-to-left deck has it on the right after a letter and not at all after punctuation.
+{
+  const hebrew = 'פסקה של טקסט גוף שהיא ארוכה מספיק כדי לגלוש לשורה שנייה ושלישית בתוך תיבת הטקסט שלה, כך שכל שורה עוטפת מסתיימת ברווח.';
+  const english = 'An English paragraph in a Hebrew deck, long enough to wrap onto a second and a third line inside its text box.';
+  const decks = [
+    {language: 'en', design: {fontScheme: 'roboto'}, slides: ['end', 'center', 'start'].map(contentAlignment => ({title: 'Hebrew', design: {contentAlignment}, blocks: [{text: hebrew}]}))},
+    {language: 'he', design: {fontScheme: 'roboto'}, slides: [{title: 'אנגלית', design: {contentAlignment: 'end'}, blocks: [{text: english}]}]},
+  ];
+  for (const [deckIndex, mixed] of decks.entries()) {
+    await fonts.ensure(mixed);
+    const bound = resolvePresentation(mixed, {fonts, catalogs: [gallery]}).slides, entries = unzipSync(new Uint8Array(await toPptx(mixed, base)));
+    for (const [index] of mixed.slides.entries()) {
+      const path = `slides.${index}.blocks.0.text`, item = bound[index].geometry.items.find(entry => entry.path === path), fit = item.text;
+      const factor = {left: 0, center: .5, right: 1}[fit.placement.lines[0].alignment ?? fit.placement.alignment];
+      const xml = strFromU8(entries[`ppt/slides/slide${index + 1}.xml`]);
+      for (const [line, place] of fit.placement.lines.entries()) {
+        const box = frame(named(xml, `OPF text ${path} line ${line}`)), hang = place.hang ?? 0;
+        const coreRtl = fit.directions?.[line] === 'rtl', glyphs = place.x + (coreRtl ? hang : 0) + (place.width - hang) * factor;
+        const text = fit.lines[line], shift = !hang ? 0 : !deckIndex ? hang * (factor - 1) : /\p{L}\s+$/u.test(text) ? hang * factor : 0;
+        near(box.x + box.width * factor, glyphs + shift, `${deckIndex ? 'English in a Hebrew deck' : 'Hebrew in an English deck'}, line ${line} ${JSON.stringify(text.slice(-3))}`);
+      }
+    }
+  }
+  cases++;
+}
 console.log(`aligned line hang (pptx): ${cases} cases`);
