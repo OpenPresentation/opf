@@ -31,6 +31,7 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 - Custom narrative records, slide beat links and catalog override surfaces.
 - Limits on a template's variables: `maxLength` and `maxLines` on text variables and `maxItems` on a list variable, with values inside them ([`variable-limits.opf.json`](./variable-limits.opf.json), from core 0.37.0).
 - Links to a slide of the same deck: `slide:<id>` on a text run, a shape and a table cell, one of them to a hidden slide ([`slide-links.opf.json`](./slide-links.opf.json)).
+- Embedded pages: an `embed` with a preview picture (a screenshot-like dashboard drawn by OPF itself), an `embed` beside text with a caption, and an `embed` with no picture, drawn as a card with its title and its site name; the pages are never loaded, and every output but a presenter whose host allows the page shows the picture or the card, linked to the page ([`embed.opf.json`](./embed.opf.json)).
 
 - `multilingual-slides.opf.json`: English, Arabic, Japanese and French slides in one deck, with a selected Arabic script font and locale-aware numbers.
 

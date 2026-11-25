@@ -14,6 +14,7 @@ Consult the installed schema for optional fields and constraints. This guide sel
 | Numbered list | `{"items":["First step","Second step"],"numbering":"arabic"}` (also `roman-upper`, `roman-lower`, `alpha-upper`, `alpha-lower`; `{"style":"alpha-lower","start":3,"suffix":"paren"}`; an array is one entry per level; works on `bullets` too) |
 | Image | `{"image":{"src":"asset:diagram","alt":"Description of the diagram"}}` |
 | Video | `{"video":{"src":"asset:demo","title":"Demo"}}` |
+| Embed | `{"embed":{"src":"https://app.example.com/dashboards/revenue","title":"Revenue dashboard","preview":"asset:dashboard"}}` |
 | Table | `{"table":{"columns":["Quarter","Revenue"],"rows":[["Q1",12],["Q2",18]]}}`; an optional `alt` is a summary of what a large or dense table shows, read before its cells (`""` hides a purely decorative table) |
 | Metric | `{"metric":{"value":98,"unit":"%","label":"Retention"}}`; `trend` (`up`, `down`, `flat`) draws an arrow, and `sentiment` (`positive`, `negative`, `neutral`) says whether the change is good news, so a falling churn is `"trend":"down","sentiment":"positive"` (absent: up green, down red, flat neutral) |
 | Chart | `{"chart":{"type":"column","alt":"Revenue rose from $12M in Q1 to $18M in Q2.","data":{"columns":["Quarter","Revenue"],"rows":[["Q1",12],["Q2",18]]}}}` |
@@ -141,7 +142,7 @@ An image block takes `fit` (`cover`, the default via `design.imageFit`; `contain
 
 A shape block draws a PowerPoint preset with optional text inside: `{"shape": "chevron", "text": "Plan"}`. Use one for a process step, a callout, a badge or a labeled figure; use a list or a table when the words carry the slide. `shape` takes DrawingML's preset names (`rect`, `roundRect`, `ellipse`, `rightArrow`, `chevron`, `wedgeRectCallout`, `flowChartDecision`, all 187 in docs/shapes.md), or `path` gives an outline of your own (SVG path data in a 0 to 1 box). `adjust` moves the preset's handles in fractions and degrees (`{"adj": 0.3}` on a `roundRect`). `fill` is `"none"`, a color, `{"gradient": {...}}` or `{"pattern": {...}}`; `stroke` is the line (`{"color", "width", "dash", "end": {"type": "triangle"}}`); `style` (`none`, `subtle`, `moderate` by default, `intense`) is the theme's shape style for whatever you leave unset, so a bare shape already follows the deck. Text is fitted inside the preset's text rectangle at the readable size, never shrunk below `minFontSize`: keep it to a few words. `anchor`, `padding` and `textDirection` place it; `rotate` and `flip` turn the shape; `alt`, `decorative`, `hidden` and `link` set its accessibility and click. Any color can be lighter or darker: `{"color": "accent1", "lighten": 0.4}` is PowerPoint's "Lighter 40%".
 
-An `image`, `chart`, `table` or `video` payload takes a `caption` (a string, `TextRun[]`, or `{text, position: "below" | "above", align: "start" | "center" | "end"}`), composed inside the block's region; only one captionable payload per block or slide root.
+An `image`, `chart`, `table`, `video` or `embed` payload takes a `caption` (a string, `TextRun[]`, or `{text, position: "below" | "above", align: "start" | "center" | "end"}`), composed inside the block's region; only one captionable payload per block or slide root.
 
 ```json
 {
