@@ -89,6 +89,9 @@ const GOLDEN = {
   "reading-order-differs": ["`blocks.0` is read at position 1 but appears at position 2 on slide 2, so a screen reader reads the slide out of order.", "reorder the blocks so the reading order follows what people see, or pin them to layout regions."],
   "schema-without-keyword": ["must NOT be valid.", "inspect this schema constraint and preserve unrelated content."],
   "text-shrunk": ["The list on slide 1 (and 2 more blocks) is shrunk to 20 px, 63% of its 32 px starting size, so the slide is likely too dense.", "split it with `opf paginate`, move detail to the speaker notes, or shorten the text."],
+  "variable-overflow-length": ["Variable `headline` has 63 characters, over its `maxLength` of 24.", "shorten the value to 24 characters or fewer, or raise `maxLength`."],
+  "variable-overflow-items": ["Variable `agenda` has 4 items, over its `maxItems` of 3.", "give it 3 items or fewer, or raise `maxItems`."],
+  "variable-overflow-lines": ["Variable `headline` takes 3 lines on slide 2, over its `maxLines` of 1.", "shorten the value, draw it in a wider place, or raise `maxLines` if the slide has the room."],
   "centered-body": ["A centered list on slide 1 runs 6 lines (275 characters); each line starts at a different place, which is harder to read.", "set `contentAlignment: \"start\"` in the slide's design, or cut it to a line or two."],
   "tight-spacing-gap": ["Two blocks on slide 1 are 0.08 in apart, closer than 0.25 in, so they read as one crowded block.", "raise `composition.gap`, use fewer blocks or nested groups, or split the slide."],
   "tight-spacing-margin": ["A block on slide 1 is 0.15 in from the slide edge, closer than 0.5 in.", "raise `composition.padding`, or place a picture meant to reach the edge with `placement`."],
@@ -106,11 +109,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 104 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 105 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 104);
+	assert.equal(RULE_IDS.length, 105);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {

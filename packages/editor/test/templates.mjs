@@ -10,6 +10,7 @@ import {
   hasTemplateVariables,
   insertVariableToken,
   isTemplateDocument,
+  limitUsage,
   listTemplateFields,
   setTemplate,
   suggestVariableId,
@@ -172,6 +173,46 @@ assert.deepEqual(editor.presentation, filled);
   // Back to a normal deck: leaving template mode with an unfilled variable is refused.
   assert.throws(() => setTemplate(session, false), (error) => error.code === "invalid-opf-edit");
   assert.equal(session.presentation.template, true);
+}
+
+// FR-09: a variable's limits reach the form fields, count against the value, and survive every edit.
+{
+  const limited = () => ({
+    template: true,
+    name: "Limits",
+    variables: {
+      headline: { type: "text", maxLength: 10, maxLines: 2, example: "Short" },
+      agenda: { type: "list", maxItems: 2, value: ["a", "b"] },
+      plain: { type: "text", value: "x" },
+    },
+    slides: [{ id: "one", title: "{{headline}}", items: "var:agenda", text: "{{plain}}" }],
+  });
+  const fields = (values) => Object.fromEntries(listTemplateFields(limited(), values).map((field) => [field.id, field]));
+  const before = fields({});
+  assert.deepEqual([before.headline.maxLength, before.headline.maxLines, before.agenda.maxItems], [10, 2, 2]);
+  assert.equal("maxLength" in before.plain || "maxLines" in before.plain || "maxItems" in before.plain, false);
+
+  // The count is what the reader sees: an emoji is one character, and the list counts entries.
+  assert.deepEqual(limitUsage("text", "Café 👨‍👩‍👧", { maxLength: 10 }), { unit: "characters", used: 6, max: 10, over: false });
+  assert.deepEqual(limitUsage("text", "Eleven char", { maxLength: 10 }), { unit: "characters", used: 11, max: 10, over: true });
+  assert.deepEqual(limitUsage("list", ["a", "b", "c"], { maxItems: 2 }), { unit: "items", used: 3, max: 2, over: true });
+  assert.equal(limitUsage("text", "x", {}), undefined);
+  assert.equal(limitUsage("number", 1, { maxLength: 3 }), undefined);
+  const typed = fields({ headline: "Eleven char", agenda: ["a", "b", "c"] });
+  assert.equal(limitUsage("text", typed.headline.value, typed.headline).over, true);
+  assert.equal(limitUsage("list", typed.agenda.value, typed.agenda).over, true);
+
+  // Edits keep the limits: an edit of a slide, an undo, and a partial fill that leaves the variable declared.
+  const session = createEditorSession(limited(), { rejectInvalid: true });
+  session.applyPatch([{ op: "replace", path: "/slides/0/id", value: "renamed" }]);
+  session.applyPatch([{ op: "replace", path: "/variables/headline/example", value: "Other" }]);
+  assert.deepEqual([session.presentation.variables.headline.maxLength, session.presentation.variables.headline.maxLines, session.presentation.variables.agenda.maxItems], [10, 2, 2]);
+  session.undo();
+  assert.equal(session.presentation.variables.headline.maxLength, 10);
+  const fill = createTemplateFill(session);
+  fill.set("headline", "Eleven char");
+  const applied = fill.apply({ partial: true });
+  assert.deepEqual(applied.diagnostics.filter((entry) => entry.code === "variable-overflow").map((entry) => entry.id), ["headline"]);
 }
 
 console.log("Templates passed fields, previews, one undoable fill, partial fills, declarations and token insertion.");

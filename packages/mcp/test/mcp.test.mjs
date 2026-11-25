@@ -295,6 +295,19 @@ describe("opf-mcp", () => {
 			assert.ok(skill.results.some((hit) => hit.kind === "skill"));
 		});
 
+		test("a model reads a variable's limits before it fills (FR-09): the schema and the docs name them, and validate_deck reports an overflow", async () => {
+			const text = (await client.callTool({ name: "get_schema", arguments: { name: "TextVariable" } })).structuredContent;
+			assert.deepEqual(Object.keys(text.schema.properties).filter((key) => key.startsWith("max")).sort(), ["maxLength", "maxLines"]);
+			const list = (await client.callTool({ name: "get_schema", arguments: { name: "ListVariable" } })).structuredContent;
+			assert.deepEqual(Object.keys(list.schema.properties).filter((key) => key.startsWith("max")), ["maxItems"]);
+			const found = (await client.callTool({ name: "search_docs", arguments: { query: "maxLength maxLines maxItems variable-overflow", limit: 3 } })).structuredContent;
+			assert.ok(found.results.some((hit) => hit.uri === "opf://docs/templates-and-variables"));
+			const deck = { name: "Limits", template: true, variables: { headline: { type: "text", value: "A headline that is far too long", maxLength: 10 } }, slides: [{ title: "{{headline}}" }] };
+			const report = (await client.callTool({ name: "validate_deck", arguments: { document: deck } })).structuredContent;
+			assert.deepEqual(report.findings.filter((finding) => finding.ruleId === "opf/variable-overflow").map((finding) => [finding.severity, finding.path]), [["warning", "/variables/headline"]]);
+			assert.equal(report.ok, true);
+		});
+
 		test("list_examples lists the bundled decks and filters them", async () => {
 			const all = (await client.callTool({ name: "list_examples", arguments: {} })).structuredContent;
 			assert.equal(all.total, JSON.parse(cli(["catalog", "examples"]).stdout).length);

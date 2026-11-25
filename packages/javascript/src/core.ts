@@ -66,6 +66,7 @@ export {
   listVariables,
   resolveVariables,
   variableDeclarations,
+  visibleLength,
 } from "./variables.js";
 export type {
   ResolveVariablesOptions,

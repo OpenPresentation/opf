@@ -421,6 +421,8 @@ _No named properties._
 | `label` | no | `string` | Optional short human label for forms and fill panels. |
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `oneOf:string / array<ref:TextRun>` | Illustrative text shown in fill forms and used when a template is previewed with examples. Never written to output. |
+| `maxLength` | no | `integer` | The most characters the value may have, counted as a reader sees them (an accented letter or an emoji counts once, however it is encoded). Checked on the declared value and on a value given to a fill; a longer value i... |
+| `maxLines` | no | `integer` | The most lines the value may take where it is drawn. Checked by composition at each place the variable is drawn (a title, a subtitle, a text block or a list entry), because the line count depends on the width of the b... |
 
 
 ### NumberVariable
@@ -512,6 +514,7 @@ _No named properties._
 | `label` | no | `string` | Optional short human label for forms and fill panels. |
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `array<string>` | Illustrative entries shown in fill forms and used when a template is previewed with examples. Never written to output. |
+| `maxItems` | no | `integer` | The most entries the list may have. Checked on the declared value and on a value given to a fill; a longer list is the warning opf/variable-overflow. Fill forms and models read it before writing. |
 
 
 ### BackgroundShortcut
