@@ -1135,7 +1135,8 @@ function renderPayload(item, box, bound, options) {
 
 function renderTextPayload(item, box, bound, options) {
   // LH-63: a text whose first line is a run-in heading draws core's runs (item.runs: the same characters, the heading bold).
-  const value = item.runs ?? item.value;
+  // The runs draw only with a fit core laid out from them (richLines); a plain fit draws the authored value.
+  const value = item.runs && (!item.text || "richLines" in item.text) ? item.runs : item.value;
   return (Array.isArray(value) ? renderRichTextBox : renderTextBox)(Array.isArray(value) ? value : flattenText(value), box, bound, {
     path: item.path,
     // Core resolves one alignment per composed item for every engine, from the slide's design, the deck's design

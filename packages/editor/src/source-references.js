@@ -15,6 +15,8 @@ import { listBuiltinVariables } from "@openpresentation/opf";
 export const REFERENCE_RULES = Object.freeze([
   { kind: "asset", definitions: ["Asset", "LogoSource", "ImageSource", "ImagePayload"], keys: ["src", "logo", "watermark"], phrases: ["asset:<id>", "or Asset"] },
   { kind: "dataset", definitions: ["DatasetId"], keys: [], phrases: [] },
+  // FR-04: a string `datasource` of a dataset or of inline chart data is the id of an entry of the root `datasources`.
+  { kind: "datasource", definitions: ["DataSourceId", "DataSourceChoice"], keys: [], phrases: [] },
   { kind: "datasetColumn", definitions: ["DatasetFields"], keys: ["category", "x", "series", "lineSeries", "secondaryAxis"], phrases: ["column"], item: true },
   { kind: "cite", definitions: [], keys: ["cite"], phrases: ["references"], item: true },
   { kind: "beat", definitions: [], keys: ["beat"], phrases: ["narrative"], item: true },
@@ -79,7 +81,7 @@ const BUILTIN_SOURCES = ["name", "description", "author", "speaker", "organizati
  * where `deck` holds the built-in sources the draft sets. Anything else the value holds, and anything malformed, is ignored: the text being edited is a draft.
  */
 export function factsOf(deck) {
-  const out = { assets: [], datasets: [], variables: [], references: [], narrative: undefined, deck: {} };
+  const out = { assets: [], datasets: [], datasources: [], variables: [], references: [], narrative: undefined, deck: {} };
   if (!isObject(deck)) return out;
   if (isObject(deck.assets)) {
     for (const [id, asset] of Object.entries(deck.assets)) out.assets.push({ id, detail: stringOf(asset) ?? stringOf(asset?.src) ?? stringOf(asset?.title) ?? "", src: stringOf(asset) ?? stringOf(asset?.src) ?? "", mediaType: stringOf(asset?.mediaType) ?? "" });
@@ -89,6 +91,9 @@ export function factsOf(deck) {
       const columns = Array.isArray(dataset?.columns) ? dataset.columns.map(columnName).filter(Boolean) : [];
       out.datasets.push({ id, title: stringOf(dataset?.title) ?? "", columns });
     }
+  }
+  if (isObject(deck.datasources)) {
+    for (const [id, source] of Object.entries(deck.datasources)) out.datasources.push({ id, title: stringOf(source?.title) ?? "", detail: stringOf(source?.connector) ?? stringOf(source?.src) ?? "" });
   }
   if (isObject(deck.variables)) {
     for (const [id, variable] of Object.entries(deck.variables)) {
@@ -105,7 +110,7 @@ export function factsOf(deck) {
   return out;
 }
 
-const TOP_LEVEL = ["assets", "datasets", "variables", "references", "narrative", ...BUILTIN_SOURCES];
+const TOP_LEVEL = ["assets", "datasets", "datasources", "variables", "references", "narrative", ...BUILTIN_SOURCES];
 
 /** The top-level parts of a JSON draft the references read (`root` is a jsonc-parser tree), as a plain value for `factsOf`. */
 export function jsonDeckParts(root, getNodeValue) {

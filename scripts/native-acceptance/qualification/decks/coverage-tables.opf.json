@@ -48,19 +48,13 @@
           "Dara"
         ]
       ],
-      "source": {
+      "datasource": {
         "src": "./data/bookings.xlsx",
-        "sheet": "Q4",
-        "range": "A1:D5",
-        "fields": [
-          "Region",
-          "Q3",
-          "Q4",
-          "Owner"
-        ],
-        "retrieved": "2026-10-05",
+        "connector": "xlsx",
         "description": "Finance export, unaudited"
-      }
+      },
+      "query": "Q4!A1:D5",
+      "retrieved": "2026-10-05"
     }
   },
   "slides": [

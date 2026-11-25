@@ -9,6 +9,7 @@ import {
 	undeclaredCatalogFindings,
 	variableFindings,
 } from './check-document.js';
+import { parseInstant } from './data-source-checks.js';
 import { parseSource, type ParsedSource } from './check-source.js';
 import type { Finding, FindingFix, FindingSeverity } from './generated/types/finding.js';
 import type { Rec } from './rule-design.js';
@@ -68,7 +69,7 @@ export { gridCells } from './schema-check.js';
  */
 
 const SEVERITIES: readonly string[] = ['error', 'warning', 'info'];
-const OPTION_KEYS = ['only', 'ignore', 'severity', 'ignorePaths', 'catalogs', 'contracts', 'thresholds', 'fonts', 'chartPalette', 'template', 'values', 'slideLinks'];
+const OPTION_KEYS = ['only', 'ignore', 'severity', 'ignorePaths', 'catalogs', 'contracts', 'thresholds', 'fonts', 'chartPalette', 'template', 'values', 'asOf', 'slideLinks'];
 
 const isObject = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 
@@ -169,6 +170,7 @@ function resolveOptions(options: ValidateOptions): Resolved {
 		throw new TypeError('Validate chartPalette must be an array of #RRGGBB colors.');
 	if (options.template !== undefined && typeof options.template !== 'boolean') throw new TypeError('Validate template must be true or false.');
 	if (options.values !== undefined && !isObject(options.values)) throw new TypeError('Validate values must be an object keyed by variable id.');
+	if (options.asOf !== undefined && parseInstant(options.asOf) === undefined) throw new TypeError('Validate asOf must be an ISO 8601 date (2026-11-25) or date-time (2026-11-25T09:30:00Z).');
 	const level = (info: ValidationRuleInfo) => severity.get(info.id) ?? severity.get(info.category);
 	const off = (info: ValidationRuleInfo) => level(info) === 'off' || !!ignore?.rules.has(info.id) || !!ignore?.categories.has(info.category);
 	return {
@@ -233,7 +235,7 @@ function syntaxReport(parsed: ParsedSource, run: Resolved): ValidationReport {
 }
 
 function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSource, cache?: ValidationCompositionCache): ValidationReport {
-	const engine = validateAgainstSchema(document, 'presentation', { template: run.options.template, values: run.options.values, ...(run.options.catalogs ? { catalogs: run.options.catalogs } : {}), ...(run.options.slideLinks !== undefined ? { slideLinks: run.options.slideLinks } : {}) });
+	const engine = validateAgainstSchema(document, 'presentation', { template: run.options.template, values: run.options.values, ...(run.options.asOf !== undefined ? { asOf: run.options.asOf } : {}), ...(run.options.catalogs ? { catalogs: run.options.catalogs } : {}), ...(run.options.slideLinks !== undefined ? { slideLinks: run.options.slideLinks } : {}) });
 	const schemaValid = engine.errors.length === 0;
 	const slides = isObject(document) && Array.isArray(document.slides) ? document.slides : [];
 	const auditWanted = auditInfos.some((info) => run.enabled(info));

@@ -1,0 +1,38 @@
+{
+ "input": "build/036/qualification/pptx/singleton-combo-reference-lines.pptx",
+ "name": "singleton-combo-reference-lines",
+ "started": "2026-11-25T17:33:32Z",
+ "keynote": "16.0",
+ "phases": {
+  "open": 1.13,
+  "probe": 0.7,
+  "slides": 0.72,
+  "pptxBack": 0.81,
+  "close": 0.24
+ },
+ "sha256Before": "8567c62c0c7da29d9419ed4efc4f7997c92b690ef4a73dc49b86213b7bafc502",
+ "documentId": "561B1877-EF5D-4921-87C7-D4B6A2F67170",
+ "documentName": "singleton-combo-reference-lines",
+ "slideCount": 1,
+ "skippedSlides": [],
+ "pictures": {
+  "slide-01.png": {
+   "keynoteFile": "_export.001.png",
+   "slide": 1
+  }
+ },
+ "status": "OPENED",
+ "message": "",
+ "seconds": 5.32,
+ "sha256After": "8567c62c0c7da29d9419ed4efc4f7997c92b690ef4a73dc49b86213b7bafc502",
+ "shaUnchanged": true,
+ "finished": "2026-11-25T17:33:37Z",
+ "warningsPanel": [
+  {
+   "window": 6131,
+   "title": "Warnings – singleton-combo-reference-lines",
+   "file": "import-warnings-6131.png",
+   "ocr": "Warnings - singleton-combo-reference-lines\nThis PowerPoint presentation may look different.\nHere's a list of what changed when you opened it in Keynote.\nUnsupported media were removed.\nSlide Layout(s): Cover, Gallery, Hero, Image, Image beside\nThe font Roboto is missing. Your text might look different.\nReplace Fonts...\n"
+  }
+ ]
+}

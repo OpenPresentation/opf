@@ -8,16 +8,17 @@ import { chartOptionTarget } from './chart-options.js';
 import { CHART_REFERENCE_TYPES } from './chart-reference-types.js';
 import { formatVariableNumber } from './variables.js';
 import { localizeNumberText } from './numerals.js';
+import { dataProvenance, unknownDataSourceDiagnostics, type DataGenerator, type DataProvenance, type DataSource } from './data-sources.js';
 import { tableRows } from './table.js';
+
+export type { DataGenerator, DataProvenance, DataSource };
 
 /** A scalar data cell (chart data, dataset rows). */
 export type DataCellValue = string | number | boolean | null;
 /** A named column with an optional number format. The string column form is `{ name }` with no format. */
 export interface DataColumn { name: string; format?: string }
-/** Provenance of inline data or a dataset. Engines never read, fetch or refresh it. */
-export interface DataSourceRef { src: string; sheet?: string; range?: string; fields?: string[]; retrieved?: string; description?: string }
-/** One shared data table in the top-level `datasets` map. */
-export interface Dataset { title?: string; description?: string; columns: (string | DataColumn)[]; rows: DataCellValue[][]; source?: DataSourceRef }
+/** One shared data table in the top-level `datasets` map. Its provenance keys say where it came from; engines never read, fetch or refresh a data source. */
+export interface Dataset extends DataProvenance { title?: string; description?: string; columns: (string | DataColumn)[]; rows: DataCellValue[][] }
 /** Chart data (or, as `{ dataset, fields }`, a table) taken from a top-level dataset. */
 export interface DatasetRef { dataset: string; fields?: string[] }
 /** `chart.mapping`: the category, X and series columns by name (after any `fields` selection). */
@@ -40,6 +41,9 @@ export type DataDiagnosticCode =
   | 'chart-value-not-numeric'
   | 'dataset-unknown'
   | 'dataset-field-unknown'
+  | 'datasource-unknown'
+  | 'datasource-credentials'
+  | 'dataset-stale'
   | 'data-column-duplicate'
   | 'chart-mapping-unknown-column'
   | 'chart-mapping-adapted'
@@ -78,7 +82,8 @@ export type ResolvedChartData =
       formats: (string | undefined)[];
       /** Category cells as authored; X and series cells (and a lone column, which has no category) passed through `chartNumber` (null is a gap). */
       rows: DataCellValue[][];
-      source?: DataSourceRef;
+      /** Where the data came from: the six provenance keys of the inline data, or of the dataset the chart references. */
+      provenance?: DataProvenance;
       /** The dataset id when the chart references one. */
       dataset?: string;
       /**
@@ -372,10 +377,14 @@ function formatDiagnostics(columns: unknown[], columnsPath: string, diagnostics:
   });
 }
 
-/** Diagnostics of the top-level datasets themselves: duplicate column names and invalid column formats. */
+/**
+ * Diagnostics of the top-level datasets themselves: duplicate column names, invalid column formats and a `datasource` that names no
+ * data source. (The credential and staleness checks of data sources are `validate`'s: data-source-checks.ts.)
+ */
 export function datasetDiagnostics(document: unknown): DataDiagnostic[] {
   const diagnostics: DataDiagnostic[] = [];
   for (const [id, dataset] of Object.entries(datasetsOf(document))) {
+    diagnostics.push(...unknownDataSourceDiagnostics(dataset, at('/datasets', id), document));
     if (!record(dataset) || !Array.isArray(dataset.columns)) continue;
     const columnsPath = at('/datasets', id, 'columns');
     duplicateColumns(dataset.columns.map(column => columnName(column) ?? ''), columnsPath, diagnostics);
@@ -391,7 +400,7 @@ function inlineColumn(column: unknown): string | DataColumn {
 }
 
 /** The inline copy of a dataset reference, or undefined when the id or a field is unknown. */
-function inlinedData(ref: DatasetRef | Record<string, unknown>, datasets: Record<string, unknown>): { columns: (string | DataColumn)[]; rows: DataCellValue[][]; source?: DataSourceRef } | undefined {
+function inlinedData(ref: DatasetRef | Record<string, unknown>, datasets: Record<string, unknown>): ({ columns: (string | DataColumn)[]; rows: DataCellValue[][] } & DataProvenance) | undefined {
   const id = ref.dataset as string;
   const dataset = own(datasets, id) ? datasets[id] : undefined;
   if (!record(dataset) || !Array.isArray(dataset.columns) || !Array.isArray(dataset.rows)) return undefined;
@@ -399,12 +408,12 @@ function inlinedData(ref: DatasetRef | Record<string, unknown>, datasets: Record
   const selection = selectFields(dataset.columns, ref.fields, '', '', diagnostics);
   if (diagnostics.some(entry => entry.code === 'dataset-field-unknown')) return undefined;
   const rows = dataset.rows.map((row: unknown) => selection.indices.map(index => (Array.isArray(row) && index < row.length ? structuredClone(row[index]) : null) as DataCellValue));
-  return { columns: selection.columns.map(inlineColumn), rows, ...(record(dataset.source) ? { source: structuredClone(dataset.source) as DataSourceRef } : {}) };
+  return { columns: selection.columns.map(inlineColumn), rows, ...dataProvenance(dataset) };
 }
 
 /**
  * Pure: a copy of the document where every chart and table DatasetRef is replaced by inline data (columns as
- * DataColumn when a format applies, rows copied; a chart also takes the dataset's `source`). `datasets` stays in
+ * DataColumn when a format applies, rows copied; a chart also takes the dataset's provenance keys). `datasets` stays in
  * place. Unknown ids (and references naming an unknown field) are left as they are.
  */
 export function inlineDatasets<T>(document: T): T {
@@ -505,7 +514,7 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
   let rows: unknown[];
   let columnsPath: string;
   let rowsPath: string;
-  let source: DataSourceRef | undefined;
+  let provenance: DataProvenance | undefined;
   let datasetId: string | undefined;
   let selected: number[] | undefined;
   if (isDatasetRef(data)) {
@@ -523,7 +532,7 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     columns = selection.columns;
     selected = selection.indices;
     rows = dataset.rows;
-    if (record(dataset.source)) source = dataset.source as DataSourceRef;
+    provenance = dataProvenance(dataset);
   } else {
     if (!Array.isArray(data.columns)) return fail('no-columns', 'The chart data has no columns.');
     columns = data.columns;
@@ -531,7 +540,8 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     columnsPath = at(base, 'data', 'columns');
     rowsPath = at(base, 'data', 'rows');
     formatDiagnostics(columns, columnsPath, diagnostics);
-    if (record(data.source)) source = data.source as DataSourceRef;
+    provenance = dataProvenance(data);
+    diagnostics.push(...unknownDataSourceDiagnostics(data, at(base, 'data'), document));
   }
   if (!columns.length) return fail('no-columns', 'The chart data has no columns.');
   const names = columns.map(column => columnName(column) ?? '');
@@ -678,7 +688,7 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     hasX: x !== undefined,
     formats: order.map(index => formats[index]),
     rows: out,
-    ...(source ? { source } : {}),
+    ...(provenance && Object.keys(provenance).length ? { provenance } : {}),
     ...(datasetId !== undefined ? { dataset: datasetId } : {}),
     ...(combo ? { combo } : {}),
     diagnostics,

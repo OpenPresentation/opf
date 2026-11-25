@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://openpresentation.org/schemas/native-known.schema.json",
+  "title": "Known differences of one native application",
+  "description": "NT-03: what an application shows differently from OPF's preview when it opens OPF's PPTX export, as records. The records with skill: true are the rows of the generated table in skills/opf-export/SKILL.md, in file order.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "target", "records"],
+  "properties": {
+    "schemaVersion": { "const": 1, "description": "The version of this record shape." },
+    "target": { "enum": ["keynote"], "description": "The application the records describe, by the name its driver uses." },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "description": "The known differences, in table order.",
+      "items": { "$ref": "#/definitions/record" }
+    }
+  },
+  "definitions": {
+    "version": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["application", "opf"],
+      "description": "A pair of versions: the application's and the OPF release whose export it opened.",
+      "properties": {
+        "application": { "type": "string", "pattern": "^[0-9]+(\\.[0-9]+)*$", "description": "The application's version as it names itself (Keynote 16.0 is \"16.0\")." },
+        "opf": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$", "description": "The OPF release that wrote the file." }
+      }
+    },
+    "place": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deck", "slide"],
+      "description": "One slide of a round's decks that shows the difference.",
+      "properties": {
+        "deck": { "type": "string", "minLength": 1, "description": "The deck's name in the round (a corpus file name such as coverage-charts, or a round deck such as m-charts)." },
+        "variant": { "type": "string", "minLength": 1, "description": "The export variant the slide was opened in: default, native (--body-text native) or static (--slide-numbers static). Absent means default." },
+        "slide": { "type": "integer", "minimum": 1, "description": "The slide number, counting from 1." }
+      }
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "feature", "sees", "workaround", "workaroundTried", "whose", "grade", "where", "firstSeen", "lastSeen", "issue", "skill", "status"],
+      "description": "One known difference.",
+      "properties": {
+        "id": { "type": "string", "pattern": "^kn-[a-z0-9-]+$", "description": "A stable id, never reused for another difference." },
+        "title": { "type": "string", "minLength": 1, "description": "What the deck has: the first column of the skill table." },
+        "feature": {
+          "enum": ["text", "lists", "tables", "charts", "shapes", "diagrams", "pictures", "links", "notes", "furniture", "fonts", "languages", "round-trip", "warnings"],
+          "description": "The area of the format the difference belongs to."
+        },
+        "sees": { "type": "string", "minLength": 1, "description": "What a user sees in the application: the second column of the skill table." },
+        "workaround": { "type": ["string", "null"], "minLength": 1, "description": "What to do: the third column of the skill table; null when there is nothing to say." },
+        "workaroundTried": { "type": ["boolean", "null"], "description": "Whether the workaround was run: true = tried in the application and it worked; false = a suggestion not tried in the application yet (the generated table then says so); null = not recorded, or there is no workaround." },
+        "whose": {
+          "enum": ["opf-file", "opf-importer", "application", "preview"],
+          "description": "Who would change for the difference to go: OPF's file, OPF's importer, the application (the file is valid and it reads it differently), or OPF's preview."
+        },
+        "grade": { "enum": ["small", "wrong"], "description": "How much it matters: small (looks different, nothing lost or misplaced) or wrong (lost, misplaced or misleading)." },
+        "where": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/place" },
+          "description": "Slides of the rounds that show it. Empty only when scope is set or located is false."
+        },
+        "located": { "type": "boolean", "description": "false when the difference is recorded but no deck and slide of the rounds shows it (where is then empty). Absent means true." },
+        "scope": { "enum": ["every-deck", "default-theme"], "description": "For a difference not tied to a slide: every deck shows it, or every deck in the default theme." },
+        "warning": {
+          "oneOf": [
+            { "type": "string", "minLength": 1 },
+            { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+          ],
+          "description": "The application's import-warning text this record explains, one string per line."
+        },
+        "firstSeen": { "$ref": "#/definitions/version", "description": "The first application and OPF versions a round saw it in." },
+        "lastSeen": { "$ref": "#/definitions/version", "description": "The last application and OPF versions a round saw it in." },
+        "issue": { "type": ["string", "null"], "pattern": "^OpenPresentation/opf#[1-9][0-9]*$", "description": "The issue that tracks it, or null." },
+        "finding": { "type": "string", "pattern": "^[A-Z]{2}-[0-9]{2}$", "description": "The id a round gave it (MX-03, LG-02 ...)." },
+        "skill": { "type": "boolean", "description": "true: a row of the generated table in skills/opf-export/SKILL.md." },
+        "status": { "enum": ["open", "retired"], "description": "open while the latest round shows it; retired when a later round no longer does." },
+        "note": { "type": "string", "minLength": 1, "description": "What a later round changed or narrowed, kept beside the table text it does not rewrite." }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "where": { "type": "array", "maxItems": 0 } } },
+          "then": { "anyOf": [{ "required": ["scope"] }, { "required": ["located"], "properties": { "located": { "type": "boolean", "const": false } } }] }
+        },
+        {
+          "if": { "properties": { "workaround": { "type": "null" } } },
+          "then": { "properties": { "workaroundTried": { "type": "null" } } }
+        },
+        {
+          "if": { "required": ["located"], "properties": { "located": { "type": "boolean", "const": false } } },
+          "then": { "properties": { "where": { "type": "array", "maxItems": 0 } } }
+        }
+      ]
+    }
+  }
+}

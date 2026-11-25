@@ -206,7 +206,11 @@
     },
     "datasets": {
       "$ref": "#/$defs/Datasets",
-      "description": "Optional shared data tables, keyed by id. A chart ('chart.data': { \"dataset\": \"<id>\" }) or a table ('table': { \"dataset\": \"<id>\" }) references one instead of holding its own copy; engines inline the reference before composing, rendering or exporting. A dataset nothing references is the warning opf/unused-dataset. See docs/chart-table-data.md."
+      "description": "Optional shared data tables, keyed by id. A chart ('chart.data': { \"dataset\": \"<id>\" }) or a table ('table': { \"dataset\": \"<id>\" }) references one instead of holding its own copy; engines inline the reference before composing, rendering or exporting. A dataset nothing references is the warning opf/unused-dataset. A dataset says where it came from with 'datasource', 'query', 'retrieved', 'version', 'sha256' and 'generator' (see 'datasources'). See docs/chart-table-data.md."
+    },
+    "datasources": {
+      "$ref": "#/$defs/DataSources",
+      "description": "Optional data sources, keyed by id: the places data comes from (a warehouse, a workbook, an API), described once. A dataset or inline chart data names one with 'datasource': \"<id>\" and records what it took, when and by whom beside its own columns and rows. A data source never holds credentials. Engines never read, fetch or refresh a data source; they keep the entries through editing, export and re-import. An unknown id is the error opf/datasource-unknown. See docs/data-sources.md."
     },
     "assets": {
       "$ref": "#/$defs/Assets",
@@ -4493,7 +4497,7 @@
             { "$ref": "#/$defs/ChartData" },
             { "$ref": "#/$defs/DatasetRef" }
           ],
-          "description": "Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ \"dataset\": \"<id>\" }) plots a top-level dataset instead. Data from a spreadsheet or file is imported into inline columns and rows, and its origin is recorded in data.source."
+          "description": "Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ \"dataset\": \"<id>\" }) plots a top-level dataset instead. Data from a spreadsheet or file is imported into inline columns and rows, and its origin is recorded in the data's own 'datasource', 'query', 'retrieved', 'version', 'sha256' and 'generator' keys."
         },
         "mapping": {
           "$ref": "#/$defs/ChartMapping",
@@ -4749,10 +4753,12 @@
           "description": "Tabular chart rows. Each row aligns by index with columns.",
           "examples": [[["Q1", 12], ["Q2", 18], ["Q3", 24], ["Q4", 31]]]
         },
-        "source": {
-          "$ref": "#/$defs/DataSourceRef",
-          "description": "Optional provenance: where this inline data came from. Engines never read, fetch or refresh it; they keep it through editing, export and re-import."
-        }
+        "datasource": { "$ref": "#/$defs/DataSourceChoice" },
+        "query": { "$ref": "#/$defs/DataQuery" },
+        "retrieved": { "$ref": "#/$defs/DataRetrieved" },
+        "version": { "$ref": "#/$defs/DataVersion" },
+        "sha256": { "$ref": "#/$defs/DataSha256" },
+        "generator": { "$ref": "#/$defs/DataGenerator" }
       }
     },
     "DataColumn": {
@@ -4773,46 +4779,108 @@
       },
       "examples": [{ "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }]
     },
-    "DataSourceRef": {
+    "DataSourceId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$",
+      "description": "Id of an entry in the top-level datasources map (the datasets id pattern). A string 'datasource' is only ever such an id; a file or a URL is written as an inline data source object, { \"src\": \"./revenue.csv\" }.",
+      "examples": ["warehouse", "finance-workbook"]
+    },
+    "DataSource": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["src"],
-      "description": "Provenance of inline data or a dataset: the file, sheet and range it came from and when. Engines never read, fetch or refresh it; they keep it through editing, export and re-import. Re-import the data to update it.",
+      "description": "A place data comes from: what it is and on what terms, not what was taken from it or when (that is the dataset's). Engines never read, fetch or refresh it; they keep it through editing, export and re-import. It never holds credentials: no password, token or key in 'src' or anywhere else (opf/datasource-credentials warns about a user and password in 'src' and a key or token in its query string); a host keeps secrets in its own store and names the connection in 'connector' or 'extensions'.",
       "properties": {
-        "src": {
+        "title": {
           "type": "string",
-          "description": "Where the data came from: an 'asset:<id>' reference, a URL, or a relative or local path.",
-          "examples": ["./data/revenue.csv", "asset:revenue", "https://cdn.acme.com/data/revenue.csv"]
-        },
-        "sheet": {
-          "type": "string",
-          "description": "Sheet or table name inside a spreadsheet source.",
-          "examples": ["Sheet1"]
-        },
-        "range": {
-          "type": "string",
-          "description": "A1-style range inside a spreadsheet source.",
-          "examples": ["A1:D8"]
-        },
-        "fields": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "The source fields the data was taken from, in order.",
-          "examples": [["Quarter", "Revenue"]]
-        },
-        "retrieved": {
-          "type": "string",
-          "anyOf": [{ "format": "date" }, { "format": "date-time" }],
-          "description": "When the data was taken from the source: an ISO 8601 date or date-time.",
-          "examples": ["2026-10-05", "2026-10-05T09:30:00Z"]
+          "description": "Human name of the data source, shown by editors.",
+          "examples": ["Finance warehouse"]
         },
         "description": {
           "type": "string",
-          "description": "Free-form note about the source.",
+          "description": "Free-form note about the data source.",
           "examples": ["Finance export, unaudited"]
+        },
+        "connector": {
+          "type": "string",
+          "description": "The kind of data source, in the host's or the author's words: a name a tool recognizes, such as 'csv', 'xlsx', 'postgres', 'bigquery' or 'rest'. Engines do not interpret it. It also says what language a dataset's 'query' is written in.",
+          "examples": ["xlsx", "postgres", "rest"]
+        },
+        "src": {
+          "type": "string",
+          "description": "Where the data is: an 'asset:<id>' reference, a URL, or a relative or local path. A URL carries no credentials.",
+          "examples": ["./data/revenue.csv", "asset:revenue", "https://cdn.acme.com/data/revenue.csv"]
+        },
+        "license": {
+          "type": "string",
+          "description": "The terms the data is under: an SPDX license identifier or a short statement. It travels with the data.",
+          "examples": ["CC-BY-4.0", "Internal use only"]
+        },
+        "refreshEvery": {
+          "type": "string",
+          "pattern": "^P(?=\\d|T\\d)(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?=\\d)(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$",
+          "description": "How often the data is meant to be taken again, as an ISO 8601 duration. No engine acts on it. A validator given a date warns when a dataset's 'retrieved' is older than this (opf/dataset-stale).",
+          "examples": ["P1D", "P1W", "P3M", "PT6H"]
+        },
+        "extensions": {
+          "type": "object",
+          "description": "Custom data passthrough, for example the connection settings a host owns; ignored by the engine but preserved across read/write round-trips. Never credentials."
         }
       },
-      "examples": [{ "src": "./data/revenue.csv", "retrieved": "2026-10-05" }]
+      "examples": [{ "title": "Finance warehouse", "connector": "postgres", "src": "postgres://warehouse.acme.com/finance", "license": "Internal use only", "refreshEvery": "P1D" }]
+    },
+    "DataSources": {
+      "type": "object",
+      "description": "Data sources keyed by id (the datasets id pattern). A dataset or inline chart data names one with 'datasource': \"<id>\".",
+      "propertyNames": { "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$" },
+      "additionalProperties": { "$ref": "#/$defs/DataSource" },
+      "examples": [
+        {
+          "warehouse": { "title": "Finance warehouse", "connector": "postgres", "src": "postgres://warehouse.acme.com/finance", "refreshEvery": "P1D" },
+          "forecast": { "title": "FY26 forecast workbook", "connector": "xlsx", "src": "https://example.com/revenue.xlsx", "license": "CC-BY-4.0" }
+        }
+      ]
+    },
+    "DataSourceChoice": {
+      "description": "Where the data came from: the id of an entry in the top-level datasources map (a string, always an id), or a data source written inline, { \"src\": \"./revenue.csv\" }. An unknown id is a 'datasource-unknown' error. Engines never read, fetch or refresh it.",
+      "oneOf": [
+        { "$ref": "#/$defs/DataSourceId" },
+        { "$ref": "#/$defs/DataSource" }
+      ],
+      "examples": ["warehouse", { "src": "./data/revenue.csv" }]
+    },
+    "DataQuery": {
+      "type": "string",
+      "minLength": 1,
+      "description": "What was taken from the data source, in the data source's own language: a spreadsheet range with its sheet ('FY26!A1:C13'; a sheet name with a space is quoted as spreadsheets do, \"'Q3 plan'!A1:B9\"), a SQL statement, a path into a document. Engines never run or parse it.",
+      "examples": ["FY26!A1:C13", "'Q3 plan'!A1:B9", "SELECT region, SUM(amount) FROM revenue GROUP BY 1"]
+    },
+    "DataRetrieved": {
+      "anyOf": [{ "type": "string", "format": "date" }, { "type": "string", "format": "date-time" }],
+      "description": "When the data was taken from its source: an ISO 8601 date or date-time. Never read from a clock by an engine.",
+      "examples": ["2026-10-05", "2026-10-05T09:30:00Z"]
+    },
+    "DataVersion": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A free string the source system gives the snapshot that was taken: a revision, an etag, a commit.",
+      "examples": ["r42", "2026-Q3"]
+    },
+    "DataSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "The SHA-256 of the source file's bytes as retrieved, as 64 lowercase hexadecimal digits. It answers 'has the file changed since'. Engines never compute or check it.",
+      "examples": ["9f2c41b1d1b6e0a8a56e7c3d2f4b8a90c1e3d5f7a9b0c2d4e6f8a0b1c3d5e07a"]
+    },
+    "DataGenerator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "name"],
+      "description": "Who produced the data: a person or a model, and which. A reviewer of a generated deck can see that a table came from a model, and from which one.",
+      "properties": {
+        "type": { "type": "string", "enum": ["human", "model"], "description": "'human' for a person, 'model' for a language model or another generating program." },
+        "name": { "type": "string", "minLength": 1, "description": "The person, model or tool, as its owner names it.", "examples": ["metricgen 2.1", "Avery Chen"] }
+      },
+      "examples": [{ "type": "model", "name": "metricgen 2.1" }]
     },
     "DatasetId": {
       "type": "string",
@@ -4839,7 +4907,8 @@
             "title": "Revenue by quarter",
             "columns": ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, "Costs"],
             "rows": [["Q1", 12, 8], ["Q2", 18, 11], ["Q3", 24, 15]],
-            "source": { "src": "./data/revenue.csv", "retrieved": "2026-10-05" }
+            "datasource": { "src": "./data/revenue.csv" },
+            "retrieved": "2026-10-05"
           }
         }
       ]
@@ -4881,10 +4950,12 @@
           "description": "Rows of scalar cells (string, number, boolean, null); each row aligns by index with columns.",
           "examples": [[["Q1", 12, 8], ["Q2", 18, 11]]]
         },
-        "source": {
-          "$ref": "#/$defs/DataSourceRef",
-          "description": "Optional provenance. Engines never read, fetch or refresh it."
-        }
+        "datasource": { "$ref": "#/$defs/DataSourceChoice" },
+        "query": { "$ref": "#/$defs/DataQuery" },
+        "retrieved": { "$ref": "#/$defs/DataRetrieved" },
+        "version": { "$ref": "#/$defs/DataVersion" },
+        "sha256": { "$ref": "#/$defs/DataSha256" },
+        "generator": { "$ref": "#/$defs/DataGenerator" }
       }
     },
     "DatasetRef": {

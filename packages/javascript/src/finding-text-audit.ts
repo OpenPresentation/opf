@@ -494,18 +494,6 @@ const layoutMonotony: RuleText = (finding) => {
   };
 };
 
-const straightQuotes: RuleText = (finding) => {
-  const open = measuredText(finding, "open");
-  const close = measuredText(finding, "close");
-  const text = unquote(match(finding.message, /: ("(?:[^"\\]|\\.)*")\.$/)?.[1]);
-  if (!open || !close) return undefined;
-  const fix = finding.fixes?.find((entry) => entry.id === "use-typographic-quotes");
-  return {
-    message: `${text ? `${code(brief(text, 50))} uses` : "This text uses"} straight quotation marks; this deck's language uses ${open}…${close}.`,
-    next: fix ? `apply the quick fix, or type ${open} and ${close} instead.` : `type ${open} and ${close} instead, and the matching single marks.`,
-  };
-};
-
 const chartDualAxis: RuleText = (finding) => {
   const names = match(finding.message, /^The combo chart plots (.+) on a second value axis/)?.[1];
   return {
@@ -535,6 +523,16 @@ const chartValueNotNumeric: RuleText = (finding) => {
     next: fix ? `${sentence((fix.title.charAt(0).toLowerCase() + fix.title.slice(1)).replace(/\.$/, ""))}` : `write a number (12, -3.5, 1e6) and put units, currency or percent in the column ${code("format")}.`,
   };
 };
+
+const datasourceCredentials: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "remove the credential from the data source and keep the secret in your own store; name the connection in `connector` or `extensions`.",
+});
+
+const datasetStale: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "take the data from its data source again and update `retrieved`, or change the data source's `refreshEvery`.",
+});
 
 const chartMappingAdapted: RuleText = (finding) => ({
   message: keep(cap(finding.message)),
@@ -709,6 +707,8 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/image-resolution": imageResolution,
   "opf/chart-value-not-numeric": chartValueNotNumeric,
   "opf/chart-mapping-adapted": chartMappingAdapted,
+  "opf/datasource-credentials": datasourceCredentials,
+  "opf/dataset-stale": datasetStale,
   "opf/chart-highlight-adapted": chartHighlightAdapted,
   "opf/chart-series-dropped": chartSeriesDropped,
   "opf/code-highlight-out-of-range": codeHighlightOutOfRange,
@@ -727,7 +727,6 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/centered-body": centeredBody,
   "opf/tight-spacing": tightSpacing,
   "opf/layout-monotony": layoutMonotony,
-  "opf/straight-quotes": straightQuotes,
   "opf/chart-dual-axis": chartDualAxis,
   "opf/chart-pie-many-slices": chartPieManySlices,
 };

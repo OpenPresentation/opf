@@ -157,6 +157,22 @@
       "basis": "opf.schema.json#/$defs/DatasetRef"
     },
     {
+      "id": "core.valid.datasource-by-id",
+      "file": "core/valid/datasource-by-id.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A dataset names an entry of the root `datasources` map by id and records what it took, when and by whom.",
+      "basis": "opf.schema.json#/$defs/DataSources and #/$defs/Dataset"
+    },
+    {
+      "id": "core.valid.datasource-inline",
+      "file": "core/valid/datasource-inline.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A dataset and inline chart data each write their data source inline, as an object.",
+      "basis": "opf.schema.json#/$defs/DataSourceChoice"
+    },
+    {
       "id": "core.valid.asset-referenced",
       "file": "core/valid/asset-referenced.opf.json",
       "levels": ["reader", "writer"],
@@ -531,6 +547,30 @@
       "expect": { "valid": false, "errorAt": "/slides/0/chart/data/dataset" },
       "description": "A chart names a dataset that does not exist.",
       "basis": "opf.schema.json#/$defs/DatasetRef (an unknown id is an error); docs/validate.md, rule opf/dataset-unknown"
+    },
+    {
+      "id": "core.invalid.datasource-unknown",
+      "file": "core/invalid/datasource-unknown.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/datasets/revenue/datasource" },
+      "description": "A dataset names a data source that is not in the root `datasources` map.",
+      "basis": "opf.schema.json#/$defs/DataSourceChoice (a string is only ever an id; an unknown id is an error); docs/validate.md, rule opf/datasource-unknown"
+    },
+    {
+      "id": "core.invalid.dataset-source-leftover",
+      "file": "core/invalid/dataset-source-leftover.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/datasets/revenue/source" },
+      "description": "A dataset keeps the nested `source` object that OPF 0.37 removed; `opf fix` rewrites it.",
+      "basis": "opf.schema.json#/$defs/Dataset (closed object)"
+    },
+    {
+      "id": "core.invalid.chart-data-source-leftover",
+      "file": "core/invalid/chart-data-source-leftover.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/chart/data" },
+      "description": "Inline chart data keeps the nested `source` object that OPF 0.37 removed.",
+      "basis": "opf.schema.json#/$defs/ChartData (closed object)"
     },
     {
       "id": "core.invalid.asset-unknown",

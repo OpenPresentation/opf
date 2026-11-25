@@ -187,7 +187,8 @@ describe('Asset.format is removed', () => {
 describe('ChartDataSource is removed', () => {
   test('chart data is inline or a dataset; src, sheet and range are errors', () => {
     const chart = (data) => deck({ datasets: { r: { columns: ['Q', 'V'], rows: [['Q1', 1]] } } }, { chart: { type: 'column', data } });
-    valid(chart({ columns: ['Q', 'V'], rows: [['Q1', 1]], source: { src: './revenue.csv', sheet: 'Summary', range: 'A1:B2' } }));
+    valid(chart({ columns: ['Q', 'V'], rows: [['Q1', 1]], datasource: { src: './revenue.csv' }, query: 'Summary!A1:B2' }));
+    invalid(chart({ columns: ['Q', 'V'], rows: [['Q1', 1]], source: { src: './revenue.csv', sheet: 'Summary', range: 'A1:B2' } }), '/slides/0/chart/data/source');
     valid(chart({ dataset: 'r' }));
     invalid(chart({ src: 'asset:revenue' }), '/slides/0/chart/data');
     invalid(chart({ src: './revenue.csv', sheet: 'Summary', range: 'A1:B2', columns: ['Q', 'V'] }), '/slides/0/chart/data');

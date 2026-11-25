@@ -15,10 +15,13 @@
 // Playwright image after scripts/libreoffice/install.sh.
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { release } from "node:os";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { prepareOutputDirectory } from "./output.mjs";
+import { prepareOutputDirectory, writeNativeRun } from "./output.mjs";
+import { fileIdentity, impressResult, impressRun, PICTURE_WIDTH, systemFrom, utc } from "../native-acceptance/apps/impress/from-libreoffice.mjs";
+import { picturePath } from "../native-acceptance/core/result/result.mjs";
 import { containment, compareStructure, inkOutside, missingWords, slideStructure, sourceBleeds, verdict } from "./checks.mjs";
 import { corpusCases, qualificationCases, qualificationManifest, selectCases } from "./corpus.mjs";
 import { featuresMarkdown, gradeFeatures } from "./features.mjs";
@@ -140,7 +143,9 @@ async function compareImages(a, b) {
 }
 
 // `control`: the same measurements on OPF's own PDF of the deck; it shows the instrument, not LibreOffice, decides.
-async function measure(entry, exported, model, profile, paths, { control = false } = {}) {
+// `native`: { dir, pictures: [], slideCount } for the shared native result format: each visible slide's rasterized page is written
+// to <dir>/slides/slide-NNN.png (numbered by the slide's place in the file) and LibreOffice's own slide count is kept.
+async function measure(entry, exported, model, profile, paths, { control = false, native = null } = {}) {
   const result = { id: entry.id, profile: profile.name, slides: model.slides.filter((slide) => !slide.hidden).length, converted: existsSync(paths.pdf) };
   if (!result.converted) {
     result.conversionError = paths.conversionLog;
@@ -179,13 +184,22 @@ async function measure(entry, exported, model, profile, paths, { control = false
       entrySlide.smartArtAsGraphics = entrySlide.smartArtMissing.length === new Set(smartArtStrings.map((word) => word.toLowerCase())).size;
     }
     const preview = exported.previews[index];
+    let drawn = null;
     if (preview) {
       const { width } = await sharp(preview).metadata();
-      const drawn = await rasterize(doc, index + 1, { scale: width / page.width });
+      drawn = await rasterize(doc, index + 1, { scale: width / page.width });
       entrySlide.preview = await compareImages(preview, drawn.png);
       if (!control) await sideBySide(preview, drawn.png, path.join(paths.caseDir, `compare-${profile.name}-${String(slide.number).padStart(2, "0")}.png`));
     } else if (!control) {
       writeFileSync(path.join(paths.caseDir, `libreoffice-${profile.name}-${String(slide.number).padStart(2, "0")}.png`), raster.png);
+    }
+    if (native) {
+      // LibreOffice's page at the preview's size (the compare step's pair), or PICTURE_WIDTH wide without a preview.
+      drawn ??= await rasterize(doc, index + 1, { scale: PICTURE_WIDTH / page.width });
+      const picture = picturePath(slide.number);
+      mkdirSync(path.join(native.dir, "slides"), { recursive: true });
+      writeFileSync(path.join(native.dir, picture), drawn.png);
+      native.pictures[index] = { path: picture, size: [drawn.width, drawn.height] };
     }
     result.perSlide.push(entrySlide);
   }
@@ -194,6 +208,7 @@ async function measure(entry, exported, model, profile, paths, { control = false
   if (result.roundTrip.converted) {
     const roundTripBytes = readFileSync(paths.roundTrip);
     const reread = readPptx(roundTripBytes);
+    if (native) native.slideCount = reread.slides.length;
     const rereadVisible = reread.slides.filter((slide) => !slide.hidden);
     result.roundTrip.findings = compareStructure(slideStructure({ slides: visible }), slideStructure({ slides: rereadVisible }));
     result.roundTrip.kinds = rereadVisible.map(shapeKinds);
@@ -253,6 +268,7 @@ function summaryMarkdown(report) {
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
+  const runStarted = utc();
   const soffice = options.soffice ?? (existsSync(environment.libreoffice.program) ? environment.libreoffice.program : "soffice");
   prepareOutputDirectory(options.out);
   const core = await import("@openpresentation/opf");
@@ -312,7 +328,14 @@ async function main() {
     }
   }
 
+  // The shared native result format (native/, docs/libreoffice.md): one file per case and profile. A retained PPTX that this checkout
+  // did not export (issue-925-original) is left out: the format names the OPF version that exported a file, and that one is unknown.
+  const natives = [];
+  const nativeDir = path.join(options.out, "native");
+  const nativeCase = (item) => (item.entry.pptx && !item.entry.qualification ? null : item);
+
   for (const name of options.profiles) {
+    const started = utc();
     const dir = path.join(options.out, "profiles", name);
     mkdirSync(dir, { recursive: true });
     const profile = { ...(await prepareProfile(name, dir)), dir };
@@ -326,13 +349,24 @@ async function main() {
     console.log(`${name}: converted in ${pdf.seconds} s (pdf) and ${roundTrip.seconds} s (pptx)`);
     for (const item of prepared) {
       const paths = { pdf: path.join(dir, "pdf", `${item.entry.id}.pdf`), roundTrip: path.join(dir, "roundtrip", `${item.entry.id}.pptx`), caseDir: item.caseDir, conversionLog: `soffice status ${pdf.status}: ${(pdf.stderr || pdf.error || "").trim().slice(0, 400)}` };
+      const native = nativeCase(item) ? { dir: path.join(nativeDir, "files", fileIdentity(item.entry.id, name).id), pictures: [] } : null;
       let result;
       try {
-        result = await measure(item.entry, item.exported, item.model, profile, paths);
+        result = await measure(item.entry, item.exported, item.model, profile, paths, { native });
       } catch (error) {
         result = failed(item, name, error);
       }
       record(item, name, result);
+      if (native) {
+        // A file LibreOffice could not convert to PDF did not open: its result has open failed and no copy.
+        const converted = existsSync(paths.pdf);
+        const resaved = converted && existsSync(paths.roundTrip);
+        if (resaved) {
+          mkdirSync(native.dir, { recursive: true });
+          copyFileSync(paths.roundTrip, path.join(native.dir, "resaved.pptx"));
+        }
+        natives.push({ item, name, result, native, resaved, converted, unchanged: sha256(readFileSync(item.file)) === item.sha256, started, finished: utc() });
+      }
     }
   }
   report.cases.sort((left, right) => cases.findIndex((entry) => entry.id === left.id) - cases.findIndex((entry) => entry.id === right.id));
@@ -354,7 +388,37 @@ ${featuresMarkdown(report.features)}
   if (judged) console.log(`baseline (opf profile): ${report.baseline.cases - baselineFailures.length}/${report.baseline.cases} pass${baselineFailures.length ? `; failing: ${baselineFailures.map((entry) => entry.id).join(", ")}` : ""}`);
   const controlFailures = report.cases.filter((entry) => entry.profiles.control?.status === "fail").map((entry) => entry.id);
   if (controlFailures.length) console.log(`control failures (the instrument or OPF's own PDF, not LibreOffice): ${controlFailures.join(", ")}`);
+  if (natives.length) writeNative(nativeDir, report.environment, options.profiles, natives, runStarted);
   if (options.failOnDefect && judged && baselineFailures.length) process.exitCode = 1;
+}
+
+/** native/run.json and native/files/<id>/result.json (scripts/native-acceptance/apps/impress/from-libreoffice.mjs), validated. */
+function writeNative(directory, environment, profiles, natives, started) {
+  const system = systemFrom({ platform: process.platform, release: existsSync("/etc/os-release") ? environment.os : release() });
+  const results = natives.map(({ item, name, result, native, resaved, converted, unchanged, started: from, finished }) => {
+    const sizes = native.pictures.filter(Boolean).map((picture) => picture.size.join("x"));
+    return impressResult({
+      caseId: item.entry.id,
+      profile: name,
+      environment,
+      system,
+      input: { path: path.basename(item.file), sha256: item.sha256, unchangedAfterRun: unchanged },
+      hidden: item.model.slides.map((slide) => slide.hidden),
+      measured: result,
+      facts: {
+        converted,
+        resaved,
+        ...(native.slideCount !== undefined ? { slideCount: native.slideCount } : {}),
+        pictures: Array.from({ length: item.model.slides.filter((slide) => !slide.hidden).length }, (_, index) => native.pictures[index]?.path ?? null),
+        ...(sizes.length && new Set(sizes).size === 1 ? { pixelSize: native.pictures.find(Boolean).size } : {}),
+      },
+      started: from,
+      finished,
+    });
+  });
+  writeNativeRun(directory, impressRun({ environment, system, profiles, started, finished: utc(), results }), results);
+  const shown = path.relative(root, directory);
+  console.log(`native: ${results.length} results in ${shown.startsWith("..") ? directory : shown}`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {

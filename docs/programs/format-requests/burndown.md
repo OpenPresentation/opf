@@ -9,7 +9,7 @@ Every item also meets the definition of done in the README; the acceptance colum
 | FR-01 | CR 7: an `id` on the document | [Below](#fr-01-the-document-id-cr-7) | done |
 | FR-02 | CR 6: ids on list items, bullets, timeline events and table rows | [Below](#fr-02-ids-inside-a-deck-cr-6) | done |
 | FR-03 | opf#1297: links to a slide of the same deck, `slide:<id>` | [Below](#fr-03-links-to-a-slide-opf1297) | done |
-| FR-04 | CR 1 with CR 3: data sources and a flat dataset | [Below](#fr-04-data-sources-and-a-flat-dataset-cr-1-with-cr-3) | in-progress |
+| FR-04 | CR 1 with CR 3: data sources and a flat dataset | [Below](#fr-04-data-sources-and-a-flat-dataset-cr-1-with-cr-3) | done |
 | FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | todo |
 | FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | todo |
 | FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | in-progress |
@@ -117,17 +117,17 @@ away entirely: OPF adds no aliases before 1.0, and `opf fix` rewrites an older `
 
 Acceptance:
 
-- The root `datasources` is a map of data sources. A data source takes `title`, `description`, `connector`, `src`, `license`, `refresh`
+- The root `datasources` is a map of data sources. A data source takes `title`, `description`, `connector`, `src`, `license`, `refreshEvery`
   (an ISO 8601 duration that no engine acts on) and `extensions`. A data source never holds credentials.
 - A dataset takes, beside `columns` and `rows`: `datasource` (a string that is always the id of an entry in `datasources`, or an inline
   data source object of the same shape), `query` (the selection in the data source's own language, which replaces `sheet` and `range`),
   `retrieved` (a date or a date-time), `version` (a free string the source gives its snapshot), `sha256` (the hash of the source file's
-  bytes as retrieved) and `generator` (`{ kind: "human" | "model", name }`). `source.fields` is dropped and so are `queryLanguage` and any
+  bytes as retrieved) and `generator` (`{ type: "human" | "model", name }`). `source.fields` is dropped and so are `queryLanguage` and any
   transform hash.
 - Inline chart data (`chart.data` with columns and rows) takes the same keys, and a chart that references a dataset reports the
   dataset's.
 - Errors: `datasource-unknown` (an unknown data source id). Warnings: `datasource-credentials` (a `src` with a user and password, or a
-  query parameter named like a key or token) and `dataset-stale` (with a date passed, `retrieved` older than the data source's `refresh`).
+  query parameter named like a key or token) and `dataset-stale` (with a date passed, `retrieved` older than the data source's `refreshEvery`).
 - A 0.35 or 0.36 document with `source` fails validation until `opf fix` rewrites it: `src` becomes `datasource: { src }`, `retrieved` and
   the rest move up, `sheet` and `range` fold into `query` (`"FY26!A1:C13"`), `fields` is dropped. The release notes say it. The gallery
   examples use no `source`, so only four docs pages and the skills change.
@@ -136,6 +136,13 @@ Acceptance:
 - Conformance: valid decks with a data source by id and inline, and invalid decks with an unknown data source and a leftover `source`.
 
 Progress log:
+
+- 2026-11-25: done, in the pull request that adds this line. Checked in PowerPoint twice, the second time after merging `main`: the
+  root `datasources` and every data source key of a dataset and of inline chart data come back the same from the export and from
+  PowerPoint's own save. A released 0.36.0 importer reads the file as a valid deck but restores no shared dataset; charts and tables
+  import the values they show (accepted for the one breaking change). `query` is optional, as the owner asked: a CSV file or rows typed
+  into the deck need none. Two key names changed in a follow-up (FR-04b, the owner's picks from the key-names study): `generator.kind` is now
+  `generator.type` and a data source's `refresh` is now `refreshEvery`. Nothing was released with the old names: no alias, no `opf fix` rewrite.
 
 ## FR-05: typed columns (CR 2)
 

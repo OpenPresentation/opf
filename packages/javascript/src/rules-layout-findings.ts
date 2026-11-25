@@ -9,9 +9,8 @@ import {
 	TABLE_NOMINAL_SIZE,
 	layoutTable,
 } from './composition.js';
-import { quoteLanguage, quoteMarksFor } from './quote-marks.js';
 import type { RuleSlide, ValidationRule } from './rule-context.js';
-import { plainText, pointerOfDotted, runsOf } from './rule-content.js';
+import { plainText, pointerOfDotted } from './rule-content.js';
 import { type Rec, rec } from './rule-design.js';
 import {
 	CENTERED_BODY_CHARACTERS,
@@ -23,7 +22,6 @@ import {
 	TIGHT_MARGIN_INCHES,
 	centeredBodyRule,
 	layoutMonotonyRule,
-	straightQuotesRule,
 	textShrunkRule,
 	tightSpacingRule,
 } from './validation-rule-info.js';
@@ -287,77 +285,5 @@ const layoutMonotony: ValidationRule = {
 	},
 };
 
-// ------------------------------------------------------------------ straight-quotes
-
-/** The roles of prose a reader sees; table cells, metrics and timeline labels hold data, identifiers and measurements. */
-const PROSE_ROLES = new Set(['title', 'subtitle', 'tag', 'body', 'list', 'list-description', 'quote', 'quote-footer']);
-const LETTER = /[\p{L}\p{N}]/u;
-/** What may stand before an opening quotation mark: a space, an opening bracket or a dash. */
-const OPENING = /[\s([{—–-]/u;
-
-/**
- * The straight marks in `text` that are used as quotation marks. Kept narrow so the finding has few false positives: a `"` after a
- * digit is an inch mark (12"); a `'` between letters or digits is an apostrophe (don't, O'Brien, rock'n'roll), after a digit a foot mark
- * (5'), and at the start of a word before a digit an elision ('90s). A lone `'` at a word's end is a plural possessive (the students');
- * single quotes count only as an opening mark at the start of a word with a closing mark at the end of a later word.
- */
-function straightQuoteMarks(text: string): { double: number; single: number } {
-	let double = 0, single = 0, open = false;
-	for (let i = 0; i < text.length; i++) {
-		const char = text[i], before = text[i - 1] ?? '', after = text[i + 1] ?? '';
-		if (char === '"') {
-			if (!/\d/.test(before)) double++;
-		} else if (char === "'") {
-			const wordAfter = LETTER.test(after), opens = before === '' || OPENING.test(before);
-			if ((LETTER.test(before) && wordAfter) || /\d/.test(before)) continue;
-			if (opens && wordAfter && !/\d/.test(after)) open = true;
-			else if (!opens && !wordAfter && open) {
-				single += 2;
-				open = false;
-			}
-		}
-	}
-	return { double, single };
-}
-
-/** `text` with its straight double quotes turned into the language's marks: an opening mark at the start of a word, a closing one elsewhere. */
-function curlDoubleQuotes(text: string, marks: { open: string; close: string }): string {
-	return text.replace(/(^|.)"/gsu, (whole, before: string) => (/\d/.test(before) ? whole : `${before}${before === '' || OPENING.test(before) ? marks.open : marks.close}`));
-}
-
-const straightQuotes: ValidationRule = {
-	info: straightQuotesRule,
-	run(context) {
-		for (const slide of context.slides) {
-			const marks = quoteMarksFor(quoteLanguage(context.document, slide.index));
-			// A language with no typographic pair of its own draws ASCII quotes; there is nothing better to suggest.
-			if (marks.open === '"') continue;
-			for (const tv of slide.texts) {
-				if (!PROSE_ROLES.has(tv.role)) continue;
-				let double = 0, single = 0;
-				const fixes: { op: 'replace'; path: string; value: string }[] = [];
-				for (const run of runsOf(tv)) {
-					if (run.style.code === true) continue;
-					const found = straightQuoteMarks(run.text);
-					double += found.double;
-					single += found.single;
-					if (found.double) fixes.push({ op: 'replace', path: run.index === -1 ? run.path : `${run.path}${typeof tv.value !== 'string' && typeof tv.value[run.index] === 'string' ? '' : '/text'}`, value: curlDoubleQuotes(run.text, marks) });
-				}
-				if (!double && !single) continue;
-				const kinds = [double ? `${double} straight double quote${double === 1 ? '' : 's'} (")` : '', single ? `${single} straight single quotes (')` : ''].filter(Boolean).join(' and ');
-				const text = plainText(tv.value);
-				context.report(straightQuotesRule, {
-					path: tv.path,
-					slide,
-					message: `Text has ${kinds}: ${JSON.stringify(text.length > 60 ? `${text.slice(0, 57)}...` : text)}.`,
-					help: `Use the typographic quotation marks of the deck's language (${marks.open}...${marks.close}).${tv.role === 'quote' ? ' A quote payload adds its own marks around the whole quote.' : ''}`,
-					measured: { double, single, open: marks.open, close: marks.close },
-					...(!single && fixes.length ? { fixes: [{ id: 'use-typographic-quotes', title: `Use ${marks.open}${marks.close}`, kind: 'patch' as const, safe: false, patch: fixes }] } : {}),
-				});
-			}
-		}
-	},
-};
-
-/** In report order: layout (text-shrunk, centered-body, tight-spacing, layout-monotony), then content (straight-quotes). */
-export const layoutFindingRules: ValidationRule[] = [textShrunk, centeredBody, tightSpacing, layoutMonotony, straightQuotes];
+/** In report order: text-shrunk, centered-body, tight-spacing, layout-monotony. */
+export const layoutFindingRules: ValidationRule[] = [textShrunk, centeredBody, tightSpacing, layoutMonotony];

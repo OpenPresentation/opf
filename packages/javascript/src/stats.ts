@@ -61,8 +61,8 @@ export interface DatasetFact {
   title: string | null;
   columns: number;
   rows: number;
-  /** `source.src` when the dataset declares a source, else null. */
-  source: string | null;
+  /** The data source the dataset names: the id of an entry of `datasources`, or an inline data source's `src`; null when it names none. */
+  datasource: string | null;
   /** Charts and tables that reference it. */
   referencedBy: number;
 }
@@ -170,9 +170,9 @@ export interface PresentationStats {
     speakerPhotos: number;
     videos: number;
   };
-  charts: { total: number; byType: Record<string, number>; data: { inline: number; dataset: number; withSource: number } };
+  charts: { total: number; byType: Record<string, number>; data: { inline: number; dataset: number; withDatasource: number } };
   tables: { total: number; datasetBacked: number; rows: number; columns: number; items: TableFact[] };
-  datasets: { count: number; withSource: number; items: DatasetFact[] };
+  datasets: { count: number; withDatasource: number; items: DatasetFact[] };
   citations: {
     references: number;
     /** Reference ids cited by at least one run, in declaration order. */
@@ -478,7 +478,7 @@ function compute(presentation: unknown, options: StatsOptions, onFile?: (src: st
   // ---- slides --------------------------------------------------------------------------------
   const payloadCounts = { text: 0, items: 0, bullets: 0, quote: 0, metric: 0, code: 0, timeline: 0, diagram: 0, chart: 0, table: 0, image: 0, video: 0, blocks: 0, cells: 0, groups: 0, maxDepth: 0 };
   const layouts = new Map<string, number>(), chartTypes = new Map<string, number>(), extensions = new Set<string>();
-  const chartData = { inline: 0, dataset: 0, withSource: 0 };
+  const chartData = { inline: 0, dataset: 0, withDatasource: 0 };
   const tableItems: TableFact[] = [];
   let tableRows = 0, tableColumns = 0, datasetBackedTables = 0, chartTotal = 0, captions = 0;
   const hidden: StatsSlideRef[] = [], withoutNotes: StatsSlideRef[] = [], sections: PresentationStats['slides']['sections'] = [];
@@ -535,7 +535,7 @@ function compute(presentation: unknown, options: StatsOptions, onFile?: (src: st
         if (isRecord(data)) {
           if (typeof data.dataset === 'string') { chartData.dataset++; bump(datasetUse, data.dataset); }
           else if (Array.isArray(data.columns) || Array.isArray(data.rows)) chartData.inline++;
-          if (isRecord(data.source)) chartData.withSource++;
+          if (data.datasource !== undefined) chartData.withDatasource++;
         }
       }
       if (isRecord(node.table)) {
@@ -622,7 +622,7 @@ function compute(presentation: unknown, options: StatsOptions, onFile?: (src: st
     title: str(value.title),
     columns: Array.isArray(value.columns) ? value.columns.length : 0,
     rows: Array.isArray(value.rows) ? value.rows.length : 0,
-    source: isRecord(value.source) ? str(value.source.src) : null,
+    datasource: typeof value.datasource === 'string' ? value.datasource : isRecord(value.datasource) ? str(value.datasource.src) : null,
     referencedBy: datasetUse.get(id) ?? 0,
   }));
   const references = Array.isArray(deck.references) ? deck.references.filter(isRecord) : [];
@@ -687,7 +687,7 @@ function compute(presentation: unknown, options: StatsOptions, onFile?: (src: st
     images,
     charts: { total: chartTotal, byType: sortedCounts(chartTypes), data: chartData },
     tables: { total: tableItems.length, datasetBacked: datasetBackedTables, rows: tableRows, columns: tableColumns, items: tableItems },
-    datasets: { count: datasetItems.length, withSource: datasetItems.filter((item) => item.source !== null).length, items: datasetItems },
+    datasets: { count: datasetItems.length, withDatasource: datasetRecords.filter(([, value]) => value.datasource !== undefined).length, items: datasetItems },
     citations: { references: references.length, cited, citations: total.citations, footnotes: total.footnotes, captions, links: total.links },
     variables: variableFacts,
     assets: { registry: registryFacts, uses, embeddedBytes: embeddedTotal },

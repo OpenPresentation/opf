@@ -106,6 +106,8 @@ const SITES = [
   ['asset', ['slides', 0, 'design', 'background', 'src'], { slides: [{ design: { background: { type: 'image', src: '' } } }] }],
   ['dataset', ['slides', 0, 'chart', 'data', 'dataset'], { slides: [{ chart: { data: { dataset: '' } } }] }],
   ['dataset', ['slides', 0, 'table', 'dataset'], { slides: [{ table: { dataset: '' } }] }],
+  ['datasource', ['datasets', 'sales', 'datasource'], { datasets: { sales: { columns: ['a'], rows: [], datasource: '' } } }],
+  ['datasource', ['slides', 0, 'chart', 'data', 'datasource'], { slides: [{ chart: { data: { columns: ['a'], rows: [], datasource: '' } } }] }],
   ['datasetColumn', ['slides', 0, 'table', 'fields', 0], { slides: [{ table: { dataset: 'a', fields: [''] } }] }],
   ['datasetColumn', ['slides', 0, 'chart', 'data', 'fields', 1], { slides: [{ chart: { data: { dataset: 'a', fields: ['x', ''] } } }] }],
   ['datasetColumn', ['slides', 0, 'chart', 'mapping', 'category'], { slides: [{ chart: { mapping: { category: '' } } }] }],
@@ -165,6 +167,7 @@ assert.deepEqual(facts.references, [{ id: 'smith2020', text: 'Smith, 2020.' }]);
 assert.equal(facts.narrative, 'classic-story');
 assert.deepEqual(factsOf(undefined).assets, []);
 assert.deepEqual(factsOf({ assets: 3, datasets: [], variables: 'x', references: {} }).datasets, [], 'malformed parts are ignored');
+assert.deepEqual(factsOf({ datasources: { warehouse: { title: 'Finance warehouse', connector: 'postgres' }, feed: { src: './a.csv' }, bare: {} } }).datasources, [{ id: 'warehouse', title: 'Finance warehouse', detail: 'postgres' }, { id: 'feed', title: '', detail: './a.csv' }, { id: 'bare', title: '', detail: '' }], 'the data sources of a draft');
 // The same deck as JSON text and as YAML text gives the same facts (the JSON reader skips the rows).
 const jsonText = JSON.stringify(DECK);
 const fromJson = factsOf(jsonDeckParts(parseTree(jsonText), getNodeValue));
@@ -185,6 +188,8 @@ const SALES = '"datasets":{"sales":{"columns":["Quarter","Revenue"],"rows":[]},"
 const JSON_LISTS = [
   ['{"assets":{"logo":"a.png"},"slides":[{"image":"|"}]}', ['asset:logo'], []],
   [`{${SALES},"slides":[{"chart":{"data":{"dataset":"|"}}}]}`, ['sales', 'pipeline'], []],
+  ['{"datasources":{"warehouse":{"connector":"postgres"},"feed":{"src":"./a.csv"}},"datasets":{"sales":{"columns":["Q"],"rows":[],"datasource":"|"}}}', ['warehouse', 'feed'], ['sales']],
+  ['{"datasources":{"warehouse":{}},"slides":[{"chart":{"data":{"columns":["Q"],"rows":[],"datasource":"|"}}}]}', ['warehouse'], []],
   [`{${SALES},"slides":[{"table":{"dataset":"sales","fields":["|"]}}]}`, ['Quarter', 'Revenue'], ['Stage']],
   [`{${SALES},"slides":[{"chart":{"data":{"dataset":"pipeline"},"mapping":{"series":["|"]}}}]}`, ['Stage'], ['Quarter']],
   ['{"references":[{"id":"r1","text":"R"}],"slides":[{"title":[{"text":"x","cite":"|"}]}]}', ['r1'], []],
