@@ -1,4 +1,4 @@
-// NT-04b: what a .pptx holds, per slide, in the shared object vocabulary (core/result/README.md, 13 kinds). Reads OPF's
+// NT-04b: what a .pptx holds, per slide, in the shared object vocabulary (core/result/README.md, 15 kinds). Reads OPF's
 // export and an application's own PowerPoint copy alike, so outcomes.mjs can compare the two. Pure Node: fflate and
 // @rgrove/parse-xml, the zip and XML libraries the pptx package already depends on, through createRequire.
 //
@@ -14,6 +14,14 @@
 //   "OPF furniture N part K line L"  index.js (footer, slide number, date)
 //   "OPF diagram N"              diagram-provenance.js (diagramName)
 // A rename there changes the kinds here: search for these prefixes when one moves.
+//
+// Diagrams (NT-01b): a live SmartArt graphic frame (DrawingML's dgm:relIds) is kind "diagram", with the layout and the node
+// count its parts state in `diagram`. OPF's own diagrams ("OPF diagram N": Mermaid, DOT, PlantUML and the arrangements
+// drawn as shapes) are groups of ordinary shapes in every application, so they stay kind "group" (label "diagram"): their
+// question is whether the shapes stay shapes, which the group's members answer. "Did it stay a live diagram" is asked of
+// the SmartArt frame alone, and its outcome answers it (native: still a frame; picture; changed: drawn as a group).
+// Media (NT-01b): a picture carrying a video or audio file (a:videoFile, a:audioFile, a:wavAudioFile, a:quickTimeFile, or
+// PowerPoint 2010's p14:media) is kind "media". Alt text: every object's DrawingML description (p:cNvPr@descr) is `alt`.
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
@@ -30,6 +38,7 @@ const TABLE_URI = 'http://schemas.openxmlformats.org/drawingml/2006/table';
 const CHART_URI = 'http://schemas.openxmlformats.org/drawingml/2006/chart';
 const CHARTEX_URI = 'http://schemas.microsoft.com/office/drawing/2014/chartex';
 const DIAGRAM_URI = 'http://schemas.openxmlformats.org/drawingml/2006/diagram';
+const MEDIA_FILES = { videoFile: 'video', quickTimeFile: 'video', audioFile: 'audio', wavAudioFile: 'audio', audioCd: 'audio' };
 const BULLETS = ['buNone', 'buChar', 'buAutoNum', 'buBlip'];
 const SHAPE_ELEMENTS = new Set(['sp', 'pic', 'graphicFrame', 'cxnSp', 'grpSp', 'contentPart']);
 const FOOTER_ROLES = { ftr: 'footer', sldNum: 'slide-number', dt: 'date' };
@@ -38,7 +47,7 @@ const FOOTER_ROLES = { ftr: 'footer', sldNum: 'slide-number', dt: 'date' };
 export const LABELS = Object.freeze([
   'slide title', 'body text', 'other text', 'list items', 'table', 'chart (native)', 'chart (extended)', 'shape', 'line/connector', 'group', 'diagram',
   'picture', 'link on text', 'link on a shape', 'link on a cell', 'link to a slide', 'presenter notes', 'footer / slide number / date', 'hidden slide',
-  'empty text box',
+  'empty text box', 'media',
 ]);
 
 // ---- XML helpers: names are compared without their prefix, so a file that binds other prefixes reads the same.
@@ -272,6 +281,46 @@ function chartInfo(pkg, part) {
   return { types, series, legend: legend ? (kid(legend, 'legendPos')?.attributes.val ?? 'present') : null };
 }
 
+// ---- diagrams and media
+/**
+ * A SmartArt frame's layout and node count as its parts state them: { layoutId?, layout?, nodes? }, the names PowerPoint's
+ * object model uses (SmartArt.Layout.Id and .Name, the node count): layoutId the layout definition's uniqueId, layout its title.
+ */
+function diagramInfo(pkg, data, rels) {
+  const relIds = kid(data, 'relIds');
+  const target = (name) => {
+    const id = relAttr(relIds, name);
+    return id && rels[id] && !rels[id].external ? rels[id].target : null;
+  };
+  const info = {};
+  const layoutPart = target('lo');
+  const layoutDef = layoutPart ? pkg.xml(layoutPart) : null;
+  if (layoutDef?.attributes.uniqueId) info.layoutId = layoutDef.attributes.uniqueId;
+  const title = kid(layoutDef, 'title')?.attributes.val;
+  if (title) info.layout = title;
+  const dataPart = target('dm');
+  const model = dataPart ? pkg.xml(dataPart) : null;
+  if (model) {
+    const points = kids(kid(model, 'ptLst'), 'pt');
+    // A content node is a point of type "node" (the default) or "asst"; doc, transitions and presentation points are not.
+    info.nodes = points.filter((point) => ['node', 'asst'].includes(point.attributes.type ?? 'node')).length;
+    // A data model without a layout part still names its layout on the document point.
+    const documentLayout = at(points.find((point) => point.attributes.type === 'doc'), 'prSet')?.attributes.loTypeId;
+    if (!info.layoutId && documentLayout) info.layoutId = documentLayout;
+  }
+  return info;
+}
+
+/** "video" or "audio" when a picture's p:nvPr carries a media file; null otherwise. */
+function mediaOf(nvPr) {
+  for (const child of elements(nvPr)) {
+    const name = local(child.name);
+    if (MEDIA_FILES[name]) return MEDIA_FILES[name];
+    if (name === 'extLst' && descendants(child, 'media').length > 0) return 'video';
+  }
+  return null;
+}
+
 // ---- links
 function linkOf(node, rels, slideIndexOfPart) {
   const id = relAttr(node);
@@ -287,10 +336,11 @@ function linkOf(node, rels, slideIndexOfPart) {
   return link;
 }
 
-// ---- the round's label and the shared kind (rt_objects.py kind_of, then the mapping to the 13 kinds)
+// ---- the round's label and the shared kind (rt_objects.py kind_of, then the mapping to the 15 kinds)
 function labelOf(item) {
   const name = item.name ?? '';
   const ph = item.placeholder?.type ?? null;
+  if (item.media) return 'media';
   if (item.element === 'pic') return 'picture';
   if (item.frame === 'table') return 'table';
   if (item.frame === 'chart') return 'chart (native)';
@@ -335,11 +385,14 @@ function kindOf(item) {
     case 'line/connector':
       return 'connector';
     case 'group':
-    case 'diagram':
-      // A diagram is OPF's group of shapes, or a DrawingML diagram (SmartArt) frame: both are drawn as a group.
       return 'group';
+    case 'diagram':
+      // A live SmartArt frame is a diagram; OPF's group of shapes named "OPF diagram N" is a group (see the head of the file).
+      return item.frame === 'diagram' ? 'diagram' : 'group';
     case 'picture':
       return 'picture';
+    case 'media':
+      return 'media';
     case 'footer / slide number / date':
       return 'footer';
     default:
@@ -377,7 +430,10 @@ function itemOf(node, element, context, groups, depth) {
   const nv = elements(node).find((child) => local(child.name).startsWith('nv'));
   const cNvPr = kid(nv, 'cNvPr');
   const item = { element, depth, name: cNvPr?.attributes.name ?? null, placeholder: placeholderOf(node) };
-  if (cNvPr?.attributes.descr) item.descr = cNvPr.attributes.descr;
+  if (cNvPr?.attributes.descr) {
+    item.descr = cNvPr.attributes.descr;
+    item.alt = cNvPr.attributes.descr;
+  }
   if (cNvPr?.attributes.title) item.title = cNvPr.attributes.title;
   if (cNvPr?.attributes.hidden === '1' || cNvPr?.attributes.hidden === 'true') item.hidden = true;
   const links = [];
@@ -408,6 +464,8 @@ function itemOf(node, element, context, groups, depth) {
     const blipFill = kid(node, 'blipFill');
     const srcRect = kid(blipFill, 'srcRect');
     if (srcRect && Object.keys(srcRect.attributes).length > 0) item.crop = { ...srcRect.attributes };
+    const media = mediaOf(kid(nv, 'nvPr'));
+    if (media) item.media = media;
   } else if (element === 'graphicFrame') {
     const data = at(node, 'graphic', 'graphicData');
     const uri = data?.attributes.uri ?? null;
@@ -440,6 +498,7 @@ function itemOf(node, element, context, groups, depth) {
     } else {
       item.frame = uri === DIAGRAM_URI ? 'diagram' : 'other';
       item.uri = uri;
+      if (item.frame === 'diagram') item.diagram = diagramInfo(pkg, data, rels);
     }
   } else if (element === 'grpSp') {
     item.items = walk(node, context, xfrm ? [xfrm, ...groups] : groups, depth + 1);
@@ -475,8 +534,9 @@ function notesOf(pkg, part) {
 /**
  * inspectPptx(bytes | path) -> { slideSize: { width, height } (points), slides: [ { index, hidden, layout, notes, items, links } ] }
  * Slides in presentation order (hidden slides included and flagged). Items in z-order, groups nested in `items`. Each item:
- * { element: sp|pic|graphicFrame|cxnSp|grpSp|contentPart, frame?: table|chart|chartex|diagram|other, kind (the 13 shared
- * kinds), label (the round's finer kind), role? (footer), name, descr?, title?, placeholder: {type, idx}|null, box: [x, y,
+ * { element: sp|pic|graphicFrame|cxnSp|grpSp|contentPart, frame?: table|chart|chartex|diagram|other, kind (the 15 shared
+ * kinds), label (the round's finer kind), role? (footer), name, descr?, alt? (= descr), title?, media? (video|audio),
+ * diagram? ({ layoutId?, layout?, nodes? }), placeholder: {type, idx}|null, box: [x, y,
  * w, h] points|null, preset (a preset name, "custGeom", or null), fill, line, paragraphs [{text, lvl, bullet, fields}],
  * hasText, emptyText?, text? (cut to 200), textFull, crop?, rows?, columns?, cells?, merges?, firstRow?, chart?, links,
  * items? }. A slide's links: { on: text|shape|cell, name, text, target (a URL, "slide:<index>", or an action), action,

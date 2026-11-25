@@ -11,6 +11,7 @@ A run writes a new directory outside the repository:
 <out>/files/<fileId>/result.json               one per input file (native-result.schema.json)
 <out>/files/<fileId>/slides/slide-001.png ...  the application's own picture of each slide, as it wrote it
 <out>/files/<fileId>/resaved.pptx              the application's own PowerPoint copy
+<out>/files/<fileId>/edits/<id>.pptx           optional: one copy per edit case (see "Edit cases")
 <out>/preview/<deck>/slide-<n>.png             OPF's preview of each visible slide (copied in by the compare step)
 <out>/sheets/<fileId>/slide-001.jpg ...        labeled sheets of slides someone has to look at (core/compare/sheet.mjs)
 ```
@@ -29,20 +30,38 @@ A run writes a new directory outside the repository:
 | `opf` | `{ version, commit? }`: the OPF that exported the file |
 | `file` | `{ id, deck, variant, path, sha256, unchangedAfterRun }`: `path` is relative to the run's input root; `unchangedAfterRun` is true when the file's SHA-256 did not change (the application did not save over it), null when not checked |
 | `started`, `finished` | UTC date-times |
-| `verbs` | `open`, `render`, `probe`, `resave`, each `{ status, seconds?, message?, ... }`; all four are always present |
+| `verbs` | `open`, `render`, `probe`, `resave`, each `{ status, seconds?, message?, ... }`; all four are always present; optional `edits` beside `resave` |
 | `slides` | every slide in file order, hidden slides included |
+| `details` | optional: facts about the file as the application opened it (the fonts it reports for the presentation, the slide size); free-form, read by no shared code |
 
 `verbs.open` adds `slideCount` and `warnings: { status, source, lines: [{ text, slides?, layouts? }] }`: the application's import warnings, word for word. `status` is `read` (an empty `lines` means it reported none), `partial` (the list was cut off) or `not-read` (it could not be read: Keynote shows its Warnings window only while it is in front). `source` is `application`, `screen` (text recognized in a capture), `log`, or null when nothing was captured. `verbs.render` may add `pixelSize`, `colorProfile` and `alpha`; `verbs.resave` adds `path` (`resaved.pptx`) and, after the round trip, `import: { status: imported / failed / not-run, error?, slideCount? }`.
 
-A slide is `{ index, hidden, layout, picture, notes, objects, compare? }`: `index` is the position in the file (1 for the first, hidden slides counted), `layout` the application's own name for the slide's layout, `picture` `slides/slide-001.png` (numbered by index) or null when the application exported none (a hidden slide), `notes` the presenter notes or null, `compare` added by the compare step.
+`open: done` means the file opened without an error. Whether the application showed a repair prompt is known only to a driver that can see its dialogs (Keynote's, which captures every window); a driver that cannot (PowerPoint over COM without a window) says so in `verbs.open.message`, and its `done` does not establish "no repair prompt".
+
+A slide is `{ index, hidden, layout, picture, notes, objects, details?, compare? }`: `index` is the position in the file (1 for the first, hidden slides counted), `layout` the application's own name for the slide's layout, `picture` `slides/slide-001.png` (numbered by index) or null when the application exported none, `notes` the presenter notes or null, `details` free-form facts about the slide (its placeholders as the application reports them), `compare` added by the compare step.
+
+Pictures:
+
+- **Any pixel size.** The compare step resizes OPF's preview and the application's picture to the preview's aspect at its working width, 1280 pixels (`DEFAULTS.width` in `core/compare/picture.mjs`; `--width` changes it), so Keynote's 960 x 540 and PowerPoint's 1920 x 1080 compare alike. `verbs.render.pixelSize` records what the application wrote.
+- **Hidden slides.** Keynote and LibreOffice export no picture of a hidden slide (`picture` null); PowerPoint does, so `picture` may be set on a hidden slide. OPF previews visible slides only, and the compare step pairs preview k with the k-th visible slide whatever the hidden slides carry: a hidden slide's `compare` is `{ preview: null, score: null, note }`.
+- **A render that fails for some slides** is `render: failed` with a `message` that names those slides; their `picture` is null and the other slides keep theirs.
 
 `compare` is `{ preview, score, note?, aspectDiffers?, regions? }`, filled by `core/compare/compare-run.mjs`: `preview` is OPF's preview of the slide relative to the run directory (`preview/<deck>/slide-<n>.png`: the compare step copies the previews there, so a run directory stands alone), or null for a slide OPF has no preview of (a hidden slide); `score` is the share of pixels that differ, or null with a `note` that says why there was no pair; `aspectDiffers` is true when the two pictures' aspect ratios differ; `regions` are the largest differing areas, `{ box: [x0, y0, x1, y1] in slide fractions, cells, share }`.
 
-The top level, `verbs`, each verb, the slides and the objects allow no other keys. An object's `details` is the one free-form object, for target-specific facts no shared code reads.
+The top level, `verbs`, each verb, the slides and the objects allow no other keys. `details` on the result, on a slide and on an object is the free-form place for target-specific facts no shared code reads.
 
-## Objects: 13 kinds
+## Edit cases
 
-An object is `{ kind, outcome, how?, name?, appClass?, box?, text?, fonts?, rows?, columns?, role?, on?, target?, objects?, details? }`. `box` is `[x, y, width, height]` in points from the slide's top left; `text` is plain text cut to 200 characters; `appClass` keeps the application's own word.
+A driver may do more than resave: per edit case it makes one edit to the opened file in the application (retype a cell, refill a cell, change a link, add or delete a row, add a paragraph, move a shape), writes one PowerPoint copy with the application's own writer to `edits/<id>.pptx`, and never saves the opened file. `verbs.resave` keeps the unedited copy; the cases are an optional list beside it, `verbs.edits: [{ id, what, path, status, seconds?, message?, import?, outcomes? }]`:
+
+- `id` is safe as a file name (`a-z 0-9 . _ -`, `retype-cell`); `what` says in one phrase what was edited; `path` is `edits/<id>.pptx` (`editPath(id)` in `result.mjs`; the validator checks it and that no id repeats); `status` is a verb status for the edit and the copy together.
+- The round-trip step compares each copy with the exported file and imports it, as it does `resaved.pptx`: `import` has the shape of `verbs.resave.import`, and `outcomes` is `{ counts: { "<kind>.<outcome>": n }, objects: [{ slide, kind, name?, outcome, how? }] }`, the objects that are not native. They stay in the edit's entry and are never merged into `slides`, which describe the unedited file.
+
+The list sits in `verbs`, next to `resave`, because an edit case is the resave verb run again after one edit, with the same statuses and the same import; a reader of the copies finds every copy there. It is not part of `slides`: each copy is a whole file.
+
+## Objects: 15 kinds
+
+An object is `{ kind, outcome, how?, name?, alt?, appClass?, box?, text?, fonts?, rows?, columns?, role?, on?, target?, objects?, details? }`. `box` is `[x, y, width, height]` in points in slide coordinates, origin at the slide's top left, for a group's members too (never relative to their group: PowerPoint reports a member's frame that way, and so does Keynote, checked on the 0.36.0 round's 330 recorded probes); `text` is plain text cut to 200 characters; `appClass` keeps the application's own word; `alt` is the object's alt text (DrawingML's description, PowerPoint's `AlternativeText`) as the application holds it, compared across applications (opf#1479).
 
 | Kind | PowerPoint | Keynote | Impress |
 | --- | --- | --- | --- |
@@ -59,14 +78,22 @@ An object is `{ kind, outcome, how?, name?, appClass?, box?, text?, fonts?, rows
 | `link` | hyperlink (`on`: text, shape or cell; `target`: a URL or `slide:<index>`) | (not exposed) | hyperlink |
 | `notes` | notes page text, one per slide that has notes | presenter notes | notes |
 | `footer` | footer, slide number or date placeholder (`role`) | (not exposed) | footer, page number or date field |
+| `diagram` | live SmartArt (`msoSmartArt`; `details.layout`, `details.layoutId`, `details.nodes`) | never from a probe | never from a probe |
+| `media` | video or audio (`msoMedia`) | movie, audio clip | media object |
 
 A driver that cannot tell a title from other text reports `text`; what the scripting interface does not expose is left to the round-trip step, which reads the application's PowerPoint copy.
 
+`diagram` is live SmartArt only. Keynote and Impress have no SmartArt and report what they show (a picture, a group); the round-trip step gives the exported diagram its kind and the outcome `picture` (the application kept OPF's fallback picture) or `changed` (drawn as a group: "no longer a live diagram"), so "did it stay a live diagram" is the outcome of one object. In a copy that keeps it live, a different node count or layout is `changed`, and the copy's layout and node count go into `details`. OPF's own diagrams (Mermaid, DOT, PlantUML and the arrangements drawn as shapes, named "OPF diagram N") are groups of ordinary shapes everywhere and stay `group`. `media`: OPF writes no video or audio, so a media object comes from a file someone else made; Keynote removes media on import ("Unsupported media were removed").
+
 `outcome` says what the exported object became: `native` (the same kind of editable object), `changed` (editable, but something changed; `how` says what in one phrase), `picture` (a picture of it), `dropped` (gone), or null when not determined. A probe alone cannot tell, so a driver writes null and the round-trip step fills it.
+
+Alt text does not decide an outcome. The round-trip step records, per exported object, the description in the export and in the copy and whether it was kept, changed, lost or added, and fills `alt` from the copy where the probe could not read it (`details.altFrom: "copy"`); the outcome stays what the shape, text and geometry say, as in the 0.36.0 round's rules.
 
 ## Verb statuses
 
-`done` (finished; for `open`, the file opened with no repair prompt), `failed` (the application returned an error), `timeout` (no answer in time), `alert` (an unexpected dialog or window appeared: captured, never clicked), `not-run` (not asked for, or could not start). A verb that did not run says `not-run`; it is never left out and never `done`. `emptyResult({...})` in `result.mjs` starts every verb at `not-run`.
+`done` (finished without an error; for `open`, see above on repair prompts), `failed` (the application returned an error), `timeout` (no answer in time), `alert` (an unexpected dialog or window appeared: captured, never clicked), `not-run` (not asked for, or could not start). A verb that did not run says `not-run`; it is never left out and never `done`. `emptyResult({...})` in `result.mjs` starts every verb at `not-run`.
+
+A driver without screen access (PowerPoint over COM, whose window is never driven) cannot see a modal prompt such as a password or a linked file: the call does not return, so it reports `timeout` where a driver that sees the screen reports `alert`, and the files after it are `not-run`.
 
 ## run.json
 

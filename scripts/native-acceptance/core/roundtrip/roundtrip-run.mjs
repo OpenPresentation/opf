@@ -6,12 +6,14 @@
 // Per file: inspect the exported .pptx (<input root>/<result.file.path>) and the application's copy
 // (files/<id>/resaved.pptx), compute what every exported object became, merge that into result.json, import the copy
 // with OPF (verbs.resave.import), validate, and write result.json back. Prints a table of kind by outcome over all files.
+// Edit cases (verbs.edits, NT-01b): each copy edits/<id>.pptx is compared with the exported file and imported the same way;
+// its outcomes and import go into its own entry and never into the slides or the table.
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateResult } from '../result/result.mjs';
 import { importResaved } from './import.mjs';
-import { countOutcomes, mergeOutcomes, OUTCOME_NAMES, objectOutcomes } from './outcomes.mjs';
+import { countOutcomes, editOutcomes, mergeOutcomes, OUTCOME_NAMES, objectOutcomes } from './outcomes.mjs';
 
 function resultFiles(runDir) {
   const runFile = path.join(runDir, 'run.json');
@@ -24,7 +26,7 @@ function resultFiles(runDir) {
 }
 
 /**
- * roundTripRun(runDir, inputRoot, { importCopies = true, importer = importResaved }) -> { files: [{ id, status, import, objects }], records }
+ * roundTripRun(runDir, inputRoot, { importCopies = true, importer = importResaved }) -> { files: [{ id, status, import, objects, edits? }], records }
  * status: "done", or "not-run" with a reason when the file has no copy. records: every outcome record with its file and
  * `row` (the kind; "text (empty box)" and "hidden slide" apart), for counting.
  */
@@ -58,12 +60,30 @@ export function roundTripRun(runDir, inputRoot, { importCopies = true, importer 
       resave.import = importCopies ? importer(copy) : { status: 'not-run', error: 'import not asked for' };
     }
     entry.import = resave.import;
+    if (Array.isArray(result.verbs.edits) && result.verbs.edits.length > 0) {
+      entry.edits = result.verbs.edits.map((edit) => roundTripEdit(edit, { folder, exported, target: result.target, importCopies, importer }));
+    }
     const { ok, errors } = validateResult(result);
     if (!ok) throw new Error(`${resultFile}: ${errors.join('; ')}`);
     writeFileSync(resultFile, `${JSON.stringify(result, null, 2)}\n`);
     files.push(entry);
   }
   return { files, records };
+}
+
+/** One edit case of a result (changed in place): its outcomes against the export and its import. Returns { id, status, import }. */
+function roundTripEdit(edit, { folder, exported, target, importCopies, importer }) {
+  const copy = path.join(folder, edit.path);
+  if (edit.status !== 'done' || !existsSync(copy)) {
+    const reason = edit.status !== 'done' ? `edit ${edit.status}` : `no ${edit.path}`;
+    delete edit.outcomes;
+    edit.import = { status: 'not-run', error: `no copy to import (${reason})` };
+    return { id: edit.id, status: 'not-run', import: edit.import };
+  }
+  if (existsSync(exported)) edit.outcomes = editOutcomes(exported, copy, { target });
+  else delete edit.outcomes;
+  edit.import = importCopies ? importer(copy) : { status: 'not-run', error: 'import not asked for' };
+  return { id: edit.id, status: existsSync(exported) ? 'done' : 'not-run', import: edit.import };
 }
 
 /** A plain-text table of kind by outcome. */
