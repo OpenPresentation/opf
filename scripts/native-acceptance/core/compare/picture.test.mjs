@@ -127,4 +127,12 @@ test('pairSlides: preview k pairs with the k-th slide that is not hidden', () =>
     pairSlides(slides, 4).map((pair) => pair.preview),
     [1, 2, 3, 4],
   );
+  // PowerPoint exports a picture of a hidden slide (NT-01b): the previews still count only the visible slides.
+  const pictured = slides.map((slide) => (slide.index === 2 ? { ...slide, picture: 'slides/slide-002.png' } : slide));
+  assert.deepEqual(pairSlides(pictured, 3), [
+    { index: 1, preview: 1, picture: 'slides/slide-001.png' },
+    { index: 2, preview: null, picture: 'slides/slide-002.png', note: 'hidden slide: OPF previews visible slides only' },
+    { index: 3, preview: 2, picture: 'slides/slide-003.png' },
+    { index: 4, preview: 3, picture: null, note: 'no application picture' },
+  ]);
 });

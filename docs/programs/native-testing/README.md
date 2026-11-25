@@ -17,7 +17,7 @@ of 0.36.0, opf#1466.
 | --- | --- | --- | --- |
 | PowerPoint, Windows | COM scripts open the file, export pictures and probe the objects; the qualification corpus and its manifest | Partly in `scripts/native-acceptance/`; the tools of the current pass are on the owner's Windows computer | No; a working rule asks for a pass before merge |
 | Impress, Linux | `scripts/libreoffice/run.mjs` converts the corpus with a pinned LibreOffice in `nightly.yml` | In the repository | No; experimental, and `release.yml` turns it off in the release gate |
-| Keynote, macOS | An agent session on the Mac, once per round | Only on the evidence branch `codex/evidence-mac-036` | No; a review |
+| Keynote, macOS | An agent session on the Mac, once per round | Only on the evidence branch `codex/evidence-mac-036` | No; a review. Decision D1 makes it a gate for OPF's defects ([docs/native-testing.md](../../native-testing.md)) |
 | PowerPoint, macOS | Never run (opf#1314) | None | No |
 
 ## Targets
@@ -61,19 +61,26 @@ Each driver implements the same five verbs and writes only the shared result for
 | `release` | The qualification corpus (`scripts/native-acceptance/qualification/`). |
 | `full` | The corpus, the example decks, the gallery layouts with little, ordinary and a lot of content, and the language decks. |
 
-NT-05 defines the exact lists from the qualification manifest.
+NT-05 defines the exact lists from the qualification manifest (`tiers` in `qualification/manifest.json`, read by
+`qualification/tiers.mjs`). The `full` tier's sources beyond the corpus are not built by the runner yet; a `full` run lists them as
+"not run".
 
-## Planned layout
+## Layout
 
-Items may adjust this layout; the item that does updates this section.
+The layout as built, all under `scripts/native-acceptance/`. How a run is started and read, and the release gate:
+[docs/native-testing.md](../../native-testing.md).
 
 | Path | What it holds |
 | --- | --- |
-| `scripts/native-acceptance/apps/<target>/` | One driver per application, behind the five verbs. |
-| `scripts/native-acceptance/core/` | The result format, compare and classify, shared by all targets. |
-| `scripts/native-acceptance/known/<target>.json` | The known differences of one target. |
-| `scripts/native-acceptance/runs/<version>/<target>.json` | The small summary of one release's run on one target. |
-| `pnpm native` | The root script, the one entry point. |
+| `core/result/` | The shared result format: schemas, validators, fixtures from the 0.36.0 Keynote round (NT-01). |
+| `core/compare/` | OPF's preview against the application's picture, and the labeled sheet (NT-04a). |
+| `core/roundtrip/` | The objects of the exported file and of the application's copy, their outcomes, OPF's import of the copy (NT-04b). |
+| `core/classify/` | Classify, the summary format, the one-time baseline importer (NT-04c). |
+| `apps/keynote/` | The Keynote driver behind the five verbs, and the importer of the 0.36.0 round's recorded output (NT-02, NT-04a). |
+| `apps/impress/` | The LibreOffice runner's output in the shared format (NT-06). |
+| `known/` | `known/<target>.json`, its schema, and the generator of the Keynote table in the export skill (NT-03). |
+| `runs/<version>/<target>.json` | The small summary of one release's run on one target; `runs/0.36.0/keynote.json` is the first (NT-04c). |
+| `native.mjs` | `pnpm native <target>`, the one entry point (NT-05). |
 
 ## Definition of done
 

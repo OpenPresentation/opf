@@ -202,14 +202,14 @@ test('qualification: every target expectation uses the shared vocabulary and nam
 test('qualification: a feature may record no expectation for an application', () => {
   const fixture = {
     features: [
-      { id: 'with', deck: 'smartart', slides: [1, 3], checks: [], targets: { keynote: { outcome: 'picture', kind: 'picture', known: ['kn-smartart-picture-alt'] } } },
+      { id: 'with', deck: 'smartart', slides: [1, 3], checks: [], targets: { keynote: { outcome: 'picture', kind: 'diagram', known: ['kn-smartart-picture-alt'] } } },
       { id: 'without', deck: 'smartart', checks: [] },
       { id: 'other-app', deck: 'footers', variant: 'static', checks: [], targets: { powerpoint: { outcome: 'native', kind: 'footer' } } },
     ],
   };
   assert.deepEqual(expectationsFor(fixture, 'keynote'), [
-    { file: 'smartart~default', deck: 'smartart', variant: 'default', slide: 1, feature: 'with', outcome: 'picture', kind: 'picture', known: ['kn-smartart-picture-alt'] },
-    { file: 'smartart~default', deck: 'smartart', variant: 'default', slide: 3, feature: 'with', outcome: 'picture', kind: 'picture', known: ['kn-smartart-picture-alt'] },
+    { file: 'smartart~default', deck: 'smartart', variant: 'default', slide: 1, feature: 'with', outcome: 'picture', kind: 'diagram', known: ['kn-smartart-picture-alt'] },
+    { file: 'smartart~default', deck: 'smartart', variant: 'default', slide: 3, feature: 'with', outcome: 'picture', kind: 'diagram', known: ['kn-smartart-picture-alt'] },
   ]);
   assert.deepEqual(expectationsFor(fixture, 'powerpoint'), [{ file: 'footers~static', deck: 'footers', variant: 'static', slide: null, feature: 'other-app', outcome: 'native', kind: 'footer' }]);
   assert.deepEqual(expectationsFor(fixture, 'impress'), []);
@@ -222,7 +222,9 @@ test('qualification: a feature may record no expectation for an application', ()
 test('qualification: the smoke tier shows every object kind, a hidden slide, a right-to-left slide, the chart families and the serious known differences', () => {
   const features = smokeFeatures();
   const kinds = new Set(features.flatMap((feature) => Object.values(feature.targets ?? {}).map((expected) => expected.kind)).filter(Boolean));
-  for (const kind of OBJECT_KINDS) assert.ok(kinds.has(kind), `smoke: a feature whose object is a ${kind}`);
+  // OPF writes no video or audio object, so no corpus deck has one: "media" is what an application reports of a file that
+  // carries one, never what OPF exported.
+  for (const kind of OBJECT_KINDS.filter((name) => name !== 'media')) assert.ok(kinds.has(kind), `smoke: a feature whose object is a ${kind}`);
 
   const slideOf = (feature, test) => {
     const deck = readDeck(feature.deck);
