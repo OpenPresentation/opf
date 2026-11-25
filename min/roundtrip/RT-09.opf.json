@@ -1,0 +1,40 @@
+{
+ "name": "RT-09 chart axis unit",
+ "slides": [
+  {
+   "title": "Wait per terminal",
+   "blocks": [
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Terminal",
+        "Wait"
+       ],
+       "rows": [
+        [
+         "North",
+         42
+        ],
+        [
+         "South",
+         28
+        ],
+        [
+         "East",
+         35
+        ],
+        [
+         "West",
+         31
+        ]
+       ]
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "language": "en-US"
+}

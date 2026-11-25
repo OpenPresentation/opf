@@ -1,0 +1,19 @@
+{
+ "name": "RT-05 text in a non-rectangular shape",
+ "slides": [
+  {
+   "layout": "agenda",
+   "title": "Agenda",
+   "blocks": [
+    {
+     "items": [
+      "Welcome",
+      "The problem",
+      "Decision"
+     ]
+    }
+   ]
+  }
+ ],
+ "language": "en-US"
+}

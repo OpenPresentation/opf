@@ -1,0 +1,29 @@
+{
+ "name": "RT-08 table with a right-aligned number column",
+ "slides": [
+  {
+   "title": "Revenue by region",
+   "blocks": [
+    {
+     "table": {
+      "columns": [
+       "Region",
+       "Revenue"
+      ],
+      "rows": [
+       [
+        "North",
+        "42"
+       ],
+       [
+        "South",
+        "31"
+       ]
+      ]
+     }
+    }
+   ]
+  }
+ ],
+ "language": "en-US"
+}

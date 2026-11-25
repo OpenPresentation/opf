@@ -1,21 +1,49 @@
 {
-  "name": "RT-01 highlighted column chart (sparse series caches)",
-  "slides": [
+ "name": "RT-01 highlighted column chart (sparse series caches)",
+ "slides": [
+  {
+   "layout": "chart",
+   "title": "Highlighted columns",
+   "blocks": [
     {
-      "layout": "chart",
-      "title": "Highlighted columns",
-      "blocks": [
-        {
-          "chart": {
-            "type": "column",
-            "data": {
-              "columns": ["Terminal", "Wait"],
-              "rows": [["North", 42], ["South", 28], ["East", 35], ["West", 31]]
-            },
-            "highlight": {"categories": ["North", "East"]}
-          }
-        }
-      ]
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Terminal",
+        "Wait"
+       ],
+       "rows": [
+        [
+         "North",
+         42
+        ],
+        [
+         "South",
+         28
+        ],
+        [
+         "East",
+         35
+        ],
+        [
+         "West",
+         31
+        ]
+       ]
+      },
+      "highlight": {
+       "categories": [
+        "North",
+        "East"
+       ]
+      },
+      "legend": "bottom",
+      "alt": "Average wait per terminal"
+     }
     }
-  ]
+   ]
+  }
+ ],
+ "language": "en-US"
 }

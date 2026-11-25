@@ -1,0 +1,14 @@
+{
+ "name": "RT-06 fractional font size and a title that fits only in Aptos",
+ "slides": [
+  {
+   "title": "M67 agenda of 8 entries: exports, numbered badges in every column",
+   "blocks": [
+    {
+     "text": "One paragraph of body text."
+    }
+   ]
+  }
+ ],
+ "language": "en-US"
+}

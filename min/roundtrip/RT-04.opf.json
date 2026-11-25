@@ -1,0 +1,25 @@
+{
+ "name": "RT-04 OPF structure after a Keynote round trip",
+ "slides": [
+  {
+   "title": "Quarterly review: what the pilot changed for the northern hubs and why it matters",
+   "blocks": [
+    {
+     "metric": {
+      "value": "84%",
+      "label": "Task completion",
+      "description": "Up from 68%"
+     }
+    },
+    {
+     "quote": {
+      "text": "The scheduler gave us our mornings back.",
+      "attribution": "Dock lead, North"
+     }
+    }
+   ],
+   "notes": "Round trip: import Keynote's PowerPoint export with opf convert; compare blocks and title."
+  }
+ ],
+ "language": "en-US"
+}

@@ -1,0 +1,14 @@
+{
+ "name": "RT-07 right-to-left paragraph that starts with Latin",
+ "language": "he",
+ "slides": [
+  {
+   "title": "כותרת",
+   "blocks": [
+    {
+     "text": "Scheduler מקצר את זמן ההמתנה ב-18 אחוזים בכל הצוותים."
+    }
+   ]
+  }
+ ]
+}
