@@ -70,6 +70,6 @@ describe("the help of an unknown property names the nearest declared one", () =>
     assert.equal(found.fixes?.[0]?.id, "rename-to:language");
   });
   test("a name with no near declared one names the validator and keeps the generic help", () => {
-    assert.match(help({ slides: [{ title: "a" }], zzzzzzzz: 1 }), /^"zzzzzzzz" is not a field of this object. This validator is OPF [0-9][^;]*; a later OPF release may define it. Review "zzzzzzzz"/);
+    assert.match(help({ slides: [{ title: "a" }], zzzzzzzz: 1 }), /^Review "zzzzzzzz" against this object.*This validator is OPF [0-9][^;]*; a later OPF release may define "zzzzzzzz".$/);
   });
 });

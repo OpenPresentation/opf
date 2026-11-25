@@ -198,7 +198,7 @@ export function issueFinding(
 	// No close known key means this is not a typo: a later release may define the key. A released validator cannot know what
 	// a later release adds, so it says only its own version (also as data, validation.params.validatorVersion).
 	const unknownKey = typedName !== undefined && nearest.length === 0;
-	if (unknownKey) help = `${JSON.stringify(typedName)} is not a field of this object. This validator is OPF ${OPF_CORE_VERSION}; a later OPF release may define it. ${help}`;
+	if (unknownKey) help = `${help} This validator is OPF ${OPF_CORE_VERSION}; a later OPF release may define ${JSON.stringify(typedName)}.`;
 	return finding(ruleId, {
 		...(severity ? { severity } : {}),
 		path,

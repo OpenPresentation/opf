@@ -13,7 +13,8 @@ describe("unknown key and the validator's version", () => {
     const [found] = additional({ slides: [{ title: "a", locked: true }] });
     assert.equal(found.path, "/slides/0/locked");
     assert.equal(found.suggestions, undefined);
-    assert.ok(found.help.startsWith(`"locked" is not a field of this object. This validator is OPF ${version}; a later OPF release may define it.`), found.help);
+    assert.ok(found.help.endsWith(` This validator is OPF ${version}; a later OPF release may define "locked".`), found.help);
+    assert.ok(found.help.startsWith('Review "locked" against this object'), found.help);
     assert.equal(found.validation.params.validatorVersion, version);
     assert.equal(found.validation.params.additionalProperty, "locked");
   });
