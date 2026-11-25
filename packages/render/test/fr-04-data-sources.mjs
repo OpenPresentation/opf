@@ -9,17 +9,17 @@ const SHA = '9f2c41b1d1b6e0a8a56e7c3d2f4b8a90c1e3d5f7a9b0c2d4e6f8a0b1c3d5e07a';
 const KEYS = ['datasource', 'query', 'retrieved', 'version', 'sha256', 'generator'];
 const withSources = {
   design: {fontScheme: 'roboto'},
-  datasources: {warehouse: {title: 'Finance warehouse', connector: 'postgres', src: 'postgres://warehouse.example.com/finance', license: 'Internal use only', refresh: 'P1D'}},
+  datasources: {warehouse: {title: 'Finance warehouse', connector: 'postgres', src: 'postgres://warehouse.example.com/finance', license: 'Internal use only', refreshEvery: 'P1D'}},
   datasets: {
     revenue: {
       columns: ['Quarter', {name: 'Revenue', format: '$#,##0.0'}], rows: [['Q1', 12.4], ['Q2', 18], ['Q3', 24.5]],
-      datasource: 'warehouse', query: 'SELECT quarter, revenue FROM revenue', retrieved: '2026-11-01T09:30:00Z', version: 'r42', sha256: SHA, generator: {kind: 'model', name: 'metricgen 2.1'},
+      datasource: 'warehouse', query: 'SELECT quarter, revenue FROM revenue', retrieved: '2026-11-01T09:30:00Z', version: 'r42', sha256: SHA, generator: {type: 'model', name: 'metricgen 2.1'},
     },
   },
   slides: [
     {title: 'Dataset chart', chart: {type: 'column', alt: 'Revenue by quarter', data: {dataset: 'revenue'}}},
     {title: 'Dataset table', table: {dataset: 'revenue'}},
-    {title: 'Inline chart', chart: {type: 'line', alt: 'Margin', data: {columns: ['Quarter', 'Margin'], rows: [['Q1', 0.31], ['Q2', 0.34]], datasource: 'warehouse', query: 'FY26!A1:B3', retrieved: '2026-11-02', version: 'r1', sha256: SHA, generator: {kind: 'human', name: 'Avery Chen'}}}},
+    {title: 'Inline chart', chart: {type: 'line', alt: 'Margin', data: {columns: ['Quarter', 'Margin'], rows: [['Q1', 0.31], ['Q2', 0.34]], datasource: 'warehouse', query: 'FY26!A1:B3', retrieved: '2026-11-02', version: 'r1', sha256: SHA, generator: {type: 'human', name: 'Avery Chen'}}}},
     {title: 'Inline data source', chart: {type: 'column', alt: 'Inline', data: {columns: ['A', 'B'], rows: [['x', 1], ['y', 2]], datasource: {src: './inline.csv', connector: 'csv'}}}},
   ],
 };

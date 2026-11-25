@@ -117,17 +117,17 @@ away entirely: OPF adds no aliases before 1.0, and `opf fix` rewrites an older `
 
 Acceptance:
 
-- The root `datasources` is a map of data sources. A data source takes `title`, `description`, `connector`, `src`, `license`, `refresh`
+- The root `datasources` is a map of data sources. A data source takes `title`, `description`, `connector`, `src`, `license`, `refreshEvery`
   (an ISO 8601 duration that no engine acts on) and `extensions`. A data source never holds credentials.
 - A dataset takes, beside `columns` and `rows`: `datasource` (a string that is always the id of an entry in `datasources`, or an inline
   data source object of the same shape), `query` (the selection in the data source's own language, which replaces `sheet` and `range`),
   `retrieved` (a date or a date-time), `version` (a free string the source gives its snapshot), `sha256` (the hash of the source file's
-  bytes as retrieved) and `generator` (`{ kind: "human" | "model", name }`). `source.fields` is dropped and so are `queryLanguage` and any
+  bytes as retrieved) and `generator` (`{ type: "human" | "model", name }`). `source.fields` is dropped and so are `queryLanguage` and any
   transform hash.
 - Inline chart data (`chart.data` with columns and rows) takes the same keys, and a chart that references a dataset reports the
   dataset's.
 - Errors: `datasource-unknown` (an unknown data source id). Warnings: `datasource-credentials` (a `src` with a user and password, or a
-  query parameter named like a key or token) and `dataset-stale` (with a date passed, `retrieved` older than the data source's `refresh`).
+  query parameter named like a key or token) and `dataset-stale` (with a date passed, `retrieved` older than the data source's `refreshEvery`).
 - A 0.35 or 0.36 document with `source` fails validation until `opf fix` rewrites it: `src` becomes `datasource: { src }`, `retrieved` and
   the rest move up, `sheet` and `range` fold into `query` (`"FY26!A1:C13"`), `fields` is dropped. The release notes say it. The gallery
   examples use no `source`, so only four docs pages and the skills change.
@@ -141,8 +141,9 @@ Progress log:
   root `datasources` and every data source key of a dataset and of inline chart data come back the same from the export and from
   PowerPoint's own save. A released 0.36.0 importer reads the file as a valid deck but restores no shared dataset; charts and tables
   import the values they show (accepted for the one breaking change). `query` is optional, as the owner asked: a CSV file or rows typed
-  into the deck need none. Two key names change in a follow-up before the release, from the key-names study: `generator.kind` becomes
-  `generator.type` and a data source's `refresh` becomes `refreshEvery`.
+  into the deck need none.
+- 2026-11-25: key names (FR-04b, from the key-names study, the owner's picks): `generator.kind` is now `generator.type` and a data
+  source's `refresh` is now `refreshEvery`. Nothing was released with the old names, so there is no alias and no `opf fix` rewrite.
 
 ## FR-05: typed columns (CR 2)
 

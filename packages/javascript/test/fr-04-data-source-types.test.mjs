@@ -11,11 +11,11 @@ test('generated Presentation types carry data sources and the flat dataset', () 
   const source=`import { type Presentation, type DataSource, type DataProvenance, type DataGenerator, resolveChartData } from '../dist/index.js';
 type Dataset = NonNullable<Presentation['datasets']>[string];
 type InlineData = Extract<NonNullable<Presentation['slides'][number]['chart']>['data'], { columns: unknown }>;
-const sources: Presentation['datasources'] = { warehouse: { title: 'Warehouse', connector: 'postgres', src: 'postgres://warehouse.example.com/finance', license: 'Internal use only', refresh: 'P1D', extensions: { 'com.example': {} } } };
-const generator: DataGenerator = { kind: 'model', name: 'metricgen 2.1' };
+const sources: Presentation['datasources'] = { warehouse: { title: 'Warehouse', connector: 'postgres', src: 'postgres://warehouse.example.com/finance', license: 'Internal use only', refreshEvery: 'P1D', extensions: { 'com.example': {} } } };
+const generator: DataGenerator = { type: 'model', name: 'metricgen 2.1' };
 const dataset: Dataset = { columns: ['Quarter'], rows: [['Q1']], datasource: 'warehouse', query: 'SELECT 1', retrieved: '2026-11-01', version: 'r1', sha256: '0'.repeat(64), generator };
 const inlineSource: Dataset = { columns: ['Quarter'], rows: [['Q1']], datasource: { src: './revenue.csv' } };
-const inline: InlineData = { columns: ['Quarter'], rows: [['Q1']], datasource: 'warehouse', generator: { kind: 'human', name: 'Avery' } };
+const inline: InlineData = { columns: ['Quarter'], rows: [['Q1']], datasource: 'warehouse', generator: { type: 'human', name: 'Avery' } };
 const handWritten: DataProvenance = { datasource: { src: './a.csv', connector: 'csv' }, query: 'A1:B2' };
 const named: DataSource = { src: './a.csv' };
 const resolved = resolveChartData({ type: 'column', data: inline });
@@ -23,7 +23,7 @@ const provenance: DataProvenance | undefined = resolved.ok ? resolved.provenance
 // @ts-expect-error The nested source object is gone.
 const old: Dataset = { columns: ['Quarter'], rows: [['Q1']], source: { src: './revenue.csv' } };
 // @ts-expect-error A generator is a person or a model.
-const robot: DataGenerator = { kind: 'robot', name: 'x' };
+const robot: DataGenerator = { type: 'robot', name: 'x' };
 // @ts-expect-error A data source holds no password key.
 const secret: DataSource = { password: 'x' };
 void [sources,dataset,inlineSource,inline,handWritten,named,provenance,old,robot,secret];`;

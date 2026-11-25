@@ -543,7 +543,7 @@ const datasourceCredentials: RuleText = (finding) => ({
 
 const datasetStale: RuleText = (finding) => ({
   message: keep(cap(finding.message)),
-  next: "take the data from its data source again and update `retrieved`, or change the data source's `refresh`.",
+  next: "take the data from its data source again and update `retrieved`, or change the data source's `refreshEvery`.",
 });
 
 const chartMappingAdapted: RuleText = (finding) => ({
