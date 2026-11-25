@@ -37,7 +37,7 @@ import {attachMetricTags,metricManifest,importMetricGroups} from './metric-prove
 import {attachCardTags,importCardFrames} from './card-provenance.js';
 import {attachMediaTags,importMediaGroups,mediaCaption,mediaFrameRecord,mediaTextFingerprint} from './media-provenance.js';
 // RR-34: captions and footnote areas as tagged text boxes; citation markers round-trip through the tags and the marker runs.
-import {addCaption, addFootnotes} from './annotation-export.js';
+import {addCaption, addFootnotes, glyphAnchor, paragraphAnchor} from './annotation-export.js';
 import {attachAnnotationTags, captionValue, importAnnotations, restoreCitations} from './annotation-provenance.js';
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
 import {writeThemeFontReferences} from './theme-font-references.js';
@@ -3329,8 +3329,12 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
         const lineDirection=(text.directions?.[index])??entry.direction;
         // SH-09: a centered line (an entry on a pyramid's or matrix's node) is its own width, centered in the entry's box, as core measured it
         // without the space it broke at; it starts at its start edge.
-        const centered=align==='center'&&!inset,offset=centered?Math.max(0,(box.width-line.width)/2):0;
-        const region=centered?{x:(box.x+offset)/96,y:(box.y+line.y)/96,w:Math.max(1,line.width)/96,h:line.height/96}:{x:(entryRtl?box.x:box.x-inset)/96,y:(box.y+line.y)/96,w:(box.width+inset)/96,h:line.height/96};
+        // A line whose whitespace hangs at its soft wrap is centered by its glyphs, its box as wide as its text with that whitespace.
+        const hang=line.hang>0?line.hang:0,glyphs=hang?line.advance-hang:line.width;
+        // (PowerPoint puts the whitespace of a line whose text is right to left on its left, before its glyphs: annotation-export.js.)
+        const textRtl=hang>0&&paragraphDirection(line.fragments.map(fragment=>fragment.text).join(''),'rtl')==='rtl';
+        const centered=align==='center'&&!inset,offset=centered?Math.max(0,(box.width-glyphs)/2)-(textRtl?hang:0):0;
+        const region=centered?{x:(box.x+offset)/96,y:(box.y+line.y)/96,w:Math.max(1,hang?line.advance:line.width)/96,h:line.height/96}:{x:(entryRtl?box.x:box.x-inset)/96,y:(box.y+line.y)/96,w:(box.width+inset)/96,h:line.height/96};
         const lineAlign=physicalAlignment('left',lineDirection);
         const objectName=`OPF list ${path} line ${lineNumber++}`;
         const fragmentPlan=planNativeTextFragments(line,{rtl:lineDirection==='rtl',originX:box.x+(lineAlign==='right'?box.width-line.width:lineAlign==='center'?(box.width-line.width)/2:0),measurement:options.textMeasurement,profile:language=>context.nativeFragmentProfile(language,context.slideIndex)});
@@ -4525,7 +4529,10 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
     const runs = richFitLineRuns(line, context, fallback);
     // Logical alignment (RR-05): a right-to-left paragraph starts at the right edge; every wrapped line shares its paragraph's direction.
     const placed = fit.placement?.lines[index], alignment = placed?.alignment ?? physicalAlignment(logicalAlignment, fit.directions?.[index]), factor = alignment === 'right' ? 1 : alignment === 'center' ? .5 : 0;
-    const area = placed ? {...region, x: (placed.x + line.width * factor - box.width * factor) / 96, y: placed.y / 96, h: placed.height / 96} : {...region, y: region.y + line.y / 96, h: line.height / 96};
+    // PowerPoint counts the whitespace at the end of a paragraph in its alignment, so a line whose whitespace hangs at a soft wrap is
+    // anchored that much past its glyphs (core's placement does it for a placed line, RichTextLine.hang for one it did not place).
+    const lineText = fit.lines?.[index] ?? line.fragments.map(fragment => fragment.text).join(''), anchor = paragraphAnchor({placed, line, text: lineText, box, factor, directions: fit.directions, index});
+    const area = placed ? {...region, x: (anchor - box.width * factor) / 96, y: placed.y / 96, h: placed.height / 96} : {...region, x: (anchor - box.width * factor) / 96, y: region.y + line.y / 96, h: line.height / 96};
     // PptxGenJS reads the paragraph direction from the first run's options, not from the shape options.
     if (fit.directions?.[index] === 'rtl') for (const run of runs) run.options.rtlMode = true;
     let name;
@@ -4627,13 +4634,15 @@ function nativeTitleCandidate(item) {
 const TITLE_LINE_TOLERANCE = 4 / 3;
 // Where each measured line box anchors its line horizontally (addMeasuredPayloadText, addRichFitLines): the start edge, the center or the
 // end edge of the line, by its physical alignment. Undefined for a line without a placement (it sits at the item's box).
+// `x` is the anchor of the line's text, whitespace that hangs at its soft wrap included (PowerPoint counts it at a paragraph end), and
+// `glyphs` the anchor of its glyphs, where a natively wrapped paragraph (which hangs that whitespace) puts them.
 function measuredLineAnchors(item) {
   const fit = item.text, rich = fit.richLines, placed = fit.placement?.lines;
   const logical = fit.placement?.alignment ?? item.alignment ?? 'left';
   return (rich ?? fit.lines).map((_, index) => {
     const align = placed?.[index]?.alignment ?? physicalAlignment(logical, fit.directions?.[index]), factor = align === 'right' ? 1 : align === 'center' ? .5 : 0;
-    const text = fit.lines?.[index];
-    return {align, factor, x: !text ? undefined : placed?.[index] ? placed[index].x + (rich ? rich[index].width : placed[index].width) * factor : item.box.x + item.box.width * factor};
+    const text = fit.lines?.[index], args = {placed: placed?.[index], line: (rich ?? fit.sourceLines)?.[index], text, box: item.box, factor, directions: fit.directions, index};
+    return {align, factor, x: text ? paragraphAnchor(args) : undefined, glyphs: text ? glyphAnchor({...args, direction: fit.directions?.[index]}) : undefined};
   });
 }
 
@@ -4668,7 +4677,7 @@ const MEASURED_LINE_SCRIPTS = /[\p{Script=Latin}\p{Script=Greek}\p{Script=Cyrill
 
 /** Whether each line of a natively wrapped title starts where its measured box put it, within TITLE_LINE_TOLERANCE. */
 function nativeTitleAnchorsHold(item, wrap) {
-  return measuredLineAnchors(item).every(line => line.x === undefined || Math.abs(line.x - (wrap.x + wrap.width * line.factor)) <= TITLE_LINE_TOLERANCE);
+  return measuredLineAnchors(item).every(line => line.glyphs === undefined || Math.abs(line.glyphs - (wrap.x + wrap.width * line.factor)) <= TITLE_LINE_TOLERANCE);
 }
 
 /** Whether a natively wrapped title at single spacing in `family` keeps its last line within TITLE_LINE_TOLERANCE of the measured one. */
@@ -4752,6 +4761,8 @@ function fixedTitlePlan(item, family) {
   const anchors = measuredLineAnchors(item), align = anchors[0].align, rtl = directions.has('rtl');
   if (anchors.some(line => line.align !== align)) return {reject: 'line-placement'};
   const drawn = anchors.map(line => line.x).filter(value => value !== undefined);
+  // A right-to-left title whose paragraphs would need margins (a centered or left-aligned one whose lines hang a space at their wraps: each
+  // paragraph is anchored with its space) keeps its measured line boxes: paragraph margins in a right-to-left title are not measured.
   if (rtl && drawn.some(value => Math.abs(value - drawn[0]) > TITLE_LINE_TOLERANCE)) return {reject: 'line-placement'};
   const width = item.box.width, factor = anchors[0].factor;
   // The box's anchor edge: the leftmost start (left), the rightmost end (right), the first line's center (center).
@@ -4849,7 +4860,10 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     }
     else if(config.media&&context.provenanceMode!==false)context.mediaTags.set(objectName,{v:1,role:'caption',path:config.path,line:index,count:fit.lines.length,boundary:sourceLine?.boundary??'end',...(context.provenanceMode==='full'?{fingerprint:mediaTextFingerprint(line),...boundary}:{})});
     else if(config.sourceText)context.plainTextTags.set(objectName,{v:1,group:config.path,line:index,count:fit.lines.length,...boundary});
-    const area=placed?{x:(placed.x+placed.width*factor-box.width*factor)/96,y:(placed.baseline-fit.fontSize)/96,w:box.width/96,h:placed.height/96}:{x:box.x/96,y:(box.y+index*fit.lineHeight)/96,w:box.width/96,h:fit.lineHeight/96};
+    // PowerPoint counts the whitespace at the end of a paragraph in its alignment: a line whose whitespace hangs at a soft wrap is
+    // anchored that much past its glyphs (core's placement does it for a placed line, TextLineSource.hang for one it did not place).
+    const anchor=paragraphAnchor({placed,line:sourceLine,text:line,box,factor,directions:fit.directions,index});
+    const area=placed?{x:(anchor-box.width*factor)/96,y:(placed.baseline-fit.fontSize)/96,w:box.width/96,h:placed.height/96}:{x:(anchor-box.width*factor)/96,y:(box.y+index*fit.lineHeight)/96,w:box.width/96,h:fit.lineHeight/96};
     // opf#1415: a linked line (a footer social account) is a text box whose whole text is the link, so the link is the shape's click link
     // (a:hlinkClick in its p:cNvPr, linkShapeBlocks): PowerPoint underlines every run that is a link, and the preview draws this line in
     // its muted color without an underline. The run keeps that color and u="none".
