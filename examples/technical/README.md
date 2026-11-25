@@ -46,3 +46,4 @@ When reviewing dense grouped examples, use the default whole-block continuation 
 
 - `item-ids.opf.json`: ids on list items, bullets, timeline events and table rows (a row is an array or `{ "id", "cells" }`), one namespace with slide and block ids; every id is optional.
 - `table-color-scale.opf.json`: `table.colorScale` shades the number cells of named columns by value in scheme colors: a sequential scale over a pinned range, a diverging scale centered on zero, a dataset-backed table, and a six-by-six scorecard with a highlighted row, and five small slides that name every color-scheme color a scale may use.
+- The document id: a root `id`, an opaque string kept on save, export, import and publish, and a claim rather than a credential ([`document-id.opf.json`](./document-id.opf.json)).

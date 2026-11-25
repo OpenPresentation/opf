@@ -1,5 +1,6 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
+  "id": "0192f4c8-6b1e-7c3a-9d42-5e8f1a7b3c90",
   "name": "Full Feature Tour",
   "description": "Technical fixture exercising every major surface of the OPF presentation schema in one self-contained document: intent metadata, organizations and speakers, a custom narrative record and slide beat links, design with slide overrides, embedded assets, inline catalog records, all content payload kinds, blocks, regions, and extensions.",
   "filename": "full-feature-tour.pptx",

@@ -2,6 +2,7 @@
 // file name pattern (RR-75): `{n}` is the record number, `{column}` a slug of that column's value, so
 // `opf fill t.opf.md clients.csv decks/qbr-{client}.opf.md` writes one deck per client; --combine writes one deck with every
 // record's slides. Without data the template fills from its own values (and their examples with --examples).
+import { randomUUID } from "node:crypto";
 import path from "node:path";
 import { type FilledDeck, fill, validate, variableDeclarations } from "@openpresentation/opf";
 import { CLI_CATALOGS } from "./catalogs.js";
@@ -97,6 +98,15 @@ export async function run(args: string[], _host: Host): Promise<void> {
 	const raw = data === undefined ? undefined : await readText(data);
 	const format = raw === undefined ? undefined : (dataFormat ?? (data === undefined ? undefined : dataFormatOf(data)) ?? (/^[\s\uFEFF]*[[{]/.test(raw) ? "json" : "csv"));
 	const result = fill(source.value, raw, { ...(format ? { format } : {}), ...(options.delimiter !== undefined ? { delimiter: String(options.delimiter) } : {}), header: !options["no-header"], partial: options.partial === true, examples: options.examples === true, combine: options.combine === true });
+	// A filled deck is a new deck: core drops the template's document id, and this host gives each deck its own (a template without an id gives decks without one).
+	const templateHasId = typeof (source.value as { id?: unknown } | null)?.id === "string";
+	const withId = (deck: Record<string, unknown>): Record<string, unknown> => {
+		if (!templateHasId) return deck;
+		const { $schema, ...rest } = deck;
+		return { ...($schema === undefined ? {} : { $schema }), id: randomUUID(), ...rest };
+	};
+	for (const deck of result.decks) deck.presentation = withId(deck.presentation);
+	if (result.presentation !== undefined) result.presentation = withId(result.presentation);
 	const errors = result.decks.flatMap((deck) =>
 		deck.diagnostics
 			.filter((entry) => entry.severity === "error")
