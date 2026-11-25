@@ -24,9 +24,9 @@ export function createTableColorScalePanel(host, { editor, getSelectedPath, onSt
     <fieldset class="opf-co-group" data-group="columns"><legend>Shade columns</legend><div class="opf-co-choices" data-choices="columns"></div></fieldset>
     <div class="opf-co-group" data-group="scale">
       <label class="opf-co-row"><span>Kind</span><select id="${id}-kind" aria-label="Color scale kind" data-opf-scale="kind"><option value="sequential">Sequential</option><option value="diverging">Diverging</option></select></label>
-      <label class="opf-co-row"><span>Lowest</span><select id="${id}-from" aria-label="Color of the lowest value" data-opf-scale="from">${colorOptions("surface", false)}</select></label>
+      <label class="opf-co-row"><span>Lowest</span><select id="${id}-low" aria-label="Color of the lowest value" data-opf-scale="low">${colorOptions("surface", false)}</select></label>
       <label class="opf-co-row" data-row="mid"><span>Middle</span><select id="${id}-mid" aria-label="Color of the center" data-opf-scale="mid">${colorOptions("surface", false)}</select></label>
-      <label class="opf-co-row"><span>Highest</span><select id="${id}-to" aria-label="Color of the highest value" data-opf-scale="to">${colorOptions("primary", false)}</select></label>
+      <label class="opf-co-row"><span>Highest</span><select id="${id}-high" aria-label="Color of the highest value" data-opf-scale="high">${colorOptions("primary", false)}</select></label>
       <label class="opf-co-row" data-row="center"><span>Center</span><input type="number" step="any" id="${id}-center" aria-label="Value drawn in the middle color" data-opf-scale="center" placeholder="Automatic"></label>
       <label class="opf-co-row"><span>Range from</span><input type="number" step="any" id="${id}-min" aria-label="Lowest value of the range" data-opf-scale="min" placeholder="Lowest number"></label>
       <label class="opf-co-row"><span>Range to</span><input type="number" step="any" id="${id}-max" aria-label="Highest value of the range" data-opf-scale="max" placeholder="Highest number"></label>
@@ -76,9 +76,10 @@ export function createTableColorScalePanel(host, { editor, getSelectedPath, onSt
     const on = state.kind !== "none";
     for (const control of root.querySelectorAll("[data-opf-scale]")) control.disabled = !on && control.dataset.opfScale !== "kind";
     $('[data-opf-scale="kind"]').value = state.kind === "diverging" ? "diverging" : "sequential";
-    $('[data-opf-scale="from"]').value = state.from;
-    $('[data-opf-scale="to"]').value = state.to;
-    $('[data-opf-scale="mid"]').value = state.mid ?? "surface";
+    const [low, middle, high] = state.colors.length === 3 ? state.colors : [state.colors[0], undefined, state.colors[1]];
+    $('[data-opf-scale="low"]').value = low;
+    $('[data-opf-scale="high"]').value = high;
+    $('[data-opf-scale="mid"]').value = middle ?? "surface";
     $('[data-row="mid"]').hidden = $('[data-row="center"]').hidden = state.kind !== "diverging";
     fillInput($('[data-opf-scale="center"]'), state.center);
     fillInput($('[data-opf-scale="min"]'), state.min);
@@ -99,7 +100,15 @@ export function createTableColorScalePanel(host, { editor, getSelectedPath, onSt
     if (!key) return;
     if (key === "kind") commit({ kind: target.value });
     else if (key === "center" || key === "min" || key === "max") commit({ [key]: target.value === "" ? null : Number(target.value) });
-    else commit({ [key]: target.value });
+    else {
+      // Two or three swatches in order: the lowest, the middle (diverging only) and the highest.
+      const state = readTableColorScale(tableNow(), editor.presentation);
+      const colors = [...state.colors];
+      if (key === "low") colors[0] = target.value;
+      else if (key === "high") colors[colors.length - 1] = target.value;
+      else if (key === "mid" && colors.length === 3) colors[1] = target.value;
+      commit({ colors });
+    }
   };
   root.addEventListener("change", onChange);
   const unsubscribe = editor.subscribe?.(() => refresh());

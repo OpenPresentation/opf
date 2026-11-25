@@ -477,6 +477,14 @@
       "basis": "opf.schema.json#/$defs/TableColorScale/properties/columns"
     },
     {
+      "id": "core.invalid.table-color-scale-center-needs-three",
+      "file": "core/invalid/table-color-scale-center-needs-three.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/table/colorScale/colors" },
+      "description": "A color scale names a center but has two colors: only a diverging scale (three colors) has a middle.",
+      "basis": "opf.schema.json#/$defs/TableColorScale"
+    },
+    {
       "id": "core.invalid.dataset-unknown",
       "file": "core/invalid/dataset-unknown.opf.json",
       "levels": ["reader"],

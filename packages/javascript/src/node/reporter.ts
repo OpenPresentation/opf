@@ -144,6 +144,7 @@ const HELP: Record<string, string> = {
 	"reference-text-changed": EDITED,
 	"chart-data-provenance-changed": EDITED,
 	"table-data-provenance-changed": EDITED,
+	"table-color-scale-not-restored": "A shaded cell was refilled in PowerPoint (or a column the scale names is gone), so the table imports its cell fills as plain fills and the color scale is not restored. Nothing needs to change if the new fills are wanted; to keep the scale, remove the fill you added or change the table in the OPF source and export again.",
 	"design-reference-changed": EDITED,
 	"layout-reference-changed": EDITED,
 	"list-line-break-changed": EDITED,

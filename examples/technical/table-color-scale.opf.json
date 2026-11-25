@@ -138,9 +138,11 @@
           "columns": [
             "YoY %"
           ],
-          "from": "accent2",
-          "mid": "surface",
-          "to": "accent1",
+          "colors": [
+            "accent2",
+            "surface",
+            "accent1"
+          ],
           "center": 0
         }
       }
@@ -282,9 +284,11 @@
           "columns": [
             "Change"
           ],
-          "from": "accent3",
-          "mid": "accent4",
-          "to": "accent5",
+          "colors": [
+            "accent3",
+            "accent4",
+            "accent5"
+          ],
           "center": 0
         }
       }
@@ -318,9 +322,11 @@
           "columns": [
             "Change"
           ],
-          "from": "accent6",
-          "mid": "accent",
-          "to": "primary",
+          "colors": [
+            "accent6",
+            "accent",
+            "primary"
+          ],
           "center": 0
         }
       }
@@ -354,9 +360,11 @@
           "columns": [
             "Change"
           ],
-          "from": "secondary",
-          "mid": "background",
-          "to": "surfaceAlt",
+          "colors": [
+            "secondary",
+            "background",
+            "surfaceAlt"
+          ],
           "center": 0
         }
       }
@@ -390,9 +398,11 @@
           "columns": [
             "Change"
           ],
-          "from": "dark1",
-          "mid": "dark2",
-          "to": "light1",
+          "colors": [
+            "dark1",
+            "dark2",
+            "light1"
+          ],
           "center": 0
         }
       }
@@ -426,9 +436,11 @@
           "columns": [
             "Change"
           ],
-          "from": "light2",
-          "mid": "text",
-          "to": "textSecondary",
+          "colors": [
+            "light2",
+            "text",
+            "textSecondary"
+          ],
           "center": 0
         }
       }

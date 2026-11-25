@@ -12,7 +12,7 @@ const deck = () => ({
   name: 'Scale',
   slides: [
     {title: 'Win rate', table: {columns: ['Region', 'Q1', 'Q2'], rows: [{id: 'r-1', cells: ['EMEA', 0.2, 0.3]}, ['APAC', 0.1, 0.4], ['AMER', 'n/a', {value: 0.25, style: {fill: '#FF00FF'}}]], colorScale: {columns: ['Q1', 'Q2'], min: 0, max: 0.4}}},
-    {title: 'Change', table: {columns: ['Product', 'YoY'], rows: [['Core', 0.12], ['Add-ons', -0.08], ['Services', 0]], colorScale: {columns: ['YoY'], from: 'accent2', mid: 'surface', to: 'accent1', center: 0}}},
+    {title: 'Change', table: {columns: ['Product', 'YoY'], rows: [['Core', 0.12], ['Add-ons', -0.08], ['Services', 0]], colorScale: {columns: ['YoY'], colors: ['accent2', 'surface', 'accent1'], center: 0}}},
     {title: 'Dataset', table: {dataset: 'sales', colorScale: {columns: ['Q1']}}},
   ],
   datasets: {sales: {columns: ['Region', 'Q1'], rows: [['EMEA', 1], ['APAC', 9]]}},

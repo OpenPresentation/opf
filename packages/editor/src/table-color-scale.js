@@ -11,8 +11,8 @@ import { checkFormat } from "./checks.js";
 
 /** The scheme colors a scale end may take (the schema's SchemeColorName). */
 export const TABLE_SCALE_COLORS = Object.freeze([...SCHEME_COLOR_NAMES]);
-/** The colors an absent `from` and `to` mean. */
-export const TABLE_SCALE_DEFAULTS = Object.freeze({ from: "surface", to: "primary" });
+/** The colors an absent `colors` means. */
+export const TABLE_SCALE_DEFAULTS = Object.freeze({ colors: Object.freeze(["surface", "primary"]) });
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
@@ -49,7 +49,7 @@ const numberOf = (cell) => {
 
 /**
  * The scale as form state: `columns` (every column by header text, with whether it holds a number and whether the scale shades it), `kind`
- * (`none`, `sequential` or `diverging`), the colors (`from`, `mid`, `to`, with the defaults filled in), and `center`, `min`, `max`
+ * (`none`, `sequential` or `diverging`), `colors` (two or three scheme color names, low to high, the defaults filled in), and `center`, `min`, `max`
  * (undefined while left to the data).
  */
 export function readTableColorScale(table, presentation) {
@@ -58,12 +58,11 @@ export function readTableColorScale(table, presentation) {
   const shaded = new Set(scale?.columns ?? []);
   const headers = (resolved.columns ?? []).map(text);
   const columns = headers.map((name, index) => ({ name, index, numeric: resolved.rows.some((row) => numberOf(row[index]) !== undefined), shaded: shaded.has(name) }));
+  const colors = Array.isArray(scale?.colors) && scale.colors.length >= 2 ? [...scale.colors] : [...TABLE_SCALE_DEFAULTS.colors];
   return {
     columns,
-    kind: !scale ? "none" : scale.mid === undefined ? "sequential" : "diverging",
-    from: scale?.from ?? TABLE_SCALE_DEFAULTS.from,
-    mid: scale?.mid,
-    to: scale?.to ?? TABLE_SCALE_DEFAULTS.to,
+    kind: !scale ? "none" : colors.length === 3 ? "diverging" : "sequential",
+    colors,
     center: scale?.center,
     min: scale?.min,
     max: scale?.max,
@@ -99,34 +98,34 @@ function desired(table, state, change) {
     next.columns = list;
   }
   if (!Array.isArray(next.columns) || !next.columns.length) throw fail("invalid-color-scale", "Name at least one column to shade.", {});
-  for (const key of ["from", "to"]) {
-    if (change[key] === undefined) continue;
-    if (change[key] === null || change[key] === "") delete next[key];
-    else next[key] = colorName(change[key], key);
+  let colors = Array.isArray(next.colors) ? [...next.colors] : [...TABLE_SCALE_DEFAULTS.colors];
+  if (change.colors !== undefined) {
+    if (change.colors === null) colors = [...TABLE_SCALE_DEFAULTS.colors];
+    else if (!Array.isArray(change.colors) || change.colors.length < 2 || change.colors.length > 3) throw fail("invalid-color-scale", "A color scale takes two colors (sequential) or three (diverging), low to high.", { colors: change.colors });
+    else colors = change.colors.map((value) => colorName(value, "color"));
   }
-  if (change.kind === "sequential") { delete next.mid; delete next.center; }
-  if (change.kind === "diverging" && next.mid === undefined) next.mid = "surface";
-  if (change.mid !== undefined) {
-    if (change.mid === null || change.mid === "") { delete next.mid; delete next.center; }
-    else next.mid = colorName(change.mid, "mid");
-  }
+  if (change.kind === "sequential" && colors.length === 3) colors = [colors[0], colors[2]];
+  if (change.kind === "diverging" && colors.length === 2) colors = [colors[0], "surface", colors[1]];
+  const isDefault = colors.length === 2 && colors[0] === TABLE_SCALE_DEFAULTS.colors[0] && colors[1] === TABLE_SCALE_DEFAULTS.colors[1];
+  if (isDefault) delete next.colors;
+  else next.colors = colors;
   for (const key of ["center", "min", "max"]) {
     if (change[key] === undefined) continue;
     if (change[key] === null) delete next[key];
     else next[key] = finite(change[key], key);
   }
-  if (next.mid === undefined) delete next.center;
+  if (colors.length !== 3) delete next.center;
   // The schema's key order: the columns, the colors, then the numbers.
   const ordered = {};
-  for (const key of ["columns", "from", "mid", "to", "center", "min", "max"]) if (next[key] !== undefined) ordered[key] = next[key];
+  for (const key of ["columns", "colors", "center", "min", "max"]) if (next[key] !== undefined) ordered[key] = next[key];
   return ordered;
 }
 
 /**
  * Prepare a color scale change as patches on the table (nothing is applied). `change` is `null` (remove the scale) or an object of
- * `columns` (header names of columns that hold numbers; an empty list removes the scale), `kind` (`sequential` or `diverging`), `from`, `mid`,
- * `to` (scheme color names; `null` returns `from` and `to` to their defaults and `mid: null` makes the scale sequential) and `center`, `min`,
- * `max` (numbers; `null` leaves the value to the data). A color that is not a scheme name is refused. The document is not modified.
+ * `columns` (header names of columns that hold numbers; an empty list removes the scale), `colors` (two or three scheme color names, low to high; `null`
+ * returns the default `["surface", "primary"]`), `kind` (`sequential` drops the middle color, `diverging` adds `surface` in the middle) and `center`, `min`, `max`
+ * (numbers; `null` leaves the value to the data; `center` goes when the scale has two colors). A color that is not a scheme name is refused. The document is not modified.
  */
 export function prepareTableColorScale(presentation, tablePath, change) {
   const before = checkFormat(presentation);

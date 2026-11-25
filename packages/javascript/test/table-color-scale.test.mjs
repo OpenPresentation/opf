@@ -61,14 +61,14 @@ describe('the computed fills (FR-07)', () => {
   });
 
   test('min and max pin the range, and a value outside it takes the end color', () => {
-    const fills = shades({ ...quarters, colorScale: { columns: ['Q1'], min: 0, max: 100, from: 'accent1', to: 'accent2' } });
+    const fills = shades({ ...quarters, colorScale: { columns: ['Q1'], min: 0, max: 100, colors: ['accent1', 'accent2'] } });
     assert.notEqual(fills['0:1'], '#1B9E4B');
-    assert.equal(shades({ ...quarters, colorScale: { columns: ['Q1'], min: 20, max: 40, from: 'accent1', to: 'accent2' } })['0:1'], '#1B9E4B', 'below min');
-    assert.equal(shades({ ...quarters, colorScale: { columns: ['Q1'], min: 20, max: 40, from: 'accent1', to: 'accent2' } })['2:1'], '#C0392B', 'above max');
+    assert.equal(shades({ ...quarters, colorScale: { columns: ['Q1'], min: 20, max: 40, colors: ['accent1', 'accent2'] } })['0:1'], '#1B9E4B', 'below min');
+    assert.equal(shades({ ...quarters, colorScale: { columns: ['Q1'], min: 20, max: 40, colors: ['accent1', 'accent2'] } })['2:1'], '#C0392B', 'above max');
   });
 
   test('a diverging scale draws the center in mid with each side on its own span', () => {
-    const table = { columns: ['Product', 'YoY'], rows: [['A', 0.12], ['B', -0.08], ['C', 0], ['D', 0.03]], colorScale: { columns: ['YoY'], from: 'accent2', mid: 'surface', to: 'accent1', center: 0 } };
+    const table = { columns: ['Product', 'YoY'], rows: [['A', 0.12], ['B', -0.08], ['C', 0], ['D', 0.03]], colorScale: { columns: ['YoY'], colors: ['accent2', 'surface', 'accent1'], center: 0 } };
     const fills = shades(table);
     assert.equal(fills['0:1'], '#1B9E4B', 'the highest value is to');
     assert.equal(fills['2:1'], '#FFFFFF', 'the center is mid');
@@ -76,14 +76,14 @@ describe('the computed fills (FR-07)', () => {
     assert.equal(fills['1:1'], mixOklab('#FFFFFF', '#C0392B', 2 / 3));
     assert.equal(fills['3:1'], mixOklab('#FFFFFF', '#1B9E4B', 0.25));
     // Without center the values spanning both signs center on 0, positive-only values on the middle of the range.
-    const spanning = shades({ ...table, colorScale: { columns: ['YoY'], from: 'accent2', mid: 'surface', to: 'accent1' } });
+    const spanning = shades({ ...table, colorScale: { columns: ['YoY'], colors: ['accent2', 'surface', 'accent1'] } });
     assert.deepEqual(spanning, fills);
-    const positive = shades({ columns: ['K', 'V'], rows: [['a', 10], ['b', 20], ['c', 30]], colorScale: { columns: ['V'], from: 'accent2', mid: 'surface', to: 'accent1' } });
+    const positive = shades({ columns: ['K', 'V'], rows: [['a', 10], ['b', 20], ['c', 30]], colorScale: { columns: ['V'], colors: ['accent2', 'surface', 'accent1'] } });
     assert.equal(positive['1:1'], '#FFFFFF');
   });
 
   test('a diverging scale with no pinned end is symmetric: a lone small negative is pale, equal distances get equal strength', () => {
-    const table = (rows, extra = {}) => ({ columns: ['K', 'V'], rows, colorScale: { columns: ['V'], from: 'accent2', mid: 'surface', to: 'accent1', center: 0, ...extra } });
+    const table = (rows, extra = {}) => ({ columns: ['K', 'V'], rows, colorScale: { columns: ['V'], colors: ['accent2', 'surface', 'accent1'], center: 0, ...extra } });
     const lone = shades(table([['a', 10], ['b', -1], ['c', 5]]));
     const strength = (fill, end) => { const [l] = srgbToOklab('#FFFFFF'), [e] = srgbToOklab(end), [f] = srgbToOklab(fill); return (l - f) / (l - e); };
     assert.ok(strength(lone['1:1'], '#C0392B') < 0.2, 'a lone -1 among +10 is pale: ' + lone['1:1']);
@@ -104,17 +104,17 @@ describe('the computed fills (FR-07)', () => {
   });
 
   test('a range on one side of the center draws only that side', () => {
-    const above = shades({ columns: ['K', 'V'], rows: [['a', 5], ['b', 9]], colorScale: { columns: ['V'], from: 'accent2', mid: 'surface', to: 'accent1', center: 0 } });
+    const above = shades({ columns: ['K', 'V'], rows: [['a', 5], ['b', 9]], colorScale: { columns: ['V'], colors: ['accent2', 'surface', 'accent1'], center: 0 } });
     assert.equal(above['0:1'], mixOklab('#FFFFFF', '#1B9E4B', 5 / 9));
     assert.equal(above['1:1'], '#1B9E4B');
-    const below = shades({ columns: ['K', 'V'], rows: [['a', -5], ['b', -9]], colorScale: { columns: ['V'], from: 'accent2', mid: 'surface', to: 'accent1', center: 0 } });
+    const below = shades({ columns: ['K', 'V'], rows: [['a', -5], ['b', -9]], colorScale: { columns: ['V'], colors: ['accent2', 'surface', 'accent1'], center: 0 } });
     assert.equal(below['1:1'], '#C0392B');
     assert.equal(below['0:1'], mixOklab('#C0392B', '#FFFFFF', 4 / 9));
   });
 
   test('equal values draw at the to color (sequential) or at mid when equal to the center', () => {
     assert.deepEqual(Object.values(shades({ columns: ['K', 'V'], rows: [['a', 4], ['b', 4]], colorScale: { columns: ['V'] } })), ['#0000FF', '#0000FF']);
-    assert.deepEqual(Object.values(shades({ columns: ['K', 'V'], rows: [['a', 0], ['b', 0]], colorScale: { columns: ['V'], mid: 'surface', center: 0 } })), ['#FFFFFF', '#FFFFFF']);
+    assert.deepEqual(Object.values(shades({ columns: ['K', 'V'], rows: [['a', 0], ['b', 0]], colorScale: { columns: ['V'], colors: ['surface', 'surface', 'primary'], center: 0 } })), ['#FFFFFF', '#FFFFFF']);
   });
 
   test('only finite numbers are shaded; a cell fill of its own is kept and still counts towards the range', () => {
@@ -206,7 +206,7 @@ describe('a paged table keeps one range (FR-07)', () => {
     const index = Number(last.cells[0].value) / 10;
     assert.equal(last.cells[0].fill, whole.at(index, 1).fill);
     // A diverging scale is pinned at its symmetric ends.
-    const diverging = paginateSlide({ title: 'Change', table: { columns: ['Name', 'Change'], rows: rows.map(([name, value]) => [name, value - 100]), colorScale: { columns: ['Change'], mid: 'surface', center: 0 } } }, { width: 1280, height: 720, minFontSize: 24 });
+    const diverging = paginateSlide({ title: 'Change', table: { columns: ['Name', 'Change'], rows: rows.map(([name, value]) => [name, value - 100]), colorScale: { columns: ['Change'], colors: ['surface', 'surface', 'primary'], center: 0 } } }, { width: 1280, height: 720, minFontSize: 24 });
     assert.ok(diverging.slides.length > 1);
     for (const page of diverging.slides) assert.deepEqual([page.table.colorScale.min, page.table.colorScale.max, page.table.colorScale.center], [-290, 290, 0]);
     // A table that fits on one page is not rewritten.
@@ -223,7 +223,7 @@ describe('the rules (FR-07)', () => {
 
   test('a valid scale, sequential or diverging, has no finding', () => {
     assert.deepEqual(found({ ...base, colorScale: { columns: ['Q1', 'Q2'], min: 0, max: 0.4 } }), []);
-    assert.deepEqual(found({ ...base, colorScale: { columns: ['Q1'], from: 'accent2', mid: 'surface', to: 'accent1', center: 0.2 } }), []);
+    assert.deepEqual(found({ ...base, colorScale: { columns: ['Q1'], colors: ['accent2', 'surface', 'accent1'], center: 0.2 } }), []);
   });
 
   test('a name no column has is an error at the name', () => {
@@ -236,7 +236,7 @@ describe('the rules (FR-07)', () => {
   });
 
   test('an empty columns list, a raw color, a hyperlink color and center without mid are schema errors', () => {
-    for (const colorScale of [{ columns: [] }, { columns: ['Q1'], from: '#FF0000' }, { columns: ['Q1'], to: 'var:brand' }, { columns: ['Q1'], mid: 'hyperlink' }, { columns: ['Q1'], center: 0 }, { columns: ['Q1', 'Q1'] }, { columns: ['Q1'], unknown: 1 }]) {
+    for (const colorScale of [{ columns: [] }, { columns: ['Q1'], colors: ['#FF0000', 'primary'] }, { columns: ['Q1'], colors: ['surface', 'var:brand'] }, { columns: ['Q1'], colors: ['surface', 'hyperlink'] }, { columns: ['Q1'], colors: ['surface'] }, { columns: ['Q1'], colors: ['surface', 'accent1', 'primary', 'text'] }, { columns: ['Q1'], center: 0 }, { columns: ['Q1'], colors: ['surface', 'primary'], center: 0 }, { columns: ['Q1', 'Q1'] }, { columns: ['Q1'], unknown: 1 }, { columns: ['Q1'], from: 'surface' }]) {
       const result = validate(deck({ ...base, colorScale }));
       assert.equal(result.valid, false, JSON.stringify(colorScale));
       assert.ok(result.findings.some((finding) => finding.severity === 'error' && finding.path?.startsWith('/slides/0/table/colorScale')), JSON.stringify(colorScale));
@@ -250,7 +250,7 @@ describe('the rules (FR-07)', () => {
     const range = validate(deck({ ...base, colorScale: { columns: ['Q1'], min: 0.5, max: 0.4 } }));
     assert.equal(range.valid, true);
     assert.deepEqual(range.findings.filter((finding) => finding.ruleId === 'opf/table-color-scale-range').map((finding) => finding.severity), ['warning']);
-    const center = validate(deck({ ...base, colorScale: { columns: ['Q1'], mid: 'surface', center: 5, min: 0, max: 0.4 } }));
+    const center = validate(deck({ ...base, colorScale: { columns: ['Q1'], colors: ['surface', 'surface', 'primary'], center: 5, min: 0, max: 0.4 } }));
     assert.deepEqual(center.findings.filter((finding) => finding.ruleId === 'opf/table-color-scale-range').map((finding) => finding.severity), ['warning']);
   });
 
@@ -272,10 +272,10 @@ describe('every gallery color scheme (FR-07)', () => {
       const { resolved } = resolveSlideContext(deck, 0, { catalogs: [gallery] });
       const resolve = (name) => resolveColorRef(name, { colorScheme: resolved.colorScheme, roles: resolved.roles, variables: {}, fallback: '#000000' }).slice(0, 7);
       const scheme = { resolve, text: resolved.roles.text.slice(0, 7) };
-      for (const [name, scale] of [['surface to primary', { columns: ['V'] }], ['accent2 / surface / accent1', { columns: ['V'], from: 'accent2', mid: 'surface', to: 'accent1', center: 0 }]]) {
+      for (const [name, scale] of [['surface to primary', { columns: ['V'] }], ['accent2 / surface / accent1', { columns: ['V'], colors: ['accent2', 'surface', 'accent1'], center: 0 }]]) {
         const result = resolveTableColorScale({ columns: ['K', 'V'], rows: [['lowest', -1], ['highest', 1]], colorScale: scale }, scheme);
-        assert.equal(result.cells[0].fill, resolve(scale.from ?? 'surface'), 'the lowest value is the from color as the scheme resolves it');
-        assert.equal(result.cells[1].fill, resolve(scale.to ?? 'primary'), 'the highest value is the to color as the scheme resolves it');
+        assert.equal(result.cells[0].fill, resolve(scale.colors?.[0] ?? 'surface'), 'the lowest value is the first color as the scheme resolves it');
+        assert.equal(result.cells[1].fill, resolve(scale.colors?.at(-1) ?? 'primary'), 'the highest value is the last color as the scheme resolves it');
         for (const [end, cell] of [['from', result.cells[0]], ['to', result.cells[1]]]) {
           const ratio = colorContrast(cell.text, cell.fill);
           if (ratio < lowest.ratio) lowest = { ratio, label: `${theme} ${colorScheme} ${variant ?? 'default'}, ${name}, ${end} end (${cell.fill} with ${cell.text})` };
@@ -294,7 +294,7 @@ describe('Markdown and YAML (FR-07)', () => {
     name: 'Scale',
     slides: [
       { title: 'Win rate', table: { columns: ['Region', { name: 'Q1', format: '0%' }, { name: 'Q2', format: '0%' }], rows: [['EMEA', 0.22, 0.25], ['APAC', 0.18, 0.21]], colorScale: { columns: ['Q1', 'Q2'], min: 0, max: 0.4 } } },
-      { title: 'Year on year', table: { columns: ['Product', 'YoY'], rows: [['Core', 0.12], ['Add-ons', -0.08]], colorScale: { columns: ['YoY'], from: 'accent2', mid: 'surface', to: 'accent1', center: 0 } } },
+      { title: 'Year on year', table: { columns: ['Product', 'YoY'], rows: [['Core', 0.12], ['Add-ons', -0.08]], colorScale: { columns: ['YoY'], colors: ['accent2', 'surface', 'accent1'], center: 0 } } },
     ],
   });
 

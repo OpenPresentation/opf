@@ -40,15 +40,15 @@ assert.equal(parseTablePath("slides.0.title"), undefined);
   assert.equal(scaledCell(editor.presentation.slides[0].table, editor.presentation, 1, 2), false, "a cell fill of its own: not shaded by the scale");
   assert.equal(scaledCell(editor.presentation.slides[0].table, editor.presentation, 0, 3), false, "a column the scale does not name");
 
-  setTableColorScale(editor, T, { kind: "diverging", from: "accent2", to: "accent1", center: 15 });
-  assert.deepEqual(editor.presentation.slides[0].table.colorScale, { columns: ["Q1", "Q2"], from: "accent2", mid: "surface", to: "accent1", center: 15 });
+  setTableColorScale(editor, T, { kind: "diverging", colors: ["accent2", "surface", "accent1"], center: 15 });
+  assert.deepEqual(editor.presentation.slides[0].table.colorScale, { columns: ["Q1", "Q2"], colors: ["accent2", "surface", "accent1"], center: 15 });
   setTableColorScale(editor, T, { min: 0, max: 50 });
   assert.deepEqual(editor.presentation.slides[0].table.colorScale.min, 0);
   setTableColorScale(editor, T, { kind: "sequential" });
-  assert.equal(editor.presentation.slides[0].table.colorScale.mid, undefined);
-  assert.equal(editor.presentation.slides[0].table.colorScale.center, undefined, "center goes with mid");
-  setTableColorScale(editor, T, { from: null, to: null });
-  assert.equal(editor.presentation.slides[0].table.colorScale.from, undefined, "the default is not written");
+  assert.deepEqual(editor.presentation.slides[0].table.colorScale.colors, ["accent2", "accent1"], "sequential drops the middle color");
+  assert.equal(editor.presentation.slides[0].table.colorScale.center, undefined, "center goes with the middle color");
+  setTableColorScale(editor, T, { colors: ["surface", "primary"] });
+  assert.equal(editor.presentation.slides[0].table.colorScale.colors, undefined, "the default is not written");
   // Removing the last column removes the scale.
   setTableColorScale(editor, T, { columns: ["Q1"] });
   setTableColorScale(editor, T, { columns: [] });
@@ -64,9 +64,10 @@ assert.equal(parseTablePath("slides.0.title"), undefined);
 {
   const document = deck().slides ? deck() : undefined;
   assert.throws(() => prepareTableColorScale(document, T, { columns: ["Note"] }), /not a column that holds numbers/);
-  assert.throws(() => prepareTableColorScale(document, T, { columns: ["Q1"], from: "#FF0000" }), /scheme/);
-  assert.throws(() => prepareTableColorScale(document, T, { columns: ["Q1"], to: "hyperlink" }), /scheme/);
+  assert.throws(() => prepareTableColorScale(document, T, { columns: ["Q1"], colors: ["#FF0000", "primary"] }), /scheme/);
+  assert.throws(() => prepareTableColorScale(document, T, { columns: ["Q1"], colors: ["surface", "hyperlink"] }), /scheme/);
   assert.throws(() => prepareTableColorScale(document, T, { columns: ["Q1"], min: Number.NaN }), /number/);
+  assert.throws(() => prepareTableColorScale(document, T, { columns: ["Q1"], colors: ["surface"] }), /two colors/);
   assert.equal(TABLE_SCALE_COLORS.includes("hyperlink"), false);
   assert.equal(prepareTableColorScale(document, T, null).changed, false, "removing a scale that is not there changes nothing");
 }

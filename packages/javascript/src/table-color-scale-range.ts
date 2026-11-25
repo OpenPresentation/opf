@@ -12,7 +12,8 @@ export type SchemeColorName = typeof SCHEME_COLOR_NAMES[number];
 /** The authored scale (schema `TableColorScale`). */
 export interface TableColorScaleSpec {
   columns: string[];
-  from?: SchemeColorName; to?: SchemeColorName; mid?: SchemeColorName;
+  /** Two or three scheme color names, low to high: two make a sequential scale, three a diverging one through the middle color. Absent: surface, primary. */
+  colors?: SchemeColorName[];
   center?: number; min?: number; max?: number;
 }
 
@@ -92,7 +93,7 @@ export function scaleNumbers(columns: Set<number>, rows: readonly (readonly unkn
 export function effectiveRange(scale: TableColorScaleSpec, values: readonly number[]): TableColorScaleRange | undefined {
   if (!values.length) return undefined;
   const min = finite(scale.min) ? scale.min : Math.min(...values), max = finite(scale.max) ? scale.max : Math.max(...values);
-  if (scale.mid === undefined) return { min, max };
+  if (scale.colors?.length !== 3) return { min, max };
   const center = finite(scale.center) ? scale.center : min < 0 && max > 0 ? 0 : (min + max) / 2;
   // A diverging scale with no pinned end is symmetric around its center: equal distances from the center get equal strength, so a lone
   // small value on one side is pale, not the strongest color of the slide. A pinned `min` or `max` keeps that end exactly (each side on its own span).
@@ -145,7 +146,7 @@ export function tableColorScaleDiagnostics(table: unknown, headers: readonly unk
   const range = effectiveRange(spec, numbers.map(entry => entry.value))!;
   const pinned = finite(spec.min) || finite(spec.max);
   const emptyRange = pinned && !(range.min < range.max);
-  const centerOutside = finite(spec.center) && spec.mid !== undefined && (spec.center < range.min || spec.center > range.max);
+  const centerOutside = finite(spec.center) && spec.colors?.length === 3 && (spec.center < range.min || spec.center > range.max);
   if (emptyRange || centerOutside) diagnostics.push({ code: 'table-color-scale-range', severity: 'warning', path: at(base, 'colorScale'), message: "The color scale's range is empty or its center is outside it." });
   return diagnostics;
 }

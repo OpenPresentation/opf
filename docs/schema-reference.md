@@ -1367,17 +1367,16 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `columns`
-- Purpose: A color scale over the number cells of one or more columns. One scale is shared by all named columns, so equal numbers get equal colors. Only cells whose value is a finite number are shaded; a cell with its own style.fill keeps it. Sequential (no 'mid'): the lowest value is 'from', the highest 'to'. Diverging ('mid'): 'center' is drawn in 'mid', lower values towards 'from' and higher values towards 'to', each side on its own span. Colors are mixed in OKLab. A table that is paged is shaded ove...
+- Purpose: A color scale over the number cells of one or more columns. One scale is shared by all named columns, so equal numbers get equal colors. Only cells whose value is a finite number are shaded; a cell with its own style.fill keeps it. Two colors make a sequential scale: the lowest value is the first color, the highest the second. Three colors make a diverging scale: 'center' is drawn in the middle color, lower values towards the first and higher values towards the last. A diverging scale with no...
+- Conditional requirement: `colors` when `center` is present
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `columns` | yes | `array<string>` | The columns to shade, by header text (an inline table) or by dataset column name after 'fields' (a dataset-backed table). A name no column has is a 'table-color-scale-unknown-column' error. |
-| `from` | no | `ref:SchemeColorName` | The color of the lowest value. Absent: 'surface'. |
-| `to` | no | `ref:SchemeColorName` | The color of the highest value. Absent: 'primary'. |
-| `mid` | no | `ref:SchemeColorName` | Makes the scale diverging: the color of 'center', with 'from' below it and 'to' above it. |
-| `center` | no | `number` | The value drawn in 'mid'. Only with 'mid'. Absent: 0 when the values span both signs, else the middle of the range. |
-| `min` | no | `number` | The value drawn in 'from'; lower values draw in 'from' too. Absent: the lowest number in the named columns. |
-| `max` | no | `number` | The value drawn in 'to'; higher values draw in 'to' too. Absent: the highest number in the named columns. |
+| `colors` | no | `array<ref:SchemeColorName>` | The colors of the scale, low to high, as scheme color names. Two colors make a sequential scale (the lowest value in the first, the highest in the second); three make a diverging scale (the middle color is drawn at 'c... |
+| `center` | no | `number` | The value drawn in the middle color. Only with three 'colors' (a 'center' with two colors, or with no 'colors', is a schema error). Absent: 0 when the values span both signs, else the middle of the range. With no 'min... |
+| `min` | no | `number` | The value drawn in the first color; lower values draw in it too. Absent: the lowest number in the named columns (a diverging scale with neither 'min' nor 'max' is symmetric around 'center': it runs from center minus d... |
+| `max` | no | `number` | The value drawn in the last color; higher values draw in it too. Absent: the highest number in the named columns (see 'min' for a diverging scale). |
 
 
 ### SchemeColorName

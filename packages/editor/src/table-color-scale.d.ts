@@ -2,20 +2,21 @@ import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js
 
 /** The scheme colors a scale end may take (the schema's SchemeColorName). */
 export declare const TABLE_SCALE_COLORS: readonly string[];
-/** The colors an absent `from` and `to` mean. */
-export declare const TABLE_SCALE_DEFAULTS: { readonly from: "surface"; readonly to: "primary" };
+/** The colors an absent `colors` means. */
+export declare const TABLE_SCALE_DEFAULTS: { readonly colors: readonly ["surface", "primary"] };
 
 export interface TableScaleColumn { name: string; index: number; numeric: boolean; shaded: boolean }
 export interface TableColorScaleState {
   columns: TableScaleColumn[];
   kind: "none" | "sequential" | "diverging";
-  from: string; mid: string | undefined; to: string;
+  /** Two or three scheme color names, low to high. */
+  colors: string[];
   center: number | undefined; min: number | undefined; max: number | undefined;
 }
 export interface TableColorScaleChange {
   columns?: string[];
   kind?: "sequential" | "diverging";
-  from?: string | null; mid?: string | null; to?: string | null;
+  colors?: string[] | null;
   center?: number | null; min?: number | null; max?: number | null;
 }
 

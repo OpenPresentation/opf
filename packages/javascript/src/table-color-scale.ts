@@ -51,7 +51,8 @@ export function resolveTableColorScale(table: unknown, colors: TableColorScaleCo
   const numbers = scaleNumbers(scaleColumns(scale, table.columns), rows);
   const range = effectiveRange(scale, numbers.map(entry => entry.value));
   if (!range) return none;
-  const ends = { from: colors.resolve(scale.from ?? 'surface'), to: colors.resolve(scale.to ?? 'primary'), ...(scale.mid !== undefined ? { mid: colors.resolve(scale.mid) } : {}) };
+  const [first = 'surface', second, third] = scale.colors ?? [], diverging = third !== undefined;
+  const ends = { from: colors.resolve(first), to: colors.resolve(third ?? second ?? 'primary'), ...(diverging ? { mid: colors.resolve(second!) } : {}) };
   const cells = numbers.filter(entry => !entry.own).map(({ row, column, value }): TableColorScaleCell => {
     const fill = shade(value, range, ends);
     return { row, column, value, fill, text: tableColorScaleText(fill, colors) };
