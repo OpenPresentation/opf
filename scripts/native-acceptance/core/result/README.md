@@ -11,6 +11,8 @@ A run writes a new directory outside the repository:
 <out>/files/<fileId>/result.json               one per input file (native-result.schema.json)
 <out>/files/<fileId>/slides/slide-001.png ...  the application's own picture of each slide, as it wrote it
 <out>/files/<fileId>/resaved.pptx              the application's own PowerPoint copy
+<out>/preview/<deck>/slide-<n>.png             OPF's preview of each visible slide (copied in by the compare step)
+<out>/sheets/<fileId>/slide-001.jpg ...        labeled sheets of slides someone has to look at (core/compare/sheet.mjs)
 ```
 
 `fileId` is `<deck>~<variant>`, lower case, characters `a-z 0-9 . _ -` plus the one `~`; the variant is `default` when the deck has one export only (`slide-links~default`, `layouts-lots~native`). `fileId(deck, variant)` in `result.mjs` builds it. Every path inside the files is relative with forward slashes; an absolute path fails validation.
@@ -33,6 +35,8 @@ A run writes a new directory outside the repository:
 `verbs.open` adds `slideCount` and `warnings: { status, source, lines: [{ text, slides?, layouts? }] }`: the application's import warnings, word for word. `status` is `read` (an empty `lines` means it reported none), `partial` (the list was cut off) or `not-read` (it could not be read: Keynote shows its Warnings window only while it is in front). `source` is `application`, `screen` (text recognized in a capture), `log`, or null when nothing was captured. `verbs.render` may add `pixelSize`, `colorProfile` and `alpha`; `verbs.resave` adds `path` (`resaved.pptx`) and, after the round trip, `import: { status: imported / failed / not-run, error?, slideCount? }`.
 
 A slide is `{ index, hidden, layout, picture, notes, objects, compare? }`: `index` is the position in the file (1 for the first, hidden slides counted), `layout` the application's own name for the slide's layout, `picture` `slides/slide-001.png` (numbered by index) or null when the application exported none (a hidden slide), `notes` the presenter notes or null, `compare` added by the compare step.
+
+`compare` is `{ preview, score, note?, aspectDiffers?, regions? }`, filled by `core/compare/compare-run.mjs`: `preview` is OPF's preview of the slide relative to the run directory (`preview/<deck>/slide-<n>.png`: the compare step copies the previews there, so a run directory stands alone), or null for a slide OPF has no preview of (a hidden slide); `score` is the share of pixels that differ, or null with a `note` that says why there was no pair; `aspectDiffers` is true when the two pictures' aspect ratios differ; `regions` are the largest differing areas, `{ box: [x0, y0, x1, y1] in slide fractions, cells, share }`.
 
 The top level, `verbs`, each verb, the slides and the objects allow no other keys. An object's `details` is the one free-form object, for target-specific facts no shared code reads.
 
