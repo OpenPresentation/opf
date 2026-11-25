@@ -181,6 +181,78 @@
       "basis": "opf.schema.json#/$defs/Slide/properties/hidden"
     },
     {
+      "id": "core.valid.key-script-group",
+      "file": "core/valid/key-script-group.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A font scheme names its script group `scriptGroup`.",
+      "basis": "opf.schema.json#/$defs/FontScheme/properties/scriptGroup"
+    },
+    {
+      "id": "core.valid.key-table-anchor",
+      "file": "core/valid/key-table-anchor.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A styled table cell places its text vertically with `anchor`.",
+      "basis": "opf.schema.json#/$defs/TableCellStyle/properties/anchor"
+    },
+    {
+      "id": "core.valid.key-speaker-organization",
+      "file": "core/valid/key-speaker-organization.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A speaker names its organization with `organization`, the id of an entry of the root `organization`.",
+      "basis": "opf.schema.json#/$defs/Speaker/properties/organization"
+    },
+    {
+      "id": "core.valid.key-composition-min-font-size-px",
+      "file": "core/valid/key-composition-min-font-size-px.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A composition limits the smallest text size in reference pixels with `minFontSizePx`.",
+      "basis": "opf.schema.json#/$defs/Composition/properties/minFontSizePx"
+    },
+    {
+      "id": "core.valid.key-composition-max-font-size-px",
+      "file": "core/valid/key-composition-max-font-size-px.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A composition limits the largest body text size in reference pixels with `maxFontSizePx`.",
+      "basis": "opf.schema.json#/$defs/Composition/properties/maxFontSizePx"
+    },
+    {
+      "id": "core.valid.key-reference-link",
+      "file": "core/valid/key-reference-link.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A cited reference carries its address as `link`, an http, https, mail or phone link.",
+      "basis": "opf.schema.json#/$defs/Reference/properties/link"
+    },
+    {
+      "id": "core.valid.key-background-appearance",
+      "file": "core/valid/key-background-appearance.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A picture background says whether it is dark or light with `appearance`.",
+      "basis": "opf.schema.json#/$defs/ImageBackground/properties/appearance"
+    },
+    {
+      "id": "core.valid.key-chart-line-series",
+      "file": "core/valid/key-chart-line-series.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A combo chart names the columns it draws as lines with `lineSeries`.",
+      "basis": "opf.schema.json#/$defs/Chart/properties/lineSeries"
+    },
+    {
+      "id": "core.valid.key-chart-reference-line-dash-presets",
+      "file": "core/valid/key-chart-reference-line-dash-presets.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A chart reference line takes any preset dash pattern a shape outline takes.",
+      "basis": "opf.schema.json#/$defs/Line/anyOf/1/properties/dash"
+    },
+    {
       "id": "core.invalid.json-trailing-comma",
       "file": "core/invalid/json-trailing-comma.opf.json",
       "levels": ["reader"],
@@ -507,6 +579,86 @@
       "expect": { "valid": false, "errorAt": "/slides/0/blocks/0/extensions" },
       "description": "Payload `extensions` is null.",
       "basis": "opf.schema.json#/$defs/ContentPayload/properties/extensions/type"
+    },
+    {
+      "id": "core.invalid.key-script-group-old",
+      "file": "core/invalid/key-script-group-old.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/design/fontScheme/languageFamily" },
+      "description": "0.36 spelling: a font scheme names its script group `scriptGroup`. OPF 0.37 renamed the key; `opf fix` rewrites it.",
+      "basis": "opf.schema.json#/$defs/FontScheme/properties/scriptGroup"
+    },
+    {
+      "id": "core.invalid.key-table-anchor-old",
+      "file": "core/invalid/key-table-anchor-old.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/table/rows/0/0/style/verticalAlign" },
+      "description": "0.36 spelling: a styled table cell places its text vertically with `anchor`. OPF 0.37 renamed the key; `opf fix` rewrites it.",
+      "basis": "opf.schema.json#/$defs/TableCellStyle/properties/anchor"
+    },
+    {
+      "id": "core.invalid.key-speaker-organization-old",
+      "file": "core/invalid/key-speaker-organization-old.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/speaker/organizationId" },
+      "description": "0.36 spelling: a speaker names its organization with `organization`, the id of an entry of the root `organization`. OPF 0.37 renamed the key; `opf fix` rewrites it.",
+      "basis": "opf.schema.json#/$defs/Speaker/properties/organization"
+    },
+    {
+      "id": "core.invalid.key-composition-min-font-size-px-old",
+      "file": "core/invalid/key-composition-min-font-size-px-old.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/composition/minFontSize" },
+      "description": "0.36 spelling: a composition limits the smallest text size in reference pixels with `minFontSizePx`. OPF 0.37 renamed the key; `opf fix` rewrites it.",
+      "basis": "opf.schema.json#/$defs/Composition/properties/minFontSizePx"
+    },
+    {
+      "id": "core.invalid.key-composition-max-font-size-px-old",
+      "file": "core/invalid/key-composition-max-font-size-px-old.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/composition/maxFontSize" },
+      "description": "0.36 spelling: a composition limits the largest body text size in reference pixels with `maxFontSizePx`. OPF 0.37 renamed the key; `opf fix` rewrites it.",
+      "basis": "opf.schema.json#/$defs/Composition/properties/maxFontSizePx"
+    },
+    {
+      "id": "core.invalid.key-reference-link-old",
+      "file": "core/invalid/key-reference-link-old.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/references/0/url" },
+      "description": "0.36 spelling: a cited reference carries its address as `link`, an http, https, mail or phone link. OPF 0.37 renamed the key; `opf fix` rewrites it.",
+      "basis": "opf.schema.json#/$defs/Reference/properties/link"
+    },
+    {
+      "id": "core.invalid.key-background-appearance-old",
+      "file": "core/invalid/key-background-appearance-old.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/design/background/tone" },
+      "description": "0.36 spelling: a picture background says whether it is dark or light with `appearance`. OPF 0.37 renamed the key; `opf fix` rewrites it.",
+      "basis": "opf.schema.json#/$defs/ImageBackground/properties/appearance"
+    },
+    {
+      "id": "core.invalid.key-chart-line-series-old",
+      "file": "core/invalid/key-chart-line-series-old.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/chart/line" },
+      "description": "0.36 spelling: a combo chart names the columns it draws as lines with `lineSeries`. OPF 0.37 renamed the key; `opf fix` rewrites it.",
+      "basis": "opf.schema.json#/$defs/Chart/properties/lineSeries"
+    },
+    {
+      "id": "core.invalid.key-script-group-short-value",
+      "file": "core/invalid/key-script-group-short-value.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/design/fontScheme/scriptGroup" },
+      "description": "The short script group value `cs` of 0.36 is not accepted; the values are `latin`, `eastAsian` and `complexScript`.",
+      "basis": "opf.schema.json#/$defs/FontScheme/properties/scriptGroup/enum"
+    },
+    {
+      "id": "core.invalid.key-reference-link-without-scheme",
+      "file": "core/invalid/key-reference-link-without-scheme.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/references/0/link" },
+      "description": "A reference link must start with https://, http://, mailto: or tel:.",
+      "basis": "opf.schema.json#/$defs/Reference/properties/link/pattern"
     }
   ]
 }

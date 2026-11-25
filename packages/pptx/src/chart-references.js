@@ -7,6 +7,10 @@ import { drawingObject } from './background-import.js';
 import { resolveExportColor } from './color-ref.js';
 import { applyComboConstruct, comboFromNative, NATIVE_CHART_ELEMENTS } from './chart-types.js';
 import { isValidFormat } from './format-check.js';
+import { PRESET_DASH_VALUES } from './shape-blocks.js';
+
+/** a:prstDash values back to the OPF dash names (the inverse of PRESET_DASH_VALUES). */
+const OPF_DASH_NAMES = Object.freeze(Object.fromEntries(Object.entries(PRESET_DASH_VALUES).map(([name, value]) => [value, name])));
 export const REFERENCE_URI = 'urn:openpresentation:chart-references:v1';
 const URI = REFERENCE_URI,
   TAG = 'OPF_CHART_REFERENCE_V1';
@@ -140,7 +144,7 @@ export function applyReferenceSeries(xml, info, binding) {
       alpha = color.length === 8 ? `<a:alpha val="${Math.round((parseInt(color.slice(6), 16) / 255) * 100000)}"/>` : '';
     // RR-105: core may move a label to the other end of its line (off the marks); the record keeps the authored end for the import.
     helpers.push({ id, index: line.index, ...authoredRecord(line, color), ...(line.label !== undefined ? { labelAt: line.endpoint, labelPosition: line.labelPosition } : {}) });
-    const paint = `<c:spPr><a:ln w="${Math.round(line.strokeWidth * 9525)}" cap="flat"><a:solidFill><a:srgbClr val="${hex}">${alpha}</a:srgbClr></a:solidFill><a:prstDash val="${line.stroke.dash}"/></a:ln></c:spPr>`;
+    const paint = `<c:spPr><a:ln w="${Math.round(line.strokeWidth * 9525)}" cap="flat"><a:solidFill><a:srgbClr val="${hex}">${alpha}</a:srgbClr></a:solidFill><a:prstDash val="${PRESET_DASH_VALUES[line.stroke.dash] ?? 'dash'}"/></a:ln></c:spPr>`;
     let next = ser
       .replace(/<c:spPr>[\s\S]*?<\/c:spPr>/g, '')
       .replace(/<c:marker>[\s\S]*?<\/c:marker>/g, '')
@@ -289,7 +293,7 @@ function authoredReference(ref, owned, key, report) {
 function stroke(node, scale, colors) {
   const ln = node?.['a:ln'],
     w = Number(ln?.w),
-    dash = ln?.['a:prstDash']?.val ?? 'solid',
+    dash = OPF_DASH_NAMES[ln?.['a:prstDash']?.val ?? 'solid'],
     read = readBackgroundColor(ln?.['a:solidFill'], colors),
     color =
       read?.hex +
@@ -303,7 +307,7 @@ function stroke(node, scale, colors) {
     !Number.isSafeInteger(w) ||
     w < 0 ||
     w > Math.round(64 * scale * 9525 + 64 / 1440) ||
-    !['solid', 'dash', 'dot'].includes(dash) ||
+    dash === undefined ||
     !read ||
     !color ||
     (ln.cap !== undefined && ln.cap !== 'flat') ||
@@ -487,7 +491,7 @@ export function addReferenceOverlays(slide, lines, { key, tags, context, color, 
         color: hex.slice(0, 6),
         ...(hex.length === 8 ? { transparency: (1 - parseInt(hex.slice(6), 16) / 255) * 100 } : {}),
         width: l.strokeWidth * 0.75,
-        dashType: l.stroke.dash,
+        dashType: PRESET_DASH_VALUES[l.stroke.dash] ?? 'dash',
       },
     });
     tags.set(name, { v: 1, id, key, role: 'line' });

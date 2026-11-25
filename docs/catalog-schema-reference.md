@@ -204,7 +204,7 @@ _No named properties._
 | `complexScript` | no | `object` | Complex-script fonts (for example Arabic, Hebrew, Indic and Thai). Maps to the OOXML a:cs element of majorFont (major) and minorFont (minor), and to run-level a:cs. When set, they fill the complexScript slot for every... |
 | `type` | no | `enum:sans-serif \| serif \| monospace` | High-level typographic class of the scheme. |
 | `app` | no | `enum:powerpoint \| google-slides` | Target application this font pairing is intended for. Metadata for pickers and catalog filters: no engine changes its output by it. |
-| `scriptGroup` | no | `enum:latin \| ea \| cs \| eastAsian \| complexScript` | The script group this scheme is intended for: 'latin' for Latin-script content and every script outside the other two groups (Cyrillic and Greek too), 'eastAsian' for East Asian scripts, 'complexScript' for Complex Sc... |
+| `scriptGroup` | no | `enum:latin \| eastAsian \| complexScript` | The script group this scheme is intended for: 'latin' for Latin-script content and every script outside the other two groups (Cyrillic and Greek too), 'eastAsian' for East Asian scripts, 'complexScript' for Complex Sc... |
 | `languages` | no | `array<string>` | Optional list of BCP-47 language tags this scheme is curated for. Useful for picker UIs that group fonts by language coverage. As the design font scheme, an 'ea' or 'cs' scheme fills its script slot only when this lis... |
 | `textSample` | no | `string` | Short specimen string used by picker UIs to preview the scheme. |
 | `summary` | no | `string` | One-sentence positioning of the font pairing. |

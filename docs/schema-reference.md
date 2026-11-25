@@ -1270,6 +1270,15 @@ _No named properties._
 _No named properties._
 
 
+### ReferenceLineStroke
+
+- Type: `anyOf:const:"none" / object`
+- Required fields: none
+- Purpose: The stroke of a chart reference line: its color, width and dash, or 'none' for no line. The dash takes the preset names a shape outline's Stroke.dash takes (a:prstDash); a custom dash array is not available on a chart line. Every part is optional and falls back to the chart's default.
+
+_No named properties._
+
+
 ### ChartReferenceLine
 
 - Type: `object`
@@ -1282,7 +1291,7 @@ _No named properties._
 | `axis` | no | `enum:value \| secondary` | Secondary requires a combo chart with an actual secondary line series. |
 | `label` | no | `string` | Optional nonblank plain text, shown verbatim. Omission draws no label. |
 | `labelPosition` | no | `enum:start \| end` | Logical endpoint. Horizontal start/end mirror in RTL; on bars they mean top/bottom. Requires label. |
-| `stroke` | no | `ref:Line` | The line's color, width and dash, or 'none' to draw only the label. Defaults: the chart-text neutral, 4/3 reference pixels (1 point) and 'dash'. The value expands the axis bounds whether or not the line is drawn. |
+| `stroke` | no | `ref:ReferenceLineStroke` | The line's color, width and dash, or 'none' to draw only the label. Defaults: the chart-text neutral, 4/3 reference pixels (1 point) and 'dash'. The value expands the axis bounds whether or not the line is drawn. |
 
 
 ### Chart

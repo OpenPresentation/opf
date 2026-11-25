@@ -4446,6 +4446,22 @@
       ],
       "examples": ["none", { "width": 2 }, { "color": "accent2", "width": 2, "dash": "dash" }]
     },
+    "ReferenceLineStroke": {
+      "description": "The stroke of a chart reference line: its color, width and dash, or 'none' for no line. The dash takes the preset names a shape outline's Stroke.dash takes (a:prstDash); a custom dash array is not available on a chart line. Every part is optional and falls back to the chart's default.",
+      "anyOf": [
+        { "const": "none", "description": "No line." },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "color": { "$ref": "#/$defs/ColorRef", "description": "Line color: any ColorRef (eight-digit hex keeps its alpha)." },
+            "width": { "type": "number", "minimum": 0, "maximum": 64, "description": "Line width in reference pixels at a 720-pixel short edge. 0 draws no line, the same as 'none'." },
+            "dash": { "type": "string", "enum": ["solid", "dot", "dash", "longDash", "dashDot", "longDashDot", "longDashDotDot", "sysDot", "sysDash", "sysDashDot", "sysDashDotDot"], "description": "DrawingML preset dash (a:prstDash), by the names Stroke.dash uses. Default dash." }
+          }
+        }
+      ],
+      "examples": ["none", { "width": 2 }, { "color": "accent2", "width": 2, "dash": "longDashDot" }]
+    },
     "ChartReferenceLine": {
       "type": "object",
       "additionalProperties": false,
@@ -4456,7 +4472,7 @@
         "axis": { "type": "string", "enum": ["value", "secondary"], "default": "value", "description": "Secondary requires a combo chart with an actual secondary line series." },
         "label": { "type": "string", "minLength": 1, "pattern": "\\S", "description": "Optional nonblank plain text, shown verbatim. Omission draws no label." },
         "labelPosition": { "type": "string", "enum": ["start", "end"], "default": "end", "description": "Logical endpoint. Horizontal start/end mirror in RTL; on bars they mean top/bottom. Requires label." },
-        "stroke": { "$ref": "#/$defs/Line", "description": "The line's color, width and dash, or 'none' to draw only the label. Defaults: the chart-text neutral, 4/3 reference pixels (1 point) and 'dash'. The value expands the axis bounds whether or not the line is drawn." }
+        "stroke": { "$ref": "#/$defs/ReferenceLineStroke", "description": "The line's color, width and dash, or 'none' to draw only the label. Defaults: the chart-text neutral, 4/3 reference pixels (1 point) and 'dash'. The value expands the axis bounds whether or not the line is drawn." }
       },
       "dependentRequired": { "labelPosition": ["label"] }
     },
