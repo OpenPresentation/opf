@@ -35,7 +35,8 @@ Impress runs on GitHub's runners.
 
 ```sh
 pnpm native <target> [--tier smoke|release|full] [--decks a,b] [--baseline <opf version>|none] [--out <dir>]
-                     [--from-run <dir>] [--warnings-dir <dir>] [--look deck#slide,...] [--write-summary] [--json]
+                     [--from-run <dir>] [--warnings-dir <dir>] [--look deck#slide,...] [--release <x.y.z>]
+                     [--write-summary] [--force-summary] [--json]
 ```
 
 The steps are select, check, build, run, classify and report. `check` runs before the build and before every file; a refusal
@@ -58,14 +59,19 @@ the exported files and OPF's previews; `<out>/run` the run directory, `classify.
 **Exit codes.** 0: nothing new. 1: something new; look at each item. 2: refused, something not run, or the run could not finish.
 
 ```sh
-pnpm native keynote --tier smoke --warnings-dir ~/opf-work/warnings-0.37.0
-pnpm native keynote --tier release --baseline 0.36.0
+pnpm native keynote --tier smoke --release 0.37.0 --warnings-dir ~/opf-work/warnings-0.37.0
+pnpm native keynote --tier release --release 0.37.0 --out ~/opf-work/native/keynote-0.37.0
 pnpm native powerpoint --from-run D:/opf-work/native/run --inputs D:/opf-work/native/build --previews D:/opf-work/native/build/preview
 ```
 
-The baseline is, by default, the newest version under `scripts/native-acceptance/runs/` that has the target; today that is
-0.36.0 for Keynote. The report names the OPF version of `packages/cli/package.json` and the checkout's commit; on a release
-candidate that version is still the previous release, and the commit identifies the candidate.
+The baseline is, by default, the newest version under `scripts/native-acceptance/runs/` that has the target, below the
+`--release` version when one is given; today that is 0.36.0 for Keynote. A run is never its own baseline.
+
+**A release candidate** is built from a workspace that still carries the previous release's version
+(`packages/cli/package.json`). `--release <x.y.z>` names the version the candidate will be released as. The report then names
+both, for example "OPF workspace 0.36.0 at <commit>, release candidate 0.37.0": the workspace version is the previous release's,
+and the commit identifies the candidate. `run.json` and every `result.json` keep the workspace's version and commit; only the
+summary carries the release.
 
 ## Before a Keynote run
 
@@ -117,25 +123,27 @@ Open its sheet and decide whose difference it is:
    places (`where`: deck, variant, slide), what a user `sees`, `whose: application`, the `workaround` and `workaroundTried`, the
    `issue` if there is one, and `firstSeen` and `lastSeen`. Set `skill: true` only when an author can act on it; then run
    `pnpm build:native-known`, which regenerates the Keynote table in `skills/opf-export/SKILL.md`.
-3. **OPF's defect** (its file, or its importer reading the application's copy): open an issue, add a record with
-   `whose: opf-file` or `whose: opf-importer` and that issue, and fix it. A failed import is recorded with `importError`, the
+3. **OPF's defect** (its file, its importer reading the application's copy, or its preview when the preview is wrong and the
+   exported file is right): open an issue, add a record with `whose: opf-file`, `opf-importer` or `preview` and that issue,
+   and fix it. A failed import is recorded with `importError`, the
    importer's error code.
 4. **A difference that is gone** (`known-gone`, or a `new` slide whose score went down): retire the record (`status: retired`) or
    narrow its `where`.
 
-Then classify again (`pnpm native <target> --from-run <out>/run`). A run is clean when it exits with 0.
+Then classify again (`pnpm native <target> --from-run <out>/run`, with the same `--release`). A run is clean when it exits
+with 0.
 
 ## The release gate
 
 Decision D1: a Keynote run gates OPF's defects only. A release supervisor applies these rules:
 
 1. A release candidate is the commit of `main` that the Release workflow's dry run tested. Before the real run, Keynote runs the
-   `smoke` tier on it, then the `release` tier.
+   `smoke` tier on it, then the `release` tier, both with `--release <the version being released>`.
 2. Each run must finish. Exit 2 is not a pass: fix the cause and run again.
 3. Every `new` item of both runs is reviewed and settled as above, until the run classified again exits with 0.
-4. A reviewed difference that is OPF's defect (`whose: opf-file` or `opf-importer`) and first seen in this candidate blocks the
-   release until it is fixed on `main` and a new candidate passes, or the owner accepts it in writing on the release's tracking
-   issue.
+4. A reviewed difference that is OPF's defect (`whose: opf-file`, `opf-importer` or `preview`) and first seen in this candidate
+   blocks the release until it is fixed on `main` and a new candidate passes, or the owner accepts it in writing on the release's
+   tracking issue.
 5. A limit of the application (`whose: application`) is recorded and does not block.
 6. An OPF defect first seen in an earlier release and still open does not block by itself. The release supervisor lists it under
    known differences on the release's tracking issue.
@@ -148,12 +156,12 @@ classify step runs on it and it has a known-difference file.
 
 ## After the release
 
-- The summary of a release is `scripts/native-acceptance/runs/<version>/<target>.json` (decision D5), written by
-  `--write-summary` for a run that finished (exit 0 or 1). The command names the file after the version in
-  `packages/cli/package.json`, so write it from a run on the release commit (the tag `vX.Y.Z`), where that version is the
-  release's. Never pass `--write-summary` on a candidate: there the version is still the previous release's, and the file would
-  replace the baseline.
-- Commit the summary together with the updated known records: set `lastSeen` (the application's version and the release) on
+- The summary of a release is `scripts/native-acceptance/runs/<version>/<target>.json` (decision D5). It is written from the
+  reviewed candidate run, without opening Keynote again:
+  `pnpm native keynote --from-run <out>/run --release <version> --write-summary`. Its `opf` is the release's version with the
+  candidate's commit. It is written only for a run that finished (exit 0 or 1), and it never replaces an existing summary unless
+  `--force-summary` is given; without it the command says which file it would have replaced and exits with 2.
+- Commit the summary in a small pull request after the release, together with the updated known records: set `lastSeen` (the application's version and the release) on
   every record the run reported, and retire the records that are gone. No tool updates `lastSeen`; it is edited by hand.
 - Pictures, sheets, saved decks and logs go to an evidence branch (`codex/evidence-<slug>`), are attached to the issue, or stay
   on the machine. They never go into `main` (`pnpm check:evidence-size`).

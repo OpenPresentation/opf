@@ -73,9 +73,10 @@ started by the owner, runs `pnpm native keynote --tier smoke` and then `--tier r
 `new` item is reviewed. A run that exits with 2 is not a pass. A reviewed difference that is OPF's defect and first seen in this
 candidate blocks the release until it is fixed (a new candidate, run again) or the owner accepts it in writing on the release's
 tracking issue; a limit of Keynote is recorded and does not block (decision D1). PowerPoint on Windows keeps its before-merge
-pass, and the Impress nightly leg reports only. If `main` moves before the real run, its new head is a new candidate. After the
-release, the Keynote summary is written from the tag and committed with the updated known records. The rules, who does what and
-how to read a result: [native-testing.md](native-testing.md).
+pass, and the Impress nightly leg reports only. If `main` moves before the real run, its new head is a new candidate. Both runs
+pass `--release <the version being released>`; after the release, the Keynote summary is written from the reviewed candidate
+run without opening Keynote again (`--from-run <dir> --release <version> --write-summary`) and committed with the updated known
+records in a small pull request. The rules, who does what and how to read a result: [native-testing.md](native-testing.md).
 
 ### Version rules
 
