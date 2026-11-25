@@ -23,8 +23,8 @@ const rules = (report, id) => report.findings.filter((finding) => finding.ruleId
 describe('the schema', () => {
   test('a dataset takes the six provenance keys and a data source by id', () => {
     const document = deck({
-      datasources: { warehouse: { title: 'Finance warehouse', description: 'Nightly export', connector: 'postgres', src: 'postgres://warehouse.example.com/finance', license: 'CC-BY-4.0', refresh: 'P1D', extensions: { 'com.example': { pool: 2 } } } },
-      datasets: { revenue: dataset({ title: 'Revenue', description: 'By quarter', datasource: 'warehouse', query: 'SELECT quarter, revenue FROM revenue', retrieved: '2026-11-01T09:30:00Z', version: 'r42', sha256: SHA, generator: { kind: 'model', name: 'metricgen 2.1' } }) },
+      datasources: { warehouse: { title: 'Finance warehouse', description: 'Nightly export', connector: 'postgres', src: 'postgres://warehouse.example.com/finance', license: 'CC-BY-4.0', refreshEvery: 'P1D', extensions: { 'com.example': { pool: 2 } } } },
+      datasets: { revenue: dataset({ title: 'Revenue', description: 'By quarter', datasource: 'warehouse', query: 'SELECT quarter, revenue FROM revenue', retrieved: '2026-11-01T09:30:00Z', version: 'r42', sha256: SHA, generator: { type: 'model', name: 'metricgen 2.1' } }) },
     });
     const report = run(document);
     assert.equal(report.valid, true, JSON.stringify(report.findings));
@@ -39,7 +39,7 @@ describe('the schema', () => {
   });
 
   test('inline chart data takes the same six keys', () => {
-    const data = { ...dataset(), datasource: { src: './revenue.csv' }, query: 'FY26!A1:C13', retrieved: '2026-11-01', version: 'r1', sha256: SHA, generator: { kind: 'human', name: 'Avery Chen' } };
+    const data = { ...dataset(), datasource: { src: './revenue.csv' }, query: 'FY26!A1:C13', retrieved: '2026-11-01', version: 'r1', sha256: SHA, generator: { type: 'human', name: 'Avery Chen' } };
     const report = run(deck({}, { chart: { type: 'column', alt: 'Revenue', data } }));
     assert.equal(report.valid, true, JSON.stringify(report.findings));
   });
@@ -62,21 +62,21 @@ describe('the schema', () => {
   test('values the schema rejects', () => {
     const bad = {
       sha256: [SHA.toUpperCase(), 'abc', 12],
-      refresh: ['daily', '1D', 'P', 'PT', 'P1Y2M3DT'],
+      refreshEvery: ['daily', '1D', 'P', 'PT', 'P1Y2M3DT'],
       retrieved: ['yesterday', '2026-13-01'],
-      generator: [{ kind: 'robot', name: 'x' }, { kind: 'model' }, 'model'],
+      generator: [{ type: 'robot', name: 'x' }, { type: 'model' }, 'model'],
       version: [''],
       query: [''],
     };
     for (const [key, values] of Object.entries(bad)) {
       for (const value of values) {
-        const document = key === 'refresh'
-          ? deck({ datasources: { warehouse: { refresh: value } } })
+        const document = key === 'refreshEvery'
+          ? deck({ datasources: { warehouse: { refreshEvery: value } } })
           : deck({ datasets: { revenue: dataset({ [key]: value }) } });
         assert.equal(run(document).valid, false, `${key}: ${JSON.stringify(value)}`);
       }
     }
-    for (const refresh of ['P1D', 'P1W', 'P3M', 'PT6H', 'P1Y2M3DT4H5M6S', 'PT0.5S']) assert.equal(run(deck({ datasources: { warehouse: { refresh } } })).valid, true, refresh);
+    for (const refresh of ['P1D', 'P1W', 'P3M', 'PT6H', 'P1Y2M3DT4H5M6S', 'PT0.5S']) assert.equal(run(deck({ datasources: { warehouse: { refreshEvery: refresh } } })).valid, true, refresh);
   });
 
   test('a data source has no unknown keys; connector settings go in extensions', () => {
@@ -166,7 +166,7 @@ describe('opf/datasource-credentials', () => {
 });
 
 describe('opf/dataset-stale', () => {
-  const stale = (retrieved, refresh, options) => run(deck({ datasources: { warehouse: { refresh } }, datasets: { revenue: dataset({ datasource: 'warehouse', retrieved }) } }), options);
+  const stale = (retrieved, refresh, options) => run(deck({ datasources: { warehouse: { refreshEvery: refresh } }, datasets: { revenue: dataset({ datasource: 'warehouse', retrieved }) } }), options);
 
   test('is reported only when the caller passes a date: core has no clock', () => {
     assert.equal(rules(stale('2026-01-01', 'P1D'), 'opf/dataset-stale').length, 0);
@@ -178,7 +178,7 @@ describe('opf/dataset-stale', () => {
     assert.equal(report.valid, true);
   });
 
-  test('compares retrieved plus refresh with the date, in the calendar', () => {
+  test('compares retrieved plus refreshEvery with the date, in the calendar', () => {
     const count = (retrieved, refresh, asOf) => rules(stale(retrieved, refresh, { asOf }), 'opf/dataset-stale').length;
     assert.equal(count('2026-11-24', 'P1D', '2026-11-25'), 0, 'due exactly on the date');
     assert.equal(count('2026-11-24', 'P1D', '2026-11-26'), 1);
@@ -191,12 +191,12 @@ describe('opf/dataset-stale', () => {
     assert.equal(count('2025-11-01', 'P1Y', '2026-11-02'), 1);
   });
 
-  test('needs a retrieved date and a refresh to compare; an inline data source counts', () => {
+  test('needs a retrieved date and a refreshEvery to compare; an inline data source counts', () => {
     const none = run(deck({ datasets: { revenue: dataset({ datasource: { src: './a.csv' }, retrieved: '2020-01-01' }) } }), { asOf: '2026-11-25' });
     assert.equal(rules(none, 'opf/dataset-stale').length, 0);
-    const inline = run(deck({ datasets: { revenue: dataset({ datasource: { src: './a.csv', refresh: 'P1D' }, retrieved: '2020-01-01' }) } }), { asOf: '2026-11-25' });
+    const inline = run(deck({ datasets: { revenue: dataset({ datasource: { src: './a.csv', refreshEvery: 'P1D' }, retrieved: '2020-01-01' }) } }), { asOf: '2026-11-25' });
     assert.equal(rules(inline, 'opf/dataset-stale').length, 1);
-    const chart = run(deck({}, { chart: { type: 'column', alt: 'Revenue', data: { ...dataset(), datasource: { src: './a.csv', refresh: 'P1D' }, retrieved: '2020-01-01' } } }), { asOf: '2026-11-25' });
+    const chart = run(deck({}, { chart: { type: 'column', alt: 'Revenue', data: { ...dataset(), datasource: { src: './a.csv', refreshEvery: 'P1D' }, retrieved: '2020-01-01' } } }), { asOf: '2026-11-25' });
     assert.deepEqual(rules(chart, 'opf/dataset-stale').map((finding) => finding.path), ['/slides/0/chart/data/retrieved']);
   });
 
@@ -209,13 +209,13 @@ describe('opf/dataset-stale', () => {
 describe('what the engines read', () => {
   const document = deck({
     datasources: { warehouse: { src: 'https://example.com/finance.csv', license: 'CC-BY-4.0' } },
-    datasets: { revenue: dataset({ datasource: 'warehouse', query: 'FY26!A1:B3', retrieved: '2026-11-01', version: 'r1', sha256: SHA, generator: { kind: 'human', name: 'Avery' } }) },
+    datasets: { revenue: dataset({ datasource: 'warehouse', query: 'FY26!A1:B3', retrieved: '2026-11-01', version: 'r1', sha256: SHA, generator: { type: 'human', name: 'Avery' } }) },
   });
 
   test('a chart that references a dataset reports the dataset\'s provenance; inline data reports its own', () => {
     const referenced = resolveChartData(document.slides[0].chart, document);
     assert.equal(referenced.ok, true);
-    assert.deepEqual(referenced.provenance, { datasource: 'warehouse', query: 'FY26!A1:B3', retrieved: '2026-11-01', version: 'r1', sha256: SHA, generator: { kind: 'human', name: 'Avery' } });
+    assert.deepEqual(referenced.provenance, { datasource: 'warehouse', query: 'FY26!A1:B3', retrieved: '2026-11-01', version: 'r1', sha256: SHA, generator: { type: 'human', name: 'Avery' } });
     const own = resolveChartData({ type: 'column', data: { ...dataset(), datasource: { src: './a.csv' }, retrieved: '2026-11-02' } }, document);
     assert.deepEqual(own.provenance, { datasource: { src: './a.csv' }, retrieved: '2026-11-02' });
     assert.equal(resolveChartData({ type: 'column', data: dataset() }, document).provenance, undefined);
@@ -245,7 +245,7 @@ describe('what the engines read', () => {
 
   test('the keys travel through the formatter unchanged', () => {
     const text = format(JSON.stringify(document));
-    assert.deepEqual(JSON.parse(text).datasets.revenue.generator, { kind: 'human', name: 'Avery' });
+    assert.deepEqual(JSON.parse(text).datasets.revenue.generator, { type: 'human', name: 'Avery' });
     assert.deepEqual(JSON.parse(text).datasources, document.datasources);
   });
 });
@@ -324,17 +324,17 @@ describe('Markdown and YAML round trip', () => {
     name: 'Round trip',
     language: 'en-US',
     datasources: {
-      warehouse: { title: 'Finance warehouse', connector: 'postgres', src: 'postgres://warehouse.example.com/finance', license: 'Internal use only', refresh: 'P1D', extensions: { 'com.example': { pool: 2 } } },
+      warehouse: { title: 'Finance warehouse', connector: 'postgres', src: 'postgres://warehouse.example.com/finance', license: 'Internal use only', refreshEvery: 'P1D', extensions: { 'com.example': { pool: 2 } } },
       forecast: { connector: 'xlsx', src: 'https://example.com/revenue.xlsx' },
     },
     datasets: {
-      revenue: dataset({ title: 'Revenue', datasource: 'warehouse', query: "SELECT quarter, revenue FROM revenue WHERE note = 'a b'", retrieved: '2026-11-01T09:30:00Z', version: 'r42', sha256: SHA, generator: { kind: 'model', name: 'metricgen 2.1' } }),
+      revenue: dataset({ title: 'Revenue', datasource: 'warehouse', query: "SELECT quarter, revenue FROM revenue WHERE note = 'a b'", retrieved: '2026-11-01T09:30:00Z', version: 'r42', sha256: SHA, generator: { type: 'model', name: 'metricgen 2.1' } }),
       costs: dataset({ datasource: { src: './costs.csv', connector: 'csv' }, query: "'Q3 plan'!A1:B9", retrieved: '2026-11-01' }),
     },
     slides: [
       { title: 'Chart', chart: { type: 'column', alt: 'Revenue by quarter', data: { dataset: 'revenue' } } },
       { title: 'Table', table: { dataset: 'costs' } },
-      { title: 'Inline', chart: { type: 'line', alt: 'Revenue', data: { ...dataset(), datasource: 'forecast', query: 'FY26!A1:C13', retrieved: '2026-11-02', version: 'r1', sha256: SHA, generator: { kind: 'human', name: 'Avery Chen' } } } },
+      { title: 'Inline', chart: { type: 'line', alt: 'Revenue', data: { ...dataset(), datasource: 'forecast', query: 'FY26!A1:C13', retrieved: '2026-11-02', version: 'r1', sha256: SHA, generator: { type: 'human', name: 'Avery Chen' } } } },
     ],
   };
 
@@ -370,9 +370,9 @@ describe('Markdown and YAML round trip', () => {
   });
 
   test('a patch changes one key; diff names what changed', () => {
-    const after = applyPatch(full, [{ op: 'replace', path: '/datasets/revenue/version', value: 'r43' }, { op: 'add', path: '/datasources/warehouse/refresh', value: 'PT6H' }]);
+    const after = applyPatch(full, [{ op: 'replace', path: '/datasets/revenue/version', value: 'r43' }, { op: 'add', path: '/datasources/warehouse/refreshEvery', value: 'PT6H' }]);
     assert.equal(after.datasets.revenue.version, 'r43');
-    assert.equal(after.datasources.warehouse.refresh, 'PT6H');
+    assert.equal(after.datasources.warehouse.refreshEvery, 'PT6H');
     const changes = diff(full, after);
     assert.ok(JSON.stringify(changes).includes('version'), JSON.stringify(changes).slice(0, 400));
     assert.equal(run(after).valid, true);
