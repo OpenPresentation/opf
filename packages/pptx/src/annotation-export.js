@@ -15,9 +15,9 @@ export const footnotesRuleName = slideIndex => `OPF footnotes ${slideIndex} rule
 export const footnoteEntryName = (slideIndex, entry) => `OPF footnotes ${slideIndex} entry ${entry}`;
 
 // Where a line's paragraph is anchored against its glyphs, by the whitespace that hangs at its soft wrap (index.js hangShift and
-// paragraphAnchor): `hang * factor` past them in a left-to-right line, by its glyphs in a right-to-left one.
-const hangShift = (line, factor, direction) => direction === 'rtl' || !(line?.hang > 0) ? 0 : line.hang * factor;
-const paragraphAnchor = (placed, factor, direction) => direction === 'rtl' && placed.hang > 0 ? placed.x + placed.hang + (placed.width - placed.hang) * factor : placed.x + placed.width * factor;
+// paragraphAnchor): PowerPoint counts it, `hang * factor` past them in a left-to-right line, `hang * (factor - 1)` in a right-to-left one.
+const hangShift = (line, factor, direction) => line?.hang > 0 ? line.hang * (direction === 'rtl' ? factor - 1 : factor) : 0;
+const paragraphAnchor = (placed, factor) => placed.x + placed.width * factor;
 
 const INVALID_XML = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF￾￿]/u;
 

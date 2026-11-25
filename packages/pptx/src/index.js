@@ -4646,17 +4646,16 @@ function measuredLineAnchors(item) {
 }
 // How far the anchor of a line's paragraph is from its glyphs' anchor, by the whitespace that hangs at its soft wrap (core's
 // TextLineSource.hang, RichTextLine.hang, TextPlacementLine.hang). PowerPoint counts trailing whitespace at the end of a left-to-right
-// paragraph in its alignment, so that paragraph is anchored `hang * factor` past its glyphs. A right-to-left line's whitespace is on its
-// left; PowerPoint ignores it at the edges of a right-aligned line (native check 2026-10-02) and whether it counts it in a centered or
-// left-aligned one is not measured, so a right-to-left paragraph is anchored by its glyphs, as it was before the whitespace hung.
+// paragraph in its alignment, so that paragraph is anchored `hang * factor` past its glyphs. It counts the whitespace at the end of a
+// right-to-left paragraph too, at the paragraph's left end (PowerPoint, 2026-11-24: centered lines half a space and left-aligned lines a
+// space off where it was not counted), and ignores it in a right-aligned one (native check 2026-10-02): `hang * (factor - 1)`.
 function hangShift(line, factor, direction) {
-  return direction === 'rtl' || !(line?.hang > 0) ? 0 : line.hang * factor;
+  return line?.hang > 0 ? line.hang * (direction === 'rtl' ? factor - 1 : factor) : 0;
 }
-// Where a placed line's paragraph is anchored (hangShift): core's placed text anchor for a left-to-right line, its glyphs' for a
-// right-to-left one (core puts that line's whitespace on its left, `hang` before its glyphs).
-function paragraphAnchor(placed, factor, direction) {
-  const hang = placed?.hang > 0 ? placed.hang : 0;
-  return direction === 'rtl' ? placed.x + hang + (placed.width - hang) * factor : placed.x + placed.width * factor;
+// Where a placed line's paragraph is anchored (hangShift): core's placed text anchor, the whitespace included (core puts a
+// right-to-left line's whitespace on its left, `hang` before its glyphs).
+function paragraphAnchor(placed, factor) {
+  return placed.x + placed.width * factor;
 }
 
 // RR-105 (opf#1291, PowerPoint 2026-11-12, probe of six faces, two-line titles). At exactly single spacing (spcPct 100%) PowerPoint draws
@@ -4774,6 +4773,8 @@ function fixedTitlePlan(item, family) {
   const anchors = measuredLineAnchors(item), align = anchors[0].align, rtl = directions.has('rtl');
   if (anchors.some(line => line.align !== align)) return {reject: 'line-placement'};
   const drawn = anchors.map(line => line.x).filter(value => value !== undefined);
+  // A right-to-left title whose paragraphs would need margins (a centered or left-aligned one whose lines hang a space at their wraps: each
+  // paragraph is anchored with its space) keeps its measured line boxes: paragraph margins in a right-to-left title are not measured.
   if (rtl && drawn.some(value => Math.abs(value - drawn[0]) > TITLE_LINE_TOLERANCE)) return {reject: 'line-placement'};
   const width = item.box.width, factor = anchors[0].factor;
   // The box's anchor edge: the leftmost start (left), the rightmost end (right), the first line's center (center).

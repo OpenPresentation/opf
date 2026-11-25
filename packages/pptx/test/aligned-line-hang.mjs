@@ -90,8 +90,9 @@ for (const [index, factor] of [[0, 1], [1, .5]]) {
 
 // Right to left: the whitespace that hangs at a soft wrap is on the left of the line. A right-aligned paragraph (PowerPoint does not count
 // whitespace at the edges of a right-aligned right-to-left line) has its box on the edge, also when the line's space did not fit in the box
-// (it was a space short before). A centered or left-aligned one is anchored by its glyphs too, as before: whether PowerPoint counts the
-// whitespace at the left end of such a paragraph is not measured.
+// (it was a space short before). PowerPoint counts the whitespace at the left end of a centered or left-aligned one (2026-11-24): its box
+// is anchored with the whitespace, half a hang (centered) or a whole hang (left) left of the glyphs' anchor, so the glyphs land where the
+// preview draws them. Centered and left-aligned titles whose lines would need right-to-left paragraph margins keep their line boxes.
 {
   const hebrew = 'פסקה של טקסט גוף שהיא ארוכה מספיק כדי לגלוש לשורה שנייה ושלישית בתוך תיבת הטקסט שלה, כך שכל שורה עוטפת מסתיימת ברווח.';
   const rtlDeck = {language: 'he', design: {fontScheme: 'roboto'}, slides: [
@@ -109,9 +110,10 @@ for (const [index, factor] of [[0, 1], [1, .5]]) {
     for (const [line, place] of placed.entries()) {
       const shape = named(xml, `OPF text ${path} line ${line}`), box = frame(shape);
       assert.equal(texts(shape)[0], item.text.lines[line], 'the line keeps its text');
-      // The glyphs of every line share one anchor, the whitespace hanging on their left, and the paragraph is anchored there.
-      const glyphs = place.x + (place.hang ?? 0) + (place.width - (place.hang ?? 0)) * factor;
-      near(box.x + box.width * factor, glyphs, 'the paragraph is anchored by its glyphs');
+      // The glyphs of every line share one anchor, the whitespace hanging on their left; the paragraph is anchored with the whitespace.
+      const hang = place.hang ?? 0, glyphs = place.x + hang + (place.width - hang) * factor;
+      near(box.x + box.width * factor, glyphs + hang * (factor - 1), 'the paragraph is anchored with its whitespace on the left');
+      if (factor < 1 && line < placed.length - 1) assert.ok(hang > 10, 'a wrapped line hangs a space');
       near(glyphs, placed.at(-1).x + placed.at(-1).width * factor, 'glyphs aligned', .5);
       if (factor === 1) near(box.x + box.width, item.box.x + item.box.width, 'a right-aligned line box ends on the edge', .5);
     }
