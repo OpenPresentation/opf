@@ -51,6 +51,8 @@ export function chartHighlightPlan({options, data, kind, panelFill, labelColor, 
 
 const fill = color => `<a:solidFill>${color.xml}</a:solidFill>`;
 const recolor = (block, color) => block.replace(/<a:solidFill>[\s\S]*?<\/a:solidFill>/g, fill(color));
+// A slice's c:dPt: the fill of its c:spPr, never the solid fill of its outline (a:ln).
+const recolorSliceFill = (point, color) => point.replace(/(<c:spPr>\s*)<a:solidFill>[\s\S]*?<\/a:solidFill>/, (_, head) => `${head}${fill(color)}`);
 
 // The series' own c:spPr: the first one, which precedes c:marker, c:dPt, c:dLbls and the data references in CT_*Ser.
 function seriesProperties(ser) {
@@ -85,7 +87,9 @@ export function applyChartHighlight(xml, plan) {
       return ser.replace(/<c:dPt>([\s\S]*?)<\/c:dPt>/g, (point, inner) => {
         const row = Number(/<c:idx val="(\d+)"\/>/.exec(inner)?.[1]);
         // LH-105: a focus plan colors each focused slice in its own color (plan.sliceColor).
-        return marks.categories[row] === undefined ? point : recolor(point, plan.sliceColor ? plan.sliceColor(row) : marks.categories[row] ? accent : muted);
+        // opf#1430: only the slice's fill: its outline (a:ln) is the separator the preview draws between slices, in the surface color, so
+        // two muted slices of one fill still read as two.
+        return marks.categories[row] === undefined ? point : recolorSliceFill(point, plan.sliceColor ? plan.sliceColor(row) : marks.categories[row] ? accent : muted);
       });
     }
     if (index >= marks.series.length) return ser;

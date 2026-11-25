@@ -176,6 +176,8 @@ let contextTimer: ReturnType<typeof setTimeout> | undefined;
 let checkTimer: ReturnType<typeof setTimeout> | undefined;
 let started = false;
 let mounted = false;
+/** Set while the editor reports that the deck's fonts could not be loaded (the host offers no read_font_file, or the read failed). */
+let fontsFailure: string | undefined;
 let themed: string[] = [];
 
 /** What the person calls the model on the other side: the host's product (Claude, ChatGPT), else "the assistant". */
@@ -856,6 +858,25 @@ function fail(message: string): void {
 	if (!mounted) $("deck-wait").dataset.failed = "true";
 }
 
+/**
+ * The deck's fonts could not be read from the server. The editor's own error box sits in the canvas, under the stage, where nothing
+ * shows it; the view says so on the placeholder in place of the slide, with the footer's status, instead of waiting for slides that
+ * cannot be drawn. A later successful load (the editor's fonts event `ready`) takes the words down again.
+ */
+function showFontsFailure(): void {
+	if (!fontsFailure) return;
+	wait.textContent = `The slides cannot be drawn: the fonts this deck needs could not be loaded from the server (${fontsFailure}). The host that serves this viewer must offer its font files (the server's read_font_file tool).`;
+	$("deck-wait").dataset.failed = "true";
+	shell.dataset.fonts = "failed";
+	if (!mounted) status("Fonts could not be loaded.");
+}
+function clearFontsFailure(): void {
+	if (!fontsFailure) return;
+	fontsFailure = undefined;
+	$("deck-wait").dataset.failed = "false";
+	delete shell.dataset.fonts;
+}
+
 /** The stage in the shape of the deck's slides (16:9 until a slide is drawn). */
 function showDeck(): void {
 	const box = $("deck-canvas").querySelector("svg")?.viewBox.baseVal;
@@ -1081,7 +1102,15 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		// The example images read through read_example_files, for the slides and the PNG, PDF and SVG exports.
 		imageResolver: (src) => examplePictures.resolve(src),
 		slideActions: "starters",
-		canvas: { titleEnterCommits: true },
+		canvas: {
+			titleEnterCommits: true,
+			onFonts: (event) => {
+				if (event.state === "error") {
+					fontsFailure = event.error.message.replace(/^Fonts for this document could not be loaded:\s*/, "").replace(/\.$/, "");
+					showFontsFailure();
+				} else if (event.state === "ready") clearFontsFailure();
+			},
+		},
 		// The deck as its audience sees it: `{{organization.name}}` in a footer draws as the name, as the renderer and the exports draw
 		// it. (The editor's default draws tokens as written; a press on resolved text then edits the authored value in its form, or the
 		// source.) A template still draws its variables as written.
@@ -1165,6 +1194,8 @@ async function start(args: ShowDeckArguments): Promise<void> {
 	syncSend();
 	sourceBaseline = paneText();
 	shell.dataset.ready = "true";
+	// A fonts failure reported while the view was starting is shown now that the placeholder would otherwise go.
+	showFontsFailure();
 	if (superseded) editor.setReadOnly(true);
 	showOpen();
 	if (typeof args.slide === "number" && args.slide >= 1) editor.setSlide(args.slide - 1);

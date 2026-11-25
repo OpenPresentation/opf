@@ -30,6 +30,16 @@ const roundTrip = async slide => {
   return {bytes, slide: deck.slides[0], provenance, record: slideRecord(bytes)};
 };
 
+// A list's explicit columns survive measured-line export/import along with its native text.
+for (const columns of [1, 2, 3, 'auto']) {
+  const block = {columns, bullets: ['Scope', 'Review', 'Test', 'Ship', 'Measure', 'Improve']};
+  const {slide, record} = await roundTrip({blocks: [block]});
+  assert.deepEqual(slide.blocks, [block]);
+  const invalid = structuredClone(record.content);
+  invalid.blocks[0].columns = 4;
+  assert.throws(() => validateTopology(invalid), /Invalid list columns/);
+}
+
 // Every form returns as authored: nested groups, each region family, ids,
 // extensions, group composition, and the root payload with its slide type.
 {

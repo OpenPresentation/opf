@@ -461,14 +461,21 @@ const namesLanguage = lang => Boolean(lang) && LANGUAGE_TAG.test(lang) && !/^(?:
  * (a plain lang="en-US"), so "תוצאות Q3" is one he-IL run and one en-US run, and the tie would rank en-US first. Those pieces
  * are not a second language. They are left out of the count wherever the paragraph also has a run in another language. A run
  * whose author set its language (OPF marks it altLang="en-US") still counts, and so does a right-to-left paragraph that is all
- * en-US.
+ * en-US. LH-118 writes a right-to-left paragraph of only numbers ("+16%") as an en-US run in a paragraph marked rtl="0"; on a
+ * slide that has such a right-to-left paragraph in another language, that run is the same kind of piece and is left out too.
  */
 function withoutLatinPieces(xml) {
-  return xml.replace(/<a:p>[\s\S]*?<\/a:p>/g, paragraph => {
-    if (!/<a:pPr\b[^>]*?\srtl="1"/.test(paragraph)) return paragraph;
-    const tags = [...paragraph.matchAll(/<a:rPr\b[^>]*>/g)].map(([run]) => attribute(run, 'lang'));
-    if (!tags.some(lang => namesLanguage(lang) && lang.toLowerCase() !== 'en-us')) return paragraph;
-    return paragraph.replace(/<a:rPr\b[^>]*>/g, run => String(attribute(run, 'lang')).toLowerCase() === 'en-us' && attribute(run, 'altLang') === undefined ? '' : run);
+  const plain = run => String(attribute(run, 'lang')).toLowerCase() === 'en-us' && attribute(run, 'altLang') === undefined;
+  const pieces = paragraph => paragraph.replace(/<a:rPr\b[^>]*>/g, run => plain(run) ? '' : run);
+  const rtlInOtherLanguage = paragraph => /<a:pPr\b[^>]*?\srtl="1"/.test(paragraph)
+    && [...paragraph.matchAll(/<a:rPr\b[^>]*>/g)].some(([run]) => { const lang = attribute(run, 'lang'); return namesLanguage(lang) && lang.toLowerCase() !== 'en-us'; });
+  const paragraphs = /<a:p>[\s\S]*?<\/a:p>/g;
+  if (![...xml.matchAll(paragraphs)].some(([paragraph]) => rtlInOtherLanguage(paragraph))) return xml;
+  return xml.replace(paragraphs, paragraph => {
+    if (rtlInOtherLanguage(paragraph)) return pieces(paragraph);
+    const numberOnly = /^<a:p>\s*<a:pPr\b[^>]*?\srtl="0"/.test(paragraph)
+      && !/[\p{L}\p{Nl}]/u.test([...paragraph.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => decodeText(match[1])).join(''));
+    return numberOnly ? pieces(paragraph) : paragraph;
   });
 }
 

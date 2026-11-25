@@ -144,6 +144,8 @@ html, body { margin: 0; overflow: hidden; background: transparent; }
 .deck-wait[data-failed="true"] .deck-wait-text { margin: 0; color: var(--opf-ui-fg); }
 @keyframes deck-wait { 50% { opacity: 0.45; } }
 #opf-deck[data-ready="true"] .deck-wait { display: none; }
+/* The deck's fonts could not be loaded: the placeholder stays (or returns) over the stage and says so; the bar and the Open menu keep working. */
+#opf-deck[data-ready="true"][data-fonts="failed"] .deck-wait { display: flex; }
 .deck-row { flex: none; display: flex; align-items: center; min-width: 0; padding: 4px 8px; border-top: 1px solid var(--opf-ui-border); background: var(--opf-ui-surface); }
 .deck-row:has(#deck-thumbs:empty) { display: none; }
 /* The strip is the editor's: it scrolls itself and keeps the open slide in view, so this element must not scroll (a scrolling

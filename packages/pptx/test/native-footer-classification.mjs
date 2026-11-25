@@ -82,6 +82,13 @@ for (const [index, fixture] of manifest.fixtures.entries()) {
     if (!slide.blocks.length) delete slide.blocks;
   }
   expected.design.footer.start = {text: 'Keynote qualification'};
+  // opf#1431 (owner, 2026-11-24): the K10 column and K11 line charts show no data labels and import as `dataLabels: false`; the sealed
+  // control predates it and records them without the field (previously the expectation was the control as is).
+  for (const slideIndex of [9, 10]) {
+    const chart = expected.slides[slideIndex].blocks[0].chart;
+    assert.equal(chart.dataLabels, undefined);
+    chart.dataLabels = false;
+  }
   assert.deepEqual(current.document, expected, 'Only literal-block removal and footer addition differ from the same-final-runtime diagnostic control');
   assert.deepEqual(current.issues, before[index].issues, 'All twenty ordered diagnostics remain exact, including the K11 paint finding');
   assert.equal(current.issues.length, 20);

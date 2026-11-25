@@ -35,8 +35,13 @@ export function addSteps(slide, steps, context, tags, rtl = false) {
   const accent = hex(context.colors.accent), numeral = hex(context.roles ? readableSchemeColor(`#${accent}`, context.roles).hex : '#FFFFFF');
   const card = hex(context.roles?.neutrals?.card?.hex ?? `#${context.colors.surface}`), cardBorder = hex(context.roles?.neutrals?.cardBorder?.hex ?? `#${context.colors.border}`);
   const inches = value => value / 96, box = area => ({x: inches(area.x), y: inches(area.y), w: inches(area.width), h: inches(area.height)});
+  // A list that flows into columns composes one sequence per column, all with the list's path: the second and later sequences of a path
+  // carry their position in the name (`part 1`), so shape names stay unique. The first keeps the bare name, as before.
+  const seen = new Map();
   for (const [sequence, step] of steps.entries()) {
-    const name = (role, index) => `OPF steps ${step.path} ${role}${index === undefined ? '' : ` ${index}`}`;
+    const part = seen.get(step.path) ?? 0;
+    seen.set(step.path, part + 1);
+    const name = (role, index) => `OPF steps ${step.path}${part ? ` part ${part}` : ''} ${role}${index === undefined ? '' : ` ${index}`}`;
     const tag = (objectName, role, extra = {}) => tags.set(objectName, {v: 1, path: step.path, form: step.form, sequence, role, ...extra});
     for (const [index, chip] of (step.chips ?? []).entries()) {
       const objectName = name('chip', index);
