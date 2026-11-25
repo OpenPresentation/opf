@@ -64,7 +64,7 @@ const NS = 'http://schemas.openxmlformats.org/presentationml/2006/main';
 const TAGS_TYPE = 'application/vnd.openxmlformats-officedocument.presentationml.tags+xml';
 const MAX_OMITTED = 256;
 const MAX_AUTHOR_LENGTH = 4096;
-const MAX_FIELD_BYTES = 256 * 1024, MAX_CATALOG_BYTES = 1024 * 1024, MAX_TAG_CHARS = 16 * 1024 * 1024;
+const MAX_ID_LENGTH = 1024, MAX_FIELD_BYTES = 256 * 1024, MAX_CATALOG_BYTES = 1024 * 1024, MAX_TAG_CHARS = 16 * 1024 * 1024;
 
 const enc = new TextEncoder(), dec = new TextDecoder('utf-8', {fatal: true});
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', textNodeName: '#text', parseAttributeValue: false, parseTagValue: false, trimValues: false});
@@ -93,6 +93,8 @@ function authoredSocials(stored, observed) {
 export const DESIGN_REFERENCES = Object.freeze(['theme', 'colorScheme', 'fontScheme', 'dimensions', 'background']);
 // OPF 0.35 removed contentDirection and chartPrimary: a 0.34 file's stored values are not restored.
 export const COMPOSITION_HINTS = Object.freeze(['titleAlignment', 'titlePosition', 'contentAlignment', 'contentBox', 'imageFit', 'listBullet']);
+// `id` (CR 7, the document id) is a top-level key of the record too: a 0.36 importer ignores it, where a metadata or supplement key it does
+// not know would lose the whole record.
 // `references` (RR-34): the deck's cited sources. Like `author`, stored as a top-level key of OPF_DOCUMENT_V1 (importers up to
 // 0.11.9 drop a tag with an unknown `supplement` field but ignore an unknown top-level key) and read back into metadata.
 export const METADATA = Object.freeze(['narrative', 'tone', 'audience', 'purpose', 'language', 'organization', 'speaker', 'takeaway', 'duration', 'tags', 'variables', 'filename', 'extensions', 'author', 'references', 'icons', 'id']);
@@ -132,7 +134,7 @@ const SLIDE_DESIGN_FIELDS = [...STYLE_REFERENCES, 'background', ...COMPOSITION_H
 // whose `design` does. Keys added since are written under `supplement`, a
 // top-level container those importers ignore, and merged back on read. Add
 // every new design or metadata key here, never to the legacy sections.
-const DOCUMENT_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['filename', 'extensions', 'id'])});
+const DOCUMENT_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['filename', 'extensions'])});
 const SLIDE_SUPPLEMENT = Object.freeze({design: BRAND_ASSETS, metadata: Object.freeze(['language'])});
 // RR-59: document-level values the import reads back although export only baked them in from engine defaults: the
 // canonical `$schema`, the package title (`name`), the language the runs carry, and the theme, color scheme, font scheme
@@ -743,8 +745,9 @@ function storable(entries, provenance) {
     for (const [key, value] of Object.entries(source[section] ?? {})) {
       const path = section === 'design' ? `design.${key}` : key;
       if (section === 'metadata' && key === 'id') {
-        // An opaque string: never read as a media or asset reference.
-        if (sizeOf(value) > MAX_FIELD_BYTES) omit(path, `it is larger than ${MAX_FIELD_BYTES / 1024} KiB`); else fields[key] = value;
+        // CR 7: a top-level key of the record, like `author` and `references` (importers up to 0.36 ignore an unknown top-level key but
+        // reject an unknown metadata key and lose the whole record). An opaque string, never read as a media or asset reference.
+        if (value.length > MAX_ID_LENGTH) omit(path, `it is longer than ${MAX_ID_LENGTH} characters`); else document.id = value;
         continue;
       }
       if (section === 'metadata' && (key === 'author' || key === 'references')) {
@@ -914,7 +917,9 @@ function validateDocument(stored) {
   for (const key of Object.keys(value.metadata ?? {})) if (!METADATA.includes(key)) throw Error(`Unknown metadata field ${key}.`);
   if (value.metadata?.filename !== undefined && typeof value.metadata.filename !== 'string') throw Error('Invalid filename record.');
   if (value.metadata?.extensions !== undefined && !object(value.metadata.extensions)) throw Error('Invalid extensions record.');
-  if (value.metadata?.id !== undefined && (typeof value.metadata.id !== 'string' || value.metadata.id === '')) throw Error('Invalid id record.');
+  if (stored.metadata?.id !== undefined || stored.supplement?.metadata?.id !== undefined) throw Error('The document id is a top-level field.');
+  const documentId = stored.id;
+  if (documentId !== undefined && (typeof documentId !== 'string' || documentId === '' || documentId.length > MAX_ID_LENGTH)) throw Error('Invalid id record.');
   const author = stored.author;
   if (author !== undefined && !((typeof author === 'string' && author.length <= MAX_AUTHOR_LENGTH * 256) || (Array.isArray(author) && author.length > 0 && author.length <= 256 && author.every(name => typeof name === 'string' && name.length <= MAX_AUTHOR_LENGTH)))) throw Error('Invalid author record.');
   const references = stored.references;
@@ -923,9 +928,9 @@ function validateDocument(stored) {
   // Untrusted: only a short list of strings is read, and a path this importer does not know is ignored (a newer exporter's).
   if (value.absent !== undefined && (!Array.isArray(value.absent) || value.absent.length > 64 || !value.absent.every(path => typeof path === 'string' && path.length <= 256))) throw Error('Invalid absent field list.');
   if (value.absent !== undefined) value.absent = value.absent.filter(path => DEFAULTED.includes(path));
-  if (author !== undefined || references !== undefined) {
-    const {author: _author, references: _references, ...rest} = value;
-    return {...rest, metadata: {...rest.metadata, ...(author !== undefined ? {author} : {}), ...(references !== undefined ? {references} : {})}};
+  if (author !== undefined || references !== undefined || documentId !== undefined) {
+    const {author: _author, references: _references, id: _id, ...rest} = value;
+    return {...rest, metadata: {...rest.metadata, ...(author !== undefined ? {author} : {}), ...(references !== undefined ? {references} : {}), ...(documentId !== undefined ? {id: documentId} : {})}};
   }
   return value;
 }

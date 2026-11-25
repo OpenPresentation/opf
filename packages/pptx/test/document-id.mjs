@@ -3,8 +3,8 @@ import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
 import {validate} from '@openpresentation/opf';
 
-// CR 7: the document id. An opaque non-empty string in OPF_DOCUMENT_V1 (under `supplement.metadata`, so published importers that
-// reject an unknown metadata key still read the tag), restored on import, kept in 'full' and 'references-only' provenance and
+// CR 7: the document id. An opaque non-empty string, a top-level key of OPF_DOCUMENT_V1 (like `author` and `references`: importers up to
+// 0.36 ignore an unknown top-level key but reject an unknown metadata key and lose the whole record), restored on import, kept in 'full' and 'references-only' provenance and
 // dropped, with a report, when provenance is off. It is a claim: import restores the stored string as written.
 const dec = new TextDecoder(), enc = new TextEncoder();
 const tagValue = xml => JSON.parse(Buffer.from(xml.match(/\bval="([^"]+)"/)[1], 'hex').toString('utf8'));
@@ -22,8 +22,14 @@ const roundTrip = async (document, options = {}) => {
 {
   const {bytes, diagnostics, imported} = await roundTrip(deck({id: UUID}));
   const tag = tagValue(dec.decode(unzipSync(bytes)['ppt/tags/opfDocument.xml']));
-  assert.equal(tag.supplement.metadata.id, UUID);
-  assert.equal(tag.metadata?.id, undefined, 'a published importer never sees an unknown legacy metadata key');
+  assert.equal(tag.id, UUID, 'a top-level key of the record');
+  assert.equal(tag.metadata?.id, undefined);
+  assert.equal(tag.supplement?.metadata?.id, undefined);
+  // The 0.36.0 importer's view (document-provenance.js at v0.36.0): it merges `supplement` into the legacy sections and rejects any
+  // metadata key outside its METADATA list, so a key there would lose the whole record. Top-level keys it does not know are ignored.
+  const METADATA_0_36 = ['narrative', 'tone', 'audience', 'purpose', 'language', 'organization', 'speaker', 'takeaway', 'duration', 'tags', 'variables', 'filename', 'extensions', 'author', 'references', 'icons'];
+  const merged = {...(tag.metadata ?? {}), ...(tag.supplement?.metadata ?? {})};
+  assert.deepEqual(Object.keys(merged).filter(key => !METADATA_0_36.includes(key)), [], 'a 0.36.0 importer accepts every metadata key');
   assert.equal(imported.id, UUID);
   assert.equal(validate(imported, {only: ['format']}).valid, true);
   assert.deepEqual(diagnostics.filter(issue => issue.code === 'document-provenance-omitted'), []);
@@ -39,7 +45,7 @@ for (const id of ['dk_5e8f1a7b3c909d426b1e7c3a', 'asset:logo', 'data:image/png;b
 // references-only keeps the id (identity, not content).
 {
   const {bytes, imported} = await roundTrip(deck({id: UUID}), {provenance: 'references-only'});
-  assert.equal(tagValue(dec.decode(unzipSync(bytes)['ppt/tags/opfDocument.xml'])).supplement.metadata.id, UUID);
+  assert.equal(tagValue(dec.decode(unzipSync(bytes)['ppt/tags/opfDocument.xml'])).id, UUID);
   assert.equal(imported.id, UUID);
 }
 
@@ -63,17 +69,31 @@ for (const id of ['dk_5e8f1a7b3c909d426b1e7c3a', 'asset:logo', 'data:image/png;b
 }
 
 // An empty or non-string stored id rejects the tag (invalid-document-provenance) and keeps the observed values.
-for (const bad of ['""', '7']) {
+for (const bad of ['""', '7', JSON.stringify('x'.repeat(1025))]) {
   const bytes = await toPptx(deck({id: UUID}));
   const entries = unzipSync(bytes);
   const tag = tagValue(dec.decode(entries['ppt/tags/opfDocument.xml']));
-  tag.supplement.metadata.id = JSON.parse(bad);
+  tag.id = JSON.parse(bad);
   const hex = Buffer.from(JSON.stringify(tag), 'utf8').toString('hex').toUpperCase();
   entries['ppt/tags/opfDocument.xml'] = enc.encode(dec.decode(entries['ppt/tags/opfDocument.xml']).replace(/\bval="[^"]+"/, `val="${hex}"`));
   const issues = [];
   const imported = await fromPptx(zipSync(entries), {onDiagnostic: issue => issues.push(issue)});
   assert.equal(imported.id, undefined, bad);
   assert.ok(issues.some(issue => issue.code === 'invalid-document-provenance'), bad);
+}
+
+// An id in a legacy section (metadata or supplement) is not the document id: the record is rejected.
+for (const place of ['metadata', 'supplement']) {
+  const entries = unzipSync(await toPptx(deck({id: UUID, tone: 'formal'})));
+  const tag = tagValue(dec.decode(entries['ppt/tags/opfDocument.xml']));
+  delete tag.id;
+  if (place === 'metadata') tag.metadata = {...tag.metadata, id: UUID}; else tag.supplement = {metadata: {id: UUID}};
+  const hex = Buffer.from(JSON.stringify(tag), 'utf8').toString('hex').toUpperCase();
+  entries['ppt/tags/opfDocument.xml'] = enc.encode(dec.decode(entries['ppt/tags/opfDocument.xml']).replace(/\bval="[^"]+"/, `val="${hex}"`));
+  const issues = [];
+  const imported = await fromPptx(zipSync(entries), {onDiagnostic: issue => issues.push(issue)});
+  assert.equal(imported.id, undefined, place);
+  assert.ok(issues.some(issue => issue.code === 'invalid-document-provenance'), place);
 }
 
 // Editing the deck in PowerPoint does not change the id: a changed title and slide still import with the stored id.
