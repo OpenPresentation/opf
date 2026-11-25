@@ -942,14 +942,25 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 		const stale = embeddedInvalid && site.kind === 'layouts' ? staleLayoutCopy(document, embeddedInvalid.group, embeddedInvalid.id, options) : undefined;
 		const diagnostic = unresolvedReference(document, site.kind, site.reference, path, options);
 		if (removedLayoutAuto(site.kind, site.reference)) {
+			// The embedded record "auto" that fails the layout schema goes with the last slide that names it, when every slide that names it
+			// names it as "auto" (a leftover of the removed layout, which nothing uses after the fix); a valid record stays (no finding here).
+			const dropRecord = embeddedInvalid !== undefined && embeddedInvalid.id === 'auto' && lastLayoutAutoSite(document, embeddedInvalid.group, options, site.path);
 			findings.push(
 				finding('opf/unresolved-reference', {
 					path,
 					message: diagnostic.message,
-					help: 'OPF 0.35 removed layout "auto". Delete the layout key: a slide without one is composed automatically, which is what "auto" did.',
+					help: `OPF 0.35 removed layout "auto". Delete the layout key: a slide without one is composed automatically, which is what "auto" did.${dropRecord ? ` The fix also removes the embedded layout "auto" in catalogs.${embeddedInvalid.group}, which fails the layout schema and which no slide names after it.` : ''}`,
 					definition: `${schemas.presentation.$id}#/$defs/Slide`,
 					lookup: ['opf', 'catalog', site.kind],
-					fixes: [{ id: 'remove-layout-auto', title: 'Delete layout (automatic composition)', kind: 'patch' as const, safe: true, patch: [{ op: 'remove' as const, path }] }],
+					fixes: [
+						{
+							id: 'remove-layout-auto',
+							title: dropRecord ? 'Delete layout (automatic composition) and the embedded layout record "auto"' : 'Delete layout (automatic composition)',
+							kind: 'patch' as const,
+							safe: true,
+							patch: [{ op: 'remove' as const, path }, ...(dropRecord ? [{ op: 'remove' as const, path: pointer(['catalogs', embeddedInvalid.group, 'layouts', 'auto']) }] : [])],
+						},
+					],
 				}),
 			);
 			continue;
@@ -1250,4 +1261,20 @@ export function contractFindings(document: unknown, contracts: readonly Contract
 		}
 	}
 	return findings;
+}
+
+/**
+ * Whether the slide site `last` is the last site that names the embedded layout "auto" of `group`, and every site that names that record
+ * names it as the bare reference "auto" (so the fix of each of them leaves no slide on the record once the last one is applied).
+ */
+function lastLayoutAutoSite(document: unknown, group: string, options: CatalogOptions, last: readonly (string | number)[]): boolean {
+	let latest: readonly (string | number)[] | undefined;
+	for (const site of catalogReferenceSites(document)) {
+		if (site.kind !== 'layouts') continue;
+		const found = resolveReference(document, site.kind, site.reference, { ...options, ...(site.group !== undefined ? { group: site.group } : {}) });
+		if (found?.origin !== 'document' || found.group !== group || found.id !== 'auto') continue;
+		if (!removedLayoutAuto(site.kind, site.reference)) return false;
+		latest = site.path;
+	}
+	return latest !== undefined && latest.length === last.length && latest.every((key, at) => key === last[at]);
 }
