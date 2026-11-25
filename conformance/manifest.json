@@ -77,6 +77,14 @@
       "basis": "opf.schema.json#/$defs/ListItem, BulletItem, TimelineEvent, TableRow (optional id; ids kept at the same JSON Pointer)"
     },
     {
+      "id": "core.valid.variable-translations",
+      "file": "core/valid/variable-translations.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A text variable with translations and a date variable with a translated display pattern, drawn on slides in two languages.",
+      "basis": "opf.schema.json#/$defs/TextVariable/properties/translations, DateVariable/properties/translations"
+    },
+    {
       "id": "core.valid.group-nesting-at-limit",
       "file": "core/valid/group-nesting-at-limit.opf.json",
       "levels": ["reader", "writer"],
@@ -259,6 +267,22 @@
       "expect": { "valid": false, "errorAt": "/slides/0/blocks/0/colour" },
       "description": "A payload field the spec does not define.",
       "basis": "opf.schema.json#/$defs/ContentPayload/additionalProperties"
+    },
+    {
+      "id": "core.invalid.variable-translation-bad-tag",
+      "file": "core/invalid/variable-translation-bad-tag.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/variables/cta/translations" },
+      "description": "A translation keyed by a word that is not a language tag: the key of translations is a BCP 47 tag such as de, de-AT or zh-Hant.",
+      "basis": "opf.schema.json#/$defs/TextVariable/properties/translations/propertyNames"
+    },
+    {
+      "id": "core.invalid.variable-translation-wrong-kind",
+      "file": "core/invalid/variable-translation-wrong-kind.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/variables/growth/translations" },
+      "description": "Translations on a number variable: only text, list, url, image and date variables have them.",
+      "basis": "opf.schema.json#/$defs/NumberVariable/additionalProperties"
     },
     {
       "id": "core.invalid.variable-limit-wrong-kind",

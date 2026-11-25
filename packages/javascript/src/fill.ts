@@ -4,7 +4,11 @@
 import { OPFDataImportError, parseTabularData } from "./data.js";
 import { type ResolveVariablesOptions, type VariableDiagnostic, resolveVariables } from "./variables.js";
 
-/** The values of one deck, keyed by variable id. */
+/**
+ * The values of one deck, keyed by variable id. A variable's entry is its value; FR-10: for a text, list, url, image or date variable it may
+ * also be `{ "value": ..., "translations": { "de": { "value": ... } } }` (a date's entries have a `format`), giving the translations the
+ * deck keeps. A value given without translations removes the template's translations of that variable (a date's formats stay).
+ */
 export type FillRecord = Record<string, unknown>;
 
 export interface FillOptions extends Pick<ResolveVariablesOptions, "partial" | "examples"> {
@@ -39,6 +43,8 @@ export interface FillResult {
 	unfilled: string[];
 	/** The warnings and errors of every deck, one entry per code, variable and path, with the records it hit. An `error` (a required variable with no value, unless `partial`) means the deck is not usable as it is. */
 	diagnostics: (VariableDiagnostic & { records: number[] })[];
+	/** FR-10: the variables whose translations were removed because a record gave a value without translations, with those records. Absent when none was. */
+	translationsRemoved?: { id: string; records: number[] }[];
 }
 
 const isRecord = (value: unknown): value is FillRecord => typeof value === "object" && value !== null && !Array.isArray(value);
@@ -78,12 +84,15 @@ export function fill(template: unknown, data?: string | FillRecord | readonly Fi
 	if (!records.length) throw new OPFDataImportError("Data contains no records.");
 	if (!records.every(isRecord)) throw new OPFDataImportError("Each record must be an object keyed by variable id.");
 	const decks = records.map((record, offset) => ({ index: offset + 1, record, ...resolveVariables(template, record, { template: false, partial: options.partial === true, examples: options.examples === true }) }));
+	const removed = new Map<string, number[]>();
+	for (const deck of decks) for (const entry of deck.diagnostics) if (entry.code === "variable-translations-removed") removed.set(entry.id, [...(removed.get(entry.id) ?? []), deck.index]);
 	return {
 		decks: decks.map(({ index, record, presentation, diagnostics, unfilled, complete }) => ({ index, record, presentation: presentation as Record<string, unknown>, diagnostics, unfilled, complete })),
 		...(options.combine ? { presentation: combine(decks as unknown as FilledDeck[]) } : {}),
 		complete: decks.every((deck) => deck.complete),
 		unfilled: [...new Set(decks.flatMap((deck) => deck.unfilled))],
 		diagnostics: summarize(decks as unknown as FilledDeck[]),
+		...(removed.size ? { translationsRemoved: [...removed].map(([id, records]) => ({ id, records })) } : {}),
 	};
 }
 

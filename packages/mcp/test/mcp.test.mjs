@@ -308,6 +308,21 @@ describe("opf-mcp", () => {
 			assert.equal(report.ok, true);
 		});
 
+		test("a model reads a variable's translations (FR-10): the schema and the docs name them, and validate_deck takes and reports them", async () => {
+			for (const name of ["TextVariable", "ListVariable", "UrlVariable", "ImageVariable", "DateVariable"]) {
+				const variable = (await client.callTool({ name: "get_schema", arguments: { name } })).structuredContent;
+				assert.ok(Object.keys(variable.schema.properties).includes("translations"), name);
+			}
+			const number = (await client.callTool({ name: "get_schema", arguments: { name: "NumberVariable" } })).structuredContent;
+			assert.equal(Object.keys(number.schema.properties).includes("translations"), false);
+			const found = (await client.callTool({ name: "search_docs", arguments: { query: "variable translations language tag fall back", limit: 3 } })).structuredContent;
+			assert.ok(found.results.some((hit) => hit.uri === "opf://docs/templates-and-variables"));
+			const deck = { name: "Bilingual", language: "de", variables: { cta: { type: "text", value: "Book", translations: { de: { value: "Buchen" }, fr: { value: "Réserver" } } } }, slides: [{ title: "{{cta}}" }] };
+			const report = (await client.callTool({ name: "validate_deck", arguments: { document: deck } })).structuredContent;
+			assert.deepEqual(report.findings.filter((finding) => finding.ruleId.includes("translation")).map((finding) => [finding.ruleId, finding.path]), [["opf/variable-translation-unused", "/variables/cta/translations/fr"]]);
+			assert.equal(report.ok, true);
+		});
+
 		test("list_examples lists the bundled decks and filters them", async () => {
 			const all = (await client.callTool({ name: "list_examples", arguments: {} })).structuredContent;
 			assert.equal(all.total, JSON.parse(cli(["catalog", "examples"]).stdout).length);

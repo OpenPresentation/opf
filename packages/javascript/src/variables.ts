@@ -3,7 +3,7 @@ import { formatFurnitureDate, parseIsoDate } from "./furniture-fields.js";
 import { organizationsOf, primaryOrganization, primarySpeaker, speakersOf } from "./deck-metadata.js";
 import { SLIDE_SCOPED_BUILTINS, isSlideScopedBuiltin, isSlideScopedName, slideTokenFollows } from "./slide-variables.js";
 import { LOGO_SHAPES, logoReferenceName, parseLogoName, resolveOrganizationLogo, type LogoReference } from "./logos.js";
-import { languageInEffect, localizeNumberText, localizePatternNumber } from "./numerals.js";
+import { languageInEffect, localizeNumberText, localizePatternNumber, plainLanguageTag } from "./numerals.js";
 
 /**
  * Template variables: typed, named values a deck declares once and uses in many
@@ -40,6 +40,17 @@ export interface VariableDeclaration {
   maxLines?: number;
   /** List: the most entries the value may have. */
   maxItems?: number;
+  /** FR-10: the value (a date: the display format) in other languages, in document order. Absent when the variable has none. */
+  translations?: VariableTranslation[];
+}
+
+/** One language's entry of a variable's `translations`: a `value` (a date: a display `format`), coerced to the variable's kind. */
+export interface VariableTranslation {
+  /** The language tag, as written. */
+  tag: string;
+  value?: unknown;
+  /** A date variable's display pattern in this language. */
+  format?: string;
 }
 
 export type VariableUseForm = "token" | "reference";
@@ -62,7 +73,10 @@ export type VariableDiagnosticCode =
   | "variable-rich-flattened"
   | "variable-format"
   | "variable-group-omitted"
-  | "variable-overflow";
+  | "variable-overflow"
+  | "variable-translation-duplicate"
+  | "variable-translation-unused"
+  | "variable-translations-removed";
 export type VariableDiagnosticSeverity = "error" | "warning" | "info";
 export interface VariableDiagnostic {
   code: VariableDiagnosticCode;
@@ -217,6 +231,72 @@ function isProvided(kind: VariableKind, raw: unknown): boolean {
   return true;
 }
 
+const languageTagPattern = /^(?:[A-Za-z]{2,3}|[iIxX])(?:-[A-Za-z0-9]{1,8})*$/;
+/** The kinds whose output changes with the language: a text, list, url or image has translated values, a date a translated format (FR-10). */
+const TRANSLATED_KINDS: readonly VariableKind[] = ["text", "list", "url", "image", "date"];
+
+/**
+ * The entries of a `translations` map, coerced to the kind: a `value` for text, list, url and image, a `format` for a date. An entry the
+ * kind cannot take is a problem (the schema reports it too); a key that is not a language tag is skipped.
+ */
+function translationEntries(kind: VariableKind, raw: unknown): { entries: VariableTranslation[]; problems: { tag: string; message: string }[] } {
+  const entries: VariableTranslation[] = [];
+  const problems: { tag: string; message: string }[] = [];
+  if (!TRANSLATED_KINDS.includes(kind) || !isRecord(raw)) return { entries, problems };
+  for (const [tag, entry] of Object.entries(raw)) {
+    if (!languageTagPattern.test(tag)) continue;
+    if (!isRecord(entry)) {
+      problems.push({ tag, message: kind === "date" ? "expected an object with a format" : "expected an object with a value" });
+      continue;
+    }
+    if (kind === "date") {
+      if (typeof entry.format === "string" && entry.format.trim() !== "") entries.push({ tag, format: entry.format });
+      else problems.push({ tag, message: "expected a date display pattern in format" });
+      continue;
+    }
+    const coerced = entry.value === undefined ? undefined : coerceVariableValue(kind, entry.value);
+    if (coerced?.ok) entries.push({ tag, value: coerced.value });
+    else problems.push({ tag, message: coerced ? coerced.message : "expected a value" });
+  }
+  return { entries, problems };
+}
+
+/** The tags a language selects, most specific first: `zh-Hant-TW`, `zh-Hant`, `zh`. Extensions (`-u-nu-latn`) are not part of the language. */
+function languageCandidates(language: string): string[] {
+  const subtags = plainLanguageTag(language).replaceAll("_", "-").toLowerCase().split("-");
+  const out: string[] = [];
+  for (let length = subtags.length; length > 0; length--) out.push(subtags.slice(0, length).join("-"));
+  return out;
+}
+
+/**
+ * The translation a language selects (FR-10): the exact tag, then the tag with its last subtag removed, and so on, compared without regard
+ * to case. Two keys that differ only in case select the first in document order. Undefined with no language or no match.
+ */
+export function pickTranslation<T extends { tag: string }>(entries: readonly T[] | undefined, language: string | undefined): T | undefined {
+  if (!entries?.length || !language) return undefined;
+  for (const candidate of languageCandidates(language)) {
+    const found = entries.find((entry) => entry.tag.toLowerCase() === candidate);
+    if (found) return found;
+  }
+  return undefined;
+}
+
+/**
+ * The language a variable inserted at `path` is drawn in, for selecting a translation: the declared language of the slide the path is in,
+ * else the deck's. A language read from the text does not select a translation. Undefined when the deck declares none. The deck's header and
+ * footer (and any other place outside a slide) are drawn in the deck's language.
+ */
+export function translationLanguageAt(presentation: unknown, path: string): string | undefined {
+  const slide = /^\/slides\/(\d+)(?:\/|$)/.exec(path);
+  return languageInEffect(presentation, slide ? Number(slide[1]) : undefined);
+}
+
+/** The translation of a declaration that applies at `path` of the document (the one its language there selects), undefined when none does. */
+export function translationAt(declaration: Pick<VariableDeclaration, "translations">, presentation: unknown, path: string): VariableTranslation | undefined {
+  return pickTranslation(declaration.translations, translationLanguageAt(presentation, path));
+}
+
 /** The declarations of the document's `variables` map, in declaration order. Entries the schema rejects are skipped. */
 export function variableDeclarations(presentation: unknown): VariableDeclaration[] {
   if (!isRecord(presentation) || !isRecord(presentation.variables)) return [];
@@ -245,6 +325,8 @@ export function variableDeclarations(presentation: unknown): VariableDeclaration
     limit("maxLength", "text");
     limit("maxLines", "text");
     limit("maxItems", "list");
+    const translations = translationEntries(kind, entry.translations).entries;
+    if (translations.length) declaration.translations = translations;
     out.push(declaration);
   }
   return out;
@@ -263,10 +345,10 @@ export function visibleLength(text: string): number {
  * `variable-overflow` for a value against its declaration's `maxLength` and `maxItems` (`maxLines` needs the box, so composition
  * checks it where the variable is drawn). Empty when the value is within its limits or the variable declares none.
  */
-export function variableLimitDiagnostics(declaration: VariableDeclaration, value: unknown): VariableDiagnostic[] {
+export function variableLimitDiagnostics(declaration: VariableDeclaration, value: unknown, path: string = declaration.path): VariableDiagnostic[] {
   const out: VariableDiagnostic[] = [];
   const overflow = (message: string): void => {
-    out.push({ code: "variable-overflow", severity: "warning", path: declaration.path, id: declaration.id, message });
+    out.push({ code: "variable-overflow", severity: "warning", path, id: declaration.id, message });
   };
   if (declaration.kind === "text" && declaration.maxLength !== undefined) {
     const length = visibleLength(plainText(value));
@@ -385,13 +467,18 @@ function sectionNumberParts(value: number, pattern: string, whole: string): { ne
   return { negative, prefix, body, suffix };
 }
 
-type Status = "filled" | "example" | "unfilled";
+/** "translated": no value of its own, only translations (FR-10): filled at a place whose language selects one. */
+type Status = "filled" | "example" | "unfilled" | "translated";
 interface Effective {
   declaration: VariableDeclaration;
   status: Status;
   value?: unknown;
   /** Value as provided by the caller (not the declaration), for color rewriting. */
   provided: boolean;
+  /** The translations in force: the declaration's, unless a fill gave a value of its own (they are dropped) or gave translations (those replace them). */
+  translations?: VariableTranslation[];
+  /** A date's display format a translation chose at this place. */
+  format?: string;
 }
 
 interface Context {
@@ -445,6 +532,18 @@ function drawnNumberLanguage(doc: Record<string, unknown>, path: string): string
   return languageInEffect(doc, slide ? Number(slide[1]) : undefined);
 }
 
+/**
+ * FR-10: the variable as it is drawn at `path`: the translation the language there selects replaces its value (a date: its format), and a
+ * variable that has only translations is unfilled at a place that selects none. A value a caller gave is the same everywhere.
+ */
+function atPlace(effective: Effective, path: string, context: Context): Effective {
+  if (!effective.translations) return effective;
+  const picked = pickTranslation(effective.translations, translationLanguageAt(context.doc, path));
+  if (!picked) return effective.status === "translated" ? { ...effective, status: "unfilled" } : effective;
+  if (picked.format !== undefined) return { ...effective, format: picked.format };
+  return { ...effective, status: "filled", value: picked.value };
+}
+
 /** The inline text of a variable value, or undefined when it cannot be formatted. */
 function inlineText(effective: Effective, format: string | undefined, path: string, context: Context): string | undefined {
   const { declaration } = effective;
@@ -469,7 +568,7 @@ function inlineText(effective: Effective, format: string | undefined, path: stri
       return formatted.text;
     }
     case "date": {
-      const pattern = (format ?? declaration.format)?.trim() || DEFAULT_VARIABLE_DATE_FORMAT;
+      const pattern = (format ?? effective.format ?? declaration.format)?.trim() || DEFAULT_VARIABLE_DATE_FORMAT;
       const formatted = formatFurnitureDate(String(value), pattern);
       if ("error" in formatted) {
         diag(context, { code: "variable-format", severity: "error", path, id: declaration.id, message: formatted.error }, `fmt:${declaration.id}:${format ?? ""}`);
@@ -620,8 +719,9 @@ function interpolate(text: string, path: string, context: Context): { value: str
     context.uses.push({ id, path, form: "token" });
     // `{{slide.number}}`, `{{slide.section}}`, `{{deck.slideCount}}` resolve per slide (resolveSlideVariables, layoutFurniture).
     if (isSlideScopedBuiltin(id)) return match;
-    const effective = lookupVariable(id, path, context);
+    const found = lookupVariable(id, path, context);
     if (context.dependencyOnly) return match;
+    const effective = found && atPlace(found, path, context);
     if (!effective) {
       if (!isBuiltinName(id)) diag(context, { code: "variable-unknown", severity: "warning", path, id, message: `'{{${id}}}' names no declared variable; declare '${id}' in the top-level variables map, or write '\\{{' for literal braces.` }, `unk:${id}:${path}`);
       return match;
@@ -660,7 +760,8 @@ function reduceString(text: string, path: string, parentIsArray: boolean, contex
     }
     const logo = id.startsWith("organization.") ? parseLogoName(id, context.doc) : null;
     if (logo) return reduceLogo(id, logo, path, context);
-    const effective = lookupVariable(id, path, context);
+    const found = lookupVariable(id, path, context);
+    const effective = found && atPlace(found, path, context);
     if (effective && effective.declaration.kind !== "color") {
       context.uses.push({ id, path, form: "reference" });
       if (effective.status === "unfilled" && !context.shape) {
@@ -872,7 +973,20 @@ function plan(presentation: Record<string, unknown>, values: VariableValues, opt
     }
   }
   for (const declaration of declarations) {
-    const raw = hasOwn(values, declaration.id) ? values[declaration.id] : undefined;
+    const given = hasOwn(values, declaration.id) ? values[declaration.id] : undefined;
+    // FR-10: a fill record gives a variable its value, its translations, or both: { value, translations }.
+    const wrapped = isRecord(given) && hasOwn(given, "translations") && Object.keys(given).every((key) => key === "value" || key === "translations") && TRANSLATED_KINDS.includes(declaration.kind) ? given : undefined;
+    const raw = wrapped ? wrapped.value : given;
+    let translations = declaration.translations;
+    if (wrapped) {
+      const own = translationEntries(declaration.kind, wrapped.translations);
+      for (const problem of own.problems) context.diagnostics.push({ code: "variable-invalid-value", severity: "error", path: pathFor(`${declaration.path}/translations`, problem.tag), id: declaration.id, message: `Translation '${problem.tag}' for '${declaration.id}' (${declaration.kind}): ${problem.message}.` });
+      translations = own.entries.length ? own.entries : undefined;
+    } else if (translations && declaration.kind !== "date" && isProvided(declaration.kind, raw)) {
+      // A new value without translations of its own: the template's translations are of the old value, so they go (a date's formats are not).
+      context.diagnostics.push({ code: "variable-translations-removed", severity: "info", path: declaration.path, id: declaration.id, message: `The translations of '${declaration.id}' were removed: a value was given for it without translations.` });
+      translations = undefined;
+    }
     let effective: Effective | undefined;
     if (isProvided(declaration.kind, raw)) {
       const coerced = coerceVariableValue(declaration.kind, raw);
@@ -884,6 +998,7 @@ function plan(presentation: Record<string, unknown>, values: VariableValues, opt
       }
     }
     if (!effective && declaration.value !== undefined) effective = { declaration, status: "filled", value: declaration.value, provided: false };
+    if (!effective && declaration.kind !== "date" && translations?.length && !(options.examples && declaration.example !== undefined)) effective = { declaration, status: "translated", provided: false };
     if (!effective && options.examples && declaration.example !== undefined) {
       effective = { declaration, status: "example", value: declaration.example, provided: false };
       examplesUsed.push(declaration.id);
@@ -906,9 +1021,54 @@ function plan(presentation: Record<string, unknown>, values: VariableValues, opt
       }
     }
     if (effective.status === "filled" || effective.status === "example") context.diagnostics.push(...variableLimitDiagnostics(declaration, effective.value));
+    if (translations) {
+      effective.translations = translations;
+      // FR-09's limits apply to every translation as to the value, and report the translation's own path.
+      if (declaration.kind !== "date") for (const entry of translations) context.diagnostics.push(...variableLimitDiagnostics(declaration, entry.value, pathFor(`${declaration.path}/translations/${entry.tag}`, "value")));
+    }
     context.effective.set(declaration.id, effective);
   }
+  for (const declaration of declarations) context.diagnostics.push(...translationDuplicates(declaration));
+  translatedOnlyUnfilled(presentation, context, lenient, unfilled);
   return { context, declarations, unfilled, examplesUsed, providedColors };
+}
+
+/** `variable-translation-duplicate`: two keys of a variable's translations that differ only in case; the first in document order is used. */
+function translationDuplicates(declaration: VariableDeclaration): VariableDiagnostic[] {
+  const first = new Map<string, string>();
+  const out: VariableDiagnostic[] = [];
+  for (const entry of declaration.translations ?? []) {
+    const key = entry.tag.toLowerCase();
+    const used = first.get(key);
+    if (used === undefined) first.set(key, entry.tag);
+    else out.push({ code: "variable-translation-duplicate", severity: "warning", path: `${declaration.path}/translations`, id: declaration.id, message: `The translations of '${declaration.id}' have both '${used}' and '${entry.tag}', which differ only in case; '${used}' is used.` });
+  }
+  return out;
+}
+
+/**
+ * A required variable that has translations and no value is filled where it is drawn when the language there selects a translation. One
+ * place that selects none leaves it unfilled, with the rule every unfilled required variable has: its token stays and it is listed in
+ * `unfilled`.
+ */
+function translatedOnlyUnfilled(presentation: Record<string, unknown>, context: Context, lenient: boolean, unfilled: string[]): void {
+  const translated = [...context.effective.values()].filter((effective) => effective.status === "translated" && effective.declaration.required);
+  if (!translated.length) return;
+  const found = new Map<string, VariableUse[]>();
+  for (const [key, entry] of Object.entries(presentation)) if (!skippedKeys.has(key) && !skippedRootKeys.has(key)) subtreeVariables(entry, pathFor("/", key), context, found);
+  for (const { declaration, translations } of translated) {
+    const missing = (found.get(declaration.id) ?? []).find((use) => !pickTranslation(translations, translationLanguageAt(presentation, use.path)));
+    if (!missing) continue;
+    const language = translationLanguageAt(presentation, missing.path);
+    unfilled.push(declaration.id);
+    context.diagnostics.push({
+      code: "variable-unfilled",
+      severity: lenient ? "info" : "error",
+      path: declaration.path,
+      id: declaration.id,
+      message: `Required variable '${declaration.id}' (${declaration.kind}) has translations but no value, and none is for the language it is drawn in at ${missing.path} (${language ?? "no language declared"}). Give it a value${lenient ? "" : ', or mark the document as a template ("template": true)'}.`,
+    });
+  }
 }
 
 function rebuildVariables(presentation: Record<string, unknown>, built: Plan, keepAll: boolean): Record<string, unknown> | undefined {
@@ -924,7 +1084,7 @@ function rebuildVariables(presentation: Record<string, unknown>, built: Plan, ke
     const { declaration } = effective;
     if (declaration.kind !== "color") {
       // Content variables are consumed; an unfilled one stays so a later pass can fill it.
-      if (keepAll || (effective.status === "unfilled" && declaration.required)) out.push([id, entry]);
+      if (keepAll || ((effective.status === "unfilled" || effective.status === "translated") && declaration.required && built.unfilled.includes(id))) out.push([id, entry]);
       continue;
     }
     const color = built.providedColors.get(id);
@@ -959,6 +1119,22 @@ function slideSectionDiagnostics(presentation: Record<string, unknown>, uses: Va
   return out;
 }
 
+/** `variable-translation-unused`: a translation that no slide (and not the deck) selects, because its language is declared nowhere. */
+function translationsUnused(presentation: Record<string, unknown>, declarations: readonly VariableDeclaration[]): VariableDiagnostic[] {
+  if (!declarations.some((declaration) => declaration.translations)) return [];
+  const slides = Array.isArray(presentation.slides) ? presentation.slides : [];
+  const languages = new Set([languageInEffect(presentation), ...slides.map((_, index) => languageInEffect(presentation, index))].filter((language): language is string => language !== undefined));
+  const out: VariableDiagnostic[] = [];
+  for (const declaration of declarations) {
+    const used = new Set([...languages].map((language) => pickTranslation(declaration.translations, language)));
+    for (const entry of declaration.translations ?? []) {
+      if (used.has(entry)) continue;
+      out.push({ code: "variable-translation-unused", severity: "warning", path: pathFor(`${declaration.path}/translations`, entry.tag), id: declaration.id, message: `The translation '${entry.tag}' of '${declaration.id}' is never drawn: no slide and not the deck declares a language that selects it.` });
+    }
+  }
+  return out;
+}
+
 function finish(presentation: Record<string, unknown>, built: Plan, options: ResolveVariablesOptions & { shape?: boolean }): ResolveVariablesResult {
   const { context } = built;
   const complete = built.unfilled.length === 0;
@@ -978,6 +1154,7 @@ function finish(presentation: Record<string, unknown>, built: Plan, options: Res
       }
     }
   }
+  if (context.content) context.diagnostics.push(...translationsUnused(presentation, built.declarations));
   // The validation view also checks the slide-scoped `{{slide.section}}` per slide; the deck-wide pass never does.
   if (context.shape) context.diagnostics.push(...slideSectionDiagnostics(presentation, context.uses));
   const diagnostics = context.diagnostics;
@@ -1054,7 +1231,7 @@ export function listVariables(presentation: unknown, values: VariableValues = {}
     return {
       ...declaration,
       ...(effective?.status === "filled" && effective.provided ? { value: effective.value } : {}),
-      filled: effective?.status === "filled",
+      filled: effective?.status === "filled" || effective?.status === "translated",
       uses: built.context.uses.filter((use) => use.id === declaration.id),
     };
   });

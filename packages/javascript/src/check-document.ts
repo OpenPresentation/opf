@@ -556,6 +556,8 @@ const HELP: Record<string, string> = {
 	'variable-unknown': "Declare the variable in the top-level variables map, or write '\\{{' for literal braces.",
 	'variable-unknown-value': 'Remove the supplied value, or declare the variable it belongs to.',
 	'variable-unused': 'Reference the variable as {{id}} or var:id where it belongs, or remove its declaration.',
+	'variable-translation-duplicate': 'Remove one of the two keys: the language tag compares without regard to case, and the first in the document is the one drawn.',
+	'variable-translation-unused': "Declare the language ('language' on the deck or a slide) that selects the translation, fix its tag, or remove it.",
 	'variable-group-omitted': 'Give one of the variables a value to draw the group, make one of them required, or move the content that should always show out of the group.',
 	'variable-reference-unknown': 'Declare the variable in the top-level variables map, or use another color.',
 	'run-color-unrecognized': 'Use a #RRGGBB hex color, a color-scheme name or a var: reference to a declared color variable.',

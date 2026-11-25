@@ -64,7 +64,10 @@ export {
   isTemplate,
   listBuiltinVariables,
   listVariables,
+  pickTranslation,
   resolveVariables,
+  translationAt,
+  translationLanguageAt,
   variableDeclarations,
   visibleLength,
 } from "./variables.js";
@@ -78,6 +81,7 @@ export type {
   BuiltinVariableInfo,
   VariableInfo,
   VariableKind,
+  VariableTranslation,
   VariableUse,
   VariableUseForm,
   VariableValues,

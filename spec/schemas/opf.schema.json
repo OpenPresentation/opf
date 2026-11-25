@@ -1397,6 +1397,36 @@
           "type": "integer",
           "minimum": 1,
           "description": "The most lines the value may take where it is drawn. Checked by composition at each place the variable is drawn (a title, a subtitle, a text block or a list entry), because the line count depends on the width of the box; a value that takes more lines is the warning opf/variable-overflow at that place, naming the slide. Inside longer text, the lines are those the variable's own characters occupy."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TextRun"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "The text in other languages, keyed by language tag, each entry a 'value' in the same form as the variable's own (a string or TextRun[]). Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "Text content. Plain string or rich TextRun[]. Insert it inline as '{{<id>}}' inside any string (rich text is flattened to plain text there), or reference it whole as 'var:<id>' in a field that accepts string or TextRun[] (the rich runs are kept)."
@@ -1498,6 +1528,27 @@
             "M/d/yyyy",
             "EEEE, MMMM d"
           ]
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "type": "string",
+                "description": "The date display pattern in this language, in the tokens of the variable's own 'format'."
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "How the date is written in other languages, keyed by language tag, each entry a 'format': the date is the same in every language, its pattern is not. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match uses the variable's own 'format'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "A calendar date as an ISO YYYY-MM-DD string. No time zone and no clock are involved. '{{<id>}}' inserts it formatted with 'format'."
@@ -1534,6 +1585,26 @@
         "example": {
           "$ref": "#/$defs/Asset",
           "description": "Illustrative image source shown in fill forms and used when a template is previewed with examples. Never written to output."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/Asset"
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "An image source per language (a localized screenshot), keyed by language tag, each entry a 'value'. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "An image source: any Asset (an 'asset:<id>' reference, HTTPS URL, data URI, relative or local path, or an object with src, alt and metadata). Reference it whole as 'var:<id>' in an image, asset or src field; '{{<id>}}' inserts the source string."
@@ -1572,6 +1643,27 @@
           "type": "string",
           "pattern": "^(?:https?://|mailto:|tel:)\\S+$",
           "description": "Illustrative link shown in fill forms and used when a template is previewed with examples. Never written to output."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "type": "string",
+                "pattern": "^(?:https?://|mailto:|tel:)\\S+$"
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "A link target per language (a localized landing page), keyed by language tag, each entry a 'value'. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "A link target (http, https, mailto or tel). Use it as '{{<id>}}' inside a link string or reference it whole as 'var:<id>' in a link field."
@@ -1619,6 +1711,29 @@
           "type": "integer",
           "minimum": 1,
           "description": "The most entries the list may have. Checked on the declared value and on a value given to a fill; a longer list is the warning opf/variable-overflow. Fill forms and models read it before writing."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "The entries in other languages, keyed by language tag, each entry a 'value' list. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "A list of strings, for bullets and list items. A whole-string array element 'var:<id>' splices every entry into the array in place; a whole field 'var:<id>' becomes the array; '{{<id>}}' joins the entries with ', ' (or the separator after a pipe: '{{<id>|; }}')."

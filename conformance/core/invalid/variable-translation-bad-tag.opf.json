@@ -1,0 +1,1 @@
+{"variables":{"cta":{"type":"text","value":"Book a demo","translations":{"German":{"value":"Demo buchen"}}}},"slides":[{"title":"{{cta}}"}]}

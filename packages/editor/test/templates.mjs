@@ -12,8 +12,12 @@ import {
   isTemplateDocument,
   limitUsage,
   listTemplateFields,
+  previewTemplate,
+  removeVariableTranslation,
   setTemplate,
+  setVariableTranslation,
   suggestVariableId,
+  translationLanguages,
   templateStatus,
   valueToFieldText,
   variableToken,
@@ -213,6 +217,59 @@ assert.deepEqual(editor.presentation, filled);
   fill.set("headline", "Eleven char");
   const applied = fill.apply({ partial: true });
   assert.deepEqual(applied.diagnostics.filter((entry) => entry.code === "variable-overflow").map((entry) => entry.id), ["headline"]);
+}
+
+// FR-10: translations as rows (language, value), one undoable edit each, the declared languages offered first, and the canvas data in each slide's language.
+{
+  const bilingual = () => ({
+    name: "Bilingual",
+    language: "de",
+    variables: { cta: { type: "text", value: "Book a demo" }, "event-date": { type: "date", value: "2026-03-05" }, steps: { type: "list", value: ["One"] }, growth: { type: "number", value: 1 } },
+    slides: [{ title: "{{cta}}", text: "{{event-date}}", items: "var:steps" }, { language: "fr", title: "{{cta}}" }, { language: "de-AT", title: "x" }, { language: "fr-CA", title: "y" }],
+  });
+  const session = createEditorSession(bilingual(), { rejectInvalid: true });
+  assert.deepEqual(translationLanguages(session.presentation), ["de", "fr", "de-AT", "fr-CA"]);
+  assert.deepEqual(translationLanguages({ language: { bcp47: "ja" }, slides: [{}] }), ["ja"]);
+  const field = (id) => listTemplateFields(session.presentation).find((entry) => entry.id === id);
+  assert.deepEqual(field("cta").translations, []);
+  assert.deepEqual(field("cta").translationLanguages, ["de", "fr", "de-AT", "fr-CA"]);
+  assert.equal("translations" in field("growth"), false, "a number variable has no translations");
+
+  setVariableTranslation(session, "cta", "de", "Demo buchen");
+  setVariableTranslation(session, "cta", "fr", "Réserver une démo");
+  assert.deepEqual(session.presentation.variables.cta.translations, { de: { value: "Demo buchen" }, fr: { value: "Réserver une démo" } });
+  assert.deepEqual(field("cta").translations, [{ tag: "de", text: "Demo buchen", rich: false }, { tag: "fr", text: "Réserver une démo", rich: false }]);
+  // The same language in another case replaces the entry; a rename moves it; the list takes lines; the date takes a pattern.
+  setVariableTranslation(session, "cta", "DE", "Jetzt buchen");
+  assert.deepEqual(Object.keys(session.presentation.variables.cta.translations), ["de", "fr"]);
+  assert.equal(session.presentation.variables.cta.translations.de.value, "Jetzt buchen");
+  setVariableTranslation(session, "cta", "fr-CA", "Réserver", { from: "fr" });
+  assert.deepEqual(Object.keys(session.presentation.variables.cta.translations), ["de", "fr-CA"]);
+  setVariableTranslation(session, "steps", "de", "Eins
+Zwei");
+  assert.deepEqual(session.presentation.variables.steps.translations.de.value, ["Eins", "Zwei"]);
+  setVariableTranslation(session, "event-date", "de", "d. MMMM yyyy");
+  assert.deepEqual(session.presentation.variables["event-date"].translations, { de: { format: "d. MMMM yyyy" } });
+  assert.deepEqual(field("event-date").translations, [{ tag: "de", text: "d. MMMM yyyy", rich: false }]);
+  // Refusals leave the document alone.
+  const before = structuredClone(session.presentation);
+  for (const bad of [() => setVariableTranslation(session, "growth", "de", "1"), () => setVariableTranslation(session, "cta", "German", "x"), () => setVariableTranslation(session, "event-date", "de", "  "), () => setVariableTranslation(session, "steps", "fr", ""), () => setVariableTranslation(session, "missing", "de", "x"), () => removeVariableTranslation(session, "cta", "it")]) assert.throws(bad);
+  assert.deepEqual(session.presentation, before);
+  // The preview draws each slide in its own language (the panel's preview and the canvas resolve through core).
+  const drawn = previewTemplate(session.presentation).presentation.slides;
+  assert.deepEqual([drawn[0].title, drawn[1].title], ["Jetzt buchen", "Réserver"]);
+  // One undo per edit, and the last removal drops the map.
+  removeVariableTranslation(session, "event-date", "de");
+  assert.equal("translations" in session.presentation.variables["event-date"], false);
+  session.undo();
+  assert.equal(session.presentation.variables["event-date"].translations.de.format, "d. MMMM yyyy");
+  session.undo();
+  assert.equal("translations" in session.presentation.variables["event-date"], false);
+  // A value typed in the fill panel replaces the translations of the filled deck, as opf fill does.
+  const fill = createTemplateFill(session);
+  fill.set("cta", "Join us");
+  const filled = fill.apply({ partial: true });
+  assert.deepEqual(filled.presentation.slides.map((slide) => slide.title).slice(0, 2), ["Join us", "Join us"]);
 }
 
 console.log("Templates passed fields, previews, one undoable fill, partial fills, declarations and token insertion.");

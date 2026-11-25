@@ -57,6 +57,8 @@ const GOLDEN = {
   "unknown-beat": ["Slide 1 names beat `zzz`, which narrative `classic-story` does not define. Its beats include hero, plan, closing, context, despair.", "use one of `hero`, `plan`, `closing`, `context` or `despair`, or remove `beat`."],
   "variable-unknown": ["`{{nmae}}` is not declared under `variables`.", "did you mean `name`? Or declare `nmae` under `variables`."],
   "variable-unused": ["Variable `name` is declared but never used.", "use it as `{{name}}` or `var:name` where it belongs, or remove its declaration."],
+  "variable-translation-duplicate": ["Variable `cta` has two translations whose language tags differ only in case.", "remove one of the two keys: the first in the document is the one that is drawn."],
+  "variable-translation-unused": ["The `de` translation of `cta` is never drawn: no slide and not the deck declares a language that selects it.", "set `language` on the deck or on a slide, fix the tag, or remove the translation."],
   "contract": ["`layout` is `cover`, which this host's policy does not allow. Allowed: text, title.", "pick one of `text` or `title`."],
   "text-contrast": ["Text `#CCCCCC` on `#FFFFFF` has contrast 1.61:1; WCAG needs 3:1 for large text.", "use `text`, the slide's text color, which is readable here."],
   "missing-alt-text": ["This image has no alt text.", "describe it in `alt`, or write `alt: \"\"` if it is only decoration."],
@@ -109,11 +111,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 106 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 108 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 106);
+	assert.equal(RULE_IDS.length, 108);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {

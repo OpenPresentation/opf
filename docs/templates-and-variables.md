@@ -64,6 +64,7 @@ Every object variable may also carry `label` (short form label), `description`, 
 - `required: false` makes a variable optional. An unfilled optional variable resolves to empty text inline, and a field that references it as `var:id` is omitted.
 - `format` (number and date only) is the display pattern used by `{{id}}`.
 - `maxLength`, `maxLines` (a text variable) and `maxItems` (a list variable) say how much room the slot has; see [Limits on a value](#limits-on-a-value).
+- `translations` (a text, list, url, image or date variable) gives the value, or a date's format, in other languages; see [Translations](#translations).
 
 Color variables are unchanged: `"risk": "#B42318"` or `{ "type": "color", "value": "#B42318" }`, referenced as `var:risk` in color fields, resolved at render time by `resolveColorRef`. The only addition is that a color variable can now be filled or overridden like the others.
 
@@ -126,6 +127,37 @@ A limit on any other kind of variable, or a limit below 1, is a schema error. A 
 Fill forms and models read the limits before they write: `listVariables` and the editor's `listTemplateFields` return `maxLength`, `maxLines` and `maxItems` with each variable; the Fill template panel shows the count ("12 of 48 characters", "at most 2 lines where it is drawn", "3 of 5 items"); a model reads them in the declaration of the template it fills (`get_schema` documents the keys; this page is `search_docs` `templates-and-variables`) and learns of an overflow from `validate_deck`.
 
 Limits change nothing that is drawn or exported: a deck without limits, and a deck within them, validates, previews and exports exactly as before. The PowerPoint export holds the resolved deck (see [Previews and export](#previews-and-export)), so a limit is not written to the file, like the declaration that carries it; the Markdown and YAML forms keep the keys.
+
+## Translations
+
+A template for a German team needs German text in its blanks. A text, list, url or image variable may carry `translations`, a map from a language tag to `{ "value": ... }` in the same form as the variable's own value; a date variable's entries are `{ "format": ... }`, because the date is the same in every language and how it is written is not. A number and a color variable have none: numbers already follow the language, and a color does not change with it. The built-in variables (`deck.name`, `speaker.name`, ...) take none.
+
+```json
+{
+  "language": "de",
+  "variables": {
+    "cta": { "type": "text", "value": "Book a demo",
+             "translations": { "de": { "value": "Demo buchen" }, "fr": { "value": "Réserver une démo" } } },
+    "event-date": { "type": "date", "value": "2026-03-05",
+                    "translations": { "fr": { "format": "EEEE d MMMM yyyy" } } }
+  },
+  "slides": [
+    { "title": "Am {{event-date}} in Berlin", "text": "{{cta}}" },
+    { "language": "fr", "title": "Le {{event-date}} à Paris", "text": "{{cta}}" }
+  ]
+}
+```
+
+**Which entry is drawn.** The language of the place where the variable is drawn selects it: the slide's declared `language`, else the deck's. The lookup takes the exact tag, then the tag with its last subtag removed, and so on (`zh-Hant-TW`, `zh-Hant`, `zh`), without regard to case, then the plain `value`. A slide in `de-CH` with translations for `de` draws `de`; an extension such as `-u-nu-latn` is not part of the language. The rule is the same for an inline `{{id}}` and a whole `var:id` field, in titles, text, notes, captions, alt text and links. Only a *declared* language selects a translation: a language the engines read from the text (for a deck that declares none) does not, because the reading is made from the text the translation would replace, so a deck with no declared language always draws `value`. The deck's header and footer are drawn in the deck's language.
+
+**Other rules.**
+
+- A template may hold translations without a `value`. The variable is filled where the language selects a translation; a place that selects none is unfilled, with the rule every unfilled variable has (a required one is an error in a deck and information in a template, and its token stays; an optional one is empty).
+- `maxLength`, `maxLines` and `maxItems` apply to every translation as to `value`; a translation over its limit is the warning `opf/variable-overflow` at the translation's path (`/variables/cta/translations/de/value`), and `maxLines` is measured on the slide that draws it.
+- A key is a language tag (as `language` takes one); two keys that differ only in case are the warning `opf/variable-translation-duplicate` and the first in document order is used. A translation that no slide (and not the deck) declares a language for is the warning `opf/variable-translation-unused`.
+- **`opf fill`.** A record that gives a value and no translations *removes* the variable's translations in the filled deck, so a German slide cannot keep the template's German text beside a new English value; `opf fill` and `fill()` report each removal (`translationsRemoved`). A date's formats are not removed. A record may give translations itself, as `{ "cta": { "value": "Join us", "translations": { "de": { "value": "Mach mit" } } } }` (with `translations` and no `value`, the template's value stays). The Fill template panel does the same: a value typed there replaces the translations.
+- **PowerPoint.** Variables resolve before export, so each slide's text is in that slide's language. Content variables are not stored in the PPTX, so the translations stay in the OPF file; import returns each slide's resolved text.
+- **Editor.** The Fill template panel lists a variable's translations as rows (language, value) with **Add translation**, offering the languages the deck and its slides declare first; each change is one undoable edit. The panel's preview, and a canvas that draws variables resolved, draw each slide in its language.
 
 ## Built-in variables
 
@@ -286,6 +318,7 @@ opf fill <template|-> <data|-> [output|pattern] [--data-format csv|tsv|json]
 
 - **Records.** A JSON object is one record. A JSON array of objects, a CSV or TSV file, `{columns, rows}` and a row matrix give one record per row; CSV and TSV columns are matched to variable ids by header name. JSON keeps rich values (text runs, lists, Asset objects); CSV and TSV cells are strings that coerce per kind. A blank cell keeps the declared value.
 - **Outputs.** One record gives one deck (the output, default stdout). Several records need a file name pattern as the output (one file per record; `{n}` is the zero-padded index and `{column}` a slug of that column's value, so `decks/qbr-{client}.opf.md`; a repeated name gets `-2`, `-3`) or `--combine` (one deck whose slides are the filled slides of every record in order, with repeated slide ids suffixed by the record index; deck-level fields come from the first record).
+- **Translations.** A record's value for a variable that has [translations](#translations) removes them (reported in the summary as `translationsRemoved`); a record may give `{ "value": ..., "translations": ... }` itself.
 - **Failure.** An unfilled required variable, a value of the wrong kind or an unusable format fails with exit code 1 and the offending record and variable, before any file is written. `--partial` allows unfilled variables and keeps their declarations; `--examples` fills them from their example.
 - **Overlap with `ingest`.** `ingest` turns tabular data into a table or chart *content* payload and shares the same CSV/TSV/JSON parser. `fill` maps rows onto *variables* of a deck the author designed. They compose: a chart whose rows come from a data file stays `ingest`; a chart cell that varies per client is a `var:` reference.
 - Relative image paths in data are written as given, so they resolve against the OPF file's final location. Prefer HTTPS URLs, data URIs, `asset:` ids or absolute paths in data files, or write decks next to their images.

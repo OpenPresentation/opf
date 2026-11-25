@@ -445,6 +445,19 @@ const variableUnused: RuleText = (finding, _context, helpers) => {
   };
 };
 
+const variableTranslationDuplicate: RuleText = (finding, _context, helpers) => {
+  const id = text(params(finding).id) ?? helpers.segments.at(-2);
+  if (!id) return undefined;
+  return { message: `Variable ${code(id)} has two translations whose language tags differ only in case.`, next: "remove one of the two keys: the first in the document is the one that is drawn." };
+};
+
+const variableTranslationUnused: RuleText = (finding, _context, helpers) => {
+  const id = text(params(finding).id) ?? helpers.segments.at(-3);
+  const tag = helpers.segments.at(-1);
+  if (!id || !tag) return undefined;
+  return { message: `The ${code(tag)} translation of ${code(id)} is never drawn: no slide and not the deck declares a language that selects it.`, next: `set ${code("language")} on the deck or on a slide, fix the tag, or remove the translation.` };
+};
+
 const variableReferenceUnknown: RuleText = (finding, _context, helpers) => {
   const id = text(params(finding).id) ?? match(finding.message, /^unknown variable '(.+?)'/)?.[1];
   if (!id) return undefined;
@@ -807,6 +820,8 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/variable-unknown": variableUnknown,
   "opf/variable-unknown-value": variableUnknownValue,
   "opf/variable-unused": variableUnused,
+  "opf/variable-translation-duplicate": variableTranslationDuplicate,
+  "opf/variable-translation-unused": variableTranslationUnused,
   "opf/variable-reference-unknown": variableReferenceUnknown,
   "opf/contract": contract,
 };
