@@ -250,7 +250,7 @@ describe('the rules (FR-07)', () => {
     const range = validate(deck({ ...base, colorScale: { columns: ['Q1'], min: 0.5, max: 0.4 } }));
     assert.equal(range.valid, true);
     assert.deepEqual(range.findings.filter((finding) => finding.ruleId === 'opf/table-color-scale-range').map((finding) => finding.severity), ['warning']);
-    const center = validate(deck({ ...base, colorScale: { columns: ['Q1'], mid: 'surface', center: 5 } }));
+    const center = validate(deck({ ...base, colorScale: { columns: ['Q1'], mid: 'surface', center: 5, min: 0, max: 0.4 } }));
     assert.deepEqual(center.findings.filter((finding) => finding.ruleId === 'opf/table-color-scale-range').map((finding) => finding.severity), ['warning']);
   });
 
