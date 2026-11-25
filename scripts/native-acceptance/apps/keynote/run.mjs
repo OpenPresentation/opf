@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // NT-02: run OPF-exported .pptx files through Keynote with the driver, one after another, into a run directory of the
-// shared format. The general entry point (`pnpm native`, NT-05) comes later; this command is the driver's own.
+// shared format. The general entry point is `pnpm native keynote` (native.mjs, NT-05); this command is the driver's own.
 //
 //   node scripts/native-acceptance/apps/keynote/run.mjs --out <dir> --opf <version> [--opf-commit <sha>]
 //        [--input-root <dir>] [--warnings-dir <dir>] <file.pptx>...

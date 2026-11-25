@@ -68,6 +68,15 @@ test('slide-links: title, table, and a group with nested members', () => {
   assert.deepEqual(table.fonts, ['Helvetica-Bold', 'Helvetica']);
   assert.equal(first.layout, 'Title Only');
   assert.equal(normalized('slide-links~default').slides[2].layout, 'Title Only 0');
+  // Keynote reports a group's members in slide coordinates, as the format wants: the boxes are kept as they are.
+  assert.deepEqual(first.objects[2].box, [223, 154, 514, 343]);
+  assert.deepEqual(
+    first.objects[2].objects.map((object) => object.box),
+    [
+      [223, 154, 514, 343],
+      [244, 303, 472, 46],
+    ],
+  );
 });
 
 test('the two qualification files: the Warnings window text parses to the application’s lines', () => {
@@ -95,6 +104,19 @@ test('chart, lines and a picture map to the shared kinds', () => {
   const picture = pictureSlide.objects.find((object) => object.kind === 'picture');
   assert.deepEqual([picture.appClass, picture.name, picture.box], ['image', 'OPF image 1', [94, 111, 772, 386]]);
   assert.equal(objectFromItem({ class: 'image', description: 'Harbor\n\nOPF image 2', position: [0, 0], width: 1, height: 1 }).name, 'OPF image 2');
+});
+
+test('NT-01b: a movie and an audio clip are media; an image description before the name is alt, the name alone is none', () => {
+  const box = { position: [10, 20], width: 300, height: 200 };
+  assert.deepEqual(objectFromItem({ class: 'movie', ...box }), { kind: 'media', outcome: null, appClass: 'movie', box: [10, 20, 300, 200] });
+  assert.equal(objectFromItem({ class: 'audio clip', ...box }).kind, 'media');
+  const titled = objectFromItem({ class: 'image', description: 'Harbor\n\nOPF image 2', ...box });
+  assert.deepEqual([titled.name, titled.alt], ['OPF image 2', 'Harbor']);
+  // A title of several paragraphs keeps its blank lines; only the last part is the name.
+  assert.equal(objectFromItem({ class: 'image', description: 'Pyramid:\nGoal\n\nTwo\n\nOPF smartart slides.1.blocks.0.items', ...box }).alt, 'Pyramid:\nGoal\n\nTwo');
+  const named = objectFromItem({ class: 'image', description: 'OPF image 1', ...box });
+  assert.deepEqual([named.name, named.alt], ['OPF image 1', undefined]);
+  assert.equal(objectFromItem({ class: 'image', description: '', ...box }).alt, undefined);
 });
 
 test('parseWarnings: placeholder, none, a slide list and a list cut at the window’s edge', () => {

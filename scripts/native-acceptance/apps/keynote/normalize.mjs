@@ -9,6 +9,12 @@
 //   here; the round-trip step reads them from the copy (NT-04).
 // - footers: no placeholder types either; a live slide-number field reads as U+FFFC inside an ordinary text item.
 // - object names: Keynote does not expose them, except a picture's, which its description ends with.
+// - alt text: an image's description is the picture's DrawingML title, a blank line and its name ("Harbor\n\nOPF image 1"),
+//   or the name alone; the part before the name is the image's `alt`. A description that is only the name is no alt text:
+//   Keynote shows none (opf#1479, kn-alt-text). Only images have a description in Keynote's dictionary.
+// - group members: Keynote reports their position in slide coordinates, as the format wants (330 recorded probes of the
+//   0.36.0 round: 2,268 of 2,300 members lie inside their group's box; the other 32 are rotated items and lines, none
+//   placed relative to the group), so boxes are taken as they are.
 // - the application build and the system version: not recorded; the caller passes them (options.application, options.system).
 import { cutText, emptyResult, picturePath } from '../../core/result/result.mjs';
 
@@ -119,7 +125,7 @@ function fontsOf(item) {
 
 const boxOf = (item) => (Array.isArray(item.position) ? [item.position[0], item.position[1], item.width, item.height] : undefined);
 
-const KIND_OF_CLASS = { image: 'picture', line: 'connector', group: 'group', table: 'table', chart: 'chart' };
+const KIND_OF_CLASS = { image: 'picture', line: 'connector', group: 'group', table: 'table', chart: 'chart', movie: 'media', 'audio clip': 'media' };
 
 /** One probe item as a shared object. Keynote classes the slide title as "shape" or "text item"; isDefaultTitle tells. */
 export function objectFromItem(item) {
@@ -131,11 +137,17 @@ export function objectFromItem(item) {
     else if (appClass === 'text item' || (item.text ?? '') !== '') kind = 'text';
     else kind = 'shape';
   }
-  // A class the 0.36.0 round never saw (movie, audio clip): keep Keynote's word in appClass.
+  // A class the 0.36.0 round never saw: keep Keynote's word in appClass. (It saw no movie and no audio clip either: Keynote
+  // removed every media object on import, "Unsupported media were removed".)
   kind ??= 'shape';
   const object = { kind, outcome: null, appClass };
-  // Keynote's description of a picture is its title, a blank line and its name ("Harbor\n\nOPF image 1").
-  if (appClass === 'image' && typeof item.description === 'string' && item.description !== '') object.name = item.description.split('\n\n').at(-1);
+  // Keynote's description of a picture is its title, a blank line and its name ("Harbor\n\nOPF image 1"), or the name.
+  if (appClass === 'image' && typeof item.description === 'string' && item.description !== '') {
+    const parts = item.description.split('\n\n');
+    object.name = parts.at(-1);
+    const alt = parts.slice(0, -1).join('\n\n');
+    if (alt !== '' && alt !== object.name) object.alt = alt;
+  }
   const box = boxOf(item);
   if (box) object.box = box;
   if (typeof item.text === 'string' && item.text !== '') object.text = cutText(item.text);

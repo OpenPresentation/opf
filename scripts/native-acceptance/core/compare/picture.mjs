@@ -403,7 +403,8 @@ export function pairSlides(slides, previewCount) {
     }
     const pair = { index: slide.index, preview, picture: slide.picture ?? null };
     if (slide.hidden && !slide.picture) pair.note = 'hidden slide: the application exported no picture';
-    else if (preview === null) pair.note = 'no preview picture';
+    // PowerPoint exports a picture of a hidden slide; OPF previews visible slides only, so it has nothing to pair with.
+    else if (preview === null) pair.note = slide.hidden ? 'hidden slide: OPF previews visible slides only' : 'no preview picture';
     else if (!slide.picture) pair.note = 'no application picture';
     return pair;
   });
