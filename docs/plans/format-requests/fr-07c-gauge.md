@@ -2,13 +2,13 @@
 
 A builder's brief for the third part of item FR-07 of the format-requests program (`docs/programs/format-requests/burndown.md` on
 `main`). It builds on FR-06 (a metric computed from data, `fr-06-computed-metric.md` on this branch) and on part 2's bands
-(`fr-07b-bands-and-bullet.md`), and lands after both. It is built last and cut first: if the release date is at risk, it follows in a
-patch, because it only adds.
+(`fr-07b-bands-and-bullet.md`), and lands after both. It is built last, because it reuses both. It ships in 0.37.0: the owner chose on 2026-11-25 that nothing is cut
+(`r-one`).
 
 Who decided what:
 
 - **Owner, 2026-11-24**: native, editable PowerPoint parts, the gauge as native `blockArc` shapes plus text, not a doughnut
-  (`cr5-export`, as round 2 made exact); built last, cut first (`cr5-which`).
+  (`cr5-export`, as round 2 made exact); built last (`cr5-which`). **Owner, 2026-11-25**: nothing is cut from 0.37.0 (`r-one`), so the gauge ships in it.
 - **Supervisor, 2026-11-25, on the owner's delegation**: a gauge is a way to draw a metric, a metric with a `scale`, not a chart type.
 - **Analysis, for the supervisor to confirm**: everything else, marked *(analysis)*.
 
@@ -114,6 +114,12 @@ to data) and one invalid deck (no `max`).
 - The target is a straight connector (`p:cxnSp`, `prstGeom line`) from the arc's inner to its outer edge at the target angle, 2 pt, in the
   text color.
 - The ends' labels and the metric's text are the text boxes of today's metric.
+- **The angles and the thickness above are a starting point, not a pin** (supervisor, 2026-11-25). The builder reads back each arc's start,
+  end and thickness from PowerPoint over COM and compares the picture with OPF's preview before anything is pinned in a test.
+- **The group's frame** is the arc's bounding square, of which only the top half is drawn. The builder checks that the text boxes under the
+  arc are not covered by the group's empty lower half in a way that makes them hard to select in PowerPoint; if they are, the group's frame
+  is cropped to the top half and the arcs' frames extend outside it (PowerPoint allows that), whichever PowerPoint handles better
+  (supervisor, 2026-11-25).
 - The gauge's shapes are grouped (`p:grpSp`) with a tag `OPF_GAUGE_V1` on the group: `{ "v": 1, "group": "<metric group id>", "scale":
   <the authored scale>, "evidence": [[shape name, "<preset>", "<adj1>", "<adj2>", "<fill>"], ...] }`.
 
@@ -146,7 +152,9 @@ back. A Mac check covers Keynote's drawing of `blockArc` adjustments; a differen
 
 ## Docs, skills, examples
 
-- `docs/content-payloads.md` (metrics): "Gauges": the scale, bands, target, clamping, the small-region fallback.
+- `docs/content-payloads.md` (metrics): "Gauges": the scale, bands, target, clamping, the small-region fallback. It says that a value
+  outside the scale keeps printing its real number while its arc is clamped to the end, so a full arc does not read as "exactly `max`"
+  (supervisor, 2026-11-25).
 - The author skill: a gauge for a value against its range, against a bullet chart for several values against targets.
 - One example deck: utilization, NPS with colored bands and a target, a gauge bound to data.
 

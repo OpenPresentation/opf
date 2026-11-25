@@ -1,12 +1,11 @@
 # FR-07, part 2 design note: bands and the bullet chart (CR 5)
 
 A builder's brief for the second part of item FR-07 of the format-requests program (`docs/programs/format-requests/burndown.md` on
-`main`). Part 1 is the table color scale (`fr-07a-table-color-scale.md` on this branch), part 3 the gauge. This part is second in the cut
-order: if the release date is at risk, it drops out after the gauge and follows in a patch, because it only adds.
+`main`). Part 1 is the table color scale (`fr-07a-table-color-scale.md` on this branch), part 3 the gauge. This part is built second. The owner chose on 2026-11-25 that nothing is cut from 0.37.0 (`r-one`): every part ships in it.
 
 Who decided what:
 
-- **Owner, 2026-11-24**: native, editable PowerPoint parts (`cr5-export`); built in order and cut from the end (`cr5-which`); what is
+- **Owner, 2026-11-24**: native, editable PowerPoint parts (`cr5-export`); built in order (`cr5-which`; "cut from the end" is replaced by the owner's no-cut answer of 2026-11-25); what is
   best for OPF over the requesting tool's shapes (the note on CR 5).
 - **Supervisor, 2026-11-25, on the owner's delegation**: bands belong to every bar, column, line and area chart, not only the bullet;
   `bullet` is its own chart type.

@@ -2,12 +2,11 @@
 
 A builder's brief for the first part of item FR-07 of the format-requests program (`docs/programs/format-requests/burndown.md` on
 `main`). FR-07 has three parts, each its own pull request with its own PowerPoint check: this one (the table color scale), then bands with
-the bullet chart (part 2), then the gauge (part 3). This part depends on nothing in the data track and stays in the release whatever else
-is cut.
+the bullet chart (part 2), then the gauge (part 3). This part depends on nothing in the data track. The owner chose on 2026-11-25 that nothing is cut from 0.37.0 (`r-one`): every part ships in it.
 
 Who decided what:
 
-- **Owner, 2026-11-24**: native, editable PowerPoint parts (`cr5-export`); all three built in order and cut from the end (`cr5-which`);
+- **Owner, 2026-11-24**: native, editable PowerPoint parts (`cr5-export`); all three built in order (`cr5-which`; its "cut from the end" is replaced by the owner's no-cut answer of 2026-11-25);
   "go with what is best for OPF" over the requesting tool's shapes (the note on CR 5).
 - **Supervisor, 2026-11-25, on the owner's delegation**: a heatmap is a table option, `colorScale`, not a chart type.
 - **Analysis, for the supervisor to confirm**: everything else, marked *(analysis)*.

@@ -1,8 +1,8 @@
 # FR-10 design note: translations and localized date names (CR 15)
 
 A builder's brief for item FR-10 of the format-requests program (`docs/programs/format-requests/burndown.md` on `main`). Two parts: variable
-translations, and month and weekday names in the language where a date is drawn. The date names are fourth in the cut order; the
-translations stay if they are cut. The measured size of the date-name table is in [Size](#size), with what it means for each budget.
+translations, and month and weekday names in the language where a date is drawn. The owner chose on 2026-11-25 that nothing is cut
+from 0.37.0 (`r-one`), so both parts ship; part 1 is still committed first and stands on its own. The measured size of the date-name table is in [Size](#size), with what it means for each budget.
 
 Who decided what:
 
@@ -155,8 +155,8 @@ Against the budgets the supervisor named (headroom on `main` on 2026-11-25):
 
 **Recommendation** *(analysis, for the supervisor and the owner)*: ship the full table and the patterns, and raise the budgets the table
 passes by its measured size, recorded as data (as the numbers table is), not as headroom. Even the long-names-only variant (9.5 KB with
-the patterns) does not fit `composition`'s headroom, so trimming does not avoid the raise; it only makes `MMM` and `EEE` English. If a
-raise is refused, part 2 is cut, as the cut order already allows, and translations ship alone.
+the patterns) does not fit `composition`'s headroom, so trimming does not avoid the raise; it only makes `MMM` and `EEE` English. With nothing
+cut (owner, 2026-11-25), the raise is the path; the owner sees the size and the before and after pictures before the item merges.
 
 ### Drawing changes
 
@@ -266,5 +266,5 @@ Conformance: the valid deck above; the two invalid decks.
 | Format and stand-alone month forms *(analysis)* | Format form with a day token, stand-alone without | Correct grammar in 23 languages. |
 | The default pattern *(analysis)* | The language's long date pattern; US English unchanged | A German name in English order is wrong. |
 | Table encoding *(analysis)* | Joined strings per list | Smaller after compression. |
-| The budget *(analysis, for the supervisor and the owner)* | Raise by the table's measured size, else cut part 2 | Trimming does not avoid the raise. |
+| The budget *(analysis, for the supervisor and the owner)* | Raise by the table's measured size (no cut: owner, 2026-11-25) | Trimming does not avoid the raise. |
 | Storage in PowerPoint | Nothing stored: content variables do not round-trip; the export holds each slide's resolved text (supervisor, 2026-11-25) | Measured with both importers. |

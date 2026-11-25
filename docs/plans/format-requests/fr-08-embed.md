@@ -8,7 +8,8 @@ Who decided what:
 - **Owner, 2026-11-24**: the names `embed`, `src`, `title` and `aspectRatio` ("I like embed and src and title and aspectRatio I don't get
   poster"); a separate kind from `video` (`cr11-video`).
 - **Supervisor, 2026-11-25, on the owner's delegation**: the static picture is an optional `preview` (round 2, `e-preview`); built in
-  0.37.0 without waiting for the request text (`e-release`). Third in the cut order, after the gauge and the bullet chart.
+  0.37.0 without waiting for the request text (`e-release`). The owner confirmed both on 2026-11-25 (`e-preview`, `e-release`), and chose that nothing is cut from 0.37.0
+  (`r-one`), so embed ships in it.
 - **Analysis, for the supervisor to confirm**: everything else, marked *(analysis)*.
 
 ## The need
