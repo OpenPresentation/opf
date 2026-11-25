@@ -37,6 +37,8 @@ export interface SchemaCheckOptions {
   values?: VariableValues;
   /** Registered catalogs, for the checks that read a resolved theme (slide-theme-dimensions). */
   catalogs?: readonly Catalog[];
+  /** The date the data is checked as of (an ISO 8601 date or date-time), for the `dataset-stale` warning. Without one no data is reported stale. */
+  asOf?: string;
 }
 
 export interface SchemaCheckResult {
@@ -706,10 +708,10 @@ function chartTypeWarnings(
   return issues;
 }
 
-// RR-54: chart and table data. Errors: dataset-unknown, dataset-field-unknown, data-column-duplicate,
-// chart-mapping-unknown-column, chart-highlight-unknown-name (FA-14), number-format-invalid. Warnings: chart-value-not-numeric (not for
+// RR-54: chart and table data. Errors: dataset-unknown, dataset-field-unknown, datasource-unknown (FR-04), data-column-duplicate,
+// chart-mapping-unknown-column, chart-highlight-unknown-name (FA-14), number-format-invalid. Warnings: datasource-credentials and dataset-stale (FR-04), chart-value-not-numeric (not for
 // null, "" or a 'var:<id>' cell whose variable is a number), chart-mapping-adapted, chart-highlight-adapted, chart-series-dropped (LH-60).
-function dataIssues(value: unknown): { errors: ValidationIssue[]; warnings: ValidationIssue[] } {
+function dataIssues(value: unknown, asOf?: string): { errors: ValidationIssue[]; warnings: ValidationIssue[] } {
   const out = { errors: [] as ValidationIssue[], warnings: [] as ValidationIssue[] };
   if (!isRecord(value) || !Array.isArray(value.slides)) return out;
   const seen = new Set<string>();
@@ -721,10 +723,10 @@ function dataIssues(value: unknown): { errors: ValidationIssue[]; warnings: Vali
       (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code }));
     }
   };
-  add(datasetDiagnostics(value));
+  add(datasetDiagnostics(value, { asOf }));
   const payload = (node: Record<string, unknown>, path: string): void => {
     if (isRecord(node.chart)) {
-      const resolved = resolveChartData(node.chart, value, { path: pathFor(path, "chart") });
+      const resolved = resolveChartData(node.chart, value, { path: pathFor(path, "chart"), asOf });
       add(resolved.diagnostics);
       // LH-60: a series the drawn chart type cannot plot is named (chart-series-dropped).
       add(chartDrawDiagnostics(node.chart, resolved, pathFor(path, "chart"), { language: typeof value.language === "string" ? value.language : undefined }));
@@ -1083,7 +1085,7 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
   if (resolved.schemaName === "presentation") {
     errors.push(...presentationSemanticIssues(subject, options.catalogs));
     errors.push(...variableIssues.errors);
-    const data = dataIssues(subject);
+    const data = dataIssues(subject, options.asOf);
     errors.push(...data.errors);
     warnings.push(...presentationReferenceWarnings(subject, options.catalogs));
     warnings.push(...data.warnings);

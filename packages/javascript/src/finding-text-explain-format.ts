@@ -103,6 +103,11 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { datasets: { sales: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", chart: { type: "column", data: { dataset: "sale" } } }] },
     { datasets: { sales: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", chart: { type: "column", data: { dataset: "sales" } } }] },
   ),
+  "opf/datasource-unknown": ex(
+    "Name a data source that exists under `datasources`, add the one the dataset asks for, or write the data source inline as an object such as `{ \"src\": \"./data.csv\" }`. A string `datasource` is only ever an id.",
+    { datasources: { warehouse: { connector: "postgres" } }, datasets: { sales: { datasource: "wharehouse", columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
+    { datasources: { warehouse: { connector: "postgres" } }, datasets: { sales: { datasource: "warehouse", columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
+  ),
   "opf/dataset-field-unknown": ex(
     "Name only columns the dataset has. The message lists them.",
     { datasets: { sales: { columns: ["Region", "Revenue"], rows: [["EMEA", 12]] } }, slides: [{ title: "Revenue", table: { dataset: "sales", fields: ["Regon"] } }] },

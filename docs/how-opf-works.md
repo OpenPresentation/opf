@@ -329,7 +329,7 @@ Everything above, together — intent metadata, a catalog-backed narrative with 
         { "region": "start", "metric": { "value": "2.1x", "label": "Quarter-over-quarter adoption", "trend": "up" } },
         {
           "region": "center+end",
-          "chart": { "type": "line", "data": { "columns": ["Month", "Active Teams"], "rows": [["Jul", 8], ["Aug", 12], ["Sep", 17]], "source": { "src": "asset:adoption-csv" } } }
+          "chart": { "type": "line", "data": { "columns": ["Month", "Active Teams"], "rows": [["Jul", 8], ["Aug", 12], ["Sep", 17]], "datasource": { "src": "asset:adoption-csv" } } }
         }
       ],
       "notes": "Pause here; this is the slide the decision hangs on."

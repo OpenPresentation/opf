@@ -29,7 +29,8 @@ const deck = () => ({
       title: "Revenue by quarter",
       columns: ["Quarter", { name: "Revenue", format: "$#,##0.0" }, "Costs", "Notes"],
       rows: [["Q1", 12.4, 5, "first"], ["Q2", 18.1, 8, "second"], ["Q3", 24, 9, "third"]],
-      source: { src: "./data/revenue.csv", retrieved: "2026-10-05" },
+      datasource: { src: "./data/revenue.csv" },
+      retrieved: "2026-10-05",
     },
   },
   slides: [
@@ -426,7 +427,7 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
 {
   const editor = session();
   const change = step(editor, "use a copy of the data (chart with fields)", () => grid.detachGridDataset(editor, C_FIELDS), () => {
-    assert.deepEqual(editor.get(`${C_FIELDS}.data`), { columns: ["Quarter", "Costs"], rows: [["Q1", 5], ["Q2", 8], ["Q3", 9]], source: { src: "./data/revenue.csv", retrieved: "2026-10-05" } });
+    assert.deepEqual(editor.get(`${C_FIELDS}.data`), { columns: ["Quarter", "Costs"], rows: [["Q1", 5], ["Q2", 8], ["Q3", 9]], datasource: { src: "./data/revenue.csv" }, retrieved: "2026-10-05" });
     assert.ok(editor.get("datasets.revenue"), "the dataset stays for the others");
     assert.equal(grid.resolveDataGridTarget(editor.presentation, C_FIELDS).dataset, undefined);
     assert.equal(grid.resolveDataGridTarget(editor.presentation, C_ALL).dataset.count, 2);
@@ -443,13 +444,13 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
   const csv = "Quarter,Revenue,Costs\nQ1,12,8\nQ2,18,11\n";
   const content = ingest(csv, { as: "chart", chartType: "column" });
   const editor = session({ name: "Import", design: { theme: "minimal", fontScheme: "aptos" }, slides: [{ id: "a", title: "A", text: "Hello" }] });
-  const stored = prepareDatasetImport(editor.presentation, content, { id: "revenue", source: { src: "./revenue.csv", retrieved: "2026-10-05" } });
+  const stored = prepareDatasetImport(editor.presentation, content, { id: "revenue", provenance: { datasource: { src: "./revenue.csv" }, query: "FY26!A1:C3", retrieved: "2026-10-05" } });
   assert.deepEqual(stored.content, { chart: { type: "column", data: { dataset: "revenue" } } });
   assert.equal(stored.replaced, false);
   assert.deepEqual(stored.patches.map((patch) => patch.op), ["add"]);
   editor.applyPatch([...stored.patches, { op: "add", path: "/slides/1", value: { id: "data", title: "Data", ...stored.content } }], { label: "Import data" });
   assert.equal(editor.snapshot().undoDepth, 1, "the dataset and the slide are one undo step");
-  assert.deepEqual(editor.get("datasets.revenue"), { columns: ["Quarter", "Revenue", "Costs"], rows: [["Q1", 12, 8], ["Q2", 18, 11]], source: { src: "./revenue.csv", retrieved: "2026-10-05" } });
+  assert.deepEqual(editor.get("datasets.revenue"), { columns: ["Quarter", "Revenue", "Costs"], rows: [["Q1", 12, 8], ["Q2", 18, 11]], datasource: { src: "./revenue.csv" }, query: "FY26!A1:C3", retrieved: "2026-10-05" });
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
   assert.equal(grid.resolveDataGridTarget(editor.presentation, "slides.1.chart").dataset.count, 1);
   assert.equal(core.unusedDatasets(editor.presentation).length, 0);
@@ -457,13 +458,14 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
   assert.equal(editor.presentation.datasets, undefined, "undo removes the dataset again");
   editor.redo();
 
-  // Importing into an existing id replaces its columns and rows and keeps its title and source.
+  // Importing into an existing id replaces its columns and rows and keeps its title and where it came from; the new provenance is merged in.
   const again = prepareDatasetImport(editor.presentation, ingest("Quarter,Revenue,Costs\nQ1,1,2\n", { as: "table" }), { id: "revenue" });
   assert.equal(again.replaced, true);
   assert.deepEqual(again.content, { table: { dataset: "revenue" } });
   editor.applyPatch([...again.patches, { op: "add", path: "/slides/2", value: { id: "t", title: "T", ...again.content } }]);
   assert.deepEqual(editor.get("datasets.revenue.rows"), [["Q1", "1", "2"]], "a CSV table keeps its cells as text");
-  assert.deepEqual(editor.get("datasets.revenue.source"), { src: "./revenue.csv", retrieved: "2026-10-05" });
+  assert.deepEqual(editor.get("datasets.revenue.datasource"), { src: "./revenue.csv" });
+  assert.equal(editor.get("datasets.revenue.retrieved"), "2026-10-05");
   assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
 
   for (const bad of ["", "-x", "a b", "a/b", undefined]) assert.throws(() => prepareDatasetImport(editor.presentation, content, { id: bad }), (error) => error.code === "dataset-id-invalid", `id ${JSON.stringify(bad)}`);

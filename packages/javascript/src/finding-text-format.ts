@@ -238,6 +238,17 @@ const datasetUnknown: RuleText = (finding, _context, helpers) => {
   };
 };
 
+const datasourceUnknown: RuleText = (finding, _context, helpers) => {
+  const id = unquote(match(finding.message, /^unknown data source '(.+?)'/)?.[1]) || String(helpers.valueAt(helpers.segments) ?? "");
+  if (!id) return undefined;
+  const ids = keysAt(helpers, ["datasources"]);
+  const here = ids.length ? `Data sources in this deck: ${plainList(ids)}.` : "This deck has no data sources.";
+  return {
+    message: `${code(`datasource: "${id}"`)} does not exist. ${here}`,
+    next: chooseNext(id, ids, `add ${code(`datasources.${id}`)}, or write the data source inline as an object such as ${code('{ "src": "./data.csv" }')}`),
+  };
+};
+
 const datasetFieldUnknown: RuleText = (finding, _context, helpers) => {
   const found = match(finding.message, /^field ("(?:[^"\\]|\\.)*") is not a column of the dataset; use one of (.+)$/);
   if (!found) return undefined;
@@ -764,6 +775,7 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/connector-end-missing": connectorEndMissing,
   "opf/layout-placeholder-group": layoutPlaceholderGroup,
   "opf/dataset-unknown": datasetUnknown,
+  "opf/datasource-unknown": datasourceUnknown,
   "opf/dataset-field-unknown": datasetFieldUnknown,
   "opf/data-column-duplicate": dataColumnDuplicate,
   "opf/chart-mapping-unknown-column": chartMappingUnknownColumn,

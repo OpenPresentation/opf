@@ -107,6 +107,11 @@ export interface ValidateOptions {
 	template?: boolean;
 	/** Values to fill variables with before checking, keyed by variable id. */
 	values?: VariableValues;
+	/**
+	 * The date to check data freshness as of (an ISO 8601 date or date-time). Core has no clock, so a dataset is reported stale
+	 * (`opf/dataset-stale`) only when the caller passes one: its `retrieved` is older than its data source's `refresh`.
+	 */
+	asOf?: string;
 }
 
 export interface ValidationChecks {

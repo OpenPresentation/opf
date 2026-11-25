@@ -514,6 +514,16 @@ const chartValueNotNumeric: RuleText = (finding) => {
   };
 };
 
+const datasourceCredentials: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "remove the credential from the data source and keep the secret in your own store; name the connection in `connector` or `extensions`.",
+});
+
+const datasetStale: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "take the data from its data source again and update `retrieved`, or change the data source's `refresh`.",
+});
+
 const chartMappingAdapted: RuleText = (finding) => ({
   message: keep(cap(finding.message)),
   next: "remove that mapping entry, or name a different column.",
@@ -687,6 +697,8 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/image-resolution": imageResolution,
   "opf/chart-value-not-numeric": chartValueNotNumeric,
   "opf/chart-mapping-adapted": chartMappingAdapted,
+  "opf/datasource-credentials": datasourceCredentials,
+  "opf/dataset-stale": datasetStale,
   "opf/chart-highlight-adapted": chartHighlightAdapted,
   "opf/chart-series-dropped": chartSeriesDropped,
   "opf/code-highlight-out-of-range": codeHighlightOutOfRange,

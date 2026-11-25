@@ -189,10 +189,12 @@ export { formatNumber, formatPercentNumber, localizeDigits, numberLocale, number
 export type { NumberLocale } from './numerals.js';
 // RR-54: chart and table data: strict numbers, number formats and Excel codes, datasets, series mapping.
 export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
+// FR-04: data sources and where a dataset came from. Engines never read, fetch or refresh a data source.
+export { dataSourcesOf, resolveDataSource, dataProvenance, credentialInSrc, parseInstant } from './data-sources.js';
 // LH-60: how a chart is drawn when its data does not fit its type (map, box, pie and scatter fallbacks; series a type cannot plot).
 export { chartDrawPlan, chartDrawDiagnostics, isPlaceLabel, markLabelColor } from './chart-fallback.js';
 export type { ChartDrawPlan, ChartFallback } from './chart-fallback.js';
-export type { DataCellValue, DataColumn, DataSourceRef, Dataset, DatasetRef, ChartMapping, ChartComboSeries, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
+export type { DataCellValue, DataColumn, DataSource, DataGenerator, DataProvenance, Dataset, DatasetRef, ChartMapping, ChartComboSeries, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
 
 export { FONT_POLICY, applyFontPolicyDecisions, fontPolicyFor, fontAvailabilityDiagnostics } from './font-policy.js';
 export { resolveDrawnFontFamilies } from './drawn-font-families.js';

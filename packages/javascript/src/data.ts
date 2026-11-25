@@ -4,7 +4,9 @@ import type { Chart } from './generated/types/presentation.js';
 
 // RR-54: chart and table data (strict numbers, number formats, datasets, series mapping) are also on this entry.
 export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
-export type { DataCellValue, DataColumn, DataSourceRef, Dataset, DatasetRef, ChartMapping, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
+// FR-04: data sources and where a dataset came from. Engines never read, fetch or refresh a data source.
+export { dataSourcesOf, resolveDataSource, dataProvenance, credentialInSrc, parseInstant } from './data-sources.js';
+export type { DataCellValue, DataColumn, DataSource, DataGenerator, DataProvenance, Dataset, DatasetRef, ChartMapping, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
 export type DataCell = string | number | boolean | null;
 export interface TabularData { columns: string[]; rows: DataCell[][] }
 /** Chart import rejects empty columns and rows before returning a schema-compatible payload. */

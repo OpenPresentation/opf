@@ -1,6 +1,7 @@
 // RR-62: `opf ingest --into` is a pure function of its inputs. No clock, no randomness, no dependence on the working directory.
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -55,7 +56,9 @@ describe("opf ingest is deterministic", () => {
 		assert.equal(await read("two.json"), first);
 		assert.equal(await read("three.json"), first);
 		const deck = JSON.parse(first);
-		assert.deepEqual(deck.datasets.revenue.source, { src: "data/revenue.csv" });
+		assert.deepEqual(deck.datasets.revenue.datasource, { src: "data/revenue.csv" });
+			assert.equal(deck.datasets.revenue.sha256, createHash("sha256").update(await readFile(path.join(work, "data", "revenue.csv"))).digest("hex"), "sha256 is the hash of the data file's bytes");
+			assert.equal(deck.datasets.revenue.source, undefined, "the nested source object is gone");
 		assert.match(deck.slides[1].id, /^data-[0-9a-f]{8}$/);
 		// stdout carries the same document
 		assert.equal(run([...base, "--into", "deck.opf.json"], { cwd: work, noClock: true }).stdout, first);
@@ -66,8 +69,8 @@ describe("opf ingest is deterministic", () => {
 		await writeFile(path.join(work, "decks", "d.opf.json"), await read("deck.opf.json"));
 		run([...base, "--into", "decks/d.opf.json", "--in-place"]);
 		const deck = JSON.parse(await read("decks/d.opf.json"));
-		assert.equal(deck.datasets.revenue.source.src, "../data/revenue.csv");
-		assert.equal(deck.datasets.revenue.source.retrieved, undefined);
+		assert.equal(deck.datasets.revenue.datasource.src, "../data/revenue.csv");
+		assert.equal(deck.datasets.revenue.retrieved, undefined);
 	});
 
 	test("a second import of different data into the same deck gets a different id", async () => {
@@ -118,13 +121,33 @@ describe("opf ingest is deterministic", () => {
 	test("--date sets retrieved; without it there is no retrieved field and a re-import drops an old one", async () => {
 		const deck = await fresh("dated.json");
 		const dated = JSON.parse(run([...base, "--into", deck, "--date", "2026-10-05"], { noClock: true }).stdout);
-		assert.deepEqual(dated.datasets.revenue.source, { src: "data/revenue.csv", retrieved: "2026-10-05" });
+		assert.deepEqual(dated.datasets.revenue.datasource, { src: "data/revenue.csv" });
+		assert.equal(dated.datasets.revenue.retrieved, "2026-10-05");
 		const again = JSON.parse(run([...base, "--into", deck], { noClock: true }).stdout);
-		assert.deepEqual(again.datasets.revenue.source, { src: "data/revenue.csv" });
-		await writeFile(path.join(work, "stale.json"), JSON.stringify({ name: "Stale", datasets: { revenue: { columns: ["a"], rows: [], source: { src: "data/revenue.csv", sheet: "S", retrieved: "2020-01-01" } } }, slides: [{ title: "T", table: { dataset: "revenue" } }] }));
-		const kept = JSON.parse(run([...base, "--into", "stale.json"], { noClock: true }).stdout);
-		assert.deepEqual(kept.datasets.revenue.source, { src: "data/revenue.csv", sheet: "S" });
-		// no --dataset: there is no source record to date
+		assert.deepEqual(again.datasets.revenue.datasource, { src: "data/revenue.csv" });
+		assert.equal(again.datasets.revenue.retrieved, undefined);
+		// A re-import of the same file keeps the inline data source's other keys and the query; what described the old data goes.
+		const old = { columns: ["a"], rows: [], datasource: { src: "data/revenue.csv", connector: "xlsx", description: "Finance export" }, query: "S!A1:B2", retrieved: "2020-01-01", version: "r1", sha256: "0".repeat(64), generator: { kind: "model", name: "m" }, title: "Kept" };
+		await writeFile(path.join(work, "stale.json"), JSON.stringify({ name: "Stale", datasets: { revenue: old }, slides: [{ title: "T", table: { dataset: "revenue" } }] }));
+		const kept = JSON.parse(run([...base, "--into", "stale.json"], { noClock: true }).stdout).datasets.revenue;
+		assert.deepEqual(kept.datasource, { src: "data/revenue.csv", connector: "xlsx", description: "Finance export" });
+		assert.equal(kept.query, "S!A1:B2");
+		assert.equal(kept.title, "Kept");
+		assert.deepEqual([kept.retrieved, kept.version, kept.generator], [undefined, undefined, undefined]);
+		assert.match(kept.sha256, /^[0-9a-f]{64}$/);
+		assert.notEqual(kept.sha256, old.sha256);
+		// A different file: the data source describes the new origin only, and the old query does not apply to it.
+		await writeFile(path.join(work, "other.json"), JSON.stringify({ name: "Other", datasets: { revenue: { ...old, datasource: { src: "data/costs.csv", connector: "xlsx" } } }, slides: [{ title: "T", table: { dataset: "revenue" } }] }));
+		const moved = JSON.parse(run([...base, "--into", "other.json"], { noClock: true }).stdout).datasets.revenue;
+		assert.deepEqual(moved.datasource, { src: "data/revenue.csv" });
+		assert.equal(moved.query, undefined);
+		// A data source named by id is the author's own description of the place: it stays, with its query.
+		await writeFile(path.join(work, "named.json"), JSON.stringify({ name: "Named", datasources: { warehouse: { connector: "csv" } }, datasets: { revenue: { ...old, datasource: "warehouse" } }, slides: [{ title: "T", table: { dataset: "revenue" } }] }));
+		const named = JSON.parse(run([...base, "--into", "named.json"], { noClock: true }).stdout);
+		assert.equal(named.datasets.revenue.datasource, "warehouse");
+		assert.equal(named.datasets.revenue.query, "S!A1:B2");
+		assert.deepEqual(named.datasources, { warehouse: { connector: "csv" } });
+		// no --dataset: there is no data source record to date
 		assert.equal(JSON.parse(run(["ingest", "data/revenue.csv", "--as", "table", "--into", deck], { noClock: true }).stdout).datasets, undefined);
 	});
 
