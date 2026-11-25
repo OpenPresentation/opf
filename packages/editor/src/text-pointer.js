@@ -130,7 +130,7 @@ function mirrorOffset({doc, win, input, clientX, clientY}) {
   // The input's side padding narrows its lines to the drawn line breaks (input-wrap.js): the copy takes the same content box.
   const padLeft = parseFloat(style.paddingLeft) || 0, padRight = parseFloat(style.paddingRight) || 0;
   mirror.style.cssText = `position:absolute;visibility:hidden;pointer-events:none;margin:0;padding:0;border:0;overflow:hidden;box-sizing:border-box;white-space:pre-wrap;overflow-wrap:break-word;left:${box.left - host.left + padLeft}px;top:${box.top - host.top}px;width:${box.width - padLeft - padRight}px`;
-  for (const name of ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'fontStretch', 'fontKerning', 'fontVariantLigatures', 'lineHeight', 'letterSpacing', 'wordSpacing', 'textAlign', 'tabSize', 'direction', 'textTransform', 'textIndent'])
+  for (const name of ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'fontStretch', 'fontKerning', 'fontVariantLigatures', 'lineHeight', 'letterSpacing', 'wordSpacing', 'textAlign', 'tabSize', 'direction', 'textTransform', 'textIndent', 'textRendering'])
     mirror.style[name] = style[name];
   const value = input.value;
   mirror.textContent = value;

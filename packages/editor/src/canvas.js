@@ -663,6 +663,9 @@ export function createCanvasEditor(container, options = {}) {
       height: `${Math.max(lineHeight, lineCount * lineHeight, richExtent) * scale + 2}px`,
       minHeight: "0",
       letterSpacing: font.letterSpacing,
+      // The drawn text is laid out with geometric precision (no hinted, whole-pixel advances): the input must be too, or its glyphs drift
+      // from the drawn ones along a line where a browser rounds each advance (Chromium on Linux), by more than half a narrow glyph.
+      textRendering: "geometricPrecision",
     });
     // The input's caret, selection and hit testing are the browser's, on the input's own lines: they are on the drawn glyphs only
     // while the input breaks its lines where the slide does. A heading's lines are balanced (WI-4) and the browser wraps greedily, so
