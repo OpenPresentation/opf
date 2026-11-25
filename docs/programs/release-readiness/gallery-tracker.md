@@ -8,7 +8,7 @@ One record per item type and value: every catalog record in `the committed track
 
 ## Summary
 
-864 records; 550 addressed, 314 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
+864 records; 551 addressed, 313 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
 
 | Type | Records | Statuses | Addressed | Unaddressed |
 | --- | ---: | --- | ---: | ---: |
@@ -27,7 +27,7 @@ One record per item type and value: every catalog record in `the committed track
 | blocks | 32 | done 24, parity-near 8 | 32 | 0 |
 | image-treatments | 15 | done 15 | 15 | 0 |
 | purposes | 9 | done 9 | 9 | 0 |
-| fonts | 169 | done 143, font-gap 26 | 168 | 1 |
+| fonts | 169 | done 143, font-gap 26 | 169 | 0 |
 | slide-sizes | 10 | descoped 7, missing-gallery 3 | 7 | 3 |
 | gallery-teasers | 1 | descoped 1 | 1 | 0 |
 
@@ -382,7 +382,6 @@ Historical measured verdicts below retain their original input scope; an additio
 | charts | `unknown` | 9 | `100pct-stacked-area`, `100pct-stacked-bar`, `100pct-stacked-column`, `combo`, `stacked-area`, `stacked-bar`, `stacked-column`, `stacked-line`, `stacked-line-with-markers` | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
 | layouts | `unknown` | 34 | `agenda`, `chart`, `chart-beside`, `closing`, `code`, `comparison`, `cover`, `dashboard`, `faq`, `gallery`, `hero`, `image` and 22 more | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
 | slide-sizes | `unknown` | 3 | `1:1`, `4:5`, `9:16` | not measured: compose, preview, export, roundTrip, parity (no gallery config uses this preset) | Measure the missing columns (audit or probe) and commit the result. | - |
-| fonts | `works-unverified` | 1 | `Leelawadee UI` | font tracker native verification unverified (FF-46) | Native PowerPoint comparison (FF-46) is the remaining acceptance gate and has not been run for this family: the owner decided on 2026-11-23 to record it as not yet natively verified (opf#1399). Added with the 0.35 script defaults (2026-1... | - |
 
 ## Addressed gaps
 
