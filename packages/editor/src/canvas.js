@@ -22,6 +22,7 @@ import { createBlockControls } from "./block-controls.js";
 import { createLayoutHandles } from "./layout-handles.js";
 import { createRichTextInput } from "./rich-text-input.js";
 import { textInputOffsetAtPoint } from "./text-pointer.js";
+import { inputWrapWidth } from "./input-wrap.js";
 import { createRichTextToolbar } from "./rich-text-toolbar.js";
 import { createImageCropper } from "./image-cropper.js";
 import { createShapeHandles } from "./shape-handles.js";
@@ -649,23 +650,55 @@ export function createCanvasEditor(container, options = {}) {
     const tracedWidth = Number(target.getAttribute("data-opf-box-width"));
     const width = split?.width ?? internalPart?.box.width ?? item?.box.width ?? (tracedWidth > 0 ? tracedWidth : Math.max(80, bounds.width + 20));
     const left = internalPart?.box.x ?? (anchor === "middle" ? x - width / 2 : anchor === "end" ? x - width : x);
-    const visibleText=active.composing||active.isCode||active.isMetric||!!split;
+    const ownText=active.isCode||active.isMetric||!!split;
     Object.assign(active.input.style, {
       fontFamily: font.fontFamily,
       fontSize: `${fontSize * scale}px`,
       fontWeight: font.fontWeight,
       fontStyle: font.fontStyle,
       lineHeight: `${lineHeight * scale}px`,
-      color: visibleText ? font.fill : "transparent",
       caretColor: font.fill,
       textAlign: furniturePart?.alignment ?? timelinePart?.alignment ?? metricLayout?.alignment ?? (anchor === "middle" ? "center" : anchor === "end" ? "right" : "left"),
       width: `${width * scale}px`,
       height: `${Math.max(lineHeight, lineCount * lineHeight, richExtent) * scale + 2}px`,
       minHeight: "0",
       letterSpacing: font.letterSpacing,
+      // The drawn text is laid out with geometric precision (no hinted, whole-pixel advances): the input must be too, or its glyphs drift
+      // from the drawn ones along a line where a browser rounds each advance (Chromium on Linux), by more than half a narrow glyph.
+      textRendering: "geometricPrecision",
     });
-    active.input.style.left = `${svgRect.left - rootRect.left + (left - viewBox.x) * scale}px`;
+    // The input's caret, selection and hit testing are the browser's, on the input's own lines: they are on the drawn glyphs only
+    // while the input breaks its lines where the slide does. A heading's lines are balanced (WI-4) and the browser wraps greedily, so
+    // the input takes the wrap width that gives the drawn breaks, as side padding (its box and outline keep the text box). A draft
+    // that is not drawn yet (a composition, an invalid value) keeps the last answer. Once no width gives the drawn breaks (`null`) the
+    // input keeps showing its own text until the edit ends: the answer does not flip from one keystroke to the next, so the heading
+    // does not jump between the drawing and the browser's wrap while it is typed.
+    if (ownText) active.wrap = undefined;
+    else if (active.wrap !== null) {
+      const fit = inputWrapWidth({ doc, win, input: active.input, target, path: active.path, source: inputSource(active), width: width * scale });
+      if (fit !== undefined) active.wrap = fit;
+    }
+    // No width gives the drawn breaks: the input shows its own text in place of the drawn one, so what is edited is what is seen.
+    // A string drawn as runs keeps its drawing: the input has one face and cannot stand in for it.
+    const visibleText = active.composing || ownText || (active.wrap === null && !richLines.length);
+    const spare = active.wrap ? width * scale - active.wrap.width : 0, slack = Math.max(0, spare), grown = Math.max(0, -spare);
+    const side = win.getComputedStyle(active.input), rtl = side.direction === "rtl";
+    const aligned = side.textAlign === "center" ? "center" : side.textAlign === "right" || side.textAlign === (rtl ? "start" : "end") ? "right" : "left";
+    Object.assign(active.input.style, {
+      color: visibleText ? font.fill : "transparent",
+      width: `${width * scale + grown}px`,
+      paddingLeft: `${aligned === "right" ? slack : aligned === "center" ? slack / 2 : 0}px`,
+      paddingRight: `${aligned === "left" ? slack : aligned === "center" ? slack / 2 : 0}px`,
+    });
+    // The box grows to the right where the text is left aligned and to the left where it is end aligned (centered: both ways).
+    active.input.style.left = `${svgRect.left - rootRect.left + (left - viewBox.x) * scale - (aligned === "right" ? grown : aligned === "center" ? grown / 2 : 0)}px`;
     active.input.style.top = `${svgRect.top - rootRect.top + (y - viewBox.y) * scale}px`;
+    // The input's own wrap can take more rows than the drawing has: its box grows to hold them (it does not scroll or clip).
+    if (active.wrap === null && !ownText) {
+      const input = active.input, drawn = parseFloat(input.style.height);
+      input.style.height = "0px";
+      input.style.height = `${Math.max(drawn, input.scrollHeight)}px`;
+    }
     // When the input supplies visible text, its selected text needs the same fill.
     active.input.style.setProperty('--opf-inline-selection-color',visibleText ? font.fill : 'transparent');
     // Other text keeps the canonical SVG visible beneath the transparent input.
@@ -692,12 +725,16 @@ export function createCanvasEditor(container, options = {}) {
     if (Array.isArray(value) && target.hasAttribute("data-opf-rich-text")) return "rich-text";
     return "properties";
   }
+  // The canonical string an inline input holds: its value with the source's own line endings.
+  function inputSource(edit) {
+    try {
+      if (edit.type === "string") return parseCanvasValue(edit.input.value, "string", edit.originalValue);
+    } catch { /* fall back to the raw input text */ }
+    return edit.input.value;
+  }
   // Textarea offset nearest to a client point, from the traced SVG glyphs (see text-pointer.js).
   function textOffsetAt(edit, clientX, clientY) {
-    let source = edit.input.value;
-    try {
-      if (edit.type === "string") source = parseCanvasValue(edit.input.value, "string", edit.originalValue);
-    } catch { /* fall back to the raw input text */ }
+    const source = inputSource(edit);
     return textInputOffsetAtPoint({
       doc, win, target: [getTarget(edit.path), ...splitParts(getTarget(edit.path), edit.path)], path: edit.path, source, input: edit.input, clientX, clientY,
     });

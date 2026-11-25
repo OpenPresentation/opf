@@ -11,6 +11,7 @@ const faces = (await loadFonts({ pack: 'office' })).registry.embeddedFonts.filte
 const bundled = await build({stdin: {resolveDir: fileURLToPath(new URL('../', import.meta.url)), contents: `
   import {createEditorSession} from './dist/index.js';
   import {createCanvasEditor} from './dist/canvas.js';
+  import {inputWrapWidth} from './dist/input-wrap.js';
   import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
   import { gallery as defaultCatalog } from '@openpresentation/gallery';
   window.mountClickEntry = async ({deck, faces, options = {}}) => {
@@ -33,6 +34,23 @@ const bundled = await build({stdin: {resolveDir: fileURLToPath(new URL('../', im
     const box = range.getBoundingClientRect();
     return {x: box.left + box.width * (side === 'left' ? 0.25 : 0.75), y: box.top + box.height / 2, width: box.width, left: box.left, right: box.right, top: box.top, bottom: box.bottom};
   };
+  window.inputWrapWidth = inputWrapWidth;
+  // The look of the open input, and the rows a plain greedy textarea of the same box would give a prefix of its text.
+  window.inputLook = (greedyPrefix) => {
+    const input = document.activeElement;
+    if (!input || input.className !== 'opf-inline-input') return null;
+    const cs = getComputedStyle(input), path = cv.editingPath, target = document.querySelector('[data-canvas-target][data-opf-path="' + path + '"]');
+    const probe = document.createElement('textarea');
+    Object.assign(probe.style, {position: 'absolute', visibility: 'hidden', margin: '0', padding: '0', border: '0', overflow: 'hidden', height: '1px', width: input.style.width,
+      fontFamily: cs.fontFamily, fontSize: cs.fontSize, fontWeight: cs.fontWeight, lineHeight: cs.lineHeight, letterSpacing: cs.letterSpacing});
+    input.parentNode.append(probe);
+    probe.value = greedyPrefix ?? input.value;
+    const greedyRows = Math.round(probe.scrollHeight / parseFloat(cs.lineHeight));
+    probe.remove();
+    const anchors = [...target.querySelectorAll('text')].map((node) => node.getAttribute('text-anchor'));
+    return {padLeft: parseFloat(cs.paddingLeft), padRight: parseFloat(cs.paddingRight), visible: cs.color !== 'rgba(0, 0, 0, 0)', targetOpacity: getComputedStyle(target).opacity,
+      greedyRows, anchors, clipped: input.scrollHeight > input.clientHeight + 1, rows: Math.round(input.scrollHeight / parseFloat(cs.lineHeight)), drawnLines: anchors.length, width: parseFloat(input.style.width)};
+  };
   window.inputState = () => {
     const input = document.activeElement;
     if (!input || !/^(opf-inline-input|opf-rich-input)$/.test(input.className)) return null;
@@ -42,6 +60,11 @@ const bundled = await build({stdin: {resolveDir: fileURLToPath(new URL('../', im
 const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jP0cAAAAASUVORK5CYII=';
 const wrapped = 'Wrapped subtitle  with double spaces and a tab\tinside and a long tail that must wrap over several lines of the subtitle placeholder because it is long, really long, so very long indeed';
 const bullet = 'This is a fairly long bullet that will need to wrap across several lines of the placeholder because it is long, indeed and more words follow to reach a third line';
+// A heading's lines are balanced (WI-4): "teams in" fits the first line and is drawn on the second.
+const balanced = 'Scale the pilot to four teams in January.';
+// Balanced lines for which no single wrap width gives the drawn breaks: the second line is too long for the first to take its first word and the first too short to
+// hold what the third needs (core's balancer does not promise a width exists).
+const unfit = 'Scale review more growth migration, platform strategy: we every security planning readiness review readiness customers security.';
 const design = {fontScheme: 'roboto', footer: {center: {text: 'Confidential footer'}}};
 const deck = {design, slides: [
   {title: 'Quarterly review of everything', subtitle: wrapped},
@@ -57,6 +80,11 @@ const deck = {design, slides: [
     {text: 'Right placeholder text'},
   ]},
   {title: 'Numbers', blocks: [{table: {columns: ['Name', 'Amount'], rows: [['alpha', 12], ['beta', 18]]}}]},
+  {layout: 'statement', title: balanced},
+  {layout: 'statement', title: balanced, design: {titleAlignment: 'center'}},
+  {layout: 'statement', title: balanced, design: {titleAlignment: 'end'}},
+  {layout: 'statement', title: unfit},
+  {layout: 'statement', title: 'Pneumonoultramicroscopicsilicovolcanoconiosis and Supercalifragilisticexpialidocious words'},
 ]};
 
 const browser = await chromium.launch({channel: process.platform === 'win32' ? 'msedge' : undefined});
@@ -417,6 +445,133 @@ try {
     assert.equal(await page.evaluate(() => cv.reveal('slides.0.notes')), null, 'notes are not on the canvas');
     assert.equal(await page.evaluate(() => cv.slideIndex), 0);
     done('reveal shows the slide and selects the nearest target');
+  }
+
+  // A balanced heading: the input breaks its lines where the slide does, so a press on the input, Home and End, and text typed
+  // into it all act on the drawn lines. (The input wraps greedily on its own: "January." alone on its second line, where a press
+  // on the drawn "January" fell past the end of the text and the caret stopped after "in".)
+  await mount();
+  for (const index of [8, 9, 10]) {
+    await slide(index);
+    const path = `slides.${index}.title`, second = balanced.indexOf('teams');
+    assert.deepEqual(await target(path).locator('text').evaluateAll((nodes) => nodes.map((node) => node.textContent.trim())),
+      ['Scale the pilot to four', 'teams in January.'], 'the fixture heading is drawn in balanced lines');
+    await pressAt(path, 'January', 3, 'left');
+    {
+      // The fix is exercised: the input took side padding by the alignment, and a plain greedy wrap of the same box would have put "teams in" on the first row.
+      const look = await page.evaluate(() => inputLook('Scale the pilot to four teams in'));
+      const anchor = index === 8 ? 'start' : index === 9 ? 'middle' : 'end';
+      assert.ok(look.anchors.length > 1 && look.anchors.every((value) => value === anchor), `slide ${index} draws its heading with text-anchor ${anchor} (saw ${look.anchors})`);
+      assert.equal(look.greedyRows, 1, 'a greedy wrap of the same box keeps "teams in" on the first row');
+      assert.ok(look.padLeft + look.padRight > 1, `the input narrowed its lines with side padding (saw ${look.padLeft} and ${look.padRight})`);
+      if (index === 8) assert.ok(look.padLeft === 0 && look.padRight > 0, 'start aligned: the spare room is on the right');
+      if (index === 9) assert.ok(look.padLeft > 0 && Math.abs(look.padLeft - look.padRight) < 0.5, 'centered: the spare room is shared');
+      if (index === 10) assert.ok(look.padRight === 0 && look.padLeft > 0, 'end aligned: the spare room is on the left');
+      assert.equal(look.visible, false, 'the input text stays transparent over the drawn glyphs');
+    }
+    // The second and later presses land on the input itself, which is over the glyphs while it is edited.
+    // The first drawn line ends in the space that hangs at its wrap. The drawing (SVG text-anchor) counts that space in the line's width and the browser's
+    // textarea does not, so on an end aligned (and, by half, a centered) heading the glyphs of that line sit a space apart; the presses on it are checked for the
+    // start aligned heading only, and the second line, which has no hanging space, for all three.
+    for (const [needle, k, side] of [['January', 5, 'right'], ['teams', 2, 'left'], ...(index === 8 ? [['four', 1, 'right']] : []), ['January', 0, 'left'], ['.', 0, 'right']])
+      await pressAt(path, needle, k, side);
+    await pressAt(path, 'January', 3, 'left');
+    await page.keyboard.press('ArrowRight');
+    assert.equal((await state()).start, balanced.indexOf('January') + 4, 'the caret moves through the second drawn line');
+    await page.keyboard.press('Home');
+    assert.equal((await state()).start, second, 'Home is the start of the drawn line');
+    await page.keyboard.press('End');
+    assert.equal((await state()).start, balanced.length, 'End is the end of the drawn line');
+    await page.keyboard.press('ArrowUp');
+    assert.ok((await state()).start < second, 'ArrowUp reaches the first drawn line');
+    // Typing redraws the slide; the input follows the new lines.
+    await page.keyboard.press('Control+End');
+    await page.keyboard.type(' Then review the result with every team lead.');
+    await paint(); await paint();
+    const lines = await target(path).locator('text').evaluateAll((nodes) => nodes.map((node) => node.textContent.trim()));
+    assert.ok(lines.length > 1, 'the longer heading still wraps');
+    const typed = flat(await page.evaluate(() => document.activeElement.value));
+    for (const line of lines.slice(1)) {
+      const word = line.split(' ')[0], at = await point(path, line, 0, 'left');
+      await page.mouse.click(at.x, at.y);
+      assert.equal((await state()).start, typed.indexOf(line), `a press on ${JSON.stringify(word)} is the start of its drawn line`);
+      await page.keyboard.press('Home');
+      assert.equal((await state()).start, typed.indexOf(line), `${JSON.stringify(word)} starts a line of the input too`);
+    }
+    await discard();
+  }
+  done('balanced heading: presses on the input, Home, End and typed text follow the drawn lines (start, center and end aligned)');
+
+  // A heading no wrap width reproduces (`null`): while it is edited the input shows its own text and the drawn heading is hidden; the two come back
+  // after Escape and after a commit, and the state does not flip while text is typed.
+  await mount();
+  {
+    await slide(11);
+    const path = 'slides.11.title', box = target(path);
+    assert.equal(await box.locator('text').count(), 3, 'the fixture heading is drawn in three lines');
+    for (const finish of ['Escape', 'commit']) {
+      await box.focus(); await page.keyboard.press('Enter');
+      const open = await page.evaluate(() => inputLook());
+      assert.equal(open.visible, true, 'no width gives the drawn breaks: the input shows its own text');
+      assert.equal(open.targetOpacity, '0', 'and the drawn heading is hidden while it is edited');
+      assert.equal(open.padLeft + open.padRight, 0);
+      await page.keyboard.press('Control+End');
+      for (const char of ' and then some more words to come, with a few more after them') {
+        await page.keyboard.type(char);
+        await paint();
+        const now = await page.evaluate(() => inputLook());
+        assert.ok(now.visible && now.targetOpacity === '0' && now.padLeft + now.padRight === 0, 'the input keeps its own text for the rest of the edit (no flip per keystroke)');
+        assert.equal(now.clipped, false, 'rows the input needs beyond the drawn ones are not clipped');
+      }
+      if (finish === 'Escape') await page.keyboard.press('Escape'); else await page.evaluate(() => cv.commit());
+      await paint();
+      assert.equal(await page.evaluate(() => document.querySelector('.opf-inline-input')), null, `the input is gone after ${finish}`);
+      assert.equal(await box.evaluate((node) => getComputedStyle(node).opacity), '1', `the drawn heading is back after ${finish}`);
+      if (finish === 'commit') await page.evaluate(() => editor.undo());
+    }
+    done('unfit heading: own text shown and drawing hidden while edited, no flip per keystroke, no clipped rows, both restored after Escape and a commit');
+  }
+
+  // A heading that breaks inside a word too long for the box: the input breaks it where the slide does.
+  await mount();
+  {
+    await slide(12);
+    const path = 'slides.12.title', box = target(path), typed = 'Pneumonoultramicroscopicsilicovolcanoconiosis and Supercalifragilisticexpialidocious words';
+    const lines = await box.locator('text').evaluateAll((nodes) => nodes.map((node) => node.textContent.trim()));
+    assert.ok(lines.length > 1 && lines[0].length < typed.indexOf(' '), 'the long word is broken across drawn lines');
+    await box.focus(); await page.keyboard.press('Enter');
+    for (const line of lines.slice(1)) {
+      const at = await point(path, line, 0, 'left');
+      await page.mouse.click(at.x, at.y);
+      assert.equal((await state()).start, typed.indexOf(line), `a press on ${JSON.stringify(line.slice(0, 8))} is the start of its drawn line`);
+      await page.keyboard.press('Home');
+      assert.equal((await state()).start, typed.indexOf(line), 'and Home agrees');
+    }
+    await discard();
+    done('a word broken across lines: the input breaks it where the slide does');
+  }
+
+  // The search itself: a box narrower than the widest drawn line (the input grows to hold it), and a transform above the input (client pixels are not CSS pixels:
+  // no answer, the old behavior stays).
+  await mount();
+  {
+    await slide(8);
+    const path = 'slides.8.title';
+    await pressAt(path, 'January', 3, 'left');
+    const run = (width) => page.evaluate((w) => {
+      const input = document.activeElement, target = document.querySelector('[data-canvas-target][data-opf-path="' + cv.editingPath + '"]');
+      return inputWrapWidth({doc: document, win: window, input, target, path: cv.editingPath, source: input.value, width: w});
+    }, width);
+    const roomy = await run(900);
+    assert.ok(roomy && roomy.width > 100 && roomy.width < 900, 'a box wider than the drawn lines is narrowed to the drawn breaks');
+    const narrow = await run(60);
+    assert.ok(narrow && narrow.width > 60, `a box narrower than the widest drawn line grows to hold it (saw ${JSON.stringify(narrow)})`);
+    await page.evaluate(() => { document.querySelector('#canvas').style.transform = 'scale(0.5)'; });
+    assert.equal(await run(900), undefined, 'under a transform there is no answer');
+    await page.evaluate(() => { document.querySelector('#canvas').style.transform = ''; });
+    assert.ok(await run(900), 'and the answer is back without it');
+    await discard();
+    done('wrap search: narrower box grows to the widest line, no answer under a transform');
   }
 
   // 17. Touch: a tap enters at the tapped character; a touch drag (scroll) does not.
