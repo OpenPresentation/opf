@@ -1,0 +1,20 @@
+{
+  "references": [
+    {
+      "id": "report",
+      "text": "Annual report",
+      "link": "acme.com/report"
+    }
+  ],
+  "slides": [
+    {
+      "title": "Cited",
+      "text": [
+        {
+          "text": "Revenue grew",
+          "cite": "report"
+        }
+      ]
+    }
+  ]
+}

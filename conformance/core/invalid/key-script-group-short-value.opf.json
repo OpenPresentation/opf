@@ -1,0 +1,14 @@
+{
+  "design": {
+    "fontScheme": {
+      "major": "Arial",
+      "minor": "Arial",
+      "scriptGroup": "cs"
+    }
+  },
+  "slides": [
+    {
+      "title": "Hello"
+    }
+  ]
+}
