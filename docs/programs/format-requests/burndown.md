@@ -6,22 +6,22 @@ Every item also meets the definition of done in the README; the acceptance colum
 
 | ID | Item | Acceptance | Status |
 | --- | --- | --- | --- |
-| FR-01 | CR 7: an `id` on the document | [Below](#fr-01-the-document-id-cr-7) | in-progress |
-| FR-02 | CR 6: ids on list items, bullets, timeline events and table rows | [Below](#fr-02-ids-inside-a-deck-cr-6) | in-progress |
-| FR-03 | opf#1297: links to a slide of the same deck, `slide:<id>` | [Below](#fr-03-links-to-a-slide-opf1297) | in-progress |
+| FR-01 | CR 7: an `id` on the document | [Below](#fr-01-the-document-id-cr-7) | done |
+| FR-02 | CR 6: ids on list items, bullets, timeline events and table rows | [Below](#fr-02-ids-inside-a-deck-cr-6) | done |
+| FR-03 | opf#1297: links to a slide of the same deck, `slide:<id>` | [Below](#fr-03-links-to-a-slide-opf1297) | done |
 | FR-04 | CR 1 with CR 3: data sources and a flat dataset | [Below](#fr-04-data-sources-and-a-flat-dataset-cr-1-with-cr-3) | in-progress |
 | FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | todo |
 | FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | todo |
-| FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | todo |
-| FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | todo |
+| FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | in-progress |
+| FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | in-progress |
 | FR-09 | CR 14: limits on a variable's value | [Below](#fr-09-limits-on-a-variables-value-cr-14) | done |
-| FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | todo |
-| FR-11 | What a validator says about a key it does not know | [Below](#fr-11-what-a-validator-says-about-a-key-it-does-not-know) | todo |
+| FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | in-progress |
+| FR-11 | What a validator says about a key it does not know | [Below](#fr-11-what-a-validator-says-about-a-key-it-does-not-know) | in-progress |
 
 Order of landing: FR-01 to FR-03 (ids), FR-04 to FR-07 (data), FR-08 (embed), FR-09 and FR-10 (variables). The tracks do not depend on
-each other, so an item lands when it is ready and each later branch merges `main` first; FR-09 was the first to land. Cut order if the
-date is at risk: the gauge, then the bullet chart (both FR-07), embed (FR-08), localized date names (FR-10), the `dataset-stale` warning
-(FR-04).
+each other, so an item lands when it is ready and each later branch merges `main` first; FR-09 was the first to land. Nothing is cut
+(owner, 2026-11-25): 0.37.0 ships when every item here is done. Each item adds an example deck and validation rules that the same count
+lines track, so the pull requests merge one at a time.
 
 ## FR-01: the document id (CR 7)
 
@@ -42,6 +42,11 @@ Acceptance:
   keeps it. The editor and `opf edit` keep it through every patch.
 
 Progress log:
+
+- 2026-11-25: done, opf#1465. The PowerPoint document record carries the id as a top-level key, not inside its validated metadata: a
+  released 0.36.0 importer ignores an unknown top-level key but drops a whole record that has one inside a validated section. Checked
+  in PowerPoint: the id comes back from the export and from PowerPoint's own save, with full provenance and with references only; with
+  provenance off there is none. The MCP's bundled documentation limit went up to 1,482,000 bytes.
 
 ## FR-02: ids inside a deck (CR 6)
 
@@ -73,6 +78,11 @@ Acceptance:
 
 Progress log:
 
+- 2026-11-25: done, opf#1462 and opf#1464. Checked in PowerPoint with eight edit cases: retyping an item, typing into a cell and adding
+  a row or a paragraph keep the ids; a moved, added or removed shape drops that slide's entry ids with one `entry-ids-not-restored`
+  finding, because the slide's native structure no longer matches the stored one (the limit block ids already have). opf#1464 stores
+  the authored table with array rows, so a released 0.36.0 importer still restores a table whose rows carry ids.
+
 ## FR-03: links to a slide (opf#1297)
 
 A link can go to a web page, a mail address or a phone number, but not to another slide, so an agenda cannot jump to its sections. The
@@ -92,6 +102,12 @@ Acceptance:
   run of the jump.
 
 Progress log:
+
+- 2026-11-25: done, opf#1463. In PowerPoint every `slide:` link is a slide jump to the right slide, on text, a shape and a table cell,
+  and comes back from PowerPoint's own save. A link to a hidden slide is valid: PowerPoint and the editor's presenter follow it, the
+  web player does not. The slide manager refuses to delete a slide that other slides link to. Open, from the owner's note of 2026-11-25
+  ("do the links work in our preview/viewer components in the opf repo? ideally yes"): the read-only slide view of the MCP viewer and
+  of the editor follows slide links and opens web links through its host; a follow-up pull request under this item.
 
 ## FR-04: data sources and a flat dataset (CR 1 with CR 3)
 
@@ -166,23 +182,22 @@ Progress log:
 ## FR-07: table color scale, bands with the bullet chart, and the gauge (CR 5)
 
 Redone on OPF's own terms, not on the requesting tool's shapes. `chart.type` lists only what the preview and PowerPoint draw as native charts, so a heatmap
-is a table option, the bullet is a chart type with value-axis bands, and the gauge is a way to draw a metric. Built and cut in this order:
+is a table option, the bullet is a chart type with value-axis bands, and the gauge is a way to draw a metric. Built in this order:
 the table color scale, then bands with the bullet chart, then the gauge. Each part is its own pull request with its own PowerPoint check.
 
 Acceptance:
 
 - **Table color scale.** `table.colorScale` (`columns`, `from`, `to`, an optional `mid` for a diverging scale) shades the named columns'
-  number cells between scheme colors; the text color follows each cell for contrast. It exports as a native table with cell fills. It
-  stays in the release whatever else is cut.
+  number cells between scheme colors; the text color follows each cell for contrast. It exports as a native table with cell fills.
 - **Bands and the bullet chart.** `chart.bands` shades value ranges (`{ to, label }`, from scheme neutrals) on the value axis of bar,
   column, line and area charts, filling the slot `referenceLines` reserves; in PowerPoint they are series drawn behind the data. A new
   chart type `bullet` is a bar chart with a target marker per category (`mapping.target`) and bands, thin bars by default; it exports as
   a native bar chart with the target as a marker series. A gallery chart-type record and previews are added for it.
 - **Gauge.** A metric with a `scale` (`min`, `max`, `bands`) draws its value on an arc with its bands, and exports as native `blockArc`
-  preset shapes with the value as text, so it stays editable. It binds to data like any metric (FR-06). Built last, cut first.
+  preset shapes with the value as text, so it stays editable. It binds to data like any metric (FR-06). Built last.
 - Colors come from the color scheme, never as raw colors. The sentence that every chart type is native in PowerPoint stays true.
 - Each part: the preview path, the PowerPoint export and import, goldens by the `golden.yml` workflow, and a native acceptance run
-  (Windows and Mac where the part is drawn). A part that fails its run drops out and follows in a patch.
+  (Windows and Mac where the part is drawn). A part that fails its run is fixed before the release; nothing is cut.
 - Conformance: valid decks for each part; an invalid deck for a band or color scale that names no column or has no data.
 
 Progress log:
@@ -240,7 +255,8 @@ Acceptance:
   subtag on `language` already says it.
 - Month and weekday names in a date's `format` follow that language, from a generated table for the languages the gallery lists, measured
   before it is committed against the edge bundle, the MCP viewer and the site's size limits. A German deck prints "5. März 2026".
-- This part (the date names) is the cut candidate; the translations stay if it is cut.
+- Both parts ship in 0.37.0 (owner, 2026-11-25). They are committed separately, translations first, and the translations pass their
+  tests without the date names.
 - Conformance: valid decks with translations; a Markdown and YAML round trip keeps them. Docs and an example deck in two languages.
 
 Progress log:
