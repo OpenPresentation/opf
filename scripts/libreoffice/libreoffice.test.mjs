@@ -1,9 +1,10 @@
 // Portable tests of the LibreOffice qualification (docs/libreoffice.md): the checks, the PPTX reader, the font profile and the
 // corpus. LibreOffice itself runs only in the nightly leg; nothing here needs it, fontconfig or the built packages.
 import assert from "node:assert/strict";
-import { readFileSync, mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { prepareOutputDirectory } from "./output.mjs";
+import { prepareOutputDirectory, writeNativeRun } from "./output.mjs";
+import { impressResult, impressRun, systemFrom } from "../native-acceptance/apps/impress/from-libreoffice.mjs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -154,5 +155,23 @@ test('output preparation preserves prior qualification evidence and refuses a no
     assert.throws(() => prepareOutputDirectory(receipt), /fresh or empty directory/);
     assert.throws(() => prepareOutputDirectory(scratch), /fresh or empty directory/);
     assert.equal(readFileSync(receipt, 'utf8'), '{"passed":false}');
+  } finally { rmSync(scratch, { recursive: true, force: true }); }
+});
+
+test("the runner also writes the shared native result format, and writes nothing when a result is invalid", () => {
+  const nightly = JSON.parse(readFileSync(path.join(root, "scripts/native-acceptance/apps/impress/fixtures/nightly-2026-11-25.json"), "utf8"));
+  const entry = nightly.cases.find((item) => item.id === "tables");
+  const system = systemFrom({ platform: "linux", release: nightly.environment.os });
+  const when = { started: "2026-11-25T11:40:00Z", finished: "2026-11-25T11:41:00Z" };
+  const result = impressResult({ caseId: entry.id, profile: "opf", environment: nightly.environment, system, input: { path: "tables.pptx", sha256: entry.pptxSha256 }, hidden: entry.hidden, measured: entry.result, ...when });
+  const run = impressRun({ environment: nightly.environment, system, profiles: ["opf"], ...when, results: [result] });
+  const scratch = mkdtempSync(path.join(tmpdir(), "opf-lo-native-"));
+  try {
+    writeNativeRun(path.join(scratch, "native"), run, [result]);
+    assert.deepEqual(JSON.parse(readFileSync(path.join(scratch, "native/run.json"), "utf8")).files.map((file) => file.result), ["files/tables~opf/result.json"]);
+    assert.equal(JSON.parse(readFileSync(path.join(scratch, "native/files/tables~opf/result.json"), "utf8")).target, "impress");
+    const invalid = { ...result, verbs: { ...result.verbs, probe: { status: "skipped" } } };
+    assert.throws(() => writeNativeRun(path.join(scratch, "again"), run, [invalid]), /files\/tables~opf\/result\.json does not validate/);
+    assert.equal(existsSync(path.join(scratch, "again")), false, "nothing is written when a result is invalid");
   } finally { rmSync(scratch, { recursive: true, force: true }); }
 });

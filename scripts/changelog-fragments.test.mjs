@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { SCRIPT, assemble, assembleChangelog, needsFragment, parseFragment, withoutPackage } from './changelog-fragments.mjs';
+import { SCRIPT, assemble, assembleChangelog, missingNative, nativeSlides, needsFragment, parseFragment, touchesExport, unknownNativeDecks, readFragments, withoutPackage } from './changelog-fragments.mjs';
 
 const single = { default: '', targets: { '': 'CHANGELOG.md' }, codePaths: ['src/'] };
 const mono = { default: 'opf', targets: { opf: 'CHANGELOG.md', cli: 'packages/cli/CHANGELOG.md' }, codePaths: ['packages/javascript/src/'] };
@@ -39,7 +39,7 @@ function repo(config, files, changelogs = { 'CHANGELOG.md': CHANGELOG }) {
 
 test('parseFragment reads type, packages and the entry text', () => {
   const parsed = parseFragment('a.md', fragment('fixed', 'RR-1 (x): text.', '[opf, cli]'), mono);
-  assert.deepEqual(parsed, { slug: 'a', type: 'fixed', packages: ['opf', 'cli'], drawing: [], body: 'RR-1 (x): text.' });
+  assert.deepEqual(parsed, { slug: 'a', type: 'fixed', packages: ['opf', 'cli'], drawing: [], native: null, nativeReason: '', body: 'RR-1 (x): text.' });
 });
 
 test('parseFragment rejects what would silently corrupt the changelog', () => {
@@ -234,4 +234,56 @@ test('assemble lists the declared ids in the gallery bullet only, and a shared f
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+});
+
+// NT-07: the `native` and `native-reason` keys.
+const monoNt = { default: 'opf', targets: { opf: 'CHANGELOG.md', cli: 'packages/cli/CHANGELOG.md', pptx: 'packages/pptx/CHANGELOG.md' }, codePaths: ['packages/javascript/src/'] };
+const withKeys = (keys, packages = '[pptx]', type = 'changed') => `---\ntype: ${type}\npackages: ${packages}\n${keys}\n---\nText.\n`;
+
+test('parseFragment reads native slides, native none and the reason', () => {
+  const slides = parseFragment('a.md', withKeys('native: [coverage-charts#16, technical/shapes#1]'), monoNt);
+  assert.deepEqual(slides.native, [{ deck: 'coverage-charts', slide: 16 }, { deck: 'technical/shapes', slide: 1 }]);
+  const none = parseFragment('a.md', withKeys('native: none\nnative-reason: Only the preview changed.'), monoNt);
+  assert.deepEqual(none.native, []);
+  assert.equal(none.nativeReason, 'Only the preview changed.');
+  assert.equal(parseFragment('a.md', fragment('fixed', 'Text.', '[opf]'), monoNt).native, null);
+});
+
+test('parseFragment rejects malformed native values', () => {
+  for (const keys of ['native: [deck]', 'native: [deck#0]', 'native: [deck#1.5]', 'native: [deck#-2]', 'native: []', 'native: deck#1', 'native: none', 'native-reason: why', 'native: [deck#1]\nnative-reason: why', 'native: [a#1, a#1]', 'native: none\nnative-reason:']) {
+    assert.throws(() => parseFragment('a.md', withKeys(keys), monoNt), /native/, keys);
+  }
+});
+
+test('assembling a fragment with native keys gives the same text and never prints the keys', () => {
+  const plain = repo(monoNt, { 'a.md': withKeys('', '[opf]').replace('\n\n', '\n') }, { 'CHANGELOG.md': CHANGELOG });
+  const keyed = repo(monoNt, { 'a.md': withKeys('native: [m-charts#1]', '[opf]') }, { 'CHANGELOG.md': CHANGELOG });
+  const a = assemble(plain, { version: '0.13.0', date: '2026-10-09' }, false).text;
+  const b = assemble(keyed, { version: '0.13.0', date: '2026-10-09' }, false).text;
+  assert.equal(a, b);
+  assert.doesNotMatch(b, /native/);
+});
+
+test('touchesExport and missingNative apply the warning rule', () => {
+  const f = (type, packages, native = null) => ({ type, packages, native });
+  assert.equal(touchesExport(f('changed', ['pptx'])), true);
+  assert.equal(touchesExport(f('fixed', ['opf'])), true);
+  assert.equal(touchesExport(f('changed', ['gallery'])), true);
+  assert.equal(touchesExport(f('added', ['pptx'])), true);
+  assert.equal(touchesExport(f('added', ['opf', 'gallery'])), false);
+  assert.equal(touchesExport(f('fixed', ['cli', 'editor', 'mcp', 'render'])), false);
+  assert.equal(touchesExport(f('fixed', [])), false);
+  assert.deepEqual(missingNative([f('fixed', ['pptx']), f('fixed', ['pptx'], []), f('fixed', ['pptx'], [{ deck: 'x', slide: 1 }])]).length, 1);
+});
+
+test('unknownNativeDecks accepts manifest ids and example paths only, and nativeSlides lists them', () => {
+  const root = repo(monoNt, { 'a.md': withKeys('native: [known#2, technical/shapes#1, nope#3]', '[opf]') });
+  mkdirSync(path.join(root, 'scripts/native-acceptance/qualification'), { recursive: true });
+  writeFileSync(path.join(root, 'scripts/native-acceptance/qualification/manifest.json'), JSON.stringify({ decks: [{ id: 'known' }] }));
+  mkdirSync(path.join(root, 'examples/technical'), { recursive: true });
+  writeFileSync(path.join(root, 'examples/technical/shapes.opf.json'), '{}');
+  const problems = unknownNativeDecks(root, readFragments(root));
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /nope/);
+  assert.deepEqual(nativeSlides(root).map((s) => `${s.fragment}:${s.deck}#${s.slide}`), ['a:known#2', 'a:technical/shapes#1', 'a:nope#3']);
 });
