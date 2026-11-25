@@ -1,6 +1,90 @@
 {
-  "version": "0.34.0",
-  "description": "Release qualification corpus: the retained v0.33 baseline plus v0.34 changes, including every supported diagram source syntax, as decks (new ones in decks/, existing examples by path), the PPTX variants to export, and per feature the slides and what to check in each native app. build.mjs exports it; run-powerpoint-windows.ps1 probes it through COM; evaluate.mjs grades the probe against the checks below. The Mac (PowerPoint for Mac, Keynote) and Linux (LibreOffice) streams run the same decks and grade the same features by hand where they have no object model.",
+  "version": "0.36.0",
+  "description": "Release qualification corpus as of 0.36.0: the decks (new ones in decks/, existing examples by path), the PPTX variants to export, the run tiers, and per feature the slides, what to check and what each application is expected to make of the feature's object (targets). build.mjs exports it; run-powerpoint-windows.ps1 probes it through COM and evaluate.mjs grades the probe against the checks below; scripts/libreoffice grades the same features in LibreOffice Impress; the native-testing program (docs/programs/native-testing/README.md) runs it in Keynote and compares a run with the targets.",
+  "tiers": {
+    "smoke": {
+      "description": "About ten decks that together show every object kind, a hidden slide, a right-to-left slide, a chart of each family Keynote reads differently and the decks behind the most serious known differences, plus the decks named by unreleased changelog fragments.",
+      "variants": "default",
+      "decks": [
+        {
+          "deck": "full-feature-tour",
+          "why": "A hidden slide (10) followed by a live slide number (11, kn-hidden-slide-numbering); titles, text, a bulleted list (6), a table (5), charts (3, 4), pictures, links on words (2), presenter notes and footer placeholders on one deck."
+        },
+        {
+          "deck": "footers",
+          "variants": [
+            "default",
+            "static"
+          ],
+          "why": "Footer, live slide number and date placeholders; a live number beside footer text (kn-slide-number-beside-footer-text), and the static variant that avoids it."
+        },
+        {
+          "deck": "layout-sampler",
+          "variants": [
+            "default",
+            "native-body"
+          ],
+          "why": "Every gallery layout; body placeholders in the native-body variant; the only open known difference in OPF's own file (kn-native-note-at-foot, slide 24 of native-body), long titles and grown table headers (kn-title-overprints, kn-table-header-split)."
+        },
+        {
+          "deck": "coverage-charts",
+          "why": "One chart of each classic family Keynote reads differently: stacked area labels (3), stacked lines and direct labels (4), radar with lines (5), doughnut (6), the map written as columns (7), scatter labels (9), an area gap (13), a combo with a secondary axis and a reference line (14), negative bars (15), a one-series highlight (16) and a chartex histogram (17); Keynote's copy fails OPF's import (kn-import-missing-value)."
+        },
+        {
+          "deck": "chart-type-sampler",
+          "why": "Extended charts that Keynote shows as OPF's picture and Impress cannot draw (kn-extended-chart), and Keynote's own axis scale (kn-automatic-axis-scale)."
+        },
+        {
+          "deck": "chart-point-overlays",
+          "why": "Overlays anchored to chart points, a pie, and the General number format Keynote shows with one decimal (kn-general-one-decimal)."
+        },
+        {
+          "deck": "coverage-languages",
+          "why": "Right-to-left slides (Arabic 2, 3 and 8, Hebrew 4) with a right-to-left chart and numbered list; Japanese, Chinese and Devanagari with their default fonts."
+        },
+        {
+          "deck": "smartart",
+          "why": "Live SmartArt, which PowerPoint lays out, Keynote shows as OPF's picture fallback and Impress draws from its drawing part; OPF's own arrangements as native shapes."
+        },
+        {
+          "deck": "diagrams",
+          "why": "Mermaid diagrams as OPF's groups of shapes, lines and text boxes."
+        },
+        {
+          "deck": "shape-overlays",
+          "why": "Glued connectors, rerouted (elbow) or straightened (curved) in Keynote (kn-elbow-connector, kn-curved-connector); shapes without text; rotated narrow text."
+        },
+        {
+          "deck": "coverage-images",
+          "why": "Pictures with crops, masks, recolor and SVG; links on the shape of video captions (14, 15); per-point bar colors (16, kn-per-point-colors); alt text Keynote does not show (kn-alt-text)."
+        }
+      ],
+      "sources": [
+        "native-fragments"
+      ]
+    },
+    "release": {
+      "description": "The whole corpus: every deck of `decks` in every variant.",
+      "decks": "all",
+      "variants": "all"
+    },
+    "full": {
+      "description": "The corpus in every variant, plus the decks the runner builds from the named sources.",
+      "decks": "all",
+      "variants": "all",
+      "sources": [
+        "examples",
+        "gallery-layouts",
+        "languages"
+      ]
+    }
+  },
+  "sources": {
+    "native-fragments": "The decks and slides that the `native:` key of each unreleased changelog fragment names (changes/*.md, NT-07).",
+    "examples": "Every example deck under examples/ that `decks` does not already name, exported in its default variant.",
+    "gallery-layouts": "Every layout of the default gallery (packages/gallery/catalog/layouts/) filled at three content sizes: short, typical and long.",
+    "languages": "One deck per language group of the language round (Latin, right to left, CJK, other scripts), in the default and native-body variants."
+  },
   "checks": {
     "opens": "The file opens without a repair prompt or an error.",
     "slides": "The app shows as many slides as OPF's preview draws.",
@@ -15,7 +99,7 @@
     "shapes": "The slide carries native preset or freeform shapes with text.",
     "footer": "Header and Footer: the footer, slide number and date placeholders the deck asks for are visible on that slide (hidden where the deck hides them) and the slide number is a live field that renumbers when a slide moves.",
     "roundtrip": "A copy saved by the app imports back through `opf convert` with the deck's shapes, diagrams and arrangements.",
-    "fallback": "Apps without SmartArt layout show the picture fallback (Keynote, LibreOffice; PowerPoint takes the SmartArt choice, so its fallback is checked by the other streams)."
+    "fallback": "Where the app does not lay SmartArt out, the slide shows a drawing of it: Keynote shows the picture fallback (mc:Fallback, OPF's picture of the arrangement); LibreOffice Impress draws the SmartArt's own drawing part (docs/libreoffice.md); PowerPoint takes the SmartArt choice and never shows the fallback."
   },
   "decks": [
     {
@@ -358,7 +442,20 @@
           "shapes": 20
         }
       },
-      "check": "Every preset keeps its outline and adjust handles in PowerPoint (yellow handles: not run, UI); fills, strokes, gradients and text match the preview."
+      "check": "Every preset keeps its outline and adjust handles in PowerPoint (yellow handles: not run, UI); fills, strokes, gradients and text match the preview.",
+      "targets": {
+        "keynote": {
+          "outcome": "changed",
+          "kind": "group",
+          "known": [
+            "kn-text-shape-group",
+            "kn-sketch-outline",
+            "kn-compound-line",
+            "kn-vertical-text"
+          ],
+          "note": "Every non-rectangle shape with text arrives as a group of the shape and a text box (QS-01); sketch and compound outlines drawn plain; vertical text rotated."
+        }
+      }
     },
     {
       "id": "SH-02-native",
@@ -381,6 +478,24 @@
       ],
       "expect": {
         "shapes": 1
+      },
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "group",
+          "known": [
+            "kn-text-shape-group"
+          ],
+          "note": "Native shapes, but a non-rectangle shape with text arrives as a group of the shape and a text box (QS-01)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
       }
     },
     {
@@ -398,7 +513,27 @@
         "visual",
         "shapes"
       ],
-      "check": "Each effect is native (Format Shape > Effects) and looks like the preview."
+      "check": "Each effect is native (Format Shape > Effects) and looks like the preview.",
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "known": [
+            "kn-shape-effects",
+            "kn-perspective-shadow",
+            "kn-rotated-narrow-text",
+            "kn-text-shape-group"
+          ],
+          "note": "Inner shadow, glow, soft edge and blur not drawn; the perspective shadow becomes a plain drop shadow (QS-08)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "SH-04",
@@ -428,7 +563,70 @@
           "overlays": 10
         }
       },
-      "check": "Connectors are glued to their shapes at both ends; moving a shape reroutes them (move: not run, UI)."
+      "check": "Connectors are glued to their shapes at both ends; moving a shape reroutes them (move: not run, UI).",
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "connector",
+          "note": "Connectors glued at both ends: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "connector",
+          "known": [
+            "kn-elbow-connector",
+            "kn-curved-connector",
+            "kn-text-shape-group-corpus",
+            "kn-rotated-narrow-text"
+          ],
+          "note": "Connection lines stay glued inside Keynote; the elbow is rerouted and the curve drawn straight; Keynote's PowerPoint copy keeps the glue only where neither end is a text shape."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "connector",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs connectors)."
+        }
+      }
+    },
+    {
+      "id": "overlay-plain-shapes",
+      "title": "Shapes without text, joined by connectors glued at both ends",
+      "changes": [
+        "sh-04-overlays-connectors"
+      ],
+      "deck": "shape-overlays",
+      "slides": [
+        5
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "connectors"
+      ],
+      "expect": {
+        "connectors": 11
+      },
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "connector",
+          "note": "Connectors glued at both ends: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "shape",
+          "known": [
+            "kn-curved-connector"
+          ],
+          "note": "Shapes without text stay one shape; the glue survives Keynote's copy (11 of 11 in the 0.36.0 round)."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "connector",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs connectors)."
+        }
+      }
     },
     {
       "id": "SH-04-rtl",
@@ -445,7 +643,25 @@
         "visual",
         "shapes"
       ],
-      "check": "Overlays mirror where the deck is right to left."
+      "check": "Overlays mirror where the deck is right to left.",
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "group",
+          "known": [
+            "kn-text-shape-group"
+          ],
+          "note": "Overlays with text: a non-rectangle shape with text arrives as a group of the shape and a text box (QS-01)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "SH-05",
@@ -463,7 +679,16 @@
           "shapes": 20
         }
       },
-      "check": "A copy PowerPoint saved imports back with its shape blocks."
+      "check": "A copy PowerPoint saved imports back with its shape blocks.",
+      "targets": {
+        "keynote": {
+          "outcome": "changed",
+          "known": [
+            "kn-import-tags-dropped"
+          ],
+          "note": "Keynote's copy imports with the same slide count but without OPF's structure: shape blocks return as overlay shapes and text (RT-04)."
+        }
+      }
     },
     {
       "id": "SH-07",
@@ -493,7 +718,26 @@
           "diagrams": 7
         }
       },
-      "check": "Flowchart and state diagrams are native shapes with editable labels and glued connectors."
+      "check": "Flowchart and state diagrams are native shapes with editable labels and glued connectors.",
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "group",
+          "known": [
+            "kn-text-shape-group",
+            "kn-import-tags-dropped"
+          ],
+          "note": "The diagram stays a group of shapes, lines and text boxes; its text shapes become nested groups (QS-01); Keynote's copy imports without the diagram blocks (RT-04)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "SH-07-connectors",
@@ -517,6 +761,27 @@
         "roundtrip": {
           "diagrams": 2
         }
+      },
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "connector",
+          "note": "Connectors glued at both ends: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "connector",
+          "known": [
+            "kn-text-shape-group",
+            "kn-import-tags-dropped"
+          ],
+          "note": "The glue is lost in Keynote's copy: each connector becomes a line inside the group (QS-01)."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "connector",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs connectors)."
+        }
       }
     },
     {
@@ -533,7 +798,25 @@
         "noShrink",
         "visual",
         "shapes"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "group",
+          "known": [
+            "kn-text-shape-group"
+          ],
+          "note": "Groups kept; text shapes become nested groups (QS-01)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "SH-07-picture",
@@ -547,7 +830,19 @@
         "opens",
         "slides",
         "visual"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "picture",
+          "note": "--diagrams picture writes every diagram as a picture."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "picture",
+          "note": "The PNG OPF wrote; the SVG part is dropped."
+        }
+      }
     },
     {
       "id": "SH-07-md",
@@ -563,7 +858,25 @@
         "noShrink",
         "visual",
         "shapes"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "group",
+          "known": [
+            "kn-text-shape-group"
+          ],
+          "note": "Groups kept; text shapes become nested groups (QS-01)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "SH-12",
@@ -587,7 +900,26 @@
           "diagrams": 5
         }
       },
-      "check": "Review all five slides: cluster/decision, undirected graph, stadium, cylinder, dashed labeled edges, dark circles/double circle, alt text; saved-current import retains authored DOT source. A custom arrow path is not claimed to be a glued native connector."
+      "check": "Review all five slides: cluster/decision, undirected graph, stadium, cylinder, dashed labeled edges, dark circles/double circle, alt text; saved-current import retains authored DOT source. A custom arrow path is not claimed to be a glued native connector.",
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "group",
+          "known": [
+            "kn-text-shape-group",
+            "kn-import-tags-dropped"
+          ],
+          "note": "Groups kept; text shapes become nested groups (QS-01); Keynote's copy imports without the diagram blocks (RT-04)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "SH-13",
@@ -611,7 +943,26 @@
           "diagrams": 8
         }
       },
-      "check": "Review all eight slides: sequence alt frame, class composition/cardinalities/realization, state, activity, use case include, component, mind map, gantt milestone and alt text. Saved-current import retains authored PlantUML source."
+      "check": "Review all eight slides: sequence alt frame, class composition/cardinalities/realization, state, activity, use case include, component, mind map, gantt milestone and alt text. Saved-current import retains authored PlantUML source.",
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "group",
+          "known": [
+            "kn-text-shape-group",
+            "kn-import-tags-dropped"
+          ],
+          "note": "Groups kept; text shapes become nested groups (QS-01); Keynote's copy imports without the diagram blocks (RT-04)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "SH-09",
@@ -652,19 +1003,36 @@
             "vertical-process"
           ]
         }
+      },
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Live SmartArt with one node per entry: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "picture",
+          "kind": "picture",
+          "known": [
+            "kn-smartart-picture-alt"
+          ],
+          "note": "Keynote has no SmartArt: the frame arrives as OPF's fallback picture, which looks like the preview."
+        },
+        "impress": {
+          "outcome": "changed",
+          "note": "LibreOffice does not lay SmartArt out; it draws the file's SmartArt drawing part (docs/libreoffice.md). features.mjs grades smartArt n/a, and the smartart deck is an advanced case, where a failing check is a known difference (corpus.mjs)."
+        }
       }
     },
     {
       "id": "SH-17",
-      "title": "Live SmartArt: Basic Chevron Process, Basic Process, Vertical Process",
+      "title": "Live SmartArt: Basic Process",
       "changes": [
-        "sh-17-linear-smartart"
+        "sh-17-linear-smartart",
+        "process-absorbs-flow"
       ],
       "deck": "smartart",
       "slides": [
-        7,
-        9,
-        11
+        9
       ],
       "checks": [
         "opens",
@@ -676,15 +1044,30 @@
       ],
       "expect": {
         "nodes": [
-          4,
-          4,
-          3
+          4
         ],
         "layouts": [
-          "chevron",
-          "process",
-          "vertical"
+          "process"
         ]
+      },
+      "note": "Slides 7 (chevrons) and 11 (vertical process) are native shapes since 0.36.0 (pptx/smartart-unavailable: their entries do not fit PowerPoint's SmartArt at the list's size); C03-VPR-1 checks them (opf#1482).",
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Live SmartArt with one node per entry: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "picture",
+          "kind": "picture",
+          "known": [
+            "kn-smartart-picture-alt"
+          ],
+          "note": "Keynote has no SmartArt: the frame arrives as OPF's fallback picture, which looks like the preview."
+        },
+        "impress": {
+          "outcome": "changed",
+          "note": "LibreOffice does not lay SmartArt out; it draws the file's SmartArt drawing part (docs/libreoffice.md). features.mjs grades smartArt n/a, and the smartart deck is an advanced case, where a failing check is a known difference (corpus.mjs)."
+        }
       }
     },
     {
@@ -712,6 +1095,24 @@
         "layouts": [
           "cycle"
         ]
+      },
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Live SmartArt with one node per entry: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "picture",
+          "kind": "picture",
+          "known": [
+            "kn-smartart-picture-alt"
+          ],
+          "note": "Keynote has no SmartArt: the frame arrives as OPF's fallback picture, which looks like the preview."
+        },
+        "impress": {
+          "outcome": "changed",
+          "note": "LibreOffice does not lay SmartArt out; it draws the file's SmartArt drawing part (docs/libreoffice.md). features.mjs grades smartArt n/a, and the smartart deck is an advanced case, where a failing check is a known difference (corpus.mjs)."
+        }
       }
     },
     {
@@ -744,6 +1145,24 @@
           8,
           6
         ]
+      },
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Live SmartArt with one node per entry: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "picture",
+          "kind": "picture",
+          "known": [
+            "kn-smartart-picture-alt"
+          ],
+          "note": "Keynote has no SmartArt: the frame arrives as OPF's fallback picture, which looks like the preview."
+        },
+        "impress": {
+          "outcome": "changed",
+          "note": "LibreOffice does not lay SmartArt out; it draws the file's SmartArt drawing part (docs/libreoffice.md). features.mjs grades smartArt n/a, and the smartart deck is an advanced case, where a failing check is a known difference (corpus.mjs)."
+        }
       }
     },
     {
@@ -772,7 +1191,56 @@
         "visual",
         "noSmartArt",
         "shapes"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "note": "OPF's arrangement arrives as native shapes and text boxes (corpus-shapes objects)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
+    },
+    {
+      "id": "C03-VPR-1",
+      "title": "Chevrons and a vertical process too large for PowerPoint's SmartArt at the list's size are OPF's native strips",
+      "changes": [
+        "fix5-linear-strips"
+      ],
+      "deck": "smartart",
+      "slides": [
+        7,
+        11
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "noSmartArt",
+        "shapes"
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "note": "OPF's arrangement arrives as native shapes and text boxes (corpus-shapes objects); slides 7 and 11 graded fonts only in the 0.36.0 round."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "SH-16",
@@ -785,14 +1253,35 @@
         1,
         3,
         5,
-        7,
         9,
-        11
+        13,
+        14,
+        15,
+        16,
+        17
       ],
       "checks": [
         "fallback"
       ],
-      "manual": "PowerPoint takes the mc:Choice (live SmartArt, checked by SH-09/17/18); the picture fallback is graded in Keynote and LibreOffice."
+      "manual": "PowerPoint takes the mc:Choice (live SmartArt, checked by SH-09/17/18/19); the picture fallback is graded in Keynote. LibreOffice Impress draws the SmartArt drawing part instead and is graded by the node text on its page.",
+      "targets": {
+        "powerpoint": {
+          "outcome": "n/a",
+          "note": "PowerPoint takes the SmartArt choice and never shows the picture fallback (checks.fallback)."
+        },
+        "keynote": {
+          "outcome": "picture",
+          "kind": "picture",
+          "known": [
+            "kn-smartart-picture-alt"
+          ],
+          "note": "The picture fallback is shown and looks like the preview (passed on 1, 3, 5 and 9 in the 0.36.0 round)."
+        },
+        "impress": {
+          "outcome": "changed",
+          "note": "LibreOffice does not lay SmartArt out; it draws the file's SmartArt drawing part (docs/libreoffice.md). features.mjs grades smartArt n/a, and the smartart deck is an advanced case, where a failing check is a known difference (corpus.mjs)."
+        }
+      }
     },
     {
       "id": "SH-smartart-shapes",
@@ -810,7 +1299,21 @@
         "visual",
         "noSmartArt",
         "shapes"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "note": "--smart-art shapes: native shapes and text boxes, no groups, all editable (corpus-shapes objects)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "SH-smartart-rtl",
@@ -829,7 +1332,21 @@
         "visual",
         "noSmartArt",
         "shapes"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "note": "OPF's arrangement arrives as native shapes and text boxes (corpus-shapes objects)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "SH-smartart-cjk",
@@ -847,7 +1364,21 @@
         "visual",
         "noSmartArt",
         "shapes"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "note": "OPF's arrangement arrives as native shapes and text boxes (corpus-shapes objects)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "LH-158",
@@ -866,7 +1397,14 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "LH-09",
@@ -884,7 +1422,14 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "LH-164",
@@ -904,7 +1449,14 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "LH-14",
@@ -925,7 +1477,21 @@
         "noShrink",
         "visual",
         "shapes"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "note": "Shapes present (corpus-text features)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "LH-165",
@@ -945,7 +1511,24 @@
         "noShrink",
         "visual",
         "shapes"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "known": [
+            "kn-line-boxes-overrun"
+          ],
+          "note": "Shapes present (corpus-text features)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "LH-132",
@@ -964,7 +1547,17 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-quote-beside-portrait"
+          ],
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "LH-168",
@@ -983,7 +1576,21 @@
         "noShrink",
         "visual",
         "shapes"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "note": "Shapes present (corpus-text features)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "LH-169",
@@ -1001,7 +1608,17 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-line-boxes-overrun"
+          ],
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "LH-63",
@@ -1019,7 +1636,14 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "LH-75",
@@ -1038,7 +1662,27 @@
         "noShrink",
         "visual",
         "nativeTable"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "table",
+          "note": "A native table whose cells take an edit: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "table",
+          "known": [
+            "kn-table-header-split"
+          ],
+          "note": "A native table; the grown header breaks mid-word (SW-01)."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "table",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeTable)."
+        }
+      }
     },
     {
       "id": "LH-18",
@@ -1056,7 +1700,14 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "LH-160",
@@ -1077,7 +1728,27 @@
         "noShrink",
         "visual",
         "nativeChart"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "The chartex part, which PowerPoint draws natively (docs/libreoffice.md; skills/opf-export/SKILL.md: the live chart stays for PowerPoint)."
+        },
+        "keynote": {
+          "outcome": "picture",
+          "kind": "picture",
+          "known": [
+            "kn-extended-chart"
+          ],
+          "note": "The chartex charts arrive as OPF's picture: the round's probe counts no Keynote chart on layout-harvest (its features.json says chart; the probe wins)."
+        },
+        "impress": {
+          "outcome": "changed",
+          "kind": "chart",
+          "note": "docs/libreoffice.md: LibreOffice 26.8 reads the chartex part, draws a single-series histogram with its own bins and shows \"One or more chart types are unsupported\" for the other types. layout-harvest is a baseline case in corpus.mjs, so features.mjs fails nativeChart here instead of calling it a known difference."
+        }
+      }
     },
     {
       "id": "LH-153",
@@ -1096,7 +1767,26 @@
         "noShrink",
         "visual",
         "nativeChart"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "The chartex part, which PowerPoint draws natively (docs/libreoffice.md; skills/opf-export/SKILL.md: the live chart stays for PowerPoint)."
+        },
+        "keynote": {
+          "outcome": "picture",
+          "kind": "picture",
+          "known": [
+            "kn-extended-chart"
+          ],
+          "note": "The chartex waterfall arrives as OPF's picture: the round's probe counts no Keynote chart on layout-harvest."
+        },
+        "impress": {
+          "outcome": "dropped",
+          "note": "docs/libreoffice.md: LibreOffice 26.8 reads the chartex part, draws a single-series histogram with its own bins and shows \"One or more chart types are unsupported\" for the other types. (a waterfall). layout-harvest is a baseline case in corpus.mjs, so features.mjs fails nativeChart here instead of calling it a known difference."
+        }
+      }
     },
     {
       "id": "LH-155",
@@ -1114,7 +1804,14 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "LH-native-body",
@@ -1131,7 +1828,46 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "body",
+          "note": "Native body text stays in its body placeholder."
+        }
+      }
+    },
+    {
+      "id": "opf-1415-native-body-anchor",
+      "title": "Native body text on a slide without a layout region: a box over its space, anchored in the middle",
+      "changes": [
+        "change-1415-native-body-anchor"
+      ],
+      "deck": "layout-harvest",
+      "variant": "native-body",
+      "slides": [
+        4,
+        8
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "body",
+          "note": "CHANGELOG 0.36.0 (opf#1415): PowerPoint keeps the list where the layout put it when lines are added or removed."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "body",
+          "note": "Native body text stays in its body placeholder (the native-body exports hold up as the default ones do in the 0.36.0 round)."
+        }
+      }
     },
     {
       "id": "LH-sampler",
@@ -1148,7 +1884,56 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-title-overprints",
+            "kn-line-boxes-overrun",
+            "kn-table-header-split",
+            "kn-monospace-light-faces",
+            "kn-per-point-colors"
+          ],
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
+    },
+    {
+      "id": "gallery-anchors",
+      "title": "Gallery layout records since 0.34: asides and cards in the middle (chart-beside, code, pillars, team, two-column, three-column) and the dashboard's one KPI row",
+      "changes": [
+        "fx-chart-beside-aside-anchor",
+        "fx-code-aside-anchor",
+        "fx-dashboard-kpi-row",
+        "fx-pillars-team-anchor",
+        "fx-column-anchor"
+      ],
+      "deck": "layout-sampler",
+      "slides": [
+        10,
+        11,
+        12,
+        23,
+        26,
+        28,
+        29
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "LH-sampler-charts",
@@ -1168,7 +1953,27 @@
         "noShrink",
         "visual",
         "nativeChart"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "A native chart: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "chart",
+          "known": [
+            "kn-per-point-colors"
+          ],
+          "note": "Native charts; per-point colors are not drawn."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeChart)."
+        }
+      }
     },
     {
       "id": "LH-sampler-tables",
@@ -1188,7 +1993,27 @@
         "noShrink",
         "visual",
         "nativeTable"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "table",
+          "note": "A native table whose cells take an edit: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "table",
+          "known": [
+            "kn-table-header-split"
+          ],
+          "note": "Native tables; the grown header breaks mid-word (SW-01)."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "table",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeTable)."
+        }
+      }
     },
     {
       "id": "LH-sampler-native-body",
@@ -1204,7 +2029,19 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "body",
+          "known": [
+            "kn-native-note-at-foot",
+            "kn-title-overprints",
+            "kn-table-header-split"
+          ],
+          "note": "Native body text; the known records name this export variant \"native\"."
+        }
+      }
     },
     {
       "id": "RR-102",
@@ -1252,6 +2089,26 @@
           }
         ],
         "renumber": true
+      },
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "footer",
+          "note": "Header and Footer placeholders with a live slide number: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "footer",
+          "known": [
+            "kn-slide-number-beside-footer-text"
+          ],
+          "note": "The live number stays a field in an ordinary text item; beside footer text only the number shows."
+        },
+        "impress": {
+          "outcome": "n/a",
+          "kind": "footer",
+          "note": "features.mjs does not grade footer: it needs the app's Header and Footer dialog."
+        }
       }
     },
     {
@@ -1268,7 +2125,14 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "footer",
+          "note": "Static numbers draw as the preview (\"Page 1 of 4\")."
+        }
+      }
     },
     {
       "id": "RR-102-logos",
@@ -1283,7 +2147,14 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "picture",
+          "note": "Logos and the watermark are present."
+        }
+      }
     },
     {
       "id": "RR-103",
@@ -1299,7 +2170,65 @@
         "noShrink",
         "visual",
         "nativeChart"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "A native chart: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "chart",
+          "known": [
+            "kn-extended-chart",
+            "kn-automatic-axis-scale",
+            "kn-secondary-value-axis",
+            "kn-chart-title"
+          ],
+          "note": "Scatter and combo stay charts with Keynote's own axis scale (QC-08); the extended charts on slides 1 and 2 are pictures (RR-103-extended)."
+        },
+        "impress": {
+          "outcome": "changed",
+          "kind": "chart",
+          "note": "chart-type-sampler is an advanced case (corpus.mjs): a failing check is a known difference. Scatter and combo stay charts; docs/libreoffice.md: LibreOffice 26.8 reads the chartex part, draws a single-series histogram with its own bins and shows \"One or more chart types are unsupported\" for the other types."
+        }
+      }
+    },
+    {
+      "id": "RR-103-extended",
+      "title": "Extended charts (box and whisker, histogram, waterfall, funnel, treemap): the chartex part, with OPF's picture as the fallback",
+      "changes": [],
+      "deck": "chart-type-sampler",
+      "slides": [
+        1,
+        2
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "nativeChart"
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "The chartex part, which PowerPoint draws natively (docs/libreoffice.md; skills/opf-export/SKILL.md: the live chart stays for PowerPoint)."
+        },
+        "keynote": {
+          "outcome": "picture",
+          "kind": "picture",
+          "known": [
+            "kn-extended-chart"
+          ],
+          "note": "OPF's picture in the chart's frame (mc:Fallback), not a live chart."
+        },
+        "impress": {
+          "outcome": "dropped",
+          "note": "docs/libreoffice.md: LibreOffice 26.8 reads the chartex part, draws a single-series histogram with its own bins and shows \"One or more chart types are unsupported\" for the other types. Advanced case: a known difference."
+        }
+      }
     },
     {
       "id": "tables",
@@ -1316,7 +2245,24 @@
         "noShrink",
         "visual",
         "nativeTable"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "table",
+          "note": "A native table whose cells take an edit: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "table",
+          "note": "A native table, header row 1."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "table",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeTable)."
+        }
+      }
     },
     {
       "id": "example-academy",
@@ -1332,7 +2278,17 @@
         "noShrink",
         "visual",
         "roundtrip"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "known": [
+            "kn-per-point-colors",
+            "kn-slide-number-beside-footer-text"
+          ],
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "example-icons",
@@ -1347,7 +2303,18 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "known": [
+            "kn-footer-behind-picture",
+            "kn-hidden-slide-numbering",
+            "kn-legend-order-reversed"
+          ],
+          "note": "Icons drawn as in the preview."
+        }
+      }
     },
     {
       "id": "feature-tour",
@@ -1361,25 +2328,145 @@
         "noShrink",
         "visual",
         "roundtrip"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "known": [
+            "kn-hidden-slide-numbering",
+            "kn-link-color",
+            "kn-quote-beside-portrait",
+            "kn-monospace-light-faces",
+            "kn-line-boxes-overrun"
+          ],
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
+    },
+    {
+      "id": "slide-titles",
+      "title": "Slide titles in the layout's title placeholder",
+      "changes": [],
+      "deck": "full-feature-tour",
+      "checks": [
+        "opens",
+        "slides",
+        "visual"
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "title",
+          "note": "Titles stay in the title placeholder (193 of 193 in the corpus-shapes decks); a centered title becomes a plain title."
+        }
+      }
+    },
+    {
+      "id": "presenter-notes",
+      "title": "Presenter notes on every slide",
+      "changes": [],
+      "deck": "full-feature-tour",
+      "checks": [
+        "opens",
+        "slides"
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "notes",
+          "note": "Presenter notes verbatim."
+        }
+      }
+    },
+    {
+      "id": "lists",
+      "title": "A bulleted list with real bullets",
+      "changes": [],
+      "deck": "full-feature-tour",
+      "slides": [
+        6
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "list",
+          "note": "Real bullets and numbering."
+        }
+      }
+    },
+    {
+      "id": "text-links",
+      "title": "Links on words inside text",
+      "changes": [],
+      "deck": "full-feature-tour",
+      "slides": [
+        2
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "visual"
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "link",
+          "known": [
+            "kn-link-color"
+          ],
+          "note": "The link and its target are kept; the words take the hyperlink color and underline."
+        }
+      }
+    },
+    {
+      "id": "hidden-slide",
+      "title": "A hidden slide, and a live slide number after it",
+      "changes": [],
+      "deck": "full-feature-tour",
+      "slides": [
+        10,
+        11
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "visual"
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "changed",
+          "kind": "footer",
+          "known": [
+            "kn-hidden-slide-numbering"
+          ],
+          "note": "The slide stays hidden; a live slide number after it skips it (QC-04)."
+        }
+      }
     },
     {
       "id": "RR-104",
       "title": "Autofit cleanup: no shrink-on-overflow anywhere",
       "changes": [
-        "(pending) rr-104"
+        "rr-104-no-autofit"
       ],
       "deck": "layout-sampler",
       "checks": [
         "noShrink"
       ],
-      "note": "Graded on every file by the noShrink column; the batch must not add a shrink autofit."
+      "note": "Graded on every file by the noShrink column; an export must not add a shrink autofit."
     },
     {
       "id": "LH-184",
       "title": "Columns",
       "changes": [
-        "(pending) lh-184"
+        "lh-184-columns-largest"
       ],
       "deck": "columns",
       "checks": [
@@ -1388,13 +2475,23 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-substitute-collides"
+          ],
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "LH-185",
       "title": "Diagram direction",
       "changes": [
-        "(pending) lh-185"
+        "lh-185-diagram-direction"
       ],
       "deck": "diagrams",
       "checks": [
@@ -1403,13 +2500,23 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "changed",
+          "kind": "group",
+          "known": [
+            "kn-text-shape-group"
+          ],
+          "note": "Groups kept; text shapes become nested groups (QS-01)."
+        }
+      }
     },
     {
       "id": "LH-186",
       "title": "Layout before shrink",
       "changes": [
-        "(pending) lh-186"
+        "lh-186-layout-before-shrink"
       ],
       "deck": "layout-sampler",
       "checks": [
@@ -1418,13 +2525,25 @@
         "noOverflow",
         "noShrink",
         "visual"
-      ]
+      ],
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-title-overprints",
+            "kn-line-boxes-overrun",
+            "kn-table-header-split"
+          ],
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "SH-11",
       "title": "Small shape text in PowerPoint",
       "changes": [
-        "(pending) sh-11"
+        "sh-11-shape-text-match"
       ],
       "deck": "shapes",
       "checks": [
@@ -1440,7 +2559,21 @@
       ],
       "deck": "full-feature-tour",
       "checks": [],
-      "manual": "Not a PowerPoint feature; covered by the MCP package tests."
+      "manual": "Not a PowerPoint feature; covered by the MCP package tests.",
+      "targets": {
+        "powerpoint": {
+          "outcome": "n/a",
+          "note": "Not a native-app feature: its PPTX output is covered by other features."
+        },
+        "keynote": {
+          "outcome": "n/a",
+          "note": "Not a native-app feature: its PPTX output is covered by other features."
+        },
+        "impress": {
+          "outcome": "n/a",
+          "note": "Not a native-app feature: its PPTX output is covered by other features."
+        }
+      }
     },
     {
       "id": "editor",
@@ -1453,7 +2586,21 @@
       ],
       "deck": "full-feature-tour",
       "checks": [],
-      "manual": "Editor features; their PPTX output is covered by the shape and icon decks."
+      "manual": "Editor features; their PPTX output is covered by the shape and icon decks.",
+      "targets": {
+        "powerpoint": {
+          "outcome": "n/a",
+          "note": "Not a native-app feature: its PPTX output is covered by other features."
+        },
+        "keynote": {
+          "outcome": "n/a",
+          "note": "Not a native-app feature: its PPTX output is covered by other features."
+        },
+        "impress": {
+          "outcome": "n/a",
+          "note": "Not a native-app feature: its PPTX output is covered by other features."
+        }
+      }
     },
     {
       "id": "ui-only",
@@ -1461,7 +2608,21 @@
       "changes": [],
       "deck": "full-feature-tour",
       "checks": [],
-      "manual": "Not run: needs PowerPoint UI control, which the owner declined."
+      "manual": "Not run: needs PowerPoint UI control, which the owner declined.",
+      "targets": {
+        "powerpoint": {
+          "outcome": "n/a",
+          "note": "Needs the application's user interface, which no run drives."
+        },
+        "keynote": {
+          "outcome": "n/a",
+          "note": "Needs the application's user interface, which no run drives."
+        },
+        "impress": {
+          "outcome": "n/a",
+          "note": "Needs the application's user interface, which no run drives."
+        }
+      }
     },
     {
       "id": "SH-25",
@@ -1479,7 +2640,28 @@
         "nativeChart",
         "roundtrip"
       ],
-      "check": "Review every slide: each anchored ring, arrow or label sits on its data point in PowerPoint as in the preview (within about 4 px at 1280 x 720)."
+      "check": "Review every slide: each anchored ring, arrow or label sits on its data point in PowerPoint as in the preview (within about 4 px at 1280 x 720).",
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "A native chart: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "chart",
+          "known": [
+            "kn-general-one-decimal",
+            "kn-chart-title"
+          ],
+          "note": "Ring, arrow and label sit on their points."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeChart)."
+        }
+      }
     },
     {
       "id": "LH-16",
@@ -1497,7 +2679,16 @@
         "visual",
         "roundtrip"
       ],
-      "check": "Review every slide: period bars span their duration, range labels are readable and inside their boxes, and right-to-left slides keep date digit order."
+      "check": "Review every slide: period bars span their duration, range labels are readable and inside their boxes, and right-to-left slides keep date digit order.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "known": [
+            "kn-monospace-light-faces"
+          ],
+          "note": "Periods span their duration; SemiBold drawn regular."
+        }
+      }
     },
     {
       "id": "LH-110-explicit",
@@ -1515,7 +2706,29 @@
         "nativeChart",
         "roundtrip"
       ],
-      "check": "Review every slide: each reference line and its label sit at the authored value on a native chart; no line is inferred from a title."
+      "check": "Review every slide: each reference line and its label sit at the authored value on a native chart; no line is inferred from a title.",
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "A native chart: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "chart",
+          "known": [
+            "kn-reference-line-label",
+            "kn-secondary-value-axis",
+            "kn-chart-title"
+          ],
+          "note": "The reference line stays; its label on the native chart is dropped (overlay labels on 4 and 5 are kept); the value-axis step is rewritten (QC-02)."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeChart)."
+        }
+      }
     },
     {
       "id": "LH-110-singleton",
@@ -1532,7 +2745,27 @@
         "visual",
         "nativeChart"
       ],
-      "check": "Review every slide: the reference line spans the plot at its value and the file opens without repair."
+      "check": "Review every slide: the reference line spans the plot at its value and the file opens without repair.",
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "A native chart: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "chart",
+          "known": [
+            "kn-secondary-value-axis"
+          ],
+          "note": "The secondary axis keeps only 0% and 30% (QC-02); the reference line and its label are kept."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeChart)."
+        }
+      }
     },
     {
       "id": "LH-110-localized",
@@ -1549,7 +2782,28 @@
         "visual",
         "nativeChart"
       ],
-      "check": "Review every slide: the dashed line sits at 92% on a native chart and its authored label is shown verbatim, on a slide in each of seven languages; no line is read from the title."
+      "check": "Review every slide: the dashed line sits at 92% on a native chart and its authored label is shown verbatim, on a slide in each of seven languages; no line is read from the title.",
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "A native chart: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "chart",
+          "known": [
+            "kn-reference-line-label",
+            "kn-chart-title"
+          ],
+          "note": "The line at 92% stays; its authored label is dropped on all seven."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeChart)."
+        }
+      }
     },
     {
       "id": "LH-34",
@@ -1568,14 +2822,25 @@
         "visual",
         "roundtrip"
       ],
-      "check": "Review every slide: each callout is a native text box at the preview's position over the picture, readable against its plate, and a saved copy imports with its callouts."
+      "check": "Review every slide: each callout is a native text box at the preview's position over the picture, readable against its plate, and a saved copy imports with its callouts.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-import-tags-dropped"
+          ],
+          "note": "Callouts are native text boxes at the preview's positions; Keynote's copy imports them as text boxes (RT-04)."
+        }
+      }
     },
     {
       "id": "SH-24",
       "title": "Inverted pyramids: widest first, editable",
       "changes": [
         "sh-24-inverted-pyramid",
-        "sh-24-catalog-current-behavior"
+        "sh-24-catalog-current-behavior",
+        "fix5-pyramid-steps"
       ],
       "deck": "inverted-pyramids",
       "checks": [
@@ -1586,7 +2851,16 @@
         "visual",
         "roundtrip"
       ],
-      "check": "Review every slide: the widest tier is on top, entry order is preserved, and text keeps its size (no shrink)."
+      "check": "Review every slide: the widest tier is on top, entry order is preserved, and text keeps its size (no shrink).",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "known": [
+            "kn-import-tags-dropped"
+          ],
+          "note": "OPF's arrangement arrives as native shapes and text boxes; Keynote's copy imports without OPF's structure (RT-04)."
+        }
+      }
     },
     {
       "id": "LH-121",
@@ -1603,7 +2877,14 @@
         "noShrink",
         "visual"
       ],
-      "check": "Review every slide: each status word is in the slide's language and script, drawn in a font that has its glyphs (no tofu, no fallback to a smaller face)."
+      "check": "Review every slide: each status word is in the slide's language and script, drawn in a font that has its glyphs (no tofu, no fallback to a smaller face).",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Status words in their language, no missing glyphs; Helvetica for Aptos."
+        }
+      }
     },
     {
       "id": "LH-106",
@@ -1622,7 +2903,14 @@
         "visual",
         "roundtrip"
       ],
-      "check": "Review every slide: a right-to-left slide in a left-to-right deck draws right to left with its complex-script font declared (not Arabic Typesetting), and quote marks and number formats follow the slide language."
+      "check": "Review every slide: a right-to-left slide in a left-to-right deck draws right to left with its complex-script font declared (not Arabic Typesetting), and quote marks and number formats follow the slide language.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Right-to-left slides drawn right to left with real glyphs; Helvetica for Aptos."
+        }
+      }
     },
     {
       "id": "SH-21",
@@ -1640,7 +2928,16 @@
         "visual",
         "roundtrip"
       ],
-      "check": "Review every slide: each tree and Venn arrangement matches the preview node for node; record for each slide whether PowerPoint holds live SmartArt or native shapes."
+      "check": "Review every slide: each tree and Venn arrangement matches the preview node for node; record for each slide whether PowerPoint holds live SmartArt or native shapes.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "known": [
+            "kn-import-tags-dropped"
+          ],
+          "note": "OPF's trees and Venn diagrams arrive as native shapes and text boxes; Keynote's copy imports without OPF's structure (RT-04)."
+        }
+      }
     },
     {
       "id": "COV-text",
@@ -1658,7 +2955,19 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-quote-beside-portrait",
+            "kn-monospace-light-faces",
+            "kn-substitute-collides"
+          ],
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "COV-lists",
@@ -1675,7 +2984,17 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "list",
+          "known": [
+            "kn-bullet-dot-smaller"
+          ],
+          "note": "Real bullets and numbering; the bullet dot is smaller (QT-01)."
+        }
+      }
     },
     {
       "id": "COV-tables",
@@ -1693,7 +3012,17 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "table",
+          "known": [
+            "kn-table-alignment-export"
+          ],
+          "note": "Native tables with merges kept; right alignment not written back in Keynote's copy (RT-08)."
+        }
+      }
     },
     {
       "id": "COV-charts",
@@ -1718,7 +3047,194 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "changed",
+          "kind": "chart",
+          "known": [
+            "kn-stacked-area-labels",
+            "kn-stacked-lines",
+            "kn-direct-line-labels",
+            "kn-radar-lines-only",
+            "kn-legend-order-reversed",
+            "kn-scatter-label-position",
+            "kn-area-gap",
+            "kn-secondary-value-axis",
+            "kn-reference-line-label",
+            "kn-highlight-legend-twice",
+            "kn-chart-title",
+            "kn-extended-chart",
+            "kn-import-missing-value"
+          ],
+          "note": "Native charts that Keynote reads differently; Keynote's copy fails OPF's import (QC-01)."
+        }
+      }
+    },
+    {
+      "id": "opf-1415-labels",
+      "title": "Data labels written on one line (wrap none), as the preview draws them",
+      "changes": [
+        "fix-1415-data-labels-one-line"
+      ],
+      "deck": "coverage-charts",
+      "slides": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "nativeChart"
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "CHANGELOG 0.36.0 (opf#1415): every label text body carries wrap=\"none\", so PowerPoint keeps each data label on one line."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "chart",
+          "known": [
+            "kn-direct-line-labels",
+            "kn-stacked-area-labels",
+            "kn-scatter-label-position"
+          ],
+          "note": "Graded in the 0.36.0 round, which exported this change."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeChart)."
+        }
+      }
+    },
+    {
+      "id": "opf-1415-legend",
+      "title": "A one-series bar chart with highlighted points: the legend names the series",
+      "changes": [
+        "fix-1415-one-series-legend"
+      ],
+      "deck": "coverage-charts",
+      "slides": [
+        16
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "nativeChart"
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "CHANGELOG 0.36.0 (opf#1415): the legend names the series in PowerPoint, as the preview draws it."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "chart",
+          "known": [
+            "kn-highlight-legend-twice",
+            "kn-import-missing-value"
+          ],
+          "note": "The legend lists the series twice and the columns are half width (MX-03)."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeChart)."
+        }
+      }
+    },
+    {
+      "id": "opf-1278-negative-bars",
+      "title": "A bar chart with negative values: the plot area is the plot (layoutTarget inner), so the category names keep their gutter",
+      "changes": [
+        "keynote-negative-bar-labels",
+        "fix-1415-small-chart-label-room"
+      ],
+      "deck": "coverage-charts",
+      "slides": [
+        15
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "nativeChart"
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "A native chart: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "chart",
+          "known": [
+            "kn-negative-bar-labels"
+          ],
+          "note": "Category names whole in Keynote 16.0 (the 0.34.0 difference, now retired)."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeChart)."
+        }
+      }
+    },
+    {
+      "id": "opf-1430-pie",
+      "title": "Pie and doughnut: slice outlines stay separators and the plot area is the preview's square",
+      "changes": [
+        "fix-1430-pie-separators"
+      ],
+      "deck": "coverage-charts",
+      "slides": [
+        6
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "nativeChart"
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "A native chart: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "Graded fonts only in the 0.36.0 round."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeChart)."
+        }
+      }
     },
     {
       "id": "COV-images",
@@ -1736,7 +3252,50 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "picture",
+          "known": [
+            "kn-per-point-colors",
+            "kn-alt-text"
+          ],
+          "note": "All 30 pictures present; crops, fits, focus points, recolors and masks as in the preview; alt text not shown."
+        }
+      }
+    },
+    {
+      "id": "opf-1415-link-video",
+      "title": "Linked video captions carry the link on the shape, without an underline",
+      "changes": [
+        "fix-1415-link-shapes"
+      ],
+      "deck": "coverage-images",
+      "slides": [
+        14,
+        15
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "visual"
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "link",
+          "note": "CHANGELOG 0.36.0 (opf#1415): the link is on the shape; a click on the box opens it in Slide Show, and no underline is drawn."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "link",
+          "known": [
+            "kn-link-color"
+          ],
+          "note": "The link stays on the shape; the caption is no longer in the hyperlink color (0.36.0 round)."
+        }
+      }
     },
     {
       "id": "COV-backgrounds",
@@ -1754,7 +3313,19 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "picture",
+          "known": [
+            "kn-tiled-background",
+            "kn-background-transparency",
+            "kn-layout-copies"
+          ],
+          "note": "Background pictures present; the tile on slide 11 is stretched."
+        }
+      }
     },
     {
       "id": "COV-shape-presets",
@@ -1769,7 +3340,20 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "changed",
+          "kind": "shape",
+          "known": [
+            "kn-presets-lose-preset",
+            "kn-pentagon-heptagon",
+            "kn-punched-tape",
+            "kn-ribbon-fold"
+          ],
+          "note": "Of 187 presets 23 stay presets, 95 become one freeform, 63 groups of freeforms and 6 lines (QS-02)."
+        }
+      }
     },
     {
       "id": "COV-shape-styles",
@@ -1784,7 +3368,23 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "changed",
+          "known": [
+            "kn-path-gradient",
+            "kn-arrowhead-size",
+            "kn-perspective-shadow",
+            "kn-shape-effects",
+            "kn-sketch-outline",
+            "kn-compound-line",
+            "kn-vertical-text",
+            "kn-text-shape-group"
+          ],
+          "note": "Styles Keynote draws differently (QS-06 to QS-08); shapes with text become groups."
+        }
+      }
     },
     {
       "id": "COV-overlays",
@@ -1803,7 +3403,20 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "changed",
+          "known": [
+            "kn-elbow-connector",
+            "kn-rotated-narrow-text",
+            "kn-shape-effects",
+            "kn-vertical-text",
+            "kn-text-shape-group-corpus"
+          ],
+          "note": "Elbow rerouted, mid-word wraps, effects and vertical text as the known records say."
+        }
+      }
     },
     {
       "id": "COV-diagrams",
@@ -1824,7 +3437,17 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "changed",
+          "known": [
+            "kn-smartart-picture-alt",
+            "kn-import-tags-dropped"
+          ],
+          "note": "Mermaid, DOT and PlantUML diagrams stay groups; the four live SmartArt frames arrive as OPF's picture."
+        }
+      }
     },
     {
       "id": "COV-regions",
@@ -1842,7 +3465,14 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "COV-composition",
@@ -1860,7 +3490,14 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "COV-design",
@@ -1880,7 +3517,19 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-per-point-colors",
+            "kn-monospace-light-faces",
+            "kn-line-boxes-overrun"
+          ],
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "COV-furniture",
@@ -1897,7 +3546,49 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-slide-number-beside-footer-text",
+            "kn-line-boxes-overrun"
+          ],
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
+    },
+    {
+      "id": "opf-1415-link-furniture",
+      "title": "A footer line that is one link carries the link on its shape, without an underline",
+      "changes": [
+        "fix-1415-link-shapes"
+      ],
+      "deck": "coverage-furniture",
+      "slides": [
+        4
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "visual"
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "link",
+          "note": "CHANGELOG 0.36.0 (opf#1415): the link is on the shape; a click on the box opens it in Slide Show, and no underline is drawn."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "link",
+          "known": [
+            "kn-link-color"
+          ],
+          "note": "Footer lines keep their own color, no underline; Keynote's copy keeps both links (0.36.0 round)."
+        }
+      }
     },
     {
       "id": "COV-metadata",
@@ -1914,7 +3605,14 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "COV-variables",
@@ -1929,7 +3627,14 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "COV-template",
@@ -1946,7 +3651,14 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "COV-languages",
@@ -1969,7 +3681,49 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Arabic, Hebrew, Japanese, Chinese and Devanagari with real glyphs in the right direction."
+        }
+      }
+    },
+    {
+      "id": "script-fonts",
+      "title": "Script default fonts in the theme: Times New Roman and Arial for Arabic, Segoe UI for Hebrew, Nirmala UI for Devanagari",
+      "changes": [
+        "arabic-default-fonts",
+        "script-default-fonts"
+      ],
+      "deck": "coverage-languages",
+      "slides": [
+        2,
+        3,
+        4,
+        7,
+        8
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "CHANGELOG 0.35.0: the fonts PowerPoint's Office theme gives the Arabic script, and per script a font that ships with Windows."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Arabic, Hebrew and Devanagari with real glyphs in the right direction (0.36.0 round)."
+        }
+      }
     },
     {
       "id": "COV-catalogs",
@@ -1986,7 +3740,14 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Same as the preview (Georgia is installed)."
+        }
+      }
     },
     {
       "id": "COV-catalogs-off",
@@ -2001,7 +3762,14 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "COV-warnings",
@@ -2020,7 +3788,14 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "note": "Text native; Helvetica for Aptos (the ambient record kn-missing-fonts)."
+        }
+      }
     },
     {
       "id": "COV-size-16x9",
@@ -2035,7 +3810,17 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-per-point-colors"
+          ],
+          "note": "Slide size kept (A4 rounded to whole points); Helvetica for Aptos."
+        }
+      }
     },
     {
       "id": "COV-size-4x3",
@@ -2050,7 +3835,17 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-per-point-colors"
+          ],
+          "note": "Slide size kept (A4 rounded to whole points); Helvetica for Aptos."
+        }
+      }
     },
     {
       "id": "COV-size-16x10",
@@ -2065,7 +3860,17 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-per-point-colors"
+          ],
+          "note": "Slide size kept (A4 rounded to whole points); Helvetica for Aptos."
+        }
+      }
     },
     {
       "id": "COV-size-1x1",
@@ -2080,7 +3885,17 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-per-point-colors"
+          ],
+          "note": "Slide size kept (A4 rounded to whole points); Helvetica for Aptos."
+        }
+      }
     },
     {
       "id": "COV-size-4x5",
@@ -2095,7 +3910,17 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-per-point-colors"
+          ],
+          "note": "Slide size kept (A4 rounded to whole points); Helvetica for Aptos."
+        }
+      }
     },
     {
       "id": "COV-size-9x16",
@@ -2110,7 +3935,17 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-per-point-colors"
+          ],
+          "note": "Slide size kept (A4 rounded to whole points); Helvetica for Aptos."
+        }
+      }
     },
     {
       "id": "COV-size-letter",
@@ -2125,7 +3960,17 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-per-point-colors"
+          ],
+          "note": "Slide size kept (A4 rounded to whole points); Helvetica for Aptos."
+        }
+      }
     },
     {
       "id": "COV-size-a4",
@@ -2140,7 +3985,17 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-per-point-colors"
+          ],
+          "note": "Slide size kept (A4 rounded to whole points); Helvetica for Aptos."
+        }
+      }
     },
     {
       "id": "COV-size-standard",
@@ -2155,7 +4010,17 @@
         "visual",
         "roundtrip"
       ],
-      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title."
+      "check": "RR-105 format-coverage deck: every slide opens, matches the preview and imports back; what each slide exercises is in its title.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-per-point-colors"
+          ],
+          "note": "Slide size kept (A4 rounded to whole points); Helvetica for Aptos."
+        }
+      }
     },
     {
       "id": "COV-charts-native",
@@ -2186,7 +4051,60 @@
       ],
       "checks": [
         "nativeChart"
-      ]
+      ],
+      "note": "Slide 7's world map is written as clustered columns (pptx/chart-data-adapted; the preview draws a tile map), so it is native in every app but unlike the preview. Slide 17's histogram is a chartex chart (COV-charts-chartex).",
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "A native chart: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "chart",
+          "known": [
+            "kn-stacked-lines"
+          ],
+          "note": "Keynote chart objects on all 18 slides; slide 4's stacked lines become a line chart."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeChart)."
+        }
+      }
+    },
+    {
+      "id": "COV-charts-chartex",
+      "title": "Format coverage: the histogram is a chartex chart with a picture fallback",
+      "changes": [],
+      "deck": "coverage-charts",
+      "slides": [
+        17
+      ],
+      "checks": [
+        "nativeChart"
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "chart",
+          "note": "The chartex part, which PowerPoint draws natively (docs/libreoffice.md; skills/opf-export/SKILL.md: the live chart stays for PowerPoint)."
+        },
+        "keynote": {
+          "outcome": "picture",
+          "kind": "picture",
+          "known": [
+            "kn-extended-chart"
+          ],
+          "note": "OPF's picture in the chart's frame."
+        },
+        "impress": {
+          "outcome": "changed",
+          "kind": "chart",
+          "note": "docs/libreoffice.md: LibreOffice 26.8 reads the chartex part, draws a single-series histogram with its own bins and shows \"One or more chart types are unsupported\" for the other types."
+        }
+      }
     },
     {
       "id": "COV-tables-native",
@@ -2197,7 +4115,24 @@
       "deck": "coverage-tables",
       "checks": [
         "nativeTable"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "table",
+          "note": "A native table whose cells take an edit: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "table",
+          "note": "Six native tables, merges kept."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "table",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs nativeTable)."
+        }
+      }
     },
     {
       "id": "COV-shapes-native",
@@ -2226,7 +4161,28 @@
         13,
         14,
         15
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "shape",
+          "known": [
+            "kn-presets-lose-preset",
+            "kn-pentagon-heptagon",
+            "kn-punched-tape",
+            "kn-ribbon-fold"
+          ],
+          "note": "Of 187 presets 23 stay presets, 95 become one freeform without adjust handles, 63 groups of freeforms and 6 lines (QS-02)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "COV-shape-styles-native",
@@ -2235,7 +4191,25 @@
       "deck": "coverage-shape-styles",
       "checks": [
         "shapes"
-      ]
+      ],
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "note": "Native preset or freeform shapes: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "group",
+          "known": [
+            "kn-text-shape-group"
+          ],
+          "note": "Styled shapes with text arrive as groups (QS-01)."
+        },
+        "impress": {
+          "outcome": "native",
+          "note": "At least 90% of the shapes are in LibreOffice's saved copy (features.mjs shapes)."
+        }
+      }
     },
     {
       "id": "COV-overlays-connectors",
@@ -2252,6 +4226,28 @@
       ],
       "expect": {
         "connectors": 3
+      },
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "connector",
+          "note": "Connectors glued at both ends: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "native",
+          "kind": "connector",
+          "known": [
+            "kn-elbow-connector",
+            "kn-curved-connector",
+            "kn-text-shape-group-corpus"
+          ],
+          "note": "Connection lines follow a move inside Keynote; Keynote's copy writes them unglued (QS-01)."
+        },
+        "impress": {
+          "outcome": "native",
+          "kind": "connector",
+          "note": "Kept native in LibreOffice's saved copy (features.mjs connectors)."
+        }
       }
     },
     {
@@ -2287,6 +4283,26 @@
             "date": false
           }
         ]
+      },
+      "targets": {
+        "powerpoint": {
+          "outcome": "native",
+          "kind": "footer",
+          "note": "Header and Footer placeholders with a live slide number: the check this feature names, graded in PowerPoint for Windows through COM (evaluate.mjs; qualification-0.33-windows.md)."
+        },
+        "keynote": {
+          "outcome": "changed",
+          "kind": "footer",
+          "known": [
+            "kn-slide-number-beside-footer-text"
+          ],
+          "note": "Beside footer text only the live number shows."
+        },
+        "impress": {
+          "outcome": "n/a",
+          "kind": "footer",
+          "note": "features.mjs does not grade footer: it needs the app's Header and Footer dialog."
+        }
       }
     }
   ]
