@@ -43,7 +43,7 @@ const at = { slideIndex: 0, path: "slides.0.blocks.0" };
 
 // 3. Leaving combo: only the references on the secondary axis cannot be drawn; the others stay.
 {
-  const combo = { type: "combo", line: ["Margin"], secondaryAxis: ["Margin"], referenceLines: [{ value: 15, label: "Plan" }, { value: 0.4, axis: "secondary", label: "Margin floor" }] };
+  const combo = { type: "combo", lineSeries: ["Margin"], secondaryAxis: ["Margin"], referenceLines: [{ value: 15, label: "Plan" }, { value: 0.4, axis: "secondary", label: "Margin floor" }] };
   const editor = session(combo);
   assert.throws(() => switchDimension(editor, "charts", "column", at), (error) => error.code === "chart-reference-lines-unsupported" && error.details.count === 1 && /secondary value axis/.test(error.message));
   const change = switchDimension(editor, "charts", "column", { ...at, removeReferenceLines: true });

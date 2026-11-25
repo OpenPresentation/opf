@@ -173,7 +173,7 @@ function scatterPlot(chart: unknown, composed: ComposedChart, selected: ChartPoi
     const axes = composed.layer?.numericAxes, valueScale = chartAxisScale(axes?.value), categoryScale = chartAxisScale(axes?.category);
     if (!valueScale || !categoryScale)
         return undefined;
-    const { scale } = geometry, font = chartTextSize({ width: geometry.box.width, height: geometry.box.height, scale, minFontSize: geometry.minFontSize }) * scale, pad = 10 * scale, line = font * 1.5;
+    const { scale } = geometry, font = chartTextSize({ width: geometry.box.width, height: geometry.box.height, scale, minFontSizePx: geometry.minFontSizePx }) * scale, pad = 10 * scale, line = font * 1.5;
     const width = (text: string) => geometry.measure(text, font), options = resolveChartOptions(chart, chartOptionTarget('scatter')!);
     const plan = selected.plan, hasX = plan.hasX, first = hasX ? 2 : 1, names = plan.columns.slice(first).map(label);
     let box = { ...geometry.box };

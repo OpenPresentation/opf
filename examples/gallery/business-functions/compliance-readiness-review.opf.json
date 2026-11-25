@@ -425,7 +425,7 @@
       "title": "Program Sponsor",
       "photo": "asset:supporting-photo",
       "email": "maya@tandem-biosystems.example",
-      "organizationId": "tandem-biosystems",
+      "organization": "tandem-biosystems",
       "socials": {
         "x": "@maya-chen"
       }
@@ -434,7 +434,7 @@
       "id": "jon",
       "name": "Jon Alvarez",
       "title": "Operating Lead",
-      "organizationId": "tandem-biosystems",
+      "organization": "tandem-biosystems",
       "socials": {
         "facebook": "@jon-alvarez"
       }
@@ -782,7 +782,7 @@
         "rockwell": {
           "name": "Rockwell",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Rockwell",
           "minor": "Rockwell",
@@ -793,7 +793,7 @@
         "noto-sans-gurmukhi": {
           "name": "Noto Sans Gurmukhi",
           "app": "google-slides",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "pa-Guru"
           ],
@@ -806,7 +806,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

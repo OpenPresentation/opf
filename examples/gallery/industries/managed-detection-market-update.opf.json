@@ -382,7 +382,7 @@
         "segoe-ui": {
           "name": "Segoe UI",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Segoe UI Semibold",
           "minor": "Segoe UI",
@@ -393,7 +393,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

@@ -482,7 +482,7 @@ function staleMappingPatches(presentation, owner, chart, type) {
   return Object.keys(rest).length ? createValuePatch(presentation, parts, rest) : [{ op: "remove", path: opfPathToJsonPointer(parts) }];
 }
 
-// FA-15: `line`, `secondaryAxis` and the secondary axis title belong to combo charts; any other type ignores them (core warns
+// FA-15: `lineSeries`, `secondaryAxis` and the secondary axis title belong to combo charts; any other type ignores them (core warns
 // chart-option-adapted). Switching away from combo removes them, and an `axisTitles` left empty.
 // Explicit reference lines are never dropped silently. A type that cannot draw a chart's references (no single value axis, or no
 // secondary axis for a `secondary` reference) refuses the switch with `chart-reference-lines-unsupported`, so a host can offer the
@@ -509,7 +509,7 @@ function staleReferencePatches(presentation, owner, chart, type, options) {
 function staleComboPatches(presentation, owner, chart, type) {
   if (chartOptionTarget(type)?.kind === "combo") return [];
   const parts = [...owner, "chart"];
-  const patches = ["line", "secondaryAxis"].filter((key) => chart[key] !== undefined).map((key) => ({ op: "remove", path: opfPathToJsonPointer([...parts, key]) }));
+  const patches = ["lineSeries", "secondaryAxis"].filter((key) => chart[key] !== undefined).map((key) => ({ op: "remove", path: opfPathToJsonPointer([...parts, key]) }));
   const titles = chart.axisTitles;
   if (titles && typeof titles === "object" && !Array.isArray(titles) && titles.secondary !== undefined) {
     const { secondary: _secondary, ...rest } = titles;

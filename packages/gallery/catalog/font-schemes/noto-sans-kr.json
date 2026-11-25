@@ -3,7 +3,7 @@
   "id": "noto-sans-kr",
   "name": "Noto Sans KR",
   "app": "google-slides",
-  "languageFamily": "ea",
+  "scriptGroup": "eastAsian",
   "languages": [
     "ko"
   ],

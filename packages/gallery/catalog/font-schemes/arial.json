@@ -3,7 +3,7 @@
   "id": "arial",
   "name": "Arial",
   "app": "powerpoint",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Arial Black",
   "minor": "Arial",

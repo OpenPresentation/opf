@@ -46,7 +46,7 @@ if(mode==='generate') {
       {source:'  const value = "two  spaces";\r\n\r\n'+'longtoken'.repeat(22)+'\n\treturn value;  \r',filename:'src\tCaseSensitive.ts',language:'TypeScript'},
       {source:'',filename:'a-long-path/'.repeat(15),language:'Long-language-label-'.repeat(12)}];
     const family={family:'Courier New'};
-    const document={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:{id:'calibri',heading:family,body:family,code:family}},slides:values.map(code=>({composition:{minFontSize:24},code}))};
+    const document={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:{id:'calibri',heading:family,body:family,code:family}},slides:values.map(code=>({composition:{minFontSizePx:24},code}))};
     const options={fonts:handle},bound=resolvePresentation(document,options);
     for(const slide of bound.slides)assert.deepEqual(slide.geometry.diagnostics,[]);
     const pptx=await toPptx(document,options),svgs=toSvg(document,options);

@@ -40,7 +40,7 @@ let checked = 0;
   const canvas = element(svg, 'rect');
   // RR-105: a dark overlay makes the picture dark (no tone of its own), so the canvas is that variant's bg1; with tone light it is light1.
   assert.equal(attr(canvas, 'fill'), COLORS.dark1, 'canvas colour');
-  assert.equal(attr(element(toSvg(deckWith({ type: 'image', src: strip, alt: 'Harbour at dawn', tone: 'light', overlay: { color: 'dark1', opacity: 0.4 } }), 1), 'rect'), 'fill'), COLORS.light1, 'canvas colour of a light picture');
+  assert.equal(attr(element(toSvg(deckWith({ type: 'image', src: strip, alt: 'Harbour at dawn', appearance: 'light', overlay: { color: 'dark1', opacity: 0.4 } }), 1), 'rect'), 'fill'), COLORS.light1, 'canvas colour of a light picture');
   const picture = svg.indexOf('<image'), overlay = svg.indexOf('data-opf-image-overlay'), title = svg.indexOf('data-opf-path="slides.0.title"');
   assert.ok(svg.indexOf(canvas) < picture && picture < overlay && overlay < title, 'canvas, picture, overlay, content');
   assert.equal(attr(element(svg, 'image'), 'aria-label'), 'Harbour at dawn');

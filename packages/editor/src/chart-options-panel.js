@@ -246,7 +246,7 @@ export function createChartOptionsPanel(host, { editor, getSelectedPath, getGeom
     [fields.series, "change", () => {
       const checked = (option) => [...fields.series.querySelectorAll(`[data-opf-chart-option='${option}']`)].filter((input) => input.checked).map((input) => input.value);
       const line = checked("line");
-      commit({ line, secondaryAxis: checked("secondaryAxis").filter((name) => line.includes(name)) }, "Changed which series are lines.");
+      commit({ lineSeries: line, secondaryAxis: checked("secondaryAxis").filter((name) => line.includes(name)) }, "Changed which series are lines.");
     }],
     [fields.legend, "change", () => commit({ legend: fields.legend.value }, "Changed the legend.")],
     [fields.labels, "change", () => commit({ dataLabels: fields.labels.checked }, fields.labels.checked ? "Showing data labels." : "Hid the data labels.")],

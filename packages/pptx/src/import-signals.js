@@ -381,7 +381,7 @@ function readTextBody(txBody, shape, context, relationships, limits, budget, rep
     paragraphs,
     paragraphCount: total,
     chars,
-    maxFontSize: maxSize || undefined,
+    maxFontSizePx: maxSize || undefined,
     dominantFont: dominant(fontCounts),
     dominantSize: dominant(sizeCounts),
     ...(monoChars ? {monospaceShare: round(monoChars / Math.max(1, [...fontCounts.values()].reduce((sum, value) => sum + value, 0)), 3)} : {}),

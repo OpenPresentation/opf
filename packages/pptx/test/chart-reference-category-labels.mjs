@@ -70,7 +70,7 @@ test('fractional percentage references retain their values, scale and number for
 
 for (const negativeAxis of ['value', 'secondary']) {
   test(`combo: ${negativeAxis} negative reference preserves primary/secondary axis association`, async () => {
-    const document = deck('combo', { data: { columns: ['Period', 'Actual', { name: 'Margin', format: '0%' }], rows: [['Jan', 40, 0.2], ['Feb', 60, 0.3], ['Mar', 50, 0.25]] }, line: ['Margin'], secondaryAxis: ['Margin'], referenceLines: [{ value: negativeAxis === 'value' ? -10 : -0.1, axis: negativeAxis, label: 'Floor' }] });
+    const document = deck('combo', { data: { columns: ['Period', 'Actual', { name: 'Margin', format: '0%' }], rows: [['Jan', 40, 0.2], ['Feb', 60, 0.3], ['Mar', 50, 0.25]] }, lineSeries: ['Margin'], secondaryAxis: ['Margin'], referenceLines: [{ value: negativeAxis === 'value' ? -10 : -0.1, axis: negativeAxis, label: 'Floor' }] });
     const e = await inspect(document);
     assert.equal(e.category['c:tickLblPos'].val, 'low');
     assert.equal(e.categories.length, 2);

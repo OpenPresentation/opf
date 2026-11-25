@@ -3,7 +3,7 @@
   "id": "leelawadee-ui",
   "name": "Leelawadee UI",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "th",
     "km"

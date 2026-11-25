@@ -435,7 +435,7 @@
       "title": "Program Sponsor",
       "photo": "asset:supporting-photo",
       "email": "maya@ironwood-devices.example",
-      "organizationId": "ironwood-devices",
+      "organization": "ironwood-devices",
       "socials": {
         "threads": "@maya-chen"
       }
@@ -444,7 +444,7 @@
       "id": "jon",
       "name": "Jon Alvarez",
       "title": "Operating Lead",
-      "organizationId": "ironwood-devices",
+      "organization": "ironwood-devices",
       "socials": {
         "youtube": "@jon-alvarez"
       }
@@ -799,7 +799,7 @@
         "courier-new": {
           "name": "Courier New",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Courier New",
           "minor": "Courier New",
@@ -811,7 +811,7 @@
         "ms-mincho": {
           "name": "MS Mincho",
           "app": "powerpoint",
-          "languageFamily": "ea",
+          "scriptGroup": "eastAsian",
           "languages": [
             "ja"
           ],
@@ -824,7 +824,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

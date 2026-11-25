@@ -34,7 +34,7 @@ const plan = (editor) => readChartOptions(editor.get(C), editor.presentation).co
 
 // 2. Reading: the fields offer a secondary axis title on combo charts; the series come in data order with their plan.
 {
-  const editor = session({ line: ["Revenue"], secondaryAxis: ["Revenue"], axisTitles: { secondary: "Revenue ($M)" } });
+  const editor = session({ lineSeries: ["Revenue"], secondaryAxis: ["Revenue"], axisTitles: { secondary: "Revenue ($M)" } });
   const read = readChartOptions(editor.get(C), editor.presentation);
   assert.equal(read.fields.axisTitles.secondary, true);
   assert.equal(read.state.axisTitles.secondary, "Revenue ($M)");
@@ -52,12 +52,12 @@ const plan = (editor) => readChartOptions(editor.get(C), editor.presentation).co
   assert.equal(editor.get(C).line, undefined, "the default line is not written");
   setChartOptions(editor, C, { axisTitles: { secondary: "Margin" } });
   assert.deepEqual(editor.get(C).axisTitles, { secondary: "Margin" });
-  setChartOptions(editor, C, { line: ["Cost", "Margin"] });
+  setChartOptions(editor, C, { lineSeries: ["Cost", "Margin"] });
   assert.deepEqual(editor.get(C).line, ["Cost", "Margin"]);
   assert.deepEqual(plan(editor), ["Revenue:bar/primary", "Cost:line/primary", "Margin:line/secondary"]);
   assert.equal(adapted(editor.presentation).counts.warning, 0, JSON.stringify(adapted(editor.presentation).findings));
   // A series that stops being a line leaves the secondary axis, and the secondary title goes with the last secondary line.
-  setChartOptions(editor, C, { line: ["Cost"] });
+  setChartOptions(editor, C, { lineSeries: ["Cost"] });
   assert.deepEqual(editor.get(C).line, ["Cost"]);
   assert.equal(editor.get(C).secondaryAxis, undefined);
   assert.equal(editor.get(C).axisTitles, undefined, "no secondary axis, no secondary title");
@@ -73,9 +73,9 @@ const plan = (editor) => readChartOptions(editor.get(C), editor.presentation).co
 // 4. Refusals: at least one line and at least one column series; unknown names.
 {
   const editor = session();
-  assert.throws(() => prepareChartOptions(editor.presentation, C, { line: [] }), /at least one series as a line/);
-  assert.throws(() => prepareChartOptions(editor.presentation, C, { line: ["Revenue", "Cost", "Margin"] }), /at least one series as columns/);
-  assert.throws(() => prepareChartOptions(editor.presentation, C, { line: ["Profit"] }), /not a plotted series/);
+  assert.throws(() => prepareChartOptions(editor.presentation, C, { lineSeries: [] }), /at least one series as a line/);
+  assert.throws(() => prepareChartOptions(editor.presentation, C, { lineSeries: ["Revenue", "Cost", "Margin"] }), /at least one series as columns/);
+  assert.throws(() => prepareChartOptions(editor.presentation, C, { lineSeries: ["Profit"] }), /not a plotted series/);
   // Only a line can use the secondary axis: a column name is dropped.
   const prepared = prepareChartOptions(editor.presentation, C, { secondaryAxis: ["Revenue", "Margin"] });
   assert.deepEqual(prepared.patches, [{ op: "add", path: "/slides/0/blocks/0/chart/secondaryAxis", value: ["Margin"] }]);
@@ -83,7 +83,7 @@ const plan = (editor) => readChartOptions(editor.get(C), editor.presentation).co
 
 // 5. Switching away from combo removes line, secondaryAxis and the secondary title.
 {
-  const editor = session({ line: ["Cost", "Margin"], secondaryAxis: ["Margin"], axisTitles: { value: "Revenue", secondary: "Margin" } });
+  const editor = session({ lineSeries: ["Cost", "Margin"], secondaryAxis: ["Margin"], axisTitles: { value: "Revenue", secondary: "Margin" } });
   switchDimension(editor, "charts", "line", { slideIndex: 0 });
   const chart = editor.get(C);
   assert.equal(chart.type, "line");

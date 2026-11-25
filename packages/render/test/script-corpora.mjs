@@ -101,7 +101,7 @@ for (const character of common) assert.ok(faces.some(face => face.font.hasGlyphF
 // The gallery catalog's own font-scheme samples (what the gallery shows for each script scheme) are covered by the script faces.
 let schemeSamples = 0;
 for (const [id, scheme] of Object.entries(defaultCatalog.fontSchemes)) {
-  if (!scheme?.textSample || scheme.languageFamily === 'latin') continue;
+  if (!scheme?.textSample || scheme.scriptGroup === 'latin') continue;
   schemeSamples++;
   for (const run of itemizeScripts(scheme.textSample, {})) {
     if (run.script === 'Latn') continue;

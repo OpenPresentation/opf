@@ -3,7 +3,7 @@
   "id": "sakkal-majalla",
   "name": "Sakkal Majalla",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "ar",
     "ur",

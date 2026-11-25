@@ -71,7 +71,7 @@ async function group(id,name,run){
 }
 const deck=footer=>({design:{footer},slides:[{title:'Title',design:{footer:false}},{title:'Two'},{title:'Three'}]});
 // OPF 0.15: the deck embeds the font scheme it names (no catalog is registered in this renderer-absent consumer).
-const wrapped=embed({name:'Wrapped generated date boundary',design:{fontScheme:'roboto',dimensions:{widthInches:7.5,heightInches:13.3333333333},footer:{center:{date:true,dateFormat:'MMMM d, yyyy'},end:{text:'{{slide.number}} / {{deck.slideCount}}'}}},slides:[{title:'Title',design:{footer:false}},{title:'Content',text:'Keep body content.',composition:{minFontSize:32,overflow:'error'}},{title:'Third',text:'Still current.',composition:{minFontSize:32,overflow:'error'}}]},{catalogs:[gallery]}).document;
+const wrapped=embed({name:'Wrapped generated date boundary',design:{fontScheme:'roboto',dimensions:{widthInches:7.5,heightInches:13.3333333333},footer:{center:{date:true,dateFormat:'MMMM d, yyyy'},end:{text:'{{slide.number}} / {{deck.slideCount}}'}}},slides:[{title:'Title',design:{footer:false}},{title:'Content',text:'Keep body content.',composition:{minFontSizePx:32,overflow:'error'}},{title:'Third',text:'Still current.',composition:{minFontSizePx:32,overflow:'error'}}]},{catalogs:[gallery]}).document;
 await group('01','Existing basic renderer-absent contract',async()=>{
  const source={name:'Installed package',slides:[{title:'Editable output',table:{columns:['Item','Value'],rows:[['Quality',42]]}},{title:'Metric',metric:{value:'42%',label:'Measured outcome'}},{title:'Quote',quote:{text:'Keep the source.',attribution:'Reviewer',source:'Interview'}},{title:'Code',code:{language:'python',source:'approve(change)'}},{title:'Timeline',timeline:{events:[{when:'Q1',what:'Pilot'},{when:'Q2',what:'Rollout'}]}}]};
  const exported=await emit('basic',source),{document}=await read('basic',exported.bytes);assert.ok(exported.bytes.length>1000);assert.equal(document.slides.length,5);
@@ -115,10 +115,10 @@ await group('04','Missing host date and unsupported native pattern diagnostics',
  return {missingDiagnostics:missing.issues,unsupportedPatternDiagnostics:iso.issues};
 });
 let wrappedExport;
-await group('05','Exact portrait minFontSize:32 fixture with estimated composition',async()=>{
+await group('05','Exact portrait minFontSizePx:32 fixture with estimated composition',async()=>{
  wrappedExport=await emit('wrapped',wrapped,{date:'2026-09-22'});
  const lines=furniture(xml(wrappedExport.entries)).filter(s=>/ part 0 line | footer center date line /.test(s.name)).map(s=>s.texts.join(''));
- await json(path.join(groupDir,'observed-boundary.json'),{lines,wrapReached:lines.length>1,minFontSize:32,unit:'reference pixels',measurement:'estimated; no renderer/provider'});
+ await json(path.join(groupDir,'observed-boundary.json'),{lines,wrapReached:lines.length>1,minFontSizePx:32,unit:'reference pixels',measurement:'estimated; no renderer/provider'});
  assert.ok(lines.length>1,'Exact fixture did not wrap under estimated composition; wrapped path is not covered.');assert.equal(lines.join(''),'September 22, 2026');
  assert.doesNotMatch(xml(wrappedExport.entries),/type="datetime/);assert.equal(markerCount(wrappedExport.entries),2);
  assert.deepEqual(wrappedExport.issues.map(({code,path})=>({code,path})),[1,2].map(()=>({code:'furniture-field-fixed',path:'design.footer.center.date'})));

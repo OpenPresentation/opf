@@ -248,7 +248,7 @@
     "id": "speaker",
     "name": "Maya Chen",
     "title": "Program Sponsor",
-    "organizationId": "county-health-alliance",
+    "organization": "county-health-alliance",
     "bio": "Leads public health planning for County Health Alliance.",
     "socials": {
       "mastodon": "@county-health-alliance-speaker"
@@ -573,7 +573,7 @@
         "poppins": {
           "name": "Poppins",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Poppins",
           "minor": "Poppins",
@@ -584,7 +584,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

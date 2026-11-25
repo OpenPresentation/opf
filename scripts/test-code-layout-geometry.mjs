@@ -62,19 +62,19 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     assert.ok(layout,'the composed code item carries its code layout');
     assert.equal(layout.overflow,overflowing);
     const scale=Math.min(dimensions.width,dimensions.height)/720;
-    const options={fontFamilies:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.code',minFontSize:layout.parts[0].minFontSize/scale,scale};
+    const options={fontFamilies:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.code',minFontSizePx:layout.parts[0].minFontSizePx/scale,scale};
     // The current checkout's composition lays the code out exactly as the published one did. Since 0.32.0 (LH wave 6) the composition
     // also passes a lone panel's growth and `fill` to layoutCode, which a bare layoutCode call in `bounds` would not reproduce.
     const again=checkoutResolve(deck,{fonts:registry}).slides[0].geometry.items[0].codeLayout;
     assert.deepEqual(again.bounds,layout.bounds,'the checkout composition gives the code the same panel');
     assert.equal(again.overflow,layout.overflow,'the checkout core agrees on overflow');
-    assert.deepEqual(again.parts.map(part=>[part.role,part.text,part.minFontSize,part.fit?.fontSize,part.fit?.lines]),layout.parts.map(part=>[part.role,part.text,part.minFontSize,part.fit?.fontSize,part.fit?.lines]),'and on every part, its floor, size and lines');
+    assert.deepEqual(again.parts.map(part=>[part.role,part.text,part.minFontSizePx,part.fit?.fontSize,part.fit?.lines]),layout.parts.map(part=>[part.role,part.text,part.minFontSizePx,part.fit?.fontSize,part.fit?.lines]),'and on every part, its floor, size and lines');
     for (const [index,part] of again.parts.entries()) for (const key of ['x','y','width','height']) assert.ok(Math.abs(part.box[key]-layout.parts[index].box[key])<1e-6,`and on the ${part.role} box`);
     assert.equal(layout.parts.at(-1).text,code.source);
     for (const field of ['language','filename']) if (code[field]) assert.equal(layout.parts.find(part=>part.role===field).text,code[field]);
     assert.equal(layout.textMeasurement,'provided');
     for (const part of layout.parts) if (part.fit) {
-      assert.ok(part.fit.fontSize>=part.minFontSize);
+      assert.ok(part.fit.fontSize>=part.minFontSizePx);
       assert.equal(part.fit.sourceLines.map(line=>part.text.slice(line.start,line.nextStart)).join(''),part.text);
       assert.deepEqual(part.fit.lines,part.fit.sourceLines.map(line=>part.text.slice(line.start,line.end)));
       for (const line of part.fit.sourceLines) {
@@ -91,7 +91,7 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     results.push({dimensions,scenario,overflowing,algorithm:layout.algorithm,textMeasurement:layout.textMeasurement,diagnostics:layout.diagnostics,
       parts:layout.parts.map(part=>({role:part.role,path:part.path,textSha256:hash(part.text),sourceLength:part.text.length,
         ...(part.text.length<128?{text:part.text}:{}),sources:part.sources,generated:part.generated,box:part.box,
-        requestedFontSize:part.requestedFontSize,minFontSize:part.minFontSize,requestedStyle:part.requestedStyle,style:part.style,
+        requestedFontSize:part.requestedFontSize,minFontSizePx:part.minFontSizePx,requestedStyle:part.requestedStyle,style:part.style,
         fit:part.fit?{fontSize:part.fit.fontSize,lineHeight:part.fit.lineHeight,lineCount:part.fit.lines.length,
           maximumLineWidth:Math.max(...part.fit.sourceLines.map(line=>line.width)),tabSize:part.fit.tabSize,tabWidth:part.fit.tabWidth,
           tabSegments:part.fit.sourceLines.flatMap(line=>line.segments).filter(segment=>segment.kind==='tab').length,

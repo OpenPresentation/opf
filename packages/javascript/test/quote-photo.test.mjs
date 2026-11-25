@@ -80,10 +80,10 @@ test('a right-to-left deck mirrors the photo to the right edge', () => {
 
 test('the photo shrinks with the footer toward the readability floor and overflow is reported', () => {
   const tight = {x:0,y:0,width:300,height:270};
-  const compact = layoutQuote({text:'Keep the complete body. '.repeat(10),attribution:'Author',role:'Title',photo:'a.png'},tight,{minFontSize:16});
+  const compact = layoutQuote({text:'Keep the complete body. '.repeat(10),attribution:'Author',role:'Title',photo:'a.png'},tight,{minFontSizePx:16});
   assert.equal(compact.overflow,false);
   assert.equal(compact.photo.box.width,3*compact.parts[1].fit.fontSize);
-  const floor = layoutQuote({text:'Keep the complete body. '.repeat(10),attribution:'Author',role:'Title',photo:'a.png'},{x:0,y:0,width:300,height:260},{minFontSize:16});
+  const floor = layoutQuote({text:'Keep the complete body. '.repeat(10),attribution:'Author',role:'Title',photo:'a.png'},{x:0,y:0,width:300,height:260},{minFontSizePx:16});
   assert.equal(floor.overflow,false);
   assert.equal(floor.parts[1].fit.fontSize,16);
   assert.equal(floor.photo.box.width,48);
@@ -118,7 +118,7 @@ test('composeSlide carries the photo on the quote item and measures it with the 
 
 test('pagination repeats the role and the photo with each page of a split quote', () => {
   const long = {text:'A long quote that must continue over several pages. '.repeat(120),attribution:'Priya Raman',role:'Head of Platform',photo:{src:'p.png',alt:'Priya Raman'}};
-  const {slides} = paginateSlide({quote:long},{minFontSize:24});
+  const {slides} = paginateSlide({quote:long},{minFontSizePx:24});
   assert.ok(slides.length>1);
   for (const slide of slides) {
     assert.equal(slide.quote.role,'Head of Platform');

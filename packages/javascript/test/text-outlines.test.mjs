@@ -63,7 +63,7 @@ test('composition preserves width-only behavior and exposes the actual outline p
 test('outline failures participate in bounded fitting, candidate scores and strict errors',()=>{
   let calls=0;
   const tooWide={measure:measurement.measure,outlineBounds:()=>{calls++;return {x:0,y:-10,width:10000,height:20};}};
-  const slide={composition:{mode:'auto',minFontSize:24},blocks:[{text:'Keep every word'},{text:'Also keep this'}]};
+  const slide={composition:{mode:'auto',minFontSizePx:24},blocks:[{text:'Keep every word'},{text:'Also keep this'}]};
   const result=composeSlide(slide,{textMeasurement:tooWide,explain:true});
   assert.equal(result.diagnostics.filter(issue=>issue.code==='text-overflow').length,2);
   assert.ok(result.items.every(item=>item.text.fontSize>=24&&item.text.placement.overflow));

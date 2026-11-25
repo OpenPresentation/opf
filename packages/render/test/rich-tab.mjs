@@ -17,7 +17,7 @@ const renderOptions={trace:true,fonts:{textMeasurement,embeddedFonts:prepared.em
 const bound=resolvePresentation(deck,renderOptions).slides[0],item=bound.geometry.items.find(value=>value.field==='table');
 assert.ok(item);
 const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
-const layout=layoutTable(item.value,item.box,{scale,minFontSize:(bound.composition??bound.geometry.composition).minFontSize,fontFamily:bound.design.fonts.body,textMeasurement,path:item.path});
+const layout=layoutTable(item.value,item.box,{scale,minFontSizePx:(bound.composition??bound.geometry.composition).minFontSizePx,fontFamily:bound.design.fonts.body,textMeasurement,path:item.path});
 const cell=layout.rows[0].cells[0],fragments=cell.fit.richLines.flatMap(line=>line.fragments),tab=fragments.find(fragment=>fragment.kind==='tab');
 assert.ok(tab);
 assert.equal(cell.fit.lines.join(''),sourceText);

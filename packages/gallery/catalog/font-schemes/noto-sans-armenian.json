@@ -3,7 +3,7 @@
   "id": "noto-sans-armenian",
   "name": "Noto Sans Armenian",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "hy"
   ],

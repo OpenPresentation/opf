@@ -179,7 +179,7 @@
             {
               "value": "Load test",
               "style": {
-                "verticalAlign": "top",
+                "anchor": "top",
                 "padding": {
                   "top": 12,
                   "right": 8,
@@ -203,7 +203,7 @@
             {
               "value": "Passed",
               "style": {
-                "verticalAlign": "middle",
+                "anchor": "middle",
                 "borders": {
                   "left": {
                     "color": "dark2",
@@ -221,7 +221,7 @@
             {
               "value": "Peak traffic held for two hours without errors",
               "style": {
-                "verticalAlign": "bottom",
+                "anchor": "bottom",
                 "align": "start"
               }
             }
@@ -274,7 +274,7 @@
               "value": "Platform",
               "rowSpan": 2,
               "style": {
-                "verticalAlign": "middle",
+                "anchor": "middle",
                 "bold": true
               }
             },

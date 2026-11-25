@@ -262,7 +262,7 @@
       "title": "Program Sponsor",
       "photo": "asset:supporting-photo",
       "email": "maya@bloom-and-anchor-beauty.example",
-      "organizationId": "bloom-and-anchor-beauty",
+      "organization": "bloom-and-anchor-beauty",
       "socials": {
         "linkedin": "@maya-chen"
       }
@@ -271,7 +271,7 @@
       "id": "jon",
       "name": "Jon Alvarez",
       "title": "Operating Lead",
-      "organizationId": "bloom-and-anchor-beauty",
+      "organization": "bloom-and-anchor-beauty",
       "socials": {
         "tiktok": "@jon-alvarez"
       }
@@ -646,7 +646,7 @@
         "tahoma": {
           "name": "Tahoma",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tahoma",
           "minor": "Tahoma",
@@ -657,7 +657,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

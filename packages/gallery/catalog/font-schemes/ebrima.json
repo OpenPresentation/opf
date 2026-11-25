@@ -3,7 +3,7 @@
   "id": "ebrima",
   "name": "Ebrima",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "am"
   ],

@@ -10,7 +10,7 @@ const fonts=await loadFonts({pack: 'office'});
 let cases=0,lines=0;
 for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
   for (const quote of ['Shorthand source',{text:'A quote with its original context.',attribution:'Author',source:'Citation'}]) {
-    const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{composition:{mode:'column',minFontSize:24},blocks:[{blocks:[{quote}]}]}]};
+    const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{composition:{mode:'column',minFontSizePx:24},blocks:[{blocks:[{quote}]}]}]};
     let calls=0;
     const textMeasurement={...fonts.textMeasurement,measure:(...args)=>{calls++;return fonts.textMeasurement.measure(...args);}};
     const bound=resolvePresentation(deck,{fonts:{textMeasurement}}).slides[0],expectedCalls=calls;

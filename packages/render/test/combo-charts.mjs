@@ -64,7 +64,7 @@ const textsAt = (svg, path) => [...svg.matchAll(/<g\b([^>]*data-opf-source-text=
 // 3. Column series first: a line named in the middle of the data is drawn after the columns, traced to its authored column.
 {
   const data = { columns: ["Quarter", "A", "B", "C"], rows: [["Q1", 1, 2, 3], ["Q2", 2, 3, 4]] };
-  const svg = toSvg({ design: { fontScheme: "roboto" }, slides: [{ title: "Order", chart: { type: "combo", data, line: ["A"] } }] }, 1, { trace: true });
+  const svg = toSvg({ design: { fontScheme: "roboto" }, slides: [{ title: "Order", chart: { type: "combo", data, lineSeries: ["A"] } }] }, 1, { trace: true });
   const line = marks(svg, "polyline").find((polyline) => polyline["data-opf-path"] === "slides.0.chart.data.columns.1");
   assert.ok(line, "the line traces to its authored column A");
   const bars = marks(svg, "rect").filter((rect) => /\.data\.rows\.\d\.[23]$/.test(rect["data-opf-path"] ?? ""));

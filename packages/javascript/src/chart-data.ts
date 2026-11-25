@@ -588,12 +588,12 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     series = [x];
     x = undefined;
   }
-  // FA-15: a combo chart draws its series as clustered columns, except the ones `line` names (default: the last series),
+  // FA-15: a combo chart draws its series as clustered columns, except the ones `lineSeries` names (default: the last series),
   // which are lines with markers; `secondaryAxis` moves line series to a secondary value axis. Column series come first, then
   // the primary-axis lines, then the secondary-axis lines (one native chart group each, so the PPTX series order is this order).
   let combo: ChartComboSeries[] | undefined;
   if (record(chart) && chartOptionTarget(chart.type)?.kind === 'combo') {
-    const listed = (option: 'line' | 'secondaryAxis', problem: (column: number) => string | undefined): Set<number> => {
+    const listed = (option: 'lineSeries' | 'secondaryAxis', problem: (column: number) => string | undefined): Set<number> => {
       const found = new Set<number>();
       const value = chart[option];
       if (!Array.isArray(value)) return found;
@@ -608,11 +608,11 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
       return found;
     };
     const notPlotted = 'is not a plotted series of the chart';
-    const lines = listed('line', column => series.includes(column) ? undefined : `${notPlotted}; it is not drawn as a line`);
-    if (chart.line === undefined && series.length >= 2) lines.add(series[series.length - 1]!);
+    const lines = listed('lineSeries', column => series.includes(column) ? undefined : `${notPlotted}; it is not drawn as a line`);
+    if (chart.lineSeries === undefined && series.length >= 2) lines.add(series[series.length - 1]!);
     if (series.length && series.every(column => lines.has(column))) {
       lines.delete(series[0]!);
-      diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path: at(base, chart.line === undefined ? 'type' : 'line'), message: series.length === 1
+      diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path: at(base, chart.lineSeries === undefined ? 'type' : 'lineSeries'), message: series.length === 1
         ? `a combo chart needs at least two series, one drawn as columns and one as a line; its one series ${JSON.stringify(names[series[0]!])} is drawn as columns`
         : `a combo chart keeps at least one column series; ${JSON.stringify(names[series[0]!])} is drawn as columns, not as a line` });
     } else if (series.length === 1) {

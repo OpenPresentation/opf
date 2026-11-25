@@ -508,10 +508,10 @@ export interface ResolvedColorRoles {
 export interface ResolveColorRolesOptions {
   /** The slide's resolved single-color background (solid, theme-slot or pattern background color). Omit for a gradient, picture or no background. */
   background?: string | null;
-  /** The slide's variant (RR-96), as authored (`"dark1"` or the object form). It sets the map; without it the background's luminance (or `tone`) chooses light1 or dark1. */
+  /** The slide's variant (RR-96), as authored (`"dark1"` or the object form). It sets the map; without it the background's luminance (or `appearance`) chooses light1 or dark1. */
   variant?: ColorVariantInput;
-  /** `dark` or `light` for a picture or gradient background that names its tone: it chooses dark1 or light1 when there is no `variant`. */
-  tone?: 'dark' | 'light';
+  /** `dark` or `light` for a picture or gradient background that names its appearance: it chooses dark1 or light1 when there is no `variant`. */
+  appearance?: 'dark' | 'light';
 }
 
 /**
@@ -520,7 +520,7 @@ export interface ResolveColorRolesOptions {
  *
  * RR-96: the roles come from the variant's map over the scheme's slots, as PowerPoint's roles do: background is bg1, text tx1,
  * textSecondary tx2, surface bg2, and primary, secondary and accent the first three accents in the variant's order. Without
- * `options.variant` the map is chosen from the slide: `options.tone` for a picture or gradient that names one, else the luminance of
+ * `options.variant` the map is chosen from the slide: `options.appearance` for a picture or gradient that names one, else the luminance of
  * `options.background` ({@link isDarkColor}; dark1 when dark, light1 otherwise), which is the earlier behavior. Role overrides on the
  * scheme (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) win over the slots they default to; a
  * `text` override applies only on a light background, so a dark slide always gets readable light text. `roles.neutrals` holds every
@@ -533,7 +533,7 @@ export function resolveColorRoles(colorScheme: Record<string, unknown>, options:
   const explicit = normalizeColorVariant(options.variant);
   // The slide background decides light or dark when no variant does: a named tone, else the luminance of the resolved color.
   const explicitBackground = keepAlpha(options.background);
-  const variant: ColorVariant = explicit ?? { background: (options.tone ? options.tone === 'dark' : isDarkColor(explicitBackground ?? defaultSlideBackground(colorScheme))) ? 'dark1' : 'light1' };
+  const variant: ColorVariant = explicit ?? { background: (options.appearance ? options.appearance === 'dark' : isDarkColor(explicitBackground ?? defaultSlideBackground(colorScheme))) ? 'dark1' : 'light1' };
   const map = colorMapFor(variant, colorScheme);
   // The slide is dark where its text is the light family: dark1, dark2, and an accent that takes light text (LH-01).
   const dark = map.tx1 === 'light1';

@@ -3,7 +3,7 @@
   "id": "rockwell",
   "name": "Rockwell",
   "app": "powerpoint",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Rockwell",
   "minor": "Rockwell",

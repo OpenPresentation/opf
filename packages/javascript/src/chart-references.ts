@@ -60,7 +60,7 @@ export function placeReferences(refs:readonly ChartReference[],data:ResolvedChar
   const plot={x:box.x+inset.left,y:box.y+inset.top,width:box.width-inset.left-inset.right,height:box.height-inset.top-inset.bottom};
   if(!(plot.width>1&&plot.height>1))return undefined;
   const horizontal=geometry.horizontal===true,rtl=geometry.direction==='rtl',count=data.rows.length,native=!horizontal&&count>=2;
-  const font=chartTextSize({...box,scale:geometry.scale,minFontSize:geometry.minFontSize})*geometry.scale,lineHeight=font*1.5,gap=font*0.1;
+  const font=chartTextSize({...box,scale:geometry.scale,minFontSizePx:geometry.minFontSizePx})*geometry.scale,lineHeight=font*1.5,gap=font*0.1;
   // A label can use either adjacent side. Test actual ordinary line/marker ink as well as earlier labels.
   const segments:{x1:number;y1:number;x2:number;y2:number;pad:number}[]=[];
   if(!horizontal&&(data.combo||geometry.chartType===undefined||['line','line-with-markers','area'].includes(geometry.chartType))){

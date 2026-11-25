@@ -3,7 +3,7 @@
   "id": "aparajita",
   "name": "Aparajita",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "hi",
     "ne"

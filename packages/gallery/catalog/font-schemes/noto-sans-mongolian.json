@@ -3,7 +3,7 @@
   "id": "noto-sans-mongolian",
   "name": "Noto Sans Mongolian",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "mn"
   ],

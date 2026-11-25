@@ -3,7 +3,7 @@
   "id": "calibri",
   "name": "Calibri",
   "app": "powerpoint",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Calibri",
   "minor": "Calibri",

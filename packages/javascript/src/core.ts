@@ -214,6 +214,6 @@ export type {
   FontReplacementMeasurement,
   FontScriptReplacement,
 } from './font-policy.js';
-// A font scheme's `languageFamily` catalog value, read as one of the three OOXML script slots.
-export { normalizeLanguageFamily } from './script-fonts.js';
-export type { LanguageFamilyName } from './script-fonts.js';
+// A font scheme's `scriptGroup` catalog value, read as one of the three OOXML script slots.
+export { normalizeScriptGroup } from './script-fonts.js';
+export type { ScriptGroupName } from './script-fonts.js';

@@ -269,7 +269,7 @@
     "id": "speaker",
     "name": "Maya Chen",
     "title": "Program Sponsor",
-    "organizationId": "granite-id",
+    "organization": "granite-id",
     "bio": "Leads incident review planning for Granite ID.",
     "socials": {
       "mastodon": "@granite-id-speaker"
@@ -597,7 +597,7 @@
         "trebuchet-ms": {
           "name": "Trebuchet MS",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Trebuchet MS",
           "minor": "Trebuchet MS",
@@ -608,7 +608,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

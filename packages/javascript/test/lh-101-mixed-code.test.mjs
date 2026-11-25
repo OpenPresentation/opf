@@ -30,7 +30,7 @@ test('explicit gap and row weights keep the exact settled note and panel frames'
  const slide=structuredClone(fixtures[0].slide);slide.composition.gap=.02;const before=composeSlide(slide,{...options('ltr'),fill:false}),after=composeSlide(slide,options('ltr'));assert.equal(after.composition.gap,.02);assert.deepEqual(after.composition.weights,[3,2]);assert.deepEqual(after.items.filter(i=>!i.codeLayout),before.items.filter(i=>!i.codeLayout));assert.deepEqual(panel(after).box,panel(before).box);assert.ok(body(after).fit.fontSize>22);
 });
 test('author minimum, maximum and fill:false keep the existing code size',()=>{
- for(const settings of[{minFontSize:18},{maxFontSize:24}]){const slide=structuredClone(fixtures[0].slide);Object.assign(slide.composition,settings);const a=composeSlide(slide,options('ltr')),b=composeSlide(slide,{...options('ltr'),fill:false});assert.deepEqual(a.items,b.items);}
+ for(const settings of[{minFontSizePx:18},{maxFontSizePx:24}]){const slide=structuredClone(fixtures[0].slide);Object.assign(slide.composition,settings);const a=composeSlide(slide,options('ltr')),b=composeSlide(slide,{...options('ltr'),fill:false});assert.deepEqual(a.items,b.items);}
  const off=composeSlide(fixtures[0].slide,{...options('ltr'),fill:false});assert.equal(body(off).fit.fontSize,22);
 });
 // C07: a snippet and its aside in the code layout grow together as a body (code to its 32 px display size); the panel still hugs its code.

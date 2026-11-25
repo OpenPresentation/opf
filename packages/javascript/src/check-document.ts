@@ -169,7 +169,7 @@ export function issueFinding(
 	let help =
 		'Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.';
 	if (issue.keyword === 'required' && issue.params.missingProperty === 'id' && /^\/(organization|speaker)(\/\d+)?$/.test(issue.path))
-		help = `Add an "id" next to "name": organizations and speakers are found by id (speaker.organizationId, {{organization.<id>.name}}, the editor and the PPTX round trip), for example "id": "acme" (letters, digits, "-" and "_", unique in the deck).`;
+		help = `Add an "id" next to "name": organizations and speakers are found by id (speaker.organization, {{organization.<id>.name}}, the editor and the PPTX round trip), for example "id": "acme" (letters, digits, "-" and "_", unique in the deck).`;
 	else if (issue.keyword === 'required')
 		help = `Add the required ${JSON.stringify(issue.params.missingProperty)} field in this object, using the intended schema form.`;
 	else if (issue.keyword === 'additionalProperties')

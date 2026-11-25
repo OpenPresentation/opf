@@ -3,7 +3,7 @@
   "id": "raavi",
   "name": "Raavi",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "pa-Guru"
   ],

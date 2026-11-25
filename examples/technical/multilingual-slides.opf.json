@@ -101,7 +101,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",
@@ -112,7 +112,7 @@
         "noto-sans-arabic": {
           "name": "Noto Sans Arabic",
           "app": "google-slides",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "ar",
             "ps",

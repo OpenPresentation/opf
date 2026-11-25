@@ -264,7 +264,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "juniper-legal",
+    "organization": "juniper-legal",
     "bio": "Leads legal operations planning for Juniper Legal.",
     "socials": {
       "github": "@juniper-legal-speaker"
@@ -623,7 +623,7 @@
         "calibri": {
           "name": "Calibri",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Calibri",
           "minor": "Calibri",
@@ -634,7 +634,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

@@ -142,8 +142,8 @@ describe("presentation shapes that must validate", () => {
         { id: "partner", name: "Partner Co", role: "partner" },
       ],
       speaker: [
-        { id: "alice", name: "Alice Chen", organizationId: "acme" },
-        { id: "bob", name: "Bob Lee", organizationId: "partner" },
+        { id: "alice", name: "Alice Chen", organization: "acme" },
+        { id: "bob", name: "Bob Lee", organization: "partner" },
       ],
       author: ["Alice Chen", "Bob Lee"],
       takeaway: ["First point", "Second point"],

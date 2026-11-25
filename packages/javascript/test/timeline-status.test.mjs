@@ -72,7 +72,7 @@ test('the vertical rail makes room for the ring and keeps the text distance from
 });
 
 test('a ring that does not fit reports the marker as out of space instead of drawing outside the box', () => {
-  const tiny = layoutTimeline(withStatus('current'), { x: 0, y: 0, width: 200, height: 50 }, { minFontSize: 8 });
+  const tiny = layoutTimeline(withStatus('current'), { x: 0, y: 0, width: 200, height: 50 }, { minFontSizePx: 8 });
   for (const marker of tiny.markers) if (marker.ring) assert.ok(tiny.diagnostics.some((d) => d.path === marker.path) || marker.x - marker.ring.radius >= -0.01);
 });
 
@@ -122,7 +122,7 @@ test('composition carries the status through nested layouts', () => {
 
 test('pagination keeps each event with its status', () => {
   const many = Array.from({ length: 8 }, (_, index) => ({ when: `Q${index + 1}`, what: `Milestone ${index + 1}`, description: 'Keep every label inside its allocated space and preserve every source detail.', status: ['done', 'current', 'planned'][index % 3] }));
-  const paged = paginateSlide({ title: 'Plan', timeline: { events: many }, composition: { minFontSize: 32 } }, { minFontSize: 32 });
+  const paged = paginateSlide({ title: 'Plan', timeline: { events: many }, composition: { minFontSizePx: 32 } }, { minFontSizePx: 32 });
   assert.ok(paged.slides.length > 1);
   assert.deepEqual(paged.slides.flatMap((slide) => slide.timeline.events), many);
 });

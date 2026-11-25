@@ -3,7 +3,7 @@
   "id": "arabic-typesetting",
   "name": "Arabic Typesetting",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "ar"
   ],

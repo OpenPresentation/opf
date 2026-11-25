@@ -7,7 +7,7 @@ import { composeSlide, layoutTable } from '../dist/composition.js';
 const data = { columns: ['Region', 'Revenue'], rows: [['North', 42], ['South', 31]] };
 const table = { columns: ['Region', 'Revenue'], rows: [['North', '$4.2M'], ['South', '$3.1M']] };
 const compose = (slide, options = {}) => composeSlide(slide, { width: 1280, height: 720, ...options });
-const size = (item) => Math.min(...layoutTable(item.value, item.box, { scale: 1, minFontSize: item.composition.minFontSize, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap((row) => row.cells.map((cell) => cell.fit.fontSize)));
+const size = (item) => Math.min(...layoutTable(item.value, item.box, { scale: 1, minFontSizePx: item.composition.minFontSizePx, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap((row) => row.cells.map((cell) => cell.fit.fontSize)));
 
 for (const type of ['column', 'line', 'pie']) test(`a short table beside a ${type} chart grows beside it (the chart's top line, or centered beside a pie)`, () => {
   const slide = { title: `${type} + table`, blocks: [{ chart: { type, title: 'Revenue by region', data } }, { table }] };

@@ -50,7 +50,7 @@ const valid=value=>validate(value,{only:['format']}).valid;
 const {loadFonts}=await load('@openpresentation/opf-render','./fonts-node');
 const registry=await loadFonts({pack:'office'}),results=[];
 for (const fixture of metricLayoutFixtures()) {
-  const {id,family,dimensions,document,metric,minFontSize,overflow}=fixture,before=JSON.stringify(document);
+  const {id,family,dimensions,document,metric,minFontSizePx,overflow}=fixture,before=JSON.stringify(document);
   assert.equal(valid(document),true);
   let rendererRejected=false;
   if (fixture.missingGlyph) {
@@ -69,7 +69,7 @@ for (const fixture of metricLayoutFixtures()) {
   const bound=resolvePresentation(document,fixture.missingGlyph?{}:{fonts:registry}).slides[0];
   assert.deepEqual(bound.design.dimensions,dimensions);
   const box=bound.geometry.items[0].box,scale=Math.min(dimensions.width,dimensions.height)/720;
-  const options={fontFamilies:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.metric',minFontSize,scale};
+  const options={fontFamilies:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.metric',minFontSizePx,scale};
   if (fixture.missingGlyph) {
     let error;
     assert.throws(()=>layoutMetric(metric,box,options),actual=>{
@@ -78,7 +78,7 @@ for (const fixture of metricLayoutFixtures()) {
       error={code:actual.code,details:actual.details};return true;
     });
     assert.equal(JSON.stringify(document),before);
-    results.push({id,family,dimensions,box,scale,minFontSize,error,rendererRejectedMissingGlyph:rendererRejected,sourceUnchanged:true});
+    results.push({id,family,dimensions,box,scale,minFontSizePx,error,rendererRejectedMissingGlyph:rendererRejected,sourceUnchanged:true});
     continue;
   }
   const layout=layoutMetric(metric,box,options);
@@ -87,7 +87,7 @@ for (const fixture of metricLayoutFixtures()) {
   assert.equal(JSON.stringify(document),before);assert.equal(layout.textMeasurement,'provided');
   assert.ok(layout.attempts>=1&&layout.attempts<=48);
   for (const part of layout.parts) {
-    assert.equal(part.text,String(part.sources[0].value));assert.ok(part.requestedFontSize>=minFontSize*scale);
+    assert.equal(part.text,String(part.sources[0].value));assert.ok(part.requestedFontSize>=minFontSizePx*scale);
     // LH-53 (LH wave 4, #1000): the trend takes no text line of its own. It is drawn as an arrow square before its host's first line
     // (the delta, else the label, else the description) or on its own placed line without one; the part then draws no text, and its
     // source text stays the arrow's text alternative. So its fit has no lines and its box is the arrow's square inside the metric.
@@ -98,7 +98,7 @@ for (const fixture of metricLayoutFixtures()) {
       continue;
     }
     if (part.fit) {
-      assert.ok(part.fit.fontSize>=part.minFontSize);
+      assert.ok(part.fit.fontSize>=part.minFontSizePx);
       assert.equal(part.fit.sourceLines.map(line=>part.text.slice(line.start,line.nextStart)).join(''),part.text);
       assert.deepEqual(part.fit.lines,part.fit.sourceLines.map(line=>part.text.slice(line.start,line.end)));
       for (const line of part.fit.sourceLines) {
@@ -116,9 +116,9 @@ for (const fixture of metricLayoutFixtures()) {
   if (overflow) assert.throws(()=>layoutMetric(metric,box,{...options,overflow:'error'}),error=>{
     assert.ok(error instanceof OPFCompositionError);assert.deepEqual(error.diagnostics,layout.diagnostics);return true;
   });
-  results.push({id,family,dimensions,box,scale,minFontSize,overflow,algorithm:layout.algorithm,arrangement:layout.arrangement,attempts:layout.attempts,
+  results.push({id,family,dimensions,box,scale,minFontSizePx,overflow,algorithm:layout.algorithm,arrangement:layout.arrangement,attempts:layout.attempts,
     diagnostics:layout.diagnostics,parts:layout.parts.map(part=>({role:part.role,path:part.path,visible:part.visible,textSha256:hash(part.text),sourceLength:part.text.length,
-      sourceType:typeof part.sources[0].value,box:part.box,requestedFontSize:part.requestedFontSize,minFontSize:part.minFontSize,requestedStyle:part.requestedStyle,style:part.style,
+      sourceType:typeof part.sources[0].value,box:part.box,requestedFontSize:part.requestedFontSize,minFontSizePx:part.minFontSizePx,requestedStyle:part.requestedStyle,style:part.style,
       fit:part.fit?{fontSize:part.fit.fontSize,lineHeight:part.fit.lineHeight,lineCount:part.fit.lines.length,
         maximumLineWidth:Math.max(0,...part.fit.sourceLines.map(line=>line.width)),sourceReconstructedExactly:true,overflow:part.fit.overflow}:null}))});
 }

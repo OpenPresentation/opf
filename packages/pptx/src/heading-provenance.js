@@ -23,7 +23,7 @@ function joinTitleParagraphs(list,data) {
   if(!Array.isArray(list)||list.length<2)return list;
   const hard=hardBreaksOf(data,list.length);
   const text=list.map((paragraph,index)=>(index&&hard.has(index)?'\n':'')+String(paragraph?.text??'')).join('');
-  const merged={...list[0],text,maxFontSize:Math.max(0,...list.map(paragraph=>paragraph?.maxFontSize??0))};
+  const merged={...list[0],text,maxFontSizePx:Math.max(0,...list.map(paragraph=>paragraph?.maxFontSizePx??0))};
   if(!list.some(paragraph=>paragraph?.richText!==undefined))return [merged];
   const runs=[];
   for(const [index,paragraph] of list.entries()) {

@@ -13,7 +13,7 @@ export function continuationFonts(composed: SlideComposition, options: ComposeSl
   for (const item of composed.items) {
     if (['title','subtitle','tag'].includes(item.field) || item.eyebrow) continue;
     const kind = item.field === 'items' || item.field === 'bullets' ? 'list' : item.field;
-    const constraints = JSON.stringify([item.composition.minFontSize??16,item.composition.maxFontSize??null]);
+    const constraints = JSON.stringify([item.composition.minFontSizePx??16,item.composition.maxFontSizePx??null]);
     const add = (size: number, part: string, role: string, style: any, run: any = {}, automatic = true) => {
       if (!Number.isFinite(size) || size <= 0) return;
       const family = record(style).sourceFontFamily??record(style).fontFamily;
@@ -43,7 +43,7 @@ export function continuationFonts(composed: SlideComposition, options: ComposeSl
       fit(part.fit,String(part.path).slice(item.path.length),part.role,part.style);
     }
     else if (item.field==='table') {
-      const table=layoutTable(item.value as any,item.box,{scale,minFontSize:item.composition.minFontSize,fontFamily:options.fontFamilies?.body,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),textMeasurement:options.textMeasurement,path:item.path,presentation:options.presentation,...(item.tableGrowth?{growth:item.tableGrowth}:{})});
+      const table=layoutTable(item.value as any,item.box,{scale,minFontSizePx:item.composition.minFontSizePx,fontFamily:options.fontFamilies?.body,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),textMeasurement:options.textMeasurement,path:item.path,presentation:options.presentation,...(item.tableGrowth?{growth:item.tableGrowth}:{})});
       for (const [rowIndex,row] of table.rows.entries()) for (const [columnIndex,cell] of row.cells.entries()) fit(cell.fit,`cell.${rowIndex}.${columnIndex}`,'cell',item.textStyle);
     } else if (item.listColumns?.length) {
       // Column boundaries may change; the source entry indexes remain stable.

@@ -383,7 +383,7 @@ export function importNativeTextFragments(shapes,paragraphs,relationships,entrie
    }
   }
   const text=richText.map(run=>typeof run==='string'?run:run.text).join('');
-  const carrier=ordered[0],paragraph={...paragraphs[carrier.index][0],text,richText,maxFontSize:Math.max(...ordered.map((member,index)=>current[index][0].maxFontSize??paragraphs[member.index]?.[0]?.maxFontSize??0))};
+  const carrier=ordered[0],paragraph={...paragraphs[carrier.index][0],text,richText,maxFontSizePx:Math.max(...ordered.map((member,index)=>current[index][0].maxFontSizePx??paragraphs[member.index]?.[0]?.maxFontSizePx??0))};
   items.push({carrier:carrier.shape,shapes:ordered.map(member=>member.shape),paragraphs:[paragraph]});
   // Consumption is committed by the caller only after carrier conversion succeeds.
   if(propertiesChanged||!groupUnchanged(ordered,paragraphs))report({code:'native-fragment-reflow',message:'Complete owned fragments retain current native text and styles; native edits or movement require reflow review.'});

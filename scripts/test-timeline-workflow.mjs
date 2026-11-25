@@ -57,7 +57,7 @@ try {
   if(fixture===2){timeline={events:[{when:'Now',what:original,description:'Blank labels remain editable.'}]};fieldPath='slides.0.blocks.0.blocks.0.timeline.events.0.what';slide={blocks:[{blocks:[{timeline}]},{text:'Keep this neighboring source.'}],composition:{mode:'row',weights:[2,1]}};}
   if(fixture===3){timeline={events:[{when:'Q1',what:'Pilot',description:'Keep all source detail and enough readable space for this milestone.'},{when:'Q2',what:'Expand',description:'Keep all source detail and enough readable space for this milestone.'}]};fieldPath='slides.0.blocks.0.timeline.events.0.what';slide={blocks:[{timeline},{text:'Keep this neighboring source.'}],composition:{mode:'row',weights:[1,2]}};}
   const actualOriginal=fixture===3?'Pilot':original;
-  slide={title:'Timeline editing',...slide,composition:{...slide.composition,minFontSize:24,overflow:'error'}};
+  slide={title:'Timeline editing',...slide,composition:{...slide.composition,minFontSizePx:24,overflow:'error'}};
   const deck = withRecords({design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96}},slides:[slide]});
   activeCase={measured,width,height,fixture,deck};
   await page.evaluate(args=>mount(args),{deck,faces:registry.embeddedFonts,measured});
@@ -67,7 +67,7 @@ try {
    const irreducible=structuredClone(deck);irreducible.slides[0].composition.weights=[1,4];
    const rejection=await page.evaluate(args=>verifyTimelineRejected(args),{deck:irreducible,measured});assert.equal(rejection.rejected,true);
    assert.deepEqual(rejection.diagnostics.map(item=>({reason:item.reason,path:item.path})),[0,1].map(index=>({reason:'text-fit',path:`slides.0.blocks.0.timeline.events.${index}.description`})));
-   rejections.push({measured,width,height,weights:[1,4],minFontSize:24,...rejection});
+   rejections.push({measured,width,height,weights:[1,4],minFontSizePx:24,...rejection});
   }
   const geometry=await page.evaluate(async()=>{
    await document.fonts.ready;

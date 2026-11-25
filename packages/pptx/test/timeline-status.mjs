@@ -12,7 +12,7 @@ const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseT
 const fontOptions={fonts:await loadFonts()};
 const events=[{when:'Q1',what:'Discovery',description:'Interviews.'},{when:'Q2',what:'Pilot'},{when:'Q3',what:'Rollout'},{what:'Review'}];
 const withStatus=(...statuses)=>events.map((event,i)=>statuses[i]?{...event,status:statuses[i]}:{...event});
-const deckOf=timeline=>({design:{fontScheme:'roboto'},slides:[{title:'Roadmap',composition:{minFontSize:24,overflow:'error'},timeline}]});
+const deckOf=timeline=>({design:{fontScheme:'roboto'},slides:[{title:'Roadmap',composition:{minFontSizePx:24,overflow:'error'},timeline}]});
 const shapesOf=async(deck,options)=>{
   const bytes=await toPptx(deck,options),entries=unzipSync(bytes),xml=decode(entries['ppt/slides/slide1.xml']);
   const tree=parser.parse(xml)['p:sld']['p:cSld']['p:spTree'];

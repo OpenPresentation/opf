@@ -31,8 +31,8 @@ for (const align of ['start', 'center', 'end']) {
       ],
     };
     const deck = { design: { fontScheme, theme: 'classic', contentAlignment: align, dimensions: {widthInches: 1280 * scale / 96, heightInches: 720 * scale / 96} }, slides: [{
-      title: 'Measured table', composition: { mode: 'row', weights: [1, 4], minFontSize: 14 },
-      blocks: [{ composition: { mode: 'column', minFontSize: 8 }, blocks: [{ table }] }, { text: 'Supporting context' }],
+      title: 'Measured table', composition: { mode: 'row', weights: [1, 4], minFontSizePx: 14 },
+      blocks: [{ composition: { mode: 'column', minFontSizePx: 8 }, blocks: [{ table }] }, { text: 'Supporting context' }],
     }] };
     const geometry = composeSlide(deck.slides[0], { width: 1280 * scale, height: 720 * scale, fontFamilies: {body:family,heading:family}, textMeasurement: fonts.textMeasurement });
     const item = geometry.items.find(item => item.field === 'table');

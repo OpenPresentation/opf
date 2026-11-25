@@ -1172,7 +1172,7 @@ function renderList(item, box, bound, options) {
     return tag('g',{...traceAttrs(options,item.path),...(item.listColumns.some(column=>column.text.overflow)?{'data-opf-overflow':'true'}:{})},columns.join('\n'));
   }
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
-  const fit=item.text?.listEntries?item.text:fitList(item.value,box,25*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,{style:{fontFamily:bound.design.fonts.body,fontWeight:400,path:item.path},...(bound.design.fonts.code?{codeFontFamily:bound.design.fonts.code}:{}),textMeasurement:options.textMeasurement,...(item.payload?.numbering!==undefined?{numbering:item.payload.numbering}:{})});
+  const fit=item.text?.listEntries?item.text:fitList(item.value,box,25*scale,((bound.composition??bound.geometry.composition).minFontSizePx??16)*scale,{style:{fontFamily:bound.design.fonts.body,fontWeight:400,path:item.path},...(bound.design.fonts.code?{codeFontFamily:bound.design.fonts.code}:{}),textMeasurement:options.textMeasurement,...(item.payload?.numbering!==undefined?{numbering:item.payload.numbering}:{})});
   return tag('g',{...traceAttrs(options,item.path),...(fit.overflow?{'data-opf-overflow':'true'}:{})},listEntriesSvg(item,fit,bound,options).join('\n'));
 }
 
@@ -1453,7 +1453,7 @@ function renderImage(item, box, bound, options) {
   const description=asset.alt??asset.title??'Image';
   const label=`Image unavailable\n${description}`;
   const style=resolveTextStyle({fontFamily:bound.design.fonts.body,fontWeight:600,path:item.path},options.textMeasurement);
-  const fit=fitText(label,inner,20*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,textWidthMeasurer(style,options.textMeasurement));
+  const fit=fitText(label,inner,20*scale,((bound.composition??bound.geometry.composition).minFontSizePx??16)*scale,textWidthMeasurer(style,options.textMeasurement));
   const textColor=textColorForFill(fill,bound.design.colors.text);
   reportDiagnostic({code:'unresolved-asset',path:item.path,message,reason,source:asset.src,assetId:missingReference,description,placeholder:fit.overflow?'icon':'label'},options);
   const children = [
@@ -1752,7 +1752,7 @@ function renderTimeline(item, box, bound, options) {
 
 function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, ...(typeof bound.scriptFonts?.profile?.bcp47 === "string" ? {language:bound.scriptFonts.profile.bcp47} : {}), alignment:itemAlignment(bound.geometry.design.contentAlignment), ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {})});
+  const layout = layoutTable(item.value, box, {scale, minFontSizePx:(bound.composition ?? bound.geometry.composition).minFontSizePx, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, ...(typeof bound.scriptFonts?.profile?.bcp47 === "string" ? {language:bound.scriptFonts.profile.bcp47} : {}), alignment:itemAlignment(bound.geometry.design.contentAlignment), ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {})});
   const children = [];
   // LH-113: a highlighted row (table.highlight, or the rows the slide's texts name) draws on an accent tint of the surface.
   const highlightFill = layout.rows.some((row) => row.cells.some((cell) => cell.highlighted)) ? tableHighlightColor(bound.design.colors.surface, bound.design.colors.primary, bound.design.colors.text) : undefined;
@@ -2295,7 +2295,7 @@ function renderEmbeddedFonts(fonts = []) {
 
 function renderRichTextBox(value, box, bound, config) {
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
-  const fit=config.fit??fitRichText(value,box,config.fontSize*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,{style:{fontFamily:config.fontFamily,fontWeight:config.fontWeight??400,path:config.path},...(bound.design.fonts.code?{codeFontFamily:bound.design.fonts.code}:{}),textMeasurement:config.options.textMeasurement});
+  const fit=config.fit??fitRichText(value,box,config.fontSize*scale,((bound.composition??bound.geometry.composition).minFontSizePx??16)*scale,{style:{fontFamily:config.fontFamily,fontWeight:config.fontWeight??400,path:config.path},...(bound.design.fonts.code?{codeFontFamily:bound.design.fonts.code}:{}),textMeasurement:config.options.textMeasurement});
   if(fit.overflow&&!config.diagnosticsHandled){const diagnostic={code:'text-overflow',path:config.path,message:'Mixed-style text exceeds its cell at the minimum font size.'};reportDiagnostic(diagnostic,config.options);if((bound.composition??bound.geometry.composition).overflow==='error')throw new OPFRenderError('layout-overflow',diagnostic.message,{diagnostics:[diagnostic]});}
   return renderRichLines(value,fit,box,bound,config);
 }
@@ -2465,7 +2465,7 @@ function renderTextBox(text, box, bound, config) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
   const style = config.textStyle ?? resolveTextStyle({fontFamily:config.fontFamily,fontWeight:config.fontWeight ?? 400,italic:config.italic ?? false,path:config.path},config.options.textMeasurement);
   const fit = config.fit ?? fitText(String(text ?? ""), box, config.fontSize * scale,
-    ((bound.composition ?? bound.geometry.composition).minFontSize ?? 16) * scale, textWidthMeasurer(style,config.options.textMeasurement));
+    ((bound.composition ?? bound.geometry.composition).minFontSizePx ?? 16) * scale, textWidthMeasurer(style,config.options.textMeasurement));
   if (fit.overflow && !config.diagnosticsHandled) {
     const diagnostic = { code: "text-overflow", path: config.path,
       message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." };

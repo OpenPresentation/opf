@@ -326,7 +326,7 @@
         "roboto": {
           "name": "Roboto",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Roboto",
           "minor": "Roboto",
@@ -337,7 +337,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

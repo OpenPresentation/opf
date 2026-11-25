@@ -29,7 +29,7 @@ const png = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCA
 const deck = () => ({
   name: "Annotations fixture",
   design: { theme: "minimal", fontScheme: "aptos" },
-  references: [{ id: "gartner", text: "Gartner, Market Guide, 2026", url: "https://example.com/g" }],
+  references: [{ id: "gartner", text: "Gartner, Market Guide, 2026", link: "https://example.com/g" }],
   slides: [
     { id: "intro", title: "Intro", text: ["Growth was strong", { text: " and margins held", bold: true }] },
     { id: "media", title: "Media", blocks: [{ image: png }, { table: { columns: ["A"], rows: [[1]] } }, { text: "Not captionable" }] },
@@ -98,7 +98,7 @@ const throws = (fn, code) => { try { fn(); } catch (error) { assert.equal(error.
   throws(() => addReference(editor, { id: "annual", text: "dup" }), "duplicate-reference");
   throws(() => addReference(editor, { id: "", text: "x" }), "invalid-reference");
   throws(() => addReference(editor, { id: "x", text: "" }), "invalid-reference");
-  updateReference(editor, "gartner", { text: "Gartner, 2026", url: null });
+  updateReference(editor, "gartner", { text: "Gartner, 2026", link: null });
   assert.deepEqual(editor.presentation.references[0], { id: "gartner", text: "Gartner, 2026" });
   throws(() => updateReference(editor, "nope", { text: "x" }), "unknown-reference");
   throws(() => removeReference(editor, "gartner"), "reference-cited");

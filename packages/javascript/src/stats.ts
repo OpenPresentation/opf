@@ -104,7 +104,7 @@ export interface PresentationStats {
   };
   people: {
     organizations: { id: string; name: string; role: string | null; hasLogo: boolean }[];
-    speakers: { id: string; name: string; title: string | null; organizationId: string | null; hasPhoto: boolean }[];
+    speakers: { id: string; name: string; title: string | null; organization: string | null; hasPhoto: boolean }[];
   };
   slides: {
     total: number;
@@ -447,7 +447,7 @@ function compute(presentation: unknown, options: StatsOptions, onFile?: (src: st
   const speakers = list(deck.speaker).filter(isRecord).map((entry) => {
     const hasPhoto = srcOf(entry.photo) !== undefined;
     if (hasPhoto) { useAsset(entry.photo); images.speakerPhotos++; }
-    return { id: str(entry.id) ?? '', name: str(entry.name) ?? '', title: str(entry.title), organizationId: str(entry.organizationId), hasPhoto };
+    return { id: str(entry.id) ?? '', name: str(entry.name) ?? '', title: str(entry.title), organization: str(entry.organization), hasPhoto };
   });
   designAssets(design, 'deck');
   for (const variable of Object.values(isRecord(deck.variables) ? deck.variables : {})) if (isRecord(variable) && variable.type === 'image') useAsset(variable.value);

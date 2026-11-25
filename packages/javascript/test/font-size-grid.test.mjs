@@ -129,7 +129,7 @@ test('tables: cell sizes are on the grid and fit their rows',()=>{
   const next=random(31);
   for(let i=0;i<60;i++){
     const rows=Array.from({length:2+Math.floor(next()*5)},()=>Array.from({length:2+Math.floor(next()*3)},()=>next()<.3?[sentence(next,2),{text:'x',bold:true,fontSize:9+next()*10}]:sentence(next,1+Math.floor(next()*6))));
-    const scale=[1,.9722,1.1333][i%3],box={x:0,y:0,width:400+next()*700,height:120+next()*500},options={scale,minFontSize:12+next()*6,textMeasurement:measurement},table=layoutTable({rows},box,options);
+    const scale=[1,.9722,1.1333][i%3],box={x:0,y:0,width:400+next()*700,height:120+next()*500},options={scale,minFontSizePx:12+next()*6,textMeasurement:measurement},table=layoutTable({rows},box,options);
     assert.deepEqual(table,layoutTable({rows},box,options),'deterministic');
     for(const size of fontSizes(table))assert.ok(onGrid(size),`table ${size}px is off the grid`);
   }
@@ -140,18 +140,18 @@ test('quote, code, metric and timeline layouts compose on the grid at awkward sc
   for(const scale of [1,.9722,1.1333,2.2222,.37]){
     const cell={x:0,y:0,width:640*scale,height:300*scale};
     const results=[
-      layoutQuote({text:sentence(next,30),attribution:sentence(next,3),source:sentence(next,3)},cell,{scale,textMeasurement:measurement,minFontSize:14}),
-      layoutCode({source:Array.from({length:12},()=>sentence(next,6)).join('\n'),language:'ts',filename:'a.ts'},cell,{scale,textMeasurement:measurement,minFontSize:14}),
-      layoutMetric({value:'1,234.5',unit:'ms',label:sentence(next,3),description:sentence(next,10),delta:3,trend:'up'},cell,{scale,textMeasurement:measurement,minFontSize:14}),
-      layoutTimeline({name:'Plan',description:sentence(next,6),events:Array.from({length:4},()=>({when:'Q1',what:sentence(next,3),description:sentence(next,6)}))},{x:0,y:0,width:1100*scale,height:420*scale},{scale,textMeasurement:measurement,minFontSize:14}),
+      layoutQuote({text:sentence(next,30),attribution:sentence(next,3),source:sentence(next,3)},cell,{scale,textMeasurement:measurement,minFontSizePx:14}),
+      layoutCode({source:Array.from({length:12},()=>sentence(next,6)).join('\n'),language:'ts',filename:'a.ts'},cell,{scale,textMeasurement:measurement,minFontSizePx:14}),
+      layoutMetric({value:'1,234.5',unit:'ms',label:sentence(next,3),description:sentence(next,10),delta:3,trend:'up'},cell,{scale,textMeasurement:measurement,minFontSizePx:14}),
+      layoutTimeline({name:'Plan',description:sentence(next,6),events:Array.from({length:4},()=>({when:'Q1',what:sentence(next,3),description:sentence(next,6)}))},{x:0,y:0,width:1100*scale,height:420*scale},{scale,textMeasurement:measurement,minFontSizePx:14}),
     ];
     for(const result of results){
       const parts=result.parts??[];
       for(const part of parts){
         assert.ok(onGrid(part.requestedFontSize),`requested ${part.requestedFontSize}px is off the grid at scale ${scale}`);
-        assert.ok(onGrid(part.minFontSize),'the floor is on the grid');
+        assert.ok(onGrid(part.minFontSizePx),'the floor is on the grid');
         if(part.fit)for(const size of fontSizes(part.fit))assert.ok(onGrid(size),`${part.path} draws ${size}px at scale ${scale}`);
-        if(part.fit)assert.ok(part.fit.fontSize+1e-9>=14*scale,'minFontSize holds');
+        if(part.fit)assert.ok(part.fit.fontSize+1e-9>=14*scale,'minFontSizePx holds');
       }
     }
   }
@@ -175,7 +175,7 @@ test('composed slides: every font size in the example corpus is on the grid, at 
 test('composed slides: the floor survives snapping at an odd scale',()=>{
   const slide={title:'A title '.repeat(9),subtitle:'Subtitle '.repeat(12),blocks:[{text:sentence(random(5),80)},{items:[sentence(random(6),9),sentence(random(7),9)]}]};
   const canvas={width:1280,height:700},scale=700/720,floor=18*scale;
-  const composed=composeSlide({...slide,composition:{minFontSize:18}},canvas);
+  const composed=composeSlide({...slide,composition:{minFontSizePx:18}},canvas);
   const sizes=composed.items.flatMap(item=>item.text?fontSizes(item.text):[]);
   assert.ok(sizes.length>3);
   for(const size of sizes){assert.ok(onGrid(size));assert.ok(size+1e-9>=floor,`${size} is below ${floor}`);}

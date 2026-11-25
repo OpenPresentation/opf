@@ -334,7 +334,7 @@ export function colorChoice(levels: readonly Rec[], scheme: Rec, variables: Rec 
 		if (themeSlot) return { variant: { background: themeSlot } };
 		if (isPicture) {
 			// RR-105: a picture that names no tone takes the one its recolor, opacity and overlay imply (pictureTone), when they imply one.
-			const tone = rec(definition).tone ?? pictureTone(definition, scheme, variables);
+			const tone = rec(definition).appearance ?? pictureTone(definition, scheme, variables);
 			if (tone === 'dark' || tone === 'light') return { variant: { background: tone === 'dark' ? 'dark1' : 'light1' } };
 			variantOnly = true;
 			picture = { definition };

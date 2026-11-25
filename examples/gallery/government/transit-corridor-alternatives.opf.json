@@ -420,7 +420,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "metro-transit-authority",
+    "organization": "metro-transit-authority",
     "bio": "Leads transportation planning for Metro Transit Authority.",
     "socials": {
       "tiktok": "@metro-transit-authority-speaker"
@@ -759,7 +759,7 @@
         "georgia": {
           "name": "Georgia",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Georgia",
           "minor": "Georgia",
@@ -770,7 +770,7 @@
         "raavi": {
           "name": "Raavi",
           "app": "powerpoint",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "pa-Guru"
           ],
@@ -783,7 +783,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

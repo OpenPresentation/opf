@@ -3,7 +3,7 @@
   "id": "noto-sans-khmer",
   "name": "Noto Sans Khmer",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "km"
   ],

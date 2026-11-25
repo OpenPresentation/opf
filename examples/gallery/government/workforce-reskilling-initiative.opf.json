@@ -447,7 +447,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "state-workforce-board",
+    "organization": "state-workforce-board",
     "bio": "Leads workforce development planning for State Workforce Board.",
     "socials": {
       "tiktok": "@state-workforce-board-speaker"
@@ -683,7 +683,7 @@
         "simsun": {
           "name": "SimSun",
           "app": "powerpoint",
-          "languageFamily": "ea",
+          "scriptGroup": "eastAsian",
           "languages": [
             "zh-Hans"
           ],
@@ -696,7 +696,7 @@
         "rockwell": {
           "name": "Rockwell",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Rockwell",
           "minor": "Rockwell",
@@ -707,7 +707,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

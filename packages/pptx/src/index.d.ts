@@ -501,7 +501,7 @@ export interface PptxTextSignal {
   paragraphCount: number;
   /** Characters before any bound. */
   chars: number;
-  maxFontSize?: number;
+  maxFontSizePx?: number;
   dominantFont?: string;
   dominantSize?: number;
   /** Share (0-1) of non-space characters set in monospace families; absent when none are. */

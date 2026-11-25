@@ -3,7 +3,7 @@
   "id": "noto-sans-gujarati",
   "name": "Noto Sans Gujarati",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "gu"
   ],

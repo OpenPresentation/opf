@@ -3,7 +3,7 @@
   "id": "vrinda",
   "name": "Vrinda",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "bn"
   ],

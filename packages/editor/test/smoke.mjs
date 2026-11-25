@@ -161,10 +161,10 @@ pageEditor.undo();
 assert.throws(()=>pageEditor.paginateSlide(0,{maxSlides:1}));
 assert.deepEqual(pageEditor.presentation,pageBefore);
 assert.ok(pageEditor.paginateSlide(1).change);
-assert.equal(pageEditor.presentation.slides[1].composition.minFontSize,24);
+assert.equal(pageEditor.presentation.slides[1].composition.minFontSizePx,24);
 assert.equal(pageEditor.paginateSlide(1).change,null,'An already persisted policy is a no-op');
 pageEditor.undo(); assert.deepEqual(pageEditor.presentation,pageBefore,'One-page policy changes are undoable');
-pageEditor.redo(); assert.equal(pageEditor.presentation.slides[1].composition.minFontSize,24);
+pageEditor.redo(); assert.equal(pageEditor.presentation.slides[1].composition.minFontSizePx,24);
 
 const quoteEditor=createEditorSession({design:{fontScheme:'roboto'},slides:[{quote:{text:'Keep the source readable.',attribution:'Reviewer',source:'Recorded interview'}}]});
 const quoteBefore=quoteEditor.presentation;
@@ -179,7 +179,7 @@ quoteEditor.redo(); assert.equal(quoteEditor.composeSlide(0).items[0].quoteLayou
 // Object order is not an editorial change. Test ordinary JSON variants through
 // the public operation and retain an existing redo entry across the no-op.
 const reverseKeys=value=>Array.isArray(value)?value.map(reverseKeys):value&&typeof value==='object'?Object.fromEntries(Object.entries(value).reverse().map(([key,child])=>[key,reverseKeys(child)])):value;
-const orderedSlide={title:'Keep history',composition:{mode:'column',minFontSize:24},blocks:[{composition:{mode:'column',minFontSize:24},blocks:[{quote:{text:'Keep the body.',attribution:'Reviewer',source:'Source'}}]}]};
+const orderedSlide={title:'Keep history',composition:{mode:'column',minFontSizePx:24},blocks:[{composition:{mode:'column',minFontSizePx:24},blocks:[{quote:{text:'Keep the body.',attribution:'Reviewer',source:'Source'}}]}]};
 for(const slide of [orderedSlide,reverseKeys(orderedSlide)]){
   const session=createEditorSession({slides:[slide]});
   session.set('slides.0.title','Redo this title');session.undo();

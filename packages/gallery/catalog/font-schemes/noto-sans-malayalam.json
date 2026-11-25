@@ -3,7 +3,7 @@
   "id": "noto-sans-malayalam",
   "name": "Noto Sans Malayalam",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "ml"
   ],

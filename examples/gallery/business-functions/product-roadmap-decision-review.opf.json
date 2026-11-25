@@ -424,7 +424,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "latticelane",
+    "organization": "latticelane",
     "bio": "Leads product planning for LatticeLane.",
     "socials": {
       "tiktok": "@latticelane-speaker"
@@ -763,7 +763,7 @@
         "lucida-sans": {
           "name": "Lucida Sans",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Lucida Sans",
           "minor": "Lucida Sans",
@@ -774,7 +774,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

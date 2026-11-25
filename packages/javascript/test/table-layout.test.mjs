@@ -58,10 +58,10 @@ test('readability settings and mixed-font metrics govern row fitting',()=>{
  const large=layoutTable(table,box,{textMeasurement:fontMetrics});
  assert.ok(large.rows[0].box.height>100);
  assert.equal(large.overflow,false);
- const constrained=layoutTable(table,{...box,height:110},{minFontSize:8,textMeasurement:fontMetrics});
+ const constrained=layoutTable(table,{...box,height:110},{minFontSizePx:8,textMeasurement:fontMetrics});
  assert.equal(constrained.overflow,false);
  assert.ok(constrained.rows[0].cells[0].fit.fontSize<15);
- assert.equal(layoutTable(table,{...box,height:110},{minFontSize:15,textMeasurement:fontMetrics}).overflow,true);
+ assert.equal(layoutTable(table,{...box,height:110},{minFontSizePx:15,textMeasurement:fontMetrics}).overflow,true);
 });
 
 test('pagination retains complete multiline rows and repeated headers',()=>{
@@ -83,7 +83,7 @@ test('mixed-size table paragraphs reserve the native uniform line spacing',()=>{
 
 test('spare height in short rows is removed before any font shrinking',()=>{
  const table={rows:[[['a\nb']],['short']]};
- const geometry=layoutTable(table,{...box,height:119},{minFontSize:8,textMeasurement:measurement});
+ const geometry=layoutTable(table,{...box,height:119},{minFontSizePx:8,textMeasurement:measurement});
  assert.equal(geometry.overflow,false);
  assert.ok(geometry.rows[1].box.height<54);
  assert.ok(geometry.rows.every(row=>row.cells[0].fit.fontSize===25),'Available spare row height must preserve requested text size');

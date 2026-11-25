@@ -428,7 +428,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "relay-cloud",
+    "organization": "relay-cloud",
     "bio": "Leads engineering planning for Relay Cloud.",
     "socials": {
       "x": "@relay-cloud-speaker"
@@ -780,7 +780,7 @@
         "verdana": {
           "name": "Verdana",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Verdana",
           "minor": "Verdana",
@@ -791,7 +791,7 @@
         "malgun-gothic": {
           "name": "Malgun Gothic",
           "app": "powerpoint",
-          "languageFamily": "ea",
+          "scriptGroup": "eastAsian",
           "languages": [
             "ko"
           ],
@@ -804,7 +804,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

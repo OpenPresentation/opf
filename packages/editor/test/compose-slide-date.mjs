@@ -9,8 +9,8 @@ const deck = {
   design: {fontScheme: 'roboto', footer: {start: {date: true, dateFormat: 'MMMM d, yyyy'}}},
   slides: [
     {title: 'Opening', text: 'The title still counts.'},
-    {title: 'Second slide', text: 'Authored second body.', composition: {minFontSize: 32, overflow: 'error'}},
-    {title: 'Third slide', text: 'Authored third body.', composition: {minFontSize: 32, overflow: 'error'}},
+    {title: 'Second slide', text: 'Authored second body.', composition: {minFontSizePx: 32, overflow: 'error'}},
+    {title: 'Third slide', text: 'Authored third body.', composition: {minFontSizePx: 32, overflow: 'error'}},
   ],
 };
 const date = '2026-09-22';

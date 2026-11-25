@@ -127,7 +127,7 @@ export function nativeShapeParagraphs(xml, rootElement = 'p:sld') {
   const root = children(reader.parse(xml),rootElement)[0];
   const tree = children(children(root,'p:cSld')[0],'p:spTree')[0];
   return orderedShapes(tree).map(shape=>children(children(shape,'p:txBody')[0],'a:p').map(paragraph=>{
-    let text = '', maxFontSize = 0, bullet = false, level = 0, math = null, autoNum;
+    let text = '', maxFontSizePx = 0, bullet = false, level = 0, math = null, autoNum;
     const fields = [];
     const readRuns = runs => {
       let value = '';
@@ -135,7 +135,7 @@ export function nativeShapeParagraphs(xml, rootElement = 'p:sld') {
         value += children(runs[key],'a:t').map(plainText).join('');
         for (const run of runs[key]) {
           const size = Number(run[':@']?.sz);
-          if (run['a:rPr'] !== undefined && Number.isFinite(size)) maxFontSize = Math.max(maxFontSize,size/100);
+          if (run['a:rPr'] !== undefined && Number.isFinite(size)) maxFontSizePx = Math.max(maxFontSizePx,size/100);
         }
       }
       return value;
@@ -163,7 +163,7 @@ export function nativeShapeParagraphs(xml, rootElement = 'p:sld') {
       }
     }
     // LH-11: a no-break space the exporter wrote where core's line breaker never breaks is the space again (same length, so field offsets hold).
-    return {text: unbindNoBreak(text),maxFontSize,bullet,level,fields,...(math ? {math} : {}),...(autoNum ? {autoNum} : {})};
+    return {text: unbindNoBreak(text),maxFontSizePx,bullet,level,fields,...(math ? {math} : {}),...(autoNum ? {autoNum} : {})};
   })).map(withDisplayedNumbers);
 }
 /** The m:t text of an OMML tree in document order (its linear reading, without the equation's layout). */

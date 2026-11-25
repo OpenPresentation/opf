@@ -22,7 +22,7 @@ const dataUrl = (bytes) => `data:font/ttf;base64,${Buffer.from(bytes).toString('
 for (const face of base.embeddedFonts) assert.equal(dataUrlFsType(face.dataUrl), fsTypeOf(new Uint8Array(Buffer.from(face.dataUrl.split(',')[1], 'base64'))), face.family);
 for (const value of [0, 0x0002, 0x0004, 0x0008, 0x0100, 0x0200, 0x0302]) assert.equal(dataUrlFsType(dataUrl(withFsType(value))), value);
 
-const deck = { name: 'Licensed', design: { fontScheme: 'x-one' }, catalogs: { custom: { fontSchemes: { 'x-one': { name: 'Host', app: 'powerpoint', languageFamily: 'latin', languages: [], major: 'Host', minor: 'Host', textSample: 'x', type: 'sans-serif' } } } }, slides: [{ title: 'Quarterly review', text: 'Revenue grew.' }] };
+const deck = { name: 'Licensed', design: { fontScheme: 'x-one' }, catalogs: { custom: { fontSchemes: { 'x-one': { name: 'Host', app: 'powerpoint', scriptGroup: 'latin', languages: [], major: 'Host', minor: 'Host', textSample: 'x', type: 'sans-serif' } } } }, slides: [{ title: 'Quarterly review', text: 'Revenue grew.' }] };
 const render = async (value, load = loadFonts, extra = {}) => {
   const fonts = await load({ pack: 'base', ...extra, faces: [{ data: withFsType(value), family: 'Host', weight: 400 }, { data: withFsType(value, 700), family: 'Host', weight: 700 }] });
   const diagnostics = [];

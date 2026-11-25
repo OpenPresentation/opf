@@ -268,7 +268,7 @@
       "title": "Program Sponsor",
       "photo": "asset:supporting-photo",
       "email": "maya@pioneer-instruments.example",
-      "organizationId": "pioneer-instruments",
+      "organization": "pioneer-instruments",
       "socials": {
         "github": "@maya-chen"
       }
@@ -277,7 +277,7 @@
       "id": "jon",
       "name": "Jon Alvarez",
       "title": "Operating Lead",
-      "organizationId": "pioneer-instruments",
+      "organization": "pioneer-instruments",
       "socials": {
         "mastodon": "@jon-alvarez"
       }
@@ -665,7 +665,7 @@
         "montserrat": {
           "name": "Montserrat",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Montserrat",
           "minor": "Montserrat",
@@ -676,7 +676,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

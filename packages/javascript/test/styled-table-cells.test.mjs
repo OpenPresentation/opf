@@ -8,7 +8,7 @@ import { check, errorsOf } from './support/validation.mjs';
 const measurement = {measure: (text, size) => [...text].length * size * .5};
 const box = {x: 10, y: 20, width: 600, height: 600};
 const style = {
-  fill: '#11223380', color: '#fff', align: 'end', verticalAlign: 'bottom',
+  fill: '#11223380', color: '#fff', align: 'end', anchor: 'bottom',
   padding: {top: 12, right: 20, bottom: 6, left: 30},
   borders: {top: {color: '#abc', width: 2, dash: 'dash'}, bottom: {color: '#00000000', width: 0}},
 };
@@ -90,12 +90,12 @@ test('span rectangles preserve dense column indexes and editable value paths', (
 });
 
 test('vertical alignment and padding use the full merged rectangle', () => {
-  for (const verticalAlign of ['top', 'middle', 'bottom']) {
-    const table = {rows: [[{value: 'A', rowSpan: 2, style: {verticalAlign}}, 'B'], [null, 'C']]};
+  for (const anchor of ['top', 'middle', 'bottom']) {
+    const table = {rows: [[{value: 'A', rowSpan: 2, style: {anchor}}, 'B'], [null, 'C']]};
     const cell = layoutTable(table, box, {textMeasurement: measurement}).rows[0].cells[0];
     const height = cell.fit.lines.length * cell.fit.lineHeight;
     const spare = cell.box.height - 12 - height;
-    assert.equal(cell.textBox.y, cell.box.y + 8 + spare * ({top: 0, middle: .5, bottom: 1}[verticalAlign]));
+    assert.equal(cell.textBox.y, cell.box.y + 8 + spare * ({top: 0, middle: .5, bottom: 1}[anchor]));
   }
   assert.equal(layoutTable({rows: [[{value: 'A', style: {padding: {left: 200, right: 200}}}]]}, {...box, width: 100}).overflow, true);
 });

@@ -420,7 +420,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "copper-mesa-mining",
+    "organization": "copper-mesa-mining",
     "bio": "Leads mining planning for Copper Mesa Mining.",
     "socials": {
       "youtube": "@copper-mesa-mining-speaker"
@@ -761,7 +761,7 @@
         "rockwell": {
           "name": "Rockwell",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Rockwell",
           "minor": "Rockwell",
@@ -772,7 +772,7 @@
         "gisha": {
           "name": "Gisha",
           "app": "powerpoint",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "he",
             "ar"
@@ -786,7 +786,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

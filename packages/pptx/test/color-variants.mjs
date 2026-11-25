@@ -124,7 +124,7 @@ const open = async (document) => {
     assert.equal(imported.slides[0].design.variant, undefined, `${tone}: the tone states the variant`);
     assert.equal(JSON.stringify(imported.slides[0]).includes('OPF background tone'), false, `${tone}: the scrim is no content`);
   }
-  const own = deck(undefined, [{title: 'Cover', text: 'Readable', design: {background: {type: 'image', src, alt: 'A picture', tone: 'dark', overlay: {color: 'dark1', opacity: 0.5}}}}]);
+  const own = deck(undefined, [{title: 'Cover', text: 'Readable', design: {background: {type: 'image', src, alt: 'A picture', appearance: 'dark', overlay: {color: 'dark1', opacity: 0.5}}}}]);
   assert.equal(scrim((await open(own)).text('ppt/slides/slide1.xml')), undefined, 'an overlay of its own replaces the scrim');
   assert.equal(scrim((await open(toned(undefined))).text('ppt/slides/slide1.xml')), undefined, 'no tone, no scrim');
 }

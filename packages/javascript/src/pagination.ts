@@ -26,9 +26,9 @@ export interface PaginationOptions extends Omit<ComposeSlideOptions, 'textMeasur
   catalogs?: readonly Catalog[];
   /**
    * Readability floor used while choosing page breaks. Default 24 reference pixels; with `wholeBlocks`, the slide's own floor
-   * (its `composition.minFontSize`, its layout's, else 16), and the pages keep the slide's composition as authored.
+   * (its `composition.minFontSizePx`, its layout's, else 16), and the pages keep the slide's composition as authored.
    */
-  minFontSize?: number;
+  minFontSizePx?: number;
   /**
    * LH-90: break only between the slide's block units (`blockUnits`: a lead block and the blocks that follow it; each root block
    * alone when the slide has none), never inside one. Retain settled source sizes for comparable automatic body roles, then
@@ -169,7 +169,7 @@ function leafFor(path: string, field: string, value: any): Leaf {
 
 /**
  * LH-144: the largest size a composed slide draws for each kind of body block, in reference pixels: a paragraph's or list's text
- * (`text`, `list`), a quote's, metric's or timeline's largest part. Tables, code and charts are not capped (composition.maxFontSize).
+ * (`text`, `list`), a quote's, metric's or timeline's largest part. Tables, code and charts are not capped (composition.maxFontSizePx).
  */
 function bodySizes(composed: SlideComposition, options: ComposeSlideOptions = {}): Map<string, number> {
   const sizes = new Map<string,number>();
@@ -186,16 +186,16 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   let source = clone(input) as Record<string, any>;
   const maxSlides = options.maxSlides ?? 100;
   if (!Number.isInteger(maxSlides) || maxSlides < 1 || maxSlides > 10000) throw new RangeError('maxSlides must be an integer between 1 and 10000.');
-  const minFontSize = options.minFontSize ?? (options.wholeBlocks ? undefined : 24);
-  if (minFontSize !== undefined && (!Number.isFinite(minFontSize) || minFontSize < 8 || minFontSize > 32)) throw new RangeError("Pagination minFontSize must be between 8 and 32.");
+  const minFontSizePx = options.minFontSizePx ?? (options.wholeBlocks ? undefined : 24);
+  if (minFontSizePx !== undefined && (!Number.isFinite(minFontSizePx) || minFontSizePx < 8 || minFontSizePx > 32)) throw new RangeError("Pagination minFontSizePx must be between 8 and 32.");
   const sourceIndex = options.slideIndex ?? 0, sourceBase = `slides.${sourceIndex}`;
   const withReadability = (slide: Record<string, any>, warn = false): Record<string, any> => {
     const result = clone(slide);
-    const rootMinimum = Math.max(minFontSize ?? 0,result.composition?.minFontSize ?? (options.layout?.composition as any)?.minFontSize ?? 16);
-    result.composition = {...result.composition,minFontSize:rootMinimum};
+    const rootMinimum = Math.max(minFontSizePx ?? 0,result.composition?.minFontSizePx ?? (options.layout?.composition as any)?.minFontSizePx ?? 16);
+    result.composition = {...result.composition,minFontSizePx:rootMinimum};
     const visit = (node: Record<string, any>, inheritedMinimum: number) => {
-      const minimum = Math.max(minFontSize ?? 0,node.composition?.minFontSize ?? inheritedMinimum);
-      if (node.composition) node.composition = { ...node.composition, minFontSize:minimum, ...(warn?{overflow:'warn'}:{}) };
+      const minimum = Math.max(minFontSizePx ?? 0,node.composition?.minFontSizePx ?? inheritedMinimum);
+      if (node.composition) node.composition = { ...node.composition, minFontSizePx:minimum, ...(warn?{overflow:'warn'}:{}) };
       if (Array.isArray(node.blocks)) node.blocks.forEach(child=>{ visit(child,minimum); });
     };
     visit(result,rootMinimum);
@@ -204,10 +204,10 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   };
   // Persist the evaluated readability policy in the ordinary returned slides. Otherwise a
   // footer measured at 24px during pagination would render at its old 17px nominal size. At the slide's own floor
-  // (`wholeBlocks` without `minFontSize`) the pages are drawn as the slide was, so they keep its composition as authored.
-  if (minFontSize !== undefined) source = withReadability(source);
+  // (`wholeBlocks` without `minFontSizePx`) the pages are drawn as the slide was, so they keep its composition as authored.
+  if (minFontSizePx !== undefined) source = withReadability(source);
   let evaluations = 0;
-  const {fonts,catalogs,minFontSize:_minFontSize,maxSlides:_maxSlides,reservedIds:_reservedIds,...engineOptions} = options;
+  const {fonts,catalogs,minFontSizePx:_minFontSize,maxSlides:_maxSlides,reservedIds:_reservedIds,...engineOptions} = options;
   // opf#485: measure script runs in the slide's script fonts, as the renderer and the exporter do.
   const textMeasurement = fonts?.textMeasurement && options.presentation !== undefined ? resolveSlideScriptMeasurement(options.presentation, sourceIndex, fonts.textMeasurement, {...(catalogs!==undefined?{catalogs}:{}),...(options.fontFamilies?{fontFamilies:options.fontFamilies}:{})}) : fonts?.textMeasurement;
   // WI-1 (P24): the role families the renderer draws, so pages break where the drawn slide overflows.
@@ -392,7 +392,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   const diagnosticsFor = (portions: Map<string,Portion>) => fit(geometry(project(portions,slides.length).slide,slides.length).diagnostics);
   // LH-144: the pages after the first share their type sizes, so a last page with one timeline, list or paragraph does not read larger
   // than the pages before it. Each page is first drawn as an unpaginated slide would be (its body grows to fill it); then every later page
-  // is capped (composition.maxFontSize), for each kind of block it holds, at the larger of the first page's size and the smallest size any
+  // is capped (composition.maxFontSizePx), for each kind of block it holds, at the larger of the first page's size and the smallest size any
   // later page draws for that kind on its own. The cap never sets a page under the first page's size or under what every later page
   // reaches, so continuation pages that all grow (an arrangement beside a side title) keep their growth (RR-105, the v0.33.0 sizes), and
   // only a page that would read larger than its siblings is held to them. A cap only lowers sizes, so a page that fits without it fits
@@ -420,7 +420,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     for (let index = 1; index < slides.length; index++) {
       const slide = slides[index]!, cap = Math.max(0, ...[...drawnSizes[index]!.kinds].map(kind => Math.max(first.get(kind) ?? 0, shared.get(kind) ?? 0)));
       if (!cap) continue;
-      slide.composition = {...slide.composition, maxFontSize: Math.min(Math.max(8, cap), 200, slide.composition?.maxFontSize ?? Infinity)};
+      slide.composition = {...slide.composition, maxFontSizePx: Math.min(Math.max(8, cap), 200, slide.composition?.maxFontSizePx ?? Infinity)};
       const issues = fit(geometry(slide,index).diagnostics);
       if (issues.length) throw new OPFPaginationError('A continuation page does not fit at its final page number. No partial result was returned.',issues);
     }
@@ -447,7 +447,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     const inspect = (from: number,to: number,pageIndex: number,caps?: Map<string,number>) => {
       const selected=portions(from,to),projection=project(selected,pageIndex);
       const cap=caps&&Math.max(0,...[...selected.values()].map(portion=>caps.get(kindOf(portion.leaf.field))??0));
-      if(cap)projection.slide.composition={...projection.slide.composition,maxFontSize:Math.min(Math.max(8,cap),200,projection.slide.composition?.maxFontSize??Infinity)};
+      if(cap)projection.slide.composition={...projection.slide.composition,maxFontSizePx:Math.min(Math.max(8,cap),200,projection.slide.composition?.maxFontSizePx??Infinity)};
       const drawn=geometry(projection.slide,pageIndex),issues=fit(drawn.diagnostics);
       const mappings=projection.mappings;
       // composeSlide keeps the source slide index; projection mappings carry output page indexes.
@@ -540,7 +540,7 @@ export interface PresentationPaginationOptions extends CatalogOptions {
   fonts?: Fonts;
   /** Unscaled reference-pixel clearance for supplied vector text outlines. */
   textRasterPadding?: number;
-  minFontSize?: number;
+  minFontSizePx?: number;
   maxSlides?: number;
   /** Host-supplied current calendar date (ISO YYYY-MM-DD) for `date: true` header/footer fields. */
   date?: string;
@@ -625,7 +625,7 @@ export function continueOverfull(input: unknown, options: PresentationPagination
       const units = blockUnits(slide);
       if (!units) return undefined;
       try {
-        const split = paginateSlide(slide,{...slideOptions,wholeBlocks:true,minFontSize:options.minFontSize});
+        const split = paginateSlide(slide,{...slideOptions,wholeBlocks:true,minFontSizePx:options.minFontSizePx});
         if (split.slides.length < 2) return undefined;
         found.set(index,units);
         return split;
@@ -694,7 +694,7 @@ function paginateSlides(input: unknown, options: PresentationPaginationOptions, 
         if (!reported.has(key)) { reported.add(key); options.onDiagnostic?.(diagnostic); }
       }
       if (output.length>=maxSlides) throw new OPFPaginationError(`Pagination needs more than ${maxSlides} slides. No partial result was returned.`);
-      const slideOptions = {...context.options,textRasterPadding:options.textRasterPadding,fonts:options.fonts,...(options.catalogs?{catalogs:options.catalogs}:{}),presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds} as PaginationOptions;
+      const slideOptions = {...context.options,textRasterPadding:options.textRasterPadding,fonts:options.fonts,...(options.catalogs?{catalogs:options.catalogs}:{}),presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSizePx:options.minFontSizePx,reservedIds} as PaginationOptions;
       const result = split(slide,slideOptions,index);
       if (!result) { output.push(slide); return; }
       const outputStart = output.length;

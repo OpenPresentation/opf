@@ -191,7 +191,7 @@ try {
   await page.locator('#paginate').click();
   const paginatedQuote=await source();
   assert.equal(paginatedQuote.slides.length,1);
-  assert.equal(paginatedQuote.slides[0].composition.minFontSize,24);
+  assert.equal(paginatedQuote.slides[0].composition.minFontSizePx,24);
   assert.equal(await page.locator('#preview g[data-opf-path="slides.0.quote"] > text').getAttribute('font-size'),'24');
   await page.locator('#paginate').click();
   await button('Undo').click(); assert.deepEqual(await source(),editedQuote,'Repeating pagination must not add a history entry');

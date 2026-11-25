@@ -14,7 +14,7 @@ test('an organization without an id says why the id is needed and how to write i
   assert.equal(found.path, '/organization');
   assert.match(found.message, /required property 'id'/);
   assert.match(found.help, /"id": "acme"/);
-  assert.match(found.help, /speaker\.organizationId/);
+  assert.match(found.help, /speaker\.organization/);
   const speaker = schemaFindings(deck({ title: 'x' }, { speaker: [{ name: 'S' }] }))[0];
   assert.match(speaker.help, /"id"/);
   assert.match(speaker.path, /^\/speaker\/0$/);

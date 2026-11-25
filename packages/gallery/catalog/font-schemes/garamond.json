@@ -3,7 +3,7 @@
   "id": "garamond",
   "name": "Garamond",
   "app": "powerpoint",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Garamond",
   "minor": "Garamond",

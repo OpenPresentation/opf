@@ -265,7 +265,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "north-pier-advisory",
+    "organization": "north-pier-advisory",
     "bio": "Leads professional services planning for North Pier Advisory.",
     "socials": {
       "linkedin": "@north-pier-advisory-speaker"
@@ -671,7 +671,7 @@
         "open-sans": {
           "name": "Open Sans",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Open Sans",
           "minor": "Open Sans",
@@ -682,7 +682,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

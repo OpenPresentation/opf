@@ -184,7 +184,7 @@
     },
     "composition": {
       "type": "object",
-      "description": "Only 'gap', 'padding', 'minFontSize' and 'overflow', with their 0.18 meaning. A template's regions replace composition.mode, columns and weights.",
+      "description": "Only 'gap', 'padding', 'minFontSizePx' and 'overflow', with their 0.18 meaning. A template's regions replace composition.mode, columns and weights.",
       "$ref": "#/$defs/Composition"
     }
   },
@@ -532,7 +532,7 @@
     "Composition": {
       "type": "object",
       "additionalProperties": false,
-      "description": "A template's composition: only gap, padding, minFontSize and overflow, with their 0.18 meaning. A slide's composition overrides them; a slide's composition.mode, columns and weights arrange its first primary flowing region.",
+      "description": "A template's composition: only gap, padding, minFontSizePx and overflow, with their 0.18 meaning. A slide's composition overrides them; a slide's composition.mode, columns and weights arrange its first primary flowing region.",
       "properties": {
         "gap": {
           "type": "number",
@@ -546,7 +546,7 @@
           "maximum": 0.2,
           "description": "Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group."
         },
-        "minFontSize": {
+        "minFontSizePx": {
           "type": "number",
           "minimum": 8,
           "maximum": 32,

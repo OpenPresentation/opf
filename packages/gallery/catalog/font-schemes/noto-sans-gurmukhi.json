@@ -3,7 +3,7 @@
   "id": "noto-sans-gurmukhi",
   "name": "Noto Sans Gurmukhi",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "pa-Guru"
   ],

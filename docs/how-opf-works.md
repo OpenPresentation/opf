@@ -325,7 +325,7 @@ Everything above, together — intent metadata, a catalog-backed narrative with 
     "domain": "acme.com",
     "socials": { "linkedin": "acme" }
   },
-  "speaker": { "id": "alice", "name": "Alice Chen", "title": "VP Operations", "organizationId": "acme" },
+  "speaker": { "id": "alice", "name": "Alice Chen", "title": "VP Operations", "organization": "acme" },
   "design": {
     "theme": "classic",
     "colorScheme": "forest-green",

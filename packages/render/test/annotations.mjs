@@ -7,7 +7,7 @@ import {toSvg} from '../dist/index.js';
 
 const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=';
 const deck = () => ({
-  references: [{ id: 'a', text: 'Source A, 2026', url: 'https://a.example' }, { id: 'b', text: ['Rich ', { text: 'B', bold: true }] }, { id: 'unused', text: 'Never' }],
+  references: [{ id: 'a', text: 'Source A, 2026', link: 'https://a.example' }, { id: 'b', text: ['Rich ', { text: 'B', bold: true }] }, { id: 'unused', text: 'Never' }],
   slides: [
     { title: 'Cites', text: [{ text: 'Growth was strong', cite: 'a', link: 'https://x.example' }, ' and margins held', { text: '.', cite: ['a', 'b'] }, { text: ' Note', footnote: 'An inline note.' }], design: { footer: { center: { text: 'Footer' } } } },
     { title: 'Caption', blocks: [{ image: png, caption: 'Figure 1. A pixel' }, { table: { columns: ['A', 'B'], rows: [[1, 2]] }, caption: { text: ['Table ', { text: '1', bold: true }], position: 'above', align: 'center' } }] },

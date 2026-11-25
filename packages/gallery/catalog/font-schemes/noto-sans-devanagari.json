@@ -3,7 +3,7 @@
   "id": "noto-sans-devanagari",
   "name": "Noto Sans Devanagari",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "hi",
     "ne"

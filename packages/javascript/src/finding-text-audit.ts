@@ -73,7 +73,7 @@ const textOnImage: RuleText = (finding) => {
   if (best !== undefined)
     return {
       message: `This text is too faint on the picture: at most ${num(best, 1)}:1 over any part of it here${needed !== undefined ? `, and ${num(needed)}:1 is needed` : ""}.`,
-      next: `set the background's ${code("tone")} so the text color follows the picture, or give the text a readable color.`,
+      next: `set the background's ${code("appearance")} so the text color follows the picture, or give the text a readable color.`,
     };
   // LH-02: the note that core drew its automatic scrim behind the text.
   if (scrim !== undefined)
@@ -257,7 +257,7 @@ const layoutFailed: RuleText = (finding, _context, helpers) => {
   };
 };
 
-const minFontSize: RuleText = (finding) => {
+const minFontSizePx: RuleText = (finding) => {
   const size = measuredNumber(finding, "sizePt");
   const minimum = measuredNumber(finding, "minimumPt");
   if (size === undefined || minimum === undefined) return undefined;
@@ -694,7 +694,7 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/text-overflow": textOverflow,
   "opf/unresolved-content": unresolvedContent,
   "opf/layout-failed": layoutFailed,
-  "opf/min-font-size": minFontSize,
+  "opf/min-font-size": minFontSizePx,
   "opf/region-unknown": regionUnknown,
   "opf/region-kind": regionKind,
   "opf/region-full": regionFull,

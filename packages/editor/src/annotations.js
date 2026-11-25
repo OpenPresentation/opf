@@ -112,10 +112,10 @@ function referenceList(presentation) {
 function checkReference(reference, existing, { allowExisting = false } = {}) {
   if (!isObject(reference) || typeof reference.id !== "string" || !reference.id) throw fail("invalid-reference", "A reference needs a non-empty string id.");
   if (!isRichText(reference.text) || (typeof reference.text === "string" && !reference.text)) throw fail("invalid-reference", "A reference needs text (a string or TextRun[]).", { id: reference.id });
-  if (reference.url !== undefined && (typeof reference.url !== "string" || !reference.url)) throw fail("invalid-reference", "A reference url is a non-empty string.", { id: reference.id });
+  if (reference.link !== undefined && (typeof reference.link !== "string" || !reference.link)) throw fail("invalid-reference", "A reference link is a non-empty string.", { id: reference.id });
   if (!allowExisting && existing.some((item) => item?.id === reference.id)) throw fail("duplicate-reference", `Reference '${reference.id}' already exists.`, { id: reference.id });
   const result = { id: reference.id, text: clone(reference.text) };
-  if (reference.url !== undefined) result.url = reference.url;
+  if (reference.link !== undefined) result.link = reference.link;
   return result;
 }
 
@@ -125,10 +125,10 @@ export function listReferences(presentation) {
   const citations = collectCitations(presentation);
   return list.map((reference, index) => {
     const note = citations.references.find((item) => item.id === reference?.id);
-    return { index, id: reference?.id, text: reference?.text, url: reference?.url, cited: Boolean(note), ...(note ? { number: note.number } : {}) };
+    return { index, id: reference?.id, text: reference?.text, link: reference?.link, cited: Boolean(note), ...(note ? { number: note.number } : {}) };
   });
 }
-/** Append a reference `{ id, text, url? }`; ids must be unique. */
+/** Append a reference `{ id, text, link? }`; ids must be unique. */
 export function prepareReference(presentation, reference) {
   const list = referenceList(presentation);
   const next = [...clone(list), checkReference(reference, list)];
@@ -138,12 +138,12 @@ export function addReference(editor, reference, meta = {}) {
   checkEditor(editor);
   return commit(editor, prepareReference(editor.presentation, reference), meta);
 }
-/** Change the text and/or url of the reference `id` (`url: null` removes the url); the id itself does not change. */
+/** Change the text and/or link of the reference `id` (`link: null` removes the link); the id itself does not change. */
 export function prepareReferenceUpdate(presentation, id, fields) {
   const list = referenceList(presentation), index = list.findIndex((item) => item?.id === id);
   if (index < 0) throw fail("unknown-reference", `No reference '${id}'.`, { id });
-  const merged = { ...list[index], ...(fields?.text !== undefined ? { text: fields.text } : {}), ...(fields?.url !== undefined ? { url: fields.url } : {}) };
-  if (fields?.url === null) delete merged.url;
+  const merged = { ...list[index], ...(fields?.text !== undefined ? { text: fields.text } : {}), ...(fields?.link !== undefined ? { link: fields.link } : {}) };
+  if (fields?.link === null) delete merged.link;
   const next = clone(list);
   next[index] = checkReference(merged, list, { allowExisting: true });
   return transaction(presentation, ["references"], next, { action: "update-reference", id });

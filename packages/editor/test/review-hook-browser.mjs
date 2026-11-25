@@ -185,7 +185,7 @@ try {
       ensure: async () => { await Promise.resolve(); loaded.push(...pending); pending = []; factor = nextFactor; },
     };
     const documentValue = { name: 'Resource epochs', language: 'en-US', slides: [
-      { id: 'unchanged-first', title: 'Long earlier content', subtitle: 'Same input', composition: { minFontSize: 24, maxFontSize: 24 }, blocks: [{ text: 'Complete authored word '.repeat(130) }, { text: 'Second complete block' }] },
+      { id: 'unchanged-first', title: 'Long earlier content', subtitle: 'Same input', composition: { minFontSizePx: 24, maxFontSizePx: 24 }, blocks: [{ text: 'Complete authored word '.repeat(130) }, { text: 'Second complete block' }] },
       { id: 'changed-last', title: 'Later slide', subtitle: 'Gate trigger', text: 'Content' },
     ] };
     const workspace = window.harness.createOpfEditor(host, { document: documentValue, fonts, catalogs: [], slots: { review: slot }, panels: { canvas: false }, review: { delay: 1 }, on: { fonts: event => events.push(event.state) } });
@@ -230,7 +230,7 @@ try {
       },
     };
     const documentValue = { name: 'Partial resource failure', language: 'en-US', slides: [
-      { id: 'unchanged-first', title: 'Long earlier content', subtitle: 'Same input', composition: { minFontSize: 24, maxFontSize: 24 }, blocks: [{ text: 'Complete authored word '.repeat(130) }, { text: 'Second complete block' }] },
+      { id: 'unchanged-first', title: 'Long earlier content', subtitle: 'Same input', composition: { minFontSizePx: 24, maxFontSizePx: 24 }, blocks: [{ text: 'Complete authored word '.repeat(130) }, { text: 'Second complete block' }] },
       { id: 'changed-last', title: 'Later slide', subtitle: 'Gate trigger', text: 'Content' },
     ] };
     const workspace = window.harness.createOpfEditor(host, { document: documentValue, fonts, catalogs: [], slots: { review: slot }, panels: { canvas: false }, review: { delay: 1 }, on: { fonts: event => events.push(event.state) }, onError: error => errors.push({ code: error.code, cause: error.cause?.code }) });

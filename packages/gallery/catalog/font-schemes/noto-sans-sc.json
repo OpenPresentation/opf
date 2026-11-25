@@ -3,7 +3,7 @@
   "id": "noto-sans-sc",
   "name": "Noto Sans SC",
   "app": "google-slides",
-  "languageFamily": "ea",
+  "scriptGroup": "eastAsian",
   "languages": [
     "zh-Hans",
     "zh-Hant",

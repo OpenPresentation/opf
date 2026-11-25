@@ -96,9 +96,9 @@ describe("LH-111: small-chart labels follow fit", () => {
   const measure = (text, size) => text.length * size * 0.55;
   test("twelve monthly columns are labeled when their labels fit (s05), not when they do not", () => {
     assert.equal(SMALL_CHART_MAX_POINTS, 16);
-    const wide = smallChart(chart, resolveChartData(chart), { box: { x: 0, y: 0, width: 1160, height: 500 }, scale: 1, minFontSize: 16, measure });
+    const wide = smallChart(chart, resolveChartData(chart), { box: { x: 0, y: 0, width: 1160, height: 500 }, scale: 1, minFontSizePx: 16, measure });
     assert.equal(wide?.labels, true);
-    assert.equal(smallChart(chart, resolveChartData(chart), { box: { x: 0, y: 0, width: 360, height: 500 }, scale: 1, minFontSize: 16, measure }), undefined);
+    assert.equal(smallChart(chart, resolveChartData(chart), { box: { x: 0, y: 0, width: 360, height: 500 }, scale: 1, minFontSizePx: 16, measure }), undefined);
   });
 });
 

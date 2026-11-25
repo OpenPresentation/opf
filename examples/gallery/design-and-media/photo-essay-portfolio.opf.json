@@ -412,7 +412,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "urban-lens-collective",
+    "organization": "urban-lens-collective",
     "bio": "Leads portfolio planning for Urban Lens Collective.",
     "socials": {
       "tiktok": "@urban-lens-collective-speaker"
@@ -755,7 +755,7 @@
         "century-schoolbook": {
           "name": "Century Schoolbook",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Century Schoolbook",
           "minor": "Century Schoolbook",
@@ -766,7 +766,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

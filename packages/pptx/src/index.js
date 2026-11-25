@@ -1105,7 +1105,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
       const name = shape['p:nvSpPr']?.['p:cNvPr']?.name;
       if (typeof name !== 'string') return;
       if (isScrimName(name, scrimName(opfSlide))) images.consumedShapes.add(index);
-      for (const tone of ['dark', 'light']) if (isScrimName(name, toneScrimName(opfSlide, tone))) { images.consumedShapes.add(index); toned = {...imageBackground, tone}; }
+      for (const tone of ['dark', 'light']) if (isScrimName(name, toneScrimName(opfSlide, tone))) { images.consumedShapes.add(index); toned = {...imageBackground, appearance: tone}; }
     });
   }
   if (toned) slide.design = {background: toned};
@@ -1119,7 +1119,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     if (!sameMap) {
       const mapped = variantFromColorMap(mapping, {explicit: true});
       // The variant a tone names is the tone's, not a second statement of it.
-      const tone = slide.design?.background?.tone, impliedByTone = tone && mapped.variant === (tone === 'dark' ? 'dark1' : 'light1');
+      const tone = slide.design?.background?.appearance, impliedByTone = tone && mapped.variant === (tone === 'dark' ? 'dark1' : 'light1');
       if (impliedByTone) { /* the tone names this variant */ }
       else if (mapped.variant) slide.design = {...slide.design, variant: mapped.variant};
       else if (mapped.unsupported) options.onDiagnostic?.({code: "unsupported-color-map", path: `slides.${slideIndex}.design.variant`, message: "The slide's color map override is not a variant OPF can name, so slides[n].design.variant was not imported."});
@@ -1413,8 +1413,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
       // scaled bodies use resolved sizes here; ordinary classification is unchanged.
       if (currentBody?.some(paragraph => paragraph.nativeFontScale !== undefined)) {
         const pointSize = paragraph => Math.max(0, ...asArray(paragraph?.richText).filter(run => run && typeof run === 'object' && run.text?.trim()).map(run => run.fontSize ?? 0));
-        item.paragraphs = item.paragraphs.map((paragraph, paragraphIndex) => ({...paragraph, maxFontSize: pointSize(currentBody[paragraphIndex])}));
-        item.maxFontSize = Math.max(0, ...item.paragraphs.map(paragraph => paragraph.maxFontSize));
+        item.paragraphs = item.paragraphs.map((paragraph, paragraphIndex) => ({...paragraph, maxFontSizePx: pointSize(currentBody[paragraphIndex])}));
+        item.maxFontSizePx = Math.max(0, ...item.paragraphs.map(paragraph => paragraph.maxFontSizePx));
       }
     }
     if (item && !item.bounds && nativeContext.layoutBounds) item.bounds = nativeContext.layoutBounds(shape) ?? item.bounds;
@@ -1540,7 +1540,7 @@ function importShape(shape, dimensions, paragraphs = readParagraphs(shape["p:txB
       bounds,
       placeholder,
       name,
-      maxFontSize: Math.max(0, ...paragraphs.map((paragraph) => paragraph.maxFontSize))
+      maxFontSizePx: Math.max(0, ...paragraphs.map((paragraph) => paragraph.maxFontSizePx))
     };
   }
 
@@ -1763,7 +1763,7 @@ function readParagraphs(txBody) {
         text: unbindNoBreak(texts.join("")),
         bullet: asArray(paragraph?.["a:pPr"]).some(props => props?.["a:buChar"] !== undefined || props?.["a:buBlip"] !== undefined || props?.["a:buAutoNum"] !== undefined),
         level: Number(asArray(paragraph?.["a:pPr"])[0]?.lvl ?? 0),
-        maxFontSize: sizes.length > 0 ? Math.max(...sizes) : 0,
+        maxFontSizePx: sizes.length > 0 ? Math.max(...sizes) : 0,
         ...(zones.length ? {math: {zones: zones.length, text: linear}} : {}),
         ...autoNumberOf(asArray(paragraph?.["a:pPr"])[0])
       };
@@ -1805,7 +1805,7 @@ function takeTitleItem(items, dimensions, inferHeadings) {
   const candidateIndex = items.findIndex((item) => {
     if (item.heading || item.placeholder === 'body' || item.kind !== "text" || !item.text || item.paragraphs.some(p=>p.bullet)) return false;
     const y = item.bounds?.y ?? 0;
-    return y <= titleLimit && (item.maxFontSize >= 20 || /^title\b/i.test(item.name ?? ""));
+    return y <= titleLimit && (item.maxFontSizePx >= 20 || /^title\b/i.test(item.name ?? ""));
   });
   if (candidateIndex >= 0) return items.splice(candidateIndex, 1)[0];
   return null;
@@ -1826,7 +1826,7 @@ function takeSubtitleItem(items, titleItem, dimensions, inferHeadings) {
       && y <= subtitleLimit
       && h <= 0.75
       && item.paragraphs.length === 1
-      && item.maxFontSize <= Math.max(22, titleItem.maxFontSize);
+      && item.maxFontSizePx <= Math.max(22, titleItem.maxFontSizePx);
   });
   if (candidateIndex >= 0) return items.splice(candidateIndex, 1)[0];
   return null;
@@ -1916,13 +1916,13 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
     let bounds, size = 0;
     for (const {item, line} of entries) {
       const [paragraph] = item.paragraphs, current = paragraphs.at(-1);
-      if(item.v2Scalar){const copy={...paragraph};paragraphs.push(copy);protectedParagraphs.add(copy);size=paragraph.maxFontSize;consumed.add(item);const b=item.visualBounds??item.bounds;if(b){const x=Math.min(bounds?.x??b.x,b.x),y=Math.min(bounds?.y??b.y,b.y);bounds={x,y,w:Math.max((bounds?bounds.x+bounds.w:-Infinity),b.x+b.w)-x,h:Math.max((bounds?bounds.y+bounds.h:-Infinity),b.y+b.h)-y};}continue;}
+      if(item.v2Scalar){const copy={...paragraph};paragraphs.push(copy);protectedParagraphs.add(copy);size=paragraph.maxFontSizePx;consumed.add(item);const b=item.visualBounds??item.bounds;if(b){const x=Math.min(bounds?.x??b.x,b.x),y=Math.min(bounds?.y??b.y,b.y);bounds={x,y,w:Math.max((bounds?bounds.x+bounds.w:-Infinity),b.x+b.w)-x,h:Math.max((bounds?bounds.y+bounds.h:-Infinity),b.y+b.h)-y};}continue;}
       if(paragraph[V2_CURRENT_RICH]&&current&&!paragraph.bullet)current[V2_CURRENT_RICH]=true;
       const gap = recorded?.get(line);
       const join = (a, b) => gap === undefined ? joinRich(a, b) : joinWrappedText([a, b], [gap]);
-      if (unbulleted || (lineRoles && !paragraph.bullet) ? lineRoles?.[line][2] : paragraph.bullet) { paragraphs.push({...paragraph, bullet: true, richText: own(paragraph, textLook)}); size = paragraph.maxFontSize; }
+      if (unbulleted || (lineRoles && !paragraph.bullet) ? lineRoles?.[line][2] : paragraph.bullet) { paragraphs.push({...paragraph, bullet: true, richText: own(paragraph, textLook)}); size = paragraph.maxFontSizePx; }
       else if (paragraph.text === '') { /* a blank line of the entry: no text, no description */ }
-      else if (lineRoles ? lineRoles[line][1] === 'description' : paragraph.maxFontSize < size - 0.01) {
+      else if (lineRoles ? lineRoles[line][1] === 'description' : paragraph.maxFontSizePx < size - 0.01) {
         const text = own(paragraph, descriptionLook) ?? paragraph.text;
         if (current.description === undefined) current.description = text;
         else { current.description = join(current.description, text); applied.add(line); }
@@ -2177,7 +2177,7 @@ function secondaryValueAxisOf(plotArea, combo) {
   return asArray(plotArea["c:valAx"]).find(axis => ids.has(String(axis?.["c:axId"]?.val)));
 }
 
-// `line` and `secondaryAxis` of an imported combo chart by series name (elideComboDefault drops a `line` that is the default).
+// `lineSeries` and `secondaryAxis` of an imported combo chart by series name (elideComboDefault drops a `lineSeries` that is the default).
 // Combo lines always draw markers in OPF; a native line without markers is reported, never silently changed.
 function comboFields(comboSeries, names, report) {
   const allLines=comboSeries.every(e=>e.role==='line');
@@ -2196,8 +2196,8 @@ function comboFields(comboSeries, names, report) {
 // An imported combo chart writes `line` only when it differs from the default (the last plotted series), judged on the final
 // data (a restored data record can order the columns differently from the native series).
 function elideComboDefault(chart, datasets) {
-  if (!Array.isArray(chart.line)) return chart;
-  const {line, ...rest} = chart;
+  if (!Array.isArray(chart.lineSeries)) return chart;
+  const {lineSeries: line, ...rest} = chart;
   const resolved = resolveChartData(rest, {datasets: datasets ?? {}});
   if (!resolved.ok || !Array.isArray(resolved.combo)) return chart;
   const defaults = resolved.columns.slice(1).filter((_, index) => resolved.combo[index]?.role === 'line');
@@ -3863,7 +3863,7 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
   // LH-02: core's automatic scrims under the text (no overlay of the author's): each one native rectangle in the slide background color (bg1 of the
   // slide's variant once scheme colors are written), whose fill packaging turns into a linear gradient with alpha stops (attachScrims)
   // unless it is a band of one opacity. It replaces RR-96's 40% scrim of a picture that names its tone, whose name it keeps.
-  const tone = isPlainObject(authored) ? authored.tone : undefined;
+  const tone = isPlainObject(authored) ? authored.appearance : undefined;
   if (!background.overlay) (background.scrims ?? []).forEach((scrim, index) => {
     const base = tone === 'dark' || tone === 'light' ? toneScrimName(slidePath, tone) : scrimName(slidePath), name = index ? `${base} ${index + 1}` : base;
     slide.addShape('rect', { x: scrim.box.x / 96, y: scrim.box.y / 96, w: scrim.box.width / 96, h: scrim.box.height / 96, objectName: name, fill: { color: normalizeHex(scrim.color), transparency: Math.round(100 - scrim.opacity * 100) }, line: { type: 'none' } });
@@ -3994,14 +3994,14 @@ async function addLogo(slide, presentation, logo, slideIndex, slideContext, cont
 
 // FF-62, RR-90: chart text is one size, core's `chartTextSize` for the chart's box: 20 px at the 1280 x 720 reference (15 pt on a 13.33 x 7.5 in
 // slide), shrunk only when the box is small (at most 1/18 of its height and 1/30 of its width, whole pixels) and never below
-// `composition.minFontSize` (default 16), scaled by the slide's shorter side over 720 px. The preview (opf-render charts.js) and core's value-axis
+// `composition.minFontSizePx` (default 16), scaled by the slide's shorter side over 720 px. The preview (opf-render charts.js) and core's value-axis
 // density call the same function with the same inputs, so the axis core composed matches the text drawn. The export writes the size in hundredths
 // of a point (DrawingML `sz`) on core's 0.01 pt grid, as core composes every font size (RR-16): the request rounds down, never below the
 // grid-rounded floor (core `gridFontSize`, `snapFontSizeUp(floor)` against `snapFontSizeDown(request)`).
 function chartTextHundredths(context, region) {
   const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
-  const floor = context.composition?.minFontSize ?? 16;
-  const px = coreChartTextSize({width: region.w * 96, height: region.h * 96, scale, minFontSize: floor});
+  const floor = context.composition?.minFontSizePx ?? 16;
+  const px = coreChartTextSize({width: region.w * 96, height: region.h * 96, scale, minFontSizePx: floor});
   return Math.max(Math.ceil(floor * scale * 75 - 1e-6), Math.floor(px * scale * 75 + 1e-6));
 }
 
@@ -4034,7 +4034,7 @@ function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale,
   const measure = textWidthMeasurer(resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, italic: false}, options.textMeasurement), options.textMeasurement);
   const deckLanguage = typeof presentation?.language === 'string' ? presentation.language : presentation?.language?.bcp47;
   const language = chartNumberLanguage(chart, deckLanguage), rtl = context.direction === 'rtl', horizontal = chartData.barDir === 'bar';
-  const geometry = {scale, minFontSize: context.composition?.minFontSize, measure, direction: rtl ? 'rtl' : 'ltr', ...(language === undefined ? {} : {language})};
+  const geometry = {scale, minFontSizePx: context.composition?.minFontSizePx, measure, direction: rtl ? 'rtl' : 'ltr', ...(language === undefined ? {} : {language})};
   const barInset = horizontal ? horizontalBarPlot(chart, data, layer, valueAxis, box, geometry) : undefined;
   // A whole horizontal plot without its value axis needs the label room only horizontalBarPlot keeps (chartPlotInset's bar branch, the
   // preview's plot of a bar chart with options, keeps none).
@@ -4075,7 +4075,7 @@ function circularPlot(chart, chartData, layer, plot, region, {scale, context, op
     const measure = textWidthMeasurer(resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, italic: false}, options.textMeasurement), options.textMeasurement);
     const deckLanguage = typeof presentation?.language === 'string' ? presentation.language : presentation?.language?.bcp47;
     const language = chartNumberLanguage(chart, deckLanguage);
-    const geometry = {box, scale, minFontSize: context.composition?.minFontSize, measure, direction: context.direction === 'rtl' ? 'rtl' : 'ltr', ...(language === undefined ? {} : {language})};
+    const geometry = {box, scale, minFontSizePx: context.composition?.minFontSizePx, measure, direction: context.direction === 'rtl' ? 'rtl' : 'ltr', ...(language === undefined ? {} : {language})};
     square = chartCircleSquare({...chart, type: chartData.type}, data, geometry, layer, {labels: true});
   }
   if (!square || !(square.width > 0)) return undefined;
@@ -4416,7 +4416,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
   }
 
   const layout = layoutTable(table, {x:region.x*96,y:region.y*96,width:region.w*96,height:region.h*96}, {
-    scale, minFontSize:context.composition?.minFontSize, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path, alignment:context.tableAlignment,
+    scale, minFontSizePx:context.composition?.minFontSizePx, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path, alignment:context.tableAlignment,
     ...(context.direction === 'rtl' ? {direction: 'rtl'} : {}), ...(presentation ? {presentation} : {}),
     // LH-106: number cells are shown in the numbering system of the slide's language (its own, else the deck's), as the preview shows them.
     ...tableNumberLanguage(presentation, path),
@@ -4482,7 +4482,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
         lineSpacing: fit.lineHeight * 0.75,
         paraSpaceAfter: 0,
         align: physicalAlignment(cell.alignment, cell.direction),
-        valign: cellStyle.verticalAlign ?? 'top',
+        valign: cellStyle.anchor ?? 'top',
         ...(cell.colSpan > 1 ? {colspan:cell.colSpan} : {}),
         ...(cell.rowSpan > 1 ? {rowspan:cell.rowSpan} : {}),
         color: nativeColor(cellStyle.color, baseColor, context, defaultText),
@@ -4862,7 +4862,7 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
   assertXmlText(text, config.path);
   const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
   const style = config.textStyle ?? resolveTextStyle({fontFamily: config.fontFamily ?? context.fonts.body, fontWeight: config.fontWeight ?? 400, path: config.path}, options.textMeasurement);
-  const fit = config.fit ?? fitText(String(text ?? ''), box, config.fontSize * scale, (context.composition?.minFontSize ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
+  const fit = config.fit ?? fitText(String(text ?? ''), box, config.fontSize * scale, (context.composition?.minFontSizePx ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
   if (fit.overflow && !config.diagnosticsHandled) {
     const diagnostic = {code: 'text-overflow', path: config.path, message: 'Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide.'};
     options.onDiagnostic?.(diagnostic);
@@ -5427,7 +5427,7 @@ function addImagePlaceholder(slide, presentation, asset, region, path, context, 
   const textColor = normalizeHex(textColorForFill(`#${surface}`, `#${context.colors.text}`));
   const style = resolveTextStyle({ fontFamily: context.fonts.body, fontWeight: 600, path }, options.textMeasurement);
   const measurer = textWidthMeasurer(style, options.textMeasurement);
-  const minimum = (context.composition?.minFontSize ?? 16) * scale;
+  const minimum = (context.composition?.minFontSizePx ?? 16) * scale;
   const fit = fitText(label, inner, 20 * scale, minimum, measurer);
   const objectName = `OPF image placeholder ${context.imagePlaceholders.size + 1}`;
   context.imagePlaceholders.set(objectName, `Image unavailable: ${description}`);

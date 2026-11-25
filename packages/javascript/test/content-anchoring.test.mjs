@@ -7,7 +7,7 @@ const measurement={measure:(text,size)=>[...text].length*size*.5};
 // OPF 0.35: a single-block region is `max: 1` (it was flow 'none'); 'single' here stands for it.
 const make=(anchor,flow='column',accepts=['quote','metric','text'])=>({name:'Measured',regions:[{name:'body',accepts,...(flow==='single'?{max:1}:{flow,max:12}),anchor}]});
 // The region anchor at the role sizes (`fill: false`: LH-48 grows a lone short block and centers it, lone-fill.test.mjs).
-const compose=(anchor,blocks,flow='column',extra={})=>composeSlide({blocks,...(extra.minFontSize?{composition:{minFontSize:extra.minFontSize}}:{})},{width:960,height:720,layout:make(anchor,flow),textMeasurement:measurement,fill:false,...extra});
+const compose=(anchor,blocks,flow='column',extra={})=>composeSlide({blocks,...(extra.minFontSizePx?{composition:{minFontSizePx:extra.minFontSizePx}}:{})},{width:960,height:720,layout:make(anchor,flow),textMeasurement:measurement,fill:false,...extra});
 test('successful quotes keep attribution immediately after measured body and include photo in compact bounds',()=>{
  for(const value of [quote,{...quote,text:[{text:'Rich words',bold:true},' remain intact.']},{...quote,photo:'person.png'}]){
   const result=layoutQuote(value,box,{textMeasurement:measurement});assert.equal(result.overflow,false);
@@ -70,7 +70,7 @@ test('six metrics share value and label baselines within two grid rows despite u
 });
 test('explicit readability floor and card insets remain respected by anchored quote and metric fits',()=>{
  for(const flow of ['column','grid']){
-  const result=compose('middle',[{quote},{metric:{value:52,label:'Trial users'}}],flow,{minFontSize:24,contentBox:true});
+  const result=compose('middle',[{quote},{metric:{value:52,label:'Trial users'}}],flow,{minFontSizePx:24,contentBox:true});
   assert.equal(result.diagnostics.length,0);
   for(const item of result.items){const internal=item.quoteLayout??item.metricLayout;assert.ok(internal.parts.every(p=>p.fit.fontSize>=24));assert.ok(internal.bounds.y+internal.bounds.height<=item.box.y+item.box.height+.01);assert.ok(item.box.y>=item.frameBox.y);assert.ok(item.box.y+item.box.height<=item.frameBox.y+item.frameBox.height+.01);}
  }

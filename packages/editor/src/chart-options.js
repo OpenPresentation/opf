@@ -163,13 +163,13 @@ function comboSeries(chart, document) {
   const resolved = resolveChartData(chart, document);
   if (!resolved.ok || !Array.isArray(resolved.combo)) return [];
   const plan = new Map(resolved.columns.slice(1).map((name, index) => [name, resolved.combo[index]]));
-  const { line: _line, secondaryAxis: _secondary, ...plain } = chart;
+  const { lineSeries: _line, secondaryAxis: _secondary, ...plain } = chart;
   const plotted = resolveChartData({ ...plain, type: "column" }, document);
   const names = plotted.ok ? plotted.columns.slice(1) : [...plan.keys()];
   return names.filter((name) => plan.has(name)).map((name) => ({ name, role: plan.get(name)?.role ?? "bar", axis: plan.get(name)?.axis ?? "primary" }));
 }
 
-// FA-15: `line` and `secondaryAxis` for a combo chart from the wanted line and secondary-axis names. `line` is written only when
+// FA-15: `lineSeries` and `secondaryAxis` for a combo chart from the wanted line and secondary-axis names. `lineSeries` is written only when
 // it differs from the default (the last plotted series), names keep the data's order, and only a line can use the secondary axis.
 function comboFields(chart, change, document) {
   const series = comboSeries(chart, document);
@@ -183,22 +183,22 @@ function comboFields(chart, change, document) {
     if (unknown.length) throw fail("invalid-chart-option", `${unknown.map((name) => `'${name}'`).join(", ")} ${unknown.length === 1 ? "is not a plotted series" : "are not plotted series"} of this chart.`, { [field]: value });
     return value;
   };
-  const lines = wanted(change.line, currentLines, "line");
-  if (!lines.length) throw fail("invalid-chart-option", "A combo chart draws at least one series as a line; choose a column chart for columns only.", { line: change.line });
-  if (lines.length >= plotted.length) throw fail("invalid-chart-option", "A combo chart keeps at least one series as columns.", { line: change.line });
+  const lines = wanted(change.lineSeries, currentLines, "lineSeries");
+  if (!lines.length) throw fail("invalid-chart-option", "A combo chart draws at least one series as a line; choose a column chart for columns only.", { lineSeries: change.lineSeries });
+  if (lines.length >= plotted.length) throw fail("invalid-chart-option", "A combo chart keeps at least one series as columns.", { lineSeries: change.lineSeries });
   const ordered = plotted.filter((name) => lines.includes(name));
   const secondary = plotted.filter((name) => ordered.includes(name) && wanted(change.secondaryAxis, currentSecondary, "secondaryAxis").includes(name));
   const defaultLine = ordered.length === 1 && ordered[0] === plotted[plotted.length - 1];
-  return { line: defaultLine ? undefined : ordered, secondaryAxis: secondary.length ? secondary : undefined };
+  return { lineSeries: defaultLine ? undefined : ordered, secondaryAxis: secondary.length ? secondary : undefined };
 }
 
 // The desired value of each field (undefined removes it), from the chart and a patch.
 function desired(chart, change, support, choices, current, document, parts) {
   const out = {};
   const combo = support.axisTitles.secondary === true;
-  if (change.line !== undefined || change.secondaryAxis !== undefined) {
+  if (change.lineSeries !== undefined || change.secondaryAxis !== undefined) {
     // Only a combo chart has line series; elsewhere the fields are removed.
-    Object.assign(out, combo ? comboFields(chart, change, document) : { line: undefined, secondaryAxis: undefined });
+    Object.assign(out, combo ? comboFields(chart, change, document) : { lineSeries: undefined, secondaryAxis: undefined });
   }
   // The secondary axis title exists only while a series uses the secondary axis.
   const hasSecondary = combo && (Object.hasOwn(out, "secondaryAxis") ? out.secondaryAxis !== undefined : Array.isArray(chart.secondaryAxis) && chart.secondaryAxis.length > 0);
@@ -291,12 +291,12 @@ function paletteOf(document, parts) {
 
 /**
  * Prepare one validated patch for a change to the chart's options. `change` is
- * `{ alt?, decorative?, axisTitles?: { category?, value?, secondary? }, legend?, dataLabels?, highlight?, colors?, line?, secondaryAxis? }`: `alt` is the text alternative (trimmed; empty or `null`
+ * `{ alt?, decorative?, axisTitles?: { category?, value?, secondary? }, legend?, dataLabels?, highlight?, colors?, lineSeries?, secondaryAxis? }`: `alt` is the text alternative (trimmed; empty or `null`
  * removes it), `decorative: true` writes the empty alt (and wins over `alt`), `decorative: false` removes an empty alt; `axisTitles` entries are strings (empty removes a title),
  * `legend` is `"default"` (remove the field), `"none"`, `"top"`, `"bottom"`, `"left"` or `"right"`, and `dataLabels` is
  * `true`, `false` (or `null`, which removes the field), or `{ content?, position?, separator? }` merged over the current labels, and
  * `highlight` is `null` (remove the field) or `{ series?, categories? }`: each list replaces that part (an empty list removes it, a name the
- * chart does not have is refused) and the other part is kept. On a combo chart (FA-15), `line` lists the series drawn as lines and
+ * chart does not have is refused) and the other part is kept. On a combo chart (FA-15), `lineSeries` lists the series drawn as lines and
  * `secondaryAxis` the lines on the secondary value axis, by name; at least one series stays columns and at least one is a line, `line`
  * is written only when it differs from the default (the last series), and the secondary axis title goes when no series uses that axis.
  * `colors` (RR-96) is `null` (remove the field) or a list of colors by position (a hex color, a scheme color such as `accent3` that keeps following the deck, or

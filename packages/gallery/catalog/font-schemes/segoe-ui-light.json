@@ -3,7 +3,7 @@
   "id": "segoe-ui-light",
   "name": "Segoe UI Light",
   "app": "powerpoint",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Segoe UI Semilight",
   "minor": "Segoe UI Light",

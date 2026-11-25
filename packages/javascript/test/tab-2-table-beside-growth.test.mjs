@@ -20,7 +20,7 @@ const asides = {
   quote: { quote: { text: 'Start small and measure.', attribution: 'Ana' } },
 };
 const slide = (aside) => ({ layout: 'table-beside', title: 'Team B needs support', blocks: [{ region: 'body', table }, { region: 'aside', ...aside }] });
-const cellSize = (item) => Math.min(...layoutTable(item.value, item.box, { scale: 1, minFontSize: item.composition.minFontSize, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap((row) => row.cells.map((cell) => cell.fit.fontSize)));
+const cellSize = (item) => Math.min(...layoutTable(item.value, item.box, { scale: 1, minFontSizePx: item.composition.minFontSizePx, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap((row) => row.cells.map((cell) => cell.fit.fontSize)));
 
 for (const [kind, aside] of Object.entries(asides)) test(`a table beside a ${kind} grows past its role size`, () => {
   const result = compose(slide(aside)), kept = compose(slide(aside), { fill: false });

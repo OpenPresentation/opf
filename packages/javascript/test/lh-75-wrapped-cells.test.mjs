@@ -11,7 +11,7 @@ const table = (decisions) => ({ table: { columns: ['Workstream', 'Owner', 'Statu
 const slide = (decisions) => ({ title: 'Plans at a glance', blocks: [table(decisions), { text: note }] });
 const itemOf = (result, field) => result.items.find((item) => item.field === field);
 const beside = (a, b) => a.x + a.width <= b.x + 1 || b.x + b.width <= a.x + 1;
-const cellLines = (item) => Math.max(...layoutTable(item.value, item.box, { scale: 1, minFontSize: item.composition.minFontSize, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap((row) => row.cells.map((cell) => cell.fit.lines.length)));
+const cellLines = (item) => Math.max(...layoutTable(item.value, item.box, { scale: 1, minFontSizePx: item.composition.minFontSizePx, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap((row) => row.cells.map((cell) => cell.fit.lines.length)));
 const findings = (result) => result.diagnostics.filter((entry) => ['text-overflow', 'small-cell'].includes(entry.code));
 
 for (const [name, options] of [['the table layout', { layout: gallery.layouts.table }], ['automatic composition', {}]]) {
@@ -23,7 +23,7 @@ for (const [name, options] of [['the table layout', { layout: gallery.layouts.ta
     assert.ok(text.frameBox, 'the note is on its card');
     assert.ok(cellLines(placed) >= 2 && cellLines(placed) <= 2, `cells on at most two lines (${cellLines(placed)})`);
     assert.deepEqual(findings(result), []);
-    const size = (composed) => Math.min(...layoutTable(itemOf(composed, 'table').value, itemOf(composed, 'table').box, { scale: 1, minFontSize: 16 }).rows.flatMap((row) => row.cells.map((cell) => cell.fit.fontSize)));
+    const size = (composed) => Math.min(...layoutTable(itemOf(composed, 'table').value, itemOf(composed, 'table').box, { scale: 1, minFontSizePx: 16 }).rows.flatMap((row) => row.cells.map((cell) => cell.fit.fontSize)));
     assert.ok(size(result) >= size(stacked) - 1e-6, 'the table is no smaller than stacked');
   });
 }

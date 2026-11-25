@@ -423,7 +423,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "civic-data-lab",
+    "organization": "civic-data-lab",
     "bio": "Leads data storytelling planning for Civic Data Lab.",
     "socials": {
       "x": "@civic-data-lab-speaker"
@@ -768,7 +768,7 @@
         "consolas": {
           "name": "Consolas",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Consolas",
           "minor": "Consolas",
@@ -780,7 +780,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

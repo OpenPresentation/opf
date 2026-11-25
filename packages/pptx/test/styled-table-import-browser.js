@@ -12,7 +12,7 @@ const out=document.querySelector('pre');let checks=0;
 const check=(ok,message)=>{if(!ok)throw Error(message);checks++;};
 try {
  const source={design:{theme:'classic',fontScheme:'roboto'},slides:[{title:'Native styled table import',table:{columns:['Team','Stage','Status'],rows:[
-  [{value:'Design',rowSpan:2,style:{fill:'#DBEAFE',verticalAlign:'middle'}},'Preview',{value:[{text:'Ready',bold:true,color:'#166534'}],style:{fill:'#DCFCE7',align:'center'}}],
+  [{value:'Design',rowSpan:2,style:{fill:'#DBEAFE',anchor:'middle'}},'Preview',{value:[{text:'Ready',bold:true,color:'#166534'}],style:{fill:'#DCFCE7',align:'center'}}],
   [null,'Editing',{value:'In progress',style:{fill:'#FEF3C7',color:'#92400E',align:'center'}}],
   [{value:'One native merged cell',colSpan:3,style:{fill:'#F1F5F9',padding:{top:12,bottom:12},borders:{top:{color:'#64748B',width:2,dash:'dash'}}}},null,null]
  ]}}]};
@@ -33,7 +33,7 @@ try {
  const table=deck.slides[0].table??deck.slides[0].blocks?.find(block=>block.table)?.table;
  check(table.rows[0][0].rowSpan===2&&table.rows[1][0]===null,'Vertical anchor and covered slot');
  check(table.rows[2][0].colSpan===3&&table.rows[2][1]===null&&table.rows[2][2]===null,'Horizontal anchor and covered slots');
- check(table.rows[0][0].style.verticalAlign==='middle','Native vertical alignment');
+ check(table.rows[0][0].style.anchor==='middle','Native vertical alignment');
  check(table.rows[2][0].style.borders.top.dash==='dash','Native dashed border');
  document.querySelector('main').innerHTML=toSvg(deck, 1,{trace:true});
  const tableBlock=deck.slides[0].blocks?.findIndex(block=>block.table)??-1;

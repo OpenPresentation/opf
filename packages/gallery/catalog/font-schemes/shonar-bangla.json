@@ -3,7 +3,7 @@
   "id": "shonar-bangla",
   "name": "Shonar Bangla",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "bn",
     "ctg"

@@ -3,7 +3,7 @@
   "id": "gautami",
   "name": "Gautami",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "te"
   ],

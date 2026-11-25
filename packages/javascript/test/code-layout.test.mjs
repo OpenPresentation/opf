@@ -74,7 +74,7 @@ test('wrapped whitespace and graphemes retain contiguous source offsets, includi
   const text='  e\u0301👩‍🔬  \t abcdefghijklmnop\r\n\r\nlast  \n';
   const segmenter=new Intl.Segmenter('und',{granularity:'grapheme'});
   const boundaries=new Set([0,text.length,...[...segmenter.segment(text)].flatMap(item=>[item.index,item.index+item.segment.length])]);
-  const result=layoutCode(text,{x:0,y:0,width:95,height:800},{minFontSize:8});
+  const result=layoutCode(text,{x:0,y:0,width:95,height:800},{minFontSizePx:8});
   const body=result.parts.at(-1);assert.equal(result.overflow,false);assertSource(body);
   for (const line of body.fit.sourceLines) {assert.ok(boundaries.has(line.start));assert.ok(boundaries.has(line.end));}
   assert.ok(body.fit.sourceLines.some(line=>line.boundary==='soft'));
@@ -105,9 +105,9 @@ test('tabs use measured space stops and never send control tabs to the font-widt
 
 test('readability floors scale once and body shrinking preserves all code content',()=>{
   for (const scale of [.75,1,1.5]) {
-    const result=layoutCode({source:'value',filename:'file',language:'lang'},cell,{scale,minFontSize:32});
+    const result=layoutCode({source:'value',filename:'file',language:'lang'},cell,{scale,minFontSizePx:32});
     assert.equal(result.overflow,false);
-    for (const part of result.parts) {assert.equal(part.fit.fontSize,32*scale);assert.equal(part.minFontSize,32*scale);assertSource(part);}
+    for (const part of result.parts) {assert.equal(part.fit.fontSize,32*scale);assert.equal(part.minFontSizePx,32*scale);assertSource(part);}
   }
   const result=layoutCode('line\n'.repeat(8),{x:0,y:0,width:300,height:250});
   assert.equal(result.overflow,false);
@@ -133,7 +133,7 @@ test('invalid inner boxes never become invented one-pixel fits; malformed option
   const result=layoutCode('retained',{x:0,y:0,width:30,height:30},{textMeasurement:{measure:()=>{calls++;return 1;}}});
   assert.equal(calls,0);assert.equal(result.overflow,true);assert.ok(result.parts.every(part=>part.box.width===-6&&!part.fit));
   for (const value of [null,[],{},{source:42},{source:'x',filename:null}]) assert.throws(()=>layoutCode(value,cell),TypeError);
-  for (const options of [{scale:0},{scale:1e308},{minFontSize:NaN},{minFontSize:1.7e308},{overflow:'ignore'}]) assert.throws(()=>layoutCode('x',cell,options),RangeError);
+  for (const options of [{scale:0},{scale:1e308},{minFontSizePx:NaN},{minFontSizePx:1.7e308},{overflow:'ignore'}]) assert.throws(()=>layoutCode('x',cell,options),RangeError);
   for (const box of [{...cell,x:NaN},{...cell,width:0},{...cell,x:1e308,width:1e308}]) assert.throws(()=>layoutCode('x',box),RangeError);
 });
 
@@ -141,7 +141,7 @@ test('font trials stay bounded independently of canvas scale',()=>{
   for (const scale of [.25,1,10]) {
     let trials=0;
     const textMeasurement={measure:(text,size)=>{if(text===' ')trials++;return text.length*size*.5;}};
-    layoutCode({source:'x\n'.repeat(100),filename:'file',language:'lang'},cell,{scale,minFontSize:8,textMeasurement});
+    layoutCode({source:'x\n'.repeat(100),filename:'file',language:'lang'},cell,{scale,minFontSizePx:8,textMeasurement});
     // At most four metadata combinations, each with two header fits and 19
     // body sizes. This provider sees one measured-space request per fit trial.
     assert.ok(trials>0&&trials<=84,`Unexpected trial count at scale ${scale}: ${trials}`);

@@ -51,7 +51,7 @@ for (const direction of ['ltr', 'rtl']) {
   });
 
   test(`LH-155 (${direction}): over a picture the closing stays low only where the measured picture is calm, else goes where it reads (LH-158)`, () => {
-    const slide = closing('Start your free pilot this month', pilot, { design: { background: { type: 'image', src: PHOTO, tone: 'dark' } } });
+    const slide = closing('Start your free pilot this month', pilot, { design: { background: { type: 'image', src: PHOTO, appearance: 'dark' } } });
     const compose = (extra) => composeSlide(slide, { layout: layouts.closing, direction, darkBackground: true, ...extra });
     const calm = compose({ pictureLuminance: () => grid('calm') }), busy = compose({ pictureLuminance: () => grid('busy') }), estimated = compose({});
     const plain = composeSlide({ title: slide.title, blocks: slide.blocks }, { layout: layouts.closing, direction });

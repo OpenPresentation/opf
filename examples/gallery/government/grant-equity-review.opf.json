@@ -380,7 +380,7 @@
         "montserrat": {
           "name": "Montserrat",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Montserrat",
           "minor": "Montserrat",
@@ -391,7 +391,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

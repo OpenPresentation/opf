@@ -104,7 +104,7 @@ const attr = (xml, element) => new RegExp(`<c:${element} val="([^"]*)"/>`).exec(
 // 3. Columns first, then the primary-axis lines, then the secondary-axis lines; the authored order and fields come back.
 {
   const data = {columns: ['Quarter', 'Margin', 'Revenue', 'Cost', 'Target'], rows: [['Q1', 0.3, 12, 8, 13], ['Q2', 0.32, 15, 9, 14]]};
-  const chart = {type: 'combo', data, line: ['Margin', 'Target'], secondaryAxis: ['Margin']};
+  const chart = {type: 'combo', data, lineSeries: ['Margin', 'Target'], secondaryAxis: ['Margin']};
   const {xml, imported} = await exportDeck(chart);
   assert.deepEqual(chartOrderProblems(xml), []);
   const lines = groups(xml, 'lineChart');

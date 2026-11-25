@@ -243,7 +243,7 @@ export interface UnpaginateOptions {
  * slices of each source slide back into the original leaves (text, list items, table rows, timeline events, code
  * lines) and replace the continuation slides by one slide. The first slide's id, headings and design are kept; the
  * slides must not have been edited or reordered since (a gap between two slices is refused). The readability floor
- * pagination wrote into `composition.minFontSize` stays, because the original value is not recorded.
+ * pagination wrote into `composition.minFontSizePx` stays, because the original value is not recorded.
  */
 export function unpaginate(presentation: unknown, pages: readonly (PaginatedPage & { sourceSlideIndex: number })[], options: UnpaginateOptions = {}): SlideEdit {
   const groups = new Map<number, (PaginatedPage & { sourceSlideIndex: number })[]>();

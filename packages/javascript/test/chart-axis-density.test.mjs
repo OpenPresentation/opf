@@ -83,9 +83,9 @@ describe('the 18 px text floor', () => {
 		assert.equal(chartTextSize({ width: 760, height: 940, scale: 2 }), 18);
 	});
 
-	test('a larger minFontSize and a roomy box are unchanged', () => {
+	test('a larger minFontSizePx and a roomy box are unchanged', () => {
 		assert.equal(chartTextSize({ width: 1000, height: 600, scale: 1 }), 20);
-		assert.equal(chartTextSize({ width: 380, height: 470, scale: 1, minFontSize: 24 }), 24);
+		assert.equal(chartTextSize({ width: 380, height: 470, scale: 1, minFontSizePx: 24 }), 24);
 		assert.equal(chartTextSize({ width: 0, height: 600, scale: 1 }), 20);
 	});
 });

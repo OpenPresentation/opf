@@ -260,7 +260,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "greenbasket-markets",
+    "organization": "greenbasket-markets",
     "bio": "Leads retail grocery planning for Greenbasket Markets.",
     "socials": {
       "github": "@greenbasket-markets-speaker"
@@ -657,7 +657,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",
@@ -668,7 +668,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

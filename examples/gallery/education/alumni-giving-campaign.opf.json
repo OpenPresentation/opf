@@ -265,7 +265,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "redwood-college-foundation",
+    "organization": "redwood-college-foundation",
     "bio": "Leads advancement planning for Redwood College Foundation.",
     "socials": {
       "github": "@redwood-college-foundation-speaker"
@@ -637,7 +637,7 @@
         "century-schoolbook": {
           "name": "Century Schoolbook",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Century Schoolbook",
           "minor": "Century Schoolbook",
@@ -648,7 +648,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

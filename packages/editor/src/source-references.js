@@ -15,7 +15,7 @@ import { listBuiltinVariables } from "@openpresentation/opf";
 export const REFERENCE_RULES = Object.freeze([
   { kind: "asset", definitions: ["Asset", "LogoSource", "ImageSource", "ImagePayload"], keys: ["src", "logo", "watermark"], phrases: ["asset:<id>", "or Asset"] },
   { kind: "dataset", definitions: ["DatasetId"], keys: [], phrases: [] },
-  { kind: "datasetColumn", definitions: ["DatasetFields"], keys: ["category", "x", "series", "line", "secondaryAxis"], phrases: ["column"], item: true },
+  { kind: "datasetColumn", definitions: ["DatasetFields"], keys: ["category", "x", "series", "lineSeries", "secondaryAxis"], phrases: ["column"], item: true },
   { kind: "cite", definitions: [], keys: ["cite"], phrases: ["references"], item: true },
   { kind: "beat", definitions: [], keys: ["beat"], phrases: ["narrative"], item: true },
   { kind: "region", definitions: [], keys: ["region"], phrases: ["a region of that layout"] },

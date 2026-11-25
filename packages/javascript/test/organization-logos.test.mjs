@@ -267,7 +267,7 @@ test('a row wider than its zone wraps its text, and reports overflow when it can
   const capped = layoutFurniture({}, {presentation: deck({...organization, logo: wide}, {design: {footer: crowded('start', {image: 'var:organization.logo', text: 'Acme'})}})});
   assert.deepEqual(capped.diagnostics, []);
   near(capped.parts[0].box.width, columnWidth() * 0.4, 'the logo takes at most 40% of the zone');
-  const overflow = layoutFurniture({composition: {minFontSize: 32}}, {presentation: deck({...organization, logo: wide}, {design: {footer: crowded('start', {image: 'var:organization.logo', text: 'Supercalifragilistic', date: '2026'})}})});
+  const overflow = layoutFurniture({composition: {minFontSizePx: 32}}, {presentation: deck({...organization, logo: wide}, {design: {footer: crowded('start', {image: 'var:organization.logo', text: 'Supercalifragilistic', date: '2026'})}})});
   assert.equal(overflow.overflow, true);
   assert.deepEqual(overflow.diagnostics.map(entry => [entry.code, entry.path]), [['text-overflow', 'design.footer.start.text']]);
 });
@@ -307,7 +307,7 @@ test('beside other parts an image is capped at FURNITURE_IMAGE_SHARE of the zone
 
 test('portrait: a logo beside text never breaks a word silently at the readability floor', () => {
   // The renderer's case: a 720 px wide portrait canvas, a header-left logo beside text, a 32 px floor.
-  const layout = (logo, text) => layoutFurniture({composition: {minFontSize: 32}}, {width: 720, height: 1280, presentation: deck({id: 'acme', name: 'Acme', logo}, {design: {header: crowded('start', {image: 'var:organization.logo', text})}})});
+  const layout = (logo, text) => layoutFurniture({composition: {minFontSizePx: 32}}, {width: 720, height: 1280, presentation: deck({id: 'acme', name: 'Acme', logo}, {design: {header: crowded('start', {image: 'var:organization.logo', text})}})});
   for (const logo of [png(400, 100), png(100, 100), './assets/acme.svg']) {
     const result = layout(logo, 'Keep both');
     assert.deepEqual(result.diagnostics, [], 'the words fit their share whole');
@@ -323,6 +323,6 @@ test('portrait: a logo beside text never breaks a word silently at the readabili
   // Scripts written without spaces break between characters as usual.
   assert.deepEqual(layout(png(100, 100), '東京都の会議資料です').diagnostics, []);
   // A lone text part keeps its 0.17 behavior: no new diagnostic for a long word in a single-part zone.
-  const single = layoutFurniture({composition: {minFontSize: 32}}, {width: 720, height: 1280, presentation: deck(undefined, {design: {header: {start: {text: 'Confidentiality-assessment'}}}})});
+  const single = layoutFurniture({composition: {minFontSizePx: 32}}, {width: 720, height: 1280, presentation: deck(undefined, {design: {header: {start: {text: 'Confidentiality-assessment'}}}})});
   assert.ok(single.diagnostics.every(entry => !/break inside the word/.test(entry.message)));
 });

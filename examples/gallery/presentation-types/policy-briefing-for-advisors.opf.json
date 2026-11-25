@@ -424,7 +424,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "civic-futures-lab",
+    "organization": "civic-futures-lab",
     "bio": "Leads policy briefing planning for Civic Futures Lab.",
     "socials": {
       "tiktok": "@civic-futures-lab-speaker"
@@ -763,7 +763,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",
@@ -774,7 +774,7 @@
         "vrinda": {
           "name": "Vrinda",
           "app": "powerpoint",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "bn"
           ],

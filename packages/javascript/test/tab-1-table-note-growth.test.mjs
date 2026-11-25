@@ -18,7 +18,7 @@ const longNote = `${note.slice(0, -1)}, then compare the results against the bas
 const slide = (count, text = note) => ({ layout: 'table', title: 'Compare outcomes', blocks: [{ region: 'body', table: { columns, rows: all.slice(0, count) } }, { region: 'aside', text }] });
 const sizes = (result) => {
   const table = result.items.find((item) => item.field === 'table'), text = result.items.find((item) => item.field === 'text');
-  const laid = layoutTable(table.value, table.box, { scale: 1, minFontSize: table.composition.minFontSize, ...(table.tableGrowth ? { growth: table.tableGrowth } : {}) });
+  const laid = layoutTable(table.value, table.box, { scale: 1, minFontSizePx: table.composition.minFontSizePx, ...(table.tableGrowth ? { growth: table.tableGrowth } : {}) });
   return { table: Math.min(...laid.rows.flatMap((row) => row.cells.map((cell) => cell.fit.fontSize))), note: text.text.fontSize, box: table.box, noteBox: text.box };
 };
 

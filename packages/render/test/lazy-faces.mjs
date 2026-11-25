@@ -215,7 +215,7 @@ assert.equal(withDefaults.pendingLazyFonts(catalogDeck, {catalogs: bullets}).len
 assert.equal((await withDefaults.ensureLazyFonts(catalogDeck, {signal: new AbortController().signal})).length, 2);
 withDefaults.dispose();
 // A font scheme that exists only in the host's catalogs and names a script font selects that font's script package.
-const yuCatalog = [{source: 'https://catalog.example/yu', fontSchemes: {'host-yu': {name: 'Host Yu', app: 'powerpoint', languageFamily: 'latin', languages: [], major: 'Yu Gothic', minor: 'Yu Gothic', textSample: 'x', type: 'sans-serif'}}}];
+const yuCatalog = [{source: 'https://catalog.example/yu', fontSchemes: {'host-yu': {name: 'Host Yu', app: 'powerpoint', scriptGroup: 'latin', languages: [], major: 'Yu Gothic', minor: 'Yu Gothic', textSample: 'x', type: 'sans-serif'}}}];
 const yuDeck = {name: 'yu', design: {fontScheme: 'host-yu'}, slides: [{title: 'Review', text: 'Text'}]};
 const scriptRegistry = await load({scriptBaseUrl: 'https://fonts.example/scripts/'});
 assert.deepEqual(scriptRegistry.pendingScripts(yuDeck, {catalogs}), [], 'the gallery catalog does not have the host scheme, so with it alone no script face is named');

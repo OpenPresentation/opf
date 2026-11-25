@@ -3,7 +3,7 @@
   "id": "consolas",
   "name": "Consolas",
   "app": "powerpoint",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Consolas",
   "minor": "Consolas",

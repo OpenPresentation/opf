@@ -106,7 +106,7 @@ const layoutRules: ValidationRule[] = [
 						path,
 						slide,
 						message: `${label} is drawn at ${round(sizePx * PX_TO_PT)} pt${scale === 1 ? '' : ' (reference slide size)'}, below the ${context.thresholds.minFontSizePt} pt minimum.`,
-						help: 'Shorten the text or give it more room so it can be drawn larger; check composition.minFontSize and run fontSize settings that force small type.',
+						help: 'Shorten the text or give it more room so it can be drawn larger; check composition.minFontSizePx and run fontSize settings that force small type.',
 						measured: { sizePt: round(sizePx * PX_TO_PT, 2), minimumPt: context.thresholds.minFontSizePt },
 					});
 				};

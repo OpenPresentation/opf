@@ -39,7 +39,7 @@ const slides = [
 ];
 const PICTURE = '#14202E';
 const cases = [
-  ['dark picture', {type: 'image', src: png(PICTURE), tone: 'dark'}, PICTURE],
+  ['dark picture', {type: 'image', src: png(PICTURE), appearance: 'dark'}, PICTURE],
   ['dark hex', '#7A1F3D', '#7A1F3D'],
   ['light hex', '#FAF7F0', '#FAF7F0'],
   ['solid var:', {type: 'solid', color: 'var:brand'}, '#0F3D2E'],

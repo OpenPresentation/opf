@@ -11,7 +11,7 @@ import { check, errorsOf } from './support/validation.mjs';
 
 const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=';
 const references = [
-  { id: 'gartner', text: 'Gartner, Market Guide, 2026', url: 'https://example.com/gartner' },
+  { id: 'gartner', text: 'Gartner, Market Guide, 2026', link: 'https://example.com/gartner' },
   { id: 'annual', text: ['Annual report ', { text: '2025', bold: true }] },
   { id: 'spare', text: 'Never cited' },
 ];
@@ -190,7 +190,7 @@ describe('footnote area', () => {
       [2, 'reference', ['2 ', 'Annual report ', { text: '2025', bold: true }], 'references.1'],
       [3, 'footnote', '3 An inline note.', 'slides.0.text.3'],
     ]);
-    assert.equal(entries[0].url, 'https://example.com/gartner');
+    assert.equal(entries[0].link, 'https://example.com/gartner');
     assert.equal(fontSize, 16);
     // Bottom edge: the bottom padding (no footer on this slide); x and width: the content area.
     assert.ok(Math.abs(box.y + box.height - (720 - 57.6)) < 1e-6);

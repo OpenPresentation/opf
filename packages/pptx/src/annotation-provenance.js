@@ -2,7 +2,7 @@
 //
 // Export writes captions and footnote lines as tagged text boxes (annotation-export.js):
 //   OPF_CAPTION_V1   {v:1, role:'caption', path, field, media, position, align, line, count, boundary, separator, rich?}
-//   OPF_FOOTNOTES_V1 {v:1, role:'rule', slide} | {v:1, role:'entry', slide, entry, number, kind, id?, source, url?, line, count, boundary, separator, rich?}
+//   OPF_FOOTNOTES_V1 {v:1, role:'rule', slide} | {v:1, role:'entry', slide, entry, number, kind, id?, source, link?, line, count, boundary, separator, rich?}
 // and the deck's `references` travel in the document record (document-provenance.js, metadata
 // supplement). Citation markers are ordinary superscript runs (`baseline="30000"`) with no tag.
 //
@@ -171,7 +171,7 @@ export function importAnnotations({shapes, paragraphs, relationships, entries, s
   for (const members of entryGroups.values()) {
     if (!complete(members)) { report({code: 'invalid-footnote-provenance', path: `slides.${slideIndex}`, message: 'Footnote lines were removed or duplicated; the remaining text stays an ordinary text block.'}); for (const member of members) consumed.delete(member.shape); continue; }
     const {record} = members[0];
-    notes.push({number: record.number, kind: record.kind, ...(record.kind === 'reference' ? {id: record.id} : {}), ...(typeof record.url === 'string' ? {url: record.url} : {}), text: withoutNumber(groupText(members, paragraphs, readBody), record.number)});
+    notes.push({number: record.number, kind: record.kind, ...(record.kind === 'reference' ? {id: record.id} : {}), ...(typeof record.link === 'string' ? {link: record.link} : {}), text: withoutNumber(groupText(members, paragraphs, readBody), record.number)});
   }
   notes.sort((a, b) => a.number - b.number);
   return {consumed, captions, notes, detached};
@@ -262,6 +262,6 @@ export function restoreCitations(imported, slideNotes, report, slideDetached = [
     report({code: 'reference-text-changed', path: `references.${stored.indexOf(reference)}`, message: `Reference '${reference.id}' shows edited text in a footnote area; the imported reference keeps the edited text.`});
     return {...reference, text: current};
   });
-  for (const note of used.values()) if (!references.some(reference => reference.id === note.id)) references.push({id: note.id, text: note.text, ...(note.url !== undefined ? {url: note.url} : {})});
+  for (const note of used.values()) if (!references.some(reference => reference.id === note.id)) references.push({id: note.id, text: note.text, ...(note.link !== undefined ? {link: note.link} : {})});
   imported.references = references;
 }

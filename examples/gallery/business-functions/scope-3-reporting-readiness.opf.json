@@ -271,7 +271,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "lumina-foods",
+    "organization": "lumina-foods",
     "bio": "Leads sustainability planning for Lumina Foods.",
     "socials": {
       "linkedin": "@lumina-foods-speaker"
@@ -634,7 +634,7 @@
         "poppins": {
           "name": "Poppins",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Poppins",
           "minor": "Poppins",
@@ -645,7 +645,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

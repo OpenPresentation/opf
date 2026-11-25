@@ -256,7 +256,7 @@
     "id": "speaker",
     "name": "Maya Chen",
     "title": "Program Sponsor",
-    "organizationId": "framewell-studio",
+    "organization": "framewell-studio",
     "bio": "Leads design system planning for Framewell Studio.",
     "socials": {
       "mastodon": "@framewell-studio-speaker"
@@ -616,7 +616,7 @@
         "bookman": {
           "name": "Bookman",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Bookman Old Style",
           "minor": "Bookman Old Style",
@@ -627,7 +627,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

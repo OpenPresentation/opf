@@ -126,7 +126,7 @@ test('pagination numbers continuation pages consecutively, keeps the tokens and 
   const sentence = 'Slide {{slide.number}} of {{deck.slideCount}} carries this sentence with enough detail. ';
   const input = { slides: [{ title: 'Long', text: sentence.repeat(90) }, { title: 'End', text: 'Last {{slide.number}}/{{deck.slideCount}}' }] };
   const before = structuredClone(input);
-  const result = paginate(input, { minFontSize: 24 });
+  const result = paginate(input, { minFontSizePx: 24 });
   assert.deepEqual(input, before);
   const slides = result.presentation.slides, total = slides.length;
   assert.ok(total > 2, 'the long slide splits');
@@ -152,7 +152,7 @@ test('{{deck.slideCount}} in body text alone triggers the slide-count fixed poin
   const measured = [];
   const textMeasurement = { measure: (text, size) => { if (/^\d+ slides$/.test(text)) measured.push(text); return [...text].length * size / 2; } };
   const input = { slides: [{ title: 'Long', text: 'Detail sentence for the pages. '.repeat(160) }, { title: 'Count', text: '{{deck.slideCount}} slides' }] };
-  const result = paginate(input, { minFontSize: 24, fonts: { textMeasurement } });
+  const result = paginate(input, { minFontSizePx: 24, fonts: { textMeasurement } });
   const total = result.presentation.slides.length;
   assert.ok(total > 2);
   assert.equal(result.presentation.slides.at(-1).text, '{{deck.slideCount}} slides');

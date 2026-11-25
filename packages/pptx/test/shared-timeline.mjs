@@ -17,7 +17,7 @@ const fixtures=[
 ];
 let control;
 for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1280]])for(const [fixture,timeline]of fixtures.entries()){
- const source={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96}},slides:[{title:'Timeline source',composition:{minFontSize:24,overflow:'error'},timeline}]},before=structuredClone(source),options=measured?fontOptions:{};
+ const source={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96}},slides:[{title:'Timeline source',composition:{minFontSizePx:24,overflow:'error'},timeline}]},before=structuredClone(source),options=measured?fontOptions:{};
  const bound=resolvePresentation(source,options).slides[0],layout=bound.geometry.items.find(item=>item.timelineLayout).timelineLayout;
  const bytes=await toPptx(source,options),entries=unzipSync(bytes),xml=decode(entries['ppt/slides/slide1.xml']),root=parser.parse(xml)['p:sld']['p:cSld']['p:spTree'];
  const shapes=array(root['p:sp']),timed=shapes.filter(shape=>shape['p:nvSpPr']?.['p:cNvPr']?.name.startsWith('OPF timeline '));
@@ -61,7 +61,7 @@ for(const [name,change]of [
  failures.push({name,diagnostics:result.diagnostics});
 }
 const multiple={slides:[{blocks:[{timeline:control.timeline},{timeline:fixtures[1]}]}]};assert.deepEqual((await fromPptx(await toPptx(multiple))).slides[0].blocks,multiple.slides[0].blocks,'untyped blocks return as authored');
-const dense={design:{fontScheme:'roboto'},slides:[{timeline:{events:Array.from({length:12},(_,index)=>({when:`Q${index+1}`,what:`Milestone ${index+1}`,description:'Keep every label inside its allocated space.'}))},composition:{minFontSize:32,overflow:'error'}}]};
+const dense={design:{fontScheme:'roboto'},slides:[{timeline:{events:Array.from({length:12},(_,index)=>({when:`Q${index+1}`,what:`Milestone ${index+1}`,description:'Keep every label inside its allocated space.'}))},composition:{minFontSizePx:32,overflow:'error'}}]};
 for(const options of [{},fontOptions]){
  await assert.rejects(toPptx(dense,options),error=>error.code==='layout-overflow'&&!(error instanceof TypeError));
  const warned=structuredClone(dense),diagnostics=[];warned.slides[0].composition.overflow='warn';

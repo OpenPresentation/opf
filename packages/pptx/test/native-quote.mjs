@@ -62,7 +62,7 @@ if(mode==='generate') {
     document.slides.push({title:'A quote and its source',quote:{text:'Keep the complete source visible.',attribution:'Long attribution '.repeat(60),source:'Recorded interview'}});
     const readable=paginateSlide({title:'A quote and its source',quote:{text:'This source keeps the selected readability floor.',attribution:'Repeated source '.repeat(15),source:'Recorded interview'}},{...dimensions,fontFamilies:{heading:'Calibri',body:'Calibri',code:'Calibri'},fonts:handle});
     assert.equal(readable.slides.length,1);
-    assert.equal(readable.slides[0].composition.minFontSize,24,'Return the policy that was evaluated');
+    assert.equal(readable.slides[0].composition.minFontSizePx,24,'Return the policy that was evaluated');
     document.slides.push(readable.slides[0]);
     assert.ok(validate(document, {only: ['format']}).valid);
     const diagnostics=[], options={fonts:handle,onDiagnostic:value=>diagnostics.push(value)};

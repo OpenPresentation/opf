@@ -279,7 +279,7 @@
       "title": "Program Sponsor",
       "photo": "asset:supporting-photo",
       "email": "maya@mosaic-strategy.example",
-      "organizationId": "mosaic-strategy",
+      "organization": "mosaic-strategy",
       "socials": {
         "linkedin": "@maya-chen"
       }
@@ -288,7 +288,7 @@
       "id": "jon",
       "name": "Jon Alvarez",
       "title": "Operating Lead",
-      "organizationId": "mosaic-strategy",
+      "organization": "mosaic-strategy",
       "socials": {
         "tiktok": "@jon-alvarez"
       }
@@ -637,7 +637,7 @@
         "trebuchet-ms": {
           "name": "Trebuchet MS",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Trebuchet MS",
           "minor": "Trebuchet MS",
@@ -648,7 +648,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

@@ -3,7 +3,7 @@
   "id": "noto-sans-oriya",
   "name": "Noto Sans Oriya",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "or"
   ],

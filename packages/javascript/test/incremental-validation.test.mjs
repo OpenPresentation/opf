@@ -107,7 +107,7 @@ test('catalog edits, callback identity and explicit resource invalidation preser
 test('source ranges, malformed input, policy and strict overflow are rebuilt on every call', () => {
 	const checker = createValidator();
 	const document = deck();
-	document.slides[1].composition = { minFontSize: 32, maxFontSize: 32, overflow: 'error' };
+	document.slides[1].composition = { minFontSizePx: 32, maxFontSizePx: 32, overflow: 'error' };
 	document.slides[1].blocks[0].text = 'Very long strict content '.repeat(150);
 	const strict = parity(checker, document);
 	assert.equal(strict.schemaValid, true);

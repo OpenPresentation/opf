@@ -26,7 +26,7 @@
             ]
           ]
         },
-        "line": [
+        "lineSeries": [
           "Margin"
         ],
         "secondaryAxis": [
@@ -76,7 +76,7 @@
             ]
           ]
         },
-        "line": [
+        "lineSeries": [
           "Margin"
         ],
         "secondaryAxis": [
@@ -119,7 +119,7 @@
             ]
           ]
         },
-        "line": [
+        "lineSeries": [
           "Margin"
         ],
         "secondaryAxis": [

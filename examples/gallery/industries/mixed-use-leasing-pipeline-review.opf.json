@@ -421,7 +421,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "cedarwell-properties",
+    "organization": "cedarwell-properties",
     "bio": "Leads commercial real estate planning for Cedarwell Properties.",
     "socials": {
       "youtube": "@cedarwell-properties-speaker"
@@ -761,7 +761,7 @@
         "consolas": {
           "name": "Consolas",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Consolas",
           "minor": "Consolas",
@@ -773,7 +773,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

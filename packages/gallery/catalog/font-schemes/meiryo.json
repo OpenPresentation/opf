@@ -3,7 +3,7 @@
   "id": "meiryo",
   "name": "Meiryo",
   "app": "powerpoint",
-  "languageFamily": "ea",
+  "scriptGroup": "eastAsian",
   "languages": [
     "ja"
   ],

@@ -45,8 +45,8 @@ for(const file of fonts.fontFiles){const actual=await realpath(file);assert.ok(a
 const design={fontScheme:{heading:'Carlito',body:'Carlito',code:'Cousine'}};
 const cases=[
  {id:'visible-metadata',document:{design,slides:[{metric:{value:42,label:'Latency',unit:'ms',delta:0,trend:'flat'}}]}},
- {id:'readability-floor',document:{design,slides:[{composition:{minFontSize:32},metric:{value:42,label:'Latency'}}]}},
- {id:'strict-long-label',document:{design:{...design,dimensions:{widthInches:5.625,heightInches:10}},slides:[{composition:{minFontSize:32,overflow:'error'},metric:{value:42,label:'The complete supporting label must remain readable. '.repeat(300)}}]}}
+ {id:'readability-floor',document:{design,slides:[{composition:{minFontSizePx:32},metric:{value:42,label:'Latency'}}]}},
+ {id:'strict-long-label',document:{design:{...design,dimensions:{widthInches:5.625,heightInches:10}},slides:[{composition:{minFontSizePx:32,overflow:'error'},metric:{value:42,label:'The complete supporting label must remain readable. '.repeat(300)}}]}}
 ];
 const results=[];const decode=t=>t.replace(/&(amp|lt|gt|quot|apos);/g,(_,n)=>({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'"})[n]);
 for(const c of cases){assert.equal(validatePresentation(c.document).valid,true);const before=JSON.stringify(c.document);const bound=resolvePresentation(c.document,{textMeasurement:fonts.textMeasurement}).slides[0];

@@ -12,7 +12,7 @@ const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCA
 const deck = () => ({
   name: 'RR-34',
   design: {fontScheme: 'roboto'},
-  references: [{id: 'a', text: 'Source A, 2026', url: 'https://a.example'}, {id: 'b', text: ['Rich ', {text: 'B', bold: true}]}, {id: 'unused', text: 'Never cited'}],
+  references: [{id: 'a', text: 'Source A, 2026', link: 'https://a.example'}, {id: 'b', text: ['Rich ', {text: 'B', bold: true}]}, {id: 'unused', text: 'Never cited'}],
   slides: [
     {title: 'Cites', text: [{text: 'Growth was strong', cite: 'a'}, ' and margins held', {text: '.', cite: ['a', 'b']}, {text: ' Note', footnote: 'An inline note.'}], design: {footer: {center: {text: 'Footer'}, end: {text: '{{slide.number}}'}}}},
     // LH-80: the picture keeps its place in the flow (fit: contain), as the captions are checked against a blank-layout composition.
@@ -133,7 +133,7 @@ for (const options of [{}, {fonts}]) {
 {
   const source = deck();
   const imported = await fromPptx(await toPptx(source, {seed: 1, provenance: 'references-only'}));
-  assert.deepEqual(imported.references, [{id: 'a', text: 'Source A, 2026', url: 'https://a.example'}, {id: 'b', text: ['Rich ', {text: 'B', bold: true}]}]);
+  assert.deepEqual(imported.references, [{id: 'a', text: 'Source A, 2026', link: 'https://a.example'}, {id: 'b', text: ['Rich ', {text: 'B', bold: true}]}]);
   // Without the content topology the slide imports as flat blocks.
   assert.deepEqual(stripEngine(imported.slides[0].text ?? imported.slides[0].blocks.find(block => block.text).text), source.slides[0].text);
   assert.equal(imported.slides[1].blocks.find(block => block.image).caption, 'Figure 1. A pixel');

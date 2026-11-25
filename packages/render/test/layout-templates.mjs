@@ -133,7 +133,7 @@ assert.ok(cards > 0 && cards < regionItems, `cards checked: ${cards}`);
 assert.ok(bled >= 25, `bled pictures checked: ${bled}`);
 assert.ok(columnLists >= 5, `lists in columns checked: ${columnLists}`);
 
-// Overflow and pagination. A sample slide whose content does not fit at minFontSize (even in list columns) carries core's
+// Overflow and pagination. A sample slide whose content does not fit at minFontSizePx (even in list columns) carries core's
 // text-overflow and draws its overflow past its cell, as OPF does everywhere; core's paginate resolves it on the same layout.
 // Every page paginate makes draws with no text-overflow (from core or from the renderer) and with every element of a region
 // inside that region's box (trace attributes; the box already includes bleed, the tolerance covers strokes and rounding).

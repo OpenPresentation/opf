@@ -143,7 +143,7 @@ test('pagination ignores the picture-bullet notice: it neither splits nor reject
   assert.deepEqual(single.slides[0].items, short.items);
   // An overflowing list still splits, and every page keeps the source design (the notice repeats per page, as a host would see it).
   const long = {title: 'List', items: Array.from({length: 40}, (_, i) => `Item ${i + 1} with enough words to take some horizontal room on the slide`)};
-  const split = paginateSlide(long, {presentation: {design: {listBullet: 'image'}, slides: [long]}, slideIndex: 0, minFontSize: 28});
+  const split = paginateSlide(long, {presentation: {design: {listBullet: 'image'}, slides: [long]}, slideIndex: 0, minFontSizePx: 28});
   assert.ok(split.slides.length > 1);
   assert.equal(split.slides.flatMap(page => page.items).length, 40);
   for (const page of split.slides) assert.deepEqual(composeSlide(page, {presentation: noLogo}).diagnostics.map(d => d.code), ['unresolved-content']);

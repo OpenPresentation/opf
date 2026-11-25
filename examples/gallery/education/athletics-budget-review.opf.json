@@ -418,7 +418,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "summit-state-athletics",
+    "organization": "summit-state-athletics",
     "bio": "Leads college athletics planning for Summit State Athletics.",
     "socials": {
       "x": "@summit-state-athletics-speaker"
@@ -761,7 +761,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",
@@ -772,7 +772,7 @@
         "noto-sans-tamil": {
           "name": "Noto Sans Tamil",
           "app": "google-slides",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "ta"
           ],
@@ -785,7 +785,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

@@ -60,7 +60,7 @@ for (const [name, background, expected] of [
 
 // 2. A picture background is a picture fill of the master, related to the media the slide embeds (a native fill, or the picture of one with alt text).
 for (const alt of [undefined, 'Night sky']) {
-  const {files, master, masterRels, layouts, text} = await open({design: {theme: 'classic', background: {type: 'image', src: png('#14202E'), tone: 'dark', ...(alt ? {alt} : {})}}});
+  const {files, master, masterRels, layouts, text} = await open({design: {theme: 'classic', background: {type: 'image', src: png('#14202E'), appearance: 'dark', ...(alt ? {alt} : {})}}});
   const fill = bgOf(master) ?? '';
   const id = fill.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
   assert.match(fill, /<a:blipFill\b/, `picture${alt ? ' with alt' : ''}: the master draws a picture fill`);

@@ -3,7 +3,7 @@
   "id": "tahoma",
   "name": "Tahoma",
   "app": "powerpoint",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Tahoma",
   "minor": "Tahoma",

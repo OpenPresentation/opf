@@ -23,7 +23,7 @@ for (const background of [duotone, {overlay: {color: 'dark1', opacity: 0.4}}]) {
   assert.deepEqual(imported.slides[0].design.background.overlay, background.overlay);
 }
 // An explicit tone wins: light text, the master's map.
-assert.equal((await slideMap(deck({...duotone, tone: 'light'})))?.bg1 ?? 'lt1', 'lt1');
+assert.equal((await slideMap(deck({...duotone, appearance: 'light'})))?.bg1 ?? 'lt1', 'lt1');
 // A photograph with nothing over it keeps the old default.
 assert.equal((await slideMap(deck({overlay: false})))?.bg1 ?? 'lt1', 'lt1');
 console.log('rr105-picture-tone: ok');

@@ -13,7 +13,7 @@ const sourceBytes=Buffer.from(JSON.stringify(deck)),sourceText=fixtureRuns.map(r
 const prepared=await loadFonts({pack:'office'}),options={trace:true, fonts: prepared};
 const bound=resolvePresentation(deck,options).slides[0],item=bound.geometry.items.find(value=>value.field==='table');
 const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
-const layout=layoutTable(item.value,item.box,{scale,minFontSize:(bound.composition??bound.geometry.composition).minFontSize,fontFamily:bound.design.fonts.body,textMeasurement:prepared.textMeasurement,path:item.path});
+const layout=layoutTable(item.value,item.box,{scale,minFontSizePx:(bound.composition??bound.geometry.composition).minFontSizePx,fontFamily:bound.design.fonts.body,textMeasurement:prepared.textMeasurement,path:item.path});
 const cell=layout.rows[0].cells[0],fragments=cell.fit.richLines.flatMap(line=>line.fragments),tab=fragments.find(fragment=>fragment.kind==='tab'),following=fragments[fragments.indexOf(tab)+1];
 assert.ok(tab&&following);
 const expected={tabX:cell.textBox.x+tab.x,tabWidth:tab.width,followingX:cell.textBox.x+following.x};

@@ -22,7 +22,7 @@ test('authored rich18pt remains18pt (24 referencepixels) under larger default',(
 });
 test('dense list columns fit at an explicit floor without losing entries or numbering',()=>{
   const values=Array.from({length:18},(_,i)=>({text:`Entry ${i+1}: preserve its words`,level:i%3===1?1:0}));
-  const slide={blocks:[{items:values,numbering:'arabic',columns:3}],composition:{minFontSize:20}};
+  const slide={blocks:[{items:values,numbering:'arabic',columns:3}],composition:{minFontSizePx:20}};
   const result=composeSlide(slide);const item=result.items.find(item=>item.field==='items');
   assert.ok(item.listColumns?.length===3);assert.equal(item.listColumns.flatMap(column=>column.text.listEntries).length,18);
   assert.ok(item.listColumns.every(column=>column.text.fontSize>=20&&!column.text.overflow));

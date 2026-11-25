@@ -20,7 +20,7 @@ test('a duotone in dark colors with a dark band makes the picture dark (finding 
   assert.equal(context.options.darkBackground, true);
   assert.equal(context.options.roles.text.toUpperCase(), '#FFFFFF');
   // The author's tone always wins.
-  assert.equal(dark(deck({ ...background, tone: 'light' })), false);
+  assert.equal(dark(deck({ ...background, appearance: 'light' })), false);
 });
 
 test('a full-frame dark overlay makes a photograph dark, a light one keeps it light (finding 18)', () => {
@@ -43,7 +43,7 @@ test('a photograph with nothing over it implies no tone: the old default holds',
 test('opf/text-on-image warns when text is too faint over every color the picture can show', () => {
   const onImage = (document) => validate(document, { only: ['accessibility'] }).findings.filter((finding) => finding.ruleId === 'opf/text-on-image');
   // Dark text forced onto a picture recolored in dark colors, with no scrim: certain to fail, whatever the picture.
-  const forced = onImage(deck({ recolor: { dark: 'dark1', light: 'dark2' }, overlay: false, tone: 'light' }));
+  const forced = onImage(deck({ recolor: { dark: 'dark1', light: 'dark2' }, overlay: false, appearance: 'light' }));
   const warnings = forced.filter((finding) => finding.severity === 'warning');
   assert.ok(warnings.length >= 1, JSON.stringify(forced));
   assert.ok(warnings.every((finding) => finding.measured.best < finding.measured.needed));

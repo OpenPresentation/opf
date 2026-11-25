@@ -77,17 +77,17 @@ describe('stackCategoryValues', () => {
 });
 
 describe('chartTextSize', () => {
-	test('20 px for a roomy box, shrunk by a small one, never below minFontSize', () => {
+	test('20 px for a roomy box, shrunk by a small one, never below minFontSizePx', () => {
 		assert.equal(chartTextSize({ width: 1000, height: 600, scale: 1 }), 20);
 		// WI-5: a box with room for it (at least 216 x 288 reference pixels) floors at 18 px, not 16.
 		assert.equal(chartTextSize({ width: 1000, height: 300, scale: 1 }), 18);
 		assert.equal(chartTextSize({ width: 1000, height: 200, scale: 1 }), 16);
 		assert.equal(chartTextSize({ width: 250, height: 600, scale: 1 }), 16);
 		assert.equal(chartTextSize({ width: 1000, height: 380, scale: 1 }), 20);
-		assert.equal(chartTextSize({ width: 560, height: 600, scale: 1, minFontSize: 12 }), 18);
+		assert.equal(chartTextSize({ width: 560, height: 600, scale: 1, minFontSizePx: 12 }), 18);
 		assert.equal(chartTextSize({ width: 100, height: 100, scale: 1 }), 16);
 		assert.equal(chartTextSize({ width: 2000, height: 1200, scale: 2 }), 20);
-		assert.equal(chartTextSize({ width: 1000, height: 600, scale: 1, minFontSize: 24 }), 24);
+		assert.equal(chartTextSize({ width: 1000, height: 600, scale: 1, minFontSizePx: 24 }), 24);
 	});
 	test('bad geometry gives the requested size', () => {
 		assert.equal(chartTextSize({ width: 0, height: 600, scale: 1 }), 20);
@@ -118,7 +118,7 @@ describe('chartValueAxis', () => {
 		assert.deepEqual(axisOf(chartOf([[1, 2], [3, 4]], '100pct-stacked-column')), { min: 0, max: 1, majorUnit: 0.2, percent: true });
 	});
 
-	test('a short chart gets fewer, larger intervals; the slide scale and minFontSize move the density', () => {
+	test('a short chart gets fewer, larger intervals; the slide scale and minFontSizePx move the density', () => {
 		const chart = chartOf([[120, 480, 760, 310]]);
 		const tall = axisOf(chart, { width: 800, height: 450, scale: 1 });
 		const short = axisOf(chart, { width: 800, height: 200, scale: 1 });
@@ -127,7 +127,7 @@ describe('chartValueAxis', () => {
 		// LH-59: a short axis ends near the data: 0 to 800 in two or one intervals, not 0 to 1000 in steps of 500 or 1000.
 		assert.deepEqual(short, { min: 0, max: 800, majorUnit: 400 });
 		assert.deepEqual(axisOf(chart, { width: 800, height: 150, scale: 1 }), { min: 0, max: 800, majorUnit: 800 });
-		assert.equal(axisOf(chart, { width: 800, height: 450, scale: 1, minFontSize: 40 }).majorUnit, 200);
+		assert.equal(axisOf(chart, { width: 800, height: 450, scale: 1, minFontSizePx: 40 }).majorUnit, 200);
 		assert.equal(axisOf(chart, { width: 1600, height: 900, scale: 2 }).majorUnit, 200);
 		assert.equal(CHART_TEXT_PX, 20);
 	});

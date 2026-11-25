@@ -310,8 +310,8 @@ function tracePaths(item, bound, resolved) {
 function chartContext(item, box, bound, options, svg, { rows, columns, formats, trace, combo, hasX = false }, layer) {
   const u = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
   const composition = bound.composition ?? bound.geometry.composition ?? {};
-  // RR-90: core's chart text size (20 px, shrunk only for a small box, never below minFontSize), the size core's value-axis density assumes.
-  const requested = chartTextSize({ width: box.width, height: box.height, scale: u, minFontSize: composition.minFontSize }), fontPx = requested * u;
+  // RR-90: core's chart text size (20 px, shrunk only for a small box, never below minFontSizePx), the size core's value-axis density assumes.
+  const requested = chartTextSize({ width: box.width, height: box.height, scale: u, minFontSizePx: composition.minFontSizePx }), fontPx = requested * u;
   // LH-03, LH-105: a chart has no panel, so its colors are judged against what it stands on: the card, or the slide background.
   const surface = item.frameBox ? bound.design.roles.neutrals.card.hex : bound.design.backgroundColor ?? bound.design.colors.background;
   // RR-96: every neutral comes from the slide's variant (core `roles.neutrals`: tx1 mixed into bg1, the colors the PPTX export writes as

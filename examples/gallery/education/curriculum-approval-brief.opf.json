@@ -415,7 +415,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "oakbridge-faculty-senate",
+    "organization": "oakbridge-faculty-senate",
     "bio": "Leads academic governance planning for Oakbridge Faculty Senate.",
     "socials": {
       "youtube": "@oakbridge-faculty-senate-speaker"
@@ -752,7 +752,7 @@
         "arial": {
           "name": "Arial",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Arial Black",
           "minor": "Arial",
@@ -763,7 +763,7 @@
         "noto-sans-tc": {
           "name": "Noto Sans TC",
           "app": "google-slides",
-          "languageFamily": "ea",
+          "scriptGroup": "eastAsian",
           "languages": [
             "zh-Hant"
           ],
@@ -776,7 +776,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

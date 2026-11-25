@@ -429,7 +429,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "sunfield-cooperative",
+    "organization": "sunfield-cooperative",
     "bio": "Leads agriculture planning for Sunfield Cooperative.",
     "socials": {
       "tiktok": "@sunfield-cooperative-speaker"
@@ -766,7 +766,7 @@
         "calibri": {
           "name": "Calibri",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Calibri",
           "minor": "Calibri",
@@ -777,7 +777,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

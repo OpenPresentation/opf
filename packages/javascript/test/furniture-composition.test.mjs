@@ -16,9 +16,9 @@ function sourceRanges(part) {
   assert.equal(cursor,part.text.length);assert.equal(rebuilt,part.text);
 }
 test('furniture preserves inherited/local sources, whitespace and generated metadata at both floors',()=>{
-  for(const [width,height] of [[1280,720],[720,1280]])for(const minFontSize of [16,32])for(const textMeasurement of [undefined,outlined]){
+  for(const [width,height] of [[1280,720],[720,1280]])for(const minFontSizePx of [16,32])for(const textMeasurement of [undefined,outlined]){
     const presentation={design:{header:{start:{text:' A\t B \r\n\r\n'},center:{text:' Primary '},end:{text:'{{slide.section}}'}},footer:{start:{text:''},center:{date:' 2026-09-10 '},end:{text:'{{slide.number}}'}}}};
-    const slide={section:'Current section',composition:{minFontSize,overflow:'error'},text:'Body'};
+    const slide={section:'Current section',composition:{minFontSizePx,overflow:'error'},text:'Body'};
     const before=structuredClone({presentation,slide}),options={width,height,presentation,slideIndex:4,slideNumber:11,textMeasurement,fontFamilies:{body:'Fixture'}};
     const geometry=composeSlide(slide,options),layout=geometry.furniture;
     assert.deepEqual({presentation,slide},before);assert.deepEqual(geometry.diagnostics,[]);
@@ -31,7 +31,7 @@ test('furniture preserves inherited/local sources, whitespace and generated meta
     assert.equal(byPath('design.header.start.text').sourcePath,'design.header.start.text');assert.equal(layout.parts.find(part=>part.field==='date').generated,false);
     assert.ok(geometry.contentBox.y>=layout.headerBottom);assert.ok(geometry.contentBox.y+geometry.contentBox.height<=layout.footerTop);
     for(const part of layout.parts){
-      sourceRanges(part);assert.ok(part.fit.fontSize>=minFontSize);assert.equal(part.style.fontFamily,'Fixture');
+      sourceRanges(part);assert.ok(part.fit.fontSize>=minFontSizePx);assert.equal(part.style.fontFamily,'Fixture');
       assert.ok(part.box.y>=0&&part.box.y+part.box.height<=height);
       for(const line of part.fit.placement?.lines??[]){if(!line.outline)continue;const ink=line.outline;
         assert.ok(ink.x>=part.box.x+2-.001&&ink.x+ink.width<=part.box.x+part.box.width-2+.001);
@@ -98,7 +98,7 @@ test('pagination repeats furniture and retains exact body source and mappings',(
   const input={design:{header:{start:{text:'Repeated heading'}},footer:{end:{text:'{{slide.number}}'}}},slides:[{title:'Title',text:source},{text:'Last slide'}]};
   const before=structuredClone(input),numbers=[];
   const textMeasurement={measure:(text,size,style)=>{if(style.path?.endsWith('footer.end.text'))numbers.push(text);return measure(text,size);}};
-  const result=paginate(input,{minFontSize:24,fonts:{textMeasurement}});
+  const result=paginate(input,{minFontSizePx:24,fonts:{textMeasurement}});
   assert.deepEqual(input,before);assert.ok(result.presentation.slides.length>2);
   assert.equal(result.presentation.slides.slice(0,-1).map(slide=>slide.text).join(''),source);
   assert.ok(numbers.includes(String(result.presentation.slides.length)),'The last source slide must use its actual output number.');
@@ -175,19 +175,19 @@ test('date and slide number in one zone sit side by side on one line, aligned to
 test('whole-deck pagination resolves {{deck.slideCount}} to the final page count',()=>{
   const source='First sentence with enough detail. '.repeat(160);
   const input={design:{footer:{end:{text:'{{slide.number}} / {{deck.slideCount}}'},start:{date:true,dateFormat:'MMM d, yyyy'}}},slides:[{title:'Title',text:source},{text:'Last slide'}]};
-  const before=structuredClone(input),result=paginate(input,{minFontSize:24,date:'2026-04-23'});
+  const before=structuredClone(input),result=paginate(input,{minFontSizePx:24,date:'2026-04-23'});
   assert.deepEqual(input,before);const total=result.presentation.slides.length;assert.ok(total>2);
   for(const [index,slide]of result.presentation.slides.entries()){
     const geometry=composeSlide(slide,{presentation:result.presentation,slideIndex:index,date:'2026-04-23'});assert.deepEqual(geometry.diagnostics,[]);
     assert.equal(geometry.furniture.parts.find(p=>p.path==='design.footer.end.text').text,`${index+1} / ${total}`);
     assert.equal(geometry.furniture.parts.find(p=>p.field==='date').text,'Apr 23, 2026');
   }
-  assert.throws(()=>paginate(input,{minFontSize:24}),OPFPaginationError);
+  assert.throws(()=>paginate(input,{minFontSizePx:24}),OPFPaginationError);
 });
 test('a slide-count retry reports each unknown font scheme once',()=>{
   const source='First sentence with enough detail. '.repeat(160),issues=[];
   const input={design:{fontScheme:'no-such-scheme',footer:{end:{text:'{{slide.number}} / {{deck.slideCount}}'}}},slides:[{title:'Title',text:source},{text:'Last slide'}]};
-  const result=paginate(input,{minFontSize:24,onDiagnostic:issue=>issues.push(issue)});
+  const result=paginate(input,{minFontSizePx:24,onDiagnostic:issue=>issues.push(issue)});
   assert.ok(result.presentation.slides.length>2,'The retry path runs: the page count differs from the source count.');
   assert.deepEqual(issues.map(issue=>[issue.code,issue.path]),[['unresolved-reference','design.fontScheme']]);
 });

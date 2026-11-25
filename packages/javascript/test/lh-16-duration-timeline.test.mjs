@@ -86,7 +86,7 @@ test('a roomy portrait duration timeline grows to the existing body display scal
   const out=composeSlide(slide,options).items.find(item=>item.timelineLayout).timelineLayout;
   assert.equal(out.arrangement,'vertical');assert.equal(out.overflow,false);
   for(const part of out.parts.filter(part=>part.role==='what'))assert.equal(part.fit.fontSize,snapFontSizeDown(LONE_DISPLAY_SIZES.text*scale));
-  const capped=composeSlide({...slide,composition:{maxFontSize:37}},options).items.find(item=>item.timelineLayout).timelineLayout;
+  const capped=composeSlide({...slide,composition:{maxFontSizePx:37}},options).items.find(item=>item.timelineLayout).timelineLayout;
   assert.ok(Math.max(...capped.parts.map(part=>part.fit.fontSize))<=37*scale+.001);
   for(const [index,part]of out.parts.entries())assert.ok(part.fit.fontSize>=capped.parts[index].fit.fontSize);
   near(out.ranges[1].box.height,4*out.ranges[0].box.height);

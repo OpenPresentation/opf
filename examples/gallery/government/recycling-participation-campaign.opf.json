@@ -428,7 +428,7 @@
     "id": "speaker",
     "name": "Jon Alvarez",
     "title": "Operating Lead",
-    "organizationId": "city-sanitation-bureau",
+    "organization": "city-sanitation-bureau",
     "bio": "Leads sanitation planning for City Sanitation Bureau.",
     "socials": {
       "threads": "@city-sanitation-bureau-speaker"
@@ -779,7 +779,7 @@
         "roboto": {
           "name": "Roboto",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Roboto",
           "minor": "Roboto",
@@ -790,7 +790,7 @@
         "shruti": {
           "name": "Shruti",
           "app": "powerpoint",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "gu"
           ],
@@ -803,7 +803,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

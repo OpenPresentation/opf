@@ -269,7 +269,7 @@
     "id": "speaker",
     "name": "Maya Chen",
     "title": "Program Sponsor",
-    "organizationId": "signalhouse-media",
+    "organization": "signalhouse-media",
     "bio": "Leads media and entertainment planning for Signalhouse Media.",
     "socials": {
       "mastodon": "@signalhouse-media-speaker"
@@ -607,7 +607,7 @@
         "consolas": {
           "name": "Consolas",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Consolas",
           "minor": "Consolas",
@@ -619,7 +619,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

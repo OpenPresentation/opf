@@ -417,7 +417,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "blue-ridge-institute",
+    "organization": "blue-ridge-institute",
     "bio": "Leads research report planning for Blue Ridge Institute.",
     "socials": {
       "youtube": "@blue-ridge-institute-speaker"
@@ -755,7 +755,7 @@
         "bookman": {
           "name": "Bookman",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Bookman Old Style",
           "minor": "Bookman Old Style",
@@ -766,7 +766,7 @@
         "angsana-new": {
           "name": "Angsana New",
           "app": "powerpoint",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "th"
           ],
@@ -779,7 +779,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

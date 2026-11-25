@@ -3,7 +3,7 @@
   "id": "noto-nastaliq-urdu",
   "name": "Noto Nastaliq Urdu",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "ur",
     "pa-Arab"

@@ -3,7 +3,7 @@
   "id": "kartika",
   "name": "Kartika",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "ml"
   ],

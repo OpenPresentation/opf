@@ -48,7 +48,7 @@ const open = async document => {
 };
 
 const PICTURE = '#14202E';
-for (const [name, background, color] of [['dark picture', {type: 'image', src: png(PICTURE), tone: 'dark'}, PICTURE], ['dark hex', '#7A1F3D', '#7A1F3D'], ['light hex', '#FAF7F0', '#FAF7F0']]) {
+for (const [name, background, color] of [['dark picture', {type: 'image', src: png(PICTURE), appearance: 'dark'}, PICTURE], ['dark hex', '#7A1F3D', '#7A1F3D'], ['light hex', '#FAF7F0', '#FAF7F0']]) {
   for (const language of ['en-US', 'ar']) {
     const label = `${name} ${language}`;
     const {slide, background: bg, runs} = await open({name: 'Fixed background', language, design: {theme: 'classic', background}, slides});

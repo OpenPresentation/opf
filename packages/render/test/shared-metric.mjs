@@ -9,7 +9,7 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
   {value:42,unit:'ms',label:'Left\tRight  ',description:'Exact\r\n\r\ncontext',delta:0,trend:'flat'},
   {value:'42\n-0.5',unit:'milliseconds across all completed production requests',label:'Latency'},
   {value:'',unit:'',label:'',description:'',delta:'',trend:'up'}]) {
-  const deck={design:{fontScheme:'roboto',contentAlignment:align,dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{composition:{minFontSize:32},metric}]},before=structuredClone(deck);
+  const deck={design:{fontScheme:'roboto',contentAlignment:align,dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{composition:{minFontSizePx:32},metric}]},before=structuredClone(deck);
   let calls=0,styles=0;const textMeasurement={measure:(...args)=>{calls++;return fonts.textMeasurement.measure(...args);},resolveStyle:style=>{styles++;return fonts.textMeasurement.resolveStyle(style);}};
   const bound=resolvePresentation(deck,{ fonts: {textMeasurement}}).slides[0],expectedCalls=calls,expectedStyles=styles;calls=0;styles=0;
   const diagnostics=[],svg=toSvg(deck, 1,{ fonts: {textMeasurement},trace:true,onDiagnostic:d=>diagnostics.push(d)});
@@ -52,7 +52,7 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
   });cases++;
 }
 assert.ok(anchored>0,'centered and end-aligned metrics exercise edge anchoring');assert.ok(exact>0,'measured tracked lines exercise the stated anchor');
-const strict={slides:[{composition:{overflow:'error',minFontSize:32},blocks:[{metric:{value:42,label:'Unabridged label '.repeat(300)}}]}]};
+const strict={slides:[{composition:{overflow:'error',minFontSizePx:32},blocks:[{metric:{value:42,label:'Unabridged label '.repeat(300)}}]}]};
 assert.throws(()=>toSvg(strict, 1),e=>e.code==='layout-overflow'&&e.diagnostics.some(d=>d.path.endsWith('.metric.label')));
 let invalidCases=0;
 const forbidden=[...Array.from({length:32},(_,i)=>i).filter(i=>![9,10,13].includes(i)),0xD800,0xDFFF,0xFFFE,0xFFFF];

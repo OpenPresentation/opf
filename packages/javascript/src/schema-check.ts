@@ -479,7 +479,7 @@ function validateSlideCells(slide: Record<string, unknown>, slidePath: string): 
   return issues;
 }
 
-// Speaker and organization ids are cross-referenced (Speaker.organizationId) and addressed by built-in variables
+// Speaker and organization ids are cross-referenced (Speaker.organization) and addressed by built-in variables
 // (`speaker.<id>.name`), so each set must be unique and a reference must resolve.
 function deckMetadataIssues(value: Record<string, unknown>): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
@@ -499,8 +499,8 @@ function deckMetadataIssues(value: Record<string, unknown>): ValidationIssue[] {
     }
   }
   for (const { entry, path } of entries("speaker")) {
-    if (typeof entry.organizationId === "string" && !organizationIds.has(entry.organizationId)) {
-      issues.push(semanticIssue(`${path}/organizationId`, `organizationId '${entry.organizationId}' names no organization in the presentation; use the id of an entry in organization`, { id: entry.organizationId }));
+    if (typeof entry.organization === "string" && !organizationIds.has(entry.organization)) {
+      issues.push(semanticIssue(`${path}/organization`, `organization '${entry.organization}' names no organization in the presentation; use the id of an entry in organization`, { id: entry.organization }));
     }
   }
   return issues;

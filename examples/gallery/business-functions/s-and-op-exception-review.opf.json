@@ -428,7 +428,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "cobalt-supply",
+    "organization": "cobalt-supply",
     "bio": "Leads operations planning for Cobalt Supply.",
     "socials": {
       "youtube": "@cobalt-supply-speaker"
@@ -768,7 +768,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",
@@ -779,7 +779,7 @@
         "mangal": {
           "name": "Mangal",
           "app": "powerpoint",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "hi",
             "mr",
@@ -794,7 +794,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

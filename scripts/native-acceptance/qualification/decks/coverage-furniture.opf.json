@@ -73,7 +73,7 @@
     "id": "ana",
     "name": "Ana Ribeiro",
     "title": "Head of Operations",
-    "organizationId": "harbor",
+    "organization": "harbor",
     "socials": {
       "github": "harbor-labs",
       "youtube": "@harborlabs",

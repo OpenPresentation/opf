@@ -161,7 +161,7 @@ export interface ChartLayerGeometry {
   box: Box;
   /** `min(slide width, slide height) / 720`. */
   scale: number;
-  minFontSize?: number;
+  minFontSizePx?: number;
   /** The width of `text` at `size` px in the deck's body font, at weight 400 or (the caption) 700. */
   measure: (text: string, size: number, weight: 400 | 700) => number;
   direction?: 'ltr' | 'rtl';
@@ -274,7 +274,7 @@ export function smallChart(chart: unknown, data: ResolvedChartData, geometry?: C
   const titled = record(chart.axisTitles) && nonBlank(chart.axisTitles.value) !== undefined;
   if (geometry && !explicit) {
     const {box, scale} = geometry;
-    const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize}) * scale;
+    const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSizePx: geometry.minFontSizePx}) * scale;
     const pad = 10 * scale;
     const widest = Math.max(0, ...values.flatMap(row => row.flatMap((value, j) => value === null ? [] : [geometry.measure(columnValueLabel(data, j + 1, value, geometry.language), fontPx, 400)])));
     if (spec.horizontal) {
@@ -320,7 +320,7 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
   if (!spec || chart.legend !== undefined) return undefined;
   const {box, scale} = geometry;
   if (![box.width, box.height, scale].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0) return undefined;
-  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize}) * scale;
+  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSizePx: geometry.minFontSizePx}) * scale;
   const pad = 10 * scale, lineHeight = fontPx * 1.5, rtl = geometry.direction === 'rtl';
   const left = box.x + pad, available = Math.max(1, box.width - 2 * pad);
   const text = geometry.captioned ? undefined : chartHeaderCaption(chart, data.columns, geometry.language);

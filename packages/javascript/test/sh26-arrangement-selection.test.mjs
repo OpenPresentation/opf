@@ -29,13 +29,13 @@ for(const source of cases){
     assert.throws(()=>composeSlide({...source.slide,composition:{overflow:'error'}},{layout:layouts[source.id]}),OPFCompositionError);
   });
   for(const wholeBlocks of[false,true])test(`${source.id} ${source.count} long: ${wholeBlocks?'whole-block continuation fits or refuses':'default pagination fits'} pagination retains exact ordered content and readable type`,()=>{
-    const document=documentFor(source.slide,source.id),saved=structuredClone(document),result=wholeBlocks?continueOverfull(document,{minFontSize:24}):paginate(document);
+    const document=documentFor(source.slide,source.id),saved=structuredClone(document),result=wholeBlocks?continueOverfull(document,{minFontSizePx:24}):paginate(document);
     assert.deepEqual(document,saved);
     assert.deepEqual(result.presentation.slides.flatMap(labels),labels(source.slide));
     if(wholeBlocks&&source.id!=='inverted-pyramid'){
       assert.deepEqual(result.presentation,document,'An indivisible unfit list keeps the original document and its findings');
       const context=resolveSlideContext(document,0);
-      assert.throws(()=>paginateSlide(context.slide,{...context.options,wholeBlocks:true,minFontSize:24}),OPFPaginationError);
+      assert.throws(()=>paginateSlide(context.slide,{...context.options,wholeBlocks:true,minFontSizePx:24}),OPFPaginationError);
       assert.equal(fitFindings(drawn(result.presentation,0)).length,source.count);
       return;
     }
@@ -52,7 +52,7 @@ for(const source of cases){
 }
 
 test('strictly fewer fit failures still outrank an equal-font joined arrangement',()=>{
-  const slide=sampleSlide(layouts['org-chart'],5,'long');slide.composition={minFontSize:16,maxFontSize:16};
+  const slide=sampleSlide(layouts['org-chart'],5,'long');slide.composition={minFontSizePx:16,maxFontSizePx:16};
   const selected=composeSlide(slide,{layout:layouts['org-chart'],recompose:false});
   assert.equal(fitFindings(selected).length,4);
   assert.equal(bodies(selected).filter(item=>item.region===undefined).length,4);
@@ -61,7 +61,7 @@ test('strictly fewer fit failures still outrank an equal-font joined arrangement
 });
 
 test('equal fit failures without font dominance keep the joined arrangement',()=>{
-  const slide=sampleSlide(layouts['org-chart'],5,'long');slide.composition={minFontSize:22,maxFontSize:22};
+  const slide=sampleSlide(layouts['org-chart'],5,'long');slide.composition={minFontSizePx:22,maxFontSizePx:22};
   const selected=composeSlide(slide,{layout:layouts['org-chart'],recompose:false});
   assert.equal(fitFindings(selected).length,5);
   assert.equal(geometryUnplaced(selected),0);

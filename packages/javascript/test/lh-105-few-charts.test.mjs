@@ -292,11 +292,11 @@ describe("validator info findings", () => {
 
   test("opf/chart-dual-axis reports a combo chart with a secondary axis, as info", () => {
     const data = { columns: ["Quarter", "Revenue", "Margin"], rows: [["Q1", 12, 0.31], ["Q2", 15, 0.34]] };
-    const [finding] = found(deck({ type: "combo", data, line: ["Margin"], secondaryAxis: ["Margin"] }), "chart-dual-axis");
+    const [finding] = found(deck({ type: "combo", data, lineSeries: ["Margin"], secondaryAxis: ["Margin"] }), "chart-dual-axis");
     assert.equal(finding.severity, "info");
     assert.equal(finding.category, "content");
     assert.match(finding.message, /"Margin" on a second value axis/);
-    assert.equal(found(deck({ type: "combo", data, line: ["Margin"] }), "chart-dual-axis").length, 0);
+    assert.equal(found(deck({ type: "combo", data, lineSeries: ["Margin"] }), "chart-dual-axis").length, 0);
   });
 
   test("opf/chart-pie-many-slices reports more than five slices, as info", () => {

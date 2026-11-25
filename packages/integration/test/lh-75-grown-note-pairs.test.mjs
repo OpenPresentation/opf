@@ -16,7 +16,7 @@ for(const source of original.slides)test('LH-75 '+source.id+': larger whole-word
  assert.ok(note.frameBox && table.box.x+table.box.width<=note.frameBox.x+1,'pair stays side by side');
  assert.ok(note.frameBox.height<=.75*geometry.contentBox.height+.001,'grown row keeps the remaining quarter of the body free');
  assert.ok(note.text.lines.every(line=>line.trim().length<=70),'note keeps its measure');
- const layout=layoutTable(table.value,table.box,{fontFamily:context.options.fontFamilies.body,textMeasurement:context.options.textMeasurement,growth:table.tableGrowth,minFontSize:table.composition.minFontSize});
+ const layout=layoutTable(table.value,table.box,{fontFamily:context.options.fontFamilies.body,textMeasurement:context.options.textMeasurement,growth:table.tableGrowth,minFontSizePx:table.composition.minFontSizePx});
  assert.equal(Math.max(...layout.rows.flatMap(row=>row.cells.map(cell=>cell.fit.lines.length))),3,'three whole-word lines permit larger type');
  assert.ok(!layout.overflow && !layout.splitsWords);
  assert.ok(layout.rows.every(row=>row.cells.every(cell=>cell.fit.fontSize>28.7)),'every table cell exceeds the original 25px role');
@@ -24,7 +24,7 @@ for(const source of original.slides)test('LH-75 '+source.id+': larger whole-word
   const expected=rowIndex===0?source.blocks[0].table.columns[column]:source.blocks[0].table.rows[rowIndex-1][column];
   assert.equal(cell.fit.lines.join('').trim(),String(expected),'every cell word remains whole and complete');
  }
- const capped=composeSlide({...context.slide,composition:{maxFontSize:28}},context.options),cappedNote=capped.items.find(item=>item.field==='text');
+ const capped=composeSlide({...context.slide,composition:{maxFontSizePx:28}},context.options),cappedNote=capped.items.find(item=>item.field==='text');
  assert.equal(cappedNote.text.fontSize,28,'authored maximum still caps the note; tables intentionally keep their own sizes');
  assert.deepEqual(geometry.diagnostics,[]);
  const svg=await convert(document,{format:'svg',fonts,catalogs:[gallery],date:'2026-11-08'}),pptx=await convert(document,{format:'pptx',fonts,catalogs:[gallery],date:'2026-11-08'});

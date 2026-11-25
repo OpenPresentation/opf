@@ -88,7 +88,7 @@ for (const type of ['column', 'bar', 'line', 'area']) {
   const steps = [];
   for (const [input, path] of cases) {
     const {box, ticks} = ticksOf(input, path);
-    const axis = chartValueAxis(chart, resolveChartData(chart), {...box, scale: 1, minFontSize: 16});
+    const axis = chartValueAxis(chart, resolveChartData(chart), {...box, scale: 1, minFontSizePx: 16});
     assert.ok(axis && ticks.length >= 2, path);
     assert.deepEqual(ticks, Array.from({length: Math.round((axis.max - axis.min) / axis.majorUnit) + 1}, (_, i) => axis.min + i * axis.majorUnit), `${path}: the preview draws core's axis ${JSON.stringify(axis)}`);
     steps.push(axis.majorUnit);
@@ -96,12 +96,12 @@ for (const type of ['column', 'bar', 'line', 'area']) {
   assert.ok(steps[1] >= steps[0], 'the narrower box has no finer axis');
 }
 
-// The chart text size is core's chartTextSize: 20 px in a roomy box, smaller only for a small box, never under minFontSize.
+// The chart text size is core's chartTextSize: 20 px in a roomy box, smaller only for a small box, never under minFontSizePx.
 {
   assert.equal(chartTextSize({width: 1200, height: 500, scale: 1}), 20);
   assert.equal(chartTextSize({width: 560, height: 500, scale: 1}), 18);
   assert.equal(chartTextSize({width: 300, height: 200, scale: 1}), 16);
-  assert.equal(chartTextSize({width: 300, height: 200, scale: 1, minFontSize: 18}), 18);
+  assert.equal(chartTextSize({width: 300, height: 200, scale: 1, minFontSizePx: 18}), 18);
   // The preview asks for that size: the tick labels of a roomy chart are 20 px, of a small one the floor.
   const fontSizes = (svg) => new Set(attrs(svg, 'text', /^slides\.0\.chart\./).map((a) => Number(a['font-size'])));
   assert.deepEqual([...fontSizes(toSvg(deck({type: 'column', data}), 1, {trace: true}))], [20]);

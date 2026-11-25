@@ -248,7 +248,7 @@
     "id": "speaker",
     "name": "Maya Chen",
     "title": "Program Sponsor",
-    "organizationId": "atlasworks",
+    "organization": "atlasworks",
     "bio": "Leads sales planning for AtlasWorks.",
     "socials": {
       "mastodon": "@atlasworks-speaker"
@@ -626,7 +626,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

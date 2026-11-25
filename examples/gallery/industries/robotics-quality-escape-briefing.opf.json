@@ -263,7 +263,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "axis-forge-robotics",
+    "organization": "axis-forge-robotics",
     "bio": "Leads advanced manufacturing planning for Axis Forge Robotics.",
     "socials": {
       "instagram": "@axis-forge-robotics-speaker"
@@ -632,7 +632,7 @@
         "calibri": {
           "name": "Calibri",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Calibri",
           "minor": "Calibri",
@@ -643,7 +643,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

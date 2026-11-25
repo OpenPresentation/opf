@@ -19,7 +19,7 @@ const catalogs = [
       'host-demand': {
         name: 'Host demand',
         app: 'powerpoint',
-        languageFamily: 'latin',
+        scriptGroup: 'latin',
         languages: [],
         major: 'Source Sans 3',
         minor: 'Roboto',

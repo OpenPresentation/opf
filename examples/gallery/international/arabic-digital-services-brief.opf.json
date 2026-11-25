@@ -274,7 +274,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "crescent-public-services",
+    "organization": "crescent-public-services",
     "bio": "Leads public services planning for Crescent Public Services.",
     "socials": {
       "linkedin": "@crescent-public-services-speaker"
@@ -638,7 +638,7 @@
         "courier-new": {
           "name": "Courier New",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Courier New",
           "minor": "Courier New",
@@ -650,7 +650,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

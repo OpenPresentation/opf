@@ -139,7 +139,7 @@ test('percent secondary combo uses the SAME composed native axes and retains ass
           ['B', 20, 0.3],
         ],
       },
-      line: ['Margin'],
+      lineSeries: ['Margin'],
       secondaryAxis: ['Margin'],
     },
   );

@@ -79,10 +79,10 @@ describe('roles from the map', () => {
 	});
 
 	test('a tone chooses dark1 or light1 without a variant; a variant wins over it', () => {
-		assert.equal(resolveColorRoles(scheme, { tone: 'dark' }).dark, true);
-		assert.deepEqual(resolveColorRoles(scheme, { tone: 'dark' }).variant, { background: 'dark1' });
-		assert.equal(resolveColorRoles(scheme, { tone: 'light', background: '#000000' }).dark, false);
-		assert.equal(resolveColorRoles(scheme, { tone: 'dark', variant: { background: 'light1' } }).dark, false);
+		assert.equal(resolveColorRoles(scheme, { appearance: 'dark' }).dark, true);
+		assert.deepEqual(resolveColorRoles(scheme, { appearance: 'dark' }).variant, { background: 'dark1' });
+		assert.equal(resolveColorRoles(scheme, { appearance: 'light', background: '#000000' }).dark, false);
+		assert.equal(resolveColorRoles(scheme, { appearance: 'dark', variant: { background: 'light1' } }).dark, false);
 	});
 
 	test('the accent order moves primary, secondary and accent and lists the six accents', () => {
@@ -255,8 +255,8 @@ describe('schema', () => {
 
 	test('tone is dark or light on a picture or gradient background', () => {
 		const gradient = { type: 'gradient', gradient: { stops: [{ color: '#000000', position: 0 }, { color: '#111111', position: 1 }] } };
-		assert.deepEqual(errors(doc({ background: { ...gradient, tone: 'dark' } })), []);
-		assert.deepEqual(errors(doc({ background: { type: 'image', src: 'asset:x', tone: 'light' } })), []);
+		assert.deepEqual(errors(doc({ background: { ...gradient, appearance: 'dark' } })), []);
+		assert.deepEqual(errors(doc({ background: { type: 'image', src: 'asset:x', appearance: 'light' } })), []);
 		assert.ok(errors(doc({ background: { ...gradient, tone: 'grey' } })).length > 0);
 		assert.ok(errors(doc({ background: { type: 'image', src: 'asset:x', tone: 'grey' } })).length > 0);
 	});

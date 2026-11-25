@@ -23,7 +23,7 @@ export interface ChartPlotGeometry {
   box: Box;
   /** `min(slide width, slide height) / 720`. */
   scale: number;
-  minFontSize?: number;
+  minFontSizePx?: number;
   /** The width of `text` at `size` px in the deck's body font at weight 400. */
   measure: (text: string, size: number) => number;
   direction?: 'ltr' | 'rtl';
@@ -137,7 +137,7 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   if (!spec || plan.columns.length < 2 || !plan.rows.length) return undefined;
   const {box, scale} = geometry;
   if (![box.width, box.height, scale].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0) return undefined;
-  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize}) * scale;
+  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSizePx: geometry.minFontSizePx}) * scale;
   const pad = 10 * scale, lineHeight = fontPx * 1.5, rtl = geometry.direction === 'rtl';
   const width = (text: string) => geometry.measure(text, fontPx);
   const names = plan.columns.slice(1).map(name => name === null || name === undefined ? '' : String(name));

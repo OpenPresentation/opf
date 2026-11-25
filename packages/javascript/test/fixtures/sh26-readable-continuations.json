@@ -26,7 +26,7 @@
           "contentBox": true
         },
         "composition": {
-          "minFontSize": 24
+          "minFontSizePx": 24
         }
       },
       "settledBodyFonts": [
@@ -111,7 +111,7 @@
           "contentBox": true
         },
         "composition": {
-          "minFontSize": 24
+          "minFontSizePx": 24
         }
       },
       "settledBodyFonts": [
@@ -196,7 +196,7 @@
           "contentBox": true
         },
         "composition": {
-          "minFontSize": 24
+          "minFontSizePx": 24
         }
       },
       "settledBodyFonts": [
@@ -281,7 +281,7 @@
           "contentBox": true
         },
         "composition": {
-          "minFontSize": 24
+          "minFontSizePx": 24
         }
       },
       "settledBodyFonts": [
