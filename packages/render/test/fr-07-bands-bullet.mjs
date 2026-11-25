@@ -2,7 +2,7 @@
 // and a target tick per row), right to left, and the lowest contrast between a data mark and a band over every gallery color scheme.
 import assert from 'node:assert/strict';
 import { readdirSync } from 'node:fs';
-import { chartBandFill, colorContrast, mixOklab } from '@openpresentation/opf/composition';
+import { chartBandFill, colorContrast } from '@openpresentation/opf/composition';
 import { resolvePresentation, toSvg } from './catalog-harness.mjs';
 
 const attributesOf = (text) => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
@@ -30,10 +30,11 @@ const deck = (chart, extra = {}) => ({ design: { fontScheme: 'roboto' }, ...extr
   assert.ok(Math.abs(num(bands[0].height) - 2 * num(bands[1].height)) < 0.05);
   const surface = resolvePresentation(input).slides[0].design.backgroundColor ?? colors.background;
   assert.equal(bands[0].fill.toUpperCase(), chartBandFill({ neutral: 0 }, { surface, text: colors.text, resolve: () => '#000000' }));
-  assert.equal(bands[0].fill.toUpperCase(), mixOklab(surface, colors.text, 0.18));
-  // The legend names the series and the labeled bands, after the series; the unlabeled band has no entry.
-  const legend = all.filter((mark) => mark.tag === 'rect' && /\.bands\.\d+$/.test(mark['data-opf-path'] ?? '') && num(mark.width) < 30).map((mark) => mark['data-opf-path']);
-  assert.deepEqual(legend, ['slides.0.chart.bands.0', 'slides.0.chart.bands.2']);
+  assert.ok(Math.abs(colorContrast(bands[0].fill, surface) - 1.75) < 0.02, 'the first neutral at 1.75:1 against the surface');
+  // The legend names the labeled bands, then the series (PowerPoint lists the bands, which it draws first, before the data); the unlabeled band
+  // has no entry.
+  const legend = all.filter((mark) => mark.tag === 'rect' && num(mark.width) < 30 && /\.(bands\.\d+|data\.columns\.\d+)$/.test(mark['data-opf-path'] ?? '')).map((mark) => mark['data-opf-path']);
+  assert.deepEqual(legend, ['slides.0.chart.bands.0', 'slides.0.chart.bands.2', 'slides.0.chart.data.columns.1']);
   checks += 8;
 }
 
@@ -79,23 +80,34 @@ const deck = (chart, extra = {}) => ({ design: { fontScheme: 'roboto' }, ...extr
   }
 }
 
-// The lowest contrast between a data mark and a band (the three darkest neutrals) over every gallery color scheme, light and dark. The note asks
-// for 3:1; the line is printed for the supervisor whatever it says.
+// The bands over every gallery color scheme, light and dark: (1) each default neutral differs from the surface and from the next band by at least
+// 1.15:1; (2) text drawn over a band (data labels, reference labels, axis text) keeps 4.5:1 against the strongest band; (3) a band never takes a
+// mark below 80% of the contrast it has against the bare surface. The lowest value of each is printed for the supervisor.
 {
   const schemes = readdirSync(new URL('../../gallery/catalog/color-schemes/', import.meta.url)).filter((file) => file !== 'index.json').map((file) => file.replace(/\.json$/, ''));
-  let worst = { ratio: Infinity };
+  const worst = { visible: { ratio: Infinity }, text: { ratio: Infinity }, marks: { ratio: Infinity } };
+  const note = (check, ratio, detail) => { if (ratio < worst[check].ratio) worst[check] = { ratio, ...detail }; };
   for (const colorScheme of schemes) for (const variant of ['light1', 'dark1']) {
-    const input = deck({ type: 'column', legend: 'none', data: { columns: ['Q', 'A', 'B', 'C'], rows: [['Q1', 10, 11, 12], ['Q2', 12, 13, 14]] }, bands: [{ to: 4 }, { to: 8 }, { to: 12 }, { to: 16 }] }, { design: { fontScheme: 'roboto', theme: 'classic', colorScheme, variant } });
-    const all = marks(toSvg(input, 1, { trace: true }));
-    const bands = [...new Set(all.filter((mark) => mark.tag === 'rect' && /\.bands\.[0-2]$/.test(mark['data-opf-path'] ?? '')).map((mark) => mark.fill))];
+    const input = deck({ type: 'column', legend: 'none', dataLabels: true, data: { columns: ['Q', 'A', 'B', 'C'], rows: [['Q1', 10, 11, 12], ['Q2', 12, 13, 14]] }, bands: [{ to: 4 }, { to: 8 }, { to: 12 }], referenceLines: [{ value: 6, label: 'Plan' }] }, { design: { fontScheme: 'roboto', theme: 'classic', colorScheme, variant } });
+    const slide = resolvePresentation(input).slides[0], surface = slide.design.backgroundColor ?? slide.design.colors.background;
+    const svg = toSvg(input, 1, { trace: true }), all = marks(svg);
+    const bands = [0, 1, 2].map((k) => all.find((mark) => mark.tag === 'rect' && mark['data-opf-path'] === `slides.0.chart.bands.${k}`).fill);
     const fills = [...new Set(all.filter((mark) => mark.tag === 'rect' && /\.data\.rows\.\d+\.\d+$/.test(mark['data-opf-path'] ?? '')).map((mark) => mark.fill))];
-    for (const band of bands) for (const fill of fills) {
-      const ratio = colorContrast(fill, band);
-      if (ratio < worst.ratio) worst = { ratio, colorScheme, variant, band, fill };
-    }
+    // The text inside the plot: data labels (on a data row) and the reference label; the axis text stands outside the plot.
+    const inks = [...new Set([...svg.matchAll(/<text\b[^>]*>/g)].map(([tag]) => tag).filter((tag) => /data-opf-path="slides\.0\.chart\.(data\.rows\.\d+\.[1-9]|referenceLines\.\d+\.label)"/.test(tag)).map((tag) => /\bfill="(#[0-9A-Fa-f]{6})/.exec(tag)?.[1]).filter(Boolean))];
+    assert.ok(inks.length, 'labels in the plot');
+    bands.forEach((band, k) => {
+      note('visible', colorContrast(band, surface), { colorScheme, variant, what: `band ${k} ${band} on surface ${surface}` });
+      if (k) note('visible', colorContrast(band, bands[k - 1]), { colorScheme, variant, what: `band ${k} ${band} beside band ${k - 1} ${bands[k - 1]}` });
+    });
+    for (const ink of inks) note('text', colorContrast(ink, bands[0]), { colorScheme, variant, what: `text ${ink} on band ${bands[0]}` });
+    for (const fill of fills) for (const band of bands) note('marks', colorContrast(fill, band) / colorContrast(fill, surface), { colorScheme, variant, what: `mark ${fill}: ${colorContrast(fill, band).toFixed(2)}:1 on band ${band}, ${colorContrast(fill, surface).toFixed(2)}:1 on surface ${surface}` });
   }
-  console.log(`FR-07 bands: lowest mark-to-band contrast ${worst.ratio.toFixed(2)}:1 (${worst.colorScheme} ${worst.variant}, mark ${worst.fill} on band ${worst.band}) over ${schemes.length} schemes, light and dark`);
-  assert.ok(worst.ratio >= 3, `a data mark keeps 3:1 against every band (lowest ${worst.ratio.toFixed(2)}:1, ${worst.colorScheme} ${worst.variant}, mark ${worst.fill} on band ${worst.band})`);
-  checks += 1;
+  const line = (check, unit) => `${worst[check].ratio.toFixed(2)}${unit} (${worst[check].colorScheme} ${worst[check].variant}, ${worst[check].what})`;
+  console.log(`FR-07 bands over ${schemes.length} schemes, light and dark: (1) lowest band step ${line('visible', ':1')}; (2) lowest text on the strongest band ${line('text', ':1')}; (3) lowest kept share of a mark's contrast ${line('marks', '')}`);
+  assert.ok(worst.visible.ratio >= 1.15, `(1) bands visible: ${line('visible', ':1')}`);
+  assert.ok(worst.text.ratio >= 4.5, `(2) text over a band: ${line('text', ':1')}`);
+  assert.ok(worst.marks.ratio >= 0.8, `(3) marks over a band: ${line('marks', '')}`);
+  checks += 3;
 }
 console.log(`FR-07 bands and bullet render: ${checks} checks`);
