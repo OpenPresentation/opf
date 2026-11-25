@@ -57,6 +57,33 @@ Moved the hero layout's media region; the minimal theme follows its color scheme
   `pnpm check:breaking` accepts a removed record id only with that bump or a gallery fragment declaring it.
 - `assemble` adds the declared ids to the gallery changelog bullet, so the release note carries them.
 
+## Naming the slide that shows the change in an app (`native`)
+
+A change that alters the exported `.pptx` is looked at in PowerPoint, Keynote and LibreOffice Impress, on a slide that shows
+it. The fragment names that slide (NT-07), so a native-app run reads the list instead of the whole changelog:
+
+```markdown
+---
+type: fixed
+packages: [pptx]
+native: [coverage-charts#16, m-charts#1]
+---
+Chart data labels keep their number format in the exported file.
+```
+
+- `native: [<deck>#<slide>, ...]`: `deck` is the `id` of a deck in `scripts/native-acceptance/qualification/manifest.json`
+  or the path of an example under `examples/` without its extension (`technical/shapes`); `slide` is a positive whole
+  number. `pnpm check:changes` fails on a malformed entry and on a deck that is in neither place.
+- `native: none` with `native-reason: <one sentence>` says the change does not alter the exported file, or cannot be seen
+  in an application, and why. Either key without the other fails the check.
+- Both keys are optional; a fragment without them is valid. **Warning rule** (never an error): a fragment that is new on the
+  branch against `origin/main`, has neither key and touches the exported file gets `warning: changes/<slug>.md: ...` from
+  `pnpm check:native-fragment` (part of `pnpm check:changed`; a `::warning` annotation in the CI step "Changelog fragment").
+  A fragment touches the exported file when its `type` is `changed` or `fixed` and `packages` names `pptx`, `opf` or
+  `gallery`, or its `type` is `added` and `packages` names `pptx`. Fragments already on `main` are not warned about.
+- The keys never reach a `CHANGELOG.md`. `nativeSlides(root)` in `scripts/changelog-fragments.mjs` returns
+  `[{fragment, deck, slide}]` for every unreleased fragment, for the native-app runner.
+
 ## Releasing
 
 The release-prep pull request runs the assembler for each package it releases, then commits the result:

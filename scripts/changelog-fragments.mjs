@@ -8,6 +8,8 @@
 //        [--package <name>] [--date YYYY-MM-DD] [--summary "<text>"] [--dry-run]
 //   node scripts/changelog-fragments.mjs warn-missing --base <ref>     warn (never fail) when code changed
 //                                                                      and the pull request has no fragment
+//   node scripts/changelog-fragments.mjs warn-native [--base <ref>]   warn (never fail) about a new fragment that touches the
+//                                                                      exported file and has no `native` key (NT-07)
 // Every command takes --dir <directory>: the directory whose changes/ and changelog files are used (default the current one).
 //
 // Fragment format (changes/README.md):
@@ -15,18 +17,28 @@
 //   type: added | changed | fixed
 //   packages: [opf]            (only in a repository with several changelogs; see changes/config.json)
 //   drawing: ["layouts:hero"]  (MR-35, gallery fragments only: the existing records that now draw differently or are gone)
+//   native: [coverage-charts#16]   (NT-07, optional: the slides that show the change in the exported file; or `native: none` + `native-reason: ...`)
 //   ---
 //   RR-17 (what and why): the text of one CHANGELOG bullet, without the leading "- ".
 //
 // One copy serves every package of the monorepo (the siblings' copies were identical to this one). Plain Node, no dependencies.
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, realpathSync, unlinkSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 export const TYPES = ['added', 'changed', 'fixed'];
 const DEFAULT_CONFIG = { default: '', targets: { '': 'CHANGELOG.md' }, codePaths: ['src/'] };
-const KEYS = new Set(['type', 'packages', 'drawing']);
+const KEYS = new Set(['type', 'packages', 'drawing', 'native', 'native-reason']);
+
+// NT-07: `native: [deck#slide, ...]` names the slides that show the change in the exported file (a qualification deck id or an
+// example path under examples/ without its extension, then a positive whole slide number); `native: none` needs `native-reason`.
+const NATIVE_ENTRY = /^([A-Za-z0-9][A-Za-z0-9._/-]*)#([1-9][0-9]*)$/;
+// A fragment that touches the exported file: it names pptx, opf or gallery and is changed or fixed, or it adds to pptx.
+export function touchesExport(fragment) {
+  const has = (...names) => fragment.packages.some((p) => names.includes(p));
+  return fragment.type === 'added' ? has('pptx') : has('pptx', 'opf', 'gallery');
+}
 
 // MR-35: the record kinds of the gallery catalog a `drawing` entry may name (`<kind>:<id>`): the eight record kinds and the three
 // display kinds of `catalogDisplay`. scripts/gallery-stability.mjs compares exactly these.
@@ -57,7 +69,7 @@ export function parseFragment(name, text, config = DEFAULT_CONFIG) {
   const meta = {};
   for (const line of match[1].split(/\r?\n/)) {
     if (!line.trim()) continue;
-    const pair = /^([a-z]+):\s*(.*?)\s*$/.exec(line);
+    const pair = /^([a-z][a-z-]*):\s*(.*?)\s*$/.exec(line);
     if (!pair || !KEYS.has(pair[1])) fail(`unknown front matter line "${line}" (allowed keys: ${[...KEYS].join(', ')})`);
     if (pair[1] in meta) fail(`duplicate key "${pair[1]}"`);
     meta[pair[1]] = pair[2];
@@ -91,10 +103,70 @@ export function parseFragment(name, text, config = DEFAULT_CONFIG) {
     if (new Set(entries).size !== entries.length) fail('duplicate drawing entry');
     drawing = entries;
   }
+  // NT-07: `native` lists the slides that show the change in the exported file, or is `none` with a `native-reason`.
+  let native = null;
+  let nativeReason = '';
+  if ('native-reason' in meta) {
+    nativeReason = meta['native-reason'].replace(/^(["'])(.*)\1$/, '$2');
+    if (meta.native !== 'none') fail('native-reason belongs to "native: none"');
+    if (!nativeReason) fail('native-reason is empty; write one sentence');
+  }
+  if ('native' in meta) {
+    if (meta.native === 'none') {
+      if (!nativeReason) fail('"native: none" needs native-reason: <one sentence>');
+      native = [];
+    } else {
+      const entries = flowList(meta.native);
+      if (!entries?.length) fail('native must be a list such as [coverage-charts#16, m-charts#1] or none');
+      native = entries.map((entry) => {
+        const parts = NATIVE_ENTRY.exec(entry);
+        if (!parts) fail(`native entry "${entry}" is not <deck>#<slide> with a positive whole slide number (for example coverage-charts#16)`);
+        return { deck: parts[1], slide: Number(parts[2]) };
+      });
+      if (new Set(entries).size !== entries.length) fail('duplicate native entry');
+    }
+  }
   const body = match[2].replace(/^\s*\n/, '').replace(/\s+$/, '');
   if (!body.trim()) fail('empty entry');
   if (/^\s*[-*]\s/.test(body)) fail('write the entry text without the leading "- "');
-  return { slug: name.replace(/\.md$/, ''), type: meta.type, packages, drawing, body };
+  return { slug: name.replace(/\.md$/, ''), type: meta.type, packages, drawing, native, nativeReason, body };
+}
+
+// NT-07: the decks a `native` entry may name: the ids of the qualification manifest, or an example path under examples/.
+export function nativeDeckExists(root, deck) {
+  const manifest = path.join(root, 'scripts', 'native-acceptance', 'qualification', 'manifest.json');
+  if (existsSync(manifest)) {
+    try {
+      if (JSON.parse(readFileSync(manifest, 'utf8')).decks?.some((d) => d.id === deck)) return true;
+    } catch {
+      // an unreadable manifest is reported by its own check; fall through to the examples
+    }
+  }
+  return ['.opf.json', '.opf.md', '.json', '.md'].some((ext) => existsSync(path.join(root, 'examples', `${deck}${ext}`)));
+}
+
+export function unknownNativeDecks(root, fragments) {
+  const problems = [];
+  for (const fragment of fragments) {
+    for (const { deck } of fragment.native ?? []) {
+      if (!nativeDeckExists(root, deck)) problems.push(`changes/${path.basename(fragment.file)}: native deck "${deck}" is neither a qualification deck id nor an example under examples/`);
+    }
+  }
+  return problems;
+}
+
+// For the native-app runner (`pnpm native`): the slides of every unreleased fragment that names some.
+export function nativeSlides(root = process.cwd()) {
+  const out = [];
+  for (const fragment of readFragments(root)) {
+    for (const { deck, slide } of fragment.native ?? []) out.push({ fragment: fragment.slug, deck, slide });
+  }
+  return out;
+}
+
+// Fragments that touch the exported file and say nothing about native apps, among the files added on this branch.
+export function missingNative(fragments) {
+  return fragments.filter((f) => touchesExport(f) && f.native === null);
 }
 
 export function readFragments(root, config = loadConfig(root)) {
@@ -247,7 +319,7 @@ function main(argv) {
   const config = loadConfig(root);
   if (command === 'check') {
     const fragments = readFragments(root, config);
-    const missing = missingChangelogs(root, fragments, config);
+    const missing = [...missingChangelogs(root, fragments, config), ...unknownNativeDecks(root, fragments)];
     if (missing.length) throw new Error(missing.join('\n'));
     console.log(`changes/: ${fragments.length} fragment(s) valid`);
     return 0;
@@ -270,7 +342,28 @@ function main(argv) {
     }
     return 0;
   }
-  throw new Error('Usage: changelog-fragments.mjs check | assemble --version X.Y.Z | warn-missing --base <ref> [--dir <directory>]');
+  if (command === 'warn-native') {
+    const base = options.base ?? 'origin/main';
+    const git = (...a) => spawnSync('git', ['-c', 'core.quotepath=off', ...a], { cwd: root, encoding: 'utf8' });
+    const mergeBase = git('merge-base', base, 'HEAD');
+    if (mergeBase.status !== 0) {
+      console.log(`native fragment check: no ${base} to compare with; skipped`);
+      return 0;
+    }
+    const names = new Set();
+    for (const a of [['diff', '--name-only', '--relative', '--diff-filter=A', mergeBase.stdout.trim(), '--', 'changes'], ['ls-files', '--others', '--exclude-standard', '--', 'changes']]) {
+      for (const line of git(...a).stdout.split('\n').filter(Boolean)) names.add(path.basename(line));
+    }
+    const added = readFragments(root, config).filter((f) => names.has(path.basename(f.file)));
+    const missing = missingNative(added);
+    for (const f of missing) {
+      const message = `changes/${f.slug}.md: this change touches the exported file; add native: [deck#slide] naming the slide that shows it, or native: none with native-reason (see changes/README.md)`;
+      console.log(process.env.GITHUB_ACTIONS ? `::warning file=changes/${f.slug}.md,title=No native slide::${message}` : `warning: ${message}`);
+    }
+    if (!missing.length) console.log('native fragment check: nothing to warn about');
+    return 0;
+  }
+  throw new Error('Usage: changelog-fragments.mjs check | assemble --version X.Y.Z | warn-missing --base <ref> | warn-native --base <ref> [--dir <directory>]');
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
