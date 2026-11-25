@@ -107,6 +107,44 @@ What engines do:
 - `opf ingest --dataset` declares the columns of the dataset it writes (inline chart data and tables stay as they were): `number` when every filled cell is a number (a decimal string that prints back unchanged counts; `12.50` does not), `boolean`, `date` (every cell a time label) or `text`; role `measure` for a number column that is neither the first column nor a time label, `dimension` otherwise. It stores the cells as that type, so a typed column it writes never warns. A column whose type cannot be told stays a plain string, and a column a dataset already declares keeps its declaration (core `inferColumnDeclaration`, `declareColumns`). The heuristic is a starting point for ingest, not a rule of the format; a host that reads a typed source writes the declarations it knows.
 - In the editor the data panel has a type, a role and a unit field for the selected column of a chart's data or a shared dataset (`setGridColumnDeclaration`); a cell of another kind is marked; columns a paste adds declare what their cells say.
 - The PowerPoint export keeps the keys in `OPF_DATASETS_V1` and in a chart's `OPF_DATA_V1` record, inline. A 0.36.0 importer does not know them and drops those records whole (see [document round trip](../packages/pptx/docs/document-roundtrip.md)); its charts and tables keep the values they show.
+### Ranges behind a chart (bands)
+
+"Is this number good?" needs the ranges that make it good: poor, fair, good; under, on or over budget. `chart.bands` shades ranges of a chart's value axis behind the data, and they move with the axis.
+
+```json
+"chart": {
+  "type": "column",
+  "data": { "columns": ["Week", { "name": "Wait (min)", "format": "0" }], "rows": [["W1", 14], ["W2", 11], ["W3", 9], ["W4", 12]] },
+  "bands": [{ "to": 10, "label": "Within target", "color": "accent3" }, { "to": 15, "label": "Watch" }, { "to": 20, "label": "Over target" }]
+}
+```
+
+- One to six bands, in increasing order: each runs from the previous band's `to` (the first from the axis minimum) to its own `to`, in the value axis's units (with format `0%`, 0.8 is 80%). There is no `from`: a range left unshaded is a band in `background`. Unordered bands are drawn sorted, with the warning `chart-bands-order`.
+- The last `to` extends an automatic axis, as a reference line's value does; a `to` below the axis minimum is not drawn.
+- Colors: without `color`, the scheme's neutrals: the text color mixed into the chart's surface (in OKLab) until it reaches a contrast of 1.75, 1.45 and 1.25 against the surface, lowest band first (then again from the first), so the bands read alike on a light and a dark variant. With `color` (a scheme name only), that color at 25% over the surface, for ranges that mean good or bad.
+- `label` names the band in the legend and in the text alternative. When the chart has a legend, the labeled bands come first, then the data series: PowerPoint lists a chart's band group, which it draws first, before the data whatever the file says, so both engines list them that way.
+- Bar, column, line and area charts and their stacked and 100% stacked forms draw bands, and so does the bullet chart. Bar and column charts shade the whole plot; line and area charts from the first to the last category center, what a PowerPoint area series covers. Any other type ignores them with the warning `chart-bands-unsupported` (a combo chart among them).
+- Bands and `referenceLines` combine: bands behind the gridlines and the data, reference lines on top. Bands never change the data drawn.
+- **PowerPoint.** The bands are a stacked chart group of their own on the primary axes (the visible ones), and the data series sit on the secondary axes, deleted and fixed to the same bounds: PowerPoint draws a chart's primary group before its secondary one, so this is what keeps the data in front. A chart with bands therefore has fixed value-axis bounds in PowerPoint (both axis pairs carry `c:min` and `c:max`), and a value typed beyond them in Edit Data does not rescale the chart; change the axis bounds in PowerPoint, or the data in OPF and export again. The band series are workbook columns after the data, so Edit Data shows them.
+
+### Bullet charts
+
+`type: "bullet"` puts many KPIs and their targets on one slide: one row per category, each a thin bar (a third of the row) for the measure, a tick (two thirds of the row) at the target, over the chart's bands.
+
+```json
+"chart": {
+  "type": "bullet",
+  "data": { "dataset": "kpis" },
+  "mapping": { "category": "KPI", "series": ["Actual"], "target": "Target" },
+  "bands": [{ "to": 0.6, "label": "Poor" }, { "to": 0.85, "label": "Fair" }, { "to": 1, "label": "Good" }]
+}
+```
+
+- `mapping.target` names the target column (optional; without it there are no ticks). The format never guesses it. A name no column has is the error `chart-mapping-unknown-column`; on any other chart type it is ignored with `chart-mapping-adapted`. A target cell that is not a number is a gap (no tick in that row) and a `chart-value-not-numeric` warning.
+- The measure is the first plotted series (default: the first column that is not the category or the target); further series are named in `chart-series-dropped`.
+- The value axis is shared by all rows: from 0 (lower when a value or band is negative) to the largest value, target or band end.
+- Rows read top to bottom in data order, the category names at the start; right to left, the names stand at the right and the values run from the right. `highlight` works as on a bar chart. A bullet chart without bands or target is a thin-bar chart.
+- **PowerPoint.** Native, editable parts in two axis pairs: the bands as a stacked bar group on the primary axes, the measure as a clustered bar group (gap width 200) on the secondary axes, and the target as a scatter series without markers on the measure's axes whose fixed vertical error bars draw the ticks. The plot has the preview's position.
 
 ### Where data came from
 

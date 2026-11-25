@@ -157,6 +157,14 @@
       "basis": "opf.schema.json#/$defs/TextRun/properties/link; docs/validate.md, rule opf/slide-link-unknown"
     },
     {
+      "id": "core.valid.chart-bands-bullet",
+      "file": "core/valid/chart-bands-bullet.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A bullet chart of KPIs against their targets over three labeled bands, and a column chart with two bands, one in a scheme color.",
+      "basis": "opf.schema.json#/$defs/ChartBand; opf.schema.json#/$defs/ChartMapping/properties/target"
+    },
+    {
       "id": "core.valid.table-color-scale",
       "file": "core/valid/table-color-scale.opf.json",
       "levels": ["reader", "writer"],
@@ -563,6 +571,22 @@
       "expect": { "valid": false, "errorAt": "/slides/0/text/0/link" },
       "description": "A link names a slide id no slide of the document has.",
       "basis": "docs/validate.md, rule opf/slide-link-unknown"
+    },
+    {
+      "id": "core.invalid.chart-bullet-target-unknown",
+      "file": "core/invalid/chart-bullet-target-unknown.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/chart/mapping/target" },
+      "description": "A bullet chart names a target column the chart data does not have.",
+      "basis": "docs/validate.md, rule opf/chart-mapping-unknown-column"
+    },
+    {
+      "id": "core.invalid.chart-bands-empty",
+      "file": "core/invalid/chart-bands-empty.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/chart/bands" },
+      "description": "A chart has an empty band list (one to six bands).",
+      "basis": "opf.schema.json#/$defs/Chart/properties/bands"
     },
     {
       "id": "core.invalid.table-color-scale-unknown-column",
