@@ -1,0 +1,19 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "LG-03 min",
+ "language": "am",
+ "slides": [
+  {
+   "language": "am",
+   "title": "am",
+   "blocks": [
+    {
+     "text": "የሰው፡ልጅ፡ሁሉ፡ሲወለድ፡ነጻና፡በክብርና፡በመብትም፡እኩልነት፡ያለው፡ነው።፡የተፈጥሮ፡ማስተዋልና፡ሕሊና፡ስላለው፡አንዱ፡ሌላውን፡በወንድማማችነት፡መንፈስ፡መመልከት፡ይገባዋል።"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights."
+    }
+   ]
+  }
+ ]
+}

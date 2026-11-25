@@ -1,0 +1,1 @@
+{"slides":[{"title":"Highlighted columns","chart":{"type":"column","data":{"columns":["Terminal","Wait"],"rows":[["North",42],["South",28],["East",35],["West",31]]},"legend":"bottom","highlight":{"categories":["North","East"]}}}]}

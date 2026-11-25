@@ -1,0 +1,61 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "SW-02 native note at foot",
+ "language": "en-US",
+ "design": {
+  "background": "light1"
+ },
+ "slides": [
+  {
+   "id": "sw-02",
+   "title": "M39 TAB-1: three-row table and note grow",
+   "layout": "table",
+   "blocks": [
+    {
+     "region": "body",
+     "table": {
+      "columns": [
+       "Team",
+       {
+        "name": "Participants",
+        "format": "0"
+       },
+       {
+        "name": "Completion",
+        "format": "0%"
+       },
+       {
+        "name": "Median time (min)",
+        "format": "0.0"
+       }
+      ],
+      "rows": [
+       [
+        "A",
+        28,
+        0.89,
+        5.8
+       ],
+       [
+        "B",
+        24,
+        0.79,
+        6.7
+       ],
+       [
+        "C",
+        31,
+        0.91,
+        5.1
+       ]
+      ]
+     }
+    },
+    {
+     "region": "aside",
+     "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"slides":[{"title":"Category and value labels","chart":{"type":"column","data":{"columns":["Terminal","Wait"],"rows":[["North",42],["South",28],["East",35]]},"dataLabels":{"content":["category","value"],"separator":": ","position":"inside-end"}}}]}

@@ -1,0 +1,1 @@
+{"name":"LY-05 colon in chart categories","language":"en-US","slides":[{"layout":"chart","title":"Completion rose through the pilot","blocks":[{"chart":{"type":"column","data":{"columns":["Month","Parcels"],"rows":[["January: northern hubs",64],["February: coastal depots",69],["March: inland warehouses",72]]}}}]}]}

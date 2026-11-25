@@ -1,0 +1,20 @@
+{
+  "name": "RT-02 category labels with a colon",
+  "slides": [
+    {
+      "layout": "chart",
+      "title": "Colon in category labels",
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": ["Month", "Parcels"],
+              "rows": [["January: northern hubs", 64], ["February: coastal depots", 69], ["March: inland warehouses", 72]]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

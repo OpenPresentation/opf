@@ -1,0 +1,54 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "LG-02 min",
+ "language": "ar",
+ "slides": [
+  {
+   "language": "ar",
+   "title": "ar",
+   "blocks": [
+    {
+     "table": {
+      "columns": [
+       "يولد",
+       "جميع",
+       "الناس"
+      ],
+      "rows": [
+       [
+        "أحرارًا",
+        "متساوين",
+        "في"
+       ]
+      ]
+     }
+    },
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "يولد",
+        "Value"
+       ],
+       "rows": [
+        [
+         "جميع",
+         3
+        ],
+        [
+         "الناس",
+         5
+        ],
+        [
+         "أحرارًا",
+         4
+        ]
+       ]
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

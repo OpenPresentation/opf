@@ -1,0 +1,1 @@
+{"slides":[{"title":"Pie legend","blocks":[{"chart":{"type":"column","data":{"columns":["Terminal","Wait"],"rows":[["North",42],["South",28]]}}},{"chart":{"type":"pie","data":{"columns":["Region","Share"],"rows":[["Europe, Middle East and Africa",40],["Asia Pacific",35],["Americas",25]]}}}]}]}

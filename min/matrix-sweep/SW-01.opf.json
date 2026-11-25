@@ -1,0 +1,55 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "SW-01 table header split",
+ "language": "en-US",
+ "design": {
+  "background": "light1"
+ },
+ "slides": [
+  {
+   "id": "sw-01",
+   "title": "M40 TAB-2: table-beside table grows with a note",
+   "layout": "table-beside",
+   "blocks": [
+    {
+     "region": "body",
+     "table": {
+      "columns": [
+       "Team",
+       {
+        "name": "Participants",
+        "format": "0"
+       },
+       {
+        "name": "Completion",
+        "format": "0%"
+       },
+       {
+        "name": "Median time (min)",
+        "format": "0.0"
+       }
+      ],
+      "rows": [
+       [
+        "A",
+        28,
+        0.89,
+        5.8
+       ],
+       [
+        "B",
+        24,
+        0.79,
+        6.7
+       ]
+      ]
+     }
+    },
+    {
+     "region": "aside",
+     "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+    }
+   ]
+  }
+ ]
+}

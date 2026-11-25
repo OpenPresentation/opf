@@ -1,0 +1,19 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "LG-01 min",
+ "language": "ca",
+ "slides": [
+  {
+   "language": "ca",
+   "title": "ca",
+   "blocks": [
+    {
+     "text": "Tots els éssers humans neixen lliures i iguals en dignitat i en drets. Són dotats de raó i de consciència, i han de comportar-se fraternalment els uns amb els altres."
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights."
+    }
+   ]
+  }
+ ]
+}
