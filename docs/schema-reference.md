@@ -34,6 +34,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `slides` | yes | `array<ref:Slide>` | Ordered array of slides that make up the presentation. |
 | `references` | no | `array<ref:Reference>` | Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run... |
 | `datasets` | no | `ref:Datasets` | Optional shared data tables, keyed by id. A chart ('chart.data': { "dataset": "<id>" }) or a table ('table': { "dataset": "<id>" }) references one instead of holding its own copy; engines inline the reference before c... |
+| `datasources` | no | `ref:DataSources` | Optional data sources, keyed by id: the places data comes from (a warehouse, a workbook, an API), described once. A dataset or inline chart data names one with 'datasource': "<id>" and records what it took, when and b... |
 | `assets` | no | `ref:Assets` | Optional reusable asset registry for images, data files, videos, documents, fonts, and other resources referenced elsewhere in the deck via 'asset:<id>' strings. |
 | `icons` | no | `ref:Icons` | Optional deck-local icons, keyed by name: an author's or an LLM's own SVG, written once and named by any `icon` of the deck. See docs/icons.md. |
 | `catalogs` | no | `ref:Catalogs` | The catalog records this document embeds, grouped by the catalog they came from: 'default' (the catalog bare ids come from), 'custom' (records the document defines itself) and any number of named catalogs ('acme', ref... |
@@ -1372,7 +1373,12 @@ _No named properties._
 | --- | --- | --- | --- |
 | `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered column labels for the chart data table. A label is a string or a DataColumn ({ "name", "format" }) whose number format the data labels, value axis and exported workbook use. |
 | `rows` | yes | `array<array<ref:ChartDataCell>>` | Tabular chart rows. Each row aligns by index with columns. |
-| `source` | no | `ref:DataSourceRef` | Optional provenance: where this inline data came from. Engines never read, fetch or refresh it; they keep it through editing, export and re-import. |
+| `datasource` | no | `ref:DataSourceChoice` |  |
+| `query` | no | `ref:DataQuery` |  |
+| `retrieved` | no | `ref:DataRetrieved` |  |
+| `version` | no | `ref:DataVersion` |  |
+| `sha256` | no | `ref:DataSha256` |  |
+| `generator` | no | `ref:DataGenerator` |  |
 
 
 ### DataColumn
@@ -1387,20 +1393,96 @@ _No named properties._
 | `format` | no | `ref:NumberFormat` | Number format of the column's number values (data labels, value axis, table cells, exported workbook). Absent: the General form. |
 
 
-### DataSourceRef
+### DataSourceId
+
+- Type: `string`
+- Required fields: none
+- Purpose: Id of an entry in the top-level datasources map (the datasets id pattern). A string 'datasource' is only ever such an id; a file or a URL is written as an inline data source object, { "src": "./revenue.csv" }.
+
+_No named properties._
+
+
+### DataSource
 
 - Type: `object`
-- Required fields: `src`
-- Purpose: Provenance of inline data or a dataset: the file, sheet and range it came from and when. Engines never read, fetch or refresh it; they keep it through editing, export and re-import. Re-import the data to update it.
+- Required fields: none
+- Purpose: A place data comes from: what it is and on what terms, not what was taken from it or when (that is the dataset's). Engines never read, fetch or refresh it; they keep it through editing, export and re-import. It never holds credentials: no password, token or key in 'src' or anywhere else (opf/datasource-credentials warns about a user and password in 'src' and a key or token in its query string); a host keeps secrets in its own store and names the connection in 'connector' or 'extensions'.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `src` | yes | `string` | Where the data came from: an 'asset:<id>' reference, a URL, or a relative or local path. |
-| `sheet` | no | `string` | Sheet or table name inside a spreadsheet source. |
-| `range` | no | `string` | A1-style range inside a spreadsheet source. |
-| `fields` | no | `array<string>` | The source fields the data was taken from, in order. |
-| `retrieved` | no | `anyOf:schema / schema` | When the data was taken from the source: an ISO 8601 date or date-time. |
-| `description` | no | `string` | Free-form note about the source. |
+| `title` | no | `string` | Human name of the data source, shown by editors. |
+| `description` | no | `string` | Free-form note about the data source. |
+| `connector` | no | `string` | The kind of data source, in the host's or the author's words: a name a tool recognizes, such as 'csv', 'xlsx', 'postgres', 'bigquery' or 'rest'. Engines do not interpret it. It also says what language a dataset's 'que... |
+| `src` | no | `string` | Where the data is: an 'asset:<id>' reference, a URL, or a relative or local path. A URL carries no credentials. |
+| `license` | no | `string` | The terms the data is under: an SPDX license identifier or a short statement. It travels with the data. |
+| `refresh` | no | `string` | How often the data is meant to be taken again, as an ISO 8601 duration. No engine acts on it. A validator given a date warns when a dataset's 'retrieved' is older than this (opf/dataset-stale). |
+| `extensions` | no | `object` | Custom data passthrough, for example the connection settings a host owns; ignored by the engine but preserved across read/write round-trips. Never credentials. |
+
+
+### DataSources
+
+- Type: `object`
+- Required fields: none
+- Purpose: Data sources keyed by id (the datasets id pattern). A dataset or inline chart data names one with 'datasource': "<id>".
+
+_No named properties._
+
+
+### DataSourceChoice
+
+- Type: `oneOf:ref:DataSourceId / ref:DataSource`
+- Required fields: none
+- Purpose: Where the data came from: the id of an entry in the top-level datasources map (a string, always an id), or a data source written inline, { "src": "./revenue.csv" }. An unknown id is a 'datasource-unknown' error. Engines never read, fetch or refresh it.
+
+_No named properties._
+
+
+### DataQuery
+
+- Type: `string`
+- Required fields: none
+- Purpose: What was taken from the data source, in the data source's own language: a spreadsheet range with its sheet ('FY26!A1:C13'; a sheet name with a space is quoted as spreadsheets do, "'Q3 plan'!A1:B9"), a SQL statement, a path into a document. Engines never run or parse it.
+
+_No named properties._
+
+
+### DataRetrieved
+
+- Type: `anyOf:string / string`
+- Required fields: none
+- Purpose: When the data was taken from its source: an ISO 8601 date or date-time. Never read from a clock by an engine.
+
+_No named properties._
+
+
+### DataVersion
+
+- Type: `string`
+- Required fields: none
+- Purpose: A free string the source system gives the snapshot that was taken: a revision, an etag, a commit.
+
+_No named properties._
+
+
+### DataSha256
+
+- Type: `string`
+- Required fields: none
+- Purpose: The SHA-256 of the source file's bytes as retrieved, as 64 lowercase hexadecimal digits. It answers 'has the file changed since'. Engines never compute or check it.
+
+_No named properties._
+
+
+### DataGenerator
+
+- Type: `object`
+- Required fields: `kind`, `name`
+- Purpose: Who produced the data: a person or a model, and which. A reviewer of a generated deck can see that a table came from a model, and from which one.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `kind` | yes | `enum:human \| model` | 'human' for a person, 'model' for a language model or another generating program. |
+| `name` | yes | `string` | The person, model or tool, as its owner names it. |
 
 
 ### DatasetId
@@ -1442,7 +1524,12 @@ _No named properties._
 | `description` | no | `string` | What the dataset holds. |
 | `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered, uniquely named columns. |
 | `rows` | yes | `array<array<ref:ChartDataCell>>` | Rows of scalar cells (string, number, boolean, null); each row aligns by index with columns. |
-| `source` | no | `ref:DataSourceRef` | Optional provenance. Engines never read, fetch or refresh it. |
+| `datasource` | no | `ref:DataSourceChoice` |  |
+| `query` | no | `ref:DataQuery` |  |
+| `retrieved` | no | `ref:DataRetrieved` |  |
+| `version` | no | `ref:DataVersion` |  |
+| `sha256` | no | `ref:DataSha256` |  |
+| `generator` | no | `ref:DataGenerator` |  |
 
 
 ### DatasetRef

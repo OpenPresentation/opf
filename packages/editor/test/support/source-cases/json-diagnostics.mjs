@@ -105,7 +105,7 @@ export const jsonA11y = [
   ['J-A11Y-001', 'R-A11Y-01', 'the editor is a labelled multi-line textbox described by the panel', 'json', '|', [], { attrs: { '.opf-source-code .cm-content': { role: 'textbox', 'aria-multiline': 'true', 'aria-label': 'OPF source' } } }],
   ['J-A11Y-002', 'R-A11Y-01', 'the description names Ctrl+Space and Escape then Tab', 'json', '|', [], { attrs: { '.opf-source-code .cm-content': { 'aria-description': /Control\+Space.*Escape then Tab/ } } }],
   ['J-A11Y-003', 'R-A11Y-01', 'while the list is open aria-activedescendant follows the selection', 'json', '{\n  "slides": [],\n  |\n}', [T('"des'), K('ArrowDown')], { attrs: { '.opf-source-code .cm-content': { 'aria-autocomplete': 'list', 'aria-haspopup': 'listbox' } }, popup: { selectedIndex: 1 } }],
-  ['J-A11Y-004', 'R-A11Y-02', 'opening the list says how many suggestions', 'json', '{\n  "slides": [],\n  "des|"\n}', [K('Control+Space')], { live: '3 suggestions' }],
+  ['J-A11Y-004', 'R-A11Y-02', 'opening the list says how many suggestions', 'json', '{\n  "slides": [],\n  "des|"\n}', [K('Control+Space')], { live: '4 suggestions' }],
   ['J-A11Y-005', 'R-A11Y-02', 'moving the selection says what it is', 'json', '{\n  "slides": [],\n  |\n}', [T('"des'), K('ArrowDown'), ['waitLive', 'description, property']], { live: 'description, property.*prose' }],
   ['J-A11Y-006', 'R-A11Y-02', 'accepting says what was inserted', 'json', '{\n  "slides": [],\n  |\n}', [T('"des'), K('Tab')], { live: 'Inserted design' }],
   ['J-A11Y-007', 'R-A11Y-02', 'a snippet says its first tab stop', 'json', '{\n  "slides": [|]\n}', [T('slide'), K('Tab')], { live: 'Tab stop 1 of 2: Slide title' }],

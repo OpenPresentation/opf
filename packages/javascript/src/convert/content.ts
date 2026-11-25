@@ -305,7 +305,7 @@ function chartToTable(chart: Json, loss: Loss): Field {
   }
   if (!data || !Array.isArray(data.columns) || !Array.isArray(data.rows)) throw refuse("This chart has no inline columns and rows. Only a chart with inline columns and rows, or a dataset, converts to a table.");
   if (chart.type) loss.note("chart type");
-  if (data.source !== undefined) loss.note("data source");
+  if (["datasource", "query", "retrieved", "version", "sha256", "generator"].some((key) => data[key] !== undefined)) loss.note("data source");
   return { key: "table", value: { columns: clone(data.columns), rows: clone(data.rows) } };
 }
 

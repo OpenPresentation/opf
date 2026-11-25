@@ -13,6 +13,16 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", "about 12"]] } } },
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: ["Quarter", { name: "Revenue", format: "$#,##0" }], rows: [["Q1", 12]] } } },
   ),
+  "opf/datasource-credentials": ex(
+    "Remove the user, password, key or token from the data source and keep the secret in your own store. Name the connection in `connector` or `extensions`; the document never holds a credential.",
+    { datasources: { warehouse: { src: "https://analyst:secret@data.example.com/export.csv" } }, slides: [{ title: "Revenue", text: "Revenue grew." }] },
+    { datasources: { warehouse: { src: "https://data.example.com/export.csv" } }, slides: [{ title: "Revenue", text: "Revenue grew." }] },
+  ),
+  "opf/dataset-stale": ex(
+    "Take the data from its data source again and update `retrieved`, or change the data source's `refresh` to how often the data really needs taking. Only a validation given a date (`asOf`) reports it.",
+    { datasources: { warehouse: { refresh: "P1D" } }, datasets: { sales: { datasource: "warehouse", retrieved: "2026-01-01", columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
+    { datasources: { warehouse: { refresh: "P1D" } }, datasets: { sales: { datasource: "warehouse", retrieved: "2026-11-30", columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
+  ),
   "opf/chart-mapping-adapted": ex(
     "Remove the mapping entry, or name a column the chart type can use. The entry is ignored.",
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, mapping: { x: "Costs" } } },

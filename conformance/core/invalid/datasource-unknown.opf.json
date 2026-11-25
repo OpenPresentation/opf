@@ -1,0 +1,1 @@
+{"datasources":{"warehouse":{}},"datasets":{"revenue":{"columns":["Quarter","Revenue"],"rows":[["Q1",12]],"datasource":"wharehouse"}},"slides":[{"title":"Revenue","chart":{"type":"bar","data":{"dataset":"revenue"}}}]}

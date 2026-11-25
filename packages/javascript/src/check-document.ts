@@ -35,6 +35,7 @@ import { splitPointer } from './rule-content.js';
 import { droppedCopyOperations, staleCopyCause, staleCopyFix, staleCopyUsers, staleLayoutCopy } from './stale-records.js';
 import { documentIcons, iconIssue } from './icons.js';
 import type { Finding, FindingSeverity, FindingSuggestion } from './generated/types/finding.js';
+import { OPF_CORE_VERSION } from './generated/version.js';
 import type { Contract, ValidateOptions } from './validation-types.js';
 
 /**
@@ -194,6 +195,10 @@ export function issueFinding(
 		help = `Write ${JSON.stringify(nearest[0].value)} instead; ${JSON.stringify(typedName)} is not a field of this object.`;
 	else if (typedName !== undefined && typeof nearest[0]?.value === 'string')
 		help = `Did you mean ${JSON.stringify(nearest[0].value)}? ${JSON.stringify(typedName)} is not a field of this object. To keep custom metadata, put it in extensions; do not delete authored content to clear this error.`;
+	// No close known key means this is not a typo: a later release may define the key. A released validator cannot know what
+	// a later release adds, so it says only its own version (also as data, validation.params.validatorVersion).
+	const unknownKey = typedName !== undefined && nearest.length === 0;
+	if (unknownKey) help = `${help} This validator is OPF ${OPF_CORE_VERSION}; a later OPF release may define ${JSON.stringify(typedName)}.`;
 	return finding(ruleId, {
 		...(severity ? { severity } : {}),
 		path,
@@ -202,7 +207,7 @@ export function issueFinding(
 		help,
 		definition,
 		lookup,
-		validation: issue,
+		validation: unknownKey ? { ...issue, params: { ...issue.params, validatorVersion: OPF_CORE_VERSION } } : issue,
 		...(allowed.length
 			? {
 					suggestions: allowed.map((value) => ({
@@ -546,6 +551,8 @@ function chartNumberFixPaths(document: unknown): Map<string, ChartNumberFix> {
 const HELP: Record<string, string> = {
 	'chart-value-not-numeric':
 		'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.',
+	'datasource-credentials': 'Remove the user, password, key or token from the data source and keep the secret in your own store; name the connection in `connector` or `extensions`. A data source never holds credentials.',
+	'dataset-stale': "Take the data from its data source again and update `retrieved`, or change the data source's `refresh` to how often the data really needs taking.",
 	'chart-mapping-adapted': 'Choose a compatible chart type or mapping for the selected data. The message explains how the mapping or drawing was adapted.',
 	'chart-series-dropped': 'The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.',
 	'chart-highlight-adapted': 'The highlight is adapted by every engine. Name a series or category the chart type can emphasize, or remove the entry.',

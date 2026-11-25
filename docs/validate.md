@@ -49,7 +49,7 @@ Every rule is listed, with its category, default severity, cost and the basis it
 
 `validate(input, options?)` takes a parsed presentation (an object) or **strict JSON text**. A string is read as JSON and nothing else: it is never sniffed for YAML or Markdown. When the text begins like YAML (`key: value`, `---`) or Markdown (`#`), the `help` of the syntax finding says to read it with `fromYaml` or `fromMarkdown` first, which return a presentation and call `validate` for you.
 
-With text, a syntax error or a duplicate key comes back with `location` (original-source UTF-16 offset and length, one-based line and column), and so does every finding about a value in the document; a finding about a missing field is located at the object that lacks it. Text that is not JSON reports its syntax errors (`opf/json-syntax`) whatever `only` says, because nothing else can run. A syntax finding names the root cause in plain words and not the token where a parser gave up: for `"design":` followed by the next key, one finding `` `design` needs a value. `` located at `"design":` (its `help` says what could come next), not four findings from the token after it. There is one finding per cause, in position order, at most five; the cascade of one mistake is not reported again. `analyzeJsonSyntax` (`@openpresentation/opf/source`, browser-safe) returns the same causes with the fixes that repair each one (`Insert comma`, `Add { }`, `Remove "design"`, ...) for editors; `locate` and `pathAt` in the same module turn a JSON Pointer into a range of the text and a caret into a path, in JSON, YAML and Markdown, and `scanMarkdown` lists the regions of a Markdown deck. A finding for an unknown property (`opf/schema`, keyword `additionalProperties`) carries up to three `suggestions` of the nearest property names of the same object (edit distance 2, or 1 for names of three characters or fewer; case-insensitive), so `slids` suggests `slides`.
+With text, a syntax error or a duplicate key comes back with `location` (original-source UTF-16 offset and length, one-based line and column), and so does every finding about a value in the document; a finding about a missing field is located at the object that lacks it. Text that is not JSON reports its syntax errors (`opf/json-syntax`) whatever `only` says, because nothing else can run. A syntax finding names the root cause in plain words and not the token where a parser gave up: for `"design":` followed by the next key, one finding `` `design` needs a value. `` located at `"design":` (its `help` says what could come next), not four findings from the token after it. There is one finding per cause, in position order, at most five; the cascade of one mistake is not reported again. `analyzeJsonSyntax` (`@openpresentation/opf/source`, browser-safe) returns the same causes with the fixes that repair each one (`Insert comma`, `Add { }`, `Remove "design"`, ...) for editors; `locate` and `pathAt` in the same module turn a JSON Pointer into a range of the text and a caret into a path, in JSON, YAML and Markdown, and `scanMarkdown` lists the regions of a Markdown deck. A finding for an unknown property (`opf/schema`, keyword `additionalProperties`) carries up to three `suggestions` of the nearest property names of the same object (edit distance 2, or 1 for names of three characters or fewer; case-insensitive), so `slids` suggests `slides`. With no near name the key is not a typo, and the finding's `help` says which release this validator is: `... This validator is OPF <version>; a later OPF release may define "locked".` after the usual advice, where `<version>` is the release of the validator that ran The same version is in the finding's `validation.params.validatorVersion`, so a tool does not parse the sentence. A validator knows only its own release, so it cannot say which later release defines a key; see [Schema versioning](schema-versioning.md#a-key-the-validator-does-not-know).
 
 ### Reading a deck in any form
 
@@ -254,6 +254,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/image-placement-invalid`](#opfimage-placement-invalid) | Format | error | structure | An image placement cannot be honored. |
 | [`opf/layout-placeholder-group`](#opflayout-placeholder-group) | Format | error | structure | A layout record's placeholder group breaks a nesting rule. |
 | [`opf/dataset-unknown`](#opfdataset-unknown) | Format | error | structure | A chart or table names a dataset that does not exist. |
+| [`opf/datasource-unknown`](#opfdatasource-unknown) | Format | error | structure | A dataset or chart data names a data source that does not exist. |
 | [`opf/dataset-field-unknown`](#opfdataset-field-unknown) | Format | error | structure | A table asks a dataset for a column it does not have. |
 | [`opf/data-column-duplicate`](#opfdata-column-duplicate) | Format | error | structure | A dataset or table has two columns with the same name. |
 | [`opf/chart-mapping-unknown-column`](#opfchart-mapping-unknown-column) | Format | error | structure | A chart mapping names a column the data does not have. |
@@ -323,6 +324,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/layout-monotony`](#opflayout-monotony) | Layout | info | structure | 4 or more content slides in a row use the same layout record. |
 | [`opf/variable-overflow`](#opfvariable-overflow) | Layout | warning | composition | A variable's value is longer than the room its declaration allows. |
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
+| [`opf/datasource-credentials`](#opfdatasource-credentials) | Content | warning | structure | A data source holds a credential. |
+| [`opf/dataset-stale`](#opfdataset-stale) | Content | warning | structure | A dataset is older than its data source says it should be. |
 | [`opf/chart-mapping-adapted`](#opfchart-mapping-adapted) | Content | warning | structure | A chart mapping entry is ignored. |
 | [`opf/chart-highlight-adapted`](#opfchart-highlight-adapted) | Content | warning | structure | A chart highlight is adapted by the chart type. |
 | [`opf/chart-series-dropped`](#opfchart-series-dropped) | Content | warning | structure | A chart series is not drawn by the chart type. |
@@ -509,6 +512,14 @@ Default severity: **error**. Cost: structure. A layout record's placeholder grou
 Default severity: **error**. Cost: structure. A chart or table names a dataset that does not exist.
 
 **Why.** The data cannot be drawn without the dataset it refers to.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/datasource-unknown`
+
+Default severity: **error**. Cost: structure. A dataset or chart data names a data source that does not exist.
+
+**Why.** A string `datasource` is the id of an entry in the top-level `datasources` map. An id that is not there says nothing about where the data came from. A file or a URL is written as an inline data source object, `{ "src": "./revenue.csv" }`.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -1120,6 +1131,22 @@ Default severity: **warning**. Cost: composition. A variable's value is longer t
 Default severity: **warning**. Cost: structure. A chart value is text, not a number.
 
 **Why.** A chart plots numbers. A text cell such as "12%" is plotted as a gap. When every text value of a column is written in one display style the finding carries the fix that stores the numbers and gives the column the matching format.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/datasource-credentials`
+
+Default severity: **warning**. Cost: structure. A data source holds a credential.
+
+**Why.** A data source says where data lives and never holds credentials. A `src` with a user and password, or a query parameter named like a key or a token, writes a secret into a document that is shared, versioned and exported. Keep the secret in the host's own store and name the connection in `connector` or `extensions`.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/dataset-stale`
+
+Default severity: **warning**. Cost: structure. A dataset is older than its data source says it should be.
+
+**Why.** A data source may say how often it is meant to be taken again (`refresh`, an ISO 8601 duration). Given a date to check as of, a dataset whose `retrieved` is older than that is reported. Core has no clock, so without a date nothing is reported, and no engine takes the data again.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

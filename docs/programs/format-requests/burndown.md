@@ -9,14 +9,14 @@ Every item also meets the definition of done in the README; the acceptance colum
 | FR-01 | CR 7: an `id` on the document | [Below](#fr-01-the-document-id-cr-7) | done |
 | FR-02 | CR 6: ids on list items, bullets, timeline events and table rows | [Below](#fr-02-ids-inside-a-deck-cr-6) | done |
 | FR-03 | opf#1297: links to a slide of the same deck, `slide:<id>` | [Below](#fr-03-links-to-a-slide-opf1297) | done |
-| FR-04 | CR 1 with CR 3: data sources and a flat dataset | [Below](#fr-04-data-sources-and-a-flat-dataset-cr-1-with-cr-3) | in-progress |
+| FR-04 | CR 1 with CR 3: data sources and a flat dataset | [Below](#fr-04-data-sources-and-a-flat-dataset-cr-1-with-cr-3) | done |
 | FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | todo |
 | FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | todo |
 | FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | in-progress |
 | FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | in-progress |
 | FR-09 | CR 14: limits on a variable's value | [Below](#fr-09-limits-on-a-variables-value-cr-14) | done |
 | FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | in-progress |
-| FR-11 | What a validator says about a key it does not know | [Below](#fr-11-what-a-validator-says-about-a-key-it-does-not-know) | in-progress |
+| FR-11 | What a validator says about a key it does not know | [Below](#fr-11-what-a-validator-says-about-a-key-it-does-not-know) | done |
 
 Order of landing: FR-01 to FR-03 (ids), FR-04 to FR-07 (data), FR-08 (embed), FR-09 and FR-10 (variables). The tracks do not depend on
 each other, so an item lands when it is ready and each later branch merges `main` first; FR-09 was the first to land. Nothing is cut
@@ -136,6 +136,13 @@ Acceptance:
 - Conformance: valid decks with a data source by id and inline, and invalid decks with an unknown data source and a leftover `source`.
 
 Progress log:
+
+- 2026-11-25: done, in the pull request that adds this line. Checked in PowerPoint twice, the second time after merging `main`: the
+  root `datasources` and every data source key of a dataset and of inline chart data come back the same from the export and from
+  PowerPoint's own save. A released 0.36.0 importer reads the file as a valid deck but restores no shared dataset; charts and tables
+  import the values they show (accepted for the one breaking change). `query` is optional, as the owner asked: a CSV file or rows typed
+  into the deck need none. Two key names change in a follow-up before the release, from the key-names study: `generator.kind` becomes
+  `generator.type` and a data source's `refresh` becomes `refreshEvery`.
 
 ## FR-05: typed columns (CR 2)
 
@@ -269,10 +276,16 @@ later release, so the table only helps if it ships in a patch of the older line.
 
 Acceptance:
 
-- The `opf/schema` finding for an unknown key names the validator's own version and says that a later OPF release may define the key
-  (`"locked" is not a key this validator knows (OPF 0.37.0); a later release may define it`).
+- The `opf/schema` finding for an unknown key names the validator's own version and says that a later OPF release may define the key:
+  its help ends with `This validator is OPF 0.37.0; a later OPF release may define "locked".`, and its parameters carry the version as
+  `validatorVersion`. A key the validator can suggest a correction for keeps its suggestion and gets no such sentence.
 - The docs say what to do: update the package, or check the key against the schema of the release that wrote the document.
 - No version field in documents. A table of the keys 0.37.0 adds, shipped in a 0.36.x patch so that 0.36 readers can name the release,
   is built only if the owner asks for it (he planned no 0.36.1).
 
 Progress log:
+
+- 2026-11-25: done, in the pull request that adds this line. The owner confirmed the approach the same day (decision R8). The
+  version comes from core's own package version at build time, so a release needs no edit. One sealed editor fixture
+  (`source-read-text.golden.json`) was regenerated with its generator on the owner's word; it stores the version as `{{version}}`,
+  so a version bump does not move it.
