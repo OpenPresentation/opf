@@ -167,3 +167,25 @@ test('entryIds is a top-level key of the slide record, outside supplement and na
   const extra = Object.keys(record).filter(key => !known036.has(key));
   assert.deepEqual(extra, ['entryIds'], 'entryIds is the only key a 0.36.0 importer has not seen');
 });
+
+// The stored authored table (OPF_DATA_V1) is read by every importer, including 0.36.0 and earlier, whose table schema is: `rows` is an array of
+// rows and each row is an ARRAY of cells (no row object; `{ id, cells }` is 0.37). A record with a row object is rejected there as
+// invalid-data-provenance and the table falls back to styled native cells, so the record keeps array rows and the ids travel in entryIds.
+const dataRecords = bytes => Object.entries(unzipSync(bytes)).filter(([name]) => /^ppt\/tags\/opfData\d+\.xml$/.test(name)).map(([, data]) => JSON.parse(Buffer.from(/val="([0-9A-Fa-f]+)"/.exec(strFromU8(data))[1], 'hex').toString('utf8')));
+test('the stored authored table has array rows (the 0.36.0 shape) and the 0.37 round trip still returns the row objects with their ids', async () => {
+  const source = {name: 'D', slides: [{id: 's', title: 'T', table: {columns: ['A', 'B'], rows: [{id: 'r-1', cells: ['x', 1.5]}, ['y', 2], {cells: ['z', 3]}]}}]};
+  const bytes = await exportDeck(source);
+  const [record] = dataRecords(bytes).filter(entry => entry.kind === 'table');
+  assert.ok(record.authored, 'the authored table is stored');
+  for (const row of record.authored.rows) assert.ok(Array.isArray(row), 'every stored row is an array of cells');
+  assert.deepEqual(record.authored.rows, [['x', 1.5], ['y', 2], ['z', 3]]);
+  const diagnostics = [];
+  const back = await importDeck(bytes, diagnostics);
+  assert.deepEqual(back.slides[0].table.rows, [{id: 'r-1', cells: ['x', 1.5]}, ['y', 2], ['z', 3]]);
+  assert.deepEqual(diagnostics.filter(d => /data-provenance/.test(d.code)), []);
+});
+
+test('a table without row objects stores the same authored table as before', async () => {
+  const [record] = dataRecords(await exportDeck({name: 'D', slides: [{title: 'T', table: {columns: ['A', 'B'], rows: [['x', 1], ['y', 2]]}}]})).filter(entry => entry.kind === 'table');
+  assert.deepEqual(record.authored, {columns: ['A', 'B'], rows: [['x', 1], ['y', 2]]});
+});

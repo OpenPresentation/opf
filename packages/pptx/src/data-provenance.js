@@ -257,7 +257,11 @@ export function tableDataRecord(table, layout, language) {
       cells.push([rowIndex, column, value, format ?? null, shown(rowIndex + (hasHeaders ? 1 : 0), column)]);
     });
   });
-  return {v: 1, kind: 'table', headers, cells, authored: clone(table)};
+  // FR-02: a row written as { id, cells } is stored as its array of cells. A 0.36.0 importer's table schema has no row object and would reject the
+  // whole authored table; the row ids are in the slide record's entryIds (src/entry-ids.js), which puts the objects back on import.
+  const stored = clone(table);
+  if (Array.isArray(stored.rows)) stored.rows = stored.rows.map(rowCells);
+  return {v: 1, kind: 'table', headers, cells, authored: stored};
 }
 
 function relationshipsXml(entries, path) {
