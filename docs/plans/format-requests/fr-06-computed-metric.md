@@ -216,6 +216,15 @@ a 0.36 metric: a `data` or `better` key in it would make that importer drop the 
   the released importer on the file, as FR-02 did for `entryIds`. If it does not, `link` moves to the slide record as a top-level key
   (as `entryIds`), keyed by the metric's path.
 
+What the released 0.36.0 importer does, verified by the supervisor on 2026-11-25:
+
+- It rejects a record that carries an unknown key inside a validated section, and then loses the whole record (the metric manifest's
+  `value` is such a section).
+- It ignores unknown top-level keys of the document record (verified for the document id, FR-01) and of the slide record (verified for
+  `entryIds`, FR-02), and unknown whole tags.
+- Since opf#1464 the table data record stores an authored table with array rows. Nothing this item stores about a metric (or anything a
+  later item stores about tables) puts a new row or cell form into that record.
+
 Import (0.37):
 
 - With `link` and the native value and change text unchanged: restore `data` and `better`; set `value` and `delta` to the drawn numbers
