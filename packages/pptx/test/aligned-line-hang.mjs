@@ -149,4 +149,13 @@ for (const [index, factor] of [[0, 1], [1, .5]]) {
   }
   cases++;
 }
+
+// A left-to-right line of a right-to-left deck: PowerPoint counts the hanging space on the right after a letter, a digit and a closing
+// bracket, and not after other punctuation (measured 2026-11-25, 18 slides: left, center and right, six line endings each).
+{
+  const {countsSpaceAfterLeftToRightText: counts} = await import('../src/annotation-export.js');
+  for (const text of ['with planning ', 'with 2026 ', 'with (planning) ', 'by 40% ', 'with [planning] ']) assert.equal(counts(text), true, JSON.stringify(text));
+  for (const text of ['with planning, ', 'with planning. ', 'with "planning" ', 'with planning: ', 'with planning']) assert.equal(counts(text), false, JSON.stringify(text));
+  cases++;
+}
 console.log(`aligned line hang (pptx): ${cases} cases`);

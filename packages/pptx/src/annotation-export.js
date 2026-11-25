@@ -12,19 +12,23 @@ import {paragraphDirection, walkCitationRuns} from '@openpresentation/opf/compos
 // the paragraph with the whitespace counted on one side, so the box is anchored that much off the glyphs' anchor that PowerPoint puts
 // them where the preview does. Which side PowerPoint counts it on follows the line's own text, not the deck (PowerPoint 2026-11-24/25).
 
-// A letter right before the hanging whitespace at the end of a line.
-const LETTER_BEFORE_SPACE = /\p{L}[^\S\r\n\u00a0\u202f\ufeff]+$/u;
+// A character that stays left to right at the end of a line of a right-to-left paragraph, right before the hanging whitespace: a letter,
+// a digit (also with its percent sign) or a closing bracket.
+const LEFT_TO_RIGHT_BEFORE_SPACE = /(?:[\p{L}\p{N})\]}]|\p{N}%)[^\S\r\n\u00a0\u202f\ufeff]+$/u;
 
 /**
  * Whether PowerPoint counts the whitespace hanging at the end of a left-to-right line of a right-to-left deck on the line's right, as in a
- * left-to-right deck. This rests on one PowerPoint observation (2026-11-25, `edge-rtl` slide 3, English in a Hebrew deck, right-aligned):
- * the line ending in a letter and its space ended a space short of the edge where the space was not counted, and the line ending in a
- * comma and its space was flush there (PowerPoint drew "deck ,": the neutral characters at the end take the deck's right-to-left
- * direction). So it is counted on the right after a letter, and not at all after punctuation or another neutral character. A hypothesis
- * until the `edge-ltr-in-rtl` deck is measured.
+ * left-to-right deck. Measured in PowerPoint on 2026-11-25 (an 18-slide deck of English paragraphs in a Hebrew deck, left-aligned,
+ * centered and right-aligned, the wrapped line ending in each of the characters below and its space): after a letter, a digit and a
+ * closing parenthesis the space is counted on the right (the line ended a space short of the right edge, or half a space left of the
+ * center, where it was not accounted for); after a comma, a period and a straight quotation mark it is not counted there (those
+ * characters and the space take the paragraph's right-to-left direction; PowerPoint draws "planning ,"). That is the bidirectional
+ * algorithm: a letter is left to right, a digit after letters becomes so, a bracket around left-to-right text does too, and other
+ * punctuation at the end of the line follows the paragraph. Brackets other than the round one and the percent sign follow from that
+ * rule and were not measured.
  */
 export function countsSpaceAfterLeftToRightText(text) {
-  return LETTER_BEFORE_SPACE.test(String(text ?? ''));
+  return LEFT_TO_RIGHT_BEFORE_SPACE.test(String(text ?? ''));
 }
 
 /**
