@@ -149,8 +149,8 @@ In one `c:plotArea`, in this order:
 
 This is the established way to build a bullet chart from native parts. *(analysis: a marker series is not possible on a horizontal bar
 chart, which has no line form; the scatter series with error bars is the native tick. The burndown's "a target marker series" is this.)*
-The native check confirms that PowerPoint and Keynote both draw the tick on the target; if Keynote does not, the Mac check records it
-and the item ships with the PowerPoint form (Keynote differences are tracked in opf#1416).
+The native check confirms that PowerPoint draws the tick on the target. Whether Keynote does is not known (supervisor, 2026-11-25): the
+item's test file is opened on the Mac once it is built, and a Keynote difference is recorded under opf#1416 and does not block the item.
 
 ### Records and import
 
@@ -200,7 +200,9 @@ A new gallery record `packages/gallery/catalog/chart-types/bullet.json`, with pr
 }
 ```
 
-The `group`, `groupSort` and `complexity` values follow the existing records; the builder checks them against the schema's enums.
+The `group`, `groupSort` and `complexity` values follow the existing records; the builder checks them against the schema's enums. The
+new record changes the gallery tracker: the item's pull request regenerates it with its generator, because a stale tracker only warns on a
+pull request and then turns `main` red (supervisor, 2026-11-25).
 
 ## Editor
 
@@ -216,7 +218,9 @@ The `group`, `groupSort` and `complexity` values follow the existing records; th
 
 ## Docs, skills, examples
 
-- `docs/chart-table-data.md`: "Ranges behind a chart (bands)" and "Bullet charts".
+- `docs/chart-table-data.md`: "Ranges behind a chart (bands)" and "Bullet charts". It says that a chart with bands has fixed
+  value-axis bounds in PowerPoint (both axis pairs carry `c:min` and `c:max`), so a value typed beyond them in Edit Data does not rescale
+  the chart: the price of the shared scale (supervisor, 2026-11-25).
 - The author skill: a bullet chart for several KPIs against targets, against a set of metrics.
 - One example deck with a banded column chart and a bullet chart.
 
