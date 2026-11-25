@@ -21,6 +21,7 @@
     "check:parity-wrappers": "node --test scripts/parity-wrappers.test.mjs",
     "check:changes": "node --test scripts/changelog-fragments.test.mjs scripts/changes-config.test.mjs && node scripts/changelog-fragments.mjs check",
     "check:release-notes": "node --test scripts/release-notes.test.mjs",
+    "check:native-fragment": "node scripts/changelog-fragments.mjs warn-native --base origin/main",
     "check:changed": "node scripts/check-changed.mjs",
     "check:conformance": "node --test scripts/conformance.test.mjs",
     "conformance": "node conformance/run.mjs",
