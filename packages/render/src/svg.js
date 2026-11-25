@@ -2521,7 +2521,7 @@ function renderTextBox(text, box, bound, config) {
     // rasterizer, so the line starts there instead of hanging from its middle or end. Estimated widths keep the anchor: the shaper's
     // width differs from core's there, and the anchor keeps the edge.
     const exactStart=!start&&factor>0&&style.tracking<0&&!rtl&&!trimWidth&&!!config.options.textMeasurement?.measure&&(placed?.width>0||sourceLine?.width>0);
-    const hung=!start&&!exactStart&&factor>0&&hang>0;
+    const hung=!start&&factor>0&&hang>0;
     return tag("text", {
     x: stableNumber(tabs||exactStart?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x+hang*factor), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
     "text-anchor": start||exactStart?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),
@@ -2535,8 +2535,11 @@ function renderTextBox(text, box, bound, config) {
     ...(config.options.trace&&sourceLine?{'data-opf-source-start':sourceOffset+sourceLine.start,'data-opf-source-end':sourceOffset+sourceLine.end,'data-opf-source-next-start':sourceOffset+sourceLine.nextStart,'data-opf-line-boundary':sourceLine.boundary}:{}),
     // opf#1322: a line that starts at core's x still says how it is aligned and where its anchor point is (text-anchor no longer does):
     // an editor lays its input over the line from them, and a reader of the SVG compares them with the native export.
-    // A line whose whitespace hangs at its wrap is anchored past its glyphs' anchor point, which these name the same way.
+    // A line whose whitespace hangs at its wrap is anchored past its glyphs' anchor point, which these name the same way (the anchor of its
+    // glyphs, where an editor's input, which hangs the whitespace too, has its own), with the hanging advance in data-opf-hang: the
+    // anchor of the text, whitespace included (where the native export anchors its paragraph), is that advance (half when centered) further.
     ...(exactStart||hung?{'data-opf-anchor':anchor,'data-opf-anchor-x':stableNumber(glyphAnchor)}:{}),
+    ...(hung?{'data-opf-hang':stableNumber(hang)}:{}),
   }, content);
   });
   return tag("g", { ...traceAttrs(config.options, config.path),

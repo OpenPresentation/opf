@@ -6,7 +6,8 @@ import assert from 'node:assert/strict';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
-import {fromPptx, toPptx} from './helpers/default-catalog.mjs';
+import {catalogs, fromPptx, toPptx} from './helpers/default-catalog.mjs';
+import {resolvePresentation} from '@openpresentation/opf-render';
 import {slideTitle} from '../scripts/title-placeholders.mjs';
 
 const fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual'});
@@ -148,7 +149,7 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
 
 // 8. Core places each line by its ink. Where one box would move a line more than 1 px (at 960) from its measured place, the title keeps
 // fixed lines, each paragraph with the margin that starts it there (the layout sampler's vertical-process slide, "How a team / joins the pilot": the J starts 2.95 px
-// right of the H; boutique-hotel-revenue-recovery's cover, right-aligned, ends its first line 1.85 px right of the second).
+// right of the H; boutique-hotel-revenue-recovery's cover, right-aligned, ends the glyphs of its first line 1.5 px right of the second's).
 {
   const {examples} = await import('@openpresentation/opf/examples');
   const {deck: sampler} = examples.find(entry => entry.file.endsWith('layout-sampler.opf.json'));
@@ -165,7 +166,11 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   const right = await exported({...hotel, slides: [hotel.slides[0]]});
   assert.equal(slideTitle(right.slide(0)).tier, 'fixed-breaks', 'right-aligned lines placed apart are one title');
   const [end1, end2] = margin(right.titles(0)[0], 'marR');
-  assert.ok(end1 === 0 && end2 > 1.5 * 9525 && end2 < 2.2 * 9525, `the second line ends its 1.85 px further left (${end1}, ${end2})`);
+  // "Boutique Hotel " ends in the space that hangs at its wrap: PowerPoint counts it at the paragraph's end, so the first paragraph ends that
+  // space past its glyphs and the second paragraph's margin is the space more than the 1.5 px its glyphs end further left.
+  const [placed] = resolvePresentation({...hotel, slides: [hotel.slides[0]]}, {fonts, catalogs}).slides[0].geometry.items.find(item => item.field === 'title').text.placement.lines;
+  assert.ok(placed.hang > 10, 'the first line hangs its space');
+  assert.ok(end1 === 0 && end2 - placed.hang * 9525 > 1.2 * 9525 && end2 - placed.hang * 9525 < 2.2 * 9525, `the second line ends its glyphs 1.5 px further left (${end1}, ${end2}, hang ${placed.hang})`);
   assert.equal((await imported(right.bytes)).value.slides[0].title, hotel.slides[0].title);
 }
 
