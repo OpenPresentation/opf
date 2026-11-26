@@ -44,7 +44,7 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { references: [{ id: "gartner", text: "Gartner, 2026" }], slides: [{ title: "Market", text: [{ text: "EMEA grew 12%", cite: "gartner" }], table: { columns: ["Region", "Growth"], rows: [["EMEA", "12%"]] } }] },
   ),
   "opf/caption-unsupported-payload": ex(
-    "Put the `caption` on the image, chart, table, video or diagram it describes, or remove it.",
+    "Put the `caption` on the image, chart, table, video, embed or diagram it describes, or remove it.",
     { title: "Revenue", blocks: [{ text: "Revenue grew", caption: "Source: finance" }] },
     { title: "Revenue", blocks: [{ chart: CHART, caption: "Source: finance" }] },
   ),
@@ -162,6 +162,11 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     "Name a row of the table in `highlight.rows` by the text of its first cell; a name that matches no row highlights nothing.",
     { title: "Pricing", table: { columns: ["Region", "Change"], rows: [["Northeast", "Hold"], ["Southeast", "+3%"]], highlight: { rows: ["South"] } } },
     { title: "Pricing", table: { columns: ["Region", "Change"], rows: [["Northeast", "Hold"], ["Southeast", "+3%"]], highlight: { rows: ["Southeast"] } } },
+  ),
+  "opf/table-color-scale-unknown-column": ex(
+    "Name a column of the table in `colorScale.columns` by its header text; a name that matches no column shades nothing.",
+    { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", 0.22]], colorScale: { columns: ["Q4"] } } },
+    { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", 0.22]], colorScale: { columns: ["Q1"] } } },
   ),
   "opf/variable-format": ex(
     "Give the variable a `format` that fits its type and its values: `#,##0.0` for a number, a date pattern for a date.",

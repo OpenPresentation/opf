@@ -30,6 +30,9 @@ export const CHART_TYPES = Object.freeze({
   // FA-15: clustered columns (a c:barChart on the primary axes) with line series with markers (a c:lineChart per value axis;
   // the secondary one crosses at the right on a deleted second c:catAx). Core's resolveChartData says which series is which.
   combo: { family: 'combo', pptx: 'bar', barDir: 'col', grouping: 'clustered', markers: true },
+  // FR-07: a bullet chart is a clustered horizontal c:barChart of its measure (gap width 200), with its bands as a stacked c:barChart on
+  // deleted secondary axes and its target as a c:scatterChart with Y error bars (src/chart-bands.js).
+  bullet: category('bar', { barDir: 'bar', grouping: 'clustered', bullet: true }),
   // Office 2016 chartex constructs (cx:chartSpace, one cx:series per plot,
   // named by layoutId). `requires` is the markup-compatibility namespace the
   // slide's mc:Choice names, so older readers take the classic fallback.

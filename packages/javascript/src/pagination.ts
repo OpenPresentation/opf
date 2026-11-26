@@ -3,6 +3,7 @@ import {isShapeBlock} from "./shape-block.js";
 import {isOverlayConnector, slideBlockIds} from "./overlay-shapes.js";
 import { codeHighlightSlice } from './code-highlight.js';
 import {tableRowBoundaries} from './table.js';
+import {pinTableColorScale} from './table-color-scale-range.js';
 import { composeSlide, OPFCompositionError, type ComposeSlideOptions, type Fonts, type LayoutDiagnostic, type SlideComposition } from './composition.js';
 import { checkCatalogsOption, type Catalog, type CatalogOptions } from './catalog-refs.js';
 import { resolveSlideContext, type SlideContextDiagnostic } from './slide-context.js';
@@ -70,7 +71,7 @@ export class OPFPaginationError extends Error {
     super(message); this.name = 'OPFPaginationError';
   }
 }
-const contentFields = new Set(['text','items','bullets','image','video','chart','table','code','metric','quote','timeline','diagram']);
+const contentFields = new Set(['text','items','bullets','image','video','embed','chart','table','code','metric','quote','timeline','diagram']);
 const headingFields = new Set(['title','subtitle','tag']);
 const isRecord = (v: unknown): v is Record<string, any> => !!v && typeof v === 'object' && !Array.isArray(v);
 const clone = <T>(value: T): T => structuredClone(value);
@@ -161,7 +162,8 @@ function leafFor(path: string, field: string, value: any): Leaf {
     const values = Array.isArray(value) ? value : value[key];
     if (Array.isArray(values)) {
       leaf.unit = 'items'; leaf.boundaries = field === 'table' ? tableRowBoundaries(value) : Array.from({length:values.length+1},(_,i)=>i);
-      leaf.slice = (a,b) => Array.isArray(value) ? value.slice(a,b) : {...value,[key]:values.slice(a,b)};
+      // FR-07: a table cut into pages keeps one color scale over its whole range, so a value has the same color on every page.
+      leaf.slice = (a,b) => Array.isArray(value) ? value.slice(a,b) : {...(field === 'table' && (a > 0 || b < values.length) ? pinTableColorScale(value) : value),[key]:values.slice(a,b)};
     }
   }
   return leaf;

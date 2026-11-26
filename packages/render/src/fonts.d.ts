@@ -181,3 +181,6 @@ export declare function hasEmojiPresentation(text: string): boolean;
 export declare function hasMathNotation(text: string): boolean;
 /** Color faces of the manifest: resvg draws their monochrome stand-in (`rasterFamily`); browsers draw them in color. */
 export declare const COLOR_FONT_FACES: readonly { family: string; file: string; package: string; format: string; rasterFamily: string }[];
+/** opf#1472: glyphs a bundled face draws wrongly; the preview draws each from the first loaded family of `replacement` at the bad glyph's advance. */
+export declare const GLYPH_DEFECTS: readonly Readonly<{family:string;weight:number;italic:boolean;file:string;sha256:string;repository:string;commit:string;release:string;defect:string;codePoints:readonly number[];replacement:readonly string[];issue:string}>[];
+export declare function glyphDefectsFor(family:string,weight:number,italic:boolean):typeof GLYPH_DEFECTS[number]|undefined;

@@ -34,6 +34,12 @@ export interface PresentOptions {
    * Default true; `false` draws every slide as written.
    */
   continuation?: boolean;
+  /**
+   * FR-08: which embedded pages are shown live, by address. A page for which it returns true is shown in a sandboxed frame over the
+   * embed's picture or card (the static form stays under it until the frame loads); every other embed stays its static form, linked
+   * to its address. Default: none is live. A page on the presenting page's own origin is never shown live, whatever this returns.
+   */
+  embeds?: (src: string) => boolean;
   /** Play hidden slides too. Default false. */
   includeHidden?: boolean;
   /** Ask for full screen (needs a user gesture). Default true. */

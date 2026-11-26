@@ -3,7 +3,7 @@ import type { RuleSlide, ValidationContext, ValidationRule } from './rule-contex
 import { pointerOfDotted } from './rule-content.js';
 import { variableOverflowRule } from './validation-rule-info.js';
 import { buildSlides } from './rule-slides.js';
-import { coerceVariableValue, instantiateForValidation, isTemplate, listVariables, resolveVariables, variableDeclarations, type VariableDeclaration, type VariableUse } from './variables.js';
+import { coerceVariableValue, instantiateForValidation, isTemplate, listVariables, resolveVariables, translationAt, variableDeclarations, type VariableDeclaration, type VariableUse } from './variables.js';
 
 /**
  * `opf/variable-overflow` (FR-09): a variable's value is longer than its declaration allows. `maxLength` (characters as a reader sees
@@ -128,11 +128,16 @@ function overflow(context: ValidationContext): void {
 	const seen = new Map<string, number>();
 	for (const declaration of limited) {
 		const value = drawnValue(declaration, values);
-		if (value === undefined || declaration.maxLines === undefined) continue;
-		const text = plain(value);
+		if (declaration.maxLines === undefined) continue;
 		for (const use of uses.get(declaration.id) ?? []) {
 			const index = slideOf(use.path);
 			if (index === undefined) continue;
+			// FR-10: the text drawn here is the translation the language of this slide selects, unless a value was given to the check.
+			const given = Object.hasOwn(values, declaration.id) && values[declaration.id] !== null && values[declaration.id] !== undefined;
+			const picked = given ? undefined : translationAt(declaration, document, use.path);
+			const drawnHere = picked ? picked.value : value;
+			if (drawnHere === undefined) continue;
+			const text = plain(drawnHere);
 			const slide = drawn[index];
 			const source = context.slides[index];
 			if (!slide || !source) continue;

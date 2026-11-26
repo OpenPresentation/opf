@@ -113,8 +113,8 @@ const captionUnsupportedPayload: RuleText = (finding) => {
   const kind = type ?? (/a group cannot carry one/.test(finding.message) ? "group" : undefined);
   const is = kind ? kindPhrase(kind) : "not one of those";
   return {
-    message: `A ${code("caption")} belongs to one image, chart, table, video or diagram; this block is ${is}.`,
-    next: `put the ${code("caption")} on the image, chart, table, video or diagram it describes, or remove it.`,
+    message: `A ${code("caption")} belongs to one image, chart, table, video, embed or diagram; this block is ${is}.`,
+    next: `put the ${code("caption")} on the image, chart, table, video, embed or diagram it describes, or remove it.`,
   };
 };
 
@@ -228,6 +228,12 @@ const layoutPlaceholderGroup: RuleText = (finding) => {
 
 /** The dataset a table's `fields` or a chart's `data` names, read from the document next to the finding's path. */
 function datasetOf(helpers: { valueAt(path: readonly string[]): unknown; segments: string[] }): string | undefined {
+  // FR-06: a metric's link (`metric.data`) names its dataset beside the field, the filter and the change.
+  const link = helpers.segments.lastIndexOf("data");
+  if (link > 0 && helpers.segments[link - 1] === "metric") {
+    const value = helpers.valueAt([...helpers.segments.slice(0, link + 1), "dataset"]);
+    if (isText(value)) return value;
+  }
   const at = helpers.segments.findIndex((segment) => segment === "fields" || segment === "columns" || segment === "mapping" || segment === "highlight");
   const parent = at > 0 ? helpers.segments.slice(0, at) : helpers.segments.slice(0, -1);
   for (const candidate of [parent, [...parent, "data"]]) {
@@ -346,6 +352,17 @@ const tableHighlightUnknownName: RuleText = (finding) => {
   };
 };
 
+const tableColorScaleUnknownColumn: RuleText = (finding) => {
+  const column = match(finding.message, /^The color scale names ("(?:[^"\\]|\\.)*"), which is no column of this table\. Columns: (.+)\.$/);
+  if (!column) return undefined;
+  const name = unquote(column[1]);
+  const columns = column[2] === "none" ? [] : unquoteList(column[2]);
+  return {
+    message: `${code(`colorScale.columns: "${name}"`)} matches no column.${columns.length ? ` Available: ${plainList(columns)}.` : ""}`,
+    next: columns.length ? chooseNext(name, columns) : "give the table a header row, or remove the color scale.",
+  };
+};
+
 // ------------------------------------------------------------------------------------------------ variables
 
 /** `{{id}}` for an inline token, `var:id` where the finding's own sentence says the whole-field form. */
@@ -454,6 +471,19 @@ const variableUnused: RuleText = (finding, _context, helpers) => {
     message: `Variable ${code(id)} is declared but never used.`,
     next: `use it as ${code(`{{${id}}}`)} or ${code(`var:${id}`)} where it belongs, or remove its declaration.`,
   };
+};
+
+const variableTranslationDuplicate: RuleText = (finding, _context, helpers) => {
+  const id = text(params(finding).id) ?? helpers.segments.at(-2);
+  if (!id) return undefined;
+  return { message: `Variable ${code(id)} has two translations whose language tags differ only in case.`, next: "remove one of the two keys: the first in the document is the one that is drawn." };
+};
+
+const variableTranslationUnused: RuleText = (finding, _context, helpers) => {
+  const id = text(params(finding).id) ?? helpers.segments.at(-3);
+  const tag = helpers.segments.at(-1);
+  if (!id || !tag) return undefined;
+  return { message: `The ${code(tag)} translation of ${code(id)} is never drawn: no slide and not the deck declares a language that selects it.`, next: `set ${code("language")} on the deck or on a slide, fix the tag, or remove the translation.` };
 };
 
 const variableReferenceUnknown: RuleText = (finding, _context, helpers) => {
@@ -797,6 +827,7 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/variable-unknown-builtin": variableUnknownBuiltin,
   "opf/chart-highlight-unknown-name": chartHighlightUnknownName,
   "opf/table-highlight-unknown-name": tableHighlightUnknownName,
+  "opf/table-color-scale-unknown-column": tableColorScaleUnknownColumn,
   "opf/variable-format": variableFormat,
   "opf/variable-unfilled": variableUnfilled,
   "opf/run-color-unrecognized": runColorUnrecognized,
@@ -819,6 +850,8 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/variable-unknown": variableUnknown,
   "opf/variable-unknown-value": variableUnknownValue,
   "opf/variable-unused": variableUnused,
+  "opf/variable-translation-duplicate": variableTranslationDuplicate,
+  "opf/variable-translation-unused": variableTranslationUnused,
   "opf/variable-reference-unknown": variableReferenceUnknown,
   "opf/contract": contract,
 };

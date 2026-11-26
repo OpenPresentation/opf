@@ -3,7 +3,7 @@
 import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, textColorForFill, chartColorForFill,
   resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform, stackedText, resolveScriptFonts, paragraphDirection, physicalAlignment, itemAlignment, patternRuns, isolateNumbers,
-  metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
+  metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, metricGaugeDrawing, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
   arrangementPaint, colorContrast,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, pictureOverlay, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup, iconPathData,
@@ -13,6 +13,10 @@ import {
 // example `defaultCatalog` from `@openpresentation/gallery`) and core resolves every reference against them.
 import {
   collectSlideLinks,
+  embedCardLayout,
+  embedSite,
+  embedTitle,
+  embedValue,
   hasContentVariables,
   isTemplate,
   resolveDrawnFontFamilies,
@@ -81,6 +85,7 @@ const ROOT_PAYLOAD_FIELDS = [
   "bullets",
   "image",
   "video",
+  "embed",
   "chart",
   "table",
   "code",
@@ -95,6 +100,7 @@ const FIELD_TYPE = Object.freeze({
   bullets: "list",
   image: "image",
   video: "video",
+  embed: "embed",
   chart: "chart",
   table: "table",
   code: "code",
@@ -1124,6 +1130,8 @@ function renderPayload(item, box, bound, options) {
       return renderShapeBlock(item, shapeHelpers(item, bound, options));
     case "video":
       return renderMedia(item, box, bound, options);
+    case "embed":
+      return renderEmbed(item, box, bound, options);
     case "code":
       return renderCode(item, box, bound, options);
     case "metric":
@@ -1557,6 +1565,53 @@ function renderMedia(item, box, bound, options) {
   return tag("g", traceAttrs(options, item.path), children.join("\n"));
 }
 
+// FR-08: an embed is drawn as its static form, wherever the page is not shown live: the `preview` picture whole (contain) on the scheme's
+// surface color, or, without a preview (or one that does not resolve), the card (core embedCardLayout: a link badge, the title and the
+// site name). The frame is a link to `src` that opens a new tab; a web presenter whose host allows the page reads the frame's
+// data-opf-embed attributes and puts a sandboxed iframe over it (the engines never load `src`). The transparent rect in the link is
+// the area a PDF link annotation covers.
+function renderEmbed(item, box, bound, options) {
+  const embed = embedValue(item.value);
+  if (!embed) return "";
+  const title = embedTitle(item.value), site = embedSite(embed.src), scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
+  const frame = { x: box.x, y: box.y, width: box.width, height: box.height };
+  const children = [];
+  let picture;
+  if (embed.preview !== undefined) {
+    const resolved = resolveImageSource({ value: embed.preview, path: item.path }, bound, options);
+    if (resolved.drawable) picture = resolved.source;
+    else {
+      const reason = resolved.missingReference ? "missing-reference" : "unsupported-source";
+      const message = unresolvedImageMessage("Embed preview", embed.preview, resolved.missingReference, "the preview draws the embed's card instead");
+      if (options.strictAssets) throw new OPFRenderError("unresolved-asset", message, { path: `${item.path}.preview`, reason });
+      reportDiagnostic({ code: "unresolved-asset", path: `${item.path}.preview`, message, reason, source: embed.preview, assetId: resolved.missingReference, description: title, placeholder: "card" }, options);
+    }
+  }
+  if (picture !== undefined) {
+    children.push(tag("rect", { ...HIDDEN, x: frame.x, y: frame.y, width: frame.width, height: frame.height, fill: bound.design.colors.surface, ...traceAttrs(options, item.path) }));
+    children.push(tag("image", { ...HIDDEN, href: picture, x: frame.x, y: frame.y, width: frame.width, height: frame.height, preserveAspectRatio: "xMidYMid meet" }));
+  } else {
+    const card = embedCardLayout({ frame, title, site, headingFamily: bound.design.fonts.heading, bodyFamily: bound.design.fonts.body, scale,
+      minFontSizePx: (bound.composition ?? bound.geometry.composition).minFontSizePx ?? 16, measurement: options.textMeasurement });
+    children.push(tag("rect", { ...HIDDEN, x: frame.x, y: frame.y, width: frame.width, height: frame.height, rx: stableNumber(card.radius), fill: bound.design.colors.surface, stroke: bound.design.colors.border, "stroke-width": 1, ...traceAttrs(options, item.path) }));
+    children.push(tag("circle", { ...HIDDEN, cx: stableNumber(card.icon.badge.x + card.icon.badge.width / 2), cy: stableNumber(card.icon.badge.y + card.icon.badge.height / 2), r: stableNumber(card.icon.badge.width / 2), fill: bound.design.colors.primary }));
+    children.push(tag("path", { ...HIDDEN, d: `M ${card.icon.points.map(([x, y]) => `${stableNumber(x)} ${stableNumber(y)}`).join(" L ")} Z`, fill: readableSchemeColor(bound.design.colors.primary, bound.design.roles).hex }));
+    for (const [text, fill] of [[card.title, bound.design.colors.text], [card.site, bound.design.colors.mutedText]]) {
+      if (!text) continue;
+      const family = fontStack(text.style.fontFamily, bound.design.fontScheme.type);
+      children.push(tag("g", { "data-opf-embed-text": text === card.title ? "title" : "site" }, text.lines.map((line, index) => tag("text", {
+        x: stableNumber(text.box.x), y: stableNumber(text.box.y + text.fontSize + index * text.lineHeight), "font-family": family, "font-size": stableNumber(text.fontSize),
+        "font-weight": text.style.fontWeight === 400 ? undefined : text.style.fontWeight, fill
+      }, escapeText(line))).join("\n")));
+    }
+  }
+  // The area a link annotation covers, and what a presenter measures to put a live frame over this one.
+  children.push(tag("rect", { ...HIDDEN, "data-opf-link-area": "true", x: frame.x, y: frame.y, width: frame.width, height: frame.height, fill: "none", "pointer-events": "all" }));
+  const link = tag("a", { ...linkAnchorAttrs(embed.src, { newTab: true }), "aria-label": title }, children.join("\n"));
+  return tag("g", { ...traceAttrs(options, item.path), "data-opf-embed": item.path, "data-opf-embed-src": embed.src, "data-opf-embed-title": title,
+    "data-opf-embed-x": stableNumber(frame.x), "data-opf-embed-y": stableNumber(frame.y), "data-opf-embed-width": stableNumber(frame.width), "data-opf-embed-height": stableNumber(frame.height) }, link);
+}
+
 function renderCode(item, box, bound, options) {
   const layout = item.codeLayout;
   if (!layout) throw new OPFRenderError('missing-code-layout', 'Code rendering requires a coordinated core build with shared code geometry.', {path:item.path});
@@ -1632,6 +1687,8 @@ function renderMetric(item, box, bound, options) {
   const pillFill=layout.deltaPill?metricPillFill(backdrop,bound.design.colors.text):undefined;
   if (layout.deltaPill) { const pill=layout.deltaPill.box; children.push(tag('rect',{...HIDDEN,x:stableNumber(pill.x),y:stableNumber(pill.y),width:stableNumber(pill.width),height:stableNumber(pill.height),rx:stableNumber(layout.deltaPill.radius),fill:pillFill,...(options.trace?{'data-opf-metric-role':'pill'}:{})})); }
   const trendMark=metricTrendMark(layout,bound,pillFill??backdrop);
+  // FR-07, part 3: a gauge (layout.gauge) draws core's plan under the text: the arcs as the blockArc preset's outline, the target tick and the ends' labels.
+  if (layout.gauge) children.push(renderGauge(item,layout.gauge,bound,backdrop,options));
   // LH-53: a unit on its value's line is part of the figure and takes the value's color.
   // LH-135: a label drawn as the metric's eyebrow takes the eyebrow's color on its backdrop (eyebrowFill), in capitals with core's tracking.
   const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?metricValueColor(bound.design.colors.primary,backdrop,bound.design.colors.text):layout.eyebrow&&part.role==='label'?eyebrowFill(bound.design,item):bound.design.colors.text;
@@ -1677,6 +1734,22 @@ function renderMetric(item, box, bound, options) {
   }
   if (trendMark) children.push(tag('g',{role:'img','aria-label':trendMark.ariaLabel},tag('polygon',{points:trendMark.points.map(([x,y])=>`${stableNumber(x)},${stableNumber(y)}`).join(' '),fill:trendMark.color})));
   return tag('g',{...traceAttrs(options,item.path),...(options.trace?{'data-opf-metric-container':'true'}:{})},children.join('\n'));
+}
+
+// FR-07, part 3: the colors a gauge is drawn in (core metricGaugeDrawing), against the metric's backdrop. The PowerPoint export passes the same.
+function gaugeColors(bound,backdrop) {
+  const text=bound.design.colors.text;
+  return {surface:backdrop,text,primary:bound.design.colors.primary,muted:bound.design.colors.mutedText,resolve:name=>String(resolveColorRef(name,bound,text)??text).slice(0,7).toUpperCase()};
+}
+// FR-07, part 3: a metric's gauge. Each arc is PowerPoint's blockArc preset at its frame and adjustments (core presetGeometry draws its
+// outline), so the preview draws what the native shapes draw; the target is a line, the ends' labels text centered under the arc's ends.
+function renderGauge(item,gauge,bound,backdrop,options) {
+  const drawing=metricGaugeDrawing(gauge,gaugeColors(bound,backdrop)),out=[];
+  for (const arc of drawing.arcs) out.push(tag('path',{...HIDDEN,d:arc.d,transform:`translate(${stableNumber(arc.frame.x)} ${stableNumber(arc.frame.y)})`,fill:arc.fill,...(options.trace?{'data-opf-metric-role':'mark','data-opf-gauge-part':arc.part}:{})}));
+  if (drawing.target) { const t=drawing.target; out.push(tag('line',{...HIDDEN,x1:stableNumber(t.x1),y1:stableNumber(t.y1),x2:stableNumber(t.x2),y2:stableNumber(t.y2),stroke:t.color,'stroke-width':stableNumber(t.width),...(options.trace?{'data-opf-metric-role':'mark','data-opf-gauge-part':t.part}:{})})); }
+  for (const {part,color,end} of drawing.ends) out.push(tag('text',{x:stableNumber(end.x),y:stableNumber(end.baseline),'text-anchor':'middle','font-family':fontStack(gauge.endStyle.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(end.fontSize),
+    'font-weight':gauge.endStyle.fontWeight,'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:color,direction:'ltr',...(options.trace?{'data-opf-metric-role':'mark','data-opf-gauge-part':part}:{})},escapeText(end.text)));
+  return tag('g',{...traceAttrs(options,`${item.path}.gauge`)},out.join('\n'));
 }
 
 // The trend arrow and color for a laid-out metric (core metricTrendMark); undefined without a trend.
@@ -1759,9 +1832,14 @@ function renderTimeline(item, box, bound, options) {
   return tag('g',{...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-arrangement':layout.arrangement}:{})},children.join('\n'));
 }
 
+// FR-07: how a color scale's scheme names resolve on this slide (the same ColorRef resolution fills use), and the slide's text color.
+function tableScaleColors(bound) {
+  return {resolve:(name) => String(resolveColorRef(name, bound, "#000000")).slice(0, 7).toUpperCase(), text:bound.design.colors.text, background:bound.design.colors.background};
+}
+
 function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const layout = layoutTable(item.value, box, {scale, minFontSizePx:(bound.composition ?? bound.geometry.composition).minFontSizePx, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, ...(typeof bound.scriptFonts?.profile?.bcp47 === "string" ? {language:bound.scriptFonts.profile.bcp47} : {}), alignment:itemAlignment(bound.geometry.design.contentAlignment), ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {})});
+  const layout = layoutTable(item.value, box, {scale, minFontSizePx:(bound.composition ?? bound.geometry.composition).minFontSizePx, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, ...(typeof bound.scriptFonts?.profile?.bcp47 === "string" ? {language:bound.scriptFonts.profile.bcp47} : {}), alignment:itemAlignment(bound.geometry.design.contentAlignment), ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {}), ...(item.value?.colorScale ? {colorScale:tableScaleColors(bound)} : {})});
   const children = [];
   // LH-113: a highlighted row (table.highlight, or the rows the slide's texts name) draws on an accent tint of the surface.
   const highlightFill = layout.rows.some((row) => row.cells.some((cell) => cell.highlighted)) ? tableHighlightColor(bound.design.colors.surface, bound.design.colors.primary, bound.design.colors.text) : undefined;
@@ -1772,11 +1850,12 @@ function renderTable(item, box, bound, options) {
   const defaultEdges = [], explicitEdges = [];
   for (const row of layout.rows) for (const cell of row.cells) {
     const style = cell.style ?? {};
-    const defaultFill = cell.header ? bound.design.colors.primary : cell.highlighted ? highlightFill : bound.design.colors.surface;
+    // FR-07: a number cell of a color scale takes the scale's fill (a fill of its own wins; the scale wins over the highlight tint).
+    const defaultFill = cell.header ? bound.design.colors.primary : cell.scaled ? cell.scaled.fill : cell.highlighted ? highlightFill : bound.design.colors.surface;
     const fill = style.fill == null
       ? defaultFill
       : resolveColorRef(style.fill, bound, defaultFill);
-    const defaultText = cell.header ? readableSchemeColor(fill, bound.design.roles).hex : textColorForFill(fill, bound.design.colors.text);
+    const defaultText = cell.header ? readableSchemeColor(fill, bound.design.roles).hex : cell.scaled && style.fill == null ? cell.scaled.text : textColorForFill(fill, bound.design.colors.text);
     const textFill = style.color == null
       ? defaultText
       : resolveColorRef(style.color, bound, defaultText);
@@ -2133,19 +2212,24 @@ function scriptLine(text, style, bound, type, { rtl = false, numbers = rtl, plac
   // `numbers` asks for it in a fragment of a flowing right-to-left line, which is one isolate across its fragments.
   const escaped = text => escapeText(numbers && text ? isolateNumbers(text) : text);
   const runs = value && scripts ? scripts.plan(value, style) : [{ text: value, own: true }];
+  // opf#1472: a tracked line (letter-spacing; a single run draws without textLength) of the line's own face and glyphs replaced at their
+  // exact advance flows like the single run it replaces: a rasterizer applies the letter-spacing again inside a positioned tspan's textLength.
+  // An untracked line takes the positioned path below, as every multi-face line does.
+  const replaced = style?.tracking && runs.some(run => run.advance !== undefined) && runs.every(run => run.own || run.advance !== undefined);
+  if (replaced) placement = runPlacement = undefined;
   if (!placement && runPlacement && runs.length > 1) placement = runPlacement;
   // RR-38: PowerPoint's baseline of a line in Arabic Typesetting sits above core's (one em below the line top): the caller moves it up by `baselineShift` em.
   const shiftOf = list => { const shift = baselineShift(list); return shift ? { baselineShift: shift } : {}; };
   // FF-45: symbol runs (Wingdings, Symbol, Webdings codes drawn as their Unicode equivalents) are always positioned when the
   // line is placed, one tspan per glyph at the verified symbol font's advance, so a single mapped glyph is never stretched to it.
   const symbols = runs.some(run => run.symbol);
-  if (runs.length === 1 && !(symbols && placement && placement.width > 0)) {
+  if (runs.length === 1 && !replaced && !(symbols && placement && placement.width > 0)) {
     const [run] = runs;
     // RR-38: a replacement the policy scales (Arabic Typesetting -> Noto Naskh Arabic, 0.64) is drawn at the scaled size; the caller applies it.
     return { content: isolate(escaped(run.own ? value : run.text)), family: run.own ? undefined : fontStack(run.stack ?? run.family, type), ...(run.sizeAdjust ? { sizeAdjust: run.sizeAdjust } : {}), ...shiftOf(runs) };
   }
   const baseSize = placement?.fontSize ?? fontSize;
-  const adjusted = run => run.sizeAdjust && baseSize > 0 ? stableNumber(adjustedFontSize(baseSize, run.sizeAdjust)) : undefined;
+  const adjusted = run => run.fontScale && baseSize > 0 ? stableNumber(baseSize * run.fontScale) : run.sizeAdjust && baseSize > 0 ? stableNumber(adjustedFontSize(baseSize, run.sizeAdjust)) : undefined;
   const widths = placement && placement.width > 0 ? scripts.runWidths(runs, placement.fontSize, style) : undefined;
   if (!widths) {
     return { content: isolate(runs.map(run => run.own ? escaped(run.text)

@@ -425,6 +425,7 @@ _No named properties._
 | `example` | no | `oneOf:string / array<ref:TextRun>` | Illustrative text shown in fill forms and used when a template is previewed with examples. Never written to output. |
 | `maxLength` | no | `integer` | The most characters the value may have, counted as a reader sees them (an accented letter or an emoji counts once, however it is encoded). Checked on the declared value and on a value given to a fill; a longer value i... |
 | `maxLines` | no | `integer` | The most lines the value may take where it is drawn. Checked by composition at each place the variable is drawn (a title, a subtitle, a text block or a list entry), because the line count depends on the width of the b... |
+| `translations` | no | `object` | The text in other languages, keyed by language tag, each entry a 'value' in the same form as the variable's own (a string or TextRun[]). Where the variable is drawn, the slide's declared language (else the deck's) sel... |
 
 
 ### NumberVariable
@@ -467,7 +468,8 @@ _No named properties._
 | `label` | no | `string` | Optional short human label for forms and fill panels. |
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `string` | Illustrative ISO date shown in fill forms and used when a template is previewed with examples. Never written to output. |
-| `format` | no | `string` | Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. English names. Default 'MMMM d, yyyy'. |
+| `format` | no | `string` | Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. The month and weekday names are those of the language where the date is d... |
+| `translations` | no | `object` | How the date is written in other languages, keyed by language tag, each entry a 'format': the date is the same in every language, its pattern is not. Where the variable is drawn, the slide's declared language (else th... |
 
 
 ### ImageVariable
@@ -484,6 +486,7 @@ _No named properties._
 | `label` | no | `string` | Optional short human label for forms and fill panels. |
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `ref:Asset` | Illustrative image source shown in fill forms and used when a template is previewed with examples. Never written to output. |
+| `translations` | no | `object` | An image source per language (a localized screenshot), keyed by language tag, each entry a 'value'. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then th... |
 
 
 ### UrlVariable
@@ -500,6 +503,7 @@ _No named properties._
 | `label` | no | `string` | Optional short human label for forms and fill panels. |
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `string` | Illustrative link shown in fill forms and used when a template is previewed with examples. Never written to output. |
+| `translations` | no | `object` | A link target per language (a localized landing page), keyed by language tag, each entry a 'value'. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then th... |
 
 
 ### ListVariable
@@ -517,6 +521,7 @@ _No named properties._
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `array<string>` | Illustrative entries shown in fill forms and used when a template is previewed with examples. Never written to output. |
 | `maxItems` | no | `integer` | The most entries the list may have. Checked on the declared value and on a value given to a fill; a longer list is the warning opf/variable-overflow. Fill forms and models read it before writing. |
+| `translations` | no | `object` | The entries in other languages, keyed by language tag, each entry a 'value' list. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its las... |
 
 
 ### BackgroundShortcut
@@ -533,6 +538,24 @@ _No named properties._
 - Type: `string`
 - Required fields: none
 - Purpose: An image source in a string shorthand: an 'asset:<id>' reference, an HTTPS URL, a data URI, or a relative path starting with './' or '../' (resolved against the OPF file location).
+
+_No named properties._
+
+
+### EmbedUrl
+
+- Type: `string`
+- Required fields: none
+- Purpose: An https URL. Any other scheme (http, data, javascript, a relative path) is a schema error.
+
+_No named properties._
+
+
+### EmbedPayload
+
+- Type: `oneOf:ref:EmbedUrl / object`
+- Required fields: none
+- Purpose: A live web page, shown in a web presenter when its host allows and as a linked picture everywhere else (PDF, PNG, PowerPoint, print, thumbnails). A string is shorthand for { "src": value }. Engines never load 'src': whether and from which sites a page is shown live is the host's decision (the presenter's 'embeds' option), not the deck's, so a deck holds no sandbox policy.
 
 _No named properties._
 
@@ -966,7 +989,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `id` | no | `string` | Optional stable identifier for the slide within the document. Use when another system needs to reference a slide across edits, comments, generation state, exports, or narrative tooling. Slide order is defined by the s... |
 | `language` | no | `oneOf:ref:LanguageTag / ref:Language` | Language of this slide, overriding the presentation language. Accepts the same BCP-47 tag or inline Language object as the presentation. Omission inherits the deck language. Direction, script fonts, quotation marks, l... |
-| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| diagram` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
+| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| embed \| code \| metric \| quote \| timeline \| diagram` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
 | `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an arr... |
 | `layout` | no | `ref:CatalogReference` | Optional layout: a layouts reference, a bare id ('pillars') or 'name:id' ('acme:hero'). When omitted, the slide is composed with no layout record: engines arrange title, subtitle, tag and content automatically, a slid... |
 | `title` | no | `oneOf:string / array<ref:TextRun>` | Slide-level title content. A v2 layout renders this in its title heading area, or an implicit heading row when that area is absent. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold,... |
@@ -978,6 +1001,7 @@ _No named properties._
 | `numbering` | no | `ref:NumberingSpec` | Number the full-slide `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one ent... |
 | `image` | no | `ref:ImagePayload` | Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A v2 layout binds it to a compatible body region; a region's bleed setting... |
 | `video` | no | `ref:Asset` | Full-slide video source. Presence of this field infers type 'video'. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the... |
+| `embed` | no | `ref:EmbedPayload` | Full-slide embed: a live web page. Presence of this field infers type 'embed'. A web presenter whose host allows the page shows it live; every other output (PDF, PNG, PowerPoint, print, thumbnails) shows a picture of... |
 | `chart` | no | `ref:Chart` | Full-slide chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Full-slide table payload. Presence of this field infers type 'table'. |
 | `code` | no | `oneOf:string / ref:Code` | Full-slide code payload. A string is shorthand for { "source": value }; object form carries optional syntax language and filename metadata. |
@@ -985,7 +1009,7 @@ _No named properties._
 | `quote` | no | `oneOf:string / ref:Quote` | Full-slide quote payload. A string is shorthand for { "text": value }; object form carries optional attribution and source metadata. Presence of this field infers type 'quote'. |
 | `timeline` | no | `ref:Timeline` | Full-slide timeline payload. An array is shorthand for { "events": value }; object form carries optional name and description metadata. Presence of this field infers type 'timeline'. |
 | `diagram` | no | `oneOf:string / ref:Diagram` | Full-slide diagram payload: Mermaid, Graphviz DOT or PlantUML source drawn in the deck's fonts and colors. A string is shorthand for { "source": value }; object form carries the source syntax and a text alternative. P... |
-| `caption` | no | `ref:Caption` | Caption for the slide's root image, chart, table, video or diagram payload. Valid only when the slide root holds exactly one of those payloads. |
+| `caption` | no | `ref:Caption` | Caption for the slide's root image, chart, table, video, embed or diagram payload. Valid only when the slide root holds exactly one of those payloads. |
 | `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as short... |
 | `shapes` | no | `array<ref:OverlayShape>` | Shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or overla... |
 | `design` | no | `ref:SlideDesign` | Slide-level design applied on top of the deck-wide design. |
@@ -1027,7 +1051,7 @@ _No named properties._
 
 ### ContentPayload
 
-- Type: `allOf:schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema`
+- Type: `allOf:schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema`
 - Required fields: none
 - Purpose: A content leaf or recursively composed group. A group contains blocks and optional composition; it cannot mix blocks with leaf payload fields. Groups may nest up to 32 levels.
 
@@ -1036,7 +1060,7 @@ _No named properties._
 | `id` | no | `string` | Optional stable identifier for this payload, unique among slide and payload ids in the document. Use when another system needs to address the payload across edits patch-style agent edits, comments, review state, or ge... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows at payload scope; ignored by the engine but preserved across read/write round-trips. |
 | `region` | no | `string` | Where a root block (slides.N.blocks.I) goes. On a slide with a layout: a region of that layout, by name. The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin i... |
-| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| diagram \| shape \| group` | Optional content kind. When omitted, engines infer the kind from the fields present: a block with 'shape' and no 'image', or with 'path', is a shape block. |
+| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| embed \| code \| metric \| quote \| timeline \| diagram \| shape \| group` | Optional content kind. When omitted, engines infer the kind from the fields present: a block with 'shape' and no 'image', or with 'path', is a shape block. |
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Structured list payload (type 'list'). Each item is either a plain string, a TextRun[] rich text sequence, or a ListItem object with optional `description`. List nesting uses item.level rather than nested content payl... |
 | `bullets` | no | `array<ref:BulletItem>` | Prose bullet payload: short talking points, each standing alone. Presence of this field infers type 'text', so it may sit beside `text` in one payload. Entries have no `description`; use `items` for entries with suppo... |
@@ -1073,6 +1097,7 @@ _No named properties._
 | `placement` | no | `ref:ImagePlacement` | Image payloads only, and only on a top-level block (slides.N.blocks.I), at most one per edge. Bleeds the image to one slide edge; the headings and the other blocks compose in the rest of the slide. |
 | `portrait` | no | `enum:avatar \| side \| top` | Image payloads only: how a person's picture is drawn in a team. A person is a group of a picture followed by a name (a list of one entry, whose description holds the role and a line, or a short text); a slide whose bo... |
 | `video` | no | `ref:Asset` | Source for a video item. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the same placeholder as native shapes linked to... |
+| `embed` | no | `ref:EmbedPayload` | Embed payload: a live web page. Presence of this field infers type 'embed'. Takes a caption and none of the image options (fit, focus, aspectRatio, recolor, ...): the frame's proportions are EmbedPayload.aspectRatio.... |
 | `chart` | no | `ref:Chart` | Chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Table payload. Presence of this field infers type 'table'. |
 | `code` | no | `oneOf:string / ref:Code` | Code payload. A string is shorthand for { "source": value }; object form carries optional syntax language and filename metadata. |
@@ -1080,7 +1105,7 @@ _No named properties._
 | `quote` | no | `oneOf:string / ref:Quote` | Quote payload. A string is shorthand for { "text": value }; object form carries optional attribution, role, photo and source metadata. |
 | `timeline` | no | `ref:Timeline` | Timeline payload ordered by narrative or chronology. |
 | `diagram` | no | `oneOf:string / ref:Diagram` | Diagram payload: Mermaid source (flowchart, sequence, state, class, ER, mindmap, timeline, journey, C4, architecture and the other built-in Mermaid families), or Graphviz DOT or PlantUML source with 'syntax', drawn in... |
-| `caption` | no | `ref:Caption` | Caption for an image, chart, table, video or diagram payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups. |
+| `caption` | no | `ref:Caption` | Caption for an image, chart, table, video, embed or diagram payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups. |
 | `blocks` | no | `array<ref:ContentPayload>` | Ordered children of a group. Each child is a leaf or another group. |
 | `composition` | no | `ref:Composition` | Arrangement within this group. Only minFontSizePx, maxFontSizePx and overflow inherit from the parent; strict overflow cannot be weakened. |
 | `emphasis` | no | `boolean` | true draws this block or group on the slide's emphasis surface: a contrasting card in its cell (a dark card on a light slide, an accent card on a dark one), from the deck's own scheme slots, with every text color on i... |
@@ -1121,7 +1146,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `value`
-- Purpose: Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news. A string or number value in a metric field is shorthand for { "value": value }; numeric values remain numbers and are formatted by renderers.
+- Purpose: Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news, 'format' for how a number value is written, 'better' for which direction of change is good news, 'data' to compute the value and the change from a dataset of this deck, and 'gauge' to draw the value on an arc agains...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -1133,6 +1158,10 @@ _No named properties._
 | `trend` | no | `enum:up \| down \| flat` | Metric trend direction. The preview and the PowerPoint export draw it as an arrow that always points the way the trend does (up, down or flat), before the delta on its line (or before the label without a delta), and c... |
 | `sentiment` | no | `enum:positive \| negative \| neutral` | Whether the change is good news. Positive draws the trend arrow and the trend and delta text in green, negative in red and neutral in the neutral text color, each kept at 4.5:1 contrast or more against the slide backg... |
 | `icon` | no | `ref:IconReference` | An icon drawn on a chip above the metric: "<set>:<name>" ("lucide:users"), a name from the deck's icons, or an SVG source. Decoration only: when the slide has no room for it without setting text smaller, it is not dra... |
+| `format` | no | `ref:NumberFormat` | How a number 'value' is written, the same pattern language as a number variable, a dataset column and a table cell ('0.0%', '$#,##0.0M'). A string 'value' is drawn as written. Absent: a metric linked to data uses its... |
+| `data` | no | `ref:MetricData` | Computes the value and, optionally, the change from a dataset of this deck. While it resolves, engines draw the computed numbers; 'value' and 'delta' are then the last computed numbers, kept for readers that do not co... |
+| `better` | no | `enum:up \| down` | Which direction of change is good news. Without 'sentiment', an up trend is positive and a down trend negative when 'better' is "up" (the default), and the reverse when it is "down"; a flat trend is neutral. An explic... |
+| `gauge` | no | `ref:MetricGauge` | Draws the metric as a gauge: its value on a half-circle arc from 'min' (left) to 'max' (right), over optional bands, with an optional target tick, and the metric's text under the arc (the value inside the arc's bowl w... |
 
 
 ### Diagram
@@ -1235,7 +1264,7 @@ _No named properties._
 
 - Type: `oneOf:string / array<ref:TextRun> / object`
 - Required fields: none
-- Purpose: A caption for an image, chart, table, video or diagram payload. A string or TextRun[] is the caption text placed below the media; object form adds the position and alignment.
+- Purpose: A caption for an image, chart, table, video, embed or diagram payload. A string or TextRun[] is the caption text placed below the media; object form adds the position and alignment.
 
 _No named properties._
 
@@ -1284,7 +1313,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `value`
-- Purpose: One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement. A reference at a category or a band between two values is not expressible yet; 'axis' and a separate key are reserved for them.
+- Purpose: One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement. A reference at a category is not expressible yet; 'axis' is reserved for it. Ranges of the value axis are the chart's 'bands'.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -1295,6 +1324,19 @@ _No named properties._
 | `stroke` | no | `ref:ReferenceLineStroke` | The line's color, width and dash, or 'none' to draw only the label. Defaults: the chart-text neutral, 4/3 reference pixels (1 point) and 'dash'. The value expands the axis bounds whether or not the line is drawn. |
 
 
+### ChartBand
+
+- Type: `object`
+- Required fields: `to`
+- Purpose: One range of a chart's value axis, shaded behind the data (see Chart.bands).
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `to` | yes | `ref:FiniteNumber` | The band's upper end, in the value axis's units (with format 0%, 0.8 is 80%). Bands expand automatic axis bounds to the last 'to', as reference lines do. |
+| `label` | no | `string` | The band's name, such as 'Poor' or 'On target': its legend entry and its text alternative. Absent: the band has no legend entry. |
+| `color` | no | `ref:SchemeColorName` | A scheme color instead of the neutral, for ranges that mean good or bad. Drawn as a light tint of that color (25% of it over the chart's surface). Absent: the next neutral. |
+
+
 ### Chart
 
 - Type: `object`
@@ -1303,12 +1345,13 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | yes | `enum:100pct-stacked-area \| 100pct-stacked-bar \| 100pct-stacked-column \| area \| bar \| box-and-whisker \| column \| combo \| doughnut \| filled-radar \| funnel \| histogram \| line \| line-with-markers \| pareto \| pie \| radar \| radar-with-markers \| scatter \| stacked-area \| stacked-bar \| stacked-column \| stacked-line \| stacked-line-with-markers \| treemap \| waterfall \| world` | Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types OPF supports natively in its preview and PPTX export, plus 'combo' (clustered columns with line series, see 'line' and 'secondar... |
+| `type` | yes | `enum:100pct-stacked-area \| 100pct-stacked-bar \| 100pct-stacked-column \| area \| bar \| box-and-whisker \| bullet \| column \| combo \| doughnut \| filled-radar \| funnel \| histogram \| line \| line-with-markers \| pareto \| pie \| radar \| radar-with-markers \| scatter \| stacked-area \| stacked-bar \| stacked-column \| stacked-line \| stacked-line-with-markers \| treemap \| waterfall \| world` | Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types OPF supports natively in its preview and PPTX export, plus 'combo' (clustered columns with line series, see 'line' and 'secondar... |
 | `data` | yes | `oneOf:ref:ChartData / ref:DatasetRef` | Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ "dataset": "<id>" }) plots a top-level dataset instead. Data from a spreadsheet or file is... |
 | `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name: which column is the category, which is the X column of a scatter chart, and which columns are plotted, in order. Absent keeps the positional rule (first column the category, the... |
 | `lineSeries` | no | `array<string>` | Combo charts only (type 'combo'): the plotted series, by column name, that are drawn as lines with markers; every other plotted series is drawn as clustered columns. Absent: the last plotted series is the line. A comb... |
 | `secondaryAxis` | no | `array<string>` | Combo charts only: line series, by column name, plotted against a secondary value axis at the end of the plot (the right; the left in a right-to-left deck, where the category axis runs from the right). That axis has i... |
 | `referenceLines` | no | `array<ref:ChartReferenceLine>` | Explicit numeric references on the chart's value axis, supported on the chart types with one value axis for every series: column, bar, line, line-with-markers, area and combo. A non-empty list on any other type (the s... |
+| `bands` | no | `array<ref:ChartBand>` | Ranges of the value axis shaded behind the data, in increasing order: each band runs from the previous band's 'to' (the first from the axis minimum) to its own 'to'. Colors come from the scheme's neutrals, darkest fir... |
 | `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-... |
 | `legend` | no | `enum:none \| top \| bottom \| left \| right` | Optional legend position. 'none' hides the legend. Absent leaves it to the engines: a line chart of two to four series names its series at the line ends and a pie or one-series doughnut names its slices, with no legen... |
 | `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels. true shows value labels at each type's default position and false shows none. Absent leaves it to the engines: no labels, except on a small chart, which labels its values in place of its value ax... |
@@ -1370,6 +1413,32 @@ _No named properties._
 | `fields` | no | `ref:DatasetFields` | Dataset tables only: the dataset columns to show, by name and in order. Absent shows every column. An unknown name is a 'dataset-field-unknown' error. |
 | `alt` | no | `string` | Text alternative for the table: what it shows (the point and the key numbers), not 'a table'. The preview exposes it as the table's accessible name (role group with aria-label; the cells stay readable) and the PowerPo... |
 | `highlight` | no | `object` | Optional emphasis: the body rows that carry the message, named by their first-column (key) text exactly as 'chart.highlight' names categories, as text; a key shared by several rows highlights each of them. The engines... |
+| `colorScale` | no | `ref:TableColorScale` | Shades the number cells of the named columns by value, between scheme colors. Engines compute each cell's fill; the text color follows it for contrast. |
+
+
+### TableColorScale
+
+- Type: `object`
+- Required fields: `columns`
+- Purpose: A color scale over the number cells of one or more columns. One scale is shared by all named columns, so equal numbers get equal colors. Only cells whose value is a finite number are shaded; a cell with its own style.fill keeps it. Two colors make a sequential scale: the lowest value is the first color, the highest the second. Three colors make a diverging scale: 'center' is drawn in the middle color, lower values towards the first and higher values towards the last. A diverging scale with no...
+- Conditional requirement: `colors` when `center` is present
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `columns` | yes | `array<string>` | The columns to shade, by header text (an inline table) or by dataset column name after 'fields' (a dataset-backed table). A name no column has is a 'table-color-scale-unknown-column' error. |
+| `colors` | no | `array<ref:SchemeColorName>` | The colors of the scale, low to high, as scheme color names. Two colors make a sequential scale (the lowest value in the first, the highest in the second); three make a diverging scale (the middle color is drawn at 'c... |
+| `center` | no | `number` | The value drawn in the middle color. Only with three 'colors' (a 'center' with two colors, or with no 'colors', is a schema error). Absent: 0 when the values span both signs, else the middle of the range. With no 'min... |
+| `min` | no | `number` | The value drawn in the first color; lower values draw in it too. Absent: the lowest number in the named columns (a diverging scale with neither 'min' nor 'max' is symmetric around 'center': it runs from center minus d... |
+| `max` | no | `number` | The value drawn in the last color; higher values draw in it too. Absent: the highest number in the named columns (see 'min' for a diverging scale). |
+
+
+### SchemeColorName
+
+- Type: `enum:accent1 | accent2 | accent3 | accent4 | accent5 | accent6 | dark1 | dark2 | light1 | light2 | primary | secondary | accent | background | surface | surfaceAlt | text | textSecondary`
+- Required fields: none
+- Purpose: A color of the effective color scheme, by slot or role, resolved as ColorRef resolves the same names (the hyperlink slots are left out). No hex and no variable: what names it follows the deck's colors.
+
+_No named properties._
 
 
 ### ChartData
@@ -1568,6 +1637,85 @@ _No named properties._
 | `fields` | no | `ref:DatasetFields` | The dataset columns to use, by name and in order. Absent uses every column. |
 
 
+### DataCondition
+
+- Type: `object`
+- Required fields: `field`, `op`, `value`
+- Purpose: One condition on a row: the row's cell in 'field' compared with 'value'. Nothing is parsed or evaluated. '=' and '!=' compare the same JSON value (null equals only null, 1 does not equal "1"); '<', '<=', '>' and '>=' compare two numbers as numbers, or two strings by the time order of a 'date' column ("2026-03" before "2026-11", "Q1 2026" before "Q3 2026") and else by code point, and any other pair does not meet the condition; 'in' is equal to one of the listed values.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `field` | yes | `string` | A column name of the linked dataset. An unknown name is a 'dataset-field-unknown' error. |
+| `op` | yes | `enum:= \| != \| < \| <= \| > \| >= \| in` | How the row's cell is compared with 'value'. |
+| `value` | yes | `oneOf:ref:ChartDataCell / array<ref:ChartDataCell>` | The value to compare with. For 'in', a list of values. |
+
+
+### DataFilter
+
+- Type: `array<ref:DataCondition>`
+- Required fields: none
+- Purpose: Conditions a row must all meet (AND). No OR and no expressions: a host that needs more writes a column that holds it.
+
+_No named properties._
+
+
+### DataLink
+
+- Type: `object`
+- Required fields: `dataset`, `field`, `aggregate`
+- Purpose: A number computed from a dataset of this deck: 'aggregate' over the cells of 'field' in the rows that meet 'filter'. Engines compute it from the embedded rows and never fetch. The shape every content that can be linked to data shares; MetricData is this shape plus a change.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `dataset` | yes | `ref:DatasetId` | Id of the dataset. An unknown id is a 'dataset-unknown' error. |
+| `field` | yes | `string` | The column whose cells are aggregated. An unknown name is a 'dataset-field-unknown' error. |
+| `aggregate` | yes | `enum:sum \| mean \| min \| max \| count \| first \| last` | How the cells are combined: 'count' is the number of rows kept (cells included whatever they hold); 'sum' and 'mean' read numbers (in a column with no declared type also strings in strict decimal syntax); 'min' and 'm... |
+| `filter` | no | `ref:DataFilter` | Only the rows that meet every condition are used. Absent: every row. |
+
+
+### MetricGauge
+
+- Type: `object`
+- Required fields: `max`
+- Purpose: A metric's gauge (see Metric.gauge): the range its value is drawn against, with optional bands and a target.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `min` | no | `ref:FiniteNumber` | The value at the arc's start (its left end). |
+| `max` | yes | `ref:FiniteNumber` | The value at the arc's end (its right end). Must be greater than 'min' ('metric-gauge-range' warning otherwise, and no gauge is drawn). |
+| `bands` | no | `array<ref:ChartBand>` | Ranges of the gauge shaded along its arc, as a chart's bands: each from the previous 'to' (the first from 'min') to its own 'to'. A band without a color is a neutral; a band with one is a light tint of it, and the val... |
+| `target` | no | `ref:FiniteNumber` | A value marked by a tick across the arc. A target outside 'min' to 'max' is not drawn ('metric-gauge-range' warning). |
+
+
+### MetricData
+
+- Type: `object`
+- Required fields: `dataset`, `field`, `aggregate`
+- Purpose: A DataLink for a metric, with an optional change. The DataLink properties, repeated because both definitions are closed, plus 'delta'.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `dataset` | yes | `ref:DatasetId` | Id of the dataset. An unknown id is a 'dataset-unknown' error. |
+| `field` | yes | `string` | The column whose cells are aggregated. An unknown name is a 'dataset-field-unknown' error. |
+| `aggregate` | yes | `enum:sum \| mean \| min \| max \| count \| first \| last` | How the cells are combined; see DataLink. |
+| `filter` | no | `ref:DataFilter` | Only the rows that meet every condition are used. Absent: every row. |
+| `delta` | no | `ref:MetricDelta` | How the metric's change is computed. Absent: no change is computed, and a typed 'delta' on the metric is drawn as written. |
+
+
+### MetricDelta
+
+- Type: `oneOf:schema / schema`
+- Required fields: none
+- Purpose: How a metric's change is computed: against the previous row ('compare': "previous", the same aggregate without the last kept row), against a baseline ('compare': { filter }, the same aggregate over the rows that meet this filter instead of the metric's own), against a fixed number ('compare': { value }), or read from a column that already holds it ('field'). Exactly one of 'compare' and 'field'. 'previous' compares row sets, not periods: with several rows per period, filter to one series firs...
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `compare` | no | `oneOf:const:"previous" / object / object` | What the value is compared with. |
+| `field` | no | `string` | A column that holds the change. The change is the metric's aggregate over the same rows of this column. An unknown name is a 'dataset-field-unknown' error. |
+| `as` | no | `enum:difference \| percent` | With 'compare': the change as a difference (value minus base) or as a ratio ((value minus base) over the absolute base; 0.12 is 12%). With 'field': what the column holds, which only picks the default format. |
+| `format` | no | `ref:NumberFormat` | How the change is drawn, usually with sign sections ('+0.0;-0.0;0', '+0%;-0%;0%'). Absent: the value column's format with sign sections built from it ('+#,##0.##;-#,##0.##;0' without one), and '+0%;-0%;0%' for a percent. |
+
+
 ### ChartMapping
 
 - Type: `object`
@@ -1578,7 +1726,8 @@ _No named properties._
 | --- | --- | --- | --- |
 | `category` | no | `string` | The label (category) column. Default: the first column. |
 | `x` | no | `string` | The X column of an XY (scatter) chart. Default: the second column (the first, when the category is the second column), and only when there are three or more columns: with two, the second column is the one series, plot... |
-| `series` | no | `array<string>` | The plotted columns, in order. Default: every column that is not the category or the X column. |
+| `series` | no | `array<string>` | The plotted columns, in order. Default: every column that is not the category or the X column (or, on a bullet chart, the target column). |
+| `target` | no | `string` | Bullet charts: the column that holds each category's target, drawn as a tick across the bar. An unknown name is a 'chart-mapping-unknown-column' error. On other chart types it is ignored with a 'chart-mapping-adapted'... |
 
 
 ### ChartDataCell

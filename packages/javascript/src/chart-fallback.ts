@@ -175,7 +175,8 @@ export function chartDrawPlan(chart: unknown, resolved: Extract<ResolvedChartDat
     ({ columns, formats, rows, sources } = { columns: keep.map(index => columns[index]!), formats: keep.map(index => formats[index]), rows: rows.map(row => keep.map(index => row[index] ?? null)), sources: keep });
     hasX = false;
   }
-  if (kind && ONE_SERIES.has(kind) && categorized && columns.length > 2) dropped.push(...columns.slice(2));
+  // FR-07: a bullet chart plots one measure series (its target is not a series); the others are named.
+  if (((kind && ONE_SERIES.has(kind)) || authored === 'bullet') && categorized && columns.length > 2) dropped.push(...columns.slice(2));
   return { type, kind: kind ?? 'bar', ...(fallback ? { fallback } : {}), columns, hasX, formats, types: sources.map(index => resolved.types[index]), rows, sources, dropped };
 }
 

@@ -23,7 +23,7 @@ const GOLDEN = {
   "reference-id-duplicate": ["Two references use the id `a` (references 1 and 2).", "give the later one another id (for example `a-2`); runs cite references by id."],
   "cite-unknown-reference": ["`cite: \"smth\"` names a reference that does not exist.", "did you mean `smith`? Or add a reference with the id `smth` under `references`."],
   "cite-unsupported-location": ["`cite` and `footnote` are drawn only in titles, text, bullets, list items and quotes, not in table cells.", "move the cited run into a text block, or remove the citation here."],
-  "caption-unsupported-payload": ["A `caption` belongs to one image, chart, table, video or diagram; this block is text.", "put the `caption` on the image, chart, table, video or diagram it describes, or remove it."],
+  "caption-unsupported-payload": ["A `caption` belongs to one image, chart, table, video, embed or diagram; this block is text.", "put the `caption` on the image, chart, table, video, embed or diagram it describes, or remove it."],
   "image-option-unsupported-payload": ["`fit` only applies to pictures; this block is a chart.", "remove `fit`, or move it onto an image."],
   "shape-option-unsupported-payload": ["`fill` only applies to shapes; this block is text.", "remove `fill`, or make the block a shape with `shape` (a preset such as roundRect) or `path`."],
   "shape-path-units": ["The `path` spans 100 by 100 units, but a path without a `viewBox` is drawn in a 0 to 1 box, so the outline is far outside its frame.","add a `viewBox` for the grid the path is written on (for example `{ \"d\": ..., \"viewBox\": \"0 0 100 100\" }`), or write its coordinates from 0 to 1."],
@@ -58,6 +58,8 @@ const GOLDEN = {
   "unknown-beat": ["Slide 1 names beat `zzz`, which narrative `classic-story` does not define. Its beats include hero, plan, closing, context, despair.", "use one of `hero`, `plan`, `closing`, `context` or `despair`, or remove `beat`."],
   "variable-unknown": ["`{{nmae}}` is not declared under `variables`.", "did you mean `name`? Or declare `nmae` under `variables`."],
   "variable-unused": ["Variable `name` is declared but never used.", "use it as `{{name}}` or `var:name` where it belongs, or remove its declaration."],
+  "variable-translation-duplicate": ["Variable `cta` has two translations whose language tags differ only in case.", "remove one of the two keys: the first in the document is the one that is drawn."],
+  "variable-translation-unused": ["The `de` translation of `cta` is never drawn: no slide and not the deck declares a language that selects it.", "set `language` on the deck or on a slide, fix the tag, or remove the translation."],
   "contract": ["`layout` is `cover`, which this host's policy does not allow. Allowed: text, title.", "pick one of `text` or `title`."],
   "text-contrast": ["Text `#CCCCCC` on `#FFFFFF` has contrast 1.61:1; WCAG needs 3:1 for large text.", "use `text`, the slide's text color, which is readable here."],
   "missing-alt-text": ["This image has no alt text.", "describe it in `alt`, or write `alt: \"\"` if it is only decoration."],
@@ -68,6 +70,7 @@ const GOLDEN = {
   "chart-colors-adjusted-contrast": ["Chart color 2 (`#7B241C`) has 1.7:1 contrast against the slide background (`#011842`), so it is drawn lighter or darker to reach 3:1.", "pick a color with at least 3:1 contrast against `#011842`, or remove `colors` to use the palette."],
   "chart-text-alternative": ["The chart on slide 1 has no text alternative.", "write the message it carries in `alt`, or add text beside it that states what it shows."],
   "missing-language": ["The deck doesn't declare its language.", "add `\"language\": \"en-US\"` (or the language the text is written in) to the deck."],
+  "embed-credentials": ["This embed's address carries what looks like a credential (a query parameter named \"api_key\"), and anyone with the deck can read it.", "take the credential out of `src`: the host that shows the page holds it."],
   "chart-series-dropped": ["A 'treemap' chart plots one series, so \"Costs\" is not drawn; use a chart type that plots several series (column, bar, line) or one chart per series.", "use a chart type that plots every series, or one chart per series."],
   "chart-option-adapted": ["`dataLabels.position` isn't supported by a pie chart and is adapted. The type's default position is used.", "remove `dataLabels.position`, or choose a chart type that can show it."],
   "text-overflow": ["Text on slide 1 doesn't fit at the smallest allowed size.", "shorten it, split the slide, or choose a roomier layout."],
@@ -110,11 +113,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 109 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 124 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 109);
+	assert.equal(RULE_IDS.length, 124);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {

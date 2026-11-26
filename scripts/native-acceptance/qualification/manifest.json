@@ -178,6 +178,10 @@
       "source": "examples/technical/shape-overlays-rtl.opf.json"
     },
     {
+      "id": "embed",
+      "source": "examples/technical/embed.opf.json"
+    },
+    {
       "id": "diagrams",
       "source": "examples/technical/diagrams.opf.json",
       "variants": [
@@ -298,6 +302,14 @@
     {
       "id": "variable-limits",
       "source": "examples/technical/variable-limits.opf.json"
+    },
+    {
+      "id": "table-color-scale",
+      "source": "examples/technical/table-color-scale.opf.json"
+    },
+    {
+      "id": "variable-translations",
+      "source": "examples/technical/variable-translations.opf.json"
     },
     {
       "id": "coverage-text",

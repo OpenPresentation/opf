@@ -65,7 +65,7 @@ const throws = (fn, code) => { try { fn(); } catch (error) { assert.equal(error.
   const editor = createEditorSession(deck());
   const targets = captionTargets(editor.presentation);
   assert.deepEqual(targets.map((target) => [target.blockPath, target.field]), [["slides.1.blocks.0", "image"], ["slides.1.blocks.1", "table"], ["slides.3", "chart"]]);
-  assert.deepEqual([...CAPTIONABLE_FIELDS], ["image", "chart", "table", "video", "diagram"]);
+  assert.deepEqual([...CAPTIONABLE_FIELDS], ["image", "chart", "table", "video", "embed", "diagram"]);
   const change = setCaption(editor, "slides.1.blocks.0", "Figure 1. Pixel");
   assert.equal(change.changed, true);
   assert.deepEqual(change.patches.map((patch) => patch.op), ["test", "replace"]);

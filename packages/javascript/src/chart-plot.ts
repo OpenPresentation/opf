@@ -8,11 +8,11 @@
 // is stored as an inset from the chart box (ChartLayer.plot); the preview draws its plot there and the PPTX export writes it as the
 // plot area's manual layout (c:plotArea c:manualLayout, layoutTarget inner), so PowerPoint draws the same plot.
 import {chartAxisScale, chartTextSize, type ChartValueAxis} from './chart-axis.js';
-import {formatDataNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
+import {chartNumber, formatDataNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
 import {chartDrawPlan} from './chart-fallback.js';
-import type {ChartLayer, ChartPlotInset} from './chart-layer.js';
+import {columnValueLabel, type ChartLayer, type ChartPlotInset} from './chart-layer.js';
 import {horizontalBarPlot} from './chart-marks.js';
-import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
+import {chartLabelText, chartOptionTarget, resolveChartOptions} from './chart-options.js';
 import {groupNumber, groupsAxisTicks} from './number-grouping.js';
 import {formatNumber, formatPercentNumber} from './numerals.js';
 
@@ -132,8 +132,9 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   if (!axis || !axisScale) return undefined;
   const authored = typeof chart.type === 'string' ? chart.type.trim().toLowerCase() : '';
   const plan = chartDrawPlan(chart, resolved, {language: geometry.language});
-  const horizontal = plan.type === 'bar';
-  const spec: {key?: 'line'; percent?: boolean} | undefined = horizontal ? {} : Object.hasOwn(VERTICAL, plan.type) ? VERTICAL[plan.type]! : undefined;
+  // opf#1492: a stacked horizontal bar chart with chart options (core pins no plot for it) is laid out as a clustered one, its labels and titles reserved the same way.
+  const horizontal = plan.type === 'bar' || plan.type === 'stacked-bar' || plan.type === '100pct-stacked-bar';
+  const spec: {key?: 'line'; percent?: boolean} | undefined = horizontal ? {percent: plan.type === '100pct-stacked-bar'} : Object.hasOwn(VERTICAL, plan.type) ? VERTICAL[plan.type]! : undefined;
   if (!spec || plan.columns.length < 2 || !plan.rows.length) return undefined;
   const {box, scale} = geometry;
   if (![box.width, box.height, scale].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0) return undefined;
@@ -190,9 +191,22 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
     const categories = plan.rows.map(row => String(row[0] ?? '').replace(/[\r\n]+/g, ' '));
     const longestWord = Math.max(0, ...categories.flatMap(name => name.split(BREAKABLE).map(width))) + fontPx * 0.5;
     const gutter = Math.min(Math.max(inner.width * 0.3, Math.min(inner.width * 0.4, longestWord)), Math.max(0, ...categories.map(width)) + fontPx * 0.5);
-    let x = inner.x + pad + gutter + pad / 2, plotWidth = Math.max(1, right - x - fontPx);
+    // opf#1492: a small bar chart (no value axis) whose labels come from the dataLabels option keeps the widest label's room beyond the
+    // longest bar, as the preview does (opf-render charts.js, labelRoom); horizontalBarPlot keeps it for a chart without options.
+    let labelRoom = 0;
+    if (hidden && options.dataLabels) {
+      const {content, separator} = options.dataLabels;
+      for (const [index, row] of resolved.rows.entries()) {
+        for (const [j, cell] of row.slice(1).entries()) {
+          const value = chartNumber(cell);
+          if (value === null) continue;
+          labelRoom = Math.max(labelRoom, width(chartLabelText({category: categories[index]!, value: columnValueLabel(resolved, j + 1, value, geometry.language)}, content, separator)) + fontPx * 0.5);
+        }
+      }
+    }
+    let x = inner.x + pad + gutter + pad / 2, plotWidth = Math.max(1, right - x - fontPx - labelRoom);
     // The composed scale is fixed, so one pass leaves both formatted end tick labels inside the chart.
-    if (!hidden && format !== undefined) {
+    if (!hidden && format !== undefined && !percent) {
       const first = width(tickLabel(ticks[0]!, false, format, undefined, geometry.language)) / 2;
       const last = width(tickLabel(ticks.at(-1)!, false, format, undefined, geometry.language)) / 2;
       const nextX = Math.max(x, inner.x + pad + first);

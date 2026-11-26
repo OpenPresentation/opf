@@ -4,6 +4,7 @@
 // slides are skipped, as the exports skip them (`slidesToConvert`). `createPresentButton` is the icon-only trigger and `bindPresentShortcut`
 // binds F5. Plain DOM, no framework, no network; styles in src/styles/presenter.css (classes `opf-presenter-*` and `opf-present-button`).
 import { toSvg } from "@openpresentation/opf-render/svg";
+import { mountLiveEmbeds } from "@openpresentation/opf-render/live-embeds";
 import { linkAt } from "./view-links.js";
 import { mergeCatalogs } from "./catalogs.js";
 import { el, icon } from "./export-dom.js";
@@ -93,7 +94,7 @@ const clampIndex = (deck, wanted) => Math.max(0, Math.min((Array.isArray(deck?.s
  * Options: `editor` (an editor session) or `presentation` (an OPF object, or a function returning the current one), `fonts` (the renderer's fonts
  * handle the canvas uses), `renderOptions` (extra `toSvg` options, such as `catalogs`; slides are drawn with `text: "system"`, `trace: false` and
  * their `{{variables}}` resolved), `slideIndex` (the slide `start()` shows, 0-based), `onExit(index)` (the presenter closed, on the slide it showed),
- * `onSlideChange(index)` (the shown slide changed), `density` (`"comfortable"` or `"touch"`), `includeHidden` (default false) and `labels`. Indexes are always positions in the deck, hidden slides included.
+ * `onSlideChange(index)` (the shown slide changed), `embeds` (FR-08: `(src) => boolean`, the embedded pages shown live in a sandboxed frame; default none, and a page of the presenting page's own origin never), `density` (`"comfortable"` or `"touch"`), `includeHidden` (default false) and `labels`. Indexes are always positions in the deck, hidden slides included.
  *
  * LH-99: a slide the export continues on further pages (LH-90) shows those pages as steps after it (`continuation: false` draws every slide
  * as written): `next` and `previous` step through them, `goTo(index)` and every index stay source slides, `getPage()` is the 0-based page
@@ -149,14 +150,20 @@ export function createPresenter(container, options = {}) {
     return shown.find((index) => index >= target) ?? shown[shown.length - 1];
   }
   function showMessage(text) {
+    clearLive();
     slide.replaceChildren();
     message.textContent = text;
     message.hidden = false;
   }
+  // FR-08: the live frames of the slide shown (the host's `embeds` option; none by default), over the static form the renderer drew.
+  let liveEmbeds;
+  function clearLive() { liveEmbeds?.destroy(); liveEmbeds = undefined; }
   function paint(html) {
+    clearLive();
     if (typeof html === "string" && /^\s*<svg[\s>]/.test(html)) {
       message.hidden = true;
       slide.innerHTML = html;
+      if (typeof options.embeds === "function") liveEmbeds = mountLiveEmbeds({ host: slide, svg: slide.firstElementChild, embeds: options.embeds, document: doc });
     } else showMessage(typeof html === "string" ? html : "Preview unavailable");
   }
   // Draw the listed steps (`[index, page]`) that are not drawn yet, in one renderer call (it composes the deck once). A slide that cannot be drawn keeps the renderer's message.
@@ -454,6 +461,7 @@ export function createPresenter(container, options = {}) {
     doc.removeEventListener("focusin", onFocusin, true);
     const fullscreen = doc.fullscreenElement === root;
     root.hidden = true;
+    clearLive();
     slide.replaceChildren();
     swipe = null;
     returnTo = opener;

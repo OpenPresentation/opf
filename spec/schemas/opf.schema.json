@@ -1407,6 +1407,36 @@
           "type": "integer",
           "minimum": 1,
           "description": "The most lines the value may take where it is drawn. Checked by composition at each place the variable is drawn (a title, a subtitle, a text block or a list entry), because the line count depends on the width of the box; a value that takes more lines is the warning opf/variable-overflow at that place, naming the slide. Inside longer text, the lines are those the variable's own characters occupy."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TextRun"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "The text in other languages, keyed by language tag, each entry a 'value' in the same form as the variable's own (a string or TextRun[]). Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "Text content. Plain string or rich TextRun[]. Insert it inline as '{{<id>}}' inside any string (rich text is flattened to plain text there), or reference it whole as 'var:<id>' in a field that accepts string or TextRun[] (the rich runs are kept)."
@@ -1501,13 +1531,34 @@
         },
         "format": {
           "type": "string",
-          "description": "Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. English names. Default 'MMMM d, yyyy'.",
+          "description": "Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. The month and weekday names are those of the language where the date is drawn (the slide's declared language, else the deck's; English when none is declared or the table has no data for it); a month after a day token is in its form after a day, else its stand-alone form. Default: the language's long date pattern ('d. MMMM yyyy' in German), 'MMMM d, yyyy' for US English and a deck with no language.",
           "examples": [
             "MMMM d, yyyy",
             "dd MMM yyyy",
             "M/d/yyyy",
             "EEEE, MMMM d"
           ]
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "type": "string",
+                "description": "The date display pattern in this language, in the tokens of the variable's own 'format'."
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "How the date is written in other languages, keyed by language tag, each entry a 'format': the date is the same in every language, its pattern is not. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match uses the variable's own 'format'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "A calendar date as an ISO YYYY-MM-DD string. No time zone and no clock are involved. '{{<id>}}' inserts it formatted with 'format'."
@@ -1544,6 +1595,26 @@
         "example": {
           "$ref": "#/$defs/Asset",
           "description": "Illustrative image source shown in fill forms and used when a template is previewed with examples. Never written to output."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/Asset"
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "An image source per language (a localized screenshot), keyed by language tag, each entry a 'value'. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "An image source: any Asset (an 'asset:<id>' reference, HTTPS URL, data URI, relative or local path, or an object with src, alt and metadata). Reference it whole as 'var:<id>' in an image, asset or src field; '{{<id>}}' inserts the source string."
@@ -1582,6 +1653,27 @@
           "type": "string",
           "pattern": "^(?:https?://|mailto:|tel:)\\S+$",
           "description": "Illustrative link shown in fill forms and used when a template is previewed with examples. Never written to output."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "type": "string",
+                "pattern": "^(?:https?://|mailto:|tel:)\\S+$"
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "A link target per language (a localized landing page), keyed by language tag, each entry a 'value'. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "A link target (http, https, mailto or tel). Use it as '{{<id>}}' inside a link string or reference it whole as 'var:<id>' in a link field."
@@ -1629,6 +1721,29 @@
           "type": "integer",
           "minimum": 1,
           "description": "The most entries the list may have. Checked on the declared value and on a value given to a fill; a longer list is the warning opf/variable-overflow. Fill forms and models read it before writing."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "The entries in other languages, keyed by language tag, each entry a 'value' list. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "A list of strings, for bullets and list items. A whole-string array element 'var:<id>' splices every entry into the array in place; a whole field 'var:<id>' becomes the array; '{{<id>}}' joins the entries with ', ' (or the separator after a pipe: '{{<id>|; }}')."
@@ -1647,6 +1762,49 @@
       "pattern": "^(asset:|https://|data:|\\./|\\.\\./)",
       "description": "An image source in a string shorthand: an 'asset:<id>' reference, an HTTPS URL, a data URI, or a relative path starting with './' or '../' (resolved against the OPF file location).",
       "examples": ["asset:cover-photo", "https://cdn.acme.com/backgrounds/cover.jpg", "./images/harbour.jpg"]
+    },
+    "EmbedUrl": {
+      "type": "string",
+      "pattern": "^https://[^\\s/?#]+[^\\s]*$",
+      "maxLength": 2048,
+      "description": "An https URL. Any other scheme (http, data, javascript, a relative path) is a schema error.",
+      "examples": ["https://app.example.com/dashboards/revenue"]
+    },
+    "EmbedPayload": {
+      "description": "A live web page, shown in a web presenter when its host allows and as a linked picture everywhere else (PDF, PNG, PowerPoint, print, thumbnails). A string is shorthand for { \"src\": value }. Engines never load 'src': whether and from which sites a page is shown live is the host's decision (the presenter's 'embeds' option), not the deck's, so a deck holds no sandbox policy.",
+      "oneOf": [
+        { "$ref": "#/$defs/EmbedUrl" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["src"],
+          "properties": {
+            "src": {
+              "$ref": "#/$defs/EmbedUrl",
+              "description": "The page's https address. Never loaded by an engine; a click on the static form opens it in a new tab."
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "description": "What the page is: its accessible name, and the heading of the card drawn when there is no 'preview'. Absent: the site name (the host of 'src' without 'www.')."
+            },
+            "aspectRatio": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 10,
+              "description": "Width to height of the frame, as an image block's aspectRatio (1.6 is 16:10). The frame is the largest box of that ratio inside the block's region. Absent: 16:9 (1.7777777777777777)."
+            },
+            "preview": {
+              "$ref": "#/$defs/ImageSource",
+              "description": "A picture of the page, drawn wherever the page is not shown live: PDF, PNG, PowerPoint, print and thumbnails. It is drawn whole (contain) on the scheme's surface color. Absent: a card with the title, the site name and a link icon."
+            }
+          }
+        }
+      ],
+      "examples": [
+        "https://app.example.com/dashboards/revenue",
+        { "src": "https://app.example.com/dashboards/revenue", "title": "Revenue dashboard", "aspectRatio": 1.6, "preview": "asset:revenue-dashboard" }
+      ]
     },
     "ColorVariant": {
       "type": "object",
@@ -2594,7 +2752,7 @@
         "dateFormat": {
           "type": "string",
           "minLength": 1,
-          "description": "Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and weekday names are English, independent of host locale. Defaults to \"M/d/yyyy\" for a current date. PPTX export writes a native current-date field only when its complete value fits within one accepted text line and the pattern matches a PowerPoint en-US date field ('M/d/yyyy'; 'EEEE, MMMM d, yyyy'; 'd MMMM yyyy'; 'MMMM d, yyyy'; 'd-MMM-yy'; 'MMMM yy'; 'MMM-yy'). Other patterns and wrapped fields export as static text with a diagnostic. Full provenance can recover generated-date intent from unchanged supported wrapped dates on OPF reimport; the existing PPTX text remains static.",
+          "description": "Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and weekday names are those of the language of the slide the date is on (its declared language, else the deck's), from OPF's own table and independent of the host's locale; English when no language is declared. Defaults to \"M/d/yyyy\" for a current date. PPTX export writes a native current-date field only when its complete value fits within one accepted text line and the pattern matches a PowerPoint en-US date field ('M/d/yyyy'; 'EEEE, MMMM d, yyyy'; 'd MMMM yyyy'; 'MMMM d, yyyy'; 'd-MMM-yy'; 'MMMM yy'; 'MMM-yy'). Other patterns and wrapped fields export as static text with a diagnostic. Full provenance can recover generated-date intent from unchanged supported wrapped dates on OPF reimport; the existing PPTX text remains static.",
           "examples": ["MMM d, yyyy", "yyyy-MM-dd", "MMM yyyy", "MMMM d, yyyy"]
         },
         "socials": {
@@ -2925,8 +3083,8 @@
       "additionalProperties": false,
       "dependentSchemas": {
         "caption": {
-          "anyOf": [{ "required": ["image"] }, { "required": ["chart"] }, { "required": ["table"] }, { "required": ["video"] }, { "required": ["diagram"] }],
-          "description": "A slide's caption belongs to its root image, chart, table, video or diagram."
+          "anyOf": [{ "required": ["image"] }, { "required": ["chart"] }, { "required": ["table"] }, { "required": ["video"] }, { "required": ["embed"] }, { "required": ["diagram"] }],
+          "description": "A slide's caption belongs to its root image, chart, table, video, embed or diagram."
         }
       },
       "properties": {
@@ -2942,7 +3100,7 @@
         },
         "type": {
           "type": "string",
-          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline", "diagram"],
+          "enum": ["text", "list", "image", "chart", "table", "video", "embed", "code", "metric", "quote", "timeline", "diagram"],
           "description": "Optional full-slide content kind. When omitted, engines infer the kind from root payload fields."
         },
         "beat": {
@@ -3026,6 +3184,10 @@
           "$ref": "#/$defs/Asset",
           "description": "Full-slide video source. Presence of this field infers type 'video'. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the same placeholder as native shapes linked to an http(s) source, with no embedded media. Native playback is out of scope (docs/programs/release-readiness)."
         },
+        "embed": {
+          "$ref": "#/$defs/EmbedPayload",
+          "description": "Full-slide embed: a live web page. Presence of this field infers type 'embed'. A web presenter whose host allows the page shows it live; every other output (PDF, PNG, PowerPoint, print, thumbnails) shows a picture of it linked to its address. Engines never load 'src'. See EmbedPayload."
+        },
         "chart": {
           "$ref": "#/$defs/Chart",
           "description": "Full-slide chart payload. Presence of this field infers type 'chart'."
@@ -3069,7 +3231,7 @@
         },
         "caption": {
           "$ref": "#/$defs/Caption",
-          "description": "Caption for the slide's root image, chart, table, video or diagram payload. Valid only when the slide root holds exactly one of those payloads."
+          "description": "Caption for the slide's root image, chart, table, video, embed or diagram payload. Valid only when the slide root holds exactly one of those payloads."
         },
         "blocks": {
           "type": "array",
@@ -3243,11 +3405,16 @@
             },
             {
               "required": [
+                "embed"
+              ]
+            },
+            {
+              "required": [
                 "diagram"
               ]
             }
           ],
-          "description": "A caption belongs to an image, chart, table, video or diagram."
+          "description": "A caption belongs to an image, chart, table, video, embed or diagram."
         }
       },
       "properties": {
@@ -3268,7 +3435,7 @@
         },
         "type": {
           "type": "string",
-          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline", "diagram", "shape", "group"],
+          "enum": ["text", "list", "image", "chart", "table", "video", "embed", "code", "metric", "quote", "timeline", "diagram", "shape", "group"],
           "description": "Optional content kind. When omitted, engines infer the kind from the fields present: a block with 'shape' and no 'image', or with 'path', is a shape block."
         },
         "text": {
@@ -3496,6 +3663,10 @@
             "./media/demo.mp4"
           ]
         },
+        "embed": {
+          "$ref": "#/$defs/EmbedPayload",
+          "description": "Embed payload: a live web page. Presence of this field infers type 'embed'. Takes a caption and none of the image options (fit, focus, aspectRatio, recolor, ...): the frame's proportions are EmbedPayload.aspectRatio. See EmbedPayload."
+        },
         "chart": {
           "$ref": "#/$defs/Chart",
           "description": "Chart payload. Presence of this field infers type 'chart'."
@@ -3587,7 +3758,7 @@
         },
         "caption": {
           "$ref": "#/$defs/Caption",
-          "description": "Caption for an image, chart, table, video or diagram payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups."
+          "description": "Caption for an image, chart, table, video, embed or diagram payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups."
         },
         "blocks": {
           "type": "array",
@@ -3675,6 +3846,19 @@
           },
           "then": {
             "required": ["video"]
+          }
+        },
+        {
+          "if": {
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "const": "embed"
+              }
+            }
+          },
+          "then": {
+            "required": ["embed"]
           }
         },
         {
@@ -3811,6 +3995,9 @@
                   "required": ["video"]
                 },
                 {
+                  "required": ["embed"]
+                },
+                {
                   "required": ["chart"]
                 },
                 {
@@ -3934,7 +4121,7 @@
     },
     "Metric": {
       "type": "object",
-      "description": "Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news. A string or number value in a metric field is shorthand for { \"value\": value }; numeric values remain numbers and are formatted by renderers.",
+      "description": "Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news, 'format' for how a number value is written, 'better' for which direction of change is good news, 'data' to compute the value and the change from a dataset of this deck, and 'gauge' to draw the value on an arc against its range. A string or number value in a metric field is shorthand for { \"value\": value }; numeric values remain numbers and are formatted by renderers. Only the object form carries 'data'.",
       "additionalProperties": false,
       "required": ["value"],
       "properties": {
@@ -3982,6 +4169,23 @@
         "icon": {
           "$ref": "#/$defs/IconReference",
           "description": "An icon drawn on a chip above the metric: \"<set>:<name>\" (\"lucide:users\"), a name from the deck's icons, or an SVG source. Decoration only: when the slide has no room for it without setting text smaller, it is not drawn (finding opf/icon-dropped). See docs/icons.md."
+        },
+        "format": {
+          "$ref": "#/$defs/NumberFormat",
+          "description": "How a number 'value' is written, the same pattern language as a number variable, a dataset column and a table cell ('0.0%', '$#,##0.0M'). A string 'value' is drawn as written. Absent: a metric linked to data uses its column's format, and any other metric today's number rules (grouping by the slide's language). It applies to the value only; the change keeps its own format. 'unit' is still printed after the value ('metric-unit-repeated' warning when the format already prints it)."
+        },
+        "data": {
+          "$ref": "#/$defs/MetricData",
+          "description": "Computes the value and, optionally, the change from a dataset of this deck. While it resolves, engines draw the computed numbers; 'value' and 'delta' are then the last computed numbers, kept for readers that do not compute, and 'trend' (the sign of the computed change) and 'sentiment' (from 'better') follow unless they are written. When the link does not resolve, the written value and delta are drawn."
+        },
+        "better": {
+          "type": "string",
+          "enum": ["up", "down"],
+          "description": "Which direction of change is good news. Without 'sentiment', an up trend is positive and a down trend negative when 'better' is \"up\" (the default), and the reverse when it is \"down\"; a flat trend is neutral. An explicit 'sentiment' still wins. It also colors a typed 'trend'."
+        },
+        "gauge": {
+          "$ref": "#/$defs/MetricGauge",
+          "description": "Draws the metric as a gauge: its value on a half-circle arc from 'min' (left) to 'max' (right), over optional bands, with an optional target tick, and the metric's text under the arc (the value inside the arc's bowl when it fits there). Only a number value draws a gauge; any other value draws the metric without it ('metric-gauge-value' warning). A value outside the range keeps printing its real number while its arc stops at the end ('metric-gauge-range' warning). In a region too small for an arc 96 reference pixels wide the metric is drawn without its gauge. PowerPoint export draws native block arcs."
         }
       }
     },
@@ -4367,7 +4571,7 @@
       ]
     },
     "Caption": {
-      "description": "A caption for an image, chart, table, video or diagram payload. A string or TextRun[] is the caption text placed below the media; object form adds the position and alignment.",
+      "description": "A caption for an image, chart, table, video, embed or diagram payload. A string or TextRun[] is the caption text placed below the media; object form adds the position and alignment.",
       "oneOf": [
         { "type": "string" },
         { "type": "array", "items": { "$ref": "#/$defs/TextRun" } },
@@ -4466,11 +4670,27 @@
       ],
       "examples": ["none", { "width": 2 }, { "color": "accent2", "width": 2, "dash": "longDashDot" }]
     },
+    "ReferenceLineStroke": {
+      "description": "The stroke of a chart reference line: its color, width and dash, or 'none' for no line. The dash takes the preset names a shape outline's Stroke.dash takes (a:prstDash); a custom dash array is not available on a chart line. Every part is optional and falls back to the chart's default.",
+      "anyOf": [
+        { "const": "none", "description": "No line." },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "color": { "$ref": "#/$defs/ColorRef", "description": "Line color: any ColorRef (eight-digit hex keeps its alpha)." },
+            "width": { "type": "number", "minimum": 0, "maximum": 64, "description": "Line width in reference pixels at a 720-pixel short edge. 0 draws no line, the same as 'none'." },
+            "dash": { "type": "string", "enum": ["solid", "dot", "dash", "longDash", "dashDot", "longDashDot", "longDashDotDot", "sysDot", "sysDash", "sysDashDot", "sysDashDotDot"], "description": "DrawingML preset dash (a:prstDash), by the names Stroke.dash uses. Default dash." }
+          }
+        }
+      ],
+      "examples": ["none", { "width": 2 }, { "color": "accent2", "width": 2, "dash": "longDashDot" }]
+    },
     "ChartReferenceLine": {
       "type": "object",
       "additionalProperties": false,
       "required": ["value"],
-      "description": "One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement. A reference at a category or a band between two values is not expressible yet; 'axis' and a separate key are reserved for them.",
+      "description": "One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement. A reference at a category is not expressible yet; 'axis' is reserved for it. Ranges of the value axis are the chart's 'bands'.",
       "properties": {
         "value": { "$ref": "#/$defs/FiniteNumber", "description": "Finite value in the associated data-axis units. With format 0%, 0.25 means 25%; 25 means 2500%. Every reference expands automatic bounds when needed." },
         "axis": { "type": "string", "enum": ["value", "secondary"], "default": "value", "description": "Secondary requires a combo chart with an actual secondary line series." },
@@ -4480,6 +4700,18 @@
       },
       "dependentRequired": { "labelPosition": ["label"] }
     },
+    "ChartBand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["to"],
+      "description": "One range of a chart's value axis, shaded behind the data (see Chart.bands).",
+      "properties": {
+        "to": { "$ref": "#/$defs/FiniteNumber", "description": "The band's upper end, in the value axis's units (with format 0%, 0.8 is 80%). Bands expand automatic axis bounds to the last 'to', as reference lines do." },
+        "label": { "type": "string", "minLength": 1, "pattern": "\\S", "description": "The band's name, such as 'Poor' or 'On target': its legend entry and its text alternative. Absent: the band has no legend entry." },
+        "color": { "$ref": "#/$defs/SchemeColorName", "description": "A scheme color instead of the neutral, for ranges that mean good or bad. Drawn as a light tint of that color (25% of it over the chart's surface). Absent: the next neutral." }
+      },
+      "examples": [{ "to": 0.6, "label": "Poor" }, { "to": 10, "label": "Within target", "color": "accent3" }]
+    },
     "Chart": {
       "type": "object",
       "description": "Chart content. The chart object keeps chart-specific fields together so slides and regions do not expose loose chart fields. OPF charts are `{ type, data }` where `data` is `{ columns, rows }`: the first column holds the category labels and every further column is one series. There are no `categories`, `series`, `labels` or `datasets` keys (the Chart.js and ECharts shape); write them as columns and rows. Example: `{ \"type\": \"column\", \"data\": { \"columns\": [\"Quarter\", \"Decks\"], \"rows\": [[\"Q1\", 3], [\"Q2\", 8], [\"Q3\", 21]] } }`.",
@@ -4488,8 +4720,8 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["100pct-stacked-area", "100pct-stacked-bar", "100pct-stacked-column", "area", "bar", "box-and-whisker", "column", "combo", "doughnut", "filled-radar", "funnel", "histogram", "line", "line-with-markers", "pareto", "pie", "radar", "radar-with-markers", "scatter", "stacked-area", "stacked-bar", "stacked-column", "stacked-line", "stacked-line-with-markers", "treemap", "waterfall", "world"],
-          "description": "Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types OPF supports natively in its preview and PPTX export, plus 'combo' (clustered columns with line series, see 'line' and 'secondaryAxis'). Each engine maps a type to its own chart model; labels and picker groups are catalog display metadata.",
+          "enum": ["100pct-stacked-area", "100pct-stacked-bar", "100pct-stacked-column", "area", "bar", "box-and-whisker", "bullet", "column", "combo", "doughnut", "filled-radar", "funnel", "histogram", "line", "line-with-markers", "pareto", "pie", "radar", "radar-with-markers", "scatter", "stacked-area", "stacked-bar", "stacked-column", "stacked-line", "stacked-line-with-markers", "treemap", "waterfall", "world"],
+          "description": "Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types OPF supports natively in its preview and PPTX export, plus 'combo' (clustered columns with line series, see 'line' and 'secondaryAxis') and 'bullet' (one thin horizontal bar per category against its target tick, over the chart's bands; see 'mapping.target' and 'bands'). Each engine maps a type to its own chart model; labels and picker groups are catalog display metadata.",
           "examples": ["column", "bar", "line", "pie", "doughnut", "area", "scatter", "radar", "waterfall", "funnel", "treemap", "stacked-column", "combo"]
         },
         "data": {
@@ -4523,6 +4755,14 @@
           "type": "array",
           "items": { "$ref": "#/$defs/ChartReferenceLine" },
           "description": "Explicit numeric references on the chart's value axis, supported on the chart types with one value axis for every series: column, bar, line, line-with-markers, area and combo. A non-empty list on any other type (the stacked and 100% stacked types among them) is the error opf/chart-reference-unsupported-type, located at referenceLines, so a reference is never dropped silently. Absent or [] means none. Authored order, duplicates and values equal to data are preserved. Vertical charts with two or more categories span first-to-last category centers; bars/single-category charts span the full plot. Titles/subtitles never create references or period bands."
+        },
+        "bands": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ChartBand" },
+          "minItems": 1,
+          "maxItems": 6,
+          "description": "Ranges of the value axis shaded behind the data, in increasing order: each band runs from the previous band's 'to' (the first from the axis minimum) to its own 'to'. Colors come from the scheme's neutrals, darkest first, unless a band names its own. Bar, column, line and area charts (and their stacked forms) and the bullet chart draw them; other chart types ignore them with a 'chart-bands-unsupported' warning. In PowerPoint a chart with bands has fixed value-axis bounds, so a value typed beyond them in Edit Data does not rescale the chart.",
+          "examples": [[{ "to": 0.6, "label": "Poor" }, { "to": 0.85, "label": "Fair" }, { "to": 1, "label": "Good" }], [{ "to": 10, "label": "Within target", "color": "accent3" }, { "to": 20, "label": "Over target" }]]
         },
         "axisTitles": {
           "$ref": "#/$defs/ChartAxisTitles",
@@ -4722,8 +4962,48 @@
             }
           },
           "examples": [{ "rows": ["Southeast", "Southwest"] }]
+        },
+        "colorScale": {
+          "$ref": "#/$defs/TableColorScale",
+          "description": "Shades the number cells of the named columns by value, between scheme colors. Engines compute each cell's fill; the text color follows it for contrast."
         }
       }
+    },
+    "TableColorScale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["columns"],
+      "description": "A color scale over the number cells of one or more columns. One scale is shared by all named columns, so equal numbers get equal colors. Only cells whose value is a finite number are shaded; a cell with its own style.fill keeps it. Two colors make a sequential scale: the lowest value is the first color, the highest the second. Three colors make a diverging scale: 'center' is drawn in the middle color, lower values towards the first and higher values towards the last. A diverging scale with no pinned 'min' or 'max' is symmetric around 'center', so equal distances from the center get equal strength. Colors are mixed in OKLab. A table that is paged is shaded over its whole range, so a value has the same color on every page.",
+      "properties": {
+        "columns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "The columns to shade, by header text (an inline table) or by dataset column name after 'fields' (a dataset-backed table). A name no column has is a 'table-color-scale-unknown-column' error."
+        },
+        "colors": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/SchemeColorName" },
+          "minItems": 2,
+          "maxItems": 3,
+          "description": "The colors of the scale, low to high, as scheme color names. Two colors make a sequential scale (the lowest value in the first, the highest in the second); three make a diverging scale (the middle color is drawn at 'center', the first below it and the last above it). Absent: ['surface', 'primary']."
+        },
+        "center": { "type": "number", "description": "The value drawn in the middle color. Only with three 'colors' (a 'center' with two colors, or with no 'colors', is a schema error). Absent: 0 when the values span both signs, else the middle of the range. With no 'min' and no 'max' the scale is symmetric around it." },
+        "min": { "type": "number", "description": "The value drawn in the first color; lower values draw in it too. Absent: the lowest number in the named columns (a diverging scale with neither 'min' nor 'max' is symmetric around 'center': it runs from center minus d to center plus d, d the largest distance of any value from the center). A given 'min' or 'max' pins that end exactly, and each side of a diverging scale is then on its own span." },
+        "max": { "type": "number", "description": "The value drawn in the last color; higher values draw in it too. Absent: the highest number in the named columns (see 'min' for a diverging scale)." }
+      },
+      "if": { "required": ["center"] },
+      "then": { "required": ["colors"], "properties": { "colors": { "minItems": 3 } } },
+      "examples": [
+        { "columns": ["Q1", "Q2", "Q3", "Q4"] },
+        { "columns": ["YoY %"], "colors": ["accent2", "surface", "accent1"], "center": 0 }
+      ]
+    },
+    "SchemeColorName": {
+      "type": "string",
+      "enum": ["accent1", "accent2", "accent3", "accent4", "accent5", "accent6", "dark1", "dark2", "light1", "light2", "primary", "secondary", "accent", "background", "surface", "surfaceAlt", "text", "textSecondary"],
+      "description": "A color of the effective color scheme, by slot or role, resolved as ColorRef resolves the same names (the hyperlink slots are left out). No hex and no variable: what names it follows the deck's colors."
     },
     "ChartData": {
       "type": "object",
@@ -5009,6 +5289,101 @@
       },
       "examples": [{ "dataset": "revenue" }, { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }]
     },
+    "DataCondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "op", "value"],
+      "description": "One condition on a row: the row's cell in 'field' compared with 'value'. Nothing is parsed or evaluated. '=' and '!=' compare the same JSON value (null equals only null, 1 does not equal \"1\"); '<', '<=', '>' and '>=' compare two numbers as numbers, or two strings by the time order of a 'date' column (\"2026-03\" before \"2026-11\", \"Q1 2026\" before \"Q3 2026\") and else by code point, and any other pair does not meet the condition; 'in' is equal to one of the listed values.",
+      "properties": {
+        "field": { "type": "string", "description": "A column name of the linked dataset. An unknown name is a 'dataset-field-unknown' error.", "examples": ["Region"] },
+        "op": { "type": "string", "enum": ["=", "!=", "<", "<=", ">", ">=", "in"], "description": "How the row's cell is compared with 'value'." },
+        "value": {
+          "description": "The value to compare with. For 'in', a list of values.",
+          "oneOf": [
+            { "$ref": "#/$defs/ChartDataCell" },
+            { "type": "array", "items": { "$ref": "#/$defs/ChartDataCell" }, "minItems": 1 }
+          ]
+        }
+      },
+      "examples": [{ "field": "Region", "op": "=", "value": "EMEA" }, { "field": "Month", "op": "in", "value": ["2026-10", "2026-11"] }]
+    },
+    "DataFilter": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/DataCondition" },
+      "minItems": 1,
+      "description": "Conditions a row must all meet (AND). No OR and no expressions: a host that needs more writes a column that holds it.",
+      "examples": [[{ "field": "Region", "op": "=", "value": "EMEA" }]]
+    },
+    "DataLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset", "field", "aggregate"],
+      "description": "A number computed from a dataset of this deck: 'aggregate' over the cells of 'field' in the rows that meet 'filter'. Engines compute it from the embedded rows and never fetch. The shape every content that can be linked to data shares; MetricData is this shape plus a change.",
+      "properties": {
+        "dataset": { "$ref": "#/$defs/DatasetId", "description": "Id of the dataset. An unknown id is a 'dataset-unknown' error." },
+        "field": { "type": "string", "description": "The column whose cells are aggregated. An unknown name is a 'dataset-field-unknown' error.", "examples": ["ARR"] },
+        "aggregate": { "type": "string", "enum": ["sum", "mean", "min", "max", "count", "first", "last"], "description": "How the cells are combined: 'count' is the number of rows kept (cells included whatever they hold); 'sum' and 'mean' read numbers (in a column with no declared type also strings in strict decimal syntax); 'min' and 'max' read numbers, or time labels in a 'date' column; 'first' and 'last' are the first or last cell that is not null, in dataset order. A column typed 'text' or 'boolean' refuses 'sum', 'mean', 'min' and 'max' ('metric-data-aggregate' warning)." },
+        "filter": { "$ref": "#/$defs/DataFilter", "description": "Only the rows that meet every condition are used. Absent: every row." }
+      }
+    },
+    "MetricGauge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max"],
+      "description": "A metric's gauge (see Metric.gauge): the range its value is drawn against, with optional bands and a target.",
+      "properties": {
+        "min": { "$ref": "#/$defs/FiniteNumber", "default": 0, "description": "The value at the arc's start (its left end)." },
+        "max": { "$ref": "#/$defs/FiniteNumber", "description": "The value at the arc's end (its right end). Must be greater than 'min' ('metric-gauge-range' warning otherwise, and no gauge is drawn)." },
+        "bands": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ChartBand" },
+          "minItems": 1,
+          "maxItems": 6,
+          "description": "Ranges of the gauge shaded along its arc, as a chart's bands: each from the previous 'to' (the first from 'min') to its own 'to'. A band without a color is a neutral; a band with one is a light tint of it, and the value arc takes the band's full color while the value falls in it."
+        },
+        "target": { "$ref": "#/$defs/FiniteNumber", "description": "A value marked by a tick across the arc. A target outside 'min' to 'max' is not drawn ('metric-gauge-range' warning)." }
+      },
+      "examples": [
+        { "max": 1 },
+        { "min": -100, "max": 100, "bands": [{ "to": 0, "label": "Detractors lead", "color": "accent2" }, { "to": 30 }, { "to": 100, "label": "Strong", "color": "accent3" }], "target": 40 }
+      ]
+    },
+    "MetricData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset", "field", "aggregate"],
+      "description": "A DataLink for a metric, with an optional change. The DataLink properties, repeated because both definitions are closed, plus 'delta'.",
+      "properties": {
+        "dataset": { "$ref": "#/$defs/DatasetId", "description": "Id of the dataset. An unknown id is a 'dataset-unknown' error." },
+        "field": { "type": "string", "description": "The column whose cells are aggregated. An unknown name is a 'dataset-field-unknown' error.", "examples": ["ARR"] },
+        "aggregate": { "type": "string", "enum": ["sum", "mean", "min", "max", "count", "first", "last"], "description": "How the cells are combined; see DataLink." },
+        "filter": { "$ref": "#/$defs/DataFilter", "description": "Only the rows that meet every condition are used. Absent: every row." },
+        "delta": { "$ref": "#/$defs/MetricDelta", "description": "How the metric's change is computed. Absent: no change is computed, and a typed 'delta' on the metric is drawn as written." }
+      },
+      "examples": [
+        { "dataset": "arr", "field": "ARR", "aggregate": "last", "filter": [{ "field": "Region", "op": "=", "value": "EMEA" }], "delta": { "compare": "previous" } }
+      ]
+    },
+    "MetricDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "How a metric's change is computed: against the previous row ('compare': \"previous\", the same aggregate without the last kept row), against a baseline ('compare': { filter }, the same aggregate over the rows that meet this filter instead of the metric's own), against a fixed number ('compare': { value }), or read from a column that already holds it ('field'). Exactly one of 'compare' and 'field'. 'previous' compares row sets, not periods: with several rows per period, filter to one series first or have the host write the change in a column and use 'field'.",
+      "oneOf": [{ "required": ["compare"] }, { "required": ["field"] }],
+      "properties": {
+        "compare": {
+          "description": "What the value is compared with.",
+          "oneOf": [
+            { "const": "previous" },
+            { "type": "object", "additionalProperties": false, "required": ["filter"], "properties": { "filter": { "$ref": "#/$defs/DataFilter", "description": "The rows the baseline is computed over. It replaces the metric's own filter instead of adding to it, so it names everything it means." } } },
+            { "type": "object", "additionalProperties": false, "required": ["value"], "properties": { "value": { "$ref": "#/$defs/FiniteNumber", "description": "A fixed number to compare with: a plan, a budget, last year's figure typed in." } } }
+          ],
+          "examples": ["previous", { "filter": [{ "field": "Month", "op": "=", "value": "2026-09" }] }, { "value": 4 }]
+        },
+        "field": { "type": "string", "description": "A column that holds the change. The change is the metric's aggregate over the same rows of this column. An unknown name is a 'dataset-field-unknown' error." },
+        "as": { "type": "string", "enum": ["difference", "percent"], "default": "difference", "description": "With 'compare': the change as a difference (value minus base) or as a ratio ((value minus base) over the absolute base; 0.12 is 12%). With 'field': what the column holds, which only picks the default format." },
+        "format": { "$ref": "#/$defs/NumberFormat", "description": "How the change is drawn, usually with sign sections ('+0.0;-0.0;0', '+0%;-0%;0%'). Absent: the value column's format with sign sections built from it ('+#,##0.##;-#,##0.##;0' without one), and '+0%;-0%;0%' for a percent." }
+      }
+    },
     "ChartMapping": {
       "type": "object",
       "additionalProperties": false,
@@ -5028,8 +5403,13 @@
           "type": "array",
           "items": { "type": "string" },
           "minItems": 1,
-          "description": "The plotted columns, in order. Default: every column that is not the category or the X column.",
+          "description": "The plotted columns, in order. Default: every column that is not the category or the X column (or, on a bullet chart, the target column).",
           "examples": [["Revenue", "Costs"]]
+        },
+        "target": {
+          "type": "string",
+          "description": "Bullet charts: the column that holds each category's target, drawn as a tick across the bar. An unknown name is a 'chart-mapping-unknown-column' error. On other chart types it is ignored with a 'chart-mapping-adapted' warning.",
+          "examples": ["Target"]
         }
       },
       "examples": [{ "category": "Quarter", "series": ["Costs", "Revenue"] }, { "category": "Region", "x": "Spend", "series": ["Revenue"] }]

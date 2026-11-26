@@ -30,7 +30,9 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 - Metadata array forms for organizations, speakers, authors, and takeaways.
 - Custom narrative records, slide beat links and catalog override surfaces.
 - Limits on a template's variables: `maxLength` and `maxLines` on text variables and `maxItems` on a list variable, with values inside them ([`variable-limits.opf.json`](./variable-limits.opf.json), from core 0.37.0).
+- One deck in two languages: variables with `translations` (a text, a list and a date pattern per language), German and French slides drawing their own ([`variable-translations.opf.json`](./variable-translations.opf.json), from core 0.37.0).
 - Links to a slide of the same deck: `slide:<id>` on a text run, a shape and a table cell, one of them to a hidden slide ([`slide-links.opf.json`](./slide-links.opf.json)).
+- Embedded pages: an `embed` with a preview picture (a screenshot-like dashboard drawn by OPF itself), an `embed` beside text, and an `embed` with no picture, drawn as a card with its title and its site name; the pages are never loaded, and every output but a presenter whose host allows the page shows the picture or the card, linked to the page ([`embed.opf.json`](./embed.opf.json)).
 
 - `multilingual-slides.opf.json`: English, Arabic, Japanese and French slides in one deck, with a selected Arabic script font and locale-aware numbers.
 
@@ -45,4 +47,8 @@ The exhaustive [layout sampler](./layout-sampler.opf.json) has all 38 default la
 When reviewing dense grouped examples, use the default whole-block continuation path from convert, or call continueOverfull first for slide-by-slide rendering. It retains settled sizes for comparable automatic body roles before choosing the page count; explicit rich sizes and author minima/maxima keep their own constraints. Later pages cap actual arrangement text to the first page. No fixed minimum is added. Inspect the returned pages and continued/source mappings; an indivisible unfit block preserves the original fit refusal and content. Use explicit paginate for splits inside a block.
 
 - `item-ids.opf.json`: ids on list items, bullets, timeline events and table rows (a row is an array or `{ "id", "cells" }`), one namespace with slide and block ids; every id is optional.
+- `bands-and-bullet.opf.json`: `chart.bands` shades ranges of a value axis behind the data (a column chart with labeled bands, one in a scheme color, and a legend; a line chart with bands and a reference line; a stacked column chart), and a `bullet` chart of five KPIs against their targets over three bands, from a dataset.
+- `gauges.opf.json`: metrics drawn as gauges (`metric.gauge`): utilization against its capacity, a Net Promoter Score with colored bands and a target, a gauge computed from a dataset (with its change and arrow), and three site gauges side by side.
+- `table-color-scale.opf.json`: `table.colorScale` shades the number cells of named columns by value in scheme colors: a sequential scale over a pinned range, a diverging scale centered on zero, a dataset-backed table, and a six-by-six scorecard with a highlighted row, and five small slides that name every color-scheme color a scale may use.
 - The document id: a root `id`, an opaque string kept on save, export, import and publish, and a claim rather than a credential ([`document-id.opf.json`](./document-id.opf.json)).
+- Metrics computed from data: the value and the change come from a dataset of the deck (the last row, a change against the previous row, a baseline, a fixed plan or a column), the arrow and its color follow the computed change, `better` says which direction is good, and `format` writes a number value ([`computed-metrics.opf.json`](./computed-metrics.opf.json)).

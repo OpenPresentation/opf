@@ -81,7 +81,7 @@ for (const entry of [...picks, fallbacks.find(entry => entry.file.endsWith('layo
     assert.match(shape, /<p:ph type="(?:ctrTitle|title)"\/>/);
     assert.match(shape, /<a:bodyPr\b[^>]*\bwrap="none"[^>]*><a:noAutofit\/>/);
     assert.equal((shape.match(/<a:p>/g) ?? []).length, entry.item.text.lines.length, 'one paragraph per measured line');
-    assert.equal([...shape.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''), entry.item.text.lines.join(''), 'the measured lines');
+    assert.equal([...shape.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''), entry.item.text.lines.map(line => line.replace(/ +$/u, '')).join(''), 'the measured lines, each without its hanging space (opf#1493)');
     if (entry === fontFallback) assert.match(shape, /<a:latin typeface="Bookman Old Style"/);
     // The first paragraph is at single spacing; a later one at a pitch under the single line (LH-189's 1.0 em display pitch, the
     // layout-sampler cover) takes its own spacing under 100% instead of space before (probe 3, variant K).

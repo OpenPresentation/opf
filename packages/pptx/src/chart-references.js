@@ -11,6 +11,10 @@ import { PRESET_DASH_VALUES } from './shape-blocks.js';
 
 /** a:prstDash values back to the OPF dash names (the inverse of PRESET_DASH_VALUES). */
 const OPF_DASH_NAMES = Object.freeze(Object.fromEntries(Object.entries(PRESET_DASH_VALUES).map(([name, value]) => [value, name])));
+import { PRESET_DASH_VALUES } from './shape-blocks.js';
+
+/** a:prstDash values back to the OPF dash names (the inverse of PRESET_DASH_VALUES). */
+const OPF_DASH_NAMES = Object.freeze(Object.fromEntries(Object.entries(PRESET_DASH_VALUES).map(([name, value]) => [value, name])));
 export const REFERENCE_URI = 'urn:openpresentation:chart-references:v1';
 const URI = REFERENCE_URI,
   TAG = 'OPF_CHART_REFERENCE_V1';
@@ -134,7 +138,9 @@ export function applyReferenceSeries(xml, info, binding) {
   const helpers = [];
   let out = applyComboConstruct(xml).replace(/<c:ser>[\s\S]*?<\/c:ser>/g, (ser) => {
     const index = ordinal++ - info.primaryCount;
+    // FR-07: a chart's band series follow its helpers (src/chart-bands.js rewrites them afterwards).
     if (index < 0) return ser;
+    if (index >= ordered.length && index < ordered.length + (info.bandCount ?? 0)) return ser;
     const line = ordered[index];
     if (!line) throw Error('Unexpected reference helper series.');
     const id = `${info.key}:${line.index}`,
@@ -167,7 +173,7 @@ export function applyReferenceSeries(xml, info, binding) {
     info.hidden.push(idx);
     return next;
   });
-  if (ordinal !== info.primaryCount + refs.length) throw Error('Missing reference helper series.');
+  if (ordinal !== info.primaryCount + refs.length + (info.bandCount ?? 0)) throw Error('Missing reference helper series.');
   const legendOrder = legendOrderIndexes(out);
   out = legendOrder.xml;
   if (info.hidden.length)

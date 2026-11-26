@@ -50,6 +50,33 @@ A body cell's own format wins over the column's.
 }
 ```
 
+### Shading cells by value
+
+`table.colorScale` shades the number cells of the named columns by their value, between two colors of the deck's color scheme, so a scorecard, a cohort table or a regional comparison reads at a glance and stays right when a number changes. Engines compute every cell's fill; the author names the columns and the colors.
+
+```json
+"table": {
+  "columns": ["Region", { "name": "Q1", "format": "0%" }, { "name": "Q2", "format": "0%" }],
+  "rows": [["EMEA", 0.22, 0.25], ["APAC", 0.18, 0.21]],
+  "colorScale": { "columns": ["Q1", "Q2"], "min": 0, "max": 0.4 }
+}
+```
+
+- `columns` (required, at least one) names the columns by header text; a dataset-backed table names dataset columns after `fields`. A name no column has is the error `table-color-scale-unknown-column`. Several columns share one scale, so equal numbers get equal colors; the range is taken over all of them.
+- `colors` is a list of two or three scheme color names, low to high (default `["surface", "primary"]`).
+- **Sequential** (two colors): the lowest value is the first color and the highest the second. If every value is equal, every cell is the last color.
+- **Diverging** (three colors): `center` (valid only with three colors; with two or none it is a schema error) is drawn in the middle color, lower values run towards the first color and higher values towards the last, so 0 is always the middle color. `center` defaults to 0 when the values span both signs, else to the middle of the range. With no `min` or `max` the scale is symmetric around `center`: it runs from `center - d` to `center + d`, where `d` is the largest distance of any value from the center, so equal distances get equal strength (with +12% on top, -8% is two thirds of the way to `from`, and a lone -1% is pale). A given `min` or `max` pins that end exactly and each side is then on its own span. A range that lies on one side of `center` draws only that side.
+- `min` and `max` pin the range (a 0 to 100% scale over data that spans 62 to 88%); a value outside it takes the end color.
+- For a diverging scale choose two ends of different hue (a blue and an orange, not two blues), so a reader tells below the center from above it at a glance; the scheme's accents are not always far apart, so look at the deck's color scheme.
+- The colors are scheme names only (`accent1` to `accent6`, `dark1`, `dark2`, `light1`, `light2`, `primary`, `secondary`, `accent`, `background`, `surface`, `surfaceAlt`, `text`, `textSecondary`): no hex and no variable, so a re-themed or dark deck changes the scale with it. Colors are mixed in OKLab, so the steps look even and the middle is not muddy.
+- Only cells whose value is a finite number are shaded; text, empty cells and the header are not. A cell with its own `style.fill` keeps it and still counts towards the range. The text of a shaded cell is the scheme text color where it reads on the fill (4.5:1), else black or white; a run with its own color keeps it. A highlighted row's shaded cells take the scale; its other cells keep the highlight tint.
+- A table split across slides is shaded over its whole range, so a value has the same color on every page.
+- Warnings, never errors, so a refresh of a dataset cannot make a deck invalid: `table-color-scale-no-data` (no named column holds a number) and `table-color-scale-range` (`min` is not below `max`, or `center` is outside the range).
+
+The preview, PNG and PDF draw the computed fills. The PowerPoint export writes a native, editable table whose shaded cells have sRGB fills and text colors; the scale itself is recorded in the file and comes back on import while every shaded cell still has its exported fill. A cell refilled in PowerPoint turns the scale into plain cell fills with a `table-color-scale-not-restored` diagnostic. See [the PPTX round-trip guide](../packages/pptx/docs/document-roundtrip.md). Choose a color scale when the reader compares many numbers across rows and columns; choose a chart when the shape of one or two series is the message.
+
+### Data source provenance
+
 ### Typed columns
 
 A dataset column and an inline chart data column may be a `DatasetColumn`: a `DataColumn` that also says what its cells hold (`type`), what the column is for (`role`) and a `unit` label. A table's own column headers stay `DataColumn` and declare nothing. A tool that picks a chart, aggregates a column or orders a time axis reads the declaration instead of guessing from the name and the cells.
@@ -80,6 +107,45 @@ What engines do:
 - `opf ingest --dataset` declares the columns of the dataset it writes (inline chart data and tables stay as they were): `number` when every filled cell is a number (a decimal string that prints back unchanged counts; `12.50` does not), `boolean`, `date` (every cell a time label) or `text`; role `measure` for a number column that is neither the first column nor a time label, `dimension` otherwise. It stores the cells as that type, so a typed column it writes never warns. A column whose type cannot be told stays a plain string, and a column a dataset already declares keeps its declaration (core `inferColumnDeclaration`, `declareColumns`). The heuristic is a starting point for ingest, not a rule of the format; a host that reads a typed source writes the declarations it knows.
 - In the editor the data panel has a type, a role and a unit field for the selected column of a chart's data or a shared dataset (`setGridColumnDeclaration`); a cell of another kind is marked; columns a paste adds declare what their cells say.
 - The PowerPoint export keeps the keys in `OPF_DATASETS_V1` and in a chart's `OPF_DATA_V1` record, inline. A 0.36.0 importer does not know them and drops those records whole (see [document round trip](../packages/pptx/docs/document-roundtrip.md)); its charts and tables keep the values they show.
+### Ranges behind a chart (bands)
+
+"Is this number good?" needs the ranges that make it good: poor, fair, good; under, on or over budget. `chart.bands` shades ranges of a chart's value axis behind the data, and they move with the axis.
+
+```json
+"chart": {
+  "type": "column",
+  "data": { "columns": ["Week", { "name": "Wait (min)", "format": "0" }], "rows": [["W1", 14], ["W2", 11], ["W3", 9], ["W4", 12]] },
+  "bands": [{ "to": 10, "label": "Within target", "color": "accent3" }, { "to": 15, "label": "Watch" }, { "to": 20, "label": "Over target" }]
+}
+```
+
+- One to six bands, in increasing order: each runs from the previous band's `to` (the first from the axis minimum) to its own `to`, in the value axis's units (with format `0%`, 0.8 is 80%). There is no `from`: a range left unshaded is a band in `background`. Unordered bands are drawn sorted, with the warning `chart-bands-order`.
+- The last `to` extends an automatic axis, as a reference line's value does; a `to` below the axis minimum is not drawn.
+- Colors: without `color`, the scheme's neutrals: the text color mixed into the chart's surface (in OKLab) until it reaches a contrast of 1.75, 1.45 and 1.25 against the surface, lowest band first (then again from the first), so the bands read alike on a light and a dark variant. With `color` (a scheme name only), that color at 25% over the surface, for ranges that mean good or bad.
+- `label` names the band inside it, in the secondary text color at the chart text size, over the data: in the top corner at the end of a horizontal stripe (column, line and area charts; the left in a right-to-left deck), at the top of a vertical strip at its start (bar and bullet charts), or at the other end (the bottom of a strip) where that corner meets a data mark or label. The legend lists only the data series. When a label does not fit its band, or meets a mark at both places, every band label of that chart goes to the legend instead, the bands first (PowerPoint lists the band group, which it draws first, before the data), and composition reports `chart-band-labels-in-legend`; nothing is shrunk or cut. A chart that names its series beside its marks (a stacked chart's names beside the last column, a line's names at the line ends) or has one series then gets a legend of the bands alone, and its series stay named where they were. The label is also the band's text alternative. One color serves every band label of a chart: the secondary text color when it reads at 4.5:1 on every labeled band, else the primary text color; a band on which even that stays below 4.5:1 (an author's dark `color`) keeps its label and is reported by both engines as the composition diagnostic `text-contrast`, not by validation.
+- Bar, column, line and area charts and their stacked and 100% stacked forms draw bands, and so does the bullet chart. Bar and column charts shade the whole plot; line and area charts from the first to the last category center, what a PowerPoint area series covers. Any other type ignores them with the warning `chart-bands-unsupported` (a combo chart among them).
+- In a chart with bands, the muted marks of a `highlight` take the neutral at a contrast of 1.5 from the chart's strongest band, on the side away from the surface (about 2.6 against the surface with default bands), so the context marks stay apart from the bands; a chart without bands keeps its muted color. The record keeps the authored chart, so import is unchanged.
+- Bands and `referenceLines` combine: bands behind the gridlines and the data, reference lines on top. Bands never change the data drawn.
+- **PowerPoint.** The bands are a stacked chart group of their own on the primary axes (the visible ones), and the data series sit on the secondary axes, deleted and fixed to the same bounds: PowerPoint draws a chart's primary group before its secondary one, so this is what keeps the data in front. A chart with bands therefore has fixed value-axis bounds in PowerPoint (both axis pairs carry `c:min` and `c:max`), and a value typed beyond them in Edit Data does not rescale the chart; change the axis bounds in PowerPoint, or the data in OPF and export again. The band series are workbook columns after the data, so Edit Data shows them.
+
+### Bullet charts
+
+`type: "bullet"` puts many KPIs and their targets on one slide: one row per category, each a thin bar (a third of the row) for the measure, a tick (two thirds of the row) at the target, over the chart's bands.
+
+```json
+"chart": {
+  "type": "bullet",
+  "data": { "dataset": "kpis" },
+  "mapping": { "category": "KPI", "series": ["Actual"], "target": "Target" },
+  "bands": [{ "to": 0.6, "label": "Poor" }, { "to": 0.85, "label": "Fair" }, { "to": 1, "label": "Good" }]
+}
+```
+
+- `mapping.target` names the target column (optional; without it there are no ticks). The format never guesses it. A name no column has is the error `chart-mapping-unknown-column`; on any other chart type it is ignored with `chart-mapping-adapted`. A target cell that is not a number is a gap (no tick in that row) and a `chart-value-not-numeric` warning.
+- The measure is the first plotted series (default: the first column that is not the category or the target); further series are named in `chart-series-dropped`.
+- The value axis is shared by all rows: from 0 (lower when a value or band is negative) to the largest value, target or band end.
+- Rows read top to bottom in data order, the category names at the start; right to left, the names stand at the right and the values run from the right. `highlight` works as on a bar chart. A bullet chart without bands or target is a thin-bar chart.
+- **PowerPoint.** Native, editable parts in two axis pairs: the bands as a stacked bar group on the primary axes, the measure as a clustered bar group (gap width 200) on the secondary axes, and the target as a scatter series without markers on the measure's axes whose fixed vertical error bars draw the ticks. The plot has the preview's position.
 
 ### Where data came from
 
@@ -126,6 +192,65 @@ Validation:
 - `series`: the plotted columns, in order. Default: every column that is not `category` or `x`.
 
 An unknown name is a `chart-mapping-unknown-column` error. A series that repeats the category or X column is a `chart-mapping-adapted` warning and is dropped. Mapping only reorders and selects columns; single-series constructs still plot one series (see [Chart fallbacks](#chart-fallbacks-lh-60)).
+
+### A metric computed from data
+
+A KPI on a slide is a typed number. When the data changes, the KPI, its change and its arrow disagree with the table beside it until someone retypes them, and a refresh that turns growth into decline leaves a green arrow pointing up. A metric can link to rows of a dataset of the same deck: core computes the value and, optionally, the change from them, and the arrow and its color follow. Core computes from the rows the deck holds and never fetches.
+
+```json
+{
+  "datasets": { "arr": { "columns": ["Month", "Region", { "name": "ARR", "format": "$#,##0.0M" }], "rows": [["2026-10", "EMEA", 4.2], ["2026-11", "EMEA", 4.4]] } },
+  "slides": [{
+    "title": "EMEA ARR",
+    "metric": {
+      "label": "EMEA ARR", "value": 4.4, "delta": 0.2,
+      "data": { "dataset": "arr", "field": "ARR", "aggregate": "last",
+                "filter": [{ "field": "Region", "op": "=", "value": "EMEA" }],
+                "delta": { "compare": "previous" } }
+    }
+  }]
+}
+```
+
+This draws `$4.4M` with `+$0.2M` and an up arrow in green. `value` stays required: it is the last computed number, kept for readers that do not compute, and for the slide when the link does not resolve.
+
+**The link** (`metric.data`) is `dataset` (an id of `datasets`), `field` (a column), `aggregate` and an optional `filter`. A filter is a list of `{ field, op, value }` conditions that every row must meet (no OR, no expressions). `op` is `=`, `!=`, `<`, `<=`, `>`, `>=` or `in` (then `value` is a list). `=` and `!=` compare the same JSON value (`1` is not `"1"`); the order operators compare two numbers as numbers, or two strings by time order in a column typed `date` (`"2026-03"` before `"2026-11"`, `"Q1 2026"` before `"Q3 2026"`) and otherwise by code point; any other pair does not meet the condition.
+
+| `aggregate` | Cells used | Result |
+| --- | --- | --- |
+| `count` | every row kept, whatever its cells hold | the number of rows |
+| `sum`, `mean` | numbers (an undeclared column also reads strings in strict decimal syntax, as chart values do) | a number |
+| `min`, `max` | numbers; in a `date` column, time labels by their time order | a number, or the cell as written |
+| `first`, `last` | the first or last cell that is not null, in dataset order | the cell as written |
+
+A column typed `text` or `boolean` refuses `sum`, `mean`, `min` and `max` (the warning `metric-data-aggregate`). When no row is kept or no cell is usable, the warning is `metric-data-empty`. In both cases the written value is drawn.
+
+**The change** (`metric.data.delta`) is optional, and the typed `delta` is drawn as written when it is absent. It is exactly one of:
+
+| `delta` | The change is |
+| --- | --- |
+| `{ "compare": "previous" }` | the value against the same aggregate over the kept rows without the last one, in dataset order |
+| `{ "compare": { "filter": [...] } }` | the value against the same aggregate over the rows that meet this filter instead of the metric's own (a baseline names everything it means: `Region = EMEA` and `Quarter = Q2`) |
+| `{ "compare": { "value": 4 } }` | the value against a fixed number: a plan, a budget, last year's figure typed in |
+| `{ "field": "ARR change" }` | the same aggregate, over the same rows, of a column that already holds the change |
+
+`as` is `difference` (the default; value minus base) or `percent` (value minus base, over the absolute base; a ratio, so `0.12` is 12%); for `field` it says what the column holds, which only picks the default format. `format` is how the change is drawn. Without one, a difference uses the value column's format with sign sections built from it (`"$#,##0"` gives `"+$#,##0;-$#,##0;$#,##0"`), or `"+#,##0.##;-#,##0.##;0"` when the column has none, and a percent `"+0%;-0%;0%"`. A change that is undefined (`previous` with fewer than two kept rows, a baseline that meets no row, a percent of 0, a value that is not a number) is the warning `metric-data-delta`: no change is drawn and the value still is.
+
+`previous` compares row sets, not periods. With several rows per period (one per region), filter to one series first, or have the host write the change in a column and use `field`.
+
+**The arrow and its color** follow the computed change. A typed `trend` wins; otherwise the sign of the change gives `up`, `down` or `flat`. A typed `sentiment` wins; otherwise `better` decides: with `better: "up"` (the default) an up trend is positive and a down trend negative, and with `better: "down"` the reverse (a rising churn is red); a flat trend is neutral. `better` is valid on any metric: it also colors a typed `trend`.
+
+**What is drawn.** While the link resolves, the computed numbers are drawn, not the written ones, so the slide agrees with its data. When it does not resolve (an unknown dataset or field is an error; the warnings above leave the link unresolved) the written `value` and `delta` are drawn exactly as before. A string `value` that the aggregate gives (`first` or `last` of a text column) is drawn as written. The change is drawn in the format above, and `unit` is printed after the value as always.
+
+**The written numbers.** `value` and `delta` are the last computed numbers, for readers that do not compute. When they differ from the computed ones the warning `metric-data-stale` carries a safe fix that writes the computed number into `value` (a number, replacing a string such as `"$12.4M"`) and into `delta`; it adds no `trend` or `sentiment`. Two numbers are equal when they draw the same text; a string is equal when it is exactly the drawn text. `opf fix --audits` applies the fix, and `opf fill` applies it to every filled deck, so a deck filled from data carries the numbers of that data.
+
+**The number format** (`metric.format`) says how a number `value` is written, in the pattern language of a number variable, a dataset column and a table cell: `{ "value": 0.044, "format": "0.0%" }` draws `4.4%`. The metric's `format` wins, then the linked column's `format`, then the number rules of today (grouping by the slide's language). A string `value` is drawn as written. It applies to the value only; a typed numeric `delta` of a metric with a `format` is drawn with sign sections built from it, and the change of a link keeps `data.delta.format`. A `unit` that the format already prints as a prefix or suffix is the warning `metric-unit-repeated`.
+
+**For a host that draws a metric another way** (a gauge's arc and its end labels), core exports `resolveMetric(metric, datasets, { path?, language? })`. It returns the metric to draw (`metric`: the plain `value`, `delta`, `trend` and `sentiment` as drawn), `resolved`, the value as drawn (`value`: `{ text, number?, format?, isNumber, computed }`: the number behind the text, the pattern that wrote it and whether it is a number), the change as drawn (`delta`), the record that a PowerPoint tag keeps (`record`) and the findings (`diagnostics`, with the safe fix of a stale number). Composition calls it before it measures, so layout measures the text that is drawn, and every engine draws its result.
+
+**Findings.** An unknown dataset (`data.dataset`) and an unknown column (`data.field`, a filter's `field`, a baseline's `field`, `delta.field`) are `dataset-unknown` and `dataset-field-unknown` errors at the key. `metric-data-stale`, `metric-data-aggregate`, `metric-data-empty`, `metric-data-delta` and `metric-unit-repeated` are `content` warnings (see [validate](validate.md)).
+
+**PowerPoint.** The native shapes are those of a typed metric, carrying the computed text. The metric's tag (`OPF_METRIC_V1`) holds the metric as drawn (a plain 0.36 metric) as `value`, so a 0.36.0 importer reads a correct metric with the same numbers. The 0.37 part (`data`, `better`, `format`, which keys were derived, and the numbers behind formatted text) rides in a separate top-level `link` key of the tag, stored with full provenance. Import restores it while the native value and change text are unchanged. A value or change edited in PowerPoint is the author's: the edited text is imported as the written number, the link is not restored, and the diagnostic is `metric-data-dropped`. A derived `trend` or `sentiment` is not imported as typed.
 
 ### Chart fallbacks (LH-60)
 

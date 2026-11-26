@@ -32,8 +32,10 @@ for (const id of CORE_CHART_TYPES) {
   assert.ok(openxml?.element, `${id}: catalogDisplay carries mappings.openxml.element`);
   // Pareto is a chartex histogram with an owned cumulative line; the mapping says so through `extension`. A mixed composition
   // (combo, FA-15) is its own construct: clustered columns (its primary element) with line series.
-  const expectedKind = id === "pareto" ? "pareto" : openxml.composition === "mixed" ? "combo" : kindByElement[openxml.element];
+  // FR-07: the bullet is a mixed composition of its own (stacked bands, a clustered measure and a target scatter).
+  const expectedKind = id === "pareto" ? "pareto" : id === "bullet" ? "bullet" : openxml.composition === "mixed" ? "combo" : kindByElement[openxml.element];
   assert.equal(spec.kind, expectedKind, `${id}: kind follows ${openxml.element}`);
+  if (spec.kind === "bullet") assert.deepEqual(openxml.series.map((entry) => [entry.element, entry.grouping]), [["barChart", "stacked"], ["barChart", "clustered"], ["scatterChart", undefined]], `${id}: bands, measure and target`);
   if (spec.kind === "pareto") assert.equal(openxml.extension, "cx:paretoLine", `${id}: the owned Pareto line`);
   if (spec.kind === "combo") {
     assert.deepEqual(openxml.series.map((entry) => entry.element), ["barChart", "lineChart"], `${id}: a bar and a line chart`);

@@ -20,6 +20,9 @@ test("the exact escaped viewer frame fits the unchanged default SDK transport",(
 // Measured after RR-111 (v0.34): 9,390,901 frame bytes, 1,094,859 bytes of headroom; the floor is that rounded down to 1,000,000,
 // about 95 KB of room for normal growth. When a change reaches the floor, make the viewer smaller (the options and what each saves
 // are in docs/programs/release-readiness/mcp-viewer-size.md); lower the floor only as a reviewed, recorded decision, never to pass.
+// opf#1516, 2026-11-26: build-time changes proven identical (the compact form of core's generated tables and of the gallery data and
+// font manifest in the viewer, three more derived validator errors) took main at a0421001c from 9,501,842 frame bytes (983,918 of
+// headroom) to 9,216,573 (1,269,187). The floor is 1,000,000 again, after 800,000 while the 0.37.0 format changes landed.
 const FRAME_HEADROOM_FLOOR=1_000_000;
 test("the viewer frame keeps its headroom floor under the stdio limit",()=>{
   const {bytes,headroom}=assertAppResourceFrame(DECK_APP_HTML);

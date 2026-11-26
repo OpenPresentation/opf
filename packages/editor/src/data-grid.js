@@ -353,7 +353,7 @@ export function createDataGrid(container, options = {}) {
     rulerRow.append(corner);
     for (let c = 0; c < grid.columnCount; c += 1) {
       const role = roles[c];
-      const role_ = role === "category" ? "categories" : role === "series" ? "series" : role === "x" ? "x values" : role === "label" ? "labels" : role === "other" ? "not plotted" : "";
+      const role_ = role === "category" ? "categories" : role === "series" ? "series" : role === "x" ? "x values" : role === "label" ? "labels" : role === "target" ? "targets" : role === "other" ? "not plotted" : "";
       const format = grid.columnFormats?.[c];
       const hint = [role_, format ? `format ${format}` : ""].filter(Boolean).join(" · ");
       const th = h("th", { role: "columnheader", scope: "col", "aria-colindex": c + 2, "data-ruler": "column", "data-column": c, "aria-label": `Column ${columnLabel(c)}${hint ? `, ${hint}` : ""}` }, columnLabel(c), hint ? h("span", { class: "opf-grid-role" }, hint) : null);

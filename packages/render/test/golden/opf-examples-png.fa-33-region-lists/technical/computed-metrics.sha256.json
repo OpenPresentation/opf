@@ -1,0 +1,37 @@
+{
+  "deck": "technical/computed-metrics.opf.json",
+  "entries": {
+    "technical/computed-metrics.opf.json#0": {
+      "sha256": "7d4ec7ee5171a6f62706ad1c2920cb286a3724fc3dfedcb1ee7f6a1b8b6990c8",
+      "bytes": 6544
+    },
+    "technical/computed-metrics.opf.json#1": {
+      "sha256": "004bfb11120e6eec27d978398d4825d4d37e07a6270f1479a1266e838e8f4579",
+      "bytes": 6090
+    },
+    "technical/computed-metrics.opf.json#2": {
+      "sha256": "ec8eceb39cf3e35224a6e9141843e47a3df05bfe4fbe7de20203b01b2f466d59",
+      "bytes": 7989
+    },
+    "technical/computed-metrics.opf.json#3": {
+      "sha256": "00969ad2281325e5d15afac4d5a610de1156b7dab63d095fb86377a070921649",
+      "bytes": 7371
+    },
+    "technical/computed-metrics.opf.json#4": {
+      "sha256": "03100c437ea83e29c60404a3831eebfc41c29c58c1b817f8d493ccaafc524152",
+      "bytes": 7597
+    },
+    "technical/computed-metrics.opf.json#5": {
+      "sha256": "c24fe282f3347b64a7a2931cd566b98ae4ee7f113185eb383a8a3a9e20a0f695",
+      "bytes": 4529
+    },
+    "technical/computed-metrics.opf.json#6": {
+      "sha256": "ee58daf9a874f9b4cb278488764596cf461eb8891a8393e696f2d8cd6cf67081",
+      "bytes": 6401
+    },
+    "technical/computed-metrics.opf.json#7": {
+      "sha256": "dc6afaed7f7fd1c526d91215f22f3cde8d60ffc3590a23996730da3a91dac0a9",
+      "bytes": 6240
+    }
+  }
+}

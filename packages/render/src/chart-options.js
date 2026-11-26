@@ -12,7 +12,8 @@ const INACTIVE = Object.freeze({ active: false, axisTitles: {}, diagnostics: [] 
  */
 export function resolveOptions(chart, spec) {
   if (!chart || typeof chart !== "object") return INACTIVE;
-  return resolveChartOptions(chart, { kind: spec.kind, stacked: spec.grouping === "stacked" || spec.grouping === "percentStacked" });
+  // FR-07: a bullet chart takes a horizontal bar chart's options (core chartOptionTarget('bullet') is a bar).
+  return resolveChartOptions(chart, { kind: spec.kind === "bullet" ? "bar" : spec.kind, stacked: spec.grouping === "stacked" || spec.grouping === "percentStacked" });
 }
 
 export function reportOptionDiagnostics(c, resolved) {
@@ -26,7 +27,7 @@ export function reportOptionDiagnostics(c, resolved) {
  * secondary value axis at the right, next to that axis; right to left, its two value axes trade sides (FA-15).
  */
 function titleSides(spec, rtl = false) {
-  const verticalCategory = (spec.kind === "bar" && spec.dir === "bar") || spec.kind === "funnel";
+  const verticalCategory = (spec.kind === "bar" && spec.dir === "bar") || spec.kind === "funnel" || spec.kind === "bullet";
   if (spec.kind === "combo") return rtl ? { category: "bottom", value: "right", secondary: "left" } : { category: "bottom", value: "left", secondary: "right" };
   return verticalCategory ? { category: "left", value: "bottom" } : { category: "bottom", value: "left" };
 }

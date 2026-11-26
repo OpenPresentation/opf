@@ -62,7 +62,7 @@ const parity = (deck, bound, entries) => {
       const transform = shape['p:spPr']['a:xfrm'];
       near(Number(transform['a:off'].y) / 9525, placed.y ?? placed.baseline - item.text.fontSize, `${deck.name}: line ${position + 1} top`);
       near(Number(transform['a:ext'].cy) / 9525, placed.height, `${deck.name}: line ${position + 1} height`);
-      assert.equal(text(shape), item.text.lines[line], `${deck.name}: line ${position + 1} breaks where the preview breaks`);
+      assert.ok([item.text.lines[line], item.text.lines[line].replace(/[^\S\r\n\u00a0\u202f\ufeff]+$/u, '')].includes(text(shape)), `${deck.name}: line ${position + 1} breaks where the preview breaks (less its hanging whitespace, opf#1493)`);
       for (const run of array(shape['p:txBody']['a:p']).flatMap(p => array(p['a:r']))) near(Number(run['a:rPr'].sz) / 100, item.text.fontSize * .75, `${deck.name}: line ${position + 1} size`);
     }
   }

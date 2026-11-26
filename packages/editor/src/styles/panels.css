@@ -2502,3 +2502,21 @@
     transition: none !important;
   }
 }
+
+.opf-template-translations {
+  margin-top: 6px;
+}
+
+.opf-template-translations summary {
+  font: 11px/1.4 var(--opf-ui-mono);
+  color: var(--opf-ui-muted-fg);
+  cursor: pointer;
+}
+
+.opf-translation-row {
+  display: grid;
+  grid-template-columns: 8ch minmax(0, 1fr) auto;
+  gap: 6px;
+  align-items: start;
+  margin: 4px 0;
+}

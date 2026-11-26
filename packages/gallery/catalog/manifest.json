@@ -19,11 +19,11 @@
     },
     "chart-types": {
       "mode": "mirror",
-      "records": 27,
-      "contentSha256": "49b76df8acb8d028166fef6d5f15c65d1a956bd2f36dfa165da8a289afbfbc09",
+      "records": 28,
+      "contentSha256": "e0f9ac80d112d9561dae1149991379c7bddffca7d0de3dbbf473a4c71b9caab8",
       "gallery": {
-        "records": 27,
-        "contentSha256": "49b76df8acb8d028166fef6d5f15c65d1a956bd2f36dfa165da8a289afbfbc09"
+        "records": 28,
+        "contentSha256": "e0f9ac80d112d9561dae1149991379c7bddffca7d0de3dbbf473a4c71b9caab8"
       }
     },
     "color-schemes": {

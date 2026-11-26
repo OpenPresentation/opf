@@ -229,9 +229,12 @@ const datasetHash = (datasets, id) => own(datasets, id) ? hash(canonical(dataset
 export function chartDataRecord(chart, datasets, {rowNumbers = false, fallback = false} = {}) {
   // LH-60: a chart drawn as core's fallback (a box per series writes its rows as one group) records its authored data, so import restores it.
   // A scatter series caches only its X/Y coordinates. Its authored point names and first-column heading need the data tag.
-  if (chart?.type !== 'scatter' && !rowNumbers && !fallback && !chartUsesDataFields(chart) && !object(chart?.highlight)) return undefined;
+  // FR-07: a chart with bands, and a bullet chart, record them as authored (the 0.37 form; no older importer is served).
+  const banded = Array.isArray(chart?.bands) || chart?.type === 'bullet';
+  if (chart?.type !== 'scatter' && !rowNumbers && !fallback && !banded && !chartUsesDataFields(chart) && !object(chart?.highlight)) return undefined;
   const dataset = isDatasetRef(chart.data) ? datasetHash(datasets, chart.data.dataset) : undefined;
-  return {v: 1, kind: 'chart', data: clone(chart.data), ...(chart.mapping !== undefined ? {mapping: clone(chart.mapping)} : {}), ...(object(chart.highlight) ? {highlight: clone(chart.highlight)} : {}), ...(dataset ? {dataset} : {})};
+  return {v: 1, kind: 'chart', data: clone(chart.data), ...(chart.mapping !== undefined ? {mapping: clone(chart.mapping)} : {}), ...(object(chart.highlight) ? {highlight: clone(chart.highlight)} : {}), ...(dataset ? {dataset} : {}),
+    ...(chart.type === 'bullet' ? {type: 'bullet'} : {}), ...(Array.isArray(chart.bands) ? {bands: clone(chart.bands)} : {})};
 }
 
 /**
@@ -239,7 +242,12 @@ export function chartDataRecord(chart, datasets, {rowNumbers = false, fallback =
  * records the language its number cells were shown in (`language`, when the slide has one), so import compares the text it showed.
  */
 export function tableDataRecord(table, layout, language) {
-  if (isDatasetRef(table)) return {v: 1, kind: 'table', table: clone(table), ...(typeof language === 'string' ? {language} : {})};
+  // FR-07: the color scale is not stored inside the table. A 0.36.0 importer validates the stored table and rejects a key it does not know,
+  // which would drop the whole record; the scale rides in a top-level key of the record that importer ignores (see colorScaleRecord).
+  const {colorScale, ...plain} = table;
+  const scale = colorScaleRecord(colorScale, layout);
+  if (isDatasetRef(plain)) return {v: 1, kind: 'table', table: clone(plain), ...(typeof language === 'string' ? {language} : {}), ...scale};
+  table = plain;
   const hasHeaders = Array.isArray(table.columns) && table.columns.length > 0;
   const shown = (row, column) => cellText(layout?.rows?.[row]?.cells?.find(cell => cell.column === column)?.value);
   // A header's format: a DataColumn's or a header StyledTableCell's (both are the column format).
@@ -264,7 +272,22 @@ export function tableDataRecord(table, layout, language) {
   // whole authored table; the row ids are in the slide record's entryIds (src/entry-ids.js), which puts the objects back on import.
   const stored = clone(table);
   if (Array.isArray(stored.rows)) stored.rows = stored.rows.map(rowCells);
-  return {v: 1, kind: 'table', headers, cells, authored: stored};
+  return {v: 1, kind: 'table', headers, cells, authored: stored, ...scale};
+}
+
+/**
+ * FR-07: `colorScale: { scale, evidence }`: the authored scale and, for each cell it shaded, [body row, column, fill hex, text hex] as exported.
+ * Import restores the scale while every one of those cells still has its fill. Absent without a scale.
+ */
+function colorScaleRecord(scale, layout) {
+  if (!object(scale)) return {};
+  const evidence = [];
+  for (const row of layout?.rows ?? []) for (const cell of row.cells) {
+    if (cell.header || !cell.scaled) continue;
+    const bodyRow = cell.row - (layout.rows[0]?.cells.some(entry => entry.header) ? 1 : 0);
+    evidence.push([bodyRow, cell.column, cell.scaled.fill.replace(/^#/, '').toUpperCase(), cell.scaled.text.replace(/^#/, '').toUpperCase()]);
+  }
+  return {colorScale: {scale: clone(scale), evidence}};
 }
 
 function relationshipsXml(entries, path) {
@@ -447,6 +470,8 @@ export function readDataTag(entries, frame, relationships) {
   if (record.kind === 'table' && record.language !== undefined && (typeof record.language !== 'string' || record.language.length > 64)) throw Error('Invalid table data record.');
   if (record.kind === 'table' && record.evidence !== undefined && (!Array.isArray(record.evidence) || !record.evidence.every(row => Array.isArray(row) && row.every(cell => typeof cell === 'string')) || typeof record.environment !== 'string')) throw Error('Invalid table evidence record.');
   if (record.kind === 'table' && record.authored !== undefined && record.evidence === undefined) throw Error('Authored table record has no native evidence.');
+  if (record.kind === 'table' && record.colorScale !== undefined && !(object(record.colorScale) && object(record.colorScale.scale) && Array.isArray(record.colorScale.evidence)
+    && record.colorScale.evidence.every(entry => Array.isArray(entry) && entry.length === 4 && index(entry[0]) && index(entry[1]) && entry.slice(2).every(hex => typeof hex === 'string' && /^[0-9A-F]{6}$/.test(hex))))) throw Error('Invalid table color scale record.');
   return record;
 }
 
@@ -471,8 +496,10 @@ export function restoreChartData(chart, record, evidence, {datasets, datasources
     report({code: 'chart-dataset-unavailable', message: `The chart referenced dataset '${record.data.dataset}', but this package's dataset of that id holds other data than at export (a slide pasted from another deck); the chart imports its values inline.`});
     return chart;
   }
-  const {mapping: _mapping, highlight: _highlight, ...rest} = chart;
-  const restored = {...rest, data: clone(record.data), ...(record.mapping !== undefined ? {mapping: clone(record.mapping)} : {}), ...(record.highlight !== undefined ? {highlight: clone(record.highlight)} : {})};
+  const {mapping: _mapping, highlight: _highlight, bands: _bands, ...rest} = chart;
+  // FR-07: the authored bands and bullet type come back with the data they were drawn over.
+  const restored = {...rest, ...(record.type === 'bullet' ? {type: 'bullet'} : {}), data: clone(record.data), ...(record.mapping !== undefined ? {mapping: clone(record.mapping)} : {}), ...(record.highlight !== undefined ? {highlight: clone(record.highlight)} : {}),
+    ...(Array.isArray(record.bands) ? {bands: clone(record.bands)} : {})};
   if (!validWith({chart: restored}, isDatasetRef(record.data) ? datasets : undefined, datasources)) {
     report({code: 'invalid-data-provenance', message: 'The chart data recorded at export does not form a valid chart; the chart imports the values it shows.'});
     return chart;
@@ -481,7 +508,63 @@ export function restoreChartData(chart, record, evidence, {datasets, datasources
 }
 
 /** The authored table data where the native evidence is unchanged; edited native cells otherwise. */
-export function restoreTableData(table, record, {datasets, datasources, report, evidence: currentEvidence, olderEvidence = [], environment: environments}) {
+/**
+ * FR-07: the scale comes back when every cell it shaded still has the fill exported for it; those cells then lose their native fill (and
+ * the text color exported with it), because the scale draws them. A refilled cell makes the scale plain cell fills (the native truth).
+ * `checkAgainst` is the native table the fills are read from.
+ */
+function withColorScale(next, record, native, report, datasets) {
+  const recorded = record.colorScale;
+  if (!recorded) return next;
+  const fillOf = (table, row, column) => { const cell = (Array.isArray(table.rows?.[row]) ? table.rows[row] : rowCells(table.rows?.[row]))[column]; return object(cell) && object(cell.style) && typeof cell.style.fill === 'string' ? cell.style.fill.replace(/^#/, '').toUpperCase() : undefined; };
+  const refilled = recorded.evidence.filter(([row, column, fill]) => fillOf(native, row, column) !== fill).length;
+  const unfill = (cell, text) => {
+    if (!object(cell) || !object(cell.style)) return cell;
+    const {fill, ...style} = cell.style;
+    if (typeof style.color === 'string' && style.color.replace(/^#/, '').toUpperCase() === text) delete style.color;
+    const {style: _style, ...rest} = cell;
+    return Object.keys(style).length ? {...rest, style} : (Object.keys(rest).length === 1 && own(rest, 'value') ? rest.value : rest);
+  };
+  const candidate = {...next, colorScale: clone(recorded.scale)};
+  const fits = isDatasetRef(next) ? validWith({table: candidate}, datasets) : validImportedTable(candidate, native);
+  if (!refilled && fits) {
+    if (Array.isArray(next.rows)) candidate.rows = next.rows.map(row => Array.isArray(row) ? [...row] : row);
+    if (Array.isArray(candidate.rows)) for (const [row, column, , text] of recorded.evidence) if (Array.isArray(candidate.rows[row]) && column < candidate.rows[row].length) candidate.rows[row][column] = unfill(candidate.rows[row][column], text);
+    return candidate;
+  }
+  report({code: 'table-color-scale-not-restored', message: refilled
+    ? `The table's color scale was not restored: ${refilled} shaded ${refilled === 1 ? 'cell was' : 'cells were'} refilled after export, so the table imports its cell fills as plain fills.`
+    : "The table's color scale was not restored: it does not fit the imported table (a column it names is gone), so the table imports its cell fills as plain fills."});
+  return plainFills(next, recorded, native);
+}
+
+/**
+ * The scale was not restored: every cell it shaded comes back with the fill (and the text color) it has in the native table, as a style on the
+ * restored value (a number keeps its authored value and format). Cells the scale never shaded stay as restored. A dataset reference cannot carry
+ * a cell fill, so such a table imports as the native table, its cells inline.
+ */
+function plainFills(next, recorded, native) {
+  if (!Array.isArray(next.rows)) return native;
+  const nativeCell = (row, column) => (Array.isArray(native.rows?.[row]) ? native.rows[row] : rowCells(native.rows?.[row]))[column];
+  const rows = next.rows.map(row => Array.isArray(row) ? [...row] : row);
+  for (const [row, column] of recorded.evidence) {
+    const source = nativeCell(row, column);
+    if (!Array.isArray(rows[row]) || column >= rows[row].length || !object(source) || !object(source.style) || typeof source.style.fill !== 'string') continue;
+    const cell = rows[row][column];
+    const current = object(cell) && own(cell, 'value') ? cell : {value: cell};
+    rows[row][column] = {...current, style: {...(object(current.style) ? current.style : {}), fill: source.style.fill, ...(typeof source.style.color === 'string' ? {color: source.style.color} : {})}};
+  }
+  return {...next, rows};
+}
+
+export function restoreTableData(table, record, options) {
+  const restored = restoreTableCells(table, record, options);
+  // The scale applies to a restored table, not to the native cells of one whose data was not restored.
+  if (!record.colorScale || restored === table || !object(restored) || !object(table)) return restored;
+  return withColorScale(restored, record, table, options.report, options.datasets);
+}
+
+function restoreTableCells(table, record, {datasets, datasources, report, evidence: currentEvidence, olderEvidence = [], environment: environments}) {
   if (!object(table)) return table;
   // RR-105 (opf#1293): the environment now, and with the theme's exported heading and body faces back (exportedThemeView): a theme
   // font change made in PowerPoint is the document's (design.fontScheme), and the cells name the theme fonts, so it does not edit a cell.

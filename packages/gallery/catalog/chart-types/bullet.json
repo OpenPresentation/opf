@@ -1,0 +1,34 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
+  "id": "bullet",
+  "name": "Bullet",
+  "summary": "One thin bar per measure against its target tick, over shaded ranges: many KPIs and their targets on one slide.",
+  "mappings": {
+    "openxml": {
+      "element": "barChart",
+      "barDir": "bar",
+      "grouping": "clustered",
+      "composition": "mixed",
+      "series": [
+        {
+          "element": "barChart",
+          "barDir": "bar",
+          "grouping": "stacked"
+        },
+        {
+          "element": "barChart",
+          "barDir": "bar",
+          "grouping": "clustered"
+        },
+        {
+          "element": "scatterChart"
+        }
+      ],
+      "notes": "Bands as a stacked c:barChart (gap width 0) on the primary axes, which PowerPoint draws first; the measure as a clustered c:barChart (gap width 200) on deleted secondary axes of the same scale; the target as a c:scatterChart series without markers on the measure's axes (Y the category position), whose fixed Y error bars draw a tick at each target."
+    }
+  },
+  "group": "Bar",
+  "groupSort": 4,
+  "series": 1,
+  "complexity": "simple"
+}

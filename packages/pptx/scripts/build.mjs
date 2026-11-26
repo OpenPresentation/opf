@@ -13,6 +13,7 @@ await copyFile(new URL('src/legacy-tags.js', root), new URL('legacy-tags.js', di
 await copyFile(new URL('src/metric-provenance.js', root), new URL('metric-provenance.js', dist));
 await copyFile(new URL('src/numeral-shapes.js', root), new URL('numeral-shapes.js', dist));
 await copyFile(new URL('src/card-provenance.js', root), new URL('card-provenance.js', dist));
+await copyFile(new URL('src/embed-provenance.js', root), new URL('embed-provenance.js', dist));
 await copyFile(new URL('src/media-provenance.js', root), new URL('media-provenance.js', dist));
 await copyFile(new URL('src/heading-provenance.js', root), new URL('heading-provenance.js', dist));
 await copyFile(new URL('src/text-provenance.js', root), new URL('text-provenance.js', dist));
@@ -106,3 +107,5 @@ await copyFile(new URL('src/numbered-list.js', root), new URL('numbered-list.js'
 
 // SH-03: the shape effects (a:effectLst), kept on their own line so other work on the list above does not collide.
 await copyFile(new URL('src/effects.js', root), new URL('effects.js', dist));
+// FR-07: bands on value axes and the bullet chart, kept on their own line so other work on the lists above does not collide.
+await copyFile(new URL('src/chart-bands.js', root), new URL('chart-bands.js', dist));

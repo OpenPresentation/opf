@@ -334,6 +334,7 @@
               "list",
               "image",
               "video",
+              "embed",
               "chart",
               "table",
               "code",
@@ -345,7 +346,7 @@
               "group"
             ]
           },
-          "description": "Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A region that takes 'image' also takes a shape block. A group is also accepted where every one of its leaf kinds is. Omitted: every body content kind and 'group'.",
+          "description": "Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A region that takes 'image' also takes a shape block, and one that takes 'video' also takes an embed. A group is also accepted where every one of its leaf kinds is. Omitted: every body content kind and 'group'.",
           "examples": [
             [
               "text",

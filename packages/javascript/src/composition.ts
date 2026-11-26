@@ -10,14 +10,20 @@ export {vennNodes,type VennBox,type VennNode} from './venn-arrangement.js';
 import {timelineDurationFractions} from './timeline-duration.js';
 import {tableGrid,type TableCellStyle} from './table.js';
 import {inlineChartData,inlineTableData,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText,type DataTableCell} from './chart-data.js';
+import {bulletPlot} from './chart-bullet.js';
+import {placeBandLabels} from './chart-band-labels.js';
+import {chartBands} from './chart-bands.js';
 import {chartTextSize,chartValueAxis,chartComboAxes,shareSiblingChartAxes,type ChartValueAxis} from './chart-axis.js';
 import {chartHeader,chartLayer,type ChartLayer} from './chart-layer.js';
 import {NUMBER_GROUPING_MIN} from './number-grouping.js';
 import {formatNumber,languageInEffect,localizeDigits} from './numerals.js';
+import {resolveMetric,type MetricRecord} from './metric-data.js';
+import {METRIC_GAUGE_BOWL_GAP,METRIC_GAUGE_MAX_WIDTH_PX,METRIC_GAUGE_MIN_WIDTH_PX,METRIC_GAUGE_THICKNESS,metricGaugeGeometry,metricGaugeInput,type MetricGaugeEnd,type MetricGaugeInput,type MetricGaugeLayout} from './metric-gauge.js';
 import {chartNumberLanguage} from './chart-options.js';
 import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
 import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-labels.js';
+import {resolveTableColorScale,type TableColorScaleColors} from './table-color-scale.js';
 import {chartSlideFocus,slideFocusSources,tableHighlightRows,tableSlideFocus,type FocusSource} from './chart-focus.js';
 import {chartDoughnut,restackForRows,chartStack,chartReferences,chartValueList,chartWaterfall,horizontalBarPlot,placeReferences,refreshChartMarks} from './chart-marks.js';
 import {chartReferenceSources} from './chart-references.js';
@@ -25,6 +31,7 @@ import {chartHistogram} from './chart-histogram.js';
 import {chartNumericAxes} from './chart-numeric-axes.js';
 import {chartDrawPlan} from './chart-fallback.js';
 import {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
+import {embedAspect} from './embed.js';
 import {itemAlignment,resolveDesignHints,type DesignAlignment,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
 import {isLayoutTemplate,layoutTemplate,regionDiagram,regionListColumns,regionSequence,singleBlockRegion,titleBesideTemplate,withRegionRules,TITLE_BESIDE_SHARE,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
@@ -58,6 +65,8 @@ import {parseLogoName,resolveLogo,resolveOrganizationLogo,type LogoShape,type Lo
 export {LOGO_SHAPES,resolveLogo} from './logos.js';
 export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logos.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
+export {DATE_NAMES,DATE_NAMES_MISSING,DATE_NAME_SOURCE,DATE_PATTERNS} from './date-name-data.js';
+export {ENGLISH_DATE_NAMES,dateNamesOf,longDatePattern,type DateNames} from './date-names.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 import {legible, luminance as legibleLuminance, normalize as legibleHex} from './legible-color.js';
 import {applyColorTransform,colorContrast,colorTransform,layoutVariantApplies,resolveColorRoles,type ColorVariant} from './color.js';
@@ -81,6 +90,8 @@ export type {ComposedArrowhead, ComposedFill, ComposedGradient, ComposedShape, C
 export {CONNECTOR_ROUTES, CONNECTOR_STANDOFF, CONNECTOR_STROKE_COLOR, CONNECTOR_STROKE_WIDTH, OVERLAY_ANCHOR_SHARE, OVERLAY_EDGES, OVERLAY_LAYERS, chooseConnectorSites, connectorAdjustPreset, connectorRoute, frameToSlide, hasOverlayShapes, isOverlayConnector, overlayIssues, rectSites, shapeSites, slideBlockIds} from './overlay-shapes.js';
 export type {ComposedConnector, ComposedOverlayEntry, ComposedOverlayShape, ConnectionSite, ConnectorEnd, ConnectorFrame, ConnectorPreset, ConnectorRoute, ConnectorRouteGeometry, OverlayEdge, OverlayIssue, OverlayLayer} from './overlay-shapes.js';
 export {applyLuminance, applyColorTransform, colorTransform, clrMapAttributes, colorMapFor, deckBackgroundIsFixed, isColorVariant, isFixedBackground, layoutColorVariant, layoutVariantApplies, normalizeColorVariant, readableSchemeColor, NEUTRAL_SHARES} from './color.js';
+export {resolveTableColorScale,pinTableColorScale,tableColorScaleText,tableColorScaleOf,SCHEME_COLOR_NAMES,type TableColorScaleColors,type TableColorScaleCell,type TableColorScaleRange,type TableColorScaleResult,type TableColorScaleSpec,type SchemeColorName} from './table-color-scale.js';
+export {mixOklab,srgbToOklab,oklabToSrgb} from './oklab.js';
 export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartSlicePlan, CHART_SLICE_MAX_SHIFT, CHART_SLICE_SEPARATOR_PX, type ChartSlicePlan, chartSchemeSeries, chartSeriesPalette, resolveChartColors, chartHighlightColors, chartEmphasisColors, softenChartPalette, chartSoftColors, applyHslTransforms, type ChartSoftColor, chartSeriesLabelColor, CHART_SERIES_SOFT_MIX, CHART_EMPHASIS_MIN_CONTRAST, CHART_EMPHASIS_MIN_LIGHTNESS_STEP, CHART_SERIES_TINT_MIX, CHART_DARK_SERIES_MIN_CONTRAST, CHART_LEAD_LIGHTNESS_STEP, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, tableHighlightColor, TABLE_HIGHLIGHT_MIX, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_SERIES_TIER_SIZE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST, CARD_SURFACE_MIX, CARD_SURFACE_MIN_CONTRAST, CARD_TEXT_MIN_CONTRAST, CARD_BORDER_MIX, CODE_PANEL_DARK_SHADE} from './color.js';
 export type {ChartColorContext, ChartPaletteOptions, ColorAccentSlot, ColorBaseSlot, ColorMap, LayoutVariantDeck, LayoutVariantRole, ColorVariant, ColorVariantBackground, ColorVariantInput, SchemeColor, SchemeNeutrals, ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles} from './color.js';
 export {resolveScriptFonts, resolveSlideDirection, scriptFontRole} from './script-fonts.js';
@@ -91,6 +102,8 @@ export {CODE_HIGHLIGHT_LANGUAGES, CODE_HIGHLIGHT_MAX_LENGTH, CODE_PANEL_BACKGROU
 export type {CodeRun, CodeSyntaxPalette, CodeSyntaxPaletteOptions, CodeSyntaxPaletteTheme, CodeToken, CodeTokenKind} from './code-syntax.js';
 export {METRIC_TREND_ARROW_GAP, METRIC_TREND_ARROW_SIZE, METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, METRIC_VALUE_MIN_CONTRAST, metricPillFill, metricTrendColor, metricTrendMark, metricTrendPoints, metricValueColor} from './metric-trend.js';
 export type {MetricSentiment, MetricTrend, MetricTrendColorOptions, MetricTrendMark} from './metric-trend.js';
+export {blockArcPath, METRIC_GAUGE_BOWL_GAP, METRIC_GAUGE_MAX_WIDTH_PX, METRIC_GAUGE_MIN_WIDTH_PX, METRIC_GAUGE_TARGET_LENGTH, METRIC_GAUGE_TARGET_WIDTH_PX, METRIC_GAUGE_THICKNESS, METRIC_GAUGE_TRACK_SHARE, METRIC_GAUGE_VALUE_SHARE, metricGaugeAngle, metricGaugeDiagnostics, metricGaugeDrawing, metricGaugeGeometry, metricGaugeInput, metricGaugeNumber, metricGaugePoint, metricGaugeShare, metricGaugeSpec, metricGaugeTrackFill, metricGaugeValueFill} from './metric-gauge.js';
+export type {MetricGaugeArc, MetricGaugeBand, MetricGaugeColors, MetricGaugeDrawing, MetricGaugeEnd, MetricGaugeInput, MetricGaugeLayout} from './metric-gauge.js';
 export {TIMELINE_OUTLINE_MIN_CONTRAST, TIMELINE_STATUSES, TIMELINE_TEXT_MIN_CONTRAST, timelineMarkerShapes, timelineTextColor} from './timeline-status.js';
 export type {TimelineMarkerShape, TimelineStatusColors} from './timeline-status.js';
 export {codeHighlightBands, codeHighlightColors, codeHighlightLines, codeLineNumbers} from './code-highlight.js';
@@ -140,7 +153,7 @@ export interface LayoutDiagnostic {
    * `shape-off-slide` for an overlay shape or an image callout that lies wholly outside the slide, so nothing of it is drawn (advice, not an
    * overflow: a strict composition still composes it; a hidden shape is exempt, and a rotated one is judged by the circle through its corners).
    */
-  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "chart-label-collision" | "timeline-period-short" | "shape-off-slide";
+  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "chart-label-collision" | "timeline-period-short" | "shape-off-slide" | "chart-band-labels-in-legend" | "metric-gauge-dropped";
   path: string;
   message: string;
   /**
@@ -463,6 +476,8 @@ export interface ComposedItem {
   codeLayout?: CodeLayout;
   /** Complete shared metric geometry, including its unit, label and metadata. */
   metricLayout?: MetricLayout;
+  /** FR-06: the 0.37 part of a metric whose drawn form was computed or formatted (its link, `better`, `format`, which keys were derived): what a PowerPoint tag keeps beside the drawn form. `value` and `payload` hold the drawn form. */
+  metricRecord?: MetricRecord;
   /** Complete timeline fields, markers and connector accepted by composition. */
   timelineLayout?: TimelineLayout;
   /**
@@ -1175,7 +1190,7 @@ export class OPFCompositionError extends Error {
   }
 }
 // SH-02: `shape` and `path` make a shape block (isShapeBlock); on an image block `shape` is the frame's mask, never a leaf of its own.
-const fields = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "diagram", "shape", "path"];
+const fields = ["text", "items", "bullets", "image", "video", "embed", "chart", "table", "code", "metric", "quote", "timeline", "diagram", "shape", "path"];
 const leafFields = (host: Record<string, any>) => fields.filter(field => host[field] !== undefined && field !== 'shape' && field !== 'path');
 const headings = new Set(["title", "subtitle", "tag"]);
 const rows = ["top", "middle", "bottom"];
@@ -1727,12 +1742,12 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         // A current date is a live field: the host supplies today's calendar date.
         const format=content.dateFormat??DEFAULT_FURNITURE_DATE_FORMAT;
         if(options.date===undefined)error(`${path}.date`,'A current date needs a host-supplied ISO date option. For fixed content use a literal date, or an ISO date with dateFormat.','unresolved-content');
-        else{const resolved=formatFurnitureDate(options.date,format);if('error' in resolved)error(`${path}.dateFormat`,resolved.error,'unresolved-content');else add('date',resolved.text,true,undefined,{fields:[{type:'date',start:0,end:resolved.text.length,format}]});}
+        else{const resolved=formatFurnitureDate(options.date,format,languageInEffect(options.presentation,options.slideIndex));if('error' in resolved)error(`${path}.dateFormat`,resolved.error,'unresolved-content');else add('date',resolved.text,true,undefined,{fields:[{type:'date',start:0,end:resolved.text.length,format}]});}
       }
       else if(typeof content.date==='string'){
         // Without dateFormat a date string stays literal, editable source text.
         if(content.dateFormat===undefined)add('date',content.date);
-        else{const resolved=formatFurnitureDate(content.date,content.dateFormat);if('error' in resolved)error(`${path}.${parseIsoDate(content.date)?'dateFormat':'date'}`,resolved.error,'unresolved-content');else add('date',resolved.text,true,`${path}.date`);}
+        else{const resolved=formatFurnitureDate(content.date,content.dateFormat,languageInEffect(options.presentation,options.slideIndex));if('error' in resolved)error(`${path}.${parseIsoDate(content.date)?'dateFormat':'date'}`,resolved.error,'unresolved-content');else add('date',resolved.text,true,`${path}.date`);}
       }
       // Text fitted at a box width, with each source line's ink when outlines are provided.
       const fitPart=(part:PendingText,boxWidth:number)=>{
@@ -2744,6 +2759,13 @@ export interface MetricLayout {
    * Engines fill it with core metricPillFill under the delta and color the delta and arrow against that fill.
    */
   deltaPill?: { box: LayoutBox; radius: number; placement: 'beside' | 'above' };
+  /**
+   * FR-07, part 3: the metric's gauge (`MetricLayoutOptions.gauge`): the arc above the text, its bands, value, target and the labels under
+   * its ends (core metricGaugeDrawing turns it into what engines draw). Absent without a gauge, and when the region could not hold one.
+   */
+  gauge?: MetricGaugeLayout;
+  /** FR-07, part 3: the metric asked for a gauge but its region cannot hold an arc METRIC_GAUGE_MIN_WIDTH_PX wide: it is drawn as a plain metric. */
+  gaugeDropped?: true;
   /** At most 48 arrangements; value fitting is bounded by 77 reference-size trials per arrangement. */
   attempts: number;
   parts: MetricTextPart[];
@@ -2809,6 +2831,13 @@ export interface MetricLayoutOptions extends QuoteLayoutOptions {
    * their delta in place. The result says where (`MetricLayout.deltaPill`). `above` tries only above (sibling metrics draw one way).
    */
   deltaPill?: boolean | 'above';
+  /**
+   * FR-07, part 3: draw the metric as a gauge (core metricGaugeInput): an arc at the top of the box, as large as the box allows while the
+   * text keeps its sizes (at most METRIC_GAUGE_MAX_WIDTH_PX wide), the labels of its ends under them, and the metric's text stacked and
+   * centered under the arc (a tile, band, display size, eyebrow or pill does not apply), the value inside the arc's bowl when it fits there at
+   * the size it has under the arc. Below METRIC_GAUGE_MIN_WIDTH_PX the metric is laid out as without a gauge (`gaugeDropped`).
+   */
+  gauge?: MetricGaugeInput;
 }
 /** LH-137: layoutMetric places the delta pill this way (its two trials of `deltaPill`). */
 const PILL_PLACEMENT = Symbol('opf.pillPlacement');
@@ -2931,6 +2960,80 @@ export const QUOTE_PORTRAIT_SHARE = .26, QUOTE_PORTRAIT_STEP = .02, QUOTE_PORTRA
 const portraitFocus = (): ImageFocus => ({ x: 0.5, y: PORTRAIT_FOCUS_Y });
 
 /**
+ * FR-07, part 3: a metric with a gauge (MetricLayoutOptions.gauge). The arc's frame is the square around its circle, of which the upper half
+ * is drawn, from the top of the box; the labels of its ends stand under the ends of the track, in the secondary text at the readability floor.
+ * The text is laid out under them; then, when the value is one line, it is laid out again with the value's baseline on the arc's center line
+ * (the same sizes), and that is kept when the value line and everything else above the center line lie inside the track's inner circle and
+ * nothing below it meets an end's label: the value stands in the bowl. "Fits" is measured on each line's box (its accepted width, from three
+ * quarters of its size above the baseline to the baseline) against the track's inner circle less a gap.
+ *
+ * The arc's size: the largest radius, from the smallest of half the box's width, METRIC_GAUGE_MAX_WIDTH_PX / 2 and the box's height, down by
+ * a tenth at a time, at which the text keeps the sizes it has at the box's width without a height limit; when none keeps them, the largest at
+ * which the text fits at all (down to the readability floor); when none, the metric is laid out without its gauge (`gaugeDropped`).
+ */
+function layoutGaugeMetric(value: string | number | MetricContent, box: LayoutBox, options: MetricLayoutOptions): MetricLayout {
+  const input = options.gauge!, {gauge: _input, ...plainOptions} = options;
+  const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSizePx ?? 16) * scale), gap = 8 * scale;
+  const inner: MetricLayoutOptions = {...plainOptions, align: 'center', tile: false, band: false, eyebrow: false, deltaPill: false};
+  // A tile's floors (the sizes its metric fitted at as a stack, LH-68) are a tile's: under an arc the text fits down to the readability floor.
+  delete inner.display; delete inner.tileFoot; delete inner.minimumSizes;
+  const endStyle = resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 500, italic: false, path: `${options.path ?? 'metric'}.gauge`}, options.textMeasurement);
+  const endWidth = textWidthMeasurer(endStyle, options.textMeasurement), endSize = minimum, endLine = endSize * 1.22;
+  const largest = Math.min(box.width / 2, box.height - 2 * gap - endLine, METRIC_GAUGE_MAX_WIDTH_PX / 2 * scale), smallest = METRIC_GAUGE_MIN_WIDTH_PX / 2 * scale;
+  const radii: number[] = [];
+  for (let radius = largest; radius >= smallest - 1e-9; radius *= .9) radii.push(radius);
+  if (largest >= smallest - 1e-9 && radii[radii.length - 1]! > smallest + 1e-9) radii.push(smallest);
+  const sizes = (layout: MetricLayout) => Object.fromEntries(layout.parts.filter(part => part.visible && part.fit).map(part => [part.role, part.fit!.fontSize]));
+  const keepsSizes = (layout: MetricLayout, wanted: Record<string, number>) => Object.entries(wanted).every(([role, size]) => (sizes(layout)[role] ?? 0) >= size - FONT_GRID_EPSILON);
+  const capped = (wanted: Record<string, number>) => { const roleSizes = {...options.roleSizes}; for (const [role, size] of Object.entries(wanted)) roleSizes[role as MetricTextRole] = Math.min(roleSizes[role as MetricTextRole] ?? Infinity, size); return roleSizes; };
+  const meets = (a: LayoutBox, b: LayoutBox) => a.x < b.x + b.width - .01 && b.x < a.x + a.width - .01 && a.y < b.y + b.height - .01 && b.y < a.y + a.height - .01;
+  // The sizes the text has at the box's width when height does not limit it: what the arc gives way to.
+  const natural = sizes(layoutMetric(value, {x: box.x, y: box.y, width: box.width, height: 1e6}, inner));
+  const attempt = (radius: number, strict: boolean): MetricLayout | undefined => {
+    const center = {x: box.x + box.width / 2, y: box.y + radius}, thickness = radius * METRIC_GAUGE_THICKNESS;
+    const ends = input.ends.map((text, index): MetricGaugeEnd => {
+      const width = endWidth(text, endSize), middle = index === 0 ? center.x - radius + thickness / 2 : center.x + radius - thickness / 2;
+      const left = Math.max(box.x, Math.min(box.x + box.width - width, middle - width / 2));
+      return {text, x: left + width / 2, baseline: center.y + gap + endSize, fontSize: endSize, width, box: {x: left, y: center.y + gap, width, height: endLine}};
+    }) as [MetricGaugeEnd, MetricGaugeEnd];
+    if (ends[0].box.x + ends[0].box.width + gap > ends[1].box.x) return undefined;
+    const endsBottom = center.y + gap + endLine, below = {x: box.x, y: endsBottom + gap, width: box.width, height: box.y + box.height - endsBottom - gap};
+    // The bowl's room: the track's inner radius less METRIC_GAUGE_BOWL_GAP of the radius (at least the metric's gap), so a value never crowds the arc.
+    const room = radius - thickness - Math.max(gap, radius * METRIC_GAUGE_BOWL_GAP), within = (x: number, y: number) => Math.hypot(x - center.x, Math.min(0, y - center.y)) <= room + .01;
+    const lineBoxes = (part: MetricTextPart) => part.fit!.sourceLines.map((line, index) => ({x: part.linePositions[index]!.x, top: part.linePositions[index]!.baseline - .75 * part.fit!.fontSize, right: part.linePositions[index]!.x + line.width, baseline: part.linePositions[index]!.baseline}));
+    // The value in the bowl: its baseline on the center line, every line above it inside the inner circle, nothing below it on an end's label.
+    const inBowl = (layout: MetricLayout) => !layout.overflow && layout.parts.filter(part => part.visible && part.fit && part.linePositions.length).every(part => lineBoxes(part).every(line =>
+      line.baseline <= center.y + .01 ? within(line.x, line.top) && within(line.right, line.top) && within(line.x, line.baseline) && within(line.right, line.baseline)
+        : line.top >= center.y - .01 && !ends.some(end => meets(end.box, {x: line.x, y: line.top, width: line.right - line.x, height: line.baseline - line.top + .3 * part.fit!.fontSize}))))
+      && (!layout.trendBox || layout.trendBox.y >= center.y - .01 && !ends.some(end => meets(end.box, layout.trendBox!)) || within(layout.trendBox.x, layout.trendBox.y) && within(layout.trendBox.x + layout.trendBox.width, layout.trendBox.y + layout.trendBox.height));
+    let chosen: MetricLayout | undefined, bowl = false;
+    // The bowl first: the text laid out once without a height limit says where the value's baseline stands in its stack.
+    const probe = layoutMetric(value, {...below, height: 1e6}, {...inner, roleSizes: capped(natural)}), valuePart = probe.parts[0]!;
+    if (valuePart.fit?.sourceLines.length === 1 && valuePart.linePositions.length === 1) {
+      const top = center.y - (valuePart.linePositions[0]!.baseline - below.y), wanted = strict ? natural : sizes(probe);
+      const laid = layoutMetric(value, {x: box.x, y: top, width: box.width, height: box.y + box.height - top}, {...inner, roleSizes: capped(wanted)});
+      if (keepsSizes(laid, wanted) && inBowl(laid)) { chosen = laid; bowl = true; }
+    }
+    if (!chosen && below.height > 0) {
+      const laid = layoutMetric(value, below, strict ? {...inner, roleSizes: capped(natural)} : inner);
+      if (!laid.overflow && (!strict || keepsSizes(laid, natural))) chosen = laid;
+    }
+    if (!chosen) return undefined;
+    const geometry = metricGaugeGeometry(input, center, radius, scale);
+    const right = Math.max(center.x + radius, ends[1].box.x + ends[1].box.width), left = Math.min(center.x - radius, ends[0].box.x);
+    const gauge: MetricGaugeLayout = {...geometry, ends, endStyle, inBowl: bowl, box: {x: left, y: box.y, width: right - left, height: endsBottom - box.y}};
+    const bottom = Math.max(endsBottom, chosen.bounds.y + chosen.bounds.height);
+    const layout: MetricLayout = {...chosen, bounds: {x: box.x, y: box.y, width: box.width, height: bottom - box.y}, gauge};
+    if (FIGURE_LINES.has(chosen)) FIGURE_LINES.add(layout);
+    return layout;
+  };
+  for (const strict of [true, false]) for (const radius of radii) { const layout = attempt(radius, strict); if (layout) return layout; }
+  const plain = layoutMetric(value, box, plainOptions), layout: MetricLayout = {...plain, gaugeDropped: true};
+  if (FIGURE_LINES.has(plain)) FIGURE_LINES.add(layout);
+  return layout;
+}
+
+/**
  * Measure every metric field before accepting geometry. Short single-line values and units can
  * share a baseline; longer values or units stack. No locale formatting or rewritten source text is
  * invented here. LH-53: the trend is drawn as an arrow, not as its word (an English word, which also
@@ -2961,6 +3064,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   }
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Metric raster padding must be finite and nonnegative.');
   if (options.overflow!==undefined&&!['warn','error'].includes(options.overflow)) throw new RangeError('Invalid metric overflow policy.');
+  // FR-07, part 3: a gauge lays the metric out under its arc.
+  if (options.gauge) return layoutGaugeMetric(value,box,options);
   // LH-137: a delta pill beside the value where every field keeps its size, else above it, else none (the delta in its place).
   const pillPlacement=(options as Record<symbol,unknown>)[PILL_PLACEMENT] as 'beside'|'above'|undefined;
   if (options.deltaPill&&!pillPlacement&&!options.tile&&!options.band&&metric.delta!==undefined&&String(metric.delta).trim()!=='') {
@@ -4734,6 +4839,11 @@ export interface TableLayoutOptions {
   growth?: number;
   /** LH-113: the body rows (0-based, after the header) drawn on the highlight tint (`ComposedItem.tableHighlight`); their cells are `highlighted`. */
   highlight?: readonly number[];
+  /**
+   * FR-07: how the scheme names of `table.colorScale` resolve (the effective color scheme), with the scheme's text and background colors.
+   * With it a table that has a color scale gives each number cell of the named columns its fill and text color (`TableCellLayout.scaled`).
+   */
+  colorScale?: TableColorScaleColors;
 }
 export interface TableCellLayout {
   /** Logical alignment, shared by preview and native export. A column of numbers (LH-117) resolves to the physical right even in RTL. */
@@ -4754,6 +4864,8 @@ export interface TableCellLayout {
   direction?: TextDirection;
   /** LH-113: a body cell of a highlighted row: without a fill of its own it takes the highlight tint (core `tableHighlightColor`). */
   highlighted?: true;
+  /** FR-07: the fill and the text color the table's color scale gives this number cell (`#RRGGBB`). A fill of the cell's own wins and has none here; it also wins over the highlight tint. */
+  scaled?: {fill: string; text: string};
 }
 export interface TableRowLayout { box: LayoutBox; cells: TableCellLayout[] }
 export interface TableLayout {
@@ -4807,6 +4919,8 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   const columnCount=grid.columnCount;
   // LH-113: the highlighted body rows, counted after the header rows.
   const headerRows=Number(grid.hasHeaders),highlighted=new Set(options.highlight??[]);
+  // FR-07: the color scale's fill and text color of each shaded number cell (body row, column).
+  const scaleOf=options.colorScale?resolveTableColorScale(inline,options.colorScale,resolveTableData(value,options.presentation).types):undefined;
   const cells=grid.rows.flat().map(cell=>{
     const padding={top:8,right:10,bottom:4,left:10,...cell.style.padding};
     const width=0;
@@ -4919,7 +5033,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const offset=cell.style.anchor==='bottom'?Math.max(0,available-height):cell.style.anchor==='middle'?Math.max(0,(available-height)/2):0;
     const textBox={x:cellBox.x+cell.padding.left*scale,y:cellBox.y+cell.padding.top*scale+offset,width:Math.max(scale,cell.width),height:Math.max(scale,available-offset)};
     overflow ||= cell.width<=0||available<=0||fit.overflow;
-    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{}),...(!cell.header&&highlighted.has(cell.row-headerRows)?{highlighted:true as const}:{})});
+    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{}),...(!cell.header&&highlighted.has(cell.row-headerRows)?{highlighted:true as const}:{}),...(()=>{const scaled=cell.header?undefined:scaleOf?.at(cell.row-headerRows,cell.column);return scaled?{scaled:{fill:scaled.fill,text:scaled.text}}:{};})()});
   }
   overflow ||= sum(heights)>box.height+.01;
   return {rows,columnCount,height:sum(heights),overflow,columnWidths:[...columnWidths],splitsWords:false,naturalWidth,minimumWidth,naturalHeight:naturalTotal};
@@ -5896,7 +6010,7 @@ function withPictureScrim(input: unknown, options: ComposeSlideOptions, result: 
     if (onPanel(item.box)) continue;
     if (item.caption) body.push(item.caption.box);
     if (item.text && !item.frameBox && !item.emphasis) line = Math.max(line, item.text.lineHeight);
-    if (item.frameBox || item.emphasis || item.codeLayout || ['image', 'video', 'code', 'table', 'diagram'].includes(item.field)) continue;
+    if (item.frameBox || item.emphasis || item.codeLayout || ['image', 'video', 'embed', 'code', 'table', 'diagram'].includes(item.field)) continue;
     body.push(result.direction === 'rtl' ? item.box : textInkBox(item, options.textMeasurement));
     if (item.quoteLayout || item.metricLayout || item.timelineLayout) muted = true;
     if (item.metricLayout || item.timelineLayout) accent = true;
@@ -6873,7 +6987,7 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
   const before = quality(base), floor = snapFontSizeUp((base.composition.minFontSizePx ?? 16) * scale);
   const attempt = (flag: symbol, value: unknown) => composeVariant(input, { ...options, [flag]: value } as ComposeSlideOptions, before, floor);
   const physical = (edge: ImageEdge): ImageEdge => base.direction === 'rtl' && (edge === 'left' || edge === 'right') ? (edge === 'left' ? 'right' : 'left') : edge;
-  if (pictures.length === 1 && !leaf('video').length) {
+  if (pictures.length === 1 && !leaf('video').length && !leaf('embed').length) {
     const index = pictures[0]!, host = record(blocks[index]), fit = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : base.design.imageFit;
     if (fit === 'contain' || fit === 'stretch' || host.aspectRatio !== undefined || (host.shape !== undefined && host.shape !== 'rect' && host.shape !== 'roundRect')) return base;
     const edge: ImageEdge = landscape ? (index === 0 ? 'left' : 'right') : (index === 0 ? 'top' : 'bottom');
@@ -6905,7 +7019,7 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
     }
     return { ...best.result, items, track: { kind: 'picture', edge: physical(edge), size: best.size, path: blockPath } };
   }
-  if (pictures.length || leaf('video').length || charts.length !== 1) return base;
+  if (pictures.length || leaf('video').length || leaf('embed').length || charts.length !== 1) return base;
   // opf#1412 (A3): a slide that asks for its blocks in a column (a row on a portrait canvas) keeps them so: the chart's track would set
   // the chart beside the others.
   if (own.mode === (landscape ? 'column' : 'row')) return base;
@@ -7846,7 +7960,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   // LH-49's chart track uses a synthetic content group without its own OPF path; it records no group, flow or decision.
   // LH-06: `emphasis` is the path of the block or group whose `emphasis: true` the node carries.
-  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean;
+  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; metricRecord?: MetricRecord; metricGauge?: MetricGaugeInput; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean;
     /** LH-131: a cell of a featured pair or set other than the featured one: drawn on one plain card (a group's blocks share it). */
     cardCell?: boolean;
     /** LH-50: the label drawn as this paragraph's eyebrow (LH-152: or this list's or group's). */
@@ -7865,11 +7979,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const key = host.shape !== undefined || host.path === undefined ? 'shape' : 'path';
       return [{ field: 'shape', type: 'shape', value: host[key], path: `${basePath}.${key}`, payload: shapePayload(host), host, hostPath: basePath, ...(cardCells.has(basePath) ? { cardCell: true } : {}) }];
     }
-    // RR-34: a caption belongs to the host's one captionable payload (image, chart, table or video).
+    // RR-34: a caption belongs to the host's one captionable payload (image, chart, table, video or embed).
     const captioned = host.caption !== undefined ? fields.filter(field => host[field] !== undefined && CAPTIONABLE_FIELDS.includes(field)) : [];
     // RR-54: a dataset-backed chart or table is composed from its inline copy (options.presentation holds the datasets).
-    const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : host[field];
-    return leafFields(host).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
+    // FR-06: a metric linked to data (or with a number format or a direction that is good) is composed as the 0.36 form of what it draws.
+    const metricResolved = host.metric !== undefined ? resolveMetric(host.metric, options.presentation, {...numberLanguage(options)}) : undefined;
+    const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : field === 'metric' && metricResolved ? metricResolved.metric : host[field];
+    return leafFields(host).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, ...(field === 'metric' && metricResolved?.record ? { metricRecord: metricResolved.record } : {}), ...(field === 'metric' && metricResolved && metricGaugeInput(host.metric, metricResolved, numberLanguage(options).language) ? { metricGauge: metricGaugeInput(host.metric, metricResolved, numberLanguage(options).language)! } : {}), payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
       ...(field === 'image' ? { host, hostPath: basePath } : {}), ...(host.emphasis === true || basePath === featuredPath ? { emphasis: basePath } : {}), ...(cardCells.has(basePath) ? { cardCell: true } : {}), ...((field === 'text' || field === 'items' || field === 'bullets') && eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
       ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
@@ -8183,6 +8299,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // LH-137: the delta as a pill beside or above the value (the guarded rule `delta-pill`). Not in LH-83's automatic grid at the floor
       // (RECOMPOSE): the room a pill frees there would decide between the layout and the grid, which the pill, a drawing, never does.
       ...(ruleOn('delta-pill')&&(options as Record<symbol,unknown>)[RECOMPOSE]!==true?{deltaPill:pill??true}:{}),
+      // FR-07, part 3: a metric with a gauge draws its arc above its text.
+      ...(node.metricGauge?{gauge:node.metricGauge}:{}),
     };
     // LH-15: a metric at display size in a cell at least METRIC_BAND_RATIO times as wide as it is tall (as the cell gives it, or as the metric
     // stacks when the cell takes its natural height) is a band: the value at the start and its other fields beside it.
@@ -8592,6 +8710,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const frame = (aspect: number) => { const box = containedBox(cell, aspect, 'top'); return box.width * box.height; };
     if (node.field === 'image') { const aspect = wholePictureAspect(node); return aspect ? frame(aspect) : cell.width * cell.height; }
     if (node.field === 'video') return frame(VIDEO_ASPECT);
+    if (node.field === 'embed') return frame(embedAspect(node.value));
     if (node.field === 'chart' || node.field === 'diagram') return frame(SPLIT_CHART_SHAPE);
     if (node.field === 'shape') return frame(Number(record(node.host).aspectRatio) > 0 ? Number(record(node.host).aspectRatio) : presetAspect(typeof record(node.host).shape === 'string' ? record(node.host).shape : undefined));
     if (!MEASURED_FIELDS.has(node.field)) return cell.width * cell.height;
@@ -8681,7 +8800,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       placeNode(node, { ...cell, y: cell.y + (cell.height - need) / 2, height: need }, settings);
       return;
     }
-    if (node.field === 'image' || node.field === 'video' || node.field === 'diagram' || node.field === 'shape') placeNode(node, cell, settings, hasCards, undefined, undefined, 'middle');
+    if (node.field === 'image' || node.field === 'video' || node.field === 'embed' || node.field === 'diagram' || node.field === 'shape') placeNode(node, cell, settings, hasCards, undefined, undefined, 'middle');
     else if (node.field === 'chart') {
       const height = modeFor(settings) === 'auto' && inner.height > chartMaxHeight(node, inner.width) ? chartMaxHeight(node, inner.width) : inner.height;
       placeNode(node, { ...inner, y: inner.y + (inner.height - height) / 2, height }, settings, false);
@@ -8808,7 +8927,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // of pictures and videos only keeps one cell width, as LH-47 keeps a gallery's. opf#1412 (A7): so does a `grid` whose columns the
     // engine chose.
     if (!paragraphs && !lead && (mode === 'auto' || (mode === 'grid' && settings.columns === undefined)) && !hasRegions && count === nodes.length && cols > 1 && count % cols !== 0 && !settings.weights?.length && ruleOn('short-row')
-      && !nodes.every(node => !node.children && (node.field === 'image' || node.field === 'video')) && !team) {
+      && !nodes.every(node => !node.children && (node.field === 'image' || node.field === 'video' || node.field === 'embed')) && !team) {
       const first = count - count % cols, short = count - first, cell = (area.width - grid.gap * (short - 1)) / short;
       for (let k = 0; k < short; k++) grid.boxes[first + k] = { ...grid.boxes[first + k]!, x: area.x + k * (cell + grid.gap), width: cell };
       fire('short-row');
@@ -8944,7 +9063,21 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const small = layer?.small ? (({emphasis: _emphasis, ...rest}) => rest)(layer.small) : undefined;
       layer = {...layer, ...(small ? {small} : {}), focus};
     }
+    let beforeStack: ChartLayer | undefined;
+    // Explicit references use the same primary/secondary scales and plot in both engines.
+    const placeChartReferences = () => {
+      if (!drawn.data.ok || !references.length || !valueAxis) return;
+      const data = drawn.data;
+      const plotGeometry = {scale, minFontSizePx: settings.minFontSizePx, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
+      const secondaryValueAxis=chartComboAxes(drawn.chart,data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSizePx:settings.minFontSizePx,language})?.secondary;
+      const plot = layer?.plot ?? (typeof (drawn.chart as {type?:unknown})?.type==='string'&&(drawn.chart as {type:string}).type==='bar' ? horizontalBarPlot(drawn.chart,data,layer,valueAxis,box,plotGeometry) ?? chartPlotInset(drawn.chart,data,{valueAxis,...(layer?{layer}:{})},{...plotGeometry,box}) : chartPlotInset(drawn.chart, data, {valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})}, {...plotGeometry, box}));
+      const placed = plot ? placeReferences(references, data, {value:valueAxis,...(secondaryValueAxis?{secondary:secondaryValueAxis}:{})}, box, plot, {...plotGeometry,horizontal:(drawn.chart as {type?:unknown})?.type==='bar',chartType:(drawn.chart as {type?:string})?.type}) : undefined;
+      if (placed && plot) {
+        layer = {...layer, plot, references: placed};
+      }
+    };
     // LH-105: direct labels instead of a legend: the series names at the line ends, the category names on the slices (chart-direct-labels.ts).
+    const beforeEnds = layer;
     const ends = drawn.data.ok ? chartEndLabels(drawn.chart, drawn.data, layer, geometry, axisFor) : undefined;
     if (ends) ({layer, valueAxis} = ends);
     const slices = drawn.data.ok ? chartSliceLabels(drawn.chart, drawn.data, geometry) : undefined;
@@ -8969,16 +9102,49 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (doughnut) layer = {...layer, doughnut};
       // LH-109: values inside stacked segments and the series names beside the last column.
       const data = drawn.data;
+      beforeStack = layer;
       const stack = chartStack(drawn.chart, data, layer, geometry, axisFor, legend => chartHeader(drawn.chart, data, geometry, {legend}));
       if (stack) ({layer, valueAxis} = stack);
-      // Explicit references use the same primary/secondary scales and plot in both engines.
-      if (references.length && valueAxis) {
-        const plotGeometry = {scale, minFontSizePx: settings.minFontSizePx, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
-        const secondaryValueAxis=chartComboAxes(drawn.chart,data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSizePx:settings.minFontSizePx,language})?.secondary;
-        const plot = layer?.plot ?? (typeof (drawn.chart as {type?:unknown})?.type==='string'&&(drawn.chart as {type:string}).type==='bar' ? horizontalBarPlot(drawn.chart,data,layer,valueAxis,box,plotGeometry) ?? chartPlotInset(drawn.chart,data,{valueAxis,...(layer?{layer}:{})},{...plotGeometry,box}) : chartPlotInset(drawn.chart, data, {valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})}, {...plotGeometry, box}));
-        const placed = plot ? placeReferences(references, data, {value:valueAxis,...(secondaryValueAxis?{secondary:secondaryValueAxis}:{})}, box, plot, {...plotGeometry,horizontal:(drawn.chart as {type?:unknown})?.type==='bar',chartType:(drawn.chart as {type?:string})?.type}) : undefined;
-        if (placed && plot) {
-          layer = {...layer, plot, references: placed};
+      placeChartReferences();
+    }
+    // FR-07: a bullet chart's plot, which the preview draws and the PowerPoint export writes as its inner plot layout.
+    const bullet = drawn.data.ok ? bulletPlot(drawn.chart, drawn.data, valueAxis, box, {scale, minFontSizePx: settings.minFontSizePx, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})}) : undefined;
+    if (bullet) layer = {...layer, plot: bullet};
+    // FR-07 (owner, "1B"): the labels of labeled bands inside their bands, on the plot composition pins (the bullet's, a bar chart's, or the
+    // category plot both engines lay out); the PowerPoint export writes them as data labels at the same boxes. When one does not fit or meets
+    // a mark at both places, every band label of the chart goes to the legend (bands first), with a diagnostic.
+    if (drawn.data.ok && valueAxis && chartBands(drawn.chart).some((band) => band.label !== undefined)) {
+      const data = drawn.data, chartType = String((drawn.chart as {type?: unknown}).type ?? '');
+      const plotGeometry = {scale, minFontSizePx: settings.minFontSizePx, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
+      const horizontal = ['bar', 'stacked-bar', '100pct-stacked-bar'].includes(chartType);
+      const plot = layer?.plot ?? (horizontal ? horizontalBarPlot(drawn.chart, data, layer, valueAxis, box, plotGeometry) ?? chartPlotInset(drawn.chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...plotGeometry, box}) : chartPlotInset(drawn.chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...plotGeometry, box}));
+      const record = drawn.chart as Record<string, unknown>;
+      const labeled = Boolean(layer?.small?.labels || layer?.stack?.values?.some((row) => row.some(Boolean)) || (record.dataLabels !== undefined && record.dataLabels !== false));
+      const avoid = [...(layer?.references?.lines ?? []).flatMap((line) => [{x: Math.min(line.x1, line.x2) - 2, y: Math.min(line.y1, line.y2) - 2, width: Math.abs(line.x2 - line.x1) + 4, height: Math.abs(line.y2 - line.y1) + 4}, ...(line.labelBox ? [line.labelBox] : [])]), ...(layer?.endLabels?.entries ?? []).map((entry) => entry.box)];
+      const placed = plot ? placeBandLabels(drawn.chart, data, valueAxis, box, plot, {...plotGeometry, labeled, avoid}) : {labels: [], legend: true as const, reason: 'too-large' as const};
+      if (placed && !placed.legend) layer = {...layer, plot, bandLabels: placed};
+      else if (placed) {
+        diagnostics.push({code: 'chart-band-labels-in-legend', path: node.path, message: placed.reason === 'collision'
+          ? 'A band label meets a data mark or a data label at both of its places, so the chart lists its band labels in the legend instead (bands first, then the data series).'
+          : 'A band label does not fit inside its band, so the chart lists its band labels in the legend instead (bands first, then the data series). Shorten the label or widen the band to write it inside.'});
+        layer = {...layer, bandLabels: placed};
+        if (chartType === 'bullet') { const plain = bulletPlot(drawn.chart, data, valueAxis, box, plotGeometry, {bandsInLegend: true}); if (plain) layer = {...layer, plot: plain}; }
+        else if (layer?.header?.legend) { const header = chartHeader(drawn.chart, data, geometry, {bands: true}); if (header) layer = {...layer, header}; }
+        // Nothing is lost (supervisor, 2026-11-26): a chart that shows no legend (its series named beside the last column or at the line
+        // ends, or one series) and has no legend option gets a header legend of its bands alone; its series stay named where they are.
+        else if ((drawn.chart as {legend?: unknown}).legend === undefined && chartType !== 'bullet') {
+          const bandsHeader = (legend: boolean) => chartHeader(drawn.chart, data, geometry, {legend, bands: true});
+          if (layer?.stack?.names && beforeStack) {
+            const again = chartStack(drawn.chart, data, beforeStack, geometry, axisFor, bandsHeader);
+            if (again) { ({layer, valueAxis} = again); placeChartReferences(); layer = {...layer, bandLabels: placed}; }
+          } else if (layer?.endLabels) {
+            const again = chartEndLabels(drawn.chart, data, beforeEnds, geometry, axisFor, {bands: true});
+            if (again) { ({layer, valueAxis} = again); placeChartReferences(); layer = {...layer, bandLabels: placed}; }
+          } else {
+            const header = bandsHeader(false);
+            const axis = header ? axisFor(header.height) : undefined;
+            if (header && axis) { const {plot: _plot, references: _references, ...rest} = layer ?? {}; layer = {...rest, header, bandLabels: placed}; valueAxis = axis; placeChartReferences(); }
+          }
         }
       }
     }
@@ -9132,7 +9298,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   /** LG1: the names drawn as wordmark tiles among logos; their text is centered in the tile. */
   const wordmarks = new WeakSet<Pending>();
   const reserveCaptions = (units: Pending[], boxes: LayoutBox[], cards: boolean): void => {
-    const media = (unit: Pending) => !unit.children && (unit.field === 'image' || unit.field === 'video');
+    const media = (unit: Pending) => !unit.children && (unit.field === 'image' || unit.field === 'video' || unit.field === 'embed');
     const rows = new Map<string, number[]>();
     units.forEach((unit, index) => { const box = boxes[index]; if (media(unit) && box) { const key = `${Math.round(box.y)}:${Math.round(box.height)}`; rows.set(key, [...rows.get(key) ?? [], index]); } });
     for (const row of rows.values()) {
@@ -9286,6 +9452,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // WI-3 (P23): a video draws in a 16:9 frame, the largest that fits its cell, placed by the region's anchor. In automatic
     // composition (no layout) a chart is at most 4:3, so a tall cell does not stretch it (P32).
     if (node.field === 'video') box = roundBox(containedBox(box, VIDEO_ASPECT, anchor));
+    // FR-08: an embed's frame is the largest box of its aspectRatio (16:9 when it has none) that fits its cell, placed as a video's is.
+    else if (node.field === 'embed') box = roundBox(containedBox(box, embedAspect(node.value), anchor));
     else if (node.field === 'chart' && !templateCell && modeFor(settings) === 'auto' && box.height > chartMaxHeight(node, box.width)) {
       // RR-105: the slide's only chart is centered in the body it does not fill (the owner's direction: a lone body is centered).
       const height = chartMaxHeight(node, box.width);
@@ -9310,7 +9478,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (caption && diagram && !diagram.issue) settleCaption(caption, diagram.box, anchor);
     items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:codeLayout&&!codeLayout.overflow?{...acceptedBox(box),height:Math.min(acceptedBox(box).height,round(codeLayout.bounds.height))}:internal?acceptedBox(box):box, ...(image ? {image} : {}), ...(chart ? {chart} : {}), ...(diagram ? {diagram} : {}),
       ...(frameBox && !emphasized ? {frameBox} : {}),
-      text, ...(node.field === 'text' && text && 'richLines' in text && runInOf(node.value) ? {runs: runInOf(node.value)!} : {}), textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: tile || (metricLayout && metricStarts(node)) ? 'left' : alignment, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
+      text, ...(node.field === 'text' && text && 'richLines' in text && runInOf(node.value) ? {runs: runInOf(node.value)!} : {}), textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: tile || (metricLayout && metricStarts(node)) ? 'left' : alignment, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(node.metricRecord?{metricRecord:node.metricRecord}:{}), ...(timelineLayout?{timelineLayout}:{}),
       ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}),
       ...(regionTag !== undefined ? {region: regionTag} : {}), ...(columns && columns.length > 1 ? {listColumns: columns} : {}), ...(onSurface ? {emphasis: true as const} : {}), ...(tile ? {metricTile: true as const} : {}), ...(node.field === 'table' && growthOf.has(node) ? {tableGrowth: growthOf.get(node)!} : {}) });
     // LH-06: an emphasized leaf's card is the surface (a block with several payload fields: around all of them).
@@ -10553,7 +10721,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-47: the cells of a short last row stretch to the full width, except in a grid of pictures and videos, whose cells keep
     // one size (one aspect) and center.
     // LH-132: a team's short last row keeps its cards at one width, so every portrait has one size.
-    const stretchesLastRow = (units: Pending[]) => !units.every(unit => !unit.children && (unit.field === 'image' || unit.field === 'video')) && !units.every(unit => personParts.has(unit.path));
+    const stretchesLastRow = (units: Pending[]) => !units.every(unit => !unit.children && (unit.field === 'image' || unit.field === 'video' || unit.field === 'embed')) && !units.every(unit => personParts.has(unit.path));
     // LH-82: blocks of another kind taken out of a grid sit in one row under it, or stacked when that is shorter, and ask for at
     // most MOVED_SHARE of the content box (down to their height at the floor), so the grid keeps about 60-65% of the body.
     const MOVED_SHARE = .3;
@@ -13172,9 +13340,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
   }
   diagnostics.push(...imageCalloutDiagnostics);
+  // FR-07, part 3: a gauge its region cannot hold is drawn as a plain metric, and said so (advice, not an overflow).
+  for (const item of items) if (item.metricLayout?.gaugeDropped) diagnostics.push({code: 'metric-gauge-dropped', path: item.path, message: `The metric's region cannot hold a gauge ${METRIC_GAUGE_MIN_WIDTH_PX} reference pixels wide with its text at the readability floor, so it is drawn as a plain metric. Give it a larger region to draw the gauge.`});
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
   const failures = diagnostics.filter(diagnostic => {
-    if(diagnostic.code==='chart-label-collision'||diagnostic.code==='timeline-period-short'||diagnostic.code==='shape-off-slide')return false;
+    if(diagnostic.code==='chart-label-collision'||diagnostic.code==='timeline-period-short'||diagnostic.code==='shape-off-slide'||diagnostic.code==='chart-band-labels-in-legend'||diagnostic.code==='metric-gauge-dropped')return false;
     if(composition.overflow==='error')return true;
     let path = diagnostic.path;
     while (path) {
@@ -13313,6 +13483,12 @@ export {chartDoughnut,restackForRows,chartWaterfall,waterfallRoles,waterfallLabe
 export type {ChartLayerDoughnut,WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartLayerReferences} from './chart-marks.js';
 export type {ChartReference,ChartReferenceDiagnostic} from './chart-references.js';
 export {CHART_REFERENCE_TYPES,chartReferenceSources} from './chart-references.js';
+// FR-07: bands on value axes and the bullet chart; the gauge reuses the sorted, clamped band list and the band colors.
+export {CHART_BAND_TYPES,CHART_BAND_NEUTRAL_CONTRASTS,CHART_BAND_MUTED_CONTRAST,chartBandMutedColor,neutralFill as chartBandNeutral,CHART_BAND_COLOR_SHARE,chartBands,chartBandMaximum,chartBandRanges,chartBandFill,chartBandFills,chartBandDiagnostics,BULLET_CHART_TYPE,BULLET_BAR_SHARE,BULLET_TARGET_SHARE,BULLET_TARGET_WIDTH_PX,BULLET_GAP_WIDTH} from './chart-bands.js';
+export type {ChartBandSpec,ChartBandRange,ChartBandColors,ChartBandDiagnostic} from './chart-bands.js';
+export {bulletPlot,bandLegendNames} from './chart-bullet.js';
+export {placeBandLabels,bandLabelColor,BAND_LABEL_PADDING,BAND_LABEL_MIN_CONTRAST} from './chart-band-labels.js';
+export type {ChartBandLabel,ChartLayerBandLabels} from './chart-band-labels.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartNumericAxes} from './chart-numeric-axes.js';
 export type {ChartNumericAxes} from './chart-numeric-axes.js';
@@ -13337,7 +13513,7 @@ export type {ChartDrawPlan,ChartFallback} from './chart-fallback.js';
 export { resolveDesignHints, itemAlignment, DESIGN_HINT_KEYS, TITLE_POSITIONS, type DesignTitlePosition, type DesignAlignment, type DesignHints, type DesignHintKey, type DesignHintSource, type ResolvedDesignHints, type ResolveDesignHintsOptions } from './design-hints.js';
 export { layoutContent, layoutStructure, LAYOUT_BODY_KINDS, type LayoutContent, type LayoutBodyKind } from './layout-content.js';
 // OPF 0.19 layout templates: the record's grid and regions, content binding and the pure geometry composeSlide uses.
-export { HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, TITLE_BESIDE_SHARE, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, regionDiagram, regionListColumns, regionSequence, titleBesideTemplate, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
+export { HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, IMPLIED_REGION_KINDS, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, kindAccepted, RESERVED_REGION_NAMES, TITLE_BESIDE_SHARE, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, regionDiagram, regionListColumns, regionSequence, titleBesideTemplate, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
 export { EYEBROW_LABEL_CHARS, EYEBROW_LABEL_WORDS, EYEBROW_TEXT_KIND, eyebrowLabel, isLabelText, rowLabel, ROW_LABEL_CHARS, ROW_LABEL_WORDS, groupBinding, groupingNode, JOINED_FIXED_MAX, majorityKind, MOVED_ROW_MAX, PAIR_FIGURE_KINDS, PAIR_LENGTH_RATIO, repeatedPairs, textLength, type GroupedBinding, type GroupingNode, type JoinedArrangement } from './block-grouping.js';
 export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
 export { cellBlocks, cellsInReadingOrder, gridCells, isGridCell, type CellBlock, type GridCell } from './grid-cells.js';

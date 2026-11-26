@@ -49,7 +49,9 @@ for(const options of [{},measured])for(const [width,height]of [[1280,720],[720,1
         // opf#1322: a measured tracked display line is start-anchored; its anchor point is in data-opf-anchor-x.
         // A line whose whitespace hangs at its wrap names its glyphs' anchor there and in data-opf-hang how far from it its text, the
         // whitespace included, is anchored, as the native paragraph is.
-        const previewAnchor=+(attr(preview,'data-opf-anchor-x')??attr(preview,'x'))+(+(attr(preview,'data-opf-hang')??0));
+        // opf#1493: a left-to-right line is written without that whitespace, so its paragraph is anchored at its glyphs.
+        const keptWhitespace=/\s<\/a:t>/.test(shape);
+        const previewAnchor=+(attr(preview,'data-opf-anchor-x')??attr(preview,'x'))+(keptWhitespace?+(attr(preview,'data-opf-hang')??0):0);
         if(previewChecked)assert.ok(Math.abs(nativeAnchor-previewAnchor)<.01,`${name} anchor ${nativeAnchor} vs preview ${previewAnchor}`);
         lines++;
       }

@@ -7,6 +7,7 @@ import { chartOptionTarget, resolveChartOptions } from './chart-options.js';
 import { chartNumber, resolveChartData, type ResolvedChartData } from './chart-data.js';
 import { chartDrawPlan } from './chart-fallback.js';
 import {chartReferences} from './chart-references.js';
+import {chartBandMaximum} from './chart-bands.js';
 
 /** The ticks of an automatic value axis: `ticks` runs from `min` to `max` in steps of `step`. */
 export interface ChartScale {
@@ -252,6 +253,8 @@ const CATEGORY_CHARTS: Readonly<Record<string, CategoryChartSpec>> = {
   area: area('standard'),
   'stacked-area': area('stacked'),
   '100pct-stacked-area': area('percentStacked'),
+  // FR-07: a bullet chart's value axis is a horizontal bar chart's, over its measure, its targets and its bands.
+  bullet: bar(true, 'clustered'),
 };
 
 /**
@@ -372,7 +375,7 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   if (!spec || !resolved.ok) return undefined;
   const { scale, width, height } = geometry;
   if (![width, height, scale].every(Number.isFinite) || width <= 0 || height <= 0 || scale <= 0) return undefined;
-  const series = resolved.columns.slice(1).map((_, offset) => ({ values: resolved.rows.map((row) => chartNumber(row[offset + 1])) }));
+  const series = resolved.columns.slice(1, id === 'bullet' ? 2 : undefined).map((_, offset) => ({ values: resolved.rows.map((row) => chartNumber(row[offset + 1])) }));
   if (!series.length || !resolved.rows.length) return undefined;
   const percent = spec.grouping === 'percentStacked';
   let stacks: ReturnType<typeof stackCategoryValues>;
@@ -384,7 +387,10 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   const stackedGrouping = spec.grouping === 'stacked' || percent;
   const extents = stacks.flat().flatMap((point) => (point === null ? [] : spec.kind === 'line' || !stackedGrouping ? [point.to] : [point.from, point.to]));
   const anchor = spec.kind === 'bar' || spec.kind === 'area' ? [0] : [];
-  const include = [...geometry.include ?? [], ...chartReferences(chart).filter(ref=>ref.axis==='value').map(ref=>ref.value)].filter(Number.isFinite);
+  // FR-07: the last band's end extends the axis, as a reference does; a bullet chart's axis holds its targets too. A bullet plots one series.
+  const bandEnd = chartBandMaximum(chart);
+  const targets = id === 'bullet' ? (resolved.target?.values ?? []).filter((value): value is number => value !== null) : [];
+  const include = [...geometry.include ?? [], ...chartReferences(chart).filter(ref=>ref.axis==='value').map(ref=>ref.value), ...(bandEnd !== undefined ? [bandEnd] : []), ...targets].filter(Number.isFinite);
   const bounds = [...extents, ...anchor, ...include];
   const dataMin = bounds.length ? Math.min(...bounds) : 0;
   const dataMax = bounds.length ? Math.max(...bounds) : 1;
@@ -401,6 +407,8 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   // LH-59) was only an empty band between the chart's heading and its tallest column. Its axis ends at the tallest column, which reaches
   // the top of the plot under the row its label takes (both engines keep that row). Columns that go below zero keep their scale.
   if (geometry.labeled === true && spec.kind === 'bar' && !spec.horizontal && !percent && dataMin >= 0 && dataMax > 0 && fitted.max > dataMax) return { min: fitted.min, max: dataMax, majorUnit: fitted.step };
+  // FR-07: a bullet chart's axis ends at the largest of its values, targets and band ends (the last band reaches the end of the row).
+  if (id === 'bullet' && dataMax > 0 && fitted.max > dataMax) return { min: fitted.min, max: dataMax, majorUnit: fitted.step };
   return { min: fitted.min, max: fitted.max, majorUnit: fitted.step, ...(percent ? { percent: true as const } : {}) };
 }
 

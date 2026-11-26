@@ -11,11 +11,11 @@ Every item also meets the definition of done in the README; the acceptance colum
 | FR-03 | opf#1297: links to a slide of the same deck, `slide:<id>` | [Below](#fr-03-links-to-a-slide-opf1297) | done |
 | FR-04 | CR 1 with CR 3: data sources and a flat dataset | [Below](#fr-04-data-sources-and-a-flat-dataset-cr-1-with-cr-3) | done |
 | FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | done |
-| FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | todo |
+| FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | done |
 | FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | in-progress |
-| FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | in-progress |
+| FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | done |
 | FR-09 | CR 14: limits on a variable's value | [Below](#fr-09-limits-on-a-variables-value-cr-14) | done |
-| FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | in-progress |
+| FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | done |
 | FR-11 | What a validator says about a key it does not know | [Below](#fr-11-what-a-validator-says-about-a-key-it-does-not-know) | done |
 
 Order of landing: FR-01 to FR-03 (ids), FR-04 to FR-07 (data), FR-08 (embed), FR-09 and FR-10 (variables). The tracks do not depend on
@@ -190,6 +190,12 @@ Acceptance:
 
 Progress log:
 
+- 2026-11-26: done, in the pull request that adds this line. Built as accepted, with the owner's fourth way of computing the change (a
+  fixed number, `compare: { value }`) and what was decided while building (in the decision log): `metric.format`, the warnings when a
+  link gives no number, `opf/metric-unit-repeated`. A column's declared type (FR-05) decides what an aggregate may read. PowerPoint
+  (COM, seven slides): the preview's value, change, arrow and color; the link comes back from the export and from PowerPoint's own
+  save; a retyped value or change drops it with `metric-data-dropped`, a retyped label or title keeps it.
+
 ## FR-07: table color scale, bands with the bullet chart, and the gauge (CR 5)
 
 Redone on OPF's own terms, not on the requesting tool's shapes. `chart.type` lists only what the preview and PowerPoint draw as native charts, so a heatmap
@@ -198,7 +204,7 @@ the table color scale, then bands with the bullet chart, then the gauge. Each pa
 
 Acceptance:
 
-- **Table color scale.** `table.colorScale` (`columns`, `from`, `to`, an optional `mid` for a diverging scale) shades the named columns'
+- **Table color scale.** `table.colorScale` (`columns`, `colors`: two or three scheme names, `center`, `min`, `max`) shades the named columns'
   number cells between scheme colors; the text color follows each cell for contrast. It exports as a native table with cell fills.
 - **Bands and the bullet chart.** `chart.bands` shades value ranges (`{ to, label }`, from scheme neutrals) on the value axis of bar,
   column, line and area charts, filling the slot `referenceLines` reserves; in PowerPoint they are series drawn behind the data. A new
@@ -212,6 +218,16 @@ Acceptance:
 - Conformance: valid decks for each part; an invalid deck for a band or color scale that names no column or has no data.
 
 Progress log:
+
+- 2026-11-25: part 1, the table color scale, built (bands with the bullet chart and the gauge are still to build, so the row stays
+  in-progress). `table.colorScale` with `colors` (two or three scheme names), `center`, `min` and `max`; OKLab mixing; a diverging scale with no
+  pinned end is symmetric around its center; the text on a shaded cell is the scheme text color, else the background color, else black
+  or white (4.5:1). Core computes the fills, the preview, PNG and PDF draw them, and a table split across slides keeps one range. The
+  PowerPoint export writes native cell fills and text colors and records the scale beside the stored table; import restores it while
+  every shaded cell keeps its fill, else every shaded cell comes back with its native fill and `table-color-scale-not-restored` is
+  reported. A dataset column declared as another type than `number` is never shaded. Rules: the error
+  `table-color-scale-unknown-column`, the warnings `table-color-scale-no-data` and `table-color-scale-range`. Checked in PowerPoint
+  (fills and text colors match the preview; the saved copy, a retyped number and a refilled cell import as designed).
 
 ## FR-08: embed (CR 11)
 
@@ -231,6 +247,13 @@ Acceptance:
 - Conformance: valid decks with the full form and the shorthand; invalid decks with an `http:` URL and with no `src`.
 
 Progress log:
+
+- 2026-11-25: done, in the pull request that adds this line. Checked in PowerPoint on three decks (classic light, classic dark, bold):
+  the picture and the card draw where the preview draws them, every part of a card opens the embed's address, and each embed comes
+  back from the export and from PowerPoint's own save. A link changed or a card title retyped in PowerPoint imports what is there, with
+  `embed-provenance-changed`. Not run: a slide show click, Change Picture and the Accessibility Checker (PowerPoint's window is not
+  driven). The card's drawing is with the owner; a version with the badge and title centered and growing with the card follows as its
+  own change.
 
 ## FR-09: limits on a variable's value (CR 14)
 
@@ -271,6 +294,13 @@ Acceptance:
 - Conformance: valid decks with translations; a Markdown and YAML round trip keeps them. Docs and an example deck in two languages.
 
 Progress log:
+
+- 2026-11-25: done, in the pull request that adds this line. The name table covers 88 languages (ICU 78.3, CLDR 48.0) and costs about
+  14 KB gzipped in each of the ten entries that draw dates; their budgets moved by that amount. Checked in PowerPoint: a translated deck
+  footer and its dates show the same text as the preview on a German and a French slide, and import returns each slide's text. Found
+  and fixed there: a date field on a slide whose language differs from the deck's was looked up in the deck's language and written in
+  the slide's, so PowerPoint showed another format than the preview. Open as opf#1507: a named current date in a non-English deck is
+  fixed text, because the date field table has no long forms per language.
 
 ## FR-11: what a validator says about a key it does not know
 

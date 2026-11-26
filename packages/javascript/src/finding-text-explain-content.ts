@@ -28,6 +28,31 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { datasources: { warehouse: { refreshEvery: "P1D" } }, datasets: { sales: { datasource: "warehouse", retrieved: "2026-01-01", columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
     { datasources: { warehouse: { refreshEvery: "P1D" } }, datasets: { sales: { datasource: "warehouse", retrieved: "2026-11-30", columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
   ),
+  "opf/metric-data-stale": ex(
+    "Write the computed number as the metric's value (apply the fix), or change the data link. A reader that does not compute draws the written number.",
+    { datasets: { arr: { columns: ["Month", "ARR"], rows: [["2026-10", 4.2], ["2026-11", 4.4]] } }, slides: [{ title: "ARR", metric: { value: "$4.2M", data: { dataset: "arr", field: "ARR", aggregate: "last" } } }] },
+    { datasets: { arr: { columns: ["Month", "ARR"], rows: [["2026-10", 4.2], ["2026-11", 4.4]] } }, slides: [{ title: "ARR", metric: { value: 4.4, data: { dataset: "arr", field: "ARR", aggregate: "last" } } }] },
+  ),
+  "opf/metric-data-aggregate": ex(
+    "Use an aggregate that fits the column (first, last and count work on any column), or link a column typed number. The written value is drawn meanwhile.",
+    { datasets: { arr: { columns: [{ name: "Region", type: "text" }, "ARR"], rows: [["EMEA", 4.4]] } }, slides: [{ title: "Regions", metric: { value: 1, data: { dataset: "arr", field: "Region", aggregate: "sum" } } }] },
+    { datasets: { arr: { columns: [{ name: "Region", type: "text" }, "ARR"], rows: [["EMEA", 4.4]] } }, slides: [{ title: "Regions", metric: { value: 1, data: { dataset: "arr", field: "Region", aggregate: "count" } } }] },
+  ),
+  "opf/metric-data-empty": ex(
+    "Check the filter and the field: a row has to meet the filter and give a usable cell. The written value is drawn meanwhile.",
+    { datasets: { arr: { columns: ["Region", "ARR"], rows: [["EMEA", 4.4]] } }, slides: [{ title: "APAC", metric: { value: 3.1, data: { dataset: "arr", field: "ARR", aggregate: "last", filter: [{ field: "Region", op: "=", value: "APAC" }] } } }] },
+    { datasets: { arr: { columns: ["Region", "ARR"], rows: [["EMEA", 4.4]] } }, slides: [{ title: "EMEA", metric: { value: 4.4, data: { dataset: "arr", field: "ARR", aggregate: "last", filter: [{ field: "Region", op: "=", value: "EMEA" }] } } }] },
+  ),
+  "opf/metric-data-delta": ex(
+    "Give the change something to compare with: two rows for previous, a baseline filter that meets a row, a comparison value other than 0 for a percent. No change is drawn until then.",
+    { datasets: { arr: { columns: ["Month", "ARR"], rows: [["2026-11", 4.4]] } }, slides: [{ title: "ARR", metric: { value: 4.4, data: { dataset: "arr", field: "ARR", aggregate: "last", delta: { compare: "previous" } } } }] },
+    { datasets: { arr: { columns: ["Month", "ARR"], rows: [["2026-10", 4.2], ["2026-11", 4.4]] } }, slides: [{ title: "ARR", metric: { value: 4.4, delta: 0.2, data: { dataset: "arr", field: "ARR", aggregate: "last", delta: { compare: "previous" } } } }] },
+  ),
+  "opf/metric-unit-repeated": ex(
+    "Drop the unit, or take its text out of the number format. The unit is printed after the value.",
+    { title: "ARR", metric: { value: 4.4, unit: "M", format: "#,##0.0M" } },
+    { title: "ARR", metric: { value: 4.4, format: "#,##0.0M" } },
+  ),
   "opf/chart-mapping-adapted": ex(
     "Remove the mapping entry, or name a column the chart type can use. The entry is ignored.",
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, mapping: { x: "Costs" } } },
@@ -38,10 +63,45 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: { type: "treemap", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS } } },
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS } } },
   ),
+  "opf/embed-credentials": ex(
+    "Take the user name, password or secret query parameter out of `src`. Anyone who has the deck can read the address, and every export links to it; the host that shows the page holds the credential.",
+    { title: "Dashboard", embed: "https://app.example.com/dashboards/revenue?api_key=abc123" },
+    { title: "Dashboard", embed: "https://app.example.com/dashboards/revenue" },
+  ),
   "opf/chart-highlight-adapted": ex(
     "Name a series the chart plots in `highlight`, or remove the entry. A column that is the category or X column, or that the mapping leaves out, highlights nothing.",
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, highlight: { series: ["Quarter"] } } },
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, highlight: { series: ["Revenue"] } } },
+  ),
+  "opf/chart-bands-order": ex(
+    "Write the bands in increasing order of `to`: each band runs from the previous band's `to` to its own.",
+    { title: "Wait", chart: { type: "column", alt: "Wait", data: { columns: COLUMNS, rows: ROWS }, bands: [{ to: 20 }, { to: 10 }] } },
+    { title: "Wait", chart: { type: "column", alt: "Wait", data: { columns: COLUMNS, rows: ROWS }, bands: [{ to: 10 }, { to: 20 }] } },
+  ),
+  "opf/chart-bands-unsupported": ex(
+    "Use a bar, column, line, area or bullet chart for bands, or remove them.",
+    { title: "Revenue", chart: { type: "pie", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, bands: [{ to: 10 }] } },
+    { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, bands: [{ to: 10 }] } },
+  ),
+  "opf/metric-gauge-range": ex(
+    "Write the gauge's `max` above its `min`, and keep the value, the target and each band's `to` between them.",
+    { title: "Utilization", metric: { label: "Utilization", value: 1.2, gauge: { max: 1 } } },
+    { title: "Utilization", metric: { label: "Utilization", value: 0.72, gauge: { max: 1 } } },
+  ),
+  "opf/metric-gauge-value": ex(
+    "Give a metric with a gauge a number value: the gauge draws that number on its arc.",
+    { title: "Utilization", metric: { label: "Utilization", value: "72%", gauge: { max: 1 } } },
+    { title: "Utilization", metric: { label: "Utilization", value: 0.72, format: "0%", gauge: { max: 1 } } },
+  ),
+  "opf/table-color-scale-no-data": ex(
+    "Name columns that hold numbers in `colorScale.columns`, or remove the color scale. A cell is shaded only when its value is a number.",
+    { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", "n/a"]], colorScale: { columns: ["Q1"] } } },
+    { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", 0.22]], colorScale: { columns: ["Q1"] } } },
+  ),
+  "opf/table-color-scale-range": ex(
+    "Pin `min` below `max` and keep `center` between them, or leave the range to the data.",
+    { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", 0.22], ["APAC", 0.3]], colorScale: { columns: ["Q1"], min: 0.5, max: 0.4 } } },
+    { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", 0.22], ["APAC", 0.3]], colorScale: { columns: ["Q1"], min: 0, max: 0.4 } } },
   ),
   "opf/code-highlight-out-of-range": ex(
     "Change the entry to a line the code has (counted from 1), or remove it.",

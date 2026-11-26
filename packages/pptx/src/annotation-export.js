@@ -32,6 +32,40 @@ export function countsSpaceAfterLeftToRightText(text) {
   return LEFT_TO_RIGHT_BEFORE_SPACE.test(String(text ?? ''));
 }
 
+// The whitespace core hangs at a soft wrap (composition's TRAILING_HANGING_SPACE: not a no-break or zero-width space), and the characters of a
+// right-to-left script, as core's direction detection lists them (a mark that starts a right-to-left run counts too).
+const TRAILING_HANGING_SPACE = /[^\S\r\n\u00a0\u202f\ufeff]+$/u;
+const RIGHT_TO_LEFT_CHARACTER = /[\u200F\u061C\u202B\u202E\u2067]|(?=\p{L})[\p{Script=Arabic}\p{Script=Hebrew}\p{Script=Syriac}\p{Script=Thaana}\p{Script=Nko}\p{Script=Adlam}\p{Script=Hanifi_Rohingya}\p{Script=Mandaic}\p{Script=Samaritan}\p{Script=Mende_Kikakui}]/u;
+
+/**
+ * opf#1493: the whitespace a line leaves out of its text box. A left-to-right line (no right-to-left character anywhere in it, in a
+ * left-to-right deck) is written without the whitespace that hangs at its soft wrap: the whitespace belongs to the break, not to the line.
+ * PowerPoint counts a trailing space when it aligns a paragraph and Keynote does not, so a right-aligned or centered line that kept its
+ * space ended or centered a space off in one of them; without it both draw the glyphs where the preview does, from the unshifted box
+ * (measured in PowerPoint 2026-11-25 and in Keynote 16.0). Returns '' for every other line, which is written as it was (a right-to-left
+ * line, a line with any right-to-left run, any line of a right-to-left deck: those need their own measurement, opf#1458).
+ * `hang` is core's width of the hanging whitespace (0 for a line without one).
+ */
+export function droppedHang(text, {hang, rtlDeck}) {
+  if (!(hang > 0) || rtlDeck) return '';
+  const line = String(text ?? '');
+  if (RIGHT_TO_LEFT_CHARACTER.test(line)) return '';
+  const match = TRAILING_HANGING_SPACE.exec(line);
+  return match && !match[0].includes('\t') && /\S/u.test(line.slice(0, match.index)) ? match[0] : '';
+}
+
+/** A line's runs without their last `dropped.length` characters (droppedHang's whitespace), a run it empties left out. */
+export function withoutTrailingCharacters(runs, dropped) {
+  const kept = [...runs];
+  let rest = dropped.length;
+  for (let index = kept.length - 1; index >= 0 && rest > 0; index--) {
+    const text = kept[index].text;
+    if (!text.length) continue;
+    if (text.length <= rest) { rest -= text.length; kept.splice(index, 1); } else { kept[index] = {...kept[index], text: text.slice(0, -rest)}; rest = 0; }
+  }
+  return kept;
+}
+
 /**
  * How far the anchor of a line's PowerPoint paragraph is from its glyphs' anchor, `factor` being 0, 0.5 or 1 (left, center, right):
  * - a line whose text is right to left (by its first strong character), in any deck: PowerPoint counts the whitespace at its left end
@@ -62,9 +96,11 @@ export function glyphAnchor({placed, box, factor, direction}) {
  * Where a line's PowerPoint paragraph is anchored: its glyphs' anchor plus paragraphHangShift. `directions` is core's fit.directions (present
  * only in a right-to-left deck), `index` the line's.
  */
-export function paragraphAnchor({placed, line, text, box, factor, directions, index}) {
+export function paragraphAnchor({placed, line, text, box, factor, directions, index, dropHang = false}) {
   const hang = placed ? placed.hang : line?.hang;
-  return glyphAnchor({placed, box, factor, direction: directions?.[index]}) + paragraphHangShift({text, hang, factor, rtlDeck: !!directions});
+  // opf#1493: a line written without its hanging whitespace (droppedHang) has none for PowerPoint to count: the paragraph is the glyphs.
+  const written = dropHang && droppedHang(text, {hang, rtlDeck: !!directions}) ? 0 : hang;
+  return glyphAnchor({placed, box, factor, direction: directions?.[index]}) + paragraphHangShift({text, hang: written, factor, rtlDeck: !!directions});
 }
 
 export const CAPTION_TAG = 'OPF_CAPTION_V1';
@@ -107,12 +143,17 @@ export function addFitLines(slide, value, fit, box, context, helpers, {objectNam
       // PowerPoint counts the whitespace at a paragraph end in its alignment: a line whose whitespace hangs at a soft wrap is anchored that
       // much past its glyphs (core's placement does it for a placed line, RichTextLine.hang for one it did not place).
       // A line whose whitespace hangs at its wrap is anchored as PowerPoint counts that whitespace (paragraphAnchor).
-      const anchor = paragraphAnchor({placed, line, text: fit.lines?.[index] ?? line.fragments.map(fragment => fragment.text).join(''), box, factor, directions: fit.directions, index});
+      const lineText = fit.lines?.[index] ?? line.fragments.map(fragment => fragment.text).join('');
+      // opf#1493: a left-to-right line is written without the whitespace that hangs at its soft wrap; the tag keeps it as the separator.
+      const soft = index !== count - 1;
+      const dropped = soft ? droppedHang(lineText, {hang: placed ? placed.hang : line.hang, rtlDeck: !!fit.directions}) : '';
+      const written = dropped ? withoutTrailingCharacters(runs, dropped) : runs;
+      const anchor = paragraphAnchor({placed, line, text: lineText, box, factor, directions: fit.directions, index, dropHang: soft});
       const area = placed ? {x: (anchor - box.width * factor) / 96, y: placed.y / 96, w: box.width / 96, h: placed.height / 96}
         : {x: (anchor - box.width * factor) / 96, y: (box.y + line.y) / 96, w: box.width / 96, h: line.height / 96};
       const name = `${objectName} line ${index}`;
-      tags.set(name, {...record, line: index, count, boundary: index === count - 1 ? 'end' : 'soft', separator: '', rich: true});
-      slide.addText(runs, {...helpers.textBoxOptions(area, context, fit.fontSize * .75), ...(fontFamily ? {fontFace: fontFamily} : {}), color: lineColor, align, fit: 'none', wrap: false, lineSpacingMultiple: 1, objectName: name});
+      tags.set(name, {...record, line: index, count, boundary: index === count - 1 ? 'end' : 'soft', separator: dropped, rich: true});
+      slide.addText(written, {...helpers.textBoxOptions(area, context, fit.fontSize * .75), ...(fontFamily ? {fontFace: fontFamily} : {}), color: lineColor, align, fit: 'none', wrap: false, lineSpacingMultiple: 1, objectName: name});
     });
     return;
   }
@@ -120,12 +161,15 @@ export function addFitLines(slide, value, fit, box, context, helpers, {objectNam
   fit.lines.forEach((line, index) => {
     const placed = fit.placement?.lines[index], sourceLine = fit.sourceLines?.[index];
     const boundary = sourceLine ? {boundary: sourceLine.boundary, separator: text.slice(sourceLine.end, sourceLine.nextStart)} : {boundary: index === count - 1 ? 'end' : 'soft', separator: ''};
-    const anchor = paragraphAnchor({placed, line: sourceLine, text: line, box, factor, directions: fit.directions, index});
+    // opf#1493: a left-to-right line is written without the whitespace that hangs at its soft wrap; the tag keeps it as the separator.
+    const soft = boundary.boundary === 'soft';
+    const dropped = soft ? droppedHang(line, {hang: placed ? placed.hang : sourceLine?.hang, rtlDeck: !!fit.directions}) : '';
+    const anchor = paragraphAnchor({placed, line: sourceLine, text: line, box, factor, directions: fit.directions, index, dropHang: soft});
     const area = placed ? {x: (anchor - box.width * factor) / 96, y: (placed.baseline - fit.fontSize) / 96, w: box.width / 96, h: placed.height / 96}
       : {x: (anchor - box.width * factor) / 96, y: (box.y + index * fit.lineHeight) / 96, w: box.width / 96, h: fit.lineHeight / 96};
     const name = `${objectName} line ${index}`;
-    tags.set(name, {...record, line: index, count, ...boundary});
-    slide.addText(line, {...helpers.textBoxOptions(area, context, fit.fontSize * .75), ...(fontFamily ? {fontFace: fontFamily} : {}), color: lineColor, align, fit: 'none', wrap: false, lineSpacingMultiple: 1,
+    tags.set(name, {...record, line: index, count, ...boundary, ...(dropped ? {separator: dropped + boundary.separator} : {})});
+    slide.addText(dropped ? line.slice(0, -dropped.length) : line, {...helpers.textBoxOptions(area, context, fit.fontSize * .75), ...(fontFamily ? {fontFace: fontFamily} : {}), color: lineColor, align, fit: 'none', wrap: false, lineSpacingMultiple: 1,
       tabStops: sourceLine?.segments.filter(segment => segment.kind === 'tab').map(segment => ({position: (segment.x + segment.width) / 96, alignment: 'l'})), objectName: name});
   });
 }

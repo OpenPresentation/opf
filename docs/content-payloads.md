@@ -15,6 +15,7 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `items` | `list` | Structured list: entries that share a shape or carry a `description`; `string[]` or `ListItem[]`. See [items versus bullets](#items-versus-bullets). |
 | `image` | `image` | Asset string shorthand or an image object with `src`, optional metadata and `callouts` (plain text panels over the picture). |
 | `video` | `video` | Asset reference shown as a media placeholder; an HTTP(S) source links from the PPTX. No embedded playback. See [Video references](#video-references). |
+| `embed` | `embed` | A live web page: an https string or `{ src, title, aspectRatio, preview }`. A web presenter whose host allows the page shows it live; every other output shows a picture of it (the `preview`, else a card) linked to the page. See [Embed](#embed). |
 | `chart` | `chart` | Chart object with `type` and tabular `data`. |
 | `table` | `table` | Table object with optional `columns` and required `rows`. |
 | `code` | `code` | String shorthand or `Code` object with `source`, `language`, `filename`, and `highlight`. |
@@ -26,6 +27,43 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 ## Video references
 
 A `video` accepts an asset string or an `Asset` object with `src` and optional metadata. The preview draws a media placeholder with a play badge and a caption, not a player. The caption is the video's title, else its source, else "Media"; an `asset:` reference is followed to the registry entry first (a title written on the value wins), so the caption is never the asset id (RR-105). PPTX export writes the same editable shapes and caption, with a hyperlink when the resolved source is HTTP(S); local references remain captions. It does not fetch or embed a video file or create a YouTube/Vimeo player. MP4/WebM sources are references, not playable media inside the exported deck. Keep that limitation beside any video example.
+
+## Embed
+
+An `embed` is a live web page: a dashboard, a prototype, a map, a form. It is a string (the page's https address) or an object:
+
+```json
+{
+  "title": "Revenue, live",
+  "embed": {
+    "src": "https://app.example.com/dashboards/revenue",
+    "title": "Revenue dashboard",
+    "aspectRatio": 1.6,
+    "preview": "asset:revenue-dashboard"
+  }
+}
+```
+
+- **`src`** is an https address (at most 2048 characters); `http:`, `data:`, `javascript:` and relative paths are schema errors. Engines never load it. It is a literal address: variables are not supported in `src`.
+- **`title`** is what the page is: its accessible name and the heading of the card. Without it the site name (the address's host without `www.`) stands in.
+- **`aspectRatio`** is the frame's width over its height, above 0 and up to 10 (1.6 is 16:10). The frame is the largest box of that ratio inside the block's region, placed by the region's anchor as a video's frame is. Without it, 16:9. The block option `aspectRatio` of an image block is a schema error on an embed: the frame is set here, in one place.
+- **`preview`** is a picture of the page (an `asset:` reference, an https address, a data URI or a relative path). It is drawn whole (`contain`) on the scheme's surface color, so a screenshot of data is never cropped. Without it, or when it does not resolve (an unknown asset is the error `opf/asset-reference`; a source nothing resolved draws the card and says so), the embed is a **card**: a rounded panel with a link badge at the top left, the title in the heading font (up to three lines, then clipped with an ellipsis) and the site name below it. The card never prints the address, which can be long and carry a query string. Its text is never under the readability floor: a frame too small for the site name keeps the badge and the title, and one too small for a line of the title keeps the badge.
+
+An embed takes a `caption` like an image or a video, and sits in a layout region that accepts `video` (no catalog record lists `embed`; an omitted `accepts` takes every body kind, `embed` included). It has no `alt`: the `title` is its name. It carries none of the image options (`fit`, `focus`, `recolor`, ...).
+
+**What each output draws.**
+
+| Output | Draws |
+| --- | --- |
+| Web presenter, when its host allows the page | A sandboxed frame of `src` over the static form, which stays under it until the page has loaded. |
+| Every other web surface (the editor's canvas and thumbnails, the MCP viewer, the web player by default) | The static form, linked to `src`: a click opens the page in a new tab. |
+| PDF | The static form with a link annotation over the frame. |
+| PNG, SVG and print | The static form. |
+| PowerPoint | The static form as native parts (a picture, or the card as one group of shapes), each linked to `src`. A `OPF_EMBED_V1` tag restores the embed on import while its link and its picture (or the card's title text) are as exported; otherwise the file imports as a linked picture or shapes and reports `embed-provenance-changed`. See [the PPTX round trip](../packages/pptx/docs/document-roundtrip.md). |
+
+**For a host that presents decks.** Nothing is live by default. The editor's presenter (the workspace option `embeds`, or `createPresenter(container, { embeds })`) and the web player (`present(source, { embeds })`) take `embeds(src) => boolean`: return true for the pages you allow, by address, and each such page is shown in an iframe with `sandbox="allow-scripts allow-same-origin allow-popups allow-forms"`, `referrerpolicy="no-referrer"`, `loading="lazy"`, the embed's title as its `title` and no `allow` features (camera, microphone and location stay off). A page whose address has the presenting page's own origin is never shown live, whatever `embeds` returns: a sandbox that allows scripts and its own origin does not contain a page of the host's own origin, so it is drawn in the static form. A click on a live frame never changes the slide, the slide keys keep working while the frame does not have focus, and Tab enters a frame only after a click on it. The MCP viewer never shows a live frame, and the deck holds no sandbox policy: which pages are shown live is the host's list, not the author's.
+
+**Choosing one.** Use `embed` for a page people will use during the talk and a picture of it everywhere else; a `video` for a recording (it draws a play badge, never a page); a link in a text run for a page you only point to. Put the address in `src` and keep secrets out of it: `opf/embed-credentials` warns when it carries a user name and password or a query parameter named like a secret (`key`, `token`, `secret`, `password`, `sig`, `signature`, `auth`), because anyone with the deck can read it.
 
 ## Items versus bullets
 
@@ -223,6 +261,8 @@ A table may instead show a dataset: `"table": { "dataset": "revenue", "fields": 
 
 `table.highlight` names the body rows that carry the message by the text of their first cell, as `chart.highlight` names categories: `"highlight": { "rows": ["Southeast", "Southwest"] }`. The preview and the PPTX export draw those rows on an accent tint of the table surface (15% of the deck's primary color, mixed less where the cell text would fall under 4.5:1, core `tableHighlightColor`); a cell with its own `style.fill` keeps it. The export writes the tint as each cell's fill, and import restores the list. A name no row has is the validation error `table-highlight-unknown-name`.
 
+`table.colorScale` shades the number cells of the named columns by value between scheme colors (`"colorScale": { "columns": ["Q1", "Q2"], "min": 0, "max": 0.4 }`; three `colors` make a diverging scale, optionally with a `center`). Every engine draws the fills core computes and the PowerPoint export writes them as native cell fills; see [Shading cells by value](chart-table-data.md#shading-cells-by-value).
+
 Without `highlight`, a table highlights the rows its slide names (layout harvest LH-113, core `tableSlideFocus`): the title and subtitle first, else what the slide's other texts, list entries, quotes and chart alts name together ("Engineering and support carry 70% of the new roles" names the Engineering and Support rows; "Prices rise 3%" names the rows whose cells show 3%). The rules are conservative: a range ("from Q1 to Q4"), a list that names a row in two or more entries, a paragraph over 140 characters that names more than one row, and sources that disagree name nothing, and the focus is never every row. An empty `rows` list turns it off, and so does a body cell with its own fill. [Chart options](chart-options.md) describes the same focus for charts.
 
 Table body cells accept strings, numbers, booleans, or `null`. Since core 0.5.0, a cell or column header also accepts the same `TextRun[]` used by rich text:
@@ -250,7 +290,7 @@ Core 0.6.0 adds `layoutTable` from `@openpresentation/opf/composition`. It measu
 
 ## Captions
 
-An `image`, `chart`, `table`, `video` or `diagram` payload takes a `caption`: a string, `TextRun[]`, or `{ "text", "position": "below" | "above", "align": "start" | "center" | "end" }` (defaults `below`, `start`). It sits beside the payload field on a block, or on the slide root when the root holds exactly one of those payloads; anywhere else it is a `caption-unsupported-payload` error.
+An `image`, `chart`, `table`, `video`, `embed` or `diagram` payload takes a `caption`: a string, `TextRun[]`, or `{ "text", "position": "below" | "above", "align": "start" | "center" | "end" }` (defaults `below`, `start`). It sits beside the payload field on a block, or on the slide root when the root holds exactly one of those payloads; anywhere else it is a `caption-unsupported-payload` error.
 
 ```json
 {
@@ -314,6 +354,43 @@ A falling value that is good news keeps its downward arrow and takes the green:
   }
 }
 ```
+
+### Gauges (OPF 0.37)
+
+`metric.gauge` draws a metric's number against its range: how full it is, and which band it falls in. It is a way to draw a metric, not a chart type, so a gauge keeps the metric's label, change, trend, number format and data link (see [computed metrics](chart-table-data.md)), and its arc moves when the data does.
+
+```json
+{
+  "title": "NPS is just above its target",
+  "metric": {
+    "label": "Net Promoter Score",
+    "value": 41,
+    "gauge": {
+      "min": -100,
+      "max": 100,
+      "bands": [
+        { "to": 0, "label": "Detractors lead", "color": "accent2" },
+        { "to": 30 },
+        { "to": 100, "label": "Strong", "color": "accent3" }
+      ],
+      "target": 40
+    }
+  }
+}
+```
+
+- **The arc** is a half circle from `min` (the left end, default 0) through the top to `max` (the right end). Its track is the scheme's text mixed lightly into the surface. In a right-to-left deck it still runs from `min` at the left to `max` at the right, as a bar chart's value axis does.
+- **Bands** are a chart's bands (`ChartBand`, at most six): each runs from the previous `to` (the first from `min`) to its own `to`, drawn sorted when written out of order (`chart-bands-order` warns). A band without a color is a neutral, darkest lowest; a band with a scheme color is a light tint of it.
+- **The value** is an arc from `min` to the value over the track, thinner than it so the bands stay visible, in the primary color, or in the full color of the band it falls in when that band names one: a value in the red band reads red. `sentiment` and `better` color the change and its arrow, not the arc.
+- **The target** is a tick across the arc in the text color.
+- **The ends** print `min` and `max` under the arc's ends, written as the value is: with its number format (a percent format prints `0%` and `100%`), else by the metric's number rules.
+- **The text** stands under the arc, centered: the value inside the arc's bowl when it fits there at its size (an eighth of the arc's radius from the track), else under the arc and its end labels; the label, description and change follow below.
+- **A value outside the range** keeps printing its real number while its arc stops at the end, so a full arc does not read as "exactly `max`" (`metric-gauge-range` warns). A target outside the range is not drawn; a band end outside it is drawn to the end. A `max` not above `min` draws no gauge.
+- **Only a number draws a gauge.** A string value (`"72%"`), or a computed value that is not a number, draws the metric without its gauge (`metric-gauge-value` warns). Write the number and a `format` instead: `{ "value": 0.72, "format": "0%" }`.
+- **A region too small** for an arc 96 reference pixels wide with the text at the readability floor draws a plain metric, so dashboards of many small tiles stay readable; composition reports `metric-gauge-dropped`.
+- **PowerPoint** draws the track, each band and the value as native block arcs on one center, the target as a line and the ends as text boxes, all editable. Import brings the gauge back while those parts are as exported; an edited arc imports as a shape beside the metric.
+
+Use a gauge for one value against its range; for several values against their targets, use a bullet chart (a chart with `type: "bullet"`).
 
 ## Quote
 

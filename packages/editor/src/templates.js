@@ -39,6 +39,101 @@ export function isTemplateDocument(presentation) {
   return isObject(presentation) && presentation.template === true;
 }
 
+// FR-10: translations. A text, list, url or image variable has a `value` per language; a date variable a `format`.
+const TRANSLATION_KINDS = ["text", "list", "url", "image", "date"];
+const LANGUAGE_TAG = /^(?:[A-Za-z]{2,3}|[iIxX])(?:-[A-Za-z0-9]{1,8})*$/;
+
+const declaredLanguage = (language) => {
+  const tag = typeof language === "string" ? language : isObject(language) ? language.bcp47 : undefined;
+  return typeof tag === "string" && tag.trim() ? tag.trim() : undefined;
+};
+
+/** The languages the deck and its slides declare, the deck's first, each once: the languages a translation is offered for first. */
+export function translationLanguages(presentation) {
+  const seen = new Set();
+  const out = [];
+  const add = (language) => {
+    const tag = declaredLanguage(language);
+    if (tag && !seen.has(tag.toLowerCase())) {
+      seen.add(tag.toLowerCase());
+      out.push(tag);
+    }
+  };
+  if (isObject(presentation)) {
+    add(presentation.language);
+    if (Array.isArray(presentation.slides)) for (const slide of presentation.slides) if (isObject(slide)) add(slide.language);
+  }
+  return out;
+}
+
+/** What a translation control shows: a date's pattern, else the value as the kind's form field shows it. */
+export function translationFieldText(kind, entry) {
+  if (!isObject(entry)) return "";
+  return kind === "date" ? String(entry.format ?? "") : valueToFieldText(kind, entry.value);
+}
+
+/** The translations a variable declares, in document order, as form rows: `{ tag, text, rich }`. Empty for a kind that has none. */
+export function listVariableTranslations(presentation, id) {
+  const declaration = isObject(presentation?.variables) ? presentation.variables[id] : undefined;
+  if (!isObject(declaration) || !TRANSLATION_KINDS.includes(declaration.type) || !isObject(declaration.translations)) return [];
+  return Object.entries(declaration.translations).map(([tag, entry]) => ({ tag, text: translationFieldText(declaration.type, entry), rich: declaration.type === "text" && Array.isArray(entry?.value) }));
+}
+
+function translationTarget(editor, id) {
+  checkEditor(editor);
+  const declaration = isObject(editor.presentation.variables) ? editor.presentation.variables[id] : undefined;
+  if (!isObject(declaration)) throw fail("unknown-variable", `No variable '${id}' is declared.`, { id });
+  if (!TRANSLATION_KINDS.includes(declaration.type)) throw fail("translation-kind", `A ${declaration.type} variable has no translations: they are for text, list, url, image and date variables.`, { id, kind: declaration.type });
+  return declaration;
+}
+
+function translationEntry(kind, text) {
+  if (kind === "date") {
+    if (typeof text !== "string" || text.trim() === "") return { ok: false, message: "A date translation needs a display pattern, such as d. MMMM yyyy." };
+    return { ok: true, entry: { format: text.trim() } };
+  }
+  const parsed = fieldTextToValue(kind, text);
+  if (!parsed.ok) return parsed;
+  if (parsed.value === undefined) {
+    if (kind === "text") return { ok: true, entry: { value: "" } };
+    return { ok: false, message: "A translation needs a value." };
+  }
+  return { ok: true, entry: { value: parsed.value } };
+}
+
+/**
+ * Set a variable's translation for a language (adding it, or replacing the one for the same tag whatever its case) as one undoable edit.
+ * `text` is what a form control holds (a date: its display pattern). `from` renames: the entry of that tag moves to `tag`.
+ */
+export function setVariableTranslation(editor, id, tag, text, { from, meta = {} } = {}) {
+  const declaration = translationTarget(editor, id);
+  if (typeof tag !== "string" || !LANGUAGE_TAG.test(tag)) throw fail("invalid-language-tag", `'${tag}' is not a language tag: write one such as de, de-AT or zh-Hant.`, { tag });
+  const parsed = translationEntry(declaration.type, text);
+  if (!parsed.ok) throw fail("invalid-translation", parsed.message, { id, tag });
+  const translations = isObject(declaration.translations) ? declaration.translations : undefined;
+  const sameTag = (key) => key.toLowerCase() === tag.toLowerCase();
+  const patches = [];
+  if (!translations) patches.push({ op: "add", path: opfPathToJsonPointer(["variables", id, "translations"]), value: { [tag]: parsed.entry } });
+  else {
+    if (from !== undefined && Object.hasOwn(translations, from) && !sameTag(from)) patches.push({ op: "remove", path: opfPathToJsonPointer(["variables", id, "translations", from]) });
+    const existing = Object.keys(translations).find((key) => sameTag(key) && key !== from);
+    patches.push({ op: existing ? "replace" : "add", path: opfPathToJsonPointer(["variables", id, "translations", existing ?? tag]), value: parsed.entry });
+  }
+  return editor.applyPatch(patches, { source: "template-translation", rejectInvalid: true, ...meta });
+}
+
+/** Remove a variable's translation for a language, and the `translations` map with its last entry, as one undoable edit. */
+export function removeVariableTranslation(editor, id, tag, meta = {}) {
+  const declaration = translationTarget(editor, id);
+  const translations = isObject(declaration.translations) ? declaration.translations : {};
+  const key = Object.keys(translations).find((entry) => entry === tag) ?? Object.keys(translations).find((entry) => entry.toLowerCase() === String(tag).toLowerCase());
+  if (key === undefined) throw fail("unknown-translation", `'${id}' has no translation for '${tag}'.`, { id, tag });
+  const patches = Object.keys(translations).length === 1
+    ? [{ op: "remove", path: opfPathToJsonPointer(["variables", id, "translations"]) }]
+    : [{ op: "remove", path: opfPathToJsonPointer(["variables", id, "translations", key]) }];
+  return editor.applyPatch(patches, { source: "template-translation", rejectInvalid: true, ...meta });
+}
+
 /** True when the document is a template or declares a variable that is not a color. */
 export function hasTemplateVariables(presentation) {
   return hasContentVariables(presentation);
@@ -131,6 +226,8 @@ export function listTemplateFields(presentation, values = {}) {
       ...(declaration?.maxLength !== undefined ? { maxLength: declaration.maxLength } : {}),
       ...(declaration?.maxLines !== undefined ? { maxLines: declaration.maxLines } : {}),
       ...(declaration?.maxItems !== undefined ? { maxItems: declaration.maxItems } : {}),
+      // FR-10: a kind with translations lists them; a value typed here replaces them when the deck is filled.
+      ...(TRANSLATION_KINDS.includes(info.kind) ? { translations: listVariableTranslations(presentation, info.id), translationLanguages: translationLanguages(presentation) } : {}),
       status,
       uses: info.uses,
     };

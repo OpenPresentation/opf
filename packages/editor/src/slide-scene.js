@@ -17,7 +17,7 @@ import { boxesAt } from "./studio-kit/overlay.js";
 import { clickTarget } from "./studio-kit/selection.js";
 
 /** The content fields a slide or a block can hold, in the order implicit content becomes blocks. */
-export const CONTENT_FIELDS = Object.freeze(["text", "items", "bullets", "image", "video", "chart", "table", "code", "diagram", "metric", "quote", "timeline"]);
+export const CONTENT_FIELDS = Object.freeze(["text", "items", "bullets", "image", "video", "embed", "chart", "table", "code", "diagram", "metric", "quote", "timeline"]);
 const HEADINGS = ["tag", "title", "subtitle"];
 const HEADING_LABELS = { tag: "Tag", title: "Title", subtitle: "Subtitle" };
 const MODE_LABELS = { auto: "Group", grid: "Grid", row: "Row", column: "Column" };
@@ -57,6 +57,7 @@ const snippet = (text) => {
   const clean = String(text ?? "").replace(/\s+/g, " ").trim();
   return clean.length > 32 ? `${clean.slice(0, 32).trimEnd()}…` : clean;
 };
+const embedSiteOf = (src) => { try { return new URL(src).host.replace(/^www\./i, ""); } catch { return ""; } };
 function contentSnippet(kind, content) {
   switch (kind) {
     case "text": return plain(content);
@@ -71,6 +72,8 @@ function contentSnippet(kind, content) {
     case "diagram": return isObject(content) ? plain(content.alt) || plain(String(content.source ?? "").split("\n")[0]) : typeof content === "string" ? plain(content.split("\n")[0]) : "";
     case "image":
     case "video": return isObject(content) ? plain(content.alt ?? content.caption) : "";
+    // An embed is named by its title, else its site (the host of its address).
+    case "embed": return isObject(content) ? plain(content.title) || embedSiteOf(content.src) : embedSiteOf(content);
     default: return "";
   }
 }

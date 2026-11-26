@@ -93,6 +93,14 @@
       "basis": "opf.schema.json#/$defs/ListItem, BulletItem, TimelineEvent, TableRow (optional id; ids kept at the same JSON Pointer)"
     },
     {
+      "id": "core.valid.variable-translations",
+      "file": "core/valid/variable-translations.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A text variable with translations and a date variable with a translated display pattern, drawn on slides in two languages.",
+      "basis": "opf.schema.json#/$defs/TextVariable/properties/translations, DateVariable/properties/translations"
+    },
+    {
       "id": "core.valid.group-nesting-at-limit",
       "file": "core/valid/group-nesting-at-limit.opf.json",
       "levels": ["reader", "writer"],
@@ -149,6 +157,38 @@
       "basis": "opf.schema.json#/$defs/TextRun/properties/link; docs/validate.md, rule opf/slide-link-unknown"
     },
     {
+      "id": "core.valid.chart-bands-bullet",
+      "file": "core/valid/chart-bands-bullet.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A bullet chart of KPIs against their targets over three labeled bands, and a column chart with two bands, one in a scheme color.",
+      "basis": "opf.schema.json#/$defs/ChartBand; opf.schema.json#/$defs/ChartMapping/properties/target"
+    },
+    {
+      "id": "core.valid.metric-gauge",
+      "file": "core/valid/metric-gauge.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Metrics drawn as gauges: a plain gauge, a gauge with three bands (two in scheme colors) and a target, and a gauge bound to a dataset.",
+      "basis": "opf.schema.json#/$defs/MetricGauge; opf.schema.json#/$defs/Metric/properties/gauge"
+    },
+    {
+      "id": "core.valid.table-color-scale",
+      "file": "core/valid/table-color-scale.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A table shades the number cells of named columns by value: a sequential scale over a pinned range and a diverging scale centered on zero, in scheme colors.",
+      "basis": "opf.schema.json#/$defs/TableColorScale"
+    },
+    {
+      "id": "core.valid.embed",
+      "file": "core/valid/embed.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "An embed on a slide, with a title, an aspect ratio and a preview asset, and an embed block with a caption.",
+      "basis": "opf.schema.json#/$defs/EmbedPayload"
+    },
+    {
       "id": "core.valid.dataset-referenced",
       "file": "core/valid/dataset-referenced.opf.json",
       "levels": ["reader", "writer"],
@@ -187,6 +227,46 @@
       "expect": { "valid": true },
       "description": "Inline chart data declares the type, role and unit of its columns.",
       "basis": "opf.schema.json#/$defs/ChartData and #/$defs/DatasetColumn"
+    },
+    {
+      "id": "core.valid.metric-data-value",
+      "file": "core/valid/metric-data-value.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A metric computes its value from the last row of a dataset that meets a filter.",
+      "basis": "opf.schema.json#/$defs/MetricData and #/$defs/DataCondition"
+    },
+    {
+      "id": "core.valid.metric-data-previous",
+      "file": "core/valid/metric-data-previous.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A metric computes its change against the previous row.",
+      "basis": "opf.schema.json#/$defs/MetricDelta (compare previous)"
+    },
+    {
+      "id": "core.valid.metric-data-baseline",
+      "file": "core/valid/metric-data-baseline.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A metric computes its change against a baseline: the same aggregate over the rows that meet another filter.",
+      "basis": "opf.schema.json#/$defs/MetricDelta (compare with a baseline filter)"
+    },
+    {
+      "id": "core.valid.metric-data-column",
+      "file": "core/valid/metric-data-column.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A metric reads its change from a column of the dataset that already holds it.",
+      "basis": "opf.schema.json#/$defs/MetricDelta (field)"
+    },
+    {
+      "id": "core.valid.metric-data-fixed",
+      "file": "core/valid/metric-data-fixed.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A metric computes its change against a fixed number, with its own change format and a direction that is good.",
+      "basis": "opf.schema.json#/$defs/MetricDelta (compare with a value) and Metric.better"
     },
     {
       "id": "core.valid.asset-referenced",
@@ -381,6 +461,22 @@
       "basis": "opf.schema.json#/$defs/ContentPayload/additionalProperties"
     },
     {
+      "id": "core.invalid.variable-translation-bad-tag",
+      "file": "core/invalid/variable-translation-bad-tag.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/variables/cta/translations" },
+      "description": "A translation keyed by a word that is not a language tag: the key of translations is a BCP 47 tag such as de, de-AT or zh-Hant.",
+      "basis": "opf.schema.json#/$defs/TextVariable/properties/translations/propertyNames"
+    },
+    {
+      "id": "core.invalid.variable-translation-wrong-kind",
+      "file": "core/invalid/variable-translation-wrong-kind.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/variables/growth/translations" },
+      "description": "Translations on a number variable: only text, list, url, image and date variables have them.",
+      "basis": "opf.schema.json#/$defs/NumberVariable/additionalProperties"
+    },
+    {
       "id": "core.invalid.variable-limit-wrong-kind",
       "file": "core/invalid/variable-limit-wrong-kind.opf.json",
       "levels": ["reader"],
@@ -557,6 +653,70 @@
       "basis": "docs/validate.md, rule opf/slide-link-unknown"
     },
     {
+      "id": "core.invalid.chart-bullet-target-unknown",
+      "file": "core/invalid/chart-bullet-target-unknown.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/chart/mapping/target" },
+      "description": "A bullet chart names a target column the chart data does not have.",
+      "basis": "docs/validate.md, rule opf/chart-mapping-unknown-column"
+    },
+    {
+      "id": "core.invalid.chart-bands-empty",
+      "file": "core/invalid/chart-bands-empty.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/chart/bands" },
+      "description": "A chart has an empty band list (one to six bands).",
+      "basis": "opf.schema.json#/$defs/Chart/properties/bands"
+    },
+    {
+      "id": "core.invalid.metric-gauge-max-missing",
+      "file": "core/invalid/metric-gauge-max-missing.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/metric/gauge" },
+      "description": "A metric's gauge has no max.",
+      "basis": "opf.schema.json#/$defs/MetricGauge"
+    },
+    {
+      "id": "core.invalid.table-color-scale-unknown-column",
+      "file": "core/invalid/table-color-scale-unknown-column.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/table/colorScale/columns/0" },
+      "description": "A color scale names a column the table does not have.",
+      "basis": "docs/validate.md, rule opf/table-color-scale-unknown-column"
+    },
+    {
+      "id": "core.invalid.table-color-scale-no-columns",
+      "file": "core/invalid/table-color-scale-no-columns.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/table/colorScale/columns" },
+      "description": "A color scale names no column.",
+      "basis": "opf.schema.json#/$defs/TableColorScale/properties/columns"
+    },
+    {
+      "id": "core.invalid.table-color-scale-center-needs-three",
+      "file": "core/invalid/table-color-scale-center-needs-three.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/table/colorScale/colors" },
+      "description": "A color scale names a center but has two colors: only a diverging scale (three colors) has a middle.",
+      "basis": "opf.schema.json#/$defs/TableColorScale"
+    },
+    {
+      "id": "core.invalid.embed-http",
+      "file": "core/invalid/embed-http.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/embed" },
+      "description": "An embed whose address is http, not https.",
+      "basis": "opf.schema.json#/$defs/EmbedUrl"
+    },
+    {
+      "id": "core.invalid.embed-no-src",
+      "file": "core/invalid/embed-no-src.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/embed" },
+      "description": "An embed object with no address.",
+      "basis": "opf.schema.json#/$defs/EmbedPayload"
+    },
+    {
       "id": "core.invalid.dataset-unknown",
       "file": "core/invalid/dataset-unknown.opf.json",
       "levels": ["reader"],
@@ -587,6 +747,22 @@
       "expect": { "valid": false, "errorAt": "/slides/0/chart/data" },
       "description": "Inline chart data keeps the nested `source` object that OPF 0.37 removed.",
       "basis": "opf.schema.json#/$defs/ChartData (closed object)"
+    },
+    {
+      "id": "core.invalid.metric-data-dataset-unknown",
+      "file": "core/invalid/metric-data-dataset-unknown.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/metric/data/dataset" },
+      "description": "A metric links to a dataset that does not exist.",
+      "basis": "opf.schema.json#/$defs/MetricData (an unknown dataset id is an error); docs/validate.md, rule opf/dataset-unknown"
+    },
+    {
+      "id": "core.invalid.metric-data-field-unknown",
+      "file": "core/invalid/metric-data-field-unknown.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/metric/data/filter/0/field" },
+      "description": "A metric filter names a column the dataset does not have.",
+      "basis": "opf.schema.json#/$defs/DataCondition (an unknown field is an error); docs/validate.md, rule opf/dataset-field-unknown"
     },
     {
       "id": "core.invalid.asset-unknown",

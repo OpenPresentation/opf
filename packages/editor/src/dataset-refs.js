@@ -41,3 +41,48 @@ export function datasetUsage(presentation, id) {
   });
   return items;
 }
+
+/**
+ * FR-06: visit every metric linked to a dataset (`metric.data`), on a slide or in a nested block. `visit({ id, parts, metric, link })`:
+ * `parts` is the metric's path, `link` its `data`.
+ */
+export function walkMetricLinks(presentation, visit) {
+  if (!isObject(presentation) || !Array.isArray(presentation.slides)) return;
+  const walk = (payload, base, depth, ancestors) => {
+    if (isObject(payload.metric) && isObject(payload.metric.data) && typeof payload.metric.data.dataset === "string")
+      visit({ id: payload.metric.data.dataset, parts: [...base, "metric"], metric: payload.metric, link: payload.metric.data });
+    if (depth >= 32 || ancestors.includes(payload) || !Array.isArray(payload.blocks)) return;
+    const nested = [...ancestors, payload];
+    payload.blocks.forEach((block, index) => {
+      if (isObject(block)) walk(block, [...base, "blocks", String(index)], depth + 1, nested);
+    });
+  };
+  presentation.slides.forEach((slide, index) => {
+    if (isObject(slide)) walk(slide, ["slides", String(index)], 0, []);
+  });
+}
+
+/** The column names a metric link reads: its field, its filters' fields, a baseline's fields and the column that holds the change. */
+export function linkFields(link) {
+  const names = [link.field];
+  for (const condition of Array.isArray(link.filter) ? link.filter : []) names.push(condition?.field);
+  const delta = link.delta;
+  if (isObject(delta)) {
+    if (typeof delta.field === "string") names.push(delta.field);
+    if (isObject(delta.compare) && Array.isArray(delta.compare.filter)) for (const condition of delta.compare.filter) names.push(condition?.field);
+  }
+  return names.filter((name) => typeof name === "string");
+}
+
+/** A copy of a metric link with its column names renamed by `rename(name)`; the same object when no name changed. */
+export function renameLinkFields(link, rename) {
+  const filter = (conditions) => (Array.isArray(conditions) ? conditions.map((condition) => (isObject(condition) && typeof condition.field === "string" ? { ...condition, field: rename(condition.field) } : condition)) : conditions);
+  const next = { ...link, ...(typeof link.field === "string" ? { field: rename(link.field) } : {}), ...(link.filter !== undefined ? { filter: filter(link.filter) } : {}) };
+  if (isObject(link.delta)) {
+    const delta = { ...link.delta };
+    if (typeof delta.field === "string") delta.field = rename(delta.field);
+    if (isObject(delta.compare) && delta.compare.filter !== undefined) delta.compare = { ...delta.compare, filter: filter(delta.compare.filter) };
+    next.delta = delta;
+  }
+  return JSON.stringify(next) === JSON.stringify(link) ? link : next;
+}

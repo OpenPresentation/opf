@@ -163,6 +163,10 @@
       "types": "./dist/image-options.d.ts",
       "default": "./dist/image-options.js"
     },
+    "./embed-options": {
+      "types": "./dist/embed-options.d.ts",
+      "default": "./dist/embed-options.js"
+    },
     "./review": {
       "types": "./dist/review.d.ts",
       "default": "./dist/review.js"
@@ -246,6 +250,22 @@
     "./chart-options-panel": {
       "types": "./dist/chart-options-panel.d.ts",
       "default": "./dist/chart-options-panel.js"
+    },
+    "./chart-bands": {
+      "types": "./dist/chart-bands.d.ts",
+      "default": "./dist/chart-bands.js"
+    },
+    "./chart-bands-panel": {
+      "types": "./dist/chart-bands-panel.d.ts",
+      "default": "./dist/chart-bands-panel.js"
+    },
+    "./table-color-scale": {
+      "types": "./dist/table-color-scale.d.ts",
+      "default": "./dist/table-color-scale.js"
+    },
+    "./table-color-scale-panel": {
+      "types": "./dist/table-color-scale-panel.d.ts",
+      "default": "./dist/table-color-scale-panel.js"
     },
     "./numbering": {
       "types": "./dist/numbering.d.ts",
@@ -368,7 +388,7 @@
     "check:font-hotlinks:built": "node ../../scripts/check-font-hotlinks.mjs --built dist artifacts/playground",
     "build:playground": "node scripts/build-playground.mjs",
     "build:chrome-examples": "node scripts/build-chrome-examples.mjs",
-    "test:playground": "pnpm run build:deps && pnpm run build && pnpm run build:playground && pnpm run check:font-hotlinks:built && node test/playground-pptx.mjs && node test/playground-script-fonts.mjs artifacts/playground-script-fonts && node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts && node test/playground-base-fonts.mjs artifacts/playground-base-fonts && node test/playground-source.mjs && node test/design-controls-browser.mjs && node test/design-gaps-browser.mjs && node test/chart-options-browser.mjs && node test/persistence-browser.mjs && node test/slides-browser.mjs && node test/slide-navigator-browser.mjs && node test/layout-templates-browser.mjs && node test/layout-editor-browser.mjs && node test/template-panel-browser.mjs && node test/numbering-panel-browser.mjs && node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts && node test/canvas-fonts-browser.mjs artifacts/canvas-fonts && node test/find-replace-browser.mjs && node test/image-crop-browser.mjs && node test/mobile-browser.mjs && node test/review-panel-browser.mjs && node test/review-hook-browser.mjs && node test/source-pane-browser.mjs && node test/playground-download.mjs artifacts/playground-download && node test/export-menu-browser.mjs && node test/agent-handoff-browser.mjs && node test/presenter-browser.mjs && node test/presenter-links-browser.mjs && node test/present-button-browser.mjs && node test/icon-picker-browser.mjs && node test/shape-editing-browser.mjs && node test/shape-overlays-browser.mjs",
+    "test:playground": "pnpm run build:deps && pnpm run build && pnpm run build:playground && pnpm run check:font-hotlinks:built && node test/playground-pptx.mjs && node test/playground-script-fonts.mjs artifacts/playground-script-fonts && node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts && node test/playground-base-fonts.mjs artifacts/playground-base-fonts && node test/playground-source.mjs && node test/design-controls-browser.mjs && node test/design-gaps-browser.mjs && node test/chart-options-browser.mjs && node test/persistence-browser.mjs && node test/slides-browser.mjs && node test/slide-navigator-browser.mjs && node test/layout-templates-browser.mjs && node test/layout-editor-browser.mjs && node test/template-panel-browser.mjs && node test/numbering-panel-browser.mjs && node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts && node test/canvas-fonts-browser.mjs artifacts/canvas-fonts && node test/find-replace-browser.mjs && node test/image-crop-browser.mjs && node test/mobile-browser.mjs && node test/review-panel-browser.mjs && node test/review-hook-browser.mjs && node test/source-pane-browser.mjs && node test/playground-download.mjs artifacts/playground-download && node test/export-menu-browser.mjs && node test/agent-handoff-browser.mjs && node test/presenter-browser.mjs && node test/presenter-links-browser.mjs && node test/presenter-embeds-browser.mjs && node test/present-button-browser.mjs && node test/icon-picker-browser.mjs && node test/shape-editing-browser.mjs && node test/shape-overlays-browser.mjs",
     "test:code-browser": "node test/code-browser.mjs",
     "test:selection-browser": "node test/selection-browser.mjs",
     "test:click-entry-browser": "node test/click-entry-browser.mjs",
@@ -407,6 +427,7 @@
     "test:numbering-panel-browser": "node test/numbering-panel-browser.mjs",
     "test:presenter-browser": "node test/presenter-browser.mjs",
     "test:presenter-links-browser": "node test/presenter-links-browser.mjs",
+    "test:presenter-embeds-browser": "node test/presenter-embeds-browser.mjs",
     "test:present-button-browser": "node test/present-button-browser.mjs",
     "test:icon-picker-browser": "node test/icon-picker-browser.mjs",
     "test:shape-editing-browser": "node test/shape-editing-browser.mjs",

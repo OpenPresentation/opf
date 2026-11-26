@@ -542,6 +542,31 @@ const datasetStale: RuleText = (finding) => ({
   next: "take the data from its data source again and update `retrieved`, or change the data source's `refreshEvery`.",
 });
 
+const metricDataStale: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "apply the fix, which writes the computed number; or change the data link to compute what the slide says.",
+});
+
+const metricDataAggregate: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "use first, last or count, which fit any column, or link a column typed number.",
+});
+
+const metricDataEmpty: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "check the filter and the field: a row has to meet the filter and give a usable cell.",
+});
+
+const metricDataDelta: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "give the change something to compare with, or write the change in a column and use `field`.",
+});
+
+const metricUnitRepeated: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "drop the unit, or take its text out of the number format.",
+});
+
 const chartMappingAdapted: RuleText = (finding) => ({
   message: keep(cap(finding.message)),
   next: "remove that mapping entry, or name a different column.",
@@ -552,6 +577,14 @@ const chartSeriesDropped: RuleText = (finding) => ({
   next: "use a chart type that plots every series, or one chart per series.",
 });
 
+const embedCredentials: RuleText = (finding) => {
+  const part = match(finding.message, /carries what looks like a credential \((.+?)\)\./)?.[1];
+  return {
+    message: `This embed's address carries what looks like a credential${part ? ` (${part})` : ""}, and anyone with the deck can read it.`,
+    next: "take the credential out of `src`: the host that shows the page holds it.",
+  };
+};
+
 const chartHighlightAdapted: RuleText = (finding) => {
   const name = unquote(match(finding.message, /^highlight names \w+ ("(?:[^"\\]|\\.)*"), which is not plotted as a series/)?.[1]);
   if (!name) return undefined;
@@ -560,6 +593,36 @@ const chartHighlightAdapted: RuleText = (finding) => {
     next: "name a series the chart plots, or remove the entry.",
   };
 };
+
+const chartBandsOrder: RuleText = (finding) => finding.message.startsWith("The bands are not in increasing order") ? {
+  message: "The bands are not in increasing order of their `to` values, so they are drawn sorted.",
+  next: "write each band's `to` above the previous one.",
+} : undefined;
+
+const chartBandsUnsupported: RuleText = (finding) => finding.message.startsWith("This chart type does not draw bands") ? {
+  message: "This chart type does not draw bands, so they are ignored.",
+  next: "use a bar, column, line, area or bullet chart, or remove the bands.",
+} : undefined;
+
+const metricGaugeRange: RuleText = (finding) => finding.message.startsWith("The gauge's") ? {
+  message: finding.message,
+  next: "write the gauge's max above its min, and keep the value, the target and the bands between them.",
+} : undefined;
+
+const metricGaugeValue: RuleText = (finding) => finding.message.startsWith("A gauge needs a number") ? {
+  message: "A gauge needs a number, and this metric's value is text, so it is drawn without its gauge.",
+  next: "give the metric a number value, or remove the gauge.",
+} : undefined;
+
+const tableColorScaleNoData: RuleText = (finding) => finding.message.startsWith("The color scale's columns hold no numbers") ? {
+  message: "None of the color scale's columns holds a number, so no cell is shaded.",
+  next: "name columns that hold numbers, or remove the color scale.",
+} : undefined;
+
+const tableColorScaleRange: RuleText = (finding) => finding.message.startsWith("The color scale's range is empty") ? {
+  message: "The color scale's range is empty or its center is outside it, so part of the scale is unused.",
+  next: "pin min below max and keep center between them, or leave the range to the data.",
+} : undefined;
 
 const codeHighlightOutOfRange: RuleText = (finding) => {
   const found = match(finding.message, /line (\d+) is past the last line \(the code has (\d+) lines?\)/);
@@ -718,8 +781,20 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/data-cell-type": dataCellType,
   "opf/datasource-credentials": datasourceCredentials,
   "opf/dataset-stale": datasetStale,
+  "opf/metric-data-stale": metricDataStale,
+  "opf/metric-data-aggregate": metricDataAggregate,
+  "opf/metric-data-empty": metricDataEmpty,
+  "opf/metric-data-delta": metricDataDelta,
+  "opf/metric-unit-repeated": metricUnitRepeated,
   "opf/chart-highlight-adapted": chartHighlightAdapted,
+  "opf/table-color-scale-no-data": tableColorScaleNoData,
+  "opf/table-color-scale-range": tableColorScaleRange,
   "opf/chart-series-dropped": chartSeriesDropped,
+  "opf/embed-credentials": embedCredentials,
+  "opf/chart-bands-order": chartBandsOrder,
+  "opf/chart-bands-unsupported": chartBandsUnsupported,
+  "opf/metric-gauge-range": metricGaugeRange,
+  "opf/metric-gauge-value": metricGaugeValue,
   "opf/code-highlight-out-of-range": codeHighlightOutOfRange,
   "opf/code-highlight-range-reversed": codeHighlightRangeReversed,
   "opf/variable-builtin-missing": variableBuiltinMissing,

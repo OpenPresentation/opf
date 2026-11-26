@@ -1,4 +1,5 @@
 import { annotationText } from './annotations.js';
+import { embedValue } from './embed.js';
 import { catalogKinds, checkCatalogsOption, type CatalogOptions } from './catalog-refs.js';
 import { imageBackground, resolveCanvasDimensions, resolveFontFamilies } from './composition.js';
 import { resolveDesignRecords } from './design-records.js';
@@ -135,6 +136,8 @@ export interface PresentationStats {
     table: number;
     image: number;
     video: number;
+    /** Embeds (FR-08): `embed` payloads, a live web page shown as a linked picture outside a web presenter. */
+    embed: number;
     /** Block entries at any depth. */
     blocks: number;
     /** Root blocks placed in a cell of their slide's grid (`"region": "top:center"` on a slide without a layout). */
@@ -234,7 +237,7 @@ export interface StatsOptions extends CatalogOptions {
 }
 
 const DEFAULT_WORDS_PER_MINUTE = 130;
-const KIND_ORDER = ['text', 'items', 'bullets', 'quote', 'metric', 'code', 'timeline', 'diagram', 'chart', 'table', 'image', 'video'] as const;
+const KIND_ORDER = ['text', 'items', 'bullets', 'quote', 'metric', 'code', 'timeline', 'diagram', 'chart', 'table', 'image', 'video', 'embed'] as const;
 const FURNITURE_FIELDS = ['image', 'text', 'socials', 'date'] as const;
 const ZONES = ['start', 'center', 'end'] as const;
 
@@ -476,7 +479,7 @@ function compute(presentation: unknown, options: StatsOptions, onFile?: (src: st
   const datasetUse = new Map<string, number>();
 
   // ---- slides --------------------------------------------------------------------------------
-  const payloadCounts = { text: 0, items: 0, bullets: 0, quote: 0, metric: 0, code: 0, timeline: 0, diagram: 0, chart: 0, table: 0, image: 0, video: 0, blocks: 0, cells: 0, groups: 0, maxDepth: 0 };
+  const payloadCounts = { text: 0, items: 0, bullets: 0, quote: 0, metric: 0, code: 0, timeline: 0, diagram: 0, chart: 0, table: 0, image: 0, video: 0, embed: 0, blocks: 0, cells: 0, groups: 0, maxDepth: 0 };
   const layouts = new Map<string, number>(), chartTypes = new Map<string, number>(), extensions = new Set<string>();
   const chartData = { inline: 0, dataset: 0, withDatasource: 0 };
   const tableItems: TableFact[] = [];
@@ -528,6 +531,7 @@ function compute(presentation: unknown, options: StatsOptions, onFile?: (src: st
       }
       if (node.image !== undefined) slideImages += contentImage(node.image);
       if (node.video !== undefined) { useAsset(node.video, true); images.videos++; }
+      if (node.embed !== undefined) { const preview = embedValue(node.embed)?.preview; if (preview !== undefined) useAsset(preview); }
       if (isRecord(node.chart)) {
         chartTotal++; slideCharts++;
         bump(chartTypes, str(node.chart.type) ?? 'unknown');

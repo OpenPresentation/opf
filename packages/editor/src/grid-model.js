@@ -19,7 +19,7 @@
 import { cellMatchesType, chartNumber, formatDataNumber, inferColumnDeclaration, inlineChartData, inlineTableData, isXYChartType, numberFormatError } from "@openpresentation/opf";
 import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { checkedDocument, fail, same } from "./edit-helpers.js";
-import { datasetUsage, isDatasetRef, walkDatasetItems } from "./dataset-refs.js";
+import { datasetUsage, isDatasetRef, linkFields, renameLinkFields, walkDatasetItems, walkMetricLinks } from "./dataset-refs.js";
 import { richTextContent, updateRichTextInput } from "./rich-text.js";
 import { formatGridNumber, isCanonicalNumber, parseDelimited, parseGridNumber, resolveNumberFormat, toDelimited } from "./grid-text.js";
 import { applyTableStyleToTable, readTableStyleOfTable } from "./table-options.js";
@@ -359,7 +359,8 @@ function mappingColumns(count, xy, mapping, names) {
 /**
  * What each column of a chart is for: "category" (column A), "series", and for a scatter chart with three or more columns
  * "label" and "x". With a `mapping` (and the column `names` it addresses) the roles follow it: "category" (the label column of a
- * chart with no X axis), "label" and "x" for an XY chart, "series" for a plotted column and "other" for a column nothing plots.
+ * chart with no X axis), "label" and "x" for an XY chart, "series" for a plotted column, "target" for a bullet chart's target column and
+ * "other" for a column nothing plots.
  */
 export function chartColumnRoles(columnCount, chartType, mapping, names) {
   if (isObject(mapping) && Array.isArray(names) && columnCount > 0) {
@@ -369,6 +370,9 @@ export function chartColumnRoles(columnCount, chartType, mapping, names) {
     for (const index of series) roles[index] = "series";
     roles[category] = xy ? "label" : "category";
     if (x !== undefined) roles[x] = "x";
+    // FR-07: a bullet chart's target column (mapping.target) is drawn as the target ticks, not as a series.
+    const target = chartType === "bullet" && typeof mapping.target === "string" ? names.indexOf(mapping.target) : -1;
+    if (target >= 0 && target !== category) roles[target] = "target";
     return roles;
   }
   if (columnCount <= 1) return Array(columnCount).fill("series");
@@ -377,7 +381,7 @@ export function chartColumnRoles(columnCount, chartType, mapping, names) {
 }
 
 const rolesOf = (model) => (model.kind === "chart" ? chartColumnRoles(model.width, model.chartType, model.mapping, namesOfModel(model)) : []);
-const isNumericRole = (role) => role === undefined || role === "series" || role === "x";
+const isNumericRole = (role) => role === undefined || role === "series" || role === "x" || role === "target";
 
 // --- describing --------------------------------------------------------------------------------
 
@@ -625,9 +629,17 @@ function datasetChanges(presentation, found, model) {
   walkDatasetItems(presentation, (entry) => {
     if (entry.id === dataset.id && entry.parts.join(".") !== ownPath) others.push(entry);
   });
+  // FR-06: the metrics linked to this dataset read its columns by name too.
+  const metrics = [];
+  walkMetricLinks(presentation, (entry) => {
+    if (entry.id === dataset.id) metrics.push(entry);
+  });
   if (!dataset.fields) {
     const gone = model.origNames.filter((_, index) => !origin.includes(index));
     for (const name of gone) {
+      const readers = metrics.filter((entry) => linkFields(entry.link).includes(name));
+      if (readers.length)
+        throw fail("dataset-column-in-use", `The column ${JSON.stringify(name)} is read by ${readers.length === 1 ? "a metric" : `${readers.length} metrics`} linked to the dataset '${dataset.id}'. Change the link first.`, { column: name, dataset: dataset.id, metrics: readers.map((entry) => entry.parts.join(".")) });
       const users = others.filter((entry) => (Array.isArray(entry.ref.fields) && entry.ref.fields.includes(name)) || (isObject(entry.item.mapping) && [entry.item.mapping.category, entry.item.mapping.x, ...(entry.item.mapping.series ?? [])].includes(name)));
       if (users.length)
         throw fail("dataset-column-in-use", `The column ${JSON.stringify(name)} is used by ${users.length === 1 ? "another chart or table" : `${users.length} other charts and tables`} that share the dataset '${dataset.id}'. Remove it there first, or use a copy of the data here.`, { column: name, items: users.map((entry) => entry.parts.join(".")) });
@@ -640,6 +652,11 @@ function datasetChanges(presentation, found, model) {
     if (!same(found.owner.mapping, next)) changes.push({ parts: [...found.parts, "mapping"], before: found.owner.mapping, after: next });
   }
   if (renames.size) {
+    const rename = (name) => (renames.has(name) ? renames.get(name) : name);
+    for (const entry of metrics) {
+      const next = renameLinkFields(entry.link, rename);
+      if (next !== entry.link) changes.push({ parts: [...entry.parts, "data"], before: entry.link, after: next });
+    }
     for (const entry of others) {
       if (Array.isArray(entry.ref.fields) && entry.ref.fields.some((name) => renames.has(name)))
         changes.push({ parts: [...entry.refParts, "fields"], before: entry.ref.fields, after: entry.ref.fields.map((name) => (renames.has(name) ? renames.get(name) : name)) });

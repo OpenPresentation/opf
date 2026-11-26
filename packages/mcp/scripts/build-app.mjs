@@ -14,6 +14,7 @@ import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
 import { assertAppResourceFrame } from "./app-resource-frame.mjs";
 import { minifyAppCss } from "./app-css.mjs";
+import { compactDataPlugin } from "./app-data.mjs";
 import { assertSameProgram, cheaperQuotes } from "./app-quotes.mjs";
 
 const require = createRequire(import.meta.url);
@@ -58,9 +59,13 @@ const zodEnglishOnly = {
 	},
 };
 
+// The gallery's records and the renderer's font manifest as compact expressions instead of JSON text (app-data.mjs): the same
+// values, fewer frame bytes.
+const dataModules = {};
+
 const profile = process.env.OPF_MCP_APP_PROFILE;
 const bundle = await build({
-	plugins: [zodEnglishOnly],
+	plugins: [zodEnglishOnly, compactDataPlugin(dataModules)],
 	metafile: true,
 	// A path, not URL.pathname, which on Windows is "/C:/..." and does not resolve.
 	entryPoints: [fileURLToPath(new URL("app/main.ts", here))],
@@ -80,6 +85,7 @@ const bundle = await build({
 	// tsup's chunks of core are imported bare for their order only; they are pure, so dropping the bare import changes nothing.
 	logOverride: { "ignored-bare-import": "silent" },
 });
+for (const [name, count] of Object.entries(dataModules)) if (count !== 1) throw new Error(`build-app: the ${name} module was rewritten ${count} times, not once; review app-data.mjs.`);
 if (zodLocaleIndexes === 0) throw new Error("build-app: zod's locale index (zod/v4/locales/index.js) was not in the bundle, so the English-only rule no longer applies. Review the rule.");
 const otherLocales = Object.keys(bundle.metafile.inputs).filter((input) => /[\\/]zod[\\/]v4[\\/]locales[\\/](?!en\.js$|index\.js$)[^\\/]+$/.test(input));
 if (otherLocales.length) throw new Error(`build-app: zod locale modules other than English are in the bundle: ${otherLocales.join(", ")}.`);

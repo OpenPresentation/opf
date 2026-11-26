@@ -473,13 +473,27 @@ const DISTRIBUTION_ELEMENTS = new Set(["histogramChart", "boxWhiskerChart", "map
 
 // RR-54: `mapping.x` names the X column of an XY chart; a type without an X axis ignores it (core warns chart-mapping-adapted). Switching to such a
 // type removes it, and the whole mapping when nothing else is left, so the document does not keep a warning it cannot act on.
+// FR-07: `mapping.target` belongs to a bullet chart. Switching away removes it; switching to a bullet chart with none sets it to a column named
+// like a target ("Target", "Goal", "Plan", "Budget", "Quota"), a convenience of the editor only (the format never guesses).
 function staleMappingPatches(presentation, owner, chart, type) {
-  const mapping = chart.mapping;
-  if (!mapping || typeof mapping !== "object" || Array.isArray(mapping) || mapping.x === undefined) return [];
-  if (isXYChartType(type)) return [];
-  const { x: _x, ...rest } = mapping;
+  const mapping = chart.mapping && typeof chart.mapping === "object" && !Array.isArray(chart.mapping) ? chart.mapping : undefined;
+  const next = { ...(mapping ?? {}) };
+  if (next.x !== undefined && !isXYChartType(type)) delete next.x;
+  if (next.target !== undefined && type !== "bullet") delete next.target;
+  if (type === "bullet" && next.target === undefined) {
+    const target = bulletTargetColumn(chart, presentation);
+    if (target !== undefined) next.target = target;
+  }
+  if (same(next, mapping ?? {})) return [];
   const parts = [...owner, "chart", "mapping"];
-  return Object.keys(rest).length ? createValuePatch(presentation, parts, rest) : [{ op: "remove", path: opfPathToJsonPointer(parts) }];
+  return Object.keys(next).length ? createValuePatch(presentation, parts, next) : [{ op: "remove", path: opfPathToJsonPointer(parts) }];
+}
+
+/** FR-07: the column a bullet chart would take as its target: one named Target, Goal, Plan, Budget or Quota that is not the category, or undefined. */
+export function bulletTargetColumn(chart, presentation) {
+  const resolved = resolveChartData({ ...chart, type: "column", mapping: chart.mapping?.category !== undefined ? { category: chart.mapping.category } : undefined }, presentation);
+  if (!resolved.ok) return undefined;
+  return resolved.columns.slice(1).find((name) => /^(targets?|goals?|plan|budget|quota)$/i.test(String(name).trim()));
 }
 
 // FA-15: `lineSeries`, `secondaryAxis` and the secondary axis title belong to combo charts; any other type ignores them (core warns
@@ -559,7 +573,8 @@ export function compatibleChartTypes(presentation, options = {}) {
           ? shape.series >= record.series
           : record.series === shape.series
         : shape.series === 1 || (MULTI_SERIES_CAPABLE.has(element) && !SINGLE_SERIES_ONLY.has(element)));
-    if (current || (simple && seriesOk)) result.push({ id: option.id, label: option.label, current, record });
+    // FR-07: a bullet chart plots one measure and may name a target among the other columns, so any category data with a series fits.
+    if (current || (simple && (seriesOk || (option.id === "bullet" && shape && shape.series >= 1)))) result.push({ id: option.id, label: option.label, current, record });
   }
   return result;
 }

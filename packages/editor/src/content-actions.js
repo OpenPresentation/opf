@@ -19,6 +19,7 @@ import {
   unwrapGroup,
   wrapBlocks,
 } from "@openpresentation/opf/convert";
+import { resolveMetric } from "@openpresentation/opf";
 import { applyJsonPatch, getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { readBlockContent } from "./block-convert.js";
 import { checkedDocument, fail } from "./edit-helpers.js";
@@ -147,6 +148,134 @@ export function setMetricTrend(editor, blockPath, trend, meta = {}) {
   const prepared = prepareMetricTrend(editor.presentation, blockPath, trend);
   const result = apply(editor, prepared, meta, "metric-trend");
   return { ...result, trend };
+}
+
+// --- a metric computed from data (FR-06) ---------------------------------------------------
+
+/** The aggregates a metric's link takes, as the schema's `DataLink.aggregate` has them. */
+export const METRIC_AGGREGATES = Object.freeze(["sum", "mean", "min", "max", "count", "first", "last"]);
+/** The directions of change that can be good news: `Metric.better`. */
+export const METRIC_BETTER = Object.freeze(["up", "down"]);
+/** The comparisons of a metric's change (`MetricDelta`): none, the previous row, a baseline filter, a fixed number, a column that holds the change. */
+export const METRIC_CHANGES = Object.freeze(["none", "previous", "baseline", "value", "column"]);
+
+/**
+ * FR-07, part 3: the gauge a metric starts with when the editor turns it on: `min` 0 and `max` the next round number above the value (1 for a
+ * value from 0 to 1; 80 for 72; 2000 for 1284). An editor convenience only: the format never guesses a range. `value` is the number the
+ * metric shows (its computed or written value); without one the range is 0 to 1.
+ */
+export function defaultMetricGauge(value) {
+  if (typeof value !== "number" || !Number.isFinite(value) || value <= 0) return { max: 1 };
+  if (value <= 1) return { max: 1 };
+  const magnitude = 10 ** Math.floor(Math.log10(value));
+  const max = Math.ceil(value / magnitude) * magnitude;
+  return { max: max > value ? max : max + magnitude };
+}
+
+const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
+const columnNameOf = (column) => (typeof column === "string" ? column : isObject(column) && typeof column.name === "string" ? column.name : "");
+
+/** The deck's datasets for a Data section: `[{ id, title, columns: [{ name, type?, role?, format? }] }]`, the `measure` columns first. */
+export function metricDatasets(presentation) {
+  const sets = isObject(presentation?.datasets) ? presentation.datasets : {};
+  return Object.entries(sets).map(([id, dataset]) => {
+    const columns = (Array.isArray(dataset?.columns) ? dataset.columns : []).map((column) => ({
+      name: columnNameOf(column),
+      ...(isObject(column) && typeof column.type === "string" ? { type: column.type } : {}),
+      ...(isObject(column) && typeof column.role === "string" ? { role: column.role } : {}),
+      ...(isObject(column) && typeof column.format === "string" ? { format: column.format } : {}),
+    }));
+    const measures = columns.filter((column) => column.role === "measure");
+    return { id, ...(typeof dataset?.title === "string" ? { title: dataset.title } : {}), columns: [...measures, ...columns.filter((column) => column.role !== "measure")] };
+  });
+}
+
+/** The kind of change a link computes: one of METRIC_CHANGES. */
+export function metricChangeKind(link) {
+  const delta = isObject(link) ? link.delta : undefined;
+  if (!isObject(delta)) return "none";
+  if (delta.field !== undefined) return "column";
+  if (delta.compare === "previous") return "previous";
+  if (isObject(delta.compare) && "filter" in delta.compare) return "baseline";
+  if (isObject(delta.compare) && "value" in delta.compare) return "value";
+  return "none";
+}
+
+/**
+ * What the metric block at `blockPath` reads from data, for a form: `{ path, scalar, link, better, format, datasets, resolved, value,
+ * delta, stale, diagnostics }`. `resolved` says whether the link computes (the computed numbers are drawn; `value` and `delta` say
+ * which: `{ text, number, ... }`); `stale` lists the written numbers that differ from the computed ones, each with the fix that writes
+ * the computed number. Undefined for a block that is not a metric.
+ */
+export function readMetricData(presentation, blockPath, options = {}) {
+  const found = readBlockContent(presentation, blockPath);
+  if (!found || found.kind !== "metric") return undefined;
+  const metric = found.owner.metric;
+  const object = isObject(metric);
+  const path = [...found.path, "metric"].join(".");
+  const language = options.language ?? (typeof presentation?.language === "string" ? presentation.language : undefined);
+  const resolved = object ? resolveMetric(metric, presentation, { path: opfPathToJsonPointer([...found.path, "metric"]), ...(language ? { language } : {}) }) : undefined;
+  return {
+    path,
+    scalar: !object,
+    link: object && isObject(metric.data) ? metric.data : undefined,
+    better: object ? metric.better : undefined,
+    format: object ? metric.format : undefined,
+    gauge: object && isObject(metric.gauge) ? metric.gauge : undefined,
+    number: resolved?.value?.isNumber ? resolved.value.number : typeof metric === "number" ? metric : undefined,
+    datasets: metricDatasets(presentation),
+    resolved: resolved?.resolved === true,
+    value: resolved?.resolved ? resolved.value : undefined,
+    delta: resolved?.resolved ? resolved.delta : undefined,
+    stale: (resolved?.diagnostics ?? []).filter((entry) => entry.code === "metric-data-stale").map((entry) => ({ field: entry.path.endsWith("/delta") ? "delta" : "value", message: entry.message, fix: entry.fix })),
+    diagnostics: resolved?.diagnostics ?? [],
+  };
+}
+
+/**
+ * Compute the patches that set a metric's link (`data`), the direction that is good (`better`) and its number `format`: `change` is
+ * `{ data?, better?, format? }`, where a key set to `null` removes it and an absent key is left as it is. A bare value (`metric: 42`)
+ * becomes `{ value: 42, ... }`. The link, `better` and `format` stay through every other edit of the metric.
+ */
+export function prepareMetricData(presentation, blockPath, change) {
+  const found = readMetricData(presentation, blockPath);
+  if (!found) throw refuse("Choose a metric block to link it to data.", { path: blockPath });
+  if (!isObject(change)) throw fail("invalid-metric-data", "A change is { data?, better?, format? }.", { change });
+  if (change.better != null && !METRIC_BETTER.includes(change.better)) throw fail("invalid-metric-better", `A metric's better is one of ${METRIC_BETTER.join(", ")}, or null to remove it.`, { better: change.better });
+  const parts = found.path.split(".");
+  const metric = getValueAtPath(presentation, parts);
+  if (change.gauge != null && (!isObject(change.gauge) || typeof change.gauge.max !== "number")) throw fail("invalid-metric-gauge", "A gauge is { min?, max, bands?, target? } with a number max, or null to remove it.", { gauge: change.gauge });
+  const keys = ["data", "better", "format", "gauge"].filter((key) => change[key] !== undefined);
+  let patches;
+  if (found.scalar) {
+    const set = keys.filter((key) => change[key] !== null);
+    patches = set.length ? [{ op: "replace", path: opfPathToJsonPointer(parts), value: { value: metric, ...Object.fromEntries(set.map((key) => [key, structuredClone(change[key])])) } }] : [];
+  } else {
+    patches = keys.flatMap((key) => {
+      const pointer = opfPathToJsonPointer([...parts, key]);
+      if (change[key] === null) return metric[key] === undefined ? [] : [{ op: "remove", path: pointer }];
+      return JSON.stringify(metric[key]) === JSON.stringify(change[key]) ? [] : [{ op: metric[key] === undefined ? "add" : "replace", path: pointer, value: structuredClone(change[key]) }];
+    });
+  }
+  return finish(presentation, patches, { path: found.path, changed: patches.length > 0, lossless: true, loss: [] });
+}
+/** Set (or, with `null`, remove) a metric's `data`, `better`, `format` and `gauge` as one undoable step. */
+export function setMetricData(editor, blockPath, change, meta = {}) {
+  requireEditor(editor);
+  return apply(editor, prepareMetricData(editor.presentation, blockPath, change), meta, "metric-data");
+}
+
+/** Compute the patches that write the computed numbers into the metric's written `value` and `delta` (the safe fix of `metric-data-stale`). */
+export function prepareMetricUpdate(presentation, blockPath) {
+  const found = readMetricData(presentation, blockPath);
+  if (!found) throw refuse("Choose a metric block to update its written numbers.", { path: blockPath });
+  const patches = found.stale.flatMap((entry) => entry.fix?.patch ?? []);
+  return finish(presentation, patches, { path: found.path, changed: patches.length > 0, lossless: true, loss: [] });
+}
+/** Write the computed numbers into the metric's written `value` and `delta` as one undoable step (the editor's Update button). */
+export function updateMetricData(editor, blockPath, meta = {}) {
+  requireEditor(editor);
+  return apply(editor, prepareMetricUpdate(editor.presentation, blockPath), meta, "metric-update");
 }
 
 // --- structure inside one slide ----------------------------------------------------------------

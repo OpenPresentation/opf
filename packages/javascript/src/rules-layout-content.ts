@@ -70,6 +70,10 @@ const layoutRules: ValidationRule[] = [
 					// A reference label that meets another label, a data line or a mark on both sides at both ends of its line: drawn as asked, and reported as what it is.
 					else if (diagnostic.code === 'chart-label-collision')
 						context.report(chartLabelCollisionRule, { path, slide, message: diagnostic.message, help: "Put the label at the other end of its line (labelPosition 'start' or 'end'), shorten it, or give the chart more room. Its text and value are kept." });
+					// FR-07: band labels listed in the legend because they do not fit inside their bands: a composition diagnostic, not a finding.
+					else if (diagnostic.code === 'chart-band-labels-in-legend') continue;
+					// FR-07, part 3: a gauge its region cannot hold, drawn as a plain metric: a composition diagnostic, not a finding.
+					else if (diagnostic.code === 'metric-gauge-dropped') continue;
 					// RR-105: a timeline period shorter than its marker (geometry, not overflow).
 					else if (diagnostic.code === 'timeline-period-short')
 						context.report(timelinePeriodShortRule, { path, slide, message: diagnostic.message, help: 'Give the timeline more room, or make its shortest period longer relative to the others.' });
@@ -277,7 +281,7 @@ const contentRules: ValidationRule[] = [
 				if (slide.slide.layout === 'blank') continue;
 				const has = (value: unknown) => value !== undefined && value !== null && !(typeof value === 'string' && value.trim() === '') && !(Array.isArray(value) && value.length === 0);
 				const hasText = slide.texts.some((tv) => plainText(tv.value).trim() !== '');
-				const hasObject = slidePayloads(slide.slide, slide.path).some((p) => ['image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram'].some((field) => has(p.node[field])));
+				const hasObject = slidePayloads(slide.slide, slide.path).some((p) => ['image', 'video', 'embed', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram'].some((field) => has(p.node[field])));
 				const hasBackgroundImage = imageBackground(rec(slide.slide.design).background) !== undefined;
 				if (hasText || hasObject || hasBackgroundImage) continue;
 				context.report(emptySlideRule, { path: slide.path, slide, message: `Slide ${slide.index + 1} has no title and no content.`, help: 'Add content, delete the slide, or give it the blank layout if it is intentionally empty.' });
