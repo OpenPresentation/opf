@@ -49,16 +49,16 @@ const plan = (editor) => readChartOptions(editor.get(C), editor.presentation).co
   const svgBefore = toSvg(editor.presentation, 1, { trace: true });
   setChartOptions(editor, C, { secondaryAxis: ["Margin"] });
   assert.deepEqual(editor.get(C).secondaryAxis, ["Margin"]);
-  assert.equal(editor.get(C).line, undefined, "the default line is not written");
+  assert.equal(editor.get(C).lineSeries, undefined, "the default line is not written");
   setChartOptions(editor, C, { axisTitles: { secondary: "Margin" } });
   assert.deepEqual(editor.get(C).axisTitles, { secondary: "Margin" });
   setChartOptions(editor, C, { lineSeries: ["Cost", "Margin"] });
-  assert.deepEqual(editor.get(C).line, ["Cost", "Margin"]);
+  assert.deepEqual(editor.get(C).lineSeries, ["Cost", "Margin"]);
   assert.deepEqual(plan(editor), ["Revenue:bar/primary", "Cost:line/primary", "Margin:line/secondary"]);
   assert.equal(adapted(editor.presentation).counts.warning, 0, JSON.stringify(adapted(editor.presentation).findings));
   // A series that stops being a line leaves the secondary axis, and the secondary title goes with the last secondary line.
   setChartOptions(editor, C, { lineSeries: ["Cost"] });
-  assert.deepEqual(editor.get(C).line, ["Cost"]);
+  assert.deepEqual(editor.get(C).lineSeries, ["Cost"]);
   assert.equal(editor.get(C).secondaryAxis, undefined);
   assert.equal(editor.get(C).axisTitles, undefined, "no secondary axis, no secondary title");
   // Undo walks back each change.
@@ -87,7 +87,7 @@ const plan = (editor) => readChartOptions(editor.get(C), editor.presentation).co
   switchDimension(editor, "charts", "line", { slideIndex: 0 });
   const chart = editor.get(C);
   assert.equal(chart.type, "line");
-  assert.equal(chart.line, undefined);
+  assert.equal(chart.lineSeries, undefined);
   assert.equal(chart.secondaryAxis, undefined);
   assert.deepEqual(chart.axisTitles, { value: "Revenue" });
   assert.equal(adapted(editor.presentation).counts.warning, 0);
