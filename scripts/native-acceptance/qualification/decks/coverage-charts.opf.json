@@ -1254,70 +1254,6 @@
               "color": "accent2",
               "dash": "dot"
             }
-          },
-          {
-            "value": 29,
-            "stroke": {
-              "color": "accent3",
-              "width": 1.5,
-              "dash": "longDash"
-            }
-          },
-          {
-            "value": 30.5,
-            "stroke": {
-              "color": "accent3",
-              "width": 1.5,
-              "dash": "dashDot"
-            }
-          },
-          {
-            "value": 32,
-            "stroke": {
-              "color": "accent3",
-              "width": 1.5,
-              "dash": "longDashDot"
-            }
-          },
-          {
-            "value": 33.5,
-            "stroke": {
-              "color": "accent3",
-              "width": 1.5,
-              "dash": "longDashDotDot"
-            }
-          },
-          {
-            "value": 35,
-            "stroke": {
-              "color": "accent3",
-              "width": 1.5,
-              "dash": "sysDot"
-            }
-          },
-          {
-            "value": 36.5,
-            "stroke": {
-              "color": "accent3",
-              "width": 1.5,
-              "dash": "sysDash"
-            }
-          },
-          {
-            "value": 38,
-            "stroke": {
-              "color": "accent3",
-              "width": 1.5,
-              "dash": "sysDashDot"
-            }
-          },
-          {
-            "value": 39.5,
-            "stroke": {
-              "color": "accent3",
-              "width": 1.5,
-              "dash": "sysDashDotDot"
-            }
           }
         ]
       }
@@ -1461,6 +1397,100 @@
       "title": "Plan status by region, from a typed dataset",
       "table": {
         "dataset": "plan"
+      }
+    },
+    {
+      "id": "reference-dashes",
+      "title": "Reference lines in the eight other preset dashes",
+      "chart": {
+        "type": "bar",
+        "data": {
+          "columns": [
+            "Terminal",
+            "Wait"
+          ],
+          "rows": [
+            [
+              "North",
+              42
+            ],
+            [
+              "South",
+              28
+            ],
+            [
+              "East",
+              35
+            ]
+          ]
+        },
+        "legend": "none",
+        "referenceLines": [
+          {
+            "value": 29,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "longDash"
+            }
+          },
+          {
+            "value": 30.5,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "dashDot"
+            }
+          },
+          {
+            "value": 32,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "longDashDot"
+            }
+          },
+          {
+            "value": 33.5,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "longDashDotDot"
+            }
+          },
+          {
+            "value": 35,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "sysDot"
+            }
+          },
+          {
+            "value": 36.5,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "sysDash"
+            }
+          },
+          {
+            "value": 38,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "sysDashDot"
+            }
+          },
+          {
+            "value": 39.5,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "sysDashDotDot"
+            }
+          }
+        ]
       }
     }
   ]
