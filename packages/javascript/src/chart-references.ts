@@ -32,13 +32,10 @@ export interface ChartReferenceLine extends ChartReference {
 export interface ChartReferenceDiagnostic {index: number; code: 'chart-reference-label-overflow' | 'chart-reference-label-collision'; message: string}
 export interface ChartLayerReferences {lines: ChartReferenceLine[]; diagnostics: ChartReferenceDiagnostic[]}
 const record=(v: unknown): v is Record<string,unknown>=>typeof v==='object'&&v!==null&&!Array.isArray(v);
+/** The preset dash names of a chart reference line's stroke (the names a shape outline's `Stroke.dash` takes); `dash` is the default. */
+export type ChartReferenceDash = 'solid' | 'dot' | 'dash' | 'longDash' | 'dashDot' | 'longDashDot' | 'longDashDotDot' | 'sysDot' | 'sysDash' | 'sysDashDot' | 'sysDashDotDot';
+const CHART_REFERENCE_DASHES: ReadonlySet<string> = new Set(['solid', 'dot', 'dash', 'longDash', 'dashDot', 'longDashDot', 'longDashDotDot', 'sysDot', 'sysDash', 'sysDashDot', 'sysDashDotDot']);
 /** Read only explicit properties; never parse text, suppress duplicates or impose a line cap. */
-/** The preset dash names of a chart reference line's stroke (the names a shape outline's `Stroke.dash` takes); `dash` is the default. */
-export type ChartReferenceDash = 'solid' | 'dot' | 'dash' | 'longDash' | 'dashDot' | 'longDashDot' | 'longDashDotDot' | 'sysDot' | 'sysDash' | 'sysDashDot' | 'sysDashDotDot';
-const CHART_REFERENCE_DASHES: ReadonlySet<string> = new Set(['solid', 'dot', 'dash', 'longDash', 'dashDot', 'longDashDot', 'longDashDotDot', 'sysDot', 'sysDash', 'sysDashDot', 'sysDashDotDot']);
-/** The preset dash names of a chart reference line's stroke (the names a shape outline's `Stroke.dash` takes); `dash` is the default. */
-export type ChartReferenceDash = 'solid' | 'dot' | 'dash' | 'longDash' | 'dashDot' | 'longDashDot' | 'longDashDotDot' | 'sysDot' | 'sysDash' | 'sysDashDot' | 'sysDashDotDot';
-const CHART_REFERENCE_DASHES: ReadonlySet<string> = new Set(['solid', 'dot', 'dash', 'longDash', 'dashDot', 'longDashDot', 'longDashDotDot', 'sysDot', 'sysDash', 'sysDashDot', 'sysDashDotDot']);
 export function chartReferences(chart: unknown): ChartReference[] {
   if(!record(chart)||typeof chart.type!=='string'||!CHART_REFERENCE_TYPES.has(chart.type)||!Array.isArray(chart.referenceLines))return [];
   return chart.referenceLines.flatMap((entry):ChartReference[]=>{

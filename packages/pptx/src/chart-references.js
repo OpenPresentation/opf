@@ -11,10 +11,6 @@ import { PRESET_DASH_VALUES } from './shape-blocks.js';
 
 /** a:prstDash values back to the OPF dash names (the inverse of PRESET_DASH_VALUES). */
 const OPF_DASH_NAMES = Object.freeze(Object.fromEntries(Object.entries(PRESET_DASH_VALUES).map(([name, value]) => [value, name])));
-import { PRESET_DASH_VALUES } from './shape-blocks.js';
-
-/** a:prstDash values back to the OPF dash names (the inverse of PRESET_DASH_VALUES). */
-const OPF_DASH_NAMES = Object.freeze(Object.fromEntries(Object.entries(PRESET_DASH_VALUES).map(([name, value]) => [value, name])));
 export const REFERENCE_URI = 'urn:openpresentation:chart-references:v1';
 const URI = REFERENCE_URI,
   TAG = 'OPF_CHART_REFERENCE_V1';
