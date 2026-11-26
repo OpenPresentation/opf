@@ -577,7 +577,11 @@ describe("the bundled sources", () => {
 		// links, and was under the limit without it. Every 0.37.0 item documents a new part of the format (data sources, typed columns,
 		// the computed metric and the rest are still to come), so the limit comes back to the 3% headroom, rounded up to 1,000 bytes:
 		// 1,482,000.
-		assert.ok(bytes < 1_482_000, `${bytes} bytes of documentation`);
+		// Reviewed for the computed metric (FR-06) on 2026-11-26 (vetoable): 1,496,616 exact bytes on main at a0421001c (typed columns,
+		// translations and embed are documented there) with FR-06, 14,616 over the limit above. The table color scale, bands with the bullet
+		// chart, the gauge and the key renames each document a new part of the format too, so the limit comes back to the 3% headroom,
+		// rounded up to 1,000 bytes: 1,542,000.
+		assert.ok(bytes < 1_542_000, `${bytes} bytes of documentation`);
 	});
 });
 

@@ -52,6 +52,7 @@ import { readOverlay } from "./shape-overlays.js";
 import { IMAGE_EDGES, IMAGE_FITS, IMAGE_SHAPES, readEffectiveImageFit, readImageTreatments, setImageTreatment } from "./image-options.js";
 import { EMBED_ASPECT_PRESETS, prepareEmbed, readEmbed, setEmbed } from "./embed-options.js";
 import { METRIC_TRENDS, readMetricTrend, setMetricTrend } from "./content-actions.js";
+import { createMetricDataControls } from "./metric-data-controls.js";
 import { applyCatalogUpdate, catalogRecordAt, checkCatalogUpdates, mergeCatalogs, moveToCustom, referenceFindings } from "./catalogs.js";
 import { describeTableCell, mergeTableCells, parseTableCellPath, readTableAlt, readTableStyle, setTableAlt, setTableCellStyle, setTableStyle, splitTableCell } from "./table-options.js";
 import { OPFEditorError } from "./index.js";
@@ -1277,6 +1278,8 @@ export function createDesignControls(container, options = {}) {
       clipboard.writeText(path).then(() => say(`Copied ${path}.`), () => complain("Could not copy the path."));
     });
     const advanced = h("details", { class: "opf-dc-advanced", "data-role": "selection-advanced", hidden: options.showPath === false || undefined }, h("summary", {}, "Advanced"), pathChip);
+    // FR-06: the Data section of a metric: its link to a dataset, the change, the direction that is good and the number format.
+    const metricData = createMetricDataControls({ editor, h, selectField, textField, button, run });
     // FR-08: an embed's address, title, aspect ratio and preview (the editor never loads the page; the canvas draws its picture or card).
     const embedSet = (fields, done) => run(() => setEmbed(editor, dynamic.embedPath, fields), done);
     const embedSrc = textField("embed-src", "Address", { placeholder: "https://app.example.com/dashboard", help: "The page's https address. Enter applies.", onCommit: (value) => embedSet({ src: value }, "Embed address changed.") });
@@ -1304,8 +1307,8 @@ export function createDesignControls(container, options = {}) {
       if (/^https:\/\/[^\s/?#]/.test(address)) doc.defaultView?.open?.(address, "_blank", "noopener,noreferrer");
     }, { quiet: true, title: "Open the page in a new tab" });
     const embedBox = h("fieldset", { class: "opf-dc-fieldset", "data-role": "embed", hidden: true }, h("legend", {}, "Embed"), embedSrc.wrap, embedTitle.wrap, embedRatio.wrap, embedRatioNumber.wrap, embedPreview.wrap, embedOpen);
-    body.append(contentControls.nodes.arrange, contentControls.nodes.list, convert.wrap, contentControls.nodes.metrics, trend.wrap, iconHost, chartType.wrap, replace.wrap, contentControls.nodes.image, embedBox, advanced);
-    dynamic.selection = { details, convert, replace, chartType, trend, iconPicker, pathChip, advanced, embed: { box: embedBox, src: embedSrc, title: embedTitle, ratio: embedRatio, ratioNumber: embedRatioNumber, preview: embedPreview } };
+    body.append(contentControls.nodes.arrange, contentControls.nodes.list, convert.wrap, contentControls.nodes.metrics, trend.wrap, metricData.node, iconHost, chartType.wrap, replace.wrap, contentControls.nodes.image, embedBox, advanced);
+    dynamic.selection = { details, convert, replace, chartType, trend, metricData, iconPicker, pathChip, advanced, embed: { box: embedBox, src: embedSrc, title: embedTitle, ratio: embedRatio, ratioNumber: embedRatioNumber, preview: embedPreview } };
   }
 
   if (built["slide-content"]) built["slide-content"].body.append(contentControls.slideNode);
@@ -1563,6 +1566,7 @@ export function createDesignControls(container, options = {}) {
       const metricTrend = content?.kind === "metric" ? readMetricTrend(document_, blockPath) : undefined;
       ui.trend.wrap.hidden = !metricTrend;
       if (metricTrend) ui.trend.set(metricTrend.trend ?? "");
+      ui.metricData.sync(content?.kind === "metric" ? blockPath : undefined);
       ui.iconPicker.refresh();
       if (content && !shaped) {
         const targets = blockConversionTargets(document_, blockPath);

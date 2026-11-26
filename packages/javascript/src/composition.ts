@@ -14,6 +14,7 @@ import {chartTextSize,chartValueAxis,chartComboAxes,shareSiblingChartAxes,type C
 import {chartHeader,chartLayer,type ChartLayer} from './chart-layer.js';
 import {NUMBER_GROUPING_MIN} from './number-grouping.js';
 import {formatNumber,languageInEffect,localizeDigits} from './numerals.js';
+import {resolveMetric,type MetricRecord} from './metric-data.js';
 import {chartNumberLanguage} from './chart-options.js';
 import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
@@ -466,6 +467,8 @@ export interface ComposedItem {
   codeLayout?: CodeLayout;
   /** Complete shared metric geometry, including its unit, label and metadata. */
   metricLayout?: MetricLayout;
+  /** FR-06: the 0.37 part of a metric whose drawn form was computed or formatted (its link, `better`, `format`, which keys were derived): what a PowerPoint tag keeps beside the drawn form. `value` and `payload` hold the drawn form. */
+  metricRecord?: MetricRecord;
   /** Complete timeline fields, markers and connector accepted by composition. */
   timelineLayout?: TimelineLayout;
   /**
@@ -7849,7 +7852,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   // LH-49's chart track uses a synthetic content group without its own OPF path; it records no group, flow or decision.
   // LH-06: `emphasis` is the path of the block or group whose `emphasis: true` the node carries.
-  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean;
+  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; metricRecord?: MetricRecord; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean;
     /** LH-131: a cell of a featured pair or set other than the featured one: drawn on one plain card (a group's blocks share it). */
     cardCell?: boolean;
     /** LH-50: the label drawn as this paragraph's eyebrow (LH-152: or this list's or group's). */
@@ -7871,8 +7874,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // RR-34: a caption belongs to the host's one captionable payload (image, chart, table, video or embed).
     const captioned = host.caption !== undefined ? fields.filter(field => host[field] !== undefined && CAPTIONABLE_FIELDS.includes(field)) : [];
     // RR-54: a dataset-backed chart or table is composed from its inline copy (options.presentation holds the datasets).
-    const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : host[field];
-    return leafFields(host).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
+    // FR-06: a metric linked to data (or with a number format or a direction that is good) is composed as the 0.36 form of what it draws.
+    const metricResolved = host.metric !== undefined ? resolveMetric(host.metric, options.presentation, {...numberLanguage(options)}) : undefined;
+    const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : field === 'metric' && metricResolved ? metricResolved.metric : host[field];
+    return leafFields(host).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, ...(field === 'metric' && metricResolved?.record ? { metricRecord: metricResolved.record } : {}), payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
       ...(field === 'image' ? { host, hostPath: basePath } : {}), ...(host.emphasis === true || basePath === featuredPath ? { emphasis: basePath } : {}), ...(cardCells.has(basePath) ? { cardCell: true } : {}), ...((field === 'text' || field === 'items' || field === 'bullets') && eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
       ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
@@ -9316,7 +9321,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (caption && diagram && !diagram.issue) settleCaption(caption, diagram.box, anchor);
     items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:codeLayout&&!codeLayout.overflow?{...acceptedBox(box),height:Math.min(acceptedBox(box).height,round(codeLayout.bounds.height))}:internal?acceptedBox(box):box, ...(image ? {image} : {}), ...(chart ? {chart} : {}), ...(diagram ? {diagram} : {}),
       ...(frameBox && !emphasized ? {frameBox} : {}),
-      text, ...(node.field === 'text' && text && 'richLines' in text && runInOf(node.value) ? {runs: runInOf(node.value)!} : {}), textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: tile || (metricLayout && metricStarts(node)) ? 'left' : alignment, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
+      text, ...(node.field === 'text' && text && 'richLines' in text && runInOf(node.value) ? {runs: runInOf(node.value)!} : {}), textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: tile || (metricLayout && metricStarts(node)) ? 'left' : alignment, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(node.metricRecord?{metricRecord:node.metricRecord}:{}), ...(timelineLayout?{timelineLayout}:{}),
       ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}),
       ...(regionTag !== undefined ? {region: regionTag} : {}), ...(columns && columns.length > 1 ? {listColumns: columns} : {}), ...(onSurface ? {emphasis: true as const} : {}), ...(tile ? {metricTile: true as const} : {}), ...(node.field === 'table' && growthOf.has(node) ? {tableGrowth: growthOf.get(node)!} : {}) });
     // LH-06: an emphasized leaf's card is the surface (a block with several payload fields: around all of them).

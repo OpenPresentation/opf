@@ -228,6 +228,12 @@ const layoutPlaceholderGroup: RuleText = (finding) => {
 
 /** The dataset a table's `fields` or a chart's `data` names, read from the document next to the finding's path. */
 function datasetOf(helpers: { valueAt(path: readonly string[]): unknown; segments: string[] }): string | undefined {
+  // FR-06: a metric's link (`metric.data`) names its dataset beside the field, the filter and the change.
+  const link = helpers.segments.lastIndexOf("data");
+  if (link > 0 && helpers.segments[link - 1] === "metric") {
+    const value = helpers.valueAt([...helpers.segments.slice(0, link + 1), "dataset"]);
+    if (isText(value)) return value;
+  }
   const at = helpers.segments.findIndex((segment) => segment === "fields" || segment === "columns" || segment === "mapping" || segment === "highlight");
   const parent = at > 0 ? helpers.segments.slice(0, at) : helpers.segments.slice(0, -1);
   for (const candidate of [parent, [...parent, "data"]]) {

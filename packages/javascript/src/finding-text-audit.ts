@@ -542,6 +542,31 @@ const datasetStale: RuleText = (finding) => ({
   next: "take the data from its data source again and update `retrieved`, or change the data source's `refreshEvery`.",
 });
 
+const metricDataStale: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "apply the fix, which writes the computed number; or change the data link to compute what the slide says.",
+});
+
+const metricDataAggregate: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "use first, last or count, which fit any column, or link a column typed number.",
+});
+
+const metricDataEmpty: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "check the filter and the field: a row has to meet the filter and give a usable cell.",
+});
+
+const metricDataDelta: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "give the change something to compare with, or write the change in a column and use `field`.",
+});
+
+const metricUnitRepeated: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "drop the unit, or take its text out of the number format.",
+});
+
 const chartMappingAdapted: RuleText = (finding) => ({
   message: keep(cap(finding.message)),
   next: "remove that mapping entry, or name a different column.",
@@ -726,6 +751,11 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/data-cell-type": dataCellType,
   "opf/datasource-credentials": datasourceCredentials,
   "opf/dataset-stale": datasetStale,
+  "opf/metric-data-stale": metricDataStale,
+  "opf/metric-data-aggregate": metricDataAggregate,
+  "opf/metric-data-empty": metricDataEmpty,
+  "opf/metric-data-delta": metricDataDelta,
+  "opf/metric-unit-repeated": metricUnitRepeated,
   "opf/chart-highlight-adapted": chartHighlightAdapted,
   "opf/chart-series-dropped": chartSeriesDropped,
   "opf/embed-credentials": embedCredentials,

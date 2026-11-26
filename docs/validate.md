@@ -328,6 +328,11 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/embed-credentials`](#opfembed-credentials) | Content | warning | structure | An embed address carries what looks like a credential. |
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
 | [`opf/data-cell-type`](#opfdata-cell-type) | Content | warning | structure | A data cell does not match its column's declared type. |
+| [`opf/metric-data-stale`](#opfmetric-data-stale) | Content | warning | structure | A metric's written value or change differs from the one its data computes. |
+| [`opf/metric-data-aggregate`](#opfmetric-data-aggregate) | Content | warning | structure | A metric asks an aggregate that its column refuses. |
+| [`opf/metric-data-empty`](#opfmetric-data-empty) | Content | warning | structure | A metric's data link gives no value. |
+| [`opf/metric-data-delta`](#opfmetric-data-delta) | Content | warning | structure | A metric's change cannot be computed. |
+| [`opf/metric-unit-repeated`](#opfmetric-unit-repeated) | Content | warning | structure | A metric's unit is already printed by its number format. |
 | [`opf/datasource-credentials`](#opfdatasource-credentials) | Content | warning | structure | A data source holds a credential. |
 | [`opf/dataset-stale`](#opfdataset-stale) | Content | warning | structure | A dataset is older than its data source says it should be. |
 | [`opf/chart-mapping-adapted`](#opfchart-mapping-adapted) | Content | warning | structure | A chart mapping entry is ignored. |
@@ -1171,6 +1176,46 @@ Default severity: **warning**. Cost: structure. A chart value is text, not a num
 Default severity: **warning**. Cost: structure. A data cell does not match its column's declared type.
 
 **Why.** A dataset or chart data column may declare what its cells hold (`type`: text, number, date or boolean). A cell of another kind is reported; null is a gap in any type. A number is a finite number, so the string "12" is not one (the safe fix stores it as 12), and a date is any time label the time-order rule reads (2026-03, Q1 2026, Jan). Nothing is drawn differently: it is advice that the column says one thing and holds another. More than five mismatches in a column are one finding for the column.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/metric-data-stale`
+
+Default severity: **warning**. Cost: structure. A metric's written value or change differs from the one its data computes.
+
+**Why.** A metric linked to data draws the computed number, and keeps the last computed number as its written value and delta for readers that do not compute. When the two differ, those readers show a number the data no longer gives. The safe fix writes the computed number.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/metric-data-aggregate`
+
+Default severity: **warning**. Cost: structure. A metric asks an aggregate that its column refuses.
+
+**Why.** Sum, mean, minimum and maximum read numbers, and a column typed text or boolean has none. The written value is drawn instead.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/metric-data-empty`
+
+Default severity: **warning**. Cost: structure. A metric's data link gives no value.
+
+**Why.** No row of the dataset meets the filter, or none of the kept cells is usable for the aggregate. The written value is drawn instead.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/metric-data-delta`
+
+Default severity: **warning**. Cost: structure. A metric's change cannot be computed.
+
+**Why.** A previous row needs two kept rows, a baseline needs a row that meets its filter, a percent needs a comparison value other than 0, and the value must be a number. The value is still drawn, with no change.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/metric-unit-repeated`
+
+Default severity: **warning**. Cost: structure. A metric's unit is already printed by its number format.
+
+**Why.** The unit is printed after the value, so a format that already writes the same text as a prefix or suffix draws it twice.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

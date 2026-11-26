@@ -48,3 +48,4 @@ When reviewing dense grouped examples, use the default whole-block continuation 
 
 - `item-ids.opf.json`: ids on list items, bullets, timeline events and table rows (a row is an array or `{ "id", "cells" }`), one namespace with slide and block ids; every id is optional.
 - The document id: a root `id`, an opaque string kept on save, export, import and publish, and a claim rather than a credential ([`document-id.opf.json`](./document-id.opf.json)).
+- Metrics computed from data: the value and the change come from a dataset of the deck (the last row, a change against the previous row, a baseline, a fixed plan or a column), the arrow and its color follow the computed change, `better` says which direction is good, and `format` writes a number value ([`computed-metrics.opf.json`](./computed-metrics.opf.json)).
