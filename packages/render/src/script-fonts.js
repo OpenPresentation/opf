@@ -545,8 +545,8 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
 
   /**
    * opf#1472: a character a bundled face draws wrongly (GLYPH_DEFECTS: U+0111 in the Intos sans faces) is its own run, drawn by the
-   * first loaded family of the row's `replacement` that has it, and it keeps the advance the bad glyph had (`run.advance`, em), so a
-   * line measures, wraps and is placed exactly as before: the SVG draws the replacement at the font size (`run.fontScale`) whose own advance is
+   * first loaded family of the row's `replacement` that has it. Every run of such a line carries its share of the unsplit line's advance
+   * (`run.advance`, em, kerning included), so the line measures, wraps and is placed exactly as before: the SVG draws the replacement at the font size (`run.fontScale`) whose own advance is
    * that advance, in a line that flows (no positioned runs), so every rasterizer, letter-spacing included, places it as it placed the old glyph. Text without such a
    * character, and a face with no loaded replacement, plan as before. Undefined when nothing is replaced.
    */
@@ -567,19 +567,35 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
             if (family === undefined) replacements.set(character, null);
             else {
               const advance = inner.measure(character, 1, styled({...style, fontFamily: own.fontFamily, fontWeight: own.fontWeight, italic: own.italic})), natural = inner.measure(character, 1, styled({...style, fontFamily: family, fontWeight: own.fontWeight, italic: false}));
-              replacements.set(character, {family, advance, scale: natural > 0 && Math.abs(advance / natural - 1) > 1e-9 ? advance / natural : undefined});
+              replacements.set(character, {family, scale: natural > 0 && Math.abs(advance / natural - 1) > 1e-9 ? advance / natural : undefined});
             }
           }
           return replacements.get(character);
         };
+        // The line's advance up to each boundary, measured on the whole prefix as the unsplit line was (the shaper kerns a letter with the
+        // glyph after it), so the runs' advances add up to exactly the width the unsplit line had.
+        const lineStyle = styled(style), upTo = new Map([[0, 0]]);
+        const at = index => { if (!upTo.has(index)) upTo.set(index, inner.measure(text.slice(0, index), 1, lineStyle)); return upTo.get(index); };
         const out = [];
-        let piece = "";
-        const flush = () => { if (piece) { out.push(...plan(piece, style, true)); piece = ""; } };
+        let piece = "", pieceStart = 0, offset = 0;
+        const flush = () => {
+          if (!piece) return;
+          const runs = plan(piece, style, true);
+          // A piece that is one run of the line's own face takes its share of the line (a run drawn in another face keeps its own width).
+          if (runs.length === 1 && runs[0].own) runs[0] = {...runs[0], advance: at(pieceStart + piece.length) - at(pieceStart)};
+          out.push(...runs);
+          piece = "";
+        };
         for (const character of text) {
           const replacement = bad.has(character.codePointAt(0)) ? replacementFor(character) : null;
-          if (!replacement) { piece += character; continue; }
-          flush();
-          out.push({text: character, family: replacement.family, own: false, advance: replacement.advance, ...(replacement.scale ? {fontScale: replacement.scale} : {})});
+          if (replacement) {
+            flush();
+            out.push({text: character, family: replacement.family, own: false, advance: at(offset + character.length) - at(offset), ...(replacement.scale ? {fontScale: replacement.scale} : {})});
+          } else {
+            if (!piece) pieceStart = offset;
+            piece += character;
+          }
+          offset += character.length;
         }
         flush();
         if (out.some(run => run.advance !== undefined)) result = out;
