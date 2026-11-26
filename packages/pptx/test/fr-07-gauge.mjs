@@ -129,6 +129,16 @@ const metricOf = (presentation, index) => { const slide = presentation.slides[in
   assert.equal(metricOf(back, 0).gauge, undefined);
 }
 
+// --- the arc sets the value's size (owner, 2026-11-26): the export writes the size composition chose, 0.42 of the arc's outer radius ---------
+
+{
+  const {parts} = await exported({name: 'One gauge', language: 'en-US', slides: [{title: 'Utilization', metric: utilization}]});
+  const named = new Map(shapesOf(strFromU8(parts['ppt/slides/slide1.xml'])).map(shape => [nameOf(shape)?.replace(/^OPF metric \d+ /, ''), shape]));
+  const radius = frameOf(named.get('gauge track')).cx / 2 / 9525; // canvas px
+  const size = Number(/<a:rPr\b[^>]*\bsz="(\d+)"/.exec(named.get('value line 1'))[1]) / 100 / 0.75; // canvas px
+  assert.ok(Math.abs(size - 0.42 * radius) <= 1, `the value's size ${size} is 0.42 of the radius ${radius}`);
+}
+
 // --- a metric without a gauge exports byte for byte as before: no gauge part, no gauge key ----------------------------------------------
 
 {
