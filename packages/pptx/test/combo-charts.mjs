@@ -104,7 +104,7 @@ const attr = (xml, element) => new RegExp(`<c:${element} val="([^"]*)"/>`).exec(
 // 3. Columns first, then the primary-axis lines, then the secondary-axis lines; the authored order and fields come back.
 {
   const data = {columns: ['Quarter', 'Margin', 'Revenue', 'Cost', 'Target'], rows: [['Q1', 0.3, 12, 8, 13], ['Q2', 0.32, 15, 9, 14]]};
-  const chart = {type: 'combo', data, line: ['Margin', 'Target'], secondaryAxis: ['Margin']};
+  const chart = {type: 'combo', data, lineSeries: ['Margin', 'Target'], secondaryAxis: ['Margin']};
   const {xml, imported} = await exportDeck(chart);
   assert.deepEqual(chartOrderProblems(xml), []);
   const lines = groups(xml, 'lineChart');
@@ -112,7 +112,7 @@ const attr = (xml, element) => new RegExp(`<c:${element} val="([^"]*)"/>`).exec(
   assert.deepEqual(lines.map(seriesNames), [['Target'], ['Margin']], 'a line group per axis');
   assert.equal(imported.type, 'combo');
   assert.deepEqual(imported.data, data, 'the authored column order is restored');
-  assert.deepEqual([...imported.line].sort(), ['Margin', 'Target']);
+  assert.deepEqual([...imported.lineSeries].sort(), ['Margin', 'Target']);
   assert.deepEqual(imported.secondaryAxis, ['Margin']);
 }
 

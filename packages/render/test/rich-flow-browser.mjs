@@ -21,7 +21,7 @@ try {
   await page.evaluate(async faces=>{for(const face of faces)document.fonts.add(await new FontFace(face.family,`url(${face.dataUrl})`,{weight:String(face.weight),style:face.italic?'italic':'normal'}).load());await document.fonts.ready;},registry.embeddedFonts);
   for(const mode of ['estimated','measured'])for(const align of ['start','center','end'])for(const [index,text]of fixtures.entries()) {
     // LH-188, LH-189: the slide's text stays at body size (under the 56 px display size), so adjacent runs keep the measured advances this test compares.
-    const document={design:{fontScheme:'roboto',contentAlignment:align},slides:[{composition:{maxFontSize:54},text}]},before=structuredClone(document),options={trace:true,...(mode==='measured'?{fonts:{textMeasurement:prepared.textMeasurement}}:{})};
+    const document={design:{fontScheme:'roboto',contentAlignment:align},slides:[{composition:{maxFontSizePx:54},text}]},before=structuredClone(document),options={trace:true,...(mode==='measured'?{fonts:{textMeasurement:prepared.textMeasurement}}:{})};
     const bound=resolvePresentation(document,options).slides[0],item=bound.geometry.items.find(item=>item.field==='text'),svg=toSvg(document, 1,options);
     assert.deepEqual(document,before);
     const actual=await page.evaluate(async({svg,item,mode,align})=>{

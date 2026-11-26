@@ -37,7 +37,7 @@ const bundled=await build({stdin:{resolveDir:fileURLToPath(new URL('../',import.
     await metricCanvas.ready;
     const action=(id,run)=>document.getElementById(id).onclick=async()=>{try{await run();}catch(error){failures.push(error.message);}};
     action('undo',()=>editor.undo());action('redo',()=>editor.redo());
-    action('paginate',()=>{metricCanvas.commit();window.pagination=editor.paginateSlide(0,{minFontSize:24,fonts});});
+    action('paginate',()=>{metricCanvas.commit();window.pagination=editor.paginateSlide(0,{minFontSizePx:24,fonts});});
     action('export',async()=>{metricCanvas.commit();window.accepted=editor.composeSlide(0,{fonts});window.lastExport=await toPptx(editor.presentation,{fonts,catalogs:[defaultCatalog]});});
     action('import',async()=>{window.lastImport=await fromPptx(lastExport,{onDiagnostic:d=>diagnostics.push(d)});editor.set('',lastImport,{rejectInvalid:true});});
   };`},bundle:true,platform:'browser',format:'iife',write:false,minify:true});
@@ -121,7 +121,7 @@ try {
     await edit('slides.0.metric.delta','1');assert.equal((await presentation()).slides[0].metric.delta,1);
     await edit('slides.0.metric.unit','seconds');await edit('slides.0.metric.label','New\tLabel  ');
     const beforePagination=await presentation();
-    await page.getByRole('button',{name:'Paginate',exact:true}).click();assert.equal((await presentation()).slides[0].composition.minFontSize,24);
+    await page.getByRole('button',{name:'Paginate',exact:true}).click();assert.equal((await presentation()).slides[0].composition.minFontSizePx,24);
     await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await presentation(),beforePagination);
     await page.getByRole('button',{name:'Redo',exact:true}).click();const accepted=await presentation();
     await page.getByRole('button',{name:'Export',exact:true}).click();await page.waitForFunction(()=>lastExport||failures.length);

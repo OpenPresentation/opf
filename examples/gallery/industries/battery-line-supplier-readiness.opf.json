@@ -417,7 +417,7 @@
     "id": "speaker",
     "name": "Jon Alvarez",
     "title": "Operating Lead",
-    "organizationId": "voltcrest-components",
+    "organization": "voltcrest-components",
     "bio": "Leads automotive supply planning for Voltcrest Components.",
     "socials": {
       "threads": "@voltcrest-components-speaker"
@@ -763,7 +763,7 @@
         "garamond": {
           "name": "Garamond",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Garamond",
           "minor": "Garamond",
@@ -774,7 +774,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

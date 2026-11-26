@@ -23,7 +23,7 @@ export interface EmbedCardInput {
   /** The deck's scale: min(width, height) / 720. */
   scale: number;
   /** The readability floor in pixels at scale 1 (default 16). */
-  minFontSize?: number;
+  minFontSizePx?: number;
   measurement?: TextMeasurement;
 }
 
@@ -71,7 +71,7 @@ function embedCardTitleSize(short: number, scale: number): number {
 }
 
 export function embedCardLayout(input: EmbedCardInput): EmbedCardLayout {
-  const { frame, scale: s } = input, floor = (input.minFontSize ?? 16) * s;
+  const { frame, scale: s } = input, floor = (input.minFontSizePx ?? 16) * s;
   const short = Math.min(frame.width, frame.height);
   const pad = Math.max(Math.min(6 * s, short / 4), Math.min(24 * s, short * .08));
   const centerX = frame.x + frame.width / 2, centerY = frame.y + frame.height / 2;

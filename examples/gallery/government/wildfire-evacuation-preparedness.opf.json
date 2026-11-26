@@ -423,7 +423,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "pine-county-emergency-management",
+    "organization": "pine-county-emergency-management",
     "bio": "Leads emergency management planning for Pine County Emergency Management.",
     "socials": {
       "x": "@pine-county-emergency-management-speaker"
@@ -777,7 +777,7 @@
         "raleway": {
           "name": "Raleway",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Raleway",
           "minor": "Raleway",
@@ -788,7 +788,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

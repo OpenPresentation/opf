@@ -195,9 +195,9 @@ export function resolveChartOptions(chart: unknown, target?: ChartOptionTarget):
   const kind = target?.kind ?? 'unknown';
 
   const combo = target?.kind === 'combo';
-  // FA-15: `line` and `secondaryAxis` belong to combo charts. Which names they hold is checked against the data by resolveChartData.
+  // FA-15: `lineSeries` and `secondaryAxis` belong to combo charts. Which names they hold is checked against the data by resolveChartData.
   if (!combo) {
-    for (const option of ['line', 'secondaryAxis'] as const) {
+    for (const option of ['lineSeries', 'secondaryAxis'] as const) {
       if (chart[option] !== undefined) adapt(option, 'unsupported-type', `Only a 'combo' chart draws line series${option === 'secondaryAxis' ? ' on a secondary axis' : ''}; ${option} is ignored on a '${kind}' chart.`);
     }
   }

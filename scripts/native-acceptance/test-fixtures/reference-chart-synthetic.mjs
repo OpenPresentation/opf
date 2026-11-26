@@ -55,7 +55,7 @@ function syntheticCase(source) {
         axis: chart.secondaryAxis?.includes(name) ? "secondary" : "value",
         kind:
           chart.type === "combo"
-            ? chart.line?.includes(name)
+            ? chart.lineSeries?.includes(name)
               ? "line"
               : "bar"
             : chart.type.startsWith("line")

@@ -19,11 +19,11 @@ for (const background of [duotone, {overlay: {color: 'dark1', opacity: 0.4}}]) {
   assert.deepEqual([map?.bg1, map?.tx1], ['dk1', 'lt1'], `${JSON.stringify(background)}: the slide takes the dark map`);
   const imported = await fromPptx(await toPptx(deck(background)));
   assert.equal(imported.slides[0].design?.variant, undefined, 'the inferred map imports as no variant');
-  assert.equal(imported.slides[0].design?.background?.tone, undefined, 'and as no tone');
+  assert.equal(imported.slides[0].design?.background?.appearance, undefined, 'and as no tone');
   assert.deepEqual(imported.slides[0].design.background.overlay, background.overlay);
 }
 // An explicit tone wins: light text, the master's map.
-assert.equal((await slideMap(deck({...duotone, tone: 'light'})))?.bg1 ?? 'lt1', 'lt1');
+assert.equal((await slideMap(deck({...duotone, appearance: 'light'})))?.bg1 ?? 'lt1', 'lt1');
 // A photograph with nothing over it keeps the old default.
 assert.equal((await slideMap(deck({overlay: false})))?.bg1 ?? 'lt1', 'lt1');
 console.log('rr105-picture-tone: ok');

@@ -3,7 +3,7 @@
   "id": "daunpenh",
   "name": "DaunPenh",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "km"
   ],

@@ -105,7 +105,7 @@ describe("bars on a table's rows (LH-115)", () => {
     const result = compose({ title: "Warranty claims by product line", layout: undefined, blocks: [{ chart: bars }, { table: warranty }] }, { presentation: { language, slides: [] } });
     const chart = chartOf(result), table = tableOf(result), rows = chart.chart?.layer?.rows;
     assert.ok(rows, "aligned");
-    const layout = layoutTable(table.value, table.box, { scale: 1, minFontSize: table.composition.minFontSize, ...(language === "ar" ? { direction: "rtl" } : {}), ...(table.tableGrowth ? { growth: table.tableGrowth } : {}) });
+    const layout = layoutTable(table.value, table.box, { scale: 1, minFontSizePx: table.composition.minFontSizePx, ...(language === "ar" ? { direction: "rtl" } : {}), ...(table.tableGrowth ? { growth: table.tableGrowth } : {}) });
     const body = layout.rows.slice(1);
     body.forEach((row, index) => {
       const key = row.cells.find((cell) => cell.column === 0), middle = key.textBox.y + key.fit.lines.length * key.fit.lineHeight / 2;
@@ -141,7 +141,7 @@ describe("a timeline under its column chart (LH-115)", () => {
     assert.equal(timeline.timelineLayout.arrangement, "band");
     assert.ok(timeline.box.y >= chart.box.y + chart.box.height - 0.5, "below the chart");
     assert.ok(result.items.indexOf(timeline) < result.items.indexOf(chart), "reading order");
-    const inset = chartPlotInset(chart.value, resolveChartData(chart.value), chart.chart, { box: chart.box, scale: 1, minFontSize: chart.composition.minFontSize, measure: (text, size) => text.length * size * 0.5, direction: language === "ar" ? "rtl" : "ltr", language });
+    const inset = chartPlotInset(chart.value, resolveChartData(chart.value), chart.chart, { box: chart.box, scale: 1, minFontSizePx: chart.composition.minFontSizePx, measure: (text, size) => text.length * size * 0.5, direction: language === "ar" ? "rtl" : "ltr", language });
     const left = chart.box.x + inset.left, width = chart.box.width - inset.left - inset.right, band = width / 4;
     const columns = [0, 1, 2, 3].map((index) => left + ((language === "ar" ? 3 - index : index) + 0.5) * band);
     for (const [index, marker] of timeline.timelineLayout.markers.entries()) assert.ok(Math.abs(marker.x - columns[index]) < 1.5, `event ${index}: ${marker.x} vs ${columns[index]}`);

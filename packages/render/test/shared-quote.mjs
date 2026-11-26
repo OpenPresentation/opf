@@ -12,7 +12,7 @@ const escape=text=>text.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAl
 let cases=0;
 for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
   for (const value of ['Shorthand source',{text:'A quote with its original context.',attribution:'Author',source:'Citation'}]) {
-    const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{composition:{mode:'column',minFontSize:24},blocks:[{blocks:[{quote:value}]}]}]};
+    const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{composition:{mode:'column',minFontSizePx:24},blocks:[{blocks:[{quote:value}]}]}]};
     let calls=0,styles=0;
     const textMeasurement={measure:(...args)=>{calls++;return fonts.textMeasurement.measure(...args);},resolveStyle:style=>{styles++;return fonts.textMeasurement.resolveStyle(style);}};
     const bound=resolvePresentation(deck,{ fonts: {textMeasurement}}).slides[0],expectedCalls=calls,expectedStyles=styles;

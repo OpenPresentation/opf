@@ -3,7 +3,7 @@
   "id": "microsoft-jhenghei",
   "name": "Microsoft JhengHei",
   "app": "powerpoint",
-  "languageFamily": "ea",
+  "scriptGroup": "eastAsian",
   "languages": [
     "zh-Hant"
   ],

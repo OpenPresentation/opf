@@ -23,7 +23,7 @@ const cases = [
   ['area', { type: 'area', data, referenceLines: refs.slice(0, 1) }],
   ['column', { type: 'column', data, referenceLines: refs }],
   ['bar (horizontal, overlay references)', { type: 'bar', data, referenceLines: refs }, false],
-  ['combo, references on both axes', { type: 'combo', data, line: ['Plan'], secondaryAxis: ['Plan'], referenceLines: [refs[0], { ...refs[1], axis: 'secondary' }] }],
+  ['combo, references on both axes', { type: 'combo', data, lineSeries: ['Plan'], secondaryAxis: ['Plan'], referenceLines: [refs[0], { ...refs[1], axis: 'secondary' }] }],
 ];
 
 // Every chart type that takes references (CHART_REFERENCE_TYPES): column, bar, line, line-with-markers, area and combo.

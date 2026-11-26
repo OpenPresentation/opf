@@ -369,7 +369,7 @@ test('opf/missing-language: only the presentation-level language is checked', ()
 
 test('opf/text-overflow and strict composition', () => {
 	const long = 'word '.repeat(600);
-	const tight = (extra = {}) => deck([{ title: 'T', composition: { minFontSize: 16, ...extra }, blocks: [{ text: long }, { text: 'b', emphasis: false }] }]);
+	const tight = (extra = {}) => deck([{ title: 'T', composition: { minFontSizePx: 16, ...extra }, blocks: [{ text: long }, { text: 'b', emphasis: false }] }]);
 	const found = only(tight(), 'text-overflow');
 	assert.ok(found.length >= 1);
 	assert.equal(found[0].severity, 'warning');
@@ -445,7 +445,7 @@ test('opf/min-font-size: explicit small runs and a lowered composition floor', (
 	assert.equal(small[0].fixes[0].focus.field, 'fontSize');
 	assert.ok(!has(deck([{ title: 'T', text: [{ text: 'fine', fontSize: 14 }] }]), 'min-font-size'));
 	assert.ok(has(deck([{ title: 'T', text: [{ text: 'tiny', fontSize: 11.5 }] }]), 'min-font-size', { thresholds: { minFontSizePt: 14 } }));
-	const shrunk = deck([{ title: 'T', composition: { minFontSize: 8 }, blocks: [{ text: 'word '.repeat(1000) }, { text: 'b' }] }]);
+	const shrunk = deck([{ title: 'T', composition: { minFontSizePx: 8 }, blocks: [{ text: 'word '.repeat(1000) }, { text: 'b' }] }]);
 	assert.ok(has(shrunk, 'min-font-size'));
 });
 

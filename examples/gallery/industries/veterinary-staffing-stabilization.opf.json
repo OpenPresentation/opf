@@ -265,7 +265,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "oaktrail-animal-health",
+    "organization": "oaktrail-animal-health",
     "bio": "Leads veterinary care planning for Oaktrail Animal Health.",
     "socials": {
       "github": "@oaktrail-animal-health-speaker"
@@ -657,7 +657,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",
@@ -668,7 +668,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

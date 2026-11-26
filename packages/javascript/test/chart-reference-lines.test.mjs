@@ -36,7 +36,7 @@ test('normalization retains ordered duplicate/data-equal values, defaults and wi
  assert.equal(place(chart()),undefined);
 });
 test('all explicit values expand own-axis bounds; percentages are raw units without clamping or label inference',()=>{
- const c=chart({type:'combo',data:{columns:['Quarter','Revenue',{name:'Margin',format:'0%'}],rows:[['Q1',100,.2],['Q2',200,.3],['Q3',300,.4]]},line:['Margin'],secondaryAxis:['Margin'],referenceLines:[{value:-50},{value:1000},{value:1.25,axis:'secondary',label:'125%'},{value:-.2,axis:'secondary',label:'-20%'}]});
+ const c=chart({type:'combo',data:{columns:['Quarter','Revenue',{name:'Margin',format:'0%'}],rows:[['Q1',100,.2],['Q2',200,.3],['Q3',300,.4]]},lineSeries:['Margin'],secondaryAxis:['Margin'],referenceLines:[{value:-50},{value:1000},{value:1.25,axis:'secondary',label:'125%'},{value:-.2,axis:'secondary',label:'-20%'}]});
  const resolved=resolveChartData(c),axes=chartComboAxes(c,resolved,geometry);assert.ok(axes.value.min<=-50&&axes.value.max>=1000);assert.ok(axes.secondary.min<=-.2&&axes.secondary.max>=1.25);assert.ok(axes.secondary.max<10);
  const primaryOnly=chartComboAxes({...c,referenceLines:[{value:5000}]},resolved,geometry);assert.deepEqual(primaryOnly.secondary,chartComboAxes({...c,referenceLines:[]},resolved,geometry).secondary);
  const secondaryOnly=chartComboAxes({...c,referenceLines:[{value:2,axis:'secondary'}]},resolved,geometry);assert.deepEqual(secondaryOnly.value,chartComboAxes({...c,referenceLines:[]},resolved,geometry).value);
@@ -44,8 +44,8 @@ test('all explicit values expand own-axis bounds; percentages are raw units with
 });
 test('null-only valid data still includes explicit bounds and combo zero anchoring follows only bars on the same axis',()=>{
  const c=chart({data:{columns:data.columns,rows:[['Q1',null],['Q2',null]]},referenceLines:[{value:200}]});assert.deepEqual(errorsOf(check(deck(c))),[]);assert.ok(chartValueAxis(c,resolveChartData(c),geometry).max>=200);
- const combo=chart({type:'combo',data:{columns:['Quarter','Amount','Rate'],rows:[['Q1',1000,101],['Q2',2000,102]]},line:['Rate'],secondaryAxis:['Rate']});const resolved=resolveChartData(combo);const axes=chartComboAxes(combo,resolved,geometry);assert.equal(axes.value.min,0);assert.ok(axes.secondary.min>0);
- const invalid=chart({...combo,line:['Amount'],secondaryAxis:['Rate'],referenceLines:[{value:10,axis:'secondary'}]});assert.ok(errorsOf(check(deck(invalid))).length,'secondary bars are rejected by the current format');
+ const combo=chart({type:'combo',data:{columns:['Quarter','Amount','Rate'],rows:[['Q1',1000,101],['Q2',2000,102]]},lineSeries:['Rate'],secondaryAxis:['Rate']});const resolved=resolveChartData(combo);const axes=chartComboAxes(combo,resolved,geometry);assert.equal(axes.value.min,0);assert.ok(axes.secondary.min>0);
+ const invalid=chart({...combo,lineSeries:['Amount'],secondaryAxis:['Rate'],referenceLines:[{value:10,axis:'secondary'}]});assert.ok(errorsOf(check(deck(invalid))).length,'secondary bars are rejected by the current format');
  const defensive={...resolved,combo:resolved.combo.map(e=>({...e,axis:e.axis==='primary'?'secondary':'primary'}))};const defensiveAxes=chartComboAxes(combo,defensive,geometry);assert.equal(defensiveAxes.secondary.min,0);assert.ok(defensiveAxes.value.min>0);
 });
 test('native span matches category centers; horizontal and singleton references span full plot',()=>{
@@ -108,14 +108,14 @@ test('wide reference strokes leave their own labels clear without moving numeric
 test('finite endpoint references survive real composition on every supported chart and own combo axis',()=>{
  for(const value of [-Number.MAX_VALUE,Number.MAX_VALUE])assert.deepEqual(errorsOf(check(deck(chart({referenceLines:[{value}]})))),[]);
  for(const type of ['column','bar','line','line-with-markers','area','combo'])for(const values of [[Number.MAX_VALUE],[-Number.MAX_VALUE],[-Number.MAX_VALUE,Number.MAX_VALUE]]){
-  const c=chart({type,...(type==='combo'?{data:{columns:['Q','Amount','Rate'],rows:[['Q1',1,.2],['Q2',2,.3]]},line:['Rate'],secondaryAxis:['Rate']}:{}),referenceLines:values.map(value=>({value,label:'Target'}))});
+  const c=chart({type,...(type==='combo'?{data:{columns:['Q','Amount','Rate'],rows:[['Q1',1,.2],['Q2',2,.3]]},lineSeries:['Rate'],secondaryAxis:['Rate']}:{}),referenceLines:values.map(value=>({value,label:'Target'}))});
   const item=composeSlide({chart:c},{width:1280,height:720}).items.find(i=>i.field==='chart');
   assert.equal(item.chart.layer.references.lines.length,values.length,type+' '+values);
   const axis=item.chart.valueAxis;assert.ok(axis.min<=Math.min(...values)&&axis.max>=Math.max(...values));
   assert.ok(item.chart.layer.references.lines.flatMap(l=>[l.x1,l.y1,l.x2,l.y2,...Object.values(l.labelBox??{})]).every(Number.isFinite));
   const ticks=chartAxisScale(axis).ticks;assert.ok(ticks.length>1&&ticks.length<=1001&&ticks.every(Number.isFinite));
  }
- const c=chart({type:'combo',data:{columns:['Q','Amount','Rate'],rows:[['Q1',1,.2],['Q2',2,.3]]},line:['Rate'],secondaryAxis:['Rate'],referenceLines:[{value:-Number.MAX_VALUE,axis:'secondary'},{value:Number.MAX_VALUE,axis:'secondary'}]});
+ const c=chart({type:'combo',data:{columns:['Q','Amount','Rate'],rows:[['Q1',1,.2],['Q2',2,.3]]},lineSeries:['Rate'],secondaryAxis:['Rate'],referenceLines:[{value:-Number.MAX_VALUE,axis:'secondary'},{value:Number.MAX_VALUE,axis:'secondary'}]});
  const item=composeSlide({chart:c},{width:1280,height:720}).items.find(i=>i.field==='chart');assert.equal(item.chart.layer.references.lines.length,2);assert.equal(item.chart.secondaryValueAxis.min,-Number.MAX_VALUE);assert.equal(item.chart.secondaryValueAxis.max,Number.MAX_VALUE);assert.ok(item.chart.valueAxis.max<10);
  const siblings=composeSlide({blocks:[{chart:chart({referenceLines:[{value:-Number.MAX_VALUE},{value:Number.MAX_VALUE}]})},{chart:chart()}]},{width:1280,height:720}).items.filter(i=>i.field==='chart');assert.deepEqual(siblings[0].chart.valueAxis,siblings[1].chart.valueAxis);assert.equal(siblings[0].chart.layer.references.lines.length,2);
 });
@@ -129,7 +129,7 @@ test('shared axis reconstruction keeps ordinary ticks and bounds overflow-sized 
 test('RR-105: a label leaves a bar or an area for a free place at the other end, or stands on a plate with a collision finding',()=>{
  const quarters={columns:['Quarter','Revenue'],rows:[['Q1',12],['Q2',18],['Q3',22],['Q4',26]]};
  for(const type of ['column','area','combo']){
-  const c=chart({type,data:type==='combo'?{columns:['Quarter','Revenue','Margin'],rows:[['Q1',12,10],['Q2',18,14],['Q3',22,17],['Q4',26,21]]}:quarters,...(type==='combo'?{line:['Margin']}:{}),referenceLines:[{value:15,label:'Floor'}]});
+  const c=chart({type,data:type==='combo'?{columns:['Quarter','Revenue','Margin'],rows:[['Q1',12,10],['Q2',18,14],['Q3',22,17],['Q4',26,21]]}:quarters,...(type==='combo'?{lineSeries:['Margin']}:{}),referenceLines:[{value:15,label:'Floor'}]});
   const free=place(c,{chartType:type});
   // The authored end (Q4) is inside the tallest mark above and below the line; Q1 (12) leaves the place above the line free.
   assert.equal(free.lines[0].endpoint,0,type);assert.equal(free.lines[0].labelSide,'above',type);assert.equal(free.lines[0].labelPlate,undefined,type);assert.deepEqual(free.diagnostics,[],type);

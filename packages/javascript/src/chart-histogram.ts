@@ -150,7 +150,7 @@ export function chartHistogram(chart: unknown, data: ResolvedChartData, geometry
   if (target?.kind !== 'histogram' && target?.kind !== 'pareto') return undefined;
   const {box, scale} = geometry;
   if (![box.width, box.height, scale].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0) return undefined;
-  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize}) * scale, pad = 10 * scale;
+  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSizePx: geometry.minFontSizePx}) * scale, pad = 10 * scale;
   const hasCategories = data.columns.length > 1, column = hasCategories ? 1 : 0;
   const values = data.rows.map(row => chartNumber(row[column]));
   const format = hasCategories && typeof data.formats[column] === 'string' && data.formats[column] !== '' ? data.formats[column] : undefined;

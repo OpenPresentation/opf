@@ -271,7 +271,7 @@
       "title": "Program Sponsor",
       "photo": "asset:supporting-photo",
       "email": "maya@regional-clean-air-board.example",
-      "organizationId": "regional-clean-air-board",
+      "organization": "regional-clean-air-board",
       "socials": {
         "github": "@maya-chen"
       }
@@ -280,7 +280,7 @@
       "id": "jon",
       "name": "Jon Alvarez",
       "title": "Operating Lead",
-      "organizationId": "regional-clean-air-board",
+      "organization": "regional-clean-air-board",
       "socials": {
         "mastodon": "@jon-alvarez"
       }
@@ -679,7 +679,7 @@
         "seaford": {
           "name": "Seaford",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Seaford Display",
           "minor": "Seaford",
@@ -690,7 +690,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

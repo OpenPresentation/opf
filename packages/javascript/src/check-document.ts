@@ -36,6 +36,7 @@ import { droppedCopyOperations, staleCopyCause, staleCopyFix, staleCopyUsers, st
 import { documentIcons, iconIssue } from './icons.js';
 import type { Finding, FindingSeverity, FindingSuggestion } from './generated/types/finding.js';
 import { OPF_CORE_VERSION } from './generated/version.js';
+import { renamedKeyAt } from './renamed-keys.js';
 import type { Contract, ValidateOptions } from './validation-types.js';
 
 /**
@@ -168,7 +169,7 @@ export function issueFinding(
 	let help =
 		'Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.';
 	if (issue.keyword === 'required' && issue.params.missingProperty === 'id' && /^\/(organization|speaker)(\/\d+)?$/.test(issue.path))
-		help = `Add an "id" next to "name": organizations and speakers are found by id (speaker.organizationId, {{organization.<id>.name}}, the editor and the PPTX round trip), for example "id": "acme" (letters, digits, "-" and "_", unique in the deck).`;
+		help = `Add an "id" next to "name": organizations and speakers are found by id (speaker.organization, {{organization.<id>.name}}, the editor and the PPTX round trip), for example "id": "acme" (letters, digits, "-" and "_", unique in the deck).`;
 	else if (issue.keyword === 'required')
 		help = `Add the required ${JSON.stringify(issue.params.missingProperty)} field in this object, using the intended schema form.`;
 	else if (issue.keyword === 'additionalProperties')
@@ -197,7 +198,7 @@ export function issueFinding(
 		help = `Did you mean ${JSON.stringify(nearest[0].value)}? ${JSON.stringify(typedName)} is not a field of this object. To keep custom metadata, put it in extensions; do not delete authored content to clear this error.`;
 	// No close known key means this is not a typo: a later release may define the key. A released validator cannot know what
 	// a later release adds, so it says only its own version (also as data, validation.params.validatorVersion).
-	const unknownKey = typedName !== undefined && nearest.length === 0;
+	const unknownKey = typedName !== undefined && nearest.length === 0 && renamedKeyAt(splitPointer(path)) === undefined;
 	if (unknownKey) help = `${help} This validator is OPF ${OPF_CORE_VERSION}; a later OPF release may define ${JSON.stringify(typedName)}.`;
 	return finding(ruleId, {
 		...(severity ? { severity } : {}),

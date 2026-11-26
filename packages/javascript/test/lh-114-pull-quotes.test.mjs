@@ -18,7 +18,7 @@ const findings = (result) => result.diagnostics.filter((entry) => ['text-overflo
 const lines = (fit) => (fit.richLines ?? fit.lines).length;
 // Where a body item's drawn content ends: a table's last row, a text's last line, a chart's box.
 const contentBottom = (item) => {
-  if (item.field === 'table') return Math.max(...layoutTable(item.value, item.box, { minFontSize: item.composition.minFontSize, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap((row) => row.cells.map((cell) => cell.box.y + cell.box.height)));
+  if (item.field === 'table') return Math.max(...layoutTable(item.value, item.box, { minFontSizePx: item.composition.minFontSizePx, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap((row) => row.cells.map((cell) => cell.box.y + cell.box.height)));
   if (item.text && (item.field === 'items' || item.field === 'text')) return item.box.y + item.text.lines.length * item.text.lineHeight;
   return item.box.y + item.box.height;
 };

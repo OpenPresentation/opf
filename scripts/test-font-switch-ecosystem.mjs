@@ -129,8 +129,8 @@ const isAvailable = (family) => {
 };
 const schemeAvailable = (id) => [byId('fontSchemes', id).major, byId('fontSchemes', id).minor].every(isAvailable);
 function schemeClass(scheme) {
-  if (scheme.languageFamily === 'ea') return 'east-asian';
-  if (scheme.languageFamily === 'cs') return 'complex-script';
+  if (scheme.scriptGroup === 'eastAsian') return 'east-asian';
+  if (scheme.scriptGroup === 'complexScript') return 'complex-script';
   if (scheme.type === 'monospace') return 'monospace';
   const policies = [scheme.major, scheme.minor].map((family) => fontPolicyFor(family));
   if (policies.every((policy) => policy?.licenseClass === 'open')) return 'open-google';

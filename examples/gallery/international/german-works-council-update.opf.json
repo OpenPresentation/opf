@@ -276,7 +276,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "rheinworks-mobility",
+    "organization": "rheinworks-mobility",
     "bio": "Leads labor relations planning for RheinWorks Mobility.",
     "socials": {
       "instagram": "@rheinworks-mobility-speaker"
@@ -608,7 +608,7 @@
         "arial": {
           "name": "Arial",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Arial Black",
           "minor": "Arial",
@@ -619,7 +619,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

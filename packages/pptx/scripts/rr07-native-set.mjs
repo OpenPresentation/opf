@@ -82,7 +82,7 @@ index => {
 const trendCases = [];
 for (const background of ['light', 'dark']) for (const trend of ['up', 'down', 'flat']) for (const align of ['left', 'center', 'right']) trendCases.push({background, trend, align});
 const trend = await build('rr07-trend', {design: {fontScheme: 'roboto'}, slides: trendCases.map(({background, trend, align}) => ({
-  composition: {minFontSize: 16}, design: {contentAlignment: align, background: background === 'dark' ? '#0F172A' : '#FFFFFF', ...(background === 'dark' ? {colorScheme: {light1: '#F8FAFC', dark1: '#0F172A', accent1: '#38BDF8'}} : {colorScheme: 'cool-horizon'})},
+  composition: {minFontSizePx: 16}, design: {contentAlignment: align, background: background === 'dark' ? '#0F172A' : '#FFFFFF', ...(background === 'dark' ? {colorScheme: {light1: '#F8FAFC', dark1: '#0F172A', accent1: '#38BDF8'}} : {colorScheme: 'cool-horizon'})},
   metric: {value: 42, unit: 'ms', label: 'Median latency', description: 'Last 30 days', delta: trend === 'up' ? '+3.2%' : trend === 'down' ? '-3.2%' : '0.0%', trend}}))},
 index => {
   const {background, trend, align} = trendCases[index];

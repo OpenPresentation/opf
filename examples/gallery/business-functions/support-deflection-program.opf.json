@@ -260,7 +260,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "waypoint-apps",
+    "organization": "waypoint-apps",
     "bio": "Leads customer support planning for Waypoint Apps.",
     "socials": {
       "linkedin": "@waypoint-apps-speaker"
@@ -594,7 +594,7 @@
         "consolas": {
           "name": "Consolas",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Consolas",
           "minor": "Consolas",
@@ -606,7 +606,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

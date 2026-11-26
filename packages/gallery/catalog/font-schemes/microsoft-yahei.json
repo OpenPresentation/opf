@@ -3,7 +3,7 @@
   "id": "microsoft-yahei",
   "name": "Microsoft Yahei",
   "app": "powerpoint",
-  "languageFamily": "ea",
+  "scriptGroup": "eastAsian",
   "languages": [
     "zh-Hans",
     "zh-Hant",

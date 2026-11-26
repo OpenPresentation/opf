@@ -260,7 +260,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "apex-support-cloud",
+    "organization": "apex-support-cloud",
     "bio": "Leads qbr planning for Apex Support Cloud.",
     "socials": {
       "github": "@apex-support-cloud-speaker"
@@ -620,7 +620,7 @@
         "times-new-roman": {
           "name": "Times New Roman",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Times New Roman",
           "minor": "Times New Roman",
@@ -631,7 +631,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

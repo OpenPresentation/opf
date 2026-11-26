@@ -3,7 +3,7 @@
   "id": "malgun-gothic",
   "name": "Malgun Gothic",
   "app": "powerpoint",
-  "languageFamily": "ea",
+  "scriptGroup": "eastAsian",
   "languages": [
     "ko"
   ],

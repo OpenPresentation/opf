@@ -3,7 +3,7 @@
   "id": "noto-sans-ethiopic",
   "name": "Noto Sans Ethiopic",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "am"
   ],

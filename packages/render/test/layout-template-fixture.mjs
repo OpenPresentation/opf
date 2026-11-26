@@ -107,7 +107,7 @@ export function featureDecks() {
 }
 
 /**
- * The template slides above that overflow (core reports `text-overflow`: the content does not fit at `minFontSize`, even in
+ * The template slides above that overflow (core reports `text-overflow`: the content does not fit at `minFontSizePx`, even in
  * list columns) put through core's `paginate`, one deck per source slide. Unpaginated, such a slide draws its overflow past
  * its cell, as OPF does everywhere; these pages are the proof that pagination resolves it on the same layout. Keyed
  * `paginated <id> <count> <size> page <n>`; `source` is the key of the slide that was paginated.

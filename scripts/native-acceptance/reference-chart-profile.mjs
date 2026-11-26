@@ -744,7 +744,7 @@ export function assertReferenceWitnessSource(archive, source) {
       const line =
         wanted.type === "line" ||
         wanted.type === "line-with-markers" ||
-        (wanted.type === "combo" && wanted.line?.includes(names[j]));
+        (wanted.type === "combo" && wanted.lineSeries?.includes(names[j]));
       assert.equal(
         group.construct,
         line ? "c:lineChart" : wanted.type === "area" ? "c:areaChart" : "c:barChart",

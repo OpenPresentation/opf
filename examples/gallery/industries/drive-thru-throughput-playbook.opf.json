@@ -261,7 +261,7 @@
     "id": "speaker",
     "name": "Maya Chen",
     "title": "Program Sponsor",
-    "organizationId": "tempo-burger-group",
+    "organization": "tempo-burger-group",
     "bio": "Leads quick service restaurants planning for Tempo Burger Group.",
     "socials": {
       "mastodon": "@tempo-burger-group-speaker"
@@ -586,7 +586,7 @@
         "poppins": {
           "name": "Poppins",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Poppins",
           "minor": "Poppins",
@@ -597,7 +597,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

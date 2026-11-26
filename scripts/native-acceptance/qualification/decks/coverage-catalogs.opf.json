@@ -244,7 +244,7 @@
         "georgia": {
           "name": "Georgia",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Georgia",
           "minor": "Georgia",
@@ -255,7 +255,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",
@@ -435,7 +435,7 @@
         "harbor-fonts": {
           "name": "Harbor fonts",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Georgia",
           "minor": "Georgia",

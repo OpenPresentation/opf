@@ -260,7 +260,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "sable-systems",
+    "organization": "sable-systems",
     "bio": "Leads security planning for Sable Systems.",
     "socials": {
       "instagram": "@sable-systems-speaker"
@@ -632,7 +632,7 @@
         "century-schoolbook": {
           "name": "Century Schoolbook",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Century Schoolbook",
           "minor": "Century Schoolbook",
@@ -643,7 +643,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

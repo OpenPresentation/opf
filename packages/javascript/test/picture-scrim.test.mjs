@@ -20,7 +20,7 @@ const inside = (box, area) => box.x >= area.x - 0.5 && box.y >= area.y - 0.5 && 
 
 test('a cover over a photo passes 4.5:1 on the worst-case gray ramp with no author overlay, in both variants', () => {
   for (const tone of [undefined, 'dark', 'light']) {
-    const document = deck([{ title: 'Shipping, rebuilt', subtitle: 'The harbor plan for 2027', design: picture(tone ? { tone } : {}) }]);
+    const document = deck([{ title: 'Shipping, rebuilt', subtitle: 'The harbor plan for 2027', design: picture(tone ? { appearance: tone } : {}) }]);
     const { context, result } = composed(document);
     const scrim = result.backgroundImage.scrims?.[0];
     assert.ok(scrim, `${tone}: a scrim`);
@@ -96,7 +96,7 @@ test('a slide with no text on the picture, and text on a card, get no scrim', ()
 });
 
 test('header and footer text get scrims of their own at their edges, and the muted color reads too', () => {
-  const { context, result } = composed(deck([{ title: 'The trails are busier than ever', design: { ...picture({ tone: 'dark' }), titleAlignment: 'center', header: { start: { text: 'Parks review' } }, footer: { start: { text: 'Parks department' } } } }]));
+  const { context, result } = composed(deck([{ title: 'The trails are busier than ever', design: { ...picture({ appearance: 'dark' }), titleAlignment: 'center', header: { start: { text: 'Parks review' } }, footer: { start: { text: 'Parks department' } } } }]));
   const scrims = result.backgroundImage.scrims;
   assert.equal(scrims.length, 3, 'the body\'s, the header\'s and the footer\'s');
   assert.deepEqual(scrims.map((scrim) => scrim.edge ?? scrim.form), ['band', 'top', 'bottom']);
@@ -108,13 +108,13 @@ test('header and footer text get scrims of their own at their edges, and the mut
   const top = composed(deck([{ title: 'Results for the third quarter', text: 'Revenue rose.', design: { ...picture(), header: { start: { text: 'Quarterly review' } } } }])).result.backgroundImage.scrims;
   assert.deepEqual(top.map((scrim) => scrim.edge), ['top']);
   // A quote's attribution is drawn in the muted color.
-  const quote = composed(deck([{ blocks: [{ quote: { text: 'The trails are busier than ever.', attribution: 'Park ranger' } }], design: picture({ tone: 'dark' }) }]));
+  const quote = composed(deck([{ blocks: [{ quote: { text: 'The trails are busier than ever.', attribution: 'Park ranger' } }], design: picture({ appearance: 'dark' }) }]));
   assert.ok(worstOverRamp(quote.context.options.roles.textSecondary, quote.result.backgroundImage.scrims[0]) >= 4.5);
 });
 
 test('a host that measures the picture sizes the scrim for it: none on a dark photo under light text, less on a mid one', () => {
   const grid = (value) => ({ columns: 4, rows: 4, values: Array(16).fill(value) });
-  const document = deck([{ title: 'Night operations', subtitle: 'Dark picture, light title', design: picture({ tone: 'dark' }) }]);
+  const document = deck([{ title: 'Night operations', subtitle: 'Dark picture, light title', design: picture({ appearance: 'dark' }) }]);
   const worst = composed(document).result.backgroundImage.scrims?.[0];
   assert.equal(composed(document, 0, { pictureLuminance: () => grid(0.01) }).result.backgroundImage.scrims?.[0], undefined, 'a dark picture needs none');
   const mid = composed(document, 0, { pictureLuminance: () => grid(0.3) }).result.backgroundImage.scrims?.[0];
@@ -122,7 +122,7 @@ test('a host that measures the picture sizes the scrim for it: none on a dark ph
   assert.ok(mid.opacity > 0 && mid.opacity < worst.opacity, `${mid.opacity} < ${worst.opacity}`);
   assert.deepEqual(mid.grays.length, 2);
   // A recolored picture is not the one measured: the worst case.
-  const recolored = deck([{ title: 'Night operations', design: picture({ tone: 'dark', recolor: 'grayscale' }) }]);
+  const recolored = deck([{ title: 'Night operations', design: picture({ appearance: 'dark', recolor: 'grayscale' }) }]);
   assert.equal(composed(recolored, 0, { pictureLuminance: () => grid(0.01) }).result.backgroundImage.scrims?.[0].basis, 'worst-case');
   // scrimOpacity itself: white text over black needs nothing; over the full ramp it needs a dark scrim.
   assert.equal(scrimOpacity([{ color: '#FFFFFF', target: 4.5 }], '#000000', ['#000000']).opacity, 0);
@@ -140,7 +140,7 @@ test('opf/text-on-image notes the scrim, and says contrast cannot be guaranteed 
   assert.match(off.message, /cannot be guaranteed/);
   assert.match(off.help, /overlay: false/);
   // The rule reads the slide's own tone: light text on a dark-toned picture.
-  const [toned] = findings({ tone: 'dark' });
+  const [toned] = findings({ appearance: 'dark' });
   assert.equal(toned.measured.textColor.toUpperCase(), '#FFFFFF');
 });
 

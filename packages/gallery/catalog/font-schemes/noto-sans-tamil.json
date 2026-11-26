@@ -3,7 +3,7 @@
   "id": "noto-sans-tamil",
   "name": "Noto Sans Tamil",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "ta"
   ],

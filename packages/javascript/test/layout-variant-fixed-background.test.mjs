@@ -19,11 +19,11 @@ const FIXED = {
 	'hex shorthand (light)': '#FAF7F0',
 	'solid hex': { type: 'solid', color: '#7A1F3D' },
 	'solid var:': { type: 'solid', color: 'var:brand' },
-	'gradient with a tone': { type: 'gradient', tone: 'dark', gradient: { angle: 90, stops: [{ color: '#0B1020', position: 0 }, { color: '#1F4E79', position: 1 }] } },
+	'gradient with a tone': { type: 'gradient', appearance: 'dark', gradient: { angle: 90, stops: [{ color: '#0B1020', position: 0 }, { color: '#1F4E79', position: 1 }] } },
 	'gradient without a tone': { type: 'gradient', gradient: { angle: 90, stops: [{ color: '#FFFFFF', position: 0 }, { color: '#F2EFE9', position: 1 }] } },
 	pattern: { type: 'pattern', pattern: { preset: 'pct5', foregroundColor: '#2B3A4A', backgroundColor: '#FFFFFF' } },
 	'picture shorthand': picture,
-	'picture with a tone': { type: 'image', src: picture, tone: 'dark' },
+	'picture with a tone': { type: 'image', src: picture, appearance: 'dark' },
 };
 // Scheme-based backgrounds: the layout variant still applies.
 const SCHEME_BASED = {

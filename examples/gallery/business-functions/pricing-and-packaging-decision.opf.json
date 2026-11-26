@@ -424,7 +424,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "northbeam-software",
+    "organization": "northbeam-software",
     "bio": "Leads pricing planning for Northbeam Software.",
     "socials": {
       "tiktok": "@northbeam-software-speaker"
@@ -764,7 +764,7 @@
         "roboto": {
           "name": "Roboto",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Roboto",
           "minor": "Roboto",
@@ -775,7 +775,7 @@
         "noto-sans-gujarati": {
           "name": "Noto Sans Gujarati",
           "app": "google-slides",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "gu"
           ],
@@ -788,7 +788,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

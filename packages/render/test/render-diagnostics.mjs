@@ -17,7 +17,7 @@ const faces=[400,700].map(weight=>{
   assert.ok(changed);return {data,family:'Host',weight};
 });
 const fonts=await loadFonts({pack:'base',faces});
-const deck={catalogs:{host:{source:'https://example.invalid/host',fontSchemes:{host:{name:'Host',app:'powerpoint',languageFamily:'latin',languages:[],major:'Host',minor:'Host',textSample:'x',type:'sans-serif'}}}},design:{fontScheme:'host:host'},slides:[{title:'Control',text:'Body'}]};
+const deck={catalogs:{host:{source:'https://example.invalid/host',fontSchemes:{host:{name:'Host',app:'powerpoint',scriptGroup:'latin',languages:[],major:'Host',minor:'Host',textSample:'x',type:'sans-serif'}}}},design:{fontScheme:'host:host'},slides:[{title:'Control',text:'Body'}]};
 const capture=draw=>{const diagnostics=[];draw(deck,1,{fonts,text:'paths',onDiagnostic:d=>diagnostics.push(d)});return diagnostics.filter(d=>['text-as-paths-fallback','font-embedding-restricted'].includes(d.code));};
 const diagnostics=capture(toSvg);assert.deepEqual(capture(svg),diagnostics,'both actual public imports emit identical font diagnostics');
 const outline=diagnostics.find(d=>d.code==='text-as-paths-fallback');assert.ok(outline,'restricted outline text reports its fallback');

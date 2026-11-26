@@ -256,7 +256,7 @@
     "id": "speaker",
     "name": "Maya Chen",
     "title": "Program Sponsor",
-    "organizationId": "greenway-parks-department",
+    "organization": "greenway-parks-department",
     "bio": "Leads parks and recreation planning for Greenway Parks Department.",
     "socials": {
       "mastodon": "@greenway-parks-department-speaker"
@@ -636,7 +636,7 @@
         "raleway": {
           "name": "Raleway",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Raleway",
           "minor": "Raleway",
@@ -647,7 +647,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

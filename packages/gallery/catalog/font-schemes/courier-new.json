@@ -3,7 +3,7 @@
   "id": "courier-new",
   "name": "Courier New",
   "app": "powerpoint",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Courier New",
   "minor": "Courier New",

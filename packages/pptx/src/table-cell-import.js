@@ -46,7 +46,7 @@ function solid(properties, context, report, kind) {
 }
 
 export function nativeCellStyle(properties, body, context, scale, report, {rtlDeck = false} = {}) {
-  const style = {fill:'#00000000', align:'start', verticalAlign:'top', padding:{}, borders:{}};
+  const style = {fill:'#00000000', align:'start', anchor:'top', padding:{}, borders:{}};
   const fill = solid(properties, context, report, 'cell-fill');
   if (properties._opfUnresolvedTableFill) report('unsupported-table-cell-fill','The native fill style reference or placeholder color could not be resolved from this archive.');
   if (fill !== undefined) style.fill = fill;
@@ -57,7 +57,7 @@ export function nativeCellStyle(properties, body, context, scale, report, {rtlDe
     else {style.padding[edge] = Math.min(200,fallback / (9525 * scale));report('unsupported-table-padding','The native cell margin is outside the canonical 0–200 reference-pixel range.');}
   }
   const vertical = {t:'top',ctr:'middle',b:'bottom'}[properties.anchor ?? 't'];
-  if (vertical) style.verticalAlign = vertical;
+  if (vertical) style.anchor = vertical;
   else report('unsupported-table-alignment','Distributed or justified vertical cell alignment is not represented.');
   if (truth(properties.anchorCtr) || properties.vert && properties.vert !== 'horz') report('unsupported-table-alignment','Centered anchoring or vertical text direction is not represented.');
   const listStyle = drawingObject(child(body,'a:lstStyle'));

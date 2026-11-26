@@ -3,7 +3,7 @@
   "id": "trebuchet-ms",
   "name": "Trebuchet MS",
   "app": "powerpoint",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Trebuchet MS",
   "minor": "Trebuchet MS",

@@ -17,7 +17,7 @@ export const REFERENCE_RULES = Object.freeze([
   { kind: "dataset", definitions: ["DatasetId"], keys: [], phrases: [] },
   // FR-04: a string `datasource` of a dataset or of inline chart data is the id of an entry of the root `datasources`.
   { kind: "datasource", definitions: ["DataSourceId", "DataSourceChoice"], keys: [], phrases: [] },
-  { kind: "datasetColumn", definitions: ["DatasetFields"], keys: ["category", "x", "series", "line", "secondaryAxis", "field"], phrases: ["column"], item: true },
+  { kind: "datasetColumn", definitions: ["DatasetFields"], keys: ["category", "x", "series", "lineSeries", "secondaryAxis", "field"], phrases: ["column"], item: true },
   { kind: "cite", definitions: [], keys: ["cite"], phrases: ["references"], item: true },
   { kind: "beat", definitions: [], keys: ["beat"], phrases: ["narrative"], item: true },
   { kind: "region", definitions: [], keys: ["region"], phrases: ["a region of that layout"] },

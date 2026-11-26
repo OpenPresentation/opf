@@ -418,7 +418,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "clearlake-data",
+    "organization": "clearlake-data",
     "bio": "Leads analytics planning for ClearLake Data.",
     "socials": {
       "x": "@clearlake-data-speaker"
@@ -766,7 +766,7 @@
         "georgia": {
           "name": "Georgia",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Georgia",
           "minor": "Georgia",
@@ -777,7 +777,7 @@
         "noto-naskh-arabic": {
           "name": "Noto Naskh Arabic",
           "app": "google-slides",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "fa"
           ],
@@ -790,7 +790,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

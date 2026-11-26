@@ -19,9 +19,9 @@ const profileOf = presentation => resolvePresentation(structuredClone(presentati
 const doc = (fontScheme, language, text = 'Text') => ({name: 'Theme slots', ...(language === undefined ? {} : {language}), design: {fontScheme}, slides: [{title: text, text}]});
 
 // The four-row rule, derived from the gallery records and the language vocabulary (not from the resolver's own `sources`):
-// 1 explicit slot on the design scheme, 2 the design scheme's own family when its languageFamily is the slot and it
+// 1 explicit slot on the design scheme, 2 the design scheme's own family when its scriptGroup is the slot and it
 // serves the language, 3 the language's script font when the language's script uses the slot, 4 the latin family.
-const SLOT = {eastAsian: 'ea', complexScript: 'cs'};
+const SLOT = {eastAsian: 'eastAsian', complexScript: 'complexScript'};
 const subtags = tag => tag.split('-');
 // A scheme serves a language when its `languages` list is empty, or an entry has the language's language subtag and, when the
 // entry names a script (`pa-Guru`), the language's script.
@@ -37,7 +37,7 @@ function expected(designId, tag) {
   for (const [role, latin] of [['heading', design.major], ['body', design.minor]]) {
     out[role] = {latin};
     for (const [slot, family] of Object.entries(SLOT)) {
-      const own = design.languageFamily === family && serves(design, language);
+      const own = design.scriptGroup === family && serves(design, language);
       out[role][slot] = own ? design[role === 'heading' ? 'major' : 'minor'] : languageRole === slot ? languageFont[role === 'heading' ? 'major' : 'minor'] : latin;
     }
   }

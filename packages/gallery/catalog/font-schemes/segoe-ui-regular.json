@@ -3,7 +3,7 @@
   "id": "segoe-ui-regular",
   "name": "Segoe UI Regular",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "he"
   ],

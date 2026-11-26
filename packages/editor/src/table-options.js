@@ -260,7 +260,7 @@ export function prepareTableSplit(presentation, tablePath, cell) {
 
 /**
  * Compute the patch that changes the style of the cells. `style` fields merge into each cell's style
- * (fill, color, bold, align, verticalAlign, padding, borders); a `null` field removes it, and `style: null`
+ * (fill, color, bold, align, anchor, padding, borders); a `null` field removes it, and `style: null`
  * clears the whole style. `bold` is a boolean (RR-93): it bolds the whole cell and, unlike rich runs, keeps a
  * numeric column's number `format` and alignment. Covered (merged) positions are skipped. A cell left with no style or spans
  * becomes a plain value again. Style is appearance only: values and spans are untouched.

@@ -4,7 +4,7 @@ export interface TableBorder { color?: unknown; width?: number; dash?: 'solid'|'
 export interface TableCellStyle {
   fill?: string; color?: string; bold?: boolean;
   /** Logical, in the engine's words: `left` is the start edge (the document writes `start`) and `right` the end edge (`end`). */
-  align?: 'left'|'center'|'right'; verticalAlign?: 'top'|'middle'|'bottom';
+  align?: 'left'|'center'|'right'; anchor?: 'top'|'middle'|'bottom';
   padding?: Partial<Record<'top'|'right'|'bottom'|'left',number>>;
   borders?: Partial<Record<'top'|'right'|'bottom'|'left',TableBorder>>;
 }

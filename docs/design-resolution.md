@@ -137,7 +137,7 @@ The heading and body families are never reused as the code fallback, so choosing
 
 ### Engine default font scheme
 
-The last-resort font scheme applies only when neither the slide, the deck nor the resolved theme names one, or when the reference resolves nowhere. It is an engine default in code, not a catalog record: `ENGINE_DEFAULT_FONT_SCHEME` (`{ major: "Aptos Display", minor: "Aptos", languageFamily: "latin" }`, the drawing fields of the gallery's `aptos` scheme), recorded in [`engine-defaults.json`](../spec/reference/engine-defaults.json) and exported from the package root and `@openpresentation/opf/composition`. A document with no `design` uses the engine default theme (`ENGINE_DEFAULT_THEME`, which names no font scheme), so it gets Aptos in every engine without any catalog registered.
+The last-resort font scheme applies only when neither the slide, the deck nor the resolved theme names one, or when the reference resolves nowhere. It is an engine default in code, not a catalog record: `ENGINE_DEFAULT_FONT_SCHEME` (`{ major: "Aptos Display", minor: "Aptos", scriptGroup: "latin" }`, the drawing fields of the gallery's `aptos` scheme), recorded in [`engine-defaults.json`](../spec/reference/engine-defaults.json) and exported from the package root and `@openpresentation/opf/composition`. A document with no `design` uses the engine default theme (`ENGINE_DEFAULT_THEME`, which names no font scheme), so it gets Aptos in every engine without any catalog registered.
 
 Every engine shares this one last resort, so a theme without `fontScheme` is measured, paginated, previewed and exported in the same fonts:
 
@@ -235,13 +235,13 @@ Which variant a slide has, from the most specific to the least (slide design, th
 
 1. a `variant`;
 2. a theme-slot background (`"dark1"`, `{ "type": "theme", "slot": "dark1" }`), which is the variant of that slot, so `design.background` stays a shorthand;
-3. a picture or gradient background with a `tone` (`"dark"` or `"light"`), which is the `dark1` or `light1` variant. Without a tone a picture takes the tone its recolor, opacity and overlay imply ([images](image-treatments.md)); when they imply none, only a variant of a less specific level can apply, and with none the slide counts as light, as before;
+3. a picture or gradient background with an `appearance` (`"dark"` or `"light"`), which is the `dark1` or `light1` variant. Without one a picture takes the appearance its recolor, opacity and overlay imply ([images](image-treatments.md)); when they imply none, only a variant of a less specific level can apply, and with none the slide counts as light, as before;
 4. any other background (a solid or pattern color) decides by luminance (dark below 0.179), as before.
 
 A layout record's `design.variant` (LH-01) is a default a gallery layout gives, and a background the author fixed beats it (LH-103; docs/programs/layout-harvest/README.md, Decisions). From the most specific:
 
 1. The slide's own `variant` or `background` always wins.
-2. If the background the deck or the theme draws is **fixed**, the layout's variant does not apply: the slide keeps that background, and its text follows that background's `tone` or luminance, exactly as on a slide whose layout names no variant. Fixed is a hex color (the `"#0B1020"` shorthand or a solid's `color`), a solid whose color is a `var:` reference (whatever the variable holds: the author named a color of the deck's own, not a place in the scheme), a gradient, a pattern or a picture.
+2. If the background the deck or the theme draws is **fixed**, the layout's variant does not apply: the slide keeps that background, and its text follows that background's `appearance` or luminance, exactly as on a slide whose layout names no variant. Fixed is a hex color (the `"#0B1020"` shorthand or a solid's `color`), a solid whose color is a `var:` reference (whatever the variable holds: the author named a color of the deck's own, not a place in the scheme), a gradient, a pattern or a picture.
 3. If that background is **scheme-based** (none, so the theme's slot or the engine default applies; a theme slot, `"dark1"` or `{ "type": "theme" }`; a solid whose color is a scheme slot or role name, such as `accent2`, `primary` or `background`; or a deck `variant`), the layout's variant applies on top, ranking above the deck and the theme, unlike the layout's other design keys.
 4. Otherwise the deck, then the theme, then the engine default, as above.
 
@@ -261,7 +261,7 @@ The default `section` is `accent1`, `statement` and `quote` are `surface` and `c
 
 A theme record can list the variants it offers (`variants`, from gallery 4): named values of `variant`, such as `light`, `light-alt`, `dark` and `dark-alt` on `minimal`, `classic` and `bold`. They are for pickers: choosing one writes its `variant` into `design.variant` (or a slide's), and the document keeps that value, not the entry id. The engines read only `design.variant`. There is no `dark` theme in the default catalog: a dark deck is a theme with a dark variant, for example `{ "theme": "classic", "variant": "dark1" }`.
 
-A slide's variant replaces the deck's whole, accent order included. `resolveSlideContext(...).resolved.roles` is the resolved record, and `resolveColorRoles(scheme, { variant, tone, background })` is the function: besides the colors it returns `variant`, `map` (bg1, tx1, bg2, tx2 and the accents; `clrMapAttributes(map)` gives the PowerPoint `clrMap` attributes for the master and for a slide's `clrMapOvr`), `accents` (the six colors in order) and `neutrals`.
+A slide's variant replaces the deck's whole, accent order included. `resolveSlideContext(...).resolved.roles` is the resolved record, and `resolveColorRoles(scheme, { variant, appearance, background })` is the function: besides the colors it returns `variant`, `map` (bg1, tx1, bg2, tx2 and the accents; `clrMapAttributes(map)` gives the PowerPoint `clrMap` attributes for the master and for a slide's `clrMapOvr`), `accents` (the six colors in order) and `neutrals`.
 
 #### Scheme-derived neutrals
 
@@ -308,8 +308,8 @@ OOXML gives each theme font (major and minor) three script slots: `latin`, East 
 ```
   latin          design font scheme heading/body (the chain above)
   eastAsian      1. design.fontScheme.eastAsian      explicit slot
-  complexScript  2. the scheme's own major/minor     when languageFamily is ea / cs (or eastAsian /
-                                                     complexScript, the same values) and its
+  complexScript  2. the scheme's own major/minor     when scriptGroup is eastAsian / complexScript
+                                                     (the group of the slot) and its
                                                      languages list (language ids) is empty or
                                                      names the language
                  3. the language's font scheme       when the language's script uses the slot
@@ -321,7 +321,7 @@ OOXML gives each theme font (major and minor) three script slots: `latin`, East 
 - A language sets `lang`, the text direction and the script slots, and never the Latin scheme: only `design.fontScheme` (slide, then deck, then theme, then the shared default `aptos`) sets the latin fonts, and a language record's `fontScheme` is a default for its own script slot, not a deck font. The PPTX theme's `a:ea` and `a:cs` are written only for a slot a script font is selected for (the scheme's explicit slot or the language's script font) and stay empty otherwise, as in Office's own themes. See [Language contract](./programs/font-fidelity-everywhere/script-font-model.md#language-contract-ff-50-model-c) and [Theme slots](./programs/font-fidelity-everywhere/script-font-model.md#theme-slots-ff-49).
 - A Latin deck therefore repeats its heading/body family in `ea`/`cs`. A Japanese deck with `design.fontScheme: { "major": "Carlito", "minor": "Carlito" }` keeps the Latin family in `latin` and uses Yu Gothic (PowerPoint) or Noto Sans JP (Google Slides) in `ea`. `design.fontScheme.eastAsian` / `.complexScript` (`{ "major": ..., "minor": ... }`) name a script font explicitly, for example for CJK text inside a Latin deck.
 
-`@openpresentation/opf/composition` exports `resolveScriptFonts(document, { app, slideIndex })` (`app` is `"powerpoint"`, the default, or `"google-slides"`), and the package root exports `normalizeLanguageFamily(value)` (which reads a font scheme's `languageFamily`, `eastAsian` as `ea` and `complexScript` as `cs`). `resolveScriptFonts` returns the heading and body slots, the OOXML `lang` (a curated `ooxmlLang` culture tag such as `ja-JP` or `ms-MY`, or an authored region tag), the canonical `bcp47` tag, `script`, `direction`/`rtl`, and the per-script supplemental theme font. Renderers and exporters should use it rather than re-deriving slots. The model, the OOXML mapping and the open questions are in [`programs/font-fidelity-everywhere/script-font-model.md`](./programs/font-fidelity-everywhere/script-font-model.md). opf-render and opf-pptx implement it (FF-07, FF-19, FF-49).
+`@openpresentation/opf/composition` exports `resolveScriptFonts(document, { app, slideIndex })` (`app` is `"powerpoint"`, the default, or `"google-slides"`), and the package root exports `normalizeScriptGroup(value)` (which reads a font scheme's `scriptGroup`, `eastAsian` as `ea` and `complexScript` as `cs`). `resolveScriptFonts` returns the heading and body slots, the OOXML `lang` (a curated `ooxmlLang` culture tag such as `ja-JP` or `ms-MY`, or an authored region tag), the canonical `bcp47` tag, `script`, `direction`/`rtl`, and the per-script supplemental theme font. Renderers and exporters should use it rather than re-deriving slots. The model, the OOXML mapping and the open questions are in [`programs/font-fidelity-everywhere/script-font-model.md`](./programs/font-fidelity-everywhere/script-font-model.md). opf-render and opf-pptx implement it (FF-07, FF-19, FF-49).
 
 ### Numbers in the language's own digits (LH-106, OPF 0.34)
 

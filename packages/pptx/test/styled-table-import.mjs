@@ -10,8 +10,8 @@ const tableOf=deck=>deck.slides[0].table??deck.slides[0].blocks.find(block=>bloc
 const plain=cell=>{const value=cell?.value??cell;return Array.isArray(value)?value.map(run=>typeof run==='string'?run:run.text).join(''):value;};
 const all=table=>[...(table.columns?[table.columns]:[]),...table.rows];
 const table={columns:[{value:'Heading',colSpan:2},null,'C'],rows:[
- [{value:['A ',{text:'red',color:'#FF0000'}],rowSpan:2,colSpan:2,style:{fill:'#12345680',color:'#ABCDEFAA',align:'end',verticalAlign:'bottom',padding:{top:0,right:3.5,bottom:6,left:12},borders:{top:{color:'#ABCDEF80',width:2,dash:'dot'},right:{color:'#123456',width:3,dash:'dash'},bottom:{color:'#000000',width:0}}}},null,'B'],
- [null,null,{value:'D',style:{align:'center',verticalAlign:'middle',padding:{left:17}}}]
+ [{value:['A ',{text:'red',color:'#FF0000'}],rowSpan:2,colSpan:2,style:{fill:'#12345680',color:'#ABCDEFAA',align:'end',anchor:'bottom',padding:{top:0,right:3.5,bottom:6,left:12},borders:{top:{color:'#ABCDEF80',width:2,dash:'dot'},right:{color:'#123456',width:3,dash:'dash'},bottom:{color:'#000000',width:0}}}},null,'B'],
+ [null,null,{value:'D',style:{align:'center',anchor:'middle',padding:{left:17}}}]
 ]};
 for(const scale of [1,.5]){
  const source={design:{dimensions:{widthInches:1280*scale/96,heightInches:720*scale/96}},slides:[{table}]};
@@ -25,14 +25,14 @@ for(const scale of [1,.5]){
  assert.equal(actual.rows[0][0].rowSpan,2);assert.equal(actual.rows[0][0].colSpan,2);
  assert.equal(actual.rows[0][1],null);assert.equal(actual.rows[1][0],null);assert.equal(actual.rows[1][1],null);
  const style=actual.rows[0][0].style;
- assert.equal(style.fill,'#12345680');assert.equal(style.align,'end');assert.equal(style.verticalAlign,'bottom');
+ assert.equal(style.fill,'#12345680');assert.equal(style.align,'end');assert.equal(style.anchor,'bottom');
  for(const edge of ['top','right','bottom','left'])assert.ok(Math.abs(style.padding[edge]-table.rows[0][0].style.padding[edge])<.001);
  for(const edge of ['top','right']){
   const expected=table.rows[0][0].style.borders[edge],actual=style.borders[edge];
   assert.equal(actual.color,expected.color);assert.equal(actual.dash,expected.dash);assert.ok(Math.abs(actual.width-expected.width)<.001);
  }
  assert.equal(style.borders.bottom.width,0);
- assert.equal(actual.rows[1][2].style.align,'center');assert.equal(actual.rows[1][2].style.verticalAlign,'middle');
+ assert.equal(actual.rows[1][2].style.align,'center');assert.equal(actual.rows[1][2].style.anchor,'middle');
  assert.equal(actual.rows[0][0].value[0].color,'#ABCDEFAA');assert.equal(actual.rows[0][0].value[1].color,'#FF0000');
  const again=tableOf(await fromPptx(await toPptx(imported)));
  assert.deepEqual(again,actual,'Native styles and dense merges survive repeated conversion');

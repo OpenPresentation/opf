@@ -54,7 +54,7 @@ try{
  for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1280]])for(const floor of [16,32])for(const local of [false,true]){
   const original=local?'':'  A  B\tC\u00a0D\r\n\r\ntrail  \r';
   const header={start:{text:original},center:{text:'{{organization.name}}'},end:{text:'{{slide.section}}'}},footer={start:{date:' 2026-09-10 '},end:{text:'{{slide.number}}'}};
-  const deck = withRecords({organization:{id:'openpresentation',name:'OpenPresentation'},design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},header,footer},slides:[{title:'Shared furniture',section:'Review',text:'Body content keeps its own space.',composition:{minFontSize:floor,overflow:'error'},...(local?{design:{header}}:{})}]});
+  const deck = withRecords({organization:{id:'openpresentation',name:'OpenPresentation'},design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},header,footer},slides:[{title:'Shared furniture',section:'Review',text:'Body content keeps its own space.',composition:{minFontSizePx:floor,overflow:'error'},...(local?{design:{header}}:{})}]});
   const fieldPath=local?'slides.0.design.header.start.text':'design.header.start.text';activeCase={measured,width,height,floor,local,deck};
   await page.evaluate(args=>mount(args),{deck,faces:registry.embeddedFonts,measured});
   const geometry=await page.evaluate(async()=>{

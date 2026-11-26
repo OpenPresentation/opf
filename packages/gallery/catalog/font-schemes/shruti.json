@@ -3,7 +3,7 @@
   "id": "shruti",
   "name": "Shruti",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "gu"
   ],

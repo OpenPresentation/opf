@@ -198,7 +198,7 @@ describe('a paged table keeps one range (FR-07)', () => {
   test('every page of a split table is shaded over the whole table', () => {
     const rows = Array.from({ length: 40 }, (_, index) => [`Row ${index + 1}`, index * 10]);
     const table = { columns: ['Name', 'Score'], rows, colorScale: { columns: ['Score'] } };
-    const { slides } = paginateSlide({ title: 'Scores', table }, { width: 1280, height: 720, minFontSize: 24 });
+    const { slides } = paginateSlide({ title: 'Scores', table }, { width: 1280, height: 720, minFontSizePx: 24 });
     assert.ok(slides.length > 1, 'the table is split');
     const first = resolveTableColorScale(slides[0].table, colors), last = resolveTableColorScale(slides.at(-1).table, colors);
     assert.deepEqual([first.range.min, first.range.max], [0, 390]);
@@ -208,7 +208,7 @@ describe('a paged table keeps one range (FR-07)', () => {
     const index = Number(last.cells[0].value) / 10;
     assert.equal(last.cells[0].fill, whole.at(index, 1).fill);
     // A diverging scale is pinned at its symmetric ends.
-    const diverging = paginateSlide({ title: 'Change', table: { columns: ['Name', 'Change'], rows: rows.map(([name, value]) => [name, value - 100]), colorScale: { columns: ['Change'], colors: ['surface', 'surface', 'primary'], center: 0 } } }, { width: 1280, height: 720, minFontSize: 24 });
+    const diverging = paginateSlide({ title: 'Change', table: { columns: ['Name', 'Change'], rows: rows.map(([name, value]) => [name, value - 100]), colorScale: { columns: ['Change'], colors: ['surface', 'surface', 'primary'], center: 0 } } }, { width: 1280, height: 720, minFontSizePx: 24 });
     assert.ok(diverging.slides.length > 1);
     for (const page of diverging.slides) assert.deepEqual([page.table.colorScale.min, page.table.colorScale.max, page.table.colorScale.center], [-290, 290, 0]);
     // A table that fits on one page is not rewritten.

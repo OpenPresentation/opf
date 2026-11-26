@@ -26,7 +26,7 @@ test('explanation preserves geometry, source values and measurement calls', () =
 });
 
 test('candidate penalties account for the score and report the selected flow', () => {
-  const slide={composition:{mode:'auto',columns:3,minFontSize:24},blocks:[
+  const slide={composition:{mode:'auto',columns:3,minFontSizePx:24},blocks:[
     {text:'Detailed explanation. '.repeat(90)},
     {table:{columns:['Heading'],rows:Array.from({length:30},(_,i)=>[`Row ${i}`])}},
     ...blocks(3),

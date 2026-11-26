@@ -121,11 +121,11 @@ export const CASES = [
 	{ name: 'chart-text-alternative-decorative', rule: 'opf/chart-text-alternative', input: deck([{ title: 'Revenue', text: 'x', chart: { type: 'column', alt: '', data: chartData } }]) },
 	{ name: 'missing-language', rule: 'opf/missing-language', input: { name: 'x', slides: [{ title: 'T', text: 'x' }] } },
 	{ name: 'chart-option-adapted', rule: 'opf/chart-option-adapted', input: deck([{ title: 'Pie', chart: { type: 'pie', data: chartData, axisTitles: { value: 'Revenue' }, dataLabels: { position: 'above' } } }]), pick: (f) => f.path.endsWith('dataLabels/position') },
-	{ name: 'text-overflow', rule: 'opf/text-overflow', input: deck([{ title: 'T', composition: { minFontSize: 16 }, blocks: [{ text: 'word '.repeat(600) }, { text: 'b', emphasis: false }] }]) },
+	{ name: 'text-overflow', rule: 'opf/text-overflow', input: deck([{ title: 'T', composition: { minFontSizePx: 16 }, blocks: [{ text: 'word '.repeat(600) }, { text: 'b', emphasis: false }] }]) },
 	{ name: 'unresolved-content', rule: 'opf/unresolved-content', input: deck([{ title: 'T', items: ['a', 'b'] }], { design: { listBullet: 'image' } }) },
 	{ name: 'layout-failed', rule: 'opf/layout-failed', input: deck([{ title: 'T', layout: 'broken', text: 'x' }]), options: { catalogs: [{ source: 'pkg:@host/layouts', layouts: { broken: { name: 'Broken', regions: [{ name: 'title', size: 1 }], composition: { padding: 5 } } } }] } },
 	{ name: 'min-font-size-run', rule: 'opf/min-font-size', input: deck([{ title: 'T', text: [{ text: 'tiny', fontSize: 8 }, ' ok'] }]) },
-	{ name: 'min-font-size-composed', rule: 'opf/min-font-size', input: deck([{ title: 'T', composition: { minFontSize: 8 }, blocks: [{ text: 'word '.repeat(1000) }, { text: 'b' }] }]) },
+	{ name: 'min-font-size-composed', rule: 'opf/min-font-size', input: deck([{ title: 'T', composition: { minFontSizePx: 8 }, blocks: [{ text: 'word '.repeat(1000) }, { text: 'b' }] }]) },
 	{ name: 'region-unknown', rule: 'opf/region-unknown', input: deck([{ layout: 'r', blocks: [{ region: 'timelin', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	{ name: 'region-kind', rule: 'opf/region-kind', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', text: 'b' }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	{ name: 'icon-unknown', rule: 'opf/icon-unknown', input: deck([{ title: 'T', items: [{ text: 'a', icon: 'brand:stra' }] }], { catalogs: { custom: { iconSets: { brand: iconSet } } } }) },
@@ -175,7 +175,7 @@ export const CASES = [
 	{ name: 'tight-spacing-gap', rule: 'opf/tight-spacing', input: deck([{ title: 'Two options', composition: { gap: 0.01 }, blocks: [{ text: 'Build it in house.' }, { text: 'Buy a hosted service.' }] }]) },
 	{ name: 'tight-spacing-margin', rule: 'opf/tight-spacing', input: deck([{ title: 'Two options', composition: { padding: 0.02 }, blocks: [{ text: 'Build it in house.' }, { text: 'Buy a hosted service.' }] }]) },
 	{ name: 'layout-monotony', rule: 'opf/layout-monotony', input: deck(['Hiring', 'Budget', 'Roadmap', 'Risks', 'Asks'].map((title) => ({ title, layout: 'list', items: ['One point', 'Another point'] }))), options: withGallery },
-	{ name: 'chart-dual-axis', rule: 'opf/chart-dual-axis', input: deck([{ title: 'Revenue and margin', chart: { type: 'combo', alt: 'Revenue and margin', data: { columns: ['Quarter', 'Revenue', 'Margin'], rows: [['Q1', 12, 0.31], ['Q2', 15, 0.34]] }, line: ['Margin'], secondaryAxis: ['Margin'] } }]) },
+	{ name: 'chart-dual-axis', rule: 'opf/chart-dual-axis', input: deck([{ title: 'Revenue and margin', chart: { type: 'combo', alt: 'Revenue and margin', data: { columns: ['Quarter', 'Revenue', 'Margin'], rows: [['Q1', 12, 0.31], ['Q2', 15, 0.34]] }, lineSeries: ['Margin'], secondaryAxis: ['Margin'] } }]) },
 	{ name: 'chart-pie-many-slices', rule: 'opf/chart-pie-many-slices', input: deck([{ title: 'Traffic sources', chart: { type: 'pie', alt: 'Traffic sources', data: { columns: ['Source', 'Visits'], rows: [['Search', 48], ['Direct', 22], ['Social', 12], ['Email', 8], ['Referral', 5], ['Ads', 3]] } } }]) },
 ];
 

@@ -3,7 +3,7 @@
   "id": "david",
   "name": "David",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "he"
   ],

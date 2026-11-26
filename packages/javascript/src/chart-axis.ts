@@ -50,15 +50,15 @@ export const CHART_MAX_INTERVALS = 6;
 
 /**
  * RR-90: the unscaled chart text size for a chart box: {@link CHART_TEXT_PX}, shrunk only when the box is small (the text is at most
- * 1/18 of the box height and 1/30 of its width, whole pixels) and never below `minFontSize` (default 16). WI-5: a box with room for it
+ * 1/18 of the box height and 1/30 of its width, whole pixels) and never below `minFontSizePx` (default 16). WI-5: a box with room for it
  * (at least 216 x 288 reference pixels) keeps {@link CHART_TEXT_FLOOR_PX} (18) as its floor, so a three-column or dashboard chart draws 18 px text
  * where it drew 16. `width` and `height` are the box in
  * canvas pixels and `scale` is `min(slide width, slide height) / 720`. The preview and the axis density both call it, so the
  * axis core computes matches the text the preview draws.
  */
-export function chartTextSize(geometry: { width: number; height: number; scale: number; minFontSize?: number }): number {
+export function chartTextSize(geometry: { width: number; height: number; scale: number; minFontSizePx?: number }): number {
   const { width, height, scale } = geometry;
-  const minimum = geometry.minFontSize ?? 16;
+  const minimum = geometry.minFontSizePx ?? 16;
   if (![width, height, scale].every(Number.isFinite) || width <= 0 || height <= 0 || scale <= 0) return Math.max(CHART_TEXT_PX, minimum);
   const roomy = Math.floor(Math.min(CHART_TEXT_PX, height / scale / 18, width / scale / 30));
   const roomForFloor = height / scale >= CHART_FLOOR_MIN_HEIGHT && width / scale >= CHART_FLOOR_MIN_WIDTH;
@@ -338,8 +338,8 @@ export interface ChartAxisGeometry {
   height: number;
   /** `min(slide width, slide height) / 720`. */
   scale: number;
-  /** The composition's `minFontSize` (default 16), which the chart text never goes below. */
-  minFontSize?: number;
+  /** The composition's `minFontSizePx` (default 16), which the chart text never goes below. */
+  minFontSizePx?: number;
   /** LH-60: the deck language, which names the places a map chart plots (a map over other categories is drawn as columns). */
   language?: string;
   /** LH-119: the chart's points (or columns) carry their value labels and its value axis is hidden (the small chart, LH-03). */

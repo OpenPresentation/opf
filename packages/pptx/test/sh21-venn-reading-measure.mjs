@@ -86,7 +86,7 @@ for(const[name,text,oldSize]of[['medium',medium,104/3],['long',long,80/3]])test(
  const doc=document(text),source=structuredClone(doc),g=compose(doc),before=details(g);assert.ok(Math.abs(before.size-oldSize)<1e-6);assert.ok(before.lines.some(line=>line.length>70));assertCompleteFallback(doc,g);assert.deepEqual(doc,source);
  assertStrictRefusal(doc);
  // Composition/pagination floors are bounded at32 by the existing schema. Check observed sizes as well as that supported floor.
- const paged=paginate(doc,{catalogs:[gallery],fonts,minFontSize:Math.min(32,before.size)}).presentation;assert.equal(paged.slides.length,2);assert.deepEqual(paged.slides.flatMap(slide=>slide.items),doc.slides[0].items);
+ const paged=paginate(doc,{catalogs:[gallery],fonts,minFontSizePx:Math.min(32,before.size)}).presentation;assert.equal(paged.slides.length,2);assert.deepEqual(paged.slides.flatMap(slide=>slide.items),doc.slides[0].items);
  let boundedWrap=false;for(let index=0;index<paged.slides.length;index++){
   const page=compose(paged,index),after=details(page);assert.ok(after.size>=before.size-1e-6);assert.ok(after.lines.every(line=>line.length<=70));assert.ok(after.texts.every(t=>!t.overflow));assert.ok(!page.diagnostics.some(d=>d.code==='text-overflow'));assertWholeWords(after,paged.slides[index].items);const measurement=resolveSlideContext(paged,index,{catalogs:[gallery],fonts}).options.textMeasurement??fonts.textMeasurement;const physicalWrap=boundedPhysicalColumns(after,before,measurement);
   if(name==='medium'&&index===0){
@@ -110,5 +110,5 @@ for(const[name,text,oldSize]of[['medium',medium,104/3],['long',long,80/3]])test(
 });
 
 test('SH21: an unbreakable Venn label is explicitly refused instead of silently splitting a word',()=>{
- const doc=document('W'.repeat(90)),source=structuredClone(doc),g=compose(doc);assertCompleteFallback(doc,g);assertStrictRefusal(doc);assert.throws(()=>paginate(doc,{catalogs:[gallery],fonts,minFontSize:32}),error=>error.code==='pagination-unresolved');assert.deepEqual(doc,source);
+ const doc=document('W'.repeat(90)),source=structuredClone(doc),g=compose(doc);assertCompleteFallback(doc,g);assertStrictRefusal(doc);assert.throws(()=>paginate(doc,{catalogs:[gallery],fonts,minFontSizePx:32}),error=>error.code==='pagination-unresolved');assert.deepEqual(doc,source);
 });

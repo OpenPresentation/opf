@@ -338,8 +338,8 @@
   ],
   "beforeImport": {
     "file": "integrated-before-imports.json",
-    "bytes": 96151,
-    "sha256": "22ffa5cf98391d1e84b7ca35042f786fd13e44e9d39644b945cf5966b3d82443",
+    "bytes": 95983,
+    "sha256": "86bb4ce2bbf0993f866ff096275aee7a3b065eec365f57e87a6c4237cb436b66",
     "scope": "Complete current A/B documents and ordered diagnostics from the same final runtime with only classifier output disabled; only asserted literal moves/footer addition produce the final importer result"
   },
   "historicalControl": {
@@ -347,8 +347,8 @@
     "beforeImport": {
       "runtimeRevision": "7f300b42166c55ee14f8f9432e7340ded26f5ee4",
       "file": "before-imports.json",
-      "bytes": 97177,
-      "sha256": "76127db5d1e3de00d83d0b7fb9945dbeaba63f3753624154f11b7174035ca45c",
+      "bytes": 97009,
+      "sha256": "ec30d33f33ec09b2af9ba65a4b29f24f627992f840f25b06181cbde3a8d59aec",
       "scope": "Exact clean-main current archive imports and all diagnostics; regression only, never importer input."
     }
   },

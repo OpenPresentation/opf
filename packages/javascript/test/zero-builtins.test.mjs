@@ -52,7 +52,7 @@ describe('engine defaults', () => {
     assert.deepEqual(ENGINE_DEFAULT_THEME, drawn(gallery.themes.minimal, ['background', 'dimensions']));
     const slots = ['accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink'];
     assert.deepEqual(ENGINE_DEFAULT_COLOR_SCHEME, drawn(gallery.colorSchemes['cool-horizon'], slots));
-    assert.deepEqual(ENGINE_DEFAULT_FONT_SCHEME, drawn(gallery.fontSchemes.aptos, ['major', 'minor', 'languageFamily']));
+    assert.deepEqual(ENGINE_DEFAULT_FONT_SCHEME, drawn(gallery.fontSchemes.aptos, ['major', 'minor', 'scriptGroup']));
   });
 
   test('a deck that names nothing draws the same with and without the default catalog', () => {

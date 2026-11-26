@@ -79,10 +79,10 @@ describe('roles from the map', () => {
 	});
 
 	test('a tone chooses dark1 or light1 without a variant; a variant wins over it', () => {
-		assert.equal(resolveColorRoles(scheme, { tone: 'dark' }).dark, true);
-		assert.deepEqual(resolveColorRoles(scheme, { tone: 'dark' }).variant, { background: 'dark1' });
-		assert.equal(resolveColorRoles(scheme, { tone: 'light', background: '#000000' }).dark, false);
-		assert.equal(resolveColorRoles(scheme, { tone: 'dark', variant: { background: 'light1' } }).dark, false);
+		assert.equal(resolveColorRoles(scheme, { appearance: 'dark' }).dark, true);
+		assert.deepEqual(resolveColorRoles(scheme, { appearance: 'dark' }).variant, { background: 'dark1' });
+		assert.equal(resolveColorRoles(scheme, { appearance: 'light', background: '#000000' }).dark, false);
+		assert.equal(resolveColorRoles(scheme, { appearance: 'dark', variant: { background: 'light1' } }).dark, false);
 	});
 
 	test('the accent order moves primary, secondary and accent and lists the six accents', () => {
@@ -207,12 +207,12 @@ describe('slide resolution', () => {
 	test('a solid color decides by luminance; a picture or gradient takes its tone, else the deck variant, else light', () => {
 		assert.equal(roles(deck({ background: '#101820' })).dark, true);
 		assert.equal(roles(deck({ background: { type: 'solid', color: '#FFFFFF' } })).dark, false);
-		const gradient = (tone) => ({ type: 'gradient', gradient: { stops: [{ color: '#101820', position: 0 }, { color: '#000000', position: 1 }] }, ...(tone ? { tone } : {}) });
+		const gradient = (tone) => ({ type: 'gradient', gradient: { stops: [{ color: '#101820', position: 0 }, { color: '#000000', position: 1 }] }, ...(tone ? { appearance: tone } : {}) });
 		assert.equal(roles(deck({ background: gradient('dark') })).dark, true);
 		assert.equal(roles(deck({ background: gradient('light') })).dark, false);
-		assert.equal(roles(deck({ background: gradient() })).dark, false, 'no tone, no variant: light, as before');
-		assert.equal(roles(deck({ variant: { background: 'dark1' } }, { background: gradient() })).dark, true, 'no tone: the deck variant applies');
-		const image = (tone) => ({ type: 'image', src: 'asset:cover', ...(tone ? { tone } : {}) });
+		assert.equal(roles(deck({ background: gradient() })).dark, false, 'no appearance, no variant: light, as before');
+		assert.equal(roles(deck({ variant: { background: 'dark1' } }, { background: gradient() })).dark, true, 'no appearance: the deck variant applies');
+		const image = (tone) => ({ type: 'image', src: 'asset:cover', ...(tone ? { appearance: tone } : {}) });
 		assert.equal(roles(deck({ background: image('dark') })).dark, true);
 		assert.equal(roles(deck({ background: image() })).dark, false);
 	});
@@ -255,10 +255,10 @@ describe('schema', () => {
 
 	test('tone is dark or light on a picture or gradient background', () => {
 		const gradient = { type: 'gradient', gradient: { stops: [{ color: '#000000', position: 0 }, { color: '#111111', position: 1 }] } };
-		assert.deepEqual(errors(doc({ background: { ...gradient, tone: 'dark' } })), []);
-		assert.deepEqual(errors(doc({ background: { type: 'image', src: 'asset:x', tone: 'light' } })), []);
-		assert.ok(errors(doc({ background: { ...gradient, tone: 'grey' } })).length > 0);
-		assert.ok(errors(doc({ background: { type: 'image', src: 'asset:x', tone: 'grey' } })).length > 0);
+		assert.deepEqual(errors(doc({ background: { ...gradient, appearance: 'dark' } })), []);
+		assert.deepEqual(errors(doc({ background: { type: 'image', src: 'asset:x', appearance: 'light' } })), []);
+		assert.ok(errors(doc({ background: { ...gradient, appearance: 'grey' } })).length > 0);
+		assert.ok(errors(doc({ background: { type: 'image', src: 'asset:x', appearance: 'grey' } })).length > 0);
 	});
 });
 

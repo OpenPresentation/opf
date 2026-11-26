@@ -274,7 +274,7 @@
       "title": "Program Sponsor",
       "photo": "asset:supporting-photo",
       "email": "maya@novara-therapeutics.example",
-      "organizationId": "novara-therapeutics",
+      "organization": "novara-therapeutics",
       "socials": {
         "github": "@maya-chen"
       }
@@ -283,7 +283,7 @@
       "id": "jon",
       "name": "Jon Alvarez",
       "title": "Operating Lead",
-      "organizationId": "novara-therapeutics",
+      "organization": "novara-therapeutics",
       "socials": {
         "mastodon": "@jon-alvarez"
       }
@@ -664,7 +664,7 @@
         "lucida-sans": {
           "name": "Lucida Sans",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Lucida Sans",
           "minor": "Lucida Sans",
@@ -675,7 +675,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

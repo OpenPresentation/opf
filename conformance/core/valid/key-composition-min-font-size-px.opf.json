@@ -1,0 +1,11 @@
+{
+  "slides": [
+    {
+      "title": "Hello",
+      "text": "Body",
+      "composition": {
+        "minFontSizePx": 18
+      }
+    }
+  ]
+}

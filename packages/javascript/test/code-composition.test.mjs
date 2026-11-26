@@ -5,7 +5,7 @@ import {paginateSlide,OPFPaginationError} from '../dist/pagination.js';
 
 test('accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements',()=>{
   const code={source:'  const value = "two  spaces";\r\n\treturn value;  \n',filename:'src/CaseSensitive.ts',language:'TypeScript'};
-  const slide={composition:{mode:'column',minFontSize:24},blocks:[{blocks:[{code}]}]},before=structuredClone(slide);
+  const slide={composition:{mode:'column',minFontSizePx:24},blocks:[{blocks:[{code}]}]},before=structuredClone(slide);
   let calls=0;
   const options={width:731.2345678,height:1280,fontFamilies:{code:'Source Code'},textMeasurement:{measure:(text,size)=>{calls++;assert.ok(!text.includes('\t'));return text.length*size*.5;}}};
   const ordinary=composeSlide(slide,options),count=calls;
@@ -16,13 +16,13 @@ test('accepted code uses rounded cells and preserves body compatibility without 
   const item=ordinary.items[0],body=item.codeLayout.parts.find(part=>part.role==='body');
   assert.equal(item.text,body.fit);assert.equal(item.textStyle,body.style);
   assert.equal(item.codeLayout.parts[0].role,'filename');assert.notEqual(item.text,item.codeLayout.parts[0].fit);
-  assert.deepEqual(item.codeLayout,layoutCode(code,item.box,{...options,scale:options.width/720,minFontSize:24,path:item.path}));
+  assert.deepEqual(item.codeLayout,layoutCode(code,item.box,{...options,scale:options.width/720,minFontSizePx:24,path:item.path}));
   assert.equal(body.fit.sourceLines.map(line=>body.text.slice(line.start,line.nextStart)).join(''),code.source);
   assert.ok(item.codeLayout.parts.every(part=>part.fit.fontSize>=24*options.width/720));
 });
 
 test('candidate penalties include complete code metadata and charge overflowing leaves once',()=>{
-  const slide={composition:{minFontSize:24},blocks:[
+  const slide={composition:{minFontSizePx:24},blocks:[
     {code:{source:'a',filename:'file'.repeat(120),language:'long-language-'.repeat(8)}},
     {code:{source:'b',filename:'file'.repeat(120),language:'long-language-'.repeat(8)}},
   ]};
@@ -60,20 +60,20 @@ test('pagination preserves exact code bytes, metadata, ranges and floors across 
   const code={source:'\tconst value = "two  spaces";  \r\n\r\n'.repeat(30)+'final\n',filename:'src/CaseSensitive.ts',language:'TypeScript'};
   for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     const slide={id:'code-pages',notes:'Original notes',code},before=structuredClone(slide);
-    const result=paginateSlide(slide,{...dimensions,minFontSize:24});
+    const result=paginateSlide(slide,{...dimensions,minFontSizePx:24});
     assert.ok(result.slides.length>1);assert.deepEqual(slide,before);
     assert.equal(result.slides.map(page=>page.code.source).join(''),code.source);
     let offset=0;
     for (const [index,page] of result.slides.entries()) {
       assert.equal(page.code.filename,code.filename);assert.equal(page.code.language,code.language);
-      assert.equal(page.composition.minFontSize,24);assert.equal(page.notes,index===0?'Original notes':undefined);
+      assert.equal(page.composition.minFontSizePx,24);assert.equal(page.notes,index===0?'Original notes':undefined);
       const geometry=composeSlide(page,dimensions),body=geometry.items[0].codeLayout.parts.at(-1);
       assert.deepEqual(geometry.diagnostics,[]);
       assert.equal(body.fit.sourceLines.map(line=>body.text.slice(line.start,line.nextStart)).join(''),page.code.source);
       const mapping=result.pages[index].mappings.find(item=>item.sourcePath==='slides.0.code');
       assert.equal(mapping.range.start,offset);offset=mapping.range.end;
       assert.equal(page.code.source,code.source.slice(mapping.range.start,mapping.range.end));
-      assert.deepEqual(paginateSlide(page,{...dimensions,minFontSize:24}).slides,[page]);
+      assert.deepEqual(paginateSlide(page,{...dimensions,minFontSizePx:24}).slides,[page]);
     }
     assert.equal(offset,code.source.length);
   }
@@ -82,7 +82,7 @@ test('pagination preserves exact code bytes, metadata, ranges and floors across 
 test('irreducible code metadata rejects pagination even after earlier content or with an empty body',()=>{
   for (const source of ['', 'Short body']) for (const field of ['filename','language']) {
     const slide={blocks:[{text:'Keep this earlier block'},{code:{source,[field]:'Unabridged metadata '.repeat(300)}}]},before=structuredClone(slide);
-    assert.throws(()=>paginateSlide(slide,{minFontSize:24}),error=>error instanceof OPFPaginationError&&error.diagnostics.some(item=>item.path.endsWith(`.code.${field}`)));
+    assert.throws(()=>paginateSlide(slide,{minFontSizePx:24}),error=>error instanceof OPFPaginationError&&error.diagnostics.some(item=>item.path.endsWith(`.code.${field}`)));
     assert.deepEqual(slide,before);
   }
 });

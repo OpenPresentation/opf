@@ -11,8 +11,8 @@ const deck = (extra = {}) => ({
   description: 'Quarterly business review',
   author: ['Bob Lee', 'Carla Diaz'],
   speaker: [
-    {id: 'ada', name: 'Ada Lovelace', title: 'CTO', email: 'ada@acme.com', phone: '+14155551234', bio: 'Wrote the first program.', photo: 'asset:ada-photo', organizationId: 'acme'},
-    {id: 'grace', name: 'Grace Hopper', title: 'Rear Admiral', organizationId: 'beta'},
+    {id: 'ada', name: 'Ada Lovelace', title: 'CTO', email: 'ada@acme.com', phone: '+14155551234', bio: 'Wrote the first program.', photo: 'asset:ada-photo', organization: 'acme'},
+    {id: 'grace', name: 'Grace Hopper', title: 'Rear Admiral', organization: 'beta'},
   ],
   organization: [
     {id: 'beta', name: 'Beta Industries', tagline: 'Second', domain: 'beta.io'},
@@ -154,15 +154,15 @@ test('user variable ids keep their pattern, so a built-in can never collide; spe
   assert.equal(first(resolved(plain)).title, 'User value / Ada Lovelace');
 });
 
-test('unique speaker and organization ids and a resolving organizationId are validation errors', () => {
+test('unique speaker and organization ids and a resolving organization are validation errors', () => {
   const duplicates = check(deck({speaker: [{id: 'a', name: 'A'}, {id: 'a', name: 'B'}], organization: [{id: 'o', name: 'O'}, {id: 'o', name: 'P'}]}));
   assert.deepEqual(errorsOf(duplicates).map((error) => error.path).sort(), ['/organization/1/id', '/speaker/1/id']);
-  const dangling = check(deck({speaker: {id: 'a', name: 'A', organizationId: 'gone'}}));
-  assert.deepEqual(errorsOf(dangling).map((error) => error.path), ['/speaker/organizationId']);
+  const dangling = check(deck({speaker: {id: 'a', name: 'A', organization: 'gone'}}));
+  assert.deepEqual(errorsOf(dangling).map((error) => error.path), ['/speaker/organization']);
   assert.match(errorsOf(dangling)[0].message, /names no organization/);
   assert.equal(check(deck()).valid, true);
   // Speaker ids and organization ids are separate namespaces.
-  assert.equal(check(deck({speaker: {id: 'acme', name: 'A', organizationId: 'acme'}})).valid, true);
+  assert.equal(check(deck({speaker: {id: 'acme', name: 'A', organization: 'acme'}})).valid, true);
 });
 
 test('template previews use the real document metadata and leave an absent built-in visible', () => {

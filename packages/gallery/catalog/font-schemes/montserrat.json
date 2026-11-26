@@ -3,7 +3,7 @@
   "id": "montserrat",
   "name": "Montserrat",
   "app": "google-slides",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Montserrat",
   "minor": "Montserrat",

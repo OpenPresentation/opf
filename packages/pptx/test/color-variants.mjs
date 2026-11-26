@@ -108,7 +108,7 @@ const open = async (document) => {
 // above the picture and below the content.
 {
   const src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
-  const toned = tone => deck(undefined, [{title: 'Cover', text: 'Readable', design: {background: {type: 'image', src, alt: 'A picture', ...(tone ? {tone} : {})}}}]);
+  const toned = tone => deck(undefined, [{title: 'Cover', text: 'Readable', design: {background: {type: 'image', src, alt: 'A picture', ...(tone ? {appearance: tone} : {})}}}]);
   const scrim = xml => xml.match(/<p:sp>(?:(?!<\/p:sp>)[\s\S])*name="OPF background tone[\s\S]*?<\/p:sp>/)?.[0];
   for (const [tone, slot, dark] of [['dark', 'dk1', true], ['light', 'lt1', false]]) {
     const {text, theme, override} = await open(toned(tone));
@@ -120,11 +120,11 @@ const open = async (document) => {
     assert.ok(xml.indexOf('<p:pic>') < xml.indexOf('name="OPF background tone') && xml.indexOf('name="OPF background tone') < xml.indexOf('Readable'), `${tone}: picture, scrim, then content`);
     assert.ok(dark ? theme.dk1 : theme.lt1);
     const imported = await fromPptx(await toPptx(toned(tone)));
-    assert.equal(imported.slides[0].design.background.tone, tone, `${tone}: the tone returns`);
+    assert.equal(imported.slides[0].design.background.appearance, tone, `${tone}: the tone returns`);
     assert.equal(imported.slides[0].design.variant, undefined, `${tone}: the tone states the variant`);
     assert.equal(JSON.stringify(imported.slides[0]).includes('OPF background tone'), false, `${tone}: the scrim is no content`);
   }
-  const own = deck(undefined, [{title: 'Cover', text: 'Readable', design: {background: {type: 'image', src, alt: 'A picture', tone: 'dark', overlay: {color: 'dark1', opacity: 0.5}}}}]);
+  const own = deck(undefined, [{title: 'Cover', text: 'Readable', design: {background: {type: 'image', src, alt: 'A picture', appearance: 'dark', overlay: {color: 'dark1', opacity: 0.5}}}}]);
   assert.equal(scrim((await open(own)).text('ppt/slides/slide1.xml')), undefined, 'an overlay of its own replaces the scrim');
   assert.equal(scrim((await open(toned(undefined))).text('ppt/slides/slide1.xml')), undefined, 'no tone, no scrim');
 }

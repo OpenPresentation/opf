@@ -29,8 +29,8 @@ const label = (value: unknown): string => value === null || value === undefined 
 const LINES: Readonly<Record<string, string>> = {line: 'standard', 'line-with-markers': 'standard', 'stacked-line': 'stacked', 'stacked-line-with-markers': 'stacked'};
 
 /** The lengths the preview draws chart text with, for a chart box. */
-function metrics(box: Box, scale: number, minFontSize: number | undefined) {
-  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSize}) * scale;
+function metrics(box: Box, scale: number, minFontSizePx: number | undefined) {
+  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSizePx}) * scale;
   return {fontPx, pad: 10 * scale, lineHeight: fontPx * 1.5, textHeight: fontPx * 1.22, pt: scale * 4 / 3};
 }
 
@@ -56,7 +56,7 @@ function endLabelCandidate(chart: unknown, data: ResolvedChartData, layer: Chart
 export function placeEndLabels(chart: unknown, data: ResolvedChartData, axis: ChartValueAxis, box: Box, plotInset: {left: number; top: number; right: number; bottom: number}, geometry: Omit<ChartPlotGeometry, 'box'> & {bold?: (text: string, size: number) => number}, relaxed = false, focus?: readonly number[]): ChartEndLabel[] | undefined {
   if (!record(chart) || !data.ok) return undefined;
   const grouping = LINES[String(chart.type).trim().toLowerCase()] ?? 'standard';
-  const {fontPx, textHeight, lineHeight, pt} = metrics(box, geometry.scale, geometry.minFontSize);
+  const {fontPx, textHeight, lineHeight, pt} = metrics(box, geometry.scale, geometry.minFontSizePx);
   const rtl = geometry.direction === 'rtl';
   const plot = {x: box.x + plotInset.left, y: box.y + plotInset.top, width: box.width - plotInset.left - plotInset.right, height: box.height - plotInset.top - plotInset.bottom};
   if (!(plot.width > 1 && plot.height > 1) || !(axis.max > axis.min)) return undefined;
@@ -110,7 +110,7 @@ export function chartEndLabels(chart: unknown, data: ResolvedChartData, layer: C
   const header = chartHeader(chart, data, geometry, {legend: false, ...headerOptions});
   const valueAxis = axisFor(header?.height ?? 0);
   if (!valueAxis) return undefined;
-  const {fontPx, pt} = metrics(box, scale, geometry.minFontSize);
+  const {fontPx, pt} = metrics(box, scale, geometry.minFontSizePx);
   const measure = (text: string, size: number) => geometry.measure(text, size, 400), bold = (text: string, size: number) => geometry.measure(text, size, 700);
   const focus = layer?.focus?.series;
   // With explicit references every name keeps its regular weight, so the plot does not depend on what the slide's texts focus (stableNameWidths).
@@ -119,7 +119,7 @@ export function chartEndLabels(chart: unknown, data: ResolvedChartData, layer: C
   // The small-chart treatment (value labels, no value axis) gives way: the end labels carry the last values and the axis the rest.
   const {header: _header, small: _small, ...rest} = layer ?? {};
   const base: ChartLayer = {...rest, ...(header ? {header} : {})};
-  const plotGeometry = {scale, minFontSize: geometry.minFontSize, measure, direction: geometry.direction, language: geometry.language};
+  const plotGeometry = {scale, minFontSizePx: geometry.minFontSizePx, measure, direction: geometry.direction, language: geometry.language};
   const plot = chartPlotInset(chart, data, {valueAxis, layer: {...base, endLabels: {gutter, entries: []}}}, {...plotGeometry, box});
   if (!plot) return undefined;
   // The gutter narrows the plot; when that turns or thins out the category labels the legend layout keeps level, the legend stays.
@@ -162,7 +162,7 @@ export function chartSliceLabels(chart: unknown, data: ResolvedChartData, geomet
   if ((type !== 'pie' && type !== 'doughnut') || chart.legend !== undefined || chart.dataLabels !== undefined) return undefined;
   const {box, scale} = geometry;
   if (![box.width, box.height, scale].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0) return undefined;
-  const {fontPx, pad, lineHeight, textHeight} = metrics(box, scale, geometry.minFontSize);
+  const {fontPx, pad, lineHeight, textHeight} = metrics(box, scale, geometry.minFontSizePx);
   const values = data.rows.map(row => Math.abs(chartNumber(row[1]) ?? 0)), total = values.reduce((sum, value) => sum + value, 0);
   if (!(total > 0) || !Number.isFinite(total)) return undefined;
   const area = {x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad), height: Math.max(1, box.height - 2 * pad)};

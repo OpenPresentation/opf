@@ -61,9 +61,9 @@ export function besideEachOther(a: Box, b: Box): boolean {
  * the bar is read beside its key), `header` the chart layer's
  * header height, `hiddenAxis` whether the chart drops its value axis (LH-03), `measure` the body font measure at weight 400.
  */
-export function alignBarRows(data: Extract<ResolvedChartData, {ok: true}>, box: Box, rows: readonly Box[], centers: readonly number[], options: {scale: number; minFontSize?: number; header?: number; hiddenAxis?: boolean; labels?: boolean; measure: (text: string, size: number) => number}): ChartLayerRows | undefined {
+export function alignBarRows(data: Extract<ResolvedChartData, {ok: true}>, box: Box, rows: readonly Box[], centers: readonly number[], options: {scale: number; minFontSizePx?: number; header?: number; hiddenAxis?: boolean; labels?: boolean; measure: (text: string, size: number) => number}): ChartLayerRows | undefined {
   if (rows.length !== data.rows.length || !rows.length || centers.length !== rows.length) return undefined;
-  const {scale} = options, fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSize: options.minFontSize}) * scale;
+  const {scale} = options, fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSizePx: options.minFontSizePx}) * scale;
   const pad = 10 * scale, lineHeight = fontPx * 1.5, header = options.header ?? 0;
   const top = rows[0]!.y, bottom = rows[rows.length - 1]!.y + rows[rows.length - 1]!.height;
   // The plot band the preview leaves (charts.js renderCategoryChart): under the header row, above the value tick labels.

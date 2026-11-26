@@ -39,7 +39,7 @@
       "email": "ana@harborlabs.example",
       "phone": "+49 30 1234568",
       "bio": "Runs operations for three terminals.",
-      "organizationId": "harbor",
+      "organization": "harbor",
       "socials": {
         "linkedin": "https://www.linkedin.com/in/ana-ribeiro"
       }

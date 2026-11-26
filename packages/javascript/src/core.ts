@@ -142,6 +142,7 @@ export type {
 } from "./catalog-refs.js";
 export { CATALOG_SCHEMA, catalogDisplayKinds, catalogIconKinds, catalogSchemaNames } from "./catalog-schemas.js";
 export type { CatalogDisplayKind, CatalogRecordKind } from "./catalog-schemas.js";
+export { renameRecordKeys } from "./renamed-keys.js";
 export { copySlides, embed, moveToCustom, OPFMoveToCustomError, sameRecord, updateFromCatalog } from "./catalog-helpers.js";
 export type { CatalogPatchOperation, CatalogRecordChange, CatalogRef, CatalogUpdate, CopiedRecordRename, CopySlidesResult, EmbedResult, EmbeddedRecord, RefreshedRecord, MovedRecord, MoveToCustomErrorCode, MoveToCustomPatchOperation, MoveToCustomResult } from "./catalog-helpers.js";
 export { resolveDesignRecords, resolveFontScheme } from "./design-records.js";
@@ -237,6 +238,6 @@ export type {
   FontReplacementMeasurement,
   FontScriptReplacement,
 } from './font-policy.js';
-// A font scheme's `languageFamily` catalog value, read as one of the three OOXML script slots.
-export { normalizeLanguageFamily } from './script-fonts.js';
-export type { LanguageFamilyName } from './script-fonts.js';
+// A font scheme's `scriptGroup` catalog value, read as one of the three OOXML script slots.
+export { normalizeScriptGroup } from './script-fonts.js';
+export type { ScriptGroupName } from './script-fonts.js';

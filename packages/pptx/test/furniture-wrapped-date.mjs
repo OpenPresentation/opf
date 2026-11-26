@@ -12,8 +12,8 @@ const source = {name: 'Wrapped generated date boundary', design: {fontScheme: 'r
   dimensions: {widthInches: 7.5, heightInches: 13.3333333333},
   footer: {center: {date: true, dateFormat: 'MMMM d, yyyy'}, end: {text: '{{slide.number}} / {{deck.slideCount}}'}}},
 slides: [{title: 'Title', design: {footer: false}},
-  {title: 'Content', text: 'Keep body content.', composition: {minFontSize: 32, overflow: 'error'}},
-  {title: 'Third', text: 'Still current.', composition: {minFontSize: 32, overflow: 'error'}}]};
+  {title: 'Content', text: 'Keep body content.', composition: {minFontSizePx: 32, overflow: 'error'}},
+  {title: 'Third', text: 'Still current.', composition: {minFontSizePx: 32, overflow: 'error'}}]};
 const fonts = {fonts: await loadFonts()};
 const options = {...fonts, slideNumberFields: 'live', date: '2026-09-22', seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'};
 const emit = async (value = source, extra = {}) => {

@@ -370,14 +370,14 @@ Mermaid's own theming (`%%{init: ...}%%`, themes, `themeVariables`) and click ca
 
 Core lays a diagram out for its block with the deck's measured fonts, the same way it fits text:
 
-1. It tries the largest base size from 48 reference pixels (1.5 times the nominal 32, as an arrangement's text grows; never past the composition's `maxFontSize`) down at which the drawing fits the block. A small diagram grows past the size of a list to fill its block (C08, IM1: a three-node flowchart in a full-width body); a large one steps down.
-2. Node labels never go below the readability floor (`minFontSize`, 16 reference pixels by default). The smallest secondary label (an edge label, an axis tick, a score) never goes below 75% of it.
+1. It tries the largest base size from 48 reference pixels (1.5 times the nominal 32, as an arrangement's text grows; never past the composition's `maxFontSizePx`) down at which the drawing fits the block. A small diagram grows past the size of a list to fill its block (C08, IM1: a three-node flowchart in a full-width body); a large one steps down.
+2. Node labels never go below the readability floor (`minFontSizePx`, 16 reference pixels by default). The smallest secondary label (an edge label, an axis tick, a score) never goes below 75% of it.
 3. A diagram is centered in its block. A region anchored to the bottom places it there.
 4. Pele lays the diagram out for the width it has, so a smaller size is a new layout, not a shrunken picture: a wide flowchart may turn to run downward.
 
 When the diagram does not fit even at the floor, a flowchart or a state diagram is first tried in the other main direction (`LR` and `TB` swap, `RL` and `BT` swap; a state diagram without a `direction` is top to bottom, so it tries `direction LR`). If the labels reach the floor there, the diagram is drawn that way and the slide reports an `arrangement-adapted` info finding ("The flowchart is drawn top to bottom because left to right does not fit at the readability floor"). This applies to a direction the author wrote too: the source keeps its text, only the drawing turns, and the preview and the PPTX export draw the same turned layout. A diagram that fits as written is never turned.
 
-When no direction holds the labels at the floor (or the diagram type has no direction), the diagram as written is drawn smaller to stay inside its block, and the slide reports a `text-overflow` finding at the diagram's path, naming the directions tried. Fix it in the content, not in `minFontSize`:
+When no direction holds the labels at the floor (or the diagram type has no direction), the diagram as written is drawn smaller to stay inside its block, and the slide reports a `text-overflow` finding at the diagram's path, naming the directions tried. Fix it in the content, not in `minFontSizePx`:
 
 - give the diagram a slide or a region of its own, or put it beside short text rather than under long text;
 - split it into two diagrams, or shorten the labels.
@@ -405,7 +405,7 @@ What the numbers say, and so what to write:
 - **A label of three or four words costs about as much as two more nodes.** Put the detail in the slide's text or notes, or in a second slide, and keep the node to the noun.
 - **Split a long flow over several slides** (one stage or one decision per slide, each with its own title that says what happens there) instead of writing one chain of 8 or more. Each part is then drawn at 32.
 - **Direction follows the shape, and the engine tries both.** A chain is drawn best left to right on a wide slide: five nodes in a row are 32 pixels left to right and 18 top to bottom, because the slide is shorter than it is wide. A parent with many children is the other way: one parent with five children is 20 pixels left to right and 32 top to bottom. Write `TB` for a fan-out or a hierarchy and `LR` for a sequence; do not turn a long chain top to bottom to make it fit, and do not rely on the engine's turn (`arrangement-adapted`) to save a diagram that has too many nodes.
-- **Do not shrink to fit.** Never lower `minFontSize` or draw a diagram in a small region so that a large one fits; fewer nodes and shorter labels is the fix, and a `text-overflow` finding on a diagram means the slide has too much in it.
+- **Do not shrink to fit.** Never lower `minFontSizePx` or draw a diagram in a small region so that a large one fits; fewer nodes and shorter labels is the fix, and a `text-overflow` finding on a diagram means the slide has too much in it.
 - **Give the diagram the slide.** A title and the diagram, or the diagram beside a few short lines, not a diagram under a paragraph.
 
 ### Layouts that accept a diagram

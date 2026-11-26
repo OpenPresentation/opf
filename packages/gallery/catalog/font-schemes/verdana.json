@@ -3,7 +3,7 @@
   "id": "verdana",
   "name": "Verdana",
   "app": "powerpoint",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Verdana",
   "minor": "Verdana",

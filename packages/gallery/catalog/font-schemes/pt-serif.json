@@ -3,7 +3,7 @@
   "id": "pt-serif",
   "name": "PT Serif",
   "app": "google-slides",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "PT Serif",
   "minor": "PT Serif",

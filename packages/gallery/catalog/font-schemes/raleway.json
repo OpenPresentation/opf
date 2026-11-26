@@ -3,7 +3,7 @@
   "id": "raleway",
   "name": "Raleway",
   "app": "google-slides",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Raleway",
   "minor": "Raleway",

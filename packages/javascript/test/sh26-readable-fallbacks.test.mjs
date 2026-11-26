@@ -50,7 +50,7 @@ test('fallback reflow keeps headings, title decoration, exact frame and footer u
 });
 test('explicit cap and fill:false retain settled26px while preserving the reading measure',()=>{
   for(const mode of['cap','fill']){
-    const doc=documentFor(fixture.cases[0].slide);if(mode==='cap')doc.slides[0].composition.maxFontSize=26;
+    const doc=documentFor(fixture.cases[0].slide);if(mode==='cap')doc.slides[0].composition.maxFontSizePx=26;
     const result=compose(doc,mode==='fill'?{fill:false}:{}),item=body(result)[0];assert.equal(item.text.fontSize,26);
     assert.ok(entries(item).every(entry=>entry.text.richLines.every(line=>line.fragments.map(f=>f.text).join('').trim().length<=70)));
   }
@@ -62,7 +62,7 @@ test('a matched diagram region list with columns: 1 stays single-column (OPF 0.3
   doc.slides[0].composition.overflow='error';assert.throws(()=>compose(doc),OPFCompositionError);
 });
 test('described singleton columns keep maintained column roles and whole description text',()=>{
-  const doc=documentFor(fixture.cases[1].slide);doc.slides[0].composition.maxFontSize=26;doc.slides[0].blocks[0].items=doc.slides[0].blocks[0].items.slice(0,2).map(text=>({text,description:'Supporting detail remains in its authored entry. '.repeat(2)}));
+  const doc=documentFor(fixture.cases[1].slide);doc.slides[0].composition.maxFontSizePx=26;doc.slides[0].blocks[0].items=doc.slides[0].blocks[0].items.slice(0,2).map(text=>({text,description:'Supporting detail remains in its authored entry. '.repeat(2)}));
   const result=compose(doc),item=body(result)[0];assert.ok(!result.diagnostics.some(d=>d.code==='text-overflow'));
   assert.deepEqual(entries(item).map(entry=>entry.value),doc.slides[0].blocks[0].items.map(value=>value.text));assert.deepEqual(entries(item).map(entry=>entry.descriptionValue),doc.slides[0].blocks[0].items.map(value=>value.description));
   const singleton=item.listColumns?.find(column=>column.end-column.start===1);assert.ok(singleton,'Actually exercise a split with one described entry');

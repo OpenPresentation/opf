@@ -5,7 +5,7 @@ export type CaptionAlignment = "start" | "center" | "end";
 export type RichText = string | ReadonlyArray<string | Record<string, unknown>>;
 export interface CaptionSettings { text: RichText; position: CaptionPosition; align: CaptionAlignment }
 export type CaptionInput = RichText | { text: RichText; position?: CaptionPosition; align?: CaptionAlignment };
-export interface Reference { id: string; text: RichText; url?: string }
+export interface Reference { id: string; text: RichText; link?: string }
 
 export declare const CAPTION_POSITIONS: readonly ["below", "above"];
 export declare const CAPTION_ALIGNMENTS: readonly ["start", "center", "end"];
@@ -30,8 +30,8 @@ export type AnnotationChange = (EditorChange & Omit<PreparedAnnotationChange, "p
 
 export interface CaptionTarget { blockPath: string; field: string; caption?: CaptionSettings }
 export interface CaptionState { blockPath: string; field: string; caption?: CaptionSettings }
-export interface ReferenceState { index: number; id: string; text: RichText; url?: string; cited: boolean; number?: number }
-export interface CitationNoteState { number: number; kind: "reference" | "footnote"; id?: string; text: RichText; sourcePath: string; url?: string; resolved: boolean }
+export interface ReferenceState { index: number; id: string; text: RichText; link?: string; cited: boolean; number?: number }
+export interface CitationNoteState { number: number; kind: "reference" | "footnote"; id?: string; text: RichText; sourcePath: string; link?: string; resolved: boolean }
 export interface CitationState {
   notes: CitationNoteState[];
   references: CitationNoteState[];
@@ -50,8 +50,8 @@ export declare function setCaption(editor: EditorSession, blockPath: string | st
 export declare function listReferences(presentation: unknown): ReferenceState[];
 export declare function prepareReference(presentation: unknown, reference: Reference): PreparedAnnotationChange;
 export declare function addReference(editor: EditorSession, reference: Reference, meta?: Record<string, unknown>): AnnotationChange;
-export declare function prepareReferenceUpdate(presentation: unknown, id: string, fields: { text?: RichText; url?: string | null }): PreparedAnnotationChange;
-export declare function updateReference(editor: EditorSession, id: string, fields: { text?: RichText; url?: string | null }, meta?: Record<string, unknown>): AnnotationChange;
+export declare function prepareReferenceUpdate(presentation: unknown, id: string, fields: { text?: RichText; link?: string | null }): PreparedAnnotationChange;
+export declare function updateReference(editor: EditorSession, id: string, fields: { text?: RichText; link?: string | null }, meta?: Record<string, unknown>): AnnotationChange;
 /** Refuses while a run cites the id unless `force`, which also removes those cites. */
 export declare function prepareReferenceRemoval(presentation: unknown, id: string, options?: { force?: boolean }): PreparedAnnotationChange;
 export declare function removeReference(editor: EditorSession, id: string, options?: { force?: boolean }, meta?: Record<string, unknown>): AnnotationChange;

@@ -397,7 +397,7 @@
         "bookman": {
           "name": "Bookman",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Bookman Old Style",
           "minor": "Bookman Old Style",
@@ -408,7 +408,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

@@ -47,7 +47,7 @@ const gallery = await apply({
   accent: "Georgia",
   type: "sans-serif",
   app: "google-slides",
-  languageFamily: "latin",
+  scriptGroup: "latin",
   headingStack: '"Inter", sans-serif',
 });
 assert.deepEqual(attached(gallery), {
@@ -56,7 +56,7 @@ assert.deepEqual(attached(gallery), {
   minor: "Inter",
   type: "sans-serif",
   app: "google-slides",
-  languageFamily: "latin",
+  scriptGroup: "latin",
   code: "JetBrains Mono",
 });
 // accent is not part of the font-scheme record schema, so it is not attached.

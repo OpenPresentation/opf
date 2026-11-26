@@ -14,7 +14,7 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}]) for(co
   '', '\t\t', {source:'  const value = "two  spaces";\r\n\treturn value;  \n',language:'TypeScript',filename:'src\tCaseSensitive.ts'},
   {source:'body',language:'long-language-label-'.repeat(20)},
 ]) {
-  const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{composition:{minFontSize:24},code}]};
+  const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{composition:{minFontSizePx:24},code}]};
   const before=structuredClone(deck);let calls=0;
   const textMeasurement={...fonts.textMeasurement,measure:(...args)=>{calls++;return fonts.textMeasurement.measure(...args);}};
   const bound=resolvePresentation(deck,{fonts:{textMeasurement}}).slides[0],expectedCalls=calls;calls=0;

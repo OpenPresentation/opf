@@ -4,7 +4,7 @@ import {composeSlide,layoutQuote,OPFCompositionError} from '../dist/composition.
 import {paginateSlide,OPFPaginationError} from '../dist/pagination.js';
 
 test('accepted quote geometry includes all parts without changing source or re-measuring for explanations', () => {
-  const slide={composition:{mode:'column',minFontSize:24},blocks:[{blocks:[{quote:{text:'Original body',attribution:'Author',source:'Citation'}}]}]};
+  const slide={composition:{mode:'column',minFontSizePx:24},blocks:[{blocks:[{quote:{text:'Original body',attribution:'Author',source:'Citation'}}]}]};
   const before=structuredClone(slide);
   let calls=0;
   const textMeasurement={measure:(text,size)=>{calls++;return text.length*size*.5;}};
@@ -19,14 +19,14 @@ test('accepted quote geometry includes all parts without changing source or re-m
   const item=ordinary.items[0];
   assert.equal(item.text,item.quoteLayout.parts[0].fit);
   assert.equal(item.textStyle,item.quoteLayout.parts[0].style);
-  assert.deepEqual(item.quoteLayout,layoutQuote(item.value,item.box,{...options,scale:options.width/720,minFontSize:24,path:item.path}));
+  assert.deepEqual(item.quoteLayout,layoutQuote(item.value,item.box,{...options,scale:options.width/720,minFontSizePx:24,path:item.path}));
   assert.ok(item.quoteLayout.parts.every(part=>part.fit.fontSize>=24*options.width/720));
 });
 
 test('automatic candidates account for footer fit and choose the arrangement that keeps it readable', () => {
   // Retained trailing spaces contribute to line widths, except a space that does not fit: it hangs at the end of its line (RR-17), so a
   // line is never started with a space. At 70 repetitions the column candidate fits; the row candidate's shorter cells do not.
-  const slide={composition:{minFontSize:24},blocks:[{quote:{text:'A',attribution:'Evidence '.repeat(70)}},{quote:{text:'B',attribution:'Evidence '.repeat(70)}}]};
+  const slide={composition:{minFontSizePx:24},blocks:[{quote:{text:'A',attribution:'Evidence '.repeat(70)}},{quote:{text:'B',attribution:'Evidence '.repeat(70)}}]};
   const result=composeSlide(slide,{explain:true});
   const decision=result.explanation.decisions[0];
   assert.equal(result.explanation.algorithm,'grid-score-v9');
@@ -64,7 +64,7 @@ test('pagination preserves quote body, repeated metadata, ranges and the accepte
   const quote={text:'Preserve each word and space. '.repeat(250),attribution:'Author',source:'Citation'};
   const slide={id:'quote-pages',notes:'Original notes',quote};
   const before=structuredClone(slide);
-  const result=paginateSlide(slide,{minFontSize:24});
+  const result=paginateSlide(slide,{minFontSizePx:24});
   assert.ok(result.slides.length>1);
   assert.deepEqual(slide,before);
   assert.equal(result.slides.map(page=>page.quote.text).join(''),quote.text);
@@ -72,7 +72,7 @@ test('pagination preserves quote body, repeated metadata, ranges and the accepte
   result.slides.forEach((page,index)=>{
     assert.equal(page.quote.attribution,quote.attribution);
     assert.equal(page.quote.source,quote.source);
-    assert.equal(page.composition.minFontSize,24);
+    assert.equal(page.composition.minFontSizePx,24);
     assert.equal(page.notes,index===0?'Original notes':undefined);
     const geometry=composeSlide(page);
     assert.deepEqual(geometry.diagnostics,[]);
@@ -82,16 +82,16 @@ test('pagination preserves quote body, repeated metadata, ranges and the accepte
     offset=mapping.range.end;
   });
   assert.equal(offset,quote.text.length);
-  assert.deepEqual(paginateSlide(result.slides[0],{minFontSize:24}).slides,[result.slides[0]]);
-  const nested=paginateSlide({composition:{minFontSize:32},blocks:[{composition:{mode:'column'},blocks:[{quote:'Short quote'}]}]},{minFontSize:24}).slides[0];
-  assert.equal(nested.blocks[0].composition.minFontSize,32);
+  assert.deepEqual(paginateSlide(result.slides[0],{minFontSizePx:24}).slides,[result.slides[0]]);
+  const nested=paginateSlide({composition:{minFontSizePx:32},blocks:[{composition:{mode:'column'},blocks:[{quote:'Short quote'}]}]},{minFontSizePx:24}).slides[0];
+  assert.equal(nested.blocks[0].composition.minFontSizePx,32);
 });
 
 test('irreducible footer overflow rejects pagination without mutating or returning partial content', () => {
   for (const text of ['', 'Short body']) {
     const source={blocks:[{text:'Keep this earlier block'},{quote:{text,attribution:'Unabridged attribution. '.repeat(100)}}]};
     const before=structuredClone(source);
-    assert.throws(()=>paginateSlide(source,{minFontSize:24}),error=>error instanceof OPFPaginationError&&error.diagnostics.some(item=>item.reason==='text-fit'&&item.parts.includes('footer')));
+    assert.throws(()=>paginateSlide(source,{minFontSizePx:24}),error=>error instanceof OPFPaginationError&&error.diagnostics.some(item=>item.reason==='text-fit'&&item.parts.includes('footer')));
     assert.deepEqual(source,before);
   }
 });

@@ -418,7 +418,7 @@
     "id": "speaker",
     "name": "Jon Alvarez",
     "title": "Operating Lead",
-    "organizationId": "brightpath-analytics",
+    "organization": "brightpath-analytics",
     "bio": "Leads marketing planning for Brightpath Analytics.",
     "socials": {
       "threads": "@brightpath-analytics-speaker"
@@ -762,7 +762,7 @@
         "times-new-roman": {
           "name": "Times New Roman",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Times New Roman",
           "minor": "Times New Roman",
@@ -773,7 +773,7 @@
         "latha": {
           "name": "Latha",
           "app": "powerpoint",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "ta"
           ],
@@ -786,7 +786,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

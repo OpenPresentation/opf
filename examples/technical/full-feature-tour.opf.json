@@ -48,7 +48,7 @@
       "id": "alice",
       "name": "Alice Chen",
       "title": "VP Operations",
-      "organizationId": "acme",
+      "organization": "acme",
       "bio": "Alice runs global operations and owns the rollout program.",
       "photo": "asset:alice-headshot",
       "socials": {
@@ -59,7 +59,7 @@
       "id": "ben",
       "name": "Ben Ortiz",
       "title": "Principal Engineer",
-      "organizationId": "acme"
+      "organization": "acme"
     }
   ],
   "narrative": "board-qbr",
@@ -418,7 +418,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",
@@ -429,7 +429,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

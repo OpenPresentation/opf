@@ -3,7 +3,7 @@
   "id": "noto-naskh-arabic",
   "name": "Noto Naskh Arabic",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "fa"
   ],

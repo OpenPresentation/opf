@@ -261,7 +261,7 @@
     "id": "speaker",
     "name": "Maya Chen",
     "title": "Program Sponsor",
-    "organizationId": "center-for-urban-oceans",
+    "organization": "center-for-urban-oceans",
     "bio": "Leads research planning for Center for Urban Oceans.",
     "socials": {
       "mastodon": "@center-for-urban-oceans-speaker"
@@ -595,7 +595,7 @@
         "times-new-roman": {
           "name": "Times New Roman",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Times New Roman",
           "minor": "Times New Roman",
@@ -606,7 +606,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

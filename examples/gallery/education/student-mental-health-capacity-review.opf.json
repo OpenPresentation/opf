@@ -277,7 +277,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "harbor-city-university",
+    "organization": "harbor-city-university",
     "bio": "Leads student affairs planning for Harbor City University.",
     "socials": {
       "instagram": "@harbor-city-university-speaker"
@@ -662,7 +662,7 @@
         "open-sans": {
           "name": "Open Sans",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Open Sans",
           "minor": "Open Sans",
@@ -673,7 +673,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

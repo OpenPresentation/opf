@@ -66,7 +66,7 @@ for (const direction of ['ltr', 'rtl']) {
   });
 
   test(`wave 6 (${direction}): LH-144's page cap leaves headings alone (LH-129, LH-130) and caps LH-133's spread rows`, () => {
-    const section = { tag: 'Part 1', title: 'Where we stand', subtitle: 'Results from the first nine months', composition: { maxFontSize: 24 } };
+    const section = { tag: 'Part 1', title: 'Where we stand', subtitle: 'Results from the first nine months', composition: { maxFontSizePx: 24 } };
     const capped = composeSlide(section, { layout: layouts.section, direction }), free = composeSlide({ ...section, composition: {} }, { layout: layouts.section, direction });
     for (const field of ['title', 'subtitle', 'tag']) assert.equal(capped.items.find((item) => item.field === field).text.fontSize, free.items.find((item) => item.field === field).text.fontSize, `${field} is not capped`);
     const questions = [
@@ -74,7 +74,7 @@ for (const direction of ['ltr', 'rtl']) {
       { text: 'Can we keep our data?', description: 'Yes, export it at any time.' },
       { text: 'Who supports us?', description: 'A named engineer for the first quarter.' },
     ];
-    const rows = composeSlide({ title: 'Questions', composition: { maxFontSize: 24 }, blocks: [{ items: questions }] }, { direction });
+    const rows = composeSlide({ title: 'Questions', composition: { maxFontSizePx: 24 }, blocks: [{ items: questions }] }, { direction });
     const list = rows.items.find((item) => item.field === 'items');
     assert.equal(list.text.fontSize, 24, 'the rows are set at the cap');
     assert.equal(list.text.rules?.length, questions.length - 1, 'still ruled rows');
@@ -105,7 +105,7 @@ const grid = (lower) => {
 for (const direction of ['ltr', 'rtl']) {
   test(`wave 6 (${direction}): a low title over a picture stays low only over a calm measured band`, () => {
     for (const layout of ['cover', 'section']) {
-      const slide = { title: 'Building a faster supply network', subtitle: 'Board strategy review, October 2026', design: { background: { type: 'image', src: PHOTO, tone: 'dark' } } };
+      const slide = { title: 'Building a faster supply network', subtitle: 'Board strategy review, October 2026', design: { background: { type: 'image', src: PHOTO, appearance: 'dark' } } };
       const compose = (extra) => composeSlide(slide, { layout: layouts[layout], direction, darkBackground: true, ...extra });
       const titleOf = (result) => result.items.find((item) => item.field === 'title');
       const calm = compose({ pictureLuminance: () => grid('calm') }), busy = compose({ pictureLuminance: () => grid('busy') }), estimated = compose({});

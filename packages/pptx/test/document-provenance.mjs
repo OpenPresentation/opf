@@ -28,7 +28,7 @@ const embedded = {custom: {layouts: {'hero-title': layoutRecord}}};
 const source = {
   $schema: 'https://openpresentation.org/schema/opf/v1', name: 'Provenance deck',
   organization: [{id: 'acme', name: 'Acme', role: 'primary', logo: 'asset:acme-logo'}, {id: 'beta', name: 'Beta', role: 'partner'}],
-  speaker: {id: 'alice', name: 'Alice Chen', title: 'VP', organizationId: 'acme'},
+  speaker: {id: 'alice', name: 'Alice Chen', title: 'VP', organization: 'acme'},
   audience: ['executives', {id: 'board', name: 'Board of directors'}], purpose: 'decide', language: 'ja', tone: 'formal',
   narrative: 'problem-solution', takeaway: ['Ship it'], duration: 20, tags: ['gallery:test'],
   variables: {risk: '#C0392B'},

@@ -1,4 +1,4 @@
-// LH-149 (half steps of the type scale for fitted body text), LH-144 (the pages of one paginated slide share its sizes: composition.maxFontSize),
+// LH-149 (half steps of the type scale for fitted body text), LH-144 (the pages of one paginated slide share its sizes: composition.maxFontSizePx),
 // LH-150 (a ratio such as "4.6 / 5" never breaks at its slash) and LH-151 (text-contrast judges a metric value in the color the engines draw).
 import { gallery } from '@openpresentation/gallery';
 import assert from 'node:assert/strict';
@@ -67,11 +67,11 @@ describe('LH-149: jointly sized siblings take the half steps of the type scale',
   });
 });
 
-describe('LH-144: composition.maxFontSize caps the body, and paginate passes the first page sizes along', () => {
+describe('LH-144: composition.maxFontSizePx caps the body, and paginate passes the first page sizes along', () => {
   test('a lone paragraph that grows to fill the body stops at the cap', () => {
     const slide = { title: 'Why it matters', text: 'One short message.' };
     const grown = composeSlide(slide);
-    const capped = composeSlide({ ...slide, composition: { maxFontSize: 28 } });
+    const capped = composeSlide({ ...slide, composition: { maxFontSizePx: 28 } });
     assert.ok(px(grown, bodyItems(grown)[0].text.fontSize) > 28, 'the lone paragraph grows without a cap');
     assert.equal(px(capped, bodyItems(capped)[0].text.fontSize), 28);
   });
@@ -84,7 +84,7 @@ describe('LH-144: composition.maxFontSize caps the body, and paginate passes the
       ['quote', { title: 'Voice', quote: { text: 'It just works.', attribution: 'A customer' } }, (item) => largest(item.quoteLayout)],
       ['metric', { title: 'Growth', metric: { value: '42%', label: 'Growth' } }, (item) => largest(item.metricLayout)],
     ]) {
-      const result = composeSlide({ ...slide, composition: { maxFontSize: 24 } });
+      const result = composeSlide({ ...slide, composition: { maxFontSizePx: 24 } });
       const item = bodyItems(result)[0];
       assert.ok(px(result, sizeOf(item)) <= 24 + 1e-6, `${name}: ${px(result, sizeOf(item))}`);
       assert.ok(!result.diagnostics.some((entry) => entry.code === 'text-overflow'), name);
@@ -93,9 +93,9 @@ describe('LH-144: composition.maxFontSize caps the body, and paginate passes the
 
   test('the cap never takes text under the readability floor, and headings keep their sizes', () => {
     const slide = { title: 'Plan', text: 'One short message.' };
-    const result = composeSlide({ ...slide, composition: { maxFontSize: 10, minFontSize: 16 } });
+    const result = composeSlide({ ...slide, composition: { maxFontSizePx: 10, minFontSizePx: 16 } });
     assert.equal(px(result, bodyItems(result)[0].text.fontSize), 16);
-    const plain = composeSlide({ ...slide, composition: { minFontSize: 16 } });
+    const plain = composeSlide({ ...slide, composition: { minFontSizePx: 16 } });
     assert.equal(result.items.find((item) => item.field === 'title').text.fontSize, plain.items.find((item) => item.field === 'title').text.fontSize);
   });
 
@@ -109,13 +109,13 @@ describe('LH-144: composition.maxFontSize caps the body, and paginate passes the
       return Math.max(...bodyItems(result).map((item) => px(result, largest(item.timelineLayout))));
     });
     for (const [page, size] of sizes.entries()) assert.ok(size <= sizes[0] + 1e-6, `page ${page + 1} draws ${size} px, page 1 ${sizes[0]} px: ${sizes}`);
-    assert.equal(presentation.slides[0].composition?.maxFontSize, undefined, 'the first page is the slide as written');
-    for (const slide of presentation.slides.slice(1)) assert.equal(slide.composition.maxFontSize, sizes[0]);
+    assert.equal(presentation.slides[0].composition?.maxFontSizePx, undefined, 'the first page is the slide as written');
+    for (const slide of presentation.slides.slice(1)) assert.equal(slide.composition.maxFontSizePx, sizes[0]);
     assert.ok(validate(presentation, { only: ['format'] }).valid, 'the pages are valid OPF');
   });
 
   test('an invalid cap is refused', () => {
-    assert.throws(() => composeSlide({ title: 'T', text: 'x', composition: { maxFontSize: 4 } }), /maxFontSize/);
+    assert.throws(() => composeSlide({ title: 'T', text: 'x', composition: { maxFontSizePx: 4 } }), /maxFontSizePx/);
   });
 });
 

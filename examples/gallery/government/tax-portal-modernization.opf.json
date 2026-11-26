@@ -421,7 +421,7 @@
       "title": "Program Sponsor",
       "photo": "asset:supporting-photo",
       "email": "maya@department-of-revenue-services.example",
-      "organizationId": "department-of-revenue-services",
+      "organization": "department-of-revenue-services",
       "socials": {
         "x": "@maya-chen"
       }
@@ -430,7 +430,7 @@
       "id": "jon",
       "name": "Jon Alvarez",
       "title": "Operating Lead",
-      "organizationId": "department-of-revenue-services",
+      "organization": "department-of-revenue-services",
       "socials": {
         "facebook": "@jon-alvarez"
       }
@@ -785,7 +785,7 @@
         "skeena": {
           "name": "Skeena",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Skeena Display",
           "minor": "Skeena",
@@ -796,7 +796,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

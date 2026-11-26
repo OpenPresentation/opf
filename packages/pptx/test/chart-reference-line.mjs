@@ -23,7 +23,7 @@ for (const type of ['line', 'bar']) {
   test(`${type} ignores malformed authored stroke metadata while preserving the valid native reference`, async () => {
     const document = source(type, {color: '#123456'}), parts = unzipSync(await toPptx(document));
     const part = 'ppt/charts/chart1.xml', xml = strFromU8(parts[part]);
-    for (const stroke of [null, [], 'invalid', {unknown: true}, {width: -1}, {width: 65}, {dash: 'sysDash'}, {end: {type: 'triangle'}}]) {
+    for (const stroke of [null, [], 'invalid', {unknown: true}, {width: -1}, {width: 65}, {dash: 'custom'}, {end: {type: 'triangle'}}]) {
       let changed = 0;
       const edited = xml.replace(/(<opf:references\b[^>]*\bdata=")([A-F0-9]+)(")/, (_all, start, hex, end) => {
         const record = decodeTextTag(hex), owned = type === 'line' ? record.helpers : record.overlays;

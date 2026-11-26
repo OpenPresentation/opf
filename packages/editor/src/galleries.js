@@ -119,7 +119,7 @@ export async function loadOpfGallery(input, options = {}) {
 const FONT_SCHEME_ENUMS = {
   type: ["sans-serif", "serif", "monospace"],
   app: ["powerpoint", "google-slides"],
-  languageFamily: ["latin", "ea", "cs", "eastAsian", "complexScript"],
+  scriptGroup: ["latin", "eastAsian", "complexScript"],
 };
 // A font role is a family name (a non-empty string), or undefined.
 function fontRole(value) {

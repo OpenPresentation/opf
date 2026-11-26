@@ -11,7 +11,7 @@ assert.ok(['Carlito', 'Tinos', 'Arimo', 'Roboto'].every(family => eager.has(fami
 
 const schemeDeck = (family, slides) => ({
   design: { fontScheme: 'x-one' },
-  catalogs: { custom: { fontSchemes: { 'x-one': { name: family, app: 'powerpoint', languageFamily: 'latin', languages: [], major: family, minor: family, textSample: 'x', type: 'sans-serif' } } } },
+  catalogs: { custom: { fontSchemes: { 'x-one': { name: family, app: 'powerpoint', scriptGroup: 'latin', languages: [], major: family, minor: family, textSample: 'x', type: 'sans-serif' } } } },
   slides,
 });
 const faces = svg => [...svg.matchAll(/@font-face\{font-family:"([^"]+)";font-weight:(\d+);font-style:(\w+)/g)].map(match => `${match[1]} ${match[2]} ${match[3]}`).sort();

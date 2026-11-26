@@ -268,7 +268,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "summit-park-arena",
+    "organization": "summit-park-arena",
     "bio": "Leads sports venues planning for Summit Park Arena.",
     "socials": {
       "instagram": "@summit-park-arena-speaker"
@@ -638,7 +638,7 @@
         "skeena": {
           "name": "Skeena",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Skeena Display",
           "minor": "Skeena",
@@ -649,7 +649,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

@@ -28,7 +28,7 @@ test('a four-column table in one of three columns takes the width it needs and k
   assert.equal(result.diagnostics.filter((entry) => entry.code === 'text-overflow').length, 0);
   const table = result.items.find((item) => item.field === 'table'), texts = result.items.filter((item) => item.field === 'text');
   assert.ok(texts.every((text) => table.box.width > text.box.width), 'the table column is the widest');
-  const laid = layoutTable(table.value, table.box, { scale: 1, minFontSize: table.composition.minFontSize, ...(table.tableGrowth ? { growth: table.tableGrowth } : {}) });
+  const laid = layoutTable(table.value, table.box, { scale: 1, minFontSizePx: table.composition.minFontSizePx, ...(table.tableGrowth ? { growth: table.tableGrowth } : {}) });
   const size = Math.min(...laid.rows.flatMap((row) => row.cells.map((cell) => cell.fit.fontSize)));
   assert.ok(size >= 25 - 1e-6, `the table keeps at least its 25 px role size: ${size}`);
   assert.ok(texts.every((text) => text.text.fontSize >= 28 - 1e-6), 'the texts keep their size');

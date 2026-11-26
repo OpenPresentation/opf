@@ -91,9 +91,9 @@ test('tiny cells retain invalid available dimensions and never measure an invent
 
 test('explicit readability floors are respected after scaling, including above nominal footer size', () => {
   for (const scale of [.75,1,1.5]) {
-    const result=layoutQuote({text:'Body',attribution:'Footer'},cell,{scale,minFontSize:32});
+    const result=layoutQuote({text:'Body',attribution:'Footer'},cell,{scale,minFontSizePx:32});
     for (const part of result.parts) {
-      assert.equal(part.minFontSize,32*scale);
+      assert.equal(part.minFontSizePx,32*scale);
       assert.ok(part.requestedFontSize>=32*scale);
       assert.ok(part.fit.fontSize>=32*scale);
     }
@@ -105,5 +105,5 @@ test('explicit readability floors are respected after scaling, including above n
 test('invalid content, geometry, scales and policies fail before reporting a usable layout', () => {
   for (const value of [null,[],{},{text:12},{text:'Body',attribution:null}]) assert.throws(()=>layoutQuote(value,cell),TypeError);
   for (const box of [{...cell,x:NaN},{...cell,width:0},{...cell,height:Infinity}]) assert.throws(()=>layoutQuote('Body',box),RangeError);
-  for (const options of [{scale:0},{scale:Infinity},{minFontSize:-1},{minFontSize:NaN},{overflow:'ignore'}]) assert.throws(()=>layoutQuote('Body',cell,options),RangeError);
+  for (const options of [{scale:0},{scale:Infinity},{minFontSizePx:-1},{minFontSizePx:NaN},{overflow:'ignore'}]) assert.throws(()=>layoutQuote('Body',cell,options),RangeError);
 });

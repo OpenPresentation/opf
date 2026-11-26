@@ -100,7 +100,7 @@ describe('precedence (README decision: slide, then layout, then deck, then theme
 	});
 
 	test('a deck picture background beats the layout variant (LH-103); a slide picture stays', () => {
-		const picture = { type: 'image', src: 'https://example.com/bg.jpg', tone: 'dark' };
+		const picture = { type: 'image', src: 'https://example.com/bg.jpg', appearance: 'dark' };
 		const document = deck('light2', { design: { background: picture } });
 		const context = resolveSlideContext(document, 0);
 		assert.ok(composeSlide(context.slide, context.options).backgroundImage, 'the layout slide keeps the deck picture');

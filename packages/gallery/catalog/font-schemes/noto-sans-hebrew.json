@@ -3,7 +3,7 @@
   "id": "noto-sans-hebrew",
   "name": "Noto Sans Hebrew",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "he"
   ],

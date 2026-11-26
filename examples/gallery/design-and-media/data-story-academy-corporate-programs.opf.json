@@ -57,7 +57,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-cover",
           "fit": "cover",
           "overlay": false
@@ -92,7 +92,7 @@
           ],
           "composition": {
             "padding": 0.1542,
-            "maxFontSize": 19
+            "maxFontSizePx": 19
           }
         }
       ],
@@ -204,7 +204,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-why",
           "fit": "cover",
           "overlay": false
@@ -242,7 +242,7 @@
           ],
           "composition": {
             "padding": 0.1219,
-            "maxFontSize": 72
+            "maxFontSizePx": 72
           }
         },
         {
@@ -267,7 +267,7 @@
           ],
           "composition": {
             "padding": 0.1219,
-            "maxFontSize": 72
+            "maxFontSizePx": 72
           }
         },
         {
@@ -292,7 +292,7 @@
           ],
           "composition": {
             "padding": 0.1219,
-            "maxFontSize": 72
+            "maxFontSizePx": 72
           }
         }
       ],
@@ -398,7 +398,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-cost",
           "fit": "cover",
           "overlay": false
@@ -508,7 +508,7 @@
           ],
           "composition": {
             "padding": 0.1933,
-            "maxFontSize": 20
+            "maxFontSizePx": 20
           }
         },
         {
@@ -539,7 +539,7 @@
           ],
           "composition": {
             "padding": 0.1933,
-            "maxFontSize": 20
+            "maxFontSizePx": 20
           }
         },
         {
@@ -570,7 +570,7 @@
           ],
           "composition": {
             "padding": 0.1933,
-            "maxFontSize": 20
+            "maxFontSizePx": 20
           }
         }
       ],
@@ -686,7 +686,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-gap",
           "fit": "cover",
           "overlay": false
@@ -771,7 +771,7 @@
           ],
           "composition": {
             "padding": 0.1982,
-            "maxFontSize": 20
+            "maxFontSizePx": 20
           }
         },
         {
@@ -802,7 +802,7 @@
           ],
           "composition": {
             "padding": 0.1982,
-            "maxFontSize": 20
+            "maxFontSizePx": 20
           }
         },
         {
@@ -833,7 +833,7 @@
           ],
           "composition": {
             "padding": 0.1982,
-            "maxFontSize": 20
+            "maxFontSizePx": 20
           }
         }
       ],
@@ -935,7 +935,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-ai",
           "fit": "cover",
           "overlay": false
@@ -979,7 +979,7 @@
             }
           ],
           "composition": {
-            "maxFontSize": 23
+            "maxFontSizePx": 23
           }
         },
         {
@@ -1001,7 +1001,7 @@
             }
           ],
           "composition": {
-            "maxFontSize": 20
+            "maxFontSizePx": 20
           }
         }
       ],
@@ -1072,7 +1072,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-different",
           "fit": "cover",
           "overlay": false
@@ -1113,7 +1113,7 @@
             }
           ],
           "composition": {
-            "maxFontSize": 24
+            "maxFontSizePx": 24
           }
         },
         {
@@ -1135,7 +1135,7 @@
             }
           ],
           "composition": {
-            "maxFontSize": 20
+            "maxFontSizePx": 20
           }
         }
       ],
@@ -1212,7 +1212,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-method",
           "fit": "cover",
           "overlay": false
@@ -1479,7 +1479,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-programs",
           "fit": "cover",
           "overlay": false
@@ -1838,7 +1838,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-makeover",
           "fit": "cover",
           "overlay": false
@@ -1865,7 +1865,7 @@
             }
           ],
           "composition": {
-            "maxFontSize": 30
+            "maxFontSizePx": 30
           }
         }
       ],
@@ -2338,7 +2338,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-formats",
           "fit": "cover",
           "overlay": false
@@ -2701,7 +2701,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-included",
           "fit": "cover",
           "overlay": false
@@ -2875,7 +2875,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-case",
           "fit": "cover",
           "overlay": false
@@ -2904,7 +2904,7 @@
             }
           ],
           "composition": {
-            "maxFontSize": 80
+            "maxFontSizePx": 80
           }
         },
         {
@@ -2928,7 +2928,7 @@
             }
           ],
           "composition": {
-            "maxFontSize": 80
+            "maxFontSizePx": 80
           }
         },
         {
@@ -2952,7 +2952,7 @@
             }
           ],
           "composition": {
-            "maxFontSize": 80
+            "maxFontSizePx": 80
           }
         },
         {
@@ -2970,7 +2970,7 @@
           ],
           "composition": {
             "padding": 0.2,
-            "maxFontSize": 19
+            "maxFontSizePx": 19
           }
         }
       ],
@@ -3276,7 +3276,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-voices",
           "fit": "cover",
           "overlay": false
@@ -3439,7 +3439,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-plan",
           "fit": "cover",
           "overlay": false
@@ -3476,7 +3476,7 @@
               ],
               "composition": {
                 "padding": 0.0846,
-                "maxFontSize": 24
+                "maxFontSizePx": 24
               }
             },
             {
@@ -3506,7 +3506,7 @@
               ],
               "composition": {
                 "padding": 0.0846,
-                "maxFontSize": 24
+                "maxFontSizePx": 24
               }
             },
             {
@@ -3536,7 +3536,7 @@
               ],
               "composition": {
                 "padding": 0.0846,
-                "maxFontSize": 24
+                "maxFontSizePx": 24
               }
             },
             {
@@ -3566,7 +3566,7 @@
               ],
               "composition": {
                 "padding": 0.0846,
-                "maxFontSize": 24
+                "maxFontSizePx": 24
               }
             }
           ],
@@ -3738,7 +3738,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-next",
           "fit": "cover",
           "overlay": false
@@ -3772,7 +3772,7 @@
             }
           ],
           "composition": {
-            "maxFontSize": 32
+            "maxFontSizePx": 32
           }
         },
         {
@@ -3802,7 +3802,7 @@
             }
           ],
           "composition": {
-            "maxFontSize": 32
+            "maxFontSizePx": 32
           }
         },
         {
@@ -3832,7 +3832,7 @@
             }
           ],
           "composition": {
-            "maxFontSize": 32
+            "maxFontSizePx": 32
           }
         },
         {
@@ -3851,7 +3851,7 @@
           ],
           "composition": {
             "padding": 0.17,
-            "maxFontSize": 22
+            "maxFontSizePx": 22
           }
         }
       ],
@@ -4013,7 +4013,7 @@
       "design": {
         "background": {
           "type": "image",
-          "tone": "light",
+          "appearance": "light",
           "src": "asset:bg-closing",
           "fit": "cover",
           "overlay": false
@@ -4048,7 +4048,7 @@
           ],
           "composition": {
             "padding": 0.1542,
-            "maxFontSize": 19
+            "maxFontSizePx": 19
           }
         }
       ],
@@ -5194,7 +5194,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

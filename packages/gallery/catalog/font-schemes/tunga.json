@@ -3,7 +3,7 @@
   "id": "tunga",
   "name": "Tunga",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "kn"
   ],

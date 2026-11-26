@@ -3,7 +3,7 @@
   "id": "fangsong",
   "name": "FangSong",
   "app": "powerpoint",
-  "languageFamily": "ea",
+  "scriptGroup": "eastAsian",
   "languages": [
     "zh-Hans"
   ],

@@ -420,7 +420,7 @@
       "title": "Program Sponsor",
       "photo": "asset:supporting-photo",
       "email": "maya@signalkit.example",
-      "organizationId": "signalkit",
+      "organization": "signalkit",
       "socials": {
         "threads": "@maya-chen"
       }
@@ -429,7 +429,7 @@
       "id": "jon",
       "name": "Jon Alvarez",
       "title": "Operating Lead",
-      "organizationId": "signalkit",
+      "organization": "signalkit",
       "socials": {
         "youtube": "@jon-alvarez"
       }
@@ -778,7 +778,7 @@
         "calibri": {
           "name": "Calibri",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Calibri",
           "minor": "Calibri",
@@ -789,7 +789,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

@@ -276,7 +276,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "orbital-ridge-systems",
+    "organization": "orbital-ridge-systems",
     "bio": "Leads aerospace planning for Orbital Ridge Systems.",
     "socials": {
       "instagram": "@orbital-ridge-systems-speaker"
@@ -659,7 +659,7 @@
         "montserrat": {
           "name": "Montserrat",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Montserrat",
           "minor": "Montserrat",
@@ -670,7 +670,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

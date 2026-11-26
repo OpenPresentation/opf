@@ -3,7 +3,7 @@
   "id": "batang",
   "name": "Batang",
   "app": "powerpoint",
-  "languageFamily": "ea",
+  "scriptGroup": "eastAsian",
   "languages": [
     "ko"
   ],

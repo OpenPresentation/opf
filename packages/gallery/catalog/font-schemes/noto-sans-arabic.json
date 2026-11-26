@@ -3,7 +3,7 @@
   "id": "noto-sans-arabic",
   "name": "Noto Sans Arabic",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "ar",
     "ps",

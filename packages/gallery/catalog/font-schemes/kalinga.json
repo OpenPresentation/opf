@@ -3,7 +3,7 @@
   "id": "kalinga",
   "name": "Kalinga",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "or"
   ],

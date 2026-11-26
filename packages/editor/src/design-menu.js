@@ -10,7 +10,7 @@
 // rows and columns, Enter or Space applies). It stays open after a choice so people can try several. The font section lists the schemes for the
 // deck's language (its script's slot: Latin, East Asian or complex script), grouped by type under the one in use, with a filter. On a phone
 // (`(max-width: 600px)`) the panel is a bottom sheet. Plain DOM; styles in src/styles/panel.css and design-menu.css (classes `opf-design-menu-*`).
-import { normalizeLanguageFamily } from "@openpresentation/opf";
+import { normalizeScriptGroup } from "@openpresentation/opf";
 import { resolveScriptFonts } from "@openpresentation/opf/composition";
 import { el, icon as lucide } from "./export-dom.js";
 import { normalizeIcons, resolveIcon } from "./icons.js";
@@ -321,7 +321,7 @@ export function createDesignMenu(container, options = {}) {
     language = { name, bcp47: script.bcp47 };
     const primary = script.bcp47.split("-")[0].toLowerCase();
     const slot = { latin: "latin", eastAsian: "ea", complexScript: "cs" }[script.scriptRole] ?? "latin";
-    const family = (entry) => normalizeLanguageFamily(entry.record?.languageFamily) ?? "latin";
+    const family = (entry) => normalizeScriptGroup(entry.record?.scriptGroup) ?? "latin";
     const serves = (entry) => {
       const tags = Array.isArray(entry.record?.languages) ? entry.record.languages : [];
       return !tags.length || tags.some((tag) => typeof tag === "string" && (tag === script.bcp47 || tag.split("-")[0].toLowerCase() === primary));

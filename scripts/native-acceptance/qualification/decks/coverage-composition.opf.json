@@ -60,7 +60,7 @@
       "composition": {
         "mode": "column",
         "gap": 0.02,
-        "maxFontSize": 40
+        "maxFontSizePx": 40
       },
       "blocks": [
         {
@@ -82,7 +82,7 @@
       "composition": {
         "mode": "grid",
         "columns": 3,
-        "minFontSize": 14,
+        "minFontSizePx": 14,
         "overflow": "warn"
       },
       "blocks": [

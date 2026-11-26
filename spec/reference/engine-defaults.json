@@ -21,7 +21,7 @@
   "fontScheme": {
     "major": "Aptos Display",
     "minor": "Aptos",
-    "languageFamily": "latin"
+    "scriptGroup": "latin"
   },
   "chartTypes": ["stacked-column", "stacked-area", "line-with-markers"]
 }

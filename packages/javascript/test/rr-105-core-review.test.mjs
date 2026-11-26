@@ -36,7 +36,7 @@ test('finding 5: a reference diagnostic names the authored entry when an earlier
 });
 
 test('finding 7: a combo chart without reference lines has no composed axis or pinned plot, as in v0.33.0; with one it has both', () => {
-  const combo = { type: 'combo', data: { columns: ['Quarter', 'Revenue', { name: 'Margin', format: '0%' }], rows: [['Q1', 120, 0.31], ['Q2', 135, 0.34], ['Q3', 150, 0.36]] }, line: ['Margin'], secondaryAxis: ['Margin'] };
+  const combo = { type: 'combo', data: { columns: ['Quarter', 'Revenue', { name: 'Margin', format: '0%' }], rows: [['Q1', 120, 0.31], ['Q2', 135, 0.34], ['Q3', 150, 0.36]] }, lineSeries: ['Margin'], secondaryAxis: ['Margin'] };
   const chartOf = (chart) => composeSlide({ title: 'Revenue and margin', chart }).items.find((item) => item.field === 'chart').chart;
   const plain = chartOf(combo);
   assert.equal(plain?.valueAxis, undefined);

@@ -271,7 +271,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "heliogrid-utilities",
+    "organization": "heliogrid-utilities",
     "bio": "Leads energy utilities planning for HelioGrid Utilities.",
     "socials": {
       "linkedin": "@heliogrid-utilities-speaker"
@@ -636,7 +636,7 @@
         "arial": {
           "name": "Arial",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Arial Black",
           "minor": "Arial",
@@ -647,7 +647,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

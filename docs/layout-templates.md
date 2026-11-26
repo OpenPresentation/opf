@@ -81,7 +81,7 @@ picture two thirds as wide, bled to the slide's edges. A heading region may sit 
 | `anchor` | Vertical position of the content of every body region under the record (or split) that does not set its own. Inherited by body regions only, never by `title` or `subtitle`. Exception: on a column record whose entries are all `auto`, it places the whole stack (see Choosing an anchor). |
 | `overflowRegion` | Where content no region accepts goes. Omitted: the first `primary` region that is not a single-block region (`max: 1`). |
 | `design` | The layout's design defaults (below). |
-| `composition` | Only `gap`, `padding`, `minFontSize` and `overflow`, with their 0.18 meaning. |
+| `composition` | Only `gap`, `padding`, `minFontSizePx` and `overflow`, with their 0.18 meaning. |
 
 An entry of `regions` is one of three things:
 
@@ -417,7 +417,7 @@ needs (cards, a grid of paragraphs, an automatic grid) or stays at the region's 
 texts is a short row and a row of long ones a tall one. The cells of one row keep its height and columns keep their widths.
 Sets that mix in other blocks (a metric, a picture, a chart) keep their rows and share sizes as above.
 
-A block that shrinks takes a size of the type scale (LH-17): from `minFontSize` up by a ratio of (28/16)^¼, rounded to whole
+A block that shrinks takes a size of the type scale (LH-17): from `minFontSizePx` up by a ratio of (28/16)^¼, rounded to whole
 reference pixels, which is 16, 18, 21, 24, 28 and 32 px at the default floor, with the half step between each two (LH-149: the
 ratio to a half power, 17, 20, 23, 26 and 30 px). A block that fits at its starting size keeps it, on the scale or not. The half
 steps matter most to siblings sized jointly: one size for all of them, the largest at which every row fits, so a whole step under
@@ -430,15 +430,15 @@ step under it, so a gain of half a step alone (16 to 17 px) keeps the slide's ar
 independently and the engines agree.
 
 Composed content never crosses a heading or another region and never leaves its region's box. What still does not fit
-uses the design's tools in order: text fits down to `minFontSize`, lists flow into columns where the region allows, blocks
+uses the design's tools in order: text fits down to `minFontSizePx`, lists flow into columns where the region allows, blocks
 beyond the room go to the overflow region and, through `paginate`, to a continuation slide; what remains is the
 `opf/text-overflow` or `opf/layout-unplaced` diagnostic.
 
 Pagination continues on a new slide with the same layout: blocks beyond a region's `max` move first, in source order, and
 carry a `region` pin to the region they came from. The pages of one slide share its type sizes (LH-144): each page after the
-first carries `composition.maxFontSize`, the largest size the first page draws for the kinds of block it holds (paragraphs,
+first carries `composition.maxFontSizePx`, the largest size the first page draws for the kinds of block it holds (paragraphs,
 lists, quotes, metrics, timelines), so a last page with one timeline or a short list does not read larger than the pages before
-it. The cap only lowers sizes, never under `minFontSize`; headings, tables, code and charts keep theirs. A block that no region of the layout accepts, on a layout with no
+it. The cap only lowers sizes, never under `minFontSizePx`; headings, tables, code and charts keep theirs. A block that no region of the layout accepts, on a layout with no
 overflow region, stays below the grid on every page and never drives a split.
 
 The export does one split on its own (LH-90). A slide whose body is two or more units of one kind (eight timelines, five
@@ -657,7 +657,7 @@ result stands. Both compositions are pure, so the choice is deterministic, and b
 
 **Before the floor (LH-186).** A template's composition that sets a paragraph, list or table more than one step of the type scale
 (16, 17, 18, 20, 21, 23, 24, 26, 28, 30, 32 px) under its role size (28 px prose, 32 px lists, 25 px table cells, each held to
-`composition.maxFontSize`), but above the floor, is composed as the automatic grid too, under the guarded rule `layout-first`. That
+`composition.maxFontSizePx`), but above the floor, is composed as the automatic grid too, under the guarded rule `layout-first`. That
 result is kept (`recomposed`) only when it adds no finding, sets no block smaller, reads as well (no more split words, no prose
 under the minimum measure) and sets the most shrunk block at least one step larger: an agenda's two lists that the agenda layout
 with its title beside them (`titlePosition: "start"`) sets at 18 px read at 32 px across the slide. A text run with its own `fontSize`, a block pinned to a
@@ -668,11 +668,11 @@ the type scale to the readability floor, never below it, flagging what still doe
 - **Body roles.** Text, lists and table cells, and the main part of the other payloads: a quote's and a code panel's body, a
   metric's value and label, and a timeline event's `what`. The other parts (attribution, filename, language, unit, delta,
   description, trend, a timeline's name, dates and notes) ask for 14 to 20 px by design, so reaching the floor is no squeeze
-  and never triggers it. Headings are not body. The floor is the composition's `minFontSize` (16 reference pixels at a
+  and never triggers it. Headings are not body. The floor is the composition's `minFontSizePx` (16 reference pixels at a
   720-pixel short edge, 12 pt).
 - **What stays.** Every block is drawn, in source order. The header and footer bands, the footnote area, placed images and
   the background are the slide's own and do not change. The layout record's `design` (alignment, cards, list bullet, image
-  fit, background variant) and `composition` (padding, gap, `minFontSize`) still apply. The slide keeps its `layout`, so
+  fit, background variant) and `composition` (padding, gap, `minFontSizePx`) still apply. The slide keeps its `layout`, so
   the PPTX export still uses that layout's native slide layout, and an edit that gives the content room (fewer blocks,
   `paginate`) returns the slide to its regions.
 - **What changes.** The tag, title and subtitle are a content slide's heading group above the body, as on an automatic slide

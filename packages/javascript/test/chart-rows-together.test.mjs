@@ -17,7 +17,7 @@ const lesson = (chart = {}) => ({
   chart: { type: "bar", data: { dataset: "taskTimes" }, axisTitles: { category: "Prototype", value: "Median task time (min)" }, dataLabels: { content: ["value"] }, ...chart },
   table: { dataset: "taskTimes" },
 });
-const tableRows = (table, document) => layoutTable(table.value, table.box, { scale: 1, minFontSize: table.composition.minFontSize, presentation: document, ...(table.tableGrowth ? { growth: table.tableGrowth } : {}) }).rows;
+const tableRows = (table, document) => layoutTable(table.value, table.box, { scale: 1, minFontSizePx: table.composition.minFontSizePx, presentation: document, ...(table.tableGrowth ? { growth: table.tableGrowth } : {}) }).rows;
 
 for (const count of [2, 4]) test(`a bar chart on the rows of a short table keeps its parts together (${count} categories)`, () => {
   const document = presentation(count), result = compose(lesson(), { presentation: document });
@@ -55,7 +55,7 @@ test("the short table grows (LH-48 growth, up to its display size) and the bars 
   const document = presentation(2), result = compose(lesson(), { presentation: document });
   const chart = chartOf(result), table = tableOf(result), rows = chart.chart.layer.rows;
   assert.ok(table.tableGrowth > 1, "the table grew");
-  const laid = layoutTable(table.value, table.box, { scale: 1, minFontSize: table.composition.minFontSize, presentation: document, growth: table.tableGrowth }).rows;
+  const laid = layoutTable(table.value, table.box, { scale: 1, minFontSizePx: table.composition.minFontSizePx, presentation: document, growth: table.tableGrowth }).rows;
   const sizes = laid.flatMap((row) => row.cells.map((cell) => cell.fit.fontSize));
   assert.ok(Math.min(...sizes) > 25 && Math.max(...sizes) <= 32 + 1e-9, `grown cells between the nominal 25 px and the 32 px display size: ${sizes}`);
   for (const [index, row] of laid.slice(1).entries()) assert.ok(Math.abs(chart.box.y + rows.centers[index] - (row.box.y + row.box.height / 2)) < row.box.height / 2, `row ${index} carries its bar`);

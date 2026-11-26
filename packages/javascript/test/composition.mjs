@@ -44,7 +44,7 @@ assert.throws(()=>composeSlide({text:huge,composition:{overflow:'error'}}),OPFCo
 assert.throws(()=>composeSlide({composition:{gap:NaN}}),RangeError);
 assert.throws(()=>composeSlide({}, {width:Infinity}),RangeError);
 assert.throws(()=>fitText('test',{x:0,y:0,width:0,height:10}),RangeError);
-for (const composition of [{mode:'banana'},{columns:0},{gap:-1},{weights:[0]},{minFontSize:2},{overflow:'clip'},{typo:true}]) {
+for (const composition of [{mode:'banana'},{columns:0},{gap:-1},{weights:[0]},{minFontSizePx:2},{overflow:'clip'},{typo:true}]) {
  assert.equal(check({slides:[{text:'hello',composition}]}).valid,false,JSON.stringify(composition));
 }
 assert.equal(check({slides:[{text:'hello',composition:{mode:'auto',columns:3}}]}).valid,true);
@@ -81,10 +81,10 @@ assert.ok(groupInRegion.items[1].box.y>groupInRegion.items[0].box.y);
 for(const invalid of [{blocks:[]},{type:'group'},{text:'Leaf',composition:{mode:'row'}},{blocks:[{text:'A'}],image:'image.png'},{type:'text',blocks:[{text:'A'}]}]) {
  assert.equal(check({slides:[{blocks:[invalid]}]}).valid,false,JSON.stringify(invalid));
 }
-const constrained={composition:{minFontSize:24,overflow:'error'},blocks:[{composition:{overflow:'warn'},blocks:[{text:huge}]}]};
+const constrained={composition:{minFontSizePx:24,overflow:'error'},blocks:[{composition:{overflow:'warn'},blocks:[{text:huge}]}]};
 assert.throws(()=>composeSlide(constrained),OPFCompositionError);
 assert.throws(()=>composeSlide({blocks:[{composition:{overflow:'error'},blocks:[{text:huge}]}]}),OPFCompositionError);
-const inheritedGroup=composeSlide({composition:{minFontSize:24},blocks:[{blocks:[{text:huge}]}]});
+const inheritedGroup=composeSlide({composition:{minFontSizePx:24},blocks:[{blocks:[{text:huge}]}]});
 assert.equal(inheritedGroup.items[0].text.fontSize,24);
 let deep={text:'Preserved'};
 for(let i=0;i<32;i++) deep={blocks:[deep]};

@@ -422,7 +422,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "harbor-and-loom-hotels",
+    "organization": "harbor-and-loom-hotels",
     "bio": "Leads hospitality planning for Harbor & Loom Hotels.",
     "socials": {
       "x": "@harbor-and-loom-hotels-speaker"
@@ -768,7 +768,7 @@
         "century-schoolbook": {
           "name": "Century Schoolbook",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Century Schoolbook",
           "minor": "Century Schoolbook",
@@ -779,7 +779,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

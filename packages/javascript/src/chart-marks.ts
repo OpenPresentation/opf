@@ -35,14 +35,14 @@ const typeOf = (chart: unknown): string => record(chart) && typeof chart.type ==
 const usable = (box: Box, scale: number) => [box.x, box.y, box.width, box.height, scale].every(Number.isFinite) && box.width > 0 && box.height > 0 && scale > 0;
 
 /** The lengths the preview draws chart text with, for a chart box. */
-function metrics(box: Box, scale: number, minFontSize: number | undefined) {
-  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSize}) * scale;
+function metrics(box: Box, scale: number, minFontSizePx: number | undefined) {
+  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSizePx}) * scale;
   return {fontPx, pad: 10 * scale, lineHeight: fontPx * 1.5, textHeight: fontPx * 1.22};
 }
 
 /** A caption-only header row (LH-81's metrics): the caption bold at the start of one row above the plot. */
 function captionHeader(text: string, geometry: ChartLayerGeometry): ChartLayerHeader {
-  const {box, scale} = geometry, {fontPx, pad, lineHeight} = metrics(box, scale, geometry.minFontSize);
+  const {box, scale} = geometry, {fontPx, pad, lineHeight} = metrics(box, scale, geometry.minFontSizePx);
   const width = Math.min(Math.max(1, box.width - 2 * pad), geometry.measure(text, fontPx, 700));
   const x = geometry.direction === 'rtl' ? box.x + box.width - pad - width : box.x + pad;
   return {caption: {text, box: {x, y: box.y + pad, width, height: lineHeight}}, height: pad + lineHeight};
@@ -119,7 +119,7 @@ export function chartWaterfall(chart: unknown, data: ResolvedChartData, geometry
   const format = typeof data.formats[column] === 'string' && data.formats[column] !== '' ? data.formats[column] : undefined;
   let labels = chart.dataLabels === undefined;
   if (labels && usable(box, scale)) {
-    const {fontPx, pad} = metrics(box, scale, geometry.minFontSize);
+    const {fontPx, pad} = metrics(box, scale, geometry.minFontSizePx);
     const band = Math.max(1, box.width - 2 * pad) / data.rows.length;
     const group = columnGroups(data, column) ? {language: geometry.language} : undefined;
     const widest = Math.max(0, ...values.map((value, index) => value === null ? 0 : geometry.measure(waterfallLabelText(value, format, roles[index]!, group, geometry.language), fontPx, roles[index] === 'total' ? 700 : 400)));
@@ -188,7 +188,7 @@ export function chartValueList(chart: unknown, data: ResolvedChartData, geometry
   if (shown.length < 2 || shown.length > CHART_VALUE_LIST_MAX_ROWS) return undefined;
   const total = shown.reduce((sum, entry) => sum + entry.value, 0);
   if (!(total > 0) || !Number.isFinite(total)) return undefined;
-  const {fontPx, pad, lineHeight} = metrics(box, scale, geometry.minFontSize);
+  const {fontPx, pad, lineHeight} = metrics(box, scale, geometry.minFontSizePx);
   const bold = new Set(options.focus?.categories ?? []);
   const entries = shown.map(({row, value}) => ({row, name: label(data.rows[row]![0]), value: columnValueLabel(data, 1, value, geometry.language), bold: bold.has(row)}));
   const width = (text: string, heavy: boolean) => geometry.measure(text, fontPx, heavy ? 700 : 400);
@@ -214,7 +214,7 @@ export function chartValueList(chart: unknown, data: ResolvedChartData, geometry
   const offset = Math.max(0, (pieWidth - 2 * radius) / 2);
   const pie = mirror({x: area.x + offset, y: area.y + area.height / 2 - radius, width: 2 * radius, height: 2 * radius});
   const listX = area.x + offset + 2 * radius + between, listHeight = headerHeight + entries.length * pitch, top = area.y + (area.height - listHeight) / 2;
-  const hole = type === 'doughnut' ? doughnutHole(pie, entries, options.focus?.categories ?? [], {fontPx, textHeight: metrics(box, scale, geometry.minFontSize).textHeight, measure: geometry.measure}) : undefined;
+  const hole = type === 'doughnut' ? doughnutHole(pie, entries, options.focus?.categories ?? [], {fontPx, textHeight: metrics(box, scale, geometry.minFontSizePx).textHeight, measure: geometry.measure}) : undefined;
   return {
     pie,
     ...(hole ? {hole} : {}),
@@ -272,7 +272,7 @@ function doughnutLabelFit(chart: unknown, data: ResolvedChartData, geometry: Cha
   const values = data.rows.map(row => chartNumber(row[1]));
   const total = values.reduce<number>((sum, value) => sum + (value !== null && value > 0 ? value : 0), 0);
   if (total <= 0) return undefined;
-  const {fontPx, textHeight} = metrics(geometry.box, geometry.scale, geometry.minFontSize);
+  const {fontPx, textHeight} = metrics(geometry.box, geometry.scale, geometry.minFontSizePx);
   const format = typeof data.formats[1] === 'string' && !numberFormatError(data.formats[1]) ? data.formats[1] : undefined;
   const group = columnGroups(data, 1) ? {language: geometry.language} : undefined;
   const radius = pie.width / 2, inner = radius / 2, middle = (radius + inner) / 2, cx = pie.x + radius, cy = pie.y + pie.height / 2;
@@ -317,7 +317,7 @@ export function chartCircleSquare(chart: unknown, data: ResolvedChartData, geome
   const {box, scale} = geometry;
   if (!usable(box, scale)) return undefined;
   const options = resolveChartOptions(chart, chartOptionTarget(typeOf(chart)));
-  const {fontPx, pad, lineHeight} = metrics(box, scale, geometry.minFontSize);
+  const {fontPx, pad, lineHeight} = metrics(box, scale, geometry.minFontSizePx);
   const square = (area: Box, radius: number): Box => { const cx = area.x + area.width / 2, cy = area.y + area.height / 2; return {x: cx - radius, y: cy - radius, width: 2 * radius, height: 2 * radius}; };
   // A pie's outside names take room around it; outside data labels of the author's are the preview's text, measured only with `labels`.
   const pie = typeOf(chart) === 'pie';
@@ -518,7 +518,7 @@ function areaEnd(shape: NonNullable<ReturnType<typeof segments>>, j: number, row
 function stackMarks(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, plot: Box, geometry: Omit<ChartPlotGeometry, 'box'> & {box: Box}, edge = false): {values: boolean[][]; ends: ChartStackEnd[]} | undefined {
   const shape = segments(chart, data, axis, plot, edge);
   if (!shape || !data.ok) return undefined;
-  const m = metrics(geometry.box, geometry.scale, geometry.minFontSize), {fontPx, textHeight} = m;
+  const m = metrics(geometry.box, geometry.scale, geometry.minFontSizePx), {fontPx, textHeight} = m;
   const last = entryCount(data) - 1, ends: ChartStackEnd[] = [];
   // A 100% stacked chart reads shares on its axis; the raw values (which a native label shows) would contradict it.
   const percent = typeOf(chart).startsWith('100pct');
@@ -552,7 +552,7 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
   if (!(plot.width > 1 && plot.height > 1)) return undefined;
   const shape = segments(chart, data, axis, plot, edge);
   if (!shape) return undefined;
-  const {fontPx, textHeight, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
+  const {fontPx, textHeight, lineHeight} = metrics(box, geometry.scale, geometry.minFontSizePx);
   const rtl = geometry.direction === 'rtl', last = data.rows.length - 1;
   // The last category is the rightmost (the leftmost right to left); the names start past the column's edge or the band's end, and never
   // inside the plot (FR-07d: the plot, and the bands drawn across it, end before the names).
@@ -595,7 +595,7 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
 function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, box: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>, hidden = false, extra: {legend?: boolean; labelRoom?: number} = {}): ChartPlotInset | undefined {
   const axisScale = chartAxisScale(axis);
   if (!data.ok || !axisScale) return undefined;
-  const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
+  const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSizePx);
   const width = (text: string) => geometry.measure(text, fontPx);
   const categories = data.rows.map(row => label(row[0]));
   const options = resolveChartOptions(chart, chartOptionTarget(typeOf(chart)));
@@ -631,7 +631,7 @@ export function horizontalBarPlot(chart: unknown, data: ResolvedChartData, layer
   if (!record(chart) || !data.ok || data.combo || data.hasX || !HORIZONTAL_BARS.has(typeOf(chart)) || layer?.rows) return undefined;
   if (resolveChartOptions(chart, chartOptionTarget(typeOf(chart))).active) return undefined;
   if (layer?.stack) return layer.plot;
-  const hidden = chartValueAxisHidden(layer), {fontPx} = metrics(box, geometry.scale, geometry.minFontSize);
+  const hidden = chartValueAxisHidden(layer), {fontPx} = metrics(box, geometry.scale, geometry.minFontSizePx);
   const labeled = hidden && layer?.small?.labels === true;
   const labelRoom = labeled ? Math.max(0, ...data.rows.flatMap(row => row.slice(1).map((cell, j) => { const value = chartNumber(cell); return value === null ? 0 : geometry.measure(columnValueLabel(data, j + 1, value, geometry.language), fontPx) + fontPx * 0.5; }))) : 0;
   return horizontalStackPlot(chart, data, axis, box, layer?.header, false, geometry, hidden, {legend: data.columns.length > 2, labelRoom});
@@ -646,7 +646,7 @@ function placeBarNames(chart: unknown, data: ResolvedChartData, axis: ChartValue
   if (!stackCandidate(chart, data) || !data.ok || !isHorizontal(chart) || !(axis.max > axis.min)) return undefined;
   const plot = plotOf(box, plotInset), shape = plot.width > 1 && plot.height > 1 ? segments(chart, data, axis, plot) : undefined;
   if (!shape) return undefined;
-  const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize), swatch = fontPx * 0.6, y = plot.y - fontPx * 0.1 - lineHeight;
+  const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSizePx), swatch = fontPx * 0.6, y = plot.y - fontPx * 0.1 - lineHeight;
   const placed = shape.series.map((_, j) => {
     const point = shape.stacks[j]![0], name = label(data.columns[j + 1]), bold = focus?.includes(j) === true && !stableNameWidths(chart);
     const x = point ? Math.min(shape.at(point.from), shape.at(point.to)) : shape.at(0);
@@ -671,9 +671,9 @@ export function chartStack(chart: unknown, data: ResolvedChartData, layer: Chart
   if (!stackCandidate(chart, data) || !data.ok) return undefined;
   const {box, scale} = geometry;
   if (!usable(box, scale)) return undefined;
-  const {fontPx} = metrics(box, scale, geometry.minFontSize);
+  const {fontPx} = metrics(box, scale, geometry.minFontSizePx);
   const measure = (text: string, size: number) => geometry.measure(text, size, 400), bold = (text: string, size: number) => geometry.measure(text, size, 700);
-  const plotGeometry = {scale, minFontSize: geometry.minFontSize, measure, direction: geometry.direction, language: geometry.language};
+  const plotGeometry = {scale, minFontSizePx: geometry.minFontSizePx, measure, direction: geometry.direction, language: geometry.language};
   const focus = layer?.focus?.series;
   const swatch = fontPx * 0.6, horizontal = isHorizontal(chart);
   const edge = !horizontal && STACKED[typeOf(chart)] === 'area' && data.rows.length >= 2;

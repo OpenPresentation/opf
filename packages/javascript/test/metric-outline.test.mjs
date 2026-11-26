@@ -11,7 +11,7 @@ function completeAndContained(layout,cell,padding){
     // LH-53: the trend is drawn as an arrow inside the cell; its part has no lines.
     if(part.role==='trend'&&!part.visible){const box=layout.trendBox;assert.ok(box.x>=cell.x-1e-8&&box.x+box.width<=cell.x+cell.width+1e-8&&box.y>=cell.y-1e-8);continue;}
     assert.equal(part.fit.sourceLines.map(line=>part.text.slice(line.start,line.nextStart)).join(''),part.text);
-    assert.ok(part.fit.fontSize>=part.minFontSize);
+    assert.ok(part.fit.fontSize>=part.minFontSizePx);
     assert.equal(part.linePositions.length,part.fit.sourceLines.length);
     for(const [i,line]of part.fit.placement.lines.entries()){
       assert.deepEqual(part.linePositions[i],{x:line.x,baseline:line.baseline});
@@ -40,13 +40,13 @@ test('metric outlines preserve exact tabs and whitespace while containing overha
 });
 test('metric outline-aware fitting retains the readability floor and rejects irreducible ink',()=>{
   const cell={x:0,y:0,width:110,height:90},value={value:'Wide',label:'L'};
-  const layout=layoutMetric(value,cell,{minFontSize:16,textMeasurement:outlines});
+  const layout=layoutMetric(value,cell,{minFontSizePx:16,textMeasurement:outlines});
   assert.ok(layout.parts.every(part=>part.fit.fontSize>=16));
   const impossible={measure,outlineBounds:()=>({x:0,y:-20,width:1000,height:40})};
-  const failure=layoutMetric(value,cell,{minFontSize:16,textMeasurement:impossible});
+  const failure=layoutMetric(value,cell,{minFontSizePx:16,textMeasurement:impossible});
   assert.equal(failure.overflow,true);assert.ok(failure.diagnostics.some(d=>d.reason==='text-fit'));
   assert.equal(failure.parts[0].text,value.value);
-  assert.throws(()=>layoutMetric(value,cell,{minFontSize:16,textMeasurement:impossible,overflow:'error'}),{code:'layout-overflow'});
+  assert.throws(()=>layoutMetric(value,cell,{minFontSizePx:16,textMeasurement:impossible,overflow:'error'}),{code:'layout-overflow'});
   assert.throws(()=>composeSlide({composition:{overflow:'error'},metric:value},{width:540,height:960,textMeasurement:impossible}),{code:'layout-overflow'});
 });
 test('zero outline clearance is explicit and width-only providers retain prior geometry',()=>{

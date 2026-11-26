@@ -21,7 +21,7 @@ if(out)await mkdir(out,{recursive:true});
 for(const dimensions of [{widthInches:40/3,heightInches:7.5},{widthInches:5.625,heightInches:10}])
 for(const contentBox of [false,true])for(const alignment of ['start','center','end'])
 for(const text of ['Full source\nSecond paragraph.', ['Exact spacing ',{text:'with bold words',bold:true},' and ',{text:'italics.',italic:true},'\n',{text:'Raised ',superscript:true},{text:'note',fontSize:20,underline:true},' stays editable.']]) {
-  const deck={design:{contentBox,dimensions,titleAlignment:alignment,contentAlignment:alignment,fontScheme:{id:'carlito',heading: 'Carlito',body: 'Carlito'}},slides:[{tag:'Source',title:'A measured title that wraps when space is narrow',subtitle:'Supporting text',composition:{mode:'column',minFontSize:24},text}]};
+  const deck={design:{contentBox,dimensions,titleAlignment:alignment,contentAlignment:alignment,fontScheme:{id:'carlito',heading: 'Carlito',body: 'Carlito'}},slides:[{tag:'Source',title:'A measured title that wraps when space is narrow',subtitle:'Supporting text',composition:{mode:'column',minFontSizePx:24},text}]};
   const original=structuredClone(deck),options={fonts};
   const bound=resolvePresentation(deck,options).slides[0],expected=bound.geometry.items.flatMap(item=>item.field==='title'&&item.text.placement.lines.length>1?[{item,placed:item.text.placement.lines[0],index:0,title:true}]:item.text.placement.lines.map((placed,index)=>({item,placed,index})));
   // RR-105 (opf#1291): a wrapped title is one Title placeholder: natively wrapped (wrap square) where its lines are verified, else its

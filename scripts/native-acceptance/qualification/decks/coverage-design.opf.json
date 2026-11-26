@@ -53,7 +53,7 @@
       },
       "type": "sans-serif",
       "app": "powerpoint",
-      "languageFamily": "latin"
+      "scriptGroup": "latin"
     },
     "background": "light1",
     "titleAlignment": "start",
@@ -799,7 +799,7 @@
           "minor": "Georgia",
           "type": "serif",
           "app": "google-slides",
-          "languageFamily": "eastAsian"
+          "scriptGroup": "eastAsian"
         }
       }
     },
@@ -812,7 +812,7 @@
           "major": "Roboto Mono",
           "minor": "Roboto Mono",
           "type": "monospace",
-          "languageFamily": "ea"
+          "scriptGroup": "eastAsian"
         }
       }
     },
@@ -824,7 +824,7 @@
         "fontScheme": {
           "major": "Aptos Display",
           "minor": "Aptos",
-          "languageFamily": "complexScript"
+          "scriptGroup": "complexScript"
         }
       }
     },
@@ -847,7 +847,7 @@
         "fontScheme": {
           "major": "Aptos Display",
           "minor": "Aptos",
-          "languageFamily": "cs"
+          "scriptGroup": "complexScript"
         }
       }
     },

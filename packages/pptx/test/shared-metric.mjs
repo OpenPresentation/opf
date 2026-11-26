@@ -12,7 +12,7 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
   {value:42,unit:'ms',label:'Left\tRight  ',description:'Exact\r\n\r\ncontext',delta:0,trend:'flat'},
   {value:'42\n-0.5',unit:'milliseconds across all completed production requests',label:'Latency'},
   {value:'',unit:'',label:'',description:'',delta:'',trend:'up'}]) {
-  const deck={design:{fontScheme:'roboto',contentAlignment:({left:'start',right:'end'}[align]??align),dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{composition:{minFontSize:32},metric}]},before=structuredClone(deck);
+  const deck={design:{fontScheme:'roboto',contentAlignment:({left:'start',right:'end'}[align]??align),dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{composition:{minFontSizePx:32},metric}]},before=structuredClone(deck);
   const layout=composeSlide(deck.slides[0],{...dimensions,fontFamilies:{heading:'Roboto',body:'Roboto'},contentAlignment:({left:'start',right:'end'}[align]??align),textMeasurement:fonts.textMeasurement}).items[0].metricLayout;
   const bytes=await toPptx(deck,{fonts}),xml=new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']);
   // The trend arrow (RR-07) and the delta pill (LH-137) are separate decoration shapes with their own tests (rr-07-preview-polish.mjs); the text shapes are the accepted lines.
@@ -37,7 +37,7 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
   assert.deepEqual(imported.slides[0].metric,metric,'the root metric payload returns as authored');assert.equal(imported.slides[0].blocks,undefined);assert.deepEqual(deck,before);
   assert.ok(!diagnostics.some(d=>d.code==='metric-import-reflow'),'RR-94: an unedited metric re-imports quietly');assert.ok(!diagnostics.some(d=>d.code==='invalid-metric-provenance'));cases++;
 }
-const strict={slides:[{composition:{overflow:'error',minFontSize:32},metric:{value:42,label:'Unabridged '.repeat(1000)}}]};
+const strict={slides:[{composition:{overflow:'error',minFontSizePx:32},metric:{value:42,label:'Unabridged '.repeat(1000)}}]};
 await assert.rejects(()=>toPptx(strict),{code:'layout-overflow'});
 let invalidCases=0;
 for(const point of [...Array.from({length:32},(_,i)=>i).filter(i=>![9,10,13].includes(i)),0xD800,0xDFFF,0xFFFE,0xFFFF])for(const field of ['shorthand','value','unit','label','description','delta']){

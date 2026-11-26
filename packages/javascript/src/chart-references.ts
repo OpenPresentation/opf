@@ -11,7 +11,7 @@ export interface ChartReference {
   axis: 'value' | 'secondary';
   label?: string;
   labelPosition: 'start' | 'end';
-  stroke: {color?: unknown; width: number; dash: 'solid' | 'dash' | 'dot'};
+  stroke: {color?: unknown; width: number; dash: ChartReferenceDash};
   /** Original authored stroke, retained only while native paint is unchanged. */
   authoredStroke?: unknown;
 }
@@ -32,13 +32,16 @@ export interface ChartReferenceLine extends ChartReference {
 export interface ChartReferenceDiagnostic {index: number; code: 'chart-reference-label-overflow' | 'chart-reference-label-collision'; message: string}
 export interface ChartLayerReferences {lines: ChartReferenceLine[]; diagnostics: ChartReferenceDiagnostic[]}
 const record=(v: unknown): v is Record<string,unknown>=>typeof v==='object'&&v!==null&&!Array.isArray(v);
+/** The preset dash names of a chart reference line's stroke (the names a shape outline's `Stroke.dash` takes); `dash` is the default. */
+export type ChartReferenceDash = 'solid' | 'dot' | 'dash' | 'longDash' | 'dashDot' | 'longDashDot' | 'longDashDotDot' | 'sysDot' | 'sysDash' | 'sysDashDot' | 'sysDashDotDot';
+const CHART_REFERENCE_DASHES: ReadonlySet<string> = new Set(['solid', 'dot', 'dash', 'longDash', 'dashDot', 'longDashDot', 'longDashDotDot', 'sysDot', 'sysDash', 'sysDashDot', 'sysDashDotDot']);
 /** Read only explicit properties; never parse text, suppress duplicates or impose a line cap. */
 export function chartReferences(chart: unknown): ChartReference[] {
   if(!record(chart)||typeof chart.type!=='string'||!CHART_REFERENCE_TYPES.has(chart.type)||!Array.isArray(chart.referenceLines))return [];
   return chart.referenceLines.flatMap((entry):ChartReference[]=>{
     if(!record(entry)||typeof entry.value!=='number'||!Number.isFinite(entry.value))return [];
     const stroke=entry.stroke==='none'?{width:0}:record(entry.stroke)?entry.stroke:{};
-    return [{value:entry.value,axis:entry.axis==='secondary'?'secondary':'value',...(typeof entry.label==='string'&&entry.label.trim()?{label:entry.label}:{}),labelPosition:entry.labelPosition==='start'?'start':'end',stroke:{...(stroke.color!==undefined?{color:stroke.color}:{}),width:typeof stroke.width==='number'&&Number.isFinite(stroke.width)?stroke.width:4/3,dash:stroke.dash==='solid'||stroke.dash==='dot'?stroke.dash:'dash'},...(entry.stroke!==undefined?{authoredStroke:entry.stroke}:{})}];
+    return [{value:entry.value,axis:entry.axis==='secondary'?'secondary':'value',...(typeof entry.label==='string'&&entry.label.trim()?{label:entry.label}:{}),labelPosition:entry.labelPosition==='start'?'start':'end',stroke:{...(stroke.color!==undefined?{color:stroke.color}:{}),width:typeof stroke.width==='number'&&Number.isFinite(stroke.width)?stroke.width:4/3,dash:typeof stroke.dash==='string'&&CHART_REFERENCE_DASHES.has(stroke.dash)?stroke.dash as ChartReferenceDash:'dash'},...(entry.stroke!==undefined?{authoredStroke:entry.stroke}:{})}];
   });
 }
 /** The authored position (`referenceLines.<n>`) of each reference chartReferences keeps, in its order: an entry without a finite value is skipped. */
@@ -60,7 +63,7 @@ export function placeReferences(refs:readonly ChartReference[],data:ResolvedChar
   const plot={x:box.x+inset.left,y:box.y+inset.top,width:box.width-inset.left-inset.right,height:box.height-inset.top-inset.bottom};
   if(!(plot.width>1&&plot.height>1))return undefined;
   const horizontal=geometry.horizontal===true,rtl=geometry.direction==='rtl',count=data.rows.length,native=!horizontal&&count>=2;
-  const font=chartTextSize({...box,scale:geometry.scale,minFontSize:geometry.minFontSize})*geometry.scale,lineHeight=font*1.5,gap=font*0.1;
+  const font=chartTextSize({...box,scale:geometry.scale,minFontSizePx:geometry.minFontSizePx})*geometry.scale,lineHeight=font*1.5,gap=font*0.1;
   // A label can use either adjacent side. Test actual ordinary line/marker ink as well as earlier labels.
   const segments:{x1:number;y1:number;x2:number;y2:number;pad:number}[]=[];
   if(!horizontal&&(data.combo||geometry.chartType===undefined||['line','line-with-markers','area'].includes(geometry.chartType))){

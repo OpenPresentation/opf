@@ -262,7 +262,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "silveroak-group",
+    "organization": "silveroak-group",
     "bio": "Leads facilities planning for SilverOak Group.",
     "socials": {
       "instagram": "@silveroak-group-speaker"
@@ -588,7 +588,7 @@
         "open-sans": {
           "name": "Open Sans",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Open Sans",
           "minor": "Open Sans",
@@ -599,7 +599,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

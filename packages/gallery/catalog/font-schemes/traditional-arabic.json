@@ -3,7 +3,7 @@
   "id": "traditional-arabic",
   "name": "Traditional Arabic",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "ar",
     "ur",

@@ -65,7 +65,7 @@ export interface ChartOptionChange {
   decorative?: boolean;
   axisTitles?: { category?: string; value?: string; secondary?: string };
   /** Combo charts: the series drawn as lines, by name (at least one, and not every series). */
-  line?: string[];
+  lineSeries?: string[];
   /** Combo charts: the line series on the secondary value axis, by name. */
   secondaryAxis?: string[];
   legend?: ChartLegendChoice;

@@ -52,7 +52,7 @@ const deck = {design: {fontScheme: 'roboto'}, slides: [
   // Charts that draw labels as their own editing targets (a container with targets inside it): nested-interactive, below.
   {title: 'Chart slide', composition: {mode: 'grid', columns: 2}, blocks: [
     {chart: {type: 'waterfall', data: {columns: ['Step', 'Value'], rows: [['Start', 100], ['Expansion', 24], ['Churn', -8], ['End', 116]]}}},
-    {chart: {type: 'combo', line: ['Margin'], secondaryAxis: ['Margin'], data: {columns: ['Quarter', 'Revenue', 'Margin'], rows: [['Q1', 12.4, 0.31], ['Q2', 18.1, 0.34]]}}},
+    {chart: {type: 'combo', lineSeries: ['Margin'], secondaryAxis: ['Margin'], data: {columns: ['Quarter', 'Revenue', 'Margin'], rows: [['Q1', 12.4, 0.31], ['Q2', 18.1, 0.34]]}}},
   ]},
 ]};
 

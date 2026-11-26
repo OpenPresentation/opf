@@ -1,0 +1,34 @@
+{
+  "slides": [
+    {
+      "title": "Line",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Revenue"
+          ],
+          "rows": [
+            [
+              "Q1",
+              10
+            ],
+            [
+              "Q2",
+              12
+            ]
+          ]
+        },
+        "referenceLines": [
+          {
+            "value": 11,
+            "stroke": {
+              "dash": "longDashDot"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

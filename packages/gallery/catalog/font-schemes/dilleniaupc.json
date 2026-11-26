@@ -3,7 +3,7 @@
   "id": "dilleniaupc",
   "name": "DilleniaUPC",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "th"
   ],

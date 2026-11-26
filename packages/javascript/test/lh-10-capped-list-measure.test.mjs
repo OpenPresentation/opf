@@ -5,7 +5,7 @@ import {paginate} from '../dist/pagination.js';
 
 const entries = Array.from({length: 7}, (_, i) => 'Item '+(i+1)+': Customers told us onboarding took too long, so we rebuilt it around th');
 const title = 'A longer title that may need a second line on the slide';
-const slide = (block = {items: entries}) => ({title, composition: {minFontSize: 24, maxFontSize: 24}, blocks: [block]});
+const slide = (block = {items: entries}) => ({title, composition: {minFontSizePx: 24, maxFontSizePx: 24}, blocks: [block]});
 const listOf = result => result.items.find(item => item.field === 'items');
 const columnsOf = item => item.listColumns ?? [{start: 0, end: item.value.length, text: item.text, box: item.box}];
 const textEntries = item => columnsOf(item).flatMap(column => column.text.listEntries);
@@ -18,11 +18,11 @@ const complete = (item, source) => {
 };
 
 for (const cap of [20, 24, 28]) test('a '+cap+'px cap makes a same-size readable column alternative eligible without shrinking', () => {
-  const source = slide(); source.composition = {minFontSize: cap, maxFontSize: cap};
+  const source = slide(); source.composition = {minFontSizePx: cap, maxFontSizePx: cap};
   const frozen = structuredClone(source), result = composeSlide(source), item = listOf(result);
   assert.deepEqual(source, frozen);
   assert.equal(item.listColumns?.length, 2);
-  assert.equal(result.composition.maxFontSize, cap);
+  assert.equal(result.composition.maxFontSizePx, cap);
   assert.deepEqual(fontsOf(item), [cap]);
   assert.ok(maxLine(item) <= 70);
   assert.deepEqual(fitFailures(result), []);
@@ -51,7 +51,7 @@ test('short readable capped entries keep one column and the layout-first opt-out
 });
 
 test('uncapped lists retain the existing larger-type and no-worse-alternative contracts', () => {
-  const source = slide(); delete source.composition.maxFontSize;
+  const source = slide(); delete source.composition.maxFontSizePx;
   const larger = listOf(composeSlide(source));
   assert.equal(larger.listColumns, undefined);
   assert.ok(larger.text.fontSize > 24);
@@ -97,7 +97,7 @@ test('paginated arrangement fallback keeps all 35 entries and exact mappings, th
       // The measure holds either way: a narrower column, or (at the continuation pages' 28 px) columns across the body.
       if (i > 0) assert.ok(item.box.width < geometry.contentBox.width || (item.listColumns?.length ?? 1) > 1, 'automatic fallback keeps a readable measure');
     }
-    if (i > 0) assert.equal(page.composition.maxFontSize, 28);
+    if (i > 0) assert.equal(page.composition.maxFontSizePx, 28);
   }
   assert.equal(paintedEntries, 35, 'all source entries have actual painted geometry');
 });

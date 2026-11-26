@@ -70,7 +70,7 @@ const rolesOf = (input) => resolvePresentation(input).slides[0].design.roles;
 // A picture that names its tone gets the tone's variant, and the text on it core's automatic scrim (LH-02) in that variant's bg1.
 {
   const picture = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
-  const input = (tone) => ({design: {colorScheme: colors, background: {type: 'image', src: picture, alt: 'Backdrop', ...(tone ? {tone} : {})}}, slides: [{title: 'T', text: ['Body']}]});
+  const input = (tone) => ({design: {colorScheme: colors, background: {type: 'image', src: picture, alt: 'Backdrop', ...(tone ? {appearance: tone} : {})}}, slides: [{title: 'T', text: ['Body']}]});
   const scrimOf = (svg) => {
     const rect = tags(svg, 'rect').find((entry) => entry['data-opf-scrim']);
     const stops = tags(svg, 'stop');

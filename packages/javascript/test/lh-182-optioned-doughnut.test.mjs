@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {chartDoughnut, resolveChartData} from '../dist/composition.js';
 const data = {columns: ['Quarter', 'Current', 'Baseline'], rows: [['Q1', 13, 10], ['Q2', 17, 12], ['Q3', 20, 14], ['Q4', 24, 16]]};
-const geometry = {box: {x: 0, y: 0, width: 600, height: 400}, scale: 1, minFontSize: 20, measure: (text, size) => text.length * size / 2};
+const geometry = {box: {x: 0, y: 0, width: 600, height: 400}, scale: 1, minFontSizePx: 20, measure: (text, size) => text.length * size / 2};
 const of = (options, extra = {}) => {
   const chart = {type: 'doughnut', data, ...options};
   return chartDoughnut(chart, resolveChartData(chart), {...geometry, ...extra});

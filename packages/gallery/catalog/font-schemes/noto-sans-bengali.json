@@ -3,7 +3,7 @@
   "id": "noto-sans-bengali",
   "name": "Noto Sans Bengali",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "bn",
     "ctg"

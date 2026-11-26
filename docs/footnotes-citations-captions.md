@@ -9,7 +9,7 @@ and the editor. A deck without the new fields validates, composes, previews and 
 
 - `TextRun.cite`: a reference id, or an array of ids, from the top-level `references` list.
 - `TextRun.footnote`: an inline note (string or `TextRun[]`) with no references entry.
-- `references` (presentation root): `[{ id, text, url? }]`; `text` is a string or `TextRun[]`.
+- `references` (presentation root): `[{ id, text, link? }]`; `text` is a string or `TextRun[]`.
 - `caption` on an `image`, `chart`, `table` or `video` payload (a block, or the
   slide root when it holds exactly one of those payloads): a string, `TextRun[]`, or
   `{ text, position?: "below" | "above", align?: "start" | "center" | "end" }` (defaults `below`, `start`).
@@ -17,7 +17,7 @@ and the editor. A deck without the new fields validates, composes, previews and 
 ```json
 {
   "references": [
-    { "id": "gartner-2026", "text": "Gartner, Market Guide for Presentation Tooling, 2026", "url": "https://www.gartner.com" }
+    { "id": "gartner-2026", "text": "Gartner, Market Guide for Presentation Tooling, 2026", "link": "https://www.gartner.com" }
   ],
   "slides": [
     {
@@ -71,7 +71,7 @@ a copy); without a presentation the slide numbers from 1 and unresolved ids are 
   whose runs carry markers gets an area directly above the footer band (or the bottom padding), with the
   content area's left edge and width: a 1 px rule, half a line of space, then `<n> <text>` for each note
   the slide uses in number order (a rich reference text keeps its runs after the number). Text is the
-  body family at the furniture size (`max(13 * scale, minFontSize)`), in the muted text color. The
+  body family at the furniture size (`max(13 * scale, minFontSizePx)`), in the muted text color. The
   content area shrinks by exactly the area's height plus half the slide gap; headings, cover centering and
   everything above are unchanged. The area takes at most `FOOTNOTE_MAX_RATIO` (35%) of the span between
   the heading top and the footer band; notes beyond that report `text-overflow` at their source path
@@ -80,12 +80,12 @@ a copy); without a presentation the slide numbers from 1 and unresolved ids are 
 - **Caption band** (`layoutCaption`, `item.caption`). Inside the block's region (the card interior when
   content cards are on) a band of the caption's measured height is reserved below the media (or above
   it); the media keeps the rest less a gap of 0.4 of the caption size, and `item.box` is that media box.
-  Caption text is the body family at `max(CAPTION_FONT_RATIO (0.6) * 25 * scale, minFontSize)`, muted,
+  Caption text is the body family at `max(CAPTION_FONT_RATIO (0.6) * 25 * scale, minFontSizePx)`, muted,
   aligned per `align`. The band takes at most `CAPTION_MAX_RATIO` (35%) of the region; a caption that
   does not fit reports `text-overflow` at the caption path. Automatic grid selection scores the captioned
   leaf on its media box.
 - `referencesSlide(presentation, { title? })` returns an ordinary slide (`{ title, items }`) listing the
-  cited references in marker order as `n. text` (with a linked url run when there is one); the deck that
+  cited references in marker order as `n. text` (with a linked link run when there is one); the deck that
   cites nothing gets a title-only slide. It is plain content: editable, exportable, no new schema.
 
 ## Preview (opf-render)
@@ -136,7 +136,7 @@ Recorded as vetoable decisions; the brief is `rr-33-35/DECISIONS.md` (RR-34 sect
   reference and footnote texts reject `cite`/`footnote` with `cite-unsupported-location` instead of
   accepting a marker that no engine would draw.
 - Footnote text size equals the furniture size (the readable floor on a 16:9 deck), not a size below it:
-  core never draws text under `minFontSize`.
+  core never draws text under `minFontSizePx`.
 - Unused references are a warning only (`opf/unused-reference`, category `references`), never an error.
 - Round trip. The run-level association comes back from the marker numbers and the tagged footnote lines
   (one number, one note), not from a stored per-run record: it is exact for every authored form, and an

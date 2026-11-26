@@ -431,7 +431,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "peoplecraft",
+    "organization": "peoplecraft",
     "bio": "Leads training planning for PeopleCraft.",
     "socials": {
       "x": "@peoplecraft-speaker"
@@ -673,7 +673,7 @@
         "yu-gothic": {
           "name": "Yu Gothic",
           "app": "powerpoint",
-          "languageFamily": "ea",
+          "scriptGroup": "eastAsian",
           "languages": [
             "ja"
           ],
@@ -686,7 +686,7 @@
         "arial": {
           "name": "Arial",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Arial Black",
           "minor": "Arial",
@@ -697,7 +697,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

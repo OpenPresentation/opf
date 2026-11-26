@@ -23,7 +23,7 @@ const deck = () => ({
   tone: { id: "formal" },
   narrative: { id: "story", name: "Story", beats: [{ id: "b1", name: "Open" }, { id: "b2", name: "Close" }] },
   organization: [{ id: "acme", name: "Acme", role: "primary", logo: { full: { onLight: "asset:dark-logo", onDark: "https://cdn.example.com/logo.png" }, icon: "./logo.svg" } }],
-  speaker: { id: "ada", name: "Ada L", title: "CEO", organizationId: "acme", photo: PNG },
+  speaker: { id: "ada", name: "Ada L", title: "CEO", organization: "acme", photo: PNG },
   design: {
     theme: "minimal",
     colorScheme: "cool-horizon",
@@ -104,7 +104,7 @@ describe("stats: deck facts", () => {
     assert.deepEqual(result.deck.tone, { id: "formal", inline: true });
     assert.deepEqual(result.deck.narrative, { id: "story", inline: true, beats: 2 });
     assert.deepEqual(result.people.organizations, [{ id: "acme", name: "Acme", role: "primary", hasLogo: true }]);
-    assert.deepEqual(result.people.speakers, [{ id: "ada", name: "Ada L", title: "CEO", organizationId: "acme", hasPhoto: true }]);
+    assert.deepEqual(result.people.speakers, [{ id: "ada", name: "Ada L", title: "CEO", organization: "acme", hasPhoto: true }]);
   });
 
   test("slide size comes from the design, the theme or the default, with the preset when named", () => {

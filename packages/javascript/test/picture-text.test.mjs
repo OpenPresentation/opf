@@ -23,7 +23,7 @@ const grid = (busyAt = () => false, calm = 0.004, extra = {}) => {
 const weights = (at) => ({ columns, rows, values: Array.from({ length: columns * rows }, (_, index) => at(Math.floor(index / columns), index % columns)) });
 // A right-to-left deck's cover is in Arabic, so its start side is the right edge (an English title in it would still start at the left).
 let arabic = false;
-const cover = (background = {}, extra = {}) => ({ title: arabic ? 'بناء شبكة إمداد أسرع' : 'Building a faster supply network', subtitle: arabic ? 'مراجعة استراتيجية لمجلس الإدارة، أكتوبر 2026' : 'Board strategy review, October 2026', design: { background: { type: 'image', src: PHOTO, tone: 'dark', ...background } }, ...extra });
+const cover = (background = {}, extra = {}) => ({ title: arabic ? 'بناء شبكة إمداد أسرع' : 'Building a faster supply network', subtitle: arabic ? 'مراجعة استراتيجية لمجلس الإدارة، أكتوبر 2026' : 'Board strategy review, October 2026', design: { background: { type: 'image', src: PHOTO, appearance: 'dark', ...background } }, ...extra });
 const compose = (slide, direction, extra = {}, layout = 'cover') => composeSlide(slide, { layout: layouts[layout], direction, darkBackground: true, ...extra });
 const title = (result) => result.items.find((item) => item.field === 'title');
 
@@ -103,7 +103,7 @@ for (const direction of ['ltr', 'rtl']) {
 
   test(`LH-158 (${direction}): a section's group and a group beside a body follow the same rule; no picture changes nothing`, () => {
     setDirection();
-    const section = compose({ tag: 'Part 3', title: 'Where the network grows', subtitle: 'Three regions, one plan', design: { background: { type: 'image', src: PHOTO, tone: 'dark' } } }, direction, { pictureLuminance: () => grid((row) => row >= 9) }, 'section');
+    const section = compose({ tag: 'Part 3', title: 'Where the network grows', subtitle: 'Three regions, one plan', design: { background: { type: 'image', src: PHOTO, appearance: 'dark' } } }, direction, { pictureLuminance: () => grid((row) => row >= 9) }, 'section');
     assert.equal(section.pictureText.placement, 'top-start');
     assert.ok(section.items.find((item) => item.field === 'tag').box.y < section.height / 3);
     const plain = composeSlide({ title: 'Building a faster supply network' }, { layout: layouts.cover, direction, pictureLuminance: () => grid(() => true) });

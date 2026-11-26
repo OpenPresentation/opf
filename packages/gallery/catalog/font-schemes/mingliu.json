@@ -3,7 +3,7 @@
   "id": "mingliu",
   "name": "MingLiU",
   "app": "powerpoint",
-  "languageFamily": "ea",
+  "scriptGroup": "eastAsian",
   "languages": [
     "zh-Hant"
   ],

@@ -417,7 +417,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "keystone-build-partners",
+    "organization": "keystone-build-partners",
     "bio": "Leads construction planning for Keystone Build Partners.",
     "socials": {
       "tiktok": "@keystone-build-partners-speaker"
@@ -759,7 +759,7 @@
         "raleway": {
           "name": "Raleway",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Raleway",
           "minor": "Raleway",
@@ -770,7 +770,7 @@
         "gautami": {
           "name": "Gautami",
           "app": "powerpoint",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "te"
           ],
@@ -783,7 +783,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

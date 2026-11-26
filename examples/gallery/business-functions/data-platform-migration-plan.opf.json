@@ -424,7 +424,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "fathom-retail",
+    "organization": "fathom-retail",
     "bio": "Leads data engineering planning for Fathom Retail.",
     "socials": {
       "youtube": "@fathom-retail-speaker"
@@ -763,7 +763,7 @@
         "grandview": {
           "name": "Grandview",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Grandview Display",
           "minor": "Grandview",
@@ -774,7 +774,7 @@
         "noto-nastaliq-urdu": {
           "name": "Noto Nastaliq Urdu",
           "app": "google-slides",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "ur",
             "pa-Arab"
@@ -788,7 +788,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

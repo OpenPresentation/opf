@@ -47,8 +47,8 @@ test('a size the author wrote wins over the role size', () => {
 });
 
 test('a lower floor does not raise the size, a higher floor does', () => {
-  const low = composeSlide({ title: 'Floor', text: 'Short.', composition: { minFontSize: 20 } }, { layout: layouts.text });
+  const low = composeSlide({ title: 'Floor', text: 'Short.', composition: { minFontSizePx: 20 } }, { layout: layouts.text });
   assert.equal(low.items.find((item) => item.field === 'text').text.fontSize >= 28, true);
-  const high = composeSlide({ title: 'Floor', text: 'Short.', composition: { minFontSize: 30 } }, { layout: layouts.text });
+  const high = composeSlide({ title: 'Floor', text: 'Short.', composition: { minFontSizePx: 30 } }, { layout: layouts.text });
   assert.ok(high.items.find((item) => item.field === 'text').text.fontSize >= 30);
 });

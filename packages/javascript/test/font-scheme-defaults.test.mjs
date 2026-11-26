@@ -67,7 +67,7 @@ test('one shared engine default font scheme: Aptos Display / Aptos (FF-35, docs/
   assert.deepEqual(defaults.fontScheme,ENGINE_DEFAULT_FONT_SCHEME);
   // The engine default is the gallery's aptos scheme, as drawn: the same families, no catalog lookup.
   assert.deepEqual(resolveFontFamilies(ENGINE_DEFAULT_FONT_SCHEME),resolveFontFamilies(record('aptos')));
-  assert.equal(ENGINE_DEFAULT_FONT_SCHEME.languageFamily,record('aptos').languageFamily);
+  assert.equal(ENGINE_DEFAULT_FONT_SCHEME.scriptGroup,record('aptos').scriptGroup);
   // Every gallery theme names a font scheme, so the last-resort default only applies to themes without one.
   for(const [id,theme] of Object.entries(gallery.themes))assert.ok(record(theme.fontScheme),`${id} names a font scheme of the default catalog`);
 });

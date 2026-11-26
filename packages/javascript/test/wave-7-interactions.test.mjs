@@ -44,7 +44,7 @@ for (const [language, text] of Object.entries(TEXT)) {
   const direction = language === 'ar' ? 'rtl' : 'ltr';
 
   test(`LH-155 with LH-158 (${direction}): the closing stack over a picture is placed by the picture-text scores`, () => {
-    const slide = (placement) => ({ title: text.thanks, blocks: [{ region: 'body', text: text.contact }], design: { background: { type: 'image', src: PHOTO, tone: 'dark', ...(placement ? { textPlacement: placement } : {}) } } });
+    const slide = (placement) => ({ title: text.thanks, blocks: [{ region: 'body', text: text.contact }], design: { background: { type: 'image', src: PHOTO, appearance: 'dark', ...(placement ? { textPlacement: placement } : {}) } } });
     const at = (extra, placement) => composeSlide(slide(placement), { layout: layouts.closing, direction, darkBackground: true, ...extra });
     const calm = at({ pictureLuminance: () => grid('calm') }), busy = at({ pictureLuminance: () => grid('busy') }), estimated = at({}), authored = at({}, 'top-start');
     const top = (result) => field(result, 'title').box.y;

@@ -9,7 +9,7 @@ const titleFill = (document) => toSvg(document, 1).match(/<text fill="([^"]+)"[^
 
 const duotone = { recolor: { dark: 'dark2', light: 'accent1' }, overlay: { color: 'dark1', opacity: 0.6, edge: 'bottom', size: 0.5 } };
 assert.equal(titleFill(deck(duotone)), '#FFFFFF', 'a dark duotone draws light text');
-assert.equal(titleFill(deck({ ...duotone, tone: 'light' })), '#000000', 'an explicit tone wins');
+assert.equal(titleFill(deck({ ...duotone, appearance: 'light' })), '#000000', 'an explicit tone wins');
 assert.equal(titleFill(deck({ overlay: { color: 'dark1', opacity: 0.4 } })), '#FFFFFF', 'a dark full-frame overlay draws light text');
 assert.equal(titleFill(deck({ overlay: false })), '#000000', 'a photograph with nothing over it keeps dark text');
 console.log('rr105-picture-tone: ok');

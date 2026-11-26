@@ -3,7 +3,7 @@
   "id": "century-schoolbook",
   "name": "Century Schoolbook",
   "app": "powerpoint",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Century Schoolbook",
   "minor": "Century Schoolbook",

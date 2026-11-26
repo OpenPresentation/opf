@@ -412,7 +412,7 @@
         "bookman": {
           "name": "Bookman",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Bookman Old Style",
           "minor": "Bookman Old Style",
@@ -423,7 +423,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

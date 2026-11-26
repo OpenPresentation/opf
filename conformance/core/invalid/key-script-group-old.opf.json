@@ -1,0 +1,14 @@
+{
+  "design": {
+    "fontScheme": {
+      "major": "Arial",
+      "minor": "Arial",
+      "languageFamily": "complexScript"
+    }
+  },
+  "slides": [
+    {
+      "title": "Hello"
+    }
+  ]
+}

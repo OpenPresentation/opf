@@ -66,7 +66,7 @@ function fittedSize(item: ComposedItem, slide: RuleSlide, document: Rec): number
 	if (item.field === 'code') return body(item.codeLayout?.parts);
 	if (item.field === 'table') {
 		try {
-			const table = layoutTable(item.value, item.box, { scale: canvasScale(slide.composition!), minFontSize: item.composition.minFontSize, fontFamily: slide.design.fonts.body, textMeasurement: slide.measurement, path: item.path, presentation: document });
+			const table = layoutTable(item.value, item.box, { scale: canvasScale(slide.composition!), minFontSizePx: item.composition.minFontSizePx, fontFamily: slide.design.fonts.body, textMeasurement: slide.measurement, path: item.path, presentation: document });
 			if (table.overflow) return undefined;
 			const sizes = table.rows.flatMap((row) => row.cells.filter((cell) => !cell.header).map((cell) => cell.fit.fontSize));
 			return sizes.length ? Math.min(...sizes) : undefined;

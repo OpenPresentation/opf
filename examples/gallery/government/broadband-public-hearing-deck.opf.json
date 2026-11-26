@@ -419,7 +419,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "rural-connectivity-office",
+    "organization": "rural-connectivity-office",
     "bio": "Leads public engagement planning for Rural Connectivity Office.",
     "socials": {
       "youtube": "@rural-connectivity-office-speaker"
@@ -759,7 +759,7 @@
         "segoe-ui": {
           "name": "Segoe UI",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Segoe UI Semibold",
           "minor": "Segoe UI",
@@ -770,7 +770,7 @@
         "sylfaen": {
           "name": "Sylfaen",
           "app": "powerpoint",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "hy",
             "ka"
@@ -784,7 +784,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

@@ -3,7 +3,7 @@
   "id": "roboto",
   "name": "Roboto",
   "app": "google-slides",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Roboto",
   "minor": "Roboto",

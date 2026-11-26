@@ -47,7 +47,7 @@ for (const [family, text] of samples) {
 
 // Only a face whose license allows it is cut: a Reserved Font Name in the face's name (Carlito), a host's own face, or an
 // fsType that forbids subsetting keeps the whole face.
-const carlito = toSvg({ name: 'Carlito', design: { fontScheme: 'x-one' }, catalogs: { custom: { fontSchemes: { 'x-one': { name: 'Carlito', app: 'powerpoint', languageFamily: 'latin', languages: [], major: 'Carlito', minor: 'Carlito', textSample: 'x', type: 'sans-serif' } } } }, slides: [{ title: 'Quarterly review' }] }, 1, { fonts });
+const carlito = toSvg({ name: 'Carlito', design: { fontScheme: 'x-one' }, catalogs: { custom: { fontSchemes: { 'x-one': { name: 'Carlito', app: 'powerpoint', scriptGroup: 'latin', languages: [], major: 'Carlito', minor: 'Carlito', textSample: 'x', type: 'sans-serif' } } } }, slides: [{ title: 'Quarterly review' }] }, 1, { fonts });
 const carlitoFaces = embedded(carlito).filter((face) => face.family === 'Carlito');
 assert.ok(carlitoFaces.length > 0 && carlitoFaces.every((face) => Buffer.compare(Buffer.from(face.data), Buffer.from(whole(face))) === 0), 'Carlito reserves its name: embedded whole');
 const roboto = fonts.registry.exportFaces().find((face) => face.family === 'Roboto').data;

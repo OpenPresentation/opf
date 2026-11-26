@@ -32,7 +32,7 @@
       "name": "Alice Rivera",
       "title": "Presenter",
       "photo": "asset:alice-photo",
-      "organizationId": "primary-org",
+      "organization": "primary-org",
       "email": "alice@primary.example",
       "socials": {
         "x": "@alice"
@@ -42,7 +42,7 @@
       "id": "sam",
       "name": "Sam Taylor",
       "title": "Co-presenter",
-      "organizationId": "partner-org",
+      "organization": "partner-org",
       "socials": {
         "mastodon": "@sam@social.example"
       }

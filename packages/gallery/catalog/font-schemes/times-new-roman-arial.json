@@ -3,7 +3,7 @@
   "id": "times-new-roman-arial",
   "name": "Times New Roman and Arial",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "ar",
     "fa",

@@ -259,7 +259,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "lakeview-tech-institute",
+    "organization": "lakeview-tech-institute",
     "bio": "Leads workforce education planning for Lakeview Tech Institute.",
     "socials": {
       "linkedin": "@lakeview-tech-institute-speaker"
@@ -658,7 +658,7 @@
         "constantia": {
           "name": "Constantia",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Constantia",
           "minor": "Constantia",
@@ -669,7 +669,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

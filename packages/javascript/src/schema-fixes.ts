@@ -14,6 +14,7 @@ import { REMOVED_DESIGN_KEYS } from "./design-hints.js";
 import { cellsInReadingOrder, type GridCell, nearestGridCell } from "./grid-cells.js";
 import type { CatalogOptions } from "./catalog-refs.js";
 import { resolvesToValidRecord } from "./record-validity.js";
+import { LOOKS_LIKE_HOST_AND_PATH, renamedKeyAt, renamedKeyMessage, renamedScriptGroupValue, renamedValueMessage } from "./renamed-keys.js";
 
 /** The most "Change to ..." fixes one enum finding carries. */
 const MAX_CHANGES = 5;
@@ -182,9 +183,66 @@ function sourceRepair(finding: Finding, document: unknown, segments: string[]): 
 
 /** OPF 0.35: what replaced a layout region's `listColumns` (removedKeyRepair). */
 export const REMOVED_LIST_COLUMNS = "OPF 0.35 removed the region key listColumns. Delete it: a list of more than 6 entries flows into up to three columns in any region without an arrangement (or with the numbered one) when that sets it at least as large as one column; a list payload's own columns (1, 2, 3 or \"auto\") still chooses.";
-export function removedKeyRepair(finding: Finding, document: unknown, options?: CatalogOptions): { help: string; fixes: FindingFix[]; dropSuggestions?: true } | undefined {
+export interface KeyRepair {
+  help: string;
+  fixes: FindingFix[];
+  dropSuggestions?: true;
+  /** The finding's own message in place of the schema engine's. */
+  message?: string;
+  /** No generic fix (a near-miss rename, a move into `extensions`) is added after this one. */
+  exclusive?: true;
+}
+
+/**
+ * OPF 0.37: a key or value that was renamed (renamed-keys.ts). An old key fails the closed schema as an unknown property: the finding says
+ * what it became, and the safe fix `rename-key` moves it (none when the new key is already there: the author removes one). An old short
+ * `scriptGroup` value (`ea`, `cs`) fails the enum: the safe fix `rename-value` writes the long name. A reference `link` that lacks its
+ * scheme gets the fix `add-https`, which is not safe. `undefined` for any other finding.
+ */
+export function renamedKeyRepair(finding: Finding, document: unknown): KeyRepair | undefined {
   const validation = finding.validation;
   if (!validation || (finding.ruleId !== "opf/schema" && finding.ruleId !== "opf/catalog-record")) return undefined;
+  const segments = segmentsOf(finding.path);
+  if (validation.keyword === "additionalProperties") {
+    const rename = renamedKeyAt(segments);
+    if (!rename) return undefined;
+    const parent = segments.slice(0, -1), owner = readAt(document, parent);
+    if (!isRecord(owner) || !Object.hasOwn(owner, rename.from)) return undefined;
+    const both = Object.hasOwn(owner, rename.to);
+    const note = rename.note ? ` ${rename.note}` : "";
+    const help = both
+      ? `OPF 0.37 renamed "${rename.from}" to "${rename.to}".${note} This object has both: keep "${rename.to}" and remove "${rename.from}".`
+      : `OPF 0.37 renamed "${rename.from}" to "${rename.to}".${note} It draws the same; the fix renames it.`;
+    const fixes = both ? [] : [patch("rename-key", `Rename ${rename.from} to ${rename.to}`, [{ op: "move", from: finding.path, path: pointerOf([...parent, rename.to]) }], true)];
+    return { help, message: renamedKeyMessage(rename, both), dropSuggestions: true, exclusive: true, fixes };
+  }
+  if (validation.keyword === "enum" && segments.at(-1) === "scriptGroup") {
+    const old = readAt(document, segments), long = renamedScriptGroupValue(old);
+    if (long === undefined) return undefined;
+    return {
+      help: `OPF 0.37 writes the script groups of a font scheme "latin", "eastAsian" and "complexScript"; "${String(old)}" is "${long}". It draws the same.`,
+      message: renamedValueMessage(String(old), long),
+      exclusive: true,
+      fixes: [patch("rename-value", `Write ${long}`, [{ op: "replace", path: finding.path, value: long }], true)],
+    };
+  }
+  if (validation.keyword === "pattern" && segments.at(-1) === "link" && segments.at(-3) === "references") {
+    const value = readAt(document, segments);
+    if (typeof value !== "string" || !LOOKS_LIKE_HOST_AND_PATH.test(value)) return undefined;
+    return {
+      help: `A reference's link is an http or https address, a "mailto:" or a "tel:" link. "${value}" looks like an address without its scheme; "https://${value}" is a guess the author confirms, so the fix is not applied by default.`,
+      exclusive: true,
+      fixes: [patch("add-https", "Add https://", [{ op: "replace", path: finding.path, value: `https://${value}` }])],
+    };
+  }
+  return undefined;
+}
+
+export function removedKeyRepair(finding: Finding, document: unknown, options?: CatalogOptions): KeyRepair | undefined {
+  const validation = finding.validation;
+  if (!validation || (finding.ruleId !== "opf/schema" && finding.ruleId !== "opf/catalog-record")) return undefined;
+  const renamed = renamedKeyRepair(finding, document);
+  if (renamed) return renamed;
   const segments = segmentsOf(finding.path);
   if (validation.keyword === "additionalProperties" && segments.length === 3 && segments[0] === "slides" && readAt(document, segments) !== undefined && nearestGridCell(segments[2]!) !== undefined) return cellKeyRepair(document, segments.slice(0, 2), segments[2]!, options);
   if (validation.keyword === "pattern" && finding.ruleId === "opf/schema" && segments.at(-1) === "datasource") {

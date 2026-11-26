@@ -3,7 +3,7 @@
   "id": "noto-sans-thai",
   "name": "Noto Sans Thai",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "th"
   ],

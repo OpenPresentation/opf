@@ -167,7 +167,7 @@ describe('audit', () => {
 describe('pagination', () => {
   test('a long rich quote paginates by text offset and keeps each run formatting', () => {
     const runs = Array.from({ length: 40 }, (_, index) => (index % 2 ? { text: `bold sentence ${index}. `, bold: true } : `Plain sentence number ${index}. `));
-    const slide = { title: 'Quote', quote: { text: runs, attribution: 'Ada' }, composition: { minFontSize: 28 } };
+    const slide = { title: 'Quote', quote: { text: runs, attribution: 'Ada' }, composition: { minFontSizePx: 28 } };
     const result = paginateSlide(slide, { width: 640, height: 360, presentation: { slides: [slide] } });
     assert.ok(result.slides.length > 1);
     const text = result.slides.map(page => (page.quote.text ?? []).map(run => (typeof run === 'string' ? run : run.text)).join('')).join('');

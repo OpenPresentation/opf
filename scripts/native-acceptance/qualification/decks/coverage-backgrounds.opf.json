@@ -62,7 +62,7 @@
       "design": {
         "background": {
           "type": "gradient",
-          "tone": "dark",
+          "appearance": "dark",
           "gradient": {
             "angle": 45,
             "stops": [
@@ -91,7 +91,7 @@
       "design": {
         "background": {
           "type": "gradient",
-          "tone": "light",
+          "appearance": "light",
           "gradient": {
             "angle": 90,
             "stops": [
@@ -134,7 +134,7 @@
           "src": "./assets/cover-image.png",
           "alt": "Harbor at dusk",
           "fit": "contain",
-          "tone": "dark",
+          "appearance": "dark",
           "overlay": false
         }
       }
@@ -150,7 +150,7 @@
           "alt": "Harbor at dusk",
           "fit": "stretch",
           "opacity": 0.3,
-          "tone": "light"
+          "appearance": "light"
         }
       }
     },

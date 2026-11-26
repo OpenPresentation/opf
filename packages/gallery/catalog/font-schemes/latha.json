@@ -3,7 +3,7 @@
   "id": "latha",
   "name": "Latha",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "ta"
   ],

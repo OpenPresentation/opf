@@ -3,7 +3,7 @@
   "id": "nirmala-ui",
   "name": "Nirmala UI",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "hi",
     "mr",

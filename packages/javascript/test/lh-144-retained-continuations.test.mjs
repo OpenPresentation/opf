@@ -32,13 +32,13 @@ for(const {id,count,offset} of [{id:'inverted-pyramid',count:5,offset:0},{id:'in
   firstMaximum??=Math.max(...fonts);
   assert.ok(fonts.every(size=>size<=firstMaximum+1e-6),'actual painted continuation text obeys the first-page cap');
   assert.ok((drawn.arrangements??[]).every(arrangement=>arrangement.fontSize<=firstMaximum+1e-6));
-  assert.equal(result.presentation.slides[page].composition?.minFontSize,undefined,'no derived minimum override');
+  assert.equal(result.presentation.slides[page].composition?.minFontSizePx,undefined,'no derived minimum override');
  }
  assert.equal(result.continued[0].sourceSlideIndex,offset);
  assert.deepEqual(result.continued[0].blocks,count===5?[[0,1],[2,3],[4]]:[[0,1],[2,3],[4,5]]);
 });
 test('actual arrangements and their rich fragments honor an explicit body cap',()=>{
- const doc=documentFor('inverted-pyramid',2);doc.slides[0].composition={maxFontSize:17};
+ const doc=documentFor('inverted-pyramid',2);doc.slides[0].composition={maxFontSizePx:17};
  const drawn=geometry(doc,0);
  assert.deepEqual(fitIssues(drawn),[]);
  assert.deepEqual(bodies(drawn).flatMap(item=>item.value),doc.slides[0].blocks.flatMap(block=>block.items));
@@ -55,7 +55,7 @@ for(const id of ['org-chart','hierarchy'])test(`${id}: unfit whole units keep fu
 });
 test('a real arrangement, not only a fallback list, obeys the automatic cap',()=>{
  const doc=documentFor('inverted-pyramid',1);
- doc.slides[0]={layout:'inverted-pyramid',...sampleSlide(layouts['inverted-pyramid'],1,'short'),composition:{maxFontSize:24}};
+ doc.slides[0]={layout:'inverted-pyramid',...sampleSlide(layouts['inverted-pyramid'],1,'short'),composition:{maxFontSizePx:24}};
  const drawn=geometry(doc,0);
  assert.ok(drawn.arrangements.length>0,'exercise actually drawn arrangement nodes');
  assert.ok(drawn.arrangements.every(arrangement=>arrangement.fontSize<=24+1e-6));
@@ -80,16 +80,16 @@ test('authored rich sizes and styles remain distinct from automatic body targets
  assert.ok(explicit.every(fragment=>fragment.run.fontFamily==='Roboto'&&fragment.run.bold&&fragment.run.italic));
  assert.ok(painted.filter(fragment=>fragment.run.fontSize===undefined).every(fragment=>fragment.fontSize>=automatic-1e-6));
 });
-for(const composition of [{maxFontSize:18},{minFontSize:24}])test(`authored composition constraints survive continuation ${JSON.stringify(composition)}`,()=>{
+for(const composition of [{maxFontSizePx:18},{minFontSizePx:24}])test(`authored composition constraints survive continuation ${JSON.stringify(composition)}`,()=>{
  const doc=documentFor('inverted-pyramid');doc.slides[0].composition=composition;
  const saved=structuredClone(doc),result=continueOverfull(doc);
  assert.equal(result.continued.length,1);assert.deepEqual(doc,saved);
  assert.deepEqual(result.presentation.slides.flatMap(slide=>slide.blocks),doc.slides[0].blocks);
  for(let index=0;index<result.presentation.slides.length;index++){
   const slide=result.presentation.slides[index],drawn=geometry(result.presentation,index),fonts=bodies(drawn).flatMap(fragments).map(fragment=>fragment.fontSize);
-  assert.equal(slide.composition.minFontSize,composition.minFontSize);
-  if(composition.maxFontSize)assert.ok(fonts.every(size=>size<=composition.maxFontSize+1e-6));
-  if(composition.minFontSize)assert.ok(fonts.every(size=>size>=composition.minFontSize-1e-6));
+  assert.equal(slide.composition.minFontSizePx,composition.minFontSizePx);
+  if(composition.maxFontSizePx)assert.ok(fonts.every(size=>size<=composition.maxFontSizePx+1e-6));
+  if(composition.minFontSizePx)assert.ok(fonts.every(size=>size>=composition.minFontSizePx-1e-6));
   assert.deepEqual(fitIssues(drawn),[]);
  }
 });

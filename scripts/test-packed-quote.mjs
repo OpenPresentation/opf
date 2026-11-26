@@ -15,7 +15,7 @@ const before=editor.presentation;
 assert.ok(editor.paginateSlide(0,options).change,'A single-page readability policy must be committed');
 const accepted=editor.presentation;
 assert.equal(accepted.slides.length,1);
-assert.equal(accepted.slides[0].composition.minFontSize,24);
+assert.equal(accepted.slides[0].composition.minFontSizePx,24);
 assert.deepEqual(accepted.slides[0].quote,before.slides[0].quote);
 const item=resolvePresentation(accepted,options).slides[0].geometry.items.find(item=>item.field==='quote');
 assert.ok(item.quoteLayout.parts.every(part=>part.fit.fontSize>=24));

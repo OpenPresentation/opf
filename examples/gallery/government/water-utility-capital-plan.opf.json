@@ -428,7 +428,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "lakehaven-water-district",
+    "organization": "lakehaven-water-district",
     "bio": "Leads public utilities planning for Lakehaven Water District.",
     "socials": {
       "youtube": "@lakehaven-water-district-speaker"
@@ -770,7 +770,7 @@
         "roboto": {
           "name": "Roboto",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Roboto",
           "minor": "Roboto",
@@ -781,7 +781,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

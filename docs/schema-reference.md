@@ -174,7 +174,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `id` | yes | `string` | Stable identifier for the organization, used to reference it from Speaker.organizationId and to address it in built-in variables as 'organization.<id>.<field>'. Must be unique among organizations (a duplicate is a val... |
+| `id` | yes | `string` | Stable identifier for the organization, used to reference it from Speaker.organization and to address it in built-in variables as 'organization.<id>.<field>'. Must be unique among organizations (a duplicate is a valid... |
 | `name` | yes | `string` | Display name. The built-in variable 'organization.name' (primary organization) or 'organization.<id>.name' carries it into any string, such as a header or footer text of '{{organization.name}}'. |
 | `legalName` | no | `string` | Optional legal entity name when it differs from the display name. Never drawn automatically; available as the built-in variable 'organization.legalName'. |
 | `logo` | no | `oneOf:ref:Asset / ref:OrganizationLogo` | The organization's logo. A path, URL or Asset is one logo for every shape; an object gives up to four shapes (full, stacked, icon, wordmark), each a path or Asset, or { onLight, onDark } for the two backgrounds. A pat... |
@@ -201,7 +201,7 @@ _No named properties._
 | `email` | no | `string` | Contact email. Never drawn automatically; available as the built-in variable 'speaker.email'. |
 | `phone` | no | `string` | Contact phone number for the speaker. E.164 format is recommended. Never drawn automatically; available as the built-in variable 'speaker.phone'. |
 | `bio` | no | `string` | Short biographical paragraph. Never drawn automatically; available as the built-in variable 'speaker.bio', for a bio or 'about the speaker' slide you write. |
-| `organizationId` | no | `string` | Reference to an Organization.id in organization; it must name an existing organization (a validation error otherwise). Attribution metadata for hosts: no engine draws it or changes which organization is primary becaus... |
+| `organization` | no | `string` | Reference to an Organization.id in organization; it must name an existing organization (a validation error otherwise). Attribution metadata for hosts: no engine draws it or changes which organization is primary becaus... |
 | `socials` | no | `ref:Socials` | Optional social media handles or URLs for the speaker. Authoring metadata only: nothing draws speaker socials and there is no built-in variable for them (the 'socials' header/footer field draws the primary organizatio... |
 
 
@@ -277,7 +277,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Typography selections used by the design system. The pair fields (major, minor) and refinement fields (type, app, languageFamily) mirror font-scheme.schema.json (https://openpresentation.org/schema/opf-font-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields. Two parallel models are supported and may be mixed: - OOXML pairs (major, minor) - heading and body family names that round-trip directly to PowerPoint majorFont/minorFont entries. - Abstract roles...
+- Purpose: Typography selections used by the design system. The pair fields (major, minor) and refinement fields (type, app, scriptGroup) mirror font-scheme.schema.json (https://openpresentation.org/schema/opf-font-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields. Two parallel models are supported and may be mixed: - OOXML pairs (major, minor) - heading and body family names that round-trip directly to PowerPoint majorFont/minorFont entries. - Abstract roles (he...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -288,7 +288,7 @@ _No named properties._
 | `complexScript` | no | `object` | Complex-script fonts (for example Arabic, Hebrew, Indic and Thai). Maps to the OOXML a:cs element of majorFont (major) and minorFont (minor), and to run-level a:cs. When set, they fill the complexScript slot for every... |
 | `type` | no | `enum:sans-serif \| serif \| monospace` | High-level typographic class of the scheme. |
 | `app` | no | `enum:powerpoint \| google-slides` | Target application this font pairing is intended for. Metadata for pickers and catalog filters: no engine changes its output by it. |
-| `languageFamily` | no | `enum:latin \| ea \| cs \| eastAsian \| complexScript` | Font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' (or 'eastAsian', the same value) for East Asian scripts, 'cs' (or 'complexScript', the same value) for Complex Scripts. The long... |
+| `scriptGroup` | no | `enum:latin \| eastAsian \| complexScript` | The script group this scheme is intended for: 'latin' for Latin-script content and every script outside the other two groups (Cyrillic and Greek too), 'eastAsian' for East Asian scripts, 'complexScript' for Complex Sc... |
 | `heading` | no | `string` | Abstract role: font family name used for slide titles and headings. Maps onto the OOXML major slot when serializing. |
 | `body` | no | `string` | Abstract role: font family name used for body copy. Maps onto the OOXML minor slot when serializing. |
 | `accent` | no | `string` | Abstract role: font family name used for accent text. When set, the slide tag (eyebrow) and the quote body use this family instead of the body and heading families; nothing else changes. resolveFontFamilies() returns... |
@@ -615,7 +615,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `tone` | no | `enum:dark \| light` | Whether the background is dark or light, which picks the color map (dark1 or light1) so text, lines and neutrals read on it. Without a tone a picture or gradient takes the deck's variant, else counts as light. |
+| `appearance` | no | `enum:dark \| light` | Whether the background is dark or light, which picks the color map (dark1 or light1) so text, lines and neutrals read on it. Without an appearance a picture or gradient takes the deck's variant, else counts as light. |
 | `type` | yes | `const:"gradient"` | Fixed gradient background fill. |
 | `gradient` | yes | `object` | Gradient fill definition: a linear gradient along 'angle' (default 0, left to right). A shape fill's Gradient also takes radial and path types; a background does not. |
 | `opacity` | no | `number` | Background opacity from 0 (fully transparent) to 1 (fully opaque). |
@@ -629,7 +629,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `tone` | no | `enum:dark \| light` | Whether the background is dark or light, which picks the color map (dark1 or light1) so text, lines and neutrals read on it. Without a tone a picture takes the tone its recolor, opacity and overlay imply (a duotone in... |
+| `appearance` | no | `enum:dark \| light` | Whether the background is dark or light, which picks the color map (dark1 or light1) so text, lines and neutrals read on it. Without an appearance a picture takes the appearance its recolor, opacity and overlay imply... |
 | `type` | yes | `const:"image"` | Picture background. |
 | `src` | yes | `string` | Source for the background image: an 'asset:<id>' reference, HTTPS URL, data URI, or a relative path resolved against the OPF file location. |
 | `alt` | no | `string` | Alternative text. A background with alt is meaningful: PowerPoint export draws it as a full-slide picture at the back that carries the text, so screen readers see it. Without alt it is decorative and exports as the na... |
@@ -1107,7 +1107,7 @@ _No named properties._
 | `diagram` | no | `oneOf:string / ref:Diagram` | Diagram payload: Mermaid source (flowchart, sequence, state, class, ER, mindmap, timeline, journey, C4, architecture and the other built-in Mermaid families), or Graphviz DOT or PlantUML source with 'syntax', drawn in... |
 | `caption` | no | `ref:Caption` | Caption for an image, chart, table, video, embed or diagram payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups. |
 | `blocks` | no | `array<ref:ContentPayload>` | Ordered children of a group. Each child is a leaf or another group. |
-| `composition` | no | `ref:Composition` | Arrangement within this group. Only minFontSize, maxFontSize and overflow inherit from the parent; strict overflow cannot be weakened. |
+| `composition` | no | `ref:Composition` | Arrangement within this group. Only minFontSizePx, maxFontSizePx and overflow inherit from the parent; strict overflow cannot be weakened. |
 | `emphasis` | no | `boolean` | true draws this block or group on the slide's emphasis surface: a contrasting card in its cell (a dark card on a light slide, an accent card on a dark one), from the deck's own scheme slots, with every text color on i... |
 | `icon` | no | `ref:IconReference` | Groups only: an icon drawn on a chip at the top of the group, before its heading, as a card of features or topics draws one: "<set>:<name>" ("lucide:shield-check"), a name from the deck's icons, or an SVG source. A li... |
 
@@ -1279,7 +1279,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `id` | yes | `string` | Identifier runs cite. Unique within the references list. |
 | `text` | yes | `oneOf:string / array<ref:TextRun>` | The reference as it is listed: a string or TextRun[] for inline rich text. |
-| `url` | no | `string` | Optional link for the reference; a references slide links its entry to it. |
+| `link` | no | `string` | Optional link for the reference: an http(s) URL, a 'mailto:' address or a 'tel:' number. A references slide links its entry to it. |
 
 
 ### FiniteNumber
@@ -1300,6 +1300,15 @@ _No named properties._
 _No named properties._
 
 
+### ReferenceLineStroke
+
+- Type: `anyOf:const:"none" / object`
+- Required fields: none
+- Purpose: The stroke of a chart reference line: its color, width and dash, or 'none' for no line. The dash takes the preset names a shape outline's Stroke.dash takes (a:prstDash); a custom dash array is not available on a chart line. Every part is optional and falls back to the chart's default.
+
+_No named properties._
+
+
 ### ChartReferenceLine
 
 - Type: `object`
@@ -1312,7 +1321,7 @@ _No named properties._
 | `axis` | no | `enum:value \| secondary` | Secondary requires a combo chart with an actual secondary line series. |
 | `label` | no | `string` | Optional nonblank plain text, shown verbatim. Omission draws no label. |
 | `labelPosition` | no | `enum:start \| end` | Logical endpoint. Horizontal start/end mirror in RTL; on bars they mean top/bottom. Requires label. |
-| `stroke` | no | `ref:Line` | The line's color, width and dash, or 'none' to draw only the label. Defaults: the chart-text neutral, 4/3 reference pixels (1 point) and 'dash'. The value expands the axis bounds whether or not the line is drawn. |
+| `stroke` | no | `ref:ReferenceLineStroke` | The line's color, width and dash, or 'none' to draw only the label. Defaults: the chart-text neutral, 4/3 reference pixels (1 point) and 'dash'. The value expands the axis bounds whether or not the line is drawn. |
 
 
 ### ChartBand
@@ -1339,7 +1348,7 @@ _No named properties._
 | `type` | yes | `enum:100pct-stacked-area \| 100pct-stacked-bar \| 100pct-stacked-column \| area \| bar \| box-and-whisker \| bullet \| column \| combo \| doughnut \| filled-radar \| funnel \| histogram \| line \| line-with-markers \| pareto \| pie \| radar \| radar-with-markers \| scatter \| stacked-area \| stacked-bar \| stacked-column \| stacked-line \| stacked-line-with-markers \| treemap \| waterfall \| world` | Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types OPF supports natively in its preview and PPTX export, plus 'combo' (clustered columns with line series, see 'line' and 'secondar... |
 | `data` | yes | `oneOf:ref:ChartData / ref:DatasetRef` | Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ "dataset": "<id>" }) plots a top-level dataset instead. Data from a spreadsheet or file is... |
 | `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name: which column is the category, which is the X column of a scatter chart, and which columns are plotted, in order. Absent keeps the positional rule (first column the category, the... |
-| `line` | no | `array<string>` | Combo charts only (type 'combo'): the plotted series, by column name, that are drawn as lines with markers; every other plotted series is drawn as clustered columns. Absent: the last plotted series is the line. A comb... |
+| `lineSeries` | no | `array<string>` | Combo charts only (type 'combo'): the plotted series, by column name, that are drawn as lines with markers; every other plotted series is drawn as clustered columns. Absent: the last plotted series is the line. A comb... |
 | `secondaryAxis` | no | `array<string>` | Combo charts only: line series, by column name, plotted against a secondary value axis at the end of the plot (the right; the left in a right-to-left deck, where the category axis runs from the right). That axis has i... |
 | `referenceLines` | no | `array<ref:ChartReferenceLine>` | Explicit numeric references on the chart's value axis, supported on the chart types with one value axis for every series: column, bar, line, line-with-markers, area and combo. A non-empty list on any other type (the s... |
 | `bands` | no | `array<ref:ChartBand>` | Ranges of the value axis shaded behind the data, in increasing order: each band runs from the previous band's 'to' (the first from the axis minimum) to its own 'to'. Colors come from the scheme's neutrals, darkest fir... |
@@ -1784,7 +1793,7 @@ _No named properties._
 | `color` | no | `ref:ColorRef` | Default text color, overridden by individual rich run colors. Accepts a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. |
 | `bold` | no | `boolean` | Bold cell text. Runs that set their own bold keep it; a number cell stays bold and still uses the cell's or column's number format. |
 | `align` | no | `enum:start \| center \| end` | Horizontal text alignment inside the cell. Logical: 'start' is the edge a paragraph starts on (the left for left-to-right text, the right for right-to-left text) and 'end' is the opposite edge. |
-| `verticalAlign` | no | `enum:top \| middle \| bottom` | Vertical alignment inside the padded cell box. |
+| `anchor` | no | `enum:top \| middle \| bottom` | Vertical alignment inside the padded cell box. |
 | `padding` | no | `ref:TableCellPadding` |  |
 | `borders` | no | `object` | Independent cell edges. An omitted edge keeps the table's default rule: a line under every row (and over the first row), none between columns. Width 0 removes an edge. |
 
@@ -1902,7 +1911,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize, maxFontSize and overflow. Blocks placed in cells (ContentPayload.region on a slide without a layout) retain their positions. A layout defines its grid as one ordered list of regions; its composition supports gap, padding, minFontSize, maxFontSize and overflow rather than mode, columns or weights.
+- Purpose: Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSizePx, maxFontSizePx and overflow. Blocks placed in cells (ContentPayload.region on a slide without a layout) retain their positions. A layout defines its grid as one ordered list of regions; its composition supports gap, padding, minFontSizePx, maxFontSizePx and overflow rather than mode, columns or weights.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -1911,6 +1920,6 @@ _No named properties._
 | `gap` | no | `number` | Space between cells as a fraction of the container short edge (canvas at slide root). Default 0.03333333333333333. |
 | `padding` | no | `number` | Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group. |
 | `weights` | no | `array<number>` | Relative track sizes: columns for row/grid/auto, rows for column. Omitted tracks have weight 1; extra weights are ignored. |
-| `minFontSize` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
-| `maxFontSize` | no | `number` | Largest body text size in reference pixels at a 720-pixel canvas short edge: paragraphs, lists, quotes, metrics and timelines are never set larger, their growth included (headings, tables, code and charts keep their s... |
+| `minFontSizePx` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
+| `maxFontSizePx` | no | `number` | Largest body text size in reference pixels at a 720-pixel canvas short edge: paragraphs, lists, quotes, metrics and timelines are never set larger, their growth included (headings, tables, code and charts keep their s... |
 | `overflow` | no | `enum:warn \| error` | warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn. |

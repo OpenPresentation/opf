@@ -1010,14 +1010,14 @@ function deckFor(rawSpec, index, catalogs) {
             title: "Program Sponsor",
             photo: "asset:supporting-photo",
             email: `maya@${orgDomain(org)}`,
-            organizationId: orgSlug,
+            organization: orgSlug,
             socials: { [socialOne]: "@maya-chen" },
           },
           {
             id: "jon",
             name: "Jon Alvarez",
             title: "Operating Lead",
-            organizationId: orgSlug,
+            organization: orgSlug,
             socials: { [socialTwo]: "@jon-alvarez" },
           },
         ]
@@ -1025,7 +1025,7 @@ function deckFor(rawSpec, index, catalogs) {
           id: "speaker",
           name: pick(["Maya Chen", "Jon Alvarez", "Priya Raman", "Samira Okafor", "Evan Brooks"], index),
           title: pick(["Program Sponsor", "Operating Lead", "Director of Strategy", "Chief of Staff", "Product Lead"], index),
-          organizationId: orgSlug,
+          organization: orgSlug,
           bio: `Leads ${area.toLowerCase()} planning for ${org}.`,
           socials: { [socialOne]: `@${orgSlug}-speaker` },
         };
@@ -1090,7 +1090,7 @@ async function loadCatalogs() {
   const latin = [];
   for (const id of catalogs.fontSchemes) {
     const record = JSON.parse(await readFile(path.join(catalogRoot, catalogKinds.fontSchemes, `${id}.json`), "utf8"));
-    if (record.languageFamily === "latin") latin.push(id);
+    if (record.scriptGroup === "latin") latin.push(id);
   }
   const narrativeDurations = {};
   for (const id of catalogs.narratives) {

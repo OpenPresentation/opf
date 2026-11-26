@@ -3,7 +3,7 @@
   "id": "noto-sans-jp",
   "name": "Noto Sans JP",
   "app": "google-slides",
-  "languageFamily": "ea",
+  "scriptGroup": "eastAsian",
   "languages": [
     "ja"
   ],

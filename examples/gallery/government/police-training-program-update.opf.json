@@ -260,7 +260,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "north-metro-police-academy",
+    "organization": "north-metro-police-academy",
     "bio": "Leads public safety planning for North Metro Police Academy.",
     "socials": {
       "linkedin": "@north-metro-police-academy-speaker"
@@ -599,7 +599,7 @@
         "segoe-ui-light": {
           "name": "Segoe UI Light",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Segoe UI Semilight",
           "minor": "Segoe UI Light",
@@ -610,7 +610,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

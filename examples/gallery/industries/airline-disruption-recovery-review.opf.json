@@ -425,7 +425,7 @@
       "title": "Program Sponsor",
       "photo": "asset:supporting-photo",
       "email": "maya@aerovista-airlines.example",
-      "organizationId": "aerovista-airlines",
+      "organization": "aerovista-airlines",
       "socials": {
         "x": "@maya-chen"
       }
@@ -434,7 +434,7 @@
       "id": "jon",
       "name": "Jon Alvarez",
       "title": "Operating Lead",
-      "organizationId": "aerovista-airlines",
+      "organization": "aerovista-airlines",
       "socials": {
         "facebook": "@jon-alvarez"
       }
@@ -758,7 +758,7 @@
         "georgia": {
           "name": "Georgia",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Georgia",
           "minor": "Georgia",
@@ -769,7 +769,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

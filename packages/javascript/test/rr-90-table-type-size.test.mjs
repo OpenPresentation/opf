@@ -16,7 +16,7 @@ test('a table that fits is set at the body size, not the 12 pt floor', () => {
   assert.deepEqual(layout.rows.map(row => row.box.height), [54, 54, 54, 54, 54]);
   // Scaled canvases and a raised floor behave the same way.
   assert.deepEqual([...new Set(sizes(layoutTable(four, {x: 0, y: 0, width: 580, height: 210}, {scale: .5, textMeasurement: measurement})))].map(size => Math.round(size * 2)), [25]);
-  assert.deepEqual([...new Set(sizes(layoutTable(four, box, {minFontSize: 30, textMeasurement: measurement})))], [30]);
+  assert.deepEqual([...new Set(sizes(layoutTable(four, box, {minFontSizePx: 30, textMeasurement: measurement})))], [30]);
 });
 
 test('a crowded table shrinks together, never below the floor, and keeps one size', () => {
@@ -29,7 +29,7 @@ test('a crowded table shrinks together, never below the floor, and keeps one siz
   assert.ok(size < 25 && size >= 16, `shrunk to ${size}`);
   assert.ok(layout.height <= 420.001);
   // The size is the largest that fits: one pixel more overflows.
-  const larger = layoutTable(table, {...box, height: 420}, {minFontSize: size + 1, textMeasurement: measurement});
+  const larger = layoutTable(table, {...box, height: 420}, {minFontSizePx: size + 1, textMeasurement: measurement});
   assert.equal(larger.overflow, true);
   // Nothing fits at the floor: it is reported, at the floor.
   const crushed = layoutTable(table, {...box, height: 120}, {textMeasurement: measurement});

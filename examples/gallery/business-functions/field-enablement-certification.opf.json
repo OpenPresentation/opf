@@ -273,7 +273,7 @@
     "id": "speaker",
     "name": "Maya Chen",
     "title": "Program Sponsor",
-    "organizationId": "nimbleops",
+    "organization": "nimbleops",
     "bio": "Leads training and enablement planning for NimbleOps.",
     "socials": {
       "mastodon": "@nimbleops-speaker"
@@ -636,7 +636,7 @@
         "pt-serif": {
           "name": "PT Serif",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "PT Serif",
           "minor": "PT Serif",
@@ -647,7 +647,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

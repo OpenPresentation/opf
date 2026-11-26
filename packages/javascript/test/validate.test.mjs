@@ -29,7 +29,7 @@ const countingMeasurement = () => {
 	const counter = { calls: 0 };
 	return { counter, measurement: { measure: (text, size) => (counter.calls++, text.length * size * 0.5) } };
 };
-const tight = deck([{ title: 'T', composition: { minFontSize: 16 }, blocks: [{ text: 'word '.repeat(300) }, { text: 'b' }] }]);
+const tight = deck([{ title: 'T', composition: { minFontSizePx: 16 }, blocks: [{ text: 'word '.repeat(300) }, { text: 'b' }] }]);
 
 describe('validate is lazy: only what the rules you ask for need is built', () => {
 	test("only: ['format'] builds no layout", () => {

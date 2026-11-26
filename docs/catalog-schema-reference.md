@@ -204,7 +204,7 @@ _No named properties._
 | `complexScript` | no | `object` | Complex-script fonts (for example Arabic, Hebrew, Indic and Thai). Maps to the OOXML a:cs element of majorFont (major) and minorFont (minor), and to run-level a:cs. When set, they fill the complexScript slot for every... |
 | `type` | no | `enum:sans-serif \| serif \| monospace` | High-level typographic class of the scheme. |
 | `app` | no | `enum:powerpoint \| google-slides` | Target application this font pairing is intended for. Metadata for pickers and catalog filters: no engine changes its output by it. |
-| `languageFamily` | no | `enum:latin \| ea \| cs \| eastAsian \| complexScript` | Font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' (or 'eastAsian', the same value) for East Asian scripts, 'cs' (or 'complexScript', the same value) for Complex Scripts. The long... |
+| `scriptGroup` | no | `enum:latin \| eastAsian \| complexScript` | The script group this scheme is intended for: 'latin' for Latin-script content and every script outside the other two groups (Cyrillic and Greek too), 'eastAsian' for East Asian scripts, 'complexScript' for Complex Sc... |
 | `languages` | no | `array<string>` | Optional list of BCP-47 language tags this scheme is curated for. Useful for picker UIs that group fonts by language coverage. As the design font scheme, an 'ea' or 'cs' scheme fills its script slot only when this lis... |
 | `textSample` | no | `string` | Short specimen string used by picker UIs to preview the scheme. |
 | `summary` | no | `string` | One-sentence positioning of the font pairing. |
@@ -317,7 +317,7 @@ _No named properties._
 | `overflowRegion` | no | `string` | The region where content that no region accepts goes, whatever its 'accepts', while it has room; content beyond every region's room is drawn there too, with the warning opf/layout-unplaced. Omitted: the first primary... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
-| `composition` | no | `ref:Composition` | Only 'gap', 'padding', 'minFontSize' and 'overflow', with their 0.18 meaning. A template's regions replace composition.mode, columns and weights. |
+| `composition` | no | `ref:Composition` | Only 'gap', 'padding', 'minFontSizePx' and 'overflow', with their 0.18 meaning. A template's regions replace composition.mode, columns and weights. |
 
 ### Nested Types
 
@@ -413,13 +413,13 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: A template's composition: only gap, padding, minFontSize and overflow, with their 0.18 meaning. A slide's composition overrides them; a slide's composition.mode, columns and weights arrange its first primary flowing region.
+- Purpose: A template's composition: only gap, padding, minFontSizePx and overflow, with their 0.18 meaning. A slide's composition overrides them; a slide's composition.mode, columns and weights arrange its first primary flowing region.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `gap` | no | `number` | Space between cells as a fraction of the container short edge (canvas at slide root). Default 0.03333333333333333. |
 | `padding` | no | `number` | Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group. |
-| `minFontSize` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
+| `minFontSizePx` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
 | `overflow` | no | `enum:warn \| error` | warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn. |
 
 ## Narrative Template

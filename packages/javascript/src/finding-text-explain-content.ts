@@ -160,7 +160,7 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   ),
   "opf/chart-dual-axis": ex(
     "Show the secondary series in a chart of its own beside this one, each with its own axis; two scales in one plot make crossings and heights meaningless. Drop `secondaryAxis` when the series share a unit.",
-    { title: "Revenue and margin", chart: { type: "combo", alt: "Revenue and margin", data: { columns: ["Quarter", "Revenue", "Margin"], rows: [["Q1", 12, 0.31], ["Q2", 15, 0.34]] }, line: ["Margin"], secondaryAxis: ["Margin"] } },
+    { title: "Revenue and margin", chart: { type: "combo", alt: "Revenue and margin", data: { columns: ["Quarter", "Revenue", "Margin"], rows: [["Q1", 12, 0.31], ["Q2", 15, 0.34]] }, lineSeries: ["Margin"], secondaryAxis: ["Margin"] } },
     { title: "Revenue and margin", blocks: [{ chart: { type: "column", alt: "Revenue", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12], ["Q2", 15]] } } }, { chart: { type: "line", alt: "Margin", data: { columns: ["Quarter", { name: "Margin", format: "0%" }], rows: [["Q1", 0.31], ["Q2", 0.34]] } } }] },
   ),
   "opf/chart-pie-many-slices": ex(

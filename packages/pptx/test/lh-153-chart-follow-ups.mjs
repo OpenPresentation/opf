@@ -54,9 +54,9 @@ const axisCodes = xml => [...xml.matchAll(/<cx:axis id="(\d)"[^>]*>[\s\S]*?<\/cx
 // 3. A combo chart's primary and secondary axes, a scatter chart's Y axis and (over a span of 1000) X axis.
 {
   const axes = xml => [...xml.matchAll(/<c:valAx>[\s\S]*?<\/c:valAx>/g)].map(block => ({code: /<c:numFmt formatCode="([^"]*)"/.exec(block[0])?.[1], position: /<c:axPos val="(\w)"/.exec(block[0])?.[1]}));
-  const combo = (await exported({type: 'combo', line: ['Orders'], secondaryAxis: ['Orders'], data: {columns: ['Quarter', 'Revenue', 'Orders'], rows: [['Q1', 12400, 5200], ['Q2', 15800, 6100], ['Q3', 21500, 8400]]}})).chart;
+  const combo = (await exported({type: 'combo', lineSeries: ['Orders'], secondaryAxis: ['Orders'], data: {columns: ['Quarter', 'Revenue', 'Orders'], rows: [['Q1', 12400, 5200], ['Q2', 15800, 6100], ['Q3', 21500, 8400]]}})).chart;
   check(axes(combo).map(axis => axis.code).join('|') === '#,##0|#,##0', `combo axes (${JSON.stringify(axes(combo))})`);
-  const split = (await exported({type: 'combo', line: ['Margin'], secondaryAxis: ['Margin'], data: {columns: ['Quarter', 'Revenue', {name: 'Margin', format: '0%'}], rows: [['Q1', 12400, 0.31], ['Q2', 15800, 0.34]]}})).chart;
+  const split = (await exported({type: 'combo', lineSeries: ['Margin'], secondaryAxis: ['Margin'], data: {columns: ['Quarter', 'Revenue', {name: 'Margin', format: '0%'}], rows: [['Q1', 12400, 0.31], ['Q2', 15800, 0.34]]}})).chart;
   check(axes(split).map(axis => axis.code).join('|') === '#,##0|0%', `only the axis with no format groups (${JSON.stringify(axes(split))})`);
   const scatter = (await exported({type: 'scatter', data: {columns: ['Region', 'Spend', 'Revenue'], rows: [['A', 5000, 12000], ['B', 18000, 26500], ['C', 41000, 62000]]}})).chart;
   check(axes(scatter).length === 2 && axes(scatter).every(axis => axis.code === '#,##0'), `scatter axes (${JSON.stringify(axes(scatter))})`);

@@ -56,7 +56,7 @@ const bareDiagnostics = [];
 await fromPptx(zipSync(bareEntries), {onDiagnostic: diagnostic => bareDiagnostics.push(diagnostic)});
 assert.equal(bareDiagnostics.filter(diagnostic => /^series\.\d+\.line\.color$/.test(diagnostic.option ?? '')).length, 2, 'Current line paint is diagnosed without source provenance');
 // Mixed charts retain their series order: only the line series' paint gets this bounded warning.
-const comboSource = {design: source.design, slides: [{title: 'Mixed current chart', chart: {...source.slides[0].chart, type: 'combo', line: ['Supply'], highlight: undefined}}]};
+const comboSource = {design: source.design, slides: [{title: 'Mixed current chart', chart: {...source.slides[0].chart, type: 'combo', lineSeries: ['Supply'], highlight: undefined}}]};
 const comboDiagnostics = [];
 await fromPptx(await toPptx(comboSource), {onDiagnostic: diagnostic => comboDiagnostics.push(diagnostic)});
 assert.deepEqual(comboDiagnostics.filter(diagnostic => /^series\.\d+\.line\.color$/.test(diagnostic.option ?? '')).map(diagnostic => [diagnostic.option, diagnostic.path]), [['series.1.line.color', 'slides.0.charts.0.series.1.line.color']], 'Column-series paint is outside the line-only diagnostic');

@@ -1,6 +1,6 @@
 // FF-62, RR-90: chart text is written at the size the preview draws it, per text role (axis, data labels, legend), not 9 pt on the axes and the
 // PowerPoint default on the legend. Core's `chartTextSize` gives that size for the chart's box: 20 px at the 1280 x 720 reference (15 pt on a
-// 13.33 x 7.5 in slide), shrunk only for a small box and never below `composition.minFontSize` (default 16), scaled by the slide's shorter side
+// 13.33 x 7.5 in slide), shrunk only for a small box and never below `composition.minFontSizePx` (default 16), scaled by the slide's shorter side
 // over 720 px. The preview (renderer charts.js, `chartTextSize`) and the export call it with the same box: the test renders the real preview,
 // reads each chart text line's size and role from its trace path, and requires the exported classic and chartex parts to name that size for
 // the same role, in every part that carries text. (Before 0.22.1 the size was 14 px floored at 16 px: 12 pt on the default slide.)
@@ -56,13 +56,13 @@ const configs = [
   {name: 'default 13.33 x 7.5 in', design: {}, composition: undefined, expected: 15},
   {name: '1920 x 1080 px', design: {dimensions: {widthInches: 20, heightInches: 11.25}}, composition: undefined, expected: 22.5},
   {name: 'portrait 540 x 960 px', design: {dimensions: {widthInches: 5.625, heightInches: 10}}, composition: undefined, expected: 11.25},
-  {name: 'minFontSize 20 (equals the request)', design: {}, composition: {minFontSize: 20}, expected: 15},
-  {name: 'minFontSize 24 (the floor above the request)', design: {}, composition: {minFontSize: 24}, expected: 18},
-  {name: 'minFontSize 10 (below the request)', design: {}, composition: {minFontSize: 10}, expected: 15},
+  {name: 'minFontSizePx 20 (equals the request)', design: {}, composition: {minFontSizePx: 20}, expected: 15},
+  {name: 'minFontSizePx 24 (the floor above the request)', design: {}, composition: {minFontSizePx: 24}, expected: 18},
+  {name: 'minFontSizePx 10 (below the request)', design: {}, composition: {minFontSizePx: 10}, expected: 15},
   // RR-16: core composes font sizes on the 0.01 pt grid. The scale of an A4 slide (8.27 in * 96 / 720 = 1.10267) makes the 20 px request
   // 16.540 pt, on the grid.
   {name: 'A4 11.69 x 8.27 in (fractional scale)', design: {dimensions: {widthInches: 11.69, heightInches: 8.27}}, composition: undefined, expected: 16.54},
-  {name: 'A4, minFontSize 10 (below the request)', design: {dimensions: {widthInches: 11.69, heightInches: 8.27}}, composition: {minFontSize: 10}, expected: 16.54},
+  {name: 'A4, minFontSizePx 10 (below the request)', design: {dimensions: {widthInches: 11.69, heightInches: 8.27}}, composition: {minFontSizePx: 10}, expected: 16.54},
 ];
 
 let checks = 0;
@@ -100,7 +100,7 @@ for (const config of configs) {
 
 // Determinism: the size comes from the deck alone, so the same deck exports the same bytes.
 {
-  const deck = {design: {fontScheme: 'roboto'}, slides: types.map((type) => ({layout: 'chart', title: type, composition: {minFontSize: 18}, chart: {type, data}}))};
+  const deck = {design: {fontScheme: 'roboto'}, slides: types.map((type) => ({layout: 'chart', title: type, composition: {minFontSizePx: 18}, chart: {type, data}}))};
   const digest = async () => createHash('sha256').update(await toPptx(structuredClone(deck))).digest('hex');
   assert.equal(await digest(), await digest(), 'two exports of one chart deck are byte-identical');
   checks++;
@@ -108,7 +108,7 @@ for (const config of configs) {
 
 // The chart size follows the slide it is on: two slides with different minimum font sizes write different sizes.
 {
-  const deck = {design: {fontScheme: 'roboto'}, slides: [{layout: 'chart', title: 'a', chart: {type: 'column', data}}, {layout: 'chart', title: 'b', composition: {minFontSize: 24}, chart: {type: 'column', data}}]};
+  const deck = {design: {fontScheme: 'roboto'}, slides: [{layout: 'chart', title: 'a', chart: {type: 'column', data}}, {layout: 'chart', title: 'b', composition: {minFontSizePx: 24}, chart: {type: 'column', data}}]};
   const parts = unzipSync(await toPptx(deck));
   assert.deepEqual(unique(sizesIn(strFromU8(parts['ppt/charts/chart1.xml']))), [15]);
   assert.deepEqual(unique(sizesIn(strFromU8(parts['ppt/charts/chart2.xml']))), [18]);

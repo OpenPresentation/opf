@@ -126,7 +126,7 @@ function shadowedSlides(presentation) {
     const design = slide?.design;
     if (!isObject(design)) return;
     const background = design.background;
-    const decides = design.variant !== undefined || background === "light1" || background === "light2" || background === "dark1" || background === "dark2" || (isObject(background) && (background.type === "theme" || background.tone !== undefined));
+    const decides = design.variant !== undefined || background === "light1" || background === "light2" || background === "dark1" || background === "dark2" || (isObject(background) && (background.type === "theme" || background.appearance !== undefined));
     if (decides) hidden.push(index);
   });
   return hidden;

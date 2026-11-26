@@ -3,7 +3,7 @@
   "id": "noto-sans-kannada",
   "name": "Noto Sans Kannada",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "kn"
   ],

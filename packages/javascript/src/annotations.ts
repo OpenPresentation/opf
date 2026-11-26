@@ -26,7 +26,7 @@ export type CaptionAlignment = 'start' | 'center' | 'end';
 export type RichText = string | readonly (string | RichTextRun)[];
 export interface CaptionObject { text: RichText; position?: CaptionPosition; align?: CaptionAlignment }
 export type Caption = RichText | CaptionObject;
-export interface Reference { id: string; text: RichText; url?: string }
+export interface Reference { id: string; text: RichText; link?: string }
 export interface CaptionSettings { text: RichText; position: CaptionPosition; align: CaptionAlignment }
 
 /**
@@ -137,7 +137,7 @@ export interface CitationNote {
   text: RichText;
   /** `references.N` for a reference, the marked run's path for a footnote. */
   sourcePath: string;
-  url?: string;
+  link?: string;
   /** False when a cited id has no references entry. */
   resolved: boolean;
 }
@@ -180,7 +180,7 @@ function numberSlide(slide: unknown, slideIndex: number, references: readonly Re
       let note = numbering.byId.get(id);
       if (!note) {
         const index = references.findIndex(item => item.id === id), reference = references[index];
-        note = { number: numbering.notes.length + 1, kind: 'reference', id, text: reference?.text ?? id, sourcePath: index >= 0 ? `references.${index}` : entry.path, resolved: !!reference, ...(typeof reference?.url === 'string' ? { url: reference.url } : {}) };
+        note = { number: numbering.notes.length + 1, kind: 'reference', id, text: reference?.text ?? id, sourcePath: index >= 0 ? `references.${index}` : entry.path, resolved: !!reference, ...(typeof reference?.link === 'string' ? { link: reference.link } : {}) };
         numbering.notes.push(note); numbering.byId.set(id, note);
       }
       if (!numbers.includes(note.number)) numbers.push(note.number);
@@ -223,12 +223,12 @@ export function slideCitations(slide: unknown, slideIndex: number, presentation?
 }
 
 /** Fits a string or TextRun[] into a box at a requested size (composeSlide supplies its placed fitter). */
-export type AnnotationFitter = (value: RichText, box: LayoutBox, requestedSize: number, minFontSize: number, path: string, alignment: 'left' | 'center' | 'right') => TextFit | RichTextFit;
+export type AnnotationFitter = (value: RichText, box: LayoutBox, requestedSize: number, minFontSizePx: number, path: string, alignment: 'left' | 'center' | 'right') => TextFit | RichTextFit;
 export interface AnnotationLayoutOptions {
   /** LH-138: a caption that reads "Name: detail" draws its name in bold (a picture's caption; see `splitCaptionName`). */
   nameDetail?: boolean;
   scale: number;
-  minFontSize: number;
+  minFontSizePx: number;
   fit: AnnotationFitter;
   textStyle: (path: string) => TextStyle;
 }
@@ -301,7 +301,7 @@ export function layoutCaption(value: unknown, box: LayoutBox, path: string, opti
   if (!plain) return undefined;
   const settings = options.nameDetail ? { ...plain, text: splitCaptionName(plain.text) } : plain;
   const alignment = plain.align === 'center' ? 'center' : plain.align === 'end' ? 'right' : 'left';
-  const fontSize = Math.max(options.minFontSize, CAPTION_FONT_RATIO * 25 * options.scale), gap = fontSize * 0.4;
+  const fontSize = Math.max(options.minFontSizePx, CAPTION_FONT_RATIO * 25 * options.scale), gap = fontSize * 0.4;
   const maxHeight = Math.max(fontSize * 1.22, box.height * CAPTION_MAX_RATIO);
   const diagnostics: LayoutDiagnostic[] = [];
   const probe = options.fit(settings.text, { x: box.x, y: box.y, width: box.width, height: maxHeight }, fontSize, fontSize, path, alignment);
@@ -329,7 +329,7 @@ export interface ComposedFootnoteEntry {
   box: LayoutBox;
   fit: TextFit | RichTextFit;
   textStyle: TextStyle;
-  url?: string;
+  link?: string;
   overflow: boolean;
 }
 /** The footnote area of a slide: a rule, then the slide's notes in number order. */
@@ -361,7 +361,7 @@ export interface FootnoteLayoutOptions extends AnnotationLayoutOptions {
 
 /** List a slide's notes in a footnote area whose bottom sits at `options.bottom`. */
 export function layoutFootnotes(citations: SlideCitations, options: FootnoteLayoutOptions): ComposedFootnotes {
-  const fontSize = Math.max(options.minFontSize, 13 * options.scale), thickness = Math.max(1, round(options.scale));
+  const fontSize = Math.max(options.minFontSizePx, 13 * options.scale), thickness = Math.max(1, round(options.scale));
   const gap = fontSize * 0.5, spacing = fontSize * 0.25, diagnostics: LayoutDiagnostic[] = [];
   const width = Math.max(options.scale, options.width);
   type Measured = { note: CitationNote; value: RichText; height: number };
@@ -380,7 +380,7 @@ export function layoutFootnotes(citations: SlideCitations, options: FootnoteLayo
     const exceeds = fit.overflow || entryBox.y + entryBox.height > options.bottom + .01;
     if (exceeds) { overflow = true; diagnostics.push({ code: 'text-overflow', path: item.note.sourcePath, message: `Footnote ${item.note.number} does not fit the slide's footnote area; shorten the note or split the slide.` }); }
     cursor += item.height + (index < measured.length - 1 ? spacing : 0);
-    return { number: item.note.number, kind: item.note.kind, ...(item.note.id !== undefined ? { id: item.note.id } : {}), sourcePath: item.note.sourcePath, value: item.value, text: item.note.text, box: entryBox, fit, textStyle: options.textStyle(item.note.sourcePath), ...(item.note.url !== undefined ? { url: item.note.url } : {}), overflow: exceeds };
+    return { number: item.note.number, kind: item.note.kind, ...(item.note.id !== undefined ? { id: item.note.id } : {}), sourcePath: item.note.sourcePath, value: item.value, text: item.note.text, box: entryBox, fit, textStyle: options.textStyle(item.note.sourcePath), ...(item.note.link !== undefined ? { link: item.note.link } : {}), overflow: exceeds };
   });
   for (const note of citations.notes) if (!note.resolved) diagnostics.push({ code: 'unresolved-content', path: note.sourcePath, message: `Reference '${note.id}' is not in the presentation's references list; its id is listed instead.` });
   return { algorithm: 'footnote-area-v1', path: options.path, box, rule: { x: box.x, y: top, width: box.width, thickness }, entries, markers: citations.marked, fontSize, overflow, diagnostics };
@@ -389,7 +389,7 @@ export function layoutFootnotes(citations: SlideCitations, options: FootnoteLayo
 export interface ReferencesSlideOptions { title?: string }
 /**
  * An ordinary list slide of the deck's cited references in marker order (`n. text`, linked to the
- * reference url when there is one). Inline footnotes are not listed. A deck that cites nothing gets
+ * reference link when there is one). Inline footnotes are not listed. A deck that cites nothing gets
  * a slide with the title only.
  */
 export function referencesSlide(presentation: unknown, options: ReferencesSlideOptions = {}): Record<string, unknown> {
@@ -398,9 +398,9 @@ export function referencesSlide(presentation: unknown, options: ReferencesSlideO
   if (!references.length) return { title };
   const items = references.map(note => {
     const label = `${note.number}. `;
-    if (typeof note.text === 'string' && note.url === undefined) return `${label}${note.text}`;
+    if (typeof note.text === 'string' && note.link === undefined) return `${label}${note.text}`;
     const runs: (string | RichTextRun)[] = [label, ...(typeof note.text === 'string' ? [note.text] : note.text)];
-    if (note.url !== undefined) runs.push(' ', { text: note.url, link: note.url });
+    if (note.link !== undefined) runs.push(' ', { text: note.link, link: note.link });
     return runs;
   });
   return { title, items };

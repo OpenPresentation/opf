@@ -112,7 +112,7 @@ const SITES = [
   ['datasetColumn', ['slides', 0, 'chart', 'data', 'fields', 1], { slides: [{ chart: { data: { dataset: 'a', fields: ['x', ''] } } }] }],
   ['datasetColumn', ['slides', 0, 'chart', 'mapping', 'category'], { slides: [{ chart: { mapping: { category: '' } } }] }],
   ['datasetColumn', ['slides', 0, 'chart', 'mapping', 'x'], { slides: [{ chart: { mapping: { x: '' } } }] }],
-  ['datasetColumn', ['slides', 0, 'chart', 'line', 0], { slides: [{ chart: { line: [''] } }] }],
+  ['datasetColumn', ['slides', 0, 'chart', 'lineSeries', 0], { slides: [{ chart: { lineSeries: [''] } }] }],
   ['datasetColumn', ['slides', 0, 'chart', 'secondaryAxis', 0], { slides: [{ chart: { secondaryAxis: [''] } }] }],
   ['datasetColumn', ['slides', 0, 'chart', 'highlight', 'series', 0], { slides: [{ chart: { highlight: { series: [''] } } }] }],
   ['datasetColumn', ['slides', 0, 'chart', 'mapping', 'series', 0], { slides: [{ chart: { mapping: { series: [''] } } }] }],

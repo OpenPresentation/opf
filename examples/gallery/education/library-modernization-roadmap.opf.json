@@ -417,7 +417,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "easton-university-library",
+    "organization": "easton-university-library",
     "bio": "Leads academic library planning for Easton University Library.",
     "socials": {
       "tiktok": "@easton-university-library-speaker"
@@ -757,7 +757,7 @@
         "verdana": {
           "name": "Verdana",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Verdana",
           "minor": "Verdana",
@@ -768,7 +768,7 @@
         "noto-sans-sc": {
           "name": "Noto Sans SC",
           "app": "google-slides",
-          "languageFamily": "ea",
+          "scriptGroup": "eastAsian",
           "languages": [
             "zh-Hans",
             "zh-Hant",
@@ -784,7 +784,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

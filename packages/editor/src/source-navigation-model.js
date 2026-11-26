@@ -24,7 +24,7 @@ const BUILT_IN = /^(?:speakers$|(?:deck|speaker|organization|slide)\.)/;
 const TOKEN = /(?<![\w.:/-])(asset|var):([A-Za-z0-9][A-Za-z0-9._-]*)(?![A-Za-z0-9_\\-])/g;
 const MUSTACHE = /\\?\{\{\s*([A-Za-z][A-Za-z0-9._-]*)\s*(?:\|[^{}\n]*)?\}\}/dg;
 // Keys that name a column of a dataset (REFERENCE_RULES says which field takes which, and the schema decides: these are only the keys worth asking about).
-const COLUMN_KEYS = new Set(["category", "x", "series", "line", "secondaryAxis", "fields"]);
+const COLUMN_KEYS = new Set(["category", "x", "series", "lineSeries", "secondaryAxis", "fields"]);
 // Subtrees whose strings are declarations or data, not uses.
 const SKIP_WALK = new Set(["assets", "datasets", "variables", "catalogs", "extensions"]);
 

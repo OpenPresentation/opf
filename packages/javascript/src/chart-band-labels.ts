@@ -124,14 +124,14 @@ function dataMarks(type: string, data: Extract<ResolvedChartData, { ok: true }>,
  * Place the labels of a chart's labeled bands inside their bands (see the module comment). `plot` is the chart's pinned plot as an inset from
  * `box`; `axis` its value axis. Undefined when the chart has no labeled band. `labeled` says the chart's marks carry data labels.
  */
-export function placeBandLabels(chart: unknown, data: ResolvedChartData, axis: ChartValueAxis | undefined, box: Box, inset: ChartPlotInset, geometry: { scale: number; minFontSize?: number; measure: (text: string, size: number) => number; direction?: 'ltr' | 'rtl'; labeled?: boolean; avoid?: readonly Box[] }): ChartLayerBandLabels | undefined {
+export function placeBandLabels(chart: unknown, data: ResolvedChartData, axis: ChartValueAxis | undefined, box: Box, inset: ChartPlotInset, geometry: { scale: number; minFontSizePx?: number; measure: (text: string, size: number) => number; direction?: 'ltr' | 'rtl'; labeled?: boolean; avoid?: readonly Box[] }): ChartLayerBandLabels | undefined {
   if (!data.ok || !axis || !(axis.max > axis.min) || typeof chart !== 'object' || chart === null) return undefined;
   const type = String((chart as { type?: unknown }).type ?? '').trim().toLowerCase();
   const ranges = chartBandRanges(chartBands(chart), axis).filter(band => band.label !== undefined);
   if (!ranges.length) return undefined;
   const plot = { x: box.x + inset.left, y: box.y + inset.top, width: box.width - inset.left - inset.right, height: box.height - inset.top - inset.bottom };
   if (!(plot.width > 1 && plot.height > 1)) return { labels: [], legend: true, reason: 'too-large' };
-  const { scale } = geometry, fontPx = chartTextSize({ width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize }) * scale;
+  const { scale } = geometry, fontPx = chartTextSize({ width: box.width, height: box.height, scale, minFontSizePx: geometry.minFontSizePx }) * scale;
   const textHeight = fontPx * 1.22, padAlong = BAND_LABEL_PADDING.along * scale, padAcross = BAND_LABEL_PADDING.across * scale;
   const strip = type === 'bullet' || BAR_TYPES[type]?.horizontal === true, rtl = geometry.direction === 'rtl', count = data.rows.length;
   // Right to left, a column, line or area chart's categories run from the right and a bullet chart's values from the right; a bar chart keeps its
@@ -186,12 +186,12 @@ export const BAND_LABEL_BESIDE_LIMIT = Object.freeze({ gutter: 0.22, row: 0.12 }
  * chart uses that side), two labels overlap (a label is never moved off its band), a strip's label is wider than its strip less the padding, a
  * label leaves the chart frame, or the gutter takes more than 22% of the frame's width (the row more than 12% of its height).
  */
-export function placeBandLabelsBeside(chart: unknown, data: ResolvedChartData, axis: ChartValueAxis | undefined, box: Box, inset: ChartPlotInset, geometry: { scale: number; minFontSize?: number; measure: (text: string, size: number) => number; direction?: 'ltr' | 'rtl'; blocked?: boolean }): { labels: ChartBandLabel[]; inset: ChartPlotInset } | undefined {
+export function placeBandLabelsBeside(chart: unknown, data: ResolvedChartData, axis: ChartValueAxis | undefined, box: Box, inset: ChartPlotInset, geometry: { scale: number; minFontSizePx?: number; measure: (text: string, size: number) => number; direction?: 'ltr' | 'rtl'; blocked?: boolean }): { labels: ChartBandLabel[]; inset: ChartPlotInset } | undefined {
   if (geometry.blocked || !data.ok || !axis || !(axis.max > axis.min) || typeof chart !== 'object' || chart === null) return undefined;
   const type = String((chart as { type?: unknown }).type ?? '').trim().toLowerCase();
   const ranges = chartBandRanges(chartBands(chart), axis).filter(band => band.label !== undefined);
   if (!ranges.length) return undefined;
-  const { scale } = geometry, fontPx = chartTextSize({ width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize }) * scale;
+  const { scale } = geometry, fontPx = chartTextSize({ width: box.width, height: box.height, scale, minFontSizePx: geometry.minFontSizePx }) * scale;
   const textHeight = fontPx * 1.22, padAlong = BAND_LABEL_PADDING.along * scale, padAcross = BAND_LABEL_PADDING.across * scale;
   const strip = type === 'bullet' || BAR_TYPES[type]?.horizontal === true, rtl = geometry.direction === 'rtl', count = data.rows.length;
   const mirrored = rtl && (type === 'bullet' || !strip);

@@ -46,7 +46,7 @@ const check = (condition, message) => { assert.ok(condition, message); checks++;
 
 // 3. A combo chart groups each value axis that has no format; a scatter chart groups its Y axis, and its X axis over a span of 1000 or more.
 {
-  const combo = texts(draw({ type: 'combo', line: ['Orders'], secondaryAxis: ['Orders'], data: { columns: ['Quarter', 'Revenue', 'Orders'], rows: [['Q1', 12400, 5200], ['Q2', 15800, 6100], ['Q3', 21500, 8400]] } }));
+  const combo = texts(draw({ type: 'combo', lineSeries: ['Orders'], secondaryAxis: ['Orders'], data: { columns: ['Quarter', 'Revenue', 'Orders'], rows: [['Q1', 12400, 5200], ['Q2', 15800, 6100], ['Q3', 21500, 8400]] } }));
   check(combo.includes('20,000') && combo.includes('8,000'), `combo primary and secondary axes group (${combo})`);
   const scatter = texts(draw({ type: 'scatter', data: { columns: ['Region', 'Spend', 'Revenue'], rows: [['A', 5000, 12000], ['B', 18000, 26500], ['C', 41000, 62000]] } }));
   check(scatter.includes('40,000') && scatter.includes('60,000'), `scatter axes group (${scatter})`);

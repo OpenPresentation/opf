@@ -418,7 +418,7 @@
     "id": "speaker",
     "name": "Jon Alvarez",
     "title": "Operating Lead",
-    "organizationId": "kiteframe",
+    "organization": "kiteframe",
     "bio": "Leads product launch planning for Kiteframe.",
     "socials": {
       "threads": "@kiteframe-speaker"
@@ -767,7 +767,7 @@
         "verdana": {
           "name": "Verdana",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Verdana",
           "minor": "Verdana",
@@ -778,7 +778,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

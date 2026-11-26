@@ -430,7 +430,7 @@
       "title": "Program Sponsor",
       "photo": "asset:supporting-photo",
       "email": "maya@city-of-redwood-falls.example",
-      "organizationId": "city-of-redwood-falls",
+      "organization": "city-of-redwood-falls",
       "socials": {
         "threads": "@maya-chen"
       }
@@ -439,7 +439,7 @@
       "id": "jon",
       "name": "Jon Alvarez",
       "title": "Operating Lead",
-      "organizationId": "city-of-redwood-falls",
+      "organization": "city-of-redwood-falls",
       "socials": {
         "youtube": "@jon-alvarez"
       }
@@ -682,7 +682,7 @@
         "pt-serif": {
           "name": "PT Serif",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "PT Serif",
           "minor": "PT Serif",
@@ -693,7 +693,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

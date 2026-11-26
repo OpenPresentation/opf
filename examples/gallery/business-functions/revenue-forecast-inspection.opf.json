@@ -423,7 +423,7 @@
     "id": "speaker",
     "name": "Jon Alvarez",
     "title": "Operating Lead",
-    "organizationId": "foundrygrid",
+    "organization": "foundrygrid",
     "bio": "Leads revenue operations planning for FoundryGrid.",
     "socials": {
       "threads": "@foundrygrid-speaker"
@@ -752,7 +752,7 @@
         "raleway": {
           "name": "Raleway",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Raleway",
           "minor": "Raleway",
@@ -763,7 +763,7 @@
         "noto-sans-georgian": {
           "name": "Noto Sans Georgian",
           "app": "google-slides",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "ka"
           ],
@@ -776,7 +776,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

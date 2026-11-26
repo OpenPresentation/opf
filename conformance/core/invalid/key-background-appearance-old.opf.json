@@ -1,0 +1,14 @@
+{
+  "design": {
+    "background": {
+      "type": "image",
+      "src": "https://example.com/hero.jpg",
+      "tone": "dark"
+    }
+  },
+  "slides": [
+    {
+      "title": "Hello"
+    }
+  ]
+}

@@ -30,7 +30,7 @@ const historical = historicalKeynoteVocabulary(deck);
 assert.equal(createHash('sha256').update(await readFile(new URL(manifest.file, directory))).digest('hex'), manifest.sha256, 'Sealed native bytes stay unchanged');
 // opf#1431: re-pinned for one reviewed change (owner, 2026-11-24), the K10 column and K11 line charts, which show no data labels, import as
 // `dataLabels: false`. Without those two fields the import hashes the previous pin, 7bcfc43c75b926dc193f451c984c773fed3e0eb54ec55845356c8c509b8e9f3f.
-assert.equal(createHash('sha256').update(JSON.stringify(historical)).digest('hex'), '93a8e8ab70de2e7c26eea09f9af17cfe2a51c0c85cd523361e99cb83ac507c45', 'Exact reviewed whole import through fourteen closed vocabulary slots; no style normalization (RR-96: table fills equal to a package theme color import as the slot; opf#1431: the two unlabeled charts import as dataLabels: false)');
+assert.equal(createHash('sha256').update(JSON.stringify(historical)).digest('hex'), '097542c6d53cc3726e506f6ea773bca9af140f39fb5759031614e51cc4621ec6', 'Exact reviewed whole import through fourteen closed vocabulary slots; no style normalization (RR-96: table fills equal to a package theme color import as the slot; opf#1431: the two unlabeled charts import as dataLabels: false)');
 for (const slide of [1,2,4,6,8,13,14,15,16]) {
   const block = deck.slides[slide].blocks[0], values = slide === 16 ? block.items : [block.text];
   for (const value of values) for (const run of Array.isArray(value) ? value : [value]) if (typeof run !== 'string') {

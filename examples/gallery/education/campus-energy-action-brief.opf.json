@@ -266,7 +266,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "lakeside-university",
+    "organization": "lakeside-university",
     "bio": "Leads higher education planning for Lakeside University.",
     "socials": {
       "github": "@lakeside-university-speaker"
@@ -671,7 +671,7 @@
         "skeena": {
           "name": "Skeena",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Skeena Display",
           "minor": "Skeena",
@@ -682,7 +682,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

@@ -15,7 +15,7 @@ function sourceIsComplete(result) {
       assert.equal(restored(part),part.text);
       assert.deepEqual(part.fit.lines,part.fit.sourceLines.map(line=>part.text.slice(line.start,line.end)));
       for(const line of part.fit.sourceLines)assert.equal(line.segments.map(segment=>part.text.slice(segment.start,segment.end)).join(''),part.text.slice(line.start,line.end));
-      assert.ok(part.fit.fontSize>=part.minFontSize);
+      assert.ok(part.fit.fontSize>=part.minFontSizePx);
     }
   }
 }
@@ -57,7 +57,7 @@ test('short units stay next to the value on the same baseline; long units and va
 
 test('inline fitting tries a smaller single-line value before rejecting a compact readable metric',()=>{
   const metric={value:'1234567890',unit:'ms',label:'L'},cell={x:0,y:0,width:104,height:72};
-  const result=layoutMetric(metric,cell,{minFontSize:16,overflow:'error',textMeasurement:{measure:(text,size)=>text.length*size*.5}});
+  const result=layoutMetric(metric,cell,{minFontSizePx:16,overflow:'error',textMeasurement:{measure:(text,size)=>text.length*size*.5}});
   assert.equal(result.overflow,false);assert.equal(result.arrangement,'inline-unit');
   assert.deepEqual(result.parts[0].fit.lines,['1234567890']);assert.equal(result.parts[0].fit.fontSize,16);
   for(const part of result.parts)assert.ok(part.box.y+part.box.height<=cell.height);
@@ -106,10 +106,10 @@ test('metadata borrows spare primary space before reducing type and exposes reso
 
 test('explicit readability floors raise nominal labels and remain invariant across canvas scales',()=>{
   const metric={value:42,unit:'ms',label:'Latency',description:'Complete source',delta:-4.2,trend:'down'};
-  const reference=layoutMetric(metric,{x:20,y:40,width:800,height:600},{minFontSize:32});
+  const reference=layoutMetric(metric,{x:20,y:40,width:800,height:600},{minFontSizePx:32});
   assert.equal(reference.overflow,false);
   for(const scale of [.01,.75,1,1.5,100]) {
-    const result=layoutMetric(metric,{x:20*scale,y:40*scale,width:800*scale,height:600*scale},{scale,minFontSize:32});
+    const result=layoutMetric(metric,{x:20*scale,y:40*scale,width:800*scale,height:600*scale},{scale,minFontSizePx:32});
     assert.equal(result.overflow,false);assert.equal(result.arrangement,reference.arrangement);
     for(const [index,part] of result.parts.entries()) {
       assert.ok(part.requestedFontSize>=32*scale);assert.ok(part.fit.fontSize>=32*scale);
@@ -122,7 +122,7 @@ test('explicit readability floors raise nominal labels and remain invariant acro
 test('irreducible metadata retains all source and strict rejection reports its actual path',()=>{
   const metric={value:42,unit:'ms',label:'Long supporting label. '.repeat(100),delta:0,trend:'flat'};
   const cell={x:0,y:0,width:300,height:180};
-  const options={path:'slides.0.blocks.2.metric',minFontSize:32};
+  const options={path:'slides.0.blocks.2.metric',minFontSizePx:32};
   const result=layoutMetric(metric,cell,options);
   assert.equal(result.overflow,true);sourceIsComplete(result);
   assert.ok(result.diagnostics.some(d=>d.path.endsWith('.label')));
@@ -149,18 +149,18 @@ test('empty optional fields retain source without blank spacing and an empty val
 
 test('metric whitespace, tabs and Unicode retain exact line and segment boundaries',()=>{
   const metric={value:'  e\u0301 👩‍🔬  42\r\n',unit:'\tms  ',label:'Original  label\n\nretained',description:'Left\tRight\rTail  ',delta:0};
-  const result=layoutMetric(metric,{x:0,y:0,width:540,height:960},{minFontSize:24});
+  const result=layoutMetric(metric,{x:0,y:0,width:540,height:960},{minFontSizePx:24});
   assert.equal(result.overflow,false);sourceIsComplete(result);
   assert.ok(result.parts.some(part=>part.fit.sourceLines.some(line=>line.segments.some(segment=>segment.kind==='tab'))));
 });
 
 test('invalid input, failed measurement and non-finite geometry reject without plausible substitute fits',()=>{
   for(const value of [null,[],{},Infinity,NaN,{value:42,unit:null},{value:42,label:1},{value:42,delta:NaN},{value:42,trend:'sideways'}])assert.throws(()=>layoutMetric(value,box),TypeError);
-  for(const options of [{scale:0},{scale:1e308},{minFontSize:0},{minFontSize:NaN},{minFontSize:1.7e308},{overflow:'ignore'}])assert.throws(()=>layoutMetric(42,box,options),RangeError);
+  for(const options of [{scale:0},{scale:1e308},{minFontSizePx:0},{minFontSizePx:NaN},{minFontSizePx:1.7e308},{overflow:'ignore'}])assert.throws(()=>layoutMetric(42,box,options),RangeError);
   for(const cell of [{...box,width:0},{...box,x:NaN},{...box,x:1e308,width:1e308}])assert.throws(()=>layoutMetric(42,cell),RangeError);
   for(const width of [-1,NaN,Infinity])assert.throws(()=>layoutMetric(42,box,{textMeasurement:{measure:()=>width}}),RangeError);
   assert.throws(()=>layoutMetric({value:0,unit:'a',label:'b',description:'c',delta:0,trend:'flat'},
-    {x:0,y:0,width:1e308,height:1e308},{minFontSize:4e307,textMeasurement:{measure:()=>1}}),RangeError);
+    {x:0,y:0,width:1e308,height:1e308},{minFontSizePx:4e307,textMeasurement:{measure:()=>1}}),RangeError);
   const tiny=layoutMetric({value:42,label:'Keep this'}, {x:0,y:0,width:1,height:1});
   assert.equal(tiny.overflow,true);assert.equal(tiny.parts[0].fit,undefined);
   assert.ok(tiny.diagnostics.some(d=>d.reason==='invalid-part-box'));
@@ -171,10 +171,10 @@ test('difficult metrics use a bounded deterministic candidate search independent
   const metric={value:'A long value '.repeat(12),unit:'long units',label:'Label '.repeat(20),description:'Context '.repeat(20),delta:0,trend:'up'};
   for(const scale of [.1,1,10]) {
     const cell={x:0,y:0,width:300*scale,height:180*scale};
-    const first=layoutMetric(metric,cell,{scale,minFontSize:8}),second=layoutMetric(metric,cell,{scale,minFontSize:8});
+    const first=layoutMetric(metric,cell,{scale,minFontSizePx:8}),second=layoutMetric(metric,cell,{scale,minFontSizePx:8});
     assert.deepEqual(first,second);assert.ok(first.attempts>1&&first.attempts<=48);sourceIsComplete(first);
   }
   // 23 * .1 / .1 rounds above 23; the public bound still applies near a zero floor.
-  const nearZero=layoutMetric(metric,{x:0,y:0,width:30,height:18},{scale:.1,minFontSize:1e-300});
+  const nearZero=layoutMetric(metric,{x:0,y:0,width:30,height:18},{scale:.1,minFontSizePx:1e-300});
   assert.ok(nearZero.attempts<=48);sourceIsComplete(nearZero);
 });

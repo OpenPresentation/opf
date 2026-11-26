@@ -18,14 +18,14 @@ export {chartNumber, fromExcelNumberFormat, groupsThousands, inlineChartData, in
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 
 /**
- * True when a chart uses an RR-54 data field that the native cache alone cannot carry back, or is a combo chart whose `line` or
+ * True when a chart uses an RR-54 data field that the native cache alone cannot carry back, or is a combo chart whose `lineSeries` or
  * `secondaryAxis` exports its series in another order than the data's (FA-15: column series first, then lines), so the record
  * restores the authored column order.
  */
 export function chartUsesDataFields(chart) {
   const data = chart?.data;
   return object(chart) && (chart.mapping !== undefined || isDatasetRef(data) || (object(data) && (['datasource', 'query', 'retrieved', 'version', 'sha256', 'generator'].some(key => data[key] !== undefined) || (Array.isArray(data.columns) && data.columns.some(object))))
-    || (chart.type === 'combo' && (chart.line !== undefined || chart.secondaryAxis !== undefined)));
+    || (chart.type === 'combo' && (chart.lineSeries !== undefined || chart.secondaryAxis !== undefined)));
 }
 
 /** True when a table is dataset-backed or carries a DataColumn header or a number format. */

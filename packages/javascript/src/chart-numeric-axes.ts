@@ -24,7 +24,7 @@ export function chartNumericAxes(chart: unknown, data: ResolvedChartData, geomet
   if (target?.kind === 'waterfall') return waterfallAxis(chart, data, geometry, layer);
   if (target?.kind !== 'scatter' && target?.kind !== 'box') return undefined;
   const {box, scale, language} = geometry;
-  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize}) * scale;
+  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSizePx: geometry.minFontSizePx}) * scale;
   const pad = 10 * scale, lineHeight = fontPx * 1.5;
   const measure = (text: string) => geometry.measure(text, fontPx, 400);
   const options = resolveChartOptions(chart, target);
@@ -95,7 +95,7 @@ function waterfallAxis(chart: unknown, data: ResolvedChartData, geometry: ChartL
   const {box,scale,language}=geometry;
   if(![box.width,box.height,scale].every(Number.isFinite)||box.width<=0||box.height<=0||scale<=0)return undefined;
   const target=chartOptionTarget('waterfall')!,options=resolveChartOptions(chart,target);
-  const font=chartTextSize({width:box.width,height:box.height,scale,minFontSize:geometry.minFontSize})*scale,line=font*1.5,pad=10*scale;
+  const font=chartTextSize({width:box.width,height:box.height,scale,minFontSizePx:geometry.minFontSizePx})*scale,line=font*1.5,pad=10*scale;
   const column=data.columns.length>1?1:0,values=data.rows.map(row=>chartNumber(row[column]));
   let extents: number[];
   try{extents=waterfallSteps(values).flatMap(step=>[step.from,step.to]);}catch{return undefined;}

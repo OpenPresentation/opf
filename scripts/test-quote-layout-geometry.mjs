@@ -58,7 +58,7 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     // The candidate core lays the quote out; since WI-4 (0.28.0) an en dash separates attribution and source.
     assert.equal(layout.parts[1].text,quote.attribution+(quote.source?` \u2013 ${quote.source}`:''));
     assert.equal(layout.textMeasurement,'provided');
-    assert.ok(layout.parts.every(part=>part.fit.fontSize>=part.minFontSize));
+    assert.ok(layout.parts.every(part=>part.fit.fontSize>=part.minFontSizePx));
     if (scenario==='expanded-footer') assert.ok(layout.parts[1].box.height>40,'Use available internal space before changing the outer grid');
     if (overflowing) {
       assert.ok(layout.diagnostics.some(item=>item.reason==='text-fit'&&item.parts[0]==='footer'));

@@ -3,7 +3,7 @@
   "id": "yu-gothic",
   "name": "Yu Gothic",
   "app": "powerpoint",
-  "languageFamily": "ea",
+  "scriptGroup": "eastAsian",
   "languages": [
     "ja"
   ],

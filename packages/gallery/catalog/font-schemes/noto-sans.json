@@ -3,7 +3,7 @@
   "id": "noto-sans",
   "name": "Noto Sans",
   "app": "google-slides",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "ru",
     "uk",

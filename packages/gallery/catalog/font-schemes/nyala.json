@@ -3,7 +3,7 @@
   "id": "nyala",
   "name": "Nyala",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "am"
   ],

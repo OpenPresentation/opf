@@ -3,7 +3,7 @@
   "id": "seaford",
   "name": "Seaford",
   "app": "powerpoint",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Seaford Display",
   "minor": "Seaford",

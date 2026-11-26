@@ -41,7 +41,7 @@ window.mount = async ({deck, faces, date, paginate: withPagination}) => {
   })), substitutionPolicy: 'visual', fallbackFamily: 'Roboto'});
   window.renderOptions = {trace: true, date};
   window.withFonts = () => ({fonts, ...renderOptions});
-  window.pagination = withPagination ? paginate(deck, {fonts, date, minFontSize: 24}) : null;
+  window.pagination = withPagination ? paginate(deck, {fonts, date, minFontSizePx: 24}) : null;
   window.editor = createEditorSession(pagination?.presentation ?? deck, {rejectInvalid: true});
   window.unsubscribe = editor.subscribe(event => events.push({type: event.type, patches: event.patches}));
   window.canvasEditor = createCanvasEditor(document.querySelector('#canvas'), {
@@ -255,7 +255,7 @@ try {
     const deck = {design: {fontScheme: 'roboto', dimensions: {widthInches: width / 96, heightInches: height / 96}, header: {start: {text: '  Review\tcopy  \r\n'}}, footer},
       slides: paginate ? [{title: 'Paginated fields', text: 'First sentence with enough detail. '.repeat(160)}, {title: 'Last slide', text: 'Last source body.'}]
         : [{title: 'Hidden title footer', text: 'The title still counts.', design: {footer: false}}, {title: 'Second slide', text: 'Authored second body.'}, {title: 'Third slide', text: 'Authored third body.'}]};
-    if (wrapped) for (const slide of deck.slides.slice(1)) slide.composition = {minFontSize: 32, overflow: 'error'};
+    if (wrapped) for (const slide of deck.slides.slice(1)) slide.composition = {minFontSizePx: 32, overflow: 'error'};
     Object.assign(deck, withRecords(deck)); // OPF 0.15: the page registers no catalog, so the deck embeds the font scheme it names
     const original = structuredClone(deck);
     await page.evaluate(args => mount(args), {deck, faces: registry.embeddedFonts, date: '2026-09-22', paginate});

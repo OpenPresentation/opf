@@ -276,7 +276,7 @@
     "id": "speaker",
     "name": "Samira Okafor",
     "title": "Chief of Staff",
-    "organizationId": "western-coast-college",
+    "organization": "western-coast-college",
     "bio": "Leads higher education planning for Western Coast College.",
     "socials": {
       "instagram": "@western-coast-college-speaker"
@@ -642,7 +642,7 @@
         "tahoma": {
           "name": "Tahoma",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tahoma",
           "minor": "Tahoma",
@@ -653,7 +653,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

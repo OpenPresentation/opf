@@ -37,7 +37,7 @@ assert.equal(entries(deck).numbering, undefined, 'Character bullets never become
 // RR-96: re-pinned for one reviewed change, table fills that equal a package theme color import as the slot ('accent1', 'light1') instead of the hex.
 // opf#1431: re-pinned for one reviewed change (owner, 2026-11-24), the K10 column and K11 line charts, which show no data labels, import as
 // `dataLabels: false`. Without those two fields the import hashes the previous pin, def677b9a0b67f384b63b6897510a6ed4a16f6e36fdc604f3a30a237ffe140be.
-assert.equal(hash(JSON.stringify({...historical, slides: historical.slides.slice(0, 16)})), '1b98a7db63241db1813850c241dbc24253c66cb9936eb2df45081508a126480d');
+assert.equal(hash(JSON.stringify({...historical, slides: historical.slides.slice(0, 16)})), 'e47c2298b2a104e4e057c5fa525a5530b2d74b0b938d4b493fb1833d76f1442a');
 assert.equal(hash(JSON.stringify(diagnostics)), 'db2fa6bd5a00ab2921d77b514e1efb3331b005dd55d6978da374bee721541fc2');
 assert.equal(diagnostics.length, 21, 'All existing adaptations and the precise current K11 paint gap remain explicit');
 assert.deepEqual(diagnostics.filter(value => value.path === 'slides.10.charts.0.series.0.line.color'), [{

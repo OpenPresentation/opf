@@ -261,7 +261,7 @@
     "id": "speaker",
     "name": "Maya Chen",
     "title": "Program Sponsor",
-    "organizationId": "evergreen-crm",
+    "organization": "evergreen-crm",
     "bio": "Leads customer success planning for Evergreen CRM.",
     "socials": {
       "mastodon": "@evergreen-crm-speaker"
@@ -589,7 +589,7 @@
         "montserrat": {
           "name": "Montserrat",
           "app": "google-slides",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Montserrat",
           "minor": "Montserrat",
@@ -600,7 +600,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

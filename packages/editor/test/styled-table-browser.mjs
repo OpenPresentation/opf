@@ -9,7 +9,7 @@ const controls=document.createElement('div'),state=document.createElement('pre')
 state.id='state';host.after(controls,state);
 const rich=['Mixed ',{text:'bold',bold:true,color:'#AA0000'},' text'];
 const source={design:{theme:'classic',fontScheme:'roboto'},slides:[{title:'Styled table editing',table:{columns:['Team','Stage','Status'],rows:[
- [{value:rich,rowSpan:2,style:{fill:'#DBEAFE',verticalAlign:'middle',borders:{bottom:{color:'#445566',width:2,dash:'dot'}}}},{value:'Preview',style:{fill:'#E5E7EB',align:'center'}},{value:'Ready',style:{fill:'#DCFCE7',color:'#166534'}}],
+ [{value:rich,rowSpan:2,style:{fill:'#DBEAFE',anchor:'middle',borders:{bottom:{color:'#445566',width:2,dash:'dot'}}}},{value:'Preview',style:{fill:'#E5E7EB',align:'center'}},{value:'Ready',style:{fill:'#DCFCE7',color:'#166534'}}],
  [null,{value:'Editing',style:{fill:'#FEF3C7'}},{value:[],style:{fill:'#F3E8FF'}}]
 ]}}]};
 const valuePath='slides.0.table.rows.0.0.value',scalarPath='slides.0.table.rows.0.1.value',emptyPath='slides.0.table.rows.1.2.value';

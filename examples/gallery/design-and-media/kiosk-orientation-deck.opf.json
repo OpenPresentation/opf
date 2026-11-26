@@ -433,7 +433,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "northgate-museum",
+    "organization": "northgate-museum",
     "bio": "Leads visitor orientation planning for Northgate Museum.",
     "socials": {
       "youtube": "@northgate-museum-speaker"
@@ -670,7 +670,7 @@
         "constantia": {
           "name": "Constantia",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Constantia",
           "minor": "Constantia",
@@ -681,7 +681,7 @@
         "aptos": {
           "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Aptos Display",
           "minor": "Aptos",

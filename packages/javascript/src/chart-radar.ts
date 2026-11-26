@@ -11,7 +11,7 @@ import {chartNumber, type ResolvedChartData} from './chart-data.js';
 
 interface Box {x: number; y: number; width: number; height: number}
 /** The geometry a radar is laid out in (chart-layer.ts ChartLayerGeometry). */
-interface RadarGeometry {box: Box; scale: number; minFontSize?: number; measure: (text: string, size: number, weight: 400 | 700) => number}
+interface RadarGeometry {box: Box; scale: number; minFontSizePx?: number; measure: (text: string, size: number, weight: 400 | 700) => number}
 
 /** RR-105: a radar's layout, read by both engines: where its legend stands and its value axis. */
 export interface ChartLayerRadar {
@@ -43,7 +43,7 @@ export function chartRadarLayout(chart: unknown, data: ResolvedChartData, geomet
   const style = RADAR_TYPES[chart.type.trim().toLowerCase()];
   const {box, scale} = geometry;
   if (!style || ![box.width, box.height, scale].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0) return undefined;
-  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize}) * scale;
+  const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSizePx: geometry.minFontSizePx}) * scale;
   const pad = 10 * scale, lineHeight = fontPx * 1.5, textHeight = fontPx * 1.22;
   const width = (text: string) => text ? geometry.measure(text, fontPx, 400) : 0;
   const categories = data.rows.map(row => flat(row[0]));

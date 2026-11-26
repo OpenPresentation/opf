@@ -3,7 +3,7 @@
   "id": "open-sans",
   "name": "Open Sans",
   "app": "google-slides",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Open Sans",
   "minor": "Open Sans",

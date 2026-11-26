@@ -177,7 +177,7 @@ assert.throws(() => toSvg({ slides: [{ image: "https://example.com/image.png" }]
 assert.match(toSvg(minimalDeck, 1), /font-family="[^"]*, sans-serif"/);
 
 const nestedDiagnostics = [];
-const nestedSvg = toSvg({ slides: [{ blocks: [{ composition: {minFontSize: 24}, blocks: [{text: 'Nested overflow text. '.repeat(1000)}] }] }] }, 1, { trace: true, onDiagnostic: issue => nestedDiagnostics.push(issue) });
+const nestedSvg = toSvg({ slides: [{ blocks: [{ composition: {minFontSizePx: 24}, blocks: [{text: 'Nested overflow text. '.repeat(1000)}] }] }] }, 1, { trace: true, onDiagnostic: issue => nestedDiagnostics.push(issue) });
 assert.match(nestedSvg, /slides.0.blocks.0.blocks.0.text/);
 assert.match(nestedSvg, /font-size="24"/);
 assert.ok(nestedDiagnostics.some(issue => issue.path === 'slides.0.blocks.0.blocks.0.text'));

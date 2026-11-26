@@ -64,8 +64,8 @@ keyword or the documented rule the expectation rests on, so an implementer can c
 `errorAt` is the JSON Pointer of the expected error. A tool that reports error paths should report one at or inside it;
 the report counts how many do, but a different path never fails a case, because tools may point at a different node
 for the same mistake. A group in the manifest adds every technical example deck (`examples/technical/*.opf.json`) as a
-valid case, so the decks CI already validates are part of the suite. In November 2026 the suite has 148 cases: 31 valid
-core documents, 60 technical examples and 57 invalid documents.
+valid case, so the decks CI already validates are part of the suite. In November 2026 the suite has 167 cases: 40 valid
+core documents, 60 technical examples and 67 invalid documents.
 
 ## Run it
 

@@ -6,7 +6,7 @@ import { allocateRows } from '../dist/composition.js';
 import { layouts, sampleSlide } from './support/template-samples.mjs';
 
 // OPF 0.19 (RR-79, RR-81 review): composed content never overlaps the heading areas or another region and never leaves
-// its own region's box; when content does not fit, the design's tools apply in order (fit down to minFontSize, list
+// its own region's box; when content does not fit, the design's tools apply in order (fit down to minFontSizePx, list
 // columns, the overflow region and a continuation slide on the same layout, then the diagnostic).
 const tolerance = 0.5;
 const inside = (a, b) => a.x >= b.x - tolerance && a.y >= b.y - tolerance && a.x + a.width <= b.x + b.width + tolerance && a.y + a.height <= b.y + b.height + tolerance;

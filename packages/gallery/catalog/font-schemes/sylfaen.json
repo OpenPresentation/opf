@@ -3,7 +3,7 @@
   "id": "sylfaen",
   "name": "Sylfaen",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "hy",
     "ka"

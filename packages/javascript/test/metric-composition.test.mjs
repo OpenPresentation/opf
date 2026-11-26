@@ -5,7 +5,7 @@ import {paginateSlide,OPFPaginationError} from '../dist/pagination.js';
 
 test('composition accepts complete metric geometry against its rounded cell and aliases the value fit',()=>{
   for (const metric of [0,{value:42,unit:'ms',label:'Latency',description:'All source',delta:0,trend:'flat'}]) {
-    const slide={composition:{mode:'column',minFontSize:32},blocks:[{blocks:[{metric}]}]},before=structuredClone(slide);
+    const slide={composition:{mode:'column',minFontSizePx:32},blocks:[{blocks:[{metric}]}]},before=structuredClone(slide);
     let calls=0;
     const options={width:731.2345678,height:1280,fontFamilies:{heading:'Heading',body:'Body'},textMeasurement:{measure:(text,size)=>{calls++;return text.length*size*.5;}}};
     const ordinary=composeSlide(slide,options),count=calls;calls=0;
@@ -15,7 +15,7 @@ test('composition accepts complete metric geometry against its rounded cell and 
     const item=ordinary.items[0],value=item.metricLayout.parts.find(part=>part.role==='value');
     assert.equal(item.text,value.fit);assert.equal(item.textStyle,value.style);
     // LH-137: composition asks for the delta pill.
-    assert.deepEqual(item.metricLayout,layoutMetric(metric,item.box,{...options,path:item.path,minFontSize:32,scale:options.width/720,deltaPill:true}));
+    assert.deepEqual(item.metricLayout,layoutMetric(metric,item.box,{...options,path:item.path,minFontSizePx:32,scale:options.width/720,deltaPill:true}));
     assert.ok(item.metricLayout.parts.every(part=>part.fit.fontSize>=32*options.width/720));
     assert.deepEqual(ordinary.diagnostics,[]);
   }
@@ -23,7 +23,7 @@ test('composition accepts complete metric geometry against its rounded cell and 
 
 test('metric scoring includes long metadata and charges each failing leaf once',()=>{
   const metric={value:42,label:'Evidence '.repeat(81)};
-  const result=composeSlide({composition:{minFontSize:24},blocks:[{metric},{metric}]},{explain:true});
+  const result=composeSlide({composition:{minFontSizePx:24},blocks:[{metric},{metric}]},{explain:true});
   const decision=result.explanation.decisions[0];
   assert.equal(decision.selectedColumns,2);
   assert.equal(decision.candidates[0].penalties.textOverflow,2000);
@@ -43,7 +43,7 @@ test('slide alignment overrides host alignment for complete metric parts',()=>{
 test('strict ancestors reject complete metric field paths without changing source',()=>{
   for (const field of ['value','unit','label','description','delta']) {
     const metric={value:42,unit:'ms',label:'Latency',delta:0,trend:'flat',[field]:'Unabridged '.repeat(1000)};
-    const slide={composition:{overflow:'error',minFontSize:32},blocks:[{composition:{overflow:'warn'},blocks:[{metric}]}]},before=structuredClone(slide);
+    const slide={composition:{overflow:'error',minFontSizePx:32},blocks:[{composition:{overflow:'warn'},blocks:[{metric}]}]},before=structuredClone(slide);
     assert.throws(()=>composeSlide(slide,{explain:true}),error=>{
       assert.ok(error instanceof OPFCompositionError);assert.equal(error.explanation.algorithm,'grid-score-v9');
       assert.ok(error.diagnostics.some(d=>d.path===`slides.0.blocks.0.blocks.0.metric.${field}`));return true;
@@ -63,19 +63,19 @@ test('explicit metric placement and weights remain authoritative despite overflo
 test('atomic metric pagination preserves scalar/metadata types and persists its readable floor',()=>{
   for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(const metric of [0,{value:-12.5,unit:'ms',label:'Latency',description:'Complete source',delta:0,trend:'flat'}]){
     const slide={metric,notes:'Original notes'},before=structuredClone(slide);
-    const result=paginateSlide(slide,{...dimensions,minFontSize:32});
+    const result=paginateSlide(slide,{...dimensions,minFontSizePx:32});
     assert.equal(result.slides.length,1);assert.deepEqual(result.slides[0].metric,metric);assert.deepEqual(slide,before);
-    assert.equal(result.slides[0].composition.minFontSize,32);assert.equal(result.slides[0].notes,slide.notes);
+    assert.equal(result.slides[0].composition.minFontSizePx,32);assert.equal(result.slides[0].notes,slide.notes);
     assert.deepEqual(result.pages[0].mappings,[{sourcePath:'slides.0.metric',outputPath:'slides.0.metric'}]);
     assert.deepEqual(composeSlide(result.slides[0],dimensions).diagnostics,[]);
-    assert.deepEqual(paginateSlide(result.slides[0],{...dimensions,minFontSize:32}).slides,result.slides);
+    assert.deepEqual(paginateSlide(result.slides[0],{...dimensions,minFontSizePx:32}).slides,result.slides);
   }
 });
 
 test('irreducible atomic metrics reject all pagination output including empty values after earlier content',()=>{
   for(const value of ['',0])for(const field of ['unit','label','description','delta']){
     const slide={blocks:[{text:'Earlier content'},{metric:{value,[field]:'Unabridged metadata '.repeat(300)}}]},before=structuredClone(slide);
-    assert.throws(()=>paginateSlide(slide,{minFontSize:24}),error=>error instanceof OPFPaginationError&&error.diagnostics.some(d=>d.path.endsWith(`.metric.${field}`)));
+    assert.throws(()=>paginateSlide(slide,{minFontSizePx:24}),error=>error instanceof OPFPaginationError&&error.diagnostics.some(d=>d.path.endsWith(`.metric.${field}`)));
     assert.deepEqual(slide,before);
   }
 });

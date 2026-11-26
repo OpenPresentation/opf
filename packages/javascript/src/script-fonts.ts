@@ -26,17 +26,17 @@ import { languageOfText } from "./language-inference.js";
 /** OOXML script slot a writing system uses: `a:latin`, `a:ea` or `a:cs`. */
 export type ScriptRole = "latin" | "eastAsian" | "complexScript";
 
-/** FontScheme.languageFamily as written: the short OOXML names and the long slot names are one value. */
-export type LanguageFamilyName = "latin" | "ea" | "cs" | "eastAsian" | "complexScript";
+/** FontScheme.scriptGroup as written (OPF 0.37): the three group names; the short OOXML names `ea` and `cs` are no longer accepted. */
+export type ScriptGroupName = "latin" | "eastAsian" | "complexScript";
 
 /**
- * Read a FontScheme `languageFamily` as one of three values. `eastAsian` is `ea` and `complexScript` is
- * `cs`; anything that is not one of the five names returns undefined.
+ * Read a FontScheme `scriptGroup` as the OOXML slot of its group: `eastAsian` is `ea` and `complexScript` is
+ * `cs`; anything that is not one of the three names returns undefined.
  */
-export function normalizeLanguageFamily(value: unknown): "latin" | "ea" | "cs" | undefined {
+export function normalizeScriptGroup(value: unknown): "latin" | "ea" | "cs" | undefined {
   if (value === "latin") return "latin";
-  if (value === "ea" || value === "eastAsian") return "ea";
-  if (value === "cs" || value === "complexScript") return "cs";
+  if (value === "eastAsian") return "ea";
+  if (value === "complexScript") return "cs";
   return undefined;
 }
 
@@ -53,7 +53,7 @@ export interface ScriptFontSlots {
 /**
  * Where a resolved eastAsian/complexScript family came from:
  * - `fontScheme`: an explicit `eastAsian`/`complexScript` slot on the effective design font scheme.
- * - `schemeFamily`: the design font scheme's own major/minor, because its `languageFamily` names this
+ * - `schemeFamily`: the design font scheme's own major/minor, because its `scriptGroup` names this
  *   slot and its `languages` list is empty or names the presentation language.
  * - `language`: the presentation language's font scheme (`fontScheme`, or `googleFontScheme` for Google Slides).
  * - `latin`: no script-specific choice exists, so the slot repeats the latin family.
@@ -340,7 +340,7 @@ function schemeServesLanguage(scheme: Record<string, unknown>, tag: string, scri
  * `resolveFontFamilies` does; when nothing names a font scheme it falls back to
  * the engine default font scheme. Each of the eastAsian and complexScript slots
  * takes, in order: the design font scheme's explicit slot; the scheme's own
- * families when its `languageFamily` names the slot and its `languages` list
+ * families when its `scriptGroup` names the slot and its `languages` list
  * is empty or names the language; the language's font scheme when the
  * language's script uses the slot; otherwise the latin family.
  */
@@ -407,7 +407,7 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
   const slot = (role: Exclude<ScriptRole, "latin">, family: "ea" | "cs") => {
     const explicit = pairFamilies(scheme[role]);
     if (explicit) return { ...explicit, source: "fontScheme" as const };
-    if (normalizeLanguageFamily(scheme.languageFamily) === family && schemeAdmitsLanguage) return { ...latin, source: "schemeFamily" as const };
+    if (normalizeScriptGroup(scheme.scriptGroup) === family && schemeAdmitsLanguage) return { ...latin, source: "schemeFamily" as const };
     if (scriptRole === role && languageFamilies) return { ...languageFamilies, source: "language" as const };
     return { heading: latin.heading, body: latin.body, source: "latin" as const };
   };
@@ -422,7 +422,7 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
     // A script the latin slot covers (Armenian, Georgian, Ethiopic) has no slot of its own, so its theme entry is the only
     // place its script font is named. The deck chooses the family for it through the complex-script slot, the only slot
     // the native FF-46 decks use for these scripts: an explicit `complexScript` pair (source `fontScheme`), or a `cs`
-    // scheme for the deck's language (its `languageFamily` is `cs` and its `languages` list is empty or names the
+    // scheme for the deck's language (its `scriptGroup` is `cs` and its `languages` list is empty or names the
     // language: `schemeFamily`). The entry then names that family, not the language's default (FF-46, opf#375: an
     // Amharic deck on Ebrima wrote `Ethi` as Nyala, and PowerPoint listed Nyala in Presentation.Fonts). A latin-only
     // scheme, an `ea` slot and a `cs` scheme for another language name no family for these scripts, so the language's

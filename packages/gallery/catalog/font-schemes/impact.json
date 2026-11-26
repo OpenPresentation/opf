@@ -3,7 +3,7 @@
   "id": "impact",
   "name": "Impact",
   "app": "powerpoint",
-  "languageFamily": "latin",
+  "scriptGroup": "latin",
   "languages": [],
   "major": "Impact",
   "minor": "Grandview",

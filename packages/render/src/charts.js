@@ -5,6 +5,7 @@
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
 import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, paretoPlan, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartFocusContextColors, chartSeriesStrokes, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer, formatNumber, formatPercentNumber, chartNumberLanguage, chartBands, chartBandRanges, chartBandFill, chartBandMutedColor, bandLabelColor, BULLET_BAR_SHARE, BULLET_TARGET_SHARE, BULLET_TARGET_WIDTH_PX } from "@openpresentation/opf/composition";
+import { PRESET_DASHES } from "./shapes.js";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colors for a chart panel: core's `chartSeriesPalette` (the deck color scheme's accents, RR-89, with the chart's own
@@ -343,8 +344,8 @@ function tracePaths(item, bound, resolved) {
 function chartContext(item, box, bound, options, svg, { rows, columns, formats, trace, combo, hasX = false, target }, layer) {
   const u = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
   const composition = bound.composition ?? bound.geometry.composition ?? {};
-  // RR-90: core's chart text size (20 px, shrunk only for a small box, never below minFontSize), the size core's value-axis density assumes.
-  const requested = chartTextSize({ width: box.width, height: box.height, scale: u, minFontSize: composition.minFontSize }), fontPx = requested * u;
+  // RR-90: core's chart text size (20 px, shrunk only for a small box, never below minFontSizePx), the size core's value-axis density assumes.
+  const requested = chartTextSize({ width: box.width, height: box.height, scale: u, minFontSizePx: composition.minFontSizePx }), fontPx = requested * u;
   // LH-03, LH-105: a chart has no panel, so its colors are judged against what it stands on: the card, or the slide background.
   const surface = item.frameBox ? bound.design.roles.neutrals.card.hex : bound.design.backgroundColor ?? bound.design.colors.background;
   // RR-96: every neutral comes from the slide's variant (core `roles.neutrals`: tx1 mixed into bg1, the colors the PPTX export writes as
@@ -1079,7 +1080,7 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot =
 function drawReferenceLines(c, lines) {
   for (const line of lines ?? []) {
     const color=line.stroke.color===undefined?c.chartTextColor:c.resolveColorRef(line.stroke.color,c.chartTextColor);
-    const width=line.strokeWidth,dash=line.stroke.dash==='dash'?[4*width,3*width]:line.stroke.dash==='dot'?[width,3*width]:undefined;
+    const width=line.strokeWidth,pattern=PRESET_DASHES[line.stroke.dash],dash=pattern?pattern.map(part=>part*width):undefined;
     if(width>0)c.mark('line',{x1:line.x1,y1:line.y1,x2:line.x2,y2:line.y2,stroke:color,'stroke-width':width,...(dash?{'stroke-dasharray':dash.map(c.num).join(' ')}:{})},c.path+'.referenceLines.'+line.index);
     // RR-105: a label core could not keep off the marks stands on a plate of the chart's surface (the PPTX export fills its label so).
     if(line.label!==undefined&&line.labelBox&&line.labelPlate)c.mark('rect',{...line.labelBox,fill:c.surface},c.path+'.referenceLines.'+line.index+'.label');

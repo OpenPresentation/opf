@@ -31,7 +31,7 @@ export function bulletPlot(chart: unknown, data: ResolvedChartData, axis: ChartV
   if (!data.ok || typeof chart !== 'object' || chart === null || (chart as { type?: unknown }).type !== 'bullet' || !data.rows.length) return undefined;
   const { scale } = geometry;
   if (![box.width, box.height, scale].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0) return undefined;
-  const fontPx = chartTextSize({ width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize }) * scale;
+  const fontPx = chartTextSize({ width: box.width, height: box.height, scale, minFontSizePx: geometry.minFontSizePx }) * scale;
   const pad = 10 * scale, lineHeight = fontPx * 1.5, rtl = geometry.direction === 'rtl';
   const measure = (text: string) => geometry.measure(text, fontPx);
   let inner = { ...box };

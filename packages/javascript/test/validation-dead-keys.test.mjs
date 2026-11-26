@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import { embed, normalizeLanguageFamily, validate, validateCatalogRecord } from '../dist/index.js';
+import { embed, normalizeScriptGroup, validate, validateCatalogRecord } from '../dist/index.js';
 import { gallery } from '@openpresentation/gallery';
 import { resolveFontFamilies } from '../dist/composition.js';
 import { check, errorsOf, warningsOf } from './support/validation.mjs';
@@ -221,7 +221,7 @@ describe('fonts are family-name strings', () => {
   });
 });
 
-describe('FontScheme.app and languageFamily', () => {
+describe('FontScheme.app and scriptGroup', () => {
   test('app is powerpoint or google-slides, inline and in a record', () => {
     const base = { $schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: 'x', name: 'X', major: 'A', minor: 'B' };
     for (const app of ['powerpoint', 'google-slides']) {
@@ -241,16 +241,16 @@ describe('FontScheme.app and languageFamily', () => {
       assert.equal(result.valid, true, `${record.id}: ${JSON.stringify(errorsOf(result))}`);
     }
   });
-  test('languageFamily accepts latin, ea, cs, eastAsian and complexScript', () => {
+  test('scriptGroup accepts latin, eastAsian and complexScript, and not the short names of 0.36', () => {
     const base = { $schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: 'x', name: 'X', major: 'A', minor: 'B' };
-    for (const languageFamily of ['latin', 'ea', 'cs', 'eastAsian', 'complexScript']) {
-      valid(deck({ design: { fontScheme: { id: 'aptos', languageFamily } } }));
-      assert.equal(validateCatalogRecord('fontSchemes', { ...base, languageFamily }).valid, true, languageFamily);
+    for (const scriptGroup of ['latin', 'eastAsian', 'complexScript']) {
+      valid(deck({ design: { fontScheme: { id: 'aptos', scriptGroup } } }));
+      assert.equal(validateCatalogRecord('fontSchemes', { ...base, scriptGroup }).valid, true, scriptGroup);
     }
-    for (const languageFamily of ['arabic', 'EA', 'east-asian']) invalid(deck({ design: { fontScheme: { id: 'aptos', languageFamily } } }), '/design/fontScheme/languageFamily');
+    for (const scriptGroup of ['arabic', 'EA', 'east-asian', 'ea', 'cs']) invalid(deck({ design: { fontScheme: { id: 'aptos', scriptGroup } } }), '/design/fontScheme/scriptGroup');
   });
-  test('core normalizes the long names to the short ones', () => {
-    assert.deepEqual(['latin', 'ea', 'eastAsian', 'cs', 'complexScript', 'x', undefined].map(normalizeLanguageFamily), ['latin', 'ea', 'ea', 'cs', 'cs', undefined, undefined]);
+  test('core normalizes the long names to the slot names', () => {
+    assert.deepEqual(['latin', 'ea', 'eastAsian', 'cs', 'complexScript', 'x', undefined].map(normalizeScriptGroup), ['latin', undefined, 'ea', undefined, 'cs', undefined, undefined]);
   });
 });
 

@@ -1,0 +1,18 @@
+{
+  "organization": [
+    {
+      "id": "acme",
+      "name": "Acme"
+    }
+  ],
+  "speaker": {
+    "id": "pat",
+    "name": "Pat",
+    "organization": "acme"
+  },
+  "slides": [
+    {
+      "title": "Hello"
+    }
+  ]
+}

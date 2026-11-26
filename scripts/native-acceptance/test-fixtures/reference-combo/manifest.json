@@ -11,8 +11,8 @@
     },
     {
       "name": "source.opf.json",
-      "bytes": 3111,
-      "sha256": "ec455bebf5e5460fcaac18d8247a4d22b67d02568914c8936a7a3b1d5eb44db4"
+      "bytes": 3117,
+      "sha256": "22f2af67eeb5f9000aab918b26461ef2a513c79af0cf483d526b43575315e789"
     }
   ],
   "note": "Copied byte-exact from preserved partial02; no exporter/generation or fixture re-authoring. Ordinary imported last-series line default is intentionally elided.",

@@ -272,7 +272,7 @@
       "title": "Program Sponsor",
       "photo": "asset:supporting-photo",
       "email": "maya@north-valley-state.example",
-      "organizationId": "north-valley-state",
+      "organization": "north-valley-state",
       "socials": {
         "linkedin": "@maya-chen"
       }
@@ -281,7 +281,7 @@
       "id": "jon",
       "name": "Jon Alvarez",
       "title": "Operating Lead",
-      "organizationId": "north-valley-state",
+      "organization": "north-valley-state",
       "socials": {
         "tiktok": "@jon-alvarez"
       }
@@ -652,7 +652,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",

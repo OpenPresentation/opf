@@ -139,7 +139,7 @@ test('percent secondary combo uses the SAME composed native axes and retains ass
           ['B', 20, 0.3],
         ],
       },
-      line: ['Margin'],
+      lineSeries: ['Margin'],
       secondaryAxis: ['Margin'],
     },
   );
@@ -421,7 +421,7 @@ test('unknown marker, unsupported dash and invalid helper point counts are retai
   const e = await exported(doc('area'));
   for (const fn of [
     (s) => s.replace('symbol val="none"', 'symbol val="circle"'),
-    (s) => s.replace('prstDash val="dash"', 'prstDash val="sysDash"'),
+    (s) => s.replace('prstDash val="dash"', 'prstDash val="notADash"'),
     (s) => s.replace(/(<c:val>[\s\S]*?<c:ptCount val=")3"/, '$1' + '100001"'),
   ]) {
     let out;
@@ -490,7 +490,7 @@ test('same-axis edited helpers remain lines; marker adaptations are explicit', a
         rewrite(e.entries, 'ppt/charts/chart1.xml', (x) => editHelpers(x, (s) => s.replace('<c:v>25</c:v>', '<c:v>26</c:v>'))),
       );
     assert.equal(out.chart.type, type);
-    assert.equal(out.chart.line, undefined);
+    assert.equal(out.chart.lineSeries, undefined);
     assert.deepEqual(
       out.chart.data.rows.map((r) => r.slice(1)),
       [
@@ -688,7 +688,7 @@ test('separate-axis ordinary line groups disclose required primary-column adapta
     ['B', 0.3, 0.5],
   ]);
   assert.ok(out.diagnostics.some((d) => /first current series 'Margin'.*primary-axis columns/.test(d.message)));
-  assert.ok(!out.chart.line?.includes('Margin'));
+  assert.ok(!out.chart.lineSeries?.includes('Margin'));
   assert.ok(!out.chart.secondaryAxis?.includes('Margin'));
 });
 test('native stroke above the mathematically rounded schema maximum remains ordinary data', async () => {

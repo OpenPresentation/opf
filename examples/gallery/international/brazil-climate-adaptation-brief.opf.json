@@ -266,7 +266,7 @@
     "id": "speaker",
     "name": "Priya Raman",
     "title": "Director of Strategy",
-    "organizationId": "instituto-verde-norte",
+    "organization": "instituto-verde-norte",
     "bio": "Leads climate adaptation planning for Instituto Verde Norte.",
     "socials": {
       "github": "@instituto-verde-norte-speaker"
@@ -653,7 +653,7 @@
         "consolas": {
           "name": "Consolas",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Consolas",
           "minor": "Consolas",
@@ -665,7 +665,7 @@
         "impact": {
           "name": "Impact",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Impact",
           "minor": "Grandview",

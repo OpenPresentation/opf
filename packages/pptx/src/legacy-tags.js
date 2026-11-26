@@ -1,6 +1,7 @@
 // Legacy native provenance is a typed interchange format, not an arbitrary JSON
 // tree. Only the known reader selects a family below. Authored strings, data
 // keys, extensions, XML evidence and unknown fields are never searched/replaced.
+import {renameRecordKeys} from '@openpresentation/opf';
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const own = (value, key) => Object.hasOwn(value, key);
 const side = value => value === 'left' ? 'start' : value === 'right' ? 'end' : value;
@@ -126,7 +127,12 @@ const dataRecord = (value, depth) => {
   }, depth);
 };
 const imageRecord = (value, depth) => fields(value, {path, treatment: image, overlay: edge}, depth);
-const annotationRecord = (value, depth) => fields(value, {path, field: path, source: path, align: side}, depth);
+// OPF 0.37: a note's `url` is its reference's `link`.
+const annotationRecord = (value, depth) => {
+  const next = fields(value, {path, field: path, source: path, align: side}, depth);
+  if (!object(next) || !own(next, 'url') || own(next, 'link')) return next;
+  return Object.fromEntries(Object.entries(next).map(([key, entry]) => [key === 'url' ? 'link' : key, entry]));
+};
 const furniturePart = (value, depth) => fields(value, {zone: side, slot}, depth);
 const furnitureRecord = (value, depth) => fields(value, {
   definitions: (definitions, at) => fields(definitions, {
@@ -158,11 +164,16 @@ export function upgradeTag(record, family) {
   if (!own(readers, family) || !object(record)) return record;
   // DATASETS is a map whose keys are authored ids, including "vocabulary".
   if (family !== 'datasets') {
-    if (record.vocabulary === 2) return record;
+    if (record.vocabulary === 2) return renamed(record, family);
     if (record.vocabulary !== undefined) throw Error('Unsupported native provenance vocabulary.');
   }
-  const upgraded = readers[family](record, 0);
+  const upgraded = renamed(readers[family](record, 0), family);
   if (family === 'slide' && record.content?.form === 'regions' && object(record.content.regions))
     regionOrders.set(upgraded, Object.keys(record.content.regions).sort().map(region));
   return upgraded;
 }
+
+// OPF 0.37 renamed eight keys of the authored deck (scriptGroup, anchor, organization, minFontSizePx, maxFontSizePx, link, appearance,
+// lineSeries). The records that hold authored OPF read a file written before 0.37 through core's one rename table; a record that needs no
+// rewrite comes back as the same object.
+const renamed = (record, family) => ['document', 'slide', 'data'].includes(family) ? renameRecordKeys(record) : record;

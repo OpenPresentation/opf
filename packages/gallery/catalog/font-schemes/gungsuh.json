@@ -3,7 +3,7 @@
   "id": "gungsuh",
   "name": "Gungsuh",
   "app": "powerpoint",
-  "languageFamily": "ea",
+  "scriptGroup": "eastAsian",
   "languages": [
     "ko"
   ],

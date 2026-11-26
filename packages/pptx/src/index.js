@@ -1116,7 +1116,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
       const name = shape['p:nvSpPr']?.['p:cNvPr']?.name;
       if (typeof name !== 'string') return;
       if (isScrimName(name, scrimName(opfSlide))) images.consumedShapes.add(index);
-      for (const tone of ['dark', 'light']) if (isScrimName(name, toneScrimName(opfSlide, tone))) { images.consumedShapes.add(index); toned = {...imageBackground, tone}; }
+      for (const tone of ['dark', 'light']) if (isScrimName(name, toneScrimName(opfSlide, tone))) { images.consumedShapes.add(index); toned = {...imageBackground, appearance: tone}; }
     });
   }
   if (toned) slide.design = {background: toned};
@@ -1130,7 +1130,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     if (!sameMap) {
       const mapped = variantFromColorMap(mapping, {explicit: true});
       // The variant a tone names is the tone's, not a second statement of it.
-      const tone = slide.design?.background?.tone, impliedByTone = tone && mapped.variant === (tone === 'dark' ? 'dark1' : 'light1');
+      const tone = slide.design?.background?.appearance, impliedByTone = tone && mapped.variant === (tone === 'dark' ? 'dark1' : 'light1');
       if (impliedByTone) { /* the tone names this variant */ }
       else if (mapped.variant) slide.design = {...slide.design, variant: mapped.variant};
       else if (mapped.unsupported) options.onDiagnostic?.({code: "unsupported-color-map", path: `slides.${slideIndex}.design.variant`, message: "The slide's color map override is not a variant OPF can name, so slides[n].design.variant was not imported."});
@@ -2228,7 +2228,7 @@ function secondaryValueAxisOf(plotArea, combo) {
   return asArray(plotArea["c:valAx"]).find(axis => ids.has(String(axis?.["c:axId"]?.val)));
 }
 
-// `line` and `secondaryAxis` of an imported combo chart by series name (elideComboDefault drops a `line` that is the default).
+// `lineSeries` and `secondaryAxis` of an imported combo chart by series name (elideComboDefault drops a `lineSeries` that is the default).
 // Combo lines always draw markers in OPF; a native line without markers is reported, never silently changed.
 function comboFields(comboSeries, names, report) {
   const allLines=comboSeries.every(e=>e.role==='line');
@@ -2238,17 +2238,17 @@ function comboFields(comboSeries, names, report) {
   if (unmarked.length) report?.({option: 'line', message: `The combo chart's line ${unmarked.length === 1 ? 'series' : 'series'} ${unmarked.map(name => `'${name}'`).join(', ')} ${unmarked.length === 1 ? 'has' : 'have'} no markers; OPF combo lines always draw markers, so ${unmarked.length === 1 ? 'it imports' : 'they import'} with markers.`});
   if(comboSeries.every(e=>e.role==='line'))report?.({option:'type',message:`Native line groups with incompatible axes/grouping require an OPF combo: the first current series '${names[0]}' becomes primary-axis columns to satisfy its required column role; remaining line/axis roles are retained where expressible. All current data columns and source order are preserved.`});
   if (new Set(line).size !== line.length || new Set(names).size !== names.length) {
-    report?.({option: 'line', message: 'Two series of the combo chart share a name, so which of them is a line cannot be said by name; the chart imports with its default line (the last series).'});
+    report?.({option: 'lineSeries', message: 'Two series of the combo chart share a name, so which of them is a line cannot be said by name; the chart imports with its default line (the last series).'});
     return {};
   }
-  return {...(line.length ? {line} : {}), ...(secondaryAxis.length ? {secondaryAxis} : {})};
+  return {...(line.length ? {lineSeries: line} : {}), ...(secondaryAxis.length ? {secondaryAxis} : {})};
 }
 
 // An imported combo chart writes `line` only when it differs from the default (the last plotted series), judged on the final
 // data (a restored data record can order the columns differently from the native series).
 function elideComboDefault(chart, datasets) {
-  if (!Array.isArray(chart.line)) return chart;
-  const {line, ...rest} = chart;
+  if (!Array.isArray(chart.lineSeries)) return chart;
+  const {lineSeries: line, ...rest} = chart;
   const resolved = resolveChartData(rest, {datasets: datasets ?? {}});
   if (!resolved.ok || !Array.isArray(resolved.combo)) return chart;
   const defaults = resolved.columns.slice(1).filter((_, index) => resolved.combo[index]?.role === 'line');
@@ -3954,7 +3954,7 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
   // LH-02: core's automatic scrims under the text (no overlay of the author's): each one native rectangle in the slide background color (bg1 of the
   // slide's variant once scheme colors are written), whose fill packaging turns into a linear gradient with alpha stops (attachScrims)
   // unless it is a band of one opacity. It replaces RR-96's 40% scrim of a picture that names its tone, whose name it keeps.
-  const tone = isPlainObject(authored) ? authored.tone : undefined;
+  const tone = isPlainObject(authored) ? authored.appearance : undefined;
   if (!background.overlay) (background.scrims ?? []).forEach((scrim, index) => {
     const base = tone === 'dark' || tone === 'light' ? toneScrimName(slidePath, tone) : scrimName(slidePath), name = index ? `${base} ${index + 1}` : base;
     slide.addShape('rect', { x: scrim.box.x / 96, y: scrim.box.y / 96, w: scrim.box.width / 96, h: scrim.box.height / 96, objectName: name, fill: { color: normalizeHex(scrim.color), transparency: Math.round(100 - scrim.opacity * 100) }, line: { type: 'none' } });
@@ -4085,14 +4085,14 @@ async function addLogo(slide, presentation, logo, slideIndex, slideContext, cont
 
 // FF-62, RR-90: chart text is one size, core's `chartTextSize` for the chart's box: 20 px at the 1280 x 720 reference (15 pt on a 13.33 x 7.5 in
 // slide), shrunk only when the box is small (at most 1/18 of its height and 1/30 of its width, whole pixels) and never below
-// `composition.minFontSize` (default 16), scaled by the slide's shorter side over 720 px. The preview (opf-render charts.js) and core's value-axis
+// `composition.minFontSizePx` (default 16), scaled by the slide's shorter side over 720 px. The preview (opf-render charts.js) and core's value-axis
 // density call the same function with the same inputs, so the axis core composed matches the text drawn. The export writes the size in hundredths
 // of a point (DrawingML `sz`) on core's 0.01 pt grid, as core composes every font size (RR-16): the request rounds down, never below the
 // grid-rounded floor (core `gridFontSize`, `snapFontSizeUp(floor)` against `snapFontSizeDown(request)`).
 function chartTextHundredths(context, region) {
   const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
-  const floor = context.composition?.minFontSize ?? 16;
-  const px = coreChartTextSize({width: region.w * 96, height: region.h * 96, scale, minFontSize: floor});
+  const floor = context.composition?.minFontSizePx ?? 16;
+  const px = coreChartTextSize({width: region.w * 96, height: region.h * 96, scale, minFontSizePx: floor});
   return Math.max(Math.ceil(floor * scale * 75 - 1e-6), Math.floor(px * scale * 75 + 1e-6));
 }
 
@@ -4125,7 +4125,7 @@ function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale,
   const measure = textWidthMeasurer(resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, italic: false}, options.textMeasurement), options.textMeasurement);
   const deckLanguage = typeof presentation?.language === 'string' ? presentation.language : presentation?.language?.bcp47;
   const language = chartNumberLanguage(chart, deckLanguage), rtl = context.direction === 'rtl', horizontal = chartData.barDir === 'bar';
-  const geometry = {scale, minFontSize: context.composition?.minFontSize, measure, direction: rtl ? 'rtl' : 'ltr', ...(language === undefined ? {} : {language})};
+  const geometry = {scale, minFontSizePx: context.composition?.minFontSizePx, measure, direction: rtl ? 'rtl' : 'ltr', ...(language === undefined ? {} : {language})};
   const barInset = horizontal ? horizontalBarPlot(chart, data, layer, valueAxis, box, geometry) : undefined;
   // A whole horizontal plot without its value axis needs the label room only horizontalBarPlot keeps (chartPlotInset's bar branch, the
   // preview's plot of a bar chart with options, keeps none).
@@ -4167,7 +4167,7 @@ function circularPlot(chart, chartData, layer, plot, region, {scale, context, op
     const measure = textWidthMeasurer(resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, italic: false}, options.textMeasurement), options.textMeasurement);
     const deckLanguage = typeof presentation?.language === 'string' ? presentation.language : presentation?.language?.bcp47;
     const language = chartNumberLanguage(chart, deckLanguage);
-    const geometry = {box, scale, minFontSize: context.composition?.minFontSize, measure, direction: context.direction === 'rtl' ? 'rtl' : 'ltr', ...(language === undefined ? {} : {language})};
+    const geometry = {box, scale, minFontSizePx: context.composition?.minFontSizePx, measure, direction: context.direction === 'rtl' ? 'rtl' : 'ltr', ...(language === undefined ? {} : {language})};
     square = chartCircleSquare({...chart, type: chartData.type}, data, geometry, layer, {labels: true});
   }
   if (!square || !(square.width > 0)) return undefined;
@@ -4585,7 +4585,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
   }
 
   const layout = layoutTable(table, {x:region.x*96,y:region.y*96,width:region.w*96,height:region.h*96}, {
-    scale, minFontSize:context.composition?.minFontSize, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path, alignment:context.tableAlignment,
+    scale, minFontSizePx:context.composition?.minFontSizePx, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path, alignment:context.tableAlignment,
     ...(context.direction === 'rtl' ? {direction: 'rtl'} : {}), ...(presentation ? {presentation} : {}),
     // LH-106: number cells are shown in the numbering system of the slide's language (its own, else the deck's), as the preview shows them.
     ...tableNumberLanguage(presentation, path),
@@ -4659,7 +4659,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
         lineSpacing: fit.lineHeight * 0.75,
         paraSpaceAfter: 0,
         align: physicalAlignment(cell.alignment, cell.direction),
-        valign: cellStyle.verticalAlign ?? 'top',
+        valign: cellStyle.anchor ?? 'top',
         ...(cell.colSpan > 1 ? {colspan:cell.colSpan} : {}),
         ...(cell.rowSpan > 1 ? {rowspan:cell.rowSpan} : {}),
         color: nativeColor(textReference, baseColor, context, defaultText),
@@ -5054,7 +5054,7 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
   assertXmlText(text, config.path);
   const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
   const style = config.textStyle ?? resolveTextStyle({fontFamily: config.fontFamily ?? context.fonts.body, fontWeight: config.fontWeight ?? 400, path: config.path}, options.textMeasurement);
-  const fit = config.fit ?? fitText(String(text ?? ''), box, config.fontSize * scale, (context.composition?.minFontSize ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
+  const fit = config.fit ?? fitText(String(text ?? ''), box, config.fontSize * scale, (context.composition?.minFontSizePx ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
   if (fit.overflow && !config.diagnosticsHandled) {
     const diagnostic = {code: 'text-overflow', path: config.path, message: 'Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide.'};
     options.onDiagnostic?.(diagnostic);
@@ -5645,7 +5645,7 @@ async function addEmbedPayload(slide, presentation, value, region, path, context
   }
   const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
   const card = embedCardLayout({frame: box, title, site: embedSite(embed.src), headingFamily: context.fonts.heading, bodyFamily: context.fonts.body, scale,
-    minFontSize: context.composition?.minFontSize ?? 16, measurement: options.textMeasurement});
+    minFontSizePx: context.composition?.minFontSizePx ?? 16, measurement: options.textMeasurement});
   const inches = value => value / 96, ink = context.roles ? normalizeHex(readableSchemeColor(`#${context.colors.accent}`, context.roles).hex) : 'FFFFFF';
   context.embedCards.set(name, title);
   slide.addShape('roundRect', {x: region.x, y: region.y, w: region.w, h: region.h, rectRadius: inches(card.radius), fill: {color: context.colors.surface}, line: {color: context.colors.border, width: 0.75}, hyperlink: link, objectName: name});
@@ -5704,7 +5704,7 @@ function addImagePlaceholder(slide, presentation, asset, region, path, context, 
   const textColor = normalizeHex(textColorForFill(`#${surface}`, `#${context.colors.text}`));
   const style = resolveTextStyle({ fontFamily: context.fonts.body, fontWeight: 600, path }, options.textMeasurement);
   const measurer = textWidthMeasurer(style, options.textMeasurement);
-  const minimum = (context.composition?.minFontSize ?? 16) * scale;
+  const minimum = (context.composition?.minFontSizePx ?? 16) * scale;
   const fit = fitText(label, inner, 20 * scale, minimum, measurer);
   const objectName = `OPF image placeholder ${context.imagePlaceholders.size + 1}`;
   context.imagePlaceholders.set(objectName, `Image unavailable: ${description}`);

@@ -1,0 +1,24 @@
+{
+  "slides": [
+    {
+      "title": "Table",
+      "table": {
+        "columns": [
+          "A",
+          "B"
+        ],
+        "rows": [
+          [
+            {
+              "value": "x",
+              "style": {
+                "anchor": "bottom"
+              }
+            },
+            "y"
+          ]
+        ]
+      }
+    }
+  ]
+}

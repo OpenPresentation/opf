@@ -3,7 +3,7 @@
   "id": "khmer-ui",
   "name": "Khmer UI",
   "app": "powerpoint",
-  "languageFamily": "cs",
+  "scriptGroup": "complexScript",
   "languages": [
     "km"
   ],

@@ -422,7 +422,7 @@
     "id": "speaker",
     "name": "Evan Brooks",
     "title": "Product Lead",
-    "organizationId": "asteria-robotics",
+    "organization": "asteria-robotics",
     "bio": "Leads investor relations planning for Asteria Robotics.",
     "socials": {
       "youtube": "@asteria-robotics-speaker"
@@ -764,7 +764,7 @@
         "seaford": {
           "name": "Seaford",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Seaford Display",
           "minor": "Seaford",
@@ -775,7 +775,7 @@
         "noto-sans-hebrew": {
           "name": "Noto Sans Hebrew",
           "app": "google-slides",
-          "languageFamily": "cs",
+          "scriptGroup": "complexScript",
           "languages": [
             "he"
           ],
@@ -788,7 +788,7 @@
         "tenorite": {
           "name": "Tenorite",
           "app": "powerpoint",
-          "languageFamily": "latin",
+          "scriptGroup": "latin",
           "languages": [],
           "major": "Tenorite Display",
           "minor": "Tenorite",
