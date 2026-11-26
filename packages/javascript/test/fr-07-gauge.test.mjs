@@ -136,3 +136,10 @@ test('Markdown and YAML: a gauge with bands and a target, and a gauge bound to d
     assert.deepEqual(metrics(back.presentation), metrics(deck));
   }
 });
+
+test('a gauge in a tile fits its text to the readability floor, not to the tile\'s floors', () => {
+  const gauge = input({ value: 0.48, format: '0%', gauge: { max: 1 } });
+  const tile = layoutMetric({ label: 'Lisbon', value: '48%' }, { x: 0, y: 0, width: 570, height: 233 }, { gauge, tile: true, minimumSizes: { value: 120, label: 40 } });
+  assert.ok(tile.gauge, 'the gauge is drawn');
+  clear(tile);
+});
