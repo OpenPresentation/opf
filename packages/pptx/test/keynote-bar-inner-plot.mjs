@@ -105,6 +105,9 @@ for (const [index, name] of names.entries()) {
   // One rounding step: a fraction is written to four decimals of the frame; the preview prints three decimals of a pixel.
   for (const side of ['left', 'top', 'right', 'bottom']) {
     const dimension = side === 'left' || side === 'right' ? plotArea.frame[2] : plotArea.frame[3], step = 1e-4 * dimension + 0.002;
+    // A 100% stacked bar chart's right edge is pulled in by what its "100%" end label lacks (PowerPoint moved the whole plot left by 2.3 px
+    // otherwise, measured 2026-11-25); the preview keeps no room for that label, so this one edge is allowed to be up to 4 px short, never long.
+    if (side === 'right' && /^100pct/.test(cases[name].type)) { assert.ok(preview.right - plotArea.plot.right >= -step && preview.right - plotArea.plot.right <= 4, `${name}: plot right ${plotArea.plot.right.toFixed(3)} in the file, ${preview.right.toFixed(3)} in the preview`); continue; }
     assert.ok(Math.abs(plotArea.plot[side] - preview[side]) <= step, `${name}: plot ${side} ${plotArea.plot[side].toFixed(3)} in the file, ${preview[side].toFixed(3)} in the preview`);
   }
   boxes++;
