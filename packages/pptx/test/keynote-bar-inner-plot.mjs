@@ -174,7 +174,7 @@ assert.ok(boxes >= 20, `most of the charts have a manual plot area (${boxes})`);
   const legends = Object.entries(cases).filter(([, chart]) => typeof chart.legend === 'string');
   assert.ok(legends.length >= 15, 'many charts with a legend');
   let placed = 0;
-  const widths = new Map();
+  const widths = new Map(), names2 = new Map();
   for (const [name, chart] of legends) {
     const n = names.indexOf(name) + 1, slide = strFromU8(parts[`ppt/slides/slide${n}.xml`]);
     const [fx, fy, fw, fh] = /<p:graphicFrame>[\s\S]*?<a:off x="(\d+)" y="(\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/.exec(slide).slice(1).map(value => Number(value) / EMU_PX);
@@ -187,10 +187,25 @@ assert.ok(boxes >= 20, `most of the charts have a manual plot area (${boxes})`);
     const box = {x: fx + at('x') * fw, y: fy + at('y') * fh, w: at('w') * fw, h: at('h') * fh};
     const keys = [...toSvg(deck, n).matchAll(/<rect\b[^>]*>/g)].map(([tag]) => Object.fromEntries([...tag.matchAll(/\b(x|y|width|height)="([\d.]+)"/g)].map(([, key, value]) => [key, Number(value)]))).filter(rect => rect.width === 12 && rect.height === 12);
     assert.equal(keys.length, chart.data.columns.length - 1, `${name}: the preview's keys`);
-    // PowerPoint centers its entries in the box, each as wide as the longest name plus 26 px, its key 6.5 px right of the box's edge: the box starts 6.5 px left of the preview's key.
-    assert.ok(Math.abs(box.x + 6.5 - keys[0].x) < 0.2, `${name}: PowerPoint's key lands on the preview's first key (box ${box.x.toFixed(2)}, key ${keys[0].x})`);
-    // On the right the preview's legend is its keys' width, the longest name and a pad wide, ending a pad inside the frame: the names' width follows from the key.
-    if (chart.legend === 'right') assert.ok(Math.abs(box.w - (fx + fw - 10 - 30 - keys[0].x + 26)) < 0.3, `${name}: the box is the longest name plus 26 px wide (${box.w.toFixed(2)})`);
+    // PowerPoint centers its entries in the box, each as wide as 25.7 px plus 1.0115 times the longest name (measured 2026-11-26): the box is the
+    // longest name N plus 26 px plus a slack of 6% of N and 4 px (so PowerPoint does not wrap an entry), and starts 6.5 px plus half the slack left of
+    // the preview's first key. A slack the frame does not hold is cut to what fits: at the left the key is only a pad (10 px) in from the frame, so
+    // the slack is 7 px there; on the right the preview's legend is its keys' width, the longest name and a pad wide, ending a pad inside the frame.
+    const keyAt = keys[0].x;
+    let nameWidth, slack;
+    if (chart.legend === 'right') {
+      nameWidth = fx + fw - 10 - 30 - keyAt;
+      slack = Math.max(0, Math.min(0.06 * nameWidth + 4, 2 * (fx + fw - keyAt - nameWidth - 19.5)));
+    } else {
+      slack = 2 * (keyAt - fx - 6.5);
+      nameWidth = box.w - 26 - slack;
+      assert.ok(0.06 * nameWidth + 4 >= slack - 0.3, `${name}: the frame cuts the slack (${slack.toFixed(2)} px)`);
+    }
+    assert.ok(Math.abs(box.w - (nameWidth + 26 + slack)) < 0.3, `${name}: the box is the longest name plus 26 px plus its slack wide (${box.w.toFixed(2)})`);
+    assert.ok(Math.abs(box.x + 6.5 + slack / 2 - keyAt) < 0.2, `${name}: PowerPoint's key lands on the preview's first key (box ${box.x.toFixed(2)}, key ${keyAt})`);
+    const known = names2.get(chart.data.columns.join());
+    if (known === undefined) names2.set(chart.data.columns.join(), nameWidth); else assert.ok(Math.abs(known - nameWidth) < 0.4, `${name}: the same names are as wide at both sides (${known.toFixed(2)}, ${nameWidth.toFixed(2)})`);
+    assert.ok(box.x >= fx - 0.05, `${name}: the box starts inside the frame`);
     widths.set(`${chart.type}|${chart.legend}|${chart.data.columns.join()}`, box.w);
     const row = box.h / keys.length;
     keys.forEach((key, index) => assert.ok(Math.abs(box.y + index * row + (row - 12) / 2 - key.y) < 0.3, `${name}: key ${index} on its row`));
@@ -198,8 +213,6 @@ assert.ok(boxes >= 20, `most of the charts have a manual plot area (${boxes})`);
     placed++;
   }
   assert.ok(placed >= 10, `side legends are placed (${placed})`);
-  // The same names have the same box width at the left and at the right.
-  for (const type of ['bar', 'column']) for (const columns of [chart('bar', 2).data.columns.join(), longNames('bar', 'x').data.columns.join()]) { const l = widths.get(`${type}|left|${columns}`), r = widths.get(`${type}|right|${columns}`); if (l !== undefined && r !== undefined) assert.ok(Math.abs(l - r) < 0.2, `${type}: one box width at both sides`); }
   // A line chart's legend is not touched.
   const line = unzipSync(await toPptx({slides: [{title: 'Line', chart: {type: 'line', legend: 'right', data: {columns: ['Month', 'A', 'B'], rows: [['Jan', 1, 2], ['Feb', 2, 3]]}}}]}));
   assert.ok(!/<c:legend>\s*<c:legendPos val="r"\/>\s*<c:layout>/.test(strFromU8(line['ppt/charts/chart1.xml'])), 'a line chart keeps PowerPoint\'s own legend place');

@@ -4370,7 +4370,11 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     const names = chartData.series.map(entry => String(entry.name ?? ''));
     const nameWidth = Math.min(Math.max(0, ...names.map(name => measure(name, fontPx))), frameW * 0.45 - fontPx * 1.5);
     const drawn = Math.min(frameW * 0.45, fontPx * 0.6 + fontPx * 0.4 + nameWidth + fontPx * 0.5), height = names.length * fontPx * 1.5;
-    const key = chart.legend === 'left' ? pad : frameW - pad - drawn, width = nameWidth + 26 * k, left = key - 6.5 * k;
+    const key = chart.legend === 'left' ? pad : frameW - pad - drawn;
+    // PowerPoint needs 25.7 px + 1.0115 x the name for an entry (measured), and wraps one that does not fit: so 6% of the name and 4 px of slack. The entries
+    // are centered, so the slack moves the box left by half of it; the frame's edges cut it to what they hold.
+    const slack = Math.max(0, Math.min(0.06 * nameWidth + 4 * k, 2 * (key - 6.5 * k), 2 * (frameW - key - nameWidth - 19.5 * k)));
+    const width = nameWidth + 26 * k + slack, left = key - 6.5 * k - slack / 2;
     layerXml.layout.legend = {x: Number((left / frameW).toFixed(4)), y: Number(((frameH - height) / 2 / frameH).toFixed(4)), w: Number((width / frameW).toFixed(4)), h: Number((height / frameH).toFixed(4))};
   }
   if (Object.keys(layerXml.layout).length) context.chartHeadings.get(objectName).layerLayout = layerXml.layout;
