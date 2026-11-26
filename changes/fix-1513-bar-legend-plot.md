@@ -1,0 +1,5 @@
+---
+type: fixed
+packages: [opf, pptx]
+---
+opf#1513 (output-changing for every bar and column chart with a `legend` option that had no manual plot area): the plot area is written as the plot the preview draws (`layoutTarget inner`) instead of being left to PowerPoint, which placed it 9 to 60 px from the preview's. A chart with a `legend` option has no header row (the author chose its legend), so core gave the export no plot to write, and a horizontal bar chart with chart options was left out of the opf#1415 rule because core's `chartPlotInset` did not keep the room of a small bar chart's value labels. Core's `chartPlotInset` now keeps that room for a small chart's own value labels too, as the preview does, and the export writes the plot for clustered, stacked and 100% stacked bar and column charts with a legend at any side. The legend is still PowerPoint's own (`legendPos` only), as for the column charts before. A chart with bands keeps the plot its bands pin; a bullet chart is unchanged.

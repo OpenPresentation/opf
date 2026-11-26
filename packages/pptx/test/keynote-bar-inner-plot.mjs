@@ -17,6 +17,7 @@ import {toPptx} from '../dist/index.js';
 const EMU_PX = 9525;
 const rows = [['Cranes', 14, 9], ['Software', 22, 12], ['Leasing', 6, 8], ['Repairs', 3, 5]];
 const series = count => ({columns: ['Product', 'Margin', 'Cost'].slice(0, count + 1), rows: rows.map(row => row.slice(0, count + 1))});
+const longNames = (type, legend) => ({type, legend, data: {columns: ['Product', 'Margin this quarter, all regions', 'Cost this quarter, all regions'], rows: rows.map(row => row.slice(0, 3))}});
 const chart = (type, count, extra = {}) => ({type, data: series(count), ...extra});
 const cases = {
   'bar with data labels (opf#1492)': chart('bar', 1, {dataLabels: true}),
@@ -48,6 +49,16 @@ const cases = {
   '100% stacked bar': chart('100pct-stacked-bar', 2),
   '100% stacked bar with data labels': chart('100pct-stacked-bar', 2, {dataLabels: true}),
   'stacked bar, legend at the bottom': chart('stacked-bar', 2, {legend: 'bottom'}),
+  // opf#1513: a chart with a legend option has no header row, and its plot was left to PowerPoint: it is the preview's (long names: a wide side legend).
+  'bar with long series names, legend at the left': longNames('bar', 'left'),
+  'bar with long series names, legend at the right': longNames('bar', 'right'),
+  'bar with long series names, legend at the top': longNames('bar', 'top'),
+  'bar with long series names, legend at the bottom, data labels': {...longNames('bar', 'bottom'), dataLabels: true},
+  'stacked bar, legend at the right': chart('stacked-bar', 2, {legend: 'right'}),
+  '100% stacked bar, legend at the left': chart('100pct-stacked-bar', 2, {legend: 'left'}),
+  '100% stacked bar, legend at the top, data labels': chart('100pct-stacked-bar', 2, {legend: 'top', dataLabels: true}),
+  'stacked column, legend at the right': chart('stacked-column', 2, {legend: 'right'}),
+  'column with long series names, legend at the right': longNames('column', 'right'),
   'stacked column': chart('stacked-column', 2),
   'stacked column with data labels': chart('stacked-column', 2, {dataLabels: true}),
 };

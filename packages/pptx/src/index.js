@@ -4130,7 +4130,6 @@ function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale,
   // preview's plot of a bar chart with options, keeps none).
   // (An outer plot area written below a header row is replaced by the preview's plot all the same, opf#1492: Keynote reads a manual box as the
   // inner plot, and cuts the category names of a chart left on the outer box.)
-  if (whole && horizontal && !barInset && valueAxisHidden && !outer) return undefined;
   const inset = barInset ?? chartPlotInset(chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...geometry, box});
   if (!inset) return undefined;
   if (whole) {
@@ -4331,7 +4330,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // without one, has the preview's plot (lowLabelPlot, whole): the plot starts where the preview's does under the heading, and the label of
   // the tallest column (or longest bar) keeps the room the preview gives it.
   else if (!layerXml.layout.plot?.target && ['bar', 'line', 'area'].includes(chartData.type) && !chartData.combo
-    && (layerXml.layout.plot || (chartData.type === 'bar' && layerXml.options.valAxisHidden === true && chartOptions.dataLabels))) {
+    && (layerXml.layout.plot || (chartData.type === 'bar' && layerXml.options.valAxisHidden === true && chartOptions.dataLabels)
+      // opf#1513: a chart with a legend option has no header row (the author chose its legend), so no plot area of core's: it is the preview's.
+      || (chartData.type === 'bar' && typeof chart?.legend === 'string'))) {
     const plotBox = lowLabelPlot(chart, chartData, layer, chartLayout?.valueAxis, layerXml.layout.plot, region, {scale, valueAxisHidden: layerXml.options.valAxisHidden === true, context, options, presentation, whole: true});
     if (plotBox) layerXml.layout.plot = plotBox;
   }
