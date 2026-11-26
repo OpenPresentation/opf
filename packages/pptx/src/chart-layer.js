@@ -112,7 +112,7 @@ export function applyChartLayerLayout(xml, layout) {
   if (!layout || (!layout.title && !layout.legend && !layout.plot)) return xml;
   let out = xml;
   if (layout.title) out = out.replace(/(<c:title>[\s\S]*?<\/c:tx>)\s*(?:<c:layout\/>|<c:layout>[\s\S]*?<\/c:layout>)?/, (_, head) => `${head}${manualLayout(layout.title)}`);
-  if (layout.legend) out = out.replace(/(<c:legend>\s*<c:legendPos val="[tb]"\/>)\s*(?:<c:layout\/>|<c:layout>[\s\S]*?<\/c:layout>)?/, (_, head) => `${head}${manualLayout(layout.legend)}`);
+  if (layout.legend) out = out.replace(/(<c:legend>\s*<c:legendPos val="[tblr]"\/>)\s*(?:<c:layout\/>|<c:layout>[\s\S]*?<\/c:layout>)?/, (_, head) => `${head}${manualLayout(layout.legend)}`);
   if (layout.plot) out = out.replace(/(<c:plotArea>)\s*(?:<c:layout\/>|<c:layout>[\s\S]*?<\/c:layout>)/, (_, head) => `${head}${manualLayout(layout.plot, layout.plot.target ?? 'outer')}`);
   return out;
 }

@@ -194,8 +194,10 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
     // opf#1492: a small bar chart (no value axis) whose labels come from the dataLabels option keeps the widest label's room beyond the
     // longest bar, as the preview does (opf-render charts.js, labelRoom); horizontalBarPlot keeps it for a chart without options.
     let labelRoom = 0;
-    if (hidden && options.dataLabels) {
-      const {content, separator} = options.dataLabels;
+    // (A small chart's own value labels are the labels of an option-less chart: the value alone.)
+    const labels = options.dataLabels ?? (layer?.small?.labels === true ? {content: ['value'] as const, separator: undefined} : undefined);
+    if (hidden && labels) {
+      const {content, separator} = labels;
       for (const [index, row] of resolved.rows.entries()) {
         for (const [j, cell] of row.slice(1).entries()) {
           const value = chartNumber(cell);
