@@ -115,3 +115,27 @@ export function separateLigatures(svg) {
 // Candidates that were measured and did not qualify. Never bundled or selected automatically.
 // Akasia (Aptos) was dropped: its repository is gone and Intos, pinned and measured identical to Aptos 2.01, replaces it.
 export const EXPERIMENTAL_FONT_CANDIDATES = Object.freeze([Object.freeze({requestedFamily:"Segoe UI",substitute:"Selawik",source:"https://github.com/microsoft/Selawik/releases/tag/1.01",note:"Microsoft's OFL Segoe UI fallback, measured 2026-09-29 against Segoe UI 5.71: mean width difference 0.16% and up to 2.5% in regular, 2.65% in italic (no italic faces), 1.75% in Semibold, 349 code points, lowercase 5% shorter, hhea ascent 8% smaller. Fails the metric bar; not bundled. See docs/evidence/font-replacements-20260923/metric-candidates-20260929.json in core."})]);
+
+// opf#1472: glyphs a bundled face draws wrongly. The vendored files stay byte for byte as upstream ships them, so a known bad glyph is
+// recorded here instead, and the script-font planner (script-fonts.js) draws that one character from `replacement` (the first loaded
+// family that has it) at the advance the bad face gave it. A row names the exact file (`sha256`, the one in the face's PROVENANCE.json):
+// a fixed upstream release changes the hash, and test/glyph-defects.mjs fails until the row is removed.
+const INTOS_BAD_DCROAT = Object.freeze({
+  repository: "https://github.com/muglug/intos", commit: "fef9315c14da9e4b23b4c3cac8e718998d4e4736", release: "1.000",
+  defect: "U+0111 (glyph dcroat) is a mirrored d with a bar to its right in the regular faces, and a d whose bar is drawn as broken blocks in the bold faces; the italic and serif faces draw it correctly",
+  codePoints: Object.freeze([0x111]), replacement: Object.freeze(["Arimo", "Noto Sans", "Roboto"]), issue: "OpenPresentation/opf#1472"
+});
+const intosFace = (family, weight, file, sha256) => Object.freeze({family, weight, italic: false, file, sha256, ...INTOS_BAD_DCROAT});
+export const GLYPH_DEFECTS = Object.freeze([
+  intosFace("Intos", 400, "Intos-Regular.ttf", "4de204b6414d30f9f49b9375dc9b71ccea1683e55ac37de6c8d541abbc760eea"),
+  intosFace("Intos", 700, "Intos-Bold.ttf", "8afd148fff67d6426d0d6906d4c6232886aedc81a7832544806e6c93c44340ab"),
+  intosFace("Intos Display", 400, "IntosDisplay-Regular.ttf", "b652fdab5e8939540f084529a507ddd158629985b8eee1b553ef05c46d131877"),
+  intosFace("Intos Display", 700, "IntosDisplay-Bold.ttf", "5055714a7215331b7786b10538138baa4dc969a8afe018bbf459f8b5395026d8"),
+  intosFace("Intos Narrow", 400, "IntosNarrow-Regular.ttf", "ea91acdb933f2f1919df688f154140b851191adf4ecb77f7d931724198ea23c1"),
+  intosFace("Intos Narrow", 700, "IntosNarrow-Bold.ttf", "59fd6e53b61ae483809ce1d8fc396357ec33d7beedef2e81f87da11551a99e51")
+]);
+/** The known bad glyphs of the face `family` at `weight` and `italic`: `{codePoints, replacement}`, or undefined. */
+export function glyphDefectsFor(family, weight, italic) {
+  const name = String(family).toLowerCase();
+  return GLYPH_DEFECTS.find(row => row.family.toLowerCase() === name && row.weight === weight && row.italic === !!italic);
+}

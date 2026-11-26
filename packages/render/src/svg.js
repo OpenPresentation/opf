@@ -2212,19 +2212,24 @@ function scriptLine(text, style, bound, type, { rtl = false, numbers = rtl, plac
   // `numbers` asks for it in a fragment of a flowing right-to-left line, which is one isolate across its fragments.
   const escaped = text => escapeText(numbers && text ? isolateNumbers(text) : text);
   const runs = value && scripts ? scripts.plan(value, style) : [{ text: value, own: true }];
+  // opf#1472: a tracked line (letter-spacing; a single run draws without textLength) of the line's own face and glyphs replaced at their
+  // exact advance flows like the single run it replaces: a rasterizer applies the letter-spacing again inside a positioned tspan's textLength.
+  // An untracked line takes the positioned path below, as every multi-face line does.
+  const replaced = style?.tracking && runs.some(run => run.advance !== undefined) && runs.every(run => run.own || run.advance !== undefined);
+  if (replaced) placement = runPlacement = undefined;
   if (!placement && runPlacement && runs.length > 1) placement = runPlacement;
   // RR-38: PowerPoint's baseline of a line in Arabic Typesetting sits above core's (one em below the line top): the caller moves it up by `baselineShift` em.
   const shiftOf = list => { const shift = baselineShift(list); return shift ? { baselineShift: shift } : {}; };
   // FF-45: symbol runs (Wingdings, Symbol, Webdings codes drawn as their Unicode equivalents) are always positioned when the
   // line is placed, one tspan per glyph at the verified symbol font's advance, so a single mapped glyph is never stretched to it.
   const symbols = runs.some(run => run.symbol);
-  if (runs.length === 1 && !(symbols && placement && placement.width > 0)) {
+  if (runs.length === 1 && !replaced && !(symbols && placement && placement.width > 0)) {
     const [run] = runs;
     // RR-38: a replacement the policy scales (Arabic Typesetting -> Noto Naskh Arabic, 0.64) is drawn at the scaled size; the caller applies it.
     return { content: isolate(escaped(run.own ? value : run.text)), family: run.own ? undefined : fontStack(run.stack ?? run.family, type), ...(run.sizeAdjust ? { sizeAdjust: run.sizeAdjust } : {}), ...shiftOf(runs) };
   }
   const baseSize = placement?.fontSize ?? fontSize;
-  const adjusted = run => run.sizeAdjust && baseSize > 0 ? stableNumber(adjustedFontSize(baseSize, run.sizeAdjust)) : undefined;
+  const adjusted = run => run.fontScale && baseSize > 0 ? stableNumber(baseSize * run.fontScale) : run.sizeAdjust && baseSize > 0 ? stableNumber(adjustedFontSize(baseSize, run.sizeAdjust)) : undefined;
   const widths = placement && placement.width > 0 ? scripts.runWidths(runs, placement.fontSize, style) : undefined;
   if (!widths) {
     return { content: isolate(runs.map(run => run.own ? escaped(run.text)
