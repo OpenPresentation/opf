@@ -264,6 +264,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/variable-invalid-value`](#opfvariable-invalid-value) | Format | error | structure | A variable value does not match its declared type. |
 | [`opf/variable-unknown-builtin`](#opfvariable-unknown-builtin) | Format | error | structure | A token names a built-in variable that does not exist. |
 | [`opf/table-highlight-unknown-name`](#opftable-highlight-unknown-name) | Format | error | structure | A table highlight names a row the table does not have. |
+| [`opf/table-color-scale-unknown-column`](#opftable-color-scale-unknown-column) | Format | error | structure | A table color scale names a column the table does not have. |
 | [`opf/chart-highlight-unknown-name`](#opfchart-highlight-unknown-name) | Format | error | structure | A chart highlight names a series or category the chart does not have. |
 | [`opf/variable-format`](#opfvariable-format) | Format | error | structure | A variable cannot be formatted. |
 | [`opf/variable-unfilled`](#opfvariable-unfilled) | Format | error | structure | A required template variable has no value. |
@@ -337,6 +338,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/dataset-stale`](#opfdataset-stale) | Content | warning | structure | A dataset is older than its data source says it should be. |
 | [`opf/chart-mapping-adapted`](#opfchart-mapping-adapted) | Content | warning | structure | A chart mapping entry is ignored. |
 | [`opf/chart-highlight-adapted`](#opfchart-highlight-adapted) | Content | warning | structure | A chart highlight is adapted by the chart type. |
+| [`opf/table-color-scale-no-data`](#opftable-color-scale-no-data) | Content | warning | structure | A table color scale has no numbers to shade. |
+| [`opf/table-color-scale-range`](#opftable-color-scale-range) | Content | warning | structure | A table color scale has an empty range or a center outside it. |
 | [`opf/chart-series-dropped`](#opfchart-series-dropped) | Content | warning | structure | A chart series is not drawn by the chart type. |
 | [`opf/code-highlight-out-of-range`](#opfcode-highlight-out-of-range) | Content | warning | structure | A code highlight marks a line the code does not have. |
 | [`opf/code-highlight-range-reversed`](#opfcode-highlight-range-reversed) | Content | warning | structure | A code highlight range ends before it starts. |
@@ -601,6 +604,14 @@ Default severity: **error**. Cost: structure. A token names a built-in variable 
 Default severity: **error**. Cost: structure. A table highlight names a row the table does not have.
 
 **Why.** `table.highlight` emphasizes body rows by their first-column text; a name that matches no row highlights nothing, so the table is not drawn as authored.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/table-color-scale-unknown-column`
+
+Default severity: **error**. Cost: structure. A table color scale names a column the table does not have.
+
+**Why.** `table.colorScale.columns` names the columns to shade by header text (a dataset-backed table by dataset column name after `fields`); a name that matches no column shades nothing, so the table is not drawn as authored.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -1248,6 +1259,22 @@ Default severity: **warning**. Cost: structure. A chart mapping entry is ignored
 Default severity: **warning**. Cost: structure. A chart highlight is adapted by the chart type.
 
 **Why.** A highlight the chart type cannot show as authored (a category highlight on a chart without categories, for example) is adapted by every engine, so the emphasis is not exactly what was written.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/table-color-scale-no-data`
+
+Default severity: **warning**. Cost: structure. A table color scale has no numbers to shade.
+
+**Why.** None of the named columns holds a number cell, so no cell is shaded. A dataset-backed table can lose its numbers on a refresh; the scale returns when they do.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/table-color-scale-range`
+
+Default severity: **warning**. Cost: structure. A table color scale has an empty range or a center outside it.
+
+**Why.** A pinned `min` that is not below `max`, or a `center` outside the range, leaves part of the scale unused: every value draws in one end color.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

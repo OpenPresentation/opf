@@ -185,6 +185,14 @@ Older importers (measured with the released 0.36.0 importer on an export of a de
 
 A native PowerPoint save test (the supervisor's pass) edits a saved export: change an item's text (the id stays), delete a row (one id lost, one finding), add a row (no id lost).
 
+### Table color scale (OPF 0.37, FR-07)
+
+A table with `colorScale` exports as a native, editable table: each shaded number cell has an sRGB fill (a theme color where the computed color is exactly one, such as the scale's own end) and a text color that reads on it; cells the scale does not shade are written as before. The scale is not stored inside the table the `OPF_DATA_V1` record keeps (a 0.36.0 importer validates that table and drops the record for a key it does not know). It is a top-level key of the record instead: `colorScale: { scale, evidence }`, where `scale` is the authored scale and `evidence` lists `[body row, column, fill hex, text hex]` for every cell it shaded. A dataset-backed table is stored without the scale in the same way.
+
+Import restores `colorScale` while every recorded cell still has its recorded fill, and the shaded cells then carry no fill (or text color) of their own: the deck is the source and the next export computes the fills from the new colors. A cell refilled in PowerPoint, or a column the scale names that is gone, makes the table import its fills as plain cell fills (the native truth) with the diagnostic `table-color-scale-not-restored`. Fills a PowerPoint theme change leaves alone stay as exported; re-theme in OPF to recompute them.
+
+Older importers (measured with the released 0.36.0 importer): it ignores the top-level `colorScale` key of the record and restores the authored table, with no scale and no cell fill; the deck is valid. The shaded cells' fills are in the file, so PowerPoint itself shows them.
+
 ### Embeds (OPF 0.37, FR-08)
 
 PowerPoint has no live page, and OPF's engines never load `src`: an `embed` leaves as its static form, every part a click link to `src` (`a:hlinkClick`, one external hyperlink relationship per slide). With a `preview` it is one native picture named `OPF embed <path>` (`slides.0.embed`, `slides.2.blocks.1.embed`), the picture contained in the frame (a negative `a:srcRect` pads it) on a fill of the scheme's surface color, its description the embed's title (or the site name). Without one, or when the preview cannot be embedded (the export reports `unresolved-asset` and says it exports the card), it is the card: a rounded rectangle `OPF embed <path>`, an ellipse `... badge` and a right arrow turned 45 degrees `... arrow`, and the title (`... title line N`) and the site name (`... site line 0`) as text lines, written as one group `OPF embed <path> group` whose description is the title. The geometry is core's `embedCardLayout`, the preview's own. A caption follows as for any captionable block and is tagged to the picture or the panel by name.

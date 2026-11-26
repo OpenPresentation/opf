@@ -1814,9 +1814,14 @@ function renderTimeline(item, box, bound, options) {
   return tag('g',{...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-arrangement':layout.arrangement}:{})},children.join('\n'));
 }
 
+// FR-07: how a color scale's scheme names resolve on this slide (the same ColorRef resolution fills use), and the slide's text color.
+function tableScaleColors(bound) {
+  return {resolve:(name) => String(resolveColorRef(name, bound, "#000000")).slice(0, 7).toUpperCase(), text:bound.design.colors.text, background:bound.design.colors.background};
+}
+
 function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, ...(typeof bound.scriptFonts?.profile?.bcp47 === "string" ? {language:bound.scriptFonts.profile.bcp47} : {}), alignment:itemAlignment(bound.geometry.design.contentAlignment), ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {})});
+  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, ...(typeof bound.scriptFonts?.profile?.bcp47 === "string" ? {language:bound.scriptFonts.profile.bcp47} : {}), alignment:itemAlignment(bound.geometry.design.contentAlignment), ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {}), ...(item.value?.colorScale ? {colorScale:tableScaleColors(bound)} : {})});
   const children = [];
   // LH-113: a highlighted row (table.highlight, or the rows the slide's texts name) draws on an accent tint of the surface.
   const highlightFill = layout.rows.some((row) => row.cells.some((cell) => cell.highlighted)) ? tableHighlightColor(bound.design.colors.surface, bound.design.colors.primary, bound.design.colors.text) : undefined;
@@ -1827,11 +1832,12 @@ function renderTable(item, box, bound, options) {
   const defaultEdges = [], explicitEdges = [];
   for (const row of layout.rows) for (const cell of row.cells) {
     const style = cell.style ?? {};
-    const defaultFill = cell.header ? bound.design.colors.primary : cell.highlighted ? highlightFill : bound.design.colors.surface;
+    // FR-07: a number cell of a color scale takes the scale's fill (a fill of its own wins; the scale wins over the highlight tint).
+    const defaultFill = cell.header ? bound.design.colors.primary : cell.scaled ? cell.scaled.fill : cell.highlighted ? highlightFill : bound.design.colors.surface;
     const fill = style.fill == null
       ? defaultFill
       : resolveColorRef(style.fill, bound, defaultFill);
-    const defaultText = cell.header ? readableSchemeColor(fill, bound.design.roles).hex : textColorForFill(fill, bound.design.colors.text);
+    const defaultText = cell.header ? readableSchemeColor(fill, bound.design.roles).hex : cell.scaled && style.fill == null ? cell.scaled.text : textColorForFill(fill, bound.design.colors.text);
     const textFill = style.color == null
       ? defaultText
       : resolveColorRef(style.color, bound, defaultText);

@@ -10,6 +10,7 @@ import { formatVariableNumber } from './variables.js';
 import { localizeNumberText } from './numerals.js';
 import { dataProvenance, unknownDataSourceDiagnostics, type DataGenerator, type DataProvenance, type DataSource } from './data-sources.js';
 import { tableRows } from './table.js';
+import { tableColorScaleDiagnostics } from './table-color-scale-range.js';
 import { isTimeLabel } from './chart-time-order.js';
 
 export type { DataGenerator, DataProvenance, DataSource };
@@ -61,6 +62,9 @@ export type DataDiagnosticCode =
   | 'chart-reference-axis-unavailable'
   | 'chart-reference-unsupported-type'
   | 'table-highlight-unknown-name'
+  | 'table-color-scale-unknown-column'
+  | 'table-color-scale-no-data'
+  | 'table-color-scale-range'
   | 'number-format-invalid'
   | 'metric-data-stale'
   | 'metric-data-aggregate'
@@ -124,6 +128,8 @@ export interface ResolvedTableData {
   rows: DataTableCell[][];
   /** The column number formats (DataColumn or header StyledTableCell `format`), by column index. */
   formats: (string | undefined)[];
+  /** FR-05: the declared type of each column of a dataset table (after `fields`), by column index; undefined where none is declared. Absent for an inline table. */
+  types?: (DataColumnType | undefined)[];
   /** The dataset id when the table references one. */
   dataset?: string;
   diagnostics: DataDiagnostic[];
@@ -1002,7 +1008,8 @@ export function resolveTableData(table: unknown, document?: unknown, options: Da
     const selection = selectFields(dataset.columns, table.fields, at(base, 'fields'), columnsPath, diagnostics);
     const rows = dataset.rows.map((row: unknown) => selection.indices.map(index => (Array.isArray(row) && index < row.length ? row[index] : null) as DataTableCell));
     highlightDiagnostics(table, rows, base, diagnostics);
-    return { columns: selection.columns as DataTableHeader[], rows, formats: selection.formats, dataset: id, diagnostics };
+    diagnostics.push(...tableColorScaleDiagnostics(table, selection.columns, rows, base, selection.types));
+    return { columns: selection.columns as DataTableHeader[], rows, formats: selection.formats, types: selection.types, dataset: id, diagnostics };
   }
   const columns = Array.isArray(table.columns) ? (table.columns as DataTableHeader[]) : undefined;
   const bodyRows = tableRows(table, base);
@@ -1022,6 +1029,7 @@ export function resolveTableData(table: unknown, document?: unknown, options: Da
     row.cells.forEach((cell, index) => { check(cell, row.object ? at(base, 'rows', rowIndex, 'cells', index) : at(base, 'rows', rowIndex, index)); });
   });
   highlightDiagnostics(table, rows, base, diagnostics);
+  diagnostics.push(...tableColorScaleDiagnostics(table, columns, rows, base));
   return { ...(columns ? { columns } : {}), rows, formats, diagnostics };
 }
 

@@ -562,6 +562,8 @@ const HELP: Record<string, string> = {
 	'chart-mapping-adapted': 'Choose a compatible chart type or mapping for the selected data. The message explains how the mapping or drawing was adapted.',
 	'chart-series-dropped': 'The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.',
 	'chart-highlight-adapted': 'The highlight is adapted by every engine. Name a series or category the chart type can emphasize, or remove the entry.',
+	'table-color-scale-no-data': 'Name columns that hold numbers, or remove the color scale. A cell is shaded only when its value is a finite number.',
+	'table-color-scale-range': 'Pin min below max, and keep center between them, or leave the range to the data.',
 	'slide-theme-dimensions': 'A PPTX has one slide size. Set design.dimensions on the deck, or give every slide the same theme dimensions.',
 	'code-highlight-out-of-range': 'Marked lines count from 1 by line break in code.source. The entry marks nothing past the last line; change it to a line the code has, or remove it.',
 	'code-highlight-range-reversed': 'Write the range with the smaller line number first, or remove it. A reversed range marks nothing.',

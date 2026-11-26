@@ -1389,6 +1389,32 @@ _No named properties._
 | `fields` | no | `ref:DatasetFields` | Dataset tables only: the dataset columns to show, by name and in order. Absent shows every column. An unknown name is a 'dataset-field-unknown' error. |
 | `alt` | no | `string` | Text alternative for the table: what it shows (the point and the key numbers), not 'a table'. The preview exposes it as the table's accessible name (role group with aria-label; the cells stay readable) and the PowerPo... |
 | `highlight` | no | `object` | Optional emphasis: the body rows that carry the message, named by their first-column (key) text exactly as 'chart.highlight' names categories, as text; a key shared by several rows highlights each of them. The engines... |
+| `colorScale` | no | `ref:TableColorScale` | Shades the number cells of the named columns by value, between scheme colors. Engines compute each cell's fill; the text color follows it for contrast. |
+
+
+### TableColorScale
+
+- Type: `object`
+- Required fields: `columns`
+- Purpose: A color scale over the number cells of one or more columns. One scale is shared by all named columns, so equal numbers get equal colors. Only cells whose value is a finite number are shaded; a cell with its own style.fill keeps it. Two colors make a sequential scale: the lowest value is the first color, the highest the second. Three colors make a diverging scale: 'center' is drawn in the middle color, lower values towards the first and higher values towards the last. A diverging scale with no...
+- Conditional requirement: `colors` when `center` is present
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `columns` | yes | `array<string>` | The columns to shade, by header text (an inline table) or by dataset column name after 'fields' (a dataset-backed table). A name no column has is a 'table-color-scale-unknown-column' error. |
+| `colors` | no | `array<ref:SchemeColorName>` | The colors of the scale, low to high, as scheme color names. Two colors make a sequential scale (the lowest value in the first, the highest in the second); three make a diverging scale (the middle color is drawn at 'c... |
+| `center` | no | `number` | The value drawn in the middle color. Only with three 'colors' (a 'center' with two colors, or with no 'colors', is a schema error). Absent: 0 when the values span both signs, else the middle of the range. With no 'min... |
+| `min` | no | `number` | The value drawn in the first color; lower values draw in it too. Absent: the lowest number in the named columns (a diverging scale with neither 'min' nor 'max' is symmetric around 'center': it runs from center minus d... |
+| `max` | no | `number` | The value drawn in the last color; higher values draw in it too. Absent: the highest number in the named columns (see 'min' for a diverging scale). |
+
+
+### SchemeColorName
+
+- Type: `enum:accent1 | accent2 | accent3 | accent4 | accent5 | accent6 | dark1 | dark2 | light1 | light2 | primary | secondary | accent | background | surface | surfaceAlt | text | textSecondary`
+- Required fields: none
+- Purpose: A color of the effective color scheme, by slot or role, resolved as ColorRef resolves the same names (the hyperlink slots are left out). No hex and no variable: what names it follows the deck's colors.
+
+_No named properties._
 
 
 ### ChartData

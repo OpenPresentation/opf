@@ -19,6 +19,7 @@ import {chartNumberLanguage} from './chart-options.js';
 import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
 import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-labels.js';
+import {resolveTableColorScale,type TableColorScaleColors} from './table-color-scale.js';
 import {chartSlideFocus,slideFocusSources,tableHighlightRows,tableSlideFocus,type FocusSource} from './chart-focus.js';
 import {chartDoughnut,restackForRows,chartStack,chartReferences,chartValueList,chartWaterfall,horizontalBarPlot,placeReferences,refreshChartMarks} from './chart-marks.js';
 import {chartReferenceSources} from './chart-references.js';
@@ -85,6 +86,8 @@ export type {ComposedArrowhead, ComposedFill, ComposedGradient, ComposedShape, C
 export {CONNECTOR_ROUTES, CONNECTOR_STANDOFF, CONNECTOR_STROKE_COLOR, CONNECTOR_STROKE_WIDTH, OVERLAY_ANCHOR_SHARE, OVERLAY_EDGES, OVERLAY_LAYERS, chooseConnectorSites, connectorAdjustPreset, connectorRoute, frameToSlide, hasOverlayShapes, isOverlayConnector, overlayIssues, rectSites, shapeSites, slideBlockIds} from './overlay-shapes.js';
 export type {ComposedConnector, ComposedOverlayEntry, ComposedOverlayShape, ConnectionSite, ConnectorEnd, ConnectorFrame, ConnectorPreset, ConnectorRoute, ConnectorRouteGeometry, OverlayEdge, OverlayIssue, OverlayLayer} from './overlay-shapes.js';
 export {applyLuminance, applyColorTransform, colorTransform, clrMapAttributes, colorMapFor, deckBackgroundIsFixed, isColorVariant, isFixedBackground, layoutColorVariant, layoutVariantApplies, normalizeColorVariant, readableSchemeColor, NEUTRAL_SHARES} from './color.js';
+export {resolveTableColorScale,pinTableColorScale,tableColorScaleText,tableColorScaleOf,SCHEME_COLOR_NAMES,type TableColorScaleColors,type TableColorScaleCell,type TableColorScaleRange,type TableColorScaleResult,type TableColorScaleSpec,type SchemeColorName} from './table-color-scale.js';
+export {mixOklab,srgbToOklab,oklabToSrgb} from './oklab.js';
 export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartSlicePlan, CHART_SLICE_MAX_SHIFT, CHART_SLICE_SEPARATOR_PX, type ChartSlicePlan, chartSchemeSeries, chartSeriesPalette, resolveChartColors, chartHighlightColors, chartEmphasisColors, softenChartPalette, chartSoftColors, applyHslTransforms, type ChartSoftColor, chartSeriesLabelColor, CHART_SERIES_SOFT_MIX, CHART_EMPHASIS_MIN_CONTRAST, CHART_EMPHASIS_MIN_LIGHTNESS_STEP, CHART_SERIES_TINT_MIX, CHART_DARK_SERIES_MIN_CONTRAST, CHART_LEAD_LIGHTNESS_STEP, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, tableHighlightColor, TABLE_HIGHLIGHT_MIX, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_SERIES_TIER_SIZE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST, CARD_SURFACE_MIX, CARD_SURFACE_MIN_CONTRAST, CARD_TEXT_MIN_CONTRAST, CARD_BORDER_MIX, CODE_PANEL_DARK_SHADE} from './color.js';
 export type {ChartColorContext, ChartPaletteOptions, ColorAccentSlot, ColorBaseSlot, ColorMap, LayoutVariantDeck, LayoutVariantRole, ColorVariant, ColorVariantBackground, ColorVariantInput, SchemeColor, SchemeNeutrals, ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles} from './color.js';
 export {resolveScriptFonts, resolveSlideDirection, scriptFontRole} from './script-fonts.js';
@@ -4740,6 +4743,11 @@ export interface TableLayoutOptions {
   growth?: number;
   /** LH-113: the body rows (0-based, after the header) drawn on the highlight tint (`ComposedItem.tableHighlight`); their cells are `highlighted`. */
   highlight?: readonly number[];
+  /**
+   * FR-07: how the scheme names of `table.colorScale` resolve (the effective color scheme), with the scheme's text and background colors.
+   * With it a table that has a color scale gives each number cell of the named columns its fill and text color (`TableCellLayout.scaled`).
+   */
+  colorScale?: TableColorScaleColors;
 }
 export interface TableCellLayout {
   /** Logical alignment, shared by preview and native export. A column of numbers (LH-117) resolves to the physical right even in RTL. */
@@ -4760,6 +4768,8 @@ export interface TableCellLayout {
   direction?: TextDirection;
   /** LH-113: a body cell of a highlighted row: without a fill of its own it takes the highlight tint (core `tableHighlightColor`). */
   highlighted?: true;
+  /** FR-07: the fill and the text color the table's color scale gives this number cell (`#RRGGBB`). A fill of the cell's own wins and has none here; it also wins over the highlight tint. */
+  scaled?: {fill: string; text: string};
 }
 export interface TableRowLayout { box: LayoutBox; cells: TableCellLayout[] }
 export interface TableLayout {
@@ -4813,6 +4823,8 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   const columnCount=grid.columnCount;
   // LH-113: the highlighted body rows, counted after the header rows.
   const headerRows=Number(grid.hasHeaders),highlighted=new Set(options.highlight??[]);
+  // FR-07: the color scale's fill and text color of each shaded number cell (body row, column).
+  const scaleOf=options.colorScale?resolveTableColorScale(inline,options.colorScale,resolveTableData(value,options.presentation).types):undefined;
   const cells=grid.rows.flat().map(cell=>{
     const padding={top:8,right:10,bottom:4,left:10,...cell.style.padding};
     const width=0;
@@ -4925,7 +4937,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const offset=cell.style.verticalAlign==='bottom'?Math.max(0,available-height):cell.style.verticalAlign==='middle'?Math.max(0,(available-height)/2):0;
     const textBox={x:cellBox.x+cell.padding.left*scale,y:cellBox.y+cell.padding.top*scale+offset,width:Math.max(scale,cell.width),height:Math.max(scale,available-offset)};
     overflow ||= cell.width<=0||available<=0||fit.overflow;
-    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{}),...(!cell.header&&highlighted.has(cell.row-headerRows)?{highlighted:true as const}:{})});
+    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{}),...(!cell.header&&highlighted.has(cell.row-headerRows)?{highlighted:true as const}:{}),...(()=>{const scaled=cell.header?undefined:scaleOf?.at(cell.row-headerRows,cell.column);return scaled?{scaled:{fill:scaled.fill,text:scaled.text}}:{};})()});
   }
   overflow ||= sum(heights)>box.height+.01;
   return {rows,columnCount,height:sum(heights),overflow,columnWidths:[...columnWidths],splitsWords:false,naturalWidth,minimumWidth,naturalHeight:naturalTotal};

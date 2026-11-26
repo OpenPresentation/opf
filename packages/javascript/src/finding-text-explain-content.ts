@@ -73,6 +73,16 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, highlight: { series: ["Quarter"] } } },
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, highlight: { series: ["Revenue"] } } },
   ),
+  "opf/table-color-scale-no-data": ex(
+    "Name columns that hold numbers in `colorScale.columns`, or remove the color scale. A cell is shaded only when its value is a number.",
+    { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", "n/a"]], colorScale: { columns: ["Q1"] } } },
+    { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", 0.22]], colorScale: { columns: ["Q1"] } } },
+  ),
+  "opf/table-color-scale-range": ex(
+    "Pin `min` below `max` and keep `center` between them, or leave the range to the data.",
+    { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", 0.22], ["APAC", 0.3]], colorScale: { columns: ["Q1"], min: 0.5, max: 0.4 } } },
+    { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", 0.22], ["APAC", 0.3]], colorScale: { columns: ["Q1"], min: 0, max: 0.4 } } },
+  ),
   "opf/code-highlight-out-of-range": ex(
     "Change the entry to a line the code has (counted from 1), or remove it.",
     { title: "Code", code: { source: "a\nb\nc", highlight: [7] } },

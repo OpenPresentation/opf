@@ -50,6 +50,33 @@ A body cell's own format wins over the column's.
 }
 ```
 
+### Shading cells by value
+
+`table.colorScale` shades the number cells of the named columns by their value, between two colors of the deck's color scheme, so a scorecard, a cohort table or a regional comparison reads at a glance and stays right when a number changes. Engines compute every cell's fill; the author names the columns and the colors.
+
+```json
+"table": {
+  "columns": ["Region", { "name": "Q1", "format": "0%" }, { "name": "Q2", "format": "0%" }],
+  "rows": [["EMEA", 0.22, 0.25], ["APAC", 0.18, 0.21]],
+  "colorScale": { "columns": ["Q1", "Q2"], "min": 0, "max": 0.4 }
+}
+```
+
+- `columns` (required, at least one) names the columns by header text; a dataset-backed table names dataset columns after `fields`. A name no column has is the error `table-color-scale-unknown-column`. Several columns share one scale, so equal numbers get equal colors; the range is taken over all of them.
+- `colors` is a list of two or three scheme color names, low to high (default `["surface", "primary"]`).
+- **Sequential** (two colors): the lowest value is the first color and the highest the second. If every value is equal, every cell is the last color.
+- **Diverging** (three colors): `center` (valid only with three colors; with two or none it is a schema error) is drawn in the middle color, lower values run towards the first color and higher values towards the last, so 0 is always the middle color. `center` defaults to 0 when the values span both signs, else to the middle of the range. With no `min` or `max` the scale is symmetric around `center`: it runs from `center - d` to `center + d`, where `d` is the largest distance of any value from the center, so equal distances get equal strength (with +12% on top, -8% is two thirds of the way to `from`, and a lone -1% is pale). A given `min` or `max` pins that end exactly and each side is then on its own span. A range that lies on one side of `center` draws only that side.
+- `min` and `max` pin the range (a 0 to 100% scale over data that spans 62 to 88%); a value outside it takes the end color.
+- For a diverging scale choose two ends of different hue (a blue and an orange, not two blues), so a reader tells below the center from above it at a glance; the scheme's accents are not always far apart, so look at the deck's color scheme.
+- The colors are scheme names only (`accent1` to `accent6`, `dark1`, `dark2`, `light1`, `light2`, `primary`, `secondary`, `accent`, `background`, `surface`, `surfaceAlt`, `text`, `textSecondary`): no hex and no variable, so a re-themed or dark deck changes the scale with it. Colors are mixed in OKLab, so the steps look even and the middle is not muddy.
+- Only cells whose value is a finite number are shaded; text, empty cells and the header are not. A cell with its own `style.fill` keeps it and still counts towards the range. The text of a shaded cell is the scheme text color where it reads on the fill (4.5:1), else black or white; a run with its own color keeps it. A highlighted row's shaded cells take the scale; its other cells keep the highlight tint.
+- A table split across slides is shaded over its whole range, so a value has the same color on every page.
+- Warnings, never errors, so a refresh of a dataset cannot make a deck invalid: `table-color-scale-no-data` (no named column holds a number) and `table-color-scale-range` (`min` is not below `max`, or `center` is outside the range).
+
+The preview, PNG and PDF draw the computed fills. The PowerPoint export writes a native, editable table whose shaded cells have sRGB fills and text colors; the scale itself is recorded in the file and comes back on import while every shaded cell still has its exported fill. A cell refilled in PowerPoint turns the scale into plain cell fills with a `table-color-scale-not-restored` diagnostic. See [the PPTX round-trip guide](../packages/pptx/docs/document-roundtrip.md). Choose a color scale when the reader compares many numbers across rows and columns; choose a chart when the shape of one or two series is the message.
+
+### Data source provenance
+
 ### Typed columns
 
 A dataset column and an inline chart data column may be a `DatasetColumn`: a `DataColumn` that also says what its cells hold (`type`), what the column is for (`role`) and a `unit` label. A table's own column headers stay `DataColumn` and declare nothing. A tool that picks a chart, aggregates a column or orders a time axis reads the declaration instead of guessing from the name and the cells.
