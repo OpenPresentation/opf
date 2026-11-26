@@ -83,6 +83,16 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: { type: "pie", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, bands: [{ to: 10 }] } },
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, bands: [{ to: 10 }] } },
   ),
+  "opf/metric-gauge-range": ex(
+    "Write the gauge's `max` above its `min`, and keep the value, the target and each band's `to` between them.",
+    { title: "Utilization", metric: { label: "Utilization", value: 1.2, gauge: { max: 1 } } },
+    { title: "Utilization", metric: { label: "Utilization", value: 0.72, gauge: { max: 1 } } },
+  ),
+  "opf/metric-gauge-value": ex(
+    "Give a metric with a gauge a number value: the gauge draws that number on its arc.",
+    { title: "Utilization", metric: { label: "Utilization", value: "72%", gauge: { max: 1 } } },
+    { title: "Utilization", metric: { label: "Utilization", value: 0.72, format: "0%", gauge: { max: 1 } } },
+  ),
   "opf/table-color-scale-no-data": ex(
     "Name columns that hold numbers in `colorScale.columns`, or remove the color scale. A cell is shaded only when its value is a number.",
     { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", "n/a"]], colorScale: { columns: ["Q1"] } } },

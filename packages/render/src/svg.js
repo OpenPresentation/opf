@@ -3,7 +3,7 @@
 import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, textColorForFill, chartColorForFill,
   resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform, stackedText, resolveScriptFonts, paragraphDirection, physicalAlignment, itemAlignment, patternRuns, isolateNumbers,
-  metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
+  metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, metricGaugeDrawing, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
   arrangementPaint, colorContrast,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, pictureOverlay, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup, iconPathData,
@@ -1687,6 +1687,8 @@ function renderMetric(item, box, bound, options) {
   const pillFill=layout.deltaPill?metricPillFill(backdrop,bound.design.colors.text):undefined;
   if (layout.deltaPill) { const pill=layout.deltaPill.box; children.push(tag('rect',{...HIDDEN,x:stableNumber(pill.x),y:stableNumber(pill.y),width:stableNumber(pill.width),height:stableNumber(pill.height),rx:stableNumber(layout.deltaPill.radius),fill:pillFill,...(options.trace?{'data-opf-metric-role':'pill'}:{})})); }
   const trendMark=metricTrendMark(layout,bound,pillFill??backdrop);
+  // FR-07, part 3: a gauge (layout.gauge) draws core's plan under the text: the arcs as the blockArc preset's outline, the target tick and the ends' labels.
+  if (layout.gauge) children.push(renderGauge(item,layout.gauge,bound,backdrop,options));
   // LH-53: a unit on its value's line is part of the figure and takes the value's color.
   // LH-135: a label drawn as the metric's eyebrow takes the eyebrow's color on its backdrop (eyebrowFill), in capitals with core's tracking.
   const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?metricValueColor(bound.design.colors.primary,backdrop,bound.design.colors.text):layout.eyebrow&&part.role==='label'?eyebrowFill(bound.design,item):bound.design.colors.text;
@@ -1732,6 +1734,22 @@ function renderMetric(item, box, bound, options) {
   }
   if (trendMark) children.push(tag('g',{role:'img','aria-label':trendMark.ariaLabel},tag('polygon',{points:trendMark.points.map(([x,y])=>`${stableNumber(x)},${stableNumber(y)}`).join(' '),fill:trendMark.color})));
   return tag('g',{...traceAttrs(options,item.path),...(options.trace?{'data-opf-metric-container':'true'}:{})},children.join('\n'));
+}
+
+// FR-07, part 3: the colors a gauge is drawn in (core metricGaugeDrawing), against the metric's backdrop. The PowerPoint export passes the same.
+function gaugeColors(bound,backdrop) {
+  const text=bound.design.colors.text;
+  return {surface:backdrop,text,primary:bound.design.colors.primary,muted:bound.design.colors.mutedText,resolve:name=>String(resolveColorRef(name,bound,text)??text).slice(0,7).toUpperCase()};
+}
+// FR-07, part 3: a metric's gauge. Each arc is PowerPoint's blockArc preset at its frame and adjustments (core presetGeometry draws its
+// outline), so the preview draws what the native shapes draw; the target is a line, the ends' labels text centered under the arc's ends.
+function renderGauge(item,gauge,bound,backdrop,options) {
+  const drawing=metricGaugeDrawing(gauge,gaugeColors(bound,backdrop)),out=[];
+  for (const arc of drawing.arcs) out.push(tag('path',{...HIDDEN,d:arc.d,transform:`translate(${stableNumber(arc.frame.x)} ${stableNumber(arc.frame.y)})`,fill:arc.fill,...(options.trace?{'data-opf-metric-role':'mark','data-opf-gauge-part':arc.part}:{})}));
+  if (drawing.target) { const t=drawing.target; out.push(tag('line',{...HIDDEN,x1:stableNumber(t.x1),y1:stableNumber(t.y1),x2:stableNumber(t.x2),y2:stableNumber(t.y2),stroke:t.color,'stroke-width':stableNumber(t.width),...(options.trace?{'data-opf-metric-role':'mark','data-opf-gauge-part':t.part}:{})})); }
+  for (const {part,color,end} of drawing.ends) out.push(tag('text',{x:stableNumber(end.x),y:stableNumber(end.baseline),'text-anchor':'middle','font-family':fontStack(gauge.endStyle.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(end.fontSize),
+    'font-weight':gauge.endStyle.fontWeight,'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:color,direction:'ltr',...(options.trace?{'data-opf-metric-role':'mark','data-opf-gauge-part':part}:{})},escapeText(end.text)));
+  return tag('g',{...traceAttrs(options,`${item.path}.gauge`)},out.join('\n'));
 }
 
 // The trend arrow and color for a laid-out metric (core metricTrendMark); undefined without a trend.

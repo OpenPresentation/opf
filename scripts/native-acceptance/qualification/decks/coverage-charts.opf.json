@@ -1515,6 +1515,33 @@
         ],
         "alt": "Three KPIs as thin bars against target ticks over poor, fair and good ranges; retention is above its target, the other two below."
       }
+    },
+    {
+      "title": "NPS is just above its target",
+      "metric": {
+        "label": "Net Promoter Score",
+        "value": 41,
+        "gauge": {
+          "min": -100,
+          "max": 100,
+          "bands": [
+            {
+              "to": 0,
+              "label": "Detractors lead",
+              "color": "accent2"
+            },
+            {
+              "to": 30
+            },
+            {
+              "to": 100,
+              "label": "Strong",
+              "color": "accent3"
+            }
+          ],
+          "target": 40
+        }
+      }
     }
   ]
 }

@@ -341,6 +341,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/table-color-scale-no-data`](#opftable-color-scale-no-data) | Content | warning | structure | A table color scale has no numbers to shade. |
 | [`opf/table-color-scale-range`](#opftable-color-scale-range) | Content | warning | structure | A table color scale has an empty range or a center outside it. |
 | [`opf/chart-bands-order`](#opfchart-bands-order) | Content | warning | structure | Chart bands are not in increasing order. |
+| [`opf/metric-gauge-range`](#opfmetric-gauge-range) | Content | warning | structure | A metric gauge has an empty range, or a value, target or band outside it. |
+| [`opf/metric-gauge-value`](#opfmetric-gauge-value) | Content | warning | structure | A metric with a gauge has no number to draw. |
 | [`opf/chart-bands-unsupported`](#opfchart-bands-unsupported) | Content | warning | structure | A chart has bands but its type does not draw them. |
 | [`opf/chart-series-dropped`](#opfchart-series-dropped) | Content | warning | structure | A chart series is not drawn by the chart type. |
 | [`opf/code-highlight-out-of-range`](#opfcode-highlight-out-of-range) | Content | warning | structure | A code highlight marks a line the code does not have. |
@@ -1285,6 +1287,22 @@ Default severity: **warning**. Cost: structure. A table color scale has an empty
 Default severity: **warning**. Cost: structure. Chart bands are not in increasing order.
 
 **Why.** Each band runs from the previous band's `to` to its own, so the `to` values must increase. Every engine draws unordered bands sorted by `to`; the warning says the list does not read as it draws.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/metric-gauge-range`
+
+Default severity: **warning**. Cost: structure. A metric gauge has an empty range, or a value, target or band outside it.
+
+**Why.** A gauge draws its value on an arc from `min` to `max`. A `max` not above `min` draws no gauge; a value outside the range keeps its real number while its arc stops at the end, a target outside it is not drawn, and a band end outside it is drawn to the end of the range.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/metric-gauge-value`
+
+Default severity: **warning**. Cost: structure. A metric with a gauge has no number to draw.
+
+**Why.** A gauge draws a number on its arc. A metric whose drawn value is text (a string literal, or a computed value that is not a number) is drawn without its gauge.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

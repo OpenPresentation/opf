@@ -355,6 +355,43 @@ A falling value that is good news keeps its downward arrow and takes the green:
 }
 ```
 
+### Gauges (OPF 0.37)
+
+`metric.gauge` draws a metric's number against its range: how full it is, and which band it falls in. It is a way to draw a metric, not a chart type, so a gauge keeps the metric's label, change, trend, number format and data link (see [computed metrics](chart-table-data.md)), and its arc moves when the data does.
+
+```json
+{
+  "title": "NPS is just above its target",
+  "metric": {
+    "label": "Net Promoter Score",
+    "value": 41,
+    "gauge": {
+      "min": -100,
+      "max": 100,
+      "bands": [
+        { "to": 0, "label": "Detractors lead", "color": "accent2" },
+        { "to": 30 },
+        { "to": 100, "label": "Strong", "color": "accent3" }
+      ],
+      "target": 40
+    }
+  }
+}
+```
+
+- **The arc** is a half circle from `min` (the left end, default 0) through the top to `max` (the right end). Its track is the scheme's text mixed lightly into the surface. In a right-to-left deck it still runs from `min` at the left to `max` at the right, as a bar chart's value axis does.
+- **Bands** are a chart's bands (`ChartBand`, at most six): each runs from the previous `to` (the first from `min`) to its own `to`, drawn sorted when written out of order (`chart-bands-order` warns). A band without a color is a neutral, darkest lowest; a band with a scheme color is a light tint of it.
+- **The value** is an arc from `min` to the value over the track, thinner than it so the bands stay visible, in the primary color, or in the full color of the band it falls in when that band names one: a value in the red band reads red. `sentiment` and `better` color the change and its arrow, not the arc.
+- **The target** is a tick across the arc in the text color.
+- **The ends** print `min` and `max` under the arc's ends, written as the value is: with its number format (a percent format prints `0%` and `100%`), else by the metric's number rules.
+- **The text** stands under the arc, centered: the value inside the arc's bowl when it fits there at its size (an eighth of the arc's radius from the track), else under the arc and its end labels; the label, description and change follow below.
+- **A value outside the range** keeps printing its real number while its arc stops at the end, so a full arc does not read as "exactly `max`" (`metric-gauge-range` warns). A target outside the range is not drawn; a band end outside it is drawn to the end. A `max` not above `min` draws no gauge.
+- **Only a number draws a gauge.** A string value (`"72%"`), or a computed value that is not a number, draws the metric without its gauge (`metric-gauge-value` warns). Write the number and a `format` instead: `{ "value": 0.72, "format": "0%" }`.
+- **A region too small** for an arc 96 reference pixels wide with the text at the readability floor draws a plain metric, so dashboards of many small tiles stay readable; composition reports `metric-gauge-dropped`.
+- **PowerPoint** draws the track, each band and the value as native block arcs on one center, the target as a line and the ends as text boxes, all editable. Import brings the gauge back while those parts are as exported; an edited arc imports as a shape beside the metric.
+
+Use a gauge for one value against its range; for several values against their targets, use a bullet chart (a chart with `type: "bullet"`).
+
 ## Quote
 
 Quote-specific fields are grouped under `quote`. A string value is shorthand for `quote.text`; use object form when attribution or citation matters. `text` is a string or `TextRun[]` with inline formatting; `attribution`, `role` and `source` are plain strings.
