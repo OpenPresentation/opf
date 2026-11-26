@@ -7,6 +7,7 @@
 // Browser-safe and synchronous: no file access, no network, no clock.
 import { chartNumber, datasetColumnDeclaration, formatDataNumber, numberFormatError, type DataDiagnostic } from './chart-data.js';
 import { timeOrderKey } from './chart-time-order.js';
+import { metricGaugeDiagnostics } from './metric-gauge.js';
 
 export type DataConditionOperator = '=' | '!=' | '<' | '<=' | '>' | '>=' | 'in';
 export type DataConditionValue = string | number | boolean | null;
@@ -212,6 +213,13 @@ const textOf = (number: number, format: string | undefined, language: string | u
  * aggregate its column refuses, no usable cell) draws its written `value` and `delta`, as before.
  */
 export function resolveMetric(metric: unknown, datasets: unknown, options: ResolveMetricOptions = {}): ResolvedMetric {
+  const result = resolveMetricData(metric, datasets, options);
+  // FR-07, part 3: a gauge's warnings (metric-gauge-range, metric-gauge-value, chart-bands-order) are the metric's own.
+  const gauge = metricGaugeDiagnostics(metric, result, options.path ?? '');
+  return gauge.length ? { ...result, diagnostics: [...result.diagnostics, ...gauge] } : result;
+}
+
+function resolveMetricData(metric: unknown, datasets: unknown, options: ResolveMetricOptions): ResolvedMetric {
   if (!isRecord(metric) || (metric.data === undefined && metric.better === undefined && metric.format === undefined)) {
     const plain = isRecord(metric) ? metric : undefined;
     return { metric, resolved: false, diagnostics: [], ...(plain && plain.value !== undefined ? { value: shownValue(plain.value, false) } : typeof metric === 'string' || typeof metric === 'number' ? { value: shownValue(metric, false) } : {}) };

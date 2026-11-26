@@ -1146,7 +1146,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `value`
-- Purpose: Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news, 'format' for how a number value is written, 'better' for which direction of change is good news, and 'data' to compute the value and the change from a dataset of this deck. A string or number value in a metric field...
+- Purpose: Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news, 'format' for how a number value is written, 'better' for which direction of change is good news, 'data' to compute the value and the change from a dataset of this deck, and 'gauge' to draw the value on an arc agains...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -1161,6 +1161,7 @@ _No named properties._
 | `format` | no | `ref:NumberFormat` | How a number 'value' is written, the same pattern language as a number variable, a dataset column and a table cell ('0.0%', '$#,##0.0M'). A string 'value' is drawn as written. Absent: a metric linked to data uses its... |
 | `data` | no | `ref:MetricData` | Computes the value and, optionally, the change from a dataset of this deck. While it resolves, engines draw the computed numbers; 'value' and 'delta' are then the last computed numbers, kept for readers that do not co... |
 | `better` | no | `enum:up \| down` | Which direction of change is good news. Without 'sentiment', an up trend is positive and a down trend negative when 'better' is "up" (the default), and the reverse when it is "down"; a flat trend is neutral. An explic... |
+| `gauge` | no | `ref:MetricGauge` | Draws the metric as a gauge: its value on a half-circle arc from 'min' (left) to 'max' (right), over optional bands, with an optional target tick, and the metric's text under the arc (the value inside the arc's bowl w... |
 
 
 ### Diagram
@@ -1661,6 +1662,20 @@ _No named properties._
 | `field` | yes | `string` | The column whose cells are aggregated. An unknown name is a 'dataset-field-unknown' error. |
 | `aggregate` | yes | `enum:sum \| mean \| min \| max \| count \| first \| last` | How the cells are combined: 'count' is the number of rows kept (cells included whatever they hold); 'sum' and 'mean' read numbers (in a column with no declared type also strings in strict decimal syntax); 'min' and 'm... |
 | `filter` | no | `ref:DataFilter` | Only the rows that meet every condition are used. Absent: every row. |
+
+
+### MetricGauge
+
+- Type: `object`
+- Required fields: `max`
+- Purpose: A metric's gauge (see Metric.gauge): the range its value is drawn against, with optional bands and a target.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `min` | no | `ref:FiniteNumber` | The value at the arc's start (its left end). |
+| `max` | yes | `ref:FiniteNumber` | The value at the arc's end (its right end). Must be greater than 'min' ('metric-gauge-range' warning otherwise, and no gauge is drawn). |
+| `bands` | no | `array<ref:ChartBand>` | Ranges of the gauge shaded along its arc, as a chart's bands: each from the previous 'to' (the first from 'min') to its own 'to'. A band without a color is a neutral; a band with one is a light tint of it, and the val... |
+| `target` | no | `ref:FiniteNumber` | A value marked by a tick across the arc. A target outside 'min' to 'max' is not drawn ('metric-gauge-range' warning). |
 
 
 ### MetricData

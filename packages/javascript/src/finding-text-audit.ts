@@ -604,6 +604,16 @@ const chartBandsUnsupported: RuleText = (finding) => finding.message.startsWith(
   next: "use a bar, column, line, area or bullet chart, or remove the bands.",
 } : undefined;
 
+const metricGaugeRange: RuleText = (finding) => finding.message.startsWith("The gauge's") ? {
+  message: finding.message,
+  next: "write the gauge's max above its min, and keep the value, the target and the bands between them.",
+} : undefined;
+
+const metricGaugeValue: RuleText = (finding) => finding.message.startsWith("A gauge needs a number") ? {
+  message: "A gauge needs a number, and this metric's value is text, so it is drawn without its gauge.",
+  next: "give the metric a number value, or remove the gauge.",
+} : undefined;
+
 const tableColorScaleNoData: RuleText = (finding) => finding.message.startsWith("The color scale's columns hold no numbers") ? {
   message: "None of the color scale's columns holds a number, so no cell is shaded.",
   next: "name columns that hold numbers, or remove the color scale.",
@@ -783,6 +793,8 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/embed-credentials": embedCredentials,
   "opf/chart-bands-order": chartBandsOrder,
   "opf/chart-bands-unsupported": chartBandsUnsupported,
+  "opf/metric-gauge-range": metricGaugeRange,
+  "opf/metric-gauge-value": metricGaugeValue,
   "opf/code-highlight-out-of-range": codeHighlightOutOfRange,
   "opf/code-highlight-range-reversed": codeHighlightRangeReversed,
   "opf/variable-builtin-missing": variableBuiltinMissing,

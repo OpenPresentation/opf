@@ -73,7 +73,9 @@ export type DataDiagnosticCode =
   | 'metric-data-aggregate'
   | 'metric-data-empty'
   | 'metric-data-delta'
-  | 'metric-unit-repeated';
+  | 'metric-unit-repeated'
+  | 'metric-gauge-range'
+  | 'metric-gauge-value';
 
 export interface DataDiagnostic {
   code: DataDiagnosticCode;

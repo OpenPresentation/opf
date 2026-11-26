@@ -54,8 +54,10 @@ const spelled=(role,original)=>(role==='value'||role==='delta')&&typeof original
 // FR-06: `value` holds the 0.36 form of what is drawn (a 0.36.0 importer validates it as a metric and must read a plain one), and the
 // 0.37 part (a data link, `better`, `format`, which keys were derived, the numbers behind formatted text) rides in the top-level `link`
 // key, which that importer never reads.
-export function metricManifest(value,layout,group,link) {
-  return {v:1,group,role:'anchor',part:0,line:0,value,...(link?{link}:{}),parts:layout.parts.map(part=>{const original=sourceFor(value,part.role);return {role:part.role,visible:part.visible,
+// FR-07, part 3: `gauge` is the evidence of the gauge's native parts (addMetricGauge): [part, preset, adj1, adj2, fill] for each arc and
+// the target's two end points in EMU. The gauge itself rides in `value`, the metric as authored.
+export function metricManifest(value,layout,group,link,gauge) {
+  return {v:1,group,role:'anchor',part:0,line:0,value,...(link?{link}:{}),...(gauge?{gauge}:{}),parts:layout.parts.map(part=>{const original=sourceFor(value,part.role);return {role:part.role,visible:part.visible,
     ...(spelled(part.role,original)&&typeof part.text==='string'&&part.text!==String(original)?{text:part.text}:{}),
     lines:part.fit?.sourceLines.map(({start,end,nextStart,boundary})=>({start,end,nextStart,boundary}))??[]};})};
 }
@@ -129,7 +131,39 @@ function restoreMetricLink(drawn,link,edited) {
   return metric;
 }
 
-export function importMetricGroups(shapes,paragraphs,relationships,entries,report) {
+const GAUGE_PART=/^gauge (?:track|band [1-6]|value|target|min|max)$/;
+const gdValue=(shape,name)=>{const gd=array(shape?.['p:spPr']?.['a:prstGeom']?.['a:avLst']?.['a:gd']).find(entry=>entry?.name===name);const match=/^val (-?\d+)$/.exec(String(gd?.fmla??''));return match?Number(match[1]):undefined;};
+
+/** The two end points of a straight line shape in EMU (its frame's corners, by its flips). */
+function lineEnds(shape) {
+  const xfrm=shape?.['p:spPr']?.['a:xfrm'],x=Number(xfrm?.['a:off']?.x),y=Number(xfrm?.['a:off']?.y),w=Number(xfrm?.['a:ext']?.cx),h=Number(xfrm?.['a:ext']?.cy);
+  if (![x,y,w,h].every(Number.isFinite)) return undefined;
+  const flipH=xfrm?.flipH==='1'||xfrm?.flipH==='true',flipV=xfrm?.flipV==='1'||xfrm?.flipV==='true';
+  const [x1,x2]=flipH?[x+w,x]:[x,x+w],[y1,y2]=flipV?[y+h,y]:[y,y+h];
+  return [x1,y1,x2,y2];
+}
+/** Whether every gauge part the manifest recorded is in the group, unedited: an arc's preset, angles and fill, the target's end points. */
+function gaugeIntact(evidence,parts,fillOf) {
+  if (!evidence||typeof evidence!=='object'||!Array.isArray(evidence.arcs)||!evidence.arcs.length) return false;
+  const byPart=new Map(parts.map(item=>[item.data.part,item.shape]));
+  for (const entry of evidence.arcs) {
+    if (!Array.isArray(entry)||entry.length!==5) return false;
+    const [part,preset,adj1,adj2,fill]=entry,shape=byPart.get(part);
+    // An angle is the same modulo a full turn (PowerPoint reports 270 degrees as -90).
+    const sameAngle=(value,recorded)=>value!==undefined&&Number.isFinite(recorded)&&((value-recorded)%21600000+21600000)%21600000===0;
+    if (!shape||shape['p:spPr']?.['a:prstGeom']?.prst!==preset||!sameAngle(gdValue(shape,'adj1'),adj1)||!sameAngle(gdValue(shape,'adj2'),adj2)||String(fillOf(shape)??'').replace(/^#/,'').toUpperCase()!==String(fill).toUpperCase()) return false;
+  }
+  if (evidence.target!==undefined) {
+    const ends=lineEnds(byPart.get('gauge target'));
+    // A line runs between its two end points either way (PowerPoint writes a line by its frame and flips).
+    const near=(points,index)=>Math.abs(points[index]-evidence.target[index])<=2;
+    if (!ends||!Array.isArray(evidence.target)||evidence.target.length!==4) return false;
+    if (![ends,[ends[2],ends[3],ends[0],ends[1]]].some(points=>points.every((_,index)=>near(points,index)))) return false;
+  } else if (byPart.has('gauge target')) return false;
+  return true;
+}
+
+export function importMetricGroups(shapes,paragraphs,relationships,entries,report,fillOf=shape=>shape?.['p:spPr']?.['a:solidFill']?.['a:srgbClr']?.val) {
   const groups=new Map(),tagCounts=new Map(),consumed=new Set(),items=[];
   for (const [index,shape] of shapes.entries()) {
     for (const link of array(shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'])) {
@@ -155,10 +189,13 @@ export function importMetricGroups(shapes,paragraphs,relationships,entries,repor
     if (anchors.length!==1) throw new Error('Missing or duplicated metric anchor.');
     const anchor=anchors[0],manifest=anchor.data;
     if (!Array.isArray(manifest.parts)||!manifest.parts.every(part=>Array.isArray(part?.lines))) throw new Error('Invalid metric parts.');
-    // RR-07: the trend arrow (role 'mark') is generated decoration: at most one, consumed with the group, never source text.
-    // LH-137: so is the delta's pill (role 'pill').
+    // RR-07: the trend arrow (role 'mark') is generated decoration, consumed with the group, never source text. LH-137: so is the delta's
+    // pill (role 'pill'). FR-07, part 3: a metric has any number of marks, told apart by part name (the gauge's arcs, target and end labels;
+    // the trend arrow has none): each part at most once.
     const marks=group.filter(item=>item.data.role==='mark'),pills=group.filter(item=>item.data.role==='pill'),members=group.filter(item=>item.data.role!=='mark'&&item.data.role!=='pill');
-    if (marks.length>1) throw new Error('Duplicated metric trend mark.');
+    const markPart=item=>item.data.part===undefined?'trend':item.data.part;
+    if (marks.some(item=>item.data.part!==undefined&&!GAUGE_PART.test(item.data.part))) throw new Error('Unknown metric mark.');
+    if (new Set(marks.map(markPart)).size!==marks.length) throw new Error('Duplicated metric mark.');
     if (pills.length>1) throw new Error('Duplicated metric delta pill.');
     const expected=manifest.parts.reduce((sum,part)=>sum+part.lines.length,0);
     if (members.length!==expected||new Set(members.map(item=>item.shape)).size!==expected) throw new Error('Incomplete or duplicated metric shapes.');
@@ -201,8 +238,19 @@ export function importMetricGroups(shapes,paragraphs,relationships,entries,repor
       }
       if (link) metric=restoreMetricLink(value,link,changedRoles);
     }
+    // FR-07, part 3: the gauge comes back while every part the manifest recorded still has its preset, angles and fill (and the target its
+    // end points); otherwise the metric is restored without it and its remaining parts import as ordinary shapes.
+    const gaugeParts=marks.filter(item=>item.data.part!==undefined);
+    let gaugeKept=true;
+    if (metric&&typeof metric==='object'&&metric.gauge!==undefined) {
+      if (!gaugeIntact(manifest.gauge,gaugeParts,fillOf)) {
+        gaugeKept=false;
+        const {gauge:_dropped,...rest}=metric;metric=rest;
+        report({code:'metric-gauge-not-restored',message:"The metric's gauge was edited, moved or deleted in PowerPoint, so the metric was restored without it; its remaining parts were imported as shapes."});
+      }
+    } else if (gaugeParts.length) gaugeKept=false;
     if (!isValidMetric(metric)) throw new Error('Edited native text cannot form a valid metric.');
-    for (const item of group) consumed.add(item.shape);
+    for (const item of group) if (gaugeKept||item.data.part===undefined||item.data.role!=='mark') consumed.add(item.shape);
     items.push({shape:anchor.shape,payload:{type:'metric',metric}});
     if (typeChanges.length) report({code:'metric-value-type-changed',message:`Edited numeric ${typeChanges.join(', ')} retained as literal text to avoid discarding spelling or precision.`});
     if(!groupUnchanged(group,paragraphs))report({code:'metric-import-reflow',message:'Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.'});

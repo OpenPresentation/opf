@@ -87,6 +87,10 @@ export interface MetricDataState {
   link?: Record<string, unknown>;
   better?: "up" | "down";
   format?: string;
+  /** FR-07, part 3: the metric's gauge as written, when it has one. */
+  gauge?: { min?: number; max: number; bands?: { to: number; label?: string; color?: string }[]; target?: number };
+  /** The number the metric shows (computed or written), when it is one. */
+  number?: number;
   datasets: MetricDatasetOption[];
   /** Whether the link computes: the computed numbers are what is drawn. */
   resolved: boolean;
@@ -97,7 +101,9 @@ export interface MetricDataState {
   stale: { field: "value" | "delta"; message: string; fix?: { title: string; patch: JsonPatchOperation[] } }[];
   diagnostics: { code: string; severity: "error" | "warning"; path: string; message: string }[];
 }
-export interface MetricDataChange { data?: Record<string, unknown> | null; better?: "up" | "down" | null; format?: string | null }
+export interface MetricDataChange { data?: Record<string, unknown> | null; better?: "up" | "down" | null; format?: string | null; gauge?: { min?: number; max: number; bands?: { to: number; label?: string; color?: string }[]; target?: number } | null }
+/** FR-07, part 3: the gauge the editor turns on for a value: min 0 and max the next round number above it (1 for a value from 0 to 1). */
+export declare function defaultMetricGauge(value: number | undefined): { max: number };
 /** The datasets of a deck, for a Data section. */
 export declare function metricDatasets(presentation: unknown): MetricDatasetOption[];
 /** The kind of change a link computes. */

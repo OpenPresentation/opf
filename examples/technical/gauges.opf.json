@@ -1,0 +1,74 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Gauges",
+  "language": "en-US",
+  "description": "Metrics drawn as gauges (metric.gauge): utilization against its capacity, a Net Promoter Score with colored bands and a target, a gauge computed from a dataset, and a row of site gauges. Fictional data.",
+  "datasets": {
+    "ops": {
+      "title": "Weekly operations",
+      "columns": [
+        { "name": "Week", "type": "text", "role": "dimension" },
+        { "name": "Utilization", "type": "number", "role": "measure", "format": "0%" }
+      ],
+      "rows": [
+        ["W45", 0.64],
+        ["W46", 0.68],
+        ["W47", 0.72]
+      ]
+    }
+  },
+  "slides": [
+    {
+      "id": "utilization",
+      "title": "Capacity is at 72%",
+      "metric": {
+        "label": "Utilization",
+        "value": 0.72,
+        "format": "0%",
+        "gauge": { "max": 1 }
+      }
+    },
+    {
+      "id": "nps",
+      "title": "NPS is just above its target",
+      "metric": {
+        "label": "Net Promoter Score",
+        "value": 41,
+        "gauge": {
+          "min": -100,
+          "max": 100,
+          "bands": [
+            { "to": 0, "label": "Detractors lead", "color": "accent2" },
+            { "to": 30 },
+            { "to": 100, "label": "Strong", "color": "accent3" }
+          ],
+          "target": 40
+        }
+      }
+    },
+    {
+      "id": "computed",
+      "title": "Utilization from the weekly data",
+      "metric": {
+        "label": "Utilization",
+        "value": 0.72,
+        "delta": 0.04,
+        "data": { "dataset": "ops", "field": "Utilization", "aggregate": "last", "delta": { "compare": "previous" } },
+        "gauge": {
+          "max": 1,
+          "bands": [{ "to": 0.6 }, { "to": 0.85 }, { "to": 1, "label": "Overloaded", "color": "accent2" }],
+          "target": 0.8
+        }
+      }
+    },
+    {
+      "id": "sites",
+      "title": "Three sites against capacity",
+      "blocks": [
+        { "metric": { "label": "Berlin", "value": 0.72, "format": "0%", "gauge": { "max": 1, "bands": [{ "to": 0.6 }, { "to": 0.85 }, { "to": 1, "color": "accent2" }], "target": 0.8 } } },
+        { "metric": { "label": "Lisbon", "value": 0.48, "format": "0%", "gauge": { "max": 1, "bands": [{ "to": 0.6 }, { "to": 0.85 }, { "to": 1, "color": "accent2" }], "target": 0.8 } } },
+        { "metric": { "label": "Madrid", "value": 0.91, "format": "0%", "gauge": { "max": 1, "bands": [{ "to": 0.6 }, { "to": 0.85 }, { "to": 1, "color": "accent2" }], "target": 0.8 } } }
+      ]
+    }
+  ]
+}
