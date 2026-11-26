@@ -14,8 +14,39 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const date = "2026-03-05"; // a Thursday
 const draw = (pattern, language) => formatFurnitureDate(date, pattern, language).text;
 
-test("the table is what Intl says on the ICU version it was made with, and is only reported on another", () => {
-  const sameIcu = process.versions.icu === DATE_NAME_SOURCE.icu;
+/**
+ * The entries that differ between two versions of the generated table's source text, at most `limit` of them, each as
+ * "what: committed -> fresh". A names entry is compared list by list, so a line names the one list that differs.
+ */
+const tableDifferences = (committed, fresh, limit = 12) => {
+  const read = (source, name) => JSON.parse(source.match(new RegExp(`export const ${name}: [^=]+= (\\{.*\\});`))?.[1] ?? "{}");
+  const lists = ["months", "short months", "stand-alone months", "short stand-alone months", "weekdays", "short weekdays"];
+  const out = [];
+  for (const name of ["DATE_NAMES", "DATE_PATTERNS"]) {
+    const before = read(committed, name);
+    const after = read(fresh, name);
+    for (const tag of [...new Set([...Object.keys(before), ...Object.keys(after)])].sort()) {
+      if (before[tag] === after[tag]) continue;
+      if (name === "DATE_PATTERNS" || before[tag] === undefined || after[tag] === undefined) {
+        out.push(`${name} ${tag}: ${JSON.stringify(before[tag])} -> ${JSON.stringify(after[tag])}`);
+        continue;
+      }
+      const left = before[tag].split("~");
+      const right = after[tag].split("~");
+      lists.forEach((list, index) => {
+        if (left[index] !== right[index]) out.push(`${name} ${tag}, ${list}: ${JSON.stringify(left[index])} -> ${JSON.stringify(right[index])}`);
+      });
+    }
+  }
+  const missing = (source) => source.match(/DATE_NAMES_MISSING: [^=]+= (\[.*\]);/)?.[1];
+  if (missing(committed) !== missing(fresh)) out.push(`DATE_NAMES_MISSING: ${missing(committed)} -> ${missing(fresh)}`);
+  return out.length > limit ? [...out.slice(0, limit), `and ${out.length - limit} more`] : out;
+};
+
+test("the table is what Intl says on the runtime it was made with, and another runtime reports what differs", () => {
+  // The runtime is the ICU version, the CLDR version and the Node major: Node 26.13 and Node 24.20 both carry ICU 78.3 with CLDR 48.0
+  // and still disagree on some of this data, which is why the engines read the table and never the running Intl.
+  const sameRuntime = process.versions.icu === DATE_NAME_SOURCE.icu && process.versions.cldr === DATE_NAME_SOURCE.cldr && process.versions.node.split(".")[0] === DATE_NAME_SOURCE.node;
   const directory = mkdtempSync(path.join(tmpdir(), "opf-date-names-"));
   try {
     const out = path.join(directory, "date-name-data.ts");
@@ -23,8 +54,12 @@ test("the table is what Intl says on the ICU version it was made with, and is on
     assert.equal(run.status, 0, run.stderr);
     const fresh = readFileSync(out, "utf8");
     const committed = readFileSync(path.join(here, "../src/date-name-data.ts"), "utf8");
-    if (sameIcu) assert.equal(fresh, committed, "rerun packages/javascript/scripts/build-date-names.mjs, with a changelog fragment, to take other data on purpose");
-    else console.log(`reported only: this runtime has ICU ${process.versions.icu}, the table ${DATE_NAME_SOURCE.icu}; differs: ${fresh !== committed}`);
+    const differences = tableDifferences(committed, fresh);
+    if (sameRuntime) assert.equal(fresh, committed, `rerun packages/javascript/scripts/build-date-names.mjs, with a changelog fragment, to take other data on purpose${differences.length ? `; it differs in:\n${differences.join("\n")}` : ""}`);
+    else console.log(`reported only: this runtime is Node ${process.versions.node} with ICU ${process.versions.icu} and CLDR ${process.versions.cldr}; the table was read on Node ${DATE_NAME_SOURCE.node} with ICU ${DATE_NAME_SOURCE.icu} and CLDR ${DATE_NAME_SOURCE.cldr}. ${differences.length ? `This runtime's Intl differs in:\n${differences.join("\n")}` : "The names and patterns are the same here."}`);
+    // The report itself: no difference between a table and itself, and a planted one is named by language and list.
+    assert.deepEqual(tableDifferences(committed, committed), []);
+    assert.deepEqual(tableDifferences(committed, committed.replace('"af":"Januarie|', '"af":"Januari|')).map((line) => line.split(":")[0]), ["DATE_NAMES af, months"]);
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }
