@@ -127,7 +127,7 @@ lists the 0.34 names of the built-ins.
 | `anchor` | `top`, `middle`, `bottom` | inherited from the nearest split or the record, else `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
 
-A region that accepts `video` also accepts `embed` (FR-08): core states the implication once (`IMPLIED_REGION_KINDS`, read through `kindAccepted`, which `regionAccepts`, the validator and the editor use), so no default layout lists `embed` except where it lists every kind. A record may list `embed` itself.
+A region that accepts `video` also accepts `embed` (FR-08): core states the implication once (`IMPLIED_REGION_KINDS`, read through `kindAccepted`, which `regionAccepts`, the validator and the editor use), so no default layout lists `embed`. A record may list `embed` itself.
 
 ### Choosing an anchor
 

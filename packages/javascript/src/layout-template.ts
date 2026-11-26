@@ -16,7 +16,7 @@ export type RegionKind = typeof REGION_KINDS[number];
 /**
  * A kind a region accepts because it accepts another (FR-08): an embed sits where a video would, so a region that lists `video` takes an embed
  * and no layout record has to list `embed`. Everything that asks "does this region take this kind" reads this one table (`kindAccepted`).
- * A record may still list the implied kind itself; the default layouts list it only where they list every kind.
+ * A record may still list the implied kind itself; no default layout does.
  */
 export const IMPLIED_REGION_KINDS: Readonly<Record<string, RegionKind>> = Object.freeze({ embed: 'video' });
 /** Whether a region that lists `accepts` takes content of `kind`: it lists the kind, or the kind it is implied by (`IMPLIED_REGION_KINDS`). */
