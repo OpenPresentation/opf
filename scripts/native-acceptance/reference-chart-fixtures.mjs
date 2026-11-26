@@ -36,7 +36,7 @@ export function assertReferenceSources(sources){
       for(const ref of chart.referenceLines??[]){
         assert.ok(Number.isFinite(ref.value),'Only explicit finite raw numeric values');
         if(ref.axis==='secondary'){
-          assert.equal(chart.type,'combo');assert.ok(chart.line?.includes('Margin'));assert.ok(chart.secondaryAxis?.includes('Margin'));
+          assert.equal(chart.type,'combo');assert.ok(chart.lineSeries?.includes('Margin'));assert.ok(chart.secondaryAxis?.includes('Margin'));
         }
       }
     }
@@ -61,7 +61,7 @@ export function assertReferenceSources(sources){
   }
   assert.equal(sources[2].document.slides[2].chart.data.rows.length,1,'Intentional singleton overlay');
   const singleton=sources[3].document.slides;
-  for(const slide of singleton){assert.equal(slide.title,undefined);assert.equal(slide.subtitle,undefined);assert.equal(slide.chart.data.rows.length,1);assert.deepEqual(slide.chart.line,['Margin']);assert.deepEqual(slide.chart.secondaryAxis,['Margin']);assert.equal(slide.chart.data.columns[2].format,'0%');}
+  for(const slide of singleton){assert.equal(slide.title,undefined);assert.equal(slide.subtitle,undefined);assert.equal(slide.chart.data.rows.length,1);assert.deepEqual(slide.chart.lineSeries,['Margin']);assert.deepEqual(slide.chart.secondaryAxis,['Margin']);assert.equal(slide.chart.data.columns[2].format,'0%');}
   assert.deepEqual(singleton[0].chart.referenceLines.map(({value,axis,label})=>({value,axis,label})),[{value:180,axis:undefined,label:undefined},{value:.25,axis:'secondary',label:undefined}]);
   assert.equal(singleton[1].chart.referenceLines.length,1);assert.equal(singleton[1].chart.referenceLines[0].axis,'secondary');assert.equal(singleton[1].chart.referenceLines[0].value,.25);assert.equal(singleton[1].chart.referenceLines[0].label,'Margin 25%');
   assert.equal(singleton[2].chart.referenceLines,undefined);
