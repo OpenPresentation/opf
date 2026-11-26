@@ -14,6 +14,7 @@ import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
 import { assertAppResourceFrame } from "./app-resource-frame.mjs";
 import { minifyAppCss } from "./app-css.mjs";
+import { compactGalleryPlugin } from "./app-gallery.mjs";
 import { assertSameProgram, cheaperQuotes } from "./app-quotes.mjs";
 
 const require = createRequire(import.meta.url);
@@ -58,9 +59,12 @@ const zodEnglishOnly = {
 	},
 };
 
+// The gallery's records as a compact expression instead of a JSON string (app-gallery.mjs): the same value, fewer frame bytes.
+const galleryModules = { rewritten: 0 };
+
 const profile = process.env.OPF_MCP_APP_PROFILE;
 const bundle = await build({
-	plugins: [zodEnglishOnly],
+	plugins: [zodEnglishOnly, compactGalleryPlugin(galleryModules)],
 	metafile: true,
 	// A path, not URL.pathname, which on Windows is "/C:/..." and does not resolve.
 	entryPoints: [fileURLToPath(new URL("app/main.ts", here))],
@@ -80,6 +84,7 @@ const bundle = await build({
 	// tsup's chunks of core are imported bare for their order only; they are pure, so dropping the bare import changes nothing.
 	logOverride: { "ignored-bare-import": "silent" },
 });
+if (galleryModules.rewritten !== 1) throw new Error(`build-app: the gallery's dist/index.js was rewritten ${galleryModules.rewritten} times, not once; review app-gallery.mjs.`);
 if (zodLocaleIndexes === 0) throw new Error("build-app: zod's locale index (zod/v4/locales/index.js) was not in the bundle, so the English-only rule no longer applies. Review the rule.");
 const otherLocales = Object.keys(bundle.metafile.inputs).filter((input) => /[\\/]zod[\\/]v4[\\/]locales[\\/](?!en\.js$|index\.js$)[^\\/]+$/.test(input));
 if (otherLocales.length) throw new Error(`build-app: zod locale modules other than English are in the bundle: ${otherLocales.join(", ")}.`);
