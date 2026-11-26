@@ -195,6 +195,8 @@
       "expect": { "valid": true },
       "description": "Inline chart data declares the type, role and unit of its columns.",
       "basis": "opf.schema.json#/$defs/ChartData and #/$defs/DatasetColumn"
+    },
+    {
       "id": "core.valid.metric-data-value",
       "file": "core/valid/metric-data-value.opf.json",
       "levels": ["reader", "writer"],
