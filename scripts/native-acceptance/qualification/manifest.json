@@ -312,6 +312,18 @@
       "source": "examples/technical/variable-translations.opf.json"
     },
     {
+      "id": "computed-metrics",
+      "source": "examples/technical/computed-metrics.opf.json"
+    },
+    {
+      "id": "bands-and-bullet",
+      "source": "examples/technical/bands-and-bullet.opf.json"
+    },
+    {
+      "id": "gauges",
+      "source": "examples/technical/gauges.opf.json"
+    },
+    {
       "id": "coverage-text",
       "source": "scripts/native-acceptance/qualification/decks/coverage-text.opf.json"
     },
