@@ -1,0 +1,87 @@
+{
+ "name": "Matrix M16: flush wrapped text, right to left and mixed",
+ "slides": [
+  {
+   "title": "M16 Arabic paragraph, start-aligned (right): full lines reach the right edge",
+   "blocks": [
+    {
+     "text": "تعمل فرق التشغيل في المراكز الشمالية على تقليل زمن الانتظار عند البوابات، ونتوقع أن ينخفض المتوسط إلى أقل من عشرين دقيقة بحلول نهاية الربع الثالث، دون الحاجة إلى معدات جديدة في أي من المحطات الأربع."
+    }
+   ],
+   "notes": "M16 slide 1. Arabic, right to left, start alignment (right). Look at the right edge: every line, also full ones, ends on the box's right edge, not a space short.",
+   "language": "ar"
+  },
+  {
+   "title": "M16 Hebrew list, start-aligned (right): wrapped entries reach the right edge",
+   "notes": "M16 slide 2. Hebrew list, right to left, wrapped entries. Look at the right edge of the text beside the bullets and the left ends of the wrapped lines.",
+   "language": "he",
+   "items": [
+    "צוותי התפעול במרכזים הצפוניים עובדים על קיצור זמני ההמתנה בשערים לפני עונת השיא",
+    "אנו מצפים שהזמן הממוצע ירד אל מתחת לעשרים דקות עד סוף הרבעון השלישי של השנה",
+    "סקירה שבועית של זמני ההמתנה תקבע אם המסופים הדרומי והמערבי יצטרפו בפברואר"
+   ]
+  },
+  {
+   "title": "M16 Arabic list, start-aligned (right)",
+   "notes": "M16 slide 3. Arabic list, right to left, wrapped entries. Look at the right edge of the entries.",
+   "items": [
+    "يبدأ تشغيل نظام جدولة الأرصفة في المحطتين الشمالية والشرقية في الأسبوع الثاني من يناير",
+    "تتبع جداول موظفي البوابات توقعات النظام بدلا من الخطة الأسبوعية الثابتة"
+   ],
+   "language": "ar"
+  },
+  {
+   "title": "M16 Arabic paragraph, centered",
+   "blocks": [
+    {
+     "type": "text",
+     "text": "تعمل فرق التشغيل في المراكز الشمالية على تقليل زمن الانتظار عند البوابات، ونتوقع أن ينخفض المتوسط إلى أقل من عشرين دقيقة بحلول نهاية الربع الثالث، دون الحاجة إلى معدات جديدة في أي من المحطات الأربع."
+    }
+   ],
+   "notes": "M16 slide 4. Arabic centered. Lines centered on one axis.",
+   "design": {
+    "contentAlignment": "center"
+   },
+   "language": "ar"
+  },
+  {
+   "title": "M16 Hebrew paragraph, end-aligned (left): lines start flush left",
+   "blocks": [
+    {
+     "type": "text",
+     "text": "צוותי התפעול במרכזים הצפוניים עובדים על קיצור זמני ההמתנה בשערים, ואנו מצפים שהזמן הממוצע ירד אל מתחת לעשרים דקות עד סוף הרבעון השלישי, בלי לרכוש ציוד חדש לאף אחד מארבעת המסופים."
+    }
+   ],
+   "notes": "M16 slide 5. Hebrew, right to left, end alignment (left). Look at the left edge: the glyphs of every line start on one edge.",
+   "language": "he",
+   "design": {
+    "contentAlignment": "end"
+   }
+  },
+  {
+   "design": {
+    "contentAlignment": "end"
+   },
+   "title": "M16 Hebrew with Latin words in an English deck, right-aligned",
+   "blocks": [
+    {
+     "text": "הפיילוט ב-Northern Hub הראה שה-Dock Scheduler מקצר את זמן ההמתנה ב-18 אחוזים, ולכן נרחיב אותו לארבעה צוותים נוספים בינואר לפני עונת השיא."
+    }
+   ],
+   "notes": "M16 slide 6. Mixed: a Hebrew paragraph with English words, on a slide in the English deck, aligned right. Look at the right edge and the order of the English words."
+  },
+  {
+   "title": "M16 English line with Hebrew and Arabic phrases, centered",
+   "blocks": [
+    {
+     "text": "The Haifa team calls the new gate plan תוכנית השערים החדשה and the Dubai team calls it خطة البوابات الجديدة, and both teams report the same drop in waiting time after the first month."
+    }
+   ],
+   "notes": "M16 slide 7. Mixed left-to-right paragraph holding Hebrew and Arabic phrases, centered.",
+   "design": {
+    "contentAlignment": "center"
+   }
+  }
+ ],
+ "language": "en-US"
+}

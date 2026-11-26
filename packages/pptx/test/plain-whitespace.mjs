@@ -33,7 +33,8 @@ assert.equal(edited.slides[0].text,baseline.text.replace('A  B','Native  edit'))
 const reordered=await fromPptx(mutate(entries=>slide(entries,xml=>{const shapes=[...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(m=>m[0]);return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,()=>shapes.pop());})));
 assert.deepEqual(reordered.slides[0],baseline);
 const cleared=await fromPptx(mutate(entries=>slide(entries,xml=>xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,shape=>shape.includes('name="OPF text ')?shape.replace(/<a:t>[\s\S]*?<\/a:t>/g,'<a:t></a:t>'):shape))));
-assert.equal(cleared.slides[0].text,'\r\n\r\n\r');
+// opf#1493: the soft wraps' whitespace is in the tags (the lines are written without it), so a cleared block keeps it with the line endings.
+assert.equal(cleared.slides[0].text,'\r\n\r\n\r'+' '.repeat(7));
 for(const [name,fn]of Object.entries({
  missing:entries=>{delete entries[tagFiles(entries)[0]];},
  badCount:entries=>changeTag(entries,d=>d.count++),

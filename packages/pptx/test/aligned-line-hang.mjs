@@ -42,12 +42,14 @@ for (const [index, factor] of [[2, 1], [3, .5], [4, 0]]) {
   assert.ok(placed.slice(0, -1).every(line => line.hang > 0), 'every wrapped line ends in a hanging space');
   for (const [line, place] of placed.entries()) {
     const shape = named(slide(index), `OPF text slides.${index}.blocks.0.text line ${line}`), box = frame(shape);
-    assert.equal(texts(shape)[0], item.text.lines[line], 'the line keeps its text, the hanging space included');
+    // opf#1493: a left-to-right line is written without the whitespace that hangs at its soft wrap (the whitespace belongs to the line
+    // break; PowerPoint counts a trailing space in its alignment and Keynote does not), so its box is not shifted.
+    assert.equal(texts(shape)[0], item.text.lines[line].replace(/\s+$/u, ''), 'the line is written without its hanging space');
     near(box.width, item.box.width, 'the box keeps its width');
-    near(box.x + box.width * factor, place.x + place.width * factor, 'the paragraph is anchored where core placed the line with its space');
-    // PowerPoint anchors the paragraph with its trailing space; its glyphs then end (or are centered) on the box's own anchor.
+    // The paragraph is its glyphs: they end (or are centered) on the box's own anchor, as the preview draws them.
     // (A start-aligned line starts where core placed it, its ink inside the box, as before.)
-    if (factor) near(box.x + box.width * factor - (place.hang ?? 0) * factor, item.box.x + item.box.width * factor, 'the glyphs are on the edge', .5);
+    if (factor) near(box.x + box.width * factor, item.box.x + item.box.width * factor, 'the glyphs are on the edge', .5);
+    near(box.x + box.width * factor, place.x + (place.width - (place.hang ?? 0)) * factor, 'the paragraph is anchored where core placed the glyphs');
   }
   cases++;
 }
@@ -58,16 +60,18 @@ for (const [index, factor] of [[0, 1], [1, .5]]) {
   const item = fit(index, `slides.${index}.title`), [first, second] = item.text.placement.lines;
   assert.ok(first.hang > 10 && !second.hang);
   const shape = named(slide(index), `OPF heading slides.${index}.title line 0`), box = frame(shape);
-  assert.deepEqual(texts(shape), ['Scale the pilot to four ', 'teams in January.']);
+  // opf#1493: the first paragraph is written without the space that hangs at its wrap (the tag keeps it as `trailing`), so no paragraph
+  // needs a margin for it: every paragraph is its glyphs.
+  assert.deepEqual(texts(shape), ['Scale the pilot to four', 'teams in January.']);
   if (factor === 1) {
     const [end1, end2] = margins(shape, 'marR');
-    near(box.x + box.width, first.x + first.width, 'the shape ends where the first line with its space does');
-    near(end1, 0, 'the first paragraph has no margin');
+    near(box.x + box.width, first.x + first.width - first.hang, 'the shape ends where the first line does', .5);
+    near(end1, 0, 'the first paragraph has no margin', .5);
     near(box.x + box.width - end2, second.x + second.width, 'the second paragraph ends where its line does');
-    near(end2, first.hang, 'by the hang', .5);
+    near(end2, 0, 'no margin for the hang', .5);
   } else {
     const [left1, left2] = margins(shape, 'marL'), [right1, right2] = margins(shape, 'marR');
-    near((box.x + left1 + box.x + box.width - right1) / 2, first.x + first.width / 2, 'the first paragraph is centered where its line with its space is');
+    near((box.x + left1 + box.x + box.width - right1) / 2, first.x + (first.width - first.hang) / 2, 'the first paragraph is centered where its line is');
     near((box.x + left2 + box.x + box.width - right2) / 2, second.x + second.width / 2, 'the second paragraph is centered where its line is');
   }
   cases++;

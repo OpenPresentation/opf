@@ -58,7 +58,8 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   assert.ok(lines.every(line => /<a:lnSpc><a:spcPct val="100000"\/><\/a:lnSpc>/.test(line)), 'single spacing on every line');
   assert.ok(!/<a:spcBef>/.test(lines[0]) && lines.slice(1).every(line => /<a:spcBef><a:spcPts val="\d+"\/><\/a:spcBef>/.test(line)), 'space before each later line makes up the pitch');
   assert.ok(!/<a:br\b/.test(title));
-  assert.equal(text(title).join(''), bookman.slides[0].title);
+  // opf#1493: each line is written without the space that hangs at its wrap.
+  assert.equal(text(title).join('').replaceAll(' ', ''), bookman.slides[0].title.replaceAll(' ', ''));
   assert.deepEqual(out.diagnostics.filter(item => item.code === 'native-body-fallback'), []);
   const back = await imported(out.bytes);
   assert.equal(back.value.slides[0].title, bookman.slides[0].title, 'paragraph breaks import as soft wraps');
@@ -170,7 +171,8 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   // space past its glyphs and the second paragraph's margin is the space more than the 1.5 px its glyphs end further left.
   const [placed] = resolvePresentation({...hotel, slides: [hotel.slides[0]]}, {fonts, catalogs}).slides[0].geometry.items.find(item => item.field === 'title').text.placement.lines;
   assert.ok(placed.hang > 10, 'the first line hangs its space');
-  assert.ok(end1 === 0 && end2 - placed.hang * 9525 > 1.2 * 9525 && end2 - placed.hang * 9525 < 2.2 * 9525, `the second line ends its glyphs 1.5 px further left (${end1}, ${end2}, hang ${placed.hang})`);
+  // opf#1493: the first paragraph is written without that space, so the second's margin is only the 1.5 px.
+  assert.ok(end1 === 0 && end2 > 1.2 * 9525 && end2 < 2.2 * 9525, `the second line ends its glyphs 1.5 px further left (${end1}, ${end2}, hang ${placed.hang})`);
   assert.equal((await imported(right.bytes)).value.slides[0].title, hotel.slides[0].title);
 }
 
@@ -194,7 +196,8 @@ const bookman = {design: {fontScheme: 'bookman'}, slides: [{title: 'Onboarding e
   };
   // Retyped: the same paragraphs, other words; still soft wraps.
   const retyped = lines.map((paragraph, index) => index === 1 ? paragraph.replace(/<a:t>[^<]*<\/a:t>/, '<a:t>retyped middle words </a:t>') : paragraph);
-  assert.equal(await importedTitle(retyped), texts[0] + 'retyped middle words ' + texts.slice(2).join(''));
+  // opf#1493: the whitespace a wrap hung is in the tag (the lines are written without it), so it joins the lines again, around the retyped words too.
+  assert.equal(await importedTitle(retyped), [texts[0], 'retyped middle words ', texts.slice(2).join(' ')].join(' '));
   // Joined: the first two lines one paragraph (Delete at the end of the first).
   const joined = [lines[0].replace(END_MARK, '') + runsOf(lines[1]) + '</a:p>', ...lines.slice(2)];
   assert.equal(await importedTitle(joined), [texts[0] + texts[1], ...texts.slice(2)].join('\n'));

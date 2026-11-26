@@ -21,6 +21,20 @@ const asParts = value => Array.isArray(value) ? value : value === undefined ? []
  * `richText`); `separatorOf(item, last)` is the text between this line and the next ('' for a soft wrap). Returns undefined when a
  * shape has no readable body, so the caller keeps the plain text path.
  */
+/**
+ * opf#1493: whitespace a soft-wrapped line was written without (its tag keeps it) follows the text of its line, in the look of the run
+ * that ended it, so a run that crosses the wrap is one run again. Appends it to the last of `parts` and returns true when it is inline
+ * whitespace (spaces, no line ending); false leaves `parts` alone.
+ */
+export function appendInlineWhitespace(parts, whitespace) {
+  if (typeof whitespace !== 'string' || !/^[^\S\r\n]+$/u.test(whitespace)) return false;
+  const before = parts.at(-1);
+  if (typeof before === 'string') parts[parts.length - 1] = before + whitespace;
+  else if (object(before) && typeof before.text === 'string') parts[parts.length - 1] = {...before, text: before.text + whitespace};
+  else return false;
+  return true;
+}
+
 export function joinRichLines(ordered, readBody, separatorOf) {
   const parts = [];
   for (const [position, item] of ordered.entries()) {
@@ -34,7 +48,7 @@ export function joinRichLines(ordered, readBody, separatorOf) {
       parts.push(...runs);
     });
     const separator = separatorOf(item, position === ordered.length - 1);
-    if (separator) parts.push(separator);
+    if (separator && !appendInlineWhitespace(parts, separator)) parts.push(separator);
   }
   return parts;
 }
