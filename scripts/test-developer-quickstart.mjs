@@ -109,7 +109,7 @@ assert.ok(geometry.furniture.headerBottom > 0);
 assert.ok(geometry.contentBox.y >= geometry.furniture.headerBottom);
 assert.ok(geometry.contentBox.y + geometry.contentBox.height <= geometry.furniture.footerTop);
 
-const {presentation, pages} = paginate(document, {fonts, catalogs, minFontSizePx: 32});
+const {presentation, pages} = paginate(document, {fonts, catalogs, minFontSize: 32});
 assert.equal(validate(presentation, {only: ['format']}).valid, true);
 assert.ok(pages.length >= 2, 'dense overflow slide must paginate into more than one page');
 assert.ok(presentation.slides.every((slide) => typeof slide.title === 'string' && slide.title.length > 0));

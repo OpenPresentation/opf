@@ -1220,6 +1220,70 @@
               "color": "accent2",
               "dash": "dot"
             }
+          },
+          {
+            "value": 29,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "longDash"
+            }
+          },
+          {
+            "value": 30.5,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "dashDot"
+            }
+          },
+          {
+            "value": 32,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "longDashDot"
+            }
+          },
+          {
+            "value": 33.5,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "longDashDotDot"
+            }
+          },
+          {
+            "value": 35,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "sysDot"
+            }
+          },
+          {
+            "value": 36.5,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "sysDash"
+            }
+          },
+          {
+            "value": 38,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "sysDashDot"
+            }
+          },
+          {
+            "value": 39.5,
+            "stroke": {
+              "color": "accent3",
+              "width": 1.5,
+              "dash": "sysDashDotDot"
+            }
           }
         ]
       }
