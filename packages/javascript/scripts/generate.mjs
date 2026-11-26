@@ -249,7 +249,11 @@ async function generatePresetGeometry() {
   const table = await readJson(path.join(specRoot, "reference", "preset-geometry.json"));
   const lines = [
     generatedHeader("spec/reference/preset-geometry.json"),
-    `export const presetGeometrySource: unknown = ${JSON.stringify({ shapes: table.shapes })};`,
+    // The compact form of compact-literal.mjs (the generator proves it builds the same value): the handles and paths
+    // repeat their key lists on every row. Strings are named only as arguments of a row's function: the thousands of
+    // short path commands stay in their array literals, which the engine copies from a template (naming them all saves
+    // 40 KB more but makes the table load measurably slower).
+    `export const presetGeometrySource: unknown = ${compactModuleExpression({ shapes: table.shapes }, "spec/reference/preset-geometry.json", { strings: "arguments" })};`,
     "",
   ];
   await fs.writeFile(path.join(generatedRoot, "preset-geometry.ts"), lines.join("\n"));

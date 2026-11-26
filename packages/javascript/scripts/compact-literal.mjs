@@ -9,62 +9,85 @@
 // and strings are primitives, so the value built is the same as the plain literal's in every respect (`JSON.stringify`
 // of both is identical, and nothing is aliased). `compactModuleExpression` proves that for each table it writes.
 //
+// Load time: a shape call costs about what the object literal does, but a named string inside an array or a one-off
+// object literal turns a constant the engine copies from the literal's template into a store of its own. A table with
+// thousands of such references (the preset geometry's path commands) loads measurably slower, so `strings: "arguments"`
+// names a string only where it is an argument of a shape call and leaves it written out everywhere else.
+//
 // The arrow is marked pure, so a bundle that does not use the export drops it as it would a plain literal.
 
 const RESERVED_KEYS = new Set(["__proto__"]);
 
 const isPlainObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 
-/** A compact expression for `value`; `typed` adds the parameter types a TypeScript module needs. */
-export function compactExpression(value, { typed = true } = {}) {
-  const strings = new Map();
+/**
+ * A compact expression for `value`. `typed` adds the parameter types a TypeScript module needs; `strings` is "all" to
+ * name repeated strings wherever they appear, "arguments" to name them only as arguments of a shape call.
+ */
+export function compactExpression(value, { typed = true, strings: stringMode = "all" } = {}) {
+  if (stringMode !== "all" && stringMode !== "arguments") throw new Error(`compact-literal: unknown strings mode ${JSON.stringify(stringMode)}.`);
   const shapes = new Map();
-  const visit = (node) => {
+  const visitShapes = (node) => {
     if (Array.isArray(node)) {
-      for (const item of node) visit(item);
+      for (const item of node) visitShapes(item);
     } else if (isPlainObject(node)) {
       const keys = Object.keys(node);
       for (const key of keys) {
         if (RESERVED_KEYS.has(key)) throw new Error(`compact-literal: the key ${JSON.stringify(key)} cannot be written as an object literal key.`);
-        visit(node[key]);
+        visitShapes(node[key]);
       }
       if (keys.length) {
         const id = JSON.stringify(keys);
         shapes.set(id, (shapes.get(id) ?? 0) + 1);
       }
-    } else if (typeof node === "string") {
-      strings.set(node, (strings.get(node) ?? 0) + 1);
+    } else if (node !== null && typeof node !== "string" && typeof node !== "number" && typeof node !== "boolean") {
+      throw new Error(`compact-literal: ${typeof node} is not a JSON value.`);
     }
   };
-  visit(value);
+  visitShapes(value);
 
-  // A name costs about two bytes where it is used and its declaration about four more; keep only what saves bytes.
-  const stringNames = new Map();
-  for (const [text, count] of strings) {
-    const literal = JSON.stringify(text).length;
-    if (count >= 2 && (count - 1) * literal > 2 * count + 4) stringNames.set(text, `s${stringNames.size}`);
-  }
+  // A shape function costs its keys once and three bytes a key for its parameters; keep only those that save bytes.
   const shapeNames = new Map();
   for (const [id, count] of shapes) {
     const keys = JSON.parse(id);
     const keyBytes = keys.reduce((sum, key) => sum + JSON.stringify(key).length, 0);
     if (count >= 2 && (count - 1) * keyBytes > keys.length * 3 + 12 + count) shapeNames.set(id, `o${shapeNames.size}`);
   }
+  const shapeOf = (node) => (isPlainObject(node) ? shapeNames.get(JSON.stringify(Object.keys(node))) : undefined);
 
-  const write = (node) => {
-    if (Array.isArray(node)) return `[${node.map(write).join(",")}]`;
+  // The strings that may be named: everywhere, or only the direct arguments of a shape call.
+  const strings = new Map();
+  const visitStrings = (node, isArgument) => {
+    if (typeof node === "string") {
+      if (stringMode === "all" || isArgument) strings.set(node, (strings.get(node) ?? 0) + 1);
+    } else if (Array.isArray(node)) {
+      for (const item of node) visitStrings(item, false);
+    } else if (isPlainObject(node)) {
+      const shaped = shapeOf(node) !== undefined;
+      for (const key of Object.keys(node)) visitStrings(node[key], shaped);
+    }
+  };
+  visitStrings(value, false);
+  // A name costs about two bytes where it is used and its declaration about four more; keep only what saves bytes.
+  const stringNames = new Map();
+  for (const [text, count] of strings) {
+    const literal = JSON.stringify(text).length;
+    if (count >= 2 && (count - 1) * literal > 2 * count + 4) stringNames.set(text, `s${stringNames.size}`);
+  }
+
+  const write = (node, isArgument) => {
+    if (Array.isArray(node)) return `[${node.map((item) => write(item, false)).join(",")}]`;
     if (isPlainObject(node)) {
       const keys = Object.keys(node);
-      const shape = shapeNames.get(JSON.stringify(keys));
-      if (shape) return `${shape}(${keys.map((key) => write(node[key])).join(",")})`;
-      return `{${keys.map((key) => `${JSON.stringify(key)}:${write(node[key])}`).join(",")}}`;
+      const shape = shapeOf(node);
+      if (shape) return `${shape}(${keys.map((key) => write(node[key], true)).join(",")})`;
+      return `{${keys.map((key) => `${JSON.stringify(key)}:${write(node[key], false)}`).join(",")}}`;
     }
-    if (typeof node === "string") return stringNames.get(node) ?? JSON.stringify(node);
-    if (node === null || typeof node === "number" || typeof node === "boolean") return JSON.stringify(node);
-    throw new Error(`compact-literal: ${typeof node} is not a JSON value.`);
+    if (typeof node === "string") return ((stringMode === "all" || isArgument) && stringNames.get(node)) || JSON.stringify(node);
+    return JSON.stringify(node);
   };
 
-  const body = write(value);
+  const body = write(value, false);
   const declarations = [];
   if (stringNames.size) declarations.push(`const ${[...stringNames].map(([text, name]) => `${name}=${JSON.stringify(text)}`).join(",")};`);
   if (shapeNames.size) {
@@ -84,8 +107,8 @@ export function compactExpression(value, { typed = true } = {}) {
  * The compact expression for a generated module, after proving that it builds the same value: evaluated here, it must
  * give the same `JSON.stringify` text as `value`, keys in the same order. The generator stops otherwise.
  */
-export function compactModuleExpression(value, label) {
-  const built = new Function(`return ${compactExpression(value, { typed: false })};`)();
+export function compactModuleExpression(value, label, options = {}) {
+  const built = new Function(`return ${compactExpression(value, { ...options, typed: false })};`)();
   if (JSON.stringify(built) !== JSON.stringify(value)) throw new Error(`compact-literal: the compact form of ${label} does not build the same value.`);
-  return compactExpression(value);
+  return compactExpression(value, options);
 }
