@@ -8928,7 +8928,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-60 with LH-03: the layer is decided for the construct the engines draw (chartDrawPlan), so a map drawn as columns takes a column
     // chart's header row and small-chart labels, and nested rings their ring names (LH-92); boxes and a scatter take none.
     const plan = resolved.ok ? chartDrawPlan(node.value, resolved, {language}) : undefined;
-    const drawn = plan?.fallback && resolved.ok ? {chart: {...(node.value as Record<string, unknown>), type: plan.type}, data: {...resolved, columns: plan.columns, rows: plan.rows, formats: plan.formats}} : {chart: node.value, data: resolved};
+    const drawn = plan?.fallback && resolved.ok ? {chart: {...(node.value as Record<string, unknown>), type: plan.type}, data: {...resolved, columns: plan.columns, rows: plan.rows, formats: plan.formats, types: plan.types}} : {chart: node.value, data: resolved};
     const geometry = {box, scale, minFontSize: settings.minFontSize, measure, direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {}), captioned: node.caption !== undefined};
     let layer = drawn.data.ok ? chartLayer(drawn.chart, drawn.data, geometry) : undefined;
     const references = drawn.data.ok ? chartReferences(drawn.chart) : [];
@@ -13323,14 +13323,14 @@ export {chartRadarLayout,RADAR_BOTTOM_LEGEND_GAIN} from './chart-radar.js';
 export type {ChartLayerRadar} from './chart-radar.js';
 export type {ChartLayer,ChartBarGeometry,ChartLayerSmall,ChartLayerHeader,ChartLayerRing,ChartPlotInset,ChartHeaderLegendEntry,ChartLayerGeometry,ChartEndLabel,ChartLayerEndLabels,ChartSliceLabel,ChartLayerSlices} from './chart-layer.js';
 export {chartEndLabels,chartSliceLabels,endLabelText,placeEndLabels,refreshEndLabels,CHART_SLICE_LABEL_MIN_RADIUS} from './chart-direct-labels.js';
-export {chartCategoriesInTime,isTimeFieldTitle,monthOf} from './chart-time-order.js';
+export {chartCategoriesInTime,isTimeFieldTitle,isTimeLabel,monthOf} from './chart-time-order.js';
 export {chartTitleFocus,chartSlideFocus,slideFocusSources,tableSlideFocus,tableHighlightRows,focusHits,type ChartLayerFocus,type FocusSource} from './chart-focus.js';
 export {alignBarRows,type ChartLayerRows} from './chart-rows.js';
 export {chartWaterfallColors,chartContextColor,chartContextColors,chartFocusContextColors,chartSeriesStrokes,CHART_CONTEXT_MIN_CONTRAST,CHART_CONTEXT_LABELED_MIN_CONTRAST,CHART_CONTEXT_FOCUS_DIFFERENCE} from './color.js';
 export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartHighlight,ChartHighlightMarks,ResolvedChartOptions} from './chart-options.js';
 // RR-54: chart and table data resolution, for engines that import the composition entry.
 export {chartNumber,formatDataNumber,numberFormatError,toExcelNumberFormat,fromExcelNumberFormat,inlineDatasets,inlineTableData,inlineChartData,isDatasetRef,isXYChartType,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText} from './chart-data.js';
-export type {DataCellValue,DataColumn,DataSource,DataGenerator,DataProvenance,Dataset,DatasetRef,ChartMapping,ChartComboSeries,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
+export type {DataCellValue,DataColumn,DatasetColumn,DataColumnType,DataColumnRole,DataSource,DataGenerator,DataProvenance,Dataset,DatasetRef,ChartMapping,ChartComboSeries,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
 export {chartDrawPlan,chartDrawDiagnostics,isPlaceLabel,markLabelColor} from './chart-fallback.js';
 export type {ChartDrawPlan,ChartFallback} from './chart-fallback.js';
 

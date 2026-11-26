@@ -520,7 +520,8 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
     assert.deepEqual(editor.get(`${H0}.data.fields`), ["A", "B", "New column 2"]);
   });
   step(editor, "paste that grows the grid beside a hidden 'New column'", () => grid.pasteGridText(editor, H0, body(0, 1), "1\t2\t3"), () => {
-    assert.deepEqual(editor.get("datasets.ds.columns").slice(3), ["New column 2", "New column 3"]);
+    // FR-05: the columns a paste adds declare what their cells say (here numbers).
+    assert.deepEqual(editor.get("datasets.ds.columns").slice(3), [{ name: "New column 2", type: "number", role: "measure" }, { name: "New column 3", type: "number", role: "measure" }]);
   });
   // A column name of a shared dataset (or of a chart with a mapping) is never blank.
   refuses(editor, "a blank dataset column name", () => grid.setGridCells(editor, H0, [{ section: "header", column: 1, text: "  " }]), "invalid-grid-values");

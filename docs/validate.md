@@ -324,6 +324,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/layout-monotony`](#opflayout-monotony) | Layout | info | structure | 4 or more content slides in a row use the same layout record. |
 | [`opf/variable-overflow`](#opfvariable-overflow) | Layout | warning | composition | A variable's value is longer than the room its declaration allows. |
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
+| [`opf/data-cell-type`](#opfdata-cell-type) | Content | warning | structure | A data cell does not match its column's declared type. |
 | [`opf/datasource-credentials`](#opfdatasource-credentials) | Content | warning | structure | A data source holds a credential. |
 | [`opf/dataset-stale`](#opfdataset-stale) | Content | warning | structure | A dataset is older than its data source says it should be. |
 | [`opf/chart-mapping-adapted`](#opfchart-mapping-adapted) | Content | warning | structure | A chart mapping entry is ignored. |
@@ -1131,6 +1132,14 @@ Default severity: **warning**. Cost: composition. A variable's value is longer t
 Default severity: **warning**. Cost: structure. A chart value is text, not a number.
 
 **Why.** A chart plots numbers. A text cell such as "12%" is plotted as a gap. When every text value of a column is written in one display style the finding carries the fix that stores the numbers and gives the column the matching format.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/data-cell-type`
+
+Default severity: **warning**. Cost: structure. A data cell does not match its column's declared type.
+
+**Why.** A dataset or chart data column may declare what its cells hold (`type`: text, number, date or boolean). A cell of another kind is reported; null is a gap in any type. A number is a finite number, so the string "12" is not one (the safe fix stores it as 12), and a date is any time label the time-order rule reads (2026-03, Q1 2026, Jan). Nothing is drawn differently: it is advice that the column says one thing and holds another. More than five mismatches in a column are one finding for the column.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
