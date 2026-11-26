@@ -45,7 +45,7 @@ const clear = (layout) => {
   const { center, radius, thickness } = layout.gauge;
   for (const part of layout.parts.filter((p) => p.visible && p.fit)) part.fit.sourceLines.forEach((line, index) => {
     const { x, baseline } = part.linePositions[index], top = baseline - 0.75 * part.fit.fontSize;
-    if (baseline <= center.y + 0.01) for (const [px, py] of [[x, top], [x + line.width, top]]) assert.ok(Math.hypot(px - center.x, py - center.y) <= radius - thickness + 0.01, `${part.role} inside the bowl`);
+    if (baseline <= center.y + 0.01) for (const [px, py] of [[x, top], [x + line.width, top]]) assert.ok(Math.hypot(px - center.x, py - center.y) <= radius - thickness - radius / 8 + 0.01, `${part.role} inside the bowl, an eighth of the radius from the track`);
     else {
       assert.ok(top >= center.y - 0.01, `${part.role} below the center line`);
       for (const end of layout.gauge.ends) assert.ok(x >= end.box.x + end.box.width || x + line.width <= end.box.x || top >= end.box.y + end.box.height, `${part.role} clear of ${end.text}`);

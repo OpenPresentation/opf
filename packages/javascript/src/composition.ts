@@ -18,7 +18,7 @@ import {chartHeader,chartLayer,type ChartLayer} from './chart-layer.js';
 import {NUMBER_GROUPING_MIN} from './number-grouping.js';
 import {formatNumber,languageInEffect,localizeDigits} from './numerals.js';
 import {resolveMetric,type MetricRecord} from './metric-data.js';
-import {METRIC_GAUGE_MAX_WIDTH_PX,METRIC_GAUGE_MIN_WIDTH_PX,METRIC_GAUGE_THICKNESS,metricGaugeGeometry,metricGaugeInput,type MetricGaugeEnd,type MetricGaugeInput,type MetricGaugeLayout} from './metric-gauge.js';
+import {METRIC_GAUGE_BOWL_GAP,METRIC_GAUGE_MAX_WIDTH_PX,METRIC_GAUGE_MIN_WIDTH_PX,METRIC_GAUGE_THICKNESS,metricGaugeGeometry,metricGaugeInput,type MetricGaugeEnd,type MetricGaugeInput,type MetricGaugeLayout} from './metric-gauge.js';
 import {chartNumberLanguage} from './chart-options.js';
 import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
@@ -102,7 +102,7 @@ export {CODE_HIGHLIGHT_LANGUAGES, CODE_HIGHLIGHT_MAX_LENGTH, CODE_PANEL_BACKGROU
 export type {CodeRun, CodeSyntaxPalette, CodeSyntaxPaletteOptions, CodeSyntaxPaletteTheme, CodeToken, CodeTokenKind} from './code-syntax.js';
 export {METRIC_TREND_ARROW_GAP, METRIC_TREND_ARROW_SIZE, METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, METRIC_VALUE_MIN_CONTRAST, metricPillFill, metricTrendColor, metricTrendMark, metricTrendPoints, metricValueColor} from './metric-trend.js';
 export type {MetricSentiment, MetricTrend, MetricTrendColorOptions, MetricTrendMark} from './metric-trend.js';
-export {blockArcPath, METRIC_GAUGE_MAX_WIDTH_PX, METRIC_GAUGE_MIN_WIDTH_PX, METRIC_GAUGE_TARGET_LENGTH, METRIC_GAUGE_TARGET_WIDTH_PX, METRIC_GAUGE_THICKNESS, METRIC_GAUGE_TRACK_SHARE, METRIC_GAUGE_VALUE_SHARE, metricGaugeAngle, metricGaugeDiagnostics, metricGaugeDrawing, metricGaugeGeometry, metricGaugeInput, metricGaugeNumber, metricGaugePoint, metricGaugeShare, metricGaugeSpec, metricGaugeTrackFill, metricGaugeValueFill} from './metric-gauge.js';
+export {blockArcPath, METRIC_GAUGE_BOWL_GAP, METRIC_GAUGE_MAX_WIDTH_PX, METRIC_GAUGE_MIN_WIDTH_PX, METRIC_GAUGE_TARGET_LENGTH, METRIC_GAUGE_TARGET_WIDTH_PX, METRIC_GAUGE_THICKNESS, METRIC_GAUGE_TRACK_SHARE, METRIC_GAUGE_VALUE_SHARE, metricGaugeAngle, metricGaugeDiagnostics, metricGaugeDrawing, metricGaugeGeometry, metricGaugeInput, metricGaugeNumber, metricGaugePoint, metricGaugeShare, metricGaugeSpec, metricGaugeTrackFill, metricGaugeValueFill} from './metric-gauge.js';
 export type {MetricGaugeArc, MetricGaugeBand, MetricGaugeColors, MetricGaugeDrawing, MetricGaugeEnd, MetricGaugeInput, MetricGaugeLayout} from './metric-gauge.js';
 export {TIMELINE_OUTLINE_MIN_CONTRAST, TIMELINE_STATUSES, TIMELINE_TEXT_MIN_CONTRAST, timelineMarkerShapes, timelineTextColor} from './timeline-status.js';
 export type {TimelineMarkerShape, TimelineStatusColors} from './timeline-status.js';
@@ -2997,8 +2997,8 @@ function layoutGaugeMetric(value: string | number | MetricContent, box: LayoutBo
     }) as [MetricGaugeEnd, MetricGaugeEnd];
     if (ends[0].box.x + ends[0].box.width + gap > ends[1].box.x) return undefined;
     const endsBottom = center.y + gap + endLine, below = {x: box.x, y: endsBottom + gap, width: box.width, height: box.y + box.height - endsBottom - gap};
-    // The bowl's room: the track's inner radius less a gap of a twelfth of the radius (at least the metric's gap), so a value never touches the arc.
-    const room = radius - thickness - Math.max(gap, radius / 12), within = (x: number, y: number) => Math.hypot(x - center.x, Math.min(0, y - center.y)) <= room + .01;
+    // The bowl's room: the track's inner radius less METRIC_GAUGE_BOWL_GAP of the radius (at least the metric's gap), so a value never crowds the arc.
+    const room = radius - thickness - Math.max(gap, radius * METRIC_GAUGE_BOWL_GAP), within = (x: number, y: number) => Math.hypot(x - center.x, Math.min(0, y - center.y)) <= room + .01;
     const lineBoxes = (part: MetricTextPart) => part.fit!.sourceLines.map((line, index) => ({x: part.linePositions[index]!.x, top: part.linePositions[index]!.baseline - .75 * part.fit!.fontSize, right: part.linePositions[index]!.x + line.width, baseline: part.linePositions[index]!.baseline}));
     // The value in the bowl: its baseline on the center line, every line above it inside the inner circle, nothing below it on an end's label.
     const inBowl = (layout: MetricLayout) => !layout.overflow && layout.parts.filter(part => part.visible && part.fit && part.linePositions.length).every(part => lineBoxes(part).every(line =>

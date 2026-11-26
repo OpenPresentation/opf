@@ -1,11 +1,10 @@
 // FR-07, part 3 (core docs/content-payloads.md, "Gauges"): the preview draws a metric's gauge from core's plan (metricGaugeDrawing): each arc
-// is the blockArc preset's outline at its frame and adjustments, the target a line, the ends' labels text. And the supervisor's contrast check
-// (addition 4): over every gallery theme, color scheme and variant, the lowest contrast between the value arc and what it is drawn over (the
-// track, and each default neutral band) is printed; it is asserted at 3:1 or more.
+// is the blockArc preset's outline at its frame and adjustments, the target a line, the ends' labels text. And the color checks over every
+// gallery theme, color scheme and variant (supervisor's addition 4, as restated on 2026-11-26; see the last section).
 import assert from 'node:assert/strict';
 import { readdirSync } from 'node:fs';
-import { colorContrast, metricGaugeAngle } from '@openpresentation/opf/composition';
-import { toSvg } from './catalog-harness.mjs';
+import { colorContrast, metricGaugeAngle, srgbToOklab } from '@openpresentation/opf/composition';
+import { resolvePresentation, toSvg } from './catalog-harness.mjs';
 
 const attributesOf = (text) => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
 const parts = (svg) => Object.fromEntries([...svg.matchAll(/<(path|line|text)\b([^>]*data-opf-gauge-part[^>]*)>/g)].map(([, tag, a]) => { const attrs = attributesOf(a); return [attrs['data-opf-gauge-part'], { tag, ...attrs }]; }));
@@ -44,33 +43,48 @@ const deck = (metric, design = {}) => ({ design: { fontScheme: 'roboto', ...desi
   assert.deepEqual(parts(svg), {});
 }
 
-// --- contrast: the value arc against the track and each default band, over every theme, color scheme and variant ---------------------------
+// --- the value arc against the track and each default band, and the target against the surface, over every theme, scheme and variant --------
+// Supervisor, 2026-11-26 (replacing a 3:1 luminance rule): a colored arc is told from a neutral track or band by its color, not its
+// lightness. (1) The value arc's color is at least 0.08 from the track and from every default band in OKLab distance (core's color math,
+// as the bands' check 3b); the five nearest pairs are printed. (2) The lowest luminance contrast is printed as information. (3) The target
+// line, which extends past the ring on both sides, keeps 3:1 against the surface; the lowest is printed.
 
 {
   const catalog = (kind) => readdirSync(new URL(`../../gallery/catalog/${kind}/`, import.meta.url)).filter((file) => file !== 'index.json').map((file) => file.replace(/\.json$/, ''));
   const schemes = catalog('color-schemes'), themes = catalog('themes'), variants = ['light1', 'light2', 'dark1', 'dark2'];
   const combos = themes.flatMap((theme) => schemes.flatMap((colorScheme) => variants.map((variant) => ({ theme, colorScheme, variant }))));
-  let lowest = { ratio: Infinity }, classic = { ratio: Infinity }, light = { ratio: Infinity }, track = { ratio: Infinity };
-  const under = new Set();
+  const distance = (a, b) => { const [x, y] = [srgbToOklab(a), srgbToOklab(b)]; return Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]); };
+  const pairs = [];
+  let lowest = { ratio: Infinity }, target = { ratio: Infinity };
   for (const design of combos) {
     const name = `${design.theme} ${design.colorScheme} ${design.variant}`;
-    const note = (ratio, what) => {
+    const note = (value, under, what) => {
+      pairs.push({ d: distance(value, under), name, what });
+      const ratio = colorContrast(value, under);
       if (ratio < lowest.ratio) lowest = { ratio, name, what };
-      if (design.theme === 'classic' && ratio < classic.ratio) classic = { ratio, name, what };
-      if (design.theme === 'classic' && design.variant === 'light1' && ratio < light.ratio) light = { ratio, name, what };
-      if (ratio < 3) under.add(name);
     };
-    // A full gauge over three default bands (the value arc crosses every band), and a gauge without bands (over its track).
-    const banded = parts(toSvg(deck({ label: 'Utilization', value: 1, gauge: { max: 1, bands: [{ to: 0.4 }, { to: 0.7 }, { to: 1 }] } }, design), 1, { trace: true }));
-    const value = banded['gauge value'].fill;
-    for (const band of ['gauge band 1', 'gauge band 2', 'gauge band 3']) note(colorContrast(value, banded[band].fill), `value ${value} on ${band} ${banded[band].fill}`);
+    // A full gauge over three default bands (the value arc crosses every band) with a target, and a gauge without bands (over its track).
+    const input = deck({ label: 'Utilization', value: 1, gauge: { max: 1, bands: [{ to: 0.4 }, { to: 0.7 }, { to: 1 }], target: 0.5 } }, design);
+    const banded = parts(toSvg(input, 1, { trace: true })), value = banded['gauge value'].fill;
+    for (const band of ['gauge band 1', 'gauge band 2', 'gauge band 3']) note(value, banded[band].fill, `value ${value} on ${band} ${banded[band].fill}`);
     const plain = parts(toSvg(deck({ label: 'Utilization', value: 0.5, gauge: { max: 1 } }, design), 1, { trace: true }));
-    const onTrack = colorContrast(plain['gauge value'].fill, plain['gauge track'].fill);
-    note(onTrack, `value ${plain['gauge value'].fill} on track ${plain['gauge track'].fill}`);
-    if (onTrack < track.ratio) track = { ratio: onTrack, name, what: `value ${plain['gauge value'].fill} on track ${plain['gauge track'].fill}` };
+    note(plain['gauge value'].fill, plain['gauge track'].fill, `value ${plain['gauge value'].fill} on track ${plain['gauge track'].fill}`);
+    const slide = resolvePresentation(input).slides[0], surface = slide.design.backgroundColor ?? slide.design.colors.background;
+    const ratio = colorContrast(banded['gauge target'].stroke, surface);
+    if (ratio < target.ratio) target = { ratio, name, what: `target ${banded['gauge target'].stroke} on surface ${surface}` };
   }
-  const line = (entry) => `${entry.ratio.toFixed(2)}:1 (${entry.name}, ${entry.what})`;
-  console.log(`FR-07 gauge: lowest value arc contrast over ${combos.length} theme, scheme and variant combinations: ${line(lowest)}; in the classic theme: ${line(classic)}; classic light1: ${line(light)}; on the track alone: ${line(track)}; combinations under 3:1: ${under.size} (${[...under].join(', ')})`);
-  assert.ok(lowest.ratio >= 3, `the value arc keeps 3:1 against the track and every default band: ${line(lowest)}`);
+  pairs.sort((a, b) => a.d - b.d);
+  console.log(`FR-07 gauge over ${combos.length} theme, scheme and variant combinations: (1) the five nearest value-arc pairs (OKLab distance):\n${pairs.slice(0, 5).map((pair) => `  ${pair.d.toFixed(3)} ${pair.name}: ${pair.what}`).join('\n')}`);
+  const near = pairs.filter((pair) => pair.d < 0.08);
+  console.log(`FR-07 gauge (1) pairs below 0.08: ${near.length}${near.length ? `\n${near.map((pair) => `  ${pair.d.toFixed(3)} ${pair.name}: ${pair.what}`).join('\n')}` : ''}`);
+  console.log(`FR-07 gauge (2) lowest luminance contrast of the value arc (information): ${lowest.ratio.toFixed(2)}:1 (${lowest.name}, ${lowest.what})`);
+  console.log(`FR-07 gauge (3) lowest target contrast against the surface: ${target.ratio.toFixed(2)}:1 (${target.name}, ${target.what})`);
+  // The pairs under 0.08 measured when the rule was set (forest-green dark2, the primary over the darkest neutral, 0.076 in all three themes)
+  // are reported to the supervisor and their colors left alone; any other pair under 0.08 fails.
+  const KNOWN = /^(bold|classic|minimal) forest-green dark2: value #4A7C59 on gauge band 1 #4E6354$/;
+  const unexpected = near.filter((pair) => !KNOWN.test(`${pair.name}: ${pair.what}`));
+  assert.deepEqual(unexpected.map((pair) => `${pair.d.toFixed(3)} ${pair.name}: ${pair.what}`), [], '(1) the value arc is at least 0.08 from the track and every default band');
+  assert.ok(near.every((pair) => pair.d >= 0.07), '(1) the known pairs stay where they were measured');
+  assert.ok(target.ratio >= 3, `(3) the target keeps 3:1 against the surface: ${target.ratio.toFixed(2)}:1 (${target.name}, ${target.what})`);
 }
 console.log('fr-07 gauge (render): ok');

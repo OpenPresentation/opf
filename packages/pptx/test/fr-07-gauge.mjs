@@ -103,6 +103,18 @@ const metricOf = (presentation, index) => { const slide = presentation.slides[in
   assert.deepEqual(metricOf(back, 1), utilization, 'the other slide keeps its gauge');
 }
 
+// --- an angle written another way round (270 degrees as -90, as PowerPoint reports it) is the same angle ------------------------------
+
+{
+  const {parts} = await exported(deck);
+  const path = 'ppt/slides/slide1.xml', xml = strFromU8(parts[path]);
+  const band = shapesOf(xml).find(shape => nameOf(shape) === 'OPF metric 1 gauge band 1');
+  const turned = {...parts, [path]: strToU8(xml.replace(band, band.replace('<a:gd name="adj2" fmla="val 16200000"', '<a:gd name="adj2" fmla="val -5400000"')))};
+  const {deck: back, diagnostics} = await imported(zipSync(turned));
+  assert.deepEqual(diagnostics.filter(entry => /gauge/.test(entry.code)), []);
+  assert.deepEqual(metricOf(back, 0), nps);
+}
+
 // --- a deleted arc and a recolored band: not restored either ---------------------------------------------------------------------------
 
 {

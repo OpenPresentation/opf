@@ -149,7 +149,9 @@ function gaugeIntact(evidence,parts,fillOf) {
   for (const entry of evidence.arcs) {
     if (!Array.isArray(entry)||entry.length!==5) return false;
     const [part,preset,adj1,adj2,fill]=entry,shape=byPart.get(part);
-    if (!shape||shape['p:spPr']?.['a:prstGeom']?.prst!==preset||gdValue(shape,'adj1')!==adj1||gdValue(shape,'adj2')!==adj2||String(fillOf(shape)??'').replace(/^#/,'').toUpperCase()!==String(fill).toUpperCase()) return false;
+    // An angle is the same modulo a full turn (PowerPoint reports 270 degrees as -90).
+    const sameAngle=(value,recorded)=>value!==undefined&&Number.isFinite(recorded)&&((value-recorded)%21600000+21600000)%21600000===0;
+    if (!shape||shape['p:spPr']?.['a:prstGeom']?.prst!==preset||!sameAngle(gdValue(shape,'adj1'),adj1)||!sameAngle(gdValue(shape,'adj2'),adj2)||String(fillOf(shape)??'').replace(/^#/,'').toUpperCase()!==String(fill).toUpperCase()) return false;
   }
   if (evidence.target!==undefined) {
     const ends=lineEnds(byPart.get('gauge target'));

@@ -31,6 +31,8 @@ export const METRIC_GAUGE_TRACK_SHARE = 0.12;
 export const METRIC_GAUGE_MIN_WIDTH_PX = 96;
 /** The widest arc drawn, in reference pixels (twice its outer radius). */
 export const METRIC_GAUGE_MAX_WIDTH_PX = 640;
+/** The room a value in the arc's bowl keeps from the track's inner edge, as a share of the arc's outer radius (supervisor, 2026-11-26). */
+export const METRIC_GAUGE_BOWL_GAP = 1 / 8;
 
 const record = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 const finite = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
