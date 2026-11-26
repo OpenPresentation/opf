@@ -2975,7 +2975,8 @@ function layoutGaugeMetric(value: string | number | MetricContent, box: LayoutBo
   const input = options.gauge!, {gauge: _input, ...plainOptions} = options;
   const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale), gap = 8 * scale;
   const inner: MetricLayoutOptions = {...plainOptions, align: 'center', tile: false, band: false, eyebrow: false, deltaPill: false};
-  delete inner.display; delete inner.tileFoot;
+  // A tile's floors (the sizes its metric fitted at as a stack, LH-68) are a tile's: under an arc the text fits down to the readability floor.
+  delete inner.display; delete inner.tileFoot; delete inner.minimumSizes;
   const endStyle = resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 500, italic: false, path: `${options.path ?? 'metric'}.gauge`}, options.textMeasurement);
   const endWidth = textWidthMeasurer(endStyle, options.textMeasurement), endSize = minimum, endLine = endSize * 1.22;
   const largest = Math.min(box.width / 2, box.height - 2 * gap - endLine, METRIC_GAUGE_MAX_WIDTH_PX / 2 * scale), smallest = METRIC_GAUGE_MIN_WIDTH_PX / 2 * scale;
