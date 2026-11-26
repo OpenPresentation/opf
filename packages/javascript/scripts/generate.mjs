@@ -2,7 +2,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { compile } from "json-schema-to-typescript";
-import { compactModuleExpression } from "./compact-literal.mjs";
+import { asConstType, compactModuleExpression } from "./compact-literal.mjs";
 import { precompiledValidatorsSource } from "./validators-codegen.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -287,7 +287,9 @@ async function generateEngineData() {
     generatedHeader("spec/reference/engine-defaults.json and spec/reference/engine-vocabularies.json"),
     `export const engineDefaultsSource = ${asTs(defaultValues)} as const;`,
     "",
-    `export const engineVocabulariesSource = ${JSON.stringify(vocabularyValues)} as const;`,
+    // The compact form of compact-literal.mjs (the generator proves it builds the same value; the language rows repeat
+    // their keys), typed as `as const` typed the literal it replaces.
+    `export const engineVocabulariesSource: ${asConstType(vocabularyValues)} = ${compactModuleExpression(vocabularyValues, "spec/reference/engine-vocabularies.json")} as never;`,
     "",
   ];
   await fs.writeFile(path.join(generatedRoot, "engine-data.ts"), lines.join("\n"));

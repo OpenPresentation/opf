@@ -103,6 +103,14 @@ export function compactExpression(value, { typed = true, strings: stringMode = "
   return `/* @__PURE__ */ (()=>{${declarations.join("")}return ${body};})()`;
 }
 
+/** The TypeScript type `value as const` has (readonly properties and tuples, literal types), for a compact expression's export. */
+export function asConstType(value) {
+  if (Array.isArray(value)) return `readonly [${value.map(asConstType).join(", ")}]`;
+  if (isPlainObject(value)) return `{ ${Object.keys(value).map((key) => `readonly ${JSON.stringify(key)}: ${asConstType(value[key])};`).join(" ")} }`;
+  if (value === null || typeof value === "string" || typeof value === "number" || typeof value === "boolean") return JSON.stringify(value);
+  throw new Error(`compact-literal: ${typeof value} is not a JSON value.`);
+}
+
 /**
  * The compact expression for a generated module, after proving that it builds the same value: evaluated here, it must
  * give the same `JSON.stringify` text as `value`, keys in the same order. The generator stops otherwise.

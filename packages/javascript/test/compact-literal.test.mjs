@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { describe, test } from "node:test";
 
-import { compactExpression, compactModuleExpression } from "../scripts/compact-literal.mjs";
+import { CHART_TYPES, LANGUAGES, SOCIAL_PLATFORMS } from "../dist/index.js";
+import { asConstType, compactExpression, compactModuleExpression } from "../scripts/compact-literal.mjs";
 
 // The generator writes large reference tables (the font policy, the DrawingML preset geometry, the JSON Schemas) as a
 // compact expression that names each repeated string once and builds each repeated object shape with a function. The value
@@ -54,10 +55,24 @@ describe("compact literal", () => {
     assert.match(compactExpression(value), /\(p0: unknown,p1: unknown\)=>/);
   });
 
+  test("asConstType writes the type `as const` gives the literal", () => {
+    assert.equal(asConstType({ a: ["x", 1, -2.5, true, null], "b-c": {} }), '{ readonly "a": readonly ["x", 1, -2.5, true, null]; readonly "b-c": {  }; }');
+    assert.throws(() => asConstType({ a: undefined }), /not a JSON value/);
+  });
+
+  test("the engine vocabularies core exports are the spec file's", () => {
+    const { description: _description, ...vocabularies } = spec("reference/engine-vocabularies.json");
+    assert.equal(JSON.stringify(CHART_TYPES), JSON.stringify(vocabularies.chartTypes));
+    assert.equal(JSON.stringify(SOCIAL_PLATFORMS), JSON.stringify(vocabularies.socialPlatforms));
+    assert.equal(JSON.stringify(LANGUAGES), JSON.stringify(vocabularies.languages));
+  });
+
   test("the generated tables build the spec files exactly", () => {
+    const { description: _description, ...vocabularies } = spec("reference/engine-vocabularies.json");
     const tables = [
       ["reference/font-policy.json", spec("reference/font-policy.json")],
       ["reference/preset-geometry.json", { shapes: spec("reference/preset-geometry.json").shapes }],
+      ["reference/engine-vocabularies.json", vocabularies],
       ...readdirSync(new URL("../../../spec/schemas/", import.meta.url)).filter((file) => file.endsWith(".schema.json")).map((file) => [`schemas/${file}`, spec(`schemas/${file}`)]),
     ];
     for (const [label, value] of tables) {
