@@ -127,7 +127,8 @@ for (const [design, label] of [[LIGHT, 'light'], [undefined, 'navy']]) {
   const right = await exported({type: 'column', data: two, legend: 'right'});
   assert.doesNotMatch(right.xml, /<c:chart>\s*<c:title>/, 'no caption');
   assert.match(right.xml, /<c:legendPos val="r"\/>/);
-  assert.doesNotMatch(right.xml, /<c:legend>[\s\S]*?<c:manualLayout>[\s\S]*?<\/c:legend>/);
+  // opf#1525: a side legend of a bar or column chart is written where the preview has it (a manual layout); the option still imports.
+  assert.match(right.xml, /<c:legend>[\s\S]*?<c:manualLayout>[\s\S]*?<\/c:legend>/);
   assert.equal(right.imported.legend, 'right', 'a right legend is not the default of a two-series column chart: it imports as an option');
   const stacked = await exported({type: 'stacked-column', data: two});
   assert.doesNotMatch(stacked.xml, /<c:chart>\s*<c:title>/, 'two series and no value axis title: no generated caption');
