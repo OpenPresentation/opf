@@ -18,6 +18,7 @@ import {chartHeader,chartLayer,type ChartLayer} from './chart-layer.js';
 import {NUMBER_GROUPING_MIN} from './number-grouping.js';
 import {formatNumber,languageInEffect,localizeDigits} from './numerals.js';
 import {resolveMetric,type MetricRecord} from './metric-data.js';
+import {METRIC_GAUGE_MAX_WIDTH_PX,METRIC_GAUGE_MIN_WIDTH_PX,METRIC_GAUGE_THICKNESS,metricGaugeGeometry,metricGaugeInput,type MetricGaugeEnd,type MetricGaugeInput,type MetricGaugeLayout} from './metric-gauge.js';
 import {chartNumberLanguage} from './chart-options.js';
 import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
@@ -101,6 +102,8 @@ export {CODE_HIGHLIGHT_LANGUAGES, CODE_HIGHLIGHT_MAX_LENGTH, CODE_PANEL_BACKGROU
 export type {CodeRun, CodeSyntaxPalette, CodeSyntaxPaletteOptions, CodeSyntaxPaletteTheme, CodeToken, CodeTokenKind} from './code-syntax.js';
 export {METRIC_TREND_ARROW_GAP, METRIC_TREND_ARROW_SIZE, METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, METRIC_VALUE_MIN_CONTRAST, metricPillFill, metricTrendColor, metricTrendMark, metricTrendPoints, metricValueColor} from './metric-trend.js';
 export type {MetricSentiment, MetricTrend, MetricTrendColorOptions, MetricTrendMark} from './metric-trend.js';
+export {METRIC_GAUGE_MAX_WIDTH_PX, METRIC_GAUGE_MIN_WIDTH_PX, METRIC_GAUGE_TARGET_LENGTH, METRIC_GAUGE_TARGET_WIDTH_PX, METRIC_GAUGE_THICKNESS, METRIC_GAUGE_TRACK_SHARE, METRIC_GAUGE_VALUE_SHARE, metricGaugeAngle, metricGaugeDiagnostics, metricGaugeDrawing, metricGaugeGeometry, metricGaugeInput, metricGaugeNumber, metricGaugePoint, metricGaugeShare, metricGaugeSpec, metricGaugeTrackFill, metricGaugeValueFill} from './metric-gauge.js';
+export type {MetricGaugeArc, MetricGaugeBand, MetricGaugeColors, MetricGaugeDrawing, MetricGaugeEnd, MetricGaugeInput, MetricGaugeLayout} from './metric-gauge.js';
 export {TIMELINE_OUTLINE_MIN_CONTRAST, TIMELINE_STATUSES, TIMELINE_TEXT_MIN_CONTRAST, timelineMarkerShapes, timelineTextColor} from './timeline-status.js';
 export type {TimelineMarkerShape, TimelineStatusColors} from './timeline-status.js';
 export {codeHighlightBands, codeHighlightColors, codeHighlightLines, codeLineNumbers} from './code-highlight.js';
@@ -150,7 +153,7 @@ export interface LayoutDiagnostic {
    * `shape-off-slide` for an overlay shape or an image callout that lies wholly outside the slide, so nothing of it is drawn (advice, not an
    * overflow: a strict composition still composes it; a hidden shape is exempt, and a rotated one is judged by the circle through its corners).
    */
-  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "chart-label-collision" | "timeline-period-short" | "shape-off-slide" | "chart-band-labels-in-legend";
+  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "chart-label-collision" | "timeline-period-short" | "shape-off-slide" | "chart-band-labels-in-legend" | "metric-gauge-dropped";
   path: string;
   message: string;
   /**
@@ -2756,6 +2759,13 @@ export interface MetricLayout {
    * Engines fill it with core metricPillFill under the delta and color the delta and arrow against that fill.
    */
   deltaPill?: { box: LayoutBox; radius: number; placement: 'beside' | 'above' };
+  /**
+   * FR-07, part 3: the metric's gauge (`MetricLayoutOptions.gauge`): the arc above the text, its bands, value, target and the labels under
+   * its ends (core metricGaugeDrawing turns it into what engines draw). Absent without a gauge, and when the region could not hold one.
+   */
+  gauge?: MetricGaugeLayout;
+  /** FR-07, part 3: the metric asked for a gauge but its region cannot hold an arc METRIC_GAUGE_MIN_WIDTH_PX wide: it is drawn as a plain metric. */
+  gaugeDropped?: true;
   /** At most 48 arrangements; value fitting is bounded by 77 reference-size trials per arrangement. */
   attempts: number;
   parts: MetricTextPart[];
@@ -2821,6 +2831,13 @@ export interface MetricLayoutOptions extends QuoteLayoutOptions {
    * their delta in place. The result says where (`MetricLayout.deltaPill`). `above` tries only above (sibling metrics draw one way).
    */
   deltaPill?: boolean | 'above';
+  /**
+   * FR-07, part 3: draw the metric as a gauge (core metricGaugeInput): an arc at the top of the box, as large as the box allows while the
+   * text keeps its sizes (at most METRIC_GAUGE_MAX_WIDTH_PX wide), the labels of its ends under them, and the metric's text stacked and
+   * centered under the arc (a tile, band, display size, eyebrow or pill does not apply), the value inside the arc's bowl when it fits there at
+   * the size it has under the arc. Below METRIC_GAUGE_MIN_WIDTH_PX the metric is laid out as without a gauge (`gaugeDropped`).
+   */
+  gauge?: MetricGaugeInput;
 }
 /** LH-137: layoutMetric places the delta pill this way (its two trials of `deltaPill`). */
 const PILL_PLACEMENT = Symbol('opf.pillPlacement');
@@ -2943,6 +2960,79 @@ export const QUOTE_PORTRAIT_SHARE = .26, QUOTE_PORTRAIT_STEP = .02, QUOTE_PORTRA
 const portraitFocus = (): ImageFocus => ({ x: 0.5, y: PORTRAIT_FOCUS_Y });
 
 /**
+ * FR-07, part 3: a metric with a gauge (MetricLayoutOptions.gauge). The arc's frame is the square around its circle, of which the upper half
+ * is drawn, from the top of the box; the labels of its ends stand under the ends of the track, in the secondary text at the readability floor.
+ * The text is laid out under them; then, when the value is one line, it is laid out again with the value's baseline on the arc's center line
+ * (the same sizes), and that is kept when the value line and everything else above the center line lie inside the track's inner circle and
+ * nothing below it meets an end's label: the value stands in the bowl. "Fits" is measured on each line's box (its accepted width, from three
+ * quarters of its size above the baseline to the baseline) against the track's inner circle less a gap.
+ *
+ * The arc's size: the largest radius, from the smallest of half the box's width, METRIC_GAUGE_MAX_WIDTH_PX / 2 and the box's height, down by
+ * a tenth at a time, at which the text keeps the sizes it has at the box's width without a height limit; when none keeps them, the largest at
+ * which the text fits at all (down to the readability floor); when none, the metric is laid out without its gauge (`gaugeDropped`).
+ */
+function layoutGaugeMetric(value: string | number | MetricContent, box: LayoutBox, options: MetricLayoutOptions): MetricLayout {
+  const input = options.gauge!, {gauge: _input, ...plainOptions} = options;
+  const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale), gap = 8 * scale;
+  const inner: MetricLayoutOptions = {...plainOptions, align: 'center', tile: false, band: false, eyebrow: false, deltaPill: false};
+  delete inner.display; delete inner.tileFoot;
+  const endStyle = resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 500, italic: false, path: `${options.path ?? 'metric'}.gauge`}, options.textMeasurement);
+  const endWidth = textWidthMeasurer(endStyle, options.textMeasurement), endSize = minimum, endLine = endSize * 1.22;
+  const largest = Math.min(box.width / 2, box.height - 2 * gap - endLine, METRIC_GAUGE_MAX_WIDTH_PX / 2 * scale), smallest = METRIC_GAUGE_MIN_WIDTH_PX / 2 * scale;
+  const radii: number[] = [];
+  for (let radius = largest; radius >= smallest - 1e-9; radius *= .9) radii.push(radius);
+  if (largest >= smallest - 1e-9 && radii[radii.length - 1]! > smallest + 1e-9) radii.push(smallest);
+  const sizes = (layout: MetricLayout) => Object.fromEntries(layout.parts.filter(part => part.visible && part.fit).map(part => [part.role, part.fit!.fontSize]));
+  const keepsSizes = (layout: MetricLayout, wanted: Record<string, number>) => Object.entries(wanted).every(([role, size]) => (sizes(layout)[role] ?? 0) >= size - FONT_GRID_EPSILON);
+  const capped = (wanted: Record<string, number>) => { const roleSizes = {...options.roleSizes}; for (const [role, size] of Object.entries(wanted)) roleSizes[role as MetricTextRole] = Math.min(roleSizes[role as MetricTextRole] ?? Infinity, size); return roleSizes; };
+  const meets = (a: LayoutBox, b: LayoutBox) => a.x < b.x + b.width - .01 && b.x < a.x + a.width - .01 && a.y < b.y + b.height - .01 && b.y < a.y + a.height - .01;
+  // The sizes the text has at the box's width when height does not limit it: what the arc gives way to.
+  const natural = sizes(layoutMetric(value, {x: box.x, y: box.y, width: box.width, height: 1e6}, inner));
+  const attempt = (radius: number, strict: boolean): MetricLayout | undefined => {
+    const center = {x: box.x + box.width / 2, y: box.y + radius}, thickness = radius * METRIC_GAUGE_THICKNESS;
+    const ends = input.ends.map((text, index): MetricGaugeEnd => {
+      const width = endWidth(text, endSize), middle = index === 0 ? center.x - radius + thickness / 2 : center.x + radius - thickness / 2;
+      const left = Math.max(box.x, Math.min(box.x + box.width - width, middle - width / 2));
+      return {text, x: left + width / 2, baseline: center.y + gap + endSize, fontSize: endSize, width, box: {x: left, y: center.y + gap, width, height: endLine}};
+    }) as [MetricGaugeEnd, MetricGaugeEnd];
+    if (ends[0].box.x + ends[0].box.width + gap > ends[1].box.x) return undefined;
+    const endsBottom = center.y + gap + endLine, below = {x: box.x, y: endsBottom + gap, width: box.width, height: box.y + box.height - endsBottom - gap};
+    // The bowl's room: the track's inner radius less a gap of a twelfth of the radius (at least the metric's gap), so a value never touches the arc.
+    const room = radius - thickness - Math.max(gap, radius / 12), within = (x: number, y: number) => Math.hypot(x - center.x, Math.min(0, y - center.y)) <= room + .01;
+    const lineBoxes = (part: MetricTextPart) => part.fit!.sourceLines.map((line, index) => ({x: part.linePositions[index]!.x, top: part.linePositions[index]!.baseline - .75 * part.fit!.fontSize, right: part.linePositions[index]!.x + line.width, baseline: part.linePositions[index]!.baseline}));
+    // The value in the bowl: its baseline on the center line, every line above it inside the inner circle, nothing below it on an end's label.
+    const inBowl = (layout: MetricLayout) => !layout.overflow && layout.parts.filter(part => part.visible && part.fit && part.linePositions.length).every(part => lineBoxes(part).every(line =>
+      line.baseline <= center.y + .01 ? within(line.x, line.top) && within(line.right, line.top) && within(line.x, line.baseline) && within(line.right, line.baseline)
+        : line.top >= center.y - .01 && !ends.some(end => meets(end.box, {x: line.x, y: line.top, width: line.right - line.x, height: line.baseline - line.top + .3 * part.fit!.fontSize}))))
+      && (!layout.trendBox || layout.trendBox.y >= center.y - .01 && !ends.some(end => meets(end.box, layout.trendBox!)) || within(layout.trendBox.x, layout.trendBox.y) && within(layout.trendBox.x + layout.trendBox.width, layout.trendBox.y + layout.trendBox.height));
+    let chosen: MetricLayout | undefined, bowl = false;
+    // The bowl first: the text laid out once without a height limit says where the value's baseline stands in its stack.
+    const probe = layoutMetric(value, {...below, height: 1e6}, {...inner, roleSizes: capped(natural)}), valuePart = probe.parts[0]!;
+    if (valuePart.fit?.sourceLines.length === 1 && valuePart.linePositions.length === 1) {
+      const top = center.y - (valuePart.linePositions[0]!.baseline - below.y), wanted = strict ? natural : sizes(probe);
+      const laid = layoutMetric(value, {x: box.x, y: top, width: box.width, height: box.y + box.height - top}, {...inner, roleSizes: capped(wanted)});
+      if (keepsSizes(laid, wanted) && inBowl(laid)) { chosen = laid; bowl = true; }
+    }
+    if (!chosen && below.height > 0) {
+      const laid = layoutMetric(value, below, strict ? {...inner, roleSizes: capped(natural)} : inner);
+      if (!laid.overflow && (!strict || keepsSizes(laid, natural))) chosen = laid;
+    }
+    if (!chosen) return undefined;
+    const geometry = metricGaugeGeometry(input, center, radius, scale);
+    const right = Math.max(center.x + radius, ends[1].box.x + ends[1].box.width), left = Math.min(center.x - radius, ends[0].box.x);
+    const gauge: MetricGaugeLayout = {...geometry, ends, endStyle, inBowl: bowl, box: {x: left, y: box.y, width: right - left, height: endsBottom - box.y}};
+    const bottom = Math.max(endsBottom, chosen.bounds.y + chosen.bounds.height);
+    const layout: MetricLayout = {...chosen, bounds: {x: box.x, y: box.y, width: box.width, height: bottom - box.y}, gauge};
+    if (FIGURE_LINES.has(chosen)) FIGURE_LINES.add(layout);
+    return layout;
+  };
+  for (const strict of [true, false]) for (const radius of radii) { const layout = attempt(radius, strict); if (layout) return layout; }
+  const plain = layoutMetric(value, box, plainOptions), layout: MetricLayout = {...plain, gaugeDropped: true};
+  if (FIGURE_LINES.has(plain)) FIGURE_LINES.add(layout);
+  return layout;
+}
+
+/**
  * Measure every metric field before accepting geometry. Short single-line values and units can
  * share a baseline; longer values or units stack. No locale formatting or rewritten source text is
  * invented here. LH-53: the trend is drawn as an arrow, not as its word (an English word, which also
@@ -2973,6 +3063,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   }
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Metric raster padding must be finite and nonnegative.');
   if (options.overflow!==undefined&&!['warn','error'].includes(options.overflow)) throw new RangeError('Invalid metric overflow policy.');
+  // FR-07, part 3: a gauge lays the metric out under its arc.
+  if (options.gauge) return layoutGaugeMetric(value,box,options);
   // LH-137: a delta pill beside the value where every field keeps its size, else above it, else none (the delta in its place).
   const pillPlacement=(options as Record<symbol,unknown>)[PILL_PLACEMENT] as 'beside'|'above'|undefined;
   if (options.deltaPill&&!pillPlacement&&!options.tile&&!options.band&&metric.delta!==undefined&&String(metric.delta).trim()!=='') {
@@ -7867,7 +7959,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   // LH-49's chart track uses a synthetic content group without its own OPF path; it records no group, flow or decision.
   // LH-06: `emphasis` is the path of the block or group whose `emphasis: true` the node carries.
-  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; metricRecord?: MetricRecord; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean;
+  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; metricRecord?: MetricRecord; metricGauge?: MetricGaugeInput; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean;
     /** LH-131: a cell of a featured pair or set other than the featured one: drawn on one plain card (a group's blocks share it). */
     cardCell?: boolean;
     /** LH-50: the label drawn as this paragraph's eyebrow (LH-152: or this list's or group's). */
@@ -7892,7 +7984,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // FR-06: a metric linked to data (or with a number format or a direction that is good) is composed as the 0.36 form of what it draws.
     const metricResolved = host.metric !== undefined ? resolveMetric(host.metric, options.presentation, {...numberLanguage(options)}) : undefined;
     const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : field === 'metric' && metricResolved ? metricResolved.metric : host[field];
-    return leafFields(host).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, ...(field === 'metric' && metricResolved?.record ? { metricRecord: metricResolved.record } : {}), payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
+    return leafFields(host).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, ...(field === 'metric' && metricResolved?.record ? { metricRecord: metricResolved.record } : {}), ...(field === 'metric' && metricResolved && metricGaugeInput(host.metric, metricResolved, numberLanguage(options).language) ? { metricGauge: metricGaugeInput(host.metric, metricResolved, numberLanguage(options).language)! } : {}), payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
       ...(field === 'image' ? { host, hostPath: basePath } : {}), ...(host.emphasis === true || basePath === featuredPath ? { emphasis: basePath } : {}), ...(cardCells.has(basePath) ? { cardCell: true } : {}), ...((field === 'text' || field === 'items' || field === 'bullets') && eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
       ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
@@ -8206,6 +8298,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // LH-137: the delta as a pill beside or above the value (the guarded rule `delta-pill`). Not in LH-83's automatic grid at the floor
       // (RECOMPOSE): the room a pill frees there would decide between the layout and the grid, which the pill, a drawing, never does.
       ...(ruleOn('delta-pill')&&(options as Record<symbol,unknown>)[RECOMPOSE]!==true?{deltaPill:pill??true}:{}),
+      // FR-07, part 3: a metric with a gauge draws its arc above its text.
+      ...(node.metricGauge?{gauge:node.metricGauge}:{}),
     };
     // LH-15: a metric at display size in a cell at least METRIC_BAND_RATIO times as wide as it is tall (as the cell gives it, or as the metric
     // stacks when the cell takes its natural height) is a band: the value at the start and its other fields beside it.
@@ -13245,9 +13339,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
   }
   diagnostics.push(...imageCalloutDiagnostics);
+  // FR-07, part 3: a gauge its region cannot hold is drawn as a plain metric, and said so (advice, not an overflow).
+  for (const item of items) if (item.metricLayout?.gaugeDropped) diagnostics.push({code: 'metric-gauge-dropped', path: item.path, message: `The metric's region cannot hold a gauge ${METRIC_GAUGE_MIN_WIDTH_PX} reference pixels wide with its text at the readability floor, so it is drawn as a plain metric. Give it a larger region to draw the gauge.`});
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
   const failures = diagnostics.filter(diagnostic => {
-    if(diagnostic.code==='chart-label-collision'||diagnostic.code==='timeline-period-short'||diagnostic.code==='shape-off-slide'||diagnostic.code==='chart-band-labels-in-legend')return false;
+    if(diagnostic.code==='chart-label-collision'||diagnostic.code==='timeline-period-short'||diagnostic.code==='shape-off-slide'||diagnostic.code==='chart-band-labels-in-legend'||diagnostic.code==='metric-gauge-dropped')return false;
     if(composition.overflow==='error')return true;
     let path = diagnostic.path;
     while (path) {

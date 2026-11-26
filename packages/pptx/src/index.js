@@ -70,7 +70,7 @@ import {recordableImageSource, placeImages, pictureFrame, importImages, importIm
 import {dedupeMedia, mediaKey} from './media-dedupe.js';
 import {placeWatermarks, importWatermark, importTextWatermark, tagTextWatermarks, watermarkName, watermarkTextName, watermarkBox, watermarkOpacity} from './watermark-provenance.js';
 import {placeLogos, importLogo, importLogoPlaceholders, logoName, LOGO_TAG} from './logo-provenance.js';
-import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} from './background.js';
+import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset, readBackgroundColor} from './background.js';
 import {importBackground, readSlideTheme} from './background-import.js';
 import {chartHighlightPlan, applyChartHighlight} from './chart-highlight.js';
 import {joinPointSeries, splitPointSeries, writePointSeriesWorkbook} from './chart-point-series.js';
@@ -87,7 +87,7 @@ import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colo
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
   CHART_BAR_GAP_WIDTH, catalogRecords, clrMapAttributes, DIAGRAM_SHAPE_FAMILIES, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
-  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, intrinsicImageAspect, itemAlignment, pictureOverlay, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
+  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, intrinsicImageAspect, itemAlignment, pictureOverlay, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, metricGaugeDrawing, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   chartCircleSquare, chartNumberLanguage, chartPlotInset, horizontalBarPlot, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, languageInEffect, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { chartBands, chartBandRanges, chartBandFill, chartBandMutedColor, bandLabelColor, BULLET_GAP_WIDTH, BULLET_TARGET_SHARE, BULLET_TARGET_WIDTH_PX } from "@openpresentation/opf/composition";
@@ -1295,7 +1295,9 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   items.push(...adoptedScalars.items);nativeContext.v2ProtectedSources=adoptedScalars.protectedSources;nativeContext.v2ProtectedPaths=adoptedScalars.protectedPaths;
   const fragments=importNativeTextFragments(shapes,paragraphs,relationships,entries,readBody,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}),decodeText(entries[slidePath]));
   const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
-  const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
+  const slideTheme = readSlideTheme(slidePath, {part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]});
+  // FR-07, part 3: a gauge arc's fill as a color (a literal, or the scheme color RR-96 wrote for it, read through the slide's theme and color map).
+  const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}), shape => readBackgroundColor(shape?.['p:spPr']?.['a:solidFill'], slideTheme)?.hex);
   const cards = importCardFrames(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const media = importMediaGroups(shapes, paragraphs, relationships, entries, slideIndex, diagnostic => options.onDiagnostic?.(diagnostic), nativeContext.mediaRegistry);
   nativeContext.mediaAssets = media.assets;
@@ -1305,7 +1307,6 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const timelines=importTimelineGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   // LH-108 to LH-110: a chart's value list, stacked names and reference marks are its defaults, not content.
   const chartMarks=importChartMarks(shapes,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
-  const slideTheme = readSlideTheme(slidePath, {part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]});
   const referenceContext={scale:Math.min(dimensions.widthInches,dimensions.heightInches)*96/720,colors:slideTheme};
   // RR-105: a chart part is untrusted input; one the overlay reader cannot parse leaves every overlay an ordinary drawing.
   let referenceOverlays;
@@ -5329,7 +5330,11 @@ function addMetricPayload(slide,value,layout,context,path,options,presentation) 
   // FR-06: the 0.37 part of a computed or formatted metric is stored only with full provenance (the datasets it links to are stored then too).
   const record=context.metricRecord,link=record&&context.provenanceMode==='full'?record:undefined;
   if (record&&!link) options.onDiagnostic?.({code:'metric-link-omitted',path,message:"The metric's data link, format and direction are not stored in the PPTX because provenance is not full; reimport has the numbers as drawn."});
-  const group=String(context.metricTags.size+1),manifest=metricManifest(value,layout,group,link);
+  const group=String(context.metricTags.size+1);
+  // FR-07, part 3: a gauge's native parts (core metricGaugeDrawing), drawn under the text; the manifest records their evidence.
+  const backdropHex=context.cardFill??`#${normalizeHex(context.colors.background)}`;
+  const gauge=layout.gauge?addMetricGauge(slide,layout.gauge,group,context,backdropHex):undefined;
+  const manifest=metricManifest(value,layout,group,link,gauge?.evidence);
   // RR-07, LH-53: a trend adds one native arrow shape where core placed it (before the delta; the trend word is not drawn) and colors
   // the delta text. LH-54: a metric in a card is colored against the card fill (context.cardFill), as the preview does. LH-57: on a
   // dark one, a value whose accent falls under 4.5:1 takes the text color.
@@ -5372,12 +5377,44 @@ function addMetricPayload(slide,value,layout,context,path,options,presentation) 
   }
   // LH-137: the pill's tag follows the text's, so the metric's manifest stays its first tag (the pill shape is drawn first, under the text).
   if (layout.deltaPill) context.metricTags.set(`OPF metric ${group} pill`,{v:1,group,role:'pill'});
+  if (gauge) for (const [objectName,part] of gauge.parts) context.metricTags.set(objectName,{v:1,group,role:'mark',part});
   if(trendMark) {
     const objectName=`OPF metric ${group} trend mark`;
     context.metricTags.set(objectName,{v:1,group,role:'mark'});
     context.metricDescriptions.set(objectName,trendMark.ariaLabel);
     slide.addShape(trendMark.shape,{objectName,x:trendMark.box.x/96,y:trendMark.box.y/96,w:trendMark.box.width/96,h:trendMark.box.height/96,fill:{color:trendMark.color.slice(1)},line:{transparency:100},altText:trendMark.ariaLabel});
   }
+}
+
+// FR-07, part 3: a metric's gauge as native, editable parts: each arc a blockArc preset shape on the arc's square frame with core's three
+// adjustments (adj1 and adj2 the start and end angles in 60000ths of a degree, adj3 the thickness in 100000ths of the frame), filled with its
+// computed color and no outline; the target a straight line from the track's inner to its outer edge at the target's angle, in the text
+// color; the ends' labels text boxes centered under the track's ends in the secondary text color. Each is named `OPF metric <group> <part>`
+// and tagged into the metric's group as generated decoration (role 'mark' with its part name). Returns the tags to set and the evidence the
+// manifest records: [part, preset, adj1, adj2, fill] for each arc, and the target's two end points in EMU.
+function addMetricGauge(slide,gauge,group,context,backdrop) {
+  const text=`#${normalizeHex(context.colors.text)}`,resolve=name=>`#${resolveExportColor(name,{...context,fallback:context.colors.text}).slice(0,6)}`.toUpperCase();
+  const drawing=metricGaugeDrawing(gauge,{surface:backdrop,text,primary:`#${normalizeHex(context.colors.accent)}`,muted:`#${normalizeHex(context.colors.mutedText)}`,resolve});
+  const parts=[],arcs=[],angle=degrees=>Math.round((degrees>360?degrees-360:degrees)*60000);
+  for (const arc of drawing.arcs) {
+    const objectName=`OPF metric ${group} ${arc.part}`,fill=arc.fill.slice(1).toUpperCase();
+    slide.addShape('blockArc',{objectName,x:arc.frame.x/96,y:arc.frame.y/96,w:arc.frame.width/96,h:arc.frame.height/96,angleRange:[arc.adjust.adj1,arc.adjust.adj2],arcThicknessRatio:arc.adjust.adj3*2,fill:{color:fill},line:{type:'none'}});
+    parts.push([objectName,arc.part]);arcs.push([arc.part,'blockArc',angle(arc.adjust.adj1),angle(arc.adjust.adj2),fill]);
+  }
+  let target;
+  if (drawing.target) {
+    const t=drawing.target,objectName=`OPF metric ${group} ${t.part}`;
+    const x=Math.min(t.x1,t.x2),y=Math.min(t.y1,t.y2),flipH=(t.x2-t.x1)*(t.y2-t.y1)<0;
+    slide.addShape('line',{objectName,x:x/96,y:y/96,w:Math.abs(t.x2-t.x1)/96,h:Math.abs(t.y2-t.y1)/96,...(flipH?{flipH:true}:{}),line:{color:t.color.slice(1),width:t.width*.75}});
+    parts.push([objectName,t.part]);target=[t.x1,t.y1,t.x2,t.y2].map(value=>Math.round(value*9525));
+  }
+  for (const {part,color,end} of drawing.ends) {
+    const objectName=`OPF metric ${group} ${part}`;
+    slide.addText(end.text,{...textBoxOptions({x:end.box.x/96,y:(end.baseline-end.fontSize)/96,w:end.box.width/96,h:end.box.height/96},context,end.fontSize*.75),
+      ...nativeFontOptions(gauge.endStyle),color:color.slice(1),align:'center',fit:'none',wrap:false,lineSpacingMultiple:1,objectName});
+    parts.push([objectName,part]);
+  }
+  return {parts,evidence:{arcs,...(target?{target}:{})}};
 }
 
 async function addQuotePayload(slide, presentation, value, layout, context, options, path) {

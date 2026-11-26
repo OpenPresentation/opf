@@ -562,6 +562,8 @@ const HELP: Record<string, string> = {
 	'chart-mapping-adapted': 'Choose a compatible chart type or mapping for the selected data. The message explains how the mapping or drawing was adapted.',
 	'chart-bands-order': 'Write the bands in increasing order of their to values. Every engine draws them sorted.',
 	'chart-bands-unsupported': 'Use a bar, column, line, area or bullet chart for bands, or remove the bands.',
+	'metric-gauge-range': "Write the gauge's max above its min, and keep the value, the target and each band's to between them. A value outside the range still prints its real number; its arc stops at the end.",
+	'metric-gauge-value': 'Give the metric a number value (a number, or a data link that computes one), or remove the gauge.',
 	'chart-series-dropped': 'The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.',
 	'chart-highlight-adapted': 'The highlight is adapted by every engine. Name a series or category the chart type can emphasize, or remove the entry.',
 	'table-color-scale-no-data': 'Name columns that hold numbers, or remove the color scale. A cell is shaded only when its value is a finite number.',
