@@ -4,7 +4,7 @@
     "browser": 693986,
     "composition": 324654,
     "convert": 576829,
-    "data": 16736,
+    "data": 20466,
     "deck": 617236,
     "diagram-engine-eager": 294825,
     "diagram-engine-lazy": 11669,
@@ -16,7 +16,7 @@
     "pagination": 562933,
     "patch": 557562,
     "precompiled": 216762,
-    "schema": 100175,
+    "schema": 105390,
     "schema-engine-ajv": 141810,
     "schema-engine-precompiled": 216792,
     "schemas": 98302,
@@ -45,8 +45,8 @@
       "gzip": 560028
     },
     "data": {
-      "minified": 46914,
-      "gzip": 16248
+      "minified": 58475,
+      "gzip": 19869
     },
     "deck": {
       "minified": 1831401,
@@ -105,8 +105,8 @@
       "gzip": 7158
     },
     "schema": {
-      "minified": 353800,
-      "gzip": 97257
+      "minified": 371575,
+      "gzip": 102320
     },
     "schema-engine-ajv": {
       "minified": 493963,

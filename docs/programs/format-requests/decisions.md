@@ -167,6 +167,7 @@ Round 2 decisions:
 | Which ways of computing the change? | All three: previous row, baseline filter, column (recommended); only previous; only a column | All three, and a fourth from his note, quoted exactly: "all three, but fixed value/constant too?" The change can also compare with a fixed number, `compare: { value }` | Owner, 2026-11-25 (`m-delta`); the key's name by the supervisor |
 | When a refresh flips the sign, who decides good or bad? | `better: "up" \| "down"` (recommended); keep only `sentiment` | `better`; an explicit `sentiment` still wins | Owner, 2026-11-25 (`m-better`) |
 | Does the arrow follow the computed change? | Yes, when `trend` is not typed (recommended); no | Yes | Owner, 2026-11-25 (`m-trend`) |
+| Built: the MCP package's bundled documentation passed its size limit | Raise the limit to 3% above the measured size; cut documentation | Raised to 1,542,000 bytes (measured 1,496,616 with the computed metric documented; the limit was 1,482,000). Every 0.37.0 item documents a new part of the format | Supervisor, 2026-11-26, on the owner's delegation; he can overrule |
 
 ## FR-07: CR 5, table color scale, bands and bullet, gauge
 
