@@ -141,3 +141,12 @@ describe('band labels inside the bands (FR-07, owner "1B")', async () => {
     assert.equal(rtl.labels[0].box.x + rtl.labels[0].box.width, 800 - 20 - 8);
   });
 });
+
+describe('one band label color per chart (FR-07)', async () => {
+  const { bandLabelColor } = await import('../dist/composition.js');
+  test('the secondary text color when it reads at 4.5:1 on every labeled band, else the primary; a band where even that fails is listed', () => {
+    assert.deepEqual(bandLabelColor(['#E6E5E5', '#D7D6D6'], '#595959', '#000000'), { color: '#595959', failing: [] });
+    assert.deepEqual(bandLabelColor(['#C4C3C3', '#D7D6D6', '#E6E5E5'], '#595959', '#000000'), { color: '#000000', failing: [] }, '595959 is 3.98:1 on C4C3C3');
+    assert.deepEqual(bandLabelColor(['#E6E5E5', '#202020'], '#595959', '#000000'), { color: '#000000', failing: [1] }, 'an author\'s dark band');
+  });
+});

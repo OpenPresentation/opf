@@ -10,6 +10,7 @@
 //   legend instead, the bands first, then the data series, and composition reports `chart-band-labels-in-legend`. Nothing is shrunk or cut.
 import { chartAxisFraction, chartTextSize, stackCategoryValues, type ChartValueAxis } from './chart-axis.js';
 import { chartBandRanges, chartBands } from './chart-bands.js';
+import { colorContrast } from './color.js';
 import { chartNumber, type ResolvedChartData } from './chart-data.js';
 import type { ChartPlotInset } from './chart-layer.js';
 import { chartBarGeometry, chartBarSeriesOffset } from './chart-layer.js';
@@ -165,4 +166,18 @@ export function placeBandLabels(chart: unknown, data: ResolvedChartData, axis: C
     labels.push(chosen);
   }
   return { labels };
+}
+
+/** The contrast every band label keeps against its band. */
+export const BAND_LABEL_MIN_CONTRAST = 4.5;
+
+/**
+ * The one color of all band labels of a chart: the secondary text color (`secondary`, the axis-label color) when it reaches 4.5:1 on every labeled
+ * band's fill, otherwise the primary text color (`primary`). `failing` lists the positions (in `fills`) where even the primary color stays below
+ * 4.5:1 (an author's own dark band): the label is still drawn there, and the engines report it.
+ */
+export function bandLabelColor(fills: readonly string[], secondary: string, primary: string): { color: string; failing: number[] } {
+  const reads = (color: string) => fills.map((fill, at) => [at, colorContrast(color, fill) ?? 0] as const);
+  if (reads(secondary).every(([, ratio]) => ratio >= BAND_LABEL_MIN_CONTRAST)) return { color: secondary, failing: [] };
+  return { color: primary, failing: reads(primary).flatMap(([at, ratio]) => ratio < BAND_LABEL_MIN_CONTRAST ? [at] : []) };
 }

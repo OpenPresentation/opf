@@ -18,7 +18,6 @@
 // Import. readNativeBands strips the owned band group (and the target), points the data back at the visible axes, and returns the ordinary
 // chart XML with the bands and the targets it read (the native truth: band labels and ends from the cached values).
 import { XMLParser } from 'fast-xml-parser';
-import { textColorForFill } from '@openpresentation/opf/composition';
 import { encodeTextTag, decodeTextTag } from './code-provenance.js';
 
 export const BANDS_URI = 'urn:openpresentation:chart-bands:v1';
@@ -166,8 +165,7 @@ export function applyChartBands(xml, info) {
     const entry = info.plan.series[position++];
     if (!entry) throw Error('Unexpected band series.');
     const label = labelFor(info, entry);
-      // The secondary text color where it reads at 4.5:1 on the band, else black or white (core textColorForFill), as the preview draws it.
-    return label ? withBandLabel(bandSeries(ser, entry), label, {...info.text, color: textColorForFill(`#${entry.fill}`, `#${hex6(info.text.color)}`)}) : bandSeries(ser, entry);
+      return label ? withBandLabel(bandSeries(ser, entry), label, info.text) : bandSeries(ser, entry);
   });
   if (position !== info.plan.series.length) throw Error('Missing band series.');
   next = next.replace(/<c:grouping val="[^"]*"\s*\/>/, '<c:grouping val="stacked"/>');

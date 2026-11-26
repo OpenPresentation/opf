@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, paretoPlan, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartFocusContextColors, chartSeriesStrokes, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer, formatNumber, formatPercentNumber, chartNumberLanguage, chartBands, chartBandRanges, chartBandFill, BULLET_BAR_SHARE, BULLET_TARGET_SHARE, BULLET_TARGET_WIDTH_PX } from "@openpresentation/opf/composition";
+import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, paretoPlan, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartFocusContextColors, chartSeriesStrokes, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer, formatNumber, formatPercentNumber, chartNumberLanguage, chartBands, chartBandRanges, chartBandFill, bandLabelColor, BULLET_BAR_SHARE, BULLET_TARGET_SHARE, BULLET_TARGET_WIDTH_PX } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colors for a chart panel: core's `chartSeriesPalette` (the deck color scheme's accents, RR-89, with the chart's own
@@ -263,9 +263,15 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   render(c, spec);
   drawReferenceLines(c, layer?.references?.lines);
   // FR-07: band labels on top of the data (PowerPoint draws data labels above every series), in the secondary text color.
-  // The secondary text color where it reads at 4.5:1 on the band, else black or white (core textColorForFill), as the PowerPoint export writes it.
-  const bandFills = new Map(bandsOver(c, c.valueAxis ?? { min: 0, max: 1 }).map((band) => [band.index, band.fill]));
-  for (const label of layer?.bandLabels?.legend ? [] : layer?.bandLabels?.labels ?? []) c.text(label.text, label.box, `${c.path}.bands.${label.index}.label`, label.align, textColorForFill(bandFills.get(label.index) ?? c.surface, c.chartTextColor));
+  // One color for every band label of the chart (core bandLabelColor): the secondary text color when it reads at 4.5:1 on every labeled band,
+  // else the primary text color, as the PowerPoint export writes it. A band on which even that stays below 4.5:1 is reported; its label is drawn.
+  const placedLabels = layer?.bandLabels?.legend ? [] : layer?.bandLabels?.labels ?? [];
+  if (placedLabels.length) {
+    const bandFills = new Map(bandsOver(c, c.valueAxis ?? { min: 0, max: 1 }).map((band) => [band.index, band.fill]));
+    const { color, failing } = bandLabelColor(placedLabels.map((label) => bandFills.get(label.index) ?? c.surface), c.chartTextColor, c.labelColor);
+    for (const at of failing) c.svg.reportDiagnostic?.({ code: "text-contrast", path: `${c.path}.bands.${placedLabels[at].index}.label`, message: `The band label "${placedLabels[at].text}" stays below 4.5:1 on its band in the text color; choose a lighter band color.` }, c.options);
+    for (const label of placedLabels) c.text(label.text, label.box, `${c.path}.bands.${label.index}.label`, label.align, color);
+  }
   drawStackNames(c, layer?.stack?.names);
   drawStackEnds(c, layer?.stack?.ends);
   if (resolved.active) drawAxisTitles(c);

@@ -13368,7 +13368,7 @@ export {CHART_REFERENCE_TYPES,chartReferenceSources} from './chart-references.js
 export {CHART_BAND_TYPES,CHART_BAND_NEUTRAL_CONTRASTS,neutralFill as chartBandNeutral,CHART_BAND_COLOR_SHARE,chartBands,chartBandMaximum,chartBandRanges,chartBandFill,chartBandFills,chartBandDiagnostics,BULLET_CHART_TYPE,BULLET_BAR_SHARE,BULLET_TARGET_SHARE,BULLET_TARGET_WIDTH_PX,BULLET_GAP_WIDTH} from './chart-bands.js';
 export type {ChartBandSpec,ChartBandRange,ChartBandColors,ChartBandDiagnostic} from './chart-bands.js';
 export {bulletPlot,bandLegendNames} from './chart-bullet.js';
-export {placeBandLabels,BAND_LABEL_PADDING} from './chart-band-labels.js';
+export {placeBandLabels,bandLabelColor,BAND_LABEL_PADDING,BAND_LABEL_MIN_CONTRAST} from './chart-band-labels.js';
 export type {ChartBandLabel,ChartLayerBandLabels} from './chart-band-labels.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartNumericAxes} from './chart-numeric-axes.js';

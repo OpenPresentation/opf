@@ -90,7 +90,7 @@ import {
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, intrinsicImageAspect, itemAlignment, pictureOverlay, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   chartCircleSquare, chartNumberLanguage, chartPlotInset, horizontalBarPlot, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, languageInEffect, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
-import { chartBands, chartBandRanges, chartBandFill, BULLET_GAP_WIDTH, BULLET_TARGET_SHARE, BULLET_TARGET_WIDTH_PX } from "@openpresentation/opf/composition";
+import { chartBands, chartBandRanges, chartBandFill, bandLabelColor, BULLET_GAP_WIDTH, BULLET_TARGET_SHARE, BULLET_TARGET_WIDTH_PX } from "@openpresentation/opf/composition";
 import { bandPlan, bandChartType, bandAxisOptions, applyChartBands, applyBulletTarget, readNativeBands } from "./chart-bands.js";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -4425,7 +4425,11 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // FR-07 (owner, '1B'): the band labels inside their bands as data labels at composition's boxes (fractions of the chart frame); in its
     // fallback (labels in the legend) none.
     const inside = layer?.bandLabels && !layer.bandLabels.legend ? layer.bandLabels.labels : undefined;
-    if (bands) heading.bands = {plan: bands, edge: Boolean(layer?.stack?.edge), ...(inside ? {labels: inside.map(label => ({...label, x: (label.box.x - region.x * 96) / (region.w * 96), y: (label.box.y - region.y * 96) / (region.h * 96)})), text: {size: textSize, color: normalizeHex(labelColor).slice(0, 6), font: context.fonts.body}} : {})};
+    // One color for every band label (core bandLabelColor, as the preview): the secondary text color when it reads at 4.5:1 on every labeled
+    // band, else the primary text color; a band on which even that fails is reported, its label still written.
+    const labelPaint = inside && bands ? bandLabelColor(inside.map(label => `#${bands.bands.find(band => band.index === label.index)?.fill ?? normalizeHex(panelFill).slice(0, 6)}`), `#${normalizeHex(labelColor).slice(0, 6)}`, `#${normalizeHex(markLabelColor).slice(0, 6)}`) : undefined;
+    for (const at of labelPaint?.failing ?? []) options.onDiagnostic?.({code: 'text-contrast', path: `${path}.bands.${inside[at].index}.label`, message: `The band label "${inside[at].text}" stays below 4.5:1 on its band in the text color; choose a lighter band color.`});
+    if (bands) heading.bands = {plan: bands, edge: Boolean(layer?.stack?.edge), ...(inside ? {labels: inside.map(label => ({...label, x: (label.box.x - region.x * 96) / (region.w * 96), y: (label.box.y - region.y * 96) / (region.h * 96)})), text: {size: textSize, color: normalizeHex(labelPaint.color).slice(0, 6), font: context.fonts.body}} : {})};
     if (target) heading.bullet = {half: BULLET_TARGET_SHARE / 2, gapWidth: BULLET_GAP_WIDTH, color: normalizeHex(markLabelColor).slice(0, 6), widthEmu: Math.round(BULLET_TARGET_WIDTH_PX * scale * 0.75 * 12700)};
     // The number formats of the extra series: the target its column's, each band the value axis's.
     if (heading.numberFormats || target?.format !== undefined) {

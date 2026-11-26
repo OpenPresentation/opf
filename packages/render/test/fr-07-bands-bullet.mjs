@@ -100,6 +100,22 @@ const deck = (chart, extra = {}) => ({ design: { fontScheme: 'roboto' }, ...extr
   }
 }
 
+// One color for every band label of a chart: with the default bands the darkest (1.75:1 on the surface) holds the secondary text below 4.5:1,
+// so every label takes the primary text color; when only the lighter bands are labeled, the secondary (axis-label) color.
+{
+  const low = { columns: ['Week', 'Wait'], rows: [['W1', 2], ['W2', 3], ['W3', 2], ['W4', 1]] };
+  const fillOf = (svg, k) => /\bfill="(#[0-9A-Fa-f]{6})"/.exec([...svg.matchAll(/<text\b[^>]*>/g)].map(([tag]) => tag).find((tag) => tag.includes(`data-opf-path="slides.0.chart.bands.${k}.label"`)) ?? '')?.[1];
+  const input = deck({ type: 'column', data: low, bands: [{ to: 10, label: 'Low' }, { to: 15, label: 'Mid' }, { to: 20, label: 'High' }] }, { design: { fontScheme: 'roboto', theme: 'classic', variant: 'light1' } });
+  const colors = resolvePresentation(input).slides[0].design.colors;
+  const all = toSvg(input, 1, { trace: true });
+  assert.deepEqual([0, 1, 2].map((k) => fillOf(all, k)?.toUpperCase()), Array(3).fill(fillOf(all, 0)?.toUpperCase()), 'one color for every label');
+  const light = toSvg(deck({ type: 'column', data: low, bands: [{ to: 10 }, { to: 15, label: 'Mid' }, { to: 20, label: 'High' }] }, { design: { fontScheme: 'roboto', theme: 'classic', variant: 'light1' } }), 1, { trace: true });
+  assert.notEqual(fillOf(light, 1), fillOf(all, 1), 'the lighter bands alone keep the secondary color');
+  const darkest = marks(all).find((mark) => mark.tag === 'rect' && mark['data-opf-path'] === 'slides.0.chart.bands.0').fill;
+  assert.ok(colorContrast(fillOf(all, 0), darkest) >= 4.5, `the primary text color reads on the darkest band (${fillOf(all, 0)} on ${darkest}, text ${colors.text})`);
+  checks += 3;
+}
+
 // Draw order, as PowerPoint draws it (its gridlines lie behind every series, and the bands are series): gridlines, then bands, then the data, on
 // column, bar, line and area charts and the bullet chart, so a gridline shows only where no band is.
 for (const type of ['column', 'bar', 'line', 'area', 'bullet']) {
