@@ -5631,7 +5631,7 @@ async function addEmbedPayload(slide, presentation, value, region, path, context
   slide.addShape('rightArrow', {x: inches(arrow.x), y: inches(arrow.y), w: inches(arrow.width), h: inches(arrow.height), rotate: 315, fill: {color: ink}, line: {transparency: 100}, hyperlink: link, objectName: `${name} arrow`});
   for (const [text, part, color] of [[card.title, 'title', context.colors.text], [card.site, 'site', context.colors.mutedText]]) {
     if (!text) continue;
-    addMeasuredPayloadText(slide, text.lines.join(' '), text.box, context, options, {path, fit: {lines: text.lines, fontSize: text.fontSize, lineHeight: text.lineHeight, overflow: false}, textStyle: text.style, align: 'left', color,
+    addMeasuredPayloadText(slide, text.lines.join(' '), text.box, context, options, {path, fit: {lines: text.lines, fontSize: text.fontSize, lineHeight: text.lineHeight, overflow: false}, textStyle: text.style, align: text.align, color,
       objectName: `${name} ${part}`, diagnosticsHandled: true, hyperlink: link});
   }
   if (tagged) context.embedTags.set(name, {...record, evidence: {href: embed.src, text: (card.title?.lines ?? []).join('\n')}});
