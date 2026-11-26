@@ -198,7 +198,7 @@ the table color scale, then bands with the bullet chart, then the gauge. Each pa
 
 Acceptance:
 
-- **Table color scale.** `table.colorScale` (`columns`, `from`, `to`, an optional `mid` for a diverging scale) shades the named columns'
+- **Table color scale.** `table.colorScale` (`columns`, `colors`: two or three scheme names, `center`, `min`, `max`) shades the named columns'
   number cells between scheme colors; the text color follows each cell for contrast. It exports as a native table with cell fills.
 - **Bands and the bullet chart.** `chart.bands` shades value ranges (`{ to, label }`, from scheme neutrals) on the value axis of bar,
   column, line and area charts, filling the slot `referenceLines` reserves; in PowerPoint they are series drawn behind the data. A new
@@ -212,6 +212,16 @@ Acceptance:
 - Conformance: valid decks for each part; an invalid deck for a band or color scale that names no column or has no data.
 
 Progress log:
+
+- 2026-11-25: part 1, the table color scale, built (bands with the bullet chart and the gauge are still to build, so the row stays
+  in-progress). `table.colorScale` with `colors` (two or three scheme names), `center`, `min` and `max`; OKLab mixing; a diverging scale with no
+  pinned end is symmetric around its center; the text on a shaded cell is the scheme text color, else the background color, else black
+  or white (4.5:1). Core computes the fills, the preview, PNG and PDF draw them, and a table split across slides keeps one range. The
+  PowerPoint export writes native cell fills and text colors and records the scale beside the stored table; import restores it while
+  every shaded cell keeps its fill, else every shaded cell comes back with its native fill and `table-color-scale-not-restored` is
+  reported. A dataset column declared as another type than `number` is never shaded. Rules: the error
+  `table-color-scale-unknown-column`, the warnings `table-color-scale-no-data` and `table-color-scale-range`. Checked in PowerPoint
+  (fills and text colors match the preview; the saved copy, a retyped number and a refilled cell import as designed).
 
 ## FR-08: embed (CR 11)
 
