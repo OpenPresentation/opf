@@ -4333,7 +4333,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   else if (!layerXml.layout.plot?.target && ['bar', 'line', 'area'].includes(chartData.type) && !chartData.combo
     && (layerXml.layout.plot || (chartData.type === 'bar' && layerXml.options.valAxisHidden === true && chartOptions.dataLabels)
       // opf#1513: a chart with a legend option has no header row (the author chose its legend), so no plot area of core's: it is the preview's.
-      || (chartData.type === 'bar' && typeof chart?.legend === 'string'))) {
+      // Only where the option shows a legend: a chart with `legend: "none"` keeps the plot it had (PowerPoint's own for a column chart
+      // without labels), which the reference Name measurement of scripts/native-acceptance was taken with (its export is pinned there).
+      || (chartData.type === 'bar' && typeof chart?.legend === 'string' && chart.legend !== 'none'))) {
     const plotBox = lowLabelPlot(chart, chartData, layer, chartLayout?.valueAxis, layerXml.layout.plot, region, {scale, valueAxisHidden: layerXml.options.valAxisHidden === true, context, options, presentation, whole: true});
     if (plotBox) layerXml.layout.plot = plotBox;
   }
