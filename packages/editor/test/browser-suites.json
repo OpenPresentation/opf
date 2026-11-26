@@ -123,6 +123,10 @@
           "command": "node test/presenter-links-browser.mjs"
         },
         {
+          "id": "playground:presenter-embeds-browser",
+          "command": "node test/presenter-embeds-browser.mjs"
+        },
+        {
           "id": "playground:present-button-browser",
           "command": "node test/present-button-browser.mjs"
         },

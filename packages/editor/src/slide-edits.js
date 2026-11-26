@@ -7,7 +7,7 @@
 //
 // D2: slides stay auto-layout. Every move resolves to a container and an index; no edit writes a position.
 import { resolveSlideContext } from "@openpresentation/opf";
-import { bindRegions } from "@openpresentation/opf/composition";
+import { bindRegions, kindAccepted } from "@openpresentation/opf/composition";
 import { formatPointer, jsonEqual, parsePointer, readPointer } from "@openpresentation/opf/patch";
 import { resolveIdPointer } from "@openpresentation/opf/ids";
 import { applyJsonPatch, createValuePatch } from "./index.js";
@@ -28,7 +28,7 @@ const isObject = (value) => Boolean(value) && typeof value === "object" && !Arra
 const valueAt = (document, pointer) => { const found = readPointer(document, pointer); return found.found ? found.value : undefined; };
 const parentPointer = (pointer) => formatPointer(parsePointer(pointer).slice(0, -2));
 const plural = (count, one, many = `${one}s`) => `${count} ${count === 1 ? one : many}`;
-const KIND_WORDS = { text: "text", list: "list", image: "image", video: "video", chart: "chart", table: "table", code: "code", diagram: "diagram", metric: "metric", quote: "quote", timeline: "timeline", group: "group" };
+const KIND_WORDS = { text: "text", list: "list", image: "image", video: "video", embed: "embed", chart: "chart", table: "table", code: "code", diagram: "diagram", metric: "metric", quote: "quote", timeline: "timeline", group: "group" };
 const HEADING_REFUSALS = { move: "move", group: "be grouped", delete: "be deleted; clear its text instead", duplicate: "be duplicated", copy: "be copied as a block" };
 const wordList = (list) => (list.length <= 1 ? list.join("") : `${list.slice(0, -1).join(", ")} and ${list.at(-1)}`);
 
@@ -203,7 +203,7 @@ function regionMove(presentation, scene, sources, region, index, options) {
   const accepts = region.accepts ?? [];
   for (const source of sources) {
     const kind = source.kind === "group" ? "group" : source.type;
-    if (accepts.length && !accepts.includes(kind)) throw refuse(`Region ${region.region} accepts only ${wordList(accepts.map((entry) => KIND_WORDS[entry] ?? entry))}.`, { region: region.region, kind });
+    if (accepts.length && !kindAccepted(accepts, kind)) throw refuse(`Region ${region.region} accepts only ${wordList(accepts.map((entry) => KIND_WORDS[entry] ?? entry))}.`, { region: region.region, kind });
   }
   const slidePointer = scene.node(scene.slideKey).path;
   const { work, slide, objectOf, parentMap } = workingCopy(presentation, scene, [slidePointer, ...sources.filter((node) => node.kind === "implicit").map((node) => node.owner)]);

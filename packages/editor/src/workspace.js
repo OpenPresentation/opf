@@ -1179,6 +1179,8 @@ export function createOpfEditor(element, options = {}) {
         editor: ui,
         fonts,
         continuation: options.continuation !== false,
+        // FR-08: the embedded pages shown live in the presenter, by address (default none).
+        ...(typeof options.embeds === "function" ? { embeds: options.embeds } : {}),
         get renderOptions() {
           return renderOptions();
         },

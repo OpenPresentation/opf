@@ -552,6 +552,14 @@ const chartSeriesDropped: RuleText = (finding) => ({
   next: "use a chart type that plots every series, or one chart per series.",
 });
 
+const embedCredentials: RuleText = (finding) => {
+  const part = match(finding.message, /carries what looks like a credential \((.+?)\)\./)?.[1];
+  return {
+    message: `This embed's address carries what looks like a credential${part ? ` (${part})` : ""}, and anyone with the deck can read it.`,
+    next: "take the credential out of `src`: the host that shows the page holds it.",
+  };
+};
+
 const chartHighlightAdapted: RuleText = (finding) => {
   const name = unquote(match(finding.message, /^highlight names \w+ ("(?:[^"\\]|\\.)*"), which is not plotted as a series/)?.[1]);
   if (!name) return undefined;
@@ -720,6 +728,7 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/dataset-stale": datasetStale,
   "opf/chart-highlight-adapted": chartHighlightAdapted,
   "opf/chart-series-dropped": chartSeriesDropped,
+  "opf/embed-credentials": embedCredentials,
   "opf/code-highlight-out-of-range": codeHighlightOutOfRange,
   "opf/code-highlight-range-reversed": codeHighlightRangeReversed,
   "opf/variable-builtin-missing": variableBuiltinMissing,

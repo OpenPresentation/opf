@@ -13,7 +13,7 @@ Every item also meets the definition of done in the README; the acceptance colum
 | FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | done |
 | FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | todo |
 | FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | in-progress |
-| FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | in-progress |
+| FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | done |
 | FR-09 | CR 14: limits on a variable's value | [Below](#fr-09-limits-on-a-variables-value-cr-14) | done |
 | FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | done |
 | FR-11 | What a validator says about a key it does not know | [Below](#fr-11-what-a-validator-says-about-a-key-it-does-not-know) | done |
@@ -231,6 +231,13 @@ Acceptance:
 - Conformance: valid decks with the full form and the shorthand; invalid decks with an `http:` URL and with no `src`.
 
 Progress log:
+
+- 2026-11-25: done, in the pull request that adds this line. Checked in PowerPoint on three decks (classic light, classic dark, bold):
+  the picture and the card draw where the preview draws them, every part of a card opens the embed's address, and each embed comes
+  back from the export and from PowerPoint's own save. A link changed or a card title retyped in PowerPoint imports what is there, with
+  `embed-provenance-changed`. Not run: a slide show click, Change Picture and the Accessibility Checker (PowerPoint's window is not
+  driven). The card's drawing is with the owner; a version with the badge and title centered and growing with the card follows as its
+  own change.
 
 ## FR-09: limits on a variable's value (CR 14)
 

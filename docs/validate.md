@@ -325,6 +325,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/tight-spacing`](#opftight-spacing) | Layout | info | composition | Blocks are closer than 0.25 in to each other or 0.5 in to the slide edge. |
 | [`opf/layout-monotony`](#opflayout-monotony) | Layout | info | structure | 4 or more content slides in a row use the same layout record. |
 | [`opf/variable-overflow`](#opfvariable-overflow) | Layout | warning | composition | A variable's value is longer than the room its declaration allows. |
+| [`opf/embed-credentials`](#opfembed-credentials) | Content | warning | structure | An embed address carries what looks like a credential. |
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
 | [`opf/data-cell-type`](#opfdata-cell-type) | Content | warning | structure | A data cell does not match its column's declared type. |
 | [`opf/datasource-credentials`](#opfdatasource-credentials) | Content | warning | structure | A data source holds a credential. |
@@ -1146,6 +1147,16 @@ Default severity: **warning**. Cost: composition. A variable's value is longer t
 ## Content rules
 
 *Is anything left unfinished?*
+
+### `opf/embed-credentials`
+
+Default severity: **warning**. Cost: structure. An embed address carries what looks like a credential.
+
+**Why.** An embed `src` is stored in the deck and linked from every export, so anyone who has the deck can read a user name and password in it, or a query parameter named like a secret (`key`, `token`, `secret`, `password`, `sig`, `signature`, `auth`, alone or in a longer name such as `api_key`). Put the secret where the host that shows the page holds it.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+**Approximations.** Matches the parameter names by word, not by letters: `api_key` and `accessToken` match, `monkey` does not. The value is never read, and nothing is fetched.
 
 ### `opf/chart-value-not-numeric`
 

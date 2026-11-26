@@ -123,3 +123,7 @@ Loading code later has the same catch as option 1: the module text must be run. 
 The candidates this section listed on 2026-11-16 (more derived validator errors, a compact form for the tables whose rows repeat their keys, and the gallery data in the viewer only) were taken on 2026-11-26; see that section for what was measured and left. What remains is a few kilobytes each: the compact form for the other generated tables loads measurably slower or saves nothing, and the two options above are the only ones that buy years of growth.
 
 Measurements in sections 1 and 2 are of the 0.34 RR-111 build, before the quote pass; with it, the script's JSON escapes are about 70,000 bytes instead of 330,000, so option 1's saving is that much smaller.
+
+## 2026-11-26: the 0.37.0 format changes reach the floor
+
+`main` with eight of the eleven format changes of 0.37.0 measures about 9,468,000 frame bytes (about 1,017,000 of headroom). With embed it is 9,501,842 (983,918), with the table color scale instead 9,492,922 (992,838), and the computed metric, bands with the bullet chart and the gauge follow. So that these land one after another, the test's floor is 800,000 from the embed change on; 0.37.0 is not released until the viewer has 1,000,000 bytes of headroom again and the test says so. The work is opf#1516: the smaller safe steps above, measured and taken in order, and anything 0.37.0 added that the viewer never reaches.

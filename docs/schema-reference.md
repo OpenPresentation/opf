@@ -542,6 +542,24 @@ _No named properties._
 _No named properties._
 
 
+### EmbedUrl
+
+- Type: `string`
+- Required fields: none
+- Purpose: An https URL. Any other scheme (http, data, javascript, a relative path) is a schema error.
+
+_No named properties._
+
+
+### EmbedPayload
+
+- Type: `oneOf:ref:EmbedUrl / object`
+- Required fields: none
+- Purpose: A live web page, shown in a web presenter when its host allows and as a linked picture everywhere else (PDF, PNG, PowerPoint, print, thumbnails). A string is shorthand for { "src": value }. Engines never load 'src': whether and from which sites a page is shown live is the host's decision (the presenter's 'embeds' option), not the deck's, so a deck holds no sandbox policy.
+
+_No named properties._
+
+
 ### ColorVariant
 
 - Type: `object`
@@ -971,7 +989,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `id` | no | `string` | Optional stable identifier for the slide within the document. Use when another system needs to reference a slide across edits, comments, generation state, exports, or narrative tooling. Slide order is defined by the s... |
 | `language` | no | `oneOf:ref:LanguageTag / ref:Language` | Language of this slide, overriding the presentation language. Accepts the same BCP-47 tag or inline Language object as the presentation. Omission inherits the deck language. Direction, script fonts, quotation marks, l... |
-| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| diagram` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
+| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| embed \| code \| metric \| quote \| timeline \| diagram` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
 | `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an arr... |
 | `layout` | no | `ref:CatalogReference` | Optional layout: a layouts reference, a bare id ('pillars') or 'name:id' ('acme:hero'). When omitted, the slide is composed with no layout record: engines arrange title, subtitle, tag and content automatically, a slid... |
 | `title` | no | `oneOf:string / array<ref:TextRun>` | Slide-level title content. A v2 layout renders this in its title heading area, or an implicit heading row when that area is absent. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold,... |
@@ -983,6 +1001,7 @@ _No named properties._
 | `numbering` | no | `ref:NumberingSpec` | Number the full-slide `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one ent... |
 | `image` | no | `ref:ImagePayload` | Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A v2 layout binds it to a compatible body region; a region's bleed setting... |
 | `video` | no | `ref:Asset` | Full-slide video source. Presence of this field infers type 'video'. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the... |
+| `embed` | no | `ref:EmbedPayload` | Full-slide embed: a live web page. Presence of this field infers type 'embed'. A web presenter whose host allows the page shows it live; every other output (PDF, PNG, PowerPoint, print, thumbnails) shows a picture of... |
 | `chart` | no | `ref:Chart` | Full-slide chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Full-slide table payload. Presence of this field infers type 'table'. |
 | `code` | no | `oneOf:string / ref:Code` | Full-slide code payload. A string is shorthand for { "source": value }; object form carries optional syntax language and filename metadata. |
@@ -990,7 +1009,7 @@ _No named properties._
 | `quote` | no | `oneOf:string / ref:Quote` | Full-slide quote payload. A string is shorthand for { "text": value }; object form carries optional attribution and source metadata. Presence of this field infers type 'quote'. |
 | `timeline` | no | `ref:Timeline` | Full-slide timeline payload. An array is shorthand for { "events": value }; object form carries optional name and description metadata. Presence of this field infers type 'timeline'. |
 | `diagram` | no | `oneOf:string / ref:Diagram` | Full-slide diagram payload: Mermaid, Graphviz DOT or PlantUML source drawn in the deck's fonts and colors. A string is shorthand for { "source": value }; object form carries the source syntax and a text alternative. P... |
-| `caption` | no | `ref:Caption` | Caption for the slide's root image, chart, table, video or diagram payload. Valid only when the slide root holds exactly one of those payloads. |
+| `caption` | no | `ref:Caption` | Caption for the slide's root image, chart, table, video, embed or diagram payload. Valid only when the slide root holds exactly one of those payloads. |
 | `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as short... |
 | `shapes` | no | `array<ref:OverlayShape>` | Shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or overla... |
 | `design` | no | `ref:SlideDesign` | Slide-level design applied on top of the deck-wide design. |
@@ -1032,7 +1051,7 @@ _No named properties._
 
 ### ContentPayload
 
-- Type: `allOf:schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema`
+- Type: `allOf:schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema`
 - Required fields: none
 - Purpose: A content leaf or recursively composed group. A group contains blocks and optional composition; it cannot mix blocks with leaf payload fields. Groups may nest up to 32 levels.
 
@@ -1041,7 +1060,7 @@ _No named properties._
 | `id` | no | `string` | Optional stable identifier for this payload, unique among slide and payload ids in the document. Use when another system needs to address the payload across edits patch-style agent edits, comments, review state, or ge... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows at payload scope; ignored by the engine but preserved across read/write round-trips. |
 | `region` | no | `string` | Where a root block (slides.N.blocks.I) goes. On a slide with a layout: a region of that layout, by name. The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin i... |
-| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| diagram \| shape \| group` | Optional content kind. When omitted, engines infer the kind from the fields present: a block with 'shape' and no 'image', or with 'path', is a shape block. |
+| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| embed \| code \| metric \| quote \| timeline \| diagram \| shape \| group` | Optional content kind. When omitted, engines infer the kind from the fields present: a block with 'shape' and no 'image', or with 'path', is a shape block. |
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Structured list payload (type 'list'). Each item is either a plain string, a TextRun[] rich text sequence, or a ListItem object with optional `description`. List nesting uses item.level rather than nested content payl... |
 | `bullets` | no | `array<ref:BulletItem>` | Prose bullet payload: short talking points, each standing alone. Presence of this field infers type 'text', so it may sit beside `text` in one payload. Entries have no `description`; use `items` for entries with suppo... |
@@ -1078,6 +1097,7 @@ _No named properties._
 | `placement` | no | `ref:ImagePlacement` | Image payloads only, and only on a top-level block (slides.N.blocks.I), at most one per edge. Bleeds the image to one slide edge; the headings and the other blocks compose in the rest of the slide. |
 | `portrait` | no | `enum:avatar \| side \| top` | Image payloads only: how a person's picture is drawn in a team. A person is a group of a picture followed by a name (a list of one entry, whose description holds the role and a line, or a short text); a slide whose bo... |
 | `video` | no | `ref:Asset` | Source for a video item. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the same placeholder as native shapes linked to... |
+| `embed` | no | `ref:EmbedPayload` | Embed payload: a live web page. Presence of this field infers type 'embed'. Takes a caption and none of the image options (fit, focus, aspectRatio, recolor, ...): the frame's proportions are EmbedPayload.aspectRatio.... |
 | `chart` | no | `ref:Chart` | Chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Table payload. Presence of this field infers type 'table'. |
 | `code` | no | `oneOf:string / ref:Code` | Code payload. A string is shorthand for { "source": value }; object form carries optional syntax language and filename metadata. |
@@ -1085,7 +1105,7 @@ _No named properties._
 | `quote` | no | `oneOf:string / ref:Quote` | Quote payload. A string is shorthand for { "text": value }; object form carries optional attribution, role, photo and source metadata. |
 | `timeline` | no | `ref:Timeline` | Timeline payload ordered by narrative or chronology. |
 | `diagram` | no | `oneOf:string / ref:Diagram` | Diagram payload: Mermaid source (flowchart, sequence, state, class, ER, mindmap, timeline, journey, C4, architecture and the other built-in Mermaid families), or Graphviz DOT or PlantUML source with 'syntax', drawn in... |
-| `caption` | no | `ref:Caption` | Caption for an image, chart, table, video or diagram payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups. |
+| `caption` | no | `ref:Caption` | Caption for an image, chart, table, video, embed or diagram payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups. |
 | `blocks` | no | `array<ref:ContentPayload>` | Ordered children of a group. Each child is a leaf or another group. |
 | `composition` | no | `ref:Composition` | Arrangement within this group. Only minFontSize, maxFontSize and overflow inherit from the parent; strict overflow cannot be weakened. |
 | `emphasis` | no | `boolean` | true draws this block or group on the slide's emphasis surface: a contrasting card in its cell (a dark card on a light slide, an accent card on a dark one), from the deck's own scheme slots, with every text color on i... |
@@ -1240,7 +1260,7 @@ _No named properties._
 
 - Type: `oneOf:string / array<ref:TextRun> / object`
 - Required fields: none
-- Purpose: A caption for an image, chart, table, video or diagram payload. A string or TextRun[] is the caption text placed below the media; object form adds the position and alignment.
+- Purpose: A caption for an image, chart, table, video, embed or diagram payload. A string or TextRun[] is the caption text placed below the media; object form adds the position and alignment.
 
 _No named properties._
 

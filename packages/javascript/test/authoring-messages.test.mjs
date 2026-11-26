@@ -54,5 +54,5 @@ test('an option on the wrong kind of content says where it belongs',()=>{
  assert.match(help('/slides/0/blocks/0/shadow'),/shape block .* or an overlay shape/);
  assert.match(help('/slides/0/blocks/0/alt'),/alt text goes inside its image object/);
  assert.match(help('/slides/0/blocks/1/fit'),/put it on an image block/);
- const caption=errors(deck({text:'Short',caption:'Not here'}));assert.match(caption.find(f=>f.path==='/slides/0/caption').help,/image, chart, table, video or diagram/);
+ const caption=errors(deck({text:'Short',caption:'Not here'}));assert.match(caption.find(f=>f.path==='/slides/0/caption').help,/image, chart, table, video, embed or diagram/);
 });

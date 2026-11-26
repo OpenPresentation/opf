@@ -185,6 +185,28 @@ Older importers (measured with the released 0.36.0 importer on an export of a de
 
 A native PowerPoint save test (the supervisor's pass) edits a saved export: change an item's text (the id stays), delete a row (one id lost, one finding), add a row (no id lost).
 
+### Embeds (OPF 0.37, FR-08)
+
+PowerPoint has no live page, and OPF's engines never load `src`: an `embed` leaves as its static form, every part a click link to `src` (`a:hlinkClick`, one external hyperlink relationship per slide). With a `preview` it is one native picture named `OPF embed <path>` (`slides.0.embed`, `slides.2.blocks.1.embed`), the picture contained in the frame (a negative `a:srcRect` pads it) on a fill of the scheme's surface color, its description the embed's title (or the site name). Without one, or when the preview cannot be embedded (the export reports `unresolved-asset` and says it exports the card), it is the card: a rounded rectangle `OPF embed <path>`, an ellipse `... badge` and a right arrow turned 45 degrees `... arrow`, and the title (`... title line N`) and the site name (`... site line 0`) as text lines, written as one group `OPF embed <path> group` whose description is the title. The geometry is core's `embedCardLayout`, the preview's own. A caption follows as for any captionable block and is tagged to the picture or the panel by name.
+
+In `full` provenance the picture or the panel carries `OPF_EMBED_V1`:
+
+```
+OPF_EMBED_V1 = {v: 1, path, embed, written, preview?, evidence}
+  path      the block's path, as in the object's name
+  embed     the authored value without its preview: {src, title?, aspectRatio?}
+  written   the title the object was written with (its description, or the card's heading)
+  preview   the authored preview when it is a relative path or a web address; absent for an asset: reference or a data URI
+  evidence  {href: src, media?: the media key of the picture's bytes, text?: the card's title lines joined by "
+"}
+```
+
+Import restores the embed (the string shorthand when it holds only an address) while its evidence holds: the object is still named for its path, its link still opens `src`, and its picture still has the exported bytes (or its card's title text is still the one written). The preview is the recorded source, else the imported picture as a data URI (an `asset:` reference does not come back; the picture is the preview). The object's current description wins over `written` as the title when someone edited it. A replaced picture (Change Picture), a changed link, an edited card title or a renamed object imports as what is there (a picture, or shapes and linked text) and reports `embed-provenance-changed` with the reason. A file with no tag (provenance `references-only` or false, or one another app wrote) imports a picture as an image and the card as its shapes. The slide record's content topology stores an embed as an `image` leaf (and a slide's own embed as the root field `image`): the kind a 0.36.0 importer reads back from a picture, never an `embed` kind, which its record check would reject and drop the whole slide record for. Import reads an `embed` block into an `image` leaf.
+
+Older importers (measured with the released 0.36.0 importer on exports of a slide with a preview, a card, an embed beside text with a caption and a row of cards): it skips the `OPF_EMBED_V1` tag it does not know (it is the only OPF tag on its object, so nothing is ambiguous), reads the topology (every kind is one it knows), and the deck is valid with no error. The picture comes back as an `image` with the title as its `alt` (an image has no link), and the card as text blocks (the title and the site name as runs that keep the link) and "PowerPoint shape: ..." text for the panel, the badge and the arrow; the findings are `grouped-text-reflow`, `caption-detached` (the caption becomes a text block) and `content-structure-changed`.
+
+A native PowerPoint save test (the supervisor's pass): the picture and the card draw, each click opens `src` in a slide show, and after PowerPoint's own save each comes back as an `embed`.
+
 ### Translations and date names (OPF 0.37)
 
 Nothing is stored. Content variables are resolved before the export, so each slide's text is in that slide's language (the translation its declared language selects, the date in that language's names) and a deck's header and footer variables are resolved for each slide; the document record keeps only the variables that remain after resolution (colors). Import returns each slide's resolved text as literals, as it does for any variable: a template's translations live in its OPF file, not in its PowerPoint export. The file carries no key for a translation, so nothing here depends on the importer's release. Checked in PowerPoint on 2026-11-25 with a German deck that has a French slide: after PowerPoint's own save, import returns each slide's text in that slide's language. A current date with month or weekday names in a language other than English is fixed text (`furniture-date-fixed`) unless PowerPoint has a date field that shows the same text in the language of that slide (see native-header-footer.md; PowerPoint's long forms per language are not in the field table yet, #1507).
