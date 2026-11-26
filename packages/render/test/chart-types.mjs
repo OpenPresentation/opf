@@ -9,9 +9,10 @@ const AXIS=resolvePresentation({slides:[{chart:{type:'column',data:{columns:['A'
 // vocabulary, no catalog); a value outside it is rejected at the validation boundary, and the renderer's legacy preview
 // for such a value is reached only with validation off. The documents here name no gallery record, so no catalog is registered.
 // FA-15: combo (clustered columns with line series) is a classic construct too: one barChart and one lineChart per value axis.
-const CLASSIC=['combo','column','stacked-column','100pct-stacked-column','bar','stacked-bar','100pct-stacked-bar','line','line-with-markers','stacked-line','stacked-line-with-markers','area','stacked-area','100pct-stacked-area','pie','doughnut','scatter','radar','radar-with-markers','filled-radar'];
+// FR-07: bullet (bands, a thin measure bar and a target tick per row) is its own construct (test/fr-07-bands-bullet.mjs).
+const CLASSIC=['bullet','combo','column','stacked-column','100pct-stacked-column','bar','stacked-bar','100pct-stacked-bar','line','line-with-markers','stacked-line','stacked-line-with-markers','area','stacked-area','100pct-stacked-area','pie','doughnut','scatter','radar','radar-with-markers','filled-radar'];
 const CHARTEX=['treemap','histogram','pareto','box-and-whisker','waterfall','funnel','world'];
-assert.deepEqual(Object.keys(CHART_TYPES).sort(),[...CLASSIC,...CHARTEX].sort(),'27 kept chart type ids');
+assert.deepEqual(Object.keys(CHART_TYPES).sort(),[...CLASSIC,...CHARTEX].sort(),'28 kept chart type ids');
 for(const id of Object.keys(CHART_TYPES))assert.equal(resolveChartType(id),id);
 assert.equal(resolveChartType('donut'),null,'OPF 0.15 removed the donut alias: only doughnut is a chart type');
 assert.equal(resolveChartType(' Stacked-Column '),'stacked-column');

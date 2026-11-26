@@ -90,6 +90,8 @@ import {
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, intrinsicImageAspect, itemAlignment, pictureOverlay, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   chartCircleSquare, chartNumberLanguage, chartPlotInset, horizontalBarPlot, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, languageInEffect, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
+import { chartBands, chartBandRanges, chartBandFill, chartBandMutedColor, bandLabelColor, BULLET_GAP_WIDTH, BULLET_TARGET_SHARE, BULLET_TARGET_WIDTH_PX } from "@openpresentation/opf/composition";
+import { bandPlan, bandChartType, bandAxisOptions, applyChartBands, applyBulletTarget, readNativeBands } from "./chart-bands.js";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
 import { unzipSync, zipSync } from "fflate";
@@ -2042,7 +2044,7 @@ function chartDataEvidence(xml, referenceXml, referenceContext) {
 // opf#1431: the classic chart types (chart-types.js chartTypeFromNative, and combo). Their export can label the marks by default (core's
 // small chart, LH-03; a stacked chart's segment values, LH-109; a pie's or doughnut's value list, LH-108), so a file without labels may
 // hold an authored `dataLabels: false`. The chartex types read their own `false` (chart-options.js chartOptionsFromChartex).
-const DEFAULT_LABEL_TYPES = new Set(['column', 'bar', 'line', 'line-with-markers', 'area', 'stacked-column', 'stacked-bar', 'stacked-area', '100pct-stacked-column', '100pct-stacked-bar', '100pct-stacked-area', 'stacked-line', 'stacked-line-with-markers', 'pie', 'doughnut', 'scatter', 'radar', 'radar-with-markers', 'filled-radar', 'combo']);
+const DEFAULT_LABEL_TYPES = new Set(['column', 'bar', 'line', 'line-with-markers', 'area', 'stacked-column', 'stacked-bar', 'stacked-area', '100pct-stacked-column', '100pct-stacked-bar', '100pct-stacked-area', 'stacked-line', 'stacked-line-with-markers', 'pie', 'doughnut', 'scatter', 'radar', 'radar-with-markers', 'filled-radar', 'combo', 'bullet']);
 // Whether any series or chart group of the plot area shows a data label (a value, category, percent or series name) that is not deleted.
 function showsNativeLabels(plotArea) {
   const shown = node => node !== undefined && node?.val !== '0' && node?.val !== 'false' && node?.val !== 0;
@@ -2089,8 +2091,10 @@ function settleDefaultLabels(imported, options) {
 function chartFromRelationship(entries, slidePath, relationships, relId, report, {marked = false,referenceContext,referenceState={}} = {}) {
   const relationship = relationships.get(relId);
   if (!relationship?.path || !entries[relationship.path]) return null;
-  const parsed=parseRequiredXml(entries, relationship.path);
-  const refs=readNativeReferences(decodeText(entries[relationship.path]),{...referenceContext,report,parsed});
+  // FR-07: the owned band group and bullet target are read (and set aside) first; the rest is an ordinary chart.
+  const banded=readNativeBands(decodeText(entries[relationship.path]));
+  const parsed=banded.xml===decodeText(entries[relationship.path])?parseRequiredXml(entries, relationship.path):undefined;
+  const refs=readNativeReferences(banded.xml,{...referenceContext,report,...(parsed?{parsed}:{})});
   Object.assign(referenceState,{xml:refs.xml,references:refs.references});
   const doc=refs.doc;
   const plotArea = doc["c:chartSpace"]?.["c:chart"]?.["c:plotArea"];
@@ -2177,7 +2181,7 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report,
     ]);
   }
 
-  return withOptions({
+  const read = withOptions({
     type: chartNode.type,
     data: {
       columns: formattedColumns([readChartCategoryHeading(entries,relationship.path) ?? "Category", ...names], [undefined, ...valueCodes], report),
@@ -2185,6 +2189,21 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report,
     },
     ...(comboSeries ? comboFields(comboSeries, names, report) : {})
   });
+  return read ? withNativeBands(read, banded, report) : read;
+}
+
+// FR-07: the bands and a bullet chart's target as the part now holds them (readNativeBands): a horizontal bar chart with a target scatter is a
+// bullet chart whose target column follows its measure. A recorded chart whose caches are unchanged is restored from its record instead.
+function withNativeBands(chart, banded, report) {
+  let next = chart;
+  if (banded.target && next.type === 'bar') {
+    const name = banded.target.name;
+    const columns = [...next.data.columns, ...formattedColumns([name], [banded.target.code === undefined ? undefined : stripNumeralShape(scalarText(banded.target.code))], report)];
+    const rows = next.data.rows.map((row, index) => [...row, banded.target.values[index] ?? null]);
+    next = {...next, type: 'bullet', data: {...next.data, columns, rows}, mapping: {...(next.mapping ?? {}), target: name}};
+  }
+  if (banded.bands?.length) next = {...next, bands: banded.bands.map(({record: _record, ...band}) => band)};
+  return next;
 }
 
 // FA-15: the series of a combo plot area with their role and axis, in c:order (document order breaks ties).
@@ -4261,7 +4280,12 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   if (chartData.type === 'doughnut' && chartData.series.length > 1) context.chartHeadings.get(objectName).rings = chartData.series.map((entry) => ({name: entry.name, values: [...entry.values]}));
   // FA-14: chart.highlight. A highlighted chart writes accent and muted colors over the series palette, and its data labels
   // contrast with those colors (src/chart-highlight.js).
-  const highlight = chartData.chartex ? undefined : chartHighlightPlan({options: chartOptions, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor: markLabelColor, primary: `#${context.colors.accent}`,
+  // FR-07 (supervisor, 2026-11-26): in a chart with bands, a highlight's muted marks take the neutral at 1.5:1 from the strongest band, away
+  // from the surface (core chartBandMutedColor, called with the colors the preview passes); without bands the muted color stays as it was.
+  const bandColorsFor = {surface: `#${normalizeHex(panelFill).slice(0, 6)}`, text: `#${context.colors.text}`, resolve: name => `#${resolveExportColor(name, {...context, fallback: context.colors.text}).slice(0, 6)}`};
+  const bandMuted = chartData.chartex || chartData.combo || !chartLayout?.valueAxis ? undefined
+    : chartBandMutedColor(chartBandRanges(chartBands(chart), chartLayout.valueAxis).map(band => chartBandFill(band, bandColorsFor)), bandColorsFor.surface, bandColorsFor.text);
+  const highlight = chartData.chartex ? undefined : chartHighlightPlan({options: chartOptions, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor: markLabelColor, primary: `#${context.colors.accent}`, ...(bandMuted ? {muted: bandMuted} : {}),
     schemeFor: hex => schemeColorValue('primary', hex, context)}) ?? chartFocusPlan({layer, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor: markLabelColor, strong: strongPalette}) ?? chartEmphasisPlan({layer, data: chartData.resolved, panelFill, palette, strong: strongPalette, schemes: paletteSchemes});
   context.chartPalettes.set(objectName,highlight ? highlight.seriesFills : palette);
   if (highlight) context.chartHeadings.get(objectName).highlight = highlight;
@@ -4378,7 +4402,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     barDir: chartData.barDir,
     barGrouping: chartData.barGrouping,
     // LH-176: core's gap width (clustered 150%, stacked 50%), the preview's bar geometry (chartBarGeometry), written explicitly.
-    ...(chartData.type === "bar" ? {barGapWidthPct: histogramClassic || chartData.paretoCombo ? 6 : /tacked/.test(chartData.barGrouping ?? "") ? CHART_BAR_GAP_WIDTH.stacked : CHART_BAR_GAP_WIDTH.clustered} : {}),
+    ...(chartData.type === "bar" ? {barGapWidthPct: chartData.spec.bullet ? BULLET_GAP_WIDTH : histogramClassic || chartData.paretoCombo ? 6 : /tacked/.test(chartData.barGrouping ?? "") ? CHART_BAR_GAP_WIDTH.stacked : CHART_BAR_GAP_WIDTH.clustered} : {}),
+    // FR-07: a right-to-left bullet chart runs its value axis from the right, so its category names stand at the right.
+    ...(chartData.spec.bullet && context.direction === 'rtl' ? {valAxisOrientation: 'maxMin'} : {}),
     // Right to left (RR-05): column, line and area charts reverse their categories (c:catAx orientation maxMin), which also moves the
     // value axis to the right, as the preview draws them. Bar charts keep their vertical category axis.
     ...(context.direction === 'rtl' && !chartData.paretoCombo && ((chartData.type === 'bar' && chartData.barDir === 'col') || chartData.type === 'line' || chartData.type === 'area') ? { catAxisOrientation: 'maxMin' } : {}),
@@ -4406,9 +4432,38 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // LH-03, LH-81: no chart area fill, no value axis or gridlines, the caption and the header legend (their positions are written below).
     ...layerXml.options
   };
+  // FR-07: bands (core's sorted, clamped ranges over the composed value axis, in core's colors) and a bullet chart's target.
+  const bands = chartData.chartex || chartData.combo || !chartLayout?.valueAxis ? undefined : bandPlan(
+    chartBandRanges(chartBands(chart), chartLayout.valueAxis),
+    chartBandRanges(chartBands(chart), chartLayout.valueAxis).map(band => chartBandFill(band, {surface: `#${normalizeHex(panelFill).slice(0, 6)}`, text: `#${context.colors.text}`, resolve: name => `#${resolveExportColor(name, {...context, fallback: context.colors.text}).slice(0, 6)}`})),
+    chartLayout.valueAxis, {kind: chartData.type === 'bar' ? 'bar' : 'area', reserved: [chartData.heading, ...chartData.series.map(entry => entry.name), ...(chartData.target ? [chartData.target.column] : [])]});
+  const target = chartData.spec.bullet && chartData.target && chartLayout?.valueAxis ? chartData.target : undefined;
+  const targetSeries = target ? {name: target.column, labels: [...chartData.series[0].labels], values: target.values.map(value => value ?? null)} : undefined;
+  const bandTypes = (types) => [...types, ...(bands ? [bandChartType(bands, chartData.series[0].labels, {kind: chartData.type === 'bar' ? 'bar' : 'area', barDir: chartData.barDir})] : [])];
+  const bandOptions = (options) => bands ? {...options, ...bandAxisOptions(bands, {catAxisOrientation: options.catAxisOrientation, valAxisOrientation: options.valAxisOrientation})} : options;
+  if (bands || target) {
+    const heading = context.chartHeadings.get(objectName);
+    // FR-07 (owner, '1B'): the band labels inside their bands as data labels at composition's boxes (fractions of the chart frame); in its
+    // fallback (labels in the legend) none.
+    const inside = layer?.bandLabels && !layer.bandLabels.legend ? layer.bandLabels.labels : undefined;
+    // One color for every band label (core bandLabelColor, as the preview): the secondary text color when it reads at 4.5:1 on every labeled
+    // band, else the primary text color; a band on which even that fails is reported, its label still written.
+    const labelPaint = inside && bands ? bandLabelColor(inside.map(label => `#${bands.bands.find(band => band.index === label.index)?.fill ?? normalizeHex(panelFill).slice(0, 6)}`), `#${normalizeHex(labelColor).slice(0, 6)}`, `#${normalizeHex(markLabelColor).slice(0, 6)}`) : undefined;
+    for (const at of labelPaint?.failing ?? []) options.onDiagnostic?.({code: 'text-contrast', path: `${path}.bands.${inside[at].index}.label`, message: `The band label "${inside[at].text}" stays below 4.5:1 on its band in the text color; choose a lighter band color.`});
+    // A header legend of the bands alone (composition's fallback for a chart that names its series beside its marks): the data series'
+    // entries, listed after the band parts, are deleted, so the series stay named once.
+    const bandsOnly = bands && layer?.header?.legend?.entries.length && layer.header.legend.entries.every(entry => entry.band !== undefined);
+    if (bands) heading.bands = {plan: bands, edge: Boolean(layer?.stack?.edge), ...(bandsOnly ? {hiddenLegend: chartData.series.map((_, k) => bands.series.length + k)} : {}), ...(inside ? {labels: inside.map(label => ({...label, x: (label.box.x - region.x * 96) / (region.w * 96), y: (label.box.y - region.y * 96) / (region.h * 96)})), text: {size: textSize, color: normalizeHex(labelPaint.color).slice(0, 6), font: context.fonts.body}} : {})};
+    if (target) heading.bullet = {half: BULLET_TARGET_SHARE / 2, gapWidth: BULLET_GAP_WIDTH, color: normalizeHex(markLabelColor).slice(0, 6), widthEmu: Math.round(BULLET_TARGET_WIDTH_PX * scale * 0.75 * 12700)};
+    // The number formats of the extra series: the target its column's, each band the value axis's.
+    if (heading.numberFormats || target?.format !== undefined) {
+      const formats = heading.numberFormats ?? {series: chartData.series.map(() => undefined), labels: true};
+      heading.numberFormats = {...formats, series: [...formats.series.slice(0, chartData.series.length), ...(target ? [target.format === undefined ? undefined : excelCode(target.format)] : []), ...(bands ? bands.series.map(() => formats.axis) : [])]};
+    }
+  }
   const referenceLines=layer?.references?.lines??[];
   if(referenceLines.some(l=>!l.native))options.onDiagnostic?.({code:'chart-reference-overlay',path,message:'Horizontal bars and singleton categories use explicit full-plot line/text overlays. These editable shapes do not follow independent chart moves or data/axis edits; edited or uncertain bindings import as visible ordinary shapes.'});
-  const refInfo=referenceLines.length?{key:objectName,lines:referenceLines,primaryCount:chartData.series.length,color:labelColor,labelColor:markLabelColor,surface:normalizeHex(panelFill).slice(0,6),font:context.fonts.body,context:{...context},textSize,hidden:[]}:undefined;
+  const refInfo=referenceLines.length?{key:objectName,lines:referenceLines,primaryCount:chartData.series.length,...(bands?{bandCount:bands.series.length}:{}),color:labelColor,labelColor:markLabelColor,surface:normalizeHex(panelFill).slice(0,6),font:context.fonts.body,context:{...context},textSize,hidden:[]}:undefined;
   if(refInfo&&!referenceLines.some(l=>l.native))assertReferenceExportBudget(chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines',multiAxisOverlays:chartData.combo?.some(entry=>entry.axis==='secondary')??false});
   if(refInfo)context.chartHeadings.get(objectName).references=refInfo;
   const comboArgs=chartData.combo?.length&&chartData.combo.length===chartData.series.length?comboChart(chartData,chartOptionsXml,{palette,chartOptions,labelColor,font:context.fonts.body,textSize}):undefined;
@@ -4423,7 +4478,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // the axes, so barDir undefined on a line chart replaced the chart's 'col' and laid the axes out as for a horizontal bar (category
     // axis left, value axis bottom), which Keynote refuses to open.
     const base=comboArgs?.[0]??[{type:chartData.type,data:chartData.series,options:Object.fromEntries(Object.entries({lineDataSymbol:chartOptionsXml.lineDataSymbol,barDir:chartData.barDir,barGrouping:chartData.barGrouping}).filter(([,value])=>value!==undefined))}];
-    slide.addChart(referenceChartTypes(base,chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines',reserved:[chartData.heading]}),comboArgs?.[1]??chartOptionsXml);
+    slide.addChart(bandTypes(referenceChartTypes(base,chartData.series,referenceLines,{key:objectName,path:path+'.referenceLines',reserved:[chartData.heading]})),bandOptions(comboArgs?.[1]??chartOptionsXml));
     addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100,surface:normalizeHex(panelFill).slice(0,6)});
     return;
   }
@@ -4437,7 +4492,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
       onSeries: index => normalizeHex(textColorForFill(`#${(highlight ? highlight.seriesFills : palette)[index % (highlight ? highlight.seriesFills : palette).length]}`, `#${markLabelColor}`)),
       hole: row => normalizeHex(chartSeriesLabelColor(panelFill, `#${(highlight?.pointFills(0) ?? palette)[row % (highlight?.pointFills(0) ?? palette).length]}`))}} : undefined;
   if (marks) addChartMarks(slide, layer, 'under', marks);
-  slide.addChart(chartData.type, chartData.series, chartOptionsXml);
+  if (bands || targetSeries) slide.addChart(bandTypes([{type: chartData.type, data: targetSeries ? [...chartData.series, targetSeries] : chartData.series, options: Object.fromEntries(Object.entries({barDir: chartData.barDir, barGrouping: chartData.barGrouping, lineDataSymbol: chartOptionsXml.lineDataSymbol}).filter(([, value]) => value !== undefined))}]), bandOptions(chartOptionsXml));
+  else slide.addChart(chartData.type, chartData.series, chartOptionsXml);
   if (marks) addChartMarks(slide, layer, 'over', marks);
   addReferenceOverlays(slide,referenceLines,{key:objectName,tags:context.referenceTags,context:{...context},color:labelColor,labelColor:markLabelColor,font:context.fonts.body,size:textSize/100,surface:normalizeHex(panelFill).slice(0,6)});
 }
@@ -4510,7 +4566,9 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
     // LH-48: a lone table that composition grew is laid out at the same growth as the preview.
     ...(context.tableGrowth ? {growth: context.tableGrowth} : {}),
     // LH-113: the highlighted body rows composition gave the table (table.highlight, or the rows the slide's texts name).
-    ...(context.tableHighlight ? {highlight: context.tableHighlight} : {})
+    ...(context.tableHighlight ? {highlight: context.tableHighlight} : {}),
+    // FR-07: the color scale's fills and text colors, resolved on the slide's colors as the preview resolves them.
+    ...(table?.colorScale ? {colorScale: {resolve: name => `#${exportColor(name, context, '000000')}`.slice(0, 7).toUpperCase(), text: `#${context.colors.text}`, background: `#${context.colors.background}`}} : {})
   });
   const columnCount = layout.columnCount;
   // LH-113: a highlighted row's cells take the accent tint of the surface the preview draws (core tableHighlightColor), an sRGB literal;
@@ -4519,18 +4577,24 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
   const rows = layout.rows.map(row => row.cells.map(cell => {
     const {header,rich,fit} = cell;
     const cellStyle = cell.style ?? {};
-    const tinted = cell.highlighted && cellStyle.fill === undefined && highlightHex !== undefined;
-    const defaultFillHex = header ? context.colors.accent : tinted ? highlightHex : context.colors.surface;
+    // FR-07: a number cell of a color scale is filled with the computed sRGB color and its text takes the computed color (a fill of its own wins).
+    const scaled = !header && cell.scaled && cellStyle.fill === undefined ? cell.scaled : undefined;
+    const scaledFill = scaled?.fill.replace(/^#/, '').toUpperCase();
+    const tinted = !scaled && cell.highlighted && cellStyle.fill === undefined && highlightHex !== undefined;
+    const defaultFillHex = header ? context.colors.accent : scaled ? scaledFill : tinted ? highlightHex : context.colors.surface;
     const baseFill = exportColor(cellStyle.fill ?? defaultFillHex, context, defaultFillHex);
     // FF-24c: engine chrome resolves from scheme roles (header accent1, body surface), so it follows the deck theme like a named fill.
-    const fillReference = cellStyle.fill ?? (header ? 'accent1' : tinted ? `#${highlightHex}` : 'surface');
+    const fillReference = cellStyle.fill ?? (header ? 'accent1' : scaled ? `#${scaledFill}` : tinted ? `#${highlightHex}` : 'surface');
     const keepsText = tinted && textColorForFill(`#${highlightHex}`, `#${context.colors.text}`) === textColorForFill(`#${context.colors.surface}`, `#${context.colors.text}`);
     const fillValue = schemeColorValue(keepsText ? 'surface' : fillReference, keepsText ? context.colors.surface : baseFill, context);
     // RR-96: header text is the role (bg1 or tx1) that reads better on the fill, as the preview chooses it (core readableSchemeColor).
-    const inheritedText = header && context.roles ? readableSchemeColor(`#${baseFill}`, context.roles).hex : textColorForFill(`#${baseFill}`, header ? "#FFFFFF" : `#${context.colors.text}`);
+    const inheritedText = header && context.roles ? readableSchemeColor(`#${baseFill}`, context.roles).hex : scaled ? scaled.text : textColorForFill(`#${baseFill}`, header ? "#FFFFFF" : `#${context.colors.text}`);
     const baseColor = exportColor(cellStyle.color ?? inheritedText.replace(/^#/, ""), context, inheritedText.replace(/^#/, ""));
     // Default cell text follows the theme only with a theme-referenced fill: paired slot on a light or dark fill, light1/dark1 on an accent fill.
-    const defaultText = cellStyle.color === undefined ? tableTextSchemeValue(fillValue, baseColor, context) : undefined;
+    // FR-07: a scaled cell's computed text color is named as a color reference, so a theme color it equals is written as that theme color.
+    const scaledTextHex = scaled ? scaled.text.replace(/^#/, '').toUpperCase() : undefined;
+    const textReference = cellStyle.color ?? (scaled ? [context.roles?.map?.tx1, context.roles?.map?.bg1].find(slot => slot && schemeColorValue(slot, scaledTextHex, context, {vendor: true})) ?? scaled.text : undefined);
+    const defaultText = cellStyle.color === undefined && !scaled ? tableTextSchemeValue(fillValue, baseColor, context) : undefined;
     const alpha = value => value.length === 8 ? (1 - parseInt(value.slice(6), 16) / 255) * 100 : 0;
     const text = stringifyText(cell.value), style = cell.textStyle;
     assertXmlText(text, cell.path ?? path);
@@ -4540,7 +4604,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
       const fragment = fragments.find(item => item.runIndex === index);
       const runStyle = fragment?.style ?? resolveTextStyle({...style,fontFamily:run.fontFamily ?? style.fontFamily,fontWeight:run.bold === undefined ? style.fontWeight : run.bold ? 700 : 400,italic:run.italic ?? style.italic}, options.textMeasurement);
       const rawColor = run.color !== undefined && run.color !== '' ? exportColor(run.color, context, baseColor) : baseColor;
-      const color = nativeColor(run.color !== undefined && run.color !== '' ? run.color : cellStyle.color, rawColor, context, defaultText), transparency = rawColor.length === 8 ? (1 - parseInt(rawColor.slice(6), 16) / 255) * 100 : 0;
+      const color = nativeColor(run.color !== undefined && run.color !== '' ? run.color : textReference, rawColor, context, defaultText), transparency = rawColor.length === 8 ? (1 - parseInt(rawColor.slice(6), 16) / 255) * 100 : 0;
       const runOptions = {
         ...nativeFontOptions(runStyle),fontSize:fragment ? fragment.fontSize * .75 : fit.fontSize * .75,
         underline:run.underline ? {style:'sng',color:linkColor(run,color,context)} : undefined,strike:run.strikethrough ? 'sngStrike' : undefined,
@@ -4572,7 +4636,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
         valign: cellStyle.verticalAlign ?? 'top',
         ...(cell.colSpan > 1 ? {colspan:cell.colSpan} : {}),
         ...(cell.rowSpan > 1 ? {rowspan:cell.rowSpan} : {}),
-        color: nativeColor(cellStyle.color, baseColor, context, defaultText),
+        color: nativeColor(textReference, baseColor, context, defaultText),
         // Rich runs carry resolved alpha. A translucent cell default would
         // overwrite an explicit opaque run because PptxGenJS inherits falsy 0.
         ...(cellStyle.color && !rich ? {transparency:alpha(baseColor)} : {}),
@@ -5908,7 +5972,9 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   // FA-14: the resolved table (category, X, series columns), which chart.highlight names its series and categories in.
   const mapped = {resolved: {columns: data.columns, hasX: plan.hasX === true, rows: data.rows}, type: spec.pptx, spec, chartex, barDir: spec.barDir, barGrouping: spec.pptx === 'bar' || spec.pptx === 'area' ? spec.grouping : undefined, diagnostics, heading: data.columns[0], pointCount: data.rows.length,
     // FA-15: core's combo plan (column series, then the primary-axis lines, then the secondary-axis lines), aligned with the series.
-    ...(spec.family === 'combo' ? {combo: comboPlanOf(resolvedData, data.columns.length - 1)} : {})};
+    ...(spec.family === 'combo' ? {combo: comboPlanOf(resolvedData, data.columns.length - 1)} : {}),
+    // FR-07: a bullet chart's target column (core resolveChartData), written as a scatter series after the measure.
+    ...(spec.bullet && resolvedData.target ? {target: resolvedData.target} : {})};
   // Number formats only when a column has one: a chart without formats carries no `formats` and is written as before.
   // LH-141: `groups` flags the series whose default value labels group their thousands (PowerPoint's own labels take `#,##0`).
   const withFormats = (result, formats) => formats.series.some((code) => code !== undefined) || formats.x !== undefined || formats.groups?.some(Boolean) ? {...result, formats} : result;
@@ -5974,7 +6040,7 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   }));
   let codes = columnCodes.slice(1);
   // LH-60: a pie plots one series (core draws a pie of several as a doughnut, whose rings plot every series).
-  const plotted = spec.pptx === 'pie' ? 1 : chartex ? chartex.series : Infinity;
+  const plotted = spec.pptx === 'pie' || spec.bullet ? 1 : chartex ? chartex.series : Infinity;
   if (series.length > plotted) {
     // A pie, doughnut or single-series chartex construct plots one series; name the ones left out instead of dropping them silently.
     const dropped = series.slice(plotted).map((entry) => `'${entry.name}'`);
@@ -6440,7 +6506,9 @@ async function normalizePptxZip(raw, context) {
       // RR-54: the columns' number formats, after the labels: caches, label and value-axis formats, then the workbook cells.
       let numberFormats=context.chartHeadings.get(name).numberFormats;
       const nativeReferences=context.chartHeadings.get(name).references?.lines.filter(l=>l.native)??[];
-      if(numberFormats&&nativeReferences.length)numberFormats={...numberFormats,series:[...numberFormats.series,...['value','secondary'].flatMap(axis=>nativeReferences.filter(l=>l.axis===axis).map(()=>axis==='secondary'?numberFormats.secondaryAxis??'General':numberFormats.axis??'General'))]};
+      // FR-07: the reference helpers' series follow the data series and precede the band series (the writer's order).
+      const dataSeries=context.chartHeadings.get(name).references?.primaryCount??numberFormats?.series.length;
+      if(numberFormats&&nativeReferences.length)numberFormats={...numberFormats,series:[...numberFormats.series.slice(0,dataSeries),...['value','secondary'].flatMap(axis=>nativeReferences.filter(l=>l.axis===axis).map(()=>axis==='secondary'?numberFormats.secondaryAxis??'General':numberFormats.axis??'General')),...numberFormats.series.slice(dataSeries)]};
       if(numberFormats){
         entries[chartPart]=encodeText(applyChartNumberFormats(decodeText(entries[chartPart]),numberFormats));
         try{writeChartWorkbookFormats(entries,chartPart,numericRanges(decodeText(entries[chartPart]),numberFormats));}
@@ -6456,6 +6524,22 @@ async function normalizePptxZip(raw, context) {
       const name=/<p:cNvPr\b[^>]*\bname="([^"]+)"/.exec(frame)?.[1],info=context.chartHeadings.get(name)?.references;
       if(!info)continue;const id=/<c:chart\b[^>]*\br:id="([^"]+)"/.exec(frame)?.[1],p=rels.get(id)?.path;
       if(!p||!entries[p])throw Error('Generated reference chart is missing.');entries[p]=encodeText(applyReferenceSeries(decodeText(entries[p]),info,{lang:referenceLabelLanguage(part),frame:new XMLParser({ignoreAttributes:false,attributeNamePrefix:"",parseTagValue:false,trimValues:false}).parse(frame)["p:graphicFrame"],shapes:asArray(parseRequiredXml(entries,part)?.["p:sld"]?.["p:cSld"]?.["p:spTree"]?.["p:sp"])}));
+    }
+  }
+  // FR-07: the band group (drawn first, on deleted axes fixed to the value axis's span) and a bullet chart's target scatter, after every
+  // other rewrite of the chart's series (src/chart-bands.js).
+  for(const [part,bytes]of Object.entries(entries)){
+    if(!/^ppt\/slides\/slide\d+\.xml$/.test(part))continue;const rels=parseRelationships(entries,part);
+    for(const [frame]of decodeText(bytes).matchAll(/<p:graphicFrame>[\s\S]*?<\/p:graphicFrame>/g)){
+      const name=/<p:cNvPr\b[^>]*\bname="([^"]+)"/.exec(frame)?.[1],heading=context.chartHeadings.get(name);
+      if(!heading?.bands&&!heading?.bullet)continue;const id=/<c:chart\b[^>]*\br:id="([^"]+)"/.exec(frame)?.[1],p=rels.get(id)?.path;
+      if(!p||!entries[p])throw new OPFPptxError('packaging-failed','Generated band chart is missing.');
+      try{
+        let xml=decodeText(entries[p]);
+        if(heading.bands)xml=applyChartBands(xml,heading.bands);
+        if(heading.bullet)xml=applyBulletTarget(xml,heading.bullet);
+        entries[p]=encodeText(xml);
+      }catch(error){throw new OPFPptxError('packaging-failed',`Chart bands could not be written: ${errorMessage(error)}`);}
     }
   }
   // opf-pptx#175: after every chart rewrite, each classic series in its CT_*Ser sequence (src/chart-order.js). opf#1415: every data label

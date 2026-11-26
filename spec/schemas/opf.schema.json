@@ -4653,7 +4653,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["value"],
-      "description": "One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement. A reference at a category or a band between two values is not expressible yet; 'axis' and a separate key are reserved for them.",
+      "description": "One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement. A reference at a category is not expressible yet; 'axis' is reserved for it. Ranges of the value axis are the chart's 'bands'.",
       "properties": {
         "value": { "$ref": "#/$defs/FiniteNumber", "description": "Finite value in the associated data-axis units. With format 0%, 0.25 means 25%; 25 means 2500%. Every reference expands automatic bounds when needed." },
         "axis": { "type": "string", "enum": ["value", "secondary"], "default": "value", "description": "Secondary requires a combo chart with an actual secondary line series." },
@@ -4663,6 +4663,18 @@
       },
       "dependentRequired": { "labelPosition": ["label"] }
     },
+    "ChartBand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["to"],
+      "description": "One range of a chart's value axis, shaded behind the data (see Chart.bands).",
+      "properties": {
+        "to": { "$ref": "#/$defs/FiniteNumber", "description": "The band's upper end, in the value axis's units (with format 0%, 0.8 is 80%). Bands expand automatic axis bounds to the last 'to', as reference lines do." },
+        "label": { "type": "string", "minLength": 1, "pattern": "\\S", "description": "The band's name, such as 'Poor' or 'On target': its legend entry and its text alternative. Absent: the band has no legend entry." },
+        "color": { "$ref": "#/$defs/SchemeColorName", "description": "A scheme color instead of the neutral, for ranges that mean good or bad. Drawn as a light tint of that color (25% of it over the chart's surface). Absent: the next neutral." }
+      },
+      "examples": [{ "to": 0.6, "label": "Poor" }, { "to": 10, "label": "Within target", "color": "accent3" }]
+    },
     "Chart": {
       "type": "object",
       "description": "Chart content. The chart object keeps chart-specific fields together so slides and regions do not expose loose chart fields. OPF charts are `{ type, data }` where `data` is `{ columns, rows }`: the first column holds the category labels and every further column is one series. There are no `categories`, `series`, `labels` or `datasets` keys (the Chart.js and ECharts shape); write them as columns and rows. Example: `{ \"type\": \"column\", \"data\": { \"columns\": [\"Quarter\", \"Decks\"], \"rows\": [[\"Q1\", 3], [\"Q2\", 8], [\"Q3\", 21]] } }`.",
@@ -4671,8 +4683,8 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["100pct-stacked-area", "100pct-stacked-bar", "100pct-stacked-column", "area", "bar", "box-and-whisker", "column", "combo", "doughnut", "filled-radar", "funnel", "histogram", "line", "line-with-markers", "pareto", "pie", "radar", "radar-with-markers", "scatter", "stacked-area", "stacked-bar", "stacked-column", "stacked-line", "stacked-line-with-markers", "treemap", "waterfall", "world"],
-          "description": "Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types OPF supports natively in its preview and PPTX export, plus 'combo' (clustered columns with line series, see 'line' and 'secondaryAxis'). Each engine maps a type to its own chart model; labels and picker groups are catalog display metadata.",
+          "enum": ["100pct-stacked-area", "100pct-stacked-bar", "100pct-stacked-column", "area", "bar", "box-and-whisker", "bullet", "column", "combo", "doughnut", "filled-radar", "funnel", "histogram", "line", "line-with-markers", "pareto", "pie", "radar", "radar-with-markers", "scatter", "stacked-area", "stacked-bar", "stacked-column", "stacked-line", "stacked-line-with-markers", "treemap", "waterfall", "world"],
+          "description": "Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types OPF supports natively in its preview and PPTX export, plus 'combo' (clustered columns with line series, see 'line' and 'secondaryAxis') and 'bullet' (one thin horizontal bar per category against its target tick, over the chart's bands; see 'mapping.target' and 'bands'). Each engine maps a type to its own chart model; labels and picker groups are catalog display metadata.",
           "examples": ["column", "bar", "line", "pie", "doughnut", "area", "scatter", "radar", "waterfall", "funnel", "treemap", "stacked-column", "combo"]
         },
         "data": {
@@ -4706,6 +4718,14 @@
           "type": "array",
           "items": { "$ref": "#/$defs/ChartReferenceLine" },
           "description": "Explicit numeric references on the chart's value axis, supported on the chart types with one value axis for every series: column, bar, line, line-with-markers, area and combo. A non-empty list on any other type (the stacked and 100% stacked types among them) is the error opf/chart-reference-unsupported-type, located at referenceLines, so a reference is never dropped silently. Absent or [] means none. Authored order, duplicates and values equal to data are preserved. Vertical charts with two or more categories span first-to-last category centers; bars/single-category charts span the full plot. Titles/subtitles never create references or period bands."
+        },
+        "bands": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ChartBand" },
+          "minItems": 1,
+          "maxItems": 6,
+          "description": "Ranges of the value axis shaded behind the data, in increasing order: each band runs from the previous band's 'to' (the first from the axis minimum) to its own 'to'. Colors come from the scheme's neutrals, darkest first, unless a band names its own. Bar, column, line and area charts (and their stacked forms) and the bullet chart draw them; other chart types ignore them with a 'chart-bands-unsupported' warning. In PowerPoint a chart with bands has fixed value-axis bounds, so a value typed beyond them in Edit Data does not rescale the chart.",
+          "examples": [[{ "to": 0.6, "label": "Poor" }, { "to": 0.85, "label": "Fair" }, { "to": 1, "label": "Good" }], [{ "to": 10, "label": "Within target", "color": "accent3" }, { "to": 20, "label": "Over target" }]]
         },
         "axisTitles": {
           "$ref": "#/$defs/ChartAxisTitles",
@@ -4905,8 +4925,48 @@
             }
           },
           "examples": [{ "rows": ["Southeast", "Southwest"] }]
+        },
+        "colorScale": {
+          "$ref": "#/$defs/TableColorScale",
+          "description": "Shades the number cells of the named columns by value, between scheme colors. Engines compute each cell's fill; the text color follows it for contrast."
         }
       }
+    },
+    "TableColorScale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["columns"],
+      "description": "A color scale over the number cells of one or more columns. One scale is shared by all named columns, so equal numbers get equal colors. Only cells whose value is a finite number are shaded; a cell with its own style.fill keeps it. Two colors make a sequential scale: the lowest value is the first color, the highest the second. Three colors make a diverging scale: 'center' is drawn in the middle color, lower values towards the first and higher values towards the last. A diverging scale with no pinned 'min' or 'max' is symmetric around 'center', so equal distances from the center get equal strength. Colors are mixed in OKLab. A table that is paged is shaded over its whole range, so a value has the same color on every page.",
+      "properties": {
+        "columns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "The columns to shade, by header text (an inline table) or by dataset column name after 'fields' (a dataset-backed table). A name no column has is a 'table-color-scale-unknown-column' error."
+        },
+        "colors": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/SchemeColorName" },
+          "minItems": 2,
+          "maxItems": 3,
+          "description": "The colors of the scale, low to high, as scheme color names. Two colors make a sequential scale (the lowest value in the first, the highest in the second); three make a diverging scale (the middle color is drawn at 'center', the first below it and the last above it). Absent: ['surface', 'primary']."
+        },
+        "center": { "type": "number", "description": "The value drawn in the middle color. Only with three 'colors' (a 'center' with two colors, or with no 'colors', is a schema error). Absent: 0 when the values span both signs, else the middle of the range. With no 'min' and no 'max' the scale is symmetric around it." },
+        "min": { "type": "number", "description": "The value drawn in the first color; lower values draw in it too. Absent: the lowest number in the named columns (a diverging scale with neither 'min' nor 'max' is symmetric around 'center': it runs from center minus d to center plus d, d the largest distance of any value from the center). A given 'min' or 'max' pins that end exactly, and each side of a diverging scale is then on its own span." },
+        "max": { "type": "number", "description": "The value drawn in the last color; higher values draw in it too. Absent: the highest number in the named columns (see 'min' for a diverging scale)." }
+      },
+      "if": { "required": ["center"] },
+      "then": { "required": ["colors"], "properties": { "colors": { "minItems": 3 } } },
+      "examples": [
+        { "columns": ["Q1", "Q2", "Q3", "Q4"] },
+        { "columns": ["YoY %"], "colors": ["accent2", "surface", "accent1"], "center": 0 }
+      ]
+    },
+    "SchemeColorName": {
+      "type": "string",
+      "enum": ["accent1", "accent2", "accent3", "accent4", "accent5", "accent6", "dark1", "dark2", "light1", "light2", "primary", "secondary", "accent", "background", "surface", "surfaceAlt", "text", "textSecondary"],
+      "description": "A color of the effective color scheme, by slot or role, resolved as ColorRef resolves the same names (the hyperlink slots are left out). No hex and no variable: what names it follows the deck's colors."
     },
     "ChartData": {
       "type": "object",
@@ -5284,8 +5344,13 @@
           "type": "array",
           "items": { "type": "string" },
           "minItems": 1,
-          "description": "The plotted columns, in order. Default: every column that is not the category or the X column.",
+          "description": "The plotted columns, in order. Default: every column that is not the category or the X column (or, on a bullet chart, the target column).",
           "examples": [["Revenue", "Costs"]]
+        },
+        "target": {
+          "type": "string",
+          "description": "Bullet charts: the column that holds each category's target, drawn as a tick across the bar. An unknown name is a 'chart-mapping-unknown-column' error. On other chart types it is ignored with a 'chart-mapping-adapted' warning.",
+          "examples": ["Target"]
         }
       },
       "examples": [{ "category": "Quarter", "series": ["Costs", "Revenue"] }, { "category": "Region", "x": "Spend", "series": ["Revenue"] }]

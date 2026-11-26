@@ -10,6 +10,9 @@ export {vennNodes,type VennBox,type VennNode} from './venn-arrangement.js';
 import {timelineDurationFractions} from './timeline-duration.js';
 import {tableGrid,type TableCellStyle} from './table.js';
 import {inlineChartData,inlineTableData,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText,type DataTableCell} from './chart-data.js';
+import {bulletPlot} from './chart-bullet.js';
+import {placeBandLabels} from './chart-band-labels.js';
+import {chartBands} from './chart-bands.js';
 import {chartTextSize,chartValueAxis,chartComboAxes,shareSiblingChartAxes,type ChartValueAxis} from './chart-axis.js';
 import {chartHeader,chartLayer,type ChartLayer} from './chart-layer.js';
 import {NUMBER_GROUPING_MIN} from './number-grouping.js';
@@ -19,6 +22,7 @@ import {chartNumberLanguage} from './chart-options.js';
 import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
 import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-labels.js';
+import {resolveTableColorScale,type TableColorScaleColors} from './table-color-scale.js';
 import {chartSlideFocus,slideFocusSources,tableHighlightRows,tableSlideFocus,type FocusSource} from './chart-focus.js';
 import {chartDoughnut,restackForRows,chartStack,chartReferences,chartValueList,chartWaterfall,horizontalBarPlot,placeReferences,refreshChartMarks} from './chart-marks.js';
 import {chartReferenceSources} from './chart-references.js';
@@ -85,6 +89,8 @@ export type {ComposedArrowhead, ComposedFill, ComposedGradient, ComposedShape, C
 export {CONNECTOR_ROUTES, CONNECTOR_STANDOFF, CONNECTOR_STROKE_COLOR, CONNECTOR_STROKE_WIDTH, OVERLAY_ANCHOR_SHARE, OVERLAY_EDGES, OVERLAY_LAYERS, chooseConnectorSites, connectorAdjustPreset, connectorRoute, frameToSlide, hasOverlayShapes, isOverlayConnector, overlayIssues, rectSites, shapeSites, slideBlockIds} from './overlay-shapes.js';
 export type {ComposedConnector, ComposedOverlayEntry, ComposedOverlayShape, ConnectionSite, ConnectorEnd, ConnectorFrame, ConnectorPreset, ConnectorRoute, ConnectorRouteGeometry, OverlayEdge, OverlayIssue, OverlayLayer} from './overlay-shapes.js';
 export {applyLuminance, applyColorTransform, colorTransform, clrMapAttributes, colorMapFor, deckBackgroundIsFixed, isColorVariant, isFixedBackground, layoutColorVariant, layoutVariantApplies, normalizeColorVariant, readableSchemeColor, NEUTRAL_SHARES} from './color.js';
+export {resolveTableColorScale,pinTableColorScale,tableColorScaleText,tableColorScaleOf,SCHEME_COLOR_NAMES,type TableColorScaleColors,type TableColorScaleCell,type TableColorScaleRange,type TableColorScaleResult,type TableColorScaleSpec,type SchemeColorName} from './table-color-scale.js';
+export {mixOklab,srgbToOklab,oklabToSrgb} from './oklab.js';
 export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartSlicePlan, CHART_SLICE_MAX_SHIFT, CHART_SLICE_SEPARATOR_PX, type ChartSlicePlan, chartSchemeSeries, chartSeriesPalette, resolveChartColors, chartHighlightColors, chartEmphasisColors, softenChartPalette, chartSoftColors, applyHslTransforms, type ChartSoftColor, chartSeriesLabelColor, CHART_SERIES_SOFT_MIX, CHART_EMPHASIS_MIN_CONTRAST, CHART_EMPHASIS_MIN_LIGHTNESS_STEP, CHART_SERIES_TINT_MIX, CHART_DARK_SERIES_MIN_CONTRAST, CHART_LEAD_LIGHTNESS_STEP, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, tableHighlightColor, TABLE_HIGHLIGHT_MIX, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_SERIES_TIER_SIZE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST, CARD_SURFACE_MIX, CARD_SURFACE_MIN_CONTRAST, CARD_TEXT_MIN_CONTRAST, CARD_BORDER_MIX, CODE_PANEL_DARK_SHADE} from './color.js';
 export type {ChartColorContext, ChartPaletteOptions, ColorAccentSlot, ColorBaseSlot, ColorMap, LayoutVariantDeck, LayoutVariantRole, ColorVariant, ColorVariantBackground, ColorVariantInput, SchemeColor, SchemeNeutrals, ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles} from './color.js';
 export {resolveScriptFonts, resolveSlideDirection, scriptFontRole} from './script-fonts.js';
@@ -144,7 +150,7 @@ export interface LayoutDiagnostic {
    * `shape-off-slide` for an overlay shape or an image callout that lies wholly outside the slide, so nothing of it is drawn (advice, not an
    * overflow: a strict composition still composes it; a hidden shape is exempt, and a rotated one is judged by the circle through its corners).
    */
-  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "chart-label-collision" | "timeline-period-short" | "shape-off-slide";
+  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "chart-label-collision" | "timeline-period-short" | "shape-off-slide" | "chart-band-labels-in-legend";
   path: string;
   message: string;
   /**
@@ -4740,6 +4746,11 @@ export interface TableLayoutOptions {
   growth?: number;
   /** LH-113: the body rows (0-based, after the header) drawn on the highlight tint (`ComposedItem.tableHighlight`); their cells are `highlighted`. */
   highlight?: readonly number[];
+  /**
+   * FR-07: how the scheme names of `table.colorScale` resolve (the effective color scheme), with the scheme's text and background colors.
+   * With it a table that has a color scale gives each number cell of the named columns its fill and text color (`TableCellLayout.scaled`).
+   */
+  colorScale?: TableColorScaleColors;
 }
 export interface TableCellLayout {
   /** Logical alignment, shared by preview and native export. A column of numbers (LH-117) resolves to the physical right even in RTL. */
@@ -4760,6 +4771,8 @@ export interface TableCellLayout {
   direction?: TextDirection;
   /** LH-113: a body cell of a highlighted row: without a fill of its own it takes the highlight tint (core `tableHighlightColor`). */
   highlighted?: true;
+  /** FR-07: the fill and the text color the table's color scale gives this number cell (`#RRGGBB`). A fill of the cell's own wins and has none here; it also wins over the highlight tint. */
+  scaled?: {fill: string; text: string};
 }
 export interface TableRowLayout { box: LayoutBox; cells: TableCellLayout[] }
 export interface TableLayout {
@@ -4813,6 +4826,8 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   const columnCount=grid.columnCount;
   // LH-113: the highlighted body rows, counted after the header rows.
   const headerRows=Number(grid.hasHeaders),highlighted=new Set(options.highlight??[]);
+  // FR-07: the color scale's fill and text color of each shaded number cell (body row, column).
+  const scaleOf=options.colorScale?resolveTableColorScale(inline,options.colorScale,resolveTableData(value,options.presentation).types):undefined;
   const cells=grid.rows.flat().map(cell=>{
     const padding={top:8,right:10,bottom:4,left:10,...cell.style.padding};
     const width=0;
@@ -4925,7 +4940,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const offset=cell.style.verticalAlign==='bottom'?Math.max(0,available-height):cell.style.verticalAlign==='middle'?Math.max(0,(available-height)/2):0;
     const textBox={x:cellBox.x+cell.padding.left*scale,y:cellBox.y+cell.padding.top*scale+offset,width:Math.max(scale,cell.width),height:Math.max(scale,available-offset)};
     overflow ||= cell.width<=0||available<=0||fit.overflow;
-    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{}),...(!cell.header&&highlighted.has(cell.row-headerRows)?{highlighted:true as const}:{})});
+    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{}),...(!cell.header&&highlighted.has(cell.row-headerRows)?{highlighted:true as const}:{}),...(()=>{const scaled=cell.header?undefined:scaleOf?.at(cell.row-headerRows,cell.column);return scaled?{scaled:{fill:scaled.fill,text:scaled.text}}:{};})()});
   }
   overflow ||= sum(heights)>box.height+.01;
   return {rows,columnCount,height:sum(heights),overflow,columnWidths:[...columnWidths],splitsWords:false,naturalWidth,minimumWidth,naturalHeight:naturalTotal};
@@ -8953,7 +8968,21 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const small = layer?.small ? (({emphasis: _emphasis, ...rest}) => rest)(layer.small) : undefined;
       layer = {...layer, ...(small ? {small} : {}), focus};
     }
+    let beforeStack: ChartLayer | undefined;
+    // Explicit references use the same primary/secondary scales and plot in both engines.
+    const placeChartReferences = () => {
+      if (!drawn.data.ok || !references.length || !valueAxis) return;
+      const data = drawn.data;
+      const plotGeometry = {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
+      const secondaryValueAxis=chartComboAxes(drawn.chart,data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSize:settings.minFontSize,language})?.secondary;
+      const plot = layer?.plot ?? (typeof (drawn.chart as {type?:unknown})?.type==='string'&&(drawn.chart as {type:string}).type==='bar' ? horizontalBarPlot(drawn.chart,data,layer,valueAxis,box,plotGeometry) ?? chartPlotInset(drawn.chart,data,{valueAxis,...(layer?{layer}:{})},{...plotGeometry,box}) : chartPlotInset(drawn.chart, data, {valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})}, {...plotGeometry, box}));
+      const placed = plot ? placeReferences(references, data, {value:valueAxis,...(secondaryValueAxis?{secondary:secondaryValueAxis}:{})}, box, plot, {...plotGeometry,horizontal:(drawn.chart as {type?:unknown})?.type==='bar',chartType:(drawn.chart as {type?:string})?.type}) : undefined;
+      if (placed && plot) {
+        layer = {...layer, plot, references: placed};
+      }
+    };
     // LH-105: direct labels instead of a legend: the series names at the line ends, the category names on the slices (chart-direct-labels.ts).
+    const beforeEnds = layer;
     const ends = drawn.data.ok ? chartEndLabels(drawn.chart, drawn.data, layer, geometry, axisFor) : undefined;
     if (ends) ({layer, valueAxis} = ends);
     const slices = drawn.data.ok ? chartSliceLabels(drawn.chart, drawn.data, geometry) : undefined;
@@ -8978,16 +9007,49 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (doughnut) layer = {...layer, doughnut};
       // LH-109: values inside stacked segments and the series names beside the last column.
       const data = drawn.data;
+      beforeStack = layer;
       const stack = chartStack(drawn.chart, data, layer, geometry, axisFor, legend => chartHeader(drawn.chart, data, geometry, {legend}));
       if (stack) ({layer, valueAxis} = stack);
-      // Explicit references use the same primary/secondary scales and plot in both engines.
-      if (references.length && valueAxis) {
-        const plotGeometry = {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
-        const secondaryValueAxis=chartComboAxes(drawn.chart,data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSize:settings.minFontSize,language})?.secondary;
-        const plot = layer?.plot ?? (typeof (drawn.chart as {type?:unknown})?.type==='string'&&(drawn.chart as {type:string}).type==='bar' ? horizontalBarPlot(drawn.chart,data,layer,valueAxis,box,plotGeometry) ?? chartPlotInset(drawn.chart,data,{valueAxis,...(layer?{layer}:{})},{...plotGeometry,box}) : chartPlotInset(drawn.chart, data, {valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})}, {...plotGeometry, box}));
-        const placed = plot ? placeReferences(references, data, {value:valueAxis,...(secondaryValueAxis?{secondary:secondaryValueAxis}:{})}, box, plot, {...plotGeometry,horizontal:(drawn.chart as {type?:unknown})?.type==='bar',chartType:(drawn.chart as {type?:string})?.type}) : undefined;
-        if (placed && plot) {
-          layer = {...layer, plot, references: placed};
+      placeChartReferences();
+    }
+    // FR-07: a bullet chart's plot, which the preview draws and the PowerPoint export writes as its inner plot layout.
+    const bullet = drawn.data.ok ? bulletPlot(drawn.chart, drawn.data, valueAxis, box, {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})}) : undefined;
+    if (bullet) layer = {...layer, plot: bullet};
+    // FR-07 (owner, "1B"): the labels of labeled bands inside their bands, on the plot composition pins (the bullet's, a bar chart's, or the
+    // category plot both engines lay out); the PowerPoint export writes them as data labels at the same boxes. When one does not fit or meets
+    // a mark at both places, every band label of the chart goes to the legend (bands first), with a diagnostic.
+    if (drawn.data.ok && valueAxis && chartBands(drawn.chart).some((band) => band.label !== undefined)) {
+      const data = drawn.data, chartType = String((drawn.chart as {type?: unknown}).type ?? '');
+      const plotGeometry = {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
+      const horizontal = ['bar', 'stacked-bar', '100pct-stacked-bar'].includes(chartType);
+      const plot = layer?.plot ?? (horizontal ? horizontalBarPlot(drawn.chart, data, layer, valueAxis, box, plotGeometry) ?? chartPlotInset(drawn.chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...plotGeometry, box}) : chartPlotInset(drawn.chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...plotGeometry, box}));
+      const record = drawn.chart as Record<string, unknown>;
+      const labeled = Boolean(layer?.small?.labels || layer?.stack?.values?.some((row) => row.some(Boolean)) || (record.dataLabels !== undefined && record.dataLabels !== false));
+      const avoid = [...(layer?.references?.lines ?? []).flatMap((line) => [{x: Math.min(line.x1, line.x2) - 2, y: Math.min(line.y1, line.y2) - 2, width: Math.abs(line.x2 - line.x1) + 4, height: Math.abs(line.y2 - line.y1) + 4}, ...(line.labelBox ? [line.labelBox] : [])]), ...(layer?.endLabels?.entries ?? []).map((entry) => entry.box)];
+      const placed = plot ? placeBandLabels(drawn.chart, data, valueAxis, box, plot, {...plotGeometry, labeled, avoid}) : {labels: [], legend: true as const, reason: 'too-large' as const};
+      if (placed && !placed.legend) layer = {...layer, plot, bandLabels: placed};
+      else if (placed) {
+        diagnostics.push({code: 'chart-band-labels-in-legend', path: node.path, message: placed.reason === 'collision'
+          ? 'A band label meets a data mark or a data label at both of its places, so the chart lists its band labels in the legend instead (bands first, then the data series).'
+          : 'A band label does not fit inside its band, so the chart lists its band labels in the legend instead (bands first, then the data series). Shorten the label or widen the band to write it inside.'});
+        layer = {...layer, bandLabels: placed};
+        if (chartType === 'bullet') { const plain = bulletPlot(drawn.chart, data, valueAxis, box, plotGeometry, {bandsInLegend: true}); if (plain) layer = {...layer, plot: plain}; }
+        else if (layer?.header?.legend) { const header = chartHeader(drawn.chart, data, geometry, {bands: true}); if (header) layer = {...layer, header}; }
+        // Nothing is lost (supervisor, 2026-11-26): a chart that shows no legend (its series named beside the last column or at the line
+        // ends, or one series) and has no legend option gets a header legend of its bands alone; its series stay named where they are.
+        else if ((drawn.chart as {legend?: unknown}).legend === undefined && chartType !== 'bullet') {
+          const bandsHeader = (legend: boolean) => chartHeader(drawn.chart, data, geometry, {legend, bands: true});
+          if (layer?.stack?.names && beforeStack) {
+            const again = chartStack(drawn.chart, data, beforeStack, geometry, axisFor, bandsHeader);
+            if (again) { ({layer, valueAxis} = again); placeChartReferences(); layer = {...layer, bandLabels: placed}; }
+          } else if (layer?.endLabels) {
+            const again = chartEndLabels(drawn.chart, data, beforeEnds, geometry, axisFor, {bands: true});
+            if (again) { ({layer, valueAxis} = again); placeChartReferences(); layer = {...layer, bandLabels: placed}; }
+          } else {
+            const header = bandsHeader(false);
+            const axis = header ? axisFor(header.height) : undefined;
+            if (header && axis) { const {plot: _plot, references: _references, ...rest} = layer ?? {}; layer = {...rest, header, bandLabels: placed}; valueAxis = axis; placeChartReferences(); }
+          }
         }
       }
     }
@@ -13185,7 +13247,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   diagnostics.push(...imageCalloutDiagnostics);
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
   const failures = diagnostics.filter(diagnostic => {
-    if(diagnostic.code==='chart-label-collision'||diagnostic.code==='timeline-period-short'||diagnostic.code==='shape-off-slide')return false;
+    if(diagnostic.code==='chart-label-collision'||diagnostic.code==='timeline-period-short'||diagnostic.code==='shape-off-slide'||diagnostic.code==='chart-band-labels-in-legend')return false;
     if(composition.overflow==='error')return true;
     let path = diagnostic.path;
     while (path) {
@@ -13324,6 +13386,12 @@ export {chartDoughnut,restackForRows,chartWaterfall,waterfallRoles,waterfallLabe
 export type {ChartLayerDoughnut,WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartLayerReferences} from './chart-marks.js';
 export type {ChartReference,ChartReferenceDiagnostic} from './chart-references.js';
 export {CHART_REFERENCE_TYPES,chartReferenceSources} from './chart-references.js';
+// FR-07: bands on value axes and the bullet chart; the gauge reuses the sorted, clamped band list and the band colors.
+export {CHART_BAND_TYPES,CHART_BAND_NEUTRAL_CONTRASTS,CHART_BAND_MUTED_CONTRAST,chartBandMutedColor,neutralFill as chartBandNeutral,CHART_BAND_COLOR_SHARE,chartBands,chartBandMaximum,chartBandRanges,chartBandFill,chartBandFills,chartBandDiagnostics,BULLET_CHART_TYPE,BULLET_BAR_SHARE,BULLET_TARGET_SHARE,BULLET_TARGET_WIDTH_PX,BULLET_GAP_WIDTH} from './chart-bands.js';
+export type {ChartBandSpec,ChartBandRange,ChartBandColors,ChartBandDiagnostic} from './chart-bands.js';
+export {bulletPlot,bandLegendNames} from './chart-bullet.js';
+export {placeBandLabels,bandLabelColor,BAND_LABEL_PADDING,BAND_LABEL_MIN_CONTRAST} from './chart-band-labels.js';
+export type {ChartBandLabel,ChartLayerBandLabels} from './chart-band-labels.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartNumericAxes} from './chart-numeric-axes.js';
 export type {ChartNumericAxes} from './chart-numeric-axes.js';

@@ -359,7 +359,8 @@ function mappingColumns(count, xy, mapping, names) {
 /**
  * What each column of a chart is for: "category" (column A), "series", and for a scatter chart with three or more columns
  * "label" and "x". With a `mapping` (and the column `names` it addresses) the roles follow it: "category" (the label column of a
- * chart with no X axis), "label" and "x" for an XY chart, "series" for a plotted column and "other" for a column nothing plots.
+ * chart with no X axis), "label" and "x" for an XY chart, "series" for a plotted column, "target" for a bullet chart's target column and
+ * "other" for a column nothing plots.
  */
 export function chartColumnRoles(columnCount, chartType, mapping, names) {
   if (isObject(mapping) && Array.isArray(names) && columnCount > 0) {
@@ -369,6 +370,9 @@ export function chartColumnRoles(columnCount, chartType, mapping, names) {
     for (const index of series) roles[index] = "series";
     roles[category] = xy ? "label" : "category";
     if (x !== undefined) roles[x] = "x";
+    // FR-07: a bullet chart's target column (mapping.target) is drawn as the target ticks, not as a series.
+    const target = chartType === "bullet" && typeof mapping.target === "string" ? names.indexOf(mapping.target) : -1;
+    if (target >= 0 && target !== category) roles[target] = "target";
     return roles;
   }
   if (columnCount <= 1) return Array(columnCount).fill("series");
@@ -377,7 +381,7 @@ export function chartColumnRoles(columnCount, chartType, mapping, names) {
 }
 
 const rolesOf = (model) => (model.kind === "chart" ? chartColumnRoles(model.width, model.chartType, model.mapping, namesOfModel(model)) : []);
-const isNumericRole = (role) => role === undefined || role === "series" || role === "x";
+const isNumericRole = (role) => role === undefined || role === "series" || role === "x" || role === "target";
 
 // --- describing --------------------------------------------------------------------------------
 
