@@ -431,6 +431,7 @@ test('unknown marker, unsupported dash and invalid helper point counts are retai
       assert.equal(error.code, 'invalid-chart-cache');
       continue;
     }
+    if (out.chart === undefined) continue; // the over-limit count: the cache guard now costs the chart, not the deck (opf#1477)
     assert.equal(out.chart.referenceLines, undefined);
     assert.equal(out.chart.data.columns.length, 3);
     assert.deepEqual(

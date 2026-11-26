@@ -1,12 +1,15 @@
 // The release qualification corpus (qualification/): the manifest names existing decks and known checks, every feature points at a
 // deck and variant the build exports, and the grader reads a probe the way the Windows runner writes it. Office-free.
+// NT-05a: the run tiers and the per-application expectations (targets) are data the native runner reads (qualification/tiers.mjs).
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { OBJECT_KINDS, OUTCOMES, TARGETS } from './core/result/result.mjs';
 import { loadManifest, parseArgs, pptxName } from './qualification/build.mjs';
 import { gradeCheck, slideFacts } from './qualification/evaluate.mjs';
+import { decksForTier, expectationsFor, NOT_APPLICABLE, sourcesForTier, TIERS } from './qualification/tiers.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const manifest = loadManifest();
@@ -117,4 +120,127 @@ test('qualification: syntax on an unselected slide cannot certify native coverag
   feature.checks.push('roundtrip');
   feature.slides = [99];
   assert.throws(covered, /selected qualification slide exists/);
+});
+
+// ---- NT-05a: tiers and targets --------------------------------------------------------------------------------------------
+
+const knownFor = (target) => {
+  const file = path.join(root, 'scripts/native-acceptance/known', `${target}.json`);
+  return existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')).records : null;
+};
+const readDeck = (id) => {
+  const source = manifest.decks.find((deck) => deck.id === id).source;
+  return source.endsWith('.json') ? JSON.parse(readFileSync(path.join(root, source), 'utf8')) : null;
+};
+const smokeDecks = () => decksForTier(manifest, 'smoke');
+/** The features the smoke tier runs: their deck is in the tier and their variant is one the tier exports. */
+const smokeFeatures = () => {
+  const decks = new Map(smokeDecks().map((entry) => [entry.deck, entry.variants]));
+  return manifest.features.filter((feature) => decks.get(feature.deck)?.includes(feature.variant ?? 'default'));
+};
+const covers = (feature, slide) => !feature.slides || feature.slides.includes(slide);
+const RTL = /^(ar|he|fa|ur|yi|ps|sd|ug|dv|ckb)(-|$)/i;
+const rightToLeft = (language) => (typeof language === 'string' ? RTL.test(language) : language?.direction === 'rtl' || RTL.test(language?.bcp47 ?? ''));
+
+test('qualification: the tiers are smoke, release and full, and every deck, variant and source they name exists', () => {
+  assert.deepEqual(Object.keys(manifest.tiers).sort(), [...TIERS].sort());
+  const ids = new Set(manifest.decks.map((deck) => deck.id));
+  const smoke = manifest.tiers.smoke;
+  assert.ok(Array.isArray(smoke.decks) && smoke.decks.length >= 8 && smoke.decks.length <= 12, 'about ten smoke decks');
+  for (const entry of smoke.decks) {
+    assert.ok(ids.has(entry.deck), `smoke: deck ${entry.deck}`);
+    assert.ok(typeof entry.why === 'string' && entry.why.length > 20, `smoke: ${entry.deck} says why it is in`);
+  }
+  assert.equal(new Set(smoke.decks.map((entry) => entry.deck)).size, smoke.decks.length, 'smoke decks are unique');
+  assert.deepEqual([manifest.tiers.release.decks, manifest.tiers.release.variants], ['all', 'all'], 'release is the whole corpus by rule');
+  assert.deepEqual([manifest.tiers.full.decks, manifest.tiers.full.variants], ['all', 'all'], 'full starts from the whole corpus');
+  for (const tier of TIERS) {
+    assert.ok(['default', 'all'].includes(manifest.tiers[tier].variants), `${tier}: variants rule`);
+    for (const source of sourcesForTier(manifest, tier)) assert.ok(source in manifest.sources, `${tier}: source ${source}`);
+    assert.doesNotThrow(() => decksForTier(manifest, tier), `${tier}: every variant exists`);
+  }
+  assert.deepEqual(sourcesForTier(manifest, 'full'), ['examples', 'gallery-layouts', 'languages']);
+});
+
+test('qualification: decksForTier applies the variant rules', () => {
+  const smoke = smokeDecks();
+  assert.equal(smoke.length, manifest.tiers.smoke.decks.length);
+  assert.deepEqual(smoke.find((entry) => entry.deck === 'footers').variants, ['default', 'static'], 'a smoke entry names its variants');
+  assert.deepEqual(smoke.find((entry) => entry.deck === 'smartart').variants, ['default'], 'otherwise the tier rule: default only');
+  const release = decksForTier(manifest, 'release');
+  assert.deepEqual(release.map((entry) => entry.deck), manifest.decks.map((deck) => deck.id));
+  assert.deepEqual(release.find((entry) => entry.deck === 'diagrams').variants, ['default', 'picture']);
+  assert.deepEqual(release.find((entry) => entry.deck === 'columns').variants, ['default']);
+  assert.throws(() => decksForTier(manifest, 'nightly'), /unknown tier/);
+  const fixture = { decks: [{ id: 'a' }], tiers: { smoke: { variants: 'default', decks: [{ deck: 'a', variants: ['native'] }] } } };
+  assert.throws(() => decksForTier(fixture, 'smoke'), /no variant "native"/);
+  assert.throws(() => decksForTier({ ...fixture, tiers: { smoke: { variants: 'default', decks: [{ deck: 'b' }] } } }, 'smoke'), /no deck "b"/);
+});
+
+test('qualification: every target expectation uses the shared vocabulary and names known records that exist', () => {
+  const outcomes = new Set([...OUTCOMES.filter(Boolean), NOT_APPLICABLE]);
+  const keys = new Set(['outcome', 'kind', 'known', 'note']);
+  for (const feature of manifest.features) {
+    if (feature.targets === undefined) continue;
+    assert.ok(Object.keys(feature.targets).length > 0, `${feature.id}: targets is not empty`);
+    for (const [target, expected] of Object.entries(feature.targets)) {
+      const where = `${feature.id} ${target}`;
+      assert.ok(TARGETS.includes(target), `${where}: a known target`);
+      for (const key of Object.keys(expected)) assert.ok(keys.has(key), `${where}: key ${key}`);
+      assert.ok(outcomes.has(expected.outcome), `${where}: outcome ${expected.outcome}`);
+      if (expected.kind !== undefined) assert.ok(OBJECT_KINDS.includes(expected.kind), `${where}: kind ${expected.kind}`);
+      if (expected.note !== undefined) assert.ok(typeof expected.note === 'string' && expected.note.length > 0, `${where}: note`);
+      if (expected.known === undefined) continue;
+      const records = knownFor(target);
+      assert.ok(records, `${where}: known ids need scripts/native-acceptance/known/${target}.json`);
+      assert.ok(Array.isArray(expected.known) && expected.known.length > 0, `${where}: known is a non-empty list`);
+      for (const id of expected.known) assert.ok(records.some((record) => record.id === id), `${where}: known record ${id}`);
+    }
+  }
+});
+
+test('qualification: a feature may record no expectation for an application', () => {
+  const fixture = {
+    features: [
+      { id: 'with', deck: 'smartart', slides: [1, 3], checks: [], targets: { keynote: { outcome: 'picture', kind: 'diagram', known: ['kn-smartart-picture-alt'] } } },
+      { id: 'without', deck: 'smartart', checks: [] },
+      { id: 'other-app', deck: 'footers', variant: 'static', checks: [], targets: { powerpoint: { outcome: 'native', kind: 'footer' } } },
+    ],
+  };
+  assert.deepEqual(expectationsFor(fixture, 'keynote'), [
+    { file: 'smartart~default', deck: 'smartart', variant: 'default', slide: 1, feature: 'with', outcome: 'picture', kind: 'diagram', known: ['kn-smartart-picture-alt'] },
+    { file: 'smartart~default', deck: 'smartart', variant: 'default', slide: 3, feature: 'with', outcome: 'picture', kind: 'diagram', known: ['kn-smartart-picture-alt'] },
+  ]);
+  assert.deepEqual(expectationsFor(fixture, 'powerpoint'), [{ file: 'footers~static', deck: 'footers', variant: 'static', slide: null, feature: 'other-app', outcome: 'native', kind: 'footer' }]);
+  assert.deepEqual(expectationsFor(fixture, 'impress'), []);
+  assert.ok(manifest.features.some((feature) => !feature.targets), 'the manifest has features without targets');
+  const keynote = expectationsFor(manifest, 'keynote');
+  assert.ok(keynote.some((entry) => entry.file === 'smartart~default' && entry.slide === 1 && entry.outcome === 'picture'));
+  assert.ok(keynote.every((entry, index) => index === 0 || keynote[index - 1].file <= entry.file));
+});
+
+test('qualification: the smoke tier shows every object kind, a hidden slide, a right-to-left slide, the chart families and the serious known differences', () => {
+  const features = smokeFeatures();
+  const kinds = new Set(features.flatMap((feature) => Object.values(feature.targets ?? {}).map((expected) => expected.kind)).filter(Boolean));
+  // OPF writes no video or audio object, so no corpus deck has one: "media" is what an application reports of a file that
+  // carries one, never what OPF exported.
+  for (const kind of OBJECT_KINDS.filter((name) => name !== 'media')) assert.ok(kinds.has(kind), `smoke: a feature whose object is a ${kind}`);
+
+  const slideOf = (feature, test) => {
+    const deck = readDeck(feature.deck);
+    return deck?.slides.some((slide, index) => covers(feature, index + 1) && feature.slides && test(slide, deck));
+  };
+  assert.ok(features.some((feature) => slideOf(feature, (slide) => slide.hidden === true)), 'smoke: a feature names a hidden slide');
+  assert.ok(features.some((feature) => slideOf(feature, (slide) => rightToLeft(slide.language))), 'smoke: a feature names a right-to-left slide');
+
+  // Known differences that name a corpus deck: every chart record Keynote has, and every open record of OPF's own file or
+  // importer graded wrong, has a place a smoke feature covers. Variants are not compared: the round named the native-body
+  // exports "native" (layout-sampler~native in known/keynote.json is the manifest's layout-sampler~native-body).
+  const corpus = new Set(manifest.decks.map((deck) => deck.id));
+  const records = knownFor('keynote').filter((record) => record.status === 'open' && (record.where ?? []).some((place) => corpus.has(place.deck)));
+  const shown = (record) => record.where.some((place) => features.some((feature) => feature.deck === place.deck && covers(feature, place.slide)));
+  const charts = records.filter((record) => record.feature === 'charts');
+  const serious = records.filter((record) => record.grade === 'wrong' && ['opf-file', 'opf-importer'].includes(record.whose));
+  assert.ok(charts.length >= 10 && serious.length >= 2, 'the known data has chart and serious records on corpus decks');
+  for (const record of [...charts, ...serious]) assert.ok(shown(record), `smoke: no feature shows ${record.id}`);
 });

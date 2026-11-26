@@ -2123,6 +2123,7 @@
       },
       "issue": "OpenPresentation/opf#1477",
       "finding": "RT-01",
+      "importError": "invalid-chart-cache",
       "skill": false,
       "status": "open",
       "note": "Importer rule is not new: #1477 reproduces it without Keynote on 0.35.1, 0.36.0 and main; a 0.35.1 deck with a gap fails too. 0.36.0 M13 newly exposes it."
@@ -2156,6 +2157,7 @@
       },
       "issue": "OpenPresentation/opf#1477",
       "finding": "QC-01",
+      "importError": "invalid-chart-cache",
       "skill": false,
       "status": "open",
       "note": "See #1477: reproduced on 0.35.1, 0.36.0 and main without Keynote."
@@ -2349,6 +2351,7 @@
       },
       "issue": "OpenPresentation/opf#1478",
       "finding": "RT-02",
+      "importError": "unsupported-chart-cache",
       "skill": false,
       "status": "open"
     },
@@ -2400,6 +2403,7 @@
       },
       "issue": "OpenPresentation/opf#1478",
       "finding": "LY-05",
+      "importError": "unsupported-chart-cache",
       "skill": false,
       "status": "open"
     },

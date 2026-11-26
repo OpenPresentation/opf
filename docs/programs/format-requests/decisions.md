@@ -12,6 +12,10 @@ Who decided:
   "nothing may be cut".
 - **Supervisor, 2026-11-25, on the owner's delegation; he can overrule**: the owner had not answered, so the option the review marks as
   recommended is taken. On 2026-11-25 the owner said to start now and that the supervisor "can make good decisions for open items too".
+- **Owner, 2026-11-25, said in the analysis session**: the owner gave this answer in the session that wrote the review and the design
+  notes, and that session passed it on. The supervisor did not hear it at the source; the owner's words are quoted as that session
+  quoted them.
+- **Owner, 2026-11-25, to the supervisor**: the owner said this in the supervisor's own session. His words are quoted exactly.
 
 An overruled decision changes its row here and the item that depends on it. Where a later round replaced a decision of an earlier round,
 only the later one is kept, with a line saying what it replaced. The review page numbered its release as 0.36; it is 0.37.0 here (see the
@@ -112,8 +116,8 @@ Round 3 decisions:
 | Question | Options | Answer | Who |
 | --- | --- | --- | --- |
 | What does a string `datasource` mean? | Only an id in `datasources` (recommended); an id if one matches, else a path or URL | Only an id; a file or URL is an object, `{ "src": "./revenue.csv" }` | Owner, 2026-11-25 (`ds3-string`) |
-| Do `sheet` and `range` stay as their own keys? | No, a workbook's `query` is the sheet and range (recommended); yes | No; `"query": "FY26!A1:C13"`, `opf fix` rewrites | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
-| What happens to `source.fields`? | Drop it (recommended); move it to each column as `field` | Drop it | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Do `sheet` and `range` stay as their own keys? | No, a workbook's `query` is the sheet and range (recommended); yes | No; `"query": "FY26!A1:C13"`, `opf fix` rewrites | Owner, 2026-11-25, said in the analysis session ("go with your recommendations for the four open details"); taken by the supervisor before that |
+| What happens to `source.fields`? | Drop it (recommended); move it to each column as `field` | Drop it | Owner, 2026-11-25, said in the analysis session (the same sentence); taken by the supervisor before that |
 | Can a chart's inline data name a data source too? | Yes, with the same keys (recommended); no, it must be a dataset | Yes, same keys | Owner, 2026-11-25 (`ds3-inline`) |
 | Owner's note of 2026-11-25, quoted exactly: "will we always have a query? what about if there's a CSV or data in the JSON" | `query` optional; `query` required | Optional. A CSV file, or rows typed into the deck, need none; `query` is only what was asked of a source that takes a question (SQL, a sheet and range, an API call) | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 
@@ -179,7 +183,7 @@ Round 2 decisions:
 | Question | Options | Answer | Who |
 | --- | --- | --- | --- |
 | Is a heatmap a chart type or a table option? | A table option, `colorScale` (recommended); a chart type that exports as a table | Table option | Owner, 2026-11-25 (`c-heatmap`) |
-| Are bands a bullet feature or a feature of every value axis? | Every bar, column, line and area chart (recommended); bullet only | Every bar, column, line and area chart. The owner asked for the question to be explained ("I don't understand the question. Explain it and make a great recommendation"); it is asked again on the review page and this answer stands until he picks | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Are bands a bullet feature or a feature of every value axis? | Every bar, column, line and area chart (recommended); bullet only | Every bar, column, line and area chart. The owner first asked for the question to be explained ("I don't understand the question. Explain it and make a great recommendation"), then answered it: "go with any chart for bands" | Owner, 2026-11-25, said in the analysis session; taken by the supervisor before that |
 | Is "bullet" its own type? | Yes, `type: "bullet"` (recommended); no, authors compose it | Yes | Owner, 2026-11-25 (`c-bullet`) |
 | Is a gauge a chart type or a way to draw a metric? | A metric with a `scale`, drawn on an arc (recommended); a chart type | A metric with a scale | Owner, 2026-11-25 (`c-gauge`) |
 | Built, color scale: which text color on a shaded cell? | The design's rule (the scheme's text color, or its inverse past a lightness limit); the engines' existing rule for text on a filled cell | The existing rule: the scheme's text color when it reaches 4.5:1 on the fill, else black or white. The design's rule fell below 4.5:1 on the strongest fill in four color schemes | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
@@ -258,10 +262,52 @@ answered R1, R2, R6 and R7 on the review page and confirmed R3 and R5; R4 and R8
 | R1 | How does one release stay shippable? | One release with a cut order agreed now (recommended); one release, nothing may be cut; back to three releases | One release, nothing may be cut: 0.37.0 ships when every item is done, and a change PowerPoint does not accept is fixed before the release. This replaces the supervisor's answer of the same day (one release with a cut order) | Owner, 2026-11-25 (`r-one`) |
 | R2 | Where does the work land while it is built? | On `main`, each change whole, in order (recommended); on an integration branch | On `main`, each change whole, in the order of the README | Owner, 2026-11-25 (`r-land`) |
 | R3 | Do the layout sweep's drawing changes ride with the format changes? | Yes, they ride along (recommended in the review); no, they take a minor of their own first | No: the sweep and the other post-0.35.1 fixes ship first as 0.36.0, and the format changes are 0.37.0 | Owner, 2026-11-24 |
-| R4 | Do the breaking proposals that wait for a minor ride along? | No, apart from CR 1's flat dataset, 0.37.0 only adds (recommended); take the six-column grid; take both | No. Decide the fill vocabulary (opf#1275) and the six-column grid (opf#1281) later, build neither here. The one breaking change is CR 1 (FR-04), with an `opf fix` rewrite | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| R4 | Do the breaking proposals that wait for a minor ride along? | No, apart from CR 1's flat dataset, 0.37.0 only adds (recommended); take the six-column grid; take both | No. Decide the fill vocabulary (opf#1275) and the six-column grid (opf#1281) later, build neither here. Later the same day the owner added one more breaking set: the renames of released keys from the key-name study ([below](#key-names-the-study-of-2026-11-25)), each with an `opf fix` rewrite | Owner, 2026-11-25, said in the analysis session (one of "the four open details"); the renames: Owner, 2026-11-25, to the supervisor |
 | R5 | Do the schema identifiers move to openpresentation.com? | Move, with a safe fix; keep them on openpresentation.org (recommended); accept both | They stay on openpresentation.org. No `$schema` fix, no document changes | Owner, 2026-11-24 (his product split) |
 | R6 | STORYD's launch also expects editor features. Are they part of 0.37.0? | A parallel track, comment anchors designed alongside CR 6 (recommended); all in 0.37.0; none | A parallel track in the cloud-editor program; only the anchor design rides with FR-02 | Owner, 2026-11-25 (`r-wave`) |
 | R7 | Merge the governance and conformance branch before any of this? | Yes, first (recommended); later | Yes, first. Already merged as opf#1419 on 2026-11-24, with the sentence that Data Advantage holds the names and neither is a registered trademark. Every item adds its cases to that suite | Supervisor, on the owner's go-ahead of 2026-11-24 for good pull requests in the plan; done |
-| R8 | What does a 0.36 reader say about a 0.37 document? | The validator names the release a field needs (recommended); a version field in documents; nothing | Changed while planning the build: a released validator cannot know the keys of a later release, so from 0.37.0 the unknown-key finding names the validator's own version and says a later release may define the key (FR-11). A table of the keys 0.37.0 adds, shipped in a 0.36.x patch, only if the owner asks for it. No version field | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| R8 | What does a 0.36 reader say about a 0.37 document? | The validator names the release a field needs (recommended); a version field in documents; nothing | Changed while planning the build: a released validator cannot know the keys of a later release, so from 0.37.0 the unknown-key finding names the validator's own version and says a later release may define the key (FR-11). A table of the keys 0.37.0 adds, shipped in a 0.36.x patch, only if the owner asks for it. No version field | Owner, 2026-11-25, said in the analysis session (one of "the four open details"); taken by the supervisor before that |
 
-R8 is item FR-11 in the burndown.
+R8 is item FR-11 in the burndown. With the answers given in the analysis session, no question of the review is open.
+
+## Key names: the study of 2026-11-25
+
+On 2026-11-25 the owner asked the analysis session to study the key names and value types of OPF as 0.37.0 plans it, and to have what is
+worth fixing fixed at once. His words, as that session passed them on: "yeah this is still pre-v1 so we can update any even niggling
+things without penalizing users yet" and "i like all you ideas, give me one more idea set here" (for the background key, which he then
+settled with "ok go with appearance"; the font scheme key with "ok go with scriptGroup"). The study's page is private; this table is the
+record. Every row is the study's recommended option unless it says otherwise.
+
+Keys that no release has shipped (they cost nothing to change):
+
+| Pick | Change | Lands with |
+| --- | --- | --- |
+| `k-generator` | A dataset's `generator.kind` is `generator.type` | A pull request of its own, right after FR-04 |
+| `k-refresh` | A data source's `refresh` is `refreshEvery` | The same pull request |
+| `k-colors` | A table color scale takes one list, `colors`, of two or three colors | FR-07, part 1 |
+| `k-gauge` | The key that draws a metric on an arc is `gauge` (the design called it `scale`) | FR-07, part 3 |
+| `k-metric-format` | A metric gets a number `format` of its own, and a rule that finds a unit typed both in the value and in `unit` | FR-06 |
+
+Keys that 0.36.0 ships. These renames are breaking; `opf fix` rewrites every one, and no slide draws differently:
+
+| Pick | Change |
+| --- | --- |
+| `k-family` | A font scheme's `languageFamily` is `scriptGroup`, with the values `latin`, `eastAsian` and `complexScript`; the short `ea` and `cs` go |
+| `k-anchor` | A table cell style's `verticalAlign` is `anchor`, with the same values |
+| `k-org` | A speaker's `organizationId` is `organization`; it still names an organization of the deck |
+| `k-fontsize` | A composition's `minFontSize` and `maxFontSize` are `minFontSizePx` and `maxFontSizePx` |
+| `k-reflink` | A reference's `url` is `link`, checked as a web, mail or phone link |
+| `n-tone` | A picture or gradient background's `tone` is `appearance`; the deck's own `tone` (its voice) stays |
+| `n-line` | A combo chart's `line` is `lineSeries` |
+| `n-dash` | A chart reference line's `dash` takes the eleven preset names a stroke's `dash` takes. This one only adds values |
+
+Who: Owner, 2026-11-25, said in the analysis session, for every pick. The renames of released keys went against his answer to R4 of the
+same day, so the supervisor asked him. Owner, 2026-11-25, to the supervisor: "Yes do the renames I asked the analysis agent to send over
+the final details". They are one pull request and land late in 0.37.0, after the items that touch the same files.
+
+## Calls outside the review
+
+| Subject | Call | Who |
+| --- | --- | --- |
+| Files written by 0.37.0 and importers of an older release | No compatibility work. A PowerPoint file stores the current form of every record and key, and nothing is shaped so that a released 0.36 importer can read it. `opf fix` rewrites stay, because they are how OPF's own examples, gallery records, documents and sites move to the new names | Owner, 2026-11-25, to the supervisor: "We don't need to worry about backwards compatibility since we don't have existing users just yet all our stuff updated", and "Like all our docs and examples and tutorials and we pages etc" |
+| The rule `opf/straight-quotes` | Removed outright (opf#1483), not switched off: it was the only rule that questioned valid characters in an author's text. The owner asked what the note meant and then said: "it seems like it's overfunctioning to question valid characters in the content of opf text value strings" | The remark: Owner, 2026-11-25, to the supervisor. Removing the rule, not making it an option: Supervisor, 2026-11-25; he can overrule |

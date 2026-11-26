@@ -150,6 +150,7 @@ el.addEventListener("opf-slide", ({ detail }) => console.log(detail.index, detai
 | `opf-deck-name`, `opf-expand` | the deck's name changed (`{ name, previous }`); the editor was expanded or returned (`{ expanded }`) |
 | `opf-dirty`, `opf-save` | unsaved changes appeared or were saved (`{ dirty }`); Ctrl/Cmd+S inside the editor (`{ document, text, format, draft }`) |
 | `opf-review-open` | the review pill was pressed in a layout without a Review panel (`{ counts, findings }`) |
+| `opf-link` | a link of a read slide was followed: `{ slide, index }` for a `slide:<id>` link, `{ href }` for an address handed to the host (`onOpenLink`) |
 | `opf-destroy` | the editor was destroyed (the element was removed, or remounted) |
 
 `opf-render`, `opf-sync`, `opf-geometry` and `opf-status` fire on every update; listen only to the ones you need. `OPF_EDITOR_EVENTS` and `opfEventType(name)` are exported from `@openpresentation/opf-editor/element`, and `OpfEditorElementEventMap` types the events for `addEventListener`.

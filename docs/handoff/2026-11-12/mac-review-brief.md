@@ -1,5 +1,7 @@
 # Brief: Keynote and PowerPoint for Mac review of v0.34.0
 
+> Current process: [docs/native-testing.md](../../native-testing.md). Decision D1 of 2026-11-25 replaces "a review, not a gate" for Keynote: a Keynote run now gates OPF's defects. This brief stays as history.
+
 Give this file to an agent on the Mac mini after v0.34.0 is published. It is a review, not a gate: the release does not wait for it.
 
 ## Goal
