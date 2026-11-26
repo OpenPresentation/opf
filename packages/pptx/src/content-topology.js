@@ -54,6 +54,9 @@ const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringi
 
 export const CONTENT_KINDS = Object.freeze(['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape']);
 export const ROOT_PAYLOAD_FIELDS = Object.freeze(['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram']);
+// FR-08: an embed is stored as an `image` leaf, the kind a 0.36.0 importer reads back from its native parts (a picture, or a card of shapes); an
+// `embed` kind would make that importer drop the whole slide record. Import reads an embed block into an `image` leaf (`compatible`).
+const EMBED = 'embed';
 // The cells of a slide's grid (core `gridCells`): 0.34 stored a slide's cells as the `regions` form, keyed by them.
 const CELL_PATTERN = /^[a-z]+(\+[a-z]+)*(:[a-z]+(\+[a-z]+)*)?$/;
 // Groups nest at most this deep (a leaf inside three groups). Deeper structures
@@ -244,11 +247,11 @@ export const softWrappedLines = item => {
 };
 
 function blockKind(block) {
-  if (typeof block.type === 'string' && block.type !== 'group') return CONTENT_KINDS.includes(block.type) ? block.type : null;
+  if (typeof block.type === 'string' && block.type !== 'group') return CONTENT_KINDS.includes(block.type) || block.type === EMBED ? block.type : null;
   // SH-02: a preset with no picture, or a custom path, is a shape block (its text is inside it).
   if (block.image === undefined && (typeof block.shape === 'string' || block.path !== undefined)) return 'shape';
   for (const field of ROOT_PAYLOAD_FIELDS) if (block[field] !== undefined) return kindOfField(field);
-  return null;
+  return block[EMBED] !== undefined ? EMBED : null;
 }
 
 // ---------------------------------------------------------------------------
@@ -282,7 +285,7 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
   const fail = reason => { throw new TopologyError(reason); };
   const leafBox = path => {
     // SH-05: a shape block's one item is its `shape` or its custom `path` (its text is inside it).
-    for (const field of [...ROOT_PAYLOAD_FIELDS, 'shape', 'path']) {
+    for (const field of [...ROOT_PAYLOAD_FIELDS, EMBED, 'shape', 'path']) {
       const box = boxes.get(`${path}.${field}`);
       if (box) return [box.x, box.y, box.width, box.height].map(round1);
     }
@@ -312,7 +315,7 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     }
     const kind = blockKind(block);
     if (!kind) fail(`${path} has no known content payload`);
-    const leaf = identity(block, {t: 'leaf', k: kind}, path);
+    const leaf = identity(block, {t: 'leaf', k: kind === EMBED ? 'image' : kind}, path);
     const box = leafBox(path);
     if (box) leaf.box = box;
     if (block.bullets !== undefined && block.items === undefined && ['list', 'text'].includes(kind)) leaf.bullets = true;
@@ -329,8 +332,8 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     }
     // Root shorthand: one payload is the common case; several payload fields
     // on one slide compose as one item each (`slides.N.<field>`).
-    const fields = ROOT_PAYLOAD_FIELDS.filter(name => slide[name] !== undefined).map(field => {
-      const box = boxes.get(`${base}.${field}`);
+    const fields = [...ROOT_PAYLOAD_FIELDS, EMBED].filter(name => slide[name] !== undefined).map(name => {
+      const field = name === EMBED ? 'image' : name, box = boxes.get(`${base}.${name}`);
       const lines = field === 'text' ? wrapped.get(`${base}.text`) : undefined;
       const sourceStyles = field === 'text' ? sourceRunStyles(slide.text) : undefined;
       return box ? {field, ...(sourceStyles ? {sourceStyles} : {}), box: [box.x, box.y, box.width, box.height].map(round1), ...lines} : {field, ...(sourceStyles ? {sourceStyles} : {})};
@@ -587,7 +590,7 @@ export function validateTopology(value) {
 // ---------------------------------------------------------------------------
 // Import: rebuild
 
-const compatible = (leafKind, kind) => leafKind === kind || (['text', 'list'].includes(leafKind) && ['text', 'list'].includes(kind));
+const compatible = (leafKind, kind) => leafKind === kind || (['text', 'list'].includes(leafKind) && ['text', 'list'].includes(kind)) || (leafKind === 'image' && kind === EMBED);
 const containsOrigin = (box, bounds) => bounds.x >= box[0] - BOX_TOLERANCE && bounds.y >= box[1] - BOX_TOLERANCE
   && bounds.x <= box[0] + box[2] + BOX_TOLERANCE && bounds.y <= box[1] + box[3] + BOX_TOLERANCE;
 const contains = (box, bounds) => containsOrigin(box, bounds)

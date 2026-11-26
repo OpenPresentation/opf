@@ -163,7 +163,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
       ['a', 'primary', 'auto', 1, 'collapse', 'top', false],
       ['b', 'primary', 'auto', 6, 'collapse', 'top', false],
     ]);
-    assert.deepEqual(template.regions[1].accepts, ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'group']);
+    assert.deepEqual(template.regions[1].accepts, ['text', 'list', 'image', 'video', 'embed', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'group']);
     // overflowRegion: the first primary region that is not a single-block region (max 1).
     assert.equal(template.overflowRegion, 'b');
   });

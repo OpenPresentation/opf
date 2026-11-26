@@ -384,6 +384,12 @@ export interface OpfEditorOptions {
    * slide. The document is never changed and no slide index shifts. `false` draws every slide as written.
    */
   continuation?: boolean;
+  /**
+   * FR-08: which embedded pages the presenter shows live, by address. A page for which it returns true is shown in a sandboxed frame over
+   * the embed's picture or card; every other embed stays its static form, linked to its address. Default: none is live. A page on the
+   * host page's own origin is never shown live, whatever this returns. The canvas, the thumbnails and the exports never show a live frame.
+   */
+  embeds?: (src: string) => boolean;
   /** `"auto"` (default) follows `(pointer: coarse)`. */
   density?: OpfEditorDensity | "auto";
   /** `"auto"` (default) shows the sheet at 900px and under. */

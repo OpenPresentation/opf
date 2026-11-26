@@ -70,7 +70,7 @@ export class OPFPaginationError extends Error {
     super(message); this.name = 'OPFPaginationError';
   }
 }
-const contentFields = new Set(['text','items','bullets','image','video','chart','table','code','metric','quote','timeline','diagram']);
+const contentFields = new Set(['text','items','bullets','image','video','embed','chart','table','code','metric','quote','timeline','diagram']);
 const headingFields = new Set(['title','subtitle','tag']);
 const isRecord = (v: unknown): v is Record<string, any> => !!v && typeof v === 'object' && !Array.isArray(v);
 const clone = <T>(value: T): T => structuredClone(value);

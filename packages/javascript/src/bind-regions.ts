@@ -1,6 +1,6 @@
 import { isShapeBlock } from './shape-block.js';
 import { cellBlocks, isGridCell } from './grid-cells.js';
-import { layoutTemplate, type LayoutRegion, type LayoutTemplate, type RegionKind } from './layout-template.js';
+import { kindAccepted, layoutTemplate, type LayoutRegion, type LayoutTemplate, type RegionKind } from './layout-template.js';
 
 /** A diagnostic of content binding, in the `LayoutDiagnostic` shape composition reports. */
 export interface RegionBindingDiagnostic {
@@ -48,8 +48,8 @@ export interface BindRegionsOptions {
   slideIndex?: number;
 }
 
-const FIELDS = ['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'path'] as const;
-const FIELD_KINDS: Readonly<Record<string, RegionKind>> = { text: 'text', bullets: 'text', items: 'list', image: 'image', video: 'video', chart: 'chart', table: 'table', code: 'code', metric: 'metric', quote: 'quote', shape: 'shape', path: 'shape', timeline: 'timeline', diagram: 'diagram' };
+const FIELDS = ['text', 'items', 'bullets', 'image', 'video', 'embed', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'path'] as const;
+const FIELD_KINDS: Readonly<Record<string, RegionKind>> = { text: 'text', bullets: 'text', items: 'list', image: 'image', video: 'video', embed: 'embed', chart: 'chart', table: 'table', code: 'code', metric: 'metric', quote: 'quote', shape: 'shape', path: 'shape', timeline: 'timeline', diagram: 'diagram' };
 const IMAGE_EDGES = ['start', 'end', 'top', 'bottom'];
 const record = (value: unknown): Record<string, any> => value !== null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, any> : {};
 const empty = (value: unknown) => value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0);
@@ -79,12 +79,13 @@ function leafKinds(block: Record<string, any>, into = new Set<RegionKind>(), dep
 /** Whether a region takes a block: its kind is accepted, or a group whose every leaf kind is accepted. */
 export function regionAccepts(region: { readonly accepts: readonly string[] }, block: unknown): boolean {
   const kind = blockKind(block);
-  if (region.accepts.includes(kind)) return true;
+  // FR-08: kindAccepted reads the implied kinds (an embed where a video is accepted); no layout record has to list 'embed'.
+  if (kindAccepted(region.accepts, kind)) return true;
   // SH-02: a shape is a figure, so a region that takes pictures takes it too.
   if (kind === 'shape' && region.accepts.includes('image')) return true;
   if (kind !== 'group') return false;
   const kinds = leafKinds(record(block));
-  return kinds.size > 0 && [...kinds].every(leaf => region.accepts.includes(leaf));
+  return kinds.size > 0 && [...kinds].every(leaf => kindAccepted(region.accepts, leaf));
 }
 
 /**
@@ -136,7 +137,7 @@ export function rootNodes(slide: unknown, slideIndex = 0): (BoundBlock & { value
 
 /** Role rank of a region for a block kind (content binding, step 2): pictures prefer media regions, everything else primary ones. */
 export function regionRoleRank(role: LayoutRegion['role'], kind: RegionKind): number {
-  const media = kind === 'image' || kind === 'video';
+  const media = kind === 'image' || kind === 'video' || kind === 'embed';
   return media ? { media: 0, primary: 1, supporting: 2 }[role] : { primary: 0, supporting: 1, media: 2 }[role];
 }
 
