@@ -17,6 +17,7 @@ import {toPptx} from '../dist/index.js';
 const EMU_PX = 9525;
 const rows = [['Cranes', 14, 9], ['Software', 22, 12], ['Leasing', 6, 8], ['Repairs', 3, 5]];
 const series = count => ({columns: ['Product', 'Margin', 'Cost'].slice(0, count + 1), rows: rows.map(row => row.slice(0, count + 1))});
+const longNames = (type, legend) => ({type, legend, data: {columns: ['Product', 'Margin this quarter, all regions', 'Cost this quarter, all regions'], rows: rows.map(row => row.slice(0, 3))}});
 const chart = (type, count, extra = {}) => ({type, data: series(count), ...extra});
 const cases = {
   'bar with data labels (opf#1492)': chart('bar', 1, {dataLabels: true}),
@@ -48,6 +49,16 @@ const cases = {
   '100% stacked bar': chart('100pct-stacked-bar', 2),
   '100% stacked bar with data labels': chart('100pct-stacked-bar', 2, {dataLabels: true}),
   'stacked bar, legend at the bottom': chart('stacked-bar', 2, {legend: 'bottom'}),
+  // opf#1513: a chart with a legend option has no header row, and its plot was left to PowerPoint: it is the preview's (long names: a wide side legend).
+  'bar with long series names, legend at the left': longNames('bar', 'left'),
+  'bar with long series names, legend at the right': longNames('bar', 'right'),
+  'bar with long series names, legend at the top': longNames('bar', 'top'),
+  'bar with long series names, legend at the bottom, data labels': {...longNames('bar', 'bottom'), dataLabels: true},
+  'stacked bar, legend at the right': chart('stacked-bar', 2, {legend: 'right'}),
+  '100% stacked bar, legend at the left': chart('100pct-stacked-bar', 2, {legend: 'left'}),
+  '100% stacked bar, legend at the top, data labels': chart('100pct-stacked-bar', 2, {legend: 'top', dataLabels: true}),
+  'stacked column, legend at the right': chart('stacked-column', 2, {legend: 'right'}),
+  'column with long series names, legend at the right': longNames('column', 'right'),
   'stacked column': chart('stacked-column', 2),
   'stacked column with data labels': chart('stacked-column', 2, {dataLabels: true}),
 };
@@ -154,6 +165,57 @@ assert.ok(boxes >= 20, `most of the charts have a manual plot area (${boxes})`);
   const bulletXml = strFromU8(bulletParts['ppt/charts/chart1.xml']);
   assert.match(bulletXml, /<c:scatterChart>/, 'the bullet chart keeps its target series');
   assert.ok(!/<c:layoutTarget val="outer"\/>/.test(bulletXml), 'the bullet chart has no outer plot area either');
+}
+
+// opf#1525: a legend at the left or right of a bar or column chart is written where the preview has it (PowerPoint puts an unplaced side legend
+// against the chart frame, up to 80 px from the preview's key): the box's edge next to the plot is the preview's first key, and the entries are
+// centered on the frame. A legend at the top or bottom, and a line chart's legend, stay PowerPoint's own (no manual layout).
+{
+  const legends = Object.entries(cases).filter(([, chart]) => typeof chart.legend === 'string');
+  assert.ok(legends.length >= 15, 'many charts with a legend');
+  let placed = 0;
+  const widths = new Map(), names2 = new Map();
+  for (const [name, chart] of legends) {
+    const n = names.indexOf(name) + 1, slide = strFromU8(parts[`ppt/slides/slide${n}.xml`]);
+    const [fx, fy, fw, fh] = /<p:graphicFrame>[\s\S]*?<a:off x="(\d+)" y="(\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/.exec(slide).slice(1).map(value => Number(value) / EMU_PX);
+    const xml = strFromU8(parts[`ppt/charts/chart${n}.xml`]);
+    const legend = /<c:legend>\s*<c:legendPos val="(\w)"\/>\s*(<c:layout>[\s\S]*?<\/c:layout>)?/.exec(xml);
+    assert.ok(legend, `${name}: a legend`);
+    if (chart.legend === 'top' || chart.legend === 'bottom') { assert.equal(legend[2], undefined, `${name}: a top or bottom legend is PowerPoint's own`); continue; }
+    assert.ok(legend[2], `${name}: a side legend has a manual layout`);
+    const at = key => Number(new RegExp(`<c:${key} val="([\\d.]+)"/>`).exec(legend[2])[1]);
+    const box = {x: fx + at('x') * fw, y: fy + at('y') * fh, w: at('w') * fw, h: at('h') * fh};
+    const keys = [...toSvg(deck, n).matchAll(/<rect\b[^>]*>/g)].map(([tag]) => Object.fromEntries([...tag.matchAll(/\b(x|y|width|height)="([\d.]+)"/g)].map(([, key, value]) => [key, Number(value)]))).filter(rect => rect.width === 12 && rect.height === 12);
+    assert.equal(keys.length, chart.data.columns.length - 1, `${name}: the preview's keys`);
+    // PowerPoint centers its entries in the box, each as wide as 25.7 px plus 1.0115 times the longest name (measured 2026-11-26): the box is the
+    // longest name N plus 26 px plus a slack of 6% of N and 4 px (so PowerPoint does not wrap an entry), and starts 6.5 px plus half the slack left of
+    // the preview's first key. A slack the frame does not hold is cut to what fits: at the left the key is only a pad (10 px) in from the frame, so
+    // the slack is 7 px there; on the right the preview's legend is its keys' width, the longest name and a pad wide, ending a pad inside the frame.
+    const keyAt = keys[0].x;
+    let nameWidth, slack;
+    if (chart.legend === 'right') {
+      nameWidth = fx + fw - 10 - 30 - keyAt;
+      slack = Math.max(0, Math.min(0.06 * nameWidth + 4, 2 * (fx + fw - keyAt - nameWidth - 19.5)));
+    } else {
+      slack = 2 * (keyAt - fx - 6.5);
+      nameWidth = box.w - 26 - slack;
+      assert.ok(0.06 * nameWidth + 4 >= slack - 0.3, `${name}: the frame cuts the slack (${slack.toFixed(2)} px)`);
+    }
+    assert.ok(Math.abs(box.w - (nameWidth + 26 + slack)) < 0.3, `${name}: the box is the longest name plus 26 px plus its slack wide (${box.w.toFixed(2)})`);
+    assert.ok(Math.abs(box.x + 6.5 + slack / 2 - keyAt) < 0.2, `${name}: PowerPoint's key lands on the preview's first key (box ${box.x.toFixed(2)}, key ${keyAt})`);
+    const known = names2.get(chart.data.columns.join());
+    if (known === undefined) names2.set(chart.data.columns.join(), nameWidth); else assert.ok(Math.abs(known - nameWidth) < 0.4, `${name}: the same names are as wide at both sides (${known.toFixed(2)}, ${nameWidth.toFixed(2)})`);
+    assert.ok(box.x >= fx - 0.05, `${name}: the box starts inside the frame`);
+    widths.set(`${chart.type}|${chart.legend}|${chart.data.columns.join()}`, box.w);
+    const row = box.h / keys.length;
+    keys.forEach((key, index) => assert.ok(Math.abs(box.y + index * row + (row - 12) / 2 - key.y) < 0.3, `${name}: key ${index} on its row`));
+    assert.ok(box.x >= fx && box.x + box.w <= fx + fw + 0.1, `${name}: the box is inside the chart frame`);
+    placed++;
+  }
+  assert.ok(placed >= 10, `side legends are placed (${placed})`);
+  // A line chart's legend is not touched.
+  const line = unzipSync(await toPptx({slides: [{title: 'Line', chart: {type: 'line', legend: 'right', data: {columns: ['Month', 'A', 'B'], rows: [['Jan', 1, 2], ['Feb', 2, 3]]}}}]}));
+  assert.ok(!/<c:legend>\s*<c:legendPos val="r"\/>\s*<c:layout>/.test(strFromU8(line['ppt/charts/chart1.xml'])), 'a line chart keeps PowerPoint\'s own legend place');
 }
 
 // The first case is the report's: its category names have their room at the left, as the preview's gutter.

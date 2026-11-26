@@ -4131,7 +4131,6 @@ function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale,
   // preview's plot of a bar chart with options, keeps none).
   // (An outer plot area written below a header row is replaced by the preview's plot all the same, opf#1492: Keynote reads a manual box as the
   // inner plot, and cuts the category names of a chart left on the outer box.)
-  if (whole && horizontal && !barInset && valueAxisHidden && !outer) return undefined;
   const inset = barInset ?? chartPlotInset(chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...geometry, box});
   if (!inset) return undefined;
   if (whole) {
@@ -4332,7 +4331,11 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // without one, has the preview's plot (lowLabelPlot, whole): the plot starts where the preview's does under the heading, and the label of
   // the tallest column (or longest bar) keeps the room the preview gives it.
   else if (!layerXml.layout.plot?.target && ['bar', 'line', 'area'].includes(chartData.type) && !chartData.combo
-    && (layerXml.layout.plot || (chartData.type === 'bar' && layerXml.options.valAxisHidden === true && chartOptions.dataLabels))) {
+    && (layerXml.layout.plot || (chartData.type === 'bar' && layerXml.options.valAxisHidden === true && chartOptions.dataLabels)
+      // opf#1513: a chart with a legend option has no header row (the author chose its legend), so no plot area of core's: it is the preview's.
+      // Only where the option shows a legend: a chart with `legend: "none"` keeps the plot it had (PowerPoint's own for a column chart
+      // without labels), which the reference Name measurement of scripts/native-acceptance was taken with (its export is pinned there).
+      || (chartData.type === 'bar' && typeof chart?.legend === 'string' && chart.legend !== 'none'))) {
     const plotBox = lowLabelPlot(chart, chartData, layer, chartLayout?.valueAxis, layerXml.layout.plot, region, {scale, valueAxisHidden: layerXml.options.valAxisHidden === true, context, options, presentation, whole: true});
     if (plotBox) layerXml.layout.plot = plotBox;
   }
@@ -4354,6 +4357,27 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     const measure = textWidthMeasurer(resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, italic: false}, options.textMeasurement), options.textMeasurement);
     const room = frame * (1 - plot.x - plot.w), needed = measure('100%', fontPx) / 2 + 8;
     if (needed > room) layerXml.layout.plot = {...plot, w: Number(Math.max(0, plot.w - (needed - room) / frame).toFixed(4))};
+  }
+  // opf#1525 (PowerPoint 2026-11-26): a legend at the side of a bar or column chart stands where the preview has it, not against the chart frame
+  // (where PowerPoint puts an unplaced one, 6 to 80 px from the preview's key). PowerPoint keeps a written legend box exactly, gives every
+  // entry the width of the longest name in its own font plus about 26 px (at 15 pt) and centers the entries in the box, its key 5.5 px inside
+  // the entry (and 1 px for the entry's own margin). The box therefore hugs what is drawn: the longest name as the preview draws it plus
+  // those 26 px, placed so PowerPoint's key lands on the preview's: 6.5 px left of it (the preview's key is a pad in from the frame's edge
+  // on the left, and the legend's width and a pad in from the right edge on the right). An error in the name's width moves the key by half of
+  // it. y and height are the preview's rows (a line and a half tall each, centered on the frame). A name wider than the preview's legend
+  // (at most 45% of the chart) is wrapped or cut there; the box keeps that width. Top and bottom legends are PowerPoint's own, as before.
+  if (chartData.type === 'bar' && !circular && ['left', 'right'].includes(chart?.legend) && layerXml.layout.plot?.target === 'inner' && context.direction !== 'rtl' && chartData.series.length >= 2) {
+    const frameW = region.w * 96, frameH = region.h * 96, fontPx = textSize / 75, pad = 10 * scale, k = fontPx / 20;
+    const measure = textWidthMeasurer(resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, italic: false}, options.textMeasurement), options.textMeasurement);
+    const names = chartData.series.map(entry => String(entry.name ?? ''));
+    const nameWidth = Math.min(Math.max(0, ...names.map(name => measure(name, fontPx))), frameW * 0.45 - fontPx * 1.5);
+    const drawn = Math.min(frameW * 0.45, fontPx * 0.6 + fontPx * 0.4 + nameWidth + fontPx * 0.5), height = names.length * fontPx * 1.5;
+    const key = chart.legend === 'left' ? pad : frameW - pad - drawn;
+    // PowerPoint needs 25.7 px + 1.0115 x the name for an entry (measured), and wraps one that does not fit: so 6% of the name and 4 px of slack. The entries
+    // are centered, so the slack moves the box left by half of it; the frame's edges cut it to what they hold.
+    const slack = Math.max(0, Math.min(0.06 * nameWidth + 4 * k, 2 * (key - 6.5 * k), 2 * (frameW - key - nameWidth - 19.5 * k)));
+    const width = nameWidth + 26 * k + slack, left = key - 6.5 * k - slack / 2;
+    layerXml.layout.legend = {x: Number((left / frameW).toFixed(4)), y: Number(((frameH - height) / 2 / frameH).toFixed(4)), w: Number((width / frameW).toFixed(4)), h: Number((height / frameH).toFixed(4))};
   }
   if (Object.keys(layerXml.layout).length) context.chartHeadings.get(objectName).layerLayout = layerXml.layout;
   const chartOptionsXml = {
