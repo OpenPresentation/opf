@@ -158,6 +158,22 @@ describe("opf fill", () => {
     assert.equal(within.stderr.includes("variable-overflow"), false);
   });
 
+  test("a value without translations removes a variable's translations and says so; a record may give its own (FR-10)", async () => {
+    const bilingual = await file("bilingual.opf.json", JSON.stringify({ name: "Bilingual", language: "de", template: true, variables: { cta: { type: "text", value: "Book a demo", translations: { de: { value: "Demo buchen" } } } }, slides: [{ title: "{{cta}}" }, { language: "en", title: "{{cta}}" }] }));
+    const own = run(["fill", bilingual]);
+    assert.equal(own.status, 0, own.stderr);
+    assert.deepEqual(JSON.parse(own.stdout).slides.map((slide) => slide.title), ["Demo buchen", "Book a demo"]);
+    const replaced = run(["fill", bilingual, await file("cta.json", JSON.stringify({ cta: "Join us" }))]);
+    assert.equal(replaced.status, 0, replaced.stderr);
+    assert.deepEqual(JSON.parse(replaced.stdout).slides.map((slide) => slide.title), ["Join us", "Join us"]);
+    assert.match(replaced.stderr, /note: the translations of 'cta' were removed/);
+    assert.deepEqual(JSON.parse(replaced.stderr.slice(replaced.stderr.indexOf("{"))).fill.translationsRemoved, [{ id: "cta", records: [1] }]);
+    const given = run(["fill", bilingual, await file("cta-own.json", JSON.stringify({ cta: { value: "Join us", translations: { de: { value: "Mach mit" } } } }))]);
+    assert.equal(given.status, 0, given.stderr);
+    assert.deepEqual(JSON.parse(given.stdout).slides.map((slide) => slide.title), ["Mach mit", "Join us"]);
+    assert.equal(given.stderr.includes("were removed"), false);
+  });
+
   test("usage mistakes exit 2", () => {
     assert.equal(run(["fill"]).status, 2);
     for (const removed of [["--name", "x"], ["--out-dir", temp], ["--output", "x.json"], ["--data", "x.csv"], ["--format", "csv"]]) assert.equal(run(["fill", TEMPLATE, ...removed]).status, 2, removed[0]);

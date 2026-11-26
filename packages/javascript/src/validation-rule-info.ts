@@ -162,6 +162,8 @@ const referenceRules: ValidationRuleInfo[] = [
 	rule('variable-unknown', 'references', 'warning', 'A `{{token}}` names a variable that is not declared.', 'An undeclared token is shown literally.', { standard: SCHEMA }),
 	rule('variable-unknown-value', 'references', 'warning', 'A value was supplied for a variable that is not declared.', 'The value is never used.', { standard: SCHEMA }),
 	rule('variable-unused', 'references', 'warning', 'A variable is declared but never used.', 'A declaration nothing refers to has no effect.', { standard: SCHEMA }),
+	rule('variable-translation-duplicate', 'references', 'warning', 'Two translations of a variable have the same language tag.', "Language tags compare without regard to case, so 'de-AT' and 'de-at' name one language. The first in document order is used; the other is never drawn.", { standard: SCHEMA }),
+	rule('variable-translation-unused', 'references', 'warning', 'A translation of a variable is never drawn.', "A translation is drawn on a slide whose declared language (else the deck's) selects it. When no slide and not the deck declares a language that selects it, it has no effect. A language read from the text does not select a translation.", { standard: SCHEMA, approximations: 'Reads the declared language of the deck and of each slide, not where the variable is used.' }),
 	rule('variable-reference-unknown', 'references', 'warning', 'A `var:` color names a variable that is not declared.', 'An undeclared color variable falls back to a default color.', { standard: SCHEMA }),
 ];
 

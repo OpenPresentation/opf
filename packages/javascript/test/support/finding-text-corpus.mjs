@@ -95,6 +95,8 @@ export const CASES = [
 	{ name: 'variable-unknown', rule: 'opf/variable-unknown', input: { ...deck([{ title: '{{nmae}}', text: 'x' }]), variables: { name: { type: 'text', value: 'A' } } } },
 	{ name: 'variable-unknown-value', rule: 'opf/variable-unknown-value', input: { ...deck([{ title: '{{name}}', text: 'x' }]), variables: { name: { type: 'text', value: 'A' } } }, options: { values: { nope: 1 } } },
 	{ name: 'variable-unused', rule: 'opf/variable-unused', input: { ...deck([{ title: 'T', text: 'x' }]), variables: { name: { type: 'text', value: 'A' } } } },
+	{ name: 'variable-translation-duplicate', rule: 'opf/variable-translation-duplicate', input: { ...deck([{ title: '{{cta}}', language: 'de-AT' }]), variables: { cta: { type: 'text', value: 'Book', translations: { 'de-AT': { value: 'Buchen' }, 'de-at': { value: 'Bestellen' } } } } } },
+	{ name: 'variable-translation-unused', rule: 'opf/variable-translation-unused', input: { ...deck([{ title: '{{cta}}' }]), variables: { cta: { type: 'text', value: 'Book', translations: { de: { value: 'Buchen' } } } } } },
 	{ name: 'variable-reference-unknown', rule: 'opf/variable-reference-unknown', input: deck([{ title: 'T', text: [{ text: 'x', color: 'var:brand' }] }]) },
 	{ name: 'contract', rule: 'opf/contract', input: deck([{ layout: 'cover', title: 'K' }]), options: { contracts: [{ path: '/slides/*/layout', allowedValues: ['text', 'title'] }], ...withGallery } },
 	{ name: 'contract-host-message', rule: 'opf/contract', input: deck([{ layout: 'cover', title: 'K' }]), options: { contracts: [{ path: '/slides/*/layout', allowedValues: ['text'], message: 'Brand rules allow only {{allowed}} here.' }], ...withGallery } },

@@ -15,7 +15,7 @@ Every item also meets the definition of done in the README; the acceptance colum
 | FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | in-progress |
 | FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | in-progress |
 | FR-09 | CR 14: limits on a variable's value | [Below](#fr-09-limits-on-a-variables-value-cr-14) | done |
-| FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | in-progress |
+| FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | done |
 | FR-11 | What a validator says about a key it does not know | [Below](#fr-11-what-a-validator-says-about-a-key-it-does-not-know) | done |
 
 Order of landing: FR-01 to FR-03 (ids), FR-04 to FR-07 (data), FR-08 (embed), FR-09 and FR-10 (variables). The tracks do not depend on
@@ -271,6 +271,13 @@ Acceptance:
 - Conformance: valid decks with translations; a Markdown and YAML round trip keeps them. Docs and an example deck in two languages.
 
 Progress log:
+
+- 2026-11-25: done, in the pull request that adds this line. The name table covers 88 languages (ICU 78.3, CLDR 48.0) and costs about
+  14 KB gzipped in each of the ten entries that draw dates; their budgets moved by that amount. Checked in PowerPoint: a translated deck
+  footer and its dates show the same text as the preview on a German and a French slide, and import returns each slide's text. Found
+  and fixed there: a date field on a slide whose language differs from the deck's was looked up in the deck's language and written in
+  the slide's, so PowerPoint showed another format than the preview. Open as opf#1507: a named current date in a non-English deck is
+  fixed text, because the date field table has no long forms per language.
 
 ## FR-11: what a validator says about a key it does not know
 

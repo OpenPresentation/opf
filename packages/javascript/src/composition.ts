@@ -58,6 +58,8 @@ import {parseLogoName,resolveLogo,resolveOrganizationLogo,type LogoShape,type Lo
 export {LOGO_SHAPES,resolveLogo} from './logos.js';
 export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logos.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
+export {DATE_NAMES,DATE_NAMES_MISSING,DATE_NAME_SOURCE,DATE_PATTERNS} from './date-name-data.js';
+export {ENGLISH_DATE_NAMES,dateNamesOf,longDatePattern,type DateNames} from './date-names.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 import {legible, luminance as legibleLuminance, normalize as legibleHex} from './legible-color.js';
 import {applyColorTransform,colorContrast,colorTransform,layoutVariantApplies,resolveColorRoles,type ColorVariant} from './color.js';
@@ -1727,12 +1729,12 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         // A current date is a live field: the host supplies today's calendar date.
         const format=content.dateFormat??DEFAULT_FURNITURE_DATE_FORMAT;
         if(options.date===undefined)error(`${path}.date`,'A current date needs a host-supplied ISO date option. For fixed content use a literal date, or an ISO date with dateFormat.','unresolved-content');
-        else{const resolved=formatFurnitureDate(options.date,format);if('error' in resolved)error(`${path}.dateFormat`,resolved.error,'unresolved-content');else add('date',resolved.text,true,undefined,{fields:[{type:'date',start:0,end:resolved.text.length,format}]});}
+        else{const resolved=formatFurnitureDate(options.date,format,languageInEffect(options.presentation,options.slideIndex));if('error' in resolved)error(`${path}.dateFormat`,resolved.error,'unresolved-content');else add('date',resolved.text,true,undefined,{fields:[{type:'date',start:0,end:resolved.text.length,format}]});}
       }
       else if(typeof content.date==='string'){
         // Without dateFormat a date string stays literal, editable source text.
         if(content.dateFormat===undefined)add('date',content.date);
-        else{const resolved=formatFurnitureDate(content.date,content.dateFormat);if('error' in resolved)error(`${path}.${parseIsoDate(content.date)?'dateFormat':'date'}`,resolved.error,'unresolved-content');else add('date',resolved.text,true,`${path}.date`);}
+        else{const resolved=formatFurnitureDate(content.date,content.dateFormat,languageInEffect(options.presentation,options.slideIndex));if('error' in resolved)error(`${path}.${parseIsoDate(content.date)?'dateFormat':'date'}`,resolved.error,'unresolved-content');else add('date',resolved.text,true,`${path}.date`);}
       }
       // Text fitted at a box width, with each source line's ink when outlines are provided.
       const fitPart=(part:PendingText,boxWidth:number)=>{

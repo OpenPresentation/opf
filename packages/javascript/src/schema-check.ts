@@ -1091,7 +1091,7 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
     subject = view.presentation;
     unfilledVariables = view.unfilled;
     for (const entry of view.diagnostics) {
-      if (entry.code === "variable-example-used" || entry.code === "variable-rich-flattened" || entry.code === "variable-unfilled") continue;
+      if (entry.code === "variable-example-used" || entry.code === "variable-rich-flattened" || entry.code === "variable-unfilled" || entry.code === "variable-translations-removed") continue;
       // A limit is read by the validator's own rule (opf/variable-overflow, which composes where a line limit needs it), not by the format check.
       if (entry.code === "variable-overflow") continue;
       const issue = semanticIssue(entry.path, entry.message, { id: entry.id, code: entry.code });
