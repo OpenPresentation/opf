@@ -112,8 +112,12 @@ function readMetricLink(link,drawn) {
 // The metric an unedited tag restores: the drawn form with the link, `better` and `format` back, the last computed numbers as the
 // literal value and change, and a trend or sentiment that was derived (not typed) left to derive again.
 function restoreMetricLink(drawn,link,edited) {
-  const metric={...drawn};
-  if (link.format!==undefined) metric.format=link.format;
+  // `format` goes where the written metric has it, right after `value`, so an unedited round trip keeps the key order.
+  const metric={};
+  for (const [key,entry] of Object.entries(drawn)) {
+    metric[key]=entry;
+    if (key==='value'&&link.format!==undefined) metric.format=link.format;
+  }
   if (link.better!==undefined) metric.better=link.better;
   // The number behind a text stands for it only while what wrote the text is back too: the link (with its column's format) or the metric's format.
   if (link.numbers.value!==undefined&&!edited.has('value')&&(link.data||link.format!==undefined)) metric.value=link.numbers.value;
@@ -191,7 +195,8 @@ export function importMetricGroups(shapes,paragraphs,relationships,entries,repor
       link=readMetricLink(manifest.link,value);
       if (!link) report({code:'invalid-metric-provenance',message:'Invalid metric link; the metric was imported as drawn.'});
       else if (link.data&&(changedRoles.has('value')||changedRoles.has('delta'))) {
-        report({code:'metric-data-dropped',message:"The metric's value was edited in PowerPoint, so its data link was not restored."});
+        const what=changedRoles.has('value')&&changedRoles.has('delta')?"value and change were":changedRoles.has('value')?'value was':'change was';
+        report({code:'metric-data-dropped',message:`The metric's ${what} edited in PowerPoint, so its data link was not restored.`});
         link={...link,data:undefined};
       }
       if (link) metric=restoreMetricLink(value,link,changedRoles);

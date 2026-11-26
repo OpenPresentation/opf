@@ -83,6 +83,8 @@ const anchors = parts => tagsOf(parts).filter(tag => tag.role === 'anchor').sort
   assert.deepEqual(metricOf(1), {...metrics.churn, delta: 0.222222222222}, 'the percent metric comes back with the number behind its text, no typed trend or sentiment');
   for (const index of [2, 3, 4, 5]) assert.deepEqual(metricOf(index), Object.values(metrics)[index], `slide ${index}`);
   assert.deepEqual(metricOf(6), metrics.unlinked, 'a format-only metric comes back with its number value');
+  assert.deepEqual(Object.keys(metricOf(6)), Object.keys(metrics.unlinked), 'and its keys in the written order: format after value');
+  for (const index of [0, 1, 2, 3, 4, 5]) assert.deepEqual(Object.keys(metricOf(index)).filter(key => key !== 'delta' || index !== 5), Object.keys(Object.values(metrics)[index]).filter(key => key !== 'delta' || index !== 5), `key order of slide ${index}`);
 }
 
 // --- a deck without data, better and format exports as before ------------------------------------------------------------------
@@ -120,13 +122,17 @@ const anchors = parts => tagsOf(parts).filter(tag => tag.role === 'anchor').sort
   assert.equal(metric.data, undefined, 'the data link is not restored');
   assert.equal(metric.value, '$4.9M', 'the edit is the written value');
   assert.equal(metric.trend, 'up', 'the arrow that was drawn stays as written');
-  assert.ok(diagnostics.some(entry => entry.code === 'metric-data-dropped' && /edited in PowerPoint/.test(entry.message)), JSON.stringify(diagnostics));
+  assert.deepEqual(diagnostics.filter(entry => entry.code === 'metric-data-dropped').map(entry => entry.message), ["The metric's value was edited in PowerPoint, so its data link was not restored."]);
   // The change edited instead of the value.
   const changed = {...parts, [path]: strToU8(xml.replace('<a:t>+$0.2M</a:t>', '<a:t>+$0.9M</a:t>'))};
   const second = await imported(zipSync(changed));
   const secondMetric = second.deck.slides[0].metric ?? second.deck.slides[0].blocks?.[0]?.metric;
   assert.equal(secondMetric.data, undefined);
+  assert.deepEqual(second.diagnostics.filter(entry => entry.code === 'metric-data-dropped').map(entry => entry.message), ["The metric's change was edited in PowerPoint, so its data link was not restored."]);
   assert.equal(secondMetric.delta, '+$0.9M');
+  // Both edited: the message names both.
+  const both = await imported(zipSync({...parts, [path]: strToU8(xml.replace('<a:t>$4.4M</a:t>', '<a:t>$4.9M</a:t>').replace('<a:t>+$0.2M</a:t>', '<a:t>+$0.5M</a:t>'))}));
+  assert.deepEqual(both.diagnostics.filter(entry => entry.code === 'metric-data-dropped').map(entry => entry.message), ["The metric's value and change were edited in PowerPoint, so its data link was not restored."]);
   assert.equal(secondMetric.value, '$4.4M', 'the unedited value stays the text that was drawn: the column format that wrote it is not back');
   // A percent change edited on the metric with a direction that is good: better is kept and the red sentiment is derived again from it.
   const churnXml = strFromU8(parts['ppt/slides/slide2.xml']);
