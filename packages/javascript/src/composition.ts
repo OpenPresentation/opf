@@ -2959,37 +2959,45 @@ export const QUOTE_PORTRAIT_SHARE = .26, QUOTE_PORTRAIT_STEP = .02, QUOTE_PORTRA
 /** LH-132: a portrait the author gave no focus keeps the upper third in view, where a face is (LH-84's PORTRAIT_FOCUS_Y). */
 const portraitFocus = (): ImageFocus => ({ x: 0.5, y: PORTRAIT_FOCUS_Y });
 
+/** FR-07, part 3: the exact starting size of each role (canvas px) a gauge asks of layoutMetric, in place of the role sizes and growth. */
+const GAUGE_SIZES = Symbol('opf.gaugeSizes');
 /**
- * FR-07, part 3: a metric with a gauge (MetricLayoutOptions.gauge). The arc's frame is the square around its circle, of which the upper half
- * is drawn, from the top of the box; the labels of its ends stand under the ends of the track, in the secondary text at the readability floor.
- * The text is laid out under them; then, when the value is one line, it is laid out again with the value's baseline on the arc's center line
- * (the same sizes), and that is kept when the value line and everything else above the center line lie inside the track's inner circle and
- * nothing below it meets an end's label: the value stands in the bowl. "Fits" is measured on each line's box (its accepted width, from three
- * quarters of its size above the baseline to the baseline) against the track's inner circle less a gap.
+ * FR-07 (owner, 2026-11-26): a gauge's value takes at most this share of the arc's outer radius as its font size, in the bowl; under the arc,
+ * the last resort, at most METRIC_GAUGE_VALUE_UNDER of it, so it does not outweigh the arc.
+ */
+export const METRIC_GAUGE_VALUE_SIZE = .42, METRIC_GAUGE_VALUE_UNDER = .3;
+/** A metric's role sizes in reference pixels (layoutMetric's): the label, description, change and trend follow the value by these proportions. */
+const METRIC_ROLE_SIZES: Readonly<Record<MetricTextRole, number>> = {value: METRIC_ROLE_VALUE_SIZE, unit: 23, label: 23, description: 20, delta: 23, trend: 18};
+/**
+ * FR-07, part 3: a metric with a gauge (MetricLayoutOptions.gauge). The arc sets the text's size (owner, 2026-11-26): the value takes the largest
+ * size up to METRIC_GAUGE_VALUE_SIZE of the arc's outer radius at which its line fits the arc's bowl (its baseline on the arc's center line, its
+ * box, from three quarters of its size above the baseline to the baseline, inside the track's inner circle less METRIC_GAUGE_BOWL_GAP of the
+ * radius), and the label, description, change and trend follow it by the metric's own proportions (METRIC_ROLE_SIZES), never under the
+ * readability floor, stacked and centered under the center line, clear of the labels of the arc's ends (in the secondary text at the floor).
  *
- * The arc's size: the largest radius, from the smallest of half the box's width, METRIC_GAUGE_MAX_WIDTH_PX / 2 and the box's height, down by
- * a tenth at a time, at which the text keeps the sizes it has at the box's width without a height limit; when none keeps them, the largest at
- * which the text fits at all (down to the readability floor); when none, the metric is laid out without its gauge (`gaugeDropped`).
+ * The arc's size: the largest radius, from the smallest of half the box's width, METRIC_GAUGE_MAX_WIDTH_PX / 2 and the box's height, down by a
+ * tenth at a time, at which the value fits the bowl at the floor or more and the text under it fits the box. The text the bowl takes back is
+ * room the arc grows into. Only when no radius holds the value in the bowl does it stand under the arc and its end labels (the last resort), at
+ * most METRIC_GAUGE_VALUE_UNDER of the radius; when that fits nowhere either, the metric is laid out without its gauge (`gaugeDropped`).
  */
 function layoutGaugeMetric(value: string | number | MetricContent, box: LayoutBox, options: MetricLayoutOptions): MetricLayout {
   const input = options.gauge!, {gauge: _input, ...plainOptions} = options;
   const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale), gap = 8 * scale;
   const inner: MetricLayoutOptions = {...plainOptions, align: 'center', tile: false, band: false, eyebrow: false, deltaPill: false};
-  // A tile's floors (the sizes its metric fitted at as a stack, LH-68) are a tile's: under an arc the text fits down to the readability floor.
-  delete inner.display; delete inner.tileFoot; delete inner.minimumSizes;
+  // The arc sets the sizes: a tile's floors (LH-68), sibling sizes, growth and display sizes do not apply under it.
+  delete inner.display; delete inner.tileFoot; delete inner.minimumSizes; delete inner.roleSizes; delete inner.growth; delete inner.proportional; delete inner.message;
   const endStyle = resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 500, italic: false, path: `${options.path ?? 'metric'}.gauge`}, options.textMeasurement);
   const endWidth = textWidthMeasurer(endStyle, options.textMeasurement), endSize = minimum, endLine = endSize * 1.22;
   const largest = Math.min(box.width / 2, box.height - 2 * gap - endLine, METRIC_GAUGE_MAX_WIDTH_PX / 2 * scale), smallest = METRIC_GAUGE_MIN_WIDTH_PX / 2 * scale;
   const radii: number[] = [];
   for (let radius = largest; radius >= smallest - 1e-9; radius *= .9) radii.push(radius);
   if (largest >= smallest - 1e-9 && radii[radii.length - 1]! > smallest + 1e-9) radii.push(smallest);
-  const sizes = (layout: MetricLayout) => Object.fromEntries(layout.parts.filter(part => part.visible && part.fit).map(part => [part.role, part.fit!.fontSize]));
-  const keepsSizes = (layout: MetricLayout, wanted: Record<string, number>) => Object.entries(wanted).every(([role, size]) => (sizes(layout)[role] ?? 0) >= size - FONT_GRID_EPSILON);
-  const capped = (wanted: Record<string, number>) => { const roleSizes = {...options.roleSizes}; for (const [role, size] of Object.entries(wanted)) roleSizes[role as MetricTextRole] = Math.min(roleSizes[role as MetricTextRole] ?? Infinity, size); return roleSizes; };
   const meets = (a: LayoutBox, b: LayoutBox) => a.x < b.x + b.width - .01 && b.x < a.x + a.width - .01 && a.y < b.y + b.height - .01 && b.y < a.y + a.height - .01;
-  // The sizes the text has at the box's width when height does not limit it: what the arc gives way to.
-  const natural = sizes(layoutMetric(value, {x: box.x, y: box.y, width: box.width, height: 1e6}, inner));
-  const attempt = (radius: number, strict: boolean): MetricLayout | undefined => {
+  // The sizes a value of `size` asks for: every role by the metric's proportions, none under the floor (layoutMetric fits each down from there).
+  const asked = (size: number) => ({...inner, [GAUGE_SIZES]: Object.fromEntries((Object.keys(METRIC_ROLE_SIZES) as MetricTextRole[]).map(role => [role, Math.max(minimum, size * METRIC_ROLE_SIZES[role] / METRIC_ROLE_VALUE_SIZE)]))} as MetricLayoutOptions);
+  const valueSize = (layout: MetricLayout) => layout.parts[0]!.fit?.fontSize ?? 0;
+  const lineBoxes = (part: MetricTextPart) => part.fit!.sourceLines.map((line, index) => ({x: part.linePositions[index]!.x, top: part.linePositions[index]!.baseline - .75 * part.fit!.fontSize, right: part.linePositions[index]!.x + line.width, baseline: part.linePositions[index]!.baseline}));
+  const attempt = (radius: number, under: boolean): MetricLayout | undefined => {
     const center = {x: box.x + box.width / 2, y: box.y + radius}, thickness = radius * METRIC_GAUGE_THICKNESS;
     const ends = input.ends.map((text, index): MetricGaugeEnd => {
       const width = endWidth(text, endSize), middle = index === 0 ? center.x - radius + thickness / 2 : center.x + radius - thickness / 2;
@@ -3000,34 +3008,48 @@ function layoutGaugeMetric(value: string | number | MetricContent, box: LayoutBo
     const endsBottom = center.y + gap + endLine, below = {x: box.x, y: endsBottom + gap, width: box.width, height: box.y + box.height - endsBottom - gap};
     // The bowl's room: the track's inner radius less METRIC_GAUGE_BOWL_GAP of the radius (at least the metric's gap), so a value never crowds the arc.
     const room = radius - thickness - Math.max(gap, radius * METRIC_GAUGE_BOWL_GAP), within = (x: number, y: number) => Math.hypot(x - center.x, Math.min(0, y - center.y)) <= room + .01;
-    const lineBoxes = (part: MetricTextPart) => part.fit!.sourceLines.map((line, index) => ({x: part.linePositions[index]!.x, top: part.linePositions[index]!.baseline - .75 * part.fit!.fontSize, right: part.linePositions[index]!.x + line.width, baseline: part.linePositions[index]!.baseline}));
     // The value in the bowl: its baseline on the center line, every line above it inside the inner circle, nothing below it on an end's label.
     const inBowl = (layout: MetricLayout) => !layout.overflow && layout.parts.filter(part => part.visible && part.fit && part.linePositions.length).every(part => lineBoxes(part).every(line =>
       line.baseline <= center.y + .01 ? within(line.x, line.top) && within(line.right, line.top) && within(line.x, line.baseline) && within(line.right, line.baseline)
         : line.top >= center.y - .01 && !ends.some(end => meets(end.box, {x: line.x, y: line.top, width: line.right - line.x, height: line.baseline - line.top + .3 * part.fit!.fontSize}))))
       && (!layout.trendBox || layout.trendBox.y >= center.y - .01 && !ends.some(end => meets(end.box, layout.trendBox!)) || within(layout.trendBox.x, layout.trendBox.y) && within(layout.trendBox.x + layout.trendBox.width, layout.trendBox.y + layout.trendBox.height));
-    let chosen: MetricLayout | undefined, bowl = false;
-    // The bowl first: the text laid out once without a height limit says where the value's baseline stands in its stack.
-    const probe = layoutMetric(value, {...below, height: 1e6}, {...inner, roleSizes: capped(natural)}), valuePart = probe.parts[0]!;
-    if (valuePart.fit?.sourceLines.length === 1 && valuePart.linePositions.length === 1) {
-      const top = center.y - (valuePart.linePositions[0]!.baseline - below.y), wanted = strict ? natural : sizes(probe);
-      const laid = layoutMetric(value, {x: box.x, y: top, width: box.width, height: box.y + box.height - top}, {...inner, roleSizes: capped(wanted)});
-      if (keepsSizes(laid, wanted) && inBowl(laid)) { chosen = laid; bowl = true; }
-    }
-    if (!chosen && below.height > 0) {
-      const laid = layoutMetric(value, below, strict ? {...inner, roleSizes: capped(natural)} : inner);
-      if (!laid.overflow && (!strict || keepsSizes(laid, natural))) chosen = laid;
+    let chosen: MetricLayout | undefined;
+    if (!under) {
+      // The largest value at or under the ceiling whose line fits the bowl. A probe at the ceiling (no height limit) gives the line's width per
+      // pixel of size (with a unit beside it); the bowl's circle then gives the size directly, and it is checked, stepping down if it misses.
+      const ceiling = Math.max(minimum, METRIC_GAUGE_VALUE_SIZE * radius);
+      const probe = layoutMetric(value, {...below, height: 1e6}, asked(ceiling)), part = probe.parts[0]!;
+      if (part.fit?.sourceLines.length !== 1 || part.linePositions.length !== 1) return undefined;
+      const unit = probe.arrangement === 'inline-unit' ? probe.parts.find(entry => entry.role === 'unit' && entry.visible && entry.fit) : undefined;
+      const left = part.linePositions[0]!.x, right = Math.max(left + part.fit.sourceLines[0]!.width, unit ? unit.box.x + unit.box.width : -Infinity);
+      const perPixel = Math.max(right - center.x, center.x - left) / valueSize(probe);
+      let size = Math.min(valueSize(probe), snapFontSizeDown(room / Math.hypot(perPixel, .75)));
+      for (let step = 0; step < 12 && size >= minimum - 1e-9 && !chosen; step++, size = snapFontSizeDown(size * .94)) {
+        const placed = layoutMetric(value, {...below, height: 1e6}, asked(size)), valuePart = placed.parts[0]!;
+        if (valuePart.fit?.sourceLines.length !== 1 || valuePart.linePositions.length !== 1) break;
+        const top = center.y - (valuePart.linePositions[0]!.baseline - below.y);
+        const laid = layoutMetric(value, {x: box.x, y: top, width: box.width, height: box.y + box.height - top}, asked(size));
+        if (valueSize(laid) >= size - FONT_GRID_EPSILON && inBowl(laid)) chosen = laid;
+      }
+    } else if (below.height > 0) {
+      // The last resort: under the arc and its end labels, at most METRIC_GAUGE_VALUE_UNDER of the radius (fitted down to the floor).
+      const laid = layoutMetric(value, below, asked(Math.max(minimum, METRIC_GAUGE_VALUE_UNDER * radius)));
+      if (!laid.overflow) chosen = laid;
     }
     if (!chosen) return undefined;
     const geometry = metricGaugeGeometry(input, center, radius, scale);
     const right = Math.max(center.x + radius, ends[1].box.x + ends[1].box.width), left = Math.min(center.x - radius, ends[0].box.x);
-    const gauge: MetricGaugeLayout = {...geometry, ends, endStyle, inBowl: bowl, box: {x: left, y: box.y, width: right - left, height: endsBottom - box.y}};
+    const gauge: MetricGaugeLayout = {...geometry, ends, endStyle, inBowl: !under, box: {x: left, y: box.y, width: right - left, height: endsBottom - box.y}};
     const bottom = Math.max(endsBottom, chosen.bounds.y + chosen.bounds.height);
+    // What the text asks for is what the widest arc its box's width allows would set: a cell that cuts the arc by its height sets the text
+    // smaller than asked, so composition scores that cell as it scores any text set below its size (a row of gauges over a stack of flat ones).
+    const ideal = Math.max(minimum, METRIC_GAUGE_VALUE_SIZE * Math.min(box.width / 2, METRIC_GAUGE_MAX_WIDTH_PX / 2 * scale));
+    for (const part of chosen.parts) part.requestedFontSize = Math.max(part.requestedFontSize, gridFontSize(Math.max(minimum, ideal * METRIC_ROLE_SIZES[part.role] / METRIC_ROLE_VALUE_SIZE), part.minFontSize));
     const layout: MetricLayout = {...chosen, bounds: {x: box.x, y: box.y, width: box.width, height: bottom - box.y}, gauge};
     if (FIGURE_LINES.has(chosen)) FIGURE_LINES.add(layout);
     return layout;
   };
-  for (const strict of [true, false]) for (const radius of radii) { const layout = attempt(radius, strict); if (layout) return layout; }
+  for (const under of [false, true]) for (const radius of radii) { const layout = attempt(radius, under); if (layout) return layout; }
   const plain = layoutMetric(value, box, plainOptions), layout: MetricLayout = {...plain, gaugeDropped: true};
   if (FIGURE_LINES.has(plain)) FIGURE_LINES.add(layout);
   return layout;
@@ -3094,7 +3116,9 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const eyebrow=options.eyebrow===true&&role==='label'&&!options.tile,caps=eyebrow&&eyebrowCaps(text);
     // LH-188: a one-message slide's figure of at most FIGURE_CEILING.characters grows to FIGURE_CEILING.size.
     const display=options.proportional?Infinity:role==='value'&&options.message&&messageCharacters(text)<=FIGURE_CEILING.characters?FIGURE_CEILING.size:LONE_DISPLAY_SIZES[role];
-    const nominal=Math.max(Math.min(grownRoleSize(role==='value'?valueSize:role==='description'?20:role==='trend'?18:eyebrow?EYEBROW_TAG_SIZE:23,eyebrow?undefined:options.growth,display)*scale,options.roleSizes?.[role]??Infinity),least);
+    // FR-07, part 3: a gauge asks each role for the size its arc sets (GAUGE_SIZES), in place of the role size and its growth.
+    const gaugeSize=((options as Record<symbol,unknown>)[GAUGE_SIZES] as Partial<Record<MetricTextRole,number>>|undefined)?.[role];
+    const nominal=gaugeSize!==undefined?Math.max(gaugeSize,least):Math.max(Math.min(grownRoleSize(role==='value'?valueSize:role==='description'?20:role==='trend'?18:eyebrow?EYEBROW_TAG_SIZE:23,eyebrow?undefined:options.growth,display)*scale,options.roleSizes?.[role]??Infinity),least);
     // LH-189: a label set in capitals as authored takes the eyebrow's tracking.
     const tracked=caps||role==='label'&&capitalsLabel(text);
     const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fontFamilies?.heading:eyebrow?options.fontFamilies?.accent??options.fontFamilies?.body:options.fontFamilies?.body)??'sans-serif',fontWeight:role==='value'?800:eyebrow?700:role==='description'?400:500,italic:false,path,...(caps?{caps:true}:{}),...(tracked?{tracking:EYEBROW_TRACKING}:{})};
