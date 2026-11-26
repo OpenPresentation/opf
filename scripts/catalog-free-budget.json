@@ -3,18 +3,18 @@
   "entries": {
     "browser": 693986,
     "composition": 336734,
-    "convert": 576829,
-    "data": 21256,
+    "convert": 594843,
+    "data": 22140,
     "deck": 617236,
     "diagram-engine-eager": 294825,
     "diagram-engine-lazy": 11669,
     "diff": 6237,
     "font-policy": 17383,
     "format": 77824,
-    "ids": 559920,
+    "ids": 577341,
     "markdown": 612828,
-    "pagination": 562933,
-    "patch": 557562,
+    "pagination": 580304,
+    "patch": 575132,
     "precompiled": 216762,
     "schema": 105390,
     "schema-engine-ajv": 146885,
@@ -28,7 +28,7 @@
     "spec-files": 625,
     "symbol-font-encodings": 26562,
     "types": 21,
-    "validator": 557113,
+    "validator": 574761,
     "yaml": 596553
   },
   "measured": {
@@ -41,12 +41,12 @@
       "gzip": 326926
     },
     "convert": {
-      "minified": 1708198,
-      "gzip": 560028
+      "minified": 1749366,
+      "gzip": 577517
     },
     "data": {
-      "minified": 60828,
-      "gzip": 20636
+      "minified": 63701,
+      "gzip": 21495
     },
     "deck": {
       "minified": 1831401,
@@ -81,20 +81,20 @@
       "gzip": 75557
     },
     "ids": {
-      "minified": 1661595,
-      "gzip": 543611
+      "minified": 1701674,
+      "gzip": 560525
     },
     "markdown": {
       "minified": 1819812,
       "gzip": 594978
     },
     "pagination": {
-      "minified": 1668571,
-      "gzip": 546536
+      "minified": 1708966,
+      "gzip": 563401
     },
     "patch": {
-      "minified": 1656856,
-      "gzip": 541322
+      "minified": 1696935,
+      "gzip": 558380
     },
     "precompiled": {
       "minified": 1406414,
@@ -153,8 +153,8 @@
       "gzip": 20
     },
     "validator": {
-      "minified": 1654623,
-      "gzip": 540886
+      "minified": 1694702,
+      "gzip": 558020
     },
     "yaml": {
       "minified": 1773765,
