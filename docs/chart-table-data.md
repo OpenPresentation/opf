@@ -8,7 +8,7 @@ Recorded 2026-10-05 for the owner, who asked for all five recommendations of the
 
 1. **One strict chart number rule in core.** The preview read `"12%"` as a gap and `"1e6"` as 1000000; the exporter stripped every non-numeric character (`"1e6"` became 16, `"(5)"` became 5, `"Q1"` became 1). Both engines now call core `chartNumber`, which follows the existing data-import rule. A string that is not a strict decimal number is a gap in both engines and a `chart-value-not-numeric` warning, never a guessed value. Decks whose chart cells held `"12%"` or `"$5"` export a gap where they used to export 12 or 5.
    How a gap draws (RR-105): a line breaks; an unstacked area ends at the points beside the gap and stands on the axis there, so a point with gaps on both sides draws no area; a stacked or 100% stacked area keeps the gap's layer at zero thickness, so the layers above still rest on the running total. A gap has no data label. The PPTX export writes the gap as an omitted `c:pt` with `c:dispBlanksAs val="gap"` on line and area charts (before 0.34 it wrote `span`, so PowerPoint joined a line across the gap while the preview broke it).
-2. **`ChartDataSource` is removed from the schema.** No engine resolved it ([opf#240](https://github.com/OpenPresentation/opf/issues/240), descoped), so the format-audit program (FA-07, 2026-10-06) deleted it, with its `chart-data-source-unresolved` warning. A future data-resolver design re-adds it when it is built. Inline data records where it came from with `data.source`, which engines never read.
+2. **`ChartDataSource` is removed from the schema.** No engine resolved it ([opf#240](https://github.com/OpenPresentation/opf/issues/240), descoped), so the format-audit program (FA-07, 2026-10-06) deleted it, with its `chart-data-source-unresolved` warning. A future data-resolver design re-adds it when it is built. Inline data records where it came from with its own `datasource`, `query`, `retrieved`, `version`, `sha256` and `generator` keys, which engines never read.
 3. **Number formats use the variables syntax.** One pattern language for `NumberVariable.format`, column formats and cell formats. Core converts it to an Excel format code for the PPTX export and back on import.
 4. **Datasets are top-level and shared.** A chart or a table references one with `{ "dataset": "<id>" }`. Core inlines references before composition, so the engines keep plotting and laying out inline data.
 5. **Series mapping is by column name.** `chart.mapping` picks the category, X and series columns. Absent keeps today's positional rule exactly.
@@ -77,9 +77,42 @@ The preview, PNG and PDF draw the computed fills. The PowerPoint export writes a
 
 ### Data source provenance
 
-`DataSourceRef` is `{ "src": string, "sheet"?, "range"?, "fields"?: string[], "retrieved"?: string (ISO date or date-time), "description"?: string }`. It records where inline data or a dataset came from. Engines never read, fetch or refresh it; they keep it through editing, export and re-import. It may appear as `ChartData.source` and `Dataset.source`.
+### Typed columns
 
-There is no chart data source by file or asset (`chart.data` with `src`, `sheet`, `range`, `columns`): that form is removed (opf#240, descoped) and is a schema error. Import the data inline with `columns`/`rows` and record its origin in `source`.
+A dataset column and an inline chart data column may be a `DatasetColumn`: a `DataColumn` that also says what its cells hold (`type`), what the column is for (`role`) and a `unit` label. A table's own column headers stay `DataColumn` and declare nothing. A tool that picks a chart, aggregates a column or orders a time axis reads the declaration instead of guessing from the name and the cells.
+
+```json
+{ "name": "Month", "type": "date", "role": "dimension" }
+{ "name": "Revenue", "format": "$#,##0", "type": "number", "role": "measure", "unit": "USD" }
+```
+
+| `type` | Cells that match | Notes |
+| --- | --- | --- |
+| `text` | a string | |
+| `number` | a finite number | A string, even `"12"`, does not match; the safe fix stores it as `12`. |
+| `date` | a string the time-order rule reads as a year, period, week, month or date (`2026-03`, `Q1 2026`, `FY26`, `Jan`, `2026-03-15`), an ISO 8601 date-time (`2026-03-15T09:30:00Z`), or an integer year from 1800 to 2200 | One date grammar for the whole format. |
+| `boolean` | `true` or `false` | |
+| any | `null` | A gap, never a mismatch. |
+
+`role` is `dimension` (it labels or groups rows) or `measure` (its values are measured and can be aggregated). Time is type `date` with role `dimension`; there is no `temporal` role. Each key stands alone: `type` without `role` and the reverse are valid, and no combination is invalid (a `text` measure is a count of values, not a sum).
+
+`unit` is a label for tools (`"USD"`, `"ms"`, `"people"`). Engines never print it: only `format` decides how a number is drawn.
+
+What engines do:
+
+- Drawing is unchanged. A typed column draws and exports exactly as the same column without the keys.
+- Time order (`chartCategoriesInTime`) reads the declared type of the category column first. `date`: the categories are time ordered when they run forward under the existing family rules, and the category-title fallback is skipped. `text` or `boolean`: never time ordered, whatever the labels look like. `number` or undeclared: the rule as before.
+- A cell that does not match its column's `type` is a `data-cell-type` warning at the cell (`/datasets/<id>/rows/<r>/<c>`, or the rows of inline chart data). More than five mismatches in one column are one finding for the column, at its first cell. Rows count from 1 in the message. The safe fix (`opf fix --audits`, or the finding's `fixes`) stores a strict decimal string in a `number` column as the number and a number in a `text` column as its text; `"12%"` stays and keeps its warning, and the fix never changes the declared type.
+- `resolveChartData` returns `types`, aligned with `columns` (so `fields` selections and a mapping keep each column's declaration). `datasetColumnDeclaration(document, dataset, field)` reads `{ type?, role?, unit? }` of one dataset column by name (`undefined` when there is no such column), for tools such as a computed metric that must refuse to sum a `text` column.
+- `opf ingest --dataset` declares the columns of the dataset it writes (inline chart data and tables stay as they were): `number` when every filled cell is a number (a decimal string that prints back unchanged counts; `12.50` does not), `boolean`, `date` (every cell a time label) or `text`; role `measure` for a number column that is neither the first column nor a time label, `dimension` otherwise. It stores the cells as that type, so a typed column it writes never warns. A column whose type cannot be told stays a plain string, and a column a dataset already declares keeps its declaration (core `inferColumnDeclaration`, `declareColumns`). The heuristic is a starting point for ingest, not a rule of the format; a host that reads a typed source writes the declarations it knows.
+- In the editor the data panel has a type, a role and a unit field for the selected column of a chart's data or a shared dataset (`setGridColumnDeclaration`); a cell of another kind is marked; columns a paste adds declare what their cells say.
+- The PowerPoint export keeps the keys in `OPF_DATASETS_V1` and in a chart's `OPF_DATA_V1` record, inline. A 0.36.0 importer does not know them and drops those records whole (see [document round trip](../packages/pptx/docs/document-roundtrip.md)); its charts and tables keep the values they show.
+
+### Where data came from
+
+A dataset and inline chart data say where they came from in their own keys: `datasource`, `query`, `retrieved`, `version`, `sha256` and `generator`. `datasource` is the id of an entry of the root `datasources` map (a string is always an id) or a data source written inline, `{ "src": "./revenue.csv" }`. Engines never read, fetch or refresh a data source; they keep the keys through editing, export and re-import. The keys, the `datasources` map, the rules and the `opf fix` rewrite of the removed nested `source` object are in [Data sources](data-sources.md).
+
+There is no chart data source by file or asset (`chart.data` with `src`, `sheet`, `range`, `columns`): that form is removed (opf#240, descoped) and is a schema error. Import the data inline with `columns`/`rows` and record its origin with `datasource` and `query`.
 
 ### Datasets
 
@@ -92,7 +125,9 @@ Top-level `datasets` maps ids (the `assets` id pattern) to a `Dataset`:
       "title": "Revenue by quarter",
       "columns": ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, "Costs"],
       "rows": [["Q1", 12, 8], ["Q2", 18, 11], ["Q3", 24, 15]],
-      "source": { "src": "./data/revenue.csv", "retrieved": "2026-10-05" }
+      "datasource": { "src": "./data/revenue.csv" },
+      "query": "A1:C4",
+      "retrieved": "2026-10-05"
     }
   }
 }
@@ -107,7 +142,8 @@ Validation:
 - an unknown dataset id is a `dataset-unknown` error;
 - an unknown field is a `dataset-field-unknown` error;
 - duplicate column names in a dataset, or in chart data that a `mapping` or `fields` addresses, are a `data-column-duplicate` error;
-- a dataset nothing references is the warning `opf/unused-dataset` (category `references`).
+- a dataset nothing references is the warning `opf/unused-dataset` (category `references`);
+- a string `datasource` that names no entry of `datasources` is a `datasource-unknown` error (on a dataset and on inline chart data); a credential in a data source's `src` is the warning `datasource-credentials`, and data older than its data source's `refreshEvery` is the warning `dataset-stale` when the caller passes a date (see [Data sources](data-sources.md)).
 
 ### Series mapping
 
@@ -134,7 +170,7 @@ The PPTX export reports a fallback as `chart-data-adapted` with `adaptation: 'ch
 
 ## Core runtime API
 
-Exported from `@openpresentation/opf` and `@openpresentation/opf/data` (module `src/chart-data.ts`; the resolvers are also on `@openpresentation/opf/composition`). Inputs are typed `unknown` so engines can pass any parsed chart, table or document; the result types are exported (`ResolvedChartData`, `ResolvedTableData`, `DataDiagnostic`, `DataColumn`, `DataSourceRef`, `Dataset`, `DatasetRef`, `ChartMapping`, `DataCellValue`, `DataTableCell`, `DataTableHeader`, `DataStyledCell`).
+Exported from `@openpresentation/opf` and `@openpresentation/opf/data` (module `src/chart-data.ts`; the resolvers are also on `@openpresentation/opf/composition`). Inputs are typed `unknown` so engines can pass any parsed chart, table or document; the result types are exported (`ResolvedChartData`, `ResolvedTableData`, `DataDiagnostic`, `DataColumn`, `DataSource`, `DataGenerator`, `DataProvenance`, `Dataset`, `DatasetRef`, `ChartMapping`, `DataCellValue`, `DataTableCell`, `DataTableHeader`, `DataStyledCell`).
 
 ```ts
 /** Strict chart number: finite numbers, and strings in strict decimal syntax (trimmed). Everything else is null (a gap), including "+5", ".5", "5.", "007" and plain digit strings beyond the safe integer range (usually identifiers that would lose digits); a decimal or exponent form such as "1e20" is a number. */
@@ -147,7 +183,7 @@ export function numberFormatError(format: unknown): string | undefined;
 export function toExcelNumberFormat(format?: string): string;
 /** Excel format code -> NumberFormat, or undefined when the code has no exact NumberFormat equivalent (General, sections, scaling commas, and placeholder orders Excel reads by position such as "0#" or "0.#0"). */
 export function fromExcelNumberFormat(code: string): string | undefined;
-/** Pure: a copy of the document where every chart and table DatasetRef is replaced by inline data (columns as DataColumn when a format applies, rows copied; a chart also takes the dataset's `source`). `datasets` stays in place. Unknown ids, and references naming an unknown field, are left as they are. */
+/** Pure: a copy of the document where every chart and table DatasetRef is replaced by inline data (columns as DataColumn when a format applies, rows copied; a chart also takes the dataset's provenance keys). `datasets` stays in place. Unknown ids, and references naming an unknown field, are left as they are. */
 export function inlineDatasets<T>(document: T): T;
 /** One table or chart in inline form (a dataset reference copied from document.datasets); anything else is returned as is. */
 export function inlineTableData<T>(table: T, document?: unknown): T;
@@ -160,8 +196,8 @@ export function inlineChartData<T>(chart: T, document?: unknown): T;
  * Inline ChartData, a DatasetRef (needs the document) and mapping are resolved here.
  * options.path is the chart's JSON Pointer, the base of diagnostic paths (dataset cells report at /datasets/<id>/...).
  */
-export function resolveChartData(chart: unknown, document?: unknown, options?: { path?: string }):
-  | { ok: true; columns: string[]; hasX: boolean; formats: (string | undefined)[]; rows: (string | number | boolean | null)[][]; source?: DataSourceRef; dataset?: string; diagnostics: DataDiagnostic[] }
+export function resolveChartData(chart: unknown, document?: unknown, options?: { path?: string; asOf?: string }):
+  | { ok: true; columns: string[]; hasX: boolean; formats: (string | undefined)[]; rows: (string | number | boolean | null)[][]; provenance?: DataProvenance; dataset?: string; diagnostics: DataDiagnostic[] }
   | { ok: false; reason: "dataset-unknown" | "no-rows" | "no-columns"; message: string; diagnostics: DataDiagnostic[] };
 /** Resolve a table (inline or dataset-backed) to headers, rows and per-column formats. */
 export function resolveTableData(table: unknown, document?: unknown, options?: { path?: string }):
@@ -180,7 +216,7 @@ export function isDatasetRef(value: unknown): value is DatasetRef;
 
 `DataDiagnostic` is `{ code, severity: "error" | "warning", path, message }`, with the codes above plus `chart-value-not-numeric`. `chartNumber` runs after variables are filled. Before filling, the validator does not warn on a `var:<id>` cell whose variable is a number. `chart-value-not-numeric` is reported for any value cell that `chartNumber` rejects (strings and booleans), never for `null` or `""`. An unknown `fields` entry is a `dataset-field-unknown` error and `resolveChartData`/`resolveTableData` leave that column out. `number-format-invalid` applies to `DataColumn.format` and `StyledTableCell.format`; `NumberVariable.format` keeps its existing check (`variable-format` where it is used), so no existing document gains an error.
 
-`validate` reports the codes as `opf/<code>` rule ids: the errors are `format` findings, `opf/chart-value-not-numeric` and `opf/chart-mapping-adapted` are `content` warnings, `opf/chart-data-source-unresolved` is a `references` warning, and `references` adds `opf/unused-dataset`. The raw schema issue of a finding is in its `validation` field (`validation.params.code`).
+`validate` reports the codes as `opf/<code>` rule ids: the errors are `format` findings, `opf/chart-value-not-numeric` and `opf/chart-mapping-adapted` are `content` warnings, `opf/datasource-credentials` and `opf/dataset-stale` are `content` warnings, and `references` adds `opf/unused-dataset`. The raw schema issue of a finding is in its `validation` field (`validation.params.code`).
 
 ### Migration help
 
@@ -196,10 +232,10 @@ Core composition, table layout and pagination accept dataset-backed tables and c
 
 - `composeSlide` inlines a dataset-backed `table` or `chart` from `options.presentation.datasets`, so the composed item's `value` (and `payload`) is the inline copy; the item `path` still points at the authored field. `layoutTable(value, box, { presentation })` does the same, and each body cell's `TableCellLayout.value` is its display value (`tableCellDisplayValue`); `input` stays the authored cell. A DataColumn header shows its `name` (`path` ends in `.name`).
 - `paginateSlide`/`paginate` validate a slide with the deck's `datasets` (and `references`). A dataset table that has to be split is written to the continuation slides as inline tables (the slide that fits is returned unchanged, with its reference).
-- `convertContent` keeps a dataset reference between chart and table (`fields` too; `mapping` is reported as lost) and needs `options.presentation` to convert a dataset table to any other kind. Inline conversions keep DataColumn formats and report lost number formats and `source`. Slide-level conversions validate with the document's datasets; slide-only structure edits skip the dataset checks they cannot make.
-- Markdown writes the new fields in its embedded YAML form (lossless); `datasets` go to the front matter. `format` orders `datasets`, `mapping`, `source` and `DataColumn` keys by the schema. `diff` reports changes under `datasets` in their own category. The chart rules of `validate` read resolved chart data (DataColumn names, dataset charts).
+- `convertContent` keeps a dataset reference between chart and table (`fields` too; `mapping` is reported as lost) and needs `options.presentation` to convert a dataset table to any other kind. Inline conversions keep DataColumn formats and report lost number formats and the data source keys. Slide-level conversions validate with the document's datasets; slide-only structure edits skip the dataset checks they cannot make.
+- Markdown writes the new fields in its embedded YAML form (lossless); `datasets` go to the front matter. `format` orders `datasets`, `datasources`, `mapping`, the provenance keys and `DataColumn` keys by the schema. `diff` reports changes under `datasets` in their own category. The chart rules of `validate` read resolved chart data (DataColumn names, dataset charts).
 - Variables: `resolveVariables` walks `datasets` like any other content, so `{{id}}` tokens and whole `var:<id>` cells in dataset rows are filled before engines inline the reference.
-- `opf ingest --dataset <id>` (CLI) writes the imported columns and rows into `datasets.<id>` and references it. Re-importing into an existing dataset keeps its title, description and the format of each column whose name is unchanged; `source.src` names the imported file relative to the deck file's folder with `/` separators (stdin: no source), and `source.retrieved` is set only by `--date YYYY-MM-DD`; the command never reads the clock.
+- `opf ingest --dataset <id>` (CLI) writes the imported columns and rows into `datasets.<id>` and references it. Re-importing into an existing dataset keeps its title, description and the format of each column whose name is unchanged; `datasource.src` names the imported file relative to the deck file's folder with `/` separators (stdin: no data source) and `sha256` is the hash of that file's bytes; `retrieved` is set only by `--date YYYY-MM-DD` (the command never reads the clock). A re-import keeps an inline data source's other keys and the `query` when the same file is imported again, keeps a data source named by id, and never keeps `retrieved`, `sha256`, `version` or `generator`, which described the old rows.
 - The generated `Table` type now has `rows?` (a dataset table has none) and `dataset?`/`fields?`; TypeScript callers that read `table.rows` handle the dataset form (or call `resolveTableData`).
 
 ## Engines
@@ -232,11 +268,11 @@ All three engines read core's functions when they exist and fall back to their p
 - **Embedded workbook:** custom `numFmt` entries from id 164, with cell styles on every value cell, so Edit Data shows the formats.
 - **Tables:** tables export core layout's display text.
 - **Datasets and mapping:** a chart that uses them exports exactly like its inline equivalent.
-- **Provenance:** in `full` mode, `OPF_DATASETS_V1` holds the `datasets` map. `OPF_DATA_V1` sits on each chart or table frame that uses a new field and holds the authored `data`, `mapping` and table form (and, FA-14, a chart's `highlight`, which then also records its inline `data`; see [chart-options.md](chart-options.md)), plus a hash of the cached names, values and format codes. `references-only` mode and `provenance: false` write neither tag.
+- **Provenance:** in `full` mode, `OPF_DATASETS_V1` holds the `datasets` map and `OPF_DATASOURCES_V1` the root `datasources` map; the provenance keys of a dataset and of inline chart data travel inside those records and the frame record, unchanged. `OPF_DATA_V1` sits on each chart or table frame that uses a new field and holds the authored `data`, `mapping` and table form (and, FA-14, a chart's `highlight`, which then also records its inline `data`; see [chart-options.md](chart-options.md)), plus a hash of the cached names, values and format codes. `references-only` mode and `provenance: false` write neither tag.
 
 ### PPTX import (opf-pptx)
 
-- **With provenance:** `datasets` is restored before document provenance validates. A frame's dataset reference, `mapping`, formats and `source` are restored only while the cache hash still matches. If PowerPoint (or a person) changed the values, the native values import and a diagnostic says why, such as `chart-data-provenance-changed` or `table-dataset-unavailable`. The hash compares format codes in core's canonical form (`fromExcelNumberFormat`), so PowerPoint's re-spellings on save (`\$#,##0.0` for `$#,##0.0`, `#,##0\ "units"` for `#,##0 "units"`, native check [opf#385](https://github.com/OpenPresentation/opf/pull/385)) still match; a General code counts as no code.
+- **With provenance:** `datasets` and `datasources` are restored before document provenance validates. A frame's dataset reference, `mapping`, formats and data source keys are restored only while the cache hash still matches. If PowerPoint (or a person) changed the values, the native values import and a diagnostic says why, such as `chart-data-provenance-changed` or `table-dataset-unavailable`. The hash compares format codes in core's canonical form (`fromExcelNumberFormat`), so PowerPoint's re-spellings on save (`\$#,##0.0` for `$#,##0.0`, `#,##0\ "units"` for `#,##0 "units"`, native check [opf#385](https://github.com/OpenPresentation/opf/pull/385)) still match; a General code counts as no code.
 
 Decorative ChartEx titles are excluded from chart-data evidence. A plain PowerPoint save can rewrite a title from `cx:rich` to `cx:txData/cx:v` without changing the data. That rewrite, or a display-caption rename, keeps an unchanged chart's authored data form; it must not introduce a synthetic `Row` column. The cached categories, numeric values, series names and number formats still control whether provenance can restore the authored form.
 - **Without provenance:** a cache `formatCode` that `fromExcelNumberFormat` maps back becomes that column's `{ name, format }`, for both classic and chartex charts. Core returns the canonical spelling, such as `#,##0 units` for `#,##0 "units"`. Other codes are reported as `chart-number-format-adapted` and never invented.
@@ -272,7 +308,7 @@ Sample decks are written by the PPTX branch under `artifacts/rr-54-native/`.
 
 ## Not in this change
 
-- Resolving a data source by file or asset, or refreshing `source` ([opf#240](https://github.com/OpenPresentation/opf/issues/240)).
+- Resolving a data source by file or asset, or refreshing a data source ([opf#240](https://github.com/OpenPresentation/opf/issues/240)).
 - Date axes and date formats.
 - Per-series colors: shipped later as `chart.colors`; see [chart-options.md](chart-options.md#setting-colors-chartcolors). (Columns with line series, optionally on a secondary axis, are the `combo` chart type: [chart-options.md](chart-options.md#combo-charts).)
 - Formulas.

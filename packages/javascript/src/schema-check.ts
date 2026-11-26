@@ -4,7 +4,8 @@ import type { Catalog } from "./catalog-refs.js";
 import { catalogSchemaNames, type CatalogRecordKind } from "./catalog-schemas.js";
 import { resolveDesignRecords } from "./design-records.js";
 import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
-import { datasetDiagnostics, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
+import { dataSourceDiagnostics, provenanceDiagnostics } from "./data-source-checks.js";
+import { datasetDiagnostics, isDatasetRef, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
 import { chartDrawDiagnostics } from "./chart-fallback.js";
 import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions, resolveSlideDirection } from "./composition.js";
 import { layoutTemplateIssues } from "./layout-template.js";
@@ -38,6 +39,8 @@ export interface SchemaCheckOptions {
   values?: VariableValues;
   /** Registered catalogs, for the checks that read a resolved theme (slide-theme-dimensions). */
   catalogs?: readonly Catalog[];
+  /** The date the data is checked as of (an ISO 8601 date or date-time), for the `dataset-stale` warning. Without one no data is reported stale. */
+  asOf?: string;
   /** See `ValidateOptions.slideLinks`. */
   slideLinks?: false | readonly string[];
 }
@@ -721,10 +724,10 @@ function chartTypeWarnings(
   return issues;
 }
 
-// RR-54: chart and table data. Errors: dataset-unknown, dataset-field-unknown, data-column-duplicate,
-// chart-mapping-unknown-column, chart-highlight-unknown-name (FA-14), number-format-invalid. Warnings: chart-value-not-numeric (not for
+// RR-54: chart and table data. Errors: dataset-unknown, dataset-field-unknown, datasource-unknown (FR-04), data-column-duplicate,
+// chart-mapping-unknown-column, chart-highlight-unknown-name (FA-14), number-format-invalid. Warnings: datasource-credentials and dataset-stale (FR-04), chart-value-not-numeric (not for
 // null, "" or a 'var:<id>' cell whose variable is a number), chart-mapping-adapted, chart-highlight-adapted, chart-series-dropped (LH-60).
-function dataIssues(value: unknown): { errors: ValidationIssue[]; warnings: ValidationIssue[] } {
+function dataIssues(value: unknown, asOf?: string): { errors: ValidationIssue[]; warnings: ValidationIssue[] } {
   const out = { errors: [] as ValidationIssue[], warnings: [] as ValidationIssue[] };
   if (!isRecord(value) || !Array.isArray(value.slides)) return out;
   const seen = new Set<string>();
@@ -733,13 +736,17 @@ function dataIssues(value: unknown): { errors: ValidationIssue[]; warnings: Vali
       const key = `${diagnostic.code}|${diagnostic.path}`;
       if (seen.has(key)) continue;
       seen.add(key);
-      (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code }));
+      (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code, ...(diagnostic.aggregate ? { aggregate: true } : {}) }));
     }
   };
   add(datasetDiagnostics(value));
+  // FR-04: the checks on data sources a `validate` makes and the browser-safe data entry does not carry (data-source-checks.ts).
+  add(dataSourceDiagnostics(value));
+  for (const [id, dataset] of Object.entries(isRecord(value.datasets) ? value.datasets : {})) add(provenanceDiagnostics(dataset, `/datasets/${id.replaceAll("~", "~0").replaceAll("/", "~1")}`, value, { asOf }));
   const payload = (node: Record<string, unknown>, path: string): void => {
     if (isRecord(node.chart)) {
       const resolved = resolveChartData(node.chart, value, { path: pathFor(path, "chart") });
+      if (isRecord(node.chart.data) && !isDatasetRef(node.chart.data)) add(provenanceDiagnostics(node.chart.data, pathFor(pathFor(path, "chart"), "data"), value, { asOf }));
       add(resolved.diagnostics);
       // LH-60: a series the drawn chart type cannot plot is named (chart-series-dropped).
       add(chartDrawDiagnostics(node.chart, resolved, pathFor(path, "chart"), { language: typeof value.language === "string" ? value.language : undefined }));
@@ -1084,7 +1091,7 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
     subject = view.presentation;
     unfilledVariables = view.unfilled;
     for (const entry of view.diagnostics) {
-      if (entry.code === "variable-example-used" || entry.code === "variable-rich-flattened" || entry.code === "variable-unfilled") continue;
+      if (entry.code === "variable-example-used" || entry.code === "variable-rich-flattened" || entry.code === "variable-unfilled" || entry.code === "variable-translations-removed") continue;
       // A limit is read by the validator's own rule (opf/variable-overflow, which composes where a line limit needs it), not by the format check.
       if (entry.code === "variable-overflow") continue;
       const issue = semanticIssue(entry.path, entry.message, { id: entry.id, code: entry.code });
@@ -1111,7 +1118,7 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
   if (resolved.schemaName === "presentation") {
     errors.push(...presentationSemanticIssues(subject, options.catalogs, options.slideLinks));
     errors.push(...variableIssues.errors);
-    const data = dataIssues(subject);
+    const data = dataIssues(subject, options.asOf);
     errors.push(...data.errors);
     warnings.push(...presentationReferenceWarnings(subject, options.catalogs));
     warnings.push(...data.warnings);

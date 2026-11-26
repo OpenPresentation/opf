@@ -1,35 +1,35 @@
 {
-  "description": "FA-21: gzip budget (bytes) of each catalog-free core entry, bundled by scripts/check-catalog-free.mjs (esbuild, browser ESM, minified, gzip level 9). The budget is the measured size plus 3% headroom; the content entries (examples, docs, repo-readme) have none. No entry carries catalog data: the pptx.gallery catalog is @openpresentation/gallery (RR-78). `measured` is the size when it was last updated.",
+  "description": "FA-21: gzip budget (bytes) of each catalog-free core entry, bundled by scripts/check-catalog-free.mjs (esbuild, browser ESM, minified, gzip level 9). The budget is the measured size plus 3% headroom; the content entries (examples, docs, repo-readme) have none. No entry carries catalog data: the pptx.gallery catalog is @openpresentation/gallery (RR-78). `measured` is the size when it was last updated. FR-10 (2026-11-25, vetoable): each entry that draws dates (it bundles furniture-fields.ts) carries the date-name table (src/date-name-data.ts, the month and weekday names and the long date pattern of 88 languages, read from ICU 78.3 / CLDR 48.0 by scripts/build-date-names.mjs; 36,431 source bytes, 12,664 gzipped alone) and its lookup. Its limit was raised by the table's measured gzip cost in that entry, not by a general headroom: browser +14004, composition +14134, convert +14019, deck +13971, ids +13883, markdown +13987, pagination +14239, patch +13977, validator +14007, yaml +14067. An entry that does not format dates does not carry the table.",
   "entries": {
-    "browser": 657392,
-    "composition": 310520,
-    "convert": 545540,
-    "data": 12831,
-    "deck": 584047,
+    "browser": 671396,
+    "composition": 324654,
+    "convert": 576829,
+    "data": 16736,
+    "deck": 598018,
     "diagram-engine-eager": 294825,
     "diagram-engine-lazy": 11669,
     "diff": 6237,
     "font-policy": 17383,
-    "format": 68609,
-    "ids": 528431,
-    "markdown": 579776,
-    "pagination": 531725,
-    "patch": 526518,
-    "precompiled": 202789,
-    "schema": 97074,
-    "schema-engine-ajv": 137660,
-    "schema-engine-precompiled": 202825,
-    "schemas": 92285,
+    "format": 71704,
+    "ids": 559920,
+    "markdown": 593763,
+    "pagination": 562933,
+    "patch": 557562,
+    "precompiled": 209577,
+    "schema": 100175,
+    "schema-engine-ajv": 141810,
+    "schema-engine-precompiled": 209617,
+    "schemas": 95359,
     "shape-catalog": 3784,
     "shape-engine-eager": 39085,
     "shape-engine-lazy": 141,
     "shape-geometry": 36548,
-    "source": 222287,
+    "source": 229117,
     "spec-files": 625,
     "symbol-font-encodings": 26562,
     "types": 21,
-    "validator": 526101,
-    "yaml": 563413
+    "validator": 557113,
+    "yaml": 577480
   },
   "measured": {
     "browser": {
@@ -41,12 +41,12 @@
       "gzip": 301475
     },
     "convert": {
-      "minified": 1596505,
-      "gzip": 529650
+      "minified": 1708198,
+      "gzip": 560028
     },
     "data": {
-      "minified": 36148,
-      "gzip": 12457
+      "minified": 46914,
+      "gzip": 16248
     },
     "deck": {
       "minified": 1715553,
@@ -77,48 +77,48 @@
       "gzip": 16876
     },
     "format": {
-      "minified": 236389,
-      "gzip": 66610
+      "minified": 245833,
+      "gzip": 69615
     },
     "ids": {
-      "minified": 1549748,
-      "gzip": 513039
+      "minified": 1661595,
+      "gzip": 543611
     },
     "markdown": {
       "minified": 1703964,
       "gzip": 562889
     },
     "pagination": {
-      "minified": 1557522,
-      "gzip": 516237
+      "minified": 1668571,
+      "gzip": 546536
     },
     "patch": {
-      "minified": 1546016,
-      "gzip": 511182
+      "minified": 1656856,
+      "gzip": 541322
     },
     "precompiled": {
-      "minified": 1320105,
-      "gzip": 196882
+      "minified": 1349245,
+      "gzip": 203472
     },
     "repo-readme": {
       "minified": 19815,
       "gzip": 7158
     },
     "schema": {
-      "minified": 344356,
-      "gzip": 94246
+      "minified": 353800,
+      "gzip": 97257
     },
     "schema-engine-ajv": {
-      "minified": 481096,
-      "gzip": 133650
+      "minified": 493963,
+      "gzip": 137679
     },
     "schema-engine-precompiled": {
-      "minified": 1320152,
-      "gzip": 196917
+      "minified": 1349292,
+      "gzip": 203511
     },
     "schemas": {
-      "minified": 332402,
-      "gzip": 89597
+      "minified": 341846,
+      "gzip": 92581
     },
     "shape-catalog": {
       "minified": 12018,
@@ -137,8 +137,8 @@
       "gzip": 35483
     },
     "source": {
-      "minified": 724549,
-      "gzip": 215812
+      "minified": 746265,
+      "gzip": 222443
     },
     "spec-files": {
       "minified": 5164,
@@ -153,8 +153,8 @@
       "gzip": 20
     },
     "validator": {
-      "minified": 1543783,
-      "gzip": 510777
+      "minified": 1654623,
+      "gzip": 540886
     },
     "yaml": {
       "minified": 1657919,

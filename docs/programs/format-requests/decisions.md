@@ -1,14 +1,21 @@
 # Format requests: decisions
 
-Read from the review page (rounds 1, 2 and 3) and the owner's saved answers of 2026-11-24. Both are private and outside this repository
+Read from the review page (rounds 1, 2 and 3) and the owner's saved answers of 2026-11-24 and 2026-11-25. Both are private and outside this repository
 (the answers are in `C:\opf-work\t\review-answers.md` on the supervisor's Windows computer), so this page is the record. Program:
 [README.md](README.md); items: [burndown.md](burndown.md).
 
 Who decided:
 
 - **Owner, 2026-11-24**: the owner picked this option (or, for a change, made this call) on the review page.
+- **Owner, 2026-11-25**: the owner answered this question on the review page between 16:05 and 16:17 UTC, after the supervisor had taken
+  the recommended option. Every one of these answers is the option already taken, except the release question R1, where he chose
+  "nothing may be cut".
 - **Supervisor, 2026-11-25, on the owner's delegation; he can overrule**: the owner had not answered, so the option the review marks as
   recommended is taken. On 2026-11-25 the owner said to start now and that the supervisor "can make good decisions for open items too".
+- **Owner, 2026-11-25, said in the analysis session**: the owner gave this answer in the session that wrote the review and the design
+  notes, and that session passed it on. The supervisor did not hear it at the source; the owner's words are quoted as that session
+  quoted them.
+- **Owner, 2026-11-25, to the supervisor**: the owner said this in the supervisor's own session. His words are quoted exactly.
 
 An overruled decision changes its row here and the item that depends on it. Where a later round replaced a decision of an earlier round,
 only the later one is kept, with a line saying what it replaced. The review page numbered its release as 0.36; it is 0.37.0 here (see the
@@ -64,7 +71,10 @@ every surface, listed in FR-03; the presenter has a bug where a click on a link 
 | --- | --- | --- | --- |
 | `links-in`: Is it in, and how is the target spelled? | In, `slide:<id>` (recommended); in, `#<id>`; not in 0.37.0 | In, spelled `slide:<id>` | Owner, 2026-11-24 |
 | `links-comments`: Does exporting comments to PowerPoint come with it? | No, it waits for comment anchors (recommended); yes | No | Owner, 2026-11-24 |
-| Round 2: When is the presenter's double action fixed? | Now, as its own small pull request (recommended); with `slide:` links | Done before the question was answered: the editor's presenter was fixed in 0.36.0 (opf#1449). The web player had the same defect and is fixed inside FR-03, in the click handling the slide links use | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Round 2: When is the presenter's double action fixed? | Now, as its own small pull request (recommended); with `slide:` links | Done before the question was answered: the editor's presenter was fixed in 0.36.0 (opf#1449). The web player had the same defect and is fixed inside FR-03, in the click handling the slide links use. The owner then answered `links-presenter` with the same option | Owner, 2026-11-25 |
+| Built: is a link to a hidden slide valid? | Yes; an error | Yes. PowerPoint and the editor's presenter follow it, the web player does not | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: may a slide that others link to be deleted? | The slide manager refuses; it deletes and leaves dead links | The editor's slide manager refuses and names the linking slides | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Owner's note of 2026-11-25, quoted exactly: "do the links work in our preview/viewer components in the opf repo? ideally yes" | Follow links in the viewers' read-only slide view; leave it to Present | They do in the preview, PDF, PowerPoint, the editor's presenter and the web player. The read-only slide view of the MCP viewer and of the editor gets it as a follow-up under FR-03 | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 
 ## FR-04: CR 1 with CR 3, data sources and a flat dataset
 
@@ -105,10 +115,11 @@ Round 3 decisions:
 
 | Question | Options | Answer | Who |
 | --- | --- | --- | --- |
-| What does a string `datasource` mean? | Only an id in `datasources` (recommended); an id if one matches, else a path or URL | Only an id; a file or URL is an object, `{ "src": "./revenue.csv" }` | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
-| Do `sheet` and `range` stay as their own keys? | No, a workbook's `query` is the sheet and range (recommended); yes | No; `"query": "FY26!A1:C13"`, `opf fix` rewrites | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
-| What happens to `source.fields`? | Drop it (recommended); move it to each column as `field` | Drop it | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
-| Can a chart's inline data name a data source too? | Yes, with the same keys (recommended); no, it must be a dataset | Yes, same keys | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| What does a string `datasource` mean? | Only an id in `datasources` (recommended); an id if one matches, else a path or URL | Only an id; a file or URL is an object, `{ "src": "./revenue.csv" }` | Owner, 2026-11-25 (`ds3-string`) |
+| Do `sheet` and `range` stay as their own keys? | No, a workbook's `query` is the sheet and range (recommended); yes | No; `"query": "FY26!A1:C13"`, `opf fix` rewrites | Owner, 2026-11-25, said in the analysis session ("go with your recommendations for the four open details"); taken by the supervisor before that |
+| What happens to `source.fields`? | Drop it (recommended); move it to each column as `field` | Drop it | Owner, 2026-11-25, said in the analysis session (the same sentence); taken by the supervisor before that |
+| Can a chart's inline data name a data source too? | Yes, with the same keys (recommended); no, it must be a dataset | Yes, same keys | Owner, 2026-11-25 (`ds3-inline`) |
+| Owner's note of 2026-11-25, quoted exactly: "will we always have a query? what about if there's a CSV or data in the JSON" | `query` optional; `query` required | Optional. A CSV file, or rows typed into the deck, need none; `query` is only what was asked of a source that takes a question (SQL, a sheet and range, an API call) | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 
 CR 3 decisions:
 
@@ -116,7 +127,8 @@ CR 3 decisions:
 | --- | --- | --- | --- |
 | `cr3-hash`: What does `sha256` cover? | The source file's bytes as retrieved (recommended); the rows in the deck | The source file's bytes | Owner, 2026-11-24 |
 | `cr3-transform`: A separate hash of the transform? | No, `query` holds the text (recommended); yes | No | Owner, 2026-11-24 |
-| `cr3-generator`: What shape is `generator`? | `{ kind: "human" \| "model", name }` (recommended); the bare word | The object | Owner, 2026-11-24 |
+| `cr3-generator`: What shape is `generator`? | `{ type: "human" \| "model", name }` (recommended); the bare word | The object; the key is `type` (the owner, 2026-11-25, said in the analysis session; it was `kind`) | Owner, 2026-11-24 |
+| `cr3-refresh-every`: What is the key for how often a data source is meant to be refreshed? | `refreshEvery` (recommended); keep `refresh` | `refreshEvery`, an ISO 8601 duration as before (the owner, 2026-11-25, said in the analysis session; the key-names study, finding A5) | Owner, 2026-11-25 |
 
 ## FR-05: CR 2, typed columns
 
@@ -126,6 +138,10 @@ Owner's call: Keep, with every recommended answer. No note.
 | --- | --- | --- | --- |
 | `cr2-role`: Does `role` have the value `temporal`? | No, `dimension` and `measure` (recommended); yes, three values | No; time is `type: "date"` with `role: "dimension"` | Owner, 2026-11-24 |
 | `cr2-unit`: What does `unit` do? | A label engines never print (recommended); engines print it | A label; `format` alone draws the number | Owner, 2026-11-24 |
+| Built: which category is the cell rule in, and what may its fix do? | A format error; a content warning with a safe fix | `opf/data-cell-type` is a warning in `content`: at most five findings per column, then one for the column. Its fix stores a strict decimal string as a number and a number in a text column as text, never changes the declared type, and runs only with `opf fix --audits` | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: what counts as a number, and as a date? | Anything a chart can plot; a strict kind | A `number` cell is a finite number, so `"12"` warns. A `date` cell is an ISO 8601 date or date-time. A `date` category column is time ordered when its labels run forward; `text` and `boolean` never are | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: where do the three keys live in a PowerPoint file? | In the data records, as authored; in a side record an older importer skips | In the data records, as authored. An importer of an older release does not restore such a record and imports the values the charts and tables show (the owner on 2026-11-25: no compatibility work for older importers) | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: does `opf ingest --dataset` declare columns? | Yes, from the cells; no | Yes: it declares what it can tell from the cells and stores typed cells as that type; a column it cannot tell stays a plain string, and a column that already exists keeps its declaration | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 
 ## FR-06: CR 4, a metric computed from data
 
@@ -147,10 +163,10 @@ Round 2 decisions:
 
 | Question | Options | Answer | Who |
 | --- | --- | --- | --- |
-| What is the link called? | `data` (recommended); `bind` | `data` (a chart already names its rows `data`) | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
-| Which ways of computing the change? | All three: previous row, baseline filter, column (recommended); only previous; only a column | All three | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
-| When a refresh flips the sign, who decides good or bad? | `better: "up" \| "down"` (recommended); keep only `sentiment` | `better`; an explicit `sentiment` still wins | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
-| Does the arrow follow the computed change? | Yes, when `trend` is not typed (recommended); no | Yes | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| What is the link called? | `data` (recommended); `bind` | `data` (a chart already names its rows `data`) | Owner, 2026-11-25 (`m-key`) |
+| Which ways of computing the change? | All three: previous row, baseline filter, column (recommended); only previous; only a column | All three, and a fourth from his note, quoted exactly: "all three, but fixed value/constant too?" The change can also compare with a fixed number, `compare: { value }` | Owner, 2026-11-25 (`m-delta`); the key's name by the supervisor |
+| When a refresh flips the sign, who decides good or bad? | `better: "up" \| "down"` (recommended); keep only `sentiment` | `better`; an explicit `sentiment` still wins | Owner, 2026-11-25 (`m-better`) |
+| Does the arrow follow the computed change? | Yes, when `trend` is not typed (recommended); no | Yes | Owner, 2026-11-25 (`m-trend`) |
 
 ## FR-07: CR 5, table color scale, bands and bullet, gauge
 
@@ -163,17 +179,19 @@ Round 1 answers, and what became of them:
 | Question | Answer | What round 2 did | Who |
 | --- | --- | --- | --- |
 | `cr5-export`: What does each type become in PowerPoint? | Native parts, editable | Kept and made exact: the color scale is a native table with cell fills, the bullet a native bar chart with a target marker series, the gauge native `blockArc` shapes plus text (not a doughnut) | Owner, 2026-11-24 |
-| `cr5-which`: Which of the three are in 0.37.0? | All three, built in order and cut from the end | Kept: built heatmap (color scale), bullet, gauge; the gauge is cut first, then the bullet | Owner, 2026-11-24 |
+| `cr5-which`: Which of the three are in 0.37.0? | All three, built in order and cut from the end | Kept: built heatmap (color scale), bullet, gauge. The cutting half no longer applies: on 2026-11-25 the owner chose "nothing may be cut" (R1) | Owner, 2026-11-24 and 2026-11-25 |
 | `cr5-contract`: Whose data shape wins? | "Use the shapes shown here" (the requesting tool adapts) | Replaced by the note: take what is best for OPF; no question to the requesting tool first | Owner, 2026-11-24 |
 
 Round 2 decisions:
 
 | Question | Options | Answer | Who |
 | --- | --- | --- | --- |
-| Is a heatmap a chart type or a table option? | A table option, `colorScale` (recommended); a chart type that exports as a table | Table option | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
-| Are bands a bullet feature or a feature of every value axis? | Every bar, column, line and area chart (recommended); bullet only | Every bar, column, line and area chart | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
-| Is "bullet" its own type? | Yes, `type: "bullet"` (recommended); no, authors compose it | Yes | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
-| Is a gauge a chart type or a way to draw a metric? | A metric with a `scale`, drawn on an arc (recommended); a chart type | A metric with a scale | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Is a heatmap a chart type or a table option? | A table option, `colorScale` (recommended); a chart type that exports as a table | Table option | Owner, 2026-11-25 (`c-heatmap`) |
+| Are bands a bullet feature or a feature of every value axis? | Every bar, column, line and area chart (recommended); bullet only | Every bar, column, line and area chart. The owner first asked for the question to be explained ("I don't understand the question. Explain it and make a great recommendation"), then answered it: "go with any chart for bands" | Owner, 2026-11-25, said in the analysis session; taken by the supervisor before that |
+| Is "bullet" its own type? | Yes, `type: "bullet"` (recommended); no, authors compose it | Yes | Owner, 2026-11-25 (`c-bullet`) |
+| Is a gauge a chart type or a way to draw a metric? | A metric with a `scale`, drawn on an arc (recommended); a chart type | A metric with a scale | Owner, 2026-11-25 (`c-gauge`) |
+| Built, color scale: which text color on a shaded cell? | The design's rule (the scheme's text color, or its inverse past a lightness limit); the engines' existing rule for text on a filled cell | The existing rule: the scheme's text color when it reaches 4.5:1 on the fill, else black or white. The design's rule fell below 4.5:1 on the strongest fill in four color schemes | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built, color scale: what range does a diverging scale span when no end is pinned? | Each side its own span; one span, symmetric around the center | Symmetric: equal distances from the center get equal strength, so a lone -1% beside +12% is pale. A pinned `min` or `max` still fixes that end. The owner sees both as pictures before the part merges | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 
 ## FR-08: CR 11, embed
 
@@ -183,12 +201,12 @@ poster". Round 2 is the result (`poster` becomes an optional `preview`).
 | Question | Options | Answer | Who |
 | --- | --- | --- | --- |
 | `cr11-video`: How does it differ from an online video? | A separate kind (recommended); one kind for both | Separate: video plays media, embed shows a page | Owner, 2026-11-24 |
-| Round 2: What about the picture for static outputs? | Optional, named `preview` (recommended); drop it; keep the name `poster` | Optional `preview`; without it a generated card | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
-| Round 2: Build it in 0.37 without waiting for the request text? | Yes, with this schema (recommended); wait for the text | Yes, with this schema | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Round 2: What about the picture for static outputs? | Optional, named `preview` (recommended); drop it; keep the name `poster` | Optional `preview`; without it a generated card | Owner, 2026-11-25 (`e-preview`) |
+| Round 2: Build it in 0.37 without waiting for the request text? | Yes, with this schema (recommended); wait for the text | Yes, with this schema | Owner, 2026-11-25 (`e-release`) |
 
 Replaced: round 1's `cr11-in` (owner: "only if the request text arrives before the schema work starts"). Round 2 asks the question again
-because the owner has now reviewed the schema himself, and its recommended answer is taken. This takes embed from "wait" to "build", so
-it is the decision most worth an owner's look. Embed stays third in the cut order, after the gauge and the bullet chart.
+because the owner has now reviewed the schema himself. The supervisor took its recommended answer, which took embed from "wait" to
+"build"; the owner confirmed it on 2026-11-25, with the optional `preview`.
 
 ## FR-09: CR 14, limits on a variable's value
 
@@ -200,7 +218,7 @@ matter because `maxLines` is measured where the variable is drawn.
 | --- | --- | --- | --- |
 | `cr14-count`: What does `maxLength` count? | Characters as a reader sees them (recommended); code units | Characters as a reader sees them (grapheme clusters) | Owner, 2026-11-24 |
 | `cr14-lines`: Where is `maxLines` checked? | By composition, at each place the variable is drawn (recommended); by validate | Composition | Owner, 2026-11-24 |
-| Round 2: Does it ship in 0.37, ahead of slide templates? | Yes, it works with today's deck templates (recommended); no, move it with slide templates | Yes (the review's option key for this answer is `036`, the old release number) | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Round 2: Does it ship in 0.37, ahead of slide templates? | Yes, it works with today's deck templates (recommended); no, move it with slide templates | Yes (the review's option key for this answer is `036`, the old release number) | Owner, 2026-11-25 (`c14-release`) |
 | Built: which category is the rule in? | One rule in `layout`; two rules, one in `format` | One rule, `opf/variable-overflow`, in `layout`: `validate({ only: ['format'] })` does not report it | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 | Built: which value is measured? | The value given, else the declared value, else the example; the example never | The value given to the check, else the declared `value`, else the `example`; a type sample is never measured | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 | Built: where is `maxLines` measured? | Titles, subtitles, tags, text blocks and list entries; every text | A title, a subtitle, a tag, a text block or a list entry; inside longer text, the lines the variable's own characters occupy; not a table cell, a chart label or text in a shape | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
@@ -217,6 +235,12 @@ Owner's call: Keep, with every recommended answer. No note.
 | `cr15-locale`: Add a `locale` field as asked? | No, a subtag on `language` says it (recommended); yes | No | Owner, 2026-11-24 |
 | `cr15-pick`: Which language selects a translation? | The language where the variable is drawn, slide else deck (recommended); always the deck's | Where it is drawn | Owner, 2026-11-24 |
 | `cr15-names`: Where do month and weekday names come from? | A generated table, measured before it is committed (recommended); the runtime's own data | A generated table | Owner, 2026-11-24 |
+| Built: which language does a deck's header or footer take? | The deck's on every slide; the slide's | The slide's: a slide in another language than the deck's draws the deck's header and footer resolved in its own language, so a translated call to action and a date read in the language of the slide they stand on | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: how far does a translation fall back? | Only by removing subtags (`zh-TW` uses `zh`); also to a related language | Only by removing subtags, ignoring case. A language read from the text selects nothing; only a declared language does | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: what does `opf fill` do with translations? | Keep them; remove them when a value is given | A value given without translations removes them and the report says so; a date's formats stay; a record may give `{ value, translations }` | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: a date with no format | Always `MMMM d, yyyy`; the language's own long pattern | The language's long pattern ("5. März 2026", "5 March 2026" in British English). United States English and a deck with no language keep `MMMM d, yyyy`; a footer date with no `dateFormat` keeps `M/d/yyyy` | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: a current date in PowerPoint | A field in the deck's language; a field in the language of its slide, else fixed text | A native field only where PowerPoint shows what OPF draws in the language of that slide; otherwise the date is fixed text with `furniture-date-fixed`. An English field is no longer used for a pattern with names in a deck whose names are not English | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: what does PowerPoint hold of a translation? | Nothing stored; a record of every translation | Nothing. Measured on 2026-11-25: content variables do not come back from PowerPoint; the export holds each slide's resolved text, and import returns that text. A translated deck exports the text of each slide's language | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 
 ## Not in 0.37.0: the owner's notes, for the record
 
@@ -239,17 +263,60 @@ Quoted exactly; none of these is built here.
 
 ## The release itself: eight decisions
 
-Round 1 left these unanswered. The owner's decisions of 2026-11-24 settled two (R3 and R5), as the plan page says.
+Round 1 left these unanswered. The owner's decisions of 2026-11-24 settled two (R3 and R5), as the plan page says. On 2026-11-25 he
+answered R1, R2, R6 and R7 on the review page and confirmed R3 and R5; R4 and R8 are still the supervisor's.
 
 | # | Question | Options | Answer | Who |
 | --- | --- | --- | --- | --- |
-| R1 | How does one release stay shippable? | One release with a cut order agreed now (recommended); one release, nothing may be cut; back to three releases | One 0.37.0 with the cut order of the README (gauge, bullet, embed, localized date names, `dataset-stale`); a change not accepted in PowerPoint by the release date follows as an addition in a patch | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
-| R2 | Where does the work land while it is built? | On `main`, each change whole, in order (recommended); on an integration branch | On `main`, each change whole, in the order of the README | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| R1 | How does one release stay shippable? | One release with a cut order agreed now (recommended); one release, nothing may be cut; back to three releases | One release, nothing may be cut: 0.37.0 ships when every item is done, and a change PowerPoint does not accept is fixed before the release. This replaces the supervisor's answer of the same day (one release with a cut order) | Owner, 2026-11-25 (`r-one`) |
+| R2 | Where does the work land while it is built? | On `main`, each change whole, in order (recommended); on an integration branch | On `main`, each change whole, in the order of the README | Owner, 2026-11-25 (`r-land`) |
 | R3 | Do the layout sweep's drawing changes ride with the format changes? | Yes, they ride along (recommended in the review); no, they take a minor of their own first | No: the sweep and the other post-0.35.1 fixes ship first as 0.36.0, and the format changes are 0.37.0 | Owner, 2026-11-24 |
-| R4 | Do the breaking proposals that wait for a minor ride along? | No, apart from CR 1's flat dataset, 0.37.0 only adds (recommended); take the six-column grid; take both | No. Decide the fill vocabulary (opf#1275) and the six-column grid (opf#1281) later, build neither here. The one breaking change is CR 1 (FR-04), with an `opf fix` rewrite | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| R4 | Do the breaking proposals that wait for a minor ride along? | No, apart from CR 1's flat dataset, 0.37.0 only adds (recommended); take the six-column grid; take both | No. Decide the fill vocabulary (opf#1275) and the six-column grid (opf#1281) later, build neither here. Later the same day the owner added one more breaking set: the renames of released keys from the key-name study ([below](#key-names-the-study-of-2026-11-25)), each with an `opf fix` rewrite | Owner, 2026-11-25, said in the analysis session (one of "the four open details"); the renames: Owner, 2026-11-25, to the supervisor |
 | R5 | Do the schema identifiers move to openpresentation.com? | Move, with a safe fix; keep them on openpresentation.org (recommended); accept both | They stay on openpresentation.org. No `$schema` fix, no document changes | Owner, 2026-11-24 (his product split) |
-| R6 | STORYD's launch also expects editor features. Are they part of 0.37.0? | A parallel track, comment anchors designed alongside CR 6 (recommended); all in 0.37.0; none | A parallel track in the cloud-editor program; only the anchor design rides with FR-02 | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| R6 | STORYD's launch also expects editor features. Are they part of 0.37.0? | A parallel track, comment anchors designed alongside CR 6 (recommended); all in 0.37.0; none | A parallel track in the cloud-editor program; only the anchor design rides with FR-02 | Owner, 2026-11-25 (`r-wave`) |
 | R7 | Merge the governance and conformance branch before any of this? | Yes, first (recommended); later | Yes, first. Already merged as opf#1419 on 2026-11-24, with the sentence that Data Advantage holds the names and neither is a registered trademark. Every item adds its cases to that suite | Supervisor, on the owner's go-ahead of 2026-11-24 for good pull requests in the plan; done |
-| R8 | What does a 0.36 reader say about a 0.37 document? | The validator names the release a field needs (recommended); a version field in documents; nothing | Changed while planning the build: a released validator cannot know the keys of a later release, so from 0.37.0 the unknown-key finding names the validator's own version and says a later release may define the key (FR-11). A table of the keys 0.37.0 adds, shipped in a 0.36.x patch, only if the owner asks for it. No version field | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| R8 | What does a 0.36 reader say about a 0.37 document? | The validator names the release a field needs (recommended); a version field in documents; nothing | Changed while planning the build: a released validator cannot know the keys of a later release, so from 0.37.0 the unknown-key finding names the validator's own version and says a later release may define the key (FR-11). A table of the keys 0.37.0 adds, shipped in a 0.36.x patch, only if the owner asks for it. No version field | Owner, 2026-11-25, said in the analysis session (one of "the four open details"); taken by the supervisor before that |
 
-R8 is item FR-11 in the burndown.
+R8 is item FR-11 in the burndown. With the answers given in the analysis session, no question of the review is open.
+
+## Key names: the study of 2026-11-25
+
+On 2026-11-25 the owner asked the analysis session to study the key names and value types of OPF as 0.37.0 plans it, and to have what is
+worth fixing fixed at once. His words, as that session passed them on: "yeah this is still pre-v1 so we can update any even niggling
+things without penalizing users yet" and "i like all you ideas, give me one more idea set here" (for the background key, which he then
+settled with "ok go with appearance"; the font scheme key with "ok go with scriptGroup"). The study's page is private; this table is the
+record. Every row is the study's recommended option unless it says otherwise.
+
+Keys that no release has shipped (they cost nothing to change):
+
+| Pick | Change | Lands with |
+| --- | --- | --- |
+| `k-generator` | A dataset's `generator.kind` is `generator.type` | A pull request of its own, right after FR-04 |
+| `k-refresh` | A data source's `refresh` is `refreshEvery` | The same pull request |
+| `k-colors` | A table color scale takes one list, `colors`, of two or three colors | FR-07, part 1 |
+| `k-gauge` | The key that draws a metric on an arc is `gauge` (the design called it `scale`) | FR-07, part 3 |
+| `k-metric-format` | A metric gets a number `format` of its own, and a rule that finds a unit typed both in the value and in `unit` | FR-06 |
+
+Keys that 0.36.0 ships. These renames are breaking; `opf fix` rewrites every one, and no slide draws differently:
+
+| Pick | Change |
+| --- | --- |
+| `k-family` | A font scheme's `languageFamily` is `scriptGroup`, with the values `latin`, `eastAsian` and `complexScript`; the short `ea` and `cs` go |
+| `k-anchor` | A table cell style's `verticalAlign` is `anchor`, with the same values |
+| `k-org` | A speaker's `organizationId` is `organization`; it still names an organization of the deck |
+| `k-fontsize` | A composition's `minFontSize` and `maxFontSize` are `minFontSizePx` and `maxFontSizePx` |
+| `k-reflink` | A reference's `url` is `link`, checked as a web, mail or phone link |
+| `n-tone` | A picture or gradient background's `tone` is `appearance`; the deck's own `tone` (its voice) stays |
+| `n-line` | A combo chart's `line` is `lineSeries` |
+| `n-dash` | A chart reference line's `dash` takes the eleven preset names a stroke's `dash` takes. This one only adds values |
+
+Who: Owner, 2026-11-25, said in the analysis session, for every pick. The renames of released keys went against his answer to R4 of the
+same day, so the supervisor asked him. Owner, 2026-11-25, to the supervisor: "Yes do the renames I asked the analysis agent to send over
+the final details". They are one pull request and land late in 0.37.0, after the items that touch the same files.
+
+## Calls outside the review
+
+| Subject | Call | Who |
+| --- | --- | --- |
+| Files written by 0.37.0 and importers of an older release | No compatibility work. A PowerPoint file stores the current form of every record and key, and nothing is shaped so that a released 0.36 importer can read it. `opf fix` rewrites stay, because they are how OPF's own examples, gallery records, documents and sites move to the new names | Owner, 2026-11-25, to the supervisor: "We don't need to worry about backwards compatibility since we don't have existing users just yet all our stuff updated", and "Like all our docs and examples and tutorials and we pages etc" |
+| The rule `opf/straight-quotes` | Removed outright (opf#1483), not switched off: it was the only rule that questioned valid characters in an author's text. The owner asked what the note meant and then said: "it seems like it's overfunctioning to question valid characters in the content of opf text value strings" | The remark: Owner, 2026-11-25, to the supervisor. Removing the rule, not making it an option: Supervisor, 2026-11-25; he can overrule |

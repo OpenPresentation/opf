@@ -34,6 +34,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `slides` | yes | `array<ref:Slide>` | Ordered array of slides that make up the presentation. |
 | `references` | no | `array<ref:Reference>` | Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run... |
 | `datasets` | no | `ref:Datasets` | Optional shared data tables, keyed by id. A chart ('chart.data': { "dataset": "<id>" }) or a table ('table': { "dataset": "<id>" }) references one instead of holding its own copy; engines inline the reference before c... |
+| `datasources` | no | `ref:DataSources` | Optional data sources, keyed by id: the places data comes from (a warehouse, a workbook, an API), described once. A dataset or inline chart data names one with 'datasource': "<id>" and records what it took, when and b... |
 | `assets` | no | `ref:Assets` | Optional reusable asset registry for images, data files, videos, documents, fonts, and other resources referenced elsewhere in the deck via 'asset:<id>' strings. |
 | `icons` | no | `ref:Icons` | Optional deck-local icons, keyed by name: an author's or an LLM's own SVG, written once and named by any `icon` of the deck. See docs/icons.md. |
 | `catalogs` | no | `ref:Catalogs` | The catalog records this document embeds, grouped by the catalog they came from: 'default' (the catalog bare ids come from), 'custom' (records the document defines itself) and any number of named catalogs ('acme', ref... |
@@ -424,6 +425,7 @@ _No named properties._
 | `example` | no | `oneOf:string / array<ref:TextRun>` | Illustrative text shown in fill forms and used when a template is previewed with examples. Never written to output. |
 | `maxLength` | no | `integer` | The most characters the value may have, counted as a reader sees them (an accented letter or an emoji counts once, however it is encoded). Checked on the declared value and on a value given to a fill; a longer value i... |
 | `maxLines` | no | `integer` | The most lines the value may take where it is drawn. Checked by composition at each place the variable is drawn (a title, a subtitle, a text block or a list entry), because the line count depends on the width of the b... |
+| `translations` | no | `object` | The text in other languages, keyed by language tag, each entry a 'value' in the same form as the variable's own (a string or TextRun[]). Where the variable is drawn, the slide's declared language (else the deck's) sel... |
 
 
 ### NumberVariable
@@ -466,7 +468,8 @@ _No named properties._
 | `label` | no | `string` | Optional short human label for forms and fill panels. |
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `string` | Illustrative ISO date shown in fill forms and used when a template is previewed with examples. Never written to output. |
-| `format` | no | `string` | Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. English names. Default 'MMMM d, yyyy'. |
+| `format` | no | `string` | Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. The month and weekday names are those of the language where the date is d... |
+| `translations` | no | `object` | How the date is written in other languages, keyed by language tag, each entry a 'format': the date is the same in every language, its pattern is not. Where the variable is drawn, the slide's declared language (else th... |
 
 
 ### ImageVariable
@@ -483,6 +486,7 @@ _No named properties._
 | `label` | no | `string` | Optional short human label for forms and fill panels. |
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `ref:Asset` | Illustrative image source shown in fill forms and used when a template is previewed with examples. Never written to output. |
+| `translations` | no | `object` | An image source per language (a localized screenshot), keyed by language tag, each entry a 'value'. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then th... |
 
 
 ### UrlVariable
@@ -499,6 +503,7 @@ _No named properties._
 | `label` | no | `string` | Optional short human label for forms and fill panels. |
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `string` | Illustrative link shown in fill forms and used when a template is previewed with examples. Never written to output. |
+| `translations` | no | `object` | A link target per language (a localized landing page), keyed by language tag, each entry a 'value'. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then th... |
 
 
 ### ListVariable
@@ -516,6 +521,7 @@ _No named properties._
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `array<string>` | Illustrative entries shown in fill forms and used when a template is previewed with examples. Never written to output. |
 | `maxItems` | no | `integer` | The most entries the list may have. Checked on the declared value and on a value given to a fill; a longer list is the warning opf/variable-overflow. Fill forms and models read it before writing. |
+| `translations` | no | `object` | The entries in other languages, keyed by language tag, each entry a 'value' list. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its las... |
 
 
 ### BackgroundShortcut
@@ -1396,9 +1402,14 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered column labels for the chart data table. A label is a string or a DataColumn ({ "name", "format" }) whose number format the data labels, value axis and exported workbook use. |
+| `columns` | yes | `array<oneOf:string / ref:DatasetColumn>` | Ordered column labels for the chart data table. A label is a string or a DatasetColumn ({ "name", "format", "type", "role", "unit" }) whose number format the data labels, value axis and exported workbook use, and whic... |
 | `rows` | yes | `array<array<ref:ChartDataCell>>` | Tabular chart rows. Each row aligns by index with columns. |
-| `source` | no | `ref:DataSourceRef` | Optional provenance: where this inline data came from. Engines never read, fetch or refresh it; they keep it through editing, export and re-import. |
+| `datasource` | no | `ref:DataSourceChoice` |  |
+| `query` | no | `ref:DataQuery` |  |
+| `retrieved` | no | `ref:DataRetrieved` |  |
+| `version` | no | `ref:DataVersion` |  |
+| `sha256` | no | `ref:DataSha256` |  |
+| `generator` | no | `ref:DataGenerator` |  |
 
 
 ### DataColumn
@@ -1413,20 +1424,111 @@ _No named properties._
 | `format` | no | `ref:NumberFormat` | Number format of the column's number values (data labels, value axis, table cells, exported workbook). Absent: the General form. |
 
 
-### DataSourceRef
+### DatasetColumn
 
 - Type: `object`
-- Required fields: `src`
-- Purpose: Provenance of inline data or a dataset: the file, sheet and range it came from and when. Engines never read, fetch or refresh it; they keep it through editing, export and re-import. Re-import the data to update it.
+- Required fields: `name`
+- Purpose: A named data column: a dataset column or an inline chart data column. Adds to DataColumn what its cells hold (type), what it is for (role) and a unit label. The string form is { "name": value } with nothing declared. A table column header keeps DataColumn.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `src` | yes | `string` | Where the data came from: an 'asset:<id>' reference, a URL, or a relative or local path. |
-| `sheet` | no | `string` | Sheet or table name inside a spreadsheet source. |
-| `range` | no | `string` | A1-style range inside a spreadsheet source. |
-| `fields` | no | `array<string>` | The source fields the data was taken from, in order. |
-| `retrieved` | no | `anyOf:schema / schema` | When the data was taken from the source: an ISO 8601 date or date-time. |
-| `description` | no | `string` | Free-form note about the source. |
+| `name` | yes | `string` | Column label, used as the series name, the table header and the name 'fields', 'chart.mapping' and data links address. |
+| `format` | no | `ref:NumberFormat` | Number format of the column's number values (data labels, value axis, table cells, exported workbook). Absent: the General form. |
+| `type` | no | `enum:text \| number \| date \| boolean` | What the column's cells hold. text: strings. number: finite numbers (a string such as "12" is not one). date: time labels (a year, a period, a month, a week or a date, as the time-order rule reads them, and an ISO 860... |
+| `role` | no | `enum:dimension \| measure` | What the column is for. dimension: it labels or groups rows (a region, a product, a month). measure: its values are measured and can be aggregated (revenue, count, rate). Time is type 'date' with role 'dimension'. Abs... |
+| `unit` | no | `string` | The unit of the column's values, as a label for tools: 'USD', 'ms', 'people'. Engines never print it; 'format' alone decides how a number is drawn. |
+
+
+### DataSourceId
+
+- Type: `string`
+- Required fields: none
+- Purpose: Id of an entry in the top-level datasources map (the datasets id pattern). A string 'datasource' is only ever such an id; a file or a URL is written as an inline data source object, { "src": "./revenue.csv" }.
+
+_No named properties._
+
+
+### DataSource
+
+- Type: `object`
+- Required fields: none
+- Purpose: A place data comes from: what it is and on what terms, not what was taken from it or when (that is the dataset's). Engines never read, fetch or refresh it; they keep it through editing, export and re-import. It never holds credentials: no password, token or key in 'src' or anywhere else (opf/datasource-credentials warns about a user and password in 'src' and a key or token in its query string); a host keeps secrets in its own store and names the connection in 'connector' or 'extensions'.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `title` | no | `string` | Human name of the data source, shown by editors. |
+| `description` | no | `string` | Free-form note about the data source. |
+| `connector` | no | `string` | The kind of data source, in the host's or the author's words: a name a tool recognizes, such as 'csv', 'xlsx', 'postgres', 'bigquery' or 'rest'. Engines do not interpret it. It also says what language a dataset's 'que... |
+| `src` | no | `string` | Where the data is: an 'asset:<id>' reference, a URL, or a relative or local path. A URL carries no credentials. |
+| `license` | no | `string` | The terms the data is under: an SPDX license identifier or a short statement. It travels with the data. |
+| `refreshEvery` | no | `string` | How often the data is meant to be taken again, as an ISO 8601 duration. No engine acts on it. A validator given a date warns when a dataset's 'retrieved' is older than this (opf/dataset-stale). |
+| `extensions` | no | `object` | Custom data passthrough, for example the connection settings a host owns; ignored by the engine but preserved across read/write round-trips. Never credentials. |
+
+
+### DataSources
+
+- Type: `object`
+- Required fields: none
+- Purpose: Data sources keyed by id (the datasets id pattern). A dataset or inline chart data names one with 'datasource': "<id>".
+
+_No named properties._
+
+
+### DataSourceChoice
+
+- Type: `oneOf:ref:DataSourceId / ref:DataSource`
+- Required fields: none
+- Purpose: Where the data came from: the id of an entry in the top-level datasources map (a string, always an id), or a data source written inline, { "src": "./revenue.csv" }. An unknown id is a 'datasource-unknown' error. Engines never read, fetch or refresh it.
+
+_No named properties._
+
+
+### DataQuery
+
+- Type: `string`
+- Required fields: none
+- Purpose: What was taken from the data source, in the data source's own language: a spreadsheet range with its sheet ('FY26!A1:C13'; a sheet name with a space is quoted as spreadsheets do, "'Q3 plan'!A1:B9"), a SQL statement, a path into a document. Engines never run or parse it.
+
+_No named properties._
+
+
+### DataRetrieved
+
+- Type: `anyOf:string / string`
+- Required fields: none
+- Purpose: When the data was taken from its source: an ISO 8601 date or date-time. Never read from a clock by an engine.
+
+_No named properties._
+
+
+### DataVersion
+
+- Type: `string`
+- Required fields: none
+- Purpose: A free string the source system gives the snapshot that was taken: a revision, an etag, a commit.
+
+_No named properties._
+
+
+### DataSha256
+
+- Type: `string`
+- Required fields: none
+- Purpose: The SHA-256 of the source file's bytes as retrieved, as 64 lowercase hexadecimal digits. It answers 'has the file changed since'. Engines never compute or check it.
+
+_No named properties._
+
+
+### DataGenerator
+
+- Type: `object`
+- Required fields: `type`, `name`
+- Purpose: Who produced the data: a person or a model, and which. A reviewer of a generated deck can see that a table came from a model, and from which one.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | yes | `enum:human \| model` | 'human' for a person, 'model' for a language model or another generating program. |
+| `name` | yes | `string` | The person, model or tool, as its owner names it. |
 
 
 ### DatasetId
@@ -1460,15 +1562,20 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `columns`, `rows`
-- Purpose: One shared data table: named columns (strings or DataColumn objects with a number format) and rows of scalar cells. Column names are unique ('data-column-duplicate' error). Rich text and styling belong in an inline table.
+- Purpose: One shared data table: named columns (strings or DatasetColumn objects with a number format, a type, a role and a unit) and rows of scalar cells. Column names are unique ('data-column-duplicate' error). Rich text and styling belong in an inline table.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `title` | no | `string` | Human name of the dataset, shown by editors. |
 | `description` | no | `string` | What the dataset holds. |
-| `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered, uniquely named columns. |
+| `columns` | yes | `array<oneOf:string / ref:DatasetColumn>` | Ordered, uniquely named columns. A column may declare what its cells hold (type), what it is for (role) and a unit label; a string column declares nothing. |
 | `rows` | yes | `array<array<ref:ChartDataCell>>` | Rows of scalar cells (string, number, boolean, null); each row aligns by index with columns. |
-| `source` | no | `ref:DataSourceRef` | Optional provenance. Engines never read, fetch or refresh it. |
+| `datasource` | no | `ref:DataSourceChoice` |  |
+| `query` | no | `ref:DataQuery` |  |
+| `retrieved` | no | `ref:DataRetrieved` |  |
+| `version` | no | `ref:DataVersion` |  |
+| `sha256` | no | `ref:DataSha256` |  |
+| `generator` | no | `ref:DataGenerator` |  |
 
 
 ### DatasetRef

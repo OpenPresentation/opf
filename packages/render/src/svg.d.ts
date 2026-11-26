@@ -238,6 +238,8 @@ export interface MeasurePicturesOptions {
   /** Called with `picture-not-measured` for a picture that could not be read or decoded; its scrim keeps the worst case. */
   onDiagnostic?: (diagnostic: RenderDiagnostic) => void;
 }
+/** FR-03: true for an http, https, mailto or tel link, the links a viewer opens outside the deck (never `slide:<id>`, `javascript:` or `data:`). */
+export declare function isOpenableLink(href: unknown): href is string;
 /**
  * LH-145: the luminance sampler of a deck's picture backgrounds, each decoded once. Pass the result as `pictureLuminance` to `toSvg` and to the
  * PPTX export, so the automatic scrim is sized for the picture under the text in both. Never rejects for a picture it cannot read.

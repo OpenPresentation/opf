@@ -5,7 +5,7 @@
 // `--list-rules` lists what it can report.
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
-import { type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, type ValidationRuleInfo, ensureIcons, findValidationRule, validationCategories, validationRules } from "@openpresentation/opf";
+import { type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, type ValidationRuleInfo, ensureIcons, findValidationRule, parseInstant, validationCategories, validationRules } from "@openpresentation/opf";
 import { type CommandSpec, oneOf, parseArgs, printHelp } from "./args.js";
 import { Reporter, assetRoot, iconSourceReader, localAssetProblems, measuringFonts, missingFontPackages, readDeckReport } from "@openpresentation/opf/internal/engine";
 import { FONT_PACKAGE_RULE, fontPackageFinding } from "./font-packages.js";
@@ -19,11 +19,11 @@ import { type Host, countsOf, failOnOf } from "./runtime.js";
 
 export const spec: CommandSpec = {
 	name: "validate",
-	usage: ["opf validate <file|dir|->... [--from <format>] [--config <file>] [--only <list>] [--ignore <list>] [--fail-on <level>] [--asset-dir <dir>] [--format <json|text|github>]", "opf validate --list-rules [--format <json|text>]"],
+	usage: ["opf validate <file|dir|->... [--from <format>] [--config <file>] [--only <list>] [--ignore <list>] [--fail-on <level>] [--asset-dir <dir>] [--as-of <date>] [--format <json|text|github>]", "opf validate --list-rules [--format <json|text>]"],
 	summary: "Check decks: format, references, policy, accessibility, layout and content.",
 	operands: ["<file|dir|-> (decks, folders of decks, or - for stdin)"],
 	positional: [0, Number.POSITIVE_INFINITY],
-	values: ["from", "config", "fail-on", "format", "asset-dir"],
+	values: ["from", "config", "fail-on", "format", "asset-dir", "as-of"],
 	repeated: ["only", "ignore"],
 	flags: ["list-rules"],
 	help: `The one checker. Findings have stable rule ids (opf/text-contrast), a severity, a category and a JSON Pointer path; read from a
@@ -34,8 +34,10 @@ correct OPF. A folder is searched (sorted, skipping node_modules and dot folders
 path that does not resolve, by the rules opf convert reads files with (relative to the deck's folder, or --asset-dir; nothing
 outside it; only image files), is a cli/asset-missing warning (cli/asset-blocked when the file is outside the folder or not an
 image), so convert would not stop on it later. --only skips that check; --ignore asset-missing or asset-blocked drops one kind.
-A --config JSON file may hold {catalogs, contracts, severity, only, ignore, ignorePaths, thresholds, chartPalette}; --only
-replaces its only and --ignore adds to its ignore.
+A --config JSON file may hold {catalogs, contracts, severity, only, ignore, ignorePaths, thresholds, chartPalette, asOf}; --only
+replaces its only and --ignore adds to its ignore. --as-of <date> (an ISO 8601 date or date-time; the config key asOf) is the date to
+check data freshness as of: a dataset whose retrieved date is older than its data source's refreshEvery is an opf/dataset-stale warning.
+The CLI never reads the clock for it, so without --as-of nothing is reported stale.
 --format json (the default) prints one input's report { command, ok, input, valid, schemaValid, findings, counts, checks, file,
 sha256, ... }, or for several { command, ok, files: [reports], counts }; text prints a line per finding; github prints
 ::error/::warning/::notice workflow annotations. Exit codes: 0 no finding at or above --fail-on, 1 findings at or above it (or
@@ -122,7 +124,7 @@ export function formatGithub(report: ValidationReport, file: string): string {
 		.join("");
 }
 
-const CONFIG_KEYS = ["catalogs", "contracts", "severity", "only", "ignore", "ignorePaths", "thresholds", "chartPalette"];
+const CONFIG_KEYS = ["catalogs", "contracts", "severity", "only", "ignore", "ignorePaths", "thresholds", "chartPalette", "asOf"];
 
 function loadConfig(raw: string, file: string): ValidateOptions {
 	let value: unknown;
@@ -212,6 +214,8 @@ export async function run(args: string[], host: Host): Promise<void> {
 	// The CLI registers the default catalog after any catalog the configuration names (the first is the host default).
 	if (settings.catalogs !== undefined && !Array.isArray(settings.catalogs)) throw usage("The validate configuration's catalogs must be an array of catalogs: { source, <kind>: { <id>: record } }.", "invalid-config");
 	settings.catalogs = cliCatalogs(settings.catalogs ?? []);
+	if (options["as-of"] !== undefined) settings.asOf = String(options["as-of"]);
+	if (settings.asOf !== undefined && (typeof settings.asOf !== "string" || parseInstant(settings.asOf) === undefined)) throw usage("--as-of (and the asOf configuration key) must be an ISO 8601 date, 2026-11-25, or date-time, 2026-11-25T09:30:00Z.", "invalid-value", { option: "--as-of" });
 	const only = list(repeated.only);
 	const ignore = list(repeated.ignore);
 	checkNames([...only, ...ignore.filter((name) => !assetRule(name) && !fontRule(name))], "--only or --ignore");

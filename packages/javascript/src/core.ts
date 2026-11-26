@@ -64,7 +64,10 @@ export {
   isTemplate,
   listBuiltinVariables,
   listVariables,
+  pickTranslation,
   resolveVariables,
+  translationAt,
+  translationLanguageAt,
   variableDeclarations,
   visibleLength,
 } from "./variables.js";
@@ -78,10 +81,13 @@ export type {
   BuiltinVariableInfo,
   VariableInfo,
   VariableKind,
+  VariableTranslation,
   VariableUse,
   VariableUseForm,
   VariableValues,
 } from "./variables.js";
+export { dateNamesOf, longDatePattern } from "./date-names.js";
+export type { DateNames } from "./date-names.js";
 export { SLIDE_SCOPED_BUILTINS, resolveSlideVariables } from "./slide-variables.js";
 export type { SlideScopedBuiltin } from "./slide-variables.js";
 // RR-71: logos live on the organization (resolveLogo, the one resolution, is on /composition with the layout engine).
@@ -196,11 +202,16 @@ export { resolveTableColorScale, pinTableColorScale, tableColorScaleText, tableC
 export type { TableColorScaleColors, TableColorScaleCell, TableColorScaleRange, TableColorScaleResult, TableColorScaleSpec, SchemeColorName } from './table-color-scale.js';
 export { mixOklab, srgbToOklab, oklabToSrgb } from './oklab.js';
 // RR-54: chart and table data: strict numbers, number formats and Excel codes, datasets, series mapping.
-export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
+export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix, suggestCellTypeFix, datasetColumnDeclaration, cellMatchesType } from './chart-data.js';
+// FR-04: data sources and where a dataset came from. Engines never read, fetch or refresh a data source.
+export { dataSourcesOf, resolveDataSource, dataProvenance } from './data-sources.js';
+// FR-05: typed dataset columns. What ingest declares for the columns of imported data.
+export { inferColumnDeclaration, declareColumns, storeCell } from './column-inference.js';
+export { credentialInSrc, parseInstant } from './data-source-checks.js';
 // LH-60: how a chart is drawn when its data does not fit its type (map, box, pie and scatter fallbacks; series a type cannot plot).
 export { chartDrawPlan, chartDrawDiagnostics, isPlaceLabel, markLabelColor } from './chart-fallback.js';
 export type { ChartDrawPlan, ChartFallback } from './chart-fallback.js';
-export type { DataCellValue, DataColumn, DataSourceRef, Dataset, DatasetRef, ChartMapping, ChartComboSeries, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
+export type { DataCellValue, DataColumn, DatasetColumn, DataColumnType, DataColumnRole, DataSource, DataGenerator, DataProvenance, Dataset, DatasetRef, ChartMapping, ChartComboSeries, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
 
 export { FONT_POLICY, applyFontPolicyDecisions, fontPolicyFor, fontAvailabilityDiagnostics } from './font-policy.js';
 export { resolveDrawnFontFamilies } from './drawn-font-families.js';

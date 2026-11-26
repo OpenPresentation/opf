@@ -64,6 +64,7 @@ const formatRules: ValidationRuleInfo[] = [
 	rule('image-placement-invalid', 'format', 'error', 'An image placement cannot be honored.', 'A placed image bleeds to a slide edge and the rest of the slide composes beside it. Only a top-level block (slides.N.blocks.I) can do that, and a slide edge holds one placed image; a block in a group or in a cell of the slide grid, or a second block on the same edge, has nowhere to go.', { standard: SCHEMA }),
 	rule('layout-placeholder-group', 'format', 'error', 'A layout record\'s placeholder group breaks a nesting rule.', 'A placeholder group arranges body regions inside one cell of its layout record. Groups nest at most three levels inside a record, and a group holds body regions and groups only: the headings (title, subtitle, tag) stay at the record\'s top level, where the engine places them. Composition cannot use a record that breaks either rule.', { standard: SCHEMA }),
 	rule('dataset-unknown', 'format', 'error', 'A chart or table names a dataset that does not exist.', 'The data cannot be drawn without the dataset it refers to.', { standard: SCHEMA }),
+	rule('datasource-unknown', 'format', 'error', 'A dataset or chart data names a data source that does not exist.', 'A string `datasource` is the id of an entry in the top-level `datasources` map. An id that is not there says nothing about where the data came from. A file or a URL is written as an inline data source object, `{ "src": "./revenue.csv" }`.', { standard: SCHEMA }),
 	rule('dataset-field-unknown', 'format', 'error', 'A table asks a dataset for a column it does not have.', 'The column cannot be shown when the dataset has no column of that name.', { standard: SCHEMA }),
 	rule('data-column-duplicate', 'format', 'error', 'A dataset or table has two columns with the same name.', 'Series, mappings and fields address columns by name, so a repeated name makes them ambiguous.', { standard: SCHEMA }),
 	rule('chart-mapping-unknown-column', 'format', 'error', 'A chart mapping names a column the data does not have.', 'The series cannot be built from a column that is not there.', { standard: SCHEMA }),
@@ -162,6 +163,8 @@ const referenceRules: ValidationRuleInfo[] = [
 	rule('variable-unknown', 'references', 'warning', 'A `{{token}}` names a variable that is not declared.', 'An undeclared token is shown literally.', { standard: SCHEMA }),
 	rule('variable-unknown-value', 'references', 'warning', 'A value was supplied for a variable that is not declared.', 'The value is never used.', { standard: SCHEMA }),
 	rule('variable-unused', 'references', 'warning', 'A variable is declared but never used.', 'A declaration nothing refers to has no effect.', { standard: SCHEMA }),
+	rule('variable-translation-duplicate', 'references', 'warning', 'Two translations of a variable have the same language tag.', "Language tags compare without regard to case, so 'de-AT' and 'de-at' name one language. The first in document order is used; the other is never drawn.", { standard: SCHEMA }),
+	rule('variable-translation-unused', 'references', 'warning', 'A translation of a variable is never drawn.', "A translation is drawn on a slide whose declared language (else the deck's) selects it. When no slide and not the deck declares a language that selects it, it has no effect. A language read from the text does not select a translation.", { standard: SCHEMA, approximations: 'Reads the declared language of the deck and of each slide, not where the variable is used.' }),
 	rule('variable-reference-unknown', 'references', 'warning', 'A `var:` color names a variable that is not declared.', 'An undeclared color variable falls back to a default color.', { standard: SCHEMA }),
 ];
 
@@ -186,6 +189,9 @@ const dataRules: ValidationRuleInfo[] = [
 		'A chart plots numbers. A text cell such as "12%" is plotted as a gap. When every text value of a column is written in one display style the finding carries the fix that stores the numbers and gives the column the matching format.',
 		{ standard: SCHEMA },
 	),
+	rule('data-cell-type', 'content', 'warning', 'A data cell does not match its column\'s declared type.', 'A dataset or chart data column may declare what its cells hold (`type`: text, number, date or boolean). A cell of another kind is reported; null is a gap in any type. A number is a finite number, so the string "12" is not one (the safe fix stores it as 12), and a date is any time label the time-order rule reads (2026-03, Q1 2026, Jan). Nothing is drawn differently: it is advice that the column says one thing and holds another. More than five mismatches in a column are one finding for the column.', { standard: SCHEMA }),
+	rule('datasource-credentials', 'content', 'warning', 'A data source holds a credential.', 'A data source says where data lives and never holds credentials. A `src` with a user and password, or a query parameter named like a key or a token, writes a secret into a document that is shared, versioned and exported. Keep the secret in the host\'s own store and name the connection in `connector` or `extensions`.', { standard: SCHEMA }),
+	rule('dataset-stale', 'content', 'warning', 'A dataset is older than its data source says it should be.', 'A data source may say how often it is meant to be taken again (`refreshEvery`, an ISO 8601 duration). Given a date to check as of, a dataset whose `retrieved` is older than that is reported. Core has no clock, so without a date nothing is reported, and no engine takes the data again.', { standard: SCHEMA }),
 	rule('chart-mapping-adapted', 'content', 'warning', 'A chart mapping entry is ignored.', 'A mapping that names a column the chart type cannot use is left out of the chart.', { standard: SCHEMA }),
 	rule('chart-highlight-adapted', 'content', 'warning', 'A chart highlight is adapted by the chart type.', 'A highlight the chart type cannot show as authored (a category highlight on a chart without categories, for example) is adapted by every engine, so the emphasis is not exactly what was written.', { standard: SCHEMA }),
 	rule('table-color-scale-no-data', 'content', 'warning', 'A table color scale has no numbers to shade.', 'None of the named columns holds a number cell, so no cell is shaded. A dataset-backed table can lose its numbers on a refresh; the scale returns when they do.', { standard: SCHEMA }),
@@ -586,18 +592,6 @@ export const layoutMonotonyRule = rule(
 		approximations: 'Compares the layout reference of each slide (a catalog prefix is ignored). Cover, section and closing slides, slides with no body content and slides without a layout record (automatic composition) break a run and are not counted; hidden slides are skipped. One finding per run, at its first slide.',
 	},
 );
-export const straightQuotesRule = rule(
-	'straight-quotes',
-	'content',
-	'info',
-	'Text uses straight quotation marks (" or \') where the language has typographic ones.',
-	'Straight marks are a typewriter substitute. Typeset text uses the quotation marks of its language (“…” in English, «…» in French, „…“ in German), and a deck that mixes them with the marks the engine draws around quotes looks unfinished.',
-	{
-		standard: 'The quotation marks of the deck language, as the engines draw them around a quote (QUOTE_MARKS in core).',
-		approximations: 'Checks titles, subtitles, tags, body text, list items and descriptions, and quotes; not table cells, metrics, timelines, code or runs with `code: true`. A `"` after a digit is an inch mark and a `\'` between letters or after a digit is an apostrophe or a foot mark; single quotes count only as a pair around words. A language with no typographic marks of its own (one OPF draws ASCII quotes for) is not checked. When only double quotes are found, the finding carries a patch to the language\'s marks.',
-	},
-);
-
 // rules-variable-overflow.ts (FR-09): a variable's value is longer than its declaration allows.
 export const variableOverflowRule = rule(
 	'variable-overflow',
@@ -682,7 +676,6 @@ const implementedRules: ValidationRuleInfo[] = [
 	centeredBodyRule,
 	tightSpacingRule,
 	layoutMonotonyRule,
-	straightQuotesRule,
 	variableOverflowRule,
 	chartDualAxisRule,
 	chartPieManySlicesRule,

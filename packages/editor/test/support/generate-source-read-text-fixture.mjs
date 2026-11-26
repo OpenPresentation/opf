@@ -13,7 +13,16 @@ export const fixturePath = new URL('../fixtures/source-read-text.golden.json', i
 export function sourceReadTextFixture() {
   return Object.fromEntries(corpus.map(entry => [entry.id, readSource(entry.format, entry.text, entry.catalogs === 'gallery' ? [gallery] : [])]));
 }
-export const fixtureBytes = () => JSON.stringify(sourceReadTextFixture(), null, 1) + '\n';
+// FR-11: an unknown key's finding names the validator's own release, so the fixture stores {{version}} where core's version appears.
+const coreVersion = JSON.parse(await readFile(new URL('../../../javascript/package.json', import.meta.url), 'utf8')).version;
+const escapeRegExp = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+/** The text with core's version replaced by {{version}} in the two places it can appear; the fixture and the test both use it. */
+export function pinVersion(text) {
+  return text
+    .replaceAll(`This validator is OPF ${coreVersion};`, 'This validator is OPF {{version}};')
+    .replace(new RegExp(`("validatorVersion":\\s*)"${escapeRegExp(coreVersion)}"`, 'g'), '$1"{{version}}"');
+}
+export const fixtureBytes = () => pinVersion(JSON.stringify(sourceReadTextFixture(), null, 1)) + '\n';
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const [mode, ...extra] = process.argv.slice(2);

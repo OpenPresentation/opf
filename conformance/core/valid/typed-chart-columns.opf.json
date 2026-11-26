@@ -1,0 +1,1 @@
+{"slides":[{"title":"Margin","chart":{"type":"column","data":{"columns":[{"name":"Month","type":"date","role":"dimension"},{"name":"Margin","format":"0%","type":"number","role":"measure","unit":"ratio"}],"rows":[["2026-09",0.31],["2026-10",0.34]]}}}]}

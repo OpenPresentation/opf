@@ -7,8 +7,18 @@ export declare const DATASET_ID_PATTERN: RegExp;
 export interface DatasetImportOptions {
   /** The dataset id: letters, digits, ".", "_" or "-", starting with a letter or digit. */
   id: string;
-  /** Provenance to record in the dataset's `source` (merged into an existing one). Engines never read it. */
-  source?: { src: string; retrieved?: string; sheet?: string; range?: string; description?: string };
+  /**
+   * Where the rows came from, written in the dataset's own keys (merged into those it has: an inline `datasource` object into an inline one it
+   * already has). A string `datasource` is the id of an entry of the root `datasources` map. Engines never read, fetch or refresh it.
+   */
+  provenance?: {
+    datasource?: string | { title?: string; description?: string; connector?: string; src?: string; license?: string; refreshEvery?: string; extensions?: Record<string, unknown> };
+    query?: string;
+    retrieved?: string;
+    version?: string;
+    sha256?: string;
+    generator?: { type: "human" | "model"; name: string };
+  };
 }
 export interface DatasetImport {
   id: string;

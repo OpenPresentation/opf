@@ -10,11 +10,13 @@ import {chartUsesDataFields, isDatasetRef, fromExcelNumberFormat, resolveTableDa
 //
 // A native chart holds plotted values and a number format code per series; a native table holds cell text. Neither has a
 // field for what the OPF author wrote: the top-level `datasets`, a chart's or table's dataset reference (`{dataset,
-// fields}`), `chart.mapping`, DataColumn objects, `data.source`, or a table cell's number value behind its formatted text.
+// fields}`), `chart.mapping`, DataColumn objects, the `datasource`, `query`, `retrieved`, `version`, `sha256` and `generator` keys of inline data, or a table cell's number value behind its formatted text.
 // In `full` provenance mode the exporter records them as PresentationML customer-data tags, the mechanism of the other
 // OPF records (uppercase-hex UTF-8 JSON, because PowerPoint's Tags API is case-insensitive):
 //
 //   OPF_DATASETS_V1  on p:presentation (beside OPF_DOCUMENT_V1): the whole `datasets` map, unused datasets included.
+//   OPF_DATASOURCES_V1  beside it: the whole root `datasources` map (FR-04), unused data sources included. A dataset's `datasource` id
+//                    and the provenance keys of a dataset or of inline chart data travel inside the records above, unchanged.
 //   OPF_DATA_V1      on each chart or table graphic frame that uses one of the fields above:
 //     chart  {v: 1, kind: 'chart', data, mapping?, highlight?, dataset?: hash, evidence: [hash]}   `data` is the authored
 //            chart.data (a dataset reference, or inline columns with DataColumn objects and `source`); `evidence`
@@ -39,6 +41,7 @@ import {chartUsesDataFields, isDatasetRef, fromExcelNumberFormat, resolveTableDa
 
 export const DATA_TAG = 'OPF_DATA_V1';
 export const DATASETS_TAG = 'OPF_DATASETS_V1';
+export const DATASOURCES_TAG = 'OPF_DATASOURCES_V1';
 const REL_TAGS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const NS = 'http://schemas.openxmlformats.org/presentationml/2006/main';
 const TAGS_TYPE = 'application/vnd.openxmlformats-officedocument.presentationml.tags+xml';
@@ -296,17 +299,18 @@ const tagPart = (name, value) => enc.encode(`<?xml version="1.0" encoding="UTF-8
  * per recorded chart or table frame (both frames of a chartex chart share it) and OPF_DATASETS_V1 beside the document
  * tag. `records` maps generated frame names to records; `datasets` is the document's datasets map.
  */
-export function attachDataProvenance(entries, {records, paths = new Map(), datasets, parseRelationships, report, chartXml=xml=>xml}) {
+export function attachDataProvenance(entries, {records, paths = new Map(), datasets, datasources, parseRelationships, report, chartXml=xml=>xml}) {
   // A record the importer would refuse (MAX_TAG_CHARS) is not written; the native values still export and import. `paths`
   // maps a frame name to the document path of its chart or table, which the diagnostic names.
   const fits = (value, path) => {
     if (enc.encode(JSON.stringify(value)).byteLength * 2 <= MAX_TAG_CHARS) return true;
-    report?.({code: 'data-provenance-omitted', path, message: `The recorded ${path === 'datasets' ? 'datasets map' : 'chart or table data'} exceeds the ${MAX_TAG_CHARS / (1024 * 1024)} MiB tag limit, so it is not stored; the native values export and re-import, without the dataset references, mapping and formats.`});
+    report?.({code: 'data-provenance-omitted', path, message: `The recorded ${path === 'datasets' ? 'datasets map' : path === 'datasources' ? 'data sources map' : 'chart or table data'} exceeds the ${MAX_TAG_CHARS / (1024 * 1024)} MiB tag limit, so it is not stored; the native values export and re-import, without the dataset references, mapping and formats.`});
     return false;
   };
   for (const [name, record] of [...records]) if (!fits(currentTag(record), paths.get(name) ?? name)) records.delete(name);
   const storedDatasets = object(datasets) && Object.keys(datasets).length && fits(datasets, 'datasets') ? datasets : undefined;
-  if (!records.size && !storedDatasets) return;
+  const storedDatasources = object(datasources) && Object.keys(datasources).length && fits(datasources, 'datasources') ? datasources : undefined;
+  if (!records.size && !storedDatasets && !storedDatasources) return;
   const types = [];
   const slides = Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path)).sort((a, b) => Number(/(\d+)\.xml$/.exec(a)[1]) - Number(/(\d+)\.xml$/.exec(b)[1]));
   let count = 0;
@@ -362,9 +366,9 @@ export function attachDataProvenance(entries, {records, paths = new Map(), datas
     entries[relsPath] = enc.encode(rels);
   }
   if (seen.size !== records.size) throw Error('A recorded chart or table frame is missing from the package.');
-  if (storedDatasets) {
+  if (storedDatasets || storedDatasources) {
     const presentationXml = dec.decode(entries['ppt/presentation.xml']);
-    const tag = `<p:tag name="${DATASETS_TAG}" val="${encodeTextTag(storedDatasets)}"/>`;
+    const tag = [storedDatasets && `<p:tag name="${DATASETS_TAG}" val="${encodeTextTag(storedDatasets)}"/>`, storedDatasources && `<p:tag name="${DATASOURCES_TAG}" val="${encodeTextTag(storedDatasources)}"/>`].filter(Boolean).join('');
     const existing = /<p:custDataLst>\s*<p:tags r:id="([^"]+)"\s*\/>\s*<\/p:custDataLst>/.exec(presentationXml);
     if (existing) {
       // Join the document tag list (OPF_DOCUMENT_V1): CT_CustomerDataList holds one p:tags per element.
@@ -405,18 +409,34 @@ function readTags(entries, container, relationships, name) {
   if (found.length > 1) throw Error(`Multiple ${name} tags.`);
   const value = found[0].val;
   if (typeof value !== 'string' || value.length > MAX_TAG_CHARS) throw Error(`Oversized or empty ${name} tag.`);
-  const decoded = upgradeTag(decodeTextTag(value), name === DATASETS_TAG ? 'datasets' : 'data');
+  const decoded = upgradeTag(decodeTextTag(value), name === DATASETS_TAG || name === DATASOURCES_TAG ? 'datasets' : 'data');
   if (tooDeep(decoded)) throw Error(`The ${name} tag nests deeper than ${MAX_DEPTH} levels.`);
   return decoded;
 }
 
+/** The stored data sources map (FR-04), or undefined. An unreadable or invalid record is reported and ignored. */
+export function readDatasourcesTag(entries, presentationRoot, relationships, report) {
+  try {
+    const datasources = readTags(entries, presentationRoot?.['p:custDataLst'], relationships, DATASOURCES_TAG);
+    if (datasources === undefined) return undefined;
+    if (!object(datasources) || !Object.keys(datasources).length) throw Error('Invalid data sources record.');
+    const checked = checkFormat({slides: [{title: 'Data sources'}], datasources});
+    const [first] = checked.findings.filter(finding => finding.severity === 'error');
+    if (!checked.valid) throw Error(`The stored data sources do not validate (${first?.path ?? ''} ${first?.message ?? ''}).`);
+    return datasources;
+  } catch (error) {
+    report?.({code: 'invalid-data-provenance', path: 'datasources', message: `${error instanceof Error ? error.message : String(error)} The data sources recorded at export were not restored.`});
+    return undefined;
+  }
+}
+
 /** The stored datasets map, or undefined. An unreadable or invalid record is reported and ignored. */
-export function readDatasetsTag(entries, presentationRoot, relationships, report) {
+export function readDatasetsTag(entries, presentationRoot, relationships, report, datasources) {
   try {
     const datasets = readTags(entries, presentationRoot?.['p:custDataLst'], relationships, DATASETS_TAG);
     if (datasets === undefined) return undefined;
     if (!object(datasets) || !Object.keys(datasets).length) throw Error('Invalid datasets record.');
-    const report = checkFormat({slides: [{title: 'Datasets'}], datasets});
+    const report = checkFormat({slides: [{title: 'Datasets'}], datasets, ...(datasources ? {datasources} : {})});
     const [first] = report.findings.filter(finding => finding.severity === 'error');
     if (!report.valid) throw Error(`The stored datasets do not validate (${first?.path ?? ''} ${first?.message ?? ''}).`);
     return datasets;
@@ -452,14 +472,14 @@ export function readDataTag(entries, frame, relationships) {
   return record;
 }
 
-const validWith = (payload, datasets) => isValidFormat({slides: [{title: 'Data', ...payload}], ...(datasets ? {datasets} : {})});
+const validWith = (payload, datasets, datasources) => isValidFormat({slides: [{title: 'Data', ...payload}], ...(datasets ? {datasets} : {}), ...(datasources ? {datasources} : {})});
 const validImportedTable = (table, nativeSource) => checkImportedFormat({slides: [{title: 'Data', table}]}, nativeSource).valid;
 
 /**
  * The authored chart data while the native caches are unchanged: the imported chart (type and options) with the recorded
  * `data` and `mapping`. Otherwise the imported chart, and a diagnostic.
  */
-export function restoreChartData(chart, record, evidence, {datasets, report}) {
+export function restoreChartData(chart, record, evidence, {datasets, datasources, report}) {
   // `evidence` is the current hash, or the hashes of the forms the export may have read the same part in (opf#1431).
   if (![evidence].flat().some(value => record.evidence.includes(value))) {
     report({code: 'chart-data-provenance-changed', message: 'The chart\'s cached data or number formats changed after export (for example in Edit Data), so the authored data form, dataset reference, column mapping, column formats and data source recorded at export were not restored; the chart imports the values and formats it now shows.' + (record.highlight ? ' The chart highlight (series and categories named at export) was not restored either: its names refer to the data as exported.' : '')});
@@ -475,7 +495,7 @@ export function restoreChartData(chart, record, evidence, {datasets, report}) {
   }
   const {mapping: _mapping, highlight: _highlight, ...rest} = chart;
   const restored = {...rest, data: clone(record.data), ...(record.mapping !== undefined ? {mapping: clone(record.mapping)} : {}), ...(record.highlight !== undefined ? {highlight: clone(record.highlight)} : {})};
-  if (!validWith({chart: restored}, isDatasetRef(record.data) ? datasets : undefined)) {
+  if (!validWith({chart: restored}, isDatasetRef(record.data) ? datasets : undefined, datasources)) {
     report({code: 'invalid-data-provenance', message: 'The chart data recorded at export does not form a valid chart; the chart imports the values it shows.'});
     return chart;
   }
@@ -539,7 +559,7 @@ export function restoreTableData(table, record, options) {
   return withColorScale(restored, record, table, options.report, options.datasets);
 }
 
-function restoreTableCells(table, record, {datasets, report, evidence: currentEvidence, olderEvidence = [], environment: environments}) {
+function restoreTableCells(table, record, {datasets, datasources, report, evidence: currentEvidence, olderEvidence = [], environment: environments}) {
   if (!object(table)) return table;
   // RR-105 (opf#1293): the environment now, and with the theme's exported heading and body faces back (exportedThemeView): a theme
   // font change made in PowerPoint is the document's (design.fontScheme), and the cells name the theme fonts, so it does not edit a cell.
@@ -566,7 +586,7 @@ function restoreTableCells(table, record, {datasets, report, evidence: currentEv
     const expectedRows = resolved.rows.map(row => row.map((cell, column) => cellText(tableCellDisplayValue(cell, resolved.formats[column], language))));
     const same = expectedHeaders.length === (columns?.length ?? 0) && expectedHeaders.every((text, index) => text === cellText(columns[index]))
       && expectedRows.length === rows.length && expectedRows.every((row, index) => row.length === rows[index].length && row.every((text, column) => text === cellText(rows[index][column])));
-    if (!same || !validWith({table: record.table}, datasets)) {
+    if (!same || !validWith({table: record.table}, datasets, datasources)) {
       report({code: 'table-data-provenance-changed', message: `The table's cells no longer show dataset '${id}' as exported, so the dataset reference was not restored; the table imports the cells it shows, inline.`});
       return table;
     }

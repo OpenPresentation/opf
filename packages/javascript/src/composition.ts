@@ -59,6 +59,8 @@ import {parseLogoName,resolveLogo,resolveOrganizationLogo,type LogoShape,type Lo
 export {LOGO_SHAPES,resolveLogo} from './logos.js';
 export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logos.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
+export {DATE_NAMES,DATE_NAMES_MISSING,DATE_NAME_SOURCE,DATE_PATTERNS} from './date-name-data.js';
+export {ENGLISH_DATE_NAMES,dateNamesOf,longDatePattern,type DateNames} from './date-names.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 import {legible, luminance as legibleLuminance, normalize as legibleHex} from './legible-color.js';
 import {applyColorTransform,colorContrast,colorTransform,layoutVariantApplies,resolveColorRoles,type ColorVariant} from './color.js';
@@ -1730,12 +1732,12 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         // A current date is a live field: the host supplies today's calendar date.
         const format=content.dateFormat??DEFAULT_FURNITURE_DATE_FORMAT;
         if(options.date===undefined)error(`${path}.date`,'A current date needs a host-supplied ISO date option. For fixed content use a literal date, or an ISO date with dateFormat.','unresolved-content');
-        else{const resolved=formatFurnitureDate(options.date,format);if('error' in resolved)error(`${path}.dateFormat`,resolved.error,'unresolved-content');else add('date',resolved.text,true,undefined,{fields:[{type:'date',start:0,end:resolved.text.length,format}]});}
+        else{const resolved=formatFurnitureDate(options.date,format,languageInEffect(options.presentation,options.slideIndex));if('error' in resolved)error(`${path}.dateFormat`,resolved.error,'unresolved-content');else add('date',resolved.text,true,undefined,{fields:[{type:'date',start:0,end:resolved.text.length,format}]});}
       }
       else if(typeof content.date==='string'){
         // Without dateFormat a date string stays literal, editable source text.
         if(content.dateFormat===undefined)add('date',content.date);
-        else{const resolved=formatFurnitureDate(content.date,content.dateFormat);if('error' in resolved)error(`${path}.${parseIsoDate(content.date)?'dateFormat':'date'}`,resolved.error,'unresolved-content');else add('date',resolved.text,true,`${path}.date`);}
+        else{const resolved=formatFurnitureDate(content.date,content.dateFormat,languageInEffect(options.presentation,options.slideIndex));if('error' in resolved)error(`${path}.${parseIsoDate(content.date)?'dateFormat':'date'}`,resolved.error,'unresolved-content');else add('date',resolved.text,true,`${path}.date`);}
       }
       // Text fitted at a box width, with each source line's ink when outlines are provided.
       const fitPart=(part:PendingText,boxWidth:number)=>{
@@ -5477,6 +5479,18 @@ function bodyIcons(input: unknown): boolean {
     : value !== null && typeof value === 'object' ? (value as Record<string, unknown>).icon !== undefined || Object.values(value as Record<string, unknown>).some(walk) : false;
   return Object.entries(record(input)).some(([key, value]) => !NON_BODY_FIELDS.has(key) && walk(value));
 }
+/**
+ * LH-63 with LH-102: the lines each run-in heading (a text's bold first run, `runs`) takes, by item path. A growth step never breaks a heading
+ * that sat on fewer lines in the slide it grows from: a name on one line stays on one line (growBody, runInIntact).
+ */
+function runInLines(result: SlideComposition): Map<string, number> {
+  const lines = new Map<string, number>();
+  for (const item of result.items) {
+    if (!item.runs || !item.text || !('richLines' in item.text)) continue;
+    lines.set(item.path, (item.text as RichTextFit).richLines.filter(line => line.fragments.some(fragment => fragment.runIndex === 0 && fragment.kind === undefined && fragment.text.trim())).length);
+  }
+  return lines;
+}
 function growBody(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition | undefined {
   if (options.fill === false || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || overflowCount(result) > 0) return undefined;
   const start = bodyFill(result, options);
@@ -5496,7 +5510,14 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && composed.emphasis !== undefined && composed.emphasis.shape !== 'card') && !item.quoteLayout?.rule && !PLACED_TILE_ITEMS.has(item)).map(item => item.text?.fontSize ?? bodyReadability(composed, options).byPath.get(item.path) ?? Infinity));
   const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
   const avatar = portraitQuotes(result) ? { [AVATAR_QUOTES]: true } : {};
-  const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...avatar, ...extra } as ComposeSlideOptions, before, floor);
+  // The guarded rules the slide's own composition kept and that drew something in it (a placement rule only spaces the body, and yields to its
+  // growth as before): no growth step drops one (composeVariant's `held`).
+  const used = KEPT_RULES.get(result), fires = new Set<GuardedRule>();
+  if (used) { try { composeLayout(input, { ...options, ...avatar, ...used.seeds, ...{ [RULES]: used.rules, [FIRED]: fires } as Record<symbol, unknown> } as ComposeSlideOptions); } catch (error) { if (!(error instanceof OPFCompositionError)) throw error; fires.clear(); } }
+  for (const rule of [...fires]) if (PLACEMENT_RULES.has(rule)) fires.delete(rule);
+  const held = fires.size ? fires : undefined, headed = runInLines(result);
+  const runInIntact = (grown: SlideComposition) => { const now = runInLines(grown); return [...headed].every(([path, lines]) => (now.get(path) ?? lines) <= lines); };
+  const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...avatar, ...extra } as ComposeSlideOptions, before, floor, held);
   // LH-114: a body with a pull line is one stack with it at the top of the body, so it grows but is not centered.
   const pulled = result.items.some(item => item.quoteLayout?.rule);
   // TAB-1: a table and its note past LONE_FILL are only composed again when they grow; at their role sizes they keep their place.
@@ -5510,7 +5531,7 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
     for (let next = 1; next <= limit; next++) {
       const grown = attempt({ [GROW]: next, ...extra }), fill = grown && bodyFill(grown, options);
       // LH-173: a step that breaks more words than the body had (a label or description of a list included) is no growth.
-      if (!grown || !fill || overflowCount(grown) > 0 || fill.fill > (fill.target ?? LONE_TARGET) || smallest(grown) <= smallest(best) + FONT_GRID_EPSILON || shrinks(grown, best, options) || !accept(grown) || bodyReadability(grown, options).splitWords + listSplitWords(grown) > bodyReadability(best, options).splitWords + listSplitWords(best)) break;
+      if (!grown || !fill || overflowCount(grown) > 0 || fill.fill > (fill.target ?? LONE_TARGET) || smallest(grown) <= smallest(best) + FONT_GRID_EPSILON || shrinks(grown, best, options) || !accept(grown) || !runInIntact(grown) || bodyReadability(grown, options).splitWords + listSplitWords(grown) > bodyReadability(best, options).splitWords + listSplitWords(best)) break;
       best = grown; steps = next;
     }
     const centered = pulled || (past && !steps) ? undefined : attempt({ [GROW]: steps, [CENTER]: true, ...extra }), fill = centered && bodyFill(centered, options);
@@ -6378,7 +6399,7 @@ function composeArranged(input: unknown, options: ComposeSlideOptions): SlideCom
  * `before`. The caller keeps it only when it reads as well as `before`, so neither the arrangement nor a rule leaves a block smaller
  * than wave 2 did, and each arrangement keeps the rules that read well in it.
  */
-function composeVariant(input: unknown, options: ComposeSlideOptions, before: TrackQuality, floor: number): SlideComposition | undefined {
+function composeVariant(input: unknown, options: ComposeSlideOptions, before: TrackQuality, floor: number, held?: ReadonlySet<GuardedRule>): SlideComposition | undefined {
   const fired = new Set<GuardedRule>(), compose = (rules: ReadonlySet<GuardedRule>, collect?: Set<GuardedRule>) => {
     try { return composeLayout(input, { ...options, [RULES]: rules, ...(collect ? { [FIRED]: collect } : {}) } as ComposeSlideOptions); }
     catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
@@ -6407,7 +6428,9 @@ function composeVariant(input: unknown, options: ComposeSlideOptions, before: Tr
     const rules = new Set([...kept, rule]), trial = compose(rules);
     if (reads(trial)) { kept = rules; best = trial; }
   }
-  if (fired.has('portraits') && !kept.has('portraits')) return composeVariant(input, { ...options, [NO_PORTRAITS]: true } as ComposeSlideOptions, before, floor);
+  if (fired.has('portraits') && !kept.has('portraits')) return composeVariant(input, { ...options, [NO_PORTRAITS]: true } as ComposeSlideOptions, before, floor, held);
+  // A growth step (growBody) never drops a rule the slide's own composition kept: an arrangement that reads well only without it is refused.
+  if (held && [...held].some(rule => fired.has(rule) && !kept.has(rule))) return undefined;
   return figure(kept, best);
 }
 /**
@@ -8919,7 +8942,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-60 with LH-03: the layer is decided for the construct the engines draw (chartDrawPlan), so a map drawn as columns takes a column
     // chart's header row and small-chart labels, and nested rings their ring names (LH-92); boxes and a scatter take none.
     const plan = resolved.ok ? chartDrawPlan(node.value, resolved, {language}) : undefined;
-    const drawn = plan?.fallback && resolved.ok ? {chart: {...(node.value as Record<string, unknown>), type: plan.type}, data: {...resolved, columns: plan.columns, rows: plan.rows, formats: plan.formats}} : {chart: node.value, data: resolved};
+    const drawn = plan?.fallback && resolved.ok ? {chart: {...(node.value as Record<string, unknown>), type: plan.type}, data: {...resolved, columns: plan.columns, rows: plan.rows, formats: plan.formats, types: plan.types}} : {chart: node.value, data: resolved};
     const geometry = {box, scale, minFontSize: settings.minFontSize, measure, direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {}), captioned: node.caption !== undefined};
     let layer = drawn.data.ok ? chartLayer(drawn.chart, drawn.data, geometry) : undefined;
     const references = drawn.data.ok ? chartReferences(drawn.chart) : [];
@@ -11609,7 +11632,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const item = autoSurface.item, dx = x - surfaceBox.x, dy = top - surfaceBox.y, box = { ...item.box, x: item.box.x + dx, y: item.box.y + dy };
     autoSurface.emphasis.box = { ...surfaceBox, x, y: top };
     item.box = box;
-    item.text = fitPlacedText('text', item.value, contentText('text', item.value)!, box, item.text!.fontSize, item.text!.fontSize, item.path, 'center');
+    item.text = fitPlacedText('text', item.runs ?? item.value, contentText('text', item.value)!, box, item.text!.fontSize, item.text!.fontSize, item.path, 'center');
   }
   // C14: a foot band under a body that ends well above it (a one-line snippet centered over a quarter-body gap) moves up to one gap under
   // the body's lowest content, so the body and its takeaway stand together as one centered group instead of apart.
@@ -12812,7 +12835,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const lay = (index: number, cell: LayoutBox, size: number) => {
       const item = body[index]!, inner = cardInner(cell), dot = TEXT_TILE_MARKER * size, indent = dot + .6 * size, width = inner.width - indent;
       if (width < 4 * size) return undefined;
-      const x = rtl ? inner.x : inner.x + indent, fitAt = (y: number, height: number) => fitPlacedText('text', item.value, texts[index]!, { x, y, width, height }, size, size, item.path, alignment);
+      const x = rtl ? inner.x : inner.x + indent, fitAt = (y: number, height: number) => fitPlacedText('text', item.runs ?? item.value, texts[index]!, { x, y, width, height }, size, size, item.path, alignment);
       const probe = fitAt(inner.y, inner.height), height = heightOf(probe), lines = probe.lines.length;
       const bad = probe.overflow || probe.fontSize < size - FONT_GRID_EPSILON || lines > TEXT_TILE_LINES || splitsWord(texts[index]!, probe.lines);
       const place = (): ComposedStepBadge => {
@@ -12951,7 +12974,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!tiled.length) return undefined;
     const heightOf = (fit: TextFit | RichTextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
     const cells = tiled.map(item => cellOfItem.get(item) ?? item.box), texts = tiled.map(item => flatten(item.value).trim());
-    const fitAt = (index: number, box: LayoutBox, size: number) => fitPlacedText('text', tiled[index]!.value, texts[index]!, box, size, size, tiled[index]!.path, tiled[index]!.alignment);
+    const fitAt = (index: number, box: LayoutBox, size: number) => fitPlacedText('text', tiled[index]!.runs ?? tiled[index]!.value, texts[index]!, box, size, size, tiled[index]!.path, tiled[index]!.alignment);
     const reads = (index: number, size: number): boolean => {
       const inner = cardInner(cells[index]!), fit = fitAt(index, inner, size);
       return !fit.overflow && fit.fontSize >= size - FONT_GRID_EPSILON && fit.lines.length <= PLACED_TILE_LINES && !splitsWord(texts[index]!, fit.lines) && heightOf(fit) <= PLACED_TILE_SHARE * inner.height + 1e-6;
@@ -13314,14 +13337,14 @@ export {chartRadarLayout,RADAR_BOTTOM_LEGEND_GAIN} from './chart-radar.js';
 export type {ChartLayerRadar} from './chart-radar.js';
 export type {ChartLayer,ChartBarGeometry,ChartLayerSmall,ChartLayerHeader,ChartLayerRing,ChartPlotInset,ChartHeaderLegendEntry,ChartLayerGeometry,ChartEndLabel,ChartLayerEndLabels,ChartSliceLabel,ChartLayerSlices} from './chart-layer.js';
 export {chartEndLabels,chartSliceLabels,endLabelText,placeEndLabels,refreshEndLabels,CHART_SLICE_LABEL_MIN_RADIUS} from './chart-direct-labels.js';
-export {chartCategoriesInTime,isTimeFieldTitle,monthOf} from './chart-time-order.js';
+export {chartCategoriesInTime,isTimeFieldTitle,isTimeLabel,monthOf} from './chart-time-order.js';
 export {chartTitleFocus,chartSlideFocus,slideFocusSources,tableSlideFocus,tableHighlightRows,focusHits,type ChartLayerFocus,type FocusSource} from './chart-focus.js';
 export {alignBarRows,type ChartLayerRows} from './chart-rows.js';
 export {chartWaterfallColors,chartContextColor,chartContextColors,chartFocusContextColors,chartSeriesStrokes,CHART_CONTEXT_MIN_CONTRAST,CHART_CONTEXT_LABELED_MIN_CONTRAST,CHART_CONTEXT_FOCUS_DIFFERENCE} from './color.js';
 export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartHighlight,ChartHighlightMarks,ResolvedChartOptions} from './chart-options.js';
 // RR-54: chart and table data resolution, for engines that import the composition entry.
 export {chartNumber,formatDataNumber,numberFormatError,toExcelNumberFormat,fromExcelNumberFormat,inlineDatasets,inlineTableData,inlineChartData,isDatasetRef,isXYChartType,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText} from './chart-data.js';
-export type {DataCellValue,DataColumn,DataSourceRef,Dataset,DatasetRef,ChartMapping,ChartComboSeries,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
+export type {DataCellValue,DataColumn,DatasetColumn,DataColumnType,DataColumnRole,DataSource,DataGenerator,DataProvenance,Dataset,DatasetRef,ChartMapping,ChartComboSeries,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
 export {chartDrawPlan,chartDrawDiagnostics,isPlaceLabel,markLabelColor} from './chart-fallback.js';
 export type {ChartDrawPlan,ChartFallback} from './chart-fallback.js';
 

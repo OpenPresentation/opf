@@ -87,6 +87,18 @@ describe("opf-mcp", () => {
 			assert.equal(strict.valid, true, "a warning does not make a deck invalid");
 		});
 
+		test("asOf checks data freshness against the date the caller gives; an unknown data source is an error", async () => {
+			const deck = { name: "Fresh", language: "en-US", datasources: { warehouse: { refreshEvery: "P1D" } }, datasets: { sales: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12]], datasource: "warehouse", retrieved: "2026-01-01" } }, slides: [{ title: "Sales", table: { dataset: "sales" } }] };
+			const call = async (document, extra = {}) => (await client.callTool({ name: "validate_deck", arguments: { document, ...extra } })).structuredContent;
+			assert.ok(!(await call(deck)).findings.some((finding) => finding.ruleId === "opf/dataset-stale"), "no date, nothing is stale");
+			const stale = (await call(deck, { asOf: "2026-11-25" })).findings.find((finding) => finding.ruleId === "opf/dataset-stale");
+			assert.equal(stale?.severity, "warning");
+			assert.equal(stale?.path, "/datasets/sales/retrieved");
+			const unknown = await call({ ...deck, datasets: { sales: { ...deck.datasets.sales, datasource: "wharehouse" } } });
+			assert.equal(unknown.valid, false);
+			assert.ok(unknown.findings.some((finding) => finding.ruleId === "opf/datasource-unknown" && finding.severity === "error"));
+		});
+
 		test("reports syntax errors with a location, and invalid decks as not ok", async () => {
 			const broken = (await client.callTool({ name: "validate_deck", arguments: { document: '{ "name": "x", "slides": [ }' } })).structuredContent;
 			assert.equal(broken.ok, false);
@@ -305,6 +317,21 @@ describe("opf-mcp", () => {
 			const deck = { name: "Limits", template: true, variables: { headline: { type: "text", value: "A headline that is far too long", maxLength: 10 } }, slides: [{ title: "{{headline}}" }] };
 			const report = (await client.callTool({ name: "validate_deck", arguments: { document: deck } })).structuredContent;
 			assert.deepEqual(report.findings.filter((finding) => finding.ruleId === "opf/variable-overflow").map((finding) => [finding.severity, finding.path]), [["warning", "/variables/headline"]]);
+			assert.equal(report.ok, true);
+		});
+
+		test("a model reads a variable's translations (FR-10): the schema and the docs name them, and validate_deck takes and reports them", async () => {
+			for (const name of ["TextVariable", "ListVariable", "UrlVariable", "ImageVariable", "DateVariable"]) {
+				const variable = (await client.callTool({ name: "get_schema", arguments: { name } })).structuredContent;
+				assert.ok(Object.keys(variable.schema.properties).includes("translations"), name);
+			}
+			const number = (await client.callTool({ name: "get_schema", arguments: { name: "NumberVariable" } })).structuredContent;
+			assert.equal(Object.keys(number.schema.properties).includes("translations"), false);
+			const found = (await client.callTool({ name: "search_docs", arguments: { query: "variable translations language tag fall back", limit: 3 } })).structuredContent;
+			assert.ok(found.results.some((hit) => hit.uri === "opf://docs/templates-and-variables"));
+			const deck = { name: "Bilingual", language: "de", variables: { cta: { type: "text", value: "Book", translations: { de: { value: "Buchen" }, fr: { value: "Réserver" } } } }, slides: [{ title: "{{cta}}" }] };
+			const report = (await client.callTool({ name: "validate_deck", arguments: { document: deck } })).structuredContent;
+			assert.deepEqual(report.findings.filter((finding) => finding.ruleId.includes("translation")).map((finding) => [finding.ruleId, finding.path]), [["opf/variable-translation-unused", "/variables/cta/translations/fr"]]);
 			assert.equal(report.ok, true);
 		});
 

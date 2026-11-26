@@ -193,6 +193,10 @@ Import restores `colorScale` while every recorded cell still has its recorded fi
 
 Older importers (measured with the released 0.36.0 importer): it ignores the top-level `colorScale` key of the record and restores the authored table, with no scale and no cell fill; the deck is valid. The shaded cells' fills are in the file, so PowerPoint itself shows them.
 
+### Translations and date names (OPF 0.37)
+
+Nothing is stored. Content variables are resolved before the export, so each slide's text is in that slide's language (the translation its declared language selects, the date in that language's names) and a deck's header and footer variables are resolved for each slide; the document record keeps only the variables that remain after resolution (colors). Import returns each slide's resolved text as literals, as it does for any variable: a template's translations live in its OPF file, not in its PowerPoint export. The file carries no key for a translation, so nothing here depends on the importer's release. Checked in PowerPoint on 2026-11-25 with a German deck that has a French slide: after PowerPoint's own save, import returns each slide's text in that slide's language. A current date with month or weekday names in a language other than English is fixed text (`furniture-date-fixed`) unless PowerPoint has a date field that shows the same text in the language of that slide (see native-header-footer.md; PowerPoint's long forms per language are not in the field table yet, #1507).
+
 ### Hard line breaks inside list items (RR-09)
 
 A list exports one native shape per line of every entry, named `OPF list <path> line N` (the entry's text lines, the first bulleted, then its description lines, numbered in that order; a blank line is a shape with no text). Import joins an entry's continuation lines without a separator and tells description lines from text lines by size, so a newline inside an item used to vanish and a blank line became an empty description. `OPF_SLIDE_V1.lists` = `[[path, [[line, gap], ...]], ...]` stores, per list path, the whitespace each hard break deleted keyed by the number of the line that follows it (a gap is whitespace or `[whitespace, keep]` as in `wrap`; soft wraps store nothing, and no word is stored). Import reads it before the shapes are merged into lists, while the slide's arrangement is unchanged (the structure hash), and joins the continuation line (a text line or a description line) with the recorded whitespace. A blank line's empty shape is skipped, so it never becomes a description (also without a record). A recorded line that is no longer a continuation reports `list-line-break-changed` at `slides.N`; a slide whose arrangement changed applies none. When the export cannot account for an item's characters exactly (leading or trailing whitespace outside the lines, changed characters), it reports `document-provenance-omitted` at the list path and import joins that list's lines as before. Plain PPTX has no record: it cannot tell a wrap from a break, so continuation lines still join without a separator. A damaged record (bad path, prototype key, non-whitespace or empty gap, unordered or out-of-range lines, more than 256 lists or 20000 breaks) rejects the slide tag (`invalid-document-provenance`).
@@ -213,6 +217,26 @@ Import reads the list: a slide in a section named exactly `Default Section` has 
 ### Per-field fallback
 
 Restores are applied as independent groups, one per OPF field. The deck background group also removes background copies observed on unchanged inheriting slides. When the combined result does not validate, each group is tried on its own. Only a group that makes the document invalid is left out, with `invalid-document-provenance` at its path; all other restores still apply. A record that cannot be decoded, has an unknown version or names an unknown field is rejected as a whole and reported at `''` or `slides.N`.
+
+## Decks written by a newer OPF (FR-04, data sources)
+
+OPF 0.37 writes where a dataset came from in its own keys (`datasource`, `query`, `retrieved`, `version`, `sha256`, `generator`; core `docs/data-sources.md`). They travel inside the `OPF_DATASETS_V1` dataset record and the `OPF_DATA_V1` record of a chart with inline data. The root `datasources` map is a new tag, `OPF_DATASOURCES_V1`, beside `OPF_DATASETS_V1`.
+
+What an importer of 0.36.0 and earlier does with such a file (read from `v0.36.0`: `readDatasetsTag`, `restoreChartData`, `restoreTableData`): answer (c), the record is rejected and the import falls back to the native values; it never restores the unknown keys, so the deck it returns is valid for 0.36.
+
+- `OPF_DATASETS_V1`: it checks the map with its own core (`checkFormat`), whose `Dataset` is a closed object (title, description, columns, rows, source). One dataset with a new key makes the whole map invalid: `invalid-data-provenance` at `datasets`, and no dataset is restored, including those without new keys.
+- A chart or table that referenced a dataset then imports the values it shows (`chart-dataset-unavailable`, `table-dataset-unavailable`): the native chart's own data, with the number formats core maps back from the native codes. The dataset reference is lost.
+- A chart with inline data and a new key: the chart-data record does not validate there, so `invalid-data-provenance` and the chart imports the values it shows (its mapping and DataColumn names from the record are lost with it).
+- `OPF_DATASOURCES_V1` is not read; it is ignored without a diagnostic.
+- A deck without data sources and without the new keys writes the same bytes as before and a 0.36 importer restores it as before.
+
+An importer of 0.37 reads all of it; `datasources` is read first, so a dataset that names a data source by id validates. The test `packages/pptx/test/fr-04-data-sources.mjs` pins where the keys are written.
+
+## Typed dataset columns (FR-05)
+
+OPF 0.37 lets a dataset column and an inline chart data column declare `type`, `role` and `unit` (core `docs/chart-table-data.md`, "Typed columns"). The keys stay inline in the column objects of the `OPF_DATASETS_V1` record and of a chart's `OPF_DATA_V1` record; there is no tag of their own. Nothing drawn changes: a deck with and without the keys writes the same slide and chart parts. They come back after a save and re-import with the rest of those records (the records are restored while the native evidence is unchanged, and a plain PowerPoint save keeps them).
+
+A deck written with them is a 0.37 deck. An importer of 0.36.0 and earlier checks both records with its own closed `DataColumn`, so a record with a declared column does not validate there and is dropped whole (`invalid-data-provenance`): no dataset of that file is restored and the charts and tables import the values they show. The owner decided on 2026-11-25 that released importers need no compatibility work, so this was not shaped around and the 0.36.0 importer was not run on the file. `packages/pptx/test/fr-05-typed-columns.mjs` pins where the keys are written and that a deck without them writes only keys a 0.36 importer accepts.
 
 ## Untrusted input
 

@@ -27,7 +27,7 @@ import type { JsonPrimitive, JsonSchema } from './json.js';
 import { validationDefinition } from './validation-definitions.js';
 import { unusedReferenceWarnings } from './annotation-validation.js';
 import { describeDurationRange, durationOutsideNarrative, durationRangeInverted, resolveNarrative, unknownBeatReferences } from './narrative-plan.js';
-import { chartNumberFixesByCell, unusedDatasets, type ChartNumberFix } from './chart-data.js';
+import { chartNumberFixesByCell, suggestCellTypeFix, unusedDatasets, type ChartNumberFix } from './chart-data.js';
 import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
 import { ruleInfo } from './validation-rules.js';
 import { chartShapeHelp, chartShapePatch, FOREIGN_CHART_KEYS } from './chart-shape.js';
@@ -35,6 +35,7 @@ import { splitPointer } from './rule-content.js';
 import { droppedCopyOperations, staleCopyCause, staleCopyFix, staleCopyUsers, staleLayoutCopy } from './stale-records.js';
 import { documentIcons, iconIssue } from './icons.js';
 import type { Finding, FindingSeverity, FindingSuggestion } from './generated/types/finding.js';
+import { OPF_CORE_VERSION } from './generated/version.js';
 import type { Contract, ValidateOptions } from './validation-types.js';
 
 /**
@@ -194,6 +195,10 @@ export function issueFinding(
 		help = `Write ${JSON.stringify(nearest[0].value)} instead; ${JSON.stringify(typedName)} is not a field of this object.`;
 	else if (typedName !== undefined && typeof nearest[0]?.value === 'string')
 		help = `Did you mean ${JSON.stringify(nearest[0].value)}? ${JSON.stringify(typedName)} is not a field of this object. To keep custom metadata, put it in extensions; do not delete authored content to clear this error.`;
+	// No close known key means this is not a typo: a later release may define the key. A released validator cannot know what
+	// a later release adds, so it says only its own version (also as data, validation.params.validatorVersion).
+	const unknownKey = typedName !== undefined && nearest.length === 0;
+	if (unknownKey) help = `${help} This validator is OPF ${OPF_CORE_VERSION}; a later OPF release may define ${JSON.stringify(typedName)}.`;
 	return finding(ruleId, {
 		...(severity ? { severity } : {}),
 		path,
@@ -202,7 +207,7 @@ export function issueFinding(
 		help,
 		definition,
 		lookup,
-		validation: issue,
+		validation: unknownKey ? { ...issue, params: { ...issue.params, validatorVersion: OPF_CORE_VERSION } } : issue,
 		...(allowed.length
 			? {
 					suggestions: allowed.map((value) => ({
@@ -546,6 +551,9 @@ function chartNumberFixPaths(document: unknown): Map<string, ChartNumberFix> {
 const HELP: Record<string, string> = {
 	'chart-value-not-numeric':
 		'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.',
+	'data-cell-type': 'Write the cell as the column declares (a number as a number, text as text, a date as a time label, a boolean as true or false), or change the column\'s `type` to what it holds. A mismatched cell is still read as it was before; nothing is drawn differently.',
+	'datasource-credentials': 'Remove the user, password, key or token from the data source and keep the secret in your own store; name the connection in `connector` or `extensions`. A data source never holds credentials.',
+	'dataset-stale': "Take the data from its data source again and update `retrieved`, or change the data source's `refreshEvery` to how often the data really needs taking.",
 	'chart-mapping-adapted': 'Choose a compatible chart type or mapping for the selected data. The message explains how the mapping or drawing was adapted.',
 	'chart-series-dropped': 'The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.',
 	'chart-highlight-adapted': 'The highlight is adapted by every engine. Name a series or category the chart type can emphasize, or remove the entry.',
@@ -558,6 +566,8 @@ const HELP: Record<string, string> = {
 	'variable-unknown': "Declare the variable in the top-level variables map, or write '\\{{' for literal braces.",
 	'variable-unknown-value': 'Remove the supplied value, or declare the variable it belongs to.',
 	'variable-unused': 'Reference the variable as {{id}} or var:id where it belongs, or remove its declaration.',
+	'variable-translation-duplicate': 'Remove one of the two keys: the language tag compares without regard to case, and the first in the document is the one drawn.',
+	'variable-translation-unused': "Declare the language ('language' on the deck or a slide) that selects the translation, fix its tag, or remove it.",
 	'variable-group-omitted': 'Give one of the variables a value to draw the group, make one of them required, or move the content that should always show out of the group.',
 	'variable-reference-unknown': 'Declare the variable in the top-level variables map, or use another color.',
 	'run-color-unrecognized': 'Use a #RRGGBB hex color, a color-scheme name or a var: reference to a declared color variable.',
@@ -794,6 +804,11 @@ export function engineFindings(document: unknown, engine: SchemaCheckResult, ena
 		const found = issueFinding(issue, ruleId, 'presentation', '', 'document', code === 'variable-group-omitted' ? 'info' : 'warning');
 		const help = HELP[code];
 		if (help) found.help = help;
+		if (code === 'data-cell-type') {
+			// FR-05: the safe fix stores a cell in the type its column declares (a strict decimal string as a number, a number as text); it never changes the type.
+			const fix = suggestCellTypeFix(document, issue.path, issue.params.aggregate === true);
+			if (fix) found.fixes = [{ id: 'store-cell-type', title: fix.title, kind: 'patch', safe: true, patch: fix.patches }];
+		}
 		if (code === 'shape-anchor-size-unit') {
 			const key = String(issue.params.key), px = `${key}Px`;
 			found.help = `Did you mean "${px}"? "${key}" is a fraction of the block.`;
@@ -944,14 +959,25 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 		const stale = embeddedInvalid && site.kind === 'layouts' ? staleLayoutCopy(document, embeddedInvalid.group, embeddedInvalid.id, options) : undefined;
 		const diagnostic = unresolvedReference(document, site.kind, site.reference, path, options);
 		if (removedLayoutAuto(site.kind, site.reference)) {
+			// The embedded record "auto" that fails the layout schema goes with the last slide that names it, when every slide that names it
+			// names it as "auto" (a leftover of the removed layout, which nothing uses after the fix); a valid record stays (no finding here).
+			const dropRecord = embeddedInvalid !== undefined && embeddedInvalid.id === 'auto' && lastLayoutAutoSite(document, embeddedInvalid.group, options, site.path);
 			findings.push(
 				finding('opf/unresolved-reference', {
 					path,
 					message: diagnostic.message,
-					help: 'OPF 0.35 removed layout "auto". Delete the layout key: a slide without one is composed automatically, which is what "auto" did.',
+					help: `OPF 0.35 removed layout "auto". Delete the layout key: a slide without one is composed automatically, which is what "auto" did.${dropRecord ? ` The fix also removes the embedded layout "auto" in catalogs.${embeddedInvalid.group}, which fails the layout schema and which no slide names after it.` : ''}`,
 					definition: `${schemas.presentation.$id}#/$defs/Slide`,
 					lookup: ['opf', 'catalog', site.kind],
-					fixes: [{ id: 'remove-layout-auto', title: 'Delete layout (automatic composition)', kind: 'patch' as const, safe: true, patch: [{ op: 'remove' as const, path }] }],
+					fixes: [
+						{
+							id: 'remove-layout-auto',
+							title: dropRecord ? 'Delete layout (automatic composition) and the embedded layout record "auto"' : 'Delete layout (automatic composition)',
+							kind: 'patch' as const,
+							safe: true,
+							patch: [{ op: 'remove' as const, path }, ...(dropRecord ? [{ op: 'remove' as const, path: pointer(['catalogs', embeddedInvalid.group, 'layouts', 'auto']) }] : [])],
+						},
+					],
 				}),
 			);
 			continue;
@@ -1252,4 +1278,20 @@ export function contractFindings(document: unknown, contracts: readonly Contract
 		}
 	}
 	return findings;
+}
+
+/**
+ * Whether the slide site `last` is the last site that names the embedded layout "auto" of `group`, and every site that names that record
+ * names it as the bare reference "auto" (so the fix of each of them leaves no slide on the record once the last one is applied).
+ */
+function lastLayoutAutoSite(document: unknown, group: string, options: CatalogOptions, last: readonly (string | number)[]): boolean {
+	let latest: readonly (string | number)[] | undefined;
+	for (const site of catalogReferenceSites(document)) {
+		if (site.kind !== 'layouts') continue;
+		const found = resolveReference(document, site.kind, site.reference, { ...options, ...(site.group !== undefined ? { group: site.group } : {}) });
+		if (found?.origin !== 'document' || found.group !== group || found.id !== 'auto') continue;
+		if (!removedLayoutAuto(site.kind, site.reference)) return false;
+		latest = site.path;
+	}
+	return latest !== undefined && latest.length === last.length && latest.every((key, at) => key === last[at]);
 }

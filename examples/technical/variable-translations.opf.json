@@ -1,0 +1,158 @@
+{
+  "name": "Bilingual event",
+  "description": "One deck in two languages. A variable carries translations, and the language where it is drawn (the slide's declared language, else the deck's) selects one: German on the German slides, French on the French ones. A date's translation is its pattern, so the same date is written in each language.",
+  "language": "de",
+  "variables": {
+    "event": {
+      "type": "text",
+      "label": "Event name",
+      "value": "Product day",
+      "translations": {
+        "de": {
+          "value": "Produkttag"
+        },
+        "fr": {
+          "value": [
+            {
+              "text": "Journée "
+            },
+            {
+              "text": "produit",
+              "bold": true
+            }
+          ]
+        }
+      }
+    },
+    "event-date": {
+      "type": "date",
+      "label": "Event date",
+      "value": "2026-03-05",
+      "translations": {
+        "de": {
+          "format": "EEEE, d. MMMM yyyy"
+        },
+        "fr": {
+          "format": "EEEE d MMMM yyyy"
+        }
+      }
+    },
+    "cta": {
+      "type": "text",
+      "label": "Call to action",
+      "value": "Book a demo",
+      "translations": {
+        "de": {
+          "value": "Demo buchen"
+        },
+        "fr": {
+          "value": "Réserver une démo"
+        }
+      }
+    },
+    "signup": {
+      "type": "url",
+      "label": "Sign-up page",
+      "value": "https://example.com/en/demo",
+      "translations": {
+        "de": {
+          "value": "https://example.com/de/demo"
+        },
+        "fr": {
+          "value": "https://example.com/fr/demo"
+        }
+      }
+    },
+    "badge": {
+      "type": "image",
+      "label": "Event badge",
+      "value": {
+        "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0ODAiIGhlaWdodD0iMjcwIiB2aWV3Qm94PSIwIDAgNDgwIDI3MCI+PHJlY3Qgd2lkdGg9IjQ4MCIgaGVpZ2h0PSIyNzAiIHJ4PSIxNiIgZmlsbD0iIzFGNEU3OSIvPjx0ZXh0IHg9IjI0MCIgeT0iMTUwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiNGRkZGRkYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlByb2R1Y3QgZGF5PC90ZXh0Pjwvc3ZnPg==",
+        "alt": "Product day"
+      },
+      "translations": {
+        "de": {
+          "value": {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0ODAiIGhlaWdodD0iMjcwIiB2aWV3Qm94PSIwIDAgNDgwIDI3MCI+PHJlY3Qgd2lkdGg9IjQ4MCIgaGVpZ2h0PSIyNzAiIHJ4PSIxNiIgZmlsbD0iIzFGNEU3OSIvPjx0ZXh0IHg9IjI0MCIgeT0iMTUwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiNGRkZGRkYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlByb2R1a3R0YWc8L3RleHQ+PC9zdmc+",
+            "alt": "Produkttag"
+          }
+        },
+        "fr": {
+          "value": {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0ODAiIGhlaWdodD0iMjcwIiB2aWV3Qm94PSIwIDAgNDgwIDI3MCI+PHJlY3Qgd2lkdGg9IjQ4MCIgaGVpZ2h0PSIyNzAiIHJ4PSIxNiIgZmlsbD0iIzFGNEU3OSIvPjx0ZXh0IHg9IjI0MCIgeT0iMTUwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiNGRkZGRkYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkpvdXJuw6llIHByb2R1aXQ8L3RleHQ+PC9zdmc+",
+            "alt": "Journée produit"
+          }
+        }
+      }
+    },
+    "agenda": {
+      "type": "list",
+      "label": "Agenda",
+      "value": [
+        "Welcome",
+        "Roadmap",
+        "Customer stories"
+      ],
+      "translations": {
+        "de": {
+          "value": [
+            "Begrüßung",
+            "Roadmap",
+            "Kundengeschichten"
+          ]
+        },
+        "fr": {
+          "value": [
+            "Accueil",
+            "Feuille de route",
+            "Témoignages clients"
+          ]
+        }
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "cover-de",
+      "title": "{{event}}",
+      "subtitle": "{{event-date}} in Berlin",
+      "text": [
+        {
+          "text": "{{cta}}",
+          "bold": true,
+          "link": "var:signup"
+        }
+      ]
+    },
+    {
+      "id": "agenda-de",
+      "title": "Programm",
+      "items": [
+        "var:agenda"
+      ],
+      "image": "var:badge"
+    },
+    {
+      "id": "cover-fr",
+      "language": "fr",
+      "title": "{{event}}",
+      "subtitle": "{{event-date}} à Paris",
+      "text": [
+        {
+          "text": "{{cta}}",
+          "bold": true,
+          "link": "var:signup"
+        }
+      ]
+    },
+    {
+      "id": "agenda-fr",
+      "language": "fr",
+      "title": "Programme",
+      "items": [
+        "var:agenda"
+      ],
+      "image": "var:badge"
+    }
+  ]
+}

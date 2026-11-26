@@ -8,17 +8,25 @@ import { chartOptionTarget } from './chart-options.js';
 import { CHART_REFERENCE_TYPES } from './chart-reference-types.js';
 import { formatVariableNumber } from './variables.js';
 import { localizeNumberText } from './numerals.js';
+import { dataProvenance, unknownDataSourceDiagnostics, type DataGenerator, type DataProvenance, type DataSource } from './data-sources.js';
 import { tableRows } from './table.js';
 import { tableColorScaleDiagnostics } from './table-color-scale-range.js';
+import { isTimeLabel } from './chart-time-order.js';
+
+export type { DataGenerator, DataProvenance, DataSource };
 
 /** A scalar data cell (chart data, dataset rows). */
 export type DataCellValue = string | number | boolean | null;
 /** A named column with an optional number format. The string column form is `{ name }` with no format. */
 export interface DataColumn { name: string; format?: string }
-/** Provenance of inline data or a dataset. Engines never read, fetch or refresh it. */
-export interface DataSourceRef { src: string; sheet?: string; range?: string; fields?: string[]; retrieved?: string; description?: string }
-/** One shared data table in the top-level `datasets` map. */
-export interface Dataset { title?: string; description?: string; columns: (string | DataColumn)[]; rows: DataCellValue[][]; source?: DataSourceRef }
+/** FR-05: what a dataset column's cells hold. `null` is a gap in any type. */
+export type DataColumnType = 'text' | 'number' | 'date' | 'boolean';
+/** FR-05: what a dataset column is for. Time is type `date` with role `dimension`. */
+export type DataColumnRole = 'dimension' | 'measure';
+/** FR-05: a dataset or inline chart data column: a DataColumn that may also say what its cells hold (`type`), what it is for (`role`) and a unit label engines never print. The string column form declares nothing. */
+export interface DatasetColumn extends DataColumn { type?: DataColumnType; role?: DataColumnRole; unit?: string }
+/** One shared data table in the top-level `datasets` map. Its provenance keys say where it came from; engines never read, fetch or refresh a data source. */
+export interface Dataset extends DataProvenance { title?: string; description?: string; columns: (string | DatasetColumn)[]; rows: DataCellValue[][] }
 /** Chart data (or, as `{ dataset, fields }`, a table) taken from a top-level dataset. */
 export interface DatasetRef { dataset: string; fields?: string[] }
 /** `chart.mapping`: the category, X and series columns by name (after any `fields` selection). */
@@ -41,7 +49,11 @@ export type DataDiagnosticCode =
   | 'chart-value-not-numeric'
   | 'dataset-unknown'
   | 'dataset-field-unknown'
+  | 'datasource-unknown'
+  | 'datasource-credentials'
+  | 'dataset-stale'
   | 'data-column-duplicate'
+  | 'data-cell-type'
   | 'chart-mapping-unknown-column'
   | 'chart-mapping-adapted'
   | 'chart-highlight-unknown-name'
@@ -61,6 +73,8 @@ export interface DataDiagnostic {
   /** JSON Pointer of the offending value: below the `path` option for the chart or table, or into `/datasets/<id>`. */
   path: string;
   message: string;
+  /** FR-05: set on the one `data-cell-type` finding that stands for every mismatched cell of a column (more than five of them). */
+  aggregate?: true;
 }
 
 export interface DataResolveOptions {
@@ -80,9 +94,12 @@ export type ResolvedChartData =
       hasX: boolean;
       /** The number format of each column (from its DataColumn), aligned with `columns`. */
       formats: (string | undefined)[];
+      /** FR-05: the declared type of each column (from its DatasetColumn), aligned with `columns`; undefined for a column that declares none. */
+      types: (DataColumnType | undefined)[];
       /** Category cells as authored; X and series cells (and a lone column, which has no category) passed through `chartNumber` (null is a gap). */
       rows: DataCellValue[][];
-      source?: DataSourceRef;
+      /** Where the data came from: the six provenance keys of the inline data, or of the dataset the chart references. */
+      provenance?: DataProvenance;
       /** The dataset id when the chart references one. */
       dataset?: string;
       /**
@@ -335,6 +352,35 @@ function columnFormat(column: unknown): string | undefined {
   return record(column) && typeof column.format === 'string' ? column.format : undefined;
 }
 
+const COLUMN_TYPES: readonly string[] = ['text', 'number', 'date', 'boolean'];
+const COLUMN_ROLES: readonly string[] = ['dimension', 'measure'];
+function columnType(column: unknown): DataColumnType | undefined {
+  return record(column) && typeof column.type === 'string' && COLUMN_TYPES.includes(column.type) ? (column.type as DataColumnType) : undefined;
+}
+function columnRole(column: unknown): DataColumnRole | undefined {
+  return record(column) && typeof column.role === 'string' && COLUMN_ROLES.includes(column.role) ? (column.role as DataColumnRole) : undefined;
+}
+function columnUnit(column: unknown): string | undefined {
+  return record(column) && typeof column.unit === 'string' && column.unit !== '' ? column.unit : undefined;
+}
+
+/**
+ * FR-05: what a dataset column declares: its `type`, `role` and `unit` (only the keys it writes), by dataset id and column name. An empty object for a
+ * column that declares none (a string column); undefined when the document has no such dataset or column. The one reader tools use (a metric
+ * that aggregates a column checks the type before it sums); it never looks at the cells.
+ */
+export function datasetColumnDeclaration(document: unknown, dataset: string, field: string): { type?: DataColumnType; role?: DataColumnRole; unit?: string } | undefined {
+  const datasets = datasetsOf(document);
+  const found = own(datasets, dataset) ? datasets[dataset] : undefined;
+  if (!record(found) || !Array.isArray(found.columns)) return undefined;
+  const column = found.columns.find((entry: unknown) => columnName(entry) === field);
+  if (column === undefined) return undefined;
+  const type = columnType(column), role = columnRole(column), unit = columnUnit(column);
+  return { ...(type ? { type } : {}), ...(role ? { role } : {}), ...(unit ? { unit } : {}) };
+}
+
+const languageOf = (document: unknown): string | undefined => (record(document) && typeof document.language === 'string' ? document.language : undefined);
+
 function datasetsOf(document: unknown): Record<string, unknown> {
   return record(document) && record(document.datasets) ? document.datasets : {};
 }
@@ -344,12 +390,12 @@ export function isDatasetRef(value: unknown): value is DatasetRef {
   return record(value) && typeof value.dataset === 'string';
 }
 
-interface Selection { names: string[]; formats: (string | undefined)[]; columns: unknown[]; indices: number[] }
+interface Selection { names: string[]; formats: (string | undefined)[]; types: (DataColumnType | undefined)[]; columns: unknown[]; indices: number[] }
 
 /** Select (and order) columns by `fields`; report unknown and ambiguous names. */
 function selectFields(columns: unknown[], fields: unknown, fieldsPath: string, columnsPath: string, diagnostics: DataDiagnostic[]): Selection {
   const names = columns.map(column => columnName(column) ?? '');
-  if (!Array.isArray(fields)) return { names, formats: columns.map(columnFormat), columns, indices: names.map((_, index) => index) };
+  if (!Array.isArray(fields)) return { names, formats: columns.map(columnFormat), types: columns.map(columnType), columns, indices: names.map((_, index) => index) };
   duplicateColumns(names, columnsPath, diagnostics);
   const indices: number[] = [];
   fields.forEach((field, index) => {
@@ -357,7 +403,7 @@ function selectFields(columns: unknown[], fields: unknown, fieldsPath: string, c
     if (found < 0) diagnostics.push({ code: 'dataset-field-unknown', severity: 'error', path: at(fieldsPath, index), message: `field ${JSON.stringify(field)} is not a column of the dataset; use one of ${names.map(name => JSON.stringify(name)).join(', ')}` });
     else indices.push(found);
   });
-  return { names: indices.map(index => names[index]!), formats: indices.map(index => columnFormat(columns[index])), columns: indices.map(index => columns[index]), indices };
+  return { names: indices.map(index => names[index]!), formats: indices.map(index => columnFormat(columns[index])), types: indices.map(index => columnType(columns[index])), columns: indices.map(index => columns[index]), indices };
 }
 
 function duplicateColumns(names: string[], columnsPath: string, diagnostics: DataDiagnostic[]): void {
@@ -376,26 +422,128 @@ function formatDiagnostics(columns: unknown[], columnsPath: string, diagnostics:
   });
 }
 
-/** Diagnostics of the top-level datasets themselves: duplicate column names and invalid column formats. */
+// ---------------------------------------------------------------------------------------------------------------
+// FR-05: typed columns
+
+/** True when `value` is a cell of the declared column `type`. `null` is a gap in any type; a number is a finite one and never a numeric string. */
+export function cellMatchesType(value: unknown, type: DataColumnType, language?: string): boolean {
+  if (value === null || value === undefined) return true;
+  switch (type) {
+    case 'text': return typeof value === 'string';
+    case 'number': return typeof value === 'number' && Number.isFinite(value);
+    case 'boolean': return typeof value === 'boolean';
+    case 'date': return (typeof value === 'string' || typeof value === 'number') && isTimeLabel(value, language);
+  }
+}
+
+/** The value as a cell shows it in a finding: JSON, cut at 40 characters. */
+function shownCell(value: unknown): string {
+  const text = JSON.stringify(value) ?? String(value);
+  return text.length > 40 ? `${text.slice(0, 39)}...` : text;
+}
+
+/** More cells of one column than this are one finding of the column, not one per cell. */
+const TYPE_FINDINGS_PER_COLUMN = 5;
+
+/**
+ * FR-05: the `data-cell-type` warnings of one dataset or inline chart data: a cell that does not match its column's declared `type`, one
+ * warning per cell up to five in a column and one for the whole column after that. `label` is how the message names the data ('dataset "sales"',
+ * "this chart's data"); `rowsPath` is the JSON Pointer of the rows. Rows count from 1 in the message and from 0 in the path.
+ */
+function cellTypeDiagnostics(columns: unknown[], rows: unknown[], label: string, rowsPath: string, language: string | undefined, diagnostics: DataDiagnostic[]): void {
+  columns.forEach((column, index) => {
+    const type = columnType(column);
+    if (!type) return;
+    const name = columnName(column) ?? '';
+    const bad: number[] = [];
+    rows.forEach((row, rowIndex) => {
+      if (Array.isArray(row) && index < row.length && !cellMatchesType(row[index], type, language)) bad.push(rowIndex);
+    });
+    if (!bad.length) return;
+    const where = (rowIndex: number) => `Row ${rowIndex + 1} of ${label} holds ${shownCell((rows[rowIndex] as unknown[])[index])} in column ${JSON.stringify(name)}, which is typed ${type}.`;
+    if (bad.length <= TYPE_FINDINGS_PER_COLUMN) {
+      for (const rowIndex of bad) diagnostics.push({ code: 'data-cell-type', severity: 'warning', path: at(rowsPath, rowIndex, index), message: where(rowIndex) });
+    } else {
+      const first = bad[0]!;
+      diagnostics.push({ code: 'data-cell-type', severity: 'warning', path: at(rowsPath, first, index), aggregate: true, message: `${bad.length} cells of column ${JSON.stringify(name)} of ${label} do not match its type ${type}; first at row ${first + 1}, which holds ${shownCell((rows[first] as unknown[])[index])}.` });
+    }
+  });
+}
+
+/** The value at a JSON Pointer's segments, or undefined. */
+function valueAtSegments(root: unknown, segments: string[]): unknown {
+  let current = root;
+  for (const key of segments) {
+    if (Array.isArray(current)) current = /^\d+$/.test(key) ? current[Number(key)] : undefined;
+    else if (record(current) && own(current, key)) current = current[key];
+    else return undefined;
+  }
+  return current;
+}
+
+/** The text of one cell converted to its column's declared type with no change of meaning: a strict decimal string to a number, a number to its shortest decimal string. */
+function convertedCell(value: unknown, type: DataColumnType): { value: DataCellValue } | undefined {
+  if (type === 'number' && typeof value === 'string') { const number = chartNumber(value); return number === null ? undefined : { value: number }; }
+  if (type === 'text' && typeof value === 'number' && Number.isFinite(value)) return { value: String(value) };
+  return undefined;
+}
+
+/** A safe fix of a `data-cell-type` finding: JSON Patch operations that store the cell (or, for the finding of a whole column, every cell of it) in its column's declared type. */
+export interface CellTypeFix { title: string; patches: ChartNumberFixOperation[] }
+
+/**
+ * FR-05: the safe fix of the `data-cell-type` finding at `cellPath` (`/datasets/<id>/rows/<r>/<c>`, or the rows of inline chart data), or undefined
+ * when nothing can be converted without changing the meaning: in a `number` column a string in strict decimal syntax (the syntax chart values already
+ * read) becomes the number, and in a `text` column a finite number becomes its shortest decimal string. `"12%"` in a number column stays and keeps its
+ * warning. The fix never changes the column's declared type. `aggregate` is true for the finding that stands for the whole column.
+ */
+export function suggestCellTypeFix(document: unknown, cellPath: string, aggregate = false): CellTypeFix | undefined {
+  const segments = cellPath.split('/').slice(1).map(part => part.replaceAll('~1', '/').replaceAll('~0', '~'));
+  if (segments.length < 4 || segments[segments.length - 3] !== 'rows') return undefined;
+  const column = Number(segments[segments.length - 1]), row = Number(segments[segments.length - 2]);
+  const owner = valueAtSegments(document, segments.slice(0, -3));
+  if (!record(owner) || !Array.isArray(owner.columns) || !Array.isArray(owner.rows)) return undefined;
+  const type = columnType(owner.columns[column]);
+  if (!type) return undefined;
+  const rowsPath = segments.slice(0, -2);
+  const patches: ChartNumberFixOperation[] = [];
+  owner.rows.forEach((cells: unknown, index: number) => {
+    if (!aggregate && index !== row) return;
+    if (!Array.isArray(cells) || column >= cells.length) return;
+    const converted = convertedCell(cells[column], type);
+    if (converted) patches.push({ op: 'replace', path: `${rowsPath.map(part => `/${segment(part)}`).join('')}/${index}/${column}`, value: converted.value });
+  });
+  if (!patches.length) return undefined;
+  const name = JSON.stringify(columnName(owner.columns[column]) ?? '');
+  return { title: patches.length === 1 ? `Store the cell as ${type === 'number' ? 'a number' : 'text'}` : `Store ${patches.length} cells of column ${name} as ${type === 'number' ? 'numbers' : 'text'}`, patches };
+}
+
+/**
+ * Diagnostics of the top-level datasets themselves: duplicate column names, invalid column formats and a `datasource` that names no
+ * data source. (The credential and staleness checks of data sources are `validate`'s: data-source-checks.ts.)
+ */
 export function datasetDiagnostics(document: unknown): DataDiagnostic[] {
   const diagnostics: DataDiagnostic[] = [];
   for (const [id, dataset] of Object.entries(datasetsOf(document))) {
+    diagnostics.push(...unknownDataSourceDiagnostics(dataset, at('/datasets', id), document));
     if (!record(dataset) || !Array.isArray(dataset.columns)) continue;
     const columnsPath = at('/datasets', id, 'columns');
     duplicateColumns(dataset.columns.map(column => columnName(column) ?? ''), columnsPath, diagnostics);
     formatDiagnostics(dataset.columns, columnsPath, diagnostics);
+    if (Array.isArray(dataset.rows)) cellTypeDiagnostics(dataset.columns, dataset.rows, `dataset ${JSON.stringify(id)}`, at('/datasets', id, 'rows'), languageOf(document), diagnostics);
   }
   return diagnostics;
 }
 
-function inlineColumn(column: unknown): string | DataColumn {
+/** The inline form of a dataset column; a table header is a DataColumn (name and format), so `forTable` leaves the declarations out. */
+function inlineColumn(column: unknown, forTable = false): string | DatasetColumn {
   const name = columnName(column) ?? '';
-  const format = columnFormat(column);
-  return format === undefined ? name : { name, format };
+  const format = columnFormat(column), type = forTable ? undefined : columnType(column), role = forTable ? undefined : columnRole(column), unit = forTable ? undefined : columnUnit(column);
+  return format === undefined && type === undefined && role === undefined && unit === undefined ? name : { name, ...(format !== undefined ? { format } : {}), ...(type ? { type } : {}), ...(role ? { role } : {}), ...(unit !== undefined ? { unit } : {}) };
 }
 
 /** The inline copy of a dataset reference, or undefined when the id or a field is unknown. */
-function inlinedData(ref: DatasetRef | Record<string, unknown>, datasets: Record<string, unknown>): { columns: (string | DataColumn)[]; rows: DataCellValue[][]; source?: DataSourceRef } | undefined {
+function inlinedData(ref: DatasetRef | Record<string, unknown>, datasets: Record<string, unknown>, forTable = false): ({ columns: (string | DatasetColumn)[]; rows: DataCellValue[][] } & DataProvenance) | undefined {
   const id = ref.dataset as string;
   const dataset = own(datasets, id) ? datasets[id] : undefined;
   if (!record(dataset) || !Array.isArray(dataset.columns) || !Array.isArray(dataset.rows)) return undefined;
@@ -403,12 +551,12 @@ function inlinedData(ref: DatasetRef | Record<string, unknown>, datasets: Record
   const selection = selectFields(dataset.columns, ref.fields, '', '', diagnostics);
   if (diagnostics.some(entry => entry.code === 'dataset-field-unknown')) return undefined;
   const rows = dataset.rows.map((row: unknown) => selection.indices.map(index => (Array.isArray(row) && index < row.length ? structuredClone(row[index]) : null) as DataCellValue));
-  return { columns: selection.columns.map(inlineColumn), rows, ...(record(dataset.source) ? { source: structuredClone(dataset.source) as DataSourceRef } : {}) };
+  return { columns: selection.columns.map(column => inlineColumn(column, forTable)), rows, ...dataProvenance(dataset) };
 }
 
 /**
  * Pure: a copy of the document where every chart and table DatasetRef is replaced by inline data (columns as
- * DataColumn when a format applies, rows copied; a chart also takes the dataset's `source`). `datasets` stays in
+ * DataColumn when a format applies, rows copied; a chart also takes the dataset's provenance keys). `datasets` stays in
  * place. Unknown ids (and references naming an unknown field) are left as they are.
  */
 export function inlineDatasets<T>(document: T): T {
@@ -428,7 +576,7 @@ export function inlineDatasets<T>(document: T): T {
 
 /** The inline form of a dataset-backed table (`{ columns, rows }`), or undefined when the id or a field is unknown. */
 function inlineTable(table: Record<string, any>, datasets: Record<string, unknown>): Record<string, unknown> | undefined {
-  const inline = inlinedData(table, datasets);
+  const inline = inlinedData(table, datasets, true);
   if (!inline) return undefined;
   const { dataset: _dataset, fields: _fields, ...rest } = table;
   return { ...rest, columns: inline.columns, rows: inline.rows };
@@ -509,7 +657,7 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
   let rows: unknown[];
   let columnsPath: string;
   let rowsPath: string;
-  let source: DataSourceRef | undefined;
+  let provenance: DataProvenance | undefined;
   let datasetId: string | undefined;
   let selected: number[] | undefined;
   if (isDatasetRef(data)) {
@@ -527,7 +675,7 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     columns = selection.columns;
     selected = selection.indices;
     rows = dataset.rows;
-    if (record(dataset.source)) source = dataset.source as DataSourceRef;
+    provenance = dataProvenance(dataset);
   } else {
     if (!Array.isArray(data.columns)) return fail('no-columns', 'The chart data has no columns.');
     columns = data.columns;
@@ -535,11 +683,14 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     columnsPath = at(base, 'data', 'columns');
     rowsPath = at(base, 'data', 'rows');
     formatDiagnostics(columns, columnsPath, diagnostics);
-    if (record(data.source)) source = data.source as DataSourceRef;
+    cellTypeDiagnostics(columns, rows, "this chart's data", rowsPath, languageOf(document), diagnostics);
+    provenance = dataProvenance(data);
+    diagnostics.push(...unknownDataSourceDiagnostics(data, at(base, 'data'), document));
   }
   if (!columns.length) return fail('no-columns', 'The chart data has no columns.');
   const names = columns.map(column => columnName(column) ?? '');
   const formats = columns.map(columnFormat);
+  const types = columns.map(columnType);
   const mapping = record(chart) && record(chart.mapping) ? chart.mapping : undefined;
   if (mapping && !selected) duplicateColumns(names, columnsPath, diagnostics);
   const mappingPath = at(base, 'mapping');
@@ -681,8 +832,9 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     columns: order.map(index => names[index]!),
     hasX: x !== undefined,
     formats: order.map(index => formats[index]),
+    types: order.map(index => types[index]),
     rows: out,
-    ...(source ? { source } : {}),
+    ...(provenance && Object.keys(provenance).length ? { provenance } : {}),
     ...(datasetId !== undefined ? { dataset: datasetId } : {}),
     ...(combo ? { combo } : {}),
     diagnostics,

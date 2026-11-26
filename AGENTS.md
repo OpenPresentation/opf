@@ -1,6 +1,6 @@
 # Working with OPF
 
-For CI, package releases, hosted previews and deployments, read the current [CI/CD contract](docs/ci-cd.md). The owner authorized agent deployments and native Cloudflare Previews on 2026-11-08; older no-deploy notes are historical. New logins, DNS and account-plan/visibility changes remain owner actions.
+For CI, package releases, hosted previews and deployments, read the current [CI/CD contract](docs/ci-cd.md). The owner authorized agent deployments and native Cloudflare Previews on 2026-11-08; older no-deploy notes are historical. New logins, DNS and account-plan/visibility changes remain owner actions. Before any run in Keynote, PowerPoint or LibreOffice Impress, read [native-app testing](docs/native-testing.md).
 
 For tasks involving OPF documents, read the relevant skill entrypoint in `skills/`:
 
@@ -82,6 +82,7 @@ Cross-repository work is tracked in `docs/programs/`. Before starting program wo
 - [Layout harvest](docs/programs/layout-harvest/README.md) (opened 2026-11-02, branches `codex/lh-<nn>-<slug>`, PR titles `LH-<nn>: `): default slides as good as Claude Design's version of the same content, compared slide by slide, plus the design and export guidance of Claude's Slides type and pptx skill; [burndown.md](docs/programs/layout-harvest/burndown.md) is the catalog of improvements built and to build.
 - [Shapes](docs/programs/shapes/README.md) (opened 2026-11-05, branches `codex/sh-<nn>-<slug>`, PR titles `SH-<nn>: `): PowerPoint's 187 preset shapes, custom outlines, every fill, line and effect, connectors and native diagrams from one geometry definition that both engines read (native DrawingML in PPTX); [burndown.md](docs/programs/shapes/burndown.md) holds SH-01 to SH-06 and the owner's diagram decision; `docs/shapes.md` is the property map.
 - [Format requests](docs/programs/format-requests/README.md) (opened 2026-11-25, branches `codex/fr-<nn>-<slug>`, PR titles `FR-<nn>: `): the format changes the owner kept in his review of 2026-11-24, shipped together as 0.37.0 (ids and slide links, data sources and typed data, a metric computed from data, table color scale, bullet bands and gauge, embed, variable limits, translations); [burndown.md](docs/programs/format-requests/burndown.md) holds FR-01 to FR-10 and [decisions.md](docs/programs/format-requests/decisions.md) every decision with who gave it (open ones are taken as recommended on the owner's delegation, and he can overrule).
+- [Native-app testing](docs/programs/native-testing/README.md) (opened 2026-11-25, branches `codex/nt-<nn>-<slug>`, PR titles `NT-<nn>: `): the exported `.pptx` checked in PowerPoint, Keynote and LibreOffice Impress with one corpus, one command (`pnpm native <target>`), one result format, one driver per application and known differences as data; [burndown.md](docs/programs/native-testing/burndown.md) holds NT-00 to NT-09 and [decisions.md](docs/programs/native-testing/decisions.md) the owner's six decisions.
 
 ## Fonts
 

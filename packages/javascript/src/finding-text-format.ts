@@ -248,6 +248,17 @@ const datasetUnknown: RuleText = (finding, _context, helpers) => {
   };
 };
 
+const datasourceUnknown: RuleText = (finding, _context, helpers) => {
+  const id = unquote(match(finding.message, /^unknown data source '(.+?)'/)?.[1]) || String(helpers.valueAt(helpers.segments) ?? "");
+  if (!id) return undefined;
+  const ids = keysAt(helpers, ["datasources"]);
+  const here = ids.length ? `Data sources in this deck: ${plainList(ids)}.` : "This deck has no data sources.";
+  return {
+    message: `${code(`datasource: "${id}"`)} does not exist. ${here}`,
+    next: chooseNext(id, ids, `add ${code(`datasources.${id}`)}, or write the data source inline as an object such as ${code('{ "src": "./data.csv" }')}`),
+  };
+};
+
 const datasetFieldUnknown: RuleText = (finding, _context, helpers) => {
   const found = match(finding.message, /^field ("(?:[^"\\]|\\.)*") is not a column of the dataset; use one of (.+)$/);
   if (!found) return undefined;
@@ -454,6 +465,19 @@ const variableUnused: RuleText = (finding, _context, helpers) => {
     message: `Variable ${code(id)} is declared but never used.`,
     next: `use it as ${code(`{{${id}}}`)} or ${code(`var:${id}`)} where it belongs, or remove its declaration.`,
   };
+};
+
+const variableTranslationDuplicate: RuleText = (finding, _context, helpers) => {
+  const id = text(params(finding).id) ?? helpers.segments.at(-2);
+  if (!id) return undefined;
+  return { message: `Variable ${code(id)} has two translations whose language tags differ only in case.`, next: "remove one of the two keys: the first in the document is the one that is drawn." };
+};
+
+const variableTranslationUnused: RuleText = (finding, _context, helpers) => {
+  const id = text(params(finding).id) ?? helpers.segments.at(-3);
+  const tag = helpers.segments.at(-1);
+  if (!id || !tag) return undefined;
+  return { message: `The ${code(tag)} translation of ${code(id)} is never drawn: no slide and not the deck declares a language that selects it.`, next: `set ${code("language")} on the deck or on a slide, fix the tag, or remove the translation.` };
 };
 
 const variableReferenceUnknown: RuleText = (finding, _context, helpers) => {
@@ -786,6 +810,7 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/connector-end-missing": connectorEndMissing,
   "opf/layout-placeholder-group": layoutPlaceholderGroup,
   "opf/dataset-unknown": datasetUnknown,
+  "opf/datasource-unknown": datasourceUnknown,
   "opf/dataset-field-unknown": datasetFieldUnknown,
   "opf/data-column-duplicate": dataColumnDuplicate,
   "opf/chart-mapping-unknown-column": chartMappingUnknownColumn,
@@ -819,6 +844,8 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/variable-unknown": variableUnknown,
   "opf/variable-unknown-value": variableUnknownValue,
   "opf/variable-unused": variableUnused,
+  "opf/variable-translation-duplicate": variableTranslationDuplicate,
+  "opf/variable-translation-unused": variableTranslationUnused,
   "opf/variable-reference-unknown": variableReferenceUnknown,
   "opf/contract": contract,
 };

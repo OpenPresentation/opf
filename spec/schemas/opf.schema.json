@@ -206,7 +206,11 @@
     },
     "datasets": {
       "$ref": "#/$defs/Datasets",
-      "description": "Optional shared data tables, keyed by id. A chart ('chart.data': { \"dataset\": \"<id>\" }) or a table ('table': { \"dataset\": \"<id>\" }) references one instead of holding its own copy; engines inline the reference before composing, rendering or exporting. A dataset nothing references is the warning opf/unused-dataset. See docs/chart-table-data.md."
+      "description": "Optional shared data tables, keyed by id. A chart ('chart.data': { \"dataset\": \"<id>\" }) or a table ('table': { \"dataset\": \"<id>\" }) references one instead of holding its own copy; engines inline the reference before composing, rendering or exporting. A dataset nothing references is the warning opf/unused-dataset. A dataset says where it came from with 'datasource', 'query', 'retrieved', 'version', 'sha256' and 'generator' (see 'datasources'). See docs/chart-table-data.md."
+    },
+    "datasources": {
+      "$ref": "#/$defs/DataSources",
+      "description": "Optional data sources, keyed by id: the places data comes from (a warehouse, a workbook, an API), described once. A dataset or inline chart data names one with 'datasource': \"<id>\" and records what it took, when and by whom beside its own columns and rows. A data source never holds credentials. Engines never read, fetch or refresh a data source; they keep the entries through editing, export and re-import. An unknown id is the error opf/datasource-unknown. See docs/data-sources.md."
     },
     "assets": {
       "$ref": "#/$defs/Assets",
@@ -1403,6 +1407,36 @@
           "type": "integer",
           "minimum": 1,
           "description": "The most lines the value may take where it is drawn. Checked by composition at each place the variable is drawn (a title, a subtitle, a text block or a list entry), because the line count depends on the width of the box; a value that takes more lines is the warning opf/variable-overflow at that place, naming the slide. Inside longer text, the lines are those the variable's own characters occupy."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TextRun"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "The text in other languages, keyed by language tag, each entry a 'value' in the same form as the variable's own (a string or TextRun[]). Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "Text content. Plain string or rich TextRun[]. Insert it inline as '{{<id>}}' inside any string (rich text is flattened to plain text there), or reference it whole as 'var:<id>' in a field that accepts string or TextRun[] (the rich runs are kept)."
@@ -1497,13 +1531,34 @@
         },
         "format": {
           "type": "string",
-          "description": "Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. English names. Default 'MMMM d, yyyy'.",
+          "description": "Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. The month and weekday names are those of the language where the date is drawn (the slide's declared language, else the deck's; English when none is declared or the table has no data for it); a month after a day token is in its form after a day, else its stand-alone form. Default: the language's long date pattern ('d. MMMM yyyy' in German), 'MMMM d, yyyy' for US English and a deck with no language.",
           "examples": [
             "MMMM d, yyyy",
             "dd MMM yyyy",
             "M/d/yyyy",
             "EEEE, MMMM d"
           ]
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "type": "string",
+                "description": "The date display pattern in this language, in the tokens of the variable's own 'format'."
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "How the date is written in other languages, keyed by language tag, each entry a 'format': the date is the same in every language, its pattern is not. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match uses the variable's own 'format'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "A calendar date as an ISO YYYY-MM-DD string. No time zone and no clock are involved. '{{<id>}}' inserts it formatted with 'format'."
@@ -1540,6 +1595,26 @@
         "example": {
           "$ref": "#/$defs/Asset",
           "description": "Illustrative image source shown in fill forms and used when a template is previewed with examples. Never written to output."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/Asset"
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "An image source per language (a localized screenshot), keyed by language tag, each entry a 'value'. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "An image source: any Asset (an 'asset:<id>' reference, HTTPS URL, data URI, relative or local path, or an object with src, alt and metadata). Reference it whole as 'var:<id>' in an image, asset or src field; '{{<id>}}' inserts the source string."
@@ -1578,6 +1653,27 @@
           "type": "string",
           "pattern": "^(?:https?://|mailto:|tel:)\\S+$",
           "description": "Illustrative link shown in fill forms and used when a template is previewed with examples. Never written to output."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "type": "string",
+                "pattern": "^(?:https?://|mailto:|tel:)\\S+$"
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "A link target per language (a localized landing page), keyed by language tag, each entry a 'value'. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "A link target (http, https, mailto or tel). Use it as '{{<id>}}' inside a link string or reference it whole as 'var:<id>' in a link field."
@@ -1625,6 +1721,29 @@
           "type": "integer",
           "minimum": 1,
           "description": "The most entries the list may have. Checked on the declared value and on a value given to a fill; a longer list is the warning opf/variable-overflow. Fill forms and models read it before writing."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "The entries in other languages, keyed by language tag, each entry a 'value' list. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "A list of strings, for bullets and list items. A whole-string array element 'var:<id>' splices every entry into the array in place; a whole field 'var:<id>' becomes the array; '{{<id>}}' joins the entries with ', ' (or the separator after a pipe: '{{<id>|; }}')."
@@ -2590,7 +2709,7 @@
         "dateFormat": {
           "type": "string",
           "minLength": 1,
-          "description": "Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and weekday names are English, independent of host locale. Defaults to \"M/d/yyyy\" for a current date. PPTX export writes a native current-date field only when its complete value fits within one accepted text line and the pattern matches a PowerPoint en-US date field ('M/d/yyyy'; 'EEEE, MMMM d, yyyy'; 'd MMMM yyyy'; 'MMMM d, yyyy'; 'd-MMM-yy'; 'MMMM yy'; 'MMM-yy'). Other patterns and wrapped fields export as static text with a diagnostic. Full provenance can recover generated-date intent from unchanged supported wrapped dates on OPF reimport; the existing PPTX text remains static.",
+          "description": "Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and weekday names are those of the language of the slide the date is on (its declared language, else the deck's), from OPF's own table and independent of the host's locale; English when no language is declared. Defaults to \"M/d/yyyy\" for a current date. PPTX export writes a native current-date field only when its complete value fits within one accepted text line and the pattern matches a PowerPoint en-US date field ('M/d/yyyy'; 'EEEE, MMMM d, yyyy'; 'd MMMM yyyy'; 'MMMM d, yyyy'; 'd-MMM-yy'; 'MMMM yy'; 'MMM-yy'). Other patterns and wrapped fields export as static text with a diagnostic. Full provenance can recover generated-date intent from unchanged supported wrapped dates on OPF reimport; the existing PPTX text remains static.",
           "examples": ["MMM d, yyyy", "yyyy-MM-dd", "MMM yyyy", "MMMM d, yyyy"]
         },
         "socials": {
@@ -4476,7 +4595,7 @@
             { "$ref": "#/$defs/ChartData" },
             { "$ref": "#/$defs/DatasetRef" }
           ],
-          "description": "Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ \"dataset\": \"<id>\" }) plots a top-level dataset instead. Data from a spreadsheet or file is imported into inline columns and rows, and its origin is recorded in data.source."
+          "description": "Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ \"dataset\": \"<id>\" }) plots a top-level dataset instead. Data from a spreadsheet or file is imported into inline columns and rows, and its origin is recorded in the data's own 'datasource', 'query', 'retrieved', 'version', 'sha256' and 'generator' keys."
         },
         "mapping": {
           "$ref": "#/$defs/ChartMapping",
@@ -4755,12 +4874,12 @@
           "items": {
             "oneOf": [
               { "type": "string" },
-              { "$ref": "#/$defs/DataColumn" }
+              { "$ref": "#/$defs/DatasetColumn" }
             ]
           },
           "minItems": 1,
-          "description": "Ordered column labels for the chart data table. A label is a string or a DataColumn ({ \"name\", \"format\" }) whose number format the data labels, value axis and exported workbook use.",
-          "examples": [["Quarter", "Revenue"], ["Quarter", "Revenue", "Costs"], ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }]]
+          "description": "Ordered column labels for the chart data table. A label is a string or a DatasetColumn ({ \"name\", \"format\", \"type\", \"role\", \"unit\" }) whose number format the data labels, value axis and exported workbook use, and which may declare what its cells hold and what the column is for.",
+          "examples": [["Quarter", "Revenue"], ["Quarter", "Revenue", "Costs"], ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }], [{ "name": "Month", "type": "date", "role": "dimension" }, { "name": "Revenue", "type": "number", "role": "measure", "unit": "USD" }]]
         },
         "rows": {
           "type": "array",
@@ -4772,10 +4891,12 @@
           "description": "Tabular chart rows. Each row aligns by index with columns.",
           "examples": [[["Q1", 12], ["Q2", 18], ["Q3", 24], ["Q4", 31]]]
         },
-        "source": {
-          "$ref": "#/$defs/DataSourceRef",
-          "description": "Optional provenance: where this inline data came from. Engines never read, fetch or refresh it; they keep it through editing, export and re-import."
-        }
+        "datasource": { "$ref": "#/$defs/DataSourceChoice" },
+        "query": { "$ref": "#/$defs/DataQuery" },
+        "retrieved": { "$ref": "#/$defs/DataRetrieved" },
+        "version": { "$ref": "#/$defs/DataVersion" },
+        "sha256": { "$ref": "#/$defs/DataSha256" },
+        "generator": { "$ref": "#/$defs/DataGenerator" }
       }
     },
     "DataColumn": {
@@ -4796,46 +4917,142 @@
       },
       "examples": [{ "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }]
     },
-    "DataSourceRef": {
+    "DatasetColumn": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["src"],
-      "description": "Provenance of inline data or a dataset: the file, sheet and range it came from and when. Engines never read, fetch or refresh it; they keep it through editing, export and re-import. Re-import the data to update it.",
+      "required": ["name"],
+      "description": "A named data column: a dataset column or an inline chart data column. Adds to DataColumn what its cells hold (type), what it is for (role) and a unit label. The string form is { \"name\": value } with nothing declared. A table column header keeps DataColumn.",
       "properties": {
-        "src": {
+        "name": {
           "type": "string",
-          "description": "Where the data came from: an 'asset:<id>' reference, a URL, or a relative or local path.",
-          "examples": ["./data/revenue.csv", "asset:revenue", "https://cdn.acme.com/data/revenue.csv"]
+          "description": "Column label, used as the series name, the table header and the name 'fields', 'chart.mapping' and data links address.",
+          "examples": ["Revenue", "Month"]
         },
-        "sheet": {
+        "format": {
+          "$ref": "#/$defs/NumberFormat",
+          "description": "Number format of the column's number values (data labels, value axis, table cells, exported workbook). Absent: the General form."
+        },
+        "type": {
           "type": "string",
-          "description": "Sheet or table name inside a spreadsheet source.",
-          "examples": ["Sheet1"]
+          "enum": ["text", "number", "date", "boolean"],
+          "description": "What the column's cells hold. text: strings. number: finite numbers (a string such as \"12\" is not one). date: time labels (a year, a period, a month, a week or a date, as the time-order rule reads them, and an ISO 8601 date-time). boolean: true or false. null is a gap in any type. A cell of another kind is a 'data-cell-type' warning. A date category column is drawn as time (the title fallback of the time-order rule is skipped); a text or boolean one never is. Absent: undeclared, read from the cells as before."
         },
-        "range": {
+        "role": {
           "type": "string",
-          "description": "A1-style range inside a spreadsheet source.",
-          "examples": ["A1:D8"]
+          "enum": ["dimension", "measure"],
+          "description": "What the column is for. dimension: it labels or groups rows (a region, a product, a month). measure: its values are measured and can be aggregated (revenue, count, rate). Time is type 'date' with role 'dimension'. Absent: undeclared. Engines do not draw differently for a role; tools that pick a chart or aggregate a column read it."
         },
-        "fields": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "The source fields the data was taken from, in order.",
-          "examples": [["Quarter", "Revenue"]]
-        },
-        "retrieved": {
+        "unit": {
           "type": "string",
-          "anyOf": [{ "format": "date" }, { "format": "date-time" }],
-          "description": "When the data was taken from the source: an ISO 8601 date or date-time.",
-          "examples": ["2026-10-05", "2026-10-05T09:30:00Z"]
+          "minLength": 1,
+          "description": "The unit of the column's values, as a label for tools: 'USD', 'ms', 'people'. Engines never print it; 'format' alone decides how a number is drawn.",
+          "examples": ["USD", "ms", "people"]
+        }
+      },
+      "examples": [{ "name": "Month", "type": "date", "role": "dimension" }, { "name": "Revenue", "format": "$#,##0", "type": "number", "role": "measure", "unit": "USD" }]
+    },
+    "DataSourceId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$",
+      "description": "Id of an entry in the top-level datasources map (the datasets id pattern). A string 'datasource' is only ever such an id; a file or a URL is written as an inline data source object, { \"src\": \"./revenue.csv\" }.",
+      "examples": ["warehouse", "finance-workbook"]
+    },
+    "DataSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "A place data comes from: what it is and on what terms, not what was taken from it or when (that is the dataset's). Engines never read, fetch or refresh it; they keep it through editing, export and re-import. It never holds credentials: no password, token or key in 'src' or anywhere else (opf/datasource-credentials warns about a user and password in 'src' and a key or token in its query string); a host keeps secrets in its own store and names the connection in 'connector' or 'extensions'.",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Human name of the data source, shown by editors.",
+          "examples": ["Finance warehouse"]
         },
         "description": {
           "type": "string",
-          "description": "Free-form note about the source.",
+          "description": "Free-form note about the data source.",
           "examples": ["Finance export, unaudited"]
+        },
+        "connector": {
+          "type": "string",
+          "description": "The kind of data source, in the host's or the author's words: a name a tool recognizes, such as 'csv', 'xlsx', 'postgres', 'bigquery' or 'rest'. Engines do not interpret it. It also says what language a dataset's 'query' is written in.",
+          "examples": ["xlsx", "postgres", "rest"]
+        },
+        "src": {
+          "type": "string",
+          "description": "Where the data is: an 'asset:<id>' reference, a URL, or a relative or local path. A URL carries no credentials.",
+          "examples": ["./data/revenue.csv", "asset:revenue", "https://cdn.acme.com/data/revenue.csv"]
+        },
+        "license": {
+          "type": "string",
+          "description": "The terms the data is under: an SPDX license identifier or a short statement. It travels with the data.",
+          "examples": ["CC-BY-4.0", "Internal use only"]
+        },
+        "refreshEvery": {
+          "type": "string",
+          "pattern": "^P(?=\\d|T\\d)(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?=\\d)(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$",
+          "description": "How often the data is meant to be taken again, as an ISO 8601 duration. No engine acts on it. A validator given a date warns when a dataset's 'retrieved' is older than this (opf/dataset-stale).",
+          "examples": ["P1D", "P1W", "P3M", "PT6H"]
+        },
+        "extensions": {
+          "type": "object",
+          "description": "Custom data passthrough, for example the connection settings a host owns; ignored by the engine but preserved across read/write round-trips. Never credentials."
         }
       },
-      "examples": [{ "src": "./data/revenue.csv", "retrieved": "2026-10-05" }]
+      "examples": [{ "title": "Finance warehouse", "connector": "postgres", "src": "postgres://warehouse.acme.com/finance", "license": "Internal use only", "refreshEvery": "P1D" }]
+    },
+    "DataSources": {
+      "type": "object",
+      "description": "Data sources keyed by id (the datasets id pattern). A dataset or inline chart data names one with 'datasource': \"<id>\".",
+      "propertyNames": { "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$" },
+      "additionalProperties": { "$ref": "#/$defs/DataSource" },
+      "examples": [
+        {
+          "warehouse": { "title": "Finance warehouse", "connector": "postgres", "src": "postgres://warehouse.acme.com/finance", "refreshEvery": "P1D" },
+          "forecast": { "title": "FY26 forecast workbook", "connector": "xlsx", "src": "https://example.com/revenue.xlsx", "license": "CC-BY-4.0" }
+        }
+      ]
+    },
+    "DataSourceChoice": {
+      "description": "Where the data came from: the id of an entry in the top-level datasources map (a string, always an id), or a data source written inline, { \"src\": \"./revenue.csv\" }. An unknown id is a 'datasource-unknown' error. Engines never read, fetch or refresh it.",
+      "oneOf": [
+        { "$ref": "#/$defs/DataSourceId" },
+        { "$ref": "#/$defs/DataSource" }
+      ],
+      "examples": ["warehouse", { "src": "./data/revenue.csv" }]
+    },
+    "DataQuery": {
+      "type": "string",
+      "minLength": 1,
+      "description": "What was taken from the data source, in the data source's own language: a spreadsheet range with its sheet ('FY26!A1:C13'; a sheet name with a space is quoted as spreadsheets do, \"'Q3 plan'!A1:B9\"), a SQL statement, a path into a document. Engines never run or parse it.",
+      "examples": ["FY26!A1:C13", "'Q3 plan'!A1:B9", "SELECT region, SUM(amount) FROM revenue GROUP BY 1"]
+    },
+    "DataRetrieved": {
+      "anyOf": [{ "type": "string", "format": "date" }, { "type": "string", "format": "date-time" }],
+      "description": "When the data was taken from its source: an ISO 8601 date or date-time. Never read from a clock by an engine.",
+      "examples": ["2026-10-05", "2026-10-05T09:30:00Z"]
+    },
+    "DataVersion": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A free string the source system gives the snapshot that was taken: a revision, an etag, a commit.",
+      "examples": ["r42", "2026-Q3"]
+    },
+    "DataSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "The SHA-256 of the source file's bytes as retrieved, as 64 lowercase hexadecimal digits. It answers 'has the file changed since'. Engines never compute or check it.",
+      "examples": ["9f2c41b1d1b6e0a8a56e7c3d2f4b8a90c1e3d5f7a9b0c2d4e6f8a0b1c3d5e07a"]
+    },
+    "DataGenerator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "name"],
+      "description": "Who produced the data: a person or a model, and which. A reviewer of a generated deck can see that a table came from a model, and from which one.",
+      "properties": {
+        "type": { "type": "string", "enum": ["human", "model"], "description": "'human' for a person, 'model' for a language model or another generating program." },
+        "name": { "type": "string", "minLength": 1, "description": "The person, model or tool, as its owner names it.", "examples": ["metricgen 2.1", "Avery Chen"] }
+      },
+      "examples": [{ "type": "model", "name": "metricgen 2.1" }]
     },
     "DatasetId": {
       "type": "string",
@@ -4862,7 +5079,8 @@
             "title": "Revenue by quarter",
             "columns": ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, "Costs"],
             "rows": [["Q1", 12, 8], ["Q2", 18, 11], ["Q3", 24, 15]],
-            "source": { "src": "./data/revenue.csv", "retrieved": "2026-10-05" }
+            "datasource": { "src": "./data/revenue.csv" },
+            "retrieved": "2026-10-05"
           }
         }
       ]
@@ -4871,7 +5089,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["columns", "rows"],
-      "description": "One shared data table: named columns (strings or DataColumn objects with a number format) and rows of scalar cells. Column names are unique ('data-column-duplicate' error). Rich text and styling belong in an inline table.",
+      "description": "One shared data table: named columns (strings or DatasetColumn objects with a number format, a type, a role and a unit) and rows of scalar cells. Column names are unique ('data-column-duplicate' error). Rich text and styling belong in an inline table.",
       "properties": {
         "title": {
           "type": "string",
@@ -4888,12 +5106,12 @@
           "items": {
             "oneOf": [
               { "type": "string" },
-              { "$ref": "#/$defs/DataColumn" }
+              { "$ref": "#/$defs/DatasetColumn" }
             ]
           },
           "minItems": 1,
-          "description": "Ordered, uniquely named columns.",
-          "examples": [["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, "Costs"]]
+          "description": "Ordered, uniquely named columns. A column may declare what its cells hold (type), what it is for (role) and a unit label; a string column declares nothing.",
+          "examples": [["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, "Costs"], [{ "name": "Month", "type": "date", "role": "dimension" }, { "name": "Revenue", "format": "$#,##0", "type": "number", "role": "measure", "unit": "USD" }]]
         },
         "rows": {
           "type": "array",
@@ -4904,10 +5122,12 @@
           "description": "Rows of scalar cells (string, number, boolean, null); each row aligns by index with columns.",
           "examples": [[["Q1", 12, 8], ["Q2", 18, 11]]]
         },
-        "source": {
-          "$ref": "#/$defs/DataSourceRef",
-          "description": "Optional provenance. Engines never read, fetch or refresh it."
-        }
+        "datasource": { "$ref": "#/$defs/DataSourceChoice" },
+        "query": { "$ref": "#/$defs/DataQuery" },
+        "retrieved": { "$ref": "#/$defs/DataRetrieved" },
+        "version": { "$ref": "#/$defs/DataVersion" },
+        "sha256": { "$ref": "#/$defs/DataSha256" },
+        "generator": { "$ref": "#/$defs/DataGenerator" }
       }
     },
     "DatasetRef": {

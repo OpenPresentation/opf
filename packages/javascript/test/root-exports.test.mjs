@@ -38,6 +38,7 @@ const symbolNames = ["SYMBOL_FONT_ENCODINGS", "SYMBOL_FONT_FAMILIES", "symbolFon
 const dataNames = [
   "chartNumber", "formatDataNumber", "numberFormatError", "toExcelNumberFormat", "fromExcelNumberFormat", "inlineDatasets", "inlineTableData", "inlineChartData", "isDatasetRef", "isXYChartType",
   "resolveChartData", "resolveTableData", "tableCellDisplayValue", "datasetDiagnostics", "unusedDatasets", "suggestChartNumberFix",
+  "suggestCellTypeFix", "datasetColumnDeclaration", "cellMatchesType", "inferColumnDeclaration", "declareColumns", "storeCell",
 ];
 
 describe("package root", () => {

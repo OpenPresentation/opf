@@ -11,10 +11,12 @@ import { checkFormat } from '../dist/checks.js';
 import { checkSource, checkSyntaxOnly, createCheckService, markdownNotesOf, readSource } from '../dist/source-check.js';
 import { createSourceChecker } from '../dist/source-checker.js';
 import { corpus } from './support/source-check-corpus.mjs';
+import { pinVersion } from './support/generate-source-read-text-fixture.mjs';
 
 const golden = JSON.parse(await readFile(new URL('./fixtures/source-read-text.golden.json', import.meta.url), 'utf8'));
 const catalogsOf = (entry) => Object.freeze(entry.catalogs === 'gallery' ? [gallery] : []);
-const plain = (value) => JSON.parse(JSON.stringify(value));
+// The fixture stores core's version as {{version}} (FR-11); the actual output is pinned by the generator's own function before it is compared.
+const plain = (value) => JSON.parse(pinVersion(JSON.stringify(value)));
 const tick = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // ---- checkSource preserves the reviewed source-reading contract --------------------------------------------------------------------------------------

@@ -158,6 +158,34 @@ docker run --rm -v "$PWD:/opf" -w /opf opf-libreoffice bash -lc "corepack enable
 `--case` takes case ids, group names or an id prefix ending in `*`; `--profiles opf` runs one profile; `--profiles none` runs only the
 control, which works on any machine without LibreOffice. The portable tests are `pnpm check:libreoffice`.
 
+## The shared native result format
+
+Beside `results.json` and `summary.md`, every run that converts with LibreOffice also writes `native/` in the
+[shared native result format](../scripts/native-acceptance/core/result/README.md) that the Keynote and PowerPoint runs write, so
+the same compare and classify steps can read Impress results. It is in the nightly artifact with everything else.
+
+```
+native/run.json                                          the run: LibreOffice's version, the system, the profiles, one entry per file
+native/files/<case>~<profile>/result.json                one per case and font profile (target "impress", fonts = the profile)
+native/files/<case>~<profile>/slides/slide-001.png ...   LibreOffice's rendering of each visible slide
+native/files/<case>~<profile>/resaved.pptx               LibreOffice's own PowerPoint copy
+```
+
+The file id is the case id (the `~` of a qualification case such as `q-smartart~shapes` written as `.`) and the font profile:
+`tables~opf`, `q-smartart.shapes~stock`. What each verb means for LibreOffice
+(`scripts/native-acceptance/apps/impress/from-libreoffice.mjs` maps it):
+
+| Verb | Status | From |
+| --- | --- | --- |
+| `open` | `done`, or `failed` with the conversion's message | the PDF conversion; `slideCount` is the slide count of LibreOffice's own PowerPoint copy. Import warnings are `not-read`: LibreOffice has no warnings window, and the one `soffice` call for all files does not say which file a line of its output belongs to |
+| `render` | `done` | every page of LibreOffice's PDF rasterized at the size of OPF's preview (1280 px wide when a case has none); a hidden slide, which the PDF leaves out, has no picture |
+| `probe` | `not-run` | the runner does not read LibreOffice's object model; LibreOffice's PowerPoint copy is there for the round-trip step |
+| `resave` | `done`, or `failed` when LibreOffice wrote no copy | the PPTX re-export; `import` is OPF's import of that copy |
+
+The runner's defects and differences stay in `results.json`. A case that did not export, and a retained PPTX whose exporter is
+unknown (`issue-925-original`), have no native result; `--profiles none` writes none. The runner validates every file against the
+format's schemas and fails (exit 2) when one does not validate.
+
 ## Reporting a LibreOffice problem with an OPF file
 
 Attach the PPTX and say: the LibreOffice version from Help, About (or `soffice --version`), the operating system, whether the deck's

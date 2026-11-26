@@ -133,7 +133,9 @@ assert.deepEqual(nativeDateField('yyyy-MM-dd', 'en-CA'), {type: 'datetime1', lan
 assert.deepEqual(nativeDateField('dd.MM.yyyy', 'de-DE'), {type: 'datetime1', lang: 'de-DE'});
 assert.deepEqual(nativeDateField("yyyy'年'M'月'd'日'", 'ja-JP'), {type: 'datetime4', lang: 'ja-JP'}, 'Quoted and bare literals are one pattern.');
 assert.deepEqual(nativeDateField('yyyy年M月d日', 'ja-JP'), {type: 'datetime4', lang: 'ja-JP'});
-assert.deepEqual(nativeDateField('MMMM d, yyyy', 'de-DE'), {type: 'datetime4', lang: 'en-US'}, 'English month names are an en-US field.');
+assert.deepEqual(nativeDateField('MMMM d, yyyy', 'en-GB'), {type: 'datetime4', lang: 'en-US'}, 'English month names are an en-US field in a deck whose names are English.');
+assert.equal(nativeDateField('MMMM d, yyyy', 'de-DE'), null, 'FR-10: OPF draws German month names in a German deck, which an en-US field would not show: fixed text.');
+assert.deepEqual(nativeDateField('M/d/yyyy', 'de-DE'), {type: 'datetime1', lang: 'en-US'}, 'A pattern without words is still an en-US field.');
 assert.deepEqual(nativeDateField('dd/MM/yyyy', 'ar-SA'), null, 'ar-SA fields are Hijri; en-US has no dd/MM/yyyy.');
 assert.deepEqual(nativeDateField('M/d/yyyy', 'ar-SA'), {type: 'datetime1', lang: 'en-US'});
 assert.equal(nativeDateField('MMM d, yyyy', 'en-US'), null);

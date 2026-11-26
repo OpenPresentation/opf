@@ -26,6 +26,17 @@ assert.match(conf, /<match target="pattern"><test name="family" qual="any"><stri
 assert.doesNotMatch(conf, /<include/, 'a conf.d file does not include the system configuration (that would loop)');
 assert.match(fontconfigConf({includeSystem: true, cacheDir: '/tmp/c', aliases: []}), /<include ignore_missing="yes">\/etc\/fonts\/fonts\.conf<\/include>[\s\S]*<cachedir>\/tmp\/c<\/cachedir>/);
 
+// The file is well-formed XML (fontconfig rejects the whole file otherwise; NT-06): no comment holds a double hyphen or ends in one,
+// and where xmllint exists it parses the file.
+function assertWellFormed(text, label) {
+  for (const comment of text.matchAll(/<!--([\s\S]*?)-->/g)) assert.ok(!comment[1].includes('--') && !comment[1].endsWith('-'), `${label}: a comment holds "--": ${comment[0]}`);
+  assert.ok(!/<!--[\s\S]*?--[^>]/.test(text.replace(/<!--([\s\S]*?)-->/g, '')), `${label}: unterminated comment`);
+  const lint = spawnSync('xmllint', ['--noout', '--nonet', '-'], {input: text, encoding: 'utf8'});
+  if (!lint.error) assert.ok(!/not well-formed|parser error/i.test(lint.stderr), `${label}: xmllint: ${lint.stderr}`);
+}
+assertWellFormed(conf, 'one alias');
+assertWellFormed(fontconfigConf({includeSystem: true, cacheDir: '/tmp/<c>&', fontDir: '/a&b', aliases}), 'all aliases');
+
 // The command: fonts copied and the file written in one run.
 const cli = fileURLToPath(new URL('../dist/preview-fonts-cli.js', import.meta.url));
 const directory = mkdtempSync(path.join(tmpdir(), 'opf-fontconfig-'));
@@ -37,6 +48,7 @@ try {
   assert.ok(existsSync(path.join(fonts, 'LICENSES.txt')), 'the fonts were copied');
   const written = readFileSync(file, 'utf8');
   assert.ok(written.includes(`<dir>${path.resolve(fonts).replaceAll('&', '&amp;')}</dir>`), 'the file names the copied font directory');
+  assertWellFormed(written, 'the written file');
   assert.equal((written.match(/<match /g) ?? []).length, aliases.length);
   const usage = spawnSync(process.execPath, [cli, '--help'], {encoding: 'utf8'});
   assert.match(usage.stderr, /--fontconfig <file>/);

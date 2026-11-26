@@ -95,7 +95,8 @@ const revenue = () => ({
   title: "Revenue by quarter",
   columns: ["Quarter", { name: "Revenue", format: "$#,##0.0" }, "Costs"],
   rows: [["Q1", 12, 8], ["Q2", 18, 11], ["Q3", 24, 15]],
-  source: { src: "./data/revenue.csv", retrieved: "2026-10-05" },
+  datasource: { src: "./data/revenue.csv" },
+  retrieved: "2026-10-05",
 });
 
 describe("chartNumber: one strict rule", () => {
@@ -215,7 +216,8 @@ describe("inlineDatasets", () => {
     assert.deepEqual(out.slides[0].chart.data, {
       columns: ["Quarter", { name: "Revenue", format: "$#,##0.0" }],
       rows: [["Q1", 12], ["Q2", 18], ["Q3", 24]],
-      source: { src: "./data/revenue.csv", retrieved: "2026-10-05" },
+      datasource: { src: "./data/revenue.csv" },
+      retrieved: "2026-10-05",
     });
     assert.deepEqual(out.slides[0].chart.mapping, { series: ["Revenue"] });
     assert.deepEqual(out.slides[1].blocks[0].table, { columns: ["Quarter", { name: "Revenue", format: "$#,##0.0" }, "Costs"], rows: revenue().rows });
@@ -245,12 +247,12 @@ describe("resolveChartData", () => {
     assert.deepEqual(result.diagnostics.map((entry) => [entry.code, entry.path]), [["chart-value-not-numeric", "/data/rows/1/1"]]);
   });
 
-  test("DataColumn formats, source and the category cell as authored", () => {
-    const result = resolveChartData(chart({ columns: [{ name: "Year" }, { name: "Revenue", format: "$#,##0" }], rows: [[2024, 5], [true, 6]], source: { src: "a.csv" } }), undefined, { path: "/slides/0/chart" });
+  test("DataColumn formats, provenance and the category cell as authored", () => {
+    const result = resolveChartData(chart({ columns: [{ name: "Year" }, { name: "Revenue", format: "$#,##0" }], rows: [[2024, 5], [true, 6]], datasource: { src: "a.csv" } }), undefined, { path: "/slides/0/chart" });
     assert.deepEqual(result.columns, ["Year", "Revenue"]);
     assert.deepEqual(result.formats, [undefined, "$#,##0"]);
     assert.deepEqual(result.rows, [[2024, 5], [true, 6]]);
-    assert.deepEqual(result.source, { src: "a.csv" });
+    assert.deepEqual(result.provenance, { datasource: { src: "a.csv" } });
     assert.equal(result.diagnostics.length, 0);
   });
 
@@ -262,7 +264,7 @@ describe("resolveChartData", () => {
     assert.deepEqual(result.columns, ["Quarter", "Costs", "Revenue"]);
     assert.deepEqual(result.formats, [undefined, undefined, "$#,##0.0"]);
     assert.deepEqual(result.rows[0], ["Q1", 8, 12]);
-    assert.deepEqual(result.source, revenue().source);
+    assert.deepEqual(result.provenance, { datasource: revenue().datasource, retrieved: revenue().retrieved });
   });
 
   test("unknown datasets, unknown fields and external sources", () => {
@@ -387,7 +389,7 @@ describe("validation findings", () => {
       datasets: { revenue: revenue() },
       slides: [
         { title: "Chart", chart: { type: "column", data: { dataset: "revenue", fields: ["Quarter", "Revenue", "Costs"] }, mapping: { category: "Quarter", series: ["Costs", "Revenue"] } } },
-        { title: "Inline", chart: { type: "line", data: { columns: ["Quarter", { name: "Margin", format: "0%" }], rows: [["Q1", 0.31], ["Q2", "0.34"]], source: { src: "./margin.csv", sheet: "Sheet1", range: "A1:B3", fields: ["Quarter", "Margin"], retrieved: "2026-10-05T09:30:00Z", description: "Finance export" } } } },
+        { title: "Inline", chart: { type: "line", data: { columns: ["Quarter", { name: "Margin", format: "0%" }], rows: [["Q1", 0.31], ["Q2", "0.34"]], datasource: { src: "./margin.csv", description: "Finance export" }, query: "Sheet1!A1:B3", retrieved: "2026-10-05T09:30:00Z", version: "r2", sha256: "9f2c41b1d1b6e0a8a56e7c3d2f4b8a90c1e3d5f7a9b0c2d4e6f8a0b1c3d5e07a", generator: { type: "model", name: "metricgen 2.1" } } } },
         { title: "Table", table: { dataset: "revenue", fields: ["Quarter", "Revenue"] } },
         { title: "Formats", table: { columns: ["Region", { name: "Revenue", format: "$#,##0.0" }, { value: "Growth", style: { align: "end" }, format: "0%" }], rows: [["EMEA", 8.2, 0.4], ["APAC", 6.1, { value: 0.52, format: "0.0%" }]] } },
       ],
@@ -401,7 +403,7 @@ describe("validation findings", () => {
   test("the new schema definitions' examples validate", () => {
     const defs = presentation.$defs;
     let checked = 0;
-    for (const name of ["NumberFormat", "DataColumn", "DataSourceRef", "DatasetId", "DatasetFields", "Datasets", "Dataset", "DatasetRef", "ChartMapping"]) {
+    for (const name of ["NumberFormat", "DataColumn", "DataSourceId", "DataSource", "DataSources", "DataSourceChoice", "DataQuery", "DataRetrieved", "DataVersion", "DataSha256", "DataGenerator", "DatasetId", "DatasetFields", "Datasets", "Dataset", "DatasetRef", "ChartMapping"]) {
       const schema = { $ref: `${presentation.$id}#/$defs/${name}` };
       const examples = [...(defs[name].examples ?? []), ...Object.values(defs[name].properties ?? {}).flatMap((property) => property.$ref ? [] : (property.examples ?? []).map((example) => ({ property, example })))];
       for (const entry of defs[name].examples ?? []) {
@@ -426,7 +428,7 @@ describe("validation findings", () => {
     assert.equal(check(deck({ slides: [{ table: { columns: ["x"] } }] })).valid, false, "an inline table still needs rows");
     assert.equal(check(deck({ datasets: { "bad id": revenue() }, slides: [{ title: "x" }] })).valid, false);
     assert.equal(check(deck({ slides: [{ chart: { type: "column", data: { dataset: "r", rows: [] } } }] })).valid, false);
-    assert.equal(check(deck({ slides: [{ chart: { type: "column", data: { columns: ["a"], rows: [["x"]], source: { src: "a", retrieved: "yesterday" } } } }] })).valid, false);
+    assert.equal(check(deck({ slides: [{ chart: { type: "column", data: { columns: ["a"], rows: [["x"]], datasource: { src: "a" }, retrieved: "yesterday" } } }] })).valid, false);
   });
 
   test("every error code", () => {
@@ -581,12 +583,12 @@ describe("core integration", () => {
     assert.equal(check(result.presentation).valid, true);
   });
 
-  test("markdown keeps datasets, formats, mapping and source", () => {
+  test("markdown keeps datasets, formats, mapping and data sources", () => {
     const document = deck({
       datasets: { revenue: revenue() },
       slides: [
         { title: "Chart", chart: { type: "column", data: { dataset: "revenue" }, mapping: { series: ["Costs"] } } },
-        { title: "Inline", chart: { type: "line", data: { columns: ["Quarter", { name: "Margin", format: "0%" }], rows: [["Q1", 0.31]], source: { src: "./m.csv" } } } },
+        { title: "Inline", chart: { type: "line", data: { columns: ["Quarter", { name: "Margin", format: "0%" }], rows: [["Q1", 0.31]], datasource: { src: "./m.csv" }, query: "A1:B2", retrieved: "2026-10-05", generator: { type: "human", name: "Avery" } } } },
         { title: "Table", table: { columns: ["Region", { name: "Revenue", format: "$#,##0" }], rows: [["EMEA", { value: "8", format: "0" }]] } },
         { title: "Data table", table: { dataset: "revenue", fields: ["Quarter"] } },
       ],
@@ -607,9 +609,9 @@ describe("core integration", () => {
     assert.deepEqual(toChart.payload.chart, { type: "column", data: { dataset: "revenue" } });
     const inline = convertContent({ table: { columns: ["Quarter", { name: "Revenue", format: "$#,##0" }], rows: [["Q1", "1e3"], ["Q2", 5]] } }, "chart");
     assert.deepEqual(inline.payload.chart.data, { columns: ["Quarter", { name: "Revenue", format: "$#,##0" }], rows: [["Q1", 1000], ["Q2", 5]] });
-    const back = convertContent({ chart: { type: "column", data: { columns: ["Q", { name: "R", format: "0%" }], rows: [["Q1", 0.5]], source: { src: "x.csv" } } } }, "table");
+    const back = convertContent({ chart: { type: "column", data: { columns: ["Q", { name: "R", format: "0%" }], rows: [["Q1", 0.5]], datasource: { src: "x.csv" } } } }, "table");
     assert.deepEqual(back.payload.table, { columns: ["Q", { name: "R", format: "0%" }], rows: [["Q1", 0.5]] });
-    assert.ok(back.loss.some((entry) => /source/.test(entry)));
+    assert.ok(back.loss.some((entry) => /data source/.test(entry)));
     const list = convertContent({ table: { dataset: "revenue", fields: ["Quarter"] } }, "list", { presentation: document });
     assert.deepEqual(list.payload.items, ["Q1", "Q2", "Q3"]);
     assert.throws(() => convertContent({ table: { dataset: "revenue" } }, "list"), /options\.presentation/);
@@ -619,11 +621,11 @@ describe("core integration", () => {
   });
 
   test("format orders the new keys by the schema", () => {
-    const text = format({ slides: [{ chart: { mapping: { series: ["R"] }, data: { source: { src: "a" }, rows: [["x", 1]], columns: ["Q", { format: "0", name: "R" }] }, type: "column" } }], datasets: { r: { rows: [], columns: ["a"], title: "t" } }, name: "x" });
+    const text = format({ slides: [{ chart: { mapping: { series: ["R"] }, data: { datasource: { src: "a" }, rows: [["x", 1]], columns: ["Q", { format: "0", name: "R" }] }, type: "column" } }], datasets: { r: { rows: [], columns: ["a"], title: "t" } }, name: "x" });
     const parsed = JSON.parse(text);
     assert.deepEqual(Object.keys(parsed), ["name", "slides", "datasets"]);
     assert.deepEqual(Object.keys(parsed.slides[0].chart), ["type", "data", "mapping"]);
-    assert.deepEqual(Object.keys(parsed.slides[0].chart.data), ["columns", "rows", "source"]);
+    assert.deepEqual(Object.keys(parsed.slides[0].chart.data), ["columns", "rows", "datasource"]);
     assert.deepEqual(Object.keys(parsed.slides[0].chart.data.columns[1]), ["name", "format"]);
     assert.deepEqual(Object.keys(parsed.datasets.r), ["title", "columns", "rows"]);
   });
@@ -678,8 +680,8 @@ describe("RR-54 review", () => {
       ["/slides/0/chart/data", "must NOT have additional properties"],
     ]);
     // A date that is neither a date nor a date-time is one error (RR-93), not one per format.
-    assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { columns: ["a", "b"], rows: [["x", 1]], source: { src: "a", retrieved: "yesterday" } } } }] })), [
-      ["/slides/0/chart/data/source/retrieved", 'must match format "date" or "date-time"'],
+    assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { columns: ["a", "b"], rows: [["x", 1]], datasource: { src: "a" }, retrieved: "yesterday" } } }] })), [
+      ["/slides/0/chart/data/retrieved", 'must match format "date" or "date-time"'],
     ]);
     // ChartDataSource is gone: a data source by asset or file is an unknown key on inline data, and 'rows' picks the inline form.
     assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { src: "asset:x", rows: [["a"]] } } }] })), [

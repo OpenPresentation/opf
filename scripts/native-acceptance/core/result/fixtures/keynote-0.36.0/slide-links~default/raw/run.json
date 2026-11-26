@@ -1,0 +1,41 @@
+{
+ "input": "build/main/main-features/slide-links/default.pptx",
+ "name": "slide-links~default",
+ "started": "2026-11-25T17:15:25Z",
+ "keynote": "16.0",
+ "phases": {
+  "open": 1.67,
+  "probe": 1.85,
+  "slides": 0.74,
+  "pptxBack": 0.83,
+  "close": 0.24
+ },
+ "sha256Before": "fffb16f8d4ffb0c22d2973d29f50460c32543d39c1fbd9b5b835047a2f35dcf4",
+ "documentId": "F3C9648D-BA06-4764-9717-0BB2DC7A938D",
+ "documentName": "default",
+ "slideCount": 4,
+ "skippedSlides": [
+  4
+ ],
+ "pictures": {
+  "slide-01.png": {
+   "keynoteFile": "_export.001.png",
+   "slide": 1
+  },
+  "slide-02.png": {
+   "keynoteFile": "_export.002.png",
+   "slide": 2
+  },
+  "slide-03.png": {
+   "keynoteFile": "_export.003.png",
+   "slide": 3
+  }
+ },
+ "status": "OPENED",
+ "message": "",
+ "seconds": 7.11,
+ "sha256After": "fffb16f8d4ffb0c22d2973d29f50460c32543d39c1fbd9b5b835047a2f35dcf4",
+ "shaUnchanged": true,
+ "finished": "2026-11-25T17:15:32Z",
+ "warningsPanel": []
+}

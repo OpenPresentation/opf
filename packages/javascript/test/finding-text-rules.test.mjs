@@ -35,6 +35,7 @@ const GOLDEN = {
   "connector-end-missing": ["The connector's `to: \"shipping\"` names no block or overlay shape on this slide, so the connector is not drawn. Ids on this slide: plan, ship.", "pick one of `plan` or `ship`, or give the block or shape it should join `id: \"shipping\"`."],
   "image-placement-invalid": ["Blocks 1 and 2 are both placed on the start edge, and a slide edge takes one placed image.", "move one of them to another edge, or remove its `placement`."],
   "dataset-unknown": ["`dataset: \"sale\"` does not exist. Datasets in this deck: sales.", "did you mean `sales`? Or add `datasets.sale`."],
+  "datasource-unknown": ["`datasource: \"wharehouse\"` does not exist. Data sources in this deck: warehouse.", "did you mean `warehouse`? Or add `datasources.wharehouse`, or write the data source inline as an object such as `{ \"src\": \"./data.csv\" }`."],
   "dataset-field-unknown": ["`regon` is not a column of `sales`. Columns: region, revenue.", "did you mean `region`?"],
   "data-column-duplicate": ["Two columns are named `region`. Series and mappings address columns by name.", "rename the second one (for example `region-2`)."],
   "chart-mapping-unknown-column": ["The chart mapping names column `Profit`, which the data does not have. Columns: Q, R, S.", "pick one of `Q`, `R` or `S`."],
@@ -57,6 +58,8 @@ const GOLDEN = {
   "unknown-beat": ["Slide 1 names beat `zzz`, which narrative `classic-story` does not define. Its beats include hero, plan, closing, context, despair.", "use one of `hero`, `plan`, `closing`, `context` or `despair`, or remove `beat`."],
   "variable-unknown": ["`{{nmae}}` is not declared under `variables`.", "did you mean `name`? Or declare `nmae` under `variables`."],
   "variable-unused": ["Variable `name` is declared but never used.", "use it as `{{name}}` or `var:name` where it belongs, or remove its declaration."],
+  "variable-translation-duplicate": ["Variable `cta` has two translations whose language tags differ only in case.", "remove one of the two keys: the first in the document is the one that is drawn."],
+  "variable-translation-unused": ["The `de` translation of `cta` is never drawn: no slide and not the deck declares a language that selects it.", "set `language` on the deck or on a slide, fix the tag, or remove the translation."],
   "contract": ["`layout` is `cover`, which this host's policy does not allow. Allowed: text, title.", "pick one of `text` or `title`."],
   "text-contrast": ["Text `#CCCCCC` on `#FFFFFF` has contrast 1.61:1; WCAG needs 3:1 for large text.", "use `text`, the slide's text color, which is readable here."],
   "missing-alt-text": ["This image has no alt text.", "describe it in `alt`, or write `alt: \"\"` if it is only decoration."],
@@ -78,6 +81,7 @@ const GOLDEN = {
   "font-outside-scheme": ["`Comic Sans MS` isn't in this deck's font scheme (Aptos Display / Aptos), so it won't follow a scheme change.", "remove `fontFamily` to use the scheme font, or add the font to the font scheme."],
   "image-resolution": ["This image is 100×100 px, shown at about 19 ppi; 96 are needed to look sharp.", "use a file of about 519×519 px or larger, or show it smaller."],
   "chart-value-not-numeric": ["`about 12` is text, so it is plotted as a gap.", "write a number (12, -3.5, 1e6) and put units, currency or percent in the column `format`."],
+  "data-cell-type": ["Row 1 of this chart's data holds \"about 12\" in column \"V\", which is typed number.", "write the cell as the column declares, or change the column's `type` to what it holds."],
   "code-highlight-out-of-range": ["Highlight line 7 is past the last line (3), so it marks nothing.", "change it to a line from 1 to 3, or remove the entry."],
   "code-highlight-range-reversed": ["Highlight 3–1 ends before it starts, so it marks no line.", "write [1, 3]."],
   "duration-outside-narrative": ["A 5-minute deck is outside the 10-20 minutes that narrative `arc` suits.", "change `duration`, or choose a narrative that suits 5 minutes."],
@@ -99,7 +103,6 @@ const GOLDEN = {
   "chart-dual-axis": ["\"Margin\" is on a second value axis, so two scales share one plot and its crossings mean nothing.", "show the secondary series in a chart of its own beside this one, or drop `secondaryAxis` when the series share a unit."],
   "variable-group-omitted": ["A group on slide 1 is left out when `quote` has no value, with its pictures, cards and other text.", "give it a value to draw the group, or move what should always show out of the group."],
   "chart-pie-many-slices": ["This chart has 6 slices, more than 5; the small ones are hard to compare and to label.", "compare the parts with bars (`type: \"bar\"`), or group the smallest into one \"Other\" slice."],
-  "straight-quotes": ["`They called it \"the easiest setup we’ve done\".` uses straight quotation marks; this deck's language uses “…”.", "apply the quick fix, or type “ and ” instead."],
 };
 
 const firstOf = (name) => {
@@ -109,11 +112,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 109 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 111 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 109);
+	assert.equal(RULE_IDS.length, 111);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {
@@ -231,7 +234,7 @@ function runExample(rule, text) {
 	const parsed = JSON.parse(text);
 	const base = rule === 'opf/missing-language' ? { name: 'Example' } : DECK_BASE;
 	const document = Array.isArray(parsed.slides) ? { ...base, ...parsed } : { ...base, slides: [parsed] };
-	return validate(document, { catalogs: [gallery], ...(rule === 'opf/contract' ? { contracts: [{ path: '/slides/*/layout', allowedValues: ['text'] }] } : {}) }).findings;
+	return validate(document, { catalogs: [gallery], ...(rule === 'opf/dataset-stale' ? { asOf: '2026-11-25' } : {}), ...(rule === 'opf/contract' ? { contracts: [{ path: '/slides/*/layout', allowedValues: ['text'] }] } : {}) }).findings;
 }
 
 test('every explain example triggers its rule on the problem side and not on the repaired side', () => {

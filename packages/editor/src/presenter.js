@@ -4,6 +4,7 @@
 // slides are skipped, as the exports skip them (`slidesToConvert`). `createPresentButton` is the icon-only trigger and `bindPresentShortcut`
 // binds F5. Plain DOM, no framework, no network; styles in src/styles/presenter.css (classes `opf-presenter-*` and `opf-present-button`).
 import { toSvg } from "@openpresentation/opf-render/svg";
+import { linkAt } from "./view-links.js";
 import { mergeCatalogs } from "./catalogs.js";
 import { el, icon } from "./export-dom.js";
 import { whenFontsReady } from "./font-gate.js";
@@ -358,8 +359,7 @@ export function createPresenter(container, options = {}) {
   }
   // A link in a slide (a text run, a shape, a table cell is drawn as an `a`): activating it follows the link and does not move the slide.
   function onLink(target) {
-    const link = target && typeof target.closest === "function" ? target.closest("a[href]") : null;
-    return !!link && root.contains(link);
+    return !!linkAt(target, root);
   }
   // A press on the left third goes back, anywhere else forward.
   function byZone(clientX) {
@@ -369,8 +369,7 @@ export function createPresenter(container, options = {}) {
   // FR-03: the id of the slide a `slide:<id>` link names (the renderer marks its anchor with `data-opf-slide-link`). It is the one link the presenter
   // follows itself: it goes to that slide, a hidden one included (the way PowerPoint jumps to a hidden slide), and an id no slide has goes nowhere.
   function slideLinkAt(target) {
-    const link = target && typeof target.closest === "function" ? target.closest("a[data-opf-slide-link]") : null;
-    return link && root.contains(link) ? link.getAttribute("data-opf-slide-link") : undefined;
+    return linkAt(target, root)?.slide;
   }
   function followSlideLink(id) {
     const index = (deckNow()?.slides ?? []).findIndex((entry) => entry && entry.id === id);

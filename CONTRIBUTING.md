@@ -92,7 +92,7 @@ One `.github/dependabot.yml` covers the workspace: grouped minor and patch updat
 
 ## Pull requests
 
-Please fill out the pull request template, make sure `pnpm check:changed` passes locally (CI runs the full check, `verify`), and add a changelog fragment `changes/<slug>.md` for any user-facing change (see [`changes/README.md`](./changes/README.md); do not edit a `CHANGELOG.md` or `## Unreleased` by hand, the release workflow assembles the fragments). See [`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md) for the full checklist.
+Please fill out the pull request template, make sure `pnpm check:changed` passes locally (CI runs the full check, `verify`), and add a changelog fragment `changes/<slug>.md` for any user-facing change (see [`changes/README.md`](./changes/README.md); do not edit a `CHANGELOG.md` or `## Unreleased` by hand, the release workflow assembles the fragments); a change that alters the exported `.pptx` names the slide that shows it with `native:` in the fragment. How those slides are run in Keynote, PowerPoint and LibreOffice Impress, and what blocks a release, is in [`docs/native-testing.md`](./docs/native-testing.md). See [`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md) for the full checklist.
 
 ## License
 
