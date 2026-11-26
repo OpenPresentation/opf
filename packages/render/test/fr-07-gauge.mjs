@@ -3,7 +3,7 @@
 // gallery theme, color scheme and variant (supervisor's addition 4, as restated on 2026-11-26; see the last section).
 import assert from 'node:assert/strict';
 import { readdirSync } from 'node:fs';
-import { colorContrast, metricGaugeAngle, srgbToOklab } from '@openpresentation/opf/composition';
+import { colorContrast, metricGaugeAngle, METRIC_GAUGE_VALUE_SIZE, srgbToOklab } from '@openpresentation/opf/composition';
 import { resolvePresentation, toSvg } from './catalog-harness.mjs';
 
 const attributesOf = (text) => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
@@ -34,6 +34,28 @@ const deck = (metric, design = {}) => ({ design: { fontScheme: 'roboto', ...desi
   const svg = toSvg(deck({ label: 'Utilization', value: 1.18, format: '0%', gauge: { max: 1 } }), 1, { trace: true });
   assert.ok(svg.includes('118%') || (svg.includes('>118<') && svg.includes('%')), 'the real number is printed');
   assert.ok(parts(svg)['gauge value'], 'the value arc is drawn, clamped to the end');
+}
+
+// --- the arc sets the text's size: one gauge, three side by side, four in tiles (owner, 2026-11-26) ---------------------------------------------
+// The value's font size is METRIC_GAUGE_VALUE_SIZE of the arc's outer radius (read from the track's outline: its first arc command's radius).
+
+{
+  const gauge = (label, value) => ({ metric: { label, value, format: '0%', gauge: { max: 1, bands: [{ to: 0.6 }, { to: 0.85 }, { to: 1, color: 'accent2' }], target: 0.8 } } });
+  const cases = {
+    one: { title: 'Capacity', ...gauge('Utilization', 0.72) },
+    three: { title: 'Three sites', blocks: [gauge('Berlin', 0.72), gauge('Lisbon', 0.48), gauge('Madrid', 0.91)] },
+    tiles: { title: 'Four sites', layout: 'scorecard', blocks: [gauge('Berlin', 0.72), gauge('Lisbon', 0.48), gauge('Madrid', 0.91), gauge('Oslo', 0.66)] },
+  };
+  const radii = {};
+  for (const [name, slide] of Object.entries(cases)) {
+    const svg = toSvg({ design: { fontScheme: 'roboto' }, slides: [slide] }, 1, { trace: true });
+    const outer = [...svg.matchAll(/<path [^>]*data-opf-gauge-part="gauge band 1"[^>]*>/g)].map((m) => Number(/ A ([\d.]+) /.exec(attributesOf(m[0]).d)[1]));
+    const values = [...svg.matchAll(/<text [^>]*data-opf-metric-role="value"[^>]*>/g)].map((m) => Number(attributesOf(m[0])['font-size']));
+    assert.equal(outer.length, name === 'one' ? 1 : name === 'three' ? 3 : 4, `every gauge is drawn (${name})`);
+    outer.forEach((radius, k) => assert.ok(Math.abs(values[k] - METRIC_GAUGE_VALUE_SIZE * radius) <= 1, `${name} ${k}: value ${values[k]} against ${METRIC_GAUGE_VALUE_SIZE} x ${radius}`));
+    radii[name] = outer[0];
+  }
+  assert.ok(radii.one > radii.three && radii.one > radii.tiles, 'one gauge has the largest arc');
 }
 
 // --- a metric without a number draws no gauge -------------------------------------------------------------------------------------------
