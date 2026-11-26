@@ -1,0 +1,21 @@
+{
+  "deck": "technical/variable-translations.opf.json",
+  "entries": {
+    "technical/variable-translations.opf.json#0": {
+      "sha256": "b1ddc250d03b119e16db7bfa6b4cf463b5365474c4afc91c9ca56a5425c66a6a",
+      "bytes": 4111
+    },
+    "technical/variable-translations.opf.json#1": {
+      "sha256": "a98780a50b577af85caaeb7593510b066cdd3610c6b872b113cace7f0dc4829c",
+      "bytes": 4421
+    },
+    "technical/variable-translations.opf.json#2": {
+      "sha256": "14e39ff5e8dfeca1e06812c5b9c15ebae244bfe72ed75569dcdd4031ddc3aada",
+      "bytes": 4680
+    },
+    "technical/variable-translations.opf.json#3": {
+      "sha256": "f4197bacb4199be150a3963aed2b3e086762e1eea8d36255f1718852f51eb5ae",
+      "bytes": 4760
+    }
+  }
+}
