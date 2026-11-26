@@ -105,7 +105,10 @@ export const ajvOptions = { allErrors: true, verbose: true, strict: false, allow
  * same string and the same value (a property read of the same object). The generator decides this per site from the values
  * Ajv compiles (`plainKeyword`); every other error goes through `opfError` with Ajv's values as they are. Three common keywords
  * also take `params` and `message` from the schema or the property name: `opfTypeError` (one type), `opfPatternError` and
- * `opfRequiredError`, each chosen only when Ajv's own params and message code equal what the helper builds. The remaining constant
+ * `opfRequiredError`, each chosen only when Ajv's own params and message code equal what the helper builds. Three more do the
+ * same for the keywords whose params and message follow from the schema value or the property name: `opfEnumError`,
+ * `opfAdditionalPropertyError` and `opfLimitError` (the numeric bounds and the minimum and maximum counts of items, characters
+ * and properties). The remaining constant
  * keywords and messages are module constants (`shared`) instead of a literal at each site.
  *
  * Only the sites that add an error to the list (`allErrors`, or inside a composite rule) are written this way, and only when
@@ -137,6 +140,29 @@ function opfPatternError(list, instancePath, path, parentSchema, data, propertyN
 function opfRequiredError(list, instancePath, path, missingProperty, parentSchema, data, propertyName) {
   return opfError(list, instancePath, `${path}/required`, 'required', { missingProperty }, `must have required property '${missingProperty}'`, parentSchema.required, parentSchema, data, propertyName);
 }
+function opfEnumError(list, instancePath, path, parentSchema, data, propertyName) {
+  const allowedValues = parentSchema.enum;
+  return opfError(list, instancePath, `${path}/enum`, 'enum', { allowedValues }, 'must be equal to one of the allowed values', allowedValues, parentSchema, data, propertyName);
+}
+function opfAdditionalPropertyError(list, instancePath, path, additionalProperty, parentSchema, data, propertyName) {
+  return opfError(list, instancePath, `${path}/additionalProperties`, 'additionalProperties', { additionalProperty }, 'must NOT have additional properties', parentSchema.additionalProperties, parentSchema, data, propertyName);
+}
+function opfLimitError(list, instancePath, path, keyword, parentSchema, data, propertyName) {
+  const limit = parentSchema[keyword];
+  const comparison = { maximum: '<=', minimum: '>=', exclusiveMaximum: '<', exclusiveMinimum: '>' }[keyword];
+  const counted = keyword.endsWith('Items') ? 'items' : keyword.endsWith('Length') ? 'characters' : 'properties';
+  const params = comparison ? { comparison, limit } : { limit };
+  const message = comparison ? `must be ${comparison} ${limit}` : `must NOT have ${keyword.startsWith('max') ? 'more' : 'fewer'} than ${limit} ${counted}`;
+  return opfError(list, instancePath, `${path}/${keyword}`, keyword, params, message, limit, parentSchema, data, propertyName);
+}
+
+/** Ajv's params and message for a bound (limitNumber, limitItems, limitLength, limitProperties), as opfLimitError builds them. */
+const LIMIT_KEYWORDS = {
+  maximum: { comparison: '<=' }, minimum: { comparison: '>=' }, exclusiveMaximum: { comparison: '<' }, exclusiveMinimum: { comparison: '>' },
+  maxItems: { comp: 'more', counted: 'items' }, minItems: { comp: 'fewer', counted: 'items' },
+  maxLength: { comp: 'more', counted: 'characters' }, minLength: { comp: 'fewer', counted: 'characters' },
+  maxProperties: { comp: 'more', counted: 'properties' }, minProperties: { comp: 'fewer', counted: 'properties' },
+};
 
 /** True when the error's `schema` is `parentSchema[keyword]` and its schema path the schema's path plus the keyword. */
 function plainKeyword(cxt, errorPaths) {
@@ -169,6 +195,21 @@ function errorCall(cxt, error, errorPaths = {}) {
     const missing = cxt.params?.missingProperty;
     if (keyword === 'required' && missing !== undefined && String(params) === String(_`{missingProperty: ${missing}}`) && String(_`${message}`) === String(str`must have required property '${missing}'`))
       return { helper: opfRequiredError, values: [instancePath, errSchemaPath, missing, parentSchema, data, ...named] };
+    // An enum error: `{allowedValues}` is the schema's own array, the message a constant.
+    if (keyword === 'enum' && Array.isArray(cxt.schema) && String(params) === String(_`{allowedValues: ${schemaValue}}`) && String(_`${message}`) === String(_`${'must be equal to one of the allowed values'}`))
+      return { helper: opfEnumError, values: [instancePath, errSchemaPath, parentSchema, data, ...named] };
+    // An additional property: `{additionalProperty}` is the property's name, the message a constant.
+    const additional = cxt.params?.additionalProperty;
+    if (keyword === 'additionalProperties' && additional !== undefined && String(params) === String(_`{additionalProperty: ${additional}}`) && String(_`${message}`) === String(_`${'must NOT have additional properties'}`))
+      return { helper: opfAdditionalPropertyError, values: [instancePath, errSchemaPath, additional, parentSchema, data, ...named] };
+    // A bound: params and message from the keyword and the schema's number (Ajv writes the number into both as a literal).
+    const limit = LIMIT_KEYWORDS[keyword];
+    if (limit && typeof cxt.schema === 'number' && Number.isFinite(cxt.schema)) {
+      const limitParams = limit.comparison ? _`{comparison: ${limit.comparison}, limit: ${cxt.schema}}` : _`{limit: ${cxt.schema}}`;
+      const limitMessage = limit.comparison ? str`must be ${limit.comparison} ${cxt.schema}` : str`must NOT have ${limit.comp} than ${cxt.schema} ${limit.counted}`;
+      if (String(params) === String(limitParams) && String(_`${message}`) === String(_`${limitMessage}`) && `${cxt.schema}` === JSON.stringify(cxt.schema))
+        return { helper: opfLimitError, values: [instancePath, errSchemaPath, shared(it.gen, keyword), parentSchema, data, ...named] };
+    }
     return { helper: opfKeywordError, values: [instancePath, errSchemaPath, shared(it.gen, keyword), params, shared(it.gen, message), parentSchema, data, ...named] };
   }
   let errorSchemaPath = errorPaths.parentSchema ? errSchemaPath : str`${errSchemaPath}/${keyword}`;
@@ -281,7 +322,7 @@ function generateSource(schemas) {
 
   const body = standaloneCode(ajv, exportNames).replace(/^"use strict";/, '');
   // Each helper is referred to once per validator scope (`const func3 = opfKeywordError;`); Ajv's own error literals are gone.
-  for (const helper of [opfError, opfKeywordError, opfTypeError, opfPatternError, opfRequiredError])
+  for (const helper of [opfError, opfKeywordError, opfTypeError, opfPatternError, opfRequiredError, opfEnumError, opfAdditionalPropertyError, opfLimitError])
     if (!body.includes(`= ${helper.name};`)) throw new Error(`No error of the generated validators is built by ${helper.name}: Ajv's error reporting changed (see withErrorHelper).`);
   if (/[{,]schemaPath:/.test(body)) throw new Error('The generated validators still build an error object literal: Ajv reports some error outside withErrorHelper.');
   if (/\bnew Function\b|\beval\s*\(|\bFunction\s*\(/.test(body)) throw new Error('The generated validators still generate code at runtime.');
@@ -296,6 +337,9 @@ ${opfKeywordError}
 ${opfTypeError}
 ${opfPatternError}
 ${opfRequiredError}
+${opfEnumError}
+${opfAdditionalPropertyError}
+${opfLimitError}
 ${body}
 export const rootValidators = {
 ${table(roots, (item) => `${JSON.stringify(item.schemaName)}: exports.${item.name}`)}
