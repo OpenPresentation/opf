@@ -79,6 +79,7 @@ const HELP: Record<string, string> = {
 	"chart-map-geodata": "PowerPoint fetches the region shapes of a map chart from its online map service, so the chart draws only when it is online. Use another chart type if the deck must open offline.",
 	"chart-reference-overlay": "These reference lines and labels are editable shapes over the chart, not part of it: they do not follow the chart when it is moved or its data or axis is edited in PowerPoint. To change a reference line, change it in the OPF source and export again.",
 	"chart-mapping-adapted": "The chart's data mapping was adapted to draw the chart (the message says how). Choose a chart type or mapping that fits the data if the result is not what you meant.",
+	"text-contrast": "A band label stays below 4.5:1 on its band even in the primary text color, so it is hard to read. Choose a lighter scheme color for that band, or leave its color to the neutrals.",
 	"chart-bands-order": "The bands are not in increasing order of their to values; every engine draws them sorted. Write them in increasing order.",
 	"chart-bands-unsupported": "This chart type does not draw bands, so they are ignored. Use a bar, column, line, area or bullet chart, or remove the bands.",
 	"chart-highlight-adapted": "The highlight names a column that is not plotted as a series, so it was adapted (the message says how). Name a plotted series or a category, or remove the entry.",

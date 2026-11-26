@@ -78,7 +78,7 @@ function dataMarks(type: string, data: Extract<ResolvedChartData, { ok: true }>,
     const grouping = bar.stacked ? 'stacked' : 'clustered';
     const stacks = stackCategoryValues(series, count, 'bar', type.startsWith('100pct') ? 'percentStacked' : grouping);
     const band = (bar.horizontal ? plot.height : plot.width) / count, geometry = chartBarGeometry(band, bar.stacked ? 1 : series.length, grouping);
-    stacks.forEach((points, j) => points.forEach((point, i) => {
+    stacks.forEach((points, j) => { points.forEach((point, i) => {
       if (!point) return;
       const offset = geometry.offset + (bar.stacked ? 0 : chartBarSeriesOffset(geometry, j, series.length, !bar.horizontal && options.rtl));
       if (bar.horizontal) {
@@ -89,7 +89,7 @@ function dataMarks(type: string, data: Extract<ResolvedChartData, { ok: true }>,
         const room = options.labeled ? lineHeight : 0;
         marks.push({ x: plot.x + slot(i) * band + offset, y: Math.min(a, b) - room, width: geometry.width, height: Math.abs(b - a) + room });
       }
-    }));
+    }); });
     return marks;
   }
   if (LINE_TYPES.has(type) || AREA_TYPES.has(type)) {
