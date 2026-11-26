@@ -9,6 +9,7 @@
 // box and that each inner box is the plot rectangle the preview draws, within the rounding of the fractions the file stores (four
 // decimals of the frame, and the preview's three decimals of a pixel).
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import {unzipSync, strFromU8} from 'fflate';
 import {toSvg} from '@openpresentation/opf-render';
 import {toPptx} from '../dist/index.js';
@@ -113,6 +114,47 @@ for (const [index, name] of names.entries()) {
   boxes++;
 }
 assert.ok(boxes >= 20, `most of the charts have a manual plot area (${boxes})`);
+
+// Bands (FR-07): a bar or column chart with labeled bands keeps an inner plot too (core pins it for the bands, the same rule that gives every
+// other bar and column chart the preview's plot), and the bars start on the preview's axis line. The bands are drawn behind the data over
+// the plot, so the union of the preview's large rectangles is the plot. A bullet chart (bars, a target and bands on two axes) is not changed
+// by this rule: its plot is whatever its own layout wrote.
+{
+  const rows = [['Cranes', 14], ['Software', 22], ['Leasing', 6], ['Repairs', 3]];
+  const bands = [{to: 10, label: 'Low'}, {to: 20, label: 'Mid'}, {to: 30, label: 'High'}];
+  const banded = {};
+  for (const type of ['bar', 'column']) for (const labels of [false, true]) banded[`${type} with three labeled bands${labels ? ' and data labels' : ''}`] = {type, data: {columns: ['Product', 'Margin'], rows}, bands, ...(labels ? {dataLabels: true} : {})};
+  const bandDeck = {language: 'en-US', slides: Object.entries(banded).map(([name, chart]) => ({title: name, chart}))};
+  const bandParts = unzipSync(await toPptx(bandDeck));
+  for (const [index, [name, chart]] of Object.entries(banded).entries()) {
+    const n = index + 1, slide = strFromU8(bandParts[`ppt/slides/slide${n}.xml`]);
+    const [fx, fy, fw, fh] = /<p:graphicFrame>[\s\S]*?<a:off x="(\d+)" y="(\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/.exec(slide).slice(1).map(value => Number(value) / EMU_PX);
+    const xml = strFromU8(bandParts[`ppt/charts/chart${n}.xml`]);
+    const layout = /<c:plotArea><c:layout><c:manualLayout><c:layoutTarget val="(\w+)"\/><c:xMode val="edge"\/><c:yMode val="edge"\/><c:x val="([\d.]+)"\/><c:y val="([\d.]+)"\/><c:w val="([\d.]+)"\/><c:h val="([\d.]+)"\/>/.exec(xml);
+    assert.ok(layout, `${name}: a manual plot area`);
+    assert.equal(layout[1], 'inner', `${name}: the plot itself`);
+    const [x, y, w, h] = layout.slice(2).map(Number), plot = {left: fx + x * fw, top: fy + y * fh, right: fx + (x + w) * fw, bottom: fy + (y + h) * fh};
+    const svg = toSvg(bandDeck, n);
+    const rects = [...svg.matchAll(/<rect\b[^>]*>/g)].map(([tag]) => Object.fromEntries([...tag.matchAll(/\b(x|y|width|height)="([\d.]+)"/g)].map(([, key, value]) => [key, Number(value)])))
+      .map(rect => ({x: rect.x, y: rect.y, w: rect.width, h: rect.height})).filter(rect => rect.w > 12 && rect.h > 12 && rect.w < 1200 && rect.x >= fx - 1 && rect.y >= fy - 1 && rect.x + rect.w <= fx + fw + 1 && rect.y + rect.h <= fy + fh + 1);
+    const union = {left: Math.min(...rects.map(r => r.x)), top: Math.min(...rects.map(r => r.y)), right: Math.max(...rects.map(r => r.x + r.w)), bottom: Math.max(...rects.map(r => r.y + r.h))};
+    // The last band ends at its own value, and the axis may run further (35 for a last band of 30): the far edge follows the axis bounds.
+    const axisMin = Number(/<c:valAx>[\s\S]*?<c:min val="([-\d.]+)"/.exec(xml)?.[1] ?? 0), axisMax = Number(/<c:valAx>[\s\S]*?<c:max val="([-\d.]+)"/.exec(xml)[1]), lastBand = chart.bands.at(-1).to;
+    if (chart.type === 'bar') union.right = union.left + (union.right - union.left) * (axisMax - axisMin) / (lastBand - axisMin);
+    else union.top = union.bottom - (union.bottom - union.top) * (axisMax - axisMin) / (lastBand - axisMin);
+    for (const side of ['left', 'top', 'right', 'bottom']) assert.ok(Math.abs(plot[side] - union[side]) <= 1e-4 * (side === 'left' || side === 'right' ? fw : fh) + 0.2, `${name}: plot ${side} ${plot[side].toFixed(2)} in the file, ${union[side].toFixed(2)} in the preview's bands`);
+    const axis = toSvg(bandDeck, n).match(/<line\b[^>]*>/)?.[0], at = key => Number(new RegExp(`\\b${key}="([\\d.]+)"`).exec(axis)[1]);
+    if (chart.type === 'bar') assert.ok(Math.abs(plot.left - at('x1')) < 0.2, `${name}: the bars start on the preview's axis line`);
+    else assert.ok(Math.abs(plot.bottom - at('y1')) < 0.2, `${name}: the columns stand on the preview's axis line`);
+  }
+  const bullet = JSON.parse(fs.readFileSync(new URL('../../../examples/technical/bands-and-bullet.opf.json', import.meta.url), 'utf8'));
+  const bulletIndex = bullet.slides.findIndex(slide => [slide.chart, ...(slide.blocks ?? []).map(block => block.chart)].some(chart => chart?.type === 'bullet'));
+  assert.ok(bulletIndex >= 0, 'the bands example has a bullet chart');
+  const bulletParts = unzipSync(await toPptx({...bullet, slides: [bullet.slides[bulletIndex]]}));
+  const bulletXml = strFromU8(bulletParts['ppt/charts/chart1.xml']);
+  assert.match(bulletXml, /<c:scatterChart>/, 'the bullet chart keeps its target series');
+  assert.ok(!/<c:layoutTarget val="outer"\/>/.test(bulletXml), 'the bullet chart has no outer plot area either');
+}
 
 // The first case is the report's: its category names have their room at the left, as the preview's gutter.
 const report = written(1);
