@@ -123,6 +123,8 @@ export interface ResolvedTableData {
   rows: DataTableCell[][];
   /** The column number formats (DataColumn or header StyledTableCell `format`), by column index. */
   formats: (string | undefined)[];
+  /** FR-05: the declared type of each column of a dataset table (after `fields`), by column index; undefined where none is declared. Absent for an inline table. */
+  types?: (DataColumnType | undefined)[];
   /** The dataset id when the table references one. */
   dataset?: string;
   diagnostics: DataDiagnostic[];
@@ -999,8 +1001,8 @@ export function resolveTableData(table: unknown, document?: unknown, options: Da
     const selection = selectFields(dataset.columns, table.fields, at(base, 'fields'), columnsPath, diagnostics);
     const rows = dataset.rows.map((row: unknown) => selection.indices.map(index => (Array.isArray(row) && index < row.length ? row[index] : null) as DataTableCell));
     highlightDiagnostics(table, rows, base, diagnostics);
-    diagnostics.push(...tableColorScaleDiagnostics(table, selection.columns, rows, base));
-    return { columns: selection.columns as DataTableHeader[], rows, formats: selection.formats, dataset: id, diagnostics };
+    diagnostics.push(...tableColorScaleDiagnostics(table, selection.columns, rows, base, selection.types));
+    return { columns: selection.columns as DataTableHeader[], rows, formats: selection.formats, types: selection.types, dataset: id, diagnostics };
   }
   const columns = Array.isArray(table.columns) ? (table.columns as DataTableHeader[]) : undefined;
   const bodyRows = tableRows(table, base);

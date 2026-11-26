@@ -4820,7 +4820,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   // LH-113: the highlighted body rows, counted after the header rows.
   const headerRows=Number(grid.hasHeaders),highlighted=new Set(options.highlight??[]);
   // FR-07: the color scale's fill and text color of each shaded number cell (body row, column).
-  const scaleOf=options.colorScale?resolveTableColorScale(inline,options.colorScale):undefined;
+  const scaleOf=options.colorScale?resolveTableColorScale(inline,options.colorScale,resolveTableData(value,options.presentation).types):undefined;
   const cells=grid.rows.flat().map(cell=>{
     const padding={top:8,right:10,bottom:4,left:10,...cell.style.padding};
     const width=0;

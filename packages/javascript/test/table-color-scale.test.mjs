@@ -316,3 +316,44 @@ describe('Markdown and YAML (FR-07)', () => {
     assert.deepEqual(back.presentation.slides.map((slide) => slide.table), document().slides.map((slide) => slide.table));
   });
 });
+
+describe('typed dataset columns (FR-07, FR-05)', () => {
+  const presentation = {
+    datasets: {
+      sales: {
+        columns: ['Region', { name: 'Code', type: 'text' }, { name: 'Q1', type: 'number', format: '0%', unit: 'ratio', role: 'measure' }, { name: 'Flag', type: 'boolean' }, { name: 'Q2', format: '0.0' }],
+        rows: [['EMEA', 101, 0.1, true, 3], ['APAC', 205, 0.4, false, 9], ['AMER', 150, 0.25, true, 6]],
+      },
+    },
+  };
+  const box = { x: 0, y: 0, width: 900, height: 300 };
+  const colors = { resolve: (name) => palette[name] ?? '#808080', text: palette.text, background: palette.background };
+  const shadedColumns = (table) => [...new Set(layoutTable(table, box, { colorScale: colors, presentation }).rows.flatMap((row) => row.cells).filter((cell) => cell.scaled).map((cell) => cell.column))];
+
+  test('a column declared as text or boolean is never shaded, even when its cells look numeric', () => {
+    assert.deepEqual(shadedColumns({ dataset: 'sales', colorScale: { columns: ['Code', 'Flag', 'Q1'] } }), [2]);
+    // The range comes from the shaded column only: the Code numbers (101 to 205) do not widen it.
+    const layout = layoutTable({ dataset: 'sales', colorScale: { columns: ['Code', 'Q1'] } }, box, { colorScale: colors, presentation });
+    const fills = layout.rows.flatMap((row) => row.cells).filter((cell) => cell.scaled).map((cell) => cell.scaled.fill);
+    assert.equal(fills[0], '#FFFFFF');
+    assert.equal(fills[1], '#0000FF');
+  });
+
+  test('a number column with a format or a unit is shaded by its numeric value; an undeclared column by its cells', () => {
+    assert.deepEqual(shadedColumns({ dataset: 'sales', colorScale: { columns: ['Q1'] } }), [2]);
+    assert.deepEqual(shadedColumns({ dataset: 'sales', colorScale: { columns: ['Q2'] } }), [4]);
+    assert.deepEqual(shadedColumns({ dataset: 'sales', colorScale: { columns: ['Q1', 'Q2'] } }), [2, 4]);
+    assert.deepEqual(shadedColumns({ dataset: 'sales', fields: ['Region', 'Q2'], colorScale: { columns: ['Q2'] } }), [1], 'after fields');
+  });
+
+  test('naming only a column of another type gets the finding a non-numeric column gets: no numbers; an unknown name is still an error', () => {
+    const deck = (colorScale) => ({ name: 'T', datasets: presentation.datasets, slides: [{ title: 'T', table: { dataset: 'sales', colorScale } }] });
+    const rules = (colorScale) => validate(deck(colorScale)).findings.filter((finding) => finding.ruleId.includes('color-scale')).map((finding) => [finding.ruleId, finding.severity, finding.path]);
+    assert.deepEqual(rules({ columns: ['Code'] }), [['opf/table-color-scale-no-data', 'warning', '/slides/0/table/colorScale']]);
+    assert.deepEqual(rules({ columns: ['Flag'] }), [['opf/table-color-scale-no-data', 'warning', '/slides/0/table/colorScale']]);
+    assert.deepEqual(rules({ columns: ['Code', 'Q1'] }), [], 'a number column beside it: nothing to report');
+    assert.deepEqual(rules({ columns: ['Nope'] }), [['opf/table-color-scale-unknown-column', 'error', '/slides/0/table/colorScale/columns/0']]);
+    const inline = validate({ name: 'T', slides: [{ title: 'T', table: { columns: ['A', 'B'], rows: [['x', 'y']], colorScale: { columns: ['B'] } } }] }).findings.filter((finding) => finding.ruleId.includes('color-scale'));
+    assert.deepEqual(inline.map((finding) => [finding.ruleId, finding.severity]), [['opf/table-color-scale-no-data', 'warning']], 'a text column of an inline table: the same finding');
+  });
+});

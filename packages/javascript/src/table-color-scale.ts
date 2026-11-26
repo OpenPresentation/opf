@@ -46,12 +46,12 @@ export function tableColorScaleText(fill: string, colors: Pick<TableColorScaleCo
  * the body rows' cells, by position. A cell takes part when its value is a finite number; a cell with a `style.fill` of its own counts
  * towards the range and keeps its fill (it is not in the result). A table without a scale, or with no number in the named columns, has no cells.
  */
-export function resolveTableColorScale(table: unknown, colors: TableColorScaleColors): TableColorScaleResult {
+export function resolveTableColorScale(table: unknown, colors: TableColorScaleColors, types?: readonly (string | undefined)[]): TableColorScaleResult {
   const none: TableColorScaleResult = { cells: [], at: () => undefined };
   const scale = tableColorScaleOf(table);
   if (!scale || !isRecord(table) || !Array.isArray(table.columns)) return none;
   const rows = tableRows(table).map(row => row.cells);
-  const numbers = scaleNumbers(scaleColumns(scale, table.columns), rows);
+  const numbers = scaleNumbers(scaleColumns(scale, table.columns, types), rows);
   const range = effectiveRange(scale, numbers.map(entry => entry.value));
   if (!range) return none;
   const [first = 'surface', second, third] = scale.colors ?? [], diverging = third !== undefined;

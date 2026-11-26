@@ -73,9 +73,10 @@ export function tableColorScaleOf(table: unknown): TableColorScaleSpec | undefin
 }
 
 /** The column positions the scale's names match: every column whose header text equals a name (two columns with one header are both shaded). */
-export function scaleColumns(scale: TableColorScaleSpec, headers: readonly unknown[]): Set<number> {
+export function scaleColumns(scale: TableColorScaleSpec, headers: readonly unknown[], types?: readonly (string | undefined)[]): Set<number> {
   const names = new Set(scale.columns), matched = new Set<number>();
-  headers.forEach((header, index) => { if (names.has(headerName(header))) matched.add(index); });
+  // A dataset column that declares a type other than `number` is never shaded, whatever its cells look like.
+  headers.forEach((header, index) => { if (names.has(headerName(header)) && (types?.[index] === undefined || types[index] === 'number')) matched.add(index); });
   return matched;
 }
 
@@ -130,7 +131,7 @@ const at = (base: string, ...segments: (string | number)[]): string => `${base}/
  * table after `fields`); `base` is the JSON Pointer of the table. An unknown column is an error; a scale with no numbers, an empty range or a
  * center outside the range is a warning (a refresh of a dataset must not make a deck invalid).
  */
-export function tableColorScaleDiagnostics(table: unknown, headers: readonly unknown[] | undefined, rows: readonly (readonly unknown[])[], base: string): TableColorScaleDiagnostic[] {
+export function tableColorScaleDiagnostics(table: unknown, headers: readonly unknown[] | undefined, rows: readonly (readonly unknown[])[], base: string, types?: readonly (string | undefined)[]): TableColorScaleDiagnostic[] {
   const scale = isRecord(table) && isRecord(table.colorScale) ? table.colorScale : undefined;
   if (!scale || !Array.isArray(scale.columns)) return [];
   const diagnostics: TableColorScaleDiagnostic[] = [];
@@ -141,7 +142,7 @@ export function tableColorScaleDiagnostics(table: unknown, headers: readonly unk
     diagnostics.push({ code: 'table-color-scale-unknown-column', severity: 'error', path: at(base, 'colorScale', 'columns', index), message: `The color scale names ${JSON.stringify(name)}, which is no column of this table. Columns: ${list || 'none'}.` });
   });
   const spec = scale as unknown as TableColorScaleSpec;
-  const numbers = scaleNumbers(scaleColumns(spec, headers ?? []), rows);
+  const numbers = scaleNumbers(scaleColumns(spec, headers ?? [], types), rows);
   if (!numbers.length) {
     // Without a numeric column an unknown name is already reported; the empty scale is reported only when every name is a column.
     if (!diagnostics.length) diagnostics.push({ code: 'table-color-scale-no-data', severity: 'warning', path: at(base, 'colorScale'), message: "The color scale's columns hold no numbers, so no cell is shaded." });
