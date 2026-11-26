@@ -7,7 +7,7 @@
 //
 // D2: slides stay auto-layout. Every move resolves to a container and an index; no edit writes a position.
 import { resolveSlideContext } from "@openpresentation/opf";
-import { bindRegions } from "@openpresentation/opf/composition";
+import { bindRegions, kindAccepted } from "@openpresentation/opf/composition";
 import { formatPointer, jsonEqual, parsePointer, readPointer } from "@openpresentation/opf/patch";
 import { resolveIdPointer } from "@openpresentation/opf/ids";
 import { applyJsonPatch, createValuePatch } from "./index.js";
@@ -203,7 +203,7 @@ function regionMove(presentation, scene, sources, region, index, options) {
   const accepts = region.accepts ?? [];
   for (const source of sources) {
     const kind = source.kind === "group" ? "group" : source.type;
-    if (accepts.length && !accepts.includes(kind)) throw refuse(`Region ${region.region} accepts only ${wordList(accepts.map((entry) => KIND_WORDS[entry] ?? entry))}.`, { region: region.region, kind });
+    if (accepts.length && !kindAccepted(accepts, kind)) throw refuse(`Region ${region.region} accepts only ${wordList(accepts.map((entry) => KIND_WORDS[entry] ?? entry))}.`, { region: region.region, kind });
   }
   const slidePointer = scene.node(scene.slideKey).path;
   const { work, slide, objectOf, parentMap } = workingCopy(presentation, scene, [slidePointer, ...sources.filter((node) => node.kind === "implicit").map((node) => node.owner)]);

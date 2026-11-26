@@ -1,6 +1,6 @@
 import { isShapeBlock } from './shape-block.js';
 import { cellBlocks, isGridCell } from './grid-cells.js';
-import { layoutTemplate, type LayoutRegion, type LayoutTemplate, type RegionKind } from './layout-template.js';
+import { kindAccepted, layoutTemplate, type LayoutRegion, type LayoutTemplate, type RegionKind } from './layout-template.js';
 
 /** A diagnostic of content binding, in the `LayoutDiagnostic` shape composition reports. */
 export interface RegionBindingDiagnostic {
@@ -79,14 +79,13 @@ function leafKinds(block: Record<string, any>, into = new Set<RegionKind>(), dep
 /** Whether a region takes a block: its kind is accepted, or a group whose every leaf kind is accepted. */
 export function regionAccepts(region: { readonly accepts: readonly string[] }, block: unknown): boolean {
   const kind = blockKind(block);
-  if (region.accepts.includes(kind)) return true;
-  // FR-08: an embed sits where a video would, so a region that takes video takes it too (no layout record lists 'embed').
-  if (kind === 'embed' && region.accepts.includes('video')) return true;
+  // FR-08: kindAccepted reads the implied kinds (an embed where a video is accepted); no layout record has to list 'embed'.
+  if (kindAccepted(region.accepts, kind)) return true;
   // SH-02: a shape is a figure, so a region that takes pictures takes it too.
   if (kind === 'shape' && region.accepts.includes('image')) return true;
   if (kind !== 'group') return false;
   const kinds = leafKinds(record(block));
-  return kinds.size > 0 && [...kinds].every(leaf => region.accepts.includes(leaf));
+  return kinds.size > 0 && [...kinds].every(leaf => kindAccepted(region.accepts, leaf));
 }
 
 /**

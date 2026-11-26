@@ -2,7 +2,7 @@
 // and let an explicit fit win. two-column gains the timeline and the contained-fit default; three-column is new.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { composeSlide, REGION_KINDS } from '@openpresentation/opf/composition';
+import { composeSlide, IMPLIED_REGION_KINDS, REGION_KINDS, regionAccepts } from '@openpresentation/opf/composition';
 import { validate } from '@openpresentation/opf';
 import { gallery } from '../dist/index.js';
 import { sampleBlock } from '../../../scripts/gallery-stability-fixtures.mjs';
@@ -17,7 +17,11 @@ for (const [id, names] of Object.entries(COLUMNS)) {
     assert.ok(record, `${id} is in the gallery`);
     const body = record.regions.flatMap((entry) => entry.regions ?? []);
     assert.deepEqual(body.map((entry) => entry.name), names);
-    for (const entry of body) assert.deepEqual([...entry.accepts].sort(), [...REGION_KINDS].sort(), `${id}/${entry.name}`);
+    // The record lists every kind the schema has except the kinds core says a listed kind implies (an embed is accepted where a video is)...
+    const literal = REGION_KINDS.filter((kind) => !Object.hasOwn(IMPLIED_REGION_KINDS, kind));
+    for (const entry of body) assert.deepEqual([...entry.accepts].sort(), [...literal].sort(), `${id}/${entry.name}`);
+    // ...and the engine's own acceptance says yes to every kind of the schema in every region.
+    for (const entry of body) for (const kind of REGION_KINDS) assert.equal(regionAccepts(entry, sampleBlock(kind, 0)), true, `${id}/${entry.name} takes ${kind}`);
     assert.ok(REGION_KINDS.includes('timeline') && REGION_KINDS.includes('video') && REGION_KINDS.includes('group'));
   });
 
