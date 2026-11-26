@@ -594,6 +594,36 @@ const chartHighlightAdapted: RuleText = (finding) => {
   };
 };
 
+const chartBandsOrder: RuleText = (finding) => finding.message.startsWith("The bands are not in increasing order") ? {
+  message: "The bands are not in increasing order of their `to` values, so they are drawn sorted.",
+  next: "write each band's `to` above the previous one.",
+} : undefined;
+
+const chartBandsUnsupported: RuleText = (finding) => finding.message.startsWith("This chart type does not draw bands") ? {
+  message: "This chart type does not draw bands, so they are ignored.",
+  next: "use a bar, column, line, area or bullet chart, or remove the bands.",
+} : undefined;
+
+const metricGaugeRange: RuleText = (finding) => finding.message.startsWith("The gauge's") ? {
+  message: finding.message,
+  next: "write the gauge's max above its min, and keep the value, the target and the bands between them.",
+} : undefined;
+
+const metricGaugeValue: RuleText = (finding) => finding.message.startsWith("A gauge needs a number") ? {
+  message: "A gauge needs a number, and this metric's value is text, so it is drawn without its gauge.",
+  next: "give the metric a number value, or remove the gauge.",
+} : undefined;
+
+const tableColorScaleNoData: RuleText = (finding) => finding.message.startsWith("The color scale's columns hold no numbers") ? {
+  message: "None of the color scale's columns holds a number, so no cell is shaded.",
+  next: "name columns that hold numbers, or remove the color scale.",
+} : undefined;
+
+const tableColorScaleRange: RuleText = (finding) => finding.message.startsWith("The color scale's range is empty") ? {
+  message: "The color scale's range is empty or its center is outside it, so part of the scale is unused.",
+  next: "pin min below max and keep center between them, or leave the range to the data.",
+} : undefined;
+
 const codeHighlightOutOfRange: RuleText = (finding) => {
   const found = match(finding.message, /line (\d+) is past the last line \(the code has (\d+) lines?\)/);
   if (!found) return undefined;
@@ -757,8 +787,14 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/metric-data-delta": metricDataDelta,
   "opf/metric-unit-repeated": metricUnitRepeated,
   "opf/chart-highlight-adapted": chartHighlightAdapted,
+  "opf/table-color-scale-no-data": tableColorScaleNoData,
+  "opf/table-color-scale-range": tableColorScaleRange,
   "opf/chart-series-dropped": chartSeriesDropped,
   "opf/embed-credentials": embedCredentials,
+  "opf/chart-bands-order": chartBandsOrder,
+  "opf/chart-bands-unsupported": chartBandsUnsupported,
+  "opf/metric-gauge-range": metricGaugeRange,
+  "opf/metric-gauge-value": metricGaugeValue,
   "opf/code-highlight-out-of-range": codeHighlightOutOfRange,
   "opf/code-highlight-range-reversed": codeHighlightRangeReversed,
   "opf/variable-builtin-missing": variableBuiltinMissing,

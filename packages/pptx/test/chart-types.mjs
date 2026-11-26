@@ -69,8 +69,8 @@ const expected = {
   'filled-radar': {element: 'radarChart', radarStyle: 'filled'},
 };
 
-// The combo chart (FA-15) is a mixed composition with its own test (test/combo-charts.mjs).
-const classic = Object.keys(CHART_TYPES).filter((id) => CHART_TYPES[id].family !== 'chartex' && CHART_TYPES[id].family !== 'combo');
+// The combo chart (FA-15) and the bullet chart (FR-07) are mixed compositions with their own tests (test/combo-charts.mjs, test/fr-07-bands-bullet.mjs).
+const classic = Object.keys(CHART_TYPES).filter((id) => CHART_TYPES[id].family !== 'chartex' && CHART_TYPES[id].family !== 'combo' && !CHART_TYPES[id].bullet);
 assert.deepEqual(classic.sort(), Object.keys(expected).sort(), 'every classic kept chart type has an expectation');
 
 let checked = 0;
@@ -115,6 +115,15 @@ for (const record of keptRecords) {
   const openxml = record.mappings.openxml;
   assert.equal(spec.family === 'chartex', openxml.composition === 'extension', `${record.id}: chartex family is the catalog's extension composition`);
   if (spec.family === 'chartex') continue;
+  if (spec.bullet) {
+    // Bands (stacked bars), the measure (clustered bars) and the target (a scatter), exported in test/fr-07-bands-bullet.mjs.
+    assert.equal(openxml.composition, 'mixed', record.id);
+    assert.deepEqual(openxml.series.map((entry) => entry.element), ['barChart', 'barChart', 'scatterChart'], record.id);
+    assert.equal(spec.barDir, openxml.barDir, `${record.id}: barDir`);
+    assert.equal(spec.grouping, openxml.grouping, `${record.id}: grouping`);
+    checked++;
+    continue;
+  }
   if (spec.family === 'combo') {
     // A mixed composition: a clustered column barChart and a lineChart with markers, both exported (test/combo-charts.mjs).
     assert.equal(openxml.composition, 'mixed', record.id);

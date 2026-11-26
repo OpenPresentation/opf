@@ -28,7 +28,7 @@ const srgb = hex => `<a:srgbClr val="${String(hex).replace(/^#/, '').toUpperCase
  *
  * Colors are `{hex, xml}`: `hex` (RRGGBB) feeds the data label contrast, `xml` is the DrawingML color element.
  */
-export function chartHighlightPlan({options, data, kind, panelFill, labelColor, primary, schemeFor}) {
+export function chartHighlightPlan({options, data, kind, panelFill, labelColor, primary, schemeFor, muted: bandMuted}) {
   if (!options?.highlight || !data) return undefined;
   const marks = chartHighlightMarks(options.highlight, data);
   if (!marks) return undefined;
@@ -36,7 +36,9 @@ export function chartHighlightPlan({options, data, kind, panelFill, labelColor, 
   const accentHex = colors.accent.replace(/^#/, '').toUpperCase();
   const scheme = schemeFor?.(colors.accent);
   const accent = {hex: accentHex, xml: scheme ? `<a:schemeClr val="${scheme}"/>` : srgb(accentHex)};
-  const muted = {hex: colors.muted.replace(/^#/, '').toUpperCase(), xml: srgb(colors.muted)};
+  // FR-07: a chart with bands passes its muted color (core chartBandMutedColor).
+  const mutedColor = bandMuted ?? colors.muted;
+  const muted = {hex: mutedColor.replace(/^#/, '').toUpperCase(), xml: srgb(mutedColor)};
   const seriesColor = index => marks.series[index] ? accent : muted;
   const markColor = (series, row) => marks.series[series] || marks.categories[row] ? accent : muted;
   const circular = kind === 'pie' || kind === 'doughnut';

@@ -1,0 +1,267 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Bands and bullet charts",
+  "language": "en-US",
+  "datasets": {
+    "kpis": {
+      "title": "KPIs against target",
+      "columns": [
+        "KPI",
+        {
+          "name": "Actual",
+          "format": "0%"
+        },
+        {
+          "name": "Target",
+          "format": "0%"
+        }
+      ],
+      "rows": [
+        [
+          "Win rate",
+          0.31,
+          0.35
+        ],
+        [
+          "Retention",
+          0.92,
+          0.9
+        ],
+        [
+          "NPS reached",
+          0.64,
+          0.7
+        ],
+        [
+          "On-time delivery",
+          0.88,
+          0.95
+        ],
+        [
+          "Upsell rate",
+          0.47,
+          0.4
+        ]
+      ]
+    }
+  },
+  "slides": [
+    {
+      "id": "bands-column",
+      "title": "Wait time stayed within target in two of six weeks",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Week",
+            {
+              "name": "Wait (min)",
+              "format": "0"
+            }
+          ],
+          "rows": [
+            [
+              "W1",
+              14
+            ],
+            [
+              "W2",
+              11
+            ],
+            [
+              "W3",
+              9
+            ],
+            [
+              "W4",
+              12
+            ],
+            [
+              "W5",
+              16
+            ],
+            [
+              "W6",
+              8
+            ]
+          ]
+        },
+        "bands": [
+          {
+            "to": 10,
+            "label": "Within target",
+            "color": "accent3"
+          },
+          {
+            "to": 15,
+            "label": "Watch"
+          },
+          {
+            "to": 20,
+            "label": "Over target"
+          }
+        ],
+        "legend": "bottom",
+        "alt": "Weekly wait time against three ranges: within target up to 10 minutes, watch up to 15, over target up to 20. W3 (9) and W6 (8) are within target; W5 (16) is over."
+      }
+    },
+    {
+      "id": "bands-line",
+      "title": "Satisfaction moved into the plan range in April",
+      "chart": {
+        "type": "line",
+        "data": {
+          "columns": [
+            "Month",
+            {
+              "name": "CSAT",
+              "format": "0"
+            }
+          ],
+          "rows": [
+            [
+              "Jan",
+              62
+            ],
+            [
+              "Feb",
+              58
+            ],
+            [
+              "Mar",
+              66
+            ],
+            [
+              "Apr",
+              71
+            ],
+            [
+              "May",
+              69
+            ],
+            [
+              "Jun",
+              74
+            ]
+          ]
+        },
+        "bands": [
+          {
+            "to": 60,
+            "label": "Below plan"
+          },
+          {
+            "to": 70,
+            "label": "On plan"
+          },
+          {
+            "to": 80,
+            "label": "Above plan"
+          }
+        ],
+        "referenceLines": [
+          {
+            "value": 65,
+            "label": "Target 65"
+          }
+        ],
+        "alt": "CSAT by month over three ranges (below plan to 60, on plan to 70, above plan to 80) with a target line at 65; it rose from 62 in January to 74 in June."
+      }
+    },
+    {
+      "id": "bands-stacked",
+      "title": "Support load by channel against staffing ranges",
+      "chart": {
+        "type": "stacked-column",
+        "data": {
+          "columns": [
+            "Week",
+            {
+              "name": "Email",
+              "format": "0"
+            },
+            {
+              "name": "Chat",
+              "format": "0"
+            },
+            {
+              "name": "Phone",
+              "format": "0"
+            }
+          ],
+          "rows": [
+            [
+              "W1",
+              120,
+              80,
+              40
+            ],
+            [
+              "W2",
+              140,
+              95,
+              35
+            ],
+            [
+              "W3",
+              110,
+              120,
+              50
+            ],
+            [
+              "W4",
+              160,
+              110,
+              45
+            ]
+          ]
+        },
+        "bands": [
+          {
+            "to": 200,
+            "label": "One shift"
+          },
+          {
+            "to": 300,
+            "label": "Two shifts",
+            "color": "accent2"
+          }
+        ],
+        "alt": "Weekly support contacts by channel stacked against staffing ranges: one shift to 200 contacts, two shifts to 300."
+      }
+    },
+    {
+      "id": "bullet",
+      "title": "Four of five KPIs are short of target",
+      "chart": {
+        "type": "bullet",
+        "data": {
+          "dataset": "kpis"
+        },
+        "mapping": {
+          "category": "KPI",
+          "series": [
+            "Actual"
+          ],
+          "target": "Target"
+        },
+        "bands": [
+          {
+            "to": 0.6,
+            "label": "Poor"
+          },
+          {
+            "to": 0.85,
+            "label": "Fair"
+          },
+          {
+            "to": 1,
+            "label": "Good"
+          }
+        ],
+        "legend": "bottom",
+        "alt": "Five KPIs against their targets over poor (to 60%), fair (to 85%) and good (to 100%) ranges. Only Retention (92% against 90%) and Upsell rate (47% against 40%) meet their targets."
+      }
+    }
+  ]
+}

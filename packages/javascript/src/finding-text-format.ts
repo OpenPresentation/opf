@@ -352,6 +352,17 @@ const tableHighlightUnknownName: RuleText = (finding) => {
   };
 };
 
+const tableColorScaleUnknownColumn: RuleText = (finding) => {
+  const column = match(finding.message, /^The color scale names ("(?:[^"\\]|\\.)*"), which is no column of this table\. Columns: (.+)\.$/);
+  if (!column) return undefined;
+  const name = unquote(column[1]);
+  const columns = column[2] === "none" ? [] : unquoteList(column[2]);
+  return {
+    message: `${code(`colorScale.columns: "${name}"`)} matches no column.${columns.length ? ` Available: ${plainList(columns)}.` : ""}`,
+    next: columns.length ? chooseNext(name, columns) : "give the table a header row, or remove the color scale.",
+  };
+};
+
 // ------------------------------------------------------------------------------------------------ variables
 
 /** `{{id}}` for an inline token, `var:id` where the finding's own sentence says the whole-field form. */
@@ -816,6 +827,7 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/variable-unknown-builtin": variableUnknownBuiltin,
   "opf/chart-highlight-unknown-name": chartHighlightUnknownName,
   "opf/table-highlight-unknown-name": tableHighlightUnknownName,
+  "opf/table-color-scale-unknown-column": tableColorScaleUnknownColumn,
   "opf/variable-format": variableFormat,
   "opf/variable-unfilled": variableUnfilled,
   "opf/run-color-unrecognized": runColorUnrecognized,

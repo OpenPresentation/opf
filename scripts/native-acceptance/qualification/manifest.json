@@ -304,6 +304,10 @@
       "source": "examples/technical/variable-limits.opf.json"
     },
     {
+      "id": "table-color-scale",
+      "source": "examples/technical/table-color-scale.opf.json"
+    },
+    {
       "id": "variable-translations",
       "source": "examples/technical/variable-translations.opf.json"
     },

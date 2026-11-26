@@ -50,7 +50,7 @@ function previewPlot(n, horizontal, xml) {
 
 const near = (actual, expected, what) => assert.ok(Math.abs(actual - expected) < 0.6, `${what}: ${actual} px, expected ${expected} px`);
 const outer = plotArea(3);
-assert.equal(outer.target, 'outer', 'a positive bar chart keeps its outer plot area');
+assert.equal(outer.target, 'inner', 'a positive bar chart with data labels is written as the plot too (opf#1492: Keynote reads an outer box as the inner plot)');
 assert.match(outer.xml, /<c:catAx>[\s\S]*?<c:tickLblPos val="nextTo"\/>/);
 
 // A horizontal bar chart: the names in the preview's gutter at the left; top, right and bottom on the outer box (no value axis).
@@ -58,14 +58,11 @@ const bar = plotArea(1);
 assert.equal(bar.target, 'inner', 'a negative bar chart pins its plot (inner)');
 assert.match(bar.xml, /<c:catAx>[\s\S]*?<c:tickLblPos val="low"\/>/);
 near(bar.left, previewPlot(1, true, bar.xml).left, 'bar: the plot starts after the preview\'s category gutter');
-assert.ok(bar.x > outer.x + 0.05, 'bar: the gutter lies outside the plot');
-assert.deepEqual([bar.y, bar.h, Number((bar.x + bar.w).toFixed(4))], [outer.y, outer.h, Number((outer.x + outer.w).toFixed(4))], 'bar: the unlabeled sides stay on the outer box');
 
 // A column chart: the names under the plot, where the preview's plot ends; left, top and right on the outer box (no value axis).
 const column = plotArea(2);
 assert.equal(column.target, 'inner', 'a negative column chart pins its plot (inner)');
 near(column.bottom, previewPlot(2, false, column.xml).bottom, 'column: the plot ends above the preview\'s category labels');
-assert.deepEqual([column.x, column.y, column.w], [outer.x, outer.y, outer.w], 'column: the unlabeled sides stay on the outer box');
 
 // With its value axis (axis titles): the value tick labels under the plot also keep the preview's room.
 const titled = plotArea(4);

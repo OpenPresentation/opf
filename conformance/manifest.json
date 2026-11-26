@@ -157,6 +157,30 @@
       "basis": "opf.schema.json#/$defs/TextRun/properties/link; docs/validate.md, rule opf/slide-link-unknown"
     },
     {
+      "id": "core.valid.chart-bands-bullet",
+      "file": "core/valid/chart-bands-bullet.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A bullet chart of KPIs against their targets over three labeled bands, and a column chart with two bands, one in a scheme color.",
+      "basis": "opf.schema.json#/$defs/ChartBand; opf.schema.json#/$defs/ChartMapping/properties/target"
+    },
+    {
+      "id": "core.valid.metric-gauge",
+      "file": "core/valid/metric-gauge.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Metrics drawn as gauges: a plain gauge, a gauge with three bands (two in scheme colors) and a target, and a gauge bound to a dataset.",
+      "basis": "opf.schema.json#/$defs/MetricGauge; opf.schema.json#/$defs/Metric/properties/gauge"
+    },
+    {
+      "id": "core.valid.table-color-scale",
+      "file": "core/valid/table-color-scale.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A table shades the number cells of named columns by value: a sequential scale over a pinned range and a diverging scale centered on zero, in scheme colors.",
+      "basis": "opf.schema.json#/$defs/TableColorScale"
+    },
+    {
       "id": "core.valid.embed",
       "file": "core/valid/embed.opf.json",
       "levels": ["reader", "writer"],
@@ -555,6 +579,54 @@
       "expect": { "valid": false, "errorAt": "/slides/0/text/0/link" },
       "description": "A link names a slide id no slide of the document has.",
       "basis": "docs/validate.md, rule opf/slide-link-unknown"
+    },
+    {
+      "id": "core.invalid.chart-bullet-target-unknown",
+      "file": "core/invalid/chart-bullet-target-unknown.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/chart/mapping/target" },
+      "description": "A bullet chart names a target column the chart data does not have.",
+      "basis": "docs/validate.md, rule opf/chart-mapping-unknown-column"
+    },
+    {
+      "id": "core.invalid.chart-bands-empty",
+      "file": "core/invalid/chart-bands-empty.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/chart/bands" },
+      "description": "A chart has an empty band list (one to six bands).",
+      "basis": "opf.schema.json#/$defs/Chart/properties/bands"
+    },
+    {
+      "id": "core.invalid.metric-gauge-max-missing",
+      "file": "core/invalid/metric-gauge-max-missing.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/metric/gauge" },
+      "description": "A metric's gauge has no max.",
+      "basis": "opf.schema.json#/$defs/MetricGauge"
+    },
+    {
+      "id": "core.invalid.table-color-scale-unknown-column",
+      "file": "core/invalid/table-color-scale-unknown-column.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/table/colorScale/columns/0" },
+      "description": "A color scale names a column the table does not have.",
+      "basis": "docs/validate.md, rule opf/table-color-scale-unknown-column"
+    },
+    {
+      "id": "core.invalid.table-color-scale-no-columns",
+      "file": "core/invalid/table-color-scale-no-columns.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/table/colorScale/columns" },
+      "description": "A color scale names no column.",
+      "basis": "opf.schema.json#/$defs/TableColorScale/properties/columns"
+    },
+    {
+      "id": "core.invalid.table-color-scale-center-needs-three",
+      "file": "core/invalid/table-color-scale-center-needs-three.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/table/colorScale/colors" },
+      "description": "A color scale names a center but has two colors: only a diverging scale (three colors) has a middle.",
+      "basis": "opf.schema.json#/$defs/TableColorScale"
     },
     {
       "id": "core.invalid.embed-http",

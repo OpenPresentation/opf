@@ -1398,6 +1398,150 @@
       "table": {
         "dataset": "plan"
       }
+    },
+    {
+      "id": "column-bands",
+      "title": "Wait time against three labeled ranges, the first in a scheme color",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Week",
+            {
+              "name": "Wait (min)",
+              "format": "0"
+            }
+          ],
+          "rows": [
+            [
+              "W1",
+              14
+            ],
+            [
+              "W2",
+              11
+            ],
+            [
+              "W3",
+              9
+            ],
+            [
+              "W4",
+              12
+            ],
+            [
+              "W5",
+              16
+            ],
+            [
+              "W6",
+              3
+            ]
+          ]
+        },
+        "bands": [
+          {
+            "to": 10,
+            "label": "Within target",
+            "color": "accent3"
+          },
+          {
+            "to": 15,
+            "label": "Watch"
+          },
+          {
+            "to": 20,
+            "label": "Over target"
+          }
+        ],
+        "alt": "Weekly wait time over three ranges: within target up to 10 minutes, watch up to 15, over target up to 20; it fell to 3 minutes in W6."
+      }
+    },
+    {
+      "id": "bullet-target",
+      "title": "Three KPIs against their targets in a bullet chart",
+      "chart": {
+        "type": "bullet",
+        "data": {
+          "columns": [
+            "KPI",
+            {
+              "name": "Actual",
+              "format": "0%"
+            },
+            {
+              "name": "Target",
+              "format": "0%"
+            }
+          ],
+          "rows": [
+            [
+              "Win rate",
+              0.31,
+              0.35
+            ],
+            [
+              "Retention",
+              0.92,
+              0.9
+            ],
+            [
+              "NPS reached",
+              0.64,
+              0.7
+            ]
+          ]
+        },
+        "mapping": {
+          "category": "KPI",
+          "series": [
+            "Actual"
+          ],
+          "target": "Target"
+        },
+        "bands": [
+          {
+            "to": 0.6,
+            "label": "Poor"
+          },
+          {
+            "to": 0.85,
+            "label": "Fair"
+          },
+          {
+            "to": 1,
+            "label": "Good"
+          }
+        ],
+        "alt": "Three KPIs as thin bars against target ticks over poor, fair and good ranges; retention is above its target, the other two below."
+      }
+    },
+    {
+      "title": "NPS is just above its target",
+      "metric": {
+        "label": "Net Promoter Score",
+        "value": 41,
+        "gauge": {
+          "min": -100,
+          "max": 100,
+          "bands": [
+            {
+              "to": 0,
+              "label": "Detractors lead",
+              "color": "accent2"
+            },
+            {
+              "to": 30
+            },
+            {
+              "to": 100,
+              "label": "Strong",
+              "color": "accent3"
+            }
+          ],
+          "target": 40
+        }
+      }
     }
   ]
 }

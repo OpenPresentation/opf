@@ -1,7 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
-import {cleanBase,headingValue,joinRichLines} from './rich-heading.js';
+import {appendInlineWhitespace,cleanBase,headingValue,joinRichLines} from './rich-heading.js';
 import {rejoinDetachedSpace} from './content-topology.js';
 import {currentThemeLook} from './document-provenance.js';
 const TAG='OPF_HEADING_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
@@ -19,10 +19,12 @@ function hardBreaksOf(data,count) {
   if(count!==data.lines)return {has:index=>index>0};
   return Array.isArray(data.hard)?new Set(data.hard.filter(index=>Number.isSafeInteger(index))):new Set();
 }
+// opf#1493: the whitespace paragraph `index - 1` was written without (a left-to-right line that ends in a soft wrap), recorded in the tag.
+const trailingOf=(data,count,index)=>count===data.lines&&Array.isArray(data.trailing)&&typeof data.trailing[index-1]==='string'&&/^[^\S\r\n]*$/u.test(data.trailing[index-1])?data.trailing[index-1]:'';
 function joinTitleParagraphs(list,data) {
   if(!Array.isArray(list)||list.length<2)return list;
   const hard=hardBreaksOf(data,list.length);
-  const text=list.map((paragraph,index)=>(index&&hard.has(index)?'\n':'')+String(paragraph?.text??'')).join('');
+  const text=list.map((paragraph,index)=>(index&&hard.has(index)?'\n':index?trailingOf(data,list.length,index):'')+String(paragraph?.text??'')).join('');
   const merged={...list[0],text,maxFontSize:Math.max(0,...list.map(paragraph=>paragraph?.maxFontSize??0))};
   if(!list.some(paragraph=>paragraph?.richText!==undefined))return [merged];
   const runs=[];
@@ -30,7 +32,11 @@ function joinTitleParagraphs(list,data) {
     const current=array(paragraph?.richText??paragraph?.text).map(run=>object(run)?{...run}:run);
     if(index&&hard.has(index))runs.push('\n');
     // A decorated run's space that ended the earlier line joins the run again (as across line shapes).
-    else if(index&&current.length)rejoinDetachedSpace(runs,current[0]);
+    else if(index&&current.length){
+      const gap=trailingOf(data,list.length,index);
+      if(gap&&!appendInlineWhitespace(runs,gap))runs.push(gap);
+      else rejoinDetachedSpace(runs,current[0]);
+    }
     runs.push(...current);
   }
   return [{...merged,richText:runs}];

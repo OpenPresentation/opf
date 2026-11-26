@@ -42,10 +42,10 @@ for (const [id, record] of Object.entries(gallery.layouts)) for (const alignment
     const {item, placed, index: lineIndex} = expected[index];
     const transform = shape['p:spPr']['a:xfrm'];
     const factor = item.alignment === 'right' ? 1 : item.alignment === 'center' ? .5 : 0;
-    near(Number(transform['a:off'].x) / 9525 + Number(transform['a:ext'].cx) / 9525 * factor, placed.x + placed.width * factor, `${id}: native line anchor`);
+    near(Number(transform['a:off'].x) / 9525 + Number(transform['a:ext'].cx) / 9525 * factor, placed.x + (placed.width - (textOf(shape) === item.text.lines[lineIndex] ? 0 : (placed.hang ?? 0))) * factor, `${id}: native line anchor (a line written without its hanging whitespace is anchored at its glyphs, opf#1493)`);
     near(Number(transform['a:off'].y) / 9525, item.text.richLines?.[lineIndex] ? placed.y : placed.baseline - item.text.fontSize, `${id}: native line top`);
-    assert.equal(textOf(shape), item.text.lines[lineIndex]);
-    const preview = previewTexts.filter(value => value.text === textOf(shape));
+    assert.ok([item.text.lines[lineIndex], item.text.lines[lineIndex].replace(/[^\S\r\n\u00a0\u202f\ufeff]+$/u, '')].includes(textOf(shape)), 'the native line is the previewed line, less its hanging whitespace (opf#1493)');
+    const preview = previewTexts.filter(value => value.text === textOf(shape) || value.text.trimEnd() === textOf(shape));
     assert.ok(preview.length, `${id}: accepted line appears in preview`);
     assert.ok(preview.some(value => value.anchor === {left: 'start', center: 'middle', right: 'end'}[item.alignment]), `${id}: preview and native alignment agree`);
     for (const paragraph of array(shape['p:txBody']['a:p'])) assert.equal(paragraph['a:pPr'].algn, {left: 'l', center: 'ctr', right: 'r'}[item.alignment]);

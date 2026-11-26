@@ -1146,7 +1146,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `value`
-- Purpose: Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news, 'format' for how a number value is written, 'better' for which direction of change is good news, and 'data' to compute the value and the change from a dataset of this deck. A string or number value in a metric field...
+- Purpose: Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news, 'format' for how a number value is written, 'better' for which direction of change is good news, 'data' to compute the value and the change from a dataset of this deck, and 'gauge' to draw the value on an arc agains...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -1161,6 +1161,7 @@ _No named properties._
 | `format` | no | `ref:NumberFormat` | How a number 'value' is written, the same pattern language as a number variable, a dataset column and a table cell ('0.0%', '$#,##0.0M'). A string 'value' is drawn as written. Absent: a metric linked to data uses its... |
 | `data` | no | `ref:MetricData` | Computes the value and, optionally, the change from a dataset of this deck. While it resolves, engines draw the computed numbers; 'value' and 'delta' are then the last computed numbers, kept for readers that do not co... |
 | `better` | no | `enum:up \| down` | Which direction of change is good news. Without 'sentiment', an up trend is positive and a down trend negative when 'better' is "up" (the default), and the reverse when it is "down"; a flat trend is neutral. An explic... |
+| `gauge` | no | `ref:MetricGauge` | Draws the metric as a gauge: its value on a half-circle arc from 'min' (left) to 'max' (right), over optional bands, with an optional target tick, and the metric's text under the arc (the value inside the arc's bowl w... |
 
 
 ### Diagram
@@ -1303,7 +1304,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `value`
-- Purpose: One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement. A reference at a category or a band between two values is not expressible yet; 'axis' and a separate key are reserved for them.
+- Purpose: One explicit reference on the chart's numeric value axis. Labels and titles never select its value, units or placement. A reference at a category is not expressible yet; 'axis' is reserved for it. Ranges of the value axis are the chart's 'bands'.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -1314,6 +1315,19 @@ _No named properties._
 | `stroke` | no | `ref:Line` | The line's color, width and dash, or 'none' to draw only the label. Defaults: the chart-text neutral, 4/3 reference pixels (1 point) and 'dash'. The value expands the axis bounds whether or not the line is drawn. |
 
 
+### ChartBand
+
+- Type: `object`
+- Required fields: `to`
+- Purpose: One range of a chart's value axis, shaded behind the data (see Chart.bands).
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `to` | yes | `ref:FiniteNumber` | The band's upper end, in the value axis's units (with format 0%, 0.8 is 80%). Bands expand automatic axis bounds to the last 'to', as reference lines do. |
+| `label` | no | `string` | The band's name, such as 'Poor' or 'On target': its legend entry and its text alternative. Absent: the band has no legend entry. |
+| `color` | no | `ref:SchemeColorName` | A scheme color instead of the neutral, for ranges that mean good or bad. Drawn as a light tint of that color (25% of it over the chart's surface). Absent: the next neutral. |
+
+
 ### Chart
 
 - Type: `object`
@@ -1322,12 +1336,13 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | yes | `enum:100pct-stacked-area \| 100pct-stacked-bar \| 100pct-stacked-column \| area \| bar \| box-and-whisker \| column \| combo \| doughnut \| filled-radar \| funnel \| histogram \| line \| line-with-markers \| pareto \| pie \| radar \| radar-with-markers \| scatter \| stacked-area \| stacked-bar \| stacked-column \| stacked-line \| stacked-line-with-markers \| treemap \| waterfall \| world` | Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types OPF supports natively in its preview and PPTX export, plus 'combo' (clustered columns with line series, see 'line' and 'secondar... |
+| `type` | yes | `enum:100pct-stacked-area \| 100pct-stacked-bar \| 100pct-stacked-column \| area \| bar \| box-and-whisker \| bullet \| column \| combo \| doughnut \| filled-radar \| funnel \| histogram \| line \| line-with-markers \| pareto \| pie \| radar \| radar-with-markers \| scatter \| stacked-area \| stacked-bar \| stacked-column \| stacked-line \| stacked-line-with-markers \| treemap \| waterfall \| world` | Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types OPF supports natively in its preview and PPTX export, plus 'combo' (clustered columns with line series, see 'line' and 'secondar... |
 | `data` | yes | `oneOf:ref:ChartData / ref:DatasetRef` | Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ "dataset": "<id>" }) plots a top-level dataset instead. Data from a spreadsheet or file is... |
 | `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name: which column is the category, which is the X column of a scatter chart, and which columns are plotted, in order. Absent keeps the positional rule (first column the category, the... |
 | `line` | no | `array<string>` | Combo charts only (type 'combo'): the plotted series, by column name, that are drawn as lines with markers; every other plotted series is drawn as clustered columns. Absent: the last plotted series is the line. A comb... |
 | `secondaryAxis` | no | `array<string>` | Combo charts only: line series, by column name, plotted against a secondary value axis at the end of the plot (the right; the left in a right-to-left deck, where the category axis runs from the right). That axis has i... |
 | `referenceLines` | no | `array<ref:ChartReferenceLine>` | Explicit numeric references on the chart's value axis, supported on the chart types with one value axis for every series: column, bar, line, line-with-markers, area and combo. A non-empty list on any other type (the s... |
+| `bands` | no | `array<ref:ChartBand>` | Ranges of the value axis shaded behind the data, in increasing order: each band runs from the previous band's 'to' (the first from the axis minimum) to its own 'to'. Colors come from the scheme's neutrals, darkest fir... |
 | `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-... |
 | `legend` | no | `enum:none \| top \| bottom \| left \| right` | Optional legend position. 'none' hides the legend. Absent leaves it to the engines: a line chart of two to four series names its series at the line ends and a pie or one-series doughnut names its slices, with no legen... |
 | `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels. true shows value labels at each type's default position and false shows none. Absent leaves it to the engines: no labels, except on a small chart, which labels its values in place of its value ax... |
@@ -1389,6 +1404,32 @@ _No named properties._
 | `fields` | no | `ref:DatasetFields` | Dataset tables only: the dataset columns to show, by name and in order. Absent shows every column. An unknown name is a 'dataset-field-unknown' error. |
 | `alt` | no | `string` | Text alternative for the table: what it shows (the point and the key numbers), not 'a table'. The preview exposes it as the table's accessible name (role group with aria-label; the cells stay readable) and the PowerPo... |
 | `highlight` | no | `object` | Optional emphasis: the body rows that carry the message, named by their first-column (key) text exactly as 'chart.highlight' names categories, as text; a key shared by several rows highlights each of them. The engines... |
+| `colorScale` | no | `ref:TableColorScale` | Shades the number cells of the named columns by value, between scheme colors. Engines compute each cell's fill; the text color follows it for contrast. |
+
+
+### TableColorScale
+
+- Type: `object`
+- Required fields: `columns`
+- Purpose: A color scale over the number cells of one or more columns. One scale is shared by all named columns, so equal numbers get equal colors. Only cells whose value is a finite number are shaded; a cell with its own style.fill keeps it. Two colors make a sequential scale: the lowest value is the first color, the highest the second. Three colors make a diverging scale: 'center' is drawn in the middle color, lower values towards the first and higher values towards the last. A diverging scale with no...
+- Conditional requirement: `colors` when `center` is present
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `columns` | yes | `array<string>` | The columns to shade, by header text (an inline table) or by dataset column name after 'fields' (a dataset-backed table). A name no column has is a 'table-color-scale-unknown-column' error. |
+| `colors` | no | `array<ref:SchemeColorName>` | The colors of the scale, low to high, as scheme color names. Two colors make a sequential scale (the lowest value in the first, the highest in the second); three make a diverging scale (the middle color is drawn at 'c... |
+| `center` | no | `number` | The value drawn in the middle color. Only with three 'colors' (a 'center' with two colors, or with no 'colors', is a schema error). Absent: 0 when the values span both signs, else the middle of the range. With no 'min... |
+| `min` | no | `number` | The value drawn in the first color; lower values draw in it too. Absent: the lowest number in the named columns (a diverging scale with neither 'min' nor 'max' is symmetric around 'center': it runs from center minus d... |
+| `max` | no | `number` | The value drawn in the last color; higher values draw in it too. Absent: the highest number in the named columns (see 'min' for a diverging scale). |
+
+
+### SchemeColorName
+
+- Type: `enum:accent1 | accent2 | accent3 | accent4 | accent5 | accent6 | dark1 | dark2 | light1 | light2 | primary | secondary | accent | background | surface | surfaceAlt | text | textSecondary`
+- Required fields: none
+- Purpose: A color of the effective color scheme, by slot or role, resolved as ColorRef resolves the same names (the hyperlink slots are left out). No hex and no variable: what names it follows the deck's colors.
+
+_No named properties._
 
 
 ### ChartData
@@ -1623,6 +1664,20 @@ _No named properties._
 | `filter` | no | `ref:DataFilter` | Only the rows that meet every condition are used. Absent: every row. |
 
 
+### MetricGauge
+
+- Type: `object`
+- Required fields: `max`
+- Purpose: A metric's gauge (see Metric.gauge): the range its value is drawn against, with optional bands and a target.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `min` | no | `ref:FiniteNumber` | The value at the arc's start (its left end). |
+| `max` | yes | `ref:FiniteNumber` | The value at the arc's end (its right end). Must be greater than 'min' ('metric-gauge-range' warning otherwise, and no gauge is drawn). |
+| `bands` | no | `array<ref:ChartBand>` | Ranges of the gauge shaded along its arc, as a chart's bands: each from the previous 'to' (the first from 'min') to its own 'to'. A band without a color is a neutral; a band with one is a light tint of it, and the val... |
+| `target` | no | `ref:FiniteNumber` | A value marked by a tick across the arc. A target outside 'min' to 'max' is not drawn ('metric-gauge-range' warning). |
+
+
 ### MetricData
 
 - Type: `object`
@@ -1662,7 +1717,8 @@ _No named properties._
 | --- | --- | --- | --- |
 | `category` | no | `string` | The label (category) column. Default: the first column. |
 | `x` | no | `string` | The X column of an XY (scatter) chart. Default: the second column (the first, when the category is the second column), and only when there are three or more columns: with two, the second column is the one series, plot... |
-| `series` | no | `array<string>` | The plotted columns, in order. Default: every column that is not the category or the X column. |
+| `series` | no | `array<string>` | The plotted columns, in order. Default: every column that is not the category or the X column (or, on a bullet chart, the target column). |
+| `target` | no | `string` | Bullet charts: the column that holds each category's target, drawn as a tick across the bar. An unknown name is a 'chart-mapping-unknown-column' error. On other chart types it is ignored with a 'chart-mapping-adapted'... |
 
 
 ### ChartDataCell

@@ -1,0 +1,41 @@
+{
+  "deck": "technical/table-color-scale.opf.json",
+  "entries": {
+    "technical/table-color-scale.opf.json#0": {
+      "sha256": "1692c917e887b87cc68ca3b7233131df441ddbc6e06f1895695a8f3d02f944db",
+      "bytes": 8069
+    },
+    "technical/table-color-scale.opf.json#1": {
+      "sha256": "f33bbbe97319fcf6fd56668eb5701fb31f5ef1e635da73ace5d732c194e39a5b",
+      "bytes": 4661
+    },
+    "technical/table-color-scale.opf.json#2": {
+      "sha256": "e562f1beeef1b9609d3b58816d18e892ba90d226b4641650dd4916bdd4727d3d",
+      "bytes": 8022
+    },
+    "technical/table-color-scale.opf.json#3": {
+      "sha256": "5a2bece0064d5ec7cb4e109073b6f21107f8007e2f39633cd442a35d33e8df0a",
+      "bytes": 12431
+    },
+    "technical/table-color-scale.opf.json#4": {
+      "sha256": "871e61ac81842ef49fcaebd9de6953def13c59a044fdd773105b74844b06f42d",
+      "bytes": 5586
+    },
+    "technical/table-color-scale.opf.json#5": {
+      "sha256": "5ada1b1f86033fb494514daf9f63237e797d9d45aa8205263ab2de9856b97ac9",
+      "bytes": 5840
+    },
+    "technical/table-color-scale.opf.json#6": {
+      "sha256": "a324d4e36506d5cd1aeff0c2958bcb91780d885d5214262661c51554f0e87e76",
+      "bytes": 5626
+    },
+    "technical/table-color-scale.opf.json#7": {
+      "sha256": "e37896caea27863889c88b9472ffa96e50f854d72465782e74403690beac20ad",
+      "bytes": 5529
+    },
+    "technical/table-color-scale.opf.json#8": {
+      "sha256": "88c3e402a2149762e3aee81882b00e8ae7699d72400c14d5b298f5737c8d4d06",
+      "bytes": 5530
+    }
+  }
+}
