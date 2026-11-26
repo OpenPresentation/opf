@@ -278,7 +278,8 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   const placedLabels = layer?.bandLabels?.legend ? [] : layer?.bandLabels?.labels ?? [];
   if (placedLabels.length) {
     const bandFills = new Map(bandsOver(c, c.valueAxis ?? { min: 0, max: 1 }).map((band) => [band.index, band.fill]));
-    const { color, failing } = bandLabelColor(placedLabels.map((label) => bandFills.get(label.index) ?? c.surface), c.chartTextColor, c.labelColor);
+    // FR-07d: labels beside the plot stand on the surface, in the secondary text color.
+    const { color, failing } = layer.bandLabels.beside ? { color: c.chartTextColor, failing: [] } : bandLabelColor(placedLabels.map((label) => bandFills.get(label.index) ?? c.surface), c.chartTextColor, c.labelColor);
     for (const at of failing) c.svg.reportDiagnostic?.({ code: "text-contrast", path: `${c.path}.bands.${placedLabels[at].index}.label`, message: `The band label "${placedLabels[at].text}" stays below 4.5:1 on its band in the text color; choose a lighter band color.` }, c.options);
     for (const label of placedLabels) c.text(label.text, label.box, `${c.path}.bands.${label.index}.label`, label.align, color);
   }

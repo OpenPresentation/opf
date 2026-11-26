@@ -2,20 +2,20 @@
   "deck": "technical/bands-and-bullet.opf.json",
   "entries": {
     "technical/bands-and-bullet.opf.json#0": {
-      "sha256": "e58e56275ad04fdc3bfeb61a8cb47af4e22eab7e33c53f2e4567efd903e8d099",
-      "bytes": 6836
+      "sha256": "2eec7dae56136cdc85f632b0e259e761455b59c9f9b281c1b4350d9c7d4f8d04",
+      "bytes": 6824
     },
     "technical/bands-and-bullet.opf.json#1": {
-      "sha256": "b25bef05b245df86725ca529e59e088e2680c350f71613ce2f90f32e9f8b3ba9",
-      "bytes": 7437
+      "sha256": "768b4a974d79bedac19792aa2d4bc4d3e8cf040bcc24fcf34eff36219355ac40",
+      "bytes": 7382
     },
     "technical/bands-and-bullet.opf.json#2": {
-      "sha256": "0b08e7e7aac600a77c1fe94f87be79dc9d3b6362d7e672b3fb9074c019c1f5e5",
-      "bytes": 8108
+      "sha256": "f41aa965f017ffddb1c853a50ce87f0ed0c87d98ae4370c624acb742e9858885",
+      "bytes": 7958
     },
     "technical/bands-and-bullet.opf.json#3": {
-      "sha256": "a2b778e4917d39875dd11454c39537ea694b7fbba7226ca05fe4cf6844338549",
-      "bytes": 6591
+      "sha256": "8343fcf0ca03d4c59b1df6edfed89be2e339e4adbbdb04a81be74e8345ede50a",
+      "bytes": 6511
     }
   }
 }
