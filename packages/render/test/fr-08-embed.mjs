@@ -33,6 +33,19 @@ assert.match(card, /<g data-opf-embed-text="title"><text [^>]*font-weight="700"[
 assert.equal((card.match(/prototype\.example\.com<\/text>/g) ?? []).length, 1, 'the site name is not drawn twice');
 assert.doesNotMatch(card.replace(/ data-opf-embed-src="[^"]*"| href="[^"]*"/g, ''), /checkout|x=1/, 'the card never prints the address');
 assert.match(card, /<circle /);
+// FR-08b: every card text is centered on the frame (text-anchor middle at its center), the badge too, and the block is centered down.
+{
+  const num = (source, name) => Number(new RegExp(`${name}="([-\\d.]+)"`).exec(source)[1]);
+  const open = /<g [^>]*data-opf-embed="slides\.1\.embed"[^>]*>/.exec(card)[0];
+  const fx = num(open, 'data-opf-embed-x'), fy = num(open, 'data-opf-embed-y'), fw = num(open, 'data-opf-embed-width'), fh = num(open, 'data-opf-embed-height');
+  const circle = /<circle [^>]*>/.exec(card)[0], r = num(circle, 'r');
+  assert.ok(Math.abs(num(circle, 'cx') - (fx + fw / 2)) <= 0.5, 'the badge is centered across');
+  const texts = [...card.matchAll(/<text [^>]*>/g)].map(match => match[0]).filter(tag => /font-size/.test(tag) && /text-anchor="middle"/.test(tag));
+  assert.ok(texts.length >= 1, 'the card text is anchored in the middle');
+  for (const tag of texts) assert.ok(Math.abs(num(tag, 'x') - (fx + fw / 2)) <= 0.5, 'the text is centered across');
+  const top = num(circle, 'cy') - r, last = texts.at(-1), bottom = num(last, 'y') + num(last, 'font-size') * 0.3;
+  assert.ok(top - fy > 0.2 * fh && fy + fh - bottom > 0.2 * fh, 'the block floats in the middle of the panel, not at a corner');
+}
 assert.match(card, /<path [^>]*d="M [\d. L]+ Z"/);
 assert.match(beside, /<g data-opf-embed-text="title"><text [^>]*>Prototype<\/text><\/g>/);
 assert.match(beside, /<g data-opf-embed-text="site"><text [^>]*>prototype\.example\.com<\/text><\/g>/);

@@ -47,6 +47,17 @@ const second = slidePart(entries, 2);
 assert.match(second, /<p:grpSp><p:nvGrpSpPr><p:cNvPr id="\d+" name="OPF embed slides\.1\.embed group" descr="prototype\.example\.com"\/>/, 'the card is one group described by its title');
 for (const part of ['', ' badge', ' arrow', ' title line 0']) assert.match(second, new RegExp(`name="OPF embed slides\\.1\\.embed${part}"><a:hlinkClick`), `the card's ${part || 'panel'} links to the page`);
 assert.match(second, /prst="roundRect"/);
+// FR-08b: the card's block is centered (core's embedCardLayout decides; the export draws its boxes): every part is centered on the panel across,
+// the title and the site name are center-aligned, and the block (badge top to site bottom) is centered down.
+{
+  const box = name => { const part = new RegExp(`name="OPF embed slides\\.1\\.embed${name}">[\\s\\S]*?<a:off x="(\\d+)" y="(\\d+)"/><a:ext cx="(\\d+)" cy="(\\d+)"/>`).exec(second); assert.ok(part, name || 'panel'); const [x, y, w, h] = part.slice(1).map(Number); return {x, y, w, h}; };
+  const panel = box(''), parts = [' badge', ' title line 0'].map(box), pt = 12700 / 2;
+  for (const part of parts) assert.ok(Math.abs(part.x + part.w / 2 - (panel.x + panel.w / 2)) <= pt, 'centered across');
+  const top = Math.min(...parts.map(part => part.y)), bottom = Math.max(...parts.map(part => part.y + part.h));
+  assert.ok(Math.abs((top + bottom) / 2 - (panel.y + panel.h / 2)) <= pt, 'centered down');
+  assert.equal((second.match(/algn="ctr"/g) ?? []).length, 1, 'the title line is center-aligned (an embed named by its site has no site line)');
+  assert.match(second, /name="OPF embed slides\.1\.embed title line 0">[\s\S]*?sz="3000"/, 'a full-slide card carries the 30 pt (40 px) ceiling title');
+}
 assert.match(second, /prst="rightArrow"/);
 assert.match(second, /<a:xfrm rot="18900000">/, 'the arrow is turned 45 degrees to point up and right');
 assert.doesNotMatch(second, /checkout/, 'the card never prints the address');
@@ -55,6 +66,7 @@ const third = slidePart(entries, 3);
 assert.match(third, /name="OPF embed slides\.2\.blocks\.1\.embed group"/);
 assert.match(third, /<a:t>Prototype<\/a:t>[\s\S]*<a:t>prototype\.example\.com<\/a:t>/, 'the title, then the site name');
 assert.match(third, /<a:t>Prototype, version 3<\/a:t>/, 'the caption follows');
+assert.equal((third.match(/algn="ctr"/g) ?? []).length, 2, 'the title and the site name of a card beside text are center-aligned');
 
 // --- tags -----------------------------------------------------------------------------------------------------------
 const tags = tagValues(entries).filter(tag => tag.name === 'OPF_EMBED_V1');
