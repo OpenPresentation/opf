@@ -120,3 +120,19 @@ test('the arc outline the preview draws is the blockArc preset of shape-geometry
     for (const [x, y] of corners) assert.ok(preset.some((point) => Math.hypot(point.x - x, point.y - y) < 0.6), `corner ${x},${y} (${JSON.stringify(adjust)})`);
   }
 });
+
+test('Markdown and YAML: a gauge with bands and a target, and a gauge bound to data, round-trip as nested metric properties', async () => {
+  const { fromMarkdown, toMarkdown } = await import('../dist/markdown.js');
+  const { fromYaml, toYaml } = await import('../dist/yaml.js');
+  const deck = { name: 'Gauges', language: 'en-US',
+    datasets: { ops: { columns: ['Week', { name: 'Utilization', format: '0%' }], rows: [['W46', 0.68], ['W47', 0.72]] } },
+    slides: [
+      { title: 'NPS', metric: { label: 'Net Promoter Score', value: 41, gauge: { min: -100, max: 100, bands: [{ to: 0, label: 'Detractors lead', color: 'accent2' }, { to: 30 }, { to: 100, label: 'Strong', color: 'accent3' }], target: 40 } } },
+      { title: 'Capacity', metric: { label: 'Utilization', value: 0.72, data: { dataset: 'ops', field: 'Utilization', aggregate: 'last' }, gauge: { max: 1 } } },
+    ] };
+  const metrics = (value) => value.slides.map((slide) => slide.metric ?? slide.blocks?.[0]?.metric);
+  for (const back of [fromYaml(toYaml(deck).yaml), fromMarkdown(toMarkdown(deck).markdown, {})]) {
+    assert.deepEqual(back.findings.filter((finding) => finding.severity === 'error'), []);
+    assert.deepEqual(metrics(back.presentation), metrics(deck));
+  }
+});
