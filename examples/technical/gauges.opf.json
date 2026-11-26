@@ -3,9 +3,6 @@
   "name": "Gauges",
   "language": "en-US",
   "description": "Metrics drawn as gauges (metric.gauge): utilization against its capacity, a Net Promoter Score with colored bands and a target, a gauge computed from a dataset, and a row of site gauges. Fictional data.",
-  "design": {
-    "theme": "classic"
-  },
   "datasets": {
     "ops": {
       "title": "Weekly operations",
@@ -66,7 +63,6 @@
     },
     {
       "id": "sites",
-      "layout": "scorecard",
       "title": "Three sites against capacity",
       "blocks": [
         { "metric": { "label": "Berlin", "value": 0.72, "format": "0%", "gauge": { "max": 1, "bands": [{ "to": 0.6 }, { "to": 0.85 }, { "to": 1, "color": "accent2" }], "target": 0.8 } } },
