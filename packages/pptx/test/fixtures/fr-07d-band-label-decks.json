@@ -1,0 +1,646 @@
+{
+  "description": "FR-07d: the native-check decks of FR-07 part 2. \"beside\": round 2's data, whose band labels meet a mark inside, so they stand beside the plot. \"inside\": round 3's data, whose labels fit inside their bands and must draw and export as before FR-07d. \"legend\": a stacked column chart that names its series beside the last column, so its band labels go to the legend.",
+  "beside": {
+    "bands-column": {
+      "name": "Bands and bullet",
+      "language": "en-US",
+      "design": {
+        "theme": "classic",
+        "variant": "light1"
+      },
+      "slides": [
+        {
+          "title": "Wait time stayed within target in two of six weeks",
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Week",
+                {
+                  "name": "Wait (min)",
+                  "format": "0"
+                }
+              ],
+              "rows": [
+                [
+                  "W1",
+                  14
+                ],
+                [
+                  "W2",
+                  11
+                ],
+                [
+                  "W3",
+                  9
+                ],
+                [
+                  "W4",
+                  12
+                ],
+                [
+                  "W5",
+                  16
+                ],
+                [
+                  "W6",
+                  8
+                ]
+              ]
+            },
+            "bands": [
+              {
+                "to": 10,
+                "label": "Within target"
+              },
+              {
+                "to": 15,
+                "label": "Watch"
+              },
+              {
+                "to": 20,
+                "label": "Over target"
+              }
+            ],
+            "legend": "bottom",
+            "alt": "Weekly wait time against three ranges: within target up to 10 minutes, watch up to 15, over target up to 20. W3 (9) and W6 (8) are within target; W5 (16) is over."
+          }
+        }
+      ]
+    },
+    "bands-line-reference": {
+      "name": "Bands and bullet",
+      "language": "en-US",
+      "design": {
+        "theme": "classic",
+        "variant": "light1"
+      },
+      "slides": [
+        {
+          "title": "Satisfaction moved into the plan range in April",
+          "chart": {
+            "type": "line",
+            "data": {
+              "columns": [
+                "Month",
+                {
+                  "name": "CSAT",
+                  "format": "0"
+                }
+              ],
+              "rows": [
+                [
+                  "Jan",
+                  62
+                ],
+                [
+                  "Feb",
+                  58
+                ],
+                [
+                  "Mar",
+                  66
+                ],
+                [
+                  "Apr",
+                  71
+                ],
+                [
+                  "May",
+                  69
+                ],
+                [
+                  "Jun",
+                  74
+                ]
+              ]
+            },
+            "bands": [
+              {
+                "to": 60,
+                "label": "Below plan"
+              },
+              {
+                "to": 70,
+                "label": "On plan"
+              },
+              {
+                "to": 80,
+                "label": "Above plan"
+              }
+            ],
+            "referenceLines": [
+              {
+                "value": 65,
+                "label": "Target 65"
+              }
+            ],
+            "alt": "CSAT by month over three ranges (below plan to 60, on plan to 70, above plan to 80) with a target line at 65; it rose from 62 in January to 74 in June."
+          }
+        }
+      ]
+    },
+    "bullet-kpis": {
+      "name": "Bands and bullet",
+      "language": "en-US",
+      "design": {
+        "theme": "classic",
+        "variant": "light1"
+      },
+      "slides": [
+        {
+          "title": "Four of five KPIs are short of target",
+          "chart": {
+            "type": "bullet",
+            "data": {
+              "columns": [
+                "KPI",
+                {
+                  "name": "Actual",
+                  "format": "0%"
+                },
+                {
+                  "name": "Target",
+                  "format": "0%"
+                }
+              ],
+              "rows": [
+                [
+                  "Win rate",
+                  0.31,
+                  0.35
+                ],
+                [
+                  "Retention",
+                  0.92,
+                  0.9
+                ],
+                [
+                  "NPS reached",
+                  0.64,
+                  0.7
+                ],
+                [
+                  "On-time delivery",
+                  0.88,
+                  0.95
+                ],
+                [
+                  "Upsell rate",
+                  0.47,
+                  0.4
+                ]
+              ]
+            },
+            "mapping": {
+              "category": "KPI",
+              "series": [
+                "Actual"
+              ],
+              "target": "Target"
+            },
+            "bands": [
+              {
+                "to": 0.6,
+                "label": "Poor"
+              },
+              {
+                "to": 0.85,
+                "label": "Fair"
+              },
+              {
+                "to": 1,
+                "label": "Good"
+              }
+            ],
+            "legend": "bottom",
+            "alt": "Five KPIs against their targets over poor (to 60%), fair (to 85%) and good (to 100%) ranges. Only Retention (92% against 90%) and Upsell rate (47% against 40%) meet their targets."
+          }
+        }
+      ]
+    },
+    "bullet-rtl": {
+      "name": "Bullet RTL",
+      "language": "ar",
+      "design": {
+        "theme": "classic",
+        "variant": "light1"
+      },
+      "slides": [
+        {
+          "title": "أربعة من خمسة مؤشرات دون الهدف",
+          "chart": {
+            "type": "bullet",
+            "data": {
+              "columns": [
+                "المؤشر",
+                {
+                  "name": "الفعلي",
+                  "format": "0%"
+                },
+                {
+                  "name": "الهدف",
+                  "format": "0%"
+                }
+              ],
+              "rows": [
+                [
+                  "معدل الفوز",
+                  0.31,
+                  0.35
+                ],
+                [
+                  "الاحتفاظ",
+                  0.92,
+                  0.9
+                ],
+                [
+                  "رضا العملاء",
+                  0.64,
+                  0.7
+                ],
+                [
+                  "التسليم في الموعد",
+                  0.88,
+                  0.95
+                ],
+                [
+                  "البيع الإضافي",
+                  0.47,
+                  0.4
+                ]
+              ]
+            },
+            "mapping": {
+              "category": "المؤشر",
+              "series": [
+                "الفعلي"
+              ],
+              "target": "الهدف"
+            },
+            "bands": [
+              {
+                "to": 0.6,
+                "label": "ضعيف"
+              },
+              {
+                "to": 0.85,
+                "label": "مقبول"
+              },
+              {
+                "to": 1,
+                "label": "جيد"
+              }
+            ],
+            "legend": "bottom",
+            "alt": "خمسة مؤشرات مقابل أهدافها."
+          }
+        }
+      ]
+    }
+  },
+  "inside": {
+    "bands-column": {
+      "name": "Bands and bullet",
+      "language": "en-US",
+      "design": {
+        "theme": "classic",
+        "variant": "light1"
+      },
+      "slides": [
+        {
+          "title": "Wait time fell below target in the last week",
+          "chart": {
+            "type": "column",
+            "data": {
+              "columns": [
+                "Week",
+                {
+                  "name": "Wait (min)",
+                  "format": "0"
+                }
+              ],
+              "rows": [
+                [
+                  "W1",
+                  14
+                ],
+                [
+                  "W2",
+                  11
+                ],
+                [
+                  "W3",
+                  9
+                ],
+                [
+                  "W4",
+                  12
+                ],
+                [
+                  "W5",
+                  16
+                ],
+                [
+                  "W6",
+                  3
+                ]
+              ]
+            },
+            "bands": [
+              {
+                "to": 10,
+                "label": "Within target"
+              },
+              {
+                "to": 15,
+                "label": "Watch"
+              },
+              {
+                "to": 20,
+                "label": "Over target"
+              }
+            ],
+            "legend": "bottom",
+            "alt": "Weekly wait time against three ranges; it fell to 3 minutes in W6."
+          }
+        }
+      ]
+    },
+    "bands-line-reference": {
+      "name": "Bands and bullet",
+      "language": "en-US",
+      "design": {
+        "theme": "classic",
+        "variant": "light1"
+      },
+      "slides": [
+        {
+          "title": "Satisfaction fell below plan in June",
+          "chart": {
+            "type": "line",
+            "data": {
+              "columns": [
+                "Month",
+                {
+                  "name": "CSAT",
+                  "format": "0"
+                }
+              ],
+              "rows": [
+                [
+                  "Jan",
+                  40
+                ],
+                [
+                  "Feb",
+                  45
+                ],
+                [
+                  "Mar",
+                  66
+                ],
+                [
+                  "Apr",
+                  71
+                ],
+                [
+                  "May",
+                  35
+                ],
+                [
+                  "Jun",
+                  32
+                ]
+              ]
+            },
+            "bands": [
+              {
+                "to": 60,
+                "label": "Below plan"
+              },
+              {
+                "to": 70,
+                "label": "On plan"
+              },
+              {
+                "to": 80,
+                "label": "Above plan"
+              }
+            ],
+            "referenceLines": [
+              {
+                "value": 45,
+                "label": "Floor 45"
+              }
+            ],
+            "alt": "CSAT by month over three ranges with a floor line at 45; it fell to 32 in June."
+          }
+        }
+      ]
+    },
+    "bullet-kpis": {
+      "name": "Bands and bullet",
+      "language": "en-US",
+      "design": {
+        "theme": "classic",
+        "variant": "light1"
+      },
+      "slides": [
+        {
+          "title": "Two of three KPIs are short of target",
+          "chart": {
+            "type": "bullet",
+            "data": {
+              "columns": [
+                "KPI",
+                {
+                  "name": "Actual",
+                  "format": "0%"
+                },
+                {
+                  "name": "Target",
+                  "format": "0%"
+                }
+              ],
+              "rows": [
+                [
+                  "Win rate",
+                  0.31,
+                  0.35
+                ],
+                [
+                  "Retention",
+                  0.92,
+                  0.9
+                ],
+                [
+                  "NPS reached",
+                  0.64,
+                  0.7
+                ]
+              ]
+            },
+            "mapping": {
+              "category": "KPI",
+              "series": [
+                "Actual"
+              ],
+              "target": "Target"
+            },
+            "bands": [
+              {
+                "to": 0.6,
+                "label": "Poor"
+              },
+              {
+                "to": 0.85,
+                "label": "Fair"
+              },
+              {
+                "to": 1,
+                "label": "Good"
+              }
+            ],
+            "legend": "bottom",
+            "alt": "Five KPIs against their targets over poor (to 60%), fair (to 85%) and good (to 100%) ranges. Only Retention (92% against 90%) and Upsell rate (47% against 40%) meet their targets."
+          }
+        }
+      ]
+    },
+    "bullet-rtl": {
+      "name": "Bullet RTL",
+      "language": "ar",
+      "design": {
+        "theme": "classic",
+        "variant": "light1"
+      },
+      "slides": [
+        {
+          "title": "اثنان من ثلاثة مؤشرات دون الهدف",
+          "chart": {
+            "type": "bullet",
+            "data": {
+              "columns": [
+                "المؤشر",
+                {
+                  "name": "الفعلي",
+                  "format": "0%"
+                },
+                {
+                  "name": "الهدف",
+                  "format": "0%"
+                }
+              ],
+              "rows": [
+                [
+                  "معدل الفوز",
+                  0.31,
+                  0.35
+                ],
+                [
+                  "الاحتفاظ",
+                  0.92,
+                  0.9
+                ],
+                [
+                  "رضا العملاء",
+                  0.64,
+                  0.7
+                ]
+              ]
+            },
+            "mapping": {
+              "category": "المؤشر",
+              "series": [
+                "الفعلي"
+              ],
+              "target": "الهدف"
+            },
+            "bands": [
+              {
+                "to": 0.6,
+                "label": "ضعيف"
+              },
+              {
+                "to": 0.85,
+                "label": "مقبول"
+              },
+              {
+                "to": 1,
+                "label": "جيد"
+              }
+            ],
+            "legend": "bottom",
+            "alt": "خمسة مؤشرات مقابل أهدافها."
+          }
+        }
+      ]
+    }
+  },
+  "legend": {
+    "name": "Bands and bullet",
+    "language": "en-US",
+    "design": {
+      "theme": "classic",
+      "variant": "light1"
+    },
+    "slides": [
+      {
+        "title": "Orders stayed on plan in every quarter",
+        "chart": {
+          "type": "stacked-column",
+          "data": {
+            "columns": [
+              "Quarter",
+              "North",
+              "South",
+              "West"
+            ],
+            "rows": [
+              [
+                "Q1",
+                4,
+                3,
+                2
+              ],
+              [
+                "Q2",
+                5,
+                4,
+                3
+              ],
+              [
+                "Q3",
+                6,
+                4,
+                4
+              ],
+              [
+                "Q4",
+                7,
+                5,
+                4
+              ]
+            ]
+          },
+          "bands": [
+            {
+              "to": 6,
+              "label": "Below plan"
+            },
+            {
+              "to": 12,
+              "label": "On plan"
+            },
+            {
+              "to": 20,
+              "label": "Above plan"
+            }
+          ],
+          "alt": "Orders by region per quarter over three plan ranges."
+        }
+      }
+    ]
+  }
+}

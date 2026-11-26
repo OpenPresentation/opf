@@ -1600,7 +1600,7 @@ function renderEmbed(item, box, bound, options) {
       if (!text) continue;
       const family = fontStack(text.style.fontFamily, bound.design.fontScheme.type);
       children.push(tag("g", { "data-opf-embed-text": text === card.title ? "title" : "site" }, text.lines.map((line, index) => tag("text", {
-        x: stableNumber(text.box.x), y: stableNumber(text.box.y + text.fontSize + index * text.lineHeight), "font-family": family, "font-size": stableNumber(text.fontSize),
+        x: stableNumber(text.box.x + text.box.width / 2), y: stableNumber(text.box.y + text.fontSize + index * text.lineHeight), "text-anchor": "middle", "font-family": family, "font-size": stableNumber(text.fontSize),
         "font-weight": text.style.fontWeight === 400 ? undefined : text.style.fontWeight, fill
       }, escapeText(line))).join("\n")));
     }

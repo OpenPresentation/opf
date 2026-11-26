@@ -140,6 +140,46 @@ test('the card: badge, title and site name at any size, never under the floor, a
   assert.equal(same.site, undefined, 'the site name is not drawn twice');
 });
 
+test('the card is centered in every form and its title grows with the card', () => {
+  const base = { title: 'Revenue dashboard', site: 'app.example.com', headingFamily: 'Roboto', bodyFamily: 'Roboto', scale: 1 };
+  const near = (a, b, message) => assert.ok(Math.abs(a - b) <= 0.5, `${message}: ${a} against ${b}`);
+  const bounds = (card) => {
+    const boxes = [card.icon.badge, card.title?.box, card.site?.box].filter(Boolean);
+    return { top: Math.min(...boxes.map((box) => box.y)), bottom: Math.max(...boxes.map((box) => box.y + box.height)) };
+  };
+  for (const [name, frame] of [['a full slide', { x: 182, y: 147, width: 915, height: 515 }], ['beside text', { x: 700, y: 200, width: 570, height: 321 }], ['small, with a title', { x: 40, y: 30, width: 360, height: 100 }], ['small, the badge only', { x: 10, y: 20, width: 80, height: 50 }]]) {
+    const card = embedCardLayout({ ...base, frame });
+    near(card.icon.badge.x + card.icon.badge.width / 2, frame.x + frame.width / 2, `${name}: the badge is centered across`);
+    const { top, bottom } = bounds(card);
+    near((top + bottom) / 2, frame.y + frame.height / 2, `${name}: the block is centered down`);
+    for (const part of [card.title, card.site].filter(Boolean)) {
+      assert.equal(part.align, 'center');
+      near(part.box.x + part.box.width / 2, frame.x + frame.width / 2, `${name}: the text is centered across`);
+      assert.equal(part.lineWidths.length, part.lines.length);
+      assert.ok(part.lineWidths.every((width) => width <= part.box.width + 1e-6));
+    }
+  }
+  // The title's size: a tenth of the shorter side, between today's 28 and a ceiling of 40; the badge and the site name grow with it.
+  const sizes = [[915, 515], [570, 321], [360, 100]].map(([width, height]) => embedCardLayout({ ...base, frame: { x: 0, y: 0, width, height } }));
+  assert.equal(sizes[0].title.fontSize, 40, 'a full-slide card is at the ceiling');
+  assert.ok(Math.abs(sizes[1].title.fontSize - 32.1) < 0.2, 'a card beside text is a tenth of its shorter side');
+  assert.ok(sizes[2].title.fontSize <= 28 && sizes[2].title.fontSize >= 16, 'a small card is at the old size or below, never under the floor');
+  assert.ok(sizes[0].icon.badge.width > sizes[1].icon.badge.width && sizes[1].icon.badge.width > sizes[2].icon.badge.width, 'the badge grows with the title');
+  assert.ok(sizes[0].site.fontSize > sizes[1].site.fontSize && sizes[1].site.fontSize > 18 - 1e-9);
+  // Scale multiplies the sizes, and the three-line limit holds at the larger size.
+  const doubled = embedCardLayout({ ...base, scale: 2, frame: { x: 0, y: 0, width: 1830, height: 1030 } });
+  assert.equal(doubled.title.fontSize, 80);
+  const long = embedCardLayout({ ...base, title: 'A very long title that goes on and on about quarterly figures, regional splits, forecasts and the plan for the next three years of the company', frame: { x: 0, y: 0, width: 915, height: 515 } });
+  assert.ok(long.title.lines.length <= 3);
+  const longSmall = embedCardLayout({ ...base, title: 'A very long title that goes on and on about quarterly figures, regional splits, forecasts and the plan for the next three years of the company', frame: { x: 0, y: 0, width: 420, height: 260 } });
+  assert.equal(longSmall.title.clipped, true);
+  assert.match(longSmall.title.lines.at(-1), /…$/);
+  // The two small forms keep their thresholds.
+  assert.ok(embedCardLayout({ ...base, frame: { x: 0, y: 0, width: 360, height: 100 } }).title);
+  assert.equal(embedCardLayout({ ...base, frame: { x: 0, y: 0, width: 360, height: 100 } }).site, undefined);
+  assert.equal(embedCardLayout({ ...base, frame: { x: 0, y: 0, width: 80, height: 50 } }).title, undefined);
+});
+
 test('Markdown and YAML round trips keep the shorthand, the full form and a slide embed with a caption', () => {
   const deck = {
     name: 'Embed', assets: { shot: png },
