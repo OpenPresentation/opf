@@ -7,7 +7,7 @@ import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {fromPptx, toPptx} from '../dist/index.js';
 
 const arr = {
-  columns: ['Month', 'Region', {name: 'ARR', format: '$#,##0.0M'}, {name: 'Churn', format: '0.0%'}, {name: 'ARR change', format: '+$#,##0.0M;-$#,##0.0M;$0'}],
+  columns: [{name: 'Month', type: 'date', role: 'dimension'}, {name: 'Region', type: 'text', role: 'dimension'}, {name: 'ARR', format: '$#,##0.0M', type: 'number', role: 'measure', unit: 'USD'}, {name: 'Churn', format: '0.0%', type: 'number', role: 'measure'}, {name: 'ARR change', format: '+$#,##0.0M;-$#,##0.0M;$0', type: 'number', role: 'measure', unit: 'USD'}],
   rows: [['2026-09', 'EMEA', 3.9, 0.041, null], ['2026-10', 'EMEA', 4.2, 0.036, 0.3], ['2026-11', 'EMEA', 4.4, 0.044, 0.2]],
 };
 const link = (extra = {}) => ({dataset: 'arr', field: 'ARR', aggregate: 'last', ...extra});

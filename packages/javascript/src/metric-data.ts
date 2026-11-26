@@ -5,7 +5,7 @@
 // before measuring, so layout measures the text that is drawn and every engine draws its result; no engine computes on its own.
 //
 // Browser-safe and synchronous: no file access, no network, no clock.
-import { chartNumber, formatDataNumber, numberFormatError, type DataDiagnostic } from './chart-data.js';
+import { chartNumber, datasetColumnDeclaration, formatDataNumber, numberFormatError, type DataDiagnostic } from './chart-data.js';
 import { timeOrderKey } from './chart-time-order.js';
 
 export type DataConditionOperator = '=' | '!=' | '<' | '<=' | '>' | '>=' | 'in';
@@ -84,14 +84,6 @@ const AGGREGATES: readonly string[] = ['sum', 'mean', 'min', 'max', 'count', 'fi
 const OPERATORS: readonly string[] = ['=', '!=', '<', '<=', '>', '>=', 'in'];
 const round = (value: number): number => Number(value.toPrecision(12));
 
-/**
- * The declared type of a dataset column (`number`, `text`, `date` or `boolean`), or undefined for a column that declares none.
- * The one place the metric's link reads a column's type.
- */
-function declaredType(column: unknown): 'number' | 'text' | 'date' | 'boolean' | undefined {
-  const type = isRecord(column) ? column.type : undefined;
-  return type === 'number' || type === 'text' || type === 'date' || type === 'boolean' ? type : undefined;
-}
 const columnName = (column: unknown): string => typeof column === 'string' ? column : isRecord(column) && typeof column.name === 'string' ? column.name : '';
 const columnFormat = (column: unknown): string | undefined => isRecord(column) && typeof column.format === 'string' ? column.format : undefined;
 
@@ -244,7 +236,9 @@ export function resolveMetric(metric: unknown, datasets: unknown, options: Resol
     if (!isRecord(dataset) || !Array.isArray(dataset.columns) || !Array.isArray(dataset.rows)) {
       diagnostics.push({ code: 'dataset-unknown', severity: 'error', path: at(base, 'data', 'dataset'), message: `unknown dataset '${link.dataset}'; add it to the top-level datasets map` });
     } else {
-      const columns: Column[] = dataset.columns.map((column, index) => ({ name: columnName(column), index, ...(declaredType(column) ? { type: declaredType(column)! } : {}), ...(columnFormat(column) ? { format: columnFormat(column)! } : {}) }));
+      // FR-05: a column's declared type, by the one reader core exports.
+      const declaredOf = (name: string) => datasetColumnDeclaration({ datasets: sets }, link.dataset, name)?.type;
+      const columns: Column[] = dataset.columns.map((column, index) => ({ name: columnName(column), index, ...(declaredOf(columnName(column)) ? { type: declaredOf(columnName(column))! } : {}), ...(columnFormat(column) ? { format: columnFormat(column)! } : {}) }));
       const names = columns.map(column => column.name);
       const known = (name: string, path: string): Column | undefined => {
         const found = columns.find(column => column.name === name);

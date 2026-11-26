@@ -26,10 +26,7 @@ const ARR = {
     ['2026-11', 'EMEA', 4.4, 0.044, 0.2],
   ],
 };
-// Typed columns (FR-05) are read by the link whenever a column declares one; the schema accepts them once FR-05 is in this checkout.
-const typedColumns = Boolean(schemas.presentation.$defs.DataColumn?.properties?.type);
-const untyped = (datasets) => typedColumns ? datasets : Object.fromEntries(Object.entries(datasets).map(([id, set]) => [id, { ...set, columns: set.columns.map((column) => typeof column === 'string' ? column : { name: column.name, ...(column.format ? { format: column.format } : {}) }) }]));
-const decks = (metric, datasets = { arr: ARR }) => ({ name: 'FR-06', language: 'en-US', datasets: untyped(datasets), slides: [{ title: 'Metric', metric }] });
+const decks = (metric, datasets = { arr: ARR }) => ({ name: 'FR-06', language: 'en-US', datasets, slides: [{ title: 'Metric', metric }] });
 const link = (extra = {}) => ({ dataset: 'arr', field: 'ARR', aggregate: 'last', ...extra });
 const run = (document, options = {}) => validate(document, { catalogs: [gallery], only: ['format', 'content'], ...options });
 const rules = (report, id) => report.findings.filter((finding) => finding.ruleId === id);
@@ -330,8 +327,8 @@ describe('validation', () => {
   });
 
   test('the warnings of the unresolved link and of the unit are findings of their rules', () => {
-    // A column's declared type (FR-05) is what refuses the aggregate; the schema takes it once typed columns are in this checkout.
-    if (typedColumns) assert.equal(rules(run(decks({ value: 1, data: link({ field: 'Region', aggregate: 'sum' }) })), 'opf/metric-data-aggregate').length, 1);
+    // A column's declared type (FR-05) is what refuses the aggregate.
+    assert.equal(rules(run(decks({ value: 1, data: link({ field: 'Region', aggregate: 'sum' }) })), 'opf/metric-data-aggregate').length, 1);
     assert.equal(rules(run(decks({ value: 1, data: link({ filter: [{ field: 'Region', op: '=', value: 'APAC' }] }) })), 'opf/metric-data-empty').length, 1);
     assert.equal(rules(run(decks({ value: 1, data: link({ filter: [{ field: 'Month', op: '=', value: '2026-11' }], delta: { compare: 'previous' } }) })), 'opf/metric-data-delta').length, 1);
     assert.equal(rules(run(decks({ value: 4.4, unit: 'M', format: '#,##0.0M' })), 'opf/metric-unit-repeated').length, 1);
@@ -373,7 +370,7 @@ describe('composition draws what the link computes', () => {
 describe('a deck written as text', () => {
   const document = () => ({
     name: 'FR-06', language: 'en-US',
-    datasets: untyped({ arr: ARR }),
+    datasets: { arr: ARR },
     slides: [
       { title: 'Plain', metric: '$4.2M' },
       { title: 'Value', metric: { value: 4.4, label: 'ARR', data: link({ filter: [{ field: 'Region', op: '=', value: 'EMEA' }] }) } },

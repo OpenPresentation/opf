@@ -495,19 +495,35 @@
     "arr": {
       "title": "ARR by month",
       "columns": [
-        "Month",
-        "Region",
+        {
+          "name": "Month",
+          "type": "date",
+          "role": "dimension"
+        },
+        {
+          "name": "Region",
+          "type": "text",
+          "role": "dimension"
+        },
         {
           "name": "ARR",
-          "format": "$#,##0.0M"
+          "format": "$#,##0.0M",
+          "type": "number",
+          "role": "measure",
+          "unit": "USD"
         },
         {
           "name": "Churn",
-          "format": "0.0%"
+          "format": "0.0%",
+          "type": "number",
+          "role": "measure"
         },
         {
           "name": "ARR change",
-          "format": "+$#,##0.0M;-$#,##0.0M;$0"
+          "format": "+$#,##0.0M;-$#,##0.0M;$0",
+          "type": "number",
+          "role": "measure",
+          "unit": "USD"
         }
       ],
       "rows": [

@@ -8,16 +8,59 @@
       "title": "ARR by month",
       "description": "Annual recurring revenue (in $M), monthly churn and the month's change in ARR.",
       "columns": [
-        "Month",
-        "Region",
-        { "name": "ARR", "format": "$#,##0.0M" },
-        { "name": "Churn", "format": "0.0%" },
-        { "name": "ARR change", "format": "+$#,##0.0M;-$#,##0.0M;$0" }
+        {
+          "name": "Month",
+          "type": "date",
+          "role": "dimension"
+        },
+        {
+          "name": "Region",
+          "type": "text",
+          "role": "dimension"
+        },
+        {
+          "name": "ARR",
+          "format": "$#,##0.0M",
+          "type": "number",
+          "role": "measure",
+          "unit": "USD"
+        },
+        {
+          "name": "Churn",
+          "format": "0.0%",
+          "type": "number",
+          "role": "measure"
+        },
+        {
+          "name": "ARR change",
+          "format": "+$#,##0.0M;-$#,##0.0M;$0",
+          "type": "number",
+          "role": "measure",
+          "unit": "USD"
+        }
       ],
       "rows": [
-        ["2026-09", "EMEA", 3.9, 0.041, null],
-        ["2026-10", "EMEA", 4.2, 0.036, 0.3],
-        ["2026-11", "EMEA", 4.4, 0.044, 0.2]
+        [
+          "2026-09",
+          "EMEA",
+          3.9,
+          0.041,
+          null
+        ],
+        [
+          "2026-10",
+          "EMEA",
+          4.2,
+          0.036,
+          0.3
+        ],
+        [
+          "2026-11",
+          "EMEA",
+          4.4,
+          0.044,
+          0.2
+        ]
       ]
     }
   },
@@ -34,8 +77,16 @@
           "dataset": "arr",
           "field": "ARR",
           "aggregate": "last",
-          "filter": [{ "field": "Region", "op": "=", "value": "EMEA" }],
-          "delta": { "compare": "previous" }
+          "filter": [
+            {
+              "field": "Region",
+              "op": "=",
+              "value": "EMEA"
+            }
+          ],
+          "delta": {
+            "compare": "previous"
+          }
         }
       }
     },
@@ -52,7 +103,10 @@
           "dataset": "arr",
           "field": "Churn",
           "aggregate": "last",
-          "delta": { "compare": "previous", "as": "percent" }
+          "delta": {
+            "compare": "previous",
+            "as": "percent"
+          }
         }
       }
     },
@@ -68,7 +122,17 @@
           "dataset": "arr",
           "field": "ARR",
           "aggregate": "last",
-          "delta": { "compare": { "filter": [{ "field": "Month", "op": "=", "value": "2026-09" }] } }
+          "delta": {
+            "compare": {
+              "filter": [
+                {
+                  "field": "Month",
+                  "op": "=",
+                  "value": "2026-09"
+                }
+              ]
+            }
+          }
         }
       }
     },
@@ -84,7 +148,11 @@
           "dataset": "arr",
           "field": "ARR",
           "aggregate": "last",
-          "delta": { "compare": { "value": 4 } }
+          "delta": {
+            "compare": {
+              "value": 4
+            }
+          }
         }
       }
     },
@@ -100,7 +168,9 @@
           "dataset": "arr",
           "field": "ARR",
           "aggregate": "last",
-          "delta": { "field": "ARR change" }
+          "delta": {
+            "field": "ARR change"
+          }
         }
       }
     },
@@ -110,7 +180,11 @@
       "metric": {
         "label": "Highest monthly churn",
         "value": 0.044,
-        "data": { "dataset": "arr", "field": "Churn", "aggregate": "max" }
+        "data": {
+          "dataset": "arr",
+          "field": "Churn",
+          "aggregate": "max"
+        }
       }
     },
     {
@@ -123,7 +197,16 @@
           "dataset": "arr",
           "field": "ARR change",
           "aggregate": "sum",
-          "filter": [{ "field": "Month", "op": "in", "value": ["2026-10", "2026-11"] }]
+          "filter": [
+            {
+              "field": "Month",
+              "op": "in",
+              "value": [
+                "2026-10",
+                "2026-11"
+              ]
+            }
+          ]
         }
       }
     },
