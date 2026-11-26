@@ -117,6 +117,26 @@ export function neutralFill(surface: string, text: string, ratio: number): strin
   return mixOklab(surface, text, high);
 }
 
+/** The contrast the muted marks of a highlighted chart keep against the chart's strongest band. */
+export const CHART_BAND_MUTED_CONTRAST = 1.5;
+
+/**
+ * FR-07 (supervisor, 2026-11-26): the muted color of a highlighted (or focused) chart that has bands, so its context marks do not vanish into
+ * the bands: the scheme's text mixed into the surface (OKLab) to 1.5:1 from the strongest band (the fill with the most contrast against the
+ * surface), on the side away from the surface. The text itself when even it stays nearer. Both engines call it with the same inputs.
+ */
+export function chartBandMutedColor(fills: readonly string[], surface: string, text: string): string | undefined {
+  const against = (color: string) => colorContrast(color, surface) ?? 1;
+  const strongest = fills.reduce<string | undefined>((best, fill) => best === undefined || against(fill) > against(best) ? fill : best, undefined);
+  if (strongest === undefined) return undefined;
+  const at = (t: number) => mixOklab(surface, text, t);
+  const beyond = (t: number) => against(at(t)) > against(strongest) && (colorContrast(at(t), strongest) ?? 1) >= CHART_BAND_MUTED_CONTRAST;
+  if (!beyond(1)) return mixOklab(surface, text, 1);
+  let low = 0, high = 1;
+  for (let step = 0; step < 40; step++) { const middle = (low + high) / 2; if (beyond(middle)) high = middle; else low = middle; }
+  return at(high);
+}
+
 /** The fills of a list of band ranges, in order ({@link chartBandFill}). */
 export function chartBandFills(bands: readonly Pick<ChartBandRange, 'color' | 'neutral'>[], colors: ChartBandColors): string[] {
   return bands.map(band => chartBandFill(band, colors));

@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, paretoPlan, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartFocusContextColors, chartSeriesStrokes, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer, formatNumber, formatPercentNumber, chartNumberLanguage, chartBands, chartBandRanges, chartBandFill, bandLabelColor, BULLET_BAR_SHARE, BULLET_TARGET_SHARE, BULLET_TARGET_WIDTH_PX } from "@openpresentation/opf/composition";
+import { chartAxisFraction as axisFraction, chartAxisScale as composedScale, chartBarGeometry, chartBarSeriesOffset, chartDrawPlan, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, paretoPlan, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartFocusContextColors, chartSeriesStrokes, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer, formatNumber, formatPercentNumber, chartNumberLanguage, chartBands, chartBandRanges, chartBandFill, chartBandMutedColor, bandLabelColor, BULLET_BAR_SHARE, BULLET_TARGET_SHARE, BULLET_TARGET_WIDTH_PX } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colors for a chart panel: core's `chartSeriesPalette` (the deck color scheme's accents, RR-89, with the chart's own
@@ -26,6 +26,16 @@ function highlightFor(c, resolved, spec, data) {
   const marks = chartHighlightMarks(resolved.highlight, { columns: data.columns, hasX: spec.kind === "scatter" && data.hasX, rows: data.rows });
   if (!marks) return undefined;
   return { ...marks, ...chartHighlightColors(c.surface, c.bound.design.colors.primary, c.labelColor) };
+}
+
+// FR-07 (supervisor, 2026-11-26): in a chart with bands, the muted marks of a highlight take the neutral at 1.5:1 from the chart's strongest
+// band, on the side away from the surface (core chartBandMutedColor, which the PPTX export calls with the same colors); without bands the
+// muted color is the one above.
+function bandHighlight(c, highlight) {
+  if (!highlight) return undefined;
+  const fills = bandsOver(c, c.valueAxis ?? bandAxis(c)).map((band) => band.fill);
+  const muted = chartBandMutedColor(fills, c.surface, c.bound.design.colors.text);
+  return muted ? { ...highlight, muted } : highlight;
 }
 
 // LH-03, LH-95: a one-series small column or bar chart draws its emphasized point (core: the last one with a value) in a stronger shade of
@@ -206,7 +216,7 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   const fitReport = doughnutFit && { code: "chart-option-adapted", option: "dataLabels.content", reason: "unsupported-content", message: `The labels of a doughnut sit inside their slices, and '${doughnutFit.from.join(', ')}' does not fit the ring, so ${doughnutFit.content ? `they show '${doughnutFit.content.join(', ')}' instead (the legend names the slices)` : 'no labels are drawn (the legend names the slices)'}.` };
   if (fitReport && authoredSpec) resolved.diagnostics = [...resolved.diagnostics, fitReport];
   // FA-14: a highlight changes colors only (no space is reserved), so it is resolved whether or not an option is active.
-  c.highlight = highlightFor(c, resolved, spec, data) ?? focusFor(c, layer, spec) ?? emphasisFor(c, layer);
+  c.highlight = bandHighlight(c, highlightFor(c, resolved, spec, data)) ?? focusFor(c, layer, spec) ?? emphasisFor(c, layer);
   // LH-03, LH-142: no value axis (a small chart's labels or a horizontal stacked bar chart's segment values carry the values): core decides it.
   c.valueAxisHidden = chartValueAxisHidden(layer);
   c.ringNames = layer?.rings;
@@ -587,6 +597,11 @@ function seriesLegend(c, series, key, marker = false) {
 function bandColors(c) {
   return { surface: c.surface, text: c.bound.design.colors.text, resolve: (name) => String(c.resolveColorRef(name, c.bound.design.colors.text) ?? c.bound.design.colors.text).slice(0, 7).toUpperCase() };
 }
+// An axis over every band, for a chart without a composed value axis.
+function bandAxis(c) {
+  const bands = chartBands(c.item.value);
+  return { min: Math.min(0, ...bands.map((band) => band.to)) - 1, max: Math.max(0, ...bands.map((band) => band.to)) };
+}
 function bandsOver(c, scale) {
   const bands = chartBands(c.item.value);
   if (!bands.length) return [];
@@ -600,7 +615,7 @@ function bandLegendEntries(c) {
   if (c.bandLabels && !c.bandLabels.legend) return [];
   const bands = chartBands(c.item.value);
   if (!bands.length) return [];
-  const axis = c.valueAxis ?? { min: Math.min(0, ...bands.map((band) => band.to)) - 1, max: Math.max(...bands.map((band) => band.to)) };
+  const axis = c.valueAxis ?? bandAxis(c);
   const colors = bandColors(c);
   return chartBandRanges(bands, axis).filter((band) => band.label !== undefined).map((band) => ({ name: band.label, color: chartBandFill(band, colors), path: `${c.path}.bands.${band.index}` }));
 }

@@ -150,3 +150,17 @@ describe('one band label color per chart (FR-07)', async () => {
     assert.deepEqual(bandLabelColor(['#E6E5E5', '#202020'], '#595959', '#000000'), { color: '#000000', failing: [1] }, 'an author\'s dark band');
   });
 });
+
+describe('the muted color of a highlighted chart with bands (FR-07, supervisor 2026-11-26)', async () => {
+  const { chartBandMutedColor, CHART_BAND_MUTED_CONTRAST } = await import('../dist/composition.js');
+  test('the neutral at 1.5:1 from the strongest band, on the side away from the surface; none without bands', () => {
+    const light = ['#C4C3C3', '#D7D6D6', '#E6E5E5'];
+    const muted = chartBandMutedColor(light, '#FFFFFF', '#000000');
+    assert.ok(Math.abs(colorContrast(muted, '#C4C3C3') - CHART_BAND_MUTED_CONTRAST) < 0.02, `${muted} at 1.5:1 from the strongest band`);
+    assert.ok(colorContrast(muted, '#FFFFFF') > colorContrast('#C4C3C3', '#FFFFFF'), 'darker than the strongest band on a light surface');
+    for (const band of light) assert.ok(colorContrast(muted, band) >= CHART_BAND_MUTED_CONTRAST - 1e-6);
+    const dark = chartBandMutedColor(['#373736', '#2A2A2A'], '#1A1A1A', '#FFFFFF');
+    assert.ok(colorContrast(dark, '#1A1A1A') > colorContrast('#373736', '#1A1A1A'), 'lighter than the strongest band on a dark surface');
+    assert.equal(chartBandMutedColor([], '#FFFFFF', '#000000'), undefined);
+  });
+});
