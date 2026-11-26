@@ -554,11 +554,12 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
   if (!shape) return undefined;
   const {fontPx, textHeight, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
   const rtl = geometry.direction === 'rtl', last = data.rows.length - 1;
-  // The last category is the rightmost (the leftmost right to left); the names start past the column's edge or the band's end.
+  // The last category is the rightmost (the leftmost right to left); the names start past the column's edge or the band's end, and never
+  // inside the plot (FR-07d: the plot, and the bands drawn across it, end before the names).
   const center = shape.pointX(last, rtl), reach = shape.kind === 'bar' ? shape.band / 3 : 0;
   // An edge-to-edge area's end value stands inside its edge: the names keep a text size and a half clear of it.
   const lead = shape.spaced ? fontPx * 0.6 : fontPx * 0.25;
-  const start = rtl ? center - reach - lead : center + reach + lead;
+  const start = rtl ? Math.min(center - reach, plot.x) - lead : Math.max(center + reach, plot.x + plot.width) + lead;
   const swatch = fontPx * 0.6;
   const placed = shape.series.map((_, j) => {
     const point = shape.stacks[j]![last], name = label(data.columns[j + 1]), bold = focus?.includes(j) === true && !stableNameWidths(chart);

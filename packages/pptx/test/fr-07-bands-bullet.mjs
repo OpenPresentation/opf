@@ -17,7 +17,7 @@ const deck = () => ({
   language: 'en-US',
   datasets: {kpis},
   slides: [
-    {title: 'Wait', chart: {type: 'column', data: wait, legend: 'bottom', bands: [{to: 10, label: 'Within target', color: 'accent3'}, {to: 15}, {to: 20, label: 'Over target'}], alt: 'Wait by week.'}},
+    {title: 'Wait', chart: {type: 'column', data: wait, legend: 'right', bands: [{to: 10, label: 'Within target', color: 'accent3'}, {to: 15}, {to: 20, label: 'Over target'}], alt: 'Wait by week.'}},
     {title: 'KPIs', chart: {type: 'bullet', data: {dataset: 'kpis'}, mapping: {category: 'KPI', series: ['Actual'], target: 'Target'}, legend: 'bottom', bands: [{to: 0.6, label: 'Poor'}, {to: 0.85, label: 'Fair'}, {to: 1, label: 'Good'}], alt: 'KPIs against targets.'}},
     {title: 'Trend', chart: {type: 'line', data: wait, bands: [{to: 10}, {to: 20}], referenceLines: [{value: 12, label: 'Plan'}], alt: 'Wait trend.'}},
     {title: 'Plain', chart: {type: 'column', data: wait, alt: 'Wait by week.'}},
@@ -58,7 +58,8 @@ test('a column chart with bands: a stacked band group first on the visible axes,
   assert.match(band.group, /<c:v>Band 2<\/c:v>/);
   assert.match(xml, /<c:legendEntry><c:idx val="1"\/><c:delete val="1"\/><\/c:legendEntry>/);
   assert.equal((xml.match(/<c:legendEntry>/g) ?? []).length, 1);
-  // Its labels meet the columns at both places (composition's fallback): they stay in the legend, bands first, and no band has a data label.
+  // Its labels meet the columns at both places, and its legend on the right takes the side a gutter of labels would (FR-07d): they stay in the
+  // legend, bands first, and no band has a data label.
   assert.doesNotMatch(band.group, /<c:dLbl>/);
 });
 
@@ -169,7 +170,8 @@ test('the band-label fallback on a chart without a series legend: a legend of th
   const source = {name: 'Fallback', language: 'en-US', slides: [
     {title: 'Stacked', chart: {type: 'stacked-column', data, bands, alt: 'x'}},
     {title: 'Line', chart: {type: 'line', data, bands, alt: 'x'}},
-    {title: 'One', chart: {type: 'column', data: {columns: ['Quarter', 'North'], rows: data.rows.map(row => row.slice(0, 2))}, bands, alt: 'x'}},
+    // FR-07d: one series beside the plot when its labels do not overlap there; these two thin bands' labels would, so the legend it is.
+    {title: 'One', chart: {type: 'column', data: {columns: ['Quarter', 'North'], rows: data.rows.map(row => row.slice(0, 2))}, bands: [{to: 12, label: 'Low'}, {to: 12.3, label: 'Edge'}, {to: 12.6, label: 'Rim'}], alt: 'x'}},
   ]};
   const exported = await exportDeck(source);
   for (const [n, count] of [[1, 3], [2, 3], [3, 1]]) {

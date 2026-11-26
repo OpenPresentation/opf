@@ -4449,7 +4449,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     const inside = layer?.bandLabels && !layer.bandLabels.legend ? layer.bandLabels.labels : undefined;
     // One color for every band label (core bandLabelColor, as the preview): the secondary text color when it reads at 4.5:1 on every labeled
     // band, else the primary text color; a band on which even that fails is reported, its label still written.
-    const labelPaint = inside && bands ? bandLabelColor(inside.map(label => `#${bands.bands.find(band => band.index === label.index)?.fill ?? normalizeHex(panelFill).slice(0, 6)}`), `#${normalizeHex(labelColor).slice(0, 6)}`, `#${normalizeHex(markLabelColor).slice(0, 6)}`) : undefined;
+    // FR-07d: labels beside the plot stand on the surface, in the secondary text color.
+    const labelPaint = inside && bands && layer.bandLabels.beside ? {color: `#${normalizeHex(labelColor).slice(0, 6)}`, failing: []} : inside && bands ? bandLabelColor(inside.map(label => `#${bands.bands.find(band => band.index === label.index)?.fill ?? normalizeHex(panelFill).slice(0, 6)}`), `#${normalizeHex(labelColor).slice(0, 6)}`, `#${normalizeHex(markLabelColor).slice(0, 6)}`) : undefined;
     for (const at of labelPaint?.failing ?? []) options.onDiagnostic?.({code: 'text-contrast', path: `${path}.bands.${inside[at].index}.label`, message: `The band label "${inside[at].text}" stays below 4.5:1 on its band in the text color; choose a lighter band color.`});
     // A header legend of the bands alone (composition's fallback for a chart that names its series beside its marks): the data series'
     // entries, listed after the band parts, are deleted, so the series stay named once.
