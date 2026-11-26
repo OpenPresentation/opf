@@ -15,7 +15,7 @@ const deck = (chart, extra = {}) => ({ design: { fontScheme: 'roboto' }, ...extr
 
 // A column chart: three bands across the whole plot, over the gridlines and behind the columns, darkest lowest, in core's colors.
 {
-  const input = deck({ type: 'column', data: wait, legend: 'right', bands: [{ to: 10, label: 'Good' }, { to: 15 }, { to: 20, label: 'Over' }] });
+  const input = deck({ type: 'column', data: { columns: ['Week', 'Wait'], rows: [['W1', 14], ['W2', 11], ['W3', 9], ['W4', 3]] }, legend: 'right', bands: [{ to: 10, label: 'Good' }, { to: 15 }, { to: 20, label: 'Over' }] });
   const svg = toSvg(input, 1, { trace: true }), all = marks(svg);
   const colors = resolvePresentation(input).slides[0].design.colors;
   const bands = all.filter((mark) => mark.tag === 'rect' && /\.bands\.\d+$/.test(mark['data-opf-path'] ?? '') && num(mark.width) > 30);
@@ -31,11 +31,31 @@ const deck = (chart, extra = {}) => ({ design: { fontScheme: 'roboto' }, ...extr
   const surface = resolvePresentation(input).slides[0].design.backgroundColor ?? colors.background;
   assert.equal(bands[0].fill.toUpperCase(), chartBandFill({ neutral: 0 }, { surface, text: colors.text, resolve: () => '#000000' }));
   assert.ok(Math.abs(colorContrast(bands[0].fill, surface) - 1.75) < 0.02, 'the first neutral at 1.75:1 against the surface');
-  // The legend names the labeled bands, then the series (PowerPoint lists the bands, which it draws first, before the data); the unlabeled band
-  // has no entry.
+  // Owner's "1B": the labeled bands name themselves inside their bands (core placeBandLabels), on top of the data, in the secondary text color;
+  // the legend holds only the series. The labels sit at the stripe's end corner, inside the band.
+  const layer = toSvg(input, 1, { trace: true });
+  const labels = [...layer.matchAll(/<g\b[^>]*data-opf-box-height="([^"]+)" data-opf-box-width="([^"]+)" data-opf-box-x="([^"]+)" data-opf-box-y="([^"]+)" data-opf-path="slides\.0\.chart\.bands\.(\d+)\.label"/g)].map(([, height, width, x, y, index]) => ({ index: Number(index), x: num(x), y: num(y), width: num(width), height: num(height) }));
+  assert.deepEqual(labels.map((label) => label.index), [0, 2], 'a label for each labeled band');
+  for (const label of labels) {
+    const band = bands.find((rect) => rect['data-opf-path'] === `slides.0.chart.bands.${label.index}`);
+    assert.ok(label.x >= num(band.x) && label.x + label.width <= num(band.x) + num(band.width) + 0.01 && label.y >= num(band.y) && label.y + label.height <= num(band.y) + num(band.height) + 0.01, `label ${label.index} inside its band`);
+    assert.ok(Math.abs(num(band.x) + num(band.width) - 8 - (label.x + label.width)) < 0.05, `label ${label.index} at the stripe's end`);
+  }
+  assert.ok(layer.lastIndexOf('bands.2.label') > layer.lastIndexOf('data.rows.3.1'), 'the labels come after the data');
   const legend = all.filter((mark) => mark.tag === 'rect' && num(mark.width) < 30 && /\.(bands\.\d+|data\.columns\.\d+)$/.test(mark['data-opf-path'] ?? '')).map((mark) => mark['data-opf-path']);
-  assert.deepEqual(legend, ['slides.0.chart.bands.0', 'slides.0.chart.bands.2', 'slides.0.chart.data.columns.1']);
-  checks += 8;
+  assert.deepEqual(legend, ['slides.0.chart.data.columns.1'], 'the legend holds only the series');
+  checks += 10;
+}
+
+// The fallback: a label that does not fit its band (or meets a mark at both places) sends every band label of the chart to the legend, the bands
+// first, then the series; nothing is drawn inside the bands.
+{
+  const input = deck({ type: 'column', data: wait, legend: 'right', bands: [{ to: 10, label: 'Good' }, { to: 10.2, label: 'A label far too long for its thin band' }, { to: 20, label: 'Over' }] });
+  const svg = toSvg(input, 1, { trace: true }), all = marks(svg);
+  assert.ok(!/bands\.\d+\.label/.test(svg), 'no label inside a band');
+  const legend = all.filter((mark) => mark.tag === 'rect' && num(mark.width) < 30 && /\.(bands\.\d+|data\.columns\.\d+)$/.test(mark['data-opf-path'] ?? '')).map((mark) => mark['data-opf-path']);
+  assert.deepEqual(legend, ['slides.0.chart.bands.0', 'slides.0.chart.bands.1', 'slides.0.chart.bands.2', 'slides.0.chart.data.columns.1'], 'bands first, then the series');
+  checks += 2;
 }
 
 // A chart without bands draws as before.
@@ -95,32 +115,32 @@ for (const type of ['column', 'bar', 'line', 'area', 'bullet']) {
 }
 
 // The bands over every gallery color scheme, light and dark: (1) each default neutral differs from the surface and from the next band by at least
-// 1.15:1; (2) text drawn over a band (data labels, reference labels, axis text) keeps 4.5:1 against the strongest band; (3) a band never takes a
+// 1.15:1; (2) each band's label (inside the band, owner's "1B") keeps 4.5:1 against its own band; (3) a band never takes a
 // mark below 80% of the contrast it has against the bare surface. The lowest value of each is printed for the supervisor.
 {
   const schemes = readdirSync(new URL('../../gallery/catalog/color-schemes/', import.meta.url)).filter((file) => file !== 'index.json').map((file) => file.replace(/\.json$/, ''));
   const worst = { visible: { ratio: Infinity }, text: { ratio: Infinity }, marks: { ratio: Infinity } };
   const note = (check, ratio, detail) => { if (ratio < worst[check].ratio) worst[check] = { ratio, ...detail }; };
   for (const colorScheme of schemes) for (const variant of ['light1', 'dark1']) {
-    const input = deck({ type: 'column', legend: 'none', dataLabels: true, data: { columns: ['Q', 'A', 'B', 'C'], rows: [['Q1', 10, 11, 12], ['Q2', 12, 13, 14]] }, bands: [{ to: 4 }, { to: 8 }, { to: 12 }], referenceLines: [{ value: 6, label: 'Plan' }] }, { design: { fontScheme: 'roboto', theme: 'classic', colorScheme, variant } });
+    const input = deck({ type: 'column', legend: 'none', data: { columns: ['Q', 'A', 'B', 'C'], rows: [['Q1', 1, 1, 1], ['Q2', 2, 1, 2]] }, bands: [{ to: 4, label: 'Low' }, { to: 8, label: 'Mid' }, { to: 12, label: 'High' }] }, { design: { fontScheme: 'roboto', theme: 'classic', colorScheme, variant } });
     const slide = resolvePresentation(input).slides[0], surface = slide.design.backgroundColor ?? slide.design.colors.background;
     const svg = toSvg(input, 1, { trace: true }), all = marks(svg);
     const bands = [0, 1, 2].map((k) => all.find((mark) => mark.tag === 'rect' && mark['data-opf-path'] === `slides.0.chart.bands.${k}`).fill);
     const fills = [...new Set(all.filter((mark) => mark.tag === 'rect' && /\.data\.rows\.\d+\.\d+$/.test(mark['data-opf-path'] ?? '')).map((mark) => mark.fill))];
     // The text inside the plot: data labels (on a data row) and the reference label; the axis text stands outside the plot.
-    const inks = [...new Set([...svg.matchAll(/<text\b[^>]*>/g)].map(([tag]) => tag).filter((tag) => /data-opf-path="slides\.0\.chart\.(data\.rows\.\d+\.[1-9]|referenceLines\.\d+\.label)"/.test(tag)).map((tag) => /\bfill="(#[0-9A-Fa-f]{6})/.exec(tag)?.[1]).filter(Boolean))];
-    assert.ok(inks.length, 'labels in the plot');
+    const inks = [0, 1, 2].map((k) => /\bfill="(#[0-9A-Fa-f]{6})/.exec([...svg.matchAll(/<text\b[^>]*>/g)].map(([tag]) => tag).find((tag) => tag.includes(`data-opf-path="slides.0.chart.bands.${k}.label"`)) ?? '')?.[1]);
+    assert.ok(inks.every(Boolean), `every band label is drawn inside its band (${colorScheme} ${variant})`);
     bands.forEach((band, k) => {
       note('visible', colorContrast(band, surface), { colorScheme, variant, what: `band ${k} ${band} on surface ${surface}` });
       if (k) note('visible', colorContrast(band, bands[k - 1]), { colorScheme, variant, what: `band ${k} ${band} beside band ${k - 1} ${bands[k - 1]}` });
     });
-    for (const ink of inks) note('text', colorContrast(ink, bands[0]), { colorScheme, variant, what: `text ${ink} on band ${bands[0]}` });
+    inks.forEach((ink, k) => { note('text', colorContrast(ink, bands[k]), { colorScheme, variant, what: `label ${ink} on band ${k} ${bands[k]}` }); });
     for (const fill of fills) for (const band of bands) note('marks', colorContrast(fill, band) / colorContrast(fill, surface), { colorScheme, variant, what: `mark ${fill}: ${colorContrast(fill, band).toFixed(2)}:1 on band ${band}, ${colorContrast(fill, surface).toFixed(2)}:1 on surface ${surface}` });
   }
   const line = (check, unit) => `${worst[check].ratio.toFixed(2)}${unit} (${worst[check].colorScheme} ${worst[check].variant}, ${worst[check].what})`;
-  console.log(`FR-07 bands over ${schemes.length} schemes, light and dark: (1) lowest band step ${line('visible', ':1')}; (2) lowest text on the strongest band ${line('text', ':1')}; (3) lowest kept share of a mark's contrast ${line('marks', '')}`);
+  console.log(`FR-07 bands over ${schemes.length} schemes, light and dark: (1) lowest band step ${line('visible', ':1')}; (2) lowest band label on its band ${line('text', ':1')}; (3) lowest kept share of a mark's contrast ${line('marks', '')}`);
   assert.ok(worst.visible.ratio >= 1.15, `(1) bands visible: ${line('visible', ':1')}`);
-  assert.ok(worst.text.ratio >= 4.5, `(2) text over a band: ${line('text', ':1')}`);
+  assert.ok(worst.text.ratio >= 4.5, `(2) a band label on its band: ${line('text', ':1')}`);
   assert.ok(worst.marks.ratio >= 0.8, `(3) marks over a band: ${line('marks', '')}`);
   checks += 3;
 }

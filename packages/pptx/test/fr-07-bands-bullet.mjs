@@ -58,6 +58,8 @@ test('a column chart with bands: a stacked band group first on the visible axes,
   assert.match(band.group, /<c:v>Band 2<\/c:v>/);
   assert.match(xml, /<c:legendEntry><c:idx val="1"\/><c:delete val="1"\/><\/c:legendEntry>/);
   assert.equal((xml.match(/<c:legendEntry>/g) ?? []).length, 1);
+  // Its labels meet the columns at both places (composition's fallback): they stay in the legend, bands first, and no band has a data label.
+  assert.doesNotMatch(band.group, /<c:dLbl>/);
 });
 
 test('a bullet chart: bands, a clustered measure with gap 200, a target scatter with fixed Y error bars on the measure\'s axes', async () => {
@@ -77,9 +79,15 @@ test('a bullet chart: bands, a clustered measure with gap 200, a target scatter 
   assert.deepEqual(parts[2].axes, ['2094734553', '2094734555'], 'the target on the measure\'s pair');
   assert.equal((xml.match(/<c:(?:valAx|catAx)>/g) ?? []).length, 4);
   assert.match(axis(xml, parts[1].axes[0]), /<c:orientation val="maxMin"\/>/, 'the first category on top');
-  // The legend lists the bands, the measure, then the target, whose entry (the last, 4) is deleted.
-  assert.match(xml, /<c:legendEntry><c:idx val="4"\/><c:delete val="1"\/><\/c:legendEntry>/);
-  assert.equal((xml.match(/<c:legendEntry>/g) ?? []).length, 1);
+  // The band labels fit inside their strips (owner's '1B'): one data label per band on its top row's point, showing the series name at
+  // composition's box; the legend lists the measure only (the bands' entries, 0 to 2, and the target's, the last, are deleted).
+  for (const idx of [0, 1, 2, 4]) assert.match(xml, new RegExp('<c:legendEntry><c:idx val="' + idx + '"/><c:delete val="1"/></c:legendEntry>'));
+  const bandLabels = [...parts[0].group.matchAll(/<c:dLbl>([\s\S]*?)<\/c:dLbl>/g)].map((m) => m[1]);
+  assert.equal(bandLabels.length, 3);
+  for (const label of bandLabels) {
+    assert.match(label, /^<c:idx val="0"\/><c:layout><c:manualLayout><c:xMode val="edge"\/><c:yMode val="edge"\/>/);
+    assert.match(label, /<c:showSerName val="1"\/>/);
+  }
   // The preview's plot as the inner plot layout.
   assert.match(xml, /<c:plotArea>\s*<c:layout>\s*<c:manualLayout>\s*<c:layoutTarget val="inner"\/>/);
 });

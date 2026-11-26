@@ -110,3 +110,34 @@ describe('Markdown and YAML (FR-07)', () => {
     }
   });
 });
+
+describe('band labels inside the bands (FR-07, owner "1B")', async () => {
+  const { placeBandLabels } = await import('../dist/composition.js');
+  const geometry = { scale: 1, measure: (text, size) => text.length * size * 0.5 };
+  const box = { x: 0, y: 0, width: 800, height: 400 }, inset = { left: 50, top: 20, right: 20, bottom: 40 };
+  const axis = { min: 0, max: 20, majorUnit: 5 };
+  const place = (chart, extra = {}) => placeBandLabels(chart, resolveChartData(chart), chart.type === 'bullet' ? { min: 0, max: 1, majorUnit: 0.2 } : axis, box, inset, { ...geometry, ...extra });
+  const low = { columns: ['W', 'V'], rows: [['W1', 14], ['W2', 2]] };
+  test('a stripe\'s label at its end corner, 8 px from the end and 4 px from the top; the start when the end meets a column', () => {
+    const placed = place({ type: 'column', data: low, bands: [{ to: 10, label: 'Good' }, { to: 20 }] });
+    assert.deepEqual(placed.labels.map((label) => [label.index, label.place, label.category, label.align]), [[0, 'end', 1, 'right']]);
+    const { box: label } = placed.labels[0];
+    assert.equal(label.x + label.width, 800 - 20 - 8);
+    assert.equal(label.y, 20 + 340 / 2 + 4);
+    const tall = place({ type: 'column', data: { columns: ['W', 'V'], rows: [['W1', 2], ['W2', 2], ['W3', 2], ['W4', 2], ['W5', 2], ['W6', 19]] }, bands: [{ to: 10, label: 'Good' }] });
+    assert.equal(tall.labels[0].place, 'start');
+  });
+  test('the fallback: a label wider than its band, or one that meets a mark at both places, sends every label to the legend', () => {
+    assert.deepEqual(place({ type: 'column', data: low, bands: [{ to: 10, label: 'Good' }, { to: 10.5, label: 'Far too long for so thin a band' }] }), { labels: [], legend: true, reason: 'too-large' });
+    assert.deepEqual(place({ type: 'area', data: { columns: ['W', 'V'], rows: [['W1', 19], ['W2', 19]] }, bands: [{ to: 10, label: 'Good' }] }), { labels: [], legend: true, reason: 'collision' }, 'an area covers both corners');
+    assert.equal(place({ type: 'column', data: low, bands: [{ to: 10 }] }), undefined, 'no labeled band');
+  });
+  test('a strip\'s label at its top, at the strip\'s start (the right, right to left)', () => {
+    const data = { columns: ['K', 'A', 'T'], rows: [['a', 0.3, 0.4], ['b', 0.5, 0.6]] };
+    const chart = { type: 'bullet', data, mapping: { target: 'T' }, bands: [{ to: 0.6, label: 'Poor' }, { to: 1, label: 'Good' }] };
+    const ltr = place(chart), rtl = place(chart, { direction: 'rtl' });
+    assert.deepEqual(ltr.labels.map((label) => [label.place, label.align]), [['top', 'left'], ['top', 'left']]);
+    assert.equal(ltr.labels[0].box.x, 50 + 8);
+    assert.equal(rtl.labels[0].box.x + rtl.labels[0].box.width, 800 - 20 - 8);
+  });
+});

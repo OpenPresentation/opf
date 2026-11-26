@@ -18,6 +18,7 @@
 // Import. readNativeBands strips the owned band group (and the target), points the data back at the visible axes, and returns the ordinary
 // chart XML with the bands and the targets it read (the native truth: band labels and ends from the cached values).
 import { XMLParser } from 'fast-xml-parser';
+import { textColorForFill } from '@openpresentation/opf/composition';
 import { encodeTextTag, decodeTextTag } from './code-provenance.js';
 
 export const BANDS_URI = 'urn:openpresentation:chart-bands:v1';
@@ -114,6 +115,31 @@ function bandSeries(ser, entry) {
   return next.replace(/<\/c:ser>$/, () => `${ext('band', record)}</c:ser>`);
 }
 
+/** The composition label of a band series part: on the part above 0 (or the only part of a band below 0), none for a base part. */
+function labelFor(info, entry) {
+  if (!info.labels || entry.part === 'base') return undefined;
+  const label = info.labels.find((candidate) => candidate.index === entry.band.index);
+  if (!label) return undefined;
+  const parts = info.plan.series.filter((other) => other.band.index === entry.band.index && other.part !== 'base');
+  const carrier = parts.find((other) => other.part === 'pos') ?? parts[0];
+  return carrier === entry ? label : undefined;
+}
+
+/**
+ * FR-07 (owner, "1B"): a band's label as a data label of its series, on the point of the category composition chose (the stripe's end or start,
+ * the strip's top or bottom row), showing the series name in the chart text size and the secondary text color, at composition's box: a manual
+ * layout in edge mode, the box's top left as fractions of the chart frame.
+ */
+function withBandLabel(ser, label, text) {
+  const fraction = (value) => Number(Math.min(1, Math.max(0, value)).toFixed(4));
+  const run = `<a:defRPr sz="${Math.round(text.size)}" b="0"><a:solidFill><a:srgbClr val="${hex6(text.color)}"/></a:solidFill><a:latin typeface="${String(text.font).replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"/></a:defRPr>`;
+  const flags = (series) => `<c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="${series ? 1 : 0}"/><c:showPercent val="0"/><c:showBubbleSize val="0"/>`;
+  const dLbl = `<c:dLbl><c:idx val="${label.category}"/><c:layout><c:manualLayout><c:xMode val="edge"/><c:yMode val="edge"/><c:x val="${fraction(label.x)}"/><c:y val="${fraction(label.y)}"/></c:manualLayout></c:layout><c:spPr><a:noFill/><a:ln><a:noFill/></a:ln></c:spPr><c:txPr><a:bodyPr wrap="none" lIns="0" tIns="0" rIns="0" bIns="0" anchor="t"/><a:lstStyle/><a:p><a:pPr algn="${label.align === 'right' ? 'r' : 'l'}">${run}</a:pPr><a:endParaRPr lang="en-US"/></a:p></c:txPr>${flags(true)}</c:dLbl>`;
+  const labels = `<c:dLbls>${dLbl}${flags(false)}</c:dLbls>`;
+  // CT_BarSer / CT_AreaSer: c:dLbls before c:trendline, c:errBars and c:cat.
+  return ser.replace(/<c:(?:trendline|errBars|cat)>/, (at) => labels + at);
+}
+
 function setScaling(axis, { min, max, orientation }) {
   const current = /<c:orientation val="([^"]+)"/.exec(axis)?.[1] ?? 'minMax';
   return axis.replace(/<c:scaling>[\s\S]*?<\/c:scaling>/, `<c:scaling><c:orientation val="${orientation ?? current}"/><c:max val="${number(max)}"/><c:min val="${number(min)}"/></c:scaling>`);
@@ -134,14 +160,16 @@ export function applyChartBands(xml, info) {
   if (!bandGroup) throw Error('Generated band chart has no band group.');
   const element = /^<c:(\w+)>/.exec(bandGroup)[1];
   let position = 0;
-  let next = bandGroup.replace(/<c:ser>[\s\S]*?<\/c:ser>/g, (ser) => {
+  // Group-level labels do not belong to the bands (the group's own c:dLbls, after its series; a series' are rewritten below).
+  const withoutGroupLabels = bandGroup.split(/(<c:ser>[\s\S]*?<\/c:ser>)/).map((part, at) => (at % 2 ? part : part.replace(/<c:dLbls>[\s\S]*?<\/c:dLbls>/g, ''))).join('');
+  let next = withoutGroupLabels.replace(/<c:ser>[\s\S]*?<\/c:ser>/g, (ser) => {
     const entry = info.plan.series[position++];
     if (!entry) throw Error('Unexpected band series.');
-    return bandSeries(ser, entry);
+    const label = labelFor(info, entry);
+      // The secondary text color where it reads at 4.5:1 on the band, else black or white (core textColorForFill), as the preview draws it.
+    return label ? withBandLabel(bandSeries(ser, entry), label, {...info.text, color: textColorForFill(`#${entry.fill}`, `#${hex6(info.text.color)}`)}) : bandSeries(ser, entry);
   });
   if (position !== info.plan.series.length) throw Error('Missing band series.');
-  // Group-level labels and line options do not belong to the bands.
-  next = next.replace(/<c:dLbls>[\s\S]*?<\/c:dLbls>/g, '');
   next = next.replace(/<c:grouping val="[^"]*"\s*\/>/, '<c:grouping val="stacked"/>');
   // CT_AreaChart opens with c:grouping (the writer leaves it out of a multi-type chart's area group); CT_BarChart with c:barDir.
   if (!/<c:grouping /.test(next)) next = element === 'barChart' ? next.replace(/(<c:barDir val="[^"]*"\/>)/, (dir) => `${dir}<c:grouping val="stacked"/>`) : next.replace(`<c:${element}>`, `<c:${element}><c:grouping val="stacked"/>`);
@@ -171,7 +199,8 @@ export function applyChartBands(xml, info) {
   let out = xml.slice(0, plot.index) + body + xml.slice(plot.index + plot[0].length);
   // PowerPoint lists the primary group's series (the bands) first: a band part's legend entry is its position. Hidden parts and bands without a
   // label have none.
-  const hidden = [...info.plan.series.flatMap((entry, k) => (entry.hidden ? [k] : [])), ...(info.hiddenLegend ?? [])];
+  // With the labels inside their bands (FR-07, owner's "1B") no band part has a legend entry.
+  const hidden = [...info.plan.series.flatMap((entry, k) => (entry.hidden || info.labels ? [k] : [])), ...(info.hiddenLegend ?? [])];
   if (hidden.length && /<c:legend>/.test(out)) {
     out = out.replace(/(<c:legend>\s*<c:legendPos\b[^>]*\/>)((?:\s*<c:legendEntry>[\s\S]*?<\/c:legendEntry>)*)/, (_, head, entries) => {
       const existing = new Set([...entries.matchAll(/<c:idx val="(\d+)"\/>/g)].map((m) => Number(m[1])));

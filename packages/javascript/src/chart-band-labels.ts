@@ -118,7 +118,7 @@ function dataMarks(type: string, data: Extract<ResolvedChartData, { ok: true }>,
  * Place the labels of a chart's labeled bands inside their bands (see the module comment). `plot` is the chart's pinned plot as an inset from
  * `box`; `axis` its value axis. Undefined when the chart has no labeled band. `labeled` says the chart's marks carry data labels.
  */
-export function placeBandLabels(chart: unknown, data: ResolvedChartData, axis: ChartValueAxis | undefined, box: Box, inset: ChartPlotInset, geometry: { scale: number; minFontSize?: number; measure: (text: string, size: number) => number; direction?: 'ltr' | 'rtl'; labeled?: boolean }): ChartLayerBandLabels | undefined {
+export function placeBandLabels(chart: unknown, data: ResolvedChartData, axis: ChartValueAxis | undefined, box: Box, inset: ChartPlotInset, geometry: { scale: number; minFontSize?: number; measure: (text: string, size: number) => number; direction?: 'ltr' | 'rtl'; labeled?: boolean; avoid?: readonly Box[] }): ChartLayerBandLabels | undefined {
   if (!data.ok || !axis || !(axis.max > axis.min) || typeof chart !== 'object' || chart === null) return undefined;
   const type = String((chart as { type?: unknown }).type ?? '').trim().toLowerCase();
   const ranges = chartBandRanges(chartBands(chart), axis).filter(band => band.label !== undefined);
@@ -132,7 +132,8 @@ export function placeBandLabels(chart: unknown, data: ResolvedChartData, axis: C
   // left-to-right value axis.
   const mirrored = rtl && (type === 'bullet' || !strip);
   const target = type === 'bullet' ? data.target?.values : undefined;
-  const marks = dataMarks(type, data, axis, plot, { rtl: mirrored, labeled: geometry.labeled === true, fontPx, ...(target ? { target } : {}) });
+  // The data marks and labels, and what else composition placed in the plot (reference lines and their labels, the names at the line ends).
+  const marks = [...dataMarks(type, data, axis, plot, { rtl: mirrored, labeled: geometry.labeled === true, fontPx, ...(target ? { target } : {}) }), ...(geometry.avoid ?? [])];
   const at = (value: number) => strip
     ? (mirrored ? plot.x + plot.width - chartAxisFraction(value, axis) * plot.width : plot.x + chartAxisFraction(value, axis) * plot.width)
     : plot.y + chartAxisFraction(value, axis, true) * plot.height;

@@ -4422,7 +4422,10 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const bandOptions = (options) => bands ? {...options, ...bandAxisOptions(bands, {catAxisOrientation: options.catAxisOrientation, valAxisOrientation: options.valAxisOrientation})} : options;
   if (bands || target) {
     const heading = context.chartHeadings.get(objectName);
-    if (bands) heading.bands = {plan: bands, edge: Boolean(layer?.stack?.edge)};
+    // FR-07 (owner, '1B'): the band labels inside their bands as data labels at composition's boxes (fractions of the chart frame); in its
+    // fallback (labels in the legend) none.
+    const inside = layer?.bandLabels && !layer.bandLabels.legend ? layer.bandLabels.labels : undefined;
+    if (bands) heading.bands = {plan: bands, edge: Boolean(layer?.stack?.edge), ...(inside ? {labels: inside.map(label => ({...label, x: (label.box.x - region.x * 96) / (region.w * 96), y: (label.box.y - region.y * 96) / (region.h * 96)})), text: {size: textSize, color: normalizeHex(labelColor).slice(0, 6), font: context.fonts.body}} : {})};
     if (target) heading.bullet = {half: BULLET_TARGET_SHARE / 2, gapWidth: BULLET_GAP_WIDTH, color: normalizeHex(markLabelColor).slice(0, 6), widthEmu: Math.round(BULLET_TARGET_WIDTH_PX * scale * 0.75 * 12700)};
     // The number formats of the extra series: the target its column's, each band the value axis's.
     if (heading.numberFormats || target?.format !== undefined) {

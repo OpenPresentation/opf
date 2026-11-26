@@ -11,6 +11,8 @@ import {timelineDurationFractions} from './timeline-duration.js';
 import {tableGrid,type TableCellStyle} from './table.js';
 import {inlineChartData,inlineTableData,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText,type DataTableCell} from './chart-data.js';
 import {bulletPlot} from './chart-bullet.js';
+import {placeBandLabels} from './chart-band-labels.js';
+import {chartBands} from './chart-bands.js';
 import {chartTextSize,chartValueAxis,chartComboAxes,shareSiblingChartAxes,type ChartValueAxis} from './chart-axis.js';
 import {chartHeader,chartLayer,type ChartLayer} from './chart-layer.js';
 import {NUMBER_GROUPING_MIN} from './number-grouping.js';
@@ -148,7 +150,7 @@ export interface LayoutDiagnostic {
    * `shape-off-slide` for an overlay shape or an image callout that lies wholly outside the slide, so nothing of it is drawn (advice, not an
    * overflow: a strict composition still composes it; a hidden shape is exempt, and a rotated one is judged by the circle through its corners).
    */
-  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "chart-label-collision" | "timeline-period-short" | "shape-off-slide";
+  code: "shape-anchor-missing" | "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted" | "chart-label-collision" | "timeline-period-short" | "shape-off-slide" | "chart-band-labels-in-legend";
   path: string;
   message: string;
   /**
@@ -9007,6 +9009,28 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // FR-07: a bullet chart's plot, which the preview draws and the PowerPoint export writes as its inner plot layout.
     const bullet = drawn.data.ok ? bulletPlot(drawn.chart, drawn.data, valueAxis, box, {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})}) : undefined;
     if (bullet) layer = {...layer, plot: bullet};
+    // FR-07 (owner, "1B"): the labels of labeled bands inside their bands, on the plot composition pins (the bullet's, a bar chart's, or the
+    // category plot both engines lay out); the PowerPoint export writes them as data labels at the same boxes. When one does not fit or meets
+    // a mark at both places, every band label of the chart goes to the legend (bands first), with a diagnostic.
+    if (drawn.data.ok && valueAxis && chartBands(drawn.chart).some((band) => band.label !== undefined)) {
+      const data = drawn.data, chartType = String((drawn.chart as {type?: unknown}).type ?? '');
+      const plotGeometry = {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
+      const horizontal = ['bar', 'stacked-bar', '100pct-stacked-bar'].includes(chartType);
+      const plot = layer?.plot ?? (horizontal ? horizontalBarPlot(drawn.chart, data, layer, valueAxis, box, plotGeometry) ?? chartPlotInset(drawn.chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...plotGeometry, box}) : chartPlotInset(drawn.chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...plotGeometry, box}));
+      const record = drawn.chart as Record<string, unknown>;
+      const labeled = Boolean(layer?.small?.labels || layer?.stack?.values?.some((row) => row.some(Boolean)) || (record.dataLabels !== undefined && record.dataLabels !== false));
+      const avoid = [...(layer?.references?.lines ?? []).flatMap((line) => [{x: Math.min(line.x1, line.x2) - 2, y: Math.min(line.y1, line.y2) - 2, width: Math.abs(line.x2 - line.x1) + 4, height: Math.abs(line.y2 - line.y1) + 4}, ...(line.labelBox ? [line.labelBox] : [])]), ...(layer?.endLabels?.entries ?? []).map((entry) => entry.box)];
+      const placed = plot ? placeBandLabels(drawn.chart, data, valueAxis, box, plot, {...plotGeometry, labeled, avoid}) : {labels: [], legend: true as const, reason: 'too-large' as const};
+      if (placed && !placed.legend) layer = {...layer, plot, bandLabels: placed};
+      else if (placed) {
+        diagnostics.push({code: 'chart-band-labels-in-legend', path: node.path, message: placed.reason === 'collision'
+          ? 'A band label meets a data mark or a data label at both of its places, so the chart lists its band labels in the legend instead (bands first, then the data series).'
+          : 'A band label does not fit inside its band, so the chart lists its band labels in the legend instead (bands first, then the data series). Shorten the label or widen the band to write it inside.'});
+        layer = {...layer, bandLabels: placed};
+        if (chartType === 'bullet') { const plain = bulletPlot(drawn.chart, data, valueAxis, box, plotGeometry, {bandsInLegend: true}); if (plain) layer = {...layer, plot: plain}; }
+        else if (layer?.header?.legend) { const header = chartHeader(drawn.chart, data, geometry, {bands: true}); if (header) layer = {...layer, header}; }
+      }
+    }
     // LH-105: the context of a focus may be a light neutral when every context mark carries its text (value labels, names at the line
     // ends, names on the slices); an unlabeled context is read against the axis and keeps 3:1.
     if (layer?.focus) {
@@ -13201,7 +13225,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   diagnostics.push(...imageCalloutDiagnostics);
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
   const failures = diagnostics.filter(diagnostic => {
-    if(diagnostic.code==='chart-label-collision'||diagnostic.code==='timeline-period-short'||diagnostic.code==='shape-off-slide')return false;
+    if(diagnostic.code==='chart-label-collision'||diagnostic.code==='timeline-period-short'||diagnostic.code==='shape-off-slide'||diagnostic.code==='chart-band-labels-in-legend')return false;
     if(composition.overflow==='error')return true;
     let path = diagnostic.path;
     while (path) {
@@ -13344,6 +13368,8 @@ export {CHART_REFERENCE_TYPES,chartReferenceSources} from './chart-references.js
 export {CHART_BAND_TYPES,CHART_BAND_NEUTRAL_CONTRASTS,neutralFill as chartBandNeutral,CHART_BAND_COLOR_SHARE,chartBands,chartBandMaximum,chartBandRanges,chartBandFill,chartBandFills,chartBandDiagnostics,BULLET_CHART_TYPE,BULLET_BAR_SHARE,BULLET_TARGET_SHARE,BULLET_TARGET_WIDTH_PX,BULLET_GAP_WIDTH} from './chart-bands.js';
 export type {ChartBandSpec,ChartBandRange,ChartBandColors,ChartBandDiagnostic} from './chart-bands.js';
 export {bulletPlot,bandLegendNames} from './chart-bullet.js';
+export {placeBandLabels,BAND_LABEL_PADDING} from './chart-band-labels.js';
+export type {ChartBandLabel,ChartLayerBandLabels} from './chart-band-labels.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartNumericAxes} from './chart-numeric-axes.js';
 export type {ChartNumericAxes} from './chart-numeric-axes.js';

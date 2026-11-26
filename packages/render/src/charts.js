@@ -221,6 +221,8 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   c.doughnut = layer?.doughnut;
   c.stack = layer?.stack;
   c.references = layer?.references;
+  // FR-07: the band labels inside their bands (core placeBandLabels), or the fallback that lists them in the legend.
+  c.bandLabels = layer?.bandLabels;
   if (layer?.valueList || layer?.stack?.names) c.legendManaged = true;
   // LH-93: sibling charts sharing one value axis share one plot height; core gives each its inner plot as an inset from the chart box.
   const inset = layer?.plot;
@@ -260,6 +262,10 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   // Explicit reference lines are drawn over the data.
   render(c, spec);
   drawReferenceLines(c, layer?.references?.lines);
+  // FR-07: band labels on top of the data (PowerPoint draws data labels above every series), in the secondary text color.
+  // The secondary text color where it reads at 4.5:1 on the band, else black or white (core textColorForFill), as the PowerPoint export writes it.
+  const bandFills = new Map(bandsOver(c, c.valueAxis ?? { min: 0, max: 1 }).map((band) => [band.index, band.fill]));
+  for (const label of layer?.bandLabels?.legend ? [] : layer?.bandLabels?.labels ?? []) c.text(label.text, label.box, `${c.path}.bands.${label.index}.label`, label.align, textColorForFill(bandFills.get(label.index) ?? c.surface, c.chartTextColor));
   drawStackNames(c, layer?.stack?.names);
   drawStackEnds(c, layer?.stack?.ends);
   if (resolved.active) drawAxisTitles(c);
@@ -581,9 +587,11 @@ function bandsOver(c, scale) {
   const colors = bandColors(c);
   return chartBandRanges(bands, scale).map((band) => ({ ...band, fill: chartBandFill(band, colors) }));
 }
-// A labeled band's legend entry, before the series (a band without a label has none). PowerPoint lists the band group, which it draws first,
-// before the data whatever the file says (native check 2026-11-25), so both engines list the bands first.
+// A labeled band's legend entry, before the series (a band without a label has none), when its label does not stand inside its band.
+// PowerPoint lists the band group, which it draws first, before the data whatever the file says (native check 2026-11-25).
 function bandLegendEntries(c) {
+  // FR-07 (owner, "1B"): the labels stand inside their bands; the legend lists them only in composition's fallback (or with no composition).
+  if (c.bandLabels && !c.bandLabels.legend) return [];
   const bands = chartBands(c.item.value);
   if (!bands.length) return [];
   const axis = c.valueAxis ?? { min: Math.min(0, ...bands.map((band) => band.to)) - 1, max: Math.max(...bands.map((band) => band.to)) };

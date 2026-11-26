@@ -17,6 +17,7 @@
 import {chartOptionTarget, chartLabelText, formatChartLabelNumber} from './chart-options.js';
 import {chartTextSize} from './chart-axis.js';
 import {chartBands} from './chart-bands.js';
+import type {ChartLayerBandLabels} from './chart-band-labels.js';
 import {groupsThousands} from './number-grouping.js';
 import {chartNumber, formatDataNumber, type ResolvedChartData} from './chart-data.js';
 import {chartCategoriesInTime} from './chart-time-order.js';
@@ -92,6 +93,8 @@ export interface ChartPlotInset { left: number; top: number; right: number; bott
 
 /** What composition decides for a chart beyond its value axis (LH-03, LH-81, LH-92, LH-93). */
 export interface ChartLayer {
+  /** FR-07: the band labels inside their bands, or (`legend`) the fallback that lists them in the legend. */
+  bandLabels?: ChartLayerBandLabels;
   /** RR-105: scatter X/Y and box-and-whisker axes, also written into native PPTX. */
   numericAxes?: ChartNumericAxes;
   small?: ChartLayerSmall;
@@ -317,7 +320,7 @@ export function smallChart(chart: unknown, data: ResolvedChartData, geometry?: C
  * only); only an entry wider than the row, or a legend of more than two rows, keeps the side legend. Each entry is its key (a swatch 0.6 text sizes square, or a line key
  * 1.4 wide), 0.4 text sizes of space and its name, entries 0.8 text sizes apart, the metrics of the preview's legends.
  */
-export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, options: {legend?: boolean} = {}): ChartLayerHeader | undefined {
+export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, options: {legend?: boolean; bands?: boolean} = {}): ChartLayerHeader | undefined {
   if (!record(chart) || !data.ok) return undefined;
   const spec = categorySpec(chart);
   if (!spec || chart.legend !== undefined) return undefined;
@@ -336,7 +339,8 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
     const lineKey = (index: number) => spec.kind === 'line' || (spec.kind === 'combo' && data.combo?.[index]?.role === 'line');
     const spacing = fontPx * 0.8;
     // FR-07: the labeled bands first, then the series (PowerPoint lists the band group, which it draws first, before the data).
-    const bandEntries = chartBands(chart).flatMap(band => band.label === undefined ? [] : [{series: -1, band: band.index, name: label(band.label), key: undefined, width: fontPx * 0.6 + fontPx * 0.4 + geometry.measure(label(band.label), fontPx, 400)}]);
+    // FR-07: only when the band labels do not fit inside their bands (composition's fallback, `bands`).
+    const bandEntries = (options.bands ? chartBands(chart) : []).flatMap(band => band.label === undefined ? [] : [{series: -1, band: band.index, name: label(band.label), key: undefined, width: fontPx * 0.6 + fontPx * 0.4 + geometry.measure(label(band.label), fontPx, 400)}]);
     const sized = [...bandEntries, ...names.map((name, series) => ({series, band: undefined as number | undefined, name, key: lineKey(series) ? 'line' as const : undefined,
       width: (lineKey(series) ? fontPx * 1.4 : fontPx * 0.6) + fontPx * 0.4 + geometry.measure(name, fontPx, 400)}))];
     const legendWidth = sized.reduce((sum, entry) => sum + entry.width, 0) + spacing * (sized.length - 1);

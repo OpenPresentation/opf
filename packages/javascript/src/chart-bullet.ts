@@ -11,12 +11,13 @@ interface Box { x: number; y: number; width: number; height: number }
 const dataLabel = (value: unknown): string => value === null || value === undefined ? '' : String(value);
 
 /**
- * The legend entries of a chart with bands, in the order both engines list them: the labeled bands first (PowerPoint lists the band group, which
- * it draws first, before the data, whatever the file says), then the plotted series. A bullet chart lists its measure only.
+ * The legend entries of a chart with bands: the plotted series (a bullet chart its measure only). The band labels stand inside their bands; only
+ * when they do not fit (`bands`, composition's fallback) are the labeled bands listed, first (PowerPoint lists the band group, which it draws first,
+ * before the data, whatever the file says).
  */
-export function bandLegendNames(chart: unknown, data: ResolvedChartData, axis: { min: number; max: number } | undefined): string[] {
+export function bandLegendNames(chart: unknown, data: ResolvedChartData, axis: { min: number; max: number } | undefined, { bands: withBands = false }: { bands?: boolean } = {}): string[] {
   if (!data.ok) return [];
-  const bands = axis ? chartBandRanges(chartBands(chart), axis).flatMap((band) => band.label === undefined ? [] : [band.label]) : [];
+  const bands = axis && withBands ? chartBandRanges(chartBands(chart), axis).flatMap((band) => band.label === undefined ? [] : [band.label]) : [];
   const bullet = typeof chart === 'object' && chart !== null && (chart as { type?: unknown }).type === 'bullet';
   return [...bands, ...data.columns.slice(1, bullet ? 2 : undefined).map(dataLabel)];
 }
@@ -26,7 +27,7 @@ export function bandLegendNames(chart: unknown, data: ResolvedChartData, axis: {
  * axis titles (category at the start, value under the plot), the category names in a gutter at the start (the end, right to left) of up to 30% of
  * the box (40% for a long word), the value axis labels in one line under the plot. Undefined for any other chart.
  */
-export function bulletPlot(chart: unknown, data: ResolvedChartData, axis: ChartValueAxis | undefined, box: Box, geometry: Omit<ChartPlotGeometry, 'box'>): ChartPlotInset | undefined {
+export function bulletPlot(chart: unknown, data: ResolvedChartData, axis: ChartValueAxis | undefined, box: Box, geometry: Omit<ChartPlotGeometry, 'box'>, { bandsInLegend = false }: { bandsInLegend?: boolean } = {}): ChartPlotInset | undefined {
   if (!data.ok || typeof chart !== 'object' || chart === null || (chart as { type?: unknown }).type !== 'bullet' || !data.rows.length) return undefined;
   const { scale } = geometry;
   if (![box.width, box.height, scale].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0) return undefined;
@@ -36,7 +37,7 @@ export function bulletPlot(chart: unknown, data: ResolvedChartData, axis: ChartV
   let inner = { ...box };
   const options = resolveChartOptions(chart, chartOptionTarget('bullet'));
   // The legend (charts.js placeLegend): its entries in rows at the top or bottom, or a column at a side.
-  const names = options.legend && options.legend !== 'none' ? bandLegendNames(chart, data, axis) : [];
+  const names = options.legend && options.legend !== 'none' ? bandLegendNames(chart, data, axis, { bands: bandsInLegend }) : [];
   if (names.length) {
     const swatch = fontPx * 0.6, gap = fontPx * 0.4;
     if (options.legend === 'left' || options.legend === 'right') {
