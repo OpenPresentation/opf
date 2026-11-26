@@ -3,6 +3,8 @@
 // those ranges into <a:fld> runs and maps them back on import. It never reads a
 // clock: the cached field text is whatever core laid out.
 
+import {dateNamesOf, ENGLISH_DATE_NAMES} from '@openpresentation/opf/composition';
+
 const enc = new TextEncoder(), dec = new TextDecoder('utf-8', {fatal: true});
 
 // PowerPoint's en-US date field types (ECMA-376 ST_TextField "datetime1".."datetime7"): what a field whose run
@@ -224,6 +226,10 @@ export function nativeDateField(pattern = DEFAULT_DATE_FORMAT, deckLang = FIELD_
   const own = typeIn(dateTable(deckLang), pattern);
   if (own) return {type: own, lang: deckLang};
   const english = typeIn(NATIVE_DATE_FIELDS, pattern);
+  // FR-10: OPF draws the words of a date in the deck's language, so the English field (English words) shows only a pattern without words
+  // or a deck whose month and weekday names are English.
+  const words = (tokens(pattern) ?? []).some(token => token.letter === 'E' || (token.letter === 'M' && token.width >= 3));
+  if (english && words && !/^en(-|$)/i.test(String(deckLang)) && dateNamesOf(deckLang) !== ENGLISH_DATE_NAMES) return null;
   return english ? {type: english, lang: FIELD_LANGUAGE} : null;
 }
 

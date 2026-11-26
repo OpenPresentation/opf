@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // NT-01: `pnpm check:native` runs every *.test.mjs under scripts/native-acceptance/core, apps and known (the shared native
-// result format, the drivers' pure parts, the known differences). A file walk instead of a glob in package.json: the
-// same on every Node version and shell CI uses, and a folder that does not exist yet simply has no tests.
+// result format, the drivers' pure parts, the known differences) and the runner's own test beside native.mjs (NT-05). A
+// file walk instead of a glob in package.json: the same on every Node version and shell CI uses, and a folder that does
+// not exist yet simply has no tests.
 import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
@@ -9,6 +10,8 @@ import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const FOLDERS = ['core', 'apps', 'known'];
+/** Tests at this level that belong to the native program (the other *.test.mjs here are check:native-acceptance's). */
+const OWN = ['native.test.mjs'];
 
 function tests(directory) {
   if (!existsSync(directory)) return [];
@@ -21,9 +24,9 @@ function tests(directory) {
     });
 }
 
-const files = FOLDERS.flatMap((folder) => tests(path.join(here, folder)));
+const files = [...FOLDERS.flatMap((folder) => tests(path.join(here, folder))), ...OWN.map((name) => path.join(here, name)).filter((file) => existsSync(file))];
 if (files.length === 0) {
-  console.log('check:native: no tests under scripts/native-acceptance/{core,apps,known}');
+  console.log('check:native: no tests under scripts/native-acceptance/{core,apps,known} and no native.test.mjs');
   process.exit(0);
 }
 const { status, error } = spawnSync(process.execPath, ['--test', ...files], { stdio: 'inherit' });

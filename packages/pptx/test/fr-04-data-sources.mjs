@@ -8,14 +8,14 @@ import {fromPptx, toPptx} from '../dist/index.js';
 
 const SHA = '9f2c41b1d1b6e0a8a56e7c3d2f4b8a90c1e3d5f7a9b0c2d4e6f8a0b1c3d5e07a';
 const datasources = {
-  warehouse: {title: 'Finance warehouse', description: 'Nightly export', connector: 'postgres', src: 'postgres://warehouse.example.com/finance', license: 'Internal use only', refresh: 'P1D', extensions: {'com.example': {pool: 2}}},
+  warehouse: {title: 'Finance warehouse', description: 'Nightly export', connector: 'postgres', src: 'postgres://warehouse.example.com/finance', license: 'Internal use only', refreshEvery: 'P1D', extensions: {'com.example': {pool: 2}}},
   forecast: {connector: 'xlsx', src: 'https://example.com/revenue.xlsx', license: 'CC-BY-4.0'},
   spare: {title: 'Not used by any dataset'},
 };
 const datasets = {
   revenue: {
     title: 'Revenue', columns: ['Quarter', {name: 'Revenue', format: '$#,##0.0'}], rows: [['Q1', 12.4], ['Q2', 18]],
-    datasource: 'warehouse', query: 'SELECT quarter, revenue FROM revenue', retrieved: '2026-11-01T09:30:00Z', version: 'r42', sha256: SHA, generator: {kind: 'model', name: 'metricgen 2.1'},
+    datasource: 'warehouse', query: 'SELECT quarter, revenue FROM revenue', retrieved: '2026-11-01T09:30:00Z', version: 'r42', sha256: SHA, generator: {type: 'model', name: 'metricgen 2.1'},
   },
   costs: {columns: ['Quarter', 'Costs'], rows: [['Q1', 8], ['Q2', 11]], datasource: {src: './costs.csv', connector: 'csv'}, query: "'Q3 plan'!A1:B9", retrieved: '2026-11-01'},
 };
@@ -26,7 +26,7 @@ const deck = {
   slides: [
     {title: 'Dataset chart', chart: {type: 'column', data: {dataset: 'revenue'}}},
     {title: 'Dataset table', table: {dataset: 'costs'}},
-    {title: 'Inline chart', chart: {type: 'line', data: {columns: ['Quarter', {name: 'Margin', format: '0%'}], rows: [['Q1', 0.31], ['Q2', 0.34]], datasource: 'forecast', query: 'FY26!A1:B3', retrieved: '2026-11-02', version: 'r1', sha256: SHA, generator: {kind: 'human', name: 'Avery Chen'}}}},
+    {title: 'Inline chart', chart: {type: 'line', data: {columns: ['Quarter', {name: 'Margin', format: '0%'}], rows: [['Q1', 0.31], ['Q2', 0.34]], datasource: 'forecast', query: 'FY26!A1:B3', retrieved: '2026-11-02', version: 'r1', sha256: SHA, generator: {type: 'human', name: 'Avery Chen'}}}},
     {title: 'Inline chart with an inline data source', chart: {type: 'column', data: {columns: ['A', 'B'], rows: [['x', 1], ['y', 2]], datasource: {src: './inline.csv'}}}},
   ],
 };

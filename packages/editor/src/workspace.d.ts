@@ -373,6 +373,12 @@ export interface OpfEditorOptions {
   /** Refuse every write that comes through the editor's own parts, and lock the slide. The host can still write to `handle.session` and call `setDocument`. */
   readOnly?: boolean;
   /**
+   * FR-03: where a web, mail or phone link of a slide that is read goes (the viewer layout, a read-only editor; in an editable slide Ctrl or Cmd with
+   * a click). Only `http:`, `https:`, `mailto:` and `tel:` addresses reach it. Without it the editor opens a new tab with `noopener` and `noreferrer`.
+   * A `slide:<id>` link shows that slide and never reaches it.
+   */
+  onOpenLink?: (href: string, event: MouseEvent) => void;
+  /**
    * LH-99: show where the export continues an overfull slide on further pages (LH-90). Default true: the thumbnails draw such a slide as a
    * stack with its page count, the canvas names its pages and previews each one read only, and the presenter shows them as steps after the
    * slide. The document is never changed and no slide index shifts. `false` draws every slide as written.
@@ -460,6 +466,8 @@ export interface OpfEditorEvents {
    * frozen. For the rest of the pane (`revealPath`, `setDecorations`, `getCursor`) use `editor.sourcePane`.
    */
   cursor: SourceCursor;
+  /** FR-03: a link of a slide was followed: a `slide:<id>` link (the slide's id and its 0-based index) or an address handed to the host. */
+  link: { slide: string; index: number } | { href: string };
   /** The slide changed (0-based). */
   slide: { index: number; count: number };
   view: { view: OpfEditorView; previous: OpfEditorView };

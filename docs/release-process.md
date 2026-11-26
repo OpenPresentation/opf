@@ -35,7 +35,7 @@ Actions, **Release**, **Run workflow** on `main`:
 | `dry-run` | Default **true**: rehearse everything up to `npm publish --dry-run`; nothing is committed, tagged or published. Set false for the real release |
 | `skip-gate` | A dry run only: skip the slow gate |
 
-Run it with `dry-run` true first. After the rehearsal succeeds, run the same version on `main` with `dry-run` false for the real release. The jobs:
+Run it with `dry-run` true first. After the rehearsal succeeds, and after the native-app run on that commit (below) passes, run the same version on `main` with `dry-run` false for the real release. The jobs:
 
 1. **plan**: a real release runs on `main`, and the check `verify` is green for its head (one API call, no waiting).
 2. **gate** (parallel with prepare): `nightly.yml` called on that commit: Windows, macOS, Node 22 and 26, the packed-install,
@@ -65,6 +65,18 @@ Run it with `dry-run` true first. After the rehearsal succeeds, run the same ver
    exists; missing bundle assets are a warning there and do not hold back the site bumps).
 
 Time target: about 20 minutes from the click to seven verified packages (measured in MR-44).
+
+### Native-app run (between the dry run and the real run)
+
+The commit of `main` that the dry run tested is the release candidate. Before the real run, an agent on the Mac, with Keynote
+started by the owner, runs `pnpm native keynote --tier smoke` and then `--tier release` on a checkout of that commit, and every
+`new` item is reviewed. A run that exits with 2 is not a pass. A reviewed difference that is OPF's defect and first seen in this
+candidate blocks the release until it is fixed (a new candidate, run again) or the owner accepts it in writing on the release's
+tracking issue; a limit of Keynote is recorded and does not block (decision D1). PowerPoint on Windows keeps its before-merge
+pass, and the Impress nightly leg reports only. If `main` moves before the real run, its new head is a new candidate. Both runs
+pass `--release <the version being released>`; after the release, the Keynote summary is written from the reviewed candidate
+run without opening Keynote again (`--from-run <dir> --release <version> --write-summary`) and committed with the updated known
+records in a small pull request. The rules, who does what and how to read a result: [native-testing.md](native-testing.md).
 
 ### Version rules
 
@@ -189,7 +201,8 @@ workflows are owner steps O4 and O8 (`docs/programs/monorepo/owner-steps.md`); t
 ### Who may release
 
 The owner authorized agents to prepare and publish npm releases on 2026-09-29 (`AGENTS.md`). A release is made only through
-`release.yml` (or the pull-request fallback) and `npm-publish.yml`, only when one is required and only with every gate green;
+`release.yml` (or the pull-request fallback) and `npm-publish.yml`, only when one is required and only with every gate green,
+the Keynote gate of [native-testing.md](native-testing.md) included;
 agents never publish from a laptop, never skip the gate and never pass a different `--tag` to make a check pass. Dry runs are
 free at any time.
 

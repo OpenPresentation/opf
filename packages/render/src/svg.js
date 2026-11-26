@@ -318,6 +318,14 @@ const sameBox = (a, b) => !!a && !!b && a.x === b.x && a.y === b.y && a.width ==
 
 const LINK_URL = /^(https?:|mailto:|tel:|slide:)/i;
 
+/**
+ * FR-03: whether a link opens outside the deck: the schemes the renderer draws as a link except `slide:<id>` (a viewer shows that slide itself).
+ * A host that opens links for a read-only slide view asks this and ignores every other address (a `javascript:` or `data:` link is never opened).
+ */
+export function isOpenableLink(href) {
+  return typeof href === "string" && LINK_URL.test(href) && !/^slide:/i.test(href);
+}
+
 // What the renderer paints with, from the records core's `resolveSlideContext` resolved (slide design, then deck design, then
 // theme, then the engine default, per field: the one order every engine uses). The theme and the color scheme keep their
 // sorted keys, so the output does not depend on the order a catalog lists a field in. A reference that resolves nowhere never

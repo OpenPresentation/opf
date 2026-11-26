@@ -1407,6 +1407,36 @@
           "type": "integer",
           "minimum": 1,
           "description": "The most lines the value may take where it is drawn. Checked by composition at each place the variable is drawn (a title, a subtitle, a text block or a list entry), because the line count depends on the width of the box; a value that takes more lines is the warning opf/variable-overflow at that place, naming the slide. Inside longer text, the lines are those the variable's own characters occupy."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TextRun"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "The text in other languages, keyed by language tag, each entry a 'value' in the same form as the variable's own (a string or TextRun[]). Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "Text content. Plain string or rich TextRun[]. Insert it inline as '{{<id>}}' inside any string (rich text is flattened to plain text there), or reference it whole as 'var:<id>' in a field that accepts string or TextRun[] (the rich runs are kept)."
@@ -1501,13 +1531,34 @@
         },
         "format": {
           "type": "string",
-          "description": "Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. English names. Default 'MMMM d, yyyy'.",
+          "description": "Date display pattern, the same LDML-style tokens as header/footer dateFormat: yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE, EEE and quoted literals. The month and weekday names are those of the language where the date is drawn (the slide's declared language, else the deck's; English when none is declared or the table has no data for it); a month after a day token is in its form after a day, else its stand-alone form. Default: the language's long date pattern ('d. MMMM yyyy' in German), 'MMMM d, yyyy' for US English and a deck with no language.",
           "examples": [
             "MMMM d, yyyy",
             "dd MMM yyyy",
             "M/d/yyyy",
             "EEEE, MMMM d"
           ]
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "type": "string",
+                "description": "The date display pattern in this language, in the tokens of the variable's own 'format'."
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "How the date is written in other languages, keyed by language tag, each entry a 'format': the date is the same in every language, its pattern is not. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match uses the variable's own 'format'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "A calendar date as an ISO YYYY-MM-DD string. No time zone and no clock are involved. '{{<id>}}' inserts it formatted with 'format'."
@@ -1544,6 +1595,26 @@
         "example": {
           "$ref": "#/$defs/Asset",
           "description": "Illustrative image source shown in fill forms and used when a template is previewed with examples. Never written to output."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/Asset"
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "An image source per language (a localized screenshot), keyed by language tag, each entry a 'value'. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "An image source: any Asset (an 'asset:<id>' reference, HTTPS URL, data URI, relative or local path, or an object with src, alt and metadata). Reference it whole as 'var:<id>' in an image, asset or src field; '{{<id>}}' inserts the source string."
@@ -1582,6 +1653,27 @@
           "type": "string",
           "pattern": "^(?:https?://|mailto:|tel:)\\S+$",
           "description": "Illustrative link shown in fill forms and used when a template is previewed with examples. Never written to output."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "type": "string",
+                "pattern": "^(?:https?://|mailto:|tel:)\\S+$"
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "A link target per language (a localized landing page), keyed by language tag, each entry a 'value'. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "A link target (http, https, mailto or tel). Use it as '{{<id>}}' inside a link string or reference it whole as 'var:<id>' in a link field."
@@ -1629,6 +1721,29 @@
           "type": "integer",
           "minimum": 1,
           "description": "The most entries the list may have. Checked on the declared value and on a value given to a fill; a longer list is the warning opf/variable-overflow. Fill forms and models read it before writing."
+        },
+        "translations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/LanguageTag"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "minProperties": 1,
+          "description": "The entries in other languages, keyed by language tag, each entry a 'value' list. Where the variable is drawn, the slide's declared language (else the deck's) selects an entry: the exact tag, then the tag with its last subtag removed, and so on ('de-AT', then 'de'), compared without regard to case; no match draws 'value'. A language read from the text does not select one. A fill that gives the variable a new value without translations removes them."
         }
       },
       "description": "A list of strings, for bullets and list items. A whole-string array element 'var:<id>' splices every entry into the array in place; a whole field 'var:<id>' becomes the array; '{{<id>}}' joins the entries with ', ' (or the separator after a pipe: '{{<id>|; }}')."
@@ -2637,7 +2752,7 @@
         "dateFormat": {
           "type": "string",
           "minLength": 1,
-          "description": "Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and weekday names are English, independent of host locale. Defaults to \"M/d/yyyy\" for a current date. PPTX export writes a native current-date field only when its complete value fits within one accepted text line and the pattern matches a PowerPoint en-US date field ('M/d/yyyy'; 'EEEE, MMMM d, yyyy'; 'd MMMM yyyy'; 'MMMM d, yyyy'; 'd-MMM-yy'; 'MMMM yy'; 'MMM-yy'). Other patterns and wrapped fields export as static text with a diagnostic. Full provenance can recover generated-date intent from unchanged supported wrapped dates on OPF reimport; the existing PPTX text remains static.",
+          "description": "Date pattern for date. Tokens: yyyy (2026), yy (26), MMMM (April), MMM (Apr), MM (04), M (4), dd (09), d (9), EEEE (Thursday), EEE (Thu). Text in single quotes and other non-letter characters are literal. Month and weekday names are those of the language of the slide the date is on (its declared language, else the deck's), from OPF's own table and independent of the host's locale; English when no language is declared. Defaults to \"M/d/yyyy\" for a current date. PPTX export writes a native current-date field only when its complete value fits within one accepted text line and the pattern matches a PowerPoint en-US date field ('M/d/yyyy'; 'EEEE, MMMM d, yyyy'; 'd MMMM yyyy'; 'MMMM d, yyyy'; 'd-MMM-yy'; 'MMMM yy'; 'MMM-yy'). Other patterns and wrapped fields export as static text with a diagnostic. Full provenance can recover generated-date intent from unchanged supported wrapped dates on OPF reimport; the existing PPTX text remains static.",
           "examples": ["MMM d, yyyy", "yyyy-MM-dd", "MMM yyyy", "MMMM d, yyyy"]
         },
         "socials": {
@@ -4791,12 +4906,12 @@
           "items": {
             "oneOf": [
               { "type": "string" },
-              { "$ref": "#/$defs/DataColumn" }
+              { "$ref": "#/$defs/DatasetColumn" }
             ]
           },
           "minItems": 1,
-          "description": "Ordered column labels for the chart data table. A label is a string or a DataColumn ({ \"name\", \"format\" }) whose number format the data labels, value axis and exported workbook use.",
-          "examples": [["Quarter", "Revenue"], ["Quarter", "Revenue", "Costs"], ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }]]
+          "description": "Ordered column labels for the chart data table. A label is a string or a DatasetColumn ({ \"name\", \"format\", \"type\", \"role\", \"unit\" }) whose number format the data labels, value axis and exported workbook use, and which may declare what its cells hold and what the column is for.",
+          "examples": [["Quarter", "Revenue"], ["Quarter", "Revenue", "Costs"], ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }], [{ "name": "Month", "type": "date", "role": "dimension" }, { "name": "Revenue", "type": "number", "role": "measure", "unit": "USD" }]]
         },
         "rows": {
           "type": "array",
@@ -4834,6 +4949,40 @@
       },
       "examples": [{ "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }]
     },
+    "DatasetColumn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "description": "A named data column: a dataset column or an inline chart data column. Adds to DataColumn what its cells hold (type), what it is for (role) and a unit label. The string form is { \"name\": value } with nothing declared. A table column header keeps DataColumn.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Column label, used as the series name, the table header and the name 'fields', 'chart.mapping' and data links address.",
+          "examples": ["Revenue", "Month"]
+        },
+        "format": {
+          "$ref": "#/$defs/NumberFormat",
+          "description": "Number format of the column's number values (data labels, value axis, table cells, exported workbook). Absent: the General form."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["text", "number", "date", "boolean"],
+          "description": "What the column's cells hold. text: strings. number: finite numbers (a string such as \"12\" is not one). date: time labels (a year, a period, a month, a week or a date, as the time-order rule reads them, and an ISO 8601 date-time). boolean: true or false. null is a gap in any type. A cell of another kind is a 'data-cell-type' warning. A date category column is drawn as time (the title fallback of the time-order rule is skipped); a text or boolean one never is. Absent: undeclared, read from the cells as before."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["dimension", "measure"],
+          "description": "What the column is for. dimension: it labels or groups rows (a region, a product, a month). measure: its values are measured and can be aggregated (revenue, count, rate). Time is type 'date' with role 'dimension'. Absent: undeclared. Engines do not draw differently for a role; tools that pick a chart or aggregate a column read it."
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The unit of the column's values, as a label for tools: 'USD', 'ms', 'people'. Engines never print it; 'format' alone decides how a number is drawn.",
+          "examples": ["USD", "ms", "people"]
+        }
+      },
+      "examples": [{ "name": "Month", "type": "date", "role": "dimension" }, { "name": "Revenue", "format": "$#,##0", "type": "number", "role": "measure", "unit": "USD" }]
+    },
     "DataSourceId": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$",
@@ -4870,7 +5019,7 @@
           "description": "The terms the data is under: an SPDX license identifier or a short statement. It travels with the data.",
           "examples": ["CC-BY-4.0", "Internal use only"]
         },
-        "refresh": {
+        "refreshEvery": {
           "type": "string",
           "pattern": "^P(?=\\d|T\\d)(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?=\\d)(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$",
           "description": "How often the data is meant to be taken again, as an ISO 8601 duration. No engine acts on it. A validator given a date warns when a dataset's 'retrieved' is older than this (opf/dataset-stale).",
@@ -4881,7 +5030,7 @@
           "description": "Custom data passthrough, for example the connection settings a host owns; ignored by the engine but preserved across read/write round-trips. Never credentials."
         }
       },
-      "examples": [{ "title": "Finance warehouse", "connector": "postgres", "src": "postgres://warehouse.acme.com/finance", "license": "Internal use only", "refresh": "P1D" }]
+      "examples": [{ "title": "Finance warehouse", "connector": "postgres", "src": "postgres://warehouse.acme.com/finance", "license": "Internal use only", "refreshEvery": "P1D" }]
     },
     "DataSources": {
       "type": "object",
@@ -4890,7 +5039,7 @@
       "additionalProperties": { "$ref": "#/$defs/DataSource" },
       "examples": [
         {
-          "warehouse": { "title": "Finance warehouse", "connector": "postgres", "src": "postgres://warehouse.acme.com/finance", "refresh": "P1D" },
+          "warehouse": { "title": "Finance warehouse", "connector": "postgres", "src": "postgres://warehouse.acme.com/finance", "refreshEvery": "P1D" },
           "forecast": { "title": "FY26 forecast workbook", "connector": "xlsx", "src": "https://example.com/revenue.xlsx", "license": "CC-BY-4.0" }
         }
       ]
@@ -4929,13 +5078,13 @@
     "DataGenerator": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kind", "name"],
+      "required": ["type", "name"],
       "description": "Who produced the data: a person or a model, and which. A reviewer of a generated deck can see that a table came from a model, and from which one.",
       "properties": {
-        "kind": { "type": "string", "enum": ["human", "model"], "description": "'human' for a person, 'model' for a language model or another generating program." },
+        "type": { "type": "string", "enum": ["human", "model"], "description": "'human' for a person, 'model' for a language model or another generating program." },
         "name": { "type": "string", "minLength": 1, "description": "The person, model or tool, as its owner names it.", "examples": ["metricgen 2.1", "Avery Chen"] }
       },
-      "examples": [{ "kind": "model", "name": "metricgen 2.1" }]
+      "examples": [{ "type": "model", "name": "metricgen 2.1" }]
     },
     "DatasetId": {
       "type": "string",
@@ -4972,7 +5121,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["columns", "rows"],
-      "description": "One shared data table: named columns (strings or DataColumn objects with a number format) and rows of scalar cells. Column names are unique ('data-column-duplicate' error). Rich text and styling belong in an inline table.",
+      "description": "One shared data table: named columns (strings or DatasetColumn objects with a number format, a type, a role and a unit) and rows of scalar cells. Column names are unique ('data-column-duplicate' error). Rich text and styling belong in an inline table.",
       "properties": {
         "title": {
           "type": "string",
@@ -4989,12 +5138,12 @@
           "items": {
             "oneOf": [
               { "type": "string" },
-              { "$ref": "#/$defs/DataColumn" }
+              { "$ref": "#/$defs/DatasetColumn" }
             ]
           },
           "minItems": 1,
-          "description": "Ordered, uniquely named columns.",
-          "examples": [["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, "Costs"]]
+          "description": "Ordered, uniquely named columns. A column may declare what its cells hold (type), what it is for (role) and a unit label; a string column declares nothing.",
+          "examples": [["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, "Costs"], [{ "name": "Month", "type": "date", "role": "dimension" }, { "name": "Revenue", "format": "$#,##0", "type": "number", "role": "measure", "unit": "USD" }]]
         },
         "rows": {
           "type": "array",

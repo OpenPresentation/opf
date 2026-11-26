@@ -50,6 +50,37 @@ A body cell's own format wins over the column's.
 }
 ```
 
+### Typed columns
+
+A dataset column and an inline chart data column may be a `DatasetColumn`: a `DataColumn` that also says what its cells hold (`type`), what the column is for (`role`) and a `unit` label. A table's own column headers stay `DataColumn` and declare nothing. A tool that picks a chart, aggregates a column or orders a time axis reads the declaration instead of guessing from the name and the cells.
+
+```json
+{ "name": "Month", "type": "date", "role": "dimension" }
+{ "name": "Revenue", "format": "$#,##0", "type": "number", "role": "measure", "unit": "USD" }
+```
+
+| `type` | Cells that match | Notes |
+| --- | --- | --- |
+| `text` | a string | |
+| `number` | a finite number | A string, even `"12"`, does not match; the safe fix stores it as `12`. |
+| `date` | a string the time-order rule reads as a year, period, week, month or date (`2026-03`, `Q1 2026`, `FY26`, `Jan`, `2026-03-15`), an ISO 8601 date-time (`2026-03-15T09:30:00Z`), or an integer year from 1800 to 2200 | One date grammar for the whole format. |
+| `boolean` | `true` or `false` | |
+| any | `null` | A gap, never a mismatch. |
+
+`role` is `dimension` (it labels or groups rows) or `measure` (its values are measured and can be aggregated). Time is type `date` with role `dimension`; there is no `temporal` role. Each key stands alone: `type` without `role` and the reverse are valid, and no combination is invalid (a `text` measure is a count of values, not a sum).
+
+`unit` is a label for tools (`"USD"`, `"ms"`, `"people"`). Engines never print it: only `format` decides how a number is drawn.
+
+What engines do:
+
+- Drawing is unchanged. A typed column draws and exports exactly as the same column without the keys.
+- Time order (`chartCategoriesInTime`) reads the declared type of the category column first. `date`: the categories are time ordered when they run forward under the existing family rules, and the category-title fallback is skipped. `text` or `boolean`: never time ordered, whatever the labels look like. `number` or undeclared: the rule as before.
+- A cell that does not match its column's `type` is a `data-cell-type` warning at the cell (`/datasets/<id>/rows/<r>/<c>`, or the rows of inline chart data). More than five mismatches in one column are one finding for the column, at its first cell. Rows count from 1 in the message. The safe fix (`opf fix --audits`, or the finding's `fixes`) stores a strict decimal string in a `number` column as the number and a number in a `text` column as its text; `"12%"` stays and keeps its warning, and the fix never changes the declared type.
+- `resolveChartData` returns `types`, aligned with `columns` (so `fields` selections and a mapping keep each column's declaration). `datasetColumnDeclaration(document, dataset, field)` reads `{ type?, role?, unit? }` of one dataset column by name (`undefined` when there is no such column), for tools such as a computed metric that must refuse to sum a `text` column.
+- `opf ingest --dataset` declares the columns of the dataset it writes (inline chart data and tables stay as they were): `number` when every filled cell is a number (a decimal string that prints back unchanged counts; `12.50` does not), `boolean`, `date` (every cell a time label) or `text`; role `measure` for a number column that is neither the first column nor a time label, `dimension` otherwise. It stores the cells as that type, so a typed column it writes never warns. A column whose type cannot be told stays a plain string, and a column a dataset already declares keeps its declaration (core `inferColumnDeclaration`, `declareColumns`). The heuristic is a starting point for ingest, not a rule of the format; a host that reads a typed source writes the declarations it knows.
+- In the editor the data panel has a type, a role and a unit field for the selected column of a chart's data or a shared dataset (`setGridColumnDeclaration`); a cell of another kind is marked; columns a paste adds declare what their cells say.
+- The PowerPoint export keeps the keys in `OPF_DATASETS_V1` and in a chart's `OPF_DATA_V1` record, inline. A 0.36.0 importer does not know them and drops those records whole (see [document round trip](../packages/pptx/docs/document-roundtrip.md)); its charts and tables keep the values they show.
+
 ### Where data came from
 
 A dataset and inline chart data say where they came from in their own keys: `datasource`, `query`, `retrieved`, `version`, `sha256` and `generator`. `datasource` is the id of an entry of the root `datasources` map (a string is always an id) or a data source written inline, `{ "src": "./revenue.csv" }`. Engines never read, fetch or refresh a data source; they keep the keys through editing, export and re-import. The keys, the `datasources` map, the rules and the `opf fix` rewrite of the removed nested `source` object are in [Data sources](data-sources.md).
@@ -85,7 +116,7 @@ Validation:
 - an unknown field is a `dataset-field-unknown` error;
 - duplicate column names in a dataset, or in chart data that a `mapping` or `fields` addresses, are a `data-column-duplicate` error;
 - a dataset nothing references is the warning `opf/unused-dataset` (category `references`);
-- a string `datasource` that names no entry of `datasources` is a `datasource-unknown` error (on a dataset and on inline chart data); a credential in a data source's `src` is the warning `datasource-credentials`, and data older than its data source's `refresh` is the warning `dataset-stale` when the caller passes a date (see [Data sources](data-sources.md)).
+- a string `datasource` that names no entry of `datasources` is a `datasource-unknown` error (on a dataset and on inline chart data); a credential in a data source's `src` is the warning `datasource-credentials`, and data older than its data source's `refreshEvery` is the warning `dataset-stale` when the caller passes a date (see [Data sources](data-sources.md)).
 
 ### Series mapping
 

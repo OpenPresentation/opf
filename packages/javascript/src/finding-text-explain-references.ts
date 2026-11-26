@@ -110,6 +110,16 @@ export const REFERENCES_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { variables: { client: { type: "text", value: "Acme" } }, slides: [{ title: "Proposal" }] },
     { variables: { client: { type: "text", value: "Acme" } }, slides: [{ title: "Proposal for {{client}}" }] },
   ),
+  "opf/variable-translation-duplicate": ex(
+    "Keep one key per language: tags compare without regard to case, so 'de-AT' and 'de-at' are the same language and only the first is drawn.",
+    { language: "de", variables: { cta: { type: "text", value: "Book", translations: { "de-AT": { value: "Buchen" }, "de-at": { value: "Bestellen" } } } }, slides: [{ title: "{{cta}}" }] },
+    { language: "de", variables: { cta: { type: "text", value: "Book", translations: { "de-AT": { value: "Buchen" } } } }, slides: [{ title: "{{cta}}" }] },
+  ),
+  "opf/variable-translation-unused": ex(
+    "Declare the language that selects the translation ('language' on the deck or a slide), or remove it. A language read from the text does not select a translation.",
+    { variables: { cta: { type: "text", value: "Book", translations: { de: { value: "Buchen" } } } }, slides: [{ title: "{{cta}}" }] },
+    { language: "de", variables: { cta: { type: "text", value: "Book", translations: { de: { value: "Buchen" } } } }, slides: [{ title: "{{cta}}" }] },
+  ),
   "opf/variable-reference-unknown": ex(
     "Declare the color variable under `variables`, or use another color. Until then a default color is drawn.",
     { slides: [{ title: "Results", text: [{ text: "Up", color: "var:brand" }] }] },

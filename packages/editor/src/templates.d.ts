@@ -39,9 +39,21 @@ export interface TemplateField {
   maxLines?: number;
   /** List: the declaration's `maxItems`. */
   maxItems?: number;
+  /** Text, list, url, image and date: the declared translations as form rows, in document order. A value typed in the panel replaces a text, list, url or image variable's translations when the deck is filled. */
+  translations?: TemplateTranslation[];
+  /** Text, list, url, image and date: the languages the deck and its slides declare, the deck's first. */
+  translationLanguages?: string[];
   /** "filled" (supplied), "default" (declared value), "unfilled" (required, no value) or "optional". */
   status: TemplateFieldStatus;
   uses: TemplateVariableUse[];
+}
+
+/** One translation of a variable as a form row: the language tag and what the control shows (a date: its display pattern). */
+export interface TemplateTranslation {
+  tag: string;
+  text: string;
+  /** Rich text: its formatting stays until the row is edited. */
+  rich: boolean;
 }
 
 export interface TemplateStatus {
@@ -130,6 +142,11 @@ export declare function suggestVariableId(presentation: unknown, label?: string)
 /** Declare a variable as one undoable edit. */
 export declare function declareVariable(editor: EditorSession, id: string, declaration: string | Record<string, unknown>, meta?: Record<string, unknown>): unknown;
 /** Mark the document as a template, or as a normal deck with `false`, as one undoable edit. */
+export declare function translationLanguages(presentation: unknown): string[];
+export declare function translationFieldText(kind: TemplateVariableKind, entry: unknown): string;
+export declare function listVariableTranslations(presentation: unknown, id: string): TemplateTranslation[];
+export declare function setVariableTranslation(editor: EditorSession, id: string, tag: string, text: string, options?: { from?: string; meta?: Record<string, unknown> }): unknown;
+export declare function removeVariableTranslation(editor: EditorSession, id: string, tag: string, meta?: Record<string, unknown>): unknown;
 export declare function setTemplate(editor: EditorSession, enabled: boolean, meta?: Record<string, unknown>): unknown;
 export interface InsertVariableTokenOptions {
   /** UTF-16 offsets into the string; a selection is replaced. Default: the end. */

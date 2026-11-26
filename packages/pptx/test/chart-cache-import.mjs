@@ -27,6 +27,23 @@ function fixture({element = 'barChart', labels = categories(), values = [cache([
   entries[chartPart] = strToU8(xml);
   return zipSync(entries);
 }
+// opf#1477: a chart that cannot be read costs the chart, not the deck: the import resolves, the chart is a text placeholder and one
+// chart-unreadable diagnostic carries the error the import used to throw (reason = its code, location = its path, detail = its message).
+async function refused(bytes) {
+  const diagnostics = [], before = bytes.slice();
+  const document = await fromPptx(bytes, {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
+  assert.deepEqual(bytes, before, 'fromPptx must not mutate the package');
+  const slide = document.slides[0];
+  assert.equal(slide.chart ?? slide.blocks?.find(block => block.chart)?.chart, undefined, 'the unreadable chart is not imported as data');
+  const found = diagnostics.filter(diagnostic => diagnostic.code === 'chart-unreadable');
+  assert.equal(found.length, 1);
+  return {code: found[0].reason, path: found[0].location, message: found[0].detail};
+}
+async function assertRefused(bytes, check) {
+  const error = await refused(bytes);
+  const result = check(error);
+  assert.notEqual(result, false, JSON.stringify(error));
+}
 async function imported(options) {
   const bytes = fixture(options), before = bytes.slice();
   const document = await fromPptx(bytes);
@@ -105,14 +122,13 @@ for (const [name, value] of [
   ['exponent index', cache([point('1e1', 2)])],
   ['nonnumeric index', cache([point('no', 2)])],
   ['huge index', cache([point('4294967295', 2)], undefined).replace('<c:ptCount val="3"/>', '')],
-  ['index outside declared extent', cache([point(3, 2)], 3)],
   ['negative count', cache([], -1)],
   ['fractional count', cache([], '1.5')],
   ['huge count', cache([], '4294967295')],
   ['duplicate count', cache([point(0, 2)]).replace('<c:ptCount val="3"/>', '<c:ptCount val="3"/><c:ptCount val="3"/>')],
 ]) {
   test(`malformed ${name} rejects with chart part and cache location`, async () => {
-    await assert.rejects(fromPptx(fixture({values: [value]})), error => {
+    await assertRefused(fixture({values: [value]}), error => {
       assert.equal(error.code, 'invalid-chart-cache');
       assert.ok(error.path.startsWith(`${chartPart}#`), error.path);
       assert.match(error.message, /chart cache/i);
@@ -124,7 +140,7 @@ for (const [name, value] of [
 test('malformed category and name caches are checked too', async () => {
   const invalid = cache([point(0, 'A'), point(0, 'B')], 2, 'strRef');
   for (const options of [{labels: invalid}, {rawName: invalid}]) {
-    await assert.rejects(fromPptx(fixture(options)), error => error.code === 'invalid-chart-cache' && error.path.startsWith(`${chartPart}#`));
+    await assertRefused(fixture(options), error => error.code === 'invalid-chart-cache' && error.path.startsWith(`${chartPart}#`));
   }
 });
 test('unchanged dense caches still import ordinary chart values', async () => {
@@ -135,11 +151,12 @@ test('multiple cache sources and multiple point values are rejected', async () =
     cache([point(0, 2)]) + cache([point(0, 2)], 3, 'numLit'),
     cache([point(0, 2)]).replace('<c:v>2</c:v>', '<c:v>2</c:v><c:v>3</c:v>'),
     cache([point(0, 2)]).replace('<c:ptCount val="3"/>', '<c:ptCount/>'),
-  ]) await assert.rejects(fromPptx(fixture({values: [value]})), error => error.code === 'invalid-chart-cache');
+  ]) await assertRefused(fixture({values: [value]}), error => error.code === 'invalid-chart-cache');
 });
-test('hierarchical categories are refused instead of becoming extra data rows', async () => {
+test('hierarchical categories read as one label per category, never as extra data rows', async () => {
   const labels = cache([point(0, 'A')], 3, 'multiLvlStrRef').replace('</c:multiLvlStrCache>', '<c:lvl><c:pt idx="0"><c:v>Group</c:v></c:pt></c:lvl></c:multiLvlStrCache>');
-  await assert.rejects(fromPptx(fixture({labels})), error => error.code === 'unsupported-chart-cache' && /single category level/.test(error.message));
+  const chart = await imported({labels});
+  assert.deepEqual(chart.data.rows.map(row => row[0]), ['Group: A', null, null]);
 });
 test('largest supported sparse extent is retained without index truncation', async () => {
   const chart = await imported({labels: cache([], 0, 'strRef'), values: [cache([point(99_999, 8)], 100_000)]});
@@ -151,7 +168,7 @@ test('combined cache and output-table budgets reject before oversized allocation
   for (const values of [
     new Array(11).fill(cache([], 100_000)),
     [cache([], 100_000), ...new Array(9).fill(cache([], 1))],
-  ]) await assert.rejects(fromPptx(fixture({values})), error => error.code === 'invalid-chart-cache' && /1,000,000-cell/.test(error.message));
+  ]) await assertRefused(fixture({values}), error => error.code === 'invalid-chart-cache' && /1,000,000-cell/.test(error.message));
 });
 
 for (const container of ['c:numRef', 'c:strRef', 'c:multiLvlStrRef', 'c:val', 'c:yVal', 'c:cat', 'c:tx']) {
@@ -165,7 +182,7 @@ for (const container of ['c:numRef', 'c:strRef', 'c:multiLvlStrRef', 'c:val', 'c
     const xml = strFromU8(entries[chartPart]), at = xml.indexOf('<c:ser>');
     assert.ok(at >= 0 && pattern.test(xml.slice(at)), 'fixture contains the intended native container');
     entries[chartPart] = strToU8(xml.slice(0, at) + xml.slice(at).replace(pattern, match => match + match));
-    await assert.rejects(fromPptx(zipSync(entries)), error =>
+    await assertRefused(zipSync(entries), error =>
       error.code === 'invalid-chart-cache'
       && error.path.startsWith(`${chartPart}#`)
       && /single element/.test(error.message));
@@ -232,7 +249,7 @@ for (const element of ['barChart', 'scatterChart']) {
       ]) {
         const bytes = fixture({element, values: [cache([point(0, 4)]), cache([point(2, token), point(0, 2)], 3, kind)]});
         const before = bytes.slice();
-        await assert.rejects(fromPptx(bytes), error => {
+        await assertRefused(bytes, error => {
           assert.equal(error.code, 'unsupported-chart-cache');
           const nested = kind === 'numRef' ? 'c:numRef/c:numCache' : 'c:numLit';
           assert.equal(error.path, `${chartPart}#c:ser[1]/c:${role}/${nested}/c:pt[@idx="2"]/c:v`);
@@ -256,3 +273,9 @@ for (const element of ['barChart', 'scatterChart']) {
     });
   }
 }
+
+// opf#1477: a point past the declared count extends the cache (the count is a lower bound); the larger of the two is the extent.
+test('a point index past the declared count extends the cache and is reported', async () => {
+  const chart = await imported({values: [cache([point(0, 1), point(3, 2)], 2)]});
+  assert.deepEqual(chart.data.rows, [['A', 1], ['B', null], ['C', null], [null, 2]]);
+});

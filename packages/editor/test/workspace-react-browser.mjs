@@ -111,7 +111,8 @@ async function run(label, alias, expectedMajor) {
     await page.waitForFunction(() => window.fixture.created.at(-1).readOnly === true && window.fixture.created.at(-1).view === 'outline', undefined, { timeout: 10000 });
     assert.equal(await page.locator('#react-editor .opf-source').evaluate((node) => getComputedStyle(node).getPropertyValue('--opf-ui-accent').trim()), 'rgb(11, 22, 33)', 'the theme prop reaches the chrome');
     assert.equal(await page.locator('#react-editor .opf-ws-outline').isVisible(), true, 'the view prop switches the view');
-    assert.equal(await page.locator('#react-editor .opf-ws-canvas').getAttribute('inert'), '', 'the readOnly prop locks the slide');
+    // FR-03: a read-only slide is not inert (its links work): its canvas is read only, with no editing targets or handles.
+    assert.deepEqual(await page.locator('#react-editor .opf-ws-canvas').evaluate((node) => ({ inert: node.hasAttribute('inert') || !!node.closest('[inert]'), readonly: !!node.querySelector('.opf-canvas[data-readonly]'), targets: node.querySelectorAll('[data-canvas-target]').length, handles: node.querySelectorAll('.opf-selection, .opf-canvas-overlay > *').length })), { inert: false, readonly: true, targets: 0, handles: 0 }, 'the readOnly prop locks the slide: read only canvas, no targets or handles, not inert');
     await ev(() => { window.theme = { tokens: { accent: 'rgb(11, 22, 33)' } }; window.readOnly = false; window.view = 'slide'; window.mount({ label: 'b' }); });
     await page.waitForFunction(() => window.fixture.created.at(-1).readOnly === false && window.fixture.created.at(-1).view === 'slide', undefined, { timeout: 10000 });
     assert.equal(await ev(() => window.fixture.created.length), 1);

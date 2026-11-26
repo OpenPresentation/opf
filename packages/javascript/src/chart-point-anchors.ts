@@ -99,7 +99,7 @@ export function chartPointGeometry(chart: unknown, composed: ComposedChart, refe
         return missing('point', 'The chart has no finite shared value axis for a native-comparable point.');
     if (composed.layer?.rows)
         return missing('point', 'Table-aligned chart rows are not yet qualified for point anchors; their native category pitch may differ.');
-    const drawn = { ...record(chart), type }, data = { ...selected.data, columns: plan.columns, formats: plan.formats, rows: plan.rows };
+    const drawn = { ...record(chart), type }, data = { ...selected.data, columns: plan.columns, formats: plan.formats, types: plan.types, rows: plan.rows };
     const inset = composed.layer?.plot ?? (horizontal ? horizontalBarPlot(drawn, data, composed.layer, axis, geometry.box, geometry) : chartPlotInset(drawn, data, composed, geometry));
     if (!inset)
         return missing('point', 'The chart has no finite shared inner plot for this point.');
@@ -252,7 +252,7 @@ function circularPoint(chart: unknown, composed: ComposedChart, selected: ChartP
     // doughnut square (both engines already draw there, so nothing is pinned), else the preview's own pie square (chartCircleSquare),
     // pinned so the PPTX plot is that square too.
     const drawnSquare = composed.layer?.valueList?.pie ?? composed.layer?.doughnut?.pie;
-    const area = drawnSquare ?? chartCircleSquare({ ...record(chart), type: selected.type }, { ...selected.data, columns: selected.plan.columns, rows: selected.plan.rows, formats: selected.plan.formats }, { ...geometry, measure: (text: string, size: number) => geometry.measure(text, size) }, composed.layer);
+    const area = drawnSquare ?? chartCircleSquare({ ...record(chart), type: selected.type }, { ...selected.data, columns: selected.plan.columns, rows: selected.plan.rows, formats: selected.plan.formats, types: selected.plan.types }, { ...geometry, measure: (text: string, size: number) => geometry.measure(text, size) }, composed.layer);
     if (!area)
         return missing('point', 'A pie with outside data labels is not yet qualified for point anchors; its labels are measured by the preview.');
     const side = Math.min(area.width, area.height);

@@ -750,7 +750,7 @@ function dataIssues(value: unknown, asOf?: string): { errors: ValidationIssue[];
       const key = `${diagnostic.code}|${diagnostic.path}`;
       if (seen.has(key)) continue;
       seen.add(key);
-      (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code }));
+      (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code, ...(diagnostic.aggregate ? { aggregate: true } : {}) }));
     }
   };
   add(datasetDiagnostics(value));
@@ -1105,7 +1105,7 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
     subject = view.presentation;
     unfilledVariables = view.unfilled;
     for (const entry of view.diagnostics) {
-      if (entry.code === "variable-example-used" || entry.code === "variable-rich-flattened" || entry.code === "variable-unfilled") continue;
+      if (entry.code === "variable-example-used" || entry.code === "variable-rich-flattened" || entry.code === "variable-unfilled" || entry.code === "variable-translations-removed") continue;
       // A limit is read by the validator's own rule (opf/variable-overflow, which composes where a line limit needs it), not by the format check.
       if (entry.code === "variable-overflow") continue;
       const issue = semanticIssue(entry.path, entry.message, { id: entry.id, code: entry.code });

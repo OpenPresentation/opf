@@ -1622,9 +1622,16 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
   const chartRelId = graphicData?.["c:chart"]?.["r:id"] ?? chartExRelId;
   if (chartRelId) {
     const referenceState={};
-    const imported = chartExRelId
-      ? chartexFromRelationship(entries, relationships, chartExRelId, report)
-      : chartFromRelationship(entries, slidePath, relationships, chartRelId, report, {marked: data.markedCharts?.has(name) === true, referenceContext:data.referenceContext, referenceState});
+    // opf#1477, opf#1478: a chart part is untrusted input; one that cannot be read costs that chart (its placeholder and a diagnostic), never the deck.
+    let imported;
+    try {
+      imported = chartExRelId
+        ? chartexFromRelationship(entries, relationships, chartExRelId, report)
+        : chartFromRelationship(entries, slidePath, relationships, chartRelId, report, {marked: data.markedCharts?.has(name) === true, referenceContext:data.referenceContext, referenceState});
+    } catch (error) {
+      data.report?.('chart', {code: 'chart-unreadable', reason: error instanceof OPFPptxError ? error.code : 'error', ...(error instanceof OPFPptxError && error.path ? {location: error.path} : {}), detail: errorMessage(error), message: `The chart ${JSON.stringify(name || chartRelId)} could not be read (${errorMessage(error)}${error instanceof OPFPptxError && error.path ? ` at ${error.path}` : ''}); it imports as a text placeholder and the rest of the deck is unchanged.`});
+      imported = null;
+    }
     const stored = imported && record('chart');
     const part = relationships.get(chartRelId)?.path;
     const restored = stored && part && entries[part]
@@ -2125,6 +2132,7 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report,
     const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {layer: {header: headerCaption || headerLegend, headerLegend, radarLegend, direct},chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
       ...(combo ? {combo: {lineNode: combo.lines[0]?.node, secondaryValueAxis: secondaryValueAxisOf(plotArea, combo)}} : {})});
     for (const note of notes) report?.(note);
+    for (const note of budget.notes?.values() ?? []) report?.(note);
     if (budget.rejected?.length) report?.({code: 'chart-value-not-numeric', option: 'data', message: `${budget.rejected.length} cached chart ${budget.rejected.length === 1 ? 'value is' : 'values are'} not a number (first at ${budget.rejected[0]}) and ${budget.rejected.length === 1 ? 'imports as a gap' : 'import as gaps'}, never as a guessed value.`});
     // LH-03: the value labels an export of a small chart writes by default are not an option. LH-105: every chart area is unfilled now, so
     // the small chart is told by its deleted value axis (a small chart whose value axis has a title keeps its labels as an option).
@@ -2354,9 +2362,8 @@ function cachedValues(node, path, budget, readValue) {
   let data = cache;
   if (kind.startsWith('c:multiLvlStrRef')) {
     const levels = asArray(cache?.['c:lvl']);
-    if (levels.length > 1) {
-      throw new OPFPptxError('unsupported-chart-cache', 'Hierarchical chart category caches cannot be flattened without losing labels; use a single category level before importing.', {path});
-    }
+    // opf#1478: a cache of several levels reads as the single-level labels it was split from.
+    if (levels.length > 1) return flattenedLevels(levels, count, path, budget, integer, invalid);
     data = levels[0];
   }
   const points = asArray(data?.['c:pt']);
@@ -2366,7 +2373,8 @@ function cachedValues(node, path, budget, readValue) {
   for (const [position, point] of points.entries()) {
     const location = `/c:pt[${position}]@idx`;
     const index = integer(point?.idx, MAX_CHART_CACHE_POINTS - 1, location);
-    if (count !== undefined && index >= count) invalid('point index is outside its declared count', location);
+    // opf#1477: a point past the declared count (a writer that counts the points present, not the positions) extends the cache.
+    if (count !== undefined && index >= count) (budget.notes ??= new Map()).set('count', {code: 'chart-cache-repaired', option: 'data', message: 'A cached chart series declares fewer points (c:ptCount) than its highest point index needs, as a writer that counts only the points present does; the chart imports with the points at their own indexes and the positions without a point as gaps.'});
     if (indexed.has(index)) invalid('duplicate point index', location);
     if (Array.isArray(point?.['c:v'])) invalid('point has multiple values', `/c:pt[${position}]/c:v`);
     indexed.set(index, point?.['c:v'] === undefined ? null : scalarText(point['c:v']));
@@ -2378,6 +2386,43 @@ function cachedValues(node, path, budget, readValue) {
   for (const [index, value] of indexed) {
     result[index] = readValue ? readValue(value, `${path}/c:pt[@idx="${index}"]/c:v`) : value;
   }
+  return result;
+}
+
+// opf#1478: a multi-level category cache (c:lvl, innermost first) read back to the single-level labels it came from. A writer that
+// splits "Month: place" labels at the colon writes the part after it and the whole label at each index of the inner level and the part
+// before it in the outer level: the whole label is the label. Without one, the levels join outer to inner with ": " (the separator
+// such a writer splits at); the cache then reports it.
+function flattenedLevels(levels, count, path, budget, integer, invalid) {
+  const perLevel = levels.map((level, levelIndex) => {
+    const points = asArray(level?.['c:pt']);
+    if (points.length > MAX_CHART_CACHE_POINTS) invalid('too many points');
+    const byIndex = new Map();
+    for (const [position, point] of points.entries()) {
+      const index = integer(point?.idx, MAX_CHART_CACHE_POINTS - 1, `/c:lvl[${levelIndex}]/c:pt[${position}]@idx`);
+      if (Array.isArray(point?.['c:v'])) invalid('point has multiple values', `/c:lvl[${levelIndex}]/c:pt[${position}]/c:v`);
+      if (point?.['c:v'] === undefined) continue;
+      (byIndex.get(index) ?? byIndex.set(index, []).get(index)).push(scalarText(point['c:v']));
+    }
+    return byIndex;
+  });
+  let extent = count ?? 0;
+  for (const byIndex of perLevel) for (const index of byIndex.keys()) extent = Math.max(extent, index + 1);
+  if (budget.cells + extent > MAX_CHART_CACHE_CELLS) invalid('combined caches exceed the 1,000,000-cell import limit');
+  budget.cells += extent;
+  const result = new Array(extent).fill(null);
+  let guessed = false;
+  for (let index = 0; index < extent; index += 1) {
+    const inner = perLevel[0].get(index) ?? [];
+    const outer = perLevel.slice(1).map(byIndex => byIndex.get(index)?.[0]).reverse();
+    const joined = [...outer, inner[0]];
+    const parts = joined.every(part => part !== undefined) ? joined.join(': ') : undefined;
+    if (parts !== undefined && inner.includes(parts)) result[index] = parts;
+    else if (inner.length > 1) result[index] = [...inner].reverse().find(text => inner.every(other => text.includes(other))) ?? (guessed = true, parts ?? inner.at(-1));
+    else if (parts !== undefined) { result[index] = parts; guessed = true; }
+    else if (inner.length === 1) result[index] = inner[0];
+  }
+  (budget.notes ??= new Map()).set('levels', {code: 'chart-categories-flattened', option: 'category', message: `The chart's category cache has ${levels.length} levels (a writer that splits labels at a colon does this); it imports as one label per category${guessed ? ', joining the levels with ": " where no whole label was cached' : ' from the whole label each point cached'}.`});
   return result;
 }
 
@@ -5101,11 +5146,14 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
       for(const field of furniturePartFields(part)){
         // RR-91: with slideNumberFields 'static' a number with words around it is fixed text; Keynote drops the words next to a live number.
         if(field.type==='slideNumber'&&context.staticSlideNumbers&&!isBareSlideNumber(part))continue;
-        const nativeType=nativeFieldType(field,context.deckLang);
-        // RR-102: a date field whose words are English (United States), not the deck's language, says so in its own `lang`.
-        const date=field.type==='date'?nativeDateField(field.format??DEFAULT_DATE_FORMAT,context.deckLang):undefined;
-        if(nativeType)fields.push({...field,nativeType,...(date&&date.lang!==context.deckLang?{lang:date.lang}:{})});
-        else options.onDiagnostic?.({code:'furniture-date-fixed',path:part.path,message:`dateFormat '${field.format}' is not a PowerPoint date field format in ${context.deckLang==='en-US'?'en-US':`${context.deckLang} or en-US`}; the current date is exported as fixed text that PowerPoint will not update.`});
+        // FR-10: PowerPoint formats a date field by the language of its run, which is the slide's (its declared language, else the deck's), so
+        // the field is looked up in that language: a deck footer drawn on a French slide in a German deck is a French field or fixed text.
+        const fieldLang=context.scriptFonts?.slides?.[slideIndex]?.lang??context.deckLang;
+        const nativeType=nativeFieldType(field,fieldLang);
+        // RR-102: a date field whose words are English (United States), not the slide's language, says so in its own `lang`.
+        const date=field.type==='date'?nativeDateField(field.format??DEFAULT_DATE_FORMAT,fieldLang):undefined;
+        if(nativeType)fields.push({...field,nativeType,...(date&&date.lang!==fieldLang?{lang:date.lang}:{})});
+        else options.onDiagnostic?.({code:'furniture-date-fixed',path:part.path,message:`dateFormat '${field.format}' is not a PowerPoint date field format in ${fieldLang==='en-US'?'en-US':`${fieldLang} or en-US`}; the current date is exported as fixed text that PowerPoint will not update.`});
       }
       const liveFields=fields.length?lineFields(part.text,fields,part.fit.sourceLines,part.fit.lines):undefined;
       for(const field of fields.filter(field => !lineFields(part.text,[field],part.fit.sourceLines,part.fit.lines).some(line => line.length))) {

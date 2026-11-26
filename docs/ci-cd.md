@@ -19,6 +19,8 @@ The owner now authorizes agents to create deployments, use native `wrangler prev
 
 Manual dispatch follows the same gates. It is a retry mechanism. Missing credentials, unsuccessful or unfinished required CI, stale heads, missing artifacts or missing qualification must not produce a successful rollout. Ordinary PR builds remain credential-free; forks do not receive deployment credentials.
 
+Native-app runs (Keynote, PowerPoint, LibreOffice Impress) are not CI jobs (native-testing decision D4): an agent session or the owner starts `pnpm native <target>` on the machine that has the application, and no workflow starts Keynote or PowerPoint. The one native leg in CI is the report-only LibreOffice job of `nightly.yml`, which `release.yml` turns off in the release gate. Where a native run sits in a release and what blocks one: [native-testing.md](native-testing.md).
+
 The existing core `ci.yml`, `verify`, Release, trusted publisher and seven-package dependency order remain authoritative. Do not replace them with a custom orchestrator. After publication, verify registry identities/provenance, then update the three sites through generated bump PRs and real package consumers. See [release-process.md](release-process.md).
 
 ## Workflow and command names

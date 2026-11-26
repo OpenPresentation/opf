@@ -524,6 +524,14 @@ const chartValueNotNumeric: RuleText = (finding) => {
   };
 };
 
+const dataCellType: RuleText = (finding) => {
+  const fix = finding.fixes?.find((entry) => entry.id === "store-cell-type");
+  return {
+    message: keep(cap(finding.message)),
+    next: fix ? `${sentence((fix.title.charAt(0).toLowerCase() + fix.title.slice(1)).replace(/\.$/, ""))}, or change the column's ${code("type")} to what it holds.` : `write the cell as the column declares, or change the column's ${code("type")} to what it holds.`,
+  };
+};
+
 const datasourceCredentials: RuleText = (finding) => ({
   message: keep(cap(finding.message)),
   next: "remove the credential from the data source and keep the secret in your own store; name the connection in `connector` or `extensions`.",
@@ -531,7 +539,7 @@ const datasourceCredentials: RuleText = (finding) => ({
 
 const datasetStale: RuleText = (finding) => ({
   message: keep(cap(finding.message)),
-  next: "take the data from its data source again and update `retrieved`, or change the data source's `refresh`.",
+  next: "take the data from its data source again and update `retrieved`, or change the data source's `refreshEvery`.",
 });
 
 const chartMappingAdapted: RuleText = (finding) => ({
@@ -715,6 +723,7 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/image-resolution": imageResolution,
   "opf/chart-value-not-numeric": chartValueNotNumeric,
   "opf/chart-mapping-adapted": chartMappingAdapted,
+  "opf/data-cell-type": dataCellType,
   "opf/datasource-credentials": datasourceCredentials,
   "opf/dataset-stale": datasetStale,
   "opf/chart-highlight-adapted": chartHighlightAdapted,

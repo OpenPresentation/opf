@@ -27,7 +27,7 @@ import type { JsonPrimitive, JsonSchema } from './json.js';
 import { validationDefinition } from './validation-definitions.js';
 import { unusedReferenceWarnings } from './annotation-validation.js';
 import { describeDurationRange, durationOutsideNarrative, durationRangeInverted, resolveNarrative, unknownBeatReferences } from './narrative-plan.js';
-import { chartNumberFixesByCell, unusedDatasets, type ChartNumberFix } from './chart-data.js';
+import { chartNumberFixesByCell, suggestCellTypeFix, unusedDatasets, type ChartNumberFix } from './chart-data.js';
 import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
 import { ruleInfo } from './validation-rules.js';
 import { chartShapeHelp, chartShapePatch, FOREIGN_CHART_KEYS } from './chart-shape.js';
@@ -551,8 +551,9 @@ function chartNumberFixPaths(document: unknown): Map<string, ChartNumberFix> {
 const HELP: Record<string, string> = {
 	'chart-value-not-numeric':
 		'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.',
+	'data-cell-type': 'Write the cell as the column declares (a number as a number, text as text, a date as a time label, a boolean as true or false), or change the column\'s `type` to what it holds. A mismatched cell is still read as it was before; nothing is drawn differently.',
 	'datasource-credentials': 'Remove the user, password, key or token from the data source and keep the secret in your own store; name the connection in `connector` or `extensions`. A data source never holds credentials.',
-	'dataset-stale': "Take the data from its data source again and update `retrieved`, or change the data source's `refresh` to how often the data really needs taking.",
+	'dataset-stale': "Take the data from its data source again and update `retrieved`, or change the data source's `refreshEvery` to how often the data really needs taking.",
 	'chart-mapping-adapted': 'Choose a compatible chart type or mapping for the selected data. The message explains how the mapping or drawing was adapted.',
 	'chart-series-dropped': 'The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.',
 	'chart-highlight-adapted': 'The highlight is adapted by every engine. Name a series or category the chart type can emphasize, or remove the entry.',
@@ -563,6 +564,8 @@ const HELP: Record<string, string> = {
 	'variable-unknown': "Declare the variable in the top-level variables map, or write '\\{{' for literal braces.",
 	'variable-unknown-value': 'Remove the supplied value, or declare the variable it belongs to.',
 	'variable-unused': 'Reference the variable as {{id}} or var:id where it belongs, or remove its declaration.',
+	'variable-translation-duplicate': 'Remove one of the two keys: the language tag compares without regard to case, and the first in the document is the one drawn.',
+	'variable-translation-unused': "Declare the language ('language' on the deck or a slide) that selects the translation, fix its tag, or remove it.",
 	'variable-group-omitted': 'Give one of the variables a value to draw the group, make one of them required, or move the content that should always show out of the group.',
 	'variable-reference-unknown': 'Declare the variable in the top-level variables map, or use another color.',
 	'run-color-unrecognized': 'Use a #RRGGBB hex color, a color-scheme name or a var: reference to a declared color variable.',
@@ -799,6 +802,11 @@ export function engineFindings(document: unknown, engine: SchemaCheckResult, ena
 		const found = issueFinding(issue, ruleId, 'presentation', '', 'document', code === 'variable-group-omitted' ? 'info' : 'warning');
 		const help = HELP[code];
 		if (help) found.help = help;
+		if (code === 'data-cell-type') {
+			// FR-05: the safe fix stores a cell in the type its column declares (a strict decimal string as a number, a number as text); it never changes the type.
+			const fix = suggestCellTypeFix(document, issue.path, issue.params.aggregate === true);
+			if (fix) found.fixes = [{ id: 'store-cell-type', title: fix.title, kind: 'patch', safe: true, patch: fix.patches }];
+		}
 		if (code === 'shape-anchor-size-unit') {
 			const key = String(issue.params.key), px = `${key}Px`;
 			found.help = `Did you mean "${px}"? "${key}" is a fraction of the block.`;

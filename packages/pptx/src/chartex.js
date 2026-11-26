@@ -541,7 +541,7 @@ export function chartFromChartex(doc, {heading, limits, invalid, path, report}) 
     if (!Number.isSafeInteger(value) || value < 0 || value > limit) invalid(`integer exceeds the supported range 0–${limit}`, location);
     return value;
   };
-  let cells = 0;
+  let cells = 0, repaired = false;
   const level = (dimension, location, numeric) => {
     const lvl = asArray(dimension?.['cx:lvl'])[0];
     if (!lvl) return [];
@@ -553,7 +553,8 @@ export function chartFromChartex(doc, {heading, limits, invalid, path, report}) 
     for (const [position, point] of points.entries()) {
       const at = `${location}/cx:lvl/cx:pt[${position}]@idx`;
       const index = integer(point?.idx, limits.points - 1, at);
-      if (count !== undefined && index >= count) invalid('point index is outside its declared count', at);
+      // opf#1477: a count below the highest index extends the cache; the points sit at their own indexes.
+      if (count !== undefined && index >= count) repaired = true;
       if (indexed.has(index)) invalid('duplicate point index', at);
       const value = scalar(point);
       if (numeric) {
@@ -585,6 +586,7 @@ export function chartFromChartex(doc, {heading, limits, invalid, path, report}) 
     const name = series['cx:tx']?.['cx:txData']?.['cx:v'];
     names.push(name === undefined ? `Series ${index + 1}` : scalar(name));
   });
+  if (repaired) report?.({code: 'chart-cache-repaired', option: 'data', message: 'A cached chart dimension declares fewer points (ptCount) than its highest point index needs; the chart imports with the points at their own indexes and the positions without a point as gaps.'});
   const rowCount = values.reduce((count, row) => Math.max(count, row.length), labels?.length ?? 0);
   if (rowCount === 0) return null;
   if (rowCount * (values.length + (labels ? 1 : 0)) > limits.cells) invalid('chart cache exceeds the 1,000,000-cell import limit', path);

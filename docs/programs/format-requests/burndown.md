@@ -10,12 +10,12 @@ Every item also meets the definition of done in the README; the acceptance colum
 | FR-02 | CR 6: ids on list items, bullets, timeline events and table rows | [Below](#fr-02-ids-inside-a-deck-cr-6) | done |
 | FR-03 | opf#1297: links to a slide of the same deck, `slide:<id>` | [Below](#fr-03-links-to-a-slide-opf1297) | done |
 | FR-04 | CR 1 with CR 3: data sources and a flat dataset | [Below](#fr-04-data-sources-and-a-flat-dataset-cr-1-with-cr-3) | done |
-| FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | todo |
+| FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | done |
 | FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | todo |
 | FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | in-progress |
 | FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | done |
 | FR-09 | CR 14: limits on a variable's value | [Below](#fr-09-limits-on-a-variables-value-cr-14) | done |
-| FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | in-progress |
+| FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | done |
 | FR-11 | What a validator says about a key it does not know | [Below](#fr-11-what-a-validator-says-about-a-key-it-does-not-know) | done |
 
 Order of landing: FR-01 to FR-03 (ids), FR-04 to FR-07 (data), FR-08 (embed), FR-09 and FR-10 (variables). The tracks do not depend on
@@ -117,17 +117,17 @@ away entirely: OPF adds no aliases before 1.0, and `opf fix` rewrites an older `
 
 Acceptance:
 
-- The root `datasources` is a map of data sources. A data source takes `title`, `description`, `connector`, `src`, `license`, `refresh`
+- The root `datasources` is a map of data sources. A data source takes `title`, `description`, `connector`, `src`, `license`, `refreshEvery`
   (an ISO 8601 duration that no engine acts on) and `extensions`. A data source never holds credentials.
 - A dataset takes, beside `columns` and `rows`: `datasource` (a string that is always the id of an entry in `datasources`, or an inline
   data source object of the same shape), `query` (the selection in the data source's own language, which replaces `sheet` and `range`),
   `retrieved` (a date or a date-time), `version` (a free string the source gives its snapshot), `sha256` (the hash of the source file's
-  bytes as retrieved) and `generator` (`{ kind: "human" | "model", name }`). `source.fields` is dropped and so are `queryLanguage` and any
+  bytes as retrieved) and `generator` (`{ type: "human" | "model", name }`). `source.fields` is dropped and so are `queryLanguage` and any
   transform hash.
 - Inline chart data (`chart.data` with columns and rows) takes the same keys, and a chart that references a dataset reports the
   dataset's.
 - Errors: `datasource-unknown` (an unknown data source id). Warnings: `datasource-credentials` (a `src` with a user and password, or a
-  query parameter named like a key or token) and `dataset-stale` (with a date passed, `retrieved` older than the data source's `refresh`).
+  query parameter named like a key or token) and `dataset-stale` (with a date passed, `retrieved` older than the data source's `refreshEvery`).
 - A 0.35 or 0.36 document with `source` fails validation until `opf fix` rewrites it: `src` becomes `datasource: { src }`, `retrieved` and
   the rest move up, `sheet` and `range` fold into `query` (`"FY26!A1:C13"`), `fields` is dropped. The release notes say it. The gallery
   examples use no `source`, so only four docs pages and the skills change.
@@ -141,8 +141,8 @@ Progress log:
   root `datasources` and every data source key of a dataset and of inline chart data come back the same from the export and from
   PowerPoint's own save. A released 0.36.0 importer reads the file as a valid deck but restores no shared dataset; charts and tables
   import the values they show (accepted for the one breaking change). `query` is optional, as the owner asked: a CSV file or rows typed
-  into the deck need none. Two key names change in a follow-up before the release, from the key-names study: `generator.kind` becomes
-  `generator.type` and a data source's `refresh` becomes `refreshEvery`.
+  into the deck need none. Two key names changed in a follow-up (FR-04b, the owner's picks from the key-names study): `generator.kind` is now
+  `generator.type` and a data source's `refresh` is now `refreshEvery`. Nothing was released with the old names: no alias, no `opf fix` rewrite.
 
 ## FR-05: typed columns (CR 2)
 
@@ -161,6 +161,10 @@ Acceptance:
 - Conformance: valid decks with typed columns; the warning has no conformance case. A Markdown and YAML round trip keeps the keys.
 
 Progress log:
+
+- 2026-11-25: done, in the pull request that adds this line. Checked in PowerPoint: the typed dataset columns, the rows, the chart's and
+  the table's dataset references and the inline chart columns all come back unchanged from the export and from PowerPoint's own save;
+  nothing draws differently. `datasetColumnDeclaration` is the function FR-06's data link reads a column's type from.
 
 ## FR-06: a metric computed from data (CR 4)
 
@@ -274,6 +278,13 @@ Acceptance:
 - Conformance: valid decks with translations; a Markdown and YAML round trip keeps them. Docs and an example deck in two languages.
 
 Progress log:
+
+- 2026-11-25: done, in the pull request that adds this line. The name table covers 88 languages (ICU 78.3, CLDR 48.0) and costs about
+  14 KB gzipped in each of the ten entries that draw dates; their budgets moved by that amount. Checked in PowerPoint: a translated deck
+  footer and its dates show the same text as the preview on a German and a French slide, and import returns each slide's text. Found
+  and fixed there: a date field on a slide whose language differs from the deck's was looked up in the deck's language and written in
+  the slide's, so PowerPoint showed another format than the preview. Open as opf#1507: a named current date in a non-English deck is
+  fixed text, because the date field table has no long forms per language.
 
 ## FR-11: what a validator says about a key it does not know
 
