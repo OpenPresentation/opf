@@ -36,6 +36,8 @@ import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeSh
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
 import {attachMediaTags,importMediaGroups,mediaCaption,mediaFrameRecord,mediaTextFingerprint} from './media-provenance.js';
+import {embedName, groupEmbedCards, importEmbeds, isEmbedCardGroup, tagEmbeds} from './embed-provenance.js';
+import {embedCardLayout, embedSite, embedTitle, embedValue} from '@openpresentation/opf';
 // RR-34: captions and footnote areas as tagged text boxes; citation markers round-trip through the tags and the marker runs.
 import {addCaption, addFootnotes, glyphAnchor, paragraphAnchor} from './annotation-export.js';
 import {attachAnnotationTags, captionValue, importAnnotations, restoreCitations} from './annotation-provenance.js';
@@ -203,6 +205,7 @@ const ROOT_PAYLOAD_FIELDS = [
   "bullets",
   "image",
   "video",
+  "embed",
   "chart",
   "table",
   "code",
@@ -342,6 +345,9 @@ export async function toPptx(input, options = {}) {
   context.notesWithCarriageReturns = new Map();
   context.cardTags = new Map();
   context.mediaTags = new Map();
+  // FR-08: the OPF_EMBED_V1 records of the embeds' pictures and card panels (full provenance), and each card panel's description (its group's alt text).
+  context.embedTags = new Map();
+  context.embedCards = new Map();
   context.provenanceMode = options.provenance ?? "full";
   context.headingTags = new Map();
   context.plainTextTags = new Map();
@@ -1230,7 +1236,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     for (const [mediaName, caption] of annotations.captions) {
       const key = keyByName.get(mediaName);
       const entry = key === undefined ? undefined : content.find(item => item.sources.includes(key));
-      if (!entry || !['image', 'chart', 'table', 'video', 'diagram'].includes(inferPayloadKind(entry.payload))) {
+      if (!entry || !['image', 'chart', 'table', 'video', 'embed', 'diagram'].includes(inferPayloadKind(entry.payload))) {
         options.onDiagnostic?.({code: 'caption-detached', path: `slides.${slideIndex}`, message: `The caption of ${caption.path} no longer has its media shape (${mediaName}); its text is imported as an ordinary text block.`});
         blocks.push({type: 'text', text: caption.value});
         continue;
@@ -1355,6 +1361,16 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   for (const [index, payload] of diagrams.shapes) {
     items.push({kind: 'diagram', bounds: shapeBounds(shapes[index]['p:spPr']?.['a:xfrm']), payload, sources: [`sp:${index}`]});
   }
+  // FR-08: a tagged embed picture or card (OPF_EMBED_V1) whose link and picture or title text are as exported is its embed block again; the card's shapes are its drawing.
+  const embeds = importEmbeds({pictures: nativeContext.pictures, shapes, paragraphs, relationships, entries, slideIndex,
+    mediaKeyOf: picture => { const bytes = entries[relationships.get(picture?.['p:blipFill']?.['a:blip']?.['r:embed'])?.path]; return bytes ? mediaKey(bytes) : undefined; },
+    readPicture: picture => importPicture(entries, picture, slidePath, relationships, () => {}),
+    valid: payload => isValidFormat({slides: [{blocks: [payload]}]}), report: diagnostic => options.onDiagnostic?.(diagnostic)});
+  const embedShapes = new Set();
+  for (const card of embeds.cards) {
+    for (const member of card.members) { embedShapes.add(member); roles.set(`sp:${member}`, 'embed'); }
+    items.push({kind: 'embed', bounds: shapeBounds(shapes[card.panel]['p:spPr']?.['a:xfrm']), payload: card.payload, sources: card.members.map(member => `sp:${member}`)});
+  }
   // SH-05: the drawn shapes in z order, with their frames on the slide (groups flattened); shapes and connectors the importer keeps as OPF shapes.
   const drawnAll = readDrawnShapes(decodeText(entries[slidePath]));
   const drawnShapes = new Map(drawnAll.filter(entry => entry.tag === 'p:sp').map(entry => [entry.index, entry]));
@@ -1381,7 +1397,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (role) roles.set(shapeKeys.get(shape), role);
     if(adoptedScalars.consumed.has(shape)){roles.set(shapeKeys.get(shape),'native-scalar-fragment');continue;}
     if(adoptedFragments.consumed.has(shape)){roles.set(shapeKeys.get(shape),'native-fragment');continue;}
-    if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index) || diagrams.shapes.has(index) || diagramMembers.has(shape)) continue;
+    if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index) || diagrams.shapes.has(index) || diagramMembers.has(shape) || embedShapes.has(index)) continue;
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (referenceOverlays.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
     if (chartMarks.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
@@ -1443,7 +1459,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     const index = shapes.indexOf(member), drawnMember = drawnShapes.get(index);
     return !drawnMember || shapeRole(drawnMember, {hasText: (paragraphs[index] ?? []).some(paragraph => paragraph.text)}) === 'text';
   }) || asArray(group?.['p:grpSp']).some(groupAtRisk);
-  if (asArray(tree?.['p:grpSp']).some(group => !isImagePlaceholderGroup(group) && !intactDiagramGroups.has(group) && groupAtRisk(group))) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.'});
+  if (asArray(tree?.['p:grpSp']).some(group => !isImagePlaceholderGroup(group) && !isEmbedCardGroup(group) && !intactDiagramGroups.has(group) && groupAtRisk(group))) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.'});
   const frames = asArray(tree?.["p:graphicFrame"]);
   // RR-35: what a chart's axis titles, legend and data labels cannot express in OPF is reported on the chart's path.
   const chartReport = label => diagnostic => options.onDiagnostic?.({code: 'chart-option-adapted', ...diagnostic, path: `slides.${slideIndex}.${label}.${diagnostic.option}`});
@@ -1513,6 +1529,10 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (pictureRole) { roles.set(`pic:${index}`, pictureRole); continue; }
     if (diagrams.pictures.has(index)) {
       items.push({kind: 'diagram', bounds: shapeBounds(picture['p:spPr']?.['a:xfrm']), visualBounds: visualBounds(picture['p:spPr']?.['a:xfrm']), payload: diagrams.pictures.get(index), sources: [`pic:${index}`]});
+      continue;
+    }
+    if (embeds.pictures.has(index)) {
+      items.push({kind: 'embed', bounds: shapeBounds(picture['p:spPr']?.['a:xfrm']), visualBounds: visualBounds(picture['p:spPr']?.['a:xfrm']), payload: embeds.pictures.get(index), sources: [`pic:${index}`]});
       continue;
     }
     // A tagged, unchanged image block brings back its own fields (fit, focus, treatment, placement); its crop is theirs.
@@ -3133,7 +3153,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       const mediaNames = item.caption ? new Set([...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()]) : undefined;
       await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", tableAlignment: itemAlignment(geometry.design.contentAlignment), direction: geometry.direction, tableGrowth: item.tableGrowth, tableHighlight: item.tableHighlight, metricRecord: item.metricRecord }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout, item.chart);
       if (item.caption) {
-        const mediaName = item.field === 'video' ? `OPF media ${item.path} frame` : [...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()].find(name => !mediaNames.has(name));
+        const mediaName = item.field === 'video' ? `OPF media ${item.path} frame` : item.field === 'embed' ? embedName(item.path) : [...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()].find(name => !mediaNames.has(name));
         addCaption(slide, item, mediaName, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
       }
     }
@@ -3252,6 +3272,9 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       break;
     case "video":
       addMediaPayload(slide, presentation, payload.video, region, path, context, options);
+      break;
+    case "embed":
+      await addEmbedPayload(slide, presentation, payload.embed, region, path, context, options);
       break;
     case "chart":
       addChartPayload(slide, payload.chart, region, context, options, path, presentation, chartLayout);
@@ -3494,14 +3517,14 @@ async function addImagePayload(slide, presentation, asset, region, path, context
 // One native image picture at `box` (inches), fitted at packaging (src/image-provenance.js placeImages). `treatment` is
 // what OPF_IMAGE_V1 stores (the authored block fields); without it the picture is untagged. Returns the picture's object
 // name, or undefined when the source could not be embedded (the caller draws the unavailable-image panel).
-async function addImagePicture(slide, presentation, asset, box, path, context, options, {fit, focus, effects = null, shrink = true, treatment, alt, role = 'block', objectName, src, measured} = {}) {
+async function addImagePicture(slide, presentation, asset, box, path, context, options, {fit, focus, effects = null, shrink = true, treatment, alt, role = 'block', objectName, src, measured, hyperlink, unresolved} = {}) {
   const outcome = { box, cover: fit === 'cover' };
   const resolved = await resolveImage(asset, presentation, options, path, outcome);
   // RR-105: the picture's aspect ratio, read from the embedded source, for a caller that places something on the drawn picture.
   if (measured && typeof resolved?.data === 'string') measured.aspect = intrinsicImageAspect(resolved.data);
   if (!resolved) {
     // RR-59 (AUTO-26): a content picture never vanishes silently. A background names its own fallback (the slide color).
-    if (!outcome.reported) options.onDiagnostic?.(role === 'background' ? backgroundUnresolved(path) : {code: "unresolved-asset", path, reason: "unresolved-source", message: "The image needs an embedded raster, a declared asset or a host imageResolver; the image exports as the unavailable-image placeholder. Remote images are never fetched."});
+    if (!outcome.reported) options.onDiagnostic?.(role === 'background' ? backgroundUnresolved(path) : {code: "unresolved-asset", path, reason: "unresolved-source", message: unresolved ?? "The image needs an embedded raster, a declared asset or a host imageResolver; the image exports as the unavailable-image placeholder. Remote images are never fetched."});
     return undefined;
   }
   const name = objectName ?? imageName(1 + [...context.images.keys()].filter(key => /^OPF image \d+$/.test(key)).length);
@@ -3517,7 +3540,7 @@ async function addImagePicture(slide, presentation, asset, box, path, context, o
   // RR-94: the authored relative path or URL is recorded with the picture's media key; an SVG imports from its own part, so it is not.
   context.images.set(name, { slide: context.slidePath, role, path, box, fit, focus, shrink, effects, ...(treatment !== undefined ? {treatment} : {}), ...(src !== undefined && !outcome.svg ? {src} : {}) });
   context.pictureText.set(name, pictureText(text, asset, presentation));
-  slide.addImage({ ...resolved, objectName: name, x: box.x, y: box.y, w: box.w, h: box.h, altText: text });
+  slide.addImage({ ...resolved, objectName: name, x: box.x, y: box.y, w: box.w, h: box.h, altText: text, ...(hyperlink ? { hyperlink } : {}) });
   return name;
 }
 
@@ -5438,6 +5461,45 @@ function addMediaPayload(slide, presentation, value, region, path, context, opti
     {path, fontSize: 18, fontFamily: context.fonts.body, fontWeight: 600, align: "center", color: context.colors.mutedText, objectName: `OPF media ${path} caption`, media: true, keepEmpty: true, hyperlink});
 }
 
+// FR-08: an embed is exported as its static form, linked to `src` (the preview draws the same): the `preview` picture contained in the frame on the
+// scheme's surface color, or the card (core embedCardLayout) as one native group. PowerPoint has no live page; OPF_EMBED_V1 (src/embed-provenance.js)
+// keeps the authored embed while its link and picture or title text stay as written.
+async function addEmbedPayload(slide, presentation, value, region, path, context, options) {
+  const embed = embedValue(value);
+  if (!embed) return;
+  const box = pixelBox(region), name = embedName(path), link = {url: embed.src}, title = embedTitle(value);
+  const authored = {src: embed.src, ...(embed.title !== undefined ? {title: embed.title} : {}), ...(embed.aspectRatio !== undefined ? {aspectRatio: embed.aspectRatio} : {})};
+  const preview = embed.preview !== undefined ? recordableImageSource(embed.preview) : undefined;
+  const tagged = context.provenanceMode === 'full';
+  const record = {v: 1, path, embed: authored, written: title, ...(preview !== undefined ? {preview} : {})};
+  if (embed.preview !== undefined) {
+    const surface = normalizeHex(context.colors.surface);
+    const picture = await addImagePicture(slide, presentation, embed.preview, region, path, context, options, {fit: 'contain', shrink: false, objectName: name, alt: title, hyperlink: link,
+      effects: {shape: null, strokeXml: null, opacity: null, recolor: null, fillXml: `<a:solidFill><a:srgbClr val="${surface}"/></a:solidFill>`},
+      unresolved: 'The embed\'s preview needs an embedded raster, a declared asset or a host imageResolver; the embed exports as its card. Remote images are never fetched.'});
+    if (picture) {
+      if (tagged) context.embedTags.set(name, {...record, evidence: {href: embed.src}});
+      return;
+    }
+  }
+  const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
+  const card = embedCardLayout({frame: box, title, site: embedSite(embed.src), headingFamily: context.fonts.heading, bodyFamily: context.fonts.body, scale,
+    minFontSize: context.composition?.minFontSize ?? 16, measurement: options.textMeasurement});
+  const inches = value => value / 96, ink = context.roles ? normalizeHex(readableSchemeColor(`#${context.colors.accent}`, context.roles).hex) : 'FFFFFF';
+  context.embedCards.set(name, title);
+  slide.addShape('roundRect', {x: region.x, y: region.y, w: region.w, h: region.h, rectRadius: inches(card.radius), fill: {color: context.colors.surface}, line: {color: context.colors.border, width: 0.75}, hyperlink: link, objectName: name});
+  const {badge, arrow} = card.icon;
+  slide.addShape('ellipse', {x: inches(badge.x), y: inches(badge.y), w: inches(badge.width), h: inches(badge.height), fill: {color: context.colors.accent}, line: {transparency: 100}, hyperlink: link, objectName: `${name} badge`});
+  // PowerPoint's right arrow, turned 45 degrees about its center to point up and right (core embedArrowPoints draws the same).
+  slide.addShape('rightArrow', {x: inches(arrow.x), y: inches(arrow.y), w: inches(arrow.width), h: inches(arrow.height), rotate: 315, fill: {color: ink}, line: {transparency: 100}, hyperlink: link, objectName: `${name} arrow`});
+  for (const [text, part, color] of [[card.title, 'title', context.colors.text], [card.site, 'site', context.colors.mutedText]]) {
+    if (!text) continue;
+    addMeasuredPayloadText(slide, text.lines.join(' '), text.box, context, options, {path, fit: {lines: text.lines, fontSize: text.fontSize, lineHeight: text.lineHeight, overflow: false}, textStyle: text.style, align: 'left', color,
+      objectName: `${name} ${part}`, diagnosticsHandled: true, hyperlink: link});
+  }
+  if (tagged) context.embedTags.set(name, {...record, evidence: {href: embed.src, text: (card.title?.lines ?? []).join('\n')}});
+}
+
 // The asset an image block names, layered as the preview layers it: fields on the
 // block win over the registry entry it references, and an unknown reference keeps
 // the block's own fields.
@@ -6471,6 +6533,13 @@ async function normalizePptxZip(raw, context) {
     if (error instanceof OPFPptxError) throw error;
     throw new OPFPptxError("packaging-failed", `Image pictures could not be placed: ${errorMessage(error)}`);
   }
+  // FR-08: the embeds' pictures and card panels carry OPF_EMBED_V1 in full provenance: the link and the picture's media key (or the card's title text) are its evidence.
+  try {
+    tagEmbeds(entries, context.embedTags, {relationshipsOf: parseRelationships,
+      mediaKeyFor: (part, id) => { const target = parseRelationships(entries, part).get(id)?.path, bytes = entries[target]; return bytes ? mediaKey(imageMetadata.get(target) ? normalizeImageOrientation(bytes, imageMetadata.get(target)) : bytes) : undefined; }});
+  } catch (error) {
+    throw new OPFPptxError("packaging-failed", `Embed tags could not be attached: ${errorMessage(error)}`);
+  }
   tagTextWatermarks(entries, context.textWatermarks);
   placeWatermarks(entries, context.watermarks, (part, id) => imageMetadata.get(parseRelationships(entries, part).get(id)?.path), path => {
     throw new OPFPptxError("unsupported-image-dimensions", "Image fitting requires readable PNG, JPEG, GIF or WebP dimensions. Supply a supported raster image through imageResolver.", { path });
@@ -6859,6 +6928,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
         return `<p:cNvPr id="${id}" name="${name}" descr="${describe(description)}"${close}>`;
       });
       xml=groupImagePlaceholders(xml,context.imagePlaceholderGroups,name=>describe(context.imagePlaceholders.get(name)));
+      xml=groupEmbedCards(xml,context.embedCards,name=>describe(context.embedCards.get(name)));
       // PptxGenJS 4.0.1 emitted pPr before each rich run (pptxgenjs-plus writes
       // one). OOXML allows one pPr, before all runs. Paragraph options belong
       // to the first run.

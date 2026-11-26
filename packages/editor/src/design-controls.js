@@ -50,6 +50,7 @@ import { createShapeControls } from "./shape-controls.js";
 import { readShape, shapeBlockPathForSelection } from "./shape-options.js";
 import { readOverlay } from "./shape-overlays.js";
 import { IMAGE_EDGES, IMAGE_FITS, IMAGE_SHAPES, readEffectiveImageFit, readImageTreatments, setImageTreatment } from "./image-options.js";
+import { EMBED_ASPECT_PRESETS, prepareEmbed, readEmbed, setEmbed } from "./embed-options.js";
 import { METRIC_TRENDS, readMetricTrend, setMetricTrend } from "./content-actions.js";
 import { createMetricDataControls } from "./metric-data-controls.js";
 import { applyCatalogUpdate, catalogRecordAt, checkCatalogUpdates, mergeCatalogs, moveToCustom, referenceFindings } from "./catalogs.js";
@@ -1279,8 +1280,35 @@ export function createDesignControls(container, options = {}) {
     const advanced = h("details", { class: "opf-dc-advanced", "data-role": "selection-advanced", hidden: options.showPath === false || undefined }, h("summary", {}, "Advanced"), pathChip);
     // FR-06: the Data section of a metric: its link to a dataset, the change, the direction that is good and the number format.
     const metricData = createMetricDataControls({ editor, h, selectField, textField, button, run });
-    body.append(contentControls.nodes.arrange, contentControls.nodes.list, convert.wrap, contentControls.nodes.metrics, trend.wrap, metricData.node, iconHost, chartType.wrap, replace.wrap, contentControls.nodes.image, advanced);
-    dynamic.selection = { details, convert, replace, chartType, trend, metricData, iconPicker, pathChip, advanced };
+    // FR-08: an embed's address, title, aspect ratio and preview (the editor never loads the page; the canvas draws its picture or card).
+    const embedSet = (fields, done) => run(() => setEmbed(editor, dynamic.embedPath, fields), done);
+    const embedSrc = textField("embed-src", "Address", { placeholder: "https://app.example.com/dashboard", help: "The page's https address. Enter applies.", onCommit: (value) => embedSet({ src: value }, "Embed address changed.") });
+    const embedTitle = textField("embed-title", "Title", { help: "Its accessible name and the card's heading. Clear to use the site name.", onCommit: (value) => embedSet({ title: value.trim() === "" ? null : value }, value.trim() === "" ? "Title removed." : "Embed title changed.") });
+    const embedRatio = selectField("embed-ratio", "Aspect ratio", {
+      empty: "16:9 (default)",
+      help: "The frame's width over its height",
+      onChange: (value) => {
+        if (value === "custom") return embedRatioNumber.input.focus();
+        embedSet({ aspectRatio: value === "" ? null : Number(value) }, "Embed aspect ratio changed.");
+      },
+    });
+    embedRatio.setOptions([...EMBED_ASPECT_PRESETS.slice(1).map((preset) => ({ value: String(preset.value), label: preset.label })), { value: "custom", label: "Other (number)" }]);
+    const embedRatioNumber = numberField("embed-ratio-number", "Aspect ratio (number)", { min: 0.1, max: 10, step: 0.01, placeholder: "width / height", help: "1.78 for 16:9. Clear for 16:9.", onCommit: (value) => embedSet({ aspectRatio: value }, "Embed aspect ratio changed.") });
+    const embedPreview = imageCluster("embed-preview", "Preview", {
+      help: "A picture of the page, drawn wherever it is not shown live. Asset, URL or data URL. Enter applies; clear to remove.",
+      apply: (ref) => setEmbed(editor, dynamic.embedPath, { preview: ref }),
+      captureBuild: () => {
+        const path = dynamic.embedPath;
+        return (ref, document_) => prepareEmbed(document_, path, { preview: ref });
+      },
+    });
+    const embedOpen = button("Open page", () => {
+      const address = embedSrc.input.value.trim();
+      if (/^https:\/\/[^\s/?#]/.test(address)) doc.defaultView?.open?.(address, "_blank", "noopener,noreferrer");
+    }, { quiet: true, title: "Open the page in a new tab" });
+    const embedBox = h("fieldset", { class: "opf-dc-fieldset", "data-role": "embed", hidden: true }, h("legend", {}, "Embed"), embedSrc.wrap, embedTitle.wrap, embedRatio.wrap, embedRatioNumber.wrap, embedPreview.wrap, embedOpen);
+    body.append(contentControls.nodes.arrange, contentControls.nodes.list, convert.wrap, contentControls.nodes.metrics, trend.wrap, metricData.node, iconHost, chartType.wrap, replace.wrap, contentControls.nodes.image, embedBox, advanced);
+    dynamic.selection = { details, convert, replace, chartType, trend, metricData, iconPicker, pathChip, advanced, embed: { box: embedBox, src: embedSrc, title: embedTitle, ratio: embedRatio, ratioNumber: embedRatioNumber, preview: embedPreview } };
   }
 
   if (built["slide-content"]) built["slide-content"].body.append(contentControls.slideNode);
@@ -1561,6 +1589,21 @@ export function createDesignControls(container, options = {}) {
           ui.chartType.setOptions(charts.map((entry) => ({ value: entry.id, label: entry.label })));
           ui.chartType.set(content.content?.type);
         }
+      }
+    }
+    // FR-08: the embed's form fields follow the selected block (a slide's own root embed included).
+    dynamic.embedPath = content?.key === "embed" ? blockPath : undefined;
+    if (ui?.embed) {
+      ui.embed.box.hidden = !dynamic.embedPath;
+      if (dynamic.embedPath) {
+        const current = readEmbed(document_, dynamic.embedPath);
+        ui.embed.src.set(current.src ?? "");
+        ui.embed.title.set(current.title ?? "");
+        const preset = current.aspectRatio === undefined ? "" : EMBED_ASPECT_PRESETS.find((entry) => Math.abs(entry.value - current.aspectRatio) < 1e-9);
+        ui.embed.ratio.set(current.aspectRatio === undefined || preset?.id === "16:9" ? "" : preset ? String(preset.value) : "custom");
+        ui.embed.ratioNumber.set(current.aspectRatio === undefined ? "" : String(current.aspectRatio));
+        ui.embed.preview.set(current.preview ?? "", "", dynamic.embedPath);
+        ui.embed.preview.refreshAssets();
       }
     }
     const shapeUi = dynamic.shape;

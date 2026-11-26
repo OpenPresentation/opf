@@ -47,6 +47,12 @@ export interface PresenterOptions {
   density?: "comfortable" | "touch";
   /** Show hidden slides too (default false: they are skipped, as the exports skip them). */
   includeHidden?: boolean;
+  /**
+   * FR-08: which embedded pages are shown live, by address. A page for which it returns true is shown in a sandboxed frame over the embed's
+   * picture or card (the static form stays under it until the frame loads); every other embed stays its static form, linked to its address.
+   * Default: none is live. A page on the presenting page's own origin is never shown live, whatever this returns.
+   */
+  embeds?: (src: string) => boolean;
   labels?: PresenterLabels;
 }
 

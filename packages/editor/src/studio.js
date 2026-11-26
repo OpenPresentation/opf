@@ -31,6 +31,7 @@ import { regionsAsBlocks } from "./content-actions.js";
 import { downloadSourceFile, copyText } from "./workspace-source.js";
 import { DECK_FILE_ACCEPT, readDeckFile } from "./read-deck-file.js";
 import { formatPointer, jsonEqual, parsePointer } from "@openpresentation/opf/patch";
+import { kindAccepted } from "@openpresentation/opf/composition";
 
 const PREFIX = "opf-studio";
 const WIDE = 1100, NARROW = 760;
@@ -841,7 +842,7 @@ export function createStudio(ctx) {
     const slide = s0.node(s0.slideKey);
     if (s0.layout || slide.container?.promoted) {
       const regions = s0.children(s0.slideKey).filter((entry) => entry.kind === "region");
-      const region = regions.find((entry) => !kind || !entry.accepts?.length || entry.accepts.includes(kind));
+      const region = regions.find((entry) => !kind || !entry.accepts?.length || kindAccepted(entry.accepts, kind));
       if (!region) return kind ? `No region of this layout accepts ${kind}.` : "Select a region to paste into.";
       return { target: region.key, index: s0.contentChildren(region.key).length };
     }
@@ -874,7 +875,7 @@ export function createStudio(ctx) {
     const s0 = scene();
     const target = s0.node(targetKey);
     if (!target) return "Drop inside the slide.";
-    if (target.kind === "region" && target.virtual && target.accepts?.length && !target.accepts.includes(kind)) return `Region ${target.region} accepts only ${target.accepts.join(", ")}.`;
+    if (target.kind === "region" && target.virtual && target.accepts?.length && !kindAccepted(target.accepts, kind)) return `Region ${target.region} accepts only ${target.accepts.join(", ")}.`;
     if (target.kind === "slide" && s0.layout) return "Drop into one of the layout's regions.";
     if (target.kind === "slide" && target.container?.promoted) return "Drop into one of the slide's cells.";
     if (target.kind === "region" && target.virtual && target.max && s0.contentChildren(target.key).length >= target.max) return `Region ${target.region} is full.`;

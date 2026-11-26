@@ -97,7 +97,7 @@ function collectSamples(context: RuleSlide): TextSample[] {
 	for (const item of composition.items) {
 		// LH-06: an item on the emphasis surface is drawn in the surface's roles on its fill.
 		const itemDesign = item.emphasis && surfaceDesign ? surfaceDesign : design;
-		if (['chart', 'image', 'video', 'code'].includes(item.field) || item.type === 'chart' || item.type === 'image' || item.type === 'video' || item.type === 'code') continue;
+		if (['chart', 'image', 'video', 'embed', 'code'].includes(item.field) || item.type === 'chart' || item.type === 'image' || item.type === 'video' || item.type === 'embed' || item.type === 'code') continue;
 		const backdrop = item.emphasis && emphasisBackdrop ? emphasisBackdrop : item.frameBox ? surface : slideBackdrop(context, textInkBox(item, measurement));
 		const itemPath = pointerOfDotted(item.path);
 		const heading = item.field === 'title' || item.field === 'subtitle' || item.field === 'tag';

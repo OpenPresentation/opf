@@ -451,6 +451,8 @@ class Converter {
     const resolve = (value, reference) => parseLength(value, { reference: reference ?? viewport.w, fontSize });
     const commands = shapeToPath(node, attrs, (value, reference) => resolve(value, reference), ctx.page.viewport);
     if (!commands) return;
+    // FR-08: a transparent rect marked as a link area (an embed's frame) is the rectangle of a link annotation, not a drawing.
+    if (attrs["data-opf-link-area"] === "true" && ctx.link) this.areaLinkAnnotation(attrs, ctx);
     const isLine = node.name === "line";
     const fill = isLine ? null : await this.paint(style.fill, style, ctx, commands, "fill");
     const strokeWidth = resolve(style["stroke-width"]) ?? 1;
@@ -907,6 +909,20 @@ class Converter {
     }
     content.op("Q");
     if (run.link) this.linkAnnotation(run, ctx);
+  }
+
+  /** FR-08: a link annotation over the rect an `a` element holds (its `data-opf-link-area`), for a link that wraps a picture and no text. */
+  areaLinkAnnotation(attrs, ctx) {
+    const link = ctx.link, uri = link.slide === undefined ? safeUri(link.href) : "";
+    if (uri === null) {
+      this.unsupported("pdf-link-skipped", `The link target ${JSON.stringify(link.href).slice(0, 80)} is not an http, https, mailto or tel address; no PDF link is created.`, {});
+      return;
+    }
+    const x = Number(attrs.x) || 0, y = Number(attrs.y) || 0, width = Number(attrs.width) || 0, height = Number(attrs.height) || 0;
+    if (!(width > 0 && height > 0)) return;
+    const box = boundsOf([[x, y], [x + width, y], [x + width, y + height], [x, y + height]].map(([px, py]) => applyPoint(ctx.matrix, px, py)));
+    const page = ctx.page;
+    page.annotations.push({ rect: [box.x, page.height - box.y - box.height, box.x + box.width, page.height - box.y], uri, ...(link.slide === undefined ? {} : { slide: link.slide }), object: link.slide === undefined ? this.file.reserve() : undefined, parent: null });
   }
 
   linkAnnotation(run, ctx) {

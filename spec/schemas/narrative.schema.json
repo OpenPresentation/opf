@@ -162,6 +162,7 @@
             "list",
             "image",
             "video",
+            "embed",
             "chart",
             "table",
             "code",

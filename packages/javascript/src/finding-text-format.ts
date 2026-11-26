@@ -113,8 +113,8 @@ const captionUnsupportedPayload: RuleText = (finding) => {
   const kind = type ?? (/a group cannot carry one/.test(finding.message) ? "group" : undefined);
   const is = kind ? kindPhrase(kind) : "not one of those";
   return {
-    message: `A ${code("caption")} belongs to one image, chart, table, video or diagram; this block is ${is}.`,
-    next: `put the ${code("caption")} on the image, chart, table, video or diagram it describes, or remove it.`,
+    message: `A ${code("caption")} belongs to one image, chart, table, video, embed or diagram; this block is ${is}.`,
+    next: `put the ${code("caption")} on the image, chart, table, video, embed or diagram it describes, or remove it.`,
   };
 };
 

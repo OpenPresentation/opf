@@ -10,7 +10,7 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { readSnapshotKind } from "../scripts/catalog-snapshot.mjs";
 import { bodyRegions } from "../../../scripts/gallery-stability-fixtures.mjs";
-import { OPFLayoutTemplateError, REGION_KINDS, layoutRegion, layoutTemplate } from "@openpresentation/opf/composition";
+import { IMPLIED_REGION_KINDS, OPFLayoutTemplateError, REGION_KINDS, layoutRegion, layoutTemplate } from "@openpresentation/opf/composition";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 /** OPF 0.35 standard region names: the 4.0.0 name of each renamed region, per record. The fixture is read with these names. */
@@ -131,7 +131,7 @@ test("rules are kept exactly: nothing but `accepts` is inherited or dropped, and
     for (const entry of written(record.regions)) {
       // LH-130: a heading takes a size and an anchor, and the title a rule (cover and section set their display title low with a rule).
       if (entry.name === "title" || entry.name === "subtitle") assert.deepEqual(Object.keys(entry).filter((key) => !["name", "size", "anchor", ...(entry.name === "title" ? ["rule"] : [])].includes(key)), [], `${record.id}/${entry.name}: a heading takes only size, anchor and (the title) rule`);
-      else if (EVERY_KIND.has(record.id)) assert.deepEqual([...entry.accepts].sort(), [...REGION_KINDS].sort(), `${record.id}/${entry.name} accepts every kind`);
+      else if (EVERY_KIND.has(record.id)) assert.deepEqual([...entry.accepts].sort(), REGION_KINDS.filter((kind) => !Object.hasOwn(IMPLIED_REGION_KINDS, kind)).sort(), `${record.id}/${entry.name} lists every kind core does not imply`);
       else assert.ok(entry.accepts && entry.accepts.length < REGION_KINDS.length, `${record.id}/${entry.name} has no reason to omit accepts`);
     }
   }

@@ -63,6 +63,11 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: { type: "treemap", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS } } },
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS } } },
   ),
+  "opf/embed-credentials": ex(
+    "Take the user name, password or secret query parameter out of `src`. Anyone who has the deck can read the address, and every export links to it; the host that shows the page holds the credential.",
+    { title: "Dashboard", embed: "https://app.example.com/dashboards/revenue?api_key=abc123" },
+    { title: "Dashboard", embed: "https://app.example.com/dashboards/revenue" },
+  ),
   "opf/chart-highlight-adapted": ex(
     "Name a series the chart plots in `highlight`, or remove the entry. A column that is the category or X column, or that the mapping leaves out, highlights nothing.",
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, highlight: { series: ["Quarter"] } } },

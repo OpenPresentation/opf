@@ -590,7 +590,7 @@ function semanticHelp(issue: ValidationIssue): string {
 	if (params.code === 'shape-option-unsupported-payload' && field === 'alt' && params.type === 'image') return 'A picture\'s alt text goes inside its image object: { "image": { "src": "...", "alt": "..." } }.';
 	if (params.code === 'shape-option-unsupported-payload' && field) return `Remove ${quoted}, or draw this as a shape: a shape block ({ "shape": ... } with no "image") or an overlay shape in the slide's "shapes".`;
 	if (params.code === 'number-format-invalid') return "Write a pattern with a numeric part, such as \"0%\", \"0.0\", \"#,##0\" or \"$#,##0.00\", optionally followed by a negative and a zero section after \";\" (\"+0%;-0%\", \"0;(0);0\"; at most three, each with a numeric part). A negative section prints no minus of its own. There is no text section, color or condition.";
-	if (params.code === 'caption-unsupported-payload') return 'Put the caption on the image, chart, table, video or diagram it describes, or write it as a text block of its own.';
+	if (params.code === 'caption-unsupported-payload') return 'Put the caption on the image, chart, table, video, embed or diagram it describes, or write it as a text block of its own.';
 	if (Array.isArray(params.incompatible) && params.incompatible.includes('bullets') && params.type === 'list') return 'For a list, write the entries under "items". To keep "bullets" (talking points, which belong to a text payload), remove "type" or write "type": "text".';
 	return 'Resolve the reported structural conflict while preserving every content field. Preview the result after editing.';
 }
@@ -708,7 +708,7 @@ function collapseAuthoringShapes(document: unknown, findings: Finding[]): void {
 	const OPTION_RULES = ['opf/image-option-unsupported-payload', 'opf/shape-option-unsupported-payload', 'opf/caption-unsupported-payload'];
 	// The raw copy is a missing kind key at the block ('image', 'shape' or 'path', or a captionable payload), or the `not` of "a shape with
 	// no image". After the union errors are reduced nothing in a finding names the definition it came from, so the wording is the test.
-	const optionDefinition = (entry: Finding): boolean => (entry.validation?.keyword === 'required' && /^must have required property '(?:image|shape|path|chart|table|video|diagram)'/.test(entry.message)) || (entry.validation?.keyword === 'not' && entry.message === 'must NOT be valid') || ((entry.validation?.keyword === 'anyOf' || entry.validation?.keyword === 'oneOf') && /must match a schema in anyOf|must match exactly one schema/.test(entry.message));
+	const optionDefinition = (entry: Finding): boolean => (entry.validation?.keyword === 'required' && /^must have required property '(?:image|shape|path|chart|table|video|embed|diagram)'/.test(entry.message)) || (entry.validation?.keyword === 'not' && entry.message === 'must NOT be valid') || ((entry.validation?.keyword === 'anyOf' || entry.validation?.keyword === 'oneOf') && /must match a schema in anyOf|must match exactly one schema/.test(entry.message));
 	for (let index = findings.length - 1; index >= 0; index--) {
 		const entry = findings[index];
 		if (!schema(entry) || !optionDefinition(entry)) continue;
