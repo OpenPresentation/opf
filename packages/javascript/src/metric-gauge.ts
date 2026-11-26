@@ -94,11 +94,14 @@ export function metricGaugeDiagnostics(metric: unknown, resolved: Pick<ResolvedM
   }
   const outside = (value: number) => value < min || value > max;
   const value = resolved.value?.isNumber ? resolved.value.number : undefined;
-  if (value !== undefined && outside(value)) out.push({ code: 'metric-gauge-range', severity: 'warning', path, message: `The gauge's value is outside its scale ${range}. Its arc stops at the end; the real number is printed.` });
-  if (finite(gauge.target) && outside(gauge.target)) out.push({ code: 'metric-gauge-range', severity: 'warning', path, message: `The gauge's target is outside its scale ${range}, so it is not drawn.` });
+  // One warning per gauge (a finding is one per rule and path), naming every part outside the range and what each then draws.
+  const parts: string[] = [];
+  if (value !== undefined && outside(value)) parts.push('value (its arc stops at the end; the real number is printed)');
+  if (finite(gauge.target) && outside(gauge.target)) parts.push('target (it is not drawn)');
   if (Array.isArray(gauge.bands)) gauge.bands.forEach((band, index) => {
-    if (record(band) && finite(band.to) && outside(band.to)) out.push({ code: 'metric-gauge-range', severity: 'warning', path, message: `The gauge's band ${index + 1} ends outside its scale ${range}; it is drawn to the end of the scale.` });
+    if (record(band) && finite(band.to) && outside(band.to)) parts.push(`band ${index + 1} (it is drawn to the end of the scale)`);
   });
+  if (parts.length) out.push({ code: 'metric-gauge-range', severity: 'warning', path, message: `The gauge's ${parts.length > 1 ? `${parts.slice(0, -1).join(', ')} and ${parts.at(-1)}` : parts[0]} ${parts.length > 1 ? 'are' : 'is'} outside its scale ${range}.` });
   const order = chartBandOrderDiagnostic(gauge.bands, path);
   if (order) out.push(order);
   return out;
