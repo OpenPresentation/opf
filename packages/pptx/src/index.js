@@ -4253,7 +4253,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // on the preview's box, which keeps only the padding and a text size). The right edge is pulled in by what the label lacks, so the plot's left
   // edge and its bars start where the preview's do; the preview itself is unchanged (its end label is not reserved room, and the golden corpus pins it).
   // A slide with several charts keeps its plots as they are: charts that share a plot width (LH-93) must stay equal, and each would need its own cut.
-  const alone = (JSON.stringify(presentation?.slides?.[context.slideIndex] ?? {}).match(/"chart":/g) ?? []).length <= 1;
+  // Nor does a slide with a shape attached to a chart point (SH-04): the anchor is computed on the composed plot.
+  const slideJson = JSON.stringify(presentation?.slides?.[context.slideIndex] ?? {});
+  const alone = (slideJson.match(/"chart":/g) ?? []).length <= 1 && !/"point":/.test(slideJson);
   if (alone && percent && chartData.barDir === 'bar' && layerXml.layout.plot?.target === 'inner' && layerXml.options.valAxisHidden !== true) {
     const frame = region.w * 96, plot = layerXml.layout.plot, fontPx = textSize / 75;
     const measure = textWidthMeasurer(resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, italic: false}, options.textMeasurement), options.textMeasurement);
