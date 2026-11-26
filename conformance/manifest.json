@@ -165,6 +165,14 @@
       "basis": "opf.schema.json#/$defs/ChartBand; opf.schema.json#/$defs/ChartMapping/properties/target"
     },
     {
+      "id": "core.valid.metric-gauge",
+      "file": "core/valid/metric-gauge.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Metrics drawn as gauges: a plain gauge, a gauge with three bands (two in scheme colors) and a target, and a gauge bound to a dataset.",
+      "basis": "opf.schema.json#/$defs/MetricGauge; opf.schema.json#/$defs/Metric/properties/gauge"
+    },
+    {
       "id": "core.valid.table-color-scale",
       "file": "core/valid/table-color-scale.opf.json",
       "levels": ["reader", "writer"],
@@ -587,6 +595,14 @@
       "expect": { "valid": false, "errorAt": "/slides/0/chart/bands" },
       "description": "A chart has an empty band list (one to six bands).",
       "basis": "opf.schema.json#/$defs/Chart/properties/bands"
+    },
+    {
+      "id": "core.invalid.metric-gauge-max-missing",
+      "file": "core/invalid/metric-gauge-max-missing.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/metric/gauge" },
+      "description": "A metric's gauge has no max.",
+      "basis": "opf.schema.json#/$defs/MetricGauge"
     },
     {
       "id": "core.invalid.table-color-scale-unknown-column",

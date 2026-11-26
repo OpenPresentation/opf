@@ -55,8 +55,16 @@ const NAMES: ReadonlySet<string> = new Set(SCHEME_COLOR_NAMES);
 
 /** The authored bands of a chart, as authored (unsorted), or an empty list; entries without a finite `to` are skipped. */
 function authoredBands(chart: unknown): ChartBandSpec[] {
-  if (!record(chart) || !Array.isArray(chart.bands)) return [];
-  return chart.bands.flatMap((entry, index): ChartBandSpec[] => {
+  return record(chart) ? readChartBands(chart.bands) : [];
+}
+
+/**
+ * A list of bands as engines read it (a chart's `bands` or a gauge's), as authored (unsorted), or an empty list; entries without a finite
+ * `to` are skipped, and a color that is not a scheme name is ignored.
+ */
+export function readChartBands(list: unknown): ChartBandSpec[] {
+  if (!Array.isArray(list)) return [];
+  return list.flatMap((entry, index): ChartBandSpec[] => {
     if (!record(entry) || typeof entry.to !== 'number' || !Number.isFinite(entry.to)) return [];
     const label = typeof entry.label === 'string' && entry.label.trim() ? entry.label : undefined;
     const color = typeof entry.color === 'string' && NAMES.has(entry.color) ? entry.color as SchemeColorName : undefined;
@@ -150,8 +158,14 @@ export function chartBandDiagnostics(chart: unknown, base = ''): ChartBandDiagno
   if (!record(chart) || !Array.isArray(chart.bands) || !chart.bands.length) return [];
   const path = `${base}/bands`;
   if (!CHART_BAND_TYPES.has(typeOf(chart))) return [{ code: 'chart-bands-unsupported', severity: 'warning', path, message: `This chart type does not draw bands; they are ignored. Bands are drawn by bar, column, line and area charts (and their stacked forms) and by bullet charts, not by a '${typeOf(chart)}' chart.` }];
-  const ends = authoredBands(chart).map(band => band.to);
-  return ends.some((to, index) => index > 0 && !(to > ends[index - 1]!)) ? [{ code: 'chart-bands-order', severity: 'warning', path, message: 'The bands are not in increasing order; they are drawn sorted. Write each band\'s "to" above the previous one.' }] : [];
+  const order = chartBandOrderDiagnostic(chart.bands, `${base}`);
+  return order ? [order] : [];
+}
+
+/** `chart-bands-order` at `<base>/bands` when a list of bands (a chart's or a gauge's) does not increase strictly by `to`. */
+export function chartBandOrderDiagnostic(list: unknown, base = ''): ChartBandDiagnostic | undefined {
+  const ends = readChartBands(list).map(band => band.to);
+  return ends.some((to, index) => index > 0 && !(to > ends[index - 1]!)) ? { code: 'chart-bands-order', severity: 'warning', path: `${base}/bands`, message: 'The bands are not in increasing order; they are drawn sorted. Write each band\'s "to" above the previous one.' } : undefined;
 }
 
 /** The bullet chart type id. */
