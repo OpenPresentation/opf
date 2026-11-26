@@ -15,7 +15,6 @@ import type { MetricDataDiagnostic, ResolvedMetric } from './metric-data.js';
 import { NUMBER_GROUPING_MIN } from './number-grouping.js';
 import { formatNumber } from './numerals.js';
 import { mixOklab } from './oklab.js';
-import { presetGeometry } from './shape-geometry.js';
 import { SCHEME_COLOR_NAMES, type SchemeColorName } from './table-color-scale-range.js';
 
 /** The track's (and each band's) thickness as a share of the arc's outer radius. */
@@ -204,6 +203,20 @@ export function metricGaugeValueFill(gauge: Pick<MetricGaugeLayout, 'bands' | 'v
 }
 
 /**
+ * The outline of DrawingML's blockArc preset in a square frame of side `size` (presetShapeDefinitions.xml: the outer arc from adj1 clockwise to
+ * adj2 at half the frame, then the inner arc back at half the frame less adj3 of it), as SVG path data relative to the frame's top left. The
+ * preset's own guides, written out for a square frame, so the composition entry does not carry the preset table (shape-geometry.ts draws the
+ * same outline; a test compares them).
+ */
+export function blockArcPath(size: number, adjust: { adj1: number; adj2: number; adj3: number }): string {
+  const c = size / 2, outer = c, inner = c - size * Math.max(0, Math.min(0.5, adjust.adj3));
+  const start = adjust.adj1 % 360, sweep = ((adjust.adj2 - adjust.adj1) % 360 + 360) % 360 || 360;
+  const at = (radius: number, degrees: number) => { const a = degrees * Math.PI / 180; return `${round(c + radius * Math.cos(a))} ${round(c + radius * Math.sin(a))}`; };
+  const large = sweep > 180 ? 1 : 0, end = start + sweep;
+  return `M ${at(outer, start)} A ${round(outer)} ${round(outer)} 0 ${large} 1 ${at(outer, end)} L ${at(inner, end)} A ${round(inner)} ${round(inner)} 0 ${large} 0 ${at(inner, start)} Z`;
+}
+
+/**
  * The drawing plan of a laid-out gauge, which both engines draw: the bands as arc segments (and the track where no band is, or the whole
  * track without bands), the value arc over them at METRIC_GAUGE_VALUE_SHARE of their thickness (none for a value at or below `min`), the
  * target tick across the arc, and the ends' labels in the secondary text color. Part names are stable: `gauge track`, `gauge band <n>` (n the
@@ -216,7 +229,7 @@ export function metricGaugeDrawing(gauge: MetricGaugeLayout, colors: MetricGauge
   const arcs: Omit<MetricGaugeArc, 'd'>[] = [];
   // The bands run from `min` (chartBandRanges starts the first drawn band there) to their last end; the track draws the rest of the arc.
   const last = gauge.bands.length ? gauge.bands[gauge.bands.length - 1]!.end : 0;
-  gauge.bands.forEach((band, position) => arcs.push({ part: `gauge band ${position + 1}`, role: 'band', band: band.index, frame: frame(r), adjust: segment(band.start, band.end, r, t), fill: chartBandFill(band, colors).toUpperCase() }));
+  for (const [position, band] of gauge.bands.entries()) arcs.push({ part: `gauge band ${position + 1}`, role: 'band', band: band.index, frame: frame(r), adjust: segment(band.start, band.end, r, t), fill: chartBandFill(band, colors).toUpperCase() });
   if (last < 1) arcs.push({ part: 'gauge track', role: 'track', frame: frame(r), adjust: segment(last, 1, r, t), fill: metricGaugeTrackFill(colors).toUpperCase() });
   if (gauge.fill > 0) {
     const inner = t * METRIC_GAUGE_VALUE_SHARE, radius = r - (t - inner) / 2;
@@ -228,6 +241,6 @@ export function metricGaugeDrawing(gauge: MetricGaugeLayout, colors: MetricGauge
     return { part: 'gauge target', x1: round(a.x), y1: round(a.y), x2: round(b.x), y2: round(b.y), width: gauge.targetWidth, color: colors.text.slice(0, 7).toUpperCase() };
   })() : undefined;
   const muted = colors.muted.slice(0, 7).toUpperCase();
-  const outlined = arcs.map((arc): MetricGaugeArc => ({ ...arc, d: presetGeometry('blockArc', arc.frame.width, arc.frame.height, arc.adjust).paths.map((path) => path.d).join(' ') }));
+  const outlined = arcs.map((arc): MetricGaugeArc => ({ ...arc, d: blockArcPath(arc.frame.width, arc.adjust) }));
   return { arcs: outlined, ...(target ? { target } : {}), ends: [{ part: 'gauge min', color: muted, end: gauge.ends[0] }, { part: 'gauge max', color: muted, end: gauge.ends[1] }] };
 }

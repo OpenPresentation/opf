@@ -165,6 +165,7 @@ const HELP: Record<string, string> = {
 	"media-source-changed": EDITED,
 	"metric-value-type-changed": EDITED,
 	"metric-data-dropped": EDITED,
+	"metric-gauge-not-restored": EDITED,
 	"metric-link-omitted": "The PPTX is written with partial or no provenance, so the metric's data link, direction and number format are not stored in it: reimport shows the numbers as drawn. To keep them, export with full provenance (the default).",
 	"quote-footer-merged": EDITED,
 	"chart-dataset-unavailable": "The chart's values were imported inline, without its dataset reference: the package's datasets record lacks that dataset or holds other data (as after pasting the slide from another deck). Point the chart at the dataset again in OPF if it should follow it.",

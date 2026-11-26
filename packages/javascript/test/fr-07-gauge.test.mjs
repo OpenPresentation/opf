@@ -100,3 +100,23 @@ test('a row of tiles: every tile draws its gauge with its text clear of the arcs
   assert.equal(metrics.length, 4);
   for (const item of metrics) { assert.ok(item.metricLayout.gauge, item.path); clear(item.metricLayout); }
 });
+
+test('the arc outline the preview draws is the blockArc preset of shape-geometry at the same frame and adjustments', async () => {
+  const { presetGeometry, flattenShapePath } = await import('../dist/shape-geometry.js');
+  const { blockArcPath } = await import('../dist/composition.js');
+  for (const adjust of [{ adj1: 180, adj2: 0, adj3: 0.09 }, { adj1: 180, adj2: 306.9, adj3: 0.05602 }, { adj1: 270, adj2: 297, adj3: 0.09 }]) {
+    const ours = blockArcPath(400, adjust), preset = flattenShapePath(presetGeometry('blockArc', 400, 400, adjust).paths[0].commands).flat();
+    const inner = 200 - 400 * adjust.adj3, sweep = ((adjust.adj2 - adjust.adj1) % 360 + 360) % 360;
+    const angleOf = ([x, y]) => (((Math.atan2(y - 200, x - 200) * 180) / Math.PI - adjust.adj1) % 360 + 360) % 360;
+    // The preset's outline lies on the two circles of ours, within the same sweep.
+    for (const point of preset) {
+      const radius = Math.hypot(point.x - 200, point.y - 200);
+      assert.ok(Math.abs(radius - 200) < 0.6 || Math.abs(radius - inner) < 0.6, `on a circle: ${radius} (${JSON.stringify(adjust)})`);
+      assert.ok(angleOf([point.x, point.y]) <= sweep + 0.2 || angleOf([point.x, point.y]) >= 359.8, `within the sweep (${JSON.stringify(adjust)})`);
+    }
+    // Our four corners are corners of the preset's outline.
+    const corners = [...ours.matchAll(/(?:M|L|A [\d.]+ [\d.]+ 0 \d \d) (-?[\d.]+) (-?[\d.]+)/g)].map((m) => [Number(m[1]), Number(m[2])]);
+    assert.equal(corners.length, 4);
+    for (const [x, y] of corners) assert.ok(preset.some((point) => Math.hypot(point.x - x, point.y - y) < 0.6), `corner ${x},${y} (${JSON.stringify(adjust)})`);
+  }
+});
