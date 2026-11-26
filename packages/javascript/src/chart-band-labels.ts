@@ -6,8 +6,10 @@
 //   when that box meets a data mark or a data label, the top corner at its start.
 // - A vertical strip (bar charts and the bullet chart): the top of the strip at its START side (left; right in a right-to-left bullet chart); when
 //   that box meets a mark or a label, the bottom of the strip.
-// - When any label of a chart does not fit its band (with the padding) or meets a mark at both places, every band label of the chart goes to the
-//   legend instead, the bands first, then the data series, and composition reports `chart-band-labels-in-legend`. Nothing is shrunk or cut.
+// - When any label of a chart does not fit its band (with the padding) or meets a mark at both places, every label of the chart stands beside the
+//   plot instead (FR-07d, `placeBandLabelsBeside`): a stripe's in a gutter at the plot's end, a strip's in a row above the plot.
+// - When that fails too, every band label of the chart goes to the legend, the bands first, then the data series, and composition reports
+//   `chart-band-labels-in-legend`. Nothing is shrunk or cut.
 import { chartAxisFraction, chartTextSize, stackCategoryValues, type ChartValueAxis } from './chart-axis.js';
 import { chartBandRanges, chartBands } from './chart-bands.js';
 import { colorContrast } from './color.js';
@@ -22,18 +24,21 @@ export interface ChartBandLabel {
   index: number;
   text: string;
   box: Box;
-  /** `end`/`start` of a stripe, `top`/`bottom` of a strip (the place a PowerPoint data label sits at: its point's category). */
-  place: 'end' | 'start' | 'top' | 'bottom';
+  /** `end`/`start` of a stripe, `top`/`bottom` of a strip, or `beside` the plot (FR-07d: a stripe's in the gutter at the plot's end, a
+   * strip's in the row above the plot). */
+  place: 'end' | 'start' | 'top' | 'bottom' | 'beside';
   /** The category (0-based, in data order) whose point carries the label in PowerPoint. */
   category: number;
-  /** The label's text alignment in its box. */
-  align: 'left' | 'right';
+  /** The label's text alignment in its box (`center` for a strip's label above the plot). */
+  align: 'left' | 'right' | 'center';
 }
 export interface ChartLayerBandLabels {
   /** The labels drawn inside their bands; empty when `legend` is true. */
   labels: ChartBandLabel[];
   /** True when the labels go to the legend instead (a label does not fit its band, or meets a mark at both places). */
   legend?: true;
+  /** FR-07d: true when the labels stand beside the plot (`placeBandLabelsBeside`): the secondary text color on the surface. */
+  beside?: true;
   /** Why the labels went to the legend. */
   reason?: 'too-large' | 'collision';
 }
@@ -166,6 +171,63 @@ export function placeBandLabels(chart: unknown, data: ResolvedChartData, axis: C
     labels.push(chosen);
   }
   return { labels };
+}
+
+/** FR-07d: the most of the chart frame a gutter of band labels beside the plot may take (its width), and a row above the plot (its height). */
+export const BAND_LABEL_BESIDE_LIMIT = Object.freeze({ gutter: 0.22, row: 0.12 });
+
+/**
+ * FR-07d (supervisor, 2026-11-26): the second placement of a chart's band labels, tried when they do not all stand inside their bands. Stripes
+ * (column, line and area charts) take a gutter at the plot's END, the side of its last category and away from the value axis: the right, or the
+ * left in a right-to-left chart, whose categories run from the right with the value axis on the right. Each label is centered on its band's
+ * height and starts 8 px from the plot's edge; the plot gets narrower by the widest label and that padding. Strips (horizontal bar charts and the
+ * bullet chart) take a row above the plot: each label centered over its strip; the plot gets shorter by one label line and its padding (4 px
+ * above and below). Returns the labels and the new plot inset, or undefined when the placement is not allowed: `blocked` (something else of the
+ * chart uses that side), two labels overlap (a label is never moved off its band), a strip's label is wider than its strip less the padding, a
+ * label leaves the chart frame, or the gutter takes more than 22% of the frame's width (the row more than 12% of its height).
+ */
+export function placeBandLabelsBeside(chart: unknown, data: ResolvedChartData, axis: ChartValueAxis | undefined, box: Box, inset: ChartPlotInset, geometry: { scale: number; minFontSize?: number; measure: (text: string, size: number) => number; direction?: 'ltr' | 'rtl'; blocked?: boolean }): { labels: ChartBandLabel[]; inset: ChartPlotInset } | undefined {
+  if (geometry.blocked || !data.ok || !axis || !(axis.max > axis.min) || typeof chart !== 'object' || chart === null) return undefined;
+  const type = String((chart as { type?: unknown }).type ?? '').trim().toLowerCase();
+  const ranges = chartBandRanges(chartBands(chart), axis).filter(band => band.label !== undefined);
+  if (!ranges.length) return undefined;
+  const { scale } = geometry, fontPx = chartTextSize({ width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize }) * scale;
+  const textHeight = fontPx * 1.22, padAlong = BAND_LABEL_PADDING.along * scale, padAcross = BAND_LABEL_PADDING.across * scale;
+  const strip = type === 'bullet' || BAR_TYPES[type]?.horizontal === true, rtl = geometry.direction === 'rtl', count = data.rows.length;
+  const mirrored = rtl && (type === 'bullet' || !strip);
+  const texts = ranges.map(band => ({ band, text: String(band.label).replace(/[\r\n]+/g, ' ') })).map(entry => ({ ...entry, width: geometry.measure(entry.text, fontPx) }));
+  const inside = (b: Box) => b.x >= box.x - 0.5 && b.y >= box.y - 0.5 && b.x + b.width <= box.x + box.width + 0.5 && b.y + b.height <= box.y + box.height + 0.5;
+  let next: ChartPlotInset;
+  const labels: ChartBandLabel[] = [];
+  if (strip) {
+    const row = textHeight + 2 * padAcross;
+    if (row > BAND_LABEL_BESIDE_LIMIT.row * box.height + 0.01) return undefined;
+    next = { ...inset, top: inset.top + row };
+    const plot = { x: box.x + next.left, y: box.y + next.top, width: box.width - next.left - next.right, height: box.height - next.top - next.bottom };
+    if (!(plot.width > 1 && plot.height > 1)) return undefined;
+    const at = (value: number) => mirrored ? plot.x + plot.width - chartAxisFraction(value, axis) * plot.width : plot.x + chartAxisFraction(value, axis) * plot.width;
+    for (const { band, text, width } of texts) {
+      const a = at(band.from), b = at(band.to), extent = Math.abs(b - a);
+      if (width + 2 * padAlong > extent + 0.01) return undefined;
+      labels.push({ index: band.index, text, place: 'beside', category: 0, align: 'center', box: { x: (a + b) / 2 - width / 2, y: plot.y - padAcross - textHeight, width, height: textHeight } });
+    }
+  } else {
+    const gutter = padAlong + Math.max(...texts.map(entry => entry.width));
+    if (gutter > BAND_LABEL_BESIDE_LIMIT.gutter * box.width + 0.01) return undefined;
+    next = mirrored ? { ...inset, left: inset.left + gutter } : { ...inset, right: inset.right + gutter };
+    const plot = { x: box.x + next.left, y: box.y + next.top, width: box.width - next.left - next.right, height: box.height - next.top - next.bottom };
+    if (!(plot.width > 1 && plot.height > 1)) return undefined;
+    const at = (value: number) => plot.y + chartAxisFraction(value, axis, true) * plot.height;
+    for (const { band, text, width } of texts) {
+      const middle = (at(band.from) + at(band.to)) / 2;
+      const x = mirrored ? plot.x - padAlong - width : plot.x + plot.width + padAlong;
+      labels.push({ index: band.index, text, place: 'beside', category: count - 1, align: mirrored ? 'right' : 'left', box: { x, y: middle - textHeight / 2, width, height: textHeight } });
+    }
+    const sorted = [...labels].sort((p, q) => p.box.y - q.box.y);
+    if (sorted.some((label, k) => k > 0 && label.box.y < sorted[k - 1]!.box.y + sorted[k - 1]!.box.height - 0.01)) return undefined;
+  }
+  if (labels.some(label => !inside(label.box))) return undefined;
+  return { labels, inset: next };
 }
 
 /** The contrast every band label keeps against its band. */

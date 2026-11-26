@@ -164,3 +164,54 @@ describe('the muted color of a highlighted chart with bands (FR-07, supervisor 2
     assert.equal(chartBandMutedColor([], '#FFFFFF', '#000000'), undefined);
   });
 });
+
+describe('band labels beside the plot (FR-07d, supervisor 2026-11-26)', async () => {
+  const { placeBandLabelsBeside, BAND_LABEL_BESIDE_LIMIT } = await import('../dist/composition.js');
+  const geometry = { scale: 1, measure: (text, size) => text.length * size * 0.5 };
+  const box = { x: 0, y: 0, width: 800, height: 400 }, inset = { left: 50, top: 20, right: 20, bottom: 40 };
+  const axis = { min: 0, max: 20, majorUnit: 5 };
+  const beside = (chart, extra = {}) => placeBandLabelsBeside(chart, resolveChartData(chart), chart.type === 'bullet' ? { min: 0, max: 1, majorUnit: 0.2 } : axis, box, inset, { ...geometry, ...extra });
+  const weeks = { columns: ['W', 'V'], rows: [['W1', 14], ['W2', 19]] };
+  const stripes = [{ to: 10, label: 'Good' }, { to: 15, label: 'Watch' }, { to: 20, label: 'Over' }];
+  test('stripes: a gutter at the plot\'s end, each label centered on its band, 8 px from the plot\'s edge; the plot narrower by the widest label and the padding', () => {
+    const placed = beside({ type: 'column', data: weeks, bands: stripes });
+    const widest = Math.max(...placed.labels.map((label) => label.box.width));
+    assert.deepEqual(placed.inset, { ...inset, right: inset.right + 8 + widest });
+    const plotEnd = 800 - placed.inset.right, height = 400 - inset.top - inset.bottom;
+    for (const label of placed.labels) {
+      assert.equal(label.place, 'beside');
+      assert.equal(label.align, 'left');
+      assert.equal(label.box.x, plotEnd + 8);
+    }
+    const middle = (from, to) => inset.top + height * (1 - (from + to) / 2 / 20);
+    assert.ok(Math.abs(placed.labels[0].box.y + placed.labels[0].box.height / 2 - middle(0, 10)) < 1e-9, 'centered on its band');
+    assert.ok(Math.abs(placed.labels[2].box.y + placed.labels[2].box.height / 2 - middle(15, 20)) < 1e-9);
+  });
+  test('right to left: the gutter at the left, the end of the categories, away from the value axis; labels end 8 px from the plot', () => {
+    const placed = beside({ type: 'line', data: weeks, bands: stripes }, { direction: 'rtl' });
+    const widest = Math.max(...placed.labels.map((label) => label.box.width));
+    assert.deepEqual(placed.inset, { ...inset, left: inset.left + 8 + widest });
+    for (const label of placed.labels) { assert.equal(label.align, 'right'); assert.equal(label.box.x + label.box.width, placed.inset.left - 8); }
+  });
+  test('strips: a row above the plot, each label centered over its strip; the plot shorter by one line and its padding', () => {
+    const data = { columns: ['K', 'A', 'T'], rows: [['a', 0.3, 0.4], ['b', 0.5, 0.6]] };
+    const chart = { type: 'bullet', data, mapping: { target: 'T' }, bands: [{ to: 0.6, label: 'Poor' }, { to: 1, label: 'Good' }] };
+    const ltr = beside(chart), rtl = beside(chart, { direction: 'rtl' });
+    const line = ltr.labels[0].box.height;
+    assert.deepEqual(ltr.inset, { ...inset, top: inset.top + line + 8 });
+    const width = 800 - inset.left - inset.right;
+    assert.ok(Math.abs(ltr.labels[0].box.x + ltr.labels[0].box.width / 2 - (inset.left + width * 0.3)) < 1e-9, 'centered over 0 to 60%');
+    assert.ok(Math.abs(rtl.labels[0].box.x + rtl.labels[0].box.width / 2 - (inset.left + width * 0.7)) < 1e-9, 'mirrored right to left');
+    for (const label of ltr.labels) { assert.equal(label.align, 'center'); assert.equal(label.box.y + label.box.height, ltr.inset.top - 4); }
+    const bar = beside({ type: 'bar', data: weeks, bands: stripes });
+    assert.equal(bar.labels[0].place, 'beside');
+  });
+  test('not allowed: the side is in use, two labels overlap, a strip\'s label is wider than its strip, or the gutter passes its limit', () => {
+    assert.equal(beside({ type: 'column', data: weeks, bands: stripes }, { blocked: true }), undefined);
+    assert.equal(beside({ type: 'column', data: weeks, bands: [{ to: 10, label: 'Good' }, { to: 10.5, label: 'Thin' }, { to: 11, label: 'Thinner' }, { to: 20, label: 'Over' }] }), undefined, 'neighbors meet: a label is never moved off its band');
+    assert.equal(beside({ type: 'bar', data: weeks, bands: [{ to: 1, label: 'A label wider than its strip' }, { to: 20, label: 'Rest' }] }), undefined);
+    const long = 'x'.repeat(Math.ceil((BAND_LABEL_BESIDE_LIMIT.gutter * 800) / 6));
+    assert.equal(beside({ type: 'column', data: weeks, bands: [{ to: 20, label: long }] }), undefined, 'a gutter over 22% of the frame');
+    assert.equal(beside({ type: 'column', data: weeks, bands: [{ to: 20 }] }), undefined, 'no labeled band');
+  });
+});

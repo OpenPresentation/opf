@@ -11,7 +11,7 @@ import {timelineDurationFractions} from './timeline-duration.js';
 import {tableGrid,type TableCellStyle} from './table.js';
 import {inlineChartData,inlineTableData,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText,type DataTableCell} from './chart-data.js';
 import {bulletPlot} from './chart-bullet.js';
-import {placeBandLabels} from './chart-band-labels.js';
+import {placeBandLabels, placeBandLabelsBeside} from './chart-band-labels.js';
 import {chartBands} from './chart-bands.js';
 import {chartTextSize,chartValueAxis,chartComboAxes,shareSiblingChartAxes,type ChartValueAxis} from './chart-axis.js';
 import {chartHeader,chartLayer,type ChartLayer} from './chart-layer.js';
@@ -9122,7 +9122,21 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const labeled = Boolean(layer?.small?.labels || layer?.stack?.values?.some((row) => row.some(Boolean)) || (record.dataLabels !== undefined && record.dataLabels !== false));
       const avoid = [...(layer?.references?.lines ?? []).flatMap((line) => [{x: Math.min(line.x1, line.x2) - 2, y: Math.min(line.y1, line.y2) - 2, width: Math.abs(line.x2 - line.x1) + 4, height: Math.abs(line.y2 - line.y1) + 4}, ...(line.labelBox ? [line.labelBox] : [])]), ...(layer?.endLabels?.entries ?? []).map((entry) => entry.box)];
       const placed = plot ? placeBandLabels(drawn.chart, data, valueAxis, box, plot, {...plotGeometry, labeled, avoid}) : {labels: [], legend: true as const, reason: 'too-large' as const};
+      // FR-07d: when the labels do not all stand inside, beside the plot (a gutter at its end, a row above it), unless something else of the
+      // chart uses that side: series names beside the last column or above the bars, names at the line ends, or a legend there.
+      const legendOption = (drawn.chart as {legend?: unknown}).legend, seriesCount = data.columns.length - 1;
+      const sideLegend = legendOption === 'right' || legendOption === 'left' || (legendOption === undefined && !layer?.header?.legend && !layer?.stack?.names && !layer?.endLabels && seriesCount >= 2 && chartType !== 'bullet');
+      const blocked = ['bullet', 'bar', 'stacked-bar', '100pct-stacked-bar'].includes(chartType)
+        ? legendOption === 'top' || Boolean(layer?.header?.legend) || Boolean(layer?.stack?.names?.above)
+        : Boolean(layer?.stack?.names) || Boolean(layer?.endLabels) || sideLegend;
+      const beside = placed?.legend && plot ? placeBandLabelsBeside(drawn.chart, data, valueAxis, box, plot, {...plotGeometry, blocked}) : undefined;
       if (placed && !placed.legend) layer = {...layer, plot, bandLabels: placed};
+      else if (beside) {
+        const {references: _references, ...rest} = layer ?? {};
+        layer = {...rest, plot: beside.inset};
+        placeChartReferences();
+        layer = {...layer, bandLabels: {labels: beside.labels, beside: true}};
+      }
       else if (placed) {
         diagnostics.push({code: 'chart-band-labels-in-legend', path: node.path, message: placed.reason === 'collision'
           ? 'A band label meets a data mark or a data label at both of its places, so the chart lists its band labels in the legend instead (bands first, then the data series).'
@@ -13487,7 +13501,7 @@ export {CHART_REFERENCE_TYPES,chartReferenceSources} from './chart-references.js
 export {CHART_BAND_TYPES,CHART_BAND_NEUTRAL_CONTRASTS,CHART_BAND_MUTED_CONTRAST,chartBandMutedColor,neutralFill as chartBandNeutral,CHART_BAND_COLOR_SHARE,chartBands,chartBandMaximum,chartBandRanges,chartBandFill,chartBandFills,chartBandDiagnostics,BULLET_CHART_TYPE,BULLET_BAR_SHARE,BULLET_TARGET_SHARE,BULLET_TARGET_WIDTH_PX,BULLET_GAP_WIDTH} from './chart-bands.js';
 export type {ChartBandSpec,ChartBandRange,ChartBandColors,ChartBandDiagnostic} from './chart-bands.js';
 export {bulletPlot,bandLegendNames} from './chart-bullet.js';
-export {placeBandLabels,bandLabelColor,BAND_LABEL_PADDING,BAND_LABEL_MIN_CONTRAST} from './chart-band-labels.js';
+export {placeBandLabels,placeBandLabelsBeside,bandLabelColor,BAND_LABEL_PADDING,BAND_LABEL_MIN_CONTRAST,BAND_LABEL_BESIDE_LIMIT} from './chart-band-labels.js';
 export type {ChartBandLabel,ChartLayerBandLabels} from './chart-band-labels.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartNumericAxes} from './chart-numeric-axes.js';
