@@ -2,6 +2,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { compile } from "json-schema-to-typescript";
+import { asConstType, compactModuleExpression } from "./compact-literal.mjs";
 import { precompiledValidatorsSource } from "./validators-codegen.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -248,7 +249,11 @@ async function generatePresetGeometry() {
   const table = await readJson(path.join(specRoot, "reference", "preset-geometry.json"));
   const lines = [
     generatedHeader("spec/reference/preset-geometry.json"),
-    `export const presetGeometrySource: unknown = ${JSON.stringify({ shapes: table.shapes })};`,
+    // The compact form of compact-literal.mjs (the generator proves it builds the same value): the handles and paths
+    // repeat their key lists on every row. Strings are named only as arguments of a row's function: the thousands of
+    // short path commands stay in their array literals, which the engine copies from a template (naming them all saves
+    // 40 KB more but makes the table load measurably slower).
+    `export const presetGeometrySource: unknown = ${compactModuleExpression({ shapes: table.shapes }, "spec/reference/preset-geometry.json", { strings: "arguments" })};`,
     "",
   ];
   await fs.writeFile(path.join(generatedRoot, "preset-geometry.ts"), lines.join("\n"));
@@ -258,12 +263,14 @@ async function generatePresetGeometry() {
 }
 
 async function generateFontPolicy() {
-  // FF-31: the authoritative font policy table is reference data, not a catalog.
+  // FF-31: the authoritative font policy table is reference data, not a catalog. Written in the compact form of
+  // compact-literal.mjs (each repeated source URL and license once, each row built by its key list's function): the same
+  // value, which the generator proves, at about half the bytes in the MCP viewer.
   const policy = await readJson(path.join(specRoot, "reference", "font-policy.json"));
   const lines = [
     generatedHeader("spec/reference/font-policy.json"),
     "// Raw JSON: rows that name a provisional decision have no replacement family until font-policy.ts applies it.",
-    `export const fontPolicySource: unknown = ${asTs(policy)};`,
+    `export const fontPolicySource: unknown = ${compactModuleExpression(policy, "spec/reference/font-policy.json")};`,
     "",
   ];
   await fs.writeFile(path.join(generatedRoot, "font-policy.ts"), lines.join("\n"));
@@ -280,7 +287,9 @@ async function generateEngineData() {
     generatedHeader("spec/reference/engine-defaults.json and spec/reference/engine-vocabularies.json"),
     `export const engineDefaultsSource = ${asTs(defaultValues)} as const;`,
     "",
-    `export const engineVocabulariesSource = ${JSON.stringify(vocabularyValues)} as const;`,
+    // The compact form of compact-literal.mjs (the generator proves it builds the same value; the language rows repeat
+    // their keys), typed as `as const` typed the literal it replaces.
+    `export const engineVocabulariesSource: ${asConstType(vocabularyValues)} = ${compactModuleExpression(vocabularyValues, "spec/reference/engine-vocabularies.json")} as never;`,
     "",
   ];
   await fs.writeFile(path.join(generatedRoot, "engine-data.ts"), lines.join("\n"));

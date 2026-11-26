@@ -39,6 +39,8 @@ export function sampleBlock(kind, index = 0) {
       return { image: { src: PICTURE, alt: pick(["Field team at work", "The new office", "Product in use"], index) } };
     case "video":
       return { video: { src: PICTURE, alt: pick(["Product walkthrough", "Customer story", "Launch film"], index) } };
+    case "embed":
+      return { embed: { src: `https://app.example.com/${pick(["dashboards/revenue", "prototype/checkout", "maps/office"], index)}`, title: pick(["Revenue dashboard", "Checkout prototype", "Office map"], index) } };
     case "chart":
       return { chart: { type: pick(["column", "line", "bar"], index), data: { columns: ["Quarter", "Current", "Baseline"], rows: [["Q1", 26 + index, 23], ["Q2", 30, 25 + index], ["Q3", 33 - index, 27], ["Q4", 37, 29]] } } };
     case "table":

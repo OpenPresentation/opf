@@ -552,6 +552,11 @@ const HELP: Record<string, string> = {
 	'chart-value-not-numeric':
 		'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.',
 	'data-cell-type': 'Write the cell as the column declares (a number as a number, text as text, a date as a time label, a boolean as true or false), or change the column\'s `type` to what it holds. A mismatched cell is still read as it was before; nothing is drawn differently.',
+	'metric-data-stale': "Write the computed number as the metric's value or delta (apply the fix), or change the data link so it computes what the slide says. Readers that do not compute draw the written number.",
+	'metric-data-aggregate': 'Use an aggregate that fits the column (first, last or count work on any column), or link a column typed number.',
+	'metric-data-empty': 'Check the filter and the field: no row meets the filter, or none of the cells is usable for the aggregate. The written value is shown until the link computes a number.',
+	'metric-data-delta': "Give the change something to compare with: two rows for \"previous\", a baseline filter that meets a row, a comparison value other than 0 for a percent, or write the change in a column and use `field`. No change is shown until then.",
+	'metric-unit-repeated': "Drop the unit, or take the unit's text out of the number format: the unit is printed after the value, and the format already prints it.",
 	'datasource-credentials': 'Remove the user, password, key or token from the data source and keep the secret in your own store; name the connection in `connector` or `extensions`. A data source never holds credentials.',
 	'dataset-stale': "Take the data from its data source again and update `retrieved`, or change the data source's `refreshEvery` to how often the data really needs taking.",
 	'chart-mapping-adapted': 'Choose a compatible chart type or mapping for the selected data. The message explains how the mapping or drawing was adapted.',
@@ -587,7 +592,7 @@ function semanticHelp(issue: ValidationIssue): string {
 	if (params.code === 'shape-option-unsupported-payload' && field === 'alt' && params.type === 'image') return 'A picture\'s alt text goes inside its image object: { "image": { "src": "...", "alt": "..." } }.';
 	if (params.code === 'shape-option-unsupported-payload' && field) return `Remove ${quoted}, or draw this as a shape: a shape block ({ "shape": ... } with no "image") or an overlay shape in the slide's "shapes".`;
 	if (params.code === 'number-format-invalid') return "Write a pattern with a numeric part, such as \"0%\", \"0.0\", \"#,##0\" or \"$#,##0.00\", optionally followed by a negative and a zero section after \";\" (\"+0%;-0%\", \"0;(0);0\"; at most three, each with a numeric part). A negative section prints no minus of its own. There is no text section, color or condition.";
-	if (params.code === 'caption-unsupported-payload') return 'Put the caption on the image, chart, table, video or diagram it describes, or write it as a text block of its own.';
+	if (params.code === 'caption-unsupported-payload') return 'Put the caption on the image, chart, table, video, embed or diagram it describes, or write it as a text block of its own.';
 	if (Array.isArray(params.incompatible) && params.incompatible.includes('bullets') && params.type === 'list') return 'For a list, write the entries under "items". To keep "bullets" (talking points, which belong to a text payload), remove "type" or write "type": "text".';
 	return 'Resolve the reported structural conflict while preserving every content field. Preview the result after editing.';
 }
@@ -705,7 +710,7 @@ function collapseAuthoringShapes(document: unknown, findings: Finding[]): void {
 	const OPTION_RULES = ['opf/image-option-unsupported-payload', 'opf/shape-option-unsupported-payload', 'opf/caption-unsupported-payload'];
 	// The raw copy is a missing kind key at the block ('image', 'shape' or 'path', or a captionable payload), or the `not` of "a shape with
 	// no image". After the union errors are reduced nothing in a finding names the definition it came from, so the wording is the test.
-	const optionDefinition = (entry: Finding): boolean => (entry.validation?.keyword === 'required' && /^must have required property '(?:image|shape|path|chart|table|video|diagram)'/.test(entry.message)) || (entry.validation?.keyword === 'not' && entry.message === 'must NOT be valid') || ((entry.validation?.keyword === 'anyOf' || entry.validation?.keyword === 'oneOf') && /must match a schema in anyOf|must match exactly one schema/.test(entry.message));
+	const optionDefinition = (entry: Finding): boolean => (entry.validation?.keyword === 'required' && /^must have required property '(?:image|shape|path|chart|table|video|embed|diagram)'/.test(entry.message)) || (entry.validation?.keyword === 'not' && entry.message === 'must NOT be valid') || ((entry.validation?.keyword === 'anyOf' || entry.validation?.keyword === 'oneOf') && /must match a schema in anyOf|must match exactly one schema/.test(entry.message));
 	for (let index = findings.length - 1; index >= 0; index--) {
 		const entry = findings[index];
 		if (!schema(entry) || !optionDefinition(entry)) continue;
@@ -809,6 +814,9 @@ export function engineFindings(document: unknown, engine: SchemaCheckResult, ena
 			const fix = suggestCellTypeFix(document, issue.path, issue.params.aggregate === true);
 			if (fix) found.fixes = [{ id: 'store-cell-type', title: fix.title, kind: 'patch', safe: true, patch: fix.patches }];
 		}
+		// FR-06: the safe fix of a metric whose written value or change differs from the one its data link computes.
+		const metricFix = issue.params.fix as { title: string; patch: { op: 'add' | 'replace'; path: string; value: string | number }[] } | undefined;
+		if (code === 'metric-data-stale' && metricFix) found.fixes = [{ id: 'update-metric-data', title: metricFix.title, kind: 'patch', safe: true, patch: metricFix.patch }];
 		if (code === 'shape-anchor-size-unit') {
 			const key = String(issue.params.key), px = `${key}Px`;
 			found.help = `Did you mean "${px}"? "${key}" is a fraction of the block.`;

@@ -22,11 +22,27 @@ const documents = [
 	...corpus({ mutants: 3, records: 6 }).filter((document) => document.filename.endsWith('.json')).map((document) => ({ id: document.id, value: JSON.parse(document.text) })),
 	...readdirSync(fixtures).filter((name) => name.endsWith('.json')).map((name) => ({ id: `fixtures/${name}`, value: JSON.parse(readFileSync(path.join(fixtures, name), 'utf8')) })),
 ];
+// Bound mutants (opfLimitError): every number of a document far below or above any bound, every string empty,
+// every array forty items longer and every object forty properties wider, so the bounds of the schemas are reached.
+const mapValues = (value, change) => {
+	const next = Array.isArray(value) ? value.map((item) => mapValues(item, change)) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([key, item]) => [key, mapValues(item, change)])) : value;
+	return change(next);
+};
+const boundMutants = [
+	['numbers-low', (value) => (typeof value === 'number' ? -1e12 : value)],
+	['numbers-high', (value) => (typeof value === 'number' ? 1e12 : value)],
+	['strings-empty', (value) => (typeof value === 'string' ? '' : value)],
+	['arrays-long', (value) => (Array.isArray(value) ? [...value, ...Array.from({ length: 40 }, () => null)] : value)],
+	['objects-wide', (value) => (value && typeof value === 'object' && !Array.isArray(value) ? { ...value, ...Object.fromEntries(Array.from({ length: 40 }, (_, index) => [`extra${index}`, 1])) } : value)],
+];
+const mutants = documents.slice(0, 12).flatMap(({ id, value }) => boundMutants.map(([mutant, change]) => ({ id: `${id} (${mutant})`, value: mapValues(value, change) })));
+documents.push(...mutants);
+// The keywords whose errors the two tests below compared with Ajv's.
+const keywords = new Set();
 
 test('the precompiled validators report exactly the errors of Ajv, property by property', () => {
 	let errors = 0;
 	let propertyNames = 0;
-	const keywords = new Set();
 	for (const name of Object.keys(schemas)) {
 		const expected = ajv.root(name);
 		const actual = precompiled.root(name);
@@ -54,9 +70,6 @@ test('the precompiled validators report exactly the errors of Ajv, property by p
 	}
 	assert.ok(errors > 2000, `the corpus should reach the error paths (${errors} errors)`);
 	assert.ok(propertyNames > 0, 'the corpus should reach an error with a propertyName');
-	// Each form of error the generator writes (opfTypeError, opfPatternError, opfRequiredError, opfKeywordError, opfError).
-	for (const keyword of ['type', 'pattern', 'required', 'additionalProperties', 'enum', 'const', 'oneOf', 'anyOf', 'not', 'if', 'propertyNames', 'minItems'])
-		assert.ok(keywords.has(keyword), `the corpus should reach a ${keyword} error (reached ${[...keywords].sort().join(', ')})`);
 });
 
 /** The oneOf and anyOf branches of a schema (as test/precompiled-validators.test.mjs finds them). */
@@ -80,6 +93,9 @@ test('the precompiled branch validators report the errors of Ajv, property by pr
 	// Ajv's branch validators compile a copy of the branch, so `schema` and `parentSchema` are equal objects here, not the same.
 	const values = [null, true, 0, 1.5, 'text', '', [], {}, { type: 'unknown' }];
 	for (const { value } of documents) for (const node of objects(value)) if (values.length < 1500) values.push(node);
+	// And the nodes of the bound mutants, so the bounds inside union branches are reached too.
+	let mutantNodes = 0;
+	for (const { value } of mutants) for (const node of objects(value)) if (mutantNodes++ < 400) values.push(node);
 	let errors = 0;
 	for (const [name, schema] of Object.entries(schemas)) {
 		for (const branch of unions(schema)) {
@@ -96,10 +112,18 @@ test('the precompiled branch validators report the errors of Ajv, property by pr
 					// references (and the bundled objects within an inlined definition). Compared with absolute references on both sides.
 					const qualified = (entry) => ({ ...entry, schema: qualifyBranch(entry.schema, schema.$id), parentSchema: qualifyBranch(entry.parentSchema, schema.$id) });
 					assert.deepEqual(qualified(error), qualified(want[index]), `${name}: ${want[index].schemaPath}`);
+					keywords.add(want[index].keyword);
 					errors++;
 				}
 			}
 		}
 	}
 	assert.ok(errors > 2000, `${errors} branch errors`);
+});
+
+test('the two tests above reach each form of error the generator writes', () => {
+	// opfTypeError, opfPatternError, opfRequiredError, opfEnumError, opfAdditionalPropertyError, opfLimitError (each bound the
+	// schemas use), opfKeywordError and opfError.
+	for (const keyword of ['type', 'pattern', 'required', 'additionalProperties', 'enum', 'const', 'oneOf', 'anyOf', 'not', 'if', 'propertyNames', 'minItems', 'maxItems', 'minLength', 'minimum', 'maximum', 'exclusiveMinimum', 'minProperties'])
+		assert.ok(keywords.has(keyword), `the corpus should reach a ${keyword} error (reached ${[...keywords].sort().join(', ')})`);
 });

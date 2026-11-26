@@ -65,7 +65,12 @@ export type DataDiagnosticCode =
   | 'table-color-scale-unknown-column'
   | 'table-color-scale-no-data'
   | 'table-color-scale-range'
-  | 'number-format-invalid';
+  | 'number-format-invalid'
+  | 'metric-data-stale'
+  | 'metric-data-aggregate'
+  | 'metric-data-empty'
+  | 'metric-data-delta'
+  | 'metric-unit-repeated';
 
 export interface DataDiagnostic {
   code: DataDiagnosticCode;
@@ -622,6 +627,8 @@ export function unusedDatasets(document: unknown): string[] {
   visitDataPayloads(document, payload => {
     if (record(payload.chart) && isDatasetRef(payload.chart.data)) used.add(payload.chart.data.dataset);
     if (record(payload.table) && isDatasetRef(payload.table)) used.add(payload.table.dataset);
+    // FR-06: a metric computed from a dataset uses it.
+    if (record(payload.metric) && record(payload.metric.data) && typeof payload.metric.data.dataset === 'string') used.add(payload.metric.data.dataset);
   });
   return ids.filter(id => !used.has(id));
 }

@@ -4,6 +4,10 @@ import type { Chart } from './generated/types/presentation.js';
 
 // RR-54: chart and table data (strict numbers, number formats, datasets, series mapping) are also on this entry.
 export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix, suggestCellTypeFix, datasetColumnDeclaration, cellMatchesType } from './chart-data.js';
+// FR-06: a metric computed from data: the metric to draw, its PowerPoint record and its findings (the gauge reads `value` and `delta`).
+export { resolveMetric } from './metric-data.js';
+export { updateMetricLiterals } from './metric-literals.js';
+export type { MetricRecord, ResolvedMetric, ResolvedMetricValue, ResolveMetricOptions, MetricData, MetricDelta, DataCondition, DataFilter, DataLink, DataAggregate, MetricDerivedKey, MetricDataDiagnostic } from './metric-data.js';
 // FR-04: data sources and where a dataset came from. Engines never read, fetch or refresh a data source.
 export { dataSourcesOf, resolveDataSource, dataProvenance } from './data-sources.js';
 // FR-05: typed dataset columns. What ingest declares for the columns of imported data.

@@ -172,7 +172,7 @@ export function placeImages(entries, images, overlays, {metadataFor, fail, fitIm
       if (image.fit === 'tile') picture = picture.replace(/<a:stretch>[\s\S]*?<\/a:stretch>|<a:stretch\/>/, `<a:tile tx="0" ty="0" sx="${srcRectValue((metadata.dpiX ?? 96) / 96)}" sy="${srcRectValue((metadata.dpiY ?? 96) / 96)}" flip="none" algn="tl"/>`);
       const effects = image.effects;
       if (effects) {
-        picture = picture.replace(/<a:prstGeom\b[\s\S]*?<\/a:prstGeom>/, presetXml(effects.shape) + (effects.strokeXml ?? ''));
+        picture = picture.replace(/<a:prstGeom\b[\s\S]*?<\/a:prstGeom>/, presetXml(effects.shape) + (effects.fillXml ?? '') + (effects.strokeXml ?? ''));
         const blip = blipEffects(effects);
         if (blip) picture = picture.replace(/<a:blip\b([^>]*?)(?:\/>|>([\s\S]*?)<\/a:blip>)/, (_, attributes, inner = '') => `<a:blip${attributes}>${blip}${inner}</a:blip>`);
       }

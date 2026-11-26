@@ -113,8 +113,8 @@ const captionUnsupportedPayload: RuleText = (finding) => {
   const kind = type ?? (/a group cannot carry one/.test(finding.message) ? "group" : undefined);
   const is = kind ? kindPhrase(kind) : "not one of those";
   return {
-    message: `A ${code("caption")} belongs to one image, chart, table, video or diagram; this block is ${is}.`,
-    next: `put the ${code("caption")} on the image, chart, table, video or diagram it describes, or remove it.`,
+    message: `A ${code("caption")} belongs to one image, chart, table, video, embed or diagram; this block is ${is}.`,
+    next: `put the ${code("caption")} on the image, chart, table, video, embed or diagram it describes, or remove it.`,
   };
 };
 
@@ -228,6 +228,12 @@ const layoutPlaceholderGroup: RuleText = (finding) => {
 
 /** The dataset a table's `fields` or a chart's `data` names, read from the document next to the finding's path. */
 function datasetOf(helpers: { valueAt(path: readonly string[]): unknown; segments: string[] }): string | undefined {
+  // FR-06: a metric's link (`metric.data`) names its dataset beside the field, the filter and the change.
+  const link = helpers.segments.lastIndexOf("data");
+  if (link > 0 && helpers.segments[link - 1] === "metric") {
+    const value = helpers.valueAt([...helpers.segments.slice(0, link + 1), "dataset"]);
+    if (isText(value)) return value;
+  }
   const at = helpers.segments.findIndex((segment) => segment === "fields" || segment === "columns" || segment === "mapping" || segment === "highlight");
   const parent = at > 0 ? helpers.segments.slice(0, at) : helpers.segments.slice(0, -1);
   for (const candidate of [parent, [...parent, "data"]]) {

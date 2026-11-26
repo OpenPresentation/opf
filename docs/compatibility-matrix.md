@@ -46,8 +46,8 @@ imply universal Office or full-catalog visual parity.
 
 ## Current source inventory
 
-This checkout's v0.34 source contains **157 JSON** example decks (101 gallery,
-56 technical), **38 default layouts** and a **52-slide sampler** (38 layouts plus
+This checkout's v0.34 source contains **159 JSON** example decks (101 gallery,
+58 technical), **38 default layouts** and a **52-slide sampler** (38 layouts plus
 14 dynamic compositions). Two Markdown decks and the quickstart fixture are
 outside the JSON catalog. These counts describe source, not an already-published
 v0.34 registry set. The recorded 0.33 release contains 137 JSON examples,
@@ -234,7 +234,7 @@ CLI consume the Gallery package (Gallery 2 in OPF 0.19; Gallery 3 in OPF 0.20), 
 | Capability | How | Notes |
 | --- | --- | --- |
 | JSON authoring | `*.opf.json` plus CLI `opf create` | Local files only |
-| Bundled examples catalog | `@openpresentation/opf/examples` | **157 JSON** decks in this source (101 gallery, 56 technical); published counts follow the installed release; two Markdown decks and quickstart JSON are outside this catalog |
+| Bundled examples catalog | `@openpresentation/opf/examples` | **159 JSON** decks in this source (101 gallery, 58 technical); published counts follow the installed release; two Markdown decks and quickstart JSON are outside this catalog |
 | Validate | `validate` / `opf validate` | One read-only checker: format, references, policy, accessibility, layout and content findings ([guide](validate.md)); no network catalog fetch |
 | Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Supported theme-slot colors write native `schemeClr` references; arbitrary native Office recoloring and full visual fidelity remain separately scoped. |
 | Embed catalog records | `embed` / `opf embed` | Embeds every record a document references, in the group it resolves in, so it renders with no catalog registered; remote media and data remain explicit host concerns. |
@@ -256,6 +256,7 @@ CLI consume the Gallery package (Gallery 2 in OPF 0.19; Gallery 3 in OPF 0.20), 
 | Diagrams | Mermaid, Graphviz DOT and PlantUML source, drawn through Pele | This source accepts all three syntax values; DOT/PlantUML are supported subsets read by OPF, without external renderer execution. Editable native shapes are conditional; unsupported drawings use an SVG/PNG picture and report the limit. See [diagrams](diagrams.md). |
 | SmartArt and diagram layouts | Shared composition and qualified native export | Live SmartArt is limited to measured eligible instances. Other supported arrangements use editable shapes or the reported picture fallback; semantic import and native editing retain explicit limits. See [SmartArt](smartart.md). |
 | Video | Preview placeholder/play badge, caption and HTTP(S) hyperlink | No embedded playback, remote video fetch or external player is promised; see [video references](content-payloads.md#video-references). |
+| Embed | Live frame in a web presenter whose host allows the page; elsewhere a picture (the `preview`) or a card, linked to the page | The engines never load the page. PowerPoint gets the picture or the card as native parts with a hyperlink and restores the embed from `OPF_EMBED_V1` while its link and picture are unchanged; see [embed](content-payloads.md#embed). |
 | LibreOffice | Experimental compatibility checks | Font resolution and bounded saved-file evidence do not promote it to full-fidelity support. See [LibreOffice](libreoffice.md). |
 | Keynote | PPTX export opened in Keynote 15.1.1 for Mac (RR-105 qualification, issue #1278) | Keynote replaces the whole text of a shape that holds a live slide number with the number ("Page 1 of 4" reads "1"): export with `--slide-numbers static` (`slideNumberFields: 'static'`) for a deck read in Keynote. An extended chart shows its fallback picture of OPF's preview. Keynote does not draw reference-line labels (the legend names each line), per-point bar colors, the language's digits in charts (chart numbers stay Latin), a right-to-left chart's value axis on the right, a right-to-left table beyond its first column, inner shadow, glow, soft edge or blur, or curved connectors (drawn straight). The final pass on the 0.34.0 content (Keynote 15.1.1, macOS 26.6, 67 files, all opened without repair), and a re-check on 2026-11-23 against PowerPoint on Windows, measured more differences, listed with what to do in [Keynote differences](../skills/opf-export/SKILL.md#keynote-differences): sketched and compound lines drawn plain, a tiled picture background stretched as one tile, a different route for an elbow connector, a lines-only radar chart drawn filled, an area chart's gap bridged, a secondary axis showing only its first labels, stacked lines drawn unstacked, link footers in the theme's hyperlink color, chart titles centered, vertical text rotated, and a negative-value bar chart's category labels clipped (measured on 0.34.0). |
 | Agent skills | `opf skills install` | Offline after the CLI is installed |

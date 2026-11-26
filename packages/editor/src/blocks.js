@@ -65,7 +65,7 @@ export function listBlockContainers(presentation,{slideIndex,includeImplicit=fal
   return result;
 }
 
-const contentFields=['text','items','bullets','image','video','chart','table','code','diagram','metric','quote','timeline'];
+const contentFields=['text','items','bullets','image','video','embed','chart','table','code','diagram','metric','quote','timeline'];
 function preparedChange(presentation,container,next,path) {
   const pointer=opfPathToJsonPointer(container);
   const patches=[{op:'test',path:pointer,value:structuredClone(getValueAtPath(presentation,container))},
@@ -166,6 +166,12 @@ export function createContentBlock(kind,{source,shape}={}) {
   if(kind==='image'||kind==='video'){
     if(typeof source!=='string'||!source.trim())throw new TypeError('Choose a media file or enter its source.');
     return {[kind]:source};
+  }
+  // FR-08: an embed is a web page; only an https address is one.
+  if(kind==='embed'){
+    const address=typeof source==='string'?source.trim():'';
+    if(!/^https:\/\/[^\s/?#]\S*$/.test(address)||address.length>2048)throw new TypeError('Enter the page\'s https address, for example https://app.example.com/dashboard.');
+    return {embed:address};
   }
   if(!Object.hasOwn(presets,kind))throw new TypeError('Unknown content block kind.');
   return structuredClone(presets[kind]);

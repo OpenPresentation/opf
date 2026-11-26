@@ -159,7 +159,7 @@ export function chooseNext(value: unknown, candidates: readonly unknown[], alter
 
 /** How a block kind reads after "this block is": "a chart", "text", "an image". */
 export function kindPhrase(kind: string): string {
-  const phrases: Record<string, string> = { text: "text", code: "code", list: "a list", chart: "a chart", table: "a table", image: "an image", video: "a video", metric: "a metric", quote: "a quote", timeline: "a timeline", shape: "a shape", group: "a group" };
+  const phrases: Record<string, string> = { text: "text", code: "code", list: "a list", chart: "a chart", table: "a table", image: "an image", video: "a video", embed: "an embed", metric: "a metric", quote: "a quote", timeline: "a timeline", shape: "a shape", group: "a group" };
   return phrases[kind] ?? `${/^[aeiou]/i.test(kind) ? "an" : "a"} ${kind}`;
 }
 
@@ -174,7 +174,7 @@ export function freshName(base: string, taken: readonly string[] = []): string {
 }
 
 /** The kind of block a document node holds: `text`, `chart`, `image`, ... from its keys. */
-const BLOCK_KINDS = ["chart", "image", "video", "table", "code", "metric", "quote", "timeline", "diagram", "items", "bullets", "text"];
+const BLOCK_KINDS = ["chart", "image", "video", "embed", "table", "code", "metric", "quote", "timeline", "diagram", "items", "bullets", "text"];
 export function blockKind(node: unknown): string | undefined {
   if (!isRecord(node)) return undefined;
   if (typeof node.type === "string" && node.type !== "group") return node.type;

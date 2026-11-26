@@ -171,6 +171,11 @@ export type { ApplyPatchOptions, PatchResult } from './patch.js';
 export { assignIds, documentHash, idToken, isIdToken, OPFIdError, resolveIdPatch, resolveIdPointer, toIdPatch, toIdPointer, touches } from './ids.js';
 export type { AssignedId, AssignIdsContext, AssignIdsOptions, AssignIdsResult, IdErrorCode, PatchScope, PatchScopeKind, PatchTouch } from './ids.js';
 export { collectSlideLinks, slideLink, slideLinkId } from './slide-links.js';
+// FR-08: the embed content kind's shared readings, and the one test for a credential in a web address.
+export { EMBED_DEFAULT_ASPECT, embedAspect, embedSite, embedTitle, embedValue } from './embed.js';
+export type { EmbedValue } from './embed.js';
+export { embedArrowPoints, embedCardLayout } from './embed-card.js';
+export type { EmbedCardInput, EmbedCardLayout, EmbedCardText } from './embed-card.js';
 export { diff, merge } from './diff.js';
 export type { DiffOptions, MergeConflict, MergeOptions, MergeResult, PresentationDiff } from './diff.js';
 // RR-75: `opf edit` and `opf fill` as functions. The Node build registers the default catalog for edit's check, as the CLI does.
@@ -203,6 +208,10 @@ export type { TableColorScaleColors, TableColorScaleCell, TableColorScaleRange, 
 export { mixOklab, srgbToOklab, oklabToSrgb } from './oklab.js';
 // RR-54: chart and table data: strict numbers, number formats and Excel codes, datasets, series mapping.
 export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix, suggestCellTypeFix, datasetColumnDeclaration, cellMatchesType } from './chart-data.js';
+// FR-06: a metric computed from data: the metric to draw, its PowerPoint record and its findings (the gauge reads `value` and `delta`).
+export { resolveMetric } from './metric-data.js';
+export { updateMetricLiterals } from './metric-literals.js';
+export type { MetricRecord, ResolvedMetric, ResolvedMetricValue, ResolveMetricOptions, MetricData, MetricDelta, DataCondition, DataFilter, DataLink, DataAggregate, MetricDerivedKey, MetricDataDiagnostic } from './metric-data.js';
 // FR-04: data sources and where a dataset came from. Engines never read, fetch or refresh a data source.
 export { dataSourcesOf, resolveDataSource, dataProvenance } from './data-sources.js';
 // FR-05: typed dataset columns. What ingest declares for the columns of imported data.

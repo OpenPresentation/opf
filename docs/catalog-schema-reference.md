@@ -373,7 +373,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `name` | yes | `string` | The region's name, lowercase kebab-case, unique across the whole record. A block targets it with 'region': '<name>'. It may not be 'title' (those are heading regions), 'tag', 'auto' or one of the cell words of a slide... |
 | `size` | no | `ref:RegionSize` |  |
-| `accepts` | no | `array<enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline \| diagram \| shape \| group>` | Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A region that takes 'image' also takes a shape block. A group is also accepted where every one of its leaf kinds... |
+| `accepts` | no | `array<enum:text \| list \| image \| video \| embed \| chart \| table \| code \| metric \| quote \| timeline \| diagram \| shape \| group>` | Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A region that takes 'image' also takes a shape block, and one that takes 'video' also takes an embed. A group is... |
 | `role` | no | `enum:primary \| media \| supporting` | Which content the region wants first. Binding gives a picture (image, video) to a media region first, then primary, supporting; every other kind to a primary region first, then supporting, media; of two equal regions... |
 | `flow` | no | `enum:auto \| grid \| row \| column` | How several blocks share the region, in the words of composition.mode: 'auto' a grid when every block is short and a column when any block is long (more than 6 estimated lines in its grid cell at the starting size); '... |
 | `max` | no | `integer` | Blocks the region holds on one slide. Default 6. 1 makes a single-block region: its block fills it, and blocks no region had room for still join it, up to 6, arranged by its flow (as 'none' did before OPF 0.35); a sin... |
@@ -457,7 +457,7 @@ _No named properties._
 | `name` | yes | `string` | Human-readable beat name, e.g. 'The Problem'. |
 | `description` | no | `string` | Curator-written prose that explains what this beat should accomplish. |
 | `instructions` | no | `string` | Short author-facing instruction for the beat typically one phrase. Complements 'description' with a concise directive. |
-| `type` | no | `enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline \| diagram` | Default content kind for the beat's slide: the same values as Slide.type. Helps engines and planners choose a layout when only the beat is known. |
+| `type` | no | `enum:text \| list \| image \| video \| embed \| chart \| table \| code \| metric \| quote \| timeline \| diagram` | Default content kind for the beat's slide: the same values as Slide.type. Helps engines and planners choose a layout when only the beat is known. |
 | `layout` | no | `string` | Suggested layout id for the beat's slide, e.g. 'section-divider', 'title-slide', 'text-left'. Resolves the same way as Slide.layout against catalogs.layouts and the default catalog at https://www.pptx.gallery/layouts. |
 | `thoughtCues` | no | `array<string>` | Optional speaker or thinking cues for the beat: questions the slide should answer. A planner or author turns them into the slide's notes; no engine copies them there on its own. |
 

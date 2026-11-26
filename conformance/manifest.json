@@ -165,6 +165,14 @@
       "basis": "opf.schema.json#/$defs/TableColorScale"
     },
     {
+      "id": "core.valid.embed",
+      "file": "core/valid/embed.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "An embed on a slide, with a title, an aspect ratio and a preview asset, and an embed block with a caption.",
+      "basis": "opf.schema.json#/$defs/EmbedPayload"
+    },
+    {
       "id": "core.valid.dataset-referenced",
       "file": "core/valid/dataset-referenced.opf.json",
       "levels": ["reader", "writer"],
@@ -203,6 +211,46 @@
       "expect": { "valid": true },
       "description": "Inline chart data declares the type, role and unit of its columns.",
       "basis": "opf.schema.json#/$defs/ChartData and #/$defs/DatasetColumn"
+    },
+    {
+      "id": "core.valid.metric-data-value",
+      "file": "core/valid/metric-data-value.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A metric computes its value from the last row of a dataset that meets a filter.",
+      "basis": "opf.schema.json#/$defs/MetricData and #/$defs/DataCondition"
+    },
+    {
+      "id": "core.valid.metric-data-previous",
+      "file": "core/valid/metric-data-previous.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A metric computes its change against the previous row.",
+      "basis": "opf.schema.json#/$defs/MetricDelta (compare previous)"
+    },
+    {
+      "id": "core.valid.metric-data-baseline",
+      "file": "core/valid/metric-data-baseline.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A metric computes its change against a baseline: the same aggregate over the rows that meet another filter.",
+      "basis": "opf.schema.json#/$defs/MetricDelta (compare with a baseline filter)"
+    },
+    {
+      "id": "core.valid.metric-data-column",
+      "file": "core/valid/metric-data-column.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A metric reads its change from a column of the dataset that already holds it.",
+      "basis": "opf.schema.json#/$defs/MetricDelta (field)"
+    },
+    {
+      "id": "core.valid.metric-data-fixed",
+      "file": "core/valid/metric-data-fixed.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A metric computes its change against a fixed number, with its own change format and a direction that is good.",
+      "basis": "opf.schema.json#/$defs/MetricDelta (compare with a value) and Metric.better"
     },
     {
       "id": "core.valid.asset-referenced",
@@ -541,6 +589,22 @@
       "basis": "opf.schema.json#/$defs/TableColorScale"
     },
     {
+      "id": "core.invalid.embed-http",
+      "file": "core/invalid/embed-http.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/embed" },
+      "description": "An embed whose address is http, not https.",
+      "basis": "opf.schema.json#/$defs/EmbedUrl"
+    },
+    {
+      "id": "core.invalid.embed-no-src",
+      "file": "core/invalid/embed-no-src.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/embed" },
+      "description": "An embed object with no address.",
+      "basis": "opf.schema.json#/$defs/EmbedPayload"
+    },
+    {
       "id": "core.invalid.dataset-unknown",
       "file": "core/invalid/dataset-unknown.opf.json",
       "levels": ["reader"],
@@ -571,6 +635,22 @@
       "expect": { "valid": false, "errorAt": "/slides/0/chart/data" },
       "description": "Inline chart data keeps the nested `source` object that OPF 0.37 removed.",
       "basis": "opf.schema.json#/$defs/ChartData (closed object)"
+    },
+    {
+      "id": "core.invalid.metric-data-dataset-unknown",
+      "file": "core/invalid/metric-data-dataset-unknown.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/metric/data/dataset" },
+      "description": "A metric links to a dataset that does not exist.",
+      "basis": "opf.schema.json#/$defs/MetricData (an unknown dataset id is an error); docs/validate.md, rule opf/dataset-unknown"
+    },
+    {
+      "id": "core.invalid.metric-data-field-unknown",
+      "file": "core/invalid/metric-data-field-unknown.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/slides/0/metric/data/filter/0/field" },
+      "description": "A metric filter names a column the dataset does not have.",
+      "basis": "opf.schema.json#/$defs/DataCondition (an unknown field is an error); docs/validate.md, rule opf/dataset-field-unknown"
     },
     {
       "id": "core.invalid.asset-unknown",

@@ -11,9 +11,9 @@ Every item also meets the definition of done in the README; the acceptance colum
 | FR-03 | opf#1297: links to a slide of the same deck, `slide:<id>` | [Below](#fr-03-links-to-a-slide-opf1297) | done |
 | FR-04 | CR 1 with CR 3: data sources and a flat dataset | [Below](#fr-04-data-sources-and-a-flat-dataset-cr-1-with-cr-3) | done |
 | FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | done |
-| FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | todo |
+| FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | done |
 | FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | in-progress |
-| FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | in-progress |
+| FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | done |
 | FR-09 | CR 14: limits on a variable's value | [Below](#fr-09-limits-on-a-variables-value-cr-14) | done |
 | FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | done |
 | FR-11 | What a validator says about a key it does not know | [Below](#fr-11-what-a-validator-says-about-a-key-it-does-not-know) | done |
@@ -190,6 +190,12 @@ Acceptance:
 
 Progress log:
 
+- 2026-11-26: done, in the pull request that adds this line. Built as accepted, with the owner's fourth way of computing the change (a
+  fixed number, `compare: { value }`) and what was decided while building (in the decision log): `metric.format`, the warnings when a
+  link gives no number, `opf/metric-unit-repeated`. A column's declared type (FR-05) decides what an aggregate may read. PowerPoint
+  (COM, seven slides): the preview's value, change, arrow and color; the link comes back from the export and from PowerPoint's own
+  save; a retyped value or change drops it with `metric-data-dropped`, a retyped label or title keeps it.
+
 ## FR-07: table color scale, bands with the bullet chart, and the gauge (CR 5)
 
 Redone on OPF's own terms, not on the requesting tool's shapes. `chart.type` lists only what the preview and PowerPoint draw as native charts, so a heatmap
@@ -241,6 +247,13 @@ Acceptance:
 - Conformance: valid decks with the full form and the shorthand; invalid decks with an `http:` URL and with no `src`.
 
 Progress log:
+
+- 2026-11-25: done, in the pull request that adds this line. Checked in PowerPoint on three decks (classic light, classic dark, bold):
+  the picture and the card draw where the preview draws them, every part of a card opens the embed's address, and each embed comes
+  back from the export and from PowerPoint's own save. A link changed or a card title retyped in PowerPoint imports what is there, with
+  `embed-provenance-changed`. Not run: a slide show click, Change Picture and the Accessibility Checker (PowerPoint's window is not
+  driven). The card's drawing is with the owner; a version with the badge and title centered and growing with the card follows as its
+  own change.
 
 ## FR-09: limits on a variable's value (CR 14)
 

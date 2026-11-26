@@ -49,7 +49,11 @@ export function addDuration(start: number, duration: unknown): number | undefine
 // ---------------------------------------------------------------------------------------------------------------
 // Credentials
 
-const SECRET_NAME_TOKENS = new Set(['key', 'apikey', 'token', 'secret', 'password', 'passwd', 'pwd', 'signature', 'sig', 'auth', 'authorization', 'credential', 'credentials', 'bearer', 'sas']);
+// The one test for "this address carries a credential", shared by every rule that reads an address a deck stores: a data source's
+// `src` (FR-04) and an embed's (FR-08). Matching is by word, not by letters: `monkey`, `design` and `author` are not secrets.
+const SECRET_NAME_TOKENS = new Set(['key', 'apikey', 'token', 'secret', 'password', 'passwd', 'pwd', 'signature', 'sig', 'auth', 'authorization', 'authentication', 'oauth', 'credential', 'credentials', 'bearer', 'sas']);
+// Compound words written as one (`accesstoken`, `clientsecret`): a known prefix and a secret word, never a bare ending (`monkey`).
+const SECRET_COMPOUND = /^(?:api|access|secret|private|public|client|auth|refresh|session|bearer|id|app|license)(?:key|token|secret|password|signature)$/;
 
 /** The words of a query parameter name: split on anything that is not a letter or digit and on camelCase boundaries, lowercased. */
 function nameTokens(name: string): string[] {
@@ -57,7 +61,7 @@ function nameTokens(name: string): string[] {
 }
 
 /**
- * Why a data source `src` looks like it holds a credential, or undefined: a URL with a password in its user information
+ * Why an address (a data source's `src`, an embed's) looks like it holds a credential, or undefined: a URL with a password in its user information
  * (`https://user:secret@host`), or a query parameter named like a key or a token (`?api_key=...`, `?access_token=...`). The reason never
  * repeats the secret. Paths and `asset:` references are never credentials.
  */
@@ -76,7 +80,7 @@ export function credentialInSrc(src: unknown): string | undefined {
       const raw = pair.split('=')[0]!;
       let name = raw;
       try { name = decodeURIComponent(raw.replaceAll('+', ' ')); } catch { /* keep the raw name */ }
-      if (name && nameTokens(name).some(token => SECRET_NAME_TOKENS.has(token))) return `a query parameter named ${JSON.stringify(name)}`;
+      if (name && nameTokens(name).some(token => SECRET_NAME_TOKENS.has(token) || SECRET_COMPOUND.test(token))) return `a query parameter named ${JSON.stringify(name)}`;
     }
   }
   return undefined;
