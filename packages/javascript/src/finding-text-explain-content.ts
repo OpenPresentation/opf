@@ -73,6 +73,16 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, highlight: { series: ["Quarter"] } } },
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, highlight: { series: ["Revenue"] } } },
   ),
+  "opf/chart-bands-order": ex(
+    "Write the bands in increasing order of `to`: each band runs from the previous band's `to` to its own.",
+    { title: "Wait", chart: { type: "column", alt: "Wait", data: { columns: COLUMNS, rows: ROWS }, bands: [{ to: 20 }, { to: 10 }] } },
+    { title: "Wait", chart: { type: "column", alt: "Wait", data: { columns: COLUMNS, rows: ROWS }, bands: [{ to: 10 }, { to: 20 }] } },
+  ),
+  "opf/chart-bands-unsupported": ex(
+    "Use a bar, column, line, area or bullet chart for bands, or remove them.",
+    { title: "Revenue", chart: { type: "pie", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, bands: [{ to: 10 }] } },
+    { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, bands: [{ to: 10 }] } },
+  ),
   "opf/table-color-scale-no-data": ex(
     "Name columns that hold numbers in `colorScale.columns`, or remove the color scale. A cell is shaded only when its value is a number.",
     { title: "Win rate", table: { columns: ["Region", "Q1"], rows: [["EMEA", "n/a"]], colorScale: { columns: ["Q1"] } } },

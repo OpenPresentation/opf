@@ -164,6 +164,8 @@ async function loadCatalogIds(kind) {
 }
 
 /** Font schemes the gallery gained after the suite was designed (v0.35 script defaults): see loadCatalogs. */
+/** Chart types the gallery gained after the suite was designed (FR-07's bullet, which needs a target column): see loadCatalogs. */
+const CHART_TYPES_ADDED_SINCE = new Set(["bullet"]);
 const FONT_SCHEMES_ADDED_SINCE = new Set(["times-new-roman-arial", "leelawadee-ui", "ebrima", "segoe-ui-regular"]);
 
 function pick(values, index, offset = 0) {
@@ -1081,6 +1083,7 @@ async function loadCatalogs() {
   // would move the choice of every deck after it, and their golden pictures with it. Schemes added since the suite was designed
   // stay out of the choice; they are script defaults, which draw no English deck anyway.
   catalogs.fontSchemes = catalogs.fontSchemes.filter((id) => !FONT_SCHEMES_ADDED_SINCE.has(id));
+  catalogs.chartTypes = catalogs.chartTypes.filter((id) => !CHART_TYPES_ADDED_SINCE.has(id));
   // RR-97: the decks are English, so the font scheme they draw with must be one the bundled Latin faces cover. A complex
   // script or East Asian scheme names proprietary faces (Aparajita, Meiryo) whose open replacements are optional
   // @expo-google-fonts packages, so `opf convert` of such a deck fails with render/font-unavailable on a plain install.

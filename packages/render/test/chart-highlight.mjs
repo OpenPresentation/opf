@@ -32,7 +32,8 @@ assert.match(surface, /^#[0-9A-Fa-f]{6}$/, 'the slide background');
 assert.doesNotMatch(toSvg(deck({}), 1, { trace: true }), /<rect[^>]*data-opf-path="slides\.0\.chart"[^>]*>/, 'no chart panel');
 const expected = chartHighlightColors(surface, '#C0392B', textColorForFill(surface, '#0F172A'));
 
-const HIGHLIGHTABLE = new Set(['bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar']);
+// FR-07: a bullet chart highlights by category, as a bar chart.
+const HIGHLIGHTABLE = new Set(['bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar', 'bullet']);
 
 // 1. Absent, and an unsupported or empty highlight, leave every chart byte-identical.
 for (const id of Object.keys(CHART_TYPES)) {

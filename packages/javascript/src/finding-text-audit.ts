@@ -594,6 +594,16 @@ const chartHighlightAdapted: RuleText = (finding) => {
   };
 };
 
+const chartBandsOrder: RuleText = (finding) => finding.message.startsWith("The bands are not in increasing order") ? {
+  message: "The bands are not in increasing order of their `to` values, so they are drawn sorted.",
+  next: "write each band's `to` above the previous one.",
+} : undefined;
+
+const chartBandsUnsupported: RuleText = (finding) => finding.message.startsWith("This chart type does not draw bands") ? {
+  message: "This chart type does not draw bands, so they are ignored.",
+  next: "use a bar, column, line, area or bullet chart, or remove the bands.",
+} : undefined;
+
 const tableColorScaleNoData: RuleText = (finding) => finding.message.startsWith("The color scale's columns hold no numbers") ? {
   message: "None of the color scale's columns holds a number, so no cell is shaded.",
   next: "name columns that hold numbers, or remove the color scale.",
@@ -771,6 +781,8 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/table-color-scale-range": tableColorScaleRange,
   "opf/chart-series-dropped": chartSeriesDropped,
   "opf/embed-credentials": embedCredentials,
+  "opf/chart-bands-order": chartBandsOrder,
+  "opf/chart-bands-unsupported": chartBandsUnsupported,
   "opf/code-highlight-out-of-range": codeHighlightOutOfRange,
   "opf/code-highlight-range-reversed": codeHighlightRangeReversed,
   "opf/variable-builtin-missing": variableBuiltinMissing,

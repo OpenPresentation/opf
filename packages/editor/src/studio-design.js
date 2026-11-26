@@ -9,6 +9,7 @@ import { createDesignControls } from "./design-controls.js";
 import { setActionState } from "./content-controls.js";
 import { createChartOptionsPanel } from "./chart-options-panel.js";
 import { createTableColorScalePanel } from "./table-color-scale-panel.js";
+import { createChartBandsPanel } from "./chart-bands-panel.js";
 import { createNumberingPanel } from "./numbering-panel.js";
 import { buildLayoutDiagram } from "./layout-diagram.js";
 import { listSwitchOptions } from "./switches.js";
@@ -68,7 +69,7 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
   const live = el("p", `${p}-design-live`, { role: "status", "aria-live": "polite" });
   container.append(head, notice, own, shared, advanced, live);
   const panels = new Map();
-  let chartPanel = null, scalePanel = null, numberingPanel = null, inspector = null, inspectorPath = null;
+  let chartPanel = null, bandsPanel = null, scalePanel = null, numberingPanel = null, inspector = null, inspectorPath = null;
   let mode = null;
   let lastKey = null;
 
@@ -304,6 +305,9 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
       chartPanel ??= createChartOptionsPanel(el("div", `${p}-design-chart`), { editor: ui, getSelectedPath: selectedPath, getGeometry: (index) => studio.slideGeometry?.(index), onStatus: (message) => studio.status(message) });
       own.append(chartPanel.element.parentElement ?? chartPanel.element);
       chartPanel.refresh();
+      bandsPanel ??= createChartBandsPanel(el("div", `${p}-design-bands`), { editor: ui, getSelectedPath: selectedPath, onStatus: (message) => studio.status(message) });
+      own.append(bandsPanel.element.parentElement ?? bandsPanel.element);
+      bandsPanel.refresh();
     }
     if (next === "table") {
       scalePanel ??= createTableColorScalePanel(el("div", `${p}-design-scale`), { editor: ui, getSelectedPath: selectedPath, onStatus: (message) => studio.status(message) });
@@ -355,6 +359,7 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
     destroy() {
       for (const entry of panels.values()) entry.controls.destroy();
       chartPanel?.destroy();
+      bandsPanel?.destroy();
       scalePanel?.destroy();
       numberingPanel?.destroy();
       inspector?.destroy();

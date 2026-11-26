@@ -1,0 +1,21 @@
+{
+  "deck": "technical/bands-and-bullet.opf.json",
+  "entries": {
+    "technical/bands-and-bullet.opf.json#0": {
+      "sha256": "e58e56275ad04fdc3bfeb61a8cb47af4e22eab7e33c53f2e4567efd903e8d099",
+      "bytes": 6836
+    },
+    "technical/bands-and-bullet.opf.json#1": {
+      "sha256": "b25bef05b245df86725ca529e59e088e2680c350f71613ce2f90f32e9f8b3ba9",
+      "bytes": 7437
+    },
+    "technical/bands-and-bullet.opf.json#2": {
+      "sha256": "0b08e7e7aac600a77c1fe94f87be79dc9d3b6362d7e672b3fb9074c019c1f5e5",
+      "bytes": 8108
+    },
+    "technical/bands-and-bullet.opf.json#3": {
+      "sha256": "a2b778e4917d39875dd11454c39537ea694b7fbba7226ca05fe4cf6844338549",
+      "bytes": 6591
+    }
+  }
+}

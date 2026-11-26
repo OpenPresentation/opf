@@ -340,6 +340,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/chart-highlight-adapted`](#opfchart-highlight-adapted) | Content | warning | structure | A chart highlight is adapted by the chart type. |
 | [`opf/table-color-scale-no-data`](#opftable-color-scale-no-data) | Content | warning | structure | A table color scale has no numbers to shade. |
 | [`opf/table-color-scale-range`](#opftable-color-scale-range) | Content | warning | structure | A table color scale has an empty range or a center outside it. |
+| [`opf/chart-bands-order`](#opfchart-bands-order) | Content | warning | structure | Chart bands are not in increasing order. |
+| [`opf/chart-bands-unsupported`](#opfchart-bands-unsupported) | Content | warning | structure | A chart has bands but its type does not draw them. |
 | [`opf/chart-series-dropped`](#opfchart-series-dropped) | Content | warning | structure | A chart series is not drawn by the chart type. |
 | [`opf/code-highlight-out-of-range`](#opfcode-highlight-out-of-range) | Content | warning | structure | A code highlight marks a line the code does not have. |
 | [`opf/code-highlight-range-reversed`](#opfcode-highlight-range-reversed) | Content | warning | structure | A code highlight range ends before it starts. |
@@ -1275,6 +1277,22 @@ Default severity: **warning**. Cost: structure. A table color scale has no numbe
 Default severity: **warning**. Cost: structure. A table color scale has an empty range or a center outside it.
 
 **Why.** A pinned `min` that is not below `max`, or a `center` outside the range, leaves part of the scale unused: every value draws in one end color.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/chart-bands-order`
+
+Default severity: **warning**. Cost: structure. Chart bands are not in increasing order.
+
+**Why.** Each band runs from the previous band's `to` to its own, so the `to` values must increase. Every engine draws unordered bands sorted by `to`; the warning says the list does not read as it draws.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/chart-bands-unsupported`
+
+Default severity: **warning**. Cost: structure. A chart has bands but its type does not draw them.
+
+**Why.** Bands shade ranges of a value axis behind the data: bar, column, line and area charts (and their stacked forms) and the bullet chart draw them. On a pie, doughnut, scatter, radar, combo or Office 2016 construct they are ignored by every engine.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

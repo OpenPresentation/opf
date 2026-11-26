@@ -146,6 +146,8 @@ export const CASES = [
 	{ name: 'data-cell-type', rule: 'opf/data-cell-type', input: deck([{ title: 'T', chart: { type: 'column', data: { columns: ['Q', { name: 'V', type: 'number' }], rows: [['Q1', 'about 12']] } } }]) },
 	{ name: 'chart-mapping-adapted', rule: 'opf/chart-mapping-adapted', input: deck([{ title: 'T', chart: { type: 'column', data: { columns: ['Quarter', 'Revenue', 'Costs'], rows: [['Q1', 1, 2]] }, mapping: { category: 'Quarter', x: 'Costs', series: ['Quarter', 'Revenue'] } } }]) },
 	{ name: 'embed-credentials', rule: 'opf/embed-credentials', input: deck([{ title: 'T', embed: 'https://app.example.com/dashboards/revenue?api_key=abc123' }]) },
+	{ name: 'chart-bands-order', rule: 'opf/chart-bands-order', input: deck([{ title: 'T', chart: { type: 'column', data: { columns: ['Quarter', 'Revenue'], rows: [['Q1', 1]] }, bands: [{ to: 20 }, { to: 10 }] } }]) },
+	{ name: 'chart-bands-unsupported', rule: 'opf/chart-bands-unsupported', input: deck([{ title: 'T', chart: { type: 'pie', data: { columns: ['Quarter', 'Revenue'], rows: [['Q1', 1]] }, bands: [{ to: 10 }] } }]) },
 	{ name: 'chart-series-dropped', rule: 'opf/chart-series-dropped', input: deck([{ title: 'T', chart: { type: 'treemap', data: { columns: ['Quarter', 'Revenue', 'Costs'], rows: [['Q1', 1, 2]] } } }]) },
 	{ name: 'table-highlight-unknown-name', rule: 'opf/table-highlight-unknown-name', input: deck([{ title: 'T', table: { columns: ['Region', 'Change'], rows: [['Northeast', 'Hold'], ['Southeast', '+3%']], highlight: { rows: ['South'] } } }]) },
 	{ name: 'table-color-scale-unknown-column', rule: 'opf/table-color-scale-unknown-column', input: deck([{ title: 'T', table: { columns: ['Region', 'Q1'], rows: [['EMEA', 0.22]], colorScale: { columns: ['Q4'] } } }]) },
