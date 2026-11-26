@@ -34,6 +34,11 @@ describe("font policy table", () => {
 
   test("the exported table is the spec reference file with decisions applied, frozen", () => {
     assert.deepEqual(JSON.parse(JSON.stringify(FONT_POLICY)), JSON.parse(JSON.stringify(applyFontPolicyDecisions(source))));
+    // The table is generated in a compact form (scripts/compact-literal.mjs) and built at load: the same values with the
+    // keys in the file's order, every object and array frozen.
+    assert.equal(JSON.stringify(FONT_POLICY), JSON.stringify(applyFontPolicyDecisions(source)));
+    const frozen = (value) => value === null || typeof value !== "object" || (Object.isFrozen(value) && Object.values(value).every(frozen));
+    assert.ok(frozen(FONT_POLICY), "every object and array of the table is frozen");
     assert.ok(Object.isFrozen(FONT_POLICY) && Object.isFrozen(rows) && Object.isFrozen(rows[0]));
     assert.equal(subpath.FONT_POLICY, FONT_POLICY);
   });

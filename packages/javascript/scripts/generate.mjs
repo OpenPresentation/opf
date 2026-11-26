@@ -2,6 +2,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { compile } from "json-schema-to-typescript";
+import { compactModuleExpression } from "./compact-literal.mjs";
 import { precompiledValidatorsSource } from "./validators-codegen.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -258,12 +259,14 @@ async function generatePresetGeometry() {
 }
 
 async function generateFontPolicy() {
-  // FF-31: the authoritative font policy table is reference data, not a catalog.
+  // FF-31: the authoritative font policy table is reference data, not a catalog. Written in the compact form of
+  // compact-literal.mjs (each repeated source URL and license once, each row built by its key list's function): the same
+  // value, which the generator proves, at about half the bytes in the MCP viewer.
   const policy = await readJson(path.join(specRoot, "reference", "font-policy.json"));
   const lines = [
     generatedHeader("spec/reference/font-policy.json"),
     "// Raw JSON: rows that name a provisional decision have no replacement family until font-policy.ts applies it.",
-    `export const fontPolicySource: unknown = ${asTs(policy)};`,
+    `export const fontPolicySource: unknown = ${compactModuleExpression(policy, "spec/reference/font-policy.json")};`,
     "",
   ];
   await fs.writeFile(path.join(generatedRoot, "font-policy.ts"), lines.join("\n"));
