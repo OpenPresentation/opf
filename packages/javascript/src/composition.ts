@@ -3044,7 +3044,7 @@ function layoutGaugeMetric(value: string | number | MetricContent, box: LayoutBo
     // What the text asks for is what the widest arc its box's width allows would set: a cell that cuts the arc by its height sets the text
     // smaller than asked, so composition scores that cell as it scores any text set below its size (a row of gauges over a stack of flat ones).
     const ideal = Math.max(minimum, METRIC_GAUGE_VALUE_SIZE * Math.min(box.width / 2, METRIC_GAUGE_MAX_WIDTH_PX / 2 * scale));
-    for (const part of chosen.parts) part.requestedFontSize = Math.max(part.requestedFontSize, gridFontSize(Math.max(minimum, ideal * METRIC_ROLE_SIZES[part.role] / METRIC_ROLE_VALUE_SIZE), part.minFontSize));
+    for (const part of chosen.parts) part.requestedFontSize = Math.max(part.requestedFontSize, gridFontSize(Math.max(minimum, ideal * METRIC_ROLE_SIZES[part.role] / METRIC_ROLE_VALUE_SIZE), part.minFontSizePx));
     const layout: MetricLayout = {...chosen, bounds: {x: box.x, y: box.y, width: box.width, height: bottom - box.y}, gauge};
     if (FIGURE_LINES.has(chosen)) FIGURE_LINES.add(layout);
     return layout;
