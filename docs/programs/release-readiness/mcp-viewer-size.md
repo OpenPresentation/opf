@@ -54,9 +54,31 @@ Together: frame 9,488,109 to 9,160,454 bytes (-327,655), headroom 997,651 to 1,3
 - **The MCP client's default JSON Schema validator** (`cfWorkerProvider`, 22,293 bytes, imported by the client's browser shims) and zod's `fromJSONSchema` (12,304, re-exported by zod's namespace): both are imported by the SDK's own modules, and dropping them would mean replacing an SDK module at build time with no test that proves the App never reaches them.
 - **One deflate library** instead of pako, fflate and tiny-inflate (64,612 bytes together): each belongs to a different package's code path (the PDF writer, the vendored JSZip, the exporter's packages); merging them changes those packages.
 
+## 1. Compressed script, decompressed at run time
+
+The script is 8,856,984 bytes of the 9,064,031-byte HTML. Compressed, it is 2,694,281 bytes with gzip level 9 (3,592,376 as base64) or 2,130,459 with Brotli quality 11 (2,840,612 as base64). A page that carries the base64 text and a small loader would save about 5.3 MB (gzip, which the browser's `DecompressionStream` can read) to 6.0 MB (Brotli, which needs a decoder in the page) of the frame, leaving room for years of growth.
+
+The catch is the step after decompression: the code is then a string, and running a string needs `eval`/`new Function` (the host CSP has no `unsafe-eval`), a `blob:` or `data:` module URL (`script-src 'self' 'unsafe-inline'` allows neither), or a dynamically inserted inline `<script>` (allowed by `unsafe-inline` in a plain page, but not when the host adds a nonce or hash, and a module graph cannot be split this way). To ship it, test in a real Claude host (web and desktop, inline and fullscreen) and in at least one other MCP Apps host: that `DecompressionStream("gzip")` exists in the sandboxed iframe; that an inline script created with `document.createElement("script")` and its `text` set runs under the host's actual CSP header and meta policy, with no console CSP report; that the page still starts when the host's CSP differs from the SEP-1865 default (a nonce, `strict-dynamic`, or `require-trusted-types-for 'script'`, which would block it); the time to first slide on a 4x-throttled CPU (decompressing and compiling 8.8 MB); and a fallback that shows a readable error when the step is refused, instead of a blank frame.
+
+## 2. The PPTX exporter and the diagram engine on demand
+
+In the viewer bundle the PPTX exporter (`@openpresentation/opf-pptx` with its vendored PptxGenJS and JSZip) is 1,176,452 bytes and the diagram engine `pele` 732,374 bytes, about 1.95 MB of the frame together with their string escapes. Neither is needed to show a deck that has no diagram, and the exporter only when the person exports. Both could come later through an app-only tool (`read_app_module`, like `read_font_file`) and be loaded when first needed, with the startup page unchanged otherwise.
+
+Loading code later has the same catch as option 1: the module text must be run. Before it ships, test in a real Claude host that the delivery and run path works (the same checks as above), that a deck with a Mermaid, DOT or PlantUML diagram still draws on first view (the diagram waits for the module, so the first slide changes from a placeholder to the diagram) and that a validation finding for a diagram is identical to today's; that Export PowerPoint works on the first press with the module not yet loaded, including when the tool call fails (a visible error, no silent download of nothing); and that a host that limits app-only tool calls or their size does not break startup. The module files would also need SHA-256 pinning like the fonts.
+
+## Smaller safe steps still open
+
+The candidates this section listed on 2026-11-16 (more derived validator errors, a compact form for the tables whose rows repeat their keys, and the gallery data in the viewer only) were taken on 2026-11-26; see that section for what was measured and left. What remains is a few kilobytes each: the compact form for the other generated tables loads measurably slower or saves nothing, and the two options above are the only ones that buy years of growth.
+
+Measurements in sections 1 and 2 are of the 0.34 RR-111 build, before the quote pass; with it, the script's JSON escapes are about 70,000 bytes instead of 330,000, so option 1's saving is that much smaller.
+
+## 2026-11-26: the 0.37.0 format changes reach the floor
+
+`main` with eight of the eleven format changes of 0.37.0 measures about 9,468,000 frame bytes (about 1,017,000 of headroom). With embed it is 9,501,842 (983,918), with the table color scale instead 9,492,922 (992,838), and the computed metric, bands with the bullet chart and the gauge follow. So that these land one after another, the test's floor is 800,000 from the embed change on; 0.37.0 is not released until the viewer has 1,000,000 bytes of headroom again and the test says so. The work is opf#1516: the smaller safe steps above, measured and taken in order, and anything 0.37.0 added that the viewer never reaches.
+
 ## 2026-11-26: the 0.37.0 cut (opf#1516)
 
-The format changes of 0.37.0 took the frame back to 9,468,222 bytes (1,017,538 of headroom) on `main` at 14170de4f, and the changes still in review add tens of kilobytes each. Six build-time steps took it to 9,183,256 bytes (1,302,504 of headroom, -284,966) on that base, Node 24, esbuild 0.28.2. No public export changes its value, type or freezing, and the viewer does the same.
+Six build-time steps, each proven identical, take `main` at a0421001c (with embed) from 9,501,842 frame bytes (983,918 of headroom) to 9,216,573 (1,269,187, -285,269), and the test's floor is 1,000,000 again. They were built and measured on 14170de4f, before embed: 9,468,222 bytes (1,017,538 of headroom) to 9,183,256 (1,302,504, -284,966); the table and the saving of each step below are of that base. Node 24, esbuild 0.28.2. No public export changes its value, type or freezing, and the viewer does the same.
 
 ### Where the bytes are
 
@@ -103,27 +125,5 @@ The catalog-free entries stay within their gzip budgets (`check:catalog-free`); 
 - **Naming every string in the preset geometry**: 40 KB more, at about 4 ms more load (step 2).
 - **The symbol-font encoding table** in the compact form on top of its column form: no gain (101,048 frame bytes either way).
 - **The date names and number locales**: already one joined string per language; nothing repeats.
-- **Code the viewer never reaches**: nothing on this base. No live-embed module is in the bundle (embed was not on `main` at 14170de4f), and no Node file API module either; the other inputs are reached as the 2026-11-16 section says.
+- **Code the viewer never reaches**: on 14170de4f nothing; no Node file API module is in the bundle, and the other inputs are reached as the 2026-11-16 section says. With embed, `@openpresentation/opf-render/live-embeds` is in it (2,309 bytes of script), imported by the editor's presenter, which mounts it only when a host passes `embeds`; the viewer passes none. Its other embed code is reached: the editor's embed options (3,063) and the exporter's embed record (2,091). A viewer-only stub for 2,309 bytes would need a test that proves the viewer can never pass `embeds` through the workspace to the presenter, and was not taken.
 - **Escapes**: what is left after the gallery step is in template literals (already delimited by a backtick), regular expressions (10,130 bytes, mostly `\`) and the CSS; none has a provably identical spelling that is shorter.
-
-## 1. Compressed script, decompressed at run time
-
-The script is 8,856,984 bytes of the 9,064,031-byte HTML. Compressed, it is 2,694,281 bytes with gzip level 9 (3,592,376 as base64) or 2,130,459 with Brotli quality 11 (2,840,612 as base64). A page that carries the base64 text and a small loader would save about 5.3 MB (gzip, which the browser's `DecompressionStream` can read) to 6.0 MB (Brotli, which needs a decoder in the page) of the frame, leaving room for years of growth.
-
-The catch is the step after decompression: the code is then a string, and running a string needs `eval`/`new Function` (the host CSP has no `unsafe-eval`), a `blob:` or `data:` module URL (`script-src 'self' 'unsafe-inline'` allows neither), or a dynamically inserted inline `<script>` (allowed by `unsafe-inline` in a plain page, but not when the host adds a nonce or hash, and a module graph cannot be split this way). To ship it, test in a real Claude host (web and desktop, inline and fullscreen) and in at least one other MCP Apps host: that `DecompressionStream("gzip")` exists in the sandboxed iframe; that an inline script created with `document.createElement("script")` and its `text` set runs under the host's actual CSP header and meta policy, with no console CSP report; that the page still starts when the host's CSP differs from the SEP-1865 default (a nonce, `strict-dynamic`, or `require-trusted-types-for 'script'`, which would block it); the time to first slide on a 4x-throttled CPU (decompressing and compiling 8.8 MB); and a fallback that shows a readable error when the step is refused, instead of a blank frame.
-
-## 2. The PPTX exporter and the diagram engine on demand
-
-In the viewer bundle the PPTX exporter (`@openpresentation/opf-pptx` with its vendored PptxGenJS and JSZip) is 1,176,452 bytes and the diagram engine `pele` 732,374 bytes, about 1.95 MB of the frame together with their string escapes. Neither is needed to show a deck that has no diagram, and the exporter only when the person exports. Both could come later through an app-only tool (`read_app_module`, like `read_font_file`) and be loaded when first needed, with the startup page unchanged otherwise.
-
-Loading code later has the same catch as option 1: the module text must be run. Before it ships, test in a real Claude host that the delivery and run path works (the same checks as above), that a deck with a Mermaid, DOT or PlantUML diagram still draws on first view (the diagram waits for the module, so the first slide changes from a placeholder to the diagram) and that a validation finding for a diagram is identical to today's; that Export PowerPoint works on the first press with the module not yet loaded, including when the tool call fails (a visible error, no silent download of nothing); and that a host that limits app-only tool calls or their size does not break startup. The module files would also need SHA-256 pinning like the fonts.
-
-## Smaller safe steps still open
-
-The candidates this section listed on 2026-11-16 (more derived validator errors, a compact form for the tables whose rows repeat their keys, and the gallery data in the viewer only) were taken on 2026-11-26; see that section for what was measured and left. What remains is a few kilobytes each: the compact form for the other generated tables loads measurably slower or saves nothing, and the two options above are the only ones that buy years of growth.
-
-Measurements in sections 1 and 2 are of the 0.34 RR-111 build, before the quote pass; with it, the script's JSON escapes are about 70,000 bytes instead of 330,000, so option 1's saving is that much smaller.
-
-## 2026-11-26: the 0.37.0 format changes reach the floor
-
-`main` with eight of the eleven format changes of 0.37.0 measures about 9,468,000 frame bytes (about 1,017,000 of headroom). With embed it is 9,501,842 (983,918), with the table color scale instead 9,492,922 (992,838), and the computed metric, bands with the bullet chart and the gauge follow. So that these land one after another, the test's floor is 800,000 from the embed change on; 0.37.0 is not released until the viewer has 1,000,000 bytes of headroom again and the test says so. The work is opf#1516: the smaller safe steps above, measured and taken in order, and anything 0.37.0 added that the viewer never reaches.
