@@ -159,6 +159,19 @@ export const METRIC_BETTER = Object.freeze(["up", "down"]);
 /** The comparisons of a metric's change (`MetricDelta`): none, the previous row, a baseline filter, a fixed number, a column that holds the change. */
 export const METRIC_CHANGES = Object.freeze(["none", "previous", "baseline", "value", "column"]);
 
+/**
+ * FR-07, part 3: the gauge a metric starts with when the editor turns it on: `min` 0 and `max` the next round number above the value (1 for a
+ * value from 0 to 1; 80 for 72; 2000 for 1284). An editor convenience only: the format never guesses a range. `value` is the number the
+ * metric shows (its computed or written value); without one the range is 0 to 1.
+ */
+export function defaultMetricGauge(value) {
+  if (typeof value !== "number" || !Number.isFinite(value) || value <= 0) return { max: 1 };
+  if (value <= 1) return { max: 1 };
+  const magnitude = 10 ** Math.floor(Math.log10(value));
+  const max = Math.ceil(value / magnitude) * magnitude;
+  return { max: max > value ? max : max + magnitude };
+}
+
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const columnNameOf = (column) => (typeof column === "string" ? column : isObject(column) && typeof column.name === "string" ? column.name : "");
 
@@ -208,6 +221,8 @@ export function readMetricData(presentation, blockPath, options = {}) {
     link: object && isObject(metric.data) ? metric.data : undefined,
     better: object ? metric.better : undefined,
     format: object ? metric.format : undefined,
+    gauge: object && isObject(metric.gauge) ? metric.gauge : undefined,
+    number: resolved?.value?.isNumber ? resolved.value.number : typeof metric === "number" ? metric : undefined,
     datasets: metricDatasets(presentation),
     resolved: resolved?.resolved === true,
     value: resolved?.resolved ? resolved.value : undefined,
@@ -229,7 +244,8 @@ export function prepareMetricData(presentation, blockPath, change) {
   if (change.better != null && !METRIC_BETTER.includes(change.better)) throw fail("invalid-metric-better", `A metric's better is one of ${METRIC_BETTER.join(", ")}, or null to remove it.`, { better: change.better });
   const parts = found.path.split(".");
   const metric = getValueAtPath(presentation, parts);
-  const keys = ["data", "better", "format"].filter((key) => change[key] !== undefined);
+  if (change.gauge != null && (!isObject(change.gauge) || typeof change.gauge.max !== "number")) throw fail("invalid-metric-gauge", "A gauge is { min?, max, bands?, target? } with a number max, or null to remove it.", { gauge: change.gauge });
+  const keys = ["data", "better", "format", "gauge"].filter((key) => change[key] !== undefined);
   let patches;
   if (found.scalar) {
     const set = keys.filter((key) => change[key] !== null);
@@ -243,7 +259,7 @@ export function prepareMetricData(presentation, blockPath, change) {
   }
   return finish(presentation, patches, { path: found.path, changed: patches.length > 0, lossless: true, loss: [] });
 }
-/** Set (or, with `null`, remove) a metric's `data`, `better` and `format` as one undoable step. */
+/** Set (or, with `null`, remove) a metric's `data`, `better`, `format` and `gauge` as one undoable step. */
 export function setMetricData(editor, blockPath, change, meta = {}) {
   requireEditor(editor);
   return apply(editor, prepareMetricData(editor.presentation, blockPath, change), meta, "metric-data");

@@ -617,6 +617,10 @@ export function shapeRole(drawn, {hasText} = {}) {
   // SH-07: the members of a diagram group the export wrote as shapes (`OPF diagram N node A`, `... edge ...`) reach here only when the
   // group was edited (an intact one is its diagram again): they are drawn shapes like any other, so an edited diagram keeps its drawing.
   const diagramMember = /^OPF diagram \d+ /.test(name);
+  // FR-07, part 3: the arcs and the target of a metric's gauge reach here only when the gauge was edited (an intact one is its metric's
+  // gauge again): they are drawn shapes like any other, so an edited gauge keeps its drawing.
+  const gaugePart = /^OPF metric \d+ gauge (?:track|band [1-6]|value|target)$/.test(name);
+  if (gaugePart) return drawsLook(props).visible ? 'overlay' : 'text';
   if ((name.startsWith('OPF ') && !diagramMember) || object(nv['p:nvPr']?.['p:custDataLst']?.['p:tags'])) return 'text';
   const look = drawsLook(props);
   const spPr = props['p:spPr'] ?? {};

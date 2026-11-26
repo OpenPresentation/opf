@@ -1,0 +1,21 @@
+{
+  "deck": "technical/gauges.opf.json",
+  "entries": {
+    "technical/gauges.opf.json#0": {
+      "sha256": "1c4bba9b8ce7123d31aedca5130cc4a54d5d17a97deb57715318482915b0f7b7",
+      "bytes": 6529
+    },
+    "technical/gauges.opf.json#1": {
+      "sha256": "da0a97c7c048e695232c94868e19a982ea1626c4fb1dc7c5060cfa3126dd2542",
+      "bytes": 7432
+    },
+    "technical/gauges.opf.json#2": {
+      "sha256": "cc9b59089d193b98daa744351aae1beba52bdc17bfce0222f41500b091b1b1f4",
+      "bytes": 7962
+    },
+    "technical/gauges.opf.json#3": {
+      "sha256": "c86e4736bc77596ae318ba6b8200195f067304b4d4b759aef0d92e4afad9197a",
+      "bytes": 11885
+    }
+  }
+}

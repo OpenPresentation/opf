@@ -5,14 +5,14 @@
     "composition": 336734,
     "convert": 594843,
     "data": 22140,
-    "deck": 617236,
+    "deck": 636022,
     "diagram-engine-eager": 294825,
     "diagram-engine-lazy": 11669,
     "diff": 6237,
     "font-policy": 17383,
     "format": 77824,
     "ids": 577341,
-    "markdown": 612828,
+    "markdown": 631991,
     "pagination": 580304,
     "patch": 575132,
     "precompiled": 216762,
@@ -29,7 +29,7 @@
     "symbol-font-encodings": 26562,
     "types": 21,
     "validator": 574761,
-    "yaml": 596553
+    "yaml": 615621
   },
   "measured": {
     "browser": {
@@ -49,8 +49,8 @@
       "gzip": 21495
     },
     "deck": {
-      "minified": 1831401,
-      "gzip": 599258
+      "minified": 1875870,
+      "gzip": 617497
     },
     "diagram-engine-eager": {
       "minified": 759883,
@@ -85,8 +85,8 @@
       "gzip": 560525
     },
     "markdown": {
-      "minified": 1819812,
-      "gzip": 594978
+      "minified": 1864283,
+      "gzip": 613583
     },
     "pagination": {
       "minified": 1708966,
@@ -157,8 +157,8 @@
       "gzip": 558020
     },
     "yaml": {
-      "minified": 1773765,
-      "gzip": 579177
+      "minified": 1818236,
+      "gzip": 597690
     }
   }
 }
