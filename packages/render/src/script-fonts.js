@@ -17,6 +17,7 @@
 // faces and lets a missing glyph raise `missing-glyph`.
 
 import { fontPolicyFor } from "@openpresentation/opf/font-policy";
+import { GLYPH_DEFECTS, glyphDefectsFor } from "./font-compatibility.js";
 import { scriptFontRole, scriptOfCharacter, itemizeScripts } from "@openpresentation/opf/composition";
 import { SYMBOL_PLACEHOLDER, SYMBOL_SCRIPT, mapSymbolAdvances, symbolEncodingFamily, symbolPreviewFaces } from "./symbol-fonts.js";
 export { scriptFontRole, scriptOfCharacter, itemizeScripts };
@@ -542,9 +543,57 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
     return out;
   };
 
+  /**
+   * opf#1472: a character a bundled face draws wrongly (GLYPH_DEFECTS: U+0111 in the Intos sans faces) is its own run, drawn by the
+   * first loaded family of the row's `replacement` that has it, and it keeps the advance the bad glyph had (`run.advance`, em), so a
+   * line measures, wraps and is placed exactly as before: the SVG draws the replacement at the font size (`run.fontScale`) whose own advance is
+   * that advance, in a line that flows (no positioned runs), so every rasterizer, letter-spacing included, places it as it placed the old glyph. Text without such a
+   * character, and a face with no loaded replacement, plan as before. Undefined when nothing is replaced.
+   */
+  const defectCodes = new Set(GLYPH_DEFECTS.flatMap(row => row.codePoints));
+  const defectPlans = new Map();
+  const planDefects = (text, style) => {
+    if (!measured || !fallbackEnabled || ![...text].some(character => defectCodes.has(character.codePointAt(0)))) return undefined;
+    const cacheKey = `${style.fontFamily} ${style.fontWeight ?? 400} ${!!style.italic} ${style.path ?? ""} ${text}`;
+    if (defectPlans.has(cacheKey)) return defectPlans.get(cacheKey);
+    let result;
+    try {
+      const own = inner.resolveStyle({...style}), defect = glyphDefectsFor(own?.fontFamily, own?.fontWeight ?? 400, own?.italic === true);
+      if (defect) {
+        const bad = new Set(defect.codePoints), replacements = new Map();
+        const replacementFor = character => {
+          if (!replacements.has(character)) {
+            const family = defect.replacement.map(name => resolveName(name, {...style, fontWeight: own.fontWeight, italic: false})).find(name => name && name !== own.fontFamily && covers(name, character, style));
+            if (family === undefined) replacements.set(character, null);
+            else {
+              const advance = inner.measure(character, 1, styled({...style, fontFamily: own.fontFamily, fontWeight: own.fontWeight, italic: own.italic})), natural = inner.measure(character, 1, styled({...style, fontFamily: family, fontWeight: own.fontWeight, italic: false}));
+              replacements.set(character, {family, advance, scale: natural > 0 && Math.abs(advance / natural - 1) > 1e-9 ? advance / natural : undefined});
+            }
+          }
+          return replacements.get(character);
+        };
+        const out = [];
+        let piece = "";
+        const flush = () => { if (piece) { out.push(...plan(piece, style, true)); piece = ""; } };
+        for (const character of text) {
+          const replacement = bad.has(character.codePointAt(0)) ? replacementFor(character) : null;
+          if (!replacement) { piece += character; continue; }
+          flush();
+          out.push({text: character, family: replacement.family, own: false, advance: replacement.advance, ...(replacement.scale ? {fontScale: replacement.scale} : {})});
+        }
+        flush();
+        if (out.some(run => run.advance !== undefined)) result = out;
+      }
+    } catch (error) { if (!softErrors.has(error?.code)) throw error; }
+    if (defectPlans.size >= 4096) defectPlans.delete(defectPlans.keys().next().value);
+    defectPlans.set(cacheKey, result);
+    return result;
+  };
+
   /** Font runs for text drawn in `style` (the resolved latin style). `own` runs use the style's family. */
-  const plan = (text, style) => {
+  const plan = (text, style, plain = false) => {
     text = String(text ?? "");
+    if (!plain) { const replaced = planDefects(text, style); if (replaced) return replaced; }
     // A symbol-encoded family (resolved styles carry `symbolEncoding`; an unresolved style names the family itself) is mapped code by
     // code; `symbolEncoding: null` is the planner's own request for ordinary runs (characters that are not codes).
     const encoding = style.symbolEncoding === null ? undefined : style.symbolEncoding ?? symbolEncodingFamily(style.fontFamily);
@@ -663,7 +712,7 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
    * verified symbol font's advance for its code, so lines break and bullets sit where PowerPoint puts them; `natural`
    * asks for the open face's advance of that run instead (the SVG compresses a wider glyph to fit, never stretches one).
    */
-  const runWidth = (run, size, style, natural = false) => run.symbol && !natural && run.symbol.advance !== null ? run.symbol.advance * size : inner.measure(run.text, adjustedFontSize(size, run.sizeAdjust), styleFor(run, style));
+  const runWidth = (run, size, style, natural = false) => run.advance !== undefined ? run.advance * size : run.symbol && !natural && run.symbol.advance !== null ? run.symbol.advance * size : inner.measure(run.text, adjustedFontSize(size, run.sizeAdjust), styleFor(run, style));
   /** Advance of each planned run, in order (see `runWidth`); undefined without a measurement provider. */
   const runWidths = (runs, size, style, {natural = false} = {}) => measured ? runs.map(run => runWidth(run, size, style, natural)) : undefined;
   let textMeasurement;
