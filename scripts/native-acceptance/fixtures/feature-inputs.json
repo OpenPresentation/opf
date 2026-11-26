@@ -3,25 +3,25 @@
     "origin": "reviewed timeline-update source",
     "originalSHA256": "8071bf3b90b87dc982014565f916b89f9d23642ce27aaa3fd68e22e3425d7efe",
     "fontOverlay": null,
-    "candidateSHA256": "249d3ba39b7d3eec818eb5897fe43fd14c9495a07da64856dc215bad9dcb2ed2"
+    "candidateSHA256": "c7bd8402c761fa5f99416a08813646c53f62b8426f379836a2e26dee52694093"
   },
   "feature-dense-events": {
     "origin": "reviewed timeline-update source",
     "originalSHA256": "e81a5c9a5bd9e4a3367b0cde47948834014a2bce906e05dbe8b2cfb517068f13",
     "fontOverlay": null,
-    "candidateSHA256": "8ecf41e4e80a24e14a295557e6534bce20eb8599c898f19da88d945c36eb491b"
+    "candidateSHA256": "90ec40e3a3b903d321ea4f55a9af1a54e55d74b244e8fb13d1339c9144670a99"
   },
   "feature-custom-roadmap": {
     "origin": "reviewed timeline-update source",
     "originalSHA256": "d029ff2cdf378610d4adc98ff226662e01dcecce1ff2f6fa192ab9e2859ebb18",
     "fontOverlay": null,
-    "candidateSHA256": "75339867e680f8deb3e29348bd35c0045800c0ead4df4bc3d519a4d9604bc3fa"
+    "candidateSHA256": "8b13526e4931470ac2e152f8a5e161dff1577690e1c1a185db03d89f5dcd0d04"
   },
   "feature-long-labels": {
     "origin": "reviewed timeline-update source",
     "originalSHA256": "043c8d2e293cab1df7c2b7705216ec60c4d142a8b5b8a4659daa182eb710cb41",
     "fontOverlay": null,
-    "candidateSHA256": "6f14b0a4fe4fc28b18c51776d7b1e34eb87ff5026d5fdb9eca746d5780cb6919"
+    "candidateSHA256": "33e561998e2b3da363f4b084d3489dc60a7e9863732b03d3220ed7510a4489b1"
   },
   "feature-metrics": {
     "origin": "qualified exact gallery-site example",

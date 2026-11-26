@@ -28,8 +28,8 @@
   "beforeImport": {
     "runtimeRevision": "7f300b42166c55ee14f8f9432e7340ded26f5ee4",
     "file": "before-imports.json",
-    "bytes": 97177,
-    "sha256": "76127db5d1e3de00d83d0b7fb9945dbeaba63f3753624154f11b7174035ca45c",
+    "bytes": 97009,
+    "sha256": "ec30d33f33ec09b2af9ba65a4b29f24f627992f840f25b06181cbde3a8d59aec",
     "scope": "Exact clean-main current archive imports and all diagnostics; regression only, never importer input."
   }
 }
