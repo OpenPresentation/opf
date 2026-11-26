@@ -10,7 +10,7 @@ Every item also meets the definition of done in the README; the acceptance colum
 | FR-02 | CR 6: ids on list items, bullets, timeline events and table rows | [Below](#fr-02-ids-inside-a-deck-cr-6) | done |
 | FR-03 | opf#1297: links to a slide of the same deck, `slide:<id>` | [Below](#fr-03-links-to-a-slide-opf1297) | done |
 | FR-04 | CR 1 with CR 3: data sources and a flat dataset | [Below](#fr-04-data-sources-and-a-flat-dataset-cr-1-with-cr-3) | done |
-| FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | todo |
+| FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | done |
 | FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | todo |
 | FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | in-progress |
 | FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | in-progress |
@@ -161,6 +161,10 @@ Acceptance:
 - Conformance: valid decks with typed columns; the warning has no conformance case. A Markdown and YAML round trip keeps the keys.
 
 Progress log:
+
+- 2026-11-25: done, in the pull request that adds this line. Checked in PowerPoint: the typed dataset columns, the rows, the chart's and
+  the table's dataset references and the inline chart columns all come back unchanged from the export and from PowerPoint's own save;
+  nothing draws differently. `datasetColumnDeclaration` is the function FR-06's data link reads a column's type from.
 
 ## FR-06: a metric computed from data (CR 4)
 

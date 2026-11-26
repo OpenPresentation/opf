@@ -62,7 +62,7 @@ try {
   const button = name => page.getByRole('button', { name, exact: true });
   const dock = page.locator('#data-grid-dock');
   const selectEditorText = async () => {
-    const editor = dock.getByRole('textbox');
+    const editor = dock.locator('[data-role="cell-editor"]');
     const value = await editor.inputValue();
     assert.equal(await editor.evaluate(node => node === document.activeElement), true, 'cell editor retains keyboard focus');
     await page.keyboard.press('ControlOrMeta+A');
@@ -226,13 +226,13 @@ try {
   // Typing replaces the cell; Tab commits and moves right; Shift+Tab and Shift+Enter move back and up; Escape cancels.
   await cell(1, 1).click();
   await page.keyboard.type('7.5');
-  assert.equal(await dock.getByRole('textbox').inputValue(), '7.5', 'typing starts an edit that replaces the text');
+  assert.equal(await dock.locator('[data-role="cell-editor"]').inputValue(), '7.5', 'typing starts an edit that replaces the text');
   await page.keyboard.press('Tab');
   await waitDoc(current => chartData(current).rows[0][1] === 7.5, 'Tab commits');
   assert.deepEqual(await active(), [1, 2], 'Tab commits and moves right');
   await page.keyboard.press('F2');
   await page.keyboard.press('Escape');
-  assert.equal(await dock.getByRole('textbox').count(), 0, 'Escape closes the editor');
+  assert.equal(await dock.locator('[data-role="cell-editor"]').count(), 0, 'Escape closes the editor');
   assert.equal((await doc()).slides[1].blocks[0].chart.data.rows[0][2], 5, 'Escape changes nothing');
   assert.match(await status(), /Edit canceled/);
   await page.keyboard.press('F2');
@@ -265,11 +265,11 @@ try {
   await page.keyboard.press('F2');
   await selectEditorText();
   await page.keyboard.type('twelve');
-  const editor = dock.getByRole('textbox');
+  const editor = dock.locator('[data-role="cell-editor"]');
   assert.equal(await editor.getAttribute('aria-invalid'), 'true', 'the editor is marked invalid as you type');
   assert.match(await alert(), /"twelve" is not a number in the 1,234\.56 format/);
   await page.keyboard.press('Enter');
-  assert.equal(await dock.getByRole('textbox').count(), 1, 'Enter keeps the editor open while the text is invalid');
+  assert.equal(await dock.locator('[data-role="cell-editor"]').count(), 1, 'Enter keeps the editor open while the text is invalid');
   assert.deepEqual(await doc(), source, 'nothing was written');
   await selectEditorText();
   await page.keyboard.type('1,5');
@@ -387,7 +387,7 @@ try {
   await page.keyboard.type('Margin');
   await page.keyboard.press('Enter');
   await waitDoc(current => chartData(current).columns.join() === 'Quarter,Revenue,Costs,Margin', 'the new series is named');
-  assert.equal(await dock.getByRole('textbox').count(), 0);
+  assert.equal(await dock.locator('[data-role="cell-editor"]').count(), 0);
   await button('Undo').click();
   await button('Undo').click();
   await waitDoc(current => JSON.stringify(chartData(current)) === JSON.stringify(source.slides[1].blocks[0].chart.data), 'both steps undone');

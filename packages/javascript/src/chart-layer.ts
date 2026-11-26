@@ -294,7 +294,7 @@ export function smallChart(chart: unknown, data: ResolvedChartData, geometry?: C
   // categories run forward in time, where the last point is the latest one (chart-time-order.ts); the last of nominal categories (stages,
   // regions, products) is only the last one written, and emphasizing it would invent a message.
   const titles = record(chart.axisTitles) ? chart.axisTitles : {};
-  const inTime = () => chartCategoriesInTime(data.rows.map(row => row[0]), {title: nonBlank(titles.category) ?? label(data.columns[0]), language: geometry?.language});
+  const inTime = () => chartCategoriesInTime(data.rows.map(row => row[0]), {title: nonBlank(titles.category) ?? label(data.columns[0]), language: geometry?.language, type: data.types?.[0]});
   if (spec.kind === 'bar' && seriesCount === 1 && chart.highlight === undefined && chart.colors === undefined && inTime()) {
     const last = values.map(row => row[0] !== null).lastIndexOf(true);
     if (last >= 0 && count > 1) out.emphasis = last;

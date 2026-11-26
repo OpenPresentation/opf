@@ -10,8 +10,17 @@
     "pipeline": {
       "title": "Pipeline by stage",
       "columns": [
-        "Month",
-        "Won",
+        {
+          "name": "Month",
+          "type": "date",
+          "role": "dimension"
+        },
+        {
+          "name": "Won",
+          "type": "number",
+          "role": "measure",
+          "unit": "deals"
+        },
         "Lost",
         "Open"
       ],
@@ -50,6 +59,31 @@
         "type": "model",
         "name": "metricgen 2.1"
       }
+    },
+    "plan": {
+      "title": "Plan status by region",
+      "columns": [
+        {
+          "name": "Region",
+          "type": "text",
+          "role": "dimension"
+        },
+        {
+          "name": "On plan",
+          "type": "boolean",
+          "role": "dimension"
+        }
+      ],
+      "rows": [
+        [
+          "EMEA",
+          true
+        ],
+        [
+          "APAC",
+          false
+        ]
+      ]
     }
   },
   "datasources": {
@@ -1420,6 +1454,13 @@
         },
         "dataLabels": false,
         "legend": "none"
+      }
+    },
+    {
+      "id": "plan-status-table",
+      "title": "Plan status by region, from a typed dataset",
+      "table": {
+        "dataset": "plan"
       }
     }
   ]

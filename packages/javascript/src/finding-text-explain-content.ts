@@ -13,6 +13,11 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", "about 12"]] } } },
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: ["Quarter", { name: "Revenue", format: "$#,##0" }], rows: [["Q1", 12]] } } },
   ),
+  "opf/data-cell-type": ex(
+    "Write the cell as its column declares, or change the column's `type` to what it holds. `opf fix --audits` stores a number written as a strict decimal string (\"12\") as a number, and a number in a text column as text. Nothing is drawn differently.",
+    { datasets: { sales: { columns: ["Quarter", { name: "Revenue", type: "number" }], rows: [["Q1", 12], ["Q2", "about 15"]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
+    { datasets: { sales: { columns: ["Quarter", { name: "Revenue", type: "number" }], rows: [["Q1", 12], ["Q2", 15]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
+  ),
   "opf/datasource-credentials": ex(
     "Remove the user, password, key or token from the data source and keep the secret in your own store. Name the connection in `connector` or `extensions`; the document never holds a credential.",
     { datasources: { warehouse: { src: "https://analyst:secret@data.example.com/export.csv" } }, slides: [{ title: "Revenue", text: "Revenue grew." }] },

@@ -9,10 +9,14 @@
 // Enter/Shift+Enter and Tab/Shift+Tab commit and move, Escape cancels, Delete clears, Ctrl+C/X/V copy, cut and paste TSV, Ctrl+A selects
 // all, Ctrl+Z / Ctrl+Y undo and redo. Outside an edit Tab leaves the grid. Row and column operations are in the toolbar.
 //
+// FR-05: the type, role and unit fields of a chart's or a shared dataset's column declare what its cells hold and what the column is for; a cell of
+// another kind than the declared type is marked. An inline table's own headings declare nothing.
 // RR-54: a header may be a DataColumn (the grid shows its name and keeps its number format); the column format field sets or
 // clears the selected column's format; a chart's "Chart columns" panel sets the category, X and series columns (`chart.mapping`);
 // and a chart or table that shows a shared dataset edits the dataset (the status line says how many items share it).
 import {
+  COLUMN_ROLES,
+  COLUMN_TYPES,
   columnFormatError,
   columnLabel,
   deleteGridColumns,
@@ -30,6 +34,7 @@ import {
   resolveDataGridTarget,
   setChartMapping,
   setGridCells,
+  setGridColumnDeclaration,
   setGridColumnFormat,
   setGridHeader,
   sortGridRows,
@@ -75,10 +80,10 @@ const CSS = `
 .opf-grid-status{margin:6px 0 0;font-size:11px;color:#3d5e47;min-height:1.2em}.opf-grid-error{margin:6px 0 0;font-size:11px;color:var(--g-error)}.opf-grid-error:empty{display:none}
 .opf-grid details{margin:6px 0 0;font-size:11px}.opf-grid details summary{cursor:pointer}.opf-grid details textarea{display:block;width:100%;box-sizing:border-box;min-height:64px;margin:4px 0;font:11px ui-monospace,monospace}
 .opf-grid-help{margin:6px 0 0;font-size:10px;color:var(--g-muted)}
-.opf-grid-dataset,.opf-grid-format{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 6px;font-size:11px;color:var(--g-muted)}
-.opf-grid-dataset[hidden],.opf-grid-format[hidden],.opf-grid-mapping[hidden]{display:none!important}
+.opf-grid-dataset,.opf-grid-format,.opf-grid-declare{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 6px;font-size:11px;color:var(--g-muted)}
+.opf-grid-dataset[hidden],.opf-grid-format[hidden],.opf-grid-declare[hidden],.opf-grid-mapping[hidden]{display:none!important}
 .opf-grid-dataset strong{color:var(--g-text)}
-.opf-grid-dataset button,.opf-grid-format button,.opf-grid-format input,.opf-grid-mapping select{font:inherit;min-height:28px;border:1px solid var(--g-border);border-radius:4px;background:#fff;color:inherit;padding:2px 8px}
+.opf-grid-dataset button,.opf-grid-format button,.opf-grid-format input,.opf-grid-declare select,.opf-grid-declare input,.opf-grid-mapping select{font:inherit;min-height:28px;border:1px solid var(--g-border);border-radius:4px;background:#fff;color:inherit;padding:2px 8px}
 .opf-grid-dataset button,.opf-grid-format button{cursor:pointer}.opf-grid-dataset button:hover,.opf-grid-format button:hover{background:#f1effa}
 .opf-grid-format [aria-disabled=true]{opacity:.45;cursor:default}
 .opf-grid-format input{width:150px}.opf-grid-format input[aria-invalid=true]{border-color:var(--g-error)}
@@ -174,10 +179,17 @@ export function createDataGrid(container, options = {}) {
   const formatClear = h("button", { type: "button", "data-action": "clear-format", "aria-disabled": "false" }, "Clear");
   const formatError = h("span", { class: "opf-grid-format-error", role: "alert", "data-role": "format-error" });
   const formatRow = h("div", { class: "opf-grid-format", hidden: true }, formatLabel, formatInput, formatList, formatApply, formatClear, formatError);
+  // FR-05: the declared type, role and unit of the selected column (a chart's data and a shared dataset's columns only).
+  const typeSelect = h("select", { "aria-label": "Column type", "data-role": "column-type" }, ["", ...COLUMN_TYPES].map((value) => h("option", { value }, value === "" ? "Type: not declared" : `Type: ${value}`)));
+  const roleSelect = h("select", { "aria-label": "Column role", "data-role": "column-role" }, ["", ...COLUMN_ROLES].map((value) => h("option", { value }, value === "" ? "Role: not declared" : `Role: ${value}`)));
+  const unitInput = h("input", { type: "text", "aria-label": "Column unit", "data-role": "column-unit", autocomplete: "off", spellcheck: "false", placeholder: "Unit (USD, ms, people)" });
+  const declareLabel = h("span", { "data-role": "declare-label" }, "Column");
+  const declareError = h("span", { class: "opf-grid-format-error", role: "alert", "data-role": "declare-error" });
+  const declareRow = h("div", { class: "opf-grid-declare", hidden: true }, declareLabel, typeSelect, roleSelect, unitInput, declareError);
   // A chart's category, X and series columns.
   const mappingBody = h("div", { "data-role": "mapping-body" });
   const mappingBox = h("details", { class: "opf-grid-mapping", hidden: true }, h("summary", {}, "Chart columns"), mappingBody);
-  root.append(h("div", { class: "opf-grid-title" }, titleText, pathText), unavailable, datasetRow, toolbar, formatRow, scroll, mappingBox, notes, help, pasteBox, statusEl, errorEl);
+  root.append(h("div", { class: "opf-grid-title" }, titleText, pathText), unavailable, datasetRow, toolbar, formatRow, declareRow, scroll, mappingBox, notes, help, pasteBox, statusEl, errorEl);
   container.append(root);
   scroll.style.setProperty("--opf-grid-max-height", options.maxHeight ?? "320px");
 
@@ -444,6 +456,7 @@ export function createDataGrid(container, options = {}) {
     headerLabel.hidden = target.kind !== "table" || shared;
     headerBox.checked = grid.hasHeader;
     updateFormatRow();
+    updateDeclareRow();
     const nameRows = count > 1 ? `${count} rows` : "row";
     buttons.get("delete-rows").textContent = count > 1 ? `Delete ${count} rows` : "Delete rows";
     // WCAG 2.5.3 (label in name): the button says what it does in its text, so there is no aria-label to differ from it.
@@ -482,7 +495,7 @@ export function createDataGrid(container, options = {}) {
     scroll.hidden = toolbar.hidden = notes.hidden = pasteBox.hidden = help.hidden = next.editable === false;
     if (next.editable === false) {
       unavailable.textContent = next.reason;
-      datasetRow.hidden = formatRow.hidden = mappingBox.hidden = true;
+      datasetRow.hidden = formatRow.hidden = declareRow.hidden = mappingBox.hidden = true;
       grid = undefined;
       return;
     }
@@ -565,6 +578,44 @@ export function createDataGrid(container, options = {}) {
     formatLabel.textContent = `Format of column ${columnLabel(column)}${name ? ` (${name})` : ""}${target?.dataset ? " in the shared dataset" : ""}`;
     formatClear.setAttribute("aria-disabled", String(grid.columnFormats?.[column] === undefined));
   }
+  // FR-05: the declaration of the column the format field is bound to.
+  function updateDeclareRow() {
+    const visible = Boolean(grid?.hasHeader) && grid?.declarable === true && target?.editable !== false;
+    declareRow.hidden = !visible;
+    if (!visible) return;
+    const column = formatBound;
+    const declared = grid.columnDeclarations?.[column] ?? {};
+    const name = grid.columnNames?.[column];
+    declareLabel.textContent = `Column ${columnLabel(column)}${name ? ` (${name})` : ""}`;
+    if (doc.activeElement !== typeSelect) typeSelect.value = declared.type ?? "";
+    if (doc.activeElement !== roleSelect) roleSelect.value = declared.role ?? "";
+    if (doc.activeElement !== unitInput) unitInput.value = declared.unit ?? "";
+    declareError.textContent = "";
+  }
+  function applyDeclaration(change, message) {
+    const column = formatBound;
+    attempt(() => setGridColumnDeclaration(editor, target.path, column, change, {}), message, (failure) => {
+      declareError.textContent = messageOf(failure);
+      updateDeclareRow();
+    });
+  }
+  typeSelect.addEventListener("change", () => applyDeclaration({ type: typeSelect.value }, typeSelect.value ? `Column ${columnLabel(formatBound)} is typed ${typeSelect.value}.` : `Column ${columnLabel(formatBound)} no longer declares a type.`));
+  roleSelect.addEventListener("change", () => applyDeclaration({ role: roleSelect.value }, roleSelect.value ? `Column ${columnLabel(formatBound)} is a ${roleSelect.value}.` : `Column ${columnLabel(formatBound)} no longer declares a role.`));
+  const commitUnit = () => {
+    const value = unitInput.value.trim();
+    if (value === (grid?.columnDeclarations?.[formatBound]?.unit ?? "")) return;
+    applyDeclaration({ unit: value }, value ? `Column ${columnLabel(formatBound)} has the unit ${value}.` : `Column ${columnLabel(formatBound)} has no unit.`);
+  };
+  unitInput.addEventListener("change", commitUnit);
+  unitInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      commitUnit();
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      unitInput.value = grid?.columnDeclarations?.[formatBound]?.unit ?? "";
+    }
+  });
   formatInput.addEventListener("input", () => {
     const error = columnFormatError(formatInput.value);
     formatError.textContent = error ?? "";

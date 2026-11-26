@@ -138,6 +138,10 @@ Owner's call: Keep, with every recommended answer. No note.
 | --- | --- | --- | --- |
 | `cr2-role`: Does `role` have the value `temporal`? | No, `dimension` and `measure` (recommended); yes, three values | No; time is `type: "date"` with `role: "dimension"` | Owner, 2026-11-24 |
 | `cr2-unit`: What does `unit` do? | A label engines never print (recommended); engines print it | A label; `format` alone draws the number | Owner, 2026-11-24 |
+| Built: which category is the cell rule in, and what may its fix do? | A format error; a content warning with a safe fix | `opf/data-cell-type` is a warning in `content`: at most five findings per column, then one for the column. Its fix stores a strict decimal string as a number and a number in a text column as text, never changes the declared type, and runs only with `opf fix --audits` | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: what counts as a number, and as a date? | Anything a chart can plot; a strict kind | A `number` cell is a finite number, so `"12"` warns. A `date` cell is an ISO 8601 date or date-time. A `date` category column is time ordered when its labels run forward; `text` and `boolean` never are | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: where do the three keys live in a PowerPoint file? | In the data records, as authored; in a side record an older importer skips | In the data records, as authored. An importer of an older release does not restore such a record and imports the values the charts and tables show (the owner on 2026-11-25: no compatibility work for older importers) | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
+| Built: does `opf ingest --dataset` declare columns? | Yes, from the cells; no | Yes: it declares what it can tell from the cells and stores typed cells as that type; a column it cannot tell stays a plain string, and a column that already exists keeps its declaration | Supervisor, 2026-11-25, on the owner's delegation; he can overrule |
 
 ## FR-06: CR 4, a metric computed from data
 

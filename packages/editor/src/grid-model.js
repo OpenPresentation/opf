@@ -16,7 +16,7 @@
 // Both are read as "lines": the header line (when there is one) followed by the body rows. The operations below
 // change lines and columns, keep merged cells whole or refuse with a reason, and return a `{ presentation, patches,
 // changed }` description like table-options.js does. Nothing here touches a DOM.
-import { chartNumber, formatDataNumber, inlineChartData, inlineTableData, isXYChartType, numberFormatError } from "@openpresentation/opf";
+import { cellMatchesType, chartNumber, formatDataNumber, inferColumnDeclaration, inlineChartData, inlineTableData, isXYChartType, numberFormatError } from "@openpresentation/opf";
 import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { checkedDocument, fail, same } from "./edit-helpers.js";
 import { datasetUsage, isDatasetRef, walkDatasetItems } from "./dataset-refs.js";
@@ -421,6 +421,14 @@ export function describeDataGrid(presentation, path, options = {}) {
       }
       if (address.section === "header" && formatOf(raw) !== undefined) cell.format = formatOf(raw);
       if (owner) cell.owner = { line: owner.u, column: owner.c };
+      if (declarable(model) && u > 0 && !owner) {
+        // FR-05: a cell of another kind than its column declares (a gap is any kind).
+        const declared = declarationOf(model.lines[0]?.[column]).type;
+        if (declared !== undefined && !cellMatchesType(value, declared)) {
+          cell.warning = `This is not ${declared === "text" ? "text" : declared === "number" ? "a number" : declared === "date" ? "a date or time label" : "true or false"}, but its column is typed ${declared}.`;
+          warnings.push({ section: address.section, row: address.row, column, message: `${describeAddress({ ...address, column })}: ${cell.warning}` });
+        }
+      }
       if (model.kind === "chart") {
         let warning;
         if (u === 0) {
@@ -453,6 +461,9 @@ export function describeDataGrid(presentation, path, options = {}) {
     columnCount: model.width,
     columnRoles: roles,
     columnFormats: Array.from({ length: model.width }, (_, column) => (model.hasHeader ? formatOf(model.lines[0]?.[column]) : undefined)),
+    // FR-05: a chart's and a dataset's columns may declare what they hold; a table's own headers cannot.
+    declarable: declarable(model),
+    columnDeclarations: Array.from({ length: model.width }, (_, column) => (model.hasHeader ? declarationOf(model.lines[0]?.[column]) : {})),
     ...(model.hasHeader ? { columnNames: namesOfModel(model) } : {}),
     ...(found.dataset ? { dataset: { id: found.dataset.id, ...(found.dataset.fields ? { fields: [...found.dataset.fields] } : {}), items: datasetUsage(presentation, found.dataset.id).map((entry) => entry.path) } } : {}),
     ...(model.mapping ? { mapping: clone(model.mapping) } : {}),
@@ -1052,7 +1063,24 @@ export function prepareGridCells(presentation, path, edits, options = {}) {
  */
 export function preparePaste(presentation, path, anchor, source, options = {}) {
   const rows = typeof source === "string" ? parseDelimited(source, { delimiter: options.delimiter }).rows : source;
-  return transact(presentation, path, "paste", (model) => pasteRows(model, anchor, rows, options), kindOf(options));
+  return transact(presentation, path, "paste", (model) => {
+    const width = model.width;
+    const result = pasteRows(model, anchor, rows, options);
+    declareNewColumns(model, width);
+    return result;
+  }, kindOf(options));
+}
+
+// FR-05: the columns a paste adds to a chart's data or a dataset declare the type and role their cells say (core inferColumnDeclaration); a column that
+// existed before the paste keeps what it declares, and a column whose type cannot be told stays as it is.
+function declareNewColumns(model, before) {
+  if (!model.hasHeader || !(model.kind === "chart" || model.dataset) || model.width <= before) return;
+  for (let column = before; column < model.width; column++) {
+    const raw = model.lines[0][column];
+    if (isStyled(raw) || Array.isArray(raw) || valueOf(raw) === null || valueOf(raw) === undefined || String(valueOf(raw)).trim() === "" || (isColumnObject(raw) && (raw.type !== undefined || raw.role !== undefined))) continue;
+    const inferred = inferColumnDeclaration(model.lines.slice(1).map((line) => valueOf(line[column])), { first: column === 0 });
+    if (inferred) model.lines[0][column] = withColumnDeclaration(raw, inferred);
+  }
 }
 
 /** Insert `count` empty rows so the first is body row `at` (0 is above the first row; the row count appends). A merged cell that spans the position grows. */
@@ -1165,6 +1193,59 @@ function setColumnFormat(model, column, format) {
 /** Set or clear (`null` or "") the number format of column `column` (its header cell). A string header becomes `{ name, format }` and returns to a string when the format is cleared. Refused with the reason when the format is invalid or the table has no header row. */
 export function prepareGridColumnFormat(presentation, path, column, format, options = {}) {
   return transact(presentation, path, "set-column-format", (model) => setColumnFormat(model, column, format), kindOf(options));
+}
+
+// --- declared type, role and unit of a column (FR-05) ----------------------------------------
+
+export const COLUMN_TYPES = ["text", "number", "date", "boolean"];
+export const COLUMN_ROLES = ["dimension", "measure"];
+// A chart's inline data and a dataset's columns are DatasetColumns; an inline table's headers are DataColumns, which declare nothing.
+const declarable = (model) => model.hasHeader && (model.kind === "chart" || Boolean(model.dataset));
+/** What a header declares: its type, role and unit (only the keys it writes). */
+const declarationOf = (raw) => (isColumnObject(raw) ? Object.fromEntries(["type", "role", "unit"].filter((key) => typeof raw[key] === "string" && raw[key] !== "").map((key) => [key, raw[key]])) : {});
+
+/** The header raw with its declaration changed: a key set to a value, or removed with undefined. A string header becomes { name, ... } and goes back to a string when nothing but the name is left. */
+function withColumnDeclaration(raw, change) {
+  const next = isColumnObject(raw) ? { ...raw } : { name: raw === null || raw === undefined ? "" : String(raw) };
+  for (const [key, value] of Object.entries(change)) {
+    if (value === undefined) delete next[key];
+    else next[key] = value;
+  }
+  return Object.keys(next).length === 1 ? next.name : next;
+}
+
+/** Why a declaration is invalid, or undefined. type and role are one of their values, unit a non-empty text; null or "" clears a key. */
+export function columnDeclarationError(declaration) {
+  if (!isObject(declaration)) return "Give the declaration as an object: { type, role, unit }.";
+  for (const key of Object.keys(declaration)) if (!["type", "role", "unit"].includes(key)) return `${JSON.stringify(key)} is not a column declaration; use type, role or unit.`;
+  const clear = (value) => value === undefined || value === null || value === "";
+  if (!clear(declaration.type) && !COLUMN_TYPES.includes(declaration.type)) return `A column type is one of ${COLUMN_TYPES.join(", ")}.`;
+  if (!clear(declaration.role) && !COLUMN_ROLES.includes(declaration.role)) return `A column role is one of ${COLUMN_ROLES.join(", ")}.`;
+  if (!clear(declaration.unit) && (typeof declaration.unit !== "string" || declaration.unit.trim() === "")) return "A unit is a label such as USD or ms.";
+  return undefined;
+}
+
+function setColumnDeclaration(model, column, declaration) {
+  if (!model.hasHeader) throw fail("grid-no-header", "This table has no header row, so there is no column heading to hold a declaration. Turn on the header row first.", {});
+  if (!declarable(model)) throw fail("column-declaration-unavailable", "Only a chart's data and a shared dataset's columns declare a type, a role or a unit; a table's own headings do not.", {});
+  padLines(model);
+  if (!Number.isInteger(column) || column < 0 || column >= model.width) throw fail("grid-column-out-of-range", "Choose a column.", { column });
+  const error = columnDeclarationError(declaration);
+  if (error) throw fail("column-declaration-invalid", error, { declaration });
+  if (ownersOf(model).has(`0:${column}`)) throw fail("table-cell-covered", `${describeAddress({ section: "header", row: 0, column })} is covered by a merged cell. Choose the merged heading.`, { column });
+  const change = {};
+  for (const key of ["type", "role", "unit"]) if (Object.hasOwn(declaration, key)) change[key] = declaration[key] === null || declaration[key] === "" ? undefined : declaration[key];
+  model.lines[0][column] = withColumnDeclaration(model.lines[0][column], change);
+  return { column, declaration: declarationOf(model.lines[0][column]) };
+}
+
+/**
+ * Set or clear a column's declared type (text, number, date, boolean), role (dimension, measure) and unit (a label): keys the declaration leaves out keep their value, null or ""
+ * clears one. A string header becomes { name, ... } and goes back to a string when nothing but the name is left; the column's format and any other key stay. Refused with
+ * column-declaration-invalid (the reason), column-declaration-unavailable (an inline table's headings are DataColumns) or grid-no-header.
+ */
+export function prepareGridColumnDeclaration(presentation, path, column, declaration, options = {}) {
+  return transact(presentation, path, "set-column-declaration", (model) => setColumnDeclaration(model, column, declaration), kindOf(options));
 }
 
 // --- chart mapping (RR-54) -----------------------------------------------------------------------
@@ -1310,6 +1391,8 @@ export const setGridHeader = (editor, path, enabled, options = {}) => run(editor
 export const transposeGridData = (editor, path, options = {}) => run(editor, (presentation) => prepareTranspose(presentation, path), options);
 /** Set (or clear, with `null` or "") the number format of a column's header as one undoable transaction. Throws `number-format-invalid` with the reason. See {@link columnFormatError}. */
 export const setGridColumnFormat = (editor, path, column, format, options = {}) => run(editor, (presentation) => prepareGridColumnFormat(presentation, path, column, format, options), options);
+/** Set or clear a column's declared type, role and unit as one undoable transaction. See {@link prepareGridColumnDeclaration}. */
+export const setGridColumnDeclaration = (editor, path, column, declaration, options = {}) => run(editor, (presentation) => prepareGridColumnDeclaration(presentation, path, column, declaration, options), options);
 /** Set a chart's category, X and series columns as one undoable transaction. See {@link prepareChartMapping}. */
 export const setChartMapping = (editor, path, wanted, options = {}) => run(editor, (presentation) => prepareChartMapping(presentation, path, wanted), options);
 /** Give a chart or table its own copy of a shared dataset's data, as one undoable transaction. See {@link prepareDetachDataset}. */

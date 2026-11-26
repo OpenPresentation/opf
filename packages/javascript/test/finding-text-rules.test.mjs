@@ -79,6 +79,7 @@ const GOLDEN = {
   "font-outside-scheme": ["`Comic Sans MS` isn't in this deck's font scheme (Aptos Display / Aptos), so it won't follow a scheme change.", "remove `fontFamily` to use the scheme font, or add the font to the font scheme."],
   "image-resolution": ["This image is 100×100 px, shown at about 19 ppi; 96 are needed to look sharp.", "use a file of about 519×519 px or larger, or show it smaller."],
   "chart-value-not-numeric": ["`about 12` is text, so it is plotted as a gap.", "write a number (12, -3.5, 1e6) and put units, currency or percent in the column `format`."],
+  "data-cell-type": ["Row 1 of this chart's data holds \"about 12\" in column \"V\", which is typed number.", "write the cell as the column declares, or change the column's `type` to what it holds."],
   "code-highlight-out-of-range": ["Highlight line 7 is past the last line (3), so it marks nothing.", "change it to a line from 1 to 3, or remove the entry."],
   "code-highlight-range-reversed": ["Highlight 3–1 ends before it starts, so it marks no line.", "write [1, 3]."],
   "duration-outside-narrative": ["A 5-minute deck is outside the 10-20 minutes that narrative `arc` suits.", "change `duration`, or choose a narrative that suits 5 minutes."],
@@ -109,11 +110,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 108 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 109 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 108);
+	assert.equal(RULE_IDS.length, 109);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {

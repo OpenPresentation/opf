@@ -4,7 +4,7 @@
     "browser": 657392,
     "composition": 310520,
     "convert": 545540,
-    "data": 13399,
+    "data": 16738,
     "deck": 584047,
     "diagram-engine-eager": 294825,
     "diagram-engine-lazy": 11669,
@@ -17,14 +17,14 @@
     "patch": 526518,
     "precompiled": 209577,
     "schema": 100175,
-    "schema-engine-ajv": 137660,
+    "schema-engine-ajv": 141810,
     "schema-engine-precompiled": 209617,
     "schemas": 95359,
     "shape-catalog": 3784,
     "shape-engine-eager": 39085,
     "shape-engine-lazy": 141,
     "shape-geometry": 36548,
-    "source": 222287,
+    "source": 229117,
     "spec-files": 625,
     "symbol-font-encodings": 26562,
     "types": 21,
@@ -45,8 +45,8 @@
       "gzip": 529650
     },
     "data": {
-      "minified": 37700,
-      "gzip": 13008
+      "minified": 46914,
+      "gzip": 16250
     },
     "deck": {
       "minified": 1715553,
@@ -109,8 +109,8 @@
       "gzip": 97257
     },
     "schema-engine-ajv": {
-      "minified": 481096,
-      "gzip": 133650
+      "minified": 493963,
+      "gzip": 137679
     },
     "schema-engine-precompiled": {
       "minified": 1349292,
@@ -137,8 +137,8 @@
       "gzip": 35483
     },
     "source": {
-      "minified": 724549,
-      "gzip": 215812
+      "minified": 746265,
+      "gzip": 222443
     },
     "spec-files": {
       "minified": 5164,

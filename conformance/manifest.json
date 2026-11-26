@@ -173,6 +173,22 @@
       "basis": "opf.schema.json#/$defs/DataSourceChoice"
     },
     {
+      "id": "core.valid.typed-dataset-columns",
+      "file": "core/valid/typed-dataset-columns.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "A dataset declares what its columns hold (type), what they are for (role) and a unit, beside a column that is a plain string.",
+      "basis": "opf.schema.json#/$defs/DatasetColumn"
+    },
+    {
+      "id": "core.valid.typed-chart-columns",
+      "file": "core/valid/typed-chart-columns.opf.json",
+      "levels": ["reader", "writer"],
+      "expect": { "valid": true },
+      "description": "Inline chart data declares the type, role and unit of its columns.",
+      "basis": "opf.schema.json#/$defs/ChartData and #/$defs/DatasetColumn"
+    },
+    {
       "id": "core.valid.asset-referenced",
       "file": "core/valid/asset-referenced.opf.json",
       "levels": ["reader", "writer"],
@@ -611,6 +627,14 @@
       "expect": { "valid": false, "errorAt": "/slides/0/extensions" },
       "description": "Slide `extensions` is a string.",
       "basis": "opf.schema.json#/$defs/Slide/properties/extensions/type"
+    },
+    {
+      "id": "core.invalid.dataset-column-type-unknown",
+      "file": "core/invalid/dataset-column-type-unknown.opf.json",
+      "levels": ["reader"],
+      "expect": { "valid": false, "errorAt": "/datasets/revenue/columns/1/type" },
+      "description": "A dataset column declares a type outside text, number, date and boolean.",
+      "basis": "opf.schema.json#/$defs/DatasetColumn/properties/type/enum"
     },
     {
       "id": "core.invalid.extensions-null-on-payload",
