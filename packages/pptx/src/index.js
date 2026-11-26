@@ -4252,7 +4252,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // PowerPoint keeps that label inside the chart frame with a margin of its own (about 8 px at 1280 wide) by moving the whole plot left (2.3 px
   // on the preview's box, which keeps only the padding and a text size). The right edge is pulled in by what the label lacks, so the plot's left
   // edge and its bars start where the preview's do; the preview itself is unchanged (its end label is not reserved room, and the golden corpus pins it).
-  if (percent && chartData.barDir === 'bar' && layerXml.layout.plot?.target === 'inner' && layerXml.options.valAxisHidden !== true) {
+  // A slide with several charts keeps its plots as they are: charts that share a plot width (LH-93) must stay equal, and each would need its own cut.
+  const alone = (JSON.stringify(presentation?.slides?.[context.slideIndex] ?? {}).match(/"chart":/g) ?? []).length <= 1;
+  if (alone && percent && chartData.barDir === 'bar' && layerXml.layout.plot?.target === 'inner' && layerXml.options.valAxisHidden !== true) {
     const frame = region.w * 96, plot = layerXml.layout.plot, fontPx = textSize / 75;
     const measure = textWidthMeasurer(resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, italic: false}, options.textMeasurement), options.textMeasurement);
     const room = frame * (1 - plot.x - plot.w), needed = measure('100%', fontPx) / 2 + 8;
