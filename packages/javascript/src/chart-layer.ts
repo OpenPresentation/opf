@@ -335,13 +335,15 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
   let legend: ChartLayerHeader['legend'];
   let rows = text ? 1 : 0;
   // LH-105: `legend: false` lays out the caption alone, for a chart that names its series at their line ends.
-  if (options.legend !== false && names.length >= 2 && names.length <= CHART_HEADER_MAX_LEGEND) {
+  const seriesInLegend = options.legend !== false && names.length >= 2 && names.length <= CHART_HEADER_MAX_LEGEND;
+  const bandsOnly = !seriesInLegend && options.bands === true && chartBands(chart).some(band => band.label !== undefined);
+  if (seriesInLegend || bandsOnly) {
     const lineKey = (index: number) => spec.kind === 'line' || (spec.kind === 'combo' && data.combo?.[index]?.role === 'line');
     const spacing = fontPx * 0.8;
     // FR-07: the labeled bands first, then the series (PowerPoint lists the band group, which it draws first, before the data).
     // FR-07: only when the band labels do not fit inside their bands (composition's fallback, `bands`).
     const bandEntries = (options.bands ? chartBands(chart) : []).flatMap(band => band.label === undefined ? [] : [{series: -1, band: band.index, name: label(band.label), key: undefined, width: fontPx * 0.6 + fontPx * 0.4 + geometry.measure(label(band.label), fontPx, 400)}]);
-    const sized = [...bandEntries, ...names.map((name, series) => ({series, band: undefined as number | undefined, name, key: lineKey(series) ? 'line' as const : undefined,
+    const sized = [...bandEntries, ...(bandsOnly ? [] : names).map((name, series) => ({series, band: undefined as number | undefined, name, key: lineKey(series) ? 'line' as const : undefined,
       width: (lineKey(series) ? fontPx * 1.4 : fontPx * 0.6) + fontPx * 0.4 + geometry.measure(name, fontPx, 400)}))];
     const legendWidth = sized.reduce((sum, entry) => sum + entry.width, 0) + spacing * (sized.length - 1);
     // LH-143: the entries in rows of at most the available width; undefined when one entry is wider or the rows exceed the limit.

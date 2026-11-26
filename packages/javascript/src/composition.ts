@@ -8968,7 +8968,21 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const small = layer?.small ? (({emphasis: _emphasis, ...rest}) => rest)(layer.small) : undefined;
       layer = {...layer, ...(small ? {small} : {}), focus};
     }
+    let beforeStack: ChartLayer | undefined;
+    // Explicit references use the same primary/secondary scales and plot in both engines.
+    const placeChartReferences = () => {
+      if (!drawn.data.ok || !references.length || !valueAxis) return;
+      const data = drawn.data;
+      const plotGeometry = {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
+      const secondaryValueAxis=chartComboAxes(drawn.chart,data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSize:settings.minFontSize,language})?.secondary;
+      const plot = layer?.plot ?? (typeof (drawn.chart as {type?:unknown})?.type==='string'&&(drawn.chart as {type:string}).type==='bar' ? horizontalBarPlot(drawn.chart,data,layer,valueAxis,box,plotGeometry) ?? chartPlotInset(drawn.chart,data,{valueAxis,...(layer?{layer}:{})},{...plotGeometry,box}) : chartPlotInset(drawn.chart, data, {valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})}, {...plotGeometry, box}));
+      const placed = plot ? placeReferences(references, data, {value:valueAxis,...(secondaryValueAxis?{secondary:secondaryValueAxis}:{})}, box, plot, {...plotGeometry,horizontal:(drawn.chart as {type?:unknown})?.type==='bar',chartType:(drawn.chart as {type?:string})?.type}) : undefined;
+      if (placed && plot) {
+        layer = {...layer, plot, references: placed};
+      }
+    };
     // LH-105: direct labels instead of a legend: the series names at the line ends, the category names on the slices (chart-direct-labels.ts).
+    const beforeEnds = layer;
     const ends = drawn.data.ok ? chartEndLabels(drawn.chart, drawn.data, layer, geometry, axisFor) : undefined;
     if (ends) ({layer, valueAxis} = ends);
     const slices = drawn.data.ok ? chartSliceLabels(drawn.chart, drawn.data, geometry) : undefined;
@@ -8993,18 +9007,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (doughnut) layer = {...layer, doughnut};
       // LH-109: values inside stacked segments and the series names beside the last column.
       const data = drawn.data;
+      beforeStack = layer;
       const stack = chartStack(drawn.chart, data, layer, geometry, axisFor, legend => chartHeader(drawn.chart, data, geometry, {legend}));
       if (stack) ({layer, valueAxis} = stack);
-      // Explicit references use the same primary/secondary scales and plot in both engines.
-      if (references.length && valueAxis) {
-        const plotGeometry = {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
-        const secondaryValueAxis=chartComboAxes(drawn.chart,data,{width:box.width,height:Math.max(1,box.height-(layer?.header?.height??0)),scale,minFontSize:settings.minFontSize,language})?.secondary;
-        const plot = layer?.plot ?? (typeof (drawn.chart as {type?:unknown})?.type==='string'&&(drawn.chart as {type:string}).type==='bar' ? horizontalBarPlot(drawn.chart,data,layer,valueAxis,box,plotGeometry) ?? chartPlotInset(drawn.chart,data,{valueAxis,...(layer?{layer}:{})},{...plotGeometry,box}) : chartPlotInset(drawn.chart, data, {valueAxis,...(secondaryValueAxis?{secondaryValueAxis}:{}), ...(layer ? {layer} : {})}, {...plotGeometry, box}));
-        const placed = plot ? placeReferences(references, data, {value:valueAxis,...(secondaryValueAxis?{secondary:secondaryValueAxis}:{})}, box, plot, {...plotGeometry,horizontal:(drawn.chart as {type?:unknown})?.type==='bar',chartType:(drawn.chart as {type?:string})?.type}) : undefined;
-        if (placed && plot) {
-          layer = {...layer, plot, references: placed};
-        }
-      }
+      placeChartReferences();
     }
     // FR-07: a bullet chart's plot, which the preview draws and the PowerPoint export writes as its inner plot layout.
     const bullet = drawn.data.ok ? bulletPlot(drawn.chart, drawn.data, valueAxis, box, {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})}) : undefined;
@@ -9029,6 +9035,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         layer = {...layer, bandLabels: placed};
         if (chartType === 'bullet') { const plain = bulletPlot(drawn.chart, data, valueAxis, box, plotGeometry, {bandsInLegend: true}); if (plain) layer = {...layer, plot: plain}; }
         else if (layer?.header?.legend) { const header = chartHeader(drawn.chart, data, geometry, {bands: true}); if (header) layer = {...layer, header}; }
+        // Nothing is lost (supervisor, 2026-11-26): a chart that shows no legend (its series named beside the last column or at the line
+        // ends, or one series) and has no legend option gets a header legend of its bands alone; its series stay named where they are.
+        else if ((drawn.chart as {legend?: unknown}).legend === undefined && chartType !== 'bullet') {
+          const bandsHeader = (legend: boolean) => chartHeader(drawn.chart, data, geometry, {legend, bands: true});
+          if (layer?.stack?.names && beforeStack) {
+            const again = chartStack(drawn.chart, data, beforeStack, geometry, axisFor, bandsHeader);
+            if (again) { ({layer, valueAxis} = again); placeChartReferences(); layer = {...layer, bandLabels: placed}; }
+          } else if (layer?.endLabels) {
+            const again = chartEndLabels(drawn.chart, data, beforeEnds, geometry, axisFor, {bands: true});
+            if (again) { ({layer, valueAxis} = again); placeChartReferences(); layer = {...layer, bandLabels: placed}; }
+          } else {
+            const header = bandsHeader(false);
+            const axis = header ? axisFor(header.height) : undefined;
+            if (header && axis) { const {plot: _plot, references: _references, ...rest} = layer ?? {}; layer = {...rest, header, bandLabels: placed}; valueAxis = axis; placeChartReferences(); }
+          }
+        }
       }
     }
     // LH-105: the context of a focus may be a light neutral when every context mark carries its text (value labels, names at the line
@@ -13365,7 +13387,7 @@ export type {ChartLayerDoughnut,WaterfallRole,ChartLayerWaterfall,ChartValueList
 export type {ChartReference,ChartReferenceDiagnostic} from './chart-references.js';
 export {CHART_REFERENCE_TYPES,chartReferenceSources} from './chart-references.js';
 // FR-07: bands on value axes and the bullet chart; the gauge reuses the sorted, clamped band list and the band colors.
-export {CHART_BAND_TYPES,CHART_BAND_NEUTRAL_CONTRASTS,neutralFill as chartBandNeutral,CHART_BAND_COLOR_SHARE,chartBands,chartBandMaximum,chartBandRanges,chartBandFill,chartBandFills,chartBandDiagnostics,BULLET_CHART_TYPE,BULLET_BAR_SHARE,BULLET_TARGET_SHARE,BULLET_TARGET_WIDTH_PX,BULLET_GAP_WIDTH} from './chart-bands.js';
+export {CHART_BAND_TYPES,CHART_BAND_NEUTRAL_CONTRASTS,CHART_BAND_MUTED_CONTRAST,chartBandMutedColor,neutralFill as chartBandNeutral,CHART_BAND_COLOR_SHARE,chartBands,chartBandMaximum,chartBandRanges,chartBandFill,chartBandFills,chartBandDiagnostics,BULLET_CHART_TYPE,BULLET_BAR_SHARE,BULLET_TARGET_SHARE,BULLET_TARGET_WIDTH_PX,BULLET_GAP_WIDTH} from './chart-bands.js';
 export type {ChartBandSpec,ChartBandRange,ChartBandColors,ChartBandDiagnostic} from './chart-bands.js';
 export {bulletPlot,bandLegendNames} from './chart-bullet.js';
 export {placeBandLabels,bandLabelColor,BAND_LABEL_PADDING,BAND_LABEL_MIN_CONTRAST} from './chart-band-labels.js';

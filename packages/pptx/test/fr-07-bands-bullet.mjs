@@ -159,3 +159,44 @@ test('an axis below zero: bar bands split at 0 (the parts below first, highest b
   // Natively (the record set aside) the same ends come back.
   for (const n of [1, 2]) assert.deepEqual(readNativeBands(chartXml(exported, n)).bands.map(band => [band.to, band.label]), [[-2, 'Loss'], [4, 'Flat'], [10, 'Gain']]);
 });
+
+// FR-07 (supervisor, 2026-11-26): band labels that fall back to the legend on a chart that names its series beside its marks (a stacked
+// column's names beside the last column, a line's names at the line ends, one series) show a legend of the bands alone: the band parts keep
+// their entries and every data series' entry is deleted, so the series stay named once, as the preview draws it.
+test('the band-label fallback on a chart without a series legend: a legend of the bands alone', async () => {
+  const data = {columns: ['Quarter', 'North', 'South', 'West'], rows: [['Q1', 4, 3, 2], ['Q2', 5, 4, 3], ['Q3', 6, 4, 4], ['Q4', 7, 5, 4]]};
+  const bands = [{to: 6, label: 'Below the plan for the year'}, {to: 12, label: 'On plan'}, {to: 20, label: 'Above plan'}];
+  const source = {name: 'Fallback', language: 'en-US', slides: [
+    {title: 'Stacked', chart: {type: 'stacked-column', data, bands, alt: 'x'}},
+    {title: 'Line', chart: {type: 'line', data, bands, alt: 'x'}},
+    {title: 'One', chart: {type: 'column', data: {columns: ['Quarter', 'North'], rows: data.rows.map(row => row.slice(0, 2))}, bands, alt: 'x'}},
+  ]};
+  const exported = await exportDeck(source);
+  for (const [n, count] of [[1, 3], [2, 3], [3, 1]]) {
+    const xml = chartXml(exported, n);
+    assert.match(xml, /<c:legend>/, `chart ${n} has a legend`);
+    const legend = /<c:legend>[\s\S]*?<\/c:legend>/.exec(xml)[0];
+    const deleted = [...legend.matchAll(/<c:legendEntry><c:idx val="(\d+)"\/><c:delete val="1"\/><\/c:legendEntry>/g)].map(m => Number(m[1])).sort((a, b) => a - b);
+    // Three band parts (0..2) keep their entries; the data series after them have none.
+    assert.deepEqual(deleted, Array.from({length: count}, (_, k) => 3 + k), `chart ${n}: only the data series' entries are deleted`);
+  }
+});
+
+// FR-07 (supervisor, 2026-11-26): the muted color of a highlighted chart with bands is core's chartBandMutedColor, the color the preview draws;
+// a chart without bands keeps the muted color it had.
+test('a highlighted chart with bands: its muted marks in the color the preview draws', async () => {
+  const {toSvg} = await import('@openpresentation/opf-render');
+  const chart = {type: 'column', data: {columns: ['Q', 'A', 'B'], rows: [['Q1', 3, 5], ['Q2', 6, 9], ['Q3', 10, 7]]}, highlight: {categories: ['Q2']}, alt: 'x'};
+  const bands = [{to: 4, label: 'Low'}, {to: 8, label: 'Mid'}, {to: 12, label: 'High'}];
+  for (const variant of ['light1', 'dark1']) {
+    const source = {name: 'Muted', language: 'en-US', design: {theme: 'classic', variant}, slides: [{title: 'With', chart: {...chart, bands}}, {title: 'Without', chart}]};
+    const exported = await exportDeck(source);
+    const svgMuted = n => /data-opf-path="slides\.\d+\.chart\.data\.rows\.0\.1"[^>]*\bfill="(#[0-9A-Fa-f]{6})"|\bfill="(#[0-9A-Fa-f]{6})"[^>]*data-opf-path="slides\.\d+\.chart\.data\.rows\.0\.1"/.exec(toSvg({...source, slides: [source.slides[n]]}, 1, {catalogs: [gallery], trace: true})).slice(1).find(Boolean).slice(1).toUpperCase();
+    // The data group is the last bar group (the band group comes first); its first point (Q1) is muted.
+    const fillsOf = xml => [...groups(xml).at(-1).group.matchAll(/<a:srgbClr val="([0-9A-F]{6})"/g)].map(m => m[1]);
+    const withBands = fillsOf(chartXml(exported, 1)), without = fillsOf(chartXml(exported, 2));
+    assert.ok(withBands.includes(svgMuted(0)), `${variant}: the export's muted color with bands is the preview's ${svgMuted(0)} (${withBands.join(' ')})`);
+    assert.ok(without.includes(svgMuted(1)), `${variant}: without bands the export keeps the preview's muted color ${svgMuted(1)} (${without.join(' ')})`);
+    assert.notEqual(svgMuted(0), svgMuted(1), `${variant}: bands change the muted color`);
+  }
+});

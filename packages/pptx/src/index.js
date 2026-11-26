@@ -90,7 +90,7 @@ import {
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, intrinsicImageAspect, itemAlignment, pictureOverlay, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   chartCircleSquare, chartNumberLanguage, chartPlotInset, horizontalBarPlot, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, languageInEffect, quoteLanguage, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
-import { chartBands, chartBandRanges, chartBandFill, bandLabelColor, BULLET_GAP_WIDTH, BULLET_TARGET_SHARE, BULLET_TARGET_WIDTH_PX } from "@openpresentation/opf/composition";
+import { chartBands, chartBandRanges, chartBandFill, chartBandMutedColor, bandLabelColor, BULLET_GAP_WIDTH, BULLET_TARGET_SHARE, BULLET_TARGET_WIDTH_PX } from "@openpresentation/opf/composition";
 import { bandPlan, bandChartType, bandAxisOptions, applyChartBands, applyBulletTarget, readNativeBands } from "./chart-bands.js";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -4278,7 +4278,12 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   if (chartData.type === 'doughnut' && chartData.series.length > 1) context.chartHeadings.get(objectName).rings = chartData.series.map((entry) => ({name: entry.name, values: [...entry.values]}));
   // FA-14: chart.highlight. A highlighted chart writes accent and muted colors over the series palette, and its data labels
   // contrast with those colors (src/chart-highlight.js).
-  const highlight = chartData.chartex ? undefined : chartHighlightPlan({options: chartOptions, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor: markLabelColor, primary: `#${context.colors.accent}`,
+  // FR-07 (supervisor, 2026-11-26): in a chart with bands, a highlight's muted marks take the neutral at 1.5:1 from the strongest band, away
+  // from the surface (core chartBandMutedColor, called with the colors the preview passes); without bands the muted color stays as it was.
+  const bandColorsFor = {surface: `#${normalizeHex(panelFill).slice(0, 6)}`, text: `#${context.colors.text}`, resolve: name => `#${resolveExportColor(name, {...context, fallback: context.colors.text}).slice(0, 6)}`};
+  const bandMuted = chartData.chartex || chartData.combo || !chartLayout?.valueAxis ? undefined
+    : chartBandMutedColor(chartBandRanges(chartBands(chart), chartLayout.valueAxis).map(band => chartBandFill(band, bandColorsFor)), bandColorsFor.surface, bandColorsFor.text);
+  const highlight = chartData.chartex ? undefined : chartHighlightPlan({options: chartOptions, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor: markLabelColor, primary: `#${context.colors.accent}`, ...(bandMuted ? {muted: bandMuted} : {}),
     schemeFor: hex => schemeColorValue('primary', hex, context)}) ?? chartFocusPlan({layer, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor: markLabelColor, strong: strongPalette}) ?? chartEmphasisPlan({layer, data: chartData.resolved, panelFill, palette, strong: strongPalette, schemes: paletteSchemes});
   context.chartPalettes.set(objectName,highlight ? highlight.seriesFills : palette);
   if (highlight) context.chartHeadings.get(objectName).highlight = highlight;
@@ -4429,7 +4434,10 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // band, else the primary text color; a band on which even that fails is reported, its label still written.
     const labelPaint = inside && bands ? bandLabelColor(inside.map(label => `#${bands.bands.find(band => band.index === label.index)?.fill ?? normalizeHex(panelFill).slice(0, 6)}`), `#${normalizeHex(labelColor).slice(0, 6)}`, `#${normalizeHex(markLabelColor).slice(0, 6)}`) : undefined;
     for (const at of labelPaint?.failing ?? []) options.onDiagnostic?.({code: 'text-contrast', path: `${path}.bands.${inside[at].index}.label`, message: `The band label "${inside[at].text}" stays below 4.5:1 on its band in the text color; choose a lighter band color.`});
-    if (bands) heading.bands = {plan: bands, edge: Boolean(layer?.stack?.edge), ...(inside ? {labels: inside.map(label => ({...label, x: (label.box.x - region.x * 96) / (region.w * 96), y: (label.box.y - region.y * 96) / (region.h * 96)})), text: {size: textSize, color: normalizeHex(labelPaint.color).slice(0, 6), font: context.fonts.body}} : {})};
+    // A header legend of the bands alone (composition's fallback for a chart that names its series beside its marks): the data series'
+    // entries, listed after the band parts, are deleted, so the series stay named once.
+    const bandsOnly = bands && layer?.header?.legend?.entries.length && layer.header.legend.entries.every(entry => entry.band !== undefined);
+    if (bands) heading.bands = {plan: bands, edge: Boolean(layer?.stack?.edge), ...(bandsOnly ? {hiddenLegend: chartData.series.map((_, k) => bands.series.length + k)} : {}), ...(inside ? {labels: inside.map(label => ({...label, x: (label.box.x - region.x * 96) / (region.w * 96), y: (label.box.y - region.y * 96) / (region.h * 96)})), text: {size: textSize, color: normalizeHex(labelPaint.color).slice(0, 6), font: context.fonts.body}} : {})};
     if (target) heading.bullet = {half: BULLET_TARGET_SHARE / 2, gapWidth: BULLET_GAP_WIDTH, color: normalizeHex(markLabelColor).slice(0, 6), widthEmu: Math.round(BULLET_TARGET_WIDTH_PX * scale * 0.75 * 12700)};
     // The number formats of the extra series: the target its column's, each band the value axis's.
     if (heading.numberFormats || target?.format !== undefined) {

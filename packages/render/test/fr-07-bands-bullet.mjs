@@ -131,3 +131,22 @@ for (const type of ['column', 'bar', 'line', 'area', 'bullet']) {
 }
 
 console.log(`FR-07 bands and bullet render: ${checks} checks`);
+
+// FR-07 (supervisor, 2026-11-26): band labels that fall back on a chart that names its series beside its marks (a stacked column's names
+// beside the last column, a line's names at the line ends, one series) show a header legend of the bands alone; each series is named once.
+{
+  const data = { columns: ['Quarter', 'North', 'South', 'West'], rows: [['Q1', 4, 3, 2], ['Q2', 5, 4, 3], ['Q3', 6, 4, 4], ['Q4', 7, 5, 4]] };
+  const bands = [{ to: 6, label: 'Below the plan for the year' }, { to: 12, label: 'On plan' }, { to: 20, label: 'Above plan' }];
+  for (const [type, series] of [['stacked-column', 3], ['line', 3], ['column', 1]]) {
+    const chart = { type, bands, data: series === 1 ? { columns: data.columns.slice(0, 2), rows: data.rows.map((row) => row.slice(0, 2)) } : data };
+    const svg = toSvg(deck(chart), 1, { trace: true });
+    const texts = [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].map(([, a, body]) => ({ path: /data-opf-path="([^"]+)"/.exec(a)?.[1], text: body.replace(/<[^>]+>/g, '') }));
+    assert.deepEqual(texts.filter((t) => /\.bands\.\d+$/.test(t.path ?? '')).map((t) => t.text), bands.map((band) => band.label), `${type}: every band label in the legend`);
+    const named = texts.filter((t) => /\.data\.columns\.\d+$/.test(t.path ?? ''));
+    assert.equal(named.length, series === 1 ? 0 : series, `${type}: each series named once, beside its marks`);
+    if (series > 1) assert.ok(named.every((t) => !/\.bands\./.test(t.path)) && new Set(named.map((t) => t.path)).size === series, `${type}: no series twice`);
+    checks += 2;
+  }
+}
+
+console.log(`FR-07 bands-only legend: ${checks} checks`);

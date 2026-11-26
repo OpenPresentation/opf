@@ -103,11 +103,11 @@ export function endLabelText(data: ResolvedChartData, series: number, language?:
  * composed axis). The plot is laid out as the preview lays it out (chartPlotInset) with a gutter at its end as wide as the gap and the
  * widest name, and the names are placed against it (placeEndLabels).
  */
-export function chartEndLabels(chart: unknown, data: ResolvedChartData, layer: ChartLayer | undefined, geometry: ChartLayerGeometry, axisFor: (headerHeight: number) => ChartValueAxis | undefined): {layer: ChartLayer; valueAxis: ChartValueAxis} | undefined {
+export function chartEndLabels(chart: unknown, data: ResolvedChartData, layer: ChartLayer | undefined, geometry: ChartLayerGeometry, axisFor: (headerHeight: number) => ChartValueAxis | undefined, headerOptions: {bands?: boolean} = {}): {layer: ChartLayer; valueAxis: ChartValueAxis} | undefined {
   if (!endLabelCandidate(chart, data, layer) || !data.ok) return undefined;
   const {box, scale} = geometry;
   if (![box.width, box.height, scale].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0) return undefined;
-  const header = chartHeader(chart, data, geometry, {legend: false});
+  const header = chartHeader(chart, data, geometry, {legend: false, ...headerOptions});
   const valueAxis = axisFor(header?.height ?? 0);
   if (!valueAxis) return undefined;
   const {fontPx, pt} = metrics(box, scale, geometry.minFontSize);
