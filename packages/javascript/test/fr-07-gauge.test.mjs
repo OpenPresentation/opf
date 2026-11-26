@@ -55,27 +55,27 @@ const clear = (layout) => {
 
 // The arc sets the text's size (owner, 2026-11-26): the value up to METRIC_GAUGE_VALUE_SIZE of the radius in the bowl, the label by the
 // metric's proportions (23 to 76), never under the floor; a long value shrinks before it leaves the bowl; under the arc only as the last resort.
-const valueOf = (layout) => layout.parts[0].fit.fontSize, labelOf = (layout) => layout.parts.find((part) => part.role === 'label').fit.fontSize;
+const valueSizeOf = (layout) => layout.parts[0].fit.fontSize, labelOf = (layout) => layout.parts.find((part) => part.role === 'label').fit.fontSize;
 const near = (actual, expected, tolerance, message) => assert.ok(Math.abs(actual - expected) <= tolerance, `${message}: ${actual} against ${expected}`);
 
 test('one gauge: the value is METRIC_GAUGE_VALUE_SIZE of the radius, the label follows it by the metric\'s proportions', () => {
   for (const width of [600, 900, 1200]) {
     const layout = layoutMetric({ label: 'Utilization', value: '72%' }, { ...box, width, height: 700 }, { gauge: input({ value: 0.72, gauge: { max: 1 } }) });
     assert.ok(layout.gauge.inBowl, `in the bowl at ${width}`);
-    near(valueOf(layout), METRIC_GAUGE_VALUE_SIZE * layout.gauge.radius, 1, `the value's size at ${width}`);
-    near(labelOf(layout), Math.max(16, valueOf(layout) * 23 / 76), 1, `the label's size at ${width}`);
+    near(valueSizeOf(layout), METRIC_GAUGE_VALUE_SIZE * layout.gauge.radius, 1, `the value's size at ${width}`);
+    near(labelOf(layout), Math.max(16, valueSizeOf(layout) * 23 / 76), 1, `the label's size at ${width}`);
     clear(layout);
   }
   const small = layoutMetric({ label: 'Utilization', value: '72%' }, { ...box, width: 300 }, { gauge: input({ value: 0.72, gauge: { max: 1 } }) });
   const large = layoutMetric({ label: 'Utilization', value: '72%' }, { ...box, width: 1000, height: 700 }, { gauge: input({ value: 0.72, gauge: { max: 1 } }) });
-  assert.ok(valueOf(large) > 1.5 * valueOf(small), 'a larger arc sets a larger value');
+  assert.ok(valueSizeOf(large) > 1.5 * valueSizeOf(small), 'a larger arc sets a larger value');
 });
 
 test('a long value shrinks to fit the bowl before it leaves it', () => {
   const long = layoutMetric({ label: 'Revenue', value: '1,284,300 USD' }, { ...box, width: 360 }, { gauge: input({ value: 1284300, gauge: { max: 2000000 } }) });
   assert.ok(long.gauge.inBowl, 'still in the bowl');
-  assert.ok(valueOf(long) < METRIC_GAUGE_VALUE_SIZE * long.gauge.radius - 1, 'at less than the ceiling');
-  assert.ok(valueOf(long) >= 16, 'not under the floor');
+  assert.ok(valueSizeOf(long) < METRIC_GAUGE_VALUE_SIZE * long.gauge.radius - 1, 'at less than the ceiling');
+  assert.ok(valueSizeOf(long) >= 16, 'not under the floor');
   clear(long);
 });
 
@@ -84,7 +84,7 @@ test('the last resort: a value too long for the bowl at the floor stands under t
   assert.ok(layout.gauge, 'the gauge is drawn');
   assert.equal(layout.gauge.inBowl, false);
   assert.ok(layout.parts[0].linePositions[0].baseline > layout.gauge.center.y, 'below the center line');
-  assert.ok(valueOf(layout) <= Math.max(16, METRIC_GAUGE_VALUE_UNDER * layout.gauge.radius) + 1e-6, 'tied to the arc');
+  assert.ok(valueSizeOf(layout) <= Math.max(16, METRIC_GAUGE_VALUE_UNDER * layout.gauge.radius) + 1e-6, 'tied to the arc');
   clear(layout);
 });
 
@@ -96,7 +96,7 @@ test('three gauges side by side: a row of arcs, each value at METRIC_GAUGE_VALUE
   assert.equal(new Set(metrics.map((item) => Math.round(item.box.y))).size, 1, 'one row');
   for (const item of metrics) {
     assert.ok(item.metricLayout.gauge.inBowl);
-    near(valueOf(item.metricLayout), METRIC_GAUGE_VALUE_SIZE * item.metricLayout.gauge.radius, 1, item.path);
+    near(valueSizeOf(item.metricLayout), METRIC_GAUGE_VALUE_SIZE * item.metricLayout.gauge.radius, 1, item.path);
     clear(item.metricLayout);
   }
 });
@@ -135,7 +135,7 @@ test('a row of tiles: every tile draws its gauge with its text clear of the arcs
   const composed = composeSlide(slide, { presentation, slideIndex: 0 });
   const metrics = composed.items.filter((item) => item.metricLayout);
   assert.equal(metrics.length, 4);
-  for (const item of metrics) { assert.ok(item.metricLayout.gauge, item.path); near(valueOf(item.metricLayout), METRIC_GAUGE_VALUE_SIZE * item.metricLayout.gauge.radius, 1, item.path); clear(item.metricLayout); }
+  for (const item of metrics) { assert.ok(item.metricLayout.gauge, item.path); near(valueSizeOf(item.metricLayout), METRIC_GAUGE_VALUE_SIZE * item.metricLayout.gauge.radius, 1, item.path); clear(item.metricLayout); }
 });
 
 test('the arc outline the preview draws is the blockArc preset of shape-geometry at the same frame and adjustments', async () => {
