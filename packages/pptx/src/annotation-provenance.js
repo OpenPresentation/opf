@@ -18,6 +18,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
 import {currentTags, upgradeTag} from './legacy-tags.js';
+import {appendInlineWhitespace} from './rich-heading.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {CAPTION_TAG, FOOTNOTES_TAG, footnotesRuleName} from './annotation-export.js';
 
@@ -60,7 +61,7 @@ function readRecord(shape, relationships, entries, tagName) {
     if (!object(record) || record.v !== 1) return null;
     if (record.line !== undefined && (!Number.isSafeInteger(record.line) || record.line < 0 || !Number.isSafeInteger(record.count) || record.count < 1 || record.count > 1000 || record.line >= record.count)) return null;
     if (record.boundary !== undefined && !['hard', 'soft', 'end'].includes(record.boundary)) return null;
-    if (record.separator !== undefined && (typeof record.separator !== 'string' || !/^(?:\r\n|\r|\n)?$/.test(record.separator))) return null;
+    if (record.separator !== undefined && (typeof record.separator !== 'string' || !/^(?:\r\n|\r|\n|[^\S\r\n\u00a0\u202f\ufeff]*)$/u.test(record.separator))) return null;
     return record;
   } catch { return null; }
 }
@@ -80,8 +81,9 @@ function groupText(members, paragraphs, readBody) {
         // color: those are not authored run styles, so only the authored emphasis comes back.
         runs.push(...(Array.isArray(paragraph.richText) ? paragraph.richText.map(run => typeof run === 'string' ? run : Object.fromEntries(Object.entries(run).filter(([key]) => !engineKey(key)))) : [paragraph.richText ?? paragraph.text ?? '']));
       });
-      const separator = member.record.boundary === 'hard' ? (member.record.separator || '\n') : '';
-      if (separator && position < ordered.length - 1) runs.push(separator);
+      // opf#1493: a soft wrap's separator is the whitespace the line was written without; it follows the text of its line, in the look of the run that ended it.
+      const separator = member.record.boundary === 'hard' ? (member.record.separator || '\n') : member.record.boundary === 'soft' && /^[^\S\r\n]+$/u.test(member.record.separator ?? '') ? member.record.separator : '';
+      if (separator && position < ordered.length - 1 && !appendInlineWhitespace(runs, separator)) runs.push(separator);
     });
     return normalizeRuns(runs);
   }

@@ -39,7 +39,7 @@ import {attachMediaTags,importMediaGroups,mediaCaption,mediaFrameRecord,mediaTex
 import {embedName, groupEmbedCards, importEmbeds, isEmbedCardGroup, tagEmbeds} from './embed-provenance.js';
 import {embedCardLayout, embedSite, embedTitle, embedValue} from '@openpresentation/opf';
 // RR-34: captions and footnote areas as tagged text boxes; citation markers round-trip through the tags and the marker runs.
-import {addCaption, addFootnotes, glyphAnchor, paragraphAnchor} from './annotation-export.js';
+import {addCaption, addFootnotes, droppedHang, glyphAnchor, paragraphAnchor, withoutTrailingCharacters} from './annotation-export.js';
 import {attachAnnotationTags, captionValue, importAnnotations, restoreCitations} from './annotation-provenance.js';
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
 import {writeThemeFontReferences} from './theme-font-references.js';
@@ -3147,7 +3147,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       // FA-10: a TextRun[] heading draws and exports like rich body text; its lines are named and tagged as a heading (the body's are not).
       const heading = item.field !== 'text';
       addRichFitLines(slide, item.text, item.box, itemContext, {
-        value: item.runs ?? item.value, path: item.path, alignment: item.text.placement?.alignment ?? item.alignment ?? 'left',
+        value: item.runs ?? item.value, path: item.path, alignment: item.text.placement?.alignment ?? item.alignment ?? 'left', dropHang: heading || !!item.runs,
         fallback: item.field === 'tag' ? tagColor(itemContext) : item.eyebrow ? eyebrowColor(itemContext) : itemContext.textColor,
         ...(heading ? {
           objectName: index => `OPF heading ${item.path} line ${index}`,
@@ -4128,7 +4128,9 @@ function lowLabelPlot(chart, chartData, layer, valueAxis, outer, region, {scale,
   const barInset = horizontal ? horizontalBarPlot(chart, data, layer, valueAxis, box, geometry) : undefined;
   // A whole horizontal plot without its value axis needs the label room only horizontalBarPlot keeps (chartPlotInset's bar branch, the
   // preview's plot of a bar chart with options, keeps none).
-  if (whole && horizontal && !barInset && valueAxisHidden) return undefined;
+  // (An outer plot area written below a header row is replaced by the preview's plot all the same, opf#1492: Keynote reads a manual box as the
+  // inner plot, and cuts the category names of a chart left on the outer box.)
+  if (whole && horizontal && !barInset && valueAxisHidden && !outer) return undefined;
   const inset = barInset ?? chartPlotInset(chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...geometry, box});
   if (!inset) return undefined;
   if (whole) {
@@ -4337,6 +4339,20 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   else if (circular) {
     const plotBox = circularPlot(chart, chartData, layer, layerXml.layout.plot, region, {scale, context, options, presentation});
     if (plotBox) layerXml.layout.plot = plotBox;
+  }
+  // opf#1492 (PowerPoint 2026-11-25): a 100% stacked bar chart's inner plot ends with the axis label "100%" centered on its right edge, and
+  // PowerPoint keeps that label inside the chart frame with a margin of its own (about 8 px at 1280 wide) by moving the whole plot left (2.3 px
+  // on the preview's box, which keeps only the padding and a text size). The right edge is pulled in by what the label lacks, so the plot's left
+  // edge and its bars start where the preview's do; the preview itself is unchanged (its end label is not reserved room, and the golden corpus pins it).
+  // A slide with several charts keeps its plots as they are: charts that share a plot width (LH-93) must stay equal, and each would need its own cut.
+  // Nor does a slide with a shape attached to a chart point (SH-04): the anchor is computed on the composed plot.
+  const slideJson = JSON.stringify(presentation?.slides?.[context.slideIndex] ?? {});
+  const alone = (slideJson.match(/"chart":/g) ?? []).length <= 1 && !/"point":/.test(slideJson);
+  if (alone && percent && chartData.barDir === 'bar' && layerXml.layout.plot?.target === 'inner' && layerXml.options.valAxisHidden !== true) {
+    const frame = region.w * 96, plot = layerXml.layout.plot, fontPx = textSize / 75;
+    const measure = textWidthMeasurer(resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, italic: false}, options.textMeasurement), options.textMeasurement);
+    const room = frame * (1 - plot.x - plot.w), needed = measure('100%', fontPx) / 2 + 8;
+    if (needed > room) layerXml.layout.plot = {...plot, w: Number(Math.max(0, plot.w - (needed - room) / frame).toFixed(4))};
   }
   if (Object.keys(layerXml.layout).length) context.chartHeadings.get(objectName).layerLayout = layerXml.layout;
   const chartOptionsXml = {
@@ -4682,7 +4698,7 @@ function richFitLineRuns(line, context, fallback) {
   }), colors);
 }
 
-function addRichFitLines(slide, fit, box, context, {value, path, alignment: logicalAlignment, fallback, objectName, tag, keepEmpty = false}) {
+function addRichFitLines(slide, fit, box, context, {value, path, alignment: logicalAlignment, fallback, objectName, tag, keepEmpty = false, dropHang = false}) {
   const region = {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96};
   const runText = run => typeof run === 'string' ? run : run.text;
   const whole = typeof value === 'string' ? value : value.map(runText).join('');
@@ -4695,7 +4711,13 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
     const placed = fit.placement?.lines[index], alignment = placed?.alignment ?? physicalAlignment(logicalAlignment, fit.directions?.[index]), factor = alignment === 'right' ? 1 : alignment === 'center' ? .5 : 0;
     // PowerPoint counts the whitespace at the end of a paragraph in its alignment, so a line whose whitespace hangs at a soft wrap is
     // anchored that much past its glyphs (core's placement does it for a placed line, RichTextLine.hang for one it did not place).
-    const lineText = fit.lines?.[index] ?? line.fragments.map(fragment => fragment.text).join(''), anchor = paragraphAnchor({placed, line, text: lineText, box, factor, directions: fit.directions, index});
+    // opf#1493: a left-to-right line is written without the whitespace that hangs at its soft wrap (which the tag keeps as the separator), so
+    // there is nothing for PowerPoint to count and its box is not shifted (droppedHang).
+    const lineText = fit.lines?.[index] ?? line.fragments.map(fragment => fragment.text).join('');
+    const lineWhole = fit.lines?.[index] ?? '';
+    const hardBreak = tag && index < count - 1 && whole.startsWith(lineWhole, cursor) && /^(\r\n|\r|\n)/.test(whole.slice(cursor + lineWhole.length));
+    const dropped = dropHang && tag && index < count - 1 && !hardBreak ? droppedHang(lineText, {hang: placed ? placed.hang : line.hang, rtlDeck: !!fit.directions}) : '';
+    const anchor = paragraphAnchor({placed, line, text: lineText, box, factor, directions: fit.directions, index, dropHang: dropped !== ''});
     const area = placed ? {...region, x: (anchor - box.width * factor) / 96, y: placed.y / 96, h: placed.height / 96} : {...region, x: (anchor - box.width * factor) / 96, y: region.y + line.y / 96, h: line.height / 96};
     // PptxGenJS reads the paragraph direction from the first run's options, not from the shape options.
     if (fit.directions?.[index] === 'rtl') for (const run of runs) run.options.rtlMode = true;
@@ -4704,13 +4726,14 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
       const text = fit.lines[index] ?? '', end = cursor + text.length;
       const newline = index < count - 1 && whole.startsWith(text, cursor) ? /^(\r\n|\r|\n)/.exec(whole.slice(end)) : null;
       name = objectName(index);
-      tag(name, index, count, {boundary: index === count - 1 ? 'end' : newline ? 'hard' : 'soft', separator: newline ? newline[0] : ''});
+      tag(name, index, count, {boundary: index === count - 1 ? 'end' : newline ? 'hard' : 'soft', separator: newline ? newline[0] : dropped});
       cursor = end + (newline ? newline[0].length : 0);
     }
     // LH-12: an untagged body line is still named for its block (`OPF text <path> line N`), never PowerPoint's generic "Text N".
     // LH-63: a plain-text group has a shape for every line, a blank one included (keepEmpty), as an unformatted body's lines do.
-    context.nativeLatinSlots.remember(context.slideIndex,name ?? `OPF text ${path} line ${index}`,line.fragments.map(fragment=>({text:fragment.text,source:fragment.run.text,start:fragment.start,end:fragment.end,style:fragment.style,sourceRun:fragment.runIndex,marker:fragment.kind==='marker'})),path);
-    if (runs.length || keepEmpty) slide.addText(runs.length ? runs : '', {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, ...smallRunSpacing(line, placed), objectName: name ?? `OPF text ${path} line ${index}`});
+    context.nativeLatinSlots.remember(context.slideIndex,name ?? `OPF text ${path} line ${index}`,withoutTrailingCharacters(line.fragments.map(fragment=>({text:fragment.text,source:fragment.run.text,start:fragment.start,end:fragment.end,style:fragment.style,sourceRun:fragment.runIndex,marker:fragment.kind==='marker'})),dropped).map(fragment=>fragment.marker?fragment:{...fragment,end:fragment.start+fragment.text.length}),path);
+    const written = dropped ? withoutTrailingCharacters(runs, dropped) : runs;
+    if (written.length || keepEmpty) slide.addText(written.length ? written : '', {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, ...smallRunSpacing(line, placed), objectName: name ?? `OPF text ${path} line ${index}`});
   }
 }
 
@@ -4800,13 +4823,13 @@ const TITLE_LINE_TOLERANCE = 4 / 3;
 // end edge of the line, by its physical alignment. Undefined for a line without a placement (it sits at the item's box).
 // `x` is the anchor of the line's text, whitespace that hangs at its soft wrap included (PowerPoint counts it at a paragraph end), and
 // `glyphs` the anchor of its glyphs, where a natively wrapped paragraph (which hangs that whitespace) puts them.
-function measuredLineAnchors(item) {
+function measuredLineAnchors(item, drops = []) {
   const fit = item.text, rich = fit.richLines, placed = fit.placement?.lines;
   const logical = fit.placement?.alignment ?? item.alignment ?? 'left';
   return (rich ?? fit.lines).map((_, index) => {
     const align = placed?.[index]?.alignment ?? physicalAlignment(logical, fit.directions?.[index]), factor = align === 'right' ? 1 : align === 'center' ? .5 : 0;
     const text = fit.lines?.[index], args = {placed: placed?.[index], line: (rich ?? fit.sourceLines)?.[index], text, box: item.box, factor, directions: fit.directions, index};
-    return {align, factor, x: text ? paragraphAnchor(args) : undefined, glyphs: text ? glyphAnchor({...args, direction: fit.directions?.[index]}) : undefined};
+    return {align, factor, x: text ? paragraphAnchor({...args, dropHang: drops[index] === true}) : undefined, glyphs: text ? glyphAnchor({...args, direction: fit.directions?.[index]}) : undefined};
   });
 }
 
@@ -4921,8 +4944,11 @@ function fixedTitlePlan(item, family) {
   if (cursor !== whole.length) return {reject: 'unsupported-text'};
   const placed = fit.placement?.lines, sizeOf = fragment => fragment.nominalSize ?? fragment.fontSize;
   const baseline = index => placed?.[index] ? placed[index].baseline : item.box.y + (rich ? rich[index].baseline : index * fit.lineHeight + fit.fontSize);
+  // opf#1493: a left-to-right line that ends in a soft wrap is written without the whitespace that hangs there (droppedHang), so its paragraph
+  // is its glyphs; the tag keeps the whitespace (`trailing`), and import joins the paragraphs with it.
+  const trailing = texts.map((text, index) => index === count - 1 || hard[index] ? '' : droppedHang(text, {hang: placed?.[index] ? placed[index].hang : (rich ? rich[index] : fit.sourceLines?.[index])?.hang, rtlDeck: !!fit.directions}));
   // One alignment; each line starts where its measured box put it.
-  const anchors = measuredLineAnchors(item), align = anchors[0].align, rtl = directions.has('rtl');
+  const anchors = measuredLineAnchors(item, trailing.map(Boolean)), align = anchors[0].align, rtl = directions.has('rtl');
   if (anchors.some(line => line.align !== align)) return {reject: 'line-placement'};
   const drawn = anchors.map(line => line.x).filter(value => value !== undefined);
   // A right-to-left title whose paragraphs would need margins (a centered or left-aligned one whose lines hang a space at their wraps: each
@@ -4953,7 +4979,7 @@ function fixedTitlePlan(item, family) {
   if (tight.some(paragraph => !(paragraph.lineSpacing > 0 && paragraph.lineSpacing < 1))) return {reject: 'line-pitch'};
   if (tight.length && residual === undefined && (count !== 2 || TITLE_TIGHT_WORST_RESIDUAL * lineSize(1) > TITLE_LINE_TOLERANCE)) return {reject: 'line-pitch'};
   const x = edge - width * factor;
-  return {x, top: lineTop, width, height: baseline(count - 1) - lineTop + height * lineSize(count - 1), size: fit.fontSize, paragraphs, align, hard, rtl, whole};
+  return {x, top: lineTop, width, height: baseline(count - 1) - lineTop + height * lineSize(count - 1), size: fit.fontSize, paragraphs, align, hard, rtl, whole, trailing};
 }
 
 function addFixedTitle(slide, item, context, options, deckContext, plan) {
@@ -4964,12 +4990,16 @@ function addFixedTitle(slide, item, context, options, deckContext, plan) {
   let start = 0;
   for (const [index, line] of (rich ?? fit.lines).entries()) {
     let lineRuns;
+    const dropped = plan.trailing[index] ?? '';
     if (rich) {
       lineRuns = richFitLineRuns(line, context, color);
-      fragments.push(...line.fragments.map(fragment => ({text: fragment.text, source: fragment.run.text, start: fragment.start, end: fragment.end, style: fragment.style, sourceRun: fragment.runIndex, marker: false})));
+      if (dropped) lineRuns = withoutTrailingCharacters(lineRuns, dropped);
+      fragments.push(...withoutTrailingCharacters(line.fragments.map(fragment => ({text: fragment.text, source: fragment.run.text, start: fragment.start, end: fragment.end, style: fragment.style, sourceRun: fragment.runIndex, marker: false})), dropped)
+        .map(fragment => ({...fragment, end: fragment.start + fragment.text.length})));
     } else {
-      lineRuns = line ? [{text: line, options: {...plainLook}}] : [];
-      fragments.push({text: line, source: plan.whole, start, end: start + line.length, style});
+      const written = dropped ? line.slice(0, -dropped.length) : line;
+      lineRuns = written ? [{text: written, options: {...plainLook}}] : [];
+      fragments.push({text: written, source: plan.whole, start, end: start + written.length, style});
       start += line.length + (plan.hard[index] ? 1 : 0);
     }
     if (!lineRuns.length) lineRuns = [{text: '', options: {...plainLook, fontSize: fit.fontSize * .75}}];
@@ -4984,6 +5014,7 @@ function addFixedTitle(slide, item, context, options, deckContext, plan) {
   }
   const hard = plan.hard.flatMap((value, index) => value ? [index + 1] : []);
   deckContext.headingTags.set(objectName, {v: 1, group: item.path, field: 'title', line: 0, count: 1, boundary: 'end', separator: '', lineBreaks: 'paragraphs', lines: plan.paragraphs.length, hard,
+    ...(plan.trailing.some(Boolean) ? {trailing: plan.trailing} : {}),
     ...(rich ? {base: richBase(fit, item.textStyle, context.colors.text)} : {})});
   deckContext.nativeTitles.add(objectName);
   context.nativeLatinSlots.remember(context.slideIndex, objectName, fragments, item.path);
@@ -5012,10 +5043,14 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     // Logical alignment (RR-05): a right-to-left line starts at the right edge; furniture and metrics pass physical alignments and report no line directions.
     const placed=fit.placement?.lines[index],alignment=placed?.alignment??physicalAlignment(fit.placement?.alignment??config.align??context.contentAlignment??'left',fit.directions?.[index]),factor=alignment==='right'?1:alignment==='center'?.5:0;
     const sourceLine=fit.sourceLines?.[index],boundary=sourceLine?{boundary:sourceLine.boundary,separator:String(text).slice(sourceLine.end,sourceLine.nextStart)}:{};
-    const headingLine=(config.headingLines?.offset??0)+index,headingBoundary=config.headingLines?.join&&index===fit.lines.length-1?config.headingLines.join:boundary;
+    const headingLine=(config.headingLines?.offset??0)+index,headingJoin=config.headingLines?.join&&index===fit.lines.length-1,headingBoundary=headingJoin?config.headingLines.join:boundary;
+    // opf#1493: a left-to-right line of a text block or a heading is written without the whitespace that hangs at its soft wrap (droppedHang);
+    // its tag keeps the whitespace as the soft boundary's separator, so import joins the lines as they were authored.
+    const dropped=(config.heading||config.sourceText)&&!headingJoin&&!link?.href&&!config.hyperlink&&sourceLine?.boundary==='soft'?droppedHang(line,{hang:placed?placed.hang:sourceLine.hang,rtlDeck:!!fit.directions}):'',written=dropped?line.slice(0,-dropped.length):line;
+    const droppedBoundary=value=>dropped?{...value,separator:dropped+(value.separator??'')}:value;
     const objectName=config.heading?`OPF heading ${config.path} line ${headingLine}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.quote?`OPF quote ${config.quote.group} part ${config.quote.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:config.objectName?`${config.objectName} line ${index}`:undefined;
     if(config.imageCallout)context.imageCalloutTags.set(objectName,{v:1,...config.imageCallout,role:'text',line:index,count:fit.lines.length,...boundary});
-    else if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:headingLine,count:config.headingLines?.count??fit.lines.length,...headingBoundary});
+    else if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:headingLine,count:config.headingLines?.count??fit.lines.length,...droppedBoundary(headingBoundary)});
     else if(config.timeline)context.timelineTags.set(objectName,{v:1,role:'text',group:config.timeline.group,part:config.timeline.part,line:index,count:fit.lines.length,...boundary,...(config.timeline.part===0&&index===0?{anchor:config.timeline.anchor}:{})});
     else if(config.quote)context.quoteTags.set(objectName,{v:1,role:'text',group:config.quote.group,part:config.quote.part,line:index,count:fit.lines.length,...boundary,...(config.quote.part===0&&index===0?{anchor:config.quote.anchor}:{})});
     else if(config.furniture){
@@ -5023,22 +5058,22 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
       if(config.liveFields?.[index]?.length)context.furnitureFields.set(objectName,{text:line,fields:config.liveFields[index]});
     }
     else if(config.media&&context.provenanceMode!==false)context.mediaTags.set(objectName,{v:1,role:'caption',path:config.path,line:index,count:fit.lines.length,boundary:sourceLine?.boundary??'end',...(context.provenanceMode==='full'?{fingerprint:mediaTextFingerprint(line),...boundary}:{})});
-    else if(config.sourceText)context.plainTextTags.set(objectName,{v:1,group:config.path,line:index,count:fit.lines.length,...boundary});
+    else if(config.sourceText)context.plainTextTags.set(objectName,{v:1,group:config.path,line:index,count:fit.lines.length,...droppedBoundary(boundary)});
     // PowerPoint counts the whitespace at the end of a paragraph in its alignment: a line whose whitespace hangs at a soft wrap is
     // anchored that much past its glyphs (core's placement does it for a placed line, TextLineSource.hang for one it did not place).
-    const anchor=paragraphAnchor({placed,line:sourceLine,text:line,box,factor,directions:fit.directions,index});
+    const anchor=paragraphAnchor({placed,line:sourceLine,text:line,box,factor,directions:fit.directions,index,dropHang:dropped!==''});
     const area=placed?{x:(anchor-box.width*factor)/96,y:(placed.baseline-fit.fontSize)/96,w:box.width/96,h:placed.height/96}:{x:(anchor-box.width*factor)/96,y:(box.y+index*fit.lineHeight)/96,w:box.width/96,h:fit.lineHeight/96};
     // opf#1415: a linked line (a footer social account) is a text box whose whole text is the link, so the link is the shape's click link
     // (a:hlinkClick in its p:cNvPr, linkShapeBlocks): PowerPoint underlines every run that is a link, and the preview draws this line in
     // its muted color without an underline. The run keeps that color and u="none".
     const lineColor = pptxColor(config.color ?? context.textColor);
     const latinStart = sourceLine?.start ?? String(text ?? '').indexOf(line,latinSourceOffset);
-    context.nativeLatinSlots.remember(context.slideIndex,objectName,[{text:line,source:String(text ?? ''),start:latinStart,end:latinStart+line.length,style:{...style,...(config.lang?{lang:config.lang}:{})}}],config.path);
+    context.nativeLatinSlots.remember(context.slideIndex,objectName,[{text:written,source:String(text ?? ''),start:latinStart,end:latinStart+written.length,style:{...style,...(config.lang?{lang:config.lang}:{})}}],config.path);
     latinSourceOffset = latinStart+line.length;
     if (link?.href && line) context.linkedTextShapes.set(objectName, {link: link.href});
     // A linked caption box (a video placeholder's) links as a whole the same way, blank caption boxes included; its text keeps u="none".
     else if (config.hyperlink?.url) context.linkedTextShapes.set(objectName, {link: config.hyperlink.url});
-    slide.addText(link?.href && line ? [{text: line, options: {color: lineColor, underline: {style: 'none'}}}] : line, {
+    slide.addText(link?.href && line ? [{text: line, options: {color: lineColor, underline: {style: 'none'}}}] : written, {
       ...textBoxOptions(area, context, fit.fontSize * .75),
       ...nativeFontOptions(style), ...eyebrowOptions(style, fit.fontSize), ...langOptions(context, config.lang),
       color: lineColor, align: alignment,
