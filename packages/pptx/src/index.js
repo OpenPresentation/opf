@@ -4355,6 +4355,18 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     const room = frame * (1 - plot.x - plot.w), needed = measure('100%', fontPx) / 2 + 8;
     if (needed > room) layerXml.layout.plot = {...plot, w: Number(Math.max(0, plot.w - (needed - room) / frame).toFixed(4))};
   }
+  // opf#1525 (PowerPoint 2026-11-26): a legend at the side of a bar or column chart stands where the preview has it, not against the chart frame
+  // (where PowerPoint puts it, 6 to 80 px from the preview's key). The box is core's legendWidth at the frame's edge (a pad in from it) and
+  // the entries, a line and a half tall each, centered on the frame; the names' own width is PowerPoint's, a few percent narrower, so the
+  // box's edge next to the plot is the one that holds: the keys start on it. Top and bottom legends are PowerPoint's own, as before.
+  if (chartData.type === 'bar' && !circular && ['left', 'right'].includes(chart?.legend) && layerXml.layout.plot?.target === 'inner' && context.direction !== 'rtl' && chartData.series.length >= 2) {
+    const frameW = region.w * 96, frameH = region.h * 96, fontPx = textSize / 75, pad = 10 * scale;
+    const measure = textWidthMeasurer(resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, italic: false}, options.textMeasurement), options.textMeasurement);
+    const names = chartData.series.map(entry => String(entry.name ?? ''));
+    const width = Math.min(frameW * 0.45, fontPx * 0.6 + fontPx * 0.4 + Math.max(0, ...names.map(name => measure(name, fontPx))) + fontPx * 0.5), height = names.length * fontPx * 1.5;
+    const left = chart.legend === 'left' ? pad : frameW - pad - width;
+    layerXml.layout.legend = {x: Number((left / frameW).toFixed(4)), y: Number(((frameH - height) / 2 / frameH).toFixed(4)), w: Number((width / frameW).toFixed(4)), h: Number((height / frameH).toFixed(4))};
+  }
   if (Object.keys(layerXml.layout).length) context.chartHeadings.get(objectName).layerLayout = layerXml.layout;
   const chartOptionsXml = {
     objectName,

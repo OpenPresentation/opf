@@ -167,6 +167,37 @@ assert.ok(boxes >= 20, `most of the charts have a manual plot area (${boxes})`);
   assert.ok(!/<c:layoutTarget val="outer"\/>/.test(bulletXml), 'the bullet chart has no outer plot area either');
 }
 
+// opf#1525: a legend at the left or right of a bar or column chart is written where the preview has it (PowerPoint puts an unplaced side legend
+// against the chart frame, up to 80 px from the preview's key): the box's edge next to the plot is the preview's first key, and the entries are
+// centered on the frame. A legend at the top or bottom, and a line chart's legend, stay PowerPoint's own (no manual layout).
+{
+  const legends = Object.entries(cases).filter(([, chart]) => typeof chart.legend === 'string');
+  assert.ok(legends.length >= 15, 'many charts with a legend');
+  let placed = 0;
+  for (const [name, chart] of legends) {
+    const n = names.indexOf(name) + 1, slide = strFromU8(parts[`ppt/slides/slide${n}.xml`]);
+    const [fx, fy, fw, fh] = /<p:graphicFrame>[\s\S]*?<a:off x="(\d+)" y="(\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/.exec(slide).slice(1).map(value => Number(value) / EMU_PX);
+    const xml = strFromU8(parts[`ppt/charts/chart${n}.xml`]);
+    const legend = /<c:legend>\s*<c:legendPos val="(\w)"\/>\s*(<c:layout>[\s\S]*?<\/c:layout>)?/.exec(xml);
+    assert.ok(legend, `${name}: a legend`);
+    if (chart.legend === 'top' || chart.legend === 'bottom') { assert.equal(legend[2], undefined, `${name}: a top or bottom legend is PowerPoint's own`); continue; }
+    assert.ok(legend[2], `${name}: a side legend has a manual layout`);
+    const at = key => Number(new RegExp(`<c:${key} val="([\\d.]+)"/>`).exec(legend[2])[1]);
+    const box = {x: fx + at('x') * fw, y: fy + at('y') * fh, w: at('w') * fw, h: at('h') * fh};
+    const keys = [...toSvg(deck, n).matchAll(/<rect\b[^>]*>/g)].map(([tag]) => Object.fromEntries([...tag.matchAll(/\b(x|y|width|height)="([\d.]+)"/g)].map(([, key, value]) => [key, Number(value)]))).filter(rect => rect.width === 12 && rect.height === 12);
+    assert.equal(keys.length, chart.data.columns.length - 1, `${name}: the preview's keys`);
+    assert.ok(Math.abs(box.x - keys[0].x) < 0.2, `${name}: the legend's edge next to the plot is the first key (${box.x.toFixed(2)} against ${keys[0].x})`);
+    const row = box.h / keys.length;
+    keys.forEach((key, index) => assert.ok(Math.abs(box.y + index * row + (row - 12) / 2 - key.y) < 0.3, `${name}: key ${index} on its row`));
+    assert.ok(box.x >= fx && box.x + box.w <= fx + fw + 0.1, `${name}: the box is inside the chart frame`);
+    placed++;
+  }
+  assert.ok(placed >= 10, `side legends are placed (${placed})`);
+  // A line chart's legend is not touched.
+  const line = unzipSync(await toPptx({slides: [{title: 'Line', chart: {type: 'line', legend: 'right', data: {columns: ['Month', 'A', 'B'], rows: [['Jan', 1, 2], ['Feb', 2, 3]]}}}]}));
+  assert.ok(!/<c:legend>\s*<c:legendPos val="r"\/>\s*<c:layout>/.test(strFromU8(line['ppt/charts/chart1.xml'])), 'a line chart keeps PowerPoint\'s own legend place');
+}
+
 // The first case is the report's: its category names have their room at the left, as the preview's gutter.
 const report = written(1);
 assert.ok(report.plot.left - report.frame[0] > 60, 'the category names keep a gutter left of the plot');
