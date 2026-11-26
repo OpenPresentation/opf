@@ -87,6 +87,10 @@ export interface DataGridDescription {
   columnRoles: string[];
   /** The number format of each column (from its header), or undefined. */
   columnFormats: Array<string | undefined>;
+  /** FR-05: true for a chart's data and a shared dataset's columns, which may declare a type, a role and a unit; false for an inline table's own headings. */
+  declarable: boolean;
+  /** FR-05: what each column's header declares (only the keys it writes). */
+  columnDeclarations: Array<{ type?: ColumnType; role?: ColumnRole; unit?: string }>;
   /** The header texts (DataColumn names included), when the grid has a header line. */
   columnNames?: string[];
   /** Set when the chart or table shows a shared dataset: its id, `fields` and the paths of every item that uses it. */
@@ -178,6 +182,20 @@ export declare function columnFormatError(format: unknown): string | undefined;
  * when the format is cleared. Throws `number-format-invalid` with the reason, or `grid-no-header` for a table without a header row.
  */
 export declare function prepareGridColumnFormat(presentation: unknown, path: string, column: number, format: string | null | undefined, options?: GridOptions): PreparedGridChange;
+/** What a dataset or chart data column's cells hold (FR-05). */
+export type ColumnType = "text" | "number" | "date" | "boolean";
+/** What a dataset or chart data column is for (FR-05). */
+export type ColumnRole = "dimension" | "measure";
+export declare const COLUMN_TYPES: readonly ColumnType[];
+export declare const COLUMN_ROLES: readonly ColumnRole[];
+export interface ColumnDeclarationChange { type?: ColumnType | null | ""; role?: ColumnRole | null | ""; unit?: string | null }
+/** Why a declaration is invalid, or undefined. */
+export declare function columnDeclarationError(declaration: unknown): string | undefined;
+/**
+ * Set or clear a column's declared type, role and unit (FR-05): keys the declaration leaves out keep their value, null or "" clears one. A string header becomes
+ * { name, ... } and goes back to a string when only the name is left. Throws column-declaration-invalid, column-declaration-unavailable (an inline table) or grid-no-header.
+ */
+export declare function prepareGridColumnDeclaration(presentation: unknown, path: string, column: number, declaration: ColumnDeclarationChange, options?: GridOptions): PreparedGridChange;
 /** The columns a chart plots and how they got that role (the chart's `mapping`, or core's positional default). */
 export declare function describeChartMapping(presentation: unknown, path: string): ChartMappingDescription;
 /**
@@ -204,6 +222,8 @@ export declare function setGridHeader(editor: EditorSession, path: string, enabl
 export declare function transposeGridData(editor: EditorSession, path: string, options?: { meta?: Record<string, unknown> }): GridChange;
 /** Set (or clear, with `null` or "") a column's number format as one undoable transaction. Throws `number-format-invalid` with the reason. */
 export declare function setGridColumnFormat(editor: EditorSession, path: string, column: number, format: string | null | undefined, options?: GridOptions): GridChange;
+/** Set or clear a column's declared type, role and unit as one undoable transaction. */
+export declare function setGridColumnDeclaration(editor: EditorSession, path: string, column: number, declaration: ColumnDeclarationChange, options?: GridOptions): GridChange;
 /** Set a chart's category, X and series columns as one undoable transaction. */
 export declare function setChartMapping(editor: EditorSession, path: string, wanted: ChartMappingColumns, options?: GridOptions): GridChange;
 /** Give a chart or table its own copy of a shared dataset's data, as one undoable transaction. */

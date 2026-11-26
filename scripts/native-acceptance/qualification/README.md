@@ -56,7 +56,7 @@ Mac has a slot in the result format (`powerpoint-mac`) and no driver yet. `check
 | `release` | `"all"`: every deck of `decks` | `"all"`: every variant a deck lists |
 | `full` | `"all"`, plus the sources `examples`, `gallery-layouts` and `languages` | `"all"` |
 
-The smoke decks together show every one of the 13 object kinds of the result format, a hidden slide, a right-to-left slide,
+The smoke decks together show every object kind of the result format but `media` (OPF writes no video or audio), a hidden slide, a right-to-left slide,
 a chart of each family Keynote reads differently, and every place of an open known difference graded `wrong` in OPF's own
 file or importer; a test fails when a change to the tier or the features loses one of these. `sources` names what the
 runner builds or collects beyond the corpus (the decks a changelog fragment's `native:` key names, every example, the gallery
@@ -69,16 +69,18 @@ target names (`powerpoint`, `keynote`, `impress`; `powerpoint-mac` once it has a
 
 ```json
 "targets": {
-  "powerpoint": { "outcome": "native", "note": "Live SmartArt with one node per entry ..." },
-  "keynote": { "outcome": "picture", "kind": "picture", "known": ["kn-smartart-picture-alt"], "note": "Keynote has no SmartArt ..." },
-  "impress": { "outcome": "changed", "note": "LibreOffice does not lay SmartArt out ..." }
+  "powerpoint": { "outcome": "native", "kind": "diagram", "note": "Live SmartArt with one node per entry ..." },
+  "keynote": { "outcome": "picture", "kind": "diagram", "known": ["kn-smartart-picture-alt"], "note": "Keynote has no SmartArt ..." },
+  "impress": { "outcome": "changed", "kind": "diagram", "note": "LibreOffice does not lay SmartArt out ..." }
 }
 ```
 
 - `outcome`: `native`, `changed`, `picture` or `dropped`, the outcomes of the result format (`core/result/README.md`), or `n/a`
   when the object does not apply to that application (SmartArt's picture fallback in PowerPoint, a footer that Impress
   cannot be asked about headless, a feature with no exported object).
-- `kind`: the object kind, one of the 13 of the result format, that the application's object is expected to be reported as.
+- `kind`: the object kind, one of the 15 of the result format, that the application's object is expected to be reported as.
+  For live SmartArt it is `diagram` for every application: the round-trip step reports the exported diagram under its
+  own kind, and the outcome says what it became (`native` in PowerPoint, `picture` in Keynote, `changed` in Impress).
 - `known`: ids of records in `scripts/native-acceptance/known/<target>.json` that explain the outcome or a difference on the
   feature's slides. Records with a `scope` (missing fonts, alt text, OPF's tags dropped in the application's copy) apply to
   every deck and are named only where they explain the outcome.

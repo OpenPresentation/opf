@@ -69,11 +69,11 @@ the template; a fixed-number export and a live one re-import to the same text).
 A current date (`date: true`) is a PowerPoint date field, which Insert > Header & Footer shows as Date and time, Update
 automatically, with the field type as the selected format and the field's `lang` as the Language. PowerPoint draws a type
 differently in each language (`datetime1` is `11/6/2026` in English (United States), `06/11/2026` in English (United Kingdom),
-`06.11.2026` in German), while OPF draws `dateFormat` with English month and weekday names whatever the deck's language. So the
-exporter writes the field whose display is OPF's:
+`06.11.2026` in German), while OPF draws `dateFormat` with the month and weekday names of the language where the date is drawn (the slide's, else the
+deck's; English when none is declared, FR-10). So the exporter writes the field whose display is OPF's:
 
 1. a field of the deck's language that shows the pattern, with the deck's `lang` (the dialog shows the deck's language);
-2. else an English (United States) field that shows it, with `lang="en-US" altLang="en-US"` on that run (the dialog shows English
+2. else, for a pattern with no month or weekday name or a deck whose names are English, an English (United States) field that shows it, with `lang="en-US" altLang="en-US"` on that run (the dialog shows English
    (United States), the language of the words OPF draws; the altLang keeps the deck-language pass from rewriting it);
 3. else fixed text with `furniture-date-fixed` ("Fixed" in the dialog).
 

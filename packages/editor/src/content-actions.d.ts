@@ -69,6 +69,50 @@ export declare function prepareMetricTrend(presentation: unknown, blockPath: str
 /** Set or remove a metric's trend as one undoable step. */
 export declare function setMetricTrend(editor: EditorSession, blockPath: string, trend: MetricTrendName | null, meta?: Record<string, unknown>): ContentActionChange & { trend: MetricTrendName | null };
 
+/** The aggregates a metric's data link takes: `DataLink.aggregate`. */
+export declare const METRIC_AGGREGATES: readonly ["sum", "mean", "min", "max", "count", "first", "last"];
+/** The directions of change that can be good news: `Metric.better`. */
+export declare const METRIC_BETTER: readonly ["up", "down"];
+/** The comparisons of a metric's change: none, the previous row, a baseline filter, a fixed number, a column that holds the change. */
+export declare const METRIC_CHANGES: readonly ["none", "previous", "baseline", "value", "column"];
+export type MetricChangeKind = (typeof METRIC_CHANGES)[number];
+/** One dataset of the deck for a Data section: its columns, the `measure` columns first. */
+export interface MetricDatasetOption { id: string; title?: string; columns: { name: string; type?: string; role?: string; format?: string }[] }
+/** A metric block's data for a form (FR-06). */
+export interface MetricDataState {
+  /** The metric's own path. */
+  path: string;
+  /** Whether the metric is a bare value (linking it makes it `{ value, data }`). */
+  scalar: boolean;
+  link?: Record<string, unknown>;
+  better?: "up" | "down";
+  format?: string;
+  datasets: MetricDatasetOption[];
+  /** Whether the link computes: the computed numbers are what is drawn. */
+  resolved: boolean;
+  /** The value and the change as drawn, when the link resolves. */
+  value?: { text: string; number?: number; format?: string; isNumber: boolean; computed: boolean };
+  delta?: { text: string; number?: number; computed: boolean };
+  /** The written numbers that differ from the computed ones, each with the fix that writes the computed number. */
+  stale: { field: "value" | "delta"; message: string; fix?: { title: string; patch: JsonPatchOperation[] } }[];
+  diagnostics: { code: string; severity: "error" | "warning"; path: string; message: string }[];
+}
+export interface MetricDataChange { data?: Record<string, unknown> | null; better?: "up" | "down" | null; format?: string | null }
+/** The datasets of a deck, for a Data section. */
+export declare function metricDatasets(presentation: unknown): MetricDatasetOption[];
+/** The kind of change a link computes. */
+export declare function metricChangeKind(link: unknown): MetricChangeKind;
+/** What the metric block at `blockPath` reads from data, or undefined when the block is not a metric. */
+export declare function readMetricData(presentation: unknown, blockPath: string, options?: { language?: string }): MetricDataState | undefined;
+/** The patches that set a metric's `data`, `better` and `format` (`null` removes one). Throws `content-action-refused` for a block that is not a metric. */
+export declare function prepareMetricData(presentation: unknown, blockPath: string, change: MetricDataChange): PreparedContentAction;
+/** Set or remove a metric's `data`, `better` and `format` as one undoable step. */
+export declare function setMetricData(editor: EditorSession, blockPath: string, change: MetricDataChange, meta?: Record<string, unknown>): ContentActionChange;
+/** The patches that write the computed numbers into the metric's written `value` and `delta`. */
+export declare function prepareMetricUpdate(presentation: unknown, blockPath: string): PreparedContentAction;
+/** Write the computed numbers into the metric's written `value` and `delta` as one undoable step. */
+export declare function updateMetricData(editor: EditorSession, blockPath: string, meta?: Record<string, unknown>): ContentActionChange;
+
 export declare function prepareGroupBlocks(presentation: unknown, containerPath: string, indices: number[], options?: DryRunOptions & { composition?: Record<string, unknown> }): PreparedContentAction;
 export declare function prepareUngroupBlock(presentation: unknown, groupPath: string, options?: DryRunOptions): PreparedContentAction;
 export declare function prepareBlocksToRegions(presentation: unknown, slideIndex: number, regions: string[], options?: DryRunOptions): PreparedContentAction;

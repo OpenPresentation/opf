@@ -4,7 +4,13 @@
 //
 //   objectOutcomes(exported, resaved, { target }) -> { objects, slides, added }
 //   mergeOutcomes(result, outcomes) -> result (the same object, changed in place)
+//   editOutcomes(exported, edited, { target }) -> { counts, objects }  (an edit case's copy: verbs.edits[].outcomes)
 //   countOutcomes(records, by = 'kind') -> { <kind>: { native, changed, picture, dropped } }
+//
+// Alt text (NT-01b): every record carries the exported object's description (`alt`), the copy's (`copyAlt`) and, when
+// either has one, `altChange`: kept, changed, lost or added. It does not change the outcome: the 0.36.0 round's rules
+// (rt_objects.py) never compared descriptions, and Keynote writes every picture's name back as its description (opf#1479),
+// so counting it would turn every described picture of a Keynote copy into "changed".
 import { cutText, validateResult } from '../result/result.mjs';
 import { allItems, inspectPptx, normalizeText as norm } from './inspect.mjs';
 
@@ -37,7 +43,18 @@ const describeTypes = (types) => types.map((type) => [type.type, type.grouping, 
 function compareObject(label, exported, copy) {
   if (!copy) return ['dropped', 'not in the copy'];
   if (copy.element === 'pic' && exported.element !== 'pic') return ['picture', 'became a picture'];
+  if (exported.media && copy.element === 'pic' && !copy.media) return ['picture', `the ${exported.media} became a still picture`];
   const hows = [];
+  if (exported.frame === 'diagram') {
+    if (copy.frame !== 'diagram') {
+      hows.push(copy.element === 'grpSp' ? `drawn as a group of ${copy.items?.length ?? 0} parts: no longer a live diagram` : `became ${copy.frame ? `a ${copy.frame} frame` : copy.element}: no longer a live diagram`);
+    } else {
+      const before = exported.diagram ?? {};
+      const after = copy.diagram ?? {};
+      if (before.nodes !== undefined && after.nodes !== undefined && before.nodes !== after.nodes) hows.push(`nodes ${before.nodes} -> ${after.nodes}`);
+      if (before.layoutId && after.layoutId && before.layoutId !== after.layoutId) hows.push(`layout ${before.layout ?? before.layoutId} -> ${after.layout ?? after.layoutId}`);
+    }
+  }
   if (exported.element === 'sp' && copy.element === 'grpSp') {
     const parts = (copy.items ?? []).map((part) => part.preset ?? part.element).join(', ');
     hows.push(exported.hasText ? `split into a group: the shape plus a separate text box (${parts})` : `drawn as a group of ${copy.items?.length ?? 0} parts (${parts})`);
@@ -83,6 +100,14 @@ function compareObject(label, exported, copy) {
   return hows.length > 0 ? ['changed', hows.join('; ')] : ['native', null];
 }
 
+/** kept, changed, lost or added; undefined when neither side has a description. */
+function altChange(alt, copyAlt) {
+  if (alt === undefined && copyAlt === undefined) return undefined;
+  if (copyAlt === undefined) return 'lost';
+  if (alt === undefined) return 'added';
+  return norm(alt) === norm(copyAlt) ? 'kept' : 'changed';
+}
+
 const linkKind = (link) => (link.jump ? 'slide jump' : link.external ? 'web link' : link.action ? `action ${link.action}` : 'other');
 const linkLabel = (link) => (link.jump ? 'link to a slide' : link.on === 'text' ? 'link on text' : link.on === 'cell' ? 'link on a cell' : 'link on a shape');
 
@@ -103,7 +128,8 @@ function record(fields, copyItem) {
 /**
  * Every exported object (and link, notes, hidden slide) against the application's copy. `exported` and `resaved` are paths,
  * bytes, or inspectPptx results. Returns:
- *   objects: [{ slide, kind, label, name, outcome, how?, why?, role?, on?, target?, text?, box?, element, copyName?, copyElement?, empty? }]
+ *   objects: [{ slide, kind, label, name, outcome, how?, why?, role?, on?, target?, text?, box?, element, copyName?, copyElement?, empty?,
+ *              alt?, copyAlt?, altChange?, diagram?, media? }]
  *   slides:  [{ index, hidden?: { outcome, why? } }]  (a hidden slide kept hidden is native)
  *   added:   [{ slide, kind, label, name, element, box, parent? }]  what the copy has that the export did not: groups and
  *            parts the application made (parent names the group they are in); empty text boxes dropped are objects above
@@ -157,6 +183,11 @@ export function objectOutcomes(exported, resaved, { target } = {}) {
             copyName: copy?.name,
             copyElement: copy ? (copy.frame ? `graphicFrame ${copy.frame}` : copy.element) : undefined,
             empty: item.label === 'empty text box' ? true : undefined,
+            alt: item.alt,
+            copyAlt: copy?.alt,
+            altChange: altChange(item.alt, copy?.alt),
+            diagram: item.diagram,
+            media: item.media ?? undefined,
           },
           copy,
         ),
@@ -215,6 +246,23 @@ export function objectOutcomes(exported, resaved, { target } = {}) {
   return outcomes;
 }
 
+/**
+ * An edit case: what every exported object became in the copy the application wrote after one edit. Kept in the edit's
+ * entry (verbs.edits[].outcomes), never merged into the slides, which describe the unedited file.
+ *   -> { counts: { "<kind>.<outcome>": n }, objects: [{ slide, kind, name?, outcome, how? }] (the ones not native) }
+ */
+export function editOutcomes(exported, edited, options = {}) {
+  const { objects } = objectOutcomes(exported, edited, options);
+  const counts = {};
+  for (const entry of objects) counts[`${entry.kind}.${entry.outcome}`] = (counts[`${entry.kind}.${entry.outcome}`] ?? 0) + 1;
+  return {
+    counts: Object.fromEntries(Object.keys(counts).sort().map((key) => [key, counts[key]])),
+    objects: objects
+      .filter((entry) => entry.outcome !== 'native')
+      .map((entry) => Object.fromEntries(Object.entries({ slide: entry.slide, kind: entry.kind, name: entry.name, outcome: entry.outcome, how: entry.how ?? entry.why }).filter(([, value]) => value !== undefined && value !== null))),
+  };
+}
+
 /** Kind (or label) by outcome. Records are objectOutcomes().objects, or a result's objects (their members counted). */
 export function countOutcomes(records, by = 'kind') {
   const table = {};
@@ -240,6 +288,8 @@ const ELEMENTS_OF_KIND = {
   table: ['graphicFrame'],
   chart: ['graphicFrame'],
   group: ['grpSp', 'graphicFrame'],
+  diagram: ['graphicFrame', 'grpSp', 'pic'],
+  media: ['pic'],
   connector: ['cxnSp', 'sp'],
   title: ['sp'],
   body: ['sp'],
@@ -292,6 +342,9 @@ function align(objects, items, pairs) {
 }
 
 const ROUND_TRIP_KINDS = new Set(['list', 'footer']);
+// The export's kind wins over the probe's whatever the probe saw: Keynote and Impress have no SmartArt and report the
+// diagram as the picture or group they show, and the question is what the exported diagram or media object became.
+const EXPORT_KINDS = new Set(['diagram', 'media']);
 
 function addedObject(entry) {
   const object = { kind: entry.kind, outcome: entry.outcome };
@@ -347,9 +400,18 @@ export function mergeOutcomes(result, outcomes) {
             object.kind = entry.kind;
             if (entry.role) object.role = entry.role;
           }
+          if (EXPORT_KINDS.has(entry.kind) && !Array.isArray(object.objects)) object.kind = entry.kind;
+          // A diagram still live in the copy: its layout and node count as the copy states them (a probe that reads them, as
+          // PowerPoint's does, has put its own in details already; those stay).
+          if (object.kind === 'diagram' && pair.item.diagram) for (const [key, value] of Object.entries(pair.item.diagram)) details[key] ??= value;
           details.label = entry.label;
         } else if (pair) {
           details.inExport = false;
+        }
+        // A probe that cannot read alt text (Keynote's): the description the application wrote into its copy.
+        if (pair && object.alt === undefined && pair.item.alt !== undefined) {
+          object.alt = pair.item.alt;
+          details.altFrom = 'copy';
         }
         object.details = details;
         if (Array.isArray(object.objects)) visit(object.objects);

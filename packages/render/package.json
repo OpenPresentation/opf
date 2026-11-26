@@ -68,6 +68,10 @@
       "types": "./dist/player.d.ts",
       "default": "./dist/player.js"
     },
+    "./live-embeds": {
+      "types": "./dist/live-embeds.d.ts",
+      "default": "./dist/live-embeds.js"
+    },
     "./element": {
       "types": "./dist/element.d.ts",
       "default": "./dist/element.js"

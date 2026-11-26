@@ -29,7 +29,11 @@ their examples with --examples), to stdout. Blank cells keep the variable's
 declared value. An unfilled required variable fails (exit 1) unless --partial; --examples fills unfilled variables from
 their example. Every deck passes the format and references check (--fail-on) before anything is written. A value
 longer than its variable's maxLength, maxItems or maxLines is reported as a warning (opf/variable-overflow, with the record and
-the slide) on stderr and in the report's fill.overflow before anything is written; the decks are still written. The report
+the slide) on stderr and in the report's fill.overflow before anything is written; the decks are still written. A value
+for a variable that has translations replaces them (the filled deck would otherwise keep the template's text in the other
+languages beside the new value): each removal is listed in the report's fill.translationsRemoved and on stderr. A record
+may give a variable's translations itself: { "cta": { "value": "Join us", "translations": { "de": { "value": "Mach mit" } } } }
+(JSON data; a date variable's entries are { "format": "d. MMMM yyyy" }). A date's translated formats are not removed. The report
 { command, ok, input, outputs: [{ file, record, ... }], findings, counts, fill } goes to stdout, or stderr for stdout output.
 
 Examples:
@@ -115,7 +119,9 @@ export async function run(args: string[], _host: Host): Promise<void> {
 	if (errors.length) throw new CliError(`Filling failed: ${errors[0]?.message}`, "fill-failed", 1, { errors });
 	const overflow = overflowOf(source.value, result.decks);
 	for (const entry of overflow) process.stderr.write(`warning: opf/variable-overflow${result.decks.length > 1 ? ` record ${entry.record}` : ""}${entry.slide !== undefined ? ` slide ${entry.slide}` : ""} ${entry.path}: ${entry.message}\n`);
-	const summary = { records: result.decks.length, complete: result.complete, unfilled: result.unfilled, diagnostics: result.diagnostics, ...(overflow.length ? { overflow } : {}) };
+	for (const entry of result.translationsRemoved ?? []) process.stderr.write(`note: the translations of '${entry.id}' were removed: a value was given for it without translations${result.decks.length > 1 ? ` (records ${entry.records.join(", ")})` : ""}
+`);
+	const summary = { records: result.decks.length, complete: result.complete, unfilled: result.unfilled, diagnostics: result.diagnostics, ...(overflow.length ? { overflow } : {}), ...(result.translationsRemoved ? { translationsRemoved: result.translationsRemoved } : {}) };
 	const inputs = [inputFact(template, source.raw), ...(data !== undefined && raw !== undefined ? [inputFact(data, raw)] : [])];
 
 	if (options.combine || result.decks.length === 1) {

@@ -1,0 +1,1 @@
+{"variables":{"growth":{"type":"number","value":0.12,"translations":{"de":{"value":0.12}}}},"slides":[{"title":"{{growth}}"}]}

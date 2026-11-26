@@ -13,6 +13,7 @@ await copyFile(new URL('src/legacy-tags.js', root), new URL('legacy-tags.js', di
 await copyFile(new URL('src/metric-provenance.js', root), new URL('metric-provenance.js', dist));
 await copyFile(new URL('src/numeral-shapes.js', root), new URL('numeral-shapes.js', dist));
 await copyFile(new URL('src/card-provenance.js', root), new URL('card-provenance.js', dist));
+await copyFile(new URL('src/embed-provenance.js', root), new URL('embed-provenance.js', dist));
 await copyFile(new URL('src/media-provenance.js', root), new URL('media-provenance.js', dist));
 await copyFile(new URL('src/heading-provenance.js', root), new URL('heading-provenance.js', dist));
 await copyFile(new URL('src/text-provenance.js', root), new URL('text-provenance.js', dist));

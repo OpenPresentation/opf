@@ -20,6 +20,7 @@
 // the title says): years and numbers strictly increasing, dates and dated
 // periods never decreasing, and periods, months and weeks without a year may wrap once (Nov, Dec, Jan; Q3, Q4, Q1). A reversed run
 // (2026, 2025, 2024) is not in time order for this rule: its last point is the oldest. Digits of any script count (٢٠٢٤ is 2024).
+// A category column that declares its type (FR-05) decides first: 'text' and 'boolean' are never time, and 'date' skips the title fallback below.
 // Failing that, a category title that names a time field (Year, Quarter, Month, Week, Day, Date, Period, Time, Fiscal year, or the deck
 // language's word for one of them) makes distinct labels time ordered (Period: Baseline, Pilot, Rollout).
 
@@ -136,6 +137,21 @@ function parse(raw: unknown, vocab: ReturnType<typeof vocabulary>, language: str
       if (year !== undefined) return {family: 'month', key: year * 100 + vocab.months.get(match[2]!)!, dated: true};
     }
   }
+  // FR-05: an ISO 8601 date-time, 2024-03-15T09:30, with optional seconds and a zone. It is keyed by its instant (in UTC): the day, then the fraction of it.
+  match = /^(\d{4})-(\d{2})-(\d{2})t(\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?(z|[+-]\d{2}(?::?\d{2})?)?$/.exec(lower);
+  if (match) {
+    const year = fullYear(match[1]!, false), month = Number(match[2]), day = Number(match[3]), hour = Number(match[4]), minute = Number(match[5]), second = Number(match[6] ?? 0);
+    if (year !== undefined && month >= 1 && month <= 12 && day >= 1 && day <= 31 && hour <= 23 && minute <= 59 && second <= 59) {
+      const zone = match[7];
+      let offset = 0;
+      if (zone && zone !== 'z') offset = (zone[0] === '-' ? -1 : 1) * (Number(zone.slice(1, 3)) * 60 + Number(zone.slice(zone.length === 6 ? 4 : 3, zone.length === 6 ? 6 : 5) || 0));
+      const instant = Date.UTC(year, month - 1, day, hour, minute, second) - offset * 60_000;
+      const utc = new Date(instant);
+      const dayKey = utc.getUTCFullYear() * 10000 + (utc.getUTCMonth() + 1) * 100 + utc.getUTCDate();
+      const fraction = (utc.getUTCHours() * 3600 + utc.getUTCMinutes() * 60 + utc.getUTCSeconds()) / 86400;
+      return {family: 'date', key: dayKey + fraction, dated: true};
+    }
+  }
   // Dates: 2024-03, 2024-03-15, 2024/3/15, 15.03.2024, 3/15/2024.
   match = /^(\d{4})[-/.](\d{1,2})(?:[-/.](\d{1,2}))?$/.exec(lower);
   if (match) {
@@ -165,8 +181,10 @@ export function isTimeFieldTitle(title: unknown, language?: string): boolean {
  * running forward, or `options.title` names a time field and the labels are distinct. `options.language` is the deck language, whose
  * month names and time-field words count besides English.
  */
-export function chartCategoriesInTime(labels: readonly unknown[], options: {title?: unknown; language?: string} = {}): boolean {
+export function chartCategoriesInTime(labels: readonly unknown[], options: {title?: unknown; language?: string; type?: 'text' | 'number' | 'date' | 'boolean'} = {}): boolean {
   if (labels.length < 2) return false;
+  // FR-05: a category column that declares its type says what it holds: text and boolean are never time, and a date is time only when its labels run forward (the title fallback is skipped).
+  if (options.type === 'text' || options.type === 'boolean') return false;
   const vocab = vocabulary(options.language);
   const parsed = labels.map(label => parse(label, vocab, options.language));
   if (parsed.every((entry): entry is Parsed => entry !== undefined)) {
@@ -188,13 +206,29 @@ export function chartCategoriesInTime(labels: readonly unknown[], options: {titl
       return forward;
     }
   }
-  if (!isTimeFieldTitle(options.title, options.language)) return false;
+  if (options.type === 'date' || !isTimeFieldTitle(options.title, options.language)) return false;
   const texts = labels.map(label => label === null || label === undefined ? '' : String(label).trim());
   return texts.every(Boolean) && new Set(texts).size === texts.length;
+}
+
+/** FR-05: true when `value` is a time label the time-order rule reads (a year, period, week, month, date or ISO date-time), or an integer year from 1800 to 2200; a plain number is not. */
+export function isTimeLabel(value: unknown, language?: string): boolean {
+  const parsed = parse(value, vocabulary(language), language);
+  return parsed !== undefined && parsed.family !== 'number';
 }
 
 /** LH-105: the month (1 to 12) a word or label names in English or the deck language (January, Jan, Sept, يناير), or undefined. */
 export function monthOf(text: unknown, language?: string): number | undefined {
   if (typeof text !== 'string' || !text.trim()) return undefined;
   return vocabulary(language).months.get(asciiDigits(text.normalize('NFKC')).toLocaleLowerCase(language || 'en').replace(/\.$/, '').trim());
+}
+
+/**
+ * FR-06: a time label as a point on a line, for comparing two labels of a `date` column: the family of the label ("year", "period", "week",
+ * "month", "date", "number") and its sort key, or undefined for a label that names no time. Two labels compare only when they are of the
+ * same family ("2026-03" before "2026-11"; "Q1 2026" before "Q3 2026"); the key is ordering only and means nothing else.
+ */
+export function timeOrderKey(label: unknown, language?: string): {family: string; key: number} | undefined {
+  const parsed = parse(label, vocabulary(language), language);
+  return parsed ? {family: parsed.family, key: parsed.key} : undefined;
 }

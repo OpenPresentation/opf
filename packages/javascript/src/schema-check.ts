@@ -4,9 +4,10 @@ import type { Catalog } from "./catalog-refs.js";
 import { catalogSchemaNames, type CatalogRecordKind } from "./catalog-schemas.js";
 import { resolveDesignRecords } from "./design-records.js";
 import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
-import { dataSourceDiagnostics, provenanceDiagnostics } from "./data-source-checks.js";
+import { credentialInSrc, dataSourceDiagnostics, provenanceDiagnostics } from "./data-source-checks.js";
 import { datasetDiagnostics, isDatasetRef, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
 import { chartDrawDiagnostics } from "./chart-fallback.js";
+import { resolveMetric, type MetricDataDiagnostic } from "./metric-data.js";
 import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions, resolveSlideDirection } from "./composition.js";
 import { layoutTemplateIssues } from "./layout-template.js";
 import { annotationIssues } from "./annotation-validation.js";
@@ -76,6 +77,7 @@ const rootPayloadFields = [
   "bullets",
   "image",
   "video",
+  "embed",
   "chart",
   "table",
   "code",
@@ -94,6 +96,7 @@ type ContentKind =
   | "chart"
   | "table"
   | "video"
+  | "embed"
   | "code"
   | "metric"
   | "quote"
@@ -134,6 +137,10 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
     fields: ["video"],
     required: ["video"],
   },
+  embed: {
+    fields: ["embed"],
+    required: ["embed"],
+  },
   code: {
     fields: ["code"],
     required: ["code"],
@@ -163,7 +170,7 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
 };
 
 // RR-34: payload kinds whose blocks may carry a caption.
-const captionableKinds = new Set<ContentKind>(["image", "chart", "table", "video", "diagram"]);
+const captionableKinds = new Set<ContentKind>(["image", "chart", "table", "video", "embed", "diagram"]);
 // FA-22: fit, focus, the image treatments and placement belong to image payloads only (LH-132: and a person's `portrait`).
 const imageOptionFields = ["fit", "focus", "aspectRatio", "shape", "adjust", "stroke", "opacity", "recolor", "overlay", "placement", "portrait"] as const;
 // SH-02: the image options a shape block also takes, and the keys only a shape block takes.
@@ -276,6 +283,7 @@ function inferredKinds(value: Record<string, unknown>): ContentKind[] {
   if (hasOwn(value, "items")) kinds.push("list");
   if (hasOwn(value, "image")) kinds.push("image");
   if (hasOwn(value, "video")) kinds.push("video");
+  if (hasOwn(value, "embed")) kinds.push("embed");
   if (hasOwn(value, "chart")) kinds.push("chart");
   if (hasOwn(value, "table")) kinds.push("table");
   if (hasOwn(value, "code")) kinds.push("code");
@@ -308,8 +316,8 @@ function validateContentPayload(
   const explicitType = value.type;
   const payloadFields = presentFields(value, rootPayloadFields);
   const hasBlocks = hasOwn(value, "blocks");
-  // RR-34: a caption belongs to exactly one image, chart, table, video or diagram payload of this host.
-  const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table, video or diagram payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
+  // RR-34: a caption belongs to exactly one image, chart, table, video, embed or diagram payload of this host.
+  const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table, video, embed or diagram payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
   // FA-22: image options on anything but an image payload, and a placement anywhere but a top-level block.
   const imageOptionIssues = (reason: string, params: Record<string, unknown> = {}, except: ReadonlySet<string> = new Set()) => {
     for (const field of imageOptionFields) if (hasOwn(value, field) && !except.has(field)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on an image payload; ${reason}`, { code: "image-option-unsupported-payload", field, ...params }));
@@ -594,6 +602,13 @@ function presentationSemanticIssues(value: unknown, catalogs?: readonly Catalog[
       };
       payloadNumberingIssues(slide, slidePath);
       visitContentPayloads(slide, slidePath, payloadNumberingIssues);
+      // FR-08: an embed's address must not carry a credential (the text of the warning says what and where).
+      const payloadEmbedIssues = (payload: Record<string, unknown>, path: string): void => {
+        const embed = payload.embed, address = isRecord(embed) ? embed.src : embed, part = credentialInSrc(address);
+        if (part !== undefined) issues.push(semanticIssue(isRecord(embed) ? pathFor(pathFor(path, "embed"), "src") : pathFor(path, "embed"), `This embed's address carries what looks like a credential (${part}). Anyone with the deck can read it.`, { code: "embed-credentials", credential: part }));
+      };
+      payloadEmbedIssues(slide, slidePath);
+      visitContentPayloads(slide, slidePath, payloadEmbedIssues);
     }
   });
   // RR-34: reference ids, cited ids and where cite/footnote may appear.
@@ -736,7 +751,8 @@ function dataIssues(value: unknown, asOf?: string): { errors: ValidationIssue[];
       const key = `${diagnostic.code}|${diagnostic.path}`;
       if (seen.has(key)) continue;
       seen.add(key);
-      (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code }));
+      const fix = (diagnostic as MetricDataDiagnostic).fix;
+      (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code, ...(diagnostic.aggregate ? { aggregate: true } : {}), ...(fix ? { fix } : {}) }));
     }
   };
   add(datasetDiagnostics(value));
@@ -752,6 +768,8 @@ function dataIssues(value: unknown, asOf?: string): { errors: ValidationIssue[];
       add(chartDrawDiagnostics(node.chart, resolved, pathFor(path, "chart"), { language: typeof value.language === "string" ? value.language : undefined }));
     }
     if (isRecord(node.table)) add(resolveTableData(node.table, value, { path: pathFor(path, "table") }).diagnostics);
+    // FR-06: a metric linked to data: its dataset and fields (errors), its aggregate, empty rows, change and stale literals (warnings).
+    if (isRecord(node.metric)) add(resolveMetric(node.metric, value, { path: pathFor(path, "metric"), ...(typeof value.language === "string" ? { language: value.language } : {}) }).diagnostics);
   };
   value.slides.forEach((slide, index) => {
     if (!isRecord(slide)) return;
@@ -1091,7 +1109,7 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
     subject = view.presentation;
     unfilledVariables = view.unfilled;
     for (const entry of view.diagnostics) {
-      if (entry.code === "variable-example-used" || entry.code === "variable-rich-flattened" || entry.code === "variable-unfilled") continue;
+      if (entry.code === "variable-example-used" || entry.code === "variable-rich-flattened" || entry.code === "variable-unfilled" || entry.code === "variable-translations-removed") continue;
       // A limit is read by the validator's own rule (opf/variable-overflow, which composes where a line limit needs it), not by the format check.
       if (entry.code === "variable-overflow") continue;
       const issue = semanticIssue(entry.path, entry.message, { id: entry.id, code: entry.code });

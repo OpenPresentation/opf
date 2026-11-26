@@ -397,10 +397,24 @@ function repack(parts, edits) {
   assert.ok(sunburstPicture.includes('PowerPoint chart: OPF chart 1') && !sunburstPicture.includes('"image"'), `an unknown layout with a picture fallback keeps a chart placeholder: ${sunburstPicture.slice(0, 300)}`);
   for (const [label, edit, code] of [
     ['duplicate point', (xml) => xml.replace('<cx:pt idx="1">31</cx:pt>', '<cx:pt idx="0">31</cx:pt>'), 'invalid-chart-cache'],
-    ['point outside its count', (xml) => xml.replace('ptCount="4" formatCode', 'ptCount="2" formatCode'), 'invalid-chart-cache'],
     ['non-numeric value', (xml) => xml.replace('<cx:pt idx="1">31</cx:pt>', '<cx:pt idx="1">thirty</cx:pt>'), 'invalid-chart-cache'],
   ]) {
-    await assert.rejects(fromPptx(repack(parts, {'ppt/charts/chartEx1.xml': edit})), (error) => error.code === code && /chartEx1\.xml#/.test(error.details?.path ?? error.path ?? ''), label);
+    // opf#1477: an unreadable chart costs the chart (a placeholder and one chart-unreadable diagnostic), never the deck.
+    const diagnostics = [];
+    const document = await fromPptx(repack(parts, {'ppt/charts/chartEx1.xml': edit}), {onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
+    const found = diagnostics.filter((diagnostic) => diagnostic.code === 'chart-unreadable');
+    assert.equal(found.length, 1, label);
+    assert.equal(found[0].reason, code, label);
+    assert.match(found[0].location ?? '', /chartEx1.xml#/, label);
+    assert.ok(document.slides[0].chart, label + ': the classic frame of the same choice is imported instead');
+  }
+  {
+    // opf#1477: a count below the highest index extends the cache; the points keep their indexes.
+    const diagnostics = [];
+    const edited = repack(parts, {'ppt/charts/chartEx1.xml': (xml) => xml.replace('ptCount="4" formatCode', 'ptCount="2" formatCode')});
+    const document = await fromPptx(edited, {onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
+    assert.ok(diagnostics.some((diagnostic) => diagnostic.code === 'chart-cache-repaired'), 'point outside its count is reported as repaired');
+    assert.ok(!JSON.stringify(document.slides[0]).includes('PowerPoint chart'), 'point outside its count still imports the chart');
   }
   checks++;
 }

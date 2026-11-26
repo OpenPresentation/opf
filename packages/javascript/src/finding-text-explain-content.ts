@@ -13,6 +13,11 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", "about 12"]] } } },
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: ["Quarter", { name: "Revenue", format: "$#,##0" }], rows: [["Q1", 12]] } } },
   ),
+  "opf/data-cell-type": ex(
+    "Write the cell as its column declares, or change the column's `type` to what it holds. `opf fix --audits` stores a number written as a strict decimal string (\"12\") as a number, and a number in a text column as text. Nothing is drawn differently.",
+    { datasets: { sales: { columns: ["Quarter", { name: "Revenue", type: "number" }], rows: [["Q1", 12], ["Q2", "about 15"]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
+    { datasets: { sales: { columns: ["Quarter", { name: "Revenue", type: "number" }], rows: [["Q1", 12], ["Q2", 15]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
+  ),
   "opf/datasource-credentials": ex(
     "Remove the user, password, key or token from the data source and keep the secret in your own store. Name the connection in `connector` or `extensions`; the document never holds a credential.",
     { datasources: { warehouse: { src: "https://analyst:secret@data.example.com/export.csv" } }, slides: [{ title: "Revenue", text: "Revenue grew." }] },
@@ -23,6 +28,31 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { datasources: { warehouse: { refreshEvery: "P1D" } }, datasets: { sales: { datasource: "warehouse", retrieved: "2026-01-01", columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
     { datasources: { warehouse: { refreshEvery: "P1D" } }, datasets: { sales: { datasource: "warehouse", retrieved: "2026-11-30", columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] } }, slides: [{ title: "Revenue", table: { dataset: "sales" } }] },
   ),
+  "opf/metric-data-stale": ex(
+    "Write the computed number as the metric's value (apply the fix), or change the data link. A reader that does not compute draws the written number.",
+    { datasets: { arr: { columns: ["Month", "ARR"], rows: [["2026-10", 4.2], ["2026-11", 4.4]] } }, slides: [{ title: "ARR", metric: { value: "$4.2M", data: { dataset: "arr", field: "ARR", aggregate: "last" } } }] },
+    { datasets: { arr: { columns: ["Month", "ARR"], rows: [["2026-10", 4.2], ["2026-11", 4.4]] } }, slides: [{ title: "ARR", metric: { value: 4.4, data: { dataset: "arr", field: "ARR", aggregate: "last" } } }] },
+  ),
+  "opf/metric-data-aggregate": ex(
+    "Use an aggregate that fits the column (first, last and count work on any column), or link a column typed number. The written value is drawn meanwhile.",
+    { datasets: { arr: { columns: [{ name: "Region", type: "text" }, "ARR"], rows: [["EMEA", 4.4]] } }, slides: [{ title: "Regions", metric: { value: 1, data: { dataset: "arr", field: "Region", aggregate: "sum" } } }] },
+    { datasets: { arr: { columns: [{ name: "Region", type: "text" }, "ARR"], rows: [["EMEA", 4.4]] } }, slides: [{ title: "Regions", metric: { value: 1, data: { dataset: "arr", field: "Region", aggregate: "count" } } }] },
+  ),
+  "opf/metric-data-empty": ex(
+    "Check the filter and the field: a row has to meet the filter and give a usable cell. The written value is drawn meanwhile.",
+    { datasets: { arr: { columns: ["Region", "ARR"], rows: [["EMEA", 4.4]] } }, slides: [{ title: "APAC", metric: { value: 3.1, data: { dataset: "arr", field: "ARR", aggregate: "last", filter: [{ field: "Region", op: "=", value: "APAC" }] } } }] },
+    { datasets: { arr: { columns: ["Region", "ARR"], rows: [["EMEA", 4.4]] } }, slides: [{ title: "EMEA", metric: { value: 4.4, data: { dataset: "arr", field: "ARR", aggregate: "last", filter: [{ field: "Region", op: "=", value: "EMEA" }] } } }] },
+  ),
+  "opf/metric-data-delta": ex(
+    "Give the change something to compare with: two rows for previous, a baseline filter that meets a row, a comparison value other than 0 for a percent. No change is drawn until then.",
+    { datasets: { arr: { columns: ["Month", "ARR"], rows: [["2026-11", 4.4]] } }, slides: [{ title: "ARR", metric: { value: 4.4, data: { dataset: "arr", field: "ARR", aggregate: "last", delta: { compare: "previous" } } } }] },
+    { datasets: { arr: { columns: ["Month", "ARR"], rows: [["2026-10", 4.2], ["2026-11", 4.4]] } }, slides: [{ title: "ARR", metric: { value: 4.4, delta: 0.2, data: { dataset: "arr", field: "ARR", aggregate: "last", delta: { compare: "previous" } } } }] },
+  ),
+  "opf/metric-unit-repeated": ex(
+    "Drop the unit, or take its text out of the number format. The unit is printed after the value.",
+    { title: "ARR", metric: { value: 4.4, unit: "M", format: "#,##0.0M" } },
+    { title: "ARR", metric: { value: 4.4, format: "#,##0.0M" } },
+  ),
   "opf/chart-mapping-adapted": ex(
     "Remove the mapping entry, or name a column the chart type can use. The entry is ignored.",
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, mapping: { x: "Costs" } } },
@@ -32,6 +62,11 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     "Use a chart type that plots every series (column, bar, line), or draw one chart per series. A one-series type draws only the first.",
     { title: "Revenue", chart: { type: "treemap", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS } } },
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS } } },
+  ),
+  "opf/embed-credentials": ex(
+    "Take the user name, password or secret query parameter out of `src`. Anyone who has the deck can read the address, and every export links to it; the host that shows the page holds the credential.",
+    { title: "Dashboard", embed: "https://app.example.com/dashboards/revenue?api_key=abc123" },
+    { title: "Dashboard", embed: "https://app.example.com/dashboards/revenue" },
   ),
   "opf/chart-highlight-adapted": ex(
     "Name a series the chart plots in `highlight`, or remove the entry. A column that is the category or X column, or that the mapping leaves out, highlights nothing.",

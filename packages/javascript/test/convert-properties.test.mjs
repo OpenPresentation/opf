@@ -51,6 +51,8 @@ function generator(seed) {
         return random() < 0.5 ? runs() : defined({ text: runs(), description: maybe(0.5, words), level: level || undefined });
       }),
     }),
+    video: () => ({ video: random() < 0.5 ? `https://cdn.example.com/v${int(1, 99)}.mp4` : { src: `https://cdn.example.com/v${int(1, 99)}.mp4`, title: words(2) } }),
+    embed: () => ({ embed: random() < 0.5 ? `https://app.example.com/p${int(1, 99)}` : { src: `https://app.example.com/p${int(1, 99)}`, title: words(2) } }),
     quote: () => ({ quote: defined({ text: words(5), attribution: maybe(0.6, words), source: maybe(0.3, words) }) }),
     metric: () => ({ metric: defined({ value: random() < 0.5 ? int(1, 900) : `${int(1, 90)}%`, label: maybe(0.7, words), unit: maybe(0.3, () => pick(["k", "%", "ms"])), delta: maybe(0.4, () => pick(["+12%", -3])), trend: maybe(0.4, () => pick(["up", "down", "flat"])), description: maybe(0.3, words) }) }),
     code: () => ({ code: defined({ source: Array.from({ length: int(1, 3) }, () => words(2)).join("\n"), language: maybe(0.6, () => pick(["ts", "py", "bash"])), filename: maybe(0.3, () => `${pick(WORDS).replace(/\P{L}/gu, "x")}.ts`) }) }),

@@ -22,6 +22,7 @@ import { createThemeController } from "./workspace-theme.js";
 import { retainedSlideIndex } from "./slide-retention.js";
 import { createSourceMemory, updateJsonSource } from "./exact-source.js";
 import { continuationOf, pageCount } from "./continuation.js";
+import { openOutside, slideIndexOf } from "./view-links.js";
 
 export { THEME_TOKENS, createThemeController, normalizeTheme, normalizeThemeTokens } from "./workspace-theme.js";
 // The script-aware measurement options for composing one slide: a host that calls `composeSlide` or `paginateSlide` on the session passes these (the playground does).
@@ -603,7 +604,8 @@ export function createOpfEditor(element, options = {}) {
     // Text in the source pane that is not a valid deck: the slide shows the last valid one and is not editable until the text is fixed.
     const frame = slots.canvas && (slots.slide ?? slots.canvas);
     // The Studio keeps selection, zoom and Present while read-only (its commands say why they are off); only invalid text locks the slide.
-    if (frame && (!inSync || (readOnly && !studioLayout))) frame.setAttribute("inert", "");
+    // A read-only slide is not inert (its links work: the canvas shows it read only); only text that is not a valid deck locks it.
+    if (frame && (!inSync || (readOnly && !studioLayout && !canvas))) frame.setAttribute("inert", "");
     else frame?.removeAttribute("inert");
   }
   function applyFit() {
@@ -906,6 +908,23 @@ export function createOpfEditor(element, options = {}) {
     }
   }
 
+  // FR-03: a link followed in a slide that is read (or Ctrl or Cmd with a click in one that is edited). A `slide:<id>` link shows that slide, a hidden one
+  // included (the way the presenter and PowerPoint jump), and the focus lands on the slide; an id no slide has does nothing. A web, mail or phone link goes to
+  // `onOpenLink(href)` when the host gave it, else opens in a new tab with noopener and noreferrer; any other address is ignored.
+  function followLink(link, event) {
+    if (link.slide !== undefined) {
+      const index = slideIndexOf(session.snapshot().presentation, link.slide);
+      if (index < 0) return false;
+      if (index !== slideIndex && !go(index)) return false;
+      canvas?.focusSlide();
+      emit("link", { slide: link.slide, index });
+      return true;
+    }
+    openOutside(link.href, { openLink: options.onOpenLink ? (href) => options.onOpenLink(href, event) : undefined, win });
+    emit("link", { href: link.href });
+    return true;
+  }
+
   function mountCanvas() {
     const configured = options.canvas ?? {};
     // Registered before the canvas, so it runs first: a source edit that reorders the slides keeps the slide the person was on (stable ids)
@@ -929,6 +948,8 @@ export function createOpfEditor(element, options = {}) {
     );
     canvas = createCanvasEditor(slots.canvas, {
       ...configured,
+      readOnly: readOnly && !studioLayout,
+      onLink: (link, event) => followLink(link, event),
       ...(studioLayout ? { textEntry: layout === "playground" ? "click" : "dblclick", targets: layout === "playground" ? "interactive" : "passive", escape: "commit" } : {}),
       editor: ui,
       fonts,
@@ -1158,6 +1179,8 @@ export function createOpfEditor(element, options = {}) {
         editor: ui,
         fonts,
         continuation: options.continuation !== false,
+        // FR-08: the embedded pages shown live in the presenter, by address (default none).
+        ...(typeof options.embeds === "function" ? { embeds: options.embeds } : {}),
         get renderOptions() {
           return renderOptions();
         },
@@ -1559,6 +1582,7 @@ export function createOpfEditor(element, options = {}) {
     }
   }
   function applyReadOnly() {
+    canvas?.setReadOnly(readOnly && !studioLayout);
     pane?.setReadOnly(readOnly);
     studio?.setReadOnly(readOnly);
     deckTitle?.setReadOnly(readOnly);

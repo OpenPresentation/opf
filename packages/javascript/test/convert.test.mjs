@@ -24,7 +24,7 @@ const valid = (block) => check({ slides: [{ blocks: [block] }] }).valid;
 
 describe("contract", () => {
   test("the matrix, labels and readContent describe the supported kinds", () => {
-    assert.deepEqual(Object.keys(CONTENT_CONVERSIONS).sort(), ["chart", "code", "group", "list", "metric", "quote", "table", "text", "timeline"]);
+    assert.deepEqual(Object.keys(CONTENT_CONVERSIONS).sort(), ["chart", "code", "embed", "group", "list", "metric", "quote", "table", "text", "timeline", "video"]);
     for (const [from, targets] of Object.entries(CONTENT_CONVERSIONS)) {
       assert.ok(CONTENT_KIND_LABELS[from], from);
       for (const target of targets) assert.ok(CONTENT_KIND_LABELS[target], target);
@@ -394,6 +394,8 @@ describe("every conversion in the matrix", () => {
     metric: { metric: { value: 5, label: "Users" } },
     code: { code: { source: "a = 1", language: "py" } },
     timeline: { timeline: [{ when: "2026", what: "Go" }] },
+    video: { video: { src: "https://cdn.example.com/demo.mp4", title: "Demo" } },
+    embed: { embed: { src: "https://app.example.com/dashboard", title: "Dashboard" } },
     chart: { chart: { type: "column", data: { columns: ["A", "B"], rows: [["x", 1]] } } },
     table: { table: { columns: ["When", "What", "Label", "Value"], rows: [["2026", "Go", "Users", 5]] } },
     group: { blocks: [{ metric: 1 }, { metric: 2 }] },

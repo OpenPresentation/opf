@@ -320,6 +320,21 @@ describe("opf-mcp", () => {
 			assert.equal(report.ok, true);
 		});
 
+		test("a model reads a variable's translations (FR-10): the schema and the docs name them, and validate_deck takes and reports them", async () => {
+			for (const name of ["TextVariable", "ListVariable", "UrlVariable", "ImageVariable", "DateVariable"]) {
+				const variable = (await client.callTool({ name: "get_schema", arguments: { name } })).structuredContent;
+				assert.ok(Object.keys(variable.schema.properties).includes("translations"), name);
+			}
+			const number = (await client.callTool({ name: "get_schema", arguments: { name: "NumberVariable" } })).structuredContent;
+			assert.equal(Object.keys(number.schema.properties).includes("translations"), false);
+			const found = (await client.callTool({ name: "search_docs", arguments: { query: "variable translations language tag fall back", limit: 3 } })).structuredContent;
+			assert.ok(found.results.some((hit) => hit.uri === "opf://docs/templates-and-variables"));
+			const deck = { name: "Bilingual", language: "de", variables: { cta: { type: "text", value: "Book", translations: { de: { value: "Buchen" }, fr: { value: "Réserver" } } } }, slides: [{ title: "{{cta}}" }] };
+			const report = (await client.callTool({ name: "validate_deck", arguments: { document: deck } })).structuredContent;
+			assert.deepEqual(report.findings.filter((finding) => finding.ruleId.includes("translation")).map((finding) => [finding.ruleId, finding.path]), [["opf/variable-translation-unused", "/variables/cta/translations/fr"]]);
+			assert.equal(report.ok, true);
+		});
+
 		test("list_examples lists the bundled decks and filters them", async () => {
 			const all = (await client.callTool({ name: "list_examples", arguments: {} })).structuredContent;
 			assert.equal(all.total, JSON.parse(cli(["catalog", "examples"]).stdout).length);
@@ -562,7 +577,11 @@ describe("the bundled sources", () => {
 		// links, and was under the limit without it. Every 0.37.0 item documents a new part of the format (data sources, typed columns,
 		// the computed metric and the rest are still to come), so the limit comes back to the 3% headroom, rounded up to 1,000 bytes:
 		// 1,482,000.
-		assert.ok(bytes < 1_482_000, `${bytes} bytes of documentation`);
+		// Reviewed for the computed metric (FR-06) on 2026-11-26 (vetoable): 1,496,616 exact bytes on main at a0421001c (typed columns,
+		// translations and embed are documented there) with FR-06, 14,616 over the limit above. The table color scale, bands with the bullet
+		// chart, the gauge and the key renames each document a new part of the format too, so the limit comes back to the 3% headroom,
+		// rounded up to 1,000 bytes: 1,542,000.
+		assert.ok(bytes < 1_542_000, `${bytes} bytes of documentation`);
 	});
 });
 

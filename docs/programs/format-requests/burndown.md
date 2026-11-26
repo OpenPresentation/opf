@@ -10,12 +10,12 @@ Every item also meets the definition of done in the README; the acceptance colum
 | FR-02 | CR 6: ids on list items, bullets, timeline events and table rows | [Below](#fr-02-ids-inside-a-deck-cr-6) | done |
 | FR-03 | opf#1297: links to a slide of the same deck, `slide:<id>` | [Below](#fr-03-links-to-a-slide-opf1297) | done |
 | FR-04 | CR 1 with CR 3: data sources and a flat dataset | [Below](#fr-04-data-sources-and-a-flat-dataset-cr-1-with-cr-3) | done |
-| FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | todo |
-| FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | todo |
+| FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | done |
+| FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | done |
 | FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | in-progress |
-| FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | in-progress |
+| FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | done |
 | FR-09 | CR 14: limits on a variable's value | [Below](#fr-09-limits-on-a-variables-value-cr-14) | done |
-| FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | in-progress |
+| FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | done |
 | FR-11 | What a validator says about a key it does not know | [Below](#fr-11-what-a-validator-says-about-a-key-it-does-not-know) | done |
 
 Order of landing: FR-01 to FR-03 (ids), FR-04 to FR-07 (data), FR-08 (embed), FR-09 and FR-10 (variables). The tracks do not depend on
@@ -162,6 +162,10 @@ Acceptance:
 
 Progress log:
 
+- 2026-11-25: done, in the pull request that adds this line. Checked in PowerPoint: the typed dataset columns, the rows, the chart's and
+  the table's dataset references and the inline chart columns all come back unchanged from the export and from PowerPoint's own save;
+  nothing draws differently. `datasetColumnDeclaration` is the function FR-06's data link reads a column's type from.
+
 ## FR-06: a metric computed from data (CR 4)
 
 A KPI on a slide is a typed number, so it disagrees with the table beside it when the data changes. A metric gets a `data` link that
@@ -185,6 +189,12 @@ Acceptance:
   decks with an unknown dataset and an unknown field.
 
 Progress log:
+
+- 2026-11-26: done, in the pull request that adds this line. Built as accepted, with the owner's fourth way of computing the change (a
+  fixed number, `compare: { value }`) and what was decided while building (in the decision log): `metric.format`, the warnings when a
+  link gives no number, `opf/metric-unit-repeated`. A column's declared type (FR-05) decides what an aggregate may read. PowerPoint
+  (COM, seven slides): the preview's value, change, arrow and color; the link comes back from the export and from PowerPoint's own
+  save; a retyped value or change drops it with `metric-data-dropped`, a retyped label or title keeps it.
 
 ## FR-07: table color scale, bands with the bullet chart, and the gauge (CR 5)
 
@@ -228,6 +238,13 @@ Acceptance:
 
 Progress log:
 
+- 2026-11-25: done, in the pull request that adds this line. Checked in PowerPoint on three decks (classic light, classic dark, bold):
+  the picture and the card draw where the preview draws them, every part of a card opens the embed's address, and each embed comes
+  back from the export and from PowerPoint's own save. A link changed or a card title retyped in PowerPoint imports what is there, with
+  `embed-provenance-changed`. Not run: a slide show click, Change Picture and the Accessibility Checker (PowerPoint's window is not
+  driven). The card's drawing is with the owner; a version with the badge and title centered and growing with the card follows as its
+  own change.
+
 ## FR-09: limits on a variable's value (CR 14)
 
 A template has a headline slot sized for a short line, and a longer value is found only at render time. A variable's declaration may say
@@ -267,6 +284,13 @@ Acceptance:
 - Conformance: valid decks with translations; a Markdown and YAML round trip keeps them. Docs and an example deck in two languages.
 
 Progress log:
+
+- 2026-11-25: done, in the pull request that adds this line. The name table covers 88 languages (ICU 78.3, CLDR 48.0) and costs about
+  14 KB gzipped in each of the ten entries that draw dates; their budgets moved by that amount. Checked in PowerPoint: a translated deck
+  footer and its dates show the same text as the preview on a German and a French slide, and import returns each slide's text. Found
+  and fixed there: a date field on a slide whose language differs from the deck's was looked up in the deck's language and written in
+  the slide's, so PowerPoint showed another format than the preview. Open as opf#1507: a named current date in a non-English deck is
+  fixed text, because the date field table has no long forms per language.
 
 ## FR-11: what a validator says about a key it does not know
 

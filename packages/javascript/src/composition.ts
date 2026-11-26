@@ -14,6 +14,7 @@ import {chartTextSize,chartValueAxis,chartComboAxes,shareSiblingChartAxes,type C
 import {chartHeader,chartLayer,type ChartLayer} from './chart-layer.js';
 import {NUMBER_GROUPING_MIN} from './number-grouping.js';
 import {formatNumber,languageInEffect,localizeDigits} from './numerals.js';
+import {resolveMetric,type MetricRecord} from './metric-data.js';
 import {chartNumberLanguage} from './chart-options.js';
 import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
@@ -25,6 +26,7 @@ import {chartHistogram} from './chart-histogram.js';
 import {chartNumericAxes} from './chart-numeric-axes.js';
 import {chartDrawPlan} from './chart-fallback.js';
 import {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
+import {embedAspect} from './embed.js';
 import {itemAlignment,resolveDesignHints,type DesignAlignment,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
 import {isLayoutTemplate,layoutTemplate,regionDiagram,regionListColumns,regionSequence,singleBlockRegion,titleBesideTemplate,withRegionRules,TITLE_BESIDE_SHARE,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
@@ -58,6 +60,8 @@ import {parseLogoName,resolveLogo,resolveOrganizationLogo,type LogoShape,type Lo
 export {LOGO_SHAPES,resolveLogo} from './logos.js';
 export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logos.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
+export {DATE_NAMES,DATE_NAMES_MISSING,DATE_NAME_SOURCE,DATE_PATTERNS} from './date-name-data.js';
+export {ENGLISH_DATE_NAMES,dateNamesOf,longDatePattern,type DateNames} from './date-names.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 import {legible, luminance as legibleLuminance, normalize as legibleHex} from './legible-color.js';
 import {applyColorTransform,colorContrast,colorTransform,layoutVariantApplies,resolveColorRoles,type ColorVariant} from './color.js';
@@ -463,6 +467,8 @@ export interface ComposedItem {
   codeLayout?: CodeLayout;
   /** Complete shared metric geometry, including its unit, label and metadata. */
   metricLayout?: MetricLayout;
+  /** FR-06: the 0.37 part of a metric whose drawn form was computed or formatted (its link, `better`, `format`, which keys were derived): what a PowerPoint tag keeps beside the drawn form. `value` and `payload` hold the drawn form. */
+  metricRecord?: MetricRecord;
   /** Complete timeline fields, markers and connector accepted by composition. */
   timelineLayout?: TimelineLayout;
   /**
@@ -1175,7 +1181,7 @@ export class OPFCompositionError extends Error {
   }
 }
 // SH-02: `shape` and `path` make a shape block (isShapeBlock); on an image block `shape` is the frame's mask, never a leaf of its own.
-const fields = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "diagram", "shape", "path"];
+const fields = ["text", "items", "bullets", "image", "video", "embed", "chart", "table", "code", "metric", "quote", "timeline", "diagram", "shape", "path"];
 const leafFields = (host: Record<string, any>) => fields.filter(field => host[field] !== undefined && field !== 'shape' && field !== 'path');
 const headings = new Set(["title", "subtitle", "tag"]);
 const rows = ["top", "middle", "bottom"];
@@ -1727,12 +1733,12 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         // A current date is a live field: the host supplies today's calendar date.
         const format=content.dateFormat??DEFAULT_FURNITURE_DATE_FORMAT;
         if(options.date===undefined)error(`${path}.date`,'A current date needs a host-supplied ISO date option. For fixed content use a literal date, or an ISO date with dateFormat.','unresolved-content');
-        else{const resolved=formatFurnitureDate(options.date,format);if('error' in resolved)error(`${path}.dateFormat`,resolved.error,'unresolved-content');else add('date',resolved.text,true,undefined,{fields:[{type:'date',start:0,end:resolved.text.length,format}]});}
+        else{const resolved=formatFurnitureDate(options.date,format,languageInEffect(options.presentation,options.slideIndex));if('error' in resolved)error(`${path}.dateFormat`,resolved.error,'unresolved-content');else add('date',resolved.text,true,undefined,{fields:[{type:'date',start:0,end:resolved.text.length,format}]});}
       }
       else if(typeof content.date==='string'){
         // Without dateFormat a date string stays literal, editable source text.
         if(content.dateFormat===undefined)add('date',content.date);
-        else{const resolved=formatFurnitureDate(content.date,content.dateFormat);if('error' in resolved)error(`${path}.${parseIsoDate(content.date)?'dateFormat':'date'}`,resolved.error,'unresolved-content');else add('date',resolved.text,true,`${path}.date`);}
+        else{const resolved=formatFurnitureDate(content.date,content.dateFormat,languageInEffect(options.presentation,options.slideIndex));if('error' in resolved)error(`${path}.${parseIsoDate(content.date)?'dateFormat':'date'}`,resolved.error,'unresolved-content');else add('date',resolved.text,true,`${path}.date`);}
       }
       // Text fitted at a box width, with each source line's ink when outlines are provided.
       const fitPart=(part:PendingText,boxWidth:number)=>{
@@ -5896,7 +5902,7 @@ function withPictureScrim(input: unknown, options: ComposeSlideOptions, result: 
     if (onPanel(item.box)) continue;
     if (item.caption) body.push(item.caption.box);
     if (item.text && !item.frameBox && !item.emphasis) line = Math.max(line, item.text.lineHeight);
-    if (item.frameBox || item.emphasis || item.codeLayout || ['image', 'video', 'code', 'table', 'diagram'].includes(item.field)) continue;
+    if (item.frameBox || item.emphasis || item.codeLayout || ['image', 'video', 'embed', 'code', 'table', 'diagram'].includes(item.field)) continue;
     body.push(result.direction === 'rtl' ? item.box : textInkBox(item, options.textMeasurement));
     if (item.quoteLayout || item.metricLayout || item.timelineLayout) muted = true;
     if (item.metricLayout || item.timelineLayout) accent = true;
@@ -6873,7 +6879,7 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
   const before = quality(base), floor = snapFontSizeUp((base.composition.minFontSize ?? 16) * scale);
   const attempt = (flag: symbol, value: unknown) => composeVariant(input, { ...options, [flag]: value } as ComposeSlideOptions, before, floor);
   const physical = (edge: ImageEdge): ImageEdge => base.direction === 'rtl' && (edge === 'left' || edge === 'right') ? (edge === 'left' ? 'right' : 'left') : edge;
-  if (pictures.length === 1 && !leaf('video').length) {
+  if (pictures.length === 1 && !leaf('video').length && !leaf('embed').length) {
     const index = pictures[0]!, host = record(blocks[index]), fit = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : base.design.imageFit;
     if (fit === 'contain' || fit === 'stretch' || host.aspectRatio !== undefined || (host.shape !== undefined && host.shape !== 'rect' && host.shape !== 'roundRect')) return base;
     const edge: ImageEdge = landscape ? (index === 0 ? 'left' : 'right') : (index === 0 ? 'top' : 'bottom');
@@ -6905,7 +6911,7 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
     }
     return { ...best.result, items, track: { kind: 'picture', edge: physical(edge), size: best.size, path: blockPath } };
   }
-  if (pictures.length || leaf('video').length || charts.length !== 1) return base;
+  if (pictures.length || leaf('video').length || leaf('embed').length || charts.length !== 1) return base;
   // opf#1412 (A3): a slide that asks for its blocks in a column (a row on a portrait canvas) keeps them so: the chart's track would set
   // the chart beside the others.
   if (own.mode === (landscape ? 'column' : 'row')) return base;
@@ -7846,7 +7852,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   // LH-49's chart track uses a synthetic content group without its own OPF path; it records no group, flow or decision.
   // LH-06: `emphasis` is the path of the block or group whose `emphasis: true` the node carries.
-  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean;
+  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; metricRecord?: MetricRecord; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean;
     /** LH-131: a cell of a featured pair or set other than the featured one: drawn on one plain card (a group's blocks share it). */
     cardCell?: boolean;
     /** LH-50: the label drawn as this paragraph's eyebrow (LH-152: or this list's or group's). */
@@ -7865,11 +7871,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const key = host.shape !== undefined || host.path === undefined ? 'shape' : 'path';
       return [{ field: 'shape', type: 'shape', value: host[key], path: `${basePath}.${key}`, payload: shapePayload(host), host, hostPath: basePath, ...(cardCells.has(basePath) ? { cardCell: true } : {}) }];
     }
-    // RR-34: a caption belongs to the host's one captionable payload (image, chart, table or video).
+    // RR-34: a caption belongs to the host's one captionable payload (image, chart, table, video or embed).
     const captioned = host.caption !== undefined ? fields.filter(field => host[field] !== undefined && CAPTIONABLE_FIELDS.includes(field)) : [];
     // RR-54: a dataset-backed chart or table is composed from its inline copy (options.presentation holds the datasets).
-    const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : host[field];
-    return leafFields(host).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
+    // FR-06: a metric linked to data (or with a number format or a direction that is good) is composed as the 0.36 form of what it draws.
+    const metricResolved = host.metric !== undefined ? resolveMetric(host.metric, options.presentation, {...numberLanguage(options)}) : undefined;
+    const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : field === 'metric' && metricResolved ? metricResolved.metric : host[field];
+    return leafFields(host).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, ...(field === 'metric' && metricResolved?.record ? { metricRecord: metricResolved.record } : {}), payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
       ...(field === 'image' ? { host, hostPath: basePath } : {}), ...(host.emphasis === true || basePath === featuredPath ? { emphasis: basePath } : {}), ...(cardCells.has(basePath) ? { cardCell: true } : {}), ...((field === 'text' || field === 'items' || field === 'bullets') && eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
       ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
@@ -8592,6 +8600,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const frame = (aspect: number) => { const box = containedBox(cell, aspect, 'top'); return box.width * box.height; };
     if (node.field === 'image') { const aspect = wholePictureAspect(node); return aspect ? frame(aspect) : cell.width * cell.height; }
     if (node.field === 'video') return frame(VIDEO_ASPECT);
+    if (node.field === 'embed') return frame(embedAspect(node.value));
     if (node.field === 'chart' || node.field === 'diagram') return frame(SPLIT_CHART_SHAPE);
     if (node.field === 'shape') return frame(Number(record(node.host).aspectRatio) > 0 ? Number(record(node.host).aspectRatio) : presetAspect(typeof record(node.host).shape === 'string' ? record(node.host).shape : undefined));
     if (!MEASURED_FIELDS.has(node.field)) return cell.width * cell.height;
@@ -8681,7 +8690,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       placeNode(node, { ...cell, y: cell.y + (cell.height - need) / 2, height: need }, settings);
       return;
     }
-    if (node.field === 'image' || node.field === 'video' || node.field === 'diagram' || node.field === 'shape') placeNode(node, cell, settings, hasCards, undefined, undefined, 'middle');
+    if (node.field === 'image' || node.field === 'video' || node.field === 'embed' || node.field === 'diagram' || node.field === 'shape') placeNode(node, cell, settings, hasCards, undefined, undefined, 'middle');
     else if (node.field === 'chart') {
       const height = modeFor(settings) === 'auto' && inner.height > chartMaxHeight(node, inner.width) ? chartMaxHeight(node, inner.width) : inner.height;
       placeNode(node, { ...inner, y: inner.y + (inner.height - height) / 2, height }, settings, false);
@@ -8808,7 +8817,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // of pictures and videos only keeps one cell width, as LH-47 keeps a gallery's. opf#1412 (A7): so does a `grid` whose columns the
     // engine chose.
     if (!paragraphs && !lead && (mode === 'auto' || (mode === 'grid' && settings.columns === undefined)) && !hasRegions && count === nodes.length && cols > 1 && count % cols !== 0 && !settings.weights?.length && ruleOn('short-row')
-      && !nodes.every(node => !node.children && (node.field === 'image' || node.field === 'video')) && !team) {
+      && !nodes.every(node => !node.children && (node.field === 'image' || node.field === 'video' || node.field === 'embed')) && !team) {
       const first = count - count % cols, short = count - first, cell = (area.width - grid.gap * (short - 1)) / short;
       for (let k = 0; k < short; k++) grid.boxes[first + k] = { ...grid.boxes[first + k]!, x: area.x + k * (cell + grid.gap), width: cell };
       fire('short-row');
@@ -8928,7 +8937,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-60 with LH-03: the layer is decided for the construct the engines draw (chartDrawPlan), so a map drawn as columns takes a column
     // chart's header row and small-chart labels, and nested rings their ring names (LH-92); boxes and a scatter take none.
     const plan = resolved.ok ? chartDrawPlan(node.value, resolved, {language}) : undefined;
-    const drawn = plan?.fallback && resolved.ok ? {chart: {...(node.value as Record<string, unknown>), type: plan.type}, data: {...resolved, columns: plan.columns, rows: plan.rows, formats: plan.formats}} : {chart: node.value, data: resolved};
+    const drawn = plan?.fallback && resolved.ok ? {chart: {...(node.value as Record<string, unknown>), type: plan.type}, data: {...resolved, columns: plan.columns, rows: plan.rows, formats: plan.formats, types: plan.types}} : {chart: node.value, data: resolved};
     const geometry = {box, scale, minFontSize: settings.minFontSize, measure, direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {}), captioned: node.caption !== undefined};
     let layer = drawn.data.ok ? chartLayer(drawn.chart, drawn.data, geometry) : undefined;
     const references = drawn.data.ok ? chartReferences(drawn.chart) : [];
@@ -9132,7 +9141,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   /** LG1: the names drawn as wordmark tiles among logos; their text is centered in the tile. */
   const wordmarks = new WeakSet<Pending>();
   const reserveCaptions = (units: Pending[], boxes: LayoutBox[], cards: boolean): void => {
-    const media = (unit: Pending) => !unit.children && (unit.field === 'image' || unit.field === 'video');
+    const media = (unit: Pending) => !unit.children && (unit.field === 'image' || unit.field === 'video' || unit.field === 'embed');
     const rows = new Map<string, number[]>();
     units.forEach((unit, index) => { const box = boxes[index]; if (media(unit) && box) { const key = `${Math.round(box.y)}:${Math.round(box.height)}`; rows.set(key, [...rows.get(key) ?? [], index]); } });
     for (const row of rows.values()) {
@@ -9286,6 +9295,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // WI-3 (P23): a video draws in a 16:9 frame, the largest that fits its cell, placed by the region's anchor. In automatic
     // composition (no layout) a chart is at most 4:3, so a tall cell does not stretch it (P32).
     if (node.field === 'video') box = roundBox(containedBox(box, VIDEO_ASPECT, anchor));
+    // FR-08: an embed's frame is the largest box of its aspectRatio (16:9 when it has none) that fits its cell, placed as a video's is.
+    else if (node.field === 'embed') box = roundBox(containedBox(box, embedAspect(node.value), anchor));
     else if (node.field === 'chart' && !templateCell && modeFor(settings) === 'auto' && box.height > chartMaxHeight(node, box.width)) {
       // RR-105: the slide's only chart is centered in the body it does not fill (the owner's direction: a lone body is centered).
       const height = chartMaxHeight(node, box.width);
@@ -9310,7 +9321,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (caption && diagram && !diagram.issue) settleCaption(caption, diagram.box, anchor);
     items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:codeLayout&&!codeLayout.overflow?{...acceptedBox(box),height:Math.min(acceptedBox(box).height,round(codeLayout.bounds.height))}:internal?acceptedBox(box):box, ...(image ? {image} : {}), ...(chart ? {chart} : {}), ...(diagram ? {diagram} : {}),
       ...(frameBox && !emphasized ? {frameBox} : {}),
-      text, ...(node.field === 'text' && text && 'richLines' in text && runInOf(node.value) ? {runs: runInOf(node.value)!} : {}), textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: tile || (metricLayout && metricStarts(node)) ? 'left' : alignment, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
+      text, ...(node.field === 'text' && text && 'richLines' in text && runInOf(node.value) ? {runs: runInOf(node.value)!} : {}), textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: tile || (metricLayout && metricStarts(node)) ? 'left' : alignment, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(node.metricRecord?{metricRecord:node.metricRecord}:{}), ...(timelineLayout?{timelineLayout}:{}),
       ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}),
       ...(regionTag !== undefined ? {region: regionTag} : {}), ...(columns && columns.length > 1 ? {listColumns: columns} : {}), ...(onSurface ? {emphasis: true as const} : {}), ...(tile ? {metricTile: true as const} : {}), ...(node.field === 'table' && growthOf.has(node) ? {tableGrowth: growthOf.get(node)!} : {}) });
     // LH-06: an emphasized leaf's card is the surface (a block with several payload fields: around all of them).
@@ -10553,7 +10564,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-47: the cells of a short last row stretch to the full width, except in a grid of pictures and videos, whose cells keep
     // one size (one aspect) and center.
     // LH-132: a team's short last row keeps its cards at one width, so every portrait has one size.
-    const stretchesLastRow = (units: Pending[]) => !units.every(unit => !unit.children && (unit.field === 'image' || unit.field === 'video')) && !units.every(unit => personParts.has(unit.path));
+    const stretchesLastRow = (units: Pending[]) => !units.every(unit => !unit.children && (unit.field === 'image' || unit.field === 'video' || unit.field === 'embed')) && !units.every(unit => personParts.has(unit.path));
     // LH-82: blocks of another kind taken out of a grid sit in one row under it, or stacked when that is shorter, and ask for at
     // most MOVED_SHARE of the content box (down to their height at the floor), so the grid keeps about 60-65% of the body.
     const MOVED_SHARE = .3;
@@ -13323,21 +13334,21 @@ export {chartRadarLayout,RADAR_BOTTOM_LEGEND_GAIN} from './chart-radar.js';
 export type {ChartLayerRadar} from './chart-radar.js';
 export type {ChartLayer,ChartBarGeometry,ChartLayerSmall,ChartLayerHeader,ChartLayerRing,ChartPlotInset,ChartHeaderLegendEntry,ChartLayerGeometry,ChartEndLabel,ChartLayerEndLabels,ChartSliceLabel,ChartLayerSlices} from './chart-layer.js';
 export {chartEndLabels,chartSliceLabels,endLabelText,placeEndLabels,refreshEndLabels,CHART_SLICE_LABEL_MIN_RADIUS} from './chart-direct-labels.js';
-export {chartCategoriesInTime,isTimeFieldTitle,monthOf} from './chart-time-order.js';
+export {chartCategoriesInTime,isTimeFieldTitle,isTimeLabel,monthOf} from './chart-time-order.js';
 export {chartTitleFocus,chartSlideFocus,slideFocusSources,tableSlideFocus,tableHighlightRows,focusHits,type ChartLayerFocus,type FocusSource} from './chart-focus.js';
 export {alignBarRows,type ChartLayerRows} from './chart-rows.js';
 export {chartWaterfallColors,chartContextColor,chartContextColors,chartFocusContextColors,chartSeriesStrokes,CHART_CONTEXT_MIN_CONTRAST,CHART_CONTEXT_LABELED_MIN_CONTRAST,CHART_CONTEXT_FOCUS_DIFFERENCE} from './color.js';
 export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartHighlight,ChartHighlightMarks,ResolvedChartOptions} from './chart-options.js';
 // RR-54: chart and table data resolution, for engines that import the composition entry.
 export {chartNumber,formatDataNumber,numberFormatError,toExcelNumberFormat,fromExcelNumberFormat,inlineDatasets,inlineTableData,inlineChartData,isDatasetRef,isXYChartType,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText} from './chart-data.js';
-export type {DataCellValue,DataColumn,DataSource,DataGenerator,DataProvenance,Dataset,DatasetRef,ChartMapping,ChartComboSeries,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
+export type {DataCellValue,DataColumn,DatasetColumn,DataColumnType,DataColumnRole,DataSource,DataGenerator,DataProvenance,Dataset,DatasetRef,ChartMapping,ChartComboSeries,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
 export {chartDrawPlan,chartDrawDiagnostics,isPlaceLabel,markLabelColor} from './chart-fallback.js';
 export type {ChartDrawPlan,ChartFallback} from './chart-fallback.js';
 
 export { resolveDesignHints, itemAlignment, DESIGN_HINT_KEYS, TITLE_POSITIONS, type DesignTitlePosition, type DesignAlignment, type DesignHints, type DesignHintKey, type DesignHintSource, type ResolvedDesignHints, type ResolveDesignHintsOptions } from './design-hints.js';
 export { layoutContent, layoutStructure, LAYOUT_BODY_KINDS, type LayoutContent, type LayoutBodyKind } from './layout-content.js';
 // OPF 0.19 layout templates: the record's grid and regions, content binding and the pure geometry composeSlide uses.
-export { HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, TITLE_BESIDE_SHARE, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, regionDiagram, regionListColumns, regionSequence, titleBesideTemplate, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
+export { HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, IMPLIED_REGION_KINDS, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, kindAccepted, RESERVED_REGION_NAMES, TITLE_BESIDE_SHARE, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, regionDiagram, regionListColumns, regionSequence, titleBesideTemplate, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
 export { EYEBROW_LABEL_CHARS, EYEBROW_LABEL_WORDS, EYEBROW_TEXT_KIND, eyebrowLabel, isLabelText, rowLabel, ROW_LABEL_CHARS, ROW_LABEL_WORDS, groupBinding, groupingNode, JOINED_FIXED_MAX, majorityKind, MOVED_ROW_MAX, PAIR_FIGURE_KINDS, PAIR_LENGTH_RATIO, repeatedPairs, textLength, type GroupedBinding, type GroupingNode, type JoinedArrangement } from './block-grouping.js';
 export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
 export { cellBlocks, cellsInReadingOrder, gridCells, isGridCell, type CellBlock, type GridCell } from './grid-cells.js';

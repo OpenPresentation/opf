@@ -5,6 +5,8 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import {
+  EDIT_ID,
+  editPath,
   emptyResult,
   fileId,
   OBJECT_KINDS,
@@ -35,13 +37,17 @@ test('the constants are the schemas’ enums', () => {
   const defs = resultSchema.$defs;
   assert.deepEqual(defs.target.enum, [...TARGETS]);
   assert.deepEqual(runSchema.properties.target.enum, [...TARGETS]);
-  assert.deepEqual(defs.object.properties.kind.enum, [...OBJECT_KINDS]);
-  assert.equal(OBJECT_KINDS.length, 13);
+  assert.deepEqual(defs.kind.enum, [...OBJECT_KINDS]);
+  assert.deepEqual(defs.object.properties.kind, { $ref: '#/$defs/kind' });
+  assert.equal(OBJECT_KINDS.length, 15);
+  assert.deepEqual(OBJECT_KINDS.slice(13), ['diagram', 'media']);
+  assert.equal(defs.edit.properties.id.pattern, EDIT_ID.source);
   assert.deepEqual(defs.outcome.enum, [...OUTCOMES]);
   assert.deepEqual(defs.verbStatus.enum, [...VERB_STATUSES]);
   assert.deepEqual(runSchema.properties.files.items.properties.open.enum, [...VERB_STATUSES]);
   assert.deepEqual(resultSchema.properties.verbs.required, [...VERBS]);
-  assert.deepEqual(Object.keys(resultSchema.properties.verbs.properties), [...VERBS]);
+  // The verbs, and the optional edit cases beside resave.
+  assert.deepEqual(Object.keys(resultSchema.properties.verbs.properties), [...VERBS, 'edits']);
   for (const shared of ['application', 'system', 'fonts', 'opf']) assert.deepEqual(runSchema.properties[shared], defs[shared], `${shared} is the same in both schemas`);
 });
 
@@ -115,6 +121,75 @@ test('rejected: what the schema alone cannot say', () => {
   const free = sample();
   free.slides[0].objects[0].details = { anything: [1, { goes: true }] };
   assert.deepEqual(validateResult(free), { ok: true, errors: [] });
+});
+
+// ---- NT-01b: the additions the Windows driver asked for (opf#1468)
+
+const edit = (id, extra = {}) => ({ id, what: 'retyped the text of table cell B2 on slide 2', path: `edits/${id}.pptx`, status: 'done', ...extra });
+
+test('NT-01b accepted: diagram and media kinds, alt, details on the result and a slide, edit cases', () => {
+  const result = sample();
+  result.details = { fonts: ['Aptos', 'Aptos Display'], slideSize: [960, 540] };
+  result.slides[0].details = { placeholders: [{ type: 'title', name: 'Title 1' }] };
+  result.slides[1].objects.push(
+    { kind: 'diagram', outcome: 'native', appClass: 'msoSmartArt', box: [40, 260, 400, 200], alt: 'Pyramid of 3 levels', details: { layout: 'Basic Pyramid', nodes: 3 } },
+    { kind: 'media', outcome: null, appClass: 'msoMedia', box: [500, 260, 320, 180] },
+  );
+  result.slides[0].objects[0].alt = 'Agenda';
+  result.verbs.edits = [
+    edit('retype-cell'),
+    edit('add-row', {
+      seconds: 1.2,
+      import: { status: 'imported', slideCount: 4 },
+      outcomes: { counts: { 'table.changed': 1, 'title.native': 3 }, objects: [{ slide: 2, kind: 'table', name: 'OPF table 1', outcome: 'changed', how: 'rows x columns 3x2 -> 4x2' }] },
+    }),
+    edit('move-shape', { status: 'timeout', message: 'PowerPoint did not answer in 60 s' }),
+  ];
+  assert.deepEqual(validateResult(result), { ok: true, errors: [] });
+  // An empty list is allowed: the driver ran no edit case.
+  assert.deepEqual(validateResult({ ...result, verbs: { ...result.verbs, edits: [] } }), { ok: true, errors: [] });
+});
+
+test('NT-01b rejected: a bad edit case, a free-form field where there is none, an unknown outcome in an edit', () => {
+  const withEdits = (edits) => {
+    const result = sample();
+    result.verbs.edits = edits;
+    return validateResult(result);
+  };
+  assert.match(withEdits([edit('Retype Cell')]).errors.join('\n'), /\/verbs\/edits\/0\/id: must match pattern/u);
+  assert.match(withEdits([{ ...edit('retype-cell'), path: 'retype-cell.pptx' }]).errors.join('\n'), /\/verbs\/edits\/0\/path: must be "edits\/retype-cell\.pptx"/u);
+  assert.match(withEdits([edit('retype-cell'), edit('retype-cell')]).errors.join('\n'), /\/verbs\/edits\/1\/id: "retype-cell" is listed twice/u);
+  assert.match(withEdits([{ ...edit('retype-cell'), what: '' }]).errors.join('\n'), /\/verbs\/edits\/0\/what/u);
+  assert.match(withEdits([{ ...edit('retype-cell'), status: 'partial' }]).errors.join('\n'), /\/verbs\/edits\/0\/status: must be one of/u);
+  assert.match(withEdits([{ ...edit('retype-cell'), outcomes: { counts: {}, objects: [{ slide: 1, kind: 'table', outcome: 'native' }] } }]).errors.join('\n'), /outcome: must be one of "changed"/u);
+  assert.match(withEdits([{ ...edit('retype-cell'), note: 'x' }]).errors.join('\n'), /must NOT have additional property 'note'/u);
+  const altNotText = sample();
+  altNotText.slides[0].objects[0].alt = 3;
+  assert.equal(validateResult(altNotText).ok, false);
+  const verbDetails = sample();
+  verbDetails.verbs.open.details = {};
+  assert.deepEqual(validateResult(verbDetails).errors, ["/verbs/open: must NOT have additional property 'details'"]);
+  const slideDetailsNotObject = sample();
+  slideDetailsNotObject.slides[0].details = 'x';
+  assert.equal(validateResult(slideDetailsNotObject).ok, false);
+  assert.equal(editPath('retype-cell'), 'edits/retype-cell.pptx');
+  assert.throws(() => editPath('../x'), /a-z 0-9/u);
+});
+
+test('NT-01b: a hidden slide may have a picture (PowerPoint exports one); a partial render keeps the other slides', () => {
+  const hidden = sample();
+  const last = hidden.slides.at(-1);
+  assert.equal(last.hidden, true);
+  last.picture = `slides/slide-00${last.index}.png`;
+  last.compare = { preview: null, score: null, note: 'hidden slide: OPF previews visible slides only' };
+  assert.deepEqual(validateResult(hidden), { ok: true, errors: [] });
+
+  const partial = sample();
+  partial.verbs.render = { status: 'failed', seconds: 2.1, message: 'Slide.Export failed for slides 2, 3: the slide could not be drawn' };
+  partial.slides[1].picture = null;
+  partial.slides[2].picture = null;
+  assert.deepEqual(validateResult(partial), { ok: true, errors: [] });
+  assert.equal(partial.slides[0].picture, 'slides/slide-001.png', 'the other slides keep their pictures');
 });
 
 test('emptyResult has every verb, all not-run, and validates', () => {

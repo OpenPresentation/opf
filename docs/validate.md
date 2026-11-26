@@ -287,6 +287,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/variable-unknown`](#opfvariable-unknown) | References | warning | structure | A `{{token}}` names a variable that is not declared. |
 | [`opf/variable-unknown-value`](#opfvariable-unknown-value) | References | warning | structure | A value was supplied for a variable that is not declared. |
 | [`opf/variable-unused`](#opfvariable-unused) | References | warning | structure | A variable is declared but never used. |
+| [`opf/variable-translation-duplicate`](#opfvariable-translation-duplicate) | References | warning | structure | Two translations of a variable have the same language tag. |
+| [`opf/variable-translation-unused`](#opfvariable-translation-unused) | References | warning | structure | A translation of a variable is never drawn. |
 | [`opf/variable-reference-unknown`](#opfvariable-reference-unknown) | References | warning | structure | A `var:` color names a variable that is not declared. |
 | [`opf/contract`](#opfcontract) | Policy | error | structure | A field is outside the values a host policy allows. |
 | [`opf/text-contrast`](#opftext-contrast) | Accessibility | warning | composition | Text color has too little contrast against the background it sits on. |
@@ -323,7 +325,14 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/tight-spacing`](#opftight-spacing) | Layout | info | composition | Blocks are closer than 0.25 in to each other or 0.5 in to the slide edge. |
 | [`opf/layout-monotony`](#opflayout-monotony) | Layout | info | structure | 4 or more content slides in a row use the same layout record. |
 | [`opf/variable-overflow`](#opfvariable-overflow) | Layout | warning | composition | A variable's value is longer than the room its declaration allows. |
+| [`opf/embed-credentials`](#opfembed-credentials) | Content | warning | structure | An embed address carries what looks like a credential. |
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
+| [`opf/data-cell-type`](#opfdata-cell-type) | Content | warning | structure | A data cell does not match its column's declared type. |
+| [`opf/metric-data-stale`](#opfmetric-data-stale) | Content | warning | structure | A metric's written value or change differs from the one its data computes. |
+| [`opf/metric-data-aggregate`](#opfmetric-data-aggregate) | Content | warning | structure | A metric asks an aggregate that its column refuses. |
+| [`opf/metric-data-empty`](#opfmetric-data-empty) | Content | warning | structure | A metric's data link gives no value. |
+| [`opf/metric-data-delta`](#opfmetric-data-delta) | Content | warning | structure | A metric's change cannot be computed. |
+| [`opf/metric-unit-repeated`](#opfmetric-unit-repeated) | Content | warning | structure | A metric's unit is already printed by its number format. |
 | [`opf/datasource-credentials`](#opfdatasource-credentials) | Content | warning | structure | A data source holds a credential. |
 | [`opf/dataset-stale`](#opfdataset-stale) | Content | warning | structure | A dataset is older than its data source says it should be. |
 | [`opf/chart-mapping-adapted`](#opfchart-mapping-adapted) | Content | warning | structure | A chart mapping entry is ignored. |
@@ -796,6 +805,24 @@ Default severity: **warning**. Cost: structure. A variable is declared but never
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
+### `opf/variable-translation-duplicate`
+
+Default severity: **warning**. Cost: structure. Two translations of a variable have the same language tag.
+
+**Why.** Language tags compare without regard to case, so 'de-AT' and 'de-at' name one language. The first in document order is used; the other is never drawn.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/variable-translation-unused`
+
+Default severity: **warning**. Cost: structure. A translation of a variable is never drawn.
+
+**Why.** A translation is drawn on a slide whose declared language (else the deck's) selects it. When no slide and not the deck declares a language that selects it, it has no effect. A language read from the text does not select a translation.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+**Approximations.** Reads the declared language of the deck and of each slide, not where the variable is used.
+
 ### `opf/variable-reference-unknown`
 
 Default severity: **warning**. Cost: structure. A `var:` color names a variable that is not declared.
@@ -1126,11 +1153,69 @@ Default severity: **warning**. Cost: composition. A variable's value is longer t
 
 *Is anything left unfinished?*
 
+### `opf/embed-credentials`
+
+Default severity: **warning**. Cost: structure. An embed address carries what looks like a credential.
+
+**Why.** An embed `src` is stored in the deck and linked from every export, so anyone who has the deck can read a user name and password in it, or a query parameter named like a secret (`key`, `token`, `secret`, `password`, `sig`, `signature`, `auth`, alone or in a longer name such as `api_key`). Put the secret where the host that shows the page holds it.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+**Approximations.** Matches the parameter names by word, not by letters: `api_key` and `accessToken` match, `monkey` does not. The value is never read, and nothing is fetched.
+
 ### `opf/chart-value-not-numeric`
 
 Default severity: **warning**. Cost: structure. A chart value is text, not a number.
 
 **Why.** A chart plots numbers. A text cell such as "12%" is plotted as a gap. When every text value of a column is written in one display style the finding carries the fix that stores the numbers and gives the column the matching format.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/data-cell-type`
+
+Default severity: **warning**. Cost: structure. A data cell does not match its column's declared type.
+
+**Why.** A dataset or chart data column may declare what its cells hold (`type`: text, number, date or boolean). A cell of another kind is reported; null is a gap in any type. A number is a finite number, so the string "12" is not one (the safe fix stores it as 12), and a date is any time label the time-order rule reads (2026-03, Q1 2026, Jan). Nothing is drawn differently: it is advice that the column says one thing and holds another. More than five mismatches in a column are one finding for the column.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/metric-data-stale`
+
+Default severity: **warning**. Cost: structure. A metric's written value or change differs from the one its data computes.
+
+**Why.** A metric linked to data draws the computed number, and keeps the last computed number as its written value and delta for readers that do not compute. When the two differ, those readers show a number the data no longer gives. The safe fix writes the computed number.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/metric-data-aggregate`
+
+Default severity: **warning**. Cost: structure. A metric asks an aggregate that its column refuses.
+
+**Why.** Sum, mean, minimum and maximum read numbers, and a column typed text or boolean has none. The written value is drawn instead.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/metric-data-empty`
+
+Default severity: **warning**. Cost: structure. A metric's data link gives no value.
+
+**Why.** No row of the dataset meets the filter, or none of the kept cells is usable for the aggregate. The written value is drawn instead.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/metric-data-delta`
+
+Default severity: **warning**. Cost: structure. A metric's change cannot be computed.
+
+**Why.** A previous row needs two kept rows, a baseline needs a row that meets its filter, a percent needs a comparison value other than 0, and the value must be a number. The value is still drawn, with no change.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/metric-unit-repeated`
+
+Default severity: **warning**. Cost: structure. A metric's unit is already printed by its number format.
+
+**Why.** The unit is printed after the value, so a format that already writes the same text as a prefix or suffix draws it twice.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

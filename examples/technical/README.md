@@ -30,7 +30,9 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 - Metadata array forms for organizations, speakers, authors, and takeaways.
 - Custom narrative records, slide beat links and catalog override surfaces.
 - Limits on a template's variables: `maxLength` and `maxLines` on text variables and `maxItems` on a list variable, with values inside them ([`variable-limits.opf.json`](./variable-limits.opf.json), from core 0.37.0).
+- One deck in two languages: variables with `translations` (a text, a list and a date pattern per language), German and French slides drawing their own ([`variable-translations.opf.json`](./variable-translations.opf.json), from core 0.37.0).
 - Links to a slide of the same deck: `slide:<id>` on a text run, a shape and a table cell, one of them to a hidden slide ([`slide-links.opf.json`](./slide-links.opf.json)).
+- Embedded pages: an `embed` with a preview picture (a screenshot-like dashboard drawn by OPF itself), an `embed` beside text, and an `embed` with no picture, drawn as a card with its title and its site name; the pages are never loaded, and every output but a presenter whose host allows the page shows the picture or the card, linked to the page ([`embed.opf.json`](./embed.opf.json)).
 
 - `multilingual-slides.opf.json`: English, Arabic, Japanese and French slides in one deck, with a selected Arabic script font and locale-aware numbers.
 
@@ -46,3 +48,4 @@ When reviewing dense grouped examples, use the default whole-block continuation 
 
 - `item-ids.opf.json`: ids on list items, bullets, timeline events and table rows (a row is an array or `{ "id", "cells" }`), one namespace with slide and block ids; every id is optional.
 - The document id: a root `id`, an opaque string kept on save, export, import and publish, and a claim rather than a credential ([`document-id.opf.json`](./document-id.opf.json)).
+- Metrics computed from data: the value and the change come from a dataset of the deck (the last row, a change against the previous row, a baseline, a fixed plan or a column), the arrow and its color follow the computed change, `better` says which direction is good, and `format` writes a number value ([`computed-metrics.opf.json`](./computed-metrics.opf.json)).

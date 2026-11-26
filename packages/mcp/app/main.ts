@@ -856,6 +856,16 @@ function status(message: string, undoable = false): void {
 	} else wait.textContent = message;
 }
 
+/**
+ * A web, mail or phone link of a slide (the editor lets only those through): the host opens it (ui/open-link), never this view's own frame. A host
+ * that does not offer it, or refuses it, leaves the address in the footer so it can be copied; nothing else happens.
+ */
+function openHostLink(href: string): void {
+	const show = (): void => status(`Link: ${href}`);
+	if (!app.getHostCapabilities()?.openLinks) return show();
+	app.openLink({ url: href }).then((result) => { if (result.isError) show(); }, show);
+}
+
 /** The deck will not open: the placeholder stops promising one. */
 function fail(message: string): void {
 	phase = "failed";
@@ -1105,6 +1115,8 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		fonts,
 		catalogs,
 		fit: "contain",
+		// A link in a slide: a slide link shows that slide; Ctrl or Cmd with a click (or a click once a newer viewer replaced this one) opens the others.
+		onOpenLink: openHostLink,
 		// The example images read through read_example_files, for the slides and the PNG, PDF and SVG exports.
 		imageResolver: (src) => examplePictures.resolve(src),
 		slideActions: "starters",

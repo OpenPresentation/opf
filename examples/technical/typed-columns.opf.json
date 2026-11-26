@@ -1,0 +1,53 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Typed Columns",
+  "description": "Technical fixture: dataset columns that declare what their cells hold (type), what they are for (role) and a unit label, behind a chart and a table, and inline chart data that declares its columns.",
+  "language": "en-US",
+  "datasets": {
+    "revenue": {
+      "title": "EMEA revenue by month",
+      "columns": [
+        { "name": "Month", "type": "date", "role": "dimension" },
+        { "name": "Region", "type": "text", "role": "dimension" },
+        { "name": "Revenue", "format": "$#,##0", "type": "number", "role": "measure", "unit": "USD" },
+        { "name": "On plan", "type": "boolean", "role": "dimension" }
+      ],
+      "rows": [
+        ["2026-09", "EMEA", 11500, true],
+        ["2026-10", "EMEA", 12100, true],
+        ["2026-11", "EMEA", null, false]
+      ]
+    }
+  },
+  "slides": [
+    {
+      "id": "revenue-chart",
+      "title": "EMEA revenue",
+      "chart": {
+        "type": "line",
+        "alt": "EMEA revenue by month, September to November 2026",
+        "data": { "dataset": "revenue", "fields": ["Month", "Revenue"] }
+      }
+    },
+    {
+      "id": "revenue-table",
+      "title": "EMEA revenue and plan",
+      "table": { "dataset": "revenue", "fields": ["Month", "Region", "Revenue", "On plan"] }
+    },
+    {
+      "id": "inline-chart",
+      "title": "Margin by month",
+      "chart": {
+        "type": "column",
+        "alt": "Margin by month, September and October 2026",
+        "data": {
+          "columns": [
+            { "name": "Month", "type": "date", "role": "dimension" },
+            { "name": "Margin", "format": "0%", "type": "number", "role": "measure", "unit": "ratio" }
+          ],
+          "rows": [["2026-09", 0.31], ["2026-10", 0.34]]
+        }
+      }
+    }
+  ]
+}

@@ -64,7 +64,10 @@ export {
   isTemplate,
   listBuiltinVariables,
   listVariables,
+  pickTranslation,
   resolveVariables,
+  translationAt,
+  translationLanguageAt,
   variableDeclarations,
   visibleLength,
 } from "./variables.js";
@@ -78,10 +81,13 @@ export type {
   BuiltinVariableInfo,
   VariableInfo,
   VariableKind,
+  VariableTranslation,
   VariableUse,
   VariableUseForm,
   VariableValues,
 } from "./variables.js";
+export { dateNamesOf, longDatePattern } from "./date-names.js";
+export type { DateNames } from "./date-names.js";
 export { SLIDE_SCOPED_BUILTINS, resolveSlideVariables } from "./slide-variables.js";
 export type { SlideScopedBuiltin } from "./slide-variables.js";
 // RR-71: logos live on the organization (resolveLogo, the one resolution, is on /composition with the layout engine).
@@ -165,6 +171,11 @@ export type { ApplyPatchOptions, PatchResult } from './patch.js';
 export { assignIds, documentHash, idToken, isIdToken, OPFIdError, resolveIdPatch, resolveIdPointer, toIdPatch, toIdPointer, touches } from './ids.js';
 export type { AssignedId, AssignIdsContext, AssignIdsOptions, AssignIdsResult, IdErrorCode, PatchScope, PatchScopeKind, PatchTouch } from './ids.js';
 export { collectSlideLinks, slideLink, slideLinkId } from './slide-links.js';
+// FR-08: the embed content kind's shared readings, and the one test for a credential in a web address.
+export { EMBED_DEFAULT_ASPECT, embedAspect, embedSite, embedTitle, embedValue } from './embed.js';
+export type { EmbedValue } from './embed.js';
+export { embedArrowPoints, embedCardLayout } from './embed-card.js';
+export type { EmbedCardInput, EmbedCardLayout, EmbedCardText } from './embed-card.js';
 export { diff, merge } from './diff.js';
 export type { DiffOptions, MergeConflict, MergeOptions, MergeResult, PresentationDiff } from './diff.js';
 // RR-75: `opf edit` and `opf fill` as functions. The Node build registers the default catalog for edit's check, as the CLI does.
@@ -192,14 +203,20 @@ export type { NumberLocale } from './numerals.js';
 export { tableRows, rowCells, rowId } from './table.js';
 export type { TableRowEntry } from './table.js';
 // RR-54: chart and table data: strict numbers, number formats and Excel codes, datasets, series mapping.
-export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
+export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix, suggestCellTypeFix, datasetColumnDeclaration, cellMatchesType } from './chart-data.js';
+// FR-06: a metric computed from data: the metric to draw, its PowerPoint record and its findings (the gauge reads `value` and `delta`).
+export { resolveMetric } from './metric-data.js';
+export { updateMetricLiterals } from './metric-literals.js';
+export type { MetricRecord, ResolvedMetric, ResolvedMetricValue, ResolveMetricOptions, MetricData, MetricDelta, DataCondition, DataFilter, DataLink, DataAggregate, MetricDerivedKey, MetricDataDiagnostic } from './metric-data.js';
 // FR-04: data sources and where a dataset came from. Engines never read, fetch or refresh a data source.
 export { dataSourcesOf, resolveDataSource, dataProvenance } from './data-sources.js';
+// FR-05: typed dataset columns. What ingest declares for the columns of imported data.
+export { inferColumnDeclaration, declareColumns, storeCell } from './column-inference.js';
 export { credentialInSrc, parseInstant } from './data-source-checks.js';
 // LH-60: how a chart is drawn when its data does not fit its type (map, box, pie and scatter fallbacks; series a type cannot plot).
 export { chartDrawPlan, chartDrawDiagnostics, isPlaceLabel, markLabelColor } from './chart-fallback.js';
 export type { ChartDrawPlan, ChartFallback } from './chart-fallback.js';
-export type { DataCellValue, DataColumn, DataSource, DataGenerator, DataProvenance, Dataset, DatasetRef, ChartMapping, ChartComboSeries, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
+export type { DataCellValue, DataColumn, DatasetColumn, DataColumnType, DataColumnRole, DataSource, DataGenerator, DataProvenance, Dataset, DatasetRef, ChartMapping, ChartComboSeries, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
 
 export { FONT_POLICY, applyFontPolicyDecisions, fontPolicyFor, fontAvailabilityDiagnostics } from './font-policy.js';
 export { resolveDrawnFontFamilies } from './drawn-font-families.js';

@@ -10,9 +10,13 @@ import {
   isTemplateDocument,
   limitUsage,
   listBuiltins,
+  removeVariableTranslation,
   setTemplate,
+  setVariableTranslation,
   suggestVariableId,
+  valueToFieldText,
 } from "./templates.js";
+import { longDatePattern } from "@openpresentation/opf";
 import { slideTitle } from "./slides.js";
 
 const KIND_LABELS = { text: "Text", number: "Number", date: "Date", image: "Image", url: "Link", list: "List", color: "Color" };
@@ -147,6 +151,50 @@ export function createTemplatePanel(container, options) {
     return input;
   }
 
+  // FR-10: a text, list, url, image or date variable's translations as rows (language, value), one undoable edit each. The languages the
+  // deck and its slides declare are offered first; a date's row is its display pattern in that language.
+  function translationSection(field) {
+    const date = field.kind === "date";
+    const listId = `${id}-languages-${field.id}`;
+    const languages = h(doc, "datalist", { id: listId }, ...field.translationLanguages.map((tag) => h(doc, "option", { value: tag })));
+    const fail = h(doc, "p", { class: "opf-template-error", role: "alert", hidden: true });
+    const attempt = (action) => {
+      try {
+        action();
+        fail.hidden = true;
+        say(`Changed the translations of ${field.label}.`);
+      } catch (error) {
+        fail.hidden = false;
+        fail.textContent = messageOf(error);
+      }
+    };
+    const rowsOf = field.translations.map((entry) => {
+      const tag = h(doc, "input", { type: "text", list: listId, value: entry.tag, "aria-label": `${field.label}: language of a translation`, class: "opf-translation-tag" });
+      const value = field.kind === "list" ? h(doc, "textarea", { rows: 3, "aria-label": `${field.label}: ${entry.tag}`, class: "opf-translation-value" }) : h(doc, "input", { type: "text", "aria-label": `${field.label}: ${entry.tag}${date ? " display pattern" : ""}`, class: "opf-translation-value", placeholder: date ? (longDatePattern(entry.tag) ?? "MMMM d, yyyy") : "" });
+      value.value = entry.text;
+      const remove = h(doc, "button", { type: "button", class: "opf-translation-remove quiet", text: "Remove", "aria-label": `Remove the ${entry.tag} translation of ${field.label}` });
+      const commit = () => {
+        if (entry.rich && value.value === entry.text && tag.value === entry.tag) return;
+        attempt(() => setVariableTranslation(editor, field.id, tag.value.trim(), value.value, { from: entry.tag }));
+      };
+      tag.addEventListener("change", commit);
+      value.addEventListener("change", commit);
+      remove.addEventListener("click", () => attempt(() => removeVariableTranslation(editor, field.id, entry.tag)));
+      return h(doc, "div", { class: "opf-translation-row", "data-language": entry.tag }, tag, value, remove);
+    });
+    const add = h(doc, "button", { type: "button", class: "opf-translation-add secondary", text: "Add translation" });
+    add.addEventListener("click", () => {
+      const used = new Set(field.translations.map((entry) => entry.tag.toLowerCase()));
+      const tag = field.translationLanguages.find((language) => !used.has(language.toLowerCase())) ?? "en";
+      const start = date ? (field.format ?? longDatePattern(tag) ?? "MMMM d, yyyy") : field.defaultValue !== undefined ? valueToFieldText(field.kind, field.defaultValue) : valueToFieldText(field.kind, field.example);
+      attempt(() => setVariableTranslation(editor, field.id, tag, start || (date ? "MMMM d, yyyy" : "")));
+    });
+    return h(doc, "details", { class: "opf-template-translations", "data-opf-component": "template-translations", open: field.translations.length > 0 },
+      h(doc, "summary", { text: `Translations (${field.translations.length})` }),
+      h(doc, "p", { class: "opf-template-help", text: date ? "How the date is written in another language: a slide in that language (else the deck's) uses the pattern." : "Where the variable is drawn, the slide's language (else the deck's) selects the translation; any other language draws the value. Typing a value above replaces the translations when the deck is filled." }),
+      languages, ...rowsOf, add, fail);
+  }
+
   function buildRow(field) {
     const input = control(field);
     const error = h(doc, "p", { class: "opf-template-error", id: `${id}-error-${field.id}`, role: "alert", hidden: true });
@@ -195,8 +243,9 @@ export function createTemplatePanel(container, options) {
       });
       extras.push(fileInput);
     }
+    const translations = field.translations ? translationSection(field) : undefined;
     const label = h(doc, "label", { for: input.id }, field.label, field.required ? h(doc, "span", { class: "opf-required", "aria-hidden": "true", text: " *" }) : null, h(doc, "span", { class: "opf-template-kind", text: ` (${KIND_LABELS[field.kind]})` }));
-    const element = h(doc, "div", { class: "opf-template-field", "data-variable": field.id, "data-kind": field.kind }, label, status, input, ...extras, counter, help, error, useDefault);
+    const element = h(doc, "div", { class: "opf-template-field", "data-variable": field.id, "data-kind": field.kind }, label, status, input, ...extras, counter, help, error, useDefault, translations);
 
     function showError(message) {
       error.hidden = !message;

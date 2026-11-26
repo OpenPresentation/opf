@@ -1,0 +1,17 @@
+{
+  "deck": "technical/typed-columns.opf.json",
+  "entries": {
+    "technical/typed-columns.opf.json#0": {
+      "sha256": "9bf12032d5a3432688f165807c0b1379e664b813d35a18cdfc3681d6fda5f225",
+      "bytes": 4578
+    },
+    "technical/typed-columns.opf.json#1": {
+      "sha256": "0b09654d97e529366de735d7f4e0b20af4661a44ad5e04f2870d42efda85288b",
+      "bytes": 7067
+    },
+    "technical/typed-columns.opf.json#2": {
+      "sha256": "93435137c633fe1333f3839ad216263f59e4b74aaff297d9558c8ee5fc3e7886",
+      "bytes": 3785
+    }
+  }
+}
