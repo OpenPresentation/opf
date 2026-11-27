@@ -10,7 +10,7 @@ import { test } from 'node:test';
 import { validateResult, validateRun } from '../../core/result/result.mjs';
 import { check, createContext, EDIT_CASES, RENDER_WIDTH, runFiles, SCRIPT } from './driver.mjs';
 import { LOCK_NAME, parseRegValue, parseTasklist, splitOfficeVersion, takeLock } from './machine.mjs';
-import { buildResult, kindOf, linkTarget, objectsOf, OPEN_NOTE } from './normalize.mjs';
+import { buildResult, cleanFonts, kindOf, linkTarget, objectsOf, OPEN_NOTE, slidesOf } from './normalize.mjs';
 import { fakeExec, REG_VERSION, sampleSlides, TASKLIST_IDLE, tasklistWith, windowsMachine } from './test-support.mjs';
 
 const temp = (name) => mkdtempSync(path.join(tmpdir(), `nt16-${name}-`));
@@ -110,10 +110,11 @@ test('one clean file: one powershell.exe call, every verb and edit case done, re
   assert.equal(two.notes, 'Speaker\nnotes');
   assert.deepEqual(
     one.objects.map((object) => object.kind),
-    ['title', 'table', 'link'],
+    ['title', 'table'],
+    'no link objects: the round trip makes them from the copy',
   );
   assert.deepEqual(one.objects[1].details.cells[0][0], { text: 'Plan', fill: '1F4E79', color: 'FFFFFF' });
-  assert.deepEqual({ on: one.objects[2].on, target: one.objects[2].target }, { on: 'cell', target: 'https://example.com/pro' });
+  assert.deepEqual(one.objects[1].details.links, [{ on: 'cell', target: 'https://example.com/pro', text: 'Pro', address: 'https://example.com/pro', subAddress: '', row: 2, column: 1 }]);
   assert.deepEqual(two.objects.map((object) => [object.kind, object.role ?? null]), [['footer', 'footer'], ['notes', null]]);
   assert.deepEqual(one.details.placeholders, [{ name: 'Title 1', type: 'title' }]);
   assert.equal(result.details.close.status, 'done');
@@ -309,11 +310,14 @@ test('kinds: each PowerPoint shape type maps to its shared kind', () => {
 });
 
 test('objects: group members in slide coordinates, SmartArt details, links on shapes and text, slide links', () => {
-  const [group, groupLink] = objectsOf({ type: 6, name: 'OPF diagram 1', left: 10, top: 10, width: 200, height: 100, click: { address: 'https://example.com', subAddress: '' }, members: [{ type: 1, name: 'Box', left: 20, top: 30, width: 50, height: 40, text: 'A', textLinks: [{ address: '', subAddress: '258,3,Pricing', text: 'see' }] }] });
+  const objects = objectsOf({ type: 6, name: 'OPF diagram 1', left: 10, top: 10, width: 200, height: 100, click: { address: 'https://example.com', subAddress: '' }, members: [{ type: 1, name: 'Box', left: 20, top: 30, width: 50, height: 40, text: 'A', textLinks: [{ address: '', subAddress: '258,3,Pricing', text: 'see' }] }] });
+  assert.equal(objects.length, 1, 'links are facts in details, never objects of their own');
+  const [group] = objects;
   assert.equal(group.kind, 'group');
   assert.deepEqual(group.objects[0].box, [20, 30, 50, 40], 'a member keeps the frame PowerPoint reports, in slide coordinates');
-  assert.deepEqual({ kind: group.objects[1].kind, on: group.objects[1].on, target: group.objects[1].target }, { kind: 'link', on: 'text', target: 'slide:3' });
-  assert.deepEqual({ on: groupLink.on, target: groupLink.target }, { on: 'shape', target: 'https://example.com' });
+  assert.deepEqual(group.objects.map((object) => object.kind), ['text']);
+  assert.deepEqual(group.objects[0].details.links, [{ on: 'text', target: 'slide:3', text: 'see', address: '', subAddress: '258,3,Pricing' }]);
+  assert.deepEqual(group.details.links, [{ on: 'shape', target: 'https://example.com', address: 'https://example.com', subAddress: '' }]);
   const [diagram] = objectsOf({ type: 24, hasSmartArt: true, name: 'Diagram 2', smartArt: { layout: 'Basic Process', layoutId: 'urn:microsoft.com/office/officeart/2005/8/layout/process1', nodes: 3 } });
   assert.deepEqual([diagram.kind, diagram.appClass, diagram.details.layout, diagram.details.nodes], ['diagram', 'msoSmartArt', 'Basic Process', 3]);
   const [media] = objectsOf({ type: 16, mediaType: 3, alt: 'Clip' });
@@ -324,6 +328,24 @@ test('objects: group members in slide coordinates, SmartArt details, links on sh
   assert.equal(linkTarget({ address: '', subAddress: '' }), null);
   const long = objectsOf({ type: 17, text: 'x'.repeat(500) })[0];
   assert.equal(long.text.length, 200);
+});
+
+test('fonts: no empty name, no theme reference, each name once (first real runs, 2026-11-27)', () => {
+  assert.deepEqual(cleanFonts(['+mn-lt', 'Aptos', '', 'Aptos', '+mj-ea', 'Roboto Mono']), ['Aptos', 'Roboto Mono']);
+  const base = { raw: { open: { status: 'not-run' }, fonts: [{ name: 'Yu Gothic', embedded: false }, { name: '', embedded: false }, { name: '+mn-lt', embedded: false }, { name: 'Yu Gothic', embedded: false }, { name: 'Aptos', embedded: true }] }, input: { deck: 'a', variant: 'default', relativePath: 'a.pptx' }, application: { name: 'PowerPoint', version: '16.0' }, system: { os: 'Windows', version: '10' }, opf: OPF, started: '2026-11-27T10:00:00Z', finished: '2026-11-27T10:00:01Z', hashes: { before: 'a'.repeat(64), after: 'a'.repeat(64) } };
+  const { details } = buildResult(base);
+  assert.deepEqual(details.fonts, [{ name: 'Yu Gothic', embedded: false }, { name: 'Aptos', embedded: true }]);
+  assert.deepEqual(details.fontsOmitted, ['', '+mn-lt']);
+  assert.deepEqual(objectsOf({ type: 17, text: 'x', fonts: ['+mn-lt', 'Aptos', 'Aptos'] })[0].fonts, ['Aptos']);
+});
+
+test('Slide.Hyperlinks become the slide\'s details.hyperlinks, never link objects that repeat the round trip\'s', () => {
+  const [slide] = slidesOf({ slides: [{ index: 1, shapes: [{ type: 17, name: 'Box', text: 'linked', textLinks: [] }], hyperlinks: [{ address: 'https://example.com', subAddress: '', type: 0, text: 'linked' }, { address: 'https://example.com/v.mp4', subAddress: '', type: 1, text: '' }, { address: '', subAddress: '', type: 1 }] }] });
+  assert.deepEqual(slide.objects.map((object) => object.kind), ['text']);
+  assert.deepEqual(slide.details.hyperlinks, [
+    { on: 'text', target: 'https://example.com', text: 'linked', address: 'https://example.com', subAddress: '' },
+    { on: 'shape', target: 'https://example.com/v.mp4', address: 'https://example.com/v.mp4', subAddress: '' },
+  ]);
 });
 
 test('the sample slides of the fake are what powerpoint.ps1 writes for a probe (keys it reads)', () => {

@@ -455,3 +455,44 @@ test('--tier candidate builds the release tier and opens the smoke tier and the 
     [false, true],
   );
 });
+
+test('--tier candidate for powerpoint on Windows: the shared selection, then one powerpoint.ps1 run of the selected files (NT-16)', async () => {
+  const { deps, build, lines, out } = await setup();
+  const preview = await picture(40);
+  const { exec, driver } = await powerpointDriver({ defaults: { slides: [{ shapes: [] }, { shapes: [] }], copyInput: true, picture: preview } });
+  const same = exportHashes(deckBytes());
+  const file = (id, slides) => ({ id, sha256: 'a'.repeat(64), open: 'done', slideCount: 2, scores: [0.001, 0.001], classes: 'ss', known: {}, export: { deck: same.deck, slides } });
+  const baseline = {
+    schemaVersion: 1,
+    target: 'powerpoint',
+    application: { name: 'PowerPoint', version: '16.0' },
+    system: { os: 'Windows', version: '10.0.26300' },
+    opf: { version: '0.36.0' },
+    tier: 'release',
+    date: '2026-11-27',
+    settings: { threshold: 0.005, tolerance: 0.002 },
+    counts: { files: 3, slides: { same: 6, 'known-present': 0, 'known-gone': 0, new: 0, 'not-compared': 0 } },
+    warnings: [],
+    files: [file('alpha~default', same.slides), file('beta~default', same.slides), file('beta~native-body', [same.slides[0], 'f'.repeat(16)])],
+  };
+  assert.deepEqual(validateSummary(baseline), { ok: true, errors: [] });
+  mkdirSync(path.join(deps.runsDir, '0.36.0'));
+  writeFileSync(path.join(deps.runsDir, '0.36.0', 'powerpoint.json'), JSON.stringify(baseline));
+  const { exit, report } = await runNative(['powerpoint', '--tier', 'candidate', '--out', out, '--release', '0.37.0'], { ...deps, platform: 'win32', loadDriver: async () => driver });
+  assert.equal(exit, 0, lines.join('\n'));
+  assert.deepEqual(build.calls, [['alpha', 'beta']], 'the whole release tier is built');
+  assert.deepEqual(report.selection.skipped, ['beta~default']);
+  assert.equal(exec.calls.filter(([command]) => /powershell\.exe$/iu.test(command)).length, 1, 'one PowerShell process for the selected files');
+  const plan = JSON.parse(readFileSync(path.join(out, 'run', 'powerpoint-plan.json'), 'utf8'));
+  assert.deepEqual(
+    plan.files.map((item) => item.id),
+    ['alpha~default', 'beta~native-body'],
+  );
+  const run = JSON.parse(readFileSync(path.join(out, 'run', 'run.json'), 'utf8'));
+  assert.deepEqual([run.target, run.tier, run.baseline], ['powerpoint', 'candidate', '0.36.0']);
+  const classified = JSON.parse(readFileSync(path.join(out, 'run', 'classify.json'), 'utf8'));
+  assert.deepEqual(
+    classified.files.find((item) => item.id === 'beta~native-body').slides.map((slide) => slide.changed ?? false),
+    [false, true],
+  );
+});

@@ -105,32 +105,38 @@ export function linkTarget(link) {
   return sub || null;
 }
 
-function linkObject(raw, link, on) {
+function linkFact(link, on) {
   const target = linkTarget(link);
   if (!target) return null;
-  const object = { kind: 'link', outcome: null };
-  if (raw.name) object.name = raw.name;
-  if (link.text && String(link.text).trim()) object.text = cutText(plainText(link.text));
-  object.on = on;
-  object.target = target;
-  const details = { address: link.address ?? '', subAddress: link.subAddress ?? '' };
-  if (link.row !== undefined) Object.assign(details, { row: link.row, column: link.column });
-  object.details = details;
-  return object;
+  const fact = { on, target };
+  if (link.text && String(link.text).trim()) fact.text = cutText(plainText(link.text));
+  Object.assign(fact, { address: link.address ?? '', subAddress: link.subAddress ?? '' });
+  if (link.row !== undefined) Object.assign(fact, { row: link.row, column: link.column });
+  return fact;
 }
 
-/** The link objects a raw shape carries: its click, its text runs', its table cells'. */
+/**
+ * The links a raw shape carries (its click, its text runs', its table cells'), as facts for the object's details.links.
+ * The driver writes no `link` objects: the round-trip step reads every link from PowerPoint's own copy, names it after
+ * the shape that carries it and gives it an outcome (core/roundtrip/outcomes.mjs adds them), so a probe link object could
+ * only repeat one unpaired ("match: none", found in the smoke and release runs of 2026-11-27).
+ */
 export function linksOf(raw) {
   return [
-    ...(raw.click ? [linkObject(raw, raw.click, 'shape')] : []),
-    ...asArray(raw.textLinks).map((link) => linkObject(raw, link, 'text')),
-    ...asArray(raw.cellLinks).map((link) => linkObject(raw, link, 'cell')),
+    ...(raw.click ? [linkFact(raw.click, 'shape')] : []),
+    ...asArray(raw.textLinks).map((link) => linkFact(link, 'text')),
+    ...asArray(raw.cellLinks).map((link) => linkFact(link, 'cell')),
   ].filter(Boolean);
+}
+
+/** A font list as the shared format means it: real names only, each once (no "", no theme reference such as "+mn-lt"). */
+export function cleanFonts(names) {
+  return [...new Set(asArray(names).filter((name) => typeof name === 'string' && name.trim() !== '' && !name.startsWith('+')))];
 }
 
 const finite = (value) => typeof value === 'number' && Number.isFinite(value);
 
-/** One raw shape -> [the object, then its links]. */
+/** One raw shape -> [the object] (an array, so a caller can flatMap the shapes of a slide). */
 export function objectsOf(raw) {
   const kind = kindOf(raw);
   const object = { kind, outcome: null };
@@ -139,7 +145,7 @@ export function objectsOf(raw) {
   object.appClass = SHAPE_TYPES[raw.type] ?? `MsoShapeType ${raw.type}`;
   if ([raw.left, raw.top, raw.width, raw.height].every(finite)) object.box = [raw.left, raw.top, raw.width, raw.height];
   if (kind !== 'table' && kind !== 'group' && hasText(raw)) object.text = cutText(plainText(raw.text));
-  const fonts = [...new Set(asArray(raw.fonts).filter((name) => typeof name === 'string' && name !== ''))];
+  const fonts = cleanFonts(raw.fonts);
   if (fonts.length > 0) object.fonts = fonts;
   if (kind === 'table') {
     if (Number.isInteger(raw.rows)) object.rows = raw.rows;
@@ -159,8 +165,10 @@ export function objectsOf(raw) {
   if (raw.chart) details.chart = raw.chart;
   if (raw.smartArt) Object.assign(details, { layout: raw.smartArt.layout, layoutId: raw.smartArt.layoutId, nodes: raw.smartArt.nodes });
   if (raw.mediaType !== undefined && raw.mediaType !== null) details.mediaType = raw.mediaType;
+  const links = linksOf(raw);
+  if (links.length > 0) details.links = links;
   if (Object.keys(details).length > 0) object.details = details;
-  return [object, ...linksOf(raw)];
+  return [object];
 }
 
 const verbOf = (raw) => {
@@ -171,36 +179,15 @@ const verbOf = (raw) => {
 };
 
 /**
- * The link objects of Slide.Hyperlinks that the per-shape reading did not already report (counted by target, group
- * members included). Slide.Hyperlinks lists every hyperlink of a slide, on shapes (Type 1) and on text (Type 0); the first
- * PowerPoint run (2026-11-27) found links on words only there.
+ * Slide.Hyperlinks as facts for the slide's details.hyperlinks: every hyperlink of the slide, on shapes (Type 1) and on
+ * text (Type 0), as PowerPoint lists it (the per-shape reading found no link on words in the first run). Like linksOf,
+ * facts and not objects: the round-trip step makes the link objects from PowerPoint's copy.
  */
-export function slideLinks(hyperlinks, objects) {
-  const seen = new Map();
-  const count = (list) => {
-    for (const object of list) {
-      if (object.kind === 'link') seen.set(object.target, (seen.get(object.target) ?? 0) + 1);
-      if (object.objects) count(object.objects);
-    }
-  };
-  count(objects);
-  const added = [];
-  for (const link of asArray(hyperlinks)) {
-    if (!link) continue;
-    const target = linkTarget(link);
-    if (!target) continue;
-    if ((seen.get(target) ?? 0) > 0) {
-      seen.set(target, seen.get(target) - 1);
-      continue;
-    }
-    const object = { kind: 'link', outcome: null };
-    if (link.text && String(link.text).trim()) object.text = cutText(plainText(link.text));
-    object.on = link.type === 1 ? 'shape' : 'text';
-    object.target = target;
-    object.details = { address: link.address ?? '', subAddress: link.subAddress ?? '', from: 'Slide.Hyperlinks' };
-    added.push(object);
-  }
-  return added;
+export function slideLinks(hyperlinks) {
+  return asArray(hyperlinks)
+    .filter(Boolean)
+    .map((link) => linkFact(link, link.type === 1 ? 'shape' : 'text'))
+    .filter(Boolean);
 }
 
 /** The slides of a raw file in the shared shape. */
@@ -208,7 +195,6 @@ export function slidesOf(raw) {
   return asArray(raw.slides).map((slide) => {
     const notes = typeof slide.notes === 'string' && slide.notes.trim() !== '' ? plainText(slide.notes) : null;
     const objects = asArray(slide.shapes).flatMap(objectsOf);
-    objects.push(...slideLinks(slide.hyperlinks, objects));
     if (notes) objects.push({ kind: 'notes', outcome: null, text: cutText(notes) });
     const details = {};
     if (slide.id !== undefined && slide.id !== null) details.slideId = slide.id;
@@ -216,6 +202,8 @@ export function slidesOf(raw) {
       .filter((shape) => shape.placeholder)
       .map((shape) => ({ name: shape.name, type: PLACEHOLDER_TYPES[shape.placeholder.type] ?? shape.placeholder.type ?? null }));
     if (placeholders.length > 0) details.placeholders = placeholders;
+    const hyperlinks = slideLinks(slide.hyperlinks);
+    if (hyperlinks.length > 0) details.hyperlinks = hyperlinks;
     if (slide.probeError) details.probeError = String(slide.probeError);
     return {
       index: slide.index,
@@ -282,7 +270,17 @@ export function buildResult({ raw, input, application, system, opf, fonts = 'ins
   }
   const details = { driver: 'powerpoint.ps1: PowerPoint over COM, read-only, no window' };
   if (raw.slideSize) details.slideSize = raw.slideSize;
-  if (raw.fonts) details.fonts = asArray(raw.fonts);
+  if (raw.fonts) {
+    // Presentation.Fonts lists "" and theme references ("+mn-lt", from SmartArt data parts) and may repeat a name
+    // (coverage-languages: "Yu Gothic" twice); details.fonts keeps each real name once, in PowerPoint's order, with
+    // whether it is embedded, and details.fontsOmitted what was left out.
+    const all = asArray(raw.fonts).filter(Boolean);
+    const keep = new Set(cleanFonts(all.map((font) => font.name)));
+    const seen = new Set();
+    details.fonts = all.filter((font) => keep.has(font.name) && !seen.has(font.name) && seen.add(font.name));
+    const omitted = [...new Set(all.map((font) => font.name).filter((name) => !keep.has(name)))];
+    if (omitted.length > 0) details.fontsOmitted = omitted;
+  }
   details.close = verbOf(raw.close);
   details.sha256 = { node: hashes, powershell: { before: raw.sha256Before ?? null, after: raw.sha256After ?? null } };
   if (raw.excelSeen) details.excelSeen = true;

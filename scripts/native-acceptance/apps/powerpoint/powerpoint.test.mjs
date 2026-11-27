@@ -253,7 +253,7 @@ test('self-test end to end: the Node driver starts the real script once (fake CO
   writeFileSync(input, 'deck');
   const scenario = path.join(root, 'scenario.json');
   const withLinks = sampleSlides();
-  // Slide.Hyperlinks repeats the cell link the probe found and adds one on words the per-shape reading missed.
+  // Slide.Hyperlinks lists the cell link the probe found and one on words the per-shape reading missed.
   withLinks[0].hyperlinks = [
     { address: 'https://example.com/pro', subAddress: '', type: 0, text: 'Pro' },
     { address: 'https://example.com/words', subAddress: '', type: 0, text: 'these words' },
@@ -270,8 +270,14 @@ test('self-test end to end: the Node driver starts the real script once (fake CO
   assert.equal(result.file.unchangedAfterRun, true);
   assert.equal(result.verbs.edits.length, 7);
   assert.ok(result.verbs.edits.every((edit) => edit.status === 'done'));
-  assert.deepEqual(result.slides[0].objects.map((object) => object.kind), ['title', 'table', 'link', 'link']);
-  assert.deepEqual(result.slides[0].objects[3], { kind: 'link', outcome: null, text: 'these words', on: 'text', target: 'https://example.com/words', details: { address: 'https://example.com/words', subAddress: '', from: 'Slide.Hyperlinks' } });
+  assert.deepEqual(result.slides[0].objects.map((object) => object.kind), ['title', 'table']);
+  assert.deepEqual(
+    result.slides[0].details.hyperlinks.map((link) => [link.on, link.target, link.text]),
+    [
+      ['text', 'https://example.com/pro', 'Pro'],
+      ['text', 'https://example.com/words', 'these words'],
+    ],
+  );
   assert.equal(result.application.version, '16.0');
   assert.deepEqual(result.details.powerpoint, { ids: [4242], quit: true, exited: true, exitSeconds: 0.5, left: [], mayBeLeft: false });
   assert.equal(done.summary, 'PowerPoint quit and POWERPNT.EXE 4242 exited after 0.5 s');
