@@ -15,7 +15,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { collectLocations, createWalker, defaultLayoutIds, LAYOUT_LOCATION, label } from '../../../check-format-coverage.mjs';
 import { sameExport } from '../classify/classify.mjs';
-import { decksForTier, sourcesForTier, TIERS } from '../../qualification/tiers.mjs';
+import { decksForTier, sourceDecks, sourcesForTier, TIERS } from '../../qualification/tiers.mjs';
 import { fileId } from '../result/result.mjs';
 
 export const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -246,9 +246,9 @@ export function exampleDecks(manifest, root = ROOT, read = (source) => readDeck(
 }
 
 /**
- * The files and slides a tier opens per application: the corpus files plus the sources that can be counted from the
- * repository (examples; gallery layouts at three sizes, one slide per layout). A source that has no decks in the
- * repository yet (languages) or depends on a release's fragments (native-fragments) is listed in `notModeled`.
+ * The files and slides a tier opens per application: the files of decksForTier (the corpus plus the decks of the sources
+ * that are groups of manifest decks: gallery-layouts, languages) plus the examples. A source that depends on a release's
+ * fragments (native-fragments) is listed in `notModeled`.
  */
 export function tierSize(units, inputs, tier) {
   const corpus = filesForTier(units, inputs.manifest, tier);
@@ -263,12 +263,7 @@ export function tierSize(units, inputs, tier) {
       parts.push(part);
       files += part.files;
       slides += part.slides;
-    } else if (source === 'gallery-layouts') {
-      const part = { name: 'gallery-layouts', files: 3, slides: 3 * inputs.layoutIds.length };
-      parts.push(part);
-      files += part.files;
-      slides += part.slides;
-    } else notModeled.push(source);
+    } else if (sourceDecks(inputs.manifest, source).length === 0) notModeled.push(source);
   }
   return { tier, files, slides, parts, notModeled };
 }

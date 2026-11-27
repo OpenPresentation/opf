@@ -1,0 +1,220 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "Languages: lang-rtl",
+ "description": "Article 1 of the UDHR per language tag, to see which font each default language gets.",
+ "language": "en-US",
+ "slides": [
+  {
+   "language": "ar",
+   "title": "ar · Arabic · Arab · expects Times New Roman / Arial",
+   "blocks": [
+    {
+     "text": "يولد جميع الناس أحرارًا متساوين في الكرامة والحقوق. وقد وهبوا عقلاً وضميرًا وعليهم أن يعامل بعضهم بعضًا بروح الإخاء.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "يولد جميع الناس",
+      "أحرارًا متساوين في",
+      "الكرامة والحقوق وقد"
+     ]
+    },
+    {
+     "table": {
+      "columns": [
+       "يولد",
+       "جميع",
+       "الناس"
+      ],
+      "rows": [
+       [
+        "أحرارًا",
+        "متساوين",
+        "في"
+       ],
+       [
+        "الكرامة",
+        "والحقوق",
+        "وقد"
+       ]
+      ]
+     }
+    },
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "يولد",
+        "Value"
+       ],
+       "rows": [
+        [
+         "جميع",
+         3
+        ],
+        [
+         "الناس",
+         5
+        ],
+        [
+         "أحرارًا",
+         4
+        ]
+       ]
+      }
+     }
+    }
+   ],
+   "notes": "ar; expected default font: Times New Roman / Arial"
+  },
+  {
+   "language": "he",
+   "title": "he · Hebrew · Hebr · expects Segoe UI",
+   "blocks": [
+    {
+     "text": "כל בני אדם נולדו בני חורין ושווים בערכם ובזכויותיהם. כולם חוננו בתבונה ובמצפון, לפיכך חובה עליהם לנהוג איש ברעהו ברוח של אחוה.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "כל בני אדם",
+      "נולדו בני חורין",
+      "ושווים בערכם ובזכויותיהם"
+     ]
+    },
+    {
+     "table": {
+      "columns": [
+       "כל",
+       "בני",
+       "אדם"
+      ],
+      "rows": [
+       [
+        "נולדו",
+        "בני",
+        "חורין"
+       ],
+       [
+        "ושווים",
+        "בערכם",
+        "ובזכויותיהם"
+       ]
+      ]
+     }
+    },
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "כל",
+        "Value"
+       ],
+       "rows": [
+        [
+         "בני",
+         3
+        ],
+        [
+         "אדם",
+         5
+        ],
+        [
+         "נולדו",
+         4
+        ]
+       ]
+      }
+     }
+    }
+   ],
+   "notes": "he; expected default font: Segoe UI"
+  },
+  {
+   "language": "ps",
+   "title": "ps · Pashto · Arab · expects Times New Roman / Arial",
+   "blocks": [
+    {
+     "text": "د بشر ټول افراد ازاد نړۍ ته راځي او د حيثيت او د حقوقو له پلوه سره برابر دي۔ ټول د عقل او وجدان خاوندان دي او بايد يو له بل سره د ورورۍ په روحيه سره چلنند کړي۔\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "د بشر ټول",
+      "افراد ازاد نړۍ",
+      "ته راځي او"
+     ]
+    }
+   ],
+   "notes": "ps; expected default font: Times New Roman / Arial"
+  },
+  {
+   "language": "fa",
+   "title": "fa · Persian · Arab · expects Times New Roman / Arial",
+   "blocks": [
+    {
+     "text": "تمام افراد بشر آزاد به دنیا می‌آیند و از لحاظ حیثیت و حقوق با هم برابرند. همه دارای عقل و وجدان هستند و باید نسبت به یکدیگر با روح برادری رفتار کنند.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "تمام افراد بشر",
+      "آزاد به دنیا",
+      "می‌آیند و از"
+     ]
+    }
+   ],
+   "notes": "fa; expected default font: Times New Roman / Arial"
+  },
+  {
+   "language": "pa-Arab",
+   "title": "pa-Arab · Punjabi (Shahmukhi) · Arab · expects Times New Roman / Arial",
+   "blocks": [
+    {
+     "text": "سارے انسان آزاد تے حقوق تے عزت دے لحاظ نال برابر پیدا ہوندے نیں ۔ ۔ اوہ عقل سمجھ تے چنگے مندے دی پچھان تے احساس رکھدے نے ایس واسطے اوہناں نوں اک دوجے نال بھائی چارے والا سلوک کرنا چاہی دا اے ۔ ۔\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "سارے انسان آزاد",
+      "تے حقوق تے",
+      "عزت دے لحاظ"
+     ]
+    }
+   ],
+   "notes": "pa-Arab; expected default font: Times New Roman / Arial"
+  },
+  {
+   "language": "ur",
+   "title": "ur · Urdu · Arab · expects Times New Roman / Arial",
+   "blocks": [
+    {
+     "text": "تمام انسان آزاد اور حقوق و عزت کے اعتبار سے برابر پیدا ہوئے ہیں۔ انہیں ضمیر اور عقل ودیعت ہوئی ہے۔ اس لئے انہیں ایک دوسرے کے ساتھ بھائی چارے کا سلوک کرنا چاہیئے۔\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "تمام انسان آزاد",
+      "اور حقوق و",
+      "عزت کے اعتبار"
+     ]
+    }
+   ],
+   "notes": "ur; expected default font: Times New Roman / Arial"
+  }
+ ]
+}

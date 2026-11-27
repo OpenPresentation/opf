@@ -137,3 +137,24 @@ test('units on one slide count a deck slide once across its variants', () => {
   assert.deepEqual([...bySlide.get('schema:Slide.kind = "chart"')], ['a#2']);
   assert.equal(bySlide.get('schema:title').size, 2, 'a deck-level unit is on every slide of the deck');
 });
+
+test('(a) and (d) see the decks a tier takes from a source that is a group of manifest decks (NT-10), each once', () => {
+  const grouped = {
+    ...manifest,
+    sources: { stress: 'Stress decks.', examples: 'Every example deck.' },
+    tiers: {
+      ...manifest.tiers,
+      release: { decks: 'all', variants: 'all', sources: [{ source: 'stress', decks: [{ deck: 'c' }] }] },
+      full: { decks: 'all', variants: 'all', sources: ['stress'] },
+    },
+    decks: [manifest.decks[0], manifest.decks[1], { ...manifest.decks[2], group: 'stress' }],
+  };
+  const groupedInputs = inputs({ manifest: grouped, known: { keynote: [record('kn-c', [{ deck: 'c', slide: 1 }])] } });
+  const units = computeUnits(groupedInputs);
+  assert.deepEqual(filesForTier(units, grouped, 'release').map((file) => file.id), ['a~default', 'a~native-body', 'b~default', 'c~default']);
+  assert.deepEqual(tierSize(units, groupedInputs, 'full'), { tier: 'full', files: 4, slides: 8, parts: [{ name: 'corpus', files: 4, slides: 8 }], notModeled: [] });
+  assert.deepEqual(checkKnownPlaces(units, groupedInputs, { records: [] }).failing, []);
+  const withoutSource = { ...grouped, tiers: { ...grouped.tiers, release: { decks: 'all', variants: 'all' } } };
+  const missing = inputs({ manifest: withoutSource, known: groupedInputs.known });
+  assert.deepEqual(checkKnownPlaces(computeUnits(missing), missing, { records: [] }).failing.map((item) => item.id ?? item), ['kn-c']);
+});

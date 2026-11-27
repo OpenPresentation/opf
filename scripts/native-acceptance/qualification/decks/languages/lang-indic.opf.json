@@ -1,0 +1,254 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "Languages: lang-indic",
+ "description": "Article 1 of the UDHR per language tag, to see which font each default language gets.",
+ "language": "en-US",
+ "slides": [
+  {
+   "language": "bn",
+   "title": "bn · Bengali · Beng · expects Nirmala UI",
+   "blocks": [
+    {
+     "text": "সমস্ত মানুষ স্বাধীনভাবে সমান মর্যাদা এবং অধিকার নিয়ে জন্মগ্রহণ করে। তাঁদের বিবেক এবং বুদ্ধি আছে; সুতরাং সকলেরই একে অপরের প্রতি ভ্রাতৃত্বসুলভ মনোভাব নিয়ে আচরণ করা উচিত।\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "সমস্ত মানুষ স্বাধীনভাবে",
+      "সমান মর্যাদা এবং",
+      "অধিকার নিয়ে জন্মগ্রহণ"
+     ]
+    }
+   ],
+   "notes": "bn; expected default font: Nirmala UI"
+  },
+  {
+   "language": "gu",
+   "title": "gu · Gujarati · Gujr · expects Nirmala UI",
+   "blocks": [
+    {
+     "text": "પ્રતિષ્ઠા અને અધિકારોની દૃષ્ટિએ સર્વ માનવો જન્મથી સ્વતંત્ર અને સમાન હોય છે. તેમનામાં વિચારશક્તિ અને અંતઃકરણ હોય છે અને તેમણે પરસ્પર બંધુત્વની ભાવનાથી વર્તવું જોઇએ.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "પ્રતિષ્ઠા અને અધિકારોની",
+      "દૃષ્ટિએ સર્વ માનવો",
+      "જન્મથી સ્વતંત્ર અને"
+     ]
+    }
+   ],
+   "notes": "gu; expected default font: Nirmala UI"
+  },
+  {
+   "language": "hi",
+   "title": "hi · Hindi · Deva · expects Nirmala UI",
+   "blocks": [
+    {
+     "text": "सभी मनुष्यों को गौरव और अधिकारों के मामले में जन्मजात स्वतन्त्रता और समानता प्राप्त है । उन्हें बुद्धि और अन्तरात्मा की देन प्राप्त है और परस्पर उन्हें भाईचारे के भाव से बर्ताव करना चाहिए ।\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "सभी मनुष्यों को",
+      "गौरव और अधिकारों",
+      "के मामले में"
+     ]
+    },
+    {
+     "table": {
+      "columns": [
+       "सभी",
+       "मनुष्यों",
+       "को"
+      ],
+      "rows": [
+       [
+        "गौरव",
+        "और",
+        "अधिकारों"
+       ],
+       [
+        "के",
+        "मामले",
+        "में"
+       ]
+      ]
+     }
+    },
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "सभी",
+        "Value"
+       ],
+       "rows": [
+        [
+         "मनुष्यों",
+         3
+        ],
+        [
+         "को",
+         5
+        ],
+        [
+         "गौरव",
+         4
+        ]
+       ]
+      }
+     }
+    }
+   ],
+   "notes": "hi; expected default font: Nirmala UI"
+  },
+  {
+   "language": "kn",
+   "title": "kn · Kannada · Knda · expects Nirmala UI",
+   "blocks": [
+    {
+     "text": "ಎಲ್ಲಾ ಮಾನವರೂ ಸ್ವತಂತ್ರರಾಗಿಯೇ ಜನಿಸಿದ್ದಾರೆ. ಹಾಗೂ ಘನತೆ ಮತ್ತು ಹಕ್ಕುಗಳಲ್ಲಿ ಸಮಾನರಾಗಿದ್ದಾರೆ. ವಿವೇಕ ಮತ್ತು ಅಂತಃಕರಣಗಳನ್ನು ಪಡೆದವರಾದ್ದರಿಂದ ಅವರು ಪರಸ್ಪರ ಸಹೋದರ ಭಾವದಿಂದ ವರ್ತಿಸಬೇಕು.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "ಎಲ್ಲಾ ಮಾನವರೂ ಸ್ವತಂತ್ರರಾಗಿಯೇ",
+      "ಜನಿಸಿದ್ದಾರೆ ಹಾಗೂ ಘನತೆ",
+      "ಮತ್ತು ಹಕ್ಕುಗಳಲ್ಲಿ ಸಮಾನರಾಗಿದ್ದಾರೆ"
+     ]
+    }
+   ],
+   "notes": "kn; expected default font: Nirmala UI"
+  },
+  {
+   "language": "ml",
+   "title": "ml · Malayalam · Mlym · expects Nirmala UI",
+   "blocks": [
+    {
+     "text": "മനുഷ്യരെല്ലാവരും തുല്യാവകാശങ്ങളോടും അന്തസ്സോടും സ്വാതന്ത്ര്യത്തോടുംകൂടി ജനിച്ചിട്ടുള്ളവരാണ്‌. അന്യോന്യം ഭ്രാതൃഭാവത്തോടെ പെരുമാറുവാനാണ്‌ മനുഷ്യന്നു വിവേകബുദ്ധിയും മനസ്സാക്ഷിയും സിദ്ധമായിരിക്കുന്നത്‌.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "മനുഷ്യരെല്ലാവരും തുല്യാവകാശങ്ങളോടും അന്തസ്സോടും",
+      "സ്വാതന്ത്ര്യത്തോടുംകൂടി ജനിച്ചിട്ടുള്ളവരാണ്‌ അന്യോന്യം",
+      "ഭ്രാതൃഭാവത്തോടെ പെരുമാറുവാനാണ്‌ മനുഷ്യന്നു"
+     ]
+    }
+   ],
+   "notes": "ml; expected default font: Nirmala UI"
+  },
+  {
+   "language": "mr",
+   "title": "mr · Marathi · Deva · expects Nirmala UI",
+   "blocks": [
+    {
+     "text": "सर्व मानवी व्यक्ति जन्मतःच स्वतंत्र आहेत व त्यांना समान प्रतिष्ठा व समान अधिकार आहेत. त्यांना विचारशक्ति व सदसविद्वेकबुद्धि लाभलेली आहे. व त्यांनी एकमेकांशी बंधुत्याच्या भावनेने आचरण करावे.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "सर्व मानवी व्यक्ति",
+      "जन्मतःच स्वतंत्र आहेत",
+      "व त्यांना समान"
+     ]
+    }
+   ],
+   "notes": "mr; expected default font: Nirmala UI"
+  },
+  {
+   "language": "ne",
+   "title": "ne · Nepali · Deva · expects Nirmala UI",
+   "blocks": [
+    {
+     "text": "सबै व्यक्ति हरू जन्मजात स्वतन्त्र हुन ती सबैको समान अधिकार र महत्व छ। निजहरूमा विचार शक्ति र सद्धिचार भएकोले निजहरूले आपसमा भातृत्वको भावना बाट व्यवहार गर्नु पर्छ।\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "सबै व्यक्ति हरू",
+      "जन्मजात स्वतन्त्र हुन",
+      "ती सबैको समान"
+     ]
+    }
+   ],
+   "notes": "ne; expected default font: Nirmala UI"
+  },
+  {
+   "language": "pa-Guru",
+   "title": "pa-Guru · Punjabi (Gurmukhi) · Guru · expects Nirmala UI",
+   "blocks": [
+    {
+     "text": "ਸਾਰਾ ਮਨੁੱਖੀ ਪਰਿਵਾਰ ਆਪਣੀ ਮਹਿਮਾ, ਸ਼ਾਨ ਅਤੇ ਹੱਕਾਂ ਦੇ ਪੱਖੋਂ ਜਨਮ ਤੋਂ ਹੀ ਆਜ਼ਾਦ ਹੈ ਅਤੇ ਸੁਤੇ ਸਿੱਧ ਸਾਰੇ ਲੋਕ ਬਰਾਬਰ ਹਨ । ਉਨ੍ਹਾਂ ਸਭਨਾ ਨੂੰ ਤਰਕ ਅਤੇ ਜ਼ਮੀਰ ਦੀ ਸੌਗਾਤ ਮਿਲੀ ਹੋਈ ਹੈ ਅਤੇ ਉਨ੍ਹਾਂ ਨੂੰ ਭਰਾਤਰੀਭਾਵ ਦੀ ਭਾਵਨਾ ਰਖਦਿਆਂ ਆਪਸ ਵਿਚ ਵਿਚਰਣਾ ਚਾਹੀਦਾ ਹੈ ।\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "ਸਾਰਾ ਮਨੁੱਖੀ ਪਰਿਵਾਰ",
+      "ਆਪਣੀ ਮਹਿਮਾ ਸ਼ਾਨ",
+      "ਅਤੇ ਹੱਕਾਂ ਦੇ"
+     ]
+    }
+   ],
+   "notes": "pa-Guru; expected default font: Nirmala UI"
+  },
+  {
+   "language": "ta",
+   "title": "ta · Tamil · Taml · expects Nirmala UI",
+   "blocks": [
+    {
+     "text": "மனிதப் பிறிவியினர் சகலரும் சுதந்திரமாகவே பிறக்கின்றனர்; அவர்கள் மதிப்பிலும், உரிமைகளிலும் சமமானவர்கள், அவர்கள் நியாயத்தையும் மனச்சாட்சியையும் இயற்பண்பாகப் பெற்றவர்கள். அவர்கள் ஒருவருடனொருவர் சகோதர உணர்வுப் பாங்கில் நடந்துகொள்ளல் வேண்டும்.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "மனிதப் பிறிவியினர் சகலரும்",
+      "சுதந்திரமாகவே பிறக்கின்றனர் அவர்கள்",
+      "மதிப்பிலும் உரிமைகளிலும் சமமானவர்கள்"
+     ]
+    }
+   ],
+   "notes": "ta; expected default font: Nirmala UI"
+  },
+  {
+   "language": "te",
+   "title": "te · Telugu · Telu · expects Nirmala UI",
+   "blocks": [
+    {
+     "text": "ప్రతిపత్తిస్వత్వముల విషయమున మానవులెల్లరును జన్మతః స్వతంత్రులును సమానులును నగుదురు. వారు వివేచన-అంతఃకరణ సంపన్నులగుటచే పరస్పరము భ్రాతృభావముతో వర్తింపవలయును.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "ప్రతిపత్తిస్వత్వముల విషయమున మానవులెల్లరును",
+      "జన్మతః స్వతంత్రులును సమానులును",
+      "నగుదురు వారు వివేచన-అంతఃకరణ"
+     ]
+    }
+   ],
+   "notes": "te; expected default font: Nirmala UI"
+  }
+ ]
+}

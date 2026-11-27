@@ -1,0 +1,94 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "Languages: lang-southeast-asia",
+ "description": "Article 1 of the UDHR per language tag, to see which font each default language gets.",
+ "language": "en-US",
+ "slides": [
+  {
+   "language": "km",
+   "title": "km · Khmer · Khmr · expects Leelawadee UI",
+   "blocks": [
+    {
+     "text": "មនុស្សទាំងអស់ កើតមកមានសេរីភាព និងសមភាព ក្នុងផ្នែកសេចក្ដីថ្លៃថ្នូរនិងសិទ្ធិ។ មនុស្ស មានវិចារណញ្ញាណនិងសតិសម្បជញ្ញៈជាប់ពីកំណើត ហើយគប្បីប្រព្រឹត្ដចំពោះគ្នាទៅវិញទៅមកក្នុងស្មារតីភាតរភាពជាបងប្អូន។\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "មនុស្សទាំងអស់កើតមក",
+      "មានសេរីភាពនិងសមភាព",
+      "ក្នុងផ្នែកសេចក្ដីថ្លៃថ្នូរ"
+     ]
+    }
+   ],
+   "notes": "km; expected default font: Leelawadee UI"
+  },
+  {
+   "language": "th",
+   "title": "th · Thai · Thai · expects Leelawadee UI",
+   "blocks": [
+    {
+     "text": "มนุษย์ทั้งหลายเกิดมามีอิสระและเสมอภาคกันในเกียรติศักด[เกียรติศักดิ์]และสิทธิ ต่างมีเหตุผลและมโนธรรม และควรปฏิบัติต่อกันด้วยเจตนารมณ์แห่งภราดรภาพ\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "มนุษย์ทั้งหลาย",
+      "เกิดมามีอิสระและ",
+      "เสมอภาคกันในเกีย"
+     ]
+    },
+    {
+     "table": {
+      "columns": [
+       "มนุษย์",
+       "ทั้ง",
+       "หลาย"
+      ],
+      "rows": [
+       [
+        "เกิด",
+        "มา",
+        "มี"
+       ],
+       [
+        "อิสระ",
+        "และ",
+        "เสมอ"
+       ]
+      ]
+     }
+    },
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "มนุษย์",
+        "Value"
+       ],
+       "rows": [
+        [
+         "ทั้ง",
+         3
+        ],
+        [
+         "หลาย",
+         5
+        ],
+        [
+         "เกิด",
+         4
+        ]
+       ]
+      }
+     }
+    }
+   ],
+   "notes": "th; expected default font: Leelawadee UI"
+  }
+ ]
+}

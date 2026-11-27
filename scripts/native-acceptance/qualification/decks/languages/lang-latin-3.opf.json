@@ -1,0 +1,188 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "Languages: lang-latin-3",
+ "description": "Article 1 of the UDHR per language tag, to see which font each default language gets.",
+ "language": "en-US",
+ "slides": [
+  {
+   "language": "sw",
+   "title": "sw · Swahili · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Watu wote wamezaliwa huru, hadhi na haki zao ni sawa. Wote wamejaliwa akili na dhamiri, hivyo yapasa watendeane kindugu.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Watu wote wamezaliwa",
+      "huru hadhi na",
+      "haki zao ni"
+     ]
+    }
+   ],
+   "notes": "sw; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "sv",
+   "title": "sv · Swedish · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Alla människor äro födda fria och lika i värde och rättigheter. De äro utrustade med förnuft och samvete och böra handla gentemot varandra i en anda av broderskap.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Alla människor äro",
+      "födda fria och",
+      "lika i värde"
+     ]
+    }
+   ],
+   "notes": "sv; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "tl",
+   "title": "tl · Tagalog · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Ang lahat ng tao'y isinilang na malaya at pantay-pantay sa karangalan at mga karapatan. Sila'y pinagkalooban ng katwiran at budhi at dapat magpalagayan ang isa't isa sa diwa ng pagkakapatiran.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Ang lahat ng",
+      "tao'y isinilang na",
+      "malaya at pantay-pantay"
+     ]
+    }
+   ],
+   "notes": "tl; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "tr",
+   "title": "tr · Turkish · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Bütün insanlar hür, haysiyet ve haklar bakımından eşit doğarlar. Akıl ve vicdana sahiptirler ve birbirlerine karşı kardeşlik zihniyeti ile hareket etmelidirler.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Bütün insanlar hür",
+      "haysiyet ve haklar",
+      "bakımından eşit doğarlar"
+     ]
+    }
+   ],
+   "notes": "tr; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "uz-Latn",
+   "title": "uz-Latn · Uzbek (Latin) · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Barcha odamlar erkin, qadr‐qimmat va huquqlarda teng boʻlib tugʻiladilar. Ular aql va vijdon sohibidirlar va bir‐birlariga birodarlarcha muomala qilishlari zarur.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Barcha odamlar erkin",
+      "qadr‐qimmat va huquqlarda",
+      "teng boʻlib tugʻiladilar"
+     ]
+    }
+   ],
+   "notes": "uz-Latn; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "vi-Latn",
+   "title": "vi-Latn · Vietnamese (Quốc Ngữ) · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Tất cả mọi người sinh ra đều được tự do và bình đẳng về nhân phẩm và quyền. Mọi con người đều được tạo hoá ban cho lý trí và lương tâm và cần phải đối xử với nhau trong tình bằng hữu.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Tất cả mọi",
+      "người sinh ra",
+      "đều được tự"
+     ]
+    }
+   ],
+   "notes": "vi-Latn; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "xh",
+   "title": "xh · Xhosa · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Bonke abantu bazalwa bekhululekile belingana ngesidima nangokweemfanelo. Bonke abantu banesiphiwo sesazela nesizathu sokwenza isenzo ongathanda ukuba senziwe kumzalwane wakho.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Bonke abantu bazalwa",
+      "bekhululekile belingana ngesidima",
+      "nangokweemfanelo Bonke abantu"
+     ]
+    }
+   ],
+   "notes": "xh; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "yo",
+   "title": "yo · Yoruba · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Gbogbo ènìyàn ni a bí ní òmìnira; iyì àti ẹ̀tọ́ kọ̀ọ̀kan sì dọ́gba. Wọ́n ní ẹ̀bùn ti làákàyè àti ti ẹ̀rí‐ọkàn, ó sì yẹ kí wọn ó máa hùwà sí ara wọn gẹ́gẹ́ bí ọmọ ìyá.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Gbogbo ènìyàn ni",
+      "a bí ní",
+      "òmìnira iyì àti"
+     ]
+    }
+   ],
+   "notes": "yo; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "zu",
+   "title": "zu · Zulu · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Bonke abantu bazalwa bekhululekile belingana ngesithunzi nangamalungelo. Bahlanganiswe wumcabango nangunembeza futhi kufanele baphathane ngomoya wobunye.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Bonke abantu bazalwa",
+      "bekhululekile belingana ngesithunzi",
+      "nangamalungelo Bahlanganiswe wumcabango"
+     ]
+    }
+   ],
+   "notes": "zu; expected default font: Aptos Display / Aptos"
+  }
+ ]
+}

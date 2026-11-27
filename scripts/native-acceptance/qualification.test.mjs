@@ -146,7 +146,7 @@ test('qualification: the tiers are smoke, release and full, and every deck, vari
   assert.deepEqual(Object.keys(manifest.tiers).sort(), [...TIERS].sort());
   const ids = new Set(manifest.decks.map((deck) => deck.id));
   const smoke = manifest.tiers.smoke;
-  assert.ok(Array.isArray(smoke.decks) && smoke.decks.length >= 8 && smoke.decks.length <= 12, 'about ten smoke decks');
+  assert.ok(Array.isArray(smoke.decks) && smoke.decks.length >= 8 && smoke.decks.length <= 14, 'about a dozen smoke decks');
   for (const entry of smoke.decks) {
     assert.ok(ids.has(entry.deck), `smoke: deck ${entry.deck}`);
     assert.ok(typeof entry.why === 'string' && entry.why.length > 20, `smoke: ${entry.deck} says why it is in`);
@@ -168,7 +168,11 @@ test('qualification: decksForTier applies the variant rules', () => {
   assert.deepEqual(smoke.find((entry) => entry.deck === 'footers').variants, ['default', 'static'], 'a smoke entry names its variants');
   assert.deepEqual(smoke.find((entry) => entry.deck === 'smartart').variants, ['default'], 'otherwise the tier rule: default only');
   const release = decksForTier(manifest, 'release');
-  assert.deepEqual(release.map((entry) => entry.deck), manifest.decks.map((deck) => deck.id));
+  const corpus = manifest.decks.filter((deck) => !deck.group).map((deck) => deck.id);
+  assert.deepEqual(release.slice(0, corpus.length).map((entry) => entry.deck), corpus, 'release starts with the corpus: every deck without a group');
+  const fromSources = manifest.tiers.release.sources.flatMap((item) => item.decks.map((one) => [one.deck, one.variants ?? null]));
+  assert.deepEqual(release.slice(corpus.length).map((entry) => entry.deck), fromSources.map(([deck]) => deck), 'then the source decks it names');
+  assert.deepEqual(release.find((entry) => entry.deck === 'lang-cjk').variants, ['native-body'], 'a source deck entry names its variants');
   assert.deepEqual(release.find((entry) => entry.deck === 'diagrams').variants, ['default', 'picture']);
   assert.deepEqual(release.find((entry) => entry.deck === 'columns').variants, ['default']);
   assert.throws(() => decksForTier(manifest, 'nightly'), /unknown tier/);

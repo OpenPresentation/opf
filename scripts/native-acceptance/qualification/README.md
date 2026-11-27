@@ -48,19 +48,41 @@ Mac has a slot in the result format (`powerpoint-mac`) and no driver yet. `check
 ## Tiers
 
 `tiers` says which decks a run takes; `qualification/tiers.mjs` reads it (`decksForTier(manifest, tier)` returns
-`[{ deck, variants }]`, `sourcesForTier` the named sources):
+`[{ deck, variants }]`, `sourcesForTier` the named sources, `sourceDecks` the manifest decks a source stands for):
 
 | Tier | Decks | Variants |
 | --- | --- | --- |
 | `smoke` | the decks listed in `tiers.smoke.decks`, each with a `why`, plus the source `native-fragments` | `default`, unless an entry lists its `variants` |
-| `release` | `"all"`: every deck of `decks` | `"all"`: every variant a deck lists |
-| `full` | `"all"`, plus the sources `examples`, `gallery-layouts` and `languages` | `"all"` |
+| `release` | `"all"`: the corpus, every deck of `decks` without a `group`; plus the source decks `tiers.release.sources` names, each with a `why` | `"all"`: every variant a deck lists, unless a source deck entry lists its `variants` |
+| `full` | `"all"`, plus every deck of the sources `gallery-layouts` and `languages`, plus the source `examples` | `"all"` |
 
 The smoke decks together show every object kind of the result format but `media` (OPF writes no video or audio), a hidden slide, a right-to-left slide,
 a chart of each family Keynote reads differently, and every place of an open known difference graded `wrong` in OPF's own
 file or importer; a test fails when a change to the tier or the features loses one of these. `sources` names what the
 runner builds or collects beyond the corpus (the decks a changelog fragment's `native:` key names, every example, the gallery
-layouts at three content sizes, the language decks); they are names the runner resolves, not file lists.
+layouts at three content sizes, the language decks). `gallery-layouts` and `languages` are groups of manifest decks (a deck's
+`group`); `native-fragments` and `examples` are names the runner resolves, and it cannot collect `examples` yet.
+
+### Stress decks and known differences
+
+Every record of `known/keynote.json` whose `where` names a place must have one place the release tier runs
+(NT-12's rule (a), `pnpm check:native-coverage`; a place's variant `native` is the corpus's `native-body`, as in `core/classify/`). Most
+records come from content stress, not from a format key: long names, many entries, mixed directions. So the corpus keeps the
+stress decks of the 0.36.0 Keynote round under their recorded ids, which the records and the baseline
+(`runs/0.36.0/keynote.json`) name with the same slide numbers:
+
+- `decks/m-*.opf.json`: hand-written decks from changelog rows (charts, negative bars, agendas, flush text left to right and
+  right to left). Each `description` says what it stresses and which records only it carries.
+- `decks/layouts/`: every default gallery layout at three content sizes (`layouts-little`, `layouts-ordinary`,
+  `layouts-lots`, group `gallery-layouts`), with their pictures in `decks/layouts/assets/`.
+- `decks/languages/`: Article 1 of the Universal Declaration of Human Rights per language tag, one deck per script group
+  (`lang-*`, group `languages`).
+
+The layout and language decks are committed as the round generated them, not generated here: the layout content is written
+per layout, and the language texts were read from the Unicode UDHR files, which are no longer served. Keep a deck's slide
+order: a new slide goes at the end, and a changed slide moves its records' `where`. When the gallery gains a layout, add a
+slide at the end of all three layout decks. A record whose places are all outside the release tier fails the test: add its
+deck to `tiers.release.sources` (a source deck) or to the corpus.
 
 ## Targets
 

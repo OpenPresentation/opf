@@ -1,0 +1,488 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "Languages: lang-latin-1",
+ "description": "Article 1 of the UDHR per language tag, to see which font each default language gets.",
+ "language": "en-US",
+ "slides": [
+  {
+   "language": "af",
+   "title": "af · Afrikaans · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Alle menslike wesens word vry, met gelyke waardigheid en regte, gebore. Hulle het rede en gewete en behoort in die gees van broederskap teenoor mekaar op te tree.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Alle menslike wesens",
+      "word vry met",
+      "gelyke waardigheid en"
+     ]
+    }
+   ],
+   "notes": "af; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "sq",
+   "title": "sq · Albanian · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Të gjithë njerëzit lindin të lirë dhe të barabartë në dinjitet dhe në të drejta. Ata kanë arsye dhe ndërgjegje dhe duhet të sillen ndaj njëri tjetrit me frymë vëllazërimi.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Të gjithë njerëzit",
+      "lindin të lirë",
+      "dhe të barabartë"
+     ]
+    }
+   ],
+   "notes": "sq; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "ay",
+   "title": "ay · Aymara · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Taqpach jaqejh khuskat uñjatatäpjhewa munañapansa, lurañapansa, amuyasiñapansa, ukatwa jilani sullkanípjhaspas ukham uñjasipjhañapawa.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Taqpach jaqejh khuskat",
+      "uñjatatäpjhewa munañapansa lurañapansa",
+      "amuyasiñapansa ukatwa jilani"
+     ]
+    }
+   ],
+   "notes": "ay; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "az",
+   "title": "az · Azerbaijani · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Bütün insanlar ləyaqət və hüquqlarına görə azad və bərabər doğulurlar. Onların şüurları və vicdanları var və bir-birlərinə münasibətdə qardaşlıq ruhunda davranmalıdırlar.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Bütün insanlar ləyaqət",
+      "və hüquqlarına görə",
+      "azad və bərabər"
+     ]
+    }
+   ],
+   "notes": "az; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "ber-Latn",
+   "title": "ber-Latn · Berber (Latin) · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Imdanen, akken ma llan ttlalen d ilelliyen msawan di lḥweṛma d yizerfan- ghur sen tamsakwit d lâquel u yessefk ad-tili tegmatt gar asen.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Imdanen akken ma",
+      "llan ttlalen d",
+      "ilelliyen msawan di"
+     ]
+    }
+   ],
+   "notes": "ber-Latn; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "bs-Latn",
+   "title": "bs-Latn · Bosnian (Latin) · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Sva ljudska bića rađaju se slobodna i jednaka u dostojanstvu i pravima. Ona su obdarena razumom i sviješću i treba da jedno prema drugome postupaju u duhu bratstva.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Sva ljudska bića",
+      "rađaju se slobodna",
+      "i jednaka u"
+     ]
+    }
+   ],
+   "notes": "bs-Latn; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "ca",
+   "title": "ca · Catalan · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Tots els éssers humans neixen lliures i iguals en dignitat i en drets. Són dotats de raó i de consciència, i han de comportar-se fraternalment els uns amb els altres.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Tots els éssers",
+      "humans neixen lliures",
+      "i iguals en"
+     ]
+    }
+   ],
+   "notes": "ca; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "ceb",
+   "title": "ceb · Cebuano · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Ang tanang katawhan gipakatawo nga may kagawasan ug managsama sa kabililhon. Sila gigasahan sa salabutan ug tanlag og mag-ilhanay isip managsoon sa usa'g-usa diha sa diwa sa ospiritu.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Ang tanang katawhan",
+      "gipakatawo nga may",
+      "kagawasan ug managsama"
+     ]
+    }
+   ],
+   "notes": "ceb; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "hr",
+   "title": "hr · Croatian · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Sva ljudska bića rađaju se slobodna i jednaka u dostojanstvu i pravima. Ona su obdarena razumom i sviješću i treba da jedno prema drugome postupaju u duhu bratstva.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Sva ljudska bića",
+      "rađaju se slobodna",
+      "i jednaka u"
+     ]
+    }
+   ],
+   "notes": "hr; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "cs",
+   "title": "cs · Czech · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Všichni lidé rodí se svobodní a sobě rovní co do důstojnosti a práv. Jsou nadáni rozumem a svědomím a mají spolu jednat v duchu bratrství.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Všichni lidé rodí",
+      "se svobodní a",
+      "sobě rovní co"
+     ]
+    }
+   ],
+   "notes": "cs; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "da",
+   "title": "da · Danish · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Alle mennesker er født frie og lige i værdighed og rettigheder. De er udstyret med fornuft og samvittighed, og de bør handle mod hverandre i en broderskabets ånd.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Alle mennesker er",
+      "født frie og",
+      "lige i værdighed"
+     ]
+    }
+   ],
+   "notes": "da; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "nl",
+   "title": "nl · Dutch · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Alle mensen worden vrij en gelijk in waardigheid en rechten geboren. Zij zijn begiftigd met verstand en geweten, en behoren zich jegens elkander in een geest van broederschap te gedragen.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Alle mensen worden",
+      "vrij en gelijk",
+      "in waardigheid en"
+     ]
+    }
+   ],
+   "notes": "nl; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "en",
+   "title": "en · English · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "All human beings",
+      "are born free",
+      "and equal in"
+     ]
+    }
+   ],
+   "notes": "en; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "en-AU",
+   "title": "en-AU · English (Australia) · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "All human beings",
+      "are born free",
+      "and equal in"
+     ]
+    }
+   ],
+   "notes": "en-AU; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "en-CA",
+   "title": "en-CA · English (Canada) · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "All human beings",
+      "are born free",
+      "and equal in"
+     ]
+    }
+   ],
+   "notes": "en-CA; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "en-GB",
+   "title": "en-GB · English (United Kingdom) · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "All human beings",
+      "are born free",
+      "and equal in"
+     ]
+    }
+   ],
+   "notes": "en-GB; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "en-IN",
+   "title": "en-IN · English (India) · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "All human beings",
+      "are born free",
+      "and equal in"
+     ]
+    }
+   ],
+   "notes": "en-IN; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "en-US",
+   "title": "en-US · English (United States) · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "All human beings",
+      "are born free",
+      "and equal in"
+     ]
+    }
+   ],
+   "notes": "en-US; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "et",
+   "title": "et · Estonian · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Kõik inimesed sünnivad vabadena ja võrdsetena oma väärikuselt ja õigustelt. Neile on antud mõistus ja südametunnistus ja nende suhtumist üksteisesse peab kandma vendluse vaim.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Kõik inimesed sünnivad",
+      "vabadena ja võrdsetena",
+      "oma väärikuselt ja"
+     ]
+    }
+   ],
+   "notes": "et; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "fil",
+   "title": "fil · Filipino · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Ang lahat ng tao'y isinilang na malaya at pantay-pantay sa karangalan at mga karapatan. Sila'y pinagkalooban ng katwiran at budhi at dapat magpalagayan ang isa't isa sa diwa ng pagkakapatiran.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Ang lahat ng",
+      "tao'y isinilang na",
+      "malaya at pantay-pantay"
+     ]
+    }
+   ],
+   "notes": "fil; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "fi",
+   "title": "fi · Finnish · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Kaikki ihmiset syntyvät vapaina ja tasavertaisina arvoltaan ja oikeuksiltaan. Heille on annettu järki ja omatunto, ja heidän on toimittava toisiaan kohtaan veljeyden hengessä.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Kaikki ihmiset syntyvät",
+      "vapaina ja tasavertaisina",
+      "arvoltaan ja oikeuksiltaan"
+     ]
+    }
+   ],
+   "notes": "fi; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "fr",
+   "title": "fr · French · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Tous les êtres humains naissent libres et égaux en dignité et en droits. Ils sont doués de raison et de conscience et doivent agir les uns envers les autres dans un esprit de fraternité.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Tous les êtres",
+      "humains naissent libres",
+      "et égaux en"
+     ]
+    }
+   ],
+   "notes": "fr; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "ff",
+   "title": "ff · Fulfulde · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Innama aadeeji fof poti, ndimɗidi e jibinannde to bannge hakkeeji. Eɓe ngoodi miijo e hakkilantaagal ete eɓe poti huufo ndirde e nder ɓ iynguyummaagu.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Innama aadeeji fof",
+      "poti ndimɗidi e",
+      "jibinannde to bannge"
+     ]
+    }
+   ],
+   "notes": "ff; expected default font: Aptos Display / Aptos"
+  },
+  {
+   "language": "gl",
+   "title": "gl · Galician · Latn · expects Aptos Display / Aptos",
+   "blocks": [
+    {
+     "text": "Tódolos seres humanos nacen libres e iguais en dignidade e dereitos e, dotados como están de razón e conciencia, díbense comportar fraternalmente uns cos outros.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "Tódolos seres humanos",
+      "nacen libres e",
+      "iguais en dignidade"
+     ]
+    }
+   ],
+   "notes": "gl; expected default font: Aptos Display / Aptos"
+  }
+ ]
+}

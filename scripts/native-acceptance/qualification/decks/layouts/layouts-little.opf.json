@@ -1,0 +1,614 @@
+{
+ "name": "Layout sweep (little)",
+ "language": "en-US",
+ "slides": [
+  {
+   "id": "s-cover",
+   "layout": "cover",
+   "title": "cover: Quiet harbor",
+   "blocks": [],
+   "notes": "cover: little"
+  },
+  {
+   "id": "s-section",
+   "layout": "section",
+   "title": "section: Part two",
+   "notes": "section: little"
+  },
+  {
+   "id": "s-agenda",
+   "layout": "agenda",
+   "title": "agenda: Short agenda",
+   "blocks": [
+    {
+     "items": [
+      "One"
+     ]
+    }
+   ],
+   "notes": "agenda: little"
+  },
+  {
+   "id": "s-statement",
+   "layout": "statement",
+   "title": "statement: Learn fast",
+   "blocks": [
+    {
+     "text": "Go."
+    }
+   ],
+   "notes": "statement: little"
+  },
+  {
+   "id": "s-closing",
+   "layout": "closing",
+   "title": "closing: Thank you",
+   "blocks": [
+    {
+     "text": "Thanks."
+    }
+   ],
+   "notes": "closing: little"
+  },
+  {
+   "id": "s-text",
+   "layout": "text",
+   "title": "text: Plain text",
+   "blocks": [
+    {
+     "text": [
+      "See the ",
+      {
+       "text": "rollout page",
+       "link": "https://example.com/rollout"
+      }
+     ]
+    }
+   ],
+   "notes": "text: little"
+  },
+  {
+   "id": "s-list",
+   "layout": "list",
+   "title": "list: Short list",
+   "blocks": [
+    {
+     "items": [
+      "One point"
+     ]
+    }
+   ],
+   "notes": "list: little"
+  },
+  {
+   "id": "s-quote",
+   "layout": "quote",
+   "title": "quote: One quote",
+   "blocks": [
+    {
+     "quote": {
+      "text": "Good.",
+      "attribution": "Ana"
+     }
+    }
+   ],
+   "notes": "quote: little"
+  },
+  {
+   "id": "s-two-column",
+   "layout": "two-column",
+   "title": "two-column: Two sides",
+   "blocks": [
+    {
+     "text": "Left."
+    },
+    {
+     "text": "Right."
+    }
+   ],
+   "notes": "two-column: little"
+  },
+  {
+   "id": "s-three-column",
+   "layout": "three-column",
+   "title": "three-column: Three parts",
+   "blocks": [
+    {
+     "text": "A."
+    },
+    {
+     "text": "B."
+    },
+    {
+     "text": "C."
+    }
+   ],
+   "notes": "three-column: little"
+  },
+  {
+   "id": "s-pillars",
+   "layout": "pillars",
+   "title": "pillars: Three pillars",
+   "blocks": [
+    {
+     "items": [
+      "One"
+     ]
+    },
+    {
+     "items": [
+      "Two"
+     ]
+    }
+   ],
+   "notes": "pillars: little"
+  },
+  {
+   "id": "s-comparison",
+   "layout": "comparison",
+   "title": "comparison: A versus B",
+   "blocks": [
+    {
+     "text": "A",
+     "region": "first"
+    },
+    {
+     "text": "B",
+     "region": "second"
+    }
+   ],
+   "notes": "comparison: little"
+  },
+  {
+   "id": "s-process",
+   "layout": "process",
+   "title": "process: Three steps",
+   "blocks": [
+    {
+     "items": [
+      "Plan"
+     ]
+    },
+    {
+     "items": [
+      "Do"
+     ]
+    }
+   ],
+   "notes": "process: little"
+  },
+  {
+   "id": "s-timeline",
+   "layout": "timeline",
+   "title": "timeline: Short timeline",
+   "blocks": [
+    {
+     "timeline": {
+      "events": [
+       {
+        "when": "Week 1",
+        "what": "Start"
+       }
+      ]
+     },
+     "region": "body"
+    }
+   ],
+   "notes": "timeline: little"
+  },
+  {
+   "id": "s-faq",
+   "layout": "faq",
+   "title": "faq: Questions answered",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Why?",
+       "description": "Learning."
+      }
+     ]
+    }
+   ],
+   "notes": "faq: little"
+  },
+  {
+   "id": "s-pyramid",
+   "layout": "pyramid",
+   "title": "pyramid: Four levels",
+   "blocks": [
+    {
+     "items": [
+      "Goal"
+     ]
+    }
+   ],
+   "notes": "pyramid: little"
+  },
+  {
+   "id": "s-inverted-pyramid",
+   "layout": "inverted-pyramid",
+   "title": "inverted-pyramid: Four levels",
+   "blocks": [
+    {
+     "items": [
+      "Possibilities"
+     ]
+    }
+   ],
+   "notes": "inverted-pyramid: little"
+  },
+  {
+   "id": "s-matrix",
+   "layout": "matrix",
+   "title": "matrix: Four cells",
+   "blocks": [
+    {
+     "items": [
+      "Small, fast"
+     ]
+    }
+   ],
+   "notes": "matrix: little"
+  },
+  {
+   "id": "s-cycle",
+   "layout": "cycle",
+   "title": "cycle: Four steps",
+   "blocks": [
+    {
+     "items": [
+      "Plan"
+     ]
+    }
+   ],
+   "notes": "cycle: little"
+  },
+  {
+   "id": "s-chevrons",
+   "layout": "chevrons",
+   "title": "chevrons: Four stages",
+   "blocks": [
+    {
+     "items": [
+      "Baseline"
+     ]
+    }
+   ],
+   "notes": "chevrons: little"
+  },
+  {
+   "id": "s-vertical-process",
+   "layout": "vertical-process",
+   "title": "vertical-process: Three steps",
+   "blocks": [
+    {
+     "items": [
+      "Nominate"
+     ]
+    }
+   ],
+   "notes": "vertical-process: little"
+  },
+  {
+   "id": "s-org-chart",
+   "layout": "org-chart",
+   "title": "org-chart: Reporting lines",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Lead",
+       "level": 0
+      },
+      {
+       "text": "Team",
+       "level": 1
+      }
+     ]
+    }
+   ],
+   "notes": "org-chart: little"
+  },
+  {
+   "id": "s-hierarchy",
+   "layout": "hierarchy",
+   "title": "hierarchy: Work breakdown",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Pilot",
+       "level": 0
+      },
+      {
+       "text": "One",
+       "level": 1
+      }
+     ]
+    }
+   ],
+   "notes": "hierarchy: little"
+  },
+  {
+   "id": "s-venn",
+   "layout": "venn",
+   "title": "venn: Three circles",
+   "blocks": [
+    {
+     "items": [
+      "A",
+      "B"
+     ]
+    }
+   ],
+   "notes": "venn: little"
+  },
+  {
+   "id": "s-metrics",
+   "layout": "metrics",
+   "title": "metrics: One number",
+   "blocks": [
+    {
+     "metric": {
+      "value": 52,
+      "label": "People"
+     }
+    }
+   ],
+   "notes": "metrics: little"
+  },
+  {
+   "id": "s-scorecard",
+   "layout": "scorecard",
+   "title": "scorecard: Scorecard",
+   "blocks": [
+    {
+     "metric": {
+      "value": 52,
+      "label": "People"
+     }
+    }
+   ],
+   "notes": "scorecard: little"
+  },
+  {
+   "id": "s-image",
+   "layout": "image",
+   "title": "image: Single image",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/night.png",
+      "alt": "Night sky over dark hills"
+     }
+    }
+   ],
+   "notes": "image: little"
+  },
+  {
+   "id": "s-image-beside",
+   "layout": "image-beside",
+   "title": "image-beside: Image beside",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/dusk.png",
+      "alt": "Purple dusk over hills"
+     }
+    },
+    {
+     "text": "Short."
+    }
+   ],
+   "notes": "image-beside: little"
+  },
+  {
+   "id": "s-gallery",
+   "layout": "gallery",
+   "title": "gallery: Image set",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/night.png",
+      "alt": "Night sky over dark hills"
+     }
+    }
+   ],
+   "notes": "gallery: little"
+  },
+  {
+   "id": "s-chart",
+   "layout": "chart",
+   "title": "chart: Simple chart",
+   "blocks": [
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Month",
+        "Value"
+       ],
+       "rows": [
+        [
+         "A",
+         1
+        ]
+       ]
+      }
+     }
+    }
+   ],
+   "notes": "chart: little"
+  },
+  {
+   "id": "s-chart-beside",
+   "layout": "chart-beside",
+   "title": "chart-beside: Chart beside",
+   "blocks": [
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Month",
+        "Value"
+       ],
+       "rows": [
+        [
+         "A",
+         1
+        ]
+       ]
+      }
+     }
+    },
+    {
+     "text": "One."
+    }
+   ],
+   "notes": "chart-beside: little"
+  },
+  {
+   "id": "s-table",
+   "layout": "table",
+   "title": "table: Small table",
+   "blocks": [
+    {
+     "table": {
+      "columns": [
+       "A",
+       "B"
+      ],
+      "rows": [
+       [
+        "1",
+        "2"
+       ]
+      ]
+     },
+     "region": "body"
+    }
+   ],
+   "notes": "table: little"
+  },
+  {
+   "id": "s-table-beside",
+   "layout": "table-beside",
+   "title": "table-beside: Table beside",
+   "blocks": [
+    {
+     "table": {
+      "columns": [
+       "A",
+       "B"
+      ],
+      "rows": [
+       [
+        "1",
+        "2"
+       ]
+      ]
+     }
+    },
+    {
+     "text": "One."
+    }
+   ],
+   "notes": "table-beside: little"
+  },
+  {
+   "id": "s-code",
+   "layout": "code",
+   "title": "code: Code sample",
+   "blocks": [
+    {
+     "code": {
+      "language": "python",
+      "source": "x = 1"
+     }
+    }
+   ],
+   "notes": "code: little"
+  },
+  {
+   "id": "s-hero",
+   "layout": "hero",
+   "title": "hero: Big idea",
+   "blocks": [
+    {
+     "text": "Short."
+    },
+    {
+     "image": {
+      "src": "./assets/night.png",
+      "alt": "Night sky over dark hills"
+     }
+    }
+   ],
+   "notes": "hero: little"
+  },
+  {
+   "id": "s-dashboard",
+   "layout": "dashboard",
+   "title": "dashboard: Mini dashboard",
+   "blocks": [
+    {
+     "metric": {
+      "value": 1,
+      "label": "One"
+     }
+    },
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "Month",
+        "V"
+       ],
+       "rows": [
+        [
+         "A",
+         1
+        ]
+       ]
+      }
+     }
+    }
+   ],
+   "notes": "dashboard: little"
+  },
+  {
+   "id": "s-team",
+   "layout": "team",
+   "title": "team: Team members",
+   "blocks": [
+    {
+     "items": [
+      {
+       "text": "Ana",
+       "description": "Lead"
+      }
+     ]
+    }
+   ],
+   "notes": "team: little"
+  },
+  {
+   "id": "s-logos",
+   "layout": "logos",
+   "title": "logos: Partner logos",
+   "blocks": [
+    {
+     "image": {
+      "src": "./assets/logo-1.png",
+      "alt": "Partner 1, fictional geometric mark"
+     }
+    }
+   ],
+   "notes": "logos: little"
+  }
+ ]
+}

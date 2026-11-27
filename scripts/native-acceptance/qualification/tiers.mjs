@@ -17,8 +17,10 @@ function tierOf(manifest, tier) {
 }
 
 /**
- * The corpus decks a tier runs, in manifest order for "all" and in the tier's order otherwise: [{ deck, variants }].
- * A tier's `variants` is the rule ("default" or "all"); a smoke entry's own `variants` list overrides it.
+ * The decks a tier runs: [{ deck, variants }]. A tier's `variants` is the rule ("default" or "all"); an entry's own
+ * `variants` list overrides it. `decks: "all"` is the corpus: every deck of `decks` without a `group`, in manifest order;
+ * a list names decks in the tier's order. Then the tier's `sources` that are deck groups (sourceDecks) add their decks:
+ * a source named by a string adds every deck of its group, `{ source, decks: [{ deck, variants? }] }` only those.
  */
 export function decksForTier(manifest, tier) {
   const entry = tierOf(manifest, tier);
@@ -29,17 +31,38 @@ export function decksForTier(manifest, tier) {
     for (const name of wanted) if (!all.includes(name)) throw new Error(`tier ${tier}: deck ${deck.id} has no variant "${name}"`);
     return { deck: deck.id, variants: [...wanted] };
   };
-  if (entry.decks === 'all') return manifest.decks.map((deck) => pick(deck));
-  return entry.decks.map((item) => {
+  const named = (item) => {
     const deck = decks.get(item.deck);
     if (!deck) throw new Error(`tier ${tier}: no deck "${item.deck}" in the manifest`);
     return pick(deck, item.variants);
-  });
+  };
+  const out = entry.decks === 'all' ? manifest.decks.filter((deck) => !deck.group).map((deck) => pick(deck)) : entry.decks.map(named);
+  for (const item of entry.sources ?? []) {
+    const source = sourceName(item);
+    const group = sourceDecks(manifest, source);
+    if (group.length === 0) continue;
+    const items = typeof item === 'string' ? group.map((deck) => ({ deck: deck.id })) : item.decks;
+    for (const one of items) {
+      if (!group.some((deck) => deck.id === one.deck)) throw new Error(`tier ${tier}: deck ${one.deck} is not a deck of the source ${source}`);
+      if (!out.some((picked) => picked.deck === one.deck)) out.push(named(one));
+    }
+  }
+  return out;
 }
 
-/** The named sources a tier adds beyond the corpus (manifest.sources says what each is; the runner resolves them). */
+const sourceName = (item) => (typeof item === 'string' ? item : item.source);
+
+/** The named sources a tier adds beyond the corpus (manifest.sources says what each is): their names. */
 export function sourcesForTier(manifest, tier) {
-  return [...(tierOf(manifest, tier).sources ?? [])];
+  return (tierOf(manifest, tier).sources ?? []).map(sourceName);
+}
+
+/**
+ * The manifest decks a named source stands for: the decks whose `group` is that name, in manifest order (gallery-layouts and
+ * languages). Empty for a source the runner resolves otherwise (native-fragments) or not at all yet (examples).
+ */
+export function sourceDecks(manifest, source) {
+  return manifest.decks.filter((deck) => deck.group === source);
 }
 
 /**

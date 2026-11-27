@@ -29,7 +29,7 @@ export function formatReport(analysis, { tiers = TIERS } = {}) {
       .join(', ');
     lines.push(`| ${tier} | ${figures.size.files} | ${figures.size.slides} | ${parts} | ${figures.size.notModeled.join(', ') || 'none'} | ${time} |`);
   }
-  lines.push('', 'Parts are files/slides. A source without decks in the repository (languages) or that depends on the release (native-fragments) is not modeled.', '');
+  lines.push('', 'Parts are files/slides. The decks of the sources gallery-layouts and languages are in the corpus part; a source that depends on the release (native-fragments) is not modeled.', '');
 
   lines.push('## Decks with no unit of their own', '');
   for (const tier of tiers) {

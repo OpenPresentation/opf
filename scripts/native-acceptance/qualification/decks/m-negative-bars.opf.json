@@ -1,0 +1,341 @@
+{
+ "name": "Matrix M71: negative bar and column charts",
+ "language": "en-US",
+ "slides": [
+  {
+   "title": "M71 horizontal bars, short names, two below zero",
+   "chart": {
+    "type": "bar",
+    "data": {
+     "columns": [
+      "Product",
+      "Margin"
+     ],
+     "rows": [
+      [
+       "Cranes",
+       14
+      ],
+      [
+       "Software",
+       22
+      ],
+      [
+       "Leasing",
+       -6
+      ],
+      [
+       "Repairs",
+       -3
+      ]
+     ]
+    },
+    "dataLabels": true,
+    "alt": "Margin by product; leasing and repairs below zero"
+   },
+   "notes": "M71 slide 1. Negative-value bar chart, four short category names (Cranes, Software, Leasing, Repairs), two values below zero, data labels. Look at the category names left of the bars: every name whole ('Cranes', not 'ranes'), inside the chart frame, at the low edge of the plot (not at the zero line)."
+  },
+  {
+   "title": "M71 horizontal bars, long names, two below zero",
+   "chart": {
+    "type": "bar",
+    "data": {
+     "columns": [
+      "Product",
+      "Margin"
+     ],
+     "rows": [
+      [
+       "Container cranes and straddle carriers",
+       14
+      ],
+      [
+       "Terminal operating software licences",
+       22
+      ],
+      [
+       "Equipment leasing to third parties",
+       -6
+      ],
+      [
+       "Repairs and maintenance contracts",
+       -3
+      ]
+     ]
+    },
+    "dataLabels": true,
+    "alt": "Margin by product line; leasing and repairs below zero"
+   },
+   "notes": "M71 slide 2. Negative-value bar chart with four long category names of four to five words. Look at the names left of the bars: whole, wrapped if needed, none cut at the frame edge."
+  },
+  {
+   "title": "M71 horizontal bars, twelve categories, four below zero",
+   "chart": {
+    "type": "bar",
+    "data": {
+     "columns": [
+      "Service",
+      "Margin"
+     ],
+     "rows": [
+      [
+       "Cranes",
+       14
+      ],
+      [
+       "Software",
+       22
+      ],
+      [
+       "Leasing",
+       -6
+      ],
+      [
+       "Repairs",
+       -3
+      ],
+      [
+       "Pilotage",
+       9
+      ],
+      [
+       "Towage",
+       -4
+      ],
+      [
+       "Storage",
+       11
+      ],
+      [
+       "Customs",
+       5
+      ],
+      [
+       "Rail",
+       -8
+      ],
+      [
+       "Trucking",
+       7
+      ],
+      [
+       "Reefers",
+       -2
+      ],
+      [
+       "Training",
+       3
+      ]
+     ]
+    },
+    "alt": "Margin by service; rail, leasing, towage and reefers below zero"
+   },
+   "notes": "M71 slide 3. Negative-value bar chart with twelve short categories, four below zero. Look at all twelve names left of the bars: whole and inside the frame; none overlapping its neighbor."
+  },
+  {
+   "title": "M71 vertical columns, short names, two below zero",
+   "chart": {
+    "type": "column",
+    "data": {
+     "columns": [
+      "Product",
+      "Margin"
+     ],
+     "rows": [
+      [
+       "Cranes",
+       14
+      ],
+      [
+       "Software",
+       22
+      ],
+      [
+       "Leasing",
+       -6
+      ],
+      [
+       "Repairs",
+       -3
+      ]
+     ]
+    },
+    "dataLabels": true,
+    "alt": "Margin by product; leasing and repairs below zero"
+   },
+   "notes": "M71 slide 4. Negative-value column chart, four short category names (Cranes, Software, Leasing, Repairs), two values below zero, data labels. Look at the category names under the plot: every name whole ('Cranes', not 'ranes'), inside the chart frame, at the low edge of the plot (not at the zero line)."
+  },
+  {
+   "title": "M71 vertical columns, long names, two below zero",
+   "chart": {
+    "type": "column",
+    "data": {
+     "columns": [
+      "Product",
+      "Margin"
+     ],
+     "rows": [
+      [
+       "Container cranes and straddle carriers",
+       14
+      ],
+      [
+       "Terminal operating software licences",
+       22
+      ],
+      [
+       "Equipment leasing to third parties",
+       -6
+      ],
+      [
+       "Repairs and maintenance contracts",
+       -3
+      ]
+     ]
+    },
+    "dataLabels": true,
+    "alt": "Margin by product line; leasing and repairs below zero"
+   },
+   "notes": "M71 slide 5. Negative-value column chart with four long category names of four to five words. Look at the names under the plot: whole, wrapped if needed, none cut at the frame edge."
+  },
+  {
+   "title": "M71 vertical columns, twelve categories, four below zero",
+   "chart": {
+    "type": "column",
+    "data": {
+     "columns": [
+      "Service",
+      "Margin"
+     ],
+     "rows": [
+      [
+       "Cranes",
+       14
+      ],
+      [
+       "Software",
+       22
+      ],
+      [
+       "Leasing",
+       -6
+      ],
+      [
+       "Repairs",
+       -3
+      ],
+      [
+       "Pilotage",
+       9
+      ],
+      [
+       "Towage",
+       -4
+      ],
+      [
+       "Storage",
+       11
+      ],
+      [
+       "Customs",
+       5
+      ],
+      [
+       "Rail",
+       -8
+      ],
+      [
+       "Trucking",
+       7
+      ],
+      [
+       "Reefers",
+       -2
+      ],
+      [
+       "Training",
+       3
+      ]
+     ]
+    },
+    "alt": "Margin by service; rail, leasing, towage and reefers below zero"
+   },
+   "notes": "M71 slide 6. Negative-value column chart with twelve short categories, four below zero. Look at all twelve names under the plot: whole and inside the frame; none overlapping its neighbor."
+  },
+  {
+   "title": "M71 horizontal bars, two series, legend at the top, with axis titles",
+   "chart": {
+    "type": "bar",
+    "data": {
+     "columns": [
+      "Product",
+      "2025",
+      "2026"
+     ],
+     "rows": [
+      [
+       "Cranes",
+       14,
+       16
+      ],
+      [
+       "Software",
+       22,
+       25
+      ],
+      [
+       "Leasing",
+       -6,
+       -2
+      ],
+      [
+       "Repairs",
+       -3,
+       1
+      ]
+     ]
+    },
+    "legend": "top",
+    "axisTitles": {
+     "category": "Product",
+     "value": "Margin (%)"
+    },
+    "alt": "Margin by product in two years"
+   },
+   "notes": "M71 slide 7. Two-series negative bar chart with a top legend and both axis titles. Look at the category names left of the bars and the rotated 'Product' title: whole, not overlapping, inside the frame."
+  },
+  {
+   "title": "M71 control: horizontal bars, all above zero",
+   "chart": {
+    "type": "bar",
+    "data": {
+     "columns": [
+      "Product",
+      "Margin"
+     ],
+     "rows": [
+      [
+       "Cranes",
+       14
+      ],
+      [
+       "Software",
+       22
+      ],
+      [
+       "Leasing",
+       6
+      ],
+      [
+       "Repairs",
+       3
+      ]
+     ]
+    },
+    "dataLabels": true,
+    "alt": "Margin by product, all positive"
+   },
+   "notes": "M71 slide 8. Control: the same short names, all values positive. 0.36.0 keeps the outer plot area here; names beside the bars as before."
+  }
+ ]
+}
