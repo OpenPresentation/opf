@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.37.1 (2026-11-27)
+
+No package changes; released with the set.
+
 ## 0.37.0 (2026-11-27)
 
 - FR-02 (CR 6): list items, bullets, timeline events and table rows can carry an `id`, so a comment, a patch, a diff or a merge can name one entry and find it after the entries move. A list item and a bullet take `id` in the object form, a timeline event takes it directly, and a table row is an array of cells or the object `{ "id", "cells" }`, both in one table. Every id shares one document-wide namespace with slide, block and overlay ids (a duplicate is a validation error), is optional, and an unmarked deck is valid and addressed by index. `tableRows` and `rowCells` (`@openpresentation/opf`) return rows in one form, so engines and converters never branch on the two spellings. `assignIds(doc, { items: true })` gives every entry an id (a string item becomes `{ id, text }`, an array row `{ id, cells }`; the default stays slides and blocks only, `generate` mints random ids for a co-editing host); `touches` lists the entry ids a patch reaches. The content conversions between list, table and timeline keep each entry's id. The renderer draws a deck the same with and without ids. The editor keeps row and item ids through edit, move, sort and delete, gives a copy new ids and replaces a taken id on paste. PowerPoint export stores the ids in the slide record (`full` provenance) and import restores an id while its entry is still recognizable, with one `entry-ids-not-restored` finding naming how many were not; a deck without entry ids exports the same bytes as before. Markdown keeps the ids through its embedded form. Dataset rows and chart data rows have no ids.
